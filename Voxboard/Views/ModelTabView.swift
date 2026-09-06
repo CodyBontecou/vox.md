@@ -12,6 +12,13 @@ struct ModelTabView: View {
             AppConstants.voiceAutoStopCapturePathEnabled($0)
         }
     )
+    /// Continuous dictation is stored per capture path; the picker applies one
+    /// choice to every path (keyboard delivery is request-scoped, so its stored
+    /// value is ignored by policy — it always ends its recording).
+    @State private var voiceAutoStopSavesSegmentsAndContinues =
+        VoiceAutoStopCapturePath.allCases.allSatisfy {
+            AppConstants.voiceAutoStopContinuousModeEnabled(for: $0)
+        }
 
     private var whisperModels: [WhisperModelInfo] {
         WhisperModelInfo.availableModels.filter { !$0.engine.isParakeet }
@@ -77,6 +84,14 @@ struct ModelTabView: View {
             for path in VoiceAutoStopCapturePath.allCases {
                 AppConstants.setVoiceAutoStopCapturePathEnabled(
                     enabledPaths.contains(path),
+                    for: path
+                )
+            }
+        }
+        .onChange(of: voiceAutoStopSavesSegmentsAndContinues) { _, savesAndContinues in
+            for path in VoiceAutoStopCapturePath.allCases {
+                AppConstants.setVoiceAutoStopContinuousModeEnabled(
+                    savesAndContinues,
                     for: path
                 )
             }
@@ -464,8 +479,17 @@ struct ModelTabView: View {
                 .tint(Geist.text)
                 .disabled(!isDownloaded || !voiceAutoStopEnabled)
 
+                Picker("On End of Speech", selection: $voiceAutoStopSavesSegmentsAndContinues) {
+                    Text("Stop Recording").tag(false)
+                    Text("Save Segment & Keep Listening").tag(true)
+                }
+                .pickerStyle(.menu)
+                .font(Geist.body())
+                .tint(Geist.text)
+                .disabled(!isDownloaded || !voiceAutoStopEnabled)
+
                 Text(isDownloaded
-                    ? "Choose exactly where auto-stop runs. Every enabled path works with Automatic, Whisper, and Parakeet. Pause timing is approximate."
+                    ? "Choose exactly where auto-stop runs. Every enabled path works with Automatic, Whisper, and Parakeet. Pause timing is approximate. Keep Listening saves each finished thought as its own segment and stays open for up to \(Int(AppConstants.voiceAutoStopContinuousSessionLimit / 60)) minutes per session."
                     : "Until this companion is downloaded, live recordings keep using manual stop.")
                     .font(Geist.caption())
                     .foregroundStyle(Geist.muted)
