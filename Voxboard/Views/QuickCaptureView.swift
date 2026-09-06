@@ -111,6 +111,9 @@ struct QuickCaptureView: View {
     @State private var isFindingLocation = false
     @State private var locationRequestTask: Task<Void, Never>?
     @State private var showsSentToast = false
+    @State private var sentUndoSnapshot: SentCaptureUndoSnapshot?
+    @State private var showsPresetSendConfirmation = false
+    @AppStorage(CapturePreferenceKeys.confirmPresetSend) private var confirmsPresetSend = false
     @State private var composerSelection = NSRange(location: 0, length: 0)
     @State private var composerIsFocused = false
     @State private var hasPerformedInitialLoad = false
@@ -225,7 +228,7 @@ struct QuickCaptureView: View {
             }
 
             if showsSentToast {
-                Label("Capture Sent", systemImage: "checkmark.circle.fill")
+                sentToastLabel
                     .font(Geist.label())
                     .foregroundStyle(Geist.Palette.background100)
                     .padding(.horizontal, Geist.Spacing.four)
@@ -235,6 +238,7 @@ struct QuickCaptureView: View {
                     .padding(.top, 12)
                     .transition(.move(edge: .top).combined(with: .opacity))
                     .zIndex(4)
+                    .accessibilityElement(children: .combine)
                     .accessibilityIdentifier("capture_sent_toast")
             }
         }
@@ -259,6 +263,31 @@ struct QuickCaptureView: View {
         }
         .toolbarBackground(Geist.Palette.background100, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
+    }
+
+    /// The sent toast, plus an Undo action for the window after a composer
+    /// send. Undo restores the just-sent Capture into this composer as an
+    /// editable draft; the note already written to the vault is kept.
+    @ViewBuilder
+    private var sentToastLabel: some View {
+        HStack(spacing: Geist.Spacing.three) {
+            Label("Capture Sent", systemImage: "checkmark.circle.fill")
+            if sentUndoSnapshot?.offersUndo == true {
+                Button {
+                    restoreSentCaptureAsDraft()
+                } label: {
+                    Text("Undo")
+                        .fontWeight(.semibold)
+                        .underline()
+                        .padding(.horizontal, Geist.Spacing.two)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Undo send and restore the Capture to this draft")
+                .accessibilityHint("The note already sent to your vault is kept.")
+                .accessibilityIdentifier("capture_sent_toast_undo")
+            }
+        }
     }
 
     private var draftLifecycleContent: some View {
@@ -304,7 +333,7 @@ struct QuickCaptureView: View {
                 ReviewPromptManager.shared.recordSuccessfulCapture(
                     totalCaptureCount: usageTracker.successfulCapturesUsed
                 )
-                Task { await presentSentToast() }
+                Task { await presentSentToast(for: receipt) }
             }
             .onChange(of: selectedPhotos) { _, items in
                 guard !items.isEmpty else { return }
@@ -1439,6 +1468,13 @@ struct QuickCaptureView: View {
             }
             .accessibilityIdentifier("capture_settings")
 
+            // Recording controls live at the leading end of the bar so a
+            // mis-tap while stopping speech can never land on the trailing
+            // send control — and vice versa.
+            voiceCaptureButton
+
+            voiceCapturePauseToggle
+
             Spacer(minLength: 4)
 
             if !usageTracker.hasUnlocked, usageTracker.successfulCapturesUsed >= 7 {
@@ -1466,16 +1502,23 @@ struct QuickCaptureView: View {
                 if captureSubmissionRequiresUnlock {
                     presentPaywall(context: .captureLimit)
                 } else {
-                    Task { await viewModel.submit() }
+                    sendComposerCapture()
                 }
             }
             .disabled(!viewModel.canSubmit || captureSubmissionIsBlocked)
             .opacity(viewModel.canSubmit && !captureSubmissionIsBlocked ? 1 : 0.35)
             .accessibilityIdentifier("quick_capture_submit")
-
-            voiceCapturePauseToggle
-
-            voiceCaptureButton
+            // Strictly opt-in confirmation (default off) for Preset sends.
+            .confirmationDialog(
+                String(localized: "Send this Capture with \(selectedFlow.displayName)?"),
+                isPresented: $showsPresetSendConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button(String(localized: "Send")) { submitComposerCapture() }
+                Button(String(localized: "Cancel"), role: .cancel) {}
+            } message: {
+                Text("Optional confirmation for Preset sends. Turn it off in Settings › Capture Bar.")
+            }
 
             routeStatusButton(
                 composerIsFocused
@@ -1856,15 +1899,72 @@ struct QuickCaptureView: View {
         }
     }
 
-    private func presentSentToast() async {
+    private func presentSentToast(for receipt: CaptureReceipt? = nil) async {
+        if let receipt {
+            // Undo is only offered when the receipt belongs to the composer
+            // send that created the snapshot. Inbox receipts key different
+            // request IDs and watch deliveries have no local snapshot.
+            if sentUndoSnapshot?.requestID != receipt.requestID {
+                sentUndoSnapshot = nil
+            }
+        } else {
+            sentUndoSnapshot = nil
+        }
         withAnimation(.easeOut(duration: 0.18)) { showsSentToast = true }
+        let undoAvailable = sentUndoSnapshot?.offersUndo == true
         UIAccessibility.post(
             notification: .announcement,
-            argument: String(localized: "Capture sent")
+            argument: undoAvailable
+                ? String(localized: "Capture sent. Undo available for five seconds.")
+                : String(localized: "Capture sent")
         )
-        try? await Task.sleep(for: .seconds(2))
+        try? await Task.sleep(for: SentCaptureUndo.toastWindow)
         withAnimation(.easeIn(duration: 0.18)) { showsSentToast = false }
+        sentUndoSnapshot = nil
         focusComposer()
+    }
+
+    /// Sends the composer Capture. When the opt-in preference is enabled, a
+    /// preset send is confirmed before dispatch; draft content in the
+    /// composer is otherwise never confirmed.
+    private func sendComposerCapture() {
+        guard confirmsPresetSend else {
+            submitComposerCapture()
+            return
+        }
+        showsPresetSendConfirmation = true
+    }
+
+    private func submitComposerCapture() {
+        // Snapshot before submit(): a successful send replaces the live draft,
+        // so this is the only moment the outgoing text still exists.
+        sentUndoSnapshot = SentCaptureUndo.snapshot(
+            draft: viewModel.draft,
+            presetDisplayName: selectedFlow.displayName
+        )
+        Task { await viewModel.submit() }
+    }
+
+    /// Restores the just-sent Capture into the composer as an editable draft.
+    /// The note already written to the user's vault is intentionally kept.
+    private func restoreSentCaptureAsDraft() {
+        guard let snapshot = sentUndoSnapshot else { return }
+        sentUndoSnapshot = nil
+        withAnimation(.easeIn(duration: 0.18)) { showsSentToast = false }
+        let sentVia = viewModel.historyRecords
+            .first { $0.requestID == snapshot.requestID && $0.outcome == .delivered }?
+            .destinationName
+            ?? snapshot.presetDisplayName
+        Task {
+            _ = await SentCaptureUndo.apply(snapshot, to: viewModel)
+            focusComposer()
+            UIAccessibility.post(
+                notification: .announcement,
+                argument: String(
+                    localized: "Capture restored to this draft. The sent note remains in \(sentVia)."
+                )
+            )
+        }
     }
 
     private func importPhotos(_ items: [PhotosPickerItem], prefix: String) async {

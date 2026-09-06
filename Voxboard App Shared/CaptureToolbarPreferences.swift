@@ -3,6 +3,7 @@ import SwiftUI
 
 enum CapturePreferenceKeys {
     static let confirmVoiceNoteBeforeAdding = "capture.voice.confirmBeforeAdding.v1"
+    static let confirmPresetSend = "capture.voice.confirmPresetSend.v1"
 }
 
 /// The quick actions users can place in the capture bar.
@@ -240,6 +241,19 @@ struct CaptureToolbarSettingsView: View {
             }
 
             Section {
+                Toggle(
+                    "Confirm Preset Sends",
+                    isOn: presetSendConfirmationBinding
+                )
+                .tint(Geist.Palette.gray1000)
+                .accessibilityIdentifier("capture_preset_send_confirmation")
+            } header: {
+                Text("Presets")
+            } footer: {
+                Text("Off by default. Turn this on to confirm before a Capture is sent with a preset. The sent-note toast also offers Undo for a few seconds after every composer send.")
+            }
+
+            Section {
                 Button("Reset Quick Actions", role: .destructive) {
                     preferences.reset()
                 }
@@ -261,6 +275,16 @@ struct CaptureToolbarSettingsView: View {
         Binding(
             get: { preferences.confirmsVoiceNotesBeforeAdding },
             set: { preferences.setConfirmsVoiceNotesBeforeAdding($0) }
+        )
+    }
+
+    @AppStorage(CapturePreferenceKeys.confirmPresetSend)
+    private var confirmsPresetSend = false
+
+    private var presetSendConfirmationBinding: Binding<Bool> {
+        Binding(
+            get: { confirmsPresetSend },
+            set: { confirmsPresetSend = $0 }
         )
     }
 
