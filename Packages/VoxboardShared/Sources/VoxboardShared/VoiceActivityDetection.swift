@@ -187,5 +187,26 @@ public enum VoiceAutoStopPolicy: Sendable {
             return nil
         }
     }
+
+    /// The end-of-speech behavior for a command's capture path. Returns nil
+    /// when voice auto-stop does not run for the command at all (master switch
+    /// off, path disabled, or no resolvable path). Keyboard capture always
+    /// ends its recording: the keyboard's transcript delivery is scoped to its
+    /// IPC request, so there is no app-owned session to continue. The recorder
+    /// passes the same start command to each re-arm, so a fresh coordinator
+    /// resolves the same action until the preference changes.
+    public static func endOfSpeechAction(
+        for command: RecordingCommand
+    ) -> VoiceAutoStopEndOfSpeechAction? {
+        guard let capturePath = capturePath(for: command),
+              AppConstants.voiceAutoStopEnabled(for: capturePath) else {
+            return nil
+        }
+        guard capturePath != .keyboard,
+              AppConstants.voiceAutoStopContinuousModeEnabled(for: capturePath) else {
+            return .endRecording
+        }
+        return .commitSegmentAndContinue
+    }
 }
 #endif
