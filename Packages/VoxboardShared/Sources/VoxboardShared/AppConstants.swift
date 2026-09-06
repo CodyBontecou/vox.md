@@ -10,6 +10,17 @@ public enum VoiceAutoStopCapturePath: String, CaseIterable, Codable, Hashable, S
     case watch
 }
 
+/// What the recorder does when live voice-activity detection reports that
+/// the user stopped speaking. The default ends the recording; continuous
+/// dictation instead commits the finished span and keeps listening.
+public enum VoiceAutoStopEndOfSpeechAction: Equatable, Sendable {
+    /// End the recording session and deliver it (historical behavior).
+    case endRecording
+    /// Commit the finished span through the standard delivery handoff and
+    /// re-arm end-of-speech detection without stopping the microphone.
+    case commitSegmentAndContinue
+}
+
 /// Shared constants used by both the main app and keyboard extension.
 /// The App Group allows sharing files (models, transcripts) and UserDefaults between targets.
 public enum AppConstants: Sendable {
@@ -36,6 +47,14 @@ public enum AppConstants: Sendable {
     public static let minimumVoiceAutoStopPauseDuration: TimeInterval = 0.5
     public static let maximumVoiceAutoStopPauseDuration: TimeInterval = 2.0
     public static let voiceAutoStopCapturePathKeyPrefix = "voiceAutoStop.capturePath"
+    public static let voiceAutoStopContinuousModeKeyPrefix = "voiceAutoStop.continuousMode"
+    /// Continuous dictation keeps the microphone open across committed
+    /// segments. This wall-clock budget bounds battery drain and thermal
+    /// pressure from a live mic that end-of-speech no longer turns off; the
+    /// recorder ends the session through the standard stop path when the
+    /// limit is reached. Ten minutes matches the circular buffer's rolling
+    /// window scale while comfortably covering a long dictation sitting.
+    public static let voiceAutoStopContinuousSessionLimit: TimeInterval = 10 * 60
 
     #if DEBUG
     public static let debugSharedContainerOverrideEnvironmentKey =
@@ -285,6 +304,28 @@ public enum AppConstants: Sendable {
         for path: VoiceAutoStopCapturePath
     ) {
         sharedDefaults?.set(enabled, forKey: voiceAutoStopCapturePathKey(for: path))
+    }
+
+    public static func voiceAutoStopContinuousModeKey(
+        for path: VoiceAutoStopCapturePath
+    ) -> String {
+        "\(voiceAutoStopContinuousModeKeyPrefix).\(path.rawValue).enabled"
+    }
+
+    /// Whether the given capture path commits segments and keeps listening
+    /// when end-of-speech fires, instead of ending the recording. Defaults to
+    /// false so existing auto-stop behavior is preserved until opted in.
+    public static func voiceAutoStopContinuousModeEnabled(
+        for path: VoiceAutoStopCapturePath
+    ) -> Bool {
+        boolOrDefault(voiceAutoStopContinuousModeKey(for: path), default: false)
+    }
+
+    public static func setVoiceAutoStopContinuousModeEnabled(
+        _ enabled: Bool,
+        for path: VoiceAutoStopCapturePath
+    ) {
+        sharedDefaults?.set(enabled, forKey: voiceAutoStopContinuousModeKey(for: path))
     }
 
     public static func voiceAutoStopEnabled(
