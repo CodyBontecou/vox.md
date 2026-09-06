@@ -271,6 +271,17 @@ final class PersistentRecorder {
     private var segmentStartedAt: TimeInterval = 0
     private var liveTranscriptionSetupTask: Task<LiveSegmentTranscriptionCoordinator?, Never>?
     private var endOfSpeechSetupTask: Task<VoiceAutoStopCoordinator?, Never>?
+    /// Non-nil while end-of-speech commits segments instead of ending the
+    /// session (continuous dictation). Owns the wall-clock budget and the
+    /// per-segment delivery identities for the commit-and-rearm loop.
+    private var continuousDictationSession: ContinuousDictationSession?
+    /// The start command whose identity (model, language, flow, origin)
+    /// re-arms reuse, so a fresh auto-stop coordinator resolves the same
+    /// capture path and end-of-speech action as the original arm.
+    private var continuousDictationCommand: RecordingCommand?
+    /// Ends the continuous session through the standard stop path when the
+    /// wall-clock budget is spent, even if no further speech ever fires.
+    private var continuousDictationSessionLimitTask: Task<Void, Never>?
     private var liveCaptureRequestId: String?
     private var liveCaptureDraftRequestId: String?
     private var liveCaptureSessionID: UUID?
@@ -1629,6 +1640,7 @@ final class PersistentRecorder {
         let service = voiceActivityDetectionService
         let buffer = circularBuffer
         let minimumSilenceDuration = AppConstants.voiceAutoStopPauseDuration
+        let endOfSpeechAction = VoiceAutoStopPolicy.endOfSpeechAction(for: command) ?? .endRecording
 
         endOfSpeechSetupTask = Task.detached(priority: .userInitiated) { [weak self] in
             do {
@@ -1651,15 +1663,28 @@ final class PersistentRecorder {
                     guard let self,
                           self.isSegmentActive,
                           self.segmentRequestId == requestID else { return }
-                    log.log("[PersistentRecorder] ⏹ Auto-stopping after voice pause: \(requestID.prefix(8))")
-                    self.handleStopSegment(
-                        RecordingCommand(requestId: requestID, action: .stopSegment),
-                        trigger: .endOfSpeech
-                    )
+                    switch endOfSpeechAction {
+                    case .endRecording:
+                        log.log("[PersistentRecorder] ⏹ Auto-stopping after voice pause: \(requestID.prefix(8))")
+                        self.handleStopSegment(
+                            RecordingCommand(requestId: requestID, action: .stopSegment),
+                            trigger: .endOfSpeech
+                        )
+                    case .commitSegmentAndContinue:
+                        log.log("[PersistentRecorder] 🔁 End of speech — committing dictation segment, session continues: \(requestID.prefix(8))")
+                        Task { @MainActor [weak self] in
+                            await self?.commitContinuousDictationSegment(requestId: requestID)
+                        }
+                    }
                 }
                 await coordinator.start()
-                await MainActor.run {
-                    log.log("[PersistentRecorder] Voice pause detection armed for \(requestID.prefix(8)) path=\(capturePath.rawValue)")
+                await MainActor.run { [weak self] in
+                    log.log("[PersistentRecorder] Voice pause detection armed for \(requestID.prefix(8)) path=\(capturePath.rawValue) action=\(endOfSpeechAction)")
+                    self?.prepareContinuousDictationSessionIfNeeded(
+                        command: command,
+                        requestId: requestID,
+                        action: endOfSpeechAction
+                    )
                 }
                 return coordinator
             } catch is CancellationError {
@@ -1673,6 +1698,51 @@ final class PersistentRecorder {
         }
     }
 
+    /// Track the continuous-session state after a successful arm. Runs on the
+    /// main actor once the coordinator has started, while the armed request
+    /// still owns the active segment.
+    private func prepareContinuousDictationSessionIfNeeded(
+        command: RecordingCommand,
+        requestId: String,
+        action: VoiceAutoStopEndOfSpeechAction
+    ) {
+        guard action == .commitSegmentAndContinue,
+              isSegmentActive,
+              segmentRequestId == requestId else { return }
+        continuousDictationCommand = command
+        guard continuousDictationSession == nil else { return }
+        let session = ContinuousDictationSession(startedAt: Date().timeIntervalSince1970)
+        continuousDictationSession = session
+        armContinuousDictationSessionLimit(requestId: requestId, limit: session.sessionLimit)
+        log.log("[PersistentRecorder] 🔁 Continuous dictation session armed (limit \(Int(session.sessionLimit / 60)) min)")
+    }
+
+    private func armContinuousDictationSessionLimit(
+        requestId: String,
+        limit: TimeInterval
+    ) {
+        continuousDictationSessionLimitTask?.cancel()
+        continuousDictationSessionLimitTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(limit))
+            guard !Task.isCancelled,
+                  let self,
+                  self.isSegmentActive,
+                  self.segmentRequestId == requestId else { return }
+            self.endContinuousDictationSessionAtLimit(requestId: requestId)
+        }
+    }
+
+    /// End a continuous dictation session at its wall-clock budget through the
+    /// standard stop path, so the in-progress span still extracts and delivers.
+    private func endContinuousDictationSessionAtLimit(requestId: String) {
+        log.log("[PersistentRecorder] ⏹ Continuous dictation reached the session limit — ending gracefully")
+        lastError = String(localized: "Continuous listening reached the \(Int(AppConstants.voiceAutoStopContinuousSessionLimit / 60))-minute limit and was stopped automatically.")
+        handleStopSegment(
+            RecordingCommand(requestId: requestId, action: .stopSegment),
+            trigger: .endOfSpeech
+        )
+    }
+
     private func cancelEndOfSpeechDetection() {
         guard let setupTask = endOfSpeechSetupTask else { return }
         endOfSpeechSetupTask = nil
@@ -1681,6 +1751,289 @@ final class PersistentRecorder {
             if let coordinator = await setupTask.value {
                 await coordinator.cancel()
             }
+        }
+    }
+
+    // MARK: - Continuous Dictation (commit-and-rearm)
+
+    /// Commit the finished dictation span through the standard delivery
+    /// handoff and re-arm end-of-speech detection from the buffer cursor —
+    /// without stopping the microphone, the duration timer, or the Live
+    /// Activity. Only the finished span is closed out; the recording session
+    /// stays alive for the next thought.
+    private func commitContinuousDictationSegment(requestId: String) async {
+        guard isSegmentActive, segmentRequestId == requestId else { return }
+        // Manual pauses never commit: paused dictation keeps accumulating
+        // into the next committed span once resumed (deliberate pause
+        // behavior — see ContinuousDictationSession.canCommitSegment).
+        guard !isSegmentPaused else { return }
+        guard let command = continuousDictationCommand,
+              let session = continuousDictationSession,
+              let completionMode = segmentCompletionMode,
+              completionMode != .keyboardTranscription else {
+            // Missing continuation state must never strand a live session:
+            // fall back to the classic end-of-speech stop.
+            log.log("[PersistentRecorder] ⚠️ Continuous commit state unavailable — stopping instead")
+            handleStopSegment(
+                RecordingCommand(requestId: requestId, action: .stopSegment),
+                trigger: .endOfSpeech
+            )
+            return
+        }
+
+        guard session.canCommitSegment(isPaused: false, now: Date().timeIntervalSince1970) else {
+            endContinuousDictationSessionAtLimit(requestId: requestId)
+            return
+        }
+
+        let endIndex = circularBuffer.totalSamplesWritten
+        guard let samples = extractSegmentSamples(endIndex: endIndex) else {
+            // The rolling buffer overran the span — the audio is unrecoverable,
+            // so end the session through the standard stop path.
+            log.log("[PersistentRecorder] ❌ Continuous span audio was overwritten — ending session")
+            handleStopSegment(
+                RecordingCommand(requestId: requestId, action: .stopSegment),
+                trigger: .endOfSpeech
+            )
+            return
+        }
+
+        let maximumAmplitude = samples.reduce(Float(0)) { max($0, abs($1)) }
+        guard ContinuousDictationSession.isDeliverableSpan(
+            sampleCount: samples.count,
+            maximumAmplitude: maximumAmplitude,
+            sampleRate: whisperSampleRate
+        ) else {
+            // A span with no usable speech (sub-minimum or silent) is skipped
+            // without delivery so stray noise cannot strand one-word notes;
+            // the session keeps listening.
+            log.log("[PersistentRecorder] ⏭ Continuous span too short or silent — skipping commit")
+            if let skippedJournal = finalizeSegmentJournal() {
+                try? FileManager.default.removeItem(at: skippedJournal)
+            }
+            rearmContinuousDictation(command: command, fromIndex: endIndex)
+            return
+        }
+
+        let commitID = UUID()
+        let deliveryRequestId = session.nextDeliveryRequestID(for: requestId)
+        guard let wavURL = writeWAV(samples: samples) else {
+            // Keep the span anchored at its original start so the next commit
+            // retries it together with the span that follows; the durable
+            // journal and the live session keep appending in the meantime.
+            // Only end-of-speech detection needs a fresh arm, because the
+            // firing coordinator has finished itself.
+            log.log("[PersistentRecorder] ⚠️ Continuous span could not be staged — will retry at the next commit")
+            lastError = String(localized: "A dictation segment could not be saved and will be retried")
+            startVoiceAutoStopIfSupported(command: command, startIndex: endIndex)
+            return
+        }
+        session.recordCommittedSegment()
+
+        // Finish the live Apple Speech session for this span. Its finalized
+        // text can be delivered to the Capture draft immediately; the durable
+        // queue re-uses the same commit ID so its later batch transcript is
+        // de-duplicated instead of appended twice.
+        let liveSetupTask = liveTranscriptionSetupTask
+        let finishedLiveSessionID = liveCaptureSessionID
+        var liveFinalText: String?
+        if let liveSetupTask, let coordinator = await liveSetupTask.value {
+            liveFinalText = (try? await coordinator.finish(through: endIndex))?.text
+        }
+        // The commit's assumptions were invalidated while the live finish was
+        // suspended. If the segment was stopped, the standard stop path already
+        // delivered the full span — drop this duplicate WAV. If it was merely
+        // paused, end through the stop path as well: its paused-tail exclusion
+        // keeps the extraction correct without corrupting pause bookkeeping.
+        guard isSegmentActive, segmentRequestId == requestId else {
+            try? FileManager.default.removeItem(at: wavURL)
+            return
+        }
+        guard !isSegmentPaused else {
+            try? FileManager.default.removeItem(at: wavURL)
+            log.log("[PersistentRecorder] ⏸ Paused during dictation commit — ending session through the standard stop path")
+            handleStopSegment(
+                RecordingCommand(requestId: requestId, action: .stopSegment),
+                trigger: .endOfSpeech
+            )
+            return
+        }
+
+        if case .captureDraft = completionMode,
+           let finishedLiveSessionID,
+           let captureDraftEventHandler {
+            let trimmedLiveText = liveFinalText?
+                .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            if !trimmedLiveText.isEmpty {
+                let delivered = await captureDraftEventHandler(.transcript(
+                    trimmedLiveText,
+                    draftRequestID: segmentDraftRequestID,
+                    liveSessionID: finishedLiveSessionID,
+                    deliveryID: commitID
+                ))
+                liveFinalText = delivered ? trimmedLiveText : nil
+            } else {
+                liveFinalText = nil
+            }
+            // The finished live session's preview must not linger: either the
+            // delivered final text committed it, or the volatile preview is
+            // dropped so the next span's session can take over cleanly.
+            if liveFinalText == nil {
+                _ = await captureDraftEventHandler(.cancelLiveTranscript(sessionID: finishedLiveSessionID))
+            }
+        }
+
+        enqueueContinuousDictationSegment(
+            audioURL: wavURL,
+            journalURL: finalizeSegmentJournal(),
+            deliveryRequestId: deliveryRequestId,
+            commitID: commitID,
+            samples: samples,
+            completionMode: completionMode
+        )
+
+        rearmContinuousDictation(command: command, fromIndex: endIndex)
+    }
+
+    /// Continue the same recording session after a committed or skipped span:
+    /// re-anchor the segment to the commit boundary, roll the durable journal,
+    /// restart live transcription from the cursor, re-arm end-of-speech
+    /// detection with a fresh VAD session, and re-anchor the duration clock
+    /// and its rolling-buffer safety stop to the new span. The microphone and
+    /// the segment identity stay untouched.
+    private func rearmContinuousDictation(
+        command: RecordingCommand,
+        fromIndex: Int64
+    ) {
+        segmentStartIndex = fromIndex
+        segmentPausedRanges = []
+        segmentPauseStartIndex = nil
+        segmentElapsedBeforePause = 0
+        segmentStartedAt = Date().timeIntervalSince1970
+        startSegmentJournal(requestID: command.requestId)
+        startLiveTranscriptionIfSupported(
+            command: command,
+            startIndex: fromIndex,
+            language: segmentLanguage ?? command.language ?? "auto"
+        )
+        startVoiceAutoStopIfSupported(command: command, startIndex: fromIndex)
+        startDurationTimer()
+    }
+
+    /// Stage a committed continuous-dictation span through the same durable
+    /// handoff the manual stop path uses, while the recorder stays live. The
+    /// commit ID doubles as the job ID and the draft transcript delivery ID
+    /// so the queue's later batch transcript de-duplicates against any text
+    /// the live session already delivered.
+    private func enqueueContinuousDictationSegment(
+        audioURL: URL,
+        journalURL: URL?,
+        deliveryRequestId: String,
+        commitID: UUID,
+        samples: [Float],
+        completionMode: RecordingCompletionMode
+    ) {
+        let presetSnapshot = segmentPresetSnapshot
+            ?? RecordingCompletionMode.presetSnapshot(
+                for: completionMode,
+                lookup: { CapturePresetStore.flow(id: $0) },
+                fallback: { CapturePresetStore.selectedFlow() }
+            )
+        let voiceProcessingConfiguration = segmentVoiceProcessingConfiguration
+        let draftRequestID = segmentDraftRequestID
+        let modelId = segmentModelId ?? AppConstants.defaultTranscriptionBackendID
+        let language = segmentLanguage ?? "auto"
+        let duration = TimeInterval(samples.count) / whisperSampleRate
+        let originLocationTask = beginOriginLocationResolution(
+            requestID: deliveryRequestId,
+            completionMode: completionMode,
+            commandOrigin: segmentOrigin,
+            presetOverride: presetSnapshot
+        )
+        let delivery: RecordingJobDelivery = {
+            if case .runVox = completionMode, let presetSnapshot {
+                return .preset(presetSnapshot)
+            }
+            return completionMode.recordingJobDelivery
+        }()
+        let fallbackModelID = AppConstants.sharedDefaults?.string(
+            forKey: AppConstants.selectedFallbackModelKey
+        )
+        let queueConfiguration = RecordingQueuePreferences.load()
+        guard let handoffIntentStore = AppConstants.recordingsDirectoryURL.map(
+            RecordingJobHandoffIntentStore.init(recordingsDirectoryURL:)
+        ) else {
+            lastError = String(localized: "The recording handoff could not be preserved. The original audio was preserved.")
+            discardOriginLocationResolution(originLocationTask, requestID: deliveryRequestId)
+            return
+        }
+        do {
+            try handoffIntentStore.save(RecordingJobHandoffIntent(
+                jobID: commitID,
+                audioFilename: audioURL.lastPathComponent,
+                relatedAudioFilenames: [journalURL?.lastPathComponent].compactMap { $0 },
+                requestID: deliveryRequestId,
+                draftRequestID: draftRequestID,
+                liveSessionID: nil,
+                captureSource: CaptureSource.recordingSource(for: segmentOrigin),
+                locationOutcome: presetSnapshot?.locationPolicy.isEnabled == true
+                    ? .unavailable(.unavailable, attemptedAt: Date())
+                    : nil,
+                duration: duration,
+                source: .iOSApp,
+                delivery: delivery,
+                voiceProcessingConfiguration: voiceProcessingConfiguration,
+                modelID: modelId,
+                fallbackModelID: fallbackModelID,
+                language: language,
+                configuration: queueConfiguration
+            ))
+        } catch {
+            lastError = String(localized: "The recording handoff could not be preserved. The original audio was preserved.")
+            discardOriginLocationResolution(originLocationTask, requestID: deliveryRequestId)
+            return
+        }
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            let originSnapshot = await originLocationTask?.value
+            guard originLocationTask == nil || originSnapshot != nil else {
+                self.lastError = String(localized: "Shared capture storage is unavailable. The recording was preserved.")
+                return
+            }
+            do {
+                guard let stagedIntent = try handoffIntentStore.load(jobID: commitID) else {
+                    throw NSError(domain: "RecordingHandoff", code: 2)
+                }
+                try handoffIntentStore.save(stagedIntent.finalized(
+                    audioFilename: audioURL.lastPathComponent,
+                    relatedAudioFilenames: [journalURL?.lastPathComponent].compactMap { $0 },
+                    duration: duration,
+                    captureSource: originSnapshot?.source,
+                    locationOutcome: originSnapshot?.outcome
+                ))
+            } catch {
+                self.lastError = String(localized: "The recording handoff could not be preserved. The original audio was preserved.")
+                return
+            }
+            self.enqueueAppRecording(
+                audioURL: audioURL,
+                requestId: deliveryRequestId,
+                modelId: modelId,
+                fallbackModelId: fallbackModelID,
+                language: language,
+                duration: duration,
+                completionMode: completionMode,
+                jobID: commitID,
+                draftRequestID: draftRequestID,
+                liveSessionID: nil,
+                fallbackRecoveryURL: journalURL,
+                captureSource: originSnapshot?.source,
+                locationOutcome: originSnapshot?.outcome,
+                presetSnapshot: presetSnapshot,
+                voiceProcessingConfiguration: voiceProcessingConfiguration,
+                queueConfiguration: queueConfiguration,
+                finishCaptureHandoff: true
+            )
         }
     }
 
@@ -2205,6 +2558,10 @@ final class PersistentRecorder {
     private func clearSegmentState() {
         cancelLiveTranscription()
         cancelEndOfSpeechDetection()
+        continuousDictationSession = nil
+        continuousDictationCommand = nil
+        continuousDictationSessionLimitTask?.cancel()
+        continuousDictationSessionLimitTask = nil
         segmentRequestId = nil
         segmentModelId = nil
         segmentLanguage = nil

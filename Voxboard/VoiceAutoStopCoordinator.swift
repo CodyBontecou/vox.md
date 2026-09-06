@@ -14,6 +14,13 @@ enum VoiceAutoStopCoordinatorError: Error, LocalizedError, Sendable {
 
 /// Feeds exact 4,096-sample, 16 kHz frames from the recorder's rolling buffer
 /// into FluidAudio VAD. Work stays off the AVAudioEngine real-time callback.
+///
+/// The coordinator finishes itself after firing `onSpeechEnd` once: a session
+/// that must keep listening (continuous dictation) re-arms a FRESH
+/// coordinator initialized with `startIndex` at the commit boundary cursor.
+/// `pause()`/`resume()` keep their existing semantics across those re-arms
+/// because the recorder always routes them through the currently armed
+/// instance.
 actor VoiceAutoStopCoordinator {
     typealias EndHandler = @MainActor @Sendable () -> Void
 
