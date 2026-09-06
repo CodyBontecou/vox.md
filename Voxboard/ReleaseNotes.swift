@@ -32,6 +32,16 @@ enum VoxboardReleaseNotes {
                             symbolSystemName: "paperplane.fill",
                             title: "Shortcuts respect your recording setting",
                             description: "Voice captures started from Shortcuts and automations now follow the recording result you configured instead of always adding to your draft. A small indicator next to the mic shows what stopping will do."
+                        ),
+                        .init(
+                            symbolSystemName: "arrow.uturn.backward.circle.fill",
+                            title: "Undo a sent capture",
+                            description: "The “Sent” toast now offers Undo for five seconds, bringing your capture back as an editable draft. Recording and Send controls sit at opposite ends of the capture bar so stopping speech can’t fat-finger Send — and an optional “Confirm Preset Sends” setting (off by default) guards immediate sends."
+                        ),
+                        .init(
+                            symbolSystemName: "waveform.circle.badge.plus",
+                            title: "Continuous dictation",
+                            description: "Turn on “Save Segment & Keep Listening” and Vox.md commits each finished thought as its own segment, then keeps the microphone open for the next one — no more re-pressing the mic mid-flow. Sessions wrap up gracefully after ten minutes to protect battery."
                         )
                     ]
                 )
