@@ -18,6 +18,26 @@ enum VoxboardReleaseNotes {
 
     private static let versionNotes: [VersionNotes] = [
         .init(
+            version: "2.8",
+            items: [
+                .list(
+                    title: "What’s new in Vox.md",
+                    rows: [
+                        .init(
+                            symbolSystemName: "text.badge.plus",
+                            title: "Your recording result now sticks",
+                            description: "Choose “Add to Draft” or “Send Immediately” once and Vox.md remembers it — the setting no longer resets every launch. “Add to Draft” is the new default, so recordings land in your Capture draft until you decide otherwise."
+                        ),
+                        .init(
+                            symbolSystemName: "paperplane.fill",
+                            title: "Shortcuts respect your recording setting",
+                            description: "Voice captures started from Shortcuts and automations now follow the recording result you configured instead of always adding to your draft. A small indicator next to the mic shows what stopping will do."
+                        )
+                    ]
+                )
+            ]
+        ),
+        .init(
             version: "2.7",
             items: [
                 .list(
