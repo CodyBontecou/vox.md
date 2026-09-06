@@ -156,4 +156,82 @@ final class RecordingCompletionModeTests: XCTestCase {
             .runVox(flowID: "custom")
         )
     }
+
+    // MARK: - Persisted recording result mode (`capture.voice.defaultResult.v1`)
+
+    func testAbsentPersistedResultModeDefaultsToDraft() throws {
+        let (defaults, suiteName) = try makeDefaults()
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        // Key absent (fresh installs and pre-2.8 upgrades) → "Add to Draft".
+        XCTAssertEqual(
+            QuickCaptureView.externallyRequestedVoiceRecordingMode(defaults: defaults),
+            .draft
+        )
+        XCTAssertEqual(
+            QuickCaptureView.completionMode(for: .draft, attachAudio: false, flowID: "general"),
+            .captureDraft(attachAudio: false)
+        )
+    }
+
+    func testPersistedSendImmediatelyModeFlowsIntoCompletionMode() throws {
+        let (defaults, suiteName) = try makeDefaults()
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        defaults.set(
+            CaptureRecordingMode.preset.rawValue,
+            forKey: CapturePreferenceKeys.defaultRecordingResultMode
+        )
+
+        // The Shortcuts "Record a Capture" path must honor a persisted
+        // "Send Immediately" choice instead of forcing the draft flow.
+        let mode = QuickCaptureView.externallyRequestedVoiceRecordingMode(defaults: defaults)
+        XCTAssertEqual(mode, .preset)
+        XCTAssertEqual(
+            QuickCaptureView.completionMode(for: mode, attachAudio: false, flowID: "general"),
+            .runVox(flowID: "general")
+        )
+    }
+
+    func testPersistedDraftModeFlowsIntoCompletionModeWithAttachAudio() throws {
+        let (defaults, suiteName) = try makeDefaults()
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        defaults.set(
+            CaptureRecordingMode.draft.rawValue,
+            forKey: CapturePreferenceKeys.defaultRecordingResultMode
+        )
+
+        let mode = QuickCaptureView.externallyRequestedVoiceRecordingMode(defaults: defaults)
+        XCTAssertEqual(mode, .draft)
+        XCTAssertEqual(
+            QuickCaptureView.completionMode(for: mode, attachAudio: true, flowID: "general"),
+            .captureDraft(attachAudio: true)
+        )
+    }
+
+    func testInvalidPersistedResultModeFallsBackToDraft() throws {
+        let (defaults, suiteName) = try makeDefaults()
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        defaults.set(
+            "unknown-mode",
+            forKey: CapturePreferenceKeys.defaultRecordingResultMode
+        )
+
+        XCTAssertEqual(
+            QuickCaptureView.externallyRequestedVoiceRecordingMode(defaults: defaults),
+            .draft
+        )
+    }
+
+    func testPersistedResultModeRoundTripsThroughRawValue() {
+        // The persisted payload is the enum's String raw value, so values
+        // written by the details-bar picker resolve back to the same mode.
+        for mode in CaptureRecordingMode.allCases {
+            XCTAssertEqual(CaptureRecordingMode(persistedRawValue: mode.rawValue), mode)
+        }
+    }
+
+    private func makeDefaults() throws -> (UserDefaults, String) {
+        let suiteName = "test.recording-completion-mode.\(UUID().uuidString)"
+        return (try XCTUnwrap(UserDefaults(suiteName: suiteName)), suiteName)
+    }
 }

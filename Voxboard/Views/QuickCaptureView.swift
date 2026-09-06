@@ -23,11 +23,19 @@ private struct InitialComposerFocusTaskID: Equatable {
     let defersForReleaseNotes: Bool
 }
 
-private enum CaptureRecordingMode: String, CaseIterable, Identifiable {
+enum CaptureRecordingMode: String, CaseIterable, Identifiable {
     case draft
     case preset
 
     var id: Self { self }
+
+    /// Resolves the persisted recording result mode. A missing or invalid
+    /// stored value maps to `.draft` ("Add to Draft") — the default for new
+    /// installs and the migration default for existing users upgrading to
+    /// 2.8, where the recording result previously reset every launch.
+    init(persistedRawValue: String?) {
+        self = Self(rawValue: persistedRawValue ?? "") ?? .draft
+    }
 }
 
 /// Mirrors the keyboard extension's seven-bar recording waveform while using
@@ -96,7 +104,17 @@ struct QuickCaptureView: View {
     @State private var showsAudioImporter = false
     @State private var showsVoiceCaptureDetails = false
     @State private var showsWatchRecordingQueue = false
-    @State private var recordingMode: CaptureRecordingMode = .preset
+    /// Durable recording result mode ("Add to Draft" vs "Send Immediately").
+    /// `recordingMode` seeds from this persisted value at first render and
+    /// writes back through the details-bar picker binding, so the choice
+    /// survives relaunches instead of resetting to "Send Immediately".
+    @AppStorage(CapturePreferenceKeys.defaultRecordingResultMode)
+    private var persistedRecordingResultMode = CaptureRecordingMode.draft.rawValue
+    @State private var recordingMode: CaptureRecordingMode = .init(
+        persistedRawValue: UserDefaults.standard.string(
+            forKey: CapturePreferenceKeys.defaultRecordingResultMode
+        )
+    )
     @State private var attachRecordingAudio = false
     @State private var lastStartedRecordingMode: CaptureRecordingMode = .preset
     @State private var micPermissionGranted = Self.currentMicrophonePermissionGranted()
@@ -706,6 +724,11 @@ struct QuickCaptureView: View {
                 Image(systemName: "stop.fill")
                     .font(.system(size: 17, weight: .medium))
                     .foregroundStyle(Geist.error)
+
+                recordingResultModeIndicator
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(Geist.muted)
+                    .accessibilityHidden(true)
             }
             .fixedSize(horizontal: true, vertical: false)
         )
@@ -713,10 +736,29 @@ struct QuickCaptureView: View {
 
     private var idleVoiceCaptureButtonLabel: AnyView {
         AnyView(
-            Image(systemName: "mic")
-                .font(.system(size: 17, weight: .medium))
-                .foregroundStyle(Geist.text)
+            ZStack(alignment: .bottomTrailing) {
+                Image(systemName: "mic")
+                    .font(.system(size: 17, weight: .medium))
+                    .foregroundStyle(Geist.text)
+
+                recordingResultModeIndicator
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundStyle(Geist.Palette.blue700)
+                    .padding(2)
+                    .background(Circle().fill(Geist.Palette.background100))
+                    .offset(x: 4, y: 4)
+                    .accessibilityHidden(true)
+            }
         )
+    }
+
+    /// Compact indicator pinned to the mic control showing the persisted
+    /// recording result mode — `text.badge.plus` when stopping adds the
+    /// transcript to the Capture draft, `paperplane.fill` when it runs the
+    /// selected preset and sends immediately — so users can see what stop
+    /// will do before pressing it.
+    private var recordingResultModeIndicator: Image {
+        Image(systemName: recordingMode == .draft ? "text.badge.plus" : "paperplane.fill")
     }
 
     private var voiceCaptureGesture: some Gesture {
@@ -776,7 +818,7 @@ struct QuickCaptureView: View {
             GeistDivider()
 
             VStack(alignment: .leading, spacing: Geist.Spacing.three) {
-                Picker("Recording result", selection: $recordingMode) {
+                Picker("Recording result", selection: recordingModeSelection) {
                     Text("Add to Draft").tag(CaptureRecordingMode.draft)
                     Text("Send Immediately").tag(CaptureRecordingMode.preset)
                 }
@@ -1851,7 +1893,10 @@ struct QuickCaptureView: View {
         case .sketch: showsSketch = true
         case .link: showsLinkPrompt = true
         case .voice:
-            recordingMode = .draft
+            // External voice requests (Shortcuts "Record a Capture", deep
+            // links) honor the persisted result mode instead of forcing the
+            // draft flow, matching the in-app behavior the user configured.
+            recordingMode = Self.externallyRequestedVoiceRecordingMode()
             startInlineRecording()
         }
     }
@@ -2045,12 +2090,54 @@ struct QuickCaptureView: View {
     }
 
     private var selectedRecordingCompletionMode: RecordingCompletionMode {
-        switch recordingMode {
+        Self.completionMode(
+            for: recordingMode,
+            attachAudio: attachRecordingAudio,
+            flowID: selectedFlow.id
+        )
+    }
+
+    /// Segmented-picker binding that keeps `recordingMode` and the persisted
+    /// default (`capture.voice.defaultResult.v1`) in lockstep, so a change
+    /// made in the details bar survives relaunches.
+    private var recordingModeSelection: Binding<CaptureRecordingMode> {
+        Binding(
+            get: { recordingMode },
+            set: { mode in
+                recordingMode = mode
+                persistedRecordingResultMode = mode.rawValue
+            }
+        )
+    }
+
+    /// Maps the selected recording result mode onto the pipeline completion
+    /// mode. Internal (and static) so unit tests can verify that the persisted
+    /// default flows through to the actual capture behavior.
+    static nonisolated func completionMode(
+        for mode: CaptureRecordingMode,
+        attachAudio: Bool,
+        flowID: String
+    ) -> RecordingCompletionMode {
+        switch mode {
         case .draft:
-            return .captureDraft(attachAudio: attachRecordingAudio)
+            return .captureDraft(attachAudio: attachAudio)
         case .preset:
-            return .runVox(flowID: selectedFlow.id)
+            return .runVox(flowID: flowID)
         }
+    }
+
+    /// Resolves the recording result mode for an externally triggered voice
+    /// capture (Shortcuts intent, deep link): the persisted preference —
+    /// defaulting to `.draft` ("Add to Draft") when unset — rather than a
+    /// forced draft flow.
+    static nonisolated func externallyRequestedVoiceRecordingMode(
+        defaults: UserDefaults = .standard
+    ) -> CaptureRecordingMode {
+        CaptureRecordingMode(
+            persistedRawValue: defaults.string(
+                forKey: CapturePreferenceKeys.defaultRecordingResultMode
+            )
+        )
     }
 
     private var recordingDetailsTitle: String {

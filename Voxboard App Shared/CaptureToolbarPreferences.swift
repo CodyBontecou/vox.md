@@ -3,6 +3,10 @@ import SwiftUI
 
 enum CapturePreferenceKeys {
     static let confirmVoiceNoteBeforeAdding = "capture.voice.confirmBeforeAdding.v1"
+    /// Persisted default recording result mode ("Add to Draft" vs
+    /// "Send Immediately"). Stored as the `CaptureRecordingMode` raw value;
+    /// absent means `.draft` (the fresh-install and 2.8 migration default).
+    static let defaultRecordingResultMode = "capture.voice.defaultResult.v1"
 }
 
 /// The quick actions users can place in the capture bar.
