@@ -99,6 +99,10 @@ struct VoxboardMacApp: App {
             }
         )
 
+        quickCaptureViewModel.configureCaptureRouteOwnership { [weak recorder] in
+            recorder?.ownsCaptureRoute == true
+        }
+
         _modelManager = State(initialValue: modelManager)
         _transcriptStore = State(initialValue: store)
         _usageTracker = State(initialValue: usage)
@@ -249,6 +253,7 @@ struct VoxboardMacApp: App {
                        : String(localized: "Start Recording")) {
                     Self.handleGlobalHotKey(
                         recorder: recorder,
+                        quickCaptureViewModel: quickCaptureViewModel,
                         modelManager: modelManager,
                         usageTracker: usageTracker,
                         windowCoordinator: windowCoordinator
@@ -303,7 +308,11 @@ struct VoxboardMacApp: App {
         }
 
         MenuBarExtra(isInserted: menuBarVisibilityBinding) {
-            MacMenuBarMenu(recorder: recorder, windowCoordinator: windowCoordinator)
+            MacMenuBarMenu(
+                recorder: recorder,
+                quickCaptureViewModel: quickCaptureViewModel,
+                windowCoordinator: windowCoordinator
+            )
                 .environment(modelManager)
                 .environment(transcriptStore)
                 .environment(usageTracker)
@@ -362,25 +371,21 @@ struct VoxboardMacApp: App {
         ) == true else { return }
 
         AppConstants.sharedDefaults?.set(false, forKey: AppConstants.pendingQuickCaptureOpenKey)
-        if let rawSource = AppConstants.sharedDefaults?.string(
-            forKey: AppConstants.pendingQuickCaptureSourceKey
-        ), let source = CaptureSource(rawValue: rawSource) {
-            AppConstants.sharedDefaults?.removeObject(forKey: AppConstants.pendingQuickCaptureSourceKey)
-            quickCaptureViewModel.requestCaptureSource(source)
+        let defaults = AppConstants.sharedDefaults
+        let incoming = CaptureDeepLinkDraft(
+            voxID: defaults?.string(forKey: AppConstants.pendingQuickCaptureVoxIdKey),
+            requestedInput: defaults?.string(forKey: AppConstants.pendingQuickCaptureInputKey)
+                .flatMap(CaptureRequestedInput.init(rawValue:)),
+            source: defaults?.string(forKey: AppConstants.pendingQuickCaptureSourceKey)
+                .flatMap(CaptureSource.init(rawValue:))
+        )
+        defaults?.removeObject(forKey: AppConstants.pendingQuickCaptureSourceKey)
+        defaults?.removeObject(forKey: AppConstants.pendingQuickCaptureVoxIdKey)
+        defaults?.removeObject(forKey: AppConstants.pendingQuickCaptureInputKey)
+        Task { @MainActor in
+            await quickCaptureViewModel.handleDeepLink(.openComposer(incoming))
+            windowCoordinator.showMain(.navigate(.capture))
         }
-        if let voxID = AppConstants.sharedDefaults?.string(
-            forKey: AppConstants.pendingQuickCaptureVoxIdKey
-        ) {
-            AppConstants.sharedDefaults?.removeObject(forKey: AppConstants.pendingQuickCaptureVoxIdKey)
-            quickCaptureViewModel.requestVox(voxID)
-        }
-        if let rawInput = AppConstants.sharedDefaults?.string(
-            forKey: AppConstants.pendingQuickCaptureInputKey
-        ), let input = CaptureRequestedInput(rawValue: rawInput) {
-            AppConstants.sharedDefaults?.removeObject(forKey: AppConstants.pendingQuickCaptureInputKey)
-            quickCaptureViewModel.requestedInput = input
-        }
-        windowCoordinator.showMain(.navigate(.capture))
     }
 
     private func configureGlobalHotKeys() {
@@ -410,6 +415,7 @@ struct VoxboardMacApp: App {
             }
             Self.handleGlobalHotKey(
                 recorder: recorder,
+                quickCaptureViewModel: quickCaptureViewModel,
                 modelManager: modelManager,
                 usageTracker: usageTracker,
                 windowCoordinator: windowCoordinator,
@@ -422,6 +428,7 @@ struct VoxboardMacApp: App {
     @MainActor
     private static func handleGlobalHotKey(
         recorder: MacRecorder,
+        quickCaptureViewModel: QuickCaptureViewModel,
         modelManager: ModelManager,
         usageTracker: UsageTracker,
         windowCoordinator: MacWindowCoordinator,
@@ -441,7 +448,15 @@ struct VoxboardMacApp: App {
         }
 
         Task { @MainActor in
+            await quickCaptureViewModel.load()
+            guard let operation = quickCaptureViewModel.beginCaptureRouteOperation() else {
+                windowCoordinator.showMain(.navigate(.capture))
+                return
+            }
+            defer { quickCaptureViewModel.endCaptureRouteOperation(operation) }
             let granted = await AudioRecorder.requestMicrophonePermission()
+            guard !Task.isCancelled, !recorder.ownsCaptureRoute,
+                  CapturePresetStore.loadFlows().contains(where: { $0.id == flowId && $0.isEnabled }) else { return }
             guard granted else {
                 recorder.lastError = String(localized: "Could not access the microphone. Check macOS Privacy & Security settings.")
                 windowCoordinator.showMain(.navigate(.capture))
@@ -1184,6 +1199,7 @@ private struct MacMenuBarMenu: View {
     @Environment(TranscriptStore.self) private var transcriptStore
 
     @Bindable var recorder: MacRecorder
+    @Bindable var quickCaptureViewModel: QuickCaptureViewModel
     let windowCoordinator: MacWindowCoordinator
     @AppStorage(CapturePresetStore.selectedFlowIdKey, store: AppConstants.sharedDefaults)
     private var selectedFlowId = CapturePresetStore.generalId
@@ -1312,13 +1328,22 @@ private struct MacMenuBarMenu: View {
         }
 
         Task { @MainActor in
+            await quickCaptureViewModel.load()
+            guard let operation = quickCaptureViewModel.beginCaptureRouteOperation() else {
+                windowCoordinator.showMain(.navigate(.capture))
+                return
+            }
+            defer { quickCaptureViewModel.endCaptureRouteOperation(operation) }
+            let flowID = selectedFlowId
             let granted = await AudioRecorder.requestMicrophonePermission()
+            guard !Task.isCancelled, !recorder.ownsCaptureRoute,
+                  CapturePresetStore.loadFlows().contains(where: { $0.id == flowID && $0.isEnabled }) else { return }
             guard granted else {
                 recorder.lastError = String(localized: "Could not access the microphone. Check macOS Privacy & Security settings.")
                 windowCoordinator.showMain(.navigate(.capture))
                 return
             }
-            recorder.startRecording(modelManager: modelManager, flowId: selectedFlowId)
+            recorder.startRecording(modelManager: modelManager, flowId: flowID)
         }
     }
 
@@ -1329,7 +1354,16 @@ private struct MacMenuBarMenu: View {
         panel.canChooseDirectories = false
         panel.canChooseFiles = true
         if panel.runModal() == .OK, let url = panel.url {
-            recorder.importAudioFile(from: url, modelManager: modelManager, flowId: selectedFlowId)
+            let flowID = selectedFlowId
+            Task { @MainActor in
+                await quickCaptureViewModel.load()
+                guard quickCaptureViewModel.requireCaptureRouteAvailable(),
+                      CapturePresetStore.loadFlows().contains(where: { $0.id == flowID && $0.isEnabled }) else {
+                    windowCoordinator.showMain(.navigate(.capture))
+                    return
+                }
+                recorder.importAudioFile(from: url, modelManager: modelManager, flowId: flowID)
+            }
         }
     }
 

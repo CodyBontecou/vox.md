@@ -15,6 +15,12 @@ final class QuickCaptureViewModel {
     var isSubmitting = false
     var isDescribingImages = false
     var isResolvingLocation = false
+    /// Host media work writes this synchronously, not through a view onChange.
+    /// It remains visible to App-level launches even while Capture is unmounted.
+    var isProcessingMedia = false
+    private(set) var pendingPresetSwitch: CapturePresetSwitchConfirmation?
+    private var routeOperationIDs = Set<UUID>()
+    private var hostOwnsCaptureRoute: @MainActor () -> Bool = { false }
     var errorMessage: String?
     var lastReceipt: CaptureReceipt?
     var failedInboxCount = 0
@@ -38,8 +44,6 @@ final class QuickCaptureViewModel {
     private var pendingDraftSave: Task<Void, Never>?
     private var initialLoadTask: Task<Bool, Never>?
     private var hasLoaded = false
-    private var pendingCaptureSource: CaptureSource?
-    private var pendingVoxID: String?
     private var liveRecordedTranscriptPreview: LiveTranscriptDraftPreview?
     private var liveRecordedTranscriptSessionID: UUID?
     private var invalidatedLiveTranscriptSessionIDs = Set<UUID>()
@@ -77,9 +81,9 @@ final class QuickCaptureViewModel {
 
     var selectedVoxProfile: CapturePresetProfile? {
         let enabled = voxProfiles.filter(\.isEnabled)
-        if let voxID = draft.voxID,
-           let selected = enabled.first(where: { $0.id == voxID }) {
-            return selected
+        if let voxID = draft.voxID {
+            // A stale explicit selection must not silently deliver elsewhere.
+            return enabled.first(where: { $0.id == voxID })
         }
         let selectedID = CapturePresetProfileStore.selectedProfileID(defaults: defaults)
         return enabled.first(where: { $0.id == selectedID }) ?? enabled.first
@@ -142,7 +146,8 @@ final class QuickCaptureViewModel {
     }
 
     var canSubmit: Bool {
-        !isSubmitting
+        canChangeCaptureRoute
+            && selectedVoxProfile != nil
             && selectedDestination != nil
             && draft.hasCaptureContent
     }
@@ -175,6 +180,7 @@ final class QuickCaptureViewModel {
     /// journaled preset snapshot without a location outcome is updated too, so
     /// the very next Send resolves the token without changing note metadata.
     func enableEntryLocationTokenForPreset() async {
+        guard requireCaptureRouteAvailable() else { return }
         let profile = draft.voxProfileSnapshot ?? selectedVoxProfile
         guard let presetID = profile?.id else { return }
         CapturePresetStore.setLocationEnabled(
@@ -193,7 +199,9 @@ final class QuickCaptureViewModel {
     func load() async {
         if hasLoaded { return }
         if let initialLoadTask {
-            _ = await initialLoadTask.value
+            // Any waiter may resume first. Publish the barrier result here too,
+            // rather than relying on the task creator's continuation ordering.
+            hasLoaded = await initialLoadTask.value
             return
         }
         let task = Task { @MainActor [self] in
@@ -230,28 +238,17 @@ final class QuickCaptureViewModel {
                     destinationSelectionMode: .inherited
                 )
             }
-            if draft.voxID == nil || !voxProfiles.contains(where: { $0.id == draft.voxID && $0.isEnabled }) {
+            if draft.voxID == nil {
                 draft.voxID = CapturePresetProfileStore.selectedProfileID(defaults: defaults)
             }
             if draft.destinationSelectionMode == .explicit {
-                let inheritedDestinationID = selectedVoxProfile?.captureDestinationID
-                if !draft.inheritDestinationIfEquivalent(to: inheritedDestinationID),
-                   (draft.destinationID == nil || !destinations.contains(where: { $0.id == draft.destinationID })) {
+                if draft.destinationID == nil || !destinations.contains(where: { $0.id == draft.destinationID }) {
                     draft.useInheritedDestination()
                 }
             }
             if let templateID = draft.entryTemplateID,
                !entryTemplates.contains(where: { $0.id == templateID }) {
                 draft.entryTemplateID = nil
-            }
-            if let pendingCaptureSource {
-                draft.captureSource = pendingCaptureSource
-                self.pendingCaptureSource = nil
-            }
-            if let pendingVoxID,
-               voxProfiles.contains(where: { $0.id == pendingVoxID && $0.isEnabled }) {
-                draft.selectVox(pendingVoxID)
-                self.pendingVoxID = nil
             }
             let persistedDraft = try await draftStore.save(draft)
             draft.preserveCaptureStart(from: persistedDraft)
@@ -264,24 +261,6 @@ final class QuickCaptureViewModel {
         }
     }
 
-    func requestCaptureSource(_ source: CaptureSource) {
-        if hasLoaded {
-            draft.captureSource = source
-            scheduleDraftSave()
-        } else {
-            pendingCaptureSource = source
-        }
-    }
-
-    func requestVox(_ id: String) {
-        if hasLoaded {
-            refreshVoxProfiles()
-            selectVox(id)
-        } else {
-            pendingVoxID = id
-        }
-    }
-
     func refreshLibrary() async {
         guard let libraryStore else { return }
         do {
@@ -290,7 +269,8 @@ final class QuickCaptureViewModel {
             entryTemplates = library.entryTemplates
             defaultDestinationID = library.defaultDestinationID
             refreshVoxProfiles()
-            errorMessage = nil
+            // A window's appearance refresh must not dismiss a rejected launch
+            // error before the user sees why its explicit preset did not open.
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -319,6 +299,8 @@ final class QuickCaptureViewModel {
     }
 
     func clearDraft() async {
+        guard let operation = beginCaptureRouteOperation() else { return }
+        defer { endCaptureRouteOperation(operation) }
         pendingDraftSave?.cancel()
         pendingDraftSave = nil
         liveRecordedTranscriptPreview = nil
@@ -338,23 +320,74 @@ final class QuickCaptureViewModel {
     }
 
     func refreshVoxProfiles() {
+        // Refreshing availability is not an implicit draft-selection operation.
         voxProfiles = CapturePresetProfileStore.enabledProfiles(defaults: defaults)
-        if let current = draft.voxID,
-           voxProfiles.contains(where: { $0.id == current && $0.isEnabled }) {
-            return
-        }
-        draft.voxID = CapturePresetProfileStore.selectedProfileID(defaults: defaults)
     }
 
-    func selectVox(_ id: String) {
-        guard voxProfiles.contains(where: { $0.id == id && $0.isEnabled }) else { return }
+    /// App installs a live reader once, before any external launch. Reading the
+    /// recorder directly avoids a view-only disabled-menu or onChange race.
+    func configureCaptureRouteOwnership(_ isOwned: @escaping @MainActor () -> Bool) {
+        hostOwnsCaptureRoute = isOwned
+    }
+
+    var isCaptureRouteOwned: Bool {
+        isLoading || isSubmitting || isDescribingImages || isResolvingLocation
+            || isProcessingMedia || hasLiveRecordedTranscriptPreview
+            || locationDecision != nil || !routeOperationIDs.isEmpty
+            || hostOwnsCaptureRoute()
+    }
+
+    var canChangeCaptureRoute: Bool {
+        hasLoaded && !isCaptureRouteOwned && pendingPresetSwitch == nil
+    }
+
+    @discardableResult
+    func requireCaptureRouteAvailable() -> Bool {
+        guard canChangeCaptureRoute else {
+            errorMessage = QuickCaptureViewModelError.captureRouteBusy.localizedDescription
+            return false
+        }
+        return true
+    }
+
+    /// Acquire before an async permission/import/start boundary. Release with
+    /// defer; tokens cannot accidentally release another operation's ownership.
+    func beginCaptureRouteOperation() -> UUID? {
+        guard requireCaptureRouteAvailable() else { return nil }
+        return holdCaptureRoute()
+    }
+
+    func endCaptureRouteOperation(_ id: UUID) {
+        routeOperationIDs.remove(id)
+    }
+
+    private func holdCaptureRoute() -> UUID {
+        let id = UUID()
+        routeOperationIDs.insert(id)
+        return id
+    }
+
+    /// Returns true only for a real change. Same-ID taps do not save, publish,
+    /// reset overrides or write either global selection preference.
+    @discardableResult
+    func selectVox(_ id: String) -> Bool {
+        let profiles = CapturePresetProfileStore.enabledProfiles(defaults: defaults)
+        guard profiles.contains(where: { $0.id == id }) else {
+            errorMessage = QuickCaptureViewModelError.unknownVox.localizedDescription
+            return false
+        }
+        guard draft.voxID != id else { return false }
+        guard requireCaptureRouteAvailable() else { return false }
+        voxProfiles = profiles
         draft.selectVox(id)
         CapturePresetProfileStore.selectCaptureProfile(id: id, defaults: defaults)
         scheduleDraftSave()
+        return true
     }
 
     func selectDestination(_ id: UUID) {
-        guard destinations.contains(where: { $0.id == id }) else { return }
+        guard requireCaptureRouteAvailable(), destinations.contains(where: { $0.id == id }) else { return }
+        guard draft.destinationID != id || draft.destinationSelectionMode != .explicit else { return }
         draft.selectDestination(id)
         scheduleDraftSave()
     }
@@ -362,6 +395,10 @@ final class QuickCaptureViewModel {
     /// Saves the reusable destination owned by the active Capture Preset and
     /// refreshes routing for the current capture without discarding one-off overrides.
     func saveSelectedPresetDestination(_ destination: CaptureDestination) async throws {
+        guard let operation = beginCaptureRouteOperation() else {
+            throw QuickCaptureViewModelError.captureRouteBusy
+        }
+        defer { endCaptureRouteOperation(operation) }
         guard let libraryStore,
               let defaults = defaults,
               let presetID = selectedVoxProfile?.id else {
@@ -401,18 +438,28 @@ final class QuickCaptureViewModel {
     }
 
     func useVoxRouteDefaults() {
+        guard requireCaptureRouteAvailable(), hasAnyRouteOverride else { return }
         draft.useInheritedDestination()
         draft.placementOverride = nil
         draft.entryTemplateID = nil
         scheduleDraftSave()
     }
 
+    func setEntryTemplateOverride(_ id: UUID?) {
+        guard requireCaptureRouteAvailable(), draft.entryTemplateID != id,
+              id == nil || entryTemplates.contains(where: { $0.id == id }) else { return }
+        draft.entryTemplateID = id
+        scheduleDraftSave()
+    }
+
     func setPlacementOverride(_ placement: CapturePlacement?) {
+        guard requireCaptureRouteAvailable(), draft.placementOverride != placement else { return }
         draft.placementOverride = placement
         scheduleDraftSave()
     }
 
     func clearRouteOverrides() {
+        guard requireCaptureRouteAvailable(), hasAnyRouteOverride else { return }
         draft.relativeNotePathOverride = nil
         draft.placementOverride = nil
         draft.entryTemplateID = nil
@@ -432,6 +479,8 @@ final class QuickCaptureViewModel {
     }
 
     func setOneOffNote(url: URL) async {
+        guard let operation = beginCaptureRouteOperation() else { return }
+        defer { endCaptureRouteOperation(operation) }
         guard let destination = selectedDestination else {
             errorMessage = QuickCaptureViewModelError.unknownDestination.localizedDescription
             return
@@ -588,6 +637,8 @@ final class QuickCaptureViewModel {
         profileSnapshot: CapturePresetProfile
     ) async -> Bool {
         await load()
+        let operation = holdCaptureRoute()
+        defer { endCaptureRouteOperation(operation) }
         guard let draftStore else {
             errorMessage = QuickCaptureViewModelError.storageUnavailable.localizedDescription
             return false
@@ -628,6 +679,8 @@ final class QuickCaptureViewModel {
     @discardableResult
     func clearRecordedOrigin(profileID: String) async -> Bool {
         await load()
+        let operation = holdCaptureRoute()
+        defer { endCaptureRouteOperation(operation) }
         guard let draftStore else { return false }
         guard draft.voxID == profileID,
               draft.voxProfileSnapshot?.id == profileID else { return true }
@@ -664,6 +717,8 @@ final class QuickCaptureViewModel {
         deliveryID: UUID? = nil
     ) async -> Bool {
         await load()
+        let operation = holdCaptureRoute()
+        defer { endCaptureRouteOperation(operation) }
         if let deliveryID,
            draft.appliedRecordingTranscriptIDs?.contains(deliveryID) == true {
             return true
@@ -731,6 +786,8 @@ final class QuickCaptureViewModel {
         deliveryID: UUID? = nil
     ) async -> CaptureAssetReference? {
         await load()
+        let operation = holdCaptureRoute()
+        defer { endCaptureRouteOperation(operation) }
         guard let stagingDirectory = stagingDirectoryURL else {
             errorMessage = QuickCaptureViewModelError.storageUnavailable.localizedDescription
             return nil
@@ -785,6 +842,8 @@ final class QuickCaptureViewModel {
     @discardableResult
     func appendRecognizedText(_ text: String) async -> Bool {
         await load()
+        let operation = holdCaptureRoute()
+        defer { endCaptureRouteOperation(operation) }
         guard liveRecordedTranscriptPreview == nil else {
             errorMessage = String(localized: "Finish the current recording before extracting text from images.")
             return false
@@ -870,6 +929,8 @@ final class QuickCaptureViewModel {
 
     @discardableResult
     func stageVoiceRecording(at sourceURL: URL, transcript: String?) async -> CaptureAssetReference? {
+        let operation = holdCaptureRoute()
+        defer { endCaptureRouteOperation(operation) }
         guard let stagingDirectory = stagingDirectoryURL else {
             errorMessage = QuickCaptureViewModelError.storageUnavailable.localizedDescription
             return nil
@@ -935,6 +996,8 @@ final class QuickCaptureViewModel {
     }
 
     func stageScan(pageImages: [Data], pdfData: Data?, extractedText: String?) async {
+        let operation = holdCaptureRoute()
+        defer { endCaptureRouteOperation(operation) }
         guard let stagingDirectory = stagingDirectoryURL else {
             errorMessage = QuickCaptureViewModelError.storageUnavailable.localizedDescription
             return
@@ -983,6 +1046,8 @@ final class QuickCaptureViewModel {
         drawingFilename: String = "sketch.drawing",
         drawingContentTypeIdentifier: String = "com.apple.pencilkit.drawing"
     ) async {
+        let operation = holdCaptureRoute()
+        defer { endCaptureRouteOperation(operation) }
         guard let stagingDirectory = stagingDirectoryURL else {
             errorMessage = QuickCaptureViewModelError.storageUnavailable.localizedDescription
             return
@@ -1292,6 +1357,11 @@ final class QuickCaptureViewModel {
     }
 
     func retryUnavailableLocation() async {
+        guard !isSubmitting, !hostOwnsCaptureRoute(), !isProcessingMedia,
+              routeOperationIDs.isEmpty, pendingPresetSwitch == nil,
+              let decision = locationDecision, decision.presetID == draft.voxID else { return }
+        let operation = holdCaptureRoute()
+        defer { endCaptureRouteOperation(operation) }
         locationDecision = nil
         pendingSendWithoutLocationOutcome = nil
         do {
@@ -1301,6 +1371,7 @@ final class QuickCaptureViewModel {
                 outcome: nil,
                 decisionOverride: nil
             ) ?? draft
+            endCaptureRouteOperation(operation)
             await submit()
         } catch {
             errorMessage = error.localizedDescription
@@ -1308,7 +1379,11 @@ final class QuickCaptureViewModel {
     }
 
     func sendWithoutUnavailableLocation(alwaysForPreset: Bool) async {
-        guard let decision = locationDecision else { return }
+        guard !isSubmitting, !hostOwnsCaptureRoute(), !isProcessingMedia,
+              routeOperationIDs.isEmpty, pendingPresetSwitch == nil,
+              let decision = locationDecision, decision.presetID == draft.voxID else { return }
+        let operation = holdCaptureRoute()
+        defer { endCaptureRouteOperation(operation) }
         let outcome = CaptureLocationOutcome.unavailable(
             decision.reason,
             attemptedAt: decision.attemptedAt
@@ -1334,10 +1409,15 @@ final class QuickCaptureViewModel {
             refreshVoxProfiles()
         }
         locationDecision = nil
+        endCaptureRouteOperation(operation)
         await submit()
     }
 
     func cancelUnavailableLocation() async {
+        guard locationDecision != nil, !isSubmitting, !hostOwnsCaptureRoute(),
+              routeOperationIDs.isEmpty else { return }
+        let operation = holdCaptureRoute()
+        defer { endCaptureRouteOperation(operation) }
         locationDecision = nil
         pendingSendWithoutLocationOutcome = nil
         do {
@@ -1352,36 +1432,11 @@ final class QuickCaptureViewModel {
 
     func handleDeepLink(_ action: CaptureDeepLinkAction) async {
         do {
-            if destinations.isEmpty { await load() }
+            await load()
+            guard hasLoaded else { return }
             switch action {
             case .openComposer(let incoming):
-                draft.captureSource = incoming.source ?? .deepLink
-                if let voxID = incoming.voxID {
-                    refreshVoxProfiles()
-                    guard voxProfiles.contains(where: { $0.id == voxID && $0.isEnabled }) else {
-                        throw QuickCaptureViewModelError.unknownVox
-                    }
-                    draft.selectVox(voxID)
-                    CapturePresetProfileStore.selectCaptureProfile(
-                        id: voxID,
-                        defaults: defaults
-                    )
-                }
-                if let destinationID = incoming.destinationID {
-                    guard destinations.contains(where: { $0.id == destinationID }) else {
-                        throw QuickCaptureViewModelError.unknownDestination
-                    }
-                    draft.selectDestination(destinationID)
-                }
-                if let text = incoming.text, !text.isEmpty {
-                    let separator = draft.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "" : "\n\n"
-                    draft.text += separator + text
-                }
-                if let url = incoming.url {
-                    draft.additionalPayloads.append(.url(url, title: nil))
-                }
-                requestedInput = incoming.requestedInput
-                try await persistDurableDraft()
+                try await openComposer(incoming)
 
             case .processInboxRequest(let requestID):
                 try await processInboxRequest(id: requestID)
@@ -1397,6 +1452,109 @@ final class QuickCaptureViewModel {
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+
+    private func openComposer(_ incoming: CaptureDeepLinkDraft) async throws {
+        guard requireCaptureRouteAvailable() else { throw QuickCaptureViewModelError.captureRouteBusy }
+        let profiles = try await validateComposerLaunch(incoming)
+        guard requireCaptureRouteAvailable() else { throw QuickCaptureViewModelError.captureRouteBusy }
+        if incoming.source == .widget, let id = incoming.voxID,
+           id != draft.voxID, draft.hasCaptureContent {
+            pendingPresetSwitch = CapturePresetSwitchConfirmation(
+                incoming: incoming,
+                presetName: profiles.first(where: { $0.id == id })!.displayName,
+                draft: draft,
+                requestedInput: requestedInput
+            )
+            return
+        }
+        try await applyComposerLaunch(incoming, profiles: profiles)
+    }
+
+    func cancelPresetSwitch(id: UUID) {
+        guard pendingPresetSwitch?.id == id else { return }
+        pendingPresetSwitch = nil
+    }
+
+    @discardableResult
+    func confirmPresetSwitch(id: UUID) async -> Bool {
+        guard let pending = pendingPresetSwitch, pending.id == id else { return false }
+        var consumed = false
+        do {
+            let profiles = try await validateComposerLaunch(pending.incoming)
+            // Recheck after the disk await, including cancellation/replacement of
+            // this decision. A duplicate acceptance never applies twice.
+            guard pendingPresetSwitch?.id == id else { return false }
+            guard !isCaptureRouteOwned,
+                  pending.matches(draft: draft, requestedInput: requestedInput) else {
+                throw QuickCaptureViewModelError.stalePresetSwitch
+            }
+            pendingPresetSwitch = nil
+            consumed = true
+            try await applyComposerLaunch(pending.incoming, profiles: profiles)
+            errorMessage = nil
+            return true
+        } catch {
+            guard consumed || pendingPresetSwitch?.id == id else { return false }
+            if pendingPresetSwitch?.id == id { pendingPresetSwitch = nil }
+            errorMessage = error.localizedDescription
+            return false
+        }
+    }
+
+    private func validateComposerLaunch(_ incoming: CaptureDeepLinkDraft) async throws -> [CapturePresetProfile] {
+        guard let libraryStore else { throw QuickCaptureViewModelError.storageUnavailable }
+        let library = try await libraryStore.load()
+        let profiles = CapturePresetProfileStore.enabledProfiles(defaults: defaults)
+        if let id = incoming.voxID, !profiles.contains(where: { $0.id == id }) {
+            throw QuickCaptureViewModelError.unknownVox
+        }
+        if let id = incoming.destinationID, !library.destinations.contains(where: { $0.id == id }) {
+            throw QuickCaptureViewModelError.unknownDestination
+        }
+        if let url = incoming.url, !["http", "https"].contains(url.scheme?.lowercased() ?? "") {
+            throw CaptureDeepLinkError.invalidURL
+        }
+        // Check the combined draft, not just the parser's incoming text budget.
+        guard composerDraft(applying: incoming).text.count <= CaptureInputLimits.maximumTextCharacters else {
+            throw QuickCaptureViewModelError.textTooLarge
+        }
+        return profiles
+    }
+
+    private func composerDraft(applying incoming: CaptureDeepLinkDraft) -> CaptureDraft {
+        var candidate = draft
+        if let id = incoming.voxID { candidate.selectVox(id) }
+        if let id = incoming.destinationID { candidate.selectDestination(id) }
+        candidate.captureSource = incoming.source ?? .deepLink
+        if let text = incoming.text, !text.isEmpty {
+            let separator = candidate.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "" : "\n\n"
+            candidate.text += separator + text
+        }
+        if let url = incoming.url { candidate.additionalPayloads.append(.url(url, title: nil)) }
+        return candidate
+    }
+
+    private func applyComposerLaunch(_ incoming: CaptureDeepLinkDraft, profiles: [CapturePresetProfile]) async throws {
+        guard let operation = beginCaptureRouteOperation() else { throw QuickCaptureViewModelError.captureRouteBusy }
+        defer { endCaptureRouteOperation(operation) }
+        let previous = draft
+        let candidate = composerDraft(applying: incoming)
+        // Publish the complete validated value together, not source/input first.
+        draft = candidate
+        voxProfiles = profiles
+        do {
+            try await persistDurableDraft()
+        } catch {
+            if draft == candidate { draft = previous }
+            throw error
+        }
+        if let id = incoming.voxID, id != previous.voxID {
+            CapturePresetProfileStore.selectCaptureProfile(id: id, defaults: defaults)
+        }
+        // Input consumers may start work only after the durable commit and lease.
+        endCaptureRouteOperation(operation)
+        requestedInput = incoming.requestedInput
     }
 
     func processPendingInbox() async {
@@ -1509,6 +1667,8 @@ final class QuickCaptureViewModel {
     private func stageAsset(
         _ operation: (CaptureAssetStager) async throws -> CapturePayload
     ) async {
+        let routeOperation = holdCaptureRoute()
+        defer { endCaptureRouteOperation(routeOperation) }
         guard let stagingDirectory = stagingDirectoryURL else {
             errorMessage = QuickCaptureViewModelError.storageUnavailable.localizedDescription
             return
@@ -1825,6 +1985,8 @@ enum QuickCaptureViewModelError: Error, LocalizedError {
     case noteOutsideDestination
     case textTooLarge
     case assetsTooLarge
+    case captureRouteBusy
+    case stalePresetSwitch
 
     var errorDescription: String? {
         switch self {
@@ -1846,6 +2008,10 @@ enum QuickCaptureViewModelError: Error, LocalizedError {
             return String(localized: "Capture text is above the 100,000-character safety limit.")
         case .assetsTooLarge:
             return String(localized: "Capture attachments exceed the 250 MB total safety limit.")
+        case .captureRouteBusy:
+            return String(localized: "Finish the current recording, import, send or preset decision before changing this Capture’s route.")
+        case .stalePresetSwitch:
+            return String(localized: "This Capture changed or became busy. Open the preset again to switch safely.")
         }
     }
 }

@@ -81,6 +81,13 @@ final class MacRecorder {
     var isTranscribing = false
     var isExporting = false
     var isResolvingLocation = false
+    /// Covers async meeting start/finalization and location-disabled imports,
+    /// not just the visible recording/transcription phases.
+    var ownsCaptureRoute: Bool {
+        isRecording || isTranscribing || isExporting || isResolvingLocation
+            || isCaptureStarting || isMeetingCaptureFinalizing
+            || recordingQueue.isCaptureActive || recordingQueue.isProcessing
+    }
     var recordingDuration: TimeInterval = 0
     var transcriptionProgress: TranscriptionProgress?
     var lastTranscriptionResult: String?
