@@ -9,6 +9,9 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
     public var id: String
     public var name: String
     public var symbolName: String
+    /// Optional emoji identity, stored losslessly. Validate input and rendering
+    /// with `CapturePresetEmoji.normalized(_:)`; `symbolName` remains the fallback.
+    public var emoji: String?
     public var isEnabled: Bool
     public var isBuiltIn: Bool
     public var kind: CapturePresetKind
@@ -52,6 +55,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         id: String,
         name: String,
         symbolName: String,
+        emoji: String? = nil,
         isEnabled: Bool = true,
         isBuiltIn: Bool = false,
         kind: CapturePresetKind = .custom,
@@ -77,6 +81,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         self.id = id
         self.name = name
         self.symbolName = symbolName
+        self.emoji = emoji
         self.isEnabled = isEnabled
         self.isBuiltIn = isBuiltIn
         self.kind = kind
@@ -138,6 +143,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
             id: id,
             name: name,
             symbolName: symbolName,
+            emoji: emoji,
             isEnabled: isEnabled,
             isBuiltIn: isBuiltIn,
             staticFrontmatter: staticFrontmatter,
@@ -176,6 +182,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         case id
         case name
         case symbolName
+        case emoji
         case isEnabled
         case isBuiltIn
         case kind
@@ -206,6 +213,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
             name: try container.decode(String.self, forKey: .name),
             symbolName: try container.decodeIfPresent(String.self, forKey: .symbolName)
                 ?? CapturePresetStore.defaultSymbolName,
+            emoji: try container.decodeIfPresent(String.self, forKey: .emoji),
             isEnabled: try container.decodeIfPresent(Bool.self, forKey: .isEnabled) ?? true,
             isBuiltIn: try container.decodeIfPresent(Bool.self, forKey: .isBuiltIn) ?? false,
             kind: try container.decodeIfPresent(CapturePresetKind.self, forKey: .kind) ?? .custom,
@@ -238,6 +246,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         try container.encode(id, forKey: .id)
         try container.encode(name, forKey: .name)
         try container.encode(symbolName, forKey: .symbolName)
+        try container.encodeIfPresent(emoji, forKey: .emoji)
         try container.encode(isEnabled, forKey: .isEnabled)
         try container.encode(isBuiltIn, forKey: .isBuiltIn)
         try container.encode(kind, forKey: .kind)

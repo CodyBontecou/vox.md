@@ -8,6 +8,9 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
     public var id: String
     public var name: String
     public var symbolName: String
+    /// Optional emoji identity, stored losslessly. Validate input and rendering
+    /// with `CapturePresetEmoji.normalized(_:)`; `symbolName` remains the fallback.
+    public var emoji: String?
     public var isEnabled: Bool
     public var isBuiltIn: Bool
     public var staticFrontmatter: [String: String]
@@ -40,6 +43,7 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
         id: String,
         name: String,
         symbolName: String,
+        emoji: String? = nil,
         isEnabled: Bool = true,
         isBuiltIn: Bool = false,
         staticFrontmatter: [String: String] = [:],
@@ -58,6 +62,7 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
         self.id = id
         self.name = name
         self.symbolName = symbolName
+        self.emoji = emoji
         self.isEnabled = isEnabled
         self.isBuiltIn = isBuiltIn
         self.staticFrontmatter = staticFrontmatter
@@ -116,6 +121,7 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
         case id
         case name
         case symbolName
+        case emoji
         case isEnabled
         case isBuiltIn
         case staticFrontmatter
@@ -138,6 +144,7 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
             id: try container.decode(String.self, forKey: .id),
             name: try container.decode(String.self, forKey: .name),
             symbolName: try container.decodeIfPresent(String.self, forKey: .symbolName) ?? "waveform",
+            emoji: try container.decodeIfPresent(String.self, forKey: .emoji),
             isEnabled: try container.decodeIfPresent(Bool.self, forKey: .isEnabled) ?? true,
             isBuiltIn: try container.decodeIfPresent(Bool.self, forKey: .isBuiltIn) ?? false,
             staticFrontmatter: try container.decodeIfPresent([String: String].self, forKey: .staticFrontmatter) ?? [:],
@@ -228,15 +235,23 @@ public struct CapturePresetReference: Codable, Equatable, Sendable {
     public var id: String
     public var name: String
     public var symbolName: String
+    /// Optional lossless identity; normalize for display and fall back to the symbol.
+    public var emoji: String?
 
-    public init(id: String, name: String, symbolName: String) {
+    public init(id: String, name: String, symbolName: String, emoji: String? = nil) {
         self.id = id
         self.name = name
         self.symbolName = symbolName
+        self.emoji = emoji
     }
 
     public init(profile: CapturePresetProfile) {
-        self.init(id: profile.id, name: profile.displayName, symbolName: profile.symbolName)
+        self.init(
+            id: profile.id,
+            name: profile.displayName,
+            symbolName: profile.symbolName,
+            emoji: profile.emoji
+        )
     }
 }
 
