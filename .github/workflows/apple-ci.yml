@@ -65,6 +65,8 @@ jobs:
           xcodebuild -list -project Voxboard.xcodeproj \
             -disableAutomaticPackageResolution \
             -onlyUsePackageVersionsFromResolvedFile
+      - name: Guard capture view metadata boundaries
+        run: ./scripts/test-capture-view-structure.sh
       - name: Select iOS simulator
         id: simulator
         shell: bash

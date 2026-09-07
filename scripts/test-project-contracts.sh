@@ -4,6 +4,10 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PROJECT="$ROOT/Voxboard.xcodeproj/project.pbxproj"
 
+# The physical-device launch gate must fail on late crashes, stale PIDs, and
+# missing/failed JSON, even on runners without an attached Apple device.
+python3 -m unittest discover -s "$ROOT/scripts/tests"
+
 "$ROOT/scripts/validate-android-wear-m0.py"
 python3 "$ROOT/Packages/contracts/scripts/convert_capabilities.py" --check
 python3 "$ROOT/Packages/contracts/scripts/validate.py"
@@ -650,7 +654,8 @@ if 'providers.prefix(' in share_source:
 quick_capture_source = (root / 'Voxboard/Views/QuickCaptureView.swift').read_text()
 multimodal_capture_source = (root / 'Voxboard/Capture/MultimodalCaptureViews.swift').read_text()
 watch_queue_source = (root / 'Voxboard/Views/WatchRecordingQueueView.swift').read_text()
-quick_capture_ui_source = quick_capture_source + multimodal_capture_source + watch_queue_source
+capture_canvas_source = (root / 'Voxboard/Capture/QuickCaptureCanvas.swift').read_text()
+quick_capture_ui_source = quick_capture_source + capture_canvas_source + multimodal_capture_source + watch_queue_source
 watch_bridge_source = (root / 'Voxboard Watch Shared/WatchPhoneBridge.swift').read_text()
 watch_controller_source = (root / 'Voxboard/WatchRecordingController.swift').read_text()
 watch_pipeline_source = (root / 'Voxboard/WatchRecordingPipeline.swift').read_text()

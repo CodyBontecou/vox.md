@@ -166,507 +166,452 @@ struct QuickCaptureView: View {
         #endif
     }
 
-    var body: some View {
-        presentedContent
-    }
+    // State and effects live here; presentation crosses concrete section
+    // boundaries. See docs/capture-view-regression-tests.md before adding UI.
+    var body: CaptureViewSection { presentedContent }
 
-    private var captureContent: AnyView {
-        AnyView(
-            ZStack(alignment: .top) {
-                Geist.Palette.background100.ignoresSafeArea()
-
-                VStack(spacing: 0) {
-                    captureOCRProgressBanner
-
-                    if viewModel.selectedDestination == nil && !isLocalizationScreenshot {
-                        AnyView(emptyDestinationBanner)
-                        GeistDivider()
-                    }
-
-                    if watchRecordingPipeline.hasVisibleItems {
-                        AnyView(watchRecordingStatusCard)
-                        GeistDivider()
-                    }
-
-                    AnyView(composer.layoutPriority(1))
-
-                    if shouldShowImmediateLiveTranscription {
-                        GeistDivider()
-                        AnyView(immediateLiveTranscriptionBar)
-                    }
-
-                    if !viewModel.draft.additionalPayloads.isEmpty {
-                        AnyView(attachmentStrip)
-                    }
-                }
-
-                keyboardGuidanceOverlay
-                captureErrorOverlay
-                fileExportOverlay
-                sentToastOverlay
-            }
-            // Keep the controls owned by the keyboard-aware safe area instead of the
-            // flexible editor stack, where a retained first responder can cover them.
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                AnyView(captureControls)
-            }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                if isKeyboardListeningActive {
-                    Button(action: togglePersistentListening) {
-                        Image(systemName: "headphones")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(Geist.Palette.blue700)
-                    }
-                    .accessibilityLabel("Stop keyboard listening")
-                    .accessibilityHint("Turns off voice input for the Vox.md keyboard")
-                    .accessibilityIdentifier("capture_keyboard_listening_status")
-                }
-            }
-        }
-        .toolbarBackground(Geist.Palette.background100, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
-        )
-    }
-
-    // MARK: - Type-erased capture sections
-    // `captureContent`'s un-erased ViewBuilder tree overflowed the Swift
-    // runtime demangler's stack on device (SIGSEGV at launch; crash log
-    // 2026-09-06 21:46). Opaque `some View` members expand recursively at
-    // the use site, so each section below is erased with AnyView — and each
-    // opaque child is wrapped at its use site — to cap every mangled-name
-    // depth independently. See voiceCaptureButton's erasure note.
-
-    private var captureOCRProgressBanner: AnyView {
-        AnyView(
-            Group {
-                if isExtractingText {
-                    HStack(spacing: Geist.Spacing.two) {
-                        ProgressView()
-                            .controlSize(.small)
-                        Text("Extracting text on this device…")
-                            .font(Geist.caption())
-                            .foregroundStyle(Geist.muted)
-                        Spacer()
-                    }
-                    .padding(.horizontal, Geist.Spacing.three)
-                    .frame(minHeight: Geist.ControlHeight.medium)
-                    .background(Geist.Palette.background200)
-                    .accessibilityElement(children: .combine)
-                    .accessibilityIdentifier("capture_ocr_progress")
-                    GeistDivider()
-                }
-            }
-        )
-    }
-
-    private var keyboardGuidanceOverlay: AnyView {
-        AnyView(
-            Group {
-                if let guidance = keyboardReturnGuidance {
-                    keyboardReturnGuidanceBanner(guidance.phase)
-                        .padding(.horizontal, 12)
-                        .padding(.top, 8)
-                        .transition(.move(edge: .top).combined(with: .opacity))
-                        .zIndex(5)
-                        .task(id: guidance.id) {
-                            await dismissKeyboardReturnGuidance(after: .seconds(6), id: guidance.id)
+    private var captureContent: CaptureViewSection {
+        CaptureViewSection {
+            QuickCaptureCanvas(
+                showsDestination: viewModel.selectedDestination == nil && !isLocalizationScreenshot,
+                showsWatchStatus: watchRecordingPipeline.hasVisibleItems,
+                showsLiveTranscript: shouldShowImmediateLiveTranscription,
+                showsAttachments: !viewModel.draft.additionalPayloads.isEmpty,
+                ocrProgress: captureOCRProgressBanner,
+                destination: emptyDestinationBanner,
+                watchStatus: watchRecordingStatusCard,
+                composer: composer,
+                liveTranscript: immediateLiveTranscriptionBar,
+                attachments: attachmentStrip,
+                controls: captureControls,
+                keyboardGuidance: keyboardGuidanceOverlay,
+                error: captureErrorOverlay,
+                fileExport: fileExportOverlay,
+                sentToast: sentToastOverlay
+            )
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    if isKeyboardListeningActive {
+                        Button(action: togglePersistentListening) {
+                            Image(systemName: "headphones")
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundStyle(Geist.Palette.blue700)
                         }
-                }
-            }
-        )
-    }
-
-    private var captureErrorOverlay: AnyView {
-        AnyView(
-            Group {
-                if let message = captureErrorMessage {
-                    errorBanner(message)
-                        .padding(.horizontal, 12)
-                        .padding(.top, 8)
-                        .transition(.move(edge: .top).combined(with: .opacity))
-                        .zIndex(3)
-                }
-            }
-        )
-    }
-
-    private var fileExportOverlay: AnyView {
-        AnyView(
-            Group {
-                if let toast = fileExportToast {
-                    FileExportToastView(fileName: toast.url.lastPathComponent) {
-                        openExportedFileInFiles(toast.url)
+                        .accessibilityLabel("Stop keyboard listening")
+                        .accessibilityHint("Turns off voice input for the Vox.md keyboard")
+                        .accessibilityIdentifier("capture_keyboard_listening_status")
                     }
-                    .padding(.horizontal, 20)
+                }
+            }
+            .toolbarBackground(Geist.Palette.background100, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+        }
+    }
+
+    private var captureOCRProgressBanner: CaptureViewSection {
+        CaptureViewSection {
+            if isExtractingText {
+                QuickCaptureOCRProgress()
+                GeistDivider()
+            }
+        }
+    }
+
+    private var keyboardGuidanceOverlay: CaptureViewSection {
+        CaptureViewSection {
+            if let guidance = keyboardReturnGuidance {
+                keyboardReturnGuidanceBanner(guidance.phase)
+                    .padding(.horizontal, 12)
                     .padding(.top, 8)
-                    .frame(maxHeight: .infinity, alignment: .top)
                     .transition(.move(edge: .top).combined(with: .opacity))
-                    .zIndex(4)
-                }
-            }
-        )
-    }
-
-    private var sentToastOverlay: AnyView {
-        AnyView(
-            Group {
-                if showsSentToast {
-                    sentToastLabel
-                        .font(Geist.label())
-                        .foregroundStyle(Geist.Palette.background100)
-                        .padding(.horizontal, Geist.Spacing.four)
-                        .frame(height: Geist.ControlHeight.medium)
-                        .background(Geist.Palette.gray1000)
-                        .clipShape(Capsule())
-                        .padding(.top, 12)
-                        .transition(.move(edge: .top).combined(with: .opacity))
-                        .zIndex(4)
-                        .accessibilityElement(children: .combine)
-                        .accessibilityIdentifier("capture_sent_toast")
-                }
-            }
-        )
-    }
-
-    /// The sent toast, plus an Undo action for the window after a composer
-    /// send. Undo restores the just-sent Capture into this composer as an
-    /// editable draft; the note already written to the vault is kept.
-    /// Type-erased: the Undo button branch grew this toast's un-erased
-    /// ViewBuilder type past the Swift runtime demangler's on-device limit
-    /// (SIGSEGV at launch) — see voiceCaptureButton's erasure note.
-    private var sentToastLabel: AnyView {
-        AnyView(
-            HStack(spacing: Geist.Spacing.three) {
-                Label("Capture Sent", systemImage: "checkmark.circle.fill")
-                if sentUndoSnapshot?.offersUndo == true {
-                    Button {
-                        restoreSentCaptureAsDraft()
-                    } label: {
-                        Text("Undo")
-                            .fontWeight(.semibold)
-                            .underline()
-                            .padding(.horizontal, Geist.Spacing.two)
-                            .contentShape(Rectangle())
+                    .task(id: guidance.id) {
+                        await dismissKeyboardReturnGuidance(after: .seconds(6), id: guidance.id)
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("Undo send and restore the Capture to this draft")
-                    .accessibilityHint("The note already sent to your vault is kept.")
-                    .accessibilityIdentifier("capture_sent_toast_undo")
-                }
             }
-        )
+        }
     }
 
-    private var draftLifecycleContent: some View {
-        captureContent
-            .task {
-                await loadAndPresentRequestedInput()
-                handleCaptureNeedsUnlock(viewModel.needsCaptureUnlock)
+    private var captureErrorOverlay: CaptureViewSection {
+        CaptureViewSection {
+            if let message = captureErrorMessage {
+                errorBanner(message)
+                    .padding(.horizontal, 12)
+                    .padding(.top, 8)
+                    .transition(.move(edge: .top).combined(with: .opacity))
             }
-            .task(id: InitialComposerFocusTaskID(
-                isPending: initialComposerFocusIsPending,
-                hasCompletedInitialLoad: hasCompletedInitialLoad,
-                defersForReleaseNotes: defersCaptureInputFocusForReleaseNotes
-            )) {
-                await fulfillInitialComposerFocusIfReady()
-            }
-            .onChange(of: defersCaptureInputFocusForReleaseNotes) { _, isDeferring in
-                if isDeferring { dismissComposer() }
-            }
-            .onChange(of: viewModel.draft.text) { _, _ in
-                if !viewModel.hasLiveRecordedTranscriptPreview {
-                    viewModel.scheduleDraftSave()
+        }
+    }
+
+    private var fileExportOverlay: CaptureViewSection {
+        CaptureViewSection {
+            if let toast = fileExportToast {
+                FileExportToastView(fileName: toast.url.lastPathComponent) {
+                    openExportedFileInFiles(toast.url)
                 }
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
+                .frame(maxHeight: .infinity, alignment: .top)
+                .transition(.move(edge: .top).combined(with: .opacity))
             }
-            .onChange(of: viewModel.draft.voxID) { _, id in
-                viewModel.scheduleDraftSave()
-                if let id { selectedFlowId = id }
-            }
-            .onChange(of: viewModel.draft.destinationID) { _, _ in viewModel.scheduleDraftSave() }
-            .onChange(of: viewModel.draft.destinationSelectionMode) { _, _ in viewModel.scheduleDraftSave() }
-            .onChange(of: viewModel.draft.entryTemplateID) { _, _ in viewModel.scheduleDraftSave() }
-            .onChange(of: viewModel.draft.placementOverride) { _, _ in viewModel.scheduleDraftSave() }
-            .onChange(of: viewModel.draft.relativeNotePathOverride) { _, _ in viewModel.scheduleDraftSave() }
-            .onChange(of: viewModel.errorMessage) { _, message in
-                guard let message else { return }
-                UIAccessibility.post(notification: .announcement, argument: message)
-            }
-            .onChange(of: viewModel.needsCaptureUnlock) { _, needsUnlock in
-                handleCaptureNeedsUnlock(needsUnlock)
-            }
-            .onChange(of: viewModel.lastReceipt) { _, receipt in
-                guard receipt != nil else { return }
-                usageTracker.reload()
-                ReviewPromptManager.shared.recordSuccessfulCapture(
-                    totalCaptureCount: usageTracker.successfulCapturesUsed
+        }
+    }
+
+    private var sentToastOverlay: CaptureViewSection {
+        CaptureViewSection {
+            if showsSentToast {
+                QuickCaptureSentToast(
+                    offersUndo: sentUndoSnapshot?.offersUndo == true,
+                    undo: restoreSentCaptureAsDraft
                 )
-                Task { await presentSentToast(for: receipt) }
             }
-            .onChange(of: selectedPhotos) { _, items in
-                guard !items.isEmpty else { return }
-                Task { await importPhotos(items, prefix: "photo") }
-            }
-            .onChange(of: selectedScreenshots) { _, items in
-                guard !items.isEmpty else { return }
-                Task { await importScreenshots(items) }
-            }
-            .onChange(of: selectedOCRPhotos) { _, items in
-                guard !items.isEmpty else { return }
-                Task { await importOCRPhotos(items) }
-            }
-            .onChange(of: viewModel.requestedInput) { _, input in
-                handleRequestedInputChange(input)
-            }
+        }
     }
 
-    private var recordingLifecycleContent: some View {
-        draftLifecycleContent
-            .onAppear(perform: prepareRecordingFeatures)
-            .task { await requestMicrophonePermissionIfNeeded() }
-            .onChange(of: pendingKeyboardLaunch) { _, isPending in
-                if isPending { consumePendingKeyboardLaunchIfNeeded() }
-            }
-            .onChange(of: pendingWidgetRecord) { _, isPending in
-                if isPending { consumePendingWidgetRecordIfNeeded() }
-            }
-            .onChange(of: persistentRecorder.needsUnlock) { _, needs in
-                handleRecorderNeedsUnlock(needs)
-            }
-            .onChange(of: persistentRecorder.lastFileExportEvent) { _, event in
-                handleFileExportEvent(event)
-            }
-            .onChange(of: persistentRecorder.lastError) { _, message in
-                guard let message else { return }
-                UIAccessibility.post(notification: .announcement, argument: message)
-            }
-            .onChange(of: persistentRecorder.isTranscribing) { _, isTranscribing in
-                handleTranscribingChange(isTranscribing)
-            }
-            .onChange(of: persistentRecorder.isSegmentActive) { _, isActive in
-                if !isActive { watchRecordingPipeline.resume() }
-            }
-            .onChange(of: watchRecordingPipeline.lastDeliveredRecordingID) { _, recordingID in
-                guard recordingID != nil else { return }
-                usageTracker.reload()
-                Task { await viewModel.refreshHistory() }
-                Task { await presentSentToast() }
-            }
-    }
-
-    private var lifecycleContent: some View {
-        recordingLifecycleContent
-            .task(id: fileExportToast?.id) { await dismissExportToastAfterDelay() }
-            .onChange(of: scenePhase) { _, phase in handleScenePhaseChange(phase) }
-            .onReceive(NotificationCenter.default.publisher(for: .captureInboxDecisionRequired)) { _ in
-                Task { await viewModel.processPendingInbox() }
-            }
-            .onDisappear(perform: handleCaptureDisappear)
-    }
-
-    private var mediaPickerContent: some View {
-        lifecycleContent
-        .photosPicker(
-            isPresented: $showsPhotoPicker,
-            selection: $selectedPhotos,
-            maxSelectionCount: 10,
-            matching: .images
-        )
-        .photosPicker(
-            isPresented: $showsScreenshotPicker,
-            selection: $selectedScreenshots,
-            maxSelectionCount: 10,
-            matching: .screenshots
-        )
-        .photosPicker(
-            isPresented: $showsOCRPhotoPicker,
-            selection: $selectedOCRPhotos,
-            maxSelectionCount: 10,
-            selectionBehavior: .ordered,
-            matching: .images
-        )
-        .sheet(isPresented: $showsFileImporter) {
-            CaptureFilePicker(
-                contentTypes: [.data],
-                allowsMultipleSelection: true,
-                onPick: { urls in
-                    showsFileImporter = false
-                    importFiles(urls)
-                },
-                onCancel: {
-                    showsFileImporter = false
-                    focusComposer()
+    private var draftLifecycleContent: CaptureViewSection {
+        CaptureViewSection {
+            captureContent
+                .task {
+                    await loadAndPresentRequestedInput()
+                    handleCaptureNeedsUnlock(viewModel.needsCaptureUnlock)
                 }
-            )
-            .ignoresSafeArea()
+                .task(
+                    id: InitialComposerFocusTaskID(
+                        isPending: initialComposerFocusIsPending,
+                        hasCompletedInitialLoad: hasCompletedInitialLoad,
+                        defersForReleaseNotes: defersCaptureInputFocusForReleaseNotes
+                    )
+                ) {
+                    await fulfillInitialComposerFocusIfReady()
+                }
+                .onChange(of: defersCaptureInputFocusForReleaseNotes) { _, isDeferring in
+                    if isDeferring { dismissComposer() }
+                }
+                .onChange(of: viewModel.draft.text) { _, _ in
+                    if !viewModel.hasLiveRecordedTranscriptPreview {
+                        viewModel.scheduleDraftSave()
+                    }
+                }
+                .onChange(of: viewModel.draft.voxID) { _, id in
+                    viewModel.scheduleDraftSave()
+                    if let id { selectedFlowId = id }
+                }
+                .onChange(of: viewModel.draft.destinationID) { _, _ in viewModel.scheduleDraftSave() }
+                .onChange(of: viewModel.draft.destinationSelectionMode) { _, _ in viewModel.scheduleDraftSave() }
+                .onChange(of: viewModel.draft.entryTemplateID) { _, _ in viewModel.scheduleDraftSave() }
+                .onChange(of: viewModel.draft.placementOverride) { _, _ in viewModel.scheduleDraftSave() }
+                .onChange(of: viewModel.draft.relativeNotePathOverride) { _, _ in viewModel.scheduleDraftSave() }
+                .onChange(of: viewModel.errorMessage) { _, message in
+                    guard let message else { return }
+                    UIAccessibility.post(notification: .announcement, argument: message)
+                }
+                .onChange(of: viewModel.needsCaptureUnlock) { _, needsUnlock in
+                    handleCaptureNeedsUnlock(needsUnlock)
+                }
+                .onChange(of: viewModel.lastReceipt) { _, receipt in
+                    guard receipt != nil else { return }
+                    usageTracker.reload()
+                    ReviewPromptManager.shared.recordSuccessfulCapture(
+                        totalCaptureCount: usageTracker.successfulCapturesUsed
+                    )
+                    Task { await presentSentToast(for: receipt) }
+                }
+                .onChange(of: selectedPhotos) { _, items in
+                    guard !items.isEmpty else { return }
+                    Task { await importPhotos(items, prefix: "photo") }
+                }
+                .onChange(of: selectedScreenshots) { _, items in
+                    guard !items.isEmpty else { return }
+                    Task { await importScreenshots(items) }
+                }
+                .onChange(of: selectedOCRPhotos) { _, items in
+                    guard !items.isEmpty else { return }
+                    Task { await importOCRPhotos(items) }
+                }
+                .onChange(of: viewModel.requestedInput) { _, input in
+                    handleRequestedInputChange(input)
+                }
         }
     }
 
-    private var presentedContent: some View {
-        mediaPickerContent
-        .confirmationDialog(
-            "Location",
-            isPresented: Binding(
-                get: { viewModel.locationDecision != nil },
-                set: { if !$0 { Task { await viewModel.cancelUnavailableLocation() } } }
-            ),
-            titleVisibility: .visible
-        ) {
-            Button("Retry") { Task { await viewModel.retryUnavailableLocation() } }
-            Button("Send Without Location") {
-                Task { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: false) }
-            }
-            Button("Always Send Without Location for This Preset") {
-                Task { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: true) }
-            }
-            Button("Cancel", role: .cancel) {
-                Task { await viewModel.cancelUnavailableLocation() }
-            }
-        } message: {
-            Text("Vox.md could not get an origin-time location. Your draft is preserved.")
+    private var recordingLifecycleContent: CaptureViewSection {
+        CaptureViewSection {
+            draftLifecycleContent
+                .onAppear(perform: prepareRecordingFeatures)
+                .task { await requestMicrophonePermissionIfNeeded() }
+                .onChange(of: pendingKeyboardLaunch) { _, isPending in
+                    if isPending { consumePendingKeyboardLaunchIfNeeded() }
+                }
+                .onChange(of: pendingWidgetRecord) { _, isPending in
+                    if isPending { consumePendingWidgetRecordIfNeeded() }
+                }
+                .onChange(of: persistentRecorder.needsUnlock) { _, needs in
+                    handleRecorderNeedsUnlock(needs)
+                }
+                .onChange(of: persistentRecorder.lastFileExportEvent) { _, event in
+                    handleFileExportEvent(event)
+                }
+                .onChange(of: persistentRecorder.lastError) { _, message in
+                    guard let message else { return }
+                    UIAccessibility.post(notification: .announcement, argument: message)
+                }
+                .onChange(of: persistentRecorder.isTranscribing) { _, isTranscribing in
+                    handleTranscribingChange(isTranscribing)
+                }
+                .onChange(of: persistentRecorder.isSegmentActive) { _, isActive in
+                    if !isActive { watchRecordingPipeline.resume() }
+                }
+                .onChange(of: watchRecordingPipeline.lastDeliveredRecordingID) { _, recordingID in
+                    guard recordingID != nil else { return }
+                    usageTracker.reload()
+                    Task { await viewModel.refreshHistory() }
+                    Task { await presentSentToast() }
+                }
         }
-        .confirmationDialog(
-            inboxLocationDecisionTitle,
-            isPresented: Binding(
-                get: { viewModel.inboxLocationDecision != nil },
-                set: { _ in }
-            ),
-            titleVisibility: .visible
-        ) {
-            Button("Send Without Location") {
-                Task { await viewModel.sendInboxRequestWithoutLocation() }
-            }
-            Button("Always Send Without Location for This Preset") {
-                Task { await viewModel.sendInboxRequestWithoutLocation(alwaysForPreset: true) }
-            }
-            Button("Cancel and Discard Capture", role: .destructive) {
-                Task { await viewModel.discardInboxLocationRequest() }
-            }
-        } message: {
-            Text(inboxLocationDecisionMessage)
+    }
+
+    private var lifecycleContent: CaptureViewSection {
+        CaptureViewSection {
+            recordingLifecycleContent
+                .task(id: fileExportToast?.id) { await dismissExportToastAfterDelay() }
+                .onChange(of: scenePhase) { _, phase in handleScenePhaseChange(phase) }
+                .onReceive(NotificationCenter.default.publisher(for: .captureInboxDecisionRequired)) { _ in
+                    Task { await viewModel.processPendingInbox() }
+                }
+                .onDisappear(perform: handleCaptureDisappear)
         }
-        .sheet(isPresented: $showsCaptureHistory) {
-            HistoryView(viewModel: viewModel)
-                .environment(transcriptStore)
+    }
+
+    private var mediaPickerContent: CaptureViewSection {
+        CaptureViewSection {
+            lifecycleContent
+                .photosPicker(
+                    isPresented: $showsPhotoPicker,
+                    selection: $selectedPhotos,
+                    maxSelectionCount: 10,
+                    matching: .images
+                )
+                .photosPicker(
+                    isPresented: $showsScreenshotPicker,
+                    selection: $selectedScreenshots,
+                    maxSelectionCount: 10,
+                    matching: .screenshots
+                )
+                .photosPicker(
+                    isPresented: $showsOCRPhotoPicker,
+                    selection: $selectedOCRPhotos,
+                    maxSelectionCount: 10,
+                    selectionBehavior: .ordered,
+                    matching: .images
+                )
+                .sheet(isPresented: $showsFileImporter) {
+                    CaptureFilePicker(
+                        contentTypes: [.data],
+                        allowsMultipleSelection: true,
+                        onPick: { urls in
+                            showsFileImporter = false
+                            importFiles(urls)
+                        },
+                        onCancel: {
+                            showsFileImporter = false
+                            focusComposer()
+                        }
+                    )
+                    .ignoresSafeArea()
+                }
         }
-        .sheet(isPresented: $showsWatchRecordingQueue) {
-            WatchRecordingQueueView(pipeline: watchRecordingPipeline)
+    }
+
+    private var locationDecisionContent: CaptureViewSection {
+        CaptureViewSection {
+            mediaPickerContent
+                .confirmationDialog(
+                    "Location",
+                    isPresented: Binding(
+                        get: { viewModel.locationDecision != nil },
+                        set: { if !$0 { Task { await viewModel.cancelUnavailableLocation() } } }
+                    ),
+                    titleVisibility: .visible
+                ) {
+                    Button("Retry") { Task { await viewModel.retryUnavailableLocation() } }
+                    Button("Send Without Location") {
+                        Task { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: false) }
+                    }
+                    Button("Always Send Without Location for This Preset") {
+                        Task { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: true) }
+                    }
+                    Button("Cancel", role: .cancel) {
+                        Task { await viewModel.cancelUnavailableLocation() }
+                    }
+                } message: {
+                    Text("Vox.md could not get an origin-time location. Your draft is preserved.")
+                }
+                .confirmationDialog(
+                    inboxLocationDecisionTitle,
+                    isPresented: Binding(
+                        get: { viewModel.inboxLocationDecision != nil },
+                        set: { _ in }
+                    ),
+                    titleVisibility: .visible
+                ) {
+                    Button("Send Without Location") {
+                        Task { await viewModel.sendInboxRequestWithoutLocation() }
+                    }
+                    Button("Always Send Without Location for This Preset") {
+                        Task { await viewModel.sendInboxRequestWithoutLocation(alwaysForPreset: true) }
+                    }
+                    Button("Cancel and Discard Capture", role: .destructive) {
+                        Task { await viewModel.discardInboxLocationRequest() }
+                    }
+                } message: {
+                    Text(inboxLocationDecisionMessage)
+                }
         }
-        .sheet(isPresented: $showsRoutePicker, onDismiss: reloadFlows) {
-            CaptureRoutePickerView(viewModel: viewModel)
-        }
-        .sheet(isPresented: $showsDueDate) {
-            CaptureDueDateSheet { date, includesTime in
-                let token = insertionFormatter.dueDateToken(for: date, includeTime: includesTime)
-                applyComposerCommand(.replaceSelection(with: token))
-                focusComposer()
-            }
-        }
-        .sheet(isPresented: $showsInternalLinks) {
-            CaptureInternalLinkPicker(rootURL: viewModel.selectedRootURL()) { markdown in
-                applyComposerCommand(.replaceSelection(with: markdown))
-                focusComposer()
-            }
-        }
-        .sheet(isPresented: $showsPaywall) {
-            PaywallView(context: paywallContext)
-                .environment(usageTracker)
-                .environment(storeManager)
-        }
-        .fileImporter(
-            isPresented: $showsAudioImporter,
-            allowedContentTypes: [.audio, .movie],
-            allowsMultipleSelection: false,
-            onCompletion: handleAudioImport
-        )
-        .sheet(isPresented: $showsCamera) {
-            CaptureCameraPicker(
-                onCapture: { data in
-                    showsCamera = false
-                    Task {
-                        isProcessingMedia = true
-                        await viewModel.stageImage(
-                            data: data,
-                            filename: "camera-\(captureTimestamp()).jpg",
-                            contentTypeIdentifier: UTType.jpeg.identifier
-                        )
-                        isProcessingMedia = false
+    }
+
+    private var navigationSheetContent: CaptureViewSection {
+        CaptureViewSection {
+            locationDecisionContent
+                .sheet(isPresented: $showsCaptureHistory) {
+                    HistoryView(viewModel: viewModel)
+                        .environment(transcriptStore)
+                }
+                .sheet(isPresented: $showsWatchRecordingQueue) {
+                    WatchRecordingQueueView(pipeline: watchRecordingPipeline)
+                }
+                .sheet(isPresented: $showsRoutePicker, onDismiss: reloadFlows) {
+                    CaptureRoutePickerView(viewModel: viewModel)
+                }
+                .sheet(isPresented: $showsDueDate) {
+                    CaptureDueDateSheet { date, includesTime in
+                        let token = insertionFormatter.dueDateToken(for: date, includeTime: includesTime)
+                        applyComposerCommand(.replaceSelection(with: token))
                         focusComposer()
                     }
-                },
-                onCancel: {
-                    showsCamera = false
-                    focusComposer()
                 }
-            )
-            .ignoresSafeArea()
-        }
-        .sheet(isPresented: $showsScanner) {
-            CaptureDocumentScanner(
-                onScan: { pages in
-                    showsScanner = false
-                    Task {
-                        await processScan(pages)
+                .sheet(isPresented: $showsInternalLinks) {
+                    CaptureInternalLinkPicker(rootURL: viewModel.selectedRootURL()) { markdown in
+                        applyComposerCommand(.replaceSelection(with: markdown))
                         focusComposer()
                     }
-                },
-                onCancel: {
-                    showsScanner = false
-                    focusComposer()
-                },
-                onError: { error in
-                    showsScanner = false
-                    viewModel.errorMessage = error.localizedDescription
                 }
-            )
-            .ignoresSafeArea()
-        }
-        .sheet(isPresented: $showsJournalPageCapture) {
-            CaptureManualJournalPages(
-                maxPageCount: 10,
-                onCapture: { pages in
-                    showsJournalPageCapture = false
-                    Task { await processOCRScan(pages) }
-                },
-                onCancel: {
-                    showsJournalPageCapture = false
-                    focusComposer()
+                .sheet(isPresented: $showsPaywall) {
+                    PaywallView(context: paywallContext)
+                        .environment(usageTracker)
+                        .environment(storeManager)
                 }
-            )
+                .fileImporter(
+                    isPresented: $showsAudioImporter,
+                    allowedContentTypes: [.audio, .movie],
+                    allowsMultipleSelection: false,
+                    onCompletion: handleAudioImport
+                )
         }
-        .sheet(isPresented: $showsSketch) {
-            CaptureSketchEditor(
-                onSave: { drawing, preview in
-                    showsSketch = false
-                    Task {
-                        isProcessingMedia = true
-                        await viewModel.stageSketch(drawingData: drawing, previewData: preview)
-                        isProcessingMedia = false
-                        focusComposer()
+    }
+
+    private var cameraSheetContent: CaptureViewSection {
+        CaptureViewSection {
+            navigationSheetContent
+                .sheet(isPresented: $showsCamera) {
+                    CaptureCameraPicker(
+                        onCapture: { data in
+                            showsCamera = false
+                            Task {
+                                isProcessingMedia = true
+                                await viewModel.stageImage(
+                                    data: data,
+                                    filename: "camera-\(captureTimestamp()).jpg",
+                                    contentTypeIdentifier: UTType.jpeg.identifier
+                                )
+                                isProcessingMedia = false
+                                focusComposer()
+                            }
+                        },
+                        onCancel: {
+                            showsCamera = false
+                            focusComposer()
+                        }
+                    )
+                    .ignoresSafeArea()
+                }
+                .sheet(isPresented: $showsScanner) {
+                    CaptureDocumentScanner(
+                        onScan: { pages in
+                            showsScanner = false
+                            Task {
+                                await processScan(pages)
+                                focusComposer()
+                            }
+                        },
+                        onCancel: {
+                            showsScanner = false
+                            focusComposer()
+                        },
+                        onError: { error in
+                            showsScanner = false
+                            viewModel.errorMessage = error.localizedDescription
+                        }
+                    )
+                    .ignoresSafeArea()
+                }
+        }
+    }
+
+    private var drawingSheetContent: CaptureViewSection {
+        CaptureViewSection {
+            cameraSheetContent
+                .sheet(isPresented: $showsJournalPageCapture) {
+                    CaptureManualJournalPages(
+                        maxPageCount: 10,
+                        onCapture: { pages in
+                            showsJournalPageCapture = false
+                            Task { await processOCRScan(pages) }
+                        },
+                        onCancel: {
+                            showsJournalPageCapture = false
+                            focusComposer()
+                        }
+                    )
+                }
+                .sheet(isPresented: $showsSketch) {
+                    CaptureSketchEditor(
+                        onSave: { drawing, preview in
+                            showsSketch = false
+                            Task {
+                                isProcessingMedia = true
+                                await viewModel.stageSketch(drawingData: drawing, previewData: preview)
+                                isProcessingMedia = false
+                                focusComposer()
+                            }
+                        },
+                        onCancel: {
+                            showsSketch = false
+                            focusComposer()
+                        }
+                    )
+                }
+        }
+    }
+
+    private var presentedContent: CaptureViewSection {
+        CaptureViewSection {
+            drawingSheetContent
+                .alert("Capture Link", isPresented: $showsLinkPrompt) {
+                    TextField("https://example.com", text: $linkText)
+                        .textInputAutocapitalization(.never)
+                        .keyboardType(.URL)
+                    Button("Cancel", role: .cancel) { linkText = "" }
+                    Button("Add") {
+                        let value = linkText.trimmingCharacters(in: .whitespacesAndNewlines)
+                        linkText = ""
+                        if let url = URL(string: value) {
+                            Task { await viewModel.addURL(url) }
+                        } else {
+                            viewModel.errorMessage = String(localized: "Enter a valid link.")
+                        }
                     }
-                },
-                onCancel: {
-                    showsSketch = false
-                    focusComposer()
+                } message: {
+                    Text("The link stays in your durable draft until the note is captured.")
                 }
-            )
-        }
-        .alert("Capture Link", isPresented: $showsLinkPrompt) {
-            TextField("https://example.com", text: $linkText)
-                .textInputAutocapitalization(.never)
-                .keyboardType(.URL)
-            Button("Cancel", role: .cancel) { linkText = "" }
-            Button("Add") {
-                let value = linkText.trimmingCharacters(in: .whitespacesAndNewlines)
-                linkText = ""
-                if let url = URL(string: value) {
-                    Task { await viewModel.addURL(url) }
-                } else {
-                    viewModel.errorMessage = String(localized: "Enter a valid link.")
-                }
-            }
-        } message: {
-            Text("The link stays in your durable draft until the note is captured.")
         }
     }
 
@@ -684,48 +629,47 @@ struct QuickCaptureView: View {
         return [finalized, volatile].filter { !$0.isEmpty }.joined(separator: " ")
     }
 
-    private var immediateLiveTranscriptionBar: some View {
+    private var immediateLiveTranscriptionBar: CaptureViewSection {
         let transcript = immediateLiveTranscriptionText
-        let visibleTranscript = transcript.count > 320
+        let visibleTranscript =
+            transcript.count > 320
             ? "…" + String(transcript.suffix(320))
             : transcript
 
-        return HStack(alignment: .top, spacing: Geist.Spacing.three) {
-            Image(systemName: "waveform")
-                .foregroundStyle(Geist.Palette.blue700)
-                .symbolEffect(.variableColor.iterative, isActive: persistentRecorder.isSegmentActive)
-                .accessibilityHidden(true)
-
-            VStack(alignment: .leading, spacing: Geist.Spacing.one) {
-                Text("Live transcript · sending immediately")
-                    .font(Geist.caption(.caption2))
+        return CaptureViewSection {
+            HStack(alignment: .top, spacing: Geist.Spacing.three) {
+                Image(systemName: "waveform")
                     .foregroundStyle(Geist.Palette.blue700)
-                Text(visibleTranscript.isEmpty ? String(localized: "Listening for speech…") : visibleTranscript)
-                    .font(Geist.body())
-                    .foregroundStyle(visibleTranscript.isEmpty ? Geist.muted : Geist.text)
-                    .lineLimit(4)
+                    .symbolEffect(.variableColor.iterative, isActive: persistentRecorder.isSegmentActive)
+                    .accessibilityHidden(true)
+
+                VStack(alignment: .leading, spacing: Geist.Spacing.one) {
+                    Text("Live transcript · sending immediately")
+                        .font(Geist.caption(.caption2))
+                        .foregroundStyle(Geist.Palette.blue700)
+                    Text(visibleTranscript.isEmpty ? String(localized: "Listening for speech…") : visibleTranscript)
+                        .font(Geist.body())
+                        .foregroundStyle(visibleTranscript.isEmpty ? Geist.muted : Geist.text)
+                        .lineLimit(4)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, Geist.Spacing.four)
+            .padding(.vertical, Geist.Spacing.three)
+            .background(Geist.Palette.blue700.opacity(0.08))
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(
+                transcript.isEmpty
+                    ? String(localized: "Live transcript, listening for speech")
+                    : String(localized: "Live transcript, \(transcript)")
+            )
+            .accessibilityIdentifier("capture_live_transcription")
         }
-        .padding(.horizontal, Geist.Spacing.four)
-        .padding(.vertical, Geist.Spacing.three)
-        .background(Geist.Palette.blue700.opacity(0.08))
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(
-            transcript.isEmpty
-                ? String(localized: "Live transcript, listening for speech")
-                : String(localized: "Live transcript, \(transcript)")
-        )
-        .accessibilityIdentifier("capture_live_transcription")
     }
 
-    /// One-tap pause/resume toggle shown in the Capture Bar next to the mic
-    /// button while a recording is active, so pausing never requires the
-    /// long-press detail sheet. `AnyView` keeps this getter's contribution to
-    /// the parent's generic type flat (see the crash note on
-    /// activeVoiceCaptureButtonLabel).
-    private var voiceCapturePauseToggle: AnyView {
-        AnyView(
+    /// One-tap pause/resume without opening the detail sheet.
+    private var voiceCapturePauseToggle: CaptureViewSection {
+        CaptureViewSection {
             Group {
                 if persistentRecorder.isAppRecordingSegmentActive {
                     Button {
@@ -752,15 +696,11 @@ struct QuickCaptureView: View {
                 }
             }
             .animation(.easeInOut(duration: 0.18), value: persistentRecorder.isSegmentPaused)
-        )
+        }
     }
 
-    /// Type-erased at the definition (not just its labels): the un-erased
-    /// modifier stack expanded at every use site and, combined with the
-    /// relocated controls in `captureActionBar`, overflowed the Swift
-    /// runtime demangler's stack on device (SIGSEGV at launch).
-    private var voiceCaptureButton: AnyView {
-        AnyView(
+    private var voiceCaptureButton: CaptureViewSection {
+        CaptureViewSection {
             Group {
                 if persistentRecorder.isAppRecordingSegmentActive {
                     activeVoiceCaptureButtonLabel
@@ -768,36 +708,32 @@ struct QuickCaptureView: View {
                     idleVoiceCaptureButtonLabel
                 }
             }
-        .frame(minWidth: 36, minHeight: 36)
-        .contentShape(Rectangle())
-        .gesture(voiceCaptureGesture)
-        .accessibilityElement()
-        .accessibilityAddTraits(.isButton)
-        .accessibilityLabel(recordingStatusTitle)
-        .accessibilityHint("Tap to start or stop. Long-press for detailed recording controls.")
-        .accessibilityAction { handleVoiceCaptureTap() }
-        .accessibilityAction(named: "Show detailed recording controls") {
-            presentVoiceCaptureDetails()
+            .frame(minWidth: 36, minHeight: 36)
+            .contentShape(Rectangle())
+            .gesture(voiceCaptureGesture)
+            .accessibilityElement()
+            .accessibilityAddTraits(.isButton)
+            .accessibilityLabel(recordingStatusTitle)
+            .accessibilityHint("Tap to start or stop. Long-press for detailed recording controls.")
+            .accessibilityAction { handleVoiceCaptureTap() }
+            .accessibilityAction(named: "Show detailed recording controls") {
+                presentVoiceCaptureDetails()
+            }
+            .accessibilityAction(
+                named: persistentRecorder.isSegmentPaused ? String(localized: "Resume") : String(localized: "Pause")
+            ) {
+                persistentRecorder.toggleInAppSegmentPause()
+            }
+            .accessibilityIdentifier("capture_voice_recording")
+            .opacity(isProcessingMedia ? 0.35 : 1)
+            .task(id: persistentRecorder.isAppRecordingSegmentActive) {
+                await updateRecordingAudioLevels()
+            }
         }
-        .accessibilityAction(named: persistentRecorder.isSegmentPaused ? String(localized: "Resume") : String(localized: "Pause")) {
-            persistentRecorder.toggleInAppSegmentPause()
-        }
-        .accessibilityIdentifier("capture_voice_recording")
-        .opacity(isProcessingMedia ? 0.35 : 1)
-        .task(id: persistentRecorder.isAppRecordingSegmentActive) {
-            await updateRecordingAudioLevels()
-        }
-        )
     }
 
-    /// Kept small via `AnyView` erasure: this button's rendered type is
-    /// instantiated from a mangled name at first render, and the un-erased
-    /// nested ViewBuilder type overflowed the Swift runtime demangler's
-    /// stack on device (SIGSEGV at launch). Note that plain computed-property
-    /// extraction does NOT help — opaque `some View` underlying types expand
-    /// recursively at the use site — only type erasure caps the depth.
-    private var activeVoiceCaptureButtonLabel: AnyView {
-        AnyView(
+    private var activeVoiceCaptureButtonLabel: CaptureViewSection {
+        CaptureViewSection {
             HStack(spacing: Geist.Spacing.two) {
                 Text(formatRecordingDuration(persistentRecorder.segmentDuration))
                     .font(Geist.caption(.caption2))
@@ -816,11 +752,11 @@ struct QuickCaptureView: View {
                     .accessibilityHidden(true)
             }
             .fixedSize(horizontal: true, vertical: false)
-        )
+        }
     }
 
-    private var idleVoiceCaptureButtonLabel: AnyView {
-        AnyView(
+    private var idleVoiceCaptureButtonLabel: CaptureViewSection {
+        CaptureViewSection {
             ZStack(alignment: .bottomTrailing) {
                 Image(systemName: "mic")
                     .font(.system(size: 17, weight: .medium))
@@ -834,7 +770,7 @@ struct QuickCaptureView: View {
                     .offset(x: 4, y: 4)
                     .accessibilityHidden(true)
             }
-        )
+        }
     }
 
     /// Compact indicator pinned to the mic control showing the persisted
@@ -866,8 +802,21 @@ struct QuickCaptureView: View {
         }
     }
 
-    private var voiceCaptureDetailsBar: some View {
-        VStack(spacing: 0) {
+    private var voiceCaptureDetailsBar: CaptureViewSection {
+        CaptureViewSection {
+            VStack(spacing: 0) {
+                recordingDetailsHeader
+                GeistDivider()
+                recordingDetailsOptions
+            }
+            .background(Geist.Palette.background200)
+            .transition(.move(edge: .bottom).combined(with: .opacity))
+            .accessibilityIdentifier("capture_recording_details")
+        }
+    }
+
+    private var recordingDetailsHeader: CaptureViewSection {
+        CaptureViewSection {
             HStack(spacing: Geist.Spacing.three) {
                 Image(systemName: recordingDetailsIcon)
                     .foregroundStyle(recordingDetailsColor)
@@ -899,9 +848,11 @@ struct QuickCaptureView: View {
             }
             .padding(.horizontal, Geist.Spacing.three)
             .padding(.vertical, Geist.Spacing.two)
+        }
+    }
 
-            GeistDivider()
-
+    private var recordingDetailsOptions: CaptureViewSection {
+        CaptureViewSection {
             VStack(alignment: .leading, spacing: Geist.Spacing.three) {
                 Picker("Recording result", selection: recordingModeSelection) {
                     Text("Add to Draft").tag(CaptureRecordingMode.draft)
@@ -911,231 +862,249 @@ struct QuickCaptureView: View {
                 .disabled(recordingOptionsAreLocked)
                 .accessibilityIdentifier("capture_recording_mode")
 
-                HStack(spacing: Geist.Spacing.three) {
-                    Menu {
-                        ForEach(enabledFlows) { flow in
-                            Button(flow.displayName) { selectFlow(flow) }
-                        }
-                    } label: {
-                        Label(selectedFlow.displayName, systemImage: selectedFlow.symbolName)
-                            .font(Geist.label())
-                            .lineLimit(1)
-                            .padding(.horizontal, Geist.Spacing.three)
-                            .frame(height: Geist.ControlHeight.medium)
-                            .background(Geist.Palette.background100)
-                            .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous))
-                    }
-                    .disabled(recordingOptionsAreLocked)
-                    .accessibilityLabel("Capture Preset \(selectedFlow.displayName)")
-
-                    if recordingMode == .draft {
-                        Toggle(isOn: $attachRecordingAudio) {
-                            Label("Audio", systemImage: "paperclip")
-                                .font(Geist.caption())
-                        }
-                        .toggleStyle(.switch)
-                        .tint(Geist.Palette.blue700)
-                        .disabled(recordingOptionsAreLocked)
-                        .accessibilityLabel("Attach audio to Capture")
-                    }
-
-                    Spacer(minLength: 0)
-
-                    Button {
-                        showsAudioImporter = true
-                    } label: {
-                        Image(systemName: "waveform.badge.plus")
-                            .frame(width: 36, height: 36)
-                    }
-                    .buttonStyle(.plain)
-                    .disabled(recordingOptionsAreLocked)
-                    .accessibilityLabel("Import audio")
-                    .accessibilityIdentifier("capture_audio_import")
-
-                    Button(action: togglePersistentListening) {
-                        Image(systemName: persistentRecorder.isListening ? "headphones.circle.fill" : "headphones.circle")
-                            .font(.system(size: 20, weight: .medium))
-                            .foregroundStyle(persistentRecorder.isListening ? Geist.Palette.blue700 : Geist.text)
-                            .frame(width: 36, height: 36)
-                    }
-                    .buttonStyle(.plain)
-                    .disabled(recordingOptionsAreLocked)
-                    .accessibilityLabel(persistentRecorder.isListening
-                                        ? String(localized: "Stop keyboard listening")
-                                        : String(localized: "Start keyboard listening"))
-                    .accessibilityIdentifier("capture_keyboard_listening")
-                }
-
-                if !usageTracker.hasUnlocked {
-                    recordingUsageMeter
-                }
-
-                if let phase = keyboardLaunchPhase {
-                    keyboardListeningStatusRow(phase)
-                }
-
-                if let result = persistentRecorder.lastTranscriptionResult {
-                    HStack(spacing: Geist.Spacing.two) {
-                        Image(systemName: lastStartedRecordingMode == .draft ? "text.badge.plus" : "checkmark.circle.fill")
-                        Text(lastStartedRecordingMode == .draft
-                             ? String(localized: "Transcript added to Capture")
-                             : String(localized: "Sent with Preset"))
-                            .font(Geist.caption())
-                        Spacer()
-                        Button("Copy") { UIPasteboard.general.string = result }
-                            .font(Geist.caption())
-                    }
-                    .foregroundStyle(Geist.muted)
-
-                    if let reason = persistentRecorder.lastSpeakerDiarizationSkipReason {
-                        Label(reason.displayText, systemImage: "exclamationmark.triangle")
-                            .font(Geist.caption(.caption2))
-                            .foregroundStyle(Geist.error)
-                            .accessibilityIdentifier("speaker_diarization_skip_reason")
-                    }
-                }
+                recordingDestinationOptions
+                recordingDetailsStatus
             }
             .padding(Geist.Spacing.three)
         }
-        .background(Geist.Palette.background200)
-        .transition(.move(edge: .bottom).combined(with: .opacity))
-        .accessibilityIdentifier("capture_recording_details")
     }
 
-    /// Extracted from the details row to keep the parent getter's SwiftUI
-    /// generic type small (deep ViewBuilder nesting overflows the Swift
-    /// runtime's metadata demangler on device — see voiceCaptureButton).
-    @ViewBuilder
-    private var voiceCapturePauseButton: some View {
-        if persistentRecorder.isAppRecordingSegmentActive {
-            Button {
-                persistentRecorder.toggleInAppSegmentPause()
-            } label: {
-                Label(
-                    persistentRecorder.isSegmentPaused
-                        ? String(localized: "Resume")
-                        : String(localized: "Pause"),
-                    systemImage: persistentRecorder.isSegmentPaused ? "play.fill" : "pause.fill"
-                )
-            }
-            .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
-            .accessibilityIdentifier("capture_recording_pause")
-        }
-    }
-
-    @ViewBuilder
-    private var recordingPrimaryButton: some View {
-        if persistentRecorder.isAppRecordingSegmentActive {
-            Button(action: { persistentRecorder.stopInAppSegment() }) {
-                Label("Stop", systemImage: "stop.fill")
-            }
-            .buttonStyle(GeistButtonStyle(variant: .destructive, size: .small))
-            .accessibilityIdentifier("capture_recording_stop")
-        } else {
-            Button(action: startInlineRecording) {
-                Label(
-                    usageTracker.isAtLimit ? String(localized: "Unlock") : String(localized: "Record"),
-                    systemImage: usageTracker.isAtLimit ? "lock.fill" : "mic.fill"
-                )
-            }
-            .buttonStyle(GeistButtonStyle(variant: usageTracker.isAtLimit ? .destructive : .primary, size: .small))
-            .accessibilityIdentifier("capture_recording_start")
-        }
-    }
-
-    private var recordingUsageMeter: some View {
-        Button(action: { presentPaywall(context: .usageMeter) }) {
-            HStack(spacing: Geist.Spacing.two) {
-                GeometryReader { geometry in
-                    ZStack(alignment: .leading) {
-                        Rectangle().fill(Geist.Palette.gray200).frame(height: 2)
-                        Rectangle()
-                            .fill(usageTracker.isAtLimit ? Geist.error : Geist.text)
-                            .frame(width: geometry.size.width * usageTracker.fractionUsed, height: 2)
+    private var recordingDestinationOptions: CaptureViewSection {
+        CaptureViewSection {
+            HStack(spacing: Geist.Spacing.three) {
+                Menu {
+                    ForEach(enabledFlows) { flow in
+                        Button(flow.displayName) { selectFlow(flow) }
                     }
+                } label: {
+                    Label(selectedFlow.displayName, systemImage: selectedFlow.symbolName)
+                        .font(Geist.label())
+                        .lineLimit(1)
+                        .padding(.horizontal, Geist.Spacing.three)
+                        .frame(height: Geist.ControlHeight.medium)
+                        .background(Geist.Palette.background100)
+                        .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous))
                 }
-                .frame(height: 2)
-                Text(recordingUsageLabel)
-                    .font(Geist.mono())
-                    .foregroundStyle(usageTracker.isAtLimit ? Geist.error : Geist.muted)
-                    .fixedSize()
+                .disabled(recordingOptionsAreLocked)
+                .accessibilityLabel("Capture Preset \(selectedFlow.displayName)")
+
+                if recordingMode == .draft {
+                    Toggle(isOn: $attachRecordingAudio) {
+                        Label("Audio", systemImage: "paperclip")
+                            .font(Geist.caption())
+                    }
+                    .toggleStyle(.switch)
+                    .tint(Geist.Palette.blue700)
+                    .disabled(recordingOptionsAreLocked)
+                    .accessibilityLabel("Attach audio to Capture")
+                }
+
+                Spacer(minLength: 0)
+
+                Button {
+                    showsAudioImporter = true
+                } label: {
+                    Image(systemName: "waveform.badge.plus")
+                        .frame(width: 36, height: 36)
+                }
+                .buttonStyle(.plain)
+                .disabled(recordingOptionsAreLocked)
+                .accessibilityLabel("Import audio")
+                .accessibilityIdentifier("capture_audio_import")
+
+                Button(action: togglePersistentListening) {
+                    Image(systemName: persistentRecorder.isListening ? "headphones.circle.fill" : "headphones.circle")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundStyle(persistentRecorder.isListening ? Geist.Palette.blue700 : Geist.text)
+                        .frame(width: 36, height: 36)
+                }
+                .buttonStyle(.plain)
+                .disabled(recordingOptionsAreLocked)
+                .accessibilityLabel(
+                    persistentRecorder.isListening
+                        ? String(localized: "Stop keyboard listening")
+                        : String(localized: "Start keyboard listening")
+                )
+                .accessibilityIdentifier("capture_keyboard_listening")
             }
+
         }
-        .buttonStyle(.plain)
     }
 
-    private func keyboardListeningStatusRow(_ phase: KeyboardLaunchPhase) -> some View {
-        HStack(spacing: Geist.Spacing.two) {
-            switch phase {
-            case .starting:
-                ProgressView().controlSize(.small)
-                Text("Preparing keyboard listening…")
-            case .ready:
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(Geist.Palette.blue700)
-                Text("Keyboard listening is ready")
-            case .error:
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundStyle(Geist.error)
-                Text("Keyboard listening could not start")
+    private var recordingDetailsStatus: CaptureViewSection {
+        CaptureViewSection {
+            if !usageTracker.hasUnlocked {
+                recordingUsageMeter
             }
-            Spacer()
+
+            if let phase = keyboardLaunchPhase {
+                keyboardListeningStatusRow(phase)
+            }
+
+            if let result = persistentRecorder.lastTranscriptionResult {
+                HStack(spacing: Geist.Spacing.two) {
+                    Image(systemName: lastStartedRecordingMode == .draft ? "text.badge.plus" : "checkmark.circle.fill")
+                    Text(
+                        lastStartedRecordingMode == .draft
+                            ? String(localized: "Transcript added to Capture")
+                            : String(localized: "Sent with Preset")
+                    )
+                    .font(Geist.caption())
+                    Spacer()
+                    Button("Copy") { UIPasteboard.general.string = result }
+                        .font(Geist.caption())
+                }
+                .foregroundStyle(Geist.muted)
+
+                if let reason = persistentRecorder.lastSpeakerDiarizationSkipReason {
+                    Label(reason.displayText, systemImage: "exclamationmark.triangle")
+                        .font(Geist.caption(.caption2))
+                        .foregroundStyle(Geist.error)
+                        .accessibilityIdentifier("speaker_diarization_skip_reason")
+                }
+            }
         }
-        .font(Geist.caption())
     }
 
-    private func keyboardReturnGuidanceBanner(_ phase: KeyboardLaunchPhase) -> some View {
-        HStack(alignment: .top, spacing: Geist.Spacing.three) {
-            Group {
+    private var voiceCapturePauseButton: CaptureViewSection {
+        CaptureViewSection {
+            if persistentRecorder.isAppRecordingSegmentActive {
+                Button {
+                    persistentRecorder.toggleInAppSegmentPause()
+                } label: {
+                    Label(
+                        persistentRecorder.isSegmentPaused
+                            ? String(localized: "Resume")
+                            : String(localized: "Pause"),
+                        systemImage: persistentRecorder.isSegmentPaused ? "play.fill" : "pause.fill"
+                    )
+                }
+                .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+                .accessibilityIdentifier("capture_recording_pause")
+            }
+        }
+    }
+
+    private var recordingPrimaryButton: CaptureViewSection {
+        CaptureViewSection {
+            if persistentRecorder.isAppRecordingSegmentActive {
+                Button(action: { persistentRecorder.stopInAppSegment() }) {
+                    Label("Stop", systemImage: "stop.fill")
+                }
+                .buttonStyle(GeistButtonStyle(variant: .destructive, size: .small))
+                .accessibilityIdentifier("capture_recording_stop")
+            } else {
+                Button(action: startInlineRecording) {
+                    Label(
+                        usageTracker.isAtLimit ? String(localized: "Unlock") : String(localized: "Record"),
+                        systemImage: usageTracker.isAtLimit ? "lock.fill" : "mic.fill"
+                    )
+                }
+                .buttonStyle(GeistButtonStyle(variant: usageTracker.isAtLimit ? .destructive : .primary, size: .small))
+                .accessibilityIdentifier("capture_recording_start")
+            }
+        }
+    }
+
+    private var recordingUsageMeter: CaptureViewSection {
+        CaptureViewSection {
+            Button(action: { presentPaywall(context: .usageMeter) }) {
+                HStack(spacing: Geist.Spacing.two) {
+                    GeometryReader { geometry in
+                        ZStack(alignment: .leading) {
+                            Rectangle().fill(Geist.Palette.gray200).frame(height: 2)
+                            Rectangle()
+                                .fill(usageTracker.isAtLimit ? Geist.error : Geist.text)
+                                .frame(width: geometry.size.width * usageTracker.fractionUsed, height: 2)
+                        }
+                    }
+                    .frame(height: 2)
+                    Text(recordingUsageLabel)
+                        .font(Geist.mono())
+                        .foregroundStyle(usageTracker.isAtLimit ? Geist.error : Geist.muted)
+                        .fixedSize()
+                }
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private func keyboardListeningStatusRow(_ phase: KeyboardLaunchPhase) -> CaptureViewSection {
+        CaptureViewSection {
+            HStack(spacing: Geist.Spacing.two) {
                 switch phase {
                 case .starting:
-                    ProgressView()
-                        .controlSize(.small)
+                    ProgressView().controlSize(.small)
+                    Text("Preparing keyboard listening…")
                 case .ready:
-                    Image(systemName: "keyboard.fill")
+                    Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(Geist.Palette.blue700)
+                    Text("Keyboard listening is ready")
                 case .error:
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundStyle(Geist.error)
+                    Text("Keyboard listening could not start")
                 }
+                Spacer()
             }
-            .frame(width: 20, height: 20)
+            .font(Geist.caption())
+        }
+    }
 
-            VStack(alignment: .leading, spacing: Geist.Spacing.one) {
-                Text(keyboardReturnGuidanceTitle(for: phase))
-                    .font(Geist.label())
-                    .foregroundStyle(Geist.text)
-                Text(keyboardReturnGuidanceMessage(for: phase))
-                    .font(Geist.caption())
-                    .foregroundStyle(Geist.muted)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            Spacer(minLength: Geist.Spacing.two)
-
-            Button {
-                withAnimation(.easeIn(duration: 0.18)) {
-                    keyboardReturnGuidance = nil
+    private func keyboardReturnGuidanceBanner(_ phase: KeyboardLaunchPhase) -> CaptureViewSection {
+        CaptureViewSection {
+            HStack(alignment: .top, spacing: Geist.Spacing.three) {
+                Group {
+                    switch phase {
+                    case .starting:
+                        ProgressView()
+                            .controlSize(.small)
+                    case .ready:
+                        Image(systemName: "keyboard.fill")
+                            .foregroundStyle(Geist.Palette.blue700)
+                    case .error:
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(Geist.error)
+                    }
                 }
-            } label: {
-                Image(systemName: "xmark")
-                    .font(.system(size: 12, weight: .semibold))
-                    .frame(width: 24, height: 24)
+                .frame(width: 20, height: 20)
+
+                VStack(alignment: .leading, spacing: Geist.Spacing.one) {
+                    Text(keyboardReturnGuidanceTitle(for: phase))
+                        .font(Geist.label())
+                        .foregroundStyle(Geist.text)
+                    Text(keyboardReturnGuidanceMessage(for: phase))
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.muted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                Spacer(minLength: Geist.Spacing.two)
+
+                Button {
+                    withAnimation(.easeIn(duration: 0.18)) {
+                        keyboardReturnGuidance = nil
+                    }
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 12, weight: .semibold))
+                        .frame(width: 24, height: 24)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Dismiss keyboard listening message")
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Dismiss keyboard listening message")
+            .padding(Geist.Spacing.three)
+            .background(phase == .error ? Geist.Palette.red100 : Geist.Palette.blue100)
+            .overlay {
+                RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous)
+                    .stroke(
+                        phase == .error ? Geist.Palette.red400 : Geist.Palette.blue400,
+                        lineWidth: 1
+                    )
+            }
+            .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous))
+            .accessibilityIdentifier("keyboard_return_guidance")
         }
-        .padding(Geist.Spacing.three)
-        .background(phase == .error ? Geist.Palette.red100 : Geist.Palette.blue100)
-        .overlay {
-            RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous)
-                .stroke(
-                    phase == .error ? Geist.Palette.red400 : Geist.Palette.blue400,
-                    lineWidth: 1
-                )
-        }
-        .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous))
-        .accessibilityIdentifier("keyboard_return_guidance")
     }
 
     private func keyboardReturnGuidanceTitle(for phase: KeyboardLaunchPhase) -> String {
@@ -1198,113 +1167,119 @@ struct QuickCaptureView: View {
             : String(format: String(localized: "%.1f / 15 min free"), usageTracker.minutesUsed)
     }
 
-    private var captureControls: some View {
-        VStack(spacing: 0) {
-            if showsVoiceCaptureDetails {
+    private var captureControls: CaptureViewSection {
+        CaptureViewSection {
+            VStack(spacing: 0) {
+                if showsVoiceCaptureDetails {
+                    GeistDivider()
+                    voiceCaptureDetailsBar
+                    GeistDivider()
+                }
+                if selectedFlow.locationPolicy.isEnabled || isFindingLocation || persistentRecorder.isResolvingLocation
+                {
+                    locationPresetStatusBar
+                    GeistDivider()
+                }
+                routeSelectionRow
+                entryLocationTokenHintSection
                 GeistDivider()
-                voiceCaptureDetailsBar
+                captureActionBar
                 GeistDivider()
+                CaptureEditorToolbar(
+                    command: handleToolbarCommand,
+                    showDueDate: { showsDueDate = true },
+                    insertLocation: insertCurrentLocation,
+                    showSketch: { showsSketch = true },
+                    showCamera: { showsCamera = true },
+                    showPhotos: { showsPhotoPicker = true },
+                    showScreenshots: { showsScreenshotPicker = true },
+                    showLinkPrompt: { showsLinkPrompt = true },
+                    showFiles: presentFileImporter,
+                    showScan: { showsScanner = VNDocumentCameraViewController.isSupported },
+                    captureTextPages: {
+                        showsJournalPageCapture = UIImagePickerController.isSourceTypeAvailable(.camera)
+                    },
+                    chooseTextPhotos: { showsOCRPhotoPicker = true },
+                    canExtractText: canExtractJournalText,
+                    canCaptureTextPages: UIImagePickerController.isSourceTypeAvailable(.camera),
+                    isProcessingMedia: isProcessingMedia,
+                    isFindingLocation: isFindingLocation,
+                    preferences: captureToolbarPreferences
+                )
             }
-            if selectedFlow.locationPolicy.isEnabled || isFindingLocation || persistentRecorder.isResolvingLocation {
-                locationPresetStatusBar
-                GeistDivider()
-            }
-            routeSelectionRow
-            entryLocationTokenHintSection
-            GeistDivider()
-            captureActionBar
-            GeistDivider()
-            CaptureEditorToolbar(
-                command: handleToolbarCommand,
-                showDueDate: { showsDueDate = true },
-                insertLocation: insertCurrentLocation,
-                showSketch: { showsSketch = true },
-                showCamera: { showsCamera = true },
-                showPhotos: { showsPhotoPicker = true },
-                showScreenshots: { showsScreenshotPicker = true },
-                showLinkPrompt: { showsLinkPrompt = true },
-                showFiles: presentFileImporter,
-                showScan: { showsScanner = VNDocumentCameraViewController.isSupported },
-                captureTextPages: {
-                    showsJournalPageCapture = UIImagePickerController.isSourceTypeAvailable(.camera)
-                },
-                chooseTextPhotos: { showsOCRPhotoPicker = true },
-                canExtractText: canExtractJournalText,
-                canCaptureTextPages: UIImagePickerController.isSourceTypeAvailable(.camera),
-                isProcessingMedia: isProcessingMedia,
-                isFindingLocation: isFindingLocation,
-                preferences: captureToolbarPreferences
+            .background(Geist.Palette.background100)
+        }
+    }
+
+    private var composer: CaptureViewSection {
+        CaptureViewSection {
+            MarkdownComposerTextView(
+                text: $viewModel.draft.text,
+                selection: $composerSelection,
+                isFocused: $composerIsFocused,
+                controller: composerController
             )
-        }
-        .background(Geist.Palette.background100)
-    }
-
-    private var composer: some View {
-        MarkdownComposerTextView(
-            text: $viewModel.draft.text,
-            selection: $composerSelection,
-            isFocused: $composerIsFocused,
-            controller: composerController
-        )
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Geist.Palette.background100)
-        .overlay(alignment: .topLeading) {
-            if viewModel.draft.text.isEmpty && !composerIsFocused {
-                BlinkingCaptureCaret()
-                    .padding(.leading, 21)
-                    .padding(.top, 24)
-                    .allowsHitTesting(false)
-                    .accessibilityHidden(true)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Geist.Palette.background100)
+            .overlay(alignment: .topLeading) {
+                if viewModel.draft.text.isEmpty && !composerIsFocused {
+                    BlinkingCaptureCaret()
+                        .padding(.leading, 21)
+                        .padding(.top, 24)
+                        .allowsHitTesting(false)
+                        .accessibilityHidden(true)
+                }
             }
-        }
-        .overlay(alignment: .center) {
-            if viewModel.draft.text.isEmpty && viewModel.draft.additionalPayloads.isEmpty {
-                inspirationPlaceholder
-                    .task { await loadInspirationQuote() }
+            .overlay(alignment: .center) {
+                if viewModel.draft.text.isEmpty && viewModel.draft.additionalPayloads.isEmpty {
+                    inspirationPlaceholder
+                        .task { await loadInspirationQuote() }
+                }
             }
         }
     }
 
-    @ViewBuilder
-    private var inspirationPlaceholder: some View {
-        VStack(spacing: Geist.Spacing.three) {
-            if let prompt = activeCapturePrompt {
-                Image(systemName: selectedFlow.symbolName)
-                    .font(.system(size: 24, weight: .medium))
-                    .foregroundStyle(Geist.faint)
-                Text(prompt)
-                    .font(Geist.body(.title3))
-                    .foregroundStyle(Geist.faint)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(5)
-                Text(selectedFlow.displayName)
-                    .font(Geist.caption())
-                    .foregroundStyle(Geist.faint)
-            } else {
-                VStack(spacing: Geist.Spacing.two) {
-                    Text(verbatim: "“\(inspirationQuote.text)”")
+    private var inspirationPlaceholder: CaptureViewSection {
+        CaptureViewSection {
+            VStack(spacing: Geist.Spacing.three) {
+                if let prompt = activeCapturePrompt {
+                    Image(systemName: selectedFlow.symbolName)
+                        .font(.system(size: 24, weight: .medium))
+                        .foregroundStyle(Geist.faint)
+                    Text(prompt)
                         .font(Geist.body(.title3))
                         .foregroundStyle(Geist.faint)
                         .multilineTextAlignment(.center)
                         .lineLimit(5)
-
-                    Text(verbatim: "— \(inspirationQuote.author)")
+                    Text(selectedFlow.displayName)
                         .font(Geist.caption())
                         .foregroundStyle(Geist.faint)
-                }
-                .accessibilityElement(children: .combine)
+                } else {
+                    VStack(spacing: Geist.Spacing.two) {
+                        Text(verbatim: "“\(inspirationQuote.text)”")
+                            .font(Geist.body(.title3))
+                            .foregroundStyle(Geist.faint)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(5)
 
-                Link(
-                    "ZenQuotes ↗",
-                    destination: URL(string: "https://zenquotes.io/")!
-                )
-                .font(Geist.caption(.caption2))
-                .foregroundStyle(Geist.faint)
-                .accessibilityLabel("Inspirational quotes provided by ZenQuotes API")
+                        Text(verbatim: "— \(inspirationQuote.author)")
+                            .font(Geist.caption())
+                            .foregroundStyle(Geist.faint)
+                    }
+                    .accessibilityElement(children: .combine)
+
+                    Link(
+                        "ZenQuotes ↗",
+                        destination: URL(string: "https://zenquotes.io/")!
+                    )
+                    .font(Geist.caption(.caption2))
+                    .foregroundStyle(Geist.faint)
+                    .accessibilityLabel("Inspirational quotes provided by ZenQuotes API")
+                }
             }
+            .frame(maxWidth: 520)
+            .padding(.horizontal, 28)
         }
-        .frame(maxWidth: 520)
-        .padding(.horizontal, 28)
     }
 
     private var activeCapturePrompt: String? {
@@ -1312,149 +1287,149 @@ struct QuickCaptureView: View {
         return trimmed.isEmpty ? nil : trimmed
     }
 
-    @ViewBuilder
-    private var watchRecordingStatusCard: some View {
-        if let item = watchRecordingPipeline.currentItem {
-            VStack(alignment: .leading, spacing: Geist.Spacing.two) {
-                HStack(spacing: Geist.Spacing.three) {
-                    Button {
-                        dismissComposer()
-                        showsWatchRecordingQueue = true
-                    } label: {
-                        HStack(spacing: Geist.Spacing.three) {
-                            Image(systemName: item.watchStatusSymbol)
-                                .foregroundStyle(item.phase == .failed ? Geist.error : Geist.text)
-                                .frame(width: 28, height: 28)
+    private var watchRecordingStatusCard: CaptureViewSection {
+        CaptureViewSection {
+            if let item = watchRecordingPipeline.currentItem {
+                VStack(alignment: .leading, spacing: Geist.Spacing.two) {
+                    HStack(spacing: Geist.Spacing.three) {
+                        Button {
+                            dismissComposer()
+                            showsWatchRecordingQueue = true
+                        } label: {
+                            HStack(spacing: Geist.Spacing.three) {
+                                Image(systemName: item.watchStatusSymbol)
+                                    .foregroundStyle(item.phase == .failed ? Geist.error : Geist.text)
+                                    .frame(width: 28, height: 28)
 
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(item.watchStatusTitle)
-                                    .font(Geist.label())
-                                Text(item.watchStatusSubtitle)
-                                    .font(Geist.caption(.caption2))
-                                    .foregroundStyle(item.phase == .failed ? Geist.error : Geist.muted)
-                                    .lineLimit(3)
-                                    .fixedSize(horizontal: false, vertical: true)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(item.watchStatusTitle)
+                                        .font(Geist.label())
+                                    Text(item.watchStatusSubtitle)
+                                        .font(Geist.caption(.caption2))
+                                        .foregroundStyle(item.phase == .failed ? Geist.error : Geist.muted)
+                                        .lineLimit(3)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                                Spacer(minLength: Geist.Spacing.two)
                             }
-                            Spacer(minLength: Geist.Spacing.two)
+                            .contentShape(Rectangle())
                         }
-                        .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
+                        .buttonStyle(.plain)
 
-                    if item.phase == .transcribing || item.phase == .delivering {
-                        ProgressView()
-                            .controlSize(.small)
+                        if item.phase == .transcribing || item.phase == .delivering {
+                            ProgressView()
+                                .controlSize(.small)
+                        }
+                        Button {
+                            dismissComposer()
+                            showsWatchRecordingQueue = true
+                        } label: {
+                            Image(systemName: "chevron.right")
+                                .font(Geist.caption(.caption2))
+                                .foregroundStyle(Geist.faint)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Show Watch recording queue")
                     }
-                    Button {
-                        dismissComposer()
-                        showsWatchRecordingQueue = true
-                    } label: {
-                        Image(systemName: "chevron.right")
-                            .font(Geist.caption(.caption2))
-                            .foregroundStyle(Geist.faint)
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("Show Watch recording queue")
-                }
 
-                if item.isWaitingForTranscriptionUpgrade {
-                    Button("Get Vox.md Unlimited") { presentPaywall(context: .limit) }
-                        .frame(maxWidth: .infinity)
-                        .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
-                } else if item.phase == .failed {
-                    Button("Retry") { watchRecordingPipeline.retry(item) }
-                        .frame(maxWidth: .infinity)
-                        .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+                    if item.isWaitingForTranscriptionUpgrade {
+                        Button("Get Vox.md Unlimited") { presentPaywall(context: .limit) }
+                            .frame(maxWidth: .infinity)
+                            .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
+                    } else if item.phase == .failed {
+                        Button("Retry") { watchRecordingPipeline.retry(item) }
+                            .frame(maxWidth: .infinity)
+                            .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(12)
+                .foregroundStyle(Geist.text)
+                .background(Geist.surface)
+                .accessibilityIdentifier("watch_recording_status")
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(12)
-            .foregroundStyle(Geist.text)
-            .background(Geist.surface)
-            .accessibilityIdentifier("watch_recording_status")
         }
     }
 
-    private var emptyDestinationBanner: some View {
-        Button {
-            dismissComposer()
-            showsRoutePicker = true
-        } label: {
+    private var emptyDestinationBanner: CaptureViewSection {
+        CaptureViewSection {
+            Button {
+                dismissComposer()
+                showsRoutePicker = true
+            } label: {
+                HStack(spacing: Geist.Spacing.two) {
+                    Image(systemName: "folder.badge.plus")
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Destination Not Configured")
+                            .font(Geist.label())
+                        Text("Set up where this Capture Preset writes Markdown")
+                            .font(Geist.caption())
+                            .foregroundStyle(Geist.muted)
+                    }
+                    Spacer(minLength: Geist.Spacing.two)
+                    Text("Set Up")
+                        .font(Geist.caption())
+                    Image(systemName: "chevron.right")
+                        .font(Geist.caption(.caption2))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(12)
+                .foregroundStyle(Geist.text)
+                .background(Geist.surface)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("capture_destination_banner")
+        }
+    }
+
+    private var locationPresetStatusBar: CaptureViewSection {
+        CaptureViewSection {
             HStack(spacing: Geist.Spacing.two) {
-                Image(systemName: "folder.badge.plus")
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Destination Not Configured")
-                        .font(Geist.label())
-                    Text("Set up where this Capture Preset writes Markdown")
+                if isFindingLocation || viewModel.isResolvingLocation || persistentRecorder.isResolvingLocation {
+                    ProgressView()
+                        .controlSize(.small)
+                    Text("Finding Location…")
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.text)
+                } else {
+                    Label("Current Location On", systemImage: "location.fill")
                         .font(Geist.caption())
                         .foregroundStyle(Geist.muted)
                 }
-                Spacer(minLength: Geist.Spacing.two)
-                Text("Set Up")
-                    .font(Geist.caption())
-                Image(systemName: "chevron.right")
+                Text(selectedFlow.displayName)
                     .font(Geist.caption(.caption2))
+                    .foregroundStyle(Geist.faint)
+                    .lineLimit(1)
+                Spacer()
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(12)
-            .foregroundStyle(Geist.text)
-            .background(Geist.surface)
-            .contentShape(Rectangle())
+            .padding(.horizontal, Geist.Spacing.three)
+            .frame(minHeight: Geist.ControlHeight.small)
+            .background(Geist.Palette.background200)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(
+                (isFindingLocation || viewModel.isResolvingLocation || persistentRecorder.isResolvingLocation
+                    ? String(localized: "Finding Location…")
+                    : String(localized: "Current Location On"))
+                    + " " + selectedFlow.displayName
+            )
+            .accessibilityIdentifier(
+                isFindingLocation || viewModel.isResolvingLocation || persistentRecorder.isResolvingLocation
+                    ? "capture_finding_preset_location"
+                    : "capture_active_preset_location"
+            )
         }
-        .buttonStyle(.plain)
-        .accessibilityIdentifier("capture_destination_banner")
     }
 
-    private var locationPresetStatusBar: some View {
-        HStack(spacing: Geist.Spacing.two) {
-            if isFindingLocation || viewModel.isResolvingLocation || persistentRecorder.isResolvingLocation {
-                ProgressView()
-                    .controlSize(.small)
-                Text("Finding Location…")
-                    .font(Geist.caption())
-                    .foregroundStyle(Geist.text)
-            } else {
-                Label("Current Location On", systemImage: "location.fill")
-                    .font(Geist.caption())
-                    .foregroundStyle(Geist.muted)
+    private var entryLocationTokenHintSection: CaptureViewSection {
+        CaptureViewSection {
+            if let hint = viewModel.entryLocationTokenHint {
+                VStack(spacing: 0) {
+                    entryLocationTokenHintBar(hint)
+                    GeistDivider()
+                }
             }
-            Text(selectedFlow.displayName)
-                .font(Geist.caption(.caption2))
-                .foregroundStyle(Geist.faint)
-                .lineLimit(1)
-            Spacer()
         }
-        .padding(.horizontal, Geist.Spacing.three)
-        .frame(minHeight: Geist.ControlHeight.small)
-        .background(Geist.Palette.background200)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(
-            (isFindingLocation || viewModel.isResolvingLocation || persistentRecorder.isResolvingLocation
-                ? String(localized: "Finding Location…")
-                : String(localized: "Current Location On"))
-            + " " + selectedFlow.displayName
-        )
-        .accessibilityIdentifier(
-            isFindingLocation || viewModel.isResolvingLocation || persistentRecorder.isResolvingLocation
-                ? "capture_finding_preset_location"
-                : "capture_active_preset_location"
-        )
-    }
-
-    /// Keeps the optional hint behind a concrete type-erasure boundary. This
-    /// view is embedded in an already-large SwiftUI tree; adding another
-    /// `_ConditionalContent` layer caused on-device Swift metadata recursion
-    /// during launch in Debug builds.
-    private var entryLocationTokenHintSection: AnyView {
-        guard let hint = viewModel.entryLocationTokenHint else {
-            return AnyView(EmptyView())
-        }
-        return AnyView(
-            VStack(spacing: 0) {
-                entryLocationTokenHintBar(hint)
-                GeistDivider()
-            }
-        )
     }
 
     /// Non-blocking hint shown when the resolved entry formatting uses the
@@ -1463,102 +1438,102 @@ struct QuickCaptureView: View {
     /// capture whose token silently renders empty.
     private func entryLocationTokenHintBar(
         _ hint: QuickCaptureViewModel.EntryLocationTokenHint
-    ) -> some View {
-        HStack(spacing: Geist.Spacing.two) {
-            Label(
-                String(localized: "{location} needs Current Location for this Preset"),
-                systemImage: "location.slash"
-            )
+    ) -> CaptureViewSection {
+        CaptureViewSection {
+            HStack(spacing: Geist.Spacing.two) {
+                Label(
+                    String(localized: "{location} needs Current Location for this Preset"),
+                    systemImage: "location.slash"
+                )
+                .font(Geist.caption())
+                .foregroundStyle(Geist.muted)
+                .lineLimit(2)
+                Spacer(minLength: 4)
+                Button(String(localized: "Use Current Location")) {
+                    Task { await viewModel.enableEntryLocationTokenForPreset() }
+                }
+                .font(Geist.caption())
+                .buttonStyle(.borderless)
+                .accessibilityLabel(
+                    String(localized: "Use Current Location for \(hint.presetDisplayName)")
+                )
+            }
+            .padding(.horizontal, Geist.Spacing.three)
+            .frame(minHeight: Geist.ControlHeight.small)
+            .background(Geist.Palette.background200)
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("capture_entry_location_token_hint")
+        }
+    }
+
+    private var routeSelectionRow: CaptureViewSection {
+        CaptureViewSection {
+            HStack(spacing: 8) {
+                Menu {
+                    ForEach(enabledFlows) { flow in
+                        Button {
+                            selectFlow(flow)
+                        } label: {
+                            Label(flow.displayName, systemImage: flow.symbolName)
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: selectedFlow.symbolName)
+                        Text(selectedFlow.displayName)
+                            .lineLimit(1)
+                        Image(systemName: "chevron.up.chevron.down")
+                            .font(.caption2)
+                    }
+                }
+                .accessibilityLabel("Capture Preset \(selectedFlow.displayName)")
+                .accessibilityIdentifier("capture_vox_selector")
+
+                Button {
+                    dismissComposer()
+                    showsRoutePicker = true
+                } label: {
+                    HStack(spacing: 5) {
+                        Image(systemName: viewModel.hasAnyRouteOverride ? "arrow.triangle.branch" : "tray.full")
+                        Text(routeLabel)
+                            .lineLimit(1)
+                        if viewModel.hasAnyRouteOverride {
+                            Text("Override")
+                                .font(Geist.caption(.caption2))
+                                .foregroundStyle(Geist.faint)
+                        }
+                    }
+                }
+                .accessibilityLabel("Capture route \(routeLabel), \(viewModel.effectivePlacementLabel)")
+
+                if viewModel.hasAnyRouteOverride {
+                    Button {
+                        viewModel.useVoxRouteDefaults()
+                    } label: {
+                        Image(systemName: "arrow.uturn.backward.circle")
+                            .frame(width: 36, height: 36)
+                    }
+                    .accessibilityLabel("Use Preset destination defaults")
+                }
+
+                Spacer(minLength: 4)
+            }
             .font(Geist.caption())
             .foregroundStyle(Geist.muted)
-            .lineLimit(2)
-            Spacer(minLength: 4)
-            Button(String(localized: "Use Current Location")) {
-                Task { await viewModel.enableEntryLocationTokenForPreset() }
-            }
-            .font(Geist.caption())
-            .buttonStyle(.borderless)
-            .accessibilityLabel(
-                String(localized: "Use Current Location for \(hint.presetDisplayName)")
-            )
+            .padding(.horizontal, Geist.Spacing.three)
+            .frame(minHeight: Geist.ControlHeight.medium)
+            .background(Geist.Palette.background100)
         }
-        .padding(.horizontal, Geist.Spacing.three)
-        .frame(minHeight: Geist.ControlHeight.small)
-        .background(Geist.Palette.background200)
-        .accessibilityElement(children: .contain)
-        .accessibilityIdentifier("capture_entry_location_token_hint")
     }
 
-    private var routeSelectionRow: some View {
-        HStack(spacing: 8) {
-            Menu {
-                ForEach(enabledFlows) { flow in
-                    Button {
-                        selectFlow(flow)
-                    } label: {
-                        Label(flow.displayName, systemImage: flow.symbolName)
-                    }
-                }
-            } label: {
-                HStack(spacing: 6) {
-                    Image(systemName: selectedFlow.symbolName)
-                    Text(selectedFlow.displayName)
-                        .lineLimit(1)
-                    Image(systemName: "chevron.up.chevron.down")
-                        .font(.caption2)
-                }
-            }
-            .accessibilityLabel("Capture Preset \(selectedFlow.displayName)")
-            .accessibilityIdentifier("capture_vox_selector")
-
-            Button {
-                dismissComposer()
-                showsRoutePicker = true
-            } label: {
-                HStack(spacing: 5) {
-                    Image(systemName: viewModel.hasAnyRouteOverride ? "arrow.triangle.branch" : "tray.full")
-                    Text(routeLabel)
-                        .lineLimit(1)
-                    if viewModel.hasAnyRouteOverride {
-                        Text("Override")
-                            .font(Geist.caption(.caption2))
-                            .foregroundStyle(Geist.faint)
-                    }
-                }
-            }
-            .accessibilityLabel("Capture route \(routeLabel), \(viewModel.effectivePlacementLabel)")
-
-            if viewModel.hasAnyRouteOverride {
-                Button {
-                    viewModel.useVoxRouteDefaults()
-                } label: {
-                    Image(systemName: "arrow.uturn.backward.circle")
-                        .frame(width: 36, height: 36)
-                }
-                .accessibilityLabel("Use Preset destination defaults")
-            }
-
-            Spacer(minLength: 4)
-        }
-        .font(Geist.caption())
-        .foregroundStyle(Geist.muted)
-        .padding(.horizontal, Geist.Spacing.three)
-        .frame(minHeight: Geist.ControlHeight.medium)
-        .background(Geist.Palette.background100)
-    }
-
-    /// Type-erased like its sibling status controls: the send button's
-    /// confirmation-dialog chain pushed `captureActionBar`'s un-erased type
-    /// past the Swift runtime demangler's on-device limit (SIGSEGV at
-    /// launch) — see voiceCaptureButton's erasure note.
-    private var sendRouteControl: AnyView {
-        AnyView(
+    private var sendRouteControl: CaptureViewSection {
+        CaptureViewSection {
             routeStatusButton(
                 viewModel.isSubmitting
                     ? String(localized: "Sending capture")
                     : (captureSubmissionRequiresUnlock
-                       ? String(localized: "Unlock unlimited captures")
-                       : String(localized: "Send capture")),
+                        ? String(localized: "Unlock unlimited captures")
+                        : String(localized: "Send capture")),
                 icon: captureSubmissionRequiresUnlock ? "lock.fill" : "arrow.up"
             ) {
                 if captureSubmissionRequiresUnlock {
@@ -1581,97 +1556,103 @@ struct QuickCaptureView: View {
             } message: {
                 Text("Optional confirmation for Preset sends. Turn it off in Settings › Capture Bar.")
             }
-        )
+        }
     }
 
-    private var captureActionBar: some View {
-        HStack(spacing: 8) {
-            routeStatusButton(
-                String(localized: "Recent captures"),
-                icon: "clock.arrow.circlepath"
-            ) {
-                dismissComposer()
-                showsCaptureHistory = true
-            }
+    private var captureActionBar: CaptureViewSection {
+        CaptureViewSection {
+            HStack(spacing: 8) {
+                routeStatusButton(
+                    String(localized: "Recent captures"),
+                    icon: "clock.arrow.circlepath"
+                ) {
+                    dismissComposer()
+                    showsCaptureHistory = true
+                }
 
-            routeStatusButton(
-                "Settings",
-                icon: "gearshape"
-            ) {
-                dismissComposer()
-                openSettings()
-            }
-            .accessibilityIdentifier("capture_settings")
+                routeStatusButton(
+                    "Settings",
+                    icon: "gearshape"
+                ) {
+                    dismissComposer()
+                    openSettings()
+                }
+                .accessibilityIdentifier("capture_settings")
 
-            // Recording controls live at the leading end of the bar so a
-            // mis-tap while stopping speech can never land on the trailing
-            // send control — and vice versa.
-            voiceCaptureButton
+                // Recording controls live at the leading end of the bar so a
+                // mis-tap while stopping speech can never land on the trailing
+                // send control — and vice versa.
+                voiceCaptureButton
 
-            voiceCapturePauseToggle
+                voiceCapturePauseToggle
 
-            Spacer(minLength: 4)
+                Spacer(minLength: 4)
 
-            if !usageTracker.hasUnlocked, usageTracker.successfulCapturesUsed >= 7 {
-                Button {
-                    presentPaywall(context: .usageMeter)
-                } label: {
-                    Text(usageTracker.isCaptureAtLimit
-                         ? String(localized: "Unlock")
-                         : String(localized: "\(usageTracker.capturesRemaining) free"))
+                if !usageTracker.hasUnlocked, usageTracker.successfulCapturesUsed >= 7 {
+                    Button {
+                        presentPaywall(context: .usageMeter)
+                    } label: {
+                        Text(
+                            usageTracker.isCaptureAtLimit
+                                ? String(localized: "Unlock")
+                                : String(localized: "\(usageTracker.capturesRemaining) free")
+                        )
                         .font(Geist.mono(.caption2, medium: true))
                         .foregroundStyle(usageTracker.isCaptureAtLimit ? Geist.error : Geist.faint)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("\(usageTracker.capturesRemaining) free captures remaining")
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel("\(usageTracker.capturesRemaining) free captures remaining")
-            }
 
-            sendRouteControl
+                sendRouteControl
 
-            routeStatusButton(
-                composerIsFocused
-                    ? String(localized: "Dismiss keyboard")
-                    : String(localized: "Show keyboard"),
-                icon: composerIsFocused ? "keyboard.chevron.compact.down" : "keyboard"
-            ) {
-                toggleKeyboard()
+                routeStatusButton(
+                    composerIsFocused
+                        ? String(localized: "Dismiss keyboard")
+                        : String(localized: "Show keyboard"),
+                    icon: composerIsFocused ? "keyboard.chevron.compact.down" : "keyboard"
+                ) {
+                    toggleKeyboard()
+                }
             }
+            .font(Geist.caption())
+            .foregroundStyle(Geist.muted)
+            .padding(.horizontal, Geist.Spacing.three)
+            .frame(minHeight: Geist.ControlHeight.large)
+            .background(Geist.Palette.background200)
         }
-        .font(Geist.caption())
-        .foregroundStyle(Geist.muted)
-        .padding(.horizontal, Geist.Spacing.three)
-        .frame(minHeight: Geist.ControlHeight.large)
-        .background(Geist.Palette.background200)
     }
 
-    private var attachmentStrip: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(Array(viewModel.draft.additionalPayloads.enumerated()), id: \.offset) { index, payload in
-                    HStack(spacing: 7) {
-                        Image(systemName: payloadIcon(payload))
-                        Text(payloadLabel(payload))
-                            .lineLimit(1)
-                        Button {
-                            Task { await viewModel.removePayload(at: index) }
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
+    private var attachmentStrip: CaptureViewSection {
+        CaptureViewSection {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(Array(viewModel.draft.additionalPayloads.enumerated()), id: \.offset) { index, payload in
+                        HStack(spacing: 7) {
+                            Image(systemName: payloadIcon(payload))
+                            Text(payloadLabel(payload))
+                                .lineLimit(1)
+                            Button {
+                                Task { await viewModel.removePayload(at: index) }
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                            }
+                            .accessibilityLabel("Remove \(payloadLabel(payload))")
                         }
-                        .accessibilityLabel("Remove \(payloadLabel(payload))")
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.text)
+                        .padding(.horizontal, Geist.Spacing.three)
+                        .frame(height: 36)
+                        .background(Geist.Palette.gray100)
+                        .clipShape(Capsule())
                     }
-                    .font(Geist.caption())
-                    .foregroundStyle(Geist.text)
-                    .padding(.horizontal, Geist.Spacing.three)
-                    .frame(height: 36)
-                    .background(Geist.Palette.gray100)
-                    .clipShape(Capsule())
                 }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 7)
             }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 7)
+            .background(Geist.Palette.background100)
+            .accessibilityLabel("Capture attachments")
         }
-        .background(Geist.Palette.background100)
-        .accessibilityLabel("Capture attachments")
     }
 
     private var captureErrorMessage: String? {
@@ -1695,48 +1676,52 @@ struct QuickCaptureView: View {
         }
     }
 
-    private func errorBanner(_ message: String) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(Geist.error)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(message)
-                    .font(Geist.caption())
-                    .foregroundStyle(Geist.text)
-                if viewModel.errorMessage != nil, viewModel.failedInboxCount > 0 {
-                    Button("Retry queued captures") {
-                        Task { await viewModel.retryFailedInbox() }
+    private func errorBanner(_ message: String) -> CaptureViewSection {
+        CaptureViewSection {
+            HStack(alignment: .top, spacing: 10) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundStyle(Geist.error)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(message)
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.text)
+                    if viewModel.errorMessage != nil, viewModel.failedInboxCount > 0 {
+                        Button("Retry queued captures") {
+                            Task { await viewModel.retryFailedInbox() }
+                        }
+                        .font(Geist.caption())
                     }
-                    .font(Geist.caption())
                 }
+                Spacer()
+                Button(action: dismissCaptureError) {
+                    Image(systemName: "xmark")
+                }
+                .accessibilityLabel("Dismiss error")
             }
-            Spacer()
-            Button(action: dismissCaptureError) {
-                Image(systemName: "xmark")
-            }
-            .accessibilityLabel("Dismiss error")
+            .padding(Geist.Spacing.three)
+            .background(Geist.Palette.red100)
+            .overlay(
+                RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous)
+                    .stroke(Geist.Palette.red400, lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous))
         }
-        .padding(Geist.Spacing.three)
-        .background(Geist.Palette.red100)
-        .overlay(
-            RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous)
-                .stroke(Geist.Palette.red400, lineWidth: 1)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous))
     }
 
     private func routeStatusButton(
         _ accessibilityLabel: String,
         icon: String,
         action: @escaping () -> Void
-    ) -> some View {
-        Button(action: action) {
-            Image(systemName: icon)
-                .font(.system(size: 17, weight: .medium))
-                .foregroundStyle(Geist.text)
-                .frame(width: 36, height: 36)
-                .contentShape(Rectangle())
-                .accessibilityLabel(accessibilityLabel)
+    ) -> CaptureViewSection {
+        CaptureViewSection {
+            Button(action: action) {
+                Image(systemName: icon)
+                    .font(.system(size: 17, weight: .medium))
+                    .foregroundStyle(Geist.text)
+                    .frame(width: 36, height: 36)
+                    .contentShape(Rectangle())
+                    .accessibilityLabel(accessibilityLabel)
+            }
         }
     }
 

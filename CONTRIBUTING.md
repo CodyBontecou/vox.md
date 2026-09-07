@@ -57,6 +57,12 @@ The app, keyboard, and widget share models, transcripts, settings, and IPC files
 - Test the main app and keyboard extension together; many flows depend on App Group shared state.
 - Test on hardware before opening a PR. The simulator does not fully represent keyboard, microphone, Live Activity, or background audio behavior.
 - For UI changes, include before/after screenshots.
+- Capture UI changes must pass `./scripts/test-capture-view-structure.sh` and
+  `QuickCaptureRenderingTests`. Before shipping, run
+  `./scripts/test-ios-capture-launch.py --device '<device UUID>'` with an unlocked
+  iPhone. This installs the checkout and cold-launches it repeatedly; save your
+  work first. See [capture UI regression gates](docs/capture-view-regression-tests.md)
+  for the metadata-boundary rule and what each test does—and does not—prove.
 - For transcription changes, specify the model and language you tested.
 - For file export changes, verify TXT, Markdown, YAML, append mode, and template mode when relevant.
 
