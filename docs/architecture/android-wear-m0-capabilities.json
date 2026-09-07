@@ -8531,6 +8531,9 @@
         "liveActivityMonitorEnabled": [
           "cap.store.live-state"
         ],
+        "shortcutRecordingLiveActivityEnabled": [
+          "cap.store.live-state"
+        ],
         "lockScreenQuickRecordEnabled": [
           "cap.store.live-state"
         ],
@@ -8633,6 +8636,9 @@
           "cap.store.presets"
         ],
         "retiredCapturePresetRouteIDs": [
+          "cap.store.presets"
+        ],
+        "capturePresetProcessingGateMigrationVersion": [
           "cap.store.presets"
         ]
       }

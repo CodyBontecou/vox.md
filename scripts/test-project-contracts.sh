@@ -959,7 +959,11 @@ quick_capture_model = (root / 'Voxboard App Shared/CaptureComposerViewModel.swif
 for required in [
     'initialLoadTask',
     'draft.selectDestination(destinationID)',
-    'requestCaptureSource',
+    'validateComposerLaunch',
+    'applyComposerLaunch',
+    'pendingPresetSwitch',
+    'confirmPresetSwitch',
+    'configureCaptureRouteOwnership',
     'appendRecordedTranscript',
     'stageRecordedAudio',
 ]:
@@ -1429,16 +1433,31 @@ if (
 startup_start = mac_app.find('private static func consumePendingQuickCaptureOpenIfNeeded')
 startup_end = mac_app.find('private func configureGlobalHotKeys()', startup_start)
 startup_source = mac_app[startup_start:startup_end]
-startup_source_index = startup_source.find('quickCaptureViewModel.requestCaptureSource(source)')
-startup_vox_index = startup_source.find('quickCaptureViewModel.requestVox(voxID)')
-startup_input_index = startup_source.find('quickCaptureViewModel.requestedInput = input')
+startup_value_index = startup_source.find('let incoming = CaptureDeepLinkDraft(')
+startup_apply_index = startup_source.find(
+    'await quickCaptureViewModel.handleDeepLink(.openComposer(incoming))'
+)
 startup_route_index = startup_source.find('windowCoordinator.showMain(.navigate(.capture))')
 if not (
     startup_start >= 0
     and startup_end >= 0
-    and 0 <= startup_source_index < startup_vox_index < startup_input_index < startup_route_index
+    and 0 <= startup_value_index < startup_apply_index < startup_route_index
 ):
-    errors.append('macOS startup handoff must apply source/Vox/input before targeted Capture delivery')
+    errors.append('macOS startup handoff must validate/persist one complete launch before targeted Capture delivery')
+for required in [
+    'pendingQuickCaptureSourceKey',
+    'pendingQuickCaptureVoxIdKey',
+    'pendingQuickCaptureInputKey',
+]:
+    if required not in startup_source:
+        errors.append(f'macOS atomic startup launch is missing {required}')
+for partial_mutation in [
+    'quickCaptureViewModel.requestCaptureSource(',
+    'quickCaptureViewModel.requestVox(',
+    'quickCaptureViewModel.requestedInput =',
+]:
+    if partial_mutation in startup_source:
+        errors.append(f'macOS startup launch must not partially mutate source/preset/input: {partial_mutation}')
 for removed_history_window in [
     'Window("Capture History", id: "history")',
     'historyWindow',
