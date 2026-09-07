@@ -213,11 +213,11 @@ private extension CapturePayload {
         switch self {
         case .text, .url:
             return []
-        case .audio(let asset, _), .retainedAudio(let asset, _), .image(let asset, _), .file(let asset):
+        case .audio(let asset, _), .retainedAudio(let asset, _), .image(let asset, _, _), .file(let asset):
             return [asset]
         case .scannedDocument(let pages, let pdf, _):
             return pdf.map { [$0] } ?? pages
-        case .sketch(let drawing, let preview, _):
+        case .sketch(let drawing, let preview, _, _):
             return [drawing, preview]
         }
     }

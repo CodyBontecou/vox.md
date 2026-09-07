@@ -198,10 +198,7 @@ private final class ShareCaptureModel {
                     locationDecisionOverride = .sendWithoutLocation
                 }
             }
-            let processingState: CapturePresetProcessingState = profile?.captureProcessingEnabled == true
-                && profile?.postProcessingMode != CapturePresetProcessingMode.none
-                ? .pending
-                : (profile == nil ? .notRequested : .applied)
+            let processingState = profile?.processingState(for: payloads) ?? .notRequested
             let request = CaptureRequest(
                 id: requestID,
                 source: .shareExtension,
@@ -380,7 +377,7 @@ private enum ShareItemLoader {
             )
             let type = UTType(typeIdentifier)
             if type?.conforms(to: .image) == true {
-                payloads.append(.image(asset, altText: provider.suggestedName))
+                payloads.append(.image(asset, altText: provider.suggestedName, altTextOrigin: .placeholder))
             } else if type?.conforms(to: .audio) == true {
                 payloads.append(.audio(asset, transcript: nil))
             } else {

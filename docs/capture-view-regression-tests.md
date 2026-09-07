@@ -83,6 +83,38 @@ recordings, vault writes, or real watch transfers.
 These tests run in the existing Apple CI app-hosted suite. They are not a claim
 of full-app end-to-end QA or proof of hardware launch safety.
 
+### One-time microphone hold tip
+
+`CaptureMicHoldHintTests` covers the stable completion key, survival across
+preference reload/toolbar reset, and arrow placement on compact, wide, and
+mirrored layouts. The rendering suite also mounts the actual anchored bubble in
+keyboard-sized space with light/dark, large-text, and RTL variants, retaining
+screenshots in the test result bundle.
+
+The tip uses `capture.voice.micHoldHintDismissed.v1` in standard app preferences.
+It is completed only by the bubble's × or a successful reveal of recording
+controls (long-press or the VoiceOver custom action). Ordinary taps, blocked
+holds, backgrounding, and temporary recording/media/modal activity do not
+complete it. Do not reset this preference on navigation, toolbar reset, or app
+updates; clearing app data is a new onboarding state.
+
+On a disposable simulator/fresh install, verify both completion paths separately:
+
+1. Finish release notes. `capture_mic_hold_hint` appears above
+   `capture_voice_recording`, with a bouncing arrow aligned to the mic.
+2. Show/hide the keyboard, change text size, and test dark mode/RTL. The bubble
+   must stay on screen, above the mic; its × has a 44-point hit target. Reduce
+   Motion leaves the arrow still. The overlay must not intercept mic presses.
+3. Hold the mic for at least 0.45 seconds. `capture_recording_details` appears;
+   the hint disappears without starting a recording. Close the details and
+   cold-relaunch: the hint must remain absent.
+4. In a separate fresh preference state, tap `capture_mic_hold_hint_dismiss`.
+   The hint disappears without opening details or recording. Cold-relaunch and
+   visit Settings/Capture: it must remain absent.
+
+These interaction checks are separate from the unit-hosted rendering tests,
+which do not exercise real touches or the full system accessibility tree.
+
 ## 3. Physical-device cold-launch gate (local, explicit device)
 
 Save your work in Vox.md, connect/pair your iPhone, enable Developer Mode, and keep

@@ -19,7 +19,7 @@ enum SecureCaptureFileIOError: Error, LocalizedError {
 /// components are opened with `O_NOFOLLOW`, so a symlink swap between path
 /// planning and the coordinated write cannot redirect data outside the root.
 enum SecureCaptureFileIO {
-    static func read(relativePath: String, rootURL: URL) throws -> Data? {
+    static func read(relativePath: String, rootURL: URL, maximumByteCount: Int? = nil) throws -> Data? {
         let split = try splitPath(relativePath)
         guard let parentFD = try openParent(
             components: split.parentComponents,
@@ -29,7 +29,7 @@ enum SecureCaptureFileIO {
         defer { close(parentFD) }
 
         let fd = split.filename.withCString {
-            openat(parentFD, $0, O_RDONLY | O_CLOEXEC | O_NOFOLLOW)
+            openat(parentFD, $0, O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK)
         }
         guard fd >= 0 else {
             let code = errno
@@ -37,7 +37,15 @@ enum SecureCaptureFileIO {
             throw SecureCaptureFileIOError.posix(operation: "open", code: code)
         }
         defer { close(fd) }
-        return try readAll(from: fd)
+        if let maximumByteCount {
+            var info = stat()
+            guard fstat(fd, &info) == 0,
+                  (info.st_mode & S_IFMT) == S_IFREG,
+                  info.st_size <= maximumByteCount else {
+                throw SecureCaptureFileIOError.invalidPath("image size or type")
+            }
+        }
+        return try readAll(from: fd, maximumByteCount: maximumByteCount)
     }
 
     static func writeAtomically(
@@ -319,7 +327,7 @@ enum SecureCaptureFileIO {
         return currentFD
     }
 
-    private static func readAll(from fd: Int32) throws -> Data {
+    private static func readAll(from fd: Int32, maximumByteCount: Int? = nil) throws -> Data {
         var result = Data()
         var buffer = [UInt8](repeating: 0, count: 64 * 1_024)
         while true {
@@ -328,6 +336,9 @@ enum SecureCaptureFileIO {
             if count < 0 {
                 if errno == EINTR { continue }
                 throw SecureCaptureFileIOError.posix(operation: "read", code: errno)
+            }
+            if let maximumByteCount, result.count + count > maximumByteCount {
+                throw SecureCaptureFileIOError.invalidPath("image size")
             }
             result.append(contentsOf: buffer.prefix(Int(count)))
         }

@@ -228,15 +228,26 @@ public enum CaptureAudioEmbedPlacement: String, Codable, Sendable {
     case bottom
 }
 
+public enum CaptureAltTextOrigin: String, Codable, Equatable, Sendable {
+    case placeholder
+    case provided
+    case generated
+
+    public static func needsDescription(text: String?, origin: Self?) -> Bool {
+        if origin == .provided || origin == .generated { return false }
+        return origin == .placeholder || text == nil
+    }
+}
+
 public enum CapturePayload: Equatable, Sendable {
     case text(String)
     case url(URL, title: String?)
     case audio(CaptureAssetReference, transcript: String?)
     case retainedAudio(CaptureAssetReference, embedPlacement: CaptureAudioEmbedPlacement)
-    case image(CaptureAssetReference, altText: String?)
+    case image(CaptureAssetReference, altText: String?, altTextOrigin: CaptureAltTextOrigin? = nil)
     case file(CaptureAssetReference)
     case scannedDocument(pages: [CaptureAssetReference], pdf: CaptureAssetReference?, extractedText: String?)
-    case sketch(drawing: CaptureAssetReference, preview: CaptureAssetReference, altText: String?)
+    case sketch(drawing: CaptureAssetReference, preview: CaptureAssetReference, altText: String?, altTextOrigin: CaptureAltTextOrigin? = nil)
 }
 
 extension CapturePayload: Codable {
@@ -260,6 +271,7 @@ extension CapturePayload: Codable {
         case transcript
         case embedPlacement
         case altText
+        case altTextOrigin
         case pages
         case pdf
         case drawing
@@ -292,7 +304,8 @@ extension CapturePayload: Codable {
         case .image:
             self = .image(
                 try container.decode(CaptureAssetReference.self, forKey: .asset),
-                altText: try container.decodeIfPresent(String.self, forKey: .altText)
+                altText: try container.decodeIfPresent(String.self, forKey: .altText),
+                altTextOrigin: try container.decodeIfPresent(CaptureAltTextOrigin.self, forKey: .altTextOrigin)
             )
         case .file:
             self = .file(try container.decode(CaptureAssetReference.self, forKey: .asset))
@@ -306,7 +319,8 @@ extension CapturePayload: Codable {
             self = .sketch(
                 drawing: try container.decode(CaptureAssetReference.self, forKey: .drawing),
                 preview: try container.decode(CaptureAssetReference.self, forKey: .preview),
-                altText: try container.decodeIfPresent(String.self, forKey: .altText)
+                altText: try container.decodeIfPresent(String.self, forKey: .altText),
+                altTextOrigin: try container.decodeIfPresent(CaptureAltTextOrigin.self, forKey: .altTextOrigin)
             )
         }
     }
@@ -329,10 +343,11 @@ extension CapturePayload: Codable {
             try container.encode(Kind.retainedAudio, forKey: .kind)
             try container.encode(asset, forKey: .asset)
             try container.encode(embedPlacement, forKey: .embedPlacement)
-        case .image(let asset, let altText):
+        case .image(let asset, let altText, let origin):
             try container.encode(Kind.image, forKey: .kind)
             try container.encode(asset, forKey: .asset)
             try container.encodeIfPresent(altText, forKey: .altText)
+            try container.encodeIfPresent(origin, forKey: .altTextOrigin)
         case .file(let asset):
             try container.encode(Kind.file, forKey: .kind)
             try container.encode(asset, forKey: .asset)
@@ -341,11 +356,12 @@ extension CapturePayload: Codable {
             try container.encode(pages, forKey: .pages)
             try container.encodeIfPresent(pdf, forKey: .pdf)
             try container.encodeIfPresent(extractedText, forKey: .text)
-        case .sketch(let drawing, let preview, let altText):
+        case .sketch(let drawing, let preview, let altText, let origin):
             try container.encode(Kind.sketch, forKey: .kind)
             try container.encode(drawing, forKey: .drawing)
             try container.encode(preview, forKey: .preview)
             try container.encodeIfPresent(altText, forKey: .altText)
+            try container.encodeIfPresent(origin, forKey: .altTextOrigin)
         }
     }
 }
@@ -385,6 +401,8 @@ public struct CaptureRequest: Identifiable, Codable, Equatable, Sendable {
     /// read live settings, so later edits cannot change queued user content.
     public var voxProfile: CapturePresetProfile?
     public var voxProcessingState: CapturePresetProcessingState
+    /// Language chosen when the request is created, reused during deferred processing.
+    public var imageDescriptionLocaleIdentifier: String?
     /// The final origin-time location result. A durable unavailable result is
     /// as meaningful as a snapshot and must never trigger later reacquisition.
     public var locationOutcome: CaptureLocationOutcome?
@@ -412,6 +430,7 @@ public struct CaptureRequest: Identifiable, Codable, Equatable, Sendable {
         frontmatter: [String: String] = [:],
         voxProfile: CapturePresetProfile? = nil,
         voxProcessingState: CapturePresetProcessingState = .notRequested,
+        imageDescriptionLocaleIdentifier: String? = Locale.current.identifier,
         locationOutcome: CaptureLocationOutcome? = nil,
         locationDecisionOverride: CaptureLocationDecisionOverride? = nil,
         originDraftUpdatedAt: Date? = nil,
@@ -429,6 +448,8 @@ public struct CaptureRequest: Identifiable, Codable, Equatable, Sendable {
         self.frontmatter = frontmatter
         self.voxProfile = voxProfile
         self.voxProcessingState = voxProcessingState
+        self.imageDescriptionLocaleIdentifier = voxProfile?.processesImages == true
+            ? imageDescriptionLocaleIdentifier : nil
         self.locationOutcome = locationOutcome
         self.locationDecisionOverride = locationDecisionOverride
         self.originDraftUpdatedAt = originDraftUpdatedAt
@@ -452,6 +473,7 @@ public struct CaptureRequest: Identifiable, Codable, Equatable, Sendable {
         case frontmatter
         case voxProfile
         case voxProcessingState
+        case imageDescriptionLocaleIdentifier
         case locationOutcome
         case locationDecisionOverride
         case originDraftUpdatedAt
@@ -476,6 +498,7 @@ public struct CaptureRequest: Identifiable, Codable, Equatable, Sendable {
             voxProfile: container.decodeIfPresent(CapturePresetProfile.self, forKey: .voxProfile),
             voxProcessingState: container.decodeIfPresent(CapturePresetProcessingState.self, forKey: .voxProcessingState)
                 ?? .notRequested,
+            imageDescriptionLocaleIdentifier: container.decodeIfPresent(String.self, forKey: .imageDescriptionLocaleIdentifier),
             locationOutcome: container.decodeIfPresent(CaptureLocationOutcome.self, forKey: .locationOutcome),
             locationDecisionOverride: container.decodeIfPresent(
                 CaptureLocationDecisionOverride.self,

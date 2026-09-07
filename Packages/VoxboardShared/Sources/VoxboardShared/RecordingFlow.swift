@@ -25,6 +25,8 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
     /// Master on/off for on-device Apple Intelligence processing of this
     /// preset's captures.
     public var captureProcessingEnabled: Bool
+    /// Optional descriptions of staged images. Missing legacy values remain off.
+    public var generateImageAltText: Bool
     /// Which modalities (voice, typed text, or both) the processing mode
     /// applies to when the master gate is on. Existing records decode as
     /// `.both`; the preset-store migration refines legacy installs to their
@@ -61,6 +63,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         customPostProcessingInstruction: String = "",
         speakerDiarizationEnabled: Bool = false,
         captureProcessingEnabled: Bool = false,
+        generateImageAltText: Bool = false,
         captureProcessingScope: CapturePresetProcessingScope = .both,
         capturePrompt: String = "",
         watchOutputMode: CapturePresetWatchOutputMode = .transcript,
@@ -85,6 +88,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         self.customPostProcessingInstruction = customPostProcessingInstruction
         self.speakerDiarizationEnabled = speakerDiarizationEnabled
         self.captureProcessingEnabled = captureProcessingEnabled
+        self.generateImageAltText = generateImageAltText
         self.captureProcessingScope = captureProcessingScope
         self.capturePrompt = capturePrompt
         self.watchOutputMode = watchOutputMode
@@ -142,6 +146,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
             postProcessingMode: postProcessingMode,
             customPostProcessingInstruction: customPostProcessingInstruction,
             captureProcessingEnabled: captureProcessingEnabled,
+            generateImageAltText: generateImageAltText,
             captureProcessingScope: captureProcessingScope,
             capturePrompt: capturePrompt,
             captureDestinationID: captureDestinationID,
@@ -182,6 +187,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         case customPostProcessingInstruction
         case speakerDiarizationEnabled
         case captureProcessingEnabled
+        case generateImageAltText
         case captureProcessingScope
         case capturePrompt
         case watchOutputMode
@@ -213,6 +219,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
             customPostProcessingInstruction: try container.decodeIfPresent(String.self, forKey: .customPostProcessingInstruction) ?? "",
             speakerDiarizationEnabled: try container.decodeIfPresent(Bool.self, forKey: .speakerDiarizationEnabled) ?? false,
             captureProcessingEnabled: try container.decodeIfPresent(Bool.self, forKey: .captureProcessingEnabled) ?? false,
+            generateImageAltText: try container.decodeIfPresent(Bool.self, forKey: .generateImageAltText) ?? false,
             captureProcessingScope: try container.decodeIfPresent(CapturePresetProcessingScope.self, forKey: .captureProcessingScope) ?? .both,
             capturePrompt: try container.decodeIfPresent(String.self, forKey: .capturePrompt) ?? "",
             watchOutputMode: try container.decodeIfPresent(CapturePresetWatchOutputMode.self, forKey: .watchOutputMode) ?? .transcript,
@@ -242,6 +249,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         try container.encode(customPostProcessingInstruction, forKey: .customPostProcessingInstruction)
         try container.encode(speakerDiarizationEnabled, forKey: .speakerDiarizationEnabled)
         try container.encode(captureProcessingEnabled, forKey: .captureProcessingEnabled)
+        try container.encode(generateImageAltText, forKey: .generateImageAltText)
         try container.encode(captureProcessingScope, forKey: .captureProcessingScope)
         try container.encode(capturePrompt, forKey: .capturePrompt)
         try container.encode(watchOutputMode, forKey: .watchOutputMode)

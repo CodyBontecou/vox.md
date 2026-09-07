@@ -727,6 +727,11 @@ private struct MacCapturePresetEditor: View {
                     .help("About Apple Intelligence Processing")
                     .accessibilityLabel("About Apple Intelligence Processing")
                 }
+                ImageAltTextSettings(
+                    generateImageAltText: $flow.generateImageAltText,
+                    processingEnabled: flow.captureProcessingEnabled
+                )
+
                 Picker("Mode", selection: $flow.postProcessingMode) {
                     ForEach(CapturePresetProcessingMode.allCases) { mode in
                         Text(mode.displayName).tag(mode)
@@ -1299,7 +1304,7 @@ private struct MacCaptureTextProcessingInfoView: View {
                 )
             }
 
-            Text("Turn it off to keep all captured text exactly as captured. Keep Original mode does the same while the switch stays on for future use.")
+            Text("Keep Original and Apply To control text only. Image descriptions are optional.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 

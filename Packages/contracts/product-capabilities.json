@@ -4074,7 +4074,7 @@
       "evidence": [
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureModels.swift",
-          "symbol": "case image(CaptureAssetReference, altText: String?)"
+          "symbol": "case image(CaptureAssetReference, altText: String?, altTextOrigin: CaptureAltTextOrigin? = nil)"
         }
       ],
       "id": "cap.payload.image",
@@ -8723,6 +8723,6 @@
   "schemaVersion": 1,
   "source": {
     "path": "docs/architecture/android-wear-m0-capabilities.json",
-    "sha256": "6fd631c304533e40f3975788fb7acce0135c3c1f5145c9c3cce16dd815cde1c2"
+    "sha256": "8645411f69e76ccbfc2744c14cd9c4414290d7bdd9559e058bad51989f31906d"
   }
 }

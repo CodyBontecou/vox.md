@@ -24,9 +24,20 @@ public protocol LLMBackend: Sendable {
     /// to fall back to `complete(prompt:)`. Backends may also return `nil`
     /// for specific inputs where guided generation isn't desirable.
     func enrichNative(rawText: String) async throws -> TranscriptEnrichment?
+    func enrichNative(rawText: String, profile: CapturePresetProfile?) async throws -> TranscriptEnrichment?
+}
+
+public enum LLMBackendFailure: String, Error, Sendable {
+    case unavailable, unsupportedLanguage, inputTooLarge, refusal, cancelled, timedOut, busy, failed
 }
 
 public extension LLMBackend {
+    func enrichNative(rawText: String, profile: CapturePresetProfile?) async throws -> TranscriptEnrichment? {
+        guard !TranscriptEnricher.requiresPromptDrivenFormatting(profile),
+              !TranscriptEnricher.containsSpeakerLabels(rawText) else { return nil }
+        return try await enrichNative(rawText: rawText)
+    }
+
     func enrichNative(rawText: String) async throws -> TranscriptEnrichment? {
         nil
     }
@@ -98,26 +109,59 @@ public struct TranscriptEnricher: Sendable {
             throw TranscriptEnricherError.emptyInput
         }
 
-        // Prefer native structured generation for plain cleanup. Workflow-
-        // specific formatting and diarized transcripts use the prompt path so
-        // speaker labels and the selected instruction remain explicit.
-        // A *throwing* native backend degrades to the prompt path rather than
-        // aborting enrichment: a transient session error should not cost the
-        // capture its title/tags when the string path might still succeed.
-        if !Self.requiresPromptDrivenFormatting(profile),
-           !Self.containsSpeakerLabels(trimmed) {
-            do {
-                if let native = try await backend.enrichNative(rawText: trimmed) {
-                    return Self.applyVoxDefaults(Self.normalize(native), profile: profile)
+        try Task.checkCancellation()
+        do {
+            if let native = try await backend.enrichNative(rawText: trimmed, profile: profile) {
+                try Task.checkCancellation()
+                guard !native.cleanedText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                    throw TranscriptEnricherError.malformedOutput("empty cleaned text")
                 }
-            } catch {
-                KeyboardDebugLog.shared.log("[Enrichment] native generation failed (\(error)); falling back to prompt path")
+                return Self.preservingSourceStructure(Self.applyVoxDefaults(Self.normalize(native), profile: profile),
+                                                       source: rawText, profile: profile)
             }
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch let error as LLMBackendFailure {
+            throw error
+        } catch is CaptureProcessingTimeout {
+            throw CaptureProcessingTimeout()
+        } catch {
+            KeyboardDebugLog.shared.log("[Enrichment] native output unavailable; trying compatibility format")
         }
+        try Task.checkCancellation()
 
         let prompt = Self.buildPrompt(rawText: trimmed, profile: profile)
         let response = try await backend.complete(prompt: prompt)
-        return Self.applyVoxDefaults(try Self.parse(response: response), profile: profile)
+        try Task.checkCancellation()
+        return Self.preservingSourceStructure(Self.applyVoxDefaults(try Self.parse(response: response), profile: profile),
+                                               source: rawText, profile: profile)
+    }
+
+    /// Model prompts alone cannot guarantee literal links, code, or speaker attribution.
+    /// Keep the source when common protected structures disappear or change order.
+    static func preservingSourceStructure(
+        _ enrichment: TranscriptEnrichment, source: String, profile: CapturePresetProfile?
+    ) -> TranscriptEnrichment {
+        var patterns = [#"\[\[[^\]\n]+\]\]"#, #"https?://[^\s<>]+"#,
+                        #"(?s)```.*?```|~~~.*?~~~"#, #"`[^`\n]+`"#,
+                        #"(?m)^\s*Speaker \d+:"#]
+        if profile == nil || profile?.postProcessingMode == .clean {
+            patterns.append(#"(?m)^#{1,6} .+$"#)
+        }
+        let output = enrichment.cleanedText
+        let intact = patterns.allSatisfy { pattern in
+            guard let regex = try? NSRegularExpression(pattern: pattern) else { return false }
+            var remaining = output.startIndex..<output.endIndex
+            for match in regex.matches(in: source, range: NSRange(source.startIndex..., in: source)) {
+                guard let range = Range(match.range, in: source) else { return false }
+                let literal = source[range].trimmingCharacters(in: .whitespacesAndNewlines)
+                guard let found = output.range(of: literal, range: remaining) else { return false }
+                remaining = found.upperBound..<output.endIndex
+            }
+            return true
+        }
+        return TranscriptEnrichment(title: enrichment.title, tags: enrichment.tags, category: enrichment.category,
+                                    cleanedText: intact ? output : source)
     }
 
     /// Snap a free-form category to the fixed taxonomy and enforce the
@@ -194,7 +238,7 @@ public struct TranscriptEnricher: Sendable {
         return result
     }
 
-    private static func containsSpeakerLabels(_ text: String) -> Bool {
+    fileprivate static func containsSpeakerLabels(_ text: String) -> Bool {
         text.components(separatedBy: .newlines).contains { line in
             let trimmed = line.trimmingCharacters(in: .whitespaces)
             guard trimmed.hasPrefix("Speaker "), trimmed.hasSuffix(":") else { return false }
@@ -203,7 +247,7 @@ public struct TranscriptEnricher: Sendable {
         }
     }
 
-    private static func requiresPromptDrivenFormatting(_ profile: CapturePresetProfile?) -> Bool {
+    fileprivate static func requiresPromptDrivenFormatting(_ profile: CapturePresetProfile?) -> Bool {
         guard let profile else { return false }
         switch profile.postProcessingMode {
         case .todoList, .meetingNotes, .custom:
@@ -286,9 +330,10 @@ public struct TranscriptEnricher: Sendable {
             log.log("[Enrichment] ⏱ id=\(shortId) exceeded its \(Int(timeout))s deadline — keeping the raw transcript so delivery proceeds")
             return
         } catch {
-            log.log("[Enrichment] ❌ id=\(shortId) error=\(error)")
+            log.log("[Enrichment] failed id=\(shortId) outcome=\((error as? LLMBackendFailure)?.rawValue ?? "failed")")
             return
         }
+        guard !Task.isCancelled else { return }
         let updated = transcript.withEnrichment(
             title: enrichment.title,
             tags: enrichment.tags,
@@ -296,9 +341,10 @@ public struct TranscriptEnricher: Sendable {
             cleanedText: enrichment.cleanedText
         )
         await MainActor.run {
+            guard !Task.isCancelled else { return }
             store.update(updated)
         }
-        log.log("[Enrichment] ✅ id=\(shortId) title=\"\(enrichment.title)\" tags=\(enrichment.tags.count) category=\(enrichment.category)")
+        log.log("[Enrichment] completed id=\(shortId)")
     }
 
     // MARK: - Prompt

@@ -699,7 +699,7 @@ struct MacCaptureWorkspaceView: View {
                 Label(
                     captureAllowanceBlocked
                         ? String(localized: "Unlock")
-                        : (viewModel.isSubmitting ? String(localized: "Sending…") : String(localized: "Send Capture")),
+                        : (viewModel.isSubmitting ? (viewModel.isDescribingImages ? String(localized: "Describing images…") : String(localized: "Sending…")) : String(localized: "Send Capture")),
                     systemImage: captureAllowanceBlocked ? "lock.fill" : "arrow.up"
                 )
             }
@@ -1012,7 +1012,7 @@ struct MacCaptureWorkspaceView: View {
                 data: imageData,
                 filename: "camera-photo.jpg",
                 contentTypeIdentifier: UTType.jpeg.identifier,
-                altText: String(localized: "Camera photo")
+                altText: String(localized: "Camera photo"), altTextOrigin: .placeholder
             )
             isProcessingAttachments = false
             composerController.focus()
@@ -1025,7 +1025,7 @@ struct MacCaptureWorkspaceView: View {
             await viewModel.stageSketch(
                 drawingData: drawingData,
                 previewData: previewData,
-                altText: String(localized: "Sketch created on Mac"),
+                altText: String(localized: "Sketch created on Mac"), altTextOrigin: .placeholder,
                 drawingFilename: "sketch.voxsketch",
                 drawingContentTypeIdentifier: "application/vnd.voxmd.sketch+json"
             )
@@ -1338,7 +1338,7 @@ struct MacCaptureWorkspaceView: View {
                     data: data,
                     filename: "pasted-image-\(UUID().uuidString.lowercased()).png",
                     contentTypeIdentifier: UTType.png.identifier,
-                    altText: String(localized: "Pasted image")
+                    altText: String(localized: "Pasted image"), altTextOrigin: .placeholder
                 )
                 isProcessingAttachments = false
             }
@@ -1354,7 +1354,7 @@ struct MacCaptureWorkspaceView: View {
                     data: png,
                     filename: "pasted-image-\(UUID().uuidString.lowercased()).png",
                     contentTypeIdentifier: UTType.png.identifier,
-                    altText: String(localized: "Pasted image")
+                    altText: String(localized: "Pasted image"), altTextOrigin: .placeholder
                 )
                 isProcessingAttachments = false
             }
@@ -1443,7 +1443,7 @@ struct MacCaptureWorkspaceView: View {
         switch payload {
         case .text(let value): value
         case .url(let url, let title): title ?? url.absoluteString
-        case .audio(let asset, _), .retainedAudio(let asset, _), .image(let asset, _), .file(let asset):
+        case .audio(let asset, _), .retainedAudio(let asset, _), .image(let asset, _, _), .file(let asset):
             asset.originalFilename
         case .scannedDocument(let pages, _, _): "Scan · \(pages.count) page(s)"
         case .sketch: "Sketch"

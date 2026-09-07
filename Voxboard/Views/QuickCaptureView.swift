@@ -79,6 +79,7 @@ struct QuickCaptureView: View {
     @Environment(WatchRecordingPipeline.self) private var watchRecordingPipeline
     @Environment(\.defersCaptureInputFocusForReleaseNotes) private var defersCaptureInputFocusForReleaseNotes
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
     @Environment(\.timeZone) private var timeZone
@@ -103,6 +104,7 @@ struct QuickCaptureView: View {
     @State private var paywallContext: OnboardingAnalyticsPaywallContext = .limit
     @State private var showsAudioImporter = false
     @State private var showsVoiceCaptureDetails = false
+    @AppStorage(CapturePreferenceKeys.micHoldHintDismissed) private var micHoldHintDismissed = false
     @State private var showsWatchRecordingQueue = false
     /// Durable recording result mode ("Add to Draft" vs "Send Immediately").
     /// `recordingMode` seeds from this persisted value at first render and
@@ -725,6 +727,7 @@ struct QuickCaptureView: View {
                 persistentRecorder.toggleInAppSegmentPause()
             }
             .accessibilityIdentifier("capture_voice_recording")
+            .anchorPreference(key: CaptureMicHoldHintAnchorKey.self, value: .bounds) { $0 }
             .opacity(isProcessingMedia ? 0.35 : 1)
             .task(id: persistentRecorder.isAppRecordingSegmentActive) {
                 await updateRecordingAudioLevels()
@@ -745,11 +748,6 @@ struct QuickCaptureView: View {
                 Image(systemName: "stop.fill")
                     .font(.system(size: 17, weight: .medium))
                     .foregroundStyle(Geist.error)
-
-                recordingResultModeIndicator
-                    .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(Geist.muted)
-                    .accessibilityHidden(true)
             }
             .fixedSize(horizontal: true, vertical: false)
         }
@@ -764,7 +762,7 @@ struct QuickCaptureView: View {
 
                 recordingResultModeIndicator
                     .font(.system(size: 9, weight: .semibold))
-                    .foregroundStyle(Geist.Palette.blue700)
+                    .foregroundStyle(.black)
                     .padding(2)
                     .background(Circle().fill(Geist.Palette.background100))
                     .offset(x: 4, y: 4)
@@ -797,8 +795,42 @@ struct QuickCaptureView: View {
 
     private func presentVoiceCaptureDetails() {
         guard !isProcessingMedia else { return }
-        withAnimation(.easeInOut(duration: 0.2)) {
+        let isFirstDiscovery = !micHoldHintDismissed
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
             showsVoiceCaptureDetails = true
+            // Only a successful menu reveal (including the VoiceOver action)
+            // completes the tip. A tap or blocked long-press must not consume it.
+            micHoldHintDismissed = true
+        }
+        if isFirstDiscovery {
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+        }
+    }
+
+    private func dismissMicHoldHint() {
+        withAnimation(reduceMotion ? nil : .easeOut(duration: 0.2)) {
+            micHoldHintDismissed = true
+        }
+    }
+
+    private var shouldShowMicHoldHint: Bool {
+        !micHoldHintDismissed
+            && hasCompletedInitialLoad
+            && scenePhase == .active
+            && !defersCaptureInputFocusForReleaseNotes
+            && !isPresentingCaptureModal
+            && !isProcessingMedia
+            && !persistentRecorder.isSegmentActive
+            && !persistentRecorder.isTranscribing
+            && !isLocalizationScreenshot
+    }
+
+    private func micHoldHintOverlay(_ anchor: Anchor<CGRect>?) -> CaptureViewSection {
+        CaptureViewSection {
+            if shouldShowMicHoldHint {
+                CaptureMicHoldHintOverlay(micAnchor: anchor, dismiss: dismissMicHoldHint)
+                    .transition(.opacity)
+            }
         }
     }
 
@@ -1208,6 +1240,9 @@ struct QuickCaptureView: View {
                 )
             }
             .background(Geist.Palette.background100)
+            .overlayPreferenceValue(CaptureMicHoldHintAnchorKey.self) { anchor in
+                micHoldHintOverlay(anchor)
+            }
         }
     }
 
@@ -1517,6 +1552,8 @@ struct QuickCaptureView: View {
                 }
 
                 Spacer(minLength: 4)
+
+                sendRouteControl
             }
             .font(Geist.caption())
             .foregroundStyle(Geist.muted)
@@ -1530,7 +1567,7 @@ struct QuickCaptureView: View {
         CaptureViewSection {
             routeStatusButton(
                 viewModel.isSubmitting
-                    ? String(localized: "Sending capture")
+                    ? (viewModel.isDescribingImages ? String(localized: "Describing images…") : String(localized: "Sending capture"))
                     : (captureSubmissionRequiresUnlock
                         ? String(localized: "Unlock unlimited captures")
                         : String(localized: "Send capture")),
@@ -1579,13 +1616,6 @@ struct QuickCaptureView: View {
                 }
                 .accessibilityIdentifier("capture_settings")
 
-                // Recording controls live at the leading end of the bar so a
-                // mis-tap while stopping speech can never land on the trailing
-                // send control — and vice versa.
-                voiceCaptureButton
-
-                voiceCapturePauseToggle
-
                 Spacer(minLength: 4)
 
                 if !usageTracker.hasUnlocked, usageTracker.successfulCapturesUsed >= 7 {
@@ -1604,7 +1634,9 @@ struct QuickCaptureView: View {
                     .accessibilityLabel("\(usageTracker.capturesRemaining) free captures remaining")
                 }
 
-                sendRouteControl
+                voiceCapturePauseToggle
+
+                voiceCaptureButton
 
                 routeStatusButton(
                     composerIsFocused
@@ -2136,7 +2168,7 @@ struct QuickCaptureView: View {
                     data: data,
                     filename: "screenshot-\(UUID().uuidString.lowercased()).\(ext)",
                     contentTypeIdentifier: type.identifier,
-                    altText: String(localized: "Screenshot")
+                    altText: String(localized: "Screenshot"), altTextOrigin: .placeholder
                 )
             } catch {
                 viewModel.errorMessage = error.localizedDescription
@@ -2636,7 +2668,7 @@ struct QuickCaptureView: View {
         switch payload {
         case .text(let value): return value
         case .url(let url, let title): return title ?? url.absoluteString
-        case .audio(let asset, _), .retainedAudio(let asset, _), .image(let asset, _), .file(let asset):
+        case .audio(let asset, _), .retainedAudio(let asset, _), .image(let asset, _, _), .file(let asset):
             return asset.originalFilename
         case .scannedDocument(let pages, _, _):
             return String(localized: "Scan · \(pages.count) page(s)")

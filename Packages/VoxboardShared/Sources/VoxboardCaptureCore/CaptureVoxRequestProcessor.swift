@@ -32,12 +32,30 @@ public protocol CapturePresetTextProcessing: Sendable {
 /// capture delivery never depends on AI availability.
 public struct CapturePresetRequestProcessor: Sendable {
     private let textProcessor: (any CapturePresetTextProcessing)?
+    private let imageDescriber: (any CaptureImageDescribing)?
+    private let imageTimeout: TimeInterval
+    private let imageStageTimeout: TimeInterval
+    private let requestTimeout: TimeInterval
 
-    public init(textProcessor: (any CapturePresetTextProcessing)? = nil) {
+    public init(
+        textProcessor: (any CapturePresetTextProcessing)? = nil,
+        imageDescriber: (any CaptureImageDescribing)? = nil,
+        imageTimeout: TimeInterval = 10,
+        imageStageTimeout: TimeInterval = 30,
+        requestTimeout: TimeInterval = 120
+    ) {
         self.textProcessor = textProcessor
+        self.imageDescriber = imageDescriber
+        self.imageTimeout = imageTimeout
+        self.imageStageTimeout = imageStageTimeout
+        self.requestTimeout = requestTimeout
     }
 
-    public func process(_ request: CaptureRequest) async -> CaptureRequest {
+    public func process(
+        _ request: CaptureRequest,
+        assetRootURL: URL? = nil,
+        onDescribingImages: (@Sendable () async -> Void)? = nil
+    ) async -> CaptureRequest {
         guard request.voxProcessingState == .pending,
               let profile = request.voxProfile else {
             return request
@@ -47,12 +65,15 @@ public struct CapturePresetRequestProcessor: Sendable {
         var generatedTitle: String?
         var generatedCategory: String?
         var generatedTags: [String] = []
+        let deadline = ProcessInfo.processInfo.systemUptime + requestTimeout
 
         for index in resolved.payloads.indices {
+            if Task.isCancelled { return request }
+            guard profile.processesText else { break }
             switch resolved.payloads[index] {
             case .text(let text):
                 guard profile.captureProcessingScope.appliesToTypedText else { continue }
-                let result = await processText(text, profile: profile)
+                let result = await processText(text, profile: profile, deadline: deadline)
                 resolved.payloads[index] = .text(result.text)
                 mergeMetadata(
                     result,
@@ -67,7 +88,7 @@ public struct CapturePresetRequestProcessor: Sendable {
                       !transcript.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
                     continue
                 }
-                let result = await processText(transcript, profile: profile)
+                let result = await processText(transcript, profile: profile, deadline: deadline)
                 resolved.payloads[index] = .audio(asset, transcript: result.text)
                 mergeMetadata(
                     result,
@@ -82,7 +103,7 @@ public struct CapturePresetRequestProcessor: Sendable {
                       !extractedText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
                     continue
                 }
-                let result = await processText(extractedText, profile: profile)
+                let result = await processText(extractedText, profile: profile, deadline: deadline)
                 resolved.payloads[index] = .scannedDocument(
                     pages: pages,
                     pdf: pdf,
@@ -100,6 +121,46 @@ public struct CapturePresetRequestProcessor: Sendable {
             }
         }
 
+        if profile.processesImages, let imageDescriber, let assetRootURL,
+           let locale = request.imageDescriptionLocaleIdentifier {
+            let imageDeadline = min(deadline, ProcessInfo.processInfo.systemUptime + imageStageTimeout)
+            var announced = false
+            for index in resolved.payloads.indices {
+                if Task.isCancelled { return request }
+                let payload = resolved.payloads[index]
+                let asset: CaptureAssetReference
+                switch payload {
+                case .image(let image, let text, let origin), .sketch(_, let image, let text, let origin):
+                    guard CaptureAltTextOrigin.needsDescription(text: text, origin: origin) else { continue }
+                    asset = image
+                default: continue
+                }
+                let timeout = min(imageTimeout, imageDeadline - ProcessInfo.processInfo.systemUptime)
+                guard timeout > 0 else { break }
+                if !announced {
+                    announced = true
+                    await onDescribingImages?()
+                }
+                do {
+                    let output = try await withCaptureProcessingDeadline(timeout: timeout) {
+                        try await imageDescriber.describe(asset: asset, assetRootURL: assetRootURL, localeIdentifier: locale)
+                    }
+                    guard !Task.isCancelled else { return request }
+                    guard let text = CaptureImageDescription.validated(output) else { continue }
+                    switch payload {
+                    case .image(let image, _, _):
+                        resolved.payloads[index] = .image(image, altText: text, altTextOrigin: .generated)
+                    case .sketch(let drawing, let preview, _, _):
+                        resolved.payloads[index] = .sketch(drawing: drawing, preview: preview, altText: text, altTextOrigin: .generated)
+                    default: break
+                    }
+                } catch {
+                    if Task.isCancelled { return request }
+                    // Descriptions are optional; never replace the existing label on failure.
+                }
+            }
+        }
+        guard !Task.isCancelled else { return request }
         if resolved.frontmatter["title"] == nil, let generatedTitle = nonEmpty(generatedTitle) {
             resolved.frontmatter["title"] = generatedTitle
         }
@@ -118,10 +179,14 @@ public struct CapturePresetRequestProcessor: Sendable {
 
     private func processText(
         _ text: String,
-        profile: CapturePresetProfile
+        profile: CapturePresetProfile,
+        deadline: TimeInterval
     ) async -> CapturePresetTextProcessingResult {
         if let textProcessor,
-           let result = try? await textProcessor.process(text: text, profile: profile),
+           let result = try? await withCaptureProcessingDeadline(
+               timeout: deadline - ProcessInfo.processInfo.systemUptime,
+               operation: { try await textProcessor.process(text: text, profile: profile) }
+           ),
            !result.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return result
         }

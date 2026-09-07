@@ -242,11 +242,7 @@ public struct CaptureDraft: Identifiable, Codable, Equatable, Sendable {
         payloads.append(contentsOf: additionalPayloads)
         let processingState: CapturePresetProcessingState
         if let resolvedVoxProfile {
-            processingState = resolvedVoxProfile.captureProcessingEnabled
-                && resolvedVoxProfile.postProcessingMode != .none
-                && resolvedVoxProfile.resolvedPostProcessingInstruction != nil
-                ? .pending
-                : .applied
+            processingState = resolvedVoxProfile.processingState(for: payloads)
         } else {
             processingState = .notRequested
         }

@@ -8,6 +8,8 @@ enum CapturePreferenceKeys {
     /// "Send Immediately"). Stored as the `CaptureRecordingMode` raw value;
     /// absent means `.draft` (the fresh-install and 2.8 migration default).
     static let defaultRecordingResultMode = "capture.voice.defaultResult.v1"
+    /// One-way onboarding completion, independent of toolbar resets or app versions.
+    static let micHoldHintDismissed = "capture.voice.micHoldHintDismissed.v1"
 }
 
 /// The quick actions users can place in the capture bar.

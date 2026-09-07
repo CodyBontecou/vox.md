@@ -31,14 +31,15 @@ struct VoxboardMacApp: App {
         // Match the iOS app's on-device Apple Intelligence enrichment path on
         // macOS 26+ when Foundation Models is available for this Mac/user.
         let enricher: TranscriptEnricher?
-        if #available(macOS 26, *), FoundationModelsBackend.isAvailable {
+        if #available(macOS 26, *) {
             enricher = TranscriptEnricher(backend: FoundationModelsBackend())
         } else {
             enricher = nil
         }
 
         let captureRequestProcessor = CapturePresetRequestProcessor(
-            textProcessor: enricher.map { EnrichedCapturePresetTextProcessor(enricher: $0) }
+            textProcessor: enricher.map { EnrichedCapturePresetTextProcessor(enricher: $0) },
+            imageDescriber: OnDeviceImageSupport.makeDescriber()
         )
         let quickCaptureViewModel = QuickCaptureViewModel(
             defaultCaptureSource: .mac,

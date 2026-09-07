@@ -9,12 +9,11 @@ final class QuickCaptureViewModel {
     var draft = CaptureDraft()
     var destinations: [CaptureDestination] = []
     var entryTemplates: [CaptureEntryTemplate] = []
-    var voxProfiles: [CapturePresetProfile] = CapturePresetProfileStore.enabledProfiles(
-        defaults: AppConstants.sharedDefaults
-    )
+    var voxProfiles: [CapturePresetProfile]
     var defaultDestinationID: UUID?
     var isLoading = false
     var isSubmitting = false
+    var isDescribingImages = false
     var isResolvingLocation = false
     var errorMessage: String?
     var lastReceipt: CaptureReceipt?
@@ -28,6 +27,7 @@ final class QuickCaptureViewModel {
     var inboxLocationDecision: CaptureInboxLocationDecision?
 
     private let captureRootURL: URL?
+    private let defaults: UserDefaults?
     private let defaultCaptureSource: CaptureSource
     private let libraryStore: CaptureLibraryStore?
     private let draftStore: CaptureDraftStore?
@@ -48,10 +48,14 @@ final class QuickCaptureViewModel {
     init(
         captureRootURL: URL? = AppConstants.captureDirectoryURL,
         defaultCaptureSource: CaptureSource = .app,
+        defaults: UserDefaults? = AppConstants.sharedDefaults,
+        pipeline: CapturePipeline = AppCapturePipeline.shared,
         requestProcessor: CapturePresetRequestProcessor = CapturePresetRequestProcessor(),
         locationProvider: (any CaptureLocationOutcomeProviding)? = nil
     ) {
         self.captureRootURL = captureRootURL
+        self.defaults = defaults
+        self.voxProfiles = CapturePresetProfileStore.enabledProfiles(defaults: defaults)
         self.defaultCaptureSource = defaultCaptureSource
         if let captureRootURL {
             self.libraryStore = CaptureLibraryStore(
@@ -66,7 +70,7 @@ final class QuickCaptureViewModel {
             self.draftStore = nil
             self.historyStore = nil
         }
-        self.pipeline = AppCapturePipeline.shared
+        self.pipeline = pipeline
         self.requestProcessor = requestProcessor
         self.locationProvider = locationProvider ?? CaptureLocationService()
     }
@@ -77,7 +81,7 @@ final class QuickCaptureViewModel {
            let selected = enabled.first(where: { $0.id == voxID }) {
             return selected
         }
-        let selectedID = CapturePresetProfileStore.selectedProfileID(defaults: AppConstants.sharedDefaults)
+        let selectedID = CapturePresetProfileStore.selectedProfileID(defaults: defaults)
         return enabled.first(where: { $0.id == selectedID }) ?? enabled.first
     }
 
@@ -89,7 +93,7 @@ final class QuickCaptureViewModel {
             destinations: destinations,
             libraryDefaultDestinationID: defaultDestinationID,
             allowsLegacyFallback: !CapturePresetProfileStore.hasOwnedRouteMigration(
-                defaults: AppConstants.sharedDefaults
+                defaults: defaults
             )
         )
     }
@@ -213,7 +217,7 @@ final class QuickCaptureViewModel {
         isLoading = true
         defer { isLoading = false }
         do {
-            let library = try await CapturePresetRouteLibrary.load(from: libraryStore)
+            let library = try await CapturePresetRouteLibrary.load(from: libraryStore, defaults: defaults)
             destinations = library.destinations
             entryTemplates = library.entryTemplates
             defaultDestinationID = library.defaultDestinationID
@@ -222,12 +226,12 @@ final class QuickCaptureViewModel {
                 draft = savedDraft
             } else {
                 draft = CaptureDraft(
-                    voxID: CapturePresetProfileStore.selectedProfileID(defaults: AppConstants.sharedDefaults),
+                    voxID: CapturePresetProfileStore.selectedProfileID(defaults: defaults),
                     destinationSelectionMode: .inherited
                 )
             }
             if draft.voxID == nil || !voxProfiles.contains(where: { $0.id == draft.voxID && $0.isEnabled }) {
-                draft.voxID = CapturePresetProfileStore.selectedProfileID(defaults: AppConstants.sharedDefaults)
+                draft.voxID = CapturePresetProfileStore.selectedProfileID(defaults: defaults)
             }
             if draft.destinationSelectionMode == .explicit {
                 let inheritedDestinationID = selectedVoxProfile?.captureDestinationID
@@ -281,7 +285,7 @@ final class QuickCaptureViewModel {
     func refreshLibrary() async {
         guard let libraryStore else { return }
         do {
-            let library = try await CapturePresetRouteLibrary.load(from: libraryStore)
+            let library = try await CapturePresetRouteLibrary.load(from: libraryStore, defaults: defaults)
             destinations = library.destinations
             entryTemplates = library.entryTemplates
             defaultDestinationID = library.defaultDestinationID
@@ -323,7 +327,7 @@ final class QuickCaptureViewModel {
             try await draftStore?.complete(draftID: draft.id)
             draft = CaptureDraft(
                 voxID: selectedVoxProfile?.id
-                    ?? CapturePresetProfileStore.selectedProfileID(defaults: AppConstants.sharedDefaults),
+                    ?? CapturePresetProfileStore.selectedProfileID(defaults: defaults),
                 destinationSelectionMode: .inherited
             )
             try await draftStore?.save(draft)
@@ -334,18 +338,18 @@ final class QuickCaptureViewModel {
     }
 
     func refreshVoxProfiles() {
-        voxProfiles = CapturePresetProfileStore.enabledProfiles(defaults: AppConstants.sharedDefaults)
+        voxProfiles = CapturePresetProfileStore.enabledProfiles(defaults: defaults)
         if let current = draft.voxID,
            voxProfiles.contains(where: { $0.id == current && $0.isEnabled }) {
             return
         }
-        draft.voxID = CapturePresetProfileStore.selectedProfileID(defaults: AppConstants.sharedDefaults)
+        draft.voxID = CapturePresetProfileStore.selectedProfileID(defaults: defaults)
     }
 
     func selectVox(_ id: String) {
         guard voxProfiles.contains(where: { $0.id == id && $0.isEnabled }) else { return }
         draft.selectVox(id)
-        CapturePresetProfileStore.selectCaptureProfile(id: id, defaults: AppConstants.sharedDefaults)
+        CapturePresetProfileStore.selectCaptureProfile(id: id, defaults: defaults)
         scheduleDraftSave()
     }
 
@@ -359,7 +363,7 @@ final class QuickCaptureViewModel {
     /// refreshes routing for the current capture without discarding one-off overrides.
     func saveSelectedPresetDestination(_ destination: CaptureDestination) async throws {
         guard let libraryStore,
-              let defaults = AppConstants.sharedDefaults,
+              let defaults = defaults,
               let presetID = selectedVoxProfile?.id else {
             throw QuickCaptureViewModelError.storageUnavailable
         }
@@ -824,11 +828,14 @@ final class QuickCaptureViewModel {
         }
     }
 
+    private func setDescribingImages(_ value: Bool) { isDescribingImages = value }
+
     func stageImage(
         data: Data,
         filename: String,
         contentTypeIdentifier: String,
-        altText: String? = nil
+        altText: String? = nil,
+        altTextOrigin: CaptureAltTextOrigin? = nil
     ) async {
         await stageAsset { stager in
             let asset = try await stager.stage(
@@ -836,7 +843,7 @@ final class QuickCaptureViewModel {
                 preferredFilename: filename,
                 contentTypeIdentifier: contentTypeIdentifier
             )
-            return .image(asset, altText: altText)
+            return .image(asset, altText: altText, altTextOrigin: altTextOrigin ?? (altText == nil ? nil : .provided))
         }
     }
 
@@ -972,6 +979,7 @@ final class QuickCaptureViewModel {
         drawingData: Data,
         previewData: Data,
         altText: String? = nil,
+        altTextOrigin: CaptureAltTextOrigin? = nil,
         drawingFilename: String = "sketch.drawing",
         drawingContentTypeIdentifier: String = "com.apple.pencilkit.drawing"
     ) async {
@@ -995,7 +1003,7 @@ final class QuickCaptureViewModel {
             )
             newlyStaged.append(preview)
             try await appendStagedPayload(
-                .sketch(drawing: drawing, preview: preview, altText: altText),
+                .sketch(drawing: drawing, preview: preview, altText: altText, altTextOrigin: altTextOrigin ?? (altText == nil ? nil : .provided)),
                 using: stager
             )
             errorMessage = nil
@@ -1068,6 +1076,8 @@ final class QuickCaptureViewModel {
         guard canSubmit else { return }
 
         isSubmitting = true
+        isDescribingImages = false
+        defer { isDescribingImages = false }
         errorMessage = nil
         let pendingSave = pendingDraftSave
         pendingDraftSave = nil
@@ -1186,7 +1196,14 @@ final class QuickCaptureViewModel {
                         resolvedDestinationID: submittedDestinationID,
                         voxProfile: submittedVoxProfile
                     )
-                    let processed = await requestProcessor.process(unresolved)
+                    let assetRoot = captureRootURL
+                        .appendingPathComponent("staging", isDirectory: true)
+                        .appendingPathComponent(draft.id.uuidString.lowercased(), isDirectory: true)
+                    let processed = await requestProcessor.process(unresolved, assetRootURL: assetRoot) { [weak self] in
+                        await self?.setDescribingImages(true)
+                    }
+                    await self.setDescribingImages(false)
+                    try Task.checkCancellation()
                     try await draftStore.savePreparedRequest(processed, draftID: draft.id)
                     request = processed
                 }
@@ -1246,6 +1263,8 @@ final class QuickCaptureViewModel {
             }
             destinations = library.destinations
             entryTemplates = library.entryTemplates
+        } catch is CancellationError {
+            // The draft and its staged attachments remain available for another Send.
         } catch let error as CaptureDeliveryQuotaError {
             if case .limitReached = error {
                 needsCaptureUnlock = true
@@ -1310,7 +1329,7 @@ final class QuickCaptureViewModel {
             CapturePresetStore.setLocationUnavailableBehavior(
                 .sendWithoutLocation,
                 presetID: decision.presetID,
-                defaults: AppConstants.sharedDefaults
+                defaults: defaults
             )
             refreshVoxProfiles()
         }
@@ -1345,7 +1364,7 @@ final class QuickCaptureViewModel {
                     draft.selectVox(voxID)
                     CapturePresetProfileStore.selectCaptureProfile(
                         id: voxID,
-                        defaults: AppConstants.sharedDefaults
+                        defaults: defaults
                     )
                 }
                 if let destinationID = incoming.destinationID {
@@ -1368,6 +1387,8 @@ final class QuickCaptureViewModel {
                 try await processInboxRequest(id: requestID)
             }
             errorMessage = nil
+        } catch is CancellationError {
+            errorMessage = nil
         } catch let error as CaptureDeliveryQuotaError {
             if case .limitReached = error {
                 needsCaptureUnlock = true
@@ -1383,7 +1404,7 @@ final class QuickCaptureViewModel {
         let inbox = CaptureInbox(rootDirectoryURL: captureRootURL)
         let result = await CaptureInboxDeliveryService.drain(
             captureRootURL: captureRootURL,
-            defaults: AppConstants.sharedDefaults,
+            defaults: defaults,
             pipeline: pipeline,
             requestProcessor: requestProcessor
         )
@@ -1417,7 +1438,7 @@ final class QuickCaptureViewModel {
                 CapturePresetStore.setLocationUnavailableBehavior(
                     .sendWithoutLocation,
                     presetID: presetID,
-                    defaults: AppConstants.sharedDefaults
+                    defaults: defaults
                 )
                 refreshVoxProfiles()
             }
@@ -1624,11 +1645,11 @@ final class QuickCaptureViewModel {
         switch payload {
         case .text, .url:
             return []
-        case .audio(let asset, _), .retainedAudio(let asset, _), .image(let asset, _), .file(let asset):
+        case .audio(let asset, _), .retainedAudio(let asset, _), .image(let asset, _, _), .file(let asset):
             return [asset]
         case .scannedDocument(let pages, let pdf, _):
             return pages + (pdf.map { [$0] } ?? [])
-        case .sketch(let drawing, let preview, _):
+        case .sketch(let drawing, let preview, _, _):
             return [drawing, preview]
         }
     }
@@ -1683,7 +1704,8 @@ final class QuickCaptureViewModel {
         }
         do {
             if request.voxProcessingState == .pending {
-                request = await requestProcessor.process(request)
+                request = await requestProcessor.process(request, assetRootURL: captureRootURL)
+                try Task.checkCancellation()
                 try await inbox.replaceProcessingRequest(request)
             }
             let library = try await libraryStore.load()
@@ -1720,6 +1742,9 @@ final class QuickCaptureViewModel {
                 outcome: .delivered,
                 failureCategory: nil
             )
+        } catch is CancellationError {
+            try? await inbox.returnToPending(requestID: request.id)
+            throw CancellationError()
         } catch let error as CaptureDeliveryQuotaError {
             try? await inbox.returnToPending(requestID: request.id)
             if case .limitReached = error {

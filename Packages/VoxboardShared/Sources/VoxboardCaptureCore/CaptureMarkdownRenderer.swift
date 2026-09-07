@@ -65,9 +65,9 @@ public struct CaptureMarkdownRenderer: Sendable {
                 case .bottom: blocks.append(obsidianEmbed(path: path))
                 }
 
-            case .image(let asset, let altText):
+            case .image(let asset, let altText, let origin):
                 let path = try attachmentPath(for: asset, destination: destination, overrides: attachmentPaths)
-                blocks.append(obsidianEmbed(path: path, alias: nonEmpty(altText)))
+                blocks.append(imageEmbed(path: path, altText: altText, origin: origin))
 
             case .file(let asset):
                 let path = try attachmentPath(for: asset, destination: destination, overrides: attachmentPaths)
@@ -85,10 +85,10 @@ public struct CaptureMarkdownRenderer: Sendable {
                     }
                 }
 
-            case .sketch(let drawing, let preview, let altText):
+            case .sketch(let drawing, let preview, let altText, let origin):
                 let previewPath = try attachmentPath(for: preview, destination: destination, overrides: attachmentPaths)
                 let drawingPath = try attachmentPath(for: drawing, destination: destination, overrides: attachmentPaths)
-                blocks.append(obsidianEmbed(path: previewPath, alias: nonEmpty(altText)))
+                blocks.append(imageEmbed(path: previewPath, altText: altText, origin: origin))
                 blocks.append(obsidianLink(path: drawingPath, alias: "Editable drawing"))
             }
         }
@@ -176,7 +176,7 @@ public struct CaptureMarkdownRenderer: Sendable {
         } catch {
             throw CaptureRenderingError.unsafeAttachmentPath(path)
         }
-        return path.replacingOccurrences(of: "]", with: "\\]")
+        return path
     }
 
     private func append(_ value: String?, to blocks: inout [String]) {
@@ -191,7 +191,23 @@ public struct CaptureMarkdownRenderer: Sendable {
         return trimmed?.isEmpty == false ? trimmed : nil
     }
 
+    private func imageEmbed(path: String, altText: String?, origin: CaptureAltTextOrigin?) -> String {
+        guard origin == .generated, let text = CaptureImageDescription.validated(altText) else {
+            return obsidianEmbed(path: path, alias: nonEmpty(altText))
+        }
+        let allowed = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~/")
+        let encodedPath = path.addingPercentEncoding(withAllowedCharacters: allowed) ?? path
+        // Alt text is literal prose, including any Markdown punctuation or entity names.
+        let label = text.reduce(into: "") { result, character in
+            if character == "&" { result.append("&amp;"); return }
+            if "\\`*_[]<>!".contains(character) { result.append("\\") }
+            result.append(character)
+        }
+        return "![\(label)](\(encodedPath))"
+    }
+
     private func obsidianEmbed(path: String, alias: String? = nil) -> String {
+        let path = path.replacingOccurrences(of: "]", with: "\\]")
         if let alias {
             return "![[\(path)|\(escapeObsidianAlias(alias))]]"
         }
@@ -199,7 +215,8 @@ public struct CaptureMarkdownRenderer: Sendable {
     }
 
     private func obsidianLink(path: String, alias: String) -> String {
-        "[[\(path)|\(escapeObsidianAlias(alias))]]"
+        let path = path.replacingOccurrences(of: "]", with: "\\]")
+        return "[[\(path)|\(escapeObsidianAlias(alias))]]"
     }
 
     private func escapeObsidianAlias(_ value: String) -> String {

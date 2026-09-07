@@ -1,0 +1,103 @@
+{
+  "contextSize" : 4096,
+  "os" : "Version 26.5.1 (Build 25F80)",
+  "preflightRejectedOversize" : true,
+  "results" : [
+    {
+      "fixture" : "dictation",
+      "implementation" : "baseline",
+      "outcome" : "completed",
+      "output" : "tomorrow i need to email sam about the launch",
+      "preservedRequiredText" : true,
+      "seconds" : 1.398483624914661
+    },
+    {
+      "fixture" : "dictation",
+      "implementation" : "candidate",
+      "outcome" : "completed",
+      "output" : "tomorrow i need to email sam about the launch",
+      "preservedRequiredText" : true,
+      "seconds" : 0.9831746248528361
+    },
+    {
+      "fixture" : "markdown",
+      "implementation" : "baseline",
+      "outcome" : "completed",
+      "output" : "Keep Project Atlas and https:\/\/example.com\/plan",
+      "preservedRequiredText" : false,
+      "seconds" : 0.8255700415465981
+    },
+    {
+      "fixture" : "markdown",
+      "implementation" : "candidate",
+      "outcome" : "completed",
+      "output" : "## Notes\n\nKeep [[Project Atlas]] and https:\/\/example.com\/plan\n\n```swift\nlet count = 3\n```",
+      "preservedRequiredText" : true,
+      "seconds" : 0.9330227498430759
+    },
+    {
+      "fixture" : "checklist",
+      "implementation" : "baseline",
+      "outcome" : "completed",
+      "output" : "- [ ] Buy milk\n- [ ] Email sam",
+      "preservedRequiredText" : true,
+      "seconds" : 1.0286683749873191
+    },
+    {
+      "fixture" : "checklist",
+      "implementation" : "candidate",
+      "outcome" : "completed",
+      "output" : "- [ ] Buy milk\n- [ ] Email sam",
+      "preservedRequiredText" : true,
+      "seconds" : 0.9124884165357798
+    },
+    {
+      "fixture" : "meeting",
+      "implementation" : "baseline",
+      "outcome" : "completed",
+      "output" : "Speaker 1: We agreed to launch Friday. Speaker 2: I will write the release notes.",
+      "preservedRequiredText" : true,
+      "seconds" : 1.1483132916036993
+    },
+    {
+      "fixture" : "meeting",
+      "implementation" : "candidate",
+      "outcome" : "completed",
+      "output" : "Speaker 1: We agreed to launch Friday. Speaker 2: I will write the release notes.",
+      "preservedRequiredText" : true,
+      "seconds" : 1.1371106249280274
+    },
+    {
+      "fixture" : "custom",
+      "implementation" : "baseline",
+      "outcome" : "completed",
+      "output" : "Remember [[Project Atlas]] and the Friday deadline.",
+      "preservedRequiredText" : true,
+      "seconds" : 1.126831041648984
+    },
+    {
+      "fixture" : "custom",
+      "implementation" : "candidate",
+      "outcome" : "completed",
+      "output" : "Remember [[Project Atlas]] and the Friday deadline.",
+      "preservedRequiredText" : true,
+      "seconds" : 0.9368866248987615
+    },
+    {
+      "fixture" : "spanish",
+      "implementation" : "baseline",
+      "outcome" : "completed",
+      "output" : "mañana tengo que llamar a ana sobre el proyecto",
+      "preservedRequiredText" : true,
+      "seconds" : 0.7632405832409859
+    },
+    {
+      "fixture" : "spanish",
+      "implementation" : "candidate",
+      "outcome" : "completed",
+      "output" : "mañana tengo que llamar a ana sobre el proyecto",
+      "preservedRequiredText" : true,
+      "seconds" : 0.9566516666673124
+    }
+  ]
+}

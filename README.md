@@ -93,6 +93,10 @@ Automatically save transcripts after each session as TXT, Markdown, or YAML. Cho
 ### Apple Intelligence Enrichment
 On iOS 26+ devices and macOS 26+ Macs with Apple Intelligence, eligible Capture Presets can generate titles, tags, categories, cleaned-up text, checklists, meeting-note structure, and custom transformations — still locally on-device through Apple's Foundation Models framework.
 
+Each request checks model readiness and its context budget. Known model failures use the existing local fallback without a second inference attempt. Captured text is never truncated to fit, and source links, code blocks, and speaker labels are protected when cleanup loses their structure.
+
+On supported iOS/iPadOS/macOS 27 devices, Capture Presets also offer **Generate Image Alt Text**, off by default. With **Use Apple Intelligence** enabled, it describes newly captured photos, screenshots, and sketch previews during Send, including when text Mode is **Keep Original**. Existing descriptions and original image files are preserved. Descriptions are saved before delivery and exported as standard Markdown alt text, so retries reuse the saved result. All model inference stays on device; unavailable models or failed descriptions keep the existing attachment and label. See the [implementation and validation record](docs/ios-27-on-device-intelligence-plan.md).
+
 ### Widgets & Live Activities
 Open a durable Quick Capture draft or start and monitor recording from widgets, Live Activities, the lock screen, and Dynamic Island. The widget target shares state through the same private App Group container.
 

@@ -57,13 +57,10 @@ struct VoxboardApp: App {
             AppConstants.sharedDefaults?.set(false, forKey: AppConstants.pendingWidgetRecordKey)
         }
 
-        // Construct the on-device LLM enricher if the user's device supports
-        // Apple Intelligence. Individual Capture Preset settings decide whether a given
-        // transcript uses enrichment. On older/ineligible devices, `isAvailable`
-        // returns false and the recorder is built without an enricher — affected
-        // Preset modes fall back to deterministic formatting or raw transcripts.
+        // Inject on supported OS versions; the adapter checks device and model
+        // readiness on every request, including after assets finish downloading.
         let enricher: TranscriptEnricher?
-        if #available(iOS 26, *), FoundationModelsBackend.isAvailable {
+        if #available(iOS 26, *) {
             enricher = TranscriptEnricher(backend: FoundationModelsBackend())
         } else {
             enricher = nil
@@ -71,7 +68,8 @@ struct VoxboardApp: App {
 
         let speakerDiarizationService = SpeakerDiarizationService()
         let captureRequestProcessor = CapturePresetRequestProcessor(
-            textProcessor: enricher.map { EnrichedCapturePresetTextProcessor(enricher: $0) }
+            textProcessor: enricher.map { EnrichedCapturePresetTextProcessor(enricher: $0) },
+            imageDescriber: OnDeviceImageSupport.makeDescriber()
         )
         let captureViewModel = QuickCaptureViewModel(requestProcessor: captureRequestProcessor)
         _quickCaptureViewModel = State(initialValue: captureViewModel)

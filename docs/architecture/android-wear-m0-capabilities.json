@@ -4028,7 +4028,7 @@
       "evidence": [
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureModels.swift",
-          "symbol": "case image(CaptureAssetReference, altText: String?)"
+          "symbol": "case image(CaptureAssetReference, altText: String?, altTextOrigin: CaptureAltTextOrigin? = nil)"
         }
       ],
       "platforms": [

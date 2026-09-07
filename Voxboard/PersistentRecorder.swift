@@ -473,7 +473,10 @@ final class PersistentRecorder {
         do {
             try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers])
             try session.setActive(true)
-            log.log("[PersistentRecorder] Audio session active")
+            log.log("[PersistentRecorder] Audio session active — inputs=\(session.currentRoute.inputs.map { $0.portType.rawValue }), sampleRate=\(session.sampleRate), inputGain=\(session.inputGain)")
+            if #available(iOS 17.0, *) {
+                log.log("[PersistentRecorder] Input muted=\(AVAudioApplication.shared.isInputMuted)")
+            }
         } catch {
             log.log("[PersistentRecorder] ❌ Session setup failed: \(error)")
             lastError = String(localized: "Audio session error")
@@ -2213,14 +2216,21 @@ final class PersistentRecorder {
             return
         }
 
-        // Check audio isn't silent
-        let maxAmp = samples.map { abs($0) }.max() ?? 0
-        log.log("[PersistentRecorder] Audio maxAmp=\(String(format: "%.4f", maxAmp))")
-        if maxAmp < 0.005 {
-            log.log("[PersistentRecorder] ⚠️ Audio appears silent")
+        // Distinguish a muted/stalled input from quiet audio. None of these
+        // preflight failures means a recognizer actually looked for speech.
+        let maxAmp = samples.reduce(Float(0)) { max($0, abs($1)) }
+        let isInputMuted: Bool
+        if #available(iOS 17.0, *) {
+            isInputMuted = AVAudioApplication.shared.isInputMuted
+        } else {
+            isInputMuted = false
+        }
+        log.log("[PersistentRecorder] Audio maxAmp=\(String(format: "%.7g", maxAmp)) inputMuted=\(isInputMuted)")
+        if let failure = RecordingInputValidation.failure(maxAmplitude: maxAmp, isInputMuted: isInputMuted) {
+            log.log("[PersistentRecorder] ⚠️ Input validation failed: \(failure)")
             finishStoppedSegmentWithError(
                 requestId: requestId,
-                message: String(localized: "No speech detected"),
+                message: failure.message,
                 originLocationTask: originLocationTask
             )
             return

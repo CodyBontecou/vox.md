@@ -49,27 +49,11 @@ public typealias EnrichedCaptureVoxTextProcessor = EnrichedCapturePresetTextProc
 
 /// Thrown when an enrichment pass exceeds its deadline. Distinct from
 /// `CancellationError` so caller-side cancellation still propagates as-is.
-public struct EnrichmentTimeoutError: Error, Sendable {}
+public typealias EnrichmentTimeoutError = CaptureProcessingTimeout
 
-/// Races `operation` against a deadline. On timeout the underlying task is
-/// cancelled and `EnrichmentTimeoutError` is thrown. Errors thrown by the
-/// operation itself (including `CancellationError`) propagate unchanged.
-/// Shared by the typed-text processor and the app targets' export-time
-/// model calls so no on-device session can stall delivery indefinitely.
 public func withRunningTask<T: Sendable>(
     timeout: TimeInterval,
     operation: @escaping @Sendable () async throws -> T
 ) async throws -> T {
-    try await withThrowingTaskGroup(of: T.self) { group in
-        group.addTask { try await operation() }
-        group.addTask {
-            try await Task.sleep(nanoseconds: UInt64(timeout * 1_000_000_000))
-            throw EnrichmentTimeoutError()
-        }
-        guard let result = try await group.next() else {
-            throw EnrichmentTimeoutError()
-        }
-        group.cancelAll()
-        return result
-    }
+    try await withCaptureProcessingDeadline(timeout: timeout, operation: operation)
 }

@@ -120,7 +120,8 @@ public enum CaptureInboxDeliveryService {
                 var request = claimedRequest
                 do {
                     if request.voxProcessingState == .pending {
-                        request = await requestProcessor.process(request)
+                        request = await requestProcessor.process(request, assetRootURL: captureRootURL)
+                        try Task.checkCancellation()
                         try await inbox.replaceProcessingRequest(request)
                     }
                     guard let storedDestination = library.destinations.first(where: {
@@ -177,6 +178,9 @@ public enum CaptureInboxDeliveryService {
                         _ = await history.upsertBestEffort(record)
                     }
                     receipts.append(receipt)
+                } catch is CancellationError {
+                    try? await inbox.returnToPending(requestID: request.id)
+                    break
                 } catch let error as CaptureDeliveryQuotaError {
                     try? await inbox.returnToPending(requestID: request.id)
                     if case .limitReached = error {

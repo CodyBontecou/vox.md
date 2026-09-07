@@ -1,0 +1,68 @@
+# Requires Default selected, Clean Prose, with both intelligence options off.
+# Changes only processing settings; the completed flow restores them.
+steps:
+  - launch: bontecou.Voxboard
+  - await: { visible: { id: capture_settings } }
+  - await: { idle: true }
+  - tap: { id: capture_settings }
+  - await: { visible: { text: "Capture Presets, Processing, formatting, metadata, and destinations" } }
+  - await: { idle: true }
+  - tap: { text: "Capture Presets, Processing, formatting, metadata, and destinations" }
+  - await: { visible: { text: "Default, Clean Prose, Default" } }
+  - await: { idle: true }
+  - tap: { text: "Default, Clean Prose, Default" }
+  - await: { visible: { id: generate_image_alt_text } }
+  - await: { idle: true }
+  - echo: Enable processing and its separate image option.
+  - tap: { text: "0", within: { id: capture_processing_enabled } }
+  - tap: { text: "0", within: { id: generate_image_alt_text } }
+  - await: { text: { in: { id: generate_image_alt_text }, contains: "1" } }
+  - scroll-to: { target: { text: "Mode, Clean Prose" }, direction: down }
+  - await: { visible: { text: "Mode, Clean Prose" } }
+  - await: { idle: true }
+  - tap: { text: Clean Prose }
+  - await: { visible: { text: Keep Original } }
+  - await: { idle: true }
+  - tap: { text: Keep Original }
+  - await: { visible: { text: "Mode, Keep Original" } }
+  - await: { idle: true }
+  - scroll-to: { target: { id: generate_image_alt_text }, direction: up }
+  - await: { text: { in: { id: generate_image_alt_text }, contains: "1" } }
+  - echo: Restart with Keep Original and the image option enabled.
+  - launch: bontecou.Voxboard
+  - await: { visible: { id: capture_settings } }
+  - await: { idle: true }
+  - tap: { id: capture_settings }
+  - await: { visible: { text: "Capture Presets, Processing, formatting, metadata, and destinations" } }
+  - await: { idle: true }
+  - tap: { text: "Capture Presets, Processing, formatting, metadata, and destinations" }
+  - await: { visible: { text: "Default, Keep Original, Default" } }
+  - await: { idle: true }
+  - tap: { text: "Default, Keep Original, Default" }
+  - await: { visible: { id: generate_image_alt_text } }
+  - await: { idle: true }
+  - await: { text: { in: { id: generate_image_alt_text }, contains: "1" } }
+  - echo: Verify the master gate blocks changes to the remembered image option.
+  - tap: { text: "1", within: { id: capture_processing_enabled } }
+  - await: { text: { in: { id: capture_processing_enabled }, contains: "0" } }
+  - tap: { text: "1", within: { id: generate_image_alt_text } }
+  - await: { text: { in: { id: generate_image_alt_text }, contains: "1" } }
+  - echo: Restore both switches off and the original Clean Prose mode.
+  - tap: { text: "0", within: { id: capture_processing_enabled } }
+  - await: { text: { in: { id: capture_processing_enabled }, contains: "1" } }
+  - tap: { text: "1", within: { id: generate_image_alt_text } }
+  - await: { text: { in: { id: generate_image_alt_text }, contains: "0" } }
+  - tap: { text: "1", within: { id: capture_processing_enabled } }
+  - await: { text: { in: { id: capture_processing_enabled }, contains: "0" } }
+  - scroll-to: { target: { text: "Mode, Keep Original" }, direction: down }
+  - await: { visible: { text: "Mode, Keep Original" } }
+  - await: { idle: true }
+  - tap: { text: Keep Original }
+  - await: { visible: { text: Clean Prose } }
+  - await: { idle: true }
+  - tap: { text: Clean Prose }
+  - await: { visible: { text: "Mode, Clean Prose" } }
+  - await: { idle: true }
+  - launch: bontecou.Voxboard
+  - await: { visible: { id: capture_settings } }
+  - await: { idle: true }

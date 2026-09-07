@@ -354,10 +354,7 @@ enum CaptureIntentSupport {
             legacyDestinationEntity: legacyDestinationEntity,
             library: library
         )
-        let processingState: CapturePresetProcessingState = profile?.captureProcessingEnabled == true
-            && profile?.postProcessingMode != CapturePresetProcessingMode.none
-            ? .pending
-            : (profile == nil ? .notRequested : .applied)
+        let processingState = profile?.processingState(for: payloads) ?? .notRequested
         let locationOutcome: CaptureLocationOutcome?
         var requiresForegroundDecision = false
         if let policy = profile?.locationPolicy, policy.isEnabled {

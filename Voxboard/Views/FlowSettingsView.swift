@@ -17,7 +17,7 @@ struct CapturePresetSettingsView: View {
             introSection
 
             Section {
-                ForEach($flows) { $flow in
+                ForEach(persistedFlows) { $flow in
                     NavigationLink {
                         CapturePresetEditorView(preset: $flow)
                     } label: {
@@ -62,7 +62,7 @@ struct CapturePresetSettingsView: View {
 
             Section {
                 Button {
-                    flows.append(CapturePresetStore.makeCustomFlow())
+                    persistedFlows.wrappedValue.append(CapturePresetStore.makeCustomFlow())
                 } label: {
                     Label("Add Preset", systemImage: "plus")
                 }
@@ -82,17 +82,26 @@ struct CapturePresetSettingsView: View {
         .scrollContentBackground(.hidden)
         .background(Geist.Palette.background200)
         .task { await migrateRoutesAndReload() }
-        .onChange(of: flows) { _, newValue in
-            CapturePresetStore.saveFlows(newValue)
-            if #available(iOS 18.0, *) {
-                VoxboardShortcutsProvider.updateAppShortcutParameters()
-            }
-            scheduleWatchStatePublish()
-        }
         .onDisappear {
             watchStatePublishTask?.cancel()
             WatchRecordingController.shared.publishState()
         }
+    }
+
+    /// Save at the edit boundary: the list's onChange is not guaranteed to run
+    /// while its navigation destination is covering it.
+    private var persistedFlows: Binding<[CapturePreset]> {
+        Binding(
+            get: { flows },
+            set: { updated in
+                flows = updated
+                CapturePresetStore.saveFlows(updated)
+                if #available(iOS 18.0, *) {
+                    VoxboardShortcutsProvider.updateAppShortcutParameters()
+                }
+                scheduleWatchStatePublish()
+            }
+        )
     }
 
     private func scheduleWatchStatePublish() {
@@ -130,7 +139,7 @@ struct CapturePresetSettingsView: View {
             id: flow.id,
             ownedRouteID: flow.captureDestinationID
         )
-        flows.removeAll { $0.id == flow.id }
+        persistedFlows.wrappedValue.removeAll { $0.id == flow.id }
         let fallbackID = flows.first?.id ?? CapturePresetStore.generalId
         if CapturePresetStore.selectedFlowId() == flow.id {
             CapturePresetStore.selectFlow(id: fallbackID)
@@ -350,6 +359,7 @@ private struct CapturePresetEditorView: View {
         Section {
             HStack(spacing: 12) {
                 Toggle("Use Apple Intelligence", isOn: $flow.captureProcessingEnabled)
+                    .accessibilityIdentifier("capture_processing_enabled")
                     .tint(Color.accentColor)
 
                 Button {
@@ -362,6 +372,11 @@ private struct CapturePresetEditorView: View {
                 .buttonStyle(.plain)
                 .accessibilityLabel("About Apple Intelligence Processing")
             }
+
+            ImageAltTextSettings(
+                generateImageAltText: $flow.generateImageAltText,
+                processingEnabled: flow.captureProcessingEnabled
+            )
 
             Picker("Mode", selection: $flow.postProcessingMode) {
                 ForEach(CapturePresetProcessingMode.allCases) { mode in
@@ -1099,7 +1114,7 @@ private struct CaptureTextProcessingInfoView: View {
                         )
                     }
 
-                    Text("Turn it off to keep all captured text exactly as captured. Keep Original mode does the same while the switch stays on for future use.")
+                    Text("Keep Original and Apply To control text only. Image descriptions are optional.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

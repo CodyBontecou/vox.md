@@ -23,6 +23,8 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
     /// Original), captured text is processed on device using the selected
     /// mode, limited to the modalities selected by `captureProcessingScope`.
     public var captureProcessingEnabled: Bool
+    /// Optional descriptions of staged images. Missing legacy values remain off.
+    public var generateImageAltText: Bool
     /// Which modalities the selected processing mode applies to when the
     /// master gate is on. Missing legacy values decode as `.both`.
     public var captureProcessingScope: CapturePresetProcessingScope
@@ -46,6 +48,7 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
         postProcessingMode: CapturePresetProcessingMode = .clean,
         customPostProcessingInstruction: String = "",
         captureProcessingEnabled: Bool = false,
+        generateImageAltText: Bool = false,
         captureProcessingScope: CapturePresetProcessingScope = .both,
         capturePrompt: String = "",
         captureDestinationID: UUID? = nil,
@@ -63,6 +66,7 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
         self.postProcessingMode = postProcessingMode
         self.customPostProcessingInstruction = customPostProcessingInstruction
         self.captureProcessingEnabled = captureProcessingEnabled
+        self.generateImageAltText = generateImageAltText
         self.captureProcessingScope = captureProcessingScope
         self.capturePrompt = capturePrompt
         self.captureDestinationID = captureDestinationID
@@ -120,6 +124,7 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
         case postProcessingMode
         case customPostProcessingInstruction
         case captureProcessingEnabled
+        case generateImageAltText
         case captureProcessingScope
         case capturePrompt
         case captureDestinationID
@@ -142,6 +147,7 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
             postProcessingMode: try container.decodeIfPresent(CapturePresetProcessingMode.self, forKey: .postProcessingMode) ?? .clean,
             customPostProcessingInstruction: try container.decodeIfPresent(String.self, forKey: .customPostProcessingInstruction) ?? "",
             captureProcessingEnabled: try container.decodeIfPresent(Bool.self, forKey: .captureProcessingEnabled) ?? false,
+            generateImageAltText: try container.decodeIfPresent(Bool.self, forKey: .generateImageAltText) ?? false,
             captureProcessingScope: try container.decodeIfPresent(CapturePresetProcessingScope.self, forKey: .captureProcessingScope) ?? .both,
             capturePrompt: try container.decodeIfPresent(String.self, forKey: .capturePrompt) ?? "",
             captureDestinationID: try container.decodeIfPresent(UUID.self, forKey: .captureDestinationID),
