@@ -958,7 +958,7 @@ if 'URLQueryItem(name: "preset", value: voxID)' not in capture_widget:
 quick_capture_model = (root / 'Voxboard App Shared/CaptureComposerViewModel.swift').read_text()
 for required in [
     'initialLoadTask',
-    'draft.selectDestination(destinationID)',
+    'candidate.selectDestination(id)',
     'validateComposerLaunch',
     'applyComposerLaunch',
     'pendingPresetSwitch',
@@ -1296,10 +1296,23 @@ for removed in [
     'showsInternalLinkPrompt',
     'showsDueDate',
     'MacCaptureDueDateSheet',
-    '.alert(',
 ]:
     if removed in workspace_surface_source:
         errors.append(f'macOS Capture accessory tools must not retain primary modal state: {removed}')
+# The one consent alert protects a nonempty draft from external widget rerouting;
+# accessory tools remain inline and may not introduce additional alerts.
+preset_alert_start = workspace_surface_source.find('.alert(\n            "Switch Capture Preset?"')
+preset_alert_end = workspace_surface_source.find('.onReceive(', preset_alert_start)
+preset_alert_source = workspace_surface_source[preset_alert_start:preset_alert_end]
+if workspace_surface_source.count('.alert(') != 1 or preset_alert_start < 0 or preset_alert_end < 0:
+    errors.append('macOS Capture must have only the ID-bound preset-switch consent alert')
+for required in [
+    'presenting: viewModel.pendingPresetSwitch',
+    'viewModel.confirmPresetSwitch(id: pending.id)',
+    'viewModel.cancelPresetSwitch(id: pending.id)',
+]:
+    if required not in preset_alert_source:
+        errors.append(f'macOS preset-switch consent is missing {required}')
 if workspace_surface_source.count('.sheet(') != 1 or '.sheet(isPresented: $showsPaywall)' not in workspace_surface_source:
     errors.append('the StoreKit paywall must be the only app-authored sheet on the macOS Capture workspace')
 for required in [
@@ -1325,7 +1338,7 @@ for required in [
     '.navigationDestination(isPresented: $isEditingDestination)',
     'embeddedInNavigation: true',
     'onClose: { isEditingDestination = false }',
-    'viewModel.scheduleDraftSave()',
+    'viewModel.setEntryTemplateOverride($0)',
     'viewModel.useVoxRouteDefaults()',
     'chooseOneOffNote()',
     'viewModel.resolvedDestinationPreview',
