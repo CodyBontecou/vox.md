@@ -170,101 +170,46 @@ struct QuickCaptureView: View {
         presentedContent
     }
 
-    private var captureContent: some View {
-        ZStack(alignment: .top) {
-            Geist.Palette.background100.ignoresSafeArea()
+    private var captureContent: AnyView {
+        AnyView(
+            ZStack(alignment: .top) {
+                Geist.Palette.background100.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                if isExtractingText {
-                    HStack(spacing: Geist.Spacing.two) {
-                        ProgressView()
-                            .controlSize(.small)
-                        Text("Extracting text on this device…")
-                            .font(Geist.caption())
-                            .foregroundStyle(Geist.muted)
-                        Spacer()
+                VStack(spacing: 0) {
+                    captureOCRProgressBanner
+
+                    if viewModel.selectedDestination == nil && !isLocalizationScreenshot {
+                        AnyView(emptyDestinationBanner)
+                        GeistDivider()
                     }
-                    .padding(.horizontal, Geist.Spacing.three)
-                    .frame(minHeight: Geist.ControlHeight.medium)
-                    .background(Geist.Palette.background200)
-                    .accessibilityElement(children: .combine)
-                    .accessibilityIdentifier("capture_ocr_progress")
-                    GeistDivider()
-                }
 
-                if viewModel.selectedDestination == nil && !isLocalizationScreenshot {
-                    emptyDestinationBanner
-                    GeistDivider()
-                }
-
-                if watchRecordingPipeline.hasVisibleItems {
-                    watchRecordingStatusCard
-                    GeistDivider()
-                }
-
-                composer
-                    .layoutPriority(1)
-
-                if shouldShowImmediateLiveTranscription {
-                    GeistDivider()
-                    immediateLiveTranscriptionBar
-                }
-
-                if !viewModel.draft.additionalPayloads.isEmpty {
-                    attachmentStrip
-                }
-            }
-
-            if let guidance = keyboardReturnGuidance {
-                keyboardReturnGuidanceBanner(guidance.phase)
-                    .padding(.horizontal, 12)
-                    .padding(.top, 8)
-                    .transition(.move(edge: .top).combined(with: .opacity))
-                    .zIndex(5)
-                    .task(id: guidance.id) {
-                        await dismissKeyboardReturnGuidance(after: .seconds(6), id: guidance.id)
+                    if watchRecordingPipeline.hasVisibleItems {
+                        AnyView(watchRecordingStatusCard)
+                        GeistDivider()
                     }
-            }
 
-            if let message = captureErrorMessage {
-                errorBanner(message)
-                    .padding(.horizontal, 12)
-                    .padding(.top, 8)
-                    .transition(.move(edge: .top).combined(with: .opacity))
-                    .zIndex(3)
-            }
+                    AnyView(composer.layoutPriority(1))
 
-            if let toast = fileExportToast {
-                FileExportToastView(fileName: toast.url.lastPathComponent) {
-                    openExportedFileInFiles(toast.url)
+                    if shouldShowImmediateLiveTranscription {
+                        GeistDivider()
+                        AnyView(immediateLiveTranscriptionBar)
+                    }
+
+                    if !viewModel.draft.additionalPayloads.isEmpty {
+                        AnyView(attachmentStrip)
+                    }
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 8)
-                .frame(maxHeight: .infinity, alignment: .top)
-                .transition(.move(edge: .top).combined(with: .opacity))
-                .zIndex(4)
-            }
 
-            if showsSentToast {
-                sentToastLabel
-                    .font(Geist.label())
-                    .foregroundStyle(Geist.Palette.background100)
-                    .padding(.horizontal, Geist.Spacing.four)
-                    .frame(height: Geist.ControlHeight.medium)
-                    .background(Geist.Palette.gray1000)
-                    .clipShape(Capsule())
-                    .padding(.top, 12)
-                    .transition(.move(edge: .top).combined(with: .opacity))
-                    .zIndex(4)
-                    .accessibilityElement(children: .combine)
-                    .accessibilityIdentifier("capture_sent_toast")
+                keyboardGuidanceOverlay
+                captureErrorOverlay
+                fileExportOverlay
+                sentToastOverlay
             }
-        }
-        // Keep the controls owned by the keyboard-aware safe area instead of the
-        // flexible editor stack, where a retained first responder can cover them.
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            captureControls
-        }
+            // Keep the controls owned by the keyboard-aware safe area instead of the
+            // flexible editor stack, where a retained first responder can cover them.
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                AnyView(captureControls)
+            }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 if isKeyboardListeningActive {
@@ -281,31 +226,136 @@ struct QuickCaptureView: View {
         }
         .toolbarBackground(Geist.Palette.background100, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
+        )
+    }
+
+    // MARK: - Type-erased capture sections
+    // `captureContent`'s un-erased ViewBuilder tree overflowed the Swift
+    // runtime demangler's stack on device (SIGSEGV at launch; crash log
+    // 2026-09-06 21:46). Opaque `some View` members expand recursively at
+    // the use site, so each section below is erased with AnyView — and each
+    // opaque child is wrapped at its use site — to cap every mangled-name
+    // depth independently. See voiceCaptureButton's erasure note.
+
+    private var captureOCRProgressBanner: AnyView {
+        AnyView(
+            Group {
+                if isExtractingText {
+                    HStack(spacing: Geist.Spacing.two) {
+                        ProgressView()
+                            .controlSize(.small)
+                        Text("Extracting text on this device…")
+                            .font(Geist.caption())
+                            .foregroundStyle(Geist.muted)
+                        Spacer()
+                    }
+                    .padding(.horizontal, Geist.Spacing.three)
+                    .frame(minHeight: Geist.ControlHeight.medium)
+                    .background(Geist.Palette.background200)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityIdentifier("capture_ocr_progress")
+                    GeistDivider()
+                }
+            }
+        )
+    }
+
+    private var keyboardGuidanceOverlay: AnyView {
+        AnyView(
+            Group {
+                if let guidance = keyboardReturnGuidance {
+                    keyboardReturnGuidanceBanner(guidance.phase)
+                        .padding(.horizontal, 12)
+                        .padding(.top, 8)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .zIndex(5)
+                        .task(id: guidance.id) {
+                            await dismissKeyboardReturnGuidance(after: .seconds(6), id: guidance.id)
+                        }
+                }
+            }
+        )
+    }
+
+    private var captureErrorOverlay: AnyView {
+        AnyView(
+            Group {
+                if let message = captureErrorMessage {
+                    errorBanner(message)
+                        .padding(.horizontal, 12)
+                        .padding(.top, 8)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .zIndex(3)
+                }
+            }
+        )
+    }
+
+    private var fileExportOverlay: AnyView {
+        AnyView(
+            Group {
+                if let toast = fileExportToast {
+                    FileExportToastView(fileName: toast.url.lastPathComponent) {
+                        openExportedFileInFiles(toast.url)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
+                    .frame(maxHeight: .infinity, alignment: .top)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .zIndex(4)
+                }
+            }
+        )
+    }
+
+    private var sentToastOverlay: AnyView {
+        AnyView(
+            Group {
+                if showsSentToast {
+                    sentToastLabel
+                        .font(Geist.label())
+                        .foregroundStyle(Geist.Palette.background100)
+                        .padding(.horizontal, Geist.Spacing.four)
+                        .frame(height: Geist.ControlHeight.medium)
+                        .background(Geist.Palette.gray1000)
+                        .clipShape(Capsule())
+                        .padding(.top, 12)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .zIndex(4)
+                        .accessibilityElement(children: .combine)
+                        .accessibilityIdentifier("capture_sent_toast")
+                }
+            }
+        )
     }
 
     /// The sent toast, plus an Undo action for the window after a composer
     /// send. Undo restores the just-sent Capture into this composer as an
     /// editable draft; the note already written to the vault is kept.
-    @ViewBuilder
-    private var sentToastLabel: some View {
-        HStack(spacing: Geist.Spacing.three) {
-            Label("Capture Sent", systemImage: "checkmark.circle.fill")
-            if sentUndoSnapshot?.offersUndo == true {
-                Button {
-                    restoreSentCaptureAsDraft()
-                } label: {
-                    Text("Undo")
-                        .fontWeight(.semibold)
-                        .underline()
-                        .padding(.horizontal, Geist.Spacing.two)
-                        .contentShape(Rectangle())
+    /// Type-erased: the Undo button branch grew this toast's un-erased
+    /// ViewBuilder type past the Swift runtime demangler's on-device limit
+    /// (SIGSEGV at launch) — see voiceCaptureButton's erasure note.
+    private var sentToastLabel: AnyView {
+        AnyView(
+            HStack(spacing: Geist.Spacing.three) {
+                Label("Capture Sent", systemImage: "checkmark.circle.fill")
+                if sentUndoSnapshot?.offersUndo == true {
+                    Button {
+                        restoreSentCaptureAsDraft()
+                    } label: {
+                        Text("Undo")
+                            .fontWeight(.semibold)
+                            .underline()
+                            .padding(.horizontal, Geist.Spacing.two)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Undo send and restore the Capture to this draft")
+                    .accessibilityHint("The note already sent to your vault is kept.")
+                    .accessibilityIdentifier("capture_sent_toast_undo")
                 }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Undo send and restore the Capture to this draft")
-                .accessibilityHint("The note already sent to your vault is kept.")
-                .accessibilityIdentifier("capture_sent_toast_undo")
             }
-        }
+        )
     }
 
     private var draftLifecycleContent: some View {
@@ -705,14 +755,19 @@ struct QuickCaptureView: View {
         )
     }
 
-    private var voiceCaptureButton: some View {
-        Group {
-            if persistentRecorder.isAppRecordingSegmentActive {
-                activeVoiceCaptureButtonLabel
-            } else {
-                idleVoiceCaptureButtonLabel
+    /// Type-erased at the definition (not just its labels): the un-erased
+    /// modifier stack expanded at every use site and, combined with the
+    /// relocated controls in `captureActionBar`, overflowed the Swift
+    /// runtime demangler's stack on device (SIGSEGV at launch).
+    private var voiceCaptureButton: AnyView {
+        AnyView(
+            Group {
+                if persistentRecorder.isAppRecordingSegmentActive {
+                    activeVoiceCaptureButtonLabel
+                } else {
+                    idleVoiceCaptureButtonLabel
+                }
             }
-        }
         .frame(minWidth: 36, minHeight: 36)
         .contentShape(Rectangle())
         .gesture(voiceCaptureGesture)
@@ -732,6 +787,7 @@ struct QuickCaptureView: View {
         .task(id: persistentRecorder.isAppRecordingSegmentActive) {
             await updateRecordingAudioLevels()
         }
+        )
     }
 
     /// Kept small via `AnyView` erasure: this button's rendered type is
@@ -1491,6 +1547,43 @@ struct QuickCaptureView: View {
         .background(Geist.Palette.background100)
     }
 
+    /// Type-erased like its sibling status controls: the send button's
+    /// confirmation-dialog chain pushed `captureActionBar`'s un-erased type
+    /// past the Swift runtime demangler's on-device limit (SIGSEGV at
+    /// launch) — see voiceCaptureButton's erasure note.
+    private var sendRouteControl: AnyView {
+        AnyView(
+            routeStatusButton(
+                viewModel.isSubmitting
+                    ? String(localized: "Sending capture")
+                    : (captureSubmissionRequiresUnlock
+                       ? String(localized: "Unlock unlimited captures")
+                       : String(localized: "Send capture")),
+                icon: captureSubmissionRequiresUnlock ? "lock.fill" : "arrow.up"
+            ) {
+                if captureSubmissionRequiresUnlock {
+                    presentPaywall(context: .captureLimit)
+                } else {
+                    sendComposerCapture()
+                }
+            }
+            .disabled(!viewModel.canSubmit || captureSubmissionIsBlocked)
+            .opacity(viewModel.canSubmit && !captureSubmissionIsBlocked ? 1 : 0.35)
+            .accessibilityIdentifier("quick_capture_submit")
+            // Strictly opt-in confirmation (default off) for Preset sends.
+            .confirmationDialog(
+                String(localized: "Send this Capture with \(selectedFlow.displayName)?"),
+                isPresented: $showsPresetSendConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button(String(localized: "Send")) { submitComposerCapture() }
+                Button(String(localized: "Cancel"), role: .cancel) {}
+            } message: {
+                Text("Optional confirmation for Preset sends. Turn it off in Settings › Capture Bar.")
+            }
+        )
+    }
+
     private var captureActionBar: some View {
         HStack(spacing: 8) {
             routeStatusButton(
@@ -1533,34 +1626,7 @@ struct QuickCaptureView: View {
                 .accessibilityLabel("\(usageTracker.capturesRemaining) free captures remaining")
             }
 
-            routeStatusButton(
-                viewModel.isSubmitting
-                    ? String(localized: "Sending capture")
-                    : (captureSubmissionRequiresUnlock
-                       ? String(localized: "Unlock unlimited captures")
-                       : String(localized: "Send capture")),
-                icon: captureSubmissionRequiresUnlock ? "lock.fill" : "arrow.up"
-            ) {
-                if captureSubmissionRequiresUnlock {
-                    presentPaywall(context: .captureLimit)
-                } else {
-                    sendComposerCapture()
-                }
-            }
-            .disabled(!viewModel.canSubmit || captureSubmissionIsBlocked)
-            .opacity(viewModel.canSubmit && !captureSubmissionIsBlocked ? 1 : 0.35)
-            .accessibilityIdentifier("quick_capture_submit")
-            // Strictly opt-in confirmation (default off) for Preset sends.
-            .confirmationDialog(
-                String(localized: "Send this Capture with \(selectedFlow.displayName)?"),
-                isPresented: $showsPresetSendConfirmation,
-                titleVisibility: .visible
-            ) {
-                Button(String(localized: "Send")) { submitComposerCapture() }
-                Button(String(localized: "Cancel"), role: .cancel) {}
-            } message: {
-                Text("Optional confirmation for Preset sends. Turn it off in Settings › Capture Bar.")
-            }
+            sendRouteControl
 
             routeStatusButton(
                 composerIsFocused
