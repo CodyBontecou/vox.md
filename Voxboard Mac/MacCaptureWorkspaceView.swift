@@ -65,7 +65,10 @@ struct MacCaptureWorkspaceView: View {
     @State private var composerSelection = NSRange(location: 0, length: 0)
     @State private var composerIsFocused = false
     @State private var composerController = MacMarkdownComposerController()
-    @State private var isProcessingAttachments = false
+    private var isProcessingAttachments: Bool {
+        get { viewModel.isProcessingMedia }
+        nonmutating set { viewModel.isProcessingMedia = newValue }
+    }
     @State private var isDropTargeted = false
     @State private var showsSentToast = false
     @State private var lastRevealedReceiptURL: URL?
@@ -200,6 +203,27 @@ struct MacCaptureWorkspaceView: View {
         } message: {
             Text("This permanently removes the queued Capture that could not resolve its required location.")
         }
+        .alert(
+            "Switch Capture Preset?",
+            isPresented: Binding(
+                get: { viewModel.pendingPresetSwitch != nil },
+                set: { _ in }
+            ),
+            presenting: viewModel.pendingPresetSwitch
+        ) { pending in
+            Button("Switch Preset") {
+                Task {
+                    if await viewModel.confirmPresetSwitch(id: pending.id) {
+                        consumeRequestedInput()
+                    }
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                viewModel.cancelPresetSwitch(id: pending.id)
+            }
+        } message: { pending in
+            Text("Use \(pending.presetName) for this draft? Your text and attachments will be kept; one-off routing will reset.")
+        }
         .onReceive(NotificationCenter.default.publisher(for: .macShowCapture)) { notification in
             guard let targetToken = notification.object as? String,
                   targetToken == windowToken else { return }
@@ -259,9 +283,8 @@ struct MacCaptureWorkspaceView: View {
             }
             .menuStyle(.borderlessButton)
             .fixedSize()
-            .disabled(recorder.isRecording || recorder.isTranscribing || recorder.isExporting)
+            .disabled(!viewModel.canChangeCaptureRoute)
             .accessibilityLabel("Capture Preset \(selectedFlow.displayName)")
-            .disabled(recorder.isRecording)
             .accessibilityIdentifier("mac_capture_preset_selector")
 
             if selectedFlow.locationPolicy.isEnabled {
@@ -1007,6 +1030,7 @@ struct MacCaptureWorkspaceView: View {
 
     private func stageCameraImage(_ imageData: Data) {
         Task {
+            guard viewModel.requireCaptureRouteAvailable() else { return }
             isProcessingAttachments = true
             await viewModel.stageImage(
                 data: imageData,
@@ -1021,6 +1045,7 @@ struct MacCaptureWorkspaceView: View {
 
     private func stageSketch(_ drawingData: Data, _ previewData: Data) {
         Task {
+            guard viewModel.requireCaptureRouteAvailable() else { return }
             isProcessingAttachments = true
             await viewModel.stageSketch(
                 drawingData: drawingData,
@@ -1101,7 +1126,8 @@ struct MacCaptureWorkspaceView: View {
     }
 
     private func consumeRequestedInput() {
-        guard let requestedInput = viewModel.requestedInput else { return }
+        guard let requestedInput = viewModel.requestedInput,
+              viewModel.requireCaptureRouteAvailable() else { return }
         viewModel.requestedInput = nil
         switch requestedInput {
         case .photos, .screenshots: chooseImages()
@@ -1115,9 +1141,8 @@ struct MacCaptureWorkspaceView: View {
     }
 
     private func selectFlow(_ flow: CapturePreset) {
-        viewModel.selectVox(flow.id)
-        CapturePresetStore.selectFlow(id: flow.id)
-        reloadFlows()
+        // Draft selection never changes the keyboard/global recording preset.
+        guard viewModel.selectVox(flow.id) else { return }
     }
 
     private var captureAllowanceBlocked: Bool {
@@ -1125,6 +1150,7 @@ struct MacCaptureWorkspaceView: View {
     }
 
     private func sendCapture() {
+        guard viewModel.requireCaptureRouteAvailable() else { return }
         if captureAllowanceBlocked {
             showsPaywall = true
             return
@@ -1133,12 +1159,22 @@ struct MacCaptureWorkspaceView: View {
     }
 
     private func startRecording() {
+        guard viewModel.requireCaptureRouteAvailable() else { return }
         guard !usageTracker.isAtLimit else {
             showsPaywall = true
             return
         }
         Task { @MainActor in
+            guard let operation = viewModel.beginCaptureRouteOperation() else { return }
+            defer { viewModel.endCaptureRouteOperation(operation) }
+            let draftID = viewModel.draft.id
+            let requestID = viewModel.draft.requestID
+            let presetID = viewModel.draft.voxID
             let granted = await AudioRecorder.requestMicrophonePermission()
+            guard !Task.isCancelled, !recorder.ownsCaptureRoute,
+                  viewModel.draft.id == draftID, viewModel.draft.requestID == requestID,
+                  viewModel.draft.voxID == presetID,
+                  CapturePresetStore.loadFlows().contains(where: { $0.id == presetID && $0.isEnabled }) else { return }
             guard granted else {
                 recorder.lastError = String(localized: "Enable microphone access in System Settings to record audio.")
                 return
@@ -1206,6 +1242,7 @@ struct MacCaptureWorkspaceView: View {
         guard panel.runModal() == .OK else { return }
 
         Task {
+            guard viewModel.requireCaptureRouteAvailable() else { return }
             isProcessingAttachments = true
             defer {
                 isProcessingAttachments = false
@@ -1235,7 +1272,7 @@ struct MacCaptureWorkspaceView: View {
                     )
                 }
                 if !otherURLs.isEmpty {
-                    await stageURLs(otherURLs)
+                    await stageURLs(otherURLs, alreadyOwnsRoute: true)
                 }
             } catch {
                 viewModel.errorMessage = error.localizedDescription
@@ -1260,6 +1297,7 @@ struct MacCaptureWorkspaceView: View {
     }
 
     private func importAudioForTranscription() {
+        guard viewModel.requireCaptureRouteAvailable() else { return }
         guard !usageTracker.isAtLimit else {
             showsPaywall = true
             return
@@ -1271,7 +1309,9 @@ struct MacCaptureWorkspaceView: View {
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = false
         panel.canChooseFiles = true
-        guard panel.runModal() == .OK, let url = panel.url else { return }
+        guard panel.runModal() == .OK, let url = panel.url,
+              viewModel.requireCaptureRouteAvailable(),
+              CapturePresetStore.loadFlows().contains(where: { $0.id == viewModel.draft.voxID && $0.isEnabled }) else { return }
         recorder.importAudioFile(
             from: url,
             modelManager: modelManager,
@@ -1297,8 +1337,9 @@ struct MacCaptureWorkspaceView: View {
         Task { await stageURLs(panel.urls) }
     }
 
-    private func stageURLs(_ urls: [URL]) async {
-        guard !urls.isEmpty else { return }
+    private func stageURLs(_ urls: [URL], alreadyOwnsRoute: Bool = false) async {
+        guard !urls.isEmpty,
+              alreadyOwnsRoute || viewModel.requireCaptureRouteAvailable() else { return }
         isProcessingAttachments = true
         defer {
             isProcessingAttachments = false
@@ -1333,6 +1374,7 @@ struct MacCaptureWorkspaceView: View {
 
         if let data = pasteboard.data(forType: .png) {
             Task {
+                guard viewModel.requireCaptureRouteAvailable() else { return }
                 isProcessingAttachments = true
                 await viewModel.stageImage(
                     data: data,
@@ -1349,6 +1391,7 @@ struct MacCaptureWorkspaceView: View {
            let image = NSImage(data: tiff),
            let png = pngData(from: image) {
             Task {
+                guard viewModel.requireCaptureRouteAvailable() else { return }
                 isProcessingAttachments = true
                 await viewModel.stageImage(
                     data: png,
@@ -1496,14 +1539,14 @@ struct MacCaptureRouteInspector: View {
                             Text("Bottom").tag(PlacementChoice.bottom)
                         }
 
-                        Picker("Entry Template", selection: $viewModel.draft.entryTemplateID) {
+                        Picker("Entry Template", selection: Binding(
+                            get: { viewModel.draft.entryTemplateID },
+                            set: { viewModel.setEntryTemplateOverride($0) }
+                        )) {
                             Text("Preset Default").tag(UUID?.none)
                             ForEach(viewModel.entryTemplates) { template in
                                 Text(template.name).tag(Optional(template.id))
                             }
-                        }
-                        .onChange(of: viewModel.draft.entryTemplateID) { _, _ in
-                            viewModel.scheduleDraftSave()
                         }
 
                         Button {
@@ -1531,6 +1574,7 @@ struct MacCaptureRouteInspector: View {
                     }
                 }
             }
+            .disabled(!viewModel.canChangeCaptureRoute)
             .formStyle(.grouped)
             .navigationTitle("Capture Route")
             .toolbar {

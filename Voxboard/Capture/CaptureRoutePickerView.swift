@@ -44,7 +44,10 @@ struct CaptureRoutePickerView: View {
                             Text("Bottom").tag(PlacementChoice.bottom)
                         }
 
-                        Picker("Entry template", selection: $viewModel.draft.entryTemplateID) {
+                        Picker("Entry template", selection: Binding(
+                            get: { viewModel.draft.entryTemplateID },
+                            set: { viewModel.setEntryTemplateOverride($0) }
+                        )) {
                             Text("Preset Default").tag(UUID?.none)
                             ForEach(viewModel.entryTemplates) { template in
                                 Text(template.name).tag(Optional(template.id))
@@ -122,14 +125,12 @@ struct CaptureRoutePickerView: View {
                     }
                 }
             }
+            .disabled(!viewModel.canChangeCaptureRoute)
             .navigationTitle("Capture destination")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        Task { await viewModel.saveDraftNow() }
-                        dismiss()
-                    }
+                    Button("Done") { dismiss() }
                 }
             }
             .sheet(isPresented: $showsNotePicker) {

@@ -147,6 +147,9 @@ struct VoxboardApp: App {
         )
         watchPipeline.configure(recorder: recorder)
         _watchRecordingPipeline = State(initialValue: watchPipeline)
+        captureViewModel.configureCaptureRouteOwnership { [weak recorder, weak watchPipeline] in
+            recorder?.ownsCaptureRoute == true || watchPipeline?.isProcessing == true
+        }
         WatchRecordingController.shared.configure(
             recorder: recorder,
             usageTracker: usage,
@@ -323,21 +326,19 @@ struct VoxboardApp: App {
     private func consumePendingQuickCaptureOpenIfNeeded() {
         guard AppConstants.sharedDefaults?.bool(forKey: AppConstants.pendingQuickCaptureOpenKey) == true else { return }
         AppConstants.sharedDefaults?.set(false, forKey: AppConstants.pendingQuickCaptureOpenKey)
-        if let rawSource = AppConstants.sharedDefaults?.string(forKey: AppConstants.pendingQuickCaptureSourceKey),
-           let source = CaptureSource(rawValue: rawSource) {
-            AppConstants.sharedDefaults?.removeObject(forKey: AppConstants.pendingQuickCaptureSourceKey)
-            quickCaptureViewModel.requestCaptureSource(source)
-        }
-        if let voxID = AppConstants.sharedDefaults?.string(forKey: AppConstants.pendingQuickCaptureVoxIdKey) {
-            AppConstants.sharedDefaults?.removeObject(forKey: AppConstants.pendingQuickCaptureVoxIdKey)
-            quickCaptureViewModel.requestVox(voxID)
-        }
-        if let rawInput = AppConstants.sharedDefaults?.string(forKey: AppConstants.pendingQuickCaptureInputKey),
-           let input = CaptureRequestedInput(rawValue: rawInput) {
-            AppConstants.sharedDefaults?.removeObject(forKey: AppConstants.pendingQuickCaptureInputKey)
-            quickCaptureViewModel.requestedInput = input
-        }
+        let defaults = AppConstants.sharedDefaults
+        let incoming = CaptureDeepLinkDraft(
+            voxID: defaults?.string(forKey: AppConstants.pendingQuickCaptureVoxIdKey),
+            requestedInput: defaults?.string(forKey: AppConstants.pendingQuickCaptureInputKey)
+                .flatMap(CaptureRequestedInput.init(rawValue:)),
+            source: defaults?.string(forKey: AppConstants.pendingQuickCaptureSourceKey)
+                .flatMap(CaptureSource.init(rawValue:))
+        )
+        defaults?.removeObject(forKey: AppConstants.pendingQuickCaptureSourceKey)
+        defaults?.removeObject(forKey: AppConstants.pendingQuickCaptureVoxIdKey)
+        defaults?.removeObject(forKey: AppConstants.pendingQuickCaptureInputKey)
         openCaptureComposer()
+        Task { await quickCaptureViewModel.handleDeepLink(.openComposer(incoming)) }
     }
 
     // MARK: - Capture Navigation

@@ -126,7 +126,10 @@ struct QuickCaptureView: View {
     @State private var flows: [CapturePreset] = CapturePresetStore.loadFlows()
     @State private var selectedFlowId: String = CapturePresetStore.selectedFlowId()
     @State private var linkText = ""
-    @State private var isProcessingMedia = false
+    private var isProcessingMedia: Bool {
+        get { viewModel.isProcessingMedia }
+        nonmutating set { viewModel.isProcessingMedia = newValue }
+    }
     @State private var isExtractingText = false
     @State private var isFindingLocation = false
     @State private var locationRequestTask: Task<Void, Never>?
@@ -470,9 +473,32 @@ struct QuickCaptureView: View {
         }
     }
 
-    private var navigationSheetContent: CaptureViewSection {
+    private var presetSwitchDecisionContent: CaptureViewSection {
         CaptureViewSection {
             locationDecisionContent
+                .alert(
+                    "Switch Capture Preset?",
+                    isPresented: Binding(
+                        get: { viewModel.pendingPresetSwitch != nil },
+                        set: { _ in }
+                    ),
+                    presenting: viewModel.pendingPresetSwitch
+                ) { pending in
+                    Button("Switch Preset") {
+                        Task { await viewModel.confirmPresetSwitch(id: pending.id) }
+                    }
+                    Button("Cancel", role: .cancel) {
+                        viewModel.cancelPresetSwitch(id: pending.id)
+                    }
+                } message: { pending in
+                    Text("Use \(pending.presetName) for this draft? Your text and attachments will be kept; one-off routing will reset.")
+                }
+        }
+    }
+
+    private var navigationSheetContent: CaptureViewSection {
+        CaptureViewSection {
+            presetSwitchDecisionContent
                 .sheet(isPresented: $showsCaptureHistory) {
                     HistoryView(viewModel: viewModel)
                         .environment(transcriptStore)
@@ -518,6 +544,7 @@ struct QuickCaptureView: View {
                         onCapture: { data in
                             showsCamera = false
                             Task {
+                                guard viewModel.requireCaptureRouteAvailable() else { return }
                                 isProcessingMedia = true
                                 await viewModel.stageImage(
                                     data: data,
@@ -579,6 +606,7 @@ struct QuickCaptureView: View {
                         onSave: { drawing, preview in
                             showsSketch = false
                             Task {
+                                guard viewModel.requireCaptureRouteAvailable() else { return }
                                 isProcessingMedia = true
                                 await viewModel.stageSketch(drawingData: drawing, previewData: preview)
                                 isProcessingMedia = false
@@ -1190,7 +1218,7 @@ struct QuickCaptureView: View {
     }
 
     private var recordingOptionsAreLocked: Bool {
-        persistentRecorder.isSegmentActive || isProcessingMedia
+        !viewModel.canChangeCaptureRoute
     }
 
     private var recordingUsageLabel: String {
@@ -1523,6 +1551,7 @@ struct QuickCaptureView: View {
                 }
                 .accessibilityLabel("Capture Preset \(selectedFlow.displayName)")
                 .accessibilityIdentifier("capture_vox_selector")
+                .disabled(!viewModel.canChangeCaptureRoute)
 
                 Button {
                     dismissComposer()
@@ -1540,6 +1569,7 @@ struct QuickCaptureView: View {
                     }
                 }
                 .accessibilityLabel("Capture route \(routeLabel), \(viewModel.effectivePlacementLabel)")
+                .disabled(!viewModel.canChangeCaptureRoute)
 
                 if viewModel.hasAnyRouteOverride {
                     Button {
@@ -1549,6 +1579,7 @@ struct QuickCaptureView: View {
                             .frame(width: 36, height: 36)
                     }
                     .accessibilityLabel("Use Preset destination defaults")
+                    .disabled(!viewModel.canChangeCaptureRoute)
                 }
 
                 Spacer(minLength: 4)
@@ -1786,7 +1817,7 @@ struct QuickCaptureView: View {
     }
 
     private var captureSubmissionIsBlocked: Bool {
-        isProcessingMedia || persistentRecorder.isSegmentActive || persistentRecorder.isTranscribing
+        !viewModel.canChangeCaptureRoute
     }
 
     private var isKeyboardListeningActive: Bool {
@@ -1856,7 +1887,7 @@ struct QuickCaptureView: View {
     }
 
     private func handleRequestedInputChange(_ input: CaptureRequestedInput?) {
-        guard let input else { return }
+        guard let input, viewModel.requireCaptureRouteAvailable() else { return }
         presentRequestedInput(input)
         viewModel.requestedInput = nil
     }
@@ -1958,6 +1989,7 @@ struct QuickCaptureView: View {
             || showsAudioImporter
             || showsVoiceCaptureDetails
             || showsWatchRecordingQueue
+            || viewModel.pendingPresetSwitch != nil
     }
 
     private func fulfillInitialComposerFocusIfReady() async {
@@ -1998,16 +2030,14 @@ struct QuickCaptureView: View {
         await viewModel.load()
         guard !Task.isCancelled else { return }
         reloadFlows()
-        if let input = viewModel.requestedInput {
-            presentRequestedInput(input)
-            viewModel.requestedInput = nil
-        }
+        handleRequestedInputChange(viewModel.requestedInput)
         if shouldAutoFocus {
             hasCompletedInitialLoad = true
         }
     }
 
     private func presentRequestedInput(_ input: CaptureRequestedInput) {
+        guard viewModel.requireCaptureRouteAvailable() else { return }
         initialComposerFocusIsPending = false
         dismissComposer()
         switch input {
@@ -2056,6 +2086,7 @@ struct QuickCaptureView: View {
     /// preset send is confirmed before dispatch; draft content in the
     /// composer is otherwise never confirmed.
     private func sendComposerCapture() {
+        guard viewModel.requireCaptureRouteAvailable() else { return }
         guard confirmsPresetSend else {
             submitComposerCapture()
             return
@@ -2064,6 +2095,7 @@ struct QuickCaptureView: View {
     }
 
     private func submitComposerCapture() {
+        guard viewModel.requireCaptureRouteAvailable() else { return }
         // Snapshot before submit(): a successful send replaces the live draft,
         // so this is the only moment the outgoing text still exists.
         sentUndoSnapshot = SentCaptureUndo.snapshot(
@@ -2096,6 +2128,7 @@ struct QuickCaptureView: View {
     }
 
     private func importPhotos(_ items: [PhotosPickerItem], prefix: String) async {
+        guard viewModel.requireCaptureRouteAvailable() else { selectedPhotos = []; return }
         isProcessingMedia = true
         defer {
             selectedPhotos = []
@@ -2119,7 +2152,7 @@ struct QuickCaptureView: View {
     }
 
     private func importOCRPhotos(_ items: [PhotosPickerItem]) async {
-        guard requireIdleVoiceCaptureForOCR() else {
+        guard viewModel.requireCaptureRouteAvailable(), requireIdleVoiceCaptureForOCR() else {
             selectedOCRPhotos = []
             focusComposer()
             return
@@ -2153,6 +2186,7 @@ struct QuickCaptureView: View {
     }
 
     private func importScreenshots(_ items: [PhotosPickerItem]) async {
+        guard viewModel.requireCaptureRouteAvailable() else { selectedScreenshots = []; return }
         isProcessingMedia = true
         defer {
             selectedScreenshots = []
@@ -2178,6 +2212,7 @@ struct QuickCaptureView: View {
 
     private func importFiles(_ urls: [URL]) {
         Task {
+            guard viewModel.requireCaptureRouteAvailable() else { return }
             isProcessingMedia = true
             defer {
                 isProcessingMedia = false
@@ -2204,6 +2239,7 @@ struct QuickCaptureView: View {
     }
 
     private func processScan(_ pages: [Data]) async {
+        guard viewModel.requireCaptureRouteAvailable() else { return }
         isProcessingMedia = true
         defer { isProcessingMedia = false }
         do {
@@ -2219,7 +2255,7 @@ struct QuickCaptureView: View {
     }
 
     private func processOCRScan(_ pages: [Data]) async {
-        guard requireIdleVoiceCaptureForOCR() else {
+        guard viewModel.requireCaptureRouteAvailable(), requireIdleVoiceCaptureForOCR() else {
             focusComposer()
             return
         }
@@ -2287,6 +2323,7 @@ struct QuickCaptureView: View {
         Binding(
             get: { recordingMode },
             set: { mode in
+                guard viewModel.requireCaptureRouteAvailable() else { return }
                 recordingMode = mode
                 persistedRecordingResultMode = mode.rawValue
             }
@@ -2422,12 +2459,15 @@ struct QuickCaptureView: View {
     }
 
     private func selectFlow(_ flow: CapturePreset) {
-        viewModel.selectVox(flow.id)
+        guard viewModel.selectVox(flow.id) else { return }
         selectedFlowId = flow.id
         WatchRecordingController.shared.publishState()
     }
 
     private func startInlineRecording() {
+        guard viewModel.requireCaptureRouteAvailable(),
+              selectedFlow.id == viewModel.draft.voxID,
+              CapturePresetStore.loadFlows().contains(where: { $0.id == selectedFlow.id && $0.isEnabled }) else { return }
         if usageTracker.isAtLimit {
             presentPaywall(context: .recording)
             return
@@ -2436,8 +2476,7 @@ struct QuickCaptureView: View {
             persistentRecorder.lastError = String(localized: "Enable microphone access in Settings to record audio.")
             return
         }
-        guard !persistentRecorder.isSegmentActive,
-              !isProcessingMedia else { return }
+        guard !persistentRecorder.ownsCaptureRoute else { return }
 
         lastStartedRecordingMode = recordingMode
         persistentRecorder.lastTranscriptionResult = nil
@@ -2464,7 +2503,9 @@ struct QuickCaptureView: View {
     private func handleAudioImport(_ result: Result<[URL], Error>) {
         switch result {
         case .success(let urls):
-            guard let url = urls.first else { return }
+            guard let url = urls.first, viewModel.requireCaptureRouteAvailable(),
+                  selectedFlow.id == viewModel.draft.voxID,
+                  CapturePresetStore.loadFlows().contains(where: { $0.id == selectedFlow.id && $0.isEnabled }) else { return }
             if usageTracker.isAtLimit {
                 presentPaywall(context: .recording)
                 return
@@ -2563,18 +2604,21 @@ struct QuickCaptureView: View {
 
         let requestedFlowID = AppConstants.sharedDefaults?.string(forKey: AppConstants.pendingWidgetRecordFlowIdKey)
         AppConstants.sharedDefaults?.removeObject(forKey: AppConstants.pendingWidgetRecordFlowIdKey)
-        let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: requestedFlowID)
-        if let explicitlyRequestedFlow = selection.explicitlyRequestedFlow {
-            selectFlow(explicitlyRequestedFlow)
+        Task { @MainActor in
+            await viewModel.load()
+            guard viewModel.requireCaptureRouteAvailable() else { return }
+            let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: requestedFlowID)
+            // Quick Record is an independent immediate recording, not a draft
+            // preset launch. Keep its legacy resolver/purpose without rerouting
+            // the open composer or changing keyboard preset selection.
+            lastStartedRecordingMode = .preset
+            persistentRecorder.lastTranscriptionResult = nil
+            _ = persistentRecorder.startOneShotInAppSegment(
+                flowId: selection.flowID,
+                completionMode: .runVox(flowID: selection.flowID),
+                origin: .quickRecord
+            )
         }
-
-        lastStartedRecordingMode = .preset
-        persistentRecorder.lastTranscriptionResult = nil
-        _ = persistentRecorder.startOneShotInAppSegment(
-            flowId: selection.flowID,
-            completionMode: .runVox(flowID: selection.flowID),
-            origin: .quickRecord
-        )
     }
 
     private func handleRecorderNeedsUnlock(_ needsUnlock: Bool) {

@@ -187,6 +187,12 @@ final class PersistentRecorder {
     var isSegmentActive: Bool = false
     var isTranscribing: Bool = false
     var isResolvingLocation: Bool = false
+    /// Includes import conversion/handoff before transcription flags turn on.
+    /// Observed live by the composer, including App-level external launches.
+    var ownsCaptureRoute: Bool {
+        isSegmentActive || isTranscribing || isResolvingLocation
+            || recordingQueue.isCaptureActive || recordingQueue.isProcessing
+    }
     var segmentDuration: TimeInterval = 0
     /// Backend-reported progress for the active ASR request. Preparing and
     /// unsupported backends intentionally have no exact fraction.

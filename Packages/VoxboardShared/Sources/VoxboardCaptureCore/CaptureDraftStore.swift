@@ -152,8 +152,11 @@ public struct CaptureDraft: Identifiable, Codable, Equatable, Sendable {
         relativeNotePathOverride = nil
     }
 
-    /// Selects a Capture Preset and returns routing to its owned destination.
+    /// Selecting the current preset is a true no-op, including one-off routing,
+    /// privacy journals, idempotency receipts, and timestamps. Explicit route
+    /// reset controls must use `useInheritedDestination()` separately.
     public mutating func selectVox(_ id: String) {
+        guard voxID != id else { return }
         voxID = id
         useInheritedDestination()
         placementOverride = nil

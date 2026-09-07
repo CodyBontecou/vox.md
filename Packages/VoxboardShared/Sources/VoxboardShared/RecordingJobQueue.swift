@@ -79,7 +79,9 @@ public final class RecordingJobQueue {
     private var includesIdleWork = false
     private var legacyCaptureActive = false
     private var captureLeaseIDs: Set<UUID> = []
-    private var isCaptureActive: Bool { legacyCaptureActive || !captureLeaseIDs.isEmpty }
+    /// Read-only ownership observation for native composer route guards. Import
+    /// conversion and recording handoff hold this even before ASR begins.
+    public var isCaptureActive: Bool { legacyCaptureActive || !captureLeaseIDs.isEmpty }
     private var isSystemSuspended = false
     private var needsDrainAfterCurrent = false
     private var pendingInterruption: RecordingQueueInterruption?
