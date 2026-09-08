@@ -3,14 +3,15 @@ import Observation
 import VoxboardCaptureCore
 
 /// Main-actor settings/capture integration. Uses AppConstants.sharedDefaults,
-/// never an independent standard-defaults preference. It owns no observers or
-/// widget dependencies: hosts call reload on appearance/foregrounding and after
+/// never an independent standard-defaults preference. It owns no defaults
+/// observers: hosts call reload on appearance/foregrounding and after
 /// profile or cross-process defaults changes. Widget timelines use the core
 /// read-only resolver instead of instantiating these seeding preferences.
 @MainActor
 @Observable
 public final class CapturePresetQuickAccessPreferences {
     private let defaults: UserDefaults?
+    private let widgetRefresh: CapturePresetWidgetRefresh
 
     public private(set) var state: CapturePresetQuickAccessState = .unavailable
     public private(set) var resolvedProfiles: [CapturePresetProfile] = []
@@ -22,18 +23,27 @@ public final class CapturePresetQuickAccessPreferences {
 
     /// The strict persisted-profile reader does not fabricate a default when
     /// first launch has not yet written the authoritative profile store.
-    public convenience init(defaults: UserDefaults? = AppConstants.sharedDefaults) {
+    public convenience init(
+        defaults: UserDefaults? = AppConstants.sharedDefaults,
+        widgetRefresh: CapturePresetWidgetRefresh = .live
+    ) {
         self.init(
             defaults: defaults,
-            authoritativeProfiles: CapturePresetQuickAccessStore.loadAuthoritativeProfiles(defaults: defaults)
+            authoritativeProfiles: CapturePresetQuickAccessStore.loadAuthoritativeProfiles(defaults: defaults),
+            widgetRefresh: widgetRefresh
         )
     }
 
     /// Injection path for hosts/tests with a full current profile snapshot.
     /// nil defers seeding; [] is authoritative empty. Include disabled profiles,
     /// exclude deleted/retired profiles, and never supply a fallback-only list.
-    public init(defaults: UserDefaults?, authoritativeProfiles: [CapturePresetProfile]?) {
+    public init(
+        defaults: UserDefaults?,
+        authoritativeProfiles: [CapturePresetProfile]?,
+        widgetRefresh: CapturePresetWidgetRefresh = .live
+    ) {
         self.defaults = defaults
+        self.widgetRefresh = widgetRefresh
         reload(authoritativeProfiles: authoritativeProfiles)
     }
 
@@ -45,10 +55,17 @@ public final class CapturePresetQuickAccessPreferences {
     /// Refreshes availability/identity without pruning saved order. Only an
     /// absent preference can seed; no subsequent usage changes pin ranking.
     public func reload(authoritativeProfiles: [CapturePresetProfile]?) {
+        let previous = CapturePresetQuickAccessStore.load(defaults: defaults)
         state = CapturePresetQuickAccessStore.seedIfNeeded(
             authoritativeProfiles: authoritativeProfiles,
             defaults: defaults
         )
+        if previous == .absent, let authoritativeProfiles {
+            let expected = Array(CapturePresetQuickAccessResolver.resolve(
+                orderedIDs: authoritativeProfiles.map(\.id), profiles: authoritativeProfiles
+            ).prefix(CapturePresetQuickAccessStore.initialSeedLimit).map(\.id))
+            widgetRefresh.pinsDidWrite(before: previous, after: state, succeeded: state == .stored(expected))
+        }
         updateResolvedProfiles(authoritativeProfiles)
     }
 
@@ -75,12 +92,14 @@ public final class CapturePresetQuickAccessPreferences {
         _ orderedIDs: [String],
         authoritativeProfiles: [CapturePresetProfile]?
     ) -> Bool {
+        let previous = CapturePresetQuickAccessStore.load(defaults: defaults)
         let saved = CapturePresetQuickAccessStore.save(
             orderedIDs: orderedIDs,
             authoritativeProfiles: authoritativeProfiles,
             defaults: defaults
         )
         state = CapturePresetQuickAccessStore.load(defaults: defaults)
+        widgetRefresh.pinsDidWrite(before: previous, after: state, succeeded: saved)
         updateResolvedProfiles(authoritativeProfiles)
         return saved
     }
