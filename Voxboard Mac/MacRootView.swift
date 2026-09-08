@@ -587,8 +587,13 @@ private struct MacCapturePresetSettingsView: View {
                 GeistDivider()
                 List(selection: $selectedFlowId) {
                     ForEach(flows) { flow in
-                        Label(flow.displayName, systemImage: MacFlowIconPickerView.iconName(for: flow.symbolName))
-                            .tag(flow.id)
+                        Label {
+                            Text(flow.displayName)
+                        } icon: {
+                            CapturePresetIconView(symbolName: flow.symbolName, emoji: flow.emoji)
+                        }
+                        .accessibilityLabel(flow.displayName)
+                        .tag(flow.id)
                     }
                 }
                 .listStyle(.sidebar)
@@ -684,10 +689,12 @@ private struct MacCapturePresetEditor: View {
                     HStack(spacing: 10) {
                         Text("Icon")
                         Spacer()
-                        Image(systemName: MacFlowIconPickerView.iconName(for: flow.symbolName))
+                        CapturePresetIconView(symbolName: flow.symbolName, emoji: flow.emoji)
                             .frame(width: 24)
                             .foregroundStyle(.secondary)
-                        Text(MacFlowIconPickerView.title(for: flow.symbolName))
+                        Text(CapturePresetEmoji.normalized(flow.emoji) != nil
+                             ? String(localized: "Emoji")
+                             : MacFlowIconPickerView.title(for: flow.symbolName))
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
                         Image(systemName: "chevron.right")
@@ -698,6 +705,10 @@ private struct MacCapturePresetEditor: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Icon for \(flow.displayName)")
+                .accessibilityValue(CapturePresetEmoji.normalized(flow.emoji)
+                                    ?? MacFlowIconPickerView.title(for: flow.symbolName))
+                .accessibilityIdentifier("mac_preset_icon_picker")
                 Toggle("Enabled", isOn: $flow.isEnabled)
                 if selectedCaptureVoxID == flow.id {
                     Label("Default for Capture", systemImage: "checkmark.circle.fill")
@@ -1034,8 +1045,18 @@ private struct MacCapturePresetEditor: View {
         .padding(.horizontal, 18)
         .navigationTitle(flow.displayName)
         .sheet(isPresented: $isIconPickerPresented) {
-            MacFlowIconPickerView(symbolName: $flow.symbolName)
-                .frame(minWidth: 540, minHeight: 620)
+            MacFlowIconPickerView(
+                presetName: flow.displayName,
+                symbolName: flow.symbolName,
+                emoji: flow.emoji
+            ) { symbolName, emoji in
+                // Commit the pair together through the existing settings save
+                // boundary. Typing, mode changes and Cancel never edit `flow`.
+                var updated = flow
+                updated.symbolName = symbolName
+                updated.emoji = emoji
+                flow = updated
+            }
         }
         .sheet(isPresented: $isEditingDestination) {
             MacCaptureDestinationEditor(
@@ -1342,118 +1363,257 @@ private enum MacCapturePresetDestinationError: Error, LocalizedError {
     }
 }
 
-private struct MacFlowIconPickerView: View {
-    @Binding var symbolName: String
-    @Environment(\.dismiss) private var dismiss
-    @State private var searchText = ""
+/// Sheet-local input only; saved identity is changed once, by Apply. In
+/// particular, unrecognized persisted emoji stays intact if the user cancels.
+private struct MacPresetIconDraft {
+    enum Mode: Hashable {
+        case symbols, emoji
+    }
 
-    private let columns = [GridItem(.adaptive(minimum: 88), spacing: 12)]
+    var mode: Mode
+    var symbolName: String
+    var emojiInput: String
+
+    init(symbolName: String, emoji: String?) {
+        self.symbolName = symbolName
+        emojiInput = emoji ?? ""
+        mode = emoji == nil ? .symbols : .emoji
+    }
+
+    var normalizedEmoji: String? { CapturePresetEmoji.normalized(emojiInput) }
+    var previewEmoji: String? { mode == .emoji ? normalizedEmoji : nil }
+
+    var hasInvalidEmoji: Bool {
+        mode == .emoji
+            && !emojiInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            && normalizedEmoji == nil
+    }
+
+    var selection: (symbolName: String, emoji: String?)? {
+        switch mode {
+        case .symbols:
+            return (symbolName, nil)
+        case .emoji:
+            guard let normalizedEmoji else { return nil }
+            return (symbolName, normalizedEmoji)
+        }
+    }
+
+    mutating func selectSymbol(_ name: String) {
+        symbolName = name
+        mode = .symbols
+        emojiInput = ""
+    }
+}
+
+private struct MacPresetIconPreview: View {
+    let presetName: String
+    let symbolName: String
+    let emoji: String?
 
     var body: some View {
-        VStack(spacing: 0) {
-            header
-            GeistDivider()
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 20) {
-                    selectedIconPreview
-
-                    if filteredCategories.isEmpty {
-                        Text("No matching icons")
-                            .font(Geist.body())
-                            .foregroundColor(Geist.muted)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(.top, 48)
-                    } else {
-                        ForEach(filteredCategories) { category in
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text(category.title)
-                                    .font(Geist.caption())
-                                    .foregroundColor(Geist.faint)
-
-                                LazyVGrid(columns: columns, spacing: 12) {
-                                    ForEach(category.options) { option in
-                                        iconButton(option)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                .padding(20)
-            }
-            .background(Geist.bg)
-        }
-        .background(Geist.bg)
-    }
-
-    private var header: some View {
-        HStack(spacing: 16) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Choose Icon")
-                    .font(Geist.label(.title3))
-                    .foregroundColor(Geist.text)
-                Text("Pick the symbol shown for this Capture Preset.")
-                    .font(Geist.caption())
-                    .foregroundColor(Geist.muted)
-            }
-
-            Spacer()
-
-            HStack(spacing: 8) {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(Geist.faint)
-                TextField("Search icons", text: $searchText)
-                    .textFieldStyle(.plain)
-                    .font(Geist.body(.callout))
-            }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 8)
-            .frame(width: 230)
-            .background(Geist.surface2)
-            .overlay(Rectangle().stroke(Geist.border, lineWidth: 1))
-
-            Button("Done") { dismiss() }
-                .buttonStyle(.bordered)
-        }
-        .padding(20)
-        .background(Geist.surface)
-    }
-
-    private var filteredCategories: [MacFlowIconCategory] {
-        Self.filteredCategories(matching: searchText)
-    }
-
-    private var selectedIconPreview: some View {
         HStack(spacing: 12) {
-            Image(systemName: Self.iconName(for: symbolName))
+            CapturePresetIconView(symbolName: symbolName, emoji: emoji)
                 .font(.title2)
                 .foregroundColor(Geist.text)
                 .frame(width: 48, height: 48)
                 .background(Geist.surface2)
                 .overlay(Rectangle().stroke(Geist.borderHi, lineWidth: 1))
             VStack(alignment: .leading, spacing: 3) {
-                Text("Selected Icon")
+                Text("Preview")
                     .font(Geist.caption())
                     .foregroundColor(Geist.muted)
-                Text(Self.title(for: symbolName))
+                Text(presetName)
                     .font(Geist.label())
                     .foregroundColor(Geist.text)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            Spacer()
+            Spacer(minLength: 0)
         }
         .padding(14)
         .background(Geist.surface)
         .overlay(Rectangle().stroke(Geist.border, lineWidth: 1))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Icon preview for \(presetName)")
+        .accessibilityValue(CapturePresetEmoji.normalized(emoji)
+                            ?? MacFlowIconPickerView.title(for: symbolName))
+        .accessibilityIdentifier("mac_preset_icon_preview")
+    }
+}
+
+private struct MacFlowIconPickerView: View {
+    let presetName: String
+    let onApply: (String, String?) -> Void
+    @Environment(\.dismiss) private var dismiss
+    @State private var draft: MacPresetIconDraft
+    @State private var searchText = ""
+    @FocusState private var focusedInput: MacPresetIconDraft.Mode?
+
+    private let columns = [GridItem(.adaptive(minimum: 88), spacing: 12)]
+
+    init(
+        presetName: String,
+        symbolName: String,
+        emoji: String?,
+        onApply: @escaping (String, String?) -> Void
+    ) {
+        self.presetName = presetName
+        self.onApply = onApply
+        _draft = State(initialValue: MacPresetIconDraft(symbolName: symbolName, emoji: emoji))
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            header
+            GeistDivider()
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    MacPresetIconPreview(
+                        presetName: presetName,
+                        symbolName: draft.symbolName,
+                        emoji: draft.previewEmoji
+                    )
+                    if draft.mode == .emoji {
+                        emojiEditor
+                    } else {
+                        symbolLibrary
+                    }
+                }
+                .padding(20)
+            }
+            GeistDivider()
+            footer
+        }
+        .background(Geist.bg)
+        .frame(minWidth: 540, idealWidth: 600, minHeight: 620)
+        .onAppear { focusedInput = draft.mode }
+        .onChange(of: draft.mode) { _, mode in focusedInput = mode }
+    }
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Choose Icon")
+                .font(Geist.label(.title3))
+                .foregroundColor(Geist.text)
+            Text(presetName)
+                .font(Geist.body())
+                .foregroundColor(Geist.muted)
+                .lineLimit(2)
+                .help(presetName)
+            Picker("Icon Type", selection: $draft.mode) {
+                Text("Symbols").tag(MacPresetIconDraft.Mode.symbols)
+                Text("Emoji").tag(MacPresetIconDraft.Mode.emoji)
+            }
+            .pickerStyle(.segmented)
+            .accessibilityIdentifier("mac_preset_icon_mode")
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(20)
+        .background(Geist.surface)
+    }
+
+    private var emojiEditor: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            TextField("Emoji", text: $draft.emojiInput)
+                .textFieldStyle(.roundedBorder)
+                .font(.title2)
+                .focused($focusedInput, equals: .emoji)
+                .onSubmit(applySelection)
+                .accessibilityLabel("Preset emoji")
+                .accessibilityHint("Enter one complete emoji. Use Control–Command–Space to open Character Viewer.")
+                .accessibilityIdentifier("mac_preset_emoji_input")
+
+            Text("Press Control–Command–Space while editing to open Character Viewer. Flags, skin tones, and joined emoji are supported.")
+                .font(Geist.caption())
+                .foregroundStyle(Geist.muted)
+                .fixedSize(horizontal: false, vertical: true)
+
+            if draft.hasInvalidEmoji {
+                Label("Enter one complete emoji, not multiple emoji or other text.", systemImage: "exclamationmark.triangle.fill")
+                    .font(Geist.caption())
+                    .foregroundStyle(Geist.error)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("mac_preset_emoji_error")
+            } else if draft.normalizedEmoji == nil {
+                Text("Enter an emoji to apply, or choose Symbols to use an SF Symbol.")
+                    .font(Geist.caption())
+                    .foregroundStyle(Geist.muted)
+            }
+
+            Text("Your current icon is kept until you choose Apply. The SF Symbol is retained as a fallback for surfaces that cannot show emoji.")
+                .font(Geist.caption())
+                .foregroundStyle(Geist.muted)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var symbolLibrary: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            TextField("Search icons", text: $searchText)
+                .textFieldStyle(.roundedBorder)
+                .font(Geist.body(.callout))
+                .focused($focusedInput, equals: .symbols)
+                .accessibilityIdentifier("mac_preset_symbol_search")
+
+            Text("Applying Symbols replaces the emoji with the selected SF Symbol.")
+                .font(Geist.caption())
+                .foregroundStyle(Geist.muted)
+
+            if filteredCategories.isEmpty {
+                Text("No matching icons")
+                    .font(Geist.body())
+                    .foregroundColor(Geist.muted)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.top, 24)
+            } else {
+                ForEach(filteredCategories) { category in
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text(category.title)
+                            .font(Geist.caption())
+                            .foregroundColor(Geist.muted)
+                        LazyVGrid(columns: columns, spacing: 12) {
+                            ForEach(category.options) { option in
+                                iconButton(option)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private var footer: some View {
+        HStack {
+            Button("Cancel", role: .cancel) { dismiss() }
+                .keyboardShortcut(.cancelAction)
+                .accessibilityIdentifier("mac_preset_icon_cancel")
+            Spacer()
+            Button("Apply", action: applySelection)
+                .keyboardShortcut(.defaultAction)
+                .disabled(draft.selection == nil)
+                .accessibilityIdentifier("mac_preset_icon_apply")
+        }
+        .padding(20)
+        .background(Geist.surface)
+    }
+
+    private func applySelection() {
+        guard let selection = draft.selection else { return }
+        onApply(selection.symbolName, selection.emoji)
+        dismiss()
+    }
+
+    private var filteredCategories: [MacFlowIconCategory] {
+        Self.filteredCategories(matching: searchText)
     }
 
     private func iconButton(_ option: MacFlowIconOption) -> some View {
-        let selected = option.symbolName == Self.iconName(for: symbolName)
+        let selected = option.symbolName == Self.iconName(for: draft.symbolName)
         return Button {
-            symbolName = option.symbolName
-            dismiss()
+            draft.selectSymbol(option.symbolName)
         } label: {
             VStack(spacing: 8) {
-                Image(systemName: option.symbolName)
+                CapturePresetIconView(symbolName: option.symbolName)
                     .font(.title2)
                 Text(option.title)
                     .font(Geist.caption())
@@ -1468,13 +1628,16 @@ private struct MacFlowIconPickerView: View {
             .overlay(Rectangle().stroke(selected ? Geist.text : Geist.border, lineWidth: selected ? 2 : 1))
         }
         .buttonStyle(.plain)
+        .focusable()
         .accessibilityLabel(option.title)
         .accessibilityValue(option.symbolName)
+        .accessibilityAddTraits(selected ? .isSelected : [])
+        .accessibilityIdentifier("mac_preset_symbol_\(option.symbolName)")
     }
 
     static func iconName(for symbolName: String) -> String {
         let trimmed = symbolName.trimmingCharacters(in: .whitespacesAndNewlines)
-        return trimmed.isEmpty ? "questionmark.square" : trimmed
+        return trimmed.isEmpty ? "waveform" : trimmed
     }
 
     static func title(for symbolName: String) -> String {

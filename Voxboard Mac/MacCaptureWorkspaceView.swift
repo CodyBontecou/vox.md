@@ -269,17 +269,27 @@ struct MacCaptureWorkspaceView: View {
                     Button {
                         selectFlow(flow)
                     } label: {
-                        Label(flow.displayName, systemImage: safeSymbol(flow.symbolName))
+                        Label {
+                            Text(flow.displayName)
+                        } icon: {
+                            CapturePresetIconView(symbolName: flow.symbolName, emoji: flow.emoji)
+                        }
                     }
+                    .accessibilityLabel(flow.displayName)
+                    .accessibilityAddTraits(flow.id == viewModel.draft.voxID ? .isSelected : [])
                 }
             } label: {
-                Label(selectedFlow.displayName, systemImage: safeSymbol(selectedFlow.symbolName))
-                    .font(Geist.label())
-                    .lineLimit(1)
-                    .padding(.horizontal, Geist.Spacing.three)
-                    .frame(height: Geist.ControlHeight.medium)
-                    .background(Geist.Palette.gray100)
-                    .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous))
+                Label {
+                    Text(selectedFlow.displayName)
+                } icon: {
+                    CapturePresetIconView(symbolName: selectedFlow.symbolName, emoji: selectedFlow.emoji)
+                }
+                .font(Geist.label())
+                .lineLimit(1)
+                .padding(.horizontal, Geist.Spacing.three)
+                .frame(height: Geist.ControlHeight.medium)
+                .background(Geist.Palette.gray100)
+                .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous))
             }
             .menuStyle(.borderlessButton)
             .fixedSize()
@@ -506,7 +516,7 @@ struct MacCaptureWorkspaceView: View {
     private var emptyComposerPrompt: some View {
         VStack(spacing: Geist.Spacing.three) {
             if !selectedFlow.displayCapturePrompt.isEmpty {
-                Image(systemName: safeSymbol(selectedFlow.symbolName))
+                CapturePresetIconView(symbolName: selectedFlow.symbolName, emoji: selectedFlow.emoji)
                     .font(.system(size: 26, weight: .medium))
                 Text(selectedFlow.displayCapturePrompt)
                     .font(Geist.body(.title3))
@@ -1466,10 +1476,6 @@ struct MacCaptureWorkspaceView: View {
         composerController.focus()
     }
 
-    private func safeSymbol(_ value: String) -> String {
-        value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "waveform" : value
-    }
-
     private func payloadIcon(_ payload: CapturePayload) -> String {
         switch payload {
         case .text: "text.alignleft"
@@ -1513,7 +1519,12 @@ struct MacCaptureRouteInspector: View {
                 if let preset = viewModel.selectedVoxProfile {
                     Section("Capture Preset") {
                         LabeledContent("Preset") {
-                            Label(preset.displayName, systemImage: preset.symbolName)
+                            Label {
+                                Text(preset.displayName)
+                            } icon: {
+                                CapturePresetIconView(symbolName: preset.symbolName, emoji: preset.emoji)
+                            }
+                            .accessibilityLabel(preset.displayName)
                         }
                         if let destination = viewModel.selectedPresetDestination {
                             LabeledContent("Vault / Folder", value: destination.rootName)
