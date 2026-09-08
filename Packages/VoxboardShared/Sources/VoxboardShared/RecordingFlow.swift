@@ -761,25 +761,32 @@ public enum CapturePresetStore {
 
     public static func saveFlows(
         _ flows: [CapturePreset],
-        defaults: UserDefaults? = AppConstants.sharedDefaults
+        defaults: UserDefaults? = AppConstants.sharedDefaults,
+        widgetRefresh: CapturePresetWidgetRefresh = .live
     ) {
         guard let defaults else { return }
         withPresetWriteLock(at: presetWriteLockURL) {
             saveFlowsWithoutLock(
                 preservingMigratedRouteOwnership(in: flows, defaults: defaults),
-                defaults: defaults
+                defaults: defaults,
+                widgetRefresh: widgetRefresh
             )
         }
     }
 
     fileprivate static func saveFlowsWithoutLock(
         _ flows: [CapturePreset],
-        defaults: UserDefaults
+        defaults: UserDefaults,
+        widgetRefresh: CapturePresetWidgetRefresh = .live
     ) {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
         guard let data = try? encoder.encode(flows) else { return }
+        let previous = defaults.data(forKey: flowsKey)
         defaults.set(data, forKey: flowsKey)
+        // Enqueue only after local readback and a changed widget fingerprint.
+        // The adapter never reenters this store or changes its route/write lock.
+        widgetRefresh.profilesDidWrite(before: previous, written: data, defaults: defaults)
     }
 
     private static func preservingMigratedRouteOwnership(

@@ -6,6 +6,7 @@ struct VoxboardWidgetBundle: WidgetBundle {
     var body: some Widget {
         VoxboardRecordWidget()
         VoxboardCaptureWidget()
+        CapturePresetWidget()
         if #available(iOSApplicationExtension 17.0, *) {
             VoxboardLiveActivity()
         }
