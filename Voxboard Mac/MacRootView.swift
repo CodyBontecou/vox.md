@@ -587,8 +587,13 @@ private struct MacCapturePresetSettingsView: View {
                 GeistDivider()
                 List(selection: $selectedFlowId) {
                     ForEach(flows) { flow in
-                        Label(flow.displayName, systemImage: MacFlowIconPickerView.iconName(for: flow.symbolName))
-                            .tag(flow.id)
+                        Label {
+                            Text(flow.displayName)
+                        } icon: {
+                            CapturePresetIconView(symbolName: flow.symbolName, emoji: flow.emoji)
+                        }
+                        .accessibilityLabel(flow.displayName)
+                        .tag(flow.id)
                     }
                 }
                 .listStyle(.sidebar)
@@ -684,10 +689,12 @@ private struct MacCapturePresetEditor: View {
                     HStack(spacing: 10) {
                         Text("Icon")
                         Spacer()
-                        Image(systemName: MacFlowIconPickerView.iconName(for: flow.symbolName))
+                        CapturePresetIconView(symbolName: flow.symbolName, emoji: flow.emoji)
                             .frame(width: 24)
                             .foregroundStyle(.secondary)
-                        Text(MacFlowIconPickerView.title(for: flow.symbolName))
+                        Text(CapturePresetEmoji.normalized(flow.emoji) != nil
+                             ? String(localized: "Emoji")
+                             : MacFlowIconPickerView.title(for: flow.symbolName))
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
                         Image(systemName: "chevron.right")
@@ -698,6 +705,10 @@ private struct MacCapturePresetEditor: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Icon for \(flow.displayName)")
+                .accessibilityValue(CapturePresetEmoji.normalized(flow.emoji)
+                                    ?? MacFlowIconPickerView.title(for: flow.symbolName))
+                .accessibilityIdentifier("mac_preset_icon_picker")
                 Toggle("Enabled", isOn: $flow.isEnabled)
                 if selectedCaptureVoxID == flow.id {
                     Label("Default for Capture", systemImage: "checkmark.circle.fill")
