@@ -15,7 +15,11 @@ struct CaptureRoutePickerView: View {
                 if let preset = viewModel.selectedVoxProfile {
                     Section("Capture Preset") {
                         LabeledContent("Preset") {
-                            Label(preset.displayName, systemImage: preset.symbolName)
+                            Label {
+                                Text(preset.displayName)
+                            } icon: {
+                                CapturePresetIconView(symbolName: preset.symbolName, emoji: preset.emoji)
+                            }
                         }
                         if let destination = viewModel.selectedPresetDestination {
                             LabeledContent("Vault / Folder", value: destination.rootName)
