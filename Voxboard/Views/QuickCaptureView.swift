@@ -383,7 +383,8 @@ struct QuickCaptureView: View {
                 .task(id: fileExportToast?.id) { await dismissExportToastAfterDelay() }
                 .onChange(of: scenePhase) { _, phase in handleScenePhaseChange(phase) }
                 .onChange(of: viewModel.voxProfiles) { _, _ in reloadPresetsIfDefaultsChanged() }
-                .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)) { _ in
+                .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)
+                    .receive(on: RunLoop.main)) { _ in
                     reloadPresetsIfDefaultsChanged()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: .captureInboxDecisionRequired)) { _ in
@@ -1560,10 +1561,13 @@ struct QuickCaptureView: View {
             Button {
                 selectFlow(flow)
             } label: {
-                Label {
-                    Text(flow.displayName)
-                } icon: {
-                    CapturePresetIconView(symbolName: flow.symbolName, emoji: flow.emoji)
+                // Native menu actions have a title + UIImage, not a SwiftUI
+                // Text icon slot (UIKit UIAction.h). Keep emoji in the title;
+                // symbol-only entries retain the native system-image fallback.
+                if let emoji = CapturePresetEmoji.normalized(flow.emoji) {
+                    Text(verbatim: "\(emoji) \(flow.displayName)")
+                } else {
+                    Label(flow.displayName, systemImage: flow.symbolName)
                 }
             }
             .accessibilityLabel(Text(verbatim: flow.displayName))
@@ -2422,10 +2426,13 @@ struct QuickCaptureView: View {
                 ? String(localized: "Paused audio is excluded — resume to keep recording this note")
                 : String(localized: "Composer remains available while you record")
         }
+        if persistentRecorder.isTranscribing,
+           let origin = persistentRecorder.appRecordingOriginDisplay {
+            return origin.transcribingSubtitle
+        }
         if persistentRecorder.isAppRecordingTranscribing {
-            return lastStartedRecordingMode == .draft
-                ? String(localized: "Adding transcript to this Capture")
-                : String(localized: "Running \(selectedFlow.displayName)")
+            // Missing origin is not permission to label another draft's preset.
+            return String(localized: "Transcribing")
         }
         if persistentRecorder.isListening {
             return String(localized: "Ready for the Vox.md keyboard in any app")

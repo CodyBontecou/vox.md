@@ -30,6 +30,17 @@ enum RecordingCompletionMode: Equatable, Sendable {
         return flowID
     }
 
+    /// Pure display projection; unlike delivery resolution, this must never
+    /// look up today's preset or substitute the composer's selected name.
+    func originDisplay(presetSnapshot: CapturePreset?) -> QuickCapturePresetRecordingDisplay? {
+        switch self {
+        case .keyboardTranscription: return nil
+        case .captureDraft: return .draft
+        case .runVox:
+            return .preset(id: presetSnapshot?.id, name: presetSnapshot?.displayName)
+        }
+    }
+
     var recordingJobDelivery: RecordingJobDelivery {
         switch self {
         case .keyboardTranscription:
@@ -213,6 +224,16 @@ final class PersistentRecorder {
             && transcribingCompletionMode != .keyboardTranscription
     }
 
+    /// Read-only identity for the recording that actually owns the subtitle.
+    /// Segment identity disappears on cancel/clear; transcription retains its
+    /// own origin through stop/queue handoff and drops it when processing ends.
+    var appRecordingOriginDisplay: QuickCapturePresetRecordingDisplay? {
+        if isAppRecordingSegmentActive {
+            return segmentCompletionMode?.originDisplay(presetSnapshot: segmentPresetSnapshot)
+        }
+        return isTranscribing ? transcribingOriginDisplay : nil
+    }
+
     /// Last transcription result from an in-app recording. Observable for UI display.
     var lastTranscriptionResult: String?
     var lastSpeakerDiarizationSkipReason: SpeakerDiarizationSkipReason?
@@ -253,8 +274,13 @@ final class PersistentRecorder {
     private var segmentPresetSnapshot: CapturePreset?
     private var segmentVoiceProcessingConfiguration: RecordingVoiceProcessingConfiguration?
     private var segmentOrigin: RecordingCommand.Origin?
-    private var transcribingCompletionMode: RecordingCompletionMode?
+    private var transcribingCompletionMode: RecordingCompletionMode? {
+        didSet {
+            if transcribingCompletionMode == nil { transcribingOriginDisplay = nil }
+        }
+    }
     private var transcribingCommandOrigin: RecordingCommand.Origin?
+    private var transcribingOriginDisplay: QuickCapturePresetRecordingDisplay?
     private var segmentDraftRequestID: UUID?
     /// True while the active in-app segment is paused. Paused intervals are
     /// excluded from the journal, the live transcription feed, the duration
@@ -2135,6 +2161,9 @@ final class PersistentRecorder {
         transcriptionProgress = nil
         transcribingCompletionMode = completionMode
         transcribingCommandOrigin = command.origin ?? segmentOrigin
+        // Copy the origin-time segment value, not the stop-time fallback lookup.
+        transcribingOriginDisplay = transcribingCommandOrigin == .keyboardExtension
+            ? nil : completionMode.originDisplay(presetSnapshot: segmentPresetSnapshot)
         if completionMode == .keyboardTranscription {
             processingRequestId = requestId
             progressRequestId = requestId
@@ -2782,6 +2811,10 @@ final class PersistentRecorder {
 
         isTranscribing = true
         transcribingCompletionMode = completionMode
+        // Queue deliveries (including imports/retries) already contain their
+        // immutable preset. Do not inherit a previous segment's display identity.
+        transcribingOriginDisplay = job.captureSource == .keyboard
+            ? nil : completionMode.originDisplay(presetSnapshot: flowSnapshot)
         processingRequestId = requestId
         progressRequestId = requestId
         transcriptionProgress = nil
