@@ -10,15 +10,14 @@ struct CapturePresetQuickAccessRow: View {
     let canChangeCaptureRoute: Bool
     let selectPreset: (String) -> Bool
 
-    @ScaledMetric(relativeTo: .body) private var iconSize = 22.0
-    @ScaledMetric(relativeTo: .body) private var buttonSide = 52.0
-
     var body: some View {
         if !profiles.isEmpty {
             ScrollView(.horizontal) {
                 HStack(spacing: 8) {
                     ForEach(profiles) { profile in
-                        presetButton(profile)
+                        CapturePresetQuickAccessButton(profile: profile, isSelected: selectedID == profile.id) {
+                            activatePreset(id: profile.id)
+                        }
                     }
                 }
                 .padding(.horizontal, 12)
@@ -33,11 +32,29 @@ struct CapturePresetQuickAccessRow: View {
         }
     }
 
-    private func presetButton(_ profile: CapturePresetProfile) -> some View {
-        let isSelected = selectedID == profile.id
-        return Button {
-            activatePreset(id: profile.id)
-        } label: {
+    /// The exact Button action, also usable by hosted tests without microphone
+    /// or synthetic touches. The coordinator/VM remains the authoritative guard
+    /// when a previously rendered row races a busy state or a deleted preset.
+    @discardableResult
+    func activatePreset(id: String) -> Bool {
+        guard canChangeCaptureRoute,
+              profiles.contains(where: { $0.id == id && $0.isEnabled }),
+              selectedID != id else { return false }
+        return selectPreset(id)
+    }
+}
+
+/// Nominal button shared by the row and mounted hit-target regression tests.
+struct CapturePresetQuickAccessButton: View {
+    let profile: CapturePresetProfile
+    let isSelected: Bool
+    let action: () -> Void
+
+    @ScaledMetric(relativeTo: .body) private var iconSize = 22.0
+    @ScaledMetric(relativeTo: .body) private var buttonSide = 52.0
+
+    var body: some View {
+        Button(action: action) {
             CapturePresetIconView(symbolName: profile.symbolName, emoji: profile.emoji)
                 .font(.system(size: iconSize, weight: .medium))
                 .frame(width: max(44, buttonSide), height: max(44, buttonSide))
@@ -68,14 +85,4 @@ struct CapturePresetQuickAccessRow: View {
         .accessibilityIdentifier("capture_preset_pin_\(profile.id)")
     }
 
-    /// The exact Button action, also usable by hosted tests without microphone
-    /// or synthetic touches. The coordinator/VM remains the authoritative guard
-    /// when a previously rendered row races a busy state or a deleted preset.
-    @discardableResult
-    func activatePreset(id: String) -> Bool {
-        guard canChangeCaptureRoute,
-              profiles.contains(where: { $0.id == id && $0.isEnabled }),
-              selectedID != id else { return false }
-        return selectPreset(id)
-    }
 }
