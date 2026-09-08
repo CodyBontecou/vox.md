@@ -10,40 +10,31 @@ import VoxboardShared
 /// Markdown destination.
 struct CapturePresetSettingsView: View {
     @State private var flows: [CapturePreset] = CapturePresetStore.loadFlows()
+    @State private var pins = CapturePresetSettingsPins()
     @State private var watchStatePublishTask: Task<Void, Never>?
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         List {
             introSection
+            CapturePresetSettingsPinnedSection(pins: pins)
 
             Section {
                 ForEach(persistedFlows) { $flow in
-                    NavigationLink {
-                        CapturePresetEditorView(preset: $flow)
-                    } label: {
-                        HStack(spacing: 12) {
-                            Image(systemName: flow.symbolName)
-                                .frame(width: 24)
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text(flow.displayName)
-                                Text(
-                                    flow.watchOutputMode == .recordingOnly
-                                        ? String(localized: "Recording Only (Watch)")
-                                        : flow.postProcessingMode.displayName
-                                )
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                            Spacer()
-                            if flow.id == CapturePresetProfileStore.selectedProfileID(defaults: AppConstants.sharedDefaults) {
-                                Text("Default")
-                                    .font(.caption2.monospaced().weight(.semibold))
-                                    .foregroundStyle(.secondary)
-                            } else if flow.id == CapturePresetStore.selectedFlowId() {
-                                Text("Keyboard")
-                                    .font(.caption2.monospaced().weight(.semibold))
-                                    .foregroundStyle(.secondary)
-                            }
+                    presetRowLayout {
+                        NavigationLink {
+                            CapturePresetEditorView(preset: $flow)
+                        } label: {
+                            CapturePresetSettingsListLabel(preset: flow, badge: badge(for: flow))
+                        }
+                        .accessibilityIdentifier("capture_preset_edit_\(flow.id)")
+                        CapturePresetSettingsPinButton(
+                            accessibilityID: "capture_preset_list_pin_\(flow.id)",
+                            name: flow.displayName,
+                            isPinned: pins.preferences.isPinned(id: flow.id)
+                        ) {
+                            pins.setPinned(!pins.preferences.isPinned(id: flow.id), id: flow.id)
                         }
                     }
                     .swipeActions(edge: .trailing) {
@@ -77,11 +68,16 @@ struct CapturePresetSettingsView: View {
             }
         }
         .navigationTitle("Capture Presets")
+        .toolbar { EditButton().accessibilityIdentifier("capture_preset_pins_edit") }
         .font(Geist.body())
         .tint(Color.accentColor)
         .scrollContentBackground(.hidden)
         .background(Geist.Palette.background200)
         .task { await migrateRoutesAndReload() }
+        .onAppear { pins.reload() }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { pins.reload() }
+        }
         .onDisappear {
             watchStatePublishTask?.cancel()
             WatchRecordingController.shared.publishState()
@@ -96,6 +92,9 @@ struct CapturePresetSettingsView: View {
             set: { updated in
                 flows = updated
                 CapturePresetStore.saveFlows(updated)
+                // Read the actual saved full profiles, never the list's possible
+                // loadFlows fallback, before updating pin identity/availability.
+                pins.reload()
                 if #available(iOS 18.0, *) {
                     VoxboardShortcutsProvider.updateAppShortcutParameters()
                 }
@@ -114,10 +113,28 @@ struct CapturePresetSettingsView: View {
     }
 
     private func migrateRoutesAndReload() async {
-        guard let url = AppConstants.captureLibraryURL else { return }
-        let store = CaptureLibraryStore(fileURL: url)
-        _ = try? await CapturePresetRouteLibrary.load(from: store)
+        if let url = AppConstants.captureLibraryURL {
+            let store = CaptureLibraryStore(fileURL: url)
+            _ = try? await CapturePresetRouteLibrary.load(from: store)
+        }
         flows = CapturePresetStore.loadFlows()
+        pins.reload()
+    }
+
+    private var presetRowLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+            : AnyLayout(HStackLayout(spacing: 12))
+    }
+
+    private func badge(for flow: CapturePreset) -> String? {
+        if flow.id == CapturePresetProfileStore.selectedProfileID(defaults: AppConstants.sharedDefaults) {
+            return String(localized: "Default")
+        }
+        if flow.id == CapturePresetStore.selectedFlowId() {
+            return String(localized: "Keyboard")
+        }
+        return nil
     }
 
     private var introSection: some View {
@@ -140,6 +157,7 @@ struct CapturePresetSettingsView: View {
             ownedRouteID: flow.captureDestinationID
         )
         persistedFlows.wrappedValue.removeAll { $0.id == flow.id }
+        pins.pruneAfterPersistedDeletion(id: flow.id)
         let fallbackID = flows.first?.id ?? CapturePresetStore.generalId
         if CapturePresetStore.selectedFlowId() == flow.id {
             CapturePresetStore.selectFlow(id: fallbackID)
@@ -249,25 +267,7 @@ private struct CapturePresetEditorView: View {
     private var showsFrontmatterSection: Bool { true }
 
     private var identitySection: some View {
-        Section("Identity") {
-            TextField("Name", text: $flow.name)
-            NavigationLink {
-                FlowIconPickerView(symbolName: $flow.symbolName)
-            } label: {
-                HStack {
-                    Text("Icon")
-                    Spacer()
-                    Image(systemName: FlowIconPickerView.iconName(for: flow.symbolName))
-                        .frame(width: 24)
-                        .foregroundStyle(.secondary)
-                    Text(FlowIconPickerView.title(for: flow.symbolName))
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                }
-            }
-            Toggle("Enabled", isOn: $flow.isEnabled)
-                .tint(Color.accentColor)
-        }
+        CapturePresetSettingsIdentitySection(preset: $flow)
     }
 
     private var watchOutputSection: some View {
@@ -1158,8 +1158,8 @@ private enum CapturePresetDestinationError: Error, LocalizedError {
     }
 }
 
-private struct FlowIconPickerView: View {
-    @Binding var symbolName: String
+struct FlowIconPickerView: View {
+    @Binding var preset: CapturePreset
     @Environment(\.dismiss) private var dismiss
     @State private var searchText = ""
 
@@ -1207,27 +1207,31 @@ private struct FlowIconPickerView: View {
 
     private var selectedIconPreview: some View {
         HStack(spacing: 12) {
-            Image(systemName: Self.iconName(for: symbolName))
+            CapturePresetIconView(symbolName: preset.symbolName, emoji: preset.emoji)
                 .font(.title2)
-                .frame(width: 44, height: 44)
+                .frame(minWidth: 44, minHeight: 44)
                 .background(RoundedRectangle(cornerRadius: 12).fill(Color.secondary.opacity(0.14)))
             VStack(alignment: .leading, spacing: 3) {
                 Text("Selected Icon")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Text(Self.title(for: symbolName))
+                Text(preset.displayName)
                     .font(.body.weight(.semibold))
             }
             Spacer()
         }
         .padding(12)
         .background(RoundedRectangle(cornerRadius: 16).fill(Color.secondary.opacity(0.10)))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(preset.displayName)
+        .accessibilityValue(Text("Selected Icon"))
+        .accessibilityIdentifier("capture_preset_symbol_preview")
     }
 
     private func iconButton(_ option: FlowIconOption) -> some View {
-        let selected = option.symbolName == Self.iconName(for: symbolName)
+        let selected = preset.emoji == nil && option.symbolName == Self.iconName(for: preset.symbolName)
         return Button {
-            symbolName = option.symbolName
+            preset = CapturePresetEmojiEditorInput.selectingSymbol(option.symbolName, for: preset)
             dismiss()
         } label: {
             VStack(spacing: 8) {
@@ -1254,11 +1258,13 @@ private struct FlowIconPickerView: View {
         .buttonStyle(.plain)
         .accessibilityLabel(option.title)
         .accessibilityValue(option.symbolName)
+        .accessibilityAddTraits(selected ? .isSelected : [])
+        .accessibilityIdentifier("capture_preset_symbol_\(option.symbolName)")
     }
 
     static func iconName(for symbolName: String) -> String {
         let trimmed = symbolName.trimmingCharacters(in: .whitespacesAndNewlines)
-        return trimmed.isEmpty ? "questionmark.square" : trimmed
+        return trimmed.isEmpty ? "waveform" : trimmed
     }
 
     static func title(for symbolName: String) -> String {
