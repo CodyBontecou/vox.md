@@ -1,11 +1,12 @@
 # Preset quick access — implementation and validation
 
-## Status (September 7, 2026)
+## Status (September 8, 2026)
 
-**Foundation implemented and locally verified; user-facing quick access is not complete.**
-The remaining work is the iOS/Mac emoji editors and display adoption, pin/reorder
-settings, iOS capture row, and dedicated configurable preset widget. Existing
-Quick Capture and Quick Record widgets retain their purposes.
+**Bounded implementation complete and locally verified; hardware/pre-ship QA is not complete.**
+iOS/Mac emoji editors and display adoption, iOS pin/reorder settings, the pinned
+capture row, and a dedicated configurable Capture Presets widget are integrated.
+Existing Quick Capture and Quick Record widgets retain their purposes. The preset
+fleet stops after cycle 2; unrelated Siri and task-spacing work are separate.
 
 ### Identity
 
@@ -69,10 +70,10 @@ remain one tap. Stale explicit presets do not silently select another preset;
 busy launches are rejected rather than queued to reroute later.
 
 The legacy immediate Quick Record path still uses its existing independent
-immutable recording route, but no longer changes the composer draft. Its iOS
-transcribing subtitle still derives its name from the draft preset; the capture
-UI follow-up should display the recording origin's name without rerouting the
-draft to fix the label.
+immutable recording route, but no longer changes the composer draft. Cycle 2
+corrects the iOS transcribing subtitle using the recording's immutable origin
+identity, retained across stop/queue handoff and cleared with transcription state.
+Unknown origin uses generic copy, never the current draft's preset name.
 
 ## Cycle 1 verification
 
@@ -113,16 +114,119 @@ unrelated accessory-tool modals. Failed attempts remain in the local receipts.
 
 ### Evidence limits and pre-ship gates
 
-Hosted tests mount real SwiftUI canvas/toast/OCR/mic-hint hierarchies; the emoji
-lane also ran real offscreen Mac raster comparisons. This is not full-app
-interaction, widget-host configuration/refresh, real VoiceOver, or a demonstration
-of cursor/keyboard preservation when tapping the forthcoming row. New consent
-alert interaction across iOS/Mac windows still needs UI validation. Argent device
-interaction tools were unavailable in this session; no interactive visual pass
-is claimed. Remaining UI lanes must add their own mounted rendering and
-keyboard-sized/large-text/RTL evidence and report tool limitations honestly.
+Cycle 1 hosted tests mount real SwiftUI canvas/toast/OCR/mic-hint hierarchies;
+the emoji lane also ran real offscreen Mac raster comparisons. Those foundation
+results alone did not exercise the new UI, system touches, or consent alerts.
+Cycle 2 component/runtime evidence below adds to, rather than replaces, those
+limits. Argent device interaction tools remained unavailable.
 
 **Physical-device cold-launch and recording/keyboard/widget QA remain required
 before shipping and were not authorized or run by this fleet.** Simulator tests
 do not prove the device-only SwiftUI metadata boundary is safe. See
 [capture-view-regression-tests.md](capture-view-regression-tests.md).
+
+## Cycle 2 surfaces
+
+- **iOS Settings → Capture Presets:** visible Pin/Unpin buttons and native Edit /
+  draggable pinned order. Disabled pins remain editable with a hidden-until-enabled
+  label. Writes read full persisted profiles; stale reorder offsets and failed
+  persistence are refused visibly. Confirmed deletion deliberately prunes retired
+  pins. Pinning never changes enabled/default/keyboard selection.
+- **Symbols / Emoji:** native text input, preview and explicit Apply; invalid or
+  partially composed input never truncates or overwrites the saved choice.
+  Symbols explicitly clears emoji, retaining the symbol fallback. Mac's sheet
+  stages both values until Apply; Cancel leaves the preset untouched.
+- **Capture Bar:** stored-order icon buttons above the existing preset/route/send
+  controls, horizontal overflow without a pin cap, no empty strip, and >=44pt
+  targets. Selected traits use the exact draft ID. Selection calls the existing
+  guarded VM API, without replacing/refocusing the Markdown editor. iOS native
+  menu titles include emoji because UIKit menu image slots cannot render Text.
+- **Capture Presets widget:** AppIntentConfiguration, default Follow Capture Bar
+  or six explicit ordered Custom slots per instance. The SDK exposes entity
+  arrays but no guaranteed reorder editor, so named positions make order explicit.
+  Small uses the first position; medium shows up to six and large up to eight
+  Follow pins (Custom has six). Empty interior slots and unavailable targets never
+  borrow the next preset. Query results reconstruct requested identifier order.
+- **Widget snapshots:** immutable configuration/identity values, fixed slot/preset
+  IDs, URLComponents-built `voxboard://capture?preset=<id>&source=widget` links.
+  No global selection lookup in rendering, auto-send, or surprise recording.
+  Setup/Fix states retain the expected stale ID or offer app/settings guidance.
+  Successful changed name/icon/availability/profile-order or pin/seed writes
+  request only `VoxboardCapturePresetsWidget`, debounced 250ms. A 15-minute
+  recovery timeline is requested; actual scheduling belongs to WidgetKit.
+- **Fixed-size accessibility layout:** large-type medium widgets keep all six
+  positions using icons/Fix labels; large keeps readable native-scaled names;
+  small uses concise text and a Settings glyph. No font squeezing or target
+  reassignment. Names/repair instructions remain in accessibility when text is
+  intentionally ellipsized. New copy is localization-ready English; translation
+  and language-specific UI review were not part of this bounded fleet.
+
+## Cycle 2 verification
+
+Four isolated lanes were collected and merged serially without conflicts. No
+coordinator repository edits occurred while lanes ran. Unrelated task-spacing
+edits on main were left untouched until their owner committed `0cb4537`; that
+clean descendant became the integration base. Its four files remain unchanged
+by this fleet. No fleet fetch/push, dependency-pin, signing/provisioning, release,
+account, physical-device, or Watch transport action was performed.
+
+| Gate | Actual result |
+| --- | --- |
+| Project contracts | Exit 0; 10 launch-script tests, 95 contract tests; 187 governed files/98 fixtures, 271 capability records unchanged |
+| Capture structure | Exit 0; 14 parser fixtures and actual concrete sections, unchanged 600-token budget |
+| Normal shared package suite, locked cached dependencies, `-j 2` | Exit 0; **895 tests** (18 widget tests added here; 24 independent task-spacing tests retained) |
+| Persistence executable `--validate` | Exit 0; no fixture regeneration |
+| Unsigned full `VoxboardTests` on a new dedicated iOS simulator | Exit 0; **209 tests**, including all 33 new cycle-2 methods and existing launch-safety tests; app/widget/embedded Watch targets compiled |
+| Unsigned `Voxboard Mac` build | Exit 0 |
+| Dedicated Watch codec suite | Exit 0; **15 tests** |
+
+Exact command arrays, source HEAD/clean status, exits, logs and result bundles
+live under `/tmp/vox-md-presets-fleet-loop/cycle-2/`. `matrix.py` runs the normal
+matrix, serially using the existing main caches without copying build trees;
+`integrated-fixed-*` records the successful post-fix host checks. `final-*`
+receipts/result bundles record the full repeat from the final documentation HEAD.
+All Xcode builds disable signing and automatic package resolution. Disk remained
+sufficient; no unrelated caches, processes or simulators were removed/stopped.
+
+### Failures investigated and retained
+
+The initial iOS compile found a missing Combine import for main-RunLoop defaults
+delivery. The next full hosted run caught a real small-widget setup overflow at
+accessibility5; replacing the extra Settings text line with a Settings glyph
+preserves native text size and the viewport. Tests also incorrectly inferred
+rows from equal cell top edges (LazyVGrid centers unequal-height cells), and
+compared a busy-action draft while a prior successful switch's autosave advanced
+its timestamp. The revised assertions use explicit row positions and drain that
+prior autosave; all containment, order, full draft-equality and cursor/focus
+checks remain. No fixtures or frozen/source contracts were weakened.
+
+Failed logs and bundles are retained. Xcode additionally timed out collecting
+verbose simulator diagnostics after 600 seconds; subsequent tests use the
+supported `-collect-test-diagnostics never`. This disables sysdiagnose collection,
+not tests, failure reporting, logs or retained XCTest image attachments.
+
+### Runtime evidence versus manual gates
+
+- Hosted tests execute actual native emoji field events, settings actions with
+  real isolated preferences, and mounted Symbols/Emoji/pinned-section variants.
+- Actual row/canvas/Markdown UITextView mounts preserve UIView identity, selected
+  range, first responder, text and attachments across a callback-driven switch,
+  same-ID no-op and busy rejection. Before/after images were inspected. Other
+  mounts cover keyboard-sized space, dark mode, RTL, overflow and >=44pt targets.
+  **This is not a real tap or an on-screen system keyboard interaction pass.**
+- Widget tests mount **78 iOS variants** through accessibility5, checking actual
+  label/glyph/tile containment and fixed-position reading order. Inspected failed
+  and corrected images corroborate the small-widget fix. Mac lane additionally
+  executed 100 offscreen actual-source editor/native-control assertions; widget
+  lane rendered 72 offscreen Mac variants. Neither is a full-app/widget-host pass.
+- Argent list-devices and screenshot-diff tools were unavailable. Saved XCTest /
+  offscreen images were inspected, not falsely reported as an automated Argent
+  visual diff, real VoiceOver run or hardware result.
+
+Before shipping, explicitly authorize/run the physical-device cold-launch gate
+and recording/keyboard/widget QA. Also check full-app pin taps while typing,
+actual native drag/reopen persistence, emoji keyboard/Character Viewer marked
+text, VoiceOver names/selected traits, native menu emoji, widget configuration /
+slot clearing / refresh timing, stale links and the iOS/Mac conflicting-draft
+consent alerts. These manual gates remain open; they are not additional fleet
+feature lanes or grounds to manufacture a third cycle.
