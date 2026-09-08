@@ -103,6 +103,10 @@ public struct MarkdownDocumentEditor: Sendable {
         }
 
         var documentParts = splitLeadingFrontmatter(normalizedDocument)
+        // Keep a compact task/frontmatter boundary compact on later appends,
+        // without changing the header spacing of an existing loose list.
+        let preservesCompactTaskStart = documentParts.frontmatter != nil
+            && taskListMarker(in: firstLine(of: documentParts.body)) != nil
         if let location = mutation.locationMetadata,
            try validatedLocationCollectionContains(location, in: documentParts.frontmatter) {
             return normalizedDocument
@@ -133,12 +137,9 @@ public struct MarkdownDocumentEditor: Sendable {
         }
 
         let wrappedEntry = trimBoundaryNewlines(wrappedParts.body)
-        let captureBlock: String
-        if mutation.retryProtectionEnabled {
-            captureBlock = wrappedEntry.isEmpty ? marker : wrappedEntry + "\n\n" + marker
-        } else {
-            captureBlock = wrappedEntry
-        }
+        let captureBlock = mutation.retryProtectionEnabled
+            ? addingRetryMarker(marker, to: wrappedEntry)
+            : wrappedEntry
 
         let editedBody: String
         switch mutation.placement {
@@ -157,7 +158,14 @@ public struct MarkdownDocumentEditor: Sendable {
 
         return CaptureMarkdownWritePolicy.applyingFinalNewline(
             mutation.finalNewline,
-            to: assemble(frontmatter: documentParts.frontmatter, body: editedBody)
+            to: assemble(
+                frontmatter: documentParts.frontmatter,
+                body: editedBody,
+                compactTaskStart: (mutation.placement == .prepend
+                    && taskListMarker(in: firstLine(of: captureBlock)) != nil)
+                    || documentParts.body.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    || preservesCompactTaskStart
+            )
         )
     }
 
@@ -507,20 +515,123 @@ public struct MarkdownDocumentEditor: Sendable {
         return values.filter { seen.insert($0).inserted }
     }
 
-    private func assemble(frontmatter: [String]?, body: String) -> String {
+    private func assemble(frontmatter: [String]?, body: String, compactTaskStart: Bool) -> String {
         let trimmedBody = trimBoundaryNewlines(body)
         guard let frontmatter else { return trimmedBody }
         let block = "---\n" + frontmatter.joined(separator: "\n") + "\n---"
+        let separator = compactTaskStart && taskListMarker(in: firstLine(of: trimmedBody)) != nil
+            ? "\n" : "\n\n"
         return trimmedBody.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             ? block
-            : block + "\n\n" + trimmedBody
+            : block + separator + trimmedBody
     }
 
     private func joinBlocks(_ blocks: [String]) -> String {
-        blocks
+        let nonEmpty = blocks
             .map(trimBoundaryNewlines)
             .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
-            .joined(separator: "\n\n")
+        guard let first = nonEmpty.first else { return "" }
+        var joined = first
+        for (before, after) in zip(nonEmpty, nonEmpty.dropFirst()) {
+            joined += blockSeparator(between: before, and: after) + after
+        }
+        return joined
+    }
+
+    /// A paragraph separator makes a tight checklist loose. Only change the
+    /// insertion seam; blank lines inside either user-owned block stay intact.
+    private func blockSeparator(between before: String, and after: String) -> String {
+        guard let nextTask = taskListMarker(in: firstLine(of: after)),
+              let previousLine = lastMarkdownLine(in: before) else { return "\n\n" }
+        let headingIndent = previousLine.prefix { $0 == " " }.count
+        let isHeading = headingIndent <= 3 && previousLine.dropFirst(headingIndent).first == "#"
+            && atxHeading(in: previousLine) != nil
+        if taskListMarker(in: previousLine) == nextTask || isHeading {
+            return "\n"
+        }
+        return "\n\n"
+    }
+
+    private func addingRetryMarker(_ marker: String, to entry: String) -> String {
+        guard !entry.isEmpty else { return marker }
+        guard let lastLine = lastMarkdownLine(in: entry), taskListMarker(in: lastLine) != nil else {
+            return entry + "\n\n" + marker
+        }
+        // A standalone HTML block splits a Markdown list even without blank
+        // lines. An inline comment keeps the list tight and the exact marker
+        // remains detectable by all existing retry readers. Preserve hard breaks.
+        let trailingSpaceCount = entry.reversed().prefix { $0 == " " || $0 == "\t" }.count
+        return String(entry.dropLast(trailingSpaceCount)) + " " + marker
+            + String(entry.suffix(trailingSpaceCount))
+    }
+
+    private struct TaskListMarker: Equatable {
+        var indentation: Int
+        var bullet: Character
+    }
+
+    private func taskListMarker(in line: String) -> TaskListMarker? {
+        let indentation = line.prefix { $0 == " " }.count
+        guard indentation <= 3 else { return nil } // Four spaces is indented code.
+        let unindented = line.dropFirst(indentation)
+        guard let bullet = unindented.first, "-*+".contains(bullet) else { return nil }
+        let afterBullet = unindented.dropFirst()
+        guard afterBullet.first == " " || afterBullet.first == "\t" else { return nil }
+        let padding = afterBullet.prefix { $0 == " " || $0 == "\t" }
+        var contentColumn = indentation + 1
+        for character in padding {
+            contentColumn += character == "\t" ? 4 - contentColumn % 4 : 1
+        }
+        // Five or more columns after a bullet starts an indented code block,
+        // not a checkbox. Tabs advance to Markdown's four-column tab stops.
+        guard contentColumn - indentation - 1 <= 4 else { return nil }
+        let checkbox = afterBullet.dropFirst(padding.count)
+        guard ["[ ]", "[x]", "[X]"].contains(String(checkbox.prefix(3))) else { return nil }
+        let afterCheckbox = checkbox.dropFirst(3)
+        guard afterCheckbox.isEmpty || afterCheckbox.first == " " || afterCheckbox.first == "\t" else {
+            return nil
+        }
+        return TaskListMarker(indentation: indentation, bullet: bullet)
+    }
+
+    private func firstLine(of markdown: String) -> String {
+        String(markdown.prefix { $0 != "\n" })
+    }
+
+    /// Be conservative about task-looking examples: never compact a seam in
+    /// an open code fence or HTML comment, or attempt to parse raw HTML blocks.
+    private func lastMarkdownLine(in markdown: String) -> String? {
+        var fence: Fence?
+        var inComment = false
+        var lastLine: String?
+        for line in markdown.components(separatedBy: "\n") {
+            if let current = fence {
+                if let delimiter = fenceDelimiter(in: line),
+                   delimiter.character == current.character, delimiter.count >= current.count,
+                   line.trimmingCharacters(in: .whitespaces).dropFirst(delimiter.count)
+                    .trimmingCharacters(in: .whitespaces).isEmpty {
+                    fence = nil
+                }
+                lastLine = nil
+                continue
+            }
+            if !inComment, let delimiter = fenceDelimiter(in: line) {
+                fence = delimiter
+                lastLine = nil
+                continue
+            }
+            if !inComment {
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
+                if trimmed.hasPrefix("<"), !trimmed.hasPrefix("<!--") { return nil }
+            }
+            var cursor = line.startIndex
+            while let delimiter = line.range(of: inComment ? "-->" : "<!--", range: cursor..<line.endIndex) {
+                inComment.toggle()
+                cursor = delimiter.upperBound
+            }
+            lastLine = inComment ? nil : line
+        }
+        return lastLine
     }
 
     private func trimBoundaryNewlines(_ value: String) -> String {
