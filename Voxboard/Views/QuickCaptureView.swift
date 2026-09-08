@@ -125,6 +125,9 @@ struct QuickCaptureView: View {
     @State private var fileExportToast: FileExportToast?
     @State private var flows: [CapturePreset] = CapturePresetStore.loadFlows()
     @State private var selectedFlowId: String = CapturePresetStore.selectedFlowId()
+    @State private var quickAccessPreferences = CapturePresetQuickAccessPreferences()
+    @State private var observedPresetData: Data?
+    @State private var observedPinState: CapturePresetQuickAccessState = .unavailable
     @State private var linkText = ""
     private var isProcessingMedia: Bool {
         get { viewModel.isProcessingMedia }
@@ -379,6 +382,11 @@ struct QuickCaptureView: View {
             recordingLifecycleContent
                 .task(id: fileExportToast?.id) { await dismissExportToastAfterDelay() }
                 .onChange(of: scenePhase) { _, phase in handleScenePhaseChange(phase) }
+                .onChange(of: viewModel.voxProfiles) { _, _ in reloadPresetsIfDefaultsChanged() }
+                .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)
+                    .receive(on: RunLoop.main)) { _ in
+                    reloadPresetsIfDefaultsChanged()
+                }
                 .onReceive(NotificationCenter.default.publisher(for: .captureInboxDecisionRequired)) { _ in
                     Task { await viewModel.processPendingInbox() }
                 }
@@ -934,10 +942,14 @@ struct QuickCaptureView: View {
             HStack(spacing: Geist.Spacing.three) {
                 Menu {
                     ForEach(enabledFlows) { flow in
-                        Button(flow.displayName) { selectFlow(flow) }
+                        presetMenuButton(flow)
                     }
                 } label: {
-                    Label(selectedFlow.displayName, systemImage: selectedFlow.symbolName)
+                    Label {
+                        Text(selectedFlow.displayName)
+                    } icon: {
+                        CapturePresetIconView(symbolName: selectedFlow.symbolName, emoji: selectedFlow.emoji)
+                    }
                         .font(Geist.label())
                         .lineLimit(1)
                         .padding(.horizontal, Geist.Spacing.three)
@@ -1240,6 +1252,7 @@ struct QuickCaptureView: View {
                     locationPresetStatusBar
                     GeistDivider()
                 }
+                pinnedPresetRow
                 routeSelectionRow
                 entryLocationTokenHintSection
                 GeistDivider()
@@ -1306,7 +1319,7 @@ struct QuickCaptureView: View {
         CaptureViewSection {
             VStack(spacing: Geist.Spacing.three) {
                 if let prompt = activeCapturePrompt {
-                    Image(systemName: selectedFlow.symbolName)
+                    CapturePresetIconView(symbolName: selectedFlow.symbolName, emoji: selectedFlow.emoji)
                         .font(.system(size: 24, weight: .medium))
                         .foregroundStyle(Geist.faint)
                     Text(prompt)
@@ -1529,20 +1542,49 @@ struct QuickCaptureView: View {
         }
     }
 
+    private var pinnedPresetRow: CaptureViewSection {
+        CaptureViewSection {
+            CapturePresetQuickAccessRow(
+                profiles: quickAccessPreferences.resolvedProfiles,
+                selectedID: viewModel.draft.voxID,
+                canChangeCaptureRoute: viewModel.canChangeCaptureRoute,
+                selectPreset: { id in
+                    guard let flow = flows.first(where: { $0.id == id }) else { return false }
+                    return selectFlow(flow)
+                }
+            )
+        }
+    }
+
+    private func presetMenuButton(_ flow: CapturePreset) -> CaptureViewSection {
+        CaptureViewSection {
+            Button {
+                selectFlow(flow)
+            } label: {
+                // Native menu actions have a title + UIImage, not a SwiftUI
+                // Text icon slot (UIKit UIAction.h). Keep emoji in the title;
+                // symbol-only entries retain the native system-image fallback.
+                if let emoji = CapturePresetEmoji.normalized(flow.emoji) {
+                    Text(verbatim: "\(emoji) \(flow.displayName)")
+                } else {
+                    Label(flow.displayName, systemImage: flow.symbolName)
+                }
+            }
+            .accessibilityLabel(Text(verbatim: flow.displayName))
+            .accessibilityAddTraits(viewModel.draft.voxID == flow.id ? .isSelected : [])
+        }
+    }
+
     private var routeSelectionRow: CaptureViewSection {
         CaptureViewSection {
             HStack(spacing: 8) {
                 Menu {
                     ForEach(enabledFlows) { flow in
-                        Button {
-                            selectFlow(flow)
-                        } label: {
-                            Label(flow.displayName, systemImage: flow.symbolName)
-                        }
+                        presetMenuButton(flow)
                     }
                 } label: {
                     HStack(spacing: 6) {
-                        Image(systemName: selectedFlow.symbolName)
+                        CapturePresetIconView(symbolName: selectedFlow.symbolName, emoji: selectedFlow.emoji)
                         Text(selectedFlow.displayName)
                             .lineLimit(1)
                         Image(systemName: "chevron.up.chevron.down")
@@ -1550,6 +1592,7 @@ struct QuickCaptureView: View {
                     }
                 }
                 .accessibilityLabel("Capture Preset \(selectedFlow.displayName)")
+                .accessibilityHint("Show all Capture Presets")
                 .accessibilityIdentifier("capture_vox_selector")
                 .disabled(!viewModel.canChangeCaptureRoute)
 
@@ -1898,6 +1941,7 @@ struct QuickCaptureView: View {
     }
 
     private func handleScenePhaseChange(_ phase: ScenePhase) {
+        if phase == .active { reloadFlows() }
         // Permission prompts make the scene temporarily inactive. Keep explicit
         // one-shot requests alive until the app actually backgrounds.
         guard phase == .background else { return }
@@ -2382,10 +2426,13 @@ struct QuickCaptureView: View {
                 ? String(localized: "Paused audio is excluded — resume to keep recording this note")
                 : String(localized: "Composer remains available while you record")
         }
+        if persistentRecorder.isTranscribing,
+           let origin = persistentRecorder.appRecordingOriginDisplay {
+            return origin.transcribingSubtitle
+        }
         if persistentRecorder.isAppRecordingTranscribing {
-            return lastStartedRecordingMode == .draft
-                ? String(localized: "Adding transcript to this Capture")
-                : String(localized: "Running \(selectedFlow.displayName)")
+            // Missing origin is not permission to label another draft's preset.
+            return String(localized: "Transcribing")
         }
         if persistentRecorder.isListening {
             return String(localized: "Ready for the Vox.md keyboard in any app")
@@ -2449,8 +2496,20 @@ struct QuickCaptureView: View {
         )
     }
 
+    private func reloadPresetsIfDefaultsChanged() {
+        let defaults = AppConstants.sharedDefaults
+        // Ignore unrelated defaults (including draft autosaves). Compare before
+        // calling store APIs so seeding/migrations cannot form an observer loop.
+        guard defaults?.data(forKey: CapturePresetProfileStore.profilesKey) != observedPresetData
+            || CapturePresetQuickAccessStore.load(defaults: defaults) != observedPinState else { return }
+        reloadFlows()
+    }
+
     private func reloadFlows() {
         flows = CapturePresetStore.loadFlows()
+        quickAccessPreferences.reload()
+        observedPresetData = AppConstants.sharedDefaults?.data(forKey: CapturePresetProfileStore.profilesKey)
+        observedPinState = quickAccessPreferences.state
         viewModel.refreshVoxProfiles()
         let draftVoxID = viewModel.draft.voxID
         selectedFlowId = flows.contains(where: { $0.id == draftVoxID && $0.isEnabled })
@@ -2458,10 +2517,12 @@ struct QuickCaptureView: View {
             : (viewModel.selectedVoxProfile?.id ?? CapturePresetStore.selectedFlowId())
     }
 
-    private func selectFlow(_ flow: CapturePreset) {
-        guard viewModel.selectVox(flow.id) else { return }
+    @discardableResult
+    private func selectFlow(_ flow: CapturePreset) -> Bool {
+        guard viewModel.selectVox(flow.id) else { return false }
         selectedFlowId = flow.id
         WatchRecordingController.shared.publishState()
+        return true
     }
 
     private func startInlineRecording() {
