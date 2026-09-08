@@ -2,8 +2,6 @@ import SwiftUI
 import VoxboardShared
 import WidgetKit
 
-/// Presentation receives only timeline values. No store/defaults reads, routing
-/// mutation, or globally selected preset participates in a rendered tile.
 struct CapturePresetWidgetEntryView: View {
     @Environment(\.widgetFamily) private var family
     let snapshot: CapturePresetWidgetSnapshot
@@ -13,11 +11,15 @@ struct CapturePresetWidgetEntryView: View {
     }
 }
 
-/// Explicit family input also permits real offscreen/hosted rendering without
-/// trying to override WidgetKit's read-only widgetFamily environment value.
+/// Values only. Explicit family permits hosted tests without overriding
+/// WidgetKit's read-only environment. Large type changes presentation, never
+/// the count, position or expected ID of custom slots.
 struct CapturePresetWidgetView: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     let snapshot: CapturePresetWidgetSnapshot
     let family: WidgetFamily
+
+    private var compactText: Bool { dynamicTypeSize >= .xxxLarge }
 
     static var setupURL: URL {
         var components = URLComponents()
@@ -28,64 +30,91 @@ struct CapturePresetWidgetView: View {
     }
 
     var body: some View {
-        if snapshot.tiles.isEmpty {
-            setup
-        } else if family == .systemSmall {
-            small
-        } else {
-            grid
-        }
+        content
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .coordinateSpace(name: CapturePresetWidgetBounds.coordinateSpace)
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if snapshot.tiles.isEmpty { setup }
+        else if family == .systemSmall { small }
+        else { grid }
     }
 
     private var small: some View {
-        // First means first, even when Custom's first slot is empty or stale.
         let tile = snapshot.tiles[0]
+        let available = tile.availability == .available && tile.captureURL != nil
         return Link(destination: tile.captureURL ?? Self.setupURL) {
-            VStack(alignment: .leading, spacing: 6) {
-                icon(tile)
-                    .font(.largeTitle)
-                Spacer(minLength: 0)
-                Text(tileTitle(tile))
-                    .font(.headline)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.75)
-                Text(tile.availability == .available && tile.captureURL != nil ? "Open Capture" : "Unavailable — edit widget or open Settings > Capture Presets")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(3)
-                    .minimumScaleFactor(0.7)
+            VStack(alignment: .leading, spacing: 8) {
+                if compactText && !available {
+                    // Fixed-family space cannot fit an icon, name and verbose
+                    // repair copy at large type. Keep a legible explicit fix,
+                    // with the exact name/repair instructions in accessibility.
+                    Text("Fix preset")
+                        .font(.headline)
+                        .lineLimit(1)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .presetWidgetBounds("small-fix")
+                    Text("Edit widget")
+                        .font(.caption2)
+                        .lineLimit(1)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .presetWidgetBounds("small-guidance")
+                } else {
+                    CapturePresetIconView(symbolName: tile.identity?.symbolName ?? "questionmark.square.dashed", emoji: tile.identity?.emoji)
+                        .font(.system(size: 32)) // Decorative glyph, not squeezed text.
+                        .widgetAccentable()
+                        .presetWidgetBounds("small-icon")
+                    if !compactText { Spacer(minLength: 0) }
+                    Text(tileTitle(tile))
+                        .font(.headline)
+                        .lineLimit(compactText ? 1 : 2)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .presetWidgetBounds("small-name")
+                    if !compactText {
+                        Text(available ? "Open Capture" : "Fix in Settings")
+                            .font(.caption2)
+                            .lineLimit(1)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .presetWidgetBounds("small-status")
+                    }
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         }
         .widgetURL(tile.captureURL ?? Self.setupURL)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(accessibilityTitle(tile))
-        .accessibilityHint("Opens Vox.md. Does not send or record.")
+        .accessibilityLabel(available ? tileTitle(tile) : String(localized: "\(tileTitle(tile)), unavailable"))
+        .accessibilityHint(available
+            ? "Opens Vox.md. Does not send or record."
+            : "Edit this widget, or open Vox.md, then Settings > Capture Presets.")
     }
 
     private var grid: some View {
         let large = family == .systemLarge
         let tiles = Array(snapshot.tiles.prefix(large ? 8 : 6))
         return VStack(alignment: .leading, spacing: 6) {
-            Link(destination: Self.setupURL) {
-                HStack {
-                    Text("Capture Presets").font(.caption.bold())
-                    Spacer(minLength: 0)
-                    Image(systemName: "arrow.up.right").font(.caption2)
+            // Medium remains a six-position grid at large type. No growing
+            // header/footer competes with its two rows; each fix is in its slot.
+            if large || !compactText {
+                Link(destination: Self.setupURL) {
+                    HStack {
+                        Text("Capture Presets")
+                            .font(.caption.bold())
+                            .lineLimit(1)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Spacer(minLength: 0)
+                        Image(systemName: "arrow.up.right").font(.system(size: 12))
+                    }
+                    .presetWidgetBounds("header")
                 }
+                .accessibilityHint("Open Vox.md, then Settings > Capture Presets to manage the Capture Bar.")
             }
-            .accessibilityHint("Open Vox.md, then Settings > Capture Presets to manage the Capture Bar.")
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: large ? 2 : 3), spacing: 6) {
                 ForEach(tiles) { tile in
-                    CapturePresetWidgetTileView(tile: tile, showsMoreName: large)
+                    CapturePresetWidgetTileView(tile: tile, large: large, compactText: compactText)
                 }
-            }
-            if snapshot.tiles.contains(where: { $0.availability != .available || $0.captureURL == nil }) {
-                Text("Unavailable? Edit widget or open Settings > Capture Presets.")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.7)
             }
             if large { Spacer(minLength: 0) }
         }
@@ -93,42 +122,54 @@ struct CapturePresetWidgetView: View {
 
     private var setup: some View {
         Link(destination: Self.setupURL) {
-            VStack(alignment: .leading, spacing: 8) {
-                Image(systemName: "pin")
-                    .font(.title2)
-                    .widgetAccentable()
-                Text(snapshot.emptyState == .emptyCaptureBar ? "No pinned presets" : "Set up Capture Presets")
-                    .font(.headline)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.75)
-                Text("Open Vox.md → Settings > Capture Presets. Pin presets, or edit this widget to choose Custom.")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .minimumScaleFactor(0.7)
+            VStack(alignment: .leading, spacing: 6) {
+                if compactText {
+                    // Retain the actual Settings path, without shrinking text
+                    // to cram a heading/icon/paragraph into a small widget.
+                    Text("Settings")
+                        .font(.caption2)
+                        .lineLimit(1)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .presetWidgetBounds("setup-settings")
+                    Text("Capture Presets")
+                        .font(.caption2)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .presetWidgetBounds("setup-presets")
+                } else {
+                    Image(systemName: "pin")
+                        .font(.system(size: 24))
+                        .widgetAccentable()
+                        .presetWidgetBounds("setup-icon")
+                    Text(snapshot.emptyState == .emptyCaptureBar ? "No available presets" : "Set up Capture Presets")
+                        .font(.headline)
+                        .lineLimit(family == .systemSmall ? 1 : 2)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .presetWidgetBounds("setup-title")
+                    Text("Open Vox.md → Settings > Capture Presets")
+                        .font(.caption2)
+                        .lineLimit(3)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .presetWidgetBounds("setup-guidance")
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         }
         .widgetURL(Self.setupURL)
-    }
-
-    private func icon(_ tile: CapturePresetWidgetTile) -> some View {
-        CapturePresetIconView(symbolName: tile.identity?.symbolName ?? "questionmark.square.dashed", emoji: tile.identity?.emoji)
-            .widgetAccentable()
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Set up Capture Presets")
+        .accessibilityHint("Open Vox.md, then Settings > Capture Presets. Pin presets or edit this widget to choose Custom.")
     }
 
     private func tileTitle(_ tile: CapturePresetWidgetTile) -> String {
         tile.identity?.name ?? (tile.presetID == nil ? String(localized: "Choose preset") : String(localized: "Unavailable preset"))
     }
-
-    private func accessibilityTitle(_ tile: CapturePresetWidgetTile) -> String {
-        if tile.availability == .available && tile.captureURL != nil { return tileTitle(tile) }
-        return String(localized: "\(tileTitle(tile)), unavailable. Edit widget or open Settings, Capture Presets.")
-    }
 }
 
 private struct CapturePresetWidgetTileView: View {
     let tile: CapturePresetWidgetTile
-    let showsMoreName: Bool
+    let large: Bool
+    let compactText: Bool
 
     private var available: Bool { tile.availability == .available && tile.captureURL != nil }
     private var title: String {
@@ -138,32 +179,74 @@ private struct CapturePresetWidgetTileView: View {
     var body: some View {
         Link(destination: tile.captureURL ?? CapturePresetWidgetView.setupURL) {
             HStack(spacing: 5) {
-                CapturePresetIconView(symbolName: tile.identity?.symbolName ?? "questionmark.square.dashed", emoji: tile.identity?.emoji)
-                    .font(showsMoreName ? .title2 : .title3)
-                    .widgetAccentable()
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
-                        .font(showsMoreName ? .subheadline : .caption2)
-                        .fontWeight(.semibold)
-                        .lineLimit(showsMoreName ? 2 : 1)
-                        .minimumScaleFactor(0.7)
-                    if !available {
-                        Text("Unavailable")
+                if compactText && !large {
+                    if available { icon }
+                    else {
+                        Text("Fix")
                             .font(.caption2)
-                            .foregroundStyle(.secondary)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.7)
+                            .fixedSize()
+                            .presetWidgetBounds("\(tile.id)-fix")
                     }
+                } else {
+                    icon
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(compactText && !available ? String(localized: "Fix: \(title)") : title)
+                            .font(large ? (compactText ? .caption2 : .subheadline) : .caption2)
+                            .fontWeight(.semibold)
+                            .lineLimit(large && !compactText ? 2 : 1)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .presetWidgetBounds("\(tile.id)-name")
+                        if !available && !compactText {
+                            Text("Fix")
+                                .font(.caption2)
+                                .lineLimit(1)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .presetWidgetBounds("\(tile.id)-fix")
+                        }
+                    }
+                    Spacer(minLength: 0)
                 }
-                Spacer(minLength: 0)
             }
             .padding(6)
-            .frame(maxWidth: .infinity, minHeight: showsMoreName ? 56 : 44, alignment: .leading)
+            .frame(maxWidth: .infinity, minHeight: large ? 56 : 44, alignment: compactText && !large ? .center : .leading)
             .background(.primary.opacity(0.07), in: RoundedRectangle(cornerRadius: 10))
+            .presetWidgetBounds("\(tile.id)-tile")
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(available ? title : String(localized: "\(title), unavailable. Edit widget or open Settings, Capture Presets."))
-        .accessibilityHint("Opens Vox.md. Does not send or record.")
+        .accessibilityLabel(available ? title : String(localized: "\(title), unavailable"))
+        .accessibilityHint(available
+            ? "Opens Vox.md. Does not send or record."
+            : "Edit this widget, or open Vox.md, then Settings > Capture Presets.")
         .accessibilityIdentifier("capture_preset_widget_\(tile.id)")
+    }
+
+    private var icon: some View {
+        CapturePresetIconView(symbolName: tile.identity?.symbolName ?? "questionmark.square.dashed", emoji: tile.identity?.emoji)
+            .font(.system(size: compactText && !large ? 28 : 24))
+            .widgetAccentable()
+            .presetWidgetBounds("\(tile.id)-icon")
+    }
+}
+
+/// Bounds of the actual rendered labels/glyphs/tiles, not merely the host's
+/// nonzero frame. Hosted tests can fail on overflow with normal SwiftUI layout.
+struct CapturePresetWidgetBounds: PreferenceKey {
+    static let coordinateSpace = "capture-preset-widget-content"
+    static var defaultValue: [String: CGRect] = [:]
+    static func reduce(value: inout [String: CGRect], nextValue: () -> [String: CGRect]) {
+        value.merge(nextValue(), uniquingKeysWith: { _, latest in latest })
+    }
+}
+
+private extension View {
+    func presetWidgetBounds(_ id: String) -> some View {
+        background {
+            GeometryReader { proxy in
+                Color.clear.preference(key: CapturePresetWidgetBounds.self, value: [
+                    id: proxy.frame(in: .named(CapturePresetWidgetBounds.coordinateSpace)),
+                ])
+            }
+        }
     }
 }
