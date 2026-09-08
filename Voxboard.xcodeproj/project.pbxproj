@@ -231,6 +231,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C2D200012026000000000001 /* Lightweight preset widget files in VoxboardTests */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				CapturePresetWidgetConfiguration.swift,
+				CapturePresetWidgetEntity.swift,
+				CapturePresetWidgetView.swift,
+			);
+			target = AAE000032FC00000AABB0003 /* VoxboardTests */;
+		};
 		622B4C912F78B09700FDC4CA /* Exceptions for "Voxboard Widget" folder in "Voxboard WidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -269,6 +278,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				622B4C912F78B09700FDC4CA /* Exceptions for "Voxboard Widget" folder in "Voxboard WidgetExtension" target */,
+				C2D200012026000000000001 /* Lightweight preset widget files in VoxboardTests */,
 			);
 			path = "Voxboard Widget";
 			sourceTree = "<group>";
