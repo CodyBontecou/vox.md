@@ -1498,7 +1498,8 @@ private struct MacFlowIconPickerView: View {
             Text(presetName)
                 .font(Geist.body())
                 .foregroundColor(Geist.muted)
-                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(2)
+                .help(presetName)
             Picker("Icon Type", selection: $draft.mode) {
                 Text("Symbols").tag(MacPresetIconDraft.Mode.symbols)
                 Text("Emoji").tag(MacPresetIconDraft.Mode.emoji)
@@ -1506,6 +1507,7 @@ private struct MacFlowIconPickerView: View {
             .pickerStyle(.segmented)
             .accessibilityIdentifier("mac_preset_icon_mode")
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
         .background(Geist.surface)
     }
