@@ -37,18 +37,31 @@ struct CapturePresetEmojiEditorInput {
 /// truncating an in-progress or pasted multi-grapheme value in an onChange.
 struct CapturePresetEmojiEditorView: View {
     @Binding var preset: CapturePreset
-    @State private var input: CapturePresetEmojiEditorInput
-    @Environment(\.dismiss) private var dismiss
+    @State private var text: String
 
     init(preset: Binding<CapturePreset>) {
         self._preset = preset
-        self._input = State(initialValue: CapturePresetEmojiEditorInput(text: preset.wrappedValue.emoji ?? ""))
+        self._text = State(initialValue: preset.wrappedValue.emoji ?? "")
     }
+
+    var body: some View {
+        CapturePresetEmojiEditorForm(preset: $preset, text: $text)
+    }
+}
+
+/// Native presentation with an injectable uncommitted input binding. The
+/// production wrapper owns that state; tests observe the same field boundary.
+struct CapturePresetEmojiEditorForm: View {
+    @Binding var preset: CapturePreset
+    @Binding var text: String
+    @Environment(\.dismiss) private var dismiss
+
+    private var input: CapturePresetEmojiEditorInput { CapturePresetEmojiEditorInput(text: text) }
 
     var body: some View {
         Form {
             Section {
-                TextField("Emoji", text: $input.text)
+                TextField("Emoji", text: $text)
                     .keyboardType(.default)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()

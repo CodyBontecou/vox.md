@@ -1209,7 +1209,7 @@ struct FlowIconPickerView: View {
         HStack(spacing: 12) {
             CapturePresetIconView(symbolName: preset.symbolName, emoji: preset.emoji)
                 .font(.title2)
-                .frame(width: 44, height: 44)
+                .frame(minWidth: 44, minHeight: 44)
                 .background(RoundedRectangle(cornerRadius: 12).fill(Color.secondary.opacity(0.14)))
             VStack(alignment: .leading, spacing: 3) {
                 Text("Selected Icon")

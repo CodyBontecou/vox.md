@@ -1,3 +1,4 @@
+import Observation
 import SwiftUI
 import UIKit
 import VoxboardShared
@@ -42,7 +43,11 @@ final class CapturePresetEmojiEditorTests: XCTestCase {
             current = updated
             writes += 1
             // Isolated binding boundary: no production routes/Watch/App Group.
-            defaults.set(try! JSONEncoder().encode([updated]), forKey: CapturePresetStore.flowsKey)
+            do {
+                defaults.set(try JSONEncoder().encode([updated]), forKey: CapturePresetStore.flowsKey)
+            } catch {
+                XCTFail("The real preset must encode at the binding boundary: \(error)")
+            }
         })
 
         binding.wrappedValue = CapturePresetEmojiEditorInput.selectingSymbol("mic", for: current)
@@ -58,6 +63,8 @@ final class CapturePresetEmojiEditorTests: XCTestCase {
         XCTAssertEqual(writes, 2)
         XCTAssertEqual(current.symbolName, "mic")
         XCTAssertEqual(current.emoji, "🇯🇵")
+        let savedEmoji = try XCTUnwrap(defaults.data(forKey: CapturePresetStore.flowsKey))
+        XCTAssertEqual(try JSONDecoder().decode([CapturePreset].self, from: savedEmoji), [current])
     }
 
     func testUnrecognizedStoredEmojiIsPreservedUntilExplicitChoice() {
@@ -71,10 +78,10 @@ final class CapturePresetEmojiEditorTests: XCTestCase {
     }
 
     func testNativeEmojiFieldRetainsInvalidPasteWithoutWritingPreset() async throws {
-        var preset = samplePreset(emoji: "📔")
-        var writes = 0
-        let binding = Binding(get: { preset }, set: { preset = $0; writes += 1 })
-        let host = UIHostingController(rootView: CapturePresetEmojiEditorView(preset: binding))
+        let state = CapturePresetEmojiNativeInputState(preset: samplePreset(emoji: "📔"))
+        let binding = Binding(get: { state.preset }, set: { state.preset = $0; state.writes += 1 })
+        let inputBinding = Binding(get: { state.text }, set: { state.text = $0 })
+        let host = UIHostingController(rootView: CapturePresetEmojiEditorForm(preset: binding, text: inputBinding))
         let window = show(host)
         defer { window.isHidden = true; window.rootViewController = nil }
         try await settle(window)
@@ -88,8 +95,9 @@ final class CapturePresetEmojiEditorTests: XCTestCase {
             field.sendActions(for: .editingChanged)
             try await settle(window)
             XCTAssertEqual(field.text, text, "The native input must not be truncated or normalized in-place")
-            XCTAssertEqual(preset.emoji, "📔", "Only an explicit valid Apply may save")
-            XCTAssertEqual(writes, 0)
+            XCTAssertEqual(state.text, text, "The real native editing event must reach the input binding")
+            XCTAssertEqual(state.preset.emoji, "📔", "Only an explicit valid Apply may save")
+            XCTAssertEqual(state.writes, 0)
         }
         attach(host.view, name: "Native emoji input, valid but unapplied")
     }
@@ -169,5 +177,18 @@ final class CapturePresetEmojiEditorTests: XCTestCase {
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
+    }
+}
+
+@MainActor
+@Observable
+private final class CapturePresetEmojiNativeInputState {
+    var preset: CapturePreset
+    var text: String
+    var writes = 0
+
+    init(preset: CapturePreset) {
+        self.preset = preset
+        self.text = preset.emoji ?? ""
     }
 }

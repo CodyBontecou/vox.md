@@ -26,6 +26,11 @@ final class CapturePresetSettingsPinsTests: XCTestCase {
             let before = pins.orderedIDs
             XCTAssertTrue(pins.setPinned(true, id: before[0]))
             XCTAssertEqual(pins.orderedIDs, before, "Already pinned must not move to the end")
+            XCTAssertTrue(pins.move(fromOffsets: IndexSet(integer: 0), toOffset: before.count))
+            XCTAssertTrue(pins.setPinned(false, id: before[1]))
+            XCTAssertEqual(defaults.data(forKey: CapturePresetStore.flowsKey), profileBytes)
+            XCTAssertEqual(defaults.string(forKey: CapturePresetProfileStore.selectedProfileIDKey), "keyboard")
+            XCTAssertEqual(defaults.string(forKey: CapturePresetProfileStore.selectedCaptureProfileIDKey), "draft")
         }
     }
 
