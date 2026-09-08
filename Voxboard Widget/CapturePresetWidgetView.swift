@@ -124,13 +124,21 @@ struct CapturePresetWidgetView: View {
         Link(destination: Self.setupURL) {
             VStack(alignment: .leading, spacing: 6) {
                 if compactText {
-                    // Retain the actual Settings path, without shrinking text
-                    // to cram a heading/icon/paragraph into a small widget.
-                    Text("Settings")
-                        .font(.caption2)
-                        .lineLimit(1)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .presetWidgetBounds("setup-settings")
+                    // At the largest iOS sizes, three text lines exceed the
+                    // small family's height. A Settings glyph leaves room for
+                    // the two-line destination without shrinking native text.
+                    if family == .systemSmall {
+                        Image(systemName: "gearshape")
+                            .font(.system(size: 20))
+                            .accessibilityHidden(true)
+                            .presetWidgetBounds("setup-settings-icon")
+                    } else {
+                        Text("Settings")
+                            .font(.caption2)
+                            .lineLimit(1)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .presetWidgetBounds("setup-settings")
+                    }
                     Text("Capture Presets")
                         .font(.caption2)
                         .lineLimit(2)

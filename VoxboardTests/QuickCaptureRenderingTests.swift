@@ -163,6 +163,11 @@ final class QuickCaptureRenderingTests: XCTestCase {
         // This is the actual row's Button callback seam, not a direct mutation
         // or a substitute editor probe. It is not a simulated physical tap.
         XCTAssertTrue(fixture.row.activatePreset(id: "inbox"))
+        // Drain the successful switch's scheduled autosave before comparing a
+        // later rejected action with the complete draft (including updatedAt).
+        // Otherwise that earlier save can land during the busy-state render.
+        let saved = await fixture.vm.flushDraftForTermination()
+        XCTAssertTrue(saved)
         try await settle(window)
         let updated = try XCTUnwrap(find("quick_capture_text", in: host.view) as? UITextView)
         XCTAssertTrue(original === updated)

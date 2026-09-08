@@ -92,15 +92,23 @@ final class CapturePresetWidgetRenderingTests: XCTestCase {
                     }
                 }
             }
-            for (first, second) in zip(tiles, tiles.dropFirst()) {
-                let a = try XCTUnwrap(measured["\(first.id)-tile"])
-                let b = try XCTUnwrap(measured["\(second.id)-tile"])
-                if abs(a.minY - b.minY) < 1 {
-                    XCTAssertTrue(direction == .leftToRight ? a.maxX <= b.minX : b.maxX <= a.minX,
-                                  "Fixed slots overlapped or reversed reading order")
-                } else {
-                    XCTAssertGreaterThanOrEqual(b.minY, a.maxY, "Rows overlapped or reordered")
+            // LazyVGrid vertically centers differently sized cells within a
+            // row. Classify rows by their specified positions, not equal minY.
+            let columns = family == .systemLarge ? 2 : 3
+            var previousRowBottom: CGFloat?
+            for start in stride(from: 0, to: tiles.count, by: columns) {
+                let row = try tiles[start..<min(start + columns, tiles.count)].map { tile in
+                    try XCTUnwrap(measured["\(tile.id)-tile"])
                 }
+                for (a, b) in zip(row, row.dropFirst()) {
+                    XCTAssertTrue(direction == .leftToRight ? a.maxX <= b.minX : b.maxX <= a.minX,
+                                  "Fixed slots overlapped or reversed reading order, \(family), \(typeSize), \(direction)")
+                }
+                if let previousRowBottom {
+                    XCTAssertGreaterThanOrEqual(try XCTUnwrap(row.map(\.minY).min()), previousRowBottom,
+                                                "Rows overlapped or reordered, \(family), \(typeSize), \(direction)")
+                }
+                previousRowBottom = row.map(\.maxY).max()
             }
         }
         let image = UIGraphicsImageRenderer(bounds: host.view.bounds).image { _ in
