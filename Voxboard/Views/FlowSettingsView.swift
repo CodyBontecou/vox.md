@@ -22,8 +22,8 @@ struct CapturePresetSettingsView: View {
                         CapturePresetEditorView(preset: $flow)
                     } label: {
                         HStack(spacing: 12) {
-                            Image(systemName: flow.symbolName)
-                                .frame(width: 24)
+                            CapturePresetIconView(symbolName: flow.symbolName, emoji: flow.emoji)
+                                .frame(minWidth: 24)
                             VStack(alignment: .leading, spacing: 3) {
                                 Text(flow.displayName)
                                 Text(
@@ -249,25 +249,7 @@ private struct CapturePresetEditorView: View {
     private var showsFrontmatterSection: Bool { true }
 
     private var identitySection: some View {
-        Section("Identity") {
-            TextField("Name", text: $flow.name)
-            NavigationLink {
-                FlowIconPickerView(symbolName: $flow.symbolName)
-            } label: {
-                HStack {
-                    Text("Icon")
-                    Spacer()
-                    Image(systemName: FlowIconPickerView.iconName(for: flow.symbolName))
-                        .frame(width: 24)
-                        .foregroundStyle(.secondary)
-                    Text(FlowIconPickerView.title(for: flow.symbolName))
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                }
-            }
-            Toggle("Enabled", isOn: $flow.isEnabled)
-                .tint(Color.accentColor)
-        }
+        CapturePresetSettingsIdentitySection(preset: $flow)
     }
 
     private var watchOutputSection: some View {
@@ -1158,8 +1140,8 @@ private enum CapturePresetDestinationError: Error, LocalizedError {
     }
 }
 
-private struct FlowIconPickerView: View {
-    @Binding var symbolName: String
+struct FlowIconPickerView: View {
+    @Binding var preset: CapturePreset
     @Environment(\.dismiss) private var dismiss
     @State private var searchText = ""
 
@@ -1207,7 +1189,7 @@ private struct FlowIconPickerView: View {
 
     private var selectedIconPreview: some View {
         HStack(spacing: 12) {
-            Image(systemName: Self.iconName(for: symbolName))
+            CapturePresetIconView(symbolName: preset.symbolName, emoji: preset.emoji)
                 .font(.title2)
                 .frame(width: 44, height: 44)
                 .background(RoundedRectangle(cornerRadius: 12).fill(Color.secondary.opacity(0.14)))
@@ -1215,19 +1197,23 @@ private struct FlowIconPickerView: View {
                 Text("Selected Icon")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Text(Self.title(for: symbolName))
+                Text(preset.displayName)
                     .font(.body.weight(.semibold))
             }
             Spacer()
         }
         .padding(12)
         .background(RoundedRectangle(cornerRadius: 16).fill(Color.secondary.opacity(0.10)))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(preset.displayName)
+        .accessibilityValue(Text("Selected Icon"))
+        .accessibilityIdentifier("capture_preset_symbol_preview")
     }
 
     private func iconButton(_ option: FlowIconOption) -> some View {
-        let selected = option.symbolName == Self.iconName(for: symbolName)
+        let selected = preset.emoji == nil && option.symbolName == Self.iconName(for: preset.symbolName)
         return Button {
-            symbolName = option.symbolName
+            preset = CapturePresetEmojiEditorInput.selectingSymbol(option.symbolName, for: preset)
             dismiss()
         } label: {
             VStack(spacing: 8) {
@@ -1254,11 +1240,13 @@ private struct FlowIconPickerView: View {
         .buttonStyle(.plain)
         .accessibilityLabel(option.title)
         .accessibilityValue(option.symbolName)
+        .accessibilityAddTraits(selected ? .isSelected : [])
+        .accessibilityIdentifier("capture_preset_symbol_\(option.symbolName)")
     }
 
     static func iconName(for symbolName: String) -> String {
         let trimmed = symbolName.trimmingCharacters(in: .whitespacesAndNewlines)
-        return trimmed.isEmpty ? "questionmark.square" : trimmed
+        return trimmed.isEmpty ? "waveform" : trimmed
     }
 
     static func title(for symbolName: String) -> String {
