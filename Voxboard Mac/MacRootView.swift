@@ -652,6 +652,68 @@ private struct MacCapturePresetSettingsView: View {
     }
 }
 
+struct MacAudioFilenameTemplateSetting: View {
+    @Binding var template: String
+    let isAudioSavingEnabled: Bool
+    let presetName: String
+
+    @ViewBuilder
+    var body: some View {
+        if isAudioSavingEnabled {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Audio Filename Template")
+                TextField(
+                    "Audio Filename Template",
+                    text: $template,
+                    prompt: Text("Automatic")
+                )
+                .textFieldStyle(.roundedBorder)
+                .accessibilityLabel("Audio Filename Template")
+                .accessibilityHint("Leave blank to retain the existing automatic name. Typed extensions are replaced by the real audio extension, and unsafe path characters are sanitized.")
+                .accessibilityIdentifier("mac_preset_audio_filename_template")
+
+                Group {
+                    if let previewFilename {
+                        Text("Example: \(previewFilename)")
+                    } else {
+                        Text("Example: Existing automatic name")
+                    }
+                }
+                .font(.caption.monospaced())
+                .foregroundStyle(.secondary)
+                .textSelection(.enabled)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityIdentifier("mac_preset_audio_filename_preview")
+
+                Text("Tokens: {timestamp}, {date}, {time}, {YR}, {id}, {id8}, {preset}, {original}")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text("Leave blank to retain the existing automatic name. A typed extension is ignored and replaced by the real encoded or copied audio extension. Unsafe and path characters are sanitized.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityIdentifier("mac_preset_audio_filename_setting")
+        }
+    }
+
+    var previewFilename: String? {
+        CapturePresetAudioFilename.preferredFilename(
+            template: template,
+            context: CapturePresetAudioFilenameContext(
+                identifier: "12345678-90AB-CDEF-1234-567890ABCDEF",
+                createdAt: Date(timeIntervalSince1970: 1_704_164_645),
+                presetName: presetName,
+                originalFilename: "recording.wav",
+                timeZone: TimeZone(secondsFromGMT: 0)!
+            ),
+            sourceExtension: "m4a"
+        )
+    }
+}
+
 private struct MacCapturePresetEditor: View {
     @Binding var flow: CapturePreset
     let onDelete: () -> Void
@@ -1017,6 +1079,11 @@ private struct MacCapturePresetEditor: View {
                         TextField("Attachments Folder", text: $flow.attachmentsFolderName)
                     }
                 }
+                MacAudioFilenameTemplateSetting(
+                    template: $flow.audioFilenameTemplate,
+                    isAudioSavingEnabled: flow.audioSaveMode != .off,
+                    presetName: flow.displayName
+                )
                 if flow.audioSaveMode != .off {
                     Toggle("Embed Audio in Markdown", isOn: $flow.exportSettings.embedAudioInMarkdown)
                         .disabled(!markdownAudioEmbedAvailable)

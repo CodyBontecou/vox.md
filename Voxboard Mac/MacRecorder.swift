@@ -34,6 +34,25 @@ enum MacRecordingCompletionMode: Equatable, Sendable {
     }
 }
 
+enum MacPresetAudioFilenameContextFactory {
+    /// Keeps direct legacy delivery on the same immutable transcript/preset
+    /// identity used by the recording queue. The caller supplies the original
+    /// app-owned source name before any temporary retention copy is created.
+    nonisolated static func make(
+        transcriptID: UUID,
+        transcriptDate: Date,
+        presetName: String,
+        originalFilename: String
+    ) -> CapturePresetAudioFilenameContext {
+        CapturePresetAudioFilenameContext(
+            identifier: transcriptID.uuidString,
+            createdAt: transcriptDate,
+            presetName: presetName,
+            originalFilename: originalFilename
+        )
+    }
+}
+
 private struct MacMeetingNormalizedArtifacts: Sendable {
     let microphoneURL: URL?
     let systemURL: URL?
@@ -1204,7 +1223,7 @@ final class MacRecorder {
             transcriptStore.add(Transcript(
                 id: job.id,
                 text: speakerResolution.text,
-                date: Date(),
+                date: job.createdAt,
                 duration: job.duration,
                 modelUsed: result.backendName,
                 language: result.language,
@@ -1229,9 +1248,11 @@ final class MacRecorder {
                 duration: job.duration,
                 modelName: result.backendName,
                 language: result.language,
+                transcriptDate: job.createdAt,
                 completionMode: completionMode,
                 audioURL: audioURL,
                 sourceAudioURL: audioURL,
+                originalAudioFilename: job.originalFilename,
                 locationOutcome: job.locationOutcome,
                 originRecordingID: nil,
                 captureSource: job.captureSource ?? .voice,
@@ -1328,7 +1349,7 @@ final class MacRecorder {
             transcriptStore.add(Transcript(
                 id: job.id,
                 text: text,
-                date: Date(),
+                date: job.createdAt,
                 duration: job.duration,
                 modelUsed: backendNames.joined(separator: " + "),
                 language: language,
@@ -1346,7 +1367,9 @@ final class MacRecorder {
         if shouldCopyAutomatically { try await recordingQueue.markAutomaticClipboardDeliveryAttempted(id: job.id) }
         try await finishSuccessfulTranscription(
             text: text, duration: job.duration, modelName: backendNames.joined(separator: " + "), language: language,
-            completionMode: completionMode, audioURL: mixURL, sourceAudioURL: mixURL, locationOutcome: job.locationOutcome,
+            transcriptDate: job.createdAt,
+            completionMode: completionMode, audioURL: mixURL, sourceAudioURL: mixURL,
+            originalAudioFilename: job.originalFilename, locationOutcome: job.locationOutcome,
             captureSource: .mac, cleanupWorkingAudio: false, copiesToClipboard: shouldCopyAutomatically, transcriptID: job.id,
             draftRequestID: job.draftRequestID, liveSessionID: job.liveSessionID,
             exportedNotePath: job.exportedNotePath, exportedAudioPath: job.exportedAudioPath,
@@ -1506,9 +1529,11 @@ final class MacRecorder {
         duration: TimeInterval,
         modelName: String,
         language: String,
+        transcriptDate: Date = Date(),
         completionMode: MacRecordingCompletionMode,
         audioURL: URL,
         sourceAudioURL: URL?,
+        originalAudioFilename: String? = nil,
         locationOutcome: CaptureLocationOutcome? = nil,
         originRecordingID: String? = nil,
         captureSource: CaptureSource = .voice,
@@ -1553,7 +1578,7 @@ final class MacRecorder {
         let rawTranscript = Transcript(
             id: transcriptID ?? UUID(),
             text: text,
-            date: Date(),
+            date: transcriptDate,
             duration: duration,
             modelUsed: modelName,
             language: language,
@@ -1616,6 +1641,8 @@ final class MacRecorder {
         isTranscribing = false
 
         let audioWasRequested = selectedFlow.audioSaveMode != .off
+        let audioFilenameOriginal = originalAudioFilename
+            ?? (sourceAudioURL ?? audioURL).lastPathComponent
         let retainedAudioURL = cleanupWorkingAudio
             ? retainAudioIfNeeded(sourceAudioURL ?? audioURL, flow: selectedFlow)
             : (audioWasRequested ? audioURL : nil)
@@ -1826,6 +1853,14 @@ final class MacRecorder {
 
             if let exportURL, let retainedAudioURL {
                 let noteFolderScopeURL = folderOverride ?? TranscriptFileExporter.resolveExportFolderURL(flow: flowForExport)
+                let audioFilenameContext: CapturePresetAudioFilenameContext? = captureSource == .fileImport
+                    ? nil
+                    : MacPresetAudioFilenameContextFactory.make(
+                        transcriptID: latest.id,
+                        transcriptDate: latest.date,
+                        presetName: flowForExport.displayName,
+                        originalFilename: audioFilenameOriginal
+                    )
                 do {
                     let checkpointedAudioURL = exportedAudioPath.map(URL.init(fileURLWithPath:))
                     if try await CheckpointedAudioDelivery.deliver(
@@ -1837,6 +1872,7 @@ final class MacRecorder {
                         audioReferenceAlreadyAttached: audioReferenceAttachedAt != nil,
                         audioDeliveryTransactionDirectoryURL: audioDeliveryTransactionURL,
                         audioReferenceDeliveryTransactionDirectoryURL: audioReferenceDeliveryTransactionURL,
+                        audioFilenameContext: audioFilenameContext,
                         checkpointExport: { audioExportURL in
                             // The audio file is now durable even if inserting
                             // its Markdown reference subsequently fails.
