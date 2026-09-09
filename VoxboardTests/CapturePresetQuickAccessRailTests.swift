@@ -256,6 +256,7 @@ final class CapturePresetQuickAccessRailTests: XCTestCase {
 struct QuickCapturePresetFixture {
     let vm: QuickCaptureViewModel
     let preferences: CapturePresetQuickAccessPreferences
+    let toolbarPreferences: CaptureToolbarPreferences
     let defaults: UserDefaults
     let presets: [CapturePreset]
 
@@ -325,7 +326,12 @@ struct QuickCapturePresetFixture {
         }
         await vm.load()
         XCTAssertNil(vm.errorMessage)
-        return Self(vm: vm, preferences: CapturePresetQuickAccessPreferences(defaults: defaults),
-                    defaults: defaults, presets: presets)
+        return Self(
+            vm: vm,
+            preferences: CapturePresetQuickAccessPreferences(defaults: defaults),
+            toolbarPreferences: CaptureToolbarPreferences(defaults: defaults),
+            defaults: defaults,
+            presets: presets
+        )
     }
 }

@@ -4,7 +4,8 @@ import VoxboardShared
 /// Presentation only: order/availability come from resolved shared pins; the
 /// callback must revalidate live route ownership and preset availability.
 /// The highest-priority pin stays nearest the controls and additional pins rise
-/// up the leading side. This rail never owns, focuses, or replaces the editor.
+/// up its configured physical edge. The coordinator places this container without
+/// overriding semantic direction; this rail never owns, focuses, or replaces the editor.
 struct CapturePresetQuickAccessRail: View {
     let profiles: [CapturePresetProfile]
     let selectedID: String?

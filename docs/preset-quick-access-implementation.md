@@ -209,13 +209,14 @@ not tests, failure reporting, logs or retained XCTest image attachments.
 ### Post-cycle compact rail refinement
 
 Following product review, the horizontal Capture Bar strip was replaced by a
-compact floating stack anchored above the selected-preset control at the
-composer's leading edge. Stored order rises from the controls, keeping the
-highest-priority pin nearest the bottom. The selector itself represents the
-selected preset, so the expanded stack shows only alternatives rather than
-repeating that icon. Each alternative remains a 14pt icon inside an independent
-44pt interaction target. Overflow scrolls vertically, while an empty stack
-consumes no composer width.
+compact floating stack anchored above the selected-preset control. Its default
+is the physical left edge; the Capture Bar setting described below can move only
+the alternatives rail to the physical right edge. Stored order rises from the
+controls, keeping the highest-priority pin nearest the bottom. The selector
+itself represents the selected preset, so the expanded stack shows only
+alternatives rather than repeating that icon. Each alternative remains a 14pt
+icon inside an independent 44pt interaction target. Overflow scrolls vertically,
+while an empty stack consumes no composer width.
 
 The selected-preset control and stack are one disclosure interaction. Fresh
 installs show only the selected preset, its name, and the two-arrow control. A
@@ -260,6 +261,43 @@ The simulator's Reduce Motion preference was enabled for that rendering matrix
 (the attachment names record `reduceMotion=true`) and restored afterward. The
 complete cycle-2 matrix above predates these layout refinements and was not
 relabeled as a current full-suite run.
+
+### Hans follow-up: rail side, timestamp format, and recording help
+
+Capture Bar settings now persist two choices independently of quick-action order
+and rail disclosure state:
+
+- `capture.presets.quickAccess.railSide.v1` stores exact `left` / `right` values,
+  defaulting defensively to Left when absent or unknown. This is a physical
+  thumb-reach preference: Left remains screen-left and Right remains screen-right
+  in both LTR and RTL. Only the floating alternatives rail moves; the selected
+  preset/menu and Send keep their established layout and semantics. The rail's
+  children continue to inherit the user's semantic direction.
+- `capture.toolbar.timestampFormat.v1` stores exact `12-hour` / `24-hour` values,
+  defaulting defensively to 12-hour when absent or unknown. Insert Timestamp now
+  passes that explicit choice to `CaptureInsertionFormatter`; output remains
+  `h:mm a yyyy-MM-dd` by default and becomes `HH:mm yyyy-MM-dd` in 24-hour mode.
+  The existing calendar, locale, and time-zone dependencies are retained, and
+  date/due-date formatting is unchanged.
+
+The recording-details panel keeps its compact Audio toggle, Import Audio icon,
+and Keyboard Listening icon. Each now has behavior-specific help and
+accessibility hints. A 44-point Recording control help affordance opens a native,
+vertically scrollable sheet rather than placing explanatory paragraphs in the
+keyboard-visible controls. The sheet explains that Audio retains the new
+recording while the transcript can still be added when off; Import Audio chooses
+and processes an existing audio/video file into the current Capture flow; and
+Keyboard Listening controls the persistent Vox.md keyboard session, not an
+attachment mode. At widths or text sizes where its title does not fit, the
+standard info glyph remains visible with the complete accessibility label/hint.
+
+Scoped preference, deterministic timestamp-consumer, rail rendering/geometry/
+focus/hit-testing, and recording-help tests accompany this follow-up. Retained
+hosted variants cover both physical sides in LTR and RTL, compact and expanded
+states, more-than-five overflow, empty/single pins, dark mode, Dynamic Type, and
+Reduce Motion. Exact current-checkout commands, exits, failed-attempt ledger, and
+result-bundle/PNG paths are recorded in the cycle-2 Capture lane report; the
+coordinator repeats the complete integrated matrix after serial merge.
 
 ### Runtime evidence versus manual gates
 

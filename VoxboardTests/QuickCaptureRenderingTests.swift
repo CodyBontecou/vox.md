@@ -133,6 +133,93 @@ final class QuickCaptureRenderingTests: XCTestCase {
         }
     }
 
+    func testRecordingControlHelpAndActionHintsDescribeThreeDistinctBehaviors() {
+        XCTAssertEqual(
+            CaptureRecordingControlSemantics.audioHelp,
+            String(localized: "Keep the new recording attached when adding it to the current draft. With Audio off, the transcript is still added when available.")
+        )
+        XCTAssertEqual(
+            CaptureRecordingControlSemantics.importAudioHelp,
+            String(localized: "Choose an existing audio or video file. Vox.md processes it and adds the transcript or result to the current Capture flow.")
+        )
+        XCTAssertEqual(
+            CaptureRecordingControlSemantics.keyboardListeningHelp,
+            String(localized: "Start or stop the persistent listening session used by the Vox.md keyboard. This is not another attachment mode.")
+        )
+        XCTAssertEqual(
+            CaptureRecordingControlSemantics.keyboardListeningLabel(isListening: false),
+            String(localized: "Start keyboard listening")
+        )
+        XCTAssertEqual(
+            CaptureRecordingControlSemantics.keyboardListeningLabel(isListening: true),
+            String(localized: "Stop keyboard listening")
+        )
+        XCTAssertEqual(
+            CaptureRecordingControlSemantics.keyboardListeningActionHint(isListening: false),
+            String(localized: "Starts the persistent listening session used by the Vox.md keyboard. This does not attach audio to the Capture.")
+        )
+        XCTAssertEqual(
+            CaptureRecordingControlSemantics.keyboardListeningActionHint(isListening: true),
+            String(localized: "Stops the persistent listening session used by the Vox.md keyboard. This does not change Capture attachments.")
+        )
+    }
+
+    func testRecordingControlHelpAffordanceAndSheetMountInCompactAccessibleLayouts() async throws {
+        let layouts: [(CGFloat, ColorScheme, DynamicTypeSize, LayoutDirection)] = [
+            (320, .light, .large, .leftToRight),
+            (320, .dark, .accessibility3, .rightToLeft),
+            (390, .light, .xxxLarge, .leftToRight),
+        ]
+        for (width, scheme, typeSize, direction) in layouts {
+            let affordanceAppeared = expectation(description: "Recording help affordance mounted")
+            let affordance = CaptureRecordingControlHelp(isPresented: .constant(false))
+                .padding(Geist.Spacing.three)
+                .environment(\.colorScheme, scheme)
+                .environment(\.dynamicTypeSize, typeSize)
+                .environment(\.layoutDirection, direction)
+                .onAppear { affordanceAppeared.fulfill() }
+            let affordanceHost = UIHostingController(rootView: affordance)
+            let affordanceWindow = show(affordanceHost, size: CGSize(width: width, height: 132))
+            await fulfillment(of: [affordanceAppeared], timeout: 3)
+            try await settle(affordanceWindow)
+            XCTAssertLessThanOrEqual(
+                affordanceHost.sizeThatFits(in: CGSize(width: width, height: 1_000)).height,
+                132,
+                "The help affordance must stay compact instead of inlining explanations"
+            )
+            retainScreenshot(
+                "Recording control help affordance \(width) \(scheme) \(typeSize) \(direction)",
+                in: affordanceHost.view
+            )
+            affordanceWindow.isHidden = true
+            affordanceWindow.rootViewController = nil
+
+            let sheetAppeared = expectation(description: "Recording help sheet mounted")
+            let sheet = CaptureRecordingControlHelpSheet()
+                .environment(\.colorScheme, scheme)
+                .environment(\.dynamicTypeSize, typeSize)
+                .environment(\.layoutDirection, direction)
+                .onAppear { sheetAppeared.fulfill() }
+            let sheetHost = UIHostingController(rootView: sheet)
+            let sheetWindow = show(sheetHost, size: CGSize(width: width, height: 620))
+            defer { sheetWindow.isHidden = true; sheetWindow.rootViewController = nil }
+            await fulfillment(of: [sheetAppeared], timeout: 3)
+            try await settle(sheetWindow)
+
+            let scrollingContainers = scrollViews(in: sheetHost.view)
+            XCTAssertTrue(
+                scrollingContainers.contains(where: { $0.isScrollEnabled && $0.bounds.height > 0 }),
+                "Recording explanations must remain vertically scrollable at large text sizes"
+            )
+            // Unit-hosted SwiftUI does not expose a faithful VoiceOver tree.
+            // Copy tests above verify semantics; these mounts verify adaptation.
+            retainScreenshot(
+                "Recording control help sheet \(width) \(scheme) \(typeSize) \(direction)",
+                in: sheetHost.view
+            )
+        }
+    }
+
     func testPinnedSelectionRetainsRealMarkdownUIViewCursorFocusTextAndAttachments() async throws {
         let fixture = try await QuickCapturePresetFixture.make(in: self)
         let editor = PresetRenderingState()
@@ -309,42 +396,177 @@ final class QuickCaptureRenderingTests: XCTestCase {
         XCTAssertEqual(fixture.vm.draft, draftBeforeDisclosure)
     }
 
-    func testRealPinnedRailOverlaysLeadingEdgeAndScrollsVerticallyInCompactLayouts() async throws {
+    func testChangingPhysicalRailSideInRTLRetainsEditorFocusSelectionAndControlGeometry() async throws {
+        let fixture = try await QuickCapturePresetFixture.make(in: self)
+        XCTAssertTrue(fixture.preferences.setOrderedIDs(["journal", "inbox", "ideas"]))
+        fixture.toolbarPreferences.setPresetQuickAccessRailSide(.left)
+        let editor = PresetRenderingState()
+        editor.isRailExpanded = true
+        let content = PresetComposerHarness(fixture: fixture, editor: editor)
+            .environment(\.layoutDirection, .rightToLeft)
+        let host = UIHostingController(rootView: content)
+        let previousKeyWindow = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows).first(where: \.isKeyWindow)
+        let window = show(host, size: CGSize(width: 390, height: 500))
+        window.makeKeyAndVisible()
+        defer {
+            editor.controller.dismissKeyboard()
+            window.isHidden = true
+            window.rootViewController = nil
+            previousKeyWindow?.makeKey()
+        }
+        try await settle(window)
+
+        let original = try XCTUnwrap(find("quick_capture_text", in: host.view) as? UITextView)
+        XCTAssertTrue(original.becomeFirstResponder())
+        let cursor = NSRange(location: 5, length: 12)
+        editor.controller.replaceAll(with: fixture.vm.draft.text, selection: cursor)
+        try await settle(window)
+        XCTAssertEqual(
+            try XCTUnwrap(editor.frames["pins"]).minX,
+            try XCTUnwrap(editor.frames["editor"]).minX,
+            accuracy: 1
+        )
+        XCTAssertTrue(original.isFirstResponder)
+        XCTAssertTrue(editor.isFocused)
+        XCTAssertEqual(original.selectedRange, cursor)
+        let draft = fixture.vm.draft
+        retainScreenshot("Pinned preset rail physical-left RTL focused", in: host.view)
+        // drawHierarchy can finish attaching a hosted test window. Compare
+        // geometry only after that one-time test-harness layout settles.
+        try await settle(window)
+        let editorFrame = try XCTUnwrap(editor.frames["editor"])
+        let routeFrame = try XCTUnwrap(editor.frames["route"])
+        let selectorFrame = try XCTUnwrap(editor.frames["selector"])
+
+        fixture.toolbarPreferences.setPresetQuickAccessRailSide(.right)
+        try await settle(window)
+
+        let rightPins = try XCTUnwrap(editor.frames["pins"])
+        XCTAssertEqual(rightPins.maxX, editorFrame.maxX, accuracy: 1)
+        XCTAssertEqual(try XCTUnwrap(editor.frames["editor"]), editorFrame)
+        XCTAssertEqual(try XCTUnwrap(editor.frames["route"]), routeFrame)
+        XCTAssertEqual(try XCTUnwrap(editor.frames["selector"]), selectorFrame)
+        let updated = try XCTUnwrap(find("quick_capture_text", in: host.view) as? UITextView)
+        XCTAssertTrue(updated === original)
+        XCTAssertTrue(updated.isFirstResponder)
+        XCTAssertTrue(editor.isFocused)
+        XCTAssertEqual(updated.selectedRange, cursor)
+        XCTAssertEqual(editor.selection, cursor)
+        XCTAssertEqual(fixture.vm.draft, draft)
+        retainScreenshot("Pinned preset rail physical-right RTL focused", in: host.view)
+    }
+
+    func testShortRailTransparentSpaceHitsEditorOnBothPhysicalSidesInLTRAndRTL() async throws {
+        let fixture = try await QuickCapturePresetFixture.make(in: self)
+        XCTAssertTrue(fixture.preferences.setOrderedIDs(["journal", "inbox", "ideas"]))
+
+        for side in CapturePresetQuickAccessRailSide.allCases {
+            for direction in [LayoutDirection.leftToRight, .rightToLeft] {
+                fixture.toolbarPreferences.setPresetQuickAccessRailSide(side)
+                let editor = PresetRenderingState()
+                editor.isRailExpanded = true
+                let content = PresetComposerHarness(fixture: fixture, editor: editor)
+                    .environment(\.layoutDirection, direction)
+                let host = UIHostingController(rootView: content)
+                let window = show(host, size: CGSize(width: 390, height: 500))
+                defer { window.isHidden = true; window.rootViewController = nil }
+                try await settle(window)
+
+                let textView = try XCTUnwrap(find("quick_capture_text", in: host.view) as? UITextView)
+                let pins = try XCTUnwrap(editor.frames["pins"])
+                let composer = try XCTUnwrap(editor.frames["editor"])
+                if side == .left {
+                    XCTAssertEqual(pins.minX, composer.minX, accuracy: 1)
+                } else {
+                    XCTAssertEqual(pins.maxX, composer.maxX, accuracy: 1)
+                }
+                let railScroll = try XCTUnwrap(
+                    scrollViews(in: host.view).first { !($0 is UITextView) }
+                )
+                let scrollFrame = railScroll.convert(railScroll.bounds, to: host.view)
+                let composerHostFrame = composer.offsetBy(
+                    dx: host.view.safeAreaInsets.left,
+                    dy: host.view.safeAreaInsets.top
+                )
+                XCTAssertGreaterThan(scrollFrame.minY, composerHostFrame.minY)
+                let exposedPoint = CGPoint(
+                    x: scrollFrame.midX,
+                    y: (composerHostFrame.minY + scrollFrame.minY) / 2
+                )
+                let hit = host.view.hitTest(exposedPoint, with: nil)
+                XCTAssertTrue(
+                    hit === textView || hit?.isDescendant(of: textView) == true,
+                    "Transparent space above the physical \(side.rawValue) rail must reach the editor in \(direction)"
+                )
+                retainScreenshot(
+                    "Short preset rail transparent hit physical-\(side.rawValue) \(direction)",
+                    in: host.view
+                )
+            }
+        }
+    }
+
+    func testRealPinnedRailUsesPhysicalSidesAndScrollsOverflowInLTRAndRTL() async throws {
         let fixture = try await QuickCapturePresetFixture.make(in: self)
         let reduceMotion = UIAccessibility.isReduceMotionEnabled
-        let variants: [(CGFloat, CGFloat, ColorScheme, DynamicTypeSize, LayoutDirection)] = [
-            (320, 220, .light, .large, .leftToRight),
-            (390, 400, .dark, .accessibility3, .leftToRight),
-            (320, 220, .light, .accessibility3, .rightToLeft),
-            (768, 400, .dark, .xxxLarge, .leftToRight),
+        let variants: [(CapturePresetQuickAccessRailSide, CGFloat, ColorScheme, DynamicTypeSize, LayoutDirection)] = [
+            (.left, 320, .light, .large, .leftToRight),
+            (.right, 390, .dark, .accessibility3, .leftToRight),
+            (.left, 320, .light, .accessibility3, .rightToLeft),
+            (.right, 768, .dark, .xxxLarge, .rightToLeft),
         ]
-        for (width, height, scheme, typeSize, direction) in variants {
+        XCTAssertGreaterThan(fixture.rail.alternateProfiles.count, 5)
+
+        for (side, width, scheme, typeSize, direction) in variants {
+            fixture.toolbarPreferences.setPresetQuickAccessRailSide(side)
             let editor = PresetRenderingState()
-            editor.isRailExpanded = true
             let content = PresetComposerHarness(fixture: fixture, editor: editor)
                 .environment(\.colorScheme, scheme)
                 .environment(\.dynamicTypeSize, typeSize)
                 .environment(\.layoutDirection, direction)
             let host = UIHostingController(rootView: content)
-            let window = show(host, size: CGSize(width: width, height: height))
+            let window = show(host, size: CGSize(width: width, height: 220))
             defer { window.isHidden = true; window.rootViewController = nil }
+            try await settle(window)
+
+            let originalEditorView = try XCTUnwrap(find("quick_capture_text", in: host.view))
+            XCTAssertLessThanOrEqual(editor.frames["pins"]?.width ?? 0, 1)
+            retainScreenshot(
+                "Pinned preset rail compact physical-\(side.rawValue) \(direction) \(scheme) \(typeSize) reduceMotion=\(reduceMotion)",
+                in: host.view
+            )
+            // Screenshot rendering can complete hosted-window safe-area setup.
+            // Establish both comparison frames after that one-time adjustment.
+            try await settle(window)
+            let compactComposer = try XCTUnwrap(editor.frames["editor"])
+            let compactRoute = try XCTUnwrap(editor.frames["route"])
+            let compactSelector = try XCTUnwrap(editor.frames["selector"])
+
+            editor.isRailExpanded = true
             try await settle(window)
             let pins = try XCTUnwrap(editor.frames["pins"])
             let composer = try XCTUnwrap(editor.frames["editor"])
             let route = try XCTUnwrap(editor.frames["route"])
+            let selector = try XCTUnwrap(editor.frames["selector"])
             XCTAssertEqual(pins.width, CapturePresetQuickAccessButton.hitTargetSide, accuracy: 1)
             XCTAssertEqual(pins.minY, composer.minY, accuracy: 1)
             XCTAssertEqual(pins.maxY, composer.maxY, accuracy: 1)
             XCTAssertGreaterThan(composer.width, pins.width)
-            if direction == .rightToLeft {
-                XCTAssertEqual(pins.maxX, composer.maxX, accuracy: 1)
-            } else {
+            if side == .left {
                 XCTAssertEqual(pins.minX, composer.minX, accuracy: 1)
+            } else {
+                XCTAssertEqual(pins.maxX, composer.maxX, accuracy: 1)
             }
             XCTAssertGreaterThanOrEqual(pins.minX, composer.minX - 1)
             XCTAssertLessThanOrEqual(pins.maxX, composer.maxX + 1)
+            XCTAssertEqual(composer, compactComposer)
+            XCTAssertEqual(route, compactRoute)
+            XCTAssertEqual(selector, compactSelector)
+            XCTAssertTrue(originalEditorView === find("quick_capture_text", in: host.view))
             XCTAssertGreaterThanOrEqual(route.minY, max(pins.maxY, composer.maxY) - 1)
             XCTAssertLessThanOrEqual(route.maxY, host.view.bounds.height + 1)
+
             let railScroll = try XCTUnwrap(
                 scrollViews(in: host.view).first { !($0 is UITextView) }
             )
@@ -364,24 +586,21 @@ final class QuickCaptureRenderingTests: XCTestCase {
             let scrollableContentHeight = railScroll.contentSize.height
                 + railScroll.adjustedContentInset.top
                 + railScroll.adjustedContentInset.bottom
-            if scrollableContentHeight > railScroll.bounds.height + 1 {
-                XCTAssertGreaterThan(
-                    railScroll.contentSize.height + railScroll.adjustedContentInset.bottom
-                        - railScroll.bounds.height,
-                    -railScroll.adjustedContentInset.top + 1,
-                    "All alternatives must retain a nonempty vertical panning range"
-                )
-            } else {
-                XCTAssertGreaterThan(railScrollFrame.minY, composerHostFrame.minY)
-            }
+            XCTAssertGreaterThan(scrollableContentHeight, railScroll.bounds.height + 1)
+            XCTAssertGreaterThan(
+                railScroll.contentSize.height + railScroll.adjustedContentInset.bottom
+                    - railScroll.bounds.height,
+                -railScroll.adjustedContentInset.top + 1,
+                "Every >5 alternative matrix variant must retain vertical panning"
+            )
             retainScreenshot(
-                "Pinned preset rail \(width)x\(height) \(scheme) \(typeSize) \(direction) reduceMotion=\(reduceMotion)",
+                "Pinned preset rail expanded physical-\(side.rawValue) \(direction) \(scheme) \(typeSize) reduceMotion=\(reduceMotion)",
                 in: host.view
             )
         }
     }
 
-    func testEmptyAndSinglePinUpdatesKeepActualEditorAndOmitEmptyRail() async throws {
+    func testEmptyAndSinglePinUpdatesKeepActualEditorOnBothPhysicalSides() async throws {
         let fixture = try await QuickCapturePresetFixture.make(in: self)
         let editor = PresetRenderingState()
         editor.isRailExpanded = true
@@ -390,44 +609,53 @@ final class QuickCaptureRenderingTests: XCTestCase {
         defer { window.isHidden = true; window.rootViewController = nil }
         try await settle(window)
         let original = try XCTUnwrap(find("quick_capture_text", in: host.view))
-        XCTAssertTrue(fixture.preferences.setOrderedIDs([]))
-        try await settle(window)
-        XCTAssertLessThanOrEqual(editor.frames["pins"]?.width ?? 0, 1)
-        XCTAssertTrue(original === find("quick_capture_text", in: host.view))
-        retainScreenshot("Pinned presets — deliberately empty", in: host.view)
-        XCTAssertTrue(fixture.preferences.setOrderedIDs(["inbox"]))
-        try await settle(window)
-        XCTAssertEqual(
-            try XCTUnwrap(editor.frames["pins"]).width,
-            CapturePresetQuickAccessButton.hitTargetSide,
-            accuracy: 1
-        )
-        let oneAlternativeScroll = try XCTUnwrap(
-            scrollViews(in: host.view).first { !($0 is UITextView) }
-        )
-        let oneAlternativeFrame = oneAlternativeScroll.convert(
-            oneAlternativeScroll.bounds,
-            to: host.view
-        )
-        let editorHostFrame = try XCTUnwrap(editor.frames["editor"]).offsetBy(
-            dx: host.view.safeAreaInsets.left,
-            dy: host.view.safeAreaInsets.top
-        )
-        XCTAssertEqual(
-            oneAlternativeFrame.height,
-            CapturePresetQuickAccessButton.hitTargetSide + (2 * Geist.Spacing.one),
-            accuracy: 2
-        )
-        XCTAssertEqual(
-            oneAlternativeFrame.maxY,
-            editorHostFrame.maxY - Geist.Spacing.one,
-            accuracy: 2
-        )
-        XCTAssertTrue(original === find("quick_capture_text", in: host.view))
+
+        for side in CapturePresetQuickAccessRailSide.allCases {
+            fixture.toolbarPreferences.setPresetQuickAccessRailSide(side)
+            XCTAssertTrue(fixture.preferences.setOrderedIDs([]))
+            try await settle(window)
+            XCTAssertLessThanOrEqual(editor.frames["pins"]?.width ?? 0, 1)
+            XCTAssertTrue(original === find("quick_capture_text", in: host.view))
+            retainScreenshot("Pinned presets — deliberately empty physical-\(side.rawValue)", in: host.view)
+
+            XCTAssertTrue(fixture.preferences.setOrderedIDs(["inbox"]))
+            try await settle(window)
+            let pins = try XCTUnwrap(editor.frames["pins"])
+            let composer = try XCTUnwrap(editor.frames["editor"])
+            XCTAssertEqual(pins.width, CapturePresetQuickAccessButton.hitTargetSide, accuracy: 1)
+            if side == .left {
+                XCTAssertEqual(pins.minX, composer.minX, accuracy: 1)
+            } else {
+                XCTAssertEqual(pins.maxX, composer.maxX, accuracy: 1)
+            }
+            let oneAlternativeScroll = try XCTUnwrap(
+                scrollViews(in: host.view).first { !($0 is UITextView) }
+            )
+            let oneAlternativeFrame = oneAlternativeScroll.convert(
+                oneAlternativeScroll.bounds,
+                to: host.view
+            )
+            let editorHostFrame = composer.offsetBy(
+                dx: host.view.safeAreaInsets.left,
+                dy: host.view.safeAreaInsets.top
+            )
+            XCTAssertEqual(
+                oneAlternativeFrame.height,
+                CapturePresetQuickAccessButton.hitTargetSide + (2 * Geist.Spacing.one),
+                accuracy: 2
+            )
+            XCTAssertEqual(
+                oneAlternativeFrame.maxY,
+                editorHostFrame.maxY - Geist.Spacing.one,
+                accuracy: 2
+            )
+            XCTAssertTrue(original === find("quick_capture_text", in: host.view))
+            retainScreenshot("Pinned presets — single useful pin physical-\(side.rawValue)", in: host.view)
+        }
+
         XCTAssertTrue(fixture.rail.activatePreset(id: "inbox"))
         try await settle(window)
         XCTAssertEqual(fixture.vm.draft.voxID, "inbox")
-        retainScreenshot("Pinned presets — single useful pin", in: host.view)
     }
 
     func testActualPresetButtonsKeepSmallIconOnlyVisualsInside44PointTargets() async throws {
@@ -556,6 +784,7 @@ private final class PresetRenderingState {
 private struct PresetComposerHarness: View {
     let fixture: QuickCapturePresetFixture
     @Bindable var editor: PresetRenderingState
+    @Environment(\.layoutDirection) private var layoutDirection
 
     var body: some View {
         @Bindable var vm = fixture.vm
@@ -568,7 +797,10 @@ private struct PresetComposerHarness: View {
                     isFocused: $editor.isFocused, controller: editor.controller)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(PresetGeometry(id: "editor"))
-                    .overlay(alignment: .leading) {
+                    .overlay(
+                        alignment: fixture.toolbarPreferences.presetQuickAccessRailSide
+                            .overlayAlignment(for: layoutDirection)
+                    ) {
                         fixture.rail(isExpanded: editor.isRailExpanded)
                             .background(PresetGeometry(id: "pins"))
                     }
