@@ -169,8 +169,8 @@ struct CapturePresetQuickAccessSelector: View {
             return String(localized: "Show all Capture Presets")
         }
         return isRailExpanded
-            ? String(localized: "Collapse pinned Capture Presets. Touch and hold to show all Capture Presets.")
-            : String(localized: "Expand pinned Capture Presets. Touch and hold to show all Capture Presets.")
+            ? String(localized: "Collapse pinned Capture Presets. Use the Show Menu action for all Capture Presets.")
+            : String(localized: "Expand pinned Capture Presets. Use the Show Menu action for all Capture Presets.")
     }
 
     var accessibilityValue: String {
@@ -224,6 +224,6 @@ struct CapturePresetQuickAccessButton: View {
     var accessibilityHint: String {
         isSelected
             ? String(localized: "Already selected. One-off routing is kept.")
-            : String(localized: "Use this preset for the current draft. Text and attachments are kept; one-off routing resets.")
+            : String(localized: "Use this preset for the current draft. Text and attachments stay in place; one-off route overrides reset.")
     }
 }
