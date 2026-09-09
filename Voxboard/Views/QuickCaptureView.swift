@@ -981,7 +981,7 @@ struct QuickCaptureView: View {
                     .toggleStyle(.switch)
                     .tint(Geist.Palette.blue700)
                     .disabled(recordingOptionsAreLocked)
-                    .accessibilityLabel("Keep recording audio attached")
+                    .accessibilityLabel("Attach audio to Capture")
                     .accessibilityHint(CaptureRecordingControlSemantics.audioHelp)
                     .help(CaptureRecordingControlSemantics.audioHelp)
                 }
