@@ -271,6 +271,16 @@ final class QuickCaptureRenderingTests: XCTestCase {
         XCTAssertEqual(railScrollFrame.height, expectedHeight, accuracy: 2)
         XCTAssertEqual(railScrollFrame.maxY, expandedEditor.maxY - Geist.Spacing.one, accuracy: 2)
         XCTAssertGreaterThan(railScrollFrame.minY, expandedEditor.minY)
+        let exposedEditorPoint = CGPoint(
+            x: railScrollFrame.midX,
+            y: (expandedEditor.minY + railScrollFrame.minY) / 2
+        )
+        let exposedEditorHit = host.view.hitTest(exposedEditorPoint, with: nil)
+        XCTAssertTrue(
+            exposedEditorHit === expandedText
+                || exposedEditorHit?.isDescendant(of: expandedText) == true,
+            "The transparent space above a short rail must remain editor-interactive"
+        )
         retainScreenshot("Preset selector — expanded overlay rail", in: host.view)
 
         let collapse = fixture.selector(isRailExpanded: true) {
