@@ -78,10 +78,6 @@ public enum RecordingOnlyFileExportError: Error, Equatable, LocalizedError, Send
 /// The caller keeps the durable WatchInbox source until this exporter returns a
 /// verified receipt and the inbox terminal state has been persisted.
 public struct RecordingOnlyFileExporter: @unchecked Sendable {
-    private static let invalidFilenameCharacters = CharacterSet(
-        charactersIn: "/\\?%*|\"<>:\n\r\t"
-    ).union(.controlCharacters)
-
     private let coordinator: any CaptureFileCoordinating
     private let fileManager: FileManager
 
@@ -223,33 +219,20 @@ public struct RecordingOnlyFileExporter: @unchecked Sendable {
         template: String,
         context: RecordingOnlyFileExportContext
     ) -> String {
-        let timestampFormatter = DateFormatter()
-        timestampFormatter.locale = Locale(identifier: "en_US_POSIX")
-        timestampFormatter.calendar = Calendar(identifier: .gregorian)
-        timestampFormatter.dateFormat = "yyyy-MM-dd-HHmmss"
-        let timestamp = timestampFormatter.string(from: context.createdAt)
-        let date = String(timestamp.prefix(10))
-        let shortYear = String(timestamp.prefix(4).suffix(2))
-        let time = String(timestamp.suffix(6))
-        let id = context.recordingID.lowercased()
-        let id8 = String(id.prefix(8))
-        let original = (context.originalFilename as NSString).deletingPathExtension
-
-        let configured = template.trimmingCharacters(in: .whitespacesAndNewlines)
-        let selectedTemplate = configured.isEmpty
-            ? CapturePresetWatchRecordingSettings.defaultFilenameTemplate
-            : configured
-        let rendered = selectedTemplate
-            .replacingOccurrences(of: "{timestamp}", with: timestamp)
-            .replacingOccurrences(of: "{date}", with: date)
-            .replacingOccurrences(of: "{YR}", with: shortYear)
-            .replacingOccurrences(of: "{time}", with: time)
-            .replacingOccurrences(of: "{id}", with: id)
-            .replacingOccurrences(of: "{id8}", with: id8)
-            .replacingOccurrences(of: "{preset}", with: context.presetName)
-            .replacingOccurrences(of: "{original}", with: original)
-        let fallback = "recording-\(timestamp)-\(id8)"
-        return sanitizeFilenameBase(rendered, fallback: fallback)
+        CapturePresetAudioFilename.renderedFilenameBase(
+            template: template,
+            context: CapturePresetAudioFilenameContext(
+                identifier: context.recordingID,
+                createdAt: context.createdAt,
+                presetName: context.presetName,
+                originalFilename: context.originalFilename,
+                calendar: Calendar(identifier: .gregorian),
+                locale: Locale(identifier: "en_US_POSIX"),
+                timeZone: .current
+            ),
+            emptyTemplate: CapturePresetWatchRecordingSettings.defaultFilenameTemplate,
+            sanitizationMode: .watchRecordingCompatibility
+        )
     }
 
     private func resolveFolder(
@@ -360,35 +343,9 @@ public struct RecordingOnlyFileExporter: @unchecked Sendable {
             && filename != "."
             && filename != ".."
             && (filename as NSString).pathExtension.lowercased() == "m4a"
-            && !filename.unicodeScalars.contains(where: invalidFilenameCharacters.contains)
-    }
-
-    private static func sanitizeFilenameBase(_ raw: String, fallback: String) -> String {
-        var value = raw.trimmingCharacters(in: .whitespacesAndNewlines)
-        if !(value as NSString).pathExtension.isEmpty {
-            value = (value as NSString).deletingPathExtension
-        }
-        let replaced = value.unicodeScalars.map { scalar in
-            invalidFilenameCharacters.contains(scalar) ? "-" : String(scalar)
-        }.joined()
-        let cleaned = replaced
-            .replacingOccurrences(of: " ", with: "-")
-            .trimmingCharacters(in: CharacterSet(charactersIn: "-._"))
-        let bounded = utf8Prefix(cleaned, maximumByteCount: 180)
-            .trimmingCharacters(in: CharacterSet(charactersIn: "-._"))
-        return bounded.isEmpty ? fallback : bounded
-    }
-
-    private static func utf8Prefix(_ value: String, maximumByteCount: Int) -> String {
-        var result = ""
-        var byteCount = 0
-        for character in value {
-            let rendered = String(character)
-            let characterByteCount = rendered.utf8.count
-            guard byteCount + characterByteCount <= maximumByteCount else { break }
-            result.append(character)
-            byteCount += characterByteCount
-        }
-        return result
+            && !CapturePresetAudioFilename.containsUnsafeFilenameCharacters(
+                filename,
+                mode: .watchRecordingCompatibility
+            )
     }
 }

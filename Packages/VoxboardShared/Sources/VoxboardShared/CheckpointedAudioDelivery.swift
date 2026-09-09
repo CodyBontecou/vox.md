@@ -19,6 +19,7 @@ public enum CheckpointedAudioDelivery {
         audioReferenceAlreadyAttached: Bool = false,
         audioDeliveryTransactionDirectoryURL: URL? = nil,
         audioReferenceDeliveryTransactionDirectoryURL: URL? = nil,
+        audioFilenameContext: CapturePresetAudioFilenameContext? = nil,
         checkpointExport: @escaping ExportCheckpoint,
         checkpointReference: @escaping ReferenceCheckpoint
     ) async throws -> URL? {
@@ -28,7 +29,8 @@ public enum CheckpointedAudioDelivery {
             flow: flow,
             transcriptFolderScopeURL: transcriptFolderScopeURL,
             previouslyExportedURL: previouslyExportedURL,
-            deliveryTransactionDirectoryURL: audioDeliveryTransactionDirectoryURL
+            deliveryTransactionDirectoryURL: audioDeliveryTransactionDirectoryURL,
+            audioFilenameContext: audioFilenameContext
         ) else {
             return nil
         }
