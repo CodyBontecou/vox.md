@@ -4,7 +4,7 @@
 
 **Bounded implementation complete and locally verified; hardware/pre-ship QA is not complete.**
 iOS/Mac emoji editors and display adoption, iOS pin/reorder settings, the pinned
-capture row, and a dedicated configurable Capture Presets widget are integrated.
+capture rail, and a dedicated configurable Capture Presets widget are integrated.
 Existing Quick Capture and Quick Record widgets retain their purposes. The preset
 fleet stops after cycle 2; unrelated Siri and task-spacing work are separate.
 
@@ -136,11 +136,12 @@ do not prove the device-only SwiftUI metadata boundary is safe. See
   partially composed input never truncates or overwrites the saved choice.
   Symbols explicitly clears emoji, retaining the symbol fallback. Mac's sheet
   stages both values until Apply; Cancel leaves the preset untouched.
-- **Capture Bar:** stored-order icon buttons above the existing preset/route/send
-  controls, horizontal overflow without a pin cap, no empty strip, and >=44pt
-  targets. Selected traits use the exact draft ID. Selection calls the existing
-  guarded VM API, without replacing/refocusing the Markdown editor. iOS native
-  menu titles include emoji because UIKit menu image slots cannot render Text.
+- **Capture Bar (cycle 2):** stored-order icon buttons above the existing
+  preset/route/send controls, horizontal overflow without a pin cap, no empty
+  strip, and >=44pt targets. Selected traits use the exact draft ID. Selection
+  calls the existing guarded VM API without replacing or refocusing the Markdown
+  editor. iOS native menu titles include emoji because UIKit menu image slots
+  cannot render Text.
 - **Capture Presets widget:** AppIntentConfiguration, default Follow Capture Bar
   or six explicit ordered Custom slots per instance. The SDK exposes entity
   arrays but no guaranteed reorder editor, so named positions make order explicit.
@@ -205,11 +206,66 @@ verbose simulator diagnostics after 600 seconds; subsequent tests use the
 supported `-collect-test-diagnostics never`. This disables sysdiagnose collection,
 not tests, failure reporting, logs or retained XCTest image attachments.
 
+### Post-cycle compact rail refinement
+
+Following product review, the horizontal Capture Bar strip was replaced by a
+compact floating stack anchored above the selected-preset control at the
+composer's leading edge. Stored order rises from the controls, keeping the
+highest-priority pin nearest the bottom. The selector itself represents the
+selected preset, so the expanded stack shows only alternatives rather than
+repeating that icon. Each alternative remains a 14pt icon inside an independent
+44pt interaction target. Overflow scrolls vertically, while an empty stack
+consumes no composer width.
+
+The selected-preset control and stack are one disclosure interaction. Fresh
+installs show only the selected preset, its name, and the two-arrow control. A
+tap spring-animates the borderless icon stack with a bottom-anchored scale and
+fade; Reduce Motion makes the change immediate. It overlays the leading edge
+without a full-height divider, so the editor's frame and Markdown layout remain
+identical in both states. The choice persists
+in standard app preferences under `capture.presets.quickAccess.railExpanded.v1`.
+Touch-and-hold still opens the
+complete native preset menu, and an empty pin list retains the menu's ordinary
+tap behavior, so unpinned presets remain reachable.
+
+A follow-up critical pass found that the preload's full-height `LazyVStack`
+proposal left short alternative sets at the top of the composer even though the
+scroll anchor was bottom. The scroll viewport now hugs its 44pt controls and is
+itself bottom-aligned, so one or two alternatives actually rise from the
+selector. It remains bounded by the composer when content overflows. Clipping is
+retained vertically, and mounted hit-testing confirms that transparent space
+above a short rail still reaches the Markdown editor. The selector has an
+independent 44pt minimum in both dimensions, carries the selected trait, and
+explains disclosure/full-menu and one-off route-reset behavior in accessibility
+semantics.
+
+The same pass made route ownership conservative by construction: only a claimed
+job with an immutable Preset delivery releases next-preset selection. Draft,
+keyboard, clipboard, recovery, import/capture handoff, and live work continue to
+block it; Send and every non-preset route mutation remain under the broader
+ownership guard.
+
+Current-checkout verification passed the 14-fixture capture structure gate, the
+project contract suite (10 launch-script and 95 contract tests), 61 focused
+shared-package tests, and 56 unsigned iOS simulator tests across launch safety,
+rail semantics, capture rendering, and completion-mode policy. Mounted
+screenshots cover compact and expanded disclosure states, fixed editor geometry,
+vertical overflow, dark mode, large text, Reduce Motion, RTL mirroring,
+empty/single-pin updates, and retained editor identity, first responder, focus,
+and selection.
+The authoritative result bundle is
+`/private/tmp/vox-md-hans-feedback-fleet-loop/cycle-1/rail-final-ios-j2-v3.xcresult`;
+its 20 exported PNGs are beside it under `rail-final-ios-j2-v3-attachments`.
+The simulator's Reduce Motion preference was enabled for that rendering matrix
+(the attachment names record `reduceMotion=true`) and restored afterward. The
+complete cycle-2 matrix above predates these layout refinements and was not
+relabeled as a current full-suite run.
+
 ### Runtime evidence versus manual gates
 
 - Hosted tests execute actual native emoji field events, settings actions with
   real isolated preferences, and mounted Symbols/Emoji/pinned-section variants.
-- Actual row/canvas/Markdown UITextView mounts preserve UIView identity, selected
+- Actual rail/canvas/Markdown UITextView mounts preserve UIView identity, selected
   range, first responder, text and attachments across a callback-driven switch,
   same-ID no-op and busy rejection. Before/after images were inspected. Other
   mounts cover keyboard-sized space, dark mode, RTL, overflow and >=44pt targets.

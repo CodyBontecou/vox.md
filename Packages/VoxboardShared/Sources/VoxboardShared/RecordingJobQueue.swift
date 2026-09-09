@@ -82,6 +82,22 @@ public final class RecordingJobQueue {
     /// Read-only ownership observation for native composer route guards. Import
     /// conversion and recording handoff hold this even before ASR begins.
     public var isCaptureActive: Bool { legacyCaptureActive || !captureLeaseIDs.isEmpty }
+    /// True only when capture/import work or a claimed queue job owns a route.
+    /// `isProcessing` also covers an empty drain scanning for work, so using it
+    /// as route ownership can make a cold-launch Quick Record block itself.
+    public var ownsCaptureRoute: Bool { isCaptureActive || activeJobID != nil }
+
+    /// A Preset job carries an immutable snapshot and is independent of the open
+    /// composer once enqueued. Every other claimed delivery stays conservative:
+    /// draft work can still mutate the composer, and recovery/IPC work does not
+    /// carry the Preset snapshot required to prove that rerouting is harmless.
+    public var blocksCapturePresetSelection: Bool {
+        if isCaptureActive { return true }
+        guard activeJobID != nil else { return false }
+        guard let activeJob else { return true }
+        if case .preset = activeJob.delivery { return false }
+        return true
+    }
     private var isSystemSuspended = false
     private var needsDrainAfterCurrent = false
     private var pendingInterruption: RecordingQueueInterruption?

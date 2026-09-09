@@ -18,6 +18,25 @@ final class RecordingCompletionModeTests: XCTestCase {
         )
     }
 
+    func testOnlyImmutablePresetDeliveryPermitsSelectingTheNextPresetWhileProcessing() {
+        XCTAssertTrue(
+            RecordingCompletionMode.captureDraft(attachAudio: false)
+                .blocksCapturePresetSelectionDuringProcessing
+        )
+        XCTAssertTrue(
+            RecordingCompletionMode.captureDraft(attachAudio: true)
+                .blocksCapturePresetSelectionDuringProcessing
+        )
+        XCTAssertFalse(
+            RecordingCompletionMode.runVox(flowID: "journal")
+                .blocksCapturePresetSelectionDuringProcessing
+        )
+        XCTAssertTrue(
+            RecordingCompletionMode.keyboardTranscription
+                .blocksCapturePresetSelectionDuringProcessing
+        )
+    }
+
     func testExternalCapturePathOverridesInAppCompletionOrigin() {
         let completionMode = RecordingCompletionMode.runVox(flowID: "general")
 

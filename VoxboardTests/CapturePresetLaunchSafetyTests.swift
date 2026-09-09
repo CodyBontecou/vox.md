@@ -281,6 +281,31 @@ final class CapturePresetLaunchSafetyTests: XCTestCase {
         XCTAssertTrue(f.vm.canChangeCaptureRoute)
     }
 
+    func testImmutableBackgroundPresetRunAllowsSelectingTheNextPresetOnly() async throws {
+        let f = try await fixture()
+        let host = HostOwnership()
+        host.busy = true
+        f.vm.configureCaptureRouteOwnership(
+            { host.busy },
+            presetSelectionIsBlocked: { host.blocksPresetSelection }
+        )
+
+        XCTAssertFalse(f.vm.canChangeCaptureRoute)
+        XCTAssertTrue(f.vm.canSelectCapturePreset)
+        XCTAssertTrue(f.vm.selectVox("inbox"))
+        XCTAssertEqual(f.vm.draft.voxID, "inbox")
+
+        let selectedDraft = f.vm.draft
+        f.vm.selectDestination(f.destinationID)
+        XCTAssertNil(f.vm.beginCaptureRouteOperation())
+        XCTAssertEqual(f.vm.draft, selectedDraft)
+
+        host.blocksPresetSelection = true
+        XCTAssertFalse(f.vm.canSelectCapturePreset)
+        XCTAssertFalse(f.vm.selectVox("journal"))
+        XCTAssertEqual(f.vm.draft, selectedDraft)
+    }
+
     func testLiveTranscriptAndLocationDecisionOwnTheRoute() async throws {
         let f = try await fixture()
         await f.vm.updateLiveRecordedTranscript(finalizedText: "", volatileText: "Recording")
@@ -431,7 +456,10 @@ final class CapturePresetLaunchSafetyTests: XCTestCase {
                        presets: presets, destinationID: destinationID, secondDestinationID: secondDestinationID)
     }
 
-    private final class HostOwnership { var busy = false }
+    private final class HostOwnership {
+        var busy = false
+        var blocksPresetSelection = false
+    }
 
     private struct Fixture {
         let vm: QuickCaptureViewModel

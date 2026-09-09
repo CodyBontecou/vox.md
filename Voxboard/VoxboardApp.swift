@@ -147,9 +147,14 @@ struct VoxboardApp: App {
         )
         watchPipeline.configure(recorder: recorder)
         _watchRecordingPipeline = State(initialValue: watchPipeline)
-        captureViewModel.configureCaptureRouteOwnership { [weak recorder, weak watchPipeline] in
-            recorder?.ownsCaptureRoute == true || watchPipeline?.isProcessing == true
-        }
+        captureViewModel.configureCaptureRouteOwnership(
+            { [weak recorder, weak watchPipeline] in
+                recorder?.ownsCaptureRoute == true || watchPipeline?.isProcessing == true
+            },
+            presetSelectionIsBlocked: { [weak recorder] in
+                recorder?.blocksCapturePresetSelection == true
+            }
+        )
         WatchRecordingController.shared.configure(
             recorder: recorder,
             usageTracker: usage,

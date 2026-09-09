@@ -21,6 +21,7 @@ final class QuickCaptureViewModel {
     private(set) var pendingPresetSwitch: CapturePresetSwitchConfirmation?
     private var routeOperationIDs = Set<UUID>()
     private var hostOwnsCaptureRoute: @MainActor () -> Bool = { false }
+    private var hostBlocksCapturePresetSelection: @MainActor () -> Bool = { false }
     var errorMessage: String?
     var lastReceipt: CaptureReceipt?
     var failedInboxCount = 0
@@ -324,21 +325,37 @@ final class QuickCaptureViewModel {
         voxProfiles = CapturePresetProfileStore.enabledProfiles(defaults: defaults)
     }
 
-    /// App installs a live reader once, before any external launch. Reading the
-    /// recorder directly avoids a view-only disabled-menu or onChange race.
-    func configureCaptureRouteOwnership(_ isOwned: @escaping @MainActor () -> Bool) {
+    /// App installs live readers once, before any external launch. A recorder
+    /// can remain broadly busy while an immutable Preset job processes without
+    /// still owning the open composer's preset selection.
+    func configureCaptureRouteOwnership(
+        _ isOwned: @escaping @MainActor () -> Bool,
+        presetSelectionIsBlocked: (@MainActor () -> Bool)? = nil
+    ) {
         hostOwnsCaptureRoute = isOwned
+        hostBlocksCapturePresetSelection = presetSelectionIsBlocked ?? isOwned
     }
 
-    var isCaptureRouteOwned: Bool {
+    private var localCaptureRouteIsOwned: Bool {
         isLoading || isSubmitting || isDescribingImages || isResolvingLocation
             || isProcessingMedia || hasLiveRecordedTranscriptPreview
             || locationDecision != nil || !routeOperationIDs.isEmpty
-            || hostOwnsCaptureRoute()
+    }
+
+    var isCaptureRouteOwned: Bool {
+        localCaptureRouteIsOwned || hostOwnsCaptureRoute()
     }
 
     var canChangeCaptureRoute: Bool {
         hasLoaded && !isCaptureRouteOwned && pendingPresetSwitch == nil
+    }
+
+    /// Unlike destination overrides and Send, selecting the next preset is safe
+    /// while an unrelated job processes from its immutable preset snapshot.
+    var canSelectCapturePreset: Bool {
+        hasLoaded && !localCaptureRouteIsOwned
+            && !hostBlocksCapturePresetSelection()
+            && pendingPresetSwitch == nil
     }
 
     @discardableResult
@@ -377,7 +394,10 @@ final class QuickCaptureViewModel {
             return false
         }
         guard draft.voxID != id else { return false }
-        guard requireCaptureRouteAvailable() else { return false }
+        guard canSelectCapturePreset else {
+            errorMessage = QuickCaptureViewModelError.captureRouteBusy.localizedDescription
+            return false
+        }
         voxProfiles = profiles
         draft.selectVox(id)
         CapturePresetProfileStore.selectCaptureProfile(id: id, defaults: defaults)
