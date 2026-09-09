@@ -1,5 +1,18 @@
 import Foundation
 
+/// The hour-cycle used for timestamps inserted from Capture.
+///
+/// Raw values are stable persisted values. An absent or unknown stored value
+/// should resolve to `default`, preserving Capture's existing 12-hour output.
+public enum CaptureTimestampFormat: String, Codable, CaseIterable, Equatable, Sendable, Identifiable {
+    case twelveHour = "12-hour"
+    case twentyFourHour = "24-hour"
+
+    public static let `default`: CaptureTimestampFormat = .twelveHour
+
+    public var id: String { rawValue }
+}
+
 public enum CaptureInsertionFormatterError: Error, Equatable, LocalizedError, Sendable {
     case invalidWikiLink
     case invalidCoordinates
@@ -53,11 +66,26 @@ public struct CaptureInsertionFormatter: Sendable {
     }
 
     public func currentTimestamp(at date: Date = Date()) -> String {
-        formatted(date, pattern: "h:mm a yyyy-MM-dd")
+        currentTimestamp(at: date, format: .default)
+    }
+
+    public func currentTimestamp(
+        at date: Date = Date(),
+        format: CaptureTimestampFormat
+    ) -> String {
+        let pattern = switch format {
+        case .twelveHour: "h:mm a yyyy-MM-dd"
+        case .twentyFourHour: "HH:mm yyyy-MM-dd"
+        }
+        return formatted(date, pattern: pattern)
     }
 
     public func timestamp(for date: Date) -> String {
         currentTimestamp(at: date)
+    }
+
+    public func timestamp(for date: Date, format: CaptureTimestampFormat) -> String {
+        currentTimestamp(at: date, format: format)
     }
 
     /// Produces an Obsidian-style wiki link after normalizing path separators.
