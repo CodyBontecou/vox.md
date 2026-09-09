@@ -228,16 +228,33 @@ Touch-and-hold still opens the
 complete native preset menu, and an empty pin list retains the menu's ordinary
 tap behavior, so unpinned presets remain reachable.
 
+A follow-up critical pass found that the preload's full-height `LazyVStack`
+proposal left short alternative sets at the top of the composer even though the
+scroll anchor was bottom. The scroll viewport now hugs its 44pt controls and is
+itself bottom-aligned, so one or two alternatives actually rise from the
+selector. It remains bounded by the composer when content overflows. Clipping is
+retained vertically, and mounted hit-testing confirms that transparent space
+above a short rail still reaches the Markdown editor. The selector has an
+independent 44pt minimum in both dimensions, carries the selected trait, and
+explains disclosure/full-menu and one-off route-reset behavior in accessibility
+semantics.
+
+The same pass made route ownership conservative by construction: only a claimed
+job with an immutable Preset delivery releases next-preset selection. Draft,
+keyboard, clipboard, recovery, import/capture handoff, and live work continue to
+block it; Send and every non-preset route mutation remain under the broader
+ownership guard.
+
 Current-checkout verification passed the 14-fixture capture structure gate, the
-project contract suite (10 launch-script and 95 contract tests), and 17 unsigned
-iOS simulator tests covering rail/selector state, persistence, selection safety,
-and all capture rendering regressions. Hosted screenshots cover compact and
-expanded disclosure states, fixed editor geometry, vertical overflow, dark mode,
-large text, RTL mirroring, empty/single-pin updates, and retained editor identity,
-focus, and selection. The latest result bundle is
-`/tmp/vox-preset-borderless-rail-1788912005.xcresult`. The complete cycle-2
-matrix above predates these layout refinements and was not relabeled as a current
-full-suite run.
+project contract suite (10 launch-script and 95 contract tests), 61 focused
+shared-package tests, and 56 unsigned iOS simulator tests across launch safety,
+rail semantics, capture rendering, and completion-mode policy. Mounted
+screenshots cover compact and expanded disclosure states, fixed editor geometry,
+vertical overflow, dark mode, large text, RTL mirroring, empty/single-pin
+updates, and retained editor identity, first responder, focus, and selection.
+The latest result bundle and screenshots are retained with the cycle-1 rail
+report. The complete cycle-2 matrix above predates these layout refinements and
+was not relabeled as a current full-suite run.
 
 ### Runtime evidence versus manual gates
 
