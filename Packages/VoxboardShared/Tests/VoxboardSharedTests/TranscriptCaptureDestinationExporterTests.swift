@@ -954,6 +954,7 @@ final class TranscriptCaptureDestinationExporterTests: XCTestCase {
         var flow = CapturePresetStore.makeCustomFlow()
         flow.name = "Watch Capture"
         flow.audioFilenameTemplate = "normal-{id8}-{preset}-{original}.wav"
+        let writer = InboxStateObservingWriter(captureRootURL: captureRoot)
 
         let receipt = try await ConfiguredTranscriptCaptureDestinationExporter.exportRecording(
             requestID: requestID,
@@ -963,7 +964,8 @@ final class TranscriptCaptureDestinationExporterTests: XCTestCase {
             audioSourceURL: sourceURL,
             preferredFilename: "Watch Original.caf",
             locationOutcome: nil,
-            captureRootURL: captureRoot
+            captureRootURL: captureRoot,
+            pipeline: CapturePipeline(writer: writer)
         )
 
         let expectedFilename = "normal-abcdef12-Watch-Capture-Watch-Original.m4a"
