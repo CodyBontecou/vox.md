@@ -136,6 +136,7 @@ final class QuickCaptureRenderingTests: XCTestCase {
     func testPinnedSelectionRetainsRealMarkdownUIViewCursorFocusTextAndAttachments() async throws {
         let fixture = try await QuickCapturePresetFixture.make(in: self)
         let editor = PresetRenderingState()
+        editor.isRailExpanded = true
         let harness = PresetComposerHarness(fixture: fixture, editor: editor)
         let host = UIHostingController(rootView: harness)
         let previousKeyWindow = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
@@ -160,9 +161,9 @@ final class QuickCaptureRenderingTests: XCTestCase {
         let before = fixture.vm.draft
         retainScreenshot("Pinned presets — focused editor before switch", in: host.view)
 
-        // This is the actual row's Button callback seam, not a direct mutation
+        // This is the actual rail's Button callback seam, not a direct mutation
         // or a substitute editor probe. It is not a simulated physical tap.
-        XCTAssertTrue(fixture.row.activatePreset(id: "inbox"))
+        XCTAssertTrue(fixture.rail.activatePreset(id: "inbox"))
         // Drain the successful switch's scheduled autosave before comparing a
         // later rejected action with the complete draft (including updatedAt).
         // Otherwise that earlier save can land during the busy-state render.
@@ -181,17 +182,17 @@ final class QuickCaptureRenderingTests: XCTestCase {
         XCTAssertEqual(fixture.vm.draft.id, before.id)
         XCTAssertEqual(fixture.vm.draft.voxID, "inbox")
         XCTAssertNil(fixture.vm.draft.relativeNotePathOverride)
-        XCTAssertFalse(fixture.row.activatePreset(id: "inbox"))
+        XCTAssertFalse(fixture.rail.activatePreset(id: "inbox"))
         try await settle(window)
         XCTAssertTrue(updated.isFirstResponder)
         XCTAssertEqual(updated.selectedRange, cursor)
         retainScreenshot("Pinned presets — focused editor after switch and no-op", in: host.view)
 
-        let staleRow = fixture.row
+        let staleRail = fixture.rail
         let selectedDraft = fixture.vm.draft
         fixture.vm.isProcessingMedia = true
-        XCTAssertFalse(fixture.row.activatePreset(id: "journal"))
-        XCTAssertFalse(staleRow.activatePreset(id: "journal"))
+        XCTAssertFalse(fixture.rail.activatePreset(id: "journal"))
+        XCTAssertFalse(staleRail.activatePreset(id: "journal"))
         try await settle(window)
         XCTAssertEqual(fixture.vm.draft, selectedDraft)
         XCTAssertTrue(original === find("quick_capture_text", in: host.view))
@@ -200,47 +201,114 @@ final class QuickCaptureRenderingTests: XCTestCase {
         fixture.vm.isProcessingMedia = false
     }
 
-    func testRealPinnedRowRendersOverflowInKeyboardSizedLargeTextAndRTLLayouts() async throws {
+    func testJoinedSelectorTogglesOverlayWithoutReflowingOrReplacingEditor() async throws {
         let fixture = try await QuickCapturePresetFixture.make(in: self)
-        let variants: [(CGFloat, ColorScheme, DynamicTypeSize, LayoutDirection)] = [
-            (320, .light, .large, .leftToRight),
-            (390, .dark, .accessibility3, .leftToRight),
-            (320, .light, .accessibility3, .rightToLeft),
-            (768, .dark, .xxxLarge, .leftToRight),
+        // Match the ordinary compact case: one selected preset plus two
+        // alternatives. The separate overflow test keeps all seven pins.
+        XCTAssertTrue(fixture.preferences.setOrderedIDs(["journal", "inbox", "ideas"]))
+        let editor = PresetRenderingState()
+        let host = UIHostingController(rootView: PresetComposerHarness(fixture: fixture, editor: editor))
+        let window = show(host, size: CGSize(width: 390, height: 400))
+        defer { window.isHidden = true; window.rootViewController = nil }
+        try await settle(window)
+
+        let original = try XCTUnwrap(find("quick_capture_text", in: host.view))
+        XCTAssertLessThanOrEqual(editor.frames["pins"]?.width ?? 0, 1)
+        XCTAssertGreaterThanOrEqual(try XCTUnwrap(editor.frames["selector"]).height, 44)
+        retainScreenshot("Preset selector — compact default", in: host.view)
+        // drawHierarchy can finish attaching a hosted test window. Measure both
+        // states only after that one-time test-harness layout settles.
+        try await settle(window)
+        let compactTextFrame = original.convert(original.bounds, to: host.view)
+        let compactEditor = try XCTUnwrap(editor.frames["editor"])
+
+        let expand = fixture.selector(isRailExpanded: false) {
+            editor.isRailExpanded.toggle()
+        }
+        XCTAssertTrue(expand.toggleRailIfAvailable())
+        try await settle(window)
+        let expandedPins = try XCTUnwrap(editor.frames["pins"])
+        let expandedEditor = try XCTUnwrap(editor.frames["editor"])
+        XCTAssertEqual(expandedPins.width, CapturePresetQuickAccessButton.hitTargetSide, accuracy: 1)
+        XCTAssertEqual(expandedPins.minX, expandedEditor.minX, accuracy: 1)
+        XCTAssertEqual(expandedEditor.minX, compactEditor.minX, accuracy: 1)
+        XCTAssertEqual(expandedEditor.minY, compactEditor.minY, accuracy: 1)
+        XCTAssertEqual(expandedEditor.width, compactEditor.width, accuracy: 1)
+        let expandedText = try XCTUnwrap(find("quick_capture_text", in: host.view))
+        let expandedTextFrame = expandedText.convert(expandedText.bounds, to: host.view)
+        XCTAssertEqual(expandedTextFrame.minX, compactTextFrame.minX, accuracy: 1)
+        XCTAssertEqual(expandedTextFrame.minY, compactTextFrame.minY, accuracy: 1)
+        XCTAssertEqual(expandedTextFrame.width, compactTextFrame.width, accuracy: 1)
+        XCTAssertEqual(expandedTextFrame.height, compactTextFrame.height, accuracy: 1)
+        XCTAssertTrue(original === expandedText)
+        retainScreenshot("Preset selector — expanded overlay rail", in: host.view)
+
+        let collapse = fixture.selector(isRailExpanded: true) {
+            editor.isRailExpanded.toggle()
+        }
+        XCTAssertTrue(collapse.toggleRailIfAvailable())
+        try await settle(window)
+        XCTAssertLessThanOrEqual(editor.frames["pins"]?.width ?? 0, 1)
+        let collapsedEditor = try XCTUnwrap(editor.frames["editor"])
+        XCTAssertEqual(collapsedEditor.minX, compactEditor.minX, accuracy: 1)
+        XCTAssertEqual(collapsedEditor.width, compactEditor.width, accuracy: 1)
+        XCTAssertTrue(original === find("quick_capture_text", in: host.view))
+    }
+
+    func testRealPinnedRailOverlaysLeadingEdgeAndScrollsVerticallyInCompactLayouts() async throws {
+        let fixture = try await QuickCapturePresetFixture.make(in: self)
+        let variants: [(CGFloat, CGFloat, ColorScheme, DynamicTypeSize, LayoutDirection)] = [
+            (320, 220, .light, .large, .leftToRight),
+            (390, 400, .dark, .accessibility3, .leftToRight),
+            (320, 220, .light, .accessibility3, .rightToLeft),
+            (768, 400, .dark, .xxxLarge, .leftToRight),
         ]
-        for (width, scheme, typeSize, direction) in variants {
+        for (width, height, scheme, typeSize, direction) in variants {
             let editor = PresetRenderingState()
+            editor.isRailExpanded = true
             let content = PresetComposerHarness(fixture: fixture, editor: editor)
                 .environment(\.colorScheme, scheme)
                 .environment(\.dynamicTypeSize, typeSize)
                 .environment(\.layoutDirection, direction)
             let host = UIHostingController(rootView: content)
-            let window = show(host, size: CGSize(width: width, height: 400))
+            let window = show(host, size: CGSize(width: width, height: height))
             defer { window.isHidden = true; window.rootViewController = nil }
             try await settle(window)
             let pins = try XCTUnwrap(editor.frames["pins"])
             let composer = try XCTUnwrap(editor.frames["editor"])
             let route = try XCTUnwrap(editor.frames["route"])
-            XCTAssertGreaterThanOrEqual(pins.height, 44)
-            XCTAssertLessThanOrEqual(pins.width, width + 1)
-            XCTAssertGreaterThan(composer.height, 0)
-            XCTAssertGreaterThanOrEqual(pins.minY, composer.maxY - 1)
-            XCTAssertGreaterThanOrEqual(route.minY, pins.maxY - 1)
-            XCTAssertLessThanOrEqual(route.maxY, host.view.bounds.height + 1)
-            if width < 768 {
-                let overflow = scrollViews(in: host.view).filter {
-                    !($0 is UITextView) && $0.contentSize.width > $0.bounds.width + 1
-                }
-                XCTAssertFalse(overflow.isEmpty, "All seven pins must overflow horizontally, never shrink or cap")
-                XCTAssertTrue(overflow.allSatisfy { $0.keyboardDismissMode == .none })
+            XCTAssertEqual(pins.width, CapturePresetQuickAccessButton.hitTargetSide, accuracy: 1)
+            XCTAssertEqual(pins.minY, composer.minY, accuracy: 1)
+            XCTAssertEqual(pins.maxY, composer.maxY, accuracy: 1)
+            XCTAssertGreaterThan(composer.width, pins.width)
+            if direction == .rightToLeft {
+                XCTAssertEqual(pins.maxX, composer.maxX, accuracy: 1)
+            } else {
+                XCTAssertEqual(pins.minX, composer.minX, accuracy: 1)
             }
-            retainScreenshot("Pinned presets \(width) \(scheme) \(typeSize) \(direction)", in: host.view)
+            XCTAssertGreaterThanOrEqual(pins.minX, composer.minX - 1)
+            XCTAssertLessThanOrEqual(pins.maxX, composer.maxX + 1)
+            XCTAssertGreaterThanOrEqual(route.minY, max(pins.maxY, composer.maxY) - 1)
+            XCTAssertLessThanOrEqual(route.maxY, host.view.bounds.height + 1)
+            if height == 220 {
+                let overflow = scrollViews(in: host.view).filter {
+                    !($0 is UITextView) && $0.contentSize.height > $0.bounds.height + 1
+                }
+                XCTAssertFalse(overflow.isEmpty, "All seven pins must overflow vertically, never shrink or cap")
+                XCTAssertTrue(overflow.allSatisfy { $0.keyboardDismissMode == .none })
+                XCTAssertTrue(overflow.allSatisfy { $0.contentSize.width <= $0.bounds.width + 1 })
+            }
+            retainScreenshot(
+                "Pinned preset rail \(width)x\(height) \(scheme) \(typeSize) \(direction)",
+                in: host.view
+            )
         }
     }
 
-    func testEmptyAndSinglePinUpdatesKeepActualEditorAndOmitEmptyStrip() async throws {
+    func testEmptyAndSinglePinUpdatesKeepActualEditorAndOmitEmptyRail() async throws {
         let fixture = try await QuickCapturePresetFixture.make(in: self)
         let editor = PresetRenderingState()
+        editor.isRailExpanded = true
         let host = UIHostingController(rootView: PresetComposerHarness(fixture: fixture, editor: editor))
         let window = show(host, size: CGSize(width: 320, height: 400))
         defer { window.isHidden = true; window.rootViewController = nil }
@@ -248,20 +316,28 @@ final class QuickCaptureRenderingTests: XCTestCase {
         let original = try XCTUnwrap(find("quick_capture_text", in: host.view))
         XCTAssertTrue(fixture.preferences.setOrderedIDs([]))
         try await settle(window)
-        XCTAssertLessThanOrEqual(editor.frames["pins"]?.height ?? 0, 1)
+        XCTAssertLessThanOrEqual(editor.frames["pins"]?.width ?? 0, 1)
         XCTAssertTrue(original === find("quick_capture_text", in: host.view))
         retainScreenshot("Pinned presets — deliberately empty", in: host.view)
         XCTAssertTrue(fixture.preferences.setOrderedIDs(["inbox"]))
         try await settle(window)
-        XCTAssertGreaterThanOrEqual(try XCTUnwrap(editor.frames["pins"]).height, 44)
+        XCTAssertEqual(
+            try XCTUnwrap(editor.frames["pins"]).width,
+            CapturePresetQuickAccessButton.hitTargetSide,
+            accuracy: 1
+        )
         XCTAssertTrue(original === find("quick_capture_text", in: host.view))
-        XCTAssertTrue(fixture.row.activatePreset(id: "inbox"))
+        XCTAssertTrue(fixture.rail.activatePreset(id: "inbox"))
         try await settle(window)
         XCTAssertEqual(fixture.vm.draft.voxID, "inbox")
         retainScreenshot("Pinned presets — single useful pin", in: host.view)
     }
 
-    func testActualPresetButtonsKeep44PointTargetsAndMirrorWithDynamicType() async throws {
+    func testActualPresetButtonsKeepSmallIconOnlyVisualsInside44PointTargets() async throws {
+        XCTAssertEqual(CapturePresetQuickAccessButton.iconSize, 14)
+        XCTAssertLessThan(CapturePresetQuickAccessButton.iconSize,
+                          CapturePresetQuickAccessButton.hitTargetSide)
+        XCTAssertGreaterThanOrEqual(CapturePresetQuickAccessButton.hitTargetSide, 44)
         for typeSize in [DynamicTypeSize.xSmall, .large, .accessibility3] {
             for direction in [LayoutDirection.leftToRight, .rightToLeft] {
                 let measurements = PresetRenderingState()
@@ -286,8 +362,8 @@ final class QuickCaptureRenderingTests: XCTestCase {
                 let first = try XCTUnwrap(measurements.frames["first"])
                 let second = try XCTUnwrap(measurements.frames["second"])
                 for frame in [first, second] {
-                    XCTAssertGreaterThanOrEqual(frame.width, 44)
-                    XCTAssertGreaterThanOrEqual(frame.height, 44)
+                    XCTAssertEqual(frame.width, CapturePresetQuickAccessButton.hitTargetSide, accuracy: 1)
+                    XCTAssertEqual(frame.height, CapturePresetQuickAccessButton.hitTargetSide, accuracy: 1)
                 }
                 if direction == .rightToLeft { XCTAssertGreaterThan(first.minX, second.minX) }
                 else { XCTAssertLessThan(first.minX, second.minX) }
@@ -373,12 +449,13 @@ final class QuickCaptureRenderingTests: XCTestCase {
 private final class PresetRenderingState {
     var selection = NSRange(location: 0, length: 0)
     var isFocused = false
+    var isRailExpanded = false
     let controller = MarkdownComposerController()
     @ObservationIgnored var frames: [String: CGRect] = [:]
 }
 
 /// Only the ancillary destination/attachment slots are deterministic labels;
-/// the row, canvas and Markdown UIViewRepresentable are production components.
+/// the rail, canvas and Markdown UIViewRepresentable are production components.
 private struct PresetComposerHarness: View {
     let fixture: QuickCapturePresetFixture
     @Bindable var editor: PresetRenderingState
@@ -394,21 +471,25 @@ private struct PresetComposerHarness: View {
                     isFocused: $editor.isFocused, controller: editor.controller)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(PresetGeometry(id: "editor"))
+                    .overlay(alignment: .leading) {
+                        fixture.rail(isExpanded: editor.isRailExpanded)
+                            .background(PresetGeometry(id: "pins"))
+                    }
             },
             liveTranscript: empty, attachments: empty,
             controls: CaptureViewSection {
-                VStack(spacing: 0) {
-                    fixture.row.background(PresetGeometry(id: "pins"))
-                    HStack {
-                        Text(vm.selectedVoxProfile?.displayName ?? "All Presets")
-                        Spacer(minLength: 4)
-                        Text("Vault / Note.md")
+                HStack {
+                    fixture.selector(isRailExpanded: editor.isRailExpanded) {
+                        editor.isRailExpanded.toggle()
                     }
-                    .font(.caption)
-                    .padding(.horizontal, 12)
-                    .frame(minHeight: 44)
-                    .background(PresetGeometry(id: "route"))
+                    .background(PresetGeometry(id: "selector"))
+                    Spacer(minLength: 4)
+                    Text("Vault / Note.md")
                 }
+                .font(.caption)
+                .padding(.horizontal, 12)
+                .frame(minHeight: 44)
+                .background(PresetGeometry(id: "route"))
             },
             keyboardGuidance: empty, error: empty, fileExport: empty, sentToast: empty
         )

@@ -127,6 +127,10 @@ struct QuickCaptureView: View {
     @State private var flows: [CapturePreset] = CapturePresetStore.loadFlows()
     @State private var selectedFlowId: String = CapturePresetStore.selectedFlowId()
     @State private var quickAccessPreferences = CapturePresetQuickAccessPreferences()
+    /// A compact selector is the fresh-install default; the user's expanded
+    /// leading-rail preference survives view recreation and app relaunches.
+    @AppStorage(CapturePreferenceKeys.presetQuickAccessRailExpanded)
+    private var isPresetQuickAccessRailExpanded = false
     @State private var observedPresetData: Data?
     @State private var observedPinState: CapturePresetQuickAccessState = .unavailable
     @State private var linkText = ""
@@ -799,7 +803,7 @@ struct QuickCaptureView: View {
 
                 recordingResultModeIndicator
                     .font(.system(size: 9, weight: .semibold))
-                    .foregroundStyle(.black)
+                    .foregroundStyle(Geist.text)
                     .padding(2)
                     .background(Circle().fill(Geist.Palette.background100))
                     .offset(x: 4, y: 4)
@@ -958,7 +962,7 @@ struct QuickCaptureView: View {
                         .background(Geist.Palette.background100)
                         .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous))
                 }
-                .disabled(recordingOptionsAreLocked)
+                .disabled(!viewModel.canSelectCapturePreset)
                 .accessibilityLabel("Capture Preset \(selectedFlow.displayName)")
 
                 if recordingMode == .draft {
@@ -1253,7 +1257,6 @@ struct QuickCaptureView: View {
                     locationPresetStatusBar
                     GeistDivider()
                 }
-                pinnedPresetRow
                 routeSelectionRow
                 entryLocationTokenHintSection
                 GeistDivider()
@@ -1312,6 +1315,11 @@ struct QuickCaptureView: View {
                     inspirationPlaceholder
                         .task { await loadInspirationQuote() }
                 }
+            }
+            // Overlaying the disclosure rail keeps the editor's frame and text
+            // layout identical in compact and expanded states.
+            .overlay(alignment: .leading) {
+                pinnedPresetRail
             }
         }
     }
@@ -1543,12 +1551,13 @@ struct QuickCaptureView: View {
         }
     }
 
-    private var pinnedPresetRow: CaptureViewSection {
+    private var pinnedPresetRail: CaptureViewSection {
         CaptureViewSection {
-            CapturePresetQuickAccessRow(
+            CapturePresetQuickAccessRail(
                 profiles: quickAccessPreferences.resolvedProfiles,
                 selectedID: viewModel.draft.voxID,
-                canChangeCaptureRoute: viewModel.canChangeCaptureRoute,
+                isExpanded: isPresetQuickAccessRailExpanded,
+                canChangeCaptureRoute: viewModel.canSelectCapturePreset,
                 selectPreset: { id in
                     guard let flow = flows.first(where: { $0.id == id }) else { return false }
                     return selectFlow(flow)
@@ -1579,23 +1588,23 @@ struct QuickCaptureView: View {
     private var routeSelectionRow: CaptureViewSection {
         CaptureViewSection {
             HStack(spacing: 8) {
-                Menu {
-                    ForEach(enabledFlows) { flow in
-                        presetMenuButton(flow)
+                CapturePresetQuickAccessSelector(
+                    profiles: enabledFlows.map(\.captureProfile),
+                    selectedProfile: selectedFlow.captureProfile,
+                    hasQuickAccessProfiles: quickAccessPreferences.resolvedProfiles.contains {
+                        $0.id != viewModel.draft.voxID
+                    },
+                    isRailExpanded: isPresetQuickAccessRailExpanded,
+                    canChangeCaptureRoute: viewModel.canSelectCapturePreset,
+                    toggleRail: togglePresetQuickAccessRail,
+                    selectPreset: { id in
+                        guard let flow = flows.first(where: { $0.id == id }) else { return false }
+                        return selectFlow(flow)
                     }
-                } label: {
-                    HStack(spacing: 6) {
-                        CapturePresetIconView(symbolName: selectedFlow.symbolName, emoji: selectedFlow.emoji)
-                        Text(selectedFlow.displayName)
-                            .lineLimit(1)
-                        Image(systemName: "chevron.up.chevron.down")
-                            .font(.caption2)
-                    }
-                }
-                .accessibilityLabel("Capture Preset \(selectedFlow.displayName)")
-                .accessibilityHint("Show all Capture Presets")
+                )
+                // Keep this stable production seam at the coordinator call site
+                // as well as on the reusable selector presentation.
                 .accessibilityIdentifier("capture_vox_selector")
-                .disabled(!viewModel.canChangeCaptureRoute)
 
                 Button {
                     dismissComposer()
@@ -1635,6 +1644,12 @@ struct QuickCaptureView: View {
             .padding(.horizontal, Geist.Spacing.three)
             .frame(minHeight: Geist.ControlHeight.medium)
             .background(Geist.Palette.background100)
+        }
+    }
+
+    private func togglePresetQuickAccessRail() {
+        withAnimation(reduceMotion ? nil : .spring(response: 0.28, dampingFraction: 0.9)) {
+            isPresetQuickAccessRailExpanded.toggle()
         }
     }
 

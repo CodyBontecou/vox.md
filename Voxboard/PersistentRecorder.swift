@@ -65,6 +65,13 @@ enum RecordingCompletionMode: Equatable, Sendable {
         }
     }
 
+    /// Only draft delivery writes the eventual queued result back into the
+    /// currently open composer. Preset delivery already owns a frozen snapshot.
+    var updatesCaptureDraftDuringProcessing: Bool {
+        if case .captureDraft = self { return true }
+        return false
+    }
+
     var defaultCommandOrigin: RecordingCommand.Origin {
         switch self {
         case .keyboardTranscription:
@@ -200,9 +207,24 @@ final class PersistentRecorder {
     var isResolvingLocation: Bool = false
     /// Includes import conversion/handoff before transcription flags turn on.
     /// Observed live by the composer, including App-level external launches.
+    /// An unclaimed queue drain is intentionally excluded: the app schedules an
+    /// empty drain during launch, before a pending Lock Screen recording runs.
     var ownsCaptureRoute: Bool {
         isSegmentActive || isTranscribing || isResolvingLocation
-            || recordingQueue.isCaptureActive || recordingQueue.isProcessing
+            || recordingQueue.ownsCaptureRoute
+    }
+
+    /// A finished Quick Record no longer owns the composer's preset after its
+    /// immutable queue job is durable. Keep broader capture actions serialized
+    /// through `ownsCaptureRoute`, while allowing the user to choose the preset
+    /// for their next capture during independent transcription and export.
+    var blocksCapturePresetSelection: Bool {
+        if isSegmentActive || isResolvingLocation
+            || recordingQueue.blocksCapturePresetSelection {
+            return true
+        }
+        guard isTranscribing else { return false }
+        return transcribingCompletionMode?.updatesCaptureDraftDuringProcessing ?? true
     }
     var segmentDuration: TimeInterval = 0
     /// Backend-reported progress for the active ASR request. Preparing and

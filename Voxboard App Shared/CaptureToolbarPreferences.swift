@@ -10,6 +10,9 @@ enum CapturePreferenceKeys {
     static let defaultRecordingResultMode = "capture.voice.defaultResult.v1"
     /// One-way onboarding completion, independent of toolbar resets or app versions.
     static let micHoldHintDismissed = "capture.voice.micHoldHintDismissed.v1"
+    /// Whether pinned Capture Presets are expanded beside the composer. An
+    /// absent value is intentionally collapsed for a compact first launch.
+    static let presetQuickAccessRailExpanded = "capture.presets.quickAccess.railExpanded.v1"
 }
 
 /// The quick actions users can place in the capture bar.

@@ -18,6 +18,22 @@ final class RecordingCompletionModeTests: XCTestCase {
         )
     }
 
+    func testOnlyDraftDeliveryUpdatesTheOpenComposerWhileProcessing() {
+        XCTAssertTrue(
+            RecordingCompletionMode.captureDraft(attachAudio: false)
+                .updatesCaptureDraftDuringProcessing
+        )
+        XCTAssertTrue(
+            RecordingCompletionMode.captureDraft(attachAudio: true)
+                .updatesCaptureDraftDuringProcessing
+        )
+        XCTAssertFalse(
+            RecordingCompletionMode.runVox(flowID: "journal")
+                .updatesCaptureDraftDuringProcessing
+        )
+        XCTAssertFalse(RecordingCompletionMode.keyboardTranscription.updatesCaptureDraftDuringProcessing)
+    }
+
     func testExternalCapturePathOverridesInAppCompletionOrigin() {
         let completionMode = RecordingCompletionMode.runVox(flowID: "general")
 
