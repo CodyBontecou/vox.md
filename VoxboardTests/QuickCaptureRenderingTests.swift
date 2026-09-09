@@ -360,7 +360,10 @@ final class QuickCaptureRenderingTests: XCTestCase {
             XCTAssertEqual(railScrollFrame.width, CapturePresetQuickAccessButton.hitTargetSide, accuracy: 2)
             XCTAssertEqual(railScroll.keyboardDismissMode, .none)
             XCTAssertLessThanOrEqual(railScroll.contentSize.width, railScroll.bounds.width + 1)
-            if railScroll.contentSize.height > railScroll.bounds.height + 1 {
+            let scrollableContentHeight = railScroll.contentSize.height
+                + railScroll.adjustedContentInset.top
+                + railScroll.adjustedContentInset.bottom
+            if scrollableContentHeight > railScroll.bounds.height + 1 {
                 XCTAssertGreaterThan(
                     railScroll.contentSize.height + railScroll.adjustedContentInset.bottom
                         - railScroll.bounds.height,
