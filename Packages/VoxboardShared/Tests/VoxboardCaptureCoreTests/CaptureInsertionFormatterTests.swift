@@ -6,12 +6,67 @@ final class CaptureInsertionFormatterTests: XCTestCase {
     private let timeZone = TimeZone(identifier: "America/Los_Angeles")!
     private lazy var formatter = makeFormatter()
 
+    func test_timestampFormatHasStablePersistedValuesAndTwelveHourDefault() throws {
+        XCTAssertEqual(CaptureTimestampFormat.twelveHour.rawValue, "12-hour")
+        XCTAssertEqual(CaptureTimestampFormat.twentyFourHour.rawValue, "24-hour")
+        XCTAssertEqual(CaptureTimestampFormat.allCases, [.twelveHour, .twentyFourHour])
+        XCTAssertEqual(CaptureTimestampFormat.default, .twelveHour)
+
+        for format in CaptureTimestampFormat.allCases {
+            XCTAssertEqual(CaptureTimestampFormat(rawValue: format.rawValue), format)
+            XCTAssertEqual(format.id, format.rawValue)
+
+            let encoded = try JSONEncoder().encode(format)
+            XCTAssertEqual(String(data: encoded, encoding: .utf8), "\"\(format.rawValue)\"")
+            XCTAssertEqual(try JSONDecoder().decode(CaptureTimestampFormat.self, from: encoded), format)
+        }
+
+        for storedValue in [nil, "retired"] as [String?] {
+            let resolved = storedValue.flatMap { CaptureTimestampFormat(rawValue: $0) } ?? .default
+            XCTAssertEqual(resolved, .twelveHour)
+        }
+    }
+
     func test_dueDateTokensAndCurrentTimestampUseInjectedClockDependencies() throws {
         let date = try localDate(2026, 1, 2, 15, 4)
 
         XCTAssertEqual(formatter.dueDateToken(for: date), "(@2026-01-02)")
         XCTAssertEqual(formatter.dueDateToken(for: date, includeTime: true), "(@2026-01-02 03:04 PM)")
         XCTAssertEqual(formatter.currentTimestamp(at: date), "3:04 PM 2026-01-02")
+        XCTAssertEqual(formatter.timestamp(for: date), "3:04 PM 2026-01-02")
+        XCTAssertEqual(
+            formatter.currentTimestamp(at: date, format: .twelveHour),
+            "3:04 PM 2026-01-02"
+        )
+        XCTAssertEqual(
+            formatter.timestamp(for: date, format: .twentyFourHour),
+            "15:04 2026-01-02"
+        )
+    }
+
+    func test_timestampFormatsHandleMidnightNoonAndLeadingZeros() throws {
+        let expectations: [(Date, twelveHour: String, twentyFourHour: String)] = [
+            (try localDate(2026, 1, 2, 0, 4), "12:04 AM 2026-01-02", "00:04 2026-01-02"),
+            (try localDate(2026, 1, 2, 3, 4), "3:04 AM 2026-01-02", "03:04 2026-01-02"),
+            (try localDate(2026, 1, 2, 12, 4), "12:04 PM 2026-01-02", "12:04 2026-01-02"),
+            (try localDate(2026, 1, 2, 15, 4), "3:04 PM 2026-01-02", "15:04 2026-01-02"),
+        ]
+
+        for (date, twelveHour, twentyFourHour) in expectations {
+            XCTAssertEqual(formatter.currentTimestamp(at: date, format: .twelveHour), twelveHour)
+            XCTAssertEqual(formatter.currentTimestamp(at: date, format: .twentyFourHour), twentyFourHour)
+        }
+    }
+
+    func test_currentTimestampNoArgumentAPIStillUsesTwelveHourDefault() {
+        let before = Date()
+        let value = formatter.currentTimestamp()
+        let after = Date()
+        let validDefaultValues = [before, after].map {
+            formatter.currentTimestamp(at: $0, format: .twelveHour)
+        }
+
+        XCTAssertTrue(validDefaultValues.contains(value), value)
     }
 
     func test_dateFormattingUsesInjectedLocaleAndTimeZoneRatherThanProcessDefaults() throws {
@@ -26,6 +81,19 @@ final class CaptureInsertionFormatterTests: XCTestCase {
 
         XCTAssertEqual(formatter.dueDateToken(for: instant), "(@2026-01-02)")
         XCTAssertEqual(utcFormatter.dueDateToken(for: instant), "(@2026-01-03)")
+        XCTAssertEqual(formatter.currentTimestamp(at: instant), "11:30 PM 2026-01-02")
+        XCTAssertEqual(
+            formatter.currentTimestamp(at: instant, format: .twentyFourHour),
+            "23:30 2026-01-02"
+        )
+        XCTAssertEqual(utcFormatter.currentTimestamp(at: instant), "7:30 AM 2026-01-03")
+        XCTAssertEqual(
+            utcFormatter.currentTimestamp(at: instant, format: .twentyFourHour),
+            "07:30 2026-01-03"
+        )
+        XCTAssertEqual(utcFormatter.calendar.identifier, utcCalendar.identifier)
+        XCTAssertEqual(utcFormatter.locale.identifier, "en_US_POSIX")
+        XCTAssertEqual(utcFormatter.timeZone.secondsFromGMT(for: instant), 0)
     }
 
     func test_wikiLinkStripsMarkdownExtensionAndNormalizesSeparators() throws {
