@@ -43,10 +43,7 @@ final class CapturePresetAudioFilenameSettingsTests: XCTestCase {
             await fulfillment(of: [appeared], timeout: 3)
             try await settle(window)
 
-            let fields = textFields(in: host.view).filter {
-                $0.accessibilityIdentifier
-                    == CapturePresetAudioFilenameSettings.fieldAccessibilityIdentifier
-            }
+            let fields = textFields(in: host.view)
             if mode == .off {
                 XCTAssertTrue(fields.isEmpty)
                 XCTAssertEqual(state.preset, original)
