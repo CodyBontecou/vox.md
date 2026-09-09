@@ -303,6 +303,41 @@ final class CapturePresetTests: XCTestCase {
         XCTAssertEqual(legacy.captureProcessingScope, .both)
     }
 
+    func test_audioFilenameTemplateDefaultsEmptyDecodesLegacyAndOmitsEmptyEncoding() throws {
+        let preset = CapturePresetStore.makeCustomFlow()
+        XCTAssertEqual(preset.audioFilenameTemplate, "")
+
+        let encoded = try JSONEncoder().encode(preset)
+        let encodedObject = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: encoded) as? [String: Any]
+        )
+        XCTAssertNil(encodedObject["audioFilenameTemplate"])
+
+        var legacyObject = encodedObject
+        legacyObject.removeValue(forKey: "audioFilenameTemplate")
+        let legacy = try JSONDecoder().decode(
+            CapturePreset.self,
+            from: JSONSerialization.data(withJSONObject: legacyObject)
+        )
+        XCTAssertEqual(legacy, preset)
+        XCTAssertEqual(legacy.audioFilenameTemplate, "")
+    }
+
+    func test_audioFilenameTemplateRoundTripsIndependentlyFromWatchTemplate() throws {
+        var preset = CapturePresetStore.makeCustomFlow()
+        preset.audioFilenameTemplate = "capture-{date}-{id8}"
+        preset.watchRecordingSettings.filenameTemplate = "watch-{timestamp}"
+
+        let decoded = try JSONDecoder().decode(
+            CapturePreset.self,
+            from: JSONEncoder().encode(preset)
+        )
+
+        XCTAssertEqual(decoded, preset)
+        XCTAssertEqual(decoded.audioFilenameTemplate, "capture-{date}-{id8}")
+        XCTAssertEqual(decoded.watchRecordingSettings.filenameTemplate, "watch-{timestamp}")
+    }
+
     func test_watchOutputDefaultsToTranscriptForExistingPresets() throws {
         XCTAssertEqual(CapturePresetStore.defaultFlow.watchOutputMode, .transcript)
         XCTAssertEqual(CapturePresetStore.makeCustomFlow().watchOutputMode, .transcript)
@@ -1147,6 +1182,34 @@ final class CapturePresetTests: XCTestCase {
         XCTAssertEqual(destination.path, "/tmp/Notes/meeting.m4a")
     }
 
+    func test_audioDestinationURL_appliesTemplateOnlyWhenExplicitLegacyContextExists() throws {
+        let transcriptURL = URL(fileURLWithPath: "/tmp/Notes/meeting.md")
+        var flow = CapturePresetStore.makeCustomFlow()
+        flow.audioSaveMode = .alongsideTranscript
+        flow.audioFilenameTemplate = "voice-{id8}.typed"
+
+        let legacy = AudioAttachmentExporter.audioDestinationURL(
+            for: transcriptURL,
+            flow: flow,
+            preferredExtension: "caf"
+        )
+        let named = AudioAttachmentExporter.audioDestinationURL(
+            for: transcriptURL,
+            flow: flow,
+            preferredExtension: "caf",
+            audioFilenameContext: CapturePresetAudioFilenameContext(
+                identifier: "ABCDEF12-3456-7890-ABCD-EF1234567890",
+                createdAt: Date(timeIntervalSince1970: 1_700_000_000),
+                presetName: "Voice",
+                originalFilename: "recording.wav",
+                timeZone: try XCTUnwrap(TimeZone(secondsFromGMT: 0))
+            )
+        )
+
+        XCTAssertEqual(legacy.path, "/tmp/Notes/meeting.caf")
+        XCTAssertEqual(named.path, "/tmp/Notes/voice-abcdef12.caf")
+    }
+
     func test_exportAudioIfNeeded_alongsideTranscriptWritesAudioNextToNote() async throws {
         let tempFolder = FileManager.default.temporaryDirectory
             .appendingPathComponent("VoxboardAudioExportTests-\(UUID().uuidString)")
@@ -1175,6 +1238,46 @@ final class CapturePresetTests: XCTestCase {
             notesFolder.resolvingSymlinksInPath()
         )
         XCTAssertTrue(FileManager.default.fileExists(atPath: savedAudioURL.path))
+    }
+
+    func test_exportAudioIfNeeded_templateUsesFallbackSourceExtensionAndCollisionSuffix() async throws {
+        let tempFolder = FileManager.default.temporaryDirectory
+            .appendingPathComponent("VoxboardNamedAudioExportTests-\(UUID().uuidString)")
+        let notesFolder = tempFolder.appendingPathComponent("Notes")
+        try FileManager.default.createDirectory(at: notesFolder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: tempFolder) }
+
+        let sourceAudioURL = tempFolder.appendingPathComponent("recording.wav")
+        let sourceData = Data("not-a-real-wav".utf8)
+        try sourceData.write(to: sourceAudioURL)
+        let transcriptURL = notesFolder.appendingPathComponent("meeting.md")
+        try "# Meeting".write(to: transcriptURL, atomically: true, encoding: .utf8)
+        let occupiedURL = notesFolder.appendingPathComponent("clip-abcdef12.wav")
+        let occupiedData = Data("occupied".utf8)
+        try occupiedData.write(to: occupiedURL)
+        var flow = CapturePresetStore.makeCustomFlow()
+        flow.audioSaveMode = .alongsideTranscript
+        flow.audioFilenameTemplate = "clip-{id8}.mp3"
+        let context = CapturePresetAudioFilenameContext(
+            identifier: "ABCDEF12-3456-7890-ABCD-EF1234567890",
+            createdAt: Date(timeIntervalSince1970: 1_700_000_000),
+            presetName: "Voice",
+            originalFilename: sourceAudioURL.lastPathComponent,
+            timeZone: try XCTUnwrap(TimeZone(secondsFromGMT: 0))
+        )
+
+        let audioURL = try await AudioAttachmentExporter.exportAudioIfNeeded(
+            sourceAudioURL: sourceAudioURL,
+            transcriptFileURL: transcriptURL,
+            flow: flow,
+            transcriptFolderScopeURL: notesFolder,
+            audioFilenameContext: context
+        )
+
+        let savedAudioURL = try XCTUnwrap(audioURL)
+        XCTAssertEqual(savedAudioURL.lastPathComponent, "clip-abcdef12-2.wav")
+        XCTAssertEqual(try Data(contentsOf: savedAudioURL), sourceData)
+        XCTAssertEqual(try Data(contentsOf: occupiedURL), occupiedData)
     }
 
     func test_exportAudioIfNeeded_deliveryTransactionReusesAtomicAttachment() async throws {

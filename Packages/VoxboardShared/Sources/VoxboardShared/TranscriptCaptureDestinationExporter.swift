@@ -82,7 +82,8 @@ public struct TranscriptCaptureDestinationExporter {
         stagingDirectoryURL: URL,
         audioSourceURL: URL?,
         locationOutcome: CaptureLocationOutcome?,
-        source: CaptureSource = .voice
+        source: CaptureSource = .voice,
+        audioFilenameContext: CapturePresetAudioFilenameContext? = nil
     ) async throws -> CaptureReceipt {
         try ConfiguredTranscriptCaptureDestinationExporter.enforceUnavailableCancellation(
             flow: flow,
@@ -90,9 +91,18 @@ public struct TranscriptCaptureDestinationExporter {
         )
         let audioAsset: CaptureAssetReference?
         if let audioSourceURL, flow.audioSaveMode != .off {
+            let originalFilename = audioSourceURL.lastPathComponent
+            let preferredFilename = Self.preferredAudioFilename(
+                flow: flow,
+                requestID: transcript.id,
+                createdAt: transcript.date,
+                originalFilename: originalFilename,
+                sourceExtension: audioSourceURL.pathExtension,
+                context: audioFilenameContext
+            ) ?? originalFilename
             audioAsset = try await CaptureAssetStager(directoryURL: stagingDirectoryURL).stageCopy(
                 from: audioSourceURL,
-                preferredFilename: audioSourceURL.lastPathComponent,
+                preferredFilename: preferredFilename,
                 contentTypeIdentifier: Self.audioContentType(forExtension: audioSourceURL.pathExtension)
             )
         } else {
@@ -156,6 +166,26 @@ public struct TranscriptCaptureDestinationExporter {
         case "aif", "aiff": return "public.aiff-audio"
         default: return "com.microsoft.waveform-audio"
         }
+    }
+
+    fileprivate static func preferredAudioFilename(
+        flow: CapturePreset,
+        requestID: UUID,
+        createdAt: Date,
+        originalFilename: String,
+        sourceExtension: String,
+        context: CapturePresetAudioFilenameContext?
+    ) -> String? {
+        CapturePresetAudioFilename.preferredFilename(
+            template: flow.audioFilenameTemplate,
+            context: context ?? CapturePresetAudioFilenameContext(
+                identifier: requestID.uuidString,
+                createdAt: createdAt,
+                presetName: flow.displayName,
+                originalFilename: originalFilename
+            ),
+            sourceExtension: sourceExtension
+        )
     }
 }
 
@@ -232,7 +262,8 @@ public enum ConfiguredTranscriptCaptureDestinationExporter {
         source: CaptureSource = .voice,
         captureRootURL: URL? = AppConstants.captureDirectoryURL,
         pipeline: CapturePipeline = AppCapturePipeline.shared,
-        fileManager: FileManager = .default
+        fileManager: FileManager = .default,
+        audioFilenameContext: CapturePresetAudioFilenameContext? = nil
     ) async throws -> CaptureReceipt {
         try enforceUnavailableCancellation(flow: flow, locationOutcome: locationOutcome)
         guard let captureRootURL else { throw ConfiguredTranscriptCaptureError.storageUnavailable }
@@ -242,15 +273,37 @@ public enum ConfiguredTranscriptCaptureDestinationExporter {
         let requestID = transcript.id
         let relativeStagingDirectory = "inbox-staging/\(requestID.uuidString.lowercased())"
         let stagingDirectoryURL = captureRootURL.appendingPathComponent(relativeStagingDirectory, isDirectory: true)
+        if let durableRequest = try await requestForRetry(
+            requestID: requestID,
+            captureRootURL: captureRootURL
+        ) {
+            return try await deliver(
+                durableRequest,
+                flow: flow,
+                captureRootURL: captureRootURL,
+                stagingDirectoryURL: stagingDirectoryURL,
+                pipeline: pipeline,
+                fileManager: fileManager
+            )
+        }
         var audioAsset: CaptureAssetReference?
         if flow.audioSaveMode != .off {
             guard let audioSourceURL else {
                 throw ConfiguredTranscriptCaptureError.audioPreparationFailed
             }
             do {
+                let originalFilename = audioSourceURL.lastPathComponent
+                let preferredFilename = TranscriptCaptureDestinationExporter.preferredAudioFilename(
+                    flow: flow,
+                    requestID: requestID,
+                    createdAt: transcript.date,
+                    originalFilename: originalFilename,
+                    sourceExtension: audioSourceURL.pathExtension,
+                    context: audioFilenameContext
+                ) ?? originalFilename
                 let staged = try await CaptureAssetStager(directoryURL: stagingDirectoryURL).stageCopy(
                     from: audioSourceURL,
-                    preferredFilename: audioSourceURL.lastPathComponent,
+                    preferredFilename: preferredFilename,
                     contentTypeIdentifier: TranscriptCaptureDestinationExporter.audioContentType(
                         forExtension: audioSourceURL.pathExtension
                     )
@@ -314,7 +367,8 @@ public enum ConfiguredTranscriptCaptureDestinationExporter {
         source: CaptureSource = .watch,
         captureRootURL: URL? = AppConstants.captureDirectoryURL,
         pipeline: CapturePipeline = AppCapturePipeline.shared,
-        fileManager: FileManager = .default
+        fileManager: FileManager = .default,
+        audioFilenameContext: CapturePresetAudioFilenameContext? = nil
     ) async throws -> CaptureReceipt {
         try enforceUnavailableCancellation(flow: flow, locationOutcome: locationOutcome)
         guard let captureRootURL else { throw ConfiguredTranscriptCaptureError.storageUnavailable }
@@ -324,11 +378,33 @@ public enum ConfiguredTranscriptCaptureDestinationExporter {
             relativeStagingDirectory,
             isDirectory: true
         )
+        if let durableRequest = try await requestForRetry(
+            requestID: requestID,
+            captureRootURL: captureRootURL
+        ) {
+            return try await deliver(
+                durableRequest,
+                flow: flow,
+                captureRootURL: captureRootURL,
+                stagingDirectoryURL: stagingDirectoryURL,
+                pipeline: pipeline,
+                fileManager: fileManager
+            )
+        }
         let audioAsset: CaptureAssetReference
         do {
+            let originalFilename = preferredFilename ?? audioSourceURL.lastPathComponent
+            let resolvedFilename = TranscriptCaptureDestinationExporter.preferredAudioFilename(
+                flow: flow,
+                requestID: requestID,
+                createdAt: createdAt,
+                originalFilename: originalFilename,
+                sourceExtension: audioSourceURL.pathExtension,
+                context: audioFilenameContext
+            ) ?? originalFilename
             let staged = try await CaptureAssetStager(directoryURL: stagingDirectoryURL).stageCopy(
                 from: audioSourceURL,
-                preferredFilename: preferredFilename ?? audioSourceURL.lastPathComponent,
+                preferredFilename: resolvedFilename,
                 contentTypeIdentifier: TranscriptCaptureDestinationExporter.audioContentType(
                     forExtension: audioSourceURL.pathExtension
                 )
@@ -379,6 +455,44 @@ public enum ConfiguredTranscriptCaptureDestinationExporter {
         }
     }
 
+    private static func requestForRetry(
+        requestID: UUID,
+        captureRootURL: URL
+    ) async throws -> CaptureRequest? {
+        let inbox = CaptureInbox(rootDirectoryURL: captureRootURL)
+        do {
+            if let request = try await inbox.request(
+                requestID: requestID,
+                states: [.pending]
+            ) {
+                return request
+            }
+            if let request = try await inbox.request(
+                requestID: requestID,
+                states: [.failed]
+            ) {
+                _ = try await inbox.retryFailed(requestID: requestID)
+                return request
+            }
+            switch try await inbox.state(of: requestID) {
+            case .processing:
+                throw ConfiguredTranscriptCaptureError.queuedForRetry(
+                    "This capture is already being delivered."
+                )
+            case .completed:
+                throw ConfiguredTranscriptCaptureError.queuedForRetry(
+                    "This capture was already delivered."
+                )
+            case .pending, .failed, nil:
+                return nil
+            }
+        } catch let error as ConfiguredTranscriptCaptureError {
+            throw error
+        } catch {
+            throw ConfiguredTranscriptCaptureError.storageUnavailable
+        }
+    }
+
     private static func deliver(
         _ request: CaptureRequest,
         flow: CapturePreset,
@@ -403,7 +517,7 @@ public enum ConfiguredTranscriptCaptureDestinationExporter {
         var didClaimRequest = false
         var destinationName = "Unavailable destination"
         do {
-            guard try await inbox.claim(requestID: request.id) != nil else {
+            guard let claimedRequest = try await inbox.claim(requestID: request.id) else {
                 throw ConfiguredTranscriptCaptureError.queuedForRetry(
                     "This capture is already queued or being delivered."
                 )
@@ -413,8 +527,8 @@ public enum ConfiguredTranscriptCaptureDestinationExporter {
                 fileURL: captureRootURL.appendingPathComponent(CaptureLibraryStore.defaultFilename)
             )
             let library = try await CapturePresetRouteLibrary.load(from: libraryStore)
-            guard let storedDestination = library.destinations.first(where: { $0.id == request.destinationID }) else {
-                throw ConfiguredTranscriptCaptureError.destinationMissing(request.destinationID)
+            guard let storedDestination = library.destinations.first(where: { $0.id == claimedRequest.destinationID }) else {
+                throw ConfiguredTranscriptCaptureError.destinationMissing(claimedRequest.destinationID)
             }
             var destination = library.resolvedDestination(
                 storedDestination,
@@ -434,22 +548,22 @@ public enum ConfiguredTranscriptCaptureDestinationExporter {
             defer { if didAccess { destinationRootURL.stopAccessingSecurityScopedResource() } }
 
             let receipt = try await pipeline.capture(
-                request,
+                claimedRequest,
                 destination: TranscriptCaptureDestinationExporter.routedDestination(destination, for: flow),
                 rootURL: destinationRootURL,
                 assetRootURL: captureRootURL
             )
             try await inbox.complete(requestID: request.id)
             if let record = try? CaptureHistoryRecord(
-                requestID: request.id,
-                createdAt: request.createdAt,
+                requestID: claimedRequest.id,
+                createdAt: claimedRequest.createdAt,
                 deliveredAt: Date(),
-                source: request.source,
+                source: claimedRequest.source,
                 outcome: .delivered,
-                destinationID: request.destinationID,
+                destinationID: claimedRequest.destinationID,
                 destinationName: destinationName,
-                voxID: request.voxReference?.id,
-                voxName: request.voxReference?.name,
+                voxID: claimedRequest.voxReference?.id,
+                voxName: claimedRequest.voxReference?.name,
                 relativeNotePath: CaptureHistoryRecord.relativeNotePath(
                     noteURL: receipt.noteURL,
                     rootURL: destinationRootURL

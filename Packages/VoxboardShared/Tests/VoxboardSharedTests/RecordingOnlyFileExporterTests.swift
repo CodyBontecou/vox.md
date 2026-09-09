@@ -39,6 +39,22 @@ final class RecordingOnlyFileExporterTests: XCTestCase {
         XCTAssertEqual(rendered, "daily-24")
     }
 
+    func test_watchRendererRetainsLegacyScalarSanitizationSemantics() {
+        let context = RecordingOnlyFileExportContext(
+            recordingID: "ABCDEF12-3456-7890-ABCD-EF1234567890",
+            createdAt: Date(timeIntervalSince1970: 1_700_000_000),
+            presetName: "👨‍👩‍👧‍👦",
+            originalFilename: "watch.m4a"
+        )
+
+        let rendered = RecordingOnlyFileExporter.renderedFilenameBase(
+            template: "{preset}",
+            context: context
+        )
+
+        XCTAssertEqual(rendered, "👨-👩-👧-👦")
+    }
+
     func test_filenameIsBoundedByUTF8Bytes() {
         let context = RecordingOnlyFileExportContext(
             recordingID: "12345678-1234-1234-1234-1234567890AB",

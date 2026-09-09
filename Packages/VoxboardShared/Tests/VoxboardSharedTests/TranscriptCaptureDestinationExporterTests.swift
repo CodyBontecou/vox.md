@@ -241,6 +241,79 @@ final class TranscriptCaptureDestinationExporterTests: XCTestCase {
         XCTAssertLessThan(try index(of: "---\n\n![[audio/top.wav]]", in: markdown), try index(of: "Spoken body", in: markdown))
     }
 
+    func test_configuredTranscriptStagesResolvedPresetAudioNameBeforeDurableHandoff() async throws {
+        let captureRoot = try temporaryFolder(named: "named-transcript-root")
+        let destinationRoot = try temporaryFolder(named: "named-transcript-destination")
+        defer {
+            try? FileManager.default.removeItem(at: captureRoot)
+            try? FileManager.default.removeItem(at: destinationRoot)
+        }
+        let destination = CaptureDestination(
+            name: "Inbox",
+            rootBookmark: try destinationRoot.bookmarkData(),
+            rootName: "Vault",
+            noteTarget: .existingNote(relativePath: "Inbox.md"),
+            attachmentsFolderName: "destination-media"
+        )
+        try await CaptureLibraryStore(
+            fileURL: captureRoot.appendingPathComponent(CaptureLibraryStore.defaultFilename),
+            coordinator: ProcessLocalCaptureFileCoordinator.shared
+        ).save(CaptureLibraryEnvelope(destinations: [destination], defaultDestinationID: destination.id))
+        let sourceURL = captureRoot.appendingPathComponent("queue-copy.wav")
+        let audio = Data("named-transcript-audio".utf8)
+        try audio.write(to: sourceURL)
+        let requestID = UUID(uuidString: "ABCDEF12-3456-7890-ABCD-EF1234567890")!
+        let recordedAt = Date(timeIntervalSince1970: 1_704_164_645)
+        let transcript = Transcript(
+            id: requestID,
+            text: "Named voice",
+            date: recordedAt,
+            duration: 1,
+            modelUsed: "base",
+            language: "en"
+        )
+        var flow = CapturePresetStore.makeCustomFlow()
+        flow.name = "Daily Notes"
+        flow.audioSaveMode = .attachmentsFolder
+        flow.attachmentsFolderName = "voice-media"
+        flow.audioFilenameTemplate = "capture-{id8}-{preset}-{original}.mp3"
+        let context = CapturePresetAudioFilenameContext(
+            identifier: requestID.uuidString,
+            createdAt: recordedAt,
+            presetName: flow.displayName,
+            originalFilename: "Field Memo.caf",
+            timeZone: try XCTUnwrap(TimeZone(secondsFromGMT: 0))
+        )
+        let writer = InboxStateObservingWriter(captureRootURL: captureRoot)
+
+        let receipt = try await ConfiguredTranscriptCaptureDestinationExporter.export(
+            transcript: transcript,
+            flow: flow,
+            destinationID: destination.id,
+            audioSourceURL: sourceURL,
+            locationOutcome: nil,
+            captureRootURL: captureRoot,
+            pipeline: CapturePipeline(writer: writer),
+            audioFilenameContext: context
+        )
+
+        let observedRequest = await writer.observedRequest
+        guard case .retainedAudio(let asset, _)? = observedRequest?.payloads.last else {
+            return XCTFail("Expected named retained audio in durable request")
+        }
+        let expectedFilename = "capture-abcdef12-Daily-Notes-Field-Memo.wav"
+        XCTAssertEqual(asset.originalFilename, expectedFilename)
+        XCTAssertEqual(
+            asset.relativePath,
+            "inbox-staging/abcdef12-3456-7890-abcd-ef1234567890/\(expectedFilename)"
+        )
+        XCTAssertEqual(receipt.attachmentURLs.map(\.lastPathComponent), [expectedFilename])
+        XCTAssertEqual(
+            try Data(contentsOf: destinationRoot.appendingPathComponent("voice-media/\(expectedFilename)")),
+            audio
+        )
+    }
+
     func test_directVoiceRunRequiresOwnedRouteAfterMigration() async throws {
         let captureRoot = try temporaryFolder(named: "voice-default-route")
         let suiteName = "voice-default-route.\(UUID().uuidString)"
@@ -626,6 +699,94 @@ final class TranscriptCaptureDestinationExporterTests: XCTestCase {
         XCTAssertEqual(failedHistory.first?.outcome, .failed)
     }
 
+    func test_configuredAudioRetryReusesDurableStagedCollisionNameAndBytes() async throws {
+        let captureRoot = try temporaryFolder(named: "named-retry-root")
+        let destinationRoot = try temporaryFolder(named: "named-retry-destination")
+        defer {
+            try? FileManager.default.removeItem(at: captureRoot)
+            try? FileManager.default.removeItem(at: destinationRoot)
+        }
+        let destination = CaptureDestination(
+            name: "Broken",
+            rootBookmark: try destinationRoot.bookmarkData(),
+            rootName: "Vault",
+            noteTarget: .existingNote(relativePath: "Inbox.md"),
+            placement: .beneathHeading(
+                CaptureHeadingSelector(title: "Missing", level: 2),
+                missingHeadingBehavior: .fail
+            )
+        )
+        try await CaptureLibraryStore(
+            fileURL: captureRoot.appendingPathComponent(CaptureLibraryStore.defaultFilename),
+            coordinator: ProcessLocalCaptureFileCoordinator.shared
+        ).save(CaptureLibraryEnvelope(destinations: [destination], defaultDestinationID: destination.id))
+        let requestID = UUID(uuidString: "ABCDEF12-3456-7890-ABCD-EF1234567890")!
+        let stagingDirectory = captureRoot
+            .appendingPathComponent("inbox-staging", isDirectory: true)
+            .appendingPathComponent(requestID.uuidString.lowercased(), isDirectory: true)
+        try FileManager.default.createDirectory(at: stagingDirectory, withIntermediateDirectories: true)
+        let occupied = stagingDirectory.appendingPathComponent("voice-abcdef12.wav")
+        try Data("occupied".utf8).write(to: occupied)
+        let sourceURL = captureRoot.appendingPathComponent("retry-source.wav")
+        let sourceData = Data("durable-retry-audio".utf8)
+        try sourceData.write(to: sourceURL)
+        let transcript = Transcript(
+            id: requestID,
+            text: "Retry this exact request",
+            date: Date(timeIntervalSince1970: 1_700_000_000),
+            duration: 1,
+            modelUsed: "base",
+            language: "en"
+        )
+        var flow = CapturePresetStore.makeCustomFlow()
+        flow.audioSaveMode = .attachmentsFolder
+        flow.audioFilenameTemplate = "voice-{id8}.typed"
+        let pipeline = CapturePipeline(
+            writer: CoordinatedCaptureWriter(coordinator: ProcessLocalCaptureFileCoordinator.shared)
+        )
+
+        for audioSourceURL in [sourceURL, nil] {
+            do {
+                _ = try await ConfiguredTranscriptCaptureDestinationExporter.export(
+                    transcript: transcript,
+                    flow: flow,
+                    destinationID: destination.id,
+                    audioSourceURL: audioSourceURL,
+                    locationOutcome: nil,
+                    captureRootURL: captureRoot,
+                    pipeline: pipeline
+                )
+                XCTFail("Expected route failure")
+            } catch ConfiguredTranscriptCaptureError.queuedForRetry {
+                // The first attempt persists bytes; the second must reuse them.
+            }
+            if audioSourceURL != nil {
+                try FileManager.default.removeItem(at: sourceURL)
+            }
+        }
+
+        let inbox = CaptureInbox(
+            rootDirectoryURL: captureRoot,
+            coordinator: ProcessLocalCaptureFileCoordinator.shared
+        )
+        let durableRequest = try await inbox.request(requestID: requestID, states: [.pending])
+        guard case .retainedAudio(let asset, _)? = durableRequest?.payloads.last else {
+            return XCTFail("Expected retained audio in retry request")
+        }
+        XCTAssertEqual(asset.originalFilename, "voice-abcdef12-2.wav")
+        XCTAssertEqual(
+            try Data(contentsOf: captureRoot.appendingPathComponent(asset.relativePath)),
+            sourceData
+        )
+        XCTAssertEqual(
+            try FileManager.default.contentsOfDirectory(
+                at: stagingDirectory,
+                includingPropertiesForKeys: nil
+            ).map(\.lastPathComponent).sorted(),
+            ["voice-abcdef12-2.wav", "voice-abcdef12.wav"]
+        )
+    }
+
     func test_missingConfiguredDestinationQueuesTranscriptForReroute() async throws {
         let captureRoot = try temporaryFolder(named: "missing-route")
         defer { try? FileManager.default.removeItem(at: captureRoot) }
@@ -767,6 +928,94 @@ final class TranscriptCaptureDestinationExporterTests: XCTestCase {
         )
         XCTAssertTrue(markdown.contains("![[media/Watch Recording.m4a]]"))
         XCTAssertFalse(markdown.localizedCaseInsensitiveContains("transcript"))
+    }
+
+    func test_configuredRecordingUsesNormalPresetTemplateAndActualCopiedExtension() async throws {
+        let captureRoot = try temporaryFolder(named: "named-recording-root")
+        let destinationRoot = try temporaryFolder(named: "named-recording-destination")
+        defer {
+            try? FileManager.default.removeItem(at: captureRoot)
+            try? FileManager.default.removeItem(at: destinationRoot)
+        }
+        let destination = CaptureDestination(
+            name: "Inbox",
+            rootBookmark: try destinationRoot.bookmarkData(),
+            rootName: "Vault",
+            noteTarget: .existingNote(relativePath: "Inbox.md"),
+            attachmentsFolderName: "media"
+        )
+        try await CaptureLibraryStore(
+            fileURL: captureRoot.appendingPathComponent(CaptureLibraryStore.defaultFilename),
+            coordinator: ProcessLocalCaptureFileCoordinator.shared
+        ).save(CaptureLibraryEnvelope(destinations: [destination], defaultDestinationID: destination.id))
+        let sourceURL = captureRoot.appendingPathComponent("watch-source.m4a")
+        try Data("watch-audio".utf8).write(to: sourceURL)
+        let requestID = UUID(uuidString: "ABCDEF12-3456-7890-ABCD-EF1234567890")!
+        var flow = CapturePresetStore.makeCustomFlow()
+        flow.name = "Watch Capture"
+        flow.audioFilenameTemplate = "normal-{id8}-{preset}-{original}.wav"
+
+        let receipt = try await ConfiguredTranscriptCaptureDestinationExporter.exportRecording(
+            requestID: requestID,
+            createdAt: Date(timeIntervalSince1970: 1_700_000_100),
+            flow: flow,
+            destinationID: destination.id,
+            audioSourceURL: sourceURL,
+            preferredFilename: "Watch Original.caf",
+            locationOutcome: nil,
+            captureRootURL: captureRoot
+        )
+
+        let expectedFilename = "normal-abcdef12-Watch-Capture-Watch-Original.m4a"
+        XCTAssertEqual(receipt.attachmentURLs.map(\.lastPathComponent), [expectedFilename])
+        XCTAssertTrue(FileManager.default.fileExists(
+            atPath: destinationRoot.appendingPathComponent("media/\(expectedFilename)").path
+        ))
+    }
+
+    func test_presetAudioTemplateDoesNotRenameArbitraryUserAttachedMedia() async throws {
+        let destinationRoot = try temporaryFolder(named: "user-media-destination")
+        let stagingRoot = try temporaryFolder(named: "user-media-staging")
+        defer {
+            try? FileManager.default.removeItem(at: destinationRoot)
+            try? FileManager.default.removeItem(at: stagingRoot)
+        }
+        let sourceURL = stagingRoot.appendingPathComponent("chosen-interview.mov")
+        try Data("user-selected-video".utf8).write(to: sourceURL)
+        let assetRoot = stagingRoot.appendingPathComponent("request", isDirectory: true)
+        let asset = try await CaptureAssetStager(directoryURL: assetRoot).stageCopy(
+            from: sourceURL,
+            contentTypeIdentifier: "com.apple.quicktime-movie"
+        )
+        var flow = CapturePresetStore.makeCustomFlow()
+        flow.audioFilenameTemplate = "generated-{id8}"
+        let destination = CaptureDestination(
+            name: "Inbox",
+            rootBookmark: Data(),
+            rootName: "Vault",
+            noteTarget: .existingNote(relativePath: "Inbox.md"),
+            attachmentsFolderName: "media"
+        )
+        let request = CaptureRequest(
+            source: .fileImport,
+            destinationID: destination.id,
+            payloads: [.file(asset)],
+            voxProfile: flow.captureProfile
+        )
+
+        let receipt = try await CapturePipeline().capture(
+            request,
+            destination: destination,
+            rootURL: destinationRoot,
+            assetRootURL: assetRoot
+        )
+
+        XCTAssertEqual(receipt.attachmentURLs.map(\.lastPathComponent), ["chosen-interview.mov"])
+        XCTAssertFalse(FileManager.default.fileExists(
+            atPath: destinationRoot.appendingPathComponent(
+                "media/generated-\(request.id.uuidString.lowercased().prefix(8)).mov"
+            ).path
+        ))
     }
 
     func test_recordingFlowRoundTripsCaptureDestinationBinding() throws {

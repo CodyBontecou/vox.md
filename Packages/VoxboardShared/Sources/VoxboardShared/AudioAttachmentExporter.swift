@@ -18,7 +18,8 @@ public enum AudioAttachmentExporter {
         flow: CapturePreset?,
         transcriptFolderScopeURL: URL? = nil,
         previouslyExportedURL: URL? = nil,
-        deliveryTransactionDirectoryURL: URL? = nil
+        deliveryTransactionDirectoryURL: URL? = nil,
+        audioFilenameContext: CapturePresetAudioFilenameContext? = nil
     ) async throws -> URL? {
         guard let flow, flow.audioSaveMode != .off else { return nil }
         let audioFolderOverride = flow.audioSaveMode == .attachmentsFolder
@@ -44,7 +45,8 @@ public enum AudioAttachmentExporter {
             for: transcriptFileURL,
             flow: flow,
             preferredExtension: "m4a",
-            audioFolderOverride: audioFolderOverride
+            audioFolderOverride: audioFolderOverride,
+            audioFilenameContext: audioFilenameContext
         ))
         do {
             if let transaction, let deliveryTransactionDirectoryURL {
@@ -76,7 +78,8 @@ public enum AudioAttachmentExporter {
                 for: transcriptFileURL,
                 flow: flow,
                 preferredExtension: fallbackExt,
-                audioFolderOverride: audioFolderOverride
+                audioFolderOverride: audioFolderOverride,
+                audioFilenameContext: audioFilenameContext
             ))
             if let transaction {
                 let published = try transaction.prepareAndPublish(
@@ -114,7 +117,8 @@ public enum AudioAttachmentExporter {
         for transcriptFileURL: URL,
         flow: CapturePreset,
         preferredExtension: String,
-        audioFolderOverride: URL? = nil
+        audioFolderOverride: URL? = nil,
+        audioFilenameContext: CapturePresetAudioFilenameContext? = nil
     ) -> URL {
         let baseFolder = transcriptFileURL.deletingLastPathComponent()
         let destinationFolder: URL
@@ -128,6 +132,14 @@ public enum AudioAttachmentExporter {
                 let folderName = sanitizedFolderName(flow.attachmentsFolderName)
                 destinationFolder = baseFolder.appendingPathComponent(folderName.isEmpty ? "attachments" : folderName)
             }
+        }
+        if let audioFilenameContext,
+           let preferredFilename = CapturePresetAudioFilename.preferredFilename(
+               template: flow.audioFilenameTemplate,
+               context: audioFilenameContext,
+               sourceExtension: preferredExtension
+           ) {
+            return destinationFolder.appendingPathComponent(preferredFilename, isDirectory: false)
         }
         let baseName = transcriptFileURL.deletingPathExtension().lastPathComponent
         return destinationFolder.appendingPathComponent(baseName).appendingPathExtension(preferredExtension)

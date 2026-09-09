@@ -43,6 +43,9 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
     public var watchOutputMode: CapturePresetWatchOutputMode
     public var watchRecordingSettings: CapturePresetWatchRecordingSettings
     public var audioSaveMode: CapturePresetAudioSaveMode
+    /// Optional template for audio generated and saved through normal Capture
+    /// delivery. This is independent from Watch Recording Only settings.
+    public var audioFilenameTemplate: String
     public var attachmentsFolderName: String
     /// The Markdown destination owned by this preset. Nil means the preset
     /// still needs destination setup; the old library default remains only as
@@ -73,6 +76,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         watchOutputMode: CapturePresetWatchOutputMode = .transcript,
         watchRecordingSettings: CapturePresetWatchRecordingSettings = CapturePresetWatchRecordingSettings(),
         audioSaveMode: CapturePresetAudioSaveMode = .off,
+        audioFilenameTemplate: String = "",
         attachmentsFolderName: String = "attachments",
         captureDestinationID: UUID? = nil,
         captureEntryTemplateID: UUID? = nil,
@@ -99,6 +103,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         self.watchOutputMode = watchOutputMode
         self.watchRecordingSettings = watchRecordingSettings
         self.audioSaveMode = audioSaveMode
+        self.audioFilenameTemplate = audioFilenameTemplate
         self.attachmentsFolderName = attachmentsFolderName
         self.captureDestinationID = captureDestinationID
         self.captureEntryTemplateID = captureEntryTemplateID
@@ -200,6 +205,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         case watchOutputMode
         case watchRecordingSettings
         case audioSaveMode
+        case audioFilenameTemplate
         case attachmentsFolderName
         case captureDestinationID
         case captureEntryTemplateID
@@ -234,6 +240,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
             watchRecordingSettings: try container.decodeIfPresent(CapturePresetWatchRecordingSettings.self, forKey: .watchRecordingSettings)
                 ?? CapturePresetWatchRecordingSettings(),
             audioSaveMode: try container.decodeIfPresent(CapturePresetAudioSaveMode.self, forKey: .audioSaveMode) ?? .off,
+            audioFilenameTemplate: try container.decodeIfPresent(String.self, forKey: .audioFilenameTemplate) ?? "",
             attachmentsFolderName: try container.decodeIfPresent(String.self, forKey: .attachmentsFolderName) ?? "attachments",
             captureDestinationID: try container.decodeIfPresent(UUID.self, forKey: .captureDestinationID),
             captureEntryTemplateID: try container.decodeIfPresent(UUID.self, forKey: .captureEntryTemplateID),
@@ -264,6 +271,9 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         try container.encode(watchOutputMode, forKey: .watchOutputMode)
         try container.encode(watchRecordingSettings, forKey: .watchRecordingSettings)
         try container.encode(audioSaveMode, forKey: .audioSaveMode)
+        if !audioFilenameTemplate.isEmpty {
+            try container.encode(audioFilenameTemplate, forKey: .audioFilenameTemplate)
+        }
         try container.encode(attachmentsFolderName, forKey: .attachmentsFolderName)
         try container.encodeIfPresent(captureDestinationID, forKey: .captureDestinationID)
         try container.encodeIfPresent(captureEntryTemplateID, forKey: .captureEntryTemplateID)

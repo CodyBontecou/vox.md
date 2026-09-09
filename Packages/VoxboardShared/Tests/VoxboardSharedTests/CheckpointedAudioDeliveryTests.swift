@@ -108,6 +108,56 @@ final class CheckpointedAudioDeliveryTests: XCTestCase {
         )
     }
 
+    func test_namedAudioRetryReusesValidCheckpointInsteadOfInventingAnotherName() async throws {
+        let fixture = try Fixture()
+        defer { fixture.cleanup() }
+        var flow = fixture.flow
+        flow.audioFilenameTemplate = "voice-{id8}.typed"
+        let context = CapturePresetAudioFilenameContext(
+            identifier: "ABCDEF12-3456-7890-ABCD-EF1234567890",
+            createdAt: Date(timeIntervalSince1970: 1_700_000_000),
+            presetName: "Voice",
+            originalFilename: fixture.source.lastPathComponent,
+            timeZone: try XCTUnwrap(TimeZone(secondsFromGMT: 0))
+        )
+        let probe = DeliveryProbe()
+
+        let firstResult = try await CheckpointedAudioDelivery.deliver(
+            sourceAudioURL: fixture.source,
+            transcriptFileURL: fixture.note,
+            flow: flow,
+            transcriptFolderScopeURL: fixture.notes,
+            audioFilenameContext: context,
+            checkpointExport: { probe.recordExport($0) },
+            checkpointReference: { probe.recordReferenceCheckpoint() }
+        )
+        let first = try XCTUnwrap(firstResult)
+        var changedContext = context
+        changedContext.identifier = "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"
+        let retried = try await CheckpointedAudioDelivery.deliver(
+            sourceAudioURL: fixture.source,
+            transcriptFileURL: fixture.note,
+            flow: flow,
+            transcriptFolderScopeURL: fixture.notes,
+            previouslyExportedURL: first,
+            audioReferenceAlreadyAttached: true,
+            audioFilenameContext: changedContext,
+            checkpointExport: { probe.recordExport($0) },
+            checkpointReference: { probe.recordReferenceCheckpoint() }
+        )
+
+        XCTAssertEqual(first.lastPathComponent, "voice-abcdef12.wav")
+        XCTAssertEqual(retried, first)
+        XCTAssertFalse(FileManager.default.fileExists(
+            atPath: fixture.notes.appendingPathComponent("voice-ffffffff.wav").path
+        ))
+        XCTAssertEqual(probe.snapshot().events, [
+            "audio-checkpoint",
+            "reference-checkpoint",
+            "audio-checkpoint",
+        ])
+    }
+
     func test_audioCheckpointFailureStopsReferenceAndPreservesSource() async throws {
         let fixture = try Fixture()
         defer { fixture.cleanup() }
