@@ -81,6 +81,7 @@ struct QuickCaptureView: View {
     @Environment(\.defersCaptureInputFocusForReleaseNotes) private var defersCaptureInputFocusForReleaseNotes
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.layoutDirection) private var layoutDirection
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
     @Environment(\.timeZone) private var timeZone
@@ -105,6 +106,7 @@ struct QuickCaptureView: View {
     @State private var paywallContext: OnboardingAnalyticsPaywallContext = .limit
     @State private var showsAudioImporter = false
     @State private var showsVoiceCaptureDetails = false
+    @State private var showsRecordingControlHelp = false
     @AppStorage(CapturePreferenceKeys.micHoldHintDismissed) private var micHoldHintDismissed = false
     @State private var showsWatchRecordingQueue = false
     /// Durable recording result mode ("Add to Draft" vs "Send Immediately").
@@ -128,7 +130,7 @@ struct QuickCaptureView: View {
     @State private var selectedFlowId: String = CapturePresetStore.selectedFlowId()
     @State private var quickAccessPreferences = CapturePresetQuickAccessPreferences()
     /// A compact selector is the fresh-install default; the user's expanded
-    /// leading-rail preference survives view recreation and app relaunches.
+    /// alternatives-rail preference survives view recreation and app relaunches.
     @AppStorage(CapturePreferenceKeys.presetQuickAccessRailExpanded)
     private var isPresetQuickAccessRailExpanded = false
     @State private var observedPresetData: Data?
@@ -210,8 +212,13 @@ struct QuickCaptureView: View {
                                 .font(.system(size: 12, weight: .semibold))
                                 .foregroundStyle(Geist.Palette.blue700)
                         }
-                        .accessibilityLabel("Stop keyboard listening")
-                        .accessibilityHint("Turns off voice input for the Vox.md keyboard")
+                        .accessibilityLabel(
+                            CaptureRecordingControlSemantics.keyboardListeningLabel(isListening: true)
+                        )
+                        .accessibilityHint(
+                            CaptureRecordingControlSemantics.keyboardListeningActionHint(isListening: true)
+                        )
+                        .help(CaptureRecordingControlSemantics.keyboardListeningHelp)
                         .accessibilityIdentifier("capture_keyboard_listening_status")
                     }
                 }
@@ -936,6 +943,7 @@ struct QuickCaptureView: View {
                 .accessibilityIdentifier("capture_recording_mode")
 
                 recordingDestinationOptions
+                CaptureRecordingControlHelp(isExpanded: $showsRecordingControlHelp)
                 recordingDetailsStatus
             }
             .padding(Geist.Spacing.three)
@@ -973,7 +981,9 @@ struct QuickCaptureView: View {
                     .toggleStyle(.switch)
                     .tint(Geist.Palette.blue700)
                     .disabled(recordingOptionsAreLocked)
-                    .accessibilityLabel("Attach audio to Capture")
+                    .accessibilityLabel("Keep recording audio attached")
+                    .accessibilityHint(CaptureRecordingControlSemantics.audioHelp)
+                    .help(CaptureRecordingControlSemantics.audioHelp)
                 }
 
                 Spacer(minLength: 0)
@@ -986,7 +996,9 @@ struct QuickCaptureView: View {
                 }
                 .buttonStyle(.plain)
                 .disabled(recordingOptionsAreLocked)
-                .accessibilityLabel("Import audio")
+                .accessibilityLabel("Import audio or video")
+                .accessibilityHint(CaptureRecordingControlSemantics.importAudioHelp)
+                .help(CaptureRecordingControlSemantics.importAudioHelp)
                 .accessibilityIdentifier("capture_audio_import")
 
                 Button(action: togglePersistentListening) {
@@ -998,10 +1010,16 @@ struct QuickCaptureView: View {
                 .buttonStyle(.plain)
                 .disabled(recordingOptionsAreLocked)
                 .accessibilityLabel(
-                    persistentRecorder.isListening
-                        ? String(localized: "Stop keyboard listening")
-                        : String(localized: "Start keyboard listening")
+                    CaptureRecordingControlSemantics.keyboardListeningLabel(
+                        isListening: persistentRecorder.isListening
+                    )
                 )
+                .accessibilityHint(
+                    CaptureRecordingControlSemantics.keyboardListeningActionHint(
+                        isListening: persistentRecorder.isListening
+                    )
+                )
+                .help(CaptureRecordingControlSemantics.keyboardListeningHelp)
                 .accessibilityIdentifier("capture_keyboard_listening")
             }
 
@@ -1316,9 +1334,10 @@ struct QuickCaptureView: View {
                         .task { await loadInspirationQuote() }
                 }
             }
-            // Overlaying the disclosure rail keeps the editor's frame and text
-            // layout identical in compact and expanded states.
-            .overlay(alignment: .leading) {
+            // Overlaying only the alternatives rail keeps the editor frame and
+            // selected-preset/Send row unchanged. Physical edge preference is
+            // mapped around RTL without overriding the rail children's direction.
+            .overlay(alignment: presetQuickAccessRailAlignment) {
                 pinnedPresetRail
             }
         }
@@ -1549,6 +1568,12 @@ struct QuickCaptureView: View {
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("capture_entry_location_token_hint")
         }
+    }
+
+    private var presetQuickAccessRailAlignment: Alignment {
+        captureToolbarPreferences.presetQuickAccessRailSide.overlayAlignment(
+            for: layoutDirection
+        )
     }
 
     private var pinnedPresetRail: CaptureViewSection {
@@ -1914,7 +1939,10 @@ struct QuickCaptureView: View {
             dismissComposer()
             showsInternalLinks = true
         case .timestamp:
-            applyComposerCommand(.replaceSelection(with: insertionFormatter.currentTimestamp()))
+            applyComposerCommand(.replaceSelection(with: Self.timestampInsertion(
+                formatter: insertionFormatter,
+                preferences: captureToolbarPreferences
+            )))
         case .date:
             let formatter = DateFormatter()
             formatter.calendar = calendar
@@ -1933,6 +1961,16 @@ struct QuickCaptureView: View {
         case .slugify:
             applyComposerCommand(.slugify)
         }
+    }
+
+    /// Injectable seam for the real composer timestamp command. Tests provide a
+    /// fixed instant while production keeps the caller's calendar/locale/zone.
+    static func timestampInsertion(
+        at date: Date = Date(),
+        formatter: CaptureInsertionFormatter,
+        preferences: CaptureToolbarPreferences
+    ) -> String {
+        formatter.currentTimestamp(at: date, format: preferences.timestampFormat)
     }
 
     private func applyComposerCommand(_ command: CaptureComposerCommand) {

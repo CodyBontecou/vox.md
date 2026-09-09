@@ -1,5 +1,6 @@
 import Observation
 import SwiftUI
+import VoxboardShared
 
 enum CapturePreferenceKeys {
     static let confirmVoiceNoteBeforeAdding = "capture.voice.confirmBeforeAdding.v1"
@@ -13,6 +14,37 @@ enum CapturePreferenceKeys {
     /// Whether pinned Capture Presets are expanded beside the composer. An
     /// absent value is intentionally collapsed for a compact first launch.
     static let presetQuickAccessRailExpanded = "capture.presets.quickAccess.railExpanded.v1"
+    /// Physical screen edge for the floating pinned-preset alternatives rail.
+    static let presetQuickAccessRailSide = "capture.presets.quickAccess.railSide.v1"
+    /// Explicit hour cycle for the Capture Bar's Insert Timestamp action.
+    static let timestampFormat = "capture.toolbar.timestampFormat.v1"
+}
+
+/// A thumb-reach preference, intentionally expressed as physical screen edges.
+/// Mapping to SwiftUI's logical alignments accounts for layout direction while
+/// leaving the rail's child content in the user's natural semantic direction.
+enum CapturePresetQuickAccessRailSide: String, CaseIterable, Hashable, Identifiable {
+    case left
+    case right
+
+    static let `default`: Self = .left
+
+    var id: String { rawValue }
+
+    init(persistedRawValue: String?) {
+        self = Self(rawValue: persistedRawValue ?? "") ?? .default
+    }
+
+    func overlayAlignment(for layoutDirection: LayoutDirection) -> Alignment {
+        switch (self, layoutDirection) {
+        case (.left, .leftToRight), (.right, .rightToLeft):
+            return .leading
+        case (.left, .rightToLeft), (.right, .leftToRight):
+            return .trailing
+        @unknown default:
+            return self == .left ? .leading : .trailing
+        }
+    }
 }
 
 /// The quick actions users can place in the capture bar.
@@ -126,6 +158,8 @@ final class CaptureToolbarPreferences {
     private(set) var orderedActions: [CaptureToolbarAction]
     private(set) var hiddenActions: Set<CaptureToolbarAction>
     private(set) var confirmsVoiceNotesBeforeAdding: Bool
+    private(set) var presetQuickAccessRailSide: CapturePresetQuickAccessRailSide
+    private(set) var timestampFormat: CaptureTimestampFormat
 
     // Avoid an actor-isolated synthesized destructor; this type owns no
     // main-actor resources that require isolated teardown.
@@ -140,6 +174,12 @@ final class CaptureToolbarPreferences {
         orderedActions = Self.migratedActionOrder(from: stored?.order)
         hiddenActions = Set(stored?.hidden.compactMap(CaptureToolbarAction.init(rawValue:)) ?? [])
         confirmsVoiceNotesBeforeAdding = defaults.bool(forKey: CapturePreferenceKeys.confirmVoiceNoteBeforeAdding)
+        presetQuickAccessRailSide = CapturePresetQuickAccessRailSide(
+            persistedRawValue: defaults.string(forKey: CapturePreferenceKeys.presetQuickAccessRailSide)
+        )
+        timestampFormat = defaults.string(forKey: CapturePreferenceKeys.timestampFormat)
+            .flatMap(CaptureTimestampFormat.init(rawValue:))
+            ?? .default
         persist()
     }
 
@@ -193,6 +233,16 @@ final class CaptureToolbarPreferences {
         defaults.set(shouldConfirm, forKey: CapturePreferenceKeys.confirmVoiceNoteBeforeAdding)
     }
 
+    func setPresetQuickAccessRailSide(_ side: CapturePresetQuickAccessRailSide) {
+        presetQuickAccessRailSide = side
+        defaults.set(side.rawValue, forKey: CapturePreferenceKeys.presetQuickAccessRailSide)
+    }
+
+    func setTimestampFormat(_ format: CaptureTimestampFormat) {
+        timestampFormat = format
+        defaults.set(format.rawValue, forKey: CapturePreferenceKeys.timestampFormat)
+    }
+
     func reset() {
         orderedActions = CaptureToolbarAction.allCases
         hiddenActions = []
@@ -234,6 +284,32 @@ struct CaptureToolbarSettingsView: View {
                 Text("Quick Actions")
             } footer: {
                 Text("Drag actions into the order you want. Turn off actions you do not want on the capture bar.")
+            }
+
+            Section {
+                Picker("Side", selection: presetRailSideBinding) {
+                    Text("Left").tag(CapturePresetQuickAccessRailSide.left)
+                    Text("Right").tag(CapturePresetQuickAccessRailSide.right)
+                }
+                .pickerStyle(.segmented)
+                .accessibilityIdentifier("capture_preset_rail_side")
+            } header: {
+                Text("Pinned Preset Rail")
+            } footer: {
+                Text("Choose the physical screen edge for pinned preset alternatives. The selected preset and Send stay in their usual positions.")
+            }
+
+            Section {
+                Picker("Timestamp Format", selection: timestampFormatRawValueBinding) {
+                    ForEach(CaptureTimestampFormat.allCases) { format in
+                        Text(verbatim: format.rawValue).tag(format.rawValue)
+                    }
+                }
+                .accessibilityIdentifier("capture_timestamp_format")
+            } header: {
+                Text("Insert Timestamp")
+            } footer: {
+                Text("The Capture Bar uses this explicit hour cycle instead of inferring it from the device setting.")
             }
 
             Section {
@@ -284,6 +360,24 @@ struct CaptureToolbarSettingsView: View {
         Binding(
             get: { preferences.confirmsVoiceNotesBeforeAdding },
             set: { preferences.setConfirmsVoiceNotesBeforeAdding($0) }
+        )
+    }
+
+    private var presetRailSideBinding: Binding<CapturePresetQuickAccessRailSide> {
+        Binding(
+            get: { preferences.presetQuickAccessRailSide },
+            set: { preferences.setPresetQuickAccessRailSide($0) }
+        )
+    }
+
+    private var timestampFormatRawValueBinding: Binding<String> {
+        Binding(
+            get: { preferences.timestampFormat.rawValue },
+            set: {
+                preferences.setTimestampFormat(
+                    CaptureTimestampFormat(rawValue: $0) ?? .default
+                )
+            }
         )
     }
 
