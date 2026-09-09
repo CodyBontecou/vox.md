@@ -38,7 +38,7 @@ enum MacPresetAudioFilenameContextFactory {
     /// Keeps direct legacy delivery on the same immutable transcript/preset
     /// identity used by the recording queue. The caller supplies the original
     /// app-owned source name before any temporary retention copy is created.
-    static func make(
+    nonisolated static func make(
         transcriptID: UUID,
         transcriptDate: Date,
         presetName: String,
