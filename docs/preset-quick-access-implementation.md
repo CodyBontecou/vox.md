@@ -253,9 +253,13 @@ screenshots cover compact and expanded disclosure states, fixed editor geometry,
 vertical overflow, dark mode, large text, Reduce Motion, RTL mirroring,
 empty/single-pin updates, and retained editor identity, first responder, focus,
 and selection.
-The latest result bundle and screenshots are retained with the cycle-1 rail
-report. The complete cycle-2 matrix above predates these layout refinements and
-was not relabeled as a current full-suite run.
+The authoritative result bundle is
+`/private/tmp/vox-md-hans-feedback-fleet-loop/cycle-1/rail-final-ios-j2-v3.xcresult`;
+its 20 exported PNGs are beside it under `rail-final-ios-j2-v3-attachments`.
+The simulator's Reduce Motion preference was enabled for that rendering matrix
+(the attachment names record `reduceMotion=true`) and restored afterward. The
+complete cycle-2 matrix above predates these layout refinements and was not
+relabeled as a current full-suite run.
 
 ### Runtime evidence versus manual gates
 
