@@ -87,16 +87,16 @@ public final class RecordingJobQueue {
     /// as route ownership can make a cold-launch Quick Record block itself.
     public var ownsCaptureRoute: Bool { isCaptureActive || activeJobID != nil }
 
-    /// Preset jobs carry an immutable preset snapshot and are independent of the
-    /// open composer once enqueued. Draft jobs still mutate that composer, while
-    /// capture/import handoff has not reached a durable job yet; both must keep
-    /// its preset stable.
+    /// A Preset job carries an immutable snapshot and is independent of the open
+    /// composer once enqueued. Every other claimed delivery stays conservative:
+    /// draft work can still mutate the composer, and recovery/IPC work does not
+    /// carry the Preset snapshot required to prove that rerouting is harmless.
     public var blocksCapturePresetSelection: Bool {
         if isCaptureActive { return true }
         guard activeJobID != nil else { return false }
         guard let activeJob else { return true }
-        if case .captureDraft = activeJob.delivery { return true }
-        return false
+        if case .preset = activeJob.delivery { return false }
+        return true
     }
     private var isSystemSuspended = false
     private var needsDrainAfterCurrent = false

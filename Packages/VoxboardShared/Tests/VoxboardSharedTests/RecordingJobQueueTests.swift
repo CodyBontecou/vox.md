@@ -145,6 +145,42 @@ final class RecordingJobQueueTests: XCTestCase {
         }
     }
 
+    func test_activeJobsWithoutImmutablePresetSnapshotsKeepSelectionBlocked() async throws {
+        let deliveries: [(String, RecordingJobDelivery)] = [
+            ("clipboard", .clipboard),
+            ("keyboard", .keyboard(requestID: "keyboard-request")),
+            ("recovery", .recovery),
+        ]
+
+        for (name, delivery) in deliveries {
+            let fixture = try QueueFixture()
+            defer { fixture.cleanup() }
+            let started = expectation(description: "\(name) executor started")
+            let release = AsyncReleaseGate()
+            let queue = RecordingJobQueue(store: fixture.store) { _, _, _ in
+                started.fulfill()
+                await release.wait()
+                return RecordingJobExecutionResult()
+            }
+
+            let job = try await fixture.enqueue(
+                on: queue,
+                policy: .immediate,
+                delivery: delivery
+            )
+            await fulfillment(of: [started], timeout: 2)
+
+            XCTAssertEqual(queue.activeJobID, job.id, name)
+            XCTAssertTrue(queue.ownsCaptureRoute, name)
+            XCTAssertTrue(queue.blocksCapturePresetSelection, name)
+
+            await release.open()
+            try await waitUntil {
+                try await fixture.store.job(id: job.id)?.phase == .completed
+            }
+        }
+    }
+
     func test_manualJobDoesNotRunUntilProcessNow() async throws {
         let fixture = try QueueFixture()
         defer { fixture.cleanup() }

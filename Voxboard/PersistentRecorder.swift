@@ -65,11 +65,12 @@ enum RecordingCompletionMode: Equatable, Sendable {
         }
     }
 
-    /// Only draft delivery writes the eventual queued result back into the
-    /// currently open composer. Preset delivery already owns a frozen snapshot.
-    var updatesCaptureDraftDuringProcessing: Bool {
-        if case .captureDraft = self { return true }
-        return false
+    /// Only immutable Preset delivery can release the composer's preset while
+    /// processing. Draft delivery still writes into that composer, and keyboard
+    /// work remains an interactive owner rather than a background Preset run.
+    var blocksCapturePresetSelectionDuringProcessing: Bool {
+        if case .runVox = self { return false }
+        return true
     }
 
     var defaultCommandOrigin: RecordingCommand.Origin {
@@ -224,7 +225,7 @@ final class PersistentRecorder {
             return true
         }
         guard isTranscribing else { return false }
-        return transcribingCompletionMode?.updatesCaptureDraftDuringProcessing ?? true
+        return transcribingCompletionMode?.blocksCapturePresetSelectionDuringProcessing ?? true
     }
     var segmentDuration: TimeInterval = 0
     /// Backend-reported progress for the active ASR request. Preparing and
