@@ -250,8 +250,9 @@ project contract suite (10 launch-script and 95 contract tests), 61 focused
 shared-package tests, and 56 unsigned iOS simulator tests across launch safety,
 rail semantics, capture rendering, and completion-mode policy. Mounted
 screenshots cover compact and expanded disclosure states, fixed editor geometry,
-vertical overflow, dark mode, large text, RTL mirroring, empty/single-pin
-updates, and retained editor identity, first responder, focus, and selection.
+vertical overflow, dark mode, large text, Reduce Motion, RTL mirroring,
+empty/single-pin updates, and retained editor identity, first responder, focus,
+and selection.
 The latest result bundle and screenshots are retained with the cycle-1 rail
 report. The complete cycle-2 matrix above predates these layout refinements and
 was not relabeled as a current full-suite run.
