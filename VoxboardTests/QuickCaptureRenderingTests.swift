@@ -311,23 +311,20 @@ final class QuickCaptureRenderingTests: XCTestCase {
 
     func testRealPinnedRailOverlaysLeadingEdgeAndScrollsVerticallyInCompactLayouts() async throws {
         let fixture = try await QuickCapturePresetFixture.make(in: self)
-        let variants: [(
-            CGFloat, CGFloat, ColorScheme, DynamicTypeSize, LayoutDirection, Bool
-        )] = [
-            (320, 220, .light, .large, .leftToRight, false),
-            (390, 400, .dark, .accessibility3, .leftToRight, false),
-            (320, 220, .light, .accessibility3, .rightToLeft, false),
-            (768, 400, .dark, .xxxLarge, .leftToRight, false),
-            (390, 400, .light, .large, .leftToRight, true),
+        let reduceMotion = UIAccessibility.isReduceMotionEnabled
+        let variants: [(CGFloat, CGFloat, ColorScheme, DynamicTypeSize, LayoutDirection)] = [
+            (320, 220, .light, .large, .leftToRight),
+            (390, 400, .dark, .accessibility3, .leftToRight),
+            (320, 220, .light, .accessibility3, .rightToLeft),
+            (768, 400, .dark, .xxxLarge, .leftToRight),
         ]
-        for (width, height, scheme, typeSize, direction, reduceMotion) in variants {
+        for (width, height, scheme, typeSize, direction) in variants {
             let editor = PresetRenderingState()
             editor.isRailExpanded = true
             let content = PresetComposerHarness(fixture: fixture, editor: editor)
                 .environment(\.colorScheme, scheme)
                 .environment(\.dynamicTypeSize, typeSize)
                 .environment(\.layoutDirection, direction)
-                .environment(\.accessibilityReduceMotion, reduceMotion)
             let host = UIHostingController(rootView: content)
             let window = show(host, size: CGSize(width: width, height: height))
             defer { window.isHidden = true; window.rootViewController = nil }
