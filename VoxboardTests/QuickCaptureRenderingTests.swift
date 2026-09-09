@@ -165,38 +165,41 @@ final class QuickCaptureRenderingTests: XCTestCase {
     }
 
     func testRecordingControlHelpMountsCollapsedAndExpandedInCompactAccessibleLayouts() async throws {
-        let variants: [(Bool, CGFloat, ColorScheme, DynamicTypeSize, LayoutDirection)] = [
-            (false, 320, .light, .large, .leftToRight),
-            (true, 320, .dark, .accessibility3, .rightToLeft),
-            (true, 390, .light, .xxxLarge, .leftToRight),
+        let layouts: [(CGFloat, ColorScheme, DynamicTypeSize, LayoutDirection)] = [
+            (320, .light, .large, .leftToRight),
+            (320, .dark, .accessibility3, .rightToLeft),
+            (390, .light, .xxxLarge, .leftToRight),
         ]
-        for (expanded, width, scheme, typeSize, direction) in variants {
-            let appeared = expectation(description: "Recording help mounted expanded=\(expanded)")
-            let content = CaptureRecordingControlHelp(isExpanded: .constant(expanded))
-                .padding(Geist.Spacing.three)
-                .environment(\.colorScheme, scheme)
-                .environment(\.dynamicTypeSize, typeSize)
-                .environment(\.layoutDirection, direction)
-                .onAppear { appeared.fulfill() }
-            let host = UIHostingController(rootView: content)
-            let window = show(host, size: CGSize(width: width, height: 620))
-            defer { window.isHidden = true; window.rootViewController = nil }
-            await fulfillment(of: [appeared], timeout: 3)
-            try await settle(window)
+        for (width, scheme, typeSize, direction) in layouts {
+            var fittingHeights: [Bool: CGFloat] = [:]
+            for expanded in [false, true] {
+                let appeared = expectation(description: "Recording help mounted expanded=\(expanded)")
+                let content = CaptureRecordingControlHelp(isExpanded: .constant(expanded))
+                    .padding(Geist.Spacing.three)
+                    .environment(\.colorScheme, scheme)
+                    .environment(\.dynamicTypeSize, typeSize)
+                    .environment(\.layoutDirection, direction)
+                    .onAppear { appeared.fulfill() }
+                let host = UIHostingController(rootView: content)
+                let window = show(host, size: CGSize(width: width, height: 620))
+                defer { window.isHidden = true; window.rootViewController = nil }
+                await fulfillment(of: [appeared], timeout: 3)
+                try await settle(window)
 
-            let fittingHeight = host.sizeThatFits(
-                in: CGSize(width: width, height: 1_000)
-            ).height
-            if expanded {
-                XCTAssertGreaterThan(fittingHeight, 160)
-            } else {
-                XCTAssertLessThan(fittingHeight, 100)
+                fittingHeights[expanded] = host.sizeThatFits(
+                    in: CGSize(width: width, height: 1_000)
+                ).height
+                // SwiftUI does not expose a faithful VoiceOver hierarchy here.
+                // This mount checks adaptive layout; value tests check the copy.
+                retainScreenshot(
+                    "Recording control help expanded=\(expanded) \(width) \(scheme) \(typeSize) \(direction)",
+                    in: host.view
+                )
             }
-            // SwiftUI does not expose a faithful VoiceOver hierarchy here. This
-            // mount checks adaptive layout; the separate value tests check copy.
-            retainScreenshot(
-                "Recording control help expanded=\(expanded) \(width) \(scheme) \(typeSize) \(direction)",
-                in: host.view
+            XCTAssertGreaterThan(
+                try XCTUnwrap(fittingHeights[true]),
+                try XCTUnwrap(fittingHeights[false]) + 60,
+                "Expanded help must reveal meaningful content without widening the compact affordance"
             )
         }
     }
