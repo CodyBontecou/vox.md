@@ -158,6 +158,61 @@ struct RecordingSegmentHandoffSnapshot: Equatable, Sendable {
     let voiceProcessingConfiguration: RecordingVoiceProcessingConfiguration?
 }
 
+/// iOS's legacy direct voice-note route. Unified Capture stages its own named
+/// asset earlier; imported user media deliberately keeps its existing naming.
+enum IOSLegacyVoiceAudioDelivery {
+    static func audioFilenameContext(
+        transcript: Transcript,
+        flowSnapshot: CapturePreset,
+        originalAudioFilename: String,
+        captureSource: CaptureSource
+    ) -> CapturePresetAudioFilenameContext? {
+        guard captureSource != .fileImport else { return nil }
+        return CapturePresetAudioFilenameContext(
+            identifier: transcript.id.uuidString,
+            createdAt: transcript.date,
+            presetName: flowSnapshot.displayName,
+            originalFilename: originalAudioFilename
+        )
+    }
+
+    @discardableResult
+    static func deliver(
+        sourceAudioURL: URL,
+        transcriptFileURL: URL,
+        flowSnapshot: CapturePreset,
+        transcript: Transcript,
+        originalAudioFilename: String,
+        captureSource: CaptureSource,
+        transcriptFolderScopeURL: URL? = nil,
+        previouslyExportedURL: URL? = nil,
+        audioReferenceAlreadyAttached: Bool = false,
+        audioDeliveryTransactionDirectoryURL: URL? = nil,
+        audioReferenceDeliveryTransactionDirectoryURL: URL? = nil,
+        checkpointExport: @escaping CheckpointedAudioDelivery.ExportCheckpoint,
+        checkpointReference: @escaping CheckpointedAudioDelivery.ReferenceCheckpoint
+    ) async throws -> URL? {
+        try await CheckpointedAudioDelivery.deliver(
+            sourceAudioURL: sourceAudioURL,
+            transcriptFileURL: transcriptFileURL,
+            flow: flowSnapshot,
+            transcriptFolderScopeURL: transcriptFolderScopeURL,
+            previouslyExportedURL: previouslyExportedURL,
+            audioReferenceAlreadyAttached: audioReferenceAlreadyAttached,
+            audioDeliveryTransactionDirectoryURL: audioDeliveryTransactionDirectoryURL,
+            audioReferenceDeliveryTransactionDirectoryURL: audioReferenceDeliveryTransactionDirectoryURL,
+            audioFilenameContext: audioFilenameContext(
+                transcript: transcript,
+                flowSnapshot: flowSnapshot,
+                originalAudioFilename: originalAudioFilename,
+                captureSource: captureSource
+            ),
+            checkpointExport: checkpointExport,
+            checkpointReference: checkpointReference
+        )
+    }
+}
+
 /// Always-on audio recorder that captures microphone input into a circular buffer.
 ///
 /// The keyboard extension controls transcription segments via IPC commands:
@@ -2872,6 +2927,7 @@ final class PersistentRecorder {
                 duration: job.duration,
                 completionMode: completionMode,
                 sourceAudioURL: audioURL,
+                originalAudioFilename: job.originalFilename,
                 captureSource: job.captureSource,
                 selectedFlowOverride: flowSnapshot,
                 voiceProcessingConfiguration: job.effectiveVoiceProcessingConfiguration,
@@ -3024,6 +3080,7 @@ final class PersistentRecorder {
         duration: TimeInterval,
         completionMode: RecordingCompletionMode,
         sourceAudioURL: URL? = nil,
+        originalAudioFilename: String? = nil,
         resolvedResult: OnDeviceTranscriptionResult? = nil,
         usesLiveDelivery: Bool = false,
         recordingStartedAt: TimeInterval? = nil,
@@ -3338,15 +3395,18 @@ final class PersistentRecorder {
                     let savedId = transcript.id
                     let initialTranscript = transcript
                     let flowForExport = selectedFlow
+                let originalAudioSourceURL = sourceAudioURL ?? audioURL
+                let originalAudioFilenameForExport = originalAudioFilename
+                    ?? originalAudioSourceURL.lastPathComponent
                 let audioSourceForExport: URL? = {
                     guard flowForExport.audioSaveMode != .off else { return nil }
-                    let source = sourceAudioURL ?? audioURL
-                    if !cleanupWorkingAudio { return source }
+                    if !cleanupWorkingAudio { return originalAudioSourceURL }
                     guard let dir = AppConstants.recordingsDirectoryURL else { return nil }
-                    let ext = source.pathExtension.isEmpty ? "wav" : source.pathExtension
+                    let ext = originalAudioSourceURL.pathExtension.isEmpty
+                        ? "wav" : originalAudioSourceURL.pathExtension
                     let retained = dir.appendingPathComponent("export_audio_\(UUID().uuidString)").appendingPathExtension(ext)
                     do {
-                        try FileManager.default.copyItem(at: source, to: retained)
+                        try FileManager.default.copyItem(at: originalAudioSourceURL, to: retained)
                         return retained
                     } catch {
                         log.log("[PersistentRecorder] ⚠️ Could not retain audio for export: \(error)")
@@ -3545,10 +3605,13 @@ final class PersistentRecorder {
                         let noteFolderScopeURL = folderOverride ?? TranscriptFileExporter.resolveExportFolderURL(flow: flowForExport)
                         do {
                             let checkpointedAudioURL = exportedAudioPath.map(URL.init(fileURLWithPath:))
-                            if try await CheckpointedAudioDelivery.deliver(
+                            if try await IOSLegacyVoiceAudioDelivery.deliver(
                                 sourceAudioURL: audioSourceForExport,
                                 transcriptFileURL: url,
-                                flow: flowForExport,
+                                flowSnapshot: flowForExport,
+                                transcript: latest,
+                                originalAudioFilename: originalAudioFilenameForExport,
+                                captureSource: originCaptureSource,
                                 transcriptFolderScopeURL: noteFolderScopeURL,
                                 previouslyExportedURL: checkpointedAudioURL,
                                 audioReferenceAlreadyAttached: audioReferenceAttachedAt != nil,

@@ -810,6 +810,8 @@ private struct CapturePresetEditorView: View {
             }
 
             if flow.audioSaveMode != .off {
+                CapturePresetAudioFilenameSettings(preset: $flow)
+
                 Toggle("Embed Audio in Markdown", isOn: $flow.exportSettings.embedAudioInMarkdown)
                     .tint(Color.accentColor)
                     .disabled(!markdownAudioEmbedAvailable)
