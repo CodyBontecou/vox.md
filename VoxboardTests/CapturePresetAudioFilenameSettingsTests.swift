@@ -90,6 +90,12 @@ final class CapturePresetAudioFilenameSettingsTests: XCTestCase {
         XCTAssertTrue(CapturePresetAudioFilenameSettings.behaviorHelp.contains("actual encoded or copied"))
         XCTAssertTrue(CapturePresetAudioFilenameSettings.behaviorHelp.contains("path-like input"))
         XCTAssertTrue(CapturePresetAudioFilenameSettings.behaviorHelp.contains("sanitized"))
+        XCTAssertEqual(CapturePresetAudioFilenameSettings.fieldLabel, "Audio Filename Template")
+        XCTAssertEqual(CapturePresetAudioFilenameSettings.fieldPlaceholder, "Automatic filename")
+        XCTAssertTrue(CapturePresetAudioFilenameSettings.fieldAccessibilityHint.contains("saved voice-audio filename"))
+        XCTAssertTrue(CapturePresetAudioFilenameSettings.fieldAccessibilityHint.contains("automatic naming"))
+        XCTAssertTrue(CapturePresetAudioFilenameSettings.fieldAccessibilityHint.contains("sanitized"))
+        XCTAssertTrue(CapturePresetAudioFilenameSettings.fieldAccessibilityHint.contains("extension replaces"))
         XCTAssertEqual(
             CapturePresetAudioFilenameSettings.fieldAccessibilityIdentifier,
             "capture_preset_audio_filename_template"

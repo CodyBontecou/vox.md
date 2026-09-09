@@ -8,6 +8,7 @@ struct CapturePresetAudioFilenameSettings: View {
     @Binding var preset: CapturePreset
 
     static let fieldLabel = String(localized: "Audio Filename Template")
+    static let fieldPlaceholder = String(localized: "Automatic filename")
     static let fieldAccessibilityIdentifier = "capture_preset_audio_filename_template"
     static let helpAccessibilityIdentifier = "capture_preset_audio_filename_help"
     static let previewAccessibilityIdentifier = "capture_preset_audio_filename_preview"
@@ -23,12 +24,17 @@ struct CapturePresetAudioFilenameSettings: View {
 
     var body: some View {
         if preset.audioSaveMode != .off {
-            TextField(Self.fieldLabel, text: $preset.audioFilenameTemplate)
-                .textInputAutocapitalization(.never)
-                .disableAutocorrection(true)
-                .accessibilityLabel(Self.fieldLabel)
-                .accessibilityHint(Self.fieldAccessibilityHint)
-                .accessibilityIdentifier(Self.fieldAccessibilityIdentifier)
+            VStack(alignment: .leading, spacing: 6) {
+                Text(Self.fieldLabel)
+                    .font(.subheadline.weight(.semibold))
+                    .accessibilityHidden(true)
+                TextField(Self.fieldPlaceholder, text: $preset.audioFilenameTemplate)
+                    .textInputAutocapitalization(.never)
+                    .disableAutocorrection(true)
+                    .accessibilityLabel(Self.fieldLabel)
+                    .accessibilityHint(Self.fieldAccessibilityHint)
+                    .accessibilityIdentifier(Self.fieldAccessibilityIdentifier)
+            }
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(Self.tokensHelp)
