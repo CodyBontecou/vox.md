@@ -699,7 +699,7 @@ struct MacAudioFilenameTemplateSetting: View {
         }
     }
 
-    private var previewFilename: String? {
+    var previewFilename: String? {
         CapturePresetAudioFilename.preferredFilename(
             template: template,
             context: CapturePresetAudioFilenameContext(
