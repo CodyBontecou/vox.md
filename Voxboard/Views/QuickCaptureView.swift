@@ -943,7 +943,7 @@ struct QuickCaptureView: View {
                 .accessibilityIdentifier("capture_recording_mode")
 
                 recordingDestinationOptions
-                CaptureRecordingControlHelp(isExpanded: $showsRecordingControlHelp)
+                CaptureRecordingControlHelp(isPresented: $showsRecordingControlHelp)
                 recordingDetailsStatus
             }
             .padding(Geist.Spacing.three)

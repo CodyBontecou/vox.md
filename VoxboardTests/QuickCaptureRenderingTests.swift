@@ -164,42 +164,58 @@ final class QuickCaptureRenderingTests: XCTestCase {
         )
     }
 
-    func testRecordingControlHelpMountsCollapsedAndExpandedInCompactAccessibleLayouts() async throws {
+    func testRecordingControlHelpAffordanceAndSheetMountInCompactAccessibleLayouts() async throws {
         let layouts: [(CGFloat, ColorScheme, DynamicTypeSize, LayoutDirection)] = [
             (320, .light, .large, .leftToRight),
             (320, .dark, .accessibility3, .rightToLeft),
             (390, .light, .xxxLarge, .leftToRight),
         ]
         for (width, scheme, typeSize, direction) in layouts {
-            var fittingHeights: [Bool: CGFloat] = [:]
-            for expanded in [false, true] {
-                let appeared = expectation(description: "Recording help mounted expanded=\(expanded)")
-                let content = CaptureRecordingControlHelp(isExpanded: .constant(expanded))
-                    .padding(Geist.Spacing.three)
-                    .environment(\.colorScheme, scheme)
-                    .environment(\.dynamicTypeSize, typeSize)
-                    .environment(\.layoutDirection, direction)
-                    .onAppear { appeared.fulfill() }
-                let host = UIHostingController(rootView: content)
-                let window = show(host, size: CGSize(width: width, height: 620))
-                defer { window.isHidden = true; window.rootViewController = nil }
-                await fulfillment(of: [appeared], timeout: 3)
-                try await settle(window)
+            let affordanceAppeared = expectation(description: "Recording help affordance mounted")
+            let affordance = CaptureRecordingControlHelp(isPresented: .constant(false))
+                .padding(Geist.Spacing.three)
+                .environment(\.colorScheme, scheme)
+                .environment(\.dynamicTypeSize, typeSize)
+                .environment(\.layoutDirection, direction)
+                .onAppear { affordanceAppeared.fulfill() }
+            let affordanceHost = UIHostingController(rootView: affordance)
+            let affordanceWindow = show(affordanceHost, size: CGSize(width: width, height: 132))
+            await fulfillment(of: [affordanceAppeared], timeout: 3)
+            try await settle(affordanceWindow)
+            XCTAssertLessThanOrEqual(
+                affordanceHost.sizeThatFits(in: CGSize(width: width, height: 1_000)).height,
+                132,
+                "The help affordance must stay compact instead of inlining explanations"
+            )
+            retainScreenshot(
+                "Recording control help affordance \(width) \(scheme) \(typeSize) \(direction)",
+                in: affordanceHost.view
+            )
+            affordanceWindow.isHidden = true
+            affordanceWindow.rootViewController = nil
 
-                fittingHeights[expanded] = host.sizeThatFits(
-                    in: CGSize(width: width, height: 1_000)
-                ).height
-                // SwiftUI does not expose a faithful VoiceOver hierarchy here.
-                // This mount checks adaptive layout; value tests check the copy.
-                retainScreenshot(
-                    "Recording control help expanded=\(expanded) \(width) \(scheme) \(typeSize) \(direction)",
-                    in: host.view
-                )
-            }
-            XCTAssertGreaterThan(
-                try XCTUnwrap(fittingHeights[true]),
-                try XCTUnwrap(fittingHeights[false]) + 60,
-                "Expanded help must reveal meaningful content without widening the compact affordance"
+            let sheetAppeared = expectation(description: "Recording help sheet mounted")
+            let sheet = CaptureRecordingControlHelpSheet()
+                .environment(\.colorScheme, scheme)
+                .environment(\.dynamicTypeSize, typeSize)
+                .environment(\.layoutDirection, direction)
+                .onAppear { sheetAppeared.fulfill() }
+            let sheetHost = UIHostingController(rootView: sheet)
+            let sheetWindow = show(sheetHost, size: CGSize(width: width, height: 620))
+            defer { sheetWindow.isHidden = true; sheetWindow.rootViewController = nil }
+            await fulfillment(of: [sheetAppeared], timeout: 3)
+            try await settle(sheetWindow)
+
+            let scrollingContainers = scrollViews(in: sheetHost.view)
+            XCTAssertTrue(
+                scrollingContainers.contains(where: { $0.isScrollEnabled && $0.bounds.height > 0 }),
+                "Recording explanations must remain vertically scrollable at large text sizes"
+            )
+            // Unit-hosted SwiftUI does not expose a faithful VoiceOver tree.
+            // Copy tests above verify semantics; these mounts verify adaptation.
+            retainScreenshot(
+                "Recording control help sheet \(width) \(scheme) \(typeSize) \(direction)",
+                in: sheetHost.view
             )
         }
     }

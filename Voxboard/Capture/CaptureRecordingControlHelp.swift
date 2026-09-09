@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Shared copy for the three compact recording controls. Production controls and
-/// the visible disclosure use the same text so accessibility and on-screen help
+/// the visible help sheet use the same text so accessibility and on-screen help
 /// cannot drift into describing different behaviors.
 enum CaptureRecordingControlSemantics {
     static var audioHelp: String {
@@ -29,14 +29,59 @@ enum CaptureRecordingControlSemantics {
     }
 }
 
-/// A compact, collapsed-by-default explanation that expands vertically instead
-/// of forcing verbose labels into the recording control row.
+/// A compact 44-point affordance. Explanations live in a standard, scrollable
+/// sheet so narrow, keyboard-visible, large-text, and RTL layouts do not have to
+/// fit verbose copy into the recording control row.
 struct CaptureRecordingControlHelp: View {
-    @Binding var isExpanded: Bool
+    @Binding var isPresented: Bool
 
     var body: some View {
-        DisclosureGroup(isExpanded: $isExpanded) {
-            VStack(alignment: .leading, spacing: Geist.Spacing.three) {
+        Button {
+            isPresented = true
+        } label: {
+            ViewThatFits(in: .horizontal) {
+                helpLabel(showsTitle: true)
+                helpLabel(showsTitle: false)
+            }
+            .font(Geist.caption())
+            .foregroundStyle(Geist.muted)
+            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Explain recording controls")
+        .accessibilityHint("Describes Audio, Import Audio, and Keyboard Listening")
+        .accessibilityIdentifier("capture_recording_control_help")
+        .sheet(isPresented: $isPresented) {
+            CaptureRecordingControlHelpSheet()
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+        }
+    }
+
+    private func helpLabel(showsTitle: Bool) -> some View {
+        HStack(spacing: Geist.Spacing.two) {
+            if showsTitle {
+                Label("Recording control help", systemImage: "info.circle")
+                    .fixedSize(horizontal: true, vertical: false)
+            } else {
+                Image(systemName: "info.circle")
+                    .accessibilityHidden(true)
+            }
+            Spacer(minLength: Geist.Spacing.two)
+            Image(systemName: "chevron.right")
+                .font(Geist.caption(.caption2))
+                .accessibilityHidden(true)
+        }
+    }
+}
+
+struct CaptureRecordingControlHelpSheet: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            List {
                 helpRow(
                     title: String(localized: "Audio"),
                     detail: CaptureRecordingControlSemantics.audioHelp,
@@ -56,13 +101,15 @@ struct CaptureRecordingControlHelp: View {
                     identifier: "capture_recording_help_keyboard_listening"
                 )
             }
-            .padding(.top, Geist.Spacing.two)
-        } label: {
-            Label("Recording control help", systemImage: "info.circle")
-                .font(Geist.caption())
-                .foregroundStyle(Geist.muted)
+            .navigationTitle("Recording Controls")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }
+                }
+            }
         }
-        .accessibilityIdentifier("capture_recording_control_help")
+        .accessibilityIdentifier("capture_recording_control_help_sheet")
     }
 
     private func helpRow(
@@ -71,21 +118,22 @@ struct CaptureRecordingControlHelp: View {
         systemImage: String,
         identifier: String
     ) -> some View {
-        HStack(alignment: .top, spacing: Geist.Spacing.two) {
+        HStack(alignment: .top, spacing: Geist.Spacing.three) {
             Image(systemName: systemImage)
-                .frame(width: 20)
+                .frame(width: 24)
                 .foregroundStyle(Geist.muted)
                 .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: Geist.Spacing.one) {
                 Text(title)
                     .font(Geist.label())
                     .foregroundStyle(Geist.text)
                 Text(detail)
-                    .font(Geist.caption(.caption2))
+                    .font(Geist.caption())
                     .foregroundStyle(Geist.muted)
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
+        .padding(.vertical, Geist.Spacing.one)
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier(identifier)
     }
