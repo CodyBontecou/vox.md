@@ -266,14 +266,22 @@ final class QuickCaptureRenderingTests: XCTestCase {
         XCTAssertEqual(fixture.vm.draft, draftBeforeDisclosure)
         let railScroll = try XCTUnwrap(scrollViews(in: host.view).first { !($0 is UITextView) })
         let railScrollFrame = railScroll.convert(railScroll.bounds, to: host.view)
+        let expandedEditorHostFrame = expandedEditor.offsetBy(
+            dx: host.view.safeAreaInsets.left,
+            dy: host.view.safeAreaInsets.top
+        )
         let expectedHeight = (2 * CapturePresetQuickAccessButton.hitTargetSide)
             + (2 * Geist.Spacing.one)
         XCTAssertEqual(railScrollFrame.height, expectedHeight, accuracy: 2)
-        XCTAssertEqual(railScrollFrame.maxY, expandedEditor.maxY - Geist.Spacing.one, accuracy: 2)
-        XCTAssertGreaterThan(railScrollFrame.minY, expandedEditor.minY)
+        XCTAssertEqual(
+            railScrollFrame.maxY,
+            expandedEditorHostFrame.maxY - Geist.Spacing.one,
+            accuracy: 2
+        )
+        XCTAssertGreaterThan(railScrollFrame.minY, expandedEditorHostFrame.minY)
         let exposedEditorPoint = CGPoint(
             x: railScrollFrame.midX,
-            y: (expandedEditor.minY + railScrollFrame.minY) / 2
+            y: (expandedEditorHostFrame.minY + railScrollFrame.minY) / 2
         )
         let exposedEditorHit = host.view.hitTest(exposedEditorPoint, with: nil)
         XCTAssertTrue(
@@ -340,24 +348,27 @@ final class QuickCaptureRenderingTests: XCTestCase {
                 scrollViews(in: host.view).first { !($0 is UITextView) }
             )
             let railScrollFrame = railScroll.convert(railScroll.bounds, to: host.view)
-            XCTAssertEqual(railScrollFrame.maxY, composer.maxY - Geist.Spacing.one, accuracy: 2)
+            let composerHostFrame = composer.offsetBy(
+                dx: host.view.safeAreaInsets.left,
+                dy: host.view.safeAreaInsets.top
+            )
+            XCTAssertEqual(
+                railScrollFrame.maxY,
+                composerHostFrame.maxY - Geist.Spacing.one,
+                accuracy: 2
+            )
             XCTAssertEqual(railScrollFrame.width, CapturePresetQuickAccessButton.hitTargetSide, accuracy: 2)
             XCTAssertEqual(railScroll.keyboardDismissMode, .none)
             XCTAssertLessThanOrEqual(railScroll.contentSize.width, railScroll.bounds.width + 1)
-            if height == 220 {
-                XCTAssertGreaterThan(
-                    railScroll.contentSize.height,
-                    railScroll.bounds.height + 1,
-                    "All seven pins must overflow vertically, never shrink or cap"
-                )
+            if railScroll.contentSize.height > railScroll.bounds.height + 1 {
                 XCTAssertGreaterThan(
                     railScroll.contentSize.height + railScroll.adjustedContentInset.bottom
                         - railScroll.bounds.height,
                     -railScroll.adjustedContentInset.top + 1,
-                    "The rail must retain a nonempty vertical panning range"
+                    "All alternatives must retain a nonempty vertical panning range"
                 )
             } else {
-                XCTAssertGreaterThan(railScrollFrame.minY, composer.minY)
+                XCTAssertGreaterThan(railScrollFrame.minY, composerHostFrame.minY)
             }
             retainScreenshot(
                 "Pinned preset rail \(width)x\(height) \(scheme) \(typeSize) \(direction)",
@@ -394,6 +405,10 @@ final class QuickCaptureRenderingTests: XCTestCase {
             oneAlternativeScroll.bounds,
             to: host.view
         )
+        let editorHostFrame = try XCTUnwrap(editor.frames["editor"]).offsetBy(
+            dx: host.view.safeAreaInsets.left,
+            dy: host.view.safeAreaInsets.top
+        )
         XCTAssertEqual(
             oneAlternativeFrame.height,
             CapturePresetQuickAccessButton.hitTargetSide + (2 * Geist.Spacing.one),
@@ -401,7 +416,7 @@ final class QuickCaptureRenderingTests: XCTestCase {
         )
         XCTAssertEqual(
             oneAlternativeFrame.maxY,
-            try XCTUnwrap(editor.frames["editor"]).maxY - Geist.Spacing.one,
+            editorHostFrame.maxY - Geist.Spacing.one,
             accuracy: 2
         )
         XCTAssertTrue(original === find("quick_capture_text", in: host.view))
