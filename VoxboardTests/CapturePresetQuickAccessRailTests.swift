@@ -49,18 +49,21 @@ final class CapturePresetQuickAccessRailTests: XCTestCase {
         XCTAssertEqual(f.defaults.string(forKey: CapturePresetProfileStore.selectedProfileIDKey), "keyboard-sentinel")
     }
 
-    func testPreviouslyRenderedRailRevalidatesBusyAndUnavailableInputsInRealViewModel() async throws {
+    func testPreviouslyRenderedRailAndSelectorRevalidateBusyAndUnavailableInputsInRealViewModel() async throws {
         let f = try await QuickCapturePresetFixture.make(in: self)
         let staleRail = f.rail
+        let staleSelector = f.selector(isRailExpanded: true, toggleRail: {})
         let before = f.vm.draft
         f.vm.isProcessingMedia = true
         XCTAssertFalse(staleRail.activatePreset(id: "inbox"))
+        XCTAssertFalse(staleSelector.activatePreset(id: "inbox"))
         XCTAssertEqual(f.vm.draft, before)
         f.vm.isProcessingMedia = false
         var changed = f.presets
         changed[1].isEnabled = false
         f.defaults.set(try JSONEncoder().encode(changed), forKey: CapturePresetProfileStore.profilesKey)
         XCTAssertFalse(staleRail.activatePreset(id: "inbox"))
+        XCTAssertFalse(staleSelector.activatePreset(id: "inbox"))
         XCTAssertEqual(f.vm.draft, before)
         f.preferences.reload()
         XCTAssertFalse(f.rail.profiles.contains(where: { $0.id == "inbox" }))
@@ -68,6 +71,7 @@ final class CapturePresetQuickAccessRailTests: XCTestCase {
         changed.remove(at: 1)
         f.defaults.set(try JSONEncoder().encode(changed), forKey: CapturePresetProfileStore.profilesKey)
         XCTAssertFalse(staleRail.activatePreset(id: "inbox"))
+        XCTAssertFalse(staleSelector.activatePreset(id: "inbox"))
         XCTAssertEqual(f.vm.draft, before)
     }
 
@@ -109,6 +113,60 @@ final class CapturePresetQuickAccessRailTests: XCTestCase {
         XCTAssertEqual(f.vm.draft, before)
     }
 
+    func testEmptySelectedOnlyAndOneAlternativeSelectorsKeepEveryPresetActionAvailable() async throws {
+        let f = try await QuickCapturePresetFixture.make(in: self)
+        let states: [([String], Bool)] = [
+            ([], false),
+            (["journal"], false),
+            (["inbox"], true),
+        ]
+
+        for (orderedIDs, expectsDisclosure) in states {
+            if f.vm.draft.voxID != "journal" {
+                XCTAssertTrue(f.vm.selectVox("journal"))
+            }
+            XCTAssertTrue(f.preferences.setOrderedIDs(orderedIDs))
+            var didToggle = false
+            let selector = f.selector(isRailExpanded: false) { didToggle = true }
+
+            XCTAssertEqual(selector.toggleRailIfAvailable(), expectsDisclosure)
+            XCTAssertEqual(didToggle, expectsDisclosure)
+            XCTAssertTrue(
+                selector.activatePreset(id: "work"),
+                "The complete menu action set must include unpinned presets for \(orderedIDs)"
+            )
+            XCTAssertEqual(f.vm.draft.voxID, "work")
+        }
+    }
+
+    func testSelectorAndRailButtonExposeAccurateSelectionAndRoutingSemantics() async throws {
+        let f = try await QuickCapturePresetFixture.make(in: self)
+        let collapsed = f.selector(isRailExpanded: false, toggleRail: {})
+        XCTAssertTrue(collapsed.accessibilitySelectionTraits.contains(.isSelected))
+        XCTAssertEqual(
+            collapsed.accessibilityHint,
+            String(localized: "Expand pinned Capture Presets. Touch and hold to show all Capture Presets.")
+        )
+        XCTAssertEqual(collapsed.accessibilityValue, String(localized: "Collapsed"))
+
+        let expanded = f.selector(isRailExpanded: true, toggleRail: {})
+        XCTAssertEqual(
+            expanded.accessibilityHint,
+            String(localized: "Collapse pinned Capture Presets. Touch and hold to show all Capture Presets.")
+        )
+        XCTAssertEqual(expanded.accessibilityValue, String(localized: "Expanded"))
+
+        let alternative = CapturePresetQuickAccessButton(
+            profile: f.presets[1].captureProfile,
+            isSelected: false,
+            action: {}
+        )
+        XCTAssertEqual(
+            alternative.accessibilityHint,
+            String(localized: "Use this preset for the current draft. Text and attachments are kept; one-off routing resets.")
+        )
+    }
+
     func testSelectorPrimaryActionOnlyTogglesRailAndRetainsAllPresetSelectionFallback() async throws {
         let f = try await QuickCapturePresetFixture.make(in: self)
         let before = f.vm.draft
@@ -125,6 +183,7 @@ final class CapturePresetQuickAccessRailTests: XCTestCase {
 
         XCTAssertTrue(selector.toggleRailIfAvailable())
         XCTAssertTrue(isExpanded)
+        XCTAssertTrue(selector.accessibilitySelectionTraits.contains(.isSelected))
         XCTAssertEqual(f.vm.draft, before, "Expanding the rail must not select or reroute a preset")
         XCTAssertFalse(selector.activatePreset(id: "journal"))
         XCTAssertTrue(selector.activatePreset(id: "inbox"))

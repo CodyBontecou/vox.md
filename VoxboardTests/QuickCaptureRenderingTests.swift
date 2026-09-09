@@ -208,13 +208,31 @@ final class QuickCaptureRenderingTests: XCTestCase {
         XCTAssertTrue(fixture.preferences.setOrderedIDs(["journal", "inbox", "ideas"]))
         let editor = PresetRenderingState()
         let host = UIHostingController(rootView: PresetComposerHarness(fixture: fixture, editor: editor))
+        let previousKeyWindow = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows).first(where: \.isKeyWindow)
         let window = show(host, size: CGSize(width: 390, height: 400))
-        defer { window.isHidden = true; window.rootViewController = nil }
+        window.makeKeyAndVisible()
+        defer {
+            editor.controller.dismissKeyboard()
+            window.isHidden = true
+            window.rootViewController = nil
+            previousKeyWindow?.makeKey()
+        }
         try await settle(window)
 
-        let original = try XCTUnwrap(find("quick_capture_text", in: host.view))
+        let original = try XCTUnwrap(find("quick_capture_text", in: host.view) as? UITextView)
+        XCTAssertTrue(original.becomeFirstResponder())
+        let cursor = NSRange(location: 5, length: 12)
+        editor.controller.replaceAll(with: fixture.vm.draft.text, selection: cursor)
+        try await settle(window)
+        XCTAssertTrue(original.isFirstResponder)
+        XCTAssertTrue(editor.isFocused)
+        XCTAssertEqual(original.selectedRange, cursor)
+        let draftBeforeDisclosure = fixture.vm.draft
         XCTAssertLessThanOrEqual(editor.frames["pins"]?.width ?? 0, 1)
-        XCTAssertGreaterThanOrEqual(try XCTUnwrap(editor.frames["selector"]).height, 44)
+        let selectorFrame = try XCTUnwrap(editor.frames["selector"])
+        XCTAssertGreaterThanOrEqual(selectorFrame.width, 44)
+        XCTAssertGreaterThanOrEqual(selectorFrame.height, 44)
         retainScreenshot("Preset selector — compact default", in: host.view)
         // drawHierarchy can finish attaching a hosted test window. Measure both
         // states only after that one-time test-harness layout settles.
@@ -234,13 +252,25 @@ final class QuickCaptureRenderingTests: XCTestCase {
         XCTAssertEqual(expandedEditor.minX, compactEditor.minX, accuracy: 1)
         XCTAssertEqual(expandedEditor.minY, compactEditor.minY, accuracy: 1)
         XCTAssertEqual(expandedEditor.width, compactEditor.width, accuracy: 1)
-        let expandedText = try XCTUnwrap(find("quick_capture_text", in: host.view))
+        let expandedText = try XCTUnwrap(find("quick_capture_text", in: host.view) as? UITextView)
         let expandedTextFrame = expandedText.convert(expandedText.bounds, to: host.view)
         XCTAssertEqual(expandedTextFrame.minX, compactTextFrame.minX, accuracy: 1)
         XCTAssertEqual(expandedTextFrame.minY, compactTextFrame.minY, accuracy: 1)
         XCTAssertEqual(expandedTextFrame.width, compactTextFrame.width, accuracy: 1)
         XCTAssertEqual(expandedTextFrame.height, compactTextFrame.height, accuracy: 1)
         XCTAssertTrue(original === expandedText)
+        XCTAssertTrue(expandedText.isFirstResponder)
+        XCTAssertTrue(editor.isFocused)
+        XCTAssertEqual(expandedText.selectedRange, cursor)
+        XCTAssertEqual(editor.selection, cursor)
+        XCTAssertEqual(fixture.vm.draft, draftBeforeDisclosure)
+        let railScroll = try XCTUnwrap(scrollViews(in: host.view).first { !($0 is UITextView) })
+        let railScrollFrame = railScroll.convert(railScroll.bounds, to: host.view)
+        let expectedHeight = (2 * CapturePresetQuickAccessButton.hitTargetSide)
+            + (2 * Geist.Spacing.one)
+        XCTAssertEqual(railScrollFrame.height, expectedHeight, accuracy: 2)
+        XCTAssertEqual(railScrollFrame.maxY, expandedEditor.maxY - Geist.Spacing.one, accuracy: 2)
+        XCTAssertGreaterThan(railScrollFrame.minY, expandedEditor.minY)
         retainScreenshot("Preset selector — expanded overlay rail", in: host.view)
 
         let collapse = fixture.selector(isRailExpanded: true) {
@@ -252,7 +282,13 @@ final class QuickCaptureRenderingTests: XCTestCase {
         let collapsedEditor = try XCTUnwrap(editor.frames["editor"])
         XCTAssertEqual(collapsedEditor.minX, compactEditor.minX, accuracy: 1)
         XCTAssertEqual(collapsedEditor.width, compactEditor.width, accuracy: 1)
-        XCTAssertTrue(original === find("quick_capture_text", in: host.view))
+        let collapsedText = try XCTUnwrap(find("quick_capture_text", in: host.view) as? UITextView)
+        XCTAssertTrue(original === collapsedText)
+        XCTAssertTrue(collapsedText.isFirstResponder)
+        XCTAssertTrue(editor.isFocused)
+        XCTAssertEqual(collapsedText.selectedRange, cursor)
+        XCTAssertEqual(editor.selection, cursor)
+        XCTAssertEqual(fixture.vm.draft, draftBeforeDisclosure)
     }
 
     func testRealPinnedRailOverlaysLeadingEdgeAndScrollsVerticallyInCompactLayouts() async throws {
@@ -290,13 +326,28 @@ final class QuickCaptureRenderingTests: XCTestCase {
             XCTAssertLessThanOrEqual(pins.maxX, composer.maxX + 1)
             XCTAssertGreaterThanOrEqual(route.minY, max(pins.maxY, composer.maxY) - 1)
             XCTAssertLessThanOrEqual(route.maxY, host.view.bounds.height + 1)
+            let railScroll = try XCTUnwrap(
+                scrollViews(in: host.view).first { !($0 is UITextView) }
+            )
+            let railScrollFrame = railScroll.convert(railScroll.bounds, to: host.view)
+            XCTAssertEqual(railScrollFrame.maxY, composer.maxY - Geist.Spacing.one, accuracy: 2)
+            XCTAssertEqual(railScrollFrame.width, CapturePresetQuickAccessButton.hitTargetSide, accuracy: 2)
+            XCTAssertEqual(railScroll.keyboardDismissMode, .none)
+            XCTAssertLessThanOrEqual(railScroll.contentSize.width, railScroll.bounds.width + 1)
             if height == 220 {
-                let overflow = scrollViews(in: host.view).filter {
-                    !($0 is UITextView) && $0.contentSize.height > $0.bounds.height + 1
-                }
-                XCTAssertFalse(overflow.isEmpty, "All seven pins must overflow vertically, never shrink or cap")
-                XCTAssertTrue(overflow.allSatisfy { $0.keyboardDismissMode == .none })
-                XCTAssertTrue(overflow.allSatisfy { $0.contentSize.width <= $0.bounds.width + 1 })
+                XCTAssertGreaterThan(
+                    railScroll.contentSize.height,
+                    railScroll.bounds.height + 1,
+                    "All seven pins must overflow vertically, never shrink or cap"
+                )
+                XCTAssertGreaterThan(
+                    railScroll.contentSize.height + railScroll.adjustedContentInset.bottom
+                        - railScroll.bounds.height,
+                    -railScroll.adjustedContentInset.top + 1,
+                    "The rail must retain a nonempty vertical panning range"
+                )
+            } else {
+                XCTAssertGreaterThan(railScrollFrame.minY, composer.minY)
             }
             retainScreenshot(
                 "Pinned preset rail \(width)x\(height) \(scheme) \(typeSize) \(direction)",
@@ -325,6 +376,23 @@ final class QuickCaptureRenderingTests: XCTestCase {
             try XCTUnwrap(editor.frames["pins"]).width,
             CapturePresetQuickAccessButton.hitTargetSide,
             accuracy: 1
+        )
+        let oneAlternativeScroll = try XCTUnwrap(
+            scrollViews(in: host.view).first { !($0 is UITextView) }
+        )
+        let oneAlternativeFrame = oneAlternativeScroll.convert(
+            oneAlternativeScroll.bounds,
+            to: host.view
+        )
+        XCTAssertEqual(
+            oneAlternativeFrame.height,
+            CapturePresetQuickAccessButton.hitTargetSide + (2 * Geist.Spacing.one),
+            accuracy: 2
+        )
+        XCTAssertEqual(
+            oneAlternativeFrame.maxY,
+            try XCTUnwrap(editor.frames["editor"]).maxY - Geist.Spacing.one,
+            accuracy: 2
         )
         XCTAssertTrue(original === find("quick_capture_text", in: host.view))
         XCTAssertTrue(fixture.rail.activatePreset(id: "inbox"))

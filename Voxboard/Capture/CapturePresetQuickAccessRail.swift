@@ -21,34 +21,35 @@ struct CapturePresetQuickAccessRail: View {
     var body: some View {
         if isExpanded && !alternateProfiles.isEmpty {
             GeometryReader { proxy in
-                ScrollView(.vertical) {
-                    LazyVStack(spacing: 0) {
-                        ForEach(alternateProfiles.reversed()) { profile in
-                            CapturePresetQuickAccessButton(
-                                profile: profile,
-                                isSelected: false
-                            ) {
-                                activatePreset(id: profile.id)
+                VStack(spacing: 0) {
+                    Spacer(minLength: 0)
+                    ScrollView(.vertical) {
+                        LazyVStack(spacing: 0) {
+                            ForEach(alternateProfiles.reversed()) { profile in
+                                CapturePresetQuickAccessButton(
+                                    profile: profile,
+                                    isSelected: false
+                                ) {
+                                    activatePreset(id: profile.id)
+                                }
+                                // Stored order reads from the controls upward,
+                                // matching its old leading-to-trailing priority.
+                                .accessibilitySortPriority(accessibilityPriority(for: profile))
                             }
-                            // Stored order reads from the controls upward, just
-                            // as it did from leading to trailing in the old row.
-                            .accessibilitySortPriority(accessibilityPriority(for: profile))
                         }
+                        .padding(.vertical, Geist.Spacing.one)
                     }
-                    .padding(.vertical, Geist.Spacing.one)
-                    // Keep the borderless icon stack attached to the selector
-                    // instead of drawing chrome through the editor.
-                    .frame(
-                        minHeight: max(0, proxy.size.height - Geist.Spacing.one),
-                        alignment: .bottom
-                    )
-                    .padding(.bottom, Geist.Spacing.one)
+                    .defaultScrollAnchor(.bottom)
+                    .scrollIndicators(.hidden)
+                    .scrollDismissesKeyboard(.never)
+                    .scrollBounceBehavior(.basedOnSize)
+                    .scrollClipDisabled()
+                    // A short rail should claim only its visible controls, not
+                    // an invisible full-height strip over the text editor.
+                    .frame(height: viewportHeight(available: proxy.size.height))
+
+                    Spacer().frame(height: Geist.Spacing.one)
                 }
-                .defaultScrollAnchor(.bottom)
-                .scrollIndicators(.hidden)
-                .scrollDismissesKeyboard(.never)
-                .scrollBounceBehavior(.basedOnSize)
-                .scrollClipDisabled()
             }
             .frame(width: CapturePresetQuickAccessButton.hitTargetSide)
             .disabled(!canChangeCaptureRoute)
@@ -62,6 +63,15 @@ struct CapturePresetQuickAccessRail: View {
     private func accessibilityPriority(for profile: CapturePresetProfile) -> Double {
         guard let index = alternateProfiles.firstIndex(where: { $0.id == profile.id }) else { return 0 }
         return Double(alternateProfiles.count - index)
+    }
+
+    private func viewportHeight(available: CGFloat) -> CGFloat {
+        let bottomGap = Geist.Spacing.one
+        let availableHeight = max(0, available - bottomGap)
+        let contentHeight = CGFloat(alternateProfiles.count)
+            * CapturePresetQuickAccessButton.hitTargetSide
+            + (2 * Geist.Spacing.one)
+        return min(availableHeight, contentHeight)
     }
 
     /// The exact Button action, also usable by hosted tests without microphone
@@ -108,6 +118,7 @@ struct CapturePresetQuickAccessSelector: View {
             }
         }
         .accessibilityLabel(Text(verbatim: "Capture Preset \(selectedProfile.displayName)"))
+        .accessibilityAddTraits(accessibilitySelectionTraits)
         .accessibilityHint(accessibilityHint)
         .accessibilityValue(accessibilityValue)
         .accessibilityIdentifier("capture_vox_selector")
@@ -144,12 +155,17 @@ struct CapturePresetQuickAccessSelector: View {
             Image(systemName: "chevron.up.chevron.down")
                 .font(.caption2)
         }
-        .frame(minHeight: CapturePresetQuickAccessButton.hitTargetSide)
+        .frame(
+            minWidth: CapturePresetQuickAccessButton.hitTargetSide,
+            minHeight: CapturePresetQuickAccessButton.hitTargetSide
+        )
         .contentShape(Rectangle())
         .foregroundStyle(isRailExpanded && hasQuickAccessProfiles ? Geist.Palette.blue700 : Geist.muted)
     }
 
-    private var accessibilityHint: String {
+    var accessibilitySelectionTraits: AccessibilityTraits { .isSelected }
+
+    var accessibilityHint: String {
         guard hasQuickAccessProfiles else {
             return String(localized: "Show all Capture Presets")
         }
@@ -158,7 +174,7 @@ struct CapturePresetQuickAccessSelector: View {
             : String(localized: "Expand pinned Capture Presets. Touch and hold to show all Capture Presets.")
     }
 
-    private var accessibilityValue: String {
+    var accessibilityValue: String {
         guard hasQuickAccessProfiles else { return "" }
         return isRailExpanded ? String(localized: "Expanded") : String(localized: "Collapsed")
     }
@@ -202,9 +218,13 @@ struct CapturePresetQuickAccessButton: View {
         .buttonStyle(.plain)
         .accessibilityLabel(Text(verbatim: profile.displayName))
         .accessibilityAddTraits(isSelected ? .isSelected : [])
-        .accessibilityHint(isSelected
-            ? String(localized: "Already selected. One-off routing is kept.")
-            : String(localized: "Use this preset for the current draft. Text and attachments are kept."))
+        .accessibilityHint(accessibilityHint)
         .accessibilityIdentifier("capture_preset_pin_\(profile.id)")
+    }
+
+    var accessibilityHint: String {
+        isSelected
+            ? String(localized: "Already selected. One-off routing is kept.")
+            : String(localized: "Use this preset for the current draft. Text and attachments are kept; one-off routing resets.")
     }
 }
