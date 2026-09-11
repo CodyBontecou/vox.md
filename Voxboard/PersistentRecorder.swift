@@ -90,6 +90,23 @@ enum RecordingCompletionMode: Equatable, Sendable {
         requestedOrigin ?? defaultCommandOrigin
     }
 
+    /// Draft recordings always render live speech in the composer. Immediate
+    /// Preset recordings do so only when started from the visible in-app UI;
+    /// Watch, widget, Shortcut, Live Activity, and keyboard captures must not
+    /// temporarily rewrite an unrelated open draft.
+    func previewsLiveTranscriptInComposer(
+        commandOrigin: RecordingCommand.Origin?
+    ) -> Bool {
+        switch self {
+        case .captureDraft:
+            return true
+        case .runVox:
+            return commandOrigin == .inAppImmediate
+        case .keyboardTranscription:
+            return false
+        }
+    }
+
     /// IPC segments do not have an app-owned completion mode assigned before
     /// their start command arrives. Modern keyboard commands carry the selected
     /// Preset explicitly; older commands remain transcription-only.
@@ -316,12 +333,6 @@ final class PersistentRecorder {
     var lastTranscriptionResult: String?
     var lastSpeakerDiarizationSkipReason: SpeakerDiarizationSkipReason?
 
-    /// Progressive Apple Speech text for the active in-app recording. Immediate
-    /// Preset runs use this preview without adding their text to the Capture draft.
-    var liveFinalizedTranscription: String?
-    var liveVolatileTranscription: String?
-    var isCaptureLiveTranscriptionActive = false
-
     /// Updated every time a configured transcript export succeeds or fails.
     var lastFileExportEvent: FileExportEvent?
 
@@ -393,7 +404,7 @@ final class PersistentRecorder {
     /// wall-clock budget is spent, even if no further speech ever fires.
     private var continuousDictationSessionLimitTask: Task<Void, Never>?
     private var liveCaptureRequestId: String?
-    private var liveCaptureDraftRequestId: String?
+    private var liveCaptureComposerRequestId: String?
     private var liveCaptureSessionID: UUID?
     /// Retained after segment state is cleared so competing manual/VAD stop
     /// commands for the same request can be ignored while transcription runs.
@@ -434,9 +445,19 @@ final class PersistentRecorder {
         isTranscribing = false
         segmentDuration = 42
         segmentCompletionMode = .captureDraft(attachAudio: false)
-        liveFinalizedTranscription = String(localized: "Capture ideas as they arrive.")
-        liveVolatileTranscription = String(localized: "Everything stays on this device.")
-        isCaptureLiveTranscriptionActive = true
+        let requestID = "inapp-localization-preview"
+        let sessionID = UUID()
+        liveCaptureRequestId = requestID
+        liveCaptureComposerRequestId = requestID
+        liveCaptureSessionID = sessionID
+        guard let captureDraftEventHandler else { return }
+        Task { @MainActor in
+            _ = await captureDraftEventHandler(.liveTranscript(
+                sessionID: sessionID,
+                finalizedText: String(localized: "Capture ideas as they arrive."),
+                volatileText: String(localized: "Everything stays on this device.")
+            ))
+        }
     }
     #endif
 
@@ -454,8 +475,9 @@ final class PersistentRecorder {
     /// Offline-only loader for the explicitly downloaded Silero companion model.
     private let voiceActivityDetectionService: VoiceActivityDetectionService
 
-    /// Delivers app-owned draft recordings into the durable Capture draft.
-    /// Keyboard, Widget, Watch, and explicit Capture Preset runs bypass this callback.
+    /// Delivers app-owned draft recordings and the ephemeral live preview for
+    /// direct in-app immediate recordings into the Capture composer. Keyboard,
+    /// Widget, Watch, and other external Preset runs bypass this callback.
     private let captureDraftEventHandler: CaptureDraftRecordingEventHandler?
 
     /// On-device LLM post-processor. Nil when the feature is disabled or the
@@ -1624,21 +1646,14 @@ final class PersistentRecorder {
 
         let publishesToKeyboard = command.origin == .keyboardExtension
         let publishesToCapture = command.requestId.hasPrefix("inapp-")
-        let publishesToDraft: Bool
-        if publishesToCapture,
-           let completionMode = segmentCompletionMode,
-           case .captureDraft = completionMode {
-            publishesToDraft = true
-        } else {
-            publishesToDraft = false
-        }
+        let previewsInComposer = publishesToCapture
+            && segmentCompletionMode?.previewsLiveTranscriptInComposer(
+                commandOrigin: command.origin
+            ) == true
         if publishesToCapture {
             liveCaptureRequestId = command.requestId
-            liveCaptureDraftRequestId = publishesToDraft ? command.requestId : nil
+            liveCaptureComposerRequestId = previewsInComposer ? command.requestId : nil
             liveCaptureSessionID = UUID()
-            liveFinalizedTranscription = nil
-            liveVolatileTranscription = nil
-            isCaptureLiveTranscriptionActive = false
         }
 
         guard (publishesToKeyboard || publishesToCapture),
@@ -1651,7 +1666,7 @@ final class PersistentRecorder {
         let requestId = command.requestId
         let sampleRate = whisperSampleRate
         let captureSessionID = liveCaptureSessionID
-        let draftEventHandler = publishesToDraft ? captureDraftEventHandler : nil
+        let composerEventHandler = previewsInComposer ? captureDraftEventHandler : nil
 
         liveTranscriptionSetupTask = Task.detached(priority: .userInitiated) {
             var startedSession: (any SystemLiveTranscriptionSession)?
@@ -1674,15 +1689,11 @@ final class PersistentRecorder {
                                 guard let self,
                                       self.liveCaptureRequestId == requestId,
                                       self.liveCaptureSessionID == captureSessionID else { return false }
-                                self.liveFinalizedTranscription = update.finalizedText.isEmpty
-                                    ? nil
-                                    : update.finalizedText
-                                self.liveVolatileTranscription = update.volatileText
                                 return true
                             }
                             guard requestIsCurrent else { return }
-                            if let draftEventHandler, let captureSessionID {
-                                _ = await draftEventHandler(.liveTranscript(
+                            if let composerEventHandler, let captureSessionID {
+                                _ = await composerEventHandler(.liveTranscript(
                                     sessionID: captureSessionID,
                                     finalizedText: update.finalizedText,
                                     volatileText: update.volatileText
@@ -1704,15 +1715,6 @@ final class PersistentRecorder {
                     progress: progress
                 )
                 await coordinator.start()
-                if publishesToCapture {
-                    await MainActor.run { [weak self] in
-                        guard let self,
-                              self.liveCaptureRequestId == requestId,
-                              self.liveCaptureSessionID == captureSessionID,
-                              self.isSegmentActive else { return }
-                        self.isCaptureLiveTranscriptionActive = true
-                    }
-                }
                 return coordinator
             } catch {
                 if let startedSession {
@@ -1972,27 +1974,27 @@ final class PersistentRecorder {
             return
         }
 
-        if case .captureDraft = completionMode,
-           let finishedLiveSessionID,
-           let captureDraftEventHandler {
-            let trimmedLiveText = liveFinalText?
-                .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            if !trimmedLiveText.isEmpty {
-                let delivered = await captureDraftEventHandler(.transcript(
-                    trimmedLiveText,
-                    draftRequestID: segmentDraftRequestID,
-                    liveSessionID: finishedLiveSessionID,
-                    deliveryID: commitID
-                ))
-                liveFinalText = delivered ? trimmedLiveText : nil
-            } else {
-                liveFinalText = nil
-            }
-            // The finished live session's preview must not linger: either the
-            // delivered final text committed it, or the volatile preview is
-            // dropped so the next span's session can take over cleanly.
-            if liveFinalText == nil {
-                _ = await captureDraftEventHandler(.cancelLiveTranscript(sessionID: finishedLiveSessionID))
+        if let finishedLiveSessionID, let captureDraftEventHandler {
+            if case .captureDraft = completionMode {
+                let trimmedLiveText = liveFinalText?
+                    .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                if !trimmedLiveText.isEmpty {
+                    let delivered = await captureDraftEventHandler(.transcript(
+                        trimmedLiveText,
+                        draftRequestID: segmentDraftRequestID,
+                        liveSessionID: finishedLiveSessionID,
+                        deliveryID: commitID
+                    ))
+                    liveFinalText = delivered ? trimmedLiveText : nil
+                } else {
+                    liveFinalText = nil
+                }
+                // The finished live session's preview must not linger: either the
+                // delivered final text committed it, or the volatile preview is
+                // dropped so the next span's session can take over cleanly.
+                if liveFinalText == nil {
+                    _ = await captureDraftEventHandler(.cancelLiveTranscript(sessionID: finishedLiveSessionID))
+                }
             }
         }
 
@@ -2004,6 +2006,14 @@ final class PersistentRecorder {
             samples: samples,
             completionMode: completionMode
         )
+        if let finishedLiveSessionID,
+           let captureDraftEventHandler,
+           completionMode.previewsLiveTranscriptInComposer(commandOrigin: command.origin),
+           case .runVox = completionMode {
+            // Every immediate-mode span is sent independently. Remove its
+            // UI-only composer text after handoff, before the next live session.
+            _ = await captureDraftEventHandler(.cancelLiveTranscript(sessionID: finishedLiveSessionID))
+        }
 
         rearmContinuousDictation(command: command, fromIndex: endIndex)
     }
@@ -2152,15 +2162,12 @@ final class PersistentRecorder {
 
     private func clearCaptureLiveTranscription(requestId: String?) {
         guard let requestId, liveCaptureRequestId == requestId else { return }
-        let shouldCancelDraftPreview = liveCaptureDraftRequestId == requestId
+        let shouldCancelComposerPreview = liveCaptureComposerRequestId == requestId
         let cancelledSessionID = liveCaptureSessionID
         liveCaptureRequestId = nil
-        liveCaptureDraftRequestId = nil
+        liveCaptureComposerRequestId = nil
         liveCaptureSessionID = nil
-        liveFinalizedTranscription = nil
-        liveVolatileTranscription = nil
-        isCaptureLiveTranscriptionActive = false
-        guard shouldCancelDraftPreview,
+        guard shouldCancelComposerPreview,
               let cancelledSessionID,
               let captureDraftEventHandler else { return }
         Task { @MainActor in
@@ -2433,6 +2440,14 @@ final class PersistentRecorder {
                 clearSegmentState()
                 recordingQueue.setCaptureActive(false)
                 return
+            }
+            if case .runVox = completionMode,
+               completionMode.previewsLiveTranscriptInComposer(
+                   commandOrigin: command.origin ?? segmentOrigin
+               ) {
+                // The queued Preset now owns the recording. Its composer text
+                // was only a live preview and must not block a subsequent capture.
+                clearCaptureLiveTranscription(requestId: requestId)
             }
             Task { @MainActor [weak self] in
                 guard let self else { return }

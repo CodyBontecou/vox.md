@@ -23,6 +23,7 @@ struct MacCameraCaptureView: View {
                         camera.capture(completion: onCapture)
                     }
                     .buttonStyle(.borderedProminent)
+                    .foregroundStyle(MacBrand.onOrange)
                     .disabled(!camera.isReady)
                     .accessibilityIdentifier("mac_capture_camera_shutter")
                 }

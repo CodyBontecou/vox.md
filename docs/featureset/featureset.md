@@ -24,7 +24,7 @@ Entry format: `F-ID — Name (platform; status; docs)`
 - F-IU-04 — Capture Action Bar: History / Settings / Send / mic / keyboard (iOS; shipped; website `#quick-capture`)
 - F-IU-05 — Voice Capture Button: tap / long-press (iOS; shipped; website `#inline-voice`)
 - F-IU-06 — Detailed Recording Controls Bar (iOS; shipped; website `#inline-voice`)
-- F-IU-07 — Inline Live Transcription Bar: Send Immediately (iOS 26 gated for live text; shipped; website `#inline-voice`)
+- F-IU-07 — In-Editor Live Transcription: Draft + Send Immediately (iOS 26 gated for live text; shipped; website `#inline-voice`)
 - F-IU-08 — Keyboard Listening: return guidance & status (iOS/keyboard; shipped; website `#keyboard-workflow`)
 - F-IU-09 — Photo / Screenshot Attachment Pickers (iOS; shipped; website `#capture-types`)
 - F-IU-10 — Camera Capture (iOS; shipped; website `#capture-types`)
@@ -305,9 +305,9 @@ Entry format: `F-ID — Name (platform; status; docs)`
 
 - F-IC-16 — StoreKit Purchases, Entitlements & Restore (iOS; shipped; website `#pricing-limits`)
 - F-SH-32 — Usage Metering: free transcription minutes, idempotent receipts (all; shipped; website `#pricing-limits`)
-- F-SH-33 — Usage Metering: free Capture deliveries, Keychain high-water mark (all; shipped; website `#pricing-limits`)
+- F-SH-33 — Usage Metering: free Capture deliveries, installation-local ledger (all; shipped; website `#pricing-limits`)
 - F-SH-34 — Purchase Access Model: individual/family/upgrade levels (all; shipped; website `#pricing-limits`)
-- Free-tier quotas (15 min / 10 captures), receipt-idempotent usage ledger, Keychain high-water mark, legacy paid-app grandfathering, individual/family access levels — evidence anchored first-hand in `UsageTracker.swift` + `CaptureDeliveryUsageStore.swift`
+- Free-tier quotas (15 min / 10 captures), receipt-idempotent local usage ledgers, reinstall-reset policy, legacy paid-app grandfathering, individual/family access levels — evidence anchored first-hand in `UsageTracker.swift` + `CaptureDeliveryUsageStore.swift`
 
 ## 11. Settings & Preferences
 

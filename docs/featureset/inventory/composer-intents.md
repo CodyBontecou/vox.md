@@ -41,10 +41,10 @@ LID prefix: **CP**. Scope: `Voxboard App Shared/` (shared layer compiled into iO
 
 ### F-CP-03 Live (in-progress) transcript preview in the composer
 - Surface: Composer text field during on-device voice recording (Apple Speech)
-- Summary: Real-time recognized speech is rendered into the draft text as a *volatile* preview that is never persisted until Speech finalizes, with session-ID invalidation to reject stale callbacks.
+- Summary: Real-time recognized speech is rendered directly in the editable composer as a *volatile* preview, with session-ID invalidation to reject stale callbacks. Draft recordings commit it when Speech finalizes; direct in-app Send Immediately recordings remove it after their independent Preset handoff.
 - Details:
   - `updateLiveRecordedTranscript(sessionID:finalizedText:volatileText:)` guards against invalidated session IDs and against callbacks from a different active session, calls `load()` (revalidating after suspension because the recorder may have stopped), renders via `LiveTranscriptDraftPreview.render`, and enforces the 100k-char limit (error: `textTooLarge`).
-  - Volatile text stays memory-only; durable draft saves strip it via `preview.cancel(in:)`.
+  - Preview text stays memory-only; durable draft saves strip it via `preview.cancel(in:)`.
   - `invalidateLiveRecordedTranscriptSession(_:)` permanently blacklists a session ID.
   - `cancelLiveRecordedTranscript(sessionID:)` restores pre-preview text and saves.
   - `hasLiveRecordedTranscriptPreview` exposes state; `submit()` refuses to send while a preview is active ("Finish the current recording before sending this Capture.").
@@ -196,6 +196,7 @@ LID prefix: **CP**. Scope: `Voxboard App Shared/` (shared layer compiled into iO
   - Fetch: `GET https://zenquotes.io/api/quotes`, `Accept: application/json`, 10 s timeout, `reloadIgnoringLocalCacheData`; requires 2xx; filters quotes to non-empty text ≤ 280 chars with non-empty author; throws if none usable.
   - Rotates `nextIndex` modulo batch size; persists cache after each read.
   - Fallback: localized "Do what you can, with what you have, where you are." — Theodore Roosevelt.
+  - Presentation: the quote is shown whenever the composer text is empty, independent of the selected preset and attachment-only draft content, and disappears as soon as text is inserted.
   - Privacy: quotes fetched over network and cached in standard UserDefaults; no other data leaves the device.
 - Constraints: Network-dependent; degrades to fallback/cached quotes offline.
 - Evidence: `Voxboard App Shared/InspirationQuoteService.swift` (whole file).

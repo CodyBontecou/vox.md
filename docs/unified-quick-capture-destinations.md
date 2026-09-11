@@ -581,7 +581,7 @@ The route picker should show only overrides the selected adapter supports. A Not
 
 ## Credentials and frameworks
 
-Add a shared Keychain credential store under `VoxboardShared`; do not reuse the freemium high-water key directly. Add `AuthenticationServices`, `EventKit`, and MessageUI/AppKit integration in platform targets rather than the framework-independent capture core.
+Add a shared Keychain credential store under `VoxboardShared` only for provider secrets; quota state must remain in local app data instead of Keychain. Add `AuthenticationServices`, `EventKit`, and MessageUI/AppKit integration in platform targets rather than the framework-independent capture core.
 
 Any OAuth exchange, automatic email, webhook relay, or provider-secret work should live in a separate narrowly scoped service, not the existing analytics worker by default.
 

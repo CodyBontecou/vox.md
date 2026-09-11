@@ -199,7 +199,7 @@
           <li>If you continue editing while a send is in progress, those newer edits are preserved in a fresh draft rather than being discarded.</li>
           <li>A destination must be configured before delivery. The composer shows <em>Destination Not Configured</em> with a Set Up action when needed.</li>
           <li>Retry-safe capture requests are journaled locally so a permission, file-provider, or sync failure can be retried.</li>
-          <li>An empty composer uses the selected preset's capture prompt. Vox.md may otherwise show a cached inspirational quote; quote requests never include your draft.</li>
+          <li>An empty composer shows a cached inspirational quote until you add text, even after you select a preset or attach a file; quote requests never include your draft.</li>
         </ul>
 
         <h3 id="capture-types">Capture types</h3>
@@ -253,7 +253,7 @@
           <li>The <strong>Audio</strong> option retains the source recording as part of a draft when requested.</li>
           <li><strong>Import audio</strong> accepts audio or movie files and uses the same local transcription pipeline.</li>
           <li><strong>Identify Speakers</strong> is an opt-in Capture Preset voice-processing step for recordings and imported audio. It prepares a separate speaker model on first use, adds anonymous best-effort labels locally, and preserves the plain transcript with a visible History reason when it cannot run.</li>
-          <li>Automatic can show finalized and tentative Apple Speech text while recording. Explicit Whisper and Parakeet models transcribe after recording stops.</li>
+          <li>Automatic can show finalized and tentative Apple Speech text directly in the editable composer while recording. Explicit Whisper and Parakeet models transcribe after recording stops.</li>
           <li>A failed transcription does not destroy the source recording; it remains recoverable.</li>
           <li>Persistent keyboard listening is kept across launches only when explicitly enabled. A one-shot app recording returns the audio session to idle.</li>
         </ul>
@@ -622,7 +622,7 @@
           <li>Failed writes and idempotent retries do not consume a successful Capture delivery.</li>
           <li>Unlimited is a one-time lifetime purchase with no subscription, renewal, or ads. The localized App Store price is authoritative; the app uses $9.99 as its fallback display price.</li>
           <li>Restore Purchase recovers an eligible purchase. Users from qualifying older paid builds are grandfathered into unlimited use.</li>
-          <li>A content-free App Group ledger and Keychain high-water mark prevent successful Capture allowance resets or double charging across reinstall and retry.</li>
+          <li>A content-free App Group ledger prevents double charging across retries while local app data remains. It is not stored in Keychain; removing local app data starts a fresh free allowance.</li>
         </ul>
 
         <h3 id="privacy-data">What stays local</h3>

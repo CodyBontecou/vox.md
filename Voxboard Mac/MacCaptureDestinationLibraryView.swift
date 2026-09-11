@@ -198,7 +198,9 @@ struct MacCaptureDestinationEditor: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
-                if let errorMessage { Text(errorMessage).foregroundStyle(.red) }
+                if let errorMessage {
+                    Text(errorMessage).foregroundStyle(MacBrand.orangeText)
+                }
         }
         .formStyle(.grouped)
         .navigationTitle(existing == nil

@@ -82,7 +82,7 @@ struct MacEntryTemplateLibraryView: View {
                 GeistDivider()
                 Label(errorMessage, systemImage: "exclamationmark.triangle.fill")
                     .font(Geist.caption())
-                    .foregroundStyle(Geist.error)
+                    .foregroundStyle(MacBrand.orangeText)
                     .padding(12)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -329,6 +329,7 @@ private struct MacEntryTemplateEditor: View {
                         Task { await saveTemplate() }
                     }
                     .buttonStyle(.borderedProminent)
+                    .foregroundStyle(MacBrand.onOrange)
                     .disabled(isSaving)
                 }
 
@@ -355,7 +356,7 @@ private struct MacEntryTemplateEditor: View {
                 if let errorMessage {
                     Label(errorMessage, systemImage: "exclamationmark.triangle.fill")
                         .font(Geist.caption())
-                        .foregroundStyle(Geist.error)
+                        .foregroundStyle(MacBrand.orangeText)
                 } else if let statusMessage {
                     Label(statusMessage, systemImage: "checkmark.circle.fill")
                         .font(Geist.caption())

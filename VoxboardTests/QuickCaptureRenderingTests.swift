@@ -35,9 +35,13 @@ final class QuickCaptureRenderingTests: XCTestCase {
 
         host.rootView = canvas(optionalSections: true)
         try await settle(window)
-        for id in ["destination", "watch", "transcript", "attachments", "controls"] {
+        for id in ["destination", "watch", "attachments", "controls"] {
             XCTAssertNotNil(find(id, in: host.view), "Missing rendered section: \(id)")
         }
+        XCTAssertNil(
+            find("transcript", in: host.view),
+            "Live transcript text belongs in the editor, not a dedicated strip"
+        )
         let updatedComposer = try XCTUnwrap(find("composer", in: host.view))
         XCTAssertTrue(originalComposer === updatedComposer, "Updating sections replaced the text editor's identity")
         XCTAssertGreaterThan(updatedComposer.bounds.height, 0)
@@ -53,6 +57,28 @@ final class QuickCaptureRenderingTests: XCTestCase {
         XCTAssertNil(find("attachments", in: host.view))
         XCTAssertNil(find("transcript", in: host.view))
         XCTAssertTrue(originalComposer === find("composer", in: host.view))
+    }
+
+    func testProgrammaticLiveTextFollowsTheEditorTailWithoutASeparateStrip() async throws {
+        let editor = LiveTranscriptRenderingState()
+        let host = UIHostingController(rootView: LiveTranscriptComposerHarness(editor: editor))
+        let window = show(host, size: CGSize(width: 390, height: 220))
+        defer { window.isHidden = true; window.rootViewController = nil }
+        try await settle(window)
+
+        let transcript = (1...40)
+            .map { "Live transcript line \($0) keeps flowing inside the editor." }
+            .joined(separator: "\n")
+        editor.text = transcript
+        editor.selection = NSRange(location: transcript.utf16.count, length: 0)
+        try await settle(window)
+
+        let textView = try XCTUnwrap(find("quick_capture_text", in: host.view) as? UITextView)
+        XCTAssertEqual(textView.text, transcript)
+        XCTAssertEqual(textView.selectedRange, editor.selection)
+        XCTAssertGreaterThan(textView.contentSize.height, textView.bounds.height)
+        XCTAssertGreaterThan(textView.contentOffset.y, 0, "Programmatic live text should keep its tail visible")
+        XCTAssertNil(find("capture_live_transcription", in: host.view))
     }
 
     func testRealToastAndOCRBodiesRenderInBothUndoStates() async throws {
@@ -716,13 +742,11 @@ final class QuickCaptureRenderingTests: XCTestCase {
         QuickCaptureCanvas(
             showsDestination: optionalSections,
             showsWatchStatus: optionalSections,
-            showsLiveTranscript: optionalSections,
             showsAttachments: optionalSections,
             ocrProgress: CaptureViewSection { EmptyView() },
             destination: slot("destination"),
             watchStatus: slot("watch"),
             composer: slot("composer", expands: true),
-            liveTranscript: slot("transcript"),
             attachments: slot("attachments"),
             controls: slot("controls"),
             keyboardGuidance: CaptureViewSection { EmptyView() },
@@ -771,6 +795,28 @@ final class QuickCaptureRenderingTests: XCTestCase {
 
 @MainActor
 @Observable
+private final class LiveTranscriptRenderingState {
+    var text = ""
+    var selection = NSRange(location: 0, length: 0)
+    var isFocused = false
+    let controller = MarkdownComposerController()
+}
+
+private struct LiveTranscriptComposerHarness: View {
+    @Bindable var editor: LiveTranscriptRenderingState
+
+    var body: some View {
+        MarkdownComposerTextView(
+            text: $editor.text,
+            selection: $editor.selection,
+            isFocused: $editor.isFocused,
+            controller: editor.controller
+        )
+    }
+}
+
+@MainActor
+@Observable
 private final class PresetRenderingState {
     var selection = NSRange(location: 0, length: 0)
     var isFocused = false
@@ -789,7 +835,7 @@ private struct PresetComposerHarness: View {
     var body: some View {
         @Bindable var vm = fixture.vm
         QuickCaptureCanvas(
-            showsDestination: false, showsWatchStatus: false, showsLiveTranscript: false,
+            showsDestination: false, showsWatchStatus: false,
             showsAttachments: false,
             ocrProgress: empty, destination: empty, watchStatus: empty,
             composer: CaptureViewSection {
@@ -805,7 +851,7 @@ private struct PresetComposerHarness: View {
                             .background(PresetGeometry(id: "pins"))
                     }
             },
-            liveTranscript: empty, attachments: empty,
+            attachments: empty,
             controls: CaptureViewSection {
                 HStack {
                     fixture.selector(isRailExpanded: editor.isRailExpanded) {

@@ -8,40 +8,31 @@ extension Notification.Name {
     static let macShowCapture = Notification.Name("VoxboardMacShowCapture")
     static let macChooseCaptureFiles = Notification.Name("VoxboardMacChooseCaptureFiles")
     static let macClearCaptureDraft = Notification.Name("VoxboardMacClearCaptureDraft")
+    static let macSelectSettingsPane = Notification.Name("VoxboardMacSelectSettingsPane")
 }
 
 enum MacDestination: String, CaseIterable, Identifiable, Hashable, Sendable {
     case capture = "Capture"
-    case queue = "Recording Queue"
-    case history = "History"
-    case models = "Transcription Models"
-    case presets = "Capture Presets"
-    case templates = "Entry Templates"
+    case activity = "Activity"
+    case library = "Library"
 
-    static let workDestinations: [MacDestination] = [.capture, .queue, .history]
-    static let configureDestinations: [MacDestination] = [.models, .presets, .templates]
+    static let workDestinations: [MacDestination] = [.capture, .activity, .library]
 
     var id: String { rawValue }
 
     var title: String {
         switch self {
         case .capture: String(localized: "Capture")
-        case .queue: String(localized: "Recording Queue")
-        case .history: String(localized: "History")
-        case .models: String(localized: "Transcription Models")
-        case .presets: String(localized: "Capture Presets")
-        case .templates: String(localized: "Entry Templates")
+        case .activity: String(localized: "Activity")
+        case .library: String(localized: "Library")
         }
     }
 
     var symbol: String {
         switch self {
-        case .capture: return "square.and.pencil"
-        case .queue: return "waveform.circle"
-        case .history: return "clock.arrow.circlepath"
-        case .models: return "cpu"
-        case .presets: return "slider.horizontal.3"
-        case .templates: return "doc.badge.plus"
+        case .capture: return "mic"
+        case .activity: return "clock"
+        case .library: return "books.vertical"
         }
     }
 }
@@ -70,6 +61,8 @@ final class MacNavigationState {
 }
 
 struct MacRootView: View {
+    private static let firstRunSetupCompletionKey = MacFirstRunSetupView.didFinishStorageKey
+
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openSettings) private var openSettings
     @Environment(ModelManager.self) private var modelManager
@@ -78,6 +71,9 @@ struct MacRootView: View {
     let windowCoordinator: MacWindowCoordinator
     @State private var navigationState: MacNavigationState
     @State private var windowToken = UUID().uuidString
+    @State private var showsFirstRunSetup: Bool
+    @AppStorage(firstRunSetupCompletionKey, store: AppConstants.sharedDefaults)
+    private var hasCompletedFirstRunSetup = false
 
     #if DEBUG
     private static var localizationScreenshotStory: String? {
@@ -98,9 +94,8 @@ struct MacRootView: View {
         self.windowCoordinator = windowCoordinator
         #if DEBUG
         let initialDestination: MacDestination = switch Self.localizationScreenshotStory {
-        case "02-history": .history
-        case "04-models": .models
-        case "05-presets": .presets
+        case "02-history": .library
+        case "06-recording-queue": .activity
         default: .capture
         }
         #else
@@ -109,6 +104,14 @@ struct MacRootView: View {
         _navigationState = State(
             initialValue: MacNavigationState(selectedDestination: initialDestination)
         )
+        let hasConfiguredDestination = CapturePresetStore.loadFlows()
+            .contains { $0.isEnabled && $0.captureDestinationID != nil }
+        let completedSetup = AppConstants.sharedDefaults?.bool(
+            forKey: Self.firstRunSetupCompletionKey
+        ) == true
+        _showsFirstRunSetup = State(
+            initialValue: !completedSetup && !hasConfiguredDestination
+        )
     }
 
     var body: some View {
@@ -116,11 +119,17 @@ struct MacRootView: View {
 
         NavigationSplitView {
             List(selection: $navigation.selectedDestination) {
+                MacSidebarBrandView()
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(
+                        EdgeInsets(top: 8, leading: 10, bottom: 10, trailing: 10)
+                    )
                 navigationSection("WORK", destinations: MacDestination.workDestinations)
-                navigationSection("CONFIGURE", destinations: MacDestination.configureDestinations)
             }
             .listStyle(.sidebar)
-            .navigationSplitViewColumnWidth(min: 150, ideal: 180, max: 220)
+            .navigationTitle("Vox.md")
+            .navigationSplitViewColumnWidth(min: 180, ideal: 220, max: 260)
         } detail: {
             #if DEBUG
             if Self.localizationScreenshotStory == "03-settings" {
@@ -135,8 +144,9 @@ struct MacRootView: View {
             selectedDetail
             #endif
         }
-        .tint(Geist.Palette.gray1000)
-        .frame(minWidth: 980, minHeight: 680)
+        .navigationSplitViewStyle(.balanced)
+        .tint(MacBrand.orange)
+        .frame(minWidth: 960, minHeight: 640)
         .background(
             MacSceneWindowRegistrar(
                 kind: .main(token: windowToken),
@@ -155,6 +165,14 @@ struct MacRootView: View {
                   request.windowToken == windowToken else { return }
             navigationState.select(request.destination)
         }
+        .sheet(isPresented: $showsFirstRunSetup) {
+            MacFirstRunSetupView(
+                viewModel: quickCaptureViewModel,
+                onComplete: completeFirstRunSetup,
+                onSkip: completeFirstRunSetup
+            )
+            .environment(modelManager)
+        }
     }
 
     @ViewBuilder
@@ -166,32 +184,28 @@ struct MacRootView: View {
                 recorder: recorder,
                 windowToken: windowToken,
                 windowCoordinator: windowCoordinator,
-                openHistory: { navigationState.select(.history) },
+                openHistory: { navigationState.select(.library) },
                 openSettings: { openSettings() },
-                openModels: { navigationState.select(.models) }
+                openModels: { openSettingsPane(.transcription) }
             )
-        case .queue:
-            RecordingQueueView(
+        case .activity:
+            MacActivityView(
                 queue: recorder.recordingQueue,
-                recoveryPresets: CapturePresetStore.loadFlows()
-            ) { job, delivery in
-                await recorder.recordingQueue.retry(
-                    job,
-                    modelID: modelManager.selectedModelId,
-                    fallbackModelID: modelManager.preferredFallbackModelID,
-                    replaceFallbackModelID: true,
-                    language: modelManager.selectedLanguage,
-                    delivery: delivery
-                )
-            }
-        case .history:
+                viewModel: quickCaptureViewModel,
+                retryOverride: { job, delivery in
+                    await recorder.recordingQueue.retry(
+                        job,
+                        modelID: modelManager.selectedModelId,
+                        fallbackModelID: modelManager.preferredFallbackModelID,
+                        replaceFallbackModelID: true,
+                        language: modelManager.selectedLanguage,
+                        delivery: delivery
+                    )
+                },
+                openCapture: { navigationState.select(.capture) }
+            )
+        case .library:
             MacHistoryView(viewModel: quickCaptureViewModel)
-        case .models:
-            MacModelView()
-        case .presets:
-            MacCapturePresetSettingsView()
-        case .templates:
-            MacEntryTemplateLibraryView()
         }
     }
 
@@ -207,14 +221,37 @@ struct MacRootView: View {
                         .contentShape(Rectangle())
                 }
                 .tag(destination)
+                .badge(destination == .activity ? activityBadgeCount : 0)
             }
+        }
+    }
+
+    private var activityBadgeCount: Int {
+        recorder.recordingQueue.actionableJobs.count + quickCaptureViewModel.failedInboxCount
+    }
+
+    private func completeFirstRunSetup() {
+        hasCompletedFirstRunSetup = true
+        showsFirstRunSetup = false
+    }
+
+    private func openSettingsPane(_ destination: MacSettingsDestination) {
+        AppConstants.sharedDefaults?.set(
+            destination.rawValue,
+            forKey: MacSettingsDestination.storageKey
+        )
+        openSettings()
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(
+                name: .macSelectSettingsPane,
+                object: destination.rawValue
+            )
         }
     }
 }
 
 #if DEBUG
-/// Hosts the real Mac feature surfaces without the vibrancy-backed sidebar,
-/// which AppKit omits from off-screen view-cache screenshots.
+/// Hosts deterministic Mac feature surfaces for localization and visual QA.
 struct MacLocalizationScreenshotRoot: View {
     @Bindable var recorder: MacRecorder
     @Bindable var quickCaptureViewModel: QuickCaptureViewModel
@@ -232,7 +269,7 @@ struct MacLocalizationScreenshotRoot: View {
     var body: some View {
         switch story {
         case "02-history":
-            NavigationStack {
+            localizationWorkspace(selection: .library) {
                 MacHistoryView(
                     viewModel: quickCaptureViewModel,
                     screenshotFixture: .localization
@@ -248,10 +285,11 @@ struct MacLocalizationScreenshotRoot: View {
         case "05-presets":
             NavigationStack { MacCapturePresetSettingsView() }
         case "06-recording-queue":
-            NavigationStack {
-                RecordingQueueView(
+            localizationWorkspace(selection: .activity) {
+                MacActivityView(
                     queue: recorder.recordingQueue,
-                    recoveryPresets: CapturePresetStore.loadFlows()
+                    viewModel: quickCaptureViewModel,
+                    openCapture: {}
                 )
             }
             .frame(minWidth: 1_180, minHeight: 760)
@@ -270,17 +308,59 @@ struct MacLocalizationScreenshotRoot: View {
                 MacCaptureRouteInspector(viewModel: quickCaptureViewModel)
                     .frame(width: 440)
             }
+        case "08-first-run-setup":
+            ZStack {
+                Color(nsColor: .windowBackgroundColor)
+                    .ignoresSafeArea()
+                MacFirstRunSetupView(
+                    viewModel: quickCaptureViewModel,
+                    onComplete: {},
+                    onSkip: {}
+                )
+            }
         default:
-            MacCaptureWorkspaceView(
-                viewModel: quickCaptureViewModel,
-                recorder: recorder,
-                windowToken: windowToken,
-                windowCoordinator: windowCoordinator,
-                openHistory: {},
-                openSettings: {},
-                openModels: {}
-            )
+            localizationWorkspace(selection: .capture) {
+                MacCaptureWorkspaceView(
+                    viewModel: quickCaptureViewModel,
+                    recorder: recorder,
+                    windowToken: windowToken,
+                    windowCoordinator: windowCoordinator,
+                    openHistory: {},
+                    openSettings: {},
+                    openModels: {}
+                )
+            }
         }
+    }
+
+    private func localizationWorkspace<Detail: View>(
+        selection: MacDestination,
+        @ViewBuilder detail: () -> Detail
+    ) -> some View {
+        NavigationSplitView {
+            List(selection: .constant(Optional(selection))) {
+                MacSidebarBrandView()
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(
+                        EdgeInsets(top: 8, leading: 10, bottom: 10, trailing: 10)
+                    )
+                Section("WORK") {
+                    ForEach(MacDestination.workDestinations) { destination in
+                        Label(destination.title, systemImage: destination.symbol)
+                            .tag(destination)
+                    }
+                }
+            }
+            .listStyle(.sidebar)
+            .navigationTitle("Vox.md")
+            .navigationSplitViewColumnWidth(min: 180, ideal: 200, max: 230)
+        } detail: {
+            detail()
+        }
+        .navigationSplitViewStyle(.balanced)
+        .tint(MacBrand.orange)
+        .frame(minWidth: 1_180, minHeight: 760)
     }
 }
 #endif
@@ -329,7 +409,7 @@ private struct MacModelView: View {
     private func modelErrorBanner(_ message: String) -> some View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(Geist.error)
+                .foregroundStyle(MacBrand.orangeText)
             VStack(alignment: .leading, spacing: 3) {
                 Text("Model Operation Failed")
                     .font(Geist.label())
@@ -346,7 +426,7 @@ private struct MacModelView: View {
             .buttonStyle(.plain)
         }
         .padding(16)
-        .background(Geist.Palette.red100)
+        .background(MacBrand.subtleOrange)
         .overlay(alignment: .bottom) { GeistDivider() }
     }
 
@@ -454,13 +534,13 @@ private struct MacModelView: View {
                 if installationSource == .external {
                     Button("Stop Using") { modelManager.forgetExternalModel(model) }
                         .font(Geist.caption())
-                        .foregroundColor(Geist.error)
+                        .foregroundColor(MacBrand.orangeText)
                         .buttonStyle(.plain)
                         .help("Stops using this model without deleting it from your Mac.")
                 } else {
                     Button("Remove") { modelManager.deleteModel(model) }
                         .font(Geist.caption())
-                        .foregroundColor(Geist.error)
+                        .foregroundColor(MacBrand.orangeText)
                         .buttonStyle(.plain)
                 }
             }
@@ -487,7 +567,7 @@ private struct MacModelView: View {
                 }
                 Button("Cancel") { modelManager.cancelDownload(model) }
                     .font(Geist.caption())
-                    .foregroundColor(Geist.error)
+                    .foregroundColor(MacBrand.orangeText)
                     .buttonStyle(.plain)
                     .disabled(state.isCancelling)
             }
@@ -875,7 +955,7 @@ private struct MacCapturePresetEditor: View {
                 if let captureDestinationLoadError {
                     Text(captureDestinationLoadError)
                         .font(.caption)
-                        .foregroundStyle(.red)
+                        .foregroundStyle(MacBrand.orangeText)
                 }
                 Text("This destination belongs to this preset, including its note target, placement, formatting, attachments, and retry behavior.")
                     .font(.caption)
@@ -973,7 +1053,7 @@ private struct MacCapturePresetEditor: View {
                                 systemImage: "exclamationmark.triangle.fill"
                             )
                             .font(.caption)
-                            .foregroundStyle(.red)
+                            .foregroundStyle(MacBrand.orangeText)
                             .accessibilityIdentifier("mac_preset_location_scope_error")
                             Button("Use Note Frontmatter Scope") {
                                 flow.metadataScope = .document
@@ -1180,7 +1260,7 @@ private struct MacCapturePresetEditor: View {
         case .success(let preview):
             VStack(alignment: .leading, spacing: 6) {
                 Label("Delivery Preview", systemImage: "checkmark.circle.fill")
-                    .foregroundStyle(.green)
+                    .foregroundStyle(MacBrand.complete)
                 Text(preview)
                     .font(.system(.caption, design: .monospaced))
                     .textSelection(.enabled)
@@ -1190,7 +1270,7 @@ private struct MacCapturePresetEditor: View {
         case .failure(let error):
             Label(error.message, systemImage: "exclamationmark.triangle.fill")
                 .font(.caption)
-                .foregroundStyle(.red)
+                .foregroundStyle(MacBrand.orangeText)
                 .accessibilityIdentifier("mac_preset_location_validation_error")
         }
     }
@@ -1598,7 +1678,7 @@ private struct MacFlowIconPickerView: View {
             if draft.hasInvalidEmoji {
                 Label("Enter one complete emoji, not multiple emoji or other text.", systemImage: "exclamationmark.triangle.fill")
                     .font(Geist.caption())
-                    .foregroundStyle(Geist.error)
+                    .foregroundStyle(MacBrand.orangeText)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityIdentifier("mac_preset_emoji_error")
             } else if draft.normalizedEmoji == nil {
@@ -1833,7 +1913,7 @@ private struct MacFlowIconOption: Identifiable {
     }
 }
 
-// MARK: - History
+// MARK: - Library
 
 struct MacHistoryView: View {
     @Bindable var viewModel: QuickCaptureViewModel
@@ -1906,15 +1986,14 @@ struct MacHistoryView: View {
     }
 
     var body: some View {
-        HStack(spacing: 0) {
+        HSplitView {
             historyCollection
                 .frame(minWidth: 300, idealWidth: 360, maxWidth: 420)
-            GeistDivider().frame(width: 1)
             historyDetail
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .background(Geist.Palette.background200)
-        .navigationTitle("History")
+        .background(Color(nsColor: .underPageBackgroundColor))
+        .navigationTitle("Library")
         .toolbar {
             Button("Reload", systemImage: "arrow.clockwise") {
                 reloadHistory()
@@ -1970,9 +2049,8 @@ struct MacHistoryView: View {
     private var historyCollection: some View {
         VStack(spacing: 0) {
             HStack {
-                Text("HISTORY")
-                    .font(Geist.label())
-                    .foregroundStyle(Geist.text)
+                Text("LIBRARY")
+                    .font(.headline)
                 Spacer()
                 if !unifiedItems.isEmpty {
                     Text(unifiedItems.count, format: .number)
@@ -1986,9 +2064,9 @@ struct MacHistoryView: View {
             Group {
                 if unifiedItems.isEmpty && viewModel.failedInboxCount == 0 {
                     ContentUnavailableView(
-                        "No History Yet",
-                        systemImage: "clock.arrow.circlepath",
-                        description: Text("Record or send a Capture to create your first history item.")
+                        "Library is Empty",
+                        systemImage: "books.vertical",
+                        description: Text("Completed captures and transcripts will appear here.")
                     )
                 } else if filteredItems.isEmpty && viewModel.failedInboxCount == 0 {
                     ContentUnavailableView.search(text: searchText)
@@ -2023,8 +2101,8 @@ struct MacHistoryView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .background(Geist.surface)
-        .searchable(text: $searchText, prompt: "Search history")
+        .background(Color(nsColor: .controlBackgroundColor))
+        .searchable(text: $searchText, prompt: "Search Library")
     }
 
     @ViewBuilder
@@ -2047,12 +2125,12 @@ struct MacHistoryView: View {
             }
         } else {
             ContentUnavailableView(
-                unifiedItems.isEmpty ? "No History Yet" : "Select a History Item",
-                systemImage: unifiedItems.isEmpty ? "clock.arrow.circlepath" : "sidebar.left",
+                unifiedItems.isEmpty ? "Library is Empty" : "Select an Item",
+                systemImage: unifiedItems.isEmpty ? "books.vertical" : "sidebar.left",
                 description: Text(
                     unifiedItems.isEmpty
-                        ? "Record or send a Capture to create your first history item."
-                        : "Choose a transcript or delivery record from the list."
+                        ? "Completed captures and transcripts will appear here."
+                        : "Choose a transcript or capture from the list."
                 )
             )
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -2088,7 +2166,7 @@ struct MacHistoryView: View {
                         .foregroundStyle(
                             selectedItemID == item.id
                                 ? Color.white.opacity(0.9)
-                                : (delivery.outcome == .delivered ? Geist.muted : Geist.error)
+                                : (delivery.outcome == .delivered ? Geist.muted : MacBrand.orangeText)
                         )
                         .help(delivery.outcome == .delivered ? "Delivered" : "Failed")
                 }
@@ -2105,7 +2183,7 @@ struct MacHistoryView: View {
                     .foregroundStyle(
                         selectedItemID == item.id
                             ? Color.white.opacity(0.9)
-                            : (record.outcome == .delivered ? Geist.muted : Geist.error)
+                            : (record.outcome == .delivered ? Geist.muted : MacBrand.orangeText)
                     )
                     .frame(width: 20)
                 VStack(alignment: .leading, spacing: Geist.Spacing.one) {
@@ -2122,7 +2200,7 @@ struct MacHistoryView: View {
                         .foregroundStyle(
                             selectedItemID == item.id
                                 ? Color.white.opacity(0.82)
-                                : (record.failureCategory == nil ? Geist.faint : Geist.error)
+                                : (record.failureCategory == nil ? Geist.faint : MacBrand.orangeText)
                         )
                         .lineLimit(2)
                 }
@@ -2316,7 +2394,7 @@ private struct MacTranscriptDetailView: View {
             if let reason = transcript.speakerDiarizationSkipReason {
                 Label(reason.displayText, systemImage: "exclamationmark.triangle")
                     .font(Geist.caption())
-                    .foregroundStyle(Geist.error)
+                    .foregroundStyle(MacBrand.orangeText)
             }
 
             if let tags = transcript.tags, !tags.isEmpty {
@@ -2393,7 +2471,11 @@ private struct MacCaptureHistoryDetailView: View {
                                     : "exclamationmark.triangle.fill"
                             )
                             .font(Geist.label())
-                            .foregroundStyle(record.outcome == .delivered ? Geist.muted : Geist.error)
+                            .foregroundStyle(
+                                record.outcome == .delivered
+                                    ? Geist.muted
+                                    : MacBrand.orangeText
+                            )
                         }
                         Spacer()
                         Button("Delete", systemImage: "trash", role: .destructive, action: onDelete)
@@ -2436,7 +2518,11 @@ private struct MacCaptureDeliveryMetadataView: View {
                         ? "checkmark.circle.fill"
                         : "exclamationmark.triangle.fill"
                 )
-                .foregroundStyle(record.outcome == .delivered ? Geist.muted : Geist.error)
+                .foregroundStyle(
+                    record.outcome == .delivered
+                        ? Geist.muted
+                        : MacBrand.orangeText
+                )
             }
             LabeledContent("Destination", value: record.destinationName)
             LabeledContent("Created", value: record.createdAt.formatted(date: .long, time: .shortened))
@@ -2458,7 +2544,7 @@ private struct MacCaptureDeliveryMetadataView: View {
             if let failure = record.failureCategory {
                 LabeledContent("Failure") {
                     Text(failure.displayName)
-                        .foregroundStyle(Geist.error)
+                        .foregroundStyle(MacBrand.orangeText)
                 }
             }
         }
@@ -2597,10 +2683,16 @@ private enum MacHistoryRevealError: Error, LocalizedError {
 
 // MARK: - Settings / Paywall
 
-private enum MacSettingsDestination: String, CaseIterable, Identifiable {
-    case access
+enum MacSettingsDestination: String, CaseIterable, Identifiable {
+    static let storageKey = "macSettingsSelectedPane"
+
     case general
+    case recording
+    case transcription
+    case presets
+    case templates
     case shortcuts
+    case access
     case diagnostics
     case about
 
@@ -2610,6 +2702,10 @@ private enum MacSettingsDestination: String, CaseIterable, Identifiable {
         switch self {
         case .access: String(localized: "Access")
         case .general: String(localized: "General")
+        case .recording: String(localized: "Recording")
+        case .transcription: String(localized: "Transcription")
+        case .presets: String(localized: "Presets & Destinations")
+        case .templates: String(localized: "Templates")
         case .shortcuts: String(localized: "Shortcuts")
         case .diagnostics: String(localized: "Diagnostics")
         case .about: String(localized: "About")
@@ -2620,6 +2716,10 @@ private enum MacSettingsDestination: String, CaseIterable, Identifiable {
         switch self {
         case .access: "person.badge.key"
         case .general: "gearshape"
+        case .recording: "waveform"
+        case .transcription: "cpu"
+        case .presets: "slider.horizontal.3"
+        case .templates: "doc.text"
         case .shortcuts: "keyboard"
         case .diagnostics: "stethoscope"
         case .about: "info.circle"
@@ -2635,7 +2735,7 @@ struct MacSettingsView: View {
     @Environment(MacStoreManager.self) private var storeManager
     @AppStorage(MacAppVisibilityMode.storageKey, store: AppConstants.sharedDefaults)
     private var visibilityModeRaw = MacAppVisibilityMode.dockAndMenuBar.rawValue
-    @State private var selectedDestination: MacSettingsDestination = .access
+    @State private var selectedDestination: MacSettingsDestination = .general
     @State private var hotKeyFlows = CapturePresetStore.loadFlows()
     @State private var hotKeyDestinations: [CaptureDestination] = []
     @State private var hotKeyBindings: [MacHotKeyTarget: MacHotKeyShortcut] = [:]
@@ -2672,6 +2772,12 @@ struct MacSettingsView: View {
     private var settingsNavigation: some View {
         NavigationSplitView {
             List(selection: $selectedDestination) {
+                MacSidebarBrandView()
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(
+                        EdgeInsets(top: 8, leading: 10, bottom: 10, trailing: 10)
+                    )
                 ForEach(MacSettingsDestination.allCases) { destination in
                     Label(destination.title, systemImage: destination.symbol)
                         .tag(destination)
@@ -2683,11 +2789,22 @@ struct MacSettingsView: View {
         } detail: {
             selectedSettingsDetail
         }
+        .tint(MacBrand.orange)
         .frame(minWidth: 900, minHeight: 640)
         .onChange(of: selectedDestination) { _, destination in
+            AppConstants.sharedDefaults?.set(
+                destination.rawValue,
+                forKey: MacSettingsDestination.storageKey
+            )
             if destination != .shortcuts {
                 editingHotKeyTarget = nil
             }
+        }
+        .onAppear(perform: restoreSelectedSettingsDestination)
+        .onReceive(NotificationCenter.default.publisher(for: .macSelectSettingsPane)) { notification in
+            guard let rawValue = notification.object as? String,
+                  let destination = MacSettingsDestination(rawValue: rawValue) else { return }
+            selectedDestination = destination
         }
         .task { await reloadHotKeyConfiguration() }
         // Settings may open before the app-level StoreKit task completes.
@@ -2699,6 +2816,11 @@ struct MacSettingsView: View {
     private var localizationScreenshotSettings: some View {
         HStack(spacing: 0) {
             VStack(spacing: 0) {
+                MacSidebarBrandView()
+                    .padding(.horizontal, 16)
+                    .padding(.top, 14)
+                    .padding(.bottom, 10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 Text("SETTINGS")
                     .font(Geist.label())
                     .foregroundStyle(Geist.text)
@@ -2751,6 +2873,14 @@ struct MacSettingsView: View {
             accessSettings
         case .general:
             generalSettings
+        case .recording:
+            MacRecordingSettingsView()
+        case .transcription:
+            MacModelView()
+        case .presets:
+            MacCapturePresetSettingsView()
+        case .templates:
+            MacEntryTemplateLibraryView()
         case .shortcuts:
             shortcutsSettings
         case .diagnostics:
@@ -2842,10 +2972,22 @@ struct MacSettingsView: View {
     private var aboutSettings: some View {
         ScrollView {
             VStack(spacing: 0) {
-                settingsPageHeader(
-                    title: "Vox.md",
-                    detail: "Private capture and on-device transcription for Markdown workflows."
-                )
+                HStack(spacing: 16) {
+                    MacAppIconView(size: 64)
+                        .accessibilityHidden(true)
+                    VStack(alignment: .leading, spacing: Geist.Spacing.two) {
+                        Text("Vox.md")
+                            .font(Geist.heading(.title))
+                            .foregroundStyle(Geist.text)
+                        Text("Private capture and on-device transcription for Markdown workflows.")
+                            .font(Geist.body())
+                            .foregroundStyle(Geist.muted)
+                    }
+                    Spacer()
+                }
+                .padding(Geist.Spacing.four)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Geist.bg)
                 sectionHeader("01", "About")
                 settingsRow(title: String(localized: "VERSION"), detail: appVersionString, trailing: "")
                 settingsRow(
@@ -3018,7 +3160,7 @@ struct MacSettingsView: View {
                 if let hotKeyStatusMessage {
                     Text(hotKeyStatusMessage)
                         .font(Geist.caption())
-                        .foregroundColor(Geist.error)
+                        .foregroundColor(MacBrand.orangeText)
                 }
             }
             .padding(20)
@@ -3067,7 +3209,7 @@ struct MacSettingsView: View {
                         .frame(width: 24, height: 24)
                 }
                 .buttonStyle(.plain)
-                .foregroundColor(Geist.error)
+                .foregroundColor(MacBrand.orangeText)
                 .accessibilityLabel("Clear \(title) keybind")
             }
         }
@@ -3185,6 +3327,101 @@ struct MacSettingsView: View {
         let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "—"
         return "\(version) (\(build))"
     }
+
+    private func restoreSelectedSettingsDestination() {
+        guard let rawValue = AppConstants.sharedDefaults?.string(
+            forKey: MacSettingsDestination.storageKey
+        ), let destination = MacSettingsDestination(rawValue: rawValue) else { return }
+        selectedDestination = destination
+    }
+}
+
+private struct MacRecordingSettingsView: View {
+    @State private var retentionMode: SourceAudioRetentionMode
+    @State private var timedRetentionDays: Int
+    @State private var processingPolicy: RecordingJobProcessingPolicy
+
+    init() {
+        let configuration = RecordingQueuePreferences.load()
+        _retentionMode = State(initialValue: configuration.sourceAudioRetention.mode)
+        let interval = configuration.sourceAudioRetention.retentionInterval
+            ?? SourceAudioRetentionPolicy.defaultTimedRetention
+        _timedRetentionDays = State(
+            initialValue: max(1, Int((interval / 86_400).rounded()))
+        )
+        _processingPolicy = State(initialValue: configuration.processingPolicy)
+    }
+
+    var body: some View {
+        Form {
+            Section("Recording Queue") {
+                Picker("After recording", selection: $processingPolicy) {
+                    Text("Immediately").tag(RecordingJobProcessingPolicy.immediate)
+                    Text("When Idle").tag(RecordingJobProcessingPolicy.whenIdle)
+                    Text("Manually").tag(RecordingJobProcessingPolicy.manual)
+                }
+
+                Text(processingDetail)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Section("Original Audio") {
+                Picker("Keep audio", selection: $retentionMode) {
+                    Text("Until Processing Finishes").tag(SourceAudioRetentionMode.deleteAfterSuccess)
+                    Text("For a Period").tag(SourceAudioRetentionMode.timed)
+                    Text("Permanently").tag(SourceAudioRetentionMode.permanent)
+                }
+
+                if retentionMode == .timed {
+                    Stepper(
+                        "Keep for \(timedRetentionDays) day\(timedRetentionDays == 1 ? "" : "s")",
+                        value: $timedRetentionDays,
+                        in: 1...365
+                    )
+                }
+
+                Text("Failed recordings remain available until you retry or delete them.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .formStyle(.grouped)
+        .navigationTitle("Recording")
+        .frame(maxWidth: 720)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .onChange(of: retentionMode) { _, _ in save() }
+        .onChange(of: timedRetentionDays) { _, _ in save() }
+        .onChange(of: processingPolicy) { _, _ in save() }
+    }
+
+    private var processingDetail: String {
+        switch processingPolicy {
+        case .immediate:
+            return String(localized: "Start processing as soon as the microphone is free.")
+        case .whenIdle:
+            return String(localized: "Process while Vox.md is open and no recording is active.")
+        case .manual:
+            return String(localized: "Wait until you choose Process Now in Activity.")
+        }
+    }
+
+    private func save() {
+        let retention: SourceAudioRetentionPolicy = switch retentionMode {
+        case .deleteAfterSuccess:
+            .deleteAfterSuccess
+        case .timed:
+            .timed(TimeInterval(timedRetentionDays) * 86_400)
+        case .permanent:
+            .permanent
+        }
+        RecordingQueuePreferences.save(
+            RecordingQueueConfiguration(
+                sourceAudioRetention: retention,
+                processingPolicy: processingPolicy
+            )
+        )
+    }
 }
 
 private struct MacHotKeyRecorderView: View {
@@ -3236,7 +3473,7 @@ private struct MacHotKeyRecorderView: View {
                 if let errorMessage {
                     Text(errorMessage)
                         .font(Geist.caption())
-                        .foregroundColor(Geist.error)
+                        .foregroundColor(MacBrand.orangeText)
                 }
 
                 HStack(spacing: 12) {
@@ -3245,7 +3482,7 @@ private struct MacHotKeyRecorderView: View {
 
                     Button("Clear", action: onClear)
                         .buttonStyle(.plain)
-                        .foregroundColor(Geist.error)
+                        .foregroundColor(MacBrand.orangeText)
                         .disabled(currentShortcut == nil && capturedShortcut == nil)
 
                     Spacer()
@@ -3433,7 +3670,7 @@ struct MacPaywallView: View {
             if let error = storeManager.errorMessage {
                 Text(error)
                     .font(Geist.caption())
-                    .foregroundColor(Geist.error)
+                    .foregroundColor(MacBrand.orangeText)
             }
             if presentation == .modal {
                 Button("Done") { dismiss() }
@@ -3569,7 +3806,7 @@ private struct MacDebugLogView: View {
                     KeyboardDebugLog.shared.clear()
                     logText = "(cleared)"
                 }
-                .foregroundColor(Geist.error)
+                .foregroundColor(MacBrand.orangeText)
                 Button("Refresh", systemImage: "arrow.clockwise") {
                     refresh()
                 }

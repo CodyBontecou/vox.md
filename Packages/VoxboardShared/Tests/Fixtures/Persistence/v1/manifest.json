@@ -106,11 +106,6 @@
       "sha256" : "a55d172a95b2ff36273881a6b4e40fbef47b75ea614d2419bebbda5c371e74dd"
     },
     {
-      "byteCount" : 1,
-      "path" : "compatibility\/usage\/legacy-high-water-decimal.txt",
-      "sha256" : "7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451"
-    },
-    {
       "byteCount" : 78,
       "path" : "compatibility\/usage\/missing-default-fields.json",
       "sha256" : "81661890c9b0ff35c10f9c5a6410eb9307ce547c0409d8e72b717369d6cbacf5"
@@ -773,7 +768,7 @@
   ],
   "foundationWire" : "Default Foundation JSON: Date numeric seconds since 2001-01-01, Data base64, UUID string, raw enum string.",
   "generatorPath" : "Packages\/VoxboardShared\/Sources\/VoxboardPersistenceFixtures\/main.swift",
-  "generatorSHA256" : "246af68424cb42363ddf504350066ec5fe83644045341ce849b8ac91c99a3319",
+  "generatorSHA256" : "838d1f1762f132f547078d824d5a328d31c2b79dea0ad0fcc286cbe9635afae4",
   "planningParentCommit" : "b50167aebb959e394908af3a5949f43fa88d6265",
   "privacy" : "Fixed synthetic values only; no user defaults, App Group, bookmarks, media library, location, microphone, or WCSession access.",
   "producer" : "VoxboardPersistenceFixtures using production package codecs; app-target Watch and toolbar fixtures are validated by VoxboardTests",

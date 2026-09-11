@@ -44,6 +44,32 @@ final class RecordingCompletionModeTests: XCTestCase {
         XCTAssertEqual(completionMode.commandOrigin(overriding: .watch), .watch)
     }
 
+    func testOnlyVisibleInAppRecordingsPreviewLiveTextInComposer() {
+        XCTAssertTrue(
+            RecordingCompletionMode.captureDraft(attachAudio: false)
+                .previewsLiveTranscriptInComposer(commandOrigin: .inAppDraft)
+        )
+        XCTAssertTrue(
+            RecordingCompletionMode.runVox(flowID: "general")
+                .previewsLiveTranscriptInComposer(commandOrigin: .inAppImmediate)
+        )
+        for origin in [
+            RecordingCommand.Origin.keyboardExtension,
+            .quickRecord,
+            .liveActivity,
+            .watch,
+        ] {
+            XCTAssertFalse(
+                RecordingCompletionMode.runVox(flowID: "general")
+                    .previewsLiveTranscriptInComposer(commandOrigin: origin)
+            )
+        }
+        XCTAssertFalse(
+            RecordingCompletionMode.keyboardTranscription
+                .previewsLiveTranscriptInComposer(commandOrigin: .keyboardExtension)
+        )
+    }
+
     func testKeyboardCommandRunsItsExplicitPreset() {
         let command = RecordingCommand(
             requestId: "keyboard",

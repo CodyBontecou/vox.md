@@ -773,7 +773,6 @@ struct VoxboardPersistenceFixtures {
         try validateLiveActivityCompatibilityFixtures(at: root)
         exercise(
             "usage/capture-usage-v1.json",
-            "compatibility/usage/legacy-high-water-decimal.txt",
             "compatibility/usage/missing-default-fields.json",
             "compatibility/usage/unknown-field.json",
             "negative/usage-settings/wrong-types.json",
@@ -2117,7 +2116,6 @@ struct VoxboardPersistenceFixtures {
     }
 
     private static func validateCaptureUsageNegativeFixtures(at root: URL) throws {
-        let highWater = FixtureCaptureUsageHighWaterMarkStore()
         for (relativePath, expectedVersion) in [
             ("negative/usage/future-version.json", 99),
             ("negative/usage/malformed.json", nil),
@@ -2132,7 +2130,6 @@ struct VoxboardPersistenceFixtures {
                 ledgerURL: ledgerURL,
                 freeCaptureLimit: 10,
                 coordinator: ProcessLocalCaptureFileCoordinator(),
-                highWaterStore: highWater,
                 isUnlocked: { false },
                 mirrorSuccessfulCount: { _ in }
             )
@@ -2795,7 +2792,6 @@ struct VoxboardPersistenceFixtures {
             ledgerURL: ledgerURL,
             freeCaptureLimit: 10,
             coordinator: ProcessLocalCaptureFileCoordinator(),
-            highWaterStore: FixtureCaptureUsageHighWaterMarkStore(),
             isUnlocked: { false },
             mirrorSuccessfulCount: { _ in }
         )
@@ -2817,11 +2813,6 @@ struct VoxboardPersistenceFixtures {
 
     private static func generateCaptureUsageCompatibilityFixtures(at root: URL) throws {
         try write(
-            Data("7".utf8),
-            to: root,
-            relativePath: "compatibility/usage/legacy-high-water-decimal.txt"
-        )
-        try write(
             Data(#"{"schemaVersion":1,"committedRequestIDs":[],"reservationTokensByRequestID":[]}"#.utf8),
             to: root,
             relativePath: "compatibility/usage/missing-default-fields.json"
@@ -2839,10 +2830,6 @@ struct VoxboardPersistenceFixtures {
     }
 
     private static func validateCaptureUsageCompatibilityFixtures(at root: URL) throws {
-        let legacyData = try Data(contentsOf: root.appendingPathComponent("compatibility/usage/legacy-high-water-decimal.txt"))
-        guard CaptureUsageHighWaterMarkCodec.decode(legacyData) == CaptureUsageHighWaterMark(successfulCaptureCount: 7) else {
-            throw FixtureError.semanticMismatch("legacy capture usage high-water codec")
-        }
         for relative in [
             "compatibility/usage/missing-default-fields.json",
             "compatibility/usage/unknown-field.json",
@@ -2856,7 +2843,6 @@ struct VoxboardPersistenceFixtures {
                 ledgerURL: ledgerURL,
                 freeCaptureLimit: 10,
                 coordinator: ProcessLocalCaptureFileCoordinator(),
-                highWaterStore: FixtureCaptureUsageHighWaterMarkStore(),
                 isUnlocked: { false },
                 mirrorSuccessfulCount: { _ in }
             )
@@ -3055,7 +3041,6 @@ struct VoxboardPersistenceFixtures {
             ledgerURL: root.appendingPathComponent(ledgerRelativePath),
             freeCaptureLimit: 10,
             coordinator: ProcessLocalCaptureFileCoordinator(),
-            highWaterStore: FixtureCaptureUsageHighWaterMarkStore(),
             isUnlocked: { false },
             mirrorSuccessfulCount: { _ in }
         )
@@ -3436,31 +3421,6 @@ struct VoxboardPersistenceFixtures {
                 throw FixtureError.privateDataDetected(url.lastPathComponent)
             }
         }
-    }
-}
-
-private final class FixtureCaptureUsageHighWaterMarkStore: CaptureUsageHighWaterMarkStoring, @unchecked Sendable {
-    private let lock = NSLock()
-    private var value = CaptureUsageHighWaterMark(successfulCaptureCount: 0)
-
-    func load() throws -> CaptureUsageHighWaterMark {
-        lock.lock()
-        defer { lock.unlock() }
-        return value
-    }
-
-    func raise(to candidate: CaptureUsageHighWaterMark) throws {
-        lock.lock()
-        defer { lock.unlock() }
-        let mergedIDs = value.committedRequestIDs.union(candidate.committedRequestIDs)
-        value = CaptureUsageHighWaterMark(
-            successfulCaptureCount: max(
-                value.successfulCaptureCount,
-                candidate.successfulCaptureCount,
-                mergedIDs.count
-            ),
-            committedRequestIDs: mergedIDs
-        )
     }
 }
 

@@ -90,7 +90,7 @@ final class CaptureDeliveryUsageStoreTests: XCTestCase {
         XCTAssertEqual(snapshot.successfulCapturesUsed, 0)
     }
 
-    func test_keychainHighWaterRestoresPartialCountAfterLedgerDeletion() async throws {
+    func test_deletingLocalLedgerStartsFreshCaptureAllowance() async throws {
         let fixture = try makeFixture()
         defer { fixture.cleanup() }
         for index in 0..<6 {
@@ -102,14 +102,13 @@ final class CaptureDeliveryUsageStoreTests: XCTestCase {
         let reinstalledStore = CaptureDeliveryUsageStore(
             ledgerURL: fixture.ledgerURL,
             coordinator: fixture.coordinator,
-            highWaterStore: fixture.highWater,
             isUnlocked: { false },
             mirrorSuccessfulCount: { _ in }
         )
-        let restored = try await reinstalledStore.snapshot()
+        let reset = try await reinstalledStore.snapshot()
 
-        XCTAssertEqual(restored.successfulCapturesUsed, 6)
-        XCTAssertEqual(restored.capturesRemaining, 4)
+        XCTAssertEqual(reset.successfulCapturesUsed, 0)
+        XCTAssertEqual(reset.capturesRemaining, 10)
     }
 
     func test_committedRequestDoesNotWriteDestinationAgainWhenMarkersAreDisabled() async throws {
@@ -144,22 +143,16 @@ final class CaptureDeliveryUsageStoreTests: XCTestCase {
         XCTAssertEqual(snapshot.successfulCapturesUsed, 1)
     }
 
-    func test_keychainRequestIDPreventsDoubleCountAfterCommitCrashWindow() async throws {
+    func test_relaunchPreservesCommittedRequestIDInLocalLedger() async throws {
         let fixture = try makeFixture()
         defer { fixture.cleanup() }
         let request = makeRequest(index: 0)
-        _ = try await fixture.store.reserve(for: request)
+        let reservation = try await fixture.store.reserve(for: request)
+        try await fixture.store.commit(reservation)
 
-        // Simulate process death after Keychain was raised for a verified write
-        // but before the coordinated App Group ledger was persisted.
-        try fixture.highWater.raise(to: CaptureUsageHighWaterMark(
-            successfulCaptureCount: 1,
-            committedRequestIDs: [request.id]
-        ))
         let relaunchedStore = CaptureDeliveryUsageStore(
             ledgerURL: fixture.ledgerURL,
             coordinator: fixture.coordinator,
-            highWaterStore: fixture.highWater,
             isUnlocked: { false },
             mirrorSuccessfulCount: { _ in }
         )
@@ -178,7 +171,6 @@ final class CaptureDeliveryUsageStoreTests: XCTestCase {
         let secondStore = CaptureDeliveryUsageStore(
             ledgerURL: fixture.ledgerURL,
             coordinator: fixture.coordinator,
-            highWaterStore: fixture.highWater,
             isUnlocked: { false },
             mirrorSuccessfulCount: { _ in }
         )
@@ -226,19 +218,16 @@ final class CaptureDeliveryUsageStoreTests: XCTestCase {
         )
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         let ledgerURL = root.appendingPathComponent("capture-usage-v1.json")
-        let highWater = InMemoryCaptureUsageHighWaterMarkStore()
         let coordinator = ProcessLocalCaptureFileCoordinator()
         let store = CaptureDeliveryUsageStore(
             ledgerURL: ledgerURL,
             coordinator: coordinator,
-            highWaterStore: highWater,
             isUnlocked: { isUnlocked },
             mirrorSuccessfulCount: { _ in }
         )
         return Fixture(
             root: root,
             ledgerURL: ledgerURL,
-            highWater: highWater,
             coordinator: coordinator,
             store: store
         )
@@ -248,36 +237,10 @@ final class CaptureDeliveryUsageStoreTests: XCTestCase {
 private struct Fixture {
     let root: URL
     let ledgerURL: URL
-    let highWater: InMemoryCaptureUsageHighWaterMarkStore
     let coordinator: ProcessLocalCaptureFileCoordinator
     let store: CaptureDeliveryUsageStore
 
     func cleanup() {
         try? FileManager.default.removeItem(at: root)
-    }
-}
-
-private final class InMemoryCaptureUsageHighWaterMarkStore: CaptureUsageHighWaterMarkStoring, @unchecked Sendable {
-    private let lock = NSLock()
-    private var highWaterMark = CaptureUsageHighWaterMark(successfulCaptureCount: 0)
-
-    func load() throws -> CaptureUsageHighWaterMark {
-        lock.lock()
-        defer { lock.unlock() }
-        return highWaterMark
-    }
-
-    func raise(to candidate: CaptureUsageHighWaterMark) throws {
-        lock.lock()
-        defer { lock.unlock() }
-        let mergedIDs = highWaterMark.committedRequestIDs.union(candidate.committedRequestIDs)
-        highWaterMark = CaptureUsageHighWaterMark(
-            successfulCaptureCount: max(
-                highWaterMark.successfulCaptureCount,
-                candidate.successfulCaptureCount,
-                mergedIDs.count
-            ),
-            committedRequestIDs: mergedIDs
-        )
     }
 }

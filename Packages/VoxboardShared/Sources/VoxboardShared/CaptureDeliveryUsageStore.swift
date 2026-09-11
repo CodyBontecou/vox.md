@@ -1,5 +1,4 @@
 import Foundation
-import Security
 import VoxboardCaptureCore
 
 public enum CaptureDeliveryUsageStoreError: Error, Equatable, LocalizedError, Sendable {
@@ -30,38 +29,6 @@ public struct CaptureDeliveryUsageSnapshot: Equatable, Sendable {
     }
 }
 
-package struct CaptureUsageHighWaterMark: Equatable, Codable, Sendable {
-    package var successfulCaptureCount: Int
-    package var committedRequestIDs: Set<UUID>
-
-    package init(successfulCaptureCount: Int, committedRequestIDs: Set<UUID> = []) {
-        self.successfulCaptureCount = max(0, successfulCaptureCount)
-        self.committedRequestIDs = committedRequestIDs
-    }
-}
-
-package protocol CaptureUsageHighWaterMarkStoring: Sendable {
-    func load() throws -> CaptureUsageHighWaterMark
-    func raise(to highWaterMark: CaptureUsageHighWaterMark) throws
-}
-
-package enum CaptureUsageHighWaterMarkCodec {
-    package static func decode(_ data: Data) -> CaptureUsageHighWaterMark? {
-        if let decoded = try? JSONDecoder().decode(CaptureUsageHighWaterMark.self, from: data) {
-            return CaptureUsageHighWaterMark(
-                successfulCaptureCount: decoded.successfulCaptureCount,
-                committedRequestIDs: decoded.committedRequestIDs
-            )
-        }
-        // v1 stored only the decimal count. Preserve it as an unattributed
-        // baseline while upgrading the next successful write.
-        if let raw = String(data: data, encoding: .utf8), let value = Int(raw) {
-            return CaptureUsageHighWaterMark(successfulCaptureCount: value)
-        }
-        return nil
-    }
-}
-
 private struct CaptureUsageLedger: Codable, Equatable {
     static let currentSchemaVersion = 1
 
@@ -83,10 +50,9 @@ private struct CaptureUsageLedger: Codable, Equatable {
 
 /// Exact-once accounting for successful, non-voice Capture deliveries.
 ///
-/// The coordinated App Group ledger prevents app/macOS delivery races. A
-/// Keychain high-water mark restores the used count after a normal uninstall
-/// and reinstall on the same device. Neither captured content nor destination
-/// metadata is stored here.
+/// The coordinated App Group ledger prevents app/macOS delivery races within
+/// an installation. Capture usage is deliberately not stored in Keychain, so
+/// removing the app's local data starts a fresh free allowance.
 public actor CaptureDeliveryUsageStore: CaptureDeliveryAccounting {
     public static let shared = CaptureDeliveryUsageStore()
 
@@ -94,22 +60,16 @@ public actor CaptureDeliveryUsageStore: CaptureDeliveryAccounting {
     private let freeCaptureLimit: Int
     private let coordinator: any CaptureFileCoordinating
     private let fileManager: FileManager
-    private let highWaterStore: any CaptureUsageHighWaterMarkStoring
     private let isUnlocked: @Sendable () -> Bool
     private let mirrorSuccessfulCount: @Sendable (Int) -> Void
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
-
-    public nonisolated static var persistedHighWaterCount: Int {
-        (try? KeychainCaptureUsageHighWaterMarkStore.shared.load().successfulCaptureCount) ?? 0
-    }
 
     package init(
         ledgerURL: URL? = AppConstants.captureUsageURL,
         freeCaptureLimit: Int = UsageTracker.freeCaptureLimit,
         coordinator: any CaptureFileCoordinating = NSFileCoordinatorCaptureFileCoordinator.shared,
         fileManager: FileManager = .default,
-        highWaterStore: any CaptureUsageHighWaterMarkStoring = KeychainCaptureUsageHighWaterMarkStore.shared,
         isUnlocked: @escaping @Sendable () -> Bool = {
             AppConstants.sharedDefaults?.bool(forKey: UsageTracker.hasUnlockedKey) ?? false
         },
@@ -121,7 +81,6 @@ public actor CaptureDeliveryUsageStore: CaptureDeliveryAccounting {
         self.freeCaptureLimit = max(0, freeCaptureLimit)
         self.coordinator = coordinator
         self.fileManager = fileManager
-        self.highWaterStore = highWaterStore
         self.isUnlocked = isUnlocked
         self.mirrorSuccessfulCount = mirrorSuccessfulCount
         let encoder = JSONEncoder()
@@ -179,14 +138,6 @@ public actor CaptureDeliveryUsageStore: CaptureDeliveryAccounting {
                 ledger.committedRequestIDs.insert(requestID)
             }
             ledger.reservationTokensByRequestID.removeValue(forKey: requestID)
-
-            // Raise the uninstall-resistant value before finalizing the local
-            // ledger. A Keychain failure therefore cannot silently report a
-            // fully committed delivery that would reset after reinstall.
-            try highWaterStore.raise(to: CaptureUsageHighWaterMark(
-                successfulCaptureCount: ledger.successfulCaptureCount,
-                committedRequestIDs: ledger.committedRequestIDs
-            ))
             try persist(ledger, to: coordinatedURL)
             return ledger.successfulCaptureCount
         }
@@ -217,9 +168,8 @@ public actor CaptureDeliveryUsageStore: CaptureDeliveryAccounting {
 
     public func snapshot() throws -> CaptureDeliveryUsageSnapshot {
         guard let ledgerURL else {
-            let highWater = (try? highWaterStore.load().successfulCaptureCount) ?? 0
             return CaptureDeliveryUsageSnapshot(
-                successfulCapturesUsed: highWater,
+                successfulCapturesUsed: 0,
                 reservedCaptureSlots: 0,
                 freeCaptureLimit: freeCaptureLimit
             )
@@ -239,48 +189,21 @@ public actor CaptureDeliveryUsageStore: CaptureDeliveryAccounting {
     }
 
     private func loadReconciledLedger(from url: URL) throws -> CaptureUsageLedger {
-        let highWater = try highWaterStore.load()
-        var ledger: CaptureUsageLedger
-        if fileManager.fileExists(atPath: url.path) {
-            do {
-                ledger = try decoder.decode(CaptureUsageLedger.self, from: Data(contentsOf: url))
-                guard ledger.schemaVersion == CaptureUsageLedger.currentSchemaVersion else {
-                    throw CaptureDeliveryUsageStoreError.unsupportedSchemaVersion(ledger.schemaVersion)
-                }
-            } catch let error as CaptureDeliveryUsageStoreError {
-                throw error
-            } catch {
-                try quarantineCorruptLedger(at: url)
-                ledger = CaptureUsageLedger(unattributedSuccessfulCount: highWater.successfulCaptureCount)
+        guard fileManager.fileExists(atPath: url.path) else {
+            return CaptureUsageLedger()
+        }
+        do {
+            let ledger = try decoder.decode(CaptureUsageLedger.self, from: Data(contentsOf: url))
+            guard ledger.schemaVersion == CaptureUsageLedger.currentSchemaVersion else {
+                throw CaptureDeliveryUsageStoreError.unsupportedSchemaVersion(ledger.schemaVersion)
             }
-        } else {
-            ledger = CaptureUsageLedger(unattributedSuccessfulCount: highWater.successfulCaptureCount)
+            return ledger
+        } catch let error as CaptureDeliveryUsageStoreError {
+            throw error
+        } catch {
+            try quarantineCorruptLedger(at: url)
+            return CaptureUsageLedger()
         }
-
-        // Keychain stores both the high-water count and the small (maximum 10)
-        // set of committed IDs. If a process dies after raising Keychain but
-        // before persisting this ledger, unioning IDs prevents that same
-        // request from becoming an unattributed success and being counted again.
-        let mergedRequestIDs = ledger.committedRequestIDs.union(highWater.committedRequestIDs)
-        let mergedSuccessfulCount = max(
-            ledger.successfulCaptureCount,
-            highWater.successfulCaptureCount,
-            mergedRequestIDs.count
-        )
-        ledger.committedRequestIDs = mergedRequestIDs
-        for requestID in mergedRequestIDs {
-            ledger.reservationTokensByRequestID.removeValue(forKey: requestID)
-        }
-        ledger.unattributedSuccessfulCount = max(0, mergedSuccessfulCount - mergedRequestIDs.count)
-
-        if ledger.successfulCaptureCount > highWater.successfulCaptureCount
-            || !ledger.committedRequestIDs.isSubset(of: highWater.committedRequestIDs) {
-            try highWaterStore.raise(to: CaptureUsageHighWaterMark(
-                successfulCaptureCount: ledger.successfulCaptureCount,
-                committedRequestIDs: ledger.committedRequestIDs
-            ))
-        }
-        return ledger
     }
 
     private func persist(_ ledger: CaptureUsageLedger, to url: URL) throws {
@@ -309,85 +232,4 @@ public enum AppCapturePipeline {
     public static let shared = CapturePipeline(
         deliveryAccounting: CaptureDeliveryUsageStore.shared
     )
-}
-
-private struct CaptureUsageKeychainError: Error, @unchecked Sendable {
-    let status: OSStatus
-}
-
-private final class KeychainCaptureUsageHighWaterMarkStore: CaptureUsageHighWaterMarkStoring, @unchecked Sendable {
-    static let shared = KeychainCaptureUsageHighWaterMarkStore()
-
-    private let service = "bontecou.Voxboard.capture-freemium"
-    private let account = "successful-capture-high-water-v1"
-    private let lock = NSLock()
-
-    func load() throws -> CaptureUsageHighWaterMark {
-        lock.lock()
-        defer { lock.unlock() }
-        return try loadLocked()
-    }
-
-    func raise(to highWaterMark: CaptureUsageHighWaterMark) throws {
-        lock.lock()
-        defer { lock.unlock() }
-        let current = try loadLocked()
-        let mergedIDs = current.committedRequestIDs.union(highWaterMark.committedRequestIDs)
-        let raised = CaptureUsageHighWaterMark(
-            successfulCaptureCount: max(
-                current.successfulCaptureCount,
-                highWaterMark.successfulCaptureCount,
-                mergedIDs.count
-            ),
-            committedRequestIDs: mergedIDs
-        )
-        guard raised != current else { return }
-        try saveLocked(raised)
-    }
-
-    private func loadLocked() throws -> CaptureUsageHighWaterMark {
-        var query: [String: Any] = baseQuery
-        query[kSecReturnData as String] = true
-        query[kSecMatchLimit as String] = kSecMatchLimitOne
-        var item: CFTypeRef?
-        let status = SecItemCopyMatching(query as CFDictionary, &item)
-        if status == errSecItemNotFound {
-            return CaptureUsageHighWaterMark(successfulCaptureCount: 0)
-        }
-        guard status == errSecSuccess, let data = item as? Data else {
-            throw CaptureUsageKeychainError(status: status)
-        }
-        if let decoded = CaptureUsageHighWaterMarkCodec.decode(data) { return decoded }
-        throw CaptureUsageKeychainError(status: errSecDecode)
-    }
-
-    private func saveLocked(_ highWaterMark: CaptureUsageHighWaterMark) throws {
-        let data = try JSONEncoder().encode(highWaterMark)
-        let updateStatus = SecItemUpdate(
-            baseQuery as CFDictionary,
-            [kSecValueData as String: data] as CFDictionary
-        )
-        if updateStatus == errSecSuccess { return }
-        guard updateStatus == errSecItemNotFound else {
-            throw CaptureUsageKeychainError(status: updateStatus)
-        }
-
-        var item = baseQuery
-        item[kSecValueData as String] = data
-        #if os(iOS)
-        item[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
-        #endif
-        let addStatus = SecItemAdd(item as CFDictionary, nil)
-        guard addStatus == errSecSuccess else {
-            throw CaptureUsageKeychainError(status: addStatus)
-        }
-    }
-
-    private var baseQuery: [String: Any] {
-        [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
-            kSecAttrAccount as String: account,
-        ]
-    }
 }

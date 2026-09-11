@@ -137,10 +137,14 @@ struct VoxboardMacApp: App {
                 .environment(store)
                 .environment(usage)
                 .environment(storeManager)
+                .tint(MacBrand.orange)
                 .preferredColorScheme(.light)
 
                 let controller = NSHostingController(rootView: root)
                 let window = NSWindow(contentViewController: controller)
+                window.identifier = NSUserInterfaceItemIdentifier(
+                    "VoxboardLocalizationScreenshot"
+                )
                 window.title = "Vox.md"
                 window.setContentSize(NSSize(width: 1180, height: 760))
                 window.center()
@@ -171,6 +175,7 @@ struct VoxboardMacApp: App {
                 quickCaptureViewModel: quickCaptureViewModel,
                 windowCoordinator: windowCoordinator
             )
+                .tint(MacBrand.orange)
                 .task {
                     // Drain the shared capture inbox on a cadence while the Mac
                     // app runs, so queued captures retry without waiting for the
@@ -234,15 +239,47 @@ struct VoxboardMacApp: App {
                 }
         }
         .handlesExternalEvents(matching: ["capture", "capture-request", "listen"])
+        .windowToolbarStyle(.unified(showsTitle: true))
         .commands {
+            SidebarCommands()
+            InspectorCommands()
+
+            CommandGroup(replacing: .newItem) {
+                Button("New Capture") {
+                    windowCoordinator.showMain(.newCapture)
+                }
+                .keyboardShortcut("n", modifiers: .command)
+            }
+
+            CommandMenu("Navigate") {
+                Button("Capture") {
+                    windowCoordinator.showMain(.navigate(.capture))
+                }
+                .keyboardShortcut("1", modifiers: .command)
+
+                Button("Activity") {
+                    windowCoordinator.showMain(.navigate(.activity))
+                }
+                .keyboardShortcut("2", modifiers: .command)
+
+                Button("Library") {
+                    windowCoordinator.showMain(.navigate(.library))
+                }
+                .keyboardShortcut("3", modifiers: .command)
+            }
+
             CommandMenu("Capture") {
                 Button("Show Capture") {
                     windowCoordinator.showMain(.navigate(.capture))
                 }
                 .keyboardShortcut("c", modifiers: [.command, .shift])
 
-                Button("Show History") {
-                    windowCoordinator.showMain(.navigate(.history))
+                Button("Show Activity") {
+                    windowCoordinator.showMain(.navigate(.activity))
+                }
+
+                Button("Show Library") {
+                    windowCoordinator.showMain(.navigate(.library))
                 }
                 .keyboardShortcut("h", modifiers: [.command, .shift])
 
@@ -267,7 +304,7 @@ struct VoxboardMacApp: App {
                 .keyboardShortcut("a", modifiers: [.command, .shift])
 
                 Button("Clear Capture Draft") {
-                    Task { await quickCaptureViewModel.clearDraft() }
+                    windowCoordinator.showMain(.newCapture)
                 }
                 .disabled(!quickCaptureViewModel.draft.hasCaptureContent)
             }
@@ -304,6 +341,7 @@ struct VoxboardMacApp: App {
             .environment(transcriptStore)
             .environment(usageTracker)
             .environment(storeManager)
+            .tint(MacBrand.orange)
             .frame(minWidth: 760, minHeight: 640)
         }
 
@@ -317,6 +355,7 @@ struct VoxboardMacApp: App {
                 .environment(transcriptStore)
                 .environment(usageTracker)
                 .environment(storeManager)
+                .tint(MacBrand.orange)
         } label: {
             Image(systemName: menuBarSymbolName)
                 .help(menuBarStatusText)
@@ -478,6 +517,7 @@ struct VoxboardMacApp: App {
 enum MacMainWindowRequest: Equatable {
     case navigate(MacDestination)
     case chooseFiles
+    case newCapture
 }
 
 enum MacSceneWindowKind {
@@ -616,6 +656,12 @@ final class MacWindowCoordinator {
                 object: MacNavigationRequest(windowToken: token, destination: .capture)
             )
             deliverPendingCaptureRequestIfReady(to: token)
+        case .newCapture:
+            NotificationCenter.default.post(
+                name: .macNavigate,
+                object: MacNavigationRequest(windowToken: token, destination: .capture)
+            )
+            deliverPendingCaptureRequestIfReady(to: token)
         }
     }
 
@@ -625,11 +671,13 @@ final class MacWindowCoordinator {
               let request = pendingMainRequests[token] else { return }
 
         switch request {
-        case .navigate(.capture), .chooseFiles:
+        case .navigate(.capture), .chooseFiles, .newCapture:
             pendingMainRequests[token] = nil
             NotificationCenter.default.post(name: .macShowCapture, object: token)
             if request == .chooseFiles {
                 NotificationCenter.default.post(name: .macChooseCaptureFiles, object: token)
+            } else if request == .newCapture {
+                NotificationCenter.default.post(name: .macClearCaptureDraft, object: token)
             }
         case .navigate:
             break
@@ -795,14 +843,18 @@ final class VoxboardMacAppDelegate: NSObject, NSApplicationDelegate {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             let candidates = NSApp.windows.filter { $0.contentView != nil }
-            guard let window = candidates.max(by: {
+            let screenshotWindow = candidates.first {
+                $0.identifier?.rawValue == "VoxboardLocalizationScreenshot"
+            }
+            guard let window = screenshotWindow ?? candidates.max(by: {
                 $0.frame.width * $0.frame.height < $1.frame.width * $1.frame.height
             }),
-                  let view = window.contentView else { return }
+                  let contentView = window.contentView else { return }
 
             if window.isMiniaturized { window.deminiaturize(nil) }
             window.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
+            let view = contentView
             view.layoutSubtreeIfNeeded()
 
             guard let image = view.bitmapImageRepForCachingDisplay(in: view.bounds) else { return }
@@ -1253,7 +1305,7 @@ private struct MacMenuBarMenu: View {
         }
         if let reason = recorder.lastSpeakerDiarizationSkipReason {
             Label(reason.displayText, systemImage: "exclamationmark.triangle")
-                .foregroundStyle(.orange)
+                .foregroundStyle(MacBrand.orangeText)
         }
 
         if let exportURL = recorder.lastExportURL {
@@ -1282,9 +1334,9 @@ private struct MacMenuBarMenu: View {
         .keyboardShortcut("0")
 
         Button {
-            windowCoordinator.showMain(.navigate(.history))
+            windowCoordinator.showMain(.navigate(.library))
         } label: {
-            Label("Show History", systemImage: "clock.arrow.circlepath")
+            Label("Show Library", systemImage: "books.vertical")
         }
 
         Button {

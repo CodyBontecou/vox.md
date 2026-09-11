@@ -48,6 +48,7 @@ struct MacSketchEditor: View {
                     Spacer()
                     Button("Add to Capture") { save() }
                         .buttonStyle(.borderedProminent)
+                        .foregroundStyle(MacBrand.onOrange)
                         .disabled(strokes.isEmpty && activeStroke.isEmpty)
                         .accessibilityIdentifier("mac_capture_sketch_add")
                 }

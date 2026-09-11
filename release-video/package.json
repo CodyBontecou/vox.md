@@ -1,0 +1,19 @@
+{
+  "name": "vox-md-release-video",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "render": "remotion render src/index.tsx ReleaseVideo ../artifacts/release-video-2.8/vox-md-2.8-release.mp4",
+    "still": "remotion still src/index.tsx ReleaseVideo ../artifacts/release-video-2.8/vox-md-2.8-poster.png --frame=45"
+  },
+  "dependencies": {
+    "@remotion/cli": "latest",
+    "remotion": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest"
+  }
+}

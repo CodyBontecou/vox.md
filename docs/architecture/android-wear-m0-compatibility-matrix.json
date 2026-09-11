@@ -666,9 +666,9 @@
         "old": {
           "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/usage/legacy-high-water-decimal.txt"
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/usage/missing-default-fields.json"
           ],
-          "rationale": "The production Keychain high-water codec accepts the shipped decimal v1 representation."
+          "rationale": "The production local-ledger decoder accepts the shipped schema with defaulted fields."
         },
         "missingFields": {
           "status": "executed",
@@ -706,7 +706,7 @@
         "data": {
           "status": "notApplicable",
           "evidence": [],
-          "rationale": "Ledger JSON has no Data field; Keychain is the native container."
+          "rationale": "The installation-local ledger JSON has no Data field."
         },
         "uuid": {
           "status": "executed",

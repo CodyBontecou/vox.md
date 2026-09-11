@@ -569,7 +569,7 @@ private final class MacKeyboardHintOverlayView: NSView {
             xRadius: 4,
             yRadius: 4
         )
-        NSColor.systemYellow.setFill()
+        MacBrand.appKitOrange.setFill()
         path.fill()
         NSColor.black.withAlphaComponent(0.82).setStroke()
         path.lineWidth = 1

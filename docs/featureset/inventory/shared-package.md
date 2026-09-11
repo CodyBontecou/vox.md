@@ -388,16 +388,16 @@ Package: `Packages/VoxboardShared/Sources/VoxboardShared/` (+ `Analytics/`). All
 
 ### F-SH-33 Usage metering — free Capture deliveries
 - Surface: Capture pipeline (typed/multimodal captures), paywall
-- Summary: `CaptureDeliveryUsageStore` (actor) implements exact-once accounting for successful non-voice Capture deliveries against a 10-capture free limit, using a coordinated App Group ledger (reservation tokens + committed request IDs) and a Keychain high-water mark that survives uninstall/reinstall.
+- Summary: `CaptureDeliveryUsageStore` (actor) implements installation-local accounting for successful non-voice Capture deliveries against a 10-capture free limit, using a coordinated App Group ledger with reservation tokens and committed request IDs.
 - Details:
   - Reserve/commit/release lifecycle; voice transcripts (`.meteredVoiceTranscript`) and unlocked users bypass; `alreadyCounted` idempotent reservations.
-  - Keychain store `bontecou.Voxboard.capture-freemium` (accessible after first unlock, this-device-only on iOS); stores count + ≤10 committed IDs; v1 decimal-count payload decodes as unattributed baseline.
-  - Ledger reconciliation: max(ledger, keychain, merged-ID count); committed IDs from keychain clear their reservations; corrupt ledger quarantined to `capture-usage-corrupt-*.json` and rebuilt from high water; schema-version mismatch is a hard error.
-  - `release` failures conservatively leak a reservation (same request can still reserve/commit later); successful count mirrored to defaults `successfulCaptureDeliveries.v1`.
+  - The ledger is local app data and is never read from or written to Keychain; removing local app data starts a fresh allowance.
+  - Corrupt ledgers are quarantined to `capture-usage-corrupt-*.json` and reset locally; unsupported future schema versions remain a hard error.
+  - `release` failures conservatively leak a reservation (same request can still reserve/commit later); successful count is mirrored to defaults `successfulCaptureDeliveries.v1`.
   - `AppCapturePipeline.shared` wires this into CaptureCore's `CapturePipeline`; Core's `.shared` stays unmetered for tests.
   - `CaptureDeliveryUsageSnapshot` exposes capturesRemaining/isAtLimit.
-- Constraints: App Group + Keychain; limit 10; lifetime purchase bypasses.
-- Evidence: `CaptureDeliveryUsageStore.swift` (whole file; `KeychainCaptureUsageHighWaterMarkStore`)
+- Constraints: local App Group data; limit 10; lifetime purchase bypasses; reinstall/removal may reset free usage.
+- Evidence: `CaptureDeliveryUsageStore.swift` (whole file)
 - Status: shipped
 
 ### F-SH-34 Purchase access model

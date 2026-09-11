@@ -3,7 +3,7 @@ import Foundation
 /// Tracks the independent free transcription and successful-Capture meters,
 /// plus the shared lifetime purchase state. Transcription and UI mirrors live
 /// in App Group defaults; authoritative Capture accounting is coordinated by
-/// `CaptureDeliveryUsageStore` and backed by a Keychain high-water mark.
+/// `CaptureDeliveryUsageStore` within the app's local data.
 @Observable
 public final class UsageTracker {
 
@@ -192,10 +192,7 @@ public final class UsageTracker {
         let mirroredCaptures = defaults?.integer(
             forKey: AppConstants.captureUsageMirrorKey
         ) ?? 0
-        successfulCapturesUsed = max(
-            mirroredCaptures,
-            CaptureDeliveryUsageStore.persistedHighWaterCount
-        )
+        successfulCapturesUsed = mirroredCaptures
 
         permanentAccessLevel = Self.persistedAccessLevel(
             forKey: Self.permanentAccessLevelKey,

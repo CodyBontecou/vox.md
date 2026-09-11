@@ -103,13 +103,13 @@ LID = IC. Every feature below is verified in the root-level files of `Voxboard/`
 - Status: shipped
 
 ### F-IC-08 Live (Streaming) Transcription Preview
-- Surface: keyboard mic preview, Capture inline recording (incl. draft live transcript), Immediate Preset runs
-- Summary: For `TranscriptionBackendID.automatic` recordings, `startLiveTranscriptionIfSupported` opens an Apple Speech live session fed by `LiveSegmentTranscriptionCoordinator` polling the circular buffer, publishing incremental finalized/volatile text to IPC (keyboard) and to `liveFinalizedTranscription`/`liveVolatileTranscription`/Capture draft events (app).
+- Surface: keyboard mic preview and the editable Capture composer for direct in-app recordings
+- Summary: For `TranscriptionBackendID.automatic` recordings, `startLiveTranscriptionIfSupported` opens an Apple Speech live session fed by `LiveSegmentTranscriptionCoordinator` polling the circular buffer, publishing incremental finalized/volatile text to IPC (keyboard) or through Capture composer events (app).
 - Details:
-  - Enabled only when origin is `.keyboardExtension` or requestId has prefix `inapp-`, and model is automatic; draft publishing only for `captureDraft` completion mode.
-  - `liveCaptureRequestId`/`liveCaptureSessionID` guard against stale sessions replacing newer text; `clearCaptureLiveTranscription` cancels draft preview via `.cancelLiveTranscript`.
+  - Enabled only when origin is `.keyboardExtension` or requestId has prefix `inapp-`, and the model is automatic. Composer publishing covers draft recordings and direct `.inAppImmediate` Preset runs; external Watch, widget, Shortcut, and Live Activity runs bypass the open composer.
+  - `liveCaptureRequestId`/`liveCaptureSessionID` guard against stale sessions replacing newer text; `clearCaptureLiveTranscription` cancels the composer preview via `.cancelLiveTranscript`.
   - On live setup failure → silent batch fallback (log only). On stop, `coordinator.finish(through: endIndex)` returns the live text; `usesLiveDelivery` recorded in the IPC response (`usesLiveTranscription: true`).
-  - Immediate Preset runs preview live text without adding it to the Capture draft.
+  - Immediate Preset previews are UI-only and are removed after handoff instead of becoming durable draft content.
 - Constraints: iOS 26+ Apple Speech availability; automatic backend only.
 - Evidence: `PersistentRecorder.swift` lines ~1400-1490; `LiveSegmentTranscriptionCoordinator.swift` (full).
 - Status: shipped (gated on iOS 26/Apple Speech)
@@ -223,7 +223,7 @@ LID = IC. Every feature below is verified in the root-level files of `Voxboard/`
   - `recordRestoreDiagnostics`: storefront country code, per-product `Transaction.latest` observations, loaded vs requested product IDs → `PurchaseRestoreDiagnostics` (also logged to KeyboardDebugLog).
   - `listenForTransactions`: `Transaction.updates` loop finishing verified transactions and re-syncing (revocations pass empty additional products).
   - Product loading with missing-offer detection ("Some purchase options are temporarily unavailable." / "Purchases are not available right now.").
-  - Note: free-tier allowance minutes and keychain high-water mark live in `UsageTracker` (VoxboardShared) — `isAtLimit`, `needsUnlock`, `addUsage(seconds:deliveryID:)` idempotent receipts, `reload()` — referenced throughout this file set.
+  - Note: free-tier allowance minutes and the installation-local Capture ledger live in VoxboardShared — `UsageTracker.isAtLimit`, `addUsage(seconds:deliveryID:)`, `reload()`, and `CaptureDeliveryUsageStore` — and are referenced throughout this file set.
 - Constraints: StoreKit 2; products configured in App Store Connect.
 - Evidence: `StoreManager.swift` (full, 462 lines); PersistentRecorder paywall checks.
 - Status: shipped
@@ -436,7 +436,7 @@ LID = IC. Every feature below is verified in the root-level files of `Voxboard/`
 
 ## Uncertainties
 
-- **UsageTracker internals**: free-tier allowance minutes, keychain high-water mark persistence, `purchaseOptions`, `reconcileStoreEntitlements`, and `completeLegacyAccessClassification` live in VoxboardShared (`UsageTracker`), which is outside this task's file scope; mechanics summarized from call sites only.
+- **UsageTracker internals**: free-tier allowance minutes, installation-local Capture usage, `purchaseOptions`, `reconcileStoreEntitlements`, and `completeLegacyAccessClassification` live in VoxboardShared, which is outside this task's file scope; mechanics summarized from call sites only.
 - **VoxboardTests coverage**: tests were allowed as supplementary evidence but were not exhaustively enumerated; behaviors above are code-verified from production sources.
 - `OpenQuickCaptureIntent` and other capture intents referenced in `VoxboardShortcutsProvider` are defined outside the in-scope files (presumably elsewhere in Voxboard/), so their internals are unverified here.
 - `LiveActivityCommandBuilder`, `CaptureDeepLinkParser`, `CheckpointedAudioDelivery`, `RecordingOnlyFileExporter`, `CaptureInboxDeliveryService`, `TranscriptionIPC`, `AppConstants` keys (e.g., `voiceAutoStopPauseDuration` default value, `smartFoldersEnabled`, `autoOrganizeEnabled`) are referenced but defined in VoxboardShared/other files; exact defaults unverified in this pass.

@@ -118,12 +118,17 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         context.coordinator.parent = self
         connect(textView, coordinator: context.coordinator)
 
-        if textView.text != text {
+        let textChanged = textView.text != text
+        if textChanged {
             textView.text = text
         }
-        let desired = MarkdownComposerController.clamped(selection, utf16Count: text.utf16.count)
+        let textEnd = text.utf16.count
+        let desired = MarkdownComposerController.clamped(selection, utf16Count: textEnd)
         if textView.selectedRange != desired {
             textView.selectedRange = desired
+        }
+        if textChanged, desired.location + desired.length == textEnd {
+            textView.scrollRangeToVisible(desired)
         }
         if isFocused, !textView.isFirstResponder {
             // Focus is queued so UIKit sees an attached view. Re-check the binding

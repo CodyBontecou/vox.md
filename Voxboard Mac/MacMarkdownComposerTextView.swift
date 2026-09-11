@@ -121,11 +121,10 @@ struct MacMarkdownComposerTextView: NSViewRepresentable {
         textView.isAutomaticSpellingCorrectionEnabled = true
         textView.isContinuousSpellCheckingEnabled = true
         textView.drawsBackground = false
-        textView.textColor = NSColor(Geist.text)
-        textView.insertionPointColor = NSColor(Geist.focus)
-        textView.font = NSFont(name: "GeistMono-Regular", size: 16)
-            ?? NSFont.monospacedSystemFont(ofSize: 16, weight: .regular)
-        textView.textContainerInset = NSSize(width: 18, height: 22)
+        textView.textColor = .textColor
+        textView.insertionPointColor = MacBrand.appKitOrange
+        textView.font = .systemFont(ofSize: 16, weight: .regular)
+        textView.textContainerInset = NSSize(width: 34, height: 32)
         textView.string = text
         textView.setSelectedRange(Self.clamped(selection, utf16Count: text.utf16.count))
         textView.setAccessibilityLabel(String(localized: "Capture note"))

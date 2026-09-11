@@ -6,23 +6,23 @@
 
 ## Context
 
-Apple can retain some usage/access evidence through Keychain and signed AppTransaction.
-Android has no approved Vox.md account/backend or equivalent uninstall-resistant free
-usage authority. Claiming identical reinstall resistance would be false.
+Apple can retain usage/access evidence through Keychain and signed AppTransaction,
+but quota records in the legacy macOS login Keychain can request the user's credentials
+when a new build has a different code signature. Android has no approved Vox.md
+account/backend or equivalent uninstall-resistant free-usage authority.
 
 ## Decision
 
-Android free transcription/capture usage is installation-local and resets after
-uninstall/reinstall or a device transfer that excludes app-private state. This is an
-explicit product-adjusted outcome, not exact Keychain-equivalent resistance. It does
-not authorize Android backup of usage ledgers. A future account/backend may change the
-policy only through a separately approved ADR covering privacy, migration, abuse, and
-cross-device identity.
+Free transcription and Capture usage is installation-local on every platform. Vox.md
+does not read or write free-usage quota state in Keychain. Removing the app's local data
+creates fresh free counters; platform backups must not transfer quota state. A future
+account/backend may change the policy only through a separately approved ADR covering
+privacy, migration, abuse, and cross-device identity.
 
 Within an installation, usage is metered only at the existing semantic success boundary
 and is idempotent by stable request/delivery ID. Failed, cancelled, discarded, or
-unverified destination work does not consume successful-delivery quota; retries cannot
-double-charge. Reinstall creates new installation identity and fresh free counters.
+unverified destination work does not consume successful-delivery quota; committed
+retries cannot double-charge while the local ledger remains.
 
 Grandfathering is store/platform-specific:
 
@@ -38,15 +38,18 @@ Apple-only grandfathered access without implying a cross-store account.
 
 ## Compatibility and consequences
 
-The policy preserves current Apple access behavior and honestly documents Android's
-adjustment. It accepts potential free-tier reset abuse rather than introducing a
-content/account backend without approval. Quota state remains separate from immutable
-pending content and cannot cause content loss.
+The policy changes Apple's free-Capture reinstall behavior while preserving signed
+AppTransaction grandfathering and current StoreKit entitlements. Legacy quota Keychain
+items are ignored rather than queried or deleted, avoiding credential prompts from old
+access-control lists. It accepts potential free-tier reset abuse rather than introducing
+a content/account backend. Quota state remains separate from immutable pending content
+and cannot cause content loss.
 
 ## Rejected alternatives
 
-- **Back up or fingerprint an uninstall-resistant quota ID:** rejected for privacy and
-  because backup is excluded by ADR-0006.
+- **Persist quota in Keychain or fingerprint an uninstall-resistant ID:** rejected to
+  avoid credential prompts, hidden persistence after uninstall, and cross-install identity.
+- **Back up quota state:** rejected because backup is excluded by ADR-0006.
 - **Import Apple entitlement to Android without an account/backend:** rejected as
   unverifiable cross-store authority.
 - **Grandfather based on install date or a Boolean:** rejected because it is forgeable
@@ -57,7 +60,7 @@ pending content and cannot cause content loss.
 
 - Metering tests prove reserve/commit/release and retry idempotency at successful
   transcription/delivery boundaries.
-- Fresh-install tests prove new installation identity and zero Android free counters;
+- Local-data-removal tests prove a missing Capture ledger starts with a fresh allowance;
   backup tests prove usage is not transferred.
 - Entitlement tests cover verified Play restore and reject unknown/unverified products,
   Apple claims, dates, and legacy flags.

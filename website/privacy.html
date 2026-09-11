@@ -42,7 +42,7 @@
   <div class="container">
     <div class="page-eyebrow">Legal · Privacy</div>
     <h1 class="page-title">Privacy Policy</h1>
-    <p class="page-meta">Effective: February 9, 2026 · Last updated: August 21, 2026</p>
+    <p class="page-meta">Effective: February 9, 2026 · Last updated: September 11, 2026</p>
   </div>
 </section>
 
@@ -116,13 +116,14 @@
     <p>The Capture editor requests batches of inspirational quotes from <a href="https://zenquotes.io/">ZenQuotes API</a> and rotates through them from an on-device cache. These requests never include capture drafts, typed text, audio, attachments, file paths, location, install identifiers, or analytics. Like any HTTPS service, ZenQuotes may receive technical connection data such as an IP address and user agent under its own terms. If first-party onboarding events are explicitly enabled in a development build, they are sent directly to a Vox.md Cloudflare Worker with the strict allowlist described above.</p>
 
     <h2>Data Storage &amp; Deletion</h2>
-    <p>All app data — including transcription history, capture drafts, staged attachments, downloaded models, templates, and settings — is stored locally on your device or in a file destination you explicitly choose. Vox.md also keeps a content-free high-water record of successful free Capture deliveries in the system Keychain so a normal uninstall and reinstall on the same device does not reset the free allowance. It contains only the count and random identifiers for up to ten successful requests, which prevent retries from being charged twice. It contains no captured text, filenames, destinations, or attachment metadata and is never sent to Vox.md.</p>
+    <p>All app data — including transcription history, capture drafts, staged attachments, downloaded models, templates, settings, and free-usage records — is stored locally on your device or in a file destination you explicitly choose. The content-free successful-Capture ledger contains only the count and random identifiers for up to ten successful requests, which prevent retries from being charged twice while local app data remains. It contains no captured text, filenames, destinations, or attachment metadata, is never stored in the system Keychain, and is never sent to Vox.md.</p>
+    <p>Versions released before this policy change may have left an inert, content-free free-usage item in the system Keychain. Current versions do not access that item; it can be removed with Keychain Access without affecting captures, transcripts, or purchases.</p>
     <p>The local Recent Captures list contains delivery metadata only: outcome, source, Capture Preset identifier and display name, destination identifier and display name, relative note path, attachment count, timestamps, and a coarse failure category. It never duplicates note text, links, coordinates, location labels or templates, bookmarks, absolute paths, or attachment filenames. Pending and failed captures retain only the content needed for local recovery, which may include an already privacy-adjusted location snapshot or durable unavailable outcome. After successful delivery, a recoverable Capture request is immediately replaced by an identifier-and-timestamp-only tombstone; completed Watch queue items are likewise scrubbed, and upgrades sanitize legacy completed requests.</p>
     <p>You can delete locally stored user content and settings by:</p>
     <ul>
       <li>Deleting individual transcriptions or clearing Recent Capture metadata from the history views within the app</li>
       <li>Removing downloaded models from Settings</li>
-      <li>Uninstalling Vox.md, which removes its app-container data. The content-free successful-Capture high-water record described above remains in the system Keychain to preserve the free allowance after reinstall.</li>
+      <li>Removing Vox.md and its local app data. This also resets the free usage allowance; eligible StoreKit purchases remain restorable from Apple.</li>
     </ul>
 
     <h2>Children's Privacy</h2>

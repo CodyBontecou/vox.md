@@ -5,13 +5,11 @@ import SwiftUI
 struct QuickCaptureCanvas: View {
     let showsDestination: Bool
     let showsWatchStatus: Bool
-    let showsLiveTranscript: Bool
     let showsAttachments: Bool
     let ocrProgress: CaptureViewSection
     let destination: CaptureViewSection
     let watchStatus: CaptureViewSection
     let composer: CaptureViewSection
-    let liveTranscript: CaptureViewSection
     let attachments: CaptureViewSection
     let controls: CaptureViewSection
     let keyboardGuidance: CaptureViewSection
@@ -33,10 +31,6 @@ struct QuickCaptureCanvas: View {
                     GeistDivider()
                 }
                 composer.layoutPriority(1)
-                if showsLiveTranscript {
-                    GeistDivider()
-                    liveTranscript
-                }
                 if showsAttachments {
                     attachments
                 }

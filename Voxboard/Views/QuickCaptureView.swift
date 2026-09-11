@@ -190,13 +190,11 @@ struct QuickCaptureView: View {
             QuickCaptureCanvas(
                 showsDestination: viewModel.selectedDestination == nil && !isLocalizationScreenshot,
                 showsWatchStatus: watchRecordingPipeline.hasVisibleItems,
-                showsLiveTranscript: shouldShowImmediateLiveTranscription,
                 showsAttachments: !viewModel.draft.additionalPayloads.isEmpty,
                 ocrProgress: captureOCRProgressBanner,
                 destination: emptyDestinationBanner,
                 watchStatus: watchRecordingStatusCard,
                 composer: composer,
-                liveTranscript: immediateLiveTranscriptionBar,
                 attachments: attachmentStrip,
                 controls: captureControls,
                 keyboardGuidance: keyboardGuidanceOverlay,
@@ -306,8 +304,10 @@ struct QuickCaptureView: View {
                 .onChange(of: defersCaptureInputFocusForReleaseNotes) { _, isDeferring in
                     if isDeferring { dismissComposer() }
                 }
-                .onChange(of: viewModel.draft.text) { _, _ in
-                    if !viewModel.hasLiveRecordedTranscriptPreview {
+                .onChange(of: viewModel.draft.text) { previousText, currentText in
+                    if viewModel.hasLiveRecordedTranscriptPreview {
+                        followLiveTranscriptTail(from: previousText, to: currentText)
+                    } else {
                         viewModel.scheduleDraftSave()
                     }
                 }
@@ -662,58 +662,6 @@ struct QuickCaptureView: View {
                 } message: {
                     Text("The link stays in your durable draft until the note is captured.")
                 }
-        }
-    }
-
-    private var shouldShowImmediateLiveTranscription: Bool {
-        persistentRecorder.isSegmentActive
-            && persistentRecorder.isCaptureLiveTranscriptionActive
-            && lastStartedRecordingMode == .preset
-    }
-
-    private var immediateLiveTranscriptionText: String {
-        let finalized = (persistentRecorder.liveFinalizedTranscription ?? "")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-        let volatile = (persistentRecorder.liveVolatileTranscription ?? "")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-        return [finalized, volatile].filter { !$0.isEmpty }.joined(separator: " ")
-    }
-
-    private var immediateLiveTranscriptionBar: CaptureViewSection {
-        let transcript = immediateLiveTranscriptionText
-        let visibleTranscript =
-            transcript.count > 320
-            ? "…" + String(transcript.suffix(320))
-            : transcript
-
-        return CaptureViewSection {
-            HStack(alignment: .top, spacing: Geist.Spacing.three) {
-                Image(systemName: "waveform")
-                    .foregroundStyle(Geist.Palette.blue700)
-                    .symbolEffect(.variableColor.iterative, isActive: persistentRecorder.isSegmentActive)
-                    .accessibilityHidden(true)
-
-                VStack(alignment: .leading, spacing: Geist.Spacing.one) {
-                    Text("Live transcript · sending immediately")
-                        .font(Geist.caption(.caption2))
-                        .foregroundStyle(Geist.Palette.blue700)
-                    Text(visibleTranscript.isEmpty ? String(localized: "Listening for speech…") : visibleTranscript)
-                        .font(Geist.body())
-                        .foregroundStyle(visibleTranscript.isEmpty ? Geist.muted : Geist.text)
-                        .lineLimit(4)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding(.horizontal, Geist.Spacing.four)
-            .padding(.vertical, Geist.Spacing.three)
-            .background(Geist.Palette.blue700.opacity(0.08))
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(
-                transcript.isEmpty
-                    ? String(localized: "Live transcript, listening for speech")
-                    : String(localized: "Live transcript, \(transcript)")
-            )
-            .accessibilityIdentifier("capture_live_transcription")
         }
     }
 
@@ -1329,7 +1277,7 @@ struct QuickCaptureView: View {
                 }
             }
             .overlay(alignment: .center) {
-                if viewModel.draft.text.isEmpty && viewModel.draft.additionalPayloads.isEmpty {
+                if InspirationQuotePresentation.shouldShow(forDraftText: viewModel.draft.text) {
                     inspirationPlaceholder
                         .task { await loadInspirationQuote() }
                 }
@@ -1346,49 +1294,30 @@ struct QuickCaptureView: View {
     private var inspirationPlaceholder: CaptureViewSection {
         CaptureViewSection {
             VStack(spacing: Geist.Spacing.three) {
-                if let prompt = activeCapturePrompt {
-                    CapturePresetIconView(symbolName: selectedFlow.symbolName, emoji: selectedFlow.emoji)
-                        .font(.system(size: 24, weight: .medium))
-                        .foregroundStyle(Geist.faint)
-                    Text(prompt)
+                VStack(spacing: Geist.Spacing.two) {
+                    Text(verbatim: "“\(inspirationQuote.text)”")
                         .font(Geist.body(.title3))
                         .foregroundStyle(Geist.faint)
                         .multilineTextAlignment(.center)
                         .lineLimit(5)
-                    Text(selectedFlow.displayName)
+
+                    Text(verbatim: "— \(inspirationQuote.author)")
                         .font(Geist.caption())
                         .foregroundStyle(Geist.faint)
-                } else {
-                    VStack(spacing: Geist.Spacing.two) {
-                        Text(verbatim: "“\(inspirationQuote.text)”")
-                            .font(Geist.body(.title3))
-                            .foregroundStyle(Geist.faint)
-                            .multilineTextAlignment(.center)
-                            .lineLimit(5)
-
-                        Text(verbatim: "— \(inspirationQuote.author)")
-                            .font(Geist.caption())
-                            .foregroundStyle(Geist.faint)
-                    }
-                    .accessibilityElement(children: .combine)
-
-                    Link(
-                        "ZenQuotes ↗",
-                        destination: URL(string: "https://zenquotes.io/")!
-                    )
-                    .font(Geist.caption(.caption2))
-                    .foregroundStyle(Geist.faint)
-                    .accessibilityLabel("Inspirational quotes provided by ZenQuotes API")
                 }
+                .accessibilityElement(children: .combine)
+
+                Link(
+                    "ZenQuotes ↗",
+                    destination: URL(string: "https://zenquotes.io/")!
+                )
+                .font(Geist.caption(.caption2))
+                .foregroundStyle(Geist.faint)
+                .accessibilityLabel("Inspirational quotes provided by ZenQuotes API")
             }
             .frame(maxWidth: 520)
             .padding(.horizontal, 28)
         }
-    }
-
-    private var activeCapturePrompt: String? {
-        let trimmed = selectedFlow.displayCapturePrompt
-        return trimmed.isEmpty ? nil : trimmed
     }
 
     private var watchRecordingStatusCard: CaptureViewSection {
@@ -2057,8 +1986,17 @@ struct QuickCaptureView: View {
         composerController.dismissKeyboard()
     }
 
+    /// Keep programmatic live speech behaving like text entered at the end of
+    /// the editor, without stealing the insertion point from active typing.
+    private func followLiveTranscriptTail(from previousText: String, to currentText: String) {
+        let previousEnd = previousText.utf16.count
+        let selectedEnd = composerSelection.location + composerSelection.length
+        guard !composerIsFocused || selectedEnd >= previousEnd else { return }
+        composerSelection = NSRange(location: currentText.utf16.count, length: 0)
+    }
+
     private func loadInspirationQuote() async {
-        guard activeCapturePrompt == nil, !hasLoadedInspirationQuote else { return }
+        guard !hasLoadedInspirationQuote else { return }
         let quote = await InspirationQuoteService.shared.nextQuote()
         guard !Task.isCancelled else { return }
         inspirationQuote = quote

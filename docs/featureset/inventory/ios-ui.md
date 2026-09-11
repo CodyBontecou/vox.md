@@ -18,12 +18,12 @@ LID: IU. Baseline inventory of every user-visible feature found in `Voxboard/Vie
 
 ### F-IU-02 Quick Capture composer (root screen)
 - Surface: `QuickCaptureView` — app root; Markdown text editor
-- Summary: A raw-Markdown `UITextView` composer where captures are typed. Shows a blinking caret placeholder when empty and unfocused, an inspiration quote (ZenQuotes API) or the preset's custom capture prompt when empty, and persists a durable draft on every change. Auto-focuses the composer on first load unless release notes are being shown or a modal is up.
+- Summary: A raw-Markdown `UITextView` composer where captures are typed. Shows a blinking caret when empty and unfocused and keeps an inspiration quote (ZenQuotes API) visible regardless of the selected preset or attachments until text is inserted. Persists a durable draft on every change and auto-focuses the composer on first load unless release notes are being shown or a modal is up.
 - Details:
   - Composer is a `MarkdownComposerTextView` (GeistMono 16pt, Dynamic Type scaling, autocorrection+spellcheck ON, smart quotes/dashes/insert OFF, interactive keyboard dismiss) — QuickCaptureView.swift:1602-1620, MarkdownComposerTextView.swift:94-125
   - Draft autosave on changes to text, voxID, destinationID, entryTemplateID, placementOverride, relativeNotePathOverride (QuickCaptureView.swift:300-320)
   - Blinking caret overlay when empty & unfocused; respects Reduce Motion (530 ms blink) (QuickCaptureView.swift:2276-2305)
-  - Inspiration placeholder: preset capture prompt if set, else ZenQuotes quote with attribution link to zenquotes.io (QuickCaptureView.swift:1622-1665)
+  - Inspiration placeholder: ZenQuotes quote with attribution link to zenquotes.io whenever the draft text is empty; preset selection and attachment-only drafts do not displace it (QuickCaptureView.swift)
   - "Capture Sent" toast after successful submit, 2 s, VoiceOver announced (QuickCaptureView.swift:1805-1813, presentSentToast 1502)
   - Background-scene draft save with `beginBackgroundTask` (handleScenePhaseChange 1423-1437)
   - Initial composer focus task with 180 ms delay, skipped if any capture modal is presented (fulfillInitialComposerFocusIfReady 1415-1448)
@@ -81,12 +81,12 @@ LID: IU. Baseline inventory of every user-visible feature found in `Voxboard/Vie
 - Evidence: `Voxboard/Views/QuickCaptureView.swift` (lines 588-726)
 - Status: shipped
 
-### F-IU-07 Inline live transcription bar (Send Immediately)
-- Surface: Above attachment strip in Quick Capture while recording
-- Summary: When recording with "Send Immediately" mode, shows a live transcript preview ("Live transcript · sending immediately") with finalized + volatile text, tail-truncated to last 320 characters, 4-line limit, "Listening for speech…" placeholder.
-- Details: shown only when `persistentRecorder.isSegmentActive && isCaptureLiveTranscriptionActive && lastStartedRecordingMode == .preset`; VoiceOver label announces full transcript (448-456, 513-552)
-- Constraints: Send-Immediately mode only
-- Evidence: `Voxboard/Views/QuickCaptureView.swift` (lines 447-456, 487-552)
+### F-IU-07 In-editor live transcription
+- Surface: The editable Quick Capture composer while an in-app recording is active
+- Summary: Finalized and tentative Apple Speech text appears directly in the Markdown editor for both "Add to Draft" and direct in-app "Send Immediately" recordings. The editor follows the transcript tail unless the user is actively editing elsewhere.
+- Details: There is no separate transcript banner or four-line truncation. Draft mode commits the final text in place; Send Immediately keeps the preview memory-only and removes it after the independent Preset handoff, preserving any text the user had already typed.
+- Constraints: Automatic backend on supported iOS versions; external Watch, widget, Shortcut, Live Activity, and keyboard recordings never rewrite the open composer.
+- Evidence: `Voxboard/Views/QuickCaptureView.swift` (`followLiveTranscriptTail`); `Voxboard/Capture/QuickCaptureCanvas.swift`; `Voxboard/PersistentRecorder.swift` (`previewsLiveTranscriptInComposer`)
 - Status: shipped
 
 ### F-IU-08 Keyboard listening (return guidance & status)

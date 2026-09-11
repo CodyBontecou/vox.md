@@ -32,7 +32,10 @@ STORIES = {
     ),
     "ipad": ("01-quick-capture", "02-history", "03-settings", "04-models", "05-live-recording"),
     "watch": ("01-ready", "02-recording", "03-synced"),
-    "mac": ("01-capture", "02-history", "03-settings", "04-models", "05-presets"),
+    "mac": (
+        "01-capture", "02-history", "03-settings", "04-models", "05-presets",
+        "06-recording-queue", "07-capture-route-inspector", "08-first-run-setup",
+    ),
 }
 
 

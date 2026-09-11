@@ -12,6 +12,14 @@ struct InspirationQuote: Codable, Equatable, Sendable {
     }
 }
 
+enum InspirationQuotePresentation {
+    /// Preset and attachment changes must not displace the empty-editor quote.
+    /// It behaves like a placeholder and leaves only when text is inserted.
+    static func shouldShow(forDraftText text: String) -> Bool {
+        text.isEmpty
+    }
+}
+
 actor InspirationQuoteService {
     static let shared = InspirationQuoteService()
 
