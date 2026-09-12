@@ -302,7 +302,7 @@ private fun VoxNavigation(
                     state = state,
                     recordingStatus = recordingStatus,
                     onSubmit = model::submit,
-                    consumeDelivery = model::consumeDelivery,
+                    consumeAcceptedCapture = model::consumeAcceptedCapture,
                     openHistory = { navController.navigate(Destination.History.route) },
                     openSettings = { navController.navigate(Destination.Settings.route) },
                     openPresets = { navController.navigate(Destination.Presets.route) },
@@ -367,7 +367,7 @@ private fun CaptureScreen(
     state: CaptureUiState,
     recordingStatus: RecordingStatus,
     onSubmit: (String, String?) -> Unit,
-    consumeDelivery: () -> Unit,
+    consumeAcceptedCapture: () -> Unit,
     openHistory: () -> Unit,
     openSettings: () -> Unit,
     openPresets: () -> Unit,
@@ -390,11 +390,11 @@ private fun CaptureScreen(
         focusRequester.requestFocus()
         keyboardController?.show()
     }
-    LaunchedEffect(state.deliveredRequestID) {
-        if (state.deliveredRequestID != null) {
+    LaunchedEffect(state.acceptedRequestID) {
+        if (state.acceptedRequestID != null) {
             text = ""
             capturedURL = null
-            consumeDelivery()
+            consumeAcceptedCapture()
         }
     }
 

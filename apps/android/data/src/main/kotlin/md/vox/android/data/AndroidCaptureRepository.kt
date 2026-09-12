@@ -100,7 +100,7 @@ class AndroidCaptureRepository(
         val draft = CaptureDraft(text, normalizedURL, clock())
         preferences.edit { values ->
             if (draft.text.isEmpty()) values.remove(draftTextKey) else values[draftTextKey] = draft.text
-            if (draft.url == null) values.remove(draftURLKey) else values[draftURLKey] = draft.url
+            draft.url?.let { values[draftURLKey] = it } ?: values.remove(draftURLKey)
             values[draftUpdatedAtKey] = draft.updatedAtEpochMillis
         }
         draft
