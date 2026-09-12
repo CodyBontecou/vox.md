@@ -117,7 +117,7 @@ struct CapturePresetQuickAccessSelector: View {
                 }
             }
         }
-        .accessibilityLabel(Text(verbatim: "Capture Preset \(selectedProfile.displayName)"))
+        .accessibilityLabel(Text(verbatim: "Capture Preset \(selectedProfile.accessibilityName)"))
         .accessibilityAddTraits(accessibilitySelectionTraits)
         .accessibilityHint(accessibilityHint)
         .accessibilityValue(accessibilityValue)
@@ -134,12 +134,16 @@ struct CapturePresetQuickAccessSelector: View {
                 // UIKit menu image slots cannot render Text, so emoji stays in
                 // the title while symbol-only presets use the native image slot.
                 if let emoji = CapturePresetEmoji.normalized(profile.emoji) {
-                    Text(verbatim: "\(emoji) \(profile.displayName)")
+                    if let name = profile.visibleName {
+                        Text(verbatim: "\(emoji) \(name)")
+                    } else {
+                        Text(verbatim: emoji)
+                    }
                 } else {
-                    Label(profile.displayName, systemImage: profile.symbolName)
+                    Label(profile.visibleName ?? "", systemImage: profile.symbolName)
                 }
             }
-            .accessibilityLabel(Text(verbatim: profile.displayName))
+            .accessibilityLabel(Text(verbatim: profile.accessibilityName))
             .accessibilityAddTraits(selectedProfile.id == profile.id ? .isSelected : [])
         }
     }
@@ -150,8 +154,10 @@ struct CapturePresetQuickAccessSelector: View {
                 symbolName: selectedProfile.symbolName,
                 emoji: selectedProfile.emoji
             )
-            Text(selectedProfile.displayName)
-                .lineLimit(1)
+            if let name = selectedProfile.visibleName {
+                Text(name)
+                    .lineLimit(1)
+            }
             Image(systemName: "chevron.up.chevron.down")
                 .font(.caption2)
         }
@@ -216,7 +222,7 @@ struct CapturePresetQuickAccessButton: View {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(Text(verbatim: profile.displayName))
+        .accessibilityLabel(Text(verbatim: profile.accessibilityName))
         .accessibilityAddTraits(isSelected ? .isSelected : [])
         .accessibilityHint(accessibilityHint)
         .accessibilityIdentifier("capture_preset_pin_\(profile.id)")

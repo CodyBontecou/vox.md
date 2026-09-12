@@ -491,7 +491,7 @@ struct MacFirstRunSetupView: View {
 
         let destination = CaptureDestination(
             id: viewModel.selectedPresetDestination?.id ?? UUID(),
-            name: preset.displayName,
+            name: preset.accessibilityName,
             rootBookmark: notesFolderBookmark,
             rootName: notesFolderName,
             noteTarget: .rollingNote(

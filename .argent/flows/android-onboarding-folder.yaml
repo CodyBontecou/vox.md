@@ -1,0 +1,28 @@
+steps:
+  - echo: Launch a clean Vox.md install. Expect first-run folder setup.
+  - launch: md.vox.android
+  - await: { visible: { text: Choose Markdown Folder } }
+  - await: { idle: true }
+  - echo: On first-run setup. Open Android's folder picker.
+  - tap:
+      text: Choose Markdown Folder
+  - await:
+      visible:
+        id: android:id/button1
+        text: USE THIS FOLDER
+  - await: { idle: true }
+  - echo: Android folder picker is open on Documents. Grant Vox.md access to this
+      folder.
+  - tap:
+      id: android:id/button1
+  - await:
+      visible:
+        id: com.google.android.documentsui:id/alertTitle
+        text: Allow Vox.md to access files in Documents?
+  - await: { idle: true }
+  - echo: Android confirms the selected folder. Allow scoped access and expect the
+      capture screen.
+  - tap:
+      id: android:id/button1
+  - await: { visible: { text: Start voice capture } }
+  - await: { idle: true }

@@ -48,10 +48,16 @@ struct QuickCaptureCanvas: View {
 }
 
 struct QuickCaptureOCRProgress: View {
+    var message: LocalizedStringKey = "Extracting text on this device…"
+
+    init(_ message: LocalizedStringKey = "Extracting text on this device…") {
+        self.message = message
+    }
+
     var body: some View {
         HStack(spacing: Geist.Spacing.two) {
             ProgressView().controlSize(.small)
-            Text("Extracting text on this device…")
+            Text(message)
                 .font(Geist.caption())
                 .foregroundStyle(Geist.muted)
             Spacer()

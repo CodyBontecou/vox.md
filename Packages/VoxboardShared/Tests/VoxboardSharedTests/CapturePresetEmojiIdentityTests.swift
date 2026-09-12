@@ -85,6 +85,23 @@ final class CapturePresetEmojiIdentityTests: XCTestCase {
         XCTAssertEqual(decoded.symbolName, "book")
     }
 
+    func test_iconOnlyPresetKeepsNameBlankForVisibleCompactSurfaces() {
+        let preset = CapturePreset(id: "icon-only", name: "  \n", symbolName: "book", emoji: "🤓")
+        XCTAssertNil(preset.visibleName)
+        XCTAssertEqual(preset.accessibilityName, String(localized: "Icon-only Capture Preset", bundle: .main))
+        XCTAssertEqual(preset.displayName, String(localized: "Untitled Preset", bundle: .main))
+        XCTAssertEqual(preset.shortLabel, "🤓")
+
+        let profile = preset.captureProfile
+        XCTAssertNil(profile.visibleName)
+        XCTAssertEqual(profile.accessibilityName, "Icon-only Capture Preset")
+        XCTAssertEqual(profile.displayName, "Untitled Preset")
+
+        let reference = CapturePresetReference(profile: profile)
+        XCTAssertEqual(reference.name, "")
+        XCTAssertEqual(reference.emoji, "🤓")
+    }
+
     func test_optionalEmojiFieldDoesNotRelaxExistingStringTypeContract() {
         let data = Data(#"{"id":"journal","name":"Journal","symbolName":"book","emoji":42}"#.utf8)
         XCTAssertThrowsError(try JSONDecoder().decode(CapturePreset.self, from: data))

@@ -54,7 +54,7 @@ class BackupAndPermissionContractTest {
     }
 
     @Test
-    fun manifestContainsNoForbiddenOrUnexpectedPermissions() {
+    fun manifestDeclaresOnlyTheReviewedVoiceServicePermissions() {
         val document = parse(mainSource.resolve("AndroidManifest.xml"))
         val permissionNodes = document.getElementsByTagName("uses-permission")
         val declared = (0 until permissionNodes.length).map { index ->
@@ -62,7 +62,6 @@ class BackupAndPermissionContractTest {
         }.toSet()
         val forbidden = setOf(
             "android.permission.INTERNET",
-            "android.permission.RECORD_AUDIO",
             "android.permission.ACCESS_COARSE_LOCATION",
             "android.permission.ACCESS_FINE_LOCATION",
             "android.permission.MANAGE_EXTERNAL_STORAGE",
@@ -73,7 +72,15 @@ class BackupAndPermissionContractTest {
             "android.permission.READ_MEDIA_VIDEO",
         )
 
-        assertTrue("No permission is required by the Phase 1 shell", declared.isEmpty())
+        assertEquals(
+            setOf(
+                "android.permission.RECORD_AUDIO",
+                "android.permission.FOREGROUND_SERVICE",
+                "android.permission.FOREGROUND_SERVICE_MICROPHONE",
+                "android.permission.POST_NOTIFICATIONS",
+            ),
+            declared,
+        )
         assertFalse("Forbidden permissions present: ${declared.intersect(forbidden)}", declared.any(forbidden::contains))
     }
 

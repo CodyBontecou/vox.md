@@ -6,6 +6,7 @@ struct ModelTabView: View {
     @Environment(ModelManager.self) private var modelManager
     @State private var automaticAvailability: SystemTranscriptionAvailability = .unavailable
     @State private var voiceAutoStopEnabled = AppConstants.voiceAutoStopEnabled
+    @State private var isVoiceAutoStopAdvancedOptionsExpanded = false
     @State private var voiceAutoStopPauseDuration = AppConstants.voiceAutoStopPauseDuration
     @State private var enabledVoiceAutoStopCapturePaths = Set(
         VoiceAutoStopCapturePath.allCases.filter {
@@ -447,53 +448,56 @@ struct ModelTabView: View {
                     .foregroundStyle(Geist.text)
                     .disabled(!isDownloaded)
 
-                VStack(alignment: .leading, spacing: Geist.Spacing.three) {
-                    Text("Capture Paths")
-                        .font(Geist.label(.body))
-                        .foregroundStyle(Geist.text)
+                DisclosureGroup(isExpanded: $isVoiceAutoStopAdvancedOptionsExpanded) {
+                    VStack(alignment: .leading, spacing: Geist.Spacing.three) {
+                        GeistDivider()
 
-                    ForEach(VoiceAutoStopCapturePath.allCases, id: \.self) { path in
-                        Toggle(isOn: voiceAutoStopCapturePathBinding(for: path)) {
-                            VStack(alignment: .leading, spacing: Geist.Spacing.one) {
-                                Text(voiceAutoStopCapturePathTitle(path))
-                                    .font(Geist.body())
-                                    .foregroundStyle(Geist.text)
-                                Text(voiceAutoStopCapturePathDescription(path))
-                                    .font(Geist.caption())
-                                    .foregroundStyle(Geist.muted)
+                        VStack(alignment: .leading, spacing: Geist.Spacing.three) {
+                            Text("Capture Paths")
+                                .font(Geist.label(.body))
+                                .foregroundStyle(Geist.text)
+
+                            ForEach(VoiceAutoStopCapturePath.allCases, id: \.self) { path in
+                                Toggle(isOn: voiceAutoStopCapturePathBinding(for: path)) {
+                                    VStack(alignment: .leading, spacing: Geist.Spacing.one) {
+                                        Text(voiceAutoStopCapturePathTitle(path))
+                                            .font(Geist.body())
+                                            .foregroundStyle(Geist.text)
+                                        Text(voiceAutoStopCapturePathDescription(path))
+                                            .font(Geist.caption())
+                                            .foregroundStyle(Geist.muted)
+                                    }
+                                }
+                                .tint(Color(uiColor: .systemGreen))
+                                .padding(.trailing, Geist.Spacing.one)
                             }
                         }
+                        .disabled(!isDownloaded || !voiceAutoStopEnabled)
+
+                        voiceAutoStopPreferenceMenus
+                            .disabled(!isDownloaded || !voiceAutoStopEnabled)
+
+                        Text(isDownloaded
+                            ? "Choose exactly where auto-stop runs. Every enabled path works with Automatic, Whisper, and Parakeet. Pause timing is approximate. Keep Listening saves each finished thought as its own segment and stays open for up to \(Int(AppConstants.voiceAutoStopContinuousSessionLimit / 60)) minutes per session."
+                            : "Until this companion is downloaded, live recordings keep using manual stop.")
+                            .font(Geist.caption())
+                            .foregroundStyle(Geist.muted)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
+                    .padding(.top, Geist.Spacing.two)
+                } label: {
+                    Text("Advanced Options")
+                        .font(Geist.label(.body))
+                        .foregroundStyle(Geist.text)
+                        .frame(
+                            maxWidth: .infinity,
+                            minHeight: Geist.ControlHeight.large,
+                            alignment: .leading
+                        )
+                        .contentShape(Rectangle())
+                        .accessibilityHint("Show or hide capture path settings.")
                 }
-                .disabled(!isDownloaded || !voiceAutoStopEnabled)
-
-                Picker("Pause Length", selection: $voiceAutoStopPauseDuration) {
-                    Text("0.5 seconds").tag(0.5)
-                    Text("0.75 seconds").tag(0.75)
-                    Text("1 second").tag(1.0)
-                    Text("1.5 seconds").tag(1.5)
-                    Text("2 seconds").tag(2.0)
-                }
-                .pickerStyle(.menu)
-                .font(Geist.body())
                 .tint(Geist.text)
-                .disabled(!isDownloaded || !voiceAutoStopEnabled)
-
-                Picker("On End of Speech", selection: $voiceAutoStopSavesSegmentsAndContinues) {
-                    Text("Stop Recording").tag(false)
-                    Text("Save Segment & Keep Listening").tag(true)
-                }
-                .pickerStyle(.menu)
-                .font(Geist.body())
-                .tint(Geist.text)
-                .disabled(!isDownloaded || !voiceAutoStopEnabled)
-
-                Text(isDownloaded
-                    ? "Choose exactly where auto-stop runs. Every enabled path works with Automatic, Whisper, and Parakeet. Pause timing is approximate. Keep Listening saves each finished thought as its own segment and stays open for up to \(Int(AppConstants.voiceAutoStopContinuousSessionLimit / 60)) minutes per session."
-                    : "Until this companion is downloaded, live recordings keep using manual stop.")
-                    .font(Geist.caption())
-                    .foregroundStyle(Geist.muted)
-                    .fixedSize(horizontal: false, vertical: true)
             }
             .padding(Geist.Spacing.four)
             .background(Geist.Palette.background100)
@@ -503,6 +507,73 @@ struct ModelTabView: View {
             )
             .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous))
         }
+    }
+
+    private var voiceAutoStopPreferenceMenus: some View {
+        VStack(spacing: 0) {
+            Menu {
+                Picker("Pause Length", selection: $voiceAutoStopPauseDuration) {
+                    Text("0.5 seconds").tag(0.5)
+                    Text("0.75 seconds").tag(0.75)
+                    Text("1 second").tag(1.0)
+                    Text("1.5 seconds").tag(1.5)
+                    Text("2 seconds").tag(2.0)
+                }
+            } label: {
+                VoiceAutoStopMenuLabel(
+                    title: "Pause Length",
+                    value: voiceAutoStopPauseDurationLabel
+                )
+            }
+            .accessibilityLabel("Pause Length")
+            .accessibilityValue(voiceAutoStopPauseDurationLabel)
+            .accessibilityHint("Choose how long silence lasts before auto-stop responds.")
+            .accessibilityIdentifier("voiceAutoStop.pauseLength")
+
+            GeistDivider()
+                .padding(.leading, Geist.Spacing.three)
+
+            Menu {
+                Picker(
+                    "On End of Speech",
+                    selection: $voiceAutoStopSavesSegmentsAndContinues
+                ) {
+                    Text("Stop Recording").tag(false)
+                    Text("Save Segment & Keep Listening").tag(true)
+                }
+            } label: {
+                VoiceAutoStopMenuLabel(
+                    title: "On End of Speech",
+                    value: voiceAutoStopEndOfSpeechLabel
+                )
+            }
+            .accessibilityLabel("On End of Speech")
+            .accessibilityValue(voiceAutoStopEndOfSpeechLabel)
+            .accessibilityHint("Choose whether auto-stop ends recording or saves a segment and keeps listening.")
+            .accessibilityIdentifier("voiceAutoStop.endOfSpeech")
+        }
+        .background(Geist.Palette.grayAlpha100)
+        .overlay(
+            RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous)
+                .stroke(Geist.border, lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous))
+    }
+
+    private var voiceAutoStopPauseDurationLabel: LocalizedStringKey {
+        switch voiceAutoStopPauseDuration {
+        case 0.5: return "0.5 seconds"
+        case 0.75: return "0.75 seconds"
+        case 1.5: return "1.5 seconds"
+        case 2.0: return "2 seconds"
+        default: return "1 second"
+        }
+    }
+
+    private var voiceAutoStopEndOfSpeechLabel: LocalizedStringKey {
+        voiceAutoStopSavesSegmentsAndContinues
+            ? "Save Segment & Keep Listening"
+            : "Stop Recording"
     }
 
     private func voiceAutoStopCapturePathBinding(
@@ -601,5 +672,39 @@ struct ModelTabView: View {
                 }
             }
         }
+    }
+}
+
+private struct VoiceAutoStopMenuLabel: View {
+    let title: LocalizedStringKey
+    let value: LocalizedStringKey
+
+    @Environment(\.isEnabled) private var isEnabled
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Geist.Spacing.one) {
+            Text(title)
+                .font(Geist.caption())
+                .foregroundStyle(isEnabled ? Geist.muted : Geist.faint)
+
+            HStack(spacing: Geist.Spacing.two) {
+                Text(value)
+                    .font(Geist.label(.body))
+                    .foregroundStyle(isEnabled ? Geist.text : Geist.muted)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Spacer(minLength: Geist.Spacing.two)
+
+                Image(systemName: "chevron.up.chevron.down")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(Geist.faint)
+                    .accessibilityHidden(true)
+            }
+        }
+        .padding(.horizontal, Geist.Spacing.three)
+        .padding(.vertical, Geist.Spacing.two)
+        .frame(maxWidth: .infinity, minHeight: 56, alignment: .leading)
+        .contentShape(Rectangle())
     }
 }

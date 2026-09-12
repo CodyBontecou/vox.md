@@ -102,7 +102,7 @@ LID: IU. Baseline inventory of every user-visible feature found in `Voxboard/Vie
 
 ### F-IU-09 Photo / screenshot attachment pickers
 - Surface: Editor toolbar Add Media menu (Photo, Screenshot)
-- Summary: Two PhotosUI pickers (images vs screenshots), each limited to 10 selections, staging picked images as draft payloads. Screenshots get localized alt text "Screenshot"; filenames are `photo-<uuid>.<ext>` / `screenshot-<uuid>.<ext>`.
+- Summary: Two PhotosUI pickers (images vs screenshots), each limited to 10 selections, staging picked images as draft payloads. Opted-in Capture Presets describe staged images on device before Send so generated labels appear in the attachment strip; screenshots start with localized placeholder alt text "Screenshot" until replaced. Filenames are `photo-<uuid>.<ext>` / `screenshot-<uuid>.<ext>`.
 - Details: `.photosPicker` modifiers (607-625); `importPhotos`/`importScreenshots` stage via `viewModel.stageImage`, set `isProcessingMedia`, refocus composer on completion, per-item error surfacing (1520-1570)
 - Constraints: max 10 per batch; media processing blocks recording start and send
 - Evidence: `Voxboard/Views/QuickCaptureView.swift` (lines 607-625, 1520-1570)
@@ -213,11 +213,11 @@ LID: IU. Baseline inventory of every user-visible feature found in `Voxboard/Vie
 - Status: shipped
 
 ### F-IU-21 Current location insertion
-- Surface: Editor toolbar location action; also preset location status bar
-- Summary: One-shot `CLLocationManager` request inserts a Google Maps Markdown link (lat/long/label) at the composer selection; shows a "Finding Location…" status bar while active; cancelled when leaving Capture; errors surface in the error banner. When the selected preset has location enabled, a persistent "Current Location On · <preset>" status bar is shown (or Finding Location… while the recorder resolves).
-- Details: `locationRequestTask` cancellation on background/disappear (1423-1443, 1450-1469); accessibility ids `capture_finding_preset_location` / `capture_active_preset_location` (1196-1235)
+- Surface: Editor toolbar location action
+- Summary: One-shot `CLLocationManager` request inserts a Google Maps Markdown link (lat/long/label) at the composer selection; shows a transient "Finding Location…" status bar only while a lookup is active; cancelled when leaving Capture; errors surface in the error banner. Preset location remains configured in Capture Preset settings without adding a persistent status row to Quick Capture.
+- Details: `locationRequestTask` cancellation on background/disappear; in-flight accessibility id `capture_finding_preset_location`
 - Constraints: location permission; one-shot only, not background tracking
-- Evidence: `Voxboard/Views/QuickCaptureView.swift` (lines 1186-1235, 1450-1469)
+- Evidence: `Voxboard/Views/QuickCaptureView.swift` (`captureControls`, `locationProgressBar`, `insertCurrentLocation`)
 - Status: shipped
 
 ### F-IU-22 Location unavailable decision dialogs

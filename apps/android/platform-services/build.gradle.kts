@@ -9,4 +9,6 @@ android {
 
 dependencies {
     implementation(project(":capture-domain"))
+    implementation(libs.core.ktx)
+    implementation(libs.coroutines.android)
 }

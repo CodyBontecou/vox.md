@@ -43,9 +43,9 @@ The original implementation plan follows for traceability.
 | Existing enrichment | Improve cleanup, titles, tags, categories, checklists, meeting formatting, custom instructions, and existing folder routing. |
 | Image option | Add **Generate Image Alt Text** to each Capture Preset, off by default, under the existing **Use Apple Intelligence** gate. |
 | Image-only processing | Allow the image option with text Mode set to **Keep Original**. Voice/Text scope controls text processing only. Turning off the master gate disables both. |
-| Eligible images | Newly submitted staged photos, screenshots, camera/pasted images, and sketch previews represented by image/sketch payloads. |
+| Eligible images | Newly attached or submitted staged photos, screenshots, camera/pasted images, and sketch previews represented by image/sketch payloads. |
 | Description output | One short factual description, normally one sentence, in the supported app language, stored with its attachment and exported as image alt text. |
-| Timing | Generate during the existing Send/preparation flow, before the destination write. Show progress through the existing submission state. |
+| Timing | Generate when an image is attached so the attachment chip can show the generated label before Send. Keep the existing Send/preparation fallback for deferred or queued captures, before the destination write. |
 | Existing descriptions | Preserve provided descriptions, including an explicitly provided empty value. Replace only missing descriptions or placeholders explicitly marked by the app. |
 | Failure | Preserve the original attachment and existing label. Complete delivery using the existing fallback policy. |
 | Platform support | Existing text enrichment on eligible iOS/macOS 26+ devices; new image support on eligible iOS/iPadOS/macOS 27+ devices. Keep current minimum deployment targets. |
@@ -126,7 +126,7 @@ For generated descriptions, emit standard Markdown image syntax with the planned
 
 Use the same attachment filename and destination rules. Escape the label and encode the path for Markdown, including spaces, brackets, parentheses, percent signs, and hash characters. Preserve current wiki-embed output when generation is off, skipped, or fails. For sketches, apply the description to the preview and keep the editable-drawing link. Verify actual image alt semantics in Obsidian and a standard Markdown renderer, including VoiceOver; a visible caption or embed sizing parameter does not satisfy this requirement.
 
-Add the toggle to the iOS and Mac preset editors alongside the current processing controls. Suggested help: “Describe photos, screenshots, and sketches on this device. Existing descriptions are preserved.” Explain that Keep Original controls text, and that the image option is separate from Voice/Text scope. Show an availability reason on unsupported devices or when assets are unavailable; preserve a saved preference through temporary unavailability. Existing captures remain usable. Update relevant localization resources and the processing help/footer text.
+Add the toggle to the iOS and Mac preset editors alongside the current processing controls. Suggested help: “Describe photos, screenshots, and sketches on this device when you attach them. Existing descriptions are preserved.” Explain that Keep Original controls text, and that the image option is separate from Voice/Text scope. Show an availability reason on unsupported devices or when assets are unavailable; preserve a saved preference through temporary unavailability. Existing captures remain usable. Update relevant localization resources and the processing help/footer text.
 
 Use the existing submission progress surface for “Describing images…” while active. Generation happens on Send; this scope adds no new image-description editor or automatic pre-Send analysis.
 

@@ -67,11 +67,13 @@ struct CapturePresetWidgetView: View {
                         .widgetAccentable()
                         .presetWidgetBounds("small-icon")
                     if !compactText { Spacer(minLength: 0) }
-                    Text(tileTitle(tile))
-                        .font(.headline)
-                        .lineLimit(compactText ? 1 : 2)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .presetWidgetBounds("small-name")
+                    if let title = tileVisibleTitle(tile) {
+                        Text(title)
+                            .font(.headline)
+                            .lineLimit(compactText ? 1 : 2)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .presetWidgetBounds("small-name")
+                    }
                     if !compactText {
                         Text(available ? "Open Capture" : "Fix in Settings")
                             .font(.caption2)
@@ -85,7 +87,7 @@ struct CapturePresetWidgetView: View {
         }
         .widgetURL(tile.captureURL ?? Self.setupURL)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(available ? tileTitle(tile) : String(localized: "\(tileTitle(tile)), unavailable"))
+        .accessibilityLabel(available ? tileAccessibilityTitle(tile) : String(localized: "\(tileAccessibilityTitle(tile)), unavailable"))
         .accessibilityHint(available
             ? "Opens Vox.md. Does not send or record."
             : "Edit this widget, or open Vox.md, then Settings > Capture Presets.")
@@ -169,8 +171,18 @@ struct CapturePresetWidgetView: View {
         .accessibilityHint("Open Vox.md, then Settings > Capture Presets. Pin presets or edit this widget to choose Custom.")
     }
 
-    private func tileTitle(_ tile: CapturePresetWidgetTile) -> String {
-        tile.identity?.name ?? (tile.presetID == nil ? String(localized: "Choose preset") : String(localized: "Unavailable preset"))
+    private func tileVisibleTitle(_ tile: CapturePresetWidgetTile) -> String? {
+        if let identity = tile.identity {
+            let title = identity.name.trimmingCharacters(in: .whitespacesAndNewlines)
+            return title.isEmpty ? nil : title
+        }
+        return tile.presetID == nil ? String(localized: "Choose preset") : String(localized: "Unavailable preset")
+    }
+
+    private func tileAccessibilityTitle(_ tile: CapturePresetWidgetTile) -> String {
+        tile.identity?.accessibilityName
+            ?? tileVisibleTitle(tile)
+            ?? String(localized: "Icon-only Capture Preset")
     }
 }
 
@@ -180,8 +192,18 @@ private struct CapturePresetWidgetTileView: View {
     let compactText: Bool
 
     private var available: Bool { tile.availability == .available && tile.captureURL != nil }
-    private var title: String {
-        tile.identity?.name ?? (tile.presetID == nil ? String(localized: "Choose preset") : String(localized: "Unavailable preset"))
+    private var title: String? {
+        if let identity = tile.identity {
+            let title = identity.name.trimmingCharacters(in: .whitespacesAndNewlines)
+            return title.isEmpty ? nil : title
+        }
+        return tile.presetID == nil ? String(localized: "Choose preset") : String(localized: "Unavailable preset")
+    }
+
+    private var accessibilityTitle: String {
+        tile.identity?.accessibilityName
+            ?? title
+            ?? String(localized: "Icon-only Capture Preset")
     }
 
     var body: some View {
@@ -198,19 +220,21 @@ private struct CapturePresetWidgetTileView: View {
                     }
                 } else {
                     icon
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(compactText && !available ? String(localized: "Fix: \(title)") : title)
-                            .font(large ? (compactText ? .caption2 : .subheadline) : .caption2)
-                            .fontWeight(.semibold)
-                            .lineLimit(large && !compactText ? 2 : 1)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .presetWidgetBounds("\(tile.id)-name")
-                        if !available && !compactText {
-                            Text("Fix")
-                                .font(.caption2)
-                                .lineLimit(1)
+                    if let title {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(compactText && !available ? String(localized: "Fix: \(title)") : title)
+                                .font(large ? (compactText ? .caption2 : .subheadline) : .caption2)
+                                .fontWeight(.semibold)
+                                .lineLimit(large && !compactText ? 2 : 1)
                                 .fixedSize(horizontal: false, vertical: true)
-                                .presetWidgetBounds("\(tile.id)-fix")
+                                .presetWidgetBounds("\(tile.id)-name")
+                            if !available && !compactText {
+                                Text("Fix")
+                                    .font(.caption2)
+                                    .lineLimit(1)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .presetWidgetBounds("\(tile.id)-fix")
+                            }
                         }
                     }
                     Spacer(minLength: 0)
@@ -222,7 +246,7 @@ private struct CapturePresetWidgetTileView: View {
             .presetWidgetBounds("\(tile.id)-tile")
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(available ? title : String(localized: "\(title), unavailable"))
+        .accessibilityLabel(available ? accessibilityTitle : String(localized: "\(accessibilityTitle), unavailable"))
         .accessibilityHint(available
             ? "Opens Vox.md. Does not send or record."
             : "Edit this widget, or open Vox.md, then Settings > Capture Presets.")

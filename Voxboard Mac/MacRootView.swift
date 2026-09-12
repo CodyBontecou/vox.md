@@ -668,11 +668,12 @@ private struct MacCapturePresetSettingsView: View {
                 List(selection: $selectedFlowId) {
                     ForEach(flows) { flow in
                         Label {
-                            Text(flow.displayName)
+                            Text(flow.visibleName ?? String(localized: "Icon-only preset"))
+                                .foregroundStyle(flow.visibleName == nil ? .secondary : .primary)
                         } icon: {
                             CapturePresetIconView(symbolName: flow.symbolName, emoji: flow.emoji)
                         }
-                        .accessibilityLabel(flow.displayName)
+                        .accessibilityLabel(flow.accessibilityName)
                         .tag(flow.id)
                     }
                 }
@@ -819,9 +820,9 @@ private struct MacCapturePresetEditor: View {
         Form {
             Section("Identity") {
                 TextField(
-                    "Name",
+                    "Name (optional)",
                     text: Binding(
-                        get: { flow.displayName },
+                        get: { flow.name },
                         set: { flow.name = $0 }
                     )
                 )
@@ -847,7 +848,7 @@ private struct MacCapturePresetEditor: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Icon for \(flow.displayName)")
+                .accessibilityLabel("Icon for \(flow.accessibilityName)")
                 .accessibilityValue(CapturePresetEmoji.normalized(flow.emoji)
                                     ?? MacFlowIconPickerView.title(for: flow.symbolName))
                 .accessibilityIdentifier("mac_preset_icon_picker")
@@ -1162,7 +1163,7 @@ private struct MacCapturePresetEditor: View {
                 MacAudioFilenameTemplateSetting(
                     template: $flow.audioFilenameTemplate,
                     isAudioSavingEnabled: flow.audioSaveMode != .off,
-                    presetName: flow.displayName
+                    presetName: flow.visibleName ?? ""
                 )
                 if flow.audioSaveMode != .off {
                     Toggle("Embed Audio in Markdown", isOn: $flow.exportSettings.embedAudioInMarkdown)
@@ -1190,10 +1191,10 @@ private struct MacCapturePresetEditor: View {
         }
         .formStyle(.grouped)
         .padding(.horizontal, 18)
-        .navigationTitle(flow.displayName)
+        .navigationTitle(flow.visibleName ?? String(localized: "Capture Preset"))
         .sheet(isPresented: $isIconPickerPresented) {
             MacFlowIconPickerView(
-                presetName: flow.displayName,
+                presetName: flow.accessibilityName,
                 symbolName: flow.symbolName,
                 emoji: flow.emoji
             ) { symbolName, emoji in
@@ -1209,7 +1210,7 @@ private struct MacCapturePresetEditor: View {
             MacCaptureDestinationEditor(
                 existing: ownedDestination,
                 templates: captureEntryTemplates,
-                fixedName: flow.displayName
+                fixedName: flow.visibleName ?? String(localized: "Icon-only preset")
             ) { destination in
                 try await saveOwnedDestination(destination)
             }
@@ -3147,7 +3148,7 @@ struct MacSettingsView: View {
                     ForEach(enabledHotKeyFlows) { flow in
                         hotKeyRow(
                             target: .preset(flow.id),
-                            title: flow.displayName,
+                            title: flow.visibleName ?? String(localized: "Icon-only preset"),
                             detail: hotKeyRouteSummary(for: flow)
                         )
                     }
@@ -3225,7 +3226,7 @@ struct MacSettingsView: View {
         case .selectedPreset:
             return String(localized: "Selected Capture Preset")
         case .preset(let presetID):
-            return hotKeyFlows.first(where: { $0.id == presetID })?.displayName
+            return hotKeyFlows.first(where: { $0.id == presetID }).map { $0.visibleName ?? String(localized: "Icon-only preset") }
                 ?? String(localized: "Capture Preset")
         }
     }

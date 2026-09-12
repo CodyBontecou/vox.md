@@ -351,7 +351,7 @@ struct MacActivityView: View {
                     Text("No Enabled Capture Presets")
                 } else {
                     ForEach(recoveryPresets) { preset in
-                        Button(preset.displayName) {
+                        Button(preset.accessibilityName) {
                             Task { await retry(job, delivery: .preset(preset)) }
                         }
                     }
@@ -958,7 +958,7 @@ private struct MacActivityRecordingDetail: View {
                     Text("No Enabled Capture Presets")
                 } else {
                     ForEach(recoveryPresets) { preset in
-                        Button(preset.displayName) {
+                        Button(preset.accessibilityName) {
                             Task { await retry(delivery: .preset(preset)) }
                         }
                     }
@@ -1240,7 +1240,7 @@ private enum MacActivityRevealError: Error, LocalizedError {
 private extension RecordingJob {
     var activityTitle: String {
         switch delivery {
-        case .preset(let preset): preset.displayName
+        case .preset(let preset): preset.accessibilityName
         case .captureDraft: String(localized: "Capture Recording")
         case .clipboard: String(localized: "Clipboard Transcription")
         case .keyboard: String(localized: "Keyboard Transcription")

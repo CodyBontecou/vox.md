@@ -458,11 +458,13 @@ struct WatchRecorderView: View {
                     Text("Capture Preset")
                         .font(WatchGeist.caption())
                         .foregroundStyle(WatchGeist.muted)
-                    Text(displayedPresetName)
-                        .font(WatchGeist.label(.caption2))
-                        .foregroundStyle(WatchGeist.text)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.72)
+                    if let visibleName = displayedPresetVisibleName {
+                        Text(visibleName)
+                            .font(WatchGeist.label(.caption2))
+                            .foregroundStyle(WatchGeist.text)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.72)
+                    }
                 }
 
                 Spacer(minLength: WatchGeist.Spacing.one)
@@ -501,14 +503,25 @@ struct WatchRecorderView: View {
 
     private var displayedPresetName: String {
         localRecorder.recordingPresetName
+            ?? selectedPresetSummary?.displayName
             ?? bridge.snapshot.selectedPresetName
             ?? String(localized: "iPhone Default")
     }
 
-    private var selectedPresetSymbolName: String {
+    private var displayedPresetVisibleName: String? {
+        if let localName = localRecorder.recordingPresetName { return localName }
+        if let summary = selectedPresetSummary { return summary.visibleName }
+        return bridge.snapshot.selectedPresetName ?? String(localized: "iPhone Default")
+    }
+
+    private var selectedPresetSummary: WatchCapturePresetSummary? {
         bridge.snapshot.availablePresets.first(where: {
             $0.id == bridge.snapshot.selectedPresetID
-        })?.symbolName ?? "waveform"
+        })
+    }
+
+    private var selectedPresetSymbolName: String {
+        selectedPresetSummary?.symbolName ?? "waveform"
     }
 
     private var canStartRecording: Bool {
@@ -812,12 +825,16 @@ private struct WatchCapturePresetPickerView: View {
                     .background(isSelected || isPending ? WatchGeist.blueBackground : WatchGeist.surface)
                     .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
 
-                Text(preset.displayName)
-                    .font(WatchGeist.label(.caption))
-                    .foregroundStyle(WatchGeist.text)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.75)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                if let visibleName = preset.visibleName {
+                    Text(visibleName)
+                        .font(WatchGeist.label(.caption))
+                        .foregroundStyle(WatchGeist.text)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.75)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    Spacer(minLength: 0)
+                }
 
                 if isPending {
                     ProgressView()

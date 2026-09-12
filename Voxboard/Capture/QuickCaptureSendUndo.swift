@@ -1,85 +1,253 @@
 import Foundation
+import UniformTypeIdentifiers
 import VoxboardShared
 
-/// Snapshot of a just-sent Capture kept alive for the sent-toast undo window.
+/// A value snapshot of the Capture that just finished sending.
 ///
-/// Restoring only puts the outgoing content back into the quick-capture
-/// composer as an editable draft. The note that was already written to the
-/// user's vault is intentionally left untouched — reversing vault writes is
-/// out of scope for this feature, and the user can delete the sent note
-/// themselves.
+/// Value-backed payloads can be retained directly. Delivery moves staged files,
+/// so audio is first hard-linked (or copied when linking is unavailable) into a
+/// short-lived cache owned by the Undo snapshot.
 struct SentCaptureUndoSnapshot: Equatable {
-    /// Matches the `CaptureReceipt.requestID` produced by the send, so an
-    /// undo offer is only kept when the receipt belongs to the composer
-    /// send that created the snapshot.
+    let id: UUID
     let requestID: UUID
     let text: String
-    /// Value-based payloads (text/link) that can round-trip back into a
-    /// draft without restaging files. Asset-backed payloads are counted for
-    /// messaging but not restored, because delivery moves their files into
-    /// the destination note.
     let restorablePayloads: [CapturePayload]
+    let cachedAudioPayloads: [CapturePayload]
     let sentAttachmentCount: Int
     let presetDisplayName: String
+    let audioCacheDirectoryURL: URL?
+
+    init(
+        id: UUID = UUID(),
+        requestID: UUID,
+        text: String,
+        restorablePayloads: [CapturePayload],
+        cachedAudioPayloads: [CapturePayload] = [],
+        sentAttachmentCount: Int,
+        presetDisplayName: String,
+        audioCacheDirectoryURL: URL? = nil
+    ) {
+        self.id = id
+        self.requestID = requestID
+        self.text = text
+        self.restorablePayloads = restorablePayloads
+        self.cachedAudioPayloads = cachedAudioPayloads
+        self.sentAttachmentCount = sentAttachmentCount
+        self.presetDisplayName = presetDisplayName
+        self.audioCacheDirectoryURL = audioCacheDirectoryURL
+    }
 
     var offersUndo: Bool {
         !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             || !restorablePayloads.isEmpty
+            || !cachedAudioPayloads.isEmpty
+    }
+
+    var summaryText: String {
+        if sentAttachmentCount > 0 {
+            return sentAttachmentCount == 1
+                ? String(localized: "Capture and attachment sent to \(presetDisplayName)")
+                : String(localized: "Capture and attachments sent to \(presetDisplayName)")
+        }
+        return String(localized: "Capture sent to \(presetDisplayName)")
+    }
+
+    func discardCachedAudio(fileManager: FileManager = .default) {
+        guard let audioCacheDirectoryURL else { return }
+        try? fileManager.removeItem(at: audioCacheDirectoryURL)
     }
 }
 
-@MainActor
 enum SentCaptureUndo {
-    /// How long the sent toast keeps its Undo action available.
     static let toastWindow: Duration = .seconds(5)
+    static let audioCacheDirectoryName = "sent-undo-audio"
 
-    /// Must be called before `QuickCaptureViewModel.submit()` clears the
-    /// live draft: this is the only moment the outgoing text still exists.
-    static func snapshot(draft: CaptureDraft, presetDisplayName: String) -> SentCaptureUndoSnapshot {
-        SentCaptureUndoSnapshot(
+    static func audioCacheRootURL(captureRootURL: URL?) -> URL? {
+        captureRootURL?.appendingPathComponent(audioCacheDirectoryName, isDirectory: true)
+    }
+
+    /// No Undo window survives a process restart, so no audio cache should.
+    static func discardAbandonedAudioCache(
+        captureRootURL: URL?,
+        fileManager: FileManager = .default
+    ) {
+        guard let rootURL = audioCacheRootURL(captureRootURL: captureRootURL) else { return }
+        try? fileManager.removeItem(at: rootURL)
+    }
+
+    static func snapshot(
+        draft: CaptureDraft,
+        presetDisplayName: String,
+        stagingDirectoryURL: URL? = nil,
+        audioCacheRootURL: URL? = nil,
+        fileManager: FileManager = .default
+    ) -> SentCaptureUndoSnapshot {
+        let snapshotID = UUID()
+        let cached = cacheAudioPayloads(
+            in: draft.additionalPayloads,
+            snapshotID: snapshotID,
+            sourceDirectoryURL: stagingDirectoryURL,
+            cacheRootURL: audioCacheRootURL,
+            fileManager: fileManager
+        )
+        return SentCaptureUndoSnapshot(
+            id: snapshotID,
             requestID: draft.requestID,
             text: draft.text,
             restorablePayloads: draft.additionalPayloads.filter(\.isRestorableAfterSend),
+            cachedAudioPayloads: cached.payloads,
             sentAttachmentCount: draft.additionalPayloads.count,
-            presetDisplayName: presetDisplayName
+            presetDisplayName: presetDisplayName,
+            audioCacheDirectoryURL: cached.directoryURL
         )
     }
 
-    /// Restores the snapshot into the live composer draft. Any content the
-    /// user typed after the send is preserved by appending; undo never
-    /// discards newer input.
-    static func apply(_ snapshot: SentCaptureUndoSnapshot, to viewModel: QuickCaptureViewModel) async -> Bool {
-        guard snapshot.offersUndo else { return false }
-        guard !viewModel.hasLiveRecordedTranscriptPreview else {
-            viewModel.errorMessage = String(
-                localized: "Finish the current recording before restoring the sent Capture."
-            )
-            return false
+    static func snapshot(
+        requestID: UUID,
+        text: String,
+        recordedAudioURL: URL,
+        originalFilename: String? = nil,
+        presetDisplayName: String,
+        audioCacheRootURL: URL?,
+        fileManager: FileManager = .default
+    ) -> SentCaptureUndoSnapshot {
+        let safeOriginalFilename = CaptureAssetStager.sanitizedFilename(
+            originalFilename ?? recordedAudioURL.lastPathComponent,
+            fallbackExtension: recordedAudioURL.pathExtension.isEmpty ? "wav" : recordedAudioURL.pathExtension
+        )
+        let contentTypeIdentifier = UTType(filenameExtension: recordedAudioURL.pathExtension)?.identifier
+            ?? UTType.audio.identifier
+        let byteCount = (try? recordedAudioURL.resourceValues(forKeys: [.fileSizeKey]).fileSize)
+            .map(Int64.init)
+        let asset = try? CaptureAssetReference(
+            relativePath: recordedAudioURL.lastPathComponent,
+            originalFilename: safeOriginalFilename,
+            contentTypeIdentifier: contentTypeIdentifier,
+            byteCount: byteCount
+        )
+        let draft = CaptureDraft(
+            requestID: requestID,
+            text: text,
+            additionalPayloads: asset.map { [.audio($0, transcript: nil)] } ?? []
+        )
+        return snapshot(
+            draft: draft,
+            presetDisplayName: presetDisplayName,
+            stagingDirectoryURL: recordedAudioURL.deletingLastPathComponent(),
+            audioCacheRootURL: audioCacheRootURL,
+            fileManager: fileManager
+        )
+    }
+
+    static func apply(
+        _ snapshot: SentCaptureUndoSnapshot,
+        to viewModel: QuickCaptureViewModel
+    ) async -> Bool {
+        defer { snapshot.discardCachedAudio() }
+        guard snapshot.offersUndo,
+              !viewModel.hasLiveRecordedTranscriptPreview else { return false }
+        return await viewModel.restoreSentCapture(
+            text: snapshot.text,
+            valuePayloads: snapshot.restorablePayloads,
+            cachedAudioPayloads: snapshot.cachedAudioPayloads,
+            audioCacheDirectoryURL: snapshot.audioCacheDirectoryURL
+        )
+    }
+
+    private static func cacheAudioPayloads(
+        in payloads: [CapturePayload],
+        snapshotID: UUID,
+        sourceDirectoryURL: URL?,
+        cacheRootURL: URL?,
+        fileManager: FileManager
+    ) -> (payloads: [CapturePayload], directoryURL: URL?) {
+        let audioPayloads = payloads.filter(\.isAudioPayload)
+        guard !audioPayloads.isEmpty,
+              let sourceDirectoryURL,
+              let cacheRootURL else { return ([], nil) }
+
+        let cacheDirectoryURL = cacheRootURL
+            .appendingPathComponent(snapshotID.uuidString.lowercased(), isDirectory: true)
+        do {
+            try fileManager.createDirectory(at: cacheDirectoryURL, withIntermediateDirectories: true)
+            var cachedPayloads: [CapturePayload] = []
+            for (index, payload) in audioPayloads.enumerated() {
+                guard let sourceAsset = payload.audioAsset else { continue }
+                let sourceURL = try CapturePathValidation.containedFileURL(
+                    relativePath: sourceAsset.relativePath,
+                    rootURL: sourceDirectoryURL
+                )
+                let sourceExtension = sourceURL.pathExtension
+                let cacheFilename = sourceExtension.isEmpty
+                    ? "audio-\(index + 1)"
+                    : "audio-\(index + 1).\(sourceExtension)"
+                let cachedURL = cacheDirectoryURL.appendingPathComponent(cacheFilename)
+                do {
+                    try fileManager.linkItem(at: sourceURL, to: cachedURL)
+                } catch {
+                    try fileManager.copyItem(at: sourceURL, to: cachedURL)
+                }
+                let cachedSize = (try? cachedURL.resourceValues(forKeys: [.fileSizeKey]).fileSize)
+                    .map(Int64.init)
+                let cachedAsset = try CaptureAssetReference(
+                    relativePath: cacheFilename,
+                    originalFilename: sourceAsset.originalFilename,
+                    contentTypeIdentifier: sourceAsset.contentTypeIdentifier,
+                    byteCount: cachedSize ?? sourceAsset.byteCount
+                )
+                cachedPayloads.append(payload.replacingAudioAsset(with: cachedAsset))
+            }
+            guard cachedPayloads.count == audioPayloads.count else {
+                throw SentCaptureUndoCacheError.incompleteAudioCache
+            }
+            return (cachedPayloads, cacheDirectoryURL)
+        } catch {
+            try? fileManager.removeItem(at: cacheDirectoryURL)
+            return ([], nil)
         }
-        let now = Date()
-        let restoredText = snapshot.text.trimmingCharacters(in: .newlines)
-        if viewModel.draft.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            viewModel.draft.text = restoredText
-        } else if !restoredText.isEmpty {
-            viewModel.draft.text += "\n\n" + restoredText
-        }
-        viewModel.draft.additionalPayloads.append(contentsOf: snapshot.restorablePayloads)
-        viewModel.draft.updatedAt = now
-        viewModel.draft.beginCaptureIfNeeded(at: now)
-        await viewModel.saveDraftNow()
-        return true
     }
 }
 
+private enum SentCaptureUndoCacheError: Error {
+    case incompleteAudioCache
+}
+
 extension CapturePayload {
-    /// Text and link payloads are pure values; media assets are moved into
-    /// the delivered note and cannot be restored without re-staging files.
     var isRestorableAfterSend: Bool {
         switch self {
         case .text, .url:
             return true
         case .audio, .retainedAudio, .image, .file, .scannedDocument, .sketch:
             return false
+        }
+    }
+
+    var isAudioPayload: Bool {
+        switch self {
+        case .audio, .retainedAudio:
+            return true
+        case .text, .url, .image, .file, .scannedDocument, .sketch:
+            return false
+        }
+    }
+
+    var audioAsset: CaptureAssetReference? {
+        switch self {
+        case .audio(let asset, _), .retainedAudio(let asset, _):
+            return asset
+        case .text, .url, .image, .file, .scannedDocument, .sketch:
+            return nil
+        }
+    }
+
+    func replacingAudioAsset(with asset: CaptureAssetReference) -> CapturePayload {
+        switch self {
+        case .audio(_, let transcript):
+            return .audio(asset, transcript: transcript)
+        case .retainedAudio(_, let embedPlacement):
+            return .retainedAudio(asset, embedPlacement: embedPlacement)
+        case .text, .url, .image, .file, .scannedDocument, .sketch:
+            return self
         }
     }
 }

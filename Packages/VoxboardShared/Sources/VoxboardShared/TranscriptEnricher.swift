@@ -356,7 +356,7 @@ public struct TranscriptEnricher: Sendable {
     static func buildPrompt(rawText: String, profile: CapturePresetProfile?) -> String {
         let categoryList = allowedCategories.joined(separator: ", ")
         let flowInstruction = profile?.resolvedPostProcessingInstruction
-        let flowLine = profile.map { "\nWorkflow: \($0.displayName)" } ?? ""
+        let flowLine = profile?.visibleName.map { "\nWorkflow: \($0)" } ?? ""
         let staticTags = profile?.staticTags ?? []
         let staticTagLine = staticTags.isEmpty ? "" : "\nPrefer including these tags when relevant: \(staticTags.joined(separator: ", "))"
         let staticCategoryLine = profile?.staticCategory.map { "\nPrefer this category when appropriate: \($0)" } ?? ""

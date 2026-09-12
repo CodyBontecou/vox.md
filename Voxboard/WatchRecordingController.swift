@@ -329,7 +329,8 @@ final class WatchRecordingController: NSObject {
         payload[WatchRecordingPayloadKey.presetSelectionAvailable] = selectedPreset != nil
         if let selectedPreset {
             payload[WatchRecordingPayloadKey.selectedPresetID] = selectedPreset.id
-            payload[WatchRecordingPayloadKey.selectedPresetName] = selectedPreset.displayName
+            payload[WatchRecordingPayloadKey.selectedPresetName] = selectedPreset.accessibilityName
+            payload[WatchRecordingPayloadKey.presetVisibleName] = selectedPreset.visibleName ?? ""
             if let snapshot = try? JSONEncoder().encode(selectedPreset) {
                 payload[WatchRecordingPayloadKey.selectedPresetSnapshot] = snapshot
             }
@@ -474,9 +475,14 @@ final class WatchRecordingController: NSObject {
             [
                 WatchRecordingPayloadKey.selectedPresetID: preset.id,
                 WatchRecordingPayloadKey.selectedPresetName: watchSafeText(
-                    preset.displayName,
+                    preset.accessibilityName,
                     maximumCharacters: 64,
-                    fallback: String(localized: "Untitled Preset")
+                    fallback: String(localized: "Icon-only Capture Preset")
+                ),
+                WatchRecordingPayloadKey.presetVisibleName: watchSafeText(
+                    preset.visibleName ?? "",
+                    maximumCharacters: 64,
+                    fallback: ""
                 ),
                 WatchRecordingPayloadKey.presetSymbolName: watchSafeSymbolName(preset.symbolName),
             ] as [String: Any]
@@ -699,6 +705,7 @@ nonisolated enum WatchRecordingPayloadKey {
     static let queuedCount = "queuedCount"
     static let selectedPresetID = "selectedPresetID"
     static let selectedPresetName = "selectedPresetName"
+    static let presetVisibleName = "presetVisibleName"
     static let selectedPresetSnapshot = "selectedPresetSnapshot"
     static let presetSummaries = "presetSummaries"
     static let presetSummariesTruncated = "presetSummariesTruncated"

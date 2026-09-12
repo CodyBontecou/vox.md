@@ -13,6 +13,7 @@ enum WatchRecordingPayloadKey {
     static let queuedCount = "queuedCount"
     static let selectedPresetID = "selectedPresetID"
     static let selectedPresetName = "selectedPresetName"
+    static let presetVisibleName = "presetVisibleName"
     static let selectedPresetSnapshot = "selectedPresetSnapshot"
     static let presetSummaries = "presetSummaries"
     static let presetSummariesTruncated = "presetSummariesTruncated"
@@ -65,7 +66,10 @@ struct WatchRemoteRecordingStatus: Equatable, Sendable {
 
 struct WatchCapturePresetSummary: Identifiable, Equatable, Sendable {
     let id: String
+    /// Non-empty accessibility/system fallback name.
     let displayName: String
+    /// Visible row title. Nil means the preset intentionally renders icon-only.
+    let visibleName: String?
     let symbolName: String
 
     init?(dictionary: [String: Any]) {
@@ -75,6 +79,13 @@ struct WatchCapturePresetSummary: Identifiable, Equatable, Sendable {
               !displayName.isEmpty else { return nil }
         self.id = id
         self.displayName = displayName
+        if dictionary.keys.contains(WatchRecordingPayloadKey.presetVisibleName) {
+            let trimmed = (dictionary[WatchRecordingPayloadKey.presetVisibleName] as? String)?
+                .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            self.visibleName = trimmed.isEmpty ? nil : trimmed
+        } else {
+            self.visibleName = displayName
+        }
         self.symbolName = (dictionary[WatchRecordingPayloadKey.presetSymbolName] as? String)
             .flatMap { $0.isEmpty ? nil : $0 }
             ?? "waveform"
@@ -84,6 +95,7 @@ struct WatchCapturePresetSummary: Identifiable, Equatable, Sendable {
         [
             WatchRecordingPayloadKey.selectedPresetID: id,
             WatchRecordingPayloadKey.selectedPresetName: displayName,
+            WatchRecordingPayloadKey.presetVisibleName: visibleName ?? "",
             WatchRecordingPayloadKey.presetSymbolName: symbolName,
         ]
     }

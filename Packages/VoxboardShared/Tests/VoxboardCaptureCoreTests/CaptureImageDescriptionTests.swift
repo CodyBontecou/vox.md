@@ -54,6 +54,28 @@ final class CaptureImageDescriptionTests: XCTestCase {
         XCTAssertEqual(output.voxProcessingState, .applied)
     }
 
+    func test_processImagePayloadsCanPrepareDraftPreviewWithoutFullRequest() async throws {
+        let image = try asset()
+        let supplied = try asset("supplied.png")
+        let fake = ImageDescriberFixture(output: "Visible draft label.")
+        let root = URL(fileURLWithPath: "/tmp/draft-preview-root")
+        let payloads: [CapturePayload] = [
+            .text("raw **Markdown**"),
+            .image(image, altText: nil),
+            .image(supplied, altText: "Supplied caption", altTextOrigin: .provided)
+        ]
+
+        let output = await CapturePresetRequestProcessor(textProcessor: ForbiddenTextProcessor(), imageDescriber: fake)
+            .processImagePayloads(payloads, profile: profile(), assetRootURL: root, localeIdentifier: "fr")
+
+        XCTAssertEqual(output[0], payloads[0])
+        XCTAssertEqual(output[1], .image(image, altText: "Visible draft label.", altTextOrigin: .generated))
+        XCTAssertEqual(output[2], payloads[2])
+        let calls = await fake.calls
+        XCTAssertEqual(calls.map(\.locale), ["fr"])
+        XCTAssertEqual(calls.map(\.root), [root])
+    }
+
     func test_masterGateAndSavedDescriptionsAvoidAllImageCalls() async throws {
         let image = try asset()
         let fake = ImageDescriberFixture()

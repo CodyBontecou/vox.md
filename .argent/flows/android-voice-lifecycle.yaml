@@ -1,0 +1,27 @@
+steps:
+  - await: { visible: { text: Start voice capture } }
+  - echo: On capture with microphone access granted. Start a voice capture.
+  - tap:
+      text: Start voice capture
+  - await:
+      visible:
+        text: Audio is staying on this device and is checkpointed every second.
+  - echo: Voice capture is active and checkpointing locally. Pause it and expect a
+      resumable paused state.
+  - tap:
+      text: Pause
+  - await: { visible: { text: Recording paused } }
+  - echo: Recording is paused with chunks retained. Resume and expect active
+      checkpointing again.
+  - tap:
+      text: Resume
+  - await:
+      visible:
+        text: Audio is staying on this device and is checkpointed every second.
+  - echo: Recording resumed. Stop it and expect a completed local recording.
+  - tap:
+      text: Stop
+  - await: { visible: { text: Recording saved } }
+executionPrerequisite: Vox.md is open on the capture screen with a writable
+  Markdown folder selected; microphone and notification permissions are granted;
+  the Android device has a usable microphone input; no recording is active.

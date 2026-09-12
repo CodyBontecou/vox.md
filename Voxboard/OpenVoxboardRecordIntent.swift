@@ -26,7 +26,7 @@ struct VoxEntity: AppEntity, Identifiable, Hashable {
     }
 
     init(flow: CapturePreset) {
-        self.init(id: flow.id, name: flow.displayName, symbolName: flow.symbolName)
+        self.init(id: flow.id, name: flow.accessibilityName, symbolName: flow.symbolName)
     }
 
     static var fallback: VoxEntity {

@@ -116,7 +116,7 @@ struct WatchRecordingQueueView: View {
                                 CapturePresetStore.loadFlows().filter(\.isEnabled),
                                 id: \.id
                             ) { preset in
-                                Button(preset.displayName) {
+                                Button(preset.accessibilityName) {
                                     pipeline.choosePreset(preset, for: item)
                                 }
                             }
@@ -133,7 +133,7 @@ struct WatchRecordingQueueView: View {
                                     },
                                     id: \.id
                                 ) { preset in
-                                    Button(preset.displayName) {
+                                    Button(preset.accessibilityName) {
                                         pipeline.choosePreset(preset, for: item)
                                     }
                                 }

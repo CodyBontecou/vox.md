@@ -667,7 +667,7 @@ private struct RecordingQueueRow: View {
                     Text("No enabled Capture Presets")
                 } else {
                     ForEach(recoveryPresets) { preset in
-                        Button(preset.displayName) {
+                        Button(preset.accessibilityName) {
                             Task {
                                 if let retryCoordinator {
                                     await retryCoordinator.retry(
@@ -722,7 +722,7 @@ private struct RecordingQueueRow: View {
     private var title: String {
         switch job.delivery {
         case .preset(let preset):
-            return preset.displayName
+            return preset.accessibilityName
         case .captureDraft:
             return String(localized: "Capture Draft Recording")
         case .clipboard:

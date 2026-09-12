@@ -68,7 +68,7 @@ struct CaptureVoxEntity: AppEntity, Identifiable, Hashable {
 
     init(profile: CapturePresetProfile) {
         id = profile.id
-        name = profile.displayName
+        name = profile.accessibilityName
         symbolName = profile.symbolName
     }
 }

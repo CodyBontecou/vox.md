@@ -110,14 +110,20 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         self.capturePlacementOverride = capturePlacementOverride
     }
 
-    public var displayName: String {
+    public var visibleName: String? {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         if isBuiltIn, id == CapturePresetStore.generalId, trimmed == "Default" {
             return String(localized: "Default", bundle: .main)
         }
-        return trimmed.isEmpty
-            ? String(localized: "Untitled Preset", bundle: .main)
-            : trimmed
+        return trimmed.isEmpty ? nil : trimmed
+    }
+
+    public var accessibilityName: String {
+        visibleName ?? String(localized: "Icon-only Capture Preset", bundle: .main)
+    }
+
+    public var displayName: String {
+        visibleName ?? String(localized: "Untitled Preset", bundle: .main)
     }
 
     public var displayCapturePrompt: String {
@@ -134,13 +140,16 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
     }
 
     public var shortLabel: String {
-        displayName
+        let initials = (visibleName ?? "")
             .split(separator: " ")
             .compactMap { $0.first }
             .prefix(3)
             .map { String($0) }
             .joined()
             .uppercased()
+        if !initials.isEmpty { return initials }
+        if let emoji = CapturePresetEmoji.normalized(emoji) { return emoji }
+        return "•"
     }
 
     public var captureProfile: CapturePresetProfile {
@@ -979,7 +988,7 @@ public enum CapturePresetStore {
                     sourceRouteID: requestedID
                 )
             }
-            owned.name = presets[index].displayName
+            owned.name = presets[index].visibleName ?? String(localized: "Icon-only preset", bundle: .main)
             if let placement = presets[index].capturePlacementOverride {
                 owned.placement = placement
             }

@@ -19,6 +19,20 @@ struct FileExportEvent: Equatable {
     let result: Result
 }
 
+private enum ConfiguredRecordingDeliveryResult: Sendable, Equatable {
+    case delivered
+    case deferred
+    case failed
+
+    var completedRecordingJob: Bool {
+        self != .failed
+    }
+
+    var offersSentUndo: Bool {
+        self == .delivered
+    }
+}
+
 enum RecordingCompletionMode: Equatable, Sendable {
     /// Return text to the Vox.md keyboard without running a Capture Preset.
     case keyboardTranscription
@@ -37,7 +51,7 @@ enum RecordingCompletionMode: Equatable, Sendable {
         case .keyboardTranscription: return nil
         case .captureDraft: return .draft
         case .runVox:
-            return .preset(id: presetSnapshot?.id, name: presetSnapshot?.displayName)
+            return .preset(id: presetSnapshot?.id, name: presetSnapshot?.visibleName)
         }
     }
 
@@ -188,7 +202,7 @@ enum IOSLegacyVoiceAudioDelivery {
         return CapturePresetAudioFilenameContext(
             identifier: transcript.id.uuidString,
             createdAt: transcript.date,
-            presetName: flowSnapshot.displayName,
+            presetName: flowSnapshot.visibleName ?? "",
             originalFilename: originalAudioFilename
         )
     }
@@ -335,6 +349,20 @@ final class PersistentRecorder {
 
     /// Updated every time a configured transcript export succeeds or fails.
     var lastFileExportEvent: FileExportEvent?
+
+    /// A successful in-app immediate recording can be restored into the
+    /// composer for the same five-second window as a regular Capture send.
+    private(set) var lastSentAudioUndoSnapshot: SentCaptureUndoSnapshot?
+
+    /// Transfers cache cleanup to the visible Capture UI. If no UI consumes
+    /// the event, the recorder expires it independently.
+    @MainActor
+    func consumeSentAudioUndoSnapshot(id: UUID) -> SentCaptureUndoSnapshot? {
+        guard lastSentAudioUndoSnapshot?.id == id else { return nil }
+        let snapshot = lastSentAudioUndoSnapshot
+        lastSentAudioUndoSnapshot = nil
+        return snapshot
+    }
 
     // MARK: - Audio Engine
 
@@ -3341,8 +3369,31 @@ final class PersistentRecorder {
             guard saved else { throw PersistentRecordingJobError.transcriptStagingFailed }
         }
 
-        let scheduledDeliveryTask: Task<Bool, Never>? = try await MainActor.run {
-            var deliveryTask: Task<Bool, Never>?
+        let immediateSentUndoCandidate: SentCaptureUndoSnapshot? = {
+            guard case .runVox = completionMode,
+                  originCaptureSource == .voice || originCaptureSource == .fileImport,
+                  let selectedFlow,
+                  let cacheRootURL = SentCaptureUndo.audioCacheRootURL(
+                    captureRootURL: AppConstants.captureDirectoryURL
+                  ) else { return nil }
+            return SentCaptureUndo.snapshot(
+                requestID: transcriptID ?? UUID(),
+                text: resolvedText,
+                recordedAudioURL: sourceAudioURL ?? audioURL,
+                originalFilename: originalAudioFilename,
+                presetDisplayName: selectedFlow.accessibilityName,
+                audioCacheRootURL: cacheRootURL
+            )
+        }()
+        var publishedImmediateSentUndo = false
+        defer {
+            if !publishedImmediateSentUndo {
+                immediateSentUndoCandidate?.discardCachedAudio()
+            }
+        }
+
+        let scheduledDeliveryTask: Task<ConfiguredRecordingDeliveryResult, Never>? = try await MainActor.run {
+            var deliveryTask: Task<ConfiguredRecordingDeliveryResult, Never>?
             self.clearCaptureLiveTranscription(requestId: requestId)
             if let text, !text.isEmpty {
                 // Only publish to the IPC channel for keyboard-initiated requests.
@@ -3447,7 +3498,7 @@ final class PersistentRecorder {
                     )
                 }
 
-                let runExport: @Sendable () async -> Bool = { [self] in
+                let runExport: @Sendable () async -> ConfiguredRecordingDeliveryResult = { [self] in
                     let captureDestinationID = await ConfiguredTranscriptCaptureDestinationExporter
                         .resolvedDestinationID(flow: flowForExport)
                     // Legacy exports consume this private working copy. Precise
@@ -3472,7 +3523,7 @@ final class PersistentRecorder {
                                 await MainActor.run {
                                     self.lastFileExportEvent = FileExportEvent(result: .success(checkpointedURL))
                                 }
-                                return true
+                                return .delivered
                             }
                         }
                         do {
@@ -3498,7 +3549,7 @@ final class PersistentRecorder {
                             await MainActor.run {
                                 self.lastFileExportEvent = FileExportEvent(result: .success(receipt.noteURL))
                             }
-                            return true
+                            return .delivered
                         } catch {
                             let queuedForRetry: Bool
                             if let configuredError = error as? ConfiguredTranscriptCaptureError {
@@ -3526,7 +3577,7 @@ final class PersistentRecorder {
                             await MainActor.run {
                                 self.lastFileExportEvent = FileExportEvent(result: .failure(error.localizedDescription))
                             }
-                            return queuedForRetry
+                            return queuedForRetry ? .deferred : .failed
                         }
                     }
 
@@ -3595,9 +3646,9 @@ final class PersistentRecorder {
                                             result: .failure("Audio retention is enabled, but this Preset has no export destination.")
                                         )
                                     }
-                                    return false
+                                    return .failed
                                 }
-                                return true
+                                return .delivered
                             case .exported(let exportedURL):
                                 url = exportedURL
                                 if let transcriptID {
@@ -3613,7 +3664,7 @@ final class PersistentRecorder {
                         await MainActor.run {
                             self.lastFileExportEvent = FileExportEvent(result: .failure(error.localizedDescription))
                         }
-                        return false
+                        return .failed
                     }
 
                     if let audioSourceForExport {
@@ -3657,7 +3708,7 @@ final class PersistentRecorder {
                                     result: .failure("The note was saved, but its audio attachment failed: \(error.localizedDescription)")
                                 )
                             }
-                            return false
+                            return .failed
                         }
                     }
 
@@ -3667,12 +3718,12 @@ final class PersistentRecorder {
                                 result: .failure("The note was saved, but its requested audio could not be exported.")
                             )
                         }
-                        return false
+                        return .failed
                     }
                     await MainActor.run {
                         self.lastFileExportEvent = FileExportEvent(result: .success(url))
                     }
-                    return true
+                    return .delivered
                 }
 
                     if let enricher = self.transcriptEnricher, flowForExport.usesAIEnrichment {
@@ -3709,13 +3760,23 @@ final class PersistentRecorder {
             return deliveryTask
         }
 
-        if let scheduledDeliveryTask,
-           await scheduledDeliveryTask.value == false {
+        let deliveryResult = await scheduledDeliveryTask?.value
+        if let deliveryResult, !deliveryResult.completedRecordingJob {
             throw PersistentRecordingJobError.deliveryFailed
         }
 
         guard !resolvedText.isEmpty else {
             throw PersistentRecordingJobError.noSpeechDetected
+        }
+        if deliveryResult?.offersSentUndo == true,
+           let immediateSentUndoCandidate,
+           !immediateSentUndoCandidate.cachedAudioPayloads.isEmpty {
+            await MainActor.run {
+                self.lastSentAudioUndoSnapshot?.discardCachedAudio()
+                self.lastSentAudioUndoSnapshot = immediateSentUndoCandidate
+                self.scheduleSentAudioUndoExpiration(for: immediateSentUndoCandidate.id)
+            }
+            publishedImmediateSentUndo = true
         }
         if cleanupWorkingAudio {
             try? FileManager.default.removeItem(at: audioURL)
@@ -3723,6 +3784,17 @@ final class PersistentRecorder {
         return RecordingJobExecutionResult(
             transcriptText: completionMode == .keyboardTranscription ? resolvedText : nil
         )
+    }
+
+    @MainActor
+    private func scheduleSentAudioUndoExpiration(for snapshotID: UUID) {
+        Task { @MainActor [weak self] in
+            try? await Task.sleep(for: SentCaptureUndo.toastWindow)
+            guard let self,
+                  self.lastSentAudioUndoSnapshot?.id == snapshotID else { return }
+            self.lastSentAudioUndoSnapshot?.discardCachedAudio()
+            self.lastSentAudioUndoSnapshot = nil
+        }
     }
 
     @MainActor

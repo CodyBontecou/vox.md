@@ -23,8 +23,9 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    implementation(libs.datastore.preferences)
+    implementation(libs.coroutines.android)
     kapt(libs.room.compiler)
-    compileOnly(libs.datastore.preferences)
     compileOnly(libs.work.runtime.ktx)
 
     androidTestImplementation(libs.androidx.test.core)

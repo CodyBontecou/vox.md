@@ -1,5 +1,9 @@
 package md.vox.android.data
 
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
 import org.junit.Test
@@ -57,6 +61,45 @@ class CapturePackageFixtureConsumerTest {
         )
         mutations.forEach { text -> try { CapturePackageCodec.admitRequest(text.toByteArray()); fail("request mutation accepted") } catch (_: PackageCodecException) { } }
         try { CapturePackageCodec.parseCanonical(ByteArray(CONTROL_LIMIT_BYTES + 1) { ' '.code.toByte() }); fail("oversized control accepted") } catch (_: PackageCodecException) { }
+    }
+
+    @Test fun currentAndroidProfileAcceptsFrozenCustomRoutingAndFrontmatter() {
+        val original = Json.parseToJsonElement(
+            resource("contracts/v1/fixtures/capture-preparation-input/valid-android-m3-text-link.json").toString(Charsets.UTF_8),
+        ) as JsonObject
+        val originalPreset = original.getValue("preset") as JsonObject
+        val originalRoute = originalPreset.getValue("routePolicy") as JsonObject
+        val customRoute = JsonObject(originalRoute.toMutableMap().apply {
+            put("logicalFolder", JsonArray(listOf(JsonPrimitive("Journal"), JsonPrimitive("Daily"))))
+            put("noteNameTemplate", JsonPrimitive("android-{id}.md"))
+        })
+        val customMetadata = JsonObject(
+            mapOf(
+                "finalNewline" to JsonPrimitive(true),
+                "frontmatterMode" to JsonPrimitive("merge"),
+                "lineEnding" to JsonPrimitive("lf"),
+                "orderedFields" to JsonArray(
+                    listOf(JsonObject(mapOf("name" to JsonPrimitive("source"), "value" to JsonPrimitive("android")))),
+                ),
+                "templatePolicy" to JsonPrimitive("none"),
+            ),
+        )
+        val zeroedPreset = JsonObject(originalPreset.toMutableMap().apply {
+            put("id", JsonPrimitive("55555555-5555-4555-8555-555555555555"))
+            put("metadataPolicy", customMetadata)
+            put("revision", JsonPrimitive(2))
+            put("routePolicy", customRoute)
+            put("snapshotHash", JsonPrimitive("0".repeat(64)))
+        })
+        val finalPreset = JsonObject(zeroedPreset.toMutableMap().apply {
+            put("snapshotHash", JsonPrimitive(CapturePackageCodec.sha256(CapturePackageCodec.canonical(zeroedPreset))))
+        })
+        val customRequest = JsonObject(original.toMutableMap().apply { put("preset", finalPreset) })
+
+        assertEquals(
+            "11111111-1111-4111-8111-111111111111",
+            CapturePackageCodec.admitRequest(CapturePackageCodec.canonical(customRequest)).requestID,
+        )
     }
 
     private fun resource(path: String): ByteArray = checkNotNull(javaClass.classLoader!!.getResourceAsStream(path)) { path }.use { it.readBytes() }

@@ -161,7 +161,7 @@ final class VoiceKeyboardState {
     }
 
     var currentFlowName: String {
-        currentFlow.displayName
+        currentFlow.visibleName ?? ""
     }
 
     var currentFlowShortLabel: String {
@@ -178,7 +178,7 @@ final class VoiceKeyboardState {
         let next = CapturePresetStore.selectNextFlow()
         selectedFlowId = next.id
         refreshFlowCache()
-        log.log("Flow switched to: \(next.displayName)")
+        log.log("Flow switched to: \(next.accessibilityName)")
     }
 
     // MARK: - Model Navigation

@@ -30,6 +30,28 @@ final class CapturePresetAudioFilenameTests: XCTestCase {
         XCTAssertEqual(filename, "2024-01-01-190405-2024-01-01-190405.wav")
     }
 
+    func test_templateDoesNotAppendPresetNameOutsideExplicitToken() throws {
+        var context = makeContext(timeZone: try XCTUnwrap(TimeZone(secondsFromGMT: 0)))
+        context.presetName = "Nerd"
+
+        XCTAssertEqual(
+            CapturePresetAudioFilename.preferredFilename(
+                template: "meeting-{date}-{time}",
+                context: context,
+                sourceExtension: "m4a"
+            ),
+            "meeting-2024-01-02-030405.m4a"
+        )
+        XCTAssertEqual(
+            CapturePresetAudioFilename.preferredFilename(
+                template: "meeting-{date}-{time}-{preset}",
+                context: context,
+                sourceExtension: "m4a"
+            ),
+            "meeting-2024-01-02-030405-Nerd.m4a"
+        )
+    }
+
     func test_typedExtensionIsRemovedAndActualSourceExtensionAlwaysWins() throws {
         let context = makeContext(timeZone: try XCTUnwrap(TimeZone(secondsFromGMT: 0)))
 

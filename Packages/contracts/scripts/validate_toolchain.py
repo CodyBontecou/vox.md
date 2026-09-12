@@ -503,9 +503,10 @@ def main(argv=None):
     for dependency in ("libs.room.runtime", "libs.room.ktx"):
         if f"implementation({dependency})" not in data_build or f"compileOnly({dependency})" in data_build:
             fail(f"Android M3 Room runtime activation drift: {dependency}")
-    for dependency in ("libs.datastore.preferences", "libs.work.runtime.ktx"):
-        if f"compileOnly({dependency})" not in data_build:
-            fail(f"Inactive Android framework must remain compileOnly: {dependency}")
+    if "implementation(libs.datastore.preferences)" not in data_build or "compileOnly(libs.datastore.preferences)" in data_build:
+        fail("Android M3 DataStore runtime activation drift")
+    if "compileOnly(libs.work.runtime.ktx)" not in data_build:
+        fail("Inactive Android framework must remain compileOnly: libs.work.runtime.ktx")
     for token in ("libs.plugins.android.legacy.kapt", "kapt(libs.room.compiler)", "room.schemaLocation"):
         if token not in data_build:
             fail(f"Android Room compiler/schema governance drift: {token}")
@@ -675,7 +676,7 @@ def main(argv=None):
         or "bytes.fill(0)" not in phase4_generated
     ):
         fail("Android Phase 4 generated-only direct-buffer adapter drift")
-    if "unwiredCoreBridge()" not in phase4_app or "productionCoreBridge" in phase4_app:
+    if "productionCoreBridge()" not in phase4_app or "unwiredCoreBridge()" in phase4_app:
         fail("Android Phase 4 application wiring widened")
     adapter_path = root / "apps/android/core-bridge/src/main/kotlin/md/vox/android/corebridge/GeneratedNativeCoreAdapter.kt"
     production_source_paths = []
@@ -715,14 +716,14 @@ def main(argv=None):
     if "internal fun mutateJournal(" not in phase3_store or "private fun mutateJournalUnderRootLock(" not in phase3_store:
         fail("Android journal mutation can bypass the internal fenced coordinator boundary")
     main_source = "\n".join(path.read_text() for path in production_source_paths)
-    if len(re.findall(r"\bRoomCaptureCoordination\b", main_source)) != 1:
-        fail("Android raw Room lease coordination has a production caller")
+    if len(re.findall(r"\bRoomCaptureCoordination\b", main_source)) != 2:
+        fail("Android raw Room lease coordination caller inventory drift")
     if "internal fun commitTerminal" not in phase3_quota:
         fail("Android terminal quota primitive is not internal")
     if len(re.findall(r"\bmutateJournal\b", main_source)) != 2:
         fail("Android journal mutation has a production caller outside the fenced coordinator")
-    if len(re.findall(r"\bcommitTerminal\b", main_source)) != 1:
-        fail("Android terminal quota primitive has a production call site")
+    if len(re.findall(r"\bcommitTerminal\b", main_source)) != 2:
+        fail("Android terminal quota primitive caller inventory drift")
     tombstone = (root / "apps/android/data/src/main/java/md/vox/android/data/CaptureTombstoneEntity.java").read_text()
     for forbidden in ("text", "url", "filename", "logicalPath", "uri", "documentID", "artifactHash", "noteHash"):
         if re.search(rf"\b{re.escape(forbidden)}\b", tombstone, flags=re.IGNORECASE):

@@ -34,6 +34,24 @@ final class CapturePresetSettingsPinsTests: XCTestCase {
         }
     }
 
+    func testUnifiedSettingsSectionsPartitionPresetsWithoutDuplicates() throws {
+        try withDefaults { defaults in
+            try save([profile("a"), profile("b"), profile("c", enabled: false)], to: defaults)
+            defaults.set(["c", "a", "missing"], forKey: CapturePresetQuickAccessStore.storageKey)
+            let pins = CapturePresetSettingsPins(defaults: defaults)
+
+            XCTAssertEqual(pins.orderedIDs, ["c", "a", "missing"])
+            XCTAssertEqual(pins.unpinnedIDs(in: ["a", "b", "c"]), ["b"])
+            XCTAssertTrue(Set(pins.orderedIDs).isDisjoint(with: pins.unpinnedIDs(in: ["a", "b", "c"])))
+
+            XCTAssertTrue(pins.setPinned(false, id: "a"))
+            XCTAssertEqual(pins.unpinnedIDs(in: ["a", "b", "c"]), ["a", "b"])
+            XCTAssertTrue(pins.setPinned(true, id: "b"))
+            XCTAssertEqual(pins.orderedIDs, ["c", "b"])
+            XCTAssertEqual(pins.unpinnedIDs(in: ["a", "b", "c"]), ["a"])
+        }
+    }
+
     func testNativeMoveOffsetsUseStoredOrderIncludingDisabledPins() throws {
         try withDefaults { defaults in
             var profiles = [profile("a"), profile("disabled", enabled: false), profile("c")]
@@ -193,15 +211,43 @@ final class CapturePresetSettingsPinsTests: XCTestCase {
             let appeared = expectation(description: "Pinned settings mounted")
             let content = NavigationStack {
                 List {
-                    CapturePresetSettingsPinnedSection(pins: pins)
-                    Section("Capture Presets") {
-                        CapturePresetSettingsListLabel(
-                            preset: CapturePreset(id: "journal", name: "Journal / يوميات", symbolName: "book", emoji: "📔"),
-                            badge: "Default"
-                        )
-                        CapturePresetSettingsPinButton(
-                            accessibilityID: "test_pin", name: "Journal / يوميات", isPinned: true
-                        ) { pins.setPinned(false, id: "journal") }
+                    Section("Pinned to Capture Bar") {
+                        ForEach(pins.orderedIDs, id: \.self) { id in
+                            if let profile = pins.profile(id: id) {
+                                HStack(spacing: 12) {
+                                    CapturePresetSettingsListLabel(
+                                        preset: self.preset(profile),
+                                        badge: id == "journal" ? "Default" : nil
+                                    )
+                                    CapturePresetSettingsPinButton(
+                                        accessibilityID: "test_pin_\(id)",
+                                        name: profile.accessibilityName,
+                                        isPinned: true
+                                    ) { pins.setPinned(false, id: id) }
+                                }
+                            } else {
+                                CapturePresetSettingsPinnedRow(id: id, profile: nil) {
+                                    pins.setPinned(false, id: id)
+                                }
+                            }
+                        }
+                        .onMove { offsets, destination in
+                            pins.move(fromOffsets: offsets, toOffset: destination)
+                        }
+                    }
+                    Section("Other Presets") {
+                        ForEach(pins.unpinnedIDs(in: ["journal", "disabled"]), id: \.self) { id in
+                            if let profile = pins.profile(id: id) {
+                                HStack(spacing: 12) {
+                                    CapturePresetSettingsListLabel(preset: self.preset(profile), badge: nil)
+                                    CapturePresetSettingsPinButton(
+                                        accessibilityID: "test_unpinned_\(id)",
+                                        name: profile.accessibilityName,
+                                        isPinned: false
+                                    ) { pins.setPinned(true, id: id) }
+                                }
+                            }
+                        }
                     }
                 }
                 .environment(\.editMode, .constant(mode))
@@ -242,6 +288,16 @@ final class CapturePresetSettingsPinsTests: XCTestCase {
     private func profile(_ id: String, enabled: Bool = true) -> CapturePresetProfile {
         CapturePresetProfile(id: id, name: id == "disabled" ? "Disabled / مخفي — a longer preset name" : id,
                              symbolName: "book", emoji: "📔", isEnabled: enabled)
+    }
+
+    private func preset(_ profile: CapturePresetProfile) -> CapturePreset {
+        CapturePreset(
+            id: profile.id,
+            name: profile.name,
+            symbolName: profile.symbolName,
+            emoji: profile.emoji,
+            isEnabled: profile.isEnabled
+        )
     }
 
     private func save(_ profiles: [CapturePresetProfile], to defaults: UserDefaults) throws {

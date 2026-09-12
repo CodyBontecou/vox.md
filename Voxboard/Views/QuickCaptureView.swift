@@ -145,6 +145,7 @@ struct QuickCaptureView: View {
     @State private var locationRequestTask: Task<Void, Never>?
     @State private var showsSentToast = false
     @State private var sentUndoSnapshot: SentCaptureUndoSnapshot?
+    @State private var sentToastPresentationID: UUID?
     @State private var showsPresetSendConfirmation = false
     @AppStorage(CapturePreferenceKeys.confirmPresetSend) private var confirmsPresetSend = false
     @State private var composerSelection = NSRange(location: 0, length: 0)
@@ -230,6 +231,9 @@ struct QuickCaptureView: View {
         CaptureViewSection {
             if isExtractingText {
                 QuickCaptureOCRProgress()
+                GeistDivider()
+            } else if viewModel.isDescribingImages {
+                QuickCaptureOCRProgress("Describing images on this device…")
                 GeistDivider()
             }
         }
@@ -370,6 +374,13 @@ struct QuickCaptureView: View {
                 .onChange(of: persistentRecorder.lastFileExportEvent) { _, event in
                     handleFileExportEvent(event)
                 }
+                .onChange(of: persistentRecorder.lastSentAudioUndoSnapshot) { _, observedSnapshot in
+                    guard let observedSnapshot,
+                          let snapshot = persistentRecorder.consumeSentAudioUndoSnapshot(
+                            id: observedSnapshot.id
+                          ) else { return }
+                    Task { await presentSentToast(replacingWith: snapshot) }
+                }
                 .onChange(of: persistentRecorder.lastError) { _, message in
                     guard let message else { return }
                     UIAccessibility.post(notification: .announcement, argument: message)
@@ -465,6 +476,7 @@ struct QuickCaptureView: View {
                         Task { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: true) }
                     }
                     Button("Cancel", role: .cancel) {
+                        discardSentUndoSnapshot()
                         Task { await viewModel.cancelUnavailableLocation() }
                     }
                 } message: {
@@ -906,20 +918,21 @@ struct QuickCaptureView: View {
                         presetMenuButton(flow)
                     }
                 } label: {
-                    Label {
-                        Text(selectedFlow.displayName)
-                    } icon: {
+                    HStack(spacing: 6) {
                         CapturePresetIconView(symbolName: selectedFlow.symbolName, emoji: selectedFlow.emoji)
+                        if let name = selectedFlow.visibleName {
+                            Text(name)
+                                .lineLimit(1)
+                        }
                     }
-                        .font(Geist.label())
-                        .lineLimit(1)
-                        .padding(.horizontal, Geist.Spacing.three)
-                        .frame(height: Geist.ControlHeight.medium)
-                        .background(Geist.Palette.background100)
-                        .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous))
+                    .font(Geist.label())
+                    .padding(.horizontal, Geist.Spacing.three)
+                    .frame(height: Geist.ControlHeight.medium)
+                    .background(Geist.Palette.background100)
+                    .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous))
                 }
                 .disabled(!viewModel.canSelectCapturePreset)
-                .accessibilityLabel("Capture Preset \(selectedFlow.displayName)")
+                .accessibilityLabel("Capture Preset \(selectedFlow.accessibilityName)")
 
                 if recordingMode == .draft {
                     Toggle(isOn: $attachRecordingAudio) {
@@ -1218,9 +1231,8 @@ struct QuickCaptureView: View {
                     voiceCaptureDetailsBar
                     GeistDivider()
                 }
-                if selectedFlow.locationPolicy.isEnabled || isFindingLocation || persistentRecorder.isResolvingLocation
-                {
-                    locationPresetStatusBar
+                if isFindingLocation || viewModel.isResolvingLocation || persistentRecorder.isResolvingLocation {
+                    locationProgressBar
                     GeistDivider()
                 }
                 routeSelectionRow
@@ -1416,41 +1428,22 @@ struct QuickCaptureView: View {
         }
     }
 
-    private var locationPresetStatusBar: CaptureViewSection {
+    private var locationProgressBar: CaptureViewSection {
         CaptureViewSection {
             HStack(spacing: Geist.Spacing.two) {
-                if isFindingLocation || viewModel.isResolvingLocation || persistentRecorder.isResolvingLocation {
-                    ProgressView()
-                        .controlSize(.small)
-                    Text("Finding Location…")
-                        .font(Geist.caption())
-                        .foregroundStyle(Geist.text)
-                } else {
-                    Label("Current Location On", systemImage: "location.fill")
-                        .font(Geist.caption())
-                        .foregroundStyle(Geist.muted)
-                }
-                Text(selectedFlow.displayName)
-                    .font(Geist.caption(.caption2))
-                    .foregroundStyle(Geist.faint)
-                    .lineLimit(1)
+                ProgressView()
+                    .controlSize(.small)
+                Text("Finding Location…")
+                    .font(Geist.caption())
+                    .foregroundStyle(Geist.text)
                 Spacer()
             }
             .padding(.horizontal, Geist.Spacing.three)
             .frame(minHeight: Geist.ControlHeight.small)
             .background(Geist.Palette.background200)
             .accessibilityElement(children: .combine)
-            .accessibilityLabel(
-                (isFindingLocation || viewModel.isResolvingLocation || persistentRecorder.isResolvingLocation
-                    ? String(localized: "Finding Location…")
-                    : String(localized: "Current Location On"))
-                    + " " + selectedFlow.displayName
-            )
-            .accessibilityIdentifier(
-                isFindingLocation || viewModel.isResolvingLocation || persistentRecorder.isResolvingLocation
-                    ? "capture_finding_preset_location"
-                    : "capture_active_preset_location"
-            )
+            .accessibilityLabel(String(localized: "Finding Location…"))
+            .accessibilityIdentifier("capture_finding_preset_location")
         }
     }
 
@@ -1529,12 +1522,16 @@ struct QuickCaptureView: View {
                 // Text icon slot (UIKit UIAction.h). Keep emoji in the title;
                 // symbol-only entries retain the native system-image fallback.
                 if let emoji = CapturePresetEmoji.normalized(flow.emoji) {
-                    Text(verbatim: "\(emoji) \(flow.displayName)")
+                    if let name = flow.visibleName {
+                        Text(verbatim: "\(emoji) \(name)")
+                    } else {
+                        Text(verbatim: emoji)
+                    }
                 } else {
-                    Label(flow.displayName, systemImage: flow.symbolName)
+                    Label(flow.visibleName ?? "", systemImage: flow.symbolName)
                 }
             }
-            .accessibilityLabel(Text(verbatim: flow.displayName))
+            .accessibilityLabel(Text(verbatim: flow.accessibilityName))
             .accessibilityAddTraits(viewModel.draft.voxID == flow.id ? .isSelected : [])
         }
     }
@@ -1607,6 +1604,17 @@ struct QuickCaptureView: View {
         }
     }
 
+    private var selectedPresetActionName: String {
+        selectedFlow.visibleName ?? String(localized: "this icon-only preset")
+    }
+
+    private var presetSendConfirmationTitle: String {
+        if let name = selectedFlow.visibleName {
+            return String(localized: "Send this Capture with \(name)?")
+        }
+        return String(localized: "Send this Capture with this icon-only preset?")
+    }
+
     private var sendRouteControl: CaptureViewSection {
         CaptureViewSection {
             routeStatusButton(
@@ -1628,7 +1636,7 @@ struct QuickCaptureView: View {
             .accessibilityIdentifier("quick_capture_submit")
             // Strictly opt-in confirmation (default off) for Preset sends.
             .confirmationDialog(
-                String(localized: "Send this Capture with \(selectedFlow.displayName)?"),
+                presetSendConfirmationTitle,
                 isPresented: $showsPresetSendConfirmation,
                 titleVisibility: .visible
             ) {
@@ -1945,6 +1953,9 @@ struct QuickCaptureView: View {
     private func handleCaptureDisappear() {
         locationRequestTask?.cancel()
         initialComposerFocusIsPending = false
+        sentToastPresentationID = nil
+        showsSentToast = false
+        discardSentUndoSnapshot()
         dismissComposer()
     }
 
@@ -2093,17 +2104,25 @@ struct QuickCaptureView: View {
         }
     }
 
-    private func presentSentToast(for receipt: CaptureReceipt? = nil) async {
-        if let receipt {
+    private func presentSentToast(
+        for receipt: CaptureReceipt? = nil,
+        replacingWith suppliedSnapshot: SentCaptureUndoSnapshot? = nil
+    ) async {
+        if let suppliedSnapshot {
+            replaceSentUndoSnapshot(with: suppliedSnapshot)
+        } else if let receipt {
             // Undo is only offered when the receipt belongs to the composer
             // send that created the snapshot. Inbox receipts key different
             // request IDs and watch deliveries have no local snapshot.
             if sentUndoSnapshot?.requestID != receipt.requestID {
-                sentUndoSnapshot = nil
+                discardSentUndoSnapshot()
             }
         } else {
-            sentUndoSnapshot = nil
+            discardSentUndoSnapshot()
         }
+
+        let presentationID = UUID()
+        sentToastPresentationID = presentationID
         withAnimation(.easeOut(duration: 0.18)) { showsSentToast = true }
         let undoAvailable = sentUndoSnapshot?.offersUndo == true
         UIAccessibility.post(
@@ -2113,9 +2132,23 @@ struct QuickCaptureView: View {
                 : String(localized: "Capture sent")
         )
         try? await Task.sleep(for: SentCaptureUndo.toastWindow)
+        guard sentToastPresentationID == presentationID else { return }
+        sentToastPresentationID = nil
         withAnimation(.easeIn(duration: 0.18)) { showsSentToast = false }
-        sentUndoSnapshot = nil
+        discardSentUndoSnapshot()
         focusComposer()
+    }
+
+    private func replaceSentUndoSnapshot(with snapshot: SentCaptureUndoSnapshot) {
+        guard sentUndoSnapshot?.id != snapshot.id else { return }
+        sentUndoSnapshot?.discardCachedAudio()
+        sentUndoSnapshot = snapshot
+    }
+
+    private func discardSentUndoSnapshot(matching snapshotID: UUID? = nil) {
+        guard snapshotID == nil || sentUndoSnapshot?.id == snapshotID else { return }
+        sentUndoSnapshot?.discardCachedAudio()
+        sentUndoSnapshot = nil
     }
 
     /// Sends the composer Capture. When the opt-in preference is enabled, a
@@ -2132,13 +2165,22 @@ struct QuickCaptureView: View {
 
     private func submitComposerCapture() {
         guard viewModel.requireCaptureRouteAvailable() else { return }
-        // Snapshot before submit(): a successful send replaces the live draft,
-        // so this is the only moment the outgoing text still exists.
-        sentUndoSnapshot = SentCaptureUndo.snapshot(
+        // Snapshot before submit(): successful delivery moves staged audio and
+        // replaces the live draft, so this is the only safe preservation point.
+        let snapshot = SentCaptureUndo.snapshot(
             draft: viewModel.draft,
-            presetDisplayName: selectedFlow.displayName
+            presetDisplayName: selectedFlow.accessibilityName,
+            stagingDirectoryURL: viewModel.sentCaptureUndoSourceDirectoryURL,
+            audioCacheRootURL: viewModel.sentCaptureUndoCacheRootURL
         )
-        Task { await viewModel.submit() }
+        replaceSentUndoSnapshot(with: snapshot)
+        Task {
+            await viewModel.submit()
+            if viewModel.lastReceipt?.requestID != snapshot.requestID,
+               viewModel.locationDecision == nil {
+                discardSentUndoSnapshot(matching: snapshot.id)
+            }
+        }
     }
 
     /// Restores the just-sent Capture into the composer as an editable draft.
@@ -2146,14 +2188,16 @@ struct QuickCaptureView: View {
     private func restoreSentCaptureAsDraft() {
         guard let snapshot = sentUndoSnapshot else { return }
         sentUndoSnapshot = nil
+        sentToastPresentationID = nil
         withAnimation(.easeIn(duration: 0.18)) { showsSentToast = false }
         let sentVia = viewModel.historyRecords
             .first { $0.requestID == snapshot.requestID && $0.outcome == .delivered }?
             .destinationName
             ?? snapshot.presetDisplayName
         Task {
-            _ = await SentCaptureUndo.apply(snapshot, to: viewModel)
+            let didRestore = await SentCaptureUndo.apply(snapshot, to: viewModel)
             focusComposer()
+            guard didRestore else { return }
             UIAccessibility.post(
                 notification: .announcement,
                 argument: String(
@@ -2171,6 +2215,7 @@ struct QuickCaptureView: View {
             isProcessingMedia = false
             focusComposer()
         }
+        let firstNewPayloadIndex = viewModel.draft.additionalPayloads.count
         for item in items {
             do {
                 guard let data = try await item.loadTransferable(type: Data.self) else { continue }
@@ -2179,12 +2224,14 @@ struct QuickCaptureView: View {
                 await viewModel.stageImage(
                     data: data,
                     filename: "\(prefix)-\(UUID().uuidString.lowercased()).\(ext)",
-                    contentTypeIdentifier: type.identifier
+                    contentTypeIdentifier: type.identifier,
+                    describeImmediately: false
                 )
             } catch {
                 viewModel.errorMessage = error.localizedDescription
             }
         }
+        await viewModel.describeStagedImagesIfNeeded(from: firstNewPayloadIndex)
     }
 
     private func importOCRPhotos(_ items: [PhotosPickerItem]) async {
@@ -2229,6 +2276,7 @@ struct QuickCaptureView: View {
             isProcessingMedia = false
             focusComposer()
         }
+        let firstNewPayloadIndex = viewModel.draft.additionalPayloads.count
         for item in items {
             do {
                 guard let data = try await item.loadTransferable(type: Data.self) else { continue }
@@ -2238,12 +2286,14 @@ struct QuickCaptureView: View {
                     data: data,
                     filename: "screenshot-\(UUID().uuidString.lowercased()).\(ext)",
                     contentTypeIdentifier: type.identifier,
-                    altText: String(localized: "Screenshot"), altTextOrigin: .placeholder
+                    altText: String(localized: "Screenshot"), altTextOrigin: .placeholder,
+                    describeImmediately: false
                 )
             } catch {
                 viewModel.errorMessage = error.localizedDescription
             }
         }
+        await viewModel.describeStagedImagesIfNeeded(from: firstNewPayloadIndex)
     }
 
     private func importFiles(_ urls: [URL]) {
@@ -2257,6 +2307,7 @@ struct QuickCaptureView: View {
             do {
                 var budget = CaptureInputBudget()
                 try budget.reserveSharedItems(urls.count)
+                let firstNewPayloadIndex = viewModel.draft.additionalPayloads.count
                 for url in urls {
                     let values = try url.resourceValues(forKeys: [.contentTypeKey])
                     let type = values.contentType ?? .data
@@ -2265,9 +2316,11 @@ struct QuickCaptureView: View {
                         filename: url.lastPathComponent,
                         contentTypeIdentifier: type.identifier,
                         embedAsImage: type.conforms(to: .image),
-                        embedAsAudio: type.conforms(to: .audio)
+                        embedAsAudio: type.conforms(to: .audio),
+                        describeImageImmediately: false
                     )
                 }
+                await viewModel.describeStagedImagesIfNeeded(from: firstNewPayloadIndex)
             } catch {
                 viewModel.errorMessage = error.localizedDescription
             }
@@ -2431,7 +2484,7 @@ struct QuickCaptureView: View {
         }
         return recordingMode == .draft
             ? String(localized: "Transcript will be added to the editor")
-            : String(localized: "Record and export with \(selectedFlow.displayName)")
+            : String(localized: "Record and export with \(selectedPresetActionName)")
     }
 
     private var recordingDetailsIcon: String {
@@ -2468,7 +2521,7 @@ struct QuickCaptureView: View {
         if usageTracker.isAtLimit { return String(localized: "Unlock voice capture") }
         return recordingMode == .draft
             ? String(localized: "Start voice capture and add transcript to Capture")
-            : String(localized: "Start voice capture and run \(selectedFlow.displayName)")
+            : String(localized: "Start voice capture and run \(selectedPresetActionName)")
     }
 
     private func prepareRecordingFeatures() {
@@ -2765,12 +2818,20 @@ struct QuickCaptureView: View {
         switch payload {
         case .text(let value): return value
         case .url(let url, let title): return title ?? url.absoluteString
-        case .audio(let asset, _), .retainedAudio(let asset, _), .image(let asset, _, _), .file(let asset):
+        case .audio(let asset, _), .retainedAudio(let asset, _), .file(let asset):
             return asset.originalFilename
+        case .image(let asset, let altText, let origin):
+            return generatedAltTextLabel(altText, origin: origin) ?? asset.originalFilename
         case .scannedDocument(let pages, _, _):
             return String(localized: "Scan · \(pages.count) page(s)")
-        case .sketch: return String(localized: "Sketch")
+        case .sketch(_, _, let altText, let origin):
+            return generatedAltTextLabel(altText, origin: origin) ?? String(localized: "Sketch")
         }
+    }
+
+    private func generatedAltTextLabel(_ altText: String?, origin: CaptureAltTextOrigin?) -> String? {
+        guard origin == .generated else { return nil }
+        return CaptureImageDescription.validated(altText)
     }
 }
 

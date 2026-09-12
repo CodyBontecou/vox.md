@@ -72,7 +72,7 @@ struct CapturePresetAudioFilenameSettings: View {
             context: CapturePresetAudioFilenameContext(
                 identifier: "01234567-89AB-CDEF-0123-456789ABCDEF",
                 createdAt: Date(timeIntervalSince1970: 1_704_164_645),
-                presetName: preset.displayName,
+                presetName: preset.visibleName ?? "",
                 originalFilename: "Original Recording.wav",
                 timeZone: TimeZone(secondsFromGMT: 0) ?? .current
             ),

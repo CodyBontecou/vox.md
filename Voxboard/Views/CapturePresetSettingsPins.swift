@@ -23,6 +23,13 @@ final class CapturePresetSettingsPins {
 
     var orderedIDs: [String] { preferences.orderedIDs }
 
+    /// Preserves the canonical preset order while ensuring every preset appears
+    /// in exactly one settings section.
+    func unpinnedIDs(in presetIDs: [String]) -> [String] {
+        let pinnedIDs = Set(orderedIDs)
+        return presetIDs.filter { !pinnedIDs.contains($0) }
+    }
+
     func profile(id: String) -> CapturePresetProfile? {
         profiles?.first { $0.id == id }
     }

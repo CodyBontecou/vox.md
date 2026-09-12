@@ -14,7 +14,6 @@ internal val SHA_PATTERN = Regex("^[0-9a-f]{64}$")
 private const val CURRENT_CORE = "0.1.0-alpha.1"
 private const val CURRENT_RENDERER = "swift-legacy-m0"
 private const val CURRENT_PROFILE = "apple-parity-v1"
-private const val FIXED_M3_PRESET_ID = "33333333-3333-4333-8333-333333333333"
 private const val ZERO_SHA = "0000000000000000000000000000000000000000000000000000000000000000"
 
 class PackageCodecException(val coarseCode: String) : IllegalArgumentException(coarseCode)
@@ -147,7 +146,7 @@ object CapturePackageCodec {
         for (key in listOf("modelProfileID", "modelRevision")) if (pins[key] !is JsonNull) boundedString(pins, key, 1, 64)
 
         val preset = objectValue(obj, "preset"); exactKeys(preset, setOf("destinationPolicy", "id", "metadataPolicy", "retryMarkerPolicy", "revision", "routePolicy", "snapshotHash", "templateFreezePoint"))
-        val presetID = string(preset, "id").also(::requireUUID); if (integer(preset, "revision") < 0) fail("presetBounds")
+        string(preset, "id").also(::requireUUID); if (integer(preset, "revision") < 0) fail("presetBounds")
         val snapshotHash = string(preset, "snapshotHash").also(::requireSha)
         val zeroed = JsonObject(preset.toMutableMap().also { it["snapshotHash"] = JsonPrimitive(ZERO_SHA) })
         if (sha256(canonical(zeroed)) != snapshotHash) fail("presetSnapshotHash")
@@ -171,9 +170,25 @@ object CapturePackageCodec {
         if (source != "app" || calendar != "gregorian" || operation != "newNote" || payloads.size !in 1..2 || payloads.any { string(it as JsonObject, "kind") !in setOf("text", "link") }) fail("requestProfile")
         if (location != "notRequested" || origin !is JsonNull) fail("invocationProfile")
         if (pins["modelProfileID"] !is JsonNull || pins["modelRevision"] !is JsonNull || renderer != CURRENT_RENDERER || profile != CURRENT_PROFILE || profileVersion != 1L || (gateCurrentCore && core != CURRENT_CORE)) fail("pinProfile")
-        if (presetID != FIXED_M3_PRESET_ID || integer(preset, "revision") != 1L || string(preset, "retryMarkerPolicy") != "none") fail("presetProfile")
-        if (string(route, "collisionPolicy") != "deterministicSuffix" || array(route, "attachmentFolder").isNotEmpty() || array(route, "logicalFolder").map { (it as JsonPrimitive).content } != listOf("Inbox") || string(route, "noteNameTemplate") != "capture-{id}.md") fail("routeProfile")
-        if (string(metadata, "frontmatterMode") != "none" || string(metadata, "templatePolicy") != "none" || string(metadata, "lineEnding") != "lf" || !boolean(metadata, "finalNewline") || fields.isNotEmpty()) fail("metadataProfile")
+        if (integer(preset, "revision") !in 1..Int.MAX_VALUE.toLong() || string(preset, "retryMarkerPolicy") != "none") fail("presetProfile")
+        val noteNameTemplate = string(route, "noteNameTemplate")
+        val logicalFolder = array(route, "logicalFolder")
+        if (
+            string(route, "collisionPolicy") != "deterministicSuffix" ||
+            array(route, "attachmentFolder").isNotEmpty() ||
+            logicalFolder.isEmpty() ||
+            noteNameTemplate.length !in 1..128 ||
+            !noteNameTemplate.endsWith(".md", ignoreCase = true) ||
+            noteNameTemplate.any { it == '/' || it == '\\' || it == '\u0000' }
+        ) fail("routeProfile")
+        val frontmatterMode = string(metadata, "frontmatterMode")
+        if (
+            frontmatterMode !in setOf("none", "merge") ||
+            (frontmatterMode == "none") != fields.isEmpty() ||
+            string(metadata, "templatePolicy") != "none" ||
+            string(metadata, "lineEnding") != "lf" ||
+            !boolean(metadata, "finalNewline")
+        ) fail("metadataProfile")
         if (string(destination, "capabilityClass") != "userVault" || string(destination, "expectedCaseSensitivity") != "sensitive") fail("destinationProfile")
         return AdmittedRequest(requestID, created)
     }

@@ -280,7 +280,7 @@ final class TranscriptCaptureDestinationExporterTests: XCTestCase {
         let context = CapturePresetAudioFilenameContext(
             identifier: requestID.uuidString,
             createdAt: recordedAt,
-            presetName: flow.displayName,
+            presetName: flow.visibleName ?? "",
             originalFilename: "Field Memo.caf",
             timeZone: try XCTUnwrap(TimeZone(secondsFromGMT: 0))
         )
@@ -973,6 +973,55 @@ final class TranscriptCaptureDestinationExporterTests: XCTestCase {
         XCTAssertTrue(FileManager.default.fileExists(
             atPath: destinationRoot.appendingPathComponent("media/\(expectedFilename)").path
         ))
+    }
+
+    func test_configuredRecordingTemplateRendersOnceWithoutAutomaticPresetSuffix() async throws {
+        let captureRoot = try temporaryFolder(named: "recording-template-no-preset-root")
+        let destinationRoot = try temporaryFolder(named: "recording-template-no-preset-destination")
+        defer {
+            try? FileManager.default.removeItem(at: captureRoot)
+            try? FileManager.default.removeItem(at: destinationRoot)
+        }
+        let destination = CaptureDestination(
+            name: "Inbox",
+            rootBookmark: try destinationRoot.bookmarkData(),
+            rootName: "Vault",
+            noteTarget: .existingNote(relativePath: "Inbox.md"),
+            attachmentsFolderName: "media"
+        )
+        try await CaptureLibraryStore(
+            fileURL: captureRoot.appendingPathComponent(CaptureLibraryStore.defaultFilename),
+            coordinator: ProcessLocalCaptureFileCoordinator.shared
+        ).save(CaptureLibraryEnvelope(destinations: [destination], defaultDestinationID: destination.id))
+        let sourceURL = captureRoot.appendingPathComponent("recording-source.m4a")
+        try Data("voice-audio".utf8).write(to: sourceURL)
+        let requestID = UUID(uuidString: "ABCDEF12-3456-7890-ABCD-EF1234567890")!
+        let createdAt = Date(timeIntervalSince1970: 1_700_000_100)
+        var flow = CapturePresetStore.makeCustomFlow()
+        flow.name = "Nerd"
+        flow.audioFilenameTemplate = "meeting-{date}-{time}-{preset}"
+        let audioFilenameContext = CapturePresetAudioFilenameContext(
+            identifier: requestID.uuidString,
+            createdAt: createdAt,
+            presetName: flow.visibleName ?? "",
+            originalFilename: "Original Recording.caf",
+            timeZone: try XCTUnwrap(TimeZone(secondsFromGMT: 0))
+        )
+
+        let receipt = try await ConfiguredTranscriptCaptureDestinationExporter.exportRecording(
+            requestID: requestID,
+            createdAt: createdAt,
+            flow: flow,
+            destinationID: destination.id,
+            audioSourceURL: sourceURL,
+            preferredFilename: "Original Recording.caf",
+            locationOutcome: nil,
+            captureRootURL: captureRoot,
+            audioFilenameContext: audioFilenameContext
+        )
+
+        XCTAssertEqual(receipt.attachmentURLs.map(\.lastPathComponent), ["meeting-2023-11-14-221500-Nerd.m4a"])
+        XCTAssertFalse(try XCTUnwrap(receipt.attachmentURLs.first?.lastPathComponent).contains("{preset}-Nerd"))
     }
 
     func test_presetAudioTemplateDoesNotRenameArbitraryUserAttachedMedia() async throws {

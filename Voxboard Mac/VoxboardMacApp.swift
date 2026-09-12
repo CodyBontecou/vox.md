@@ -1320,8 +1320,9 @@ private struct MacMenuBarMenu: View {
 
         Picker("Capture Preset", selection: $selectedFlowId) {
             ForEach(enabledFlows) { flow in
-                Label(flow.displayName, systemImage: iconName(for: flow.symbolName))
+                Label(flow.visibleName ?? String(localized: "Icon-only preset"), systemImage: iconName(for: flow.symbolName))
                     .tag(flow.id)
+                    .accessibilityLabel(flow.accessibilityName)
             }
         }
         .disabled(recorder.isRecording)

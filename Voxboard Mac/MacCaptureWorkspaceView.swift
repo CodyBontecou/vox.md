@@ -302,66 +302,35 @@ struct MacCaptureWorkspaceView: View {
                     selectFlow(flow)
                 } label: {
                     Label {
-                        Text(flow.displayName)
+                        Text(flow.visibleName ?? String(localized: "Icon-only preset"))
                     } icon: {
                         CapturePresetIconView(symbolName: flow.symbolName, emoji: flow.emoji)
                     }
                 }
-                .accessibilityLabel(flow.displayName)
+                .accessibilityLabel(flow.accessibilityName)
                 .accessibilityAddTraits(flow.id == viewModel.draft.voxID ? .isSelected : [])
-            }
-
-            if selectedFlow.locationPolicy.isEnabled {
-                Divider()
-                locationToolbarStatus
             }
         } label: {
             Label {
-                Text(selectedFlow.displayName)
-                    .lineLimit(1)
+                if let name = selectedFlow.visibleName {
+                    Text(name)
+                        .lineLimit(1)
+                }
             } icon: {
                 CapturePresetIconView(symbolName: selectedFlow.symbolName, emoji: selectedFlow.emoji)
             }
         }
         .fixedSize()
         .disabled(!viewModel.canChangeCaptureRoute)
-        .help("Capture Preset: \(selectedFlow.displayName)")
-        .accessibilityLabel("Capture Preset \(selectedFlow.displayName)")
+        .help("Capture Preset: \(selectedFlow.accessibilityName)")
+        .accessibilityLabel("Capture Preset \(selectedFlow.accessibilityName)")
         .accessibilityIdentifier("mac_capture_preset_selector")
-    }
-
-    private var locationToolbarStatus: some View {
-        Group {
-            if viewModel.isResolvingLocation || recorder.isResolvingLocation {
-                ProgressView()
-                    .controlSize(.small)
-            } else {
-                Image(systemName: "location.fill")
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .help(
-            viewModel.isResolvingLocation || recorder.isResolvingLocation
-                ? "Finding Location…"
-                : "Current Location On"
-        )
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(
-            (viewModel.isResolvingLocation || recorder.isResolvingLocation
-                ? String(localized: "Finding Location…")
-                : String(localized: "Current Location On"))
-                + " " + selectedFlow.displayName
-        )
-        .accessibilityIdentifier(
-            viewModel.isResolvingLocation || recorder.isResolvingLocation
-                ? "mac_capture_finding_preset_location"
-                : "mac_capture_active_preset_location"
-        )
     }
 
     private var isCaptureActivityVisible: Bool {
         recorder.isRecording || recorder.isTranscribing || recorder.isExporting
-            || viewModel.isSubmitting || isProcessingAttachments
+            || viewModel.isSubmitting || viewModel.isResolvingLocation
+            || recorder.isResolvingLocation || isProcessingAttachments
     }
 
     private var captureActivityToolbarStatus: some View {
@@ -390,6 +359,9 @@ struct MacCaptureWorkspaceView: View {
         }
         if recorder.isTranscribing { return String(localized: "Transcribing…") }
         if recorder.isExporting { return String(localized: "Finishing Export…") }
+        if viewModel.isResolvingLocation || recorder.isResolvingLocation {
+            return String(localized: "Finding Location…")
+        }
         if viewModel.isDescribingImages { return String(localized: "Describing Images…") }
         if viewModel.isSubmitting { return String(localized: "Sending…") }
         return String(localized: "Adding Attachments…")
@@ -799,7 +771,7 @@ struct MacCaptureWorkspaceView: View {
                      ? "The transcript is saved locally while its note and requested audio finish exporting."
                      : recordingMode == .draft
                          ? "The on-device transcript will be added to this durable draft."
-                         : "The recording will be processed and sent with \(selectedFlow.displayName).")
+                         : "The recording will be processed and sent with \(selectedFlow.accessibilityName).")
                     .font(Geist.caption())
                     .foregroundStyle(Geist.muted)
             }
@@ -1400,6 +1372,7 @@ struct MacCaptureWorkspaceView: View {
         do {
             var budget = CaptureInputBudget()
             try budget.reserveSharedItems(urls.count)
+            let firstNewPayloadIndex = viewModel.draft.additionalPayloads.count
             for url in urls {
                 let type = (try? url.resourceValues(forKeys: [.contentTypeKey]).contentType)
                     ?? UTType(filenameExtension: url.pathExtension)
@@ -1409,9 +1382,11 @@ struct MacCaptureWorkspaceView: View {
                     filename: url.lastPathComponent,
                     contentTypeIdentifier: type.identifier,
                     embedAsImage: type.conforms(to: .image),
-                    embedAsAudio: type.conforms(to: .audio)
+                    embedAsAudio: type.conforms(to: .audio),
+                    describeImageImmediately: false
                 )
             }
+            await viewModel.describeStagedImagesIfNeeded(from: firstNewPayloadIndex)
         } catch {
             viewModel.errorMessage = error.localizedDescription
         }
@@ -1534,11 +1509,19 @@ struct MacCaptureWorkspaceView: View {
         switch payload {
         case .text(let value): value
         case .url(let url, let title): title ?? url.absoluteString
-        case .audio(let asset, _), .retainedAudio(let asset, _), .image(let asset, _, _), .file(let asset):
+        case .audio(let asset, _), .retainedAudio(let asset, _), .file(let asset):
             asset.originalFilename
+        case .image(let asset, let altText, let origin):
+            generatedAltTextLabel(altText, origin: origin) ?? asset.originalFilename
         case .scannedDocument(let pages, _, _): "Scan · \(pages.count) page(s)"
-        case .sketch: "Sketch"
+        case .sketch(_, _, let altText, let origin):
+            generatedAltTextLabel(altText, origin: origin) ?? "Sketch"
         }
+    }
+
+    private func generatedAltTextLabel(_ altText: String?, origin: CaptureAltTextOrigin?) -> String? {
+        guard origin == .generated else { return nil }
+        return CaptureImageDescription.validated(altText)
     }
 }
 
@@ -1588,7 +1571,7 @@ struct MacCaptureRouteInspector: View {
                 MacCaptureDestinationEditor(
                     existing: viewModel.selectedPresetDestination,
                     templates: viewModel.entryTemplates,
-                    fixedName: viewModel.selectedVoxProfile?.displayName,
+                    fixedName: viewModel.selectedVoxProfile.map { $0.visibleName ?? String(localized: "Icon-only preset") },
                     embeddedInNavigation: true,
                     onClose: { isEditingDestination = false }
                 ) { destination in
@@ -1604,11 +1587,12 @@ struct MacCaptureRouteInspector: View {
             if let preset = viewModel.selectedVoxProfile {
                 LabeledContent("Preset") {
                     Label {
-                        Text(preset.displayName)
+                        Text(preset.visibleName ?? String(localized: "Icon-only preset"))
+                            .foregroundStyle(preset.visibleName == nil ? .secondary : .primary)
                     } icon: {
                         CapturePresetIconView(symbolName: preset.symbolName, emoji: preset.emoji)
                     }
-                    .accessibilityLabel(preset.displayName)
+                    .accessibilityLabel(preset.accessibilityName)
                 }
 
                 if let destination = viewModel.selectedPresetDestination {
@@ -1800,11 +1784,19 @@ struct MacCaptureRouteInspector: View {
         switch payload {
         case .text(let value): value
         case .url(let url, let title): title ?? url.absoluteString
-        case .audio(let asset, _), .retainedAudio(let asset, _), .image(let asset, _, _), .file(let asset):
+        case .audio(let asset, _), .retainedAudio(let asset, _), .file(let asset):
             asset.originalFilename
+        case .image(let asset, let altText, let origin):
+            generatedAltTextLabel(altText, origin: origin) ?? asset.originalFilename
         case .scannedDocument(let pages, _, _): "Scan · \(pages.count) page(s)"
-        case .sketch: "Sketch"
+        case .sketch(_, _, let altText, let origin):
+            generatedAltTextLabel(altText, origin: origin) ?? "Sketch"
         }
+    }
+
+    private func generatedAltTextLabel(_ altText: String?, origin: CaptureAltTextOrigin?) -> String? {
+        guard origin == .generated else { return nil }
+        return CaptureImageDescription.validated(altText)
     }
 
     private enum PlacementChoice: String, Hashable {

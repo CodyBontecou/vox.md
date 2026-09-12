@@ -1,45 +1,10 @@
 import SwiftUI
 import VoxboardShared
 
-/// Uses the stored-ID collection directly so disabled and unavailable rows have
-/// real move offsets. Native EditButton/onMove provides draggable ordering.
-struct CapturePresetSettingsPinnedSection: View {
-    let pins: CapturePresetSettingsPins
-
-    var body: some View {
-        Section {
-            if pins.orderedIDs.isEmpty {
-                Text("No pinned presets. Pin a preset below to show it in the Capture Bar.")
-                    .foregroundStyle(.secondary)
-                    .accessibilityIdentifier("capture_preset_pins_empty")
-            }
-            ForEach(pins.orderedIDs, id: \.self) { id in
-                CapturePresetSettingsPinnedRow(id: id, profile: pins.profile(id: id)) {
-                    pins.setPinned(false, id: id)
-                }
-            }
-            .onMove { offsets, destination in
-                pins.move(fromOffsets: offsets, toOffset: destination)
-            }
-        } header: {
-            Text("Capture Bar")
-        } footer: {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Tap Edit to drag pinned presets into order. Disabled presets keep their place but are hidden until enabled. Pinning does not change your default or keyboard preset.")
-                if let message = pins.errorMessage ?? pins.storageMessage {
-                    Text(message)
-                        .foregroundStyle(.red)
-                        .accessibilityIdentifier("capture_preset_pins_error")
-                    Button("Reload") { pins.reload() }
-                        .frame(minHeight: 44)
-                        .accessibilityIdentifier("capture_preset_pins_reload")
-                }
-            }
-        }
-    }
-}
-
-private struct CapturePresetSettingsPinnedRow: View {
+/// Fallback row for a stored pin whose editable preset is temporarily missing.
+/// Keeping it in the stored-ID list preserves exact native move offsets and
+/// gives the user a direct recovery action instead of silently dropping it.
+struct CapturePresetSettingsPinnedRow: View {
     let id: String
     let profile: CapturePresetProfile?
     let unpin: () -> Void
@@ -52,6 +17,7 @@ private struct CapturePresetSettingsPinnedRow: View {
                     .frame(minWidth: 24)
                 VStack(alignment: .leading, spacing: 3) {
                     Text(name)
+                        .foregroundStyle(profile?.visibleName == nil ? .secondary : .primary)
                         .fixedSize(horizontal: false, vertical: true)
                     if profile == nil {
                         Text("Unavailable — unpin or reload")
@@ -76,7 +42,7 @@ private struct CapturePresetSettingsPinnedRow: View {
         .accessibilityIdentifier("capture_preset_pinned_row_\(id)")
     }
 
-    private var name: String { profile?.displayName ?? String(localized: "Unavailable Preset") }
+    private var name: String { profile.map { $0.visibleName ?? String(localized: "Icon-only preset") } ?? String(localized: "Unavailable Preset") }
 
     private var layout: AnyLayout {
         dynamicTypeSize.isAccessibilitySize
@@ -92,17 +58,25 @@ struct CapturePresetSettingsPinButton: View {
     let isPinned: Bool
     let action: () -> Void
 
+    @Environment(\.editMode) private var editMode
+
     var body: some View {
         Button(action: action) {
-            Text(isPinned ? "Unpin" : "Pin")
-                .font(.callout)
-                .padding(.horizontal, 8)
-                .frame(minWidth: 44, minHeight: 44)
+            Image(systemName: isPinned ? "pin.fill" : "pin")
+                .font(.body.weight(.semibold))
+                .foregroundStyle(isPinned ? Color.accentColor : .secondary)
+                .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
         }
         .buttonStyle(.borderless)
+        .disabled(editMode?.wrappedValue.isEditing == true)
         .accessibilityLabel(isPinned
             ? String(localized: "Unpin \(name) from Capture Bar")
             : String(localized: "Pin \(name) to Capture Bar"))
+        .accessibilityValue(isPinned ? String(localized: "Pinned") : String(localized: "Not pinned"))
+        .accessibilityHint(isPinned
+            ? String(localized: "Removes this preset from Capture Bar quick actions.")
+            : String(localized: "Adds this preset to the end of Capture Bar quick actions."))
         .accessibilityIdentifier(accessibilityID)
     }
 }
@@ -116,7 +90,8 @@ struct CapturePresetSettingsListLabel: View {
             CapturePresetIconView(symbolName: preset.symbolName, emoji: preset.emoji)
                 .frame(minWidth: 24)
             VStack(alignment: .leading, spacing: 3) {
-                Text(preset.displayName)
+                Text(preset.visibleName ?? String(localized: "Icon-only preset"))
+                    .foregroundStyle(preset.visibleName == nil ? .secondary : .primary)
                     .fixedSize(horizontal: false, vertical: true)
                 Text(preset.watchOutputMode == .recordingOnly
                     ? String(localized: "Recording Only (Watch)")

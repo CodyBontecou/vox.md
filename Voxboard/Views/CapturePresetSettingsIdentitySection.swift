@@ -7,8 +7,8 @@ struct CapturePresetSettingsIdentitySection: View {
     @Binding var preset: CapturePreset
 
     var body: some View {
-        Section("Identity") {
-            TextField("Name", text: $preset.name)
+        Section {
+            TextField("Name (optional)", text: $preset.name)
                 .accessibilityIdentifier("capture_preset_name")
             NavigationLink {
                 CapturePresetSettingsIconPickerView(preset: $preset)
@@ -23,11 +23,15 @@ struct CapturePresetSettingsIdentitySection: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
-            .accessibilityLabel(String(localized: "Icon for \(preset.displayName)"))
+            .accessibilityLabel(String(localized: "Icon for \(preset.accessibilityName)"))
             .accessibilityValue(iconDescription)
             .accessibilityIdentifier("capture_preset_icon_picker")
             Toggle("Enabled", isOn: $preset.isEnabled)
                 .tint(Color.accentColor)
+        } header: {
+            Text("Identity")
+        } footer: {
+            Text("Leave the name blank to show only the icon in compact Capture controls.")
         }
     }
 

@@ -1,0 +1,74 @@
+steps:
+  - await: { visible: { text: Choose capture preset } }
+  - echo: On capture with Default active. Open Capture Presets.
+  - tap:
+      text: Choose capture preset
+  - await: { visible: { text: Capture Presets } }
+  - await: { idle: true }
+  - echo: Capture Presets is open. Create a new preset.
+  - tap:
+      text: New capture preset
+  - await: { visible: { text: New Preset } }
+  - await: { idle: true }
+  - echo: New Preset is open. Name the preset Daily.
+  - tap:
+      text: Name
+  - tool: keyboard
+    args:
+      text: Daily
+  - echo: Daily is named. Use the checklist icon and route it to Journal/Daily.
+  - tap:
+      text: Checklist preset icon
+  - tap:
+      on:
+        text: Inbox
+      times: 2
+  - tap: { text: Select all }
+  - tool: keyboard
+    args:
+      text: Journal/Daily
+  - echo: Folder route is set. Change the note filename to daily-{id}.md.
+  - tap:
+      on:
+        text: capture-{id}.md
+      times: 2
+  - tap: { text: Select all }
+  - tool: keyboard
+    args:
+      text: daily-{id}.md
+  - echo: Filename is set. Add source=android frontmatter and save.
+  - tap: { text: Frontmatter }
+  - tool: keyboard
+    args:
+      text: source=android
+  - await: { visible: { text: source=android } }
+  - tap:
+      text: Save capture preset
+  - await: { visible: { text: Daily } }
+  - await: { idle: true }
+  - echo: Daily preset is saved. Select it, then return to capture.
+  - tap: { text: Daily }
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: Daily / Journal/Daily
+      timeoutMs: 5000
+  - tap:
+      text: Back
+  - await: { visible: { text: Choose capture preset } }
+  - await: { idle: true }
+  - echo: Back on capture with Daily active. Enter a test capture and send it.
+  - tap:
+      identifier: capture-editor
+  - await: { idle: true }
+  - tool: keyboard
+    args:
+      text: Preset route verification
+  - echo: Capture text is present and Send is enabled. Submit the durable capture.
+  - tap:
+      identifier: send-capture
+  - await: { visible: { text: Capture sent }, timeout: 10000 }
+executionPrerequisite: Vox.md is open on the capture screen with the Default
+  preset active, a writable Documents destination selected, no preset named
+  Daily, and no capture text entered.

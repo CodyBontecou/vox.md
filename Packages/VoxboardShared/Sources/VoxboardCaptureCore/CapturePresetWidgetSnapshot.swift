@@ -3,14 +3,17 @@ import Foundation
 /// Identity only: widget entries never retain a workflow, route or selection preference.
 public struct CapturePresetWidgetIdentity: Identifiable, Equatable, Hashable, Sendable {
     public let id: String
+    /// Visible title. Empty means the preset is intentionally icon-only.
     public let name: String
+    public let accessibilityName: String
     public let symbolName: String
     public let emoji: String?
     public let isEnabled: Bool
 
     public init(profile: CapturePresetProfile) {
         id = profile.id
-        name = profile.displayName
+        name = profile.visibleName ?? ""
+        accessibilityName = profile.accessibilityName
         symbolName = profile.symbolName
         emoji = profile.emoji
         isEnabled = profile.isEnabled

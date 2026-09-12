@@ -14,42 +14,13 @@ struct CapturePresetSettingsView: View {
     @State private var watchStatePublishTask: Task<Void, Never>?
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.editMode) private var editMode
 
     var body: some View {
         List {
             introSection
-            CapturePresetSettingsPinnedSection(pins: pins)
-
-            Section {
-                ForEach(persistedFlows) { $flow in
-                    presetRowLayout {
-                        NavigationLink {
-                            CapturePresetEditorView(preset: $flow)
-                        } label: {
-                            CapturePresetSettingsListLabel(preset: flow, badge: badge(for: flow))
-                        }
-                        .accessibilityIdentifier("capture_preset_edit_\(flow.id)")
-                        CapturePresetSettingsPinButton(
-                            accessibilityID: "capture_preset_list_pin_\(flow.id)",
-                            name: flow.displayName,
-                            isPinned: pins.preferences.isPinned(id: flow.id)
-                        ) {
-                            pins.setPinned(!pins.preferences.isPinned(id: flow.id), id: flow.id)
-                        }
-                    }
-                    .swipeActions(edge: .trailing) {
-                        if !flow.isBuiltIn {
-                            Button("Delete", role: .destructive) {
-                                delete(flow)
-                            }
-                        }
-                    }
-                }
-            } header: {
-                Text("Capture Presets")
-            } footer: {
-                Text("Each preset owns how captures are processed, formatted, and delivered. Voice-specific audio and legacy export options live in the same preset.")
-            }
+            pinnedPresetSection
+            otherPresetSection
 
             Section {
                 Button {
@@ -68,7 +39,12 @@ struct CapturePresetSettingsView: View {
             }
         }
         .navigationTitle("Capture Presets")
-        .toolbar { EditButton().accessibilityIdentifier("capture_preset_pins_edit") }
+        .toolbar {
+            if pins.orderedIDs.count > 1 || editMode?.wrappedValue.isEditing == true {
+                EditButton()
+                    .accessibilityIdentifier("capture_preset_pins_edit")
+            }
+        }
         .font(Geist.body())
         .tint(Color.accentColor)
         .scrollContentBackground(.hidden)
@@ -119,6 +95,128 @@ struct CapturePresetSettingsView: View {
         }
         flows = CapturePresetStore.loadFlows()
         pins.reload()
+    }
+
+    @ViewBuilder
+    private var pinnedPresetSection: some View {
+        Section {
+            if pins.orderedIDs.isEmpty {
+                VStack(alignment: .leading, spacing: 4) {
+                    Label("No Pinned Presets", systemImage: "pin.slash")
+                        .font(.body.weight(.medium))
+                    Text("Tap the pin beside a preset below to add it to the Capture Bar.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.vertical, 4)
+                .accessibilityElement(children: .combine)
+                .accessibilityIdentifier("capture_preset_pins_empty")
+            }
+
+            ForEach(pins.orderedIDs, id: \.self) { id in
+                if let flow = persistedFlowBinding(for: id) {
+                    presetSettingsRow(flow: flow, isPinned: true)
+                } else {
+                    CapturePresetSettingsPinnedRow(
+                        id: id,
+                        profile: pins.profile(id: id)
+                    ) {
+                        pins.setPinned(false, id: id)
+                    }
+                }
+            }
+            .onMove { offsets, destination in
+                pins.move(fromOffsets: offsets, toOffset: destination)
+            }
+        } header: {
+            Text("Pinned to Capture Bar")
+        } footer: {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(pinnedPresetFooter)
+                if let message = pins.errorMessage ?? pins.storageMessage {
+                    Text(message)
+                        .foregroundStyle(.red)
+                        .accessibilityIdentifier("capture_preset_pins_error")
+                    Button("Reload") { pins.reload() }
+                        .frame(minHeight: 44)
+                        .accessibilityIdentifier("capture_preset_pins_reload")
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var otherPresetSection: some View {
+        let ids = pins.unpinnedIDs(in: flows.map(\.id))
+        if !ids.isEmpty {
+            Section {
+                ForEach(ids, id: \.self) { id in
+                    if let flow = persistedFlowBinding(for: id) {
+                        presetSettingsRow(flow: flow, isPinned: false)
+                    }
+                }
+            } header: {
+                Text("Other Presets")
+            } footer: {
+                Text("Tap a preset to edit its processing, formatting, metadata, audio, and destination. Pinning adds it to the end of the Capture Bar without changing your default or keyboard preset.")
+            }
+        }
+    }
+
+    private var pinnedPresetFooter: LocalizedStringResource {
+        switch pins.orderedIDs.count {
+        case 0:
+            "Pinning adds Capture Bar quick actions without changing your default or keyboard preset."
+        case 1:
+            "Pin another preset to arrange their order. Disabled presets keep their position and reappear when enabled. Pinning does not change your default or keyboard preset."
+        default:
+            "Pinned presets appear in this order in the Capture Bar. Tap Edit to drag them. Disabled presets keep their position and reappear when enabled. Pinning does not change your default or keyboard preset."
+        }
+    }
+
+    private func persistedFlowBinding(for id: String) -> Binding<CapturePreset>? {
+        guard let fallback = flows.first(where: { $0.id == id }) else { return nil }
+        return Binding(
+            get: {
+                persistedFlows.wrappedValue.first(where: { $0.id == id }) ?? fallback
+            },
+            set: { updatedFlow in
+                var updatedFlows = persistedFlows.wrappedValue
+                guard let index = updatedFlows.firstIndex(where: { $0.id == id }) else { return }
+                updatedFlows[index] = updatedFlow
+                persistedFlows.wrappedValue = updatedFlows
+            }
+        )
+    }
+
+    private func presetSettingsRow(
+        flow: Binding<CapturePreset>,
+        isPinned: Bool
+    ) -> some View {
+        let preset = flow.wrappedValue
+        return presetRowLayout {
+            NavigationLink {
+                CapturePresetEditorView(preset: flow)
+            } label: {
+                CapturePresetSettingsListLabel(preset: preset, badge: badge(for: preset))
+            }
+            .accessibilityIdentifier("capture_preset_edit_\(preset.id)")
+
+            CapturePresetSettingsPinButton(
+                accessibilityID: "capture_preset_list_pin_\(preset.id)",
+                name: preset.accessibilityName,
+                isPinned: isPinned
+            ) {
+                pins.setPinned(!pins.preferences.isPinned(id: preset.id), id: preset.id)
+            }
+        }
+        .swipeActions(edge: .trailing) {
+            if !preset.isBuiltIn {
+                Button("Delete", role: .destructive) {
+                    delete(preset)
+                }
+            }
+        }
     }
 
     private var presetRowLayout: AnyLayout {
@@ -223,7 +321,7 @@ private struct CapturePresetEditorView: View {
                 audioExportSection
             }
         }
-        .navigationTitle(flow.displayName)
+        .navigationTitle(flow.visibleName ?? String(localized: "Capture Preset"))
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await loadCaptureDestinations()
@@ -240,7 +338,7 @@ private struct CapturePresetEditorView: View {
                 CaptureDestinationEditorView(
                     existing: ownedDestination,
                     templates: captureEntryTemplates,
-                    fixedName: flow.displayName
+                    fixedName: flow.visibleName ?? String(localized: "Icon-only preset")
                 ) { destination in
                     try await saveOwnedDestination(destination)
                 }
@@ -1217,15 +1315,16 @@ struct FlowIconPickerView: View {
                 Text("Selected Icon")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Text(preset.displayName)
+                Text(preset.visibleName ?? String(localized: "Icon-only preset"))
                     .font(.body.weight(.semibold))
+                    .foregroundStyle(preset.visibleName == nil ? .secondary : .primary)
             }
             Spacer()
         }
         .padding(12)
         .background(RoundedRectangle(cornerRadius: 16).fill(Color.secondary.opacity(0.10)))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(preset.displayName)
+        .accessibilityLabel(preset.accessibilityName)
         .accessibilityValue(Text("Selected Icon"))
         .accessibilityIdentifier("capture_preset_symbol_preview")
     }

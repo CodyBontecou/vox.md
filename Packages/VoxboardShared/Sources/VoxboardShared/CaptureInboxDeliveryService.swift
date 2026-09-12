@@ -201,7 +201,7 @@ public enum CaptureInboxDeliveryService {
                         reason: reason,
                         source: request.source,
                         presetID: request.voxProfile?.id,
-                        presetName: request.voxProfile?.displayName
+                        presetName: request.voxProfile?.accessibilityName
                     ))
                     continue
                 } catch {

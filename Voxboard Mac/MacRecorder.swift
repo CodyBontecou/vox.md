@@ -1858,7 +1858,7 @@ final class MacRecorder {
                     : MacPresetAudioFilenameContextFactory.make(
                         transcriptID: latest.id,
                         transcriptDate: latest.date,
-                        presetName: flowForExport.displayName,
+                        presetName: flowForExport.visibleName ?? "",
                         originalFilename: audioFilenameOriginal
                     )
                 do {
@@ -1937,7 +1937,7 @@ final class MacRecorder {
         guard resolveSecurityScopedURL(from: flow.exportSettings.folderBookmark) == nil else { return flow }
         guard let selection = requestDirectoryAccess(
             title: String(localized: "Choose Export Folder"),
-            message: String(localized: "Vox.md needs permission to save notes for the \"\(flow.displayName)\" Capture Preset.")
+            message: String(localized: "Vox.md needs permission to save notes for the \"\(flow.accessibilityName)\" Capture Preset.")
         ) else {
             KeyboardDebugLog.shared.log("[MacRecorder] Export folder selection cancelled for flow \(flow.id)")
             return flow

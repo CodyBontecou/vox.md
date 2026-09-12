@@ -11,7 +11,7 @@ struct ImageAltTextSettings: View {
             .disabled(!processingEnabled || (unavailableReason != nil && !generateImageAltText))
             .accessibilityIdentifier("generate_image_alt_text")
             .task(id: scenePhase) { unavailableReason = OnDeviceImageSupport.unavailableReason }
-        Text("Describe photos, screenshots, and sketches on this device. Existing descriptions are preserved.")
+        Text("Describe photos, screenshots, and sketches on this device when you attach them. Existing descriptions are preserved.")
             .font(.caption)
             .foregroundStyle(.secondary)
         Text("Keep Original and Apply To control text only. Image descriptions are optional.")

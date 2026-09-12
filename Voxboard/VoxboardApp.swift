@@ -35,6 +35,9 @@ struct VoxboardApp: App {
         // on the next launch; this also repairs drift between the shared
         // override and the app's standard defaults (e.g. after an update).
         AppLanguagePreference.applyAtLaunch()
+        SentCaptureUndo.discardAbandonedAudioCache(
+            captureRootURL: AppConstants.captureDirectoryURL
+        )
 
         // BGTaskScheduler registration must complete before launch finishes.
         CaptureInboxBackgroundDrain.register()

@@ -71,7 +71,7 @@ nonisolated struct WatchRecordingInboxItem: Codable, Equatable, Identifiable, Se
 
     var displayPresetName: String {
         if requiresPresetSelection { return String(localized: "Choose a Preset") }
-        return flowSnapshot?.displayName ?? String(localized: "Capture Preset")
+        return flowSnapshot?.accessibilityName ?? String(localized: "Capture Preset")
     }
 
     var shouldCancelForUnavailableLocation: Bool {

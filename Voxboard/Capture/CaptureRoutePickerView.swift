@@ -15,11 +15,13 @@ struct CaptureRoutePickerView: View {
                 if let preset = viewModel.selectedVoxProfile {
                     Section("Capture Preset") {
                         LabeledContent("Preset") {
-                            Label {
-                                Text(preset.displayName)
-                            } icon: {
+                            HStack(spacing: 6) {
                                 CapturePresetIconView(symbolName: preset.symbolName, emoji: preset.emoji)
+                                Text(preset.visibleName ?? String(localized: "Icon-only preset"))
+                                    .foregroundStyle(preset.visibleName == nil ? .secondary : .primary)
                             }
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(preset.accessibilityName)
                         }
                         if let destination = viewModel.selectedPresetDestination {
                             LabeledContent("Vault / Folder", value: destination.rootName)
@@ -153,7 +155,7 @@ struct CaptureRoutePickerView: View {
                     CaptureDestinationEditorView(
                         existing: viewModel.selectedPresetDestination,
                         templates: viewModel.entryTemplates,
-                        fixedName: viewModel.selectedVoxProfile?.displayName
+                        fixedName: viewModel.selectedVoxProfile.map { $0.visibleName ?? String(localized: "Icon-only preset") }
                     ) { destination in
                         try await viewModel.saveSelectedPresetDestination(destination)
                     }

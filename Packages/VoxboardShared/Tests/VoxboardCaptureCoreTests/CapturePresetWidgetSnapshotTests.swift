@@ -13,6 +13,14 @@ final class CapturePresetWidgetSnapshotTests: XCTestCase {
         XCTAssertNil(custom.tiles[1].captureURL)
     }
 
+    func testIconOnlyProfileSnapshotsKeepVisibleNameBlank() {
+        var unnamed = profile("icon")
+        unnamed.name = "  \n"
+        let value = snapshot(.custom(slots: ["icon"]), profiles: [unnamed])
+        XCTAssertEqual(value.tiles.first?.identity?.name, "")
+        XCTAssertEqual(value.tiles.first?.identity?.accessibilityName, "Icon-only Capture Preset")
+    }
+
     func testSnapshotsRetainIdentityOrderAndURLAfterStoreChanges() throws {
         try withDefaults { defaults in
             defaults.set(try JSONEncoder().encode([profile("a"), profile("b")]), forKey: CapturePresetProfileStore.profilesKey)

@@ -4,7 +4,7 @@ import VoxboardShared
 
 @MainActor
 final class CaptureImagePreparationTests: XCTestCase {
-    func test_cancelledSendKeepsDraftAndUsesItsStagingRoot() async throws {
+    func test_stageImageGeneratesAltTextImmediatelyAndSendReusesIt() async throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let vault = root.appendingPathComponent("vault")
         try FileManager.default.createDirectory(at: vault, withIntermediateDirectories: true)
@@ -26,37 +26,47 @@ final class CaptureImagePreparationTests: XCTestCase {
         model.voxProfiles = [profile]
         model.draft.voxID = profile.id
         let bytes = Data([1, 2, 3])
-        await model.stageImage(data: bytes, filename: "photo.png", contentTypeIdentifier: "public.png")
-        XCTAssertTrue(model.canSubmit)
         let draftID = model.draft.id
-        let submit = Task { await model.submit() }
-        for _ in 0..<100 {
-            if await describer.root != nil { break }
-            try await Task.sleep(nanoseconds: 10_000_000)
-        }
-        let usedRoot = await describer.root
+
+        await model.stageImage(data: bytes, filename: "photo.png", contentTypeIdentifier: "public.png")
+
+        let usedRoot = await describer.firstRoot
         XCTAssertEqual(usedRoot?.standardizedFileURL, root.appendingPathComponent("staging/\(draftID.uuidString.lowercased())").standardizedFileURL)
-        XCTAssertTrue(model.isDescribingImages)
-        submit.cancel()
-        await submit.value
-        XCTAssertFalse(model.isSubmitting)
-        XCTAssertFalse(model.isDescribingImages)
-        XCTAssertNil(model.lastReceipt)
-        XCTAssertNil(model.errorMessage)
+        let asset = try CaptureAssetReference(
+            relativePath: "photo.png",
+            originalFilename: "photo.png",
+            contentTypeIdentifier: "public.png",
+            byteCount: 3
+        )
+        XCTAssertEqual(model.draft.additionalPayloads, [
+            .image(asset, altText: "Visible before send.", altTextOrigin: .generated)
+        ])
         let store = CaptureDraftStore(rootDirectoryURL: root)
         let persisted = try await store.load(id: draftID)
         XCTAssertEqual(persisted?.additionalPayloads, model.draft.additionalPayloads)
-        XCTAssertFalse(FileManager.default.fileExists(atPath: vault.appendingPathComponent("Inbox.md").path))
+        XCTAssertTrue(model.canSubmit)
+        XCTAssertFalse(model.isDescribingImages)
+
+        await model.submit()
+
+        XCTAssertNil(model.errorMessage)
+        let receipt = try XCTUnwrap(model.lastReceipt)
+        let markdown = try String(contentsOf: receipt.noteURL, encoding: .utf8)
+        XCTAssertTrue(markdown.contains("![Visible before send.]"), markdown)
+        let rootCount = await describer.rootCount
+        XCTAssertEqual(rootCount, 1, "Send should reuse the generated draft alt text instead of describing again")
         XCTAssertEqual(AppConstants.sharedDefaults?.data(forKey: CapturePresetStore.flowsKey), savedPresets)
     }
 }
 
 private actor PreparationImageFixture: CaptureImageDescribing {
-    var root: URL?
+    var roots: [URL] = []
+    var firstRoot: URL? { roots.first }
+    var rootCount: Int { roots.count }
+
     func describe(asset: CaptureAssetReference, assetRootURL: URL, localeIdentifier: String) async throws -> String? {
-        root = assetRootURL
+        roots.append(assetRootURL)
         XCTAssertEqual(try CaptureImageAssetReader.read(asset: asset, rootURL: assetRootURL), Data([1, 2, 3]))
-        try await Task.sleep(nanoseconds: 10_000_000_000)
-        return "Unused late description."
+        return "Visible before send."
     }
 }

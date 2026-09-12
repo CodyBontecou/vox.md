@@ -173,7 +173,7 @@ final class QuickCaptureViewModel {
                 oneOffTemplateID: draft.entryTemplateID,
                 preset: profile
               ) else { return nil }
-        return EntryLocationTokenHint(presetDisplayName: profile.displayName)
+        return EntryLocationTokenHint(presetDisplayName: profile.accessibilityName)
     }
 
     /// One-tap fix for `entryLocationTokenHint`: turns on origin-time location
@@ -859,6 +859,113 @@ final class QuickCaptureViewModel {
         }
     }
 
+    /// Atomically restores a sent value/audio snapshot into the active draft.
+    /// Cached files are copied into this draft's own staging directory before
+    /// the durable draft references them.
+    @discardableResult
+    func restoreSentCapture(
+        text: String,
+        valuePayloads: [CapturePayload],
+        cachedAudioPayloads: [CapturePayload],
+        audioCacheDirectoryURL: URL?
+    ) async -> Bool {
+        await load()
+        let operation = holdCaptureRoute()
+        defer { endCaptureRouteOperation(operation) }
+        guard liveRecordedTranscriptPreview == nil else { return false }
+        guard let draftStore, let stagingDirectory = stagingDirectoryURL else {
+            errorMessage = QuickCaptureViewModelError.storageUnavailable.localizedDescription
+            return false
+        }
+        guard valuePayloads.allSatisfy({ payload in
+            switch payload {
+            case .text, .url: return true
+            case .audio, .retainedAudio, .image, .file, .scannedDocument, .sketch: return false
+            }
+        }), cachedAudioPayloads.allSatisfy({ payload in
+            switch payload {
+            case .audio, .retainedAudio: return true
+            case .text, .url, .image, .file, .scannedDocument, .sketch: return false
+            }
+        }) else { return false }
+        guard cachedAudioPayloads.isEmpty || audioCacheDirectoryURL != nil else {
+            errorMessage = QuickCaptureViewModelError.storageUnavailable.localizedDescription
+            return false
+        }
+
+        let restoredText = text.trimmingCharacters(in: .newlines)
+        let updatedText: String
+        if restoredText.isEmpty {
+            updatedText = draft.text
+        } else if draft.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            updatedText = restoredText
+        } else {
+            updatedText = draft.text + "\n\n" + restoredText
+        }
+        guard updatedText.count <= CaptureInputLimits.maximumTextCharacters else {
+            errorMessage = QuickCaptureViewModelError.textTooLarge.localizedDescription
+            return false
+        }
+        guard attachmentsFitInputBudget(
+            draft.additionalPayloads + valuePayloads + cachedAudioPayloads
+        ) else {
+            errorMessage = QuickCaptureViewModelError.assetsTooLarge.localizedDescription
+            return false
+        }
+
+        pendingDraftSave?.cancel()
+        pendingDraftSave = nil
+        let previousDraft = draft
+        let stager = CaptureAssetStager(directoryURL: stagingDirectory)
+        var stagedAssets: [CaptureAssetReference] = []
+        do {
+            var restoredAudioPayloads: [CapturePayload] = []
+            for payload in cachedAudioPayloads {
+                let sourceAsset: CaptureAssetReference
+                switch payload {
+                case .audio(let asset, _), .retainedAudio(let asset, _):
+                    sourceAsset = asset
+                case .text, .url, .image, .file, .scannedDocument, .sketch:
+                    continue
+                }
+                guard let audioCacheDirectoryURL else {
+                    throw QuickCaptureViewModelError.storageUnavailable
+                }
+                let sourceURL = try CapturePathValidation.containedFileURL(
+                    relativePath: sourceAsset.relativePath,
+                    rootURL: audioCacheDirectoryURL
+                )
+                let restoredAsset = try await stager.stageCopy(
+                    from: sourceURL,
+                    preferredFilename: sourceAsset.originalFilename,
+                    contentTypeIdentifier: sourceAsset.contentTypeIdentifier
+                )
+                stagedAssets.append(restoredAsset)
+                switch payload {
+                case .audio(_, let transcript):
+                    restoredAudioPayloads.append(.audio(restoredAsset, transcript: transcript))
+                case .retainedAudio(_, let embedPlacement):
+                    restoredAudioPayloads.append(.retainedAudio(restoredAsset, embedPlacement: embedPlacement))
+                case .text, .url, .image, .file, .scannedDocument, .sketch:
+                    break
+                }
+            }
+
+            draft.text = updatedText
+            draft.additionalPayloads.append(contentsOf: valuePayloads + restoredAudioPayloads)
+            try await saveDurableDraft(using: draftStore)
+            errorMessage = nil
+            return true
+        } catch {
+            draft = previousDraft
+            for asset in stagedAssets {
+                try? await stager.remove(asset)
+            }
+            errorMessage = error.localizedDescription
+            return false
+        }
+    }
+
     @discardableResult
     func appendRecognizedText(_ text: String) async -> Bool {
         await load()
@@ -909,14 +1016,111 @@ final class QuickCaptureViewModel {
 
     private func setDescribingImages(_ value: Bool) { isDescribingImages = value }
 
+    func describeStagedImagesIfNeeded(from startIndex: Int) async {
+        let lowerBound = max(0, min(startIndex, draft.additionalPayloads.count))
+        let payloads = Array(draft.additionalPayloads[lowerBound...])
+        await describeStagedImagesIfNeeded(payloads: payloads)
+    }
+
+    private func describeStagedImagesIfNeeded(payloads: [CapturePayload]) async {
+        guard payloads.contains(where: Self.imagePayloadNeedsDescription) else { return }
+        let routeOperation = holdCaptureRoute()
+        defer {
+            isDescribingImages = false
+            endCaptureRouteOperation(routeOperation)
+        }
+        guard let profile = draft.voxProfileSnapshot ?? selectedVoxProfile,
+              profile.processesImages,
+              let stagingDirectory = stagingDirectoryURL,
+              let draftStore else { return }
+
+        let processedPayloads = await requestProcessor.processImagePayloads(
+            payloads,
+            profile: profile,
+            assetRootURL: stagingDirectory,
+            localeIdentifier: Locale.current.identifier
+        ) { [weak self] in
+            await self?.setDescribingImages(true)
+        }
+        guard !Task.isCancelled else { return }
+
+        let replacements = processedPayloads.compactMap(Self.generatedImageReplacement)
+        guard !replacements.isEmpty else { return }
+
+        let previousDraft = draft
+        var didChange = false
+        for replacement in replacements {
+            guard let index = draft.additionalPayloads.firstIndex(where: { current in
+                Self.matchesImageDescriptionTarget(current, target: replacement.target)
+                    && Self.imagePayloadNeedsDescription(current)
+            }) else { continue }
+            draft.additionalPayloads[index] = replacement.payload
+            didChange = true
+        }
+        guard didChange else { return }
+
+        let candidateDraft = draft
+        do {
+            try await saveDurableDraft(using: draftStore)
+            errorMessage = nil
+        } catch {
+            if draft == candidateDraft {
+                draft = previousDraft
+            } else {
+                scheduleDraftSave()
+            }
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    private struct ImageDescriptionReplacement {
+        var target: CaptureAssetReference
+        var payload: CapturePayload
+    }
+
+    private static func imagePayloadNeedsDescription(_ payload: CapturePayload) -> Bool {
+        switch payload {
+        case .image(_, let text, let origin), .sketch(_, _, let text, let origin):
+            return CaptureAltTextOrigin.needsDescription(text: text, origin: origin)
+        case .text, .url, .audio, .retainedAudio, .file, .scannedDocument:
+            return false
+        }
+    }
+
+    private static func generatedImageReplacement(_ payload: CapturePayload) -> ImageDescriptionReplacement? {
+        switch payload {
+        case .image(let asset, let text, let origin):
+            guard origin == .generated, CaptureImageDescription.validated(text) != nil else { return nil }
+            return ImageDescriptionReplacement(target: asset, payload: payload)
+        case .sketch(_, let preview, let text, let origin):
+            guard origin == .generated, CaptureImageDescription.validated(text) != nil else { return nil }
+            return ImageDescriptionReplacement(target: preview, payload: payload)
+        case .text, .url, .audio, .retainedAudio, .file, .scannedDocument:
+            return nil
+        }
+    }
+
+    private static func matchesImageDescriptionTarget(_ payload: CapturePayload, target: CaptureAssetReference) -> Bool {
+        switch payload {
+        case .image(let asset, _, _):
+            return asset == target
+        case .sketch(_, let preview, _, _):
+            return preview == target
+        case .text, .url, .audio, .retainedAudio, .file, .scannedDocument:
+            return false
+        }
+    }
+
+    @discardableResult
     func stageImage(
         data: Data,
         filename: String,
         contentTypeIdentifier: String,
         altText: String? = nil,
-        altTextOrigin: CaptureAltTextOrigin? = nil
-    ) async {
-        await stageAsset { stager in
+        altTextOrigin: CaptureAltTextOrigin? = nil,
+        describeImmediately: Bool = true
+    ) async -> CapturePayload? {
+        let payload = await stageAsset { stager in
             let asset = try await stager.stage(
                 data: data,
                 preferredFilename: filename,
@@ -924,18 +1128,24 @@ final class QuickCaptureViewModel {
             )
             return .image(asset, altText: altText, altTextOrigin: altTextOrigin ?? (altText == nil ? nil : .provided))
         }
+        if describeImmediately, let payload {
+            await describeStagedImagesIfNeeded(payloads: [payload])
+        }
+        return payload
     }
 
+    @discardableResult
     func stageFile(
         at sourceURL: URL,
         filename: String? = nil,
         contentTypeIdentifier: String,
         embedAsImage: Bool = false,
-        embedAsAudio: Bool = false
-    ) async {
+        embedAsAudio: Bool = false,
+        describeImageImmediately: Bool = true
+    ) async -> CapturePayload? {
         let didAccess = sourceURL.startAccessingSecurityScopedResource()
         defer { if didAccess { sourceURL.stopAccessingSecurityScopedResource() } }
-        await stageAsset { stager in
+        let payload = await stageAsset { stager in
             let asset = try await stager.stageCopy(
                 from: sourceURL,
                 preferredFilename: filename,
@@ -945,6 +1155,10 @@ final class QuickCaptureViewModel {
             if embedAsAudio { return .audio(asset, transcript: nil) }
             return .file(asset)
         }
+        if embedAsImage, describeImageImmediately, let payload {
+            await describeStagedImagesIfNeeded(payloads: [payload])
+        }
+        return payload
     }
 
     @discardableResult
@@ -1058,19 +1272,21 @@ final class QuickCaptureViewModel {
         }
     }
 
+    @discardableResult
     func stageSketch(
         drawingData: Data,
         previewData: Data,
         altText: String? = nil,
         altTextOrigin: CaptureAltTextOrigin? = nil,
         drawingFilename: String = "sketch.drawing",
-        drawingContentTypeIdentifier: String = "com.apple.pencilkit.drawing"
-    ) async {
+        drawingContentTypeIdentifier: String = "com.apple.pencilkit.drawing",
+        describeImmediately: Bool = true
+    ) async -> CapturePayload? {
         let operation = holdCaptureRoute()
         defer { endCaptureRouteOperation(operation) }
         guard let stagingDirectory = stagingDirectoryURL else {
             errorMessage = QuickCaptureViewModelError.storageUnavailable.localizedDescription
-            return
+            return nil
         }
         let stager = CaptureAssetStager(directoryURL: stagingDirectory)
         var newlyStaged: [CaptureAssetReference] = []
@@ -1087,14 +1303,22 @@ final class QuickCaptureViewModel {
                 contentTypeIdentifier: "public.png"
             )
             newlyStaged.append(preview)
-            try await appendStagedPayload(
-                .sketch(drawing: drawing, preview: preview, altText: altText, altTextOrigin: altTextOrigin ?? (altText == nil ? nil : .provided)),
-                using: stager
+            let payload = CapturePayload.sketch(
+                drawing: drawing,
+                preview: preview,
+                altText: altText,
+                altTextOrigin: altTextOrigin ?? (altText == nil ? nil : .provided)
             )
+            try await appendStagedPayload(payload, using: stager)
             errorMessage = nil
+            if describeImmediately {
+                await describeStagedImagesIfNeeded(payloads: [payload])
+            }
+            return payload
         } catch {
             for asset in newlyStaged { try? await stager.remove(asset) }
             errorMessage = error.localizedDescription
+            return nil
         }
     }
 
@@ -1482,7 +1706,7 @@ final class QuickCaptureViewModel {
            id != draft.voxID, draft.hasCaptureContent {
             pendingPresetSwitch = CapturePresetSwitchConfirmation(
                 incoming: incoming,
-                presetName: profiles.first(where: { $0.id == id })!.displayName,
+                presetName: profiles.first(where: { $0.id == id })!.accessibilityName,
                 draft: draft,
                 requestedInput: requestedInput
             )
@@ -1678,6 +1902,14 @@ final class QuickCaptureViewModel {
         }
     }
 
+    var sentCaptureUndoSourceDirectoryURL: URL? {
+        stagingDirectoryURL
+    }
+
+    var sentCaptureUndoCacheRootURL: URL? {
+        captureRootURL?.appendingPathComponent("sent-undo-audio", isDirectory: true)
+    }
+
     private var stagingDirectoryURL: URL? {
         captureRootURL?
             .appendingPathComponent("staging", isDirectory: true)
@@ -1686,20 +1918,22 @@ final class QuickCaptureViewModel {
 
     private func stageAsset(
         _ operation: (CaptureAssetStager) async throws -> CapturePayload
-    ) async {
+    ) async -> CapturePayload? {
         let routeOperation = holdCaptureRoute()
         defer { endCaptureRouteOperation(routeOperation) }
         guard let stagingDirectory = stagingDirectoryURL else {
             errorMessage = QuickCaptureViewModelError.storageUnavailable.localizedDescription
-            return
+            return nil
         }
         do {
             let stager = CaptureAssetStager(directoryURL: stagingDirectory)
             let payload = try await operation(stager)
             try await appendStagedPayload(payload, using: stager)
             errorMessage = nil
+            return payload
         } catch {
             errorMessage = error.localizedDescription
+            return nil
         }
     }
 
@@ -1942,7 +2176,7 @@ final class QuickCaptureViewModel {
                     reason: reason,
                     source: request.source,
                     presetID: request.voxProfile?.id,
-                    presetName: request.voxProfile?.displayName
+                    presetName: request.voxProfile?.accessibilityName
                 )
                 throw error
             }

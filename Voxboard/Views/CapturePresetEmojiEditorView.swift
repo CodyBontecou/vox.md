@@ -66,7 +66,7 @@ struct CapturePresetEmojiEditorForm: View {
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .submitLabel(.done)
-                    .accessibilityLabel(String(localized: "Emoji for \(preset.displayName)"))
+                    .accessibilityLabel(String(localized: "Emoji for \(preset.accessibilityName)"))
                     .accessibilityHint(input.validationMessage ?? String(localized: "Apply to save this icon."))
                     .accessibilityIdentifier("capture_preset_emoji_input")
                     .onSubmit { apply() }
@@ -91,18 +91,19 @@ struct CapturePresetEmojiEditorForm: View {
                     )
                     .font(.largeTitle)
                     .frame(minWidth: 44, minHeight: 44)
-                    Text(preset.displayName)
+                    Text(preset.visibleName ?? String(localized: "Icon-only preset"))
+                        .foregroundStyle(preset.visibleName == nil ? .secondary : .primary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel(preset.displayName)
+                .accessibilityLabel(preset.accessibilityName)
                 .accessibilityValue(input.normalizedEmoji == nil ? Text("Current Icon") : Text("Preview"))
                 .accessibilityIdentifier("capture_preset_emoji_preview")
 
                 Button("Apply Emoji") { apply() }
                     .frame(minHeight: 44)
                     .disabled(input.normalizedEmoji == nil)
-                    .accessibilityLabel(String(localized: "Apply emoji for \(preset.displayName)"))
+                    .accessibilityLabel(String(localized: "Apply emoji for \(preset.accessibilityName)"))
                     .accessibilityIdentifier("capture_preset_emoji_apply")
             } header: {
                 Text(input.normalizedEmoji == nil ? "Current Icon" : "Preview")

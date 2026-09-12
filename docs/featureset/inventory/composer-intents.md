@@ -82,14 +82,14 @@ LID prefix: **CP**. Scope: `Voxboard App Shared/` (shared layer compiled into iO
 - Surface: Composer attachment pickers, share sheet, drag-and-drop, recording completion, OCR, scanning, sketch
 - Summary: All binary content is staged into a per-draft staging directory (`<captureRoot>/staging/<draft-id>/`) by `CaptureAssetStager` and appended to `draft.additionalPayloads` with rollback that removes staged bytes on failure.
 - Details:
-  - `stageImage(data:filename:contentTypeIdentifier:altText:)` — staged image with optional alt text.
-  - `stageFile(at:filename:contentTypeIdentifier:embedAsImage:embedAsAudio:)` — security-scoped copy; type decides payload kind (image / audio / generic file).
+  - `stageImage(data:filename:contentTypeIdentifier:altText:altTextOrigin:describeImmediately:)` — staged image with optional alt text; opted-in presets attempt on-device description immediately so the generated label is visible before Send.
+  - `stageFile(at:filename:contentTypeIdentifier:embedAsImage:embedAsAudio:describeImageImmediately:)` — security-scoped copy; type decides payload kind (image / audio / generic file), with the same immediate description path for image payloads.
   - `stageVoiceRecording(at:transcript:)` — `Recording-<timestamp>.m4a`, `public.mpeg-4-audio`, cancellation-aware (removes staged asset on `CancellationError`).
   - `updateStagedVoiceRecording(_:transcript:)` — rewrites the transcript attached to a staged audio payload with rollback.
   - `removeStagedVoiceRecording(_:)` — removes matching audio payload.
   - `stageRecordedAudio(at:deliveryID:)` — idempotent via `draft.stagedRecordingAudioReceipts[deliveryID]`; if the receipt exists and the staged file still exists, returns the existing asset; otherwise stages `Recording-<deliveryID>.<ext>`, removes the stale receipt/asset, and records a new receipt. Rolled back (asset removed, draft restored) on failure.
   - `stageScan(pageImages:pdfData:extractedText:)` — stages `scan-page-N.jpg` pages, optional `scan.pdf`, appends a `.scannedDocument` payload with extracted text; removes all newly staged assets on failure.
-  - `stageSketch(drawingData:previewData:altText:...)` — stages `sketch.drawing` (PencilKit) + `sketch.png` preview into a `.sketch` payload; rollback removes both.
+  - `stageSketch(drawingData:previewData:altText:...describeImmediately:)` — stages `sketch.drawing` (PencilKit) + `sketch.png` preview into a `.sketch` payload; rollback removes both and opted-in presets can describe the preview immediately.
   - `addURL(_:title:)` — accepts only http/https schemes, else error "Enter a complete http:// or https:// link.".
   - `removePayload(at:)` — awaits any pending save first, persists the *removal* before deleting bytes (so a failed delete still leaves a valid durable draft), restores the payload on save failure, surfaces (non-fatal) cleanup failure.
   - `appendStagedPayload` enforces the `CaptureInputBudget` (250 MB total attachments) *before* mutating, removes staged bytes on budget failure, and rolls back the payload + audio receipt on durable-save failure.

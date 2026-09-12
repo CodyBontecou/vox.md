@@ -181,7 +181,7 @@ public struct TranscriptCaptureDestinationExporter {
             context: context ?? CapturePresetAudioFilenameContext(
                 identifier: requestID.uuidString,
                 createdAt: createdAt,
-                presetName: flow.displayName,
+                presetName: flow.visibleName ?? "",
                 originalFilename: originalFilename
             ),
             sourceExtension: sourceExtension

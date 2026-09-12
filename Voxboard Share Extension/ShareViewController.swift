@@ -504,8 +504,9 @@ private struct ShareCaptureView: View {
                         Section("Capture Preset") {
                             Picker("Preset", selection: $model.selectedPresetID) {
                                 ForEach(model.presets) { preset in
-                                    Label(preset.displayName, systemImage: preset.symbolName)
+                                    Label(preset.visibleName ?? String(localized: "Icon-only preset"), systemImage: preset.symbolName)
                                         .tag(Optional(preset.id))
+                                        .accessibilityLabel(preset.accessibilityName)
                                 }
                             }
                             .disabled(model.isQueuedForLater)

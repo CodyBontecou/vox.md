@@ -318,7 +318,7 @@ final class WatchRecordingPipeline {
             updated.reservedOutputFolderBookmark = nil
             updated.phase = .queued
             updated.failureStage = nil
-            updated.statusMessage = String(localized: "Recovered with \(preset.displayName); queued to retry")
+            updated.statusMessage = String(localized: "Recovered with \(preset.accessibilityName); queued to retry")
         }
         refresh()
         resume()
@@ -536,7 +536,7 @@ final class WatchRecordingPipeline {
         _ = inbox.transition(
             id: item.id,
             to: .delivering,
-            message: "Saving with \(flow.displayName)"
+            message: "Saving with \(flow.accessibilityName)"
         )
         refresh()
         WatchRecordingController.shared.publishState()
@@ -581,7 +581,7 @@ final class WatchRecordingPipeline {
             .resolvedDestinationID(flow: flow) else {
             throw WatchRecordingPipelineError(
                 stage: .delivery,
-                message: String(localized: "Set a destination for \(flow.displayName) on iPhone, then retry.")
+                message: String(localized: "Set a destination for \(flow.accessibilityName) on iPhone, then retry.")
             )
         }
 
@@ -656,7 +656,7 @@ final class WatchRecordingPipeline {
             .resolvedDestinationID(flow: flow) else {
             throw WatchRecordingPipelineError(
                 stage: .delivery,
-                message: String(localized: "Set a destination for \(flow.displayName) on iPhone, then retry.")
+                message: String(localized: "Set a destination for \(flow.accessibilityName) on iPhone, then retry.")
             )
         }
 
@@ -711,7 +711,7 @@ final class WatchRecordingPipeline {
         let context = RecordingOnlyFileExportContext(
             recordingID: item.id,
             createdAt: item.createdAt,
-            presetName: flow.displayName,
+            presetName: flow.visibleName ?? "",
             originalFilename: item.originalFilename ?? item.filename
         )
         var reservation = item.reservedOutputFilename

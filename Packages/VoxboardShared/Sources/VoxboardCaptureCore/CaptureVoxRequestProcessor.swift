@@ -121,44 +121,16 @@ public struct CapturePresetRequestProcessor: Sendable {
             }
         }
 
-        if profile.processesImages, let imageDescriber, let assetRootURL,
-           let locale = request.imageDescriptionLocaleIdentifier {
-            let imageDeadline = min(deadline, ProcessInfo.processInfo.systemUptime + imageStageTimeout)
-            var announced = false
-            for index in resolved.payloads.indices {
-                if Task.isCancelled { return request }
-                let payload = resolved.payloads[index]
-                let asset: CaptureAssetReference
-                switch payload {
-                case .image(let image, let text, let origin), .sketch(_, let image, let text, let origin):
-                    guard CaptureAltTextOrigin.needsDescription(text: text, origin: origin) else { continue }
-                    asset = image
-                default: continue
-                }
-                let timeout = min(imageTimeout, imageDeadline - ProcessInfo.processInfo.systemUptime)
-                guard timeout > 0 else { break }
-                if !announced {
-                    announced = true
-                    await onDescribingImages?()
-                }
-                do {
-                    let output = try await withCaptureProcessingDeadline(timeout: timeout) {
-                        try await imageDescriber.describe(asset: asset, assetRootURL: assetRootURL, localeIdentifier: locale)
-                    }
-                    guard !Task.isCancelled else { return request }
-                    guard let text = CaptureImageDescription.validated(output) else { continue }
-                    switch payload {
-                    case .image(let image, _, _):
-                        resolved.payloads[index] = .image(image, altText: text, altTextOrigin: .generated)
-                    case .sketch(let drawing, let preview, _, _):
-                        resolved.payloads[index] = .sketch(drawing: drawing, preview: preview, altText: text, altTextOrigin: .generated)
-                    default: break
-                    }
-                } catch {
-                    if Task.isCancelled { return request }
-                    // Descriptions are optional; never replace the existing label on failure.
-                }
-            }
+        if let assetRootURL, let locale = request.imageDescriptionLocaleIdentifier {
+            guard let processedPayloads = await processImagePayloads(
+                resolved.payloads,
+                profile: profile,
+                assetRootURL: assetRootURL,
+                localeIdentifier: locale,
+                deadline: deadline,
+                onDescribingImages: onDescribingImages
+            ) else { return request }
+            resolved.payloads = processedPayloads
         }
         guard !Task.isCancelled else { return request }
         if resolved.frontmatter["title"] == nil, let generatedTitle = nonEmpty(generatedTitle) {
@@ -174,6 +146,76 @@ public struct CapturePresetRequestProcessor: Sendable {
             resolved.frontmatter["tags"] = "[" + combinedTags.joined(separator: ", ") + "]"
         }
         resolved.voxProcessingState = .applied
+        return resolved
+    }
+
+    public func processImagePayloads(
+        _ payloads: [CapturePayload],
+        profile: CapturePresetProfile,
+        assetRootURL: URL,
+        localeIdentifier: String,
+        onDescribingImages: (@Sendable () async -> Void)? = nil
+    ) async -> [CapturePayload] {
+        await processImagePayloads(
+            payloads,
+            profile: profile,
+            assetRootURL: assetRootURL,
+            localeIdentifier: localeIdentifier,
+            deadline: ProcessInfo.processInfo.systemUptime + requestTimeout,
+            onDescribingImages: onDescribingImages
+        ) ?? payloads
+    }
+
+    private func processImagePayloads(
+        _ payloads: [CapturePayload],
+        profile: CapturePresetProfile,
+        assetRootURL: URL,
+        localeIdentifier: String,
+        deadline: TimeInterval,
+        onDescribingImages: (@Sendable () async -> Void)? = nil
+    ) async -> [CapturePayload]? {
+        guard profile.processesImages, let imageDescriber else { return payloads }
+        var resolved = payloads
+        let imageDeadline = min(deadline, ProcessInfo.processInfo.systemUptime + imageStageTimeout)
+        var announced = false
+        for index in resolved.indices {
+            if Task.isCancelled { return nil }
+            let payload = resolved[index]
+            let asset: CaptureAssetReference
+            switch payload {
+            case .image(let image, let text, let origin), .sketch(_, let image, let text, let origin):
+                guard CaptureAltTextOrigin.needsDescription(text: text, origin: origin) else { continue }
+                asset = image
+            default: continue
+            }
+            let timeout = min(imageTimeout, imageDeadline - ProcessInfo.processInfo.systemUptime)
+            guard timeout > 0 else { break }
+            if !announced {
+                announced = true
+                await onDescribingImages?()
+            }
+            do {
+                let output = try await withCaptureProcessingDeadline(timeout: timeout) {
+                    try await imageDescriber.describe(
+                        asset: asset,
+                        assetRootURL: assetRootURL,
+                        localeIdentifier: localeIdentifier
+                    )
+                }
+                guard !Task.isCancelled else { return nil }
+                guard let text = CaptureImageDescription.validated(output) else { continue }
+                switch payload {
+                case .image(let image, _, _):
+                    resolved[index] = .image(image, altText: text, altTextOrigin: .generated)
+                case .sketch(let drawing, let preview, _, _):
+                    resolved[index] = .sketch(drawing: drawing, preview: preview, altText: text, altTextOrigin: .generated)
+                default: break
+                }
+            } catch {
+                if Task.isCancelled { return nil }
+                // Descriptions are optional; never replace the existing label on failure.
+            }
+        }
         return resolved
     }
 

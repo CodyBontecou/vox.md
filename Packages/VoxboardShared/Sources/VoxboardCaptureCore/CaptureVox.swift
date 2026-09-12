@@ -79,9 +79,17 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
         self.capturePlacementOverride = capturePlacementOverride
     }
 
-    public var displayName: String {
+    public var visibleName: String? {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        return trimmed.isEmpty ? "Untitled Preset" : trimmed
+        return trimmed.isEmpty ? nil : trimmed
+    }
+
+    public var accessibilityName: String {
+        visibleName ?? "Icon-only Capture Preset"
+    }
+
+    public var displayName: String {
+        visibleName ?? "Untitled Preset"
     }
 
     public var resolvedPostProcessingInstruction: String? {
@@ -248,7 +256,7 @@ public struct CapturePresetReference: Codable, Equatable, Sendable {
     public init(profile: CapturePresetProfile) {
         self.init(
             id: profile.id,
-            name: profile.displayName,
+            name: profile.visibleName ?? "",
             symbolName: profile.symbolName,
             emoji: profile.emoji
         )
