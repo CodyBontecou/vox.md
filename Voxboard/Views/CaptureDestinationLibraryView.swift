@@ -234,6 +234,7 @@ struct CaptureDestinationEditorView: View {
     @State private var headingTitle: String
     @State private var headingLevel: Int
     @State private var missingHeadingBehavior: CaptureMissingHeadingBehavior
+    @State private var headingPosition: CaptureHeadingPosition
     @State private var selectedTemplateID: UUID?
     @State private var markdownTemplatePath: String?
     @State private var entryPrefix: String
@@ -285,21 +286,25 @@ struct CaptureDestinationEditorView: View {
             _headingTitle = State(initialValue: "")
             _headingLevel = State(initialValue: 2)
             _missingHeadingBehavior = State(initialValue: .fail)
+            _headingPosition = State(initialValue: .top)
         case .prepend:
             _placementKind = State(initialValue: .prepend)
             _headingTitle = State(initialValue: "")
             _headingLevel = State(initialValue: 2)
             _missingHeadingBehavior = State(initialValue: .fail)
-        case .beneathHeading(let selector, let behavior):
+            _headingPosition = State(initialValue: .top)
+        case .beneathHeading(let selector, let behavior, let position):
             _placementKind = State(initialValue: .heading)
             _headingTitle = State(initialValue: selector.title)
             _headingLevel = State(initialValue: selector.level ?? 2)
             _missingHeadingBehavior = State(initialValue: behavior)
+            _headingPosition = State(initialValue: position)
         case nil:
             _placementKind = State(initialValue: .append)
             _headingTitle = State(initialValue: "")
             _headingLevel = State(initialValue: 2)
             _missingHeadingBehavior = State(initialValue: .fail)
+            _headingPosition = State(initialValue: .top)
         }
 
         let selectedTemplateID = existing?.entryTemplateID ?? templates.first(where: {
@@ -384,6 +389,14 @@ struct CaptureDestinationEditorView: View {
                         Text("Show Error").tag(CaptureMissingHeadingBehavior.fail)
                         Text("Create Heading").tag(CaptureMissingHeadingBehavior.create)
                     }
+                    Picker("Position", selection: $headingPosition) {
+                        Text("Top").tag(CaptureHeadingPosition.top)
+                        Text("Bottom").tag(CaptureHeadingPosition.bottom)
+                    }
+                    .pickerStyle(.segmented)
+                    Text("Top inserts directly beneath the heading. Bottom appends to the end of the heading’s section, before the next heading.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
 
@@ -631,7 +644,8 @@ struct CaptureDestinationEditorView: View {
                 guard !title.isEmpty else { throw DestinationEditorError.headingRequired }
                 placement = .beneathHeading(
                     CaptureHeadingSelector(title: title, level: headingLevel),
-                    missingHeadingBehavior: missingHeadingBehavior
+                    missingHeadingBehavior: missingHeadingBehavior,
+                    headingPosition: headingPosition
                 )
             }
 

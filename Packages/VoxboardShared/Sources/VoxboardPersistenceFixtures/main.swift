@@ -70,7 +70,8 @@ struct VoxboardPersistenceFixtures {
             relativeNotePathOverride: "Fixtures/Inbox.md",
             placementOverride: .beneathHeading(
                 CaptureHeadingSelector(title: "Inbox", level: 2),
-                missingHeadingBehavior: .create
+                missingHeadingBehavior: .create,
+                headingPosition: .top
             ),
             entryTemplateIDOverride: templateID,
             attachmentsFolderNameOverride: "fixtures"
@@ -3118,7 +3119,8 @@ struct VoxboardPersistenceFixtures {
                     noteTarget: .existingNote(relativePath: "Fixtures/Inbox.md"),
                     placement: .beneathHeading(
                         CaptureHeadingSelector(title: "Inbox", level: 2),
-                        missingHeadingBehavior: .create
+                        missingHeadingBehavior: .create,
+                        headingPosition: .top
                     ),
                     entryPrefix: "- ",
                     entrySuffix: " #fixture",

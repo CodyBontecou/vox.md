@@ -71,7 +71,7 @@ Entry format: `F-ID — Name (platform; status; docs)`
 - F-CC-03 — Capture Preset Data Model: full profile fields incl. location/metadata/processing/audio (all platforms; shipped; website `#presets`)
 - F-CC-04 — Preset Selection & Route Resolution precedence (all platforms; shipped; readme partial)
 - F-CC-05 — Destination Kinds & Note Targets: new/rolling(5 periods)/existing (all platforms; shipped; website `#destinations`)
-- F-CC-06 — Placement: append/prepend/beneath-heading L1–6, missing-heading fail/create (all platforms; shipped; website `#placement-templates`)
+- F-CC-06 — Placement: append/prepend/beneath-heading L1–6, missing-heading fail/create, beneath-heading top/bottom position (all platforms; shipped; website `#placement-templates`)
 - F-CC-07 — Entry Formatting: YAML frontmatter merge, multiline entries, inline fields (all platforms; shipped; website `#preset-metadata`)
 - F-CC-08 — Rolling Note Path Planning & Date Tokens incl. {period}/{week} (all platforms; shipped; website `#destinations`)
 - F-CC-09 — Markdown Entry Rendering: payload → Markdown blocks, embeds, wiki/file links (all platforms; shipped; readme)

@@ -106,7 +106,7 @@ public struct MarkdownDocumentEditor: Sendable {
         // Keep a compact task/frontmatter boundary compact on later appends,
         // without changing the header spacing of an existing loose list.
         let preservesCompactTaskStart = documentParts.frontmatter != nil
-            && taskListMarker(in: firstLine(of: documentParts.body)) != nil
+            && listItemMarker(in: firstLine(of: documentParts.body)) != nil
         if let location = mutation.locationMetadata,
            try validatedLocationCollectionContains(location, in: documentParts.frontmatter) {
             return normalizedDocument
@@ -147,11 +147,12 @@ public struct MarkdownDocumentEditor: Sendable {
             editedBody = joinBlocks([documentParts.body, captureBlock])
         case .prepend:
             editedBody = joinBlocks([captureBlock, documentParts.body])
-        case .beneathHeading(let selector, let missingHeadingBehavior):
+        case .beneathHeading(let selector, let missingHeadingBehavior, let headingPosition):
             editedBody = try inserting(
                 captureBlock,
                 beneath: selector,
                 missingBehavior: missingHeadingBehavior,
+                position: headingPosition,
                 in: documentParts.body
             )
         }
@@ -162,7 +163,7 @@ public struct MarkdownDocumentEditor: Sendable {
                 frontmatter: documentParts.frontmatter,
                 body: editedBody,
                 compactTaskStart: (mutation.placement == .prepend
-                    && taskListMarker(in: firstLine(of: captureBlock)) != nil)
+                    && listItemMarker(in: firstLine(of: captureBlock)) != nil)
                     || documentParts.body.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                     || preservesCompactTaskStart
             )
@@ -173,6 +174,7 @@ public struct MarkdownDocumentEditor: Sendable {
         _ captureBlock: String,
         beneath selector: CaptureHeadingSelector,
         missingBehavior: CaptureMissingHeadingBehavior,
+        position: CaptureHeadingPosition,
         in body: String
     ) throws -> String {
         if let level = selector.level, !(1...6).contains(level) {
@@ -181,11 +183,27 @@ public struct MarkdownDocumentEditor: Sendable {
 
         let lines = body.components(separatedBy: "\n")
         if let headingIndex = firstHeadingIndex(matching: selector, in: lines) {
-            let before = lines[...headingIndex].joined(separator: "\n")
-            let after = headingIndex + 1 < lines.count
-                ? lines[(headingIndex + 1)...].joined(separator: "\n")
-                : ""
-            return joinBlocks([before, captureBlock, after])
+            switch position {
+            case .top:
+                let before = lines[...headingIndex].joined(separator: "\n")
+                let after = headingIndex + 1 < lines.count
+                    ? lines[(headingIndex + 1)...].joined(separator: "\n")
+                    : ""
+                return joinBlocks([before, captureBlock, after])
+            case .bottom:
+                // The section owned by the heading extends to the next heading
+                // of the same or higher level outside code fences (deeper
+                // headings stay inside), or the end of the document.
+                let matchedLevel = atxHeading(in: lines[headingIndex])?.level ?? selector.level ?? 6
+                let sectionEnd = endOfSection(after: headingIndex, headingLevel: matchedLevel, in: lines)
+                let before = sectionEnd > 0
+                    ? lines[...(sectionEnd - 1)].joined(separator: "\n")
+                    : ""
+                let after = sectionEnd < lines.count
+                    ? lines[sectionEnd...].joined(separator: "\n")
+                    : ""
+                return joinBlocks([before, captureBlock, after])
+            }
         }
 
         switch missingBehavior {
@@ -198,6 +216,34 @@ public struct MarkdownDocumentEditor: Sendable {
             }
             return joinBlocks([body, "\(String(repeating: "#", count: level)) \(selector.title)", captureBlock])
         }
+    }
+
+    /// The index of the first line after the heading that starts a sibling or
+    /// parent section: a heading of the same or higher level outside fences.
+    /// Fence-aware and conservative: unclosed fences swallow the rest of the
+    /// document, matching `firstHeadingIndex`'s heading matching rules.
+    private func endOfSection(after headingIndex: Int, headingLevel: Int, in lines: [String]) -> Int {
+        var fence: Fence?
+        var index = headingIndex + 1
+        while index < lines.count {
+            let line = lines[index]
+            if let delimiter = fenceDelimiter(in: line) {
+                if let current = fence {
+                    if delimiter.character == current.character && delimiter.count >= current.count {
+                        fence = nil
+                    }
+                } else {
+                    fence = delimiter
+                }
+                index += 1
+                continue
+            }
+            if fence == nil, let heading = atxHeading(in: line), heading.level <= headingLevel {
+                return index
+            }
+            index += 1
+        }
+        return lines.count
     }
 
     private func firstHeadingIndex(matching selector: CaptureHeadingSelector, in lines: [String]) -> Int? {
@@ -519,7 +565,7 @@ public struct MarkdownDocumentEditor: Sendable {
         let trimmedBody = trimBoundaryNewlines(body)
         guard let frontmatter else { return trimmedBody }
         let block = "---\n" + frontmatter.joined(separator: "\n") + "\n---"
-        let separator = compactTaskStart && taskListMarker(in: firstLine(of: trimmedBody)) != nil
+        let separator = compactTaskStart && listItemMarker(in: firstLine(of: trimmedBody)) != nil
             ? "\n" : "\n\n"
         return trimmedBody.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             ? block
@@ -538,15 +584,19 @@ public struct MarkdownDocumentEditor: Sendable {
         return joined
     }
 
-    /// A paragraph separator makes a tight checklist loose. Only change the
+    /// A paragraph separator makes a tight list loose. Only change the
     /// insertion seam; blank lines inside either user-owned block stay intact.
+    /// Checkbox and plain list items are both list items: adjacent items with
+    /// an identical marker (bullet, indentation, checkbox presence) join with
+    /// one newline, and a heading keeps any list item tight beneath it. Mixed
+    /// or reordered markers keep paragraph spacing.
     private func blockSeparator(between before: String, and after: String) -> String {
-        guard let nextTask = taskListMarker(in: firstLine(of: after)),
+        guard let nextMarker = listItemMarker(in: firstLine(of: after)),
               let previousLine = lastMarkdownLine(in: before) else { return "\n\n" }
         let headingIndent = previousLine.prefix { $0 == " " }.count
         let isHeading = headingIndent <= 3 && previousLine.dropFirst(headingIndent).first == "#"
             && atxHeading(in: previousLine) != nil
-        if taskListMarker(in: previousLine) == nextTask || isHeading {
+        if listItemMarker(in: previousLine) == nextMarker || isHeading {
             return "\n"
         }
         return "\n\n"
@@ -554,7 +604,7 @@ public struct MarkdownDocumentEditor: Sendable {
 
     private func addingRetryMarker(_ marker: String, to entry: String) -> String {
         guard !entry.isEmpty else { return marker }
-        guard let lastLine = lastMarkdownLine(in: entry), taskListMarker(in: lastLine) != nil else {
+        guard let lastLine = lastMarkdownLine(in: entry), listItemMarker(in: lastLine) != nil else {
             return entry + "\n\n" + marker
         }
         // A standalone HTML block splits a Markdown list even without blank
@@ -565,12 +615,16 @@ public struct MarkdownDocumentEditor: Sendable {
             + String(entry.suffix(trailingSpaceCount))
     }
 
-    private struct TaskListMarker: Equatable {
+    private struct ListItemMarker: Equatable {
         var indentation: Int
         var bullet: Character
+        /// Checkbox status is deliberately not part of the identity: unchecked
+        /// and checked tasks belong to the same list. A plain bullet is a
+        /// different list shape than a checkbox item, so it stays separate.
+        var hasCheckbox: Bool
     }
 
-    private func taskListMarker(in line: String) -> TaskListMarker? {
+    private func listItemMarker(in line: String) -> ListItemMarker? {
         let indentation = line.prefix { $0 == " " }.count
         guard indentation <= 3 else { return nil } // Four spaces is indented code.
         let unindented = line.dropFirst(indentation)
@@ -583,15 +637,19 @@ public struct MarkdownDocumentEditor: Sendable {
             contentColumn += character == "\t" ? 4 - contentColumn % 4 : 1
         }
         // Five or more columns after a bullet starts an indented code block,
-        // not a checkbox. Tabs advance to Markdown's four-column tab stops.
+        // not a list item. Tabs advance to Markdown's four-column tab stops.
         guard contentColumn - indentation - 1 <= 4 else { return nil }
-        let checkbox = afterBullet.dropFirst(padding.count)
-        guard ["[ ]", "[x]", "[X]"].contains(String(checkbox.prefix(3))) else { return nil }
-        let afterCheckbox = checkbox.dropFirst(3)
-        guard afterCheckbox.isEmpty || afterCheckbox.first == " " || afterCheckbox.first == "\t" else {
-            return nil
+        let content = afterBullet.dropFirst(padding.count)
+        guard !content.isEmpty else { return nil } // A bare bullet is not a text-bearing item.
+        if ["[ ]", "[x]", "[X]"].contains(String(content.prefix(3))) {
+            let afterCheckbox = content.dropFirst(3)
+            guard afterCheckbox.isEmpty || afterCheckbox.first == " " || afterCheckbox.first == "\t" else {
+                // Not a checkbox task (e.g. "- [x](link)"); an ordinary bullet.
+                return ListItemMarker(indentation: indentation, bullet: bullet, hasCheckbox: false)
+            }
+            return ListItemMarker(indentation: indentation, bullet: bullet, hasCheckbox: true)
         }
-        return TaskListMarker(indentation: indentation, bullet: bullet)
+        return ListItemMarker(indentation: indentation, bullet: bullet, hasCheckbox: false)
     }
 
     private func firstLine(of markdown: String) -> String {

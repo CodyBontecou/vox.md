@@ -536,10 +536,24 @@ public enum CaptureMissingHeadingBehavior: String, Codable, Sendable {
     case create
 }
 
+/// Where a capture lands inside a matched heading's section. `top` inserts
+/// directly beneath the heading, above the section's existing content;
+/// `bottom` appends at the end of the section, before the next heading of
+/// the same or higher level. Legacy payloads without this field decode as
+/// `top`, matching the original beneath-heading behavior.
+public enum CaptureHeadingPosition: String, Codable, CaseIterable, Sendable {
+    case top
+    case bottom
+}
+
 public enum CapturePlacement: Equatable, Sendable {
     case append
     case prepend
-    case beneathHeading(CaptureHeadingSelector, missingHeadingBehavior: CaptureMissingHeadingBehavior)
+    case beneathHeading(
+        CaptureHeadingSelector,
+        missingHeadingBehavior: CaptureMissingHeadingBehavior,
+        headingPosition: CaptureHeadingPosition
+    )
 }
 
 extension CapturePlacement: Codable {
@@ -553,6 +567,7 @@ extension CapturePlacement: Codable {
         case kind
         case selector
         case missingHeadingBehavior
+        case headingPosition
     }
 
     public init(from decoder: Decoder) throws {
@@ -568,7 +583,11 @@ extension CapturePlacement: Codable {
                 missingHeadingBehavior: try container.decodeIfPresent(
                     CaptureMissingHeadingBehavior.self,
                     forKey: .missingHeadingBehavior
-                ) ?? .fail
+                ) ?? .fail,
+                headingPosition: try container.decodeIfPresent(
+                    CaptureHeadingPosition.self,
+                    forKey: .headingPosition
+                ) ?? .top
             )
         }
     }
@@ -580,10 +599,11 @@ extension CapturePlacement: Codable {
             try container.encode(Kind.append, forKey: .kind)
         case .prepend:
             try container.encode(Kind.prepend, forKey: .kind)
-        case .beneathHeading(let selector, let behavior):
+        case .beneathHeading(let selector, let behavior, let position):
             try container.encode(Kind.beneathHeading, forKey: .kind)
             try container.encode(selector, forKey: .selector)
             try container.encode(behavior, forKey: .missingHeadingBehavior)
+            try container.encode(position, forKey: .headingPosition)
         }
     }
 }

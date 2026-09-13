@@ -650,7 +650,8 @@ final class TranscriptCaptureDestinationExporterTests: XCTestCase {
             noteTarget: .existingNote(relativePath: "Inbox.md"),
             placement: .beneathHeading(
                 CaptureHeadingSelector(title: "Missing", level: 2),
-                missingHeadingBehavior: .fail
+                missingHeadingBehavior: .fail,
+                headingPosition: .top
             )
         )
         try await CaptureLibraryStore(
@@ -713,7 +714,8 @@ final class TranscriptCaptureDestinationExporterTests: XCTestCase {
             noteTarget: .existingNote(relativePath: "Inbox.md"),
             placement: .beneathHeading(
                 CaptureHeadingSelector(title: "Missing", level: 2),
-                missingHeadingBehavior: .fail
+                missingHeadingBehavior: .fail,
+                headingPosition: .top
             )
         )
         try await CaptureLibraryStore(

@@ -75,7 +75,7 @@ final class MarkdownTaskSpacingTests: XCTestCase {
         let result = try edit(
             "# Inbox\n\n## Tasks\n\n- [ ] Older\n\n## Notes\n\nKeep this paragraph.",
             entry: "- [ ] New",
-            placement: .beneathHeading(.init(title: "Tasks", level: 2), missingHeadingBehavior: .fail)
+            placement: .beneathHeading(.init(title: "Tasks", level: 2), missingHeadingBehavior: .fail, headingPosition: .top)
         )
         XCTAssertEqual(
             result,
@@ -88,7 +88,7 @@ final class MarkdownTaskSpacingTests: XCTestCase {
             try edit(
                 "Intro.",
                 entry: "- [ ] New",
-                placement: .beneathHeading(.init(title: "Tasks", level: 2), missingHeadingBehavior: .create)
+                placement: .beneathHeading(.init(title: "Tasks", level: 2), missingHeadingBehavior: .create, headingPosition: .top)
             ),
             "Intro.\n\n## Tasks\n- [ ] New"
         )
@@ -253,6 +253,187 @@ final class MarkdownTaskSpacingTests: XCTestCase {
             "New.\n\n\(marker)\n\nExisting."
         )
         XCTAssertEqual(try edit("", entry: "", placement: .prepend, retryProtection: true), marker)
+    }
+
+    // MARK: - Plain bullet seams
+
+    func test_plainBulletsWithMatchingMarkersJoinWithOneNewline() throws {
+        XCTAssertEqual(
+            try edit("- Older note", entry: "- New note", placement: .prepend),
+            "- New note\n- Older note"
+        )
+        XCTAssertEqual(
+            try edit("- Older note", entry: "- New note", placement: .append),
+            "- Older note\n- New note"
+        )
+        XCTAssertEqual(
+            try edit("* Older note", entry: "* New note", placement: .prepend),
+            "* New note\n* Older note"
+        )
+    }
+
+    func test_repeatedPlainBulletBottomInsertsStayCompactAndInOrder() throws {
+        var document = "## Notes"
+        for note in ["First", "Second", "Third"] {
+            document = try edit(
+                document,
+                entry: note,
+                placement: .beneathHeading(
+                    .init(title: "Notes", level: 2),
+                    missingHeadingBehavior: .fail,
+                    headingPosition: .bottom
+                ),
+                prefix: "- "
+            )
+        }
+        XCTAssertEqual(document, "## Notes\n- First\n- Second\n- Third")
+    }
+
+    func test_headingKeepsPlainBulletsTightBeneathIt() throws {
+        XCTAssertEqual(
+            try edit(
+                "## Notes\n\n- Older note",
+                entry: "Newest note",
+                placement: .beneathHeading(
+                    .init(title: "Notes", level: 2),
+                    missingHeadingBehavior: .fail,
+                    headingPosition: .top
+                ),
+                prefix: "- "
+            ),
+            "## Notes\n- Newest note\n- Older note"
+        )
+    }
+
+    func test_mixedPlainAndCheckboxSeamsKeepParagraphSpacing() throws {
+        XCTAssertEqual(
+            try edit("- [ ] Older task", entry: "- New note", placement: .append),
+            "- [ ] Older task\n\n- New note"
+        )
+        XCTAssertEqual(
+            try edit("- Older note", entry: "- [ ] New task", placement: .append),
+            "- Older note\n\n- [ ] New task"
+        )
+    }
+
+    func test_differentPlainBulletStylesKeepParagraphSpacing() throws {
+        XCTAssertEqual(
+            try edit("* Older note", entry: "- New note", placement: .append),
+            "* Older note\n\n- New note"
+        )
+        XCTAssertEqual(
+            try edit("  - Nested note", entry: "- New note", placement: .append),
+            "  - Nested note\n\n- New note"
+        )
+    }
+
+    func test_bareBulletIsNotACompactListBoundary() throws {
+        XCTAssertEqual(try edit("-", entry: "- New note", placement: .append), "-\n\n- New note")
+        XCTAssertEqual(try edit("- ", entry: "- New note", placement: .append), "- \n\n- New note")
+    }
+
+    func test_plainBulletRetryMarkerStaysInline() throws {
+        let marker = CaptureRequestMarker.text(for: requestID)
+        XCTAssertEqual(
+            try edit("- Older note", entry: "New note", placement: .append, prefix: "- ", retryProtection: true),
+            "- Older note\n- New note \(marker)"
+        )
+    }
+
+    // MARK: - Bottom-of-section insertion
+
+    func test_bottomPositionAppendsAfterTheSectionList() throws {
+        let result = try edit(
+            "# Daily\n\n## Notes\n\n- Older note\n- Another note\n\n## Journal\n\nEntry.",
+            entry: "Newest note",
+            placement: .beneathHeading(
+                .init(title: "Notes", level: 2),
+                missingHeadingBehavior: .fail,
+                headingPosition: .bottom
+            ),
+            prefix: "- "
+        )
+        XCTAssertEqual(
+            result,
+            "# Daily\n\n## Notes\n\n- Older note\n- Another note\n- Newest note\n\n## Journal\n\nEntry."
+        )
+    }
+
+    func test_bottomPositionStaysInsideDeeperHeadings() throws {
+        let result = try edit(
+            "## Notes\n\n- A note\n\n### Archived\n\nOld archive.\n\n## Journal\n\nEntry.",
+            entry: "Newest note",
+            placement: .beneathHeading(
+                .init(title: "Notes", level: 2),
+                missingHeadingBehavior: .fail,
+                headingPosition: .bottom
+            ),
+            prefix: "- "
+        )
+        XCTAssertEqual(
+            result,
+            "## Notes\n\n- A note\n\n### Archived\n\nOld archive.\n\n- Newest note\n\n## Journal\n\nEntry."
+        )
+    }
+
+    func test_bottomPositionWithEmptySectionMatchesTopInsertion() throws {
+        XCTAssertEqual(
+            try edit(
+                "## Notes\n\n## Journal\n\nEntry.",
+                entry: "- New note",
+                placement: .beneathHeading(
+                    .init(title: "Notes", level: 2),
+                    missingHeadingBehavior: .fail,
+                    headingPosition: .bottom
+                )
+            ),
+            "## Notes\n- New note\n\n## Journal\n\nEntry."
+        )
+    }
+
+    func test_bottomPositionAppendsToDocumentEndWhenSectionIsLast() throws {
+        XCTAssertEqual(
+            try edit(
+                "Intro.\n\n## Notes\n\n- Older note",
+                entry: "- [ ] New task",
+                placement: .beneathHeading(
+                    .init(title: "Notes", level: 2),
+                    missingHeadingBehavior: .fail,
+                    headingPosition: .bottom
+                )
+            ),
+            "Intro.\n\n## Notes\n\n- Older note\n\n- [ ] New task"
+        )
+    }
+
+    func test_bottomPositionIgnoresHeadingsInsideCodeFences() throws {
+        XCTAssertEqual(
+            try edit(
+                "## Notes\n\n```markdown\n## Journal\n```\n\n- Older note",
+                entry: "- New note",
+                placement: .beneathHeading(
+                    .init(title: "Notes", level: 2),
+                    missingHeadingBehavior: .fail,
+                    headingPosition: .bottom
+                )
+            ),
+            "## Notes\n\n```markdown\n## Journal\n```\n\n- Older note\n- New note"
+        )
+    }
+
+    func test_bottomPositionCreatesMissingHeadingLikeTop() throws {
+        XCTAssertEqual(
+            try edit(
+                "Intro.",
+                entry: "- [ ] New task",
+                placement: .beneathHeading(
+                    .init(title: "Tasks", level: 2),
+                    missingHeadingBehavior: .create,
+                    headingPosition: .bottom
+                )
+            ),
+            "Intro.\n\n## Tasks\n- [ ] New task"
+        )
     }
 
     private func edit(

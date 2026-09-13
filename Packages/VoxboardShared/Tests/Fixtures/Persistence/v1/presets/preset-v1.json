@@ -7,6 +7,7 @@
     "kind" : "prepend"
   },
   "captureProcessingEnabled" : true,
+  "captureProcessingScope" : "both",
   "capturePrompt" : "Synthetic prompt",
   "customPostProcessingInstruction" : "",
   "exportSettings" : {
@@ -34,6 +35,7 @@
     ],
     "yamlUsesMarkdownExtension" : false
   },
+  "generateImageAltText" : false,
   "id" : "fixture",
   "isBuiltIn" : false,
   "isEnabled" : true,
@@ -42,6 +44,7 @@
     "advancedTemplate" : "",
     "collectionKey" : "locations",
     "isEnabled" : true,
+    "metadataOutputEnabled" : true,
     "outputMode" : "structured",
     "precision" : "city",
     "structuredFields" : [

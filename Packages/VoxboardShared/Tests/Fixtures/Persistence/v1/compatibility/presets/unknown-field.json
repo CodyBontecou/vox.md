@@ -3,6 +3,7 @@
     "attachmentsFolderName" : "attachments",
     "audioSaveMode" : "off",
     "captureProcessingEnabled" : false,
+    "captureProcessingScope" : "both",
     "capturePrompt" : "Capture an idea, task, link, file, scan, or recording.",
     "customPostProcessingInstruction" : "",
     "exportSettings" : {
@@ -29,6 +30,7 @@
       ],
       "yamlUsesMarkdownExtension" : false
     },
+    "generateImageAltText" : false,
     "id" : "general",
     "isBuiltIn" : true,
     "isEnabled" : true,
@@ -37,6 +39,7 @@
       "advancedTemplate" : "",
       "collectionKey" : "locations",
       "isEnabled" : false,
+      "metadataOutputEnabled" : false,
       "outputMode" : "structured",
       "precision" : "exact",
       "structuredFields" : [
@@ -90,6 +93,7 @@
       "kind" : "prepend"
     },
     "captureProcessingEnabled" : true,
+    "captureProcessingScope" : "both",
     "capturePrompt" : "Synthetic prompt",
     "customPostProcessingInstruction" : "",
     "exportSettings" : {
@@ -120,6 +124,7 @@
     "futureFixtureField" : {
       "ignored" : true
     },
+    "generateImageAltText" : false,
     "id" : "fixture",
     "isBuiltIn" : false,
     "isEnabled" : true,
@@ -128,6 +133,7 @@
       "advancedTemplate" : "",
       "collectionKey" : "locations",
       "isEnabled" : true,
+      "metadataOutputEnabled" : true,
       "outputMode" : "structured",
       "precision" : "city",
       "structuredFields" : [

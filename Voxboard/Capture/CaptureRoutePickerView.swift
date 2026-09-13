@@ -171,7 +171,7 @@ struct CaptureRoutePickerView: View {
                 case nil: return .default
                 case .prepend: return .top
                 case .append: return .bottom
-                case .beneathHeading(_, _): return .default
+                case .beneathHeading: return .default
                 }
             },
             set: { choice in

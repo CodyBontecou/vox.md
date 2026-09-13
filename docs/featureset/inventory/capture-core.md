@@ -78,13 +78,14 @@ LID: CC. Package: `Packages/VoxboardShared/Sources/VoxboardCaptureCore/` (framew
 
 ### F-CC-06 Placement: append/prepend/beneath-heading
 - Surface: destination editor, pipeline writes to existing/rolling notes
-- Summary: `CapturePlacement` determines where the rendered capture block goes inside a note: `append` (end of body), `prepend` (top of body, after frontmatter), or `beneathHeading(CaptureHeadingSelector, missingHeadingBehavior:)`.
+- Summary: `CapturePlacement` determines where the rendered capture block goes inside a note: `append` (end of body), `prepend` (top of body, after frontmatter), or `beneathHeading(CaptureHeadingSelector, missingHeadingBehavior:, headingPosition:)`.
 - Details:
   - `CaptureHeadingSelector {title, level?}` — level nil matches any level
   - `CaptureMissingHeadingBehavior`: `.fail` (throws `headingNotFound`, decode default) or `.create` (appends a heading at `level ?? 2`, validated to 1-6, before the capture block)
+  - `CaptureHeadingPosition`: `.top` (directly beneath the heading, above existing section content; decode default) or `.bottom` (end of the heading's section, before the next heading of the same or higher level outside code fences; deeper headings stay inside the section)
   - Heading detection ignores headings inside fenced code blocks (``` or ~~~ with ≥3 delimiters, closing fence must match char and length)
   - ATX heading parsing accepts up to 3 leading spaces/tabs, requires whitespace after `#`s, strips trailing `#`s
-  - Codable with `kind`/`selector`/`missingHeadingBehavior` keys
+  - Codable with `kind`/`selector`/`missingHeadingBehavior`/`headingPosition` keys
 - Constraints: none
 - Evidence: `CaptureModels.swift` `CapturePlacement` (lines ~415-470); `MarkdownDocumentEditor.swift` `inserting`/`firstHeadingIndex`/`atxHeading`/`fenceDelimiter` (lines ~150-230); tests `MarkdownDocumentEditorTests.swift`, `CaptureInsertionFormatterTests.swift`
 - Status: shipped

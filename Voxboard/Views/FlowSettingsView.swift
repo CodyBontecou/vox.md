@@ -1060,7 +1060,10 @@ private struct CapturePresetEditorView: View {
         switch destination.placement {
         case .append: placement = String(localized: "append")
         case .prepend: placement = String(localized: "prepend")
-        case .beneathHeading(let heading, _): placement = String(localized: "under \(heading.title)")
+        case .beneathHeading(let heading, _, let position):
+            placement = position == .bottom
+                ? String(localized: "end of \(heading.title)")
+                : String(localized: "under \(heading.title)")
         }
         return "\(target) · \(placement)"
     }

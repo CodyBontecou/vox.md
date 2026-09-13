@@ -99,6 +99,36 @@ final class CaptureModelCodableTests: XCTestCase {
         XCTAssertFalse(destination.retryProtectionEnabled)
     }
 
+    func test_beneathHeadingPlacement_decodesLegacyPayloadWithoutPositionAsTop() throws {
+        let legacy = """
+        {"kind":"beneathHeading","selector":{"title":"Notes","level":2},"missingHeadingBehavior":"create"}
+        """.data(using: .utf8)!
+
+        let placement = try JSONDecoder.captureCore.decode(CapturePlacement.self, from: legacy)
+
+        XCTAssertEqual(
+            placement,
+            .beneathHeading(
+                CaptureHeadingSelector(title: "Notes", level: 2),
+                missingHeadingBehavior: .create,
+                headingPosition: .top
+            )
+        )
+    }
+
+    func test_beneathHeadingPlacement_roundTripsHeadingPosition() throws {
+        let placement = CapturePlacement.beneathHeading(
+            CaptureHeadingSelector(title: "Notes"),
+            missingHeadingBehavior: .fail,
+            headingPosition: .bottom
+        )
+        let data = try JSONEncoder.captureCore.encode(placement)
+
+        XCTAssertEqual(try JSONDecoder.captureCore.decode(CapturePlacement.self, from: data), placement)
+        let object = try XCTUnwrap(try JSONSerialization.jsonObject(with: data) as? [String: Any])
+        XCTAssertEqual(object["headingPosition"] as? String, "bottom")
+    }
+
     func test_destinationRetryProtectionOptInRoundTrips() throws {
         let destination = CaptureDestination(
             name: "Inbox",

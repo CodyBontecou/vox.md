@@ -11,7 +11,8 @@ final class CapturePipelineTests: XCTestCase {
             target: .existingNote(relativePath: "Inbox.md"),
             placement: .beneathHeading(
                 CaptureHeadingSelector(title: "Ideas", level: 2),
-                missingHeadingBehavior: .fail
+                missingHeadingBehavior: .fail,
+                headingPosition: .top
             )
         )
         let request = CaptureRequest(

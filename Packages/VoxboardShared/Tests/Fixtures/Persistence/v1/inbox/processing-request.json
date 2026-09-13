@@ -30,6 +30,7 @@
     }
   ],
   "placementOverride" : {
+    "headingPosition" : "top",
     "kind" : "beneathHeading",
     "missingHeadingBehavior" : "create",
     "selector" : {
@@ -47,8 +48,10 @@
       "kind" : "prepend"
     },
     "captureProcessingEnabled" : true,
+    "captureProcessingScope" : "both",
     "capturePrompt" : "Synthetic prompt",
     "customPostProcessingInstruction" : "",
+    "generateImageAltText" : false,
     "id" : "fixture",
     "isBuiltIn" : false,
     "isEnabled" : true,
@@ -56,6 +59,7 @@
       "advancedTemplate" : "",
       "collectionKey" : "locations",
       "isEnabled" : true,
+      "metadataOutputEnabled" : true,
       "outputMode" : "structured",
       "precision" : "city",
       "structuredFields" : [

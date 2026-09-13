@@ -125,7 +125,8 @@ final class MarkdownDocumentEditorTests: XCTestCase {
         """
         let placement = CapturePlacement.beneathHeading(
             CaptureHeadingSelector(title: "Ideas", level: 2),
-            missingHeadingBehavior: .fail
+            missingHeadingBehavior: .fail,
+            headingPosition: .top
         )
 
         let result = try edit(document, entry: "New idea.", placement: placement)
@@ -146,7 +147,8 @@ final class MarkdownDocumentEditorTests: XCTestCase {
         """
         let placement = CapturePlacement.beneathHeading(
             CaptureHeadingSelector(title: "Ideas", level: 2),
-            missingHeadingBehavior: .fail
+            missingHeadingBehavior: .fail,
+            headingPosition: .top
         )
 
         let result = try edit(document, entry: "Captured.", placement: placement)
@@ -158,7 +160,8 @@ final class MarkdownDocumentEditorTests: XCTestCase {
     func test_missingHeading_failsWhenPolicyIsFail() {
         let placement = CapturePlacement.beneathHeading(
             CaptureHeadingSelector(title: "Missing", level: 2),
-            missingHeadingBehavior: .fail
+            missingHeadingBehavior: .fail,
+            headingPosition: .top
         )
 
         XCTAssertThrowsError(try edit("# Inbox", entry: "Thought", placement: placement)) { error in
@@ -172,7 +175,8 @@ final class MarkdownDocumentEditorTests: XCTestCase {
     func test_missingHeading_createsSectionWhenConfigured() throws {
         let placement = CapturePlacement.beneathHeading(
             CaptureHeadingSelector(title: "Ideas", level: 2),
-            missingHeadingBehavior: .create
+            missingHeadingBehavior: .create,
+            headingPosition: .top
         )
 
         let result = try edit("# Inbox\n", entry: "Thought", placement: placement)

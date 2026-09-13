@@ -40,6 +40,7 @@ struct MacCaptureDestinationEditor: View {
     @State private var heading: String
     @State private var headingLevel: Int
     @State private var missingHeadingBehavior: CaptureMissingHeadingBehavior
+    @State private var headingPosition: CaptureHeadingPosition
     @State private var templateID: UUID?
     @State private var markdownTemplatePath: String?
     @State private var prefix: String
@@ -78,11 +79,11 @@ struct MacCaptureDestinationEditor: View {
         }
         switch existing?.placement {
         case .prepend:
-            _placementKind = State(initialValue: .prepend); _heading = State(initialValue: ""); _headingLevel = State(initialValue: 2); _missingHeadingBehavior = State(initialValue: .fail)
-        case .beneathHeading(let selector, let behavior):
-            _placementKind = State(initialValue: .heading); _heading = State(initialValue: selector.title); _headingLevel = State(initialValue: selector.level ?? 2); _missingHeadingBehavior = State(initialValue: behavior)
+            _placementKind = State(initialValue: .prepend); _heading = State(initialValue: ""); _headingLevel = State(initialValue: 2); _missingHeadingBehavior = State(initialValue: .fail); _headingPosition = State(initialValue: .top)
+        case .beneathHeading(let selector, let behavior, let position):
+            _placementKind = State(initialValue: .heading); _heading = State(initialValue: selector.title); _headingLevel = State(initialValue: selector.level ?? 2); _missingHeadingBehavior = State(initialValue: behavior); _headingPosition = State(initialValue: position)
         default:
-            _placementKind = State(initialValue: .append); _heading = State(initialValue: ""); _headingLevel = State(initialValue: 2); _missingHeadingBehavior = State(initialValue: .fail)
+            _placementKind = State(initialValue: .append); _heading = State(initialValue: ""); _headingLevel = State(initialValue: 2); _missingHeadingBehavior = State(initialValue: .fail); _headingPosition = State(initialValue: .top)
         }
         let boundID = existing?.entryTemplateID
         let bound = templates.first { $0.id == boundID }
@@ -148,6 +149,14 @@ struct MacCaptureDestinationEditor: View {
                             Text("Show Error").tag(CaptureMissingHeadingBehavior.fail)
                             Text("Create Heading").tag(CaptureMissingHeadingBehavior.create)
                         }
+                        Picker("Position", selection: $headingPosition) {
+                            Text("Top").tag(CaptureHeadingPosition.top)
+                            Text("Bottom").tag(CaptureHeadingPosition.bottom)
+                        }
+                        .pickerStyle(.segmented)
+                        Text("Top inserts directly beneath the heading. Bottom appends to the end of the heading’s section, before the next heading.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
                 }
                 Section("Entry Formatting") {
@@ -383,10 +392,11 @@ struct MacCaptureDestinationEditor: View {
             case .heading:
                 .beneathHeading(
                     CaptureHeadingSelector(title: heading.trimmingCharacters(in: .whitespacesAndNewlines), level: headingLevel),
-                    missingHeadingBehavior: missingHeadingBehavior
+                    missingHeadingBehavior: missingHeadingBehavior,
+                    headingPosition: headingPosition
                 )
             }
-            if case .beneathHeading(let selector, _) = placement, selector.title.isEmpty {
+            if case .beneathHeading(let selector, _, _) = placement, selector.title.isEmpty {
                 throw MacCaptureRouteError.headingRequired
             }
             if case .existingNote(let relativePath) = target {
