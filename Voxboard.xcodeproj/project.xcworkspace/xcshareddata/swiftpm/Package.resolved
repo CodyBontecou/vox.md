@@ -1,5 +1,5 @@
 {
-  "originHash" : "5810e53e957f6eeb73d2f5fa058c0db47672eeb23aaf00fcbfc4e8db4979333c",
+  "originHash" : "ccc7ebf376c8274313d02611772596ffcc5e3867e110d44f70344e05cd3d6170",
   "pins" : [
     {
       "identity" : "exportkit",
@@ -44,6 +44,15 @@
       "state" : {
         "revision" : "f01e68239a3e711895462e202b7cf1eac6f6bec3",
         "version" : "1.1.0"
+      }
+    },
+    {
+      "identity" : "selfieoverlaykit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/CodyBontecou/SelfieOverlayKit.git",
+      "state" : {
+        "branch" : "debug-only",
+        "revision" : "dca25e185b62b0d93ae85cdef5e08eff8bcf61d4"
       }
     }
   ],

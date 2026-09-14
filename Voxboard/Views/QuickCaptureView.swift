@@ -1806,6 +1806,7 @@ struct QuickCaptureView: View {
                     .contentShape(Rectangle())
                     .accessibilityLabel(accessibilityLabel)
             }
+            .buttonStyle(.plain)
         }
     }
 

@@ -70,7 +70,7 @@ If a one-shot request is unavailable, an interactive surface can retry, cancel, 
 Add the Vox.md keyboard to iOS and dictate into any text field — Messages, Notes, Safari, or any app that accepts a keyboard. With Automatic on supported iOS 26 devices, finalized Apple Speech phrases stream into the active field while you speak; tentative words stay in the toolbar until Apple finalizes them. Whisper and Parakeet selections insert the completed transcript after recording stops. Parakeet users can optionally download the small on-device Voice Pause Detection companion to stop and transcribe keyboard segments after a configurable pause.
 
 ### On-Device Transcription
-Speech recognition runs locally. On supported iOS 26 devices, Automatic uses Apple's `SpeechAnalyzer` and system-managed `SpeechTranscriber` assets. Whisper (`whisper.cpp`) and Core ML/FluidAudio-backed Parakeet models remain optional downloads and explicit overrides or fallbacks. No app-managed speech model weights ship in the app bundle. Audio, transcripts, capture drafts, and templates stay on the device.
+Speech recognition runs locally. On supported iOS 26 devices, Automatic uses Apple's `SpeechAnalyzer` and system-managed `SpeechTranscriber` assets; Whisper (`whisper.cpp`) and Core ML/FluidAudio-backed Parakeet models remain optional downloads and explicit overrides or fallbacks, so no app-managed speech weights ship in the iOS bundle. Android ships Whisper Small in an install-time AI pack and selects it automatically on a fresh install, while keeping the other Whisper, Parakeet, and Vosk choices configurable. Audio, transcripts, capture drafts, and templates stay on the device.
 
 ### One-Shot Recording + Keyboard Listening
 Tap **Start Recording** in the app, from Shortcuts, or from a widget to record one segment, process it locally, and automatically return the microphone session to idle. On iOS 26, the **Toggle Recording** shortcut starts and stops that same one-shot segment entirely in the background — bind it to the Apple Pencil squeeze, the Action Button, or run it from any shortcut, and a transient Live Activity in the Dynamic Island shows elapsed time with a Stop control while you stay in your current app (requires the Live Activities permission; configurable in Settings, and the shortcut opens the app instead when disabled). Keyboard users can still open Vox.md from the keyboard to start persistent listening, then mark recording segments from any text field.
@@ -79,7 +79,7 @@ Tap **Start Recording** in the app, from Shortcuts, or from a widget to record o
 Record voice notes from your wrist, pause and resume a recording, and choose which Capture Preset should handle it. Recordings stay in a durable Watch queue until they can sync to iPhone, where they can be processed, reassigned, retried, or discarded. A preset can run the normal local transcription and Markdown delivery flow or use Recording Only to keep the audio without transcribing it. The Watch widget provides quick access and reflects ready, recording, paused, syncing, and queued states.
 
 ### Model Picker
-Automatic is the default on iOS and uses Apple Speech when the device and selected language support it. Users can optionally download and explicitly select Whisper Tiny, Base, Small, Medium, Large v3 Turbo, or Parakeet v2/v3. Downloaded models can also serve as Automatic's fallback.
+Automatic is the default on both platforms. On iOS it uses Apple Speech when the device and selected language support it, with downloaded models available as fallbacks. On Android it starts with the bundled Whisper Small model. Users can still download and explicitly select other Whisper, Parakeet, or supported Vosk models.
 
 ### Transcript History
 Every transcription is stored locally in the shared App Group container. Search raw text, cleaned text, titles, tags, and categories; edit saved transcripts; delete filtered selections safely; and share or export previous captures. Cross-process writes are coordinated so app and extension updates do not silently overwrite one another.
@@ -183,7 +183,7 @@ Packages/VoxboardShared/
   Sources/VoxboardShared/           # Models, transcription, history, export, usage, and Watch sync
 
 Voxboard.xcodeproj                  # Main Xcode project
-whisper.xcframework                 # Whisper inference engine; no model weights are bundled
+whisper.xcframework                 # Apple-platform Whisper engine; iOS model weights are not bundled
 artifacts/                          # Current App Store and Watch screenshot assets
 fastlane/                           # App Store metadata and legacy screenshot assets
 website/                            # Product site, docs, privacy policy, and terms

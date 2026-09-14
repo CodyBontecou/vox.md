@@ -305,6 +305,20 @@ pub struct RoutePolicy {
     pub extension_policy: String,
     pub collision_policy: String,
     pub attachment_folder: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub entry_prefix: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub entry_suffix: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub rolling_period: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub placement: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub heading_title: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub heading_level: Option<u8>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub missing_heading_behavior: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -322,6 +336,8 @@ pub struct MetadataPolicy {
     pub template_policy: String,
     pub line_ending: String,
     pub final_newline: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub scope: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -343,6 +359,77 @@ pub struct Preset {
     pub route_policy: RoutePolicy,
     pub metadata_policy: MetadataPolicy,
     pub destination_policy: DestinationPolicy,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub location_policy: Option<LocationPolicy>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct LocationPolicy {
+    pub is_enabled: bool,
+    pub metadata_output_enabled: bool,
+    pub precision: String,
+    pub output_mode: String,
+    #[serde(default = "default_location_structured_fields")]
+    pub structured_fields: Vec<LocationStructuredField>,
+    pub collection_key: String,
+    pub advanced_template: String,
+    #[serde(default = "default_location_label_lookup_class")]
+    pub label_lookup_class: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub label_consent_version: Option<u32>,
+}
+
+fn default_location_label_lookup_class() -> String {
+    "none".to_owned()
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct LocationStructuredField {
+    pub field: String,
+    pub output_key: String,
+}
+
+fn default_location_structured_fields() -> Vec<LocationStructuredField> {
+    ["coordinates", "place", "appleMapsURL", "timestamp", "source", "id"]
+        .into_iter()
+        .map(|field| LocationStructuredField {
+            field: field.to_owned(),
+            output_key: field.to_owned(),
+        })
+        .collect()
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct LocationSnapshot {
+    pub latitude_e6: i64,
+    pub longitude_e6: i64,
+    pub accuracy_millimeters: Option<u64>,
+    pub captured_at_epoch_milliseconds: i64,
+    pub precision: String,
+    pub source: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub label: Option<LocationLabel>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct LocationLabel {
+    pub place: Option<String>,
+    pub city: Option<String>,
+    pub region: Option<String>,
+    pub country: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct LocationLabelObservation {
+    pub requested: bool,
+    pub lookup_class: String,
+    pub consent_version: Option<u32>,
+    pub outcome: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -352,6 +439,14 @@ pub struct Invocation {
     #[serde(rename = "originRecordingID")]
     pub origin_recording_id: Option<Uuid>,
     pub location_outcome: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub location_attempted_at_epoch_milliseconds: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub location_unavailable_reason: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub location_label_observation: Option<LocationLabelObservation>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub location_snapshot: Option<LocationSnapshot>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -412,7 +507,7 @@ pub enum ObservationResult {
         length: u64,
         sha256: String,
         #[serde(rename = "byteStreamID")]
-        byte_stream_id: Uuid,
+        byte_stream_id: Option<Uuid>,
     },
     #[serde(rename = "stagedAssetMetadata")]
     StagedAssetMetadata {
@@ -442,7 +537,7 @@ impl ObservationResult {
                 ..
             }
             | Self::ExistingNote {
-                byte_stream_id: id,
+                byte_stream_id: Some(id),
                 length,
                 ..
             } => Some((*id, *length)),
@@ -492,6 +587,8 @@ pub struct ObservationRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logical_candidates: Option<Vec<Vec<String>>>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub logical_path: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub required: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_bytes: Option<u64>,
@@ -516,17 +613,35 @@ pub fn prepare(bytes: &[u8]) -> Result<RequiredObservations, CoreError> {
     let input: PreparationInput = parse_control(bytes)?;
     validate_preparation(&input)?;
     let candidates = path_candidates(&input)?;
-    let mut observations = vec![ObservationRequest {
-        kind: "candidateOccupancy",
-        id: derived_uuid(
-            "vox.observation.v1",
-            &json!({"kind":"candidateOccupancy","requestID":input.request_id}),
-        )?,
-        logical_candidates: Some(candidates),
-        required: None,
-        maximum_bytes: None,
-        template_capability_reference: None,
-    }];
+    let mut observations = Vec::new();
+    if input.operation == "newNote" {
+        observations.push(ObservationRequest {
+            kind: "candidateOccupancy",
+            id: derived_uuid(
+                "vox.observation.v1",
+                &json!({"kind":"candidateOccupancy","requestID":input.request_id}),
+            )?,
+            logical_candidates: Some(candidates.clone()),
+            logical_path: None,
+            required: None,
+            maximum_bytes: None,
+            template_capability_reference: None,
+        });
+    } else {
+        let path = candidates.first().cloned().ok_or(CoreError::InvalidPath)?;
+        observations.push(ObservationRequest {
+            kind: "existingNote",
+            id: derived_uuid(
+                "vox.observation.v1",
+                &json!({"kind":"existingNote","requestID":input.request_id}),
+            )?,
+            logical_candidates: None,
+            logical_path: Some(path),
+            required: Some(input.operation != "rollingNote"),
+            maximum_bytes: Some(MAX_AGGREGATE_BYTES),
+            template_capability_reference: None,
+        });
+    }
     if input.preset.metadata_policy.template_policy == "frozenObservation" {
         observations.push(ObservationRequest {
             kind: "frozenTemplate",
@@ -535,6 +650,7 @@ pub fn prepare(bytes: &[u8]) -> Result<RequiredObservations, CoreError> {
                 &json!({"kind":"frozenTemplate","requestID":input.request_id}),
             )?,
             logical_candidates: None,
+            logical_path: None,
             required: Some(false),
             maximum_bytes: Some(MAX_AGGREGATE_BYTES),
             template_capability_reference: Some("native-frozen-template-v1".to_owned()),
@@ -585,9 +701,6 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
     ) {
         return Err(CoreError::InvalidEnum);
     }
-    if input.operation != "newNote" {
-        return Err(CoreError::UnsupportedOperation);
-    }
     validate_pins(&input.pins)?;
     bounded_array(input.payloads.len(), 1, 128)?;
     for payload in &input.payloads {
@@ -623,7 +736,6 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
                 if !matches!(original_name_policy.as_str(), "discard" | "safeStem") {
                     return Err(CoreError::InvalidEnum);
                 }
-                return Err(CoreError::UnsupportedOperation);
             }
         }
     }
@@ -648,6 +760,12 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
         return Err(CoreError::InvalidPath);
     }
     validate_segments(&route.attachment_folder)?;
+    if let Some(prefix) = &route.entry_prefix {
+        bounded_string(prefix, 0, 16_384)?;
+    }
+    if let Some(suffix) = &route.entry_suffix {
+        bounded_string(suffix, 0, 16_384)?;
+    }
     if route.extension_policy != "markdownDotMd" {
         return Err(CoreError::InvalidEnum);
     }
@@ -657,8 +775,62 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
     ) {
         return Err(CoreError::InvalidEnum);
     }
-    if route.collision_policy != "deterministicSuffix" {
+    if (input.operation == "newNote" && route.collision_policy != "deterministicSuffix")
+        || (input.operation != "newNote"
+            && !matches!(
+                route.collision_policy.as_str(),
+                "fail" | "reuseIfHashMatches"
+            ))
+    {
         return Err(CoreError::UnsupportedCollisionSemantics);
+    }
+    if let Some(period) = &route.rolling_period {
+        if !matches!(
+            period.as_str(),
+            "daily" | "weekly" | "monthly" | "quarterly" | "yearly"
+        ) {
+            return Err(CoreError::InvalidEnum);
+        }
+    }
+    if input.operation == "rollingNote" && route.rolling_period.is_none() {
+        return Err(CoreError::InvalidControl);
+    }
+    if input.operation != "rollingNote" && route.rolling_period.is_some() {
+        return Err(CoreError::InvalidControl);
+    }
+    if let Some(placement) = &route.placement {
+        if !matches!(placement.as_str(), "append" | "prepend" | "beneathHeading") {
+            return Err(CoreError::InvalidEnum);
+        }
+    }
+    let expected_placement = match input.operation.as_str() {
+        "existingNoteAppend" => Some("append"),
+        "existingNotePrepend" => Some("prepend"),
+        "existingNoteHeading" => Some("beneathHeading"),
+        "rollingNote" => route.placement.as_deref().or(Some("append")),
+        _ => None,
+    };
+    if input.operation != "newNote"
+        && route.placement.as_deref().unwrap_or("append") != expected_placement.unwrap_or("append")
+    {
+        return Err(CoreError::InvalidControl);
+    }
+    if expected_placement == Some("beneathHeading") {
+        bounded_string(route.heading_title.as_deref().unwrap_or_default(), 1, 256)?;
+        if !matches!(route.heading_level, Some(1..=6)) {
+            return Err(CoreError::IntegerOutOfRange);
+        }
+        if !matches!(
+            route.missing_heading_behavior.as_deref(),
+            Some("fail" | "create")
+        ) {
+            return Err(CoreError::InvalidEnum);
+        }
+    } else if route.heading_title.is_some()
+        || route.heading_level.is_some()
+        || route.missing_heading_behavior.is_some()
+    {
+        return Err(CoreError::InvalidControl);
     }
     let metadata = &input.preset.metadata_policy;
     if !matches!(
@@ -673,6 +845,12 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
     }
     if metadata.frontmatter_mode == "replace" || metadata.line_ending != "lf" {
         return Err(CoreError::UnsupportedOperation);
+    }
+    if !matches!(
+        metadata.scope.as_deref().unwrap_or("document"),
+        "document" | "entry"
+    ) {
+        return Err(CoreError::InvalidEnum);
     }
     bounded_array(metadata.ordered_fields.len(), 0, 128)?;
     let mut field_names = BTreeSet::new();
@@ -706,7 +884,207 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
     ) {
         return Err(CoreError::InvalidEnum);
     }
+    let snapshot = input.invocation.location_snapshot.as_ref();
+    match input.invocation.location_outcome.as_str() {
+        "coordinatesFrozen" | "labelFrozen" if snapshot.is_none() => {
+            return Err(CoreError::InvalidControl);
+        }
+        "notRequested" | "unavailable" if snapshot.is_some() => {
+            return Err(CoreError::InvalidControl);
+        }
+        _ => {}
+    }
+    if input.invocation.location_outcome == "unavailable" {
+        if !matches!(
+            input.invocation.location_attempted_at_epoch_milliseconds,
+            Some(0..=4_102_444_800_000)
+        ) {
+            return Err(CoreError::IntegerOutOfRange);
+        }
+    } else if input
+        .invocation
+        .location_attempted_at_epoch_milliseconds
+        .is_some()
+    {
+        return Err(CoreError::InvalidControl);
+    }
+    if let Some(reason) = input.invocation.location_unavailable_reason.as_deref() {
+        if input.invocation.location_outcome != "unavailable" {
+            return Err(CoreError::InvalidControl);
+        }
+        if !matches!(
+            reason,
+            "permissionDenied"
+                | "restricted"
+                | "notDetermined"
+                | "reducedAccuracy"
+                | "timeout"
+                | "cancelled"
+                | "unavailable"
+        ) {
+            return Err(CoreError::InvalidEnum);
+        }
+    }
+    if let Some(snapshot) = snapshot {
+        if !(-90_000_000..=90_000_000).contains(&snapshot.latitude_e6)
+            || !(-180_000_000..=180_000_000).contains(&snapshot.longitude_e6)
+            || !(0..=4_102_444_800_000).contains(&snapshot.captured_at_epoch_milliseconds)
+            || snapshot
+                .accuracy_millimeters
+                .is_some_and(|value| value > 100_000_000)
+        {
+            return Err(CoreError::IntegerOutOfRange);
+        }
+        if !matches!(snapshot.precision.as_str(), "exact" | "city")
+            || !matches!(
+                snapshot.source.as_str(),
+                "app" | "share" | "keyboard" | "widget" | "shortcut" | "watch" | "wear"
+            )
+        {
+            return Err(CoreError::InvalidEnum);
+        }
+        if let Some(label) = &snapshot.label {
+            let values = [
+                label.place.as_deref(),
+                label.city.as_deref(),
+                label.region.as_deref(),
+                label.country.as_deref(),
+            ];
+            if values.iter().all(|value| value.is_none())
+                || values.iter().flatten().any(|value| {
+                    value.is_empty() || value.len() > 512 || value.trim() != *value
+                })
+                || (snapshot.precision == "city" && label.place.is_some())
+            {
+                return Err(CoreError::InvalidControl);
+            }
+        }
+    }
+    if (input.invocation.location_outcome == "labelFrozen")
+        != snapshot.and_then(|value| value.label.as_ref()).is_some()
+    {
+        return Err(CoreError::InvalidControl);
+    }
+    if let Some(observation) = &input.invocation.location_label_observation {
+        if !matches!(
+            observation.lookup_class.as_str(),
+            "none" | "offline" | "systemMayUseNetwork"
+        ) || !matches!(
+            observation.outcome.as_str(),
+            "notRequested" | "unavailable" | "frozen"
+        ) {
+            return Err(CoreError::InvalidEnum);
+        }
+        if (!observation.requested
+            && (observation.lookup_class != "none"
+                || observation.consent_version.is_some()
+                || observation.outcome != "notRequested"))
+            || (observation.requested
+                && (observation.lookup_class == "none"
+                    || observation.outcome == "notRequested"))
+            || ((observation.lookup_class == "systemMayUseNetwork")
+                != observation.consent_version.is_some())
+            || ((observation.outcome == "frozen")
+                != (input.invocation.location_outcome == "labelFrozen"))
+        {
+            return Err(CoreError::InvalidControl);
+        }
+    }
+    if let Some(policy) = &input.preset.location_policy {
+        if !matches!(policy.precision.as_str(), "exact" | "city")
+            || !matches!(
+                policy.output_mode.as_str(),
+                "structured" | "advancedTemplate"
+            )
+        {
+            return Err(CoreError::InvalidEnum);
+        }
+        bounded_string(&policy.collection_key, 1, 128)?;
+        if !valid_yaml_key(&policy.collection_key) {
+            return Err(CoreError::InvalidRendering);
+        }
+        bounded_string(&policy.advanced_template, 0, 8_192)?;
+        if !matches!(
+            policy.label_lookup_class.as_str(),
+            "none" | "offline" | "systemMayUseNetwork"
+        ) {
+            return Err(CoreError::InvalidEnum);
+        }
+        if (policy.label_lookup_class == "systemMayUseNetwork")
+            != policy.label_consent_version.is_some()
+        {
+            return Err(CoreError::InvalidControl);
+        }
+        bounded_array(policy.structured_fields.len(), 0, 15)?;
+        let mut location_fields = BTreeSet::new();
+        let mut location_output_keys = BTreeSet::new();
+        for selection in &policy.structured_fields {
+            if !matches!(
+                selection.field.as_str(),
+                "coordinates"
+                    | "latitude"
+                    | "longitude"
+                    | "place"
+                    | "city"
+                    | "region"
+                    | "country"
+                    | "appleMapsURL"
+                    | "googleMapsURL"
+                    | "openStreetMapURL"
+                    | "geoURI"
+                    | "accuracy"
+                    | "timestamp"
+                    | "source"
+                    | "id"
+            ) {
+                return Err(CoreError::InvalidEnum);
+            }
+            bounded_string(&selection.output_key, 1, 64)?;
+            if !valid_yaml_key(&selection.output_key)
+                || !location_fields.insert(selection.field.as_str())
+                || !location_output_keys.insert(selection.output_key.as_str())
+                || ((selection.field == "id") != (selection.output_key == "id"))
+            {
+                return Err(CoreError::InvalidRendering);
+            }
+        }
+        if policy.output_mode == "advancedTemplate"
+            && policy.metadata_output_enabled
+            && policy.advanced_template.trim().is_empty()
+        {
+            return Err(CoreError::InvalidRendering);
+        }
+        if policy.is_enabled && snapshot.is_some_and(|value| value.precision != policy.precision) {
+            return Err(CoreError::InvalidControl);
+        }
+        if let Some(observation) = &input.invocation.location_label_observation {
+            if observation.requested
+                && (observation.lookup_class != policy.label_lookup_class
+                    || observation.consent_version != policy.label_consent_version)
+            {
+                return Err(CoreError::InvalidControl);
+            }
+        }
+    } else if snapshot.is_some()
+        || input
+            .invocation
+            .location_label_observation
+            .as_ref()
+            .is_some_and(|observation| observation.requested)
+    {
+        return Err(CoreError::InvalidControl);
+    }
     Ok(())
+}
+
+fn valid_yaml_key(value: &str) -> bool {
+    value.bytes().enumerate().all(|(index, byte)| {
+        if index == 0 {
+            byte.is_ascii_alphabetic() || byte == b'_'
+        } else {
+            byte.is_ascii_alphanumeric() || matches!(byte, b'_' | b'-')
+        }
+    })
 }
 
 fn validate_pins(pins: &Pins) -> Result<(), CoreError> {
@@ -771,12 +1149,13 @@ fn validate_hash(value: &str) -> Result<(), CoreError> {
 }
 
 pub fn path_candidates(input: &PreparationInput) -> Result<Vec<Vec<String>>, CoreError> {
-    let rendered = render_tokens(
+    let rendered = render_path_tokens(
         &input.preset.route_policy.note_name_template,
         input.created_at_epoch_milliseconds,
         &input.timezone,
         input.request_id,
         &input.capture_source,
+        input.preset.route_policy.rolling_period.as_deref(),
     )?;
     let trimmed = rendered.trim_matches(char::is_whitespace);
     let name = if suffix_extension(trimmed).is_some() {
@@ -785,8 +1164,9 @@ pub fn path_candidates(input: &PreparationInput) -> Result<Vec<Vec<String>>, Cor
         format!("{trimmed}.md")
     };
     validate_segment(&name)?;
-    let mut result = Vec::with_capacity(256);
-    for suffix in 1..=256_u16 {
+    let candidate_count = if input.operation == "newNote" { 256 } else { 1 };
+    let mut result = Vec::with_capacity(candidate_count);
+    for suffix in 1..=candidate_count as u16 {
         let mut path = input.preset.route_policy.logical_folder.clone();
         let candidate = if suffix == 1 {
             name.clone()
@@ -797,6 +1177,33 @@ pub fn path_candidates(input: &PreparationInput) -> Result<Vec<Vec<String>>, Cor
         result.push(path);
     }
     Ok(result)
+}
+
+fn render_path_tokens(
+    template: &str,
+    epoch_ms: i64,
+    timezone: &str,
+    request_id: Uuid,
+    source: &str,
+    rolling_period: Option<&str>,
+) -> Result<String, CoreError> {
+    let mut rendered = render_tokens(template, epoch_ms, timezone, request_id, source)?;
+    let timezone: Tz = timezone.parse().map_err(|_| CoreError::InvalidControl)?;
+    let date = timezone
+        .timestamp_millis_opt(epoch_ms)
+        .single()
+        .ok_or(CoreError::InvalidControl)?;
+    let iso = date.iso_week();
+    let period = match rolling_period {
+        Some("daily") | None => format!("{:04}-{:02}-{:02}", date.year(), date.month(), date.day()),
+        Some("weekly") => format!("{:04}-W{:02}", iso.year(), iso.week()),
+        Some("monthly") => format!("{:04}-{:02}", date.year(), date.month()),
+        Some("quarterly") => format!("{:04}-Q{}", date.year(), (date.month() - 1) / 3 + 1),
+        Some("yearly") => format!("{:04}", date.year()),
+        Some(_) => return Err(CoreError::InvalidEnum),
+    };
+    rendered = rendered.replace("{period}", &period);
+    Ok(rendered)
 }
 
 fn suffixed(name: &str, suffix: u16) -> String {
@@ -817,6 +1224,32 @@ pub fn render_tokens(
     timezone: &str,
     request_id: Uuid,
     source: &str,
+) -> Result<String, CoreError> {
+    render_tokens_with_location(template, epoch_ms, timezone, request_id, source, "")
+}
+
+fn render_tokens_for_input(
+    template: &str,
+    input: &MaterializationInput,
+) -> Result<String, CoreError> {
+    let location = location_map_link(input)?.unwrap_or_default();
+    render_tokens_with_location(
+        template,
+        input.created_at_epoch_milliseconds,
+        &input.timezone,
+        input.request_id,
+        &input.capture_source,
+        &location,
+    )
+}
+
+fn render_tokens_with_location(
+    template: &str,
+    epoch_ms: i64,
+    timezone: &str,
+    request_id: Uuid,
+    source: &str,
+    location: &str,
 ) -> Result<String, CoreError> {
     let timezone: Tz = timezone.parse().map_err(|_| CoreError::InvalidControl)?;
     let date = timezone
@@ -850,17 +1283,281 @@ pub fn render_tokens(
         ("{source}", source.to_owned()),
         ("{id}", id.clone()),
         ("{id8}", id[..8].to_owned()),
-        // Admitted requests always carry `location_outcome: notRequested` (the
-        // Swift oracle renders an empty string when no usable location exists),
-        // so the portable core must also collapse the token to nothing to keep
-        // entry-prefix bytes identical to the oracle.
-        ("{location}", String::new()),
+        ("{location}", location.to_owned()),
     ];
     Ok(replacements
         .into_iter()
         .fold(template.to_owned(), |value, (token, replacement)| {
             value.replace(token, &replacement)
         }))
+}
+
+fn location_map_link(input: &MaterializationInput) -> Result<Option<String>, CoreError> {
+    let Some(policy) = input.preset.location_policy.as_ref() else {
+        return Ok(None);
+    };
+    if !policy.is_enabled {
+        return Ok(None);
+    }
+    let Some(snapshot) = input.invocation.location_snapshot.as_ref() else {
+        return Ok(None);
+    };
+    let formatted = formatted_location(snapshot, policy)?;
+    Ok(Some(format!("[Location]({})", formatted.google_maps_url)))
+}
+
+struct FormattedLocation {
+    latitude: String,
+    longitude: String,
+    coordinates: String,
+    apple_maps_url: String,
+    google_maps_url: String,
+    open_street_map_url: String,
+    geo_uri: String,
+    accuracy: Option<String>,
+    timestamp: String,
+}
+
+fn formatted_location(
+    snapshot: &LocationSnapshot,
+    policy: &LocationPolicy,
+) -> Result<FormattedLocation, CoreError> {
+    let city = policy.precision == "city" || snapshot.precision == "city";
+    let decimals = if city { 2 } else { 6 };
+    let latitude = format_coordinate(snapshot.latitude_e6, decimals);
+    let longitude = format_coordinate(snapshot.longitude_e6, decimals);
+    let coordinates = format!("{latitude}, {longitude}");
+    let query = format!("{latitude}%2C{longitude}");
+    let map_label = snapshot
+        .label
+        .as_ref()
+        .and_then(|label| {
+            label
+                .place
+                .as_ref()
+                .or(label.city.as_ref())
+                .or(label.region.as_ref())
+                .or(label.country.as_ref())
+        })
+        .map(|value| percent_encode_query(value))
+        .unwrap_or_else(|| format!("{latitude}%2C%20{longitude}"));
+    let zoom = if city { 10 } else { 16 };
+    let accuracy = snapshot
+        .accuracy_millimeters
+        .map(|millimeters| format!("{:.1} m", millimeters as f64 / 1_000.0));
+    let geo_accuracy = snapshot
+        .accuracy_millimeters
+        .map(|millimeters| format!(";u={:.1}", millimeters as f64 / 1_000.0))
+        .unwrap_or_default();
+    let timestamp = chrono::Utc
+        .timestamp_millis_opt(snapshot.captured_at_epoch_milliseconds)
+        .single()
+        .ok_or(CoreError::InvalidControl)?
+        .format("%Y-%m-%dT%H:%M:%S%.3fZ")
+        .to_string();
+    Ok(FormattedLocation {
+        latitude: latitude.clone(),
+        longitude: longitude.clone(),
+        coordinates,
+        apple_maps_url: format!("https://maps.apple.com/?ll={query}&q={map_label}"),
+        google_maps_url: format!("https://www.google.com/maps/search/?api=1&query={query}"),
+        open_street_map_url: format!(
+            "https://www.openstreetmap.org/?mlat={latitude}&mlon={longitude}#map={zoom}/{latitude}/{longitude}"
+        ),
+        geo_uri: format!("geo:{latitude},{longitude}{geo_accuracy}"),
+        accuracy,
+        timestamp,
+    })
+}
+
+fn percent_encode_query(value: &str) -> String {
+    let mut encoded = String::with_capacity(value.len());
+    for byte in value.as_bytes() {
+        if byte.is_ascii_alphanumeric() || matches!(byte, b'-' | b'.' | b'_' | b'~') {
+            encoded.push(char::from(*byte));
+        } else {
+            use std::fmt::Write as _;
+            let _ = write!(encoded, "%{byte:02X}");
+        }
+    }
+    encoded
+}
+
+fn format_coordinate(value_e6: i64, decimals: u32) -> String {
+    let divisor = 10_i64.pow(6 - decimals);
+    let scaled = value_e6 / divisor;
+    let fraction_base = 10_i64.pow(decimals);
+    let absolute = scaled.unsigned_abs();
+    let sign = if scaled < 0 { "-" } else { "" };
+    format!(
+        "{sign}{}.{:0width$}",
+        absolute / fraction_base as u64,
+        absolute % fraction_base as u64,
+        width = decimals as usize,
+    )
+}
+
+struct RenderedLocationMetadata {
+    document_lines: Vec<String>,
+    inline_lines: Vec<String>,
+}
+
+fn render_location_metadata(
+    input: &MaterializationInput,
+    metadata_scope: &str,
+) -> Result<Option<RenderedLocationMetadata>, CoreError> {
+    let Some(policy) = input.preset.location_policy.as_ref() else {
+        return Ok(None);
+    };
+    if !policy.is_enabled || !policy.metadata_output_enabled {
+        return Ok(None);
+    }
+    let Some(snapshot) = input.invocation.location_snapshot.as_ref() else {
+        return Ok(None);
+    };
+    if policy.output_mode == "advancedTemplate" && metadata_scope == "entry" {
+        return Err(CoreError::InvalidRendering);
+    }
+    let formatted = formatted_location(snapshot, policy)?;
+    let request_id = input.request_id.hyphenated().to_string();
+    let mut values = BTreeMap::new();
+    values.insert("coordinates", formatted.coordinates.clone());
+    values.insert("latitude", formatted.latitude.clone());
+    values.insert("longitude", formatted.longitude.clone());
+    values.insert("appleMapsURL", formatted.apple_maps_url.clone());
+    values.insert("googleMapsURL", formatted.google_maps_url.clone());
+    values.insert("openStreetMapURL", formatted.open_street_map_url.clone());
+    values.insert("geoURI", formatted.geo_uri.clone());
+    values.insert("timestamp", formatted.timestamp.clone());
+    values.insert("source", snapshot.source.clone());
+    values.insert("id", request_id.clone());
+    if let Some(label) = &snapshot.label {
+        if let Some(value) = &label.place {
+            values.insert("place", value.clone());
+        }
+        if let Some(value) = &label.city {
+            values.insert("city", value.clone());
+        }
+        if let Some(value) = &label.region {
+            values.insert("region", value.clone());
+        }
+        if let Some(value) = &label.country {
+            values.insert("country", value.clone());
+        }
+    }
+    if let Some(accuracy) = formatted.accuracy.clone() {
+        values.insert("accuracy", accuracy);
+    }
+
+    if metadata_scope == "entry" {
+        let mut inline_lines = vec![format!("location.id:: {request_id}")];
+        for selection in &policy.structured_fields {
+            if selection.field == "id" {
+                continue;
+            }
+            if let Some(value) = structured_location_value(&selection.field, &formatted, &values) {
+                inline_lines.push(format!("location.{}:: {value}", selection.output_key));
+            }
+        }
+        return Ok(Some(RenderedLocationMetadata {
+            document_lines: Vec::new(),
+            inline_lines,
+        }));
+    }
+
+    let item_lines = if policy.output_mode == "structured" {
+        let mut lines = vec![format!("id: {}", yaml_scalar(&request_id))];
+        for selection in &policy.structured_fields {
+            if selection.field == "id" {
+                continue;
+            }
+            if let Some(value) = structured_location_value(&selection.field, &formatted, &values) {
+                lines.push(format!("{}: {value}", selection.output_key));
+            }
+        }
+        lines
+    } else {
+        let mut lines = vec![format!("id: {}", yaml_scalar(&request_id))];
+        lines.extend(render_advanced_location_template(
+            &policy.advanced_template,
+            &values,
+        )?);
+        lines
+    };
+    let mut document_lines = vec![format!("{}:", policy.collection_key)];
+    for (index, line) in item_lines.into_iter().enumerate() {
+        if index == 0 {
+            document_lines.push(format!("  - {line}"));
+        } else {
+            document_lines.push(format!("    {line}"));
+        }
+    }
+    let output_bytes = document_lines.iter().map(String::len).sum::<usize>();
+    if output_bytes > 16_384 {
+        return Err(CoreError::StringTooLarge);
+    }
+    Ok(Some(RenderedLocationMetadata {
+        document_lines,
+        inline_lines: Vec::new(),
+    }))
+}
+
+fn structured_location_value(
+    field: &str,
+    formatted: &FormattedLocation,
+    values: &BTreeMap<&str, String>,
+) -> Option<String> {
+    match field {
+        "coordinates" => Some(format!(
+            "[{}, {}]",
+            formatted.latitude, formatted.longitude
+        )),
+        "latitude" => Some(formatted.latitude.clone()),
+        "longitude" => Some(formatted.longitude.clone()),
+        "accuracy" => formatted
+            .accuracy
+            .as_deref()
+            .and_then(|value| value.split(' ').next())
+            .map(str::to_owned),
+        _ => values.get(field).map(|value| yaml_scalar(value)),
+    }
+}
+
+fn render_advanced_location_template(
+    template: &str,
+    values: &BTreeMap<&str, String>,
+) -> Result<Vec<String>, CoreError> {
+    let normalized = normalize_newlines(template);
+    let lines = normalized.lines().collect::<Vec<_>>();
+    if normalized.len() > 8_192 || lines.len() > 128 {
+        return Err(CoreError::StringTooLarge);
+    }
+    let mut output = Vec::new();
+    for line in lines {
+        if line.contains('\t') || matches!(line.trim(), "---" | "...") {
+            return Err(CoreError::InvalidRendering);
+        }
+        let mut rendered = line.to_owned();
+        while let Some(start) = rendered.find("{{") {
+            let tail = &rendered[start + 2..];
+            let Some(end) = tail.find("}}") else {
+                return Err(CoreError::InvalidRendering);
+            };
+            let token = tail[..end].trim();
+            let value = values.get(token).ok_or(CoreError::InvalidRendering)?;
+            rendered.replace_range(start..start + 2 + end + 2, value);
+        }
+        if !rendered.trim().is_empty() {
+            if !rendered.contains(':') {
+                return Err(CoreError::InvalidRendering);
+            }
+            output.push(rendered);
+        }
+    }
+    if output.is_empty() {
+        return Err(CoreError::InvalidRendering);
+    }
+    Ok(output)
 }
 
 fn validate_segments(segments: &[String]) -> Result<(), CoreError> {
@@ -1009,6 +1706,7 @@ impl BufferedObservation {
 #[derive(Clone, Debug)]
 struct InputStream {
     id: Uuid,
+    kind: &'static str,
     expected_length: u64,
     expected_sha256: String,
     length: u64,
@@ -1072,8 +1770,23 @@ impl MaterializationSession {
                         return Err(CoreError::ObservationMismatch);
                     }
                 }
-                ObservationResult::ExistingNote { .. }
-                | ObservationResult::StagedAssetMetadata { .. } => {
+                ObservationResult::ExistingNote {
+                    status,
+                    length,
+                    sha256,
+                    byte_stream_id,
+                    ..
+                } => {
+                    let absent = status == "absent"
+                        && *length == 0
+                        && sha256 == ZERO_HASH
+                        && byte_stream_id.is_none();
+                    let present = status == "present" && byte_stream_id.is_some();
+                    if !absent && !present {
+                        return Err(CoreError::ObservationMismatch);
+                    }
+                }
+                ObservationResult::StagedAssetMetadata { .. } => {
                     return Err(CoreError::UnsupportedOperation);
                 }
             }
@@ -1091,15 +1804,25 @@ impl MaterializationSession {
                 };
                 streams.push(InputStream {
                     id,
+                    kind: match observation {
+                        ObservationResult::FrozenTemplate { .. } => "frozenTemplate",
+                        ObservationResult::ExistingNote { .. } => "existingNote",
+                        _ => unreachable!(),
+                    },
                     expected_length: length,
                     expected_sha256: sha256,
                     length: 0,
                     hasher: Sha256::new(),
-                    template: matches!(observation, ObservationResult::FrozenTemplate { .. })
-                        .then_some(BufferedObservation::Uniform {
-                            byte: None,
-                            length: 0,
-                        }),
+                    template: Some(
+                        if matches!(observation, ObservationResult::FrozenTemplate { .. }) {
+                            BufferedObservation::Uniform {
+                                byte: None,
+                                length: 0,
+                            }
+                        } else {
+                            BufferedObservation::Bytes(Vec::new())
+                        },
+                    ),
                     next_sequence: 0,
                     eof: false,
                 });
@@ -1187,8 +1910,14 @@ impl MaterializationSession {
             let template = self
                 .streams
                 .iter()
-                .find_map(|stream| stream.template.as_ref());
-            let (path, bytes) = match materialize_buffered(input, template) {
+                .find(|stream| stream.kind == "frozenTemplate")
+                .and_then(|stream| stream.template.as_ref());
+            let existing_note = self
+                .streams
+                .iter()
+                .find(|stream| stream.kind == "existingNote")
+                .and_then(|stream| stream.template.as_ref());
+            let (path, bytes) = match materialize_buffered(input, template, existing_note) {
                 Ok(value) => value,
                 Err(error) => return self.fail(error),
             };
@@ -1202,7 +1931,12 @@ impl MaterializationSession {
             return self.fail(CoreError::AggregateTooLarge);
         }
         let hash = sha256_hex(&bytes);
-        let operation_id = match operation_id(request_id, 0, "newNote") {
+        let operation = self
+            .input
+            .as_ref()
+            .map(|input| input.operation.as_str())
+            .unwrap_or("newNote");
+        let operation_id = match operation_id(request_id, 0, operation) {
             Ok(value) => value,
             Err(error) => return self.fail(error),
         };
@@ -1432,7 +2166,22 @@ fn validate_materialization(
                             ObservationResult::CandidateOccupancy { .. },
                             "candidateOccupancy"
                         ) | (ObservationResult::FrozenTemplate { .. }, "frozenTemplate")
+                            | (ObservationResult::ExistingNote { .. }, "existingNote")
                     )
+                    || match (actual, expected.kind) {
+                        (
+                            ObservationResult::ExistingNote {
+                                status,
+                                logical_path,
+                                ..
+                            },
+                            "existingNote",
+                        ) => {
+                            expected.logical_path.as_ref() != Some(logical_path)
+                                || (expected.required == Some(true) && status != "present")
+                        }
+                        _ => false,
+                    }
             })
         || input.session.maximum_chunk_bytes != MAX_CHUNK_BYTES as u64
         || input.session.maximum_aggregate_observation_bytes != MAX_AGGREGATE_BYTES
@@ -1492,9 +2241,10 @@ fn validate_observations(observations: &[ObservationResult]) -> Result<(), CoreE
                 logical_path,
                 length,
                 sha256,
+                byte_stream_id,
                 ..
             } => {
-                if status != "present" {
+                if !matches!(status.as_str(), "present" | "absent") {
                     return Err(CoreError::InvalidEnum);
                 }
                 bounded_array(logical_path.len(), 1, 32)?;
@@ -1503,6 +2253,14 @@ fn validate_observations(observations: &[ObservationResult]) -> Result<(), CoreE
                     return Err(CoreError::IntegerOutOfRange);
                 }
                 validate_hash(sha256)?;
+                let coherent = (status == "present" && byte_stream_id.is_some())
+                    || (status == "absent"
+                        && *length == 0
+                        && sha256 == ZERO_HASH
+                        && byte_stream_id.is_none());
+                if !coherent {
+                    return Err(CoreError::ObservationMismatch);
+                }
             }
             ObservationResult::StagedAssetMetadata {
                 status,
@@ -1544,6 +2302,9 @@ fn selected_path(input: &MaterializationInput) -> Result<Vec<String>, CoreError>
         invocation: input.invocation.clone(),
     };
     let candidates = path_candidates(&prep)?;
+    if input.operation != "newNote" {
+        return candidates.into_iter().next().ok_or(CoreError::InvalidPath);
+    }
     let occupied = input
         .observations
         .iter()
@@ -1562,11 +2323,21 @@ fn selected_path(input: &MaterializationInput) -> Result<Vec<String>, CoreError>
 fn materialize_buffered(
     input: &MaterializationInput,
     template: Option<&BufferedObservation>,
+    existing_note: Option<&BufferedObservation>,
 ) -> Result<(Vec<String>, Vec<u8>), CoreError> {
+    let existing_bytes = match existing_note {
+        None => None,
+        Some(BufferedObservation::Bytes(bytes)) => Some(bytes.as_slice()),
+        Some(BufferedObservation::Uniform { .. }) => {
+            return Err(CoreError::InvalidObservationStream);
+        }
+    };
     match template {
-        None => materialize(input, None),
-        Some(BufferedObservation::Bytes(bytes)) => materialize(input, Some(bytes)),
-        Some(BufferedObservation::Uniform { byte: None, .. }) => materialize(input, Some(&[])),
+        None => materialize(input, None, existing_bytes),
+        Some(BufferedObservation::Bytes(bytes)) => materialize(input, Some(bytes), existing_bytes),
+        Some(BufferedObservation::Uniform { byte: None, .. }) => {
+            materialize(input, Some(&[]), existing_bytes)
+        }
         Some(BufferedObservation::Uniform {
             byte: Some(b'\n' | b'\r' | b'\x0b' | b'\x0c'),
             ..
@@ -1574,7 +2345,7 @@ fn materialize_buffered(
             // A uniform ASCII newline template is removed by the production
             // boundary-newline policy. Preserve that exact result without
             // retaining or expanding a potentially 256 MiB observation.
-            materialize(input, Some(&[]))
+            materialize(input, Some(&[]), existing_bytes)
         }
         Some(BufferedObservation::Uniform {
             byte: Some(byte),
@@ -1586,14 +2357,14 @@ fn materialize_buffered(
             // Compute the bytes that cannot be removed by template normalization before
             // expanding a potentially 256 MiB observation. A repeated non-newline byte
             // contributes its full length to the final document.
-            let (_, unavoidable) = materialize(input, None)?;
+            let (_, unavoidable) = materialize(input, None, existing_bytes)?;
             ensure_uniform_materialization_fits(*length, unavoidable.len())?;
             let mut expanded = Vec::new();
             expanded
                 .try_reserve_exact(*length)
                 .map_err(|_| CoreError::AggregateTooLarge)?;
             expanded.resize(*length, *byte);
-            materialize(input, Some(&expanded))
+            materialize(input, Some(&expanded), existing_bytes)
         }
     }
 }
@@ -1615,6 +2386,7 @@ fn ensure_uniform_materialization_fits(
 pub fn materialize(
     input: &MaterializationInput,
     template: Option<&[u8]>,
+    existing_note: Option<&[u8]>,
 ) -> Result<(Vec<String>, Vec<u8>), CoreError> {
     let path = selected_path(input)?;
     let mut blocks = Vec::new();
@@ -1641,7 +2413,10 @@ pub fn materialize(
                 };
                 blocks.push(format!("[{}]({})", escape_label(label), escape_url(&url)));
             }
-            Payload::Asset { .. } => return Err(CoreError::UnsupportedOperation),
+            // Android owns the immutable staged bytes and commits them before the note.
+            // The text payload already contains the requested Markdown reference; the
+            // shared core validates the descriptor but never receives or duplicates bytes.
+            Payload::Asset { .. } => {}
         }
     }
     if blocks.is_empty() {
@@ -1650,21 +2425,43 @@ pub fn materialize(
     let entry = blocks.join("\n\n");
     let rendered_template = if let Some(template) = template {
         let template = std::str::from_utf8(template).map_err(|_| CoreError::InvalidRendering)?;
-        Some(render_tokens(
-            template,
-            input.created_at_epoch_milliseconds,
-            &input.timezone,
-            input.request_id,
-            &input.capture_source,
-        )?)
+        Some(render_tokens_for_input(template, input)?)
     } else {
         None
     };
     let prefix = normalize_newlines(rendered_template.as_deref().unwrap_or_default());
     let normalized_entry = trim_boundary_newlines(&normalize_newlines(&entry));
     let (mut frontmatter, prefix_body) = split_leading_frontmatter(&prefix);
-    let body = format!("{prefix_body}{normalized_entry}");
-    if input.preset.metadata_policy.frontmatter_mode == "merge" {
+    let route_prefix = render_tokens_for_input(
+        input
+            .preset
+            .route_policy
+            .entry_prefix
+            .as_deref()
+            .unwrap_or_default(),
+        input,
+    )?;
+    let route_suffix = render_tokens_for_input(
+        input
+            .preset
+            .route_policy
+            .entry_suffix
+            .as_deref()
+            .unwrap_or_default(),
+        input,
+    )?;
+    let mut body = format!(
+        "{prefix_body}{}{normalized_entry}{}",
+        normalize_newlines(&route_prefix),
+        normalize_newlines(&route_suffix)
+    );
+    let metadata_scope = input
+        .preset
+        .metadata_policy
+        .scope
+        .as_deref()
+        .unwrap_or("document");
+    if metadata_scope == "document" && input.preset.metadata_policy.frontmatter_mode == "merge" {
         for field in &input.preset.metadata_policy.ordered_fields {
             let line = format!("{}: {}", yaml_key(&field.name), yaml_scalar(&field.value));
             if frontmatter_entry_key(&line).is_some_and(|key| {
@@ -1675,6 +2472,38 @@ pub fn materialize(
                 continue;
             }
             frontmatter.push(line);
+        }
+    } else if metadata_scope == "entry" && !input.preset.metadata_policy.ordered_fields.is_empty() {
+        let inline_fields = input
+            .preset
+            .metadata_policy
+            .ordered_fields
+            .iter()
+            .map(|field| {
+                format!(
+                    "{}:: {}",
+                    field.name,
+                    field.value.replace('\n', " ").replace('\r', " ")
+                )
+            })
+            .collect::<Vec<_>>()
+            .join("\n");
+        body = if body.trim().is_empty() {
+            inline_fields
+        } else {
+            format!("{inline_fields}\n{body}")
+        };
+    }
+    if let Some(location) = render_location_metadata(input, metadata_scope)? {
+        if metadata_scope == "document" {
+            frontmatter.extend(location.document_lines);
+        } else if !location.inline_lines.is_empty() {
+            let inline = location.inline_lines.join("\n");
+            body = if body.trim().is_empty() {
+                inline
+            } else {
+                format!("{inline}\n{body}")
+            };
         }
     }
     let mut capture_block = trim_boundary_newlines(&body);
@@ -1688,7 +2517,65 @@ pub fn materialize(
     } else if input.preset.retry_marker_policy != "none" {
         return Err(CoreError::InvalidRendering);
     }
-    let mut document = assemble_markdown(&frontmatter, &capture_block);
+    let mut document = if input.operation == "newNote" || existing_note.is_none() {
+        if input.operation != "newNote" && input.operation != "rollingNote" {
+            return Err(CoreError::ObservationMismatch);
+        }
+        assemble_markdown(&frontmatter, &capture_block)
+    } else {
+        let existing = std::str::from_utf8(existing_note.ok_or(CoreError::ObservationMismatch)?)
+            .map_err(|_| CoreError::InvalidRendering)?;
+        let normalized_existing = normalize_newlines(existing);
+        let marker = format!("<!-- vox-capture:{} -->", input.request_id.hyphenated());
+        if input.preset.retry_marker_policy == "voxCaptureCommentV1"
+            && normalized_existing.contains(&marker)
+        {
+            normalized_existing
+        } else {
+            let (mut existing_frontmatter, existing_body) =
+                split_leading_frontmatter(&normalized_existing);
+            merge_frontmatter(&mut existing_frontmatter, &frontmatter);
+            let placement = match input.operation.as_str() {
+                "existingNoteAppend" => "append",
+                "existingNotePrepend" => "prepend",
+                "existingNoteHeading" => "beneathHeading",
+                "rollingNote" => input
+                    .preset
+                    .route_policy
+                    .placement
+                    .as_deref()
+                    .unwrap_or("append"),
+                _ => return Err(CoreError::UnsupportedOperation),
+            };
+            let edited_body = match placement {
+                "append" => join_markdown_blocks(&[&existing_body, &capture_block]),
+                "prepend" => join_markdown_blocks(&[&capture_block, &existing_body]),
+                "beneathHeading" => insert_beneath_heading(
+                    &existing_body,
+                    &capture_block,
+                    input
+                        .preset
+                        .route_policy
+                        .heading_title
+                        .as_deref()
+                        .ok_or(CoreError::InvalidControl)?,
+                    input
+                        .preset
+                        .route_policy
+                        .heading_level
+                        .ok_or(CoreError::InvalidControl)?,
+                    input
+                        .preset
+                        .route_policy
+                        .missing_heading_behavior
+                        .as_deref()
+                        .ok_or(CoreError::InvalidControl)?,
+                )?,
+                _ => return Err(CoreError::InvalidEnum),
+            };
+            assemble_markdown(&existing_frontmatter, &edited_body)
+        }
+    };
     if input.preset.metadata_policy.final_newline && !document.ends_with('\n') {
         document.push('\n');
     }
@@ -1696,6 +2583,70 @@ pub fn materialize(
         return Err(CoreError::AggregateTooLarge);
     }
     Ok((path, document.into_bytes()))
+}
+
+fn join_markdown_blocks(blocks: &[&str]) -> String {
+    blocks
+        .iter()
+        .map(|block| trim_boundary_newlines(block))
+        .filter(|block| !block.is_empty())
+        .collect::<Vec<_>>()
+        .join("\n\n")
+}
+
+fn insert_beneath_heading(
+    body: &str,
+    capture_block: &str,
+    title: &str,
+    level: u8,
+    missing_behavior: &str,
+) -> Result<String, CoreError> {
+    if !(1..=6).contains(&level) {
+        return Err(CoreError::IntegerOutOfRange);
+    }
+    let lines = body.split('\n').collect::<Vec<_>>();
+    let mut fence: Option<(u8, usize)> = None;
+    for (index, line) in lines.iter().enumerate() {
+        let leading = line.trim_start_matches([' ', '\t']);
+        let first = leading.as_bytes().first().copied();
+        if matches!(first, Some(b'`' | b'~')) {
+            let character = first.unwrap_or_default();
+            let count = leading
+                .bytes()
+                .take_while(|byte| *byte == character)
+                .count();
+            if count >= 3 {
+                fence = match fence {
+                    Some((open, minimum)) if open == character && count >= minimum => None,
+                    None => Some((character, count)),
+                    current => current,
+                };
+                continue;
+            }
+        }
+        if fence.is_some() {
+            continue;
+        }
+        let hashes = leading.bytes().take_while(|byte| *byte == b'#').count();
+        if hashes != level as usize || !leading[hashes..].starts_with([' ', '\t']) {
+            continue;
+        }
+        let heading_title = leading[hashes..].trim().trim_end_matches('#').trim();
+        if heading_title == title {
+            let before = lines[..=index].join("\n");
+            let after = lines.get(index + 1..).unwrap_or_default().join("\n");
+            return Ok(join_markdown_blocks(&[&before, capture_block, &after]));
+        }
+    }
+    match missing_behavior {
+        "create" => Ok(join_markdown_blocks(&[
+            body,
+            &format!("{} {}", "#".repeat(level as usize), title),
+            capture_block,
+        ])),
+        "fail" => Err(CoreError::InvalidRendering),
+        _ => Err(CoreError::InvalidEnum),
+    }
 }
 
 fn normalize_newlines(value: &str) -> String {
@@ -1751,6 +2702,40 @@ fn frontmatter_entry_key(line: &str) -> Option<&str> {
     let (key, _) = line.split_once(':')?;
     let key = key.trim();
     (!key.is_empty()).then_some(key)
+}
+
+fn merge_frontmatter(existing: &mut Vec<String>, incoming: &[String]) {
+    let mut index = 0;
+    while index < incoming.len() {
+        let start = index;
+        index += 1;
+        while index < incoming.len() && frontmatter_entry_key(&incoming[index]).is_none() {
+            index += 1;
+        }
+        let group = &incoming[start..index];
+        let Some(key) = frontmatter_entry_key(&group[0]) else {
+            continue;
+        };
+        let Some(existing_start) = existing
+            .iter()
+            .position(|line| frontmatter_entry_key(line) == Some(key))
+        else {
+            existing.extend(group.iter().cloned());
+            continue;
+        };
+        // Collection metadata is request keyed. Appending another list item is
+        // safe and preserves earlier rolling-note entries; scalar collisions
+        // retain the existing document value.
+        if group.len() > 1 && group[1].trim_start().starts_with("- ") {
+            let mut insertion = existing_start + 1;
+            while insertion < existing.len()
+                && frontmatter_entry_key(&existing[insertion]).is_none()
+            {
+                insertion += 1;
+            }
+            existing.splice(insertion..insertion, group[1..].iter().cloned());
+        }
+    }
 }
 
 fn assemble_markdown(frontmatter: &[String], body: &str) -> String {
@@ -1839,14 +2824,39 @@ fn plan_value(
     } else {
         json!({"placement":"none","policy":"none","syntax":""})
     };
+    let existing_sha = input
+        .observations
+        .iter()
+        .find_map(|observation| match observation {
+            ObservationResult::ExistingNote { status, sha256, .. } if status == "present" => {
+                Some(sha256.clone())
+            }
+            _ => None,
+        });
+    let replaces_existing = existing_sha.is_some();
+    let expected_policy = if replaces_existing {
+        "hashMatch"
+    } else {
+        "absent"
+    };
+    let write_mode = if replaces_existing {
+        "replace"
+    } else {
+        "create"
+    };
+    let diagnostics = if replaces_existing {
+        json!([{"code":"existingNoteMutated","fieldPath":"$.observations","severity":"info"}])
+    } else {
+        json!([{"code":"materialized","fieldPath":"$","severity":"info"}])
+    };
     let mut value = json!({
         "artifacts": [{
             "artifactID": descriptor.artifact_id,
             "commitSequence": 0,
             "equivalenceRule": "exactBytes",
-            "expectedExistingPolicy": "absent",
-            "expectedExistingSHA256": Value::Null,
-            "expectedOriginalSHA256": Value::Null,
+            "expectedExistingPolicy": expected_policy,
+            "expectedExistingSHA256": existing_sha.clone(),
+            "expectedOriginalSHA256": existing_sha,
             "journalFrontier": "noteVerified",
             "kind": "note",
             "logicalPath": path,
@@ -1856,11 +2866,11 @@ fn plan_value(
             "receiptKind": "noteCommit",
             "resultLength": descriptor.length,
             "resultSHA256": descriptor.result_sha256,
-            "writeMode": "create"
+            "writeMode": write_mode
         }],
         "contractVersion": ARTIFACT_PLAN_VERSION,
-        "diagnostics": [{"code":"materialized","fieldPath":"$","severity":"info"}],
-        "operation": "newNote",
+        "diagnostics": diagnostics,
+        "operation": input.operation,
         "pins": input.pins,
         "planHash": ZERO_HASH,
         "preparedByteDelivery": {"finalJSONDuplicatesBytes":false,"maximumChunkBytes":MAX_CHUNK_BYTES,"mode":"drainedImmutableArtifacts"},
@@ -2014,6 +3024,13 @@ mod tests {
                         extension_policy: "markdownDotMd".to_owned(),
                         collision_policy: "deterministicSuffix".to_owned(),
                         attachment_folder: vec![],
+                        entry_prefix: None,
+                        entry_suffix: None,
+                        rolling_period: None,
+                        placement: None,
+                        heading_title: None,
+                        heading_level: None,
+                        missing_heading_behavior: None,
                     },
                     metadata_policy: MetadataPolicy {
                         frontmatter_mode: "merge".to_owned(),
@@ -2021,12 +3038,14 @@ mod tests {
                         template_policy: "frozenObservation".to_owned(),
                         line_ending: "lf".to_owned(),
                         final_newline: false,
+                        scope: None,
                     },
                     destination_policy: DestinationPolicy {
                         capability_reference: "synthetic".to_owned(),
                         capability_class: "userVault".to_owned(),
                         expected_case_sensitivity: "sensitive".to_owned(),
                     },
+                    location_policy: None,
                 },
                 preparation_revision: 1,
                 snapshot_hash: ZERO_HASH.to_owned(),
@@ -2048,11 +3067,16 @@ mod tests {
                     sequence: 1,
                     origin_recording_id: None,
                     location_outcome: "notRequested".to_owned(),
+                    location_attempted_at_epoch_milliseconds: None,
+                    location_unavailable_reason: None,
+                    location_label_observation: None,
+                    location_snapshot: None,
                 },
             }),
             state,
             streams: vec![InputStream {
                 id: Uuid::nil(),
+                kind: "frozenTemplate",
                 expected_length: 16,
                 expected_sha256: ZERO_HASH.to_owned(),
                 length: 16,
@@ -2075,6 +3099,579 @@ mod tests {
         assert!(session.streams.is_empty());
         assert!(session.output.is_none());
         assert!(session.descriptor.is_none());
+    }
+
+    fn mutation_input(operation: &str) -> MaterializationInput {
+        let mut input = retained_session(State::Input).input.take().unwrap();
+        input.operation = operation.to_owned();
+        input.preset.route_policy.collision_policy = "fail".to_owned();
+        input.preset.metadata_policy.template_policy = "none".to_owned();
+        input.observations.clear();
+        input
+    }
+
+    #[test]
+    fn recording_origin_and_asset_descriptors_are_admitted_without_copying_asset_bytes() {
+        let mut input = mutation_input("newNote");
+        input.preset.route_policy.collision_policy = "deterministicSuffix".to_owned();
+        input.invocation.origin_recording_id = Some(
+            Uuid::parse_str("77777777-7777-4777-8777-777777777777").unwrap(),
+        );
+        input.payloads.push(Payload::Asset {
+            id: Uuid::parse_str("88888888-8888-4888-8888-888888888888").unwrap(),
+            source_id: Uuid::parse_str("88888888-8888-4888-8888-888888888888").unwrap(),
+            media_type: "audio/wav".to_owned(),
+            length: 4_096,
+            sha256: "a".repeat(64),
+            safe_extension: "wav".to_owned(),
+            original_name_policy: "safeStem".to_owned(),
+        });
+
+        let preparation = PreparationInput {
+            contract_version: PREPARATION_INPUT_VERSION,
+            request_id: input.request_id,
+            capture_source: input.capture_source.clone(),
+            created_at_epoch_milliseconds: input.created_at_epoch_milliseconds,
+            timezone: input.timezone.clone(),
+            calendar: input.calendar.clone(),
+            locale: input.locale.clone(),
+            operation: input.operation.clone(),
+            pins: input.pins.clone(),
+            payloads: input.payloads.clone(),
+            preset: input.preset.clone(),
+            invocation: input.invocation.clone(),
+        };
+        assert_eq!(validate_preparation(&preparation), Ok(()));
+        let required = prepare(&canonical_bytes(&preparation).unwrap()).unwrap();
+        input.snapshot_hash = required.snapshot_hash;
+        input.observations = vec![ObservationResult::CandidateOccupancy {
+            observation_id: required.observations[0].id,
+            status: "present".to_owned(),
+            logical_paths: vec![],
+            ordered_set_hash: sha256_hex(&canonical_bytes(&json!([])).unwrap()),
+        }];
+        let (_, rendered) = materialize(&input, None, None).unwrap();
+        assert_eq!(String::from_utf8(rendered).unwrap(), "captured payload");
+    }
+
+    #[test]
+    fn existing_note_append_and_prepend_preserve_frontmatter() {
+        let existing = b"---\ntitle: Original\n---\n\nExisting body\n";
+
+        let mut append = mutation_input("existingNoteAppend");
+        append.preset.route_policy.placement = Some("append".to_owned());
+        append.preset.metadata_policy.ordered_fields = vec![OrderedField {
+            name: "source".to_owned(),
+            value: "android".to_owned(),
+        }];
+        let (_, appended) = materialize(&append, None, Some(existing)).unwrap();
+        assert_eq!(
+            String::from_utf8(appended).unwrap(),
+            "---\ntitle: Original\nsource: \"android\"\n---\n\nExisting body\n\ncaptured payload"
+        );
+
+        let mut prepend = mutation_input("existingNotePrepend");
+        prepend.preset.route_policy.placement = Some("prepend".to_owned());
+        let (_, prepended) = materialize(&prepend, None, Some(existing)).unwrap();
+        assert_eq!(
+            String::from_utf8(prepended).unwrap(),
+            "---\ntitle: Original\n---\n\ncaptured payload\n\nExisting body"
+        );
+    }
+
+    #[test]
+    fn prefix_suffix_and_document_or_entry_metadata_match_apple_oracle() {
+        let mut document = mutation_input("existingNoteAppend");
+        document.preset.route_policy.placement = Some("append".to_owned());
+        document.preset.route_policy.entry_prefix = Some("- {date} ".to_owned());
+        document.preset.route_policy.entry_suffix = Some(" #inbox".to_owned());
+        document.preset.metadata_policy.scope = Some("document".to_owned());
+        document.preset.metadata_policy.ordered_fields = vec![OrderedField {
+            name: "type".to_owned(),
+            value: "capture".to_owned(),
+        }];
+        let (_, rendered_document) = materialize(&document, None, Some(b"Earlier")).unwrap();
+        assert_eq!(
+            String::from_utf8(rendered_document).unwrap(),
+            "---\ntype: \"capture\"\n---\n\nEarlier\n\n- 1970-01-01 captured payload #inbox"
+        );
+
+        let mut entry = document;
+        entry.preset.metadata_policy.scope = Some("entry".to_owned());
+        entry.preset.metadata_policy.frontmatter_mode = "none".to_owned();
+        let (_, rendered_entry) = materialize(&entry, None, Some(b"Earlier")).unwrap();
+        assert_eq!(
+            String::from_utf8(rendered_entry).unwrap(),
+            "Earlier\n\ntype:: capture\n- 1970-01-01 captured payload #inbox"
+        );
+    }
+
+    #[test]
+    fn heading_placement_ignores_fenced_headings_and_can_create_missing_heading() {
+        let mut input = mutation_input("existingNoteHeading");
+        input.preset.route_policy.placement = Some("beneathHeading".to_owned());
+        input.preset.route_policy.heading_title = Some("Inbox".to_owned());
+        input.preset.route_policy.heading_level = Some(2);
+        input.preset.route_policy.missing_heading_behavior = Some("create".to_owned());
+        let existing = b"```md\n## Inbox\n```\n\nBody";
+        let (_, rendered) = materialize(&input, None, Some(existing)).unwrap();
+        assert_eq!(
+            String::from_utf8(rendered).unwrap(),
+            "```md\n## Inbox\n```\n\nBody\n\n## Inbox\n\ncaptured payload"
+        );
+    }
+
+    #[test]
+    fn heading_placement_fails_when_required_heading_is_missing() {
+        let mut input = mutation_input("existingNoteHeading");
+        input.preset.route_policy.placement = Some("beneathHeading".to_owned());
+        input.preset.route_policy.heading_title = Some("Inbox".to_owned());
+        input.preset.route_policy.heading_level = Some(2);
+        input.preset.route_policy.missing_heading_behavior = Some("fail".to_owned());
+
+        assert_eq!(
+            materialize(&input, None, Some(b"## Archive\n\nExisting body")),
+            Err(CoreError::InvalidRendering)
+        );
+    }
+
+    #[test]
+    fn existing_note_target_uses_exact_relative_markdown_path() {
+        let mut input = mutation_input("existingNoteAppend");
+        input.preset.route_policy.logical_folder =
+            vec!["Journal".to_owned(), "Meetings".to_owned()];
+        input.preset.route_policy.note_name_template = "standup.md".to_owned();
+        input.preset.route_policy.placement = Some("append".to_owned());
+
+        let (path, rendered) = materialize(&input, None, Some(b"Earlier notes")).unwrap();
+
+        assert_eq!(path, ["Journal", "Meetings", "standup.md"]);
+        assert_eq!(
+            String::from_utf8(rendered).unwrap(),
+            "Earlier notes\n\ncaptured payload"
+        );
+    }
+
+    #[test]
+    fn rolling_note_renders_period_and_creates_when_absent() {
+        let mut input = mutation_input("rollingNote");
+        input.created_at_epoch_milliseconds = 1_735_689_600_000;
+        input.preset.route_policy.collision_policy = "reuseIfHashMatches".to_owned();
+        input.preset.route_policy.note_name_template = "{period}".to_owned();
+        input.preset.route_policy.rolling_period = Some("monthly".to_owned());
+        input.preset.route_policy.placement = Some("append".to_owned());
+        let (path, rendered) = materialize(&input, None, None).unwrap();
+        assert_eq!(path, vec!["Inbox".to_owned(), "2025-01.md".to_owned()]);
+        assert_eq!(String::from_utf8(rendered).unwrap(), "captured payload");
+    }
+
+    #[test]
+    fn rolling_period_paths_match_daily_weekly_monthly_quarterly_and_yearly_oracle() {
+        let expectations = [
+            ("daily", "2024-01-02.md"),
+            ("weekly", "2024-W01.md"),
+            ("monthly", "2024-01.md"),
+            ("quarterly", "2024-Q1.md"),
+            ("yearly", "2024.md"),
+        ];
+        for (period, expected_name) in expectations {
+            let mut input = mutation_input("rollingNote");
+            input.created_at_epoch_milliseconds = 1_704_164_645_000;
+            input.preset.route_policy.collision_policy = "reuseIfHashMatches".to_owned();
+            input.preset.route_policy.logical_folder = vec!["Rolling".to_owned()];
+            input.preset.route_policy.note_name_template = "{period}.md".to_owned();
+            input.preset.route_policy.rolling_period = Some(period.to_owned());
+            input.preset.route_policy.placement = Some("append".to_owned());
+
+            let (path, rendered) = materialize(&input, None, None).unwrap();
+
+            assert_eq!(path, ["Rolling", expected_name], "period {period}");
+            assert_eq!(String::from_utf8(rendered).unwrap(), "captured payload");
+        }
+    }
+
+    #[test]
+    fn retry_marker_makes_existing_note_replay_idempotent() {
+        let mut input = mutation_input("existingNoteAppend");
+        input.preset.route_policy.placement = Some("append".to_owned());
+        input.preset.retry_marker_policy = "voxCaptureCommentV1".to_owned();
+
+        let original = b"Existing body";
+        let (_, first) = materialize(&input, None, Some(original)).unwrap();
+        let (_, replayed) = materialize(&input, None, Some(&first)).unwrap();
+
+        assert_eq!(first, replayed);
+        assert_eq!(
+            String::from_utf8(replayed).unwrap(),
+            "Existing body\n\ncaptured payload\n\n<!-- vox-capture:11111111-1111-4111-8111-111111111111 -->"
+        );
+    }
+
+    #[test]
+    fn frozen_location_renders_token_and_appends_request_keyed_metadata() {
+        let mut input = mutation_input("rollingNote");
+        input.preset.route_policy.collision_policy = "reuseIfHashMatches".to_owned();
+        input.preset.route_policy.note_name_template = "{period}".to_owned();
+        input.preset.route_policy.rolling_period = Some("daily".to_owned());
+        input.preset.route_policy.placement = Some("append".to_owned());
+        input.preset.route_policy.entry_prefix = Some("📍 {location}\n".to_owned());
+        input.preset.location_policy = Some(LocationPolicy {
+            is_enabled: true,
+            metadata_output_enabled: true,
+            precision: "exact".to_owned(),
+            output_mode: "structured".to_owned(),
+            structured_fields: default_location_structured_fields(),
+            collection_key: "locations".to_owned(),
+            advanced_template: String::new(),
+            label_lookup_class: "none".to_owned(),
+            label_consent_version: None,
+        });
+        input.invocation.location_outcome = "coordinatesFrozen".to_owned();
+        input.invocation.location_snapshot = Some(LocationSnapshot {
+            latitude_e6: 18_465_500,
+            longitude_e6: -66_105_700,
+            accuracy_millimeters: Some(4_250),
+            captured_at_epoch_milliseconds: 1_700_000_000_123,
+            precision: "exact".to_owned(),
+            source: "app".to_owned(),
+            label: None,
+        });
+        let existing = b"---\nlocations:\n  - id: \"older\"\n    coordinates: [1.000000, 2.000000]\n---\n\nEarlier";
+
+        let (_, rendered) = materialize(&input, None, Some(existing)).unwrap();
+        let markdown = String::from_utf8(rendered).unwrap();
+
+        assert!(markdown.contains("  - id: \"older\""));
+        assert!(markdown.contains("  - id: \"11111111-1111-4111-8111-111111111111\""));
+        assert!(markdown.contains("coordinates: [18.465500, -66.105700]"));
+        assert!(markdown.contains(
+            "📍 [Location](https://www.google.com/maps/search/?api=1&query=18.465500%2C-66.105700)"
+        ));
+        assert!(markdown.ends_with("captured payload"));
+        assert_eq!(markdown.matches("locations:").count(), 1);
+    }
+
+    #[test]
+    fn city_location_discards_exact_precision_in_rendered_values() {
+        let mut input = mutation_input("newNote");
+        input.observations = vec![ObservationResult::CandidateOccupancy {
+            observation_id: Uuid::nil(),
+            status: "present".to_owned(),
+            logical_paths: vec![],
+            ordered_set_hash: ZERO_HASH.to_owned(),
+        }];
+        input.preset.route_policy.collision_policy = "deterministicSuffix".to_owned();
+        input.preset.route_policy.entry_prefix = Some("{location}".to_owned());
+        input.preset.location_policy = Some(LocationPolicy {
+            is_enabled: true,
+            metadata_output_enabled: false,
+            precision: "city".to_owned(),
+            output_mode: "structured".to_owned(),
+            structured_fields: default_location_structured_fields(),
+            collection_key: "locations".to_owned(),
+            advanced_template: String::new(),
+            label_lookup_class: "none".to_owned(),
+            label_consent_version: None,
+        });
+        input.invocation.location_outcome = "coordinatesFrozen".to_owned();
+        input.invocation.location_snapshot = Some(LocationSnapshot {
+            latitude_e6: 18_470_000,
+            longitude_e6: -66_110_000,
+            accuracy_millimeters: None,
+            captured_at_epoch_milliseconds: 1_700_000_000_123,
+            precision: "city".to_owned(),
+            source: "app".to_owned(),
+            label: None,
+        });
+
+        let (_, rendered) = materialize(&input, None, None).unwrap();
+        let markdown = String::from_utf8(rendered).unwrap();
+        assert!(markdown.starts_with(
+            "[Location](https://www.google.com/maps/search/?api=1&query=18.47%2C-66.11)"
+        ));
+        assert!(!markdown.contains("18.470000"));
+    }
+
+    #[test]
+    fn exact_location_formats_every_supported_field_without_locale_drift() {
+        let policy = LocationPolicy {
+            is_enabled: true,
+            metadata_output_enabled: true,
+            precision: "exact".to_owned(),
+            output_mode: "structured".to_owned(),
+            structured_fields: default_location_structured_fields(),
+            collection_key: "locations".to_owned(),
+            advanced_template: String::new(),
+            label_lookup_class: "none".to_owned(),
+            label_consent_version: None,
+        };
+        let snapshot = LocationSnapshot {
+            latitude_e6: 18_465_500,
+            longitude_e6: -66_105_700,
+            accuracy_millimeters: Some(4_250),
+            captured_at_epoch_milliseconds: 1_700_000_000_123,
+            precision: "exact".to_owned(),
+            source: "app".to_owned(),
+            label: None,
+        };
+
+        let formatted = formatted_location(&snapshot, &policy).unwrap();
+
+        assert_eq!(formatted.latitude, "18.465500");
+        assert_eq!(formatted.longitude, "-66.105700");
+        assert_eq!(formatted.coordinates, "18.465500, -66.105700");
+        assert_eq!(
+            formatted.apple_maps_url,
+            "https://maps.apple.com/?ll=18.465500%2C-66.105700&q=18.465500%2C%20-66.105700"
+        );
+        assert_eq!(
+            formatted.google_maps_url,
+            "https://www.google.com/maps/search/?api=1&query=18.465500%2C-66.105700"
+        );
+        assert_eq!(
+            formatted.open_street_map_url,
+            "https://www.openstreetmap.org/?mlat=18.465500&mlon=-66.105700#map=16/18.465500/-66.105700"
+        );
+        assert_eq!(formatted.geo_uri, "geo:18.465500,-66.105700;u=4.2");
+        assert_eq!(formatted.accuracy.as_deref(), Some("4.2 m"));
+        assert_eq!(formatted.timestamp, "2023-11-14T22:13:20.123Z");
+    }
+
+    #[test]
+    fn structured_location_fields_preserve_order_renamed_keys_and_typed_scalars() {
+        let mut input = mutation_input("existingNoteAppend");
+        input.preset.route_policy.placement = Some("append".to_owned());
+        input.preset.location_policy = Some(LocationPolicy {
+            is_enabled: true,
+            metadata_output_enabled: true,
+            precision: "exact".to_owned(),
+            output_mode: "structured".to_owned(),
+            structured_fields: vec![
+                LocationStructuredField { field: "longitude".to_owned(), output_key: "lng".to_owned() },
+                LocationStructuredField { field: "coordinates".to_owned(), output_key: "point".to_owned() },
+                LocationStructuredField { field: "accuracy".to_owned(), output_key: "uncertainty".to_owned() },
+                LocationStructuredField { field: "googleMapsURL".to_owned(), output_key: "map".to_owned() },
+            ],
+            collection_key: "visits".to_owned(),
+            advanced_template: String::new(),
+            label_lookup_class: "none".to_owned(),
+            label_consent_version: None,
+        });
+        input.invocation.location_outcome = "coordinatesFrozen".to_owned();
+        input.invocation.location_snapshot = Some(LocationSnapshot {
+            latitude_e6: 18_465_500,
+            longitude_e6: -66_105_700,
+            accuracy_millimeters: Some(4_250),
+            captured_at_epoch_milliseconds: 1_700_000_000_123,
+            precision: "exact".to_owned(),
+            source: "app".to_owned(),
+            label: None,
+        });
+
+        let (_, rendered) = materialize(&input, None, Some(b"Earlier")).unwrap();
+        let markdown = String::from_utf8(rendered).unwrap();
+        let id = markdown.find("  - id:").unwrap();
+        let longitude = markdown.find("    lng: -66.105700").unwrap();
+        let coordinates = markdown.find("    point: [18.465500, -66.105700]").unwrap();
+        let accuracy = markdown.find("    uncertainty: 4.2").unwrap();
+        let map = markdown.find("    map: \"https://www.google.com/maps/search/").unwrap();
+        assert!(id < longitude && longitude < coordinates && coordinates < accuracy && accuracy < map);
+        assert!(!markdown.contains("    latitude:"));
+    }
+
+    #[test]
+    fn consented_frozen_location_labels_render_place_city_region_and_country() {
+        let mut input = mutation_input("existingNoteAppend");
+        input.preset.route_policy.placement = Some("append".to_owned());
+        input.preset.location_policy = Some(LocationPolicy {
+            is_enabled: true,
+            metadata_output_enabled: true,
+            precision: "exact".to_owned(),
+            output_mode: "structured".to_owned(),
+            structured_fields: ["place", "city", "region", "country"]
+                .into_iter()
+                .map(|field| LocationStructuredField {
+                    field: field.to_owned(),
+                    output_key: field.to_owned(),
+                })
+                .collect(),
+            collection_key: "locations".to_owned(),
+            advanced_template: String::new(),
+            label_lookup_class: "systemMayUseNetwork".to_owned(),
+            label_consent_version: Some(1),
+        });
+        input.invocation.location_outcome = "labelFrozen".to_owned();
+        input.invocation.location_label_observation = Some(LocationLabelObservation {
+            requested: true,
+            lookup_class: "systemMayUseNetwork".to_owned(),
+            consent_version: Some(1),
+            outcome: "frozen".to_owned(),
+        });
+        input.invocation.location_snapshot = Some(LocationSnapshot {
+            latitude_e6: 45_501_235,
+            longitude_e6: -73_567_890,
+            accuracy_millimeters: Some(12_300),
+            captured_at_epoch_milliseconds: 1_700_000_000_123,
+            precision: "exact".to_owned(),
+            source: "app".to_owned(),
+            label: Some(LocationLabel {
+                place: Some("Café & Main".to_owned()),
+                city: Some("Montréal".to_owned()),
+                region: Some("Québec".to_owned()),
+                country: Some("Canada".to_owned()),
+            }),
+        });
+
+        let (_, rendered) = materialize(&input, None, Some(b"Earlier")).unwrap();
+        let markdown = String::from_utf8(rendered).unwrap();
+        assert!(markdown.contains("place: \"Café & Main\""));
+        assert!(markdown.contains("city: \"Montréal\""));
+        assert!(markdown.contains("region: \"Québec\""));
+        assert!(markdown.contains("country: \"Canada\""));
+        let formatted = formatted_location(
+            input.invocation.location_snapshot.as_ref().unwrap(),
+            input.preset.location_policy.as_ref().unwrap(),
+        )
+        .unwrap();
+        assert_eq!(
+            formatted.apple_maps_url,
+            "https://maps.apple.com/?ll=45.501235%2C-73.567890&q=Caf%C3%A9%20%26%20Main"
+        );
+
+        let mut mismatched = input.clone();
+        mismatched
+            .invocation
+            .location_label_observation
+            .as_mut()
+            .unwrap()
+            .consent_version = Some(2);
+        assert_eq!(
+            validate_materialization(&mismatched, 1),
+            Err(CoreError::InvalidControl)
+        );
+
+        let mut city_leak = input;
+        city_leak.preset.location_policy.as_mut().unwrap().precision = "city".to_owned();
+        city_leak.invocation.location_snapshot.as_mut().unwrap().precision = "city".to_owned();
+        assert_eq!(
+            validate_materialization(&city_leak, 1),
+            Err(CoreError::InvalidControl)
+        );
+    }
+
+    #[test]
+    fn unavailable_location_reason_is_frozen_and_validated_without_rendering_metadata() {
+        let mut input = mutation_input("existingNoteAppend");
+        input.preset.route_policy.placement = Some("append".to_owned());
+        input.preset.location_policy = Some(LocationPolicy {
+            is_enabled: true,
+            metadata_output_enabled: true,
+            precision: "exact".to_owned(),
+            output_mode: "structured".to_owned(),
+            structured_fields: default_location_structured_fields(),
+            collection_key: "locations".to_owned(),
+            advanced_template: String::new(),
+            label_lookup_class: "none".to_owned(),
+            label_consent_version: None,
+        });
+        input.invocation.location_outcome = "unavailable".to_owned();
+        input.invocation.location_attempted_at_epoch_milliseconds = Some(1_700_000_000_123);
+        input.invocation.location_unavailable_reason = Some("timeout".to_owned());
+        input.invocation.location_snapshot = None;
+
+        let (_, rendered) = materialize(&input, None, Some(b"Earlier")).unwrap();
+        assert_eq!(String::from_utf8(rendered).unwrap(), "Earlier\n\ncaptured payload");
+        assert_eq!(
+            serde_json::to_value(&input).unwrap()["invocation"]["locationUnavailableReason"],
+            "timeout"
+        );
+
+        input.invocation.location_unavailable_reason = Some("network".to_owned());
+        assert_eq!(
+            validate_materialization(&input, 1),
+            Err(CoreError::InvalidEnum)
+        );
+    }
+
+    #[test]
+    fn advanced_location_template_renders_the_validated_field_vocabulary() {
+        let mut input = mutation_input("existingNoteAppend");
+        input.preset.route_policy.placement = Some("append".to_owned());
+        input.preset.location_policy = Some(LocationPolicy {
+            is_enabled: true,
+            metadata_output_enabled: true,
+            precision: "exact".to_owned(),
+            output_mode: "advancedTemplate".to_owned(),
+            structured_fields: default_location_structured_fields(),
+            collection_key: "visits".to_owned(),
+            advanced_template: [
+                "coordinates: \"{{coordinates}}\"",
+                "latitude: \"{{latitude}}\"",
+                "longitude: \"{{longitude}}\"",
+                "accuracy: \"{{accuracy}}\"",
+                "apple: \"{{appleMapsURL}}\"",
+                "google: \"{{googleMapsURL}}\"",
+                "osm: \"{{openStreetMapURL}}\"",
+                "geo: \"{{geoURI}}\"",
+                "captured: \"{{timestamp}}\"",
+                "source: \"{{source}}\"",
+                "request: \"{{id}}\"",
+            ]
+            .join("\n"),
+            label_lookup_class: "none".to_owned(),
+            label_consent_version: None,
+        });
+        input.invocation.location_outcome = "coordinatesFrozen".to_owned();
+        input.invocation.location_snapshot = Some(LocationSnapshot {
+            latitude_e6: 18_465_500,
+            longitude_e6: -66_105_700,
+            accuracy_millimeters: Some(4_250),
+            captured_at_epoch_milliseconds: 1_700_000_000_123,
+            precision: "exact".to_owned(),
+            source: "shortcut".to_owned(),
+            label: None,
+        });
+
+        let (_, rendered) = materialize(&input, None, Some(b"Earlier")).unwrap();
+        let markdown = String::from_utf8(rendered).unwrap();
+
+        assert!(markdown.contains("visits:\n  - id: \"11111111-1111-4111-8111-111111111111\""));
+        assert!(markdown.contains("coordinates: \"18.465500, -66.105700\""));
+        assert!(markdown.contains("latitude: \"18.465500\""));
+        assert!(markdown.contains("longitude: \"-66.105700\""));
+        assert!(markdown.contains("accuracy: \"4.2 m\""));
+        assert!(markdown.contains("https://maps.apple.com/"));
+        assert!(markdown.contains("https://www.google.com/maps/search/"));
+        assert!(markdown.contains("https://www.openstreetmap.org/"));
+        assert!(markdown.contains("geo:18.465500,-66.105700;u=4.2"));
+        assert!(markdown.contains("captured: \"2023-11-14T22:13:20.123Z\""));
+        assert!(markdown.contains("source: \"shortcut\""));
+        assert!(markdown.contains("request: \"11111111-1111-4111-8111-111111111111\""));
+    }
+
+    #[test]
+    fn disabled_location_policy_emits_neither_link_nor_metadata() {
+        let mut input = mutation_input("existingNoteAppend");
+        input.preset.route_policy.placement = Some("append".to_owned());
+        input.preset.route_policy.entry_prefix = Some("Before {location} after".to_owned());
+        input.preset.location_policy = Some(LocationPolicy {
+            is_enabled: false,
+            metadata_output_enabled: true,
+            precision: "exact".to_owned(),
+            output_mode: "structured".to_owned(),
+            structured_fields: default_location_structured_fields(),
+            collection_key: "locations".to_owned(),
+            advanced_template: String::new(),
+            label_lookup_class: "none".to_owned(),
+            label_consent_version: None,
+        });
+
+        let (_, rendered) = materialize(&input, None, Some(b"Earlier")).unwrap();
+        let markdown = String::from_utf8(rendered).unwrap();
+
+        assert_eq!(markdown, "Earlier\n\nBefore  aftercaptured payload");
+        assert!(!markdown.contains("locations:"));
+        assert!(!markdown.contains("maps"));
     }
 
     #[test]

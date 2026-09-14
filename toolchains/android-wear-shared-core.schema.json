@@ -207,11 +207,14 @@
         "dependencies": {
           "const": {
             "activityCompose": "1.13.0",
+            "appcompat": "1.8.0",
             "androidxAnnotation": "1.7.0",
             "androidxHilt": "1.4.0",
             "androidxTest": "1.7.0",
             "androidxTestExtJunit": "1.3.0",
+            "billing": "9.1.0",
             "composeBom": "2026.08.00",
+            "concurrent": "1.3.0",
             "coreKtx": "1.19.0",
             "coroutines": "1.11.0",
             "dataStore": "1.2.1",
@@ -220,9 +223,19 @@
             "jna": "5.17.0",
             "junit4": "4.13.2",
             "lifecycle": "2.11.0",
+            "mlkitDocumentScanner": "16.0.0",
+            "mlkitImageLabeling": "17.0.9",
+            "mlkitTextRecognition": "16.0.1",
             "navigationCompose": "2.9.8",
             "room": "2.8.4",
             "serialization": "1.11.0",
+            "vosk": "0.3.75",
+            "wearCompose": "1.6.2",
+            "wearOngoing": "1.1.0",
+            "wearProtoLayout": "1.4.2",
+            "wearTiles": "1.6.2",
+            "wearWatchface": "1.3.0",
+            "wearable": "20.0.1",
             "workManager": "2.11.2"
           }
         },
@@ -243,7 +256,8 @@
               "apps/android/core-bridge/build.gradle.kts",
               "apps/android/capture-domain/build.gradle.kts",
               "apps/android/data/build.gradle.kts",
-              "apps/android/platform-services/build.gradle.kts"
+              "apps/android/platform-services/build.gradle.kts",
+              "apps/android/wear/build.gradle.kts"
             ],
             "artifactValidator": "apps/android/scripts/validate-debug-artifacts.py"
           }
@@ -258,7 +272,8 @@
               "apps/android/core-bridge/gradle.lockfile",
               "apps/android/capture-domain/gradle.lockfile",
               "apps/android/data/gradle.lockfile",
-              "apps/android/platform-services/gradle.lockfile"
+              "apps/android/platform-services/gradle.lockfile",
+              "apps/android/wear/gradle.lockfile"
             ]
           }
         },
@@ -352,8 +367,8 @@
     },
     "governedImplementationFiles": {
       "type": "array",
-      "minItems": 45,
-      "maxItems": 45,
+      "minItems": 101,
+      "maxItems": 101,
       "uniqueItems": true,
       "items": {
         "type": "object",

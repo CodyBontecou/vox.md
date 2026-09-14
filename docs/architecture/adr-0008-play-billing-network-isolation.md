@@ -32,6 +32,13 @@ existing Apple policy; a Play purchase grants Android-product access. No cross-s
 entitlement, account linking, or backend is implied. Adding one requires a separate
 approved account/backend/privacy ADR and migration.
 
+The Android product is individual. Google Play Family Library does not share in-app
+purchases, so the Android purchase screen must not advertise Apple-style Family Sharing
+or a family-upgrade product and must disclose that platform difference. Implementing an
+Android family entitlement would require the separate account/backend decision above;
+the family payment method alone is not entitlement sharing. See the current
+[Google Play Family Library policy](https://support.google.com/googleplay/answer/7007852).
+
 The M1-approved restore and offline policy is:
 
 - On the same installation, the last locally verified `PURCHASED` state remains usable

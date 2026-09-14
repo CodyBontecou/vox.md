@@ -1,4 +1,6 @@
-# Android/Wear OS Port (Voxboard) — Planned Capability Inventory
+# Android/Wear OS Port (Voxboard) — Historical Planning Inventory
+
+> **2026-09-12 implementation note:** This file preserves the original `b50167a` planning inventory and its pre-implementation evidence statements. It is not the current Android status report. The current implementation checkpoint, verified local gates, and remaining blockers are maintained in `docs/android-ios-parity-execution-plan.md`; capability completion remains governed row-by-row by `Packages/contracts/product-capabilities.json`.
 
 LID: **AP** (Android Port). All features below are in-development Android/Wear OS capability,
 explicitly separated from shipped iOS/Mac/Watch features. Planning baseline: `b50167a`

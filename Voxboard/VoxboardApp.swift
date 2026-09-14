@@ -29,6 +29,10 @@ struct VoxboardApp: App {
     @State private var pendingWidgetRecord = false
 
     init() {
+        #if DEBUG
+        DebugSelfie.install()
+        #endif
+
         // Reconcile AppleLanguages with any stored in-app language override
         // before the first view resolves localized strings. The system pins
         // the launch language at process spawn, so a new selection applies

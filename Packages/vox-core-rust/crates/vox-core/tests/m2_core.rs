@@ -195,7 +195,7 @@ fn build_info_exposes_exact_readiness_pins() {
 }
 
 #[test]
-fn preparation_plans_candidates_and_rejects_unshipped_semantics() {
+fn preparation_plans_candidates_and_rejects_unsupported_semantics() {
     let prep = prep_value();
     let result = prepare(&canonical(&prep)).unwrap();
     assert_eq!(
@@ -206,12 +206,15 @@ fn preparation_plans_candidates_and_rejects_unshipped_semantics() {
         result.observations[0].logical_candidates.as_ref().unwrap()[1],
         ["Inbox", "2023-11-14-11111111-2.md"]
     );
+    let mut rolling = prep.clone();
+    rolling["operation"] = json!("rollingNote");
+    rolling["preset"]["routePolicy"]["collisionPolicy"] = json!("reuseIfHashMatches");
+    rolling["preset"]["routePolicy"]["rollingPeriod"] = json!("daily");
+    rolling["preset"]["routePolicy"]["placement"] = json!("append");
+    let rolling_result = prepare(&canonical(&rolling)).unwrap();
+    assert_eq!(rolling_result.observations[0].kind, "existingNote");
+    assert_eq!(rolling_result.observations[0].required, Some(false));
     for (path, value, error) in [
-        (
-            "operation",
-            json!("rollingNote"),
-            CoreError::UnsupportedOperation,
-        ),
         (
             "pins.profileID",
             json!("future"),
