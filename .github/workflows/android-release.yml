@@ -221,12 +221,28 @@ jobs:
       - name: Authenticate to Google Play with protected Workload Identity
         id: play-auth
         uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        if: vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER != ''
         with:
           workload_identity_provider: ${{ vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ vars.GOOGLE_PLAY_SERVICE_ACCOUNT }}
           token_format: access_token
           access_token_scopes: https://www.googleapis.com/auth/androidpublisher
           create_credentials_file: false
+
+      - name: Stage service-account JSON authentication
+        if: vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER == ''
+        shell: bash
+        env:
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          set -euo pipefail
+          [[ -n "$PLAY_SERVICE_ACCOUNT_JSON" ]] || {
+            echo '::error::set GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER vars or the PLAY_SERVICE_ACCOUNT_JSON secret'; exit 1;
+          }
+          key="$RUNNER_TEMP/vox-play-key.json"
+          printf '%s' "$PLAY_SERVICE_ACCOUNT_JSON" >"$key"
+          chmod 600 "$key"
+          echo "PLAY_CONSOLE_KEY_PATH=$key" >>"$GITHUB_ENV"
 
       - name: Upload phone bundle to Internal Testing
         env:
@@ -236,6 +252,7 @@ jobs:
           PLAY_RELEASE_STATUS: completed
           PLAY_UPLOAD_RECEIPT_PATH: ${{ runner.temp }}/phone-upload-receipt.json
           PLAY_ACCESS_TOKEN: ${{ steps.play-auth.outputs.access_token }}
+          PLAY_CONSOLE_KEY_PATH: ${{ env.PLAY_CONSOLE_KEY_PATH }}
           PLAY_RELEASE_ROOT: ${{ github.workspace }}/apps/android
           PHONE_AAB: ${{ github.workspace }}/signed/app-release.aab
         run: ./apps/android/scripts/upload-google-play-phone-release.sh
