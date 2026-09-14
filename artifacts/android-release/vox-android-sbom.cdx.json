@@ -1,0 +1,5287 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "pkg:cargo/aho-corasick@1.1.5",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c982642fa9e8606056828ee9a8505737230110bb1099153c79efe865c59d12ba"
+        }
+      ],
+      "name": "aho-corasick",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/aho-corasick@1.1.5",
+      "type": "library",
+      "version": "1.1.5"
+    },
+    {
+      "bom-ref": "pkg:cargo/anstyle@1.0.14",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "940b3a0ca603d1eade50a4846a2afffd5ef57a9feac2c0e2ec2e14f9ead76000"
+        }
+      ],
+      "name": "anstyle",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/anstyle@1.0.14",
+      "type": "library",
+      "version": "1.0.14"
+    },
+    {
+      "bom-ref": "pkg:cargo/anyhow@1.0.104",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "330a5ed07fa54e4702c9d6c4174f74427fc0ef6e214bbd677ae50a5099946470"
+        }
+      ],
+      "name": "anyhow",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/anyhow@1.0.104",
+      "type": "library",
+      "version": "1.0.104"
+    },
+    {
+      "bom-ref": "pkg:cargo/askama@0.16.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f1bf825125edd887a019d0a3a837dcc5499a68b0d034cc3eb594070c3e18addc"
+        }
+      ],
+      "name": "askama",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/askama@0.16.0",
+      "type": "library",
+      "version": "0.16.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/askama_derive@0.16.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e1c7065972a130eafa84215f21352ae15b4a7393da48c1f5e103904490736738"
+        }
+      ],
+      "name": "askama_derive",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/askama_derive@0.16.0",
+      "type": "library",
+      "version": "0.16.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/askama_macros@0.16.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0e23b1d2c4bd39a41971f6124cef4cc6fd0540913ecb90919b69ab3bbe44ae1a"
+        }
+      ],
+      "name": "askama_macros",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/askama_macros@0.16.0",
+      "type": "library",
+      "version": "0.16.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/askama_parser@0.16.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7db09fde9143e7ac4513358fb32ee32847125b63b18ea715afd487956da715da"
+        }
+      ],
+      "name": "askama_parser",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/askama_parser@0.16.0",
+      "type": "library",
+      "version": "0.16.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/autocfg@1.5.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
+        }
+      ],
+      "name": "autocfg",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/autocfg@1.5.1",
+      "type": "library",
+      "version": "1.5.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/basic-toml@0.1.10",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ba62675e8242a4c4e806d12f11d136e626e6c8361d6b829310732241652a178a"
+        }
+      ],
+      "name": "basic-toml",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/basic-toml@0.1.10",
+      "type": "library",
+      "version": "0.1.10"
+    },
+    {
+      "bom-ref": "pkg:cargo/bitflags@2.13.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b588b76d00fde79687d7646a9b5bdf3cc0f655e0bbd080335a95d7e96f3587da"
+        }
+      ],
+      "name": "bitflags",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/bitflags@2.13.1",
+      "type": "library",
+      "version": "2.13.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/block-buffer@0.10.4",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3078c7629b62d3f0439517fa394996acacc5cbc91c5a20d8c658e77abd503a71"
+        }
+      ],
+      "name": "block-buffer",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/block-buffer@0.10.4",
+      "type": "library",
+      "version": "0.10.4"
+    },
+    {
+      "bom-ref": "pkg:cargo/bytes@1.12.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "fc652a48c352aef3ea3aed32080501cf3ef6ed5da78602a020c991775b0aff04"
+        }
+      ],
+      "name": "bytes",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/bytes@1.12.1",
+      "type": "library",
+      "version": "1.12.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/camino@1.2.5",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "bb1307f12aa967b5a58416e87b3653360e0fd614a016b6e970db08fecbb1b80d"
+        }
+      ],
+      "name": "camino",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/camino@1.2.5",
+      "type": "library",
+      "version": "1.2.5"
+    },
+    {
+      "bom-ref": "pkg:cargo/cfg-if@1.0.4",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
+        }
+      ],
+      "name": "cfg-if",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/cfg-if@1.0.4",
+      "type": "library",
+      "version": "1.0.4"
+    },
+    {
+      "bom-ref": "pkg:cargo/chrono-tz-build@0.4.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8f10f8c9340e31fc120ff885fcdb54a0b48e474bbd77cab557f0c30a3e569402"
+        }
+      ],
+      "name": "chrono-tz-build",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/chrono-tz-build@0.4.1",
+      "type": "library",
+      "version": "0.4.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/chrono-tz@0.10.3",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "efdce149c370f133a071ca8ef6ea340b7b88748ab0810097a9e2976eaa34b4f3"
+        }
+      ],
+      "name": "chrono-tz",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/chrono-tz@0.10.3",
+      "type": "library",
+      "version": "0.10.3"
+    },
+    {
+      "bom-ref": "pkg:cargo/chrono@0.4.41",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c469d952047f47f91b68d1cba3f10d63c11d73e4636f24f08daf0278abf01c4d"
+        }
+      ],
+      "name": "chrono",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/chrono@0.4.41",
+      "type": "library",
+      "version": "0.4.41"
+    },
+    {
+      "bom-ref": "pkg:cargo/clap@4.6.6",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "473c7e07f409a8d772161724aa8db6a765a2532a70f9667eeb7b49d3d02fbdca"
+        }
+      ],
+      "name": "clap",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/clap@4.6.6",
+      "type": "library",
+      "version": "4.6.6"
+    },
+    {
+      "bom-ref": "pkg:cargo/clap_builder@4.6.6",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7b48fea5a88e9ae728a2dcbedbfc0e730f7d60da42e1cb049a83c9fb8b789889"
+        }
+      ],
+      "name": "clap_builder",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/clap_builder@4.6.6",
+      "type": "library",
+      "version": "4.6.6"
+    },
+    {
+      "bom-ref": "pkg:cargo/clap_derive@4.6.4",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d012d2b9d65aca7f18f4d9878a045bc17899bba951561ba5ec3c2ba1eed9a061"
+        }
+      ],
+      "name": "clap_derive",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/clap_derive@4.6.4",
+      "type": "library",
+      "version": "4.6.4"
+    },
+    {
+      "bom-ref": "pkg:cargo/clap_lex@1.1.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c8d4a3bb8b1e0c1050499d1815f5ab16d04f0959b233085fb31653fbfc9d98f9"
+        }
+      ],
+      "name": "clap_lex",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/clap_lex@1.1.0",
+      "type": "library",
+      "version": "1.1.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/cpufeatures@0.2.17",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "59ed5838eebb26a2bb2e58f6d5b5316989ae9d08bab10e0e6d103e656d1b0280"
+        }
+      ],
+      "name": "cpufeatures",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/cpufeatures@0.2.17",
+      "type": "library",
+      "version": "0.2.17"
+    },
+    {
+      "bom-ref": "pkg:cargo/crypto-common@0.1.7",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "78c8292055d1c1df0cce5d180393dc8cce0abec0a7102adb6c7b1eef6016d60a"
+        }
+      ],
+      "name": "crypto-common",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/crypto-common@0.1.7",
+      "type": "library",
+      "version": "0.1.7"
+    },
+    {
+      "bom-ref": "pkg:cargo/digest@0.10.7",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9ed9a281f7bc9b7576e61468ba615a66a5c8cfdff42420a70aa82701a3b1e292"
+        }
+      ],
+      "name": "digest",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/digest@0.10.7",
+      "type": "library",
+      "version": "0.10.7"
+    },
+    {
+      "bom-ref": "pkg:cargo/equivalent@1.0.2",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
+        }
+      ],
+      "name": "equivalent",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/equivalent@1.0.2",
+      "type": "library",
+      "version": "1.0.2"
+    },
+    {
+      "bom-ref": "pkg:cargo/errno@0.3.14",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
+        }
+      ],
+      "name": "errno",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/errno@0.3.14",
+      "type": "library",
+      "version": "0.3.14"
+    },
+    {
+      "bom-ref": "pkg:cargo/fastrand@2.5.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "da7c62ceae207dd37ea5b845da6a0696c799f85e97da1ab5b7910be3c1c80223"
+        }
+      ],
+      "name": "fastrand",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/fastrand@2.5.0",
+      "type": "library",
+      "version": "2.5.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/fs-err@3.3.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b91aa448ca50d7e79433bdf3ee8d99215430d2ec02ade5aefab2a073a1822e8a"
+        }
+      ],
+      "name": "fs-err",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/fs-err@3.3.1",
+      "type": "library",
+      "version": "3.3.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/generic-array@0.14.7",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "85649ca51fd72272d7821adaf274ad91c288277713d9c18820d8499a7ff69e9a"
+        }
+      ],
+      "name": "generic-array",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/generic-array@0.14.7",
+      "type": "library",
+      "version": "0.14.7"
+    },
+    {
+      "bom-ref": "pkg:cargo/getrandom@0.4.3",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "300e883d756b2e4ec94e02791f39b04b522276138852cfc41d9fb7e904106099"
+        }
+      ],
+      "name": "getrandom",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/getrandom@0.4.3",
+      "type": "library",
+      "version": "0.4.3"
+    },
+    {
+      "bom-ref": "pkg:cargo/glob@0.3.4",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e4eba85ea1d0a966a983acd07deee566e67395d2d96b6fb39e62b5a833f1eb0b"
+        }
+      ],
+      "name": "glob",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/glob@0.3.4",
+      "type": "library",
+      "version": "0.3.4"
+    },
+    {
+      "bom-ref": "pkg:cargo/goblin@0.8.2",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1b363a30c165f666402fe6a3024d3bec7ebc898f96a4a23bd1c99f8dbf3f4f47"
+        }
+      ],
+      "name": "goblin",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/goblin@0.8.2",
+      "type": "library",
+      "version": "0.8.2"
+    },
+    {
+      "bom-ref": "pkg:cargo/hashbrown@0.15.5",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9229cfe53dfd69f0609a49f65461bd93001ea1ef889cd5529dd176593f5338a1"
+        }
+      ],
+      "name": "hashbrown",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/hashbrown@0.15.5",
+      "type": "library",
+      "version": "0.15.5"
+    },
+    {
+      "bom-ref": "pkg:cargo/heck@0.5.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
+        }
+      ],
+      "name": "heck",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/heck@0.5.0",
+      "type": "library",
+      "version": "0.5.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/indexmap@2.11.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "206a8042aec68fa4a62e8d3f7aa4ceb508177d9324faf261e1959e495b7a1921"
+        }
+      ],
+      "name": "indexmap",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/indexmap@2.11.1",
+      "type": "library",
+      "version": "2.11.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/itoa@1.0.18",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8f42a60cbdf9a97f5d2305f08a87dc4e09308d1276d28c869c684d7777685682"
+        }
+      ],
+      "name": "itoa",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/itoa@1.0.18",
+      "type": "library",
+      "version": "1.0.18"
+    },
+    {
+      "bom-ref": "pkg:cargo/libc@0.2.189",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3eaf3ede3fee6db1a4c2ee091bf8a8b4dccdc6d17f656fb07896ee72867612f2"
+        }
+      ],
+      "name": "libc",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/libc@0.2.189",
+      "type": "library",
+      "version": "0.2.189"
+    },
+    {
+      "bom-ref": "pkg:cargo/linux-raw-sys@0.12.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "32a66949e030da00e8c7d4434b251670a91556f4144941d37452769c25d58a53"
+        }
+      ],
+      "name": "linux-raw-sys",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/linux-raw-sys@0.12.1",
+      "type": "library",
+      "version": "0.12.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/log@0.4.33",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0ceec5bc11778974d1bcb055b18002eba7f4b3518b6a0081b3af5f21666da9ad"
+        }
+      ],
+      "name": "log",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/log@0.4.33",
+      "type": "library",
+      "version": "0.4.33"
+    },
+    {
+      "bom-ref": "pkg:cargo/memchr@2.8.3",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
+        }
+      ],
+      "name": "memchr",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/memchr@2.8.3",
+      "type": "library",
+      "version": "2.8.3"
+    },
+    {
+      "bom-ref": "pkg:cargo/minimal-lexical@0.2.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "68354c5c6bd36d73ff3feceb05efa59b6acb7626617f4962be322a825e61f79a"
+        }
+      ],
+      "name": "minimal-lexical",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/minimal-lexical@0.2.1",
+      "type": "library",
+      "version": "0.2.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/nom@7.1.3",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d273983c5a657a70a3e8f2a01329822f3b8c8172b73826411a55751e404a0a4a"
+        }
+      ],
+      "name": "nom",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/nom@7.1.3",
+      "type": "library",
+      "version": "7.1.3"
+    },
+    {
+      "bom-ref": "pkg:cargo/num-traits@0.2.19",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "071dfc062690e90b734c0b2273ce72ad0ffa95f0c74596bc250dcfd960262841"
+        }
+      ],
+      "name": "num-traits",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/num-traits@0.2.19",
+      "type": "library",
+      "version": "0.2.19"
+    },
+    {
+      "bom-ref": "pkg:cargo/once_cell@1.21.4",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
+        }
+      ],
+      "name": "once_cell",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/once_cell@1.21.4",
+      "type": "library",
+      "version": "1.21.4"
+    },
+    {
+      "bom-ref": "pkg:cargo/parse-zoneinfo@0.3.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1f2a05b18d44e2957b88f96ba460715e295bc1d7510468a2f3d3b44535d26c24"
+        }
+      ],
+      "name": "parse-zoneinfo",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/parse-zoneinfo@0.3.1",
+      "type": "library",
+      "version": "0.3.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/percent-encoding@2.3.2",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9b4f627cb1b25917193a259e49bdad08f671f8d9708acfd5fe0a8c1455d87220"
+        }
+      ],
+      "name": "percent-encoding",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/percent-encoding@2.3.2",
+      "type": "library",
+      "version": "2.3.2"
+    },
+    {
+      "bom-ref": "pkg:cargo/phf@0.11.3",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1fd6780a80ae0c52cc120a26a1a42c1ae51b247a253e4e06113d23d2c2edd078"
+        }
+      ],
+      "name": "phf",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/phf@0.11.3",
+      "type": "library",
+      "version": "0.11.3"
+    },
+    {
+      "bom-ref": "pkg:cargo/phf_codegen@0.11.3",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "aef8048c789fa5e851558d709946d6d79a8ff88c0440c587967f8e94bfb1216a"
+        }
+      ],
+      "name": "phf_codegen",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/phf_codegen@0.11.3",
+      "type": "library",
+      "version": "0.11.3"
+    },
+    {
+      "bom-ref": "pkg:cargo/phf_generator@0.11.3",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3c80231409c20246a13fddb31776fb942c38553c51e871f8cbd687a4cfb5843d"
+        }
+      ],
+      "name": "phf_generator",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/phf_generator@0.11.3",
+      "type": "library",
+      "version": "0.11.3"
+    },
+    {
+      "bom-ref": "pkg:cargo/phf_shared@0.11.3",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "67eabc2ef2a60eb7faa00097bd1ffdb5bd28e62bf39990626a582201b7a754e5"
+        }
+      ],
+      "name": "phf_shared",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/phf_shared@0.11.3",
+      "type": "library",
+      "version": "0.11.3"
+    },
+    {
+      "bom-ref": "pkg:cargo/plain@0.2.3",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b4596b6d070b27117e987119b4dac604f3c58cfb0b191112e24771b2faeac1a6"
+        }
+      ],
+      "name": "plain",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/plain@0.2.3",
+      "type": "library",
+      "version": "0.2.3"
+    },
+    {
+      "bom-ref": "pkg:cargo/proc-macro2@1.0.107",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "985e7ec9bb745e6ce6535b544d84d6cd6f7ad8bd711c398938ae983b91a766d9"
+        }
+      ],
+      "name": "proc-macro2",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/proc-macro2@1.0.107",
+      "type": "library",
+      "version": "1.0.107"
+    },
+    {
+      "bom-ref": "pkg:cargo/quote@1.0.47",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1fbf4db142a473a8d80c26bbf18454ed458bf8d26c8219c331daecfdbd079001"
+        }
+      ],
+      "name": "quote",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/quote@1.0.47",
+      "type": "library",
+      "version": "1.0.47"
+    },
+    {
+      "bom-ref": "pkg:cargo/r-efi@6.0.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf"
+        }
+      ],
+      "name": "r-efi",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/r-efi@6.0.0",
+      "type": "library",
+      "version": "6.0.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/rand@0.8.7",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "22f6172bdec972074665ed81ed53b71da00bfc44b65a753cfde883ec4c702a1a"
+        }
+      ],
+      "name": "rand",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/rand@0.8.7",
+      "type": "library",
+      "version": "0.8.7"
+    },
+    {
+      "bom-ref": "pkg:cargo/rand_core@0.6.4",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ec0be4795e2f6a28069bec0b5ff3e2ac9bafc99e6a9a7dc3547996c5c816922c"
+        }
+      ],
+      "name": "rand_core",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/rand_core@0.6.4",
+      "type": "library",
+      "version": "0.6.4"
+    },
+    {
+      "bom-ref": "pkg:cargo/regex-automata@0.4.18",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ad8553b9b26413251cbf30e620595c7a41b3887f03da04579c0e6b0d6a06b4b2"
+        }
+      ],
+      "name": "regex-automata",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/regex-automata@0.4.18",
+      "type": "library",
+      "version": "0.4.18"
+    },
+    {
+      "bom-ref": "pkg:cargo/regex-syntax@0.8.11",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4"
+        }
+      ],
+      "name": "regex-syntax",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/regex-syntax@0.8.11",
+      "type": "library",
+      "version": "0.8.11"
+    },
+    {
+      "bom-ref": "pkg:cargo/regex@1.13.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f020237b6c8eed93db2e2cb53c00c60a8e1bc73da7d073199a1180401450218d"
+        }
+      ],
+      "name": "regex",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/regex@1.13.1",
+      "type": "library",
+      "version": "1.13.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/rustc-hash@2.1.3",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6b1e7f9a428571be2dc5bc0505c13fb6bf936822b894ec87abf8a08a4e51742d"
+        }
+      ],
+      "name": "rustc-hash",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/rustc-hash@2.1.3",
+      "type": "library",
+      "version": "2.1.3"
+    },
+    {
+      "bom-ref": "pkg:cargo/rustix@1.1.4",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b6fe4565b9518b83ef4f91bb47ce29620ca828bd32cb7e408f0062e9930ba190"
+        }
+      ],
+      "name": "rustix",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/rustix@1.1.4",
+      "type": "library",
+      "version": "1.1.4"
+    },
+    {
+      "bom-ref": "pkg:cargo/ryu@1.0.23",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9774ba4a74de5f7b1c1451ed6cd5285a32eddb5cccb8cc655a4e50009e06477f"
+        }
+      ],
+      "name": "ryu",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/ryu@1.0.23",
+      "type": "library",
+      "version": "1.0.23"
+    },
+    {
+      "bom-ref": "pkg:cargo/scroll@0.12.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6ab8598aa408498679922eff7fa985c25d58a90771bd6be794434c5277eab1a6"
+        }
+      ],
+      "name": "scroll",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/scroll@0.12.0",
+      "type": "library",
+      "version": "0.12.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/scroll_derive@0.12.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1783eabc414609e28a5ba76aee5ddd52199f7107a0b24c2e9746a1ecc34a683d"
+        }
+      ],
+      "name": "scroll_derive",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/scroll_derive@0.12.1",
+      "type": "library",
+      "version": "0.12.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/serde@1.0.219",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5f0e2c6ed6606019b4e29e69dbaba95b11854410e5347d525002456dbbb786b6"
+        }
+      ],
+      "name": "serde",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/serde@1.0.219",
+      "type": "library",
+      "version": "1.0.219"
+    },
+    {
+      "bom-ref": "pkg:cargo/serde_derive@1.0.219",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5b0276cf7f2c73365f7157c8123c21cd9a50fbbd844757af28ca1f5925fc2a00"
+        }
+      ],
+      "name": "serde_derive",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/serde_derive@1.0.219",
+      "type": "library",
+      "version": "1.0.219"
+    },
+    {
+      "bom-ref": "pkg:cargo/serde_json@1.0.140",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "20068b6e96dc6c9bd23e01df8827e6c7e1f2fddd43c21810382803c136b99373"
+        }
+      ],
+      "name": "serde_json",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/serde_json@1.0.140",
+      "type": "library",
+      "version": "1.0.140"
+    },
+    {
+      "bom-ref": "pkg:cargo/serde_spanned@1.0.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "40734c41988f7306bb04f0ecf60ec0f3f1caa34290e4e8ea471dcd3346483b83"
+        }
+      ],
+      "name": "serde_spanned",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/serde_spanned@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/sha1_smol@1.0.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "bbfa15b3dddfee50a0fff136974b3e1bde555604ba463834a7eb7deb6417705d"
+        }
+      ],
+      "name": "sha1_smol",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/sha1_smol@1.0.1",
+      "type": "library",
+      "version": "1.0.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/sha2@0.10.9",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a7507d819769d01a365ab707794a4084392c824f54a7a6a7862f8c3d0892b283"
+        }
+      ],
+      "name": "sha2",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/sha2@0.10.9",
+      "type": "library",
+      "version": "0.10.9"
+    },
+    {
+      "bom-ref": "pkg:cargo/siphasher@1.0.3",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8ee5873ec9cce0195efcb7a4e9507a04cd49aec9c83d0389df45b1ef7ba2e649"
+        }
+      ],
+      "name": "siphasher",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/siphasher@1.0.3",
+      "type": "library",
+      "version": "1.0.3"
+    },
+    {
+      "bom-ref": "pkg:cargo/smawk@0.3.3",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e8e2fb0f499abb4d162f2bedad68f5ef91a1682b5a03596ddb67efd37768d100"
+        }
+      ],
+      "name": "smawk",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/smawk@0.3.3",
+      "type": "library",
+      "version": "0.3.3"
+    },
+    {
+      "bom-ref": "pkg:cargo/static_assertions@1.1.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
+        }
+      ],
+      "name": "static_assertions",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/static_assertions@1.1.0",
+      "type": "library",
+      "version": "1.1.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/strsim@0.11.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
+        }
+      ],
+      "name": "strsim",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/strsim@0.11.1",
+      "type": "library",
+      "version": "0.11.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/syn@2.0.119",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "872831b642d1a07999a962a351ed35b955ea2cfc8f3862091e2a240a84f17297"
+        }
+      ],
+      "name": "syn",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/syn@2.0.119",
+      "type": "library",
+      "version": "2.0.119"
+    },
+    {
+      "bom-ref": "pkg:cargo/syn@3.0.3",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "53e9bae58849f64dfa4f5d5ae372c8341f7305f82a3868709269343628b659a3"
+        }
+      ],
+      "name": "syn",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/syn@3.0.3",
+      "type": "library",
+      "version": "3.0.3"
+    },
+    {
+      "bom-ref": "pkg:cargo/tempfile@3.27.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
+        }
+      ],
+      "name": "tempfile",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/tempfile@3.27.0",
+      "type": "library",
+      "version": "3.27.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/textwrap@0.16.2",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c13547615a44dc9c452a8a534638acdf07120d4b6847c8178705da06306a3057"
+        }
+      ],
+      "name": "textwrap",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/textwrap@0.16.2",
+      "type": "library",
+      "version": "0.16.2"
+    },
+    {
+      "bom-ref": "pkg:cargo/thiserror-impl@2.0.12",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7f7cf42b4507d8ea322120659672cf1b9dbb93f8f2d4ecfd6e51350ff5b17a1d"
+        }
+      ],
+      "name": "thiserror-impl",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/thiserror-impl@2.0.12",
+      "type": "library",
+      "version": "2.0.12"
+    },
+    {
+      "bom-ref": "pkg:cargo/thiserror@2.0.12",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "567b8a2dae586314f7be2a752ec7474332959c6460e02bde30d702a66d488708"
+        }
+      ],
+      "name": "thiserror",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/thiserror@2.0.12",
+      "type": "library",
+      "version": "2.0.12"
+    },
+    {
+      "bom-ref": "pkg:cargo/toml@0.9.5",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "75129e1dc5000bfbaa9fee9d1b21f974f9fbad9daec557a521ee6e080825f6e8"
+        }
+      ],
+      "name": "toml",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/toml@0.9.5",
+      "type": "library",
+      "version": "0.9.5"
+    },
+    {
+      "bom-ref": "pkg:cargo/toml_datetime@0.7.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "bade1c3e902f58d73d3f294cd7f20391c1cb2fbcb643b73566bc773971df91e3"
+        }
+      ],
+      "name": "toml_datetime",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/toml_datetime@0.7.0",
+      "type": "library",
+      "version": "0.7.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/toml_parser@1.1.3%2Bspec-1.1.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1d38ac1cf9b95face32296c0a3ede1fdc270627c9d9c02a7274dd6d960dc4d56"
+        }
+      ],
+      "name": "toml_parser",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/toml_parser@1.1.3%2Bspec-1.1.0",
+      "type": "library",
+      "version": "1.1.3+spec-1.1.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/toml_writer@1.1.2%2Bspec-1.1.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7d56353a2a665ad0f41a421187180aab746c8c325620617ad883a99a1cbe66d2"
+        }
+      ],
+      "name": "toml_writer",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/toml_writer@1.1.2%2Bspec-1.1.0",
+      "type": "library",
+      "version": "1.1.2+spec-1.1.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/typenum@1.20.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20"
+        }
+      ],
+      "name": "typenum",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/typenum@1.20.1",
+      "type": "library",
+      "version": "1.20.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/unicode-ident@1.0.24",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
+        }
+      ],
+      "name": "unicode-ident",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/unicode-ident@1.0.24",
+      "type": "library",
+      "version": "1.0.24"
+    },
+    {
+      "bom-ref": "pkg:cargo/uniffi@0.32.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a782a48d72cfd7a2d65cfc7c691dbf5375c43104b3c195f7eccc716dcc3540c8"
+        }
+      ],
+      "name": "uniffi",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/uniffi@0.32.0",
+      "type": "library",
+      "version": "0.32.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/uniffi_bindgen@0.32.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "533b0312c73e3b54eb78a4b257ceae390962dd4767995778309a74644643f9ac"
+        }
+      ],
+      "name": "uniffi_bindgen",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/uniffi_bindgen@0.32.0",
+      "type": "library",
+      "version": "0.32.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/uniffi_core@0.32.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8e32e261c5b0dfaba6488f536e71957dddd6b1a498ac7eb791bee56b60a086be"
+        }
+      ],
+      "name": "uniffi_core",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/uniffi_core@0.32.0",
+      "type": "library",
+      "version": "0.32.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/uniffi_internal_macros@0.32.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "84ae78069a5e6772ef694fd5bdb628532c88d2c2f0e7142bf6a384636eadb1af"
+        }
+      ],
+      "name": "uniffi_internal_macros",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/uniffi_internal_macros@0.32.0",
+      "type": "library",
+      "version": "0.32.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/uniffi_macros@0.32.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "330be6770532e86320df31f54c70bb0be67588594e8e77fa56e9083a3fed5d0d"
+        }
+      ],
+      "name": "uniffi_macros",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/uniffi_macros@0.32.0",
+      "type": "library",
+      "version": "0.32.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/uniffi_meta@0.32.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "78de021f5547e56ab16c665a49d67d4fd3d31e77422f7739a2e9359d328cd9e7"
+        }
+      ],
+      "name": "uniffi_meta",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/uniffi_meta@0.32.0",
+      "type": "library",
+      "version": "0.32.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/uniffi_pipeline@0.32.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3f8201bb1907ed8a42d80e11cbc25c8a033e7a31c3cff1d911f56eedb81d4948"
+        }
+      ],
+      "name": "uniffi_pipeline",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/uniffi_pipeline@0.32.0",
+      "type": "library",
+      "version": "0.32.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/uniffi_udl@0.32.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a6e57996bc58009cc29bf04845d627ae313c2547b87171c1c349d6c51a1656c0"
+        }
+      ],
+      "name": "uniffi_udl",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/uniffi_udl@0.32.0",
+      "type": "library",
+      "version": "0.32.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/uuid@1.16.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "458f7a779bf54acc9f347480ac654f68407d3aab21269a6e3c9f922acd9e2da9"
+        }
+      ],
+      "name": "uuid",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/uuid@1.16.0",
+      "type": "library",
+      "version": "1.16.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/version_check@0.9.5",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
+        }
+      ],
+      "name": "version_check",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/version_check@0.9.5",
+      "type": "library",
+      "version": "0.9.5"
+    },
+    {
+      "bom-ref": "pkg:cargo/vox-core-uniffi@0.1.0-alpha.1",
+      "name": "vox-core-uniffi",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/vox-core-uniffi@0.1.0-alpha.1",
+      "type": "library",
+      "version": "0.1.0-alpha.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/vox-core@0.1.0-alpha.1",
+      "name": "vox-core",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/vox-core@0.1.0-alpha.1",
+      "type": "library",
+      "version": "0.1.0-alpha.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/weedle2@5.0.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "998d2c24ec099a87daf9467808859f9d82b61f1d9c9701251aea037f514eae0e"
+        }
+      ],
+      "name": "weedle2",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/weedle2@5.0.0",
+      "type": "library",
+      "version": "5.0.0"
+    },
+    {
+      "bom-ref": "pkg:cargo/windows-link@0.2.1",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f0805222e57f7521d6a62e36fa9163bc891acd422f971defe97d64e70d0a4fe5"
+        }
+      ],
+      "name": "windows-link",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/windows-link@0.2.1",
+      "type": "library",
+      "version": "0.2.1"
+    },
+    {
+      "bom-ref": "pkg:cargo/windows-sys@0.61.2",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ae137229bcbd6cdf0f7b80a31df61766145077ddf49416a728b02cb3921ff3fc"
+        }
+      ],
+      "name": "windows-sys",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/windows-sys@0.61.2",
+      "type": "library",
+      "version": "0.61.2"
+    },
+    {
+      "bom-ref": "pkg:cargo/winnow@0.7.15",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "df79d97927682d2fd8adb29682d1140b343be4ac0f08fd68b7765d9c059d3945"
+        }
+      ],
+      "name": "winnow",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/winnow@0.7.15",
+      "type": "library",
+      "version": "0.7.15"
+    },
+    {
+      "bom-ref": "pkg:cargo/winnow@1.0.4",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "23b97319f7b8343df12cc98938e5c3eb436064524c8d2b4e30a1d3a36eecdf81"
+        }
+      ],
+      "name": "winnow",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/winnow@1.0.4",
+      "type": "library",
+      "version": "1.0.4"
+    },
+    {
+      "bom-ref": "pkg:cargo/xtask@0.1.0-alpha.1",
+      "name": "xtask",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:cargo/xtask@0.1.0-alpha.1",
+      "type": "library",
+      "version": "0.1.0-alpha.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.activity/activity-compose@1.13.0",
+      "group": "androidx.activity",
+      "name": "activity-compose",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.activity/activity-compose@1.13.0",
+      "type": "library",
+      "version": "1.13.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.activity/activity-ktx@1.13.0",
+      "group": "androidx.activity",
+      "name": "activity-ktx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.activity/activity-ktx@1.13.0",
+      "type": "library",
+      "version": "1.13.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.activity/activity@1.13.0",
+      "group": "androidx.activity",
+      "name": "activity",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.activity/activity@1.13.0",
+      "type": "library",
+      "version": "1.13.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.annotation/annotation-experimental@1.4.1",
+      "group": "androidx.annotation",
+      "name": "annotation-experimental",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.annotation/annotation-experimental@1.4.1",
+      "type": "library",
+      "version": "1.4.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.annotation/annotation-experimental@1.5.0",
+      "group": "androidx.annotation",
+      "name": "annotation-experimental",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.annotation/annotation-experimental@1.5.0",
+      "type": "library",
+      "version": "1.5.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.annotation/annotation-jvm@1.10.0",
+      "group": "androidx.annotation",
+      "name": "annotation-jvm",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.annotation/annotation-jvm@1.10.0",
+      "type": "library",
+      "version": "1.10.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.annotation/annotation-jvm@1.7.0",
+      "group": "androidx.annotation",
+      "name": "annotation-jvm",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:maven/androidx.annotation/annotation-jvm@1.7.0",
+      "type": "library",
+      "version": "1.7.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.annotation/annotation-jvm@1.9.1",
+      "group": "androidx.annotation",
+      "name": "annotation-jvm",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.annotation/annotation-jvm@1.9.1",
+      "type": "library",
+      "version": "1.9.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.annotation/annotation@1.10.0",
+      "group": "androidx.annotation",
+      "name": "annotation",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.annotation/annotation@1.10.0",
+      "type": "library",
+      "version": "1.10.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.annotation/annotation@1.7.0",
+      "group": "androidx.annotation",
+      "name": "annotation",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge"
+        }
+      ],
+      "purl": "pkg:maven/androidx.annotation/annotation@1.7.0",
+      "type": "library",
+      "version": "1.7.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.annotation/annotation@1.9.1",
+      "group": "androidx.annotation",
+      "name": "annotation",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.annotation/annotation@1.9.1",
+      "type": "library",
+      "version": "1.9.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.appcompat/appcompat-resources@1.1.0",
+      "group": "androidx.appcompat",
+      "name": "appcompat-resources",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.appcompat/appcompat-resources@1.1.0",
+      "type": "library",
+      "version": "1.1.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.appcompat/appcompat-resources@1.8.0",
+      "group": "androidx.appcompat",
+      "name": "appcompat-resources",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.appcompat/appcompat-resources@1.8.0",
+      "type": "library",
+      "version": "1.8.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.appcompat/appcompat@1.1.0",
+      "group": "androidx.appcompat",
+      "name": "appcompat",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.appcompat/appcompat@1.1.0",
+      "type": "library",
+      "version": "1.1.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.appcompat/appcompat@1.8.0",
+      "group": "androidx.appcompat",
+      "name": "appcompat",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.appcompat/appcompat@1.8.0",
+      "type": "library",
+      "version": "1.8.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.arch.core/core-common@2.2.0",
+      "group": "androidx.arch.core",
+      "name": "core-common",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.arch.core/core-common@2.2.0",
+      "type": "library",
+      "version": "2.2.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.arch.core/core-runtime@2.2.0",
+      "group": "androidx.arch.core",
+      "name": "core-runtime",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.arch.core/core-runtime@2.2.0",
+      "type": "library",
+      "version": "2.2.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.asynclayoutinflater/asynclayoutinflater@1.0.0",
+      "group": "androidx.asynclayoutinflater",
+      "name": "asynclayoutinflater",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.asynclayoutinflater/asynclayoutinflater@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.autofill/autofill@1.0.0",
+      "group": "androidx.autofill",
+      "name": "autofill",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.autofill/autofill@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.collection/collection-jvm@1.4.2",
+      "group": "androidx.collection",
+      "name": "collection-jvm",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "platform-services"
+        }
+      ],
+      "purl": "pkg:maven/androidx.collection/collection-jvm@1.4.2",
+      "type": "library",
+      "version": "1.4.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.collection/collection-jvm@1.5.0",
+      "group": "androidx.collection",
+      "name": "collection-jvm",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.collection/collection-jvm@1.5.0",
+      "type": "library",
+      "version": "1.5.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.collection/collection-ktx@1.5.0",
+      "group": "androidx.collection",
+      "name": "collection-ktx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.collection/collection-ktx@1.5.0",
+      "type": "library",
+      "version": "1.5.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.collection/collection@1.4.2",
+      "group": "androidx.collection",
+      "name": "collection",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "platform-services"
+        }
+      ],
+      "purl": "pkg:maven/androidx.collection/collection@1.4.2",
+      "type": "library",
+      "version": "1.4.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.collection/collection@1.5.0",
+      "group": "androidx.collection",
+      "name": "collection",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.collection/collection@1.5.0",
+      "type": "library",
+      "version": "1.5.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.animation/animation-android@1.12.0",
+      "group": "androidx.compose.animation",
+      "name": "animation-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.animation/animation-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.animation/animation-core-android@1.12.0",
+      "group": "androidx.compose.animation",
+      "name": "animation-core-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.animation/animation-core-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.animation/animation-core@1.12.0",
+      "group": "androidx.compose.animation",
+      "name": "animation-core",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.animation/animation-core@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.animation/animation@1.12.0",
+      "group": "androidx.compose.animation",
+      "name": "animation",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.animation/animation@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.foundation/foundation-android@1.12.0",
+      "group": "androidx.compose.foundation",
+      "name": "foundation-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.foundation/foundation-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.foundation/foundation-layout-android@1.12.0",
+      "group": "androidx.compose.foundation",
+      "name": "foundation-layout-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.foundation/foundation-layout-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.foundation/foundation-layout@1.12.0",
+      "group": "androidx.compose.foundation",
+      "name": "foundation-layout",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.foundation/foundation-layout@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.foundation/foundation@1.12.0",
+      "group": "androidx.compose.foundation",
+      "name": "foundation",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.foundation/foundation@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.material/material-icons-core-android@1.7.8",
+      "group": "androidx.compose.material",
+      "name": "material-icons-core-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.material/material-icons-core-android@1.7.8",
+      "type": "library",
+      "version": "1.7.8"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.material/material-icons-core@1.7.8",
+      "group": "androidx.compose.material",
+      "name": "material-icons-core",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.material/material-icons-core@1.7.8",
+      "type": "library",
+      "version": "1.7.8"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.material/material-icons-extended-android@1.7.8",
+      "group": "androidx.compose.material",
+      "name": "material-icons-extended-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.material/material-icons-extended-android@1.7.8",
+      "type": "library",
+      "version": "1.7.8"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.material/material-icons-extended@1.7.8",
+      "group": "androidx.compose.material",
+      "name": "material-icons-extended",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.material/material-icons-extended@1.7.8",
+      "type": "library",
+      "version": "1.7.8"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.material/material-ripple-android@1.12.0",
+      "group": "androidx.compose.material",
+      "name": "material-ripple-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.material/material-ripple-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.material/material-ripple@1.12.0",
+      "group": "androidx.compose.material",
+      "name": "material-ripple",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.material/material-ripple@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.material3/material3-android@1.4.0",
+      "group": "androidx.compose.material3",
+      "name": "material3-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.material3/material3-android@1.4.0",
+      "type": "library",
+      "version": "1.4.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.material3/material3@1.4.0",
+      "group": "androidx.compose.material3",
+      "name": "material3",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.material3/material3@1.4.0",
+      "type": "library",
+      "version": "1.4.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.runtime/runtime-android@1.12.0",
+      "group": "androidx.compose.runtime",
+      "name": "runtime-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.runtime/runtime-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.runtime/runtime-annotation-android@1.12.0",
+      "group": "androidx.compose.runtime",
+      "name": "runtime-annotation-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.runtime/runtime-annotation-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.runtime/runtime-annotation@1.12.0",
+      "group": "androidx.compose.runtime",
+      "name": "runtime-annotation",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.runtime/runtime-annotation@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.runtime/runtime-retain-android@1.12.0",
+      "group": "androidx.compose.runtime",
+      "name": "runtime-retain-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.runtime/runtime-retain-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.runtime/runtime-retain@1.12.0",
+      "group": "androidx.compose.runtime",
+      "name": "runtime-retain",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.runtime/runtime-retain@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.runtime/runtime-saveable-android@1.12.0",
+      "group": "androidx.compose.runtime",
+      "name": "runtime-saveable-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.runtime/runtime-saveable-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.runtime/runtime-saveable@1.12.0",
+      "group": "androidx.compose.runtime",
+      "name": "runtime-saveable",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.runtime/runtime-saveable@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.runtime/runtime@1.12.0",
+      "group": "androidx.compose.runtime",
+      "name": "runtime",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.runtime/runtime@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.ui/ui-android@1.12.0",
+      "group": "androidx.compose.ui",
+      "name": "ui-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.ui/ui-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.ui/ui-geometry-android@1.12.0",
+      "group": "androidx.compose.ui",
+      "name": "ui-geometry-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.ui/ui-geometry-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.ui/ui-geometry@1.12.0",
+      "group": "androidx.compose.ui",
+      "name": "ui-geometry",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.ui/ui-geometry@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.ui/ui-graphics-android@1.12.0",
+      "group": "androidx.compose.ui",
+      "name": "ui-graphics-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.ui/ui-graphics-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.ui/ui-graphics@1.12.0",
+      "group": "androidx.compose.ui",
+      "name": "ui-graphics",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.ui/ui-graphics@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.ui/ui-text-android@1.12.0",
+      "group": "androidx.compose.ui",
+      "name": "ui-text-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.ui/ui-text-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.ui/ui-text@1.12.0",
+      "group": "androidx.compose.ui",
+      "name": "ui-text",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.ui/ui-text@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.ui/ui-tooling-preview-android@1.12.0",
+      "group": "androidx.compose.ui",
+      "name": "ui-tooling-preview-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.ui/ui-tooling-preview-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.ui/ui-tooling-preview@1.12.0",
+      "group": "androidx.compose.ui",
+      "name": "ui-tooling-preview",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.ui/ui-tooling-preview@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.ui/ui-unit-android@1.12.0",
+      "group": "androidx.compose.ui",
+      "name": "ui-unit-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.ui/ui-unit-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.ui/ui-unit@1.12.0",
+      "group": "androidx.compose.ui",
+      "name": "ui-unit",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.ui/ui-unit@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.ui/ui-util-android@1.12.0",
+      "group": "androidx.compose.ui",
+      "name": "ui-util-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.ui/ui-util-android@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.ui/ui-util@1.12.0",
+      "group": "androidx.compose.ui",
+      "name": "ui-util",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.ui/ui-util@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose.ui/ui@1.12.0",
+      "group": "androidx.compose.ui",
+      "name": "ui",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose.ui/ui@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.compose/compose-bom@2026.08.00",
+      "group": "androidx.compose",
+      "name": "compose-bom",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.compose/compose-bom@2026.08.00",
+      "type": "library",
+      "version": "2026.08.00"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.concurrent/concurrent-futures-ktx@1.1.0",
+      "group": "androidx.concurrent",
+      "name": "concurrent-futures-ktx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.concurrent/concurrent-futures-ktx@1.1.0",
+      "type": "library",
+      "version": "1.1.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.concurrent/concurrent-futures-ktx@1.3.0",
+      "group": "androidx.concurrent",
+      "name": "concurrent-futures-ktx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.concurrent/concurrent-futures-ktx@1.3.0",
+      "type": "library",
+      "version": "1.3.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.concurrent/concurrent-futures@1.1.0",
+      "group": "androidx.concurrent",
+      "name": "concurrent-futures",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,platform-services"
+        }
+      ],
+      "purl": "pkg:maven/androidx.concurrent/concurrent-futures@1.1.0",
+      "type": "library",
+      "version": "1.1.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.concurrent/concurrent-futures@1.3.0",
+      "group": "androidx.concurrent",
+      "name": "concurrent-futures",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.concurrent/concurrent-futures@1.3.0",
+      "type": "library",
+      "version": "1.3.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.coordinatorlayout/coordinatorlayout@1.0.0",
+      "group": "androidx.coordinatorlayout",
+      "name": "coordinatorlayout",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.coordinatorlayout/coordinatorlayout@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.core/core-ktx@1.19.0",
+      "group": "androidx.core",
+      "name": "core-ktx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.core/core-ktx@1.19.0",
+      "type": "library",
+      "version": "1.19.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.core/core-viewtree@1.0.0",
+      "group": "androidx.core",
+      "name": "core-viewtree",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.core/core-viewtree@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.core/core@1.19.0",
+      "group": "androidx.core",
+      "name": "core",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.core/core@1.19.0",
+      "type": "library",
+      "version": "1.19.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.cursoradapter/cursoradapter@1.0.0",
+      "group": "androidx.cursoradapter",
+      "name": "cursoradapter",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.cursoradapter/cursoradapter@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.customview/customview-poolingcontainer@1.0.0",
+      "group": "androidx.customview",
+      "name": "customview-poolingcontainer",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.customview/customview-poolingcontainer@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.customview/customview@1.0.0",
+      "group": "androidx.customview",
+      "name": "customview",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.customview/customview@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.datastore/datastore-android@1.2.1",
+      "group": "androidx.datastore",
+      "name": "datastore-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.datastore/datastore-android@1.2.1",
+      "type": "library",
+      "version": "1.2.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.datastore/datastore-core-android@1.2.1",
+      "group": "androidx.datastore",
+      "name": "datastore-core-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.datastore/datastore-core-android@1.2.1",
+      "type": "library",
+      "version": "1.2.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.datastore/datastore-core-okio-jvm@1.2.1",
+      "group": "androidx.datastore",
+      "name": "datastore-core-okio-jvm",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.datastore/datastore-core-okio-jvm@1.2.1",
+      "type": "library",
+      "version": "1.2.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.datastore/datastore-core-okio@1.2.1",
+      "group": "androidx.datastore",
+      "name": "datastore-core-okio",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.datastore/datastore-core-okio@1.2.1",
+      "type": "library",
+      "version": "1.2.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.datastore/datastore-core@1.2.1",
+      "group": "androidx.datastore",
+      "name": "datastore-core",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.datastore/datastore-core@1.2.1",
+      "type": "library",
+      "version": "1.2.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.datastore/datastore-preferences-android@1.2.1",
+      "group": "androidx.datastore",
+      "name": "datastore-preferences-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.datastore/datastore-preferences-android@1.2.1",
+      "type": "library",
+      "version": "1.2.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.datastore/datastore-preferences-core-android@1.2.1",
+      "group": "androidx.datastore",
+      "name": "datastore-preferences-core-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.datastore/datastore-preferences-core-android@1.2.1",
+      "type": "library",
+      "version": "1.2.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.datastore/datastore-preferences-core@1.2.1",
+      "group": "androidx.datastore",
+      "name": "datastore-preferences-core",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.datastore/datastore-preferences-core@1.2.1",
+      "type": "library",
+      "version": "1.2.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.datastore/datastore-preferences-external-protobuf@1.2.1",
+      "group": "androidx.datastore",
+      "name": "datastore-preferences-external-protobuf",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.datastore/datastore-preferences-external-protobuf@1.2.1",
+      "type": "library",
+      "version": "1.2.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.datastore/datastore-preferences-proto@1.2.1",
+      "group": "androidx.datastore",
+      "name": "datastore-preferences-proto",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.datastore/datastore-preferences-proto@1.2.1",
+      "type": "library",
+      "version": "1.2.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.datastore/datastore-preferences@1.2.1",
+      "group": "androidx.datastore",
+      "name": "datastore-preferences",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.datastore/datastore-preferences@1.2.1",
+      "type": "library",
+      "version": "1.2.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.datastore/datastore@1.2.1",
+      "group": "androidx.datastore",
+      "name": "datastore",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.datastore/datastore@1.2.1",
+      "type": "library",
+      "version": "1.2.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.documentfile/documentfile@1.0.0",
+      "group": "androidx.documentfile",
+      "name": "documentfile",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.documentfile/documentfile@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.drawerlayout/drawerlayout@1.0.0",
+      "group": "androidx.drawerlayout",
+      "name": "drawerlayout",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.drawerlayout/drawerlayout@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.emoji2/emoji2-views-helper@1.4.0",
+      "group": "androidx.emoji2",
+      "name": "emoji2-views-helper",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.emoji2/emoji2-views-helper@1.4.0",
+      "type": "library",
+      "version": "1.4.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.emoji2/emoji2@1.4.0",
+      "group": "androidx.emoji2",
+      "name": "emoji2",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.emoji2/emoji2@1.4.0",
+      "type": "library",
+      "version": "1.4.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.exifinterface/exifinterface@1.0.0",
+      "group": "androidx.exifinterface",
+      "name": "exifinterface",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.exifinterface/exifinterface@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.fragment/fragment@1.1.0",
+      "group": "androidx.fragment",
+      "name": "fragment",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.fragment/fragment@1.1.0",
+      "type": "library",
+      "version": "1.1.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.fragment/fragment@1.5.4",
+      "group": "androidx.fragment",
+      "name": "fragment",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.fragment/fragment@1.5.4",
+      "type": "library",
+      "version": "1.5.4"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.graphics/graphics-path@1.0.1",
+      "group": "androidx.graphics",
+      "name": "graphics-path",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.graphics/graphics-path@1.0.1",
+      "type": "library",
+      "version": "1.0.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.interpolator/interpolator@1.0.0",
+      "group": "androidx.interpolator",
+      "name": "interpolator",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.interpolator/interpolator@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.legacy/legacy-support-core-ui@1.0.0",
+      "group": "androidx.legacy",
+      "name": "legacy-support-core-ui",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.legacy/legacy-support-core-ui@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.legacy/legacy-support-core-utils@1.0.0",
+      "group": "androidx.legacy",
+      "name": "legacy-support-core-utils",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.legacy/legacy-support-core-utils@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-common-java8@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-common-java8",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-common-java8@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-common-jvm@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-common-jvm",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-common-jvm@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-common@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-common",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-common@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-common@2.6.2",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-common",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "platform-services"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-common@2.6.2",
+      "type": "library",
+      "version": "2.6.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-livedata-core-ktx@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-livedata-core-ktx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-livedata-core-ktx@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-livedata-core@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-livedata-core",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-livedata-core@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-livedata@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-livedata",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-livedata@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-process@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-process",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-process@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-runtime-android@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-runtime-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-runtime-android@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-runtime-compose-android@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-runtime-compose-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-runtime-compose-android@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-runtime-compose@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-runtime-compose",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-runtime-compose@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-runtime-ktx-android@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-runtime-ktx-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-runtime-ktx-android@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-runtime-ktx@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-runtime-ktx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-runtime-ktx@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-runtime",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.6.2",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-runtime",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "platform-services"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.6.2",
+      "type": "library",
+      "version": "2.6.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-service@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-service",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-service@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-android@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-viewmodel-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-android@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-compose-android@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-viewmodel-compose-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-compose-android@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-compose@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-viewmodel-compose",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-compose@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-ktx@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-viewmodel-ktx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-ktx@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-savedstate-android@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-viewmodel-savedstate-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-savedstate-android@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-savedstate@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-viewmodel-savedstate",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-viewmodel-savedstate@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.lifecycle/lifecycle-viewmodel@2.11.0",
+      "group": "androidx.lifecycle",
+      "name": "lifecycle-viewmodel",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.lifecycle/lifecycle-viewmodel@2.11.0",
+      "type": "library",
+      "version": "2.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.loader/loader@1.0.0",
+      "group": "androidx.loader",
+      "name": "loader",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.loader/loader@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.localbroadcastmanager/localbroadcastmanager@1.0.0",
+      "group": "androidx.localbroadcastmanager",
+      "name": "localbroadcastmanager",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.localbroadcastmanager/localbroadcastmanager@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.navigation/navigation-common-android@2.9.8",
+      "group": "androidx.navigation",
+      "name": "navigation-common-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.navigation/navigation-common-android@2.9.8",
+      "type": "library",
+      "version": "2.9.8"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.navigation/navigation-common@2.9.8",
+      "group": "androidx.navigation",
+      "name": "navigation-common",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.navigation/navigation-common@2.9.8",
+      "type": "library",
+      "version": "2.9.8"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.navigation/navigation-compose-android@2.9.8",
+      "group": "androidx.navigation",
+      "name": "navigation-compose-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.navigation/navigation-compose-android@2.9.8",
+      "type": "library",
+      "version": "2.9.8"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.navigation/navigation-compose@2.9.8",
+      "group": "androidx.navigation",
+      "name": "navigation-compose",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.navigation/navigation-compose@2.9.8",
+      "type": "library",
+      "version": "2.9.8"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.navigation/navigation-runtime-android@2.9.8",
+      "group": "androidx.navigation",
+      "name": "navigation-runtime-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.navigation/navigation-runtime-android@2.9.8",
+      "type": "library",
+      "version": "2.9.8"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.navigation/navigation-runtime@2.9.8",
+      "group": "androidx.navigation",
+      "name": "navigation-runtime",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.navigation/navigation-runtime@2.9.8",
+      "type": "library",
+      "version": "2.9.8"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.navigationevent/navigationevent-android@1.0.0",
+      "group": "androidx.navigationevent",
+      "name": "navigationevent-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.navigationevent/navigationevent-android@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.navigationevent/navigationevent-compose-android@1.0.0",
+      "group": "androidx.navigationevent",
+      "name": "navigationevent-compose-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.navigationevent/navigationevent-compose-android@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.navigationevent/navigationevent-compose@1.0.0",
+      "group": "androidx.navigationevent",
+      "name": "navigationevent-compose",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.navigationevent/navigationevent-compose@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.navigationevent/navigationevent@1.0.0",
+      "group": "androidx.navigationevent",
+      "name": "navigationevent",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.navigationevent/navigationevent@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.preference/preference@1.1.0",
+      "group": "androidx.preference",
+      "name": "preference",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.preference/preference@1.1.0",
+      "type": "library",
+      "version": "1.1.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.print/print@1.0.0",
+      "group": "androidx.print",
+      "name": "print",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.print/print@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.profileinstaller/profileinstaller@1.3.0",
+      "group": "androidx.profileinstaller",
+      "name": "profileinstaller",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "platform-services"
+        }
+      ],
+      "purl": "pkg:maven/androidx.profileinstaller/profileinstaller@1.3.0",
+      "type": "library",
+      "version": "1.3.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.profileinstaller/profileinstaller@1.4.0",
+      "group": "androidx.profileinstaller",
+      "name": "profileinstaller",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.profileinstaller/profileinstaller@1.4.0",
+      "type": "library",
+      "version": "1.4.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.recyclerview/recyclerview@1.0.0",
+      "group": "androidx.recyclerview",
+      "name": "recyclerview",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.recyclerview/recyclerview@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.resourceinspection/resourceinspection-annotation@1.0.1",
+      "group": "androidx.resourceinspection",
+      "name": "resourceinspection-annotation",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.resourceinspection/resourceinspection-annotation@1.0.1",
+      "type": "library",
+      "version": "1.0.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.room/room-common-jvm@2.8.4",
+      "group": "androidx.room",
+      "name": "room-common-jvm",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.room/room-common-jvm@2.8.4",
+      "type": "library",
+      "version": "2.8.4"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.room/room-common@2.8.4",
+      "group": "androidx.room",
+      "name": "room-common",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.room/room-common@2.8.4",
+      "type": "library",
+      "version": "2.8.4"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.room/room-ktx@2.8.4",
+      "group": "androidx.room",
+      "name": "room-ktx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.room/room-ktx@2.8.4",
+      "type": "library",
+      "version": "2.8.4"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.room/room-runtime-android@2.8.4",
+      "group": "androidx.room",
+      "name": "room-runtime-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.room/room-runtime-android@2.8.4",
+      "type": "library",
+      "version": "2.8.4"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.room/room-runtime@2.8.4",
+      "group": "androidx.room",
+      "name": "room-runtime",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.room/room-runtime@2.8.4",
+      "type": "library",
+      "version": "2.8.4"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.savedstate/savedstate-android@1.4.0",
+      "group": "androidx.savedstate",
+      "name": "savedstate-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.savedstate/savedstate-android@1.4.0",
+      "type": "library",
+      "version": "1.4.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.savedstate/savedstate-compose-android@1.4.0",
+      "group": "androidx.savedstate",
+      "name": "savedstate-compose-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.savedstate/savedstate-compose-android@1.4.0",
+      "type": "library",
+      "version": "1.4.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.savedstate/savedstate-compose@1.4.0",
+      "group": "androidx.savedstate",
+      "name": "savedstate-compose",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.savedstate/savedstate-compose@1.4.0",
+      "type": "library",
+      "version": "1.4.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.savedstate/savedstate-ktx@1.4.0",
+      "group": "androidx.savedstate",
+      "name": "savedstate-ktx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.savedstate/savedstate-ktx@1.4.0",
+      "type": "library",
+      "version": "1.4.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.savedstate/savedstate@1.4.0",
+      "group": "androidx.savedstate",
+      "name": "savedstate",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.savedstate/savedstate@1.4.0",
+      "type": "library",
+      "version": "1.4.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.slidingpanelayout/slidingpanelayout@1.0.0",
+      "group": "androidx.slidingpanelayout",
+      "name": "slidingpanelayout",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.slidingpanelayout/slidingpanelayout@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.sqlite/sqlite-android@2.6.2",
+      "group": "androidx.sqlite",
+      "name": "sqlite-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.sqlite/sqlite-android@2.6.2",
+      "type": "library",
+      "version": "2.6.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.sqlite/sqlite-framework-android@2.6.2",
+      "group": "androidx.sqlite",
+      "name": "sqlite-framework-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.sqlite/sqlite-framework-android@2.6.2",
+      "type": "library",
+      "version": "2.6.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.sqlite/sqlite-framework@2.6.2",
+      "group": "androidx.sqlite",
+      "name": "sqlite-framework",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.sqlite/sqlite-framework@2.6.2",
+      "type": "library",
+      "version": "2.6.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.sqlite/sqlite@2.6.2",
+      "group": "androidx.sqlite",
+      "name": "sqlite",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/androidx.sqlite/sqlite@2.6.2",
+      "type": "library",
+      "version": "2.6.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.startup/startup-runtime@1.1.1",
+      "group": "androidx.startup",
+      "name": "startup-runtime",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.startup/startup-runtime@1.1.1",
+      "type": "library",
+      "version": "1.1.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.swiperefreshlayout/swiperefreshlayout@1.0.0",
+      "group": "androidx.swiperefreshlayout",
+      "name": "swiperefreshlayout",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.swiperefreshlayout/swiperefreshlayout@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.tracing/tracing-ktx@1.2.0",
+      "group": "androidx.tracing",
+      "name": "tracing-ktx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.tracing/tracing-ktx@1.2.0",
+      "type": "library",
+      "version": "1.2.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.tracing/tracing@1.2.0",
+      "group": "androidx.tracing",
+      "name": "tracing",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.tracing/tracing@1.2.0",
+      "type": "library",
+      "version": "1.2.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.vectordrawable/vectordrawable-animated@1.1.0",
+      "group": "androidx.vectordrawable",
+      "name": "vectordrawable-animated",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.vectordrawable/vectordrawable-animated@1.1.0",
+      "type": "library",
+      "version": "1.1.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.vectordrawable/vectordrawable@1.1.0",
+      "group": "androidx.vectordrawable",
+      "name": "vectordrawable",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.vectordrawable/vectordrawable@1.1.0",
+      "type": "library",
+      "version": "1.1.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.versionedparcelable/versionedparcelable@1.1.1",
+      "group": "androidx.versionedparcelable",
+      "name": "versionedparcelable",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.versionedparcelable/versionedparcelable@1.1.1",
+      "type": "library",
+      "version": "1.1.1"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.viewpager/viewpager@1.0.0",
+      "group": "androidx.viewpager",
+      "name": "viewpager",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.viewpager/viewpager@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.compose/compose-foundation@1.6.2",
+      "group": "androidx.wear.compose",
+      "name": "compose-foundation",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.compose/compose-foundation@1.6.2",
+      "type": "library",
+      "version": "1.6.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.compose/compose-material-core@1.6.2",
+      "group": "androidx.wear.compose",
+      "name": "compose-material-core",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.compose/compose-material-core@1.6.2",
+      "type": "library",
+      "version": "1.6.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.compose/compose-material@1.6.2",
+      "group": "androidx.wear.compose",
+      "name": "compose-material",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.compose/compose-material@1.6.2",
+      "type": "library",
+      "version": "1.6.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.protolayout/protolayout-expression-pipeline@1.4.2",
+      "group": "androidx.wear.protolayout",
+      "name": "protolayout-expression-pipeline",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.protolayout/protolayout-expression-pipeline@1.4.2",
+      "type": "library",
+      "version": "1.4.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.protolayout/protolayout-expression@1.4.2",
+      "group": "androidx.wear.protolayout",
+      "name": "protolayout-expression",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.protolayout/protolayout-expression@1.4.2",
+      "type": "library",
+      "version": "1.4.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.protolayout/protolayout-external-protobuf@1.4.2",
+      "group": "androidx.wear.protolayout",
+      "name": "protolayout-external-protobuf",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.protolayout/protolayout-external-protobuf@1.4.2",
+      "type": "library",
+      "version": "1.4.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.protolayout/protolayout-material-core@1.4.2",
+      "group": "androidx.wear.protolayout",
+      "name": "protolayout-material-core",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.protolayout/protolayout-material-core@1.4.2",
+      "type": "library",
+      "version": "1.4.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.protolayout/protolayout-material3@1.4.2",
+      "group": "androidx.wear.protolayout",
+      "name": "protolayout-material3",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.protolayout/protolayout-material3@1.4.2",
+      "type": "library",
+      "version": "1.4.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.protolayout/protolayout-material@1.4.2",
+      "group": "androidx.wear.protolayout",
+      "name": "protolayout-material",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.protolayout/protolayout-material@1.4.2",
+      "type": "library",
+      "version": "1.4.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.protolayout/protolayout-proto@1.4.2",
+      "group": "androidx.wear.protolayout",
+      "name": "protolayout-proto",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.protolayout/protolayout-proto@1.4.2",
+      "type": "library",
+      "version": "1.4.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.protolayout/protolayout@1.4.2",
+      "group": "androidx.wear.protolayout",
+      "name": "protolayout",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.protolayout/protolayout@1.4.2",
+      "type": "library",
+      "version": "1.4.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.tiles/tiles-proto@1.6.2",
+      "group": "androidx.wear.tiles",
+      "name": "tiles-proto",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.tiles/tiles-proto@1.6.2",
+      "type": "library",
+      "version": "1.6.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.tiles/tiles@1.6.2",
+      "group": "androidx.wear.tiles",
+      "name": "tiles",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.tiles/tiles@1.6.2",
+      "type": "library",
+      "version": "1.6.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.watchface/watchface-complications-data-source-ktx@1.3.0",
+      "group": "androidx.wear.watchface",
+      "name": "watchface-complications-data-source-ktx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.watchface/watchface-complications-data-source-ktx@1.3.0",
+      "type": "library",
+      "version": "1.3.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.watchface/watchface-complications-data-source@1.3.0",
+      "group": "androidx.wear.watchface",
+      "name": "watchface-complications-data-source",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.watchface/watchface-complications-data-source@1.3.0",
+      "type": "library",
+      "version": "1.3.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.watchface/watchface-complications-data@1.3.0",
+      "group": "androidx.wear.watchface",
+      "name": "watchface-complications-data",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.watchface/watchface-complications-data@1.3.0",
+      "type": "library",
+      "version": "1.3.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear.watchface/watchface-complications@1.3.0",
+      "group": "androidx.wear.watchface",
+      "name": "watchface-complications",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear.watchface/watchface-complications@1.3.0",
+      "type": "library",
+      "version": "1.3.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.wear/wear-ongoing@1.1.0",
+      "group": "androidx.wear",
+      "name": "wear-ongoing",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.wear/wear-ongoing@1.1.0",
+      "type": "library",
+      "version": "1.1.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.window/window-core-android@1.5.0",
+      "group": "androidx.window",
+      "name": "window-core-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.window/window-core-android@1.5.0",
+      "type": "library",
+      "version": "1.5.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.window/window-core@1.5.0",
+      "group": "androidx.window",
+      "name": "window-core",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.window/window-core@1.5.0",
+      "type": "library",
+      "version": "1.5.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.window/window@1.5.0",
+      "group": "androidx.window",
+      "name": "window",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/androidx.window/window@1.5.0",
+      "type": "library",
+      "version": "1.5.0"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.work/work-runtime-ktx@2.11.2",
+      "group": "androidx.work",
+      "name": "work-runtime-ktx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.work/work-runtime-ktx@2.11.2",
+      "type": "library",
+      "version": "2.11.2"
+    },
+    {
+      "bom-ref": "pkg:maven/androidx.work/work-runtime@2.11.2",
+      "group": "androidx.work",
+      "name": "work-runtime",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/androidx.work/work-runtime@2.11.2",
+      "type": "library",
+      "version": "2.11.2"
+    },
+    {
+      "bom-ref": "pkg:maven/com.alphacephei/vosk-android@0.3.75",
+      "group": "com.alphacephei",
+      "name": "vosk-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.alphacephei/vosk-android@0.3.75",
+      "type": "library",
+      "version": "0.3.75"
+    },
+    {
+      "bom-ref": "pkg:maven/com.android.billingclient/billing-ktx@9.1.0",
+      "group": "com.android.billingclient",
+      "name": "billing-ktx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.android.billingclient/billing-ktx@9.1.0",
+      "type": "library",
+      "version": "9.1.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.android.billingclient/billing@9.1.0",
+      "group": "com.android.billingclient",
+      "name": "billing",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.android.billingclient/billing@9.1.0",
+      "type": "library",
+      "version": "9.1.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.github.k2-fsa/sherpa-onnx@1.13.4",
+      "group": "com.github.k2-fsa",
+      "name": "sherpa-onnx",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.github.k2-fsa/sherpa-onnx@1.13.4",
+      "type": "library",
+      "version": "1.13.4"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.android.datatransport/transport-api@3.0.0",
+      "group": "com.google.android.datatransport",
+      "name": "transport-api",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.datatransport/transport-api@3.0.0",
+      "type": "library",
+      "version": "3.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.android.datatransport/transport-backend-cct@3.1.8",
+      "group": "com.google.android.datatransport",
+      "name": "transport-backend-cct",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.datatransport/transport-backend-cct@3.1.8",
+      "type": "library",
+      "version": "3.1.8"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.android.datatransport/transport-runtime@3.1.8",
+      "group": "com.google.android.datatransport",
+      "name": "transport-runtime",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.datatransport/transport-runtime@3.1.8",
+      "type": "library",
+      "version": "3.1.8"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.android.gms/play-services-base@18.5.0",
+      "group": "com.google.android.gms",
+      "name": "play-services-base",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.gms/play-services-base@18.5.0",
+      "type": "library",
+      "version": "18.5.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.android.gms/play-services-basement@18.9.0",
+      "group": "com.google.android.gms",
+      "name": "play-services-basement",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.gms/play-services-basement@18.9.0",
+      "type": "library",
+      "version": "18.9.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.android.gms/play-services-location@19.0.0",
+      "group": "com.google.android.gms",
+      "name": "play-services-location",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.gms/play-services-location@19.0.0",
+      "type": "library",
+      "version": "19.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.android.gms/play-services-mlkit-document-scanner@16.0.0",
+      "group": "com.google.android.gms",
+      "name": "play-services-mlkit-document-scanner",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.gms/play-services-mlkit-document-scanner@16.0.0",
+      "type": "library",
+      "version": "16.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.android.gms/play-services-mlkit-text-recognition-common@19.1.0",
+      "group": "com.google.android.gms",
+      "name": "play-services-mlkit-text-recognition-common",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.gms/play-services-mlkit-text-recognition-common@19.1.0",
+      "type": "library",
+      "version": "19.1.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.android.gms/play-services-mlkit-text-recognition@19.0.1",
+      "group": "com.google.android.gms",
+      "name": "play-services-mlkit-text-recognition",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.gms/play-services-mlkit-text-recognition@19.0.1",
+      "type": "library",
+      "version": "19.0.1"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.android.gms/play-services-places-placereport@17.0.0",
+      "group": "com.google.android.gms",
+      "name": "play-services-places-placereport",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.gms/play-services-places-placereport@17.0.0",
+      "type": "library",
+      "version": "17.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0",
+      "group": "com.google.android.gms",
+      "name": "play-services-tasks",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.gms/play-services-tasks@18.2.0",
+      "type": "library",
+      "version": "18.2.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.android.gms/play-services-wearable@20.0.1",
+      "group": "com.google.android.gms",
+      "name": "play-services-wearable",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.gms/play-services-wearable@20.0.1",
+      "type": "library",
+      "version": "20.0.1"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.android.odml/image@1.0.0-beta1",
+      "group": "com.google.android.odml",
+      "name": "image",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.android.odml/image@1.0.0-beta1",
+      "type": "library",
+      "version": "1.0.0-beta1"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.firebase/firebase-annotations@16.0.0",
+      "group": "com.google.firebase",
+      "name": "firebase-annotations",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.firebase/firebase-annotations@16.0.0",
+      "type": "library",
+      "version": "16.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.firebase/firebase-components@16.1.0",
+      "group": "com.google.firebase",
+      "name": "firebase-components",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.firebase/firebase-components@16.1.0",
+      "type": "library",
+      "version": "16.1.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.firebase/firebase-encoders-json@18.0.0",
+      "group": "com.google.firebase",
+      "name": "firebase-encoders-json",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.firebase/firebase-encoders-json@18.0.0",
+      "type": "library",
+      "version": "18.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.firebase/firebase-encoders-proto@16.0.0",
+      "group": "com.google.firebase",
+      "name": "firebase-encoders-proto",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.firebase/firebase-encoders-proto@16.0.0",
+      "type": "library",
+      "version": "16.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.firebase/firebase-encoders@17.0.0",
+      "group": "com.google.firebase",
+      "name": "firebase-encoders",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.firebase/firebase-encoders@17.0.0",
+      "type": "library",
+      "version": "17.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.guava/listenablefuture@1.0",
+      "group": "com.google.guava",
+      "name": "listenablefuture",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/com.google.guava/listenablefuture@1.0",
+      "type": "library",
+      "version": "1.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.mlkit/common@18.11.0",
+      "group": "com.google.mlkit",
+      "name": "common",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.mlkit/common@18.11.0",
+      "type": "library",
+      "version": "18.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.mlkit/image-labeling-common@18.1.0",
+      "group": "com.google.mlkit",
+      "name": "image-labeling-common",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.mlkit/image-labeling-common@18.1.0",
+      "type": "library",
+      "version": "18.1.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.mlkit/image-labeling-default-common@17.0.0",
+      "group": "com.google.mlkit",
+      "name": "image-labeling-default-common",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.mlkit/image-labeling-default-common@17.0.0",
+      "type": "library",
+      "version": "17.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.mlkit/image-labeling@17.0.9",
+      "group": "com.google.mlkit",
+      "name": "image-labeling",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.mlkit/image-labeling@17.0.9",
+      "type": "library",
+      "version": "17.0.9"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.mlkit/text-recognition-bundled-common@17.0.0",
+      "group": "com.google.mlkit",
+      "name": "text-recognition-bundled-common",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.mlkit/text-recognition-bundled-common@17.0.0",
+      "type": "library",
+      "version": "17.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.mlkit/text-recognition@16.0.1",
+      "group": "com.google.mlkit",
+      "name": "text-recognition",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.mlkit/text-recognition@16.0.1",
+      "type": "library",
+      "version": "16.0.1"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.mlkit/vision-common@17.3.0",
+      "group": "com.google.mlkit",
+      "name": "vision-common",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.mlkit/vision-common@17.3.0",
+      "type": "library",
+      "version": "17.3.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.mlkit/vision-interfaces@16.3.0",
+      "group": "com.google.mlkit",
+      "name": "vision-interfaces",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.mlkit/vision-interfaces@16.3.0",
+      "type": "library",
+      "version": "16.3.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.google.mlkit/vision-internal-vkp@18.2.3",
+      "group": "com.google.mlkit",
+      "name": "vision-internal-vkp",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.google.mlkit/vision-internal-vkp@18.2.3",
+      "type": "library",
+      "version": "18.2.3"
+    },
+    {
+      "bom-ref": "pkg:maven/com.squareup.okhttp3/okhttp@3.0.0",
+      "group": "com.squareup.okhttp3",
+      "name": "okhttp",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/com.squareup.okhttp3/okhttp@3.0.0",
+      "type": "library",
+      "version": "3.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/com.squareup.okio/okio-jvm@3.9.1",
+      "group": "com.squareup.okio",
+      "name": "okio-jvm",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/com.squareup.okio/okio-jvm@3.9.1",
+      "type": "library",
+      "version": "3.9.1"
+    },
+    {
+      "bom-ref": "pkg:maven/com.squareup.okio/okio@3.9.1",
+      "group": "com.squareup.okio",
+      "name": "okio",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data"
+        }
+      ],
+      "purl": "pkg:maven/com.squareup.okio/okio@3.9.1",
+      "type": "library",
+      "version": "3.9.1"
+    },
+    {
+      "bom-ref": "pkg:maven/javax.inject/javax.inject@1",
+      "group": "javax.inject",
+      "name": "javax.inject",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/javax.inject/javax.inject@1",
+      "type": "library",
+      "version": "1"
+    },
+    {
+      "bom-ref": "pkg:maven/net.java.dev.jna/jna@5.17.0",
+      "group": "net.java.dev.jna",
+      "name": "jna",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "core-bridge,data"
+        }
+      ],
+      "purl": "pkg:maven/net.java.dev.jna/jna@5.17.0",
+      "type": "library",
+      "version": "5.17.0"
+    },
+    {
+      "bom-ref": "pkg:maven/net.java.dev.jna/jna@5.18.1",
+      "group": "net.java.dev.jna",
+      "name": "jna",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        }
+      ],
+      "purl": "pkg:maven/net.java.dev.jna/jna@5.18.1",
+      "type": "library",
+      "version": "5.18.1"
+    },
+    {
+      "bom-ref": "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@2.4.10",
+      "group": "org.jetbrains.kotlin",
+      "name": "kotlin-stdlib-common",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,wear"
+        }
+      ],
+      "purl": "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@2.4.10",
+      "type": "library",
+      "version": "2.4.10"
+    },
+    {
+      "bom-ref": "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.4.10",
+      "group": "org.jetbrains.kotlin",
+      "name": "kotlin-stdlib",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,capture-domain,core-bridge,data,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@2.4.10",
+      "type": "library",
+      "version": "2.4.10"
+    },
+    {
+      "bom-ref": "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.11.0",
+      "group": "org.jetbrains.kotlinx",
+      "name": "kotlinx-coroutines-android",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.11.0",
+      "type": "library",
+      "version": "1.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-bom@1.11.0",
+      "group": "org.jetbrains.kotlinx",
+      "name": "kotlinx-coroutines-bom",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-bom@1.11.0",
+      "type": "library",
+      "version": "1.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm@1.11.0",
+      "group": "org.jetbrains.kotlinx",
+      "name": "kotlinx-coroutines-core-jvm",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm@1.11.0",
+      "type": "library",
+      "version": "1.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.11.0",
+      "group": "org.jetbrains.kotlinx",
+      "name": "kotlinx-coroutines-core",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.11.0",
+      "type": "library",
+      "version": "1.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-bom@1.11.0",
+      "group": "org.jetbrains.kotlinx",
+      "name": "kotlinx-serialization-bom",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-bom@1.11.0",
+      "type": "library",
+      "version": "1.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-core-jvm@1.11.0",
+      "group": "org.jetbrains.kotlinx",
+      "name": "kotlinx-serialization-core-jvm",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-core-jvm@1.11.0",
+      "type": "library",
+      "version": "1.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-core@1.11.0",
+      "group": "org.jetbrains.kotlinx",
+      "name": "kotlinx-serialization-core",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-core@1.11.0",
+      "type": "library",
+      "version": "1.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-json-jvm@1.11.0",
+      "group": "org.jetbrains.kotlinx",
+      "name": "kotlinx-serialization-json-jvm",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-json-jvm@1.11.0",
+      "type": "library",
+      "version": "1.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-json@1.11.0",
+      "group": "org.jetbrains.kotlinx",
+      "name": "kotlinx-serialization-json",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/org.jetbrains.kotlinx/kotlinx-serialization-json@1.11.0",
+      "type": "library",
+      "version": "1.11.0"
+    },
+    {
+      "bom-ref": "pkg:maven/org.jetbrains/annotations@13.0",
+      "group": "org.jetbrains",
+      "name": "annotations",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "capture-domain,core-bridge"
+        }
+      ],
+      "purl": "pkg:maven/org.jetbrains/annotations@13.0",
+      "type": "library",
+      "version": "13.0"
+    },
+    {
+      "bom-ref": "pkg:maven/org.jetbrains/annotations@23.0.0",
+      "group": "org.jetbrains",
+      "name": "annotations",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/org.jetbrains/annotations@23.0.0",
+      "type": "library",
+      "version": "23.0.0"
+    },
+    {
+      "bom-ref": "pkg:maven/org.jspecify/jspecify@1.0.0",
+      "group": "org.jspecify",
+      "name": "jspecify",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app,data,platform-services,wear"
+        }
+      ],
+      "purl": "pkg:maven/org.jspecify/jspecify@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    }
+  ],
+  "metadata": {
+    "component": {
+      "bom-ref": "pkg:generic/vox.md-android@0.1.0-foundation",
+      "name": "Vox.md Android and Wear",
+      "type": "application",
+      "version": "0.1.0-foundation"
+    },
+    "properties": [
+      {
+        "name": "vox.sbom.inputs",
+        "value": "Gradle releaseRuntimeClasspath locks and Cargo.lock"
+      },
+      {
+        "name": "vox.sbom.networkContent",
+        "value": "none"
+      }
+    ]
+  },
+  "specVersion": "1.5",
+  "version": 1
+}

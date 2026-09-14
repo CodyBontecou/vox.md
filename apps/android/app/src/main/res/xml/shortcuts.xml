@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="quick_capture"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_input_add"
+        android:shortcutShortLabel="@string/shortcut_capture_short"
+        android:shortcutLongLabel="@string/shortcut_capture_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="md.vox.android"
+            android:targetClass="md.vox.android.MainActivity"
+            android:data="voxboard://capture?source=shortcut" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="voice_capture"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_btn_speak_now"
+        android:shortcutShortLabel="@string/shortcut_voice_short"
+        android:shortcutLongLabel="@string/shortcut_voice_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="md.vox.android"
+            android:targetClass="md.vox.android.MainActivity"
+            android:data="voxboard://record?source=shortcut" />
+    </shortcut>
+</shortcuts>

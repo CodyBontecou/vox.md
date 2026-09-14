@@ -10,6 +10,8 @@ ADR-0013 lifecycle applies. Mirrors must remain byte-identical and cannot claim 
 
 `scope-variances.json` overlays no current rows and is validated against an exact strict schema. Only `unavailable` and `deferred` are valid overlay classifications; each requires an accepted decision ID, reason, user-visible behavior, `objectiveAmended: false`, and `parityStatus: blocking`. The base 271-row inventory always preserves M0 ownership.
 
+`validation/android-local-capability-evidence.json` binds locally verified Android/Wear fixture and focused UI rows to exact executable assertions and passing gates. Its strict schema and validator reject missing symbols, duplicate or unsorted capability IDs, unsupported or mismatched acceptance kinds, unknown gates, and any mismatch between the evidence registry and ledger acceptance state. UI claims additionally require an instrumented `src/androidTest` source and a passing `connectedDebugAndroidTest` gate. Broader screen-flow, accessibility, account, provider-matrix, physical-device, performance, signing, and release-track evidence cannot be promoted through this local registry.
+
 ```sh
 python3 Packages/contracts/scripts/convert_capabilities.py --check
 python3 Packages/contracts/scripts/generate_fixtures.py

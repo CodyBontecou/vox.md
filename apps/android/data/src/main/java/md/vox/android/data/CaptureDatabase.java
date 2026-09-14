@@ -9,10 +9,12 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 @Database(entities = {CaptureProjectionEntity.class, CaptureLeaseEntity.class, LeaseClockEntity.class,
-        InstallationIdentityEntity.class, QuotaReservationEntity.class, CaptureTombstoneEntity.class}, version = 2, exportSchema = true)
+        InstallationIdentityEntity.class, QuotaReservationEntity.class, CaptureTombstoneEntity.class,
+        CaptureActivityEntity.class, RecordingActivityEntity.class, CaptureCompletionEntity.class}, version = 5, exportSchema = true)
 public abstract class CaptureDatabase extends RoomDatabase {
     public abstract CaptureProjectionDao captureProjectionDao();
     public abstract CaptureCoordinationDao captureCoordinationDao();
+    public abstract CaptureActivityDao captureActivityDao();
 
     public static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override public void migrate(@NonNull SupportSQLiteDatabase db) {
@@ -33,8 +35,33 @@ public abstract class CaptureDatabase extends RoomDatabase {
         }
     };
 
+    public static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override public void migrate(@NonNull SupportSQLiteDatabase db) {
+            db.execSQL("CREATE TABLE IF NOT EXISTS capture_activity (requestID TEXT NOT NULL, completedAtEpochMillis INTEGER NOT NULL, source TEXT NOT NULL, attachmentCount INTEGER NOT NULL, PRIMARY KEY(requestID))");
+            db.execSQL("CREATE TABLE IF NOT EXISTS recording_activity (sessionID TEXT NOT NULL, completedAtEpochMillis INTEGER NOT NULL, durationMillis INTEGER NOT NULL, PRIMARY KEY(sessionID))");
+        }
+    };
+
+    public static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override public void migrate(@NonNull SupportSQLiteDatabase db) {
+            // A paid capture still needs a reservation/tombstone, but consumes zero
+            // free quota units. Rebuild to keep the migrated schema identical to a
+            // fresh Room schema (ALTER would retain a DEFAULT clause).
+            db.execSQL("CREATE TABLE IF NOT EXISTS quota_reservation_v4 (requestID TEXT NOT NULL, reservationToken TEXT NOT NULL, installationID TEXT NOT NULL, reservedAtEpochMillis INTEGER NOT NULL, updatedAtEpochMillis INTEGER NOT NULL, quotaUnits INTEGER NOT NULL, PRIMARY KEY(requestID))");
+            db.execSQL("INSERT INTO quota_reservation_v4 (requestID, reservationToken, installationID, reservedAtEpochMillis, updatedAtEpochMillis, quotaUnits) SELECT requestID, reservationToken, installationID, reservedAtEpochMillis, updatedAtEpochMillis, 1 FROM quota_reservation");
+            db.execSQL("DROP TABLE quota_reservation");
+            db.execSQL("ALTER TABLE quota_reservation_v4 RENAME TO quota_reservation");
+        }
+    };
+
+    public static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override public void migrate(@NonNull SupportSQLiteDatabase db) {
+            db.execSQL("CREATE TABLE IF NOT EXISTS capture_completion (requestID TEXT NOT NULL, completedAtEpochMillis INTEGER NOT NULL, PRIMARY KEY(requestID))");
+        }
+    };
+
     public static CaptureDatabase create(Context context) {
         return Room.databaseBuilder(context.getApplicationContext(), CaptureDatabase.class, "capture-index-v1.db")
-                .addMigrations(MIGRATION_1_2).build();
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5).build();
     }
 }

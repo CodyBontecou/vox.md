@@ -75,4 +75,10 @@ class CaptureDeliveryTest {
         assertThrows(IllegalArgumentException::class.java) { ObservationAttempt(requestID, 0) }
         assertThrows(IllegalArgumentException::class.java) { ObservationAttempt(requestID, 1023) }
     }
+
+    @Test fun recordingDeliveryNeverConsumesTheTextCaptureAllowance() {
+        assertTrue(CaptureMeteringPolicy.chargesFreeCaptureAllowance(originRecordingID = null, hasUnlimitedAccess = false))
+        assertFalse(CaptureMeteringPolicy.chargesFreeCaptureAllowance(originRecordingID = requestID, hasUnlimitedAccess = false))
+        assertFalse(CaptureMeteringPolicy.chargesFreeCaptureAllowance(originRecordingID = null, hasUnlimitedAccess = true))
+    }
 }

@@ -3,6 +3,7 @@ package md.vox.android.data
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import android.os.Process
 import android.provider.DocumentsContract
 import md.vox.android.capturedomain.*
 import java.security.MessageDigest
@@ -44,6 +45,9 @@ interface SafDocumentsGateway {
     /** Bounded read-back of the created document returning exact length and SHA-256. */
     fun readBackDocument(handle: SafDocumentHandle): SafResult<Pair<Long, String>>
 
+    /** Bounded read of an existing document for a frozen core observation. */
+    fun readDocument(handle: SafDocumentHandle, maximumBytes: Long): SafResult<ByteArray>
+
     /** Bounded exact-name child lookup for reconciliation. */
     fun findChildByDisplayName(parent: SafFolderHandle, displayName: String): List<SafDocumentHandle>
 }
@@ -78,12 +82,17 @@ open class AndroidSafDocumentsGateway(
     context: Context,
     private val timeoutMillis: Long = TimeUnit.SECONDS.toMillis(30),
 ) : SafDocumentsGateway {
-    private val resolver: ContentResolver = context.applicationContext.contentResolver
+    private val appContext = context.applicationContext
+    private val resolver: ContentResolver = appContext.contentResolver
 
     override fun revalidateGrant(destination: VaultDestination): Boolean = try {
         val uri = Uri.parse(destination.treeUri)
         val persisted = resolver.persistedUriPermissions.any { it.uri == uri && it.isReadPermission && it.isWritePermission }
-        persisted && DocumentsContract.getTreeDocumentId(uri) != null
+        @Suppress("DEPRECATION")
+        val providerUID = uri.authority?.let { authority ->
+            appContext.packageManager.resolveContentProvider(authority, 0)?.applicationInfo?.uid
+        }
+        (persisted || providerUID == Process.myUid()) && DocumentsContract.getTreeDocumentId(uri) != null
     } catch (_: Exception) {
         false
     }
@@ -142,6 +151,23 @@ open class AndroidSafDocumentsGateway(
                 digest.update(buffer, 0, read)
             }
             total to digest.digest().joinToString("") { "%02x".format(it) }
+        } ?: throw IllegalStateException(GatewayError.ProviderFailure.name)
+    }
+
+    override fun readDocument(handle: SafDocumentHandle, maximumBytes: Long): SafResult<ByteArray> = watchdog("read") {
+        require(maximumBytes in 1..268_435_456L)
+        resolver.openInputStream(Uri.parse(handle.key))?.use { input ->
+            val output = java.io.ByteArrayOutputStream()
+            val buffer = ByteArray(64 * 1024)
+            var total = 0L
+            while (true) {
+                val read = input.read(buffer)
+                if (read < 0) break
+                total += read
+                if (total > maximumBytes) throw IllegalStateException(GatewayError.InvalidState.name)
+                output.write(buffer, 0, read)
+            }
+            output.toByteArray()
         } ?: throw IllegalStateException(GatewayError.ProviderFailure.name)
     }
 

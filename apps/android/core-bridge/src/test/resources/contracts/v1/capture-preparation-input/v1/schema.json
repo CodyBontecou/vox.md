@@ -37,6 +37,210 @@
             "labelFrozen"
           ]
         },
+        "locationAttemptedAtEpochMilliseconds": {
+          "oneOf": [
+            {
+              "maximum": 4102444800000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "locationUnavailableReason": {
+          "enum": [
+            "permissionDenied",
+            "restricted",
+            "notDetermined",
+            "reducedAccuracy",
+            "timeout",
+            "cancelled",
+            "unavailable"
+          ]
+        },
+        "locationLabelObservation": {
+          "oneOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "consentVersion": {
+                  "oneOf": [
+                    {
+                      "maximum": 2147483647,
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "lookupClass": {
+                  "enum": [
+                    "none",
+                    "offline",
+                    "systemMayUseNetwork"
+                  ]
+                },
+                "outcome": {
+                  "enum": [
+                    "notRequested",
+                    "unavailable",
+                    "frozen"
+                  ]
+                },
+                "requested": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "requested",
+                "lookupClass",
+                "consentVersion",
+                "outcome"
+              ],
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "locationSnapshot": {
+          "oneOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "accuracyMillimeters": {
+                  "oneOf": [
+                    {
+                      "maximum": 100000000,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "capturedAtEpochMilliseconds": {
+                  "maximum": 4102444800000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "latitudeE6": {
+                  "maximum": 90000000,
+                  "minimum": -90000000,
+                  "type": "integer"
+                },
+                "label": {
+                  "oneOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "city": {
+                          "oneOf": [
+                            {
+                              "maxLength": 512,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "country": {
+                          "oneOf": [
+                            {
+                              "maxLength": 512,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "place": {
+                          "oneOf": [
+                            {
+                              "maxLength": 512,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "region": {
+                          "oneOf": [
+                            {
+                              "maxLength": 512,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "place",
+                        "city",
+                        "region",
+                        "country"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "longitudeE6": {
+                  "maximum": 180000000,
+                  "minimum": -180000000,
+                  "type": "integer"
+                },
+                "precision": {
+                  "enum": [
+                    "exact",
+                    "city"
+                  ]
+                },
+                "source": {
+                  "enum": [
+                    "app",
+                    "share",
+                    "keyboard",
+                    "widget",
+                    "shortcut",
+                    "watch",
+                    "wear"
+                  ]
+                }
+              },
+              "required": [
+                "latitudeE6",
+                "longitudeE6",
+                "accuracyMillimeters",
+                "capturedAtEpochMilliseconds",
+                "precision",
+                "source"
+              ],
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+
         "originRecordingID": {
           "oneOf": [
             {
@@ -281,6 +485,107 @@
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
           "type": "string"
         },
+        "locationPolicy": {
+          "additionalProperties": false,
+          "properties": {
+            "advancedTemplate": {
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "collectionKey": {
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Za-z_][A-Za-z0-9_-]*$",
+              "type": "string"
+            },
+            "isEnabled": {
+              "type": "boolean"
+            },
+            "labelConsentVersion": {
+              "oneOf": [
+                {
+                  "maximum": 2147483647,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "labelLookupClass": {
+              "enum": [
+                "none",
+                "offline",
+                "systemMayUseNetwork"
+              ]
+            },
+            "metadataOutputEnabled": {
+              "type": "boolean"
+            },
+            "outputMode": {
+              "enum": [
+                "structured",
+                "advancedTemplate"
+              ]
+            },
+            "precision": {
+              "enum": [
+                "exact",
+                "city"
+              ]
+            },
+            "structuredFields": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "field": {
+                    "enum": [
+                      "coordinates",
+                      "latitude",
+                      "longitude",
+                      "place",
+                      "city",
+                      "region",
+                      "country",
+                      "appleMapsURL",
+                      "googleMapsURL",
+                      "openStreetMapURL",
+                      "geoURI",
+                      "accuracy",
+                      "timestamp",
+                      "source",
+                      "id"
+                    ]
+                  },
+                  "outputKey": {
+                    "maxLength": 64,
+                    "minLength": 1,
+                    "pattern": "^[A-Za-z_][A-Za-z0-9_-]*$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "field",
+                  "outputKey"
+                ],
+                "type": "object"
+              },
+              "maxItems": 15,
+              "type": "array"
+            }
+          },
+          "required": [
+            "isEnabled",
+            "metadataOutputEnabled",
+            "precision",
+            "outputMode",
+            "collectionKey",
+            "advancedTemplate"
+          ],
+          "type": "object"
+        },
+
         "metadataPolicy": {
           "additionalProperties": false,
           "properties": {
@@ -323,6 +628,12 @@
               "maxItems": 128,
               "minItems": 0,
               "type": "array"
+            },
+            "scope": {
+              "enum": [
+                "document",
+                "entry"
+              ]
             },
             "templatePolicy": {
               "enum": [
@@ -371,8 +682,26 @@
                 "deterministicSuffix"
               ]
             },
+            "entryPrefix": {
+              "maxLength": 16384,
+              "type": "string"
+            },
+            "entrySuffix": {
+              "maxLength": 16384,
+              "type": "string"
+            },
             "extensionPolicy": {
               "const": "markdownDotMd"
+            },
+            "headingLevel": {
+              "maximum": 6,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "headingTitle": {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string"
             },
             "logicalFolder": {
               "items": {
@@ -384,10 +713,32 @@
               "maxItems": 32,
               "type": "array"
             },
+            "missingHeadingBehavior": {
+              "enum": [
+                "fail",
+                "create"
+              ]
+            },
             "noteNameTemplate": {
               "maxLength": 1024,
               "minLength": 1,
               "type": "string"
+            },
+            "placement": {
+              "enum": [
+                "append",
+                "prepend",
+                "beneathHeading"
+              ]
+            },
+            "rollingPeriod": {
+              "enum": [
+                "daily",
+                "weekly",
+                "monthly",
+                "quarterly",
+                "yearly"
+              ]
             }
           },
           "required": [

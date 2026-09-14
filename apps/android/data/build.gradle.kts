@@ -20,6 +20,7 @@ kapt {
 
 dependencies {
     implementation(project(":capture-domain"))
+    implementation(project(":core-bridge"))
     implementation(libs.serialization.json)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)

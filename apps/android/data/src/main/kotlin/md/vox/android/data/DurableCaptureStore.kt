@@ -15,6 +15,20 @@ import kotlin.concurrent.withLock
 private val JOURNAL_TEMP_PATTERN = Regex("^\\.delivery-journal\\.[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\\.tmp$")
 private val MARKER_TEMP_PATTERN = Regex("^\\.commit-attempt\\.[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\\.tmp$")
 private val STAGING_TEMP_PATTERN = Regex("^\\.tmp-[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")
+private const val MAX_CAPTURE_ASSETS = 32
+private const val MAX_CAPTURE_ASSET_BYTES = 100 * 1024 * 1024
+
+data class DurableAssetInput(
+    val sourceID: String,
+    val fileName: String,
+    val mediaType: String,
+    val bytes: ByteArray,
+)
+
+data class PackagedAsset(
+    val metadata: AssetManifestEntry,
+    val bytes: ByteArray,
+)
 
 /**
  * Type-level proof that a commit marker was durably persisted (ADR-0023 §3/§4,
@@ -156,13 +170,60 @@ class DurableCapturePackageStore(
 ) {
     private val root = File(noBackupFilesDir, "vox-captures")
 
-    fun enqueue(requestBytes: ByteArray, nowEpochMillis: Long): EnqueueResult {
+    /**
+     * Removes only a fully verified completed package. The content-free quota/activity
+     * records live in Room and intentionally survive this History cleanup.
+     * Index deletion happens first: a crash before package removal is repaired by reconcile.
+     */
+    fun pruneCompletedPackage(requestID: String): Boolean {
+        if (!UUID_PATTERN.matches(requestID)) return false
+        return try {
+            withRootMutationLock {
+                val directory = File(root, requestID)
+                if (!fileOps.exists(directory)) return@withRootMutationLock index.delete(requestID)
+                val verified = validatePackage(directory)
+                if (verified.snapshot.state != CaptureState.COMPLETED) return@withRootMutationLock false
+                if (!index.delete(requestID)) return@withRootMutationLock false
+                fileOps.checkpoint("beforeCompletedPackageDelete")
+                fileOps.deleteOwnedTemporary(directory)
+                fileOps.checkpoint("afterCompletedPackageDelete")
+                fileOps.syncDirectory(root)
+                true
+            }
+        } catch (_: Exception) {
+            false
+        }
+    }
+
+    fun enqueue(
+        requestBytes: ByteArray,
+        nowEpochMillis: Long,
+        assetInputs: List<DurableAssetInput> = emptyList(),
+    ): EnqueueResult {
         val historical = try { CapturePackageCodec.decodeHistoricalRequest(requestBytes) } catch (error: PackageCodecException) {
             return EnqueueResult.DurabilityFailure("unknown", error.coarseCode)
         }
         val requestID = historical.requestID
         if (nowEpochMillis < 0) return EnqueueResult.DurabilityFailure(requestID, "enqueueTimeOutOfBounds")
-        val assetsBytes = CapturePackageCodec.encodeAssets(AssetManifest(requestID))
+        val assetManifest = try {
+            AssetManifest(
+                requestID,
+                assetInputs.map { asset ->
+                    AssetManifestEntry(
+                        sourceID = asset.sourceID,
+                        fileName = asset.fileName,
+                        mediaType = asset.mediaType,
+                        length = asset.bytes.size.toLong(),
+                        sha256 = CapturePackageCodec.sha256(asset.bytes),
+                    )
+                },
+            )
+        } catch (_: Exception) {
+            return EnqueueResult.DurabilityFailure(requestID, "assetManifestShape")
+        }
+        val assetsBytes = try { CapturePackageCodec.encodeAssets(assetManifest) } catch (error: PackageCodecException) {
+            return EnqueueResult.DurabilityFailure(requestID, error.coarseCode)
+        }
         val finalDirectory = File(root, requestID)
         try {
             if (fileOps.exists(root)) {
@@ -181,6 +242,7 @@ class DurableCapturePackageStore(
             try {
                 writeVerified(temporary, "request.json", requestBytes) { CapturePackageCodec.admitRequest(it) }
                 writeVerified(temporary, "assets.json", assetsBytes) { CapturePackageCodec.decodeAssets(it) }
+                if (assetInputs.isNotEmpty()) writeAssetFiles(temporary, assetInputs, assetManifest)
                 writeVerified(temporary, "delivery-journal.json", journalBytes) { CapturePackageCodec.decodeJournal(it) }
                 phase("beforeTempDirectorySync", "afterTempDirectorySync") { fileOps.syncDirectory(temporary) }
                 fileOps.checkpoint("beforePromotionLockAcquire")
@@ -383,10 +445,47 @@ class DurableCapturePackageStore(
         validate(reopened)
     }
 
+    private fun writeAssetFiles(
+        directory: File,
+        inputs: List<DurableAssetInput>,
+        manifest: AssetManifest,
+    ) {
+        val assetDirectory = File(directory, "asset-data")
+        fileOps.createDirectory(assetDirectory)
+        inputs.zip(manifest.assets).forEach { (input, metadata) ->
+            if (input.sourceID != metadata.sourceID || input.bytes.size.toLong() != metadata.length ||
+                CapturePackageCodec.sha256(input.bytes) != metadata.sha256
+            ) throw PackageCodecException("assetCorrelation")
+            val target = File(assetDirectory, metadata.sourceID)
+            fileOps.writeNewFileDurably(target, input.bytes) { phase ->
+                fileOps.checkpoint("$phase:asset:${metadata.sourceID}")
+            }
+            val reopened = fileOps.readBounded(target, MAX_CAPTURE_ASSET_BYTES)
+            if (!reopened.contentEquals(input.bytes) || CapturePackageCodec.sha256(reopened) != metadata.sha256) {
+                throw PackageCodecException("assetReopenMismatch")
+            }
+        }
+        fileOps.syncDirectory(assetDirectory)
+    }
+
     private fun reconcileTemporary(directory: File): ReconciliationResult {
         val safeName = Regex("^\\.tmp-[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}-[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$").matches(directory.name)
         val safe = try {
-            safeName && !fileOps.isSymlink(directory) && fileOps.isDirectoryNoFollow(directory) && fileOps.list(directory).let { children -> children.size <= 3 && children.all { it.name in setOf("request.json", "assets.json", "delivery-journal.json") && !fileOps.isSymlink(it) && fileOps.isRegularFileNoFollow(it) && fileOps.length(it) in 0..CONTROL_LIMIT_BYTES.toLong() } }
+            safeName && !fileOps.isSymlink(directory) && fileOps.isDirectoryNoFollow(directory) && fileOps.list(directory).let { children ->
+                children.size <= 4 && children.all { child ->
+                    when (child.name) {
+                        "request.json", "assets.json", "delivery-journal.json" ->
+                            !fileOps.isSymlink(child) && fileOps.isRegularFileNoFollow(child) &&
+                                fileOps.length(child) in 0..CONTROL_LIMIT_BYTES.toLong()
+                        "asset-data" -> !fileOps.isSymlink(child) && fileOps.isDirectoryNoFollow(child) &&
+                            fileOps.list(child).size <= MAX_CAPTURE_ASSETS && fileOps.list(child).all { asset ->
+                                UUID_PATTERN.matches(asset.name) && !fileOps.isSymlink(asset) &&
+                                    fileOps.isRegularFileNoFollow(asset) && fileOps.length(asset) in 1..MAX_CAPTURE_ASSET_BYTES.toLong()
+                            }
+                        else -> false
+                    }
+                }
+            }
         } catch (_: Exception) { false }
         if (!safe) return ReconciliationResult.SuspiciousTemporaryPackage(directory.name, "unsafeTemporary")
         return try { fileOps.deleteOwnedTemporary(directory); ReconciliationResult.TemporaryPackageDeleted(directory.name) } catch (_: Exception) { ReconciliationResult.SuspiciousTemporaryPackage(directory.name, "temporaryDeleteFailed") }
@@ -446,12 +545,38 @@ class DurableCapturePackageStore(
 
         // State-gated optional entries (ADR-0023 §7).
         val extra = names - setOf("assets.json", "delivery-journal.json", "request.json")
+        val assetDataDir = entries.firstOrNull { it.name == "asset-data" }
         val observationsDir = entries.firstOrNull { it.name == "observations" }
         val preparedDir = entries.firstOrNull { it.name == "prepared" }
         val receiptsDir = entries.firstOrNull { it.name == "receipts" }
         val markerFile = entries.firstOrNull { it.name == "commit-attempt.json" }
-        val unexpected = extra - setOf("observations", "prepared", "receipts", "commit-attempt.json")
+        val unexpected = extra - setOf("asset-data", "observations", "prepared", "receipts", "commit-attempt.json")
         if (unexpected.isNotEmpty()) throw PackageCodecException("entryInventory")
+
+        if (assetManifest.assets.isEmpty()) {
+            if (assetDataDir != null) throw PackageCodecException("assetInventory")
+        } else {
+            if (assetDataDir == null || fileOps.isSymlink(assetDataDir) || !fileOps.isDirectoryNoFollow(assetDataDir)) {
+                throw PackageCodecException("assetInventory")
+            }
+            val assetFiles = fileOps.list(assetDataDir)
+            if (assetFiles.map(File::getName).toSet() != assetManifest.assets.map(AssetManifestEntry::sourceID).toSet()) {
+                throw PackageCodecException("assetInventory")
+            }
+            var aggregateAssetBytes = 0L
+            assetManifest.assets.forEach { metadata ->
+                val file = File(assetDataDir, metadata.sourceID)
+                if (fileOps.isSymlink(file) || !fileOps.isRegularFileNoFollow(file) || fileOps.length(file) != metadata.length) {
+                    throw PackageCodecException("assetInventory")
+                }
+                val bytesOnDisk = fileOps.readBounded(file, MAX_CAPTURE_ASSET_BYTES)
+                if (CapturePackageCodec.sha256(bytesOnDisk) != metadata.sha256) throw PackageCodecException("assetHash")
+                aggregateAssetBytes += metadata.length
+            }
+            if (request.size.toLong() + assets.size + journal.size + aggregateAssetBytes > AGGREGATE_LIMIT_BYTES) {
+                throw PackageCodecException("aggregateBounds")
+            }
+        }
 
         val attempts = mutableMapOf<String, Int>()
         if (observationsDir != null) {
@@ -543,6 +668,22 @@ class DurableCapturePackageStore(
     /** Loads the durable request envelope bytes. */
     fun loadRequestBytes(requestID: String): ByteArray? = try {
         validatePackage(File(root, requestID)).requestBytes
+    } catch (_: Exception) { null }
+
+    /** Loads only hash-verified, request-bound attachment bytes from app-private storage. */
+    fun loadPackagedAssets(requestID: String): List<PackagedAsset>? = try {
+        withRootMutationLock {
+            val directory = File(root, requestID)
+            val verified = validatePackage(directory)
+            val manifest = CapturePackageCodec.decodeAssets(verified.assetsBytes)
+            manifest.assets.map { metadata ->
+                val bytes = fileOps.readBounded(File(File(directory, "asset-data"), metadata.sourceID), MAX_CAPTURE_ASSET_BYTES)
+                if (bytes.size.toLong() != metadata.length || CapturePackageCodec.sha256(bytes) != metadata.sha256) {
+                    throw PackageCodecException("assetHash")
+                }
+                PackagedAsset(metadata, bytes)
+            }
+        }
     } catch (_: Exception) { null }
 
     /** Persists the immutable per-attempt observation snapshot (ADR-0018 layout). */

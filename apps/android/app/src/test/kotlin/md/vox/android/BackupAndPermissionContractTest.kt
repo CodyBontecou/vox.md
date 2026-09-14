@@ -54,16 +54,13 @@ class BackupAndPermissionContractTest {
     }
 
     @Test
-    fun manifestDeclaresOnlyTheReviewedVoiceServicePermissions() {
+    fun manifestDeclaresOnlyReviewedCapturePermissions() {
         val document = parse(mainSource.resolve("AndroidManifest.xml"))
         val permissionNodes = document.getElementsByTagName("uses-permission")
         val declared = (0 until permissionNodes.length).map { index ->
             (permissionNodes.item(index) as Element).androidAttribute("name")
         }.toSet()
         val forbidden = setOf(
-            "android.permission.INTERNET",
-            "android.permission.ACCESS_COARSE_LOCATION",
-            "android.permission.ACCESS_FINE_LOCATION",
             "android.permission.MANAGE_EXTERNAL_STORAGE",
             "android.permission.READ_EXTERNAL_STORAGE",
             "android.permission.WRITE_EXTERNAL_STORAGE",
@@ -74,14 +71,94 @@ class BackupAndPermissionContractTest {
 
         assertEquals(
             setOf(
+                "android.permission.INTERNET",
                 "android.permission.RECORD_AUDIO",
                 "android.permission.FOREGROUND_SERVICE",
                 "android.permission.FOREGROUND_SERVICE_MICROPHONE",
                 "android.permission.POST_NOTIFICATIONS",
+                "android.permission.ACCESS_COARSE_LOCATION",
+                "android.permission.ACCESS_FINE_LOCATION",
             ),
             declared,
         )
         assertFalse("Forbidden permissions present: ${declared.intersect(forbidden)}", declared.any(forbidden::contains))
+    }
+
+    @Test
+    fun manifestUsesInjectedWorkManagerAndScopedCaptureFileProvider() {
+        val document = parse(mainSource.resolve("AndroidManifest.xml"))
+        val providers = document.getElementsByTagName("provider")
+        val all = (0 until providers.length).map { providers.item(it) as Element }
+        val startup = all.single { it.androidAttribute("name") == "androidx.startup.InitializationProvider" }
+        val metadata = startup.getElementsByTagName("meta-data")
+        val work = (0 until metadata.length).map { metadata.item(it) as Element }
+            .single { it.androidAttribute("name") == "androidx.work.WorkManagerInitializer" }
+        assertEquals("remove", work.getAttributeNS("http://schemas.android.com/tools", "node"))
+
+        val files = all.single { it.androidAttribute("name") == "androidx.core.content.FileProvider" }
+        assertEquals("${'$'}{applicationId}.files", files.androidAttribute("authorities"))
+        assertEquals("false", files.androidAttribute("exported"))
+        assertEquals("true", files.androidAttribute("grantUriPermissions"))
+    }
+
+    @Test
+    fun artifactValidatorReviewsOnlyTheExpectedBillingPermission() {
+        val validator = mainSource.parent.parent.parent.resolve("scripts/validate-debug-artifacts.py")
+        assertTrue("Missing artifact validator: $validator", Files.isRegularFile(validator))
+        val source = Files.readString(validator)
+
+        assertTrue(source.contains("REVIEWED_NON_PLATFORM_PERMISSIONS"))
+        assertTrue(source.contains("\"com.android.vending.BILLING\""))
+    }
+
+    @Test
+    fun wearArtifactValidatorRejectsEveryPhoneOnlyRuntime() {
+        val validator = mainSource.parent.parent.parent.resolve("scripts/validate-wear-artifacts.py")
+        assertTrue("Missing Wear artifact validator: $validator", Files.isRegularFile(validator))
+        val source = Files.readString(validator)
+
+        listOf(
+            "libvosk.so",
+            "libvox_core_uniffi.so",
+            "libmlkit_google_ocr_pipeline.so",
+            "libmlkitcommonpipeline.so",
+            "assets/mlkit-google-ocr-models/",
+            "assets/mlkit_label_default_model/",
+            "Lorg/vosk/",
+            "LocalLiveSpeechSession",
+            "SpeechModelManager",
+            "Lcom/google/mlkit/vision/text/",
+            "Lcom/google/mlkit/vision/label/",
+        ).forEach { forbidden -> assertTrue("Validator must reject $forbidden", source.contains(forbidden)) }
+    }
+
+    @Test
+    fun wearRecordingSurfaceCannotRequestLocation() {
+        val androidRoot = mainSource.parent.parent.parent
+        val manifestPath = androidRoot.resolve("wear/src/main/AndroidManifest.xml")
+        val document = parse(manifestPath)
+        val permissions = document.getElementsByTagName("uses-permission")
+        val declared = (0 until permissions.length).map { index ->
+            (permissions.item(index) as Element).androidAttribute("name")
+        }.toSet()
+        assertFalse("Wear must not declare coarse location", "android.permission.ACCESS_COARSE_LOCATION" in declared)
+        assertFalse("Wear must not declare fine location", "android.permission.ACCESS_FINE_LOCATION" in declared)
+
+        val wearSources = androidRoot.resolve("wear/src/main/kotlin")
+        Files.walk(wearSources).use { paths ->
+            paths.filter(Files::isRegularFile).forEach { path ->
+                val source = Files.readString(path)
+                listOf(
+                    "Manifest.permission.ACCESS_COARSE_LOCATION",
+                    "Manifest.permission.ACCESS_FINE_LOCATION",
+                    "LocationManager",
+                    "FusedLocationProviderClient",
+                    "Geocoder(",
+                ).forEach { forbidden ->
+                    assertFalse("Wear source $path must not use $forbidden", source.contains(forbidden))
+                }
+            }
+        }
     }
 
     private fun excludedDomains(parent: Element): Set<String> {

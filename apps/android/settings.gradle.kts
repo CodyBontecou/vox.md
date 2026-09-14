@@ -18,6 +18,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://jitpack.io") {
+            content {
+                includeModule("com.github.k2-fsa", "sherpa-onnx")
+            }
+        }
     }
 }
 
@@ -28,3 +33,5 @@ include(":core-bridge")
 include(":capture-domain")
 include(":data")
 include(":platform-services")
+include(":wear")
+include(":whisper_small")

@@ -9,6 +9,7 @@ class RoomCaptureIndex(private val database: CaptureDatabase) : CaptureIndex {
     private val dao get() = database.captureProjectionDao()
     override fun read(requestID: String): CaptureIndexProjection? = dao.read(requestID)?.projection()
     override fun all(): List<CaptureIndexProjection> = dao.all().map(CaptureProjectionEntity::projection)
+    override fun delete(requestID: String): Boolean = dao.delete(requestID) in 0..1
     override fun insertOrRepair(projection: CaptureIndexProjection): IndexWriteResult {
         var result = IndexWriteResult.CONFLICT
         database.runInTransaction {

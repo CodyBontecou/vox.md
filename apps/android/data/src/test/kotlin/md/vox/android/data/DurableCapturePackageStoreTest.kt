@@ -13,6 +13,24 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 class DurableCapturePackageStoreTest {
+    @Test fun attachmentBytesAreHashBoundAndRecoveredFromTheDurablePackage() {
+        val base = Files.createTempDirectory("capture-assets").toFile()
+        val store = DurableCapturePackageStore(base, MemoryIndex(), JvmOps())
+        val bytes = "synthetic-image-bytes".toByteArray()
+        val sourceID = "55555555-5555-4555-8555-555555555555"
+        val asset = DurableAssetInput(sourceID, "$sourceID-photo.jpg", "image/jpeg", bytes)
+
+        assertEquals(EnqueueResult.SavedLocally(ID), store.enqueue(request(), 10, listOf(asset)))
+        val loaded = requireNotNull(store.loadPackagedAssets(ID)).single()
+        assertEquals(asset.fileName, loaded.metadata.fileName)
+        assertEquals(asset.mediaType, loaded.metadata.mediaType)
+        assertArrayEquals(bytes, loaded.bytes)
+
+        File(base, "vox-captures/$ID/asset-data/$sourceID").appendText("tampered")
+        assertNull(store.loadPackagedAssets(ID))
+        assertTrue(store.reconcile().any { it is ReconciliationResult.CorruptPackage && it.coarseCode == "assetInventory" })
+    }
+
     @Test fun savedLocallyRequiresBothParentSyncsAndIndexResult() {
         val base = Files.createTempDirectory("capture-store").toFile(); val index = MemoryIndex(); val ops = JvmOps()
         assertTrue(DurableCapturePackageStore(base, index, ops).enqueue(request(), 10) is EnqueueResult.SavedLocally)

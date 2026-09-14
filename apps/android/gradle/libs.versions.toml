@@ -4,16 +4,30 @@ kotlin = "2.4.10"
 compose-bom = "2026.08.00"
 core = "1.19.0"
 activity = "1.13.0"
+appcompat = "1.8.0"
 lifecycle = "2.11.0"
 navigation = "2.9.8"
 room = "2.8.4"
 datastore = "1.2.1"
 work = "2.11.2"
+concurrent = "1.3.0"
+wear-compose = "1.6.2"
+wearable = "20.0.1"
+wear-tiles = "1.6.2"
+wear-protolayout = "1.4.2"
+wear-watchface = "1.3.0"
+wear-ongoing = "1.1.0"
 hilt = "2.60.1"
 androidx-hilt = "1.4.0"
 coroutines = "1.11.0"
 serialization = "1.11.0"
+mlkit-text-recognition = "16.0.1"
+mlkit-document-scanner = "16.0.0"
+mlkit-image-labeling = "17.0.9"
 jna = "5.17.0"
+vosk = "0.3.75"
+sherpa-onnx = "1.13.4"
+billing = "9.1.0"
 androidx-annotation = "1.7.0"
 androidx-test = "1.7.0"
 androidx-test-ext-junit = "1.3.0"
@@ -25,10 +39,13 @@ compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-
 compose-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core" }
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
@@ -38,6 +55,16 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
+concurrent-futures = { module = "androidx.concurrent:concurrent-futures", version.ref = "concurrent" }
+wear-compose-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "wear-compose" }
+wear-compose-material = { module = "androidx.wear.compose:compose-material", version.ref = "wear-compose" }
+wear-compose-tooling = { module = "androidx.wear.compose:compose-ui-tooling", version.ref = "wear-compose" }
+play-services-wearable = { module = "com.google.android.gms:play-services-wearable", version.ref = "wearable" }
+wear-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "wear-tiles" }
+wear-protolayout = { module = "androidx.wear.protolayout:protolayout", version.ref = "wear-protolayout" }
+wear-protolayout-material = { module = "androidx.wear.protolayout:protolayout-material", version.ref = "wear-protolayout" }
+wear-watchface-complications-data-source = { module = "androidx.wear.watchface:watchface-complications-data-source-ktx", version.ref = "wear-watchface" }
+wear-ongoing = { module = "androidx.wear:wear-ongoing", version.ref = "wear-ongoing" }
 work-testing = { module = "androidx.work:work-testing", version.ref = "work" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
@@ -47,7 +74,13 @@ androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-com
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+mlkit-text-recognition = { module = "com.google.mlkit:text-recognition", version.ref = "mlkit-text-recognition" }
+mlkit-document-scanner = { module = "com.google.android.gms:play-services-mlkit-document-scanner", version.ref = "mlkit-document-scanner" }
+mlkit-image-labeling = { module = "com.google.mlkit:image-labeling", version.ref = "mlkit-image-labeling" }
 jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
+vosk-android = { module = "com.alphacephei:vosk-android", version.ref = "vosk" }
+sherpa-onnx = { module = "com.github.k2-fsa:sherpa-onnx", version.ref = "sherpa-onnx" }
+play-billing = { module = "com.android.billingclient:billing-ktx", version.ref = "billing" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
 androidx-test-core = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
@@ -59,6 +92,7 @@ junit4 = { module = "junit:junit", version.ref = "junit4" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+android-ai-pack = { id = "com.android.ai-pack", version.ref = "agp" }
 android-legacy-kapt = { id = "com.android.legacy-kapt", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

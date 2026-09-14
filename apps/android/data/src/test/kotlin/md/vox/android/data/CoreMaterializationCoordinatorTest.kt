@@ -41,8 +41,15 @@ class CoreMaterializationCoordinatorTest {
             override fun observeOccupiedCandidates(destination: VaultDestination, candidates: List<List<String>>): List<List<String>> =
                 candidates.filter { it.last() == "occupied.md" }
         }
+        val existingNotes = object : CoreMaterializationCoordinator.ExistingNoteSource {
+            override fun observeExistingNote(
+                destination: VaultDestination,
+                logicalPath: List<String>,
+                maximumBytes: Long,
+            ) = CoreMaterializationCoordinator.ExistingNoteSnapshot.Absent
+        }
         var time = 30L
-        val underTest = CoreMaterializationCoordinator(fake, store, coordinator, occupancy, destination, clock = { time++ })
+        val underTest = CoreMaterializationCoordinator(fake, store, coordinator, occupancy, existingNotes, destination, clock = { time++ })
 
         val result = underTest.materialize(requestID, leaseToken, store.loadJournal(requestID)!!.revision)
         assertTrue("materialize failed: $result", result is CoreMaterializationCoordinator.MaterializationResult.Materialized)
@@ -74,7 +81,15 @@ class CoreMaterializationCoordinatorTest {
             FakeCoreBridge(request, note), store, coordinator,
             object : CoreMaterializationCoordinator.CandidateOccupancySource {
                 override fun observeOccupiedCandidates(destination: VaultDestination, candidates: List<List<String>>): List<List<String>>? = null
-            }, destination,
+            },
+            object : CoreMaterializationCoordinator.ExistingNoteSource {
+                override fun observeExistingNote(
+                    destination: VaultDestination,
+                    logicalPath: List<String>,
+                    maximumBytes: Long,
+                ) = CoreMaterializationCoordinator.ExistingNoteSnapshot.Absent
+            },
+            destination,
         ) { time++ }
         val result = underTest.materialize(requestID, leaseToken, store.loadJournal(requestID)!!.revision)
         assertTrue(result is CoreMaterializationCoordinator.MaterializationResult.Retryable)

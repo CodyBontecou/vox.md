@@ -60,6 +60,10 @@ class AndroidArtifactValidatorTests(unittest.TestCase):
                 header[18:20] = machine.to_bytes(2, "little")
                 archive.writestr(f"lib/{abi}/{VALIDATOR.VOX_LIBRARY}", header)
                 archive.writestr(f"lib/{abi}/{VALIDATOR.JNA_LIBRARY}", header)
+                for library in VALIDATOR.SHERPA_LIBRARIES:
+                    archive.writestr(f"lib/{abi}/{library}", header)
+            for packaged_name, (source_name, _) in VALIDATOR.GEIST_FONTS.items():
+                archive.write(ROOT / "Voxboard/Fonts" / source_name, f"res/font/{packaged_name}")
 
     def validate(self):
         VALIDATOR.validate_merged_manifest(self.manifest)
@@ -72,7 +76,7 @@ class AndroidArtifactValidatorTests(unittest.TestCase):
     def test_platform_permission_is_rejected(self):
         text = self.manifest.read_text().replace(
             "<application",
-            '<uses-permission android:name="android.permission.INTERNET" />\n  <application',
+            '<uses-permission android:name="android.permission.READ_SMS" />\n  <application',
         )
         self.manifest.write_text(text)
         with self.assertRaisesRegex(VALIDATOR.ValidationError, "platform permission"):
@@ -86,6 +90,29 @@ class AndroidArtifactValidatorTests(unittest.TestCase):
         self.manifest.write_text(text)
         with self.assertRaisesRegex(VALIDATOR.ValidationError, "unpermissioned exported"):
             self.validate()
+
+    def test_compose_test_activity_is_allowed_only_in_debuggable_artifact(self):
+        component = '<activity android:name="androidx.activity.ComponentActivity" android:exported="true" />'
+        text = self.manifest.read_text().replace(
+            "<application ",
+            '<application android:debuggable="true" ',
+        ).replace("</application>", f"{component}\n  </application>")
+        self.manifest.write_text(text)
+        self.validate()
+
+        self.manifest.write_text(text.replace(' android:debuggable="true"', ""))
+        with self.assertRaisesRegex(VALIDATOR.ValidationError, "unpermissioned exported"):
+            self.validate()
+
+    def test_exported_documents_provider_with_platform_signature_permission_is_allowed(self):
+        text = self.manifest.read_text().replace(
+            "</application>",
+            '<provider android:name="md.vox.android.TestDocumentsProvider" '
+            'android:exported="true" android:grantUriPermissions="true" '
+            'android:permission="android.permission.MANAGE_DOCUMENTS" />\n  </application>',
+        )
+        self.manifest.write_text(text)
+        self.validate()
 
     def test_non_literal_or_resource_exported_value_is_rejected(self):
         for value in ("@bool/provider_exported", "TRUE", "1"):
@@ -126,6 +153,17 @@ class AndroidArtifactValidatorTests(unittest.TestCase):
         with self.assertRaisesRegex(VALIDATOR.ValidationError, "JNA native ABI set differs"):
             self.validate()
 
+    def test_missing_sherpa_runtime_abi_is_rejected(self):
+        missing = "lib/x86/libsherpa-onnx-jni.so"
+        with zipfile.ZipFile(self.apk) as archive:
+            entries = {name: archive.read(name) for name in archive.namelist() if name != missing}
+        self.apk.unlink()
+        with zipfile.ZipFile(self.apk, "w") as archive:
+            for name, contents in entries.items():
+                archive.writestr(name, contents)
+        with self.assertRaisesRegex(VALIDATOR.ValidationError, "sherpa-onnx native ABI set differs"):
+            self.validate()
+
     def test_wrong_vox_elf_machine_is_rejected(self):
         self.write_valid_inputs()
         with zipfile.ZipFile(self.apk, "a") as archive:
@@ -139,6 +177,17 @@ class AndroidArtifactValidatorTests(unittest.TestCase):
             for name, contents in entries.items():
                 archive.writestr(name, contents)
         with self.assertRaisesRegex(VALIDATOR.ValidationError, "x86 Vox ELF machine differs"):
+            self.validate()
+
+    def test_changed_geist_font_is_rejected(self):
+        with zipfile.ZipFile(self.apk) as archive:
+            entries = {name: archive.read(name) for name in archive.namelist()}
+        entries["res/font/geist_regular.ttf"] += b"changed"
+        self.apk.unlink()
+        with zipfile.ZipFile(self.apk, "w") as archive:
+            for name, contents in entries.items():
+                archive.writestr(name, contents)
+        with self.assertRaisesRegex(VALIDATOR.ValidationError, "Geist font hash differs"):
             self.validate()
 
     def test_incomplete_transfer_exclusions_are_rejected(self):

@@ -1,0 +1,153 @@
+{
+  "$id": "https://vox.md/contracts/schemas/android-local-capability-evidence.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "capability": {
+      "additionalProperties": false,
+      "properties": {
+        "acceptanceKinds": {
+          "items": {
+            "enum": [
+              "device",
+              "fixture",
+              "ui"
+            ]
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "capabilityID": {
+          "maxLength": 160,
+          "pattern": "^cap\\.[a-z0-9][a-z0-9.-]*$",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/sourceEvidence"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "gateIDs": {
+          "items": {
+            "maxLength": 80,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "acceptanceKinds",
+        "capabilityID",
+        "evidence",
+        "gateIDs"
+      ],
+      "type": "object"
+    },
+    "gate": {
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 80,
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "type": "string"
+        },
+        "result": {
+          "const": "passed"
+        },
+        "observedCount": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "observedUnit": {
+          "enum": [
+            "tests",
+            "gradle-tasks"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "command",
+        "result",
+        "observedCount",
+        "observedUnit"
+      ],
+      "type": "object"
+    },
+    "sourceEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "maxLength": 512,
+          "minLength": 1,
+          "type": "string"
+        },
+        "symbol": {
+          "maxLength": 512,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "symbol"
+      ],
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "capabilities": {
+      "items": {
+        "$ref": "#/$defs/capability"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "gates": {
+      "items": {
+        "$ref": "#/$defs/gate"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "limitations": {
+      "items": {
+        "maxLength": 1024,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "qualification": {
+      "const": "local-working-tree"
+    },
+    "schemaVersion": {
+      "const": 2
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "qualification",
+    "gates",
+    "capabilities",
+    "limitations"
+  ],
+  "title": "Android local capability acceptance evidence",
+  "type": "object"
+}

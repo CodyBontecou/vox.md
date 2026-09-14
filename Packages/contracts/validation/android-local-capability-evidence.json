@@ -1,0 +1,4684 @@
+{
+  "capabilities": [
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.ai.category",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/TranscriptEnrichment.kt",
+          "symbol": "object DeterministicTranscriptEnrichment"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalIntelligenceInstrumentationTest.kt",
+          "symbol": "fun localProcessingProducesChecklistMeetingTitleTagsAndCategoryOutcomes()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.ai.checklist",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/LocalCaptureTextProcessor.kt",
+          "symbol": "private fun todoList(source: String)"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalIntelligenceInstrumentationTest.kt",
+          "symbol": "fun localProcessingProducesChecklistMeetingTitleTagsAndCategoryOutcomes()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.ai.diarization",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SpeakerDiarization.kt",
+          "symbol": "object LocalSpeakerDiarizer"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalIntelligenceInstrumentationTest.kt",
+          "symbol": "fun localSpeakerDiarizationLabelsGroundedTurnsAndPreservesFallback()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.ai.meeting",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/LocalCaptureTextProcessor.kt",
+          "symbol": "private fun meetingNotes(source: String)"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalIntelligenceInstrumentationTest.kt",
+          "symbol": "fun localProcessingProducesChecklistMeetingTitleTagsAndCategoryOutcomes()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.ai.mode-clean",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/LocalCaptureTextProcessorTest.kt",
+          "symbol": "clean applies only to matching scope and preserves original"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.ai.mode-custom",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/LocalCaptureTextProcessorTest.kt",
+          "symbol": "supported custom instruction performs the requested grounded transformation"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.ai.mode-meetingnotes",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/LocalCaptureTextProcessorTest.kt",
+          "symbol": "meeting mode creates action section only from matching source fragments"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.ai.mode-none",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/LocalCaptureTextProcessorTest.kt",
+          "symbol": "none keeps the original deterministic text"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.ai.mode-todolist",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/LocalCaptureTextProcessorTest.kt",
+          "symbol": "todo mode produces grounded checklist without dropping lines"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.ai.tags",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/TranscriptEnrichment.kt",
+          "symbol": "object DeterministicTranscriptEnrichment"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalIntelligenceInstrumentationTest.kt",
+          "symbol": "fun localProcessingProducesChecklistMeetingTitleTagsAndCategoryOutcomes()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.ai.title",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/TranscriptEnrichment.kt",
+          "symbol": "object DeterministicTranscriptEnrichment"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalIntelligenceInstrumentationTest.kt",
+          "symbol": "fun localProcessingProducesChecklistMeetingTitleTagsAndCategoryOutcomes()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.billing.reinstall-adjustment",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/main/kotlin/md/vox/android/data/RoomQuotaLedger.kt",
+          "symbol": "class RoomQuotaLedger"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/ReinstallAdjustmentInstrumentationTest.kt",
+          "symbol": "class ReinstallAdjustmentInstrumentationTest"
+        },
+        {
+          "path": "apps/android/scripts/validate-reinstall-quota.py",
+          "symbol": "def main()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35-reinstall",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.billing.restore-diagnostics",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt",
+          "symbol": "data class BillingRestoreDiagnostics"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/BillingRestoreDiagnosticsInstrumentationTest.kt",
+          "symbol": "fun restoreDiagnosticsExcludeEveryAccountAndTransactionIdentifier()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.delivery.standard",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
+          "symbol": "failedWriteReservationAndRetryConsumeOnlyAfterVerifiedTerminalCommit"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api36"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.delivery.voice-meter",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureDeliveryTest.kt",
+          "symbol": "recordingDeliveryNeverConsumesTheTextCaptureAllowance"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
+          "symbol": "unmeteredRecordingReservationCommitsZeroCaptureUnitsAndRemainsIdempotent"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api36",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.add-files",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureBarAction.ADD_FILES"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "fun captureBarMenusAndActionsDispatchEveryEditorCommand()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.add-media",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureBarAction.ADD_MEDIA"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "fun captureBarMenusAndActionsDispatchEveryEditorCommand()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.bold",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "fun captureBarMenusAndActionsDispatchEveryEditorCommand()"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureComposerTextEditorTest.kt",
+          "symbol": "fun boldWrapsAndTogglesSelection()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.bullet",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureBarAction.BULLET_LIST"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureComposerTextEditorTest.kt",
+          "symbol": "fun headingAndListsReplaceExistingPrefixesAcrossSelectedLines()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.capitalize",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureComposerCommand.CapitalizeWords"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureComposerTextEditorTest.kt",
+          "symbol": "fun caseAndSlugCommandsMatchAppleExamples()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.current-location",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureInsertionFormatter.googleMapsLink"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureBarAction.CURRENT_LOCATION"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureComposerTextEditorTest.kt",
+          "symbol": "fun currentLocationMatchesTheIosCoordinateOnlyGoogleMapsInsertion()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.date",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureBarAction.DATE"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.due-date",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureBarAction.DUE_DATE"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.extract-text",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureBarAction.EXTRACT_TEXT"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureBarAction.EXTRACT_TEXT"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.format-menu",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "onNodeWithContentDescription(\"Format Markdown\")"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.hashtag",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureComposerCommand.InsertHashtag"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureComposerTextEditorTest.kt",
+          "symbol": "fun hashtagPrefixesSelectedTextOrInsertsAtCaret()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.heading",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "\"Heading 6\" to CaptureComposerCommand.Heading(6)"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureComposerTextEditorTest.kt",
+          "symbol": "fun headingReplacesExistingHeadingAndInvalidLevelIsSafeNoOp()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.italic",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureComposerCommand.ToggleItalic"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureComposerTextEditorTest.kt",
+          "symbol": "fun italicWrapsAndTogglesSelectedText()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.lowercase",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureComposerCommand.Lowercase"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureComposerTextEditorTest.kt",
+          "symbol": "fun caseAndSlugCommandsMatchAppleExamples()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.markdown-link",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureBarAction.MARKDOWN_LINK"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureComposerTextEditorTest.kt",
+          "symbol": "fun markdownLinkAtCaretSelectsLabelPlaceholderAndEscapesSelectedLabel()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.paste",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureBarAction.PASTE"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureBarAction.PASTE"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.replace",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureComposerCommand.ReplaceSelection"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureComposerTextEditorTest.kt",
+          "symbol": "fun replaceNormalizesNewlines()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.scan",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureBarAction.SCAN_DOCUMENT"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureBarAction.SCAN_DOCUMENT"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.sentence-case",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureComposerCommand.SentenceCase"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureComposerTextEditorTest.kt",
+          "symbol": "fun caseAndSlugCommandsMatchAppleExamples()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.sketch",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureBarAction.SKETCH"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureBarAction.SKETCH"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.slugify",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureComposerCommand.Slugify"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureComposerTextEditorTest.kt",
+          "symbol": "fun caseAndSlugCommandsMatchAppleExamples()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.task",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureBarAction.CHECKLIST"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureComposerTextEditorTest.kt",
+          "symbol": "fun headingAndTaskReplaceValidEmptyMarkdownPrefixes()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.timestamp",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureBarAction.TIMESTAMP"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.toolbar-order",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "internal fun CaptureBarSettingsScreen"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "fun captureBarSettingsDispatchVisibilityAndOrderChanges()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureBarPersistenceTest.kt",
+          "symbol": "fun customOrderHiddenActionsAndTimestampPreferenceRoundTripExactly()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.undo",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureBarAction.UNDO"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureBarAction.UNDO"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.uppercase",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureComposerCommand.Uppercase"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureComposerTextEditorTest.kt",
+          "symbol": "fun caseAndSlugCommandsMatchAppleExamples()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.voice-confirm",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "internal fun RecordingCard"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "fun voiceConfirmationKeepsManualReviewOrAutomaticallyAddsTheFinishedTranscript()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureBarPersistenceTest.kt",
+          "symbol": "fun customOrderHiddenActionsAndTimestampPreferenceRoundTripExactly()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.editor.wiki-link",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureBarUiInstrumentationTest.kt",
+          "symbol": "CaptureBarAction.INTERNAL_LINK"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureComposerTextEditorTest.kt",
+          "symbol": "fun linksUseSelectionAndSelectEditablePlaceholder()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.entry.app",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "internal fun CaptureScreen"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/EntryPointUiInstrumentationTest.kt",
+          "symbol": "fun mainAppQuickCaptureAcceptsTextAndDispatchesSend()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.entry.control-center",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/SystemEntryPoints.kt",
+          "symbol": "class CaptureTileService"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/EntryPointUiInstrumentationTest.kt",
+          "symbol": "fun shortcutWidgetQuickSettingsAndVoiceIntentsMapToTheExpectedNativeActions()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.entry.deep-link",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/ExternalCaptureRequest.kt",
+          "symbol": "private fun parseDeepLink"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/EntryPointUiInstrumentationTest.kt",
+          "symbol": "fun deepLinkIsNormalizedIntoTheNativeCaptureReviewUi()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.entry.file-import",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt",
+          "symbol": "internal fun RecordingQueueImportAction"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/EntryPointUiInstrumentationTest.kt",
+          "symbol": "fun recordingQueueExposesTheNativeAudioVideoImportAction()"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/ImportedMediaDecoderTest.kt",
+          "symbol": "class ImportedMediaDecoderTest"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.entry.keyboard",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/VoxInputMethodService.kt",
+          "symbol": "class VoxInputMethodService"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/KeyboardUiInstrumentationTest.kt",
+          "symbol": "fun voxImeTypesAndExposesLocalVoiceCaptureState()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.entry.live-activity",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt",
+          "symbol": "private fun notification(status: RecordingStatus): Notification"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/VoiceLifecycleInstrumentationTest.kt",
+          "symbol": "fun foregroundRecordingPausesResumesStopsAndPreservesAudioAfterTranscriptionFailure()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.entry.share",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/AndroidManifest.xml",
+          "symbol": "android.intent.action.SEND_MULTIPLE"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/EntryPointUiInstrumentationTest.kt",
+          "symbol": "fun shareAndFileIntentsKeepTextAndEveryAdmittedAttachmentForReview()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.entry.shortcut",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/res/xml/shortcuts.xml",
+          "symbol": "quick_capture"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/EntryPointUiInstrumentationTest.kt",
+          "symbol": "fun shortcutWidgetQuickSettingsAndVoiceIntentsMapToTheExpectedNativeActions()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.entry.voice",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "if (request.action == ExternalCaptureAction.RECORD) startRecording()"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/EntryPointUiInstrumentationTest.kt",
+          "symbol": "fun shortcutWidgetQuickSettingsAndVoiceIntentsMapToTheExpectedNativeActions()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.entry.watch",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearMainActivity.kt",
+          "symbol": "internal fun WearRecorderContent("
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecorderUiInstrumentationTest.kt",
+          "symbol": "fun recorderControlsAndPresetEntryDispatchThroughTheProductionSurface()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.entry.widget",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/SystemEntryPoints.kt",
+          "symbol": "class VoxCaptureWidgetProvider"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/EntryPointUiInstrumentationTest.kt",
+          "symbol": "fun shortcutWidgetQuickSettingsAndVoiceIntentsMapToTheExpectedNativeActions()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.append",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/ConfiguredTranscriptSafInstrumentationTest.kt",
+          "symbol": "fun appendExportReadsMergesWritesAndVerifiesThroughSaf()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.audio-reference",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/ConfiguredTranscriptSafInstrumentationTest.kt",
+          "symbol": "fun newFileExportCopiesAudioBesideTranscriptAndEmbedsAtTop()"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/ConfiguredTranscriptSafInstrumentationTest.kt",
+          "symbol": "fun attachmentsAudioExportCopiesIntoSubfolderAndEmbedsAtBottom()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.destination",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/ConfiguredTranscriptExporter.kt",
+          "symbol": "settings.destinationTreeUri?.let(Uri::parse)"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/ConfiguredTranscriptSafInstrumentationTest.kt",
+          "symbol": "destinationTreeUri = treeUri.toString()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.format-json",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
+          "symbol": "TranscriptExportFormat.JSON"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/TranscriptHistoryTest.kt",
+          "symbol": "structuredExportsEscapeContentAndStayTerminated"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.format-md",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
+          "symbol": "TranscriptExportFormat.MARKDOWN"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/TranscriptHistoryTest.kt",
+          "symbol": "structuredExportsEscapeContentAndStayTerminated"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.format-txt",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
+          "symbol": "TranscriptExportFormat.TEXT"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/TranscriptHistoryTest.kt",
+          "symbol": "allFourTranscriptExportFormatsRemainAvailable"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.format-yaml",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
+          "symbol": "TranscriptExportFormat.YAML"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/TranscriptHistoryTest.kt",
+          "symbol": "yamlIncludesEveryGovernedTranscriptPropertyInStableIosOrder"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.new",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/ConfiguredTranscriptSafInstrumentationTest.kt",
+          "symbol": "fun newFileExportCreatesUniqueVerifiedSafDocuments()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.obsidian",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/ConfiguredTranscriptSafInstrumentationTest.kt",
+          "symbol": "fun obsidianAppendKeepsOneFrontmatterDocumentAndMergesTags()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.template",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/ConfiguredTranscriptSafInstrumentationTest.kt",
+          "symbol": "fun markdownTemplateExportReadsSelectedSafDocumentAndEnrichesIt()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.yaml-date",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
+          "symbol": "append(\"date: \\\"\")"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/TranscriptHistoryTest.kt",
+          "symbol": "yamlIncludesEveryGovernedTranscriptPropertyInStableIosOrder"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.yaml-duration",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
+          "symbol": "append(\"duration_seconds: \")"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/TranscriptHistoryTest.kt",
+          "symbol": "yamlIncludesEveryGovernedTranscriptPropertyInStableIosOrder"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.yaml-extension",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/ConfiguredTranscriptSafInstrumentationTest.kt",
+          "symbol": "fun yamlMarkdownExportWritesFrontmatterDocumentThroughSaf()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.yaml-id",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
+          "symbol": "append(\"id: \\\"\")"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/TranscriptHistoryTest.kt",
+          "symbol": "yamlIncludesEveryGovernedTranscriptPropertyInStableIosOrder"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.yaml-language",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
+          "symbol": "append(\"language: \\\"\")"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/TranscriptHistoryTest.kt",
+          "symbol": "yamlIncludesEveryGovernedTranscriptPropertyInStableIosOrder"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.yaml-modelused",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
+          "symbol": "append(\"model_used: \\\"\")"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/TranscriptHistoryTest.kt",
+          "symbol": "yamlIncludesEveryGovernedTranscriptPropertyInStableIosOrder"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.export.yaml-text",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
+          "symbol": "append(\"text: |-\\n\")"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/TranscriptHistoryTest.kt",
+          "symbol": "yamlIncludesEveryGovernedTranscriptPropertyInStableIosOrder"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.format.attachment-folder",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun formattingPresetMapsFoldersPrefixesSuffixesMetadataAndRetryMarker()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/SafVaultCommitExecutorTest.kt",
+          "symbol": "fun retainedRecordingAudioCanBeCommittedIntoConfiguredAttachmentsFolder()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.format.entry-template",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureEntryTemplateTest.kt",
+          "symbol": "fun reusableAndOneShotTemplatesResolveAtTheImmutableCaptureBoundary()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun reusableAndOneShotEntryTemplatesFreezeIntoTheExactCoreRoutePolicy()"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingPresetSnapshotTest.kt",
+          "symbol": "fun fullPresetRoundTripsAtRecordingFreezePoint()"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/EntryTemplateRepositoryInstrumentationTest.kt",
+          "symbol": "fun editsPropagateAndDeletionKeepsPresetSnapshotWhileClearingOneShotOverride()"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/EntryPointUiInstrumentationTest.kt",
+          "symbol": "fun quickCaptureExposesAOneShotEntryTemplateOverride()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.format.metadata-document",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun formattingPresetMapsFoldersPrefixesSuffixesMetadataAndRetryMarker()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn prefix_suffix_and_document_or_entry_metadata_match_apple_oracle()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.format.metadata-entry",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun formattingPresetMapsFoldersPrefixesSuffixesMetadataAndRetryMarker()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn prefix_suffix_and_document_or_entry_metadata_match_apple_oracle()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.format.note-template",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingPresetSnapshotTest.kt",
+          "symbol": "fun markdownNoteTemplateSelectionIsFrozenAtRecordingStart()"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/ConfiguredTranscriptSafInstrumentationTest.kt",
+          "symbol": "fun markdownTemplateExportReadsSelectedSafDocumentAndEnrichesIt()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.format.prefix",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun formattingPresetMapsFoldersPrefixesSuffixesMetadataAndRetryMarker()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn prefix_suffix_and_document_or_entry_metadata_match_apple_oracle()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.format.retry-marker",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun formattingPresetMapsFoldersPrefixesSuffixesMetadataAndRetryMarker()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn retry_marker_makes_existing_note_replay_idempotent()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.format.static-frontmatter",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun formattingPresetMapsFoldersPrefixesSuffixesMetadataAndRetryMarker()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn prefix_suffix_and_document_or_entry_metadata_match_apple_oracle()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.format.suffix",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun formattingPresetMapsFoldersPrefixesSuffixesMetadataAndRetryMarker()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn prefix_suffix_and_document_or_entry_metadata_match_apple_oracle()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.history.delete-filtered",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
+          "symbol": "internal fun TranscriptDetailScreen"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/HistoryUiInstrumentationTest.kt",
+          "symbol": "fun filteredTranscriptDeletionTargetsItsStableID()"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/RecordingTranscriptPersistenceInstrumentationTest.kt",
+          "symbol": "fun clearingASelectedTranscriptLeavesOtherLocalHistoryUntouched()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.history.edit",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "fun updateTranscriptDetails"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/HistoryUiInstrumentationTest.kt",
+          "symbol": "fun transcriptEditorSavesRawCleanedAndOrganizationFields()"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/RecordingTranscriptPersistenceInstrumentationTest.kt",
+          "symbol": "fun transcriptEditsPersistRawCleanedTitleTagsAndCategoryAcrossReload()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.history.search",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
+          "symbol": "object TranscriptSearch"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/HistoryUiInstrumentationTest.kt",
+          "symbol": "fun historySearchMatchesRawCleanedTitleTagsAndCategoryThenOpensOnlyTheMatch()"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/TranscriptHistoryTest.kt",
+          "symbol": "fun searchIsMultiTokenAndDiacriticInsensitive()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.history.share",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
+          "symbol": "internal object TranscriptExporter"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/HistoryUiInstrumentationTest.kt",
+          "symbol": "fun previousTranscriptCanBeSharedOrExportedFromItsDetail()"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/TranscriptHistoryTest.kt",
+          "symbol": "fun allFourTranscriptExportFormatsRemainAvailable()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.history.tombstone",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CompletedCaptureCompactor.kt",
+          "symbol": "internal class CompletedCaptureCompactor"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
+          "symbol": "fun completionLedgerContainsOnlyStableIDAndTimestampAndIsIdempotent()"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
+          "symbol": "fun enqueueMaterializeCommitAndVerifyThroughRealProvider()"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/HistoryUiInstrumentationTest.kt",
+          "symbol": "fun completedCaptureHistoryRendersOnlyItsPayloadFreeMarkerAndCannotOpenContent()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.advanced",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun locationPolicyDefaultsDisabledAndMapsStructuredCityOrValidatedAdvancedOutputExactly()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn advanced_location_template_renders_the_validated_field_vocabulary()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.city-precision",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
+          "symbol": "fun currentAndroidProfileAcceptsCoherentFrozenLocationAndRejectsPrecisionLeak()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn city_location_discards_exact_precision_in_rendered_values()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.disabled",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun locationPolicyDefaultsDisabledAndMapsStructuredCityOrValidatedAdvancedOutputExactly()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn disabled_location_policy_emits_neither_link_nor_metadata()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.exact",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
+          "symbol": "fun currentAndroidProfileAcceptsCoherentFrozenLocationAndRejectsPrecisionLeak()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn exact_location_formats_every_supported_field_without_locale_drift()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.field-accuracy",
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn exact_location_formats_every_supported_field_without_locale_drift()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.field-applemapsurl",
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn exact_location_formats_every_supported_field_without_locale_drift()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.field-city",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
+          "symbol": "fun currentAndroidProfileFreezesDisclosedSystemLabelsAndRejectsConsentDrift()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn consented_frozen_location_labels_render_place_city_region_and_country()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.field-coordinates",
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn exact_location_formats_every_supported_field_without_locale_drift()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.field-country",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
+          "symbol": "fun currentAndroidProfileFreezesDisclosedSystemLabelsAndRejectsConsentDrift()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn consented_frozen_location_labels_render_place_city_region_and_country()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.field-geouri",
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn exact_location_formats_every_supported_field_without_locale_drift()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.field-googlemapsurl",
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn exact_location_formats_every_supported_field_without_locale_drift()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.field-id",
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn advanced_location_template_renders_the_validated_field_vocabulary()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.field-latitude",
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn exact_location_formats_every_supported_field_without_locale_drift()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.field-longitude",
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn exact_location_formats_every_supported_field_without_locale_drift()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.field-openstreetmapurl",
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn exact_location_formats_every_supported_field_without_locale_drift()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.field-place",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
+          "symbol": "fun currentAndroidProfileFreezesDisclosedSystemLabelsAndRejectsConsentDrift()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn consented_frozen_location_labels_render_place_city_region_and_country()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.field-region",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
+          "symbol": "fun currentAndroidProfileFreezesDisclosedSystemLabelsAndRejectsConsentDrift()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn consented_frozen_location_labels_render_place_city_region_and_country()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.field-source",
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn advanced_location_template_renders_the_validated_field_vocabulary()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.field-timestamp",
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn exact_location_formats_every_supported_field_without_locale_drift()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.retry-freeze",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt",
+          "symbol": "store.loadRequestBytes(requestID)"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
+          "symbol": "fun currentAndroidProfileAcceptsCoherentFrozenLocationAndRejectsPrecisionLeak()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn frozen_location_renders_token_and_appends_request_keyed_metadata()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.structured",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun locationPolicyDefaultsDisabledAndMapsStructuredCityOrValidatedAdvancedOutputExactly()"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingPresetSnapshotTest.kt",
+          "symbol": "fun fullPresetRoundTripsAtRecordingFreezePoint()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn structured_location_fields_preserve_order_renamed_keys_and_typed_scalars()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.unavailable-ask",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureLocationUnavailableBehavior.ASK -> locationDecision"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingPresetSnapshotTest.kt",
+          "symbol": "fun everyUnavailableBehaviorSurvivesTheRecordingFreezePoint()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.unavailable-cancel",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureLocationUnavailableBehavior.CANCEL -> presentNotice"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingPresetSnapshotTest.kt",
+          "symbol": "fun everyUnavailableBehaviorSurvivesTheRecordingFreezePoint()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.location.unavailable-cancelled",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
+          "symbol": "CaptureLocationUnavailableReason.entries.forEach"
+        },
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureLocationUnavailableReason.CANCELLED"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocationUnavailableUiInstrumentationTest.kt",
+          "symbol": "fun everyFrozenUnavailableReasonIsSurfacedAndEveryInteractiveDecisionDispatches()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.location.unavailable-notdetermined",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
+          "symbol": "CaptureLocationUnavailableReason.entries.forEach"
+        },
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureLocationUnavailableReason.NOT_DETERMINED"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocationUnavailableUiInstrumentationTest.kt",
+          "symbol": "fun everyFrozenUnavailableReasonIsSurfacedAndEveryInteractiveDecisionDispatches()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.location.unavailable-permissiondenied",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
+          "symbol": "CaptureLocationUnavailableReason.entries.forEach"
+        },
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureLocationUnavailableReason.PERMISSION_DENIED"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocationUnavailableUiInstrumentationTest.kt",
+          "symbol": "fun everyFrozenUnavailableReasonIsSurfacedAndEveryInteractiveDecisionDispatches()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.location.unavailable-reducedaccuracy",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
+          "symbol": "CaptureLocationUnavailableReason.entries.forEach"
+        },
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureLocationUnavailableReason.REDUCED_ACCURACY"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocationUnavailableUiInstrumentationTest.kt",
+          "symbol": "fun everyFrozenUnavailableReasonIsSurfacedAndEveryInteractiveDecisionDispatches()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.location.unavailable-restricted",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
+          "symbol": "CaptureLocationUnavailableReason.entries.forEach"
+        },
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureLocationUnavailableReason.RESTRICTED"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocationUnavailableUiInstrumentationTest.kt",
+          "symbol": "fun everyFrozenUnavailableReasonIsSurfacedAndEveryInteractiveDecisionDispatches()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.unavailable-send",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureLocationUnavailableBehavior.SEND_WITHOUT_LOCATION -> deliverPending"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingPresetSnapshotTest.kt",
+          "symbol": "fun everyUnavailableBehaviorSurvivesTheRecordingFreezePoint()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.location.unavailable-timeout",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
+          "symbol": "CaptureLocationUnavailableReason.entries.forEach"
+        },
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureLocationUnavailableReason.TIMEOUT"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocationUnavailableUiInstrumentationTest.kt",
+          "symbol": "fun everyFrozenUnavailableReasonIsSurfacedAndEveryInteractiveDecisionDispatches()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.location.unavailable-unavailable",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
+          "symbol": "CaptureLocationUnavailableReason.entries.forEach"
+        },
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "CaptureLocationUnavailableReason.UNAVAILABLE"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocationUnavailableUiInstrumentationTest.kt",
+          "symbol": "fun everyFrozenUnavailableReasonIsSurfacedAndEveryInteractiveDecisionDispatches()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.location.watch-recording-only",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/BackupAndPermissionContractTest.kt",
+          "symbol": "fun wearRecordingSurfaceCannotRequestLocation()"
+        },
+        {
+          "path": "apps/android/wear/src/main/AndroidManifest.xml",
+          "symbol": "uses-permission"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.model.audio-only",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "failureCode = \"modelNotInstalled\""
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/VoiceLifecycleInstrumentationTest.kt",
+          "symbol": "fun foregroundRecordingPausesResumesStopsAndPreservesAudioAfterTranscriptionFailure()"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/RecordingQueueUiInstrumentationTest.kt",
+          "symbol": "fun missingLocalModelKeepsManualAudioExportAvailable()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.model.automatic",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "fun automaticSpeechModelID"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalSpeechInferenceInstrumentationTest.kt",
+          "symbol": "fun installedModelTranscribesRealSpeechThroughTheProductionClientWhileOffline()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35-local-speech",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.model.parakeet-v2",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SherpaSpeechModels.kt",
+          "symbol": "id = \"parakeet-v2\""
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "private suspend fun transcribeWithSherpa"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/NamedModelInferenceInstrumentationTest.kt",
+          "symbol": "fun selectedRequestedModelTranscribesRealSpeechOfflineThroughProductionClient()"
+        },
+        {
+          "path": "apps/android/scripts/validate-named-speech-model.py",
+          "symbol": "def main()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35-named-models-standard",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.model.parakeet-v3",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SherpaSpeechModels.kt",
+          "symbol": "id = \"parakeet-v3\""
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "private suspend fun transcribeWithSherpa"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/NamedModelInferenceInstrumentationTest.kt",
+          "symbol": "fun selectedRequestedModelTranscribesRealSpeechOfflineThroughProductionClient()"
+        },
+        {
+          "path": "apps/android/scripts/validate-named-speech-model.py",
+          "symbol": "def main()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35-named-models-standard",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.model.whisper-base",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SherpaSpeechModels.kt",
+          "symbol": "id = \"ggml-base\""
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "private suspend fun transcribeWithSherpa"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/NamedModelInferenceInstrumentationTest.kt",
+          "symbol": "fun selectedRequestedModelTranscribesRealSpeechOfflineThroughProductionClient()"
+        },
+        {
+          "path": "apps/android/scripts/validate-named-speech-model.py",
+          "symbol": "def main()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35-named-models-standard",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.model.whisper-large-turbo",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SherpaSpeechModels.kt",
+          "symbol": "id = \"ggml-large-v3-turbo\""
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SherpaSpeechModels.kt",
+          "symbol": "minimumMemoryBytes = 6_500_000_000"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/NamedModelInferenceInstrumentationTest.kt",
+          "symbol": "fun selectedRequestedModelTranscribesRealSpeechOfflineThroughProductionClient()"
+        },
+        {
+          "path": "apps/android/scripts/validate-named-speech-model.py",
+          "symbol": "def main()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35-named-models-high-memory",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.model.whisper-medium",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SherpaSpeechModels.kt",
+          "symbol": "id = \"ggml-medium\""
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "isSpeechModelSupportedByMemory"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/NamedModelInferenceInstrumentationTest.kt",
+          "symbol": "fun selectedRequestedModelTranscribesRealSpeechOfflineThroughProductionClient()"
+        },
+        {
+          "path": "apps/android/scripts/validate-named-speech-model.py",
+          "symbol": "def main()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35-named-models-high-memory",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.model.whisper-small",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SherpaSpeechModels.kt",
+          "symbol": "id = \"ggml-small\""
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "private suspend fun transcribeWithSherpa"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/NamedModelInferenceInstrumentationTest.kt",
+          "symbol": "fun selectedRequestedModelTranscribesRealSpeechOfflineThroughProductionClient()"
+        },
+        {
+          "path": "apps/android/scripts/validate-named-speech-model.py",
+          "symbol": "def main()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35-named-models-standard",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.model.whisper-tiny",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SherpaSpeechModels.kt",
+          "symbol": "id = \"ggml-tiny\""
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "private suspend fun transcribeWithSherpa"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/NamedModelInferenceInstrumentationTest.kt",
+          "symbol": "fun selectedRequestedModelTranscribesRealSpeechOfflineThroughProductionClient()"
+        },
+        {
+          "path": "apps/android/scripts/validate-named-speech-model.py",
+          "symbol": "def main()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35-named-models-standard",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.payload.audio-transcript",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureAssetPayloadTest.kt",
+          "symbol": "fun arbitraryFilesAndImagesBecomeOrderedHashBoundAssetDescriptors()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
+          "symbol": "fun currentAndroidProfileAdmitsHashBoundAssetsAndRecordingCorrelation()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/ImageAttachmentMarkdownTest.kt",
+          "symbol": "audio payload remains capturable when no local transcript is available"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/ImageAttachmentMarkdownTest.kt",
+          "symbol": "retained audio can be embedded below transcript text"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn recording_origin_and_asset_descriptors_are_admitted_without_copying_asset_bytes()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.payload.file",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureAssetPayloadTest.kt",
+          "symbol": "fun arbitraryFilesAndImagesBecomeOrderedHashBoundAssetDescriptors()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/DurableCapturePackageStoreTest.kt",
+          "symbol": "fun attachmentBytesAreHashBoundAndRecoveredFromTheDurablePackage()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/SafVaultCommitExecutorTest.kt",
+          "symbol": "fun verifiedCommitWritesAndReadsBackAttachmentsBeforeTheNote()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.payload.image",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureAssetPayloadTest.kt",
+          "symbol": "fun arbitraryFilesAndImagesBecomeOrderedHashBoundAssetDescriptors()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/ImageAttachmentMarkdownTest.kt",
+          "symbol": "local image description becomes the Obsidian embed alias"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/ImageAttachmentMarkdownTest.kt",
+          "symbol": "missing local evidence preserves the original filename alias"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.payload.retained-audio-bottom",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/ImageAttachmentMarkdownTest.kt",
+          "symbol": "retained audio can be embedded below transcript text"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.payload.retained-audio-none",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/ImageAttachmentMarkdownTest.kt",
+          "symbol": "retained audio without markdown embed preserves text and other attachments"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.payload.retained-audio-top",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/ImageAttachmentMarkdownTest.kt",
+          "symbol": "retained audio can be embedded above transcript text"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.payload.scan-ocr",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureMediaTools.kt",
+          "symbol": "internal fun scanOcrPayload(recognizedText: String): ScanOcrPayload?"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/CaptureMediaToolsTest.kt",
+          "symbol": "fun ocrIsASeparateBoundedHiddenArtifactAndNeverReplacesTheScan()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureAssetPayloadTest.kt",
+          "symbol": "fun scanAndSketchSourcesStayInThePackageWhileHiddenDerivativesStayOutOfMarkdown()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.payload.scan-pages",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureMediaTools.kt",
+          "symbol": "internal fun documentScanAssetSpecs("
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/CaptureMediaToolsTest.kt",
+          "symbol": "fun documentScanPreservesEveryPageBeforeItsGeneratedPdf()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureAssetPayloadTest.kt",
+          "symbol": "fun scanAndSketchSourcesStayInThePackageWhileHiddenDerivativesStayOutOfMarkdown()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.payload.scan-pdf",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": ".setResultFormats(RESULT_FORMAT_JPEG, RESULT_FORMAT_PDF)"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/CaptureMediaToolsTest.kt",
+          "symbol": "fun documentScanPreservesEveryPageBeforeItsGeneratedPdf()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureAssetPayloadTest.kt",
+          "symbol": "fun scanAndSketchSourcesStayInThePackageWhileHiddenDerivativesStayOutOfMarkdown()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.payload.screenshot",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureMediaTools.kt",
+          "symbol": "internal fun screenshotMetadataMatches("
+        },
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "val screenshotPicker = rememberLauncherForActivityResult"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/CaptureMediaToolsTest.kt",
+          "symbol": "fun screenshotFilterUsesScreenshotMetadataWithoutAcceptingSimilarWords()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.payload.sketch-preview",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/SketchDialog.kt",
+          "symbol": "GeneratedCaptureAsset(captureImportUri(context, pngFile), \"Sketch.png\", \"image/png\")"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureAssetPayloadTest.kt",
+          "symbol": "fun scanAndSketchSourcesStayInThePackageWhileHiddenDerivativesStayOutOfMarkdown()"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/LocalImageAltTextTest.kt",
+          "symbol": "fun `formats only strong distinct labels without markdown delimiters`()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.payload.sketch-raw",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/SketchDialog.kt",
+          "symbol": "internal fun encodeSketchDocument(strokes: List<List<SketchPoint>>): ByteArray"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/CaptureMediaToolsTest.kt",
+          "symbol": "fun sketchSourceIsVersionedDeterministicAndBoundsEveryRecordedPoint()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureAssetPayloadTest.kt",
+          "symbol": "fun scanAndSketchSourcesStayInThePackageWhileHiddenDerivativesStayOutOfMarkdown()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.payload.text",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
+          "symbol": "assertTrue(noteText.contains(\"Synthetic capture text.\"))"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api36"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.payload.url",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
+          "symbol": "assertTrue(noteText.contains(\"[Synthetic link](https://example.invalid/synthetic)\"))"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api36"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.placement.append",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun existingTargetSplitsRelativeMarkdownPathAndMapsAllPlacements()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn existing_note_append_and_prepend_preserve_frontmatter()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.placement.heading-create",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun headingRouteCarriesExactCreateAndFailPolicies()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn heading_placement_ignores_fenced_headings_and_can_create_missing_heading()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.placement.heading-fail",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun headingRouteCarriesExactCreateAndFailPolicies()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn heading_placement_fails_when_required_heading_is_missing()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.placement.prepend",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun existingTargetSplitsRelativeMarkdownPathAndMapsAllPlacements()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn existing_note_append_and_prepend_preserve_frontmatter()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.preset.audio-reference-bottom",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/ImageAttachmentMarkdownTest.kt",
+          "symbol": "retained audio can be embedded below transcript text"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingPresetSnapshotTest.kt",
+          "symbol": "audioReferencePlacementSurvivesRecordingFreezePoint"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.preset.audio-reference-top",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/ImageAttachmentMarkdownTest.kt",
+          "symbol": "retained audio can be embedded above transcript text"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingPresetSnapshotTest.kt",
+          "symbol": "audioReferencePlacementSurvivesRecordingFreezePoint"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.preset.audio-save-alongside",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/RecordingAudioArtifactPolicyTest.kt",
+          "symbol": "fun alongsideCopiesSourceAudioBesideTheTranscriptNote()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/SafVaultCommitExecutorTest.kt",
+          "symbol": "fun retainedRecordingAudioCanBeCommittedBesideTheTranscriptNote()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.preset.audio-save-attachments",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/RecordingAudioArtifactPolicyTest.kt",
+          "symbol": "fun attachmentsModeCopiesSourceAudioIntoConfiguredFolder()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/SafVaultCommitExecutorTest.kt",
+          "symbol": "fun retainedRecordingAudioCanBeCommittedIntoConfiguredAttachmentsFolder()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.preset.audio-save-off",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/RecordingAudioArtifactPolicyTest.kt",
+          "symbol": "fun offDoesNotCopySourceAudioIntoDestinationArtifacts()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/SafVaultCommitExecutorTest.kt",
+          "symbol": "fun recordingAudioOffLeavesNoDestinationAsset()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.queue.action-copy",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt",
+          "symbol": "copyTranscript"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/RecordingQueueUiInstrumentationTest.kt",
+          "symbol": "fun failedAndCompletedJobsDispatchRetryCopyShareAndAddToDraft()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.queue.action-delete",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt",
+          "symbol": "Delete Recording?"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/RecordingQueueUiInstrumentationTest.kt",
+          "symbol": "fun retainedRecordingDispatchesProcessDeleteAudioShareReassignmentAndRetentionOverride()"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/RecordingTranscriptPersistenceInstrumentationTest.kt",
+          "symbol": "fun reassigningFrozenPresetPersistsAndDeleteRemovesOnlyTheSelectedRecording()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.queue.action-process-now",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt",
+          "symbol": "Process Now"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/RecordingQueueUiInstrumentationTest.kt",
+          "symbol": "fun retainedRecordingDispatchesProcessDeleteAudioShareReassignmentAndRetentionOverride()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.queue.action-reassign",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt",
+          "symbol": "fun reassignPreset"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/RecordingQueueUiInstrumentationTest.kt",
+          "symbol": "fun retainedRecordingDispatchesProcessDeleteAudioShareReassignmentAndRetentionOverride()"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/RecordingTranscriptPersistenceInstrumentationTest.kt",
+          "symbol": "fun reassigningFrozenPresetPersistsAndDeleteRemovesOnlyTheSelectedRecording()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.queue.action-retention-override",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt",
+          "symbol": "retentionOptions"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/RecordingQueueUiInstrumentationTest.kt",
+          "symbol": "fun retainedRecordingDispatchesProcessDeleteAudioShareReassignmentAndRetentionOverride()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.queue.action-retry",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt",
+          "symbol": "RecordingTranscriptionPhase.FAILED"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/RecordingQueueUiInstrumentationTest.kt",
+          "symbol": "fun failedAndCompletedJobsDispatchRetryCopyShareAndAddToDraft()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.queue.action-retry-all",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt",
+          "symbol": "internal fun RecordingRetryAllAction"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/RecordingQueueUiInstrumentationTest.kt",
+          "symbol": "fun retryAllActionIsExplicitAndDispatchesOnce()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.queue.action-share",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt",
+          "symbol": "prepareRecordingAudioShare"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/RecordingQueueUiInstrumentationTest.kt",
+          "symbol": "fun retainedRecordingDispatchesProcessDeleteAudioShareReassignmentAndRetentionOverride()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.queue.capture-concurrency",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "recordingTranscription: RecordingTranscriptionState?"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/EntryPointUiInstrumentationTest.kt",
+          "symbol": "fun quickCaptureRemainsAvailableWhileAnEarlierRecordingProcesses()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.queue.keyboard-preservation",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/VoxInputMethodService.kt",
+          "symbol": "object KeyboardVoiceCommitPolicy"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/KeyboardUiInstrumentationTest.kt",
+          "symbol": "fun keyboardIpcFailurePreservesDurableAudioAndRecoverableText()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.queue.phase-completed",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "COMPLETED(isTerminal = true)"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingJobPhaseTest.kt",
+          "symbol": "fun lifecycleRequiresProcessingAndFinalizingBeforeCompletion()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.queue.phase-discarded",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "DISCARDED(isTerminal = true)"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingJobPhaseTest.kt",
+          "symbol": "fun failedJobsAreRecoverableAndDiscardedJobsRemainTerminal()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.queue.phase-failed",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "phase = RecordingTranscriptionPhase.FAILED"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingJobPhaseTest.kt",
+          "symbol": "fun failedJobsAreRecoverableAndDiscardedJobsRemainTerminal()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.queue.phase-finalizing",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "phase = RecordingTranscriptionPhase.FINALIZING"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingJobPhaseTest.kt",
+          "symbol": "fun lifecycleRequiresProcessingAndFinalizingBeforeCompletion()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.queue.phase-processing",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "phase = RecordingTranscriptionPhase.PROCESSING"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingJobPhaseTest.kt",
+          "symbol": "fun lifecycleRequiresProcessingAndFinalizingBeforeCompletion()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.queue.phase-queued",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "phase = RecordingTranscriptionPhase.QUEUED"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingJobPhaseTest.kt",
+          "symbol": "fun representsTheExactIosRecordingJobPhases()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.queue.policy-immediate",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingJobPolicyTest.kt",
+          "symbol": "shouldProcessRecordingAutomatically(RecordingProcessingPolicy.IMMEDIATE"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.queue.policy-manual",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingJobPolicyTest.kt",
+          "symbol": "shouldProcessRecordingAutomatically(RecordingProcessingPolicy.MANUAL"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.queue.policy-whenidle",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingJobPolicyTest.kt",
+          "symbol": "shouldProcessRecordingAutomatically(RecordingProcessingPolicy.WHEN_IDLE"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.queue.recovery",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt",
+          "symbol": "fun recoverInterrupted(context: Context)"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/QueueRecoveryInstrumentationTest.kt",
+          "symbol": "fun relaunchRecoversEveryOrphanAndInterruptedFinalizationWithoutDeletingAudio()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.queue.retention-deleteaftersuccess",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingJobPolicyTest.kt",
+          "symbol": "RecordingRetentionKind.DELETE_AFTER_SUCCESS"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.queue.retention-permanent",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingJobPolicyTest.kt",
+          "symbol": "RecordingRetentionKind.PERMANENT"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.queue.retention-timed",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingJobPolicyTest.kt",
+          "symbol": "RecordingRetentionKind.TIMED"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.queue.serialization",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureDrainWorker.kt",
+          "symbol": "enqueueUniqueWork(UNIQUE_NAME, ExistingWorkPolicy.KEEP, request)"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
+          "symbol": "fun concurrentLeaseAcquisitionIsExclusiveAndFenced()"
+        },
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/DurableCapturePackageStoreTest.kt",
+          "symbol": "fun sharedRootLockPreventsFenceReplacementBetweenCheckAndJournalCommit()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api36",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.quota.capture",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
+          "symbol": "repeat(10) { n ->"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
+          "symbol": "assertEquals(QuotaReservationResult.LimitReached"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api36"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.quota.retry-no-charge",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
+          "symbol": "failedWriteReservationAndRetryConsumeOnlyAfterVerifiedTerminalCommit"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api36"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.quota.transcription",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/TranscriptionQuota.kt",
+          "symbol": "const val FREE_TRANSCRIPTION_LIMIT_MILLIS = 15L * 60 * 1_000"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/TranscriptionQuotaPolicyTest.kt",
+          "symbol": "freeAllowanceIsBoundedAndPaidAccessBypassesIt"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.quota.voice-one-meter",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureDeliveryTest.kt",
+          "symbol": "recordingDeliveryNeverConsumesTheTextCaptureAllowance"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
+          "symbol": "unmeteredRecordingReservationCommitsZeroCaptureUnitsAndRemainsIdempotent"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api36",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.stats.attachments",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
+          "symbol": "assertEquals(2, stats.attachmentCount)"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api36"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.stats.captures",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
+          "symbol": "assertEquals(1, stats.captureCount)"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api36"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.stats.recordings",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
+          "symbol": "assertEquals(65_000, stats.recordedDurationMillis)"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api36"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.stats.seven-day",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
+          "symbol": "assertEquals(7, stats.lastSevenDays.size)"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api36"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.stats.sources",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
+          "symbol": "assertEquals(mapOf(\"share\" to 1), stats.captureSources)"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api36"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.target.daily",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun newAndRollingTargetsMapToExactCoreOperationsAndPolicies()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn rolling_period_paths_match_daily_weekly_monthly_quarterly_and_yearly_oracle()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.target.existing",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun existingTargetSplitsRelativeMarkdownPathAndMapsAllPlacements()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn existing_note_target_uses_exact_relative_markdown_path()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.target.monthly",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun newAndRollingTargetsMapToExactCoreOperationsAndPolicies()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn rolling_period_paths_match_daily_weekly_monthly_quarterly_and_yearly_oracle()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.target.new",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
+          "symbol": "assertEquals(\"capture-$requestID.md\", candidateNameOf(artifacts.planBytes))"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
+          "symbol": "outcome.value is CommitOutcome.VerifiedCommitted"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api36"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.target.quarterly",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun newAndRollingTargetsMapToExactCoreOperationsAndPolicies()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn rolling_period_paths_match_daily_weekly_monthly_quarterly_and_yearly_oracle()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.target.weekly",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun newAndRollingTargetsMapToExactCoreOperationsAndPolicies()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn rolling_period_paths_match_daily_weekly_monthly_quarterly_and_yearly_oracle()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.target.yearly",
+      "evidence": [
+        {
+          "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
+          "symbol": "fun newAndRollingTargetsMapToExactCoreOperationsAndPolicies()"
+        },
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn rolling_period_paths_match_daily_weekly_monthly_quarterly_and_yearly_oracle()"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release",
+        "rust-local-library"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.voice.audio-preserved",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt",
+          "symbol": "fun exportWav(sessionID: String, output: OutputStream): Boolean"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/VoiceLifecycleInstrumentationTest.kt",
+          "symbol": "fun foregroundRecordingPausesResumesStopsAndPreservesAudioAfterTranscriptionFailure()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.voice.live-final",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LiveSpeech.kt",
+          "symbol": "committedText: String = \"\""
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LiveTranscriptUiInstrumentationTest.kt",
+          "symbol": "fun committedLocalPhrasesStreamWhileTentativeTextRemainsVolatile()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.voice.live-volatile",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LiveSpeech.kt",
+          "symbol": "partialText: String = \"\""
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LiveTranscriptUiInstrumentationTest.kt",
+          "symbol": "fun committedLocalPhrasesStreamWhileTentativeTextRemainsVolatile()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.voice.local-only",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "private suspend fun transcribe"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalSpeechInferenceInstrumentationTest.kt",
+          "symbol": "fun installedModelTranscribesRealSpeechThroughTheProductionClientWhileOffline()"
+        },
+        {
+          "path": "apps/android/scripts/validate-local-speech.py",
+          "symbol": "def main()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35-local-speech",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.voice.one-shot",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt",
+          "symbol": "fun dismissResult()"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/VoiceLifecycleInstrumentationTest.kt",
+          "symbol": "fun foregroundRecordingPausesResumesStopsAndPreservesAudioAfterTranscriptionFailure()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.voice.pause-resume",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt",
+          "symbol": "private fun resumeSession()"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/VoiceLifecycleInstrumentationTest.kt",
+          "symbol": "fun foregroundRecordingPausesResumesStopsAndPreservesAudioAfterTranscriptionFailure()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.voice.persistent",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt",
+          "symbol": "VoiceAutoStopEndAction.SAVE_SEGMENT_AND_CONTINUE -> {"
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+          "symbol": "internal fun groupRecordingChunks(chunks: List<File>, boundaries: Set<Int>)"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/VoiceAutoStopTest.kt",
+          "symbol": "fun pauseDurationIsBoundedAndPersistentModeKeepsDetectedThoughtsSeparate()"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/VoiceAutoStopUiInstrumentationTest.kt",
+          "symbol": "fun pauseDetectionCanBeEnabledConfiguredAndSwitchedToPersistentSegments()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.voice.vad",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt",
+          "symbol": "current.autoStop?.accept(level, frameDurationMillis)"
+        },
+        {
+          "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/VoiceAutoStopTest.kt",
+          "symbol": "fun sustainedSpeechThenConfiguredPauseEndsSpeech()"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/VoiceAutoStopUiInstrumentationTest.kt",
+          "symbol": "fun pauseDetectionCanBeEnabledConfiguredAndSwitchedToPersistentSegments()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.ack-committed",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/WearRecordingOnlyDelivery.kt",
+          "symbol": "WearRemoteRecordingPhase.DELIVERED"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/WearRecordingOnlySafInstrumentationTest.kt",
+          "symbol": "fun recordingOnlyWritesVerifiedWavToFrozenFolderWithoutTranscriptArtifacts()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.ack-ingested",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/PhoneWearBridge.kt",
+          "symbol": "phase = if (result.ingested) WearRemoteRecordingPhase.INGESTED"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/PhoneWearInboxInstrumentationTest.kt",
+          "symbol": "fun phoneAcknowledgesIngestedOnlyAfterEveryVerifiedChunkIsDurable()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.delete-auth",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearQueueStore.kt",
+          "symbol": "Phone delivery acknowledgement was incomplete"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearQueueStoreInstrumentationTest.kt",
+          "symbol": "fun phoneIngestedFrontierRetainsAudioUntilACompleteNewerTerminalAuthorization()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.discard",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearQueueStore.kt",
+          "symbol": "fun discard(context: Context, recordingID: String): Boolean"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearQueueStoreInstrumentationTest.kt",
+          "symbol": "fun explicitDiscardIsDurablyReceiptedBeforeAudioRemoval()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.filename-template",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/WearRecordingOnlyDelivery.kt",
+          "symbol": "internal fun recordingOnlyBaseName("
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/WearRecordingOnlySafInstrumentationTest.kt",
+          "symbol": "fun recordingOnlyWritesVerifiedWavToFrozenFolderWithoutTranscriptArtifacts()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.mode-recording-only",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/WearRecordingOnlyDelivery.kt",
+          "symbol": "internal class AndroidWearRecordingOnlyExporter"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/WearRecordingOnlySafInstrumentationTest.kt",
+          "symbol": "fun recordingOnlyWritesVerifiedWavToFrozenFolderWithoutTranscriptArtifacts()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.mode-transcript",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/WearTranscriptDelivery.kt",
+          "symbol": "suspend fun deliver"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalSpeechInferenceInstrumentationTest.kt",
+          "symbol": "fun frozenWearPresetRoutesRealSpeechThroughPhoneLocalTranscriptionAndMarkdownDelivery()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35-local-speech",
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.pause-resume",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt",
+          "symbol": "fun pause() = dispatch(AudioCaptureService.ACTION_PAUSE)"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecordingLifecycleInstrumentationTest.kt",
+          "symbol": "fun realWatchRecorderPausesResumesStopsAndPublishesAnOngoingActivity()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.watch.phase-delivering",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearMainActivity.kt",
+          "symbol": "internal enum class WearDisplayPhase"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecorderUiInstrumentationTest.kt",
+          "symbol": "fun allInventoriedWatchPhasesHaveAConcreteStatusSurface()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.watch.phase-error",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearMainActivity.kt",
+          "symbol": "internal enum class WearDisplayPhase"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecorderUiInstrumentationTest.kt",
+          "symbol": "fun allInventoriedWatchPhasesHaveAConcreteStatusSurface()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.watch.phase-idle",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearMainActivity.kt",
+          "symbol": "internal enum class WearDisplayPhase"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecorderUiInstrumentationTest.kt",
+          "symbol": "fun allInventoriedWatchPhasesHaveAConcreteStatusSurface()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.watch.phase-listening",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearMainActivity.kt",
+          "symbol": "internal enum class WearDisplayPhase"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecorderUiInstrumentationTest.kt",
+          "symbol": "fun allInventoriedWatchPhasesHaveAConcreteStatusSurface()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.watch.phase-paused",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearMainActivity.kt",
+          "symbol": "internal enum class WearDisplayPhase"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecorderUiInstrumentationTest.kt",
+          "symbol": "fun allInventoriedWatchPhasesHaveAConcreteStatusSurface()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.watch.phase-pending",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearMainActivity.kt",
+          "symbol": "internal enum class WearDisplayPhase"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecorderUiInstrumentationTest.kt",
+          "symbol": "fun allInventoriedWatchPhasesHaveAConcreteStatusSurface()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.watch.phase-recording",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearMainActivity.kt",
+          "symbol": "internal enum class WearDisplayPhase"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecorderUiInstrumentationTest.kt",
+          "symbol": "fun allInventoriedWatchPhasesHaveAConcreteStatusSurface()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.watch.phase-syncing",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearMainActivity.kt",
+          "symbol": "internal enum class WearDisplayPhase"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecorderUiInstrumentationTest.kt",
+          "symbol": "fun allInventoriedWatchPhasesHaveAConcreteStatusSurface()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.watch.phase-transcribing",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearMainActivity.kt",
+          "symbol": "internal enum class WearDisplayPhase"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecorderUiInstrumentationTest.kt",
+          "symbol": "fun allInventoriedWatchPhasesHaveAConcreteStatusSurface()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "ui"
+      ],
+      "capabilityID": "cap.watch.phase-unavailable",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearMainActivity.kt",
+          "symbol": "internal enum class WearDisplayPhase"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecorderUiInstrumentationTest.kt",
+          "symbol": "fun allInventoriedWatchPhasesHaveAConcreteStatusSurface()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.preset-snapshot",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearQueueStore.kt",
+          "symbol": "val presetSnapshot: ByteArray,"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearQueueStoreInstrumentationTest.kt",
+          "symbol": "fun frozenPresetAndQueueStateReloadFromDurableFiles()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.queue",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearQueueStore.kt",
+          "symbol": "internal object WearQueueStore"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearQueueStoreInstrumentationTest.kt",
+          "symbol": "fun frozenPresetAndQueueStateReloadFromDurableFiles()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.reassign",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt",
+          "symbol": "fun reassignPreset(sessionID: String, preset: CapturePreset): Boolean"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/RecordingTranscriptPersistenceInstrumentationTest.kt",
+          "symbol": "fun reassigningFrozenPresetPersistsAndDeleteRemovesOnlyTheSelectedRecording()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.recording-folder",
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/WearRecordingOnlyDelivery.kt",
+          "symbol": "val folderSegments = safeFolderSegments(preset.logicalFolder)"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/WearRecordingOnlySafInstrumentationTest.kt",
+          "symbol": "fun recordingOnlyWritesVerifiedWavToFrozenFolderWithoutTranscriptArtifacts()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-api35"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.watch.remote-delivered",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/WearProtocol.kt",
+          "symbol": "DELIVERED(\"delivered\", terminal = true)"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/WearProtocolTest.kt",
+          "symbol": "representsEveryRemoteRecordingLifecycleStateExactly"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.watch.remote-delivering",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/WearProtocol.kt",
+          "symbol": "DELIVERING(\"delivering\")"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/WearProtocolTest.kt",
+          "symbol": "representsEveryRemoteRecordingLifecycleStateExactly"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.watch.remote-discarded",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/WearProtocol.kt",
+          "symbol": "DISCARDED(\"discarded\", terminal = true)"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/WearProtocolTest.kt",
+          "symbol": "representsEveryRemoteRecordingLifecycleStateExactly"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.watch.remote-failed",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/WearProtocol.kt",
+          "symbol": "FAILED(\"failed\")"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/WearProtocolTest.kt",
+          "symbol": "representsEveryRemoteRecordingLifecycleStateExactly"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.watch.remote-queued",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/WearProtocol.kt",
+          "symbol": "QUEUED(\"queued\")"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/WearProtocolTest.kt",
+          "symbol": "representsEveryRemoteRecordingLifecycleStateExactly"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.watch.remote-transcribing",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/WearProtocol.kt",
+          "symbol": "TRANSCRIBING(\"transcribing\")"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/WearProtocolTest.kt",
+          "symbol": "representsEveryRemoteRecordingLifecycleStateExactly"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "fixture"
+      ],
+      "capabilityID": "cap.watch.remote-transportfailed",
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/WearProtocol.kt",
+          "symbol": "TRANSPORT_FAILED(\"transportFailed\")"
+        },
+        {
+          "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/WearProtocolTest.kt",
+          "symbol": "representsEveryRemoteRecordingLifecycleStateExactly"
+        }
+      ],
+      "gateIDs": [
+        "android-local-release"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.retry",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearDataBridge.kt",
+          "symbol": "chunks.drop(item.acknowledgedFrontier)"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearDataBridgeInstrumentationTest.kt",
+          "symbol": "fun retryResumesAtAcknowledgedFrontierAndReusesIdempotentDataPaths()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.surface-app",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearMainActivity.kt",
+          "symbol": "internal fun WearRecorderContent("
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecorderUiInstrumentationTest.kt",
+          "symbol": "fun recorderControlsAndPresetEntryDispatchThroughTheProductionSurface()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.surface-complication",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearSystemSurfaces.kt",
+          "symbol": "internal fun complicationData("
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearSystemSurfaceInstrumentationTest.kt",
+          "symbol": "fun complicationExposesStatusAndTapActionForIdleQueuedAndRecordingStates()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.surface-notification",
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt",
+          "symbol": "private fun notification(status: RecordingStatus): Notification"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecordingLifecycleInstrumentationTest.kt",
+          "symbol": "fun realWatchRecorderPausesResumesStopsAndPublishesAnOngoingActivity()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.surface-ongoing",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearRecordingNotificationExtender.kt",
+          "symbol": "class WearRecordingNotificationExtender"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecordingLifecycleInstrumentationTest.kt",
+          "symbol": "fun realWatchRecorderPausesResumesStopsAndPublishesAnOngoingActivity()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.surface-tile",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearSystemSurfaces.kt",
+          "symbol": "internal fun captureTile(context: Context, state: WearSurfaceState)"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearSystemSurfaceInstrumentationTest.kt",
+          "symbol": "fun tileContainsQuickActionStatusAndAppLaunchTarget()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    },
+    {
+      "acceptanceKinds": [
+        "device"
+      ],
+      "capabilityID": "cap.watch.transfer",
+      "evidence": [
+        {
+          "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearDataBridge.kt",
+          "symbol": "chunks.drop(item.acknowledgedFrontier)"
+        },
+        {
+          "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearDataBridgeInstrumentationTest.kt",
+          "symbol": "fun retryResumesAtAcknowledgedFrontierAndReusesIdempotentDataPaths()"
+        }
+      ],
+      "gateIDs": [
+        "android-connected-wear-api34"
+      ]
+    }
+  ],
+  "gates": [
+    {
+      "command": "ANDROID_SERIAL=emulator-5556 ./gradlew :app:connectedDebugAndroidTest",
+      "id": "android-connected-api35",
+      "observedCount": 49,
+      "observedUnit": "tests",
+      "result": "passed"
+    },
+    {
+      "command": "ANDROID_SERIAL=emulator-5556 ./gradlew connectedDebugAndroidTestLocalSpeech",
+      "id": "android-connected-api35-local-speech",
+      "observedCount": 2,
+      "observedUnit": "tests",
+      "result": "passed"
+    },
+    {
+      "command": "ANDROID_SERIAL=emulator-5558 VOX_TEST_NAMED_MODEL_ID=<ggml-medium|ggml-large-v3-turbo> ./gradlew connectedDebugAndroidTestNamedModel",
+      "id": "android-connected-api35-named-models-high-memory",
+      "observedCount": 4,
+      "observedUnit": "tests",
+      "result": "passed"
+    },
+    {
+      "command": "ANDROID_SERIAL=emulator-5556 VOX_TEST_NAMED_MODEL_ID=<ggml-tiny|ggml-base|ggml-small|parakeet-v2|parakeet-v3> ./gradlew connectedDebugAndroidTestNamedModel",
+      "id": "android-connected-api35-named-models-standard",
+      "observedCount": 10,
+      "observedUnit": "tests",
+      "result": "passed"
+    },
+    {
+      "command": "ANDROID_SERIAL=emulator-5556 ./gradlew connectedDebugAndroidTestReinstall",
+      "id": "android-connected-api35-reinstall",
+      "observedCount": 2,
+      "observedUnit": "tests",
+      "result": "passed"
+    },
+    {
+      "command": "ANDROID_SERIAL=emulator-5558 ./gradlew :wear:connectedDebugAndroidTest",
+      "id": "android-connected-wear-api34",
+      "observedCount": 13,
+      "observedUnit": "tests",
+      "result": "passed"
+    },
+    {
+      "command": "ANDROID_SERIAL=emulator-5554 ./gradlew connectedDebugAndroidTest",
+      "id": "android-connected-api36",
+      "observedCount": 13,
+      "observedUnit": "tests",
+      "result": "passed"
+    },
+    {
+      "command": "./gradlew check assembleDebugAndroidTest :app:validateDebugArtifacts :wear:validateWearDebugArtifacts releaseReadiness",
+      "id": "android-local-release",
+      "observedCount": 715,
+      "observedUnit": "gradle-tasks",
+      "result": "passed"
+    },
+    {
+      "command": "cargo test --manifest-path Packages/vox-core-rust/Cargo.toml --workspace --lib --locked",
+      "id": "rust-local-library",
+      "observedCount": 29,
+      "observedUnit": "tests",
+      "result": "passed"
+    }
+  ],
+  "limitations": [
+    "This registry verifies deterministic fixture outcomes, focused Compose UI interactions, and deterministic Rust library semantics with direct executable assertions.",
+    "The connected qualifications use an API 36 phone emulator with the platform ExternalStorageProvider, an isolated standard-memory API 35 phone emulator with a hermetic DocumentsProvider fixture, an isolated 8 GB API 35 phone emulator for Medium and Large Turbo inference, and a round API 34 Wear OS emulator.",
+    "UI evidence includes exact shared Geist/Geist Mono typography plus focused onboarding dark, RTL, 200% font-scale, app-language recreation, and 48 dp action-target assertions; broader screen flows, approved canonical goldens, and complete accessibility remain open.",
+    "Provider-matrix, physical-device, Wear-hardware, billing-account, performance, signing, and release-track acceptance remain open.",
+    "The source revision is an uncommitted working tree, so provenance-bound Swift oracle evidence remains open."
+  ],
+  "qualification": "local-working-tree",
+  "schemaVersion": 2
+}

@@ -7,10 +7,10 @@
       "sha256": "1ddae8997b4e6bc6c6dd96faf817e410ec70a77ccaa23e78e8960a574500e807"
     },
     {
-      "bytes": 2167,
+      "bytes": 2859,
       "category": "contractReadme",
       "path": "Packages/contracts/README.md",
-      "sha256": "f348e6516f341a00adf96b245645d514df400c9291ac0f6d1b02c165261fdd12"
+      "sha256": "e84a4b55180831da40f3bb7fa89b66f1f5d0f705e58d86e55022dbc2519eb396"
     },
     {
       "bytes": 1568,
@@ -37,28 +37,28 @@
       "sha256": "3d0edee824eea58d87b720a81935dd92a9e6c9f3640eef96949888a24aede955"
     },
     {
-      "bytes": 992,
+      "bytes": 1360,
       "category": "contractSource",
       "path": "Packages/contracts/capture-materialization-input/v1/contract.md",
-      "sha256": "5ecd9f44e6388fcd353b493595a6a759294dd145912bb65545d64da3e2a250c1"
+      "sha256": "0a6f51fa88e7df22dc33cac9907829e9e9b4d6e514ceba6a08fa37fcb1217760"
     },
     {
-      "bytes": 18656,
+      "bytes": 28853,
       "category": "contractSource",
       "path": "Packages/contracts/capture-materialization-input/v1/schema.json",
-      "sha256": "f656be039ecb87eeb48e6c54c02c351be136bb0dcd1dda7ecf616035a148ff17"
+      "sha256": "6ecd6d985e903a300a5d9d6c5f63aa3289612934454c6b6e86e2d901c1e1e8af"
     },
     {
-      "bytes": 909,
+      "bytes": 1593,
       "category": "contractSource",
       "path": "Packages/contracts/capture-preparation-input/v1/contract.md",
-      "sha256": "40dfa56f2bc0a23550f7eae5f09b6162b23cc44a07514e1b54b90f17eca9c897"
+      "sha256": "c07d654208ed876d3b2feffa56abf6c5f2d2b59a800178b496a261440728cc19"
     },
     {
-      "bytes": 11225,
+      "bytes": 21188,
       "category": "contractSource",
       "path": "Packages/contracts/capture-preparation-input/v1/schema.json",
-      "sha256": "c19b1dd5fa31ac616b568d0c0494c664f131b51d77d42292b6cdf993900d14f3"
+      "sha256": "86a5ffe3882a86d4a0301e76cecc49a0d318ac805feadd261c9b41b57b793d76"
     },
     {
       "bytes": 1871,
@@ -661,10 +661,10 @@
       "sha256": "f27454d91f8b3a969994be8a4970165404979c3b4c65a3b23754926fa0a649b0"
     },
     {
-      "bytes": 263776,
+      "bytes": 265208,
       "category": "capabilityInventory",
       "path": "Packages/contracts/product-capabilities.json",
-      "sha256": "3317667a1faac7b89977ff194bae70833cb16f59afb5bcd24762d2050dd61e6d"
+      "sha256": "f9b4db127746fc694e84db1393d07ac4d5036658b633b6937ffc3623094636a9"
     },
     {
       "bytes": 751,
@@ -673,16 +673,22 @@
       "sha256": "a28ff02c8b051139a2d8559d96e657d3cd46ffd9f7935a0289f5a9ce0e27c11f"
     },
     {
-      "bytes": 4969,
+      "bytes": 4973,
       "category": "contractSource",
       "path": "Packages/contracts/required-observations/v1/schema.json",
-      "sha256": "75af08d91becf9e99f04cc4f069dd125c247499d7ef57e8b55e3b007a75b52d8"
+      "sha256": "b81f700b2a36fcbc35b0d1784de09e3c4c16b93601b93301c4d08ab5c46cb197"
     },
     {
       "bytes": 16542,
       "category": "validationSchema",
       "path": "Packages/contracts/schemas/aggregate.schema.json",
       "sha256": "8c1a8a26aaf90e3280169b671c8c4266ad7a1e4cfec1158d5ef2d6e729326879"
+    },
+    {
+      "bytes": 3261,
+      "category": "validationSchema",
+      "path": "Packages/contracts/schemas/android-local-capability-evidence.schema.json",
+      "sha256": "3c394e0a21075197fdb82b6febf363e02354962f4954f7234723948cd21df445"
     },
     {
       "bytes": 1489,
@@ -793,16 +799,16 @@
       "sha256": "4dc48dcd39defed8639accb27ed3c2388da30dc9e4fb12b404411fd1317776ae"
     },
     {
-      "bytes": 44722,
+      "bytes": 48851,
       "category": "validatorScript",
       "path": "Packages/contracts/scripts/validate.py",
-      "sha256": "8921853381704c10e071d13b3047e348315073fc6b0ee9b9f9c64c33961a2d52"
+      "sha256": "c3cd1fe615ba8dec47ca29d57b21582025f287ae4b18342954be883f89467d24"
     },
     {
-      "bytes": 41307,
+      "bytes": 78266,
       "category": "validatorScript",
       "path": "Packages/contracts/scripts/validate_toolchain.py",
-      "sha256": "335c64573ed1a044331f318db7884c6d958e87e25f4acbd9d42503f80ac59de4"
+      "sha256": "71166ae425fdc1ee785891a2bee51bcdc0b4eb7d23d47d53bdf672bec3af77d6"
     },
     {
       "bytes": 113342,
@@ -811,10 +817,22 @@
       "sha256": "d81c312d360192094ac044a7e990cdca6cacd2d36500b1c0dc75e405f1d7d4f3"
     },
     {
-      "bytes": 7179,
+      "bytes": 9755,
       "category": "validatorTest",
       "path": "Packages/contracts/tests/test_android_artifact_validator.py",
-      "sha256": "220d7da0a0e45a418dfa31e476a280fe0a2d72a058a4b9afabb7f9f212d5f8f9"
+      "sha256": "a83779a92299fd676b1be7d8026b956d653a13c4a98a81ff374b6e969088cbeb"
+    },
+    {
+      "bytes": 6777,
+      "category": "validatorTest",
+      "path": "Packages/contracts/tests/test_android_localization_audit.py",
+      "sha256": "9e8a0c0bc8545ab1517c6e025cf289afe99adb598c3794551a572d0518714dbf"
+    },
+    {
+      "bytes": 15020,
+      "category": "validatorTest",
+      "path": "Packages/contracts/tests/test_android_visual_parity_validator.py",
+      "sha256": "91f402f2ecc6295365cd0a73689b6212788b42fd193841f2244f76da89ffec54"
     },
     {
       "bytes": 6066,
@@ -829,10 +847,10 @@
       "sha256": "65e1532465e3cd82273e0012a40606ae89ce0aa064b4d20df4cb3d2e40739b13"
     },
     {
-      "bytes": 36465,
+      "bytes": 39700,
       "category": "validatorTest",
       "path": "Packages/contracts/tests/test_validate.py",
-      "sha256": "6d4bcb4ce5ac32b6ae04ea1533074c4fe462c4f9163a06aaad78beda02d88f25"
+      "sha256": "1673c9e71514c466dd7959e164de50aeb98ae69bd717a326352247e781e89f05"
     },
     {
       "bytes": 83338,
@@ -845,6 +863,12 @@
       "category": "validationDefinition",
       "path": "Packages/contracts/validation/aggregate-policy.json",
       "sha256": "6a28dee780416eb1c58df1dd7b9b68a1024340a329b5831079fdb960f22238d0"
+    },
+    {
+      "bytes": 152331,
+      "category": "validationDefinition",
+      "path": "Packages/contracts/validation/android-local-capability-evidence.json",
+      "sha256": "82154872bec27ae406903cffbba412c06ad53069644954b12bb082ffb39374ba"
     },
     {
       "bytes": 1293,
@@ -967,10 +991,10 @@
       "sha256": "efc1e2fe2994bfc2e6267d5818793defbb29014e49f58fef6b94edf53d0f3ced"
     },
     {
-      "bytes": 5553,
+      "bytes": 6067,
       "category": "acceptedDecision",
       "path": "docs/architecture/adr-0008-play-billing-network-isolation.md",
-      "sha256": "d598f44b6eb57d217cac332536f8ce5e554dbf5781073ab3ea2b8d055564594b"
+      "sha256": "22604d72ec474a8c3d6eb25293a4d183e8fa59167d31eb3415ffa1217ff4a288"
     },
     {
       "bytes": 3680,
@@ -1039,10 +1063,10 @@
       "sha256": "fc3731530f915b855961ffbf821ce76b30dc7784f64765ba222b1b60a1ce8e15"
     },
     {
-      "bytes": 6347,
+      "bytes": 6760,
       "category": "acceptedDecision",
       "path": "docs/architecture/adr-0020-android-capture-package-codec-v1.md",
-      "sha256": "4b8f02437806b7f36651e863bb440f5a8cbddc353dbf3634f4ee691db427d66b"
+      "sha256": "443893dd2a8e49d1e58a02e33cf030f208c6221ea4bd914ae4b0e951501192de"
     },
     {
       "bytes": 4750,
@@ -1111,16 +1135,16 @@
       "sha256": "d4756927df6a5221e44dbe313abd0514d538cc963fb142e5d926140f775ebc04"
     },
     {
-      "bytes": 21730,
+      "bytes": 38863,
       "category": "toolchainDefinition",
       "path": "toolchains/android-wear-shared-core.json",
-      "sha256": "1192afe7ca198971fc9720364109eba137e30abfe490f147b3e161615ef91531"
+      "sha256": "c71adc7f62436cc8535a9e55489cafaaa8e84f620368bca1aff64c07a81152ca"
     },
     {
-      "bytes": 10626,
+      "bytes": 11216,
       "category": "toolchainDefinition",
       "path": "toolchains/android-wear-shared-core.schema.json",
-      "sha256": "46800914af3b308bc2554200548d4b1f1a998d2067f72ac784570294fb0561c6"
+      "sha256": "be6833492e19ac3f0554c62d0c8634da0241c858ed3ddbe7bbb52744ee7e0f4c"
     }
   ],
   "fixtureCases": [
@@ -2925,7 +2949,7 @@
   "producer": {
     "name": "vox-contract-manifest-generator",
     "script": "Packages/contracts/scripts/validate.py",
-    "scriptSHA256": "8921853381704c10e071d13b3047e348315073fc6b0ee9b9f9c64c33961a2d52"
+    "scriptSHA256": "c3cd1fe615ba8dec47ca29d57b21582025f287ae4b18342954be883f89467d24"
   },
   "producerRevision": "29ec869c8bda4d511af787af394658d0274b339b",
   "schemaVersion": 2

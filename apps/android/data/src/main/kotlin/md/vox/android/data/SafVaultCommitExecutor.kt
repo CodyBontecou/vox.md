@@ -81,6 +81,18 @@ internal class SafVaultCommitExecutor(
                 else -> emptyList()
             }
             if (candidateDisplayName in occupied) return ExecutorOutcome.ok(CommitOutcome.StaleOccupancy)
+        } else if (noteDescriptor.expectedExistingPolicy == "hashMatch") {
+            val folder = gateway.resolveFolder(destination, logicalPath.dropLast(1), createMissing = false)
+                ?: return ExecutorOutcome.ok(CommitOutcome.StaleOccupancy)
+            val matches = gateway.findChildByDisplayName(folder, candidateDisplayName)
+            if (matches.size != 1) return ExecutorOutcome.ok(CommitOutcome.StaleOccupancy)
+            val verified = (gateway.readBackDocument(matches.single()) as? SafResult.Success)?.value
+                ?: return ExecutorOutcome.err("existingNoteObservation")
+            if (verified.second != noteDescriptor.expectedOriginalSHA256) {
+                return ExecutorOutcome.ok(CommitOutcome.StaleOccupancy)
+            }
+        } else {
+            return ExecutorOutcome.err("existingPolicy")
         }
 
         // 6. Quota reservation was held idempotently at enqueue/ADR-0021; the terminal
@@ -102,6 +114,8 @@ internal class SafVaultCommitExecutor(
         val length: Long,
         val sha256: String,
         val expectedExistingPolicy: String,
+        val expectedOriginalSHA256: String?,
+        val writeMode: String,
     )
 
     private fun noteDescriptorOf(planBytes: ByteArray): NoteDescriptor? = try {
@@ -116,6 +130,8 @@ internal class SafVaultCommitExecutor(
             length = (note["resultLength"] as? JsonPrimitive)?.content?.toLongOrNull() ?: return null,
             sha256 = note.stringField("resultSHA256") ?: return null,
             expectedExistingPolicy = note.stringField("expectedExistingPolicy") ?: return null,
+            expectedOriginalSHA256 = note.stringField("expectedOriginalSHA256"),
+            writeMode = note.stringField("writeMode") ?: return null,
         ).also { VoxDeterministicIds.requireUuidText(requestID) }
     } catch (_: Exception) { null }
 
@@ -140,11 +156,32 @@ internal class SafVaultCommitExecutor(
             store.persistCommitMarker(requestID, CommitMarker.validated(CommitMarker.MarkerState.ACTIVE, destination.destinationID, planHash, candidateDisplayName, clock()))
         } catch (_: Exception) { return ExecutorOutcome.err("markerPersist") }
 
-        val folder = gateway.resolveFolder(destination, noteDescriptorOf(artifacts.planBytes)?.logicalPath?.dropLast(1) ?: return ExecutorOutcome.err("logicalPathMissing"), createMissing = true)
+        val note = noteDescriptorOf(artifacts.planBytes) ?: return ExecutorOutcome.err("noteDescriptorMissing")
+        val folder = gateway.resolveFolder(destination, note.logicalPath.dropLast(1), createMissing = note.writeMode == "create")
             ?: return appendAmbiguous(requestID, leaseToken, snapshot)
 
-        val created = gateway.createDocument(token, folder, candidateDisplayName, "text/markdown; charset=utf-8")
-        val handle = (created as? SafResult.Success)?.value ?: return mapCreateFailure(requestID, leaseToken, snapshot, (created as? SafResult.Error)?.code)
+        // Attachments are immutable package members, copied before the note. A crash can
+        // therefore never leave a committed note whose embeds point at missing files.
+        if (!commitAttachments(requestID, token)) return appendAmbiguous(requestID, leaseToken, snapshot)
+
+        val handle = when (note.writeMode) {
+            "create" -> {
+                val created = gateway.createDocument(token, folder, candidateDisplayName, "text/markdown; charset=utf-8")
+                (created as? SafResult.Success)?.value
+                    ?: return mapCreateFailure(requestID, leaseToken, snapshot, (created as? SafResult.Error)?.code)
+            }
+            "replace" -> {
+                val matches = gateway.findChildByDisplayName(folder, candidateDisplayName)
+                if (matches.size != 1) return appendAmbiguous(requestID, leaseToken, snapshot)
+                val beforeWrite = (gateway.readBackDocument(matches.single()) as? SafResult.Success)?.value
+                    ?: return appendAmbiguous(requestID, leaseToken, snapshot)
+                if (beforeWrite.second != note.expectedOriginalSHA256) {
+                    return appendAmbiguous(requestID, leaseToken, snapshot)
+                }
+                matches.single()
+            }
+            else -> return ExecutorOutcome.err("writeMode")
+        }
 
         val written = gateway.writeDocument(handle, artifacts.noteBytes, artifacts.noteBytes.size.toLong())
         if (written !is SafResult.Success) return appendAmbiguous(requestID, leaseToken, snapshot)
@@ -155,6 +192,47 @@ internal class SafVaultCommitExecutor(
             return appendAmbiguous(requestID, leaseToken, snapshot)
         }
         return finalizeVerified(requestID, leaseToken, snapshot, artifacts.planBytes, verified.first, verified.second)
+    }
+
+    private fun commitAttachments(requestID: String, marker: DurableMarkerToken): Boolean {
+        val assets = store.loadPackagedAssets(requestID) ?: return false
+        if (assets.isEmpty()) return true
+        val request = store.loadRequestBytes(requestID)?.let { bytes ->
+            runCatching { CapturePackageCodec.parseCanonical(bytes) }.getOrNull()
+        } ?: return false
+        val route = request["preset"]?.let { it as? JsonObject }?.get("routePolicy") as? JsonObject ?: return false
+        val declaredAttachmentPath = (route["attachmentFolder"] as? JsonArray)
+            ?.map { (it as? JsonPrimitive)?.content ?: return false }
+            ?: return false
+        // Packages produced before configurable attachment folders encoded an empty
+        // route while the executor always used "Attachments". Preserve that frozen
+        // behavior; extended packages carry entryPrefix/entrySuffix even when empty.
+        val attachmentPath = declaredAttachmentPath.ifEmpty {
+            if ("entryPrefix" in route || "entrySuffix" in route) emptyList() else listOf("Attachments")
+        }
+        val folder = gateway.resolveFolder(destination, attachmentPath, createMissing = true) ?: return false
+        for (asset in assets) {
+            val existing = gateway.findChildByDisplayName(folder, asset.metadata.fileName)
+            when {
+                existing.size > 1 -> return false
+                existing.size == 1 -> {
+                    val verified = (gateway.readBackDocument(existing.single()) as? SafResult.Success)?.value ?: return false
+                    if (verified.first != asset.metadata.length || verified.second != asset.metadata.sha256) return false
+                }
+                else -> {
+                    val created = (gateway.createDocument(
+                        marker,
+                        folder,
+                        asset.metadata.fileName,
+                        asset.metadata.mediaType,
+                    ) as? SafResult.Success)?.value ?: return false
+                    if (gateway.writeDocument(created, asset.bytes, asset.metadata.length) !is SafResult.Success) return false
+                    val verified = (gateway.readBackDocument(created) as? SafResult.Success)?.value ?: return false
+                    if (verified.first != asset.metadata.length || verified.second != asset.metadata.sha256) return false
+                }
+            }
+        }
+        return true
     }
 
     // ---- Reconciliation (normal write path is never invoked first) ----

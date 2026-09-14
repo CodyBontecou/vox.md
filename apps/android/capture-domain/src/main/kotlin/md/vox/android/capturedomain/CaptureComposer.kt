@@ -32,6 +32,27 @@ sealed interface CaptureComposerCommand {
     data object Slugify : CaptureComposerCommand
 }
 
+object CaptureInsertionFormatter {
+    /** Matches the iOS editor's coordinate-only Google Maps Markdown insertion. */
+    fun googleMapsLink(latitude: Double, longitude: Double, label: String = "Location"): String {
+        require(latitude.isFinite() && longitude.isFinite()) { "invalidCoordinates" }
+        require(latitude in -90.0..90.0 && longitude in -180.0..180.0) { "invalidCoordinates" }
+        val latitudeText = posixCoordinate(latitude)
+        val longitudeText = posixCoordinate(longitude)
+        return "[${escapedMarkdownLabel(label)}](https://www.google.com/maps?q=$latitudeText,$longitudeText)"
+    }
+
+    private fun posixCoordinate(value: Double): String = String.format(
+        Locale.US,
+        "%.6f",
+        if (kotlin.math.abs(value) < 0.0000005) 0.0 else value,
+    )
+
+    private fun escapedMarkdownLabel(value: String): String = buildString {
+        value.forEach { character -> append(if (character.isISOControl()) ' ' else character) }
+    }.replace("\\", "\\\\").replace("[", "\\[").replace("]", "\\]")
+}
+
 /**
  * Selection-aware Markdown editing shared by the Android composer and its tests.
  * Kotlin and Compose string offsets are UTF-16 offsets, matching the Apple editor contract.

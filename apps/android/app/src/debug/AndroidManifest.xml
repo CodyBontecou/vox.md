@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <activity
+            android:name="md.vox.android.VisualStoryActivity"
+            android:exported="true" />
+        <provider
+            android:name="md.vox.android.TestDocumentsProvider"
+            android:authorities="md.vox.android.test.documents"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:permission="android.permission.MANAGE_DOCUMENTS" />
+    </application>
+</manifest>

@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/android-ci.yml'
       - 'apps/android/**'
+      - 'artifacts/android-release/vox-android-sbom.cdx.json'
       - 'Packages/contracts/**'
       - 'Packages/vox-core-rust/**'
       - 'toolchains/android-wear-shared-core*'
@@ -14,6 +15,7 @@ on:
     paths:
       - '.github/workflows/android-ci.yml'
       - 'apps/android/**'
+      - 'artifacts/android-release/vox-android-sbom.cdx.json'
       - 'Packages/contracts/**'
       - 'Packages/vox-core-rust/**'
       - 'toolchains/android-wear-shared-core*'
@@ -91,8 +93,16 @@ jobs:
           python3 Packages/contracts/scripts/validate_toolchain.py
           python3 Packages/contracts/scripts/validate.py
           ./scripts/test-project-contracts.sh
-      - name: Test, lint, and assemble debug application
+      - name: Verify generated localization inventory is committed
+        shell: bash
+        run: python3 apps/android/scripts/generate-runtime-localizations.py --check
+      - name: Test, lint, and validate debug and optimized release artifacts
         shell: bash
         run: |
           set -euo pipefail
-          ./apps/android/gradlew -p apps/android --no-daemon test lint assembleDebug assembleDebugAndroidTest :app:validateDebugArtifacts
+          ./apps/android/gradlew -p apps/android --no-daemon \
+            check \
+            assembleDebugAndroidTest \
+            :app:validateDebugArtifacts \
+            :wear:validateWearDebugArtifacts \
+            releaseReadiness

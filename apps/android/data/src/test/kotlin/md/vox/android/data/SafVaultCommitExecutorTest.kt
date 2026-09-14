@@ -34,9 +34,9 @@ class SafVaultCommitExecutorTest {
 
     // ---- fixtures ----
 
-    private fun materializedPlan(): ByteArray {
+    private fun materializedPlan(operation: String = "newNote", originalSHA256: String? = null): ByteArray {
         val operationID = VoxDeterministicIds.uuid5("vox.operation.v1", CapturePackageCodec.canonical(kotlinx.serialization.json.buildJsonObject {
-            put("commitSequence", 0L); put("operation", "newNote"); put("requestID", requestID)
+            put("commitSequence", 0L); put("operation", operation); put("requestID", requestID)
         }))
         val logicalPath = kotlinx.serialization.json.JsonArray(listOf(kotlinx.serialization.json.JsonPrimitive("Inbox"), kotlinx.serialization.json.JsonPrimitive("capture.md")))
         val artifactID = VoxDeterministicIds.uuid5("vox.artifact.v1", CapturePackageCodec.canonical(kotlinx.serialization.json.buildJsonObject {
@@ -48,13 +48,16 @@ class SafVaultCommitExecutorTest {
         val base = kotlinx.serialization.json.buildJsonObject {
             put("artifacts", kotlinx.serialization.json.JsonArray(listOf(kotlinx.serialization.json.buildJsonObject {
                 put("artifactID", artifactID); put("commitSequence", 0L); put("equivalenceRule", "exactBytes")
-                put("expectedExistingPolicy", "absent"); put("expectedExistingSHA256", kotlinx.serialization.json.JsonNull)
+                put("expectedExistingPolicy", if (originalSHA256 == null) "absent" else "hashMatch")
+                put("expectedExistingSHA256", originalSHA256?.let(::JsonPrimitive) ?: JsonNull)
+                put("expectedOriginalSHA256", originalSHA256?.let(::JsonPrimitive) ?: JsonNull)
                 put("journalFrontier", "noteVerified"); put("kind", "note"); put("logicalPath", logicalPath)
                 put("mediaType", "text/markdown; charset=utf-8"); put("operationID", operationID)
                 put("preparedStreamID", streamID); put("receiptKind", "noteCommit")
-                put("resultLength", note.size.toLong()); put("resultSHA256", noteSha); put("writeMode", "create")
+                put("resultLength", note.size.toLong()); put("resultSHA256", noteSha)
+                put("writeMode", if (originalSHA256 == null) "create" else "replace")
             })))
-            put("contractVersion", 1L); put("diagnostics", kotlinx.serialization.json.JsonArray(emptyList())); put("operation", "newNote")
+            put("contractVersion", 1L); put("diagnostics", kotlinx.serialization.json.JsonArray(emptyList())); put("operation", operation)
             put("pins", kotlinx.serialization.json.buildJsonObject {
                 put("coreVersion", "0.1.0-alpha.1"); put("modelProfileID", kotlinx.serialization.json.JsonNull)
                 put("modelRevision", kotlinx.serialization.json.JsonNull); put("profileID", "apple-parity-v1")
@@ -83,18 +86,21 @@ class SafVaultCommitExecutorTest {
         fun nextTime(): Long = clock++
     }
 
-    private fun fixture(): Fixture {
+    private fun fixture(
+        assetInputs: List<DurableAssetInput> = emptyList(),
+        planBytes: ByteArray = materializedPlan(),
+        requestBytes: ByteArray? = null,
+    ): Fixture {
         val base = Files.createTempDirectory("executor").toFile()
         val store = DurableCapturePackageStore(base, MemoryIndex(), JvmOps())
-        val request = checkNotNull(javaClass.classLoader!!.getResourceAsStream("contracts/v1/fixtures/capture-preparation-input/valid-android-m3-text-link.json")).use { it.readBytes() }
-        assertEquals(EnqueueResult.SavedLocally(requestID), store.enqueue(request, 10))
+        val request = requestBytes ?: baseRequestBytes()
+        assertEquals(EnqueueResult.SavedLocally(requestID), store.enqueue(request, 10, assetInputs))
         val leases = MemoryLeases()
         val coordinator = CaptureDurabilityCoordinator(store, leases)
         val fixture = Fixture(store, coordinator, leases, "")
         coordinator.acquire(requestID, leaseToken, 20, 600_000)
         coordinator.mutate(JournalMutationCommand(requestID, store.loadJournal(requestID)!!.revision, JournalEvent(store.loadJournal(requestID)!!.revision + 1, CaptureState.QUEUED, CaptureState.PREPARING, JournalCode.PREPARATION_STARTED, 20), leaseToken), 20)
         // Staged drain + promotion.
-        val planBytes = materializedPlan()
         val planHash = PreparedPlanVerifier.verifiedPlanHash(planBytes)!!
         val staging = "44444444-4444-4444-8444-444444444444"
         val sink = store.openStagedNoteSink(requestID, staging, note.size.toLong(), noteSha)
@@ -102,6 +108,24 @@ class SafVaultCommitExecutorTest {
         store.promotePreparedArtifacts(requestID, planHash, planBytes, staging)
         coordinator.mutate(JournalMutationCommand(requestID, store.loadJournal(requestID)!!.revision, JournalEvent(store.loadJournal(requestID)!!.revision + 1, CaptureState.PREPARING, CaptureState.MATERIALIZED, JournalCode.MATERIALIZED, 21, planHash = planHash), leaseToken), 21)
         return Fixture(store, coordinator, leases, planHash)
+    }
+
+    private fun baseRequestBytes(): ByteArray =
+        checkNotNull(javaClass.classLoader!!.getResourceAsStream("contracts/v1/fixtures/capture-preparation-input/valid-android-m3-text-link.json"))
+            .use { it.readBytes() }
+
+    private fun requestWithAttachmentFolder(vararg segments: String): ByteArray {
+        val request = CapturePackageCodec.parseCanonical(baseRequestBytes()).toMutableMap()
+        val preset = (request.getValue("preset") as JsonObject).toMutableMap()
+        val route = (preset.getValue("routePolicy") as JsonObject).toMutableMap()
+        route["attachmentFolder"] = JsonArray(segments.map(::JsonPrimitive))
+        route.putIfAbsent("entryPrefix", JsonPrimitive(""))
+        route.putIfAbsent("entrySuffix", JsonPrimitive(""))
+        preset["routePolicy"] = JsonObject(route)
+        val unhashed = JsonObject(preset.toMutableMap().also { it["snapshotHash"] = JsonPrimitive("0".repeat(64)) })
+        preset["snapshotHash"] = JsonPrimitive(CapturePackageCodec.sha256(CapturePackageCodec.canonical(unhashed)))
+        request["preset"] = JsonObject(preset)
+        return CapturePackageCodec.canonical(JsonObject(request))
     }
 
     private fun executor(fixture: Fixture, gateway: FakeGateway) = SafVaultCommitExecutor(
@@ -124,6 +148,93 @@ class SafVaultCommitExecutorTest {
         assertNotNull(fixture.store.loadReceipt(requestID, receiptID))
         assertEquals(CommitMarker.MarkerState.ACTIVE, fixture.store.readCommitMarker(requestID)!!.state)
         assertEquals(1, gateway.created.size)
+    }
+
+    @Test fun verifiedCommitWritesAndReadsBackAttachmentsBeforeTheNote() {
+        val sourceID = "55555555-5555-4555-8555-555555555555"
+        val assetBytes = "synthetic-photo".toByteArray()
+        val fileName = "$sourceID-photo.jpg"
+        val fixture = fixture(listOf(DurableAssetInput(sourceID, fileName, "image/jpeg", assetBytes)))
+        val gateway = FakeGateway()
+
+        val outcome = executor(fixture, gateway).execute(requestID, leaseToken)
+
+        assertTrue((outcome as ExecutorOutcome.Ok).value is CommitOutcome.VerifiedCommitted)
+        assertArrayEquals(assetBytes, gateway.documents["Attachments/$fileName"])
+        assertArrayEquals(note, gateway.documents["Inbox/capture.md"])
+        assertEquals(listOf("Attachments/$fileName", "Inbox/capture.md"), gateway.created)
+    }
+
+    @Test fun retainedRecordingAudioCanBeCommittedBesideTheTranscriptNote() {
+        val sourceID = "55555555-5555-4555-8555-555555555555"
+        val audioBytes = "synthetic-audio".toByteArray()
+        val fileName = "$sourceID-recording.wav"
+        val fixture = fixture(
+            assetInputs = listOf(DurableAssetInput(sourceID, fileName, "audio/wav", audioBytes)),
+            requestBytes = requestWithAttachmentFolder("Inbox"),
+        )
+        val gateway = FakeGateway()
+
+        val outcome = executor(fixture, gateway).execute(requestID, leaseToken)
+
+        assertTrue((outcome as ExecutorOutcome.Ok).value is CommitOutcome.VerifiedCommitted)
+        assertArrayEquals(audioBytes, gateway.documents["Inbox/$fileName"])
+        assertEquals(listOf("Inbox/$fileName", "Inbox/capture.md"), gateway.created)
+    }
+
+    @Test fun retainedRecordingAudioCanBeCommittedIntoConfiguredAttachmentsFolder() {
+        val sourceID = "55555555-5555-4555-8555-555555555555"
+        val audioBytes = "synthetic-audio".toByteArray()
+        val fileName = "$sourceID-recording.wav"
+        val fixture = fixture(
+            assetInputs = listOf(DurableAssetInput(sourceID, fileName, "audio/wav", audioBytes)),
+            requestBytes = requestWithAttachmentFolder("Media", "Recordings"),
+        )
+        val gateway = FakeGateway()
+
+        val outcome = executor(fixture, gateway).execute(requestID, leaseToken)
+
+        assertTrue((outcome as ExecutorOutcome.Ok).value is CommitOutcome.VerifiedCommitted)
+        assertArrayEquals(audioBytes, gateway.documents["Media/Recordings/$fileName"])
+        assertEquals(listOf("Media/Recordings/$fileName", "Inbox/capture.md"), gateway.created)
+    }
+
+    @Test fun recordingAudioOffLeavesNoDestinationAsset() {
+        val fixture = fixture(requestBytes = requestWithAttachmentFolder("Media", "Recordings"))
+        val gateway = FakeGateway()
+
+        val outcome = executor(fixture, gateway).execute(requestID, leaseToken)
+
+        assertTrue((outcome as ExecutorOutcome.Ok).value is CommitOutcome.VerifiedCommitted)
+        assertEquals(listOf("Inbox/capture.md"), gateway.created)
+        assertEquals(setOf("Inbox/capture.md"), gateway.documents.keys)
+    }
+
+    @Test fun replacementCommitRequiresOriginalHashAndDoesNotCreateDuplicate() {
+        val original = "Existing note\n".toByteArray()
+        val originalSHA256 = CapturePackageCodec.sha256(original)
+        val fixture = fixture(planBytes = materializedPlan("existingNoteAppend", originalSHA256))
+        val gateway = FakeGateway().apply { documents[documentKey("Inbox", "capture.md")] = original }
+
+        val outcome = executor(fixture, gateway).execute(requestID, leaseToken)
+
+        assertTrue("got $outcome", (outcome as ExecutorOutcome.Ok).value is CommitOutcome.VerifiedCommitted)
+        assertArrayEquals(note, gateway.documents[documentKey("Inbox", "capture.md")])
+        assertTrue(gateway.created.isEmpty())
+    }
+
+    @Test fun replacementCommitRematerializesWhenOriginalChangedBeforeMarker() {
+        val original = "Existing note\n".toByteArray()
+        val fixture = fixture(planBytes = materializedPlan("existingNoteAppend", CapturePackageCodec.sha256(original)))
+        val gateway = FakeGateway().apply {
+            documents[documentKey("Inbox", "capture.md")] = "External edit\n".toByteArray()
+        }
+
+        val outcome = executor(fixture, gateway).execute(requestID, leaseToken)
+
+        assertSame(CommitOutcome.StaleOccupancy, (outcome as ExecutorOutcome.Ok).value)
+        assertEquals(CaptureState.MATERIALIZED, fixture.store.loadJournal(requestID)!!.state)
+        assertNull(fixture.store.readCommitMarker(requestID))
     }
 
     @Test fun staleOccupancyReturnsBeforeCommittingAndKeepsMaterIALIZED() {
@@ -261,6 +372,11 @@ class SafVaultCommitExecutorTest {
             val bytes = documents[key] ?: return SafResult.error(GatewayError.ProviderFailure.name)
             val digest = MessageDigest.getInstance("SHA-256").digest(bytes).joinToString("") { "%02x".format(it) }
             return SafResult.success(bytes.size.toLong() to digest)
+        }
+
+        override fun readDocument(handle: SafDocumentHandle, maximumBytes: Long): SafResult<ByteArray> {
+            val bytes = documents[handle.key.removePrefix("doc/")] ?: return SafResult.error(GatewayError.ProviderFailure.name)
+            return if (bytes.size.toLong() <= maximumBytes) SafResult.success(bytes.copyOf()) else SafResult.error(GatewayError.InvalidState.name)
         }
 
         override fun findChildByDisplayName(parent: SafFolderHandle, displayName: String): List<SafDocumentHandle> {

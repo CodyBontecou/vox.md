@@ -17,6 +17,7 @@ LIFECYCLES={"resourceOnlyPlanned","required"}
 SCHEMA_KEYWORDS={"$schema","$id","$defs","$ref","title","description","type","const","enum","oneOf","anyOf","allOf","not","if","then","else","properties","required","additionalProperties","minProperties","maxProperties","items","minItems","maxItems","uniqueItems","minLength","maxLength","pattern","minimum","maximum"}
 PRIVACY=(re.compile(r"/Users/"),re.compile(r"/home/[^/]+/"),re.compile(r"file://"),re.compile(r"content://"),re.compile(r"bookmark",re.I))
 DECISION_RE=re.compile(r"`(PD-M1-[A-Z0-9-]+)`")
+ANDROID_LOCAL_EVIDENCE="Packages/contracts/validation/android-local-capability-evidence.json"
 
 class ContractError(Exception):
  def __init__(self,code,path,message): self.code,self.path,self.message=code,path,message; super().__init__(f"{code} at {path}: {message}")
@@ -403,10 +404,56 @@ def accepted_decisions(root):
  text=(root/"docs/architecture/android-wear-m1-decisions.md").read_text()
  return set(DECISION_RE.findall(text))
 
+def validate_android_local_capability_evidence(root,m0):
+ evidence_path=root/ANDROID_LOCAL_EVIDENCE; evidence=load(evidence_path)
+ schema_path=root/"Packages/contracts/schemas/android-local-capability-evidence.schema.json"; schema=load(schema_path)
+ audit_schema(schema); schema_validate(evidence,schema,schema_file=schema_path,root_schema=schema,contracts_root=root/"Packages/contracts")
+ gates={item["id"]:item for item in evidence["gates"]}
+ if len(gates)!=len(evidence["gates"]): reject("capability.acceptanceGateDuplicate","$.gates","local acceptance gate IDs must be unique")
+ entries={item["capabilityID"]:item for item in evidence["capabilities"]}
+ if len(entries)!=len(evidence["capabilities"]): reject("capability.acceptanceEvidenceDuplicate","$.capabilities","local capability evidence IDs must be unique")
+ if list(entries)!=sorted(entries): reject("capability.acceptanceEvidenceOrder","$.capabilities","local capability evidence must be sorted by capability ID")
+ capabilities={item["id"]:item for item in m0["capabilities"]}
+ for capability_id,entry in entries.items():
+  capability=capabilities.get(capability_id)
+  if capability is None: reject("capability.acceptanceEvidenceUnknown","$.capabilities",capability_id)
+  if not ({"android","wear"}&set(capability["platforms"])): reject("capability.acceptanceEvidencePlatform","$.capabilities",capability_id)
+  if capability["status"]!="verified": reject("capability.acceptanceEvidenceStatus","$.capabilities",f"{capability_id} is not verified")
+  acceptances=capability["acceptance"]
+  if not acceptances or any(item["status"]!="verified" or item["evidencePath"]!=ANDROID_LOCAL_EVIDENCE for item in acceptances):
+   reject("capability.acceptanceEvidenceBinding","$.capabilities",f"{capability_id} is not exclusively bound to verified local executable evidence")
+  acceptance_kinds={item["kind"] for item in acceptances}
+  registered_kinds=set(entry["acceptanceKinds"])
+  if acceptance_kinds!=registered_kinds:
+   reject("capability.acceptanceEvidenceKind","$.capabilities",f"{capability_id}: ledger kinds {sorted(acceptance_kinds)} do not match registry kinds {sorted(registered_kinds)}")
+  for gate_id in entry["gateIDs"]:
+   if gate_id not in gates: reject("capability.acceptanceGateUnknown","$.capabilities",f"{capability_id}: {gate_id}")
+  instrumented_kind = "device" if "device" in registered_kinds else "ui" if "ui" in registered_kinds else None
+  if instrumented_kind is not None:
+   error_stem = "Device" if instrumented_kind == "device" else "Ui"
+   capability_gates=[gates[gate_id] for gate_id in entry["gateIDs"]]
+   if not any("connectedDebugAndroidTest" in gate["command"] and gate["observedUnit"]=="tests" for gate in capability_gates):
+    reject(f"capability.acceptance{error_stem}Gate","$.capabilities",f"{capability_id}: {instrumented_kind} evidence requires a passing connectedDebugAndroidTest gate")
+   if not any("/src/androidTest/" in source["path"] for source in entry["evidence"]):
+    reject(f"capability.acceptance{error_stem}Source","$.capabilities",f"{capability_id}: {instrumented_kind} evidence requires an instrumented src/androidTest source")
+  for source in entry["evidence"]:
+   relative=source["path"]
+   if not safe_rel(relative): reject("capability.acceptanceEvidencePath","$.capabilities",f"{capability_id}: {relative}")
+   source_path=root/relative
+   if not source_path.is_file(): reject("capability.acceptanceEvidenceMissing","$.capabilities",f"{capability_id}: {relative}")
+   if source["symbol"] not in source_path.read_text(encoding="utf-8",errors="ignore"):
+    reject("capability.acceptanceEvidenceSymbol","$.capabilities",f"{capability_id}: {source['symbol']}")
+ local_claims={
+  item["id"] for item in m0["capabilities"]
+  if any(acceptance.get("evidencePath")==ANDROID_LOCAL_EVIDENCE for acceptance in item["acceptance"])
+ }
+ if local_claims!=set(entries): reject("capability.acceptanceEvidenceSet","$.capabilities","ledger and local capability evidence sets differ")
+
 def validate_capabilities(root,inventory,overlay):
  base=root/"Packages/contracts"; schema_file=base/"schemas/scope-variances.schema.json"; schema=load(schema_file)
  audit_schema(schema); schema_validate(overlay,schema,schema_file=schema_file,root_schema=schema,contracts_root=base)
  m0_path=root/"docs/architecture/android-wear-m0-capabilities.json"; m0=load(m0_path)
+ validate_android_local_capability_evidence(root,m0)
  expected_caps=[]
  for c in m0["capabilities"]:
   item={k:copy.deepcopy(c[k]) for k in ("id","outcome","evidence","platforms")}

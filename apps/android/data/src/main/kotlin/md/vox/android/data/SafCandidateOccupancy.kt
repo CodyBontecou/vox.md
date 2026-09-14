@@ -11,7 +11,8 @@ import md.vox.android.capturedomain.VaultDestination
 internal class SafCandidateOccupancy(
     private val gateway: SafDocumentsGateway,
     private val destination: VaultDestination,
-) : CoreMaterializationCoordinator.CandidateOccupancySource {
+) : CoreMaterializationCoordinator.CandidateOccupancySource,
+    CoreMaterializationCoordinator.ExistingNoteSource {
     override fun observeOccupiedCandidates(destination: VaultDestination, candidates: List<List<String>>): List<List<String>>? {
         if (candidates.isEmpty()) return emptyList()
         val folderSegments = candidates.first().dropLast(1)
@@ -26,5 +27,26 @@ internal class SafCandidateOccupancy(
             }
         val names = gateway.listChildDisplayNames(folder) ?: return null
         return candidates.filter { candidate -> candidate.last() in names }
+    }
+
+    override fun observeExistingNote(
+        destination: VaultDestination,
+        logicalPath: List<String>,
+        maximumBytes: Long,
+    ): CoreMaterializationCoordinator.ExistingNoteSnapshot? {
+        if (logicalPath.isEmpty() || maximumBytes !in 1..268_435_456L) return null
+        val folder = gateway.resolveFolder(destination, logicalPath.dropLast(1), createMissing = false)
+            ?: return if (gateway.resolveFolder(destination, emptyList(), createMissing = false) != null) {
+                CoreMaterializationCoordinator.ExistingNoteSnapshot.Absent
+            } else {
+                null
+            }
+        val matches = gateway.findChildByDisplayName(folder, logicalPath.last())
+        if (matches.isEmpty()) return CoreMaterializationCoordinator.ExistingNoteSnapshot.Absent
+        if (matches.size != 1) return null
+        return when (val bytes = gateway.readDocument(matches.single(), maximumBytes)) {
+            is SafResult.Success -> CoreMaterializationCoordinator.ExistingNoteSnapshot.Present(bytes.value)
+            is SafResult.Error -> null
+        }
     }
 }

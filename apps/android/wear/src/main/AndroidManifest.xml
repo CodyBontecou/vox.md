@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-feature android:name="android.hardware.type.watch" android:required="true" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:allowBackup="false"
+        android:label="Vox.md"
+        android:theme="@style/Theme.Vox.Wear">
+        <meta-data
+            android:name="md.vox.android.RECORDING_NOTIFICATION_EXTENDER"
+            android:value="md.vox.android.wear.WearRecordingNotificationExtender" />
+        <uses-library android:name="com.google.android.wearable" android:required="false" />
+        <meta-data android:name="com.google.android.wearable.standalone" android:value="false" />
+        <activity
+            android:name=".WearMainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name=".WearDataListenerService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/vox/phone/v1/" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".VoxCaptureTileService"
+            android:description="@string/wear_ready_detail"
+            android:exported="true"
+            android:icon="@drawable/ic_vox_mic"
+            android:label="@string/wear_quick_capture"
+            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
+            <intent-filter>
+                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".VoxCaptureComplicationService"
+            android:directBootAware="true"
+            android:exported="true"
+            android:icon="@drawable/ic_vox_mic"
+            android:label="@string/wear_quick_capture"
+            android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
+            <intent-filter>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.wearable.complications.SUPPORTED_TYPES"
+                android:value="SHORT_TEXT" />
+            <meta-data
+                android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
+                android:value="300" />
+            <meta-data
+                android:name="androidx.watchface.complications.datasource.DEFAULT_CONFIG_SUPPORTED"
+                android:value="true" />
+        </service>
+    </application>
+</manifest>

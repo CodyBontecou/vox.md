@@ -171,6 +171,7 @@ interface CaptureIndex {
     fun read(requestID: String): CaptureIndexProjection?
     fun insertOrRepair(projection: CaptureIndexProjection): IndexWriteResult
     fun all(): List<CaptureIndexProjection>
+    fun delete(requestID: String): Boolean = false
 }
 
 enum class IndexWriteResult { INSERTED, IDENTICAL, REPAIRED_OLDER, PROJECTION_AHEAD, CONFLICT }

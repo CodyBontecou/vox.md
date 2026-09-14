@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Validate the assembled Phase 1 merged manifest and backup defenses."""
+"""Validate the assembled Android app manifest, backup defenses, and native artifacts."""
 from __future__ import annotations
 
 import argparse
+import hashlib
 import sys
 from pathlib import Path
 import xml.etree.ElementTree as ET
@@ -22,8 +23,39 @@ EXPECTED_DOMAINS = {
 }
 COMPONENT_TAGS = {"activity", "activity-alias", "service", "receiver", "provider"}
 WORKMANAGER_MARKERS = {"androidx.work.WorkManagerInitializer"}
-REVIEWED_DEBUG_EXPORTED = {"androidx.compose.ui.tooling.PreviewActivity"}
-REVIEWED_PLATFORM_COMPONENT_PERMISSIONS = {"android.permission.DUMP"}
+REVIEWED_PLATFORM_PERMISSIONS = {
+    "android.permission.ACCESS_COARSE_LOCATION",
+    "android.permission.ACCESS_FINE_LOCATION",
+    "android.permission.ACCESS_NETWORK_STATE",
+    "android.permission.FOREGROUND_SERVICE",
+    "android.permission.FOREGROUND_SERVICE_MICROPHONE",
+    "android.permission.INTERNET",
+    "android.permission.POST_NOTIFICATIONS",
+    "android.permission.RECEIVE_BOOT_COMPLETED",
+    "android.permission.RECORD_AUDIO",
+    "android.permission.WAKE_LOCK",
+}
+REVIEWED_NON_PLATFORM_PERMISSIONS = {
+    # Added by the official Play Billing client. It is normal-protection and carries no
+    # storage, microphone, location, or cross-app data access.
+    "com.android.vending.BILLING",
+}
+REVIEWED_EXPORTED = {
+    "md.vox.android.PhoneWearDataListenerService",
+    "md.vox.android.VoxCaptureWidgetProvider",
+}
+REVIEWED_DEBUG_ONLY_EXPORTED = {
+    "androidx.activity.ComponentActivity",
+    "androidx.compose.ui.tooling.PreviewActivity",
+    "md.vox.android.VisualStoryActivity",
+}
+REVIEWED_PLATFORM_COMPONENT_PERMISSIONS = {
+    "android.permission.BIND_INPUT_METHOD",
+    "android.permission.BIND_JOB_SERVICE",
+    "android.permission.BIND_QUICK_SETTINGS_TILE",
+    "android.permission.DUMP",
+    "android.permission.MANAGE_DOCUMENTS",
+}
 VOX_ELF_TARGETS = {
     "arm64-v8a": (2, 183),
     "armeabi-v7a": (1, 40),
@@ -32,6 +64,19 @@ VOX_ELF_TARGETS = {
 }
 VOX_LIBRARY = "libvox_core_uniffi.so"
 JNA_LIBRARY = "libjnidispatch.so"
+SHERPA_LIBRARIES = (
+    "libonnxruntime.so",
+    "libsherpa-onnx-c-api.so",
+    "libsherpa-onnx-cxx-api.so",
+    "libsherpa-onnx-jni.so",
+)
+GEIST_FONTS = {
+    "geist_regular.ttf": ("Geist-Regular.ttf", "5c8968eafb98a4c4f47033daf29e38e284a6f2a82eb017d171ab040fe7c4b615"),
+    "geist_medium.ttf": ("Geist-Medium.ttf", "0090e004725f6f64b841715b4167920580f883fcf9b67fc6d744089103fec101"),
+    "geist_semibold.ttf": ("Geist-SemiBold.ttf", "612ec98df33935354f39e81e54101656961ab6e5549f64b63eb57868ba7bab8d"),
+    "geist_mono_regular.ttf": ("GeistMono-Regular.ttf", "42d8ad2e610238e64e8abfcde3037c63f7850a73928742b7ab7229d897bcb155"),
+    "geist_mono_medium.ttf": ("GeistMono-Medium.ttf", "90b15711dc3779b2e64e8aff5228154dd019a90bce4947549c4a8a8a43f2ac25"),
+}
 
 
 class ValidationError(Exception):
@@ -77,14 +122,16 @@ def validate_merged_manifest(path: Path) -> None:
         raise ValidationError("merged application legacy backup rule reference drift")
     if android(application, "dataExtractionRules") != "@xml/data_extraction_rules":
         raise ValidationError("merged application data extraction rule reference drift")
+    is_debuggable = android(application, "debuggable") == "true"
 
     protected = signature_permissions(manifest)
     for request in manifest.findall("uses-permission") + manifest.findall("uses-permission-sdk-23"):
         name = android(request, "name")
-        if name.startswith("android.permission."):
-            raise ValidationError(f"Phase 1 merged manifest requests platform permission {name}")
-        if name not in protected:
-            raise ValidationError(f"merged manifest requests unreviewed non-signature permission {name}")
+        if name.startswith("android.permission.") and name not in REVIEWED_PLATFORM_PERMISSIONS:
+            raise ValidationError(f"merged manifest requests unreviewed platform permission {name}")
+        if name not in protected and not name.startswith("android.permission."):
+            if name not in REVIEWED_NON_PLATFORM_PERMISSIONS:
+                raise ValidationError(f"merged manifest requests unreviewed non-signature permission {name}")
 
     launcher_count = 0
     for component in application:
@@ -97,8 +144,8 @@ def validate_merged_manifest(path: Path) -> None:
         exported = android(component, "exported")
         if exported not in {"", "true", "false"}:
             raise ValidationError(f"component has non-literal android:exported value: {name}={exported}")
-        if name in WORKMANAGER_MARKERS or name.startswith("androidx.work."):
-            raise ValidationError(f"WorkManager component is packaged: {name}")
+        if name in WORKMANAGER_MARKERS:
+            raise ValidationError(f"WorkManager initializer is packaged: {name}")
         for metadata in component.findall(".//meta-data"):
             if android(metadata, "name") in WORKMANAGER_MARKERS or android(metadata, "value") in WORKMANAGER_MARKERS:
                 raise ValidationError("WorkManager initializer metadata is packaged")
@@ -123,7 +170,10 @@ def validate_merged_manifest(path: Path) -> None:
                 raise ValidationError(f"unexpected launcher component: {name}")
         if exported == "true" and not is_launcher:
             permission = android(component, "permission")
-            explicitly_reviewed = name in REVIEWED_DEBUG_EXPORTED
+            explicitly_reviewed = (
+                name in REVIEWED_EXPORTED
+                or (is_debuggable and name in REVIEWED_DEBUG_ONLY_EXPORTED)
+            )
             permission_protected = (
                 permission in protected
                 or permission in REVIEWED_PLATFORM_COMPONENT_PERMISSIONS
@@ -136,21 +186,25 @@ def validate_merged_manifest(path: Path) -> None:
 
 def validate_vox_native_libraries(apk_path: Path) -> None:
     if not apk_path.is_file():
-        raise ValidationError(f"missing APK input: {apk_path}")
+        raise ValidationError(f"missing Android artifact input: {apk_path}")
     try:
         with zipfile.ZipFile(apk_path) as apk:
             names = apk.namelist()
             if len(names) != len(set(names)):
-                raise ValidationError("APK contains duplicate ZIP entries")
-            for label, library in (("Vox", VOX_LIBRARY), ("JNA", JNA_LIBRARY)):
+                raise ValidationError("Android artifact contains duplicate ZIP entries")
+            prefix = "base/" if apk_path.suffix == ".aab" else ""
+            native_libraries = (("Vox", VOX_LIBRARY), ("JNA", JNA_LIBRARY)) + tuple(
+                ("sherpa-onnx", library) for library in SHERPA_LIBRARIES
+            )
+            for label, library in native_libraries:
                 actual = {name for name in names if name.endswith("/" + library)}
-                expected = {f"lib/{abi}/{library}" for abi in VOX_ELF_TARGETS}
+                expected = {f"{prefix}lib/{abi}/{library}" for abi in VOX_ELF_TARGETS}
                 if actual != expected:
                     raise ValidationError(
                         f"{label} native ABI set differs: expected {sorted(expected)}, found {sorted(actual)}"
                     )
                 for abi, (expected_class, expected_machine) in VOX_ELF_TARGETS.items():
-                    data = apk.read(f"lib/{abi}/{library}")
+                    data = apk.read(f"{prefix}lib/{abi}/{library}")
                     if len(data) < 20 or data[:4] != b"\x7fELF":
                         raise ValidationError(f"{abi} {label} library is not ELF")
                     if data[4] != expected_class or data[5] != 1:
@@ -158,8 +212,17 @@ def validate_vox_native_libraries(apk_path: Path) -> None:
                     machine = int.from_bytes(data[18:20], "little")
                     if machine != expected_machine:
                         raise ValidationError(f"{abi} {label} ELF machine differs: {machine}")
+            for packaged_name, (_, expected_sha256) in GEIST_FONTS.items():
+                entry = f"{prefix}res/font/{packaged_name}"
+                if entry not in names:
+                    raise ValidationError(f"missing packaged Geist font {entry}")
+                actual_sha256 = hashlib.sha256(apk.read(entry)).hexdigest()
+                if actual_sha256 != expected_sha256:
+                    raise ValidationError(
+                        f"packaged Geist font hash differs for {packaged_name}: {actual_sha256}"
+                    )
     except zipfile.BadZipFile as error:
-        raise ValidationError(f"invalid APK ZIP: {error}") from error
+        raise ValidationError(f"invalid Android artifact ZIP: {error}") from error
 
 
 def excluded_domains(parent: ET.Element) -> set[str]:
@@ -198,7 +261,7 @@ def main(argv: list[str] | None = None) -> int:
     except ValidationError as error:
         print(f"Android artifact validation failed: {error}", file=sys.stderr)
         return 1
-    print("Android artifact validation passed: merged permissions/components, backup defenses, and four Vox/JNA ELF targets are closed.")
+    print("Android artifact validation passed: reviewed permissions/components, backup defenses, exact Geist fonts, and four-ABI Vox/JNA/sherpa-onnx ELF targets are closed.")
     return 0
 
 

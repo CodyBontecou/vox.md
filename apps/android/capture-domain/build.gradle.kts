@@ -6,7 +6,3 @@ plugins {
 android {
     namespace = "md.vox.android.capturedomain"
 }
-
-dependencies {
-    api(project(":core-bridge"))
-}

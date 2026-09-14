@@ -1,0 +1,1510 @@
+{
+  "schemaVersion": 1,
+  "status": "captured-unreviewed",
+  "capturedDate": "2026-09-13",
+  "capture": {
+    "deviceName": "healthmd_phone_api35",
+    "serial": "emulator-5556",
+    "apiLevel": 35,
+    "resolutionPx": [
+      1080,
+      2400
+    ],
+    "appearance": "dark",
+    "locale": "en-US",
+    "fontScale": 1.0,
+    "sourceActivity": "md.vox.android.VisualStoryActivity"
+  },
+  "stories": [
+    {
+      "id": "01-quick-capture",
+      "android": {
+        "path": "artifacts/android-parity/goldens/phone/phone-01-quick-capture-dark.png",
+        "sha256": "20e9cbb024d2a59782943147ce9cadeb100b199bdb62a2116623a494c5c52696",
+        "width": 1080,
+        "height": 2400
+      },
+      "iosReference": {
+        "path": "artifacts/app-store-raw-latest/01-quick-capture.png",
+        "sha256": "584b4b7dc9558b521abe2a2a6387181d8560b1fbf0f35e895c001503f6865e6d",
+        "width": 1206,
+        "height": 2622
+      },
+      "comparison": {
+        "tool": "Argent screenshot-diff",
+        "directComparison": "dimension-mismatch-expected",
+        "normalization": "The iOS reference was resized to 1080x2400 for diagnostic comparison only.",
+        "status": "changed",
+        "reviewStatus": "unreviewed",
+        "pixelMismatchPercent": 4.53,
+        "normalizedReference": {
+          "path": "artifacts/android-parity/normalized-ios/01-quick-capture-1080x2400.png",
+          "sha256": "554ad215f5297db7d4ed71bc9ef3f9fd2b7c77d38f28eec820fb5f03274002c9",
+          "width": 1080,
+          "height": 2400
+        },
+        "diff": {
+          "path": "artifacts/android-parity/diffs/01-quick-capture-normalized/phone-01-quick-capture-dark-diff.png",
+          "sha256": "9fe31ad7823a07eba6f46dbcdbf617afb8e088d920566093247dd6693497cee3",
+          "width": 1080,
+          "height": 2400
+        },
+        "contextDiff": {
+          "path": "artifacts/android-parity/diffs/01-quick-capture-normalized/phone-01-quick-capture-dark-context-diff.png",
+          "sha256": "47928b811509a36b8e7a7813da6609e95036e8f1fb806c200598640dba433eb4"
+        }
+      }
+    },
+    {
+      "id": "02-history",
+      "android": {
+        "path": "artifacts/android-parity/goldens/phone/phone-02-history-dark.png",
+        "sha256": "3f8efa3804df8b1dd18de19385b6d3932b50f816357e858b46360aea7412a73a",
+        "width": 1080,
+        "height": 2400
+      },
+      "iosReference": null,
+      "comparison": null
+    },
+    {
+      "id": "03-settings",
+      "android": {
+        "path": "artifacts/android-parity/goldens/phone/phone-03-settings-dark.png",
+        "sha256": "994389471742b18c933d9bff8665b2075b43134cd415477d2c8438272f210478",
+        "width": 1080,
+        "height": 2400
+      },
+      "iosReference": {
+        "path": "artifacts/app-store-raw-latest/03-settings.png",
+        "sha256": "6c2e36e7eacfdbfaae4e41f98346aa78bbf8f105d8e47713a9977b5abc7c23c7",
+        "width": 1206,
+        "height": 2622
+      },
+      "comparison": {
+        "tool": "Argent screenshot-diff",
+        "directComparison": "dimension-mismatch-expected",
+        "normalization": "The iOS reference was resized to 1080x2400 for diagnostic comparison only.",
+        "status": "changed",
+        "reviewStatus": "unreviewed",
+        "pixelMismatchPercent": 13.53,
+        "normalizedReference": {
+          "path": "artifacts/android-parity/normalized-ios/03-settings-1080x2400.png",
+          "sha256": "5198f62163d2653de8aadca8be191b7ee7b73d25329ce4342ace5c8b32716fed",
+          "width": 1080,
+          "height": 2400
+        },
+        "diff": {
+          "path": "artifacts/android-parity/diffs/03-settings-normalized/phone-03-settings-dark-diff.png",
+          "sha256": "01367f5cb6310ea15ceaa08a8c74a28f75fd2b45d690ea62c8cdbd5d64ac6ad1",
+          "width": 1080,
+          "height": 2400
+        },
+        "contextDiff": {
+          "path": "artifacts/android-parity/diffs/03-settings-normalized/phone-03-settings-dark-context-diff.png",
+          "sha256": "5b4889703feaa8b42fe78ee6ef909cd640b73b6ba2759e4690e305bb30258ce4"
+        }
+      }
+    },
+    {
+      "id": "04-models",
+      "android": {
+        "path": "artifacts/android-parity/goldens/phone/phone-04-models-dark.png",
+        "sha256": "485af892248559017bf5743316b86e77019315b4ff16b475ac2105d0aa6dc9f5",
+        "width": 1080,
+        "height": 2400
+      },
+      "iosReference": {
+        "path": "artifacts/app-store-raw-latest/04-models.png",
+        "sha256": "133d435f2b9f73094e1d8fc8a2a42da03fa7a6dc731a253f8529dbeef33482b7",
+        "width": 1206,
+        "height": 2622
+      },
+      "comparison": {
+        "tool": "Argent screenshot-diff",
+        "directComparison": "dimension-mismatch-expected",
+        "normalization": "The iOS reference was resized to 1080x2400 for diagnostic comparison only.",
+        "status": "changed",
+        "reviewStatus": "unreviewed",
+        "pixelMismatchPercent": 56.46,
+        "normalizedReference": {
+          "path": "artifacts/android-parity/normalized-ios/04-models-1080x2400.png",
+          "sha256": "de52f3342306cce3b85e0d55420436119ace33eb1857bd8328ca89090cf22890",
+          "width": 1080,
+          "height": 2400
+        },
+        "diff": {
+          "path": "artifacts/android-parity/diffs/04-models-normalized/phone-04-models-dark-diff.png",
+          "sha256": "5226b7a55c56f0ea655601e56da7c7e17807c408ae11dab441516659f9bbed28",
+          "width": 1080,
+          "height": 2400
+        },
+        "contextDiff": {
+          "path": "artifacts/android-parity/diffs/04-models-normalized/phone-04-models-dark-context-diff.png",
+          "sha256": "127ac1be01f9d29b56790f789b4b99697e2405403951bf1bada8ae181c6df991"
+        }
+      }
+    },
+    {
+      "id": "05-capture-presets",
+      "android": {
+        "path": "artifacts/android-parity/goldens/phone/phone-05-capture-presets-dark.png",
+        "sha256": "68b86f744ebddc830ca0bf1472b3049c0019af111ed755d666163a40da81f8be",
+        "width": 1080,
+        "height": 2400
+      },
+      "iosReference": {
+        "path": "artifacts/app-store-raw-latest/05-capture-presets.png",
+        "sha256": "c3c7786964c318ad1e459266ab60e5df4a13f4a431a976a4dfcee27b01305379",
+        "width": 1206,
+        "height": 2622
+      },
+      "comparison": {
+        "tool": "Argent screenshot-diff",
+        "directComparison": "dimension-mismatch-expected",
+        "normalization": "The iOS reference was resized to 1080x2400 for diagnostic comparison only.",
+        "status": "changed",
+        "reviewStatus": "unreviewed",
+        "pixelMismatchPercent": 7.38,
+        "normalizedReference": {
+          "path": "artifacts/android-parity/normalized-ios/05-capture-presets-1080x2400.png",
+          "sha256": "a52e417d683ea4b4089eb8ad66f0a424ceb332f5dbf263ebec672d47ee914258",
+          "width": 1080,
+          "height": 2400
+        },
+        "diff": {
+          "path": "artifacts/android-parity/diffs/05-capture-presets-normalized/phone-05-capture-presets-dark-diff.png",
+          "sha256": "f5d7ad54e587fcbd484f20afaf728a0f705e6eb5efdc58f4c2500c4ae8089b45",
+          "width": 1080,
+          "height": 2400
+        },
+        "contextDiff": {
+          "path": "artifacts/android-parity/diffs/05-capture-presets-normalized/phone-05-capture-presets-dark-context-diff.png",
+          "sha256": "04833ff2d0abdea477fdf9d3e955de290f689a03cc959ed027016d1242b3f73e"
+        }
+      }
+    },
+    {
+      "id": "06-app-language",
+      "android": {
+        "path": "artifacts/android-parity/goldens/phone/phone-06-app-language-dark.png",
+        "sha256": "338e65210a3d86aa56bc9c6b5e785554170936b579d259d467b404696722006b",
+        "width": 1080,
+        "height": 2400
+      },
+      "iosReference": null,
+      "comparison": null
+    },
+    {
+      "id": "07-live-recording",
+      "android": {
+        "path": "artifacts/android-parity/goldens/phone/phone-07-live-recording-dark.png",
+        "sha256": "29bde732f48beb14c2e21f31126caf03f7e58ee4b4258ff283b4551d25509ddb",
+        "width": 1080,
+        "height": 2400
+      },
+      "iosReference": null,
+      "comparison": null
+    }
+  ],
+  "contactSheet": {
+    "path": "artifacts/android-parity/goldens/phone/phone-story-contact-sheet.png",
+    "sha256": "290fcddbe91e3e8de3a2663421dccb7746e95b9d59ebd5be4200f14f0593e1f3",
+    "width": 1152,
+    "height": 2472
+  },
+  "motionEvidence": {
+    "reviewStatus": "unreviewed",
+    "capture": {
+      "deviceName": "healthmd_phone_api35",
+      "serial": "emulator-5556",
+      "apiLevel": 35,
+      "resolutionPx": [
+        1080,
+        2400
+      ],
+      "appearance": "dark",
+      "locale": "en-US",
+      "fontScale": 1.0,
+      "captureMethod": "Argent screen recording",
+      "sourceActivity": "md.vox.android.MainActivity",
+      "showTouches": true,
+      "trimStaticFrames": true
+    },
+    "clips": [
+      {
+        "id": "android-vault-setup-flow-api35",
+        "path": "artifacts/android-parity/motion/android-vault-setup-flow-api35.mp4",
+        "sha256": "6158d5df58ee7d430b3aa94a136006dcb617a0a1f87fd642041b97c6ada020ab",
+        "bytes": 396732,
+        "width": 1080,
+        "height": 2400,
+        "frameRate": "30/1",
+        "codec": "h264",
+        "durationMs": 21967,
+        "wallClockMs": 54086,
+        "trimmedMs": 32119,
+        "flow": [
+          "vault setup",
+          "system document-tree picker",
+          "persisted folder grant",
+          "loading",
+          "composer"
+        ]
+      },
+      {
+        "id": "android-primary-navigation-flow-api35",
+        "path": "artifacts/android-parity/motion/android-primary-navigation-flow-api35.mp4",
+        "sha256": "7dcb5c12372e22c806b963282142ee817e57e4b1aa2397d2fe762b640fea8de9",
+        "bytes": 1154600,
+        "width": 1080,
+        "height": 2400,
+        "frameRate": "30/1",
+        "codec": "h264",
+        "durationMs": 23967,
+        "wallClockMs": 90004,
+        "trimmedMs": 66037,
+        "flow": [
+          "composer",
+          "settings",
+          "models",
+          "settings",
+          "composer",
+          "history"
+        ]
+      }
+    ]
+  },
+  "limitations": [
+    "These captured comparisons and form-factor sweeps are not visual approval; every reviewStatus remains unreviewed.",
+    "Physical-device and OEM review, human split-screen/freeform approval, full-speed and frame-by-frame motion approval, performance, and endurance evidence remain open.",
+    "The Argent simulator-server failed to start on the new headless tablet and foldable AVDs, so those lossless captures use Android adb screencap; phone screenshots and cross-platform diffs use Argent.",
+    "The Arabic RTL sweep exposes documented English fallback phrases that remain pending translation review.",
+    "Emulated OPENED, HALF_OPENED, and CLOSED posture captures do not substitute for physical hinge and outer-display testing.",
+    "Direct iOS-to-Android comparison reports the expected 1206x2622 versus 1080x2400 dimension mismatch; normalized comparisons are diagnostic and do not establish pixel identity."
+  ],
+  "windowingCaptureSets": [
+    {
+      "id": "phone-dark-split-horizontal-en",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "healthmd_phone_api35",
+        "serial": "emulator-5556",
+        "apiLevel": 35,
+        "resolutionPx": [
+          1080,
+          2400
+        ],
+        "appearance": "dark",
+        "locale": "en-US",
+        "fontScale": 1.0,
+        "layoutDirection": "LTR",
+        "windowingMode": "split-screen-horizontal",
+        "appTaskBoundsPx": [
+          0,
+          0,
+          1080,
+          1187
+        ],
+        "companionTask": "com.android.settings/.Settings",
+        "companionTaskBoundsPx": [
+          0,
+          1213,
+          1080,
+          2400
+        ],
+        "captureMethod": "Argent screenshot",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "01-quick-capture",
+          "path": "artifacts/android-parity/goldens/windowing/phone-01-quick-capture-dark-split-horizontal.png",
+          "sha256": "530fe6d79c5cb1e9d8db81ebc66d87709c9b1eb6540dffd7752091cd1b5e9fd1",
+          "width": 1080,
+          "height": 2400
+        }
+      ]
+    },
+    {
+      "id": "tablet-dark-freeform-en",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "vox_tablet_api35",
+        "serial": "emulator-5554",
+        "apiLevel": 35,
+        "resolutionPx": [
+          2560,
+          1600
+        ],
+        "appearance": "dark",
+        "locale": "en-US",
+        "fontScale": 1.0,
+        "layoutDirection": "LTR",
+        "windowingMode": "freeform",
+        "captureMethod": "Argent screenshot",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "01-quick-capture-narrow",
+          "storyID": "01-quick-capture",
+          "appTaskBoundsPx": [
+            892,
+            102,
+            1668,
+            1482
+          ],
+          "path": "artifacts/android-parity/goldens/windowing/tablet-01-quick-capture-dark-freeform.png",
+          "sha256": "2c6a4ce1e70da711d200ea6b2c78285da43a9f868c077bd3a3fb4be669d7ad14",
+          "width": 2560,
+          "height": 1600
+        },
+        {
+          "id": "03-settings-narrow",
+          "storyID": "03-settings",
+          "appTaskBoundsPx": [
+            892,
+            102,
+            1668,
+            1482
+          ],
+          "path": "artifacts/android-parity/goldens/windowing/tablet-03-settings-dark-freeform.png",
+          "sha256": "72826533d95b95afe378d800453fd8d9fbdd87d7c6efd3d90255da1f9fa2af8d",
+          "width": 2560,
+          "height": 1600
+        },
+        {
+          "id": "03-settings-wide",
+          "storyID": "03-settings",
+          "appTaskBoundsPx": [
+            400,
+            250,
+            2160,
+            1300
+          ],
+          "path": "artifacts/android-parity/goldens/windowing/tablet-03-settings-dark-freeform-wide.png",
+          "sha256": "a1871b186bccee99d5274c5709aeec50751e180aee6898645bcc9c9622b04645",
+          "width": 2560,
+          "height": 1600
+        },
+        {
+          "id": "07-live-recording-narrow",
+          "storyID": "07-live-recording",
+          "appTaskBoundsPx": [
+            892,
+            102,
+            1668,
+            1482
+          ],
+          "path": "artifacts/android-parity/goldens/windowing/tablet-07-live-recording-dark-freeform.png",
+          "sha256": "ee05e3386eed3ee86f66fa51cc63934c03b4e5d3a1e752e88c6a02995ed4a6a3",
+          "width": 2560,
+          "height": 1600
+        }
+      ],
+      "contactSheet": {
+        "path": "artifacts/android-parity/goldens/windowing/windowing-story-contact-sheet.png",
+        "sha256": "9cef74f970d8fb0aa838a5826a5c235f30b300bd0336725e604cabb4eb944008",
+        "width": 1504,
+        "height": 1596
+      }
+    }
+  ],
+  "stateCaptureSets": [
+    {
+      "id": "phone-state-dark-default-en",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "healthmd_phone_api35",
+        "serial": "emulator-5556",
+        "apiLevel": 35,
+        "resolutionPx": [
+          1080,
+          2400
+        ],
+        "appearance": "dark",
+        "locale": "en-US",
+        "fontScale": 1.0,
+        "layoutDirection": "LTR",
+        "posture": "standard",
+        "captureMethod": "Argent screenshot",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "08-vault-repair",
+          "path": "artifacts/android-parity/goldens/states/phone-08-vault-repair-dark.png",
+          "sha256": "bf98aad9bc51e4a28f52e51207a341ff5257b2c968c0689c7f33fa65d6b730ba",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "09-history-empty",
+          "path": "artifacts/android-parity/goldens/states/phone-09-history-empty-dark.png",
+          "sha256": "bb028cf8a82fd045cb7802e283b29d488a80ddd8a309aa25e36b877575b80a3a",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "10-history-folder-repair",
+          "path": "artifacts/android-parity/goldens/states/phone-10-history-folder-repair-dark.png",
+          "sha256": "1ee81a431197c6859945eb9f23ad3f52b7fc16a8825797b4b1e74b7dedeaf2b4",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "11-recording-paused",
+          "path": "artifacts/android-parity/goldens/states/phone-11-recording-paused-dark.png",
+          "sha256": "27ab1c6ccca797545bbb8da5f62d3a41b7ee5793ac80cb3f578facf4b1e9927e",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "12-recording-failed",
+          "path": "artifacts/android-parity/goldens/states/phone-12-recording-failed-dark.png",
+          "sha256": "d7e28a30173dfe48899b7b12c3c651b9102f8e335894cb2f740eec8297512c54",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "13-upgrade-pending",
+          "path": "artifacts/android-parity/goldens/states/phone-13-upgrade-pending-dark.png",
+          "sha256": "c81c10bce4744d3056e53d5fc6f14df6afdff7cb3ab1ce9f35e35ac2f658366f",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "14-upgrade-active",
+          "path": "artifacts/android-parity/goldens/states/phone-14-upgrade-active-dark.png",
+          "sha256": "28359ac41e540dba34fe2b2f8b065e22557fb4a5f7750feb11f23b2b98838a17",
+          "width": 1080,
+          "height": 2400
+        }
+      ],
+      "contactSheet": {
+        "path": "artifacts/android-parity/goldens/states/phone-state-dark-contact-sheet.png",
+        "sha256": "f173c9ff71bf9305065f6d37c18fe0f84cad064a5796779ceadb6e4b2e58fabc",
+        "width": 1152,
+        "height": 2472
+      }
+    },
+    {
+      "id": "phone-state-light-default-en",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "healthmd_phone_api35",
+        "serial": "emulator-5556",
+        "apiLevel": 35,
+        "resolutionPx": [
+          1080,
+          2400
+        ],
+        "appearance": "light",
+        "locale": "en-US",
+        "fontScale": 1.0,
+        "layoutDirection": "LTR",
+        "posture": "standard",
+        "captureMethod": "Argent screenshot",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "08-vault-repair",
+          "path": "artifacts/android-parity/goldens/states/phone-08-vault-repair-light.png",
+          "sha256": "a60ea98e22ee142dbd86ceb2f140a3f3e4deb1a4954f2c28b2940d76d5454d97",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "09-history-empty",
+          "path": "artifacts/android-parity/goldens/states/phone-09-history-empty-light.png",
+          "sha256": "ae2160d12873da4ee734690b7fc87d7496f6ba10e40b1fd5ca5fc9a49a840c09",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "10-history-folder-repair",
+          "path": "artifacts/android-parity/goldens/states/phone-10-history-folder-repair-light.png",
+          "sha256": "5842ddeefad7079b922ca6b91218a84d669abfeda33b2f51451d95a51efa9d8d",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "11-recording-paused",
+          "path": "artifacts/android-parity/goldens/states/phone-11-recording-paused-light.png",
+          "sha256": "9259841d9d4ed2bde0910791f1178c1dbcf5efa4eca640314c584800b3560887",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "12-recording-failed",
+          "path": "artifacts/android-parity/goldens/states/phone-12-recording-failed-light.png",
+          "sha256": "13d1252ca9d75e05f295a14e6326611fd281bc8fab97bd90ef5c156e1fa8c541",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "13-upgrade-pending",
+          "path": "artifacts/android-parity/goldens/states/phone-13-upgrade-pending-light.png",
+          "sha256": "0a1487aea6b07fb18e559c101956924de729886a9b97dac635321fc1b0e1ba59",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "14-upgrade-active",
+          "path": "artifacts/android-parity/goldens/states/phone-14-upgrade-active-light.png",
+          "sha256": "c261afff798a1fdb42ba15e353a83b4a0b863041f064f608dc95e3dc63d9b88d",
+          "width": 1080,
+          "height": 2400
+        }
+      ],
+      "contactSheet": {
+        "path": "artifacts/android-parity/goldens/states/phone-state-light-contact-sheet.png",
+        "sha256": "816f7b6e382b6fc31ec39d89243563bb0f4f0ebbba6cd23b557dba28e56da0ac",
+        "width": 1152,
+        "height": 2472
+      }
+    },
+    {
+      "id": "phone-state-dark-large-text-en",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "healthmd_phone_api35",
+        "serial": "emulator-5556",
+        "apiLevel": 35,
+        "resolutionPx": [
+          1080,
+          2400
+        ],
+        "appearance": "dark",
+        "locale": "en-US",
+        "fontScale": 2.0,
+        "layoutDirection": "LTR",
+        "posture": "standard",
+        "captureMethod": "Argent screenshot",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "08-vault-repair",
+          "path": "artifacts/android-parity/goldens/states/phone-08-vault-repair-dark-large-text.png",
+          "sha256": "c9df6f36a34a6f2b547e6273d88d7c49bfd1877985a2698e3f26d7cd3b747fd5",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "09-history-empty",
+          "path": "artifacts/android-parity/goldens/states/phone-09-history-empty-dark-large-text.png",
+          "sha256": "d2735294b3d70f58adc63f34d42b2ff9b4e6a55b4b06c5f134970324c9a2e730",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "10-history-folder-repair",
+          "path": "artifacts/android-parity/goldens/states/phone-10-history-folder-repair-dark-large-text.png",
+          "sha256": "910632e2d76ea4cb9a987540cd00e29f8acd55d5c05e809c8757e2aa8356d519",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "11-recording-paused",
+          "path": "artifacts/android-parity/goldens/states/phone-11-recording-paused-dark-large-text.png",
+          "sha256": "1c0e9734a13c107b15ff360f063d2017d2df54567e03d75e7c916a4065abb8fd",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "12-recording-failed",
+          "path": "artifacts/android-parity/goldens/states/phone-12-recording-failed-dark-large-text.png",
+          "sha256": "389922c9f06c1e2fe1d748e0d6f088ea7d8a00c63682108e16a2833e01d4073d",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "13-upgrade-pending",
+          "path": "artifacts/android-parity/goldens/states/phone-13-upgrade-pending-dark-large-text.png",
+          "sha256": "a61738ba5d650c30ff9eccff8c59b3adc3ba6aa145eea821deacb6bae9b23f3f",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "14-upgrade-active",
+          "path": "artifacts/android-parity/goldens/states/phone-14-upgrade-active-dark-large-text.png",
+          "sha256": "129c76b93ca4551fc25c4b10bd686b9fd8a0eba38a45f55f88dd93f91d085d54",
+          "width": 1080,
+          "height": 2400
+        }
+      ],
+      "contactSheet": {
+        "path": "artifacts/android-parity/goldens/states/phone-state-large-text-contact-sheet.png",
+        "sha256": "11b7b483e748774cd87afccf2750fc8bb5bd42f43bea0dc40546cb2015a4385e",
+        "width": 1152,
+        "height": 2472
+      }
+    },
+    {
+      "id": "phone-state-dark-rtl-ar",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "healthmd_phone_api35",
+        "serial": "emulator-5556",
+        "apiLevel": 35,
+        "resolutionPx": [
+          1080,
+          2400
+        ],
+        "appearance": "dark",
+        "locale": "ar",
+        "fontScale": 1.0,
+        "layoutDirection": "RTL",
+        "posture": "standard",
+        "captureMethod": "Argent screenshot",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "08-vault-repair",
+          "path": "artifacts/android-parity/goldens/states/phone-08-vault-repair-dark-rtl-ar.png",
+          "sha256": "ca9d7195c34336b4545a3ca0a5126beb6d88e8e683ed7dba3a5a199eb467c6da",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "09-history-empty",
+          "path": "artifacts/android-parity/goldens/states/phone-09-history-empty-dark-rtl-ar.png",
+          "sha256": "4e0cd96848bfcc2b3abb05d3c3384946bfb97692e953ac664252ad9e749d3ce0",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "10-history-folder-repair",
+          "path": "artifacts/android-parity/goldens/states/phone-10-history-folder-repair-dark-rtl-ar.png",
+          "sha256": "61e9147985bee2e60c7fd3d477483f0e714106e9c87d701a3d536fdeaf054a51",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "11-recording-paused",
+          "path": "artifacts/android-parity/goldens/states/phone-11-recording-paused-dark-rtl-ar.png",
+          "sha256": "18947f6f281ba17ec360335d33ed06a260285fb6e2be0ef620bb2fc41b9c18ab",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "12-recording-failed",
+          "path": "artifacts/android-parity/goldens/states/phone-12-recording-failed-dark-rtl-ar.png",
+          "sha256": "cb3d359df9da8d9216ea8da5610fe088260b52fc2d516404e5ab3ec096764724",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "13-upgrade-pending",
+          "path": "artifacts/android-parity/goldens/states/phone-13-upgrade-pending-dark-rtl-ar.png",
+          "sha256": "bb11782804df08253244607801ca5e04117c8925579770e922c4f23d4b74054d",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "14-upgrade-active",
+          "path": "artifacts/android-parity/goldens/states/phone-14-upgrade-active-dark-rtl-ar.png",
+          "sha256": "f7a207c7348df5331ec831b17e6b8be7ce8ff98a0d09c5af6bab574049ee5a1e",
+          "width": 1080,
+          "height": 2400
+        }
+      ],
+      "contactSheet": {
+        "path": "artifacts/android-parity/goldens/states/phone-state-rtl-ar-contact-sheet.png",
+        "sha256": "4b1737a96dd26394e46b202c58fd6b615adf9fc7b5c94f041ff4058d66af4ded",
+        "width": 1152,
+        "height": 2472
+      }
+    }
+  ],
+  "resilienceCaptureSets": [
+    {
+      "id": "phone-resilience-dark-default-en",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "healthmd_phone_api35",
+        "serial": "emulator-5556",
+        "apiLevel": 35,
+        "resolutionPx": [
+          1080,
+          2400
+        ],
+        "appearance": "dark",
+        "locale": "en-US",
+        "fontScale": 1,
+        "layoutDirection": "LTR",
+        "posture": "standard",
+        "captureMethod": "Argent screenshot",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "15-loading",
+          "path": "artifacts/android-parity/goldens/resilience/phone-15-loading-dark.png",
+          "sha256": "17ce27ae3cfc44f7558866be39cc5e29089182357ac9812def35f05053bc551e",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "16-upgrade-quota-reached",
+          "path": "artifacts/android-parity/goldens/resilience/phone-16-upgrade-quota-reached-dark.png",
+          "sha256": "fea2c600fbcb898a1b969196ffc1da78e97d9824d9739f6f02dfce3709d2f823",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "17-upgrade-offline",
+          "path": "artifacts/android-parity/goldens/resilience/phone-17-upgrade-offline-dark.png",
+          "sha256": "174e2afc25706816a7847ae311a50011198a3463ffd3c7cad864cbe39adf8bbf",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "18-recording-quota-reached",
+          "path": "artifacts/android-parity/goldens/resilience/phone-18-recording-quota-reached-dark.png",
+          "sha256": "f02f13c92e24e8ff990beac9a310fc4d1a3be850da433452299b16ae9d2d4ee2",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "19-recording-interrupted",
+          "path": "artifacts/android-parity/goldens/resilience/phone-19-recording-interrupted-dark.png",
+          "sha256": "88e518b9a7c9eba6b61f247df20ba1a79910c5f113ede33c67c22cc18ef5f37c",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "20-history-unknown-outcome",
+          "path": "artifacts/android-parity/goldens/resilience/phone-20-history-unknown-outcome-dark.png",
+          "sha256": "5e9ee18625cf3843ab50ad0134d95efdc4c231e94f2abfbb17f70f1bc6705642",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "21-history-permanent-failure",
+          "path": "artifacts/android-parity/goldens/resilience/phone-21-history-permanent-failure-dark.png",
+          "sha256": "cc255024d86e37e7ca28aea1c5dc11380643bdcf7cff1d71bc05caf66409cc02",
+          "width": 1080,
+          "height": 2400
+        }
+      ],
+      "contactSheet": {
+        "path": "artifacts/android-parity/goldens/resilience/phone-resilience-dark-contact-sheet.png",
+        "sha256": "44d01d60434598eed4734fd20f01be727b582a0698043e81588c0cd0d252c417",
+        "width": 1152,
+        "height": 2472
+      }
+    },
+    {
+      "id": "phone-resilience-light-default-en",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "healthmd_phone_api35",
+        "serial": "emulator-5556",
+        "apiLevel": 35,
+        "resolutionPx": [
+          1080,
+          2400
+        ],
+        "appearance": "light",
+        "locale": "en-US",
+        "fontScale": 1,
+        "layoutDirection": "LTR",
+        "posture": "standard",
+        "captureMethod": "Argent screenshot",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "15-loading",
+          "path": "artifacts/android-parity/goldens/resilience/phone-15-loading-light.png",
+          "sha256": "2097ae4e8907d89b70eb6d074c1b153fe69ba95af8312f31d9aeb74a605823d2",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "16-upgrade-quota-reached",
+          "path": "artifacts/android-parity/goldens/resilience/phone-16-upgrade-quota-reached-light.png",
+          "sha256": "b41c3803db1c40b2e54ed6f82a5c74b27b06229128b0ffd269d8a971411b4444",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "17-upgrade-offline",
+          "path": "artifacts/android-parity/goldens/resilience/phone-17-upgrade-offline-light.png",
+          "sha256": "b10917e4ff4c96f4f301b936d9e97d9895e9b897121992d70ae1672b60542cc3",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "18-recording-quota-reached",
+          "path": "artifacts/android-parity/goldens/resilience/phone-18-recording-quota-reached-light.png",
+          "sha256": "f5df27127c031d53fa69ef5b08b8b8d04f9a73f5652b1cb9d91e29cf9bc59cf6",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "19-recording-interrupted",
+          "path": "artifacts/android-parity/goldens/resilience/phone-19-recording-interrupted-light.png",
+          "sha256": "4657f7777636116193248c7186d4e4a0787eec4c7b29207040f91d70aa17ae9e",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "20-history-unknown-outcome",
+          "path": "artifacts/android-parity/goldens/resilience/phone-20-history-unknown-outcome-light.png",
+          "sha256": "cbbd01a377fb5f3cc1b05dfa891712d4260d2d41e769e6e1aeb3802c1aa9970a",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "21-history-permanent-failure",
+          "path": "artifacts/android-parity/goldens/resilience/phone-21-history-permanent-failure-light.png",
+          "sha256": "1eef88c78da8ea34a6fadc3828641dc47548a1c503f005437a8f967f83a41507",
+          "width": 1080,
+          "height": 2400
+        }
+      ],
+      "contactSheet": {
+        "path": "artifacts/android-parity/goldens/resilience/phone-resilience-light-contact-sheet.png",
+        "sha256": "1f786524dc21be03409d633fa4dfbc67ebfe09b94b7c962448193ee24ef4a46e",
+        "width": 1152,
+        "height": 2472
+      }
+    },
+    {
+      "id": "phone-resilience-dark-large-text-en",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "healthmd_phone_api35",
+        "serial": "emulator-5556",
+        "apiLevel": 35,
+        "resolutionPx": [
+          1080,
+          2400
+        ],
+        "appearance": "dark",
+        "locale": "en-US",
+        "fontScale": 2,
+        "layoutDirection": "LTR",
+        "posture": "standard",
+        "captureMethod": "Argent screenshot",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "15-loading",
+          "path": "artifacts/android-parity/goldens/resilience/phone-15-loading-dark-large-text.png",
+          "sha256": "fa6cee6ff7835a1677a982e9937d4b9fbdf1eadcbabb2a6e9ef461320c90a34a",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "16-upgrade-quota-reached",
+          "path": "artifacts/android-parity/goldens/resilience/phone-16-upgrade-quota-reached-dark-large-text.png",
+          "sha256": "4bf43d1e77a29afb2b5a520e4e82cc7b1fc178a15c36a507f9af2e5f02ae1b72",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "17-upgrade-offline",
+          "path": "artifacts/android-parity/goldens/resilience/phone-17-upgrade-offline-dark-large-text.png",
+          "sha256": "6391165320b122dc42cf3dac031a2f336f1329313f870afb2fdd9e0d3d26f87b",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "18-recording-quota-reached",
+          "path": "artifacts/android-parity/goldens/resilience/phone-18-recording-quota-reached-dark-large-text.png",
+          "sha256": "aa117fdf7c561dce97d2b102dfad1e3add284a7e505e884f41e638999dbe2bfb",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "19-recording-interrupted",
+          "path": "artifacts/android-parity/goldens/resilience/phone-19-recording-interrupted-dark-large-text.png",
+          "sha256": "97479c002fa38beaa89a031e7b5407628f9bbb32560b397b32883c0cf9ccae17",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "20-history-unknown-outcome",
+          "path": "artifacts/android-parity/goldens/resilience/phone-20-history-unknown-outcome-dark-large-text.png",
+          "sha256": "fca194403f82404a16097c60d521edcc4180910279bb21e6ef159126bc182c6e",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "21-history-permanent-failure",
+          "path": "artifacts/android-parity/goldens/resilience/phone-21-history-permanent-failure-dark-large-text.png",
+          "sha256": "3bf037f0aac6060d80881085a6f84bd89bc451a6f6b28d427b06dd797544e4d0",
+          "width": 1080,
+          "height": 2400
+        }
+      ],
+      "contactSheet": {
+        "path": "artifacts/android-parity/goldens/resilience/phone-resilience-large-text-contact-sheet.png",
+        "sha256": "60d5fac92c62345ea8a8b0f3e0c943feab8b8bd500f4e1c23afb3b001e695d0c",
+        "width": 1152,
+        "height": 2472
+      }
+    },
+    {
+      "id": "phone-resilience-dark-rtl-ar",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "healthmd_phone_api35",
+        "serial": "emulator-5556",
+        "apiLevel": 35,
+        "resolutionPx": [
+          1080,
+          2400
+        ],
+        "appearance": "dark",
+        "locale": "ar",
+        "fontScale": 1,
+        "layoutDirection": "RTL",
+        "posture": "standard",
+        "captureMethod": "Argent screenshot",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "15-loading",
+          "path": "artifacts/android-parity/goldens/resilience/phone-15-loading-dark-rtl-ar.png",
+          "sha256": "18c7d9f117c0dde9fab34f7b9866b30e5b2d89ae942ae5c7de427ff3b0cf8ec6",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "16-upgrade-quota-reached",
+          "path": "artifacts/android-parity/goldens/resilience/phone-16-upgrade-quota-reached-dark-rtl-ar.png",
+          "sha256": "9410612047abd2820ade48086730f61cd734d8f84509cea2bb8c11b08c701fac",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "17-upgrade-offline",
+          "path": "artifacts/android-parity/goldens/resilience/phone-17-upgrade-offline-dark-rtl-ar.png",
+          "sha256": "4bea45709b014fd417939da1dfbce1f46ba55c6e5a248df94e77851eaa07ad5b",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "18-recording-quota-reached",
+          "path": "artifacts/android-parity/goldens/resilience/phone-18-recording-quota-reached-dark-rtl-ar.png",
+          "sha256": "c7f9c4debb4d6626facfa095d70dfc502dc7bc698ffeb02ed1ec9de6450d03b3",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "19-recording-interrupted",
+          "path": "artifacts/android-parity/goldens/resilience/phone-19-recording-interrupted-dark-rtl-ar.png",
+          "sha256": "9c127686c1d84295827d2d99e6e936452dcf4600532fc7a2327bac8d3b1bc8a8",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "20-history-unknown-outcome",
+          "path": "artifacts/android-parity/goldens/resilience/phone-20-history-unknown-outcome-dark-rtl-ar.png",
+          "sha256": "fca583d49e180868f49e9d70c1e37e9a56ca7c99b161f8c24774335d5fc89b72",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "21-history-permanent-failure",
+          "path": "artifacts/android-parity/goldens/resilience/phone-21-history-permanent-failure-dark-rtl-ar.png",
+          "sha256": "9175ce7ace884ec1e8e46e20195cec74c89c015144162c7afb6e62d9af7e588c",
+          "width": 1080,
+          "height": 2400
+        }
+      ],
+      "contactSheet": {
+        "path": "artifacts/android-parity/goldens/resilience/phone-resilience-rtl-ar-contact-sheet.png",
+        "sha256": "4fa1fc85d23efa429ce56e5a20dc01bb6829b2ad2aa45669554d150a752860e8",
+        "width": 1152,
+        "height": 2472
+      }
+    }
+  ],
+  "additionalCaptureSets": [
+    {
+      "id": "phone-light-default-en",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "healthmd_phone_api35",
+        "serial": "emulator-5556",
+        "apiLevel": 35,
+        "resolutionPx": [
+          1080,
+          2400
+        ],
+        "appearance": "light",
+        "locale": "en-US",
+        "fontScale": 1.0,
+        "layoutDirection": "LTR",
+        "posture": "standard",
+        "captureMethod": "Argent screenshot",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "01-quick-capture",
+          "path": "artifacts/android-parity/goldens/phone/phone-01-quick-capture-light.png",
+          "sha256": "515c144b91f91505420a6b9dd271fb8672f2674b7d93bea64013070d9c460bea",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "02-history",
+          "path": "artifacts/android-parity/goldens/phone/phone-02-history-light.png",
+          "sha256": "d1d98c094f5df494ddb2e783b635638cd49231c2a926a8cd50156e0cf83e98c9",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "03-settings",
+          "path": "artifacts/android-parity/goldens/phone/phone-03-settings-light.png",
+          "sha256": "818dbef682326d19c2641a2e30eae6002dd16c3de9554eb7814995c1d2cfe13e",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "04-models",
+          "path": "artifacts/android-parity/goldens/phone/phone-04-models-light.png",
+          "sha256": "18d3dc2150ef18beeb7dd06cfacfc8e9699033c011897668d117aa3016b6a997",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "05-capture-presets",
+          "path": "artifacts/android-parity/goldens/phone/phone-05-capture-presets-light.png",
+          "sha256": "820bea89d25b8b633575149280c4c75015ad31d21512c6908c17d5cd6e5219be",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "06-app-language",
+          "path": "artifacts/android-parity/goldens/phone/phone-06-app-language-light.png",
+          "sha256": "68b2a10e251d6c68275f3efda46da417c0a15b33a2a8f6dbba73ab5c704c186d",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "07-live-recording",
+          "path": "artifacts/android-parity/goldens/phone/phone-07-live-recording-light.png",
+          "sha256": "6d8426747be963d8db397141adee87f39f3b1cd43433380a351868d3f3c1cf2b",
+          "width": 1080,
+          "height": 2400
+        }
+      ]
+    },
+    {
+      "id": "phone-dark-large-text-en",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "healthmd_phone_api35",
+        "serial": "emulator-5556",
+        "apiLevel": 35,
+        "resolutionPx": [
+          1080,
+          2400
+        ],
+        "appearance": "dark",
+        "locale": "en-US",
+        "fontScale": 2.0,
+        "layoutDirection": "LTR",
+        "posture": "standard",
+        "captureMethod": "Argent screenshot",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "01-quick-capture",
+          "path": "artifacts/android-parity/goldens/phone/phone-01-quick-capture-dark-large-text.png",
+          "sha256": "bddae34686306fb1815c56249999cb58d656e9c0dd8d2e0e9eb18f93a4b56f03",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "02-history",
+          "path": "artifacts/android-parity/goldens/phone/phone-02-history-dark-large-text.png",
+          "sha256": "46884a364368b8a81645d2a6f524db4408286e23d5cebfb4c034eea350a60ccb",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "03-settings",
+          "path": "artifacts/android-parity/goldens/phone/phone-03-settings-dark-large-text.png",
+          "sha256": "fe03cc78966d94274961b8cff496f29925533a6b3e344e9177f24061148659a6",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "04-models",
+          "path": "artifacts/android-parity/goldens/phone/phone-04-models-dark-large-text.png",
+          "sha256": "668bfc77ec33742387a3aacaa3dc683a420d56dc772f26283cd10c58b98ea284",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "05-capture-presets",
+          "path": "artifacts/android-parity/goldens/phone/phone-05-capture-presets-dark-large-text.png",
+          "sha256": "f2792261208b4ce38d40566dcf563e04cb7cab6714c40eaf132885b969369b9d",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "06-app-language",
+          "path": "artifacts/android-parity/goldens/phone/phone-06-app-language-dark-large-text.png",
+          "sha256": "501c955672f149604f5bf790607998dbf7e56adccf1804744b066b8db78f131f",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "07-live-recording",
+          "path": "artifacts/android-parity/goldens/phone/phone-07-live-recording-dark-large-text.png",
+          "sha256": "647f36c469af9a5257d8fa6eca78f457a30ce11769e4ca6c20a963307e6a6577",
+          "width": 1080,
+          "height": 2400
+        }
+      ]
+    },
+    {
+      "id": "phone-dark-rtl-ar",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "healthmd_phone_api35",
+        "serial": "emulator-5556",
+        "apiLevel": 35,
+        "resolutionPx": [
+          1080,
+          2400
+        ],
+        "appearance": "dark",
+        "locale": "ar",
+        "fontScale": 1.0,
+        "layoutDirection": "RTL",
+        "posture": "standard",
+        "captureMethod": "Argent screenshot",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "01-quick-capture",
+          "path": "artifacts/android-parity/goldens/phone/phone-01-quick-capture-dark-rtl-ar.png",
+          "sha256": "ae10709169eef1734b8fcf53ca2cbb38be0ec66c8f1d08e2dea8f3886a7f7877",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "02-history",
+          "path": "artifacts/android-parity/goldens/phone/phone-02-history-dark-rtl-ar.png",
+          "sha256": "81b85e232a31ac1ad3c3ea67f0ed573682ad9f0c7dd400d26572b8a40bca2741",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "03-settings",
+          "path": "artifacts/android-parity/goldens/phone/phone-03-settings-dark-rtl-ar.png",
+          "sha256": "4ccff27a9ec488273f4ace91e1816b48b7cf199269fb2e3e2a2c6febe90efb6a",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "04-models",
+          "path": "artifacts/android-parity/goldens/phone/phone-04-models-dark-rtl-ar.png",
+          "sha256": "42911a973235e54a45e6c024d3ca4832cb7ca05b15e8ed38ed8075fc29af08c2",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "05-capture-presets",
+          "path": "artifacts/android-parity/goldens/phone/phone-05-capture-presets-dark-rtl-ar.png",
+          "sha256": "ef5380fcb3d493e213814cec070241ebc89502fd38fe62e5533e2bdb426c9c09",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "06-app-language",
+          "path": "artifacts/android-parity/goldens/phone/phone-06-app-language-dark-rtl-ar.png",
+          "sha256": "2935d68f0e853719693de529420880ea72ba4b9c6f742ee0dadf02cea361ae9f",
+          "width": 1080,
+          "height": 2400
+        },
+        {
+          "id": "07-live-recording",
+          "path": "artifacts/android-parity/goldens/phone/phone-07-live-recording-dark-rtl-ar.png",
+          "sha256": "59b2dfcf0cf7ee73dbdf5e258b4fa8b5f427ac84b70536b7cacd4f0973949ee8",
+          "width": 1080,
+          "height": 2400
+        }
+      ]
+    },
+    {
+      "id": "tablet-dark-landscape-en",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "vox_tablet_api35",
+        "serial": "emulator-5558",
+        "apiLevel": 35,
+        "resolutionPx": [
+          2560,
+          1600
+        ],
+        "appearance": "dark",
+        "locale": "en-US",
+        "fontScale": 1.0,
+        "layoutDirection": "LTR",
+        "posture": "landscape",
+        "captureMethod": "Android adb screencap fallback",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "01-quick-capture",
+          "path": "artifacts/android-parity/goldens/tablet/tablet-01-quick-capture-dark-landscape.png",
+          "sha256": "adeefee827c67d9370a9a1091492ce9c69e9f413f0932ba072581dc011a31285",
+          "width": 2560,
+          "height": 1600
+        },
+        {
+          "id": "02-history",
+          "path": "artifacts/android-parity/goldens/tablet/tablet-02-history-dark-landscape.png",
+          "sha256": "7ee5814f04a22ab47a1c08856ed1595561e312067cfb3036ce9e7231083dc7b2",
+          "width": 2560,
+          "height": 1600
+        },
+        {
+          "id": "03-settings",
+          "path": "artifacts/android-parity/goldens/tablet/tablet-03-settings-dark-landscape.png",
+          "sha256": "41446cc0a180de8f1342000a1cb28d1fca94e2558cb4941d3a52354aeea40777",
+          "width": 2560,
+          "height": 1600
+        },
+        {
+          "id": "04-models",
+          "path": "artifacts/android-parity/goldens/tablet/tablet-04-models-dark-landscape.png",
+          "sha256": "4155ac71969a8351232aee67108c424c456d3d4fdc9dad47589b1b321c118fd0",
+          "width": 2560,
+          "height": 1600
+        },
+        {
+          "id": "05-capture-presets",
+          "path": "artifacts/android-parity/goldens/tablet/tablet-05-capture-presets-dark-landscape.png",
+          "sha256": "87a787b31ba7ac04de34f0f5db4d53cf21a4f7e0b94a77ce95e25ae9eead0e55",
+          "width": 2560,
+          "height": 1600
+        },
+        {
+          "id": "06-app-language",
+          "path": "artifacts/android-parity/goldens/tablet/tablet-06-app-language-dark-landscape.png",
+          "sha256": "20448717e8b950ec17606322b1d5eb3b713604ab05670571f317b2704fb31ebd",
+          "width": 2560,
+          "height": 1600
+        },
+        {
+          "id": "07-live-recording",
+          "path": "artifacts/android-parity/goldens/tablet/tablet-07-live-recording-dark-landscape.png",
+          "sha256": "c84496c7576ad2a607b2f80e612b641c62f26ce3f2f8d816206de2fbbbee2766",
+          "width": 2560,
+          "height": 1600
+        }
+      ]
+    },
+    {
+      "id": "foldable-dark-opened-en",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "vox_foldable_api35",
+        "serial": "emulator-5558",
+        "apiLevel": 35,
+        "resolutionPx": [
+          1768,
+          2208
+        ],
+        "appearance": "dark",
+        "locale": "en-US",
+        "fontScale": 1.0,
+        "layoutDirection": "LTR",
+        "posture": "OPENED",
+        "captureMethod": "Android adb screencap fallback",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "01-quick-capture",
+          "path": "artifacts/android-parity/goldens/foldable/foldable-01-quick-capture-dark-opened.png",
+          "sha256": "87588b933a2d8d59de4796fe9d1309423c4d187640aad44cca5880760c5b9696",
+          "width": 1768,
+          "height": 2208
+        },
+        {
+          "id": "02-history",
+          "path": "artifacts/android-parity/goldens/foldable/foldable-02-history-dark-opened.png",
+          "sha256": "e9db4d5d28ee95e14d4b4d0456cae3b3a591cc1ee2722b220dcfc4ac60e59dee",
+          "width": 1768,
+          "height": 2208
+        },
+        {
+          "id": "03-settings",
+          "path": "artifacts/android-parity/goldens/foldable/foldable-03-settings-dark-opened.png",
+          "sha256": "6d8c447faa3ef5899063445bd564f6d604feead2f1888f1e68ab20b43075c46c",
+          "width": 1768,
+          "height": 2208
+        },
+        {
+          "id": "04-models",
+          "path": "artifacts/android-parity/goldens/foldable/foldable-04-models-dark-opened.png",
+          "sha256": "e176e365b8b7f26a6c829019c7f2338ad3173696f244596feb3c918dacbf8ec4",
+          "width": 1768,
+          "height": 2208
+        },
+        {
+          "id": "05-capture-presets",
+          "path": "artifacts/android-parity/goldens/foldable/foldable-05-capture-presets-dark-opened.png",
+          "sha256": "3daf61617864f97dacfb56d974bc520188752a5aef5987f062aeb96b555804ff",
+          "width": 1768,
+          "height": 2208
+        },
+        {
+          "id": "06-app-language",
+          "path": "artifacts/android-parity/goldens/foldable/foldable-06-app-language-dark-opened.png",
+          "sha256": "bc26cae46e4195a2a256729c77f1b1a986013b0b433f7c7d8d624bcabe8e6ff3",
+          "width": 1768,
+          "height": 2208
+        },
+        {
+          "id": "07-live-recording",
+          "path": "artifacts/android-parity/goldens/foldable/foldable-07-live-recording-dark-opened.png",
+          "sha256": "2dff0f7055edbac145fc6d76ff7ffbdf4e5a36ea87b05eca766c363dc6b012fa",
+          "width": 1768,
+          "height": 2208
+        }
+      ]
+    },
+    {
+      "id": "foldable-dark-half-opened-en",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "vox_foldable_api35",
+        "serial": "emulator-5558",
+        "apiLevel": 35,
+        "resolutionPx": [
+          1768,
+          2208
+        ],
+        "appearance": "dark",
+        "locale": "en-US",
+        "fontScale": 1.0,
+        "layoutDirection": "LTR",
+        "posture": "HALF_OPENED",
+        "captureMethod": "Android adb screencap fallback",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "01-quick-capture",
+          "path": "artifacts/android-parity/goldens/foldable/foldable-01-quick-capture-dark-half-opened.png",
+          "sha256": "c99c14441dd513706e78e8894219670adc4eeb41b87fb428359b8168558d3ad4",
+          "width": 1768,
+          "height": 2208
+        },
+        {
+          "id": "07-live-recording",
+          "path": "artifacts/android-parity/goldens/foldable/foldable-07-live-recording-dark-half-opened.png",
+          "sha256": "31a4f113fdb47c4df4a4b550aa5063d732e0cab938a5bab33311b7f8e1b459b2",
+          "width": 1768,
+          "height": 2208
+        }
+      ]
+    },
+    {
+      "id": "foldable-dark-closed-en",
+      "reviewStatus": "unreviewed",
+      "capture": {
+        "deviceName": "vox_foldable_api35",
+        "serial": "emulator-5558",
+        "apiLevel": 35,
+        "resolutionPx": [
+          1768,
+          2208
+        ],
+        "appearance": "dark",
+        "locale": "en-US",
+        "fontScale": 1.0,
+        "layoutDirection": "LTR",
+        "posture": "CLOSED",
+        "captureMethod": "Android adb screencap fallback",
+        "sourceActivity": "md.vox.android.VisualStoryActivity"
+      },
+      "screenshots": [
+        {
+          "id": "01-quick-capture",
+          "path": "artifacts/android-parity/goldens/foldable/foldable-01-quick-capture-dark-closed.png",
+          "sha256": "e82c86a13226b51422f010359f554a31231f5a388a982c2b1f789a1c383188af",
+          "width": 1768,
+          "height": 2208
+        }
+      ]
+    }
+  ],
+  "additionalContactSheets": [
+    {
+      "id": "phone-light-default-en",
+      "path": "artifacts/android-parity/goldens/phone/phone-light-story-contact-sheet.png",
+      "sha256": "2b26b3840ae80708ac9d6693616b69ed3d350475e5b7b62124fe8e91bdb0e6bb",
+      "width": 1152,
+      "height": 2472
+    },
+    {
+      "id": "phone-dark-large-text-en",
+      "path": "artifacts/android-parity/goldens/phone/phone-large-text-story-contact-sheet.png",
+      "sha256": "bec842ef4da40082782aeb243db6cfa7659fdf5dc289aaaec913d178d1149fe1",
+      "width": 1152,
+      "height": 2472
+    },
+    {
+      "id": "phone-dark-rtl-ar",
+      "path": "artifacts/android-parity/goldens/phone/phone-rtl-ar-story-contact-sheet.png",
+      "sha256": "08f46f16211ac37a4a014d1ee365bb490db30bc3175319ac8d059eb56e55d319",
+      "width": 1152,
+      "height": 2472
+    },
+    {
+      "id": "tablet-dark-landscape-en",
+      "path": "artifacts/android-parity/goldens/tablet/tablet-story-contact-sheet.png",
+      "sha256": "ff85fcc02eb9e94bddfdd1ed57146da8af0a4bdea579ff7dd657bdd77825f8a6",
+      "width": 1328,
+      "height": 1696
+    },
+    {
+      "id": "foldable-dark-postures-en",
+      "path": "artifacts/android-parity/goldens/foldable/foldable-story-contact-sheet.png",
+      "sha256": "7fa44c06d497f98898508950c3de56a276ebc769a54e2d3ebf38b5b34b8fb65b",
+      "width": 1272,
+      "height": 2096
+    }
+  ],
+  "supplementalScreenshots": [
+    {
+      "id": "phone-onboarding-en-dark-200",
+      "reviewStatus": "unreviewed",
+      "path": "artifacts/android-parity/goldens/phone-onboarding-en-dark-200.png",
+      "sha256": "46f3d728bcbf4e1e7d7a12337103f365ed436033a45e19c8a315226557f32825",
+      "width": 1080,
+      "height": 2250
+    },
+    {
+      "id": "phone-onboarding-ar-dark-200",
+      "reviewStatus": "unreviewed",
+      "path": "artifacts/android-parity/goldens/phone-onboarding-ar-dark-200.png",
+      "sha256": "a9a37bd1c7dfe58039e0a347b05f5ca45109a31346772542fa2486d31fda6f64",
+      "width": 1080,
+      "height": 2400
+    }
+  ]
+}

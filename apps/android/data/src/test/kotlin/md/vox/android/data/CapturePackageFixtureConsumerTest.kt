@@ -102,5 +102,219 @@ class CapturePackageFixtureConsumerTest {
         )
     }
 
+    @Test fun currentAndroidTextLinkProfileAdmitsEveryGovernedEntrySource() {
+        val original = Json.parseToJsonElement(
+            resource("contracts/v1/fixtures/capture-preparation-input/valid-android-m3-text-link.json").toString(Charsets.UTF_8),
+        ) as JsonObject
+        for (source in listOf("app", "share", "keyboard", "widget", "shortcut", "watch", "wear")) {
+            val request = JsonObject(original.toMutableMap().apply { put("captureSource", JsonPrimitive(source)) })
+            assertEquals(source, CapturePackageCodec.admitRequest(CapturePackageCodec.canonical(request)).captureSource)
+        }
+        val unsupported = JsonObject(original.toMutableMap().apply { put("captureSource", JsonPrimitive("voice")) })
+        try {
+            CapturePackageCodec.admitRequest(CapturePackageCodec.canonical(unsupported))
+            fail("unimplemented source accepted")
+        } catch (_: PackageCodecException) { }
+    }
+
+    @Test fun currentAndroidProfileAdmitsHashBoundAssetsAndRecordingCorrelation() {
+        val original = Json.parseToJsonElement(
+            resource("contracts/v1/fixtures/capture-preparation-input/valid-android-m3-text-link.json").toString(Charsets.UTF_8),
+        ) as JsonObject
+        val assetID = "55555555-5555-4555-8555-555555555555"
+        val asset = JsonObject(
+            mapOf(
+                "id" to JsonPrimitive(assetID),
+                "kind" to JsonPrimitive("asset"),
+                "sourceID" to JsonPrimitive(assetID),
+                "mediaType" to JsonPrimitive("application/pdf"),
+                "length" to JsonPrimitive(4_096),
+                "sha256" to JsonPrimitive("a".repeat(64)),
+                "safeExtension" to JsonPrimitive("pdf"),
+                "originalNamePolicy" to JsonPrimitive("safeStem"),
+            ),
+        )
+        val invocation = JsonObject((original.getValue("invocation") as JsonObject).toMutableMap().apply {
+            put("originRecordingID", JsonPrimitive("66666666-6666-4666-8666-666666666666"))
+        })
+        val request = JsonObject(original.toMutableMap().apply {
+            put("invocation", invocation)
+            put("payloads", JsonArray((original.getValue("payloads") as JsonArray) + asset))
+        })
+
+        assertEquals(
+            "11111111-1111-4111-8111-111111111111",
+            CapturePackageCodec.admitRequest(CapturePackageCodec.canonical(request)).requestID,
+        )
+    }
+
+    @Test fun currentAndroidProfileAcceptsCoherentFrozenLocationAndRejectsPrecisionLeak() {
+        val original = Json.parseToJsonElement(
+            resource("contracts/v1/fixtures/capture-preparation-input/valid-android-m3-text-link.json").toString(Charsets.UTF_8),
+        ) as JsonObject
+        val originalPreset = original.getValue("preset") as JsonObject
+        val locationPolicy = JsonObject(
+            mapOf(
+                "advancedTemplate" to JsonPrimitive(""),
+                "collectionKey" to JsonPrimitive("locations"),
+                "isEnabled" to JsonPrimitive(true),
+                "metadataOutputEnabled" to JsonPrimitive(true),
+                "outputMode" to JsonPrimitive("structured"),
+                "precision" to JsonPrimitive("city"),
+                "structuredFields" to JsonArray(
+                    listOf(
+                        JsonObject(mapOf("field" to JsonPrimitive("longitude"), "outputKey" to JsonPrimitive("lng"))),
+                        JsonObject(mapOf("field" to JsonPrimitive("coordinates"), "outputKey" to JsonPrimitive("point"))),
+                    ),
+                ),
+            ),
+        )
+        val zeroedPreset = JsonObject(originalPreset.toMutableMap().apply {
+            put("locationPolicy", locationPolicy)
+            put("snapshotHash", JsonPrimitive("0".repeat(64)))
+        })
+        val preset = JsonObject(zeroedPreset.toMutableMap().apply {
+            put("snapshotHash", JsonPrimitive(CapturePackageCodec.sha256(CapturePackageCodec.canonical(zeroedPreset))))
+        })
+        val snapshot = JsonObject(
+            mapOf(
+                "accuracyMillimeters" to JsonPrimitive(4_250),
+                "capturedAtEpochMilliseconds" to JsonPrimitive(1_700_000_000_123),
+                "latitudeE6" to JsonPrimitive(18_470_000),
+                "longitudeE6" to JsonPrimitive(-66_110_000),
+                "precision" to JsonPrimitive("city"),
+                "source" to JsonPrimitive("app"),
+            ),
+        )
+        val invocation = JsonObject((original.getValue("invocation") as JsonObject).toMutableMap().apply {
+            put("locationOutcome", JsonPrimitive("coordinatesFrozen"))
+            put("locationSnapshot", snapshot)
+        })
+        val request = JsonObject(original.toMutableMap().apply {
+            put("invocation", invocation)
+            put("preset", preset)
+        })
+        assertEquals(
+            "11111111-1111-4111-8111-111111111111",
+            CapturePackageCodec.admitRequest(CapturePackageCodec.canonical(request)).requestID,
+        )
+
+        val leaking = JsonObject(snapshot.toMutableMap().apply { put("latitudeE6", JsonPrimitive(18_465_500)) })
+        val invalidInvocation = JsonObject(invocation.toMutableMap().apply { put("locationSnapshot", leaking) })
+        val invalid = JsonObject(request.toMutableMap().apply { put("invocation", invalidInvocation) })
+        try {
+            CapturePackageCodec.admitRequest(CapturePackageCodec.canonical(invalid))
+            fail("city precision leak accepted")
+        } catch (_: PackageCodecException) { }
+
+        val unavailableInvocation = JsonObject((original.getValue("invocation") as JsonObject).toMutableMap().apply {
+            put("locationOutcome", JsonPrimitive("unavailable"))
+            put("locationAttemptedAtEpochMilliseconds", JsonPrimitive(1_700_000_000_123))
+        })
+        CaptureLocationUnavailableReason.entries.forEach { reason ->
+            val reasonInvocation = JsonObject(unavailableInvocation.toMutableMap().apply {
+                put("locationUnavailableReason", JsonPrimitive(reason.wireName))
+            })
+            val unavailable = JsonObject(request.toMutableMap().apply { put("invocation", reasonInvocation) })
+            assertEquals(
+                "11111111-1111-4111-8111-111111111111",
+                CapturePackageCodec.admitRequest(CapturePackageCodec.canonical(unavailable)).requestID,
+            )
+        }
+        val invalidReason = JsonObject(unavailableInvocation.toMutableMap().apply {
+            put("locationUnavailableReason", JsonPrimitive("network"))
+        })
+        try {
+            CapturePackageCodec.admitRequest(CapturePackageCodec.canonical(JsonObject(request.toMutableMap().apply {
+                put("invocation", invalidReason)
+            })))
+            fail("unknown unavailable reason accepted")
+        } catch (_: PackageCodecException) { }
+    }
+
+    @Test fun currentAndroidProfileFreezesDisclosedSystemLabelsAndRejectsConsentDrift() {
+        val original = Json.parseToJsonElement(
+            resource("contracts/v1/fixtures/capture-preparation-input/valid-android-m3-text-link.json").toString(Charsets.UTF_8),
+        ) as JsonObject
+        val originalPreset = original.getValue("preset") as JsonObject
+        val locationPolicy = JsonObject(
+            mapOf(
+                "advancedTemplate" to JsonPrimitive(""),
+                "collectionKey" to JsonPrimitive("locations"),
+                "isEnabled" to JsonPrimitive(true),
+                "labelConsentVersion" to JsonPrimitive(1),
+                "labelLookupClass" to JsonPrimitive("systemMayUseNetwork"),
+                "metadataOutputEnabled" to JsonPrimitive(true),
+                "outputMode" to JsonPrimitive("structured"),
+                "precision" to JsonPrimitive("exact"),
+                "structuredFields" to JsonArray(
+                    listOf("place", "city", "region", "country").map { field ->
+                        JsonObject(mapOf("field" to JsonPrimitive(field), "outputKey" to JsonPrimitive(field)))
+                    },
+                ),
+            ),
+        )
+        val zeroedPreset = JsonObject(originalPreset.toMutableMap().apply {
+            put("locationPolicy", locationPolicy)
+            put("snapshotHash", JsonPrimitive("0".repeat(64)))
+        })
+        val preset = JsonObject(zeroedPreset.toMutableMap().apply {
+            put("snapshotHash", JsonPrimitive(CapturePackageCodec.sha256(CapturePackageCodec.canonical(zeroedPreset))))
+        })
+        val label = JsonObject(
+            mapOf(
+                "place" to JsonPrimitive("Café & Main"),
+                "city" to JsonPrimitive("Montréal"),
+                "region" to JsonPrimitive("Québec"),
+                "country" to JsonPrimitive("Canada"),
+            ),
+        )
+        val snapshot = JsonObject(
+            mapOf(
+                "accuracyMillimeters" to JsonPrimitive(12_300),
+                "capturedAtEpochMilliseconds" to JsonPrimitive(1_700_000_000_123),
+                "label" to label,
+                "latitudeE6" to JsonPrimitive(45_501_235),
+                "longitudeE6" to JsonPrimitive(-73_567_890),
+                "precision" to JsonPrimitive("exact"),
+                "source" to JsonPrimitive("app"),
+            ),
+        )
+        val observation = JsonObject(
+            mapOf(
+                "consentVersion" to JsonPrimitive(1),
+                "lookupClass" to JsonPrimitive("systemMayUseNetwork"),
+                "outcome" to JsonPrimitive("frozen"),
+                "requested" to JsonPrimitive(true),
+            ),
+        )
+        val invocation = JsonObject((original.getValue("invocation") as JsonObject).toMutableMap().apply {
+            put("locationLabelObservation", observation)
+            put("locationOutcome", JsonPrimitive("labelFrozen"))
+            put("locationSnapshot", snapshot)
+        })
+        val request = JsonObject(original.toMutableMap().apply {
+            put("invocation", invocation)
+            put("preset", preset)
+        })
+        assertEquals(
+            "11111111-1111-4111-8111-111111111111",
+            CapturePackageCodec.admitRequest(CapturePackageCodec.canonical(request)).requestID,
+        )
+
+        val driftedObservation = JsonObject(observation.toMutableMap().apply {
+            put("consentVersion", JsonPrimitive(2))
+        })
+        val driftedInvocation = JsonObject(invocation.toMutableMap().apply {
+            put("locationLabelObservation", driftedObservation)
+        })
+        try {
+            CapturePackageCodec.admitRequest(CapturePackageCodec.canonical(JsonObject(request.toMutableMap().apply {
+                put("invocation", driftedInvocation)
+            })))
+            fail("label consent drift accepted")
+        } catch (_: PackageCodecException) { }
+    }
+
     private fun resource(path: String): ByteArray = checkNotNull(javaClass.classLoader!!.getResourceAsStream(path)) { path }.use { it.readBytes() }
 }

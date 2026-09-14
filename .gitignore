@@ -23,6 +23,8 @@ Packages/vox-core-rust/target/
 
 # Secrets
 api_key.json
+*.jks
+*.keystore
 
 # OS files
 .DS_Store
@@ -33,7 +35,9 @@ node_modules/
 # Generated output
 output/
 apps/android/.gradle/
+apps/android/.kotlin/
 apps/android/local.properties
+apps/android/whisper_small/src/main/assets/speech-models/ggml-small/
 
 # Agent/local automation state
 .pi/

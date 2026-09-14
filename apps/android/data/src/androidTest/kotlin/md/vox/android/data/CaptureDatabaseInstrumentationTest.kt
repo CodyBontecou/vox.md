@@ -46,7 +46,130 @@ class CaptureDatabaseInstrumentationTest {
                 assertEquals(QuotaReservationResult.Existing(token), quota.reserve(id, "20000000-0000-4000-8000-${(n + 1).toString().padStart(12, '0')}", 200L + n))
             }
             assertEquals(QuotaReservationResult.LimitReached, quota.reserve(request, THIRD_TOKEN, 300))
+            val paidRequest = "77777777-7777-4777-8777-777777777777"
+            val paidToken = "88888888-8888-4888-8888-888888888888"
+            assertEquals(
+                QuotaReservationResult.Reserved(paidToken),
+                quota.reserve(paidRequest, paidToken, 301, chargeFreeQuota = false),
+            )
+            assertEquals(0, database.captureCoordinationDao().readReservation(paidRequest).quotaUnits)
             assertEquals(installation, quota.initializeInstallation("66666666-6666-4666-8666-666666666666", 300))
+        } finally { database.close() }
+    }
+
+    @Test fun activityLedgerIsContentFreeIdempotentAndKeepsSevenDayBreakdown() {
+        val database = Room.inMemoryDatabaseBuilder(context, CaptureDatabase::class.java).build()
+        try {
+            val ledger = RoomActivityStatsLedger(database)
+            val now = 1_787_875_200_000L
+            assertTrue(ledger.recordCapture(REQUEST, now, "share", 2))
+            assertTrue(ledger.recordCapture(REQUEST, now + 1, "app", 99))
+            assertTrue(ledger.recordRecording(SECOND_TOKEN, now, 65_000))
+            assertTrue(ledger.recordRecording(SECOND_TOKEN, now + 1, 10))
+
+            val stats = ledger.snapshot(now, java.time.ZoneOffset.UTC)
+            assertEquals(1, stats.captureCount)
+            assertEquals(1, stats.recordingCount)
+            assertEquals(2, stats.attachmentCount)
+            assertEquals(65_000, stats.recordedDurationMillis)
+            assertEquals(mapOf("share" to 1), stats.captureSources)
+            assertEquals(7, stats.lastSevenDays.size)
+            assertEquals(1, stats.lastSevenDays.last().captureCount)
+            assertEquals(1, stats.lastSevenDays.last().recordingCount)
+        } finally { database.close() }
+    }
+
+    @Test fun completionLedgerContainsOnlyStableIDAndTimestampAndIsIdempotent() {
+        val database = Room.inMemoryDatabaseBuilder(context, CaptureDatabase::class.java).build()
+        try {
+            val ledger = RoomCaptureCompletionLedger(database)
+            assertTrue(ledger.record(REQUEST, 1_700_000_000_123))
+            assertTrue(ledger.record(REQUEST, 1_700_000_000_123))
+            assertFalse(ledger.record(REQUEST, 1_700_000_000_124))
+            assertEquals(CaptureCompletion(REQUEST, 1_700_000_000_123), ledger.read(REQUEST))
+            assertEquals(listOf(CaptureCompletion(REQUEST, 1_700_000_000_123)), ledger.all())
+            database.openHelper.writableDatabase.query("PRAGMA table_info(`capture_completion`)").use { cursor ->
+                val names = buildList {
+                    val nameColumn = cursor.getColumnIndexOrThrow("name")
+                    while (cursor.moveToNext()) add(cursor.getString(nameColumn))
+                }
+                assertEquals(listOf("requestID", "completedAtEpochMillis"), names)
+            }
+            assertTrue(ledger.delete(REQUEST))
+            assertNull(ledger.read(REQUEST))
+        } finally { database.close() }
+    }
+
+    @Test fun migrationTwoToThreeAddsOnlyContentFreeActivityTables() {
+        val name = "capture-migration-v3-${System.nanoTime()}"
+        migration.createDatabase(name, 2).close()
+        val migrated = migration.runMigrationsAndValidate(name, 3, true, CaptureDatabase.MIGRATION_2_3)
+        try {
+            for (table in listOf("capture_activity", "recording_activity")) {
+                migrated.query("PRAGMA table_info(`$table`)").use { cursor -> assertTrue(cursor.count > 0) }
+            }
+        } finally { migrated.close(); context.deleteDatabase(name) }
+    }
+
+    @Test fun migrationThreeToFourPreservesReservationsAsFreeQuotaUnits() {
+        val name = "capture-migration-v4-${System.nanoTime()}"
+        migration.createDatabase(name, 3).apply {
+            execSQL("INSERT INTO quota_reservation VALUES ('$REQUEST','$TOKEN','$INSTALLATION',1,2)")
+            close()
+        }
+        val migrated = migration.runMigrationsAndValidate(name, 4, true, CaptureDatabase.MIGRATION_3_4)
+        try {
+            migrated.query("SELECT quotaUnits FROM quota_reservation WHERE requestID='$REQUEST'").use { cursor ->
+                assertTrue(cursor.moveToFirst())
+                assertEquals(1, cursor.getInt(0))
+            }
+        } finally { migrated.close(); context.deleteDatabase(name) }
+    }
+
+    @Test fun migrationFourToFiveAddsOnlyThePayloadFreeCompletionTable() {
+        val name = "capture-migration-v5-${System.nanoTime()}"
+        migration.createDatabase(name, 4).close()
+        val migrated = migration.runMigrationsAndValidate(name, 5, true, CaptureDatabase.MIGRATION_4_5)
+        try {
+            migrated.query("PRAGMA table_info(`capture_completion`)").use { cursor ->
+                val nameColumn = cursor.getColumnIndexOrThrow("name")
+                val columns = buildList { while (cursor.moveToNext()) add(cursor.getString(nameColumn)) }
+                assertEquals(listOf("requestID", "completedAtEpochMillis"), columns)
+            }
+        } finally { migrated.close(); context.deleteDatabase(name) }
+    }
+
+    @Test fun unmeteredRecordingReservationCommitsZeroCaptureUnitsAndRemainsIdempotent() {
+        val database = Room.inMemoryDatabaseBuilder(context, CaptureDatabase::class.java).build()
+        try {
+            val quota = RoomQuotaLedger(database)
+            quota.initializeInstallation(INSTALLATION, 1)
+            assertEquals(
+                QuotaReservationResult.Reserved(TOKEN),
+                quota.reserve(REQUEST, TOKEN, 2, chargeFreeQuota = false),
+            )
+            val draft = tombstoneDraft()
+            assertEquals(TerminalQuotaResult.COMMITTED, quota.commitTerminal(TOKEN, draft))
+            assertEquals(TerminalQuotaResult.IDENTICAL, quota.commitTerminal(TOKEN, draft))
+            assertEquals(0, database.captureCoordinationDao().committedUnits())
+            assertEquals(0, database.captureCoordinationDao().readTombstone(REQUEST).quotaUnits)
+        } finally { database.close() }
+    }
+
+    @Test fun failedWriteReservationAndRetryConsumeOnlyAfterVerifiedTerminalCommit() {
+        val database = Room.inMemoryDatabaseBuilder(context, CaptureDatabase::class.java).build()
+        try {
+            val quota = RoomQuotaLedger(database)
+            quota.initializeInstallation(INSTALLATION, 1)
+            assertEquals(QuotaReservationResult.Reserved(TOKEN), quota.reserve(REQUEST, TOKEN, 2))
+            assertEquals(0, database.captureCoordinationDao().committedUnits())
+            assertEquals(QuotaReservationResult.Existing(TOKEN), quota.reserve(REQUEST, SECOND_TOKEN, 3))
+            assertEquals(0, database.captureCoordinationDao().committedUnits())
+
+            assertEquals(TerminalQuotaResult.COMMITTED, quota.commitTerminal(TOKEN, tombstoneDraft()))
+            assertEquals(1, database.captureCoordinationDao().committedUnits())
+            assertEquals(QuotaReservationResult.AlreadyCommitted, quota.reserve(REQUEST, SECOND_TOKEN, 4))
+            assertEquals(1, database.captureCoordinationDao().committedUnits())
         } finally { database.close() }
     }
 
@@ -146,7 +269,7 @@ class CaptureDatabaseInstrumentationTest {
     private fun tombstoneDraft() = TombstoneDraft(REQUEST, INSTALLATION, 3, "33333333-3333-4333-8333-333333333333", THIRD_TOKEN, 1, 1, 1, 4, "0.1.0-alpha.1", "swift-legacy-m0", "apple-parity-v1", 1)
 
     private fun schemaShape(database: SupportSQLiteDatabase): Map<String, List<String>> {
-        val tables = listOf("capture_projection", "capture_lease", "lease_clock", "installation_identity", "quota_reservation", "capture_tombstone")
+        val tables = listOf("capture_projection", "capture_lease", "lease_clock", "installation_identity", "capture_tombstone")
         return tables.associateWith { table ->
             database.query("PRAGMA table_info(`$table`)").use { cursor ->
                 buildList { while (cursor.moveToNext()) add((0 until cursor.columnCount).joinToString("|") { cursor.getString(it) ?: "NULL" }) }

@@ -7,6 +7,7 @@ val repositoryRoot = rootProject.projectDir.parentFile.parentFile
 val generatedKotlin = repositoryRoot.resolve("Packages/vox-core-rust/generated/kotlin")
 val nativeBuildScript = repositoryRoot.resolve("Packages/vox-core-rust/scripts/build-android-cdylibs.sh")
 val nativeWorkspace = repositoryRoot.resolve("Packages/vox-core-rust")
+val toolchainManifest = repositoryRoot.resolve("toolchains/android-wear-shared-core.json")
 
 android {
     namespace = "md.vox.android.corebridge"
@@ -34,6 +35,7 @@ fun registerNativeBuild(name: String, profile: String) = tasks.register<Exec>(na
     description = "Source-builds the governed four-ABI Vox core ($profile)."
     val output = layout.buildDirectory.dir("generated/vox-native/$profile/jniLibs")
     inputs.file(nativeBuildScript)
+    inputs.file(toolchainManifest)
     inputs.files(
         fileTree(nativeWorkspace) {
             include(

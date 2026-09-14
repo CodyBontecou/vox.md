@@ -4,10 +4,10 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Local categories outcome",
-          "evidencePath": "artifacts/validation/android-wear/cap.ai.category.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.ai.category.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -30,16 +30,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Local checklists outcome",
-          "evidencePath": "artifacts/validation/android-wear/cap.ai.checklist.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.ai.checklist.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -62,16 +62,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Local Speaker diarization outcome",
-          "evidencePath": "artifacts/validation/android-wear/cap.ai.diarization.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.ai.diarization.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -94,16 +94,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Local meeting notes outcome",
-          "evidencePath": "artifacts/validation/android-wear/cap.ai.meeting.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.ai.meeting.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -126,16 +126,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Clean prose",
-          "evidencePath": "artifacts/validation/android-wear/cap.ai.mode-clean.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.ai.mode-clean.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -158,16 +158,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Custom instruction transformation",
-          "evidencePath": "artifacts/validation/android-wear/cap.ai.mode-custom.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.ai.mode-custom.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -190,16 +190,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Meeting-note structure",
-          "evidencePath": "artifacts/validation/android-wear/cap.ai.mode-meetingnotes.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.ai.mode-meetingnotes.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -222,16 +222,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Keep original deterministic text",
-          "evidencePath": "artifacts/validation/android-wear/cap.ai.mode-none.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.ai.mode-none.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -252,16 +252,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Todo checklist",
-          "evidencePath": "artifacts/validation/android-wear/cap.ai.mode-todolist.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.ai.mode-todolist.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -284,16 +284,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Local tags outcome",
-          "evidencePath": "artifacts/validation/android-wear/cap.ai.tags.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.ai.tags.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -316,16 +316,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Local titles outcome",
-          "evidencePath": "artifacts/validation/android-wear/cap.ai.title.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.ai.title.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -348,7 +348,7 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
@@ -386,10 +386,10 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Android free counter resets on uninstall unless a future approved account service exists",
-          "evidencePath": "artifacts/validation/android-wear/cap.billing.reinstall-adjustment.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.billing.reinstall-adjustment.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -412,16 +412,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Standard Capture delivery is metered only after verified success",
-          "evidencePath": "artifacts/validation/android-wear/cap.delivery.standard.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.delivery.standard.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -444,16 +444,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Voice transcript routed to Markdown consumes transcription allowance only",
-          "evidencePath": "artifacts/validation/android-wear/cap.delivery.voice-meter.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.delivery.voice-meter.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -476,16 +476,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: File action",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.add-files.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.add-files.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -506,16 +506,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Media action",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.add-media.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.add-media.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -536,16 +536,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Selection-aware bold toggle",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.bold.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.bold.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -566,16 +566,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Bullet list formatting",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.bullet.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.bullet.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -596,16 +596,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Word capitalization",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.capitalize.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.capitalize.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -626,16 +626,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Independent coordinate-only Google Maps insertion",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.current-location.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.current-location.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -656,16 +656,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Date insertion",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.date.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.date.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -686,16 +686,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Due-date insertion",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.due-date.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.due-date.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -716,16 +716,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Journal OCR action",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.extract-text.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.extract-text.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -746,16 +746,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Markdown format menu",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.format-menu.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.format-menu.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -776,16 +776,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Hashtag insertion",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.hashtag.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.hashtag.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -806,16 +806,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Heading levels 1 through 6",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.heading.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.heading.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -836,16 +836,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Selection-aware italic toggle",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.italic.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.italic.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -866,16 +866,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Lowercase transformation",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.lowercase.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.lowercase.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -896,16 +896,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Markdown link insertion",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.markdown-link.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.markdown-link.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -926,16 +926,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Paste controls",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.paste.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.paste.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -956,16 +956,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Selection replacement",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.replace.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.replace.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -986,16 +986,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Document scan action",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.scan.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.scan.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1016,16 +1016,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Sentence-case transformation",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.sentence-case.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.sentence-case.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1046,16 +1046,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Sketch action",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.sketch.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.sketch.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1076,16 +1076,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Slug transformation",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.slugify.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.slugify.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1106,16 +1106,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Task checkbox formatting",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.task.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.task.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1136,16 +1136,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Timestamp insertion",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.timestamp.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.timestamp.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1166,16 +1166,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Capture Bar order and hidden state persist",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.toolbar-order.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.toolbar-order.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1196,16 +1196,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Undo action",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.undo.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.undo.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1226,16 +1226,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Uppercase transformation",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.uppercase.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.uppercase.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1256,16 +1256,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Voice-note confirmation preference",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.voice-confirm.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.voice-confirm.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1286,16 +1286,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wiki link insertion",
-          "evidencePath": "artifacts/validation/android-wear/cap.editor.wiki-link.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.editor.wiki-link.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1316,16 +1316,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Main-app Quick Capture",
-          "evidencePath": "artifacts/validation/android-wear/cap.entry.app.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.entry.app.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1346,16 +1346,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Deep-link capture",
-          "evidencePath": "artifacts/validation/android-wear/cap.entry.deep-link.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.entry.deep-link.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1376,16 +1376,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Imported media capture",
-          "evidencePath": "artifacts/validation/android-wear/cap.entry.file-import.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.entry.file-import.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1406,16 +1406,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Voice keyboard capture",
-          "evidencePath": "artifacts/validation/android-wear/cap.entry.keyboard.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.entry.keyboard.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -1436,7 +1436,7 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
@@ -1470,10 +1470,10 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Share Sheet capture",
-          "evidencePath": "artifacts/validation/android-wear/cap.entry.share.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.entry.share.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1494,16 +1494,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Shortcut capture",
-          "evidencePath": "artifacts/validation/android-wear/cap.entry.shortcut.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.entry.shortcut.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1524,16 +1524,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Voice entry capture",
-          "evidencePath": "artifacts/validation/android-wear/cap.entry.voice.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.entry.voice.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -1554,16 +1554,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Apple Watch/Wear capture",
-          "evidencePath": "artifacts/validation/android-wear/cap.entry.watch.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.entry.watch.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -1583,16 +1583,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Widget capture",
-          "evidencePath": "artifacts/validation/android-wear/cap.entry.widget.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.entry.widget.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -1613,16 +1613,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Append to a named file",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.append.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.append.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -1646,16 +1646,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Optional audio copy/reference at top or bottom",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.audio-reference.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.audio-reference.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -1679,16 +1679,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Per-preset export folder capability",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.destination.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.destination.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -1712,16 +1712,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: JSON export",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.format-json.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.format-json.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -1744,16 +1744,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Markdown export",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.format-md.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.format-md.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -1776,16 +1776,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: TXT export",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.format-txt.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.format-txt.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -1808,16 +1808,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: YAML export",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.format-yaml.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.format-yaml.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -1840,16 +1840,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: New-file export with filename template",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.new.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.new.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -1873,16 +1873,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Obsidian-friendly Markdown frontmatter",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.obsidian.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.obsidian.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -1906,16 +1906,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Optional Markdown export template",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.template.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.template.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -1939,16 +1939,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: YAML export property date",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.yaml-date.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.yaml-date.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -1971,16 +1971,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: YAML export property duration",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.yaml-duration.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.yaml-duration.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2003,16 +2003,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: YAML output with Markdown extension",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.yaml-extension.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.yaml-extension.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2036,16 +2036,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: YAML export property id",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.yaml-id.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.yaml-id.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2068,16 +2068,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: YAML export property language",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.yaml-language.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.yaml-language.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2100,16 +2100,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: YAML export property modelUsed",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.yaml-modelused.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.yaml-modelused.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2132,16 +2132,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: YAML export property text",
-          "evidencePath": "artifacts/validation/android-wear/cap.export.yaml-text.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.export.yaml-text.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2164,16 +2164,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Preset or one-shot attachment subfolder",
-          "evidencePath": "artifacts/validation/android-wear/cap.format.attachment-folder.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.format.attachment-folder.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2196,16 +2196,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Reusable entry template and one-shot override",
-          "evidencePath": "artifacts/validation/android-wear/cap.format.entry-template.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.format.entry-template.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2228,16 +2228,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Document-level YAML metadata",
-          "evidencePath": "artifacts/validation/android-wear/cap.format.metadata-document.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.format.metadata-document.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2260,16 +2260,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Entry-scoped inline metadata fields",
-          "evidencePath": "artifacts/validation/android-wear/cap.format.metadata-entry.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.format.metadata-entry.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2292,16 +2292,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Frozen Markdown note template",
-          "evidencePath": "artifacts/validation/android-wear/cap.format.note-template.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.format.note-template.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2324,16 +2324,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Destination entry prefix",
-          "evidencePath": "artifacts/validation/android-wear/cap.format.prefix.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.format.prefix.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2356,16 +2356,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Invisible request marker for idempotent shared-note retry",
-          "evidencePath": "artifacts/validation/android-wear/cap.format.retry-marker.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.format.retry-marker.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2388,16 +2388,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Static note frontmatter fields",
-          "evidencePath": "artifacts/validation/android-wear/cap.format.static-frontmatter.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.format.static-frontmatter.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2420,16 +2420,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Destination entry suffix",
-          "evidencePath": "artifacts/validation/android-wear/cap.format.suffix.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.format.suffix.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2452,16 +2452,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Safely delete filtered transcript selections",
-          "evidencePath": "artifacts/validation/android-wear/cap.history.delete-filtered.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.history.delete-filtered.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -2484,16 +2484,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Edit locally saved transcripts",
-          "evidencePath": "artifacts/validation/android-wear/cap.history.edit.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.history.edit.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -2516,16 +2516,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Search transcript raw/clean text, title, tags and categories",
-          "evidencePath": "artifacts/validation/android-wear/cap.history.search.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.history.search.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -2548,16 +2548,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Share/export previous transcripts",
-          "evidencePath": "artifacts/validation/android-wear/cap.history.share.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.history.share.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -2580,16 +2580,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Replace completed requests with content-free ID/timestamp tombstones",
-          "evidencePath": "artifacts/validation/android-wear/cap.history.tombstone.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.history.tombstone.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -2612,16 +2612,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Validated advanced YAML location template",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.advanced.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.advanced.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2644,16 +2644,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: City precision rounds coordinates to two decimals and omits POI labels",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.city-precision.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.city-precision.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2676,16 +2676,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Preset location is off by default",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.disabled.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.disabled.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2708,16 +2708,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Exact privacy-adjusted origin-time fix",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.exact.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.exact.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2740,16 +2740,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Accuracy",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.field-accuracy.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.field-accuracy.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2772,16 +2772,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Apple Maps link outcome",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.field-applemapsurl.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.field-applemapsurl.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -2804,16 +2804,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: City label",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.field-city.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.field-city.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -2837,16 +2837,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Coordinates",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.field-coordinates.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.field-coordinates.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2869,16 +2869,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Country label",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.field-country.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.field-country.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -2902,16 +2902,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: geo URI",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.field-geouri.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.field-geouri.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2934,16 +2934,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Google Maps link",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.field-googlemapsurl.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.field-googlemapsurl.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2966,16 +2966,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Capture ID",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.field-id.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.field-id.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -2998,16 +2998,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Latitude",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.field-latitude.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.field-latitude.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -3030,16 +3030,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Longitude",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.field-longitude.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.field-longitude.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -3062,16 +3062,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: OpenStreetMap link",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.field-openstreetmapurl.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.field-openstreetmapurl.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -3094,16 +3094,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Place label",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.field-place.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.field-place.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -3127,16 +3127,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Region label",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.field-region.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.field-region.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -3160,16 +3160,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Capture source",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.field-source.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.field-source.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -3192,16 +3192,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Origin timestamp",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.field-timestamp.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.field-timestamp.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -3224,16 +3224,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Retries reuse the original location or unavailable outcome and never reacquire",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.retry-freeze.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.retry-freeze.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -3256,16 +3256,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Ordered renameable structured location fields",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.structured.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.structured.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -3288,16 +3288,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Unavailable location can require an interactive choice",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.unavailable-ask.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.unavailable-ask.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -3320,16 +3320,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Unavailable location can cancel while preserving staged content",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.unavailable-cancel.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.unavailable-cancel.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -3352,16 +3352,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Persist and surface location unavailability reason cancelled",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.unavailable-cancelled.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.location.unavailable-cancelled.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -3384,16 +3384,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Persist and surface location unavailability reason notDetermined",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.unavailable-notdetermined.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.location.unavailable-notdetermined.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -3416,16 +3416,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Persist and surface location unavailability reason permissionDenied",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.unavailable-permissiondenied.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.location.unavailable-permissiondenied.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -3448,16 +3448,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Persist and surface location unavailability reason reducedAccuracy",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.unavailable-reducedaccuracy.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.location.unavailable-reducedaccuracy.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -3480,16 +3480,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Persist and surface location unavailability reason restricted",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.unavailable-restricted.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.location.unavailable-restricted.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -3512,16 +3512,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Unavailable location can send without location",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.unavailable-send.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.unavailable-send.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -3544,16 +3544,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Persist and surface location unavailability reason timeout",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.unavailable-timeout.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.location.unavailable-timeout.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -3576,16 +3576,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Persist and surface location unavailability reason unavailable",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.unavailable-unavailable.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.location.unavailable-unavailable.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -3608,16 +3608,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Watch Recording Only never requests location",
-          "evidencePath": "artifacts/validation/android-wear/cap.location.watch-recording-only.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.location.watch-recording-only.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -3639,16 +3639,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Manual/audio-only recovery when no local model can run",
-          "evidencePath": "artifacts/validation/android-wear/cap.model.audio-only.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.model.audio-only.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -3671,16 +3671,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Capability-gated automatic local backend can be selected and managed locally",
-          "evidencePath": "artifacts/validation/android-wear/cap.model.automatic.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.model.automatic.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -3704,16 +3704,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Parakeet v2 model can be selected and managed locally",
-          "evidencePath": "artifacts/validation/android-wear/cap.model.parakeet-v2.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.model.parakeet-v2.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -3737,16 +3737,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Parakeet v3 model can be selected and managed locally",
-          "evidencePath": "artifacts/validation/android-wear/cap.model.parakeet-v3.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.model.parakeet-v3.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -3770,16 +3770,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Whisper Base model can be selected and managed locally",
-          "evidencePath": "artifacts/validation/android-wear/cap.model.whisper-base.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.model.whisper-base.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -3803,16 +3803,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Whisper Large v3 Turbo model can be selected and managed locally",
-          "evidencePath": "artifacts/validation/android-wear/cap.model.whisper-large-turbo.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.model.whisper-large-turbo.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -3836,16 +3836,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Whisper Medium model can be selected and managed locally",
-          "evidencePath": "artifacts/validation/android-wear/cap.model.whisper-medium.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.model.whisper-medium.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -3869,16 +3869,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Whisper Small model can be selected and managed locally",
-          "evidencePath": "artifacts/validation/android-wear/cap.model.whisper-small.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.model.whisper-small.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -3902,16 +3902,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Whisper Tiny model can be selected and managed locally",
-          "evidencePath": "artifacts/validation/android-wear/cap.model.whisper-tiny.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.model.whisper-tiny.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -3935,7 +3935,7 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
@@ -3997,10 +3997,10 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Audio capture with optional local transcript",
-          "evidencePath": "artifacts/validation/android-wear/cap.payload.audio-transcript.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.payload.audio-transcript.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -4023,16 +4023,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Arbitrary file capture copied into staging",
-          "evidencePath": "artifacts/validation/android-wear/cap.payload.file.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.payload.file.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -4055,16 +4055,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Photo or camera image with optional alt text",
-          "evidencePath": "artifacts/validation/android-wear/cap.payload.image.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.payload.image.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -4087,16 +4087,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Retained audio embedded below text",
-          "evidencePath": "artifacts/validation/android-wear/cap.payload.retained-audio-bottom.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.payload.retained-audio-bottom.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -4119,16 +4119,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Retained audio without Markdown embed",
-          "evidencePath": "artifacts/validation/android-wear/cap.payload.retained-audio-none.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.payload.retained-audio-none.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -4151,16 +4151,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Retained audio embedded above text",
-          "evidencePath": "artifacts/validation/android-wear/cap.payload.retained-audio-top.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.payload.retained-audio-top.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -4183,16 +4183,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: On-device OCR retained separately from scan source",
-          "evidencePath": "artifacts/validation/android-wear/cap.payload.scan-ocr.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.payload.scan-ocr.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -4215,16 +4215,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Document scan page images",
-          "evidencePath": "artifacts/validation/android-wear/cap.payload.scan-pages.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.payload.scan-pages.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -4247,16 +4247,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Generated PDF preserved with the scan",
-          "evidencePath": "artifacts/validation/android-wear/cap.payload.scan-pdf.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.payload.scan-pdf.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -4279,16 +4279,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Screenshot-filtered media selection",
-          "evidencePath": "artifacts/validation/android-wear/cap.payload.screenshot.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.payload.screenshot.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -4311,16 +4311,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Rendered sketch preview and optional alt text",
-          "evidencePath": "artifacts/validation/android-wear/cap.payload.sketch-preview.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.payload.sketch-preview.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -4343,16 +4343,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Versioned raw sketch strokes/drawing retained",
-          "evidencePath": "artifacts/validation/android-wear/cap.payload.sketch-raw.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.payload.sketch-raw.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -4375,16 +4375,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Typed Markdown capture",
-          "evidencePath": "artifacts/validation/android-wear/cap.payload.text.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.payload.text.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -4405,16 +4405,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Link capture with optional title",
-          "evidencePath": "artifacts/validation/android-wear/cap.payload.url.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.payload.url.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -4435,16 +4435,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Append entry",
-          "evidencePath": "artifacts/validation/android-wear/cap.placement.append.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.placement.append.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -4467,16 +4467,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Insert beneath a heading and create it if absent",
-          "evidencePath": "artifacts/validation/android-wear/cap.placement.heading-create.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.placement.heading-create.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -4499,16 +4499,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Insert beneath an existing heading and fail if absent",
-          "evidencePath": "artifacts/validation/android-wear/cap.placement.heading-fail.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.placement.heading-fail.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -4531,16 +4531,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Prepend entry",
-          "evidencePath": "artifacts/validation/android-wear/cap.placement.prepend.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.placement.prepend.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -4563,16 +4563,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Explicit Copy",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.action-copy.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.queue.action-copy.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -4595,16 +4595,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Delete/discard a job",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.action-delete.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.queue.action-delete.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -4627,16 +4627,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Process now",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.action-process-now.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.queue.action-process-now.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -4659,16 +4659,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Reassign recovered/Watch job",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.action-reassign.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.queue.action-reassign.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -4691,16 +4691,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Override retention per job",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.action-retention-override.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.queue.action-retention-override.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -4723,16 +4723,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Retry one job",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.action-retry.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.queue.action-retry.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -4755,16 +4755,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Retry all eligible jobs",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.action-retry-all.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.queue.action-retry-all.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -4787,7 +4787,7 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
@@ -4823,10 +4823,10 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Share source/output",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.action-share.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.queue.action-share.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -4849,16 +4849,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Capture remains available while earlier jobs process",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.capture-concurrency.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.queue.capture-concurrency.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -4881,16 +4881,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Keyboard IPC failure preserves audio",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.keyboard-preservation.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.queue.keyboard-preservation.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -4913,16 +4913,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Completed job state",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.phase-completed.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.queue.phase-completed.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -4945,16 +4945,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Discarded terminal job state",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.phase-discarded.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.queue.phase-discarded.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -4977,16 +4977,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Failed recoverable job state",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.phase-failed.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.queue.phase-failed.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5009,16 +5009,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Finalizing job state",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.phase-finalizing.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.queue.phase-finalizing.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5041,16 +5041,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Processing job state",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.phase-processing.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.queue.phase-processing.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5073,16 +5073,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Queued job state",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.phase-queued.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.queue.phase-queued.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5105,16 +5105,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Immediate processing",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.policy-immediate.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.queue.policy-immediate.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5137,16 +5137,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Manual processing",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.policy-manual.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.queue.policy-manual.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5169,16 +5169,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Idle processing",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.policy-whenidle.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.queue.policy-whenidle.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5201,16 +5201,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Relaunch, orphan, interrupted and finalizing recovery",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.recovery.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.queue.recovery.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5233,16 +5233,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Delete source audio after verified successful delivery",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.retention-deleteaftersuccess.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.queue.retention-deleteaftersuccess.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5265,16 +5265,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Permanent source-audio retention",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.retention-permanent.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.queue.retention-permanent.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5297,16 +5297,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Timed source-audio retention",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.retention-timed.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.queue.retention-timed.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5329,16 +5329,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: One serialized cross-process worker",
-          "evidencePath": "artifacts/validation/android-wear/cap.queue.serialization.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.queue.serialization.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5361,16 +5361,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: 10 successful Capture deliveries",
-          "evidencePath": "artifacts/validation/android-wear/cap.quota.capture.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.quota.capture.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5393,7 +5393,7 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
@@ -5431,10 +5431,10 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Failed writes and retries do not consume a Capture",
-          "evidencePath": "artifacts/validation/android-wear/cap.quota.retry-no-charge.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.quota.retry-no-charge.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5457,16 +5457,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: 15 free transcription minutes",
-          "evidencePath": "artifacts/validation/android-wear/cap.quota.transcription.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.quota.transcription.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5489,16 +5489,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Voice Markdown capture consumes transcription allowance only",
-          "evidencePath": "artifacts/validation/android-wear/cap.quota.voice-one-meter.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.quota.voice-one-meter.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -5521,16 +5521,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Attachment counts",
-          "evidencePath": "artifacts/validation/android-wear/cap.stats.attachments.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.stats.attachments.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -5553,16 +5553,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Lifetime capture total",
-          "evidencePath": "artifacts/validation/android-wear/cap.stats.captures.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.stats.captures.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -5585,16 +5585,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Lifetime recording totals and recorded time",
-          "evidencePath": "artifacts/validation/android-wear/cap.stats.recordings.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.stats.recordings.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -5617,16 +5617,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Seven-day activity chart",
-          "evidencePath": "artifacts/validation/android-wear/cap.stats.seven-day.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.stats.seven-day.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -5649,16 +5649,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Source breakdown",
-          "evidencePath": "artifacts/validation/android-wear/cap.stats.sources.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.stats.sources.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -5681,7 +5681,7 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
@@ -6499,10 +6499,10 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Daily rolling note",
-          "evidencePath": "artifacts/validation/android-wear/cap.target.daily.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.target.daily.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -6526,16 +6526,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Existing relative Markdown note",
-          "evidencePath": "artifacts/validation/android-wear/cap.target.existing.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.target.existing.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -6559,16 +6559,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Monthly rolling note",
-          "evidencePath": "artifacts/validation/android-wear/cap.target.monthly.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.target.monthly.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -6592,16 +6592,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: New note using a path template",
-          "evidencePath": "artifacts/validation/android-wear/cap.target.new.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.target.new.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -6625,16 +6625,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Quarterly rolling note",
-          "evidencePath": "artifacts/validation/android-wear/cap.target.quarterly.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.target.quarterly.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -6658,16 +6658,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Weekly rolling note",
-          "evidencePath": "artifacts/validation/android-wear/cap.target.weekly.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.target.weekly.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -6691,16 +6691,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Yearly rolling note",
-          "evidencePath": "artifacts/validation/android-wear/cap.target.yearly.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.target.yearly.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -6724,16 +6724,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Audio remains recoverable when transcription fails",
-          "evidencePath": "artifacts/validation/android-wear/cap.voice.audio-preserved.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.voice.audio-preserved.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -6756,16 +6756,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Finalized local transcript streams when supported",
-          "evidencePath": "artifacts/validation/android-wear/cap.voice.live-final.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.voice.live-final.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -6788,16 +6788,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Tentative transcript remains volatile and is never inserted durably",
-          "evidencePath": "artifacts/validation/android-wear/cap.voice.live-volatile.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.voice.live-volatile.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -6820,16 +6820,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Transcription inference remains local",
-          "evidencePath": "artifacts/validation/android-wear/cap.voice.local-only.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.voice.local-only.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -6852,16 +6852,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: One recording segment then return to idle",
-          "evidencePath": "artifacts/validation/android-wear/cap.voice.one-shot.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.voice.one-shot.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -6884,16 +6884,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Pause and resume long recording",
-          "evidencePath": "artifacts/validation/android-wear/cap.voice.pause-resume.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.voice.pause-resume.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -6916,16 +6916,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Persistent listening with marked segments",
-          "evidencePath": "artifacts/validation/android-wear/cap.voice.persistent.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.voice.persistent.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -6948,16 +6948,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Configurable local pause detection",
-          "evidencePath": "artifacts/validation/android-wear/cap.voice.vad.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.voice.vad.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -6980,16 +6980,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: vaultCommitted only after verified destination",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.ack-committed.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.ack-committed.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -7012,16 +7012,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: phoneIngested only after verified durable phone package",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.ack-ingested.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.ack-ingested.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -7044,16 +7044,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Source deletion only after correlated authorization threshold",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.delete-auth.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.delete-auth.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -7076,16 +7076,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Explicit durable discard",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.discard.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.discard.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7108,16 +7108,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Recording Only filename template",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.filename-template.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.filename-template.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -7140,16 +7140,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Recording Only copies verified raw audio and excludes transcription/location",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.mode-recording-only.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.mode-recording-only.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7172,16 +7172,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Frozen preset routes recording through phone-local transcription and Markdown delivery",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.mode-transcript.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.mode-transcript.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -7204,16 +7204,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Pause and resume local wrist recording",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.pause-resume.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.pause-resume.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7236,16 +7236,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents delivering state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.phase-delivering.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.watch.phase-delivering.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7267,16 +7267,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents error state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.phase-error.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.watch.phase-error.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7298,16 +7298,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents idle state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.phase-idle.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.watch.phase-idle.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7329,16 +7329,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents listening state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.phase-listening.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.watch.phase-listening.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7360,16 +7360,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents paused state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.phase-paused.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.watch.phase-paused.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7391,16 +7391,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents pending state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.phase-pending.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.watch.phase-pending.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7422,16 +7422,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents recording state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.phase-recording.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.watch.phase-recording.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7453,16 +7453,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents syncing state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.phase-syncing.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.watch.phase-syncing.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7484,16 +7484,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents transcribing state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.phase-transcribing.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.watch.phase-transcribing.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7515,16 +7515,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents unavailable state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.phase-unavailable.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.watch.phase-unavailable.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7546,16 +7546,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Choose and freeze complete preset snapshot per recording",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.preset-snapshot.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.preset-snapshot.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7578,16 +7578,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Durable local watch queue survives phone absence and interruptions",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.queue.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.queue.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7610,16 +7610,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Phone-side preset reassignment",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.reassign.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.reassign.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7642,16 +7642,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Recording Only phone-owned folder capability",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.recording-folder.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.recording-folder.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7674,16 +7674,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Phone/watch protocol represents remote delivered state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.remote-delivered.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.watch.remote-delivered.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -7705,16 +7705,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Phone/watch protocol represents remote delivering state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.remote-delivering.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.watch.remote-delivering.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -7736,16 +7736,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Phone/watch protocol represents remote discarded state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.remote-discarded.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.watch.remote-discarded.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -7767,16 +7767,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Phone/watch protocol represents remote failed state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.remote-failed.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.watch.remote-failed.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -7798,16 +7798,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Phone/watch protocol represents remote queued state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.remote-queued.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.watch.remote-queued.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -7829,16 +7829,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Phone/watch protocol represents remote transcribing state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.remote-transcribing.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.watch.remote-transcribing.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -7860,16 +7860,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Phone/watch protocol represents remote transportFailed state",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.remote-transportfailed.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.watch.remote-transportfailed.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -7891,16 +7891,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Retry transfer or processing",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.retry.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.retry.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7923,16 +7923,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear app recording/preset/status/recovery UI",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.surface-app.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.surface-app.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -7955,16 +7955,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear complication status/action",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.surface-complication.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.surface-complication.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -7987,16 +7987,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Required local recording notification",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.surface-notification.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.surface-notification.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -8019,16 +8019,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear Ongoing Activity while recording",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.surface-ongoing.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.surface-ongoing.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -8051,16 +8051,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear Tile quick action and coarse status",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.surface-tile.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.surface-tile.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "adjusted",
@@ -8083,16 +8083,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Resumable idempotent media transfer",
-          "evidencePath": "artifacts/validation/android-wear/cap.watch.transfer.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.watch.transfer.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -8115,7 +8115,7 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
@@ -8268,10 +8268,10 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Control Center Quick Capture and recording controls",
-          "evidencePath": "artifacts/validation/android-wear/cap.entry.control-center.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.entry.control-center.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -8298,16 +8298,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Live Activity recording monitor and actions",
-          "evidencePath": "artifacts/validation/android-wear/cap.entry.live-activity.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "mappingID": "cap.entry.live-activity.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -8334,7 +8334,7 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
@@ -8436,10 +8436,10 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Privacy-safe restore diagnostics without account or transaction identifiers",
-          "evidencePath": "artifacts/validation/android-wear/cap.billing.restore-diagnostics.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "mappingID": "cap.billing.restore-diagnostics.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "native",
@@ -8463,16 +8463,16 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Preset does not copy source audio into destination artifacts",
-          "evidencePath": "artifacts/validation/android-wear/cap.preset.audio-save-off.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.preset.audio-save-off.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -8497,16 +8497,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Preset copies source audio alongside the transcript note",
-          "evidencePath": "artifacts/validation/android-wear/cap.preset.audio-save-alongside.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.preset.audio-save-alongside.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -8531,16 +8531,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Preset copies source audio into the configured attachments folder",
-          "evidencePath": "artifacts/validation/android-wear/cap.preset.audio-save-attachments.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.preset.audio-save-attachments.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -8565,16 +8565,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Preset places the audio reference at the top of the transcript",
-          "evidencePath": "artifacts/validation/android-wear/cap.preset.audio-reference-top.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.preset.audio-reference-top.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -8599,16 +8599,16 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Preset places the audio reference at the bottom of the transcript",
-          "evidencePath": "artifacts/validation/android-wear/cap.preset.audio-reference-bottom.md",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.preset.audio-reference-bottom.acceptance.1",
-          "status": "planned"
+          "status": "verified"
         }
       ],
       "classification": "shared",
@@ -8633,7 +8633,7 @@
         "wear"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "verified"
     }
   ],
   "dependencyCatalog": [
@@ -8723,6 +8723,6 @@
   "schemaVersion": 1,
   "source": {
     "path": "docs/architecture/android-wear-m0-capabilities.json",
-    "sha256": "8b15d52e56f03ddac86ad5626e6b070784a89ac2495134306530efc300a60cc3"
+    "sha256": "a0c8bda572db0969ee67a30763d0a2ca084173c2167df26bc0907ec41422802a"
   }
 }

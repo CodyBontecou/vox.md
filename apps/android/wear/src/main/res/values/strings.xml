@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Vox.md</string>
+    <string name="wear_brand" translatable="false">Vox.md</string>
+    <string name="wear_record">Record</string>
+    <string name="wear_recording">Recording</string>
+    <string name="wear_ready">Ready</string>
+    <string name="wear_paused">Paused</string>
+    <string name="wear_needs_attention">Needs attention</string>
+    <string name="wear_failed">Watch recording needs attention</string>
+    <string name="wear_saved">Saved</string>
+    <string name="wear_saved_watch">Watch recording saved</string>
+    <string name="wear_capture_preset">Capture Preset</string>
+    <string name="wear_selected">Selected</string>
+    <string name="wear_done">Done</string>
+    <string name="wear_sync">Sync</string>
+    <string name="wear_sync_status">Sync Status</string>
+    <string name="wear_syncing">Syncing</string>
+    <string name="wear_queued">Queued</string>
+    <string name="wear_nothing_to_sync">No Watch recordings waiting to sync.</string>
+    <string name="wear_recording_detail">Pause for a break, Stop to save, or Cancel to delete.</string>
+    <string name="wear_paused_detail">Recording paused. Resume when you\'re ready, or stop to save it.</string>
+    <string name="wear_failure_detail">Open Vox.md to review a Watch recording delivery problem.</string>
+    <string name="wear_ready_detail">Tap REC.</string>
+    <string name="wear_queue_preserved">Watch recordings sync back</string>
+    <string name="wear_synced">Synced</string>
+    <string name="wear_remote_waiting">Waiting for phone</string>
+    <string name="wear_remote_transcribing">Transcribing on phone</string>
+    <string name="wear_remote_saving">Saving on phone</string>
+    <string name="wear_remote_failed">Delivery failed</string>
+    <string name="wear_remote_transport_failed">Check phone</string>
+    <string name="wear_pause_action">Pause Watch recording</string>
+    <string name="wear_resume_action">Resume Watch recording</string>
+    <string name="wear_stop_action">Stop Watch recording</string>
+    <string name="wear_cancel_action">Cancel and delete Watch recording</string>
+    <string name="wear_start_action">Start Watch recording</string>
+    <string name="wear_open_controls">Show detailed recording controls</string>
+    <string name="wear_is_recording">Vox.md is recording</string>
+    <string name="wear_one_recording_saved">1 recording saved on Watch.</string>
+    <string name="wear_recordings_saved_count">%1$d recordings saved on Watch.</string>
+    <string name="wear_quick_capture">Quick Capture</string>
+    <string name="wear_listening">Listening</string>
+    <string name="wear_pending">Pending</string>
+    <string name="wear_delivering">Delivering</string>
+    <string name="wear_unavailable">Phone unavailable</string>
+    <string name="wear_listening_detail">Starting the local Watch microphone.</string>
+    <string name="wear_pending_detail">Saved locally and waiting for the phone.</string>
+    <string name="wear_syncing_detail">Sending verified audio chunks to the phone.</string>
+    <string name="wear_unavailable_detail">Your recording is safe on this Watch. Retry when the phone is available.</string>
+    <string name="wear_microphone_unavailable">Microphone permission is required. Your prior recordings remain safe.</string>
+    <string name="wear_delivery_complete">The recording reached its verified destination.</string>
+    <string name="wear_phone_receiving">Phone is receiving audio</string>
+    <string name="wear_review_recordings">Review recordings</string>
+    <string name="wear_saved_recordings">Saved recordings</string>
+    <string name="wear_retry_action">Retry Watch recording</string>
+    <string name="wear_discard_action">Discard Watch recording</string>
+    <string name="wear_confirm_discard_title">Discard recording?</string>
+    <string name="wear_confirm_discard_detail">This permanently deletes the %1$s recording from this Watch.</string>
+    <string name="wear_discard_recording">Discard recording</string>
+    <string name="wear_keep_recording">Keep recording</string>
+    <string name="wear_back">Back</string>
+</resources>

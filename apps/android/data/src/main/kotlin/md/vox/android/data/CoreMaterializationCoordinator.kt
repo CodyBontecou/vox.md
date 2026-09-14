@@ -26,6 +26,7 @@ internal class CoreMaterializationCoordinator(
     private val store: DurableCapturePackageStore,
     private val coordinator: CaptureDurabilityCoordinator,
     private val occupancy: CandidateOccupancySource,
+    private val existingNotes: ExistingNoteSource,
     private val destination: VaultDestination,
     private val clock: () -> Long,
 ) {
@@ -47,6 +48,19 @@ internal class CoreMaterializationCoordinator(
      */
     interface CandidateOccupancySource {
         fun observeOccupiedCandidates(destination: VaultDestination, candidates: List<List<String>>): List<List<String>>?
+    }
+
+    sealed interface ExistingNoteSnapshot {
+        data class Present(val bytes: ByteArray) : ExistingNoteSnapshot
+        data object Absent : ExistingNoteSnapshot
+    }
+
+    interface ExistingNoteSource {
+        fun observeExistingNote(
+            destination: VaultDestination,
+            logicalPath: List<String>,
+            maximumBytes: Long,
+        ): ExistingNoteSnapshot?
     }
 
     fun materialize(requestID: String, leaseToken: String, expectedRevision: Int): MaterializationResult {
@@ -73,14 +87,14 @@ internal class CoreMaterializationCoordinator(
         } catch (_: Exception) { return MaterializationResult.Retryable("observationPersist") }
 
         // 3. Compose the canonical control: bridge observations + native candidate occupancy.
-        val controlBytes = try {
+        val composed = try {
             composeControl(requestBytes, required, snapshotHash)
         } catch (failure: ControlCompositionFailure) {
             return MaterializationResult.Retryable(failure.coarseCode)
         }
 
         // 4. Drive the bounded session; staged drain, then verified promotion.
-        val planHash = when (val driven = driveSession(requestID, controlBytes)) {
+        val planHash = when (val driven = driveSession(requestID, composed)) {
             is SessionDriveResult.Done -> driven.planHash
             is SessionDriveResult.Retryable -> return MaterializationResult.Retryable(driven.coarseCode)
         }
@@ -110,10 +124,14 @@ internal class CoreMaterializationCoordinator(
 
     private class ControlCompositionFailure(val coarseCode: String) : IllegalStateException()
 
+    private data class ObservationStream(val id: String, val bytes: ByteArray)
+    private data class ComposedControl(val bytes: ByteArray, val streams: List<ObservationStream>)
+
     /** Builds the exact materialization control the core accepts: request fields + frozen observations + session limits. */
-    private fun composeControl(requestBytes: ByteArray, required: JsonObject, snapshotHash: String): ByteArray {
+    private fun composeControl(requestBytes: ByteArray, required: JsonObject, snapshotHash: String): ComposedControl {
         val request = CapturePackageCodec.parseCanonical(requestBytes)
         val requiredObservations = (required["observations"] as? JsonArray) ?: throw ControlCompositionFailure("requiredObservationsDecode")
+        val streams = mutableListOf<ObservationStream>()
 
         val observationJson = JsonArray(
             requiredObservations.map { element ->
@@ -121,6 +139,7 @@ internal class CoreMaterializationCoordinator(
                 when (obs["kind"]?.let { (it as? JsonPrimitive)?.content }) {
                     "candidateOccupancy" -> candidateOccupancyObservation(obs)
                     "frozenTemplate" -> frozenTemplateObservation(obs)
+                    "existingNote" -> existingNoteObservation(obs, streams)
                     else -> throw ControlCompositionFailure("unsupportedObservationKind")
                 }
             },
@@ -140,7 +159,7 @@ internal class CoreMaterializationCoordinator(
             })
             put("snapshotHash", snapshotHash)
         }
-        return CapturePackageCodec.canonical(control)
+        return ComposedControl(CapturePackageCodec.canonical(control), streams)
     }
 
     private fun candidateOccupancyObservation(required: JsonObject): kotlinx.serialization.json.JsonElement {
@@ -172,8 +191,59 @@ internal class CoreMaterializationCoordinator(
             put("observationID", observationID)
             put("status", "absent")
             put("length", 0L)
-            put("sha256", CapturePackageCodec.sha256(ByteArray(0)))
+            put("sha256", ABSENT_OBSERVATION_SHA256)
             put("byteStreamID", JsonNull)
+        }
+    }
+
+    private fun existingNoteObservation(
+        required: JsonObject,
+        streams: MutableList<ObservationStream>,
+    ): kotlinx.serialization.json.JsonElement {
+        val observationID = required.stringField("id") ?: throw ControlCompositionFailure("observationID")
+        val logicalPath = (required["logicalPath"] as? JsonArray)
+            ?.map { (it as? JsonPrimitive)?.content ?: throw ControlCompositionFailure("existingNotePath") }
+            ?: throw ControlCompositionFailure("existingNotePath")
+        val maximumBytes = (required["maximumBytes"] as? JsonPrimitive)?.content?.toLongOrNull()
+            ?: throw ControlCompositionFailure("existingNoteBounds")
+        val isRequired = (required["required"] as? JsonPrimitive)?.content?.toBooleanStrictOrNull()
+            ?: throw ControlCompositionFailure("existingNoteRequired")
+        return when (val snapshot = existingNotes.observeExistingNote(destination, logicalPath, maximumBytes)) {
+            null -> throw ControlCompositionFailure("existingNoteObservation")
+            ExistingNoteSnapshot.Absent -> {
+                if (isRequired) throw ControlCompositionFailure("existingNoteMissing")
+                buildJsonObject {
+                    put("kind", "existingNote")
+                    put("observationID", observationID)
+                    put("status", "absent")
+                    put("logicalPath", JsonArray(logicalPath.map(::JsonPrimitive)))
+                    put("length", 0L)
+                    put("sha256", ABSENT_OBSERVATION_SHA256)
+                    put("byteStreamID", JsonNull)
+                }
+            }
+            is ExistingNoteSnapshot.Present -> {
+                if (snapshot.bytes.size.toLong() > maximumBytes) throw ControlCompositionFailure("existingNoteBounds")
+                val sha256 = CapturePackageCodec.sha256(snapshot.bytes)
+                val streamID = VoxDeterministicIds.uuid5(
+                    "vox.observation-stream.v1",
+                    CapturePackageCodec.canonical(buildJsonObject {
+                        put("length", snapshot.bytes.size)
+                        put("observationID", observationID)
+                        put("sha256", sha256)
+                    }),
+                )
+                streams += ObservationStream(streamID, snapshot.bytes.copyOf())
+                buildJsonObject {
+                    put("kind", "existingNote")
+                    put("observationID", observationID)
+                    put("status", "present")
+                    put("logicalPath", JsonArray(logicalPath.map(::JsonPrimitive)))
+                    put("length", snapshot.bytes.size)
+                    put("sha256", sha256)
+                    put("byteStreamID", streamID)
+                }
+            }
         }
     }
 
@@ -182,7 +252,8 @@ internal class CoreMaterializationCoordinator(
         data class Retryable(val coarseCode: String) : SessionDriveResult
     }
 
-    private fun driveSession(requestID: String, controlBytes: ByteArray): SessionDriveResult {
+    private fun driveSession(requestID: String, composed: ComposedControl): SessionDriveResult {
+        val controlBytes = composed.bytes
         if (controlBytes.isEmpty() || controlBytes.size > CONTROL_LIMIT_BYTES) return SessionDriveResult.Retryable("controlBounds")
         val stagingUUID = UUID.randomUUID().toString()
         val started = bridge.startMaterialization(controlBytes)
@@ -192,6 +263,22 @@ internal class CoreMaterializationCoordinator(
         }
         var finalized: ByteArray? = null
         try {
+            for (stream in composed.streams) {
+                var offset = 0
+                var sequence = 0U
+                var eof: Boolean
+                do {
+                    val end = (offset + MAX_CHUNK_CONTROL_BYTES.toInt()).coerceAtMost(stream.bytes.size)
+                    val bytes = stream.bytes.copyOfRange(offset, end)
+                    eof = end == stream.bytes.size
+                    when (val pushed = session.pushObservation(stream.id, sequence, bytes, eof)) {
+                        is CoreResult.Success -> Unit
+                        is CoreResult.Failure -> return SessionDriveResult.Retryable(coarse(pushed.code))
+                    }
+                    offset = end
+                    sequence++
+                } while (!eof)
+            }
             val descriptors = when (val sealed = session.seal()) {
                 is CoreResult.Success -> sealed.value
                 is CoreResult.Failure -> return SessionDriveResult.Retryable(coarse(sealed.code))
@@ -219,7 +306,7 @@ internal class CoreMaterializationCoordinator(
             session.close()
         }
 
-        val planBytes = finalized ?: return SessionDriveResult.Retryable("sessionState")
+        val planBytes = finalized
         val planHash = verifyPlan(planBytes) ?: return SessionDriveResult.Retryable("planVerification")
         try {
             store.promotePreparedArtifacts(requestID, planHash, planBytes, stagingUUID)
@@ -265,6 +352,9 @@ internal class CoreMaterializationCoordinator(
 
     private companion object {
         val SHA_PATTERN_64 = Regex("^[0-9a-f]{64}$")
+        // Contract sentinel for an absent byte stream. This is deliberately not
+        // SHA-256(empty); the shared core and checked-in fixtures require zeroes.
+        const val ABSENT_OBSERVATION_SHA256 = "0000000000000000000000000000000000000000000000000000000000000000"
         const val MAX_CHUNK_CONTROL_BYTES = 1_048_576UL
     }
 }
