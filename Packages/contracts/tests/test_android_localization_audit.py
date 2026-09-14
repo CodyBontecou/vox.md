@@ -60,13 +60,13 @@ class AndroidLocalizationAuditTests(unittest.TestCase):
         )
 
     def test_audit_inventory_requires_deliberate_review_when_copy_changes(self):
-        self.assertEqual(self.audit["runtimeSourceLiteralCount"], 2_368)
-        self.assertEqual(self.audit["literalRuntimeSourceCount"], 678)
-        self.assertEqual(self.audit["catalogBackedSourceCount"], 211)
+        self.assertEqual(self.audit["runtimeSourceLiteralCount"], 2_403)
+        self.assertEqual(self.audit["literalRuntimeSourceCount"], 707)
+        self.assertEqual(self.audit["catalogBackedSourceCount"], 216)
         self.assertEqual(self.audit["aliasBackedSourceCount"], 6)
         self.assertEqual(self.audit["incompleteCatalogSourceCount"], 0)
-        self.assertEqual(self.audit["missingCatalogSourceCount"], 461)
-        self.assertEqual(self.audit["fallbackSourceCount"], 461)
+        self.assertEqual(self.audit["missingCatalogSourceCount"], 485)
+        self.assertEqual(self.audit["fallbackSourceCount"], 485)
         self.assertEqual(self.audit["dynamicRuntimeCallSiteCount"], 0)
         self.assertEqual(self.audit["dynamicRuntimeExpressionCount"], 0)
         self.assertEqual(self.audit["integerFormatSourceCount"], 16)

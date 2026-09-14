@@ -969,9 +969,9 @@ def main(argv=None):
         localization_audit["incompleteCatalogSourceCount"],
         localization_audit["missingCatalogSourceCount"],
     )
-    if counts != (678, 211, 6, 0, 461) or counts[0] != sum(counts[1:]):
+    if counts != (707, 216, 6, 0, 485) or counts[0] != sum(counts[1:]):
         fail("Android localization review source counts changed without review")
-    if localization_audit["runtimeSourceLiteralCount"] != 2_368:
+    if localization_audit["runtimeSourceLiteralCount"] != 2_403:
         fail("Android runtime localization lookup-source count changed without review")
     if localization_audit["fallbackSourceCount"] != counts[3] + counts[4]:
         fail("Android localization fallback count differs from incomplete and absent sources")
@@ -1271,8 +1271,9 @@ def main(argv=None):
         "label = { Text(option.label, maxLines = 1) }",
         "FlowRow(",
         'Text(voxString("Cancel"), maxLines = 1)',
-        "recordingCardMaxHeight = LocalConfiguration.current.screenHeightDp.dp * 0.45f",
-        "Modifier.verticalScroll(rememberScrollState()).padding(14.dp)",
+        "modifier = Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp * 0.42f)",
+        ".verticalScroll(rememberScrollState())",
+        ".padding(horizontal = 16.dp, vertical = 12.dp)",
         "liveRegion = LiveRegionMode.Polite",
     ):
         if needle not in capture_ui:

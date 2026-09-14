@@ -79,7 +79,7 @@ Tap **Start Recording** in the app, from Shortcuts, or from a widget to record o
 Record voice notes from your wrist, pause and resume a recording, and choose which Capture Preset should handle it. Recordings stay in a durable Watch queue until they can sync to iPhone, where they can be processed, reassigned, retried, or discarded. A preset can run the normal local transcription and Markdown delivery flow or use Recording Only to keep the audio without transcribing it. The Watch widget provides quick access and reflects ready, recording, paused, syncing, and queued states.
 
 ### Model Picker
-Automatic is the default on both platforms. On iOS it uses Apple Speech when the device and selected language support it, with downloaded models available as fallbacks. On Android it starts with the bundled Whisper Small model. Users can still download and explicitly select other Whisper, Parakeet, or supported Vosk models.
+Automatic is the default on both platforms. On iOS it uses Apple Speech when the device and selected language support it, with downloaded models available as fallbacks. On Android it starts with the bundled Whisper Small model. Users can still download and explicitly select other Whisper, Parakeet, or supported Vosk models — the local lineup spans Whisper Tiny, Base, Medium, and Large v3 Turbo alongside Parakeet v2 and v3.
 
 ### Transcript History
 Every transcription is stored locally in the shared App Group container. Search raw text, cleaned text, titles, tags, and categories; edit saved transcripts; delete filtered selections safely; and share or export previous captures. Cross-process writes are coordinated so app and extension updates do not silently overwrite one another.
