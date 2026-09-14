@@ -1,0 +1,250 @@
+name: Android Release
+
+on:
+  push:
+    tags:
+      - 'android/v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-google-play-mutation
+  cancel-in-progress: false
+
+jobs:
+  resolve:
+    name: Resolve exact release identity
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      tag: ${{ steps.identity.outputs.tag }}
+      release_sha: ${{ steps.identity.outputs.release_sha }}
+      version: ${{ steps.identity.outputs.version }}
+      version_code: ${{ steps.identity.outputs.version_code }}
+    steps:
+      - name: Check out source for identity resolution
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Resolve and validate the immutable release tag
+        id: identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="$GITHUB_REF_NAME"
+          [[ "$GITHUB_REF_TYPE" == tag && "$tag" == android/v* ]] || {
+            echo '::error::this workflow accepts only annotated android/v* tags'; exit 1;
+          }
+          git fetch --force origin "+refs/tags/$tag:refs/tags/$tag"
+          annotated_type=$(git cat-file -t "$tag")
+          [[ "$annotated_type" == tag ]] || {
+            echo '::error::android/v* tags must be annotated, not lightweight'; exit 1;
+          }
+          release_sha=$(git rev-parse "$tag^{}")
+          git merge-base --is-ancestor "$release_sha" origin/main || {
+            echo '::error::the tagged commit is not reachable from origin/main'; exit 1;
+          }
+          version_code=$(grep -m1 '^\s*versionCode = ' apps/android/app/build.gradle.kts | grep -oE '[0-9]+')
+          version=$(grep -m1 '^\s*versionName = ' apps/android/app/build.gradle.kts | sed 's/.*= *"//; s/".*//')
+          [[ "$version_code" =~ ^[1-9][0-9]*$ ]] || { echo '::error::versionCode could not be resolved'; exit 1; }
+          [[ "$tag" == "android/v$version" ]] || {
+            echo "::error::tag $tag does not match versionName $version"; exit 1;
+          }
+          {
+            echo "tag=$tag"
+            echo "release_sha=$release_sha"
+            echo "version=$version"
+            echo "version_code=$version_code"
+          } >>"$GITHUB_OUTPUT"
+
+  qualify:
+    name: Qualify the exact release source
+    needs: resolve
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+    steps:
+      - name: Check out the exact qualified source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ needs.resolve.outputs.release_sha }}
+          persist-credentials: false
+
+      - name: Select exact Temurin JDK
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.4
+        with:
+          distribution: temurin
+          java-version: '17.0.20+8'
+
+      - name: Validate contracts and toolchain pins
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./apps/android/gradlew -p apps/android help
+          python3 Packages/contracts/scripts/validate.py
+          python3 Packages/contracts/scripts/validate_toolchain.py
+          python3 apps/android/scripts/generate-runtime-localizations.py --check
+
+      - name: Test, lint, and build the credential-free release bundles
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./apps/android/gradlew -p apps/android --no-daemon \
+            check \
+            :app:validateDebugArtifacts \
+            :wear:validateWearDebugArtifacts \
+            releaseReadiness
+
+      - name: Retain release intent before any mutation
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP"
+          jq -n \
+            --arg tag '${{ needs.resolve.outputs.tag }}' \
+            --arg sha '${{ needs.resolve.outputs.release_sha }}' \
+            --arg version '${{ needs.resolve.outputs.version }}' \
+            --argjson code '${{ needs.resolve.outputs.version_code }}' \
+            '{schemaVersion:1,tag:$tag,releaseSha:$sha,version:$version,versionCode:$code,
+              intendedTrack:"internal",intendedPackage:"md.vox.android",
+              retainedAtUtc:(now | todateiso8601)}' \
+            >"$RUNNER_TEMP/phone-upload-intent.json"
+
+      - name: Retain release intent evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: vox-android-phone-upload-intent-${{ needs.resolve.outputs.version }}-${{ needs.resolve.outputs.release_sha }}
+          path: ${{ runner.temp }}/phone-upload-intent.json
+          if-no-files-found: error
+          retention-days: 90
+          compression-level: 0
+
+  sign:
+    name: Sign the phone release bundle
+    needs: [resolve, qualify]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    environment: google-play-qa
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+    outputs:
+      aab_sha256: ${{ steps.signed.outputs.aab_sha256 }}
+    steps:
+      - name: Check out the exact qualified source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ needs.resolve.outputs.release_sha }}
+          persist-credentials: false
+
+      - name: Select exact Temurin JDK
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.4
+        with:
+          distribution: temurin
+          java-version: '17.0.20+8'
+
+      - name: Decode the upload keystore into a temporary file
+        id: keystore
+        shell: bash
+        env:
+          ANDROID_UPLOAD_KEYSTORE_BASE64: ${{ secrets.ANDROID_UPLOAD_KEYSTORE_BASE64 }}
+        run: |
+          set -euo pipefail
+          [[ -n "$ANDROID_UPLOAD_KEYSTORE_BASE64" ]] || { echo '::error::upload keystore secret is missing'; exit 1; }
+          keystore="$RUNNER_TEMP/vox-upload.jks"
+          printf '%s' "$ANDROID_UPLOAD_KEYSTORE_BASE64" | base64 --decode >"$keystore"
+          chmod 600 "$keystore"
+          echo "path=$keystore" >>"$GITHUB_OUTPUT"
+
+      - name: Build and verify the signed phone bundle
+        id: signed
+        shell: bash
+        env:
+          VOX_ANDROID_STORE_FILE: ${{ steps.keystore.outputs.path }}
+          VOX_ANDROID_STORE_PASSWORD: ${{ secrets.VOX_ANDROID_STORE_PASSWORD }}
+          VOX_ANDROID_KEY_ALIAS: ${{ secrets.VOX_ANDROID_KEY_ALIAS }}
+          VOX_ANDROID_KEY_PASSWORD: ${{ secrets.VOX_ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          ./apps/android/gradlew -p apps/android --no-daemon signedReleaseReadiness
+          aab="apps/android/app/build/outputs/bundle/release/app-release.aab"
+          [[ -f "$aab" ]] || { echo '::error::signed phone AAB is missing'; exit 1; }
+          echo "aab_sha256=$(sha256sum "$aab" | awk '{print $1}')" >>"$GITHUB_OUTPUT"
+
+      - name: Delete the temporary upload keystore
+        if: always()
+        shell: bash
+        run: rm -f "${{ steps.keystore.outputs.path }}"
+
+      - name: Transfer only the exact signed artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: vox-android-phone-signed-aab-${{ needs.resolve.outputs.version }}-${{ needs.resolve.outputs.release_sha }}
+          path: apps/android/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+
+  upload:
+    name: Upload the phone bundle to Internal Testing
+    needs: [resolve, sign]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: google-play
+    steps:
+      - name: Check out release tooling
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ needs.resolve.outputs.release_sha }}
+          persist-credentials: false
+
+      - name: Download the exact signed artifact
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801dab # v4.1.8
+        with:
+          name: vox-android-phone-signed-aab-${{ needs.resolve.outputs.version }}-${{ needs.resolve.outputs.release_sha }}
+          path: signed
+
+      - name: Verify the transferred artifact digest
+        shell: bash
+        env:
+          EXPECTED_SHA256: ${{ needs.sign.outputs.aab_sha256 }}
+        run: |
+          set -euo pipefail
+          actual=$(sha256sum signed/app-release.aab | awk '{print $1}')
+          [[ "$actual" == "$EXPECTED_SHA256" ]] || {
+            echo "::error::signed artifact digest mismatch: $actual"; exit 1;
+          }
+
+      - name: Authenticate to Google Play with protected Workload Identity
+        id: play-auth
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        with:
+          workload_identity_provider: ${{ vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/androidpublisher
+          create_credentials_file: false
+
+      - name: Upload phone bundle to Internal Testing
+        env:
+          CONFIRM_PLAY_PHONE_UPLOAD: md.vox.android:internal:${{ needs.resolve.outputs.version_code }}
+          PHONE_VERSION_CODE: ${{ needs.resolve.outputs.version_code }}
+          PHONE_PLAY_TRACK: internal
+          PLAY_RELEASE_STATUS: completed
+          PLAY_UPLOAD_RECEIPT_PATH: ${{ runner.temp }}/phone-upload-receipt.json
+          PLAY_ACCESS_TOKEN: ${{ steps.play-auth.outputs.access_token }}
+          PLAY_RELEASE_ROOT: ${{ github.workspace }}/apps/android
+          PHONE_AAB: ${{ github.workspace }}/signed/app-release.aab
+        run: ./apps/android/scripts/upload-google-play-phone-release.sh
+
+      - name: Retain verified phone upload receipt
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: vox-android-phone-upload-result-${{ needs.resolve.outputs.version }}-${{ needs.resolve.outputs.release_sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/phone-upload-receipt.json
+          if-no-files-found: error
+          retention-days: 90
+          compression-level: 0
