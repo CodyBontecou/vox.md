@@ -293,7 +293,7 @@ def main(argv=None):
         "namespace": "md.vox.android",
         "applicationID": "md.vox.android",
         "jdk": {
-            "distribution": "temurin", "version": "21.0.8+9",
+            "distribution": "temurin", "version": "21",
             "languageLevel": 17, "jvmTarget": "17",
         },
         "gradle": {
@@ -754,7 +754,7 @@ def main(argv=None):
         "toolchain: 1.97.1",
         "targets: aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android,i686-linux-android",
         "cargo +1.97.1 install cargo-ndk --version 4.1.2 --locked",
-        "java-version: '21.0.8+9'", "'platforms;android-37.0'",
+        "java-version: '21'", "'platforms;android-37.0'",
         "'build-tools;36.0.0'", "'ndk;27.1.12297006'",
         'ndk_path="$ANDROID_SDK_ROOT/ndk/27.1.12297006"',
         'echo "ANDROID_NDK_HOME=$ndk_path" >> "$GITHUB_ENV"',

@@ -80,7 +80,7 @@ jobs:
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.4
         with:
           distribution: temurin
-          java-version: '21.0.8+9'
+          java-version: '21'
 
       - name: Install exact governed Rust and Android targets
         uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772
@@ -160,7 +160,7 @@ jobs:
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.4
         with:
           distribution: temurin
-          java-version: '21.0.8+9'
+          java-version: '21'
 
       - name: Install exact governed Rust and Android targets
         uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772
