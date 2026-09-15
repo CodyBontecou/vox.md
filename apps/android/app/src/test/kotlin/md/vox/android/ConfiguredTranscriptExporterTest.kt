@@ -1,5 +1,6 @@
 package md.vox.android
 
+import java.util.TimeZone
 import java.util.UUID
 import md.vox.android.capturedomain.CaptureAudioEmbedPlacement
 import md.vox.android.capturedomain.CaptureExportFileFormat
@@ -14,6 +15,14 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ConfiguredTranscriptExporterTest {
+    companion object {
+        // The planner formats fixed instants near UTC midnight in the JVM default
+        // zone; pin it so expectations hold on UTC CI runners and dev machines alike.
+        init {
+            TimeZone.setDefault(TimeZone.getTimeZone("America/New_York"))
+        }
+    }
+
     private val state = RecordingTranscriptionState(
         sessionID = "11111111-1111-4111-8111-111111111111",
         phase = RecordingTranscriptionPhase.COMPLETED,
