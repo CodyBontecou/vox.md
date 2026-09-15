@@ -18,8 +18,8 @@ android {
 
     defaultConfig {
         applicationId = "md.vox.android"
-        versionCode = 1
-        versionName = "0.1.0-foundation"
+        versionCode = 2
+        versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging.jniLibs.excludes += setOf(
