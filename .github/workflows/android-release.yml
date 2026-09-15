@@ -64,9 +64,11 @@ jobs:
     name: Qualify the exact release source
     needs: resolve
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 60
     env:
       ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/27.1.12297006
+      ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/27.1.12297006
     steps:
       - name: Check out the exact qualified source
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -79,6 +81,18 @@ jobs:
         with:
           distribution: temurin
           java-version: '17.0.20+8'
+
+      - name: Install exact governed Rust and Android targets
+        uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772
+        with:
+          toolchain: 1.97.1
+          targets: aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android,i686-linux-android
+
+      - name: Install exact cargo-ndk
+        run: cargo +1.97.1 install cargo-ndk --version 4.1.2 --locked
+
+      - name: Install the pinned NDK
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true && "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;27.1.12297006" >/dev/null
 
       - name: Validate contracts and toolchain pins
         shell: bash
@@ -127,10 +141,12 @@ jobs:
     name: Sign the phone release bundle
     needs: [resolve, qualify]
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 60
     environment: google-play-qa
     env:
       ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/27.1.12297006
+      ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/27.1.12297006
     outputs:
       aab_sha256: ${{ steps.signed.outputs.aab_sha256 }}
     steps:
@@ -145,6 +161,18 @@ jobs:
         with:
           distribution: temurin
           java-version: '17.0.20+8'
+
+      - name: Install exact governed Rust and Android targets
+        uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772
+        with:
+          toolchain: 1.97.1
+          targets: aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android,i686-linux-android
+
+      - name: Install exact cargo-ndk
+        run: cargo +1.97.1 install cargo-ndk --version 4.1.2 --locked
+
+      - name: Install the pinned NDK
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true && "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;27.1.12297006" >/dev/null
 
       - name: Decode the upload keystore into a temporary file
         id: keystore
