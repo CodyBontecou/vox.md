@@ -117,7 +117,7 @@ play_call "production track update" -X PUT "${auth[@]}" \
   "$api/edits/$edit_id/tracks/production" >"$work/track-update.json"
 jq -e --argjson code "$version_code" \
   '(.releases | length == 1) and any(.releases[0].versionCodes[]?; (. | tonumber) == $code)' \
-  "$work/track-update.json" >/dev/null || fail 'production track update did not contain only the promoted code'
+  "$work/track-update.json" >/dev/null || { printf 'track-update response: '; head -c 600 "$work/track-update.json" >&2; printf '\n'; fail 'production track update did not contain only the promoted code'; }
 
 play_call "edit validation" -X POST "${auth[@]}" \
   -H 'Content-Type: application/json' -d '' "$api/edits/$edit_id:validate" >"$work/validate.json" \
