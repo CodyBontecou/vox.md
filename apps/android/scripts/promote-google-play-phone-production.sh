@@ -108,7 +108,7 @@ edit_id=$(play_call "edit creation" -X POST "${auth[@]}" \
 release_payload=$(printf '%s' "$source_release" | jq -ce --argjson code "$version_code" \
   --arg language "$locale" --rawfile notes "$release_notes" '
   # Only writable fields: copy nothing else from the internal release object.
-  {name: .name, versionCodes: [$code | tostring], status: "completed",
+  {name: .name, versionCodes: [$code | tostring], status: "${PLAY_PROMOTE_STATUS:-draft}",
    releaseNotes: [{language: $language, text: ($notes | sub("\\n+$"; ""))}]}
   | if .name == null or .name == "" then del(.name) else . end
 ')
