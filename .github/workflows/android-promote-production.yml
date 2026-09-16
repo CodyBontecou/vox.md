@@ -1,0 +1,82 @@
+name: Android Promote Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Exact Android semantic version being promoted'
+        required: true
+        type: string
+      version_code:
+        description: 'Exact phone versionCode to promote from Internal Testing'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: android-google-play-mutation
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    name: Promote Internal to Production and submit for review
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: google-play
+    env:
+      PACKAGE_NAME: md.vox.android
+      VERSION_CODE: ${{ inputs.version_code }}
+      PLAY_RELEASE_ROOT: ${{ github.workspace }}/apps/android
+    steps:
+      - name: Check out release tooling
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Authenticate to Google Play with protected Workload Identity
+        id: play-auth
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        if: vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER != ''
+        with:
+          workload_identity_provider: ${{ vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/androidpublisher
+          create_credentials_file: false
+
+      - name: Stage service-account JSON authentication
+        if: vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER == ''
+        shell: bash
+        env:
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          set -euo pipefail
+          [[ -n "$PLAY_SERVICE_ACCOUNT_JSON" ]] || {
+            echo '::error::set GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER vars or the PLAY_SERVICE_ACCOUNT_JSON secret'; exit 1;
+          }
+          key="$RUNNER_TEMP/vox-play-key.json"
+          printf '%s' "$PLAY_SERVICE_ACCOUNT_JSON" >"$key"
+          chmod 600 "$key"
+          echo "PLAY_CONSOLE_KEY_PATH=$key" >>"$GITHUB_ENV"
+
+      - name: Promote phone bundle to Production
+        env:
+          CONFIRM_PLAY_PROMOTION: md.vox.android:production:${{ inputs.version_code }}
+          PHONE_VERSION_CODE: ${{ inputs.version_code }}
+          PLAY_PROMOTE_RECEIPT_PATH: ${{ runner.temp }}/phone-promote-receipt.json
+          PLAY_ACCESS_TOKEN: ${{ steps.play-auth.outputs.access_token }}
+          PLAY_CONSOLE_KEY_PATH: ${{ env.PLAY_CONSOLE_KEY_PATH }}
+        run: ./apps/android/scripts/promote-google-play-phone-production.sh
+
+      - name: Retain verified promote receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: vox-android-phone-promote-result-${{ inputs.version }}-${{ inputs.version_code }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/phone-promote-receipt.json
+          if-no-files-found: warn
+          retention-days: 90
+          compression-level: 0
