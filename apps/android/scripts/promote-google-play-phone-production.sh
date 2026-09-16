@@ -131,7 +131,9 @@ curl -fsS --max-time 30 -sS -X POST "${auth[@]}" -H 'Content-Type: application/j
 commit_exit=$?
 set -e
 [[ $commit_exit -ne 22 ]] || {
-  jq -r '.error.message // "(no body)"' "$work/commit.json" >&2 2>/dev/null || true
+  printf 'commit rejection body: '
+  head -c 600 "$work/commit.json" >&2 2>/dev/null || true
+  printf '\n' >&2
   fail 'promote commit received a definite HTTP rejection'
 }
 [[ $commit_exit -eq 0 ]] || commit_response_received=false
