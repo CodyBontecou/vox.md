@@ -1,6 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Promotes an exact phone versionCode from Internal Testing to Production in one
+# Play edit and proves the resulting review lifecycle. Mirrors the guarded
+# semantics of upload-google-play-phone-release.sh: exact-code pinning, a
+# confirmation string, single-shot commit, and postcondition polling.
+
+script_dir=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+release_root=${PLAY_RELEASE_ROOT:-"$script_dir/.."}
+cd "$release_root"
+
+key=${PLAY_CONSOLE_KEY_PATH:-}
+token=${PLAY_ACCESS_TOKEN:-}
+package=${PLAY_PACKAGE_NAME:-md.vox.android}
+version_code=${PHONE_VERSION_CODE:-}
+confirmation=${CONFIRM_PLAY_PROMOTION:-}
+expected_confirmation="$package:production:$version_code"
+receipt=${PLAY_PROMOTE_RECEIPT_PATH:-}
+locale=${PLAY_LISTING_LOCALE:-en-US}
+release_notes=${PLAY_RELEASE_NOTES:-play-console/listing/$locale/release-notes/$locale/default.txt}
+
 fail() { printf 'Phone Play promote: %s\n' "$*" >&2; exit 1; }
 
 [[ -n "$token" || ( -n "$key" && -r "$key" ) ]] \
