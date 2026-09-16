@@ -1,6 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Diagnostics: name each API stage so a failure names its URL and body.
+play_call() {
+  local stage=$1; shift
+  local body out rc
+  out=$(mktemp)
+  set +e
+  body=$(curl -sS --max-time 60 "$@" -o "$out" 2>&1); rc=$?
+  set -e
+  if [[ $rc -ne 0 ]]; then
+    printf 'Phone Play promote: %s failed (curl rc=%s): %s\n' "$stage" "$rc" "$body" >&2
+    head -c 400 "$out" >&2 2>/dev/null || true
+    printf '\n' >&2
+    rm -f "$out"
+    return $rc
+  fi
+  cat "$out"
+  rm -f "$out"
+}
+
 # Promotes an exact phone versionCode from Internal Testing to Production in one
 # Play edit and proves the resulting review lifecycle. Mirrors the guarded
 # semantics of upload-google-play-phone-release.sh: exact-code pinning, a
@@ -75,14 +94,14 @@ if curl -fsS --retry 2 --max-time 30 -sS "${auth[@]}" "$api/tracks/production/re
   exit 0
 fi
 
-curl -fsS --retry 3 --max-time 30 -sS "${auth[@]}" "$api/tracks/internal/releases" \
-  -o "$work/internal.json" || fail 'internal track query failed'
+play_call "internal track query" "${auth[@]}" "$api/tracks/internal/releases" >"$work/internal.json" \
+  || fail 'internal track query failed'
 source_release=$(jq -ce --argjson code "$version_code" \
   'first(.releases[]? | select(any(.versionCodes[]?; (. | tonumber) == $code) or any(.activeArtifacts[]?; (.versionCode | tonumber) == $code))) // empty' \
   "$work/internal.json")
 [[ -n "$source_release" ]] || fail "versionCode $version_code is not on the internal track"
 
-edit_id=$(curl -fsS --retry 3 --max-time 30 -sS -X POST "${auth[@]}" \
+edit_id=$(play_call "edit creation" -X POST "${auth[@]}" \
   -H 'Content-Type: application/json' -d '{}' "$api/edits" | jq -er .id) \
   || fail 'Play edit creation failed'
 
@@ -93,16 +112,16 @@ release_payload=$(printf '%s' "$source_release" | jq -ce --argjson code "$versio
   | .releaseNotes = [{language: $language, text: ($notes | sub("\\n+$"; ""))}]
   | del(.userFraction, .countryTargeting, .inAppUpdatePriority)
 ')
-curl -fsS --retry 3 --max-time 30 -sS -X PUT "${auth[@]}" \
+play_call "production track update" -X PUT "${auth[@]}" \
   -H 'Content-Type: application/json' --data "$(jq -nc --argjson release "$release_payload" '{track: "production", releases: [$release]}')" \
-  "$api/edits/$edit_id/tracks/production" -o "$work/track-update.json"
+  "$api/edits/$edit_id/tracks/production" >"$work/track-update.json"
 jq -e --argjson code "$version_code" \
   '(.releases | length == 1) and any(.releases[0].versionCodes[]?; (. | tonumber) == $code)' \
   "$work/track-update.json" >/dev/null || fail 'production track update did not contain only the promoted code'
 
-curl -fsS --retry 3 --max-time 30 -sS -X POST "${auth[@]}" \
-  -H 'Content-Type: application/json' -d '' "$api/edits/$edit_id:validate" -o "$work/validate.json" \
-  || fail "Play rejected the promote edit at validation: $(cat "$work/validate.json" 2>/dev/null | head -c 300)"
+play_call "edit validation" -X POST "${auth[@]}" \
+  -H 'Content-Type: application/json' -d '' "$api/edits/$edit_id:validate" >"$work/validate.json" \
+  || fail "Play rejected the promote edit at validation"
 
 commit_response_received=true
 set +e
