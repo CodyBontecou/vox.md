@@ -106,9 +106,10 @@ edit_id=$(play_call "edit creation" -X POST "${auth[@]}" \
   || fail 'Play edit creation failed'
 
 release_payload=$(printf '%s' "$source_release" | jq -ce --argjson code "$version_code" \
+  --arg status "${PLAY_PROMOTE_STATUS:-draft}" \
   --arg language "$locale" --rawfile notes "$release_notes" '
   # Only writable fields: copy nothing else from the internal release object.
-  {name: .name, versionCodes: [$code | tostring], status: "${PLAY_PROMOTE_STATUS:-draft}",
+  {name: .name, versionCodes: [$code | tostring], status: $status,
    releaseNotes: [{language: $language, text: ($notes | sub("\\n+$"; ""))}]}
   | if .name == null or .name == "" then del(.name) else . end
 ')
@@ -161,7 +162,7 @@ for _ in $(seq 1 40); do
     first(.releases[]? | select(any(.activeArtifacts[]?; (.versionCode | tonumber) == $code)) | .releaseLifecycleState) // empty' \
     "$work/lifecycle.json")
   case "$state" in
-    RELEASE_LIFECYCLE_STATE_IN_REVIEW|RELEASE_LIFECYCLE_STATE_APPROVED_NOT_PUBLISHED|RELEASE_LIFECYCLE_STATE_PUBLISHED)
+    RELEASE_LIFECYCLE_STATE_IN_REVIEW|RELEASE_LIFECYCLE_STATE_APPROVED_NOT_PUBLISHED|RELEASE_LIFECYCLE_STATE_PUBLISHED|RELEASE_LIFECYCLE_STATE_DRAFT)
       if [[ -n "$receipt" ]]; then
         mkdir -p "$(dirname "$receipt")"
         jq -n --argjson code "$version_code" --arg state "$state" \
