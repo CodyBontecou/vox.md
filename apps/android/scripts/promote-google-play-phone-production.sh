@@ -75,8 +75,18 @@ if curl -fsS --retry 2 --max-time 30 -sS "${auth[@]}" "$api/tracks/production/re
   exit 0
 fi
 
-curl -fsS --retry 3 --retry-all-errors --max-time 30 -sS "${auth[@]}" \
-  "$api/tracks/internal/releases" -o "$work/internal.json" || fail 'internal track query failed'
+set +e
+curl -sS --max-time 30 "${auth[@]}" "$api/tracks/internal/releases" \
+  -o "$work/internal.json" -w '%{http_code}' >"$work/internal.http" 2>"$work/internal.err"
+internal_rc=$?
+set -e
+if [[ $internal_rc -ne 0 ]] || ! grep -qE '^2[0-9][0-9]$' "$work/internal.http"; then
+  printf 'internal query rc=%s http=%s stderr=' "$internal_rc" "$(cat "$work/internal.http" 2>/dev/null)" >&2
+  head -c 400 "$work/internal.err" >&2 2>/dev/null || true
+  printf ' body=' >&2; head -c 400 "$work/internal.json" >&2 2>/dev/null || true
+  printf '\n' >&2
+  fail 'internal track query failed'
+fi
 source_release=$(jq -ce --argjson code "$version_code" \
   'first(.releases[]? | select(any(.versionCodes[]?; (. | tonumber) == $code) or any(.activeArtifacts[]?; (.versionCode | tonumber) == $code))) // empty' \
   "$work/internal.json" 2>/dev/null) || true
