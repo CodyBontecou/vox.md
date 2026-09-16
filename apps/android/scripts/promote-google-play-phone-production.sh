@@ -107,10 +107,10 @@ edit_id=$(play_call "edit creation" -X POST "${auth[@]}" \
 
 release_payload=$(printf '%s' "$source_release" | jq -ce --argjson code "$version_code" \
   --arg language "$locale" --rawfile notes "$release_notes" '
-  .versionCodes = [$code]
+  .versionCodes = [$code | tostring]
   | .status = "completed"
   | .releaseNotes = [{language: $language, text: ($notes | sub("\\n+$"; ""))}]
-  | del(.userFraction, .countryTargeting, .inAppUpdatePriority)
+  | del(.releaseName, .activeArtifacts, .userFraction, .countryTargeting, .inAppUpdatePriority)
 ')
 play_call "production track update" -X PUT "${auth[@]}" \
   -H 'Content-Type: application/json' --data "$(jq -nc --argjson release "$release_payload" '{track: "production", releases: [$release]}')" \
