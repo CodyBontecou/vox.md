@@ -125,17 +125,17 @@ play_call "edit validation" -X POST "${auth[@]}" \
 
 commit_response_received=true
 set +e
-curl -fsS --max-time 30 -sS -X POST "${auth[@]}" -H 'Content-Type: application/json' \
+commit_http=$(curl -sS --max-time 30 -X POST "${auth[@]}" -H 'Content-Type: application/json' \
   "$api/edits/$edit_id:commit?changesNotSentForReview=false&changesInReviewBehavior=ERROR_IF_IN_REVIEW" \
-  --data '' -o "$work/commit.json"
+  --data '' -o "$work/commit.json" -w '%{http_code}')
 commit_exit=$?
 set -e
-[[ $commit_exit -ne 22 ]] || {
-  printf 'commit rejection body: '
+if [[ $commit_exit -ne 0 || ! "$commit_http" =~ ^2[0-9][0-9]$ ]]; then
+  printf 'commit failed: curl_rc=%s http=%s body=' "$commit_exit" "${commit_http:-000}" >&2
   head -c 600 "$work/commit.json" >&2 2>/dev/null || true
   printf '\n' >&2
-  fail 'promote commit received a definite HTTP rejection'
-}
+  fail 'promote commit was rejected'
+fi
 [[ $commit_exit -eq 0 ]] || commit_response_received=false
 
 commit_visible=false
