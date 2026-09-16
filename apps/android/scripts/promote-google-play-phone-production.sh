@@ -98,7 +98,7 @@ play_call "internal track query" "${auth[@]}" "$api/tracks/internal/releases" >"
   || fail 'internal track query failed'
 source_release=$(jq -ce --argjson code "$version_code" \
   'first(.releases[]? | select(any(.versionCodes[]?; (. | tonumber) == $code) or any(.activeArtifacts[]?; (.versionCode | tonumber) == $code))) // empty' \
-  "$work/internal.json")
+  "$work/internal.json" 2>/dev/null) || true
 [[ -n "$source_release" ]] || { printf 'internal track response: '; head -c 800 "$work/internal.json" >&2; printf '\\n'; fail "versionCode $version_code is not on the internal track"; }
 
 edit_id=$(play_call "edit creation" -X POST "${auth[@]}" \
