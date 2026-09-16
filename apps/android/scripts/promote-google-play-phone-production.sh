@@ -1,44 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Diagnostics: name each API stage so a failure names its URL and body.
-play_call() {
-  local stage=$1; shift
-  local body out rc
-  out=$(mktemp)
-  set +e
-  body=$(curl -sS --max-time 60 "$@" -o "$out" 2>&1); rc=$?
-  set -e
-  if [[ $rc -ne 0 ]]; then
-    printf 'Phone Play promote: %s failed (curl rc=%s): %s\n' "$stage" "$rc" "$body" >&2
-    head -c 400 "$out" >&2 2>/dev/null || true
-    printf '\n' >&2
-    rm -f "$out"
-    return $rc
-  fi
-  cat "$out"
-  rm -f "$out"
-}
-
-# Promotes an exact phone versionCode from Internal Testing to Production in one
-# Play edit and proves the resulting review lifecycle. Mirrors the guarded
-# semantics of upload-google-play-phone-release.sh: exact-code pinning, a
-# confirmation string, single-shot commit, and postcondition polling.
-
-script_dir=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-release_root=${PLAY_RELEASE_ROOT:-"$script_dir/.."}
-cd "$release_root"
-
-key=${PLAY_CONSOLE_KEY_PATH:-}
-token=${PLAY_ACCESS_TOKEN:-}
-package=${PLAY_PACKAGE_NAME:-md.vox.android}
-version_code=${PHONE_VERSION_CODE:-}
-confirmation=${CONFIRM_PLAY_PROMOTION:-}
-expected_confirmation="$package:production:$version_code"
-receipt=${PLAY_PROMOTE_RECEIPT_PATH:-}
-locale=${PLAY_LISTING_LOCALE:-en-US}
-release_notes=${PLAY_RELEASE_NOTES:-play-console/listing/$locale/release-notes/$locale/default.txt}
-
 fail() { printf 'Phone Play promote: %s\n' "$*" >&2; exit 1; }
 
 [[ -n "$token" || ( -n "$key" && -r "$key" ) ]] \
@@ -94,14 +56,14 @@ if curl -fsS --retry 2 --max-time 30 -sS "${auth[@]}" "$api/tracks/production/re
   exit 0
 fi
 
-play_call "internal track query" "${auth[@]}" "$api/tracks/internal/releases" >"$work/internal.json" \
-  || fail 'internal track query failed'
+curl -fsS --retry 3 --retry-all-errors --max-time 30 -sS "${auth[@]}" \
+  "$api/tracks/internal/releases" -o "$work/internal.json" || fail 'internal track query failed'
 source_release=$(jq -ce --argjson code "$version_code" \
   'first(.releases[]? | select(any(.versionCodes[]?; (. | tonumber) == $code) or any(.activeArtifacts[]?; (.versionCode | tonumber) == $code))) // empty' \
   "$work/internal.json" 2>/dev/null) || true
 [[ -n "$source_release" ]] || { printf 'internal track response: '; head -c 800 "$work/internal.json" >&2; printf '\\n'; fail "versionCode $version_code is not on the internal track"; }
 
-edit_id=$(play_call "edit creation" -X POST "${auth[@]}" \
+edit_id=$(curl -fsS --retry 3 --retry-all-errors --max-time 30 -sS -X POST "${auth[@]}" \
   -H 'Content-Type: application/json' -d '{}' "$api/edits" | jq -er .id) \
   || fail 'Play edit creation failed'
 
@@ -113,15 +75,15 @@ release_payload=$(printf '%s' "$source_release" | jq -ce --argjson code "$versio
    releaseNotes: [{language: $language, text: ($notes | sub("\\n+$"; ""))}]}
   | if .name == null or .name == "" then del(.name) else . end
 ')
-play_call "production track update" -X PUT "${auth[@]}" \
+curl -fsS --retry 3 --retry-all-errors --max-time 30 -sS -X PUT "${auth[@]}" \
   -H 'Content-Type: application/json' --data "$(jq -nc --argjson release "$release_payload" '{track: "production", releases: [$release]}')" \
-  "$api/edits/$edit_id/tracks/production" >"$work/track-update.json"
+  "$api/edits/$edit_id/tracks/production" -o "$work/track-update.json"
 jq -e --argjson code "$version_code" \
   '(.releases | length == 1) and any(.releases[0].versionCodes[]?; (. | tonumber) == $code)' \
   "$work/track-update.json" >/dev/null || { printf 'track-update response: '; head -c 600 "$work/track-update.json" >&2; printf '\n'; fail 'production track update did not contain only the promoted code'; }
 
-play_call "edit validation" -X POST "${auth[@]}" \
-  -H 'Content-Type: application/json' -d '' "$api/edits/$edit_id:validate" >"$work/validate.json" \
+curl -fsS --retry 3 --retry-all-errors --max-time 30 -sS -X POST "${auth[@]}" \
+  -H 'Content-Type: application/json' -d '' "$api/edits/$edit_id:validate" -o "$work/validate.json" \
   || fail "Play rejected the promote edit at validation"
 
 commit_response_received=true

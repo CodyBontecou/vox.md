@@ -69,7 +69,7 @@ jobs:
           PLAY_PROMOTE_RECEIPT_PATH: ${{ runner.temp }}/phone-promote-receipt.json
           PLAY_ACCESS_TOKEN: ${{ steps.play-auth.outputs.access_token }}
           PLAY_CONSOLE_KEY_PATH: ${{ env.PLAY_CONSOLE_KEY_PATH }}
-        run: bash -x ./apps/android/scripts/promote-google-play-phone-production.sh
+        run: ./apps/android/scripts/promote-google-play-phone-production.sh
 
       - name: Retain verified promote receipt
         if: always()
