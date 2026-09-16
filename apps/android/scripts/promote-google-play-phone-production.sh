@@ -131,7 +131,7 @@ fi
 [[ $commit_exit -eq 0 ]] || commit_response_received=false
 
 commit_visible=false
-for _ in $(seq 1 24); do
+for _ in $(seq 1 10); do
   if curl -fsS --retry 2 --max-time 30 -sS "${auth[@]}" "$api/tracks/production/releases" \
       -o "$work/prod-after.json" \
     && jq -e --argjson code "$version_code" \
@@ -140,7 +140,7 @@ for _ in $(seq 1 24); do
     commit_visible=true
     break
   fi
-  sleep 5
+  sleep 15
 done
 $commit_visible || fail 'production commit postcondition is absent'
 committed=true
