@@ -1,0 +1,23 @@
+name: OIDC Debug
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  dump:
+    runs-on: ubuntu-24.04
+    environment: google-play
+    steps:
+      - name: Dump GitHub OIDC claims
+        shell: bash
+        run: |
+          set -euo pipefail
+          token=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=google" | jq -r .value)
+          payload=$(printf '%s' "$token" | cut -d. -f2)
+          case $((${#payload} % 4)) in 2) payload="${payload}==";; 3) payload="${payload}=";; esac
+          printf '%s' "$payload" | tr '_-' '/+' | base64 -d 2>/dev/null | jq '{sub, repository, ref, environment, event_name, job_workflow_ref}'
