@@ -56,15 +56,16 @@ android {
 val generateLauncherIcons by tasks.registering(Exec::class) {
     group = "build setup"
     description = "Derives every launcher icon variant from the canonical iOS app icon."
-    val generator = rootProject.file("scripts/generate-launcher-icons.py")
+    val generator = rootProject.file("scripts/run-launcher-icon-generator.sh")
     val icon = rootProject.projectDir.parentFile.parentFile
         .resolve("Voxboard/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png")
     inputs.file(generator)
+    inputs.file(rootProject.file("scripts/generate-launcher-icons.py"))
     inputs.file(icon)
     outputs.dir(layout.buildDirectory.dir("generated/res/launcherIcons"))
     commandLine(
-        "python3",
-        generator,
+        "bash",
+        generator.absolutePath,
         "--icon",
         icon,
         "--out",
