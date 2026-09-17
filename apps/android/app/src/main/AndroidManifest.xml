@@ -20,8 +20,10 @@
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
         android:label="Vox.md"
         android:localeConfig="@xml/locales_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Vox">
         <service
@@ -96,7 +98,7 @@
         <service
             android:name=".CaptureTileService"
             android:exported="true"
-            android:icon="@android:drawable/ic_input_add"
+            android:icon="@drawable/ic_vox_waveform"
             android:label="@string/tile_capture_label"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>

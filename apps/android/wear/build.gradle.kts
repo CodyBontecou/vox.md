@@ -45,6 +45,26 @@ android {
         }
     }
     sourceSets.getByName("main").res.directories.add("build/generated/res/geistFonts")
+    sourceSets.getByName("main").res.directories.add("build/generated/res/launcherIcons")
+}
+
+val generateLauncherIcons by tasks.registering(Exec::class) {
+    group = "build setup"
+    description = "Derives every launcher icon variant from the canonical iOS app icon."
+    val generator = rootProject.file("scripts/generate-launcher-icons.py")
+    val icon = rootProject.projectDir.parentFile.parentFile
+        .resolve("Voxboard/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png")
+    inputs.file(generator)
+    inputs.file(icon)
+    outputs.dir(layout.buildDirectory.dir("generated/res/launcherIcons"))
+    commandLine(
+        "python3",
+        generator,
+        "--icon",
+        icon,
+        "--out",
+        layout.buildDirectory.dir("generated/res/launcherIcons").get().asFile,
+    )
 }
 
 val syncWearGeistFonts by tasks.registering(Sync::class) {
@@ -90,7 +110,7 @@ dependencies {
 }
 
 tasks.named("preBuild") {
-    dependsOn(":app:generateRuntimeLocalizations", syncWearGeistFonts)
+    dependsOn(":app:generateRuntimeLocalizations", syncWearGeistFonts, generateLauncherIcons)
 }
 
 val validateWearDebugArtifacts by tasks.registering(Exec::class) {

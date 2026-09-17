@@ -116,6 +116,7 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -226,6 +227,7 @@ import md.vox.android.capturedomain.CaptureEntryTemplate
 import md.vox.android.capturedomain.resolvingEntryTemplate
 import md.vox.android.capturedomain.CaptureState
 import md.vox.android.capturedomain.CaptureSubmitResult
+import md.vox.android.capturedomain.VoiceRecordingResult
 import md.vox.android.capturedomain.WearRemoteRecordingPhase
 import md.vox.android.capturedomain.ActivityStats
 import md.vox.android.capturedomain.CompletedRecordingActivity
@@ -939,6 +941,7 @@ private fun VoxNavigation(
                                     move = model::moveCaptureBarAction,
                                     setTwentyFourHour = model::setTwentyFourHourTimestamps,
                                     setVoiceConfirmation = model::setConfirmsVoiceNotesBeforeAdding,
+                                    setVoiceRecordingResult = model::setVoiceRecordingResult,
                                     reset = model::resetCaptureBar,
                                 )
                                 adaptiveSettingsDestination == Destination.Presets.route -> CapturePresetsScreen(
@@ -1030,6 +1033,7 @@ private fun VoxNavigation(
                     move = model::moveCaptureBarAction,
                     setTwentyFourHour = model::setTwentyFourHourTimestamps,
                     setVoiceConfirmation = model::setConfirmsVoiceNotesBeforeAdding,
+                    setVoiceRecordingResult = model::setVoiceRecordingResult,
                     reset = model::resetCaptureBar,
                 )
             }
@@ -1697,6 +1701,9 @@ internal fun CaptureScreen(
         transcription = recordingTranscription,
         confirmsVoiceNotesBeforeAdding = state.captureBar.confirmsVoiceNotesBeforeAdding,
         addToDraft = ::addRecordingTranscriptToDraft,
+        voiceRecordingResult = state.captureBar.voiceRecordingResult,
+        sendWithPreset = ::sendRecordingWithPreset,
+        markRecordingAdded = markRecordingAdded,
     )
     LaunchedEffect(
         recordingStatus.phase,
@@ -2251,12 +2258,16 @@ internal fun RecordingTranscriptCompletionEffect(
     transcription: RecordingTranscriptionState?,
     confirmsVoiceNotesBeforeAdding: Boolean,
     addToDraft: (String) -> Unit,
+    voiceRecordingResult: VoiceRecordingResult = VoiceRecordingResult.ADD_TO_DRAFT,
+    sendWithPreset: (String) -> Unit = {},
+    markRecordingAdded: () -> Unit = {},
 ) {
     val preferredTranscript = transcription?.preferredTranscript.orEmpty()
     LaunchedEffect(
         transcription?.sessionID,
         transcription?.phase,
         transcription?.addedToDraft,
+        voiceRecordingResult,
         confirmsVoiceNotesBeforeAdding,
         preferredTranscript,
     ) {
@@ -2266,7 +2277,15 @@ internal fun RecordingTranscriptCompletionEffect(
             !confirmsVoiceNotesBeforeAdding &&
             preferredTranscript.isNotBlank()
         ) {
-            addToDraft(preferredTranscript)
+            when (voiceRecordingResult) {
+                VoiceRecordingResult.ADD_TO_DRAFT -> addToDraft(preferredTranscript)
+                VoiceRecordingResult.SEND_IMMEDIATELY -> {
+                    // Mark consumed up front so the effect cannot re-fire (and
+                    // double-send) while the asynchronous submission resolves.
+                    markRecordingAdded()
+                    sendWithPreset(preferredTranscript)
+                }
+            }
         }
     }
 }
@@ -5318,6 +5337,7 @@ internal fun CaptureBarSettingsScreen(
     move: (CaptureBarAction, Int) -> Unit,
     setTwentyFourHour: (Boolean) -> Unit,
     setVoiceConfirmation: (Boolean) -> Unit,
+    setVoiceRecordingResult: (VoiceRecordingResult) -> Unit = {},
     reset: () -> Unit,
 ) {
     Scaffold(
@@ -5395,6 +5415,36 @@ internal fun CaptureBarSettingsScreen(
                             onCheckedChange = setVoiceConfirmation,
                             enabled = !isBusy,
                             modifier = Modifier.semantics { contentDescription = description },
+                        )
+                    },
+                    colors = androidx.compose.material3.ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.background),
+                )
+                HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+                SettingsSection(voxUiText("Recording Result"))
+                ListItem(
+                    headlineContent = { Text(voxString("Add to Draft")) },
+                    supportingContent = {
+                        Text(voxString("A finished voice transcript lands in the composer, ready to review before sending."))
+                    },
+                    leadingContent = {
+                        RadioButton(
+                            selected = configuration.voiceRecordingResult == VoiceRecordingResult.ADD_TO_DRAFT,
+                            onClick = { setVoiceRecordingResult(VoiceRecordingResult.ADD_TO_DRAFT) },
+                            enabled = !isBusy,
+                        )
+                    },
+                    colors = androidx.compose.material3.ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.background),
+                )
+                ListItem(
+                    headlineContent = { Text(voxString("Send Immediately")) },
+                    supportingContent = {
+                        Text(voxString("A finished voice transcript is sent straight to the active preset without stopping in the composer."))
+                    },
+                    leadingContent = {
+                        RadioButton(
+                            selected = configuration.voiceRecordingResult == VoiceRecordingResult.SEND_IMMEDIATELY,
+                            onClick = { setVoiceRecordingResult(VoiceRecordingResult.SEND_IMMEDIATELY) },
+                            enabled = !isBusy,
                         )
                     },
                     colors = androidx.compose.material3.ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.background),

@@ -324,11 +324,27 @@ enum class CaptureBarAction(val persistedName: String, val displayName: String) 
     TEXT_CASE("textCase", "Change Text Case"),
 }
 
+/**
+ * What happens to a voice note once its transcript is ready. Mirrors the iOS
+ * "Recording result" choice (Add to Draft vs Send Immediately) and persists
+ * inside the Capture Bar configuration payload.
+ */
+enum class VoiceRecordingResult(val persistedName: String) {
+    ADD_TO_DRAFT("addToDraft"),
+    SEND_IMMEDIATELY("sendImmediately");
+
+    companion object {
+        fun fromPersistedName(name: String?): VoiceRecordingResult =
+            entries.firstOrNull { it.persistedName == name } ?: ADD_TO_DRAFT
+    }
+}
+
 data class CaptureBarConfiguration(
     val orderedActions: List<CaptureBarAction> = CaptureBarAction.entries,
     val hiddenActions: Set<CaptureBarAction> = emptySet(),
     val usesTwentyFourHourTimestamps: Boolean = false,
     val confirmsVoiceNotesBeforeAdding: Boolean = false,
+    val voiceRecordingResult: VoiceRecordingResult = VoiceRecordingResult.ADD_TO_DRAFT,
 ) {
     val visibleActions: List<CaptureBarAction>
         get() = orderedActions.filterNot(hiddenActions::contains)

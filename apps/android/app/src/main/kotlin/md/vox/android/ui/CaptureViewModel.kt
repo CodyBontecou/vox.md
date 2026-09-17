@@ -15,6 +15,7 @@ import md.vox.android.capturedomain.CaptureDraft
 import md.vox.android.capturedomain.CaptureBarAction
 import md.vox.android.capturedomain.CaptureBarConfiguration
 import md.vox.android.capturedomain.CaptureHistoryItem
+import md.vox.android.capturedomain.VoiceRecordingResult
 import md.vox.android.capturedomain.CaptureHistoryDetail
 import md.vox.android.capturedomain.CapturePreset
 import md.vox.android.capturedomain.CapturePresetCollection
@@ -376,6 +377,10 @@ internal class CaptureViewModel private constructor(
 
     fun setConfirmsVoiceNotesBeforeAdding(enabled: Boolean) {
         saveCaptureBar(mutableState.value.captureBar.copy(confirmsVoiceNotesBeforeAdding = enabled))
+    }
+
+    fun setVoiceRecordingResult(result: VoiceRecordingResult) {
+        saveCaptureBar(mutableState.value.captureBar.copy(voiceRecordingResult = result))
     }
 
     fun resetCaptureBar() {

@@ -2,6 +2,7 @@ package md.vox.android.data
 
 import md.vox.android.capturedomain.CaptureBarAction
 import md.vox.android.capturedomain.CaptureBarConfiguration
+import md.vox.android.capturedomain.VoiceRecordingResult
 import md.vox.android.capturedomain.normalized
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -20,6 +21,7 @@ class CaptureBarPersistenceTest {
             hiddenActions = setOf(CaptureBarAction.UNDO, CaptureBarAction.ADD_MEDIA),
             usesTwentyFourHourTimestamps = true,
             confirmsVoiceNotesBeforeAdding = true,
+            voiceRecordingResult = VoiceRecordingResult.SEND_IMMEDIATELY,
         ).normalized()
 
         val encoded = encodeCaptureBarConfiguration(configuration)
@@ -30,7 +32,9 @@ class CaptureBarPersistenceTest {
         assertTrue(encoded.contains("\"order\": ["))
         assertTrue(encoded.contains("\"twentyFourHour\": true"))
         assertTrue(encoded.contains("\"confirmVoiceNoteBeforeAdding\": true"))
+        assertTrue(encoded.contains("\"voiceRecordingResult\": \"sendImmediately\""))
         assertTrue(decoded.confirmsVoiceNotesBeforeAdding)
+        assertEquals(VoiceRecordingResult.SEND_IMMEDIATELY, decoded.voiceRecordingResult)
         assertFalse(CaptureBarAction.ADD_MEDIA in decoded.visibleActions)
     }
 
@@ -45,6 +49,10 @@ class CaptureBarPersistenceTest {
         assertEquals(CaptureBarAction.entries.size, migrated.orderedActions.distinct().size)
         assertFalse(CaptureBarAction.PASTE in migrated.visibleActions)
         assertFalse(migrated.confirmsVoiceNotesBeforeAdding)
+        assertEquals(VoiceRecordingResult.ADD_TO_DRAFT, migrated.voiceRecordingResult)
+        assertEquals(VoiceRecordingResult.ADD_TO_DRAFT, VoiceRecordingResult.fromPersistedName(null))
+        assertEquals(VoiceRecordingResult.ADD_TO_DRAFT, VoiceRecordingResult.fromPersistedName("unknown"))
+        assertEquals(VoiceRecordingResult.SEND_IMMEDIATELY, VoiceRecordingResult.fromPersistedName("sendImmediately"))
         assertEquals(CaptureBarConfiguration(), decodeCaptureBarConfiguration("{\"version\":999}"))
     }
 }

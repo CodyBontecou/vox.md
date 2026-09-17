@@ -37,6 +37,7 @@ import md.vox.android.capturedomain.CaptureDraft
 import md.vox.android.capturedomain.CaptureAttachment
 import md.vox.android.capturedomain.CaptureBarAction
 import md.vox.android.capturedomain.CaptureBarConfiguration
+import md.vox.android.capturedomain.VoiceRecordingResult
 import md.vox.android.capturedomain.normalized
 import md.vox.android.capturedomain.CaptureDrainSummary
 import md.vox.android.capturedomain.CaptureHistoryItem
@@ -1763,6 +1764,7 @@ internal fun encodeCaptureBarConfiguration(configuration: CaptureBarConfiguratio
         put("hidden", JsonArray(configuration.hiddenActions.map(CaptureBarAction::persistedName).sorted().map(::JsonPrimitive)))
         put("order", JsonArray(configuration.orderedActions.map { JsonPrimitive(it.persistedName) }))
         put("confirmVoiceNoteBeforeAdding", configuration.confirmsVoiceNotesBeforeAdding)
+        put("voiceRecordingResult", configuration.voiceRecordingResult.persistedName)
         put("twentyFourHour", configuration.usesTwentyFourHourTimestamps)
         put("version", 1)
     },
@@ -1777,6 +1779,9 @@ internal fun decodeCaptureBarConfiguration(value: String): CaptureBarConfigurati
         hiddenActions = root.getValue("hidden").jsonArray.mapNotNull { byName[it.jsonPrimitive.content] }.toSet(),
         usesTwentyFourHourTimestamps = root["twentyFourHour"]?.jsonPrimitive?.booleanOrNull ?: false,
         confirmsVoiceNotesBeforeAdding = root["confirmVoiceNoteBeforeAdding"]?.jsonPrimitive?.booleanOrNull ?: false,
+        voiceRecordingResult = VoiceRecordingResult.fromPersistedName(
+            root["voiceRecordingResult"]?.jsonPrimitive?.contentOrNull,
+        ),
     ).normalized()
 }.getOrDefault(CaptureBarConfiguration())
 

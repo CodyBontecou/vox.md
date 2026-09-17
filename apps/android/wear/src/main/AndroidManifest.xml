@@ -8,7 +8,9 @@
 
     <application
         android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
         android:label="Vox.md"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/Theme.Vox.Wear">
         <meta-data
             android:name="md.vox.android.RECORDING_NOTIFICATION_EXTENDER"

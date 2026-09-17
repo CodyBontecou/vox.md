@@ -13,6 +13,7 @@ import androidx.compose.ui.test.performScrollToIndex
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import md.vox.android.capturedomain.CaptureBarAction
 import md.vox.android.capturedomain.CaptureBarConfiguration
+import md.vox.android.capturedomain.VoiceRecordingResult
 import md.vox.android.capturedomain.CaptureComposerCommand
 import md.vox.android.platformservices.RecordingPhase
 import md.vox.android.platformservices.RecordingStatus
@@ -241,6 +242,56 @@ class CaptureBarUiInstrumentationTest {
         compose.waitForIdle()
         compose.runOnIdle {
             assertEquals(listOf("Reviewed voice note.", "Automatic voice note."), added)
+        }
+    }
+
+    @Test
+    fun sendImmediatelyResultSubmitsTheFinishedTranscriptWithoutDrafting() {
+        var transcription by mutableStateOf(
+            RecordingTranscriptionState(
+                sessionID = "33333333-3333-4333-8333-333333333333",
+                phase = RecordingTranscriptionPhase.COMPLETED,
+                transcript = "raw send words",
+                cleanedTranscript = "Send immediately voice note.",
+            ),
+        )
+        val drafted = mutableListOf<String>()
+        val sent = mutableListOf<String>()
+        var markedAdded = 0
+        compose.setContent {
+            VoxTheme {
+                Surface {
+                    RecordingTranscriptCompletionEffect(
+                        transcription = transcription,
+                        confirmsVoiceNotesBeforeAdding = false,
+                        addToDraft = drafted::add,
+                        voiceRecordingResult = VoiceRecordingResult.SEND_IMMEDIATELY,
+                        sendWithPreset = sent::add,
+                        markRecordingAdded = { markedAdded += 1 },
+                    )
+                }
+            }
+        }
+
+        compose.runOnIdle {
+            assertEquals(listOf("Send immediately voice note."), sent)
+            assertTrue(drafted.isEmpty())
+            assertEquals(1, markedAdded)
+        }
+
+        // A new recording sends exactly once; the consumed transcript never
+        // falls back into the composer.
+        compose.runOnIdle {
+            transcription = transcription.copy(
+                sessionID = "44444444-4444-4444-8444-444444444444",
+                cleanedTranscript = "Second voice note.",
+            )
+        }
+        compose.waitForIdle()
+        compose.runOnIdle {
+            assertEquals(listOf("Send immediately voice note.", "Second voice note."), sent)
+            assertTrue(drafted.isEmpty())
+            assertEquals(2, markedAdded)
         }
     }
 
