@@ -91,7 +91,11 @@ The current Vox.md iOS keyboard requires Apple's Allow Full Access setting so th
 
 ## Apple System Entry Points
 
-App Intents include Record with Vox.md, Open Quick Capture, Record a Capture, Capture a Screenshot, Capture Text to Markdown, Capture Link to Markdown, and Capture File to Markdown.
+App Intents include Record with Vox.md (foreground App Shortcut: Record with Preset), Toggle Recording (iOS 26+ background start/stop), Open Quick Capture, Record a Capture, Capture a Screenshot, Capture Text to Markdown, Capture Link to Markdown, and Capture File to Markdown.
+
+On iOS 26+, the separate Vox.md Toggle Recording control is registered for Action Button/Control Center with a configurable Preset. Choose Settings > Action Button > Controls > Vox.md Toggle Recording. Prepare microphone permission and transcription model/language first; enable Lock Screen Record Button and Shortcut Recording Live Activity in Vox.md and allow Live Activities in iOS Settings. Invoke again to stop, or use the Live Activity Stop control. Existing Vox.md Record / Record with Preset assignments still open the app; replace the assignment and reselect the preset to change behavior.
+
+If the direct entry is absent, the confirmed workaround is a regular Apple Shortcut containing Vox.md's Toggle Recording action with its Preset, assigned under Settings > Action Button > Shortcut > Choose a Shortcut. Existing wrapper Shortcuts are unchanged. Disabled Lock Screen Record Button makes invocation a no-op; recording/Live Activity failures can open the app. Older iOS uses foreground Record. Direct-picker visibility and cold/warm, locked/unlocked behavior on fresh/upgraded installs require physical-device QA; source/metadata registration is not runtime verification.
 
 Deep-link examples:
 

@@ -22,13 +22,13 @@ import VoxboardShared
 /// permission missing, or the engine failing — the intent chains to the
 /// open-and-record intent so the user still gets their recording.
 @available(iOS 26.0, *)
-struct ToggleVoxboardRecordingIntent: AudioRecordingIntent, LiveActivityStartingIntent {
+struct ToggleVoxboardRecordingIntent: AudioRecordingIntent, LiveActivityIntent {
     static let title: LocalizedStringResource = "Toggle Recording"
     static let description = IntentDescription("Starts or stops a Vox.md recording without leaving the current app. Run it again to stop.")
     static var openAppWhenRun: Bool = false
 
     /// iOS 26 requires an AudioRecordingIntent to present a Live Activity
-    /// whenever its session is active. `LiveActivityStartingIntent` authorizes
+    /// whenever its session is active. `LiveActivityIntent` authorizes
     /// starting that activity from the background — without it the request is
     /// rejected with `ActivityAuthorizationError.visibility`.
     static var supportedModes: IntentModes { [.background, .foreground(.dynamic)] }
@@ -48,7 +48,14 @@ struct ToggleVoxboardRecordingIntent: AudioRecordingIntent, LiveActivityStarting
 
     @MainActor
     func perform() async throws -> some IntentResult {
-
+#if VOXBOARD_WIDGET_EXTENSION
+        // The extension carries the same intent identity/parameters for control
+        // metadata. LiveActivityIntent routes execution to the app process, where
+        // the recorder lives. If the system nevertheless executes here, use the
+        // existing foreground fallback rather than silently doing nothing.
+        guard AppConstants.lockScreenQuickRecordEnabled else { return .result() }
+        return .result(opensIntent: OpenVoxboardRecordIntent(vox: vox))
+#else
         guard AppConstants.lockScreenQuickRecordEnabled else {
             return .result()
         }
@@ -75,7 +82,7 @@ struct ToggleVoxboardRecordingIntent: AudioRecordingIntent, LiveActivityStarting
         // listening this arms the microphone only for this segment and tears
         // it back down after delivery. The audio session activates inside —
         // background Live Activity starts are authorized by this intent's
-        // conformance to `LiveActivityStartingIntent`, so the card is requested
+        // conformance to `LiveActivityIntent`, so the card is requested
         // immediately after the session is live.
         let started = recorder.startOneShotInAppSegment(
             flowId: Self.resolvedFlowId(for: vox),
@@ -103,6 +110,7 @@ struct ToggleVoxboardRecordingIntent: AudioRecordingIntent, LiveActivityStarting
         // back to the legacy behavior: open the app and record there.
         LiveActivityController.shared.endShortcutRecordingActivityIfNeeded()
         return .result(opensIntent: OpenVoxboardRecordIntent(vox: vox))
+#endif
     }
 
     private static func resolvedFlowId(for vox: VoxEntity?) -> String? {

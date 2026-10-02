@@ -251,6 +251,8 @@
 				LiveActivityRecordingIntents.swift,
 				OpenVoxboardQuickCaptureIntent.swift,
 				OpenVoxboardRecordIntent.swift,
+				ToggleVoxboardRecordingIntent.swift,
+				VoxboardToggleRecordingControl.swift,
 			);
 			target = 622B4C7C2F78B09600FDC4CA /* Voxboard WidgetExtension */;
 		};
@@ -1146,6 +1148,7 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) VOXBOARD_WIDGET_EXTENSION";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1178,6 +1181,7 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) VOXBOARD_WIDGET_EXTENSION";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

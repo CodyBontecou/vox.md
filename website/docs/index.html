@@ -463,7 +463,8 @@
 
         <h3 id="control-center-live-activities">Control Center, Live Activities, and Dynamic Island</h3>
         <ul>
-          <li>On iOS 18+, Control Center offers <strong>Quick Capture</strong> and a configurable <strong>Vox.md Record</strong> control with a selected preset.</li>
+          <li>On iOS 18+, Control Center offers <strong>Quick Capture</strong> and a configurable <strong>Vox.md Record</strong> control with a selected preset. Vox.md Record opens the app.</li>
+          <li>On iOS 26+, the separate <strong>Vox.md Toggle Recording</strong> control starts or stops a recording without switching apps when recording setup is complete. It can be assigned through Settings → Action Button → Controls with a selected Preset.</li>
           <li>The <strong>Live Activity Monitor</strong> setting controls recording status and Record/Stop actions on the Lock Screen and Dynamic Island.</li>
           <li>Live Activity states include Recording, timer, Processing, Ready, Record, and Stop.</li>
           <li>Live Activities are available from iOS 17; Control Center controls require iOS 18.</li>
@@ -472,7 +473,8 @@
         <h3 id="shortcuts">Shortcuts and App Intents</h3>
         <p>Capture Presets appear as selectable entities in Shortcuts and supported controls. With Use Current Location enabled, direct-enqueue text, link, and file intents request location during invocation; actions that open Quick Capture request it at Send; and recording actions request it when recording stops. Metadata output does not change this timing. If an unattended <em>Ask</em> request cannot get location, its unavailable origin-time result is retained for a later decision rather than reacquired. Shipped intents include:</p>
         <ul class="docs-columns">
-          <li>Record with Vox.md</li>
+          <li>Record with Vox.md (foreground; App Shortcut: Record with Preset)</li>
+          <li>Toggle Recording (background start/stop, iOS 26+)</li>
           <li>Open Quick Capture</li>
           <li>Record a Capture</li>
           <li>Capture a Screenshot</li>
@@ -480,6 +482,11 @@
           <li>Capture Link to Markdown</li>
           <li>Capture File to Markdown</li>
         </ul>
+
+        <h3 id="action-button-recording">Action Button recording setup</h3>
+        <p>Open Vox.md once to grant microphone permission and prepare the transcription model/language. Enable <strong>Lock Screen Record Button</strong> and <strong>Shortcut Recording Live Activity</strong> in Vox.md Settings, and allow Live Activities in iOS Settings. On iOS 26+, select <strong>Vox.md Toggle Recording</strong> under Settings → Action Button → Controls, then choose its Preset. Invoke once to start and again to stop; the Live Activity provides Stop too.</p>
+        <p><strong>Record with Preset / Vox.md Record</strong> intentionally opens Vox.md. Existing assignments are preserved: replace the assignment in Action Button settings and reselect the Preset to use Toggle Recording. If the new direct entry is not offered, the confirmed workaround is to create a regular Apple Shortcut: Shortcuts → + → Add Action → Vox.md → <strong>Toggle Recording</strong>, select its Preset, save, then assign it under Settings → Action Button → Shortcut → Choose a Shortcut. Existing wrapper Shortcuts need no changes.</p>
+        <p class="docs-note">Background recording requires a Live Activity. Permission, usage-limit, recorder, or Live Activity failures may open Vox.md through the existing fallback; turning off Lock Screen Record Button disables invocation. Older iOS versions use foreground Record. Direct-picker exposure after fresh/upgrade installs and cold/warm, locked/unlocked execution remain pending device QA, not guaranteed by registration metadata.</p>
 
         <h3 id="deep-links">Deep links</h3>
         <p>Vox.md registers the <code>voxboard://</code> URL scheme. Use URL encoding for query values.</p>

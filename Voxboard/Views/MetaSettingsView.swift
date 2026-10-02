@@ -478,7 +478,7 @@ struct MetaSettingsView: View {
                     Text("Lock Screen Record Button")
                         .font(Geist.label())
                         .foregroundColor(Geist.text)
-                    Text("Allow the Quick Record widget/control to open Vox.md and immediately start recording.")
+                    Text("Allow recording from widgets, controls, and Shortcuts. Vox.md Record opens the app; Toggle Recording starts or stops in the background on iOS 26+ when setup is complete.")
                         .font(Geist.caption())
                         .foregroundColor(Geist.muted)
                 }
@@ -491,6 +491,9 @@ struct MetaSettingsView: View {
                         WidgetCenter.shared.reloadTimelines(ofKind: "VoxboardRecordWidget")
                         if #available(iOS 18.0, *) {
                             ControlCenter.shared.reloadControls(ofKind: "VoxboardRecordControl")
+                        }
+                        if #available(iOS 26.0, *) {
+                            ControlCenter.shared.reloadControls(ofKind: VoxboardToggleRecordingControl.kind)
                         }
                     }
             }
