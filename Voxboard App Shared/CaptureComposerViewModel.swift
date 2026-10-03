@@ -1549,6 +1549,10 @@ final class QuickCaptureViewModel {
                     outcome: .delivered,
                     failureCategory: nil
                 )
+                deliverCaptureToURLIfConfigured(
+                    request: request,
+                    presetID: submittedVoxProfile?.id
+                )
             }
             if let concurrentlyEdited = try await draftStore.load(id: submittedDraftID) {
                 let rebased = concurrentlyEdited.rebased(afterSubmitting: submittedDraft)
@@ -2029,6 +2033,33 @@ final class QuickCaptureViewModel {
               ) else { return }
         _ = await historyStore.upsertBestEffort(record)
         historyRecords = (try? await historyStore.list()) ?? historyRecords
+    }
+
+    /// Opt-in per-preset URL delivery for a delivered Capture (typed text, link,
+    /// scan text, or a transcript sent through the composer). Runs independently
+    /// of the file sink; a failure never affects the capture result. Voice
+    /// `.runVox` recordings deliver from the recorder instead, not here.
+    private func deliverCaptureToURLIfConfigured(request: CaptureRequest, presetID: String?) {
+        guard let presetID,
+              let preset = CapturePresetStore.flow(id: presetID),
+              preset.exportSettings.urlDelivery.enabled else { return }
+        let text = request.urlDeliveryText
+        guard !text.isEmpty else { return }
+        let settings = preset.exportSettings.urlDelivery
+        let deliverer = TranscriptURLDeliverer.appDefault()
+        #if DEBUG
+        KeyboardDebugLog.shared.log(
+            "[CaptureComposer] URL delivery capture id=\(request.id.uuidString.lowercased()) preset=\(presetID) bytes=\(text.utf8.count)"
+        )
+        #endif
+        Task.detached(priority: .utility) {
+            _ = await deliverer.deliverCapture(
+                id: request.id,
+                text: text,
+                date: request.createdAt,
+                settings: settings
+            )
+        }
     }
 
     nonisolated private static func historyFailureCategory(for error: Error) -> CaptureHistoryFailureCategory {

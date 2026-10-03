@@ -350,6 +350,10 @@ final class PersistentRecorder {
     /// Updated every time a configured transcript export succeeds or fails.
     var lastFileExportEvent: FileExportEvent?
 
+    /// Updated every time an opt-in URL delivery succeeds or fails. Independent
+    /// of `lastFileExportEvent`: a URL failure never marks the recording failed.
+    var lastURLDeliveryEvent: URLDeliveryEvent?
+
     /// A successful in-app immediate recording can be restored into the
     /// composer for the same five-second window as a regular Capture send.
     private(set) var lastSentAudioUndoSnapshot: SentCaptureUndoSnapshot?
@@ -3513,6 +3517,28 @@ final class PersistentRecorder {
                     }
                     let latest = await MainActor.run {
                         store.transcripts.first(where: { $0.id == savedId }) ?? initialTranscript
+                    }
+
+                    // Opt-in per-preset URL delivery. Runs independently of the
+                    // file sink so it works with no folder, a folder with no URL,
+                    // or both; a failure here never fails the recording.
+                    let urlDeliverySettings = flowForExport.exportSettings.urlDelivery
+                    #if DEBUG
+                    KeyboardDebugLog.shared.log(
+                        "[PersistentRecorder] URL delivery check preset=\(flowForExport.id) enabled=\(urlDeliverySettings.enabled)"
+                    )
+                    #endif
+                    if urlDeliverySettings.enabled {
+                        let deliverer = TranscriptURLDeliverer.appDefault()
+                        Task.detached(priority: .utility) {
+                            let event = await deliverer.deliver(
+                                transcript: latest,
+                                settings: urlDeliverySettings
+                            )
+                            await MainActor.run {
+                                self.lastURLDeliveryEvent = event
+                            }
+                        }
                     }
 
                     if let captureDestinationID {

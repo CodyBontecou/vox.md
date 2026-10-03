@@ -281,6 +281,12 @@ private struct CapturePresetEditorView: View {
     @State private var isEditingDestination = false
     @State private var isCaptureProcessingInfoPresented = false
     @State private var recordingDeliveryNotificationsDenied = false
+    @State private var urlDeliveryToken = ""
+    @State private var urlDeliveryError: String?
+    @State private var urlDeliveryWarning: String?
+    @State private var urlDeliveryTestResult: String?
+    @State private var urlDeliveryIsTesting = false
+    @State private var urlDeliveryHeadersDraft = ""
 
     private enum BookmarkKind {
         case exportFolder
@@ -314,6 +320,7 @@ private struct CapturePresetEditorView: View {
                 if flow.captureDestinationID == nil {
                     fileExportSection
                 }
+                urlDeliverySection
                 if showsFrontmatterSection {
                     frontmatterSection
                     locationMetadataSection
@@ -861,6 +868,100 @@ private struct CapturePresetEditorView: View {
         }
     }
 
+    private var urlDeliverySection: some View {
+        Section {
+            Toggle("Deliver to URL", isOn: $flow.exportSettings.urlDelivery.enabled)
+                .tint(Color.accentColor)
+                .accessibilityIdentifier("preset_url_delivery_enabled")
+
+            if flow.exportSettings.urlDelivery.enabled {
+                TextField("https://example.com/ingest", text: $flow.exportSettings.urlDelivery.urlString)
+                    .textInputAutocapitalization(.never)
+                    .disableAutocorrection(true)
+                    .keyboardType(.URL)
+                    .accessibilityIdentifier("preset_url_delivery_url")
+                    .onChange(of: flow.exportSettings.urlDelivery.urlString) { _, _ in
+                        validateURLDelivery()
+                    }
+
+                if let urlDeliveryError {
+                    Text(urlDeliveryError)
+                        .font(.caption)
+                        .foregroundStyle(Geist.error)
+                        .accessibilityIdentifier("preset_url_delivery_error")
+                }
+                if let urlDeliveryWarning {
+                    Label(urlDeliveryWarning, systemImage: "exclamationmark.triangle.fill")
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                }
+
+                SecureField("Bearer token (optional)", text: $urlDeliveryToken)
+                    .textInputAutocapitalization(.never)
+                    .disableAutocorrection(true)
+                    .accessibilityIdentifier("preset_url_delivery_token")
+                HStack {
+                    Button("Save Token") { saveURLDeliveryToken() }
+                        .disabled(urlDeliveryToken.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    if flow.exportSettings.urlDelivery.hasBearerToken {
+                        Spacer()
+                        Button("Remove Token", role: .destructive) { removeURLDeliveryToken() }
+                    }
+                }
+                if flow.exportSettings.urlDelivery.hasBearerToken {
+                    Label("A token is stored in the Keychain.", systemImage: "lock.fill")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Custom Headers")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    TextEditor(text: $urlDeliveryHeadersDraft)
+                        .font(.system(.caption, design: .monospaced))
+                        .frame(minHeight: 60)
+                        .textInputAutocapitalization(.never)
+                        .disableAutocorrection(true)
+                        .accessibilityIdentifier("preset_url_delivery_headers")
+                        .onChange(of: urlDeliveryHeadersDraft) { _, newValue in
+                            flow.exportSettings.urlDelivery.customHeaders = Self.parseHeaders(newValue)
+                        }
+                    Text("One per line: Name: Value. Content-Type, Idempotency-Key, and the bearer token are managed by Vox.md.")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
+
+                Button {
+                    Task { await sendURLDeliveryTest() }
+                } label: {
+                    if urlDeliveryIsTesting {
+                        HStack { ProgressView(); Text("Sending test…") }
+                    } else {
+                        Text("Send Test")
+                    }
+                }
+                .disabled(
+                    urlDeliveryIsTesting
+                        || flow.exportSettings.urlDelivery.urlString
+                            .trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                )
+                .accessibilityIdentifier("preset_url_delivery_test")
+
+                if let urlDeliveryTestResult {
+                    Text(urlDeliveryTestResult)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        } header: {
+            Text("Deliver to URL")
+        } footer: {
+            Text("POSTs this preset's finished transcript as JSON to your own endpoint. Off by default; nothing is sent unless you configure it. Secrets are stored in the Keychain.")
+        }
+        .onAppear(perform: refreshURLDeliveryTokenState)
+    }
+
     private var audioExportSection: some View {
         Section {
             Picker("Save Audio", selection: $flow.audioSaveMode) {
@@ -1094,6 +1195,105 @@ private struct CapturePresetEditorView: View {
 
     private func markPerFlow() {
         flow.exportSettings.usesCustomExportSettings = true
+    }
+
+    private var urlDeliveryHost: String? {
+        URLComponents(string: flow.exportSettings.urlDelivery.urlString)?.host
+    }
+
+    private func validateURLDelivery() {
+        let raw = flow.exportSettings.urlDelivery.urlString
+        guard !raw.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            urlDeliveryError = nil
+            urlDeliveryWarning = nil
+            return
+        }
+        do {
+            _ = try URLDeliveryValidator.validate(raw)
+            urlDeliveryError = nil
+            urlDeliveryWarning = nil
+        } catch URLDeliveryValidationError.insecureLocalRequiresConfirmation {
+            urlDeliveryError = nil
+            urlDeliveryWarning = "Plain HTTP is insecure. Only use it for a local-only endpoint."
+        } catch {
+            urlDeliveryWarning = nil
+            urlDeliveryError = error.localizedDescription
+        }
+    }
+
+    private func refreshURLDeliveryTokenState() {
+        if let host = urlDeliveryHost, URLDeliveryKeychain.token(forHost: host) != nil {
+            flow.exportSettings.urlDelivery.hasBearerToken = true
+        } else if flow.exportSettings.urlDelivery.hasBearerToken {
+            flow.exportSettings.urlDelivery.hasBearerToken = false
+        }
+        urlDeliveryHeadersDraft = Self.renderHeaders(flow.exportSettings.urlDelivery.customHeaders)
+        validateURLDelivery()
+    }
+
+    private static func renderHeaders(_ headers: [String: String]) -> String {
+        headers
+            .sorted { $0.key.lowercased() < $1.key.lowercased() }
+            .map { "\($0.key): \($0.value)" }
+            .joined(separator: "\n")
+    }
+
+    /// Parses `Name: Value` lines. Malformed lines are ignored; the last value
+    /// for a duplicate name wins.
+    private static func parseHeaders(_ text: String) -> [String: String] {
+        var headers: [String: String] = [:]
+        for line in text.split(separator: "\n", omittingEmptySubsequences: true) {
+            guard let separator = line.firstIndex(of: ":") else { continue }
+            let name = line[line.startIndex..<separator].trimmingCharacters(in: .whitespaces)
+            let value = line[line.index(after: separator)...].trimmingCharacters(in: .whitespaces)
+            guard !name.isEmpty, !value.isEmpty else { continue }
+            headers[name] = value
+        }
+        return headers
+    }
+
+    private func saveURLDeliveryToken() {
+        guard let host = urlDeliveryHost else {
+            urlDeliveryError = URLDeliveryValidationError.missingHost.localizedDescription
+            return
+        }
+        let token = urlDeliveryToken.trimmingCharacters(in: .whitespacesAndNewlines)
+        if URLDeliveryKeychain.setToken(token, forHost: host) {
+            flow.exportSettings.urlDelivery.hasBearerToken = true
+            urlDeliveryToken = ""
+            urlDeliveryError = nil
+        }
+    }
+
+    private func removeURLDeliveryToken() {
+        guard let host = urlDeliveryHost else { return }
+        URLDeliveryKeychain.deleteToken(forHost: host)
+        flow.exportSettings.urlDelivery.hasBearerToken = false
+    }
+
+    @MainActor
+    private func sendURLDeliveryTest() async {
+        do {
+            _ = try URLDeliveryValidator.validate(
+                flow.exportSettings.urlDelivery.urlString,
+                allowingInsecureLocal: true
+            )
+        } catch {
+            urlDeliveryError = error.localizedDescription
+            return
+        }
+        urlDeliveryIsTesting = true
+        defer { urlDeliveryIsTesting = false }
+        let event = await TranscriptURLDeliverer.appDefault()
+            .sendTest(settings: flow.exportSettings.urlDelivery)
+        switch event.result {
+        case .delivered(let statusCode):
+            urlDeliveryTestResult = "Delivered (HTTP \(statusCode))."
+        case .failed(let message, _):
+            urlDeliveryTestResult = message
+        case .disabled:
+            urlDeliveryTestResult = "Enable delivery first."
+        }
     }
 
     private func toggleYAMLProperty(_ property: ExportYAMLProperty, enabled: Bool) {

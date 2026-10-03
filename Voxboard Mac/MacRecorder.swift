@@ -114,6 +114,8 @@ final class MacRecorder {
     var lastError: String?
     var lastExportURL: URL?
     var lastRecoveryAudioURL: URL?
+    /// Opt-in URL delivery outcome. Independent of `lastExportURL`.
+    var lastURLDeliveryEvent: URLDeliveryEvent?
     var needsUnlock = false
 
     private let recorder = AudioRecorder()
@@ -1706,6 +1708,21 @@ final class MacRecorder {
 
             let latest = await MainActor.run {
                 store.transcripts.first(where: { $0.id == savedId }) ?? initialTranscript
+            }
+
+            // Opt-in per-preset URL delivery, independent of the file sink.
+            let urlDeliverySettings = flowForExport.exportSettings.urlDelivery
+            if urlDeliverySettings.enabled {
+                let deliverer = TranscriptURLDeliverer.appDefault()
+                Task.detached(priority: .utility) {
+                    let event = await deliverer.deliver(
+                        transcript: latest,
+                        settings: urlDeliverySettings
+                    )
+                    await MainActor.run {
+                        recorderForExport.lastURLDeliveryEvent = event
+                    }
+                }
             }
 
             if let captureDestinationID {

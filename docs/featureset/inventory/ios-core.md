@@ -403,6 +403,19 @@ LID = IC. Every feature below is verified in the root-level files of `Voxboard/`
 - Evidence: `PersistentRecorder.swift` `pauseInAppSegment`/`resumeInAppSegment`/`extractSegmentSamples`/duration timer/`appendToSegmentJournal`; `LiveSegmentTranscriptionCoordinator.swift`; `VoiceAutoStopCoordinator.swift`; `WatchRecordingController.swift` phase mapping; `QuickCaptureView.swift` `voiceCapturePauseToggle` (AnyView-erased — see F-IC-31 sibling note on deep ViewBuilder types overflowing the Swift runtime metadata demangler on device) — `VoxboardTests/RecordingPauseResumeTests.swift`.
 - Status: shipped
 
+### F-IC-33 Per-Preset URL Delivery
+- Surface: Capture Preset editor → Deliver to URL section; runs after segment transcription on iOS and Mac
+- Summary: An opt-in, per-preset HTTP destination. A finished transcript is POSTed as JSON to a user-typed HTTPS endpoint (loopback/LAN HTTP allowed behind a local-only warning), with exponential-backoff retry, a durable receipt, and a redacted diagnostic log line. Off by default; Vox.md ships no endpoint. Covers both voice transcripts (from the recorder's delivery path) and typed/link/scan Captures sent through the composer (`CaptureComposerViewModel.submit`), which use the generic `{id, text, source, recorded_at}` body.
+- Details:
+  - Settings: `CapturePresetExportSettings.urlDelivery` (`CapturePresetURLDeliverySettings`) is decode-additive, so existing archives decode as disabled. Only `hasBearerToken` is persisted; the token lives in the Keychain (`URLDeliveryKeychain`, service `bontecou.Voxboard.urldelivery`, account = destination host).
+  - Transport: `TranscriptURLDeliverer` (actor, VoxboardShared) reuses the existing JSON export renderer (`TranscriptFileExporter.exportKitRenderedContent`, `.json`) so there is no second serializer. Headers: `Content-Type: application/json; charset=utf-8`, `User-Agent: Vox.md/<version> (iOS|macOS <version>)`, stable `Idempotency-Key` = transcript UUID lowercased, optional `Authorization: Bearer`, plus user-defined custom headers (e.g. HMAC signatures). Custom headers cannot override `Content-Type`/`Idempotency-Key`, and a configured bearer token wins over a manual `Authorization`. Header names/values are never logged.
+  - Retry policy: `2xx` delivered; `408`/`429` retryable (`Retry-After` honoured); other `4xx` permanent; `5xx`/timeouts/transport errors retry with `1, 4, 15, 60 s` backoff + jitter up to `maxAttempts`.
+  - Durability: each attempt writes `URLDeliveryReceipt` JSON under `AppConstants.urlDeliveryReceiptsDirectoryURL` so a failure survives restart. Delivery runs in a detached task independent of the file sink; a URL failure never marks the recording failed (`lastURLDeliveryEvent`).
+  - Validation: HTTPS only, except loopback/`.local`/RFC1918 HTTP; credentials and secret-looking query parameters rejected; body capped at 1 MiB. The editor's "Send Test" button POSTs a fixed synthetic payload only on explicit user action.
+- Constraints: no audio upload, no multipart, no background `URLSession` (phase 2), no analytics; Keychain/App Group unavailable on a simulator without the group entitlement.
+- Evidence: `Packages/VoxboardShared/Sources/VoxboardShared/CapturePresetURLDeliverySettings.swift`, `TranscriptURLDeliverer.swift`, `URLDeliveryKeychain.swift`, `RecordingFlow.swift` (`CapturePresetExportSettings`), `Voxboard/PersistentRecorder.swift` (voice delivery path), `Voxboard Mac/MacRecorder.swift`, `Voxboard App Shared/CaptureComposerViewModel.swift` (typed Capture path), `Voxboard/Views/FlowSettingsView.swift` (`urlDeliverySection`) — `Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptURLDelivererTests.swift`, `URLDeliveryValidationTests.swift`.
+- Status: not shipped
+
 ---
 
 ## File-by-File Coverage Checklist

@@ -90,6 +90,8 @@ Stats shows lifetime recording and capture totals, recorded time, attachment cou
 ### File Export
 Automatically save transcripts after each session as TXT, Markdown, or YAML. Choose a destination folder, use filename templates, append to a single file, render Markdown templates, and enable Obsidian-friendly frontmatter.
 
+Capture Presets can also opt into **Deliver to URL**: POST a finished transcript, or a typed Capture, as JSON to an HTTPS endpoint you own (self-hosted agent, webhook, n8n, Home Assistant), with retry, a durable receipt, an optional bearer token, and custom headers (for example an HMAC signature). Off by default, per preset, text-only; the bearer token is stored in the Keychain and nothing is sent anywhere you did not type in.
+
 ### Apple Intelligence Enrichment
 On iOS 26+ devices and macOS 26+ Macs with Apple Intelligence, eligible Capture Presets can generate titles, tags, categories, cleaned-up text, checklists, meeting-note structure, and custom transformations — still locally on-device through Apple's Foundation Models framework.
 
