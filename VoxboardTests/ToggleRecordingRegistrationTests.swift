@@ -17,7 +17,7 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
             XCTAssertNotEqual(current.action.vox?.id, selected.id)
             XCTAssertTrue(current.isEnabled)
             XCTAssertFalse(ToggleVoxboardRecordingIntent.openAppWhenRun)
-            XCTAssertTrue(ToggleVoxboardRecordingIntent.supportedModes.contains(.background))
+            XCTAssertEqual(ToggleVoxboardRecordingIntent.supportedModes, [.background, .foreground(.dynamic)])
             XCTAssertTrue(current.action is any AudioRecordingIntent)
             XCTAssertTrue(current.action is any LiveActivityIntent)
         }
@@ -47,6 +47,47 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
         }
     }
 
+    func testStopWithoutLiveActivityTearsDownRemainingAudioSession() {
+        var segmentActive = true
+        var audioSessionActive = true
+        var finishedRecording = false
+
+        ToggleVoxboardRecordingIntent.stopRecording(
+            stopSegment: {
+                // A background stop finalizes the recording, but the recorder
+                // can retain its audio session while queued processing runs.
+                segmentActive = false
+                finishedRecording = true
+            },
+            ensureLiveActivity: { false },
+            stopListening: {
+                XCTAssertTrue(finishedRecording, "Finalize before tearing down capture")
+                audioSessionActive = false
+            }
+        )
+
+        XCTAssertFalse(segmentActive)
+        XCTAssertTrue(finishedRecording)
+        XCTAssertFalse(audioSessionActive, "An audio recording intent must not return with audio capture active and no Live Activity")
+    }
+
+    func testStopWithLiveActivityKeepsBackgroundProcessingSession() {
+        var segmentActive = true
+        var audioSessionActive = true
+
+        ToggleVoxboardRecordingIntent.stopRecording(
+            stopSegment: { segmentActive = false },
+            ensureLiveActivity: {
+                XCTAssertFalse(segmentActive, "Stop the segment before updating its activity")
+                return true
+            },
+            stopListening: { audioSessionActive = false }
+        )
+
+        XCTAssertFalse(segmentActive)
+        XCTAssertTrue(audioSessionActive, "Keep the existing background processing lease when its Live Activity is available")
+    }
+
     func testBuiltAppRegistersBackgroundAndLegacyAppShortcuts() throws {
         let metadata = try actionsMetadata(in: Bundle.main.bundleURL)
         let shortcuts = try XCTUnwrap(metadata["autoShortcuts"])
@@ -54,6 +95,30 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
         XCTAssertTrue(serialized.contains("ToggleVoxboardRecordingIntent"), serialized)
         XCTAssertTrue(serialized.contains("OpenVoxboardRecordIntent"), serialized)
         XCTAssertTrue(OpenVoxboardRecordIntent.openAppWhenRun)
+    }
+
+    func testBuiltAppPreservesLegacyShortcutAvailabilityBelowIOS26() throws {
+        let metadata = try actionsMetadata(in: Bundle.main.bundleURL)
+        let shortcuts = try XCTUnwrap(metadata["autoShortcuts"] as? [[String: Any]])
+        let legacyActions = [
+            "OpenVoxboardRecordIntent", "OpenQuickCaptureIntent", "OpenCaptureVoiceIntent",
+            "OpenCaptureScreenshotIntent", "OpenCaptureScanIntent", "CaptureTextIntent",
+            "CaptureURLIntent", "CaptureFileIntent"
+        ]
+        for identifier in legacyActions + ["ToggleVoxboardRecordingIntent"] {
+            let shortcut = try XCTUnwrap(shortcuts.first { $0["actionIdentifier"] as? String == identifier })
+            let availability = try XCTUnwrap(shortcut["availabilityAnnotations"] as? [String: Any])
+            let iOS = try XCTUnwrap(availability["LNPlatformNameIOS"] as? [String: Any])
+            let introducedVersion = try XCTUnwrap(iOS["introducedVersion"] as? String)
+            if identifier == "ToggleVoxboardRecordingIntent" {
+                XCTAssertEqual(introducedVersion, "26.0")
+            } else {
+                XCTAssertNotEqual(
+                    introducedVersion.compare("17.6", options: .numeric), .orderedDescending,
+                    "\(identifier) must remain available on the supported iOS 17.6 deployment target, not require \(introducedVersion)"
+                )
+            }
+        }
     }
 
     func testEmbeddedWidgetCarriesSameToggleIntentIdentity() throws {

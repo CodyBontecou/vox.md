@@ -70,11 +70,13 @@ struct ToggleVoxboardRecordingIntent: AudioRecordingIntent, LiveActivityIntent {
         // A segment is already recording — the same trigger that started it
         // now stops it, and the segment transcribes and delivers as usual.
         if recorder.isSegmentActive {
-            recorder.stopInAppSegment()
-            // Re-present the card if the user dismissed it while recording;
-            // the system requires an active Live Activity whenever the audio
-            // session is active. No-op when a card already exists.
-            LiveActivityController.shared.startIfNeeded(reason: .shortcutRecording)
+            Self.stopRecording(
+                stopSegment: { recorder.stopInAppSegment() },
+                ensureLiveActivity: {
+                    LiveActivityController.shared.startIfNeeded(reason: .shortcutRecording)
+                },
+                stopListening: { recorder.stopListening() }
+            )
             return .result()
         }
 
@@ -112,6 +114,29 @@ struct ToggleVoxboardRecordingIntent: AudioRecordingIntent, LiveActivityIntent {
         return .result(opensIntent: OpenVoxboardRecordIntent(vox: vox))
 #endif
     }
+
+#if !VOXBOARD_WIDGET_EXTENSION
+    /// The stop path can leave microphone capture active during background
+    /// processing. Keep its Live Activity requirement testable without audio
+    /// capture or ActivityKit permission in the test runner.
+    @MainActor
+    static func stopRecording(
+        stopSegment: () -> Void,
+        ensureLiveActivity: () -> Bool,
+        stopListening: () -> Void
+    ) {
+        // Finalize first: stopping listening while the segment is still active
+        // would cancel it instead of handing the recording off for processing.
+        stopSegment()
+        if !ensureLiveActivity() {
+            // The system requires a Live Activity while audio capture remains
+            // active, even after the segment stops. Do not return with an
+            // unpresented session, and do not restart recording via a fallback:
+            // this invocation was a Stop request.
+            stopListening()
+        }
+    }
+#endif
 
     private static func resolvedFlowId(for vox: VoxEntity?) -> String? {
         guard let id = vox?.id,
