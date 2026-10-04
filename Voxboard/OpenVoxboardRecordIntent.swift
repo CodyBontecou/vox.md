@@ -107,6 +107,8 @@ struct OpenVoxboardRecordIntent: AppIntent {
         } else {
             AppConstants.sharedDefaults?.removeObject(forKey: AppConstants.pendingWidgetRecordFlowIdKey)
         }
+        // A new legacy recording must not inherit a previous draft action's policy.
+        AppConstants.sharedDefaults?.removeObject(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey)
         AppConstants.sharedDefaults?.set(true, forKey: AppConstants.pendingWidgetRecordKey)
         return .result()
     }
@@ -131,6 +133,8 @@ struct WidgetRecordingFlowSelection {
         from url: URL,
         defaults: UserDefaults? = AppConstants.sharedDefaults
     ) {
+        // All legacy widget URLs remain immediate, even after a draft request.
+        defaults?.removeObject(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey)
         let requestedFlowID = URLComponents(url: url, resolvingAgainstBaseURL: false)?
             .queryItems?
             .first(where: { $0.name == "flowId" })?

@@ -543,7 +543,8 @@ final class PersistentRecorder {
         speakerDiarizationService: SpeakerDiarizationService = SpeakerDiarizationService(),
         voiceActivityDetectionService: VoiceActivityDetectionService = VoiceActivityDetectionService(),
         captureDraftEventHandler: CaptureDraftRecordingEventHandler? = nil,
-        transcriptEnricher: TranscriptEnricher? = nil
+        transcriptEnricher: TranscriptEnricher? = nil,
+        recordingJobStore: RecordingJobStore? = nil
     ) {
         self.transcriptStore = transcriptStore
         self.usageTracker = usageTracker
@@ -557,7 +558,7 @@ final class PersistentRecorder {
 
         let queueRoot = AppConstants.recordingJobsDirectoryURL
             ?? FileManager.default.temporaryDirectory.appendingPathComponent("VoxboardRecordingJobs", isDirectory: true)
-        let jobStore = RecordingJobStore(rootDirectoryURL: queueRoot)
+        let jobStore = recordingJobStore ?? RecordingJobStore(rootDirectoryURL: queueRoot)
         self.recordingQueue = RecordingJobQueue(store: jobStore) { [weak self] job, audioURL, progress in
             #if DEBUG
             if ProcessInfo.processInfo.arguments.contains(

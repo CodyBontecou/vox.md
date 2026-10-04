@@ -97,43 +97,7 @@ struct VoxboardApp: App {
             speakerDiarizationService: speakerDiarizationService,
             captureDraftEventHandler: { [weak captureViewModel] event in
                 guard let captureViewModel else { return false }
-                switch event {
-                case .origin(let source, let locationOutcome, let profileSnapshot):
-                    return await captureViewModel.journalRecordedOrigin(
-                        source: source,
-                        outcome: locationOutcome,
-                        profileSnapshot: profileSnapshot
-                    )
-                case .clearOrigin(let profileID):
-                    return await captureViewModel.clearRecordedOrigin(profileID: profileID)
-                case .audio(let url, let draftRequestID, let deliveryID):
-                    guard draftRequestID == nil || captureViewModel.draft.requestID == draftRequestID else {
-                        return false
-                    }
-                    return await captureViewModel.stageRecordedAudio(
-                        at: url,
-                        deliveryID: deliveryID
-                    ) != nil
-                case .liveTranscript(let sessionID, let finalizedText, let volatileText):
-                    await captureViewModel.updateLiveRecordedTranscript(
-                        sessionID: sessionID,
-                        finalizedText: finalizedText,
-                        volatileText: volatileText
-                    )
-                    return true
-                case .cancelLiveTranscript(let sessionID):
-                    await captureViewModel.cancelLiveRecordedTranscript(sessionID: sessionID)
-                    return true
-                case .transcript(let text, let draftRequestID, let liveSessionID, let deliveryID):
-                    guard draftRequestID == nil || captureViewModel.draft.requestID == draftRequestID else {
-                        return false
-                    }
-                    return await captureViewModel.appendRecordedTranscript(
-                        text,
-                        sessionID: liveSessionID,
-                        deliveryID: deliveryID
-                    )
-                }
+                return await CaptureDraftRecordingEventDelivery.deliver(event, to: captureViewModel)
             },
             transcriptEnricher: enricher
         )
