@@ -578,8 +578,20 @@ public enum CapturePresetStore {
     ) -> [CapturePreset] {
         guard let defaults else { return defaultFlows }
         let decoder = JSONDecoder()
-        let stored = defaults.data(forKey: flowsKey)
-            .flatMap { try? decoder.decode([CapturePreset].self, from: $0) } ?? []
+        let storedData = defaults.data(forKey: flowsKey)
+        let stored = storedData.flatMap { try? decoder.decode([CapturePreset].self, from: $0) } ?? []
+        // Decoding discards PR #35's plaintext header values. Compare the raw
+        // archive too: decoded equality alone would leave those secrets in
+        // UserDefaults when no unrelated migration needs to save the presets.
+        let rawPresets = storedData.flatMap {
+            (try? JSONSerialization.jsonObject(with: $0)) as? [[String: Any]]
+        } ?? []
+        let requiresURLDeliveryRedaction = rawPresets.contains { preset in
+            guard let export = preset["exportSettings"] as? [String: Any],
+                  let url = export["urlDelivery"] as? [String: Any],
+                  let headers = url["customHeaders"] as? [String: String] else { return false }
+            return !headers.isEmpty
+        }
 
         if stored.isEmpty {
             var flows = defaultFlows
@@ -644,7 +656,7 @@ public enum CapturePresetStore {
             migrateProcessingGate(&migrated)
         }
 
-        if persistMigrations, migrated != stored {
+        if persistMigrations, migrated != stored || requiresURLDeliveryRedaction {
             saveFlows(migrated, defaults: defaults)
         }
         if persistMigrations, processingGateMigrationPending {

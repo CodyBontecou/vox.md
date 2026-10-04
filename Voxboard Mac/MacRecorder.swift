@@ -1710,17 +1710,17 @@ final class MacRecorder {
                 store.transcripts.first(where: { $0.id == savedId }) ?? initialTranscript
             }
 
-            // Opt-in per-preset URL delivery, independent of the file sink.
+            // Opt-in additive delivery. The journal freezes bytes and prevents
+            // another POST when a separate note/audio sink retries this job.
             let urlDeliverySettings = flowForExport.exportSettings.urlDelivery
             if urlDeliverySettings.enabled {
-                let deliverer = TranscriptURLDeliverer.appDefault()
-                Task.detached(priority: .utility) {
-                    let event = await deliverer.deliver(
-                        transcript: latest,
-                        settings: urlDeliverySettings
-                    )
-                    await MainActor.run {
-                        recorderForExport.lastURLDeliveryEvent = event
+                let event = await TranscriptURLDeliverer.appDefault().deliver(
+                    transcript: latest, settings: urlDeliverySettings
+                )
+                await MainActor.run {
+                    recorderForExport.lastURLDeliveryEvent = event
+                    if case .failed(let message, _) = event.result {
+                        recorderForExport.lastError = String(localized: "Your transcript was saved locally, but URL delivery failed. \(message)")
                     }
                 }
             }

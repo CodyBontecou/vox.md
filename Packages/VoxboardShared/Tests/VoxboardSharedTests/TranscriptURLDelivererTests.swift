@@ -43,7 +43,9 @@ final class TranscriptURLDelivererTests: XCTestCase {
             StubURLProtocol.capturedRequests.first?.headers["Idempotency-Key"],
             transcript.id.uuidString.lowercased()
         )
-        let receipts = await deliverer.pendingReceipts()
+        let receipts = await deliverer.receipts()
+        let pending = await deliverer.pendingReceipts()
+        XCTAssertTrue(pending.isEmpty)
         XCTAssertEqual(receipts.first?.outcome, .delivered)
         XCTAssertEqual(receipts.first?.id, transcript.id.uuidString.lowercased())
     }
@@ -135,8 +137,13 @@ final class TranscriptURLDelivererTests: XCTestCase {
 
         StubURLProtocol.reset()
         let withoutToken = makeDeliverer(responses: [.init(statusCode: 200)], token: nil)
-        _ = await withoutToken.deliver(transcript: makeTranscript(), settings: settings)
-        XCTAssertNil(StubURLProtocol.capturedRequests.first?.headers["Authorization"])
+        let missingToken = await withoutToken.deliver(transcript: makeTranscript(), settings: settings)
+        guard case .failed(_, let retryable) = missingToken.result else {
+            return XCTFail("A configured but unavailable token must fail before sending")
+        }
+        XCTAssertFalse(retryable)
+        XCTAssertEqual(missingToken.attempts, 0)
+        XCTAssertTrue(StubURLProtocol.capturedRequests.isEmpty)
     }
 
     func test_customHeaders_areAppliedButProtocolHeadersAndBearerWin() async {
@@ -244,7 +251,7 @@ final class TranscriptURLDelivererTests: XCTestCase {
             urlString: "https://example.invalid/ingest",
             includeCleanedText: false
         )
-        _ = await deliverer.deliver(transcript: transcript, settings: withoutCleaned)
+        _ = await deliverer.deliver(transcript: makeTranscript(text: "Raw text", cleanedText: "Cleaned text"), settings: withoutCleaned)
         let raw = try XCTUnwrap(StubURLProtocol.capturedRequests.last?.body)
         let object = try XCTUnwrap(JSONSerialization.jsonObject(with: raw) as? [String: Any])
         XCTAssertNil(object["cleanedText"])
@@ -260,9 +267,11 @@ final class TranscriptURLDelivererTests: XCTestCase {
         XCTAssertEqual(event.result, .delivered(statusCode: 200))
         let body = try XCTUnwrap(StubURLProtocol.capturedRequests.first?.body)
         let object = try XCTUnwrap(JSONSerialization.jsonObject(with: body) as? [String: Any])
-        XCTAssertEqual(object["id"] as? String, "voxboard-test")
+        let id = try XCTUnwrap(object["id"] as? String)
+        XCTAssertNotNil(UUID(uuidString: id))
+        XCTAssertEqual(object["text"] as? String, "Vox.md delivery test")
         XCTAssertEqual(object["test"] as? Bool, true)
-        XCTAssertEqual(StubURLProtocol.capturedRequests.first?.headers["Idempotency-Key"], "voxboard-test")
+        XCTAssertEqual(StubURLProtocol.capturedRequests.first?.headers["Idempotency-Key"], id)
     }
 
     func test_deliverCapture_postsGenericBodyWithUniqueId() async throws {
@@ -319,9 +328,11 @@ final class TranscriptURLDelivererTests: XCTestCase {
             enabled: true,
             urlString: "https://example.invalid/ingest",
             hasBearerToken: true,
-            customHeaders: ["X-Signature": "abc"],
             maxAttempts: 7,
-            includeCleanedText: false
+            includeCleanedText: false,
+            hasCustomHeaders: true,
+            credentialID: UUID().uuidString,
+            credentialURLString: "https://example.invalid/ingest"
         )
         let data = try JSONEncoder().encode(settings)
         let decoded = try JSONDecoder().decode(CapturePresetExportSettings.self, from: data)

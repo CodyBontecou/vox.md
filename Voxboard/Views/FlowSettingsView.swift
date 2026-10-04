@@ -282,11 +282,13 @@ private struct CapturePresetEditorView: View {
     @State private var isCaptureProcessingInfoPresented = false
     @State private var recordingDeliveryNotificationsDenied = false
     @State private var urlDeliveryToken = ""
+    @State private var urlDeliveryURLDraft = ""
+    @State private var urlDeliveryTestTask: Task<Void, Never>?
     @State private var urlDeliveryError: String?
-    @State private var urlDeliveryWarning: String?
     @State private var urlDeliveryTestResult: String?
     @State private var urlDeliveryIsTesting = false
     @State private var urlDeliveryHeadersDraft = ""
+    @State private var urlDeliverySavedHeadersDraft = ""
 
     private enum BookmarkKind {
         case exportFolder
@@ -875,14 +877,17 @@ private struct CapturePresetEditorView: View {
                 .accessibilityIdentifier("preset_url_delivery_enabled")
 
             if flow.exportSettings.urlDelivery.enabled {
-                TextField("https://example.com/ingest", text: $flow.exportSettings.urlDelivery.urlString)
+                TextField("https://example.com/ingest", text: $urlDeliveryURLDraft)
                     .textInputAutocapitalization(.never)
                     .disableAutocorrection(true)
                     .keyboardType(.URL)
                     .accessibilityIdentifier("preset_url_delivery_url")
-                    .onChange(of: flow.exportSettings.urlDelivery.urlString) { _, _ in
-                        validateURLDelivery()
-                    }
+                Toggle("Allow insecure local HTTP", isOn: $flow.exportSettings.urlDelivery.allowingInsecureLocal)
+                    .accessibilityIdentifier("preset_url_delivery_insecure_local")
+                Text("HTTP sends your transcript and credentials without encryption. Only enable this for a trusted local endpoint.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Button("Save URL", action: saveURLDeliveryURL)
 
                 if let urlDeliveryError {
                     Text(urlDeliveryError)
@@ -890,28 +895,28 @@ private struct CapturePresetEditorView: View {
                         .foregroundStyle(Geist.error)
                         .accessibilityIdentifier("preset_url_delivery_error")
                 }
-                if let urlDeliveryWarning {
-                    Label(urlDeliveryWarning, systemImage: "exclamationmark.triangle.fill")
-                        .font(.caption)
-                        .foregroundStyle(.orange)
-                }
-
                 SecureField("Bearer token (optional)", text: $urlDeliveryToken)
                     .textInputAutocapitalization(.never)
                     .disableAutocorrection(true)
                     .accessibilityIdentifier("preset_url_delivery_token")
                 HStack {
                     Button("Save Token") { saveURLDeliveryToken() }
-                        .disabled(urlDeliveryToken.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        .disabled(urlDeliveryToken.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                            || flow.exportSettings.urlDelivery.requiresCredentialMigration)
                     if flow.exportSettings.urlDelivery.hasBearerToken {
                         Spacer()
                         Button("Remove Token", role: .destructive) { removeURLDeliveryToken() }
+                            .disabled(flow.exportSettings.urlDelivery.requiresCredentialMigration)
                     }
                 }
                 if flow.exportSettings.urlDelivery.hasBearerToken {
-                    Label("A token is stored in the Keychain.", systemImage: "lock.fill")
+                    Label("A bearer token is configured in the Keychain.", systemImage: "lock.fill")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                }
+                if flow.exportSettings.urlDelivery.credentialID != nil
+                    || flow.exportSettings.urlDelivery.requiresCredentialMigration {
+                    Button("Remove Saved Credentials", role: .destructive, action: removeURLDeliveryCredentials)
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
@@ -924,16 +929,15 @@ private struct CapturePresetEditorView: View {
                         .textInputAutocapitalization(.never)
                         .disableAutocorrection(true)
                         .accessibilityIdentifier("preset_url_delivery_headers")
-                        .onChange(of: urlDeliveryHeadersDraft) { _, newValue in
-                            flow.exportSettings.urlDelivery.customHeaders = Self.parseHeaders(newValue)
-                        }
-                    Text("One per line: Name: Value. Content-Type, Idempotency-Key, and the bearer token are managed by Vox.md.")
+                    Button("Save Headers", action: saveURLDeliveryHeaders)
+                        .disabled(flow.exportSettings.urlDelivery.requiresCredentialMigration)
+                    Text("One per line: Name: Value. Values are saved only in the Keychain. Content-Type, Idempotency-Key, and the bearer token are managed by Vox.md.")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
 
                 Button {
-                    Task { await sendURLDeliveryTest() }
+                    urlDeliveryTestTask = Task { await sendURLDeliveryTest() }
                 } label: {
                     if urlDeliveryIsTesting {
                         HStack { ProgressView(); Text("Sending test…") }
@@ -942,9 +946,12 @@ private struct CapturePresetEditorView: View {
                     }
                 }
                 .disabled(
-                    urlDeliveryIsTesting
-                        || flow.exportSettings.urlDelivery.urlString
-                            .trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    urlDeliveryIsTesting || urlDeliveryError != nil
+                        || flow.exportSettings.urlDelivery.requiresCredentialMigration
+                        || urlDeliveryHeadersDraft != urlDeliverySavedHeadersDraft
+                        || flow.exportSettings.urlDelivery.urlString.isEmpty
+                        || urlDeliveryURLDraft != flow.exportSettings.urlDelivery.urlString
+                        || !urlDeliveryToken.isEmpty
                 )
                 .accessibilityIdentifier("preset_url_delivery_test")
 
@@ -957,9 +964,14 @@ private struct CapturePresetEditorView: View {
         } header: {
             Text("Deliver to URL")
         } footer: {
-            Text("POSTs this preset's finished transcript as JSON to your own endpoint. Off by default; nothing is sent unless you configure it. Secrets are stored in the Keychain.")
+            Text("Adds a JSON POST to this preset's existing destinations; it does not replace note delivery. Off by default. Save the URL and credentials explicitly. Draft recordings are not sent until you choose Send. Redirects are not followed.")
         }
         .onAppear(perform: refreshURLDeliveryTokenState)
+        .onDisappear {
+            urlDeliveryTestTask?.cancel()
+            urlDeliveryToken = ""
+            urlDeliveryHeadersDraft = ""
+        }
     }
 
     private var audioExportSection: some View {
@@ -1197,38 +1209,44 @@ private struct CapturePresetEditorView: View {
         flow.exportSettings.usesCustomExportSettings = true
     }
 
-    private var urlDeliveryHost: String? {
-        URLComponents(string: flow.exportSettings.urlDelivery.urlString)?.host
-    }
-
-    private func validateURLDelivery() {
-        let raw = flow.exportSettings.urlDelivery.urlString
-        guard !raw.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            urlDeliveryError = nil
-            urlDeliveryWarning = nil
-            return
-        }
+    private func saveURLDeliveryURL() {
         do {
-            _ = try URLDeliveryValidator.validate(raw)
+            let url = try URLDeliveryValidator.validate(urlDeliveryURLDraft,
+                allowingInsecureLocal: flow.exportSettings.urlDelivery.allowingInsecureLocal)
+            flow.exportSettings.urlDelivery.urlString = url.absoluteString
+            urlDeliveryURLDraft = url.absoluteString
             urlDeliveryError = nil
-            urlDeliveryWarning = nil
-        } catch URLDeliveryValidationError.insecureLocalRequiresConfirmation {
-            urlDeliveryError = nil
-            urlDeliveryWarning = "Plain HTTP is insecure. Only use it for a local-only endpoint."
+            if flow.exportSettings.urlDelivery.credentialID != nil,
+               flow.exportSettings.urlDelivery.credentialURLString != url.absoluteString {
+                urlDeliveryHeadersDraft = ""
+                urlDeliveryError = URLDeliveryKeychain.StorageError.destinationChanged.localizedDescription
+            }
         } catch {
-            urlDeliveryWarning = nil
             urlDeliveryError = error.localizedDescription
         }
     }
 
     private func refreshURLDeliveryTokenState() {
-        if let host = urlDeliveryHost, URLDeliveryKeychain.token(forHost: host) != nil {
-            flow.exportSettings.urlDelivery.hasBearerToken = true
-        } else if flow.exportSettings.urlDelivery.hasBearerToken {
-            flow.exportSettings.urlDelivery.hasBearerToken = false
+        urlDeliveryURLDraft = flow.exportSettings.urlDelivery.urlString
+        guard !flow.exportSettings.urlDelivery.requiresCredentialMigration else {
+            urlDeliveryError = "Remove Saved Credentials, then re-enter your URL delivery credentials. Legacy values are no longer read from presets or host-scoped Keychain accounts."
+            return
         }
-        urlDeliveryHeadersDraft = Self.renderHeaders(flow.exportSettings.urlDelivery.customHeaders)
-        validateURLDelivery()
+        guard let id = flow.exportSettings.urlDelivery.credentialID else { return }
+        do {
+            guard let credentials = try URLDeliveryKeychain.credentials(forID: id) else {
+                throw URLDeliveryKeychain.StorageError.missingCredentials
+            }
+            guard credentials.urlString == flow.exportSettings.urlDelivery.urlString else {
+                throw URLDeliveryKeychain.StorageError.destinationChanged
+            }
+            urlDeliveryHeadersDraft = Self.renderHeaders(credentials.customHeaders)
+            urlDeliverySavedHeadersDraft = urlDeliveryHeadersDraft
+        } catch {
+            // Never clear hasBearerToken on a locked/missing Keychain item: that
+            // would downgrade a configured authenticated request to anonymous.
+            urlDeliveryError = error.localizedDescription
+        }
     }
 
     private static func renderHeaders(_ headers: [String: String]) -> String {
@@ -1238,37 +1256,94 @@ private struct CapturePresetEditorView: View {
             .joined(separator: "\n")
     }
 
-    /// Parses `Name: Value` lines. Malformed lines are ignored; the last value
-    /// for a duplicate name wins.
-    private static func parseHeaders(_ text: String) -> [String: String] {
+    private static func parseHeaders(_ text: String) throws -> [String: String] {
         var headers: [String: String] = [:]
         for line in text.split(separator: "\n", omittingEmptySubsequences: true) {
-            guard let separator = line.firstIndex(of: ":") else { continue }
+            guard let separator = line.firstIndex(of: ":") else { throw URLDeliveryValidationError.invalidHeaders }
             let name = line[line.startIndex..<separator].trimmingCharacters(in: .whitespaces)
             let value = line[line.index(after: separator)...].trimmingCharacters(in: .whitespaces)
-            guard !name.isEmpty, !value.isEmpty else { continue }
+            guard !headers.keys.contains(where: { $0.caseInsensitiveCompare(name) == .orderedSame }) else {
+                throw URLDeliveryValidationError.invalidHeaders
+            }
             headers[name] = value
         }
+        try URLDeliveryValidator.validateHeaders(headers)
         return headers
     }
 
-    private func saveURLDeliveryToken() {
-        guard let host = urlDeliveryHost else {
-            urlDeliveryError = URLDeliveryValidationError.missingHost.localizedDescription
-            return
+    private func updateURLDeliveryCredentials(
+        _ update: (inout URLDeliveryKeychain.Credentials) throws -> Void
+    ) throws {
+        let settings = flow.exportSettings.urlDelivery
+        let url = try URLDeliveryValidator.validate(settings.urlString, allowingInsecureLocal: settings.allowingInsecureLocal)
+        let sameDestination = settings.credentialURLString == url.absoluteString
+        guard !settings.requiresCredentialMigration else { throw URLDeliveryKeychain.StorageError.missingCredentials }
+        guard settings.credentialID == nil || sameDestination else {
+            throw URLDeliveryKeychain.StorageError.destinationChanged
         }
-        let token = urlDeliveryToken.trimmingCharacters(in: .whitespacesAndNewlines)
-        if URLDeliveryKeychain.setToken(token, forHost: host) {
-            flow.exportSettings.urlDelivery.hasBearerToken = true
+        let id = sameDestination ? (settings.credentialID ?? UUID().uuidString) : UUID().uuidString
+        var credentials = URLDeliveryKeychain.Credentials(urlString: url.absoluteString)
+        if sameDestination, let storedID = settings.credentialID {
+            guard let stored = try URLDeliveryKeychain.credentials(forID: storedID) else {
+                throw URLDeliveryKeychain.StorageError.missingCredentials
+            }
+            guard stored.urlString == url.absoluteString else {
+                throw URLDeliveryKeychain.StorageError.destinationChanged
+            }
+            credentials = stored
+        }
+        try update(&credentials)
+        try URLDeliveryKeychain.saveCredentials(credentials, forID: id)
+        flow.exportSettings.urlDelivery.credentialID = id
+        flow.exportSettings.urlDelivery.credentialURLString = url.absoluteString
+        flow.exportSettings.urlDelivery.hasBearerToken = credentials.bearerToken != nil
+        flow.exportSettings.urlDelivery.hasCustomHeaders = !credentials.customHeaders.isEmpty
+        flow.exportSettings.urlDelivery.customHeaders = [:]
+        flow.exportSettings.urlDelivery.requiresCredentialMigration = false
+    }
+
+    private func saveURLDeliveryToken() {
+        do {
+            try updateURLDeliveryCredentials {
+                $0.bearerToken = urlDeliveryToken.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
             urlDeliveryToken = ""
             urlDeliveryError = nil
-        }
+        } catch { urlDeliveryError = error.localizedDescription }
+    }
+
+    private func saveURLDeliveryHeaders() {
+        do {
+            let headers = try Self.parseHeaders(urlDeliveryHeadersDraft)
+            try updateURLDeliveryCredentials { $0.customHeaders = headers }
+            urlDeliverySavedHeadersDraft = urlDeliveryHeadersDraft
+            urlDeliveryError = nil
+        } catch { urlDeliveryError = error.localizedDescription }
     }
 
     private func removeURLDeliveryToken() {
-        guard let host = urlDeliveryHost else { return }
-        URLDeliveryKeychain.deleteToken(forHost: host)
-        flow.exportSettings.urlDelivery.hasBearerToken = false
+        do {
+            try updateURLDeliveryCredentials { $0.bearerToken = nil }
+            urlDeliveryError = nil
+        } catch { urlDeliveryError = error.localizedDescription }
+    }
+
+    private func removeURLDeliveryCredentials() {
+        do {
+            if let id = flow.exportSettings.urlDelivery.credentialID {
+                try URLDeliveryKeychain.deleteCredentials(forID: id)
+            }
+            flow.exportSettings.urlDelivery.credentialID = nil
+            flow.exportSettings.urlDelivery.credentialURLString = nil
+            flow.exportSettings.urlDelivery.hasBearerToken = false
+            flow.exportSettings.urlDelivery.hasCustomHeaders = false
+            flow.exportSettings.urlDelivery.requiresCredentialMigration = false
+            flow.exportSettings.urlDelivery.customHeaders = [:]
+            urlDeliveryToken = ""
+            urlDeliveryHeadersDraft = ""
+            urlDeliverySavedHeadersDraft = ""
+            urlDeliveryError = nil
+        } catch { urlDeliveryError = error.localizedDescription }
     }
 
     @MainActor
@@ -1276,16 +1351,18 @@ private struct CapturePresetEditorView: View {
         do {
             _ = try URLDeliveryValidator.validate(
                 flow.exportSettings.urlDelivery.urlString,
-                allowingInsecureLocal: true
+                allowingInsecureLocal: flow.exportSettings.urlDelivery.allowingInsecureLocal
             )
         } catch {
             urlDeliveryError = error.localizedDescription
             return
         }
+        guard !urlDeliveryIsTesting else { return }
         urlDeliveryIsTesting = true
         defer { urlDeliveryIsTesting = false }
-        let event = await TranscriptURLDeliverer.appDefault()
-            .sendTest(settings: flow.exportSettings.urlDelivery)
+        var settings = flow.exportSettings.urlDelivery
+        settings.maxAttempts = 1
+        let event = await TranscriptURLDeliverer.appDefault().sendTest(settings: settings)
         switch event.result {
         case .delivered(let statusCode):
             urlDeliveryTestResult = "Delivered (HTTP \(statusCode))."

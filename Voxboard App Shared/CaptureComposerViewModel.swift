@@ -1398,6 +1398,10 @@ final class QuickCaptureViewModel {
         // A journaled origin result owns the exact Preset policy that produced
         // it. Do not combine that outcome with later edits to the same Preset.
         let submittedVoxProfile = submittedDraft.voxProfileSnapshot ?? selectedVoxProfile
+        // Freeze the opt-in destination before any asynchronous processing.
+        let submittedURLDeliverySettings = submittedVoxProfile.flatMap {
+            CapturePresetStore.flow(id: $0.id, defaults: defaults)?.exportSettings.urlDelivery
+        }
         guard let submittedDestinationID = effectiveDestinationID else {
             isSubmitting = false
             errorMessage = CaptureDraftError.destinationRequired.localizedDescription
@@ -1522,12 +1526,16 @@ final class QuickCaptureViewModel {
                 let stagingURL = captureRootURL
                     .appendingPathComponent("staging", isDirectory: true)
                     .appendingPathComponent(draft.id.uuidString.lowercased(), isDirectory: true)
-                return try await pipeline.capture(
+                let receipt = try await pipeline.capture(
                     request,
                     destination: destination,
                     rootURL: rootURL,
                     assetRootURL: stagingURL
                 )
+                // Use the exact processed request, not a reconstructed raw
+                // draft or a preset re-read after the note has been written.
+                await self.deliverCaptureToURLIfConfigured(request: request, settings: submittedURLDeliverySettings)
+                return receipt
             }
 
             lastReceipt = receipt
@@ -1548,10 +1556,6 @@ final class QuickCaptureViewModel {
                     attachmentCount: receipt.attachmentURLs.count,
                     outcome: .delivered,
                     failureCategory: nil
-                )
-                deliverCaptureToURLIfConfigured(
-                    request: request,
-                    presetID: submittedVoxProfile?.id
                 )
             }
             if let concurrentlyEdited = try await draftStore.load(id: submittedDraftID) {
@@ -2035,30 +2039,20 @@ final class QuickCaptureViewModel {
         historyRecords = (try? await historyStore.list()) ?? historyRecords
     }
 
-    /// Opt-in per-preset URL delivery for a delivered Capture (typed text, link,
-    /// scan text, or a transcript sent through the composer). Runs independently
-    /// of the file sink; a failure never affects the capture result. Voice
-    /// `.runVox` recordings deliver from the recorder instead, not here.
-    private func deliverCaptureToURLIfConfigured(request: CaptureRequest, presetID: String?) {
-        guard let presetID,
-              let preset = CapturePresetStore.flow(id: presetID),
-              preset.exportSettings.urlDelivery.enabled else { return }
+    /// Called only inside explicit Send, after the note sink succeeds. An HTTP
+    /// failure does not repeat that successful note write; its immutable payload
+    /// remains in the URL journal for an explicit HTTP-only retry.
+    private func deliverCaptureToURLIfConfigured(
+        request: CaptureRequest, settings: CapturePresetURLDeliverySettings?
+    ) async {
+        guard let settings, settings.enabled else { return }
         let text = request.urlDeliveryText
         guard !text.isEmpty else { return }
-        let settings = preset.exportSettings.urlDelivery
-        let deliverer = TranscriptURLDeliverer.appDefault()
-        #if DEBUG
-        KeyboardDebugLog.shared.log(
-            "[CaptureComposer] URL delivery capture id=\(request.id.uuidString.lowercased()) preset=\(presetID) bytes=\(text.utf8.count)"
+        let event = await TranscriptURLDeliverer.appDefault().deliverCapture(
+            id: request.id, text: text, date: request.createdAt, settings: settings
         )
-        #endif
-        Task.detached(priority: .utility) {
-            _ = await deliverer.deliverCapture(
-                id: request.id,
-                text: text,
-                date: request.createdAt,
-                settings: settings
-            )
+        if case .failed(let message, _) = event.result {
+            errorMessage = String(localized: "Your note was saved, but URL delivery failed. \(message)")
         }
     }
 
