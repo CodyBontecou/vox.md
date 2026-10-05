@@ -1,23 +1,30 @@
 # Apple CI simulator policy
 
 The iOS app-hosted suite runs on an available iPhone whose runtime matches the
-selected Xcode's iOS Simulator SDK **major/minor version**. With Xcode 26.6 this
-means iOS 26.5. Runtime/device availability is read from `simctl` JSON rather than
-from the first phone in its human-readable listing. The selector logs the SDK,
-runtime version and device UDID, and fails rather than silently falling back to
-an older runtime or a newer beta. A missing runtime must be installed on the
-runner. The baseline requires iOS 26.4 or newer.
+selected Xcode's iOS Simulator SDK **exact version** (with equivalent spellings
+such as 26.5 and 26.5.0). With the pinned Xcode 26.6 this means iOS 26.5, which
+includes the Swift runtime correction shipped in iOS 26.4. Runtime/device
+availability is read from `simctl` JSON rather than from the first phone in its
+human-readable listing. The shared selector from PR #36 records the SDK, runtime
+version and device UDID, and fails rather than silently falling back to an older
+runtime or a newer beta. A missing runtime must be installed on the runner.
+See [the shared policy and diagnostic investigation](issue-22-ci-allocator-investigation.md).
 
 Run the selector and its portable regression tests with:
 
 ```sh
-python3 scripts/select-ios-test-simulator.py
-python3 -m unittest discover -s scripts/tests -p test_ci_ios_simulator.py
+python3 scripts/select-issue22-ios-test-simulator.py \
+  --github-output /tmp/vox-ios-destination \
+  --metadata /tmp/vox-ios-simulator.json
+python3 -m unittest discover -s scripts/tests
 ```
 
-The tests execute the workflow's actual selection step with a fake `xcrun`, so
-restoring the old first-device selection also breaks the regression tests. They
-run in the existing repository-contracts job, including on Linux.
+The 15 additional workflow tests execute the actual selection step with a fake
+`xcrun`, so restoring the old first-device selection also breaks the regression
+tests. They exercise the canonical PR #36 selector, its exact-version policy and
+retained receipts, alongside the shared policy/retention tests. The duplicate
+PR #34 selector is removed; App Intents metadata collection is preserved. All
+portable tests run in the existing repository-contracts job, including on Linux.
 
 ## Why not the first installed runtime?
 
@@ -89,10 +96,11 @@ Using PR #34 head `4600bded54ea725dbc22461f5437bcd7ae38193d` and Xcode 26.6
   contracts (25 script tests and 131 contract tests) and capture-view structure
   guard.
 
-The retry workaround is removed: `-retry-tests-on-failure` does not reliably
-rerun a test whose host process aborts. This policy changes the CI baseline,
+PR #34 removes the retry workaround: `-retry-tests-on-failure` does not reliably
+rerun a test whose host process aborts. The shared runtime selector and diagnostic
+retention are inherited from merged PR #36. This policy changes the CI baseline,
 **not** the app's deployment target, recording engine, or supported-OS behavior.
 It does not fix Apple's older installed runtime or establish physical-device
 Action Button behavior. Older-OS compatibility remains a separate verification
 surface; do not treat a green current-runtime suite as proof of that coverage.
-A fresh GitHub Actions run of the patch is still required.
+A fresh GitHub Actions run of the integrated branch is still required.
