@@ -18,6 +18,31 @@ enum VoxboardReleaseNotes {
 
     private static let versionNotes: [VersionNotes] = [
         .init(
+            version: "2.10",
+            items: [
+                .list(
+                    title: "What’s new in Vox.md",
+                    rows: [
+                        .init(
+                            symbolSystemName: "mic.fill",
+                            title: "One Record Audio action",
+                            description: "Choose a Capture Preset and Start, Stop, or Start or Stop in Shortcuts. Existing Record and Toggle Recording shortcut identities and control types are retained."
+                        ),
+                        .init(
+                            symbolSystemName: "slider.horizontal.3",
+                            title: "Configure each recording control",
+                            description: "Recording controls offer their own Action and Open App choices, so you can configure each control independently."
+                        ),
+                        .init(
+                            symbolSystemName: "app.badge",
+                            title: "Choose whether Vox.md opens",
+                            description: "Shortcuts uses its native Open When Run switch instead of a second app-opening option. Background recording requires iOS 26 or later and Live Activities; older iOS versions open Vox.md."
+                        )
+                    ]
+                )
+            ]
+        ),
+        .init(
             version: "2.8",
             items: [
                 .list(

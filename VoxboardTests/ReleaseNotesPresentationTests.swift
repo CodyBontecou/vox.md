@@ -2,6 +2,22 @@ import XCTest
 @testable import Voxboard
 
 final class ReleaseNotesPresentationTests: XCTestCase {
+    func testRecordingUpdateIsPresentedAfterUpgradingFromPreviousVersion() {
+        XCTAssertTrue(VoxboardReleaseNotes.shouldPresentCurrentVersion(
+            currentAppVersion: "2.10",
+            latestSeenAppVersion: "2.9",
+            releaseNotesEnabled: true
+        ))
+    }
+
+    func testRecordingUpdateIsNotRepeatedAfterBeingSeen() {
+        XCTAssertFalse(VoxboardReleaseNotes.shouldPresentCurrentVersion(
+            currentAppVersion: "2.10",
+            latestSeenAppVersion: "2.10",
+            releaseNotesEnabled: true
+        ))
+    }
+
     func testUnseenCurrentVersionWithNotesIsPresented() {
         XCTAssertTrue(VoxboardReleaseNotes.shouldPresentCurrentVersion(
             currentAppVersion: "2.2",
