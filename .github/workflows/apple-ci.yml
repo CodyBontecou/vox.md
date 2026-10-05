@@ -60,8 +60,10 @@ jobs:
           xcode-version: '26.6'
       - name: Attest toolchain and project
         run: |
-          xcodebuild -version
-          swift --version
+          set -euo pipefail
+          mkdir -p build/logs
+          { sw_vers; xcodebuild -version; swift --version; } 2>&1 | tee build/logs/ios-test-toolchain.log
+          git rev-parse HEAD > build/logs/ios-test-revision.txt
           xcodebuild -list -project Voxboard.xcodeproj \
             -disableAutomaticPackageResolution \
             -onlyUsePackageVersionsFromResolvedFile
@@ -72,30 +74,17 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          device_line=$(
-            xcrun simctl list devices available iOS \
-              | grep -E 'iPhone (17 Pro|17|16 Pro|16|15 Pro|15)' \
-              | head -n 1 \
-              || true
-          )
-          if [[ -z "$device_line" ]]; then
-            device_line=$(xcrun simctl list devices available iOS | grep -E 'iPhone' | head -n 1 || true)
-          fi
-          if [[ -z "$device_line" ]]; then
-            echo '::error::No available iOS Simulator device found'
-            exit 1
-          fi
-          udid=$(sed -nE 's/.*\(([0-9A-Fa-f-]+)\).*/\1/p' <<<"$device_line")
-          if [[ -z "$udid" ]]; then
-            echo "::error::Could not parse simulator UDID from: $device_line"
-            exit 1
-          fi
-          echo "Using simulator: $device_line"
-          echo "destination=platform=iOS Simulator,id=$udid" >> "$GITHUB_OUTPUT"
+          # #22: retained iOS 26.2 crashes match Swift's isolated-deinit
+          # allocator bug despite building with the 26.5 SDK. This is test-host
+          # runtime isolation, not an application fix or a retry/skip policy.
+          python3 scripts/select-issue22-ios-test-simulator.py \
+            --github-output "$GITHUB_OUTPUT" \
+            --metadata build/logs/ios-simulator.json
       - name: Run iOS app-hosted tests
         run: |
           set -o pipefail
           mkdir -p build/logs build/test-results
+          touch build/logs/ios-tests-started
           xcodebuild test \
             -project Voxboard.xcodeproj \
             -scheme VoxboardTests \
@@ -128,29 +117,43 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           mkdir -p build/logs/crash-reports
-          # Simulator host-app crashes land in the runner's DiagnosticReports.
-          # Capturing them (with symbolication via the .dSYM in DerivedData)
-          # turns the next malloc-abort flake into a readable backtrace (#22).
+          # Retain only this host's reports from this invocation, including
+          # deferred isolated-deinit frees; not unrelated/stale runner crashes.
           found=0
-          for dir in "$HOME/Library/Logs/DiagnosticReports" \
-                     "$RUNNER_TEMP/Voxboard-iOS-Tests/Logs/DiagnosticReports"; do
-            [ -d "$dir" ] || continue
-            while IFS= read -r -d '' ips; do
-              if [ "$(basename "$ips")" != "Retired" ] && find "$ips" -newermt '2 hours ago' | grep -q .; then
+          if [ -f build/logs/ios-tests-started ]; then
+            for dir in "$HOME/Library/Logs/DiagnosticReports" \
+                       "$RUNNER_TEMP/Voxboard-iOS-Tests/Logs/DiagnosticReports"; do
+              [ -d "$dir" ] || continue
+              while IFS= read -r -d '' ips; do
                 cp "$ips" build/logs/crash-reports/ && found=1
-              fi
-            done < <(find "$dir" -name '*.ips' -print0 2>/dev/null)
-          done
+              done < <(find "$dir" -name 'Voxboard-*.ips' -newer build/logs/ios-tests-started -print0 2>/dev/null)
+            done
+          fi
           echo "crash-reports-collected=$found" >> "$GITHUB_OUTPUT"
+          if [ -d build/test-results/Voxboard-iOS.xcresult ]; then
+            # The summary attests the *executed* simulator OS, not just the SDK.
+            xcrun xcresulttool get test-results summary \
+              --path build/test-results/Voxboard-iOS.xcresult \
+              > build/logs/ios-test-summary.json || echo '::warning::Could not export iOS test summary'
+            xcrun xcresulttool get test-results tests \
+              --path build/test-results/Voxboard-iOS.xcresult \
+              > build/logs/ios-test-tree.json || echo '::warning::Could not export iOS test order'
+          fi
       - name: Upload iOS diagnostics
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: voxboard-ios-test-diagnostics
+          # A passing rerun must not overwrite the failing attempt's evidence.
+          name: voxboard-ios-test-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             build/logs/ios-tests.log
             build/logs/app-intents
             build/logs/crash-reports
+            build/logs/ios-test-toolchain.log
+            build/logs/ios-test-revision.txt
+            build/logs/ios-simulator.json
+            build/logs/ios-test-summary.json
+            build/logs/ios-test-tree.json
             build/test-results/Voxboard-iOS.xcresult
           retention-days: 14
 
