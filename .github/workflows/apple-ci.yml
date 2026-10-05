@@ -72,26 +72,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          device_line=$(
-            xcrun simctl list devices available iOS \
-              | grep -E 'iPhone (17 Pro|17|16 Pro|16|15 Pro|15)' \
-              | head -n 1 \
-              || true
-          )
-          if [[ -z "$device_line" ]]; then
-            device_line=$(xcrun simctl list devices available iOS | grep -E 'iPhone' | head -n 1 || true)
-          fi
-          if [[ -z "$device_line" ]]; then
-            echo '::error::No available iOS Simulator device found'
-            exit 1
-          fi
-          udid=$(sed -nE 's/.*\(([0-9A-Fa-f-]+)\).*/\1/p' <<<"$device_line")
-          if [[ -z "$udid" ]]; then
-            echo "::error::Could not parse simulator UDID from: $device_line"
-            exit 1
-          fi
-          echo "Using simulator: $device_line"
-          echo "destination=platform=iOS Simulator,id=$udid" >> "$GITHUB_OUTPUT"
+          # The first installed runtime can be iOS 26.2, whose Swift runtime
+          # crashes during isolated deinit (#22). Match the selected SDK instead.
+          python3 scripts/select-ios-test-simulator.py >> "$GITHUB_OUTPUT"
       - name: Run iOS app-hosted tests
         run: |
           set -o pipefail
@@ -105,8 +88,6 @@ jobs:
             -resultBundlePath "$PWD/build/test-results/Voxboard-iOS.xcresult" \
             -disableAutomaticPackageResolution \
             -onlyUsePackageVersionsFromResolvedFile \
-            -retry-tests-on-failure \
-            -test-iterations 2 \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY='' \
