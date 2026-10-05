@@ -452,7 +452,7 @@ struct MetaSettingsView: View {
                     Text("Shortcut Recording Live Activity")
                         .font(Geist.label())
                         .foregroundColor(Geist.text)
-                    Text("Show a Live Activity while recording is toggled from the Toggle Recording shortcut, Apple Pencil squeeze, or Action Button without opening Vox.md. Required for in-place recording on iOS 26 — when off, the shortcut opens the app instead.")
+                    Text("Show a Live Activity for background shortcut and control recordings, including Apple Pencil squeeze and Action Button recordings. Required for background recording on iOS 26+ — when unavailable, starting a recording opens the app instead.")
                         .font(Geist.caption())
                         .foregroundColor(Geist.muted)
                 }
@@ -478,7 +478,7 @@ struct MetaSettingsView: View {
                     Text("Lock Screen Record Button")
                         .font(Geist.label())
                         .foregroundColor(Geist.text)
-                    Text("Allow recording from widgets, controls, and Shortcuts. Vox.md Record opens the app; Toggle Recording starts or stops in the background on iOS 26+ when setup is complete.")
+                    Text("Allow recording from widgets, controls, and Shortcuts. Choose a Preset and Action. Shortcuts uses Open When Run; the Vox.md Record control uses Open App. Background recording requires iOS 26+ and completed setup.")
                         .font(Geist.caption())
                         .foregroundColor(Geist.muted)
                 }

@@ -2711,9 +2711,21 @@ struct QuickCaptureView: View {
 
         let requestedFlowID = AppConstants.sharedDefaults?.string(forKey: AppConstants.pendingWidgetRecordFlowIdKey)
         AppConstants.sharedDefaults?.removeObject(forKey: AppConstants.pendingWidgetRecordFlowIdKey)
+        let action = WidgetRecordingActionSelection.consume()
+        switch action.command(isRecording: persistentRecorder.isSegmentActive) {
+        case .none:
+            return
+        case .stop:
+            // Stop doesn't require a valid capture route, reload the composer,
+            // or replace the active recording's preset/completion mode.
+            persistentRecorder.stopInAppSegment()
+            return
+        case .start:
+            break
+        }
         Task { @MainActor in
             await viewModel.load()
-            guard viewModel.requireCaptureRouteAvailable() else { return }
+            guard viewModel.requireCaptureRouteAvailable(), !persistentRecorder.isSegmentActive else { return }
             let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: requestedFlowID)
             // Quick Record is an independent immediate recording, not a draft
             // preset launch. Keep its legacy resolver/purpose without rerouting

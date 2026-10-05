@@ -3,9 +3,9 @@ import SwiftUI
 import VoxboardShared
 import WidgetKit
 
-/// A separate kind preserves all existing foreground Record assignments.
-/// Use a button (run again to stop), not a SetValueIntent toggle: the app's
-/// recorder, rather than a potentially stale extension snapshot, owns state.
+/// Keep this kind registered so installed background control assignments keep
+/// working. New assignments should use the configurable Vox.md Record control.
+/// WidgetKit has no public modifier for hiding a registered legacy control kind.
 @available(iOS 26.0, *)
 struct VoxboardToggleRecordingControl: ControlWidget {
     static let kind = "VoxboardToggleRecordingControl"
@@ -18,37 +18,25 @@ struct VoxboardToggleRecordingControl: ControlWidget {
                     systemImage: state.isEnabled ? state.vox.symbolName : "mic.slash"
                 )
                 .controlWidgetActionHint(
-                    state.isEnabled
-                        ? String(localized: "Start or stop recording without switching apps")
-                        : String(localized: "Disabled in Vox.md Settings")
+                    state.isEnabled ? state.actionHint : String(localized: "Disabled in Vox.md Settings")
                 )
             }
             .disabled(!state.isEnabled)
         }
-        .displayName("Vox.md Toggle Recording")
-        .description("Start or stop recording in the background with a Capture Preset. Opens Vox.md if recording needs setup.")
+        .displayName("Vox.md Record (Legacy Background)")
+        .description("Preserves existing background start/stop assignments. For new controls, use Vox.md Record and configure Action and Open App.")
         .promptsForUserConfiguration()
     }
 
-    struct State {
-        let isEnabled: Bool
-        let vox: VoxEntity
-
-        var action: ToggleVoxboardRecordingIntent {
-            ToggleVoxboardRecordingIntent(vox: vox)
-        }
-    }
-
     struct Provider: AppIntentControlValueProvider {
-        func previewValue(configuration: SelectVoxboardRecordVoxIntent) -> State {
-            State(isEnabled: true, vox: VoxEntity.resolved(configuration.vox))
+        private let provider = VoxboardRecordingControlProvider(defaultAction: .toggle, defaultOpenApp: false)
+
+        func previewValue(configuration: SelectVoxboardRecordVoxIntent) -> VoxboardRecordingControlProvider.State {
+            provider.previewValue(configuration: configuration)
         }
 
-        func currentValue(configuration: SelectVoxboardRecordVoxIntent) async throws -> State {
-            State(
-                isEnabled: AppConstants.lockScreenQuickRecordEnabled,
-                vox: VoxEntity.resolved(configuration.vox)
-            )
+        func currentValue(configuration: SelectVoxboardRecordVoxIntent) async throws -> VoxboardRecordingControlProvider.State {
+            try await provider.currentValue(configuration: configuration)
         }
     }
 }

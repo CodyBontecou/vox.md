@@ -3,17 +3,6 @@ import AppIntents
 @available(iOS 17.0, *)
 struct VoxboardShortcutsProvider: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
-        if #available(iOS 26.0, *) {
-            AppShortcut(
-                intent: ToggleVoxboardRecordingIntent(),
-                phrases: [
-                    "Toggle recording with \(.applicationName)",
-                    "Toggle \(\.$vox) recording with \(.applicationName)"
-                ],
-                shortTitle: "Toggle Recording",
-                systemImageName: "mic.badge.plus"
-            )
-        }
         AppShortcut(
             intent: OpenVoxboardRecordIntent(),
             phrases: [
@@ -21,7 +10,7 @@ struct VoxboardShortcutsProvider: AppShortcutsProvider {
                 "Record \(\.$vox) with \(.applicationName)",
                 "Start \(\.$vox) in \(.applicationName)"
             ],
-            shortTitle: "Record with Preset",
+            shortTitle: "Record Audio",
             systemImageName: "mic.fill"
         )
         AppShortcut(

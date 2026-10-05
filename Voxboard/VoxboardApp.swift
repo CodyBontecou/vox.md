@@ -417,6 +417,7 @@ struct VoxboardApp: App {
                 return
             }
             WidgetRecordingFlowSelection.persistRequestedFlowID(from: url)
+            WidgetRecordingActionSelection.persist(.start)
             log.log("[App] Widget record request — opening inline Capture recording controls")
             rootDestination = .capture
             pendingWidgetRecord = true
