@@ -6,6 +6,7 @@ import VoxboardShared
 struct StartRecordingLiveActivityIntent: LiveActivityIntent {
     static let title: LocalizedStringResource = "Start Recording"
     static let description = IntentDescription("Starts a Vox.md recording segment.")
+    static var isDiscoverable: Bool = false
 
     init() {}
 
@@ -29,6 +30,7 @@ struct StartRecordingLiveActivityIntent: LiveActivityIntent {
 struct StopRecordingLiveActivityIntent: LiveActivityIntent {
     static let title: LocalizedStringResource = "Stop Recording"
     static let description = IntentDescription("Stops the active Vox.md recording segment.")
+    static var isDiscoverable: Bool = false
 
     @Parameter(title: "Recording")
     var requestId: String?
