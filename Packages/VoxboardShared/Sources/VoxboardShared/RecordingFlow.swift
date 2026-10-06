@@ -100,7 +100,9 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         self.generateImageAltText = generateImageAltText
         self.captureProcessingScope = captureProcessingScope
         self.capturePrompt = capturePrompt
-        self.watchOutputMode = watchOutputMode
+        // Legacy enabled-URL records also select HTTP: they cannot retain an
+        // audio-only Watch route that bypasses the text delivery target.
+        self.watchOutputMode = exportSettings.deliveryTarget == .http ? .transcript : watchOutputMode
         self.watchRecordingSettings = watchRecordingSettings
         self.audioSaveMode = audioSaveMode
         self.audioFilenameTemplate = audioFilenameTemplate
@@ -108,6 +110,16 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         self.captureDestinationID = captureDestinationID
         self.captureEntryTemplateID = captureEntryTemplateID
         self.capturePlacementOverride = capturePlacementOverride
+    }
+
+    /// One destination choice. Inactive folder and endpoint settings are kept
+    /// so switching targets never erases configuration or Keychain references.
+    public var deliveryTarget: CapturePresetDeliveryTarget {
+        get { exportSettings.deliveryTarget }
+        set {
+            exportSettings.deliveryTarget = newValue
+            if newValue == .http { watchOutputMode = .transcript }
+        }
     }
 
     public var visibleName: String? {
@@ -161,7 +173,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
             isEnabled: isEnabled,
             isBuiltIn: isBuiltIn,
             staticFrontmatter: staticFrontmatter,
-            locationPolicy: locationPolicy,
+            locationPolicy: deliveryTarget == .directory ? locationPolicy : CapturePresetLocationPolicy(),
             metadataScope: metadataScope,
             postProcessingMode: postProcessingMode,
             customPostProcessingInstruction: customPostProcessingInstruction,
@@ -374,6 +386,19 @@ public enum CapturePresetAudioEmbedPlacement: String, Codable, CaseIterable, Sen
     }
 }
 
+public enum CapturePresetDeliveryTarget: String, CaseIterable, Identifiable, Sendable {
+    case directory
+    case http
+
+    public var id: String { rawValue }
+    public var displayName: String {
+        switch self {
+        case .directory: return String(localized: "Directory", bundle: .main)
+        case .http: return "HTTP"
+        }
+    }
+}
+
 /// Per-preset legacy file export settings. `usesCustomExportSettings` is kept
 /// for migration from the old global Files tab.
 public struct CapturePresetExportSettings: Codable, Equatable, Sendable {
@@ -397,6 +422,14 @@ public struct CapturePresetExportSettings: Codable, Equatable, Sendable {
     public var audioEmbedPlacement: CapturePresetAudioEmbedPlacement
     /// Opt-in per-preset HTTP delivery. Existing archives decode as disabled.
     public var urlDelivery: CapturePresetURLDeliverySettings
+
+    /// Reuse the existing persisted opt-in as the single source of truth.
+    /// Legacy presets with URL delivery enabled become HTTP-only; all others
+    /// retain their directory behavior. There is no additive target mode.
+    public var deliveryTarget: CapturePresetDeliveryTarget {
+        get { urlDelivery.enabled ? .http : .directory }
+        set { urlDelivery.enabled = newValue == .http }
+    }
 
     public init(
         usesCustomExportSettings: Bool = true,

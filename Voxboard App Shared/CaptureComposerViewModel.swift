@@ -3,6 +3,25 @@ import Observation
 import UniformTypeIdentifiers
 import VoxboardShared
 
+/// A durable HTTP handoff is not a note receipt. Never invent a file URL for
+/// HTTP-only captures (Finder, Undo, and history must not imply a note exists).
+enum CaptureSubmissionReceipt: Equatable, Sendable {
+    case directory(CaptureReceipt)
+    case http(requestID: UUID)
+
+    var requestID: UUID {
+        switch self {
+        case .directory(let receipt): return receipt.requestID
+        case .http(let id): return id
+        }
+    }
+
+    var noteURL: URL? {
+        if case .directory(let receipt) = self { return receipt.noteURL }
+        return nil
+    }
+}
+
 @MainActor
 @Observable
 final class QuickCaptureViewModel {
@@ -23,7 +42,7 @@ final class QuickCaptureViewModel {
     private var hostOwnsCaptureRoute: @MainActor () -> Bool = { false }
     private var hostBlocksCapturePresetSelection: @MainActor () -> Bool = { false }
     var errorMessage: String?
-    var lastReceipt: CaptureReceipt?
+    var lastReceipt: CaptureSubmissionReceipt?
     var failedInboxCount = 0
     var historyRecords: [CaptureHistoryRecord] = []
     var requestedInput: CaptureRequestedInput?
@@ -41,6 +60,7 @@ final class QuickCaptureViewModel {
     private let historyStore: CaptureHistoryStore?
     private let pipeline: CapturePipeline
     private let urlDeliveryCoordinator: URLDeliveryCoordinator
+    private let httpDeliveryAccounting: any CaptureDeliveryAccounting
     private let requestProcessor: CapturePresetRequestProcessor
     private let locationProvider: any CaptureLocationOutcomeProviding
     private var pendingDraftSave: Task<Void, Never>?
@@ -58,7 +78,8 @@ final class QuickCaptureViewModel {
         pipeline: CapturePipeline = AppCapturePipeline.shared,
         requestProcessor: CapturePresetRequestProcessor = CapturePresetRequestProcessor(),
         locationProvider: (any CaptureLocationOutcomeProviding)? = nil,
-        urlDeliveryCoordinator: URLDeliveryCoordinator? = nil
+        urlDeliveryCoordinator: URLDeliveryCoordinator? = nil,
+        httpDeliveryAccounting: any CaptureDeliveryAccounting = CaptureDeliveryUsageStore.shared
     ) {
         self.captureRootURL = captureRootURL
         self.defaults = defaults
@@ -79,6 +100,7 @@ final class QuickCaptureViewModel {
         }
         self.pipeline = pipeline
         self.urlDeliveryCoordinator = urlDeliveryCoordinator ?? URLDeliveryRuntime.coordinator
+        self.httpDeliveryAccounting = httpDeliveryAccounting
         self.requestProcessor = requestProcessor
         self.locationProvider = locationProvider ?? CaptureLocationService()
     }
@@ -93,8 +115,51 @@ final class QuickCaptureViewModel {
         return enabled.first(where: { $0.id == selectedID }) ?? enabled.first
     }
 
+    private var selectedHTTPSettings: CapturePresetURLDeliverySettings? {
+        guard let id = selectedVoxProfile?.id else { return nil }
+        return CapturePresetStore.flow(id: id, defaults: defaults)?.exportSettings.urlDelivery
+    }
+
+    var usesHTTPDestination: Bool { selectedHTTPSettings?.enabled == true }
+    var needsDirectorySetup: Bool { !usesHTTPDestination && selectedDestination == nil }
+
+    var httpDestinationOrigin: String {
+        guard let url = selectedHTTPSettings?.urlString,
+              var components = URLComponents(string: url) else { return "HTTP" }
+        components.user = nil
+        components.password = nil
+        components.path = ""
+        components.query = nil
+        components.fragment = nil
+        return components.string ?? "HTTP"
+    }
+
+    /// Resolve the draft's active preset, not the keyboard or app default.
+    /// Only endpoint validation failures offer this settings recovery action.
+    var httpEndpointSettingsPresetID: String? {
+        httpEndpointIssue == nil ? nil : selectedVoxProfile?.id
+    }
+
+    private var httpEndpointIssue: String? {
+        guard usesHTTPDestination, let settings = selectedHTTPSettings else { return nil }
+        do {
+            _ = try URLDeliveryValidator.validate(settings.urlString, allowingInsecureLocal: settings.allowingInsecureLocal)
+            return nil
+        } catch { return error.localizedDescription }
+    }
+
+    var httpDestinationIssue: String? {
+        guard usesHTTPDestination else { return nil }
+        if let issue = httpEndpointIssue { return issue }
+        if !draft.additionalPayloads.flatMap(Self.assets(in:)).isEmpty {
+            return String(localized: "HTTP targets send text only. Remove attachments or choose Directory to save them.")
+        }
+        return nil
+    }
+
     var effectiveDestinationID: UUID? {
-        CapturePresetRouteResolver.destinationID(
+        guard !usesHTTPDestination else { return nil }
+        return CapturePresetRouteResolver.destinationID(
             selectionMode: draft.destinationSelectionMode,
             explicitDestinationID: draft.destinationID,
             profile: selectedVoxProfile,
@@ -112,7 +177,7 @@ final class QuickCaptureViewModel {
     }
 
     var selectedPresetDestination: CaptureDestination? {
-        guard let id = selectedVoxProfile?.captureDestinationID else { return nil }
+        guard !usesHTTPDestination, let id = selectedVoxProfile?.captureDestinationID else { return nil }
         return destinations.first { $0.id == id }
     }
 
@@ -152,7 +217,7 @@ final class QuickCaptureViewModel {
     var canSubmit: Bool {
         canChangeCaptureRoute
             && selectedVoxProfile != nil
-            && selectedDestination != nil
+            && (usesHTTPDestination ? httpDestinationIssue == nil : selectedDestination != nil)
             && draft.hasCaptureContent
     }
 
@@ -1385,12 +1450,23 @@ final class QuickCaptureViewModel {
             errorMessage = String(localized: "Shared capture storage is unavailable.")
             return
         }
-        guard canSubmit else { return }
+        guard canSubmit else {
+            if let issue = httpDestinationIssue { errorMessage = issue }
+            return
+        }
 
         isSubmitting = true
         isDescribingImages = false
         defer { isDescribingImages = false }
         errorMessage = nil
+        // Freeze the selected policy and target before the first suspension.
+        // A journaled origin result still owns the policy that produced it.
+        let submittedVoxProfile = draft.voxProfileSnapshot ?? selectedVoxProfile
+        let submittedURLDeliverySettings = submittedVoxProfile.flatMap {
+            CapturePresetStore.flow(id: $0.id, defaults: defaults)?.exportSettings.urlDelivery
+        }
+        let sendsToHTTP = submittedURLDeliverySettings?.enabled == true
+        let submittedDirectoryDestinationID = effectiveDestinationID
         let pendingSave = pendingDraftSave
         pendingDraftSave = nil
         pendingSave?.cancel()
@@ -1398,14 +1474,10 @@ final class QuickCaptureViewModel {
         let submittedAt = Date()
         draft.beginCaptureIfNeeded(at: submittedAt)
         var submittedDraft = draft
-        // A journaled origin result owns the exact Preset policy that produced
-        // it. Do not combine that outcome with later edits to the same Preset.
-        let submittedVoxProfile = submittedDraft.voxProfileSnapshot ?? selectedVoxProfile
-        // Freeze the opt-in destination before any asynchronous processing.
-        let submittedURLDeliverySettings = submittedVoxProfile.flatMap {
-            CapturePresetStore.flow(id: $0.id, defaults: defaults)?.exportSettings.urlDelivery
-        }
-        guard let submittedDestinationID = effectiveDestinationID else {
+        // CaptureRequest's legacy envelope requires a destination identity.
+        // HTTP uses its request identity, not a fabricated directory/library
+        // entry; this identity can never enter the local Capture pipeline.
+        guard let submittedDestinationID = sendsToHTTP ? submittedDraft.requestID : submittedDirectoryDestinationID else {
             isSubmitting = false
             errorMessage = CaptureDraftError.destinationRequired.localizedDescription
             return
@@ -1423,7 +1495,7 @@ final class QuickCaptureViewModel {
                     presetID: submittedVoxProfile?.id
                 ) ? prepared : nil
             }
-            if submittedVoxProfile?.locationPolicy.isEnabled == true, reusablePrepared == nil {
+            if !sendsToHTTP, submittedVoxProfile?.locationPolicy.isEnabled == true, reusablePrepared == nil {
                 let policy = submittedVoxProfile!.locationPolicy
                 let usedExplicitSendWithout = pendingSendWithoutLocationOutcome != nil
                 let outcome: CaptureLocationOutcome
@@ -1480,29 +1552,7 @@ final class QuickCaptureViewModel {
             locationDecision = nil
             let pipeline = self.pipeline
             let requestProcessor = self.requestProcessor
-            let receipt = try await draftStore.submit(draftID: submittedDraftID) { draft in
-                let library = try await libraryStore.load()
-                guard let storedDestination = library.destinations.first(where: {
-                    $0.id == submittedDestinationID
-                }) else {
-                    throw CaptureDraftError.destinationRequired
-                }
-                var destination = library.resolvedDestination(
-                    storedDestination,
-                    overrideEntryTemplateID: draft.entryTemplateID
-                        ?? submittedVoxProfile?.captureEntryTemplateID
-                )
-                if let override = draft.placementOverride
-                    ?? submittedVoxProfile?.capturePlacementOverride {
-                    destination.placement = override
-                }
-                if let noteOverride = draft.relativeNotePathOverride {
-                    try CapturePathValidation.validateRelativePath(noteOverride)
-                    guard noteOverride.lowercased().hasSuffix(".md") else {
-                        throw QuickCaptureViewModelError.noteMustBeMarkdown
-                    }
-                    destination.noteTarget = .existingNote(relativePath: noteOverride)
-                }
+            let receipt: CaptureSubmissionReceipt = try await draftStore.submit(draftID: submittedDraftID) { draft in
                 let request: CaptureRequest
                 if let reusablePrepared {
                     request = reusablePrepared
@@ -1523,49 +1573,71 @@ final class QuickCaptureViewModel {
                     try await draftStore.savePreparedRequest(processed, draftID: draft.id)
                     request = processed
                 }
+                if sendsToHTTP, let settings = submittedURLDeliverySettings {
+                    let cancellation = URLDeliveryCancellation()
+                    return try await withTaskCancellationHandler {
+                        let event = try await self.enqueueHTTPCapture(request: request, settings: settings)
+                        try Task.checkCancellation()
+                        if case .queued = event.result {
+                            await self.dispatchCaptureURLDelivery(id: request.id, cancellation: cancellation)
+                        }
+                        return .http(requestID: request.id)
+                    } onCancel: { cancellation.cancel() }
+                }
+
+                let library = try await libraryStore.load()
+                guard let storedDestination = library.destinations.first(where: {
+                    $0.id == submittedDestinationID
+                }) else { throw CaptureDraftError.destinationRequired }
+                var destination = library.resolvedDestination(
+                    storedDestination,
+                    overrideEntryTemplateID: draft.entryTemplateID ?? submittedVoxProfile?.captureEntryTemplateID
+                )
+                if let override = draft.placementOverride ?? submittedVoxProfile?.capturePlacementOverride {
+                    destination.placement = override
+                }
+                if let noteOverride = draft.relativeNotePathOverride {
+                    try CapturePathValidation.validateRelativePath(noteOverride)
+                    guard noteOverride.lowercased().hasSuffix(".md") else {
+                        throw QuickCaptureViewModelError.noteMustBeMarkdown
+                    }
+                    destination.noteTarget = .existingNote(relativePath: noteOverride)
+                }
                 let rootURL = try Self.resolveRootURL(for: destination)
                 let didAccess = rootURL.startAccessingSecurityScopedResource()
                 defer { if didAccess { rootURL.stopAccessingSecurityScopedResource() } }
                 let stagingURL = captureRootURL
                     .appendingPathComponent("staging", isDirectory: true)
                     .appendingPathComponent(draft.id.uuidString.lowercased(), isDirectory: true)
-                let cancellation = URLDeliveryCancellation()
-                return try await withTaskCancellationHandler {
-                    // Explicit Send freezes processed bytes before a note
-                    // mutation, without contacting the endpoint.
-                    let urlEvent = try await self.enqueueCaptureToURLIfConfigured(
-                        request: request, settings: submittedURLDeliverySettings
-                    )
-                    try Task.checkCancellation()
-                    let receipt = try await pipeline.capture(
-                        request,
-                        destination: destination,
-                        rootURL: rootURL,
-                        assetRootURL: stagingURL
-                    )
-                    if case .queued? = urlEvent?.result {
-                        await self.dispatchCaptureURLDelivery(id: request.id, cancellation: cancellation)
-                    }
-                    return receipt
-                } onCancel: { cancellation.cancel() }
+                return .directory(try await pipeline.capture(
+                    request, destination: destination, rootURL: rootURL, assetRootURL: stagingURL
+                ))
             }
 
             lastReceipt = receipt
             needsCaptureUnlock = false
             try? await draftStore.removePreparedRequest(draftID: submittedDraftID)
-            let library = try await libraryStore.load()
-            if let request = try? submittedDraft.makeRequest(
+            let library: CaptureLibraryEnvelope?
+            if sendsToHTTP {
+                library = nil
+            } else {
+                library = try await libraryStore.load()
+            }
+            // HTTP has its own delivery journal: do not report a queued POST
+            // as a delivered note in file history.
+            if case .directory(let noteReceipt) = receipt,
+               let request = try? submittedDraft.makeRequest(
                 source: defaultCaptureSource,
                 resolvedDestinationID: submittedDestinationID,
                 voxProfile: submittedVoxProfile
             ) {
                 await recordHistory(
                     request: request,
-                    destinationName: library.destinations.first(where: { $0.id == request.destinationID })?.name
+                    destinationName: library?.destinations.first(where: { $0.id == request.destinationID })?.name
                         ?? String(localized: "Deleted destination"),
                     relativeNotePath: submittedDraft.relativeNotePathOverride
-                        ?? historyRelativeNotePath(for: receipt, destinationID: request.destinationID),
-                    attachmentCount: receipt.attachmentURLs.count,
+                        ?? historyRelativeNotePath(for: noteReceipt, destinationID: request.destinationID),
+                    attachmentCount: noteReceipt.attachmentURLs.count,
                     outcome: .delivered,
                     failureCategory: nil
                 )
@@ -1590,8 +1662,10 @@ final class QuickCaptureViewModel {
                 )
                 try await draftStore.save(draft)
             }
-            destinations = library.destinations
-            entryTemplates = library.entryTemplates
+            if let library {
+                destinations = library.destinations
+                entryTemplates = library.entryTemplates
+            }
         } catch is CancellationError {
             // The draft and its staged attachments remain available for another Send.
         } catch let error as CaptureDeliveryQuotaError {
@@ -1600,7 +1674,7 @@ final class QuickCaptureViewModel {
                 errorMessage = nil
             }
         } catch {
-            if let request = try? submittedDraft.makeRequest(
+            if !sendsToHTTP, let request = try? submittedDraft.makeRequest(
                 source: defaultCaptureSource,
                 resolvedDestinationID: submittedDestinationID,
                 voxProfile: submittedVoxProfile
@@ -2051,19 +2125,35 @@ final class QuickCaptureViewModel {
         historyRecords = (try? await historyStore.list()) ?? historyRecords
     }
 
-    /// Called only inside explicit Send. A preparation failure preserves the
-    /// draft before any note mutation; a POST failure belongs to HTTP recovery.
-    private func enqueueCaptureToURLIfConfigured(
-        request: CaptureRequest, settings: CapturePresetURLDeliverySettings?
-    ) async throws -> URLDeliveryEvent? {
-        guard let settings, settings.enabled, !request.urlDeliveryText.isEmpty else { return nil }
-        let event = await urlDeliveryCoordinator.enqueueCapture(
-            id: request.id, text: request.urlDeliveryText, date: request.createdAt, settings: settings
-        )
-        if case .failed(let message, _) = event.result {
-            throw QuickCaptureViewModelError.urlDeliveryHandoffFailed(message)
+    /// Explicit HTTP-only Send commits durable content before clearing the
+    /// draft. No folder permission, note mutation, or attachment export occurs.
+    private func enqueueHTTPCapture(
+        request: CaptureRequest, settings: CapturePresetURLDeliverySettings
+    ) async throws -> URLDeliveryEvent {
+        guard settings.enabled, !request.urlDeliveryText.isEmpty,
+              request.payloads.flatMap(Self.assets(in:)).isEmpty else {
+            throw QuickCaptureViewModelError.urlDeliveryHandoffFailed(
+                String(localized: "HTTP targets send text only. Choose Directory for attachments.")
+            )
         }
-        return event
+        let reservation = try await httpDeliveryAccounting.reserve(for: request)
+        do {
+            try Task.checkCancellation()
+            let event = await urlDeliveryCoordinator.enqueueCapture(
+                id: request.id, text: request.urlDeliveryText, date: request.createdAt, settings: settings
+            )
+            if case .failed(let message, _) = event.result {
+                throw QuickCaptureViewModelError.urlDeliveryHandoffFailed(message)
+            }
+            try Task.checkCancellation()
+            // Count an accepted durable handoff once. HTTP-only retries retain
+            // the identity and never consume another capture slot.
+            try await httpDeliveryAccounting.commit(reservation)
+            return event
+        } catch {
+            await httpDeliveryAccounting.release(reservation)
+            throw error
+        }
     }
 
     private func dispatchCaptureURLDelivery(id: UUID, cancellation: URLDeliveryCancellation) {
@@ -2183,7 +2273,7 @@ final class QuickCaptureViewModel {
                 assetRootURL: captureRootURL
             )
             try await inbox.complete(requestID: request.id)
-            lastReceipt = receipt
+            lastReceipt = .directory(receipt)
             needsCaptureUnlock = false
             await recordHistory(
                 request: request,

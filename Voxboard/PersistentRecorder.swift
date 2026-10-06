@@ -3025,7 +3025,7 @@ final class PersistentRecorder {
         case .keyboardTranscription:
             return nil
         } }
-        guard flow.locationPolicy.isEnabled else { return nil }
+        guard flow.deliveryTarget == .directory, flow.locationPolicy.isEnabled else { return nil }
         let policy = flow.locationPolicy
         let presetID = flow.id
         guard let rootURL = AppConstants.captureDirectoryURL else {
@@ -3470,7 +3470,8 @@ final class PersistentRecorder {
                 let originalAudioFilenameForExport = originalAudioFilename
                     ?? originalAudioSourceURL.lastPathComponent
                 let audioSourceForExport: URL? = {
-                    guard flowForExport.audioSaveMode != .off else { return nil }
+                    guard flowForExport.deliveryTarget == .directory,
+                          flowForExport.audioSaveMode != .off else { return nil }
                     if !cleanupWorkingAudio { return originalAudioSourceURL }
                     guard let dir = AppConstants.recordingsDirectoryURL else { return nil }
                     let ext = originalAudioSourceURL.pathExtension.isEmpty
@@ -3509,7 +3510,8 @@ final class PersistentRecorder {
                     // Legacy exports consume this private working copy. Precise
                     // capture exports keep it until either delivery succeeds or
                     // an exact audio-bearing inbox request is durable.
-                    let audioWasRequested = flowForExport.audioSaveMode != .off
+                    let audioWasRequested = flowForExport.deliveryTarget == .directory
+                        && flowForExport.audioSaveMode != .off
                     var canRemoveRetainedAudio = !audioWasRequested
                     defer {
                         if cleanupWorkingAudio, canRemoveRetainedAudio, let audioSourceForExport {
@@ -3520,9 +3522,9 @@ final class PersistentRecorder {
                         store.transcripts.first(where: { $0.id == savedId }) ?? initialTranscript
                     }
 
-                    // Persist the additive HTTP handoff before completing this
-                    // recording. Only local preparation can fail the job; the
-                    // owned sender's network retries never block the note sink.
+                    // Persist the HTTP-only handoff before completing this
+                    // recording. A chosen HTTP target never enters a note or
+                    // audio exporter, including remembered directory settings.
                     let urlDeliverySettings = flowForExport.exportSettings.urlDelivery
                     #if DEBUG
                     KeyboardDebugLog.shared.log(
@@ -3545,6 +3547,11 @@ final class PersistentRecorder {
                         if case .queued = event.result {
                             await MainActor.run { URLDeliveryRuntime.coordinator.dispatch(id: latest.id, cancellation: urlDeliveryCancellation) }
                         }
+                        if let rootURL = AppConstants.captureDirectoryURL {
+                            try? await CaptureRecordingOriginStore(rootDirectoryURL: rootURL)
+                                .remove(recordingID: requestId)
+                        }
+                        return .delivered
                     }
 
                     if let captureDestinationID {

@@ -880,6 +880,13 @@ private struct MacCapturePresetEditor: View {
                 }
             }
 
+            CapturePresetTargetSection(flow: $flow)
+            if flow.deliveryTarget == .http {
+                URLDeliverySettingsSection(settings: $flow.exportSettings.urlDelivery)
+            } else {
+                directoryDestinationSections
+            }
+
             Section("Capture Processing") {
                 HStack(spacing: 10) {
                     Toggle("Use Apple Intelligence", isOn: $flow.captureProcessingEnabled)
@@ -893,10 +900,12 @@ private struct MacCapturePresetEditor: View {
                     .help("About Apple Intelligence Processing")
                     .accessibilityLabel("About Apple Intelligence Processing")
                 }
-                ImageAltTextSettings(
-                    generateImageAltText: $flow.generateImageAltText,
-                    processingEnabled: flow.captureProcessingEnabled
-                )
+                if flow.deliveryTarget == .directory {
+                    ImageAltTextSettings(
+                        generateImageAltText: $flow.generateImageAltText,
+                        processingEnabled: flow.captureProcessingEnabled
+                    )
+                }
 
                 Picker("Mode", selection: $flow.postProcessingMode) {
                     ForEach(CapturePresetProcessingMode.allCases) { mode in
@@ -948,198 +957,141 @@ private struct MacCapturePresetEditor: View {
                     .foregroundStyle(.secondary)
             }
 
-            Section("Destination") {
-                if let destination = ownedDestination {
-                    LabeledContent("Vault / Folder", value: destination.rootName)
-                    Text(captureDestinationSummary(destination))
-                        .font(.caption.monospaced())
-                        .foregroundStyle(.secondary)
-                    Button("Edit Destination…") {
-                        isEditingDestination = true
-                    }
-                } else {
-                    Text("Choose a vault or folder and define where this preset writes Markdown.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Button("Set Up Destination…") {
-                        isEditingDestination = true
-                    }
-                }
-                if let captureDestinationLoadError {
-                    Text(captureDestinationLoadError)
-                        .font(.caption)
-                        .foregroundStyle(MacBrand.orangeText)
-                }
-                Text("This destination belongs to this preset, including its note target, placement, formatting, attachments, and retry behavior.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-
-            if flow.captureDestinationID == nil {
-                Section("Legacy Voice File Export") {
-                Toggle("Save Notes to Files", isOn: $flow.exportSettings.exportEnabled)
-                    .onChange(of: flow.exportSettings.exportEnabled) { _, _ in markPerFlow() }
-                if flow.exportSettings.exportEnabled {
-                    Button { chooseFolder(.exportFolder) } label: {
-                        settingRow("Export Directory", value: flow.exportSettings.folderName, image: "folder")
-                    }
-                    Picker("Format", selection: $flow.exportSettings.format) {
-                        ForEach(ExportFileFormat.allCases, id: \.self) { format in
-                            Text(format.rawValue.uppercased()).tag(format)
+            if flow.deliveryTarget == .directory {
+                Section("Metadata") {
+                    Picker("Scope", selection: $flow.metadataScope) {
+                        ForEach(CapturePresetMetadataScope.allCases) { scope in
+                            Text(scope.displayName).tag(scope)
                         }
                     }
-                    Picker("Mode", selection: $flow.exportSettings.mode) {
-                        Text("New File").tag(ExportFileMode.newFile)
-                        Text("Append").tag(ExportFileMode.append)
-                    }
-                    if flow.exportSettings.mode == .newFile {
-                        TextField("Filename Template", text: $flow.exportSettings.newFileNameTemplate)
-                        Text("Tokens: {timestamp}, {date}, {time}, {YR} (2-digit year), {id8}, {id}, {model}, {language}")
+                    Text(
+                        flow.metadataScope == .document
+                            ? "Use note frontmatter for one-note-per-capture routes."
+                            : "Use inline key:: value fields to keep rolling-note entries separate."
+                    )
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    TextEditor(text: $frontmatterText)
+                        .font(.system(.body, design: .monospaced))
+                        .frame(minHeight: 110)
+                        .onChange(of: frontmatterText) { _, text in flow.staticFrontmatter = Self.parseFrontmatter(text) }
+                }
+
+                Section("Location") {
+                    Toggle("Use Current Location", isOn: $flow.locationPolicy.isEnabled)
+                        .accessibilityIdentifier("mac_preset_location_enabled")
+
+                    if flow.locationPolicy.isEnabled {
+                        Text("Entry formatting can use {location} without writing additional metadata.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                    } else {
-                        TextField("Append Filename", text: $flow.exportSettings.appendFileName)
-                    }
-                    Toggle("Obsidian Bases", isOn: $flow.exportSettings.mdObsidianEnabled)
-                    Toggle("Use Markdown Template", isOn: $flow.exportSettings.markdownTemplateEnabled)
-                    if flow.exportSettings.markdownTemplateEnabled {
-                        Button { chooseFolder(.markdownTemplate) } label: {
-                            settingRow("Markdown Template", value: flow.exportSettings.markdownTemplateName, image: "doc.text")
+                        Picker("Precision", selection: $flow.locationPolicy.precision) {
+                            Text("Exact").tag(CaptureLocationPrecision.exact)
+                            Text("City").tag(CaptureLocationPrecision.city)
                         }
-                    }
-                }
-                }
-            }
-
-            URLDeliverySettingsSection(settings: $flow.exportSettings.urlDelivery)
-
-            Section("Metadata") {
-                Picker("Scope", selection: $flow.metadataScope) {
-                    ForEach(CapturePresetMetadataScope.allCases) { scope in
-                        Text(scope.displayName).tag(scope)
-                    }
-                }
-                Text(flow.metadataScope == .document
-                     ? "Use note frontmatter for one-note-per-capture routes."
-                     : "Use inline key:: value fields to keep rolling-note entries separate.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                TextEditor(text: $frontmatterText)
-                    .font(.system(.body, design: .monospaced))
-                    .frame(minHeight: 110)
-                    .onChange(of: frontmatterText) { _, text in flow.staticFrontmatter = Self.parseFrontmatter(text) }
-            }
-
-            Section("Location") {
-                Toggle("Use Current Location", isOn: $flow.locationPolicy.isEnabled)
-                    .accessibilityIdentifier("mac_preset_location_enabled")
-
-                if flow.locationPolicy.isEnabled {
-                    Text("Entry formatting can use {location} without writing additional metadata.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Picker("Precision", selection: $flow.locationPolicy.precision) {
-                        Text("Exact").tag(CaptureLocationPrecision.exact)
-                        Text("City").tag(CaptureLocationPrecision.city)
-                    }
-                    .accessibilityIdentifier("mac_preset_location_precision")
-                    Picker("When Location Is Unavailable", selection: $flow.locationPolicy.unavailableBehavior) {
-                        Text("Ask").tag(CaptureLocationUnavailableBehavior.ask)
-                        Text("Send Without Location").tag(CaptureLocationUnavailableBehavior.sendWithoutLocation)
-                        Text("Cancel Capture").tag(CaptureLocationUnavailableBehavior.cancel)
-                    }
-                    .accessibilityIdentifier("mac_preset_location_unavailable_behavior")
-                    Toggle("Write Location Metadata", isOn: $flow.locationPolicy.metadataOutputEnabled)
-                        .accessibilityIdentifier("mac_preset_location_metadata_output_enabled")
-
-                    if flow.locationPolicy.metadataOutputEnabled {
-                        Picker("Configuration", selection: $flow.locationPolicy.outputMode) {
-                            Text("Structured Fields").tag(CaptureLocationOutputMode.structured)
-                            Text("Advanced YAML Template")
-                                .tag(CaptureLocationOutputMode.advancedTemplate)
-                                .disabled(flow.metadataScope == .entry)
+                        .accessibilityIdentifier("mac_preset_location_precision")
+                        Picker("When Location Is Unavailable", selection: $flow.locationPolicy.unavailableBehavior) {
+                            Text("Ask").tag(CaptureLocationUnavailableBehavior.ask)
+                            Text("Send Without Location").tag(CaptureLocationUnavailableBehavior.sendWithoutLocation)
+                            Text("Cancel Capture").tag(CaptureLocationUnavailableBehavior.cancel)
                         }
-                        .accessibilityIdentifier("mac_preset_location_output_mode")
+                        .accessibilityIdentifier("mac_preset_location_unavailable_behavior")
+                        Toggle("Write Location Metadata", isOn: $flow.locationPolicy.metadataOutputEnabled)
+                            .accessibilityIdentifier("mac_preset_location_metadata_output_enabled")
 
-                        if flow.locationPolicy.outputMode == .advancedTemplate,
-                           flow.metadataScope == .entry {
-                            Label(
-                                String(localized: "Advanced YAML Template") + " · " + String(localized: "Use Note Frontmatter Scope"),
-                                systemImage: "exclamationmark.triangle.fill"
-                            )
-                            .font(.caption)
-                            .foregroundStyle(MacBrand.orangeText)
-                            .accessibilityIdentifier("mac_preset_location_scope_error")
-                            Button("Use Note Frontmatter Scope") {
-                                flow.metadataScope = .document
+                        if flow.locationPolicy.metadataOutputEnabled {
+                            Picker("Configuration", selection: $flow.locationPolicy.outputMode) {
+                                Text("Structured Fields").tag(CaptureLocationOutputMode.structured)
+                                Text("Advanced YAML Template")
+                                    .tag(CaptureLocationOutputMode.advancedTemplate)
+                                    .disabled(flow.metadataScope == .entry)
                             }
-                        }
+                            .accessibilityIdentifier("mac_preset_location_output_mode")
 
-                        if flow.metadataScope == .document {
-                            TextField("Name", text: $flow.locationPolicy.collectionKey)
-                                .font(.system(.body, design: .monospaced))
-                                .accessibilityIdentifier("mac_preset_location_collection_key")
-                            Text("Each Capture is appended to this collection by Capture ID, so a note can retain multiple locations without replacing earlier ones.")
+                            if flow.locationPolicy.outputMode == .advancedTemplate,
+                                flow.metadataScope == .entry
+                            {
+                                Label(
+                                    String(localized: "Advanced YAML Template") + " · " + String(localized: "Use Note Frontmatter Scope"),
+                                    systemImage: "exclamationmark.triangle.fill"
+                                )
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
-                        } else {
-                            Text("Inline Entry Fields writes the selected `key:: value` fields beside each captured entry. No frontmatter collection is written.")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-
-                        if flow.locationPolicy.outputMode == .structured {
-                            ForEach(CaptureLocationField.allCases, id: \.self) { field in
-                                Toggle(field.configurationDisplayName, isOn: locationFieldSelection(field))
-                                if flow.locationPolicy.structuredFields.contains(where: { $0.field == field }) {
-                                    TextField("Output", text: locationOutputKey(field))
-                                        .font(.system(.body, design: .monospaced))
-                                        .accessibilityLabel(
-                                            String(localized: "Output") + " · " + field.configurationDisplayName
-                                        )
-                                        .accessibilityIdentifier("mac_preset_location_key_\(field.rawValue)")
+                                .foregroundStyle(MacBrand.orangeText)
+                                .accessibilityIdentifier("mac_preset_location_scope_error")
+                                Button("Use Note Frontmatter Scope") {
+                                    flow.metadataScope = .document
                                 }
                             }
+
+                            if flow.metadataScope == .document {
+                                TextField("Name", text: $flow.locationPolicy.collectionKey)
+                                    .font(.system(.body, design: .monospaced))
+                                    .accessibilityIdentifier("mac_preset_location_collection_key")
+                                Text("Each Capture is appended to this collection by Capture ID, so a note can retain multiple locations without replacing earlier ones.")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            } else {
+                                Text("Inline Entry Fields writes the selected `key:: value` fields beside each captured entry. No frontmatter collection is written.")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+
+                            if flow.locationPolicy.outputMode == .structured {
+                                ForEach(CaptureLocationField.allCases, id: \.self) { field in
+                                    Toggle(field.configurationDisplayName, isOn: locationFieldSelection(field))
+                                    if flow.locationPolicy.structuredFields.contains(where: { $0.field == field }) {
+                                        TextField("Output", text: locationOutputKey(field))
+                                            .font(.system(.body, design: .monospaced))
+                                            .accessibilityLabel(
+                                                String(localized: "Output") + " · " + field.configurationDisplayName
+                                            )
+                                            .accessibilityIdentifier("mac_preset_location_key_\(field.rawValue)")
+                                    }
+                                }
+                            } else {
+                                TextEditor(text: $flow.locationPolicy.advancedTemplate)
+                                    .font(.system(.body, design: .monospaced))
+                                    .frame(minHeight: 160)
+                                    .accessibilityLabel("Advanced YAML Template")
+                                    .accessibilityIdentifier("mac_preset_location_advanced_template")
+                                Text("Nested mappings and list items are supported. Use placeholders such as `{{coordinates}}`, `{{city}}`, `{{timestamp}}`, and `{{id}}`.")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+
+                            locationPolicyPreview
+
+                            Text("Place, city, region, and country use Apple's system reverse geocoder only when selected and may make a network request.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         } else {
-                            TextEditor(text: $flow.locationPolicy.advancedTemplate)
-                                .font(.system(.body, design: .monospaced))
-                                .frame(minHeight: 160)
-                                .accessibilityLabel("Advanced YAML Template")
-                                .accessibilityIdentifier("mac_preset_location_advanced_template")
-                            Text("Nested mappings and list items are supported. Use placeholders such as `{{coordinates}}`, `{{city}}`, `{{timestamp}}`, and `{{id}}`.")
+                            Text("No frontmatter collection or inline location fields will be written. The {location} template token still works.")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
 
-                        locationPolicyPreview
-
-                        Text("Place, city, region, and country use Apple's system reverse geocoder only when selected and may make a network request.")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        Text("No frontmatter collection or inline location fields will be written. The {location} template token still works.")
+                        Text("Provider links disclose the privacy-adjusted coordinates to Apple, Google, or OpenStreetMap only when you open a link.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
 
-                    Text("Provider links disclose the privacy-adjusted coordinates to Apple, Google, or OpenStreetMap only when you open a link.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
+                    Button("Reset Location Unavailable Choice") {
+                        flow.locationPolicy.unavailableBehavior = .ask
+                    }
+                    .disabled(flow.locationPolicy.unavailableBehavior == .ask)
+                    .accessibilityIdentifier("mac_preset_location_reset_unavailable")
 
-                Button("Reset Location Unavailable Choice") {
-                    flow.locationPolicy.unavailableBehavior = .ask
-                }
-                .disabled(flow.locationPolicy.unavailableBehavior == .ask)
-                .accessibilityIdentifier("mac_preset_location_reset_unavailable")
-
-                Button("Reset Location Configuration", role: .destructive) {
-                    flow.locationPolicy = CapturePresetLocationPolicy()
-                }
-                .accessibilityIdentifier("mac_preset_location_reset_configuration")
-                Text("Location is requested once at Capture send or recording stop. Exact keeps the origin fix; City rounds coordinates and omits a point-of-interest label. Vox.md does not track location in the background.")
+                    Button("Reset Location Configuration", role: .destructive) {
+                        flow.locationPolicy = CapturePresetLocationPolicy()
+                    }
+                    .accessibilityIdentifier("mac_preset_location_reset_configuration")
+                    Text(
+                        "Location is requested once at Capture send or recording stop. Exact keeps the origin fix; City rounds coordinates and omits a point-of-interest label. Vox.md does not track location in the background."
+                    )
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                }
+
             }
 
             Section("Voice Processing") {
@@ -1155,46 +1107,51 @@ private struct MacCapturePresetEditor: View {
                     .foregroundStyle(.secondary)
             }
 
-            Section("Voice Audio") {
-                Picker("Save Audio", selection: $flow.audioSaveMode) {
-                    ForEach(CapturePresetAudioSaveMode.allCases) { mode in
-                        Text(mode.displayName).tag(mode)
+            if flow.deliveryTarget == .directory {
+                Section("Voice Audio") {
+                    Picker("Save Audio", selection: $flow.audioSaveMode) {
+                        ForEach(CapturePresetAudioSaveMode.allCases) { mode in
+                            Text(mode.displayName).tag(mode)
+                        }
                     }
-                }
-                if flow.audioSaveMode == .attachmentsFolder {
-                    if flow.captureDestinationID != nil {
-                        TextField("Attachments Folder", text: $flow.attachmentsFolderName)
-                        Text("Relative to the unified Markdown destination. Leave blank to use its default attachment folder.")
+                    if flow.audioSaveMode == .attachmentsFolder {
+                        if flow.captureDestinationID != nil {
+                            TextField("Attachments Folder", text: $flow.attachmentsFolderName)
+                            Text("Relative to the unified Markdown destination. Leave blank to use its default attachment folder.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        } else {
+                            Button {
+                                chooseFolder(.audioFolder)
+                            } label: {
+                                settingRow("Audio Export Directory", value: flow.exportSettings.audioFolderName, image: "folder")
+                            }
+                            TextField("Attachments Folder", text: $flow.attachmentsFolderName)
+                        }
+                    }
+                    MacAudioFilenameTemplateSetting(
+                        template: $flow.audioFilenameTemplate,
+                        isAudioSavingEnabled: flow.audioSaveMode != .off,
+                        presetName: flow.visibleName ?? ""
+                    )
+                    if flow.audioSaveMode != .off {
+                        Toggle("Embed Audio in Markdown", isOn: $flow.exportSettings.embedAudioInMarkdown)
+                            .disabled(!markdownAudioEmbedAvailable)
+                            .onChange(of: flow.exportSettings.embedAudioInMarkdown) { _, _ in markPerFlow() }
+                        if flow.exportSettings.embedAudioInMarkdown && markdownAudioEmbedAvailable {
+                            Picker("Embed Position", selection: $flow.exportSettings.audioEmbedPlacement) {
+                                ForEach(CapturePresetAudioEmbedPlacement.allCases) { placement in
+                                    Text(placement.displayName).tag(placement)
+                                }
+                            }
+                            .onChange(of: flow.exportSettings.audioEmbedPlacement) { _, _ in markPerFlow() }
+                        }
+                        Text(markdownAudioEmbedHelpText)
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                    } else {
-                        Button { chooseFolder(.audioFolder) } label: {
-                            settingRow("Audio Export Directory", value: flow.exportSettings.audioFolderName, image: "folder")
-                        }
-                        TextField("Attachments Folder", text: $flow.attachmentsFolderName)
                     }
                 }
-                MacAudioFilenameTemplateSetting(
-                    template: $flow.audioFilenameTemplate,
-                    isAudioSavingEnabled: flow.audioSaveMode != .off,
-                    presetName: flow.visibleName ?? ""
-                )
-                if flow.audioSaveMode != .off {
-                    Toggle("Embed Audio in Markdown", isOn: $flow.exportSettings.embedAudioInMarkdown)
-                        .disabled(!markdownAudioEmbedAvailable)
-                        .onChange(of: flow.exportSettings.embedAudioInMarkdown) { _, _ in markPerFlow() }
-                    if flow.exportSettings.embedAudioInMarkdown && markdownAudioEmbedAvailable {
-                        Picker("Embed Position", selection: $flow.exportSettings.audioEmbedPlacement) {
-                            ForEach(CapturePresetAudioEmbedPlacement.allCases) { placement in
-                                Text(placement.displayName).tag(placement)
-                            }
-                        }
-                        .onChange(of: flow.exportSettings.audioEmbedPlacement) { _, _ in markPerFlow() }
-                    }
-                    Text(markdownAudioEmbedHelpText)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
+
             }
 
             if !flow.isBuiltIn {
@@ -1405,6 +1362,72 @@ private struct MacCapturePresetEditor: View {
             return String(localized: "Audio embeds require a Markdown note export. Switch this preset to MD, a Markdown template, or YAML with the .md extension.")
         }
         return String(localized: "Adds an Obsidian-style `![[recording.m4a]]` link to the note so you can replay the recording while reviewing the transcript.")
+    }
+
+    @ViewBuilder
+    private var directoryDestinationSections: some View {
+        Section("Directory") {
+            if let destination = ownedDestination {
+                LabeledContent("Vault / Folder", value: destination.rootName)
+                Text(captureDestinationSummary(destination))
+                    .font(.caption.monospaced())
+                    .foregroundStyle(.secondary)
+                Button("Edit Destination…") {
+                    isEditingDestination = true
+                }
+            } else {
+                Text("Choose a vault or folder and define where this preset writes Markdown.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Button("Set Up Destination…") {
+                    isEditingDestination = true
+                }
+            }
+            if let captureDestinationLoadError {
+                Text(captureDestinationLoadError)
+                    .font(.caption)
+                    .foregroundStyle(MacBrand.orangeText)
+            }
+            Text("This destination belongs to this preset, including its note target, placement, formatting, attachments, and retry behavior.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+
+        if flow.captureDestinationID == nil {
+            Section("Legacy Voice File Export") {
+                Toggle("Save Notes to Files", isOn: $flow.exportSettings.exportEnabled)
+                    .onChange(of: flow.exportSettings.exportEnabled) { _, _ in markPerFlow() }
+                if flow.exportSettings.exportEnabled {
+                    Button { chooseFolder(.exportFolder) } label: {
+                        settingRow("Export Directory", value: flow.exportSettings.folderName, image: "folder")
+                    }
+                    Picker("Format", selection: $flow.exportSettings.format) {
+                        ForEach(ExportFileFormat.allCases, id: \.self) { format in
+                            Text(format.rawValue.uppercased()).tag(format)
+                        }
+                    }
+                    Picker("Mode", selection: $flow.exportSettings.mode) {
+                        Text("New File").tag(ExportFileMode.newFile)
+                        Text("Append").tag(ExportFileMode.append)
+                    }
+                    if flow.exportSettings.mode == .newFile {
+                        TextField("Filename Template", text: $flow.exportSettings.newFileNameTemplate)
+                        Text("Tokens: {timestamp}, {date}, {time}, {YR} (2-digit year), {id8}, {id}, {model}, {language}")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        TextField("Append Filename", text: $flow.exportSettings.appendFileName)
+                    }
+                    Toggle("Obsidian Bases", isOn: $flow.exportSettings.mdObsidianEnabled)
+                    Toggle("Use Markdown Template", isOn: $flow.exportSettings.markdownTemplateEnabled)
+                    if flow.exportSettings.markdownTemplateEnabled {
+                        Button { chooseFolder(.markdownTemplate) } label: {
+                            settingRow("Markdown Template", value: flow.exportSettings.markdownTemplateName, image: "doc.text")
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private func markPerFlow() {

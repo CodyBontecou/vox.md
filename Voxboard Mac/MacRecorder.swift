@@ -360,6 +360,7 @@ final class MacRecorder {
             captureSource: .mac,
             locationOutcome: {
                 guard case .runPreset(let preset) = completionMode,
+                      preset.deliveryTarget == .directory,
                       preset.locationPolicy.isEnabled else { return nil }
                 return .unavailable(.unavailable, attemptedAt: Date())
             }(),
@@ -647,7 +648,7 @@ final class MacRecorder {
         } else {
             return nil
         }
-        guard flow.locationPolicy.isEnabled else { return nil }
+        guard flow.deliveryTarget == .directory, flow.locationPolicy.isEnabled else { return nil }
         let policy = flow.locationPolicy
         let presetID = flow.id
         let draftProfile: CapturePresetProfile? = {
@@ -1642,12 +1643,15 @@ final class MacRecorder {
         isExporting = true
         isTranscribing = false
 
-        let audioWasRequested = selectedFlow.audioSaveMode != .off
+        let audioWasRequested = selectedFlow.deliveryTarget == .directory
+            && selectedFlow.audioSaveMode != .off
         let audioFilenameOriginal = originalAudioFilename
             ?? (sourceAudioURL ?? audioURL).lastPathComponent
-        let retainedAudioURL = cleanupWorkingAudio
-            ? retainAudioIfNeeded(sourceAudioURL ?? audioURL, flow: selectedFlow)
-            : (audioWasRequested ? audioURL : nil)
+        let retainedAudioURL = audioWasRequested
+            ? (cleanupWorkingAudio
+                ? retainAudioIfNeeded(sourceAudioURL ?? audioURL, flow: selectedFlow)
+                : audioURL)
+            : nil
         if audioWasRequested, retainedAudioURL == nil {
             lastRecoveryAudioURL = audioURL
             lastError = String(localized: "Your transcript was saved locally, but the requested audio could not be prepared. The recording was preserved for recovery.")
@@ -1711,8 +1715,8 @@ final class MacRecorder {
                 store.transcripts.first(where: { $0.id == savedId }) ?? initialTranscript
             }
 
-            // Opt-in additive delivery. The journal freezes bytes and prevents
-            // another POST when a separate note/audio sink retries this job.
+            // HTTP is an alternative to directory delivery. Persist the exact
+            // request before handing ownership to the independent HTTP sender.
             let urlDeliverySettings = flowForExport.exportSettings.urlDelivery
             guard !Task.isCancelled, !urlDeliveryCancellation.isCancelled else { return false }
             if urlDeliverySettings.enabled {
@@ -1729,6 +1733,9 @@ final class MacRecorder {
                 if case .queued = event.result {
                     await MainActor.run { URLDeliveryRuntime.coordinator.dispatch(id: latest.id, cancellation: urlDeliveryCancellation) }
                 }
+                canRemoveOriginSnapshot = true
+                await MainActor.run { recorderForExport.lastExportURL = nil }
+                return true
             }
 
             if let captureDestinationID {
@@ -1952,7 +1959,7 @@ final class MacRecorder {
     }
 
     private func prepareFlowForFileExportIfNeeded(_ flow: CapturePreset) -> CapturePreset {
-        guard flow.captureDestinationID == nil else { return flow }
+        guard flow.deliveryTarget == .directory, flow.captureDestinationID == nil else { return flow }
         guard flow.exportSettings.usesCustomExportSettings else {
             prepareGlobalExportFolderIfNeeded()
             return flow

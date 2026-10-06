@@ -227,7 +227,7 @@ public enum ConfiguredTranscriptCaptureDestinationExporter {
         captureRootURL: URL? = AppConstants.captureDirectoryURL,
         defaults: UserDefaults? = AppConstants.sharedDefaults
     ) async -> UUID? {
-        guard let captureRootURL else { return nil }
+        guard flow.deliveryTarget == .directory, let captureRootURL else { return nil }
         let store = CaptureLibraryStore(
             fileURL: captureRootURL.appendingPathComponent(CaptureLibraryStore.defaultFilename)
         )

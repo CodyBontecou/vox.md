@@ -37,12 +37,15 @@ struct CaptureEditorToolbar: View {
     var canCaptureTextPages: Bool
     var isProcessingMedia: Bool
     var isFindingLocation: Bool
+    var allowsAttachments: Bool = true
     @Bindable var preferences: CaptureToolbarPreferences
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 4) {
-                ForEach(preferences.visibleActions) { action in
+                ForEach(preferences.visibleActions.filter {
+                    allowsAttachments || ($0 != .addFiles && $0 != .scanDocument)
+                }) { action in
                     toolbarAction(action)
                 }
             }
@@ -60,19 +63,21 @@ struct CaptureEditorToolbar: View {
         switch action {
         case .addMedia:
             Menu {
-                Button(action: showSketch) {
-                    Label("Sketch", systemImage: "pencil.tip")
+                if allowsAttachments {
+                    Button(action: showSketch) {
+                        Label("Sketch", systemImage: "pencil.tip")
+                    }
+                    Button(action: showCamera) {
+                        Label("Camera", systemImage: "camera")
+                    }
+                    Button(action: showPhotos) {
+                        Label("Photo", systemImage: "photo")
+                    }
+                    Button(action: showScreenshots) {
+                        Label("Screenshot", systemImage: "rectangle.inset.filled.and.person.filled")
+                    }
+                    Divider()
                 }
-                Button(action: showCamera) {
-                    Label("Camera", systemImage: "camera")
-                }
-                Button(action: showPhotos) {
-                    Label("Photo", systemImage: "photo")
-                }
-                Button(action: showScreenshots) {
-                    Label("Screenshot", systemImage: "rectangle.inset.filled.and.person.filled")
-                }
-                Divider()
                 Button(action: showLinkPrompt) {
                     Label("Web Link", systemImage: "link")
                 }

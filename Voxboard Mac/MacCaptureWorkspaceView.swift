@@ -59,6 +59,7 @@ struct MacCaptureWorkspaceView: View {
     @State private var recordingMode: MacCaptureRecordingMode = .preset
     @State private var attachRecordingAudio = false
     @State private var showsPaywall = false
+    @State private var httpEndpointSettingsRoute: CaptureHTTPEndpointSettingsRoute?
     @State private var showsInboxDiscardConfirmation = false
     @State private var showsClearDraftConfirmation = false
     @State private var linkText = ""
@@ -72,11 +73,22 @@ struct MacCaptureWorkspaceView: View {
     }
     @State private var isDropTargeted = false
     @State private var showsSentToast = false
+    @State private var sentToastUsesHTTPDestination = false
     @State private var lastRevealedReceiptURL: URL?
     @State private var inspirationQuote = InspirationQuote.fallback
     @State private var hasLoadedInspirationQuote = false
 
     var body: some View {
+        NavigationStack {
+            captureContent
+                .navigationDestination(item: $httpEndpointSettingsRoute) { route in
+                    CaptureHTTPEndpointSettingsView(presetID: route.presetID)
+                        .onDisappear(perform: reloadFlows)
+                }
+        }
+    }
+
+    private var captureContent: some View {
         ZStack(alignment: .top) {
             Color(nsColor: .underPageBackgroundColor)
                 .ignoresSafeArea()
@@ -102,7 +114,7 @@ struct MacCaptureWorkspaceView: View {
             }
 
             if showsSentToast {
-                Label("Capture Sent", systemImage: "checkmark.circle.fill")
+                Label(sentToastUsesHTTPDestination ? String(localized: "Saved for HTTP") : String(localized: "Capture Sent"), systemImage: "checkmark.circle.fill")
                     .font(.callout.weight(.medium))
                     .foregroundStyle(Color(nsColor: .windowBackgroundColor))
                     .padding(.horizontal, 14)
@@ -150,6 +162,7 @@ struct MacCaptureWorkspaceView: View {
             guard let receipt else { return }
             usageTracker.reload()
             lastRevealedReceiptURL = receipt.noteURL
+            sentToastUsesHTTPDestination = receipt.noteURL == nil
             Task { await presentSentToast() }
         }
         .onChange(of: viewModel.needsCaptureUnlock) { _, needsUnlock in
@@ -271,7 +284,7 @@ struct MacCaptureWorkspaceView: View {
             Spacer(minLength: 0)
 
             VStack(spacing: 0) {
-                if viewModel.selectedDestination == nil && !isLocalizationScreenshot {
+                if viewModel.needsDirectorySetup && !isLocalizationScreenshot {
                     destinationSetupNotice
                 }
 
@@ -369,12 +382,14 @@ struct MacCaptureWorkspaceView: View {
 
     private var attachmentToolbarMenu: some View {
         Menu {
-            Button("Images or Screenshots…", systemImage: "photo") { chooseImages() }
-            Button("Take Photo…", systemImage: "camera") { selectInspectorTool(.camera) }
-            Button("Import Scan or PDF…", systemImage: "doc.viewfinder") { chooseScan() }
-            Button("Sketch…", systemImage: "pencil.tip") { selectInspectorTool(.sketch) }
-            Button("Files…", systemImage: "paperclip") { chooseFiles() }
-            Button("Audio Attachment…", systemImage: "waveform") { chooseAudio() }
+            if !viewModel.usesHTTPDestination {
+                Button("Images or Screenshots…", systemImage: "photo") { chooseImages() }
+                Button("Take Photo…", systemImage: "camera") { selectInspectorTool(.camera) }
+                Button("Import Scan or PDF…", systemImage: "doc.viewfinder") { chooseScan() }
+                Button("Sketch…", systemImage: "pencil.tip") { selectInspectorTool(.sketch) }
+                Button("Files…", systemImage: "paperclip") { chooseFiles() }
+                Button("Audio Attachment…", systemImage: "waveform") { chooseAudio() }
+            }
             Button("Transcribe Audio or Video…", systemImage: "waveform.badge.plus") {
                 importAudioForTranscription()
             }
@@ -456,7 +471,7 @@ struct MacCaptureWorkspaceView: View {
             }
             .disabled(recorder.isRecording)
 
-            if recordingMode == .draft {
+            if recordingMode == .draft && !viewModel.usesHTTPDestination {
                 Toggle("Attach Audio to Draft", isOn: $attachRecordingAudio)
                     .disabled(recorder.isRecording)
             }
@@ -529,7 +544,8 @@ struct MacCaptureWorkspaceView: View {
             Label("Capture Details", systemImage: "sidebar.trailing")
                 .labelStyle(.iconOnly)
         }
-        .help("Show Capture details")
+        .disabled(viewModel.usesHTTPDestination)
+        .help(viewModel.usesHTTPDestination ? "HTTP target: \(viewModel.httpDestinationOrigin)" : "Show Capture details")
         .accessibilityLabel("Capture Destination: \(routeLabel)")
         .accessibilityIdentifier("mac_capture_route")
     }
@@ -859,15 +875,29 @@ struct MacCaptureWorkspaceView: View {
     private var captureInspector: some View {
         switch selectedInspectorTool {
         case .route:
-            MacCaptureRouteInspector(
-                viewModel: viewModel,
-                onClose: { dismissInspectorTool() },
-                onAddFiles: { chooseFiles() },
-                onOpenModels: {
-                    dismissInspectorTool(refocus: false)
-                    openModels()
+            if viewModel.usesHTTPDestination {
+                VStack(alignment: .leading, spacing: 12) {
+                    Label("HTTP Target", systemImage: "network")
+                    Text(viewModel.httpDestinationOrigin)
+                        .font(.caption.monospaced())
+                    Text("Sends text only. Edit the endpoint in Capture Presets.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Button("Close") { dismissInspectorTool() }
+                    Spacer()
                 }
-            )
+                .padding()
+            } else {
+                MacCaptureRouteInspector(
+                    viewModel: viewModel,
+                    onClose: { dismissInspectorTool() },
+                    onAddFiles: { chooseFiles() },
+                    onOpenModels: {
+                        dismissInspectorTool(refocus: false)
+                        openModels()
+                    }
+                )
+            }
         case .webLink:
             MacCaptureTextInspectorView(
                 title: "Capture Link",
@@ -969,6 +999,27 @@ struct MacCaptureWorkspaceView: View {
                     .help("Open Transcription Models")
                     .accessibilityHint("Opens Transcription Models to download the selected model or choose an existing copy.")
                     .accessibilityIdentifier("mac_error_open_models")
+                } else if let presetID = viewModel.httpEndpointSettingsPresetID,
+                          message == viewModel.httpDestinationIssue {
+                    Button {
+                        composerController.dismissFocus()
+                        if viewModel.errorMessage == message { viewModel.errorMessage = nil }
+                        httpEndpointSettingsRoute = CaptureHTTPEndpointSettingsRoute(presetID: presetID)
+                    } label: {
+                        HStack(alignment: .top, spacing: Geist.Spacing.three) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundStyle(MacBrand.orangeText)
+                            Text(message).font(Geist.caption())
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(Geist.caption()).foregroundStyle(Geist.muted)
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .help("Open HTTP Endpoint Settings")
+                    .accessibilityHint("Opens this preset’s HTTP settings and focuses the delivery URL.")
+                    .accessibilityIdentifier("capture_http_endpoint_settings")
                 } else {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundStyle(MacBrand.orangeText)
@@ -1070,7 +1121,7 @@ struct MacCaptureWorkspaceView: View {
     private var displayedError: String? {
         if isLocalizationScreenshot { return nil }
         if let message = viewModel.errorMessage { return message }
-        return recorder.lastError
+        return recorder.lastError ?? viewModel.httpDestinationIssue
     }
 
     private var isLocalizationScreenshot: Bool {
@@ -1112,6 +1163,7 @@ struct MacCaptureWorkspaceView: View {
     }
 
     private var routeLabel: String {
+        if viewModel.usesHTTPDestination { return viewModel.httpDestinationOrigin }
         if let override = viewModel.draft.relativeNotePathOverride {
             return URL(fileURLWithPath: override).deletingPathExtension().lastPathComponent
         }
@@ -1224,7 +1276,7 @@ struct MacCaptureWorkspaceView: View {
     private var selectedRecordingCompletionMode: MacRecordingCompletionMode {
         switch recordingMode {
         case .draft:
-            return .captureDraft(attachAudio: attachRecordingAudio)
+            return .captureDraft(attachAudio: attachRecordingAudio && !viewModel.usesHTTPDestination)
         case .preset:
             return .runPreset(flow: selectedFlow)
         }

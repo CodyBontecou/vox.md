@@ -608,16 +608,13 @@ flow_settings_source = (root / 'Voxboard/Views/FlowSettingsView.swift').read_tex
 recording_only_settings_gate = '''            if flow.watchOutputMode != .recordingOnly {
                 voiceProcessingSection
                 postProcessingSection
-                ownedDestinationSection
-                if flow.captureDestinationID == nil {
-                    fileExportSection
+                if flow.deliveryTarget == .directory {
+                    if showsFrontmatterSection {
+                        frontmatterSection
+                        locationMetadataSection
+                    }
+                    audioExportSection
                 }
-                urlDeliverySection
-                if showsFrontmatterSection {
-                    frontmatterSection
-                    locationMetadataSection
-                }
-                audioExportSection
             }'''
 if recording_only_settings_gate not in flow_settings_source:
     errors.append('Recording Only Apple Watch presets must hide transcript workflow settings')

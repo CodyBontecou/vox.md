@@ -31,6 +31,7 @@ final class WatchRecordingPipeline {
     private let transcriptionService: OnDeviceTranscriptionService
     private let speakerDiarizationService: SpeakerDiarizationService
     private let transcriptEnricher: TranscriptEnricher?
+    private let urlDeliveryCoordinator: URLDeliveryCoordinator
     private let backgroundTaskService: any WatchRecordingBackgroundTaskServicing
     private weak var recorder: PersistentRecorder?
     private var processingTask: Task<Void, Never>?
@@ -47,7 +48,8 @@ final class WatchRecordingPipeline {
         transcriptionService: OnDeviceTranscriptionService,
         speakerDiarizationService: SpeakerDiarizationService = SpeakerDiarizationService(),
         transcriptEnricher: TranscriptEnricher?,
-        backgroundTaskService: (any WatchRecordingBackgroundTaskServicing)? = nil
+        backgroundTaskService: (any WatchRecordingBackgroundTaskServicing)? = nil,
+        urlDeliveryCoordinator: URLDeliveryCoordinator? = nil
     ) {
         self.inbox = inbox
         self.transcriptStore = transcriptStore
@@ -55,6 +57,7 @@ final class WatchRecordingPipeline {
         self.transcriptionService = transcriptionService
         self.speakerDiarizationService = speakerDiarizationService
         self.transcriptEnricher = transcriptEnricher
+        self.urlDeliveryCoordinator = urlDeliveryCoordinator ?? URLDeliveryRuntime.coordinator
         self.backgroundTaskService = backgroundTaskService
             ?? WatchRecordingBackgroundTaskClient.live()
         items = inbox.load()
@@ -485,6 +488,12 @@ final class WatchRecordingPipeline {
             return
         }
         if item.capturesRecordingWithoutTranscript {
+            guard flow.deliveryTarget == .directory else {
+                throw WatchRecordingPipelineError(
+                    stage: .delivery,
+                    message: String(localized: "HTTP targets require a transcript. The Watch audio is retained; choose Directory to save the recording without transcription.")
+                )
+            }
             try await deliverCaptureRecording(item, flow: flow)
             return
         }
@@ -553,6 +562,31 @@ final class WatchRecordingPipeline {
             latestTranscript = transcript
         }
         try ensureProcessingIsActive(for: item.id)
+
+        if flow.deliveryTarget == .http {
+            let cancellation = URLDeliveryCancellation()
+            try await withTaskCancellationHandler {
+                let event = await urlDeliveryCoordinator.enqueueTranscript(
+                    latestTranscript, settings: flow.exportSettings.urlDelivery
+                )
+                try ensureProcessingIsActive(for: item.id)
+                switch event.result {
+                case .queued:
+                    urlDeliveryCoordinator.dispatch(id: latestTranscript.id, cancellation: cancellation)
+                case .retained, .delivered:
+                    break
+                case .failed(let message, _):
+                    throw WatchRecordingPipelineError(stage: .delivery, message: message)
+                case .disabled:
+                    throw WatchRecordingPipelineError(
+                        stage: .delivery, message: String(localized: "HTTP delivery could not be prepared. The Watch transcript and audio are retained for retry.")
+                    )
+                }
+                lastDeliveredRecordingID = item.id
+                complete(item, message: String(localized: "Transcript queued for HTTP delivery. Review its status in URL Deliveries."))
+            } onCancel: { cancellation.cancel() }
+            return
+        }
 
         guard let captureRootURL = AppConstants.captureDirectoryURL else {
             throw WatchRecordingPipelineError(

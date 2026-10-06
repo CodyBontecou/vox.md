@@ -21,8 +21,8 @@ public struct CapturePresetURLDeliverySettings: Codable, Equatable, Sendable {
     public var requiresCredentialMigration: Bool
     /// Explicit user consent, never inferred from a local-looking URL.
     public var allowingInsecureLocal: Bool
-    /// Keep writing the file sink (when configured) even if the URL delivery
-    /// fails. A URL failure is independent and retryable.
+    /// Legacy decode compatibility only. Targets are mutually exclusive;
+    /// HTTP failure never dispatches a directory fallback.
     public var deliverOnFailureFallbackFile: Bool
     public var maxAttempts: Int
     /// Prefer `cleanedText` when present in the JSON body.

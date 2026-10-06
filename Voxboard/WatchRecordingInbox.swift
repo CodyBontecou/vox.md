@@ -75,7 +75,8 @@ nonisolated struct WatchRecordingInboxItem: Codable, Equatable, Identifiable, Se
     }
 
     var shouldCancelForUnavailableLocation: Bool {
-        guard let policy = flowSnapshot?.locationPolicy,
+        guard flowSnapshot?.deliveryTarget == .directory,
+              let policy = flowSnapshot?.locationPolicy,
               policy.isEnabled,
               policy.unavailableBehavior == .cancel else { return false }
         guard case .available = locationOutcome else { return true }

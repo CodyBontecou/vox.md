@@ -51,7 +51,7 @@ final class CaptureImagePreparationTests: XCTestCase {
 
         XCTAssertNil(model.errorMessage)
         let receipt = try XCTUnwrap(model.lastReceipt)
-        let markdown = try String(contentsOf: receipt.noteURL, encoding: .utf8)
+        let markdown = try String(contentsOf: XCTUnwrap(receipt.noteURL), encoding: .utf8)
         XCTAssertTrue(markdown.contains("![Visible before send.]"), markdown)
         let rootCount = await describer.rootCount
         XCTAssertEqual(rootCount, 1, "Send should reuse the generated draft alt text instead of describing again")

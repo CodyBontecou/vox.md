@@ -3,6 +3,69 @@ import XCTest
 
 final class CapturePresetTests: XCTestCase {
 
+    func testDestinationChoiceRetainsInactiveSettingsAndRoundTrips() throws {
+        var preset = CapturePresetStore.makeCustomFlow()
+        let directoryID = UUID()
+        preset.captureDestinationID = directoryID
+        preset.exportSettings.folderName = "Remembered directory"
+        preset.exportSettings.urlDelivery.urlString = "https://example.invalid/ingest"
+        XCTAssertEqual(preset.deliveryTarget, .directory)
+
+        preset.watchOutputMode = .recordingOnly
+        preset.deliveryTarget = .http
+        XCTAssertTrue(preset.exportSettings.urlDelivery.enabled)
+        XCTAssertEqual(preset.watchOutputMode, .transcript)
+        XCTAssertEqual(preset.captureDestinationID, directoryID)
+        let decoded = try JSONDecoder().decode(CapturePreset.self, from: JSONEncoder().encode(preset))
+        XCTAssertEqual(decoded.deliveryTarget, .http)
+
+        preset.deliveryTarget = .directory
+        XCTAssertFalse(preset.exportSettings.urlDelivery.enabled)
+        XCTAssertEqual(preset.exportSettings.urlDelivery.urlString, "https://example.invalid/ingest")
+        XCTAssertEqual(preset.exportSettings.folderName, "Remembered directory")
+    }
+
+    func testHTTPRetainsInactiveLocationPolicyWithoutAcquiringLocation() throws {
+        var preset = CapturePresetStore.makeCustomFlow()
+        preset.locationPolicy = CapturePresetLocationPolicy(isEnabled: true, unavailableBehavior: .cancel)
+        preset.deliveryTarget = .http
+        XCTAssertTrue(preset.locationPolicy.isEnabled)
+        XCTAssertFalse(preset.captureProfile.locationPolicy.isEnabled)
+        XCTAssertFalse(CaptureWatchLocationAcquisitionPolicy.shouldAcquire(
+            presetSnapshot: try JSONEncoder().encode(preset)
+        ))
+        preset.deliveryTarget = .directory
+        XCTAssertTrue(preset.captureProfile.locationPolicy.isEnabled)
+        XCTAssertTrue(CaptureWatchLocationAcquisitionPolicy.shouldAcquire(
+            presetSnapshot: try JSONEncoder().encode(preset)
+        ))
+    }
+
+    func testLegacyHTTPPresetCannotRemainWatchRecordingOnly() throws {
+        var legacy = CapturePresetStore.makeCustomFlow()
+        legacy.watchOutputMode = .recordingOnly
+        legacy.watchRecordingSettings.folderName = "Remembered Watch folder"
+        legacy.exportSettings.urlDelivery.enabled = true
+        let decoded = try JSONDecoder().decode(CapturePreset.self, from: JSONEncoder().encode(legacy))
+        XCTAssertEqual(decoded.deliveryTarget, .http)
+        XCTAssertEqual(decoded.watchOutputMode, .transcript)
+        XCTAssertEqual(decoded.watchRecordingSettings.folderName, "Remembered Watch folder")
+    }
+
+    func testHTTPChoiceSuppressesLegacyFileExportEvenWithRememberedFolder() throws {
+        var preset = CapturePresetStore.makeCustomFlow()
+        preset.exportSettings.exportEnabled = true
+        preset.exportSettings.urlDelivery.enabled = true
+        let suite = "ExclusiveTarget-\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let transcript = Transcript(text: "Synthetic HTTP-only", duration: 1, modelUsed: "test", language: "en")
+        switch try TranscriptFileExporter.exportConfigured(transcript, flow: preset, defaults: defaults) {
+        case .disabled: break
+        case .exported: XCTFail("HTTP must not create a local export")
+        }
+    }
+
     func test_defaultFlows_includeOnlyDefaultFlow() {
         XCTAssertEqual(CapturePresetStore.flowsKey, "recordingFlows")
         XCTAssertEqual(CapturePresetStore.selectedFlowIdKey, "selectedRecordingFlowId")

@@ -75,21 +75,22 @@ struct QuickCaptureOCRProgress: View {
 struct QuickCaptureSentToast: View {
     let offersUndo: Bool
     let undo: () -> Void
+    var usesHTTPDestination = false
 
     var body: some View {
         HStack(spacing: Geist.Spacing.three) {
-            Label("Capture Sent", systemImage: "checkmark.circle.fill")
+            Label(usesHTTPDestination ? String(localized: "Saved for HTTP") : String(localized: "Capture Sent"), systemImage: "checkmark.circle.fill")
             if offersUndo {
                 Button(action: undo) {
-                    Text("Undo")
+                    Text(usesHTTPDestination ? String(localized: "Restore") : String(localized: "Undo"))
                         .fontWeight(.semibold)
                         .underline()
                         .padding(.horizontal, Geist.Spacing.two)
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Undo send and restore the Capture to this draft")
-                .accessibilityHint("The note already sent to your vault is kept.")
+                .accessibilityLabel("Restore the Capture to this draft")
+                .accessibilityHint("This does not undo the original delivery.")
                 .accessibilityIdentifier("capture_sent_toast_undo")
             }
         }

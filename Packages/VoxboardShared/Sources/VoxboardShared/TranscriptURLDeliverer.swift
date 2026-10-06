@@ -71,7 +71,7 @@ public struct URLDeliveryReceipt: Codable, Equatable, Sendable, Identifiable {
     }
 }
 
-/// Additive, opt-in JSON delivery. Never writes a note or drains on app launch.
+/// HTTP-target JSON delivery. Never writes a note or drains on app launch.
 /// A failed delivery retains immutable bytes for an explicit HTTP-only retry;
 /// replaying a successful identity does not POST again. Receivers MUST implement
 /// Idempotency-Key deduplication to close a server-commit/local-receipt crash gap.

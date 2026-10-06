@@ -1,14 +1,17 @@
 import Foundation
 
 /// Determines whether a Watch preset snapshot has a Capture Markdown location
-/// surface. Recording Only is a raw audio export and intentionally opts out.
+/// surface. Recording Only and HTTP text delivery intentionally opt out.
 public enum CaptureWatchLocationAcquisitionPolicy {
     public static func shouldAcquire(presetSnapshot data: Data?) -> Bool {
         guard let data,
               let profile = try? JSONDecoder().decode(CapturePresetProfile.self, from: data),
               profile.locationPolicy.isEnabled else { return false }
         let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
-        return object?["watchOutputMode"] as? String != "recordingOnly"
+        let exportSettings = object?["exportSettings"] as? [String: Any]
+        let http = exportSettings?["urlDelivery"] as? [String: Any]
+        return http?["enabled"] as? Bool != true
+            && object?["watchOutputMode"] as? String != "recordingOnly"
     }
 }
 

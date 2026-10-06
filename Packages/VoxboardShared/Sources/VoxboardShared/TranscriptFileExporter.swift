@@ -1012,6 +1012,7 @@ public enum TranscriptFileExporter {
         deliveryTransactionDirectoryURL: URL? = nil,
         defaults: UserDefaults? = AppConstants.sharedDefaults
     ) throws -> TranscriptConfiguredExportOutcome {
+        guard flow?.deliveryTarget != .http else { return .disabled }
         guard let defaults else { throw TranscriptConfiguredExportError.settingsUnavailable }
 
         let custom = (flow?.exportSettings.usesCustomExportSettings == true) ? flow?.exportSettings : nil

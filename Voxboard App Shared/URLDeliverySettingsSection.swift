@@ -1,14 +1,44 @@
 import SwiftUI
 import VoxboardShared
 
-/// The same opt-in editor on iOS and Mac. Only opaque account IDs and presence
+/// One native choice, shared by the iOS and Mac preset editors.
+struct CapturePresetTargetSection: View {
+    @Binding var flow: CapturePreset
+
+    var body: some View {
+        Section {
+            Picker("Target", selection: $flow.deliveryTarget) {
+                ForEach(CapturePresetDeliveryTarget.allCases) { target in
+                    Text(target.displayName).tag(target)
+                }
+            }
+            .pickerStyle(.segmented)
+            .accessibilityIdentifier("preset_delivery_target")
+        } header: {
+            Text("Destination")
+        } footer: {
+            if flow.deliveryTarget == .http {
+                Text("Send text as a JSON POST to an HTTP endpoint. No note or attachment files are exported to a directory.")
+            } else {
+                Text("Save captures as notes and attachments in your chosen directory. Nothing is sent to an HTTP endpoint.")
+            }
+        }
+    }
+}
+
+/// The same endpoint editor on iOS and Mac. Only opaque account IDs and presence
 /// flags cross the preset binding; token/header values stay in the Keychain.
 struct URLDeliverySettingsSection: View {
     @Binding var settings: CapturePresetURLDeliverySettings
+    var focusEndpointOnAppear = false
+    @FocusState private var endpointIsFocused: Bool
     @State private var urlDraft = ""
     @State private var tokenDraft = ""
-    @State private var headersDraft = ""
-    @State private var savedHeadersDraft = ""
+    @State private var headersDraft = URLDeliveryHeadersDraft()
+    @State private var savedHeadersDraft: [String: String] = [:]
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    private enum HeaderField: Hashable { case name(UUID), value(UUID) }
+    @FocusState private var focusedHeader: HeaderField?
     private enum ErrorArea { case endpoint, credentials, headers }
     @State private var errorArea = ErrorArea.credentials
     @State private var errorMessage: String?
@@ -21,8 +51,6 @@ struct URLDeliverySettingsSection: View {
 
     var body: some View {
         Section {
-            Toggle("Deliver to URL", isOn: $settings.enabled)
-                .accessibilityIdentifier("preset_url_delivery_enabled")
             if settings.enabled {
                 Text("Endpoint").font(.subheadline)
                 endpointField
@@ -53,10 +81,17 @@ struct URLDeliverySettingsSection: View {
 
                 Text("Custom Headers").font(.subheadline)
                 headersField
+                Button {
+                    focusedHeader = .name(headersDraft.addRow())
+                } label: {
+                    Label("Add Header", systemImage: "plus")
+                }
+                .disabled(headersDraft.rows.count >= 32 || settings.requiresCredentialMigration)
+                .accessibilityIdentifier("preset_url_delivery_add_header")
                 Button("Save Headers", action: saveHeaders)
                     .disabled(settings.requiresCredentialMigration)
                     .accessibilityIdentifier("preset_url_delivery_save_headers")
-                Text("One per line: Name: Value. Values are saved only in the Keychain. Content-Type, Idempotency-Key, and bearer authorization are managed by Vox.md.")
+                Text("Add a header and its value in each row, then save your changes. Values are saved only in the Keychain. Content-Type, Idempotency-Key, and bearer authorization are managed by Vox.md.")
                     .font(.caption).foregroundStyle(.secondary)
 
                 inlineError(.headers)
@@ -67,7 +102,7 @@ struct URLDeliverySettingsSection: View {
                     else { Text("Send Test") }
                 }
                 .disabled(isTesting || errorMessage != nil || settings.requiresCredentialMigration
-                    || headersDraft != savedHeadersDraft || urlDraft != settings.urlString
+                    || headersDraft.hasUnsavedChanges(comparedTo: savedHeadersDraft) || urlDraft != settings.urlString
                     || settings.urlString.isEmpty || !tokenDraft.isEmpty)
                 .accessibilityIdentifier("preset_url_delivery_test")
                 if let testResult { Text(testResult).font(.caption).foregroundStyle(.secondary) }
@@ -80,16 +115,21 @@ struct URLDeliverySettingsSection: View {
                 .accessibilityIdentifier("preset_url_deliveries")
             #endif
         } header: {
-            Text("Deliver to URL")
+            Text("HTTP Endpoint")
         } footer: {
-            Text("Adds a JSON POST to this preset’s existing destinations; it does not replace note delivery. Off by default. Draft recordings are not sent until you choose Send. Redirects are not followed. Failed deliveries are retained for HTTP-only retry or discard in URL Deliveries.")
+            Text("Sends text and transcript metadata as JSON, not the exported note or attachment files. Draft recordings are not sent until you choose Send. Redirects are not followed. Failed deliveries are retained for retry or discard in URL Deliveries.")
         }
         .onAppear(perform: loadCredentials)
+        .task {
+            if focusEndpointOnAppear { endpointIsFocused = true }
+        }
         .onDisappear {
             testTask?.cancel()
+            endpointIsFocused = false
             tokenDraft = ""
-            headersDraft = ""
-            savedHeadersDraft = ""
+            focusedHeader = nil
+            headersDraft = URLDeliveryHeadersDraft()
+            savedHeadersDraft = [:]
         }
         #if os(macOS)
         .sheet(isPresented: $showDeliveries) {
@@ -113,6 +153,9 @@ struct URLDeliverySettingsSection: View {
     private var endpointField: some View {
         TextField("https://example.com/ingest", text: $urlDraft)
             .autocorrectionDisabled()
+            .focused($endpointIsFocused)
+            .submitLabel(.done)
+            .onSubmit { endpointIsFocused = false }
             .accessibilityLabel("Endpoint")
             .accessibilityIdentifier("preset_url_delivery_url")
             #if os(iOS)
@@ -130,14 +173,76 @@ struct URLDeliverySettingsSection: View {
     }
 
     private var headersField: some View {
-        TextEditor(text: $headersDraft)
-            .font(.system(.body, design: .monospaced)).frame(minHeight: 88)
-            .autocorrectionDisabled()
-            .accessibilityLabel("Custom Headers")
-            .accessibilityIdentifier("preset_url_delivery_headers")
-            #if os(iOS)
-            .textInputAutocapitalization(.never)
-            #endif
+        ForEach($headersDraft.rows) { row in
+            headerRow(row)
+        }
+    }
+
+    private func headerRow(_ row: Binding<URLDeliveryHeadersDraft.Row>) -> some View {
+        let index = headersDraft.rows.firstIndex { $0.id == row.wrappedValue.id } ?? 0
+        return HStack(alignment: .bottom, spacing: 8) {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 8) {
+                    headerNameField(row, index: index)
+                    headerValueField(row, index: index)
+                }
+            } else {
+                headerNameField(row, index: index)
+                headerValueField(row, index: index)
+            }
+            Button(role: .destructive) {
+                let id = row.wrappedValue.id
+                if focusedHeader == .name(id) || focusedHeader == .value(id) { focusedHeader = nil }
+                headersDraft.removeRow(id: id)
+            } label: {
+                Image(systemName: "minus.circle.fill")
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.borderless)
+            .disabled(headersDraft.rows.count == 1 && row.wrappedValue.isBlank)
+            .accessibilityLabel("Remove header \(index + 1)")
+            .accessibilityIdentifier("preset_url_delivery_remove_header_\(index)")
+        }
+        .disabled(settings.requiresCredentialMigration)
+    }
+
+    private func headerNameField(_ row: Binding<URLDeliveryHeadersDraft.Row>, index: Int) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Header").font(.caption).foregroundStyle(.secondary)
+            TextField("X-Api-Key", text: row.name)
+                .textFieldStyle(.roundedBorder)
+                .autocorrectionDisabled()
+                .focused($focusedHeader, equals: .name(row.wrappedValue.id))
+                .submitLabel(.next)
+                .onSubmit { focusedHeader = .value(row.wrappedValue.id) }
+                .accessibilityLabel("Header \(index + 1)")
+                .accessibilityIdentifier("preset_url_delivery_header_name_\(index)")
+                #if os(iOS)
+                .textInputAutocapitalization(.never).keyboardType(.asciiCapable)
+                #endif
+                .frame(minHeight: 44)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func headerValueField(_ row: Binding<URLDeliveryHeadersDraft.Row>, index: Int) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Value").font(.caption).foregroundStyle(.secondary)
+            TextField("Enter value", text: row.value)
+                .textFieldStyle(.roundedBorder)
+                .autocorrectionDisabled()
+                .focused($focusedHeader, equals: .value(row.wrappedValue.id))
+                .submitLabel(.done)
+                .onSubmit { focusedHeader = nil }
+                .accessibilityLabel("Value \(index + 1)")
+                .accessibilityIdentifier("preset_url_delivery_header_value_\(index)")
+                #if os(iOS)
+                .textInputAutocapitalization(.never)
+                #endif
+                .frame(minHeight: 44)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func saveURL() {
@@ -146,9 +251,12 @@ struct URLDeliverySettingsSection: View {
             let url = try URLDeliveryValidator.validate(urlDraft, allowingInsecureLocal: settings.allowingInsecureLocal)
             settings.urlString = url.absoluteString
             urlDraft = url.absoluteString
+            endpointIsFocused = false
             errorMessage = nil
             if settings.credentialID != nil, settings.credentialURLString != url.absoluteString {
-                headersDraft = ""
+                focusedHeader = nil
+                headersDraft = URLDeliveryHeadersDraft()
+                savedHeadersDraft = [:]
                 errorMessage = URLDeliveryKeychain.StorageError.destinationChanged.localizedDescription
             }
         } catch { errorMessage = error.localizedDescription }
@@ -157,6 +265,9 @@ struct URLDeliverySettingsSection: View {
     private func loadCredentials() {
         errorArea = .credentials
         urlDraft = settings.urlString
+        headersDraft = URLDeliveryHeadersDraft()
+        savedHeadersDraft = [:]
+        errorMessage = nil
         guard !settings.requiresCredentialMigration else {
             errorMessage = String(localized: "Remove Saved Credentials, then re-enter your URL delivery credentials. Legacy values are no longer read from presets or host-scoped accounts.")
             return
@@ -165,9 +276,8 @@ struct URLDeliverySettingsSection: View {
         do {
             guard let credentials = try URLDeliveryKeychain.credentials(forID: id) else { throw URLDeliveryKeychain.StorageError.missingCredentials }
             guard credentials.urlString == settings.urlString else { throw URLDeliveryKeychain.StorageError.destinationChanged }
-            headersDraft = credentials.customHeaders.sorted { $0.key.lowercased() < $1.key.lowercased() }
-                .map { "\($0.key): \($0.value)" }.joined(separator: "\n")
-            savedHeadersDraft = headersDraft
+            headersDraft = URLDeliveryHeadersDraft(headers: credentials.customHeaders)
+            savedHeadersDraft = credentials.customHeaders
         } catch {
             // Do not clear presence flags on a locked or missing account.
             errorMessage = error.localizedDescription
@@ -208,17 +318,10 @@ struct URLDeliverySettingsSection: View {
     private func saveHeaders() {
         errorArea = .headers
         do {
-            var headers: [String: String] = [:]
-            for line in headersDraft.split(separator: "\n", omittingEmptySubsequences: true) {
-                guard let separator = line.firstIndex(of: ":") else { throw URLDeliveryValidationError.invalidHeaders }
-                let name = line[..<separator].trimmingCharacters(in: .whitespaces)
-                let value = line[line.index(after: separator)...].trimmingCharacters(in: .whitespaces)
-                guard !headers.keys.contains(where: { $0.caseInsensitiveCompare(name) == .orderedSame }) else { throw URLDeliveryValidationError.invalidHeaders }
-                headers[name] = value
-            }
-            try URLDeliveryValidator.validateHeaders(headers)
+            let headers = try headersDraft.validatedHeaders()
             try updateCredentials { $0.customHeaders = headers }
-            savedHeadersDraft = headersDraft
+            savedHeadersDraft = headers
+            focusedHeader = nil
             errorMessage = nil
         } catch { errorMessage = error.localizedDescription }
     }
@@ -240,8 +343,9 @@ struct URLDeliverySettingsSection: View {
             settings.requiresCredentialMigration = false
             settings.customHeaders = [:]
             tokenDraft = ""
-            headersDraft = ""
-            savedHeadersDraft = ""
+            focusedHeader = nil
+            headersDraft = URLDeliveryHeadersDraft()
+            savedHeadersDraft = [:]
             errorMessage = nil
         } catch { errorMessage = error.localizedDescription }
     }

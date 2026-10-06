@@ -192,6 +192,9 @@ extension WatchRecordingInboxItem {
                 ? String(localized: "Saving recording to Files")
                 : String(localized: "Saving to Capture")
         case .delivered:
+            if flowSnapshot?.deliveryTarget == .http {
+                return String(localized: "Watch transcript queued for HTTP")
+            }
             return isRecordingOnlyWatchOutput
                 ? String(localized: "Watch recording saved to Files")
                 : String(localized: "Watch recording saved")
@@ -232,6 +235,7 @@ extension WatchRecordingInboxItem {
         phase == .failed
             && failureStage == .transcription
             && !isRecordingOnlyWatchOutput
+            && flowSnapshot?.deliveryTarget != .http
             && hasAudio
     }
 

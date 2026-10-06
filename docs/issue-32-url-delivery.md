@@ -4,13 +4,30 @@ This draft builds on contributor PR #35. It is not a release-readiness claim.
 
 ## Destination semantics
 
-Delivery remains **additive**, disabled by default: an enabled preset POSTs JSON
-in addition to its existing destinations. An HTTP failure does not undo a
-successful local transcript or note. The owner's suggestion of URL + bearer
-*instead of* a directory remains a separate product decision; typed Capture
-still requires a working Markdown destination. The inherited
-`deliverOnFailureFallbackFile` field is decode compatibility only, not a fallback
-mode.
+Each preset has one mutually exclusive **Directory / HTTP** target. Directory
+is the default and shows its note, formatting and attachment settings. HTTP
+shows endpoint, credentials, test and recovery settings instead, and never
+exports a note or audio attachment to the remembered directory. Switching back
+retains the inactive target's settings and Keychain references.
+
+The existing persisted URL opt-in is the target's single source of truth:
+previous URL-enabled presets select HTTP; other presets retain Directory.
+There is no additive mode or automatic file fallback. The inherited
+`deliverOnFailureFallbackFile` field is decode compatibility only.
+
+Typed Capture can Send to HTTP without any directory configured. It POSTs
+processed text/links as JSON, not an exported file. Binary attachments are
+rejected without clearing the draft; choose Directory to export them. Recording
+presets POST transcript JSON and keep normal internal transcript history, but
+skip directory/note/audio exporters. Selecting HTTP also selects transcribed
+Watch output rather than Recording Only (which requires a local audio folder).
+Inactive Directory location settings are retained, but HTTP does not acquire
+location or cancel a send for a missing Directory location outcome.
+Watch transcripts use the same durable HTTP owner without directory setup; raw
+Watch audio remains retained if an HTTP preset cannot produce a transcript.
+The Share extension remains directory-only: an HTTP preset cannot enqueue to its
+remembered directory there. Its UI directs HTTP users to Capture in Vox.md,
+while keeping shared items available for choosing a Directory preset.
 
 Vox.md ships no endpoint and performs no HTTP startup drain. Draft recording
 completion never enters URL delivery. Explicit composer Send freezes the exact
@@ -57,12 +74,17 @@ queued files are not indiscriminately deleted or rewritten by this follow-up.
 `enqueueCapture` / `enqueueTranscript` verify and atomically persist the prepared
 body, digest, exact endpoint, settings references and a receipt **without a
 Keychain lookup or HTTP request**. The composer does this inside explicit Send,
-before the note mutation. Preparation failure preserves the draft/recording job
-for recovery rather than completing and losing the HTTP intent.
+in its HTTP-only branch, without resolving or writing a directory. Preparation
+failure preserves the draft/recording job for recovery rather than completing
+and losing the HTTP intent. The HTTP branch uses a distinct submission receipt;
+it never invents a note URL. A durable accepted handoff counts against the same
+Capture allowance once; HTTP-only retries retain that identity. HTTP status is
+tracked in URL Deliveries rather than reported as a successfully delivered note
+in file history.
 
 Only a successful durable enqueue is dispatched to `URLDeliveryCoordinator`.
-The iOS recorder has no nested detached HTTP task. Composer completion and Mac
-note export do not await endpoint retry latency. The task registry coalesces
+The iOS recorder has no nested detached HTTP task. Composer and recording-job
+completion do not await endpoint retry latency. The task registry coalesces
 identities and owns cancellation. On iOS an exactly-once finite background lease
 cancels its sender on expiry; an unavailable lease leaves the unattempted handoff
 locally inspectable. This is not a background `URLSession` transfer.
@@ -84,7 +106,7 @@ or unproven legacy state fails closed.
 
 ## HTTP-only recovery
 
-Open **Settings → URL Deliveries** on iOS, or **Capture Presets → Deliver to URL →
+Open **Settings → URL Deliveries** on iOS, or **Capture Presets → HTTP →
 URL Deliveries** on Mac. Merely opening or refreshing recovery never sends.
 Unattempted payloads offer Send Now; attempted/authentication/permanent failures
 require deliberate Retry. Discard removes local HTTP content without changing
@@ -127,7 +149,7 @@ controls. These are not substitutes for device evidence.
 
 Still required before release:
 
-- Agree additive versus alternative destination semantics and release scope.
+- Confirm Directory / HTTP exclusive semantics and upgrade behavior with users.
 - Real Keychain entitlements, lock/unlock, account replacement/deletion, local-
   network/ATS and termination/crash-boundary acceptance on appropriate hardware.
 - Full real recording/draft/Send and HTTP-only recovery device matrix, including

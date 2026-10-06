@@ -79,9 +79,6 @@ private final class ShareCaptureModel {
                 profile: selectedPreset,
                 libraryDefaultID: library.defaultDestinationID
             )
-            guard selectedDestinationID != nil else {
-                throw ShareCaptureError.destinationRequired
-            }
             loadedPayloads = try await ShareItemLoader.load(
                 providers: providers,
                 requestID: requestID,
@@ -111,16 +108,15 @@ private final class ShareCaptureModel {
         return presets.first(where: { $0.id == selectedPresetID })
     }
 
+    var usesHTTPDestination: Bool {
+        guard let id = selectedPreset?.id else { return false }
+        return CapturePresetStore.flow(id: id)?.deliveryTarget == .http
+    }
+
     func applySelectedPresetDestination() {
-        selectedDestinationID = CapturePresetRouteResolver.destinationID(
-            selectionMode: .inherited,
-            explicitDestinationID: nil,
+        selectedDestinationID = resolvedDestinationID(
             profile: selectedPreset,
-            destinations: destinations,
-            libraryDefaultDestinationID: libraryDefaultDestinationID,
-            allowsLegacyFallback: !CapturePresetProfileStore.hasOwnedRouteMigration(
-                defaults: UserDefaults(suiteName: "group.bontecou.Voxboard")
-            )
+            libraryDefaultID: libraryDefaultDestinationID
         )
         if let selectedPresetID {
             CapturePresetProfileStore.selectCaptureProfile(
@@ -134,6 +130,10 @@ private final class ShareCaptureModel {
         guard !isSubmitting, !cancellationRequested else { return }
         if isQueuedForLater {
             await openQueuedCapture()
+            return
+        }
+        guard !usesHTTPDestination else {
+            fail(String(localized: "Use Capture in Vox.md to send to HTTP. Choose a Directory preset to share files here."))
             return
         }
         guard let captureRootURL, let selectedDestinationID else {
@@ -265,7 +265,10 @@ private final class ShareCaptureModel {
         profile: CapturePresetProfile?,
         libraryDefaultID: UUID?
     ) -> UUID? {
-        CapturePresetRouteResolver.destinationID(
+        if let id = profile?.id, CapturePresetStore.flow(id: id)?.deliveryTarget == .http {
+            return nil
+        }
+        return CapturePresetRouteResolver.destinationID(
             selectionMode: .inherited,
             explicitDestinationID: nil,
             profile: profile,
@@ -513,7 +516,11 @@ private struct ShareCaptureView: View {
                             .onChange(of: model.selectedPresetID) { _, _ in
                                 model.applySelectedPresetDestination()
                             }
-                            if let destination = model.destinations.first(where: { $0.id == model.selectedDestinationID }) {
+                            if model.usesHTTPDestination {
+                                Text("Use Capture in Vox.md to send to HTTP. Choose a Directory preset to share files here.")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            } else if let destination = model.destinations.first(where: { $0.id == model.selectedDestinationID }) {
                                 LabeledContent("Destination", value: destination.rootName)
                             }
                         }

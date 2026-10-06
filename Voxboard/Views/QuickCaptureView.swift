@@ -100,6 +100,7 @@ struct QuickCaptureView: View {
     @State private var showsLinkPrompt = false
     @State private var showsCaptureHistory = false
     @State private var showsRoutePicker = false
+    @State private var httpEndpointSettingsRoute: CaptureHTTPEndpointSettingsRoute?
     @State private var showsDueDate = false
     @State private var showsInternalLinks = false
     @State private var showsPaywall = false
@@ -144,6 +145,7 @@ struct QuickCaptureView: View {
     @State private var isFindingLocation = false
     @State private var locationRequestTask: Task<Void, Never>?
     @State private var showsSentToast = false
+    @State private var sentToastUsesHTTPDestination = false
     @State private var sentUndoSnapshot: SentCaptureUndoSnapshot?
     @State private var sentToastPresentationID: UUID?
     @State private var showsPresetSendConfirmation = false
@@ -189,7 +191,7 @@ struct QuickCaptureView: View {
     private var captureContent: CaptureViewSection {
         CaptureViewSection {
             QuickCaptureCanvas(
-                showsDestination: viewModel.selectedDestination == nil && !isLocalizationScreenshot,
+                showsDestination: viewModel.needsDirectorySetup && !isLocalizationScreenshot,
                 showsWatchStatus: watchRecordingPipeline.hasVisibleItems,
                 showsAttachments: !viewModel.draft.additionalPayloads.isEmpty,
                 ocrProgress: captureOCRProgressBanner,
@@ -255,7 +257,7 @@ struct QuickCaptureView: View {
 
     private var captureErrorOverlay: CaptureViewSection {
         CaptureViewSection {
-            if let message = captureErrorMessage {
+            if let message = captureErrorMessage ?? viewModel.httpDestinationIssue {
                 errorBanner(message)
                     .padding(.horizontal, 12)
                     .padding(.top, 8)
@@ -283,7 +285,8 @@ struct QuickCaptureView: View {
             if showsSentToast {
                 QuickCaptureSentToast(
                     offersUndo: sentUndoSnapshot?.offersUndo == true,
-                    undo: restoreSentCaptureAsDraft
+                    undo: restoreSentCaptureAsDraft,
+                    usesHTTPDestination: sentToastUsesHTTPDestination
                 )
             }
         }
@@ -539,6 +542,13 @@ struct QuickCaptureView: View {
     private var navigationSheetContent: CaptureViewSection {
         CaptureViewSection {
             presetSwitchDecisionContent
+                .navigationDestination(item: $httpEndpointSettingsRoute) { route in
+                    CaptureHTTPEndpointSettingsView(presetID: route.presetID)
+                        .onDisappear {
+                            reloadFlows()
+                            WatchRecordingController.shared.publishState()
+                        }
+                }
                 .sheet(isPresented: $showsCaptureHistory) {
                     HistoryView(viewModel: viewModel)
                         .environment(transcriptStore)
@@ -942,7 +952,7 @@ struct QuickCaptureView: View {
                 .disabled(!viewModel.canSelectCapturePreset)
                 .accessibilityLabel("Capture Preset \(selectedFlow.accessibilityName)")
 
-                if recordingMode == .draft {
+                if recordingMode == .draft && !viewModel.usesHTTPDestination {
                     Toggle(isOn: $attachRecordingAudio) {
                         Label("Audio", systemImage: "paperclip")
                             .font(Geist.caption())
@@ -1267,6 +1277,7 @@ struct QuickCaptureView: View {
                     canCaptureTextPages: UIImagePickerController.isSourceTypeAvailable(.camera),
                     isProcessingMedia: isProcessingMedia,
                     isFindingLocation: isFindingLocation,
+                    allowsAttachments: !viewModel.usesHTTPDestination,
                     preferences: captureToolbarPreferences
                 )
             }
@@ -1565,33 +1576,39 @@ struct QuickCaptureView: View {
                 // as well as on the reusable selector presentation.
                 .accessibilityIdentifier("capture_vox_selector")
 
-                Button {
-                    dismissComposer()
-                    showsRoutePicker = true
-                } label: {
-                    HStack(spacing: 5) {
-                        Image(systemName: viewModel.hasAnyRouteOverride ? "arrow.triangle.branch" : "tray.full")
-                        Text(routeLabel)
-                            .lineLimit(1)
-                        if viewModel.hasAnyRouteOverride {
-                            Text("Override")
-                                .font(Geist.caption(.caption2))
-                                .foregroundStyle(Geist.faint)
+                if viewModel.usesHTTPDestination {
+                    Label("HTTP", systemImage: "network")
+                        .accessibilityLabel("HTTP destination \(viewModel.httpDestinationOrigin)")
+                        .accessibilityIdentifier("capture_http_target")
+                } else {
+                    Button {
+                        dismissComposer()
+                        showsRoutePicker = true
+                    } label: {
+                        HStack(spacing: 5) {
+                            Image(systemName: viewModel.hasAnyRouteOverride ? "arrow.triangle.branch" : "tray.full")
+                            Text(routeLabel)
+                                .lineLimit(1)
+                            if viewModel.hasAnyRouteOverride {
+                                Text("Override")
+                                    .font(Geist.caption(.caption2))
+                                    .foregroundStyle(Geist.faint)
+                            }
                         }
                     }
-                }
-                .accessibilityLabel("Capture route \(routeLabel), \(viewModel.effectivePlacementLabel)")
-                .disabled(!viewModel.canChangeCaptureRoute)
-
-                if viewModel.hasAnyRouteOverride {
-                    Button {
-                        viewModel.useVoxRouteDefaults()
-                    } label: {
-                        Image(systemName: "arrow.uturn.backward.circle")
-                            .frame(width: 36, height: 36)
-                    }
-                    .accessibilityLabel("Use Preset destination defaults")
+                    .accessibilityLabel("Capture route \(routeLabel), \(viewModel.effectivePlacementLabel)")
                     .disabled(!viewModel.canChangeCaptureRoute)
+
+                    if viewModel.hasAnyRouteOverride {
+                        Button {
+                            viewModel.useVoxRouteDefaults()
+                        } label: {
+                            Image(systemName: "arrow.uturn.backward.circle")
+                                .frame(width: 36, height: 36)
+                        }
+                        .accessibilityLabel("Use Preset destination defaults")
+                        .disabled(!viewModel.canChangeCaptureRoute)
+                    }
                 }
 
                 Spacer(minLength: 4)
@@ -1774,9 +1791,32 @@ struct QuickCaptureView: View {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .foregroundStyle(Geist.error)
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(message)
+                    if let presetID = viewModel.httpEndpointSettingsPresetID,
+                       message == viewModel.httpDestinationIssue {
+                        Button {
+                            dismissComposer()
+                            if viewModel.errorMessage == message { viewModel.errorMessage = nil }
+                            httpEndpointSettingsRoute = CaptureHTTPEndpointSettingsRoute(presetID: presetID)
+                        } label: {
+                            HStack {
+                                Text(message)
+                                Spacer(minLength: 8)
+                                Image(systemName: "chevron.right")
+                                    .foregroundStyle(Geist.muted)
+                            }
+                            .frame(minHeight: 44)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
                         .font(Geist.caption())
                         .foregroundStyle(Geist.text)
+                        .accessibilityHint("Opens this preset’s HTTP settings and focuses the delivery URL.")
+                        .accessibilityIdentifier("capture_http_endpoint_settings")
+                    } else {
+                        Text(message)
+                            .font(Geist.caption())
+                            .foregroundStyle(Geist.text)
+                    }
                     if viewModel.errorMessage != nil, viewModel.failedInboxCount > 0 {
                         Button("Retry queued captures") {
                             Task { await viewModel.retryFailedInbox() }
@@ -1835,6 +1875,7 @@ struct QuickCaptureView: View {
     }
 
     private var routeLabel: String {
+        if viewModel.usesHTTPDestination { return viewModel.httpDestinationOrigin }
         if let override = viewModel.draft.relativeNotePathOverride {
             return URL(fileURLWithPath: override).deletingPathExtension().lastPathComponent
         }
@@ -2114,7 +2155,7 @@ struct QuickCaptureView: View {
     }
 
     private func presentSentToast(
-        for receipt: CaptureReceipt? = nil,
+        for receipt: CaptureSubmissionReceipt? = nil,
         replacingWith suppliedSnapshot: SentCaptureUndoSnapshot? = nil
     ) async {
         if let suppliedSnapshot {
@@ -2130,15 +2171,18 @@ struct QuickCaptureView: View {
             discardSentUndoSnapshot()
         }
 
+        sentToastUsesHTTPDestination = receipt.map { $0.noteURL == nil } ?? viewModel.usesHTTPDestination
         let presentationID = UUID()
         sentToastPresentationID = presentationID
         withAnimation(.easeOut(duration: 0.18)) { showsSentToast = true }
         let undoAvailable = sentUndoSnapshot?.offersUndo == true
         UIAccessibility.post(
             notification: .announcement,
-            argument: undoAvailable
-                ? String(localized: "Capture sent. Undo available for five seconds.")
-                : String(localized: "Capture sent")
+            argument: sentToastUsesHTTPDestination
+                ? String(localized: "Capture saved for HTTP delivery. Restoring the draft does not undo delivery.")
+                : (undoAvailable
+                    ? String(localized: "Capture sent. Undo available for five seconds.")
+                    : String(localized: "Capture sent"))
         )
         try? await Task.sleep(for: SentCaptureUndo.toastWindow)
         guard sentToastPresentationID == presentationID else { return }
@@ -2210,7 +2254,7 @@ struct QuickCaptureView: View {
             UIAccessibility.post(
                 notification: .announcement,
                 argument: String(
-                    localized: "Capture restored to this draft. The sent note remains in \(sentVia)."
+                    localized: "Capture restored to this draft. The original delivery to \(sentVia) is not undone."
                 )
             )
         }
@@ -2409,7 +2453,7 @@ struct QuickCaptureView: View {
     private var selectedRecordingCompletionMode: RecordingCompletionMode {
         Self.completionMode(
             for: recordingMode,
-            attachAudio: attachRecordingAudio,
+            attachAudio: attachRecordingAudio && !viewModel.usesHTTPDestination,
             flowID: selectedFlow.id
         )
     }

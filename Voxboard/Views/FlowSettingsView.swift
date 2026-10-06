@@ -318,20 +318,28 @@ private struct CapturePresetEditorView: View {
     var body: some View {
         Form {
             identitySection
-            watchOutputSection
+            CapturePresetTargetSection(flow: $flow)
+            if flow.deliveryTarget == .http {
+                urlDeliverySection
+            } else {
+                if flow.watchOutputMode != .recordingOnly {
+                    ownedDestinationSection
+                    if flow.captureDestinationID == nil {
+                        fileExportSection
+                    }
+                }
+                watchOutputSection
+            }
             if flow.watchOutputMode != .recordingOnly {
                 voiceProcessingSection
                 postProcessingSection
-                ownedDestinationSection
-                if flow.captureDestinationID == nil {
-                    fileExportSection
+                if flow.deliveryTarget == .directory {
+                    if showsFrontmatterSection {
+                        frontmatterSection
+                        locationMetadataSection
+                    }
+                    audioExportSection
                 }
-                urlDeliverySection
-                if showsFrontmatterSection {
-                    frontmatterSection
-                    locationMetadataSection
-                }
-                audioExportSection
             }
         }
         .navigationTitle(flow.visibleName ?? String(localized: "Capture Preset"))
@@ -484,10 +492,12 @@ private struct CapturePresetEditorView: View {
                 .accessibilityLabel("About Apple Intelligence Processing")
             }
 
-            ImageAltTextSettings(
-                generateImageAltText: $flow.generateImageAltText,
-                processingEnabled: flow.captureProcessingEnabled
-            )
+            if flow.deliveryTarget == .directory {
+                ImageAltTextSettings(
+                    generateImageAltText: $flow.generateImageAltText,
+                    processingEnabled: flow.captureProcessingEnabled
+                )
+            }
 
             Picker("Mode", selection: $flow.postProcessingMode) {
                 ForEach(CapturePresetProcessingMode.allCases) { mode in
@@ -580,7 +590,7 @@ private struct CapturePresetEditorView: View {
                     .foregroundStyle(.red)
             }
         } header: {
-            Text("Destination")
+            Text("Directory")
         } footer: {
             Text("This destination belongs to this preset. It includes the note target, placement, entry formatting, attachments folder, and retry behavior.")
         }

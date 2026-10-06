@@ -4,6 +4,142 @@ import VoxboardShared
 
 @MainActor
 final class CaptureURLDeliveryIntegrationTests: XCTestCase {
+    func testHTTPOnlySendDoesNotRequireDirectory() async throws {
+        let accounting = ComposerHTTPAccounting()
+        let fixture = try await makeFixture(refuseLease: true, directoryConfigured: false, accounting: accounting)
+        fixture.model.draft.text = "Synthetic HTTP-only capture"
+        let requestID = fixture.model.draft.requestID
+        XCTAssertNil(fixture.model.selectedDestination)
+        XCTAssertTrue(fixture.model.canSubmit)
+        await fixture.model.submit()
+        XCTAssertNil(fixture.model.errorMessage)
+        XCTAssertEqual(fixture.model.lastReceipt?.requestID, requestID)
+        XCTAssertEqual(fixture.model.draft.text, "")
+        XCTAssertTrue(try FileManager.default.contentsOfDirectory(atPath: fixture.vault.path).isEmpty)
+        await fixture.owner.refresh()
+        XCTAssertEqual(fixture.owner.receipts.first?.outcome, .pending)
+        let counts = await accounting.counts()
+        XCTAssertEqual(counts.reserved, 1)
+        XCTAssertEqual(counts.committed, 1)
+        XCTAssertEqual(counts.released, 0)
+    }
+
+    func testHTTPCompletionDoesNotReadOrWriteDirectoryHistory() async throws {
+        let fixture = try await makeFixture(refuseLease: true, directoryConfigured: false)
+        fixture.model.draft.text = "Synthetic independent HTTP handoff"
+        try Data("Corrupt directory library".utf8).write(
+            to: fixture.root.appendingPathComponent(AppConstants.captureLibraryFilename)
+        )
+        await fixture.model.submit()
+        XCTAssertNil(fixture.model.errorMessage)
+        XCTAssertEqual(fixture.model.draft.text, "")
+        XCTAssertNotNil(fixture.model.lastReceipt)
+        XCTAssertTrue(fixture.model.historyRecords.isEmpty)
+    }
+
+    func testHTTPQuotaRefusalPreservesDraftWithoutHandoff() async throws {
+        let accounting = ComposerHTTPAccounting(refusesQuota: true)
+        let fixture = try await makeFixture(refuseLease: true, accounting: accounting)
+        fixture.model.draft.text = "Synthetic quota-limited capture"
+        let requestID = fixture.model.draft.requestID
+        await fixture.model.submit()
+        XCTAssertTrue(fixture.model.needsCaptureUnlock)
+        XCTAssertEqual(fixture.model.draft.requestID, requestID)
+        XCTAssertEqual(fixture.model.draft.text, "Synthetic quota-limited capture")
+        XCTAssertNil(fixture.model.lastReceipt)
+        await fixture.owner.refresh()
+        XCTAssertTrue(fixture.owner.receipts.isEmpty)
+        XCTAssertEqual(ComposerHTTPProtocol.requestCount, 0)
+    }
+
+    func testHTTPPreparationFailureReleasesAllowanceReservation() async throws {
+        let accounting = ComposerHTTPAccounting()
+        let fixture = try await makeFixture(brokenJournal: true, accounting: accounting)
+        fixture.model.draft.text = "Synthetic recoverable handoff"
+        await fixture.model.submit()
+        let counts = await accounting.counts()
+        XCTAssertEqual(counts.reserved, 1)
+        XCTAssertEqual(counts.committed, 0)
+        XCTAssertEqual(counts.released, 1)
+        XCTAssertEqual(fixture.model.draft.text, "Synthetic recoverable handoff")
+        XCTAssertTrue(fixture.model.historyRecords.isEmpty)
+    }
+
+    func testMissingHTTPURLRecoveryUsesExplicitDraftPresetNotDefault() async throws {
+        let fixture = try await makeFixture()
+        var selected = fixture.preset
+        selected.exportSettings.urlDelivery.urlString = ""
+        var other = selected
+        other.id = "other-http-preset"
+        other.name = "Other HTTP"
+        CapturePresetStore.saveFlows([selected, other], defaults: fixture.defaults, widgetRefresh: .disabled)
+        CapturePresetProfileStore.selectCaptureProfile(id: other.id, defaults: fixture.defaults)
+        fixture.model.refreshVoxProfiles()
+        fixture.model.draft.text = "Keep this draft"
+        fixture.model.draft.voxID = selected.id
+        let requestID = fixture.model.draft.requestID
+        XCTAssertNotNil(fixture.model.httpDestinationIssue)
+        XCTAssertEqual(fixture.model.httpEndpointSettingsPresetID, selected.id)
+        XCTAssertEqual(fixture.model.draft.text, "Keep this draft")
+        XCTAssertEqual(fixture.model.draft.requestID, requestID)
+
+        selected.exportSettings.urlDelivery.urlString = "https://example.invalid/configured"
+        CapturePresetStore.saveFlows([selected, other], defaults: fixture.defaults, widgetRefresh: .disabled)
+        fixture.model.refreshVoxProfiles()
+        XCTAssertNil(fixture.model.httpEndpointSettingsPresetID)
+        XCTAssertNil(fixture.model.httpDestinationIssue)
+        XCTAssertTrue(fixture.model.canSubmit)
+        XCTAssertEqual(fixture.model.draft.voxID, selected.id)
+    }
+
+    func testInvalidHTTPURLOffersEndpointRecovery() async throws {
+        let fixture = try await makeFixture()
+        var preset = fixture.preset
+        preset.exportSettings.urlDelivery.urlString = "not a delivery URL"
+        CapturePresetStore.saveFlows([preset], defaults: fixture.defaults, widgetRefresh: .disabled)
+        fixture.model.refreshVoxProfiles()
+        XCTAssertEqual(fixture.model.httpEndpointSettingsPresetID, preset.id)
+    }
+
+    func testDirectoryAndStalePresetDoNotOfferHTTPRecovery() async throws {
+        let fixture = try await makeFixture(httpTarget: false)
+        XCTAssertNil(fixture.model.httpEndpointSettingsPresetID)
+        fixture.model.draft.voxID = "missing-preset"
+        XCTAssertNil(fixture.model.httpEndpointSettingsPresetID)
+    }
+
+    func testDirectoryOnlySendWritesNoteWithoutHTTP() async throws {
+        let fixture = try await makeFixture(httpTarget: false)
+        fixture.model.draft.text = "Synthetic directory-only capture"
+        XCTAssertTrue(fixture.model.canSubmit)
+        await fixture.model.submit()
+        XCTAssertNil(fixture.model.errorMessage)
+        let noteURL = try XCTUnwrap(fixture.model.lastReceipt?.noteURL)
+        XCTAssertTrue(try String(contentsOf: noteURL, encoding: .utf8).contains("Synthetic directory-only capture"))
+        await fixture.owner.refresh()
+        XCTAssertTrue(fixture.owner.receipts.isEmpty)
+        XCTAssertEqual(ComposerHTTPProtocol.requestCount, 0)
+    }
+
+    func testHTTPAttachmentAttemptPreservesDraftAndStagedFile() async throws {
+        let fixture = try await makeFixture(refuseLease: true)
+        fixture.model.draft.text = "Do not lose my attachment"
+        let source = fixture.root.appendingPathComponent("synthetic.txt")
+        try Data("Synthetic attachment".utf8).write(to: source)
+        let staged = await fixture.model.stageFile(at: source, contentTypeIdentifier: "public.plain-text")
+        let payload = try XCTUnwrap(staged)
+        XCTAssertFalse(fixture.model.canSubmit)
+        XCTAssertNil(fixture.model.httpEndpointSettingsPresetID)
+        await fixture.model.submit()
+        XCTAssertNotNil(fixture.model.errorMessage)
+        XCTAssertNil(fixture.model.lastReceipt)
+        XCTAssertEqual(fixture.model.draft.additionalPayloads, [payload])
+        XCTAssertEqual(fixture.model.draft.text, "Do not lose my attachment")
+        await fixture.owner.refresh()
+        XCTAssertTrue(fixture.owner.receipts.isEmpty)
+        XCTAssertEqual(ComposerHTTPProtocol.requestCount, 0)
+    }
+
     func testDraftEditingDoesNotPrepareOrPOST() async throws {
         let fixture = try await makeFixture()
         _ = await fixture.model.appendRecognizedText("Synthetic draft only")
@@ -13,7 +149,7 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: fixture.vault.appendingPathComponent("Inbox.md").path))
     }
 
-    func testSendCompletesLocalNoteWhileHTTPBackoffRemainsOwned() async throws {
+    func testHTTPHandoffCompletesWithoutNoteWhileBackoffRemainsOwned() async throws {
         let sleeping = expectation(description: "HTTP is waiting in backoff")
         let submitted = expectation(description: "Composer completed without waiting for HTTP")
         let fixture = try await makeFixture(sleeper: { _ in
@@ -30,7 +166,8 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         XCTAssertFalse(fixture.model.isSubmitting)
         XCTAssertNil(fixture.model.errorMessage)
         let receipt = try XCTUnwrap(fixture.model.lastReceipt)
-        XCTAssertTrue(try String(contentsOf: receipt.noteURL, encoding: .utf8).contains("Synthetic local note"))
+        XCTAssertNil(receipt.noteURL)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: fixture.vault.appendingPathComponent("Inbox.md").path))
         XCTAssertEqual(fixture.model.draft.text, "")
         XCTAssertEqual(ComposerHTTPProtocol.requestCount, 1)
         XCTAssertEqual(fixture.owner.receipts.first?.id, requestID.uuidString.lowercased())
@@ -60,6 +197,7 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         let submission = Task { await fixture.model.submit() }
         await fulfillment(of: [entered], timeout: 5)
         var changed = fixture.preset
+        changed.deliveryTarget = .directory
         changed.exportSettings.urlDelivery.urlString = "https://example.invalid/changed"
         CapturePresetStore.saveFlows([changed], defaults: fixture.defaults, widgetRefresh: .disabled)
         await processor.release()
@@ -67,7 +205,8 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         await fixture.owner.cancelAll()
         XCTAssertNil(fixture.model.errorMessage)
         let receipt = try XCTUnwrap(fixture.model.lastReceipt)
-        XCTAssertTrue(try String(contentsOf: receipt.noteURL, encoding: .utf8).contains("Processed synthetic text"))
+        XCTAssertNil(receipt.noteURL)
+        XCTAssertTrue(try FileManager.default.contentsOfDirectory(atPath: fixture.vault.path).isEmpty)
         let prepared = try preparedObject(id: requestID, directory: fixture.journal)
         XCTAssertEqual(prepared["url"] as? String, "https://example.invalid/ingest")
         let encodedBody = try XCTUnwrap(prepared["body"] as? String)
@@ -107,7 +246,9 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
 
     private func makeFixture(
         processor: (any CapturePresetTextProcessing)? = nil, brokenJournal: Bool = false,
-        refuseLease: Bool = false, sleeper: @escaping TranscriptURLDeliverer.Sleeper = { _ in }
+        refuseLease: Bool = false, directoryConfigured: Bool = true, httpTarget: Bool = true,
+        sleeper: @escaping TranscriptURLDeliverer.Sleeper = { _ in },
+        accounting: any CaptureDeliveryAccounting = UnmeteredCaptureDeliveryAccounting()
     ) async throws -> Fixture {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("ComposerURL-\(UUID().uuidString)")
         let vault = root.appendingPathComponent("vault")
@@ -117,15 +258,16 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         let destination = CaptureDestination(name: "Synthetic", rootBookmark: try vault.bookmarkData(), rootName: "Synthetic Vault",
                                              noteTarget: .existingNote(relativePath: "Inbox.md"), retryProtectionEnabled: true)
         try await CaptureLibraryStore(fileURL: root.appendingPathComponent(AppConstants.captureLibraryFilename))
-            .save(CaptureLibraryEnvelope(destinations: [destination], defaultDestinationID: destination.id))
+            .save(CaptureLibraryEnvelope(destinations: directoryConfigured ? [destination] : [],
+                                         defaultDestinationID: directoryConfigured ? destination.id : nil))
         let suite = "ComposerURL-\(UUID().uuidString)"
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
         var preset = CapturePresetStore.makeCustomFlow()
         preset.name = "Synthetic HTTP"
-        preset.captureDestinationID = destination.id
+        preset.captureDestinationID = directoryConfigured ? destination.id : nil
         preset.postProcessingMode = processor == nil ? .none : .clean
         preset.captureProcessingEnabled = true
-        preset.exportSettings.urlDelivery = .init(enabled: true, urlString: "https://example.invalid/ingest", maxAttempts: 2)
+        preset.exportSettings.urlDelivery = .init(enabled: httpTarget, urlString: "https://example.invalid/ingest", maxAttempts: 2)
         CapturePresetStore.saveFlows([preset], defaults: defaults, widgetRefresh: .disabled)
         ComposerHTTPProtocol.reset()
         let configuration = URLSessionConfiguration.ephemeral
@@ -134,7 +276,8 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
                                             credentialsProvider: { _ in nil }, logger: { _ in }, sleeper: sleeper)
         let owner = URLDeliveryCoordinator(deliverer: sender, beginExecution: { _ in refuseLease ? nil : .init() })
         let model = QuickCaptureViewModel(captureRootURL: root, defaults: defaults, pipeline: CapturePipeline(),
-            requestProcessor: CapturePresetRequestProcessor(textProcessor: processor), urlDeliveryCoordinator: owner)
+            requestProcessor: CapturePresetRequestProcessor(textProcessor: processor), urlDeliveryCoordinator: owner,
+            httpDeliveryAccounting: accounting)
         addTeardownBlock {
             await owner.cancelAll()
             defaults.removePersistentDomain(forName: suite)
@@ -150,6 +293,22 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         let data = try Data(contentsOf: directory.appendingPathComponent("\(id.uuidString.lowercased()).request.json"))
         return try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
     }
+}
+
+private actor ComposerHTTPAccounting: CaptureDeliveryAccounting {
+    let refusesQuota: Bool
+    private var reserved = 0
+    private var committed = 0
+    private var released = 0
+    init(refusesQuota: Bool = false) { self.refusesQuota = refusesQuota }
+    func reserve(for request: CaptureRequest) async throws -> CaptureDeliveryReservation {
+        if refusesQuota { throw CaptureDeliveryQuotaError.limitReached(limit: 10) }
+        reserved += 1
+        return .reserved(requestID: request.id, token: UUID())
+    }
+    func commit(_ reservation: CaptureDeliveryReservation) async throws { committed += 1 }
+    func release(_ reservation: CaptureDeliveryReservation) async { released += 1 }
+    func counts() -> (reserved: Int, committed: Int, released: Int) { (reserved, committed, released) }
 }
 
 private actor PausedComposerTextProcessor: CapturePresetTextProcessing {

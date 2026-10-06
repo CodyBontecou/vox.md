@@ -150,6 +150,10 @@ final class WatchRecordingInboxItemTests: XCTestCase {
             source: .watch,
             precision: .exact
         ))).shouldCancelForUnavailableLocation)
+
+        flow.deliveryTarget = .http
+        XCTAssertFalse(item(nil).shouldCancelForUnavailableLocation)
+        XCTAssertFalse(item(.unavailable(.timeout, attemptedAt: Date())).shouldCancelForUnavailableLocation)
     }
 
     func testTerminalTombstoneStripsLocationAndPresetTemplatePayload() throws {
