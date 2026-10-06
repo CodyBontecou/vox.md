@@ -337,14 +337,17 @@ public actor CapturePipeline {
 
     private static func validateLocationDecision(in request: CaptureRequest) throws {
         guard let policy = request.voxProfile?.locationPolicy, policy.isEnabled else { return }
+        // Older/interrupted captures may have no origin-time observation at
+        // all. Honor consent to omit location without inventing or reacquiring it.
+        if policy.unavailableBehavior == .sendWithoutLocation
+            || request.locationDecisionOverride == .sendWithoutLocation {
+            return
+        }
         switch request.locationOutcome {
         case .available:
             return
         case .unavailable(let reason, _):
-            guard policy.unavailableBehavior == .sendWithoutLocation
-                    || request.locationDecisionOverride == .sendWithoutLocation else {
-                throw CapturePipelineError.locationDecisionRequired(reason)
-            }
+            throw CapturePipelineError.locationDecisionRequired(reason)
         case nil:
             throw CapturePipelineError.locationDecisionRequired(nil)
         }

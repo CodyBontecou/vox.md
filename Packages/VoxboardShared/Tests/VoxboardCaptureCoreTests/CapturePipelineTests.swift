@@ -716,6 +716,88 @@ final class CapturePipelineTests: XCTestCase {
         XCTAssertFalse(markdown.contains("locations:"))
     }
 
+    func test_sendWithoutLocationPolicyDeliversMissingOutcomeWithoutInventingSnapshot() async throws {
+        let root = try temporaryFolder()
+        defer { try? FileManager.default.removeItem(at: root) }
+        var destination = destination(target: .existingNote(relativePath: "Inbox.md"))
+        destination.entrySuffix = "\n{location}"
+        let original = CaptureRequest(
+            source: .voice,
+            destinationID: destination.id,
+            payloads: [.text("Missing origin location")],
+            voxProfile: CapturePresetProfile(
+                id: "location", name: "Location", symbolName: "location",
+                locationPolicy: CapturePresetLocationPolicy(
+                    isEnabled: true, unavailableBehavior: .sendWithoutLocation
+                )
+            )
+        )
+        // Exercise a saved/legacy request whose JSON has no locationOutcome.
+        let encoded = try JSONEncoder().encode(original)
+        let json = try XCTUnwrap(JSONSerialization.jsonObject(with: encoded) as? [String: Any])
+        XCTAssertNil(json["locationOutcome"])
+        let request = try JSONDecoder().decode(CaptureRequest.self, from: encoded)
+
+        _ = try await CapturePipeline().capture(request, destination: destination, rootURL: root)
+
+        let markdown = try String(contentsOf: root.appendingPathComponent("Inbox.md"), encoding: .utf8)
+        XCTAssertTrue(markdown.contains("Missing origin location"))
+        XCTAssertFalse(markdown.contains("locations:"))
+        XCTAssertFalse(markdown.contains("maps"))
+        XCTAssertFalse(markdown.contains("{location}"))
+        XCTAssertEqual(request, original, "Delivery must not invent an origin-time location or change the policy")
+        XCTAssertNil(request.locationOutcome)
+    }
+
+    func test_oneTimeSendWithoutOverrideDeliversMissingOutcomeWithoutChangingAskPolicy() async throws {
+        let root = try temporaryFolder()
+        defer { try? FileManager.default.removeItem(at: root) }
+        let destination = destination(target: .existingNote(relativePath: "Inbox.md"))
+        let request = CaptureRequest(
+            source: .voice,
+            destinationID: destination.id,
+            payloads: [.text("Explicit coordinate-free delivery")],
+            voxProfile: CapturePresetProfile(
+                id: "location", name: "Location", symbolName: "location",
+                locationPolicy: CapturePresetLocationPolicy(isEnabled: true, unavailableBehavior: .ask)
+            ),
+            locationDecisionOverride: .sendWithoutLocation
+        )
+
+        _ = try await CapturePipeline().capture(request, destination: destination, rootURL: root)
+
+        let markdown = try String(contentsOf: root.appendingPathComponent("Inbox.md"), encoding: .utf8)
+        XCTAssertTrue(markdown.contains("Explicit coordinate-free delivery"))
+        XCTAssertFalse(markdown.contains("locations:"))
+        XCTAssertNil(request.locationOutcome)
+        XCTAssertEqual(request.voxProfile?.locationPolicy.unavailableBehavior, .ask)
+    }
+
+    func test_missingLocationOutcomeStillRequiresDecisionForAskAndCancel() async throws {
+        for behavior in [CaptureLocationUnavailableBehavior.ask, .cancel] {
+            let root = try temporaryFolder()
+            defer { try? FileManager.default.removeItem(at: root) }
+            let destination = destination(target: .existingNote(relativePath: "Inbox.md"))
+            let request = CaptureRequest(
+                source: .voice,
+                destinationID: destination.id,
+                payloads: [.text("Do not silently send")],
+                voxProfile: CapturePresetProfile(
+                    id: "location", name: "Location", symbolName: "location",
+                    locationPolicy: CapturePresetLocationPolicy(isEnabled: true, unavailableBehavior: behavior)
+                )
+            )
+
+            do {
+                _ = try await CapturePipeline().capture(request, destination: destination, rootURL: root)
+                XCTFail("Missing location without consent must remain blocked for \(behavior)")
+            } catch let error as CapturePipelineError {
+                XCTAssertEqual(error, .locationDecisionRequired(nil))
+            }
+            XCTAssertFalse(FileManager.default.fileExists(atPath: root.appendingPathComponent("Inbox.md").path))
+        }
+    }
+
     func test_documentScopedLocationAppendsFrontmatterCollectionThroughPipeline() async throws {
         let root = try temporaryFolder()
         defer { try? FileManager.default.removeItem(at: root) }

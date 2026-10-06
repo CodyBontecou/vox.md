@@ -30,7 +30,9 @@ struct QuickCaptureCanvas: View {
                     watchStatus
                     GeistDivider()
                 }
-                composer.layoutPriority(1)
+                // A wrapped status row can reduce the editor's height at
+                // accessibility sizes; keep its placeholder inside that slot.
+                composer.layoutPriority(1).clipped()
                 if showsAttachments {
                     attachments
                 }

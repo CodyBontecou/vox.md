@@ -194,7 +194,7 @@ struct QuickCaptureView: View {
                 showsDestination: viewModel.needsDirectorySetup && !isLocalizationScreenshot,
                 showsWatchStatus: watchRecordingPipeline.hasVisibleItems,
                 showsAttachments: !viewModel.draft.additionalPayloads.isEmpty,
-                ocrProgress: captureOCRProgressBanner,
+                ocrProgress: captureTopStatusContent,
                 destination: emptyDestinationBanner,
                 watchStatus: watchRecordingStatusCard,
                 composer: composer,
@@ -226,6 +226,52 @@ struct QuickCaptureView: View {
             }
             .toolbarBackground(Geist.Palette.background100, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
+        }
+    }
+
+    private var captureTopStatusContent: CaptureViewSection {
+        CaptureViewSection {
+            VStack(spacing: 0) {
+                captureOCRProgressBanner
+                if viewModel.inboxLocationDecision != nil {
+                    inboxLocationDecisionBanner
+                    GeistDivider()
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var inboxLocationDecisionBanner: CaptureViewSection {
+        CaptureViewSection {
+            Button {
+                dismissComposer()
+                viewModel.presentInboxLocationDecision()
+            } label: {
+                HStack(spacing: Geist.Spacing.three) {
+                    Image(systemName: "mappin.and.ellipse")
+                        .font(.system(size: 17))
+                        .accessibilityHidden(true)
+                    Text(inboxLocationDecisionTitle)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(Geist.muted)
+                        .accessibilityHidden(true)
+                }
+                .font(Geist.body())
+                .foregroundStyle(Geist.text)
+                .padding(.horizontal, Geist.Spacing.three)
+                .padding(.vertical, Geist.Spacing.two)
+                .frame(minHeight: 44)
+                .background(Geist.Palette.background200)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint("Review this saved capture. Nothing is sent until you choose.")
+            .accessibilityIdentifier("capture_inbox_location_review")
         }
     }
 
@@ -495,23 +541,26 @@ struct QuickCaptureView: View {
                 }
                 .confirmationDialog(
                     inboxLocationDecisionTitle,
-                    isPresented: Binding(
-                        get: { viewModel.inboxLocationDecision != nil },
-                        set: { _ in }
-                    ),
-                    titleVisibility: .visible
-                ) {
+                    isPresented: $viewModel.isInboxLocationDecisionPresented,
+                    titleVisibility: .visible,
+                    presenting: viewModel.inboxLocationDecision
+                ) { decision in
+                    // Popovers hide role: .cancel. Keep the safe exit visible
+                    // first, including when accessibility-size actions scroll.
+                    Button("Not Now") {
+                        viewModel.isInboxLocationDecisionPresented = false
+                    }
                     Button("Send Without Location") {
-                        Task { await viewModel.sendInboxRequestWithoutLocation() }
+                        Task { await viewModel.sendInboxRequestWithoutLocation(expectedRequestID: decision.requestID) }
                     }
                     Button("Always Send Without Location for This Preset") {
-                        Task { await viewModel.sendInboxRequestWithoutLocation(alwaysForPreset: true) }
+                        Task { await viewModel.sendInboxRequestWithoutLocation(alwaysForPreset: true, expectedRequestID: decision.requestID) }
                     }
                     Button("Cancel and Discard Capture", role: .destructive) {
-                        Task { await viewModel.discardInboxLocationRequest() }
+                        Task { await viewModel.discardInboxLocationRequest(expectedRequestID: decision.requestID) }
                     }
-                } message: {
-                    Text(inboxLocationDecisionMessage)
+                } message: { _ in
+                    Text("This capture is saved. Choose how to handle its missing location, or decide later.")
                 }
         }
     }
@@ -1864,14 +1913,6 @@ struct QuickCaptureView: View {
         }
         let preset = decision.presetName ?? String(localized: "Unknown Preset")
         return String(localized: "Location Needed for \(preset)")
-    }
-
-    private var inboxLocationDecisionMessage: String {
-        guard let decision = viewModel.inboxLocationDecision else { return "" }
-        let preset = decision.presetName ?? String(localized: "Unknown Preset")
-        return String(localized: "Send Capture Without Location?")
-            + " " + preset + ". "
-            + String(localized: "Location is unavailable. Open Vox.md to send this exact Capture without location or discard it.")
     }
 
     private var routeLabel: String {

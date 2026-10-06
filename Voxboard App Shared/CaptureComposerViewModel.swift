@@ -51,6 +51,15 @@ final class QuickCaptureViewModel {
     /// handle this origin-time unavailable result.
     var locationDecision: CaptureLocationDecision?
     var inboxLocationDecision: CaptureInboxLocationDecision?
+    /// Discovering durable work is not an invitation to interrupt navigation.
+    /// iOS presents its choices only after the user taps the saved-capture row.
+    var isInboxLocationDecisionPresented = false
+    private var isDrainingInbox = false
+
+    func presentInboxLocationDecision() {
+        guard inboxLocationDecision != nil else { return }
+        isInboxLocationDecisionPresented = true
+    }
 
     private let captureRootURL: URL?
     private let defaults: UserDefaults?
@@ -1896,7 +1905,9 @@ final class QuickCaptureViewModel {
     }
 
     func processPendingInbox() async {
-        guard let captureRootURL else { return }
+        guard let captureRootURL, !isDrainingInbox else { return }
+        isDrainingInbox = true
+        defer { isDrainingInbox = false }
         let inbox = CaptureInbox(rootDirectoryURL: captureRootURL)
         let result = await CaptureInboxDeliveryService.drain(
             captureRootURL: captureRootURL,
@@ -1907,14 +1918,30 @@ final class QuickCaptureViewModel {
         if !result.quotaBlockedRequestIDs.isEmpty {
             needsCaptureUnlock = true
         }
-        if let decision = result.decisionsRequired.first {
-            inboxLocationDecision = CaptureInboxLocationDecision(
-                requestID: decision.requestID,
-                reason: decision.reason,
-                source: decision.source,
-                presetID: decision.presetID,
-                presetName: decision.presetName
-            )
+        // Keep an explicitly reviewed request pinned through refreshes. Never
+        // silently replace the capture under Send/Discard with a different one.
+        let currentID = inboxLocationDecision?.requestID
+        let currentState = if let currentID {
+            try? await inbox.state(of: currentID)
+        } else {
+            Optional<CaptureInboxState>.none
+        }
+        if !isInboxLocationDecisionPresented || (currentState != .pending && currentState != .processing) {
+            let decision = result.decisionsRequired.first { $0.requestID == currentID }
+                ?? result.decisionsRequired.first
+            if let decision {
+                inboxLocationDecision = CaptureInboxLocationDecision(
+                    requestID: decision.requestID,
+                    reason: decision.reason,
+                    source: decision.source,
+                    presetID: decision.presetID,
+                    presetName: decision.presetName
+                )
+            } else if currentState != .pending && currentState != .processing {
+                inboxLocationDecision = nil
+            }
+            // A refresh may discover more work, but only Review opens choices.
+            isInboxLocationDecisionPresented = false
         }
         failedInboxCount = (try? await inbox.requestIDs(in: .failed).count) ?? failedInboxCount
         if let detail = result.latestFailureDescription ?? result.setupError {
@@ -1922,8 +1949,9 @@ final class QuickCaptureViewModel {
         }
     }
 
-    func sendInboxRequestWithoutLocation(alwaysForPreset: Bool = false) async {
+    func sendInboxRequestWithoutLocation(alwaysForPreset: Bool = false, expectedRequestID: UUID? = nil) async {
         guard let decision = inboxLocationDecision,
+              expectedRequestID == nil || expectedRequestID == decision.requestID,
               let captureRootURL else { return }
         let inbox = CaptureInbox(rootDirectoryURL: captureRootURL)
         do {
@@ -1939,6 +1967,7 @@ final class QuickCaptureViewModel {
                 refreshVoxProfiles()
             }
             inboxLocationDecision = nil
+            isInboxLocationDecisionPresented = false
             try await processInboxRequest(id: decision.requestID)
             NotificationCenter.default.post(
                 name: .captureInboxDecisionResolved,
@@ -1952,8 +1981,9 @@ final class QuickCaptureViewModel {
         }
     }
 
-    func discardInboxLocationRequest() async {
+    func discardInboxLocationRequest(expectedRequestID: UUID? = nil) async {
         guard let decision = inboxLocationDecision,
+              expectedRequestID == nil || expectedRequestID == decision.requestID,
               let captureRootURL else { return }
         do {
             let inbox = CaptureInbox(rootDirectoryURL: captureRootURL)
@@ -1961,6 +1991,7 @@ final class QuickCaptureViewModel {
                 throw QuickCaptureViewModelError.inboxRequestUnavailable
             }
             inboxLocationDecision = nil
+            isInboxLocationDecisionPresented = false
             NotificationCenter.default.post(
                 name: .captureInboxDecisionResolved,
                 object: decision.requestID,
