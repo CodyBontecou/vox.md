@@ -89,6 +89,15 @@ struct URLDeliveryRecoveryView: View {
                         Text("Cancel Send").frame(minWidth: 44, minHeight: 44)
                     }
                         .accessibilityIdentifier("url_delivery_cancel_\(receipt.id)")
+                } else if receipt.outcome == .delivered {
+                    Button {
+                        if let id { Task { await coordinator.cleanup(id: id) } }
+                    } label: {
+                        Text("Clean Up").frame(minWidth: 44, minHeight: 44)
+                    }
+                    .disabled(id == nil)
+                    .accessibilityHint("Removes only the local payload. Does not send this capture again.")
+                    .accessibilityIdentifier("url_delivery_cleanup_\(receipt.id)")
                 } else if receipt.outcome != .discarded {
                     Button {
                         if receipt.attempt == 0 && receipt.outcome == .pending, let id {
@@ -103,12 +112,14 @@ struct URLDeliveryRecoveryView: View {
                     .disabled(id == nil)
                     .accessibilityIdentifier("url_delivery_retry_\(receipt.id)")
                 }
-                Button(role: .destructive) {
-                    discardReceipt = receipt
-                    showDiscardConfirmation = true
-                } label: { Text("Discard").frame(minWidth: 44, minHeight: 44) }
-                .disabled(active || id == nil)
-                .accessibilityIdentifier("url_delivery_discard_\(receipt.id)")
+                if receipt.outcome != .delivered {
+                    Button(role: .destructive) {
+                        discardReceipt = receipt
+                        showDiscardConfirmation = true
+                    } label: { Text("Discard").frame(minWidth: 44, minHeight: 44) }
+                    .disabled(active || id == nil)
+                    .accessibilityIdentifier("url_delivery_discard_\(receipt.id)")
+                }
             }
             .buttonStyle(.borderless)
             .frame(minHeight: 44)
@@ -130,7 +141,7 @@ struct URLDeliveryRecoveryView: View {
         case .permanent: return String(localized: "Endpoint Rejected Delivery")
         case .unknownOutcome, .pending: return String(localized: "Outcome Unknown")
         case .discarded: return String(localized: "Cleanup Required")
-        case .delivered: return String(localized: "Delivered")
+        case .delivered: return String(localized: "Delivered · Cleanup Required")
         }
     }
 
@@ -148,7 +159,7 @@ struct URLDeliveryRecoveryView: View {
         case .discarded:
             return String(localized: "Sending is disabled for this identity. Choose Discard again to finish removing its local payload.")
         case .delivered:
-            return String(localized: "No further HTTP attempt is needed.")
+            return String(localized: "The endpoint accepted this capture, but its local payload remains. Clean Up removes that saved content without sending again.")
         }
     }
 }

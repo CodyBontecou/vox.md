@@ -28,6 +28,10 @@ Watch audio remains retained if an HTTP preset cannot produce a transcript.
 The Share extension remains directory-only: an HTTP preset cannot enqueue to its
 remembered directory there. Its UI directs HTTP users to Capture in Vox.md,
 while keeping shared items available for choosing a Directory preset.
+Capture Text, Link and File Shortcuts are also Directory-only. They reject HTTP
+presets before directory resolution or file staging, including legacy directory
+overrides, and explain how to use Open Quick Capture and explicit Send instead.
+Direct HTTP execution from those Shortcuts is not implemented in this pass.
 
 Vox.md ships no endpoint and performs no HTTP startup drain. Draft recording
 completion never enters URL delivery. Explicit composer Send freezes the exact
@@ -78,9 +82,15 @@ in its HTTP-only branch, without resolving or writing a directory. Preparation
 failure preserves the draft/recording job for recovery rather than completing
 and losing the HTTP intent. The HTTP branch uses a distinct submission receipt;
 it never invents a note URL. A durable accepted handoff counts against the same
-Capture allowance once; HTTP-only retries retain that identity. HTTP status is
-tracked in URL Deliveries rather than reported as a successfully delivered note
-in file history.
+Capture allowance once; HTTP-only retries retain that identity. If accounting
+fails after enqueue, an unchanged Send can complete the existing handoff, but
+changed content cannot clear the draft against the original saved payload.
+Composer handoffs require an exact payload match, including when another actor
+owns the sender. A content-derived fingerprint remains in new receipts to
+verify that match after body removal; legacy retained bodies can supply proof,
+while body-free legacy receipts without a fingerprint fail closed.
+HTTP status is tracked in URL Deliveries rather than reported as a successfully
+delivered note in file history.
 
 Only a successful durable enqueue is dispatched to `URLDeliveryCoordinator`.
 The iOS recorder has no nested detached HTTP task. Composer and recording-job
@@ -101,8 +111,12 @@ Discard attempt.
 An advisory file lock excludes overlapping sends/discards across actor
 instances. Existing failed/ambiguous HTTP work is retained, not automatically
 reset/reposted by a note/audio retry. A verified delivered tombstone suppresses
-another POST; successful delivery removes its separate prepared body. Corrupt
-or unproven legacy state fails closed.
+another POST; successful delivery removes its separate prepared body. A crash
+or removal failure leaves a delivered body visible as **Cleanup Required**.
+**Clean Up** retries only local removal under the same advisory lock, preserves
+the delivered tombstone and never reads credentials or POSTs. It cannot remove
+an undelivered payload; that still requires explicit Discard. Corrupt or
+unproven legacy state fails closed.
 
 ## HTTP-only recovery
 

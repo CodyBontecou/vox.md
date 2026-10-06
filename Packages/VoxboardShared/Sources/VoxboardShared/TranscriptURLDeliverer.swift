@@ -46,6 +46,9 @@ public struct URLDeliveryReceipt: Codable, Equatable, Sendable, Identifiable {
     public let message: String
     public let date: Date
     public var destinationFingerprint: String? = nil
+    /// Verifies an exact handoff even after the body has been removed. This is
+    /// a digest of the UUID/timestamp-bearing JSON; it stores no body bytes.
+    public var payloadFingerprint: String? = nil
 
     /// Recovery metadata, excluding URL credentials, path, query and fragment.
     /// Malformed and non-HTTP legacy endpoints have no displayable origin.
@@ -94,6 +97,7 @@ public actor TranscriptURLDeliverer {
     private enum DeliveryError: LocalizedError {
         case storage
         case changedDestination
+        case changedPayload
         case legacyReceipt
         case incompletePreparation
         case inProgress
@@ -105,6 +109,8 @@ public actor TranscriptURLDeliverer {
                 "URL delivery could not be saved locally. Check available storage before retrying."
             case .changedDestination:
                 "This delivery belongs to a different endpoint. Its destination cannot change during retry."
+            case .changedPayload:
+                "This capture already has different saved HTTP content. Your edited draft is preserved. Recover the original in URL Deliveries and send these edits as a new capture."
             case .legacyReceipt:
                 "This legacy URL receipt cannot prove its destination or payload. Check the endpoint before resending."
             case .incompletePreparation:
@@ -126,6 +132,7 @@ public actor TranscriptURLDeliverer {
     private let credentialsProvider: CredentialsProvider
     private let logger: Logger
     private let sleeper: Sleeper
+    private let removePayload: @Sendable (URL) throws -> Void
 
     public init(
         session: URLSession? = nil,
@@ -133,7 +140,8 @@ public actor TranscriptURLDeliverer {
         tokenProvider: TokenProvider? = nil,
         credentialsProvider: @escaping CredentialsProvider = { try URLDeliveryKeychain.credentials(forID: $0) },
         logger: @escaping Logger = { KeyboardDebugLog.shared.log("[TranscriptURLDeliverer] \($0)") },
-        sleeper: @escaping Sleeper = { try await Task.sleep(for: .seconds(min(300, max(0, $0)))) }
+        sleeper: @escaping Sleeper = { try await Task.sleep(for: .seconds(min(300, max(0, $0)))) },
+        removePayload: @escaping @Sendable (URL) throws -> Void = { try FileManager.default.removeItem(at: $0) }
     ) {
         if let session {
             self.session = session
@@ -153,6 +161,7 @@ public actor TranscriptURLDeliverer {
         self.credentialsProvider = credentialsProvider
         self.logger = logger
         self.sleeper = sleeper
+        self.removePayload = removePayload
     }
 
     public static var defaultUserAgent: String {
@@ -257,8 +266,20 @@ public actor TranscriptURLDeliverer {
 
     public func outstandingReceipts() -> [URLDeliveryReceipt] {
         receipts().filter {
-            $0.outcome != .delivered && ($0.outcome != .discarded
-                || FileManager.default.fileExists(atPath: requestURL($0.id).path))
+            ($0.outcome != .delivered && $0.outcome != .discarded)
+                || FileManager.default.fileExists(atPath: requestURL($0.id).path)
+        }
+    }
+
+    /// Cleanup only: preserve the delivered anti-replay receipt, never acquire
+    /// credentials or POST. A failure leaves the body visible for another try.
+    public func cleanupDeliveredPayload(id: UUID) throws {
+        let key = id.uuidString.lowercased()
+        let descriptor = try acquireLock(key)
+        defer { close(descriptor) }
+        guard try loadReceipt(key)?.outcome == .delivered else { throw DeliveryError.incompletePreparation }
+        if FileManager.default.fileExists(atPath: requestURL(key).path) {
+            try removePayload(requestURL(key))
         }
     }
 
@@ -308,13 +329,17 @@ public actor TranscriptURLDeliverer {
 
     /// Commits an HTTP-only handoff without accessing credentials or contacting
     /// the endpoint. Hosts await this before completing their local capture.
+    /// Editable composers must require a matching payload before clearing a
+    /// draft; recording retries may retain an earlier immutable handoff.
     public func enqueueCapture(
         id: UUID, text: String, date: Date, settings: CapturePresetURLDeliverySettings,
-        userAgent: String = TranscriptURLDeliverer.defaultUserAgent
+        userAgent: String = TranscriptURLDeliverer.defaultUserAgent,
+        requireMatchingPayload: Bool = false
     ) -> URLDeliveryEvent {
         guard settings.enabled else { return event(nil, 0, .disabled) }
-        return enqueue(body: Self.captureBody(id: id, text: text, date: date),
-                       id: id, transcriptID: nil, settings: settings, userAgent: userAgent)
+        let body = Self.captureBody(id: id, text: text, date: date)
+        return enqueue(body: body, id: id, transcriptID: nil, settings: settings, userAgent: userAgent,
+                       expectedBodyDigest: requireMatchingPayload ? Self.digest(body) : nil)
     }
 
     public func enqueueTranscript(
@@ -352,15 +377,16 @@ public actor TranscriptURLDeliverer {
         origin?.fragment = nil
         let discarded = URLDeliveryReceipt(id: key, urlString: origin?.string ?? "", attempt: previous.attempt,
             outcome: .discarded, statusCode: previous.statusCode, message: "Discarded locally", date: Date(),
-            destinationFingerprint: previous.destinationFingerprint)
+            destinationFingerprint: previous.destinationFingerprint, payloadFingerprint: previous.payloadFingerprint)
         try persist(discarded, to: receiptURL(key))
         if FileManager.default.fileExists(atPath: requestURL(key).path) {
-            try FileManager.default.removeItem(at: requestURL(key))
+            try removePayload(requestURL(key))
         }
     }
 
     private func enqueue(
-        body: Data, id: UUID, transcriptID: UUID?, settings: CapturePresetURLDeliverySettings, userAgent: String
+        body: Data, id: UUID, transcriptID: UUID?, settings: CapturePresetURLDeliverySettings, userAgent: String,
+        expectedBodyDigest: String? = nil
     ) -> URLDeliveryEvent {
         let key = id.uuidString.lowercased()
         do {
@@ -376,12 +402,13 @@ public actor TranscriptURLDeliverer {
             catch DeliveryError.inProgress {
                 // A sender already owns a durable handoff. Do not make a local
                 // sink retry wait for HTTP, mutate its journal, or dispatch it.
-                return try retainedBusyHandoff(key: key, url: url, transcriptID: transcriptID)
+                return try retainedBusyHandoff(key: key, url: url, transcriptID: transcriptID, expectedBodyDigest: expectedBodyDigest)
             }
             defer { close(descriptor) }
             if let previous = try loadReceipt(key) {
                 guard let fingerprint = previous.destinationFingerprint else { throw DeliveryError.legacyReceipt }
                 guard fingerprint == Self.digest(Data(url.absoluteString.utf8)) else { throw DeliveryError.changedDestination }
+                try requireMatchingPayload(expectedBodyDigest, receipt: previous)
                 if previous.outcome == .delivered {
                     return event(transcriptID, previous.attempt, .delivered(statusCode: previous.statusCode ?? 200))
                 }
@@ -396,23 +423,41 @@ public actor TranscriptURLDeliverer {
             if FileManager.default.fileExists(atPath: requestURL(key).path) {
                 prepared = try loadPrepared(key)
                 guard prepared.url == url else { throw DeliveryError.changedDestination }
+                if let expectedBodyDigest, prepared.bodyDigest != expectedBodyDigest { throw DeliveryError.changedPayload }
             } else {
                 prepared = PreparedDelivery(id: key, transcriptID: transcriptID, body: body,
                     bodyDigest: Self.digest(body), url: url, settings: settings, userAgent: userAgent)
             }
             try persist(prepared, to: requestURL(key))
-            try record(id: key, url: url, attempt: 0, outcome: .pending, message: "Saved locally; awaiting URL delivery")
+            try record(id: key, url: url, attempt: 0, outcome: .pending, message: "Saved locally; awaiting URL delivery",
+                       payloadFingerprint: prepared.bodyDigest)
             return event(transcriptID, 0, .queued)
         } catch {
             return failure(transcriptID, 0, message: Task.isCancelled ? DeliveryError.canceled.localizedDescription : validationMessage(error))
         }
     }
 
-    private func retainedBusyHandoff(key: String, url: URL, transcriptID: UUID?) throws -> URLDeliveryEvent {
+    private func requireMatchingPayload(_ expectedDigest: String?, receipt: URLDeliveryReceipt) throws {
+        guard let expectedDigest else { return }
+        // Legacy pending records can prove their payload from the retained body.
+        // A body-free legacy tombstone cannot prove an edited draft was accepted.
+        let actualDigest: String
+        if let fingerprint = receipt.payloadFingerprint {
+            actualDigest = fingerprint
+        } else {
+            actualDigest = try loadPrepared(receipt.id).bodyDigest
+        }
+        guard actualDigest == expectedDigest else { throw DeliveryError.changedPayload }
+    }
+
+    private func retainedBusyHandoff(
+        key: String, url: URL, transcriptID: UUID?, expectedBodyDigest: String?
+    ) throws -> URLDeliveryEvent {
         func checkedReceipt() throws -> URLDeliveryReceipt {
             guard let receipt = try loadReceipt(key), receipt.id == key else { throw DeliveryError.incompletePreparation }
             guard let fingerprint = receipt.destinationFingerprint else { throw DeliveryError.legacyReceipt }
             guard fingerprint == Self.digest(Data(url.absoluteString.utf8)) else { throw DeliveryError.changedDestination }
+            try requireMatchingPayload(expectedBodyDigest, receipt: receipt)
             return receipt
         }
         let receipt = try checkedReceipt()
@@ -493,7 +538,8 @@ public actor TranscriptURLDeliverer {
             }
             let request = try makeRequest(prepared)
             try persist(prepared, to: requestURL(idempotencyKey))
-            try record(id: idempotencyKey, url: url, attempt: 0, outcome: .pending, message: "Awaiting URL delivery")
+            try record(id: idempotencyKey, url: url, attempt: 0, outcome: .pending, message: "Awaiting URL delivery",
+                       payloadFingerprint: prepared.bodyDigest)
 
             let maxAttempts = min(5, max(1, prepared.settings.maxAttempts))
             logger("begin id=\(idempotencyKey) bytes=\(prepared.body.count)")
@@ -538,7 +584,9 @@ public actor TranscriptURLDeliverer {
                 if (200..<300).contains(status) {
                     try record(id: idempotencyKey, url: url, attempt: attempt, outcome: .delivered,
                                statusCode: status, message: "Delivered")
-                    try? FileManager.default.removeItem(at: requestURL(idempotencyKey))
+                    // Remote delivery succeeded even if local cleanup fails.
+                    // Recovery exposes the retained body as cleanup-only work.
+                    try? removePayload(requestURL(idempotencyKey))
                     logger("delivered id=\(idempotencyKey) status=\(status) attempt=\(attempt)")
                     return event(transcriptID, attempt, .delivered(statusCode: status))
                 }
@@ -666,14 +714,15 @@ public actor TranscriptURLDeliverer {
     }
 
     private func record(id: String, url: URL, attempt: Int, outcome: URLDeliveryReceipt.Outcome,
-                        statusCode: Int? = nil, message: String) throws {
+                        statusCode: Int? = nil, message: String, payloadFingerprint: String? = nil) throws {
         var origin = URLComponents()
         origin.scheme = url.scheme
         origin.host = url.host
         origin.port = url.port
         let receipt = URLDeliveryReceipt(id: id, urlString: origin.string ?? "", attempt: attempt, outcome: outcome,
                                          statusCode: statusCode, message: message, date: Date(),
-                                         destinationFingerprint: Self.digest(Data(url.absoluteString.utf8)))
+                                         destinationFingerprint: Self.digest(Data(url.absoluteString.utf8)),
+                                         payloadFingerprint: try payloadFingerprint ?? loadReceipt(id)?.payloadFingerprint)
         try persist(receipt, to: receiptURL(id))
     }
 

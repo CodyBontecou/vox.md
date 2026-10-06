@@ -65,6 +65,49 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         XCTAssertTrue(fixture.model.historyRecords.isEmpty)
     }
 
+    func testEditedDraftSurvivesFailureAfterHTTPHandoff() async throws {
+        let accounting = ComposerHTTPAccounting(failsFirstCommit: true)
+        let fixture = try await makeFixture(refuseLease: true, accounting: accounting)
+        fixture.model.draft.text = "Original synthetic capture"
+        let requestID = fixture.model.draft.requestID
+        await fixture.model.submit()
+        XCTAssertNotNil(fixture.model.errorMessage)
+        XCTAssertEqual(fixture.model.draft.text, "Original synthetic capture")
+        await fixture.owner.refresh()
+        XCTAssertEqual(fixture.owner.receipts.first?.id, requestID.uuidString.lowercased())
+
+        fixture.model.draft.text = "Edited synthetic capture"
+        await fixture.model.saveDraftNow()
+        await fixture.model.submit()
+        XCTAssertEqual(fixture.model.draft.text, "Edited synthetic capture")
+        XCTAssertEqual(fixture.model.draft.requestID, requestID)
+        XCTAssertNil(fixture.model.lastReceipt)
+        XCTAssertNotNil(fixture.model.errorMessage)
+        XCTAssertEqual(ComposerHTTPProtocol.requestCount, 0)
+        let saved = try await CaptureDraftStore(rootDirectoryURL: fixture.root).load(id: fixture.model.draft.id)
+        XCTAssertEqual(saved?.text, "Edited synthetic capture")
+        let counts = await accounting.counts()
+        XCTAssertEqual(counts.committed, 0)
+    }
+
+    func testUnchangedDraftCanCompleteAfterHTTPAccountingFailure() async throws {
+        let accounting = ComposerHTTPAccounting(failsFirstCommit: true)
+        let fixture = try await makeFixture(refuseLease: true, accounting: accounting)
+        fixture.model.draft.text = "Unchanged synthetic capture"
+        let requestID = fixture.model.draft.requestID
+        await fixture.model.submit()
+        XCTAssertNotNil(fixture.model.errorMessage)
+        await fixture.model.submit()
+        XCTAssertNil(fixture.model.errorMessage)
+        XCTAssertEqual(fixture.model.draft.text, "")
+        XCTAssertEqual(fixture.model.lastReceipt?.requestID, requestID)
+        await fixture.owner.refresh()
+        XCTAssertEqual(fixture.owner.receipts.count, 1)
+        XCTAssertEqual(ComposerHTTPProtocol.requestCount, 0)
+        let counts = await accounting.counts()
+        XCTAssertEqual(counts.committed, 1)
+    }
+
     func testMissingHTTPURLRecoveryUsesExplicitDraftPresetNotDefault() async throws {
         let fixture = try await makeFixture()
         var selected = fixture.preset
@@ -300,13 +343,23 @@ private actor ComposerHTTPAccounting: CaptureDeliveryAccounting {
     private var reserved = 0
     private var committed = 0
     private var released = 0
-    init(refusesQuota: Bool = false) { self.refusesQuota = refusesQuota }
+    private var failsFirstCommit: Bool
+    init(refusesQuota: Bool = false, failsFirstCommit: Bool = false) {
+        self.refusesQuota = refusesQuota
+        self.failsFirstCommit = failsFirstCommit
+    }
     func reserve(for request: CaptureRequest) async throws -> CaptureDeliveryReservation {
         if refusesQuota { throw CaptureDeliveryQuotaError.limitReached(limit: 10) }
         reserved += 1
         return .reserved(requestID: request.id, token: UUID())
     }
-    func commit(_ reservation: CaptureDeliveryReservation) async throws { committed += 1 }
+    func commit(_ reservation: CaptureDeliveryReservation) async throws {
+        if failsFirstCommit {
+            failsFirstCommit = false
+            throw CaptureDeliveryUsageStoreError.storageUnavailable
+        }
+        committed += 1
+    }
     func release(_ reservation: CaptureDeliveryReservation) async { released += 1 }
     func counts() -> (reserved: Int, committed: Int, released: Int) { (reserved, committed, released) }
 }

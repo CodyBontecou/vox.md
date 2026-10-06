@@ -2140,7 +2140,8 @@ final class QuickCaptureViewModel {
         do {
             try Task.checkCancellation()
             let event = await urlDeliveryCoordinator.enqueueCapture(
-                id: request.id, text: request.urlDeliveryText, date: request.createdAt, settings: settings
+                id: request.id, text: request.urlDeliveryText, date: request.createdAt, settings: settings,
+                requireMatchingPayload: true
             )
             if case .failed(let message, _) = event.result {
                 throw QuickCaptureViewModelError.urlDeliveryHandoffFailed(message)

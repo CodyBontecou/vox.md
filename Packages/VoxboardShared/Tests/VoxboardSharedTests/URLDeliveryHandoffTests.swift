@@ -57,6 +57,67 @@ final class URLDeliveryHandoffTests: XCTestCase {
         XCTAssertEqual(StubURLProtocol.capturedRequests.count, 1)
     }
 
+    func testComposerHandoffRejectsChangedContentWithoutReplacingFrozenBody() async throws {
+        let sender = makeSender()
+        let id = UUID()
+        let date = Date(timeIntervalSince1970: 1)
+        _ = await sender.enqueueCapture(id: id, text: "Original", date: date, settings: settings(), requireMatchingPayload: true)
+        let changed = await sender.enqueueCapture(id: id, text: "Changed", date: date, settings: settings(), requireMatchingPayload: true)
+        guard case .failed = changed.result else { return XCTFail("Changed drafts cannot complete against an older handoff") }
+        _ = await sender.sendQueuedDelivery(id: id)
+        let body = try XCTUnwrap(StubURLProtocol.capturedRequests.first?.body)
+        let object = try XCTUnwrap(JSONSerialization.jsonObject(with: body) as? [String: Any])
+        XCTAssertEqual(object["text"] as? String, "Original")
+        XCTAssertEqual(StubURLProtocol.capturedRequests.count, 1)
+    }
+
+    func testComposerHandoffVerifiesContentAfterDeliveredBodyIsRemoved() async {
+        let sender = makeSender()
+        let id = UUID()
+        let date = Date(timeIntervalSince1970: 1)
+        _ = await sender.enqueueCapture(id: id, text: "Original", date: date, settings: settings(), requireMatchingPayload: true)
+        _ = await sender.sendQueuedDelivery(id: id)
+        let restarted = makeSender()
+        let unchanged = await restarted.enqueueCapture(id: id, text: "Original", date: date, settings: settings(), requireMatchingPayload: true)
+        XCTAssertEqual(unchanged.result, .delivered(statusCode: 200))
+        let changed = await restarted.enqueueCapture(id: id, text: "Changed", date: date, settings: settings(), requireMatchingPayload: true)
+        guard case .failed = changed.result else { return XCTFail("A delivered tombstone must not acknowledge unseen edits") }
+        XCTAssertFalse(FileManager.default.fileExists(atPath: requestURL(id).path))
+        XCTAssertTrue(StubURLProtocol.capturedRequests.isEmpty)
+    }
+
+    func testComposerHandoffUsesLegacyPendingBodyWhenFingerprintIsMissing() async throws {
+        let sender = makeSender()
+        let id = UUID()
+        let date = Date(timeIntervalSince1970: 1)
+        _ = await sender.enqueueCapture(id: id, text: "Original", date: date, settings: settings())
+        let receiptURL = directory.appendingPathComponent("\(id.uuidString.lowercased()).json")
+        var legacy = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: receiptURL)) as? [String: Any])
+        legacy.removeValue(forKey: "payloadFingerprint")
+        try JSONSerialization.data(withJSONObject: legacy).write(to: receiptURL, options: .atomic)
+        let matching = await sender.enqueueCapture(id: id, text: "Original", date: date, settings: settings(), requireMatchingPayload: true)
+        XCTAssertEqual(matching.result, .queued)
+        let changed = await sender.enqueueCapture(id: id, text: "Changed", date: date, settings: settings(), requireMatchingPayload: true)
+        guard case .failed = changed.result else { return XCTFail("Legacy records also reject changed content") }
+        XCTAssertTrue(StubURLProtocol.capturedRequests.isEmpty)
+    }
+
+    func testLegacyDeliveredTombstoneCannotAcknowledgeAnUnprovenComposerBody() async throws {
+        let sender = makeSender()
+        let id = UUID()
+        let date = Date(timeIntervalSince1970: 1)
+        _ = await sender.enqueueCapture(id: id, text: "Original", date: date, settings: settings())
+        _ = await sender.sendQueuedDelivery(id: id)
+        let receiptURL = directory.appendingPathComponent("\(id.uuidString.lowercased()).json")
+        var legacy = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: receiptURL)) as? [String: Any])
+        legacy.removeValue(forKey: "payloadFingerprint")
+        try JSONSerialization.data(withJSONObject: legacy).write(to: receiptURL, options: .atomic)
+        let replay = await sender.enqueueCapture(id: id, text: "Original", date: date, settings: settings(), requireMatchingPayload: true)
+        guard case .failed = replay.result else { return XCTFail("A body-free legacy receipt cannot prove the composer's content") }
+        XCTAssertEqual(StubURLProtocol.capturedRequests.count, 1)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: requestURL(id).path))
+    }
+
     func testQueuedDispatcherCannotAutomaticallyReplayAnAttemptedFailure() async {
         let sender = makeSender(responses: [.init(statusCode: 503), .init(statusCode: 200)])
         let id = UUID()
@@ -102,6 +163,12 @@ final class URLDeliveryHandoffTests: XCTestCase {
         let restarted = TranscriptURLDeliverer(receiptsDirectoryURL: directory, logger: { _ in })
         let retained = await restarted.enqueueCapture(id: id, text: "Local sink retry", date: Date(), settings: configured)
         XCTAssertEqual(retained.result, .retained, "A network lock must not block an already-durable local-sink retry")
+        let changedDraft = await restarted.enqueueCapture(id: id, text: "Changed draft", date: Date(), settings: configured, requireMatchingPayload: true)
+        guard case .failed = changedDraft.result else {
+            sending.cancel()
+            _ = await sending.value
+            return XCTFail("Active HTTP must not acknowledge different composer content")
+        }
         var wrongEndpoint = configured
         wrongEndpoint.urlString = "https://other.example.invalid/ingest"
         let rejected = await restarted.enqueueCapture(id: id, text: "Synthetic", date: Date(), settings: wrongEndpoint)

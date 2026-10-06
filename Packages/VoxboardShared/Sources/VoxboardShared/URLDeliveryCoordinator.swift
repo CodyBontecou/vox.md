@@ -37,9 +37,11 @@ public final class URLDeliveryCoordinator {
     public func refresh() async { receipts = await deliverer.outstandingReceipts() }
 
     public func enqueueCapture(
-        id: UUID, text: String, date: Date, settings: CapturePresetURLDeliverySettings
+        id: UUID, text: String, date: Date, settings: CapturePresetURLDeliverySettings,
+        requireMatchingPayload: Bool = false
     ) async -> URLDeliveryEvent {
-        let event = await deliverer.enqueueCapture(id: id, text: text, date: date, settings: settings)
+        let event = await deliverer.enqueueCapture(id: id, text: text, date: date, settings: settings,
+                                                  requireMatchingPayload: requireMatchingPayload)
         await refresh()
         return event
     }
@@ -65,6 +67,16 @@ public final class URLDeliveryCoordinator {
         let task = tasks[id]
         task?.cancel()
         await task?.value
+        await refresh()
+    }
+
+    public func cleanup(id: UUID) async {
+        do {
+            try await deliverer.cleanupDeliveredPayload(id: id)
+            lastError = nil
+        } catch {
+            lastError = "The delivered HTTP payload could not be removed locally. Try Clean Up again. Nothing was sent."
+        }
         await refresh()
     }
 

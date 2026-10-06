@@ -326,12 +326,15 @@ enum CaptureIntentSupport {
         }
     }
 
-    static func loadLibrary() async throws -> CaptureLibraryEnvelope {
-        guard let url = AppConstants.captureLibraryURL else {
+    static func loadLibrary(
+        captureRootURL: URL? = AppConstants.captureDirectoryURL,
+        defaults: UserDefaults? = AppConstants.sharedDefaults
+    ) async throws -> CaptureLibraryEnvelope {
+        guard let url = captureRootURL?.appendingPathComponent(AppConstants.captureLibraryFilename) else {
             throw CaptureIntentError.storageUnavailable
         }
         return try await CapturePresetRouteLibrary.load(
-            from: CaptureLibraryStore(fileURL: url)
+            from: CaptureLibraryStore(fileURL: url), defaults: defaults
         )
     }
 
@@ -340,19 +343,24 @@ enum CaptureIntentSupport {
         payloads: [CapturePayload],
         presetEntity: CaptureVoxEntity?,
         legacyDestinationEntity: CaptureDestinationEntity? = nil,
-        requestID: UUID = UUID()
+        requestID: UUID = UUID(),
+        captureRootURL: URL? = AppConstants.captureDirectoryURL,
+        defaults: UserDefaults? = AppConstants.sharedDefaults
     ) async throws {
-        guard let root = AppConstants.captureDirectoryURL else {
+        try requireDirectoryTarget(for: presetEntity, defaults: defaults)
+        guard let root = captureRootURL else {
             throw CaptureIntentError.storageUnavailable
         }
-        let library = try await loadLibrary()
+        let library = try await loadLibrary(captureRootURL: root, defaults: defaults)
+        try requireDirectoryTarget(for: presetEntity, defaults: defaults)
         // Loading can publish the one-time ownership migration, so resolve the
         // profile afterward rather than routing with a stale legacy snapshot.
-        let profile = resolvedProfile(for: presetEntity)
+        let profile = resolvedProfile(for: presetEntity, defaults: defaults)
         let selectedID = try selectedDestinationID(
             for: profile,
             legacyDestinationEntity: legacyDestinationEntity,
-            library: library
+            library: library,
+            defaults: defaults
         )
         let processingState = profile?.processingState(for: payloads) ?? .notRequested
         let locationOutcome: CaptureLocationOutcome?
@@ -398,9 +406,12 @@ enum CaptureIntentSupport {
     static func enqueue(
         file: IntentFile,
         presetEntity: CaptureVoxEntity?,
-        legacyDestinationEntity: CaptureDestinationEntity? = nil
+        legacyDestinationEntity: CaptureDestinationEntity? = nil,
+        captureRootURL: URL? = AppConstants.captureDirectoryURL,
+        defaults: UserDefaults? = AppConstants.sharedDefaults
     ) async throws {
-        guard let root = AppConstants.captureDirectoryURL else {
+        try requireDirectoryTarget(for: presetEntity, defaults: defaults)
+        guard let root = captureRootURL else {
             throw CaptureIntentError.storageUnavailable
         }
         let requestID = UUID()
@@ -431,7 +442,9 @@ enum CaptureIntentSupport {
                 payloads: [payload],
                 presetEntity: presetEntity,
                 legacyDestinationEntity: legacyDestinationEntity,
-                requestID: requestID
+                requestID: requestID,
+                captureRootURL: root,
+                defaults: defaults
             )
         } catch {
             if case CaptureIntentError.locationDecisionRequiresApp = error {
@@ -443,13 +456,23 @@ enum CaptureIntentSupport {
         }
     }
 
+    /// These intents own Directory inbox work only. HTTP execution must remain
+    /// an explicit Capture Send with its durable journal and host task owner.
+    private static func requireDirectoryTarget(for entity: CaptureVoxEntity?, defaults: UserDefaults?) throws {
+        let id = entity?.id ?? CapturePresetProfileStore.selectedProfileID(defaults: defaults)
+        guard CapturePresetStore.flow(id: id, defaults: defaults)?.deliveryTarget != .http else {
+            throw CaptureIntentError.httpRequiresComposer
+        }
+    }
+
     private static func selectedDestinationID(
         for profile: CapturePresetProfile?,
         legacyDestinationEntity: CaptureDestinationEntity?,
-        library: CaptureLibraryEnvelope
+        library: CaptureLibraryEnvelope,
+        defaults: UserDefaults?
     ) throws -> UUID {
         let hasOwnedRoutes = CapturePresetProfileStore.hasOwnedRouteMigration(
-            defaults: AppConstants.sharedDefaults
+            defaults: defaults
         )
         var routeProfile = profile
         if !hasOwnedRoutes,
@@ -475,12 +498,14 @@ enum CaptureIntentSupport {
         return selectedID
     }
 
-    private static func resolvedProfile(for entity: CaptureVoxEntity?) -> CapturePresetProfile? {
+    private static func resolvedProfile(
+        for entity: CaptureVoxEntity?, defaults: UserDefaults? = AppConstants.sharedDefaults
+    ) -> CapturePresetProfile? {
         let requestedID = entity?.id
-            ?? CapturePresetProfileStore.selectedProfileID(defaults: AppConstants.sharedDefaults)
+            ?? CapturePresetProfileStore.selectedProfileID(defaults: defaults)
         return CapturePresetProfileStore.profile(
             id: requestedID,
-            defaults: AppConstants.sharedDefaults
+            defaults: defaults
         )
     }
 }
@@ -489,6 +514,7 @@ enum CaptureIntentSupport {
 enum CaptureIntentError: Error, LocalizedError {
     case storageUnavailable
     case destinationRequired
+    case httpRequiresComposer
     case invalidURL
     case textTooLarge
     case locationDecisionRequiresApp
@@ -500,6 +526,8 @@ enum CaptureIntentError: Error, LocalizedError {
             return String(localized: "Vox.md shared capture storage is unavailable.")
         case .destinationRequired:
             return String(localized: "Configure a destination for a Capture Preset in Vox.md before running this shortcut.")
+        case .httpRequiresComposer:
+            return String(localized: "This shortcut supports Directory presets only. Use Open Quick Capture and Send in Vox.md for an HTTP preset, or choose a Directory preset.")
         case .invalidURL:
             return String(localized: "Only HTTP and HTTPS links can be captured.")
         case .textTooLarge:
