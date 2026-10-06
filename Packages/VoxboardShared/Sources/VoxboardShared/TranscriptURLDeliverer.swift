@@ -101,6 +101,7 @@ public actor TranscriptURLDeliverer {
         case legacyReceipt
         case incompletePreparation
         case inProgress
+        case discarded
         case canceled
 
         var errorDescription: String? {
@@ -117,6 +118,8 @@ public actor TranscriptURLDeliverer {
                 "The pending URL delivery is incomplete or corrupt. No request was made."
             case .inProgress:
                 "This URL delivery is already in progress."
+            case .discarded:
+                "This HTTP delivery was discarded. Your draft is preserved. Send it as a new capture."
             case .canceled:
                 "URL delivery was canceled. Its prepared payload is retained for an explicit retry."
             }
@@ -252,9 +255,43 @@ public actor TranscriptURLDeliverer {
         guard let urls = try? FileManager.default.contentsOfDirectory(at: receiptsDirectoryURL, includingPropertiesForKeys: nil) else {
             return []
         }
-        return urls.filter { $0.pathExtension == "json" && !$0.lastPathComponent.hasSuffix(".request.json") }
+        var receipts = urls.filter { $0.pathExtension == "json" && !$0.lastPathComponent.hasSuffix(".request.json") }
             .compactMap { try? JSONDecoder().decode(URLDeliveryReceipt.self, from: Data(contentsOf: $0)) }
-            .sorted { $0.date > $1.date }
+        for url in urls where url.lastPathComponent.hasSuffix(".request.json") {
+            let key = String(url.lastPathComponent.dropLast(".request.json".count))
+            guard UUID(uuidString: key)?.uuidString.lowercased() == key else { continue }
+            if let recovered = recoverIncompleteReceipt(key) { receipts.append(recovered) }
+        }
+        return receipts.sorted { $0.date > $1.date }
+    }
+
+    /// A process can exit between the separate body and receipt writes. Recover
+    /// that body under the sender's lock, never while another process publishes
+    /// it. Treat missing evidence conservatively: only explicit Retry may send.
+    private func recoverIncompleteReceipt(_ key: String) -> URLDeliveryReceipt? {
+        guard !FileManager.default.fileExists(atPath: receiptURL(key).path),
+              let descriptor = try? acquireLock(key) else { return nil }
+        defer { close(descriptor) }
+        guard !FileManager.default.fileExists(atPath: receiptURL(key).path),
+              FileManager.default.fileExists(atPath: requestURL(key).path) else { return nil }
+
+        // No credential lookup or HTTP. Even a corrupt body stays discoverable
+        // for Discard; absent fingerprints prevent it from being sent.
+        let prepared = try? loadPrepared(key)
+        var origin = URLComponents()
+        origin.scheme = prepared?.url.scheme
+        origin.host = prepared?.url.host
+        origin.port = prepared?.url.port
+        let recovered = URLDeliveryReceipt(
+            id: key, urlString: origin.string ?? "", attempt: 0, outcome: .unknownOutcome,
+            statusCode: nil, message: "The HTTP handoff was interrupted. Check the endpoint before retrying or discard the saved payload.",
+            date: Date(), destinationFingerprint: prepared.map { Self.digest(Data($0.url.absoluteString.utf8)) },
+            payloadFingerprint: prepared?.bodyDigest
+        )
+        // A full disk must not hide retained content from recovery. Sending or
+        // discarding still requires a durable receipt and fails closed on I/O.
+        try? persist(recovered, to: receiptURL(key))
+        return recovered
     }
 
     public func pendingReceipts() -> [URLDeliveryReceipt] {
@@ -439,6 +476,9 @@ public actor TranscriptURLDeliverer {
 
     private func requireMatchingPayload(_ expectedDigest: String?, receipt: URLDeliveryReceipt) throws {
         guard let expectedDigest else { return }
+        // A tombstone suppresses recording replays, but cannot acknowledge an
+        // editable draft whose saved payload was deliberately removed.
+        guard receipt.outcome != .discarded else { throw DeliveryError.discarded }
         // Legacy pending records can prove their payload from the retained body.
         // A body-free legacy tombstone cannot prove an edited draft was accepted.
         let actualDigest: String
@@ -512,7 +552,9 @@ public actor TranscriptURLDeliverer {
             defer { close(descriptor) }
 
             let fingerprint = Self.digest(Data(url.absoluteString.utf8))
-            if let previous = try loadReceipt(idempotencyKey) {
+            let previous = try loadReceipt(idempotencyKey)
+            if let previous {
+                attempts = previous.attempt
                 guard let priorDestination = previous.destinationFingerprint else { throw DeliveryError.legacyReceipt }
                 guard priorDestination == fingerprint else { throw DeliveryError.changedDestination }
                 if previous.outcome == .delivered {
@@ -538,8 +580,13 @@ public actor TranscriptURLDeliverer {
             }
             let request = try makeRequest(prepared)
             try persist(prepared, to: requestURL(idempotencyKey))
-            try record(id: idempotencyKey, url: url, attempt: 0, outcome: .pending, message: "Awaiting URL delivery",
-                       payloadFingerprint: prepared.bodyDigest)
+            // Preserve prior attempts and ambiguity through retry preparation.
+            // Cancellation or process exit before the next POST must not turn
+            // previously attempted work into an automatic, unattempted send.
+            if previous == nil {
+                try record(id: idempotencyKey, url: url, attempt: 0, outcome: .pending, message: "Awaiting URL delivery",
+                           payloadFingerprint: prepared.bodyDigest)
+            }
 
             let maxAttempts = min(5, max(1, prepared.settings.maxAttempts))
             logger("begin id=\(idempotencyKey) bytes=\(prepared.body.count)")

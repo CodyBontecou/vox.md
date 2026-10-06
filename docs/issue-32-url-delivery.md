@@ -75,9 +75,13 @@ queued files are not indiscriminately deleted or rewritten by this follow-up.
 
 ## Durable handoff and task ownership
 
-`enqueueCapture` / `enqueueTranscript` verify and atomically persist the prepared
-body, digest, exact endpoint, settings references and a receipt **without a
-Keychain lookup or HTTP request**. The composer does this inside explicit Send,
+`enqueueCapture` / `enqueueTranscript` verify the prepared body, digest, exact
+endpoint and settings references, then publish the prepared file and its separate
+receipt using atomic writes **without a Keychain lookup or HTTP request**. If interrupted
+between those writes, recovery reconstructs a conservative Outcome Unknown
+receipt under the sender lock. The retained body is visible for explicit Retry
+or Discard; refresh never sends, and corrupt bodies remain discardable but cannot
+be sent. The composer does this inside explicit Send,
 in its HTTP-only branch, without resolving or writing a directory. Preparation
 failure preserves the draft/recording job for recovery rather than completing
 and losing the HTTP intent. The HTTP branch uses a distinct submission receipt;
@@ -88,7 +92,9 @@ changed content cannot clear the draft against the original saved payload.
 Composer handoffs require an exact payload match, including when another actor
 owns the sender. A content-derived fingerprint remains in new receipts to
 verify that match after body removal; legacy retained bodies can supply proof,
-while body-free legacy receipts without a fingerprint fail closed.
+while body-free legacy receipts without a fingerprint fail closed. Discarded
+identities also fail strict composer handoff: they cannot clear a still-unsent
+draft or consume its Capture allowance. Recording retries still suppress reposts.
 HTTP status is tracked in URL Deliveries rather than reported as a successfully
 delivered note in file history.
 
@@ -123,8 +129,10 @@ unproven legacy state fails closed.
 Open **Settings → URL Deliveries** on iOS, or **Capture Presets → HTTP →
 URL Deliveries** on Mac. Merely opening or refreshing recovery never sends.
 Unattempted payloads offer Send Now; attempted/authentication/permanent failures
-require deliberate Retry. Discard removes local HTTP content without changing
-notes, audio or an endpoint's existing copy.
+require deliberate Retry. Retry preparation preserves prior attempt evidence
+until the next write-ahead attempt record; cancellation cannot relabel previously
+attempted work as Ready to Send. Discard removes local HTTP content without
+changing notes, audio or an endpoint's existing copy.
 
 401/403 stop the automatic attempt window and remain recoverable. Retry can use
 the original saved account after correcting it, or explicitly select a current

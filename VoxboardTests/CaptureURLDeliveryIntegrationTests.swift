@@ -90,6 +90,31 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         XCTAssertEqual(counts.committed, 0)
     }
 
+    func testDiscardedHTTPHandoffPreservesDraftOnSend() async throws {
+        let accounting = ComposerHTTPAccounting(failsFirstCommit: true)
+        let fixture = try await makeFixture(refuseLease: true, accounting: accounting)
+        fixture.model.draft.text = "Unsent synthetic capture"
+        let draftID = fixture.model.draft.id
+        let requestID = fixture.model.draft.requestID
+        await fixture.model.submit()
+        XCTAssertNotNil(fixture.model.errorMessage)
+        XCTAssertEqual(fixture.model.draft.text, "Unsent synthetic capture")
+
+        await fixture.owner.discard(id: requestID)
+        await fixture.model.submit()
+        XCTAssertEqual(fixture.model.draft.id, draftID)
+        XCTAssertEqual(fixture.model.draft.requestID, requestID)
+        XCTAssertEqual(fixture.model.draft.text, "Unsent synthetic capture")
+        XCTAssertNil(fixture.model.lastReceipt)
+        XCTAssertNotNil(fixture.model.errorMessage)
+        let saved = try await CaptureDraftStore(rootDirectoryURL: fixture.root).load(id: draftID)
+        XCTAssertEqual(saved?.text, "Unsent synthetic capture")
+        let counts = await accounting.counts()
+        XCTAssertEqual(counts.committed, 0)
+        XCTAssertTrue(fixture.owner.receipts.isEmpty)
+        XCTAssertEqual(ComposerHTTPProtocol.requestCount, 0)
+    }
+
     func testUnchangedDraftCanCompleteAfterHTTPAccountingFailure() async throws {
         let accounting = ComposerHTTPAccounting(failsFirstCommit: true)
         let fixture = try await makeFixture(refuseLease: true, accounting: accounting)
