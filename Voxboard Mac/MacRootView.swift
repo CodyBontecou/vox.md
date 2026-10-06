@@ -651,6 +651,7 @@ private struct MacModelView: View {
 private struct MacCapturePresetSettingsView: View {
     @State private var flows: [CapturePreset] = CapturePresetStore.loadFlows()
     @State private var selectedFlowId: String = CapturePresetStore.selectedFlowId()
+    @State private var deletionError: String?
 
     var body: some View {
         HStack(spacing: 0) {
@@ -697,6 +698,9 @@ private struct MacCapturePresetSettingsView: View {
         .navigationTitle("Capture Presets")
         .onAppear { reload() }
         .onChange(of: flows) { _, newValue in CapturePresetStore.saveFlows(newValue) }
+        .alert("Preset Could Not Be Deleted", isPresented: Binding(
+            get: { deletionError != nil }, set: { if !$0 { deletionError = nil } }
+        )) { Button("OK", role: .cancel) {} } message: { Text(deletionError ?? "") }
         .onChange(of: selectedFlowId) { _, id in CapturePresetStore.selectFlow(id: id) }
     }
 
@@ -713,6 +717,14 @@ private struct MacCapturePresetSettingsView: View {
 
     private func delete(_ flow: CapturePreset) {
         guard !flow.isBuiltIn else { return }
+        do {
+            if let id = flow.exportSettings.urlDelivery.credentialID {
+                try URLDeliveryKeychain.deleteCredentials(forID: id)
+            }
+        } catch {
+            deletionError = String(localized: "Saved URL credentials could not be removed. Try again after the Keychain is available. The preset has not been deleted.")
+            return
+        }
         let selectedCapturePresetID = CapturePresetProfileStore.selectedProfileID(
             defaults: AppConstants.sharedDefaults
         )
@@ -998,6 +1010,8 @@ private struct MacCapturePresetEditor: View {
                 }
                 }
             }
+
+            URLDeliverySettingsSection(settings: $flow.exportSettings.urlDelivery)
 
             Section("Metadata") {
                 Picker("Scope", selection: $flow.metadataScope) {

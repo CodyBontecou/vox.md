@@ -1,117 +1,141 @@
 # Issue #32: URL delivery review notes
 
-This branch builds on contributor PR #35. It is not a release-readiness claim.
+This draft builds on contributor PR #35. It is not a release-readiness claim.
 
 ## Destination semantics
 
-The contributor implementation is **additive**: an enabled preset POSTs JSON in
-addition to its existing destinations. A failed HTTP request does not undo a
-successful local transcript/note. The issue owner's comment suggested URL +
-bearer token *instead of* a directory; choosing and implementing an alternative
-output mode remains a coordinated product decision. The inherited
-`deliverOnFailureFallbackFile` field is retained for decode compatibility, but
-has no behavior and must not be advertised as a fallback mode.
+Delivery remains **additive**, disabled by default: an enabled preset POSTs JSON
+in addition to its existing destinations. An HTTP failure does not undo a
+successful local transcript or note. The owner's suggestion of URL + bearer
+*instead of* a directory remains a separate product decision; typed Capture
+still requires a working Markdown destination. The inherited
+`deliverOnFailureFallbackFile` field is decode compatibility only, not a fallback
+mode.
 
-URL delivery is disabled by default, including presets written before the URL
-field existed. There is no shipped endpoint or startup drain. Completing a
-recording into a draft must not call the deliverer. The composer calls it only
-inside explicit Send, with the exact processed request and URL settings captured
-before asynchronous processing. Image/audio attachments are not uploaded.
+Vox.md ships no endpoint and performs no HTTP startup drain. Draft recording
+completion never enters URL delivery. Explicit composer Send freezes the exact
+processed request and the submitted preset's endpoint before asynchronous
+processing. Images, audio and other attachment bytes are not uploaded.
 
 ## Credentials and validation
 
-- Bearer tokens and **all** custom header values are saved in the Keychain, not
-  preset JSON, UserDefaults, prepared requests, receipts, or diagnostic logs.
-- Keychain accounts are opaque UUIDs allocated per preset, bound to an exact
-  validated endpoint, not merely a shared host. The transport checks the
-  Keychain record's endpoint as well as the preset reference.
-- Missing, locked, corrupt, or denied credentials fail visibly before a request.
-  Auth flags are not cleared just because a Keychain lookup failed.
-- The editor uses explicit Save URL / Save Token / Save Headers actions. Invalid
-  headers are not silently ignored; case-insensitive duplicate names, controls,
-  and unsafe Host/cookie/hop-by-hop headers are rejected. Protocol JSON and
-  idempotency headers remain app-owned.
-- Changing an authenticated endpoint requires removing saved credentials and
-  saving credentials for the new endpoint. Credentials are rechecked between
-  attempts: removal/replacement during backoff cannot reuse a copied token.
-- HTTPS is the default. HTTP requires a separate explicit local-only opt-in;
-  host classification rejects malformed IPv4 literals. Hostnames such as
-  `.local` are not a guarantee of a trusted network. Do not enable HTTP on an
-  untrusted network: both text and credentials would be plaintext.
-- URL user/password and secret-looking query names are rejected. Query-secret
-  detection is best-effort; never put an authentication secret in a URL path or
-  query. Receipt URLs contain only the origin, not the path/query.
-- All redirects (including same-origin, cross-origin, and HTTPS downgrades) are
-  refused. Configure the final endpoint URL instead. The production session has
-  no cookie jar, URL credential storage, or response cache. Only response status
-  is consumed; response bodies are not buffered without a size bound.
+- Tokens and all custom header values are Keychain-only. Presets, queued
+  requests, receipts and logs contain account references/presence flags, not
+  authentication values.
+- Each preset's opaque UUID account is bound to an exact validated URL. Missing,
+  locked, corrupt or mismatched accounts fail closed; a failed lookup never
+  clears authentication flags or silently sends anonymously.
+- iOS and Mac use the same explicit Save URL / Save Token / Save Headers / Send
+  Test controls. Invalid and case-insensitively duplicate headers are rejected.
+  Host, cookies and hop-by-hop headers are forbidden; JSON and idempotency
+  headers remain app-owned. Static header values are not automatic HMAC signing.
+- Preset deletion removes its referenced Keychain account before retirement. A
+  cleanup error leaves the preset intact and presents an error. Pending HTTP
+  payloads remain available for deliberate recovery/discard, not automatic
+  sending. Deletion cannot recall a request already received by an endpoint.
+- Changing an authenticated endpoint requires explicitly removing/re-entering
+  credentials. Credentials are re-read between attempts; removal or replacement
+  during backoff cannot reuse a copied token.
+- HTTPS is the default. Local HTTP requires a separate warning/opt-in; it sends
+  text and credentials without encryption. `.local` or a private IP is not proof
+  that a network is trusted. Local-network permission and ATS remain device
+  verification gates.
+- URL user/password and secret-looking query names are rejected. Query detection
+  is best-effort: do not put secrets in a URL path or query. Receipts and recovery
+  UI show the origin only, never the path/query or raw transport errors.
+- All redirects are refused, including same-origin and HTTPS downgrades. The
+  production session has no cookie jar, URL credential storage or response
+  cache. Response bodies are not buffered without a bound.
 
-PR #35's legacy plaintext headers are discarded on decode and removed from
-UserDefaults on a persisting preset load. Legacy credential-bearing settings
-require explicit removal/re-entry, never anonymous fallback or automatic reuse
-of a host-scoped token. Existing old host-scoped Keychain items are not read;
-coordinated cleanup of those items and credential cleanup on preset deletion are
-remaining integration seams. Existing legacy queued files are not rewritten
-indiscriminately by this lane.
+PR #35's legacy plaintext preset headers are discarded on decode. Credential-
+bearing legacy settings require explicit migration, never host-scoped token
+reuse or anonymous fallback. Old shared host accounts and arbitrary legacy
+queued files are not indiscriminately deleted or rewritten by this follow-up.
 
-## Delivery state and retry
+## Durable handoff and task ownership
 
-The request body remains the contributor's JSON export rendering for voice and
-`{id,text,source,recorded_at}` for other text-bearing captures. A synthetic Send
-Test has fixed test text, `test: true`, and a fresh identity each time.
+`enqueueCapture` / `enqueueTranscript` verify and atomically persist the prepared
+body, digest, exact endpoint, settings references and a receipt **without a
+Keychain lookup or HTTP request**. The composer does this inside explicit Send,
+before the note mutation. Preparation failure preserves the draft/recording job
+for recovery rather than completing and losing the HTTP intent.
 
-Before the first HTTP side effect the actor writes an immutable prepared body,
-URL, settings references, and digest, plus a privacy-limited receipt. Writes are
-atomic with private permissions; a storage failure prevents the first request.
-An advisory file lock excludes overlapping senders for the same identity, even
-across actor instances. A verified delivered tombstone suppresses another POST
-on recording/file-sink replay. Corrupt or legacy unproven receipts fail closed.
-Successful delivery removes the separate prepared body.
+Only a successful durable enqueue is dispatched to `URLDeliveryCoordinator`.
+The iOS recorder has no nested detached HTTP task. Composer completion and Mac
+note export do not await endpoint retry latency. The task registry coalesces
+identities and owns cancellation. On iOS an exactly-once finite background lease
+cancels its sender on expiry; an unavailable lease leaves the unattempted handoff
+locally inspectable. This is not a background `URLSession` transfer.
 
-Each request uses the same lowercase UUID `Idempotency-Key`. Receivers must
-implement deduplication for that key: the header alone cannot promise exactly
-once when a server commits just before a timeout/process death/local receipt
-failure. The journal marks an in-flight request `unknownOutcome` before sending;
-a missing terminal receipt cannot claim success or silently auto-replay it.
+`URLDeliveryCancellation` bridges source cancellation, including cancellation
+before an asynchronous task factory/HTTP registration. Cancellation while the
+source is performing local delivery/handoff cancels that task and HTTP backoff.
+Normal local completion transfers HTTP ownership without canceling it.
+Explicit Cancel Send and Discard use the same registry. Discard cancels and
+awaits the sender before removing the body and retaining a content-free
+anti-replay tombstone. A failed payload cleanup remains visible for another
+Discard attempt.
 
-2xx is delivered; 408/429 and 5xx retry. Other statuses, redirects, and permanent
-TLS/URL transport errors fail without automatic retry. Attempts are clamped to
-1–5 per attempt window; backoff is 1/4/15/60 seconds plus bounded jitter, and
-finite seconds-only Retry-After is capped at 300 seconds. Each attempt has a
-30-second timeout. Cancellation stops further attempts, including during
-backoff. Raw transport error strings are never logged or stored.
+An advisory file lock excludes overlapping sends/discards across actor
+instances. Existing failed/ambiguous HTTP work is retained, not automatically
+reset/reposted by a note/audio retry. A verified delivered tombstone suppresses
+another POST; successful delivery removes its separate prepared body. Corrupt
+or unproven legacy state fails closed.
 
-`pendingReceipts()` reports pending/retryable/ambiguous deliveries, not successful
-or permanent ones. `retryPendingDelivery(id:)` is an **explicit HTTP-only retry**:
-it loads the frozen prepared body/settings and grants another bounded window;
-it never renders a fresh draft, reads a mutable preset, or reruns note writes.
-No background drain or user-facing pending-delivery/retry UI is wired yet.
-Failures stay locally inspectable. Durable delivered/failed records currently
-have no automatic pruning policy.
+## HTTP-only recovery
 
-## Remaining integration and verification gates
+Open **Settings → URL Deliveries** on iOS, or **Capture Presets → Deliver to URL →
+URL Deliveries** on Mac. Merely opening or refreshing recovery never sends.
+Unattempted payloads offer Send Now; attempted/authentication/permanent failures
+require deliberate Retry. Discard removes local HTTP content without changing
+notes, audio or an endpoint's existing copy.
 
-- Product decision: additive vs alternative destination.
-- Delete a preset's Keychain account with visible failure handling before
-  retiring/removing it; the outer list deletion UI is outside this lane's
-  URL-section ownership. Coordinate legacy host-account cleanup too.
-- Replace the reserved iOS recorder's nested detached URL task with a durable,
-  cancellation-owned handoff. The hardened transport protects once invoked,
-  not before a detached child has started. The Mac URL hook is awaited, which
-  can delay queue finalization/note export while its bounded HTTP attempts run.
-  Existing outer detached recording delivery still needs coordinated parent
-  cancellation handling; package cancellation tests do not prove host wiring.
-- Preserve explicit draft-vs-immediate guards when integrating issue #31. Do not
-  pass a draft recording into a preset export/URL path. Exercise the full draft
-  -> review -> Send workflow with synthetic inputs on a dedicated simulator,
-  then the appropriate hardware matrix.
-- Update the stale exact-string recording-only project contract to include the
-  inherited URL section inside its existing transcript-workflow guard.
-- Native Keychain entitlements/accessibility/locked-device behavior, app-hosted
-  integration tests, iOS CI, and physical-device behavior are unverified here.
-  Settings layout/motion/light/dark/Dynamic Type screenshots are also a remaining
-  gate, not implied by package tests or an unsigned simulator compile.
+401/403 stop the automatic attempt window and remain recoverable. Retry can use
+the original saved account after correcting it, or explicitly select a current
+preset's credentials for the **exact same endpoint**. This also recovers an
+original anonymous 401 or a replaced account. Only credential references/flags
+may change; body, endpoint, capture identity and Idempotency-Key stay frozen. A
+missing/locked/wrong-endpoint replacement does not modify the journal or POST.
 
-Package tests use synthetic JSON, mocked Keychain/Security failures, an injected
-URLProtocol, and a loopback-only Network listener for real URLSession redirects.
-No real endpoint, credential, vault content, or microphone recording is used.
+Each attempt uses the same lowercase UUID `Idempotency-Key`. The receiver must
+implement deduplication: the header alone cannot guarantee exactly once after a
+server commit followed by timeout, process death or local receipt failure. The
+journal records `unknownOutcome` before HTTP, and Retry warns that the endpoint
+may already have received the capture.
+
+2xx succeeds; 408/429 and 5xx retry. Other statuses, redirects and permanent
+TLS/URL errors stop automatic retry but can be retried deliberately after fixing
+the cause. Attempt windows are clamped to 1–5, with bounded backoff/jitter and a
+seconds-only Retry-After capped at 300 seconds. Individual requests time out at
+30 seconds. Cancellation stops subsequent attempts and preserves recovery
+state; it cannot undo a committed remote request.
+
+`outstandingReceipts()` includes permanent/authentication failures. Delivered
+and fully discarded tombstones are hidden from recovery. Records currently have
+no automatic pruning policy, and outstanding bodies remain stored until success
+or explicit discard.
+
+## Verification and remaining gates
+
+Synthetic package regressions cover authorization recovery (401 and 403),
+anonymous reauthorization, immutable endpoint/body/identity, durable no-HTTP
+handoff, restart recovery, source/lease cancellation and discard. App-hosted
+composer tests cover draft-before-Send, slow HTTP versus local completion,
+preparation failure, processed/settings snapshots and cancellation. Portable
+source checks protect both host hooks, credential cleanup ordering and shared
+controls. These are not substitutes for device evidence.
+
+Still required before release:
+
+- Agree additive versus alternative destination semantics and release scope.
+- Real Keychain entitlements, lock/unlock, account replacement/deletion, local-
+  network/ATS and termination/crash-boundary acceptance on appropriate hardware.
+- Full real recording/draft/Send and HTTP-only recovery device matrix, including
+  iOS background limits and Mac signing/sandbox behavior.
+- Lowest-supported-device/release-build motion/performance evidence; simulator
+  screenshots or a 30fps recording do not prove sustained 60fps.
+- A retention/pruning decision and coordinated legacy host-account cleanup.
+
+No PR is merged, issue closed or endpoint/credential/vault content taken from a
+real user for these tests. Mocked transports/Security clients and synthetic local
+fixtures do not validate production credentials or physical-device behavior.

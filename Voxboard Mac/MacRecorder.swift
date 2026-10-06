@@ -1678,7 +1678,8 @@ final class MacRecorder {
             )
         }
 
-        let deliverySucceeded = await Task.detached(priority: .utility) { [recorderForExport] () -> Bool in
+        let urlDeliveryCancellation = URLDeliveryCancellation()
+        let deliverySucceeded = await urlDeliveryCancellation.runDetached(priority: .utility) { [recorderForExport] () -> Bool in
             defer {
                 Task { @MainActor in recorderForExport.isExporting = false }
             }
@@ -1713,15 +1714,20 @@ final class MacRecorder {
             // Opt-in additive delivery. The journal freezes bytes and prevents
             // another POST when a separate note/audio sink retries this job.
             let urlDeliverySettings = flowForExport.exportSettings.urlDelivery
+            guard !Task.isCancelled, !urlDeliveryCancellation.isCancelled else { return false }
             if urlDeliverySettings.enabled {
-                let event = await TranscriptURLDeliverer.appDefault().deliver(
-                    transcript: latest, settings: urlDeliverySettings
-                )
-                await MainActor.run {
-                    recorderForExport.lastURLDeliveryEvent = event
-                    if case .failed(let message, _) = event.result {
-                        recorderForExport.lastError = String(localized: "Your transcript was saved locally, but URL delivery failed. \(message)")
+                let event = await URLDeliveryRuntime.coordinator.enqueueTranscript(latest, settings: urlDeliverySettings)
+                await MainActor.run { recorderForExport.lastURLDeliveryEvent = event }
+                guard !Task.isCancelled else { return false }
+                if case .failed(let message, _) = event.result {
+                    await MainActor.run {
+                        recorderForExport.lastError = message
+                        recorderForExport.lastRecoveryAudioURL = retainedAudioURL ?? audioURL
                     }
+                    return false
+                }
+                if case .queued = event.result {
+                    await MainActor.run { URLDeliveryRuntime.coordinator.dispatch(id: latest.id, cancellation: urlDeliveryCancellation) }
                 }
             }
 
@@ -1932,7 +1938,8 @@ final class MacRecorder {
                 }
             }
             return !shouldExposeRecovery
-        }.value
+        }
+        try Task.checkCancellation()
 
         guard deliverySucceeded else {
             throw MacRecordingHandoffError.deliveryFailed

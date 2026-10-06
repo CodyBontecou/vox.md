@@ -377,6 +377,11 @@ struct QuickCaptureView: View {
                 .onChange(of: persistentRecorder.lastURLDeliveryEvent) { _, event in
                     handleURLDeliveryEvent(event)
                 }
+                .onChange(of: URLDeliveryRuntime.coordinator.lastError) { _, message in
+                    if let message, persistentRecorder.lastError == nil {
+                        persistentRecorder.lastError = String(localized: "URL delivery needs attention. Open URL Deliveries in Settings. \(message)")
+                    }
+                }
                 .onChange(of: persistentRecorder.lastSentAudioUndoSnapshot) { _, observedSnapshot in
                     guard let observedSnapshot,
                           let snapshot = persistentRecorder.consumeSentAudioUndoSnapshot(
@@ -2759,7 +2764,7 @@ struct QuickCaptureView: View {
     private func handleURLDeliveryEvent(_ event: URLDeliveryEvent?) {
         guard let event else { return }
         switch event.result {
-        case .delivered, .disabled:
+        case .delivered, .disabled, .queued, .retained:
             break
         case .failed(let message, _):
             if persistentRecorder.lastError == nil {

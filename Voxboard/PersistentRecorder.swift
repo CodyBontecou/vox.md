@@ -3396,7 +3396,8 @@ final class PersistentRecorder {
             }
         }
 
-        let scheduledDeliveryTask: Task<ConfiguredRecordingDeliveryResult, Never>? = try await MainActor.run {
+        let urlDeliveryCancellation = URLDeliveryCancellation()
+        let deliveryResult = try await urlDeliveryCancellation.valueOfMainActorTask {
             var deliveryTask: Task<ConfiguredRecordingDeliveryResult, Never>?
             self.clearCaptureLiveTranscription(requestId: requestId)
             if let text, !text.isEmpty {
@@ -3519,25 +3520,30 @@ final class PersistentRecorder {
                         store.transcripts.first(where: { $0.id == savedId }) ?? initialTranscript
                     }
 
-                    // Opt-in per-preset URL delivery. Runs independently of the
-                    // file sink so it works with no folder, a folder with no URL,
-                    // or both; a failure here never fails the recording.
+                    // Persist the additive HTTP handoff before completing this
+                    // recording. Only local preparation can fail the job; the
+                    // owned sender's network retries never block the note sink.
                     let urlDeliverySettings = flowForExport.exportSettings.urlDelivery
                     #if DEBUG
                     KeyboardDebugLog.shared.log(
                         "[PersistentRecorder] URL delivery check preset=\(flowForExport.id) enabled=\(urlDeliverySettings.enabled)"
                     )
                     #endif
+                    guard !Task.isCancelled, !urlDeliveryCancellation.isCancelled else { return .failed }
                     if urlDeliverySettings.enabled {
-                        let deliverer = TranscriptURLDeliverer.appDefault()
-                        Task.detached(priority: .utility) {
-                            let event = await deliverer.deliver(
-                                transcript: latest,
-                                settings: urlDeliverySettings
-                            )
+                        let event = await URLDeliveryRuntime.coordinator.enqueueTranscript(
+                            latest, settings: urlDeliverySettings
+                        )
+                        await MainActor.run { self.lastURLDeliveryEvent = event }
+                        guard !Task.isCancelled else { return .failed }
+                        if case .failed(let message, _) = event.result {
                             await MainActor.run {
-                                self.lastURLDeliveryEvent = event
+                                self.lastError = message
                             }
+                            return .failed
+                        }
+                        if case .queued = event.result {
+                            await MainActor.run { URLDeliveryRuntime.coordinator.dispatch(id: latest.id, cancellation: urlDeliveryCancellation) }
                         }
                     }
 
@@ -3786,7 +3792,7 @@ final class PersistentRecorder {
             return deliveryTask
         }
 
-        let deliveryResult = await scheduledDeliveryTask?.value
+        try Task.checkCancellation()
         if let deliveryResult, !deliveryResult.completedRecordingJob {
             throw PersistentRecordingJobError.deliveryFailed
         }

@@ -5,6 +5,9 @@ import Foundation
 public struct URLDeliveryEvent: Equatable, Sendable {
     public enum Result: Equatable, Sendable {
         case delivered(statusCode: Int)
+        case queued
+        /// Existing journal state owns this identity; do not dispatch again.
+        case retained
         case failed(message: String, retryable: Bool)
         case disabled
     }
@@ -24,13 +27,15 @@ public struct URLDeliveryEvent: Equatable, Sendable {
 
 /// Privacy-limited tombstone. No body, header values, URL path/query, or raw
 /// transport errors are written here. Prepared bytes live separately until sent.
-public struct URLDeliveryReceipt: Codable, Equatable, Sendable {
+public struct URLDeliveryReceipt: Codable, Equatable, Sendable, Identifiable {
     public enum Outcome: String, Codable, Sendable {
         case pending
         case delivered
         case retryable
         case permanent
         case unknownOutcome
+        case needsAuthentication
+        case discarded
     }
 
     public let id: String
@@ -41,6 +46,29 @@ public struct URLDeliveryReceipt: Codable, Equatable, Sendable {
     public let message: String
     public let date: Date
     public var destinationFingerprint: String? = nil
+
+    /// Recovery metadata, excluding URL credentials, path, query and fragment.
+    /// Malformed and non-HTTP legacy endpoints have no displayable origin.
+    public var origin: String? {
+        guard var components = URLComponents(string: urlString), let host = components.host, !host.isEmpty,
+              components.scheme == "https" || components.scheme == "http" else { return nil }
+        components.user = nil
+        components.password = nil
+        components.path = ""
+        components.query = nil
+        components.fragment = nil
+        return components.string
+    }
+
+    /// Offer current preset credentials without exposing endpoint paths/queries
+    /// in recovery UI or authorizing a different destination.
+    public func matchesDestination(_ settings: CapturePresetURLDeliverySettings) -> Bool {
+        guard let destinationFingerprint,
+              let url = try? URLDeliveryValidator.validate(settings.urlString, allowingInsecureLocal: settings.allowingInsecureLocal)
+        else { return false }
+        let fingerprint = SHA256.hash(data: Data(url.absoluteString.utf8)).map { String(format: "%02x", $0) }.joined()
+        return fingerprint == destinationFingerprint
+    }
 }
 
 /// Additive, opt-in JSON delivery. Never writes a note or drains on app launch.
@@ -221,21 +249,206 @@ public actor TranscriptURLDeliverer {
     }
 
     public func pendingReceipts() -> [URLDeliveryReceipt] {
-        receipts().filter { $0.outcome == .pending || $0.outcome == .retryable || $0.outcome == .unknownOutcome }
+        receipts().filter {
+            $0.outcome == .pending || $0.outcome == .retryable
+                || $0.outcome == .unknownOutcome || $0.outcome == .needsAuthentication
+        }
+    }
+
+    public func outstandingReceipts() -> [URLDeliveryReceipt] {
+        receipts().filter {
+            $0.outcome != .delivered && ($0.outcome != .discarded
+                || FileManager.default.fileExists(atPath: requestURL($0.id).path))
+        }
     }
 
     /// Must be called by an explicit Retry action. It never reruns a note sink,
     /// reads a mutable preset, or substitutes a freshly rendered body. Manual
     /// retry grants another bounded attempt window with the same idempotency key.
-    public func retryPendingDelivery(id: UUID) async -> URLDeliveryEvent {
+    public func retryPendingDelivery(
+        id: UUID, authorization: CapturePresetURLDeliverySettings? = nil
+    ) async -> URLDeliveryEvent {
+        if let authorization {
+            do { try replaceAuthorization(id: id, using: authorization) }
+            catch { return failure(nil, 0, message: validationMessage(error)) }
+        }
+        return await sendStoredDelivery(id: id, explicitRetry: true)
+    }
+
+    /// A deliberate recovery action may replace credential references, never
+    /// the frozen endpoint, content or identity. This also recovers an original
+    /// anonymous 401 or a replaced/missing Keychain account without retargeting.
+    private func replaceAuthorization(id: UUID, using authorization: CapturePresetURLDeliverySettings) throws {
+        try Task.checkCancellation()
+        let key = id.uuidString.lowercased()
+        let descriptor = try acquireLock(key)
+        defer { close(descriptor) }
+        let prepared = try loadPrepared(key)
+        let receipt = try loadReceipt(key)
+        guard receipt?.outcome != .delivered, receipt?.outcome != .discarded else { throw DeliveryError.incompletePreparation }
+        let endpoint = try URLDeliveryValidator.validate(authorization.urlString, allowingInsecureLocal: authorization.allowingInsecureLocal)
+        guard endpoint == prepared.url else { throw DeliveryError.changedDestination }
+        guard authorization.customHeaders.isEmpty, !authorization.requiresCredentialMigration else {
+            throw URLDeliveryKeychain.StorageError.missingCredentials
+        }
+        var settings = prepared.settings
+        settings.credentialID = authorization.credentialID
+        settings.credentialURLString = authorization.credentialURLString
+        settings.hasBearerToken = authorization.hasBearerToken
+        settings.hasCustomHeaders = authorization.hasCustomHeaders
+        settings.customHeaders = [:]
+        settings.requiresCredentialMigration = false
+        let replacement = PreparedDelivery(id: prepared.id, transcriptID: prepared.transcriptID,
+            body: prepared.body, bodyDigest: prepared.bodyDigest, url: prepared.url, settings: settings, userAgent: prepared.userAgent)
+        // Fail closed and leave the journal unchanged if the chosen account is
+        // missing, locked, or bound to another endpoint.
+        _ = try makeRequest(replacement)
+        try persist(replacement, to: requestURL(key))
+    }
+
+    /// Commits an HTTP-only handoff without accessing credentials or contacting
+    /// the endpoint. Hosts await this before completing their local capture.
+    public func enqueueCapture(
+        id: UUID, text: String, date: Date, settings: CapturePresetURLDeliverySettings,
+        userAgent: String = TranscriptURLDeliverer.defaultUserAgent
+    ) -> URLDeliveryEvent {
+        guard settings.enabled else { return event(nil, 0, .disabled) }
+        return enqueue(body: Self.captureBody(id: id, text: text, date: date),
+                       id: id, transcriptID: nil, settings: settings, userAgent: userAgent)
+    }
+
+    public func enqueueTranscript(
+        _ transcript: Transcript, settings: CapturePresetURLDeliverySettings,
+        userAgent: String = TranscriptURLDeliverer.defaultUserAgent
+    ) -> URLDeliveryEvent {
+        guard settings.enabled else { return event(transcript.id, 0, .disabled) }
+        do {
+            return enqueue(body: try makeBody(transcript: transcript, includeCleanedText: settings.includeCleanedText),
+                           id: transcript.id, transcriptID: transcript.id, settings: settings, userAgent: userAgent)
+        } catch {
+            return failure(transcript.id, 0, message: validationMessage(error))
+        }
+    }
+
+    /// Dispatches only an unattempted, already durable handoff. Relaunch does
+    /// not automatically replay a failed or ambiguous POST.
+    public func sendQueuedDelivery(id: UUID) async -> URLDeliveryEvent {
+        await sendStoredDelivery(id: id, explicitRetry: false)
+    }
+
+    /// Retains a content-free tombstone so discarded identities cannot be
+    /// silently resubmitted by another sink's retry. An active sender holds the
+    /// same lock; its task owner must cancel and await it before discarding.
+    public func discardDelivery(id: UUID) throws {
+        let key = id.uuidString.lowercased()
+        let descriptor = try acquireLock(key)
+        defer { close(descriptor) }
+        guard let previous = try loadReceipt(key) else { throw DeliveryError.incompletePreparation }
+        var origin = URLComponents(string: previous.urlString)
+        origin?.user = nil
+        origin?.password = nil
+        origin?.path = ""
+        origin?.query = nil
+        origin?.fragment = nil
+        let discarded = URLDeliveryReceipt(id: key, urlString: origin?.string ?? "", attempt: previous.attempt,
+            outcome: .discarded, statusCode: previous.statusCode, message: "Discarded locally", date: Date(),
+            destinationFingerprint: previous.destinationFingerprint)
+        try persist(discarded, to: receiptURL(key))
+        if FileManager.default.fileExists(atPath: requestURL(key).path) {
+            try FileManager.default.removeItem(at: requestURL(key))
+        }
+    }
+
+    private func enqueue(
+        body: Data, id: UUID, transcriptID: UUID?, settings: CapturePresetURLDeliverySettings, userAgent: String
+    ) -> URLDeliveryEvent {
         let key = id.uuidString.lowercased()
         do {
+            try Task.checkCancellation()
+            let url = try URLDeliveryValidator.validate(settings.urlString, allowingInsecureLocal: settings.allowingInsecureLocal)
+            try URLDeliveryValidator.validateBody(body)
+            try URLDeliveryValidator.validateHeaders(["User-Agent": userAgent])
+            // In-memory secrets cannot become a durable handoff. The settings
+            // editor must first save all header values in a Keychain account.
+            guard settings.customHeaders.isEmpty else { throw URLDeliveryKeychain.StorageError.missingCredentials }
+            let descriptor: Int32
+            do { descriptor = try acquireLock(key) }
+            catch DeliveryError.inProgress {
+                // A sender already owns a durable handoff. Do not make a local
+                // sink retry wait for HTTP, mutate its journal, or dispatch it.
+                return try retainedBusyHandoff(key: key, url: url, transcriptID: transcriptID)
+            }
+            defer { close(descriptor) }
+            if let previous = try loadReceipt(key) {
+                guard let fingerprint = previous.destinationFingerprint else { throw DeliveryError.legacyReceipt }
+                guard fingerprint == Self.digest(Data(url.absoluteString.utf8)) else { throw DeliveryError.changedDestination }
+                if previous.outcome == .delivered {
+                    return event(transcriptID, previous.attempt, .delivered(statusCode: previous.statusCode ?? 200))
+                }
+                if previous.outcome == .discarded { return event(transcriptID, previous.attempt, .retained) }
+                if previous.outcome != .pending || previous.attempt != 0 {
+                    let prepared = try loadPrepared(key)
+                    guard prepared.url == url else { throw DeliveryError.changedDestination }
+                    return event(transcriptID, previous.attempt, .retained)
+                }
+            }
+            let prepared: PreparedDelivery
+            if FileManager.default.fileExists(atPath: requestURL(key).path) {
+                prepared = try loadPrepared(key)
+                guard prepared.url == url else { throw DeliveryError.changedDestination }
+            } else {
+                prepared = PreparedDelivery(id: key, transcriptID: transcriptID, body: body,
+                    bodyDigest: Self.digest(body), url: url, settings: settings, userAgent: userAgent)
+            }
+            try persist(prepared, to: requestURL(key))
+            try record(id: key, url: url, attempt: 0, outcome: .pending, message: "Saved locally; awaiting URL delivery")
+            return event(transcriptID, 0, .queued)
+        } catch {
+            return failure(transcriptID, 0, message: Task.isCancelled ? DeliveryError.canceled.localizedDescription : validationMessage(error))
+        }
+    }
+
+    private func retainedBusyHandoff(key: String, url: URL, transcriptID: UUID?) throws -> URLDeliveryEvent {
+        func checkedReceipt() throws -> URLDeliveryReceipt {
+            guard let receipt = try loadReceipt(key), receipt.id == key else { throw DeliveryError.incompletePreparation }
+            guard let fingerprint = receipt.destinationFingerprint else { throw DeliveryError.legacyReceipt }
+            guard fingerprint == Self.digest(Data(url.absoluteString.utf8)) else { throw DeliveryError.changedDestination }
+            return receipt
+        }
+        let receipt = try checkedReceipt()
+        if receipt.outcome == .delivered {
+            return event(transcriptID, receipt.attempt, .delivered(statusCode: receipt.statusCode ?? 200))
+        }
+        if receipt.outcome == .discarded { return event(transcriptID, receipt.attempt, .retained) }
+        do {
+            let prepared = try loadPrepared(key)
+            guard prepared.url == url else { throw DeliveryError.changedDestination }
+        } catch {
+            // A different process may have finished/discarded between reads.
+            // Only a verified terminal tombstone justifies a missing body.
+            let latest = try checkedReceipt()
+            if latest.outcome == .delivered {
+                return event(transcriptID, latest.attempt, .delivered(statusCode: latest.statusCode ?? 200))
+            }
+            if latest.outcome != .discarded { throw error }
+        }
+        return event(transcriptID, receipt.attempt, .retained)
+    }
+
+    private func sendStoredDelivery(id: UUID, explicitRetry: Bool) async -> URLDeliveryEvent {
+        let key = id.uuidString.lowercased()
+        do {
+            try Task.checkCancellation()
+            if let receipt = try loadReceipt(key), receipt.outcome == .delivered {
+                guard receipt.destinationFingerprint != nil else { throw DeliveryError.legacyReceipt }
+                return event(nil, receipt.attempt, .delivered(statusCode: receipt.statusCode ?? 200))
+            }
             let prepared = try loadPrepared(key)
             return await send(body: prepared.body, url: prepared.url, settings: prepared.settings,
                               idempotencyKey: key, transcriptID: prepared.transcriptID,
-                              userAgent: prepared.userAgent, explicitRetry: true)
+                              userAgent: prepared.userAgent, explicitRetry: explicitRetry, dispatchQueued: !explicitRetry)
         } catch {
-            return failure(nil, 0, message: validationMessage(error))
+            return failure(nil, 0, message: Task.isCancelled ? DeliveryError.canceled.localizedDescription : validationMessage(error))
         }
     }
 
@@ -243,20 +456,15 @@ public actor TranscriptURLDeliverer {
 
     private func send(
         body: Data, url: URL, settings: CapturePresetURLDeliverySettings,
-        idempotencyKey: String, transcriptID: UUID?, userAgent: String, explicitRetry: Bool = false
+        idempotencyKey: String, transcriptID: UUID?, userAgent: String,
+        explicitRetry: Bool = false, dispatchQueued: Bool = false
     ) async -> URLDeliveryEvent {
         var attempts = 0
         do {
             try Task.checkCancellation()
             try URLDeliveryValidator.validateBody(body)
-            try FileManager.default.createDirectory(at: receiptsDirectoryURL, withIntermediateDirectories: true,
-                                                    attributes: [.posixPermissions: 0o700])
-            let lockURL = receiptsDirectoryURL.appendingPathComponent("\(idempotencyKey).lock")
-            let descriptor = open(lockURL.path, O_CREAT | O_RDWR | O_NOFOLLOW, 0o600)
-            guard descriptor >= 0 else { throw DeliveryError.storage }
+            let descriptor = try acquireLock(idempotencyKey)
             defer { close(descriptor) }
-            guard flock(descriptor, LOCK_EX | LOCK_NB) == 0 else { throw DeliveryError.inProgress }
-            defer { flock(descriptor, LOCK_UN) }
 
             let fingerprint = Self.digest(Data(url.absoluteString.utf8))
             if let previous = try loadReceipt(idempotencyKey) {
@@ -265,9 +473,12 @@ public actor TranscriptURLDeliverer {
                 if previous.outcome == .delivered {
                     return event(transcriptID, previous.attempt, .delivered(statusCode: previous.statusCode ?? 200))
                 }
-                if previous.outcome == .permanent || !explicitRetry {
+                let unattemptedHandoff = dispatchQueued && previous.outcome == .pending && previous.attempt == 0
+                // A deliberate Retry may recover even a permanent rejection,
+                // but a discarded identity and automatic replays never POST.
+                if previous.outcome == .discarded || (!explicitRetry && !unattemptedHandoff) {
                     return failure(transcriptID, previous.attempt, message: previous.message,
-                                   retryable: previous.outcome == .retryable || previous.outcome == .pending)
+                                   retryable: previous.outcome != .discarded)
                 }
             }
 
@@ -335,8 +546,10 @@ public actor TranscriptURLDeliverer {
                 let message = (300..<400).contains(status)
                     ? "URL redirects are not followed. Configure the endpoint's final URL."
                     : "The endpoint returned HTTP \(status)."
+                let outcome: URLDeliveryReceipt.Outcome = status == 401 || status == 403
+                    ? .needsAuthentication : (retryable ? .retryable : .permanent)
                 try record(id: idempotencyKey, url: url, attempt: attempt,
-                           outcome: retryable ? .retryable : .permanent, statusCode: status, message: message)
+                           outcome: outcome, statusCode: status, message: message)
                 logger("attempt=\(attempt) id=\(idempotencyKey) status=\(status)")
                 guard retryable, attempt < maxAttempts else {
                     return failure(transcriptID, attempt, message: message, retryable: retryable)
@@ -346,6 +559,11 @@ public actor TranscriptURLDeliverer {
         } catch {
             if Task.isCancelled || error is CancellationError {
                 return failure(transcriptID, attempts, message: DeliveryError.canceled.localizedDescription, retryable: true)
+            }
+            if error is URLDeliveryKeychain.StorageError,
+               FileManager.default.fileExists(atPath: requestURL(idempotencyKey).path) {
+                try? record(id: idempotencyKey, url: url, attempt: attempts, outcome: .needsAuthentication,
+                            message: validationMessage(error))
             }
             // Never echo Foundation / provider error descriptions: they can
             // contain private URL paths, query values, or credentials.
@@ -406,6 +624,20 @@ public actor TranscriptURLDeliverer {
         }
         object.removeValue(forKey: "cleanedText")
         return try JSONSerialization.data(withJSONObject: object, options: [.sortedKeys])
+    }
+
+    /// The descriptor owns flock until close, including across actor awaits.
+    private func acquireLock(_ id: String) throws -> Int32 {
+        try FileManager.default.createDirectory(at: receiptsDirectoryURL, withIntermediateDirectories: true,
+                                                attributes: [.posixPermissions: 0o700])
+        let descriptor = open(receiptsDirectoryURL.appendingPathComponent("\(id).lock").path,
+                              O_CREAT | O_RDWR | O_NOFOLLOW, 0o600)
+        guard descriptor >= 0 else { throw DeliveryError.storage }
+        guard flock(descriptor, LOCK_EX | LOCK_NB) == 0 else {
+            close(descriptor)
+            throw DeliveryError.inProgress
+        }
+        return descriptor
     }
 
     private func receiptURL(_ id: String) -> URL { receiptsDirectoryURL.appendingPathComponent("\(id).json") }
