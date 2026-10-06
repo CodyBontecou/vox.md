@@ -109,34 +109,47 @@ public enum AudioFileConverter {
         )
         var wroteFrames = false
 
-        while input.framePosition < input.length {
+        // Drive the converter until endOfStream, not merely until the input
+        // file has been read. It may still own a buffered tail at that point.
+        guard inputFramesPerChunk > 0 else { throw ConversionError.couldNotCreateBuffer }
+        while true {
             try Task.checkCancellation()
-            let remaining = AVAudioFrameCount(min(Int64(inputFramesPerChunk), input.length - input.framePosition))
-            guard let source = AVAudioPCMBuffer(pcmFormat: sourceFormat, frameCapacity: remaining) else {
+            let inputPosition = input.framePosition
+            guard let converted = AVAudioPCMBuffer(pcmFormat: targetFormat, frameCapacity: 16_384) else {
                 throw ConversionError.couldNotCreateBuffer
             }
-            try input.read(into: source, frameCount: remaining)
-            if source.frameLength == 0 { break }
-            let capacity = AVAudioFrameCount(ceil(Double(source.frameLength) * targetSampleRate / sourceFormat.sampleRate)) + 32
-            guard let converted = AVAudioPCMBuffer(pcmFormat: targetFormat, frameCapacity: capacity) else {
-                throw ConversionError.couldNotCreateBuffer
-            }
-            var supplied = false
+            var readError: Error?
             var conversionError: NSError?
-            let status = converter.convert(to: converted, error: &conversionError) { _, outStatus in
-                if supplied {
-                    outStatus.pointee = .noDataNow
+            let status = converter.convert(to: converted, error: &conversionError) { requested, outStatus in
+                guard input.framePosition < input.length else {
+                    outStatus.pointee = .endOfStream
                     return nil
                 }
-                supplied = true
-                outStatus.pointee = .haveData
-                return source
+                do {
+                    try Task.checkCancellation()
+                    let count = AVAudioFrameCount(min(Int64(min(inputFramesPerChunk, max(1, requested))), input.length - input.framePosition))
+                    guard let source = AVAudioPCMBuffer(pcmFormat: sourceFormat, frameCapacity: count) else {
+                        throw ConversionError.couldNotCreateBuffer
+                    }
+                    try input.read(into: source, frameCount: count)
+                    outStatus.pointee = source.frameLength > 0 ? .haveData : .endOfStream
+                    return source.frameLength > 0 ? source : nil
+                } catch {
+                    readError = error
+                    outStatus.pointee = .endOfStream
+                    return nil
+                }
             }
+            if let readError { throw readError }
             if let conversionError { throw conversionError }
             guard status != .error else { throw ConversionError.noAudioSamples }
             if converted.frameLength > 0 {
                 try output.write(from: converted)
                 wroteFrames = true
+            }
+            if status == .endOfStream { break }
+            guard converted.frameLength > 0 || input.framePosition > inputPosition else {
+                throw ConversionError.noAudioSamples
             }
         }
         guard wroteFrames else { throw ConversionError.noAudioSamples }
@@ -240,10 +253,18 @@ public enum AudioFileConverter {
         )
         var wrote = false
         for (index, url) in inputURLs.enumerated() {
+            try Task.checkCancellation()
+            guard hasAudioContainerHeader(url) else { throw ConversionError.noAudioSamples }
             let normalized = temporaryDirectory.appendingPathComponent("\(index).wav")
+            defer { try? FileManager.default.removeItem(at: normalized) }
             try convertToWhisperWAVStreaming(inputURL: url, outputURL: normalized, targetSampleRate: targetSampleRate)
-            let source = try AVAudioFile(forReading: normalized)
+            // Default reads expose Float32 buffers. The destination's processing
+            // format is Int16, so matching it explicitly prevents interpreting
+            // floating-point sample bits as PCM16 during concatenation.
+            let source = try AVAudioFile(forReading: normalized, commonFormat: format.commonFormat, interleaved: format.isInterleaved)
+            guard source.length > 0 else { throw ConversionError.noAudioSamples }
             while source.framePosition < source.length {
+                try Task.checkCancellation()
                 let count = AVAudioFrameCount(min(16_384, source.length - source.framePosition))
                 guard let buffer = AVAudioPCMBuffer(pcmFormat: source.processingFormat, frameCapacity: count) else { throw ConversionError.couldNotCreateBuffer }
                 try source.read(into: buffer, frameCount: count)

@@ -15,6 +15,8 @@ struct MacActivityView: View {
     @State private var localErrorMessage: String?
     @State private var isRefreshing = false
     @State private var pendingDeletion: MacActivityDeletion?
+    @State private var stitchSelection: RecordingStitchSelection?
+    @State private var showIndividualClips = false
 
     private let retryCoordinator: MacActivityRetryCoordinator?
     private let recoveryPresets: [CapturePreset]
@@ -63,7 +65,23 @@ struct MacActivityView: View {
             }
 
             ToolbarItemGroup {
-                if !queue.retryAllEligibleJobs.isEmpty {
+                if queue.stitchableJobs.count >= 2 {
+                    Menu("Stitch Recordings", systemImage: "waveform.path") {
+                        Button("Select Recordings") { stitchSelection = RecordingStitchSelection() }
+                        ForEach(queue.stitchSuggestions) { suggestion in
+                            Button("Review \(suggestion.recordings.count) Nearby Clips") {
+                                stitchSelection = RecordingStitchSelection(recordingIDs: suggestion.recordingIDs)
+                            }
+                        }
+                    }
+                    .disabled(queue.isProcessing || queue.isCaptureActive || queue.isStitching)
+                }
+                if !queue.stitchOriginalIDs.isEmpty {
+                    Button(showIndividualClips ? "Grouped Recordings" : "Individual Clips", systemImage: "rectangle.stack") {
+                        showIndividualClips.toggle()
+                    }
+                }
+                if !queue.retryAllEligibleJobs(showIndividualClips: showIndividualClips).isEmpty {
                     Button("Retry All", systemImage: "arrow.clockwise") {
                         Task { await retryAllFailedJobs() }
                     }
@@ -83,6 +101,14 @@ struct MacActivityView: View {
         }
         .onChange(of: visibleItems.map(\.id)) { _, _ in
             reconcileSelection()
+        }
+        .sheet(item: $stitchSelection) { selection in
+            RecordingStitchSelectionView(queue: queue, selection: selection) { job in
+                showIndividualClips = false
+                scope = .all
+                searchText = ""
+                self.selection = .recording(job.id)
+            }
         }
         .alert("Activity Error", isPresented: errorPresented) {
             Button("Dismiss") {}
@@ -109,7 +135,7 @@ struct MacActivityView: View {
         let transcriptIDs = Set(transcriptStore.transcripts.map(\.id))
         let actionableJobs = queue.actionableJobs
         let actionableJobIDs = Set(actionableJobs.map(\.id))
-        let now = actionableJobs
+        let now = queue.visibleJobs(showIndividualClips: showIndividualClips)
             .sorted { $0.createdAt > $1.createdAt }
             .map(MacActivityItem.recording)
 
@@ -210,7 +236,13 @@ struct MacActivityView: View {
                     retryCoordinator: retryCoordinator,
                     recoveryPresets: recoveryPresets,
                     onDelete: { pendingDeletion = .recording(job) },
-                    onError: { localErrorMessage = $0 }
+                    onError: { localErrorMessage = $0 },
+                    onShowOriginal: { id in
+                        showIndividualClips = true
+                        scope = .all
+                        searchText = ""
+                        selection = .recording(id)
+                    }
                 )
 
             case .transcript(let transcript, let delivery):
@@ -301,9 +333,11 @@ struct MacActivityView: View {
 
             if job.phase != .processing && job.phase != .finalizing {
                 Divider()
-                Button("Delete Recording", systemImage: "trash", role: .destructive) {
+                Button(job.stitch == nil ? String(localized: "Delete Recording") : String(localized: "Undo Stitch"),
+                       systemImage: job.stitch == nil ? "trash" : "arrow.uturn.backward", role: .destructive) {
                     pendingDeletion = .recording(job)
                 }
+                .disabled(queue.stitchOriginalIDs.contains(job.id))
             }
 
         case .transcript(let transcript, let delivery):
@@ -340,13 +374,13 @@ struct MacActivityView: View {
     @ViewBuilder
     private func recordingPrimaryAction(for job: RecordingJob) -> some View {
         switch job.phase {
-        case .queued:
+        case .queued where job.delivery != .recovery:
             Button("Process Now", systemImage: "play.fill") {
                 Task { await queue.processNow(job) }
             }
 
-        case .failed where job.delivery == .recovery:
-            Menu("Retry with Preset", systemImage: "arrow.clockwise") {
+        case .queued where job.delivery == .recovery, .failed where job.delivery == .recovery:
+            Menu("Choose Preset", systemImage: "arrow.clockwise") {
                 if recoveryPresets.isEmpty {
                     Text("No Enabled Capture Presets")
                 } else {
@@ -380,7 +414,7 @@ struct MacActivityView: View {
     }
 
     private func retryAllFailedJobs() async {
-        for job in queue.retryAllEligibleJobs {
+        for job in queue.retryAllEligibleJobs(showIndividualClips: showIndividualClips) {
             await retry(job)
         }
     }
@@ -565,8 +599,8 @@ private enum MacActivityDeletion {
 
     var title: String {
         switch self {
-        case .recording:
-            String(localized: "Delete Recording?")
+        case .recording(let job):
+            job.stitch == nil ? String(localized: "Delete Recording?") : String(localized: "Undo Stitch?")
         case .transcript:
             String(localized: "Delete Transcript?")
         case .capture:
@@ -576,8 +610,8 @@ private enum MacActivityDeletion {
 
     var actionTitle: String {
         switch self {
-        case .recording:
-            String(localized: "Delete Recording")
+        case .recording(let job):
+            job.stitch == nil ? String(localized: "Delete Recording") : String(localized: "Undo Stitch")
         case .transcript:
             String(localized: "Delete Transcript")
         case .capture:
@@ -587,8 +621,10 @@ private enum MacActivityDeletion {
 
     var message: String {
         switch self {
-        case .recording:
-            String(localized: "This removes the queued recording and its retained audio. This action can’t be undone.")
+        case .recording(let job):
+            job.stitch == nil
+                ? String(localized: "This removes the queued recording and its retained audio. This action can’t be undone.")
+                : String(localized: "Only the combined recording is removed. Original clips stay saved and appear individually again. Any previously delivered file stays in place.")
         case .transcript:
             String(localized: "This deletes the saved transcript and its Activity and Library record. Any delivered Markdown file stays in place.")
         case .capture:
@@ -802,12 +838,29 @@ private struct MacActivityRecordingDetail: View {
     let recoveryPresets: [CapturePreset]
     let onDelete: () -> Void
     let onError: (String) -> Void
+    let onShowOriginal: (UUID) -> Void
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 header
                 processingStatus
+                if let stitch = job.stitch {
+                    GroupBox("Original Clips (\(stitch.clips.count))") {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Original clips stay saved. Undo Stitch removes only the combined recording.")
+                                .foregroundStyle(.secondary)
+                            ForEach(stitch.clips, id: \.recordingID) { clip in
+                                Button {
+                                    onShowOriginal(clip.recordingID)
+                                } label: {
+                                    Label("\(clip.createdAt.formatted(date: .abbreviated, time: .shortened)) · \(clip.duration.activityDuration)", systemImage: "waveform")
+                                }
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
 
                 if let transcript = job.transcriptText, !transcript.isEmpty {
                     GroupBox("Transcript") {
@@ -934,8 +987,10 @@ private struct MacActivityRecordingDetail: View {
             }
 
             if job.phase != .processing && job.phase != .finalizing {
-                Button("Delete", systemImage: "trash", role: .destructive, action: onDelete)
-                .help("Delete Recording")
+                Button(job.stitch == nil ? String(localized: "Delete") : String(localized: "Undo Stitch"),
+                       systemImage: job.stitch == nil ? "trash" : "arrow.uturn.backward", role: .destructive, action: onDelete)
+                .disabled(queue.stitchOriginalIDs.contains(job.id))
+                .help(job.stitch == nil ? String(localized: "Delete Recording") : String(localized: "Remove only the combined recording"))
             }
         }
         .labelStyle(.iconOnly)
@@ -945,15 +1000,15 @@ private struct MacActivityRecordingDetail: View {
     @ViewBuilder
     private var primaryAction: some View {
         switch job.phase {
-        case .queued:
+        case .queued where job.delivery != .recovery:
             Button("Process Now", systemImage: "play.fill") {
                 Task { await queue.processNow(job) }
             }
             .labelStyle(.titleAndIcon)
             .help("Process Now")
 
-        case .failed where job.delivery == .recovery:
-            Menu("Retry with Preset", systemImage: "arrow.clockwise") {
+        case .queued where job.delivery == .recovery, .failed where job.delivery == .recovery:
+            Menu("Choose Preset", systemImage: "arrow.clockwise") {
                 if recoveryPresets.isEmpty {
                     Text("No Enabled Capture Presets")
                 } else {
@@ -1239,7 +1294,8 @@ private enum MacActivityRevealError: Error, LocalizedError {
 
 private extension RecordingJob {
     var activityTitle: String {
-        switch delivery {
+        if stitch != nil { return String(localized: "Stitched Recording") }
+        return switch delivery {
         case .preset(let preset): preset.accessibilityName
         case .captureDraft: String(localized: "Capture Recording")
         case .clipboard: String(localized: "Clipboard Transcription")
@@ -1249,6 +1305,7 @@ private extension RecordingJob {
     }
 
     var activityStatus: String {
+        if stitch != nil, phase == .queued, delivery == .recovery { return String(localized: "Ready to Process") }
         if phase == .completed, transcriptText != nil {
             return String(localized: "Ready to Copy")
         }
@@ -1263,7 +1320,8 @@ private extension RecordingJob {
     }
 
     var activitySymbolName: String {
-        switch phase {
+        if stitch != nil, phase == .queued, delivery == .recovery { return "waveform.path" }
+        return switch phase {
         case .queued: "clock"
         case .processing, .finalizing: "waveform"
         case .completed: "checkmark.circle.fill"

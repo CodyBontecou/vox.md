@@ -381,6 +381,7 @@ public struct RecordingJob: Codable, Equatable, Identifiable, Sendable {
     /// are treated as one `.primaryAudio` artifact.
     public var artifacts: [RecordingArtifact]?
     public var originalFilename: String?
+    public var stitch: RecordingStitch?
     public var createdAt: Date
     public var updatedAt: Date
     public var duration: TimeInterval
@@ -419,6 +420,7 @@ public struct RecordingJob: Codable, Equatable, Identifiable, Sendable {
         audioFilename: String,
         artifacts: [RecordingArtifact]? = nil,
         originalFilename: String? = nil,
+        stitch: RecordingStitch? = nil,
         createdAt: Date = Date(),
         updatedAt: Date? = nil,
         duration: TimeInterval,
@@ -455,6 +457,7 @@ public struct RecordingJob: Codable, Equatable, Identifiable, Sendable {
         self.audioFilename = audioFilename
         self.artifacts = artifacts
         self.originalFilename = originalFilename
+        self.stitch = stitch
         self.createdAt = createdAt
         self.updatedAt = updatedAt ?? createdAt
         self.duration = max(0, duration)
@@ -491,7 +494,7 @@ public struct RecordingJob: Codable, Equatable, Identifiable, Sendable {
 
     private enum CodingKeys: String, CodingKey {
         case schemaVersion, id, requestID, draftRequestID, liveSessionID, captureSource, locationOutcome
-        case audioFilename, artifacts, originalFilename, createdAt, updatedAt, duration, source, delivery
+        case audioFilename, artifacts, originalFilename, stitch, createdAt, updatedAt, duration, source, delivery
         case voiceProcessingConfiguration, modelID, fallbackModelID, language, retentionPolicy, processingPolicy, initialProcessingPolicy
         case phase, failureStage, statusMessage, attemptCount, revision, transcriptText
         case automaticClipboardDeliveryAttemptedAt, exportedNotePath, exportedAudioPath
@@ -513,6 +516,7 @@ public struct RecordingJob: Codable, Equatable, Identifiable, Sendable {
         audioFilename = try c.decode(String.self, forKey: .audioFilename)
         artifacts = try c.decodeIfPresent([RecordingArtifact].self, forKey: .artifacts)
         originalFilename = try c.decodeIfPresent(String.self, forKey: .originalFilename)
+        stitch = try c.decodeIfPresent(RecordingStitch.self, forKey: .stitch)
         createdAt = try c.decode(Date.self, forKey: .createdAt)
         updatedAt = try c.decode(Date.self, forKey: .updatedAt)
         duration = try c.decode(TimeInterval.self, forKey: .duration)
@@ -744,33 +748,69 @@ public actor RecordingJobStore {
                 retentionPolicy: configuration.sourceAudioRetention, processingPolicy: configuration.processingPolicy,
                 statusMessage: queuedMessage(for: configuration.processingPolicy)
             )
-            let intent = RecordingBundleEnqueueIntent(
-                job: job,
-                sources: entries,
-                removeSourcesAfterCommit: removeSourcesAfterCommit
-            )
-            let intentURL = bundleIntentURL(id: id)
-            do {
-                try encoder.encode(intent).write(to: intentURL, options: .atomic)
-                try materializeBundle(intent)
-                try persist(job)
-                finishBundleCommit(intent, intentURL: intentURL)
-                return job
-            } catch {
-                // A thrown in-process operation retains the previous rollback
-                // contract. A process exit does not execute this path, leaving
-                // the intent to be reconciled before generic orphan recovery.
-                for entry in entries {
-                    try? fileManager.removeItem(at: bundleTemporaryURL(filename: entry.filename))
-                    try? fileManager.removeItem(at: audioDirectoryURL.appendingPathComponent(entry.filename))
-                }
-                try? fileManager.removeItem(at: intentURL)
-                throw error
-            }
+            return try commitBundle(job: job, sources: entries, removeSourcesAfterCommit: removeSourcesAfterCommit)
         }
         notifyChanged()
         return job
     }
+
+    #if os(iOS) || os(macOS)
+    /// Creates a local derivative; original jobs and files remain independent.
+    public func stitch(recordingIDs: [UUID]) throws -> RecordingJob {
+        guard recordingIDs.count >= 2 else { throw RecordingStitchError.selectAtLeastTwo }
+        guard Set(recordingIDs).count == recordingIDs.count else { throw RecordingStitchError.duplicateSelection }
+        let stitched: RecordingJob = try coordinator.coordinateWriting(at: rootDirectoryURL) { _ in
+            try ensureDirectories()
+            _ = recoverPendingBundleEnqueues()
+            let jobs = try loadItems()
+            let held = try protectedStitchOriginalIDs(in: jobs)
+            guard held.isDisjoint(with: recordingIDs) else { throw RecordingStitchError.alreadyStitched }
+            var clips: [RecordingJob] = []
+            for id in recordingIDs {
+                guard let job = jobs.first(where: { $0.id == id }), job.canBeStitched else {
+                    throw RecordingStitchError.unavailableClip
+                }
+                guard isRegularNonSymlinkFile(audioURL(for: job)) else { throw RecordingStitchError.unavailableClip }
+                guard AudioFileConverter.hasAudioContainerHeader(audioURL(for: job)),
+                      let duration = AudioFileConverter.duration(of: audioURL(for: job)), duration > 0 else {
+                    throw RecordingStitchError.invalidAudio
+                }
+                clips.append(job)
+            }
+            clips.sort { $0.createdAt == $1.createdAt ? $0.id.uuidString < $1.id.uuidString : $0.createdAt < $1.createdAt }
+            try Task.checkCancellation()
+            let id = UUID()
+            let working = rootDirectoryURL.appendingPathComponent(".stitching/\(id.uuidString.lowercased())", isDirectory: true)
+            try fileManager.createDirectory(at: working, withIntermediateDirectories: true)
+            defer { try? fileManager.removeItem(at: working) }
+            let output = working.appendingPathComponent("stitched-\(id.uuidString.lowercased()).wav")
+            try AudioFileConverter.concatenateToWhisperWAVStreaming(inputURLs: clips.map { audioURL(for: $0) }, outputURL: output)
+            guard let duration = AudioFileConverter.duration(of: output), duration > 0 else { throw RecordingStitchError.invalidAudio }
+            try Task.checkCancellation()
+            let filename = "\(id.uuidString.lowercased())-primaryAudio.wav"
+            let metadata = RecordingStitch(clips: clips.map {
+                .init(recordingID: $0.id, createdAt: $0.createdAt, duration: AudioFileConverter.duration(of: audioURL(for: $0)) ?? $0.duration)
+            })
+            let job = RecordingJob(
+                id: id, audioFilename: filename,
+                artifacts: [.init(role: .primaryAudio, filename: filename, originalFilename: output.lastPathComponent)],
+                originalFilename: output.lastPathComponent, stitch: metadata, createdAt: now(),
+                duration: duration, source: .recovered, delivery: .recovery,
+                modelID: clips[0].modelID, fallbackModelID: clips[0].fallbackModelID, language: clips[0].language,
+                retentionPolicy: .permanent, processingPolicy: .manual, phase: .queued,
+                statusMessage: "Stitched locally; choose a preset to process it"
+            )
+            // Reuse the bundle write-ahead journal so a crash between audio
+            // publication and metadata publication cannot lose provenance.
+            return try commitBundle(job: job, sources: [.init(
+                role: .primaryAudio, sourcePath: output.path, expectedByteCount: fileSize(at: output),
+                filename: filename, originalFilename: output.lastPathComponent
+            )], removeSourcesAfterCommit: true)
+        }
+        notifyChanged()
+        return stitched
+    }
+    #endif
 
     public func enqueue(
         sourceURL: URL,
@@ -1359,7 +1399,9 @@ public actor RecordingJobStore {
         delivery: RecordingJobDelivery? = nil
     ) throws -> RecordingJob {
         let updated = try mutate(id: id) { job in
-            guard job.phase == .failed else {
+            let isExplicitStitchRoute = job.phase == .queued && job.stitch != nil
+                && job.delivery == .recovery && delivery != nil && delivery != .recovery
+            guard job.phase == .failed || isExplicitStitchRoute else {
                 throw RecordingJobStoreError.invalidTransition(job.id, job.phase, .queued)
             }
             try ensureAudioExists(for: job)
@@ -1381,6 +1423,7 @@ public actor RecordingJobStore {
 
     public func processNow(id: UUID) throws -> RecordingJob {
         let updated = try mutate(id: id) { job in
+            if job.stitch != nil, job.delivery == .recovery { throw RecordingStitchError.choosePreset }
             guard job.phase == .queued || job.phase == .failed else {
                 throw RecordingJobStoreError.invalidTransition(job.id, job.phase, .queued)
             }
@@ -1551,6 +1594,22 @@ public actor RecordingJobStore {
             guard job.phase != .processing && job.phase != .finalizing else {
                 throw RecordingJobStoreError.jobIsActive(job.id)
             }
+            guard !(try protectedStitchOriginalIDs(in: loadItems())).contains(id) else {
+                throw RecordingStitchError.originalInUse
+            }
+            if let stitch = job.stitch, job.phase != .discarded {
+                // Undo must not release an expired retention deadline and
+                // immediately erase the originals. Keep their files before
+                // dropping the group; their delivery/transcript state is intact.
+                for clip in stitch.clips {
+                    if var original = try loadItem(id: clip.recordingID), original.audioDeletedAt == nil {
+                        original.retentionPolicy = .permanent
+                        original.audioDeletionDate = nil
+                        touch(&original)
+                        try persist(original)
+                    }
+                }
+            }
             job.phase = .discarded
             job.failureStage = nil
             job.statusMessage = "Discarded"
@@ -1564,6 +1623,7 @@ public actor RecordingJobStore {
             discarded = try mutate(id: id) { job in
                 job.audioDeletedAt = Date()
             }
+            if discarded.stitch != nil { try? fileManager.removeItem(at: bundleIntentURL(id: id)) }
             for artifact in [
                 RecordingJobExternalDeliveryArtifact.note,
                 .audio,
@@ -1641,6 +1701,7 @@ public actor RecordingJobStore {
                   latest.audioDeletedAt == nil,
                   let deletionDate = latest.audioDeletionDate,
                   deletionDate <= now else { return latest }
+            guard !(try protectedStitchOriginalIDs(in: loadItems())).contains(latest.id) else { return latest }
             for url in artifactURLs(for: latest) where fileManager.fileExists(atPath: url.path) {
                 try fileManager.removeItem(at: url)
             }
@@ -1649,6 +1710,24 @@ public actor RecordingJobStore {
             try persist(latest)
             return latest
         }
+    }
+
+    /// Pending write-ahead commits also own their originals. Reconciliation
+    /// can be deferred by I/O failures (for example, a full disk); cleanup must
+    /// not erase clips merely because the derivative manifest is not live yet.
+    private func protectedStitchOriginalIDs(in jobs: [RecordingJob]) throws -> Set<UUID> {
+        var ids = Set(jobs.filter { $0.phase != .discarded }.flatMap { $0.stitch?.recordingIDs ?? [] })
+        let discardedIDs = Set(jobs.filter { $0.phase == .discarded }.map(\.id))
+        let journals = try fileManager.contentsOfDirectory(at: bundleIntentsDirectoryURL,
+            includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])
+        for url in journals where url.pathExtension == "json" {
+            guard let data = try? Data(contentsOf: url),
+                  let intent = try? decoder.decode(RecordingBundleEnqueueIntent.self, from: data),
+                  isValidBundleIntent(intent, at: url), !discardedIDs.contains(intent.job.id),
+                  let stitch = intent.job.stitch else { continue }
+            ids.formUnion(stitch.recordingIDs)
+        }
+        return ids
     }
 
     private func loadItems() throws -> [RecordingJob] {
@@ -1726,8 +1805,13 @@ public actor RecordingJobStore {
                   isValidBundleIntent(intent, at: url) else { continue }
             claimed.formUnion(intent.sources.map(\.filename))
             do {
+                let existing = try loadItem(id: intent.job.id)
+                if existing?.stitch != nil, existing?.phase == .discarded {
+                    finishBundleCommit(intent, intentURL: url)
+                    continue
+                }
                 try materializeBundle(intent)
-                if try loadItem(id: intent.job.id) == nil { try persist(intent.job) }
+                if existing == nil { try persist(intent.job) }
                 finishBundleCommit(intent, intentURL: url)
             } catch {
                 for source in intent.sources {
@@ -1738,6 +1822,29 @@ public actor RecordingJobStore {
             }
         }
         return claimed
+    }
+
+    private func commitBundle(
+        job: RecordingJob, sources: [RecordingBundleEnqueueIntent.Source], removeSourcesAfterCommit: Bool
+    ) throws -> RecordingJob {
+        let intent = RecordingBundleEnqueueIntent(job: job, sources: sources, removeSourcesAfterCommit: removeSourcesAfterCommit)
+        let intentURL = bundleIntentURL(id: job.id)
+        do {
+            try encoder.encode(intent).write(to: intentURL, options: .atomic)
+            try materializeBundle(intent)
+            try persist(job)
+            finishBundleCommit(intent, intentURL: intentURL)
+            return job
+        } catch {
+            // In-process failures roll back. A process exit leaves the intent
+            // available for recovery before generic audio-orphan scanning.
+            for source in sources {
+                try? fileManager.removeItem(at: bundleTemporaryURL(filename: source.filename))
+                try? fileManager.removeItem(at: audioDirectoryURL.appendingPathComponent(source.filename))
+            }
+            try? fileManager.removeItem(at: intentURL)
+            throw error
+        }
     }
 
     private func materializeBundle(_ intent: RecordingBundleEnqueueIntent) throws {

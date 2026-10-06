@@ -47,6 +47,7 @@ public final class RecordingJobQueue {
     public private(set) var activeJobID: UUID?
     public private(set) var transcriptionProgress: TranscriptionProgress?
     public private(set) var lastError: String?
+    public private(set) var isStitching = false
 
     public var isProcessing: Bool { processingTask != nil }
     public var activeJob: RecordingJob? {
@@ -59,21 +60,55 @@ public final class RecordingJobQueue {
             case .queued, .processing, .finalizing, .failed:
                 return true
             case .completed:
-                return job.transcriptText != nil || job.audioDeletedAt == nil
+                return job.transcriptText != nil || job.audioDeletedAt == nil || job.stitch != nil
             case .discarded:
                 return false
             }
         }
     }
     public var pendingCount: Int {
-        jobs.filter { $0.phase == .queued || $0.phase == .failed }.count
+        visibleJobs(showIndividualClips: false).filter { $0.phase == .queued || $0.phase == .failed }.count
+    }
+    public var stitchOriginalIDs: Set<UUID> {
+        Set(jobs.filter { $0.phase != .discarded }.flatMap { $0.stitch?.recordingIDs ?? [] })
+    }
+    public var stitchableJobs: [RecordingJob] {
+        let originals = stitchOriginalIDs
+        return actionableJobs.filter { $0.canBeStitched && !originals.contains($0.id) && audioURL(for: $0) != nil }
+    }
+    public var stitchSuggestions: [RecordingStitchSuggestion] {
+        RecordingStitchSuggestions.groups(in: stitchableJobs)
+    }
+    public func visibleJobs(showIndividualClips: Bool) -> [RecordingJob] {
+        if showIndividualClips { return actionableJobs.filter { $0.stitch == nil } }
+        let originals = stitchOriginalIDs
+        return actionableJobs.filter { !originals.contains($0.id) }
     }
     public var retryAllEligibleJobs: [RecordingJob] {
-        actionableJobs.filter { $0.phase == .failed && $0.delivery != .recovery }
+        retryAllEligibleJobs(showIndividualClips: false)
     }
+    public func retryAllEligibleJobs(showIndividualClips: Bool) -> [RecordingJob] {
+        visibleJobs(showIndividualClips: showIndividualClips).filter { $0.phase == .failed && $0.delivery != .recovery }
+    }
+
+    #if os(iOS) || os(macOS)
+    public func stitchRecordings(_ recordingIDs: [UUID]) async throws -> RecordingJob {
+        guard !isStitching, !isProcessing, !isCaptureActive else { throw RecordingStitchError.unavailableClip }
+        isStitching = true
+        let lease = beginCaptureLease()
+        defer {
+            isStitching = false
+            endCaptureLease(lease)
+        }
+        let stitched = try await store.stitch(recordingIDs: recordingIDs)
+        await refresh()
+        return stitched
+    }
+    #endif
 
     public let store: RecordingJobStore
     private let executor: RecordingJobExecutor
+    private let retryPresetLookup: (String) -> CapturePreset?
     private let processStartedAt = Date()
     private var processingTask: Task<Void, Never>?
     private var includesIdleWork = false
@@ -106,9 +141,11 @@ public final class RecordingJobQueue {
 
     public init(
         store: RecordingJobStore,
+        retryPresetLookup: @escaping (String) -> CapturePreset? = { CapturePresetStore.flow(id: $0) },
         executor: @escaping RecordingJobExecutor
     ) {
         self.store = store
+        self.retryPresetLookup = retryPresetLookup
         self.executor = executor
         storeChangeObserver = NotificationCenter.default.addObserver(
             forName: RecordingJobStore.didChangeNotification,
@@ -353,13 +390,17 @@ public final class RecordingJobQueue {
         delivery: RecordingJobDelivery? = nil
     ) async {
         do {
+            let current = try await store.job(id: job.id) ?? job
+            let retryDelivery = RecordingJobRetryDelivery.resolve(
+                for: current, override: delivery, presetLookup: retryPresetLookup
+            )
             _ = try await store.retry(
                 id: job.id,
                 modelID: modelID,
                 fallbackModelID: fallbackModelID,
                 replaceFallbackModelID: replaceFallbackModelID,
                 language: language,
-                delivery: delivery
+                delivery: retryDelivery
             )
             _ = try await store.processNow(id: job.id)
             await refresh()

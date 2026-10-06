@@ -232,6 +232,8 @@ private final class RecordingQueueRetryCoordinator: @unchecked Sendable {
 struct RecordingQueueView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Bindable var queue: RecordingJobQueue
+    @State private var stitchSelection: RecordingStitchSelection?
+    @State private var showIndividualClips = false
     #if DEBUG
     @State private var runtimeValidationStatus: String?
     #endif
@@ -258,17 +260,35 @@ struct RecordingQueueView: View {
 
                     VStack(alignment: .leading, spacing: Geist.Spacing.four) {
                         queueSectionHeader
+                        stitchControls
 
                         if queue.actionableJobs.isEmpty {
                             emptyQueueView
                         } else {
-                            ForEach(queue.actionableJobs) { job in
-                                RecordingQueueRow(
-                                    job: job,
-                                    queue: queue,
-                                    retryCoordinator: retryCoordinator,
-                                    recoveryPresets: recoveryPresets
-                                )
+                            ForEach(queue.visibleJobs(showIndividualClips: showIndividualClips)) { job in
+                                VStack(alignment: .leading, spacing: Geist.Spacing.four) {
+                                    RecordingQueueRow(job: job, queue: queue,
+                                        retryCoordinator: retryCoordinator, recoveryPresets: recoveryPresets)
+                                    if let stitch = job.stitch {
+                                        DisclosureGroup("Original Clips (\(stitch.clips.count))") {
+                                            ForEach(stitch.clips, id: \.recordingID) { clip in
+                                                if let original = queue.jobs.first(where: { $0.id == clip.recordingID }) {
+                                                    GeistDivider()
+                                                    RecordingQueueRow(job: original, queue: queue,
+                                                        retryCoordinator: retryCoordinator, recoveryPresets: recoveryPresets)
+                                                        .padding(.vertical, Geist.Spacing.three)
+                                                } else {
+                                                    Text("Original clip unavailable")
+                                                        .foregroundStyle(Geist.muted)
+                                                }
+                                            }
+                                        }
+                                        .tint(Geist.text)
+                                        Text("Original clips stay saved. Undo Stitch removes only the combined recording.")
+                                            .font(Geist.caption())
+                                            .foregroundStyle(Geist.muted)
+                                    }
+                                }
                                 .geistCard(padding: Geist.Spacing.four)
                             }
                         }
@@ -285,7 +305,7 @@ struct RecordingQueueView: View {
         .navigationBarTitleDisplayMode(dynamicTypeSize.isAccessibilitySize ? .inline : .large)
         #endif
         .toolbar {
-            if !queue.retryAllEligibleJobs.isEmpty {
+            if !queue.retryAllEligibleJobs(showIndividualClips: showIndividualClips).isEmpty {
                 ToolbarItem {
                     Button("Retry All", systemImage: "arrow.clockwise") {
                         Task { await retryAllFailedJobs() }
@@ -332,10 +352,66 @@ struct RecordingQueueView: View {
         .accessibilityIdentifier("recording-queue-runtime-actions")
         .accessibilityLabel(runtimeValidationStatus ?? "Runtime queue actions pending")
         #endif
+        .sheet(item: $stitchSelection) { selection in
+            RecordingStitchSelectionView(queue: queue, selection: selection) { _ in
+                showIndividualClips = false
+            }
+        }
         .alert("Recording Queue Error", isPresented: errorPresented) {
             Button("Dismiss Error") {}
         } message: {
             Text(queue.lastError ?? String(localized: "Unknown error"))
+        }
+    }
+
+    @ViewBuilder
+    private var stitchControls: some View {
+        if !queue.stitchOriginalIDs.isEmpty {
+            let picker = Picker("Recording View", selection: $showIndividualClips) {
+                Text("Grouped").tag(false)
+                Text("Individual Clips").tag(true)
+            }
+            .accessibilityIdentifier("recording-view-mode")
+            if dynamicTypeSize.isAccessibilitySize {
+                picker.pickerStyle(.menu)
+                    .labelsHidden()
+                    .font(Geist.label())
+                    .tint(Geist.text)
+            } else {
+                picker.pickerStyle(.segmented)
+            }
+        }
+        if queue.stitchableJobs.count >= 2 {
+            Button("Stitch Recordings", systemImage: "waveform.path") {
+                stitchSelection = RecordingStitchSelection()
+            }
+            .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+            .disabled(queue.isProcessing || queue.isCaptureActive || queue.isStitching)
+            ForEach(Array(queue.stitchSuggestions.prefix(3))) { suggestion in
+                Button {
+                    stitchSelection = RecordingStitchSelection(recordingIDs: suggestion.recordingIDs)
+                } label: {
+                    HStack(alignment: .top, spacing: Geist.Spacing.three) {
+                        VStack(alignment: .leading, spacing: Geist.Spacing.one) {
+                            Text("Review \(suggestion.recordings.count) Nearby Clips")
+                                .font(Geist.label())
+                                .foregroundStyle(Geist.text)
+                            Text(suggestion.recordings[0].createdAt.formatted(date: .abbreviated, time: .shortened))
+                                .font(Geist.caption())
+                                .foregroundStyle(Geist.muted)
+                        }
+                        Spacer(minLength: 0)
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(Geist.muted)
+                            .accessibilityHidden(true)
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .disabled(queue.isProcessing || queue.isCaptureActive || queue.isStitching)
+                .accessibilityHint("Timestamps suggest these clips may belong together; review before stitching")
+            }
         }
     }
 
@@ -346,10 +422,10 @@ struct RecordingQueueView: View {
                 .foregroundStyle(Geist.text)
             Spacer()
             if !queue.actionableJobs.isEmpty {
-                Text("\(queue.actionableJobs.count)")
+                Text("\(queue.visibleJobs(showIndividualClips: showIndividualClips).count)")
                     .font(Geist.mono(.footnote, medium: true))
                     .foregroundStyle(Geist.muted)
-                    .accessibilityLabel("\(queue.actionableJobs.count) recordings")
+                    .accessibilityLabel("\(queue.visibleJobs(showIndividualClips: showIndividualClips).count) recordings")
             }
         }
     }
@@ -501,7 +577,7 @@ struct RecordingQueueView: View {
     #endif
 
     private func retryAllFailedJobs() async {
-        for job in queue.retryAllEligibleJobs {
+        for job in queue.retryAllEligibleJobs(showIndividualClips: showIndividualClips) {
             if let retryCoordinator {
                 await retryCoordinator.retry(job)
             } else {
@@ -551,7 +627,7 @@ private struct RecordingQueueRow: View {
                !message.isEmpty {
                 Text(message)
                     .font(Geist.caption())
-                    .foregroundStyle(job.phase == .failed ? Geist.error : Geist.muted)
+                    .foregroundStyle(statusColor)
             }
 
             if queue.activeJobID == job.id,
@@ -646,22 +722,26 @@ private struct RecordingQueueRow: View {
     @ViewBuilder
     private var deleteAction: some View {
         if job.phase != .processing && job.phase != .finalizing {
-            Button("Delete Recording", systemImage: "trash", role: .destructive) {
+            Button(job.stitch == nil ? String(localized: "Delete Recording") : String(localized: "Undo Stitch"),
+                   systemImage: job.stitch == nil ? "trash" : "arrow.uturn.backward", role: .destructive) {
                 Task { await queue.discard(job) }
             }
             .buttonStyle(GeistButtonStyle(variant: .destructive, size: .small))
+            .disabled(queue.stitchOriginalIDs.contains(job.id))
+            .accessibilityHint(queue.stitchOriginalIDs.contains(job.id)
+                ? "Undo Stitch before deleting an original clip" : "")
         }
     }
 
     @ViewBuilder
     private var primaryAction: some View {
         switch job.phase {
-        case .queued:
+        case .queued where job.delivery != .recovery:
             Button("Process Now", systemImage: "play.fill") {
                 Task { await queue.processNow(job) }
             }
             .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
-        case .failed where job.delivery == .recovery:
+        case .queued where job.delivery == .recovery, .failed where job.delivery == .recovery:
             Menu("Choose Preset", systemImage: "arrow.triangle.branch") {
                 if recoveryPresets.isEmpty {
                     Text("No enabled Capture Presets")
@@ -720,6 +800,7 @@ private struct RecordingQueueRow: View {
     }
 
     private var title: String {
+        if job.stitch != nil { return String(localized: "Stitched Recording") }
         switch job.delivery {
         case .preset(let preset):
             return preset.accessibilityName
@@ -735,6 +816,7 @@ private struct RecordingQueueRow: View {
     }
 
     private var symbolName: String {
+        if isUnprocessedStitch { return "waveform.path" }
         switch job.phase {
         case .queued: return "clock"
         case .processing, .finalizing: return "waveform"
@@ -745,6 +827,7 @@ private struct RecordingQueueRow: View {
     }
 
     private var status: String {
+        if isUnprocessedStitch { return String(localized: "Ready to process") }
         if job.phase == .completed, job.transcriptText != nil {
             return String(localized: "Ready to copy")
         }
@@ -759,6 +842,7 @@ private struct RecordingQueueRow: View {
     }
 
     private var statusSymbolName: String {
+        if isUnprocessedStitch { return "checkmark.circle" }
         switch job.phase {
         case .queued: return "clock"
         case .processing, .finalizing: return "waveform"
@@ -768,8 +852,12 @@ private struct RecordingQueueRow: View {
         }
     }
 
+    private var isUnprocessedStitch: Bool {
+        job.stitch != nil && job.phase == .queued && job.delivery == .recovery
+    }
+
     private var statusColor: Color {
-        job.phase == .failed ? Geist.error : Geist.muted
+        job.phase == .failed && !isUnprocessedStitch ? Geist.error : Geist.muted
     }
 
     @discardableResult

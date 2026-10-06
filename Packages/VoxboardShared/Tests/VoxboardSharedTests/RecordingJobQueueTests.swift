@@ -472,6 +472,69 @@ final class RecordingJobQueueTests: XCTestCase {
         XCTAssertEqual(routed.processingPolicy, .immediate)
     }
 
+    func test_failedHTTPRecordingRetryUsesCorrectedEndpointWithoutChangingFrozenPolicy() async throws {
+        let fixture = try QueueFixture()
+        defer { fixture.cleanup() }
+        var original = CapturePreset(id: "http", name: "Original", symbolName: "mic")
+        original.exportSettings.urlDelivery = .init(enabled: true, urlString: "")
+        original.postProcessingMode = .clean
+        var corrected = original
+        corrected.name = "Edited"
+        corrected.postProcessingMode = .todoList
+        corrected.exportSettings.urlDelivery.urlString = "https://example.invalid/corrected"
+        let queue = RecordingJobQueue(
+            store: fixture.store,
+            retryPresetLookup: { $0 == original.id ? corrected : nil }
+        ) { job, _, _ in
+            guard case .preset(let preset) = job.delivery else {
+                XCTFail("The retry lost its preset")
+                return RecordingJobExecutionResult()
+            }
+            _ = try URLDeliveryValidator.validate(preset.exportSettings.urlDelivery.urlString)
+            return RecordingJobExecutionResult()
+        }
+        let job = try await fixture.enqueue(on: queue, policy: .manual, delivery: .preset(original))
+        _ = try await fixture.store.claim(id: job.id)
+        let failed = try await fixture.store.markFailed(
+            id: job.id, stage: .delivery, message: "Enter a delivery URL."
+        )
+
+        // Retry with no override, exactly as the iOS and Mac queue UI does.
+        await queue.retry(failed)
+        try await waitUntil {
+            let persisted = try await fixture.store.job(id: job.id)
+            return persisted?.attemptCount == 2 && (persisted?.phase == .completed || persisted?.phase == .failed)
+        }
+        let loaded = try await fixture.store.job(id: job.id)
+        let persisted = try XCTUnwrap(loaded)
+        XCTAssertEqual(persisted.phase, .completed, persisted.statusMessage ?? "")
+        guard case .preset(let retried) = persisted.delivery else { return XCTFail("Missing preset") }
+        XCTAssertEqual(retried.exportSettings.urlDelivery, corrected.exportSettings.urlDelivery)
+        XCTAssertEqual(retried.name, original.name)
+        XCTAssertEqual(retried.postProcessingMode, original.postProcessingMode)
+        XCTAssertEqual(persisted.id, job.id)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: fixture.store.audioURL(for: persisted).path))
+    }
+
+    func test_failedHTTPRecordingCanBeKeptWithoutValidEndpoint() async throws {
+        let fixture = try QueueFixture()
+        defer { fixture.cleanup() }
+        var preset = CapturePresetStore.makeCustomFlow()
+        preset.exportSettings.urlDelivery = .init(enabled: true, urlString: "")
+        let queue = RecordingJobQueue(store: fixture.store) { _, _, _ in RecordingJobExecutionResult() }
+        let job = try await fixture.enqueue(on: queue, policy: .manual, delivery: .preset(preset))
+        _ = try await fixture.store.claim(id: job.id)
+        let failed = try await fixture.store.markFailed(id: job.id, stage: .delivery, message: "Enter a delivery URL.")
+
+        await queue.updateRetention(failed, policy: .permanent)
+
+        let persisted = try await fixture.store.job(id: job.id)
+        XCTAssertNil(queue.lastError)
+        XCTAssertEqual(persisted?.phase, .failed)
+        XCTAssertEqual(persisted?.retentionPolicy, .permanent)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: fixture.store.audioURL(for: failed).path))
+    }
+
     func test_retryCanExplicitlyClearPersistedFallbackModel() async throws {
         let fixture = try QueueFixture()
         defer { fixture.cleanup() }
