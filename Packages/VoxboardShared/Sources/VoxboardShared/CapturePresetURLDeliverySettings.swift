@@ -241,3 +241,38 @@ public enum URLDeliveryValidator {
         }
     }
 }
+
+/// Redact only the known preset snapshot in a validated queue/handoff archive.
+/// Keep unknown metadata and capture state intact; never sweep arbitrary JSON.
+enum URLDeliveryLegacyArchive {
+    static func scrub(_ data: Data, at url: URL) throws {
+        guard var root = try JSONSerialization.jsonObject(with: data) as? [String: Any] else { return }
+        if var job = root["job"] as? [String: Any] {
+            guard redactDelivery(in: &job) else { return }
+            root["job"] = job
+        } else {
+            guard redactDelivery(in: &root) else { return }
+        }
+        let redacted = try JSONSerialization.data(withJSONObject: root, options: [.prettyPrinted, .sortedKeys])
+        try redacted.write(to: url, options: .atomic)
+        try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: url.path)
+    }
+
+    private static func redactDelivery(in archive: inout [String: Any]) -> Bool {
+        guard var delivery = archive["delivery"] as? [String: Any],
+              var associated = delivery["preset"] as? [String: Any],
+              var preset = associated["_0"] as? [String: Any],
+              var export = preset["exportSettings"] as? [String: Any],
+              var settings = export["urlDelivery"] as? [String: Any],
+              let headers = settings["customHeaders"] as? [String: String], !headers.isEmpty else { return false }
+        settings.removeValue(forKey: "customHeaders")
+        settings["hasCustomHeaders"] = true
+        settings["requiresCredentialMigration"] = true
+        export["urlDelivery"] = settings
+        preset["exportSettings"] = export
+        associated["_0"] = preset
+        delivery["preset"] = associated
+        archive["delivery"] = delivery
+        return true
+    }
+}

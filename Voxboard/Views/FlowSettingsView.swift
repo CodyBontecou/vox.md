@@ -255,9 +255,7 @@ struct CapturePresetSettingsView: View {
 
     private func delete(_ flow: CapturePreset) {
         do {
-            if let id = flow.exportSettings.urlDelivery.credentialID {
-                try URLDeliveryKeychain.deleteCredentials(forID: id)
-            }
+            try URLDeliveryKeychain.deleteCredentials(for: flow.exportSettings.urlDelivery)
         } catch {
             deletionError = String(localized: "Saved URL credentials could not be removed. Unlock your device and try again. The preset has not been deleted.")
             return

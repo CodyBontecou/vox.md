@@ -50,6 +50,12 @@ public enum URLDeliveryKeychain {
         try Store(client: .live).delete(id: id)
     }
 
+    /// Explicit removal/deletion also retires the old host account when a
+    /// legacy preset requires reauthorization. No legacy token is ever read.
+    public static func deleteCredentials(for settings: CapturePresetURLDeliverySettings) throws {
+        try Store(client: .live).delete(settings: settings)
+    }
+
     /// Never falls back to PR #35's host-scoped account: that could share one
     /// preset's token with another endpoint on the same host.
     static func token(forID id: String) throws -> String? {
@@ -128,6 +134,23 @@ public enum URLDeliveryKeychain {
             let update = client.update(id, data)
             let status = update == errSecItemNotFound ? client.add(id, data) : update
             guard status == errSecSuccess else { throw StorageError.unavailable(status) }
+        }
+
+        func delete(settings: CapturePresetURLDeliverySettings) throws {
+            if settings.requiresCredentialMigration, settings.credentialID == nil, settings.hasBearerToken {
+                guard let endpoint = URLComponents(string: settings.urlString),
+                      ["https", "http"].contains(endpoint.scheme?.lowercased() ?? ""),
+                      let host = endpoint.host, !host.isEmpty, UUID(uuidString: host) == nil else {
+                    throw StorageError.invalidData
+                }
+                // PR #35 used URL.host as the account. Delete this exact
+                // referenced account only; never delete the service wholesale.
+                try delete(id: host)
+            }
+            if let id = settings.credentialID {
+                guard UUID(uuidString: id) != nil else { throw StorageError.invalidData }
+                try delete(id: id)
+            }
         }
 
         func delete(id: String) throws {

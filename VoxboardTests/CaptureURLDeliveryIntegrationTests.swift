@@ -95,6 +95,42 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: fixture.vault.appendingPathComponent("Inbox.md").path))
     }
 
+    func testHTTPOnlyRetryAfterNoteSuccessDoesNotRepeatLocalDelivery() async throws {
+        let fixture = try await makeFixture(maxAttempts: 1, responseStatuses: [503, 200])
+        fixture.model.draft.text = "Synthetic partial delivery"
+        let id = fixture.model.draft.requestID
+        await fixture.model.submit()
+        // Wait for the dispatched attempt to finish without requesting a retry.
+        for _ in 0..<500 {
+            if fixture.owner.activeIDs.isEmpty { break }
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        XCTAssertTrue(fixture.owner.activeIDs.isEmpty)
+        let noteURL = try XCTUnwrap(fixture.model.lastReceipt?.noteURL)
+        let original = try Data(contentsOf: noteURL)
+        XCTAssertEqual(ComposerHTTPProtocol.requestCount, 1)
+        XCTAssertEqual(fixture.owner.receipts.first?.outcome, .retryable)
+        await fixture.owner.retry(id: id)
+        XCTAssertEqual(ComposerHTTPProtocol.requestCount, 2)
+        XCTAssertTrue(fixture.owner.receipts.isEmpty)
+        XCTAssertEqual(try Data(contentsOf: noteURL), original)
+        XCTAssertEqual(fixture.model.draft.text, "")
+    }
+
+    func testNativeKeychainRoundTripAndDeletionForSyntheticAccount() throws {
+        let id = UUID().uuidString
+        defer { try? URLDeliveryKeychain.deleteCredentials(forID: id) }
+        let credentials = URLDeliveryKeychain.Credentials(urlString: "https://example.invalid/synthetic",
+            bearerToken: "synthetic-test-token", customHeaders: ["X-Test": "synthetic-test-header"])
+        try URLDeliveryKeychain.saveCredentials(credentials, forID: id)
+        XCTAssertEqual(try URLDeliveryKeychain.credentials(forID: id), credentials)
+        let replacement = URLDeliveryKeychain.Credentials(urlString: credentials.urlString, bearerToken: "synthetic-replacement")
+        try URLDeliveryKeychain.saveCredentials(replacement, forID: id)
+        XCTAssertEqual(try URLDeliveryKeychain.credentials(forID: id), replacement)
+        try URLDeliveryKeychain.deleteCredentials(forID: id)
+        XCTAssertNil(try URLDeliveryKeychain.credentials(forID: id))
+    }
+
     private struct Fixture {
         let model: QuickCaptureViewModel
         let owner: URLDeliveryCoordinator
@@ -107,7 +143,7 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
 
     private func makeFixture(
         processor: (any CapturePresetTextProcessing)? = nil, brokenJournal: Bool = false,
-        refuseLease: Bool = false, sleeper: @escaping TranscriptURLDeliverer.Sleeper = { _ in }
+        refuseLease: Bool = false, maxAttempts: Int = 2, responseStatuses: [Int] = [503], sleeper: @escaping TranscriptURLDeliverer.Sleeper = { _ in }
     ) async throws -> Fixture {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("ComposerURL-\(UUID().uuidString)")
         let vault = root.appendingPathComponent("vault")
@@ -125,9 +161,9 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         preset.captureDestinationID = destination.id
         preset.postProcessingMode = processor == nil ? .none : .clean
         preset.captureProcessingEnabled = true
-        preset.exportSettings.urlDelivery = .init(enabled: true, urlString: "https://example.invalid/ingest", maxAttempts: 2)
+        preset.exportSettings.urlDelivery = .init(enabled: true, urlString: "https://example.invalid/ingest", maxAttempts: maxAttempts)
         CapturePresetStore.saveFlows([preset], defaults: defaults, widgetRefresh: .disabled)
-        ComposerHTTPProtocol.reset()
+        ComposerHTTPProtocol.reset(statuses: responseStatuses)
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [ComposerHTTPProtocol.self]
         let sender = TranscriptURLDeliverer(session: URLSession(configuration: configuration), receiptsDirectoryURL: journal,
@@ -167,13 +203,17 @@ private actor PausedComposerTextProcessor: CapturePresetTextProcessing {
 nonisolated private final class ComposerHTTPProtocol: URLProtocol, @unchecked Sendable {
     private static let lock = NSLock()
     nonisolated(unsafe) private static var count = 0
+    nonisolated(unsafe) private static var statuses = [503]
     static var requestCount: Int { lock.lock(); defer { lock.unlock() }; return count }
-    static func reset() { lock.lock(); defer { lock.unlock() }; count = 0 }
+    static func reset(statuses: [Int] = [503]) { lock.lock(); defer { lock.unlock() }; count = 0; self.statuses = statuses }
     override class func canInit(with request: URLRequest) -> Bool { true }
     override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
     override func startLoading() {
-        Self.lock.lock(); Self.count += 1; Self.lock.unlock()
-        guard let url = request.url, let response = HTTPURLResponse(url: url, statusCode: 503, httpVersion: "HTTP/1.1", headerFields: nil) else { return }
+        Self.lock.lock()
+        let status = Self.statuses[min(Self.count, Self.statuses.count - 1)]
+        Self.count += 1
+        Self.lock.unlock()
+        guard let url = request.url, let response = HTTPURLResponse(url: url, statusCode: status, httpVersion: "HTTP/1.1", headerFields: nil) else { return }
         client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
         client?.urlProtocolDidFinishLoading(self)
     }

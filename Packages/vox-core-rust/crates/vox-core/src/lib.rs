@@ -392,13 +392,20 @@ pub struct LocationStructuredField {
 }
 
 fn default_location_structured_fields() -> Vec<LocationStructuredField> {
-    ["coordinates", "place", "appleMapsURL", "timestamp", "source", "id"]
-        .into_iter()
-        .map(|field| LocationStructuredField {
-            field: field.to_owned(),
-            output_key: field.to_owned(),
-        })
-        .collect()
+    [
+        "coordinates",
+        "place",
+        "appleMapsURL",
+        "timestamp",
+        "source",
+        "id",
+    ]
+    .into_iter()
+    .map(|field| LocationStructuredField {
+        field: field.to_owned(),
+        output_key: field.to_owned(),
+    })
+    .collect()
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -951,9 +958,10 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
                 label.country.as_deref(),
             ];
             if values.iter().all(|value| value.is_none())
-                || values.iter().flatten().any(|value| {
-                    value.is_empty() || value.len() > 512 || value.trim() != *value
-                })
+                || values
+                    .iter()
+                    .flatten()
+                    .any(|value| value.is_empty() || value.len() > 512 || value.trim() != *value)
                 || (snapshot.precision == "city" && label.place.is_some())
             {
                 return Err(CoreError::InvalidControl);
@@ -980,8 +988,7 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
                 || observation.consent_version.is_some()
                 || observation.outcome != "notRequested"))
             || (observation.requested
-                && (observation.lookup_class == "none"
-                    || observation.outcome == "notRequested"))
+                && (observation.lookup_class == "none" || observation.outcome == "notRequested"))
             || ((observation.lookup_class == "systemMayUseNetwork")
                 != observation.consent_version.is_some())
             || ((observation.outcome == "frozen")
@@ -1508,10 +1515,7 @@ fn structured_location_value(
     values: &BTreeMap<&str, String>,
 ) -> Option<String> {
     match field {
-        "coordinates" => Some(format!(
-            "[{}, {}]",
-            formatted.latitude, formatted.longitude
-        )),
+        "coordinates" => Some(format!("[{}, {}]", formatted.latitude, formatted.longitude)),
         "latitude" => Some(formatted.latitude.clone()),
         "longitude" => Some(formatted.longitude.clone()),
         "accuracy" => formatted
@@ -3114,9 +3118,8 @@ mod tests {
     fn recording_origin_and_asset_descriptors_are_admitted_without_copying_asset_bytes() {
         let mut input = mutation_input("newNote");
         input.preset.route_policy.collision_policy = "deterministicSuffix".to_owned();
-        input.invocation.origin_recording_id = Some(
-            Uuid::parse_str("77777777-7777-4777-8777-777777777777").unwrap(),
-        );
+        input.invocation.origin_recording_id =
+            Some(Uuid::parse_str("77777777-7777-4777-8777-777777777777").unwrap());
         input.payloads.push(Payload::Asset {
             id: Uuid::parse_str("88888888-8888-4888-8888-888888888888").unwrap(),
             source_id: Uuid::parse_str("88888888-8888-4888-8888-888888888888").unwrap(),
@@ -3447,10 +3450,22 @@ mod tests {
             precision: "exact".to_owned(),
             output_mode: "structured".to_owned(),
             structured_fields: vec![
-                LocationStructuredField { field: "longitude".to_owned(), output_key: "lng".to_owned() },
-                LocationStructuredField { field: "coordinates".to_owned(), output_key: "point".to_owned() },
-                LocationStructuredField { field: "accuracy".to_owned(), output_key: "uncertainty".to_owned() },
-                LocationStructuredField { field: "googleMapsURL".to_owned(), output_key: "map".to_owned() },
+                LocationStructuredField {
+                    field: "longitude".to_owned(),
+                    output_key: "lng".to_owned(),
+                },
+                LocationStructuredField {
+                    field: "coordinates".to_owned(),
+                    output_key: "point".to_owned(),
+                },
+                LocationStructuredField {
+                    field: "accuracy".to_owned(),
+                    output_key: "uncertainty".to_owned(),
+                },
+                LocationStructuredField {
+                    field: "googleMapsURL".to_owned(),
+                    output_key: "map".to_owned(),
+                },
             ],
             collection_key: "visits".to_owned(),
             advanced_template: String::new(),
@@ -3474,8 +3489,12 @@ mod tests {
         let longitude = markdown.find("    lng: -66.105700").unwrap();
         let coordinates = markdown.find("    point: [18.465500, -66.105700]").unwrap();
         let accuracy = markdown.find("    uncertainty: 4.2").unwrap();
-        let map = markdown.find("    map: \"https://www.google.com/maps/search/").unwrap();
-        assert!(id < longitude && longitude < coordinates && coordinates < accuracy && accuracy < map);
+        let map = markdown
+            .find("    map: \"https://www.google.com/maps/search/")
+            .unwrap();
+        assert!(
+            id < longitude && longitude < coordinates && coordinates < accuracy && accuracy < map
+        );
         assert!(!markdown.contains("    latitude:"));
     }
 
@@ -3552,7 +3571,12 @@ mod tests {
 
         let mut city_leak = input;
         city_leak.preset.location_policy.as_mut().unwrap().precision = "city".to_owned();
-        city_leak.invocation.location_snapshot.as_mut().unwrap().precision = "city".to_owned();
+        city_leak
+            .invocation
+            .location_snapshot
+            .as_mut()
+            .unwrap()
+            .precision = "city".to_owned();
         assert_eq!(
             validate_materialization(&city_leak, 1),
             Err(CoreError::InvalidControl)
@@ -3580,7 +3604,10 @@ mod tests {
         input.invocation.location_snapshot = None;
 
         let (_, rendered) = materialize(&input, None, Some(b"Earlier")).unwrap();
-        assert_eq!(String::from_utf8(rendered).unwrap(), "Earlier\n\ncaptured payload");
+        assert_eq!(
+            String::from_utf8(rendered).unwrap(),
+            "Earlier\n\ncaptured payload"
+        );
         assert_eq!(
             serde_json::to_value(&input).unwrap()["invocation"]["locationUnavailableReason"],
             "timeout"

@@ -143,6 +143,9 @@ struct URLDeliverySettingsSection: View {
     private func saveURL() {
         errorArea = .endpoint
         do {
+            guard !settings.requiresCredentialMigration else {
+                throw URLDeliveryKeychain.StorageError.missingCredentials
+            }
             let url = try URLDeliveryValidator.validate(urlDraft, allowingInsecureLocal: settings.allowingInsecureLocal)
             settings.urlString = url.absoluteString
             urlDraft = url.absoluteString
@@ -232,7 +235,7 @@ struct URLDeliverySettingsSection: View {
     private func removeCredentials() {
         errorArea = .credentials
         do {
-            if let id = settings.credentialID { try URLDeliveryKeychain.deleteCredentials(forID: id) }
+            try URLDeliveryKeychain.deleteCredentials(for: settings)
             settings.credentialID = nil
             settings.credentialURLString = nil
             settings.hasBearerToken = false

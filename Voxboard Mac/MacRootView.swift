@@ -718,9 +718,7 @@ private struct MacCapturePresetSettingsView: View {
     private func delete(_ flow: CapturePreset) {
         guard !flow.isBuiltIn else { return }
         do {
-            if let id = flow.exportSettings.urlDelivery.credentialID {
-                try URLDeliveryKeychain.deleteCredentials(forID: id)
-            }
+            try URLDeliveryKeychain.deleteCredentials(for: flow.exportSettings.urlDelivery)
         } catch {
             deletionError = String(localized: "Saved URL credentials could not be removed. Try again after the Keychain is available. The preset has not been deleted.")
             return

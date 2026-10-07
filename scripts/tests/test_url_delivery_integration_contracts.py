@@ -39,7 +39,7 @@ class URLDeliveryIntegrationContracts(unittest.TestCase):
             text = source(path)
             self.assertIn("URLDeliverySettingsSection(settings: $flow.exportSettings.urlDelivery)", text)
             deletion = text.split("private func delete(_ flow: CapturePreset)", 1)[1].split("flows.removeAll", 1)[0]
-            self.assertLess(deletion.index("deleteCredentials(forID:"), deletion.index("CapturePresetStore.retirePreset("))
+            self.assertLess(deletion.index("deleteCredentials(for:"), deletion.index("CapturePresetStore.retirePreset("))
             self.assertIn("deletionError =", deletion)
         self.assertIn("URLDeliveryRecoveryView", source("Voxboard/Views/MetaSettingsView.swift"))
 
