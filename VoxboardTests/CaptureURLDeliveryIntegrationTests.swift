@@ -1,4 +1,5 @@
 import XCTest
+import Network
 import VoxboardShared
 @testable import Voxboard
 
@@ -131,6 +132,40 @@ final class CaptureURLDeliveryIntegrationTests: XCTestCase {
         XCTAssertNil(try URLDeliveryKeychain.credentials(forID: id))
     }
 
+    func testNativeLocalHTTPRequiresConsentAndDeliversWithEndpointBoundKeychainCredentials() async throws {
+        let server = try ComposerLoopbackServer()
+        defer { server.stop() }
+        let ready = expectation(description: "Synthetic loopback listener")
+        server.start { ready.fulfill() }
+        await fulfillment(of: [ready], timeout: 3)
+        let port = try XCTUnwrap(server.port)
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let id = UUID().uuidString
+        defer { try? URLDeliveryKeychain.deleteCredentials(forID: id) }
+        let url = "http://127.0.0.1:\(port)/synthetic"
+        try URLDeliveryKeychain.saveCredentials(.init(urlString: url, bearerToken: "synthetic-loopback-token"), forID: id)
+        let sender = TranscriptURLDeliverer(receiptsDirectoryURL: root, logger: { _ in }, sleeper: { _ in })
+        var settings = CapturePresetURLDeliverySettings(enabled: true, urlString: url, hasBearerToken: true,
+            maxAttempts: 1, credentialID: id, credentialURLString: url)
+        let denied = await sender.deliverCapture(id: UUID(), text: "Synthetic local capture", date: Date(), settings: settings)
+        XCTAssertEqual(denied.attempts, 0)
+        XCTAssertTrue(server.requests.isEmpty)
+        settings.allowingInsecureLocal = true
+        let delivered = await sender.deliverCapture(id: UUID(), text: "Synthetic local capture", date: Date(), settings: settings)
+        XCTAssertEqual(delivered.result, .delivered(statusCode: 200))
+        XCTAssertEqual(server.requests.count, 1)
+        XCTAssertTrue(server.requests.first?.contains("Bearer synthetic-loopback-token") == true)
+        XCTAssertTrue(server.requests.first?.contains("Synthetic local capture") == true)
+    }
+
+    func testAppBundleDeclaresLocalNetworkPurposeAndNarrowATSException() throws {
+        XCTAssertFalse(try XCTUnwrap(Bundle.main.object(forInfoDictionaryKey: "NSLocalNetworkUsageDescription") as? String).isEmpty)
+        let ats = try XCTUnwrap(Bundle.main.object(forInfoDictionaryKey: "NSAppTransportSecurity") as? [String: Any])
+        XCTAssertEqual(ats["NSAllowsLocalNetworking"] as? Bool, true)
+        XCTAssertNotEqual(ats["NSAllowsArbitraryLoads"] as? Bool, true)
+    }
+
     private struct Fixture {
         let model: QuickCaptureViewModel
         let owner: URLDeliveryCoordinator
@@ -218,4 +253,69 @@ nonisolated private final class ComposerHTTPProtocol: URLProtocol, @unchecked Se
         client?.urlProtocolDidFinishLoading(self)
     }
     override func stopLoading() {}
+}
+
+nonisolated private final class ComposerLoopbackServer: @unchecked Sendable {
+    private let listener: NWListener
+    private let queue = DispatchQueue(label: "ComposerLoopbackServer")
+    private let lock = NSLock()
+    private var storage: [String] = []
+
+    var port: UInt16? { listener.port?.rawValue }
+    var requests: [String] {
+        lock.lock(); defer { lock.unlock() }
+        return storage
+    }
+
+    init() throws {
+        let parameters = NWParameters.tcp
+        parameters.requiredLocalEndpoint = .hostPort(host: .ipv4(IPv4Address("127.0.0.1")!), port: .any)
+        listener = try NWListener(using: parameters)
+    }
+
+    func start(ready: @escaping @Sendable () -> Void) {
+        listener.stateUpdateHandler = { [weak self] state in
+            switch state {
+            case .ready, .failed:
+                self?.listener.stateUpdateHandler = nil
+                ready()
+            default: break
+            }
+        }
+        listener.newConnectionHandler = { [weak self] connection in
+            guard let self else { connection.cancel(); return }
+            connection.start(queue: self.queue)
+            self.receive(connection, buffered: Data())
+        }
+        listener.start(queue: queue)
+    }
+
+    func stop() { listener.cancel() }
+
+    private func receive(_ connection: NWConnection, buffered: Data) {
+        connection.receive(minimumIncompleteLength: 1, maximumLength: 64 * 1024) { [weak self] data, _, complete, error in
+            guard let self, error == nil else { connection.cancel(); return }
+            var buffer = buffered
+            if let data { buffer.append(data) }
+            guard buffer.count <= 64 * 1024 else { connection.cancel(); return }
+            let raw = String(decoding: buffer, as: UTF8.self)
+            guard let headerEnd = raw.range(of: "\r\n\r\n") else {
+                if complete { connection.cancel() } else { self.receive(connection, buffered: buffer) }
+                return
+            }
+            let header = String(raw[..<headerEnd.lowerBound])
+            let length = header.components(separatedBy: "\r\n").first { $0.lowercased().hasPrefix("content-length:") }
+                .flatMap { Int($0.split(separator: ":")[1].trimmingCharacters(in: .whitespaces)) } ?? 0
+            let body = raw[headerEnd.upperBound...]
+            if body.utf8.count < length, !complete {
+                self.receive(connection, buffered: buffer)
+                return
+            }
+            self.lock.lock()
+            self.storage.append(raw)
+            self.lock.unlock()
+            let response = "HTTP/1.1 200 OK\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
+            connection.send(content: Data(response.utf8), completion: .contentProcessed { _ in connection.cancel() })
+        }
+    }
 }

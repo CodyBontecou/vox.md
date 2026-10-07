@@ -38,8 +38,10 @@ processing. Images, audio and other attachment bytes are not uploaded.
   during backoff cannot reuse a copied token.
 - HTTPS is the default. Local HTTP requires a separate warning/opt-in; it sends
   text and credentials without encryption. `.local` or a private IP is not proof
-  that a network is trusted. Local-network permission and ATS remain device
-  verification gates.
+  that a network is trusted. Both apps declare a local-network purpose and only
+  the local ATS allowance (`NSAllowsLocalNetworking`); public HTTP stays rejected
+  by validation. Real local-network permission prompts still require device
+  verification. See [Apple's local-network guidance](https://developer.apple.com/documentation/technotes/tn3179-understanding-local-network-privacy).
 - URL user/password and secret-looking query names are rejected. Query detection
   is best-effort: do not put secrets in a URL path or query. Receipts and recovery
   UI show the origin only, never the path/query or raw transport errors.
@@ -49,8 +51,18 @@ processing. Images, audio and other attachment bytes are not uploaded.
 
 PR #35's legacy plaintext preset headers are discarded on decode. Credential-
 bearing legacy settings require explicit migration, never host-scoped token
-reuse or anonymous fallback. Old shared host accounts and arbitrary legacy
-queued files are not indiscriminately deleted or rewritten by this follow-up.
+reuse or anonymous fallback. Explicit Remove Saved Credentials or preset deletion
+removes the exact old host account for a legacy bearer-token preset; modern
+accounts and unrelated hosts are untouched. Migration blocks endpoint edits until
+cleanup, so the original host reference is retained. Keychain errors keep the
+preset and its migration flags intact.
+
+Validated job, bundle-intent and handoff snapshots atomically redact legacy
+headers on read. Redaction retains capture identity, phase and unknown metadata,
+marks reauthorization required, and applies private file permissions. Malformed
+or future-schema archives are preserved without rewriting; arbitrary files are
+never swept. A failed job-redaction write blocks processing rather than silently
+leaving authentication values on disk.
 
 ## Durable handoff and task ownership
 
@@ -134,8 +146,14 @@ Still required before release:
   iOS background limits and Mac signing/sandbox behavior.
 - Lowest-supported-device/release-build motion/performance evidence; simulator
   screenshots or a 30fps recording do not prove sustained 60fps.
-- A retention/pruning decision and coordinated legacy host-account cleanup.
+- A retention/pruning decision. Pending payloads currently remain until success
+  or explicit Discard; content-free anti-replay tombstones are retained indefinitely
+  to prevent duplicate POSTs from old recording/note retries.
 
 No PR is merged, issue closed or endpoint/credential/vault content taken from a
-real user for these tests. Mocked transports/Security clients and synthetic local
-fixtures do not validate production credentials or physical-device behavior.
+real user for these tests. Mocked transports/Security clients and synthetic local fixtures do not validate
+production credentials or physical-device behavior. App-hosted tests additionally
+exercise native Security.framework save/read/replace/delete with a fresh synthetic
+UUID account and production URLSession delivery to an in-process loopback listener.
+The simulator host is ad hoc signed because an unsigned host cannot access its
+Keychain identity; CI uses the same signing mode, without certificates or profiles.

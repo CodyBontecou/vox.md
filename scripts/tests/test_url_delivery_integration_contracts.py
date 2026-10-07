@@ -1,6 +1,7 @@
 """Portable host-wiring checks, not substitutes for the Swift runtime tests."""
 from pathlib import Path
 import unittest
+import plistlib
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -42,6 +43,21 @@ class URLDeliveryIntegrationContracts(unittest.TestCase):
             self.assertLess(deletion.index("deleteCredentials(for:"), deletion.index("CapturePresetStore.retirePreset("))
             self.assertIn("deletionError =", deletion)
         self.assertIn("URLDeliveryRecoveryView", source("Voxboard/Views/MetaSettingsView.swift"))
+
+    def test_ios_native_keychain_gate_uses_adhoc_simulator_identity(self):
+        workflow = source(".github/workflows/apple-ci.yml")
+        block = workflow.split("      - name: Run iOS app-hosted tests", 1)[1].split("      - name: Collect simulator crash reports", 1)[0]
+        self.assertIn("CODE_SIGNING_ALLOWED=YES", block)
+        self.assertIn("CODE_SIGN_IDENTITY=-", block)
+
+    def test_local_network_configuration_keeps_global_ats_enabled(self):
+        for path in ["Voxboard/Info.plist", "Voxboard Mac/Info.plist"]:
+            with (ROOT / path).open("rb") as handle:
+                info = plistlib.load(handle)
+            self.assertTrue(info.get("NSLocalNetworkUsageDescription"))
+            ats = info.get("NSAppTransportSecurity", {})
+            self.assertIs(ats.get("NSAllowsLocalNetworking"), True)
+            self.assertIsNot(ats.get("NSAllowsArbitraryLoads"), True)
 
     def test_constructing_or_refreshing_http_owner_does_not_dispatch(self):
         coordinator = source("Packages/VoxboardShared/Sources/VoxboardShared/URLDeliveryCoordinator.swift")

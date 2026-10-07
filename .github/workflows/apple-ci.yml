@@ -85,6 +85,8 @@ jobs:
           set -o pipefail
           mkdir -p build/logs build/test-results
           touch build/logs/ios-tests-started
+          # Native Security.framework tests need an app identity. Simulator
+          # ad hoc signing uses no certificate or provisioning profile.
           xcodebuild test \
             -project Voxboard.xcodeproj \
             -scheme VoxboardTests \
@@ -96,9 +98,9 @@ jobs:
             -onlyUsePackageVersionsFromResolvedFile \
             -retry-tests-on-failure \
             -test-iterations 2 \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY='' \
+            CODE_SIGNING_ALLOWED=YES \
+            CODE_SIGNING_REQUIRED=YES \
+            CODE_SIGN_IDENTITY=- \
             DEVELOPMENT_TEAM='' \
             2>&1 | tee build/logs/ios-tests.log
       - name: Collect simulator crash reports
