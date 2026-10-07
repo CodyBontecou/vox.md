@@ -550,7 +550,7 @@
       {
         "name" : "CaptureAttachmentWriter",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureAttachmentWriter.swift",
-        "sha256" : "243df6574a529fc8bb3fd7d7b8fb7df4160991a5545381661f41eaf3591a466e"
+        "sha256" : "02ab2212754c657a5a9c65650f5612192d19bddc1cbc5c2021fca35354cc6273"
       },
       {
         "name" : "CaptureComposerTextEditor",
@@ -575,7 +575,7 @@
       {
         "name" : "CaptureDraftStore",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureDraftStore.swift",
-        "sha256" : "76517b03ca2371db61eeca0ae4f3002f54f326169a74d8d915e7f2ce8bce47aa"
+        "sha256" : "8dc1784be56bb635b4775cf86c0391d1abb00cc810770f69a17d63fa5d627bb8"
       },
       {
         "name" : "CaptureEntryTemplateRenderer",
@@ -586,6 +586,11 @@
         "name" : "CaptureHistoryStore",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureHistoryStore.swift",
         "sha256" : "2867ff1b5077036d19a1e38bee541a6d13e3d048af8aee42e9e0e65374c91d14"
+      },
+      {
+        "name" : "CaptureImageDescription",
+        "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureImageDescription.swift",
+        "sha256" : "89d6e355313c0ee7ff337cd21703f9e1e52e54672825d75930eef2e50fdd8a26"
       },
       {
         "name" : "CaptureInbox",
@@ -600,7 +605,7 @@
       {
         "name" : "CaptureInsertionFormatter",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureInsertionFormatter.swift",
-        "sha256" : "e5e926258a6e3b4eb6d04f6f9ebefa027205f355e7611d0018ac7742528cc626"
+        "sha256" : "873287d6e9d7967d96d586be841af402402cdc7160ce368ba7b0dc539ad70ea3"
       },
       {
         "name" : "CaptureLibraryStore",
@@ -615,12 +620,12 @@
       {
         "name" : "CaptureMarkdownRenderer",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureMarkdownRenderer.swift",
-        "sha256" : "beaaee2972e4f76322da83baeb88fd850108e37034e142bfda88c453d224ca37"
+        "sha256" : "ec004e2508f6d3eb629165bc6008591dd75d81d840abc1e060f10d263470df1a"
       },
       {
         "name" : "CaptureModels",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureModels.swift",
-        "sha256" : "4b0309ef27996320e30d6d459090d6d266071ea97f6fe684d0a1d29876303cdd"
+        "sha256" : "f93b8e087e065b8cccb56cee1a0d618b5e4db8402ed12d84d28ee3b983d90e4b"
       },
       {
         "name" : "CaptureOCRMarkdownFormatter",
@@ -638,6 +643,41 @@
         "sha256" : "f16acdbd8384550b0bf9d820e49603fb4f283cfe6402e7504e93826c11343e09"
       },
       {
+        "name" : "CapturePresetEmoji",
+        "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CapturePresetEmoji.swift",
+        "sha256" : "414abb13d37f60d9ab8d67624c135b435eea05356ac96e2810c92f100baebc67"
+      },
+      {
+        "name" : "CapturePresetQuickAccessResolver",
+        "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CapturePresetQuickAccessResolver.swift",
+        "sha256" : "119c947fefa181388fa38a900e8ecbf6f7d811c261322a13561bb73b8b230d8a"
+      },
+      {
+        "name" : "CapturePresetQuickAccessStore",
+        "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CapturePresetQuickAccessStore.swift",
+        "sha256" : "df39e6fb6a4398c783b3b66c4844fc5d6aaf1eb5c531b7d1bb5084c7906f1bfd"
+      },
+      {
+        "name" : "CapturePresetSwitchConfirmation",
+        "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CapturePresetSwitchConfirmation.swift",
+        "sha256" : "3a17d30c4dcbe6f6eab80214054890ee2badca8bcb9a7412052f9ba1c7cb899f"
+      },
+      {
+        "name" : "CapturePresetWidgetReload",
+        "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CapturePresetWidgetReload.swift",
+        "sha256" : "257416c882179f74cfbbbf17b472046ed6ad821af19ce3b534c80a2335577e68"
+      },
+      {
+        "name" : "CapturePresetWidgetSnapshot",
+        "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CapturePresetWidgetSnapshot.swift",
+        "sha256" : "8373ddee21d8d0e6bbc7a86ccbae7032fa642e312789377110f0cfe474a54dce"
+      },
+      {
+        "name" : "CaptureProcessingDeadline",
+        "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureProcessingDeadline.swift",
+        "sha256" : "de371ad6fa90afd7792df75cafdf5b4e7cac870d26ba501d4d9b042e3a9ecb74"
+      },
+      {
         "name" : "CaptureVaultMarkdownTemplate",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureVaultMarkdownTemplate.swift",
         "sha256" : "4edc0ee5a97083ced6abb406c11cb5c4b34f6a3237b69177b69d7401a80ced85"
@@ -650,12 +690,12 @@
       {
         "name" : "CaptureVox",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureVox.swift",
-        "sha256" : "efc9bfbce72fc0c91b48a5202ce44b833682f331076b93458a40562ee092d259"
+        "sha256" : "7a83501afc4a1da854acc82b6df5ba5f6228043953610449a9761111744f91bf"
       },
       {
         "name" : "CaptureVoxRequestProcessor",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureVoxRequestProcessor.swift",
-        "sha256" : "ca123db529d40f01a82a65679918af373211a21f4350851eb172b5f3561138c6"
+        "sha256" : "53712df3cf02ac9802df383441f6a6eec31ea1db1fb9f01e95abdf4b58981ffd"
       },
       {
         "name" : "CoordinatedCaptureWriter",
@@ -665,12 +705,12 @@
       {
         "name" : "MarkdownDocumentEditor",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/MarkdownDocumentEditor.swift",
-        "sha256" : "04162550271c7c86e17bfed753b529f08f3fee433dbc535cdf5f61a539b2767f"
+        "sha256" : "a1a304e759f25e6fa00e97081838caedf0fa4cec841fcc08547b30959cf6d378"
       },
       {
         "name" : "SecureCaptureFileIO",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/SecureCaptureFileIO.swift",
-        "sha256" : "20d34945f5d55c4f6853766efe9dde1684cf4fb05f5aa191c2f436469ee4ac28"
+        "sha256" : "9641f807695b25c2ed864292a01562b4315ef6da4e41725ba36a693fe0e947bf"
       },
       {
         "name" : "VoxboardCaptureCore",
@@ -678,9 +718,9 @@
         "sha256" : "dda9b75f64b106eb544de201f599122d75abc483c5b156bba6c05c0f956dbc3c"
       }
     ],
-    "sourceRevision" : "60a58d9cdeb65103c0dd701c97b85731174eb3a9",
+    "sourceRevision" : "b008173412845cf8da9b618590a333da8236bd6c",
     "swiftCompilerIdentity" : "Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101) Target: arm64-apple-macosx26.0",
-    "toolchainManifestSHA256" : "7c15fa0b9afa06ae93a6323c52d0a524c082bb09ebd04eb24c05e05843c0597a",
+    "toolchainManifestSHA256" : "fb2d236b7faee4a2aa573afdedde9b2bca6da28c550645621c875a6c28d3016d",
     "xcodeIdentity" : "Xcode 26.6 Build version 17F113"
   }
 }
