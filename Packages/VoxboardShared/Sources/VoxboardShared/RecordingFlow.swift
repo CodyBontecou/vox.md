@@ -726,7 +726,12 @@ public enum CapturePresetStore {
         let legacySettings = legacyFileExportSettings(from: defaults)
         for index in flows.indices where !flows[index].exportSettings.usesCustomExportSettings {
             if let legacySettings {
+                // The legacy Files tab never owned HTTP settings. Import its
+                // directory configuration without losing a saved endpoint,
+                // target choice, or endpoint-bound credential references.
+                let urlDelivery = flows[index].exportSettings.urlDelivery
                 flows[index].exportSettings = legacySettings
+                flows[index].exportSettings.urlDelivery = urlDelivery
             } else {
                 flows[index].exportSettings.usesCustomExportSettings = true
             }

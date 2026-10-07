@@ -26,14 +26,104 @@ struct CapturePresetTargetSection: View {
     }
 }
 
+/// The credential edit boundary used by both native editors. Keychain access is
+/// injected so account and preset changes can be verified without real secrets.
+struct URLDeliveryCredentialEditor {
+    var load: (String) throws -> URLDeliveryKeychain.Credentials?
+    var save: (URLDeliveryKeychain.Credentials, String) throws -> Void
+    var delete: (String) throws -> Void
+
+    static let live = URLDeliveryCredentialEditor(
+        load: { try URLDeliveryKeychain.credentials(forID: $0) },
+        save: { try URLDeliveryKeychain.saveCredentials($0, forID: $1) },
+        delete: { try URLDeliveryKeychain.deleteCredentials(forID: $0) }
+    )
+
+    func loadCredentials(settings: inout CapturePresetURLDeliverySettings) throws -> URLDeliveryKeychain.Credentials? {
+        guard let credentials = try loadBoundCredentials(settings: &settings) else { return nil }
+        guard credentials.urlString == settings.urlString else { throw URLDeliveryKeychain.StorageError.destinationChanged }
+        return credentials
+    }
+
+    func loadBoundCredentials(settings: inout CapturePresetURLDeliverySettings) throws -> URLDeliveryKeychain.Credentials? {
+        guard !settings.requiresCredentialMigration else { throw URLDeliveryKeychain.StorageError.missingCredentials }
+        guard let id = settings.credentialID else { return nil }
+        guard let credentials = try load(id) else { throw URLDeliveryKeychain.StorageError.missingCredentials }
+        guard credentials.urlString == settings.credentialURLString else {
+            throw URLDeliveryKeychain.StorageError.destinationChanged
+        }
+        if credentials.bearerToken == nil, credentials.customHeaders.isEmpty {
+            try persist(credentials, id: id, settings: &settings)
+            return nil
+        }
+        return credentials
+    }
+
+    func updateCredentials(
+        settings: inout CapturePresetURLDeliverySettings,
+        _ update: (inout URLDeliveryKeychain.Credentials) throws -> Void
+    ) throws {
+        let url = try URLDeliveryValidator.validate(settings.urlString, allowingInsecureLocal: settings.allowingInsecureLocal)
+        let sameDestination = settings.credentialURLString == url.absoluteString
+        guard !settings.requiresCredentialMigration else { throw URLDeliveryKeychain.StorageError.missingCredentials }
+        guard settings.credentialID == nil || sameDestination else { throw URLDeliveryKeychain.StorageError.destinationChanged }
+        let id = sameDestination ? (settings.credentialID ?? UUID().uuidString) : UUID().uuidString
+        var credentials = URLDeliveryKeychain.Credentials(urlString: url.absoluteString)
+        if sameDestination, let storedID = settings.credentialID {
+            guard let stored = try load(storedID) else { throw URLDeliveryKeychain.StorageError.missingCredentials }
+            guard stored.urlString == url.absoluteString else { throw URLDeliveryKeychain.StorageError.destinationChanged }
+            credentials = stored
+        }
+        try update(&credentials)
+        try persist(credentials, id: id, settings: &settings)
+    }
+
+    func removeToken(settings: inout CapturePresetURLDeliverySettings) throws {
+        guard !settings.requiresCredentialMigration else { throw URLDeliveryKeychain.StorageError.missingCredentials }
+        if let id = settings.credentialID {
+            guard var credentials = try load(id) else { throw URLDeliveryKeychain.StorageError.missingCredentials }
+            guard credentials.urlString == settings.credentialURLString else {
+                throw URLDeliveryKeychain.StorageError.destinationChanged
+            }
+            credentials.bearerToken = nil
+            try persist(credentials, id: id, settings: &settings)
+        }
+        settings.hasBearerToken = false
+    }
+
+    private func persist(
+        _ credentials: URLDeliveryKeychain.Credentials,
+        id: String,
+        settings: inout CapturePresetURLDeliverySettings
+    ) throws {
+        if credentials.bearerToken == nil, credentials.customHeaders.isEmpty {
+            if settings.credentialID != nil { try delete(id) }
+            settings.credentialID = nil
+            settings.credentialURLString = nil
+        } else {
+            try save(credentials, id)
+            settings.credentialID = id
+            settings.credentialURLString = credentials.urlString
+        }
+        settings.hasBearerToken = credentials.bearerToken != nil
+        settings.hasCustomHeaders = !credentials.customHeaders.isEmpty
+        settings.customHeaders = [:]
+        settings.requiresCredentialMigration = false
+    }
+}
+
 /// The same endpoint editor on iOS and Mac. Only opaque account IDs and presence
 /// flags cross the preset binding; token/header values stay in the Keychain.
 struct URLDeliverySettingsSection: View {
     @Binding var settings: CapturePresetURLDeliverySettings
     var focusEndpointOnAppear = false
     @FocusState private var endpointIsFocused: Bool
+    @FocusState private var tokenIsFocused: Bool
     @State private var urlDraft = ""
     @State private var tokenDraft = ""
+    @State private var savedTokenDraft = ""
+    @State private var tokenSaveFailed = false
+    @State private var credentialsLoaded = false
     @State private var headersDraft = URLDeliveryHeadersDraft()
     @State private var savedHeadersDraft: [String: String] = [:]
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -45,6 +135,27 @@ struct URLDeliverySettingsSection: View {
     @State private var testResult: String?
     @State private var isTesting = false
     @State private var testTask: Task<Void, Never>?
+    private let credentialEditor = URLDeliveryCredentialEditor.live
+    private struct AutosaveInput: Equatable {
+        var url: String
+        var token: String
+        var allowingInsecureLocal: Bool
+    }
+
+    private var autosaveInput: AutosaveInput {
+        AutosaveInput(url: urlDraft, token: tokenDraft, allowingInsecureLocal: settings.allowingInsecureLocal)
+    }
+
+    private var normalizedTokenDraft: String {
+        tokenDraft.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private var hasUnsavedToken: Bool { normalizedTokenDraft != savedTokenDraft }
+
+    private var hasUnsavedURL: Bool {
+        (try? URLDeliveryValidator.validate(urlDraft, allowingInsecureLocal: settings.allowingInsecureLocal).absoluteString)
+            != settings.urlString
+    }
     #if os(macOS)
     @State private var showDeliveries = false
     #endif
@@ -58,15 +169,12 @@ struct URLDeliverySettingsSection: View {
                     .accessibilityIdentifier("preset_url_delivery_insecure_local")
                 Text("HTTP sends your capture and credentials without encryption. Only enable this for a trusted local endpoint.")
                     .font(.caption).foregroundStyle(.secondary)
-                Button("Save URL", action: saveURL)
-                    .accessibilityIdentifier("preset_url_delivery_save_url")
                 inlineError(.endpoint)
 
                 Text("Bearer Token (Optional)").font(.subheadline)
                 tokenField
-                Button("Save Token", action: saveToken)
-                    .disabled(tokenDraft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || settings.requiresCredentialMigration)
-                    .accessibilityIdentifier("preset_url_delivery_save_token")
+                Text("URL and token changes save automatically.")
+                    .font(.caption).foregroundStyle(.secondary)
                 if settings.hasBearerToken {
                     Label("A bearer token is saved in the Keychain.", systemImage: "lock.fill")
                         .font(.caption).foregroundStyle(.secondary)
@@ -102,8 +210,8 @@ struct URLDeliverySettingsSection: View {
                     else { Text("Send Test") }
                 }
                 .disabled(isTesting || errorMessage != nil || settings.requiresCredentialMigration
-                    || headersDraft.hasUnsavedChanges(comparedTo: savedHeadersDraft) || urlDraft != settings.urlString
-                    || settings.urlString.isEmpty || !tokenDraft.isEmpty)
+                    || headersDraft.hasUnsavedChanges(comparedTo: savedHeadersDraft) || hasUnsavedURL
+                    || settings.urlString.isEmpty || hasUnsavedToken)
                 .accessibilityIdentifier("preset_url_delivery_test")
                 if let testResult { Text(testResult).font(.caption).foregroundStyle(.secondary) }
             }
@@ -123,10 +231,26 @@ struct URLDeliverySettingsSection: View {
         .task {
             if focusEndpointOnAppear { endpointIsFocused = true }
         }
+        .task(id: autosaveInput) {
+            do { try await Task.sleep(for: .milliseconds(400)) }
+            catch { return }
+            guard !Task.isCancelled else { return }
+            saveInputs()
+        }
+        .onChange(of: endpointIsFocused) { _, isFocused in
+            if !isFocused { saveInputs() }
+        }
+        .onChange(of: tokenIsFocused) { _, isFocused in
+            if !isFocused { saveInputs() }
+        }
         .onDisappear {
+            saveInputs()
+            credentialsLoaded = false
             testTask?.cancel()
             endpointIsFocused = false
+            tokenIsFocused = false
             tokenDraft = ""
+            savedTokenDraft = ""
             focusedHeader = nil
             headersDraft = URLDeliveryHeadersDraft()
             savedHeadersDraft = [:]
@@ -155,7 +279,7 @@ struct URLDeliverySettingsSection: View {
             .autocorrectionDisabled()
             .focused($endpointIsFocused)
             .submitLabel(.done)
-            .onSubmit { endpointIsFocused = false }
+            .onSubmit { saveInputs(); endpointIsFocused = false }
             .accessibilityLabel("Endpoint")
             .accessibilityIdentifier("preset_url_delivery_url")
             #if os(iOS)
@@ -166,6 +290,10 @@ struct URLDeliverySettingsSection: View {
     private var tokenField: some View {
         SecureField("Bearer token", text: $tokenDraft)
             .autocorrectionDisabled()
+            .focused($tokenIsFocused)
+            .submitLabel(.done)
+            .onSubmit { saveInputs(); tokenIsFocused = false }
+            .disabled(settings.requiresCredentialMigration)
             .accessibilityIdentifier("preset_url_delivery_token")
             #if os(iOS)
             .textInputAutocapitalization(.never)
@@ -245,26 +373,59 @@ struct URLDeliverySettingsSection: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private func saveURL() {
-        errorArea = .endpoint
+    private func saveInputs() {
+        guard credentialsLoaded else { return }
+        let endpointIsValid = saveURL()
+        if hasUnsavedToken, normalizedTokenDraft.isEmpty {
+            removeToken()
+        } else if hasUnsavedToken, endpointIsValid {
+            saveToken()
+        } else if tokenSaveFailed {
+            clearError(.credentials)
+            tokenSaveFailed = false
+        }
+    }
+
+    private func clearError(_ area: ErrorArea) {
+        if errorArea == area { errorMessage = nil }
+    }
+
+    @discardableResult
+    private func saveURL() -> Bool {
+        if urlDraft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            if !settings.urlString.isEmpty { settings.urlString = "" }
+            clearError(.endpoint)
+            return false
+        }
         do {
             let url = try URLDeliveryValidator.validate(urlDraft, allowingInsecureLocal: settings.allowingInsecureLocal)
-            settings.urlString = url.absoluteString
-            urlDraft = url.absoluteString
-            endpointIsFocused = false
-            errorMessage = nil
+            let endpointChanged = settings.urlString != url.absoluteString
+            if endpointChanged { settings.urlString = url.absoluteString }
+            clearError(.endpoint)
             if settings.credentialID != nil, settings.credentialURLString != url.absoluteString {
-                focusedHeader = nil
-                headersDraft = URLDeliveryHeadersDraft()
-                savedHeadersDraft = [:]
+                if endpointChanged {
+                    focusedHeader = nil
+                }
+                errorArea = .endpoint
                 errorMessage = URLDeliveryKeychain.StorageError.destinationChanged.localizedDescription
+                return false
             }
-        } catch { errorMessage = error.localizedDescription }
+            return true
+        } catch {
+            errorArea = .endpoint
+            errorMessage = error.localizedDescription
+            return false
+        }
     }
 
     private func loadCredentials() {
+        credentialsLoaded = false
+        defer { credentialsLoaded = true }
         errorArea = .credentials
         urlDraft = settings.urlString
+        tokenDraft = ""
+        savedTokenDraft = ""
+        tokenSaveFailed = false
         headersDraft = URLDeliveryHeadersDraft()
         savedHeadersDraft = [:]
         errorMessage = nil
@@ -272,12 +433,16 @@ struct URLDeliverySettingsSection: View {
             errorMessage = String(localized: "Remove Saved Credentials, then re-enter your URL delivery credentials. Legacy values are no longer read from presets or host-scoped accounts.")
             return
         }
-        guard let id = settings.credentialID else { return }
         do {
-            guard let credentials = try URLDeliveryKeychain.credentials(forID: id) else { throw URLDeliveryKeychain.StorageError.missingCredentials }
-            guard credentials.urlString == settings.urlString else { throw URLDeliveryKeychain.StorageError.destinationChanged }
+            guard let credentials = try credentialEditor.loadBoundCredentials(settings: &settings) else { return }
+            tokenDraft = credentials.bearerToken ?? ""
+            savedTokenDraft = normalizedTokenDraft
             headersDraft = URLDeliveryHeadersDraft(headers: credentials.customHeaders)
             savedHeadersDraft = credentials.customHeaders
+            if credentials.urlString != settings.urlString {
+                errorArea = .endpoint
+                errorMessage = URLDeliveryKeychain.StorageError.destinationChanged.localizedDescription
+            }
         } catch {
             // Do not clear presence flags on a locked or missing account.
             errorMessage = error.localizedDescription
@@ -285,37 +450,26 @@ struct URLDeliverySettingsSection: View {
     }
 
     private func updateCredentials(_ update: (inout URLDeliveryKeychain.Credentials) throws -> Void) throws {
-        let url = try URLDeliveryValidator.validate(settings.urlString, allowingInsecureLocal: settings.allowingInsecureLocal)
-        let sameDestination = settings.credentialURLString == url.absoluteString
-        guard !settings.requiresCredentialMigration else { throw URLDeliveryKeychain.StorageError.missingCredentials }
-        guard settings.credentialID == nil || sameDestination else { throw URLDeliveryKeychain.StorageError.destinationChanged }
-        let id = sameDestination ? (settings.credentialID ?? UUID().uuidString) : UUID().uuidString
-        var credentials = URLDeliveryKeychain.Credentials(urlString: url.absoluteString)
-        if sameDestination, let storedID = settings.credentialID {
-            guard let stored = try URLDeliveryKeychain.credentials(forID: storedID) else { throw URLDeliveryKeychain.StorageError.missingCredentials }
-            guard stored.urlString == url.absoluteString else { throw URLDeliveryKeychain.StorageError.destinationChanged }
-            credentials = stored
-        }
-        try update(&credentials)
-        try URLDeliveryKeychain.saveCredentials(credentials, forID: id)
-        settings.credentialID = id
-        settings.credentialURLString = url.absoluteString
-        settings.hasBearerToken = credentials.bearerToken != nil
-        settings.hasCustomHeaders = !credentials.customHeaders.isEmpty
-        settings.customHeaders = [:]
-        settings.requiresCredentialMigration = false
+        try credentialEditor.updateCredentials(settings: &settings, update)
     }
 
     private func saveToken() {
-        errorArea = .credentials
         do {
-            try updateCredentials { $0.bearerToken = tokenDraft.trimmingCharacters(in: .whitespacesAndNewlines) }
-            tokenDraft = ""
-            errorMessage = nil
-        } catch { errorMessage = error.localizedDescription }
+            let token = normalizedTokenDraft
+            try updateCredentials { $0.bearerToken = token.isEmpty ? nil : token }
+            savedTokenDraft = token
+            tokenSaveFailed = false
+            clearError(.credentials)
+        } catch {
+            tokenSaveFailed = true
+            errorArea = .credentials
+            errorMessage = error.localizedDescription
+        }
     }
 
     private func saveHeaders() {
+        saveInputs()
+        guard !hasUnsavedURL, !hasUnsavedToken else { return }
         errorArea = .headers
         do {
             let headers = try headersDraft.validatedHeaders()
@@ -327,9 +481,18 @@ struct URLDeliverySettingsSection: View {
     }
 
     private func removeToken() {
-        errorArea = .credentials
-        do { try updateCredentials { $0.bearerToken = nil }; errorMessage = nil }
-        catch { errorMessage = error.localizedDescription }
+        do {
+            try credentialEditor.removeToken(settings: &settings)
+            tokenDraft = ""
+            savedTokenDraft = ""
+            tokenSaveFailed = false
+            clearError(.credentials)
+            if settings.credentialID == nil { _ = saveURL() }
+        } catch {
+            tokenSaveFailed = true
+            errorArea = .credentials
+            errorMessage = error.localizedDescription
+        }
     }
 
     private func removeCredentials() {
@@ -343,6 +506,7 @@ struct URLDeliverySettingsSection: View {
             settings.requiresCredentialMigration = false
             settings.customHeaders = [:]
             tokenDraft = ""
+            savedTokenDraft = ""
             focusedHeader = nil
             headersDraft = URLDeliveryHeadersDraft()
             savedHeadersDraft = [:]

@@ -3,6 +3,70 @@ import XCTest
 
 final class CapturePresetTests: XCTestCase {
 
+    func testLegacyFileExportMigrationPreservesConfiguredHTTPEndpoint() throws {
+        try assertLegacyFileExportMigrationPreservesURLDelivery(enabled: true, includesCustomExportFlag: true)
+        try assertLegacyFileExportMigrationPreservesURLDelivery(enabled: true, includesCustomExportFlag: false)
+    }
+
+    func testLegacyFileExportMigrationPreservesInactiveHTTPEndpoint() throws {
+        try assertLegacyFileExportMigrationPreservesURLDelivery(enabled: false, includesCustomExportFlag: true)
+        try assertLegacyFileExportMigrationPreservesURLDelivery(enabled: false, includesCustomExportFlag: false)
+    }
+
+    private func assertLegacyFileExportMigrationPreservesURLDelivery(
+        enabled: Bool,
+        includesCustomExportFlag: Bool,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) throws {
+        let suiteName = "test.flow.http-legacy-export.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let archive = Data("""
+        [{
+          "id": "custom-existing-http",
+          "name": "Existing HTTP",
+          "exportSettings": {
+            \(includesCustomExportFlag ? "\"usesCustomExportSettings\": false," : "")
+            "urlDelivery": {
+              "enabled": \(enabled),
+              "urlString": "https://example.invalid/ingest",
+              "hasBearerToken": true,
+              "credentialID": "00000000-0000-0000-0000-000000000001",
+              "credentialURLString": "https://example.invalid/ingest"
+            }
+          }
+        }]
+        """.utf8)
+        let decoded = try XCTUnwrap(JSONDecoder().decode([CapturePreset].self, from: archive).first)
+        XCTAssertEqual(decoded.deliveryTarget, enabled ? .http : .directory, file: file, line: line)
+        defaults.set(archive, forKey: CapturePresetStore.flowsKey)
+        defaults.set(true, forKey: AppConstants.fileExportEnabledKey)
+        defaults.set(ExportFileFormat.yaml.rawValue, forKey: AppConstants.fileExportFormatKey)
+        defaults.set(ExportFileMode.append.rawValue, forKey: AppConstants.fileExportModeKey)
+        defaults.set("Legacy Daily", forKey: AppConstants.fileExportAppendFileNameKey)
+
+        let loaded = try XCTUnwrap(CapturePresetStore.loadFlows(defaults: defaults)
+            .first(where: { $0.id == "custom-existing-http" }))
+        XCTAssertEqual(loaded.deliveryTarget, enabled ? .http : .directory, file: file, line: line)
+        XCTAssertEqual(loaded.exportSettings.urlDelivery, decoded.exportSettings.urlDelivery, file: file, line: line)
+        XCTAssertTrue(loaded.exportSettings.usesCustomExportSettings, file: file, line: line)
+        XCTAssertTrue(loaded.exportSettings.exportEnabled, file: file, line: line)
+        XCTAssertEqual(loaded.exportSettings.format, .yaml, file: file, line: line)
+        XCTAssertEqual(loaded.exportSettings.mode, .append, file: file, line: line)
+        XCTAssertEqual(loaded.exportSettings.appendFileName, "Legacy Daily", file: file, line: line)
+
+        let persistedArchive = try XCTUnwrap(defaults.data(forKey: CapturePresetStore.flowsKey))
+        let persisted = try XCTUnwrap(JSONDecoder().decode([CapturePreset].self, from: persistedArchive)
+            .first(where: { $0.id == "custom-existing-http" }))
+        XCTAssertEqual(persisted.exportSettings.urlDelivery, decoded.exportSettings.urlDelivery, file: file, line: line)
+        XCTAssertTrue(persisted.exportSettings.usesCustomExportSettings, file: file, line: line)
+
+        let reloaded = try XCTUnwrap(CapturePresetStore.loadFlows(defaults: defaults)
+            .first(where: { $0.id == "custom-existing-http" }))
+        XCTAssertEqual(reloaded.exportSettings.urlDelivery, decoded.exportSettings.urlDelivery, file: file, line: line)
+    }
+
     func testDestinationChoiceRetainsInactiveSettingsAndRoundTrips() throws {
         var preset = CapturePresetStore.makeCustomFlow()
         let directoryID = UUID()

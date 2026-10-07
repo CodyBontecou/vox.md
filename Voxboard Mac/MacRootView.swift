@@ -684,9 +684,9 @@ private struct MacCapturePresetSettingsView: View {
             .frame(width: 260)
             GeistDivider().frame(width: 1)
 
-            if let index = flows.firstIndex(where: { $0.id == selectedFlowId }) {
-                MacCapturePresetEditor(preset: $flows[index], onDelete: { delete(flows[index]) })
-                    .id(flows[index].id)
+            if let flow = flows.first(where: { $0.id == selectedFlowId }) {
+                MacCapturePresetEditor(preset: persistedFlowBinding(for: flow), onDelete: { delete(flow) })
+                    .id(flow.id)
             } else {
                 Text("Select a Capture Preset")
                     .font(Geist.body())
@@ -697,7 +697,6 @@ private struct MacCapturePresetSettingsView: View {
         .background(Geist.surface)
         .navigationTitle("Capture Presets")
         .onAppear { reload() }
-        .onChange(of: flows) { _, newValue in CapturePresetStore.saveFlows(newValue) }
         .alert("Preset Could Not Be Deleted", isPresented: Binding(
             get: { deletionError != nil }, set: { if !$0 { deletionError = nil } }
         )) { Button("OK", role: .cancel) {} } message: { Text(deletionError ?? "") }
@@ -709,9 +708,21 @@ private struct MacCapturePresetSettingsView: View {
         selectedFlowId = CapturePresetStore.selectedFlowId()
     }
 
+    private func persistedFlowBinding(for flow: CapturePreset) -> Binding<CapturePreset> {
+        Binding(
+            get: { flows.first(where: { $0.id == flow.id }) ?? flow },
+            set: { updatedFlow in
+                guard let index = flows.firstIndex(where: { $0.id == flow.id }) else { return }
+                flows[index] = updatedFlow
+                CapturePresetStore.saveFlows(flows)
+            }
+        )
+    }
+
     private func addFlow() {
         let flow = CapturePresetStore.makeCustomFlow()
         flows.append(flow)
+        CapturePresetStore.saveFlows(flows)
         selectedFlowId = flow.id
     }
 
@@ -733,6 +744,7 @@ private struct MacCapturePresetSettingsView: View {
             ownedRouteID: flow.captureDestinationID
         )
         flows.removeAll { $0.id == flow.id }
+        CapturePresetStore.saveFlows(flows)
         let fallbackID = flows.first?.id ?? CapturePresetStore.generalId
         selectedFlowId = fallbackID
         CapturePresetStore.selectFlow(id: fallbackID)
