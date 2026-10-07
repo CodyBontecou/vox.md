@@ -157,3 +157,25 @@ exercise native Security.framework save/read/replace/delete with a fresh synthet
 UUID account and production URLSession delivery to an in-process loopback listener.
 The simulator host is ad hoc signed because an unsigned host cannot access its
 Keychain identity; CI uses the same signing mode, without certificates or profiles.
+
+## Completion evidence — October 7, 2026
+
+| Check | Result |
+| --- | --- |
+| Full shared Swift package | 1,021 XCTest cases and 10 Swift Testing cases passed |
+| Full iOS app-hosted suite | 253 tests passed on the SDK-matched iOS 26.5 simulator |
+| Native URL integration subset | 14 tests passed, including draft isolation, partial note/HTTP recovery, native Keychain replacement/deletion and real loopback HTTP |
+| Rust workspace and MSRV 1.87.0 runtime crates | 47 tests passed on each toolchain |
+| Governed Rust formatting and strict Clippy | Passed without relaxing lint policy |
+| UniFFI Swift/Kotlin binding drift | Byte-identical |
+| Project contracts and capture-view structure | Passed |
+| Mac Debug app | Build passed; unsigned build does not prove release sandbox/signing behavior |
+
+Legacy queue/handoff plaintext regressions failed before the migration and pass
+after it. The native Keychain test exposed unsigned-host error `-34018`; ad hoc
+simulator signing makes the same native test pass and is now used in iOS CI.
+Inherited Rust formatting, a stale unsupported-asset test, strict lint failures
+and stale oracle/manifest provenance were repaired. The generated oracle's
+behavioral case outputs remain unchanged. Device lock/unlock, physical local-
+network prompts, crash/termination acceptance and release performance remain the
+hardware gates described above.
