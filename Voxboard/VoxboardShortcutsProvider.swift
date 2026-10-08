@@ -10,7 +10,7 @@ struct VoxboardShortcutsProvider: AppShortcutsProvider {
                 "Record \(\.$vox) with \(.applicationName)",
                 "Start \(\.$vox) in \(.applicationName)"
             ],
-            shortTitle: "Record with Preset",
+            shortTitle: "Record Audio",
             systemImageName: "mic.fill"
         )
         AppShortcut(

@@ -160,6 +160,12 @@ public enum AppConstants: Sendable {
         sharedContainerURL?.appendingPathComponent(captureDirectoryName, isDirectory: true)
     }
 
+    /// Durable receipts for per-preset URL delivery. Mirrors the app-private
+    /// delivery transaction layout so a failed delivery survives a restart.
+    public static var urlDeliveryReceiptsDirectoryURL: URL? {
+        sharedContainerURL?.appendingPathComponent("url-delivery-receipts", isDirectory: true)
+    }
+
     public static var captureLibraryURL: URL? {
         captureDirectoryURL?.appendingPathComponent(captureLibraryFilename)
     }

@@ -272,7 +272,12 @@ public struct RecordingJobHandoffIntentStore: Sendable {
     public func load(jobID: UUID) throws -> RecordingJobHandoffIntent? {
         let url = Self.url(for: jobID, in: Self.directoryURL(in: recordingsDirectoryURL))
         guard FileManager.default.fileExists(atPath: url.path) else { return nil }
-        return try JSONDecoder().decode(RecordingJobHandoffIntent.self, from: Data(contentsOf: url))
+        return try NSFileCoordinatorCaptureFileCoordinator.shared.coordinateWriting(at: url) { coordinatedURL in
+            let data = try Data(contentsOf: coordinatedURL)
+            let intent = try JSONDecoder().decode(RecordingJobHandoffIntent.self, from: data)
+            try URLDeliveryLegacyArchive.scrub(data, at: coordinatedURL)
+            return intent
+        }
     }
 
     static func directoryURL(in recordingsDirectoryURL: URL) -> URL {
@@ -1067,11 +1072,9 @@ public actor RecordingJobStore {
             at: directoryURL,
             includingPropertiesForKeys: nil,
             options: [.skipsHiddenFiles]
-        ).filter({ $0.pathExtension == "json" }).compactMap { intentURL in
-            try? decoder.decode(
-                RecordingJobHandoffIntent.self,
-                from: Data(contentsOf: intentURL)
-            )
+        ).filter({ $0.pathExtension == "json" }).compactMap { intentURL -> RecordingJobHandoffIntent? in
+            guard let id = UUID(uuidString: intentURL.deletingPathExtension().lastPathComponent) else { return nil }
+            return try? RecordingJobHandoffIntentStore(recordingsDirectoryURL: recordingsDirectoryURL).load(jobID: id)
         }
         return try coordinator.coordinateWriting(at: rootDirectoryURL) { _ in
             try ensureDirectories()
@@ -1660,8 +1663,9 @@ public actor RecordingJobStore {
         var jobs: [RecordingJob] = []
         for url in urls {
             let data = try Data(contentsOf: url)
+            let job: RecordingJob
             do {
-                let job = try decoder.decode(RecordingJob.self, from: data)
+                job = try decoder.decode(RecordingJob.self, from: data)
                 guard job.schemaVersion <= RecordingJob.currentSchemaVersion else {
                     throw RecordingJobStoreError.unsupportedSchemaVersion(job.schemaVersion)
                 }
@@ -1670,7 +1674,6 @@ public actor RecordingJobStore {
                       job.resolvedArtifacts.allSatisfy({ artifact in
                           !artifact.filename.isEmpty && artifact.filename == URL(fileURLWithPath: artifact.filename).lastPathComponent
                       }) else { continue }
-                jobs.append(job)
             } catch let DecodingError.dataCorrupted(context)
                 where context.debugDescription.hasPrefix("Unsupported recording job schema version ") {
                 let version = (try? JSONSerialization.jsonObject(with: data) as? [String: Any])?["schemaVersion"] as? Int
@@ -1683,6 +1686,10 @@ public actor RecordingJobStore {
                 // but do not let them hide compatible jobs in the queue.
                 continue
             }
+            // Surface a redaction write failure instead of processing a job
+            // whose on-disk snapshot still contains authentication values.
+            try URLDeliveryLegacyArchive.scrub(data, at: url)
+            jobs.append(job)
         }
         return jobs.sorted(by: Self.sortJobs)
     }
@@ -1690,13 +1697,15 @@ public actor RecordingJobStore {
     private func loadItem(id: UUID) throws -> RecordingJob? {
         let url = itemURL(id: id)
         guard fileManager.fileExists(atPath: url.path) else { return nil }
-        let job = try decoder.decode(RecordingJob.self, from: Data(contentsOf: url))
+        let data = try Data(contentsOf: url)
+        let job = try decoder.decode(RecordingJob.self, from: data)
         guard job.schemaVersion <= RecordingJob.currentSchemaVersion,
               job.audioFilename == URL(fileURLWithPath: job.audioFilename).lastPathComponent,
               !job.audioFilename.isEmpty,
               job.resolvedArtifacts.allSatisfy({ !$0.filename.isEmpty && $0.filename == URL(fileURLWithPath: $0.filename).lastPathComponent }) else {
             return nil
         }
+        try URLDeliveryLegacyArchive.scrub(data, at: url)
         return job
     }
 
@@ -1726,6 +1735,7 @@ public actor RecordingJobStore {
                   isValidBundleIntent(intent, at: url) else { continue }
             claimed.formUnion(intent.sources.map(\.filename))
             do {
+                try URLDeliveryLegacyArchive.scrub(data, at: url)
                 try materializeBundle(intent)
                 if try loadItem(id: intent.job.id) == nil { try persist(intent.job) }
                 finishBundleCommit(intent, intentURL: url)

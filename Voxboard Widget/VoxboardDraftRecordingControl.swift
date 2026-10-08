@@ -35,11 +35,11 @@ struct VoxboardDraftRecordingControl: ControlWidget {
     }
 
     private struct Provider: AppIntentControlValueProvider {
-        func previewValue(configuration: SelectVoxboardRecordVoxIntent) -> State {
+        func previewValue(configuration: SelectVoxboardDraftRecordVoxIntent) -> State {
             State(isEnabled: true, vox: VoxEntity.resolved(configuration.vox))
         }
 
-        func currentValue(configuration: SelectVoxboardRecordVoxIntent) async throws -> State {
+        func currentValue(configuration: SelectVoxboardDraftRecordVoxIntent) async throws -> State {
             State(
                 isEnabled: AppConstants.lockScreenQuickRecordEnabled,
                 vox: VoxEntity.resolved(configuration.vox)

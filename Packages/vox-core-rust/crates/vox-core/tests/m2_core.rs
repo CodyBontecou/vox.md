@@ -237,6 +237,14 @@ fn preparation_plans_candidates_and_rejects_unsupported_semantics() {
     }
     let mut asset = prep;
     asset["payloads"][0] = json!({"id":"22222222-2222-4222-8222-222222222222","kind":"asset","length":1,"mediaType":"image/png","originalNamePolicy":"discard","safeExtension":"png","sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","sourceID":"55555555-5555-4555-8555-555555555555"});
+    // Asset descriptors are supported; preparation plans paths without reading
+    // attachment bytes. Keep the negative gate on an unsupported destination.
+    let asset_result = prepare(&canonical(&asset)).unwrap();
+    assert_eq!(
+        asset_result.observations[0].logical_candidates,
+        result.observations[0].logical_candidates
+    );
+    asset["preset"]["destinationPolicy"]["capabilityClass"] = json!("recordingExport");
     assert_eq!(
         prepare(&canonical(&asset)),
         Err(CoreError::UnsupportedOperation)

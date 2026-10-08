@@ -224,7 +224,7 @@ struct MetaSettingsView: View {
 
     private var recordingQueueSection: some View {
         VStack(spacing: 0) {
-            sectionHeader("02", "Recording Queue")
+            sectionHeader("02", "Queues & Recovery")
             GeistDivider()
 
             settingsNavigationRow(
@@ -246,6 +246,15 @@ struct MetaSettingsView: View {
                     )
                 }
             }
+            GeistDivider()
+            settingsNavigationRow(
+                "URL Deliveries",
+                description: "Review saved HTTP payloads, retry with corrected credentials, or discard",
+                systemImage: "paperplane"
+            ) {
+                URLDeliveryRecoveryView(coordinator: URLDeliveryRuntime.coordinator)
+            }
+            .accessibilityIdentifier("settings_url_deliveries")
         }
     }
 
@@ -452,7 +461,7 @@ struct MetaSettingsView: View {
                     Text("Shortcut Recording Live Activity")
                         .font(Geist.label())
                         .foregroundColor(Geist.text)
-                    Text("Show a Live Activity while recording is toggled from the Toggle Recording shortcut, Apple Pencil squeeze, or Action Button without opening Vox.md. Required for in-place recording on iOS 26 — when off, the shortcut opens the app instead.")
+                    Text("Show a Live Activity for background shortcut and control recordings, including Apple Pencil squeeze and Action Button recordings. Required for background recording on iOS 26+ — when unavailable, starting a recording opens the app instead.")
                         .font(Geist.caption())
                         .foregroundColor(Geist.muted)
                 }
@@ -478,7 +487,7 @@ struct MetaSettingsView: View {
                     Text("Lock Screen Record Button")
                         .font(Geist.label())
                         .foregroundColor(Geist.text)
-                    Text("Allow the Quick Record widget/control to open Vox.md and immediately start recording.")
+                    Text("Allow recording from widgets, controls, and Shortcuts. Choose a Preset and Action. Shortcuts uses Open When Run; the Vox.md Record control uses Open App. Background recording requires iOS 26+ and completed setup.")
                         .font(Geist.caption())
                         .foregroundColor(Geist.muted)
                 }
@@ -491,6 +500,9 @@ struct MetaSettingsView: View {
                         WidgetCenter.shared.reloadTimelines(ofKind: "VoxboardRecordWidget")
                         if #available(iOS 18.0, *) {
                             ControlCenter.shared.reloadControls(ofKind: "VoxboardRecordControl")
+                        }
+                        if #available(iOS 26.0, *) {
+                            ControlCenter.shared.reloadControls(ofKind: VoxboardToggleRecordingControl.kind)
                         }
                     }
             }

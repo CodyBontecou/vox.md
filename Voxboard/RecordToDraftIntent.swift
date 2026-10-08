@@ -41,3 +41,19 @@ struct RecordToDraftIntent: AppIntent {
         return .result()
     }
 }
+
+/// Draft recording always starts in the foreground. Its control configures only
+/// voice processing, without exposing the immediate action's Stop/Open App options.
+@available(iOS 18.0, *)
+struct SelectVoxboardDraftRecordVoxIntent: ControlConfigurationIntent {
+    static let title: LocalizedStringResource = "Choose Draft Recording Preset"
+
+    @Parameter(title: "Preset", description: "The Capture Preset whose voice-processing settings to use.")
+    var vox: VoxEntity?
+
+    init() {}
+
+    init(vox: VoxEntity?) {
+        self.vox = vox
+    }
+}

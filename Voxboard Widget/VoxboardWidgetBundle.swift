@@ -15,5 +15,8 @@ struct VoxboardWidgetBundle: WidgetBundle {
             VoxboardDraftRecordingControl()
             VoxboardQuickCaptureControl()
         }
+        if #available(iOSApplicationExtension 26.0, *) {
+            VoxboardToggleRecordingControl()
+        }
     }
 }

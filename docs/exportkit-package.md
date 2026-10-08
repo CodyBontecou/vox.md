@@ -11,6 +11,7 @@ Vox.md uses the standalone MIT SwiftPM package [`ExportKit`](https://github.com/
 - **Formats:** `txt`, `md`, `json`, and `yaml` remain app-owned `ExportFileFormat` cases. YAML can still write `.md` frontmatter for Obsidian Bases.
 - **Preview UI:** Vox.md does not have a user-facing export preview screen yet. `TranscriptExportPreviewFactory` now exposes an ExportKit-backed no-write preview builder for future UI.
 - **Scheduling/notifications:** No scheduled export, pending export, background export, or export notification logic exists in Vox.md, so `ExportAutomationKit` is intentionally not linked.
+- **URL delivery:** Per-preset "Deliver to URL" reuses the JSON export renderer (`TranscriptFileExporter.exportKitRenderedContent`, `.json`) rather than adding a second serializer. Delivery receipts are written under the App Group and are shaped so a future `ExportAutomationKit` pending-export retry can drain them; the transport itself is app-owned (Keychain, per-preset settings, recorder events).
 
 ## Adapter mapping
 

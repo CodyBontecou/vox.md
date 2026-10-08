@@ -374,6 +374,14 @@ struct QuickCaptureView: View {
                 .onChange(of: persistentRecorder.lastFileExportEvent) { _, event in
                     handleFileExportEvent(event)
                 }
+                .onChange(of: persistentRecorder.lastURLDeliveryEvent) { _, event in
+                    handleURLDeliveryEvent(event)
+                }
+                .onChange(of: URLDeliveryRuntime.coordinator.lastError) { _, message in
+                    if let message, persistentRecorder.lastError == nil {
+                        persistentRecorder.lastError = String(localized: "URL delivery needs attention. Open URL Deliveries in Settings. \(message)")
+                    }
+                }
                 .onChange(of: persistentRecorder.lastSentAudioUndoSnapshot) { _, observedSnapshot in
                     guard let observedSnapshot,
                           let snapshot = persistentRecorder.consumeSentAudioUndoSnapshot(
@@ -2710,13 +2718,23 @@ struct QuickCaptureView: View {
         let request = PendingQuickRecordingRequest.consume()
         guard AppConstants.lockScreenQuickRecordEnabled else { return }
 
+        switch request.recordingAction.command(isRecording: persistentRecorder.isSegmentActive) {
+        case .none:
+            return
+        case .stop:
+            // Stop preserves the active segment's preset and completion mode,
+            // and does not require loading or changing the composer's route.
+            persistentRecorder.stopInAppSegment()
+            return
+        case .start:
+            break
+        }
         Task { @MainActor in
             await viewModel.load()
-            guard viewModel.requireCaptureRouteAvailable() else { return }
+            guard viewModel.requireCaptureRouteAvailable(), !persistentRecorder.isSegmentActive else { return }
             let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: request.requestedFlowID)
-            // Neither quick action switches/clears the composer's preset or
-            // contents. Draft delivery overrides only the destination; the
-            // recorder freezes this preset's voice policy at segment start.
+            // Draft delivery preserves the composer's route; the requested
+            // preset supplies only the frozen voice-processing policy.
             lastStartedRecordingMode = request.draftAttachAudio == nil ? .preset : .draft
             persistentRecorder.lastTranscriptionResult = nil
             _ = persistentRecorder.startOneShotInAppSegment(
@@ -2750,6 +2768,18 @@ struct QuickCaptureView: View {
         case .failure(let message):
             fileExportToast = nil
             persistentRecorder.lastError = String(localized: "Your transcript was saved locally, but file export failed. \(message)")
+        }
+    }
+
+    private func handleURLDeliveryEvent(_ event: URLDeliveryEvent?) {
+        guard let event else { return }
+        switch event.result {
+        case .delivered, .disabled, .queued, .retained:
+            break
+        case .failed(let message, _):
+            if persistentRecorder.lastError == nil {
+                persistentRecorder.lastError = String(localized: "Your transcript was saved locally, but URL delivery failed. \(message)")
+            }
         }
     }
 

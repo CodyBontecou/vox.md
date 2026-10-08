@@ -10,6 +10,13 @@ struct PendingQuickRecordingRequest: Equatable {
 
     let requestedFlowID: String?
     let draftAttachAudio: Bool?
+    let recordingAction: RecordingAction
+
+    init(requestedFlowID: String?, draftAttachAudio: Bool?, recordingAction: RecordingAction = .start) {
+        self.requestedFlowID = requestedFlowID
+        self.draftAttachAudio = draftAttachAudio
+        self.recordingAction = recordingAction
+    }
 
     func persist(
         defaults: UserDefaults? = AppConstants.sharedDefaults,
@@ -25,6 +32,7 @@ struct PendingQuickRecordingRequest: Equatable {
         } else {
             defaults?.removeObject(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey)
         }
+        WidgetRecordingActionSelection.persist(recordingAction, defaults: defaults)
         // Publish last, after the preset and delivery policy are both present.
         defaults?.set(true, forKey: AppConstants.pendingWidgetRecordKey)
         // Foreground intents may execute after the scene is already active.
@@ -40,7 +48,8 @@ struct PendingQuickRecordingRequest: Equatable {
             requestedFlowID: defaults?.string(forKey: AppConstants.pendingWidgetRecordFlowIdKey),
             // A malformed override may drop the attachment, never the review step.
             draftAttachAudio: defaults?.object(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey)
-                .map { $0 as? Bool ?? false }
+                .map { $0 as? Bool ?? false },
+            recordingAction: WidgetRecordingActionSelection.consume(defaults: defaults)
         )
         defaults?.removeObject(forKey: AppConstants.pendingWidgetRecordFlowIdKey)
         defaults?.removeObject(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey)

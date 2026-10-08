@@ -85,6 +85,8 @@ jobs:
           set -o pipefail
           mkdir -p build/logs build/test-results
           touch build/logs/ios-tests-started
+          # Native Security.framework tests need an app identity. Simulator
+          # ad hoc signing uses no certificate or provisioning profile.
           xcodebuild test \
             -project Voxboard.xcodeproj \
             -scheme VoxboardTests \
@@ -94,13 +96,23 @@ jobs:
             -resultBundlePath "$PWD/build/test-results/Voxboard-iOS.xcresult" \
             -disableAutomaticPackageResolution \
             -onlyUsePackageVersionsFromResolvedFile \
-            -retry-tests-on-failure \
-            -test-iterations 2 \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY='' \
+            CODE_SIGNING_ALLOWED=YES \
+            CODE_SIGNING_REQUIRED=YES \
+            CODE_SIGN_IDENTITY=- \
             DEVELOPMENT_TEAM='' \
             2>&1 | tee build/logs/ios-tests.log
+      - name: Collect App Intents registration metadata
+        if: ${{ !cancelled() }}
+        run: |
+          mkdir -p build/logs/app-intents
+          products="$RUNNER_TEMP/Voxboard-iOS-Tests/Build/Products/Debug-iphonesimulator"
+          for bundle in "$products/Voxboard.app" \
+                        "$products/Voxboard.app/PlugIns/Voxboard WidgetExtension.appex"; do
+            metadata="$bundle/Metadata.appintents/extract.actionsdata"
+            if [ -f "$metadata" ]; then
+              cp "$metadata" "build/logs/app-intents/$(basename "$bundle").json"
+            fi
+          done
       - name: Collect simulator crash reports
         if: ${{ !cancelled() }}
         run: |
@@ -135,6 +147,7 @@ jobs:
           name: voxboard-ios-test-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             build/logs/ios-tests.log
+            build/logs/app-intents
             build/logs/crash-reports
             build/logs/ios-test-toolchain.log
             build/logs/ios-test-revision.txt

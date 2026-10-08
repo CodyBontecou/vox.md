@@ -10,40 +10,20 @@ struct VoxboardRecordControl: ControlWidget {
     static let kind = "VoxboardRecordControl"
 
     var body: some ControlWidgetConfiguration {
-        AppIntentControlConfiguration(kind: Self.kind, provider: Provider()) { state in
-            ControlWidgetButton(action: OpenVoxboardRecordIntent(vox: state.vox)) {
+        AppIntentControlConfiguration(kind: Self.kind, provider: VoxboardRecordingControlProvider()) { state in
+            ControlWidgetButton(action: state.action) {
                 Label(
                     state.isEnabled ? state.vox.name : String(localized: "Off"),
                     systemImage: state.isEnabled ? state.vox.symbolName : "mic.slash"
                 )
                 .controlWidgetActionHint(
-                    state.isEnabled
-                        ? String(localized: "Record with \(state.vox.name)")
-                        : String(localized: "Disabled in Vox.md Settings")
+                    state.isEnabled ? state.actionHint : String(localized: "Disabled in Vox.md Settings")
                 )
             }
             .disabled(!state.isEnabled)
         }
         .displayName("Vox.md Record")
-        .description("Start recording with a configurable Capture Preset.")
+        .description("Record with a Capture Preset. Configure Start, Stop, or Start or Stop and whether to open Vox.md. Background recording requires iOS 26+.")
         .promptsForUserConfiguration()
-    }
-
-    struct State {
-        let isEnabled: Bool
-        let vox: VoxEntity
-    }
-
-    private struct Provider: AppIntentControlValueProvider {
-        func previewValue(configuration: SelectVoxboardRecordVoxIntent) -> State {
-            State(isEnabled: true, vox: VoxEntity.resolved(configuration.vox))
-        }
-
-        func currentValue(configuration: SelectVoxboardRecordVoxIntent) async throws -> State {
-            State(
-                isEnabled: AppConstants.lockScreenQuickRecordEnabled,
-                vox: VoxEntity.resolved(configuration.vox)
-            )
-        }
     }
 }

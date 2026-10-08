@@ -60,6 +60,35 @@ final class DraftRecordingActionTests: XCTestCase {
         XCTAssertNil(legacyRequest.draftRequestID(in: CaptureDraft()))
     }
 
+    func testDraftStartReplacesStaleStopOrToggleWithoutStoppingAnActiveCapture() throws {
+        let defaults = try makeDefaults()
+        for staleAction in [RecordingAction.stop, .toggle] {
+            WidgetRecordingActionSelection.persist(staleAction, defaults: defaults)
+            PendingQuickRecordingRequest(requestedFlowID: "journal", draftAttachAudio: false)
+                .persist(defaults: defaults, notificationCenter: NotificationCenter())
+            let request = PendingQuickRecordingRequest.consume(defaults: defaults)
+            XCTAssertEqual(request.recordingAction, .start)
+            XCTAssertEqual(request.recordingAction.command(isRecording: false), .start)
+            XCTAssertEqual(request.recordingAction.command(isRecording: true), .none)
+            XCTAssertEqual(request.completionMode(flowID: "journal"), .captureDraft(attachAudio: false))
+            XCTAssertNil(defaults.object(forKey: WidgetRecordingActionSelection.key))
+        }
+    }
+
+    func testImmediateHandoffClearsDraftPolicyAndPreservesEachConfiguredAction() throws {
+        let defaults = try makeDefaults()
+        for action in RecordingAction.allCases {
+            PendingQuickRecordingRequest(requestedFlowID: "draft", draftAttachAudio: true)
+                .persist(defaults: defaults, notificationCenter: NotificationCenter())
+            PendingQuickRecordingRequest(requestedFlowID: "immediate", draftAttachAudio: nil, recordingAction: action)
+                .persist(defaults: defaults, notificationCenter: NotificationCenter())
+            let request = PendingQuickRecordingRequest.consume(defaults: defaults)
+            XCTAssertEqual(request.recordingAction, action)
+            XCTAssertEqual(request.completionMode(flowID: "immediate"), .runVox(flowID: "immediate"))
+            XCTAssertNil(defaults.object(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey))
+        }
+    }
+
     func testMalformedDraftOverrideCannotFallBackToImmediateDelivery() throws {
         let defaults = try makeDefaults()
         defaults.set("invalid-attachment-policy", forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey)
@@ -120,7 +149,8 @@ final class DraftRecordingActionTests: XCTestCase {
     func testIntentSchedulesAutomaticDraftStartAndLegacyIntentRemainsImmediate() async throws {
         let defaults = try XCTUnwrap(AppConstants.sharedDefaults)
         let keys = [AppConstants.lockScreenQuickRecordEnabledKey, AppConstants.pendingWidgetRecordKey,
-                    AppConstants.pendingWidgetRecordFlowIdKey, AppConstants.pendingWidgetRecordDraftAttachAudioKey]
+                    AppConstants.pendingWidgetRecordFlowIdKey, AppConstants.pendingWidgetRecordDraftAttachAudioKey,
+                    WidgetRecordingActionSelection.key]
         let originals = keys.map { defaults.object(forKey: $0) }
         defer {
             for (key, value) in zip(keys, originals) {
@@ -133,7 +163,7 @@ final class DraftRecordingActionTests: XCTestCase {
         XCTAssertEqual(defaults.object(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey) as? Bool, true)
         XCTAssertTrue(RecordToDraftIntent.openAppWhenRun)
 
-        _ = try await OpenVoxboardRecordIntent().perform()
+        _ = try await OpenVoxboardRecordIntent().foregroundIntent.perform()
         XCTAssertTrue(defaults.bool(forKey: AppConstants.pendingWidgetRecordKey))
         XCTAssertNil(defaults.object(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey))
 

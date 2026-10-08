@@ -101,6 +101,7 @@ nonisolated final class WatchRecordingBackgroundLease: @unchecked Sendable {
 
     static func begin(
         recordingID: String?,
+        namePrefix: String = "WatchRecordingDelivery",
         service: any WatchRecordingBackgroundTaskServicing,
         onExpiration: @escaping @MainActor @Sendable (UUID) -> Void
     ) -> WatchRecordingBackgroundLease {
@@ -110,7 +111,7 @@ nonisolated final class WatchRecordingBackgroundLease: @unchecked Sendable {
             expirationCallback: onExpiration
         )
         let suffix = recordingID.map { String($0.prefix(8)) } ?? "unknown"
-        let identifier = service.begin(name: "WatchRecordingDelivery-\(suffix)") { [weak lease] in
+        let identifier = service.begin(name: "\(namePrefix)-\(suffix)") { [weak lease] in
             lease?.expire()
         }
         lease.install(identifier)

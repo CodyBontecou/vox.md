@@ -6,9 +6,10 @@ you stop, the transcript is added to the existing Capture draft for review.
 Nothing is sent to a note or other preset destination until you explicitly tap
 **Send** in Capture.
 
-This is not **Record with Preset**, which retains immediate delivery, or
-**Toggle Recording**, which retains its background start/stop behavior. Existing
-assignments and wrapper Shortcuts keep their intent identities and behavior.
+**Record Audio** retains immediate delivery and its configurable Start, Stop,
+and Open When Run choices. Saved **Toggle Recording** assignments retain their
+background start/stop behavior. Existing assignments and wrapper Shortcuts keep
+their intent identities and behavior.
 Record to Draft is a foreground action, not a new background toggle. Running it
 while another capture owns the recorder does not stop or replace that capture.
 
@@ -57,6 +58,9 @@ permission, unlock, audio-session, or Live Activity checks are bypassed.
 - A new legacy immediate action or legacy widget URL clears the draft override.
   A malformed draft attachment override fails closed to transcript-only draft
   delivery, never immediate delivery.
+- Draft actions replace stale Stop/Toggle launch metadata with Start and leave an
+  already-active capture untouched. The draft control configures only its voice
+  preset; Record Audio's action and app-presentation options stay on its own control.
 - After publishing its complete launch request, the draft action wakes a running
   app directly. Recording does not wait for another scene activation when the
   foreground intent executes after activation. Launch/activation checks retain
@@ -80,5 +84,7 @@ installs, picker/configuration persistence, cold/warm invocation, locked/unlocke
 behavior, microphone denial/free limits, one-shot teardown, Live Activity Stop,
 and real transcription with the chosen preset. Device authentication/foreground
 launch behavior and any iOS-specific picker caching are still hardware gates.
-After integration with URL delivery, verify with synthetic data and a loopback
-endpoint that draft recording makes no HTTP request before explicit Send.
+The integrated synthetic URL-delivery regression verifies that recorded draft
+text neither prepares HTTP delivery nor sends a request before explicit Send,
+then sends once after review. Native loopback and keychain tests cover the URL
+transport separately.
