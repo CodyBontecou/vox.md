@@ -1,39 +1,42 @@
-# Action Button: Record to Draft
+# Action Button: Record Audio into a Draft
 
-**Record to Draft** is a separate preset-aware quick action. It opens Vox.md and
-starts a one-shot recording automatically, without another tap on Start. When
+Choose **Delivery → Add to Draft** in the existing **Record Audio** action or
+**Vox.md Record** control. Vox.md opens and starts a one-shot recording. When
 you stop, the transcript is added to the existing Capture draft for review.
 Nothing is sent to a note or other preset destination until you explicitly tap
-**Send** in Capture.
+**Send** in Capture. Enable **Attach Audio** to keep the recording in the draft.
 
-**Record Audio** retains immediate delivery and its configurable Start, Stop,
-and Open When Run choices. Saved **Toggle Recording** assignments retain their
-background start/stop behavior. Existing assignments and wrapper Shortcuts keep
-their intent identities and behavior.
-Record to Draft is a foreground action, not a new background toggle. Running it
-while another capture owns the recorder does not stop or replace that capture.
+**Send Immediately** remains the default for saved recording assignments.
+Start, Stop, and Start or Stop keep their existing behavior; Stop does not
+change an active recording's delivery or preset. Draft delivery opens Capture
+even when Open App or Open When Run is off. This choice does not change the
+composer's saved Send Immediately preference.
+
+Saved **Toggle Recording** assignments keep their background behavior. The
+separate **Record to Draft** action and control have been removed. Replace any
+assignment to them with **Record Audio** or **Vox.md Record**, selecting
+**Delivery → Add to Draft** and the same preset. Select **Start** to retain the
+old action's start-only behavior, or **Start or Stop** to use one button for both.
 
 ## Setup
 
 1. Complete Vox.md's microphone/model setup and enable the existing Lock Screen
    Record Button setting. Free-tier limits and microphone permission still apply.
-2. On supported systems, look in Settings → Action Button → Controls for
-   **Vox.md Record to Draft**, then configure its Capture Preset. The same control
-   is registered for Control Center/Lock Screen controls.
-3. Alternatively, assign the **Record to Draft** App Shortcut. To configure the
-   optional **Attach Audio** parameter, create a Shortcut containing Vox.md's
-   **Record to Draft** action, choose a Preset, enable Attach Audio if desired,
-   and assign that Shortcut to the Action Button. The control uses transcript-only
-   draft delivery; the configurable Shortcut can retain audio too.
-4. Invoke the action. Vox.md opens and requests recording immediately. Stop using
-   the app's existing Stop control, or the existing Live Activity Stop control
-   when an activity is available. Open Capture to review/edit and tap Send only
-   when ready.
+2. In Settings → Action Button → Controls, choose **Vox.md Record**. Set Preset,
+   Action (**Start or Stop** for a single button), Delivery (**Add to Draft**),
+   and Attach Audio if desired. The same control supports Control Center and
+   Lock Screen assignments.
+3. Alternatively, create a Shortcut containing Vox.md's **Record Audio** action.
+   Expand its options, choose Preset, Action, Delivery, and Attach Audio, save it,
+   then assign it under Settings → Action Button → Shortcut.
+4. Invoke the action, speak, and stop with the assigned toggle, the app's Stop
+   control, or the Live Activity Stop control. Review/edit Capture and tap Send
+   only when ready.
 
-The intent has the same iOS 17 foreground availability annotation as the legacy
-record intent; the control is iOS 18+. The shipped app's deployment target still
-applies. The iOS 26 foreground mode is explicitly immediate. No OS-availability,
-permission, unlock, audio-session, or Live Activity checks are bypassed.
+Record Audio remains available on iOS 17+ and the control on iOS 18+; the app's
+shipped deployment target still applies. Draft delivery uses the immediate
+foreground handoff. Permission, unlock, audio-session, and Live Activity checks
+still apply.
 
 ## Preset and draft behavior
 
@@ -58,9 +61,8 @@ permission, unlock, audio-session, or Live Activity checks are bypassed.
 - A new legacy immediate action or legacy widget URL clears the draft override.
   A malformed draft attachment override fails closed to transcript-only draft
   delivery, never immediate delivery.
-- Draft actions replace stale Stop/Toggle launch metadata with Start and leave an
-  already-active capture untouched. The draft control configures only its voice
-  preset; Record Audio's action and app-presentation options stay on its own control.
+- Record Audio preserves its chosen Action through the draft handoff. Start
+  leaves an active capture untouched; Stop does not start an idle recorder.
 - After publishing its complete launch request, the draft action wakes a running
   app directly. Recording does not wait for another scene activation when the
   foreground intent executes after activation. Launch/activation checks retain
@@ -70,8 +72,10 @@ permission, unlock, audio-session, or Live Activity checks are bypassed.
 
 ## Verification boundary
 
-Source registration includes both an App Shortcut and a distinct configurable
-ControlWidget. App-hosted synthetic tests cover request/preset/completion routing,
+Source registration exposes one recording App Shortcut and the existing
+configurable Record control for both deliveries. App and widget metadata tests
+verify that the separate draft intent and configuration are absent.
+App-hosted synthetic tests cover request/preset/completion routing,
 immutable recovery/retry metadata, cold-load draft identity, existing content and
 attachments, idempotent delivery, and the real recorder's queued `.captureDraft`
 transcription path without note export, followed by an explicit Send that writes

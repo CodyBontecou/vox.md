@@ -12,7 +12,6 @@ struct VoxboardWidgetBundle: WidgetBundle {
         }
         if #available(iOSApplicationExtension 18.0, *) {
             VoxboardRecordControl()
-            VoxboardDraftRecordingControl()
             VoxboardQuickCaptureControl()
         }
         if #available(iOSApplicationExtension 26.0, *) {

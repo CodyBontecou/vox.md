@@ -146,7 +146,7 @@ final class DraftRecordingActionTests: XCTestCase {
         XCTAssertEqual(request.completionMode(flowID: "legacy"), .runVox(flowID: "legacy"))
     }
 
-    func testIntentSchedulesAutomaticDraftStartAndLegacyIntentRemainsImmediate() async throws {
+    func testConfiguredIntentSchedulesAutomaticDraftStartAndDefaultIntentRemainsImmediate() async throws {
         let defaults = try XCTUnwrap(AppConstants.sharedDefaults)
         let keys = [AppConstants.lockScreenQuickRecordEnabledKey, AppConstants.pendingWidgetRecordKey,
                     AppConstants.pendingWidgetRecordFlowIdKey, AppConstants.pendingWidgetRecordDraftAttachAudioKey,
@@ -158,10 +158,11 @@ final class DraftRecordingActionTests: XCTestCase {
             }
         }
         defaults.set(true, forKey: AppConstants.lockScreenQuickRecordEnabledKey)
-        _ = try await RecordToDraftIntent(vox: nil, attachAudio: true).perform()
+        _ = try await OpenVoxboardRecordIntent(vox: nil, delivery: .draft, attachAudio: true).foregroundIntent.perform()
         XCTAssertTrue(defaults.bool(forKey: AppConstants.pendingWidgetRecordKey))
         XCTAssertEqual(defaults.object(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey) as? Bool, true)
-        XCTAssertTrue(RecordToDraftIntent.openAppWhenRun)
+        XCTAssertTrue(OpenVoxboardRecordingActionIntent.openAppWhenRun)
+        XCTAssertEqual(WidgetRecordingActionSelection.consume(defaults: defaults), .start)
 
         _ = try await OpenVoxboardRecordIntent().foregroundIntent.perform()
         XCTAssertTrue(defaults.bool(forKey: AppConstants.pendingWidgetRecordKey))
@@ -169,7 +170,7 @@ final class DraftRecordingActionTests: XCTestCase {
 
         defaults.set(false, forKey: AppConstants.pendingWidgetRecordKey)
         defaults.set(false, forKey: AppConstants.lockScreenQuickRecordEnabledKey)
-        _ = try await RecordToDraftIntent().perform()
+        _ = try await OpenVoxboardRecordIntent(vox: nil, delivery: .draft).foregroundIntent.perform()
         XCTAssertFalse(defaults.bool(forKey: AppConstants.pendingWidgetRecordKey))
         XCTAssertNil(defaults.object(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey))
     }

@@ -15,12 +15,21 @@ struct VoxboardRecordingControlProvider: AppIntentControlValueProvider {
         let vox: VoxEntity
         let recordingAction: RecordingAction
         let openApp: Bool
+        let delivery: RecordingDelivery
+        let attachAudio: Bool
 
         var action: VoxboardRecordingControlIntent {
-            VoxboardRecordingControlIntent(vox: vox, action: recordingAction, openApp: openApp)
+            VoxboardRecordingControlIntent(vox: vox, action: recordingAction, openApp: openApp, delivery: delivery, attachAudio: attachAudio)
         }
 
         var actionHint: String {
+            if delivery == .draft {
+                return switch recordingAction {
+                case .start: String(localized: "Start recording into your draft")
+                case .stop: String(localized: "Stop recording and review your draft")
+                case .toggle: String(localized: "Start or stop recording into your draft")
+                }
+            }
             let opensApp: Bool
             if #available(iOS 26.0, *) { opensApp = openApp }
             else { opensApp = true }
@@ -48,7 +57,9 @@ struct VoxboardRecordingControlProvider: AppIntentControlValueProvider {
             isEnabled: isEnabled,
             vox: VoxEntity.resolved(configuration.vox),
             recordingAction: configuration.recordingAction ?? defaultAction,
-            openApp: configuration.openApp ?? defaultOpenApp
+            openApp: configuration.openApp ?? defaultOpenApp,
+            delivery: configuration.delivery ?? .immediate,
+            attachAudio: configuration.attachAudio ?? false
         )
     }
 }

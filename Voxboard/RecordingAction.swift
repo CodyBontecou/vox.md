@@ -2,6 +2,19 @@ import AppIntents
 import Foundation
 import VoxboardShared
 
+/// Missing delivery parameters in saved actions retain immediate delivery.
+@available(iOS 17.0, *)
+enum RecordingDelivery: String, AppEnum {
+    case immediate
+    case draft
+
+    static let typeDisplayRepresentation: TypeDisplayRepresentation = "Recording Delivery"
+    static let caseDisplayRepresentations: [RecordingDelivery: DisplayRepresentation] = [
+        .immediate: "Send Immediately",
+        .draft: "Add to Draft"
+    ]
+}
+
 /// Recording state and app presentation are independent choices. Keep the raw
 /// values stable: Shortcuts and control configurations persist them.
 @available(iOS 17.0, *)

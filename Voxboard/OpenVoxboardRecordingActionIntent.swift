@@ -20,11 +20,19 @@ struct OpenVoxboardRecordingActionIntent: AppIntent {
     @Parameter(title: "Action", default: .start)
     var recordingAction: RecordingAction
 
+    @Parameter(title: "Delivery", default: .immediate)
+    var delivery: RecordingDelivery
+
+    @Parameter(title: "Attach Audio", default: false)
+    var attachAudio: Bool
+
     init() {}
 
-    init(vox: VoxEntity?, action: RecordingAction) {
+    init(vox: VoxEntity?, action: RecordingAction, delivery: RecordingDelivery = .immediate, attachAudio: Bool = false) {
         self.vox = vox
         self.recordingAction = action
+        self.delivery = delivery
+        self.attachAudio = attachAudio
     }
 
     @MainActor
@@ -32,7 +40,7 @@ struct OpenVoxboardRecordingActionIntent: AppIntent {
         guard AppConstants.lockScreenQuickRecordEnabled else { return .result() }
         PendingQuickRecordingRequest(
             requestedFlowID: VoxEntity.requestedFlowID(for: vox),
-            draftAttachAudio: nil,
+            draftAttachAudio: delivery == .draft ? attachAudio : nil,
             recordingAction: recordingAction
         ).persist()
         return .result()

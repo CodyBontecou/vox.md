@@ -80,7 +80,7 @@ struct VoxEntityQuery: EntityQuery, EnumerableEntityQuery {
 @available(iOS 17.0, *)
 struct OpenVoxboardRecordIntent: AppIntent {
     static let title: LocalizedStringResource = "Record Audio"
-    static let description = IntentDescription("Start, stop, or start/stop a Vox.md recording with a Capture Preset. Turn off Open When Run to record without switching apps on iOS 26+. Recording opens Vox.md if setup is needed.")
+    static let description = IntentDescription("Start, stop, or start/stop a Vox.md recording with a Capture Preset. Send immediately or add to your draft for review. Draft delivery opens Vox.md; immediate delivery can record in the background on iOS 26+.")
 
     // Keep the saved Record action's foreground default, including older iOS.
     // Shortcuts owns the single Open When Run preference; do not export a
@@ -98,19 +98,30 @@ struct OpenVoxboardRecordIntent: AppIntent {
     @Parameter(title: "Action", description: "Start and Stop leave an already-started or already-stopped recording unchanged. Start or Stop switches the current recording state.", default: .start)
     var recordingAction: RecordingAction
 
+    @Parameter(title: "Delivery", description: "Send Immediately runs the preset after recording. Add to Draft opens Capture and waits for explicit Send.", default: .immediate)
+    var delivery: RecordingDelivery
+
+    @Parameter(title: "Attach Audio", description: "Keep audio as a draft attachment when Delivery is Add to Draft.", default: false)
+    var attachAudio: Bool
+
     static var parameterSummary: some ParameterSummary {
-        Summary("\(\.$recordingAction) recording with \(\.$vox)")
+        Summary("\(\.$recordingAction) recording with \(\.$vox)") {
+            \.$delivery
+            \.$attachAudio
+        }
     }
 
     init() {}
 
-    init(vox: VoxEntity?, action: RecordingAction = .start) {
+    init(vox: VoxEntity?, action: RecordingAction = .start, delivery: RecordingDelivery = .immediate, attachAudio: Bool = false) {
         self.vox = vox
         self.recordingAction = action
+        self.delivery = delivery
+        self.attachAudio = attachAudio
     }
 
     var foregroundIntent: OpenVoxboardRecordingActionIntent {
-        OpenVoxboardRecordingActionIntent(vox: vox, action: recordingAction)
+        OpenVoxboardRecordingActionIntent(vox: vox, action: recordingAction, delivery: delivery, attachAudio: attachAudio)
     }
 
     @MainActor
@@ -121,7 +132,7 @@ struct OpenVoxboardRecordIntent: AppIntent {
         } else {
             openApp = true
         }
-        return try await RecordingIntentExecution.perform(vox: vox, action: recordingAction, openApp: openApp)
+        return try await RecordingIntentExecution.perform(vox: vox, action: recordingAction, openApp: openApp, delivery: delivery, attachAudio: attachAudio)
     }
 }
 
@@ -151,17 +162,25 @@ struct VoxboardRecordingControlIntent: AppIntent {
     @Parameter(title: "Open App", default: true)
     var openApp: Bool
 
+    @Parameter(title: "Delivery", default: .immediate)
+    var delivery: RecordingDelivery
+
+    @Parameter(title: "Attach Audio", default: false)
+    var attachAudio: Bool
+
     init() {}
 
-    init(vox: VoxEntity?, action: RecordingAction = .start, openApp: Bool = true) {
+    init(vox: VoxEntity?, action: RecordingAction = .start, openApp: Bool = true, delivery: RecordingDelivery = .immediate, attachAudio: Bool = false) {
         self.vox = vox
         self.recordingAction = action
         self.openApp = openApp
+        self.delivery = delivery
+        self.attachAudio = attachAudio
     }
 
     @MainActor
     func perform() async throws -> some IntentResult & OpensIntent {
-        try await RecordingIntentExecution.perform(vox: vox, action: recordingAction, openApp: openApp)
+        try await RecordingIntentExecution.perform(vox: vox, action: recordingAction, openApp: openApp, delivery: delivery, attachAudio: attachAudio)
     }
 }
 
@@ -172,9 +191,9 @@ extension VoxboardRecordingControlIntent: AudioRecordingIntent, LiveActivityInte
 /// toggles. Presentation is chosen by the caller; recorder safety is shared.
 @MainActor
 enum RecordingIntentExecution {
-    static func perform(vox: VoxEntity?, action: RecordingAction, openApp: Bool) async throws -> some IntentResult & OpensIntent {
+    static func perform(vox: VoxEntity?, action: RecordingAction, openApp: Bool, delivery: RecordingDelivery = .immediate, attachAudio: Bool = false) async throws -> some IntentResult & OpensIntent {
         guard AppConstants.lockScreenQuickRecordEnabled else { return .result() }
-        let foreground = OpenVoxboardRecordingActionIntent(vox: vox, action: action)
+        let foreground = OpenVoxboardRecordingActionIntent(vox: vox, action: action, delivery: delivery, attachAudio: attachAudio)
         guard #available(iOS 18.2, *) else {
 #if VOXBOARD_WIDGET_EXTENSION
             // The legacy foreground flag normally routes execution to the
@@ -188,7 +207,9 @@ enum RecordingIntentExecution {
             return .result()
 #endif
         }
-        if openApp { return .result(opensIntent: foreground) }
+        // Draft identity and its review sink belong to the foreground composer.
+        // Preserve Action through this handoff, including Stop and Toggle.
+        if openApp || delivery == .draft { return .result(opensIntent: foreground) }
         guard #available(iOS 26.0, *) else {
             return .result(opensIntent: foreground)
         }
@@ -274,7 +295,7 @@ struct WidgetRecordingFlowSelection {
 @available(iOS 18.0, *)
 struct SelectVoxboardRecordVoxIntent: ControlConfigurationIntent {
     static let title: LocalizedStringResource = "Configure Recording"
-    static let description = IntentDescription("Choose a Capture Preset, recording action, and whether to open Vox.md.")
+    static let description = IntentDescription("Choose a Capture Preset, recording action, delivery, and whether to open Vox.md. Draft delivery always opens Capture for review.")
 
     @Parameter(title: "Preset", description: "The Capture Preset to use for recordings started by this control.")
     var vox: VoxEntity?
@@ -288,18 +309,28 @@ struct SelectVoxboardRecordVoxIntent: ControlConfigurationIntent {
     @Parameter(title: "Open App", description: "Open Vox.md when recording. Background recording requires iOS 26+. Leave unset to keep this control's original behavior.")
     var openApp: Bool?
 
+    @Parameter(title: "Delivery", description: "Send Immediately runs the preset; Add to Draft opens Capture and waits for Send. Leave unset to retain immediate delivery.")
+    var delivery: RecordingDelivery?
+
+    @Parameter(title: "Attach Audio", description: "Keep audio as a draft attachment when Delivery is Add to Draft.")
+    var attachAudio: Bool?
+
     static var parameterSummary: some ParameterSummary {
         Summary("Record with \(\.$vox)") {
             \.$recordingAction
             \.$openApp
+            \.$delivery
+            \.$attachAudio
         }
     }
 
     init() {}
 
-    init(vox: VoxEntity?, action: RecordingAction? = nil, openApp: Bool? = nil) {
+    init(vox: VoxEntity?, action: RecordingAction? = nil, openApp: Bool? = nil, delivery: RecordingDelivery? = nil, attachAudio: Bool? = nil) {
         self.vox = vox
         self.recordingAction = action
         self.openApp = openApp
+        self.delivery = delivery
+        self.attachAudio = attachAudio
     }
 }

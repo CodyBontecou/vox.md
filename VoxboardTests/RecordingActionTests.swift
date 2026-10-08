@@ -95,6 +95,8 @@ final class RecordingActionTests: XCTestCase {
     func testPrimaryPreservesLegacyStartAndForegroundDefaults() {
         let recording = OpenVoxboardRecordIntent()
         XCTAssertEqual(recording.recordingAction, .start)
+        XCTAssertEqual(recording.delivery, .immediate)
+        XCTAssertFalse(recording.attachAudio)
         XCTAssertTrue(OpenVoxboardRecordIntent.openAppWhenRun, "Older iOS retains its foreground launch default")
     }
 
@@ -115,7 +117,8 @@ final class RecordingActionTests: XCTestCase {
     func testForegroundIntentPreservesStopAndPresetInsteadOfStarting() async throws {
         let defaults = try XCTUnwrap(AppConstants.sharedDefaults)
         let keys = [AppConstants.lockScreenQuickRecordEnabledKey, AppConstants.pendingWidgetRecordKey,
-                    AppConstants.pendingWidgetRecordFlowIdKey, WidgetRecordingActionSelection.key]
+                    AppConstants.pendingWidgetRecordFlowIdKey, WidgetRecordingActionSelection.key,
+                    AppConstants.pendingWidgetRecordDraftAttachAudioKey]
         let originals = keys.map { defaults.object(forKey: $0) }
         defer {
             for (key, value) in zip(keys, originals) {
@@ -138,6 +141,48 @@ final class RecordingActionTests: XCTestCase {
         WidgetRecordingActionSelection.persist(.stop, defaults: defaults)
         _ = try await OpenVoxboardRecordIntent(vox: preset).foregroundIntent.perform()
         XCTAssertEqual(WidgetRecordingActionSelection.consume(defaults: defaults), .start)
+    }
+
+    func testConfiguredRecordActionPublishesDraftDeliveryWithoutChangingItsAction() async throws {
+        let defaults = try XCTUnwrap(AppConstants.sharedDefaults)
+        let keys = [AppConstants.lockScreenQuickRecordEnabledKey, AppConstants.pendingWidgetRecordKey,
+                    AppConstants.pendingWidgetRecordFlowIdKey, WidgetRecordingActionSelection.key,
+                    AppConstants.pendingWidgetRecordDraftAttachAudioKey,
+                    CapturePreferenceKeys.defaultRecordingResultMode]
+        let originals = keys.map { defaults.object(forKey: $0) }
+        defer {
+            for (key, value) in zip(keys, originals) {
+                if let value { defaults.set(value, forKey: key) }
+                else { defaults.removeObject(forKey: key) }
+            }
+        }
+        defaults.set(true, forKey: AppConstants.lockScreenQuickRecordEnabledKey)
+        defaults.set(CaptureRecordingMode.preset.rawValue, forKey: CapturePreferenceKeys.defaultRecordingResultMode)
+        let preset = VoxEntity.fallback
+        let draft = CaptureDraft(text: "Existing draft")
+        for action in RecordingAction.allCases {
+            for attachAudio in [false, true] {
+                let intent = OpenVoxboardRecordIntent(vox: preset, action: action, delivery: .draft, attachAudio: attachAudio)
+                _ = try await intent.foregroundIntent.perform()
+                let request = PendingQuickRecordingRequest.consume(defaults: defaults)
+                XCTAssertEqual(request.recordingAction, action)
+                XCTAssertEqual(request.requestedFlowID, preset.id)
+                XCTAssertEqual(request.completionMode(flowID: preset.id), .captureDraft(attachAudio: attachAudio))
+                XCTAssertEqual(request.draftRequestID(in: draft), draft.requestID)
+                XCTAssertEqual(defaults.string(forKey: CapturePreferenceKeys.defaultRecordingResultMode), CaptureRecordingMode.preset.rawValue)
+            }
+        }
+        // Audio retention is a draft option; immediate delivery must clear the
+        // last draft override even if a saved action retains Attach Audio=true.
+        _ = try await OpenVoxboardRecordIntent(vox: preset, delivery: .immediate, attachAudio: true).foregroundIntent.perform()
+        let immediate = PendingQuickRecordingRequest.consume(defaults: defaults)
+        XCTAssertEqual(immediate.completionMode(flowID: preset.id), .runVox(flowID: preset.id))
+        XCTAssertNil(immediate.draftRequestID(in: draft))
+
+        defaults.set(false, forKey: AppConstants.pendingWidgetRecordKey)
+        defaults.set(false, forKey: AppConstants.lockScreenQuickRecordEnabledKey)
+        _ = try await OpenVoxboardRecordIntent(vox: preset, delivery: .draft).foregroundIntent.perform()
+        XCTAssertFalse(defaults.bool(forKey: AppConstants.pendingWidgetRecordKey))
     }
 
     private func withDefaults(_ body: (UserDefaults) throws -> Void) throws {

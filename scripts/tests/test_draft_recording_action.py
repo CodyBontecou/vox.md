@@ -12,30 +12,34 @@ class DraftRecordingActionRegistrationTests(unittest.TestCase):
         observer = app.split("for: PendingQuickRecordingRequest.didPersistNotification", 1)[1]
         self.assertIn("consumePendingWidgetRecordIfNeeded()", observer.split(".onOpenURL", 1)[0])
 
-    def test_draft_action_is_separate_from_legacy_immediate_action(self):
+    def test_record_audio_is_the_only_recording_shortcut(self):
         provider = (ROOT / "Voxboard/VoxboardShortcutsProvider.swift").read_text()
         self.assertIn("intent: OpenVoxboardRecordIntent()", provider)
-        self.assertIn("intent: RecordToDraftIntent()", provider)
-        self.assertIn('shortTitle: "Record to Draft"', provider)
+        self.assertNotIn("RecordToDraftIntent", provider)
+        self.assertNotIn('shortTitle: "Record to Draft"', provider)
+        self.assertFalse((ROOT / "Voxboard/RecordToDraftIntent.swift").exists())
 
-    def test_draft_control_is_additive_and_configurable(self):
+    def test_existing_record_control_owns_draft_configuration(self):
         bundle = (ROOT / "Voxboard Widget/VoxboardWidgetBundle.swift").read_text()
-        control = (ROOT / "Voxboard Widget/VoxboardDraftRecordingControl.swift").read_text()
+        control = (ROOT / "Voxboard Widget/VoxboardRecordControl.swift").read_text()
+        provider = (ROOT / "Voxboard/VoxboardRecordingControlProvider.swift").read_text()
         project = (ROOT / "Voxboard.xcodeproj/project.pbxproj").read_text()
         self.assertIn("VoxboardRecordControl()", bundle)
-        self.assertIn("VoxboardDraftRecordingControl()", bundle)
-        self.assertIn("RecordToDraftIntent(vox: state.vox)", control)
+        self.assertNotIn("VoxboardDraftRecordingControl", bundle)
+        self.assertFalse((ROOT / "Voxboard Widget/VoxboardDraftRecordingControl.swift").exists())
+        self.assertIn("ControlWidgetButton(action: state.action)", control)
+        self.assertIn("delivery: delivery, attachAudio: attachAudio", provider)
         self.assertIn("promptsForUserConfiguration()", control)
-        self.assertIn("AppConstants.lockScreenQuickRecordEnabled", control)
-        self.assertIn("RecordToDraftIntent.swift,", project)
+        self.assertIn("AppConstants.lockScreenQuickRecordEnabled", provider)
+        self.assertNotIn("RecordToDraftIntent.swift", project)
         self.assertIn("PendingQuickRecordingRequest.swift,", project)
 
     def test_foreground_draft_intent_preserves_quick_record_safety_gate(self):
-        intent = (ROOT / "Voxboard/RecordToDraftIntent.swift").read_text()
+        intent = (ROOT / "Voxboard/OpenVoxboardRecordingActionIntent.swift").read_text()
         self.assertIn("static var openAppWhenRun: Bool = true", intent)
         self.assertIn(".foreground(.immediate)", intent)
         self.assertIn("guard AppConstants.lockScreenQuickRecordEnabled", intent)
-        self.assertIn("draftAttachAudio: attachAudio", intent)
+        self.assertIn("draftAttachAudio: delivery == .draft ? attachAudio : nil", intent)
         self.assertNotIn("ToggleVoxboardRecordingIntent", intent)
 
     def test_pending_launch_starts_recorder_without_switching_or_sending_draft(self):
