@@ -224,7 +224,7 @@ struct MetaSettingsView: View {
 
     private var recordingQueueSection: some View {
         VStack(spacing: 0) {
-            sectionHeader("02", "Recording Queue")
+            sectionHeader("02", "Queues & Recovery")
             GeistDivider()
 
             settingsNavigationRow(
@@ -246,6 +246,15 @@ struct MetaSettingsView: View {
                     )
                 }
             }
+            GeistDivider()
+            settingsNavigationRow(
+                "URL Deliveries",
+                description: "Review saved HTTP payloads, retry with corrected credentials, or discard",
+                systemImage: "paperplane"
+            ) {
+                URLDeliveryRecoveryView(coordinator: URLDeliveryRuntime.coordinator)
+            }
+            .accessibilityIdentifier("settings_url_deliveries")
         }
     }
 

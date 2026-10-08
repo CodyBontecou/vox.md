@@ -395,6 +395,8 @@ public struct CapturePresetExportSettings: Codable, Equatable, Sendable {
     public var yamlProperties: Set<ExportYAMLProperty>
     public var embedAudioInMarkdown: Bool
     public var audioEmbedPlacement: CapturePresetAudioEmbedPlacement
+    /// Opt-in per-preset HTTP delivery. Existing archives decode as disabled.
+    public var urlDelivery: CapturePresetURLDeliverySettings
 
     public init(
         usesCustomExportSettings: Bool = true,
@@ -414,7 +416,8 @@ public struct CapturePresetExportSettings: Codable, Equatable, Sendable {
         yamlUsesMarkdownExtension: Bool = false,
         yamlProperties: Set<ExportYAMLProperty> = ExportYAMLProperty.defaultSelection,
         embedAudioInMarkdown: Bool = false,
-        audioEmbedPlacement: CapturePresetAudioEmbedPlacement = .bottom
+        audioEmbedPlacement: CapturePresetAudioEmbedPlacement = .bottom,
+        urlDelivery: CapturePresetURLDeliverySettings = CapturePresetURLDeliverySettings()
     ) {
         self.usesCustomExportSettings = usesCustomExportSettings
         self.exportEnabled = exportEnabled
@@ -434,6 +437,7 @@ public struct CapturePresetExportSettings: Codable, Equatable, Sendable {
         self.yamlProperties = yamlProperties
         self.embedAudioInMarkdown = embedAudioInMarkdown
         self.audioEmbedPlacement = audioEmbedPlacement
+        self.urlDelivery = urlDelivery
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -455,6 +459,7 @@ public struct CapturePresetExportSettings: Codable, Equatable, Sendable {
         case yamlProperties
         case embedAudioInMarkdown
         case audioEmbedPlacement
+        case urlDelivery
     }
 
     public init(from decoder: Decoder) throws {
@@ -484,6 +489,8 @@ public struct CapturePresetExportSettings: Codable, Equatable, Sendable {
         }
         embedAudioInMarkdown = try container.decodeIfPresent(Bool.self, forKey: .embedAudioInMarkdown) ?? false
         audioEmbedPlacement = try container.decodeIfPresent(CapturePresetAudioEmbedPlacement.self, forKey: .audioEmbedPlacement) ?? .bottom
+        urlDelivery = try container.decodeIfPresent(CapturePresetURLDeliverySettings.self, forKey: .urlDelivery)
+            ?? CapturePresetURLDeliverySettings()
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -506,6 +513,7 @@ public struct CapturePresetExportSettings: Codable, Equatable, Sendable {
         try container.encode(yamlProperties.sorted { $0.rawValue < $1.rawValue }, forKey: .yamlProperties)
         try container.encode(embedAudioInMarkdown, forKey: .embedAudioInMarkdown)
         try container.encode(audioEmbedPlacement, forKey: .audioEmbedPlacement)
+        try container.encode(urlDelivery, forKey: .urlDelivery)
     }
 }
 
@@ -570,8 +578,20 @@ public enum CapturePresetStore {
     ) -> [CapturePreset] {
         guard let defaults else { return defaultFlows }
         let decoder = JSONDecoder()
-        let stored = defaults.data(forKey: flowsKey)
-            .flatMap { try? decoder.decode([CapturePreset].self, from: $0) } ?? []
+        let storedData = defaults.data(forKey: flowsKey)
+        let stored = storedData.flatMap { try? decoder.decode([CapturePreset].self, from: $0) } ?? []
+        // Decoding discards PR #35's plaintext header values. Compare the raw
+        // archive too: decoded equality alone would leave those secrets in
+        // UserDefaults when no unrelated migration needs to save the presets.
+        let rawPresets = storedData.flatMap {
+            (try? JSONSerialization.jsonObject(with: $0)) as? [[String: Any]]
+        } ?? []
+        let requiresURLDeliveryRedaction = rawPresets.contains { preset in
+            guard let export = preset["exportSettings"] as? [String: Any],
+                  let url = export["urlDelivery"] as? [String: Any],
+                  let headers = url["customHeaders"] as? [String: String] else { return false }
+            return !headers.isEmpty
+        }
 
         if stored.isEmpty {
             var flows = defaultFlows
@@ -636,7 +656,7 @@ public enum CapturePresetStore {
             migrateProcessingGate(&migrated)
         }
 
-        if persistMigrations, migrated != stored {
+        if persistMigrations, migrated != stored || requiresURLDeliveryRedaction {
             saveFlows(migrated, defaults: defaults)
         }
         if persistMigrations, processingGateMigrationPending {

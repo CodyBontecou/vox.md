@@ -70,7 +70,7 @@ If a one-shot request is unavailable, an interactive surface can retry, cancel, 
 Add the Vox.md keyboard to iOS and dictate into any text field — Messages, Notes, Safari, or any app that accepts a keyboard. With Automatic on supported iOS 26 devices, finalized Apple Speech phrases stream into the active field while you speak; tentative words stay in the toolbar until Apple finalizes them. Whisper and Parakeet selections insert the completed transcript after recording stops. Parakeet users can optionally download the small on-device Voice Pause Detection companion to stop and transcribe keyboard segments after a configurable pause.
 
 ### On-Device Transcription
-Speech recognition runs locally. On supported iOS 26 devices, Automatic uses Apple's `SpeechAnalyzer` and system-managed `SpeechTranscriber` assets; Whisper (`whisper.cpp`) and Core ML/FluidAudio-backed Parakeet models remain optional downloads and explicit overrides or fallbacks, so no app-managed speech weights ship in the iOS bundle. Android ships Whisper Small in an install-time AI pack and selects it automatically on a fresh install, while keeping the other Whisper, Parakeet, and Vosk choices configurable. Audio, transcripts, capture drafts, and templates stay on the device.
+Speech recognition runs locally. On supported iOS 26 devices, Automatic uses Apple's `SpeechAnalyzer` and system-managed `SpeechTranscriber` assets; Whisper (`whisper.cpp`) and Core ML/FluidAudio-backed Parakeet models remain optional downloads and explicit overrides or fallbacks, so no app-managed speech weights ship in the iOS bundle. Android ships Whisper Small in an install-time AI pack and selects it automatically on a fresh install, while keeping the other Whisper, Parakeet, and Vosk choices configurable. Audio, capture drafts, and templates stay on the device. Captured text can leave through destinations you explicitly configure, including opt-in URL delivery.
 
 ### One-Shot Recording + Keyboard Listening
 
@@ -101,6 +101,8 @@ Stats shows lifetime recording and capture totals, recorded time, attachment cou
 
 ### File Export
 Automatically save transcripts after each session as TXT, Markdown, or YAML. Choose a destination folder, use filename templates, append to a single file, render Markdown templates, and enable Obsidian-friendly frontmatter.
+
+The **draft Deliver to URL implementation in PR #39** adds a JSON POST to a preset’s existing destinations; it does not replace Markdown delivery. Configure it on iOS or Mac with an HTTPS endpoint you own, an optional bearer token, and custom headers. Tokens and header values are Keychain-only. Local capture completion does not wait for network retries; **URL Deliveries** provides HTTP-only retry (including corrected authentication) and discard. Endpoint, content, and idempotency key remain frozen, and the receiver must deduplicate the key. Off by default, text-only, no redirects or URL-journal sending on launch. See the [scope and remaining release gates](docs/issue-32-url-delivery.md).
 
 ### Apple Intelligence Enrichment
 On iOS 26+ devices and macOS 26+ Macs with Apple Intelligence, eligible Capture Presets can generate titles, tags, categories, cleaned-up text, checklists, meeting-note structure, and custom transformations — still locally on-device through Apple's Foundation Models framework.

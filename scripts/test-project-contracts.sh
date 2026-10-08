@@ -612,6 +612,7 @@ recording_only_settings_gate = '''            if flow.watchOutputMode != .record
                 if flow.captureDestinationID == nil {
                     fileExportSection
                 }
+                urlDeliverySection
                 if showsFrontmatterSection {
                     frontmatterSection
                     locationMetadataSection

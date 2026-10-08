@@ -12,6 +12,7 @@ struct CapturePresetSettingsView: View {
     @State private var flows: [CapturePreset] = CapturePresetStore.loadFlows()
     @State private var pins = CapturePresetSettingsPins()
     @State private var watchStatePublishTask: Task<Void, Never>?
+    @State private var deletionError: String?
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.editMode) private var editMode
@@ -51,6 +52,9 @@ struct CapturePresetSettingsView: View {
         .background(Geist.Palette.background200)
         .task { await migrateRoutesAndReload() }
         .onAppear { pins.reload() }
+        .alert("Preset Could Not Be Deleted", isPresented: Binding(
+            get: { deletionError != nil }, set: { if !$0 { deletionError = nil } }
+        )) { Button("OK", role: .cancel) {} } message: { Text(deletionError ?? "") }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { pins.reload() }
         }
@@ -250,6 +254,12 @@ struct CapturePresetSettingsView: View {
     }
 
     private func delete(_ flow: CapturePreset) {
+        do {
+            try URLDeliveryKeychain.deleteCredentials(for: flow.exportSettings.urlDelivery)
+        } catch {
+            deletionError = String(localized: "Saved URL credentials could not be removed. Unlock your device and try again. The preset has not been deleted.")
+            return
+        }
         CapturePresetStore.retirePreset(
             id: flow.id,
             ownedRouteID: flow.captureDestinationID
@@ -314,6 +324,7 @@ private struct CapturePresetEditorView: View {
                 if flow.captureDestinationID == nil {
                     fileExportSection
                 }
+                urlDeliverySection
                 if showsFrontmatterSection {
                     frontmatterSection
                     locationMetadataSection
@@ -859,6 +870,10 @@ private struct CapturePresetEditorView: View {
         } footer: {
             Text("These compatibility settings apply to direct voice runs only when no unified Capture route is selected.")
         }
+    }
+
+    private var urlDeliverySection: some View {
+        URLDeliverySettingsSection(settings: $flow.exportSettings.urlDelivery)
     }
 
     private var audioExportSection: some View {
