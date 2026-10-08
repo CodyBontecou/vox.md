@@ -14,15 +14,6 @@ struct VoxboardShortcutsProvider: AppShortcutsProvider {
             systemImageName: "mic.fill"
         )
         AppShortcut(
-            intent: RecordToDraftIntent(),
-            phrases: [
-                "Record to a draft with \(.applicationName)",
-                "Record \(\.$vox) to a draft with \(.applicationName)"
-            ],
-            shortTitle: "Record to Draft",
-            systemImageName: "square.and.pencil"
-        )
-        AppShortcut(
             intent: OpenQuickCaptureIntent(),
             phrases: [
                 "Quick capture with \(.applicationName)",

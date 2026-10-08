@@ -207,18 +207,27 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
                        "Shortcuts owns Open When Run; exporting Open App creates a competing foreground control")
     }
 
-    func testCurrentOSProvidesImmediateAndDraftRecordingShortcuts() {
+    func testCurrentOSProvidesOneConfigurableRecordingShortcutAndAllCaptureShortcuts() {
         let shortcuts = VoxboardShortcutsProvider.appShortcuts
-        XCTAssertEqual(shortcuts.count, 9, "Record Audio and Record to Draft retain all seven capture shortcuts within the ten-shortcut limit")
+        XCTAssertEqual(shortcuts.count, 8, "Record Audio handles both deliveries and retains all seven capture shortcuts")
     }
 
-    func testDraftControlConfigurationExposesOnlyItsVoicePreset() throws {
-        let metadata = try actionsMetadata(in: Bundle.main.bundleURL)
-        let actions = try XCTUnwrap(metadata["actions"] as? [String: [String: Any]])
-        let configuration = try XCTUnwrap(actions["SelectVoxboardDraftRecordVoxIntent"])
-        let parameters = try XCTUnwrap(configuration["parameters"] as? [[String: Any]])
-        XCTAssertEqual(Set(parameters.compactMap { $0["name"] as? String }), ["vox"])
-        XCTAssertNotNil(actions["RecordToDraftIntent"])
+    func testAppAndWidgetDoNotExportSeparateDraftRecordingActions() throws {
+        let plugins = Bundle.main.bundleURL.appendingPathComponent("PlugIns")
+        let extensionURL = try XCTUnwrap(
+            FileManager.default.contentsOfDirectory(at: plugins, includingPropertiesForKeys: nil)
+                .first { $0.lastPathComponent == "Voxboard WidgetExtension.appex" }
+        )
+        for bundle in [Bundle.main.bundleURL, extensionURL] {
+            let metadata = try actionsMetadata(in: bundle)
+            let actions = try XCTUnwrap(metadata["actions"] as? [String: [String: Any]])
+            XCTAssertNil(actions["RecordToDraftIntent"])
+            XCTAssertNil(actions["SelectVoxboardDraftRecordVoxIntent"])
+            XCTAssertNotNil(actions["OpenVoxboardRecordIntent"])
+            XCTAssertNotNil(actions["SelectVoxboardRecordVoxIntent"])
+            let shortcuts = metadata["autoShortcuts"] as? [[String: Any]] ?? []
+            XCTAssertFalse(shortcuts.contains { $0["actionIdentifier"] as? String == "RecordToDraftIntent" })
+        }
     }
 
     func testBuiltAppRegistersConfigurableActionAndCompatibilityIdentities() throws {

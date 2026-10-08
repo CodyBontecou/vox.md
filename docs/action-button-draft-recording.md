@@ -1,4 +1,4 @@
-# Action Button: Record to Draft
+# Action Button: Record Audio into a Draft
 
 Choose **Delivery → Add to Draft** in the existing **Record Audio** action or
 **Vox.md Record** control. Vox.md opens and starts a one-shot recording. When
@@ -13,9 +13,10 @@ even when Open App or Open When Run is off. This choice does not change the
 composer's saved Send Immediately preference.
 
 Saved **Toggle Recording** assignments keep their background behavior. The
-separate **Record to Draft** action and control remain available for existing
-assignments; they always start draft recording, and the separate control retains
-its own preset configuration.
+separate **Record to Draft** action and control have been removed. Replace any
+assignment to them with **Record Audio** or **Vox.md Record**, selecting
+**Delivery → Add to Draft** and the same preset. Select **Start** to retain the
+old action's start-only behavior, or **Start or Stop** to use one button for both.
 
 ## Setup
 
@@ -60,9 +61,8 @@ still apply.
 - A new legacy immediate action or legacy widget URL clears the draft override.
   A malformed draft attachment override fails closed to transcript-only draft
   delivery, never immediate delivery.
-- The separate Record to Draft action replaces stale Stop/Toggle launch metadata
-  with Start and leaves an active capture untouched. Configured Record Audio
-  preserves its chosen Action through the same draft handoff.
+- Record Audio preserves its chosen Action through the draft handoff. Start
+  leaves an active capture untouched; Stop does not start an idle recorder.
 - After publishing its complete launch request, the draft action wakes a running
   app directly. Recording does not wait for another scene activation when the
   foreground intent executes after activation. Launch/activation checks retain
@@ -72,8 +72,10 @@ still apply.
 
 ## Verification boundary
 
-Source registration includes both an App Shortcut and a distinct configurable
-ControlWidget. App-hosted synthetic tests cover request/preset/completion routing,
+Source registration exposes one recording App Shortcut and the existing
+configurable Record control for both deliveries. App and widget metadata tests
+verify that the separate draft intent and configuration are absent.
+App-hosted synthetic tests cover request/preset/completion routing,
 immutable recovery/retry metadata, cold-load draft identity, existing content and
 attachments, idempotent delivery, and the real recorder's queued `.captureDraft`
 transcription path without note export, followed by an explicit Send that writes
