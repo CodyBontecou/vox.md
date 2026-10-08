@@ -18,6 +18,8 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
             XCTAssertEqual(current.action.recordingAction, .toggle)
             XCTAssertFalse(current.action.openApp)
             XCTAssertTrue(current.isEnabled)
+            XCTAssertFalse(ToggleVoxboardRecordingIntent.openAppWhenRun)
+            XCTAssertEqual(ToggleVoxboardRecordingIntent.supportedModes, [.background, .foreground(.dynamic)])
             XCTAssertTrue(current.action is any AudioRecordingIntent)
             XCTAssertTrue(current.action is any LiveActivityIntent)
         }
@@ -88,6 +90,75 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
             _ = try await ToggleVoxboardRecordingIntent(vox: VoxEntity(flow: configured)).perform()
             XCTAssertNil(defaults.object(forKey: AppConstants.pendingWidgetRecordKey))
         }
+    }
+
+    func testBackgroundToggleStopWithoutLiveActivityTearsDownRemainingAudioSession() {
+        var segmentActive = true
+        var audioSessionActive = true
+        var events: [String] = []
+        let outcome = BackgroundRecordingAction.perform(
+            action: .toggle,
+            flowID: nil,
+            effects: .init(
+                isRecording: { segmentActive },
+                start: { _ in XCTFail("Stop must not start another recording"); return false },
+                stop: { segmentActive = false; events.append("finalize") },
+                stopListening: { audioSessionActive = false; events.append("release") },
+                ensureLiveActivity: { events.append("activity"); return false },
+                endShortcutActivity: { events.append("endActivity") }
+            )
+        )
+        XCTAssertEqual(outcome, .completed)
+        XCTAssertEqual(events, ["finalize", "activity", "release", "endActivity"])
+        XCTAssertFalse(segmentActive)
+        XCTAssertFalse(audioSessionActive)
+    }
+
+    func testBackgroundToggleStopWithLiveActivityKeepsBackgroundProcessingSession() {
+        var segmentActive = true
+        var audioSessionActive = true
+        let outcome = BackgroundRecordingAction.perform(
+            action: .toggle,
+            flowID: nil,
+            effects: .init(
+                isRecording: { segmentActive },
+                start: { _ in XCTFail("Stop must not start another recording"); return false },
+                stop: { segmentActive = false },
+                stopListening: { audioSessionActive = false },
+                ensureLiveActivity: {
+                    XCTAssertFalse(segmentActive, "Finalize before updating the activity")
+                    return true
+                },
+                endShortcutActivity: { XCTFail("Keep the active background processing activity") }
+            )
+        )
+        XCTAssertEqual(outcome, .completed)
+        XCTAssertFalse(segmentActive)
+        XCTAssertTrue(audioSessionActive)
+    }
+
+    func testBuiltAppPreservesLegacyShortcutAvailabilityBelowIOS26() throws {
+        let metadata = try actionsMetadata(in: Bundle.main.bundleURL)
+        let shortcuts = try XCTUnwrap(metadata["autoShortcuts"] as? [[String: Any]])
+        let legacyActions = [
+            "OpenVoxboardRecordIntent", "OpenQuickCaptureIntent", "OpenCaptureVoiceIntent",
+            "OpenCaptureScreenshotIntent", "OpenCaptureScanIntent", "CaptureTextIntent",
+            "CaptureURLIntent", "CaptureFileIntent"
+        ]
+        for identifier in legacyActions {
+            let shortcut = try XCTUnwrap(shortcuts.first { $0["actionIdentifier"] as? String == identifier })
+            let availability = try XCTUnwrap(shortcut["availabilityAnnotations"] as? [String: Any])
+            let iOS = try XCTUnwrap(availability["LNPlatformNameIOS"] as? [String: Any])
+            let introducedVersion = try XCTUnwrap(iOS["introducedVersion"] as? String)
+            XCTAssertNotEqual(
+                introducedVersion.compare("17.6", options: .numeric), .orderedDescending,
+                "\(identifier) must remain available on iOS 17.6, not require \(introducedVersion)"
+            )
+        }
+        let actions = try XCTUnwrap(metadata["actions"] as? [String: [String: Any]])
+        let toggle = try XCTUnwrap(actions["ToggleVoxboardRecordingIntent"])
+        let availability = try XCTUnwrap(toggle["availabilityAnnotations"] as? [String: [String: Any]])
+        XCTAssertEqual(availability["LNPlatformNameIOS"]?["introducedVersion"] as? String, "26.0")
     }
 
     func testPrimaryUsesNativeForegroundPreferenceAndControlsUseHiddenDispatcher() {
