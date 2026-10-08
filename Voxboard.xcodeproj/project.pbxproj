@@ -251,7 +251,10 @@
 				LiveActivityRecordingIntents.swift,
 				OpenVoxboardQuickCaptureIntent.swift,
 				OpenVoxboardRecordIntent.swift,
+				OpenVoxboardRecordingActionIntent.swift,
+				RecordingAction.swift,
 				ToggleVoxboardRecordingIntent.swift,
+				VoxboardRecordingControlProvider.swift,
 				VoxboardToggleRecordingControl.swift,
 			);
 			target = 622B4C7C2F78B09600FDC4CA /* Voxboard WidgetExtension */;

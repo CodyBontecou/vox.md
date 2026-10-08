@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Vox.md connects to the local endpoint you configure when you explicitly send a capture or test URL delivery.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Vox.md uses on-device speech recognition to preview a transcript while you record.</string>
 	<key>NSLocationUsageDescription</key>

@@ -403,6 +403,19 @@ LID = IC. Every feature below is verified in the root-level files of `Voxboard/`
 - Evidence: `PersistentRecorder.swift` `pauseInAppSegment`/`resumeInAppSegment`/`extractSegmentSamples`/duration timer/`appendToSegmentJournal`; `LiveSegmentTranscriptionCoordinator.swift`; `VoiceAutoStopCoordinator.swift`; `WatchRecordingController.swift` phase mapping; `QuickCaptureView.swift` `voiceCapturePauseToggle` (AnyView-erased — see F-IC-31 sibling note on deep ViewBuilder types overflowing the Swift runtime metadata demangler on device) — `VoxboardTests/RecordingPauseResumeTests.swift`.
 - Status: shipped
 
+### F-IC-33 Per-Preset URL Delivery
+- Surface: iOS/Mac Capture Preset editor → Deliver to URL; iOS Settings → URL Deliveries; Mac preset editor → URL Deliveries
+- Summary: Draft, opt-in additive JSON delivery to a user-entered endpoint. Off by default; no shipped endpoint or HTTP startup drain. Immediate voice and explicit composer Send use durable, frozen requests. Typed Capture still requires a Markdown destination.
+- Details:
+  - Settings: decode-additive `CapturePresetExportSettings.urlDelivery`; tokens and all header values are Keychain-only, referenced by opaque per-preset UUID accounts bound to exact endpoints. Preset deletion removes that account before retirement, or leaves the preset intact on cleanup failure. iOS and Mac share explicit URL/token/header/test controls.
+  - Transport: voice uses the JSON export renderer; text-bearing composer captures use `{id,text,source,recorded_at}`. Stable lowercase UUID `Idempotency-Key`; receiver-side deduplication is required. No redirects, cookie jar, response cache, unbounded response-body buffering or raw transport-error disclosure.
+  - Retry: 2xx succeeds; 408/429 and 5xx use bounded cancellable attempt windows/backoff. 401/403 and other permanent failures stop automatic retry but stay available for explicit HTTP-only recovery. Recovery can deliberately adopt credentials from a preset with the exact original endpoint without changing content or identity.
+  - Durability: enqueue verifies and atomically saves body/digest/settings references/receipt without HTTP. `URLDeliveryCoordinator` owns sends separately from local completion; iOS uses a finite expiration-cancellable lease. `URLDeliveryCancellation` propagates source cancellation across task creation/handoff. Note retries do not reset/repost failed HTTP. Delivered/discarded tombstones suppress replay; discard cancels/awaits the sender and removes the body without repeating notes/audio.
+  - Privacy/validation: HTTPS by default; local HTTP needs explicit consent. User/password and secret-looking query names rejected; 1 MiB body cap. Recovery shows origin/status/identity metadata, not content, endpoint paths/queries, credentials or legacy transport errors. Send Test is explicitly initiated, fixed synthetic text only.
+- Constraints: PR #39 remains draft; additive versus alternative output is a separate product decision. No audio/multipart upload, background URLSession, startup HTTP drain or automatic pruning. Device Keychain/lock, ATS/local-network, signing and crash-boundary acceptance remain required.
+- Evidence: `docs/issue-32-url-delivery.md`; shared `TranscriptURLDeliverer.swift`, `URLDeliveryCoordinator.swift`, `URLDeliveryCancellation.swift`, `URLDeliveryKeychain.swift`; iOS/Mac recorder hooks; `Voxboard App Shared/CaptureComposerViewModel.swift`, `URLDeliverySettingsSection.swift`, `URLDeliveryRecoveryView.swift`, `URLDeliveryRetrySheet.swift`; `URLDeliveryAuthorizationRecoveryTests.swift`, `URLDeliveryHandoffTests.swift`, `URLDeliveryCoordinatorTests.swift`, `URLDeliveryCancellationTests.swift`; `VoxboardTests/CaptureURLDeliveryIntegrationTests.swift`; `scripts/tests/test_url_delivery_integration_contracts.py`.
+- Status: planned
+
 ---
 
 ## File-by-File Coverage Checklist

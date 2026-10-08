@@ -10,7 +10,7 @@ struct VoxboardShortcutsProvider: AppShortcutsProvider {
                 "Record \(\.$vox) with \(.applicationName)",
                 "Start \(\.$vox) in \(.applicationName)"
             ],
-            shortTitle: "Record with Preset",
+            shortTitle: "Record Audio",
             systemImageName: "mic.fill"
         )
         AppShortcut(
@@ -76,18 +76,5 @@ struct VoxboardShortcutsProvider: AppShortcutsProvider {
             shortTitle: "Capture File",
             systemImageName: "doc.badge.plus"
         )
-        // Keep availability-gated additions last. Xcode 26's metadata extractor
-        // otherwise applies this gate to subsequent legacy App Shortcuts too.
-        if #available(iOS 26.0, *) {
-            AppShortcut(
-                intent: ToggleVoxboardRecordingIntent(),
-                phrases: [
-                    "Toggle recording with \(.applicationName)",
-                    "Toggle \(\.$vox) recording with \(.applicationName)"
-                ],
-                shortTitle: "Toggle Recording",
-                systemImageName: "mic.badge.plus"
-            )
-        }
     }
 }

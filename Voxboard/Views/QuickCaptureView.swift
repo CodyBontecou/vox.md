@@ -374,6 +374,14 @@ struct QuickCaptureView: View {
                 .onChange(of: persistentRecorder.lastFileExportEvent) { _, event in
                     handleFileExportEvent(event)
                 }
+                .onChange(of: persistentRecorder.lastURLDeliveryEvent) { _, event in
+                    handleURLDeliveryEvent(event)
+                }
+                .onChange(of: URLDeliveryRuntime.coordinator.lastError) { _, message in
+                    if let message, persistentRecorder.lastError == nil {
+                        persistentRecorder.lastError = String(localized: "URL delivery needs attention. Open URL Deliveries in Settings. \(message)")
+                    }
+                }
                 .onChange(of: persistentRecorder.lastSentAudioUndoSnapshot) { _, observedSnapshot in
                     guard let observedSnapshot,
                           let snapshot = persistentRecorder.consumeSentAudioUndoSnapshot(
@@ -2711,9 +2719,21 @@ struct QuickCaptureView: View {
 
         let requestedFlowID = AppConstants.sharedDefaults?.string(forKey: AppConstants.pendingWidgetRecordFlowIdKey)
         AppConstants.sharedDefaults?.removeObject(forKey: AppConstants.pendingWidgetRecordFlowIdKey)
+        let action = WidgetRecordingActionSelection.consume()
+        switch action.command(isRecording: persistentRecorder.isSegmentActive) {
+        case .none:
+            return
+        case .stop:
+            // Stop doesn't require a valid capture route, reload the composer,
+            // or replace the active recording's preset/completion mode.
+            persistentRecorder.stopInAppSegment()
+            return
+        case .start:
+            break
+        }
         Task { @MainActor in
             await viewModel.load()
-            guard viewModel.requireCaptureRouteAvailable() else { return }
+            guard viewModel.requireCaptureRouteAvailable(), !persistentRecorder.isSegmentActive else { return }
             let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: requestedFlowID)
             // Quick Record is an independent immediate recording, not a draft
             // preset launch. Keep its legacy resolver/purpose without rerouting
@@ -2750,6 +2770,18 @@ struct QuickCaptureView: View {
         case .failure(let message):
             fileExportToast = nil
             persistentRecorder.lastError = String(localized: "Your transcript was saved locally, but file export failed. \(message)")
+        }
+    }
+
+    private func handleURLDeliveryEvent(_ event: URLDeliveryEvent?) {
+        guard let event else { return }
+        switch event.result {
+        case .delivered, .disabled, .queued, .retained:
+            break
+        case .failed(let message, _):
+            if persistentRecorder.lastError == nil {
+                persistentRecorder.lastError = String(localized: "Your transcript was saved locally, but URL delivery failed. \(message)")
+            }
         }
     }
 

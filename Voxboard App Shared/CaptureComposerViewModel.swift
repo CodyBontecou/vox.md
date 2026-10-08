@@ -40,6 +40,7 @@ final class QuickCaptureViewModel {
     private let draftStore: CaptureDraftStore?
     private let historyStore: CaptureHistoryStore?
     private let pipeline: CapturePipeline
+    private let urlDeliveryCoordinator: URLDeliveryCoordinator
     private let requestProcessor: CapturePresetRequestProcessor
     private let locationProvider: any CaptureLocationOutcomeProviding
     private var pendingDraftSave: Task<Void, Never>?
@@ -56,7 +57,8 @@ final class QuickCaptureViewModel {
         defaults: UserDefaults? = AppConstants.sharedDefaults,
         pipeline: CapturePipeline = AppCapturePipeline.shared,
         requestProcessor: CapturePresetRequestProcessor = CapturePresetRequestProcessor(),
-        locationProvider: (any CaptureLocationOutcomeProviding)? = nil
+        locationProvider: (any CaptureLocationOutcomeProviding)? = nil,
+        urlDeliveryCoordinator: URLDeliveryCoordinator? = nil
     ) {
         self.captureRootURL = captureRootURL
         self.defaults = defaults
@@ -76,6 +78,7 @@ final class QuickCaptureViewModel {
             self.historyStore = nil
         }
         self.pipeline = pipeline
+        self.urlDeliveryCoordinator = urlDeliveryCoordinator ?? URLDeliveryRuntime.coordinator
         self.requestProcessor = requestProcessor
         self.locationProvider = locationProvider ?? CaptureLocationService()
     }
@@ -1398,6 +1401,10 @@ final class QuickCaptureViewModel {
         // A journaled origin result owns the exact Preset policy that produced
         // it. Do not combine that outcome with later edits to the same Preset.
         let submittedVoxProfile = submittedDraft.voxProfileSnapshot ?? selectedVoxProfile
+        // Freeze the opt-in destination before any asynchronous processing.
+        let submittedURLDeliverySettings = submittedVoxProfile.flatMap {
+            CapturePresetStore.flow(id: $0.id, defaults: defaults)?.exportSettings.urlDelivery
+        }
         guard let submittedDestinationID = effectiveDestinationID else {
             isSubmitting = false
             errorMessage = CaptureDraftError.destinationRequired.localizedDescription
@@ -1522,12 +1529,25 @@ final class QuickCaptureViewModel {
                 let stagingURL = captureRootURL
                     .appendingPathComponent("staging", isDirectory: true)
                     .appendingPathComponent(draft.id.uuidString.lowercased(), isDirectory: true)
-                return try await pipeline.capture(
-                    request,
-                    destination: destination,
-                    rootURL: rootURL,
-                    assetRootURL: stagingURL
-                )
+                let cancellation = URLDeliveryCancellation()
+                return try await withTaskCancellationHandler {
+                    // Explicit Send freezes processed bytes before a note
+                    // mutation, without contacting the endpoint.
+                    let urlEvent = try await self.enqueueCaptureToURLIfConfigured(
+                        request: request, settings: submittedURLDeliverySettings
+                    )
+                    try Task.checkCancellation()
+                    let receipt = try await pipeline.capture(
+                        request,
+                        destination: destination,
+                        rootURL: rootURL,
+                        assetRootURL: stagingURL
+                    )
+                    if case .queued? = urlEvent?.result {
+                        await self.dispatchCaptureURLDelivery(id: request.id, cancellation: cancellation)
+                    }
+                    return receipt
+                } onCancel: { cancellation.cancel() }
             }
 
             lastReceipt = receipt
@@ -2031,6 +2051,26 @@ final class QuickCaptureViewModel {
         historyRecords = (try? await historyStore.list()) ?? historyRecords
     }
 
+    /// Called only inside explicit Send. A preparation failure preserves the
+    /// draft before any note mutation; a POST failure belongs to HTTP recovery.
+    private func enqueueCaptureToURLIfConfigured(
+        request: CaptureRequest, settings: CapturePresetURLDeliverySettings?
+    ) async throws -> URLDeliveryEvent? {
+        guard let settings, settings.enabled, !request.urlDeliveryText.isEmpty else { return nil }
+        let event = await urlDeliveryCoordinator.enqueueCapture(
+            id: request.id, text: request.urlDeliveryText, date: request.createdAt, settings: settings
+        )
+        if case .failed(let message, _) = event.result {
+            throw QuickCaptureViewModelError.urlDeliveryHandoffFailed(message)
+        }
+        return event
+    }
+
+    private func dispatchCaptureURLDelivery(id: UUID, cancellation: URLDeliveryCancellation) {
+        guard !Task.isCancelled else { return }
+        urlDeliveryCoordinator.dispatch(id: id, cancellation: cancellation)
+    }
+
     nonisolated private static func historyFailureCategory(for error: Error) -> CaptureHistoryFailureCategory {
         switch error {
         case is CaptureDraftError:
@@ -2241,9 +2281,12 @@ enum QuickCaptureViewModelError: Error, LocalizedError {
     case assetsTooLarge
     case captureRouteBusy
     case stalePresetSwitch
+    case urlDeliveryHandoffFailed(String)
 
     var errorDescription: String? {
         switch self {
+        case .urlDeliveryHandoffFailed(let message):
+            return String(localized: "URL delivery could not be saved. Your draft is preserved. \(message)")
         case .storageUnavailable:
             return String(localized: "Shared capture storage is unavailable.")
         case .staleDestination(let name):

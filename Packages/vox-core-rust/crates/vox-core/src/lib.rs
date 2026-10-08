@@ -392,13 +392,20 @@ pub struct LocationStructuredField {
 }
 
 fn default_location_structured_fields() -> Vec<LocationStructuredField> {
-    ["coordinates", "place", "appleMapsURL", "timestamp", "source", "id"]
-        .into_iter()
-        .map(|field| LocationStructuredField {
-            field: field.to_owned(),
-            output_key: field.to_owned(),
-        })
-        .collect()
+    [
+        "coordinates",
+        "place",
+        "appleMapsURL",
+        "timestamp",
+        "source",
+        "id",
+    ]
+    .into_iter()
+    .map(|field| LocationStructuredField {
+        field: field.to_owned(),
+        output_key: field.to_owned(),
+    })
+    .collect()
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -950,10 +957,11 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
                 label.region.as_deref(),
                 label.country.as_deref(),
             ];
-            if values.iter().all(|value| value.is_none())
-                || values.iter().flatten().any(|value| {
-                    value.is_empty() || value.len() > 512 || value.trim() != *value
-                })
+            if values.iter().all(Option::is_none)
+                || values
+                    .iter()
+                    .flatten()
+                    .any(|value| value.is_empty() || value.len() > 512 || value.trim() != *value)
                 || (snapshot.precision == "city" && label.place.is_some())
             {
                 return Err(CoreError::InvalidControl);
@@ -980,8 +988,7 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
                 || observation.consent_version.is_some()
                 || observation.outcome != "notRequested"))
             || (observation.requested
-                && (observation.lookup_class == "none"
-                    || observation.outcome == "notRequested"))
+                && (observation.lookup_class == "none" || observation.outcome == "notRequested"))
             || ((observation.lookup_class == "systemMayUseNetwork")
                 != observation.consent_version.is_some())
             || ((observation.outcome == "frozen")
@@ -1164,9 +1171,9 @@ pub fn path_candidates(input: &PreparationInput) -> Result<Vec<Vec<String>>, Cor
         format!("{trimmed}.md")
     };
     validate_segment(&name)?;
-    let candidate_count = if input.operation == "newNote" { 256 } else { 1 };
-    let mut result = Vec::with_capacity(candidate_count);
-    for suffix in 1..=candidate_count as u16 {
+    let candidate_count: u16 = if input.operation == "newNote" { 256 } else { 1 };
+    let mut result = Vec::with_capacity(usize::from(candidate_count));
+    for suffix in 1..=candidate_count {
         let mut path = input.preset.route_policy.logical_folder.clone();
         let candidate = if suffix == 1 {
             name.clone()
@@ -1339,15 +1346,20 @@ fn formatted_location(
                 .or(label.region.as_ref())
                 .or(label.country.as_ref())
         })
-        .map(|value| percent_encode_query(value))
-        .unwrap_or_else(|| format!("{latitude}%2C%20{longitude}"));
+        .map_or_else(
+            || format!("{latitude}%2C%20{longitude}"),
+            |value| percent_encode_query(value),
+        );
     let zoom = if city { 10 } else { 16 };
-    let accuracy = snapshot
+    let accuracy_meters = snapshot
         .accuracy_millimeters
-        .map(|millimeters| format!("{:.1} m", millimeters as f64 / 1_000.0));
-    let geo_accuracy = snapshot
-        .accuracy_millimeters
-        .map(|millimeters| format!(";u={:.1}", millimeters as f64 / 1_000.0))
+        .map(u32::try_from)
+        .transpose()
+        .map_err(|_| CoreError::IntegerOutOfRange)?
+        .map(|millimeters| f64::from(millimeters) / 1_000.0);
+    let accuracy = accuracy_meters.map(|meters| format!("{meters:.1} m"));
+    let geo_accuracy = accuracy_meters
+        .map(|meters| format!(";u={meters:.1}"))
         .unwrap_or_default();
     let timestamp = chrono::Utc
         .timestamp_millis_opt(snapshot.captured_at_epoch_milliseconds)
@@ -1386,13 +1398,13 @@ fn percent_encode_query(value: &str) -> String {
 fn format_coordinate(value_e6: i64, decimals: u32) -> String {
     let divisor = 10_i64.pow(6 - decimals);
     let scaled = value_e6 / divisor;
-    let fraction_base = 10_i64.pow(decimals);
+    let fraction_base = 10_u64.pow(decimals);
     let absolute = scaled.unsigned_abs();
     let sign = if scaled < 0 { "-" } else { "" };
     format!(
         "{sign}{}.{:0width$}",
-        absolute / fraction_base as u64,
-        absolute % fraction_base as u64,
+        absolute / fraction_base,
+        absolute % fraction_base,
         width = decimals as usize,
     )
 }
@@ -1508,10 +1520,7 @@ fn structured_location_value(
     values: &BTreeMap<&str, String>,
 ) -> Option<String> {
     match field {
-        "coordinates" => Some(format!(
-            "[{}, {}]",
-            formatted.latitude, formatted.longitude
-        )),
+        "coordinates" => Some(format!("[{}, {}]", formatted.latitude, formatted.longitude)),
         "latitude" => Some(formatted.latitude.clone()),
         "longitude" => Some(formatted.longitude.clone()),
         "accuracy" => formatted
@@ -1760,17 +1769,8 @@ impl MaterializationSession {
                     sha256,
                     byte_stream_id,
                     ..
-                } => {
-                    let absent = status == "absent"
-                        && *length == 0
-                        && sha256 == ZERO_HASH
-                        && byte_stream_id.is_none();
-                    let present = status == "present" && byte_stream_id.is_some();
-                    if !absent && !present {
-                        return Err(CoreError::ObservationMismatch);
-                    }
                 }
-                ObservationResult::ExistingNote {
+                | ObservationResult::ExistingNote {
                     status,
                     length,
                     sha256,
@@ -1934,8 +1934,7 @@ impl MaterializationSession {
         let operation = self
             .input
             .as_ref()
-            .map(|input| input.operation.as_str())
-            .unwrap_or("newNote");
+            .map_or("newNote", |input| input.operation.as_str());
         let operation_id = match operation_id(request_id, 0, operation) {
             Ok(value) => value,
             Err(error) => return self.fail(error),
@@ -2383,12 +2382,7 @@ fn ensure_uniform_materialization_fits(
     }
 }
 
-pub fn materialize(
-    input: &MaterializationInput,
-    template: Option<&[u8]>,
-    existing_note: Option<&[u8]>,
-) -> Result<(Vec<String>, Vec<u8>), CoreError> {
-    let path = selected_path(input)?;
+fn render_payload_entry(input: &MaterializationInput) -> Result<String, CoreError> {
     let mut blocks = Vec::new();
     for payload in &input.payloads {
         match payload {
@@ -2422,7 +2416,73 @@ pub fn materialize(
     if blocks.is_empty() {
         return Err(CoreError::InvalidRendering);
     }
-    let entry = blocks.join("\n\n");
+    Ok(blocks.join("\n\n"))
+}
+
+fn apply_capture_metadata(
+    input: &MaterializationInput,
+    frontmatter: &mut Vec<String>,
+    mut body: String,
+) -> Result<String, CoreError> {
+    let metadata_scope = input
+        .preset
+        .metadata_policy
+        .scope
+        .as_deref()
+        .unwrap_or("document");
+    if metadata_scope == "document" && input.preset.metadata_policy.frontmatter_mode == "merge" {
+        for field in &input.preset.metadata_policy.ordered_fields {
+            let line = format!("{}: {}", yaml_key(&field.name), yaml_scalar(&field.value));
+            if frontmatter_entry_key(&line).is_some_and(|key| {
+                frontmatter
+                    .iter()
+                    .any(|existing| frontmatter_entry_key(existing) == Some(key))
+            }) {
+                continue;
+            }
+            frontmatter.push(line);
+        }
+    } else if metadata_scope == "entry" && !input.preset.metadata_policy.ordered_fields.is_empty() {
+        let inline_fields = input
+            .preset
+            .metadata_policy
+            .ordered_fields
+            .iter()
+            .map(|field| {
+                format!(
+                    "{}:: {}",
+                    field.name,
+                    field.value.replace(['\n', '\r'], " ")
+                )
+            })
+            .collect::<Vec<_>>()
+            .join("\n");
+        body = if body.trim().is_empty() {
+            inline_fields
+        } else {
+            format!("{inline_fields}\n{body}")
+        };
+    }
+    if let Some(location) = render_location_metadata(input, metadata_scope)? {
+        if metadata_scope == "document" {
+            frontmatter.extend(location.document_lines);
+        } else if !location.inline_lines.is_empty() {
+            let inline = location.inline_lines.join("\n");
+            body = if body.trim().is_empty() {
+                inline
+            } else {
+                format!("{inline}\n{body}")
+            };
+        }
+    }
+    Ok(body)
+}
+
+fn render_capture_block(
+    input: &MaterializationInput,
+    template: Option<&[u8]>,
+) -> Result<(Vec<String>, String), CoreError> {
+    let entry = render_payload_entry(input)?;
     let rendered_template = if let Some(template) = template {
         let template = std::str::from_utf8(template).map_err(|_| CoreError::InvalidRendering)?;
         Some(render_tokens_for_input(template, input)?)
@@ -2455,57 +2515,7 @@ pub fn materialize(
         normalize_newlines(&route_prefix),
         normalize_newlines(&route_suffix)
     );
-    let metadata_scope = input
-        .preset
-        .metadata_policy
-        .scope
-        .as_deref()
-        .unwrap_or("document");
-    if metadata_scope == "document" && input.preset.metadata_policy.frontmatter_mode == "merge" {
-        for field in &input.preset.metadata_policy.ordered_fields {
-            let line = format!("{}: {}", yaml_key(&field.name), yaml_scalar(&field.value));
-            if frontmatter_entry_key(&line).is_some_and(|key| {
-                frontmatter
-                    .iter()
-                    .any(|existing| frontmatter_entry_key(existing) == Some(key))
-            }) {
-                continue;
-            }
-            frontmatter.push(line);
-        }
-    } else if metadata_scope == "entry" && !input.preset.metadata_policy.ordered_fields.is_empty() {
-        let inline_fields = input
-            .preset
-            .metadata_policy
-            .ordered_fields
-            .iter()
-            .map(|field| {
-                format!(
-                    "{}:: {}",
-                    field.name,
-                    field.value.replace('\n', " ").replace('\r', " ")
-                )
-            })
-            .collect::<Vec<_>>()
-            .join("\n");
-        body = if body.trim().is_empty() {
-            inline_fields
-        } else {
-            format!("{inline_fields}\n{body}")
-        };
-    }
-    if let Some(location) = render_location_metadata(input, metadata_scope)? {
-        if metadata_scope == "document" {
-            frontmatter.extend(location.document_lines);
-        } else if !location.inline_lines.is_empty() {
-            let inline = location.inline_lines.join("\n");
-            body = if body.trim().is_empty() {
-                inline
-            } else {
-                format!("{inline}\n{body}")
-            };
-        }
-    }
+    body = apply_capture_metadata(input, &mut frontmatter, body)?;
     let mut capture_block = trim_boundary_newlines(&body);
     if input.preset.retry_marker_policy == "voxCaptureCommentV1" {
         let marker = format!("<!-- vox-capture:{} -->", input.request_id.hyphenated());
@@ -2517,6 +2527,16 @@ pub fn materialize(
     } else if input.preset.retry_marker_policy != "none" {
         return Err(CoreError::InvalidRendering);
     }
+    Ok((frontmatter, capture_block))
+}
+
+pub fn materialize(
+    input: &MaterializationInput,
+    template: Option<&[u8]>,
+    existing_note: Option<&[u8]>,
+) -> Result<(Vec<String>, Vec<u8>), CoreError> {
+    let path = selected_path(input)?;
+    let (frontmatter, capture_block) = render_capture_block(input, template)?;
     let mut document = if input.operation == "newNote" || existing_note.is_none() {
         if input.operation != "newNote" && input.operation != "rollingNote" {
             return Err(CoreError::ObservationMismatch);
@@ -2977,6 +2997,91 @@ fn classify_json_error(error: &serde_json::Error) -> CoreError {
 mod tests {
     use super::*;
 
+    fn retained_input(request_id: Uuid) -> MaterializationInput {
+        MaterializationInput {
+            contract_version: MATERIALIZATION_INPUT_VERSION,
+            request_id,
+            capture_source: "app".to_owned(),
+            created_at_epoch_milliseconds: 0,
+            timezone: "UTC".to_owned(),
+            calendar: "gregorian".to_owned(),
+            locale: "en-US".to_owned(),
+            operation: "newNote".to_owned(),
+            pins: Pins {
+                core_version: CORE_VERSION.to_owned(),
+                renderer_revision: RENDERER_REVISION.to_owned(),
+                profile_id: PROFILE_ID.to_owned(),
+                profile_version: PROFILE_VERSION,
+                model_profile_id: None,
+                model_revision: None,
+            },
+            payloads: vec![Payload::Text {
+                id: Uuid::parse_str("55555555-5555-4555-8555-555555555555").unwrap(),
+                text: "captured payload".to_owned(),
+            }],
+            preset: Preset {
+                id: Uuid::parse_str("66666666-6666-4666-8666-666666666666").unwrap(),
+                revision: 1,
+                snapshot_hash: ZERO_HASH.to_owned(),
+                template_freeze_point: "firstPreparation".to_owned(),
+                retry_marker_policy: "none".to_owned(),
+                route_policy: RoutePolicy {
+                    logical_folder: vec!["Inbox".to_owned()],
+                    note_name_template: "note".to_owned(),
+                    extension_policy: "markdownDotMd".to_owned(),
+                    collision_policy: "deterministicSuffix".to_owned(),
+                    attachment_folder: vec![],
+                    entry_prefix: None,
+                    entry_suffix: None,
+                    rolling_period: None,
+                    placement: None,
+                    heading_title: None,
+                    heading_level: None,
+                    missing_heading_behavior: None,
+                },
+                metadata_policy: MetadataPolicy {
+                    frontmatter_mode: "merge".to_owned(),
+                    ordered_fields: vec![],
+                    template_policy: "frozenObservation".to_owned(),
+                    line_ending: "lf".to_owned(),
+                    final_newline: false,
+                    scope: None,
+                },
+                destination_policy: DestinationPolicy {
+                    capability_reference: "synthetic".to_owned(),
+                    capability_class: "userVault".to_owned(),
+                    expected_case_sensitivity: "sensitive".to_owned(),
+                },
+                location_policy: None,
+            },
+            preparation_revision: 1,
+            snapshot_hash: ZERO_HASH.to_owned(),
+            control_byte_count: 1,
+            observations: vec![ObservationResult::CandidateOccupancy {
+                observation_id: Uuid::nil(),
+                status: "present".to_owned(),
+                logical_paths: vec![],
+                ordered_set_hash: ZERO_HASH.to_owned(),
+            }],
+            session: SessionPolicy {
+                maximum_chunk_bytes: MAX_CHUNK_BYTES as u64,
+                maximum_aggregate_observation_bytes: MAX_AGGREGATE_BYTES,
+                input_ordering: "observation-list-then-sequence".to_owned(),
+                single_seal: true,
+                single_finalize: true,
+            },
+            invocation: Invocation {
+                sequence: 1,
+                origin_recording_id: None,
+                location_outcome: "notRequested".to_owned(),
+                location_attempted_at_epoch_milliseconds: None,
+                location_unavailable_reason: None,
+                location_label_observation: None,
+                location_snapshot: None,
+            },
+        }
+    }
+
     fn retained_session(state: State) -> MaterializationSession {
         let request_id = Uuid::parse_str("11111111-1111-4111-8111-111111111111").unwrap();
         let descriptor = ArtifactDescriptor {
@@ -2991,88 +3096,7 @@ mod tests {
             receipt_kind: "noteCommit",
         };
         MaterializationSession {
-            input: Some(MaterializationInput {
-                contract_version: MATERIALIZATION_INPUT_VERSION,
-                request_id,
-                capture_source: "app".to_owned(),
-                created_at_epoch_milliseconds: 0,
-                timezone: "UTC".to_owned(),
-                calendar: "gregorian".to_owned(),
-                locale: "en-US".to_owned(),
-                operation: "newNote".to_owned(),
-                pins: Pins {
-                    core_version: CORE_VERSION.to_owned(),
-                    renderer_revision: RENDERER_REVISION.to_owned(),
-                    profile_id: PROFILE_ID.to_owned(),
-                    profile_version: PROFILE_VERSION,
-                    model_profile_id: None,
-                    model_revision: None,
-                },
-                payloads: vec![Payload::Text {
-                    id: Uuid::parse_str("55555555-5555-4555-8555-555555555555").unwrap(),
-                    text: "captured payload".to_owned(),
-                }],
-                preset: Preset {
-                    id: Uuid::parse_str("66666666-6666-4666-8666-666666666666").unwrap(),
-                    revision: 1,
-                    snapshot_hash: ZERO_HASH.to_owned(),
-                    template_freeze_point: "firstPreparation".to_owned(),
-                    retry_marker_policy: "none".to_owned(),
-                    route_policy: RoutePolicy {
-                        logical_folder: vec!["Inbox".to_owned()],
-                        note_name_template: "note".to_owned(),
-                        extension_policy: "markdownDotMd".to_owned(),
-                        collision_policy: "deterministicSuffix".to_owned(),
-                        attachment_folder: vec![],
-                        entry_prefix: None,
-                        entry_suffix: None,
-                        rolling_period: None,
-                        placement: None,
-                        heading_title: None,
-                        heading_level: None,
-                        missing_heading_behavior: None,
-                    },
-                    metadata_policy: MetadataPolicy {
-                        frontmatter_mode: "merge".to_owned(),
-                        ordered_fields: vec![],
-                        template_policy: "frozenObservation".to_owned(),
-                        line_ending: "lf".to_owned(),
-                        final_newline: false,
-                        scope: None,
-                    },
-                    destination_policy: DestinationPolicy {
-                        capability_reference: "synthetic".to_owned(),
-                        capability_class: "userVault".to_owned(),
-                        expected_case_sensitivity: "sensitive".to_owned(),
-                    },
-                    location_policy: None,
-                },
-                preparation_revision: 1,
-                snapshot_hash: ZERO_HASH.to_owned(),
-                control_byte_count: 1,
-                observations: vec![ObservationResult::CandidateOccupancy {
-                    observation_id: Uuid::nil(),
-                    status: "present".to_owned(),
-                    logical_paths: vec![],
-                    ordered_set_hash: ZERO_HASH.to_owned(),
-                }],
-                session: SessionPolicy {
-                    maximum_chunk_bytes: MAX_CHUNK_BYTES as u64,
-                    maximum_aggregate_observation_bytes: MAX_AGGREGATE_BYTES,
-                    input_ordering: "observation-list-then-sequence".to_owned(),
-                    single_seal: true,
-                    single_finalize: true,
-                },
-                invocation: Invocation {
-                    sequence: 1,
-                    origin_recording_id: None,
-                    location_outcome: "notRequested".to_owned(),
-                    location_attempted_at_epoch_milliseconds: None,
-                    location_unavailable_reason: None,
-                    location_label_observation: None,
-                    location_snapshot: None,
-                },
-            }),
+            input: Some(retained_input(request_id)),
             state,
             streams: vec![InputStream {
                 id: Uuid::nil(),
@@ -3114,9 +3138,8 @@ mod tests {
     fn recording_origin_and_asset_descriptors_are_admitted_without_copying_asset_bytes() {
         let mut input = mutation_input("newNote");
         input.preset.route_policy.collision_policy = "deterministicSuffix".to_owned();
-        input.invocation.origin_recording_id = Some(
-            Uuid::parse_str("77777777-7777-4777-8777-777777777777").unwrap(),
-        );
+        input.invocation.origin_recording_id =
+            Some(Uuid::parse_str("77777777-7777-4777-8777-777777777777").unwrap());
         input.payloads.push(Payload::Asset {
             id: Uuid::parse_str("88888888-8888-4888-8888-888888888888").unwrap(),
             source_id: Uuid::parse_str("88888888-8888-4888-8888-888888888888").unwrap(),
@@ -3447,10 +3470,22 @@ mod tests {
             precision: "exact".to_owned(),
             output_mode: "structured".to_owned(),
             structured_fields: vec![
-                LocationStructuredField { field: "longitude".to_owned(), output_key: "lng".to_owned() },
-                LocationStructuredField { field: "coordinates".to_owned(), output_key: "point".to_owned() },
-                LocationStructuredField { field: "accuracy".to_owned(), output_key: "uncertainty".to_owned() },
-                LocationStructuredField { field: "googleMapsURL".to_owned(), output_key: "map".to_owned() },
+                LocationStructuredField {
+                    field: "longitude".to_owned(),
+                    output_key: "lng".to_owned(),
+                },
+                LocationStructuredField {
+                    field: "coordinates".to_owned(),
+                    output_key: "point".to_owned(),
+                },
+                LocationStructuredField {
+                    field: "accuracy".to_owned(),
+                    output_key: "uncertainty".to_owned(),
+                },
+                LocationStructuredField {
+                    field: "googleMapsURL".to_owned(),
+                    output_key: "map".to_owned(),
+                },
             ],
             collection_key: "visits".to_owned(),
             advanced_template: String::new(),
@@ -3474,8 +3509,12 @@ mod tests {
         let longitude = markdown.find("    lng: -66.105700").unwrap();
         let coordinates = markdown.find("    point: [18.465500, -66.105700]").unwrap();
         let accuracy = markdown.find("    uncertainty: 4.2").unwrap();
-        let map = markdown.find("    map: \"https://www.google.com/maps/search/").unwrap();
-        assert!(id < longitude && longitude < coordinates && coordinates < accuracy && accuracy < map);
+        let map = markdown
+            .find("    map: \"https://www.google.com/maps/search/")
+            .unwrap();
+        assert!(
+            id < longitude && longitude < coordinates && coordinates < accuracy && accuracy < map
+        );
         assert!(!markdown.contains("    latitude:"));
     }
 
@@ -3552,7 +3591,12 @@ mod tests {
 
         let mut city_leak = input;
         city_leak.preset.location_policy.as_mut().unwrap().precision = "city".to_owned();
-        city_leak.invocation.location_snapshot.as_mut().unwrap().precision = "city".to_owned();
+        city_leak
+            .invocation
+            .location_snapshot
+            .as_mut()
+            .unwrap()
+            .precision = "city".to_owned();
         assert_eq!(
             validate_materialization(&city_leak, 1),
             Err(CoreError::InvalidControl)
@@ -3580,7 +3624,10 @@ mod tests {
         input.invocation.location_snapshot = None;
 
         let (_, rendered) = materialize(&input, None, Some(b"Earlier")).unwrap();
-        assert_eq!(String::from_utf8(rendered).unwrap(), "Earlier\n\ncaptured payload");
+        assert_eq!(
+            String::from_utf8(rendered).unwrap(),
+            "Earlier\n\ncaptured payload"
+        );
         assert_eq!(
             serde_json::to_value(&input).unwrap()["invocation"]["locationUnavailableReason"],
             "timeout"

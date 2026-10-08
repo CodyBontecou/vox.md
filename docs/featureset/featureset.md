@@ -123,6 +123,7 @@ Entry format: `F-ID — Name (platform; status; docs)`
 - F-IC-20 — Voice Auto-Stop: Voice Pause Detection (iOS/keyboard; gated on companion model; website `#parakeet-autostop`)
 - F-IC-21 — Keyboard Recording Artifact Retention (iOS/keyboard; shipped; readme)
 - F-IC-32 — Pause / Resume In-App Recording: paused-range exclusion for journal, live transcription, VAD, and extraction (iOS; shipped; website `#inline-voice`)
+- F-IC-33 — Per-Preset URL Delivery: opt-in JSON POST destination with retry, receipts, and Keychain token (iOS/mac; shipped: no; website `#export`)
 - F-SH-01 — App Group Container & Shared Configuration (all platforms; shipped; internal)
 - F-SH-02 — Voice Auto-Stop Preferences (pause thresholds, companion model) (iOS/keyboard; shipped; website `#parakeet-autostop`)
 - F-SH-05 — Microphone Recording: AudioRecorder (all; shipped; internal)
