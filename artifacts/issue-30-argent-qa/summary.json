@@ -1,0 +1,22 @@
+{
+  "commit": "f2e1c43e2bf1e56b4a605eb2d563e35d8e6b419d",
+  "simulator": "03AE614E-7BA2-4B5A-8CEA-D3A3BC2404B0",
+  "os": "iOS 26.5",
+  "transcriptionBackend": "Whisper Tiny",
+  "input": "synthetic macOS speech audio in seeded manual voice queue jobs",
+  "prefix": "- [ ] ",
+  "suffix": " #inbox",
+  "placement": "prepend",
+  "processingMode": "none",
+  "processingEnabled": false,
+  "audioSaveMode": "off",
+  "noteUTF8": "- [ ] Bye milk. #inbox\n- [ ] call the dentist. #inbox\n- [x] Older task\n\n- [ ] Existing second task",
+  "noteByteCount": 98,
+  "allJobsCompleted": true,
+  "exactNoteAssertionPassed": true,
+  "limitations": [
+    "No live microphone, Watch, or Apple Intelligence validation",
+    "Real ASR emits trimmed text; padded boundary line regression is asserted by package tests",
+    "Whisper Tiny recognized Buy milk as Bye milk; this check validates delivery formatting"
+  ]
+}

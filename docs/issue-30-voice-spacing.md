@@ -190,3 +190,41 @@ Live Apple Intelligence and reporter-device confirmation remain outside this
 verification. The fix is deliberately limited to blank transcript boundary lines;
 prose separators, retained-audio blocks, entry metadata, and user-authored internal
 paragraph/template breaks keep their existing semantics.
+
+## Argent simulator QA — 2026-10-08
+
+Built the unchanged app sources at `f2e1c43` with the `Voxboard` scheme, Debug,
+on an iPhone 17 Pro simulator running iOS 26.5. Argent drove the model download
+and Recording Queue's **Process Now** buttons. The app used its existing Debug
+shared-container override and queue-screen launch argument to isolate synthetic
+fixtures from other app data; no transcription service or exporter was mocked.
+
+Apple Speech is unavailable on this simulator, so the jobs ran real Whisper Tiny
+inference on two macOS `say` recordings: “Call the dentist” and “Buy milk.” The
+manually seeded voice jobs retained a preset snapshot with Keep Original mode,
+processing disabled, audio export off, an existing-note prepend target,
+prefix `- [ ] `, and suffix ` #inbox`. Both jobs completed in one attempt and
+checkpointed the destination note. Source recordings were retained in the queue
+for QA; no audio payload was exported into the note.
+
+The final file was asserted against these exact UTF-8 bytes, with no final newline:
+
+```text
+"- [ ] Bye milk. #inbox\n- [ ] call the dentist. #inbox\n- [x] Older task\n\n- [ ] Existing second task"
+```
+
+Whisper Tiny recognized “Buy milk” as “Bye milk”; the spacing assertion uses the
+actual transcript. The two new tasks have one newline between them and the older
+list, while the original blank line between the older tasks survives unchanged.
+Assertions also checked the persisted transcript backend, completed job receipts,
+exported-note paths, and attempt counts.
+
+[Completed queue screenshot](../artifacts/issue-30-argent-qa/queue-completed.png),
+[saved Markdown](../artifacts/issue-30-argent-qa/Tasks.md), and
+[machine-readable result](../artifacts/issue-30-argent-qa/summary.json) record the run.
+
+This is an app-driven transcription/export smoke test. Real ASR returned trimmed
+text, so whitespace-only transcript boundary lines, cleaned-text selection, and
+LF/CRLF/CR variants remain verified by the failing-then-passing package regressions
+above. This run does not establish live microphone, Apple Intelligence, Watch, or
+reporter-device behavior.
