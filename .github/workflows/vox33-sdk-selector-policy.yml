@@ -1,0 +1,231 @@
+name: Vox selector source policy (not native)
+on:
+  push:
+    branches: [prep/qualification/vox33-sdk-selector-policy-20261008]
+    paths: ['.github/workflows/vox33-sdk-selector-policy.yml']
+permissions:
+  contents: read
+concurrency:
+  group: vox-selector-policy-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  selector-source-policy:
+    if: ${{ github.run_attempt == 1 }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Pinned synthetic source policy, finite owned processes
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          python3 -I -B -S <<'SELECTOR_POLICY_BOOTSTRAP'
+          """UNEXECUTED sealed Linux bootstrap template; substitute pinned payload literals."""
+          import os
+          
+          os.umask(0o077)
+          
+          import base64
+          import hashlib
+          import json
+          from pathlib import Path
+          import stat
+          import sys
+          import zlib
+          
+          SEALED_PAYLOAD = "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"
+          PAYLOAD_SHA256 = "6dfc47a42736452294a3799c4e735d33f00c56988f2ccc95c87aa4842e65515c"
+          EXPECTED_FILES = {'helper.py': (7445, '875d0c360d19768ee28ce59b60286f9ba381c11b9a27f64cfad4338fdd798303'), 'caller.py': (11914, 'cf874fba28121311c8afce441cac5163546ce1fcd7a636b2d09ebe6afcce6f00'), 'child-loader.py': (6755, '2c19765f3cee238808b6a7d0acbfc99af25beb2146261c92ede8d29ff2de1768'), 'test-inputs.json': (20015, 'c8202ecfc495165a1837a25ba377813eb80581aff75440e876079939ce8ac092')}
+          OUTER_SECONDS = 140
+          OUTER_OUTPUT_CAP = 131072
+          
+          
+          def require(ok, message):
+              if not ok:
+                  raise RuntimeError("Selector outer bootstrap STOP: " + message)
+          
+          
+          def private_read(rootfd, name, cap):
+              fd = os.open(name, os.O_RDONLY | os.O_CLOEXEC | os.O_NOFOLLOW, dir_fd=rootfd)
+              try:
+                  before = os.fstat(fd)
+                  require(stat.S_ISREG(before.st_mode) and before.st_uid == os.getuid()
+                          and stat.S_IMODE(before.st_mode) == 0o600 and before.st_nlink == 1
+                          and 0 < before.st_size <= cap, "bounded private file lease")
+                  raw = os.read(fd, before.st_size)
+                  require(len(raw) == before.st_size, "short private read")
+                  after = os.fstat(fd)
+                  require((before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns)
+                          == (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns), "file drift")
+                  return raw
+              finally:
+                  os.close(fd)
+          
+          
+          
+          def runtime_origin():
+              require(sys.implementation.name == "cpython" and sys.version_info[:2] == (3, 12)
+                      and sys.flags.isolated == 1 and sys.flags.no_site == 1
+                      and sys.flags.ignore_environment == 1 and sys.flags.no_user_site == 1
+                      and sys.dont_write_bytecode, "isolated no-site CPython3.12")
+              import sysconfig
+              library = Path(sysconfig.get_path("stdlib")).resolve()
+              binary = Path(sys.executable).resolve(strict=True)
+              meta = binary.stat()
+              require(stat.S_ISREG(meta.st_mode) and meta.st_uid in (0, os.getuid())
+                      and not (stat.S_IMODE(meta.st_mode) & 0o022), "provider interpreter metadata")
+              require(len(sys.path) <= 16 and len(sys.modules) <= 256, "bounded runtime origins")
+              for item in sys.path:
+                  require(type(item) is str and item and len(item) <= 512
+                          and Path(item).is_absolute() and Path(item).resolve().is_relative_to(library.parent)
+                          and "site-packages" not in Path(item).parts, "stdlib-only isolated paths")
+              origins = []
+              for name, module in tuple(sys.modules.items()):
+                  origin = getattr(getattr(module, "__spec__", None), "origin", None)
+                  if origin in ("built-in", "frozen"):
+                      origins.append((name, origin))
+                  elif origin is None:
+                      require(name == "__main__", "unqualified originless module")
+                  else:
+                      require(type(origin) is str and len(origin) <= 512, "origin bound")
+                      source = Path(origin).resolve(strict=True)
+                      require(source.is_relative_to(library), "nonstdlib module origin")
+                      source_meta = source.stat()
+                      require(stat.S_ISREG(source_meta.st_mode) and source_meta.st_uid in (0, os.getuid())
+                              and not (stat.S_IMODE(source_meta.st_mode) & 0o022), "stdlib file metadata")
+                      origins.append((name, str(source)))
+              print("SELECTOR_PYTHON_RUNTIME_ORIGIN=" + json.dumps({"version": sys.version,
+                    "binary": str(binary), "binary_dev_inode_size_mtime":
+                    [meta.st_dev, meta.st_ino, meta.st_size, meta.st_mtime_ns],
+                    "stdlib": str(library), "paths": sys.path, "module_origin_count": len(origins),
+                    "module_origin_catalog_sha256": hashlib.sha256(json.dumps(sorted(origins)).encode()).hexdigest(),
+                    "no_site": True, "native_pass_claim": False}, sort_keys=True), flush=True)
+              # Provider/path metadata is not a binary loaded-image or lifetime/sandbox proof.
+          
+          def main():
+              runtime_origin()
+              require(sys.platform.startswith("linux") and os.environ.get("GITHUB_ACTIONS") == "true"
+                      and os.environ.get("RUNNER_OS") == "Linux"
+                      and os.environ.get("RUNNER_ENVIRONMENT") == "github-hosted", "actual hosted Linux")
+              require(sys.flags.isolated == 1 and sys.dont_write_bytecode, "isolated no-bytecode bootstrap")
+              require(os.umask(0o077) == 0o077, "private mask")
+              require(not any(os.environ.get(k) for k in ("GH_TOKEN", "GITHUB_TOKEN", "PYTHONPATH",
+                      "NODE_OPTIONS", "LD_PRELOAD", "LD_LIBRARY_PATH")), "credential/loader environment")
+              require(type(SEALED_PAYLOAD) is str and len(SEALED_PAYLOAD) <= 87384,
+                      "bounded sealed payload")
+              compressed = base64.b64decode(SEALED_PAYLOAD, validate=True)
+              decoder = zlib.decompressobj()
+              raw = decoder.decompress(compressed, 65536)
+              require(decoder.eof and not decoder.unconsumed_tail and not decoder.unused_data
+                      and len(raw) <= 65536 and hashlib.sha256(raw).hexdigest() == PAYLOAD_SHA256,
+                      "bounded single-stream sealed payload digest")
+              packed = json.loads(raw)
+              require(type(EXPECTED_FILES) is dict and type(packed) is dict
+                      and set(packed) == set(EXPECTED_FILES)
+                      == {"helper.py", "caller.py", "child-loader.py", "test-inputs.json"},
+                      "exact sealed four files")
+              decoded = {}
+              for name, (size, digest) in EXPECTED_FILES.items():
+                  require(type(size) is int and 0 < size <= 32768 and type(packed[name]) is str
+                          and len(packed[name]) <= 4 * ((size + 2) // 3), "encoded file bounds")
+                  data = base64.b64decode(packed[name], validate=True)
+                  require(len(data) == size and hashlib.sha256(data).hexdigest() == digest,
+                          "sealed file pin")
+                  decoded[name] = data
+              temp = Path(os.environ["RUNNER_TEMP"])
+              require(temp.is_absolute() and temp.resolve() == temp and not temp.is_symlink(),
+                      "canonical provider temp")
+              tempfd = os.open(temp, os.O_RDONLY | os.O_DIRECTORY | os.O_CLOEXEC | os.O_NOFOLLOW)
+              rootfd = None
+              try:
+                  provider = os.fstat(tempfd)
+                  require(provider.st_uid == os.getuid(), "provider temp UID")
+                  capacity = os.statvfs(temp)
+                  available = next(int(line.split()[1]) * 1024
+                                   for line in Path("/proc/meminfo").read_text().splitlines()
+                                   if line.startswith("MemAvailable:"))
+                  require(capacity.f_bavail * capacity.f_frsize >= 10 * 1024**3
+                          and available >= 3 * 1024**3, "unchanged Linux resource floors")
+                  rootname = "vox-selector-policy-" + os.urandom(8).hex()
+                  os.mkdir(rootname, 0o700, dir_fd=tempfd)
+                  root = temp / rootname
+                  rootfd = os.open(rootname, os.O_RDONLY | os.O_DIRECTORY | os.O_CLOEXEC | os.O_NOFOLLOW,
+                                   dir_fd=tempfd)
+                  rootmeta = os.fstat(rootfd)
+                  require(rootmeta.st_uid == os.getuid() and stat.S_IMODE(rootmeta.st_mode) == 0o700,
+                          "fresh private root")
+                  for name, data in decoded.items():
+                      fd = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_CLOEXEC | os.O_NOFOLLOW,
+                                   0o600, dir_fd=rootfd)
+                      try:
+                          os.fchmod(fd, 0o600)
+                          require(os.write(fd, data) == len(data), "short sealed file write")
+                      finally:
+                          os.close(fd)
+                      actual = private_read(rootfd, name, EXPECTED_FILES[name][0])
+                      require(actual == data, "written source byte identity")
+                  for name in ("env-home", "env-tmp"):
+                      os.mkdir(name, 0o700, dir_fd=rootfd)
+                  helperraw = private_read(rootfd, "helper.py", EXPECTED_FILES["helper.py"][0])
+                  require(hashlib.sha256(helperraw).hexdigest() == EXPECTED_FILES["helper.py"][1],
+                          "loaded helper source pin")
+                  namespace = {"__name__": "qualified_selector_outer_helper", "__file__": str(root / "helper.py")}
+                  exec(compile(helperraw, str(root / "helper.py"), "exec"), namespace)
+                  env = {"PATH": "/usr/bin:/bin", "HOME": str(root / "env-home"),
+                         "TMPDIR": str(root / "env-tmp"), "LANG": "C.UTF-8", "LC_ALL": "C.UTF-8",
+                         "GITHUB_ACTIONS": "true", "RUNNER_OS": "Linux",
+                         "RUNNER_ENVIRONMENT": "github-hosted", "GIT_ALLOW_PROTOCOL": ""}
+                  argv = [sys.executable, "-I", "-B", "-S", str(root / "child-loader.py")]
+                  try:
+                      receipt = namespace["run_owned"](argv, cwd=root, env=env, timeout=OUTER_SECONDS,
+                                                       output_path=root / "outer-combined.log",
+                                                       output_cap=OUTER_OUTPUT_CAP)
+                  except namespace["RunFailure"] as error:
+                      # Reporting must not mask the original owned-runner exception.
+                      try:
+                          print("SELECTOR_POLICY_OUTER_STOP=" + json.dumps(error.receipt, sort_keys=True),
+                                flush=True)
+                      except BaseException:
+                          pass
+                      raise
+                  require(receipt["returncode"] == 0 and receipt["finite_root_pipe_cleanup_verified"]
+                          and receipt["pipe_eof"] and receipt["owned_stdout_closed"]
+                          and receipt["owned_output_closed"] and not receipt["output_limited"]
+                          and receipt["cleanup_exception_types"] == []
+                          and receipt["cleanup_elapsed_seconds"] <= 8
+                          and receipt["accepted_output_bytes"] == receipt["observed_pipe_bytes"],
+                          "complete owned outer receipt")
+                  current = root.lstat()
+                  require(root.resolve() == root and not root.is_symlink()
+                          and (current.st_dev, current.st_ino) == (rootmeta.st_dev, rootmeta.st_ino)
+                          and current.st_uid == os.getuid() and stat.S_IMODE(current.st_mode) == 0o700,
+                          "post-run private root lease")
+                  for name, (_, digest) in EXPECTED_FILES.items():
+                      data = private_read(rootfd, name, EXPECTED_FILES[name][0])
+                      require(hashlib.sha256(data).hexdigest() == digest, "post-run input drift")
+                  output = private_read(rootfd, "outer-combined.log", OUTER_OUTPUT_CAP)
+                  require(len(output) == receipt["accepted_output_bytes"]
+                          and hashlib.sha256(output).hexdigest() == receipt["accepted_output_sha256"],
+                          "outer output file/receipt identity")
+                  text = output.decode("utf-8", errors="strict")
+                  prefix = "SELECTOR_POLICY_CLOUD_TERMINAL="
+                  records = [line[len(prefix):] for line in text.splitlines() if line.startswith(prefix)]
+                  require(len(records) == 1, "one terminal source-policy record")
+                  terminal = json.loads(records[0])
+                  require(terminal["status"] == "SELECTOR_SOURCE_POLICY_POSITIVE10_AND_NEGATIVE3_VERIFIED_NOT_NATIVE"
+                          and terminal["native_pass_claim"] is False
+                          and [item["variant"] for item in terminal["results"]]
+                          == ["positive", "sdk-guard-removed"], "expected terminal")
+                  print(text, end="", flush=True)
+                  print("SELECTOR_POLICY_OUTER_RESULT=" + json.dumps({"receipt": receipt,
+                        "source_pins": EXPECTED_FILES, "native_pass_claim": False}, sort_keys=True), flush=True)
+                  return 0
+              finally:
+                  if rootfd is not None:
+                      os.close(rootfd)
+                  os.close(tempfd)
+          
+          
+          if __name__ == "__main__":
+              raise SystemExit(main())
+          SELECTOR_POLICY_BOOTSTRAP
