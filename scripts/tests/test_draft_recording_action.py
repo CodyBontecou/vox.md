@@ -6,6 +6,12 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class DraftRecordingActionRegistrationTests(unittest.TestCase):
+    def test_running_app_observes_published_recording_requests(self):
+        app = (ROOT / "Voxboard/VoxboardApp.swift").read_text()
+        self.assertIn("for: PendingQuickRecordingRequest.didPersistNotification", app)
+        observer = app.split("for: PendingQuickRecordingRequest.didPersistNotification", 1)[1]
+        self.assertIn("consumePendingWidgetRecordIfNeeded()", observer.split(".onOpenURL", 1)[0])
+
     def test_draft_action_is_separate_from_legacy_immediate_action(self):
         provider = (ROOT / "Voxboard/VoxboardShortcutsProvider.swift").read_text()
         self.assertIn("intent: OpenVoxboardRecordIntent()", provider)

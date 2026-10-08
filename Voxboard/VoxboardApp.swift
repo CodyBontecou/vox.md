@@ -1,4 +1,5 @@
 import AppIntents
+import Combine
 import SwiftUI
 import VoxboardShared
 
@@ -210,6 +211,11 @@ struct VoxboardApp: App {
                 if AppConstants.sharedDefaults?.bool(forKey: AppConstants.autoListenEnabledKey) == true {
                     persistentRecorder.startListening()
                 }
+            }
+            .onReceive(NotificationCenter.default.publisher(
+                for: PendingQuickRecordingRequest.didPersistNotification
+            ).receive(on: RunLoop.main)) { _ in
+                consumePendingWidgetRecordIfNeeded()
             }
             .onOpenURL { url in
                 handleURL(url)

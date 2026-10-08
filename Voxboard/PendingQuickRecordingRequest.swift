@@ -6,10 +6,15 @@ import VoxboardShared
 /// draft delivery, just without an audio attachment. Never infer this policy
 /// from the composer's persisted result-mode preference.
 struct PendingQuickRecordingRequest: Equatable {
+    static let didPersistNotification = Notification.Name("Voxboard.pendingQuickRecordingRequest")
+
     let requestedFlowID: String?
     let draftAttachAudio: Bool?
 
-    func persist(defaults: UserDefaults? = AppConstants.sharedDefaults) {
+    func persist(
+        defaults: UserDefaults? = AppConstants.sharedDefaults,
+        notificationCenter: NotificationCenter = .default
+    ) {
         if let requestedFlowID, !requestedFlowID.isEmpty {
             defaults?.set(requestedFlowID, forKey: AppConstants.pendingWidgetRecordFlowIdKey)
         } else {
@@ -22,6 +27,10 @@ struct PendingQuickRecordingRequest: Equatable {
         }
         // Publish last, after the preset and delivery policy are both present.
         defaults?.set(true, forKey: AppConstants.pendingWidgetRecordKey)
+        // Foreground intents may execute after the scene is already active.
+        // Wake its consumer now; the durable flag also covers launches before
+        // the app subscribes and requests written by another process.
+        notificationCenter.post(name: Self.didPersistNotification, object: nil)
     }
 
     /// The app has already transferred the pending flag into its scene binding.

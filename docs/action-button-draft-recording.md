@@ -57,6 +57,10 @@ permission, unlock, audio-session, or Live Activity checks are bypassed.
 - A new legacy immediate action or legacy widget URL clears the draft override.
   A malformed draft attachment override fails closed to transcript-only draft
   delivery, never immediate delivery.
+- After publishing its complete launch request, the draft action wakes a running
+  app directly. Recording does not wait for another scene activation when the
+  foreground intent executes after activation. Launch/activation checks retain
+  the durable fallback for requests published before the app subscribes.
 - Transcription history/usage accounting remains local and unchanged. Saving
   local history or staging an attachment is not sending to a destination.
 

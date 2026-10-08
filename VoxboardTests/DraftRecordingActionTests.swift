@@ -1,10 +1,35 @@
 import AppIntents
+import Combine
 import VoxboardShared
 import XCTest
 @testable import Voxboard
 
 @MainActor
 final class DraftRecordingActionTests: XCTestCase {
+    func testPublishedRequestWakesAnAlreadyActiveConsumerWithoutAnotherActivation() throws {
+        let defaults = try makeDefaults()
+        let notificationCenter = NotificationCenter()
+        var receivedRequests: [PendingQuickRecordingRequest] = []
+        let subscription = notificationCenter.publisher(
+            for: PendingQuickRecordingRequest.didPersistNotification
+        ).sink { _ in
+            guard defaults.bool(forKey: AppConstants.pendingWidgetRecordKey) else { return }
+            defaults.set(false, forKey: AppConstants.pendingWidgetRecordKey)
+            receivedRequests.append(PendingQuickRecordingRequest.consume(defaults: defaults))
+        }
+        defer { subscription.cancel() }
+
+        let request = PendingQuickRecordingRequest(requestedFlowID: "journal", draftAttachAudio: true)
+        request.persist(defaults: defaults, notificationCenter: notificationCenter)
+        // A redundant wake-up must not replay the consumed request.
+        notificationCenter.post(name: PendingQuickRecordingRequest.didPersistNotification, object: nil)
+
+        XCTAssertEqual(receivedRequests, [request], "An active consumer must wake after the complete request is published")
+        XCTAssertFalse(defaults.bool(forKey: AppConstants.pendingWidgetRecordKey), "A later activation must not replay the request")
+        XCTAssertNil(defaults.object(forKey: AppConstants.pendingWidgetRecordFlowIdKey))
+        XCTAssertNil(defaults.object(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey))
+    }
+
     func testDraftPolicySurvivesLaunchEvenWhenDefaultIsSendImmediately() throws {
         let defaults = try makeDefaults()
         defaults.set(CaptureRecordingMode.preset.rawValue, forKey: CapturePreferenceKeys.defaultRecordingResultMode)
