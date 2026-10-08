@@ -30,9 +30,13 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
             let configuration = SelectVoxboardRecordVoxIntent(vox: VoxEntity(flow: configured))
             XCTAssertNil(configuration.recordingAction)
             XCTAssertNil(configuration.openApp)
+            XCTAssertNil(configuration.delivery)
+            XCTAssertNil(configuration.attachAudio)
             let state = try await VoxboardRecordingControlProvider().currentValue(configuration: configuration)
             XCTAssertEqual(state.action.recordingAction, .start)
             XCTAssertTrue(state.action.openApp)
+            XCTAssertEqual(state.action.delivery, .immediate)
+            XCTAssertFalse(state.action.attachAudio)
             XCTAssertEqual(state.action.vox?.id, configured.id)
         }
     }
@@ -62,6 +66,26 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
                 let legacy = try await VoxboardToggleRecordingControl.Provider().currentValue(configuration: configuration)
                 XCTAssertEqual(record.action.vox?.id, selected.id)
                 XCTAssertEqual(legacy.action.vox?.id, selected.id)
+            }
+        }
+    }
+
+    func testBothControlKindsForwardDraftDeliveryAndAudioWithoutRewritingPresentation() async throws {
+        try await withPresets { _, configured, _, _ in
+            for action in RecordingAction.allCases {
+                for attachAudio in [false, true] {
+                    let configuration = SelectVoxboardRecordVoxIntent(vox: VoxEntity(flow: configured), action: action, openApp: false, delivery: .draft, attachAudio: attachAudio)
+                    let record = try await VoxboardRecordingControlProvider().currentValue(configuration: configuration)
+                    let legacy = try await VoxboardToggleRecordingControl.Provider().currentValue(configuration: configuration)
+                    for state in [record, legacy] {
+                        XCTAssertEqual(state.action.recordingAction, action)
+                        XCTAssertEqual(state.action.delivery, .draft)
+                        XCTAssertEqual(state.action.attachAudio, attachAudio)
+                        XCTAssertFalse(state.action.openApp)
+                        XCTAssertEqual(state.action.vox?.id, configured.id)
+                        XCTAssertFalse(state.actionHint.contains("without switching apps"), "Draft execution always opens the review composer")
+                    }
+                }
             }
         }
     }
@@ -179,7 +203,7 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
         let actions = try XCTUnwrap(metadata["actions"] as? [String: [String: Any]])
         let recording = try XCTUnwrap(actions["OpenVoxboardRecordIntent"])
         let parameters = try XCTUnwrap(recording["parameters"] as? [[String: Any]])
-        XCTAssertEqual(Set(parameters.compactMap { $0["name"] as? String }), ["vox", "recordingAction"],
+        XCTAssertEqual(Set(parameters.compactMap { $0["name"] as? String }), ["vox", "recordingAction", "delivery", "attachAudio"],
                        "Shortcuts owns Open When Run; exporting Open App creates a competing foreground control")
     }
 
@@ -208,10 +232,13 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
         let availability = try XCTUnwrap(recording["availabilityAnnotations"] as? [String: [String: Any]])
         XCTAssertEqual(availability["LNPlatformNameIOS"]?["introducedVersion"] as? String, "17.0")
         let parameters = try XCTUnwrap(recording["parameters"] as? [[String: Any]])
-        XCTAssertEqual(Set(parameters.compactMap { $0["name"] as? String }), ["vox", "recordingAction"])
+        XCTAssertEqual(Set(parameters.compactMap { $0["name"] as? String }), ["vox", "recordingAction", "delivery", "attachAudio"])
         let actionParameter = try XCTUnwrap(parameters.first { $0["name"] as? String == "recordingAction" })
         let actionMetadata = try XCTUnwrap(actionParameter["typeSpecificMetadata"] as? [Any])
         XCTAssertEqual((actionMetadata.last as? [String: [String: String]])?["string"]?["wrapper"], "start")
+        let deliveryParameter = try XCTUnwrap(parameters.first { $0["name"] as? String == "delivery" })
+        let deliveryMetadata = try XCTUnwrap(deliveryParameter["typeSpecificMetadata"] as? [Any])
+        XCTAssertEqual((deliveryMetadata.last as? [String: [String: String]])?["string"]?["wrapper"], "immediate")
         let protocols = try XCTUnwrap(recording["systemProtocols"] as? [String])
         XCTAssertTrue(protocols.contains("com.apple.link.systemProtocol.AudioRecording"))
         XCTAssertTrue(protocols.contains("com.apple.link.systemProtocol.SessionStarting"))
@@ -226,7 +253,7 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
         XCTAssertEqual(control["outputFlags"] as? Int, 1)
         XCTAssertEqual(control["supportedModes"] as? Int, 1)
         let controlParameters = try XCTUnwrap(control["parameters"] as? [[String: Any]])
-        XCTAssertEqual(Set(controlParameters.compactMap { $0["name"] as? String }), ["vox", "recordingAction", "openApp"])
+        XCTAssertEqual(Set(controlParameters.compactMap { $0["name"] as? String }), ["vox", "recordingAction", "openApp", "delivery", "attachAudio"])
         let foreground = try XCTUnwrap(actions["OpenVoxboardRecordingActionIntent"])
         XCTAssertEqual(foreground["isDiscoverable"] as? Bool, false)
         XCTAssertEqual(foreground["supportedModes"] as? Int, 2, "Foreground handoff retains immediate foreground execution")
@@ -256,10 +283,10 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
         XCTAssertEqual(recording["supportedModes"] as? Int, 3)
         XCTAssertEqual(recording["openAppWhenRun"] as? Bool, true)
         let recordingParameters = try XCTUnwrap(recording["parameters"] as? [[String: Any]])
-        XCTAssertEqual(Set(recordingParameters.compactMap { $0["name"] as? String }), ["vox", "recordingAction"])
+        XCTAssertEqual(Set(recordingParameters.compactMap { $0["name"] as? String }), ["vox", "recordingAction", "delivery", "attachAudio"])
         let configuration = try XCTUnwrap(actions["SelectVoxboardRecordVoxIntent"])
         let parameters = try XCTUnwrap(configuration["parameters"] as? [[String: Any]])
-        XCTAssertEqual(Set(parameters.compactMap { $0["name"] as? String }), ["vox", "recordingAction", "openApp"])
+        XCTAssertEqual(Set(parameters.compactMap { $0["name"] as? String }), ["vox", "recordingAction", "openApp", "delivery", "attachAudio"])
         XCTAssertTrue(parameters.allSatisfy { $0["isOptional"] as? Bool == true }, "New optional fields must not rewrite saved configurations")
         XCTAssertEqual(VoxboardToggleRecordingControl.kind, "VoxboardToggleRecordingControl")
     }
@@ -276,7 +303,7 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
         let defaults = try XCTUnwrap(AppConstants.sharedDefaults)
         let keys = [CapturePresetStore.flowsKey, CapturePresetStore.selectedFlowIdKey,
                     AppConstants.lockScreenQuickRecordEnabledKey, AppConstants.pendingWidgetRecordKey,
-                    AppConstants.pendingWidgetRecordFlowIdKey, WidgetRecordingActionSelection.key]
+                    AppConstants.pendingWidgetRecordFlowIdKey, AppConstants.pendingWidgetRecordDraftAttachAudioKey, WidgetRecordingActionSelection.key]
         let originals = keys.map { defaults.object(forKey: $0) }
         defer {
             for (key, original) in zip(keys, originals) {

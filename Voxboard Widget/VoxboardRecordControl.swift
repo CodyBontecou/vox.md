@@ -23,7 +23,7 @@ struct VoxboardRecordControl: ControlWidget {
             .disabled(!state.isEnabled)
         }
         .displayName("Vox.md Record")
-        .description("Record with a Capture Preset. Configure Start, Stop, or Start or Stop and whether to open Vox.md. Background recording requires iOS 26+.")
+        .description("Record with a Capture Preset. Choose Start, Stop, or Start or Stop; send immediately or add to your draft. Draft delivery opens Vox.md for review. Background recording requires iOS 26+.")
         .promptsForUserConfiguration()
     }
 }

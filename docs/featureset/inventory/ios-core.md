@@ -337,10 +337,11 @@ LID = IC. Every feature below is verified in the root-level files of `Voxboard/`
 
 ### F-IC-27 Record App Intent & Widget Flow Selection
 - Surface: Shortcuts, Lock Screen widgets, Control Center controls
-- Summary: `OpenVoxboardRecordIntent` ("Record with Vox.md", opens app) persists a pending widget-record request (`pendingWidgetRecordKey`) plus resolved Capture Preset flow ID (`pendingWidgetRecordFlowIdKey`) which the app consumes to start a one-shot recording. `VoxEntity`/`VoxEntityQuery` expose enabled Presets as an App Entity (enumerable, suggested, default = selected flow); `SelectVoxboardRecordVoxIntent` (iOS 18 `ControlConfigurationIntent`) configures which Preset a control uses.
+- Summary: `OpenVoxboardRecordIntent` ("Record Audio") and `SelectVoxboardRecordVoxIntent` expose Preset, Action, Delivery, and Attach Audio. Send Immediately remains the default for saved actions; Add to Draft opens Capture and preserves its draft until explicit Send. The control also configures Open App; Shortcuts uses native Open When Run. `VoxEntity`/`VoxEntityQuery` expose enabled Presets as an App Entity (enumerable, suggested, default = selected flow).
 - Details:
   - `WidgetRecordingFlowSelection.persistRequestedFlowID(from:)` parses `?flowId=` from widget deep links; `resolve` validates enabled flow or falls back to the selected flow.
   - Intent no-ops when Quick Record is disabled; resolved flow must be enabled.
+  - Draft delivery forwards Start/Stop/Toggle and optional audio retention through the foreground pending-request handoff, even when background execution was selected. Stop preserves an active recording's original completion mode. Missing control Delivery/Attach Audio values resolve to immediate/false.
 - Constraints: iOS 17+ (control config 18+); Quick Record setting.
 - Evidence: `OpenVoxboardRecordIntent.swift` (full, 174 lines).
 - Status: shipped
