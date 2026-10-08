@@ -7,6 +7,11 @@ The reported unwanted blank lines were **not reproduced** on
 files. No production formatting change is justified by the evidence gathered here.
 This adds regression coverage, not a claim that the reporter's issue is fixed.
 
+The 2026-10-08 follow-up below also failed to reproduce the defect with synthetic
+variants grounded in the reporter's Discord history. Full production SwiftPM
+testing is now available locally; the earlier dependency-download limitation no
+longer applies to this follow-up.
+
 ## Actual delivery path
 
 The direct recording caller applies `TranscriptFlowFormatter`, then sends the
@@ -75,3 +80,66 @@ after one voice capture. Distinguish raw text from cleaned/model-produced text.
 No real voice recording, private transcript, credentials, or user vault is needed.
 Do not collapse user-authored paragraph breaks or template whitespace to manufacture
 a passing reproduction. Issue #30 remains unresolved for the reported configuration.
+
+## Discord follow-up — 2026-10-08
+
+Read the original message, its surrounding conversation, the September 8 repair
+thread, and all 21 results returned by the guild's author search for `mchalkley`.
+Reads used the existing isobot Discord bridge credential without exposing it.
+The isobot prompt API itself reported that it has no Discord read tools. No
+Discord messages were sent.
+
+The reporter's statements establish:
+
+- [August 11](https://discord.com/channels/1443424100759634003/1498086779536936961/1536845865715761212): a preset prepends tasks to an existing scratchpad in
+  the vault. Typed phone tasks worked; Watch transcripts had a dated transcript
+  heading. The [preset was named Task](https://discord.com/channels/1443424100759634003/1498086779536936961/1536850525947953182).
+- [August 13](https://discord.com/channels/1443424100759634003/1498086779536936961/1537588797967966319): the earlier transcript-heading problem was confirmed
+  fixed. This is separate from the September spacing report.
+- [August 19](https://discord.com/channels/1443424100759634003/1498086779536936961/1539782143520145408): the reporter used `{location}` and tried
+  ` Loc:{location}` as suffixes. That message does not establish that the same
+  suffix or location-metadata settings were still active on September 22.
+- [September 6](https://discord.com/channels/1443424100759634003/1498086779536936961/1546146654938333234): a simple task-prepend preset on iPhone and iPad
+  produced unwanted blank lines above and below the entry.
+- [September 6 processing comparison](https://discord.com/channels/1443424100759634003/1498086779536936961/1546234501942747136): blank lines occurred with Apple Intelligence
+  both on and off; disabling it produced notes instead of tasks.
+- [September 22](https://discord.com/channels/1443424100759634003/1498086779536936961/1551931246169301054): the reporter said transcribed entries still had
+  blank lines after the keyboard-entry repair.
+
+None of these messages supplies before/after note bytes, an exact current preset
+export, an app build for the September report, or audio-embed settings. There are
+no attachments in the reporter's indexed messages. Naming a preset Task alone
+does not establish its processing mode or prefix.
+
+Two further byte-level tests now exercise the configured exporter:
+
+- Repeated voice, Watch, and widget task prepends with the reported location
+  suffix, raw/cleaned body selection, and available/unavailable synthetic
+  location outcomes. The tests explicitly use Todo Checklist mode, no prefix,
+  no audio attachment, and location metadata output disabled. Those settings
+  are test assumptions, not a recovered failing preset. All boundaries remain
+  compact, including when the location token resolves to an empty string.
+- The same three source routes with Keep Original mode and no prefix preserve
+  raw prose beside the older checklist: `Buy milk\n\n- [x] Older`. This is the
+  existing prose/list paragraph policy, not evidence of unintended whitespace
+  around a task.
+
+Validation against PR head `2c8adf1` plus these test/documentation changes:
+
+```sh
+swift test --package-path Packages/VoxboardShared --filter TranscriptVoiceSpacingTests
+swift test --package-path Packages/VoxboardShared
+./scripts/test-project-contracts.sh
+git diff --check
+```
+
+All 13 voice-spacing tests pass. The full run passes 953 XCTest tests plus 10
+Swift Testing tests (963 total). Full SwiftPM testing compiles the production
+package and its pinned dependencies; it no longer uses the partial offline
+harness described above. Package tests and repository contracts pass. These
+checks do not exercise a microphone, live Apple Intelligence, or physical device.
+
+The next required evidence is one synthetic before/after note plus the active
+Task preset's route, prefix/suffix/template, processing and metadata scopes,
+location-output policy, retained-audio/embed settings, and app build. A further
+production fix remains unjustified without a failing reproduction.

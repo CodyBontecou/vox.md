@@ -189,6 +189,67 @@ final class TranscriptVoiceSpacingTests: XCTestCase {
         XCTAssertEqual(try fixture.bytes(), Data("- [ ] Call Sam\n- [ ] Buy milk\n- [x] Older".utf8))
     }
 
+    // The reporter previously described a Task preset, scratchpad prepend,
+    // Watch/widget delivery, and a " Loc:{location}" suffix. The coordinates
+    // and remaining settings here are synthetic, not a recovered failing preset.
+    func test_reportedTaskRoutesKeepLocationSuffixCompact() async throws {
+        let date = Date(timeIntervalSince1970: 1_704_164_645)
+        for source in [CaptureSource.voice, .watch, .widget] {
+            for hasLocation in [false, true] {
+                for usesCleanedText in [false, true] {
+                    let fixture = try await Fixture(
+                        document: "- [x] Older",
+                        suffix: " Loc:{location}",
+                        mode: .todoList,
+                        locationPolicy: CapturePresetLocationPolicy(
+                            isEnabled: true,
+                            metadataOutputEnabled: false,
+                            unavailableBehavior: .sendWithoutLocation
+                        )
+                    )
+                    defer { fixture.remove() }
+                    let outcome: CaptureLocationOutcome = hasLocation
+                        ? .available(CaptureLocationSnapshot(
+                            latitude: 12.345678,
+                            longitude: -98.765432,
+                            timestamp: date,
+                            source: source,
+                            precision: .exact
+                        ))
+                        : .unavailable(.permissionDenied, attemptedAt: date)
+                    let location = hasLocation
+                        ? "[Location](https://www.google.com/maps/search/?api=1&query=12.345678%2C-98.765432)"
+                        : ""
+                    var expected = "- [x] Older"
+
+                    for text in ["Buy milk", "Call Sam"] {
+                        _ = try await fixture.export(
+                            usesCleanedText ? "Raw words not chosen" : text,
+                            cleanedText: usesCleanedText ? text : nil,
+                            source: source,
+                            locationOutcome: outcome
+                        )
+                        expected = "- [ ] \(text) Loc:\(location)\n" + expected
+                        XCTAssertEqual(try fixture.bytes(), Data(expected.utf8))
+                    }
+                }
+            }
+        }
+    }
+
+    func test_reportedTaskRoutesKeepRawProseWhenChecklistProcessingIsOff() async throws {
+        for source in [CaptureSource.voice, .watch, .widget] {
+            let fixture = try await Fixture(document: "- [x] Older", mode: .none)
+            defer { fixture.remove() }
+
+            _ = try await fixture.export("Buy milk", source: source)
+
+            // The reporter said disabling processing produced notes, not tasks.
+            // Raw prose still requires a paragraph boundary beside a checklist.
+            XCTAssertEqual(try fixture.bytes(), Data("Buy milk\n\n- [x] Older".utf8))
+        }
+    }
+
     func test_voiceRetryMarkersDoNotSplitPrefixFormattedLists() async throws {
         for placement in [CapturePlacement.prepend, .append] {
             let fixture = try await Fixture(
@@ -224,7 +285,8 @@ final class TranscriptVoiceSpacingTests: XCTestCase {
             suffix: String = "",
             placement: CapturePlacement = .prepend,
             mode: CapturePresetProcessingMode = .none,
-            retryProtection: Bool = false
+            retryProtection: Bool = false,
+            locationPolicy: CapturePresetLocationPolicy = CapturePresetLocationPolicy()
         ) async throws {
             root = FileManager.default.temporaryDirectory
                 .appendingPathComponent("voice-spacing.\(UUID().uuidString)", isDirectory: true)
@@ -250,6 +312,7 @@ final class TranscriptVoiceSpacingTests: XCTestCase {
             var preset = CapturePresetStore.makeCustomFlow()
             preset.captureDestinationID = destination.id
             preset.postProcessingMode = mode
+            preset.locationPolicy = locationPolicy
             flow = preset
             var calendar = Calendar(identifier: .gregorian)
             calendar.locale = Locale(identifier: "en_US_POSIX")
@@ -260,7 +323,12 @@ final class TranscriptVoiceSpacingTests: XCTestCase {
             )
         }
 
-        func export(_ text: String, cleanedText: String? = nil) async throws -> CaptureReceipt {
+        func export(
+            _ text: String,
+            cleanedText: String? = nil,
+            source: CaptureSource = .voice,
+            locationOutcome: CaptureLocationOutcome? = nil
+        ) async throws -> CaptureReceipt {
             try await ConfiguredTranscriptCaptureDestinationExporter.export(
                 transcript: TranscriptFlowFormatter.apply(
                     flow: flow,
@@ -277,7 +345,8 @@ final class TranscriptVoiceSpacingTests: XCTestCase {
                 flow: flow,
                 destinationID: destination.id,
                 audioSourceURL: nil,
-                locationOutcome: nil,
+                locationOutcome: locationOutcome,
+                source: source,
                 captureRootURL: captureRoot,
                 pipeline: pipeline
             )
