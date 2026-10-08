@@ -2715,17 +2715,15 @@ struct QuickCaptureView: View {
     private func consumePendingWidgetRecordIfNeeded() {
         guard pendingWidgetRecord else { return }
         pendingWidgetRecord = false
+        let request = PendingQuickRecordingRequest.consume()
         guard AppConstants.lockScreenQuickRecordEnabled else { return }
 
-        let requestedFlowID = AppConstants.sharedDefaults?.string(forKey: AppConstants.pendingWidgetRecordFlowIdKey)
-        AppConstants.sharedDefaults?.removeObject(forKey: AppConstants.pendingWidgetRecordFlowIdKey)
-        let action = WidgetRecordingActionSelection.consume()
-        switch action.command(isRecording: persistentRecorder.isSegmentActive) {
+        switch request.recordingAction.command(isRecording: persistentRecorder.isSegmentActive) {
         case .none:
             return
         case .stop:
-            // Stop doesn't require a valid capture route, reload the composer,
-            // or replace the active recording's preset/completion mode.
+            // Stop preserves the active segment's preset and completion mode,
+            // and does not require loading or changing the composer's route.
             persistentRecorder.stopInAppSegment()
             return
         case .start:
@@ -2734,16 +2732,16 @@ struct QuickCaptureView: View {
         Task { @MainActor in
             await viewModel.load()
             guard viewModel.requireCaptureRouteAvailable(), !persistentRecorder.isSegmentActive else { return }
-            let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: requestedFlowID)
-            // Quick Record is an independent immediate recording, not a draft
-            // preset launch. Keep its legacy resolver/purpose without rerouting
-            // the open composer or changing keyboard preset selection.
-            lastStartedRecordingMode = .preset
+            let selection = WidgetRecordingFlowSelection.resolve(requestedFlowID: request.requestedFlowID)
+            // Draft delivery preserves the composer's route; the requested
+            // preset supplies only the frozen voice-processing policy.
+            lastStartedRecordingMode = request.draftAttachAudio == nil ? .preset : .draft
             persistentRecorder.lastTranscriptionResult = nil
             _ = persistentRecorder.startOneShotInAppSegment(
                 flowId: selection.flowID,
-                completionMode: .runVox(flowID: selection.flowID),
-                origin: .quickRecord
+                completionMode: request.completionMode(flowID: selection.flowID),
+                origin: .quickRecord,
+                draftRequestID: request.draftRequestID(in: viewModel.draft)
             )
         }
     }

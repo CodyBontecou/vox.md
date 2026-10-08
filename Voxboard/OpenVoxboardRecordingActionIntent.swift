@@ -30,13 +30,11 @@ struct OpenVoxboardRecordingActionIntent: AppIntent {
     @MainActor
     func perform() async throws -> some IntentResult {
         guard AppConstants.lockScreenQuickRecordEnabled else { return .result() }
-        if let flowID = VoxEntity.requestedFlowID(for: vox) {
-            AppConstants.sharedDefaults?.set(flowID, forKey: AppConstants.pendingWidgetRecordFlowIdKey)
-        } else {
-            AppConstants.sharedDefaults?.removeObject(forKey: AppConstants.pendingWidgetRecordFlowIdKey)
-        }
-        WidgetRecordingActionSelection.persist(recordingAction)
-        AppConstants.sharedDefaults?.set(true, forKey: AppConstants.pendingWidgetRecordKey)
+        PendingQuickRecordingRequest(
+            requestedFlowID: VoxEntity.requestedFlowID(for: vox),
+            draftAttachAudio: nil,
+            recordingAction: recordingAction
+        ).persist()
         return .result()
     }
 }

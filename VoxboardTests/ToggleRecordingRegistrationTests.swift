@@ -183,9 +183,18 @@ final class ToggleRecordingRegistrationTests: XCTestCase {
                        "Shortcuts owns Open When Run; exporting Open App creates a competing foreground control")
     }
 
-    func testCurrentOSProvidesOneCuratedRecordingShortcut() {
+    func testCurrentOSProvidesImmediateAndDraftRecordingShortcuts() {
         let shortcuts = VoxboardShortcutsProvider.appShortcuts
-        XCTAssertEqual(shortcuts.count, 8, "One recording shortcut replaces Record + Toggle; all seven capture shortcuts remain")
+        XCTAssertEqual(shortcuts.count, 9, "Record Audio and Record to Draft retain all seven capture shortcuts within the ten-shortcut limit")
+    }
+
+    func testDraftControlConfigurationExposesOnlyItsVoicePreset() throws {
+        let metadata = try actionsMetadata(in: Bundle.main.bundleURL)
+        let actions = try XCTUnwrap(metadata["actions"] as? [String: [String: Any]])
+        let configuration = try XCTUnwrap(actions["SelectVoxboardDraftRecordVoxIntent"])
+        let parameters = try XCTUnwrap(configuration["parameters"] as? [[String: Any]])
+        XCTAssertEqual(Set(parameters.compactMap { $0["name"] as? String }), ["vox"])
+        XCTAssertNotNil(actions["RecordToDraftIntent"])
     }
 
     func testBuiltAppRegistersConfigurableActionAndCompatibilityIdentities() throws {

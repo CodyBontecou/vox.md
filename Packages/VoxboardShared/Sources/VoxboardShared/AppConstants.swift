@@ -221,6 +221,9 @@ public enum AppConstants: Sendable {
 
     public static let pendingWidgetRecordKey = "pendingWidgetRecord"
     public static let pendingWidgetRecordFlowIdKey = "pendingWidgetRecordFlowId"
+    // Presence forces review-in-draft delivery; false means transcript only.
+    // Absence preserves legacy immediate quick-record delivery.
+    public static let pendingWidgetRecordDraftAttachAudioKey = "pendingWidgetRecordDraftAttachAudio.v1"
 
     // Cross-process Quick Capture launch requests from Shortcuts and controls.
     public static let pendingQuickCaptureOpenKey = "pendingOpenQuickCapture"

@@ -5,6 +5,34 @@ import VoxboardShared
 
 @MainActor
 final class CaptureURLDeliveryIntegrationTests: XCTestCase {
+    func testRecordedDraftWaitsForExplicitSendBeforeHTTPDelivery() async throws {
+        let fixture = try await makeFixture(maxAttempts: 1, responseStatuses: [200])
+        let requestID = fixture.model.draft.requestID
+        let accepted = await CaptureDraftRecordingEventDelivery.deliver(
+            .transcript("Synthetic recorded draft", draftRequestID: requestID, liveSessionID: nil, deliveryID: UUID()),
+            to: fixture.model
+        )
+        XCTAssertTrue(accepted)
+        await fixture.owner.refresh()
+        XCTAssertEqual(fixture.model.draft.requestID, requestID)
+        XCTAssertTrue(fixture.owner.receipts.isEmpty)
+        XCTAssertEqual(ComposerHTTPProtocol.requestCount, 0)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: fixture.vault.appendingPathComponent("Inbox.md").path))
+
+        fixture.model.draft.text += "\nReviewed before Send"
+        await fixture.model.submit()
+        for _ in 0..<500 {
+            if fixture.owner.activeIDs.isEmpty { break }
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        XCTAssertTrue(fixture.owner.activeIDs.isEmpty)
+        XCTAssertEqual(ComposerHTTPProtocol.requestCount, 1)
+        let receipt = try XCTUnwrap(fixture.model.lastReceipt)
+        let note = try String(contentsOf: receipt.noteURL, encoding: .utf8)
+        XCTAssertTrue(note.contains("Synthetic recorded draft"))
+        XCTAssertTrue(note.contains("Reviewed before Send"))
+    }
+
     func testDraftEditingDoesNotPrepareOrPOST() async throws {
         let fixture = try await makeFixture()
         _ = await fixture.model.appendRecognizedText("Synthetic draft only")

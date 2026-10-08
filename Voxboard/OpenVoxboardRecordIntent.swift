@@ -236,6 +236,8 @@ struct WidgetRecordingFlowSelection {
         from url: URL,
         defaults: UserDefaults? = AppConstants.sharedDefaults
     ) {
+        defaults?.removeObject(forKey: AppConstants.pendingWidgetRecordDraftAttachAudioKey)
+        WidgetRecordingActionSelection.persist(.start, defaults: defaults)
         let requestedFlowID = URLComponents(url: url, resolvingAgainstBaseURL: false)?
             .queryItems?
             .first(where: { $0.name == "flowId" })?
