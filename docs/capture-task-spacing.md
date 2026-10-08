@@ -60,6 +60,12 @@ processing is off. For one task per capture without processing, use the `- [ ] `
 entry prefix rather than relying on the disabled Todo Checklist mode. Do not combine
 the prefix with checklist conversion, which can create duplicate checkbox syntax.
 
+Voice Capture delivery removes whole blank lines, including space/tab-only lines,
+at the selected transcript body's boundaries before prefix/suffix wrapping. This
+keeps the task marker and suffix attached to the spoken text. Content-line
+indentation, hard-break spaces, and internal paragraph/template breaks remain
+literal. See [the issue #30 reproduction](issue-30-voice-spacing.md).
+
 ## Compatibility boundary
 
 This is a separate, user-requested change to the legacy Apple writer, not a

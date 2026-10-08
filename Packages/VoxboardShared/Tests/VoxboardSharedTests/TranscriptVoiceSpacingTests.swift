@@ -3,6 +3,52 @@ import XCTest
 
 /// Byte-level coverage of the voice delivery seam, not just intermediate strings.
 final class TranscriptVoiceSpacingTests: XCTestCase {
+    func test_voiceBoundaryCleanupPreservesIndentationHardBreaksAndInternalBlankLines() async throws {
+        for newline in ["\n", "\r\n", "\r"] {
+            let fixture = try await Fixture(document: "  - [x] Older  \n \t\n  - [x] Oldest  ")
+            defer { fixture.remove() }
+
+            _ = try await fixture.export(
+                [" \t", "  - [ ] First  ", " \t", "  - [ ] Second  ", "\t "].joined(separator: newline)
+            )
+
+            XCTAssertEqual(
+                try fixture.bytes(),
+                Data("  - [ ] First  \n \t\n  - [ ] Second  \n  - [x] Older  \n \t\n  - [x] Oldest  ".utf8)
+            )
+        }
+    }
+
+    func test_voiceBoundaryCleanupPreservesIndentedCode() async throws {
+        let fixture = try await Fixture(document: "Older paragraph.")
+        defer { fixture.remove() }
+
+        _ = try await fixture.export(" \n    code  \n\t ")
+
+        XCTAssertEqual(try fixture.bytes(), Data("    code  \n\nOlder paragraph.".utf8))
+    }
+
+    func test_voiceWhitespaceOnlyBoundaryLinesDoNotSeparateTaskFromPrefixOrSuffix() async throws {
+        for newline in ["\n", "\r\n", "\r"] {
+            for usesCleanedText in [false, true] {
+                let fixture = try await Fixture(
+                    document: "- [x] Older",
+                    prefix: "- [ ] ",
+                    suffix: " #inbox"
+                )
+                defer { fixture.remove() }
+                let body = " \t" + newline + "Buy milk" + newline + "\t "
+
+                _ = try await fixture.export(
+                    usesCleanedText ? "Raw words not chosen" : body,
+                    cleanedText: usesCleanedText ? body : nil
+                )
+
+                XCTAssertEqual(try fixture.bytes(), Data("- [ ] Buy milk #inbox\n- [x] Older".utf8))
+            }
+        }
+    }
+
     func test_configuredVoicePrependKeepsPrefixAndSuffixTaskBoundariesCompact() async throws {
         let fixture = try await Fixture(
             document: "---\ntitle: Tasks\n---\n\n- [x] Older task",

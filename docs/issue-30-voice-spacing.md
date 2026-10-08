@@ -1,23 +1,67 @@
-# Issue #30: voice entry spacing investigation
+# Issue #30: voice entry spacing fix
 
 ## Result
 
-The reported unwanted blank lines were **not reproduced** on
-`4f5bd7d0dd88b0c22dc13dac5e9c780da43c5991` with synthetic transcripts and temporary
-files. No production formatting change is justified by the evidence gathered here.
-This adds regression coverage, not a claim that the reporter's issue is fixed.
+The production Capture adapter now removes whole whitespace-only lines at the
+boundaries of the selected raw/cleaned transcript before entry prefix/suffix
+wrapping. Spaces or tabs on those lines previously survived newline-only trimming,
+separated the task marker or suffix from the spoken content, and prevented compact
+list insertion. Content-line indentation, Markdown hard-break spaces, internal
+paragraph breaks, and template whitespace remain preserved.
 
-The 2026-10-08 follow-up below also failed to reproduce the defect with synthetic
-variants grounded in the reporter's Discord history. Full production SwiftPM
-testing is now available locally; the earlier dependency-download limitation no
-longer applies to this follow-up.
+The initial tests and Discord-based variants did not reproduce the defect. The
+boundary-whitespace reproduction below fails on unchanged production sources at
+`d678446` and passes with this fix. The exact reporter build and note bytes remain
+unavailable; this establishes and repairs a concrete production failure with the
+reported spacing symptom, using synthetic input rather than private recordings.
+
+## Failing reproduction
+
+Start with `- [x] Older`, prefix `- [ ] `, suffix ` #inbox`, and a selected raw or
+cleaned transcript with these escaped bytes:
+
+```text
+" \t\nBuy milk\n\t "
+```
+
+Before the fix, the configured exporter writes 40 UTF-8 bytes:
+
+```text
+"- [ ]  \t\nBuy milk\n\t  #inbox\n\n- [x] Older"
+```
+
+After the fix, it writes the expected 33 bytes, with no final newline:
+
+```markdown
+- [ ] Buy milk #inbox
+- [x] Older
+```
+
+The regression command is:
+
+```sh
+swift test --package-path Packages/VoxboardShared --filter TranscriptVoiceSpacingTests/test_voiceWhitespaceOnlyBoundaryLinesDoNotSeparateTaskFromPrefixOrSuffix
+```
+
+The pre-fix run failed all six raw/cleaned and LF/CRLF/CR variants. The final run
+passes. Either a leading `" \n"` or trailing `"\n "` independently reproduced the
+failure in a temporary minimized writer test. That prototype was removed after
+the fix was scoped to the voice adapter; the retained regression checks actual
+destination-file bytes through the configured production exporter.
+
+The adapter normalizes CRLF/CR to LF consistently with the existing destination
+writer, then removes only whole blank boundary lines. It preserves spaces on
+content lines and all internal lines. The shared Markdown writer and frozen
+Swift/Rust contract profiles are unchanged. Audio payload placement, transcript
+history, and standalone transcript-file export retain their existing behavior.
 
 ## Actual delivery path
 
 The direct recording caller applies `TranscriptFlowFormatter`, then sends the
 transcript through `ConfiguredTranscriptCaptureDestinationExporter` when a Capture
-destination is configured. The adapter selects cleaned or raw body text without
-adding the standalone transcript-file heading. The pipeline renders the body and
+destination is configured. The adapter selects cleaned or raw body text and
+removes blank boundary lines without adding the standalone transcript-file
+heading. The pipeline renders the body and
 entry prefix/suffix, and `CoordinatedCaptureWriter` applies
 `MarkdownDocumentEditor` to the destination file.
 
@@ -58,7 +102,7 @@ headings, retry markers, literal payload tokens, and intentional internal
 paragraph/list/template newlines. It also compares voice bytes to typed keyboard
 Capture delivery for matching inputs.
 
-All 11 new tests and the neighboring suites passed in a network-free macOS harness
+Initially, all 11 tests and the neighboring suites passed in a network-free macOS harness
 (460 tests total). The harness compiled unchanged delivery sources and the entire
 Capture core with ExportKit pinned to
 `17993dc0361c41145dc6429738ed369d9976e550`. It excluded inference/app targets and
@@ -71,15 +115,16 @@ An isolated scratch mutation that always uses paragraph separators made the
 prefix/prepend regression fail (60 actual bytes versus 59 expected). That proves
 test sensitivity; it is **not** a failing reproduction on the investigated base.
 
-## Missing reproducer
+## Reporter configuration
 
-To justify a further fix, obtain the exact app build, destination placement,
+For reporter-specific confirmation or any remaining spacing variant, obtain the exact app build, destination placement,
 prefix/suffix or vault-template bytes, processing mode and scope, metadata scope,
 retained-audio/embed settings, and a synthetic equivalent of the note before and
 after one voice capture. Distinguish raw text from cleaned/model-produced text.
 No real voice recording, private transcript, credentials, or user vault is needed.
 Do not collapse user-authored paragraph breaks or template whitespace to manufacture
-a passing reproduction. Issue #30 remains unresolved for the reported configuration.
+a passing reproduction. The synthetic failing case above is the evidence for
+this production fix; it is not a recovered copy of the reporter's private input.
 
 ## Discord follow-up — 2026-10-08
 
@@ -111,7 +156,7 @@ export, an app build for the September report, or audio-embed settings. There ar
 no attachments in the reporter's indexed messages. Naming a preset Task alone
 does not establish its processing mode or prefix.
 
-Two further byte-level tests now exercise the configured exporter:
+The first Discord follow-up added two byte-level tests through the configured exporter:
 
 - Repeated voice, Watch, and widget task prepends with the reported location
   suffix, raw/cleaned body selection, and available/unavailable synthetic
@@ -124,7 +169,7 @@ Two further byte-level tests now exercise the configured exporter:
   existing prose/list paragraph policy, not evidence of unintended whitespace
   around a task.
 
-Validation against PR head `2c8adf1` plus these test/documentation changes:
+Final validation:
 
 ```sh
 swift test --package-path Packages/VoxboardShared --filter TranscriptVoiceSpacingTests
@@ -133,13 +178,15 @@ swift test --package-path Packages/VoxboardShared
 git diff --check
 ```
 
-All 13 voice-spacing tests pass. The full run passes 953 XCTest tests plus 10
-Swift Testing tests (963 total). Full SwiftPM testing compiles the production
+All 16 voice-spacing tests pass, including the failing reproduction and additional
+checks for preserved indentation, hard-break spaces, internal whitespace-only
+lines, and indented code. The full run passes 956 XCTest tests plus 10
+Swift Testing tests (966 total). Full SwiftPM testing compiles the production
 package and its pinned dependencies; it no longer uses the partial offline
 harness described above. Package tests and repository contracts pass. These
 checks do not exercise a microphone, live Apple Intelligence, or physical device.
 
-The next required evidence is one synthetic before/after note plus the active
-Task preset's route, prefix/suffix/template, processing and metadata scopes,
-location-output policy, retained-audio/embed settings, and app build. A further
-production fix remains unjustified without a failing reproduction.
+Live Apple Intelligence and reporter-device confirmation remain outside this
+verification. The fix is deliberately limited to blank transcript boundary lines;
+prose separators, retained-audio blocks, entry metadata, and user-authored internal
+paragraph/template breaks keep their existing semantics.

@@ -25,7 +25,11 @@ public enum TranscriptCaptureAdapter {
         } else {
             body = transcript.text
         }
-        var payloads: [CapturePayload] = [.text(body)]
+        // Blank transcript lines can contain spaces/tabs. Remove those whole
+        // boundary lines before entry wrapping so a task prefix or suffix is
+        // attached to the spoken content. Content-line indentation, hard-break
+        // spaces, and internal paragraph breaks remain literal.
+        var payloads: [CapturePayload] = [.text(trimmingBoundaryBlankLines(body))]
         if let audioAsset, flow.audioSaveMode != .off {
             let embedPlacement: CaptureAudioEmbedPlacement
             if !flow.exportSettings.embedAudioInMarkdown {
@@ -36,6 +40,19 @@ public enum TranscriptCaptureAdapter {
             payloads.append(.retainedAudio(audioAsset, embedPlacement: embedPlacement))
         }
         return payloads
+    }
+
+    private static func trimmingBoundaryBlankLines(_ text: String) -> String {
+        let lines = text
+            .replacingOccurrences(of: "\r\n", with: "\n")
+            .replacingOccurrences(of: "\r", with: "\n")
+            .trimmingCharacters(in: .newlines)
+            .components(separatedBy: "\n")
+        guard let first = lines.firstIndex(where: { !$0.trimmingCharacters(in: .whitespaces).isEmpty }),
+              let last = lines.lastIndex(where: { !$0.trimmingCharacters(in: .whitespaces).isEmpty }) else {
+            return ""
+        }
+        return lines[first...last].joined(separator: "\n")
     }
 
     public static func frontmatter(
