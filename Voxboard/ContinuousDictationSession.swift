@@ -64,14 +64,13 @@ final class ContinuousDictationSession {
         committedSegmentCount += 1
     }
 
-    /// Mirrors the manual stop path's minimum-span guards: spans shorter than
-    /// a third of a second or effectively silent are skipped rather than
-    /// delivered as notes, without ending the continuous session.
+    /// Every nonempty span contains audio worth preserving. Duration and
+    /// amplitude cannot establish whether the sounds matter to the user.
     static func isDeliverableSpan(
         sampleCount: Int,
-        maximumAmplitude: Float,
-        sampleRate: Double
+        maximumAmplitude _: Float,
+        sampleRate _: Double
     ) -> Bool {
-        sampleCount > Int(sampleRate * 0.3) && maximumAmplitude >= 0.005
+        sampleCount > 0
     }
 }

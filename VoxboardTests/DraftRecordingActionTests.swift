@@ -347,6 +347,117 @@ final class DraftRecordingActionTests: XCTestCase {
         return defaults
     }
 
+    func testNoSpeechStillExportsConfiguredAudioAndRetainsSource() async throws {
+        try await assertNoSpeechExport(audioSaveMode: .alongsideTranscript)
+    }
+
+    func testNoSpeechInTextOnlyPresetStillSavesAudioToFiles() async throws {
+        try await assertNoSpeechExport(audioSaveMode: .off)
+    }
+
+    private func assertNoSpeechExport(audioSaveMode: CapturePresetAudioSaveMode) async throws {
+        let fixture = try await makeDraftFixture()
+        var preset = makePresets().selected
+        preset.captureDestinationID = nil
+        preset.audioSaveMode = audioSaveMode
+        preset.exportSettings.usesCustomExportSettings = true
+        preset.exportSettings.exportEnabled = true
+        preset.exportSettings.folderBookmark = try fixture.vault.bookmarkData()
+        preset.exportSettings.format = .md
+        let jobStore = RecordingJobStore(rootDirectoryURL: fixture.root.appendingPathComponent("jobs"))
+        let transcriptStore = TranscriptStore()
+        let originalRecorder = PersistentRecorder.active
+        let recorder = PersistentRecorder(
+            transcriptStore: transcriptStore,
+            usageTracker: UsageTracker(defaults: fixture.defaults),
+            transcriptionService: OnDeviceTranscriptionService(
+                systemBackend: DraftActionEmptySpeechBackend(), usesDownloadedLocalFallbacks: false
+            ),
+            recordingJobStore: jobStore
+        )
+        let jobID = UUID()
+        defer {
+            transcriptStore.delete(ids: [jobID])
+            PersistentRecorder.active = originalRecorder
+        }
+        _ = try await recorder.recordingQueue.enqueue(
+            sourceURL: fixture.audioURL, id: jobID, requestID: "inapp-no-speech",
+            captureSource: .shortcut, duration: 1, source: .iOSApp, delivery: .preset(preset),
+            modelID: "automatic", fallbackModelID: nil, language: "en",
+            configuration: RecordingQueueConfiguration(sourceAudioRetention: .permanent)
+        )
+        let deadline = Date().addingTimeInterval(10)
+        var finished: RecordingJob?
+        while Date() < deadline {
+            finished = try await jobStore.load(recoverInterrupted: false).first(where: { $0.id == jobID })
+            if finished?.phase == .completed || finished?.phase == .failed { break }
+            try await Task.sleep(for: .milliseconds(25))
+        }
+        let job = try XCTUnwrap(finished)
+        XCTAssertEqual(job.phase, .completed, job.statusMessage ?? "Queue did not finish")
+        XCTAssertTrue(FileManager.default.fileExists(atPath: jobStore.audioURL(for: job).path))
+        let files = try FileManager.default.contentsOfDirectory(at: fixture.vault, includingPropertiesForKeys: nil)
+        XCTAssertTrue(files.contains { ["m4a", "wav"].contains($0.pathExtension) }, "No-speech recording must reach Files")
+        XCTAssertTrue(files.contains { $0.pathExtension == "md" })
+    }
+
+    func testRepeatedStopsPreserveShortQuietAndSilentRecordingAudio() async throws {
+        let fixture = try await makeDraftFixture()
+        let jobStore = RecordingJobStore(rootDirectoryURL: fixture.root.appendingPathComponent("jobs"))
+        let buffer = CircularAudioBuffer(capacity: 100_000)
+        let originalRecorder = PersistentRecorder.active
+        let recorder = PersistentRecorder(
+            transcriptStore: TranscriptStore(),
+            usageTracker: UsageTracker(defaults: fixture.defaults),
+            transcriptionService: OnDeviceTranscriptionService(
+                systemBackend: DraftActionEmptySpeechBackend(), usesDownloadedLocalFallbacks: false
+            ),
+            recordingJobStore: jobStore,
+            circularBuffer: buffer
+        )
+        // Hold processing while exercising the real segment stop/handoff path.
+        // Samples are injected at the audio-tap boundary; no microphone is used.
+        _ = recorder.recordingQueue.beginCaptureLease()
+        recorder.isListening = true
+        defer {
+            recorder.stopListening()
+            PersistentRecorder.active = originalRecorder
+        }
+        for (index, samples) in [
+            Array(repeating: Float(0.1), count: 1_600),
+            Array(repeating: Float(0.000_001), count: 16_000),
+            Array(repeating: Float(0), count: 16_000)
+        ].enumerated() {
+            buffer.reset()
+            recorder.startInAppSegment(completionMode: .captureDraft(attachAudio: false), origin: .quickRecord)
+            XCTAssertTrue(recorder.isSegmentActive)
+            buffer.append(samples)
+            recorder.stopInAppSegment()
+            recorder.stopInAppSegment()
+            let deadline = Date().addingTimeInterval(3)
+            var jobs: [RecordingJob] = []
+            while Date() < deadline {
+                jobs = try await jobStore.load(recoverInterrupted: false)
+                if jobs.count == index + 1 { break }
+                try await Task.sleep(for: .milliseconds(25))
+            }
+            XCTAssertEqual(jobs.count, index + 1, recorder.lastError ?? "Recording never reached the durable queue")
+            guard let job = jobs.max(by: { $0.createdAt < $1.createdAt }) else { continue }
+            XCTAssertEqual(job.retentionPolicy, .permanent)
+            let saved = try Data(contentsOf: jobStore.audioURL(for: job))
+            XCTAssertEqual(saved.count, 44 + samples.count * 2)
+            XCTAssertEqual(job.duration, Double(samples.count) / 16_000, accuracy: 0.000_1)
+        }
+    }
+
+    func testDefaultQueuePreferencesRetainAudioAndRespectExplicitDeletion() throws {
+        let defaults = try makeDefaults()
+        XCTAssertEqual(RecordingQueueConfiguration.default.sourceAudioRetention, .permanent)
+        XCTAssertEqual(RecordingQueuePreferences.load(from: defaults).sourceAudioRetention, .permanent)
+        defaults.set(SourceAudioRetentionMode.deleteAfterSuccess.rawValue, forKey: RecordingQueuePreferences.retentionModeKey)
+        XCTAssertEqual(RecordingQueuePreferences.load(from: defaults).sourceAudioRetention, .deleteAfterSuccess)
+    }
+
     private func makeRoot() throws -> URL {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("DraftRecordingActionTests-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
@@ -408,6 +519,20 @@ private struct DraftActionSyntheticSpeechBackend: SystemTranscriptionBackend {
     func prepare(language: String) async throws {}
     func transcribe(audioURL: URL, language: String) async throws -> SystemTranscriptionOutput {
         SystemTranscriptionOutput(text: "Synthetic reviewed transcript", language: "en")
+    }
+    func startLiveTranscription(
+        language: String,
+        onUpdate: @escaping @concurrent @Sendable (SystemTranscriptionUpdate) async -> Void
+    ) async throws -> any SystemLiveTranscriptionSession {
+        throw OnDeviceTranscriptionError.systemBackendUnavailable
+    }
+}
+
+private struct DraftActionEmptySpeechBackend: SystemTranscriptionBackend {
+    func availability(language: String) async -> SystemTranscriptionAvailability { .ready }
+    func prepare(language: String) async throws {}
+    func transcribe(audioURL: URL, language: String) async throws -> SystemTranscriptionOutput {
+        SystemTranscriptionOutput(text: "", language: "en")
     }
     func startLiveTranscription(
         language: String,

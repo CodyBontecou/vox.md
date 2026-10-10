@@ -58,11 +58,10 @@ final class ContinuousDictationSessionTests: XCTestCase {
         XCTAssertEqual(session.committedSegmentCount, 1)
     }
 
-    // MARK: - Span deliverability mirrors the stop path guards
+    // MARK: - Audio preservation
 
-    func testIsDeliverableSpanMirrorsStopPathGuards() {
-        // Minimum span: a third of a second at 16 kHz (4,800 samples).
-        XCTAssertFalse(ContinuousDictationSession.isDeliverableSpan(
+    func testShortAndQuietSpansAreStillDeliveredForAudioPreservation() {
+        XCTAssertTrue(ContinuousDictationSession.isDeliverableSpan(
             sampleCount: 4_800,
             maximumAmplitude: 0.5,
             sampleRate: 16_000
@@ -72,8 +71,7 @@ final class ContinuousDictationSessionTests: XCTestCase {
             maximumAmplitude: 0.5,
             sampleRate: 16_000
         ))
-        // Effectively silent spans are skipped rather than delivered.
-        XCTAssertFalse(ContinuousDictationSession.isDeliverableSpan(
+        XCTAssertTrue(ContinuousDictationSession.isDeliverableSpan(
             sampleCount: 16_000,
             maximumAmplitude: 0.004,
             sampleRate: 16_000
@@ -82,6 +80,12 @@ final class ContinuousDictationSessionTests: XCTestCase {
             sampleCount: 16_000,
             maximumAmplitude: 0.005,
             sampleRate: 16_000
+        ))
+        XCTAssertTrue(ContinuousDictationSession.isDeliverableSpan(
+            sampleCount: 1, maximumAmplitude: 0, sampleRate: 16_000
+        ))
+        XCTAssertFalse(ContinuousDictationSession.isDeliverableSpan(
+            sampleCount: 0, maximumAmplitude: 0, sampleRate: 16_000
         ))
     }
 

@@ -81,7 +81,7 @@ public struct RecordingQueueConfiguration: Codable, Equatable, Sendable {
     public var processingPolicy: RecordingJobProcessingPolicy
 
     public init(
-        sourceAudioRetention: SourceAudioRetentionPolicy = .deleteAfterSuccess,
+        sourceAudioRetention: SourceAudioRetentionPolicy = .permanent,
         processingPolicy: RecordingJobProcessingPolicy = .immediate
     ) {
         self.sourceAudioRetention = sourceAudioRetention
@@ -334,7 +334,7 @@ public enum RecordingQueuePreferences {
         guard let defaults else { return .default }
         let retentionMode = defaults.string(forKey: retentionModeKey)
             .flatMap(SourceAudioRetentionMode.init(rawValue:))
-            ?? .deleteAfterSuccess
+            ?? .permanent
         let retentionInterval: TimeInterval?
         if retentionMode == .timed {
             let stored = defaults.double(forKey: retentionIntervalKey)

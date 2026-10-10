@@ -373,7 +373,7 @@ final class PersistentRecorder {
     private var audioEngine: AVAudioEngine?
 
     /// Circular buffer: 10 minutes at 16 kHz mono = 9,600,000 samples ≈ 38 MB
-    private let circularBuffer = CircularAudioBuffer(capacity: 16_000 * 60 * 10)
+    private let circularBuffer: CircularAudioBuffer
 
     /// Target sample rate for whisper.cpp
     private let whisperSampleRate: Double = 16_000
@@ -548,7 +548,8 @@ final class PersistentRecorder {
         voiceActivityDetectionService: VoiceActivityDetectionService = VoiceActivityDetectionService(),
         captureDraftEventHandler: CaptureDraftRecordingEventHandler? = nil,
         transcriptEnricher: TranscriptEnricher? = nil,
-        recordingJobStore: RecordingJobStore? = nil
+        recordingJobStore: RecordingJobStore? = nil,
+        circularBuffer: CircularAudioBuffer = CircularAudioBuffer(capacity: 16_000 * 60 * 10)
     ) {
         self.transcriptStore = transcriptStore
         self.usageTracker = usageTracker
@@ -557,6 +558,7 @@ final class PersistentRecorder {
         self.voiceActivityDetectionService = voiceActivityDetectionService
         self.captureDraftEventHandler = captureDraftEventHandler
         self.transcriptEnricher = transcriptEnricher
+        self.circularBuffer = circularBuffer
         Self.active = self
         ensureRecordingsDirectory()
 
@@ -1030,6 +1032,14 @@ final class PersistentRecorder {
             return false
         }
 
+        // A background stop keeps temporary capture alive through delivery.
+        // Starting again must acquire a fresh engine/tap rather than promoting
+        // that old one-shot lease into persistent keyboard listening. iOS can
+        // leave the old engine running while its input tap delivers silence.
+        if isListening, shouldAutoStopListeningAfterCurrentRecording {
+            stopListening(endLiveActivity: false)
+            shouldEndLiveActivityAfterCurrentTranscription = false
+        }
         let startedTemporaryListening = !isListening
         if startedTemporaryListening {
             shouldAutoStopListeningAfterCurrentRecording = true
@@ -1952,13 +1962,10 @@ final class PersistentRecorder {
             maximumAmplitude: maximumAmplitude,
             sampleRate: whisperSampleRate
         ) else {
-            // A span with no usable speech (sub-minimum or silent) is skipped
-            // without delivery so stray noise cannot strand one-word notes;
-            // the session keeps listening.
-            log.log("[PersistentRecorder] ⏭ Continuous span too short or silent — skipping commit")
-            if let skippedJournal = finalizeSegmentJournal() {
-                try? FileManager.default.removeItem(at: skippedJournal)
-            }
+            // Only an empty span can be skipped. Keep any journal rather than
+            // deleting a recovery source on the strength of an input heuristic.
+            log.log("[PersistentRecorder] ⏭ Empty continuous span — skipping commit")
+            _ = finalizeSegmentJournal()
             rearmContinuousDictation(command: command, fromIndex: endIndex)
             return
         }
@@ -2359,7 +2366,8 @@ final class PersistentRecorder {
         let durationSec = Float(samples.count) / Float(whisperSampleRate)
         log.log("[PersistentRecorder] Extracted \(samples.count) samples (\(String(format: "%.1f", durationSec))s)")
 
-        guard samples.count > Int(whisperSampleRate * 0.3) else {
+        if completionMode == .keyboardTranscription,
+           samples.count <= Int(whisperSampleRate * 0.3) {
             log.log("[PersistentRecorder] ⚠️ Segment too short (<0.3s)")
             finishStoppedSegmentWithError(
                 requestId: requestId,
@@ -2379,7 +2387,8 @@ final class PersistentRecorder {
             isInputMuted = false
         }
         log.log("[PersistentRecorder] Audio maxAmp=\(String(format: "%.7g", maxAmp)) inputMuted=\(isInputMuted)")
-        if let failure = RecordingInputValidation.failure(maxAmplitude: maxAmp, isInputMuted: isInputMuted) {
+        if completionMode == .keyboardTranscription,
+           let failure = RecordingInputValidation.failure(maxAmplitude: maxAmp, isInputMuted: isInputMuted) {
             log.log("[PersistentRecorder] ⚠️ Input validation failed: \(failure)")
             finishStoppedSegmentWithError(
                 requestId: requestId,
@@ -2389,6 +2398,8 @@ final class PersistentRecorder {
             return
         }
 
+        // App recordings preserve every captured sample, including short,
+        // quiet and silent audio. Speech eligibility must never gate storage.
         // Write WAV file
         guard let wavURL = writeWAV(samples: samples) else {
             finishStoppedSegmentWithError(
@@ -3238,6 +3249,8 @@ final class PersistentRecorder {
             }
         }
 
+        let deliversAudioWithoutTranscript = completionMode == .captureDraft(attachAudio: true)
+            || selectedFlow != nil
         let result: OnDeviceTranscriptionResult
         do {
             // Live Apple Speech returns text optimized for immediate insertion.
@@ -3281,6 +3294,17 @@ final class PersistentRecorder {
                 cleanupWorkingAudio: cleanupWorkingAudio
             )
             throw CancellationError()
+        } catch OnDeviceTranscriptionError.noSpeechDetected where deliversAudioWithoutTranscript {
+            // No speech is a valid audio-only recording. Reuse the configured
+            // delivery/checkpoint path so its audio still reaches Files (or
+            // the draft) and export failures remain retryable.
+            result = OnDeviceTranscriptionResult(
+                text: "",
+                backendID: modelId,
+                backendName: "Audio recording",
+                backendKind: .appleSpeech,
+                language: language
+            )
         } catch {
             log.log("[PersistentRecorder] ❌ Transcription failed: \(error.localizedDescription)")
             if case .captureDraft(let attachAudio) = completionMode,
@@ -3313,7 +3337,8 @@ final class PersistentRecorder {
             speakerResolution = try await speakerDiarizationService.resolve(
                 audioURL: audioURL,
                 transcription: result,
-                configuration: effectiveVoiceProcessingConfiguration
+                configuration: result.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    ? nil : effectiveVoiceProcessingConfiguration
             )
         } catch is CancellationError {
             await cancelTranscription(
@@ -3323,7 +3348,16 @@ final class PersistentRecorder {
             )
             throw CancellationError()
         }
-        let resolvedText = speakerResolution.text
+        let resolvedText = speakerResolution.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let audioDeliveryFlow = selectedFlow.map { flow in
+            var flow = flow
+            // A text-only preset still needs to deliver the original sounds
+            // when speech recognition has no text to put in its note.
+            if resolvedText.isEmpty, flow.audioSaveMode == .off {
+                flow.audioSaveMode = .alongsideTranscript
+            }
+            return flow
+        }
         let speakerTurns = speakerResolution.turns
         let speakerDiarizationSkipReason = speakerResolution.skipReason
         if let speakerDiarizationSkipReason {
@@ -3401,14 +3435,14 @@ final class PersistentRecorder {
         let deliveryResult = try await urlDeliveryCancellation.valueOfMainActorTask {
             var deliveryTask: Task<ConfiguredRecordingDeliveryResult, Never>?
             self.clearCaptureLiveTranscription(requestId: requestId)
-            if let text, !text.isEmpty {
+            if let text, !text.isEmpty || (selectedFlow != nil && deliversAudioWithoutTranscript) {
                 // Only publish to the IPC channel for keyboard-initiated requests.
                 // In-app recordings surface the result via `lastTranscriptionResult`;
                 // writing response.json here would leave a stale file that the
                 // keyboard later treats as an orphaned transcription and pastes
                 // into the next text field that comes up.
                 let shouldPublishToKeyboard = !requestId.hasPrefix("inapp-") && !requestId.hasPrefix("import-")
-                if shouldPublishToKeyboard {
+                if shouldPublishToKeyboard, !text.isEmpty {
                     let response = TranscriptionResponse(
                         requestId: requestId,
                         text: text,
@@ -3451,13 +3485,15 @@ final class PersistentRecorder {
                 if let persistenceError = self.transcriptStore.lastPersistenceError {
                     throw persistenceError
                 }
-                self.usageTracker.addUsage(seconds: duration, deliveryID: transcriptID)
-                ReviewPromptManager.shared.recordSuccessfulTranscription(
-                    totalTranscriptionCount: self.transcriptStore.transcripts.count,
-                    transcriptDates: self.transcriptStore.transcripts.map(\.date)
-                )
+                if !text.isEmpty {
+                    self.usageTracker.addUsage(seconds: duration, deliveryID: transcriptID)
+                    ReviewPromptManager.shared.recordSuccessfulTranscription(
+                        totalTranscriptionCount: self.transcriptStore.transcripts.count,
+                        transcriptDates: self.transcriptStore.transcripts.map(\.date)
+                    )
+                }
 
-                if let selectedFlow {
+                if let selectedFlow = audioDeliveryFlow {
                     // On-device LLM enrichment (title, tags, category, cleanedText).
                     // When enrichment is enabled, we defer the file export until
                     // the enricher finishes so the exported file reflects the
@@ -3759,7 +3795,7 @@ final class PersistentRecorder {
                     return .delivered
                 }
 
-                    if let enricher = self.transcriptEnricher, flowForExport.usesAIEnrichment {
+                    if !text.isEmpty, let enricher = self.transcriptEnricher, flowForExport.usesAIEnrichment {
                         deliveryTask = Task.detached(priority: .utility) {
                             await enricher.enrichAndUpdate(transcript: initialTranscript, flow: flowForExport, into: store)
                             return await runExport()
@@ -3787,7 +3823,9 @@ final class PersistentRecorder {
                 log.log("[PersistentRecorder] ✅ Transcription complete: \(text.count) chars")
             } else {
                 self.lastTranscriptionResult = nil
-                writeErrorResponse(requestId: requestId, message: "No speech detected")
+                if !deliversAudioWithoutTranscript {
+                    writeErrorResponse(requestId: requestId, message: "No speech detected")
+                }
                 Task { await self.removeOriginLocationSnapshot(requestID: requestId) }
             }
             return deliveryTask
@@ -3798,7 +3836,7 @@ final class PersistentRecorder {
             throw PersistentRecordingJobError.deliveryFailed
         }
 
-        guard !resolvedText.isEmpty else {
+        guard !resolvedText.isEmpty || deliversAudioWithoutTranscript else {
             throw PersistentRecordingJobError.noSpeechDetected
         }
         if deliveryResult?.offersSentUndo == true,
