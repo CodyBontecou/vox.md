@@ -29,13 +29,18 @@ public struct CaptureMarkdownRenderer: Sendable {
             throw CaptureRenderingError.emptyRequest
         }
 
+        let mappedKey = request.deliveryKind == .meteredVoiceTranscript
+            ? TranscriptPropertyMapping.normalizedKey(request.voxProfile?.transcriptPropertyName ?? "") : nil
+        let includeText = mappedKey == nil || request.voxProfile?.includeTranscriptInBody != false
+        var mappedText: [String] = []
         var blocks: [String] = []
         var topAudioBlocks: [String] = []
         var attachmentOnlyFallbackBlocks: [String] = []
         for payload in request.payloads {
             switch payload {
             case .text(let text):
-                append(text, to: &blocks)
+                if mappedKey != nil { append(text, to: &mappedText) }
+                if includeText { append(text, to: &blocks) }
 
             case .url(let url, let title):
                 guard let scheme = url.scheme?.lowercased(),
@@ -46,7 +51,8 @@ public struct CaptureMarkdownRenderer: Sendable {
                 blocks.append("[\(escapeMarkdownLabel(label))](\(escapeMarkdownURL(url.absoluteString)))")
 
             case .audio(let asset, let transcript):
-                append(transcript, to: &blocks)
+                if mappedKey != nil { append(transcript, to: &mappedText) }
+                if includeText { append(transcript, to: &blocks) }
                 let path = try attachmentPath(for: asset, destination: destination, overrides: attachmentPaths)
                 blocks.append(obsidianEmbed(path: path))
 
@@ -109,7 +115,7 @@ public struct CaptureMarkdownRenderer: Sendable {
         if request.voxProfile?.metadataScope == .entry {
             var metadataBlocks: [String] = []
             if !request.frontmatter.isEmpty {
-                let metadata = inlineMetadata(request.frontmatter)
+                let metadata = inlineMetadata(request.frontmatter.filter { $0.key != mappedKey })
                 if !metadata.isEmpty { metadataBlocks.append(metadata) }
             }
             if let location = try CaptureLocationMetadataRenderer().render(request: request),
@@ -122,6 +128,11 @@ public struct CaptureMarkdownRenderer: Sendable {
                     in: rendered
                 )
             }
+        }
+        if let mappedKey, !mappedText.isEmpty {
+            let value = TranscriptPropertyMapping.yamlString(mappedText.joined(separator: "\n\n"))
+            let frontmatter = "---\n\(mappedKey): \(value)\n---"
+            rendered = rendered.isEmpty ? frontmatter : frontmatter + "\n\n" + rendered
         }
         guard !rendered.isEmpty else { throw CaptureRenderingError.emptyRequest }
         return rendered

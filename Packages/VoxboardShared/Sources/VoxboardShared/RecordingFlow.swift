@@ -17,6 +17,9 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
     public var kind: CapturePresetKind
     public var exportSettings: CapturePresetExportSettings
     public var staticFrontmatter: [String: String]
+    /// Empty disables mapping. Invalid keys preserve normal body export.
+    public var transcriptPropertyName: String
+    public var includeTranscriptInBody: Bool
     /// Opt-in location metadata policy shared by every Capture modality.
     public var locationPolicy: CapturePresetLocationPolicy
     public var metadataScope: CapturePresetMetadataScope
@@ -64,6 +67,8 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         kind: CapturePresetKind = .custom,
         exportSettings: CapturePresetExportSettings = CapturePresetExportSettings(),
         staticFrontmatter: [String: String] = [:],
+        transcriptPropertyName: String = "",
+        includeTranscriptInBody: Bool = true,
         locationPolicy: CapturePresetLocationPolicy = CapturePresetLocationPolicy(),
         metadataScope: CapturePresetMetadataScope = .document,
         postProcessingMode: CapturePresetProcessingMode = .clean,
@@ -91,6 +96,8 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         self.kind = kind
         self.exportSettings = exportSettings
         self.staticFrontmatter = staticFrontmatter
+        self.transcriptPropertyName = transcriptPropertyName
+        self.includeTranscriptInBody = includeTranscriptInBody
         self.locationPolicy = locationPolicy
         self.metadataScope = metadataScope
         self.postProcessingMode = postProcessingMode
@@ -161,6 +168,8 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
             isEnabled: isEnabled,
             isBuiltIn: isBuiltIn,
             staticFrontmatter: staticFrontmatter,
+            transcriptPropertyName: transcriptPropertyName,
+            includeTranscriptInBody: includeTranscriptInBody,
             locationPolicy: locationPolicy,
             metadataScope: metadataScope,
             postProcessingMode: postProcessingMode,
@@ -202,6 +211,8 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         case kind
         case exportSettings
         case staticFrontmatter
+        case transcriptPropertyName
+        case includeTranscriptInBody
         case locationPolicy
         case metadataScope
         case postProcessingMode
@@ -235,6 +246,8 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
             exportSettings: try container.decodeIfPresent(CapturePresetExportSettings.self, forKey: .exportSettings)
                 ?? CapturePresetExportSettings(),
             staticFrontmatter: try container.decodeIfPresent([String: String].self, forKey: .staticFrontmatter) ?? [:],
+            transcriptPropertyName: try container.decodeIfPresent(String.self, forKey: .transcriptPropertyName) ?? "",
+            includeTranscriptInBody: try container.decodeIfPresent(Bool.self, forKey: .includeTranscriptInBody) ?? true,
             locationPolicy: try container.decodeIfPresent(CapturePresetLocationPolicy.self, forKey: .locationPolicy)
                 ?? CapturePresetLocationPolicy(),
             metadataScope: try container.decodeIfPresent(CapturePresetMetadataScope.self, forKey: .metadataScope) ?? .document,
@@ -268,6 +281,8 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         try container.encode(kind, forKey: .kind)
         try container.encode(exportSettings, forKey: .exportSettings)
         try container.encode(staticFrontmatter, forKey: .staticFrontmatter)
+        try container.encode(transcriptPropertyName, forKey: .transcriptPropertyName)
+        try container.encode(includeTranscriptInBody, forKey: .includeTranscriptInBody)
         try container.encode(locationPolicy, forKey: .locationPolicy)
         try container.encode(metadataScope, forKey: .metadataScope)
         try container.encode(postProcessingMode, forKey: .postProcessingMode)

@@ -73,6 +73,11 @@ public enum TranscriptCaptureAdapter {
            metadata["type"] == nil {
             metadata["category"] = category
         }
+        // The shared renderer writes this field as an explicitly quoted YAML string.
+        // Do not let static or generated metadata overwrite the mapped text.
+        if let key = TranscriptPropertyMapping.normalizedKey(flow.transcriptPropertyName) {
+            metadata.removeValue(forKey: key)
+        }
         return metadata
     }
 }
