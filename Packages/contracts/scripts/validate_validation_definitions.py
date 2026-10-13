@@ -484,8 +484,15 @@ def validate_run_set(value:dict,build:dict,gates:dict,qualification:dict|None=No
         if rss:
             elapsed=[x["elapsedNanoseconds"] for x in rss["samples"]]; resident=[x["residentBytes"] for x in rss["samples"]]
             if elapsed[0]!=0 or elapsed!=sorted(elapsed) or len(elapsed)!=len(set(elapsed)) or elapsed[-1]>r["durationNanoseconds"]: raise ValidationError("RSS samples are filtered, unordered, or outside run")
-            if any(b-a>rss["sampleIntervalNanoseconds"] for a,b in zip(elapsed,elapsed[1:])): raise ValidationError("RSS sample cadence exceeds declared interval")
-            peak=max([rss["baselineBytes"],*resident]); additional=max(0,peak-rss["baselineBytes"])
+            observed_peak=max([rss["baselineBytes"],*resident])
+            if rss["method"]=="macosMachTaskResidentSizeSampled":
+                if any(b-a>rss["sampleIntervalNanoseconds"] for a,b in zip(elapsed,elapsed[1:])): raise ValidationError("RSS sample cadence exceeds declared interval")
+                peak=observed_peak
+            else:
+                if len(elapsed)!=2 or resident[0]!=rss["baselineBytes"]: raise ValidationError("kernel RSS requires exact baseline/final observations")
+                peak=rss["kernelPeakBytes"]
+                if peak<observed_peak: raise ValidationError("kernel peak is below an observed resident size")
+            additional=max(0,peak-rss["baselineBytes"])
             if rss["peakBytes"]!=peak or rss["additionalBytes"]!=additional or elapsed[-1]!=r["durationNanoseconds"]: raise ValidationError("RSS peak/additional/final sample mismatch")
     for gid,b in bindings.items():
         ids=b["runIDs"]
@@ -1180,7 +1187,7 @@ def validate(root:Path,campaign:Path|None=None,repository_root:Path|None=None,qu
     if campaign: validate_campaign(root,campaign,docs,schemas,repository_root,qualification,external_root,approval_verifier,hosted_identity_verifier)
     print(f"Validation definitions passed: {len(devices)} roles, {len(providers)} providers, {len(cases)} cases, {len(gates)} gates"+("; scoped campaign computed" if campaign else ""))
 
-CANONICAL_HASHES={'devices': 'ecd13c2b779065abe91824bdbc2726c3e1363368fe46558fe694aa571597d8a4', 'providers': 'd0e9a96c63213cbaa13c587e92b6318ae63f88ecd88b7387c0a441c57e0eaed2', 'cases': '6992838ac548ff2cd88a26dacec7f698036ff2c6476d82b0001ace55748c2a98', 'gates': 'f227ffb7119ec4599a46870166b49ce9ed9a30974b3e41db1cb8097e28366559', 'aggregate': 'e99042ec440740050384ae1576c980de7f42a06b96db82d1c5d6d40c2f56ef58', 'evidencePolicy': '8446cf2b15504c7a7b5861e93b5cbbc1477682a8dfb4de8b0c968603caf994fc', 'approvalPolicy': 'c086d7b57f2a832ff6a1d9a8d4acdc0d8d52ffdbf0131a4512fe60b3c6b69e02', 'schemas': 'f147817d0dfb43c1b3de89ba8a5eedffaaca0716a4bbca4f248cc3fd3e66dd51'}
+CANONICAL_HASHES={'devices': 'ecd13c2b779065abe91824bdbc2726c3e1363368fe46558fe694aa571597d8a4', 'providers': 'd0e9a96c63213cbaa13c587e92b6318ae63f88ecd88b7387c0a441c57e0eaed2', 'cases': '6992838ac548ff2cd88a26dacec7f698036ff2c6476d82b0001ace55748c2a98', 'gates': 'f227ffb7119ec4599a46870166b49ce9ed9a30974b3e41db1cb8097e28366559', 'aggregate': 'e99042ec440740050384ae1576c980de7f42a06b96db82d1c5d6d40c2f56ef58', 'evidencePolicy': '8446cf2b15504c7a7b5861e93b5cbbc1477682a8dfb4de8b0c968603caf994fc', 'approvalPolicy': 'c086d7b57f2a832ff6a1d9a8d4acdc0d8d52ffdbf0131a4512fe60b3c6b69e02', 'schemas': '8f36a9defd8c2b74ca1daf75d9abc0045b4c873a6d98e10672bd4c31f2f5a94f'}
 
 def main()->int:
     ap=argparse.ArgumentParser(); ap.add_argument("--contracts-root",type=Path,default=Path(__file__).resolve().parents[1]); ap.add_argument("--campaign-dir",type=Path); ap.add_argument("--repository-root",type=Path); ap.add_argument("--qualification",choices=("repositoryObservation","hostedRun","releaseGate")); ap.add_argument("--external-artifact-root",type=Path)
