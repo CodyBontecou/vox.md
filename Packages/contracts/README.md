@@ -12,6 +12,8 @@ ADR-0013 lifecycle applies. Mirrors must remain byte-identical and cannot claim 
 
 `validation/android-local-capability-evidence.json` binds locally verified Android/Wear fixture and focused UI rows to exact executable assertions and passing gates. Its strict schema and validator reject missing symbols, duplicate or unsorted capability IDs, unsupported or mismatched acceptance kinds, unknown gates, and any mismatch between the evidence registry and ledger acceptance state. UI claims additionally require an instrumented `src/androidTest` source and a passing `connectedDebugAndroidTest` gate. Broader screen-flow, accessibility, account, provider-matrix, physical-device, performance, signing, and release-track evidence cannot be promoted through this local registry.
 
+M2 materialization memory evidence uses macOS Mach’s process-lifetime resident-memory high-water mark, read after the session. Each run starts a fresh process. This conservatively includes pre-session allocations and retains transient peaks without depending on timer scheduling. Baseline and final RSS observations remain explicit, and the additional-RSS limit remains 64 MiB. Historical timer-sampled receipts still require their declared cadence (at most 10 ms); the two measurement methods have distinct schema requirements. The native evidence recipe also verifies peak retention with a touched 64 MiB mapping that is unmapped before its final observation.
+
 ```sh
 python3 Packages/contracts/scripts/convert_capabilities.py --check
 python3 Packages/contracts/scripts/generate_fixtures.py

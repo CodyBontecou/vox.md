@@ -72,6 +72,39 @@
     },
     "rss": {
       "additionalProperties": false,
+      "oneOf": [
+        {
+          "not": {
+            "required": [
+              "kernelPeakBytes"
+            ]
+          },
+          "properties": {
+            "method": {
+              "const": "macosMachTaskResidentSizeSampled"
+            }
+          },
+          "required": [
+            "sampleIntervalNanoseconds"
+          ]
+        },
+        {
+          "not": {
+            "required": [
+              "sampleIntervalNanoseconds"
+            ]
+          },
+          "properties": {
+            "method": {
+              "const": "macosMachTaskResidentSizeHighWater"
+            }
+          },
+          "required": [
+            "kernelPeakBytes",
+            "peakDefinition"
+          ]
+        }
+      ],
       "properties": {
         "additionalBytes": {
           "minimum": 0,
@@ -84,12 +117,22 @@
         "baselineDefinition": {
           "const": "resident bytes immediately before opening the measured production session"
         },
+        "kernelPeakBytes": {
+          "minimum": 1,
+          "type": "integer"
+        },
         "method": {
-          "const": "macosMachTaskResidentSizeSampled"
+          "enum": [
+            "macosMachTaskResidentSizeSampled",
+            "macosMachTaskResidentSizeHighWater"
+          ]
         },
         "peakBytes": {
           "minimum": 1,
           "type": "integer"
+        },
+        "peakDefinition": {
+          "const": "process lifetime resident-memory high-water mark; conservative for the measured session"
         },
         "sampleIntervalNanoseconds": {
           "maximum": 10000000,
@@ -124,7 +167,6 @@
         "method",
         "baselineDefinition",
         "baselineBytes",
-        "sampleIntervalNanoseconds",
         "samples",
         "peakBytes",
         "additionalBytes"
@@ -134,6 +176,16 @@
     "run": {
       "additionalProperties": false,
       "properties": {
+        "controlArtifactPath": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/path"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
         "controlBytes": {
           "maximum": 1048576,
           "minimum": 1,
@@ -144,16 +196,6 @@
         },
         "controlSha256": {
           "$ref": "#/$defs/sha256"
-        },
-        "controlArtifactPath": {
-          "oneOf": [
-            {
-              "$ref": "#/$defs/path"
-            },
-            {
-              "type": "null"
-            }
-          ]
         },
         "drainChunkManifestSha256": {
           "$ref": "#/$defs/sha256"
