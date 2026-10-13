@@ -1025,7 +1025,7 @@ private struct MacCapturePresetEditor: View {
                     } else {
                         Text("Use letters, numbers, underscores, or hyphens for the property name.")
                             .font(.caption)
-                            .foregroundStyle(.red)
+                            .foregroundStyle(MacBrand.orangeText)
                     }
                 } else {
                     Text("Leave empty to keep voice transcripts in the note body.")
