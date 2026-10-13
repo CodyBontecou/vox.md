@@ -240,12 +240,18 @@ public actor CapturePipeline {
                 for: effectiveDestination,
                 attachmentPaths: attachments.attachmentPaths
             )
+            let mappedKey = request.deliveryKind == .meteredVoiceTranscript
+                ? TranscriptPropertyMapping.normalizedKey(request.voxProfile?.transcriptPropertyName ?? "") : nil
+            let propertyOnly = mappedKey != nil && request.voxProfile?.includeTranscriptInBody == false
             let renderedPrefix: String
             let renderedSuffix: String
             if let vaultTemplate {
                 let rendered = vaultTemplateRenderer.render(vaultTemplate, for: request)
                     .trimmingCharacters(in: .newlines)
                 renderedPrefix = rendered.isEmpty ? "" : rendered + "\n\n"
+                renderedSuffix = ""
+            } else if propertyOnly {
+                renderedPrefix = ""
                 renderedSuffix = ""
             } else {
                 renderedPrefix = templateRenderer.render(effectiveDestination.entryPrefix, for: request)
@@ -260,7 +266,8 @@ public actor CapturePipeline {
                 placement: effectiveDestination.placement,
                 entryPrefix: renderedPrefix,
                 entrySuffix: renderedSuffix,
-                frontmatter: request.voxProfile?.metadataScope == .entry ? [:] : request.frontmatter,
+                frontmatter: request.voxProfile?.metadataScope == .entry ? [:] : request.frontmatter.filter { $0.key != mappedKey },
+                replacingFrontmatterKeys: Set(mappedKey.map { [$0] } ?? []),
                 locationMetadata: documentMetadata,
                 retryProtectionEnabled: effectiveDestination.retryProtectionEnabled,
                 destinationRootURL: rootURL,
