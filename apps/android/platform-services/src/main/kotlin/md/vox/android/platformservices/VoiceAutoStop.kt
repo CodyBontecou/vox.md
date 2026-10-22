@@ -169,4 +169,3 @@ internal object RecordingAutoStopSnapshot {
 internal const val MIN_PAUSE_MILLIS = 500L
 internal const val DEFAULT_PAUSE_MILLIS = 750L
 internal const val MAX_PAUSE_MILLIS = 2_000L
-internal const val CONTINUOUS_LISTENING_LIMIT_MILLIS = 10L * 60 * 1_000

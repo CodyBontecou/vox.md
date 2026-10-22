@@ -88,17 +88,6 @@ final class VoiceAutoStopContinuousModeTests: XCTestCase {
         XCTAssertNil(VoiceAutoStopPolicy.endOfSpeechAction(for: stop))
     }
 
-    // MARK: - Session guardrail
-
-    func testContinuousSessionLimitIsTenMinutes() {
-        // Documents the battery/thermal guardrail: continuous dictation keeps
-        // the microphone live, so sessions are bounded at ten wall-clock
-        // minutes before the recorder ends them through the standard stop
-        // path. Ten minutes matches the circular buffer's rolling window
-        // scale while covering a long dictation sitting.
-        XCTAssertEqual(AppConstants.voiceAutoStopContinuousSessionLimit, 600)
-    }
-
     // MARK: - Helpers
 
     private func makeCommand(origin: RecordingCommand.Origin) -> RecordingCommand {

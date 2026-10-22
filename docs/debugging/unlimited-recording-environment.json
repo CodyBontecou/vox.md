@@ -1,0 +1,29 @@
+{
+  "inspection_date": "2026-10-22",
+  "workspace": "/Users/codybontecou/dev/vox.md",
+  "argent_available": true,
+  "is_react_native": false,
+  "is_native_ios": true,
+  "is_native_android": true,
+  "platforms": [
+    "iOS",
+    "iPadOS",
+    "macOS",
+    "watchOS",
+    "Android",
+    "Wear OS"
+  ],
+  "apple_project": "Voxboard.xcodeproj",
+  "android_project": "apps/android",
+  "shared_swift": "Packages/VoxboardShared",
+  "ios_test_scheme": "VoxboardTests",
+  "ios_test_device": "78D1ED06-CC90-4153-A3C3-AC851DE39920",
+  "findings": [
+    "iOS 9:45 safety stop preceded overwrite of a ten-minute rolling audio buffer.",
+    "PersistentRecorder is shared by app, keyboard, shortcuts, controls, Live Activities, and phone-backed Apple Watch recording.",
+    "Android AudioCaptureService enforced a 24-hour cap and ten-minute continuous-listening cap.",
+    "iOS continuous dictation independently enforced a ten-minute wall-clock cap.",
+    "Local macOS and Apple Watch recorders had no matching duration cutoff.",
+    "Physical microphone/background behavior requires hardware validation; tests use the simulator and deterministic audio fixtures."
+  ]
+}

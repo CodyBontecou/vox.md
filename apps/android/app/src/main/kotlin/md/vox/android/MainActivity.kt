@@ -2700,8 +2700,6 @@ private fun recordingDetailUiText(status: RecordingStatus): VoxUiText = when (st
     RecordingPhase.RECORDING -> voxUiText("Audio is staying on this device and is checkpointed every second.")
     RecordingPhase.PAUSED -> voxUiText("The recorded chunks are safe. Resume or stop when you’re ready.")
     RecordingPhase.COMPLETED -> when (status.failureCode) {
-        "safetyLimitReached" -> voxUiText("Recording reached the 24-hour safety limit. All completed audio chunks were saved locally.")
-        "continuousListeningLimitReached" -> voxUiText("Continuous listening reached its 10-minute limit. All segments were saved locally.")
         "voiceAutoStop" -> voxUiText("Voice Auto-Stop detected the end of speech. The recording was saved locally.")
         "segmentBoundaryPersistence" -> voxUiText("A segment boundary could not be saved, so recording stopped with all audio preserved.")
         else -> if (status.chunkCount == 1) {
