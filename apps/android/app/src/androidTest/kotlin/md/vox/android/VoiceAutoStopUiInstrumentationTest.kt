@@ -39,7 +39,7 @@ class VoiceAutoStopUiInstrumentationTest {
         compose.onNode(hasText("Pause", substring = true) and hasClickAction()).performClick()
         compose.onNodeWithText("1.5 seconds").performClick()
         compose.onNodeWithText("Keep Listening").performClick()
-        compose.onNodeWithText("Each detected thought becomes a transcript paragraph. Continuous listening ends after 10 minutes.")
+        compose.onNodeWithText("Each detected thought becomes a transcript paragraph. Continuous listening keeps recording until you stop it.")
             .assertExists()
 
         compose.runOnIdle {

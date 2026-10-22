@@ -432,9 +432,6 @@ final class PersistentRecorder {
     /// re-arms reuse, so a fresh auto-stop coordinator resolves the same
     /// capture path and end-of-speech action as the original arm.
     private var continuousDictationCommand: RecordingCommand?
-    /// Ends the continuous session through the standard stop path when the
-    /// wall-clock budget is spent, even if no further speech ever fires.
-    private var continuousDictationSessionLimitTask: Task<Void, Never>?
     private var liveCaptureRequestId: String?
     private var liveCaptureComposerRequestId: String?
     private var liveCaptureSessionID: UUID?
@@ -456,15 +453,9 @@ final class PersistentRecorder {
     // MARK: - Timers
 
     private var durationTimer: Timer?
-    private var segmentSafetyStopTask: Task<Void, Never>?
     private var listeningHeartbeatTimer: Timer?
     private var commandPollTimer: Timer?
     private var listeningStartedAt: TimeInterval?
-
-    /// The circular buffer retains ten minutes. Finalize before the segment's
-    /// pre-roll can be overwritten so an accidentally abandoned recording still
-    /// produces a transcript instead of running forever and failing on Stop.
-    private let maximumSegmentDuration: TimeInterval = 9 * 60 + 45
 
     #if DEBUG
     /// Supplies a stable, microphone-free state for localized simulator screenshots.
@@ -702,7 +693,6 @@ final class PersistentRecorder {
 
                 if let floatData = outputBuffer.floatChannelData?[0], outputBuffer.frameLength > 0 {
                     let ptr = UnsafeBufferPointer(start: floatData, count: Int(outputBuffer.frameLength))
-                    self.circularBuffer.append(ptr)
                     self.appendToSegmentJournal(ptr)
                     self.writeAudioLevelIfNeeded(floatData, frameCount: Int(outputBuffer.frameLength))
                 }
@@ -710,7 +700,6 @@ final class PersistentRecorder {
                 // Already 16kHz mono — direct append
                 if let floatData = buffer.floatChannelData?[0], buffer.frameLength > 0 {
                     let ptr = UnsafeBufferPointer(start: floatData, count: Int(buffer.frameLength))
-                    self.circularBuffer.append(ptr)
                     self.appendToSegmentJournal(ptr)
                     self.writeAudioLevelIfNeeded(floatData, frameCount: Int(buffer.frameLength))
                 }
@@ -1143,10 +1132,12 @@ final class PersistentRecorder {
     /// recording.
     func pauseInAppSegment() {
         guard isAppRecordingSegmentActive, !isSegmentPaused else { return }
-        let pauseStart = circularBuffer.totalSamplesWritten
+        let pauseStart = segmentJournalLock.withLock {
+            journalPaused = true
+            return circularBuffer.totalSamplesWritten
+        }
         segmentPauseStartIndex = pauseStart
         segmentElapsedBeforePause += Date().timeIntervalSince1970 - segmentStartedAt
-        segmentJournalLock.withLock { journalPaused = true }
         isSegmentPaused = true
         segmentDuration = segmentElapsedBeforePause
         TranscriptionIPC.clearAudioLevel()
@@ -1160,13 +1151,15 @@ final class PersistentRecorder {
     func resumeInAppSegment() {
         guard isAppRecordingSegmentActive, isSegmentPaused else { return }
         let pauseStart = segmentPauseStartIndex
-        let resumeIndex = circularBuffer.totalSamplesWritten
+        let resumeIndex = segmentJournalLock.withLock {
+            journalPaused = false
+            return circularBuffer.totalSamplesWritten
+        }
         if let pauseStart, resumeIndex > pauseStart {
             segmentPausedRanges.append((pauseStart, resumeIndex))
         }
         segmentPauseStartIndex = nil
         segmentStartedAt = Date().timeIntervalSince1970
-        segmentJournalLock.withLock { journalPaused = false }
         isSegmentPaused = false
         setLiveConsumersPaused(false)
         WatchRecordingController.shared.publishState()
@@ -1639,14 +1632,18 @@ final class PersistentRecorder {
         log.log("[PersistentRecorder] ✅ Segment started at buffer index \(segmentStartIndex) (pre-roll: \(preRollSamples) samples)")
     }
 
-    /// Extract the segment's audio from the circular buffer, skipping every
-    /// paused range. With no pauses this is the original contiguous read.
-    private func extractSegmentSamples(endIndex: Int64) -> [Float]? {
-        Self.extractSegmentSamples(
+    /// Extract recorded audio, falling back to the durable journal when the
+    /// rolling preview buffer no longer retains the complete segment.
+    private func extractSegmentSamples(endIndex: Int64, journalURL: URL? = nil) -> [Float]? {
+        let activeURL = segmentJournalLock.withLock { segmentJournalWriter?.url }
+        // Drain accepted microphone writes before reading the journal snapshot.
+        segmentJournalWriteQueue.sync {}
+        return Self.extractSegmentSamples(
             from: circularBuffer,
             startIndex: segmentStartIndex,
             endIndex: endIndex,
-            pausedRanges: segmentPausedRanges
+            pausedRanges: segmentPausedRanges,
+            journalURL: journalURL ?? activeURL
         )
     }
 
@@ -1656,27 +1653,16 @@ final class PersistentRecorder {
         from buffer: CircularAudioBuffer,
         startIndex: Int64,
         endIndex: Int64,
-        pausedRanges: [(start: Int64, end: Int64)]
+        pausedRanges: [(start: Int64, end: Int64)],
+        journalURL: URL? = nil
     ) -> [Float]? {
-        guard !pausedRanges.isEmpty else {
-            return buffer.extract(from: startIndex, to: endIndex)
-        }
-        var samples: [Float] = []
-        var cursor = startIndex
-        for (pauseStart, pauseEnd) in pausedRanges {
-            if pauseStart > cursor {
-                guard let chunk = buffer.extract(from: cursor, to: pauseStart) else { return nil }
-                samples.append(contentsOf: chunk)
-            }
-            // Advance past the paused span — also when the segment start
-            // (pre-roll) landed inside the pause.
-            cursor = max(cursor, pauseEnd)
-        }
-        if cursor < endIndex {
-            guard let tail = buffer.extract(from: cursor, to: endIndex) else { return nil }
-            samples.append(contentsOf: tail)
-        }
-        return samples
+        RecordingAudioExtraction.samples(
+            from: buffer,
+            startIndex: startIndex,
+            endIndex: endIndex,
+            pausedRanges: pausedRanges,
+            journalURL: journalURL
+        )
     }
 
     private func startLiveTranscriptionIfSupported(
@@ -1869,36 +1855,8 @@ final class PersistentRecorder {
               segmentRequestId == requestId else { return }
         continuousDictationCommand = command
         guard continuousDictationSession == nil else { return }
-        let session = ContinuousDictationSession(startedAt: Date().timeIntervalSince1970)
-        continuousDictationSession = session
-        armContinuousDictationSessionLimit(requestId: requestId, limit: session.sessionLimit)
-        log.log("[PersistentRecorder] 🔁 Continuous dictation session armed (limit \(Int(session.sessionLimit / 60)) min)")
-    }
-
-    private func armContinuousDictationSessionLimit(
-        requestId: String,
-        limit: TimeInterval
-    ) {
-        continuousDictationSessionLimitTask?.cancel()
-        continuousDictationSessionLimitTask = Task { @MainActor [weak self] in
-            try? await Task.sleep(for: .seconds(limit))
-            guard !Task.isCancelled,
-                  let self,
-                  self.isSegmentActive,
-                  self.segmentRequestId == requestId else { return }
-            self.endContinuousDictationSessionAtLimit(requestId: requestId)
-        }
-    }
-
-    /// End a continuous dictation session at its wall-clock budget through the
-    /// standard stop path, so the in-progress span still extracts and delivers.
-    private func endContinuousDictationSessionAtLimit(requestId: String) {
-        log.log("[PersistentRecorder] ⏹ Continuous dictation reached the session limit — ending gracefully")
-        lastError = String(localized: "Continuous listening reached the \(Int(AppConstants.voiceAutoStopContinuousSessionLimit / 60))-minute limit and was stopped automatically.")
-        handleStopSegment(
-            RecordingCommand(requestId: requestId, action: .stopSegment),
-            trigger: .endOfSpeech
-        )
+        continuousDictationSession = ContinuousDictationSession()
+        log.log("[PersistentRecorder] 🔁 Continuous dictation session armed")
     }
 
     private func cancelEndOfSpeechDetection() {
@@ -1923,7 +1881,7 @@ final class PersistentRecorder {
         guard isSegmentActive, segmentRequestId == requestId else { return }
         // Manual pauses never commit: paused dictation keeps accumulating
         // into the next committed span once resumed (deliberate pause
-        // behavior — see ContinuousDictationSession.canCommitSegment).
+        // behavior).
         guard !isSegmentPaused else { return }
         guard let command = continuousDictationCommand,
               let session = continuousDictationSession,
@@ -1939,15 +1897,10 @@ final class PersistentRecorder {
             return
         }
 
-        guard session.canCommitSegment(isPaused: false, now: Date().timeIntervalSince1970) else {
-            endContinuousDictationSessionAtLimit(requestId: requestId)
-            return
-        }
-
         let endIndex = circularBuffer.totalSamplesWritten
         guard let samples = extractSegmentSamples(endIndex: endIndex) else {
-            // The rolling buffer overran the span — the audio is unrecoverable,
-            // so end the session through the standard stop path.
+            // Neither the preview buffer nor the durable journal could provide
+            // the full span. End through the standard recovery path.
             log.log("[PersistentRecorder] ❌ Continuous span audio was overwritten — ending session")
             handleStopSegment(
                 RecordingCommand(requestId: requestId, action: .stopSegment),
@@ -2062,7 +2015,7 @@ final class PersistentRecorder {
     /// re-anchor the segment to the commit boundary, roll the durable journal,
     /// restart live transcription from the cursor, re-arm end-of-speech
     /// detection with a fresh VAD session, and re-anchor the duration clock
-    /// and its rolling-buffer safety stop to the new span. The microphone and
+    /// to the new span. The microphone and
     /// the segment identity stay untouched.
     private func rearmContinuousDictation(
         command: RecordingCommand,
@@ -2301,13 +2254,15 @@ final class PersistentRecorder {
 
         stopDurationTimer()
         isSegmentActive = false
+        // Fix the stop cursor before detaching/draining the journal. The audio
+        // tap can keep filling the preview ring while disk writes finish.
+        let endIndex = segmentJournalLock.withLock { circularBuffer.totalSamplesWritten }
         let segmentJournalURL = finalizeSegmentJournal()
         cancelEndOfSpeechDetection()
         TranscriptionIPC.clearAudioLevel()
 
         // Close any in-flight pause so the final extraction and the live
         // transcription finish both exclude audio captured while paused.
-        let endIndex = circularBuffer.totalSamplesWritten
         let pausedTailExclusionEnd: Int64?
         if isSegmentPaused {
             if let pauseStart = segmentPauseStartIndex, endIndex > pauseStart {
@@ -2321,7 +2276,7 @@ final class PersistentRecorder {
         }
 
         // Extract audio from the circular buffer, excluding paused ranges
-        guard let samples = extractSegmentSamples(endIndex: endIndex) else {
+        guard let samples = extractSegmentSamples(endIndex: endIndex, journalURL: segmentJournalURL) else {
             // Two distinct failure modes land here. Distinguish them so the
             // log is actionable and we only self-heal when appropriate.
             if endIndex == segmentStartIndex {
@@ -2742,8 +2697,6 @@ final class PersistentRecorder {
         cancelEndOfSpeechDetection()
         continuousDictationSession = nil
         continuousDictationCommand = nil
-        continuousDictationSessionLimitTask?.cancel()
-        continuousDictationSessionLimitTask = nil
         segmentRequestId = nil
         segmentModelId = nil
         segmentLanguage = nil
@@ -2805,16 +2758,31 @@ final class PersistentRecorder {
             .appendingPathExtension("wav")
         do {
             let writer = try IncrementalWAVWriter(url: url, sampleRate: whisperSampleRate)
-            segmentJournalLock.withLock { segmentJournalWriter = writer }
+            segmentJournalLock.withLock {
+                // Serialize pre-roll seeding with microphone appends. This also
+                // captures audio arriving while a continuous span was delivered.
+                let end = circularBuffer.totalSamplesWritten
+                let seed = Self.extractSegmentSamples(
+                    from: circularBuffer, startIndex: segmentStartIndex,
+                    endIndex: end, pausedRanges: segmentPausedRanges
+                ) ?? []
+                segmentJournalWriteQueue.async {
+                    do { try writer.append(samples: seed) }
+                    catch { log.log("[PersistentRecorder] Could not seed recording journal: \(error)") }
+                }
+                segmentJournalWriter = writer
+            }
         } catch {
             log.log("[PersistentRecorder] ⚠️ Could not start durable recording journal: \(error.localizedDescription)")
         }
     }
 
     private func appendToSegmentJournal(_ samples: UnsafeBufferPointer<Float>) {
-        let ownedSamples = Array(samples)
         segmentJournalLock.withLock {
+            // Keep the ring cursor and journal seed boundary in the same lock.
+            circularBuffer.append(samples)
             guard let writer = segmentJournalWriter, !journalPaused else { return }
+            let ownedSamples = Array(samples)
             segmentJournalWriteQueue.async {
                 do {
                     try writer.append(samples: ownedSamples)
@@ -4176,30 +4144,11 @@ final class PersistentRecorder {
                     : self.segmentElapsedBeforePause + Date().timeIntervalSince1970 - startedAt
             }
         }
-
-        guard let requestId = segmentRequestId else { return }
-        let maximumSegmentDuration = maximumSegmentDuration
-        segmentSafetyStopTask = Task { @MainActor [weak self] in
-            try? await Task.sleep(for: .seconds(maximumSegmentDuration))
-            guard !Task.isCancelled,
-                  let self,
-                  self.isSegmentActive,
-                  self.segmentRequestId == requestId else { return }
-
-            log.log("[PersistentRecorder] ⏹ Auto-stopping at the circular-buffer safety limit")
-            self.lastError = String(localized: "Recording reached the 9:45 safety limit and was stopped automatically.")
-            self.handleStopSegment(RecordingCommand(
-                requestId: requestId,
-                action: .stopSegment
-            ))
-        }
     }
 
     private func stopDurationTimer() {
         durationTimer?.invalidate()
         durationTimer = nil
-        segmentSafetyStopTask?.cancel()
-        segmentSafetyStopTask = nil
     }
 
     // MARK: - Helpers

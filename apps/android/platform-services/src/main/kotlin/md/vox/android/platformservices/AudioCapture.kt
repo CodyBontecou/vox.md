@@ -40,11 +40,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import md.vox.android.capturedomain.CapturePreset
 
-internal const val MAX_RECORDING_DURATION_MILLIS = 24L * 60 * 60 * 1_000
-
-internal fun reachedRecordingSafetyLimit(elapsedMillis: Long): Boolean =
-    elapsedMillis >= MAX_RECORDING_DURATION_MILLIS
-
 internal fun recordingCreatedAtEpochMillis(context: Context, sessionID: String): Long? =
     RecordingManifestStore.all(context)
         .firstOrNull { it.sessionID == sessionID }
@@ -445,15 +440,6 @@ class AudioCaptureService : Service() {
                     RecordingManifestStore.write(this, sessionStatus(RecordingPhase.RECORDING, elapsed, level))
                     updateNotification(sessionStatus(RecordingPhase.RECORDING, elapsed, level))
                     lastManifestAt = now
-                }
-                if (current.autoStopSettings.endAction == VoiceAutoStopEndAction.SAVE_SEGMENT_AND_CONTINUE &&
-                    elapsed >= CONTINUOUS_LISTENING_LIMIT_MILLIS
-                ) {
-                    desiredPhase.compareAndSet(RecordingPhase.RECORDING, RecordingPhase.COMPLETED)
-                    completionCode = "continuousListeningLimitReached"
-                } else if (reachedRecordingSafetyLimit(elapsed)) {
-                    desiredPhase.compareAndSet(RecordingPhase.RECORDING, RecordingPhase.COMPLETED)
-                    completionCode = "safetyLimitReached"
                 }
             }
         } catch (_: SecurityException) {

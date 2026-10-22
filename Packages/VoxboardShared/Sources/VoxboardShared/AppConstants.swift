@@ -48,14 +48,6 @@ public enum AppConstants: Sendable {
     public static let maximumVoiceAutoStopPauseDuration: TimeInterval = 2.0
     public static let voiceAutoStopCapturePathKeyPrefix = "voiceAutoStop.capturePath"
     public static let voiceAutoStopContinuousModeKeyPrefix = "voiceAutoStop.continuousMode"
-    /// Continuous dictation keeps the microphone open across committed
-    /// segments. This wall-clock budget bounds battery drain and thermal
-    /// pressure from a live mic that end-of-speech no longer turns off; the
-    /// recorder ends the session through the standard stop path when the
-    /// limit is reached. Ten minutes matches the circular buffer's rolling
-    /// window scale while comfortably covering a long dictation sitting.
-    public static let voiceAutoStopContinuousSessionLimit: TimeInterval = 10 * 60
-
     #if DEBUG
     public static let debugSharedContainerOverrideEnvironmentKey =
         "VOXBOARD_SHARED_CONTAINER_OVERRIDE"

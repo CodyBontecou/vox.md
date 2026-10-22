@@ -984,7 +984,7 @@ internal fun VoiceAutoStopCard(
                     ) { Text(voxString("Keep Listening")) }
                 }
                 if (settings.endAction == VoiceAutoStopEndAction.SAVE_SEGMENT_AND_CONTINUE) {
-                    Text(voxString("Each detected thought becomes a transcript paragraph. Continuous listening ends after 10 minutes."),
+                    Text(voxString("Each detected thought becomes a transcript paragraph. Continuous listening keeps recording until you stop it."),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

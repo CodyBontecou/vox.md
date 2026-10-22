@@ -17,7 +17,7 @@ internal class RoomActivityStatsLedger(private val database: CaptureDatabase) {
     }
 
     fun recordRecording(sessionID: String, completedAtEpochMillis: Long, durationMillis: Long): Boolean {
-        if (!UUID_PATTERN.matches(sessionID) || completedAtEpochMillis < 0 || durationMillis !in 0..MAX_RECORDING_DURATION_MILLIS) return false
+        if (!UUID_PATTERN.matches(sessionID) || completedAtEpochMillis < 0 || durationMillis < 0) return false
         val inserted = dao.insertRecording(RecordingActivityEntity(sessionID, completedAtEpochMillis, durationMillis))
         return inserted != -1L || dao.allRecordings().any { it.sessionID == sessionID }
     }
@@ -48,6 +48,5 @@ internal class RoomActivityStatsLedger(private val database: CaptureDatabase) {
 
     private companion object {
         val CAPTURE_SOURCES = setOf("app", "share", "keyboard", "widget", "shortcut", "watch", "wear")
-        const val MAX_RECORDING_DURATION_MILLIS = 24L * 60 * 60 * 1_000
     }
 }

@@ -5,48 +5,10 @@ import VoxboardShared
 @MainActor
 final class ContinuousDictationSessionTests: XCTestCase {
 
-    // MARK: - Session duration cap (battery/thermal guardrail)
-
-    func testDefaultSessionLimitMatchesDocumentedGuardrail() {
-        let session = ContinuousDictationSession(startedAt: 1_000)
-
-        XCTAssertEqual(session.sessionLimit, 600)
-        XCTAssertEqual(
-            session.sessionLimit,
-            AppConstants.voiceAutoStopContinuousSessionLimit
-        )
-    }
-
-    func testSessionStaysCommittableUntilTheLimitAndEndsAtIt() {
-        let session = ContinuousDictationSession(startedAt: 1_000, sessionLimit: 600)
-
-        XCTAssertTrue(session.canCommitSegment(isPaused: false, now: 1_599.9))
-        XCTAssertFalse(session.hasReachedSessionLimit(now: 1_599.9))
-
-        XCTAssertFalse(session.canCommitSegment(isPaused: false, now: 1_600))
-        XCTAssertTrue(session.hasReachedSessionLimit(now: 1_600))
-        // Beyond the budget the session stays terminal — a late commit cannot
-        // resurrect it.
-        XCTAssertFalse(session.canCommitSegment(isPaused: false, now: 2_000))
-    }
-
-    // MARK: - Manual pause never commits
-
-    func testManualPauseNeverCommitsMidSession() {
-        let session = ContinuousDictationSession(startedAt: 0, sessionLimit: 600)
-
-        XCTAssertFalse(
-            session.canCommitSegment(isPaused: true, now: 10),
-            "paused dictation must accumulate into the next span instead of committing"
-        )
-        // Once resumed, commits are allowed again — the session survived.
-        XCTAssertTrue(session.canCommitSegment(isPaused: false, now: 10))
-    }
-
     // MARK: - Per-segment delivery identities
 
     func testDeliveryRequestIDsAdvancePerCommittedSegment() {
-        let session = ContinuousDictationSession(startedAt: 0)
+        let session = ContinuousDictationSession()
 
         XCTAssertEqual(session.nextDeliveryRequestID(for: "inapp-r"), "inapp-r-c1")
         // The identity is stable until the segment is actually staged, so a

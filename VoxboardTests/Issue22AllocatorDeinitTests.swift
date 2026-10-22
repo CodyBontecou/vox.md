@@ -57,11 +57,9 @@ final class Issue22AllocatorDeinitTests: XCTestCase {
                 XCTAssertTrue(withUnsafeCurrentTask { $0 == nil })
                 AllocatorProbeLocal.$value.withValue("production-thread-bound") {
                     for _ in 0..<64 {
-                        var session: ContinuousDictationSession? = ContinuousDictationSession(
-                            startedAt: 1_000
-                        )
+                        var session: ContinuousDictationSession? = ContinuousDictationSession()
                         weak var released = session
-                        XCTAssertEqual(session?.sessionLimit, 600)
+                        XCTAssertEqual(session?.committedSegmentCount, 0)
                         session = nil
                         XCTAssertNil(released)
                         XCTAssertEqual(AllocatorProbeLocal.value, "production-thread-bound")

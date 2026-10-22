@@ -478,7 +478,7 @@ struct ModelTabView: View {
                             .disabled(!isDownloaded || !voiceAutoStopEnabled)
 
                         Text(isDownloaded
-                            ? "Choose exactly where auto-stop runs. Every enabled path works with Automatic, Whisper, and Parakeet. Pause timing is approximate. Keep Listening saves each finished thought as its own segment and stays open for up to \(Int(AppConstants.voiceAutoStopContinuousSessionLimit / 60)) minutes per session."
+                            ? "Choose exactly where auto-stop runs. Every enabled path works with Automatic, Whisper, and Parakeet. Pause timing is approximate. Keep Listening saves each finished thought as its own segment and keeps recording until you stop it."
                             : "Until this companion is downloaded, live recordings keep using manual stop.")
                             .font(Geist.caption())
                             .foregroundStyle(Geist.muted)

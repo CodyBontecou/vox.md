@@ -159,3 +159,70 @@ public final class CircularAudioBuffer: @unchecked Sendable {
         samplesWritten = 0
     }
 }
+
+/// Reads a complete recording even after the rolling preview buffer wraps.
+/// The journal contains pre-roll and recorded audio only; paused samples have
+/// already been excluded by the recorder's journal gate.
+public enum RecordingAudioExtraction {
+    public static func samples(
+        from buffer: CircularAudioBuffer,
+        startIndex: Int64,
+        endIndex: Int64,
+        pausedRanges: [(start: Int64, end: Int64)],
+        journalURL: URL? = nil
+    ) -> [Float]? {
+        guard endIndex > startIndex else { return nil }
+        var spans: [(Int64, Int64)] = []
+        var cursor = startIndex
+        for (pauseStart, pauseEnd) in pausedRanges {
+            let stop = min(endIndex, pauseStart)
+            if stop > cursor { spans.append((cursor, stop)) }
+            cursor = max(cursor, min(endIndex, pauseEnd))
+        }
+        if cursor < endIndex { spans.append((cursor, endIndex)) }
+
+        var samples: [Float] = []
+        for (start, end) in spans {
+            guard let chunk = buffer.extract(from: start, to: end) else {
+                guard let journalURL else { return nil }
+                let count = spans.reduce(Int64(0)) { $0 + $1.1 - $1.0 }
+                return try? readJournal(journalURL, sampleCount: Int(count))
+            }
+            samples.append(contentsOf: chunk)
+        }
+        return samples
+    }
+
+    /// Reads only the requested prefix of our 16-bit mono journal. A live
+    /// continuous recording may already have appended beyond the commit cursor.
+    private static func readJournal(_ url: URL, sampleCount: Int) throws -> [Float] {
+        let file = try FileHandle(forReadingFrom: url)
+        defer { try? file.close() }
+        let size = try file.seekToEnd()
+        guard size >= 44 + UInt64(sampleCount) * 2 else {
+            // Never deliver a truncated journal as a successful full recording.
+            throw CocoaError(.fileReadCorruptFile)
+        }
+        try file.seek(toOffset: 0)
+        let header = try file.read(upToCount: 44) ?? Data()
+        guard header.count == 44,
+              String(decoding: header[0..<4], as: UTF8.self) == "RIFF",
+              String(decoding: header[8..<12], as: UTF8.self) == "WAVE",
+              String(decoding: header[36..<40], as: UTF8.self) == "data",
+              header[20] == 1, header[22] == 1, header[34] == 16 else {
+            throw CocoaError(.fileReadCorruptFile)
+        }
+        var result: [Float] = []
+        result.reserveCapacity(sampleCount)
+        while result.count < sampleCount {
+            let byteCount = min(32_768, sampleCount - result.count) * 2
+            let data = try file.read(upToCount: byteCount) ?? Data()
+            guard data.count == byteCount else { throw CocoaError(.fileReadCorruptFile) }
+            for offset in stride(from: 0, to: data.count, by: 2) {
+                let bits = UInt16(data[offset]) | UInt16(data[offset + 1]) << 8
+                result.append(Float(Int16(bitPattern: bits)) / 32_767)
+            }
+        }
+        return result
+    }
+}

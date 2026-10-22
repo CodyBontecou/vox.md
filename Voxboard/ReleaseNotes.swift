@@ -66,7 +66,7 @@ enum VoxboardReleaseNotes {
                         .init(
                             symbolSystemName: "waveform.circle.badge.plus",
                             title: "Continuous dictation",
-                            description: "Turn on “Save Segment & Keep Listening” and Vox.md commits each finished thought as its own segment, then keeps the microphone open for the next one — no more re-pressing the mic mid-flow. Sessions wrap up gracefully after ten minutes to protect battery."
+                            description: "Turn on “Save Segment & Keep Listening” and Vox.md commits each finished thought as its own segment, then keeps the microphone open for the next one — no more re-pressing the mic mid-flow. Recording continues until you stop it."
                         )
                     ]
                 )
