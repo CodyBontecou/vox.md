@@ -297,11 +297,6 @@ enum VoxboardReleaseNotes {
                             symbolSystemName: "applewatch",
                             title: "Clearer Watch upgrades",
                             description: "Apple Watch recordings now explain when free transcription time has been used and provide a direct path to unlock unlimited transcription."
-                        ),
-                        .init(
-                            symbolSystemName: "lock.shield",
-                            title: "Private by design",
-                            description: "Stats update as you capture while keeping captured content, filenames, and destinations out of analytics."
                         )
                     ]
                 )
