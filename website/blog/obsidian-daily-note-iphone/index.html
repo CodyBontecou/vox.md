@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capture into an Obsidian Daily Note from iPhone — Vox.md</title>
+  <meta name="description" content="Set up Vox.md to append text and on-device voice transcripts to an Obsidian daily note, choose a heading, verify Markdown output, and recover failed deliveries.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://vox.isolated.tech/blog/obsidian-daily-note-iphone/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Capture into an Obsidian Daily Note from iPhone">
+  <meta property="og:description" content="Set up Vox.md to append text and on-device voice transcripts to an Obsidian daily note, choose a heading, verify Markdown output, and recover failed deliveries.">
+  <meta property="og:url" content="https://vox.isolated.tech/blog/obsidian-daily-note-iphone/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-10-25">
+  <meta property="article:modified_time" content="2026-10-25">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../../favicon.ico" sizes="any">
+  <link rel="stylesheet" href="../../geist.css">
+  <style>.daily-note-shot { width: min(100%, 320px); margin: 32px auto; }</style>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Capture into an Obsidian Daily Note from iPhone", "description": "Set up Vox.md to append text and on-device voice transcripts to an Obsidian daily note, choose a heading, verify Markdown output, and recover failed deliveries.", "datePublished": "2026-10-25", "dateModified": "2026-10-25", "author": {"@type": "Person", "name": "Cody Bontecou"}, "mainEntityOfPage": "https://vox.isolated.tech/blog/obsidian-daily-note-iphone/"}</script>
+</head>
+<body>
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="../../index.html" class="logo" aria-label="Vox.md home">
+      <img class="logo-mark" src="../../app-icon.png" alt="" width="32" height="32">
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html#how">How It Works</a></li>
+      <li><a href="../../docs/">Docs</a></li>
+      <li><a href="../" aria-current="page">Blog</a></li>
+      <li><a href="../../privacy.html">Privacy</a></li>
+      <li><a href="../../terms.html">Terms</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener">Download Vox.md</a>
+  </div>
+</nav>
+
+
+<header class="hero"><div class="container"><div class="hero-inner"><div>
+  <div class="eyebrow">Vox.md · Obsidian · iPhone</div>
+  <h1 class="hero-title">Capture into an Obsidian Daily Note from iPhone</h1>
+  <p class="hero-subtitle">Vox.md sends text, links, scans, photos, and on-device voice transcripts into an Obsidian vault or Markdown folder. Set up one Capture Preset to append entries to a daily note under a chosen heading.</p>
+  <p>By Cody Bontecou · October 25, 2026</p>
+</div><aside class="meta-card" aria-label="Example capture route"><div class="meta-label">Example route</div><dl><div><dt>Preset</dt><dd>Daily Inbox</dd></div><div><dt>Note</dt><dd>Journal/{period}.md</dd></div><div><dt>Heading</dt><dd>Inbox · Level 2</dd></div></dl></aside></div></div></header>
+<main><article><div class="article-container article-body">
+  <h2>Before you start</h2>
+  <p>Install Vox.md and open your vault in Obsidian on the same iPhone. Identify that vault's folder in Files. No Obsidian plugin or Vox.md account is required. This guide covers the iPhone workflow; file-provider availability and app labels can vary.</p>
+  <h2>1. Create a daily-note Capture Preset</h2>
+  <ol>
+    <li>Open Settings → Capture Presets in Vox.md. Create a preset called Daily Inbox.</li>
+    <li>For a first test, choose Keep Original and leave typed-text processing off. This makes it easier to compare the text you send with the saved note.</li>
+    <li>Set up the destination and select the folder of the vault you opened in Obsidian.</li>
+    <li>Choose Rolling Note with a daily period. Use a path such as <code>Journal/{period}.md</code>, or match your vault's actual daily-note folder and naming convention.</li>
+    <li>Choose heading placement, enter Inbox, and set the heading level to 2. Use bottom placement instead if you do not want a heading.</li>
+  </ol>
+  <p>See <a href="../../docs/#destinations">destination options</a> and <a href="../../docs/#placement-templates">placement rules</a>. Existing Note is for one fixed file; Rolling Note follows the selected period.</p>
+  <figure class="screenshot-item daily-note-shot"><div class="screenshot-frame"><img src="../../screenshots/01-route-heading-light.png" alt="Vox.md destination editor with rolling-note and heading-placement controls" width="1206" height="2622" loading="lazy"></div><figcaption>Choose a rolling daily note and heading placement. Labels may vary by app version.</figcaption></figure>
+  <h2>2. Send one test and inspect the file</h2>
+  <p>Select Daily Inbox in Quick Capture, type <em>Book dentist appointment</em>, then tap Send. Wait for Capture Sent. In Obsidian, open the note for that day and check the heading and entry. Verify the folder in Files too if you have similarly named vaults.</p>
+  <p>This illustrative output uses a synthetic capture and a daily note dated October 25. Your template, metadata, and placement settings determine the exact file contents.</p>
+  <pre class="docs-code-block"><code># October 25
+
+## Inbox
+Book dentist appointment</code></pre>
+  <p>The example path is <code>Journal/2026-10-25.md</code>. Match the preview and saved filename to your own daily-note convention rather than creating a second daily-note series by accident.</p>
+  <h2>3. Add voice after text delivery works</h2>
+  <p>Record a short voice capture using the same preset. Transcription runs on the device. A local model may need downloading before first use; Apple Speech availability depends on the device, system, and language. Check the transcript and destination before relying on unattended capture. See <a href="../../docs/#models">models and transcription</a>.</p>
+  <p>Then add the <a href="../../docs/#system-integrations">Share Sheet, widgets, or Shortcuts</a> to the workflow. Keep one verified destination as the starting point.</p>
+  <h2>If a capture does not arrive</h2>
+  <ul>
+    <li>Check the selected preset and any one-capture destination override.</li>
+    <li>If the folder moved or access expired, select it again. Make sure your file provider is available.</li>
+    <li>Review History for queued or failed work and use its recovery options after fixing the destination. Repeatedly sending a new capture can create separate entries.</li>
+    <li>If transcription fails, check that the selected model is downloaded and appropriate for the language.</li>
+  </ul>
+  <p><a href="../../docs/#troubleshooting">Troubleshooting reference</a> · <a href="../../docs/#history-settings">History, limits, and purchases</a> · <a href="../../privacy.html">Privacy details</a></p>
+  <p>Vox.md writes files to the destination you choose. If that vault syncs through iCloud or another service, its copies follow that service's settings. Content reviewed against the product documentation on October 25, 2026.</p>
+  <p><a href="https://apps.apple.com/us/app/vox-md-quick-capture-notes/id6758967337">Get Vox.md on the App Store</a> or <a href="../../docs/">read the complete documentation</a>.</p>
+</div></article></main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../docs/">Docs</a></li>
+        <li><a href="../" aria-current="page">Blog</a></li>
+        <li><a href="../../privacy.html">Privacy</a></li>
+        <li><a href="../../terms.html">Terms</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Support</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Quick capture for local notes · No content uploads.</div>
+    </div>
+  </div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
