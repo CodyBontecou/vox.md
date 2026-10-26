@@ -44,7 +44,11 @@ def build(destination: Path) -> None:
             documents.append({'title': title, 'url': 'https://vox.isolated.tech' + canonical,
                               'description': description, 'markdownUrl': 'https://vox.isolated.tech' + canonical})
         markdown_path = '/' + relative[:-5] + '.md'
-        page.with_suffix('.md').write_text(parser.markdown())
+        markdown = parser.markdown()
+        if not parser.has_title:
+            # Some article layouts put the document heading before <main>.
+            markdown = '# ' + title + '\n\n' + markdown
+        page.with_suffix('.md').write_text(markdown)
         for alias in {route, canonical, route[:-5]}:
             markdown_routes[alias] = markdown_path
         html, count = re.subn(

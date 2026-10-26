@@ -10,6 +10,7 @@ class MarkdownDocument(HTMLParser):
         self.base_url = base_url
         self.parts = []
         self.in_main = False
+        self.has_title = False
         self.skip_depth = 0
         self.links = []
         self.list_depth = 0
@@ -31,6 +32,8 @@ class MarkdownDocument(HTMLParser):
         if tag in {'section', 'div', 'p', 'figure', 'blockquote', 'details'}:
             self.parts.append('\n\n')
         elif re.fullmatch(r'h[1-6]', tag):
+            if tag == 'h1':
+                self.has_title = True
             self.parts.append('\n\n' + '#' * int(tag[1]) + ' ')
         elif tag in {'ul', 'ol'}:
             self.list_depth += 1

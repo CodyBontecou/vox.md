@@ -7,7 +7,7 @@ import { resolve } from 'node:path';
 const base = (process.argv[2] ?? 'https://vox.isolated.tech').replace(/\/$/, '');
 const output = resolve(process.argv[3] ?? 'output/lighthouse');
 const routes = ['/', '/docs/', '/docs/location/', '/blog/',
-  '/blog/best-voice-to-text-keyboard-iphone/', '/privacy', '/terms', '/about', '/contact', '/developers'];
+  '/blog/best-voice-to-text-keyboard-iphone/', '/blog/obsidian-daily-note-iphone/', '/privacy', '/terms', '/about', '/contact', '/developers'];
 mkdirSync(output, { recursive: true });
 const results = [];
 let failed = false;

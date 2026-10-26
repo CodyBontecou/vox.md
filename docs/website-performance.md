@@ -22,7 +22,7 @@ Run Lighthouse 13.5.0 with its default mobile simulation and desktop preset:
 node scripts/audit-website.mjs
 ```
 
-The audit checks all ten public pages sequentially in both modes. It saves HTML
+The audit checks all public pages sequentially in both modes. It saves HTML
 and JSON reports under `output/lighthouse/`, prints category scores, and exits
 unsuccessfully if any category scores below 100. Optional arguments override the
 base URL and report directory. Timing scores can vary between runs; inspect the
