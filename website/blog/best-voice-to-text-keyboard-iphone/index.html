@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Best Voice-to-Text Keyboard for iPhone — Vox.md</title>
   <meta name="description" content="A practical guide to choosing the best iPhone voice-to-text keyboard for private dictation, transparent Full Access setup, local transcription, and typing directly into any app.">
@@ -13,13 +14,13 @@
   <meta property="og:title" content="Best Voice-to-Text Keyboard for iPhone">
   <meta property="og:description" content="What to look for in an iPhone dictation keyboard: privacy, keyboard access, local transcription, and practical everyday workflows.">
   <meta property="og:url" content="https://vox.isolated.tech/blog/best-voice-to-text-keyboard-iphone/">
-  <meta property="og:image" content="https://vox.isolated.tech/blog/best-voice-to-text-keyboard-iphone/assets/voxboard-main.png">
+  <meta property="og:image" content="https://vox.isolated.tech/blog/best-voice-to-text-keyboard-iphone/assets/voxboard-main.webp">
   <meta property="article:published_time" content="2026-06-13">
   <meta property="article:author" content="Cody Bontecou">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Best Voice-to-Text Keyboard for iPhone">
   <meta name="twitter:description" content="Choose an iPhone voice-to-text keyboard that keeps dictation private and inserts text where you already type.">
-  <meta name="twitter:image" content="https://vox.isolated.tech/blog/best-voice-to-text-keyboard-iphone/assets/voxboard-main.png">
+  <meta name="twitter:image" content="https://vox.isolated.tech/blog/best-voice-to-text-keyboard-iphone/assets/voxboard-main.webp">
 
   <link rel="icon" href="../../favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
@@ -33,7 +34,7 @@
     "@type": "BlogPosting",
     "headline": "Best Voice-to-Text Keyboard for iPhone",
     "description": "A practical guide to choosing the best iPhone voice-to-text keyboard for private dictation, transparent Full Access setup, local transcription, and typing directly into any app.",
-    "image": "https://vox.isolated.tech/blog/best-voice-to-text-keyboard-iphone/assets/voxboard-main.png",
+    "image": "https://vox.isolated.tech/blog/best-voice-to-text-keyboard-iphone/assets/voxboard-main.webp",
     "datePublished": "2026-06-13",
     "dateModified": "2026-07-29",
     "author": {
@@ -74,14 +75,16 @@
   }
   </script>
 
+  <link rel="preload" href="../../fonts/Geist-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../../geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="../../openapi.json" title="Vox.md Public Information API">
 </head>
 <body>
 
 <nav aria-label="Primary navigation">
   <div class="nav-inner">
     <a href="../../index.html" class="logo" aria-label="Vox.md home">
-      <img class="logo-mark" src="../../app-icon.png" alt="" width="32" height="32">
+      <img class="logo-mark" src="../../app-icon.webp" alt="" width="32" height="32">
       <span>Vox.md</span>
     </a>
     <ul class="nav-links">
@@ -161,11 +164,11 @@
 
       <section class="screenshot-feature" aria-labelledby="main-screenshot-title">
         <figure class="phone-frame">
-          <img src="assets/voxboard-main.png" alt="Vox.md main screen standing by for local voice-to-text recording" width="1206" height="2622" decoding="async">
+          <img src="assets/voxboard-main.webp" alt="Vox.md main screen standing by for local voice-to-text recording" width="1206" height="2622" loading="lazy" decoding="async">
         </figure>
         <div class="screenshot-note">
           <div class="num">Fresh Simulator Capture · 01</div>
-          <h3 id="main-screenshot-title">Start From a Private Recording Surface</h3>
+          <h2 id="main-screenshot-title">Start From a Private Recording Surface</h2>
           <p>The main Vox.md app gives you a clear standby state, quick recording control, model selection, and a path into history. The keyboard extension is for typing into other apps; the main app is where setup, review, and local transcript management live.</p>
         </div>
       </section>
@@ -237,13 +240,13 @@
       <div class="screenshot-grid" aria-label="Vox.md app screenshots">
         <figure>
           <div class="phone-frame">
-            <img src="assets/voxboard-history.png" alt="Vox.md empty local transcript history with private search" width="1206" height="2622" loading="lazy" decoding="async">
+            <img src="assets/voxboard-history.webp" alt="Vox.md empty local transcript history with private search" width="1206" height="2622" loading="lazy" decoding="async">
           </div>
           <figcaption>Local history keeps transcripts private and points you to the first recording when empty.</figcaption>
         </figure>
         <figure>
           <div class="phone-frame">
-            <img src="assets/voxboard-settings.png" alt="Vox.md settings screen with keyboard and lock screen options" width="1206" height="2622" loading="lazy" decoding="async">
+            <img src="assets/voxboard-settings.webp" alt="Vox.md settings screen with keyboard and lock screen options" width="1206" height="2622" loading="lazy" decoding="async">
           </div>
           <figcaption>Settings make keyboard options explicit, including haptics and the Full Access requirement.</figcaption>
         </figure>
@@ -290,6 +293,9 @@
   <div class="container">
     <div class="footer-inner">
       <ul class="footer-links">
+        <li><a href="../../developers.html">Developers</a></li>
+        <li><a href="../../about.html">About</a></li>
+        <li><a href="../../contact.html">Contact</a></li>
         <li><a href="../../index.html">Home</a></li>
         <li><a href="../../docs/">Docs</a></li>
         <li><a href="../" aria-current="page">Blog</a></li>
@@ -331,22 +337,42 @@
     document.head.appendChild(script);
   }
 
-  fetch('https://img-host.costream.workers.dev/analytics-gate', {
-    cache: 'no-store',
-    mode: 'cors',
-    credentials: 'omit'
-  })
-    .then(function (response) {
-      return response.ok ? response.json() : { track: false };
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
     })
-    .then(function (gate) {
-      if (gate && gate.track) {
-        loadCloudflareBeacon();
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
       }
-    })
-    .catch(function () {
-      // Fail closed so excluded IPs are not accidentally tracked.
     });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
 })();
 </script>
 <!-- End Cloudflare Web Analytics -->
