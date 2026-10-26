@@ -1,0 +1,80 @@
+<!--{
+  "slug": "apple-watch-obsidian-voice-notes",
+  "title": "Send Apple Watch voice notes to Obsidian",
+  "description": "Record on Apple Watch and send voice notes to Obsidian through your iPhone. Set up a Capture Preset, understand the queue, and troubleshoot delivery.",
+  "subtitle": "Record a thought on your wrist. Let your iPhone transcribe it and write Markdown to the note you choose.",
+  "eyebrow": "Apple Watch · Voice capture · Obsidian",
+  "requirements": "watchOS 10+ · paired iPhone",
+  "published": "2026-10-26",
+  "modified": "2026-10-26",
+  "image": "/screenshots/watch-ready.png"
+}-->
+<div class="answer-box" id="short-answer">
+        <div class="label">The short answer</div>
+        <p>Vox.md records audio locally on Apple Watch, transfers it to your paired iPhone, and uses the selected Capture Preset to transcribe and deliver it to an Obsidian vault folder. The Watch records; the iPhone transcribes and writes the note. An Obsidian plugin is not required.</p>
+      </div>
+      <p>Prepare the iPhone destination first, then make a short Watch recording and confirm the note arrived before relying on the workflow away from your phone.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md free</a></p>
+      <p>Try 15 transcription minutes and 10 successful Capture deliveries free. Unlimited use is a one-time lifetime purchase; the App Store shows your regional price.</p>
+      <nav class="toc" aria-label="In this guide"><div class="toc-title">In this guide</div><ol>
+        <li><a href="#setup">Prepare your iPhone and vault</a></li>
+        <li><a href="#record">Choose a preset and record on Watch</a></li>
+        <li><a href="#delivery">Check the Markdown delivery</a></li>
+        <li><a href="#away-from-phone">Recording away from your phone</a></li>
+        <li><a href="#troubleshooting">Fix queued or failed recordings</a></li>
+      </ol></nav>
+
+      <h2 id="setup">1. Prepare your iPhone and vault</h2>
+      <ul>
+        <li>Install Vox.md on a paired iPhone running iOS 17.6 or later and on Apple Watch running watchOS 10 or later.</li>
+        <li>Open Vox.md on iPhone, grant microphone permission, and prepare an available local speech backend. Backend and language support vary by phone and OS; initial model or language preparation can require a download.</li>
+        <li>Enable a Capture Preset and connect its destination to a vault folder exposed through Files. Start with a New Note target to make the first result easy to find.</li>
+        <li>Make one capture on iPhone and check the resulting file in Obsidian. A working iPhone route separates folder and model setup problems from Watch transfer problems.</li>
+      </ul>
+      <p>The <a href="../voice-notes-to-obsidian-iphone/">iPhone voice notes guide</a> walks through those steps. Vox.md writes to a selected folder; it does not connect directly to the Obsidian Sync service. If the vault cannot be selected through Files, that destination is not ready for this workflow.</p>
+
+      <h2 id="record">2. Choose a preset and record on Watch</h2>
+      <ol>
+        <li>Open Vox.md on iPhone so your enabled Capture Presets can sync to Watch.</li>
+        <li>Open Vox.md on Watch. Use the <strong>Capture Preset</strong> card to choose the intended preset, then confirm the displayed selection before recording.</li>
+        <li>Tap <strong>Record</strong> and speak a short thought. Use Pause and Resume when needed; pausing keeps one recording.</li>
+        <li>Tap <strong>Stop</strong> when finished. Watch queues the recording for transfer. Cancel discards a recording, so use Stop when you want to keep it.</li>
+      </ol>
+      <p>If iPhone is unavailable while you request a different preset, the selection can remain pending and the last confirmed preset stays active. Select and confirm your route while the devices can communicate before heading out.</p>
+      <figure class="guide-figure">
+        <img src="../../screenshots/watch-ready.png" alt="Vox.md on Apple Watch, ready to record audio and sync to iPhone" width="396" height="484" loading="lazy" decoding="async">
+        <figcaption>The Watch recording surface. The existing product screenshot shows the Record action; controls and preset placement vary by version.</figcaption>
+      </figure>
+      <p>For a quicker entry point, add the <strong>Record voice note</strong> complication to a compatible watch face. Its available presentation depends on the face and complication slot. See the <a href="../../docs/#watch-complication">complication reference</a>.</p>
+
+      <h2 id="delivery">3. Check the Markdown delivery</h2>
+      <p>Your iPhone receives the audio, transcribes it on device, and saves through the selected preset. Watch can show queued, transcribing, saving, sent, or attention states as that progresses. A queued recording is not confirmation that the Markdown has reached your vault.</p>
+      <p>For a first check, open Vox.md on iPhone and inspect <strong>Watch Recordings</strong>. After successful delivery, open the target file in Obsidian. A spoken thought such as “Look up the trail map before Saturday” could become this plain note body:</p>
+      <pre class="guide-code"><code>Look up the trail map before Saturday.</code></pre>
+      <p>This is illustrative output. Recognition, punctuation, filename, metadata, and processing depend on your recording and preset. Review important transcripts.</p>
+      <p>Once delivery works, use a daily Rolling Note or an Existing Note instead of creating a new file each time. Follow the <a href="../append-to-obsidian-daily-note-iphone/">daily-note routing guide</a> to keep journal entries or tasks beneath a chosen heading.</p>
+
+      <h2 id="away-from-phone">What happens away from your phone?</h2>
+      <p>Watch can keep a recording locally while waiting to transfer it. Transcription and Markdown delivery still need the paired iPhone, a prepared speech backend, and access to the destination folder. This is delayed delivery, not independent transcription on Watch.</p>
+      <p>Recordings remain on Watch until iPhone confirms delivery or discard. iOS can delay background processing. Force-quitting Vox.md on iPhone prevents background delivery until you open the app again. If a note is time-sensitive, check the delivered file rather than assuming transfer has completed.</p>
+      <p>Local transcription also does not determine how your vault syncs. A cloud-backed destination may need connectivity for file access or later synchronization under that provider’s terms.</p>
+
+      <h2 id="troubleshooting">Fix queued or failed recordings</h2>
+      <h3>The recording stays queued</h3>
+      <p>Open Vox.md on iPhone, open Watch Recordings, and use Refresh or Retry as offered. Check that the preset is enabled, the speech backend is ready, and the folder permission still works. Keep the app installed and available for handoff.</p>
+      <h3>The selected destination is no longer available</h3>
+      <p>Use the iPhone queue to choose a valid preset or retry after restoring folder access. You can also capture without a transcript when offered. Discard removes retained audio and queued delivery, so use it only when you no longer need the recording.</p>
+      <h3>I only want the audio file</h3>
+      <p>Configure a preset with <strong>Recording Only</strong> output and choose its recording folder on iPhone. That copies M4A audio without transcription; it does not create the Markdown transcript described here or consume transcription minutes. See <a href="../../docs/#watch-recording-only">Recording Only setup</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Capture on your wrist.<br>Find the thought in your notes.</h2>
+        <p>Set up the iPhone destination once, confirm your Watch preset, and try a short recording.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md free</a></p>
+      </section>
+      <p><a href="../obsidian-quick-capture-iphone/">Choose between iPhone capture methods</a>, or <a href="../../compare/vox-md-vs-obsidian-quick-capture/">compare native Obsidian with Vox.md</a>.</p>
+      <nav class="toc" aria-label="Related guides"><div class="toc-title">Continue your setup</div><ul>
+        <li><a href="../voice-notes-to-obsidian-iphone/">iPhone voice notes to Obsidian</a></li>
+        <li><a href="../append-to-obsidian-daily-note-iphone/">Daily notes, headings, and task capture</a></li>
+        <li><a href="../../docs/#apple-watch">Apple Watch reference and queue controls</a></li>
+      </ul></nav>

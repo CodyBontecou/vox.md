@@ -1,0 +1,91 @@
+<!--{
+  "slug": "append-to-obsidian-daily-note-iphone",
+  "title": "Append text and voice to an Obsidian daily note on iPhone",
+  "description": "Set up a Vox.md preset to append text or voice to an Obsidian daily note. Match filenames, insert beneath headings, and format tasks without duplicate prefixes.",
+  "subtitle": "Choose the daily file and heading once. Send later thoughts to the same place with a Capture Preset.",
+  "eyebrow": "Daily notes · Capture Presets · Markdown",
+  "requirements": "iPhone · writable vault folder",
+  "published": "2026-10-26",
+  "modified": "2026-10-26",
+  "image": "/screenshots/01-route-heading-light.png"
+}-->
+<div class="answer-box" id="short-answer"><div class="label">The short answer</div>
+        <p>Connect a Vox.md Capture Preset to your vault, choose a Rolling Note with a daily period, and match its path to your existing daily-note filenames. Use Bottom to append to the note, or Heading to insert beneath a named section. The same destination can accept text and voice captures.</p>
+      </div>
+      <p>This guide focuses on routing and formatting. For recording and model setup, start with <a href="../voice-notes-to-obsidian-iphone/">iPhone voice notes to Obsidian</a>. Obsidian also has its own daily-note capture tools; you do not need Vox.md for every append workflow.</p>
+      <nav class="toc" aria-label="In this guide"><div class="toc-title">In this guide</div><ol>
+        <li><a href="#match-path">Match your daily-note path</a></li>
+        <li><a href="#heading">Choose placement and a heading</a></li>
+        <li><a href="#two-captures">Check two successive captures</a></li>
+        <li><a href="#tasks">Format a task list</a></li>
+        <li><a href="#troubleshooting">Avoid duplicate files and misplaced entries</a></li>
+        <li><a href="#native-option">Consider native Obsidian capture</a></li>
+      </ol></nav>
+
+      <h2 id="match-path">1. Match your daily-note path</h2>
+      <p>Find an existing daily note in your vault and check its folder and filename. This example assumes <code>Journal/2026-10-26.md</code>. Keep your own convention if it differs.</p>
+      <ol>
+        <li>Open <strong>Settings → Capture Presets</strong> in Vox.md. Create or edit an enabled preset, such as Journal.</li>
+        <li>Connect its destination to the vault folder using Files. That folder must be exposed to Vox.md and writable.</li>
+        <li>Choose <strong>Rolling Note</strong> and the <strong>Daily</strong> period.</li>
+        <li>For the example convention, set the path pattern to <code>Journal/{period}.md</code>. Review the resolved destination before sending.</li>
+      </ol>
+      <p>With a daily period, <code>{period}</code> resolves to a date such as <code>2026-10-26</code>. A vault that stores daily files at its root would instead use <code>{period}.md</code>. These are Vox.md path tokens, not Obsidian template expressions.</p>
+      <p>Vox.md does not automatically read your Daily Notes plugin configuration. Choosing a different folder or filename creates a different target. The path is relative to the folder selected through Files; do not repeat the vault’s own name in the path unless that is an actual subfolder.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md free</a></p>
+      <p>Try 10 successful Capture deliveries and 15 transcription minutes free. Unlimited use is a one-time lifetime purchase; prices vary by region.</p>
+
+      <h2 id="heading">2. Choose placement and a heading</h2>
+      <p>Choose <strong>Bottom</strong> to append at the end of the daily note, or <strong>Top</strong> to prepend. To keep captures in a section, choose <strong>Heading</strong>, enter its title, and set its level.</p>
+      <p>For the example below, use a level-two heading named <strong>Inbox</strong>. Choose insertion at the end of that heading’s section so newer entries follow earlier ones. Set missing-heading behavior to <strong>Create Heading</strong> if Vox.md should add it, or <strong>Show Error</strong> if you want to fix the note yourself.</p>
+      <figure class="guide-figure">
+        <img src="../../screenshots/optimized/01-route-heading-light-640.webp" alt="Vox.md destination editor with rolling-note and heading-placement settings" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>The destination editor controls the file target and placement. Match your vault’s path and heading level before sending.</figcaption>
+      </figure>
+      <p>For plain entries, select <strong>Keep Original</strong> processing. In entry formatting, use a bullet prefix such as <code>- </code> if you want each short capture to become a list item. Prefixes are formatting choices; a plain transcript does not become a checklist unless you configure that behavior.</p>
+
+      <h2 id="two-captures">3. Check two successive captures</h2>
+      <p>First type “Read the trail guide” in Quick Capture and send it using the Journal preset. Then type “Pack a rain jacket” and send again using the same preset. Open the resolved daily note in Obsidian and confirm both entries appear beneath Inbox.</p>
+      <p>With the daily path, heading, and bullet prefix described above, the relevant section of <code>Journal/2026-10-26.md</code> would look like:</p>
+      <pre class="guide-code"><code>## Inbox
+- Read the trail guide
+- Pack a rain jacket</code></pre>
+      <p>This is illustrative output for those settings. Your entry template, processing, and existing note content can change the result. Use two short typed captures to confirm routing before adding voice recognition to the workflow.</p>
+      <p>For voice, record through Quick Capture with the same preset. Add the transcript to the draft for review before Send, or choose Send Immediately once you are comfortable with the route. The keyboard inserts text into a host app instead of exporting a second Markdown capture.</p>
+
+      <h2 id="tasks">Format a task list</h2>
+      <p>For a Tasks section, choose a level-two heading named <strong>Tasks</strong> and a consistent checklist method. For typed captures without text processing, Keep Original plus the entry prefix <code>- [ ] </code> makes a short entry a task without AI rewriting.</p>
+      <pre class="guide-code"><code>## Tasks
+- [ ] Read the trail guide
+- [ ] Pack a rain jacket</code></pre>
+      <p>If you instead enable Todo Checklist processing, let processing own the task markers rather than adding a second checkbox prefix. Typed and mixed text processing is a separate opt-in. Inspect one result before applying the preset to longer notes or lists. See <a href="../../docs/#presets">processing modes</a> and <a href="../../docs/#placement-templates">entry formatting</a>.</p>
+      <p>Reusable Entry Templates can add timestamps or source fields. Keep the first setup simple so you can tell whether a problem comes from the destination, processing, or formatting.</p>
+
+      <h2 id="troubleshooting">Avoid duplicate files and misplaced entries</h2>
+      <h3>A second daily note appeared</h3>
+      <p>Compare the resolved folder and filename with Obsidian’s existing file. Check the selected vault root, daily period, date convention, and path pattern. A New Note target creates separate files; it does not group captures into a rolling daily note.</p>
+      <h3>The entry went beneath the wrong heading</h3>
+      <p>Check the heading text and level. An Inbox heading at level two is not the same target as a level-three Inbox. Review your choice between insertion at the start or end of the section, and whether missing headings should be created.</p>
+      <h3>A write failed or is pending</h3>
+      <p>Restore access to the selected folder and retry the existing pending capture. Avoid manually sending the same content again while a delivery remains unresolved. Optional <strong>Retry Protection</strong> writes a visible HTML comment used to identify repeated requests; it is off by default. It does not detect two separately created captures that happen to have the same words.</p>
+      <h3>I changed the destination for one draft</h3>
+      <p>The composer can apply a one-capture destination override without changing the preset. Return to <strong>Preset Default</strong> if the preview does not match the route you configured.</p>
+      <h3>The folder needs the network</h3>
+      <p>Local capture and transcription do not make every file provider available offline. Confirm that the daily file and its folder are locally available, and allow your chosen sync provider to handle synchronization.</p>
+
+      <h2 id="native-option">Consider native Obsidian capture</h2>
+      <p>Obsidian’s <a href="https://obsidian.md/help/ios">official iOS guide</a> describes Quick Capture locations that append or prepend text to daily notes. Native Quick Capture requires Obsidian 1.14 or later and iOS 26 or later. If that covers your workflow, start with the built-in option.</p>
+      <p>Vox.md adds its own preset processing, entry formatting, media capture, and local speech backend choices around your Markdown destination. Choose it for the complete workflow you need, rather than assuming a daily-note append requires another app.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Choose the section once.<br>Keep capturing into it.</h2>
+        <p>Start with a short typed entry, check the file, then use the same preset for your next voice note.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md free</a></p>
+      </section>
+      <p><a href="../obsidian-quick-capture-iphone/">Choose between iPhone capture methods</a>, or <a href="../../compare/vox-md-vs-obsidian-quick-capture/">compare native Obsidian with Vox.md</a>.</p>
+      <nav class="toc" aria-label="Related guides"><div class="toc-title">Continue your setup</div><ul>
+          <li><a href="../obsidian-capture-templates/">Copy inbox, journal and task-format recipes</a></li>
+        <li><a href="../voice-notes-to-obsidian-iphone/">Record and transcribe on iPhone</a></li>
+        <li><a href="../apple-watch-obsidian-voice-notes/">Send recordings from Apple Watch</a></li>
+        <li><a href="../../docs/#placement-templates">Placement, templates, and retry protection</a></li>
+      </ul></nav>

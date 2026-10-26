@@ -5,6 +5,8 @@
   "scripts": {
     "appstore:images:plan": "npm --prefix scripts/app-store-images run plan",
     "appstore:images:store-key": "npm --prefix scripts/app-store-images run store-key",
-    "appstore:images:generate": "npm --prefix scripts/app-store-images run generate"
+    "appstore:images:generate": "npm --prefix scripts/app-store-images run generate",
+    "website:build": "python3 scripts/website/build_guides.py && python3 scripts/website/build_download_links.py",
+    "website:check": "python3 -m unittest discover -s scripts/website -p 'test_*.py' && python3 scripts/website/build_guides.py --check && python3 scripts/website/build_download_links.py --check && python3 scripts/website/check_site.py"
   }
 }

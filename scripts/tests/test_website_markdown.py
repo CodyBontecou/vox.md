@@ -40,7 +40,7 @@ class WebsiteMarkdownTests(unittest.TestCase):
             html = (output / 'index.html').read_text()
             self.assertIn('<style data-source="geist.css">', html)
             self.assertNotIn('<link rel="stylesheet"', html)
-            self.assertIn('Capture Now', (output / 'index.md').read_text())
+            self.assertIn('Capture ideas into Obsidian', (output / 'index.md').read_text())
             guide = (output / 'blog/obsidian-daily-note-iphone/index.md').read_text()
             self.assertTrue(guide.startswith('# Capture into an Obsidian Daily Note from iPhone'))
             self.assertIn('Book dentist appointment', guide)

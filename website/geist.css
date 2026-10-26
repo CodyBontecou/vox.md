@@ -2849,6 +2849,123 @@ figcaption {
   }
 }
 
+/* Voice-to-Obsidian guide: reuse the site's article layout. */
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  padding: 12px 16px;
+  background: var(--background-100);
+  color: var(--gray-1000);
+  transform: translateY(-200%);
+}
+.skip-link:focus { transform: translateY(0); }
+.voice-guide [id] { scroll-margin-top: 96px; }
+.voice-guide .hero-title { max-width: 680px; text-wrap: balance; }
+.voice-guide .article-body h2 { font-size: 30px; line-height: 36px; }
+.voice-guide .article-body p { text-wrap: pretty; }
+.voice-guide .guide-code {
+  padding: 24px;
+  margin: 0 0 24px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: var(--background-200);
+  border: 1px solid var(--gray-alpha-400);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  line-height: 24px;
+}
+.voice-guide .guide-figure { margin: 32px 0; }
+.voice-guide .guide-figure img {
+  display: block;
+  width: min(100%, 320px);
+  height: auto;
+  margin: 0 auto 16px;
+  border-radius: var(--radius-md);
+}
+.voice-guide .guide-figure figcaption { font-size: 14px; line-height: 20px; }
+
+/* Keep the comparison table scrollable within the article on narrow screens. */
+.voice-guide .guide-comparison {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 32px 0;
+}
+.voice-guide .guide-comparison:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+.voice-guide .guide-comparison .comparison {
+  display: table;
+  min-width: 640px;
+  table-layout: fixed;
+  margin: 0;
+  overflow: visible;
+}
+.voice-guide .guide-comparison caption {
+  padding: 0 0 12px;
+  text-align: left;
+  font-size: 14px;
+  line-height: 20px;
+}
+.voice-guide .guide-comparison th { font-size: 14px; line-height: 20px; }
+.voice-guide .guide-comparison tbody tr:last-child th { border-bottom: 0; }
+
+.voice-guide .guide-table-hint { font-size: 14px; line-height: 20px; }
+@media (min-width: 768px) {
+  .voice-guide .guide-table-hint { display: none; }
+}
+
+#latest-posts { scroll-margin-top: 96px; }
+
+/* Desktop visitors can hand the download off to their iPhone. */
+.desktop-download-qr {
+  position: relative;
+  width: fit-content;
+  margin: 16px 0 24px;
+  font-size: 14px;
+  line-height: 20px;
+  border: 0;
+}
+.desktop-download-qr summary {
+  min-height: 32px;
+  padding: 0;
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+  color: var(--gray-1000);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.desktop-download-qr summary:hover { color: var(--gray-800); }
+.desktop-download-qr summary:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+.download-qr-panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  z-index: 20;
+  width: 240px;
+  padding: 24px;
+  border: 1px solid var(--gray-alpha-400);
+  border-radius: var(--radius-md);
+  background: var(--background-200);
+}
+.download-qr-panel img {
+  display: block;
+  width: 176px;
+  height: 176px;
+  background: #fff;
+}
+.download-qr-panel p { margin: 16px 0 0; padding: 0; }
+@media (max-width: 767px) {
+  .desktop-download-qr { display: none; }
+}
+
 /* Public App Store reviews: three reviewers, three cards, no duplicated endorsements. */
 .reviews-section { padding: 100px 0; border-top: 1px solid var(--gray-200); background: var(--background-100); }
 .reviews-heading { max-width: 680px; margin: 0 auto 44px; text-align: center; }
