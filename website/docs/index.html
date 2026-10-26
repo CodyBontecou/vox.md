@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vox.md Documentation: Complete Feature Guide</title>
   <meta name="description" content="Complete documentation for Vox.md Quick Capture, Capture Presets, Markdown destinations, the iOS keyboard, local transcription models, widgets, Shortcuts, Apple Watch, and Mac.">
@@ -64,14 +65,16 @@
   }
   </script>
 
+  <link rel="preload" href="../fonts/Geist-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="../openapi.json" title="Vox.md Public Information API">
 </head>
 <body>
 
 <nav aria-label="Primary navigation">
   <div class="nav-inner">
     <a href="../index.html" class="logo" aria-label="Vox.md home">
-      <img class="logo-mark" src="../app-icon.png" alt="" width="32" height="32">
+      <img class="logo-mark" src="../app-icon.webp" alt="" width="32" height="32">
       <span>Vox.md</span>
     </a>
     <ul class="nav-links">
@@ -638,7 +641,7 @@
           <li>Free use includes <strong>15 minutes of transcription</strong> and <strong>10 successful Capture deliveries</strong>.</li>
           <li>A voice transcript already charged against transcription time does not also consume the separate Capture allowance when routed to Markdown.</li>
           <li>Failed writes and idempotent retries do not consume a successful Capture delivery.</li>
-          <li>Unlimited is a one-time lifetime purchase with no subscription, renewal, or ads. The localized App Store price is authoritative; the app uses $9.99 as its fallback display price.</li>
+          <li>Unlimited is a one-time lifetime purchase with no subscription, renewal, or ads. The localized App Store price is authoritative; US prices are $19.99 Individual, $39.99 Family, and $19.99 Family Upgrade, with purchasing-power pricing in other storefronts.</li>
           <li>Restore Purchase recovers an eligible purchase. Users from qualifying older paid builds are grandfathered into unlimited use.</li>
           <li>A content-free App Group ledger prevents double charging across retries while local app data remains. It is not stored in Keychain; removing local app data starts a fresh free allowance.</li>
         </ul>
@@ -709,6 +712,9 @@
   <div class="container">
     <div class="footer-inner">
       <ul class="footer-links">
+        <li><a href="../developers.html">Developers</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
         <li><a href="../index.html">Home</a></li>
         <li><a href="./" aria-current="page">Docs</a></li>
         <li><a href="../blog/">Blog</a></li>
@@ -752,22 +758,42 @@
     document.head.appendChild(script);
   }
 
-  fetch('https://img-host.costream.workers.dev/analytics-gate', {
-    cache: 'no-store',
-    mode: 'cors',
-    credentials: 'omit'
-  })
-    .then(function (response) {
-      return response.ok ? response.json() : { track: false };
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
     })
-    .then(function (gate) {
-      if (gate && gate.track) {
-        loadCloudflareBeacon();
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
       }
-    })
-    .catch(function () {
-      // Fail closed so excluded IPs are not accidentally tracked.
     });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
 })();
 </script>
 <!-- End Cloudflare Web Analytics -->

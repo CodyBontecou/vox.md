@@ -65,3 +65,9 @@ service is used. Decode a browser-rendered QR after regeneration and verify the
 full destination. On October 26, Apple Vision successfully decoded the rendered
 176px QR to the direct Vox.md App Store URL. Desktop disclosure and 390px phone
 layout were checked; the QR disclosure is hidden on phones.
+
+The deployment script also runs `scripts/build-website.py`, preserving the inline
+CSS, Markdown negotiation and read-only discovery API introduced on main. The
+site check covers extensionless public pages and excludes the noindex 404 page
+from sitemap requirements. After integration, 21 HTML pages and 20 sitemap URLs
+are checked.

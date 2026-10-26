@@ -2,6 +2,7 @@
 <html lang="en" class="js">
 <head>
   <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quick capture for Obsidian on iPhone and Apple Watch | Vox.md</title>
   <meta name="description" content="Capture text, links, photos, files, scans, sketches, and private voice notes into Obsidian vaults or local Markdown files on iPhone.">
@@ -24,8 +25,8 @@
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="preload" as="image" href="screenshots/optimized/00-capture-light-640.webp" type="image/webp" media="(prefers-color-scheme: light)" fetchpriority="high">
-  <link rel="preload" as="image" href="screenshots/optimized/00-capture-dark-640.webp" type="image/webp" media="(prefers-color-scheme: dark)" fetchpriority="high">
+  <link rel="preload" as="image" href="screenshots/optimized/00-capture-light-640.webp" imagesrcset="screenshots/optimized/00-capture-light-360.webp 360w, screenshots/optimized/00-capture-light-640.webp 640w" imagesizes="300px" type="image/webp" media="(prefers-color-scheme: light)" fetchpriority="high">
+  <link rel="preload" as="image" href="screenshots/optimized/00-capture-dark-640.webp" imagesrcset="screenshots/optimized/00-capture-dark-360.webp 360w, screenshots/optimized/00-capture-dark-640.webp 640w" imagesizes="300px" type="image/webp" media="(prefers-color-scheme: dark)" fetchpriority="high">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -66,14 +67,35 @@
   }
   </script>
 
+  <link rel="preload" href="fonts/Geist-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="geist.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://isolated.tech/#organization",
+  "name": "Isolated Tech",
+  "url": "https://isolated.tech/",
+  "sameAs": [
+    "https://github.com/CodyBontecou"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer support",
+    "email": "codybontecou@gmail.com",
+    "url": "https://vox.isolated.tech/contact",
+    "availableLanguage": "English"
+  }
+}
+  </script>
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="openapi.json" title="Vox.md Public Information API">
 </head>
 <body>
 
 <nav aria-label="Primary navigation">
   <div class="nav-inner">
     <a href="index.html" class="logo" aria-label="Vox.md home">
-      <img class="logo-mark" src="app-icon.png" alt="" width="32" height="32">
+      <img class="logo-mark" src="app-icon.webp" alt="" width="32" height="32">
       <span>Vox.md</span>
     </a>
     <ul class="nav-links">
@@ -141,8 +163,8 @@
         </div>
         <div class="phone-shell">
           <picture>
-            <source srcset="screenshots/optimized/00-capture-dark-640.webp" media="(prefers-color-scheme: dark)" type="image/webp">
-            <source srcset="screenshots/optimized/00-capture-light-640.webp" type="image/webp">
+            <source srcset="screenshots/optimized/00-capture-dark-360.webp 360w, screenshots/optimized/00-capture-dark-640.webp 640w" sizes="300px" media="(prefers-color-scheme: dark)" type="image/webp">
+            <source srcset="screenshots/optimized/00-capture-light-360.webp 360w, screenshots/optimized/00-capture-light-640.webp 640w" sizes="300px" type="image/webp">
             <img src="screenshots/00-capture-light.png" alt="Vox.md Capture screen with Markdown tools and destination controls" width="1206" height="2622" fetchpriority="high" decoding="async">
           </picture>
         </div>
@@ -272,8 +294,8 @@
         </ul>
         <div class="visual-phone visual-phone-capture">
           <picture>
-            <source srcset="screenshots/optimized/00-capture-dark-640.webp" media="(prefers-color-scheme: dark)" type="image/webp">
-            <source srcset="screenshots/optimized/00-capture-light-640.webp" type="image/webp">
+            <source srcset="screenshots/optimized/00-capture-dark-360.webp 360w, screenshots/optimized/00-capture-dark-640.webp 640w" sizes="300px" media="(prefers-color-scheme: dark)" type="image/webp">
+            <source srcset="screenshots/optimized/00-capture-light-360.webp 360w, screenshots/optimized/00-capture-light-640.webp 640w" sizes="300px" type="image/webp">
             <img src="screenshots/00-capture-light.png" alt="Vox.md composer with Markdown, photo, file, scan, sketch, and voice controls" width="1206" height="2622" loading="lazy" decoding="async">
           </picture>
         </div>
@@ -292,8 +314,8 @@
         </div>
         <div class="visual-phone visual-phone-route">
           <picture>
-            <source srcset="screenshots/optimized/01-route-heading-dark-640.webp" media="(prefers-color-scheme: dark)" type="image/webp">
-            <source srcset="screenshots/optimized/01-route-heading-light-640.webp" type="image/webp">
+            <source srcset="screenshots/optimized/01-route-heading-dark-360.webp 360w, screenshots/optimized/01-route-heading-dark-640.webp 640w" sizes="300px" media="(prefers-color-scheme: dark)" type="image/webp">
+            <source srcset="screenshots/optimized/01-route-heading-light-360.webp 360w, screenshots/optimized/01-route-heading-light-640.webp 640w" sizes="300px" type="image/webp">
             <img src="screenshots/01-route-heading-light.png" alt="Vox.md destination editor showing rolling notes and heading placement" width="1206" height="2622" loading="lazy" decoding="async">
           </picture>
         </div>
@@ -469,7 +491,7 @@
       <div class="faq-list reveal rd2">
         <details open>
           <summary>Does Vox.md work with Obsidian?</summary>
-          <p>Yes. Create a Capture Preset and choose your Obsidian vault as its destination. Vox.md writes standard Markdown, wikilinks, and attachment embeds directly into the vault. It does not require an Obsidian plugin. <a href="compare/vox-md-vs-obsidian-quick-capture/">Compare Vox.md with native Obsidian capture.</a></p>
+          <p>Yes. Create a Capture Preset and choose your Obsidian vault as its destination. Vox.md writes standard Markdown, wikilinks, and attachment embeds directly into the vault. It does not require an Obsidian plugin. <a href="compare/vox-md-vs-obsidian-quick-capture/">Compare Vox.md with native Obsidian capture.</a> <a href="blog/obsidian-daily-note-iphone/">Set up a daily-note capture workflow.</a></p>
         </details>
         <details>
           <summary>What can I capture?</summary>
@@ -508,6 +530,46 @@
   </div>
 </section>
 
+<section class="reviews-section" id="reviews" aria-labelledby="reviews-title">
+  <div class="container">
+    <header class="reviews-heading">
+      <div class="section-label">From the App Store</div>
+      <h2 class="section-title" id="reviews-title">Less Friction.<br>More Captured.</h2>
+      <p class="section-kicker">Real notes. Real workflows. In their own words.</p>
+    </header>
+    <div class="reviews-grid">
+      <figure class="review-card" data-review-id="00000192-dda8-2903-5a77-5cb500000000">
+        <span class="review-quote-mark" aria-hidden="true">“</span>
+        <h3>Underrated, Overlooked, Not forgotten</h3>
+        <blockquote><p>“Quickly becoming one of my favorite and most used apps in 2026!”</p></blockquote>
+        <figcaption><span class="review-author">PromisedOne</span><span class="review-source">App Store review · <time datetime="2026-08-08">Aug 8, 2026</time></span></figcaption>
+        <p class="review-stars" role="img" aria-label="5 out of 5 stars"><span aria-hidden="true">★★★★★</span></p>
+      </figure>
+      <figure class="review-card" data-review-id="00000192-dda8-2903-5b29-4b3500000000">
+        <span class="review-quote-mark" aria-hidden="true">“</span>
+        <h3>Exactly What I Needed</h3>
+        <blockquote><p>“For a while now, I’ve been trying to find a way for me to verbally take notes quickly, add in attachments, transcribe locally, and sync to an Obsidian folder. This app does it perfectly.”</p></blockquote>
+        <figcaption><span class="review-author">SteamingCoax</span><span class="review-source">App Store review · <time datetime="2026-08-11">Aug 11, 2026</time></span></figcaption>
+        <p class="review-stars" role="img" aria-label="5 out of 5 stars"><span aria-hidden="true">★★★★★</span></p>
+      </figure>
+      <figure class="review-card review-card-featured" data-review-id="00000192-dda8-2903-5bf7-fadc00000000">
+        <span class="review-quote-mark" aria-hidden="true">“</span>
+        <h3>The quiet capture powerhouse</h3>
+        <blockquote>
+          <p>“Vox.md has become one of my most-used tools. I picked it up for voice memos into Obsidian, and it quietly transformed my daily capture flow.</p>
+          <p>The Capture Presets system is brilliant — each preset owns its destination, template, and placement. My voice memos land directly in the right daily note, formatted exactly as I want, zero friction.”</p>
+        </blockquote>
+        <figcaption><span class="review-author">Eric Know</span><span class="review-source">App Store review · <time datetime="2026-08-14">Aug 14, 2026</time></span></figcaption>
+        <p class="review-stars" role="img" aria-label="5 out of 5 stars"><span aria-hidden="true">★★★★★</span></p>
+      </figure>
+    </div>
+    <div class="reviews-footer">
+      <p>Selected App Store reviews. Eric’s quote is an excerpt; wording is unchanged.</p>
+      <a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_home">Read App Store reviews <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
 <section class="cta-section" id="download">
   <div class="container reveal rd1">
     <h2 class="cta-title">Put the Next Thought<br>in the Right Note</h2>
@@ -527,6 +589,9 @@
   <div class="container">
     <div class="footer-inner">
       <ul class="footer-links">
+        <li><a href="developers.html">Developers</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
         <li><a href="docs/">Docs</a></li>
         <li><a href="blog/">Guides</a></li>
       <li><a href="compare/">Compare</a></li>
@@ -599,22 +664,42 @@
     document.head.appendChild(script);
   }
 
-  fetch('https://img-host.costream.workers.dev/analytics-gate', {
-    cache: 'no-store',
-    mode: 'cors',
-    credentials: 'omit'
-  })
-    .then(function (response) {
-      return response.ok ? response.json() : { track: false };
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
     })
-    .then(function (gate) {
-      if (gate && gate.track) {
-        loadCloudflareBeacon();
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
       }
-    })
-    .catch(function () {
-      // Fail closed so excluded IPs are not accidentally tracked.
     });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
 })();
 </script>
 <!-- End Cloudflare Web Analytics -->
