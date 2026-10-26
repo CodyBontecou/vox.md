@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transcribe audio to Markdown offline on iPhone | Vox.md</title>
+  <meta name="description" content="Prepare local transcription in Vox.md, record or import audio, and save Markdown on iPhone. Understand model downloads, folder availability, and offline checks.">
+  <link rel="canonical" href="https://vox.isolated.tech/blog/offline-transcription-iphone-markdown/">
+  <link rel="alternate" type="text/plain" href="../../llms.txt" title="Vox.md documentation for language models">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Transcribe audio to Markdown offline on iPhone">
+  <meta property="og:description" content="Prepare local transcription in Vox.md, record or import audio, and save Markdown on iPhone. Understand model downloads, folder availability, and offline checks.">
+  <meta property="og:url" content="https://vox.isolated.tech/blog/offline-transcription-iphone-markdown/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Transcribe audio to Markdown offline on iPhone">
+  <meta name="twitter:description" content="Prepare local transcription in Vox.md, record or import audio, and save Markdown on iPhone. Understand model downloads, folder availability, and offline checks.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="../../favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../../favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+
+  
+  
+
+  <link rel="stylesheet" href="../../geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Transcribe audio to Markdown offline on iPhone",
+  "description": "Prepare local transcription in Vox.md, record or import audio, and save Markdown on iPhone. Understand model downloads, folder availability, and offline checks.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/blog/offline-transcription-iphone-markdown/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://vox.isolated.tech/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Transcribe audio to Markdown offline on iPhone",
+      "item": "https://vox.isolated.tech/blog/offline-transcription-iphone-markdown/"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to guide</a>
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="../../index.html" class="logo" aria-label="Vox.md home">
+      <img class="logo-mark" src="../../app-icon.png" alt="" width="32" height="32">
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html#how">How It Works</a></li>
+      <li><a href="../../docs/">Docs</a></li>
+      <li><a href="../../blog/">Guides</a></li>
+      <li><a href="../../compare/">Compare</a></li>
+      <li><a href="../../privacy.html">Privacy</a></li>
+      <li><a href="../../terms.html">Terms</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_offline_md">Download Vox.md</a>
+  </div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">iPhone · Local transcription · Markdown</div>
+        <h1 class="hero-title">Transcribe audio to Markdown offline on iPhone</h1>
+        <p class="hero-subtitle">Prepare the speech backend and a local destination before you need them. Keep transcription and file sync as separate choices.</p>
+      </div>
+      <aside class="meta-card" aria-label="About this guide">
+        <dl>
+          <div><dt>By</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Updated</dt><dd><time datetime="2026-10-26">October 26, 2026</time></dd></div>
+          <div><dt>Requires</dt><dd>Prepared backend · writable folder</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Transcribe audio to Markdown offline on iPhone">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">The short answer</div>
+        <p>Vox.md transcribes on your device using an available Apple Speech backend or an explicitly downloaded Whisper or Parakeet model. To save the transcript as Markdown while offline, you also need a locally available, writable folder. Prepare both before disconnecting.</p>
+      </div>
+      <p>“Local transcription” describes where recognition runs. It does not promise that a model is already installed, every language is supported, or a cloud-backed folder is available offline. This guide explains the setup and a check you can perform on your own phone; it is not a report of an airplane-mode test on every supported device.</p>
+      <nav class="toc" aria-label="In this guide"><div class="toc-title">In this guide</div><ol>
+        <li><a href="#prepare">Prepare a speech backend</a></li>
+        <li><a href="#destination">Choose the Markdown destination</a></li>
+        <li><a href="#transcribe">Record or import audio</a></li>
+        <li><a href="#offline-check">Check the complete workflow offline</a></li>
+        <li><a href="#limitations">Understand privacy and availability limits</a></li>
+      </ol></nav>
+
+      <h2 id="prepare">1. Prepare a speech backend while connected</h2>
+      <p>Open Vox.md’s model settings and choose a backend available for your device and language. Automatic prefers Apple Speech on supported iOS 26 devices and languages. Optional Whisper and Parakeet models are downloaded when you choose them.</p>
+      <p>Finish any model download or system-language preparation before going offline. Automatic does not silently download a Whisper or Parakeet fallback; it can only use a fallback model you have already chosen to download. If no backend is ready, disconnecting will not make one available.</p>
+      <p>Explicit Whisper and Parakeet selections transcribe after recording stops. Live Apple Speech can show tentative and finalized text on supported devices. A live preview is not required to produce a Markdown transcript.</p>
+      <figure class="guide-figure">
+        <img src="../../screenshots/optimized/05-settings-local-360.webp" alt="Vox.md settings for local speech models and processing" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>Choose and prepare a local backend while connected. Available models and settings depend on the installed version and device.</figcaption>
+      </figure>
+      <p>Model choice changes storage use, processing time, language coverage and recognition quality. Check the <a href="../../docs/#models">model reference</a> instead of assuming that a larger model is supported or that one option recognizes every language.</p>
+
+      <h2 id="destination">2. Choose the Markdown destination</h2>
+      <p>Create or select a Capture Preset and connect it to a folder through Files. Use a New Note target for the first test so the output is easy to identify. Keep Original processing is a useful starting point when you want the transcript without an optional rewrite.</p>
+      <p>Make sure the destination is locally available and permits writes. A folder name appearing in Files does not necessarily mean its contents are downloaded. If you choose an Obsidian vault, it must be accessible to Vox.md through the picker; Vox.md does not connect directly to the Obsidian Sync service.</p>
+      <p>For detailed folder setup, follow <a href="../voice-notes-to-obsidian-iphone/">save iPhone voice notes to Obsidian</a>. A plain writable Markdown folder works too; Obsidian is not required for transcription.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_offline_md">Download Vox.md free</a></p>
+      <p>Try 15 transcription minutes and 10 successful Capture deliveries. Unlimited use is a one-time lifetime purchase. Configure purchases or model preparation while connected rather than relying on a new setup completing offline.</p>
+
+      <h2 id="transcribe">3. Record or import audio</h2>
+      <ol>
+        <li>Open Quick Capture and select the preset with your prepared destination. Choose <strong>Add to Draft</strong> in the voice controls before starting so you can review the first transcript.</li>
+        <li>Record a short voice note, or use <strong>Import audio or video</strong> in the voice controls to select an existing supported file.</li>
+        <li>Let the selected backend finish recognition, review the transcript in the draft, then tap Send.</li>
+        <li>Check that delivery completed, then open the Markdown file in its destination.</li>
+      </ol>
+      <p>A short recording might produce this illustrative note body:</p>
+      <pre class="guide-code"><code>Review the outline before the next meeting.</code></pre>
+      <p>The actual wording and punctuation depend on recognition and processing. Retain the source audio when you need a reference, and check important transcripts against it. Optional cleanup has its own device requirements and fallbacks; on-device transcription does not mean Apple Intelligence processing is available on every supported phone.</p>
+
+      <h2 id="offline-check">Check the complete workflow offline</h2>
+      <p>After a successful connected capture, repeat a small test without connectivity. If you use Airplane Mode, confirm that Wi-Fi is also off.</p>
+      <ol>
+        <li>Confirm the chosen backend was prepared and the destination is locally available.</li>
+        <li>Disconnect, make a new short recording, and wait for transcription.</li>
+        <li>Review and send the transcript. Check the completed Markdown file while still disconnected.</li>
+        <li>Reconnect when you are ready, and separately check any sync to another device.</li>
+      </ol>
+      <p>Success means both recognition and the local write completed. A transcript visible in a draft proves recognition worked; a queued capture does not yet prove that the destination write worked. If delivery fails, keep the recoverable capture and retry after restoring folder access rather than making another copy of the recording.</p>
+
+      <h2 id="limitations">Understand privacy and availability limits</h2>
+      <p>Vox.md does not upload audio for transcription. If you deliberately save the resulting transcript or retained audio in a cloud-backed folder, that provider can handle synchronization under its own terms. Keep the destination local if you do not want that file synced through a provider.</p>
+      <p>Long recordings, available storage, audio quality and model support affect practical results. This guide makes no universal claim about transcription speed or accuracy. Review sensitive or consequential wording before using it.</p>
+      <p>For Watch recordings, the <a href="../apple-watch-obsidian-voice-notes/">paired iPhone still performs transcription and delivery</a>. Keeping a recording on Watch while the phone is unavailable is delayed delivery, not independent Watch transcription.</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Prepare it once.<br>Check it before you disconnect.</h2>
+        <p>Start with a short recording and an accessible local folder, then verify the complete Markdown output.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_offline_md">Download Vox.md free</a></p>
+      </section>
+      <nav class="toc" aria-label="Related guides"><div class="toc-title">Continue your setup</div><ul>
+        <li><a href="../voice-notes-to-obsidian-iphone/">iPhone voice notes to Obsidian</a></li>
+        <li><a href="../obsidian-capture-templates/">Format inbox, journal and task entries</a></li>
+        <li><a href="../../docs/#models">Backend requirements and language options</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../docs/">Docs</a></li>
+        <li><a href="../../blog/">Guides</a></li>
+        <li><a href="../../compare/">Compare</a></li>
+        <li><a href="../../privacy.html">Privacy</a></li>
+        <li><a href="../../terms.html">Terms</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Support</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_offline_md">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Quick capture for local notes · No content uploads.</div>
+    </div>
+  </div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
