@@ -1,0 +1,259 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Vox.md Public Information API",
+    "version": "1.0.0",
+    "description": "Read-only product information and documentation discovery for Vox.md. No authentication, API keys, purchases, or private user data. Capture, transcription, vault access, and note writes execute locally in the installed app and are not provided by this API.",
+    "contact": {
+      "name": "Cody Bontecou",
+      "url": "https://vox.isolated.tech/contact",
+      "email": "codybontecou@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://vox.isolated.tech",
+      "description": "Public production website"
+    }
+  ],
+  "security": [],
+  "paths": {
+    "/api/v1/product": {
+      "get": {
+        "operationId": "getVoxProduct",
+        "summary": "Read Vox.md product facts",
+        "description": "Retrieve the product name, supported operating systems, description, download link, user guide, and support URL. Values come from the published website structured data.",
+        "tags": [
+          "Public information"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Public information, generated from the published website.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not supported; use GET or HEAD.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents": {
+      "get": {
+        "operationId": "listVoxDocuments",
+        "summary": "List public documentation pages",
+        "description": "Discover document titles, summaries, canonical URLs, and Markdown access URLs. Fetch an individual document URL with Accept: text/markdown to read its content.",
+        "tags": [
+          "Public information"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Public information, generated from the published website.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "documents": {
+                      "type": "array",
+                      "description": "Public product, support, policy, and documentation pages.",
+                      "items": {
+                        "$ref": "#/components/schemas/Document"
+                      }
+                    }
+                  },
+                  "required": [
+                    "documents"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not supported; use GET or HEAD.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Canonical product name."
+          },
+          "description": {
+            "type": "string",
+            "description": "Public product description."
+          },
+          "url": {
+            "type": "string",
+            "description": "Canonical product website.",
+            "format": "uri"
+          },
+          "downloadUrl": {
+            "type": "string",
+            "description": "Apple App Store download listing.",
+            "format": "uri"
+          },
+          "operatingSystem": {
+            "type": "string",
+            "description": "Supported platforms and minimum versions."
+          },
+          "applicationCategory": {
+            "type": "string",
+            "description": "Software category from the product structured data."
+          },
+          "documentationUrl": {
+            "type": "string",
+            "description": "Public user guide.",
+            "format": "uri"
+          },
+          "supportUrl": {
+            "type": "string",
+            "description": "Support contact page.",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "url",
+          "downloadUrl",
+          "operatingSystem",
+          "applicationCategory",
+          "documentationUrl",
+          "supportUrl"
+        ]
+      },
+      "Document": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Document title."
+          },
+          "url": {
+            "type": "string",
+            "description": "Canonical document URL.",
+            "format": "uri"
+          },
+          "description": {
+            "type": "string",
+            "description": "Document summary."
+          },
+          "markdownUrl": {
+            "type": "string",
+            "description": "Request this URL with Accept: text/markdown for the document main content.",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "title",
+          "url",
+          "description",
+          "markdownUrl"
+        ]
+      },
+      "Problem": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Problem type identifier.",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string",
+            "description": "Short HTTP problem title."
+          },
+          "status": {
+            "type": "integer",
+            "description": "HTTP error status code.",
+            "enum": [
+              404,
+              405
+            ]
+          },
+          "code": {
+            "type": "string",
+            "description": "Stable error code."
+          },
+          "detail": {
+            "type": "string",
+            "description": "Explanation of the failed request."
+          },
+          "instance": {
+            "type": "string",
+            "description": "Requested path."
+          },
+          "resolution": {
+            "type": "string",
+            "description": "How to find a supported resource."
+          }
+        },
+        "required": [
+          "type",
+          "title",
+          "status",
+          "code",
+          "detail",
+          "instance",
+          "resolution"
+        ]
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Usage, limitations, errors, and examples.",
+    "url": "https://vox.isolated.tech/developers"
+  }
+}
