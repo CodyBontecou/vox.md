@@ -1,0 +1,40 @@
+{
+  "inspection_date": "2026-10-10",
+  "workspace_path": "/Users/codybontecou/dev/vox.md",
+  "argent_available": true,
+  "is_react_native": false,
+  "is_native_ios": true,
+  "platforms": ["iOS/iPadOS", "macOS", "watchOS", "Android source under apps/android"],
+  "project": "Voxboard.xcodeproj",
+  "schemes": ["Voxboard", "VoxboardTests", "Voxboard Mac", "Voxboard Watch Tests"],
+  "shared_package": "Packages/VoxboardShared",
+  "metro_port": null,
+  "agents_md_found": false,
+  "memory_md_found": false,
+  "build_command": "xcodebuild build -project Voxboard.xcodeproj -scheme Voxboard -destination 'generic/platform=iOS Simulator' -disableAutomaticPackageResolution -onlyUsePackageVersionsFromResolvedFile CODE_SIGNING_ALLOWED=NO",
+  "shared_test_command": "swift test --package-path Packages/VoxboardShared --skip-update --disable-automatic-resolution -j 2",
+  "ios_test_command": "xcodebuild test -project Voxboard.xcodeproj -scheme VoxboardTests -configuration Debug -destination 'platform=iOS Simulator,id=<selected-device>' -disableAutomaticPackageResolution -onlyUsePackageVersionsFromResolvedFile CODE_SIGNING_ALLOWED=YES CODE_SIGNING_REQUIRED=YES CODE_SIGN_IDENTITY=- DEVELOPMENT_TEAM=''",
+  "targeted_shared_tests": ["RecordingRouteOwnershipTests", "RecordingJobStoreTests", "RecordingJobQueueTests", "CheckpointedAudioDeliveryTests", "IncrementalWAVWriterTests", "LiveActivityCommandBuilderTests", "VoxboardLiveActivityStateTests", "CaptureDraftRecordingReceiptTests", "RecordingOnlyFileExporterTests"],
+  "targeted_ios_tests": ["RecordingActionTests", "ToggleRecordingRegistrationTests", "ShortcutRecordingLiveActivityGatingTests", "KeyboardRecordingArtifactRetentionTests", "RecordingDraftDeliveryTests", "RecordingCompletionModeTests", "RecordingPauseResumeTests"],
+  "validation_limits": [
+    "Use a running simulator selected through Argent; CI avoids iOS 26.2 due to a known Swift isolated-deinit allocator crash and uses newer runtimes.",
+    "A physical device is required to establish actual Action Button, lock-screen Live Activity, microphone and background recording behavior.",
+    "README marks unified Record Audio action as work in progress; saved Stop decoding was incorrect on iOS 26.5 simulator, and the prior physical no-audio probe only verified decoding on iOS 27 beta."
+  ],
+  "dependencies": ["local whisper.xcframework", "FluidAudio 0.13.4", "ExportKit main"],
+  "additional_ui_gate_if_capture_views_change": "./scripts/test-capture-view-structure.sh plus QuickCaptureRenderingTests",
+  "recording_safety_investigation": {
+    "reported_sequence": "Action Button shortcut starts recording; lock phone; stop from Live Activity (possibly repeatedly); next shortcut recording appears active but reports no speech when stopped.",
+    "physical_reproduction_status": "Not reproduced on hardware: no USB-connected iPhone available during this session.",
+    "confirmed_findings": [
+      "No-speech recognition errors prevented preset audio export, including text-only presets. Reproduced in the actual recorder queue using a controlled empty speech backend.",
+      "Short and quiet samples were rejected before app recording handoff. Regression coverage now exercises repeated stops with short, quiet and silent buffers and verifies durable WAV length and duration.",
+      "Continuous dictation excluded short and quiet spans and deleted their recovery journals. Its deliverability regression failed before the preservation change.",
+      "The prior default source retention deleted audio after successful delivery. New default retention is permanent; explicitly configured cleanup policies remain supported."
+    ],
+    "restart_hardening": "A new one-shot recording rebuilds a still-running temporary listening engine instead of treating it as persistent listening. The restart keeps the existing Live Activity. This prevents lease reuse; whether it explains the reported hardware failure remains unverified.",
+    "final_ios_validation": {"tests": 70, "failures": 0, "log": "/tmp/vox-recording-safety-final-tests.log"},
+    "shared_validation": {"tests": 67, "failures": 0, "log": "/tmp/vox-recording-safety-shared.log"},
+    "hardware_follow_up": "Test the reported sequence using single and repeated Live Activity stops, then inspect both consecutive audio files for actual microphone samples, rather than relying on the activity state or transcript alone."
+  }
+}

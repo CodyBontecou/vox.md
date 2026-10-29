@@ -18,6 +18,21 @@ enum VoxboardReleaseNotes {
 
     private static let versionNotes: [VersionNotes] = [
         .init(
+            version: "2.13",
+            items: [
+                .list(
+                    title: "What’s new in Vox.md",
+                    rows: [
+                        .init(
+                            symbolSystemName: "note.text",
+                            title: "A quick-capture maintenance update",
+                            description: "Refreshed app information for your voice and Markdown capture workflows."
+                        )
+                    ]
+                )
+            ]
+        ),
+        .init(
             version: "2.10",
             items: [
                 .list(
@@ -297,11 +312,6 @@ enum VoxboardReleaseNotes {
                             symbolSystemName: "applewatch",
                             title: "Clearer Watch upgrades",
                             description: "Apple Watch recordings now explain when free transcription time has been used and provide a direct path to unlock unlimited transcription."
-                        ),
-                        .init(
-                            symbolSystemName: "lock.shield",
-                            title: "Private by design",
-                            description: "Stats update as you capture while keeping captured content, filenames, and destinations out of analytics."
                         )
                     ]
                 )

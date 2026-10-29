@@ -633,8 +633,8 @@ analytics_source = (
     root / 'Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift'
 ).read_text()
 release_default = re.search(r'#else\s+(true|false)\s+#endif', analytics_source)
-if release_default is None or release_default.group(1) != 'false':
-    errors.append('release analytics must remain disabled by default')
+if release_default is None or release_default.group(1) != 'true':
+    errors.append('release onboarding analytics must be enabled by default')
 
 share_source = (root / 'Voxboard Share Extension/ShareViewController.swift').read_text()
 for required in [

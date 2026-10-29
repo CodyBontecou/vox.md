@@ -1,0 +1,1087 @@
+diff --git a/Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift b/Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift
+index 8758f7d..0c53a07 100644
+--- a/Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift
++++ b/Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift
+@@ -68,13 +68,13 @@ public final class OnboardingAnalyticsClient: @unchecked Sendable {
+         state.queuedPayloads()
+     }
+ 
+-    /// Privacy-first default: production builds never emit onboarding events.
+-    /// Developers can explicitly opt in for local/debug funnel verification.
++    /// Release builds collect the allowlisted first-party onboarding events.
++    /// Debug builds require explicit opt-in for local funnel verification.
+     public static var isEnabledByDefault: Bool {
+         #if DEBUG
+         ProcessInfo.processInfo.environment["ONBOARDING_ANALYTICS_ENABLED"] == "1"
+         #else
+-        false
++        true
+         #endif
+     }
+ 
+diff --git a/Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift b/Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift
+index 5afdb21..6a348b5 100644
+--- a/Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift
++++ b/Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift
+@@ -2,6 +2,32 @@ import XCTest
+ @testable import VoxboardShared
+ 
+ final class OnboardingAnalyticsClientTests: XCTestCase {
++    func testBuildDefaultControlsEventDelivery() async {
++        let transport = RecordingOnboardingAnalyticsTransport()
++        let client = OnboardingAnalyticsClient(
++            transport: transport,
++            defaults: FakeOnboardingAnalyticsDefaults(),
++            queueKey: "onboarding.analytics.test.build-default",
++            retryDelayNanoseconds: 0,
++            runtimeContextProvider: { nil }
++        )
++
++        client.track(OnboardingAnalyticsEvent(name: .onboardingStarted))
++        await client.flushAndWait()
++
++        let sent = await transport.payloadsValue()
++        #if DEBUG
++        let expectedCount = ProcessInfo.processInfo.environment["ONBOARDING_ANALYTICS_ENABLED"] == "1" ? 1 : 0
++        #else
++        let expectedCount = 1
++        #endif
++        XCTAssertEqual(sent.count, expectedCount)
++        if expectedCount == 1 {
++            XCTAssertEqual(sent.first?.eventName, "onboarding_started")
++            XCTAssertNotNil(sent.first?.eventId)
++        }
++    }
++
+     func testOfflineTransportQueuesStablePayloadWithAssignmentAndRuntimeContext() async {
+         let defaults = FakeOnboardingAnalyticsDefaults()
+         let client = OnboardingAnalyticsClient(
+diff --git a/Packages/contracts/manifest.json b/Packages/contracts/manifest.json
+index 3d3402b..57b6683 100644
+--- a/Packages/contracts/manifest.json
++++ b/Packages/contracts/manifest.json
+@@ -1129,10 +1129,10 @@
+       "sha256": "682ad5ae4196683700c0657dd438f0ac9e6b88d174a982ca2f0fd3ebca1adcef"
+     },
+     {
+-      "bytes": 92935,
++      "bytes": 93045,
+       "category": "contractGate",
+       "path": "scripts/test-project-contracts.sh",
+-      "sha256": "095266c010a5a010020fa8f4082b54c2fbfeed9787b472b709edc80a55cf866e"
++      "sha256": "a4fe84958e704c35c0ecb33805d432ff8c47755e0b28ac93cf9d3cf1d6327998"
+     },
+     {
+       "bytes": 38856,
+diff --git a/README.md b/README.md
+index 54032db..b55e570 100644
+--- a/README.md
++++ b/README.md
+@@ -125,7 +125,7 @@ The Mac drains the same durable retry inbox as iOS and can reroute failed captur
+ 
+ Vox.md includes **15 minutes of free transcription** and **10 successful Capture deliveries** so you can test the full flow. Failed writes and retries do not consume a Capture; voice transcripts routed to Markdown use only the transcription allowance.
+ 
+-Unlimited transcription and Capture are a one-time **$9.99** unlock. No subscription, no renewal, no ads. Users who bought the original paid app build are automatically grandfathered into unlimited access. The successful-Capture count is stored only in local app data, never in Keychain; removing that data starts a fresh free allowance.
++Unlimited transcription and Capture are a one-time **$19.99 Individual** unlock. **Family Unlimited is $39.99**, and the **Family Upgrade is $19.99**. These are US prices; regional prices reflect purchasing power. No subscription, no renewal, no ads. Users who bought the original paid app build are automatically grandfathered into unlimited access. The successful-Capture count is stored only in local app data, never in Keychain; removing that data starts a fresh free allowance.
+ 
+ ## Tech Stack
+ 
+diff --git a/Voxboard.xcodeproj/project.pbxproj b/Voxboard.xcodeproj/project.pbxproj
+index 9fd826f..29ad067 100644
+--- a/Voxboard.xcodeproj/project.pbxproj
++++ b/Voxboard.xcodeproj/project.pbxproj
+@@ -1100,7 +1100,7 @@
+ 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+ 				CODE_SIGN_ENTITLEMENTS = "Voxboard Watch Widget/VoxboardWatchWidget.entitlements";
+ 				CODE_SIGN_STYLE = Automatic;
+-				CURRENT_PROJECT_VERSION = 56;
++				CURRENT_PROJECT_VERSION = 57;
+ 				DEVELOPMENT_TEAM = 67KC823C9A;
+ 				GENERATE_INFOPLIST_FILE = YES;
+ 				INFOPLIST_FILE = "Voxboard Watch Widget/Info.plist";
+@@ -1111,7 +1111,7 @@
+ 					"@executable_path/Frameworks",
+ 					"@executable_path/../../Frameworks",
+ 				);
+-				MARKETING_VERSION = 2.12;
++				MARKETING_VERSION = 2.13;
+ 				PRODUCT_BUNDLE_IDENTIFIER = bontecou.Voxboard.watchkitapp.Widget;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SDKROOT = watchos;
+@@ -1132,7 +1132,7 @@
+ 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+ 				CODE_SIGN_ENTITLEMENTS = "Voxboard Widget/VoxboardWidget.entitlements";
+ 				CODE_SIGN_STYLE = Automatic;
+-				CURRENT_PROJECT_VERSION = 56;
++				CURRENT_PROJECT_VERSION = 57;
+ 				DEVELOPMENT_TEAM = 67KC823C9A;
+ 				GENERATE_INFOPLIST_FILE = YES;
+ 				INFOPLIST_FILE = "Voxboard Widget/Info.plist";
+@@ -1144,7 +1144,7 @@
+ 					"@executable_path/Frameworks",
+ 					"@executable_path/../../Frameworks",
+ 				);
+-				MARKETING_VERSION = 2.12;
++				MARKETING_VERSION = 2.13;
+ 				PRODUCT_BUNDLE_IDENTIFIER = "bontecou.Voxboard.Voxboard-Widget";
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SKIP_INSTALL = YES;
+@@ -1165,7 +1165,7 @@
+ 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+ 				CODE_SIGN_ENTITLEMENTS = "Voxboard Widget/VoxboardWidget.entitlements";
+ 				CODE_SIGN_STYLE = Automatic;
+-				CURRENT_PROJECT_VERSION = 56;
++				CURRENT_PROJECT_VERSION = 57;
+ 				DEVELOPMENT_TEAM = 67KC823C9A;
+ 				GENERATE_INFOPLIST_FILE = YES;
+ 				INFOPLIST_FILE = "Voxboard Widget/Info.plist";
+@@ -1177,7 +1177,7 @@
+ 					"@executable_path/Frameworks",
+ 					"@executable_path/../../Frameworks",
+ 				);
+-				MARKETING_VERSION = 2.12;
++				MARKETING_VERSION = 2.13;
+ 				PRODUCT_BUNDLE_IDENTIFIER = "bontecou.Voxboard.Voxboard-Widget";
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SKIP_INSTALL = YES;
+@@ -1319,7 +1319,7 @@
+ 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+ 				CODE_SIGN_ENTITLEMENTS = Voxboard/Voxboard.entitlements;
+ 				CODE_SIGN_STYLE = Automatic;
+-				CURRENT_PROJECT_VERSION = 56;
++				CURRENT_PROJECT_VERSION = 57;
+ 				DEVELOPMENT_TEAM = 67KC823C9A;
+ 				ENABLE_PREVIEWS = YES;
+ 				GENERATE_INFOPLIST_FILE = YES;
+@@ -1337,7 +1337,7 @@
+ 					"$(inherited)",
+ 					"@executable_path/Frameworks",
+ 				);
+-				MARKETING_VERSION = 2.12;
++				MARKETING_VERSION = 2.13;
+ 				PRODUCT_BUNDLE_IDENTIFIER = bontecou.Voxboard;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+@@ -1357,7 +1357,7 @@
+ 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+ 				CODE_SIGN_ENTITLEMENTS = Voxboard/Voxboard.entitlements;
+ 				CODE_SIGN_STYLE = Automatic;
+-				CURRENT_PROJECT_VERSION = 56;
++				CURRENT_PROJECT_VERSION = 57;
+ 				DEVELOPMENT_TEAM = 67KC823C9A;
+ 				ENABLE_PREVIEWS = YES;
+ 				GENERATE_INFOPLIST_FILE = YES;
+@@ -1373,7 +1373,7 @@
+ 					"$(inherited)",
+ 					"@executable_path/Frameworks",
+ 				);
+-				MARKETING_VERSION = 2.12;
++				MARKETING_VERSION = 2.13;
+ 				PRODUCT_BUNDLE_IDENTIFIER = bontecou.Voxboard;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+@@ -1391,7 +1391,7 @@
+ 			buildSettings = {
+ 				CODE_SIGN_ENTITLEMENTS = "Voxboard Keyboard/VoxboardKeyboard.entitlements";
+ 				CODE_SIGN_STYLE = Automatic;
+-				CURRENT_PROJECT_VERSION = 56;
++				CURRENT_PROJECT_VERSION = 57;
+ 				DEVELOPMENT_TEAM = 67KC823C9A;
+ 				GENERATE_INFOPLIST_FILE = YES;
+ 				INFOPLIST_FILE = "Voxboard Keyboard/Info.plist";
+@@ -1403,7 +1403,7 @@
+ 					"@executable_path/Frameworks",
+ 					"@executable_path/../../Frameworks",
+ 				);
+-				MARKETING_VERSION = 2.12;
++				MARKETING_VERSION = 2.13;
+ 				PRODUCT_BUNDLE_IDENTIFIER = "bontecou.Voxboard.Voxboard-Keyboard";
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SKIP_INSTALL = YES;
+@@ -1421,7 +1421,7 @@
+ 			buildSettings = {
+ 				CODE_SIGN_ENTITLEMENTS = "Voxboard Keyboard/VoxboardKeyboard.entitlements";
+ 				CODE_SIGN_STYLE = Automatic;
+-				CURRENT_PROJECT_VERSION = 56;
++				CURRENT_PROJECT_VERSION = 57;
+ 				DEVELOPMENT_TEAM = 67KC823C9A;
+ 				GENERATE_INFOPLIST_FILE = YES;
+ 				INFOPLIST_FILE = "Voxboard Keyboard/Info.plist";
+@@ -1433,7 +1433,7 @@
+ 					"@executable_path/Frameworks",
+ 					"@executable_path/../../Frameworks",
+ 				);
+-				MARKETING_VERSION = 2.12;
++				MARKETING_VERSION = 2.13;
+ 				PRODUCT_BUNDLE_IDENTIFIER = "bontecou.Voxboard.Voxboard-Keyboard";
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SKIP_INSTALL = YES;
+@@ -1453,7 +1453,7 @@
+ 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+ 				CODE_SIGN_ENTITLEMENTS = "Voxboard Watch Widget/VoxboardWatchWidget.entitlements";
+ 				CODE_SIGN_STYLE = Automatic;
+-				CURRENT_PROJECT_VERSION = 56;
++				CURRENT_PROJECT_VERSION = 57;
+ 				DEVELOPMENT_TEAM = 67KC823C9A;
+ 				GENERATE_INFOPLIST_FILE = YES;
+ 				INFOPLIST_FILE = "Voxboard Watch Widget/Info.plist";
+@@ -1464,7 +1464,7 @@
+ 					"@executable_path/Frameworks",
+ 					"@executable_path/../../Frameworks",
+ 				);
+-				MARKETING_VERSION = 2.12;
++				MARKETING_VERSION = 2.13;
+ 				PRODUCT_BUNDLE_IDENTIFIER = bontecou.Voxboard.watchkitapp.Widget;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SDKROOT = watchos;
+@@ -1486,7 +1486,7 @@
+ 				CODE_SIGN_ENTITLEMENTS = "Voxboard Mac/VoxboardMac.entitlements";
+ 				CODE_SIGN_STYLE = Automatic;
+ 				COMBINE_HIDPI_IMAGES = YES;
+-				CURRENT_PROJECT_VERSION = 51;
++				CURRENT_PROJECT_VERSION = 57;
+ 				DEVELOPMENT_TEAM = 67KC823C9A;
+ 				ENABLE_HARDENED_RUNTIME = YES;
+ 				ENABLE_PREVIEWS = YES;
+@@ -1505,7 +1505,7 @@
+ 					"@executable_path/../Frameworks",
+ 				);
+ 				MACOSX_DEPLOYMENT_TARGET = 14.0;
+-				MARKETING_VERSION = 2.9;
++				MARKETING_VERSION = 2.13;
+ 				PRODUCT_BUNDLE_IDENTIFIER = bontecou.Voxboard;
+ 				PRODUCT_NAME = Vox.md;
+ 				SDKROOT = macosx;
+@@ -1525,7 +1525,7 @@
+ 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+ 				CODE_SIGN_ENTITLEMENTS = "Voxboard Watch/VoxboardWatch.entitlements";
+ 				CODE_SIGN_STYLE = Automatic;
+-				CURRENT_PROJECT_VERSION = 56;
++				CURRENT_PROJECT_VERSION = 57;
+ 				DEVELOPMENT_TEAM = 67KC823C9A;
+ 				GENERATE_INFOPLIST_FILE = YES;
+ 				INFOPLIST_FILE = "Voxboard Watch/Info.plist";
+@@ -1537,7 +1537,7 @@
+ 					"$(inherited)",
+ 					"@executable_path/Frameworks",
+ 				);
+-				MARKETING_VERSION = 2.12;
++				MARKETING_VERSION = 2.13;
+ 				PRODUCT_BUNDLE_IDENTIFIER = bontecou.Voxboard.watchkitapp;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SDKROOT = watchos;
+@@ -1560,7 +1560,7 @@
+ 				CODE_SIGN_ENTITLEMENTS = "Voxboard Mac/VoxboardMac.entitlements";
+ 				CODE_SIGN_STYLE = Automatic;
+ 				COMBINE_HIDPI_IMAGES = YES;
+-				CURRENT_PROJECT_VERSION = 51;
++				CURRENT_PROJECT_VERSION = 57;
+ 				DEVELOPMENT_TEAM = 67KC823C9A;
+ 				ENABLE_HARDENED_RUNTIME = YES;
+ 				ENABLE_PREVIEWS = YES;
+@@ -1579,7 +1579,7 @@
+ 					"@executable_path/../Frameworks",
+ 				);
+ 				MACOSX_DEPLOYMENT_TARGET = 14.0;
+-				MARKETING_VERSION = 2.9;
++				MARKETING_VERSION = 2.13;
+ 				PRODUCT_BUNDLE_IDENTIFIER = bontecou.Voxboard;
+ 				PRODUCT_NAME = Vox.md;
+ 				SDKROOT = macosx;
+@@ -1599,7 +1599,7 @@
+ 				CLANG_ENABLE_OBJC_WEAK = NO;
+ 				CODE_SIGN_ENTITLEMENTS = "Voxboard Share Extension/VoxboardShare.entitlements";
+ 				CODE_SIGN_STYLE = Automatic;
+-				CURRENT_PROJECT_VERSION = 56;
++				CURRENT_PROJECT_VERSION = 57;
+ 				DEVELOPMENT_TEAM = 67KC823C9A;
+ 				GENERATE_INFOPLIST_FILE = YES;
+ 				INFOPLIST_FILE = "Voxboard Share Extension/Info.plist";
+@@ -1610,7 +1610,7 @@
+ 					"@executable_path/Frameworks",
+ 					"@executable_path/../../Frameworks",
+ 				);
+-				MARKETING_VERSION = 2.12;
++				MARKETING_VERSION = 2.13;
+ 				PRODUCT_BUNDLE_IDENTIFIER = bontecou.Voxboard.ShareExtension;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SDKROOT = iphoneos;
+@@ -1627,7 +1627,7 @@
+ 				CLANG_ENABLE_OBJC_WEAK = NO;
+ 				CODE_SIGN_ENTITLEMENTS = "Voxboard Share Extension/VoxboardShare.entitlements";
+ 				CODE_SIGN_STYLE = Automatic;
+-				CURRENT_PROJECT_VERSION = 56;
++				CURRENT_PROJECT_VERSION = 57;
+ 				DEVELOPMENT_TEAM = 67KC823C9A;
+ 				GENERATE_INFOPLIST_FILE = YES;
+ 				INFOPLIST_FILE = "Voxboard Share Extension/Info.plist";
+@@ -1638,7 +1638,7 @@
+ 					"@executable_path/Frameworks",
+ 					"@executable_path/../../Frameworks",
+ 				);
+-				MARKETING_VERSION = 2.12;
++				MARKETING_VERSION = 2.13;
+ 				PRODUCT_BUNDLE_IDENTIFIER = bontecou.Voxboard.ShareExtension;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SDKROOT = iphoneos;
+@@ -1726,7 +1726,7 @@
+ 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+ 				CODE_SIGN_ENTITLEMENTS = "Voxboard Watch/VoxboardWatch.entitlements";
+ 				CODE_SIGN_STYLE = Automatic;
+-				CURRENT_PROJECT_VERSION = 56;
++				CURRENT_PROJECT_VERSION = 57;
+ 				DEVELOPMENT_TEAM = 67KC823C9A;
+ 				GENERATE_INFOPLIST_FILE = YES;
+ 				INFOPLIST_FILE = "Voxboard Watch/Info.plist";
+@@ -1738,7 +1738,7 @@
+ 					"$(inherited)",
+ 					"@executable_path/Frameworks",
+ 				);
+-				MARKETING_VERSION = 2.12;
++				MARKETING_VERSION = 2.13;
+ 				PRODUCT_BUNDLE_IDENTIFIER = bontecou.Voxboard.watchkitapp;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SDKROOT = watchos;
+diff --git a/Voxboard/ReleaseNotes.swift b/Voxboard/ReleaseNotes.swift
+index f086c94..8f4a5da 100644
+--- a/Voxboard/ReleaseNotes.swift
++++ b/Voxboard/ReleaseNotes.swift
+@@ -17,6 +17,21 @@ enum VoxboardReleaseNotes {
+     }
+ 
+     private static let versionNotes: [VersionNotes] = [
++        .init(
++            version: "2.13",
++            items: [
++                .list(
++                    title: "What’s new in Vox.md",
++                    rows: [
++                        .init(
++                            symbolSystemName: "note.text",
++                            title: "A quick-capture maintenance update",
++                            description: "Refreshed app information for your voice and Markdown capture workflows."
++                        )
++                    ]
++                )
++            ]
++        ),
+         .init(
+             version: "2.10",
+             items: [
+diff --git a/Voxboard/Voxboard.storekit b/Voxboard/Voxboard.storekit
+index 18e70e2..0615407 100644
+--- a/Voxboard/Voxboard.storekit
++++ b/Voxboard/Voxboard.storekit
+@@ -2,7 +2,7 @@
+   "identifier" : "VoxboardStore",
+   "nonConsumableProducts" : [
+     {
+-      "displayPrice" : "9.99",
++      "displayPrice" : "19.99",
+       "familySharable" : false,
+       "internalID" : "bontecou.Voxboard.unlock",
+       "localizations" : [
+@@ -17,7 +17,7 @@
+       "type" : "NonConsumable"
+     },
+     {
+-      "displayPrice" : "14.99",
++      "displayPrice" : "39.99",
+       "familySharable" : true,
+       "internalID" : "bontecou.Voxboard.family",
+       "localizations" : [
+@@ -32,7 +32,7 @@
+       "type" : "NonConsumable"
+     },
+     {
+-      "displayPrice" : "4.99",
++      "displayPrice" : "19.99",
+       "familySharable" : true,
+       "internalID" : "bontecou.Voxboard.familyUpgrade",
+       "localizations" : [
+diff --git a/docs/onboarding-analytics.md b/docs/onboarding-analytics.md
+index fec13a6..6ab43b5 100644
+--- a/docs/onboarding-analytics.md
++++ b/docs/onboarding-analytics.md
+@@ -14,7 +14,7 @@ The remote D1 database is `voxboard-onboarding-analytics` (`af59f484-87cd-4f0b-b
+ 
+ No ingest token is configured today, matching the Health.md worker setup. If abuse becomes an issue, set a Worker `INGEST_TOKEN` secret and provide `ONBOARDING_ANALYTICS_INGEST_TOKEN` to the app build.
+ 
+-Events are queued in UserDefaults with stable event IDs and flushed asynchronously. Failures never block app flows.
++Release builds enable collection through `OnboardingAnalyticsClient.isEnabledByDefault`; debug builds remain opt-in. Events are queued in UserDefaults with stable event IDs and flushed asynchronously. Failures never block app flows.
+ 
+ ## Debug/local testing
+ 
+diff --git a/fastlane/metadata/ar-SA/release_notes.txt b/fastlane/metadata/ar-SA/release_notes.txt
+index a3b6b82..c96c421 100644
+--- a/fastlane/metadata/ar-SA/release_notes.txt
++++ b/fastlane/metadata/ar-SA/release_notes.txt
+@@ -1,6 +1 @@
+-أوقفوا التسجيلات مؤقتًا لتجميع أفكاركم ثم تابعوا من حيث توقفتم تمامًا — على آيفون وآيباد وماك. ملاحظة واحدة، بلا صمت، بلا ملفات منفصلة.
+-
+-الجديد
+-• أوقفوا أي تسجيل مؤقتًا وتابعوه بلمسة واحدة — في شريط الالتقاط على آيفون، وفي شريط الحالة على ماك، بما يطابق Apple Watch.
+-• يُحذف وقت الإيقاف المؤقت والصمت تلقائيًا، فتحتوي ملاحظتكم ومؤقّتها على ما قلتموه فعلًا فقط.
+-• أثناء الإيقاف المؤقت يتوقف النسخ المباشر والإيقاف التلقائي مؤقتًا — لحظة صمت لا تقطع الملاحظة أبدًا.
++تحديث صيانة يتضمن معلومات محدّثة عن التطبيق لسير عمل التقاط الصوت وMarkdown في Vox.md.
+diff --git a/fastlane/metadata/ca/release_notes.txt b/fastlane/metadata/ca/release_notes.txt
+index 9159b4f..869c503 100644
+--- a/fastlane/metadata/ca/release_notes.txt
++++ b/fastlane/metadata/ca/release_notes.txt
+@@ -1,6 +1 @@
+-Atureu temporalment els enregistraments per reunir els vostres pensaments i continueu exactament on us vau aturar — a l'iPhone, l'iPad i el Mac. Una sola nota, sense silencis morts, sense fitxers separats.
+-
+-Novetats
+-• Atureu i repreneu qualsevol enregistrament amb un sol toc — a la barra de captura de l'iPhone, a la barra d'estat del Mac, igual que a l'Apple Watch.
+-• El temps i el silenci de la pausa s'eliminen automàticament, de manera que la nota i el seu temporitzador contenen només allò que realment vau dir.
+-• Durant la pausa, la transcripció en directe i l'aturada automàtica queden en espera — un moment de silenci mai no talla una nota.
++Una actualització de manteniment amb informació renovada de l’app per als teus fluxos de captura de veu i Markdown amb Vox.md.
+diff --git a/fastlane/metadata/cs/release_notes.txt b/fastlane/metadata/cs/release_notes.txt
+index 095a44b..155455b 100644
+--- a/fastlane/metadata/cs/release_notes.txt
++++ b/fastlane/metadata/cs/release_notes.txt
+@@ -1,6 +1 @@
+-Pozastavte nahrávání, abyste se soustředili na myšlenky, a pokračujte přesně tam, kde jste skončili — na iPhonu, iPadu i Macu. Jedna poznámka, bez mrtvého vzduchu, bez oddělených souborů.
+-
+-Novinky
+-• Pozastavte a obnovte jakékoli nahrávání jedním klepnutím — na liště zachytávání na iPhonu, na stavové liště na Macu, stejně jako na Apple Watch.
+-• Čas a ticho během pauzy se automaticky odstraní, takže poznámka i její časovač obsahují jen to, co jste skutečně řekli.
+-• Během pauzy se pozastaví živý přepis i automatické zastavení — chvíle ticha nikdy poznámku nepřeruší.
++Aktualizace údržby s aktualizovanými informacemi o aplikaci pro vaše pracovní postupy hlasového záznamu a Markdownu ve Vox.md.
+diff --git a/fastlane/metadata/da/release_notes.txt b/fastlane/metadata/da/release_notes.txt
+index 5873c28..68860fc 100644
+--- a/fastlane/metadata/da/release_notes.txt
++++ b/fastlane/metadata/da/release_notes.txt
+@@ -1,6 +1 @@
+-Sæt optagelser på pause for at samle dine tanker, og fortsæt lige der, hvor du slap — på iPhone, iPad og Mac. Én note, uden død luft, uden separate filer.
+-
+-Nyt
+-• Sæt enhver optagelse på pause og genoptag den med ét tryk — i Capture-linjen på iPhone, i statuslinjen på Mac og i takt med Apple Watch.
+-• Pausetid og stilhed fjernes automatisk, så din note og dens timer kun indeholder det, du faktisk sagde.
+-• Under pausen venter live-transskription og autostop — et stille øjeblik afslutter aldrig en note for tidligt.
++En vedligeholdelsesopdatering med opdaterede appoplysninger til dine arbejdsgange med tale og Markdown i Vox.md.
+diff --git a/fastlane/metadata/de-DE/release_notes.txt b/fastlane/metadata/de-DE/release_notes.txt
+index 4f66bff..9740b0a 100644
+--- a/fastlane/metadata/de-DE/release_notes.txt
++++ b/fastlane/metadata/de-DE/release_notes.txt
+@@ -1,6 +1 @@
+-Pausieren Sie Aufnahmen, um Ihre Gedanken zu sammeln, und setzen Sie genau dort fort, wo Sie aufgehört haben – auf iPhone, iPad und Mac. Eine Notiz, ohne tote Luft, ohne separate Dateien.
+-
+-Neu
+-• Pausieren und fortsetzen Sie jede Aufnahme mit einem Tipp – in der Capture-Leiste auf dem iPhone, in der Statusleiste auf dem Mac, passend zur Apple Watch.
+-• Pausierte Zeit und Stille werden automatisch entfernt, sodass Ihre Notiz und ihr Timer nur enthalten, was Sie tatsächlich gesagt haben.
+-• Beim Pausieren werden Live-Transkription und automatisches Stoppen ausgesetzt – ein stiller Moment beendet eine Notiz nie vorzeitig.
++Wartungsupdate mit aktualisierten App-Informationen für die Sprach- und Markdown-Erfassung mit Vox.md.
+diff --git a/fastlane/metadata/el/release_notes.txt b/fastlane/metadata/el/release_notes.txt
+index 217910e..716317b 100644
+--- a/fastlane/metadata/el/release_notes.txt
++++ b/fastlane/metadata/el/release_notes.txt
+@@ -1,6 +1 @@
+-Βάλτε τις ηχογραφήσεις σε παύση για να μαζέψετε τις σκέψεις σας και συνεχίστε ακριβώς εκεί που σταματήσατε — σε iPhone, iPad και Mac. Μια σημείωση, χωρίς νεκρό χρόνο, χωρίς ξεχωριστά αρχεία.
+-
+-Νέα
+-• Βάλτε σε παύση και συνεχίστε οποιαδήποτε ηχογράφηση με ένα άγγιγμα — στη μπάρα καταγραφής στο iPhone, στη μπάρα κατάστασης στο Mac, όπως στο Apple Watch.
+-• Ο χρόνος και η σιωπή της παύσης αφαιρούνται αυτόματα, ώστε η σημείωση και το χρονόμετρό της να περιέχουν μόνο όσα είπατε πραγματικά.
+-• Κατά την παύση, η ζωντανή απομαγνητοφώνηση και η αυτόματη διακοπή αναμένουν — μια στιγμή σιωπής δεν κόβει ποτέ μια σημείωση.
++Ενημέρωση συντήρησης με ανανεωμένες πληροφορίες εφαρμογής για τις ροές καταγραφής φωνής και Markdown στο Vox.md.
+diff --git a/fastlane/metadata/en-AU/release_notes.txt b/fastlane/metadata/en-AU/release_notes.txt
+index 9e84fa5..5fc5c67 100644
+--- a/fastlane/metadata/en-AU/release_notes.txt
++++ b/fastlane/metadata/en-AU/release_notes.txt
+@@ -1,6 +1 @@
+-Pause recordings to gather your thoughts, then pick up right where you left off — on iPhone, iPad, and Mac. One note, no dead air, no separate files.
+-
+-New
+-• Pause and resume any recording with one tap — in the Capture Bar on iPhone, the status bar on Mac, and matching Apple Watch.
+-• Paused time and silence are removed automatically, so your note and its timer contain only what you actually said.
+-• Pausing holds live transcription and voice auto-stop, so a quiet moment never cuts a note short.
++A maintenance update with refreshed app information for Vox.md’s voice and Markdown capture workflows.
+diff --git a/fastlane/metadata/en-CA/release_notes.txt b/fastlane/metadata/en-CA/release_notes.txt
+index 9e84fa5..5fc5c67 100644
+--- a/fastlane/metadata/en-CA/release_notes.txt
++++ b/fastlane/metadata/en-CA/release_notes.txt
+@@ -1,6 +1 @@
+-Pause recordings to gather your thoughts, then pick up right where you left off — on iPhone, iPad, and Mac. One note, no dead air, no separate files.
+-
+-New
+-• Pause and resume any recording with one tap — in the Capture Bar on iPhone, the status bar on Mac, and matching Apple Watch.
+-• Paused time and silence are removed automatically, so your note and its timer contain only what you actually said.
+-• Pausing holds live transcription and voice auto-stop, so a quiet moment never cuts a note short.
++A maintenance update with refreshed app information for Vox.md’s voice and Markdown capture workflows.
+diff --git a/fastlane/metadata/en-GB/release_notes.txt b/fastlane/metadata/en-GB/release_notes.txt
+index 9e84fa5..5fc5c67 100644
+--- a/fastlane/metadata/en-GB/release_notes.txt
++++ b/fastlane/metadata/en-GB/release_notes.txt
+@@ -1,6 +1 @@
+-Pause recordings to gather your thoughts, then pick up right where you left off — on iPhone, iPad, and Mac. One note, no dead air, no separate files.
+-
+-New
+-• Pause and resume any recording with one tap — in the Capture Bar on iPhone, the status bar on Mac, and matching Apple Watch.
+-• Paused time and silence are removed automatically, so your note and its timer contain only what you actually said.
+-• Pausing holds live transcription and voice auto-stop, so a quiet moment never cuts a note short.
++A maintenance update with refreshed app information for Vox.md’s voice and Markdown capture workflows.
+diff --git a/fastlane/metadata/en-US/release_notes.txt b/fastlane/metadata/en-US/release_notes.txt
+index 9e84fa5..5fc5c67 100644
+--- a/fastlane/metadata/en-US/release_notes.txt
++++ b/fastlane/metadata/en-US/release_notes.txt
+@@ -1,6 +1 @@
+-Pause recordings to gather your thoughts, then pick up right where you left off — on iPhone, iPad, and Mac. One note, no dead air, no separate files.
+-
+-New
+-• Pause and resume any recording with one tap — in the Capture Bar on iPhone, the status bar on Mac, and matching Apple Watch.
+-• Paused time and silence are removed automatically, so your note and its timer contain only what you actually said.
+-• Pausing holds live transcription and voice auto-stop, so a quiet moment never cuts a note short.
++A maintenance update with refreshed app information for Vox.md’s voice and Markdown capture workflows.
+diff --git a/fastlane/metadata/es-ES/release_notes.txt b/fastlane/metadata/es-ES/release_notes.txt
+index cdcde68..6fd318f 100644
+--- a/fastlane/metadata/es-ES/release_notes.txt
++++ b/fastlane/metadata/es-ES/release_notes.txt
+@@ -1,6 +1 @@
+-Pausa las grabaciones para reunir tus ideas y retoma justo donde lo dejaste — en iPhone, iPad y Mac. Una sola nota, sin silencios, sin archivos separados.
+-
+-Novedades
+-• Pausa y reanuda cualquier grabación con un toque — en la barra de captura del iPhone, en la barra de estado del Mac y a juego con el Apple Watch.
+-• El tiempo y el silencio en pausa se eliminan automáticamente, de modo que tu nota y su cronómetro contienen solo lo que realmente dijiste.
+-• Al pausar se detienen la transcripción en vivo y la parada automática: un momento de silencio nunca corta una nota.
++Una actualización de mantenimiento con información renovada de la app para tus flujos de captura de voz y Markdown con Vox.md.
+diff --git a/fastlane/metadata/es-MX/release_notes.txt b/fastlane/metadata/es-MX/release_notes.txt
+index cdcde68..6fd318f 100644
+--- a/fastlane/metadata/es-MX/release_notes.txt
++++ b/fastlane/metadata/es-MX/release_notes.txt
+@@ -1,6 +1 @@
+-Pausa las grabaciones para reunir tus ideas y retoma justo donde lo dejaste — en iPhone, iPad y Mac. Una sola nota, sin silencios, sin archivos separados.
+-
+-Novedades
+-• Pausa y reanuda cualquier grabación con un toque — en la barra de captura del iPhone, en la barra de estado del Mac y a juego con el Apple Watch.
+-• El tiempo y el silencio en pausa se eliminan automáticamente, de modo que tu nota y su cronómetro contienen solo lo que realmente dijiste.
+-• Al pausar se detienen la transcripción en vivo y la parada automática: un momento de silencio nunca corta una nota.
++Una actualización de mantenimiento con información renovada de la app para tus flujos de captura de voz y Markdown con Vox.md.
+diff --git a/fastlane/metadata/fi/release_notes.txt b/fastlane/metadata/fi/release_notes.txt
+index e98ed8e..e5455cc 100644
+--- a/fastlane/metadata/fi/release_notes.txt
++++ b/fastlane/metadata/fi/release_notes.txt
+@@ -1,6 +1 @@
+-Keskeytä tallennukset ajatuksiesi kokoamiseksi ja jatka täsmälleen siitä, mihin jäit — iPhonessa, iPadissa ja Macissa. Yksi muistiinpano, ei kuollutta hiljaisuutta, ei erillisiä tiedostoja.
+-
+-Uutta
+-• Keskeytä ja jatka mitä tahansa tallennusta yhdellä napautuksella — Capture-palkissa iPhonessa, tilapalkissa Macissa ja Apple Watchin tavoin.
+-• Tauko ja hiljaisuus poistetaan automaattisesti, joten muistiinpanosi ja sen ajastin sisältävät vain sen, mitä oikeasti sanoit.
+-• Tauon aikana suora litterointi ja automaattinen pysäytys odottavat — hiljainen hetki ei koskaan katkaise muistiinpanoa.
++Ylläpitopäivitys, jossa on päivitetyt sovellustiedot Vox.md:n puhe- ja Markdown-tallennuksen työnkulkuihin.
+diff --git a/fastlane/metadata/fr-CA/release_notes.txt b/fastlane/metadata/fr-CA/release_notes.txt
+index ade4bf4..7e76fb8 100644
+--- a/fastlane/metadata/fr-CA/release_notes.txt
++++ b/fastlane/metadata/fr-CA/release_notes.txt
+@@ -1,6 +1 @@
+-Mettez vos enregistrements en pause pour rassembler vos idées, puis reprenez exactement là où vous vous êtes arrêté — sur iPhone, iPad et Mac. Une seule note, sans temps mort, sans fichiers séparés.
+-
+-Nouveautés
+-• Mettez n'importe quel enregistrement en pause et reprenez-le d'un simple geste — dans la barre de capture sur iPhone, dans la barre d'état sur Mac, comme sur Apple Watch.
+-• Le temps et le silence en pause sont automatiquement retirés : votre note et son chronomètre ne contiennent que ce que vous avez réellement dit.
+-• La pause suspend la transcription en direct et l'arrêt automatique : un moment de silence n'interrompt jamais une note.
++Une mise à jour de maintenance avec des informations actualisées sur l’app pour vos captures vocales et Markdown avec Vox.md.
+diff --git a/fastlane/metadata/fr-FR/release_notes.txt b/fastlane/metadata/fr-FR/release_notes.txt
+index ade4bf4..7e76fb8 100644
+--- a/fastlane/metadata/fr-FR/release_notes.txt
++++ b/fastlane/metadata/fr-FR/release_notes.txt
+@@ -1,6 +1 @@
+-Mettez vos enregistrements en pause pour rassembler vos idées, puis reprenez exactement là où vous vous êtes arrêté — sur iPhone, iPad et Mac. Une seule note, sans temps mort, sans fichiers séparés.
+-
+-Nouveautés
+-• Mettez n'importe quel enregistrement en pause et reprenez-le d'un simple geste — dans la barre de capture sur iPhone, dans la barre d'état sur Mac, comme sur Apple Watch.
+-• Le temps et le silence en pause sont automatiquement retirés : votre note et son chronomètre ne contiennent que ce que vous avez réellement dit.
+-• La pause suspend la transcription en direct et l'arrêt automatique : un moment de silence n'interrompt jamais une note.
++Une mise à jour de maintenance avec des informations actualisées sur l’app pour vos captures vocales et Markdown avec Vox.md.
+diff --git a/fastlane/metadata/he/release_notes.txt b/fastlane/metadata/he/release_notes.txt
+index 2b7cec4..ac59637 100644
+--- a/fastlane/metadata/he/release_notes.txt
++++ b/fastlane/metadata/he/release_notes.txt
+@@ -1,6 +1 @@
+-השהו הקלטות כדי לאסוף את מחשבותיכם והמשיכו בדיוק מאותה נקודה — ב-iPhone, ב-iPad וב-Mac. פתק אחד, בלי שקט מת, בלי קבצים נפרדים.
+-
+-חדש
+-• השהו והמשיכו כל הקלטה בנגיעה אחת — בסרגל הלכידה ב-iPhone, בשורת המצב ב-Mac, בהתאמה ל-Apple Watch.
+-• זמן ושקט בהשהיה מוסרים אוטומטית, כך שהפתק והטיימר שלו כוללים רק את מה שאמרתם בפועל.
+-• בהשהיה, התמלול החי והעצירה האוטומטית ממתינים — רגע של שקט לעולם לא יקטע פתק.
++עדכון תחזוקה עם מידע מעודכן על האפליקציה לתהליכי העבודה של לכידת קול ו-Markdown ב-Vox.md.
+diff --git a/fastlane/metadata/hi/release_notes.txt b/fastlane/metadata/hi/release_notes.txt
+index c69dbe0..64ee682 100644
+--- a/fastlane/metadata/hi/release_notes.txt
++++ b/fastlane/metadata/hi/release_notes.txt
+@@ -1,6 +1 @@
+-विचारों को जुटाने के लिए रिकॉर्डिंग रोकें और बिल्कुल वहीं से जारी रखें जहाँ रुके थे — iPhone, iPad और Mac पर। एक ही नोट, बिना खामोशी, बिना अलग फ़ाइलें।
+-
+-नया
+-• किसी भी रिकॉर्डिंग को एक टैप से रोकें और जारी रखें — iPhone पर कैप्चर बार में, Mac पर स्टेटस बार में, Apple Watch की तरह।
+-• रुकने का समय और सन्नाटा अपने आप हट जाता है, इसलिए आपका नोट और उसका टाइमर सिर्फ़ वही रखते हैं जो आपने सच में कहा।
+-• रोकने पर लाइव ट्रांसक्रिप्शन और ऑटो-स्टॉप रुके रहते हैं — चुप्पी का एक पल नोट को कभी बीच में नहीं काटता।
++Vox.md में आवाज़ और Markdown कैप्चर के लिए ऐप की जानकारी को ताज़ा करने वाला रखरखाव अपडेट।
+diff --git a/fastlane/metadata/hr/release_notes.txt b/fastlane/metadata/hr/release_notes.txt
+index f24f5cd..b43271c 100644
+--- a/fastlane/metadata/hr/release_notes.txt
++++ b/fastlane/metadata/hr/release_notes.txt
+@@ -1,6 +1 @@
+-Pauzirajte snimke da biste skupili misli, a zatim nastavite točno tamo gdje ste stali — na iPhoneu, iPadu i Macu. Jedna bilješka, bez mrtvog zraka, bez odvojenih datoteka.
+-
+-Novo
+-• Pauzirajte i nastavite bilo koju snimku jednim dodirom — u traci snimanja na iPhoneu, u statusnoj traci na Macu, u skladu s Apple Watchom.
+-• Vrijeme i tišina tijekom pauze automatski se uklanjaju, pa bilješka i njezin brojač vremena sadrže samo ono što ste stvarno rekli.
+-• Tijekom pauze čekaju transkripcija u živo i automatsko zaustavljanje — trenutak tišine nikad ne prekida bilješku.
++Ažuriranje održavanja s osvježenim informacijama o aplikaciji za vaše tijekove rada s glasovnim zapisima i Markdownom u Vox.md.
+diff --git a/fastlane/metadata/hu/release_notes.txt b/fastlane/metadata/hu/release_notes.txt
+index 06dcad6..c97576c 100644
+--- a/fastlane/metadata/hu/release_notes.txt
++++ b/fastlane/metadata/hu/release_notes.txt
+@@ -1,6 +1 @@
+-Állítson szünetre a felvételeket, hogy összeszedje gondolatait, majd pontosan ott folytassa, ahol abbahagyta — iPhone-on, iPadon és Macen. Egy jegyzet, holttér nélkül, külön fájlok nélkül.
+-
+-Újdonságok
+-• Bármely felvételt egy koppintással szüneteltethet és folytathat — a Capture sávban iPhone-on, az állapotsorban Macen, az Apple Watchhoz illő módon.
+-• A szünet ideje és csendje automatikusan eltávolításra kerül, így jegyzete és annak időmérője csak azt tartalmazza, amit ténylegesen mondott.
+-• Szünet alatt az élő átírás és az automatikus leállítás várakozik — egy csendes pillanat sosem vágja el a jegyzetet.
++Karbantartási frissítés megújult alkalmazásinformációkkal a Vox.md hang- és Markdown-rögzítési munkafolyamataihoz.
+diff --git a/fastlane/metadata/id/release_notes.txt b/fastlane/metadata/id/release_notes.txt
+index c838713..3defc30 100644
+--- a/fastlane/metadata/id/release_notes.txt
++++ b/fastlane/metadata/id/release_notes.txt
+@@ -1,6 +1 @@
+-Jeda rekaman untuk mengumpulkan pikiran, lalu lanjutkan tepat dari titik Anda berhenti — di iPhone, iPad, dan Mac. Satu catatan, tanpa keheningan mati, tanpa file terpisah.
+-
+-Baru
+-• Jeda dan lanjutkan rekaman apa pun dengan satu ketukan — di bilah Capture di iPhone, di bilah status di Mac, sejalan dengan Apple Watch.
+-• Waktu dan keheningan saat jeda dihapus otomatis, sehingga catatan dan pewaktunya hanya memuat apa yang benar-benar Anda ucapkan.
+-• Saat dijeda, transkripsi langsung dan penghentian otomatis menunggu — sejenak hening tak pernah memotong catatan.
++Pembaruan pemeliharaan dengan informasi aplikasi yang diperbarui untuk alur kerja perekaman suara dan Markdown di Vox.md.
+diff --git a/fastlane/metadata/it/release_notes.txt b/fastlane/metadata/it/release_notes.txt
+index 5af252e..0e80506 100644
+--- a/fastlane/metadata/it/release_notes.txt
++++ b/fastlane/metadata/it/release_notes.txt
+@@ -1,6 +1 @@
+-Metti in pausa le registrazioni per raccogliere i pensieri, poi riprendi esattamente da dove eri rimasto — su iPhone, iPad e Mac. Una sola nota, senza silenzi, senza file separati.
+-
+-Novità
+-• Metti in pausa e riprendi qualsiasi registrazione con un tocco — nella barra di cattura su iPhone, nella barra di stato su Mac, come su Apple Watch.
+-• Il tempo e il silenzio in pausa vengono rimossi automaticamente: la nota e il suo timer contengono solo ciò che hai realmente detto.
+-• Durante la pausa si fermano la trascrizione in diretta e l'arresto automatico: un momento di silenzio non interrompe mai una nota.
++Un aggiornamento di manutenzione con informazioni aggiornate sull’app per i tuoi flussi di acquisizione vocale e Markdown con Vox.md.
+diff --git a/fastlane/metadata/ja/release_notes.txt b/fastlane/metadata/ja/release_notes.txt
+index 0966ba8..d70185a 100644
+--- a/fastlane/metadata/ja/release_notes.txt
++++ b/fastlane/metadata/ja/release_notes.txt
+@@ -1,6 +1 @@
+-思考をまとめるために録音を一時停止し、続きからすぐ再開できます — iPhone、iPad、Macで。1つのノートに、無音も、別々のファイルも残りません。
+-
+-新機能
+-• どんな録音もワンタップで一時停止・再開 — iPhoneのキャプチャーバー、Macのステータスバー、Apple Watchと同じ操作感で。
+-• 一時停止中の時間と無音は自動的に取り除かれ、ノートとタイマーには実際に話した内容だけが残ります。
+-• 一時停止中はライブ書き起こしと自動停止も待機します — 静かなひとときがノートを途中で終わらせることはありません。
++Vox.mdの音声・Markdownキャプチャに関するアプリ情報を更新するメンテナンスアップデートです。
+diff --git a/fastlane/metadata/ko/release_notes.txt b/fastlane/metadata/ko/release_notes.txt
+index 3e1abaa..5049fde 100644
+--- a/fastlane/metadata/ko/release_notes.txt
++++ b/fastlane/metadata/ko/release_notes.txt
+@@ -1,6 +1 @@
+-생각을 정리할 때는 녹음을 일시정지하고, 멈췄던 바로 그곳에서 이어가세요 — iPhone, iPad, Mac에서 모두. 노트 하나로, 침묵도, 별도 파일도 없이.
+-
+-새로운 기능
+-• 어떤 녹음이든 한 번 탭해 일시정지하고 이어서 계속하세요 — iPhone의 캡처 막대, Mac의 상태 막대, Apple Watch와 같은 방식으로.
+-• 일시정지한 시간과 무음은 자동으로 제거되어 노트와 타이머에는 실제로 말한 내용만 남습니다.
+-• 일시정지 중에는 실시간 전사와 자동 중지도 함께 대기합니다 — 잠깐의 침묵이 노트를 중간에 끊지 않습니다.
++Vox.md의 음성 및 Markdown 캡처 작업을 위한 앱 정보를 새롭게 정리한 유지보수 업데이트입니다.
+diff --git a/fastlane/metadata/ms/release_notes.txt b/fastlane/metadata/ms/release_notes.txt
+index 3712127..9ef46e2 100644
+--- a/fastlane/metadata/ms/release_notes.txt
++++ b/fastlane/metadata/ms/release_notes.txt
+@@ -1,6 +1 @@
+-Jeda rakaman untuk mengumpulkan fikiran anda, kemudian sambung tepat di tempat anda berhenti — pada iPhone, iPad dan Mac. Satu nota, tanpa keheningan kosong, tanpa fail berasingan.
+-
+-Baharu
+-• Jeda dan sambung mana-mana rakaman dengan satu ketukan — pada bar Capture di iPhone, bar status di Mac, seiring dengan Apple Watch.
+-• Masa jeda dan keheningan dibuang secara automatik, jadi nota dan pemasa nya hanya mengandungi apa yang anda sebenarnya katakan.
+-• Semasa jeda, transkripsi langsung dan henti automatik ditangguhkan — sesaat senyap tidak sekali-kali memotong nota.
++Kemas kini penyelenggaraan dengan maklumat aplikasi yang dikemas kini untuk aliran kerja rakaman suara dan Markdown dalam Vox.md.
+diff --git a/fastlane/metadata/nl-NL/release_notes.txt b/fastlane/metadata/nl-NL/release_notes.txt
+index 3230caf..ab2fd20 100644
+--- a/fastlane/metadata/nl-NL/release_notes.txt
++++ b/fastlane/metadata/nl-NL/release_notes.txt
+@@ -1,6 +1 @@
+-Pauzeer opnames om je gedachten te ordenen en ga precies verder waar je was gebleven — op iPhone, iPad en Mac. Eén notitie, geen dode lucht, geen losse bestanden.
+-
+-Nieuw
+-• Pauzeer en hervat elke opname met één tik — in de capturebalk op iPhone, in de statusbalk op Mac, en in lijn met de Apple Watch.
+-• Gepauzeerde tijd en stilte worden automatisch verwijderd, zodat je notitie en de timer alleen bevatten wat je daadwerkelijk zei.
+-• Tijdens de pauze staan live transcriptie en automatisch stoppen stil — een stil moment beëindigt nooit een notitie.
++Een onderhoudsupdate met bijgewerkte app-informatie voor het vastleggen van spraak en Markdown met Vox.md.
+diff --git a/fastlane/metadata/no/release_notes.txt b/fastlane/metadata/no/release_notes.txt
+index 84fc6bd..ef97633 100644
+--- a/fastlane/metadata/no/release_notes.txt
++++ b/fastlane/metadata/no/release_notes.txt
+@@ -1,6 +1 @@
+-Sett opptak på pause for å samle tankene, og fortsett akkurat der du slapp — på iPhone, iPad og Mac. Étt notat, uten dødtid, uten egne filer.
+-
+-Nytt
+-• Sett ethvert opptak på pause og fortsett med ett trykk — i Capture-linjen på iPhone, i statuslinjen på Mac, i takt med Apple Watch.
+-• Pausetid og stillhet fjernes automatisk, slik at notatet og timeren bare inneholder det du faktisk sa.
+-• Under pausen venter direkteskriving og autostopp — et stille øyeblikk avslutter aldri et notat.
++En vedlikeholdsoppdatering med oppdatert appinformasjon for arbeidsflytene dine med tale og Markdown i Vox.md.
+diff --git a/fastlane/metadata/pl/release_notes.txt b/fastlane/metadata/pl/release_notes.txt
+index 7308896..9b54f69 100644
+--- a/fastlane/metadata/pl/release_notes.txt
++++ b/fastlane/metadata/pl/release_notes.txt
+@@ -1,6 +1 @@
+-Wstrzymuj nagrania, by zebrać myśli, i wracaj dokładnie tam, gdzie skończyłeś — na iPhonie, iPadzie i Macu. Jedna notatka, bez ciszy, bez osobnych plików.
+-
+-Nowości
+-• Wstrzymuj i wznawiaj dowolne nagranie jednym dotknięciem — na pasku przechwytywania na iPhonie, na pasku statusu na Macu, tak jak na Apple Watch.
+-• Czas i cisza podczas pauzy są automatycznie usuwane, więc notatka i jej timer zawierają tylko to, co faktycznie powiedziałeś.
+-• Podczas pauzy transkrypcja na żywo i automatyczne zatrzymanie czekają — chwila ciszy nigdy nie ucina notatki.
++Aktualizacja konserwacyjna z odświeżonymi informacjami o aplikacji do przechwytywania głosu i treści Markdown w Vox.md.
+diff --git a/fastlane/metadata/pt-BR/release_notes.txt b/fastlane/metadata/pt-BR/release_notes.txt
+index 6c83780..8fae1ff 100644
+--- a/fastlane/metadata/pt-BR/release_notes.txt
++++ b/fastlane/metadata/pt-BR/release_notes.txt
+@@ -1,6 +1 @@
+-Pause gravações para reunir seus pensamentos e retome exatamente de onde parou — no iPhone, iPad e Mac. Uma única nota, sem tempo morto, sem arquivos separados.
+-
+-Novidades
+-• Pause e retome qualquer gravação com um toque — na barra de captura no iPhone, na barra de status no Mac, acompanhando o Apple Watch.
+-• O tempo e o silêncio da pausa são removidos automaticamente, então sua nota e o cronômetro contêm só o que você realmente disse.
+-• Ao pausar, a transcrição ao vivo e a parada automática ficam em espera: um momento de silêncio nunca encerra uma nota antes da hora.
++Uma atualização de manutenção com informações atualizadas do app para seus fluxos de captura de voz e Markdown no Vox.md.
+diff --git a/fastlane/metadata/pt-PT/release_notes.txt b/fastlane/metadata/pt-PT/release_notes.txt
+index ef8a645..01aa8c1 100644
+--- a/fastlane/metadata/pt-PT/release_notes.txt
++++ b/fastlane/metadata/pt-PT/release_notes.txt
+@@ -1,6 +1 @@
+-Pouse gravações para reunir os seus pensamentos e retome exatamente onde parou — no iPhone, iPad e Mac. Uma única nota, sem tempos mortos, sem ficheiros separados.
+-
+-Novidades
+-• Pouse e retome qualquer gravação com um toque — na barra de captura no iPhone, na barra de estado no Mac, em linha com o Apple Watch.
+-• O tempo e o silêncio da pausa são removidos automaticamente: a sua nota e o cronómetro contêm apenas o que realmente disse.
+-• Ao pausar, a transcrição em direto e a paragem automática ficam em espera — um momento de silêncio nunca corta uma nota.
++Uma atualização de manutenção com informações atualizadas da app para os seus fluxos de captura de voz e Markdown no Vox.md.
+diff --git a/fastlane/metadata/ro/release_notes.txt b/fastlane/metadata/ro/release_notes.txt
+index c79af33..b8367a3 100644
+--- a/fastlane/metadata/ro/release_notes.txt
++++ b/fastlane/metadata/ro/release_notes.txt
+@@ -1,6 +1 @@
+-Puneți înregistrările pe pauză pentru a vă aduna gândurile și continuați exact de unde ați rămas — pe iPhone, iPad și Mac. O singură notă, fără tăceri, fără fișiere separate.
+-
+-Noutăți
+-• Puneți orice înregistrare pe pauză și reluați-o cu o singură atingere — în bara Capture pe iPhone, în bara de stare pe Mac, la fel ca pe Apple Watch.
+-• Timpul și tăcerea de pe pauză sunt eliminate automat, deci nota și cronometrul ei conțin doar ce ați spus realmente.
+-• În pauză, transcrierea în direct și oprirea automată așteaptă — un moment de liniște nu întrerupe niciodată o notă.
++O actualizare de întreținere cu informații actualizate despre aplicație pentru fluxurile de captură vocală și Markdown din Vox.md.
+diff --git a/fastlane/metadata/ru/release_notes.txt b/fastlane/metadata/ru/release_notes.txt
+index b490268..dbac020 100644
+--- a/fastlane/metadata/ru/release_notes.txt
++++ b/fastlane/metadata/ru/release_notes.txt
+@@ -1,6 +1 @@
+-Ставьте запись на паузу, чтобы собраться с мыслями, и продолжайте ровно с того же места — на iPhone, iPad и Mac. Одна заметка, без тишины, без лишних файлов.
+-
+-Новое
+-• Ставьте на паузу и продолжайте любую запись одним касанием — в панели захвата на iPhone, в строке состояния на Mac, как и на Apple Watch.
+-• Время и тишина на паузе удаляются автоматически: в заметке и её таймере остаётся только то, что вы действительно произнесли.
+-• На паузе живая расшифровка и автоостановка приостанавливаются — минута тишины никогда не оборвёт заметку.
++Обновление обслуживания с актуальной информацией о приложении для записи голоса и сохранения Markdown в Vox.md.
+diff --git a/fastlane/metadata/sk/release_notes.txt b/fastlane/metadata/sk/release_notes.txt
+index df14d61..48f88a6 100644
+--- a/fastlane/metadata/sk/release_notes.txt
++++ b/fastlane/metadata/sk/release_notes.txt
+@@ -1,6 +1 @@
+-Pozastavte nahrávanie, aby ste si zhrnuli myšlienky, a pokračujte presne tam, kde ste prestali — na iPhone, iPade aj Macu. Jedna poznámka, bez mŕtveho vzduchu, bez samostatných súborov.
+-
+-Novinky
+-• Pozastavte a obnovte akékoľvek nahrávanie jedným klepnutím — v lište zachytávania na iPone, v stavovej lište na Macu, rovnako ako na Apple Watch.
+-• Čas a ticho počas pauzy sa automaticky odstránia, takže poznámka aj jej časovač obsahujú iba to, čo ste skutočne povedali.
+-• Počas pauzy sa pozastavia živý prepis aj automatické zastavenie — chvíľa ticha nikdy neskráti poznámku.
++Aktualizácia údržby s aktualizovanými informáciami o aplikácii pre vaše pracovné postupy hlasového záznamu a Markdownu vo Vox.md.
+diff --git a/fastlane/metadata/sv/release_notes.txt b/fastlane/metadata/sv/release_notes.txt
+index c066abf..d3e9ed0 100644
+--- a/fastlane/metadata/sv/release_notes.txt
++++ b/fastlane/metadata/sv/release_notes.txt
+@@ -1,6 +1 @@
+-Pausa inspelningar för att samla dina tankar och fortsätt precis där du slutade — på iPhone, iPad och Mac. En anteckning, utan tystnad, utan separata filer.
+-
+-Nytt
+-• Pausa och återuppta vilken inspelning som helst med ett tryck — i Capture-raden på iPhone, i statusraden på Mac och i linje med Apple Watch.
+-• Pausad tid och tystnad tas bort automatiskt, så din anteckning och dess timer innehåller bara det du faktiskt sa.
+-• Under pausen vilar live-transkribering och automatiskt stopp — en tyst stund avslutar aldrig en anteckning i förtid.
++En underhållsuppdatering med uppdaterad appinformation för dina arbetsflöden med tal och Markdown i Vox.md.
+diff --git a/fastlane/metadata/th/release_notes.txt b/fastlane/metadata/th/release_notes.txt
+index 4ad5802..b83be41 100644
+--- a/fastlane/metadata/th/release_notes.txt
++++ b/fastlane/metadata/th/release_notes.txt
+@@ -1,6 +1 @@
+-หยุดการบันทึกชั่วคราวเพื่อรวบรวมความคิด แล้วกลับมาพูดต่อจากที่ค้างไว้ได้เลย — บน iPhone, iPad และ Mac โน้ตเดียว ไม่มีช่วงเงียบ ไม่ต้องแยกไฟล์
+-
+-ใหม่
+-• หยุดชั่วคราวและกลับมาบันทึกต่อได้ในแตะเดียว — ที่แถบจับเสียงบน iPhone แถบสถานะบน Mac และเหมือนบน Apple Watch
+-• เวลาและเสียงช่วงหยุดจะถูกตัดออกอัตโนมัติ โน้ตและตัวจับเวลาจึงมีเฉพาะสิ่งที่คุณพูดจริง
+-• ขณะหยุดชั่วคราว การถอดเสียงแบบสดและการหยุดอัตโนมัติจะพักไว้ — ช่วงเงียบสักครู่ไม่ตัดโน้ตเสียก่อนเวลา
++อัปเดตการบำรุงรักษาพร้อมข้อมูลแอปที่ปรับปรุงใหม่สำหรับขั้นตอนการบันทึกเสียงและ Markdown ใน Vox.md
+diff --git a/fastlane/metadata/tr/release_notes.txt b/fastlane/metadata/tr/release_notes.txt
+index 3e47b2b..9348f9e 100644
+--- a/fastlane/metadata/tr/release_notes.txt
++++ b/fastlane/metadata/tr/release_notes.txt
+@@ -1,6 +1 @@
+-Düşüncelerinizi toplamak için kayıtları duraklatın ve tam kaldığınız yerden sürdürün — iPhone, iPad ve Mac'te. Tek bir not, ölü sessizlik yok, ayrı dosya yok.
+-
+-Yenilikler
+-• Herhangi bir kaydı tek dokunuşla duraklatın ve sürdürün — iPhone'da Yakalama çubuğunda, Mac'te durum çubuğunda, Apple Watch ile uyumlu biçimde.
+-• Duraklatılan süre ve sessizlik otomatik olarak kaldırılır; notunuz ve zamanlayıcısı yalnızca gerçekte söylediklerinizi içerir.
+-• Duraklatma sırasında canlı transkripsiyon ve otomatik durdurma bekler — sessiz bir an, bir notu asla erken kesmez.
++Vox.md’nin ses ve Markdown yakalama iş akışları için yenilenmiş uygulama bilgileri içeren bir bakım güncellemesi.
+diff --git a/fastlane/metadata/uk/release_notes.txt b/fastlane/metadata/uk/release_notes.txt
+index d1b4794..417edaf 100644
+--- a/fastlane/metadata/uk/release_notes.txt
++++ b/fastlane/metadata/uk/release_notes.txt
+@@ -1,6 +1 @@
+-Ставте запис на паузу, щоб зібратися з думками, і продовжуйте саме з того місця — на iPhone, iPad та Mac. Одна нотатка, без тиші, без окремих файлів.
+-
+-Нове
+-• Ставте на паузу та продовжуйте будь-який запис одним дотиком — у панелі захоплення на iPhone, у рядку стану на Mac, як і на Apple Watch.
+-• Час і тиша на паузі вилучаються автоматично: у нотатці та її таймері лишається лише те, що ви справді сказали.
+-• На паузі живе транскрибування та автозупинка призупиняються — хвилина тиші ніколи не обірве нотатку.
++Оновлення обслуговування з актуальною інформацією про застосунок для запису голосу та збереження Markdown у Vox.md.
+diff --git a/fastlane/metadata/vi/release_notes.txt b/fastlane/metadata/vi/release_notes.txt
+index a5db5bd..8aec1f4 100644
+--- a/fastlane/metadata/vi/release_notes.txt
++++ b/fastlane/metadata/vi/release_notes.txt
+@@ -1,6 +1 @@
+-Tạm dừng bản ghi để tập hợp suy nghĩ, rồi tiếp tục đúng chỗ bạn dừng lại — trên iPhone, iPad và Mac. Một ghi chú duy nhất, không khoảng lặng, không tách file.
+-
+-Mới
+-• Tạm dừng và tiếp tục bất kỳ bản ghi nào chỉ với một chạm — trên thanh Capture ở iPhone, thanh trạng thái ở Mac, đồng bộ với Apple Watch.
+-• Thời gian và sự im lặng khi tạm dừng được loại bỏ tự động, nên ghi chú và bộ đếm thời gian chỉ chứa những gì bạn thực sự nói.
+-• Khi tạm dừng, chuyển lời trực tiếp và tự động dừng đều chờ — khoảnh khắc im lặng không bao giờ cắt ngang ghi chú.
++Bản cập nhật bảo trì với thông tin ứng dụng được làm mới cho quy trình ghi âm và lưu Markdown trong Vox.md.
+diff --git a/fastlane/metadata/zh-Hans/release_notes.txt b/fastlane/metadata/zh-Hans/release_notes.txt
+index f66f20d..fc459cc 100644
+--- a/fastlane/metadata/zh-Hans/release_notes.txt
++++ b/fastlane/metadata/zh-Hans/release_notes.txt
+@@ -1,6 +1 @@
+-暂停录音来整理思路，然后从停下的地方继续——iPhone、iPad 和 Mac 均可。一条笔记，没有空白静音，无需拆分文件。
+-
+-新增
+-• 任何录音都能一键暂停、继续——iPhone 的捕获栏、Mac 的状态栏，与 Apple Watch 一致。
+-• 暂停期间的时间和静音会被自动移除，笔记与计时器只保留你真正说过的内容。
+-• 暂停时，实时转写与自动停止同步挂起——片刻沉默绝不会提前结束一条笔记。
++本次维护更新刷新了 Vox.md 的应用信息，帮助你了解语音和 Markdown 快速记录工作流程。
+diff --git a/fastlane/metadata/zh-Hant/release_notes.txt b/fastlane/metadata/zh-Hant/release_notes.txt
+index a1df255..12c385b 100644
+--- a/fastlane/metadata/zh-Hant/release_notes.txt
++++ b/fastlane/metadata/zh-Hant/release_notes.txt
+@@ -1,6 +1 @@
+-暫停錄音來整理思緒，然後從停下的地方繼續——iPhone、iPad 和 Mac 皆可。一則筆記，沒有空白靜音，無需拆分檔案。
+-
+-新增
+-• 任何錄音都能一鍵暫停、繼續——iPhone 的擷取列、Mac 的狀態列，與 Apple Watch 一致。
+-• 暫停期間的時間與靜音會自動移除，筆記與計時器只保留你真正說過的內容。
+-• 暫停時，即時轉寫與自動停止同步暫停——片刻沉默絕不會提前結束一則筆記。
++本次維護更新重新整理了 Vox.md 的應用程式資訊，協助你瞭解語音與 Markdown 快速擷取工作流程。
+diff --git a/scripts/build-website.py b/scripts/build-website.py
+index fb6ead3..92a1429 100644
+--- a/scripts/build-website.py
++++ b/scripts/build-website.py
+@@ -56,8 +56,9 @@ def build(destination: Path) -> None:
+             lambda _: '<style data-source="geist.css">\n' + css + '\n</style>',
+             html,
+         )
+-        if count != 1:
+-            raise SystemExit(f'Expected one shared stylesheet in {page}')
++        has_standalone_styles = bool(re.search(r'<style(?:\s[^>]*)?>[\s\S]+?</style>', html))
++        if count > 1 or (count == 0 and not has_standalone_styles):
++            raise SystemExit(f'Expected one shared stylesheet or standalone inline styles in {page}')
+         page.write_text(html)
+     worker = (ROOT / 'worker/website/index.mjs').read_text()
+     worker = worker.replace('/* @generated-markdown-routes */ {}', json.dumps(markdown_routes, sort_keys=True))
+diff --git a/scripts/test-project-contracts.sh b/scripts/test-project-contracts.sh
+index 3368550..30f7f47 100755
+--- a/scripts/test-project-contracts.sh
++++ b/scripts/test-project-contracts.sh
+@@ -633,8 +633,8 @@ analytics_source = (
+     root / 'Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift'
+ ).read_text()
+ release_default = re.search(r'#else\s+(true|false)\s+#endif', analytics_source)
+-if release_default is None or release_default.group(1) != 'false':
+-    errors.append('release analytics must remain disabled by default')
++if release_default is None or release_default.group(1) != 'true':
++    errors.append('release onboarding analytics must be enabled by default')
+ 
+ share_source = (root / 'Voxboard Share Extension/ShareViewController.swift').read_text()
+ for required in [
+@@ -1943,7 +1943,8 @@ for page in website_pages:
+         parsed = urlsplit(reference)
+         if parsed.scheme or reference.startswith(('#', 'mailto:', 'tel:', 'data:')):
+             continue
+-        referenced_path = (page.parent / parsed.path).resolve()
++        reference_base = root / 'website' if parsed.path.startswith('/') else page.parent
++        referenced_path = (reference_base / parsed.path.lstrip('/')).resolve()
+         if parsed.path.endswith('/'):
+             referenced_path /= 'index.html'
+         if not referenced_path.exists():
+diff --git a/scripts/tests/test_website_markdown.py b/scripts/tests/test_website_markdown.py
+index b17f520..493b573 100644
+--- a/scripts/tests/test_website_markdown.py
++++ b/scripts/tests/test_website_markdown.py
+@@ -38,6 +38,10 @@ class WebsiteMarkdownTests(unittest.TestCase):
+             output = Path(directory) / 'site'
+             module.build(output)
+             html = (output / 'index.html').read_text()
++            chinese = (output / 'zh-hans/index.html').read_text()
++            self.assertIn('<html lang="zh-Hans">', chinese)
++            self.assertIn('<style>', chinese)
++            self.assertTrue((output / 'zh-hans/index.md').is_file())
+             self.assertIn('<style data-source="geist.css">', html)
+             self.assertNotIn('<link rel="stylesheet"', html)
+             self.assertIn('Capture ideas into Obsidian', (output / 'index.md').read_text())
+diff --git a/website/blog/obsidian-daily-note-iphone/index.html b/website/blog/obsidian-daily-note-iphone/index.html
+index b35e4a7..ce47c7a 100644
+--- a/website/blog/obsidian-daily-note-iphone/index.html
++++ b/website/blog/obsidian-daily-note-iphone/index.html
+@@ -35,7 +35,7 @@
+       <li><a href="../../privacy.html">Privacy</a></li>
+       <li><a href="../../terms.html">Terms</a></li>
+     </ul>
+-    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_daily_setup">Download Vox.md</a>
++    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener">Download Vox.md</a>
+   </div>
+ </nav>
+ 
+@@ -79,7 +79,7 @@ Book dentist appointment</code></pre>
+   </ul>
+   <p><a href="../../docs/#troubleshooting">Troubleshooting reference</a> · <a href="../../docs/#history-settings">History, limits, and purchases</a> · <a href="../../privacy.html">Privacy details</a></p>
+   <p>Vox.md writes files to the destination you choose. If that vault syncs through iCloud or another service, its copies follow that service's settings. Content reviewed against the product documentation on October 25, 2026.</p>
+-  <p><a href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-campaign="seo_daily_setup">Get Vox.md on the App Store</a> or <a href="../../docs/">read the complete documentation</a>.</p>
++  <p><a href="https://apps.apple.com/us/app/vox-md-quick-capture-notes/id6758967337">Get Vox.md on the App Store</a> or <a href="../../docs/">read the complete documentation</a>.</p>
+ </div></article></main>
+ <footer>
+   <div class="container">
+@@ -91,7 +91,7 @@ Book dentist appointment</code></pre>
+         <li><a href="../../privacy.html">Privacy</a></li>
+         <li><a href="../../terms.html">Terms</a></li>
+         <li><a href="mailto:codybontecou@gmail.com">Support</a></li>
+-        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_daily_setup">App Store</a></li>
++        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">App Store</a></li>
+       </ul>
+       <div class="footer-copy">© 2026 Vox.md · Quick capture for local notes · No content uploads.</div>
+     </div>
+diff --git a/website/index.html b/website/index.html
+index 3c8e4ed..a8c46cb 100644
+--- a/website/index.html
++++ b/website/index.html
+@@ -89,6 +89,9 @@
+ }
+   </script>
+   <link rel="service-desc" type="application/vnd.oai.openapi+json" href="openapi.json" title="Vox.md Public Information API">
++<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/">
++<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/">
++<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/">
+ </head>
+ <body>
+ 
+@@ -604,7 +607,7 @@
+       <div class="footer-copy">© 2026 Vox.md · Built by <a href="https://codybontecou.com/">Cody Bontecou</a> at <a href="https://isolated.tech/">Isolated Tech</a> · No content uploads.</div>
+     </div>
+   </div>
+-</footer>
++<a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></footer>
+ 
+ <script>
+   const revealEls = document.querySelectorAll('.reveal');
+diff --git a/website/llms.txt b/website/llms.txt
+index 161b321..466c89a 100644
+--- a/website/llms.txt
++++ b/website/llms.txt
+@@ -137,7 +137,7 @@ Unknown or duplicate parameters, malformed identifiers, non-HTTP URLs, and overs
+ 
+ Capture drafts, attachments, audio, transcripts, templates, routes, file paths, OCR results, typed text, and keyboard input are handled locally and are not sent to Vox.md servers. Files are written only to the destination selected by the user. If that folder uses iCloud Drive or another provider, that provider can sync it under its own terms.
+ 
+-Production onboarding analytics are disabled by default. Vox.md has no third-party analytics SDK, ad network, or cross-app tracker. Location is not collected by the developer or analytics. User-initiated model downloads contact external model-distribution infrastructure, currently Hugging Face directly or through FluidAudio, which can receive ordinary connection metadata but no capture content. Pending and failed requests may retain the privacy-adjusted location snapshot or unavailable outcome needed for recovery. After successful delivery, recoverable Capture requests and completed Watch queue items are reduced to scrubbed tombstones. Completed Capture history stores coarse delivery metadata, not note content, URLs, coordinates, location labels or templates, bookmarks, absolute paths, or attachment filenames.
++Production builds send coarse first-party onboarding analytics to a Vox.md Cloudflare Worker; debug builds require explicit opt-in. Analytics include an anonymous install ID and allowlisted setup/purchase metadata, never capture content. Vox.md has no third-party analytics SDK, ad network, or cross-app tracker. Location is not collected by the developer or analytics. User-initiated model downloads contact external model-distribution infrastructure, currently Hugging Face directly or through FluidAudio, which can receive ordinary connection metadata but no capture content. Pending and failed requests may retain the privacy-adjusted location snapshot or unavailable outcome needed for recovery. After successful delivery, recoverable Capture requests and completed Watch queue items are reduced to scrubbed tombstones. Completed Capture history stores coarse delivery metadata, not note content, URLs, coordinates, location labels or templates, bookmarks, absolute paths, or attachment filenames.
+ 
+ - [Privacy Policy](https://vox.isolated.tech/privacy.html): Complete data handling and retention details.
+ - [Terms of Service](https://vox.isolated.tech/terms.html): Product terms and transcription disclaimers.
+diff --git a/website/privacy.html b/website/privacy.html
+index 7b8c49b..4cce7cb 100644
+--- a/website/privacy.html
++++ b/website/privacy.html
+@@ -45,7 +45,7 @@
+   <div class="container">
+     <div class="page-eyebrow">Legal · Privacy</div>
+     <h1 class="page-title">Privacy Policy</h1>
+-    <p class="page-meta">Effective: February 9, 2026 · Last updated: September 11, 2026</p>
++    <p class="page-meta">Effective: February 9, 2026 · Last updated: October 26, 2026</p>
+   </div>
+ </section>
+ 
+@@ -54,12 +54,12 @@
+ 
+     <h2>Overview</h2>
+     <div class="callout">
+-      <p>Vox.md keeps capture drafts, attachments, transcripts, and note routes on your device. It sends completed files only to destinations you choose and never sends capture content to Vox.md servers. Production builds keep onboarding analytics disabled by default.</p>
++      <p>Vox.md keeps capture drafts, attachments, transcripts, and note routes on your device. It sends completed files only to destinations you choose and never sends capture content to Vox.md servers. Production builds send the coarse first-party onboarding analytics described below.</p>
+     </div>
+     <p>This Privacy Policy describes how Vox.md ("we," "our," or "the app") handles information when you use our iOS and macOS applications and their extensions. Audio, transcripts, keystrokes, capture drafts, attachments, exported file contents, and user-entered text are handled locally. Files are written only to locations you select; your chosen storage provider may sync those files under its own terms.</p>
+ 
+     <h2>Information We Do Not Collect</h2>
+-    <p>Vox.md does not collect any of the following for the developer, analytics, advertising, or tracking. Data can leave the device only through a feature you choose, such as writing to a synced folder, requesting an Apple place label, or opening a map-provider link, as described below.</p>
++    <p>Vox.md does not collect any of the following for the developer, analytics, advertising, or tracking. The coarse onboarding metadata described below can leave the device automatically. Capture content leaves the device only through a feature you choose, such as writing to a synced folder or opening a map-provider link, as described below.</p>
+     <ul>
+       <li>Audio recordings or voice data</li>
+       <li>Transcribed text or transcription history</li>
+@@ -72,7 +72,7 @@
+     </ul>
+ 
+     <h2>Privacy-Safe Onboarding Analytics</h2>
+-    <p>Production builds do not send onboarding analytics by default. Development builds can explicitly enable a small first-party event set for setup testing. These events are intentionally coarse and are not used for advertising or cross-app tracking.</p>
++    <p>Production builds send a small first-party event set to understand onboarding, setup friction, and purchase or restore outcomes. Development builds require explicit opt-in for setup testing. These events are intentionally coarse and are not used for advertising or cross-app tracking.</p>
+     <p>Onboarding analytics may include:</p>
+     <ul>
+       <li>An anonymous Vox.md install ID used only to count funnel progress</li>
+@@ -116,10 +116,10 @@
+ 
+     <h2>Third-Party Services</h2>
+     <p>Vox.md does not integrate with third-party analytics SDKs, advertising networks, crash-reporting SDKs, or cross-app tracking services. User-initiated Whisper and Parakeet model downloads connect to model-distribution infrastructure hosted by Hugging Face, either directly or through FluidAudio. Model requests never include capture drafts, typed text, audio, transcripts, attachments, file paths, or location, but the provider may receive ordinary HTTPS connection data and the requested model identifier under its own terms.</p>
+-    <p>The Capture editor requests batches of inspirational quotes from <a href="https://zenquotes.io/">ZenQuotes API</a> and rotates through them from an on-device cache. These requests never include capture drafts, typed text, audio, attachments, file paths, location, install identifiers, or analytics. Like any HTTPS service, ZenQuotes may receive technical connection data such as an IP address and user agent under its own terms. If first-party onboarding events are explicitly enabled in a development build, they are sent directly to a Vox.md Cloudflare Worker with the strict allowlist described above.</p>
++    <p>The Capture editor requests batches of inspirational quotes from <a href="https://zenquotes.io/">ZenQuotes API</a> and rotates through them from an on-device cache. These requests never include capture drafts, typed text, audio, attachments, file paths, location, install identifiers, or analytics. Like any HTTPS service, ZenQuotes may receive technical connection data such as an IP address and user agent under its own terms. First-party onboarding events are sent directly to a Vox.md Cloudflare Worker and stored in its D1 database using the strict allowlist described above.</p>
+ 
+     <h2>Data Storage &amp; Deletion</h2>
+-    <p>All app data — including transcription history, capture drafts, staged attachments, downloaded models, templates, settings, and free-usage records — is stored locally on your device or in a file destination you explicitly choose. The content-free successful-Capture ledger contains only the count and random identifiers for up to ten successful requests, which prevent retries from being charged twice while local app data remains. It contains no captured text, filenames, destinations, or attachment metadata, is never stored in the system Keychain, and is never sent to Vox.md.</p>
++    <p>Capture content and local app data — including transcription history, capture drafts, staged attachments, downloaded models, templates, settings, and free-usage records — are stored locally on your device or in a file destination you explicitly choose. The content-free successful-Capture ledger contains only the count and random identifiers for up to ten successful requests, which prevent retries from being charged twice while local app data remains. It contains no captured text, filenames, destinations, or attachment metadata, is never stored in the system Keychain, and is never sent to Vox.md.</p>
+     <p>Versions released before this policy change may have left an inert, content-free free-usage item in the system Keychain. Current versions do not access that item; it can be removed with Keychain Access without affecting captures, transcripts, or purchases.</p>
+     <p>The local Recent Captures list contains delivery metadata only: outcome, source, Capture Preset identifier and display name, destination identifier and display name, relative note path, attachment count, timestamps, and a coarse failure category. It never duplicates note text, links, coordinates, location labels or templates, bookmarks, absolute paths, or attachment filenames. Pending and failed captures retain only the content needed for local recovery, which may include an already privacy-adjusted location snapshot or durable unavailable outcome. After successful delivery, a recoverable Capture request is immediately replaced by an identifier-and-timestamp-only tombstone; completed Watch queue items are likewise scrubbed, and upgrades sanitize legacy completed requests.</p>
+     <p>You can delete locally stored user content and settings by:</p>
+diff --git a/website/sitemap.xml b/website/sitemap.xml
+index 49ea65c..b18d44a 100644
+--- a/website/sitemap.xml
++++ b/website/sitemap.xml
+@@ -87,4 +87,5 @@
+   <url><loc>https://vox.isolated.tech/about</loc><lastmod>2026-10-26</lastmod></url>
+   <url><loc>https://vox.isolated.tech/contact</loc><lastmod>2026-10-26</lastmod></url>
+   <url><loc>https://vox.isolated.tech/developers</loc><lastmod>2026-10-26</lastmod></url>
++<url><loc>https://vox.isolated.tech/zh-hans/</loc><lastmod>2026-10-26</lastmod></url>
+ </urlset>
+diff --git a/website/terms.html b/website/terms.html
+index 16d28ee..4b37cd6 100644
+--- a/website/terms.html
++++ b/website/terms.html
+@@ -58,7 +58,7 @@
+     <h2>Description of Service</h2>
+     <p>Vox.md is a quick capture application for iOS and macOS with keyboard, share, widget, and Shortcuts integrations. It writes text, links, images, files, scans, sketches, and voice captures into user-selected Markdown folders, including Obsidian vaults. Optional voice-to-text uses local speech recognition models on your device.</p>
+     <div class="callout">
+-      <p>Capture content and voice transcription are not sent to Vox.md servers. Completed files are written only to destinations you choose, and production onboarding analytics are disabled by default as described in the Privacy Policy.</p>
++      <p>Capture content and voice transcription are not sent to Vox.md servers. Completed files are written only to destinations you choose, and production builds send coarse first-party onboarding analytics as described in the Privacy Policy.</p>
+     </div>
+ 
+     <h2>License</h2>
+@@ -99,7 +99,7 @@
+     <p>You retain full ownership of the text, links, media, files, scans, sketches, audio, and generated transcripts you capture. We claim no rights to your content.</p>
+ 
+     <h2>Privacy</h2>
+-    <p>Please review our <a href="privacy.html">Privacy Policy</a> for details. Capture drafts, attachments, file routes, audio, transcripts, keystrokes, and exported content are handled locally; production onboarding analytics are disabled by default.</p>
++    <p>Please review our <a href="privacy.html">Privacy Policy</a> for details. Capture drafts, attachments, file routes, audio, transcripts, keystrokes, and exported content are handled locally; production builds send coarse first-party onboarding analytics as described in the Privacy Policy.</p>
+ 
+     <h2>Disclaimer of Warranties</h2>
+     <p>Vox.md is provided <strong>"as is"</strong> and <strong>"as available"</strong> without warranties of any kind, either express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</p>

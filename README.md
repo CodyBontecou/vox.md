@@ -123,7 +123,7 @@ The Mac drains the same durable retry inbox as iOS and can reroute failed captur
 
 Vox.md includes **15 minutes of free transcription** and **10 successful Capture deliveries** so you can test the full flow. Failed writes and retries do not consume a Capture; voice transcripts routed to Markdown use only the transcription allowance.
 
-Unlimited transcription and Capture are a one-time **$9.99** unlock. No subscription, no renewal, no ads. Users who bought the original paid app build are automatically grandfathered into unlimited access. The successful-Capture count is stored only in local app data, never in Keychain; removing that data starts a fresh free allowance.
+Unlimited transcription and Capture are a one-time **$19.99 Individual** unlock. **Family Unlimited is $39.99**, and the **Family Upgrade is $19.99**. These are US prices; regional prices reflect purchasing power. No subscription, no renewal, no ads. Users who bought the original paid app build are automatically grandfathered into unlimited access. The successful-Capture count is stored only in local app data, never in Keychain; removing that data starts a fresh free allowance.
 
 ## Tech Stack
 

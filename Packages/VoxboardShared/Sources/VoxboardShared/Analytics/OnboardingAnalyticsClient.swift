@@ -68,13 +68,13 @@ public final class OnboardingAnalyticsClient: @unchecked Sendable {
         state.queuedPayloads()
     }
 
-    /// Privacy-first default: production builds never emit onboarding events.
-    /// Developers can explicitly opt in for local/debug funnel verification.
+    /// Release builds collect the allowlisted first-party onboarding events.
+    /// Debug builds require explicit opt-in for local funnel verification.
     public static var isEnabledByDefault: Bool {
         #if DEBUG
         ProcessInfo.processInfo.environment["ONBOARDING_ANALYTICS_ENABLED"] == "1"
         #else
-        false
+        true
         #endif
     }
 

@@ -2,6 +2,32 @@ import XCTest
 @testable import VoxboardShared
 
 final class OnboardingAnalyticsClientTests: XCTestCase {
+    func testBuildDefaultControlsEventDelivery() async {
+        let transport = RecordingOnboardingAnalyticsTransport()
+        let client = OnboardingAnalyticsClient(
+            transport: transport,
+            defaults: FakeOnboardingAnalyticsDefaults(),
+            queueKey: "onboarding.analytics.test.build-default",
+            retryDelayNanoseconds: 0,
+            runtimeContextProvider: { nil }
+        )
+
+        client.track(OnboardingAnalyticsEvent(name: .onboardingStarted))
+        await client.flushAndWait()
+
+        let sent = await transport.payloadsValue()
+        #if DEBUG
+        let expectedCount = ProcessInfo.processInfo.environment["ONBOARDING_ANALYTICS_ENABLED"] == "1" ? 1 : 0
+        #else
+        let expectedCount = 1
+        #endif
+        XCTAssertEqual(sent.count, expectedCount)
+        if expectedCount == 1 {
+            XCTAssertEqual(sent.first?.eventName, "onboarding_started")
+            XCTAssertNotNil(sent.first?.eventId)
+        }
+    }
+
     func testOfflineTransportQueuesStablePayloadWithAssignmentAndRuntimeContext() async {
         let defaults = FakeOnboardingAnalyticsDefaults()
         let client = OnboardingAnalyticsClient(
