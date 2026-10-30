@@ -312,7 +312,13 @@ final class HardPaywallStoreKitTests: XCTestCase {
         XCTAssertTrue(tracker.isCaptureAtLimit)
 
         try await session.buyProduct(identifier: VoxboardPurchaseProduct.individual.rawValue)
-        await store.syncCurrentEntitlements()
+        // StoreKit also publishes a new lifetime entitlement asynchronously.
+        // Wait for that delivery, just as above for subscription expiration.
+        for _ in 0..<50 {
+            await store.syncCurrentEntitlements()
+            if tracker.hasUnlocked && tracker.isEligibleForFamilyUpgrade { break }
+            try await Task.sleep(for: .milliseconds(100))
+        }
         XCTAssertTrue(tracker.hasUnlocked)
         XCTAssertTrue(tracker.isEligibleForFamilyUpgrade)
     }

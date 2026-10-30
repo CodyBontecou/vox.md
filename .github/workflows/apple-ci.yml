@@ -291,7 +291,7 @@ jobs:
           python3 scripts/select-issue22-ios-test-simulator.py \
             --github-output "$GITHUB_OUTPUT" \
             --metadata build/logs/storekit-simulator.json
-      - name: Run complete StoreKit and paywall test class
+      - name: Activate local StoreKit fixture
         run: |
           set -euo pipefail
           mkdir -p build/logs build/test-results
@@ -312,6 +312,9 @@ jobs:
             CODE_SIGNING_ALLOWED=YES \
             CODE_SIGNING_REQUIRED=YES \
             2>&1 | tee build/logs/storekit-activation.log
+      - name: Run complete StoreKit and paywall test class
+        run: |
+          set -euo pipefail
           xcodebuild test \
             -project Voxboard.xcodeproj \
             -scheme VoxboardStoreKitTests \
