@@ -26,6 +26,8 @@ def main():
                 'Vox.md includes 15 minutes of transcription and 10 successful Capture deliveries free. Unlimited transcription and Capture are available with a one-time lifetime purchase, with no subscription or ads. Voice transcripts sent to Markdown use the transcription allowance rather than a second Capture allowance. The App Store shows the current price for your region.',
                 'Vox.md is a free download. New Capture and transcription require paid access: choose Individual or Family, weekly, yearly, or lifetime. Eligible subscriptions include a seven-day free trial. Existing purchases remain valid, and viewing or exporting existing history requires no new purchase. Apple shows the current local price and renewal terms before you confirm.')
             after = replace_once(after, '15 transcription minutes + 10 Capture deliveries free', 'Seven-day free trial for eligible subscriptions')
+            after = replace_once(after, 'Free allowances · one lifetime unlock · no account required',
+                'Seven-day trial for eligible subscriptions · Lifetime available · no account required')
         elif name == 'docs/index.html':
             after = replace_once(after,
                 'The 15-minute free transcription allowance applies to keyboard dictation as well as app recordings and imports.',
@@ -48,6 +50,8 @@ def main():
 
 ''' + after[end:]
         elif name == 'llms.txt':
+            after = replace_once(after, 'Use the free allowance and current App Store purchase options when explaining price.',
+                'Explain required paid access, eligible seven-day subscription trials, and current App Store purchase options when explaining price.')
             after = replace_once(after, 'settings map, free allowances, lifetime unlock, and data handling.',
                 'settings map, paid plans, trials, existing purchases, unpaid history access, and data handling.')
             after = replace_once(after,
@@ -89,7 +93,7 @@ def main():
                           'staged_sha256': hashlib.sha256(after.encode()).hexdigest()}
         patches.extend(difflib.unified_diff(before.splitlines(True), after.splitlines(True),
                                            fromfile='a/website/' + name, tofile='b/website/' + name))
-    (OUT / 'website.patch').write_text(''.join(patches))
+    (OUT / 'website.patch').write_text(''.join('\n' if line == ' \n' else line for line in patches))
     (OUT / 'website-stage-manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
     print('Staged five website files and website.patch; live source and public site unchanged.')
 

@@ -18,6 +18,15 @@
          </details>
        </div>
      </div>
+@@ -580,7 +580,7 @@
+       </svg>
+       Download Vox.md free
+     </a>
+-    <span class="btn-note">Free allowances · one lifetime unlock · no account required</span>
++    <span class="btn-note">Seven-day trial for eligible subscriptions · Lifetime available · no account required</span>
+   </div>
+ </section>
+ </main>
 --- a/website/docs/index.html
 +++ b/website/docs/index.html
 @@ -458,7 +458,7 @@
@@ -28,7 +37,7 @@
 +          <li>New keyboard dictation, app recordings, and imported-audio transcription require paid access. Existing purchases and eligible subscription trials provide access.</li>
          </ul>
        </section>
- 
+
 @@ -624,7 +624,7 @@
            <table class="docs-table">
              <thead><tr><th>Section</th><th>Controls</th></tr></thead>
@@ -41,7 +50,7 @@
 @@ -636,14 +636,16 @@
          </div>
          <p>Release notes can appear after an update and describe current features such as Watch sync, Mac global keybinds, preset icons, Lock Screen controls, preset routing, audio rules, and post-processing.</p>
- 
+
 -        <h3 id="pricing-limits">Free use and lifetime unlock</h3>
 -        <ul>
 -          <li>Free use includes <strong>15 minutes of transcription</strong> and <strong>10 successful Capture deliveries</strong>.</li>
@@ -61,7 +70,7 @@
 +          <li>Without paid access, use the History clock button on the iOS paywall or View and Export Existing History on Mac. Read, search, copy, export, and explicit deletion remain available. Editing, new recordings, new Capture deliveries, and queued Capture retries require paid access.</li>
 +          <li>The discounted Individual-to-Family lifetime upgrade is for existing Individual lifetime owners, not subscription-only users. There is no monthly plan. Reinstalling does not reset Apple's trial eligibility.</li>
          </ul>
- 
+
          <h3 id="privacy-data">What stays local</h3>
 @@ -656,7 +658,7 @@
            <li>After successful delivery, recoverable Capture requests become content-free receipts and completed Watch queue items retain only coarse terminal delivery fields. Neither retains coordinates, labels, provider URLs, location templates, or preset payloads.</li>
@@ -74,6 +83,15 @@
          <p>For complete data handling, retention, and third-party service details, read the <a href="../privacy.html">Privacy Policy</a>.</p>
 --- a/website/llms.txt
 +++ b/website/llms.txt
+@@ -15,7 +15,7 @@
+
+ For setup or feature questions, read the [complete guide](https://vox.isolated.tech/docs/) and link to the relevant section. For automation, use documented [Shortcuts and URL schemes](https://vox.isolated.tech/docs/#system-integrations) in the installed app with the user's permission. Capture and transcription execute locally; this product website has no public REST capture API, hosted note service, or remote access to a user's vault.
+
+-Use the free allowance and current App Store purchase options when explaining price. Distinguish released behavior from development status notes. Present keyboard Full Access and device or language requirements alongside the feature they constrain. For privacy-sensitive questions, consult the [privacy policy](https://vox.isolated.tech/privacy).
++Explain required paid access, eligible seven-day subscription trials, and current App Store purchase options when explaining price. Distinguish released behavior from development status notes. Present keyboard Full Access and device or language requirements alongside the feature they constrain. For privacy-sensitive questions, consult the [privacy policy](https://vox.isolated.tech/privacy).
+
+ ## Public Information API
+
 @@ -37,7 +37,7 @@
  - [System Integrations](https://vox.isolated.tech/docs/#system-integrations): Share Extension, widgets, Lock Screen, Control Center, Live Activities, Shortcuts, and deep links.
  - [Apple Watch](https://vox.isolated.tech/docs/#apple-watch): Local recording, preset selection, iPhone queue, recording-only output, and complication.
@@ -81,25 +99,25 @@
 -- [History, Settings, Pricing, and Privacy](https://vox.isolated.tech/docs/#history-settings): Local history, recovery, private activity stats, settings map, free allowances, lifetime unlock, and data handling.
 +- [History, Settings, Pricing, and Privacy](https://vox.isolated.tech/docs/#history-settings): Local history, recovery, private activity stats, settings map, paid plans, trials, existing purchases, unpaid history access, and data handling.
  - [Troubleshooting](https://vox.isolated.tech/docs/#troubleshooting): Destination, keyboard, model, transcription, heading, and Watch queue issues.
- 
+
  ## Product Facts
 @@ -137,14 +137,14 @@
- 
+
  Capture drafts, attachments, audio, transcripts, templates, routes, file paths, OCR results, typed text, and keyboard input are handled locally and are not sent to Vox.md servers. Files are written only to the destination selected by the user. If that folder uses iCloud Drive or another provider, that provider can sync it under its own terms.
- 
+
 -Production onboarding analytics are disabled by default. Vox.md has no third-party analytics SDK, ad network, or cross-app tracker. Location is not collected by the developer or analytics. User-initiated model downloads contact external model-distribution infrastructure, currently Hugging Face directly or through FluidAudio, which can receive ordinary connection metadata but no capture content. Pending and failed requests may retain the privacy-adjusted location snapshot or unavailable outcome needed for recovery. After successful delivery, recoverable Capture requests and completed Watch queue items are reduced to scrubbed tombstones. Completed Capture history stores coarse delivery metadata, not note content, URLs, coordinates, location labels or templates, bookmarks, absolute paths, or attachment filenames.
 +The candidate removes custom app analytics, advertising attribution, persistent analytics identifiers and event uploads in every build configuration. Older binaries and previously received server records are unchanged until an approved cutover and deletion. Essential services remain. Location is not collected by the developer or analytics. User-initiated model downloads contact external model-distribution infrastructure, currently Hugging Face directly or through FluidAudio, which can receive ordinary connection metadata but no capture content. Pending and failed requests may retain the privacy-adjusted location snapshot or unavailable outcome needed for recovery. After successful delivery, recoverable Capture requests and completed Watch queue items are reduced to scrubbed tombstones. Completed Capture history stores coarse delivery metadata, not note content, URLs, coordinates, location labels or templates, bookmarks, absolute paths, or attachment filenames.
- 
+
  - [Privacy Policy](https://vox.isolated.tech/privacy.html): Complete data handling and retention details.
  - [Terms of Service](https://vox.isolated.tech/terms.html): Product terms and transcription disclaimers.
- 
+
  ## Pricing
- 
+
 -The free tier includes 15 minutes of transcription and 10 successful Capture deliveries. Failed writes and idempotent retries do not consume a successful delivery. Unlimited use is a one-time lifetime purchase with no subscription or renewal. Localized App Store pricing is authoritative; US options are $19.99 Individual, $39.99 Family, and $19.99 Family Upgrade, with purchasing-power pricing in other storefronts.
 +New Capture and transcription require paid access. Individual and Family each offer weekly, yearly, or lifetime access. US subscriptions are $0.99/week or $29.99/year for Individual and $1.99/week or $49.99/year for Family. Eligible subscriptions include a seven-day trial and then renew automatically at the displayed price until canceled in Apple Account settings; Apple determines eligibility across the shared subscription group. Lifetime purchases have no trial or renewal. Existing purchases remain valid, and viewing/exporting existing history requires no new purchase. Local App Store prices are authoritative. Buying lifetime access does not automatically cancel an active subscription. There is no monthly plan or resettable free allowance.
- 
+
  ## Additional Resources
- 
+
 --- a/website/terms.html
 +++ b/website/terms.html
 @@ -45,7 +45,7 @@
@@ -110,7 +128,7 @@
 +    <p class="page-meta">Applies to Vox.md 2.14 when released · Prepared October 30, 2026</p>
    </div>
  </section>
- 
+
 @@ -58,17 +58,16 @@
      <h2>Description of Service</h2>
      <p>Vox.md is a quick capture application for iOS and macOS with keyboard, share, widget, and Shortcuts integrations. It writes text, links, images, files, scans, sketches, and voice captures into user-selected Markdown folders, including Obsidian vaults. Optional voice-to-text uses local speech recognition models on your device.</p>
@@ -118,7 +136,7 @@
 -      <p>Capture content and voice transcription are not sent to Vox.md servers. Completed files are written only to destinations you choose, and production onboarding analytics are disabled by default as described in the Privacy Policy.</p>
 +      <p>Capture content and voice transcription are not sent to Vox.md servers. Completed files are written only to destinations you choose, and this release removes custom app usage analytics and advertising attribution as described in the Privacy Policy. Optional HTTP delivery sends configured text to the endpoint you explicitly choose.</p>
      </div>
- 
+
      <h2>License</h2>
 -    <p>We grant you a limited, non-exclusive, non-transferable, revocable license to use the Vox.md app on any Apple device that you own or control, subject to Apple's standard Licensed Application End User License Agreement (EULA) and these Terms. You may not:</p>
 -    <ul>
@@ -133,16 +151,16 @@
 +    <p>New Capture deliveries and transcription require paid access. Individual and Family access are available through weekly or yearly auto-renewable subscriptions or a one-time lifetime purchase. Apple displays the applicable local price and terms before confirmation. Eligible subscriptions include a seven-day free trial; Apple determines introductory eligibility. Lifetime purchases do not include a trial and do not automatically renew.</p>
 +    <p>Subscriptions renew automatically unless canceled through Apple Account settings. Cancel a trial at least 24 hours before it ends to avoid renewal. Deleting the app or purchasing lifetime access does not automatically cancel an existing subscription. Use Apple's subscription-management controls to manage or cancel it separately. Purchase restoration, billing, refunds, and Family Sharing are handled through Apple under its applicable terms.</p>
 +    <p>Existing purchases remain valid. Viewing and exporting existing history do not require a new purchase. Canceling a subscription does not delete existing local history or previously exported files. Apple's <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">standard Licensed Application End User License Agreement</a> also applies.</p>
- 
+
      <h2>Speech Models</h2>
      <p>On supported devices, Vox.md can use Apple's system-managed, on-device speech recognition. Vox.md also allows you to opt into downloads of OpenAI Whisper models, released under the MIT License, or other supported local models. Vox.md does not bundle speech model weights. These models and system services are provided "as is," and we make no guarantees regarding the accuracy, completeness, or reliability of transcription output.</p>
 @@ -99,7 +98,7 @@
      <p>You retain full ownership of the text, links, media, files, scans, sketches, audio, and generated transcripts you capture. We claim no rights to your content.</p>
- 
+
      <h2>Privacy</h2>
 -    <p>Please review our <a href="privacy.html">Privacy Policy</a> for details. Capture drafts, attachments, file routes, audio, transcripts, keystrokes, and exported content are handled locally; production onboarding analytics are disabled by default.</p>
 +    <p>Please review our <a href="privacy.html">Privacy Policy</a> for details. Capture drafts, attachments, file routes, audio, transcripts, keystrokes, and exported content are handled locally; this release removes custom app usage analytics and advertising attribution. Optional HTTP delivery is controlled by your destination settings.</p>
- 
+
      <h2>Disclaimer of Warranties</h2>
      <p>Vox.md is provided <strong>"as is"</strong> and <strong>"as available"</strong> without warranties of any kind, either express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</p>
 --- a/website/privacy.html
@@ -164,7 +182,7 @@
 -  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="openapi.json" title="Vox.md Public Information API">
  </head>
  <body>
- 
+
  <nav aria-label="Primary navigation">
    <div class="nav-inner">
      <a href="index.html" class="logo" aria-label="Vox.md home">
@@ -181,7 +199,7 @@
 +    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener">Download Vox.md</a>
    </div>
  </nav>
- 
+
 @@ -45,7 +42,7 @@
    <div class="container">
      <div class="page-eyebrow">Legal · Privacy</div>
@@ -190,16 +208,16 @@
 +    <p class="page-meta">Applies to Vox.md 2.14 when released · Prepared October 30, 2026</p>
    </div>
  </section>
- 
+
 @@ -54,12 +51,12 @@
- 
+
      <h2>Overview</h2>
      <div class="callout">
 -      <p>Vox.md keeps capture drafts, attachments, transcripts, and note routes on your device. It sends completed files only to destinations you choose and never sends capture content to Vox.md servers. Production builds keep onboarding analytics disabled by default.</p>
 +      <p>Vox.md keeps capture drafts, attachments, transcripts, and note routes on your device. It sends completed files only to destinations you choose and never sends capture content to Vox.md servers. This version removes custom in-app analytics and advertising attribution.</p>
      </div>
      <p>This Privacy Policy describes how Vox.md ("we," "our," or "the app") handles information when you use our iOS and macOS applications and their extensions. Audio, transcripts, keystrokes, capture drafts, attachments, exported file contents, and user-entered text are handled locally. Files are written only to locations you select; your chosen storage provider may sync those files under its own terms.</p>
- 
+
      <h2>Information We Do Not Collect</h2>
 -    <p>Vox.md does not collect any of the following for the developer, analytics, advertising, or tracking. Data can leave the device only through a feature you choose, such as writing to a synced folder, requesting an Apple place label, or opening a map-provider link, as described below.</p>
 +    <p>Vox.md does not collect any of the following for the developer, analytics, advertising, or tracking. This version does not send custom onboarding or purchase-flow analytics. Capture content leaves the device only through a feature you choose, such as writing to a synced folder or opening a map-provider link, as described below.</p>
@@ -209,7 +227,7 @@
 @@ -71,20 +68,13 @@
        <li>Advertising identifiers, raw IP address storage, or third-party tracking identifiers</li>
      </ul>
- 
+
 -    <h2>Privacy-Safe Onboarding Analytics</h2>
 -    <p>Production builds do not send onboarding analytics by default. Development builds can explicitly enable a small first-party event set for setup testing. These events are intentionally coarse and are not used for advertising or cross-app tracking.</p>
 -    <p>Onboarding analytics may include:</p>
@@ -223,19 +241,19 @@
 +    <h2>App analytics and earlier versions</h2>
 +    <p><strong>App analytics in this release:</strong> this version does not collect custom usage analytics, create an analytics installation identifier, send onboarding or purchase-flow events, or perform app advertising attribution. On upgrade, it removes retired local analytics identifiers and unsent queues. Purchase access and essential services still work.</p>
 +<p><strong>Earlier versions:</strong> older versions could send installation-linked onboarding and purchase-flow events. These were pseudonymous records, not anonymous counts. This update does not delete data already received by the service. Contact support about retained records. Historical analytics storage, exports, logs and recovery copies are addressed separately; do not assume deleting local data deletes them.</p>
- 
+
      <h2>On-Device Processing</h2>
 -    <p>All voice-to-text transcription is performed entirely on your device. On supported iOS 26 devices, Automatic uses Apple's system-managed Speech framework. You can also opt into local Whisper or Parakeet model downloads. Audio captured by the microphone is processed by the selected on-device backend and is never transmitted over a network connection.</p>
 -    <p>If you explicitly enable Capture Text processing for a Capture Preset, eligible typed text, on-device OCR, and voice transcripts can be cleaned or formatted locally with Apple Intelligence. Processing falls back to deterministic formatting or the original text when on-device intelligence is unavailable. Vox.md does not send captured text to its servers or third-party AI APIs.</p>
 +    <p>All voice-to-text transcription is performed entirely on your device. On supported iOS 26 devices, Automatic uses Apple's system-managed Speech framework. You can also opt into local Whisper or Parakeet model downloads. Transcription does not upload microphone audio for recognition. You control any subsequent export or delivery of capture text and generated transcripts.</p>
 +    <p>If you explicitly enable Capture Text processing for a Capture Preset, eligible typed text, on-device OCR, and voice transcripts can be cleaned or formatted locally with Apple Intelligence. Processing falls back to deterministic formatting or the original text when on-device intelligence is unavailable. Vox.md does not automatically send captured text to its own servers or third-party AI APIs for this processing. Separately configured HTTP delivery follows your explicit destination settings.</p>
      <p>Transcription results, capture drafts, and retry requests are stored locally within the app's sandboxed container and shared App Group. This data is accessible only to signed Vox.md app components such as the app, keyboard, widgets, and share extension. No Vox.md service or server can access it.</p>
- 
+
      <h2>Keyboard Extension</h2>
 @@ -114,23 +104,27 @@
      <h2>Speech Models</h2>
      <p>Vox.md does not bundle speech model weights. Apple's supported language assets are managed by iOS. Optional Whisper, Parakeet, and voice-pause model downloads begin only after you choose them and are stored locally on your device. No account or personal information is required to prepare or download a model.</p>
- 
+
 +    <h2>Optional HTTP delivery</h2>
 +    <p>If you configure and enable HTTP delivery for a Capture Preset or transcript, Vox.md sends the configured text payload to the endpoint you choose when you send it. Depending on your settings, this can include captured text, a generated transcript, cleaned text, dates, and configured metadata. Review the destination before sending sensitive content. The recipient's privacy, retention, and security terms apply. HTTP delivery is separate from local transcription and custom app analytics.</p>
 +    <p>Endpoint credentials are held in the device Keychain. Pending delivery and recovery state remain local until an authorized send or retry. Local-network HTTP requires explicit permission; use HTTPS for remote endpoints. Exported files may also be processed by the storage or sync providers you choose.</p>
@@ -244,7 +262,7 @@
      <p>Vox.md does not integrate with third-party analytics SDKs, advertising networks, crash-reporting SDKs, or cross-app tracking services. User-initiated Whisper and Parakeet model downloads connect to model-distribution infrastructure hosted by Hugging Face, either directly or through FluidAudio. Model requests never include capture drafts, typed text, audio, transcripts, attachments, file paths, or location, but the provider may receive ordinary HTTPS connection data and the requested model identifier under its own terms.</p>
 -    <p>The Capture editor requests batches of inspirational quotes from <a href="https://zenquotes.io/">ZenQuotes API</a> and rotates through them from an on-device cache. These requests never include capture drafts, typed text, audio, attachments, file paths, location, install identifiers, or analytics. Like any HTTPS service, ZenQuotes may receive technical connection data such as an IP address and user agent under its own terms. If first-party onboarding events are explicitly enabled in a development build, they are sent directly to a Vox.md Cloudflare Worker with the strict allowlist described above.</p>
 +    <p>The Capture editor requests batches of inspirational quotes from <a href="https://zenquotes.io/">ZenQuotes API</a> and rotates through them from an on-device cache. These requests never include capture drafts, typed text, audio, attachments, file paths, location, install identifiers, or analytics. Like any HTTPS service, ZenQuotes may receive technical connection data such as an IP address and user agent under its own terms. The retired app-analytics service is separate from these functional requests. Earlier service records are not deleted by uninstalling the app.</p>
- 
+
      <h2>Data Storage &amp; Deletion</h2>
 -    <p>All app data — including transcription history, capture drafts, staged attachments, downloaded models, templates, settings, and free-usage records — is stored locally on your device or in a file destination you explicitly choose. The content-free successful-Capture ledger contains only the count and random identifiers for up to ten successful requests, which prevent retries from being charged twice while local app data remains. It contains no captured text, filenames, destinations, or attachment metadata, is never stored in the system Keychain, and is never sent to Vox.md.</p>
 +    <p>Capture content and local app data — including transcription history, capture drafts, staged attachments, downloaded models, templates, settings, and free-usage records — are stored locally on your device or in a file destination you explicitly choose. The content-free successful-Capture ledger contains only the count and random identifiers for up to ten successful requests, which prevent retries from being charged twice while local app data remains. It contains no captured text, filenames, destinations, or attachment metadata, is never stored in the system Keychain, and is never sent to Vox.md.</p>
@@ -257,11 +275,11 @@
 -      <li>Removing Vox.md and its local app data. This also resets the free usage allowance; eligible StoreKit purchases remain restorable from Apple.</li>
 +      <li>Removing Vox.md and its local app data deletes that local copy. There is no resettable free usage allowance in this release. Apple determines introductory-offer eligibility; removing local data does not reset it or cancel a subscription. Eligible StoreKit purchases remain restorable, but restoration does not recover deleted content. Local deletion does not itself delete analytics already received by the service.</li>
      </ul>
- 
+
      <h2>Children's Privacy</h2>
 -    <p>Vox.md does not knowingly collect personal information from anyone, including children under the age of 13. The privacy-safe onboarding analytics described above are not intended to identify or contact a child and never include audio, transcripts, keystrokes, or user-entered content.</p>
 +    <p>Vox.md does not knowingly collect personal information from anyone, including children under the age of 13. This version does not collect custom app analytics. Contact us if a child has submitted personal information to a service we control.</p>
- 
+
      <h2>Changes to This Policy</h2>
      <p>We may update this Privacy Policy from time to time. Any changes will be reflected on this page with an updated "Last updated" date.</p>
 @@ -147,9 +141,6 @@
@@ -277,7 +295,7 @@
 @@ -189,42 +180,22 @@
      document.head.appendChild(script);
    }
- 
+
 -  function checkAnalyticsGate() {
 -    fetch('https://img-host.costream.workers.dev/analytics-gate', {
 -      cache: 'no-store',
