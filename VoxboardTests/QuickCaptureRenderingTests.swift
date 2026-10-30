@@ -611,7 +611,13 @@ final class QuickCaptureRenderingTests: XCTestCase {
                 composerHostFrame.maxY - Geist.Spacing.one,
                 accuracy: 2
             )
-            XCTAssertEqual(railScrollFrame.width, CapturePresetQuickAccessButton.hitTargetSide, accuracy: 2)
+            // UIKit extends the native scroll surface into the window's safe
+            // area on landscape/foldable hosts. The visible composer intersection
+            // must remain exactly the 44-point rail, including at large text sizes.
+            let visibleScrollFrame = railScrollFrame.intersection(composerHostFrame)
+            XCTAssertEqual(visibleScrollFrame.width, CapturePresetQuickAccessButton.hitTargetSide, accuracy: 2)
+            XCTAssertEqual(visibleScrollFrame.minX, railHostFrame.minX, accuracy: 2)
+            XCTAssertEqual(visibleScrollFrame.maxX, railHostFrame.maxX, accuracy: 2)
             XCTAssertEqual(railScroll.keyboardDismissMode, .none)
             XCTAssertLessThanOrEqual(railScroll.contentSize.width, railScroll.bounds.width + 1)
             let scrollableContentHeight = railScroll.contentSize.height

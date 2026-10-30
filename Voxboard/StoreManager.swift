@@ -41,6 +41,9 @@ final class StoreManager {
 
     typealias OriginalPaidAppOwnershipLoader = @MainActor (Bool) async throws -> Bool
 
+    typealias Purchase = @MainActor (Product) async throws -> Product.PurchaseResult
+
+    private let purchaseProduct: Purchase
     private let usageTracker: UsageTracker
     private let legacyAccessDefaults: UserDefaults
     private let originalPaidAppOwnership: OriginalPaidAppOwnershipLoader
@@ -53,8 +56,10 @@ final class StoreManager {
     init(
         usageTracker: UsageTracker,
         legacyAccessDefaults: UserDefaults? = nil,
-        originalPaidAppOwnership: OriginalPaidAppOwnershipLoader? = nil
+        originalPaidAppOwnership: OriginalPaidAppOwnershipLoader? = nil,
+        purchaseProduct: Purchase? = nil
     ) {
+        self.purchaseProduct = purchaseProduct ?? { try await $0.purchase() }
         self.usageTracker = usageTracker
         self.legacyAccessDefaults = legacyAccessDefaults ?? AppConstants.sharedDefaults ?? .standard
         self.originalPaidAppOwnership = originalPaidAppOwnership ?? Self.loadOriginalPaidAppOwnership
@@ -209,7 +214,7 @@ final class StoreManager {
         errorMessage = nil
 
         do {
-            let result = try await product.purchase()
+            let result = try await purchaseProduct(product)
             switch result {
             case .success(let verification):
                 do {

@@ -41,7 +41,10 @@ final class HardPaywallStoreKitTests: XCTestCase {
         return UsageTracker(defaults: defaults)
     }
 
-    private func makeStore(usageTracker: UsageTracker) -> StoreManager {
+    private func makeStore(
+        usageTracker: UsageTracker,
+        purchase: StoreManager.Purchase? = nil
+    ) -> StoreManager {
         let suite = "HardPaywallOwnership.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!
         addTeardownBlock { defaults.removePersistentDomain(forName: suite) }
@@ -49,7 +52,7 @@ final class HardPaywallStoreKitTests: XCTestCase {
         // sandbox Apple Account for AppTransaction. This fixture is a verified
         // new cohort, and has no authority to grant an active entitlement.
         return StoreManager(usageTracker: usageTracker, legacyAccessDefaults: defaults,
-                            originalPaidAppOwnership: { _ in false })
+                            originalPaidAppOwnership: { _ in false }, purchaseProduct: purchase)
     }
 
     func testOwnershipVerificationFailureCannotGrantAccessOrCacheClassification() async throws {
@@ -92,14 +95,24 @@ final class HardPaywallStoreKitTests: XCTestCase {
 
     func testCancelledPurchaseKeepsFreshUserLocked() async throws {
         let session = try makeSession()
+        defer { withExtendedLifetime(session) {} }
         let tracker = makeTracker()
-        let store = makeStore(usageTracker: tracker)
+        // Native StoreKit Test's forced userCancelled response hangs on the
+        // hosted runtime. Exercise this terminal result at StoreManager's API
+        // boundary; successful purchases/refunds still use native StoreKit below.
+        var purchaseCalls = 0
+        let store = makeStore(usageTracker: tracker) { product in
+            XCTAssertEqual(product.id, VoxboardPurchaseProduct.individualWeekly.rawValue)
+            purchaseCalls += 1
+            return .userCancelled
+        }
         await store.prepareForPurchases()
         _ = try XCTUnwrap(store.isEntitlementStateReady ? store : nil)
-        try await session.setSimulatedError(SKTestFailures.Purchase.generic(.userCancelled), forAPI: .purchase)
         await store.purchase(.individualWeekly)
+        XCTAssertEqual(purchaseCalls, 1)
         XCTAssertFalse(tracker.hasUnlocked)
         XCTAssertFalse(store.isPurchasing)
+        XCTAssertNil(store.errorMessage)
     }
 
     func testPendingPurchaseKeepsFreshUserLocked() async throws {
