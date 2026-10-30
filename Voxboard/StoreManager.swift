@@ -39,15 +39,25 @@ final class StoreManager {
 
     // MARK: - Dependencies
 
+    typealias OriginalPaidAppOwnershipLoader = @MainActor (Bool) async throws -> Bool
+
     private let usageTracker: UsageTracker
+    private let legacyAccessDefaults: UserDefaults
+    private let originalPaidAppOwnership: OriginalPaidAppOwnershipLoader
     @ObservationIgnored private var transactionListenerTask: Task<Void, Never>?
     @ObservationIgnored private var hasVerifiedAppTransaction = false
     @ObservationIgnored private var lastEntitlementObservations: [PurchaseEntitlementObservation] = []
 
     // MARK: - Init / Deinit
 
-    init(usageTracker: UsageTracker) {
+    init(
+        usageTracker: UsageTracker,
+        legacyAccessDefaults: UserDefaults? = nil,
+        originalPaidAppOwnership: OriginalPaidAppOwnershipLoader? = nil
+    ) {
         self.usageTracker = usageTracker
+        self.legacyAccessDefaults = legacyAccessDefaults ?? AppConstants.sharedDefaults ?? .standard
+        self.originalPaidAppOwnership = originalPaidAppOwnership ?? Self.loadOriginalPaidAppOwnership
     }
 
     func start() {
@@ -72,7 +82,7 @@ final class StoreManager {
     /// Uses Apple's signed AppTransaction to distinguish original paid-app
     /// owners from users whose old `hasUnlocked` Boolean came from StoreKit.
     private func verifyAppTransactionIfNeeded(forceRefresh: Bool = false) async {
-        let defaults = AppConstants.sharedDefaults ?? UserDefaults.standard
+        let defaults = legacyAccessDefaults
         let flagKey = "v3_verifiedLegacyPaidAccessMigrationDone"
         if defaults.bool(forKey: flagKey) {
             hasVerifiedAppTransaction = true
@@ -80,33 +90,7 @@ final class StoreManager {
         }
 
         do {
-            let verification: VerificationResult<AppTransaction>
-            if forceRefresh {
-                verification = try await AppTransaction.refresh()
-            } else {
-                verification = try await AppTransaction.shared
-            }
-            guard case .verified(let appTransaction) = verification,
-                  appTransaction.bundleID == Bundle.main.bundleIdentifier else {
-                errorMessage = String(localized: "Could not verify your App Store purchase history. Try Restore Purchases.")
-                return
-            }
-
-            let isOriginalPaidAppOwner: Bool
-            if let originalBuild = Int(appTransaction.originalAppVersion) {
-                isOriginalPaidAppOwner = originalBuild <= Self.lastPaidBuildNumber
-                if isOriginalPaidAppOwner {
-                    print("[StoreManager] Granting verified paid-app access (build \(originalBuild))")
-                }
-            } else if appTransaction.environment != .production {
-                // Sandbox/TestFlight commonly reports the placeholder `1.0`
-                // instead of the production CFBundleVersion. Never grandfather
-                // that placeholder, but allow purchase testing to continue.
-                isOriginalPaidAppOwner = false
-            } else {
-                errorMessage = String(localized: "Could not verify your App Store purchase history. Try Restore Purchases.")
-                return
-            }
+            let isOriginalPaidAppOwner = try await originalPaidAppOwnership(forceRefresh)
             usageTracker.completeLegacyAccessClassification(
                 isOriginalPaidAppOwner: isOriginalPaidAppOwner
             )
@@ -116,6 +100,33 @@ final class StoreManager {
             print("[StoreManager] App transaction verification failed: \(error)")
             errorMessage = String(localized: "Could not verify your App Store purchase history. Try Restore Purchases.")
         }
+    }
+
+    private enum PurchaseHistoryVerificationError: Error {
+        case unverifiedAppTransaction
+        case invalidOriginalBuild
+    }
+
+    private static func loadOriginalPaidAppOwnership(forceRefresh: Bool) async throws -> Bool {
+        let verification: VerificationResult<AppTransaction>
+        if forceRefresh {
+            verification = try await AppTransaction.refresh()
+        } else {
+            verification = try await AppTransaction.shared
+        }
+        guard case .verified(let appTransaction) = verification,
+              appTransaction.bundleID == Bundle.main.bundleIdentifier else {
+            throw PurchaseHistoryVerificationError.unverifiedAppTransaction
+        }
+        if let originalBuild = Int(appTransaction.originalAppVersion) {
+            return originalBuild <= lastPaidBuildNumber
+        }
+        // Sandbox/TestFlight can use the non-integer placeholder "1.0".
+        // It never establishes original paid-app ownership.
+        guard appTransaction.environment != .production else {
+            throw PurchaseHistoryVerificationError.invalidOriginalBuild
+        }
+        return false
     }
 
     // MARK: - Products

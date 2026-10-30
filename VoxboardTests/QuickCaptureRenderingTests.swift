@@ -593,9 +593,14 @@ final class QuickCaptureRenderingTests: XCTestCase {
             XCTAssertGreaterThanOrEqual(route.minY, max(pins.maxY, composer.maxY) - 1)
             XCTAssertLessThanOrEqual(route.maxY, host.view.bounds.height + 1)
 
-            let railScroll = try XCTUnwrap(
-                scrollViews(in: host.view).first { !($0 is UITextView) }
+            let railHostFrame = pins.offsetBy(
+                dx: host.view.safeAreaInsets.left,
+                dy: host.view.safeAreaInsets.top
             )
+            let pinPoint = CGPoint(x: railHostFrame.midX,
+                                   y: railHostFrame.maxY - Geist.Spacing.one
+                                       - CapturePresetQuickAccessButton.hitTargetSide / 2)
+            let railScroll = try XCTUnwrap(scrollViewAtHitPoint(pinPoint, in: host.view))
             let railScrollFrame = railScroll.convert(railScroll.bounds, to: host.view)
             let composerHostFrame = composer.offsetBy(
                 dx: host.view.safeAreaInsets.left,
@@ -731,6 +736,16 @@ final class QuickCaptureRenderingTests: XCTestCase {
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
+    }
+
+    /// Resolve the actual hit-tested rail rather than UIKit's incidental scroll-view order.
+    private func scrollViewAtHitPoint(_ point: CGPoint, in root: UIView) -> UIScrollView? {
+        var view = root.hitTest(point, with: nil)
+        while let current = view {
+            if let scroll = current as? UIScrollView, !(scroll is UITextView) { return scroll }
+            view = current.superview
+        }
+        return nil
     }
 
     private func scrollViews(in view: UIView) -> [UIScrollView] {
