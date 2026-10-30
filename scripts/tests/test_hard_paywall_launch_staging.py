@@ -40,6 +40,8 @@ class WebsiteStagingTests(unittest.TestCase):
                 self.assertNotIn('15 minutes of transcription', text)
                 self.assertNotIn('15-minute free transcription allowance', text)
                 self.assertNotIn('starts a fresh free allowance', text)
+                self.assertNotIn('Free allowances · one lifetime unlock', text)
+                self.assertNotIn('Use the free allowance and current App Store purchase options', text)
             docs = (output / 'website-staged/docs/index.html').read_text()
             self.assertIn('Viewing', (output / 'website-staged/terms.html').read_text())
             self.assertIn('Cancel a trial at least 24 hours', docs)
