@@ -460,6 +460,26 @@ final class QuickCaptureViewModel {
         errorMessage = nil
     }
 
+    /// The first-note shortcut uses the same durable preset route as the full
+    /// editor. Choosing a folder never writes a note or changes the user's draft.
+    func setUpFirstNoteFolder(_ url: URL) async throws {
+        guard selectedDestination == nil else { return }
+        let didAccess = url.startAccessingSecurityScopedResource()
+        defer { if didAccess { url.stopAccessingSecurityScopedResource() } }
+        #if os(macOS)
+        let options: URL.BookmarkCreationOptions = .withSecurityScope
+        #else
+        let options: URL.BookmarkCreationOptions = .minimalBookmark
+        #endif
+        let bookmark = try url.bookmarkData(options: options,
+                                           includingResourceValuesForKeys: nil, relativeTo: nil)
+        try await saveSelectedPresetDestination(CaptureDestination(
+            name: selectedVoxProfile?.accessibilityName ?? url.lastPathComponent,
+            rootBookmark: bookmark, rootName: url.lastPathComponent,
+            noteTarget: .newNote(pathTemplate: "{date}.md")
+        ))
+    }
+
     func useVoxRouteDefaults() {
         guard requireCaptureRouteAvailable(), hasAnyRouteOverride else { return }
         draft.useInheritedDestination()

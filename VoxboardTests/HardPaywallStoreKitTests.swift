@@ -1,3 +1,4 @@
+import AVFoundation
 import StoreKit
 import StoreKitTest
 import SwiftUI
@@ -223,10 +224,14 @@ final class HardPaywallStoreKitTests: XCTestCase {
         defer { window.isHidden = true }
         for (name, page, style, size) in [
             ("welcome-light", 0, UIUserInterfaceStyle.light, UIContentSizeCategory.large),
-            ("privacy-light", 1, .light, .large),
+            ("privacy-light", 2, .light, .large),
+            ("voice-light", 1, .light, .large),
+            ("voice-large-type", 1, .light, .accessibilityExtraExtraExtraLarge),
             ("welcome-dark", 0, .dark, .large),
-            ("privacy-dark", 1, .dark, .large),
+            ("privacy-dark", 2, .dark, .large),
             ("welcome-large-type", 0, .light, .accessibilityExtraExtraExtraLarge),
+            ("privacy-large-type", 2, .light, .accessibilityExtraExtraExtraLarge),
+            ("welcome-dark-large-type", 0, .dark, .accessibilityExtraExtraExtraLarge),
         ] {
             controller.rootView = ThoughtfulOnboarding(onFinish: {}, initialPage: page)
             window.overrideUserInterfaceStyle = style
@@ -240,6 +245,75 @@ final class HardPaywallStoreKitTests: XCTestCase {
             attachment.lifetime = .keepAlways
             add(attachment)
         }
+    }
+
+    func testOnboardingTransparentFooterOverScrolledContent() async throws {
+        let scene = try XCTUnwrap(UIApplication.shared.connectedScenes.first as? UIWindowScene)
+        let window = UIWindow(windowScene: scene)
+        window.frame = scene.coordinateSpace.bounds
+        defer { window.isHidden = true }
+        for (name, style, highContrast) in [
+            ("transparent-footer-light", UIUserInterfaceStyle.light, false),
+            ("transparent-footer-dark", .dark, false),
+            ("transparent-footer-increased-contrast", .light, true),
+        ] {
+            let controller = UIHostingController(rootView: ThoughtfulOnboarding(onFinish: {}))
+            controller.traitOverrides.accessibilityContrast = highContrast ? .high : .normal
+            window.rootViewController = controller
+            window.overrideUserInterfaceStyle = style
+            window.makeKeyAndVisible()
+            try await Task.sleep(for: .milliseconds(400))
+            let scroll = try XCTUnwrap(firstScrollView(in: try XCTUnwrap(window.rootViewController).view))
+            XCTAssertGreaterThan(scroll.bounds.height, window.bounds.height * 0.7,
+                                 "The transparent footer must preserve the scrolling canvas")
+            scroll.setContentOffset(CGPoint(x: 0, y: 180), animated: false)
+            try await Task.sleep(for: .milliseconds(200))
+            let image = UIGraphicsImageRenderer(bounds: window.bounds).image { _ in
+                window.drawHierarchy(in: window.bounds, afterScreenUpdates: true)
+            }
+            let attachment = XCTAttachment(image: image)
+            attachment.name = name
+            attachment.lifetime = .keepAlways
+            add(attachment)
+        }
+    }
+
+    func testOnboardingOnSmallPhoneAtLargestTextSize() async throws {
+        let scene = try XCTUnwrap(UIApplication.shared.connectedScenes.first as? UIWindowScene)
+        let window = UIWindow(windowScene: scene)
+        window.frame = CGRect(x: 0, y: 0, width: 320, height: 568)
+        defer { window.isHidden = true }
+        for page in [0, 1, 2] {
+            window.rootViewController = UIHostingController(rootView:
+                ThoughtfulOnboarding(onFinish: {}, initialPage: page)
+                    .environment(\.dynamicTypeSize, .accessibility5))
+            window.makeKeyAndVisible()
+            try await Task.sleep(for: .milliseconds(400))
+            let scroll = try XCTUnwrap(firstScrollView(in: try XCTUnwrap(window.rootViewController).view))
+            XCTAssertGreaterThan(scroll.bounds.height, window.bounds.height * 0.6,
+                                 "Large-text footer must not consume the reading area")
+            let image = UIGraphicsImageRenderer(bounds: window.bounds).image { _ in
+                window.drawHierarchy(in: window.bounds, afterScreenUpdates: true)
+            }
+            let attachment = XCTAttachment(image: image)
+            attachment.name = "onboarding-small-largest-page-\(page)"
+            attachment.lifetime = .keepAlways
+            add(attachment)
+            scroll.setContentOffset(CGPoint(x: 0, y: max(0, scroll.contentSize.height - scroll.bounds.height)), animated: false)
+            try await Task.sleep(for: .milliseconds(200))
+            let bottom = UIGraphicsImageRenderer(bounds: window.bounds).image { _ in
+                window.drawHierarchy(in: window.bounds, afterScreenUpdates: true)
+            }
+            let bottomAttachment = XCTAttachment(image: bottom)
+            bottomAttachment.name = "onboarding-small-largest-actions-page-\(page)"
+            bottomAttachment.lifetime = .keepAlways
+            add(bottomAttachment)
+        }
+    }
+
+    private func firstScrollView(in view: UIView) -> UIScrollView? {
+        if let scroll = view as? UIScrollView { return scroll }
+        return view.subviews.lazy.compactMap { self.firstScrollView(in: $0) }.first
     }
 
     /// Opt-in, simulator-only manual motion pass. The sentinel is outside the
@@ -264,8 +338,10 @@ final class HardPaywallStoreKitTests: XCTestCase {
         let window = UIWindow(windowScene: scene)
         window.frame = scene.coordinateSpace.bounds
         window.overrideUserInterfaceStyle = .light
+        let previewMode = (try? String(contentsOfFile: "/tmp/vox-thoughtful-design-preview", encoding: .utf8)) ?? ""
         window.rootViewController = UIHostingController(rootView: PaywallView(isAccessGate: true, historyViewModel: model, includesOnboarding: true)
-            .environment(tracker).environment(store).environment(TranscriptStore()))
+            .environment(tracker).environment(store).environment(TranscriptStore())
+            .environment(\.dynamicTypeSize, previewMode.contains("large-type") ? .accessibility5 : .large))
         window.rootViewController?.view.accessibilityViewIsModal = true
         window.accessibilityViewIsModal = true
         window.windowLevel = .normal + 1
@@ -277,6 +353,82 @@ final class HardPaywallStoreKitTests: XCTestCase {
             try await Task.sleep(for: .seconds(1))
         }
         XCTAssertTrue(tracker.isAtLimit, "Preview must not buy anything")
+        #else
+        throw XCTSkip("Simulator-only preview")
+        #endif
+    }
+
+    /// Opt-in local UI exercise. No production purchase, notes, or account is
+    /// used. The writer is isolated/unmetered; paid access is supplied by StoreKitTest.
+    func testInteractiveFirstNotePreview() async throws {
+        #if targetEnvironment(simulator)
+        let sentinel = "/tmp/vox-first-note-preview"
+        try XCTSkipUnless(FileManager.default.fileExists(atPath: sentinel))
+        let session = try await makeSession()
+        defer { withExtendedLifetime(session) {} }
+        let tracker = makeTracker()
+        let store = StoreManager(usageTracker: tracker)
+        try await session.buyProduct(identifier: VoxboardPurchaseProduct.individual.rawValue)
+        await store.prepareForPurchases()
+        XCTAssertTrue(tracker.hasUnlocked)
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("FirstNotePreview-\(UUID().uuidString)")
+        let suite = "FirstNotePreview-\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer {
+            defaults.removePersistentDomain(forName: suite)
+            try? FileManager.default.removeItem(at: root)
+        }
+        let sharedDefaults = try XCTUnwrap(AppConstants.sharedDefaults)
+        let previous = sharedDefaults.object(forKey: CapturePreferenceKeys.firstNoteSaved)
+        sharedDefaults.set(false, forKey: CapturePreferenceKeys.firstNoteSaved)
+        defer {
+            if let previous { sharedDefaults.set(previous, forKey: CapturePreferenceKeys.firstNoteSaved) }
+            else { sharedDefaults.removeObject(forKey: CapturePreferenceKeys.firstNoteSaved) }
+        }
+        let initialPermission = AVAudioApplication.shared.recordPermission
+        let model = QuickCaptureViewModel(captureRootURL: root, defaults: defaults, pipeline: CapturePipeline())
+        let previewMode = (try? String(contentsOfFile: sentinel, encoding: .utf8)) ?? ""
+        if previewMode.contains("ready-to-send") {
+            let folder = root.appendingPathComponent("Preview Notes")
+            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+            await model.load()
+            try await model.setUpFirstNoteFolder(folder)
+            model.draft.text = "My first onboarding note"
+        }
+        let transcripts = TranscriptStore()
+        let recorder = PersistentRecorder(transcriptStore: transcripts, usageTracker: tracker,
+            transcriptionService: AppTranscriptionServices.shared,
+            recordingJobStore: RecordingJobStore(rootDirectoryURL: root.appendingPathComponent("jobs")))
+        let watch = WatchRecordingPipeline(transcriptStore: transcripts, usageTracker: tracker,
+            transcriptionService: AppTranscriptionServices.shared, transcriptEnricher: nil)
+        let scene = try XCTUnwrap(UIApplication.shared.connectedScenes.first as? UIWindowScene)
+        let window = UIWindow(windowScene: scene)
+        window.frame = scene.coordinateSpace.bounds
+        window.windowLevel = .normal + 1
+        window.rootViewController = UIHostingController(rootView: NavigationStack {
+            QuickCaptureView(viewModel: model, persistentRecorder: recorder,
+                pendingKeyboardLaunch: .constant(false), pendingWidgetRecord: .constant(false),
+                captureToolbarPreferences: CaptureToolbarPreferences(defaults: defaults), openSettings: {})
+        }.environment(tracker).environment(store).environment(transcripts)
+            .environment(watch).environment(ModelManager()))
+        window.rootViewController?.view.accessibilityViewIsModal = true
+        window.accessibilityViewIsModal = true
+        window.makeKeyAndVisible()
+        defer { window.isHidden = true }
+        print("[FirstNotePreview] READY FOR NATIVE INTERACTION")
+        let deadline = Date().addingTimeInterval(300)
+        while Date() < deadline && FileManager.default.fileExists(atPath: sentinel) {
+            try await Task.sleep(for: .seconds(1))
+        }
+        let receipt = try XCTUnwrap(model.lastReceipt, "Exercise folder selection, typing and Send before ending the preview")
+        XCTAssertTrue(FileManager.default.fileExists(atPath: receipt.noteURL.path))
+        XCTAssertTrue(try String(contentsOf: receipt.noteURL, encoding: .utf8).contains("My first onboarding note"))
+        XCTAssertEqual(AVAudioApplication.shared.recordPermission, initialPermission, "Typing must not request microphone access")
+        let attachment = XCTAttachment(contentsOfFile: receipt.noteURL)
+        attachment.name = "first-note-written-by-real-capture-ui.md"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+        try? FileManager.default.removeItem(at: receipt.noteURL)
         #else
         throw XCTSkip("Simulator-only preview")
         #endif

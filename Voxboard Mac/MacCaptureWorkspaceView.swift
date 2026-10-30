@@ -75,6 +75,10 @@ struct MacCaptureWorkspaceView: View {
     @State private var lastRevealedReceiptURL: URL?
     @State private var inspirationQuote = InspirationQuote.fallback
     @State private var hasLoadedInspirationQuote = false
+    @State private var hasLoadedFirstNoteState = false
+    @State private var firstNoteReceipt: CaptureReceipt?
+    @AppStorage(CapturePreferenceKeys.firstNoteSaved, store: AppConstants.sharedDefaults)
+    private var hasSavedFirstNote = false
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -121,6 +125,10 @@ struct MacCaptureWorkspaceView: View {
         .task {
             await viewModel.load()
             guard !Task.isCancelled else { return }
+            if viewModel.historyRecords.contains(where: { $0.outcome == .delivered }) {
+                hasSavedFirstNote = true
+            }
+            hasLoadedFirstNoteState = true
 
             // `load()` owns the only destructive draft restoration. Do not let
             // coordinator-targeted actions consume or mutate that draft until
@@ -148,6 +156,10 @@ struct MacCaptureWorkspaceView: View {
         }
         .onChange(of: viewModel.lastReceipt) { _, receipt in
             guard let receipt else { return }
+            if !hasSavedFirstNote {
+                firstNoteReceipt = receipt
+                hasSavedFirstNote = true
+            }
             usageTracker.reload()
             lastRevealedReceiptURL = receipt.noteURL
             Task { await presentSentToast() }
@@ -271,7 +283,13 @@ struct MacCaptureWorkspaceView: View {
             Spacer(minLength: 0)
 
             VStack(spacing: 0) {
-                if viewModel.selectedDestination == nil && !isLocalizationScreenshot {
+                if !isLocalizationScreenshot && hasLoadedFirstNoteState
+                    && (!hasSavedFirstNote || firstNoteReceipt != nil) {
+                    FirstNoteGuide(step: firstNoteStep, action: advanceFirstNote, dismiss: {
+                        firstNoteReceipt = nil
+                    })
+                    .padding(.horizontal, 30)
+                } else if viewModel.selectedDestination == nil && !isLocalizationScreenshot {
                     destinationSetupNotice
                 }
 
@@ -597,6 +615,23 @@ struct MacCaptureWorkspaceView: View {
         .buttonStyle(.plain)
         .accessibilityLabel("Destination Not Configured. Choose where this Capture writes Markdown.")
         .accessibilityIdentifier("mac_capture_destination_banner")
+    }
+
+    private var firstNoteStep: FirstNoteGuide.Step {
+        if let receipt = firstNoteReceipt { return .saved(file: receipt.noteURL.lastPathComponent) }
+        if let destination = viewModel.selectedDestination { return .writeNote(folder: destination.rootName) }
+        return .chooseFolder
+    }
+
+    private func advanceFirstNote() {
+        if let receipt = firstNoteReceipt {
+            NSWorkspace.shared.activateFileViewerSelecting([receipt.noteURL])
+            firstNoteReceipt = nil
+        } else if viewModel.selectedDestination == nil {
+            selectInspectorTool(.route)
+        } else {
+            composerController.focus()
+        }
     }
 
     private var locationDecisionBanner: some View {

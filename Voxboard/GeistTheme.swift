@@ -438,8 +438,8 @@ extension View {
 /// An isolated, warmer treatment for onboarding/purchasing. The rest of Geist
 /// stays unchanged. Blue ink and charcoal actions retain the app's identity.
 enum Thoughtful {
-    static let background = adaptive("#e8e6e2", "#1d1c1b")
-    static let paper = adaptive("#f5f3ef", "#282725")
+    static let background = adaptive("#eeeae3", "#201f1c")
+    static let paper = adaptive("#faf7f1", "#2c2b27")
     static let ink = Geist.text
     static let secondary = Geist.muted
     static let rule = Geist.borderHi
@@ -502,128 +502,392 @@ struct ThoughtfulNoteIllustration: View {
     }
 }
 
+/// Original full-bleed ink drawing. The notebook, window and growing stems sit
+/// behind the interface rather than taking up a separate illustration header.
+struct ThoughtfulBackdrop: View {
+    var page = 0
+    var quiet = false
+
+    var body: some View {
+        GeometryReader { geometry in
+            Canvas { context, size in
+                let sx = size.width / 400
+                let sy = size.height / 820
+                context.scaleBy(x: sx, y: sy)
+                let ink = Geist.Palette.blue900.opacity(quiet ? 0.16 : 0.26)
+                let fine = StrokeStyle(lineWidth: 1.2, lineCap: .round, lineJoin: .round)
+                // A loosely drawn window, cropped by the upper-right edge.
+                var window = Path()
+                window.move(to: CGPoint(x: 276, y: -35))
+                window.addLine(to: CGPoint(x: 278, y: 202))
+                window.addQuadCurve(to: CGPoint(x: 440, y: 197), control: CGPoint(x: 360, y: 193))
+                window.move(to: CGPoint(x: 287, y: -30))
+                window.addLine(to: CGPoint(x: 289, y: 188))
+                window.addLine(to: CGPoint(x: 437, y: 184))
+                window.move(to: CGPoint(x: 354, y: -20))
+                window.addLine(to: CGPoint(x: 357, y: 186))
+                window.move(to: CGPoint(x: 289, y: 89))
+                window.addQuadCurve(to: CGPoint(x: 434, y: 86), control: CGPoint(x: 365, y: 94))
+                context.stroke(window, with: .color(ink), style: fine)
+                // Open journal: asymmetric pages and a curved, stitched spine.
+                var journal = Path()
+                journal.move(to: CGPoint(x: 42, y: 535))
+                journal.addCurve(to: CGPoint(x: 239, y: 568), control1: CGPoint(x: 124, y: 508), control2: CGPoint(x: 174, y: 540))
+                journal.addCurve(to: CGPoint(x: 439, y: 533), control1: CGPoint(x: 303, y: 532), control2: CGPoint(x: 358, y: 518))
+                journal.addLine(to: CGPoint(x: 467, y: 777))
+                journal.addCurve(to: CGPoint(x: 252, y: 810), control1: CGPoint(x: 387, y: 751), control2: CGPoint(x: 326, y: 774))
+                journal.addCurve(to: CGPoint(x: 16, y: 782), control1: CGPoint(x: 171, y: 776), control2: CGPoint(x: 104, y: 748))
+                journal.closeSubpath()
+                context.fill(journal, with: .color(Thoughtful.paper.opacity(0.65)))
+                context.stroke(journal, with: .color(ink), style: fine)
+                var details = Path()
+                details.move(to: CGPoint(x: 239, y: 568))
+                details.addQuadCurve(to: CGPoint(x: 252, y: 810), control: CGPoint(x: 226, y: 682))
+                details.move(to: CGPoint(x: 24, y: 794))
+                details.addQuadCurve(to: CGPoint(x: 252, y: 823), control: CGPoint(x: 152, y: 769))
+                details.addQuadCurve(to: CGPoint(x: 465, y: 789), control: CGPoint(x: 365, y: 769))
+                for row in 0..<7 {
+                    let y = CGFloat(580 + row * 24)
+                    details.move(to: CGPoint(x: 65, y: y))
+                    details.addQuadCurve(to: CGPoint(x: row == 6 ? 162 : 202, y: y + 14), control: CGPoint(x: 140, y: y - 7))
+                    details.move(to: CGPoint(x: 277, y: y + 6))
+                    details.addQuadCurve(to: CGPoint(x: row == 5 ? 353 : 406, y: y - 7), control: CGPoint(x: 340, y: y - 19))
+                }
+                context.stroke(details, with: .color(ink.opacity(0.6)), style: fine)
+                // A botanical margin, deliberately extending off the canvas.
+                var stem = Path()
+                stem.move(to: CGPoint(x: -20, y: 677))
+                stem.addCurve(to: CGPoint(x: 104, y: 320), control1: CGPoint(x: 52, y: 597), control2: CGPoint(x: 8, y: 393))
+                for i in 0..<8 {
+                    let y = CGFloat(366 + i * 36)
+                    let x = CGFloat(73 - i * 7)
+                    let side: CGFloat = i.isMultiple(of: 2) ? 1 : -1
+                    stem.move(to: CGPoint(x: x, y: y + 24))
+                    stem.addQuadCurve(to: CGPoint(x: x + side * 52, y: y - 19), control: CGPoint(x: x + side * 5, y: y - 16))
+                    stem.addQuadCurve(to: CGPoint(x: x, y: y + 24), control: CGPoint(x: x + side * 48, y: y + 22))
+                }
+                context.stroke(stem, with: .color(ink), style: fine)
+                // Loose blue pen marks and the edge of a writing instrument.
+                var pen = Path()
+                pen.move(to: CGPoint(x: 336, y: 419)); pen.addLine(to: CGPoint(x: 418, y: 266))
+                pen.addLine(to: CGPoint(x: 430, y: 274)); pen.addLine(to: CGPoint(x: 348, y: 425))
+                pen.addLine(to: CGPoint(x: 333, y: 439)); pen.closeSubpath()
+                pen.move(to: CGPoint(x: 336, y: 419)); pen.addLine(to: CGPoint(x: 348, y: 425))
+                pen.move(to: CGPoint(x: 310, y: 469))
+                pen.addCurve(to: CGPoint(x: 421, y: 451), control1: CGPoint(x: 339, y: 443), control2: CGPoint(x: 377, y: 493))
+                context.stroke(pen, with: .color(ink), style: fine)
+            }
+            .rotationEffect(.degrees(page == 1 ? 5 : 0))
+            .frame(width: geometry.size.width, height: geometry.size.height)
+        }
+        .background(Thoughtful.background)
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+}
+
+struct ThoughtfulBlueButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(Geist.label(.body))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 14)
+            .frame(minHeight: 54)
+            .frame(maxWidth: .infinity)
+            .background(Geist.Palette.blue800.opacity(!isEnabled ? 0.55 : configuration.isPressed ? 0.78 : 1),
+                        in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+}
+
 struct ThoughtfulOnboarding: View {
     var onFinish: () -> Void
     var onHistory: (() -> Void)? = nil
     var initialPage = 0
     @State private var path: [Int] = []
+    @State private var exampleCaptured = false
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .largeTitle) private var headlineSize: CGFloat = 44
+
+    private var currentPage: Int { path.last ?? initialPage }
 
     var body: some View {
-        VStack(spacing: 0) {
-            NavigationStack(path: $path) {
-                page(initialPage)
-                    .navigationDestination(for: Int.self) { page($0) }
-            }
-            footer
+        NavigationStack(path: $path) {
+            page(initialPage)
+                .navigationDestination(for: Int.self) { page($0) }
         }
-        .background(Thoughtful.background.ignoresSafeArea())
-        .tint(Thoughtful.ink)
+        .tint(Geist.Palette.blue900)
     }
 
-    private var footer: some View {
-        let currentPage = path.last ?? initialPage
-        return VStack(spacing: 12) {
-            Button("Continue") {
-                if currentPage == 0 {
-                    if path.isEmpty { path.append(1) }
-                } else { onFinish() }
+    private func footer(_ index: Int) -> some View {
+        VStack(spacing: 16) {
+            HStack(spacing: 6) {
+                ForEach(0..<3) { step in
+                    Capsule().fill(step == index ? Geist.Palette.blue900 : Thoughtful.rule)
+                        .frame(width: step == index ? 24 : 6, height: 6)
+                }
+                Spacer()
+                Text(verbatim: "\(index + 1) / 3")
+                    .font(Geist.mono(.caption))
+                    .foregroundStyle(Thoughtful.secondary)
             }
-            .buttonStyle(GeistButtonStyle(variant: .primary))
-            .accessibilityIdentifier(currentPage == 0 ? "onboarding.continue" : "onboarding.plans")
-            Text("No Vox.md account needed. Purchases use your Apple Account.")
-                .font(Geist.caption(.caption))
-                .foregroundStyle(Thoughtful.secondary)
-                .multilineTextAlignment(.center)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Introduction, page \(index + 1) of 3")
+            let actionLayout = dynamicTypeSize.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12))
+                : AnyLayout(HStackLayout(spacing: 20))
+            actionLayout {
+                Group {
+                    if index > initialPage {
+                        Button {
+                            guard currentPage == index, !path.isEmpty else { return }
+                            path.removeLast()
+                        } label: {
+                            Text("Back")
+                                .font(Geist.body())
+                                .frame(minHeight: 44, alignment: .leading)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(Thoughtful.ink)
+                        .accessibilityIdentifier("onboarding.back")
+                    } else if !dynamicTypeSize.isAccessibilitySize {
+                        Color.clear.frame(height: 44).accessibilityHidden(true)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                Button {
+                    if index < 2 {
+                        guard currentPage == index else { return }
+                        path.append(index + 1)
+                    } else { onFinish() }
+                } label: {
+                    HStack(spacing: 12) {
+                        Text(index == 2 ? String(localized: "View plans") : String(localized: "Continue"))
+                            .fixedSize(horizontal: false, vertical: true)
+                        if !dynamicTypeSize.isAccessibilitySize {
+                            Spacer(minLength: 0)
+                            Image(systemName: "arrow.right")
+                        }
+                    }
+                }
+                .buttonStyle(ThoughtfulBlueButtonStyle())
+                .frame(maxWidth: .infinity)
+                .accessibilityIdentifier(index == 2 ? "onboarding.plans" : "onboarding.continue")
+            }
         }
-        .frame(maxWidth: 440)
-        .padding(24)
+        .padding(.horizontal, 24)
+        .padding(.vertical, 16)
+        .frame(maxWidth: 488)
         .frame(maxWidth: .infinity)
-        .background(Thoughtful.background)
     }
 
     private func page(_ index: Int) -> some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                HStack {
-                    Text("A LITTLE SPACE FOR YOU")
-                        .font(Geist.mono(.caption))
-                        .tracking(1)
-                    Spacer()
-                    Text(verbatim: index == 0 ? "01 / 02" : "02 / 02")
-                        .font(Geist.mono(.caption))
-                }
-                .foregroundStyle(Thoughtful.secondary)
-
-                ThoughtfulNoteIllustration()
-                    .scaleEffect(0.85)
-                    .frame(height: 168)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-
-                Text(index == 0 ? String(localized: "Catch a thought.\nKeep it close.") : String(localized: "Your words.\nYour own space."))
-                    .font(Thoughtful.title)
+            VStack(alignment: .leading, spacing: 28) {
+                Text(index == 0 ? "A place for the\nsmall things."
+                     : index == 1 ? "Say it.\nKeep the thought."
+                     : "Your words.\nYour own home.")
+                    .font(.system(size: headlineSize, weight: .regular, design: .serif))
+                    .tracking(-1.4)
                     .foregroundStyle(Thoughtful.ink)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityAddTraits(.isHeader)
-                Text(index == 0
-                     ? String(localized: "A quick note, a voice memo, a little something you don’t want to lose. Give it a place in Vox.md.")
-                     : String(localized: "Plain Markdown, saved to the folders you choose. Voice transcription stays on your device."))
+                Text(index == 0 ? "The passing idea. The long way home. The thing you’ll want to remember."
+                     : index == 1 ? "Speak naturally. Vox.md turns your voice into text, right on your device."
+                     : "Plain Markdown files, in a folder you choose. Yours to open, move, and make your own.")
                     .font(Geist.body())
                     .foregroundStyle(Thoughtful.secondary)
                     .fixedSize(horizontal: false, vertical: true)
-
-                if index == 0 {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Label("A thought for later", systemImage: "pencil.line")
-                            .font(Geist.caption())
-                            .foregroundStyle(Thoughtful.secondary)
-                        Text("Take the long way home.")
-                            .font(.system(.title3, design: .serif))
-                            .foregroundStyle(Thoughtful.ink)
-                        Text("Example note · yours can start anywhere")
-                            .font(Geist.caption(.caption))
-                            .foregroundStyle(Thoughtful.secondary)
-                    }
-                    .padding(20)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Thoughtful.paper, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                } else {
-                    VStack(alignment: .leading, spacing: 16) {
-                        Label("Capture a moment in words or voice", systemImage: "waveform")
-                        Label("Keep notes in your own folders", systemImage: "folder")
-                        Label("Read and export your history anytime", systemImage: "clock")
-                    }
-                    .font(Geist.body(.callout))
-                    .foregroundStyle(Thoughtful.ink)
-                    .padding(.vertical, 8)
-                }
+                    .frame(maxWidth: 330, alignment: .leading)
+                if index == 0 { exampleNote }
+                else if index == 1 { voiceExample }
+                else { folderExample }
+                if dynamicTypeSize.isAccessibilitySize { footer(index).padding(.horizontal, -24) }
             }
-            .frame(maxWidth: 440, alignment: .topLeading)
-            .padding(24)
-            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 28)
+            .padding(.top, 28)
+            .padding(.bottom, 32)
+            .frame(maxWidth: 488, alignment: .leading)
+            .frame(maxWidth: .infinity, alignment: .center)
         }
-        .background(Thoughtful.background.ignoresSafeArea())
-        .id(index)
-        .navigationTitle("Vox.md")
-        #if os(iOS)
-        .navigationBarTitleDisplayMode(.inline)
-        #endif
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if !dynamicTypeSize.isAccessibilitySize { footer(index) }
+        }
+        .background(ThoughtfulBackdrop(page: index))
         .toolbar {
-            // Only the active page contributes tools; pushed pages must not
-            // accumulate another History button from their ancestor.
-            if index == (path.last ?? initialPage) {
+            if index == currentPage {
                 ToolbarItem(placement: .cancellationAction) {
                     if let onHistory {
                         Button("History", systemImage: "clock", action: onHistory)
                             .accessibilityIdentifier("paywall.existingHistory")
                     }
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("View plans", action: onFinish)
+            }
+        }
+        #if os(iOS)
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackground(.hidden, for: .navigationBar)
+        #endif
+        .id(index)
+    }
+
+    private var exampleNote: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            HStack {
+                Image(systemName: "text.book.closed")
+                Text("SMALL THINGS")
+                    .font(Geist.mono(.caption))
+                Spacer()
+                Image(systemName: "paperclip")
+            }
+            .foregroundStyle(Geist.Palette.blue900)
+            Text("Take the long\nway home.")
+                .font(.system(.title, design: .serif))
+                .foregroundStyle(Thoughtful.ink)
+                .fixedSize(horizontal: false, vertical: true)
+            Text("Stop for coffee. Call someone you miss.\nLeave a little room for a good idea.")
+                .font(Geist.body(.callout))
+                .foregroundStyle(Thoughtful.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(24)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Thoughtful.paper.opacity(0.97), in: RoundedRectangle(cornerRadius: 16))
+        .overlay { RoundedRectangle(cornerRadius: 16).stroke(Thoughtful.rule.opacity(0.5)) }
+        .rotationEffect(.degrees(dynamicTypeSize.isAccessibilitySize ? 0 : -2))
+        .padding(.vertical, 12)
+    }
+
+    private var voiceExample: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            HStack(alignment: .center, spacing: 4) {
+                ForEach(0..<27) { i in
+                    Capsule().fill(Geist.Palette.blue900.opacity(0.65))
+                        .frame(width: 3, height: CGFloat([12, 24, 38, 18, 46, 30, 16][i % 7]))
+                }
+                Spacer(minLength: 0)
+            }
+            .accessibilityHidden(true)
+            Text(exampleCaptured ? "# A thought for later\n\nTake the long way home." : "“Take the long way home.”")
+                .font(exampleCaptured ? Geist.mono(.body) : .system(.title2, design: .serif))
+                .foregroundStyle(Thoughtful.ink)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityIdentifier("onboarding.exampleText")
+            Button {
+                exampleCaptured.toggle()
+            } label: {
+                Label(exampleCaptured ? "Play example again" : "Turn it into a note",
+                      systemImage: exampleCaptured ? "arrow.counterclockwise" : "arrow.down.doc")
+                    .font(Geist.label(.callout))
+                    .frame(minHeight: 44)
+            }
+            .accessibilityIdentifier("onboarding.tryExample")
+        }
+        .padding(24)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Thoughtful.paper.opacity(0.97), in: RoundedRectangle(cornerRadius: 16))
+        .overlay { RoundedRectangle(cornerRadius: 16).stroke(Thoughtful.rule.opacity(0.5)) }
+        .padding(.vertical, 12)
+    }
+
+    private var folderExample: some View {
+        VStack(alignment: .leading, spacing: 22) {
+            Label("Your folder", systemImage: "folder")
+                .font(Geist.label(.body))
+                .foregroundStyle(Geist.Palette.blue900)
+            HStack(alignment: .top, spacing: 16) {
+                Image(systemName: "doc.text")
+                    .font(.title)
+                    .foregroundStyle(Geist.Palette.blue900)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Small things.md").font(Geist.label())
+                    Text("Readable anywhere.\nNo special format. No lock-in.")
                         .font(Geist.body(.callout))
-                        .accessibilityIdentifier("onboarding.skip")
+                        .foregroundStyle(Thoughtful.secondary)
                 }
             }
+        }
+        .foregroundStyle(Thoughtful.ink)
+        .padding(24)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Thoughtful.paper.opacity(0.97), in: RoundedRectangle(cornerRadius: 16))
+        .overlay { RoundedRectangle(cornerRadius: 16).stroke(Thoughtful.rule.opacity(0.5)) }
+        .padding(.vertical, 12)
+    }
+}
+
+/// Shared guidance for choosing a destination and saving the first real note.
+struct FirstNoteGuide: View {
+    enum Step {
+        case chooseFolder
+        case writeNote(folder: String)
+        case saved(file: String)
+    }
+
+    let step: Step
+    let action: () -> Void
+    let dismiss: () -> Void
+
+    private var title: String {
+        switch step {
+        case .chooseFolder: "Save your first note"
+        case .writeNote: "Make it yours"
+        case .saved: "Your first note is saved"
+        }
+    }
+
+    private var detail: String {
+        switch step {
+        case .chooseFolder:
+            "Choose a folder for your Markdown notes. Nothing is saved until you tap Send."
+        case .writeNote(let folder):
+            "Type a thought or tap Record, then tap Send to save it in \(folder)."
+        case .saved(let file):
+            "\(file) is ready in your folder."
+        }
+    }
+
+    private var actionTitle: String {
+        switch step {
+        case .chooseFolder: "Choose a folder"
+        case .writeNote: "Write a note"
+        case .saved: "Open saved note"
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(title)
+                .font(Geist.label())
+                .accessibilityAddTraits(.isHeader)
+            Text(detail)
+                .font(Geist.body(.callout))
+                .foregroundStyle(Thoughtful.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 16) { actions }
+                VStack(alignment: .leading, spacing: 12) { actions }
+            }
+        }
+        .foregroundStyle(Thoughtful.ink)
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Thoughtful.paper, in: RoundedRectangle(cornerRadius: 16))
+        .accessibilityIdentifier("capture.firstNoteGuide")
+    }
+
+    @ViewBuilder private var actions: some View {
+        Button(actionTitle, action: action)
+            .buttonStyle(.borderedProminent)
+            .accessibilityIdentifier("capture.firstNoteAction")
+        if case .saved = step {
+            Button("Done", action: dismiss)
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("capture.firstNoteDone")
         }
     }
 }
