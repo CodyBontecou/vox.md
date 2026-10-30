@@ -62,13 +62,16 @@ final class HardPaywallStoreKitTests: XCTestCase {
         XCTAssertTrue(tracker.isCaptureAtLimit)
     }
 
-    func testTrialPurchaseAndRefundThroughStoreManager() async throws {
+    func testTrialTransactionAndRefundUpdateStoreManager() async throws {
         let session = try makeSession()
         let tracker = makeTracker()
         let store = StoreManager(usageTracker: tracker)
         await store.prepareForPurchases()
         XCTAssertFalse(tracker.hasUnlocked)
-        await store.purchase(.familyYearly)
+        // Headless runners have no purchase-sheet anchor. Use StoreKitTest to
+        // create the real transaction, then exercise production entitlement sync.
+        try await session.buyProduct(identifier: VoxboardPurchaseProduct.familyYearly.rawValue)
+        await store.syncCurrentEntitlements()
         XCTAssertTrue(tracker.hasFamilyAccess, store.errorMessage ?? "Family trial must unlock access")
         let transaction = try XCTUnwrap(session.allTransactions().last)
         try session.refundTransaction(identifier: transaction.identifier)
