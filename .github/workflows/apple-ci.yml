@@ -51,6 +51,8 @@ jobs:
   ios-tests:
     runs-on: macos-26
     timeout-minutes: 75
+    env:
+      IOS_TEST_RUNTIME_VERSION: '26.6'
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -69,6 +71,15 @@ jobs:
             -onlyUsePackageVersionsFromResolvedFile
       - name: Guard capture view metadata boundaries
         run: ./scripts/test-capture-view-structure.sh
+      # iOS 26.5's StoreKit Test daemon rejects CLI sessions (FB22237318).
+      # Keep the build compiler pinned and explicitly provision the fixed runtime.
+      # https://developer.apple.com/forums/thread/826971
+      - name: Provision StoreKit test runtime
+        run: |
+          xcodebuild -downloadPlatform iOS -buildVersion "$IOS_TEST_RUNTIME_VERSION"
+          xcrun simctl create 'Vox StoreKit CI' \
+            com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro \
+            "com.apple.CoreSimulator.SimRuntime.iOS-${IOS_TEST_RUNTIME_VERSION//./-}"
       - name: Select iOS simulator
         id: simulator
         shell: bash
@@ -78,6 +89,7 @@ jobs:
           # allocator bug despite building with the 26.5 SDK. This is test-host
           # runtime isolation, not an application fix or a retry/skip policy.
           python3 scripts/select-issue22-ios-test-simulator.py \
+            --runtime-version "$IOS_TEST_RUNTIME_VERSION" \
             --github-output "$GITHUB_OUTPUT" \
             --metadata build/logs/ios-simulator.json
       - name: Run iOS app-hosted tests
@@ -91,6 +103,9 @@ jobs:
             -project Voxboard.xcodeproj \
             -scheme VoxboardTests \
             -configuration Debug \
+            -test-timeouts-enabled YES \
+            -default-test-execution-time-allowance 120 \
+            -maximum-test-execution-time-allowance 180 \
             -destination '${{ steps.simulator.outputs.destination }}' \
             -derivedDataPath "$RUNNER_TEMP/Voxboard-iOS-Tests" \
             -resultBundlePath "$PWD/build/test-results/Voxboard-iOS.xcresult" \

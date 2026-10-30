@@ -21,8 +21,13 @@ def version_tuple(value):
     return parts + (0,) * (3 - len(parts))
 
 
-def select_simulator(sdk_version, runtimes, devices):
-    """Require the selected Xcode SDK's runtime; never silently fall back."""
+def select_simulator(sdk_version, runtimes, devices, runtime_version=None):
+    """Use the SDK runtime or an explicitly pinned compatible runtime; never fall back."""
+    target_version = runtime_version or sdk_version
+    sdk = version_tuple(sdk_version)
+    target = version_tuple(target_version)
+    if target[0] != sdk[0] or target < sdk:
+        raise ValueError("Explicit test runtime must be the same iOS major and no older than the SDK")
     candidates = []
     for runtime in runtimes:
         identifier = runtime.get("identifier", "")
@@ -30,7 +35,7 @@ def select_simulator(sdk_version, runtimes, devices):
             continue
         if not runtime.get("isAvailable"):
             continue
-        if version_tuple(runtime["version"]) != version_tuple(sdk_version):
+        if version_tuple(runtime["version"]) != target:
             continue
         for device in devices.get(identifier, []):
             name = device.get("name", "")
@@ -42,7 +47,7 @@ def select_simulator(sdk_version, runtimes, devices):
             candidates.append((rank, device["udid"], runtime, device))
     if not candidates:
         raise ValueError(
-            f"No available iPhone simulator for the selected iOS SDK {sdk_version}; "
+            f"No available iPhone simulator for requested iOS runtime {target_version} (SDK {sdk_version}); "
             "refusing an older or beta runtime fallback (Refs #22)."
         )
     _, _, runtime, device = min(candidates, key=lambda candidate: candidate[:2])
@@ -58,6 +63,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--github-output", required=True, type=Path)
     parser.add_argument("--metadata", required=True, type=Path)
+    parser.add_argument("--runtime-version", help="Explicit fixed test runtime; defaults to the selected SDK")
     args = parser.parse_args()
     metadata = {}
     try:
@@ -71,11 +77,11 @@ def main():
             ["xcrun", "simctl", "list", "devices", "available", "--json"], text=True
         ))["devices"]
         metadata = {"sdk_version": sdk, "available_runtimes": runtimes}
-        selected = select_simulator(sdk, runtimes, devices)
+        selected = select_simulator(sdk, runtimes, devices, args.runtime_version)
         metadata["selected"] = selected
         with args.github_output.open("a") as output:
             output.write(f"destination={selected['destination']}\n")
-        print(f"Using SDK-matched simulator: {json.dumps(selected, sort_keys=True)}")
+        print(f"Using pinned iOS test simulator: {json.dumps(selected, sort_keys=True)}")
         return 0
     except (ValueError, KeyError, subprocess.CalledProcessError, OSError) as error:
         metadata["error"] = str(error)

@@ -43,7 +43,7 @@ def selection_step():
 
 
 class CIiOSSimulatorTests(unittest.TestCase):
-    def select(self, entries, sdk="26.5", sdk_failure=False):
+    def select(self, entries, sdk="26.5", sdk_failure=False, runtime_override=None):
         payload = {"runtimes": [], "devices": {}}
         for os_runtime, devices in entries:
             payload["runtimes"].append(os_runtime)
@@ -92,6 +92,7 @@ class CIiOSSimulatorTests(unittest.TestCase):
                     "GITHUB_OUTPUT": str(output),
                     "SIMULATOR_FIXTURE": str(fixture),
                     "SDK_VERSION": sdk,
+                    "IOS_TEST_RUNTIME_VERSION": runtime_override or sdk,
                     "SDK_FAILURE": "1" if sdk_failure else "0",
                 },
                 capture_output=True,
@@ -115,6 +116,35 @@ class CIiOSSimulatorTests(unittest.TestCase):
         self.assertEqual(output, "", "A failed selector must not publish a destination")
         self.assertIn("::error::", result.stdout + result.stderr)
         self.assertIn("error", receipt)
+
+    def test_storekit_ci_rejects_observed_broken_26_5_runtime(self):
+        self.assert_rejected(
+            [(runtime("26.5"), [device(CURRENT)])],
+            sdk="26.5", runtime_override="26.6",
+        )
+
+    def test_storekit_ci_uses_explicit_fixed_runtime_with_existing_sdk(self):
+        result, output, receipt = self.select([
+            (runtime("26.5"), [device(OLD)]),
+            (runtime("26.6"), [device(CURRENT)]),
+        ], sdk="26.5", runtime_override="26.6")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(receipt["selected"]["runtime"]["version"], "26.6")
+        self.assertEqual(output, f"destination=platform=iOS Simulator,id={CURRENT}\n")
+
+    def test_explicit_runtime_rejects_older_or_different_major_versions(self):
+        for requested in ("26.2", "27.0"):
+            with self.subTest(requested=requested):
+                self.assert_rejected(
+                    [(runtime(requested), [device(CURRENT)])],
+                    sdk="26.5", runtime_override=requested,
+                )
+
+    def test_explicit_runtime_does_not_accept_another_patch_release(self):
+        self.assert_rejected(
+            [(runtime("26.6.1"), [device(CURRENT)])],
+            sdk="26.5", runtime_override="26.6",
+        )
 
     def test_older_runtime_listed_first_cannot_override_selected_xcode_sdk(self):
         self.assert_selected([
@@ -179,6 +209,10 @@ class CIiOSSimulatorTests(unittest.TestCase):
         workflow = (ROOT / ".github/workflows/apple-ci.yml").read_text()
         ios_job = workflow.split("  ios-tests:\n", 1)[1].split("  macos-build:\n", 1)[0]
         self.assertIn("xcode-version: '26.6'", ios_job)
+        self.assertIn("IOS_TEST_RUNTIME_VERSION: '26.6'", ios_job)
+        self.assertIn('xcodebuild -downloadPlatform iOS -buildVersion "$IOS_TEST_RUNTIME_VERSION"', ios_job)
+        self.assertIn('-test-timeouts-enabled YES', ios_job)
+        self.assertIn('-maximum-test-execution-time-allowance 180', ios_job)
         self.assert_rejected([(runtime("26.2"), [device(OLD)])])
 
     def test_malformed_sdk_version_fails_early(self):
@@ -187,7 +221,7 @@ class CIiOSSimulatorTests(unittest.TestCase):
     def test_selected_runtime_and_sdk_are_attested_in_retained_receipt(self):
         result, _, receipt = self.select([(runtime("26.5"), [device(CURRENT)])])
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn("Using SDK-matched simulator", result.stdout + result.stderr)
+        self.assertIn("Using pinned iOS test simulator", result.stdout + result.stderr)
         self.assertEqual(receipt["selected"]["runtime"]["version"], "26.5")
         self.assertEqual(receipt["sdk_version"], "26.5")
         workflow = (ROOT / ".github/workflows/apple-ci.yml").read_text()
