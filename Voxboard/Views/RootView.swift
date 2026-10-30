@@ -34,8 +34,7 @@ enum RootDestination: Hashable {
 
 // MARK: - RootView
 
-/// The capture composer is the app's root. Secondary destinations are opened
-/// from its action bar instead of a persistent tab bar or sidebar.
+/// Capture owns its adaptive writing workspace. History is an explicit sheet.
 struct RootView: View {
     @Bindable var persistentRecorder: PersistentRecorder
     @Bindable var quickCaptureViewModel: QuickCaptureViewModel
