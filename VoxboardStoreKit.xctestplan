@@ -1,0 +1,39 @@
+{
+  "configurations": [
+    {
+      "id": "B3BB56F1-B8D6-4793-8B8F-7F42E72A788B",
+      "name": "StoreKit",
+      "options": {}
+    }
+  ],
+  "defaultOptions": {
+    "storeKitConfiguration": {
+      "identifier": "Voxboard/Voxboard.storekit"
+    },
+    "targetForVariableExpansion": {
+      "containerPath": "container:Voxboard.xcodeproj",
+      "identifier": "62C951792F392ADB001F79DF",
+      "name": "Voxboard"
+    },
+    "commandLineArgumentEntries": [
+      {
+        "argument": "--storekit-test-host",
+        "enabled": true
+      }
+    ]
+  },
+  "testTargets": [
+    {
+      "parallelizable": false,
+      "target": {
+        "containerPath": "container:Voxboard.xcodeproj",
+        "identifier": "AAE000032FC00000AABB0003",
+        "name": "VoxboardTests"
+      },
+      "selectedTests": [
+        "HardPaywallStoreKitTests"
+      ]
+    }
+  ],
+  "version": 1
+}
