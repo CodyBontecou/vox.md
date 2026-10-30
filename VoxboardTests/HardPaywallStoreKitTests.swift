@@ -90,21 +90,37 @@ final class HardPaywallStoreKitTests: XCTestCase {
         XCTAssertTrue(tracker.isCaptureAtLimit)
     }
 
-    func testCancelPendingAndOfflineRestoreKeepFreshUserLocked() async throws {
+    func testCancelledPurchaseKeepsFreshUserLocked() async throws {
         let session = try makeSession()
         let tracker = makeTracker()
         let store = makeStore(usageTracker: tracker)
         await store.prepareForPurchases()
-        _ = try XCTUnwrap(store.isEntitlementStateReady ? store : nil, "StoreKit Test setup failed; refusing a real App Store purchase")
-        XCTAssertFalse(tracker.hasUnlocked)
+        _ = try XCTUnwrap(store.isEntitlementStateReady ? store : nil)
         try await session.setSimulatedError(SKTestFailures.Purchase.generic(.userCancelled), forAPI: .purchase)
         await store.purchase(.individualWeekly)
         XCTAssertFalse(tracker.hasUnlocked)
-        try await session.setSimulatedError(nil, forAPI: .purchase)
+        XCTAssertFalse(store.isPurchasing)
+    }
+
+    func testPendingPurchaseKeepsFreshUserLocked() async throws {
+        let session = try makeSession()
+        let tracker = makeTracker()
+        let store = makeStore(usageTracker: tracker)
+        await store.prepareForPurchases()
+        _ = try XCTUnwrap(store.isEntitlementStateReady ? store : nil)
         session.askToBuyEnabled = true
         await store.purchase(.individualWeekly)
         XCTAssertFalse(tracker.hasUnlocked)
-        session.askToBuyEnabled = false
+        XCTAssertFalse(store.isPurchasing)
+        XCTAssertNotNil(store.errorMessage)
+    }
+
+    func testOfflineRestoreKeepsFreshUserLocked() async throws {
+        let session = try makeSession()
+        let tracker = makeTracker()
+        let store = makeStore(usageTracker: tracker)
+        await store.prepareForPurchases()
+        _ = try XCTUnwrap(store.isEntitlementStateReady ? store : nil)
         try await session.setSimulatedError(SKTestFailures.AppStoreSync.generic(.networkError(URLError(.notConnectedToInternet))), forAPI: .appStoreSync)
         await store.restorePurchases()
         XCTAssertFalse(tracker.hasUnlocked)

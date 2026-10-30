@@ -46,7 +46,10 @@ struct CapturePresetQuickAccessRail: View {
                     .scrollBounceBehavior(.basedOnSize)
                     // A short rail should claim only its visible controls, not
                     // an invisible full-height strip over the text editor.
-                    .frame(height: viewportHeight(available: proxy.size.height))
+                    .frame(
+                        width: CapturePresetQuickAccessButton.hitTargetSide,
+                        height: viewportHeight(available: proxy.size.height)
+                    )
 
                     Spacer().frame(height: Geist.Spacing.one)
                 }
