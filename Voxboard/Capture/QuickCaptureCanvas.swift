@@ -1,4 +1,66 @@
 import SwiftUI
+import QuickLook
+
+/// A fixed viewport keeps the high-priority editor from collapsing guidance.
+/// Larger text scrolls inside it; the composer and Send remain on screen.
+struct QuickCaptureFirstNoteGuide: View {
+    let step: FirstNoteGuide.Step
+    let action: () -> Void
+    let dismiss: () -> Void
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private var needsMoreRoom: Bool {
+        if case .saved = step { return true }
+        return dynamicTypeSize.isAccessibilitySize
+    }
+
+    var body: some View {
+        ScrollView {
+            FirstNoteGuide(step: step, action: action, dismiss: dismiss)
+        }
+        .frame(height: needsMoreRoom ? 240 : 180)
+    }
+}
+
+struct FirstNoteDocument: Identifiable {
+    let id = UUID()
+    let noteURL: URL
+    let rootURL: URL
+}
+
+/// Quick Look opens the actual saved file while retaining its folder access.
+struct FirstNoteDocumentPreview: UIViewControllerRepresentable {
+    let document: FirstNoteDocument
+
+    func makeCoordinator() -> Coordinator { Coordinator(document: document) }
+
+    func makeUIViewController(context: Context) -> QLPreviewController {
+        let controller = QLPreviewController()
+        controller.dataSource = context.coordinator
+        return controller
+    }
+
+    func updateUIViewController(_ controller: QLPreviewController, context: Context) {}
+
+    final class Coordinator: NSObject, QLPreviewControllerDataSource {
+        private let document: FirstNoteDocument
+        private let didAccess: Bool
+
+        init(document: FirstNoteDocument) {
+            self.document = document
+            didAccess = document.rootURL.startAccessingSecurityScopedResource()
+        }
+
+        deinit {
+            if didAccess { document.rootURL.stopAccessingSecurityScopedResource() }
+        }
+
+        func numberOfPreviewItems(in controller: QLPreviewController) -> Int { 1 }
+        func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> any QLPreviewItem {
+            document.noteURL as NSURL
+        }
+    }
+}
 
 /// Layout only. Slots are deliberately concrete, not `Content: View` generics:
 /// a new feature inside a slot cannot enlarge the canvas's metadata type.

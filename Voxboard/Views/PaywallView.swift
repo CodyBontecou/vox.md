@@ -72,6 +72,7 @@ struct PaywallView: View {
                             .foregroundStyle(Thoughtful.ink)
                             .fixedSize(horizontal: false, vertical: true)
                             .accessibilityAddTraits(.isHeader)
+                            .accessibilityIdentifier("paywall.title")
                         Text("Unlimited Capture. Private, on-device transcription. Your words, in your own Markdown files.")
                             .font(Geist.body(.callout))
                             .foregroundStyle(Thoughtful.secondary)
@@ -175,6 +176,7 @@ struct PaywallView: View {
                     }
                     .disabled(storeManager.isRestoring || storeManager.isPurchasing)
                     .accessibilityLabel("Restore Purchases")
+                    .accessibilityIdentifier("paywall.restore")
                 }
             }
         }
