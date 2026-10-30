@@ -214,7 +214,7 @@ final class StoreManager {
         errorMessage = nil
 
         do {
-            let result = try await purchaseProduct(product)
+            let result = try await self.purchaseProduct(product)
             switch result {
             case .success(let verification):
                 do {
