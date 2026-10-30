@@ -26,8 +26,67 @@ final class PurchaseAccessTests: XCTestCase {
         XCTAssertFalse(tracker.hasUnlocked)
         XCTAssertEqual(
             VoxboardPurchaseProduct.purchaseOptions(for: tracker.accessLevel),
-            [.individual, .family]
+            [.individualWeekly, .individualYearly, .individual, .familyWeekly, .familyYearly, .family]
         )
+    }
+
+    func testNewAndExistingFreeUsersAreBlockedBeforeAnyUsage() {
+        let tracker = UsageTracker(defaults: defaults)
+        XCTAssertTrue(tracker.isAtLimit)
+        XCTAssertTrue(tracker.isCaptureAtLimit)
+        XCTAssertEqual(tracker.secondsRemaining, 0)
+        XCTAssertEqual(tracker.capturesRemaining, 0)
+        XCTAssertTrue(tracker.fractionUsed.isFinite)
+        XCTAssertTrue(tracker.captureFractionUsed.isFinite)
+
+        tracker.addUsage(seconds: 30)
+        let relaunched = UsageTracker(defaults: defaults)
+        XCTAssertTrue(relaunched.isAtLimit)
+        XCTAssertTrue(relaunched.isCaptureAtLimit)
+    }
+
+    func testSubscriptionsUnlockButDoNotQualifyForLifetimeFamilyUpgrade() {
+        for product in VoxboardPurchaseProduct.allCases where product.isSubscription {
+            let tracker = UsageTracker(defaults: defaults)
+            tracker.reconcileStoreEntitlements([product], expirationDate: Date().addingTimeInterval(3600))
+            XCTAssertTrue(tracker.hasUnlocked)
+            XCTAssertFalse(tracker.isAtLimit)
+            XCTAssertFalse(tracker.isCaptureAtLimit)
+            XCTAssertFalse(tracker.isEligibleForFamilyUpgrade)
+            XCTAssertEqual(tracker.hasFamilyAccess, product.grantedAccessLevel == .family)
+
+            tracker.reconcileStoreEntitlements([])
+            XCTAssertFalse(tracker.hasUnlocked)
+            XCTAssertTrue(tracker.isAtLimit)
+        }
+    }
+
+    func testExpiredSubscriptionCacheCannotUnlockAfterRelaunch() {
+        let tracker = UsageTracker(defaults: defaults)
+        tracker.reconcileStoreEntitlements([.familyWeekly], expirationDate: Date().addingTimeInterval(3600))
+        XCTAssertTrue(tracker.hasUnlocked)
+        defaults.set(Date().addingTimeInterval(-1), forKey: "storeAccessExpirationV1")
+        let relaunched = UsageTracker(defaults: defaults)
+        XCTAssertFalse(relaunched.hasUnlocked)
+        XCTAssertFalse(relaunched.hasFamilyAccess)
+        XCTAssertTrue(relaunched.isAtLimit)
+    }
+
+    func testFamilySubscriptionExpirationPreservesIndividualLifetime() {
+        let tracker = UsageTracker(defaults: defaults)
+        tracker.reconcileStoreEntitlements([.individual, .familyYearly], expirationDate: Date().addingTimeInterval(-1))
+        XCTAssertEqual(tracker.accessLevel, .individual)
+        XCTAssertTrue(tracker.hasUnlocked)
+        XCTAssertFalse(tracker.hasFamilyAccess)
+        XCTAssertEqual(UsageTracker(defaults: defaults).accessLevel, .individual)
+    }
+
+    func testUnboundedSubscriptionGrantIsRejected() {
+        let tracker = UsageTracker(defaults: defaults)
+        tracker.applyVerifiedPurchase(.individualWeekly)
+        XCTAssertFalse(tracker.hasUnlocked)
+        tracker.reconcileStoreEntitlements([.individualYearly])
+        XCTAssertFalse(tracker.hasUnlocked)
     }
 
     func testLegacyUnlockedBooleanRemainsProvisionalUntilClassified() {
@@ -121,13 +180,10 @@ final class PurchaseAccessTests: XCTestCase {
         XCTAssertEqual(tracker.accessLevel, .individual)
     }
 
-    func testProductIdentifiersAndAnalyticsMappingRemainAligned() {
+    func testProductIdentifiersRemainUnchanged() {
         XCTAssertEqual(VoxboardPurchaseProduct.individual.rawValue, "bontecou.Voxboard.unlock")
         XCTAssertEqual(VoxboardPurchaseProduct.family.rawValue, "bontecou.Voxboard.family")
         XCTAssertEqual(VoxboardPurchaseProduct.familyUpgrade.rawValue, "bontecou.Voxboard.familyUpgrade")
-        XCTAssertEqual(OnboardingAnalyticsProductID(.individual), .lifetimeUnlock)
-        XCTAssertEqual(OnboardingAnalyticsProductID(.family), .familyUnlock)
-        XCTAssertEqual(OnboardingAnalyticsProductID(.familyUpgrade), .familyUpgrade)
     }
 
     func testStrongestProductSelectionIsDeterministic() {

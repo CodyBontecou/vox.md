@@ -1954,6 +1954,7 @@ private struct MacFlowIconOption: Identifiable {
 
 struct MacHistoryView: View {
     @Bindable var viewModel: QuickCaptureViewModel
+    private let isReadOnly: Bool
     @Environment(TranscriptStore.self) private var store
     #if DEBUG
     private let screenshotFixture: MacHistoryScreenshotFixture?
@@ -1966,14 +1967,17 @@ struct MacHistoryView: View {
     #if DEBUG
     fileprivate init(
         viewModel: QuickCaptureViewModel,
-        screenshotFixture: MacHistoryScreenshotFixture? = nil
+        screenshotFixture: MacHistoryScreenshotFixture? = nil,
+        isReadOnly: Bool = false
     ) {
         self.viewModel = viewModel
         self.screenshotFixture = screenshotFixture
+        self.isReadOnly = isReadOnly
     }
     #else
-    init(viewModel: QuickCaptureViewModel) {
+    init(viewModel: QuickCaptureViewModel, isReadOnly: Bool = false) {
         self.viewModel = viewModel
+        self.isReadOnly = isReadOnly
     }
     #endif
 
@@ -2109,7 +2113,7 @@ struct MacHistoryView: View {
                     ContentUnavailableView.search(text: searchText)
                 } else {
                     List(selection: $selectedItemID) {
-                        if viewModel.failedInboxCount > 0 {
+                        if !isReadOnly && viewModel.failedInboxCount > 0 {
                             Section("Needs Attention") {
                                 Button {
                                     Task { await viewModel.retryFailedInbox() }
@@ -2340,6 +2344,7 @@ struct MacHistoryView: View {
 }
 
 private struct MacTranscriptDetailView: View {
+    @State private var exportError: String?
     let transcript: Transcript
     let delivery: CaptureHistoryRecord?
     let onReveal: (CaptureHistoryRecord) -> Void
@@ -2396,6 +2401,29 @@ private struct MacTranscriptDetailView: View {
             }
         }
         .navigationTitle("History Detail")
+        .alert("Export Error", isPresented: Binding(get: { exportError != nil }, set: { if !$0 { exportError = nil } })) {
+            Button("OK") { exportError = nil }
+        } message: {
+            Text(exportError ?? "")
+        }
+    }
+
+    private func exportExistingTranscript() {
+        let panel = NSSavePanel()
+        panel.allowedContentTypes = [UTType(filenameExtension: "md") ?? .plainText]
+        panel.nameFieldStringValue = "transcript-\(transcript.id.uuidString.prefix(8)).md"
+        panel.begin { response in
+            guard response == .OK, let destination = panel.url else { return }
+            do {
+                let folder = FileManager.default.temporaryDirectory.appendingPathComponent("VoxboardHistoryExports", isDirectory: true)
+                try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+                let source = try TranscriptFileExporter.export(transcript, format: .md, mode: .newFile,
+                    folderURL: folder, newFileNameTemplateOverride: "transcript-{date}-{id8}")
+                try Data(contentsOf: source).write(to: destination, options: .atomic)
+            } catch {
+                exportError = error.localizedDescription
+            }
+        }
     }
 
     private var header: some View {
@@ -2407,6 +2435,7 @@ private struct MacTranscriptDetailView: View {
                     .textSelection(.enabled)
                 Spacer()
                 copyControl
+                Button("Export", systemImage: "square.and.arrow.up", action: exportExistingTranscript)
                 Button("Delete", systemImage: "trash", role: .destructive, action: onDelete)
             }
 
@@ -3640,16 +3669,25 @@ struct MacPaywallView: View {
     @Environment(UsageTracker.self) private var usageTracker
     @Environment(MacStoreManager.self) private var storeManager
 
-    let context: OnboardingAnalyticsPaywallContext
+    @AppStorage(Thoughtful.introductionKey) private var introductionCompleted = false
+    @State private var family = false
+    @State private var selectedPlanIndex = 1
+    @State private var showsHistory = false
+    private var historyViewModel: QuickCaptureViewModel?
+    let context: PaywallContext
+    var isAccessGate = false
     fileprivate let presentation: MacPaywallPresentation
 
-    init(context: OnboardingAnalyticsPaywallContext = .settings) {
+    init(context: PaywallContext = .settings, isAccessGate: Bool = false,
+         historyViewModel: QuickCaptureViewModel? = nil) {
         self.context = context
+        self.isAccessGate = isAccessGate
+        self.historyViewModel = historyViewModel
         self.presentation = .modal
     }
 
     fileprivate init(
-        context: OnboardingAnalyticsPaywallContext,
+        context: PaywallContext,
         embeddedInSettings: Bool
     ) {
         self.context = context
@@ -3658,23 +3696,45 @@ struct MacPaywallView: View {
 
     @ViewBuilder
     var body: some View {
-        if presentation == .modal {
-            paywallContent
+        if isAccessGate && !introductionCompleted && !usageTracker.hasUnlocked {
+            ThoughtfulOnboarding(onFinish: { introductionCompleted = true },
+                                 onHistory: historyViewModel == nil ? nil : { showsHistory = true })
+                .frame(minWidth: 560, idealWidth: 620, maxWidth: 760, minHeight: 560, idealHeight: 760)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Thoughtful.background)
+                .sheet(isPresented: $showsHistory) { existingHistory }
+                .task { await storeManager.prepareForPurchases() }
+        } else if presentation == .modal {
+            ScrollView { paywallContent }
                 .frame(width: 620)
-                .background(Geist.Palette.background100)
+                .background(Thoughtful.background)
                 .task { await storeManager.prepareForPurchases() }
         } else {
             paywallContent
                 .frame(maxWidth: 760)
-                .background(Geist.Palette.background100)
+                .background(Thoughtful.background)
                 .task { await storeManager.prepareForPurchases() }
         }
     }
 
     private var paywallContent: some View {
         VStack(spacing: 22) {
+            if isAccessGate && historyViewModel != nil {
+                Button("View and Export Existing History", systemImage: "clock") { showsHistory = true }
+                    .accessibilityIdentifier("paywall.existingHistory")
+                    .sheet(isPresented: $showsHistory) {
+                        if let historyViewModel {
+                            NavigationStack {
+                                MacHistoryView(viewModel: historyViewModel, isReadOnly: true)
+                                    .toolbar { Button("Close") { showsHistory = false } }
+                            }
+                            .frame(minWidth: 900, minHeight: 600)
+                        }
+                    }
+            }
+            ThoughtfulNoteIllustration(compact: true)
             Text(paywallTitle)
-                .font(Geist.heading(.title))
+                .font(Thoughtful.title)
                 .foregroundColor(Geist.text)
             Text(paywallDetail)
                 .font(Geist.body())
@@ -3682,22 +3742,21 @@ struct MacPaywallView: View {
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: 520)
 
-            if !usageTracker.hasUnlocked {
-                Text(String(
-                    format: String(localized: "%.1f / 15 min transcription · %d / 10 captures used"),
-                    locale: Locale.current,
-                    usageTracker.minutesUsed,
-                    usageTracker.successfulCapturesUsed
-                ))
-                .font(Geist.mono(.footnote, medium: true))
-                .foregroundColor(Geist.muted)
-            }
-
             purchaseOptions
 
+            Text("Subscriptions renew automatically unless canceled at least 24 hours before the period ends. Eligible subscriptions include a 7-day free trial, then renew at the displayed price. Lifetime is a one-time purchase without a trial. Deleting the app or buying Lifetime does not cancel an existing subscription.")
+                .font(Geist.caption())
+                .foregroundStyle(Geist.muted)
+            HStack {
+                Link("Terms of Use", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
+                Link("Privacy Policy", destination: URL(string: "https://vox.isolated.tech/privacy.html")!)
+                Link("Manage Subscriptions", destination: URL(string: "https://apps.apple.com/account/subscriptions")!)
+            }
+            .font(Geist.caption())
+
             Button(storeManager.isRestoring
-                   ? String(localized: "RESTORING…")
-                   : String(localized: "RESTORE PURCHASES")) {
+                   ? String(localized: "Restoring…")
+                   : String(localized: "Restore Purchases")) {
                 Task { await storeManager.restore() }
             }
             .buttonStyle(GeistButtonStyle(variant: .secondary))
@@ -3708,8 +3767,12 @@ struct MacPaywallView: View {
                 Text(error)
                     .font(Geist.caption())
                     .foregroundColor(MacBrand.orangeText)
+                Button("Retry Loading Purchases") {
+                    Task { await storeManager.prepareForPurchases() }
+                }
+                .disabled(storeManager.isPurchasing || storeManager.isRestoring)
             }
-            if presentation == .modal {
+            if presentation == .modal && !isAccessGate {
                 Button("Done") { dismiss() }
                     .buttonStyle(.plain)
                     .foregroundColor(Geist.muted)
@@ -3733,36 +3796,77 @@ struct MacPaywallView: View {
         }
     }
 
+    private var offers: [VoxboardPurchaseProduct] {
+        if usageTracker.isEligibleForFamilyUpgrade { return [.familyUpgrade] }
+        return family ? [.familyWeekly, .familyYearly, .family] : [.individualWeekly, .individualYearly, .individual]
+    }
+
+    private var selectedProduct: VoxboardPurchaseProduct {
+        offers[min(selectedPlanIndex, offers.count - 1)]
+    }
+
+    @ViewBuilder
+    private var existingHistory: some View {
+        if let historyViewModel {
+            NavigationStack {
+                MacHistoryView(viewModel: historyViewModel, isReadOnly: true)
+                    .toolbar { Button("Close") { showsHistory = false } }
+            }
+            .frame(minWidth: 900, minHeight: 600)
+        }
+    }
+
     @ViewBuilder
     private var availablePurchaseOptions: some View {
-        switch usageTracker.accessLevel {
-        case .free:
-            HStack(alignment: .top, spacing: 16) {
-                macOffer(
-                    product: .individual,
-                    title: "INDIVIDUAL UNLIMITED",
-                    detail: "Lifetime access on devices using your Apple Account."
-                )
-                macOffer(
-                    product: .family,
-                    title: "FAMILY UNLIMITED",
-                    detail: "Lifetime access for your Apple Family Sharing group."
-                )
-            }
-        case .individual:
-            macOffer(
-                product: .familyUpgrade,
-                title: "UPGRADE TO FAMILY",
-                detail: "Add Apple Family Sharing to your existing Unlimited purchase."
-            )
-            .frame(maxWidth: 440)
-        case .family:
+        if usageTracker.hasFamilyAccess {
             Label("Family Unlimited Unlocked", systemImage: "person.3.fill")
-                .font(Geist.label())
-                .foregroundColor(Geist.text)
-                .padding(18)
-                .frame(maxWidth: 440)
-                .overlay(Rectangle().stroke(Geist.border, lineWidth: 1))
+                .font(Geist.body())
+        } else {
+            if !usageTracker.isEligibleForFamilyUpgrade {
+                Picker("Access", selection: $family) {
+                    Text("Individual").tag(false)
+                    Text("Family").tag(true)
+                }
+                .pickerStyle(.segmented)
+                .disabled(storeManager.isPurchasing || storeManager.isRestoring)
+                Text(family ? String(localized: "For your Apple Family Sharing group. Each person keeps their own notes.") : String(localized: "For you, across your Apple devices."))
+                    .font(Geist.caption())
+                    .foregroundStyle(Thoughtful.secondary)
+            }
+            VStack(spacing: 0) {
+                ForEach(offers, id: \.rawValue) { product in
+                    macOffer(product: product, title: LocalizedStringKey(planTitle(product)),
+                             detail: LocalizedStringKey(product.isSubscription ? product.billingLabel : String(localized: "One-time purchase. No trial.")))
+                    if product != offers.last { Divider().padding(.horizontal, 16) }
+                }
+            }
+            .background(Thoughtful.paper, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(Thoughtful.rule, lineWidth: 1))
+            .frame(maxWidth: 480)
+            if let price = storeManager.displayPrice(for: selectedProduct) {
+                Text(storeManager.offersFreeTrial(selectedProduct)
+                     ? String(localized: "7 days free, then \(price) \(selectedProduct.billingLabel). Auto-renews.")
+                     : selectedProduct.isSubscription ? String(localized: "\(price) \(selectedProduct.billingLabel). Auto-renews until canceled.")
+                     : String(localized: "\(price), once. No subscription."))
+                    .font(Geist.caption())
+                    .foregroundStyle(Thoughtful.secondary)
+            }
+            Button(purchaseButtonTitle(for: selectedProduct)) {
+                let product = selectedProduct
+                Task { await storeManager.purchase(product, context: context) }
+            }
+            .buttonStyle(GeistButtonStyle(variant: .primary))
+            .frame(maxWidth: 480)
+            .disabled(storeManager.isPurchasing || storeManager.isRestoring || storeManager.product(for: selectedProduct) == nil)
+        }
+    }
+
+    private func planTitle(_ product: VoxboardPurchaseProduct) -> String {
+        switch product {
+        case .individualWeekly, .familyWeekly: String(localized: "Weekly")
+        case .individualYearly, .familyYearly: String(localized: "Yearly")
+        case .familyUpgrade: String(localized: "Upgrade to Family Lifetime")
+        default: String(localized: "Lifetime")
         }
     }
 
@@ -3771,44 +3875,48 @@ struct MacPaywallView: View {
         title: LocalizedStringKey,
         detail: LocalizedStringKey
     ) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(title)
-                .font(Geist.label())
-                .foregroundColor(Geist.text)
-            Text(storeManager.displayPrice(for: product) ?? String(localized: "PRICE UNAVAILABLE"))
-                .font(Geist.heading(.title2))
-                .foregroundColor(Geist.text)
-            Text(detail)
-                .font(Geist.caption())
-                .foregroundColor(Geist.muted)
-                .fixedSize(horizontal: false, vertical: true)
-            Spacer(minLength: 0)
-            Button(purchaseButtonTitle(for: product)) {
-                Task { await storeManager.purchase(product, context: context) }
+        Button {
+            selectedPlanIndex = offers.firstIndex(of: product) ?? 0
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: selectedProduct == product ? "checkmark.circle.fill" : "circle")
+                    .font(.title3)
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title).font(Geist.label(.body))
+                    Text(detail).font(Geist.caption()).foregroundStyle(Thoughtful.secondary)
+                }
+                Spacer()
+                Text(storeManager.displayPrice(for: product) ?? String(localized: "Price unavailable"))
+                    .font(Geist.label(.body))
+                    .monospacedDigit()
             }
-            .buttonStyle(GeistButtonStyle(variant: .primary))
-            .disabled(storeManager.isPurchasing || storeManager.product(for: product) == nil)
+            .foregroundStyle(Thoughtful.ink)
+            .padding(16)
+            .frame(maxWidth: .infinity, minHeight: 76)
+            .contentShape(Rectangle())
         }
-        .padding(18)
-        .frame(maxWidth: .infinity, minHeight: 190, alignment: .leading)
-        .overlay(Rectangle().stroke(Geist.border, lineWidth: 1))
+        .buttonStyle(.plain)
+        .disabled(storeManager.isPurchasing || storeManager.isRestoring)
+        .accessibilityAddTraits(selectedProduct == product ? .isSelected : [])
     }
 
     private func purchaseButtonTitle(for product: VoxboardPurchaseProduct) -> String {
         if storeManager.purchasingProductID == product.rawValue {
-            return String(localized: "PURCHASING…")
+            return String(localized: "Purchasing…")
         }
+        if storeManager.offersFreeTrial(product) { return String(localized: "Start 7-Day Free Trial") }
         return switch product {
-        case .individual: String(localized: "UNLOCK INDIVIDUAL")
-        case .family: String(localized: "UNLOCK FAMILY")
-        case .familyUpgrade: String(localized: "UPGRADE TO FAMILY")
+        case .individualWeekly, .individualYearly, .familyWeekly, .familyYearly: String(localized: "Subscribe")
+        case .individual, .family: String(localized: "Buy Lifetime")
+        case .familyUpgrade: String(localized: "Upgrade to Family")
         }
     }
 
     private var paywallTitle: String {
         switch usageTracker.accessLevel {
-        case .free: String(localized: "Choose Vox.md Unlimited")
-        case .individual: String(localized: "Share Unlimited with Family")
+        case .free: String(localized: "A home for every thought.")
+        case .individual: String(localized: "A little more room.")
         case .family: String(localized: "Vox.md Family Unlimited")
         }
     }
@@ -3816,11 +3924,11 @@ struct MacPaywallView: View {
     private var paywallDetail: String {
         switch usageTracker.accessLevel {
         case .free:
-            String(localized: "Unlock unlimited local Capture and private, on-device transcription. Pay once with no subscription.")
+            String(localized: "Unlimited Capture. Private, on-device transcription. Your words, in your own Markdown files.")
         case .individual:
-            String(localized: "You already own lifetime Unlimited. Upgrade once to support Apple Family Sharing.")
+            String(localized: "Your Unlimited access is active. Lifetime owners can upgrade to Family Sharing.")
         case .family:
-            String(localized: "Your lifetime Unlimited access supports Apple Family Sharing.")
+            String(localized: "Your Unlimited access supports Apple Family Sharing.")
         }
     }
 }

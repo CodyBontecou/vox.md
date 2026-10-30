@@ -4,6 +4,7 @@ import VoxboardShared
 
 struct HistoryView: View {
     @Bindable var viewModel: QuickCaptureViewModel
+    var isReadOnly = false
     @Environment(TranscriptStore.self) private var store
     @Environment(\.dismiss) private var dismiss
     @State private var showClearHistoryConfirmation = false
@@ -141,7 +142,7 @@ struct HistoryView: View {
 
     private var transcriptList: some View {
         List {
-            if viewModel.failedInboxCount > 0 {
+            if !isReadOnly && viewModel.failedInboxCount > 0 {
                 Section {
                     Button {
                         Task { await viewModel.retryFailedInbox() }
@@ -163,7 +164,9 @@ struct HistoryView: View {
                     .listRowSeparator(.hidden)
                     .contextMenu {
                         if case .transcript(let transcript, _) = item {
-                            Button("Edit", systemImage: "pencil") { editingTranscript = transcript }
+                            if !isReadOnly {
+                                Button("Edit", systemImage: "pencil") { editingTranscript = transcript }
+                            }
                             Button("Export", systemImage: "square.and.arrow.up") { export(transcript) }
                             Button("Delete", systemImage: "trash", role: .destructive) {
                                 store.delete(ids: [transcript.id])
@@ -335,7 +338,9 @@ struct HistoryView: View {
 
     private func actionMenu(for transcript: Transcript) -> some View {
         Menu {
-            Button("Edit", systemImage: "pencil") { editingTranscript = transcript }
+            if !isReadOnly {
+                Button("Edit", systemImage: "pencil") { editingTranscript = transcript }
+            }
             Button("Export", systemImage: "square.and.arrow.up") { export(transcript) }
             Button("Delete", systemImage: "trash", role: .destructive) {
                 store.delete(ids: [transcript.id])

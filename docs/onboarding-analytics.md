@@ -14,7 +14,7 @@ The remote D1 database is `voxboard-onboarding-analytics` (`af59f484-87cd-4f0b-b
 
 No ingest token is configured today, matching the Health.md worker setup. If abuse becomes an issue, set a Worker `INGEST_TOKEN` secret and provide `ONBOARDING_ANALYTICS_INGEST_TOKEN` to the app build.
 
-Events are queued in UserDefaults with stable event IDs and flushed asynchronously. Failures never block app flows.
+Release builds enable collection through `OnboardingAnalyticsClient.isEnabledByDefault`; debug builds remain opt-in. Events are queued in UserDefaults with stable event IDs and flushed asynchronously. Failures never block app flows.
 
 ## Debug/local testing
 

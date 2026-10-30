@@ -36,11 +36,31 @@ public enum VoxboardPurchaseProduct: String, CaseIterable, Sendable {
     /// The discounted Family Sharing upgrade for existing individual owners.
     case familyUpgrade = "bontecou.Voxboard.familyUpgrade"
 
+    case individualWeekly = "bontecou.Voxboard.individual.weekly"
+    case individualYearly = "bontecou.Voxboard.individual.yearly"
+    case familyWeekly = "bontecou.Voxboard.family.weekly"
+    case familyYearly = "bontecou.Voxboard.family.yearly"
+
+    public var isSubscription: Bool {
+        switch self {
+        case .individualWeekly, .individualYearly, .familyWeekly, .familyYearly: true
+        default: false
+        }
+    }
+
+    public var billingLabel: String {
+        switch self {
+        case .individualWeekly, .familyWeekly: String(localized: "per week")
+        case .individualYearly, .familyYearly: String(localized: "per year")
+        default: String(localized: "one time")
+        }
+    }
+
     public var grantedAccessLevel: VoxboardAccessLevel {
         switch self {
-        case .individual:
+        case .individual, .individualWeekly, .individualYearly:
             .individual
-        case .family, .familyUpgrade:
+        case .family, .familyUpgrade, .familyWeekly, .familyYearly:
             .family
         }
     }
@@ -49,7 +69,7 @@ public enum VoxboardPurchaseProduct: String, CaseIterable, Sendable {
     public static func purchaseOptions(for accessLevel: VoxboardAccessLevel) -> [Self] {
         switch accessLevel {
         case .free:
-            [.individual, .family]
+            [.individualWeekly, .individualYearly, .individual, .familyWeekly, .familyYearly, .family]
         case .individual:
             [.familyUpgrade]
         case .family:
@@ -63,9 +83,13 @@ public enum VoxboardPurchaseProduct: String, CaseIterable, Sendable {
 
     private static func productPriority(_ product: Self) -> Int {
         switch product {
-        case .individual: 1
-        case .familyUpgrade: 2
-        case .family: 3
+        case .individualWeekly: 1
+        case .individualYearly: 2
+        case .individual: 3
+        case .familyWeekly: 4
+        case .familyYearly: 5
+        case .familyUpgrade: 6
+        case .family: 7
         }
     }
 }

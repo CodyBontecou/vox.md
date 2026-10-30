@@ -3,6 +3,23 @@ import XCTest
 @testable import VoxboardShared
 
 final class CaptureDeliveryUsageStoreTests: XCTestCase {
+    func test_defaultPolicyBlocksFirstCaptureForFreeUser() async throws {
+        let fixture = try makeFixture()
+        defer { fixture.cleanup() }
+        let store = CaptureDeliveryUsageStore(
+            ledgerURL: fixture.ledgerURL,
+            coordinator: fixture.coordinator,
+            isUnlocked: { false },
+            mirrorSuccessfulCount: { _ in }
+        )
+        do {
+            _ = try await store.reserve(for: makeRequest(index: 0))
+            XCTFail("An unpurchased user must not deliver their first Capture")
+        } catch let error as CaptureDeliveryQuotaError {
+            XCTAssertEqual(error, .limitReached(limit: 0))
+        }
+    }
+
     func test_tenSuccessfulCapturesAreAllowedAndEleventhIsDenied() async throws {
         let fixture = try makeFixture()
         defer { fixture.cleanup() }
@@ -101,6 +118,7 @@ final class CaptureDeliveryUsageStoreTests: XCTestCase {
 
         let reinstalledStore = CaptureDeliveryUsageStore(
             ledgerURL: fixture.ledgerURL,
+            freeCaptureLimit: 10,
             coordinator: fixture.coordinator,
             isUnlocked: { false },
             mirrorSuccessfulCount: { _ in }
@@ -152,6 +170,7 @@ final class CaptureDeliveryUsageStoreTests: XCTestCase {
 
         let relaunchedStore = CaptureDeliveryUsageStore(
             ledgerURL: fixture.ledgerURL,
+            freeCaptureLimit: 10,
             coordinator: fixture.coordinator,
             isUnlocked: { false },
             mirrorSuccessfulCount: { _ in }
@@ -170,6 +189,7 @@ final class CaptureDeliveryUsageStoreTests: XCTestCase {
         defer { fixture.cleanup() }
         let secondStore = CaptureDeliveryUsageStore(
             ledgerURL: fixture.ledgerURL,
+            freeCaptureLimit: 10,
             coordinator: fixture.coordinator,
             isUnlocked: { false },
             mirrorSuccessfulCount: { _ in }
@@ -221,6 +241,8 @@ final class CaptureDeliveryUsageStoreTests: XCTestCase {
         let coordinator = ProcessLocalCaptureFileCoordinator()
         let store = CaptureDeliveryUsageStore(
             ledgerURL: ledgerURL,
+            // Exercise legacy ledger accounting independently of the zero-free policy.
+            freeCaptureLimit: 10,
             coordinator: coordinator,
             isUnlocked: { isUnlocked },
             mirrorSuccessfulCount: { _ in }

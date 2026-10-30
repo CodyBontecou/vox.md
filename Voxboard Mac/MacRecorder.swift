@@ -197,7 +197,7 @@ final class MacRecorder {
         defer { isCaptureStarting = false }
         guard !usageTracker.isAtLimit else {
             needsUnlock = true
-            lastError = String(localized: "Free limit reached — unlock Vox.md to keep recording.")
+            lastError = String(localized: "Choose a Vox.md plan to begin recording.")
             return
         }
         guard validateSelectedModel(modelManager) else { return }
@@ -244,7 +244,7 @@ final class MacRecorder {
         guard !isRecording, !isCaptureStarting, !isMeetingCaptureFinalizing else { return }
         guard !usageTracker.isAtLimit else {
             needsUnlock = true
-            lastError = String(localized: "Free limit reached — unlock Vox.md to keep recording.")
+            lastError = String(localized: "Choose a Vox.md plan to begin recording.")
             return
         }
         guard validateSelectedModel(modelManager) else { return }
@@ -440,7 +440,7 @@ final class MacRecorder {
         }
         guard !usageTracker.isAtLimit else {
             needsUnlock = true
-            lastError = String(localized: "Free limit reached — unlock Vox.md to import audio.")
+            lastError = String(localized: "Choose a Vox.md plan to import audio.")
             return
         }
         guard validateSelectedModel(modelManager) else { return }
@@ -2188,7 +2188,7 @@ private enum MacRecordingHandoffError: LocalizedError, RecordingJobFailureClassi
         case .recoveryRoutingRequired:
             return String(localized: "Choose a Capture Preset before retrying this recovered recording.")
         case .transcriptionLimitReached:
-            return String(localized: "You've used your free transcription time. Unlock Vox.md to process this recording.")
+            return String(localized: "Choose a Vox.md plan to process this recording.")
         case .deliveryFailed:
             return String(localized: "The transcript was saved, but its configured destination did not finish. The source recording was preserved for retry.")
         }

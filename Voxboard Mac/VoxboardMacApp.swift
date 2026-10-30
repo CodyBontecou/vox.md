@@ -22,6 +22,8 @@ struct VoxboardMacApp: App {
     private var visibilityModeRaw = MacAppVisibilityMode.dockAndMenuBar.rawValue
 
     init() {
+        RetiredAnalyticsCleanup.run()
+        if let defaults = AppConstants.sharedDefaults { RetiredAnalyticsCleanup.run(defaults: defaults) }
         Geist.registerBundledFonts()
         let modelManager = ModelManager()
         let store = TranscriptStore()
@@ -170,18 +172,25 @@ struct VoxboardMacApp: App {
 
     var body: some Scene {
         WindowGroup("Vox.md", id: "main") {
-            MacRootView(
-                recorder: recorder,
-                quickCaptureViewModel: quickCaptureViewModel,
-                windowCoordinator: windowCoordinator
-            )
+            Group {
+                if usageTracker.hasUnlocked {
+                    MacRootView(
+                        recorder: recorder,
+                        quickCaptureViewModel: quickCaptureViewModel,
+                        windowCoordinator: windowCoordinator
+                    )
+                } else {
+                    MacPaywallView(context: .onboarding, isAccessGate: true, historyViewModel: quickCaptureViewModel)
+                }
+            }
                 .tint(MacBrand.orange)
                 .task {
                     // Drain the shared capture inbox on a cadence while the Mac
                     // app runs, so queued captures retry without waiting for the
                     // next foreground activation (#11).
                     while !Task.isCancelled {
-                        try? await Task.sleep(for: .seconds(300))
+                        do { try await Task.sleep(for: .seconds(30)) } catch { return }
+                        await storeManager.syncCurrentEntitlements()
                         await quickCaptureViewModel.processPendingInbox()
                     }
                 }
@@ -192,7 +201,8 @@ struct VoxboardMacApp: App {
                 .onAppear {
                     appDelegate.configureURLHandler(handleURL)
                     appDelegate.configureLifecycleHandlers(
-                        didBecomeActive: { [weak quickCaptureViewModel, weak recorder, weak windowCoordinator] in
+                        didBecomeActive: { [weak quickCaptureViewModel, weak recorder, weak windowCoordinator, weak storeManager] in
+                            await storeManager?.syncCurrentEntitlements()
                             if let quickCaptureViewModel, let windowCoordinator {
                                 Self.consumePendingQuickCaptureOpenIfNeeded(
                                     quickCaptureViewModel: quickCaptureViewModel,

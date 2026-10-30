@@ -22,7 +22,7 @@ nonisolated enum WatchRecordingFailureStage: String, Codable, Sendable {
 
 nonisolated enum WatchRecordingStatusMessage {
     static var transcriptionLimitReached: String {
-        String(localized: "You've used your free transcription time. Get Vox.md Unlimited to continue.")
+        String(localized: "Choose a Vox.md plan on your iPhone to process this recording.")
     }
 }
 
