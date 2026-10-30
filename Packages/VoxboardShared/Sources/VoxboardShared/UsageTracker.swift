@@ -1,7 +1,7 @@
 import Foundation
 
-/// Tracks the independent free transcription and successful-Capture meters,
-/// plus the shared lifetime purchase state. Transcription and UI mirrors live
+/// Tracks transcription and successful-Capture usage, plus shared paid access.
+/// Transcription and UI mirrors live
 /// in App Group defaults; authoritative Capture accounting is coordinated by
 /// `CaptureDeliveryUsageStore` within the app's local data.
 @Observable
@@ -9,8 +9,9 @@ public final class UsageTracker {
 
     // MARK: - Constants
 
-    public static let freeMinutesLimit: Double = 15.0
-    public static let freeCaptureLimit: Int = 10
+    // The trial is provided by StoreKit, not a device-local free allowance.
+    public static let freeMinutesLimit: Double = 0
+    public static let freeCaptureLimit: Int = 0
     private static let usageSecondsKey = "totalTranscriptionSeconds"
     private static let usageReceiptBaselineKey = "transcriptionUsageReceiptBaselineV1"
     private static let usageReceiptsKey = "transcriptionUsageReceiptsV1"
@@ -23,7 +24,18 @@ public final class UsageTracker {
 
     public var totalSecondsUsed: Double = 0
     public var successfulCapturesUsed: Int = 0
-    public private(set) var accessLevel: VoxboardAccessLevel = .free
+    private var storedAccessLevel: VoxboardAccessLevel = .free
+    private var storeAccessExpiration: Date?
+    private var lifetimeStoreAccess: VoxboardAccessLevel = .free
+    private static let lifetimeStoreAccessKey = "lifetimeStoreAccessV1"
+    private static let storeAccessExpirationKey = "storeAccessExpirationV1"
+
+    public var accessLevel: VoxboardAccessLevel {
+        if let storeAccessExpiration, storeAccessExpiration <= Date() {
+            return VoxboardAccessLevel.highest(permanentAccessLevel, lifetimeStoreAccess)
+        }
+        return storedAccessLevel
+    }
     public private(set) var isLegacyAccessClassificationPending = false
     public private(set) var hasCurrentIndividualStoreEntitlement = false
 
@@ -41,7 +53,8 @@ public final class UsageTracker {
     }
     public var purchaseOptions: [VoxboardPurchaseProduct] {
         if accessLevel == .individual {
-            return isEligibleForFamilyUpgrade ? [.familyUpgrade] : []
+            if isEligibleForFamilyUpgrade { return [.familyUpgrade] }
+            return isLegacyAccessClassificationPending ? [] : VoxboardPurchaseProduct.purchaseOptions(for: .free)
         }
         guard !isLegacyAccessClassificationPending else { return [] }
         return VoxboardPurchaseProduct.purchaseOptions(for: accessLevel)
@@ -51,24 +64,24 @@ public final class UsageTracker {
     public var minutesRemaining: Double { secondsRemaining / 60.0 }
     public var capturesRemaining: Int { max(0, Self.freeCaptureLimit - successfulCapturesUsed) }
 
-    /// True when the free tier is exhausted and the user hasn't purchased.
+    /// Core transcription requires a verified purchase or subscription trial.
     public var isAtLimit: Bool {
-        !hasUnlocked && totalSecondsUsed >= Self.freeMinutesLimit * 60
+        !hasUnlocked
     }
 
-    /// True when the free Capture allowance is exhausted and the user hasn't purchased.
+    /// Capture requires the same paid access as transcription.
     public var isCaptureAtLimit: Bool {
-        !hasUnlocked && successfulCapturesUsed >= Self.freeCaptureLimit
+        !hasUnlocked
     }
 
     /// 0…1 fraction of free transcription consumed.
     public var fractionUsed: Double {
-        min(1.0, totalSecondsUsed / (Self.freeMinutesLimit * 60))
+        Self.freeMinutesLimit > 0 ? min(1.0, totalSecondsUsed / (Self.freeMinutesLimit * 60)) : 1
     }
 
     /// 0…1 fraction of free Capture deliveries consumed.
     public var captureFractionUsed: Double {
-        min(1.0, Double(successfulCapturesUsed) / Double(Self.freeCaptureLimit))
+        Self.freeCaptureLimit > 0 ? min(1.0, Double(successfulCapturesUsed) / Double(Self.freeCaptureLimit)) : 1
     }
 
     // MARK: - Init
@@ -131,7 +144,7 @@ public final class UsageTracker {
     /// Grants grandfathered access that does not depend on a StoreKit entitlement.
     public func grantPermanentIndividualAccess() {
         permanentAccessLevel = VoxboardAccessLevel.highest(permanentAccessLevel, .individual)
-        accessLevel = VoxboardAccessLevel.highest(accessLevel, .individual)
+        storedAccessLevel = VoxboardAccessLevel.highest(accessLevel, .individual)
         isLegacyAccessClassificationPending = false
         persist()
     }
@@ -142,7 +155,7 @@ public final class UsageTracker {
     public func completeLegacyAccessClassification(isOriginalPaidAppOwner: Bool) {
         if isOriginalPaidAppOwner {
             permanentAccessLevel = VoxboardAccessLevel.highest(permanentAccessLevel, .individual)
-            accessLevel = VoxboardAccessLevel.highest(accessLevel, .individual)
+            storedAccessLevel = VoxboardAccessLevel.highest(accessLevel, .individual)
         }
         isLegacyAccessClassificationPending = false
         persist()
@@ -151,7 +164,9 @@ public final class UsageTracker {
     /// Applies a newly verified transaction immediately. Launch and restore flows
     /// should subsequently reconcile against `Transaction.currentEntitlements`.
     public func applyVerifiedPurchase(_ product: VoxboardPurchaseProduct) {
-        accessLevel = VoxboardAccessLevel.highest(accessLevel, product.grantedAccessLevel)
+        // Subscription access must include its verified expiration via reconciliation.
+        guard !product.isSubscription else { return }
+        storedAccessLevel = VoxboardAccessLevel.highest(accessLevel, product.grantedAccessLevel)
         if product == .individual {
             hasCurrentIndividualStoreEntitlement = true
         }
@@ -160,9 +175,17 @@ public final class UsageTracker {
 
     /// Replaces StoreKit-derived access with the complete current entitlement set,
     /// while retaining access granted to owners of the original paid app.
-    public func reconcileStoreEntitlements(_ products: some Sequence<VoxboardPurchaseProduct>) {
-        let currentProducts = Array(products)
+    public func reconcileStoreEntitlements(
+        _ products: some Sequence<VoxboardPurchaseProduct>,
+        expirationDate: Date? = nil
+    ) {
+        let currentProducts = products.filter {
+            !$0.isSubscription || (expirationDate.map { $0 > Date() } ?? false)
+        }
         hasCurrentIndividualStoreEntitlement = currentProducts.contains(.individual)
+        lifetimeStoreAccess = currentProducts.filter { !$0.isSubscription }.reduce(.free) {
+            VoxboardAccessLevel.highest($0, $1.grantedAccessLevel)
+        }
         let storeAccess = currentProducts.reduce(VoxboardAccessLevel.free) { level, product in
             VoxboardAccessLevel.highest(level, product.grantedAccessLevel)
         }
@@ -173,8 +196,9 @@ public final class UsageTracker {
             // Preserve the old entitlement provisionally if the receipt is not
             // available yet. A completed modern-app classification will clear it.
         } else {
-            accessLevel = reconciledAccess
+            storedAccessLevel = reconciledAccess
         }
+        storeAccessExpiration = expirationDate
         persist()
     }
 
@@ -194,6 +218,8 @@ public final class UsageTracker {
         ) ?? 0
         successfulCapturesUsed = mirroredCaptures
 
+        storeAccessExpiration = defaults?.object(forKey: Self.storeAccessExpirationKey) as? Date
+        lifetimeStoreAccess = Self.persistedAccessLevel(forKey: Self.lifetimeStoreAccessKey, defaults: defaults) ?? .free
         permanentAccessLevel = Self.persistedAccessLevel(
             forKey: Self.permanentAccessLevelKey,
             defaults: defaults
@@ -206,15 +232,15 @@ public final class UsageTracker {
             forKey: Self.accessLevelKey,
             defaults: defaults
         ) {
-            accessLevel = VoxboardAccessLevel.highest(permanentAccessLevel, persistedLevel)
+            storedAccessLevel = VoxboardAccessLevel.highest(permanentAccessLevel, persistedLevel)
         } else if defaults?.bool(forKey: Self.hasUnlockedKey) == true {
             // `hasUnlocked` represented both the original paid app and StoreKit
             // purchasers. Keep access while StoreManager classifies its source.
-            accessLevel = .individual
+            storedAccessLevel = .individual
             isLegacyAccessClassificationPending = true
             persist()
         } else {
-            accessLevel = permanentAccessLevel
+            storedAccessLevel = permanentAccessLevel
         }
     }
 
@@ -223,11 +249,14 @@ public final class UsageTracker {
     /// Cheap check suitable for use in the keyboard extension without creating a
     /// full `UsageTracker` instance.
     public static var staticIsAtLimit: Bool {
-        guard !(AppConstants.sharedDefaults?.bool(forKey: hasUnlockedKey) ?? false) else {
-            return false
+        let defaults = AppConstants.sharedDefaults
+        if let expiration = defaults?.object(forKey: storeAccessExpirationKey) as? Date,
+           expiration <= Date() {
+            let permanent = persistedAccessLevel(forKey: permanentAccessLevelKey, defaults: defaults) ?? .free
+            let lifetime = persistedAccessLevel(forKey: lifetimeStoreAccessKey, defaults: defaults) ?? .free
+            return !VoxboardAccessLevel.highest(permanent, lifetime).hasUnlimitedAccess
         }
-        let seconds = AppConstants.sharedDefaults?.double(forKey: usageSecondsKey) ?? 0
-        return seconds >= freeMinutesLimit * 60
+        return !(defaults?.bool(forKey: hasUnlockedKey) ?? false)
     }
 
     // MARK: - Private
@@ -242,7 +271,9 @@ public final class UsageTracker {
 
     private func persist() {
         defaults?.set(totalSecondsUsed, forKey: Self.usageSecondsKey)
-        defaults?.set(accessLevel.rawValue, forKey: Self.accessLevelKey)
+        defaults?.set(storedAccessLevel.rawValue, forKey: Self.accessLevelKey)
+        defaults?.set(storeAccessExpiration, forKey: Self.storeAccessExpirationKey)
+        defaults?.set(lifetimeStoreAccess.rawValue, forKey: Self.lifetimeStoreAccessKey)
         defaults?.set(permanentAccessLevel.rawValue, forKey: Self.permanentAccessLevelKey)
         defaults?.set(
             isLegacyAccessClassificationPending,

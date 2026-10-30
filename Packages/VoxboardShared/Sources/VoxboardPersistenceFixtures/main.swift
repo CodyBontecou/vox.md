@@ -1668,30 +1668,10 @@ struct VoxboardPersistenceFixtures {
         guard !modelSelection.0.isEmpty, modelSelection.1 == "en" else {
             throw FixtureError.semanticMismatch("model selection fixture producer")
         }
-        let analyticsDefaults = SystemOnboardingAnalyticsUserDefaults(defaults: defaults)
-        analyticsDefaults.set(
-            requestID.uuidString.lowercased(),
-            forKey: OnboardingAnalyticsInstallIDStore.defaultKey
-        )
-        guard OnboardingAnalyticsInstallIDStore(defaults: analyticsDefaults).installID()
-            == requestID.uuidString.lowercased() else {
-            throw FixtureError.semanticMismatch("analytics install identity producer")
-        }
-        let assignmentStore = OnboardingExperimentAssignmentStore(
-            defaults: analyticsDefaults,
-            now: { fixedDate }
-        )
-        _ = assignmentStore.assignment()
-        let analytics = OnboardingAnalyticsClient(
-            transport: OfflineOnboardingAnalyticsTransport(),
-            defaults: analyticsDefaults,
-            isEnabled: true,
-            retryDelayNanoseconds: UInt64.max,
-            assignmentStore: assignmentStore,
-            runtimeContextProvider: { nil },
-            eventIDProvider: { requestID.uuidString.lowercased() }
-        )
-        analytics.track(OnboardingAnalyticsEvent(name: .onboardingStarted))
+        // Historical fixture coverage for upgrade cleanup; no analytics producer remains.
+        defaults.set(requestID.uuidString.lowercased(), forKey: "onboarding.analytics.install_id.v1")
+        defaults.set(Data("retired".utf8), forKey: "onboarding.experiment.assignment.v1")
+        defaults.set(Data("retired".utf8), forKey: "onboarding.analytics.queue.v1")
         defaults.set(
             Data(#"{"hidden":["paste"],"order":["addMedia","currentLocation"]}"#.utf8),
             forKey: "capture.toolbar.configuration.v1"
@@ -1715,9 +1695,9 @@ struct VoxboardPersistenceFixtures {
             AppConstants.selectedModelKey,
             AppConstants.selectedLanguageKey,
             AppConstants.selectedFallbackModelKey,
-            OnboardingAnalyticsInstallIDStore.defaultKey,
-            OnboardingExperimentAssignmentStore.defaultKey,
-            OnboardingAnalyticsClient.defaultQueueKey,
+            "onboarding.analytics.install_id.v1",
+            "onboarding.experiment.assignment.v1",
+            "onboarding.analytics.queue.v1",
             "capture.toolbar.configuration.v1",
             "watchPresetSelection.epoch.v1",
             "watchPresetSelection.sequence.v1",
@@ -1820,23 +1800,11 @@ struct VoxboardPersistenceFixtures {
         }), modelSelection.1 == "en", modelSelection.2 == modelSelection.0 else {
             throw FixtureError.semanticMismatch("model selection settings store")
         }
-        let analyticsDefaults = SystemOnboardingAnalyticsUserDefaults(defaults: defaults)
-        let assignment = OnboardingExperimentAssignmentStore(
-            defaults: analyticsDefaults,
-            now: { fixedDate }
-        ).assignment()
-        let analytics = OnboardingAnalyticsClient(
-            transport: OfflineOnboardingAnalyticsTransport(),
-            defaults: analyticsDefaults,
-            isEnabled: true,
-            retryDelayNanoseconds: UInt64.max,
-            runtimeContextProvider: { nil }
-        )
-        guard assignment.experimentId == OnboardingExperimentConfig.currentExperimentId,
-              OnboardingAnalyticsInstallIDStore(defaults: analyticsDefaults).installID()
-                == requestID.uuidString.lowercased(),
-              try waitForAsync({ await analytics.queuedPayloads() }).count == 1 else {
-            throw FixtureError.semanticMismatch("analytics settings store")
+        RetiredAnalyticsCleanup.run(defaults: defaults)
+        guard defaults.object(forKey: "onboarding.analytics.install_id.v1") == nil,
+              defaults.object(forKey: "onboarding.experiment.assignment.v1") == nil,
+              defaults.object(forKey: "onboarding.analytics.queue.v1") == nil else {
+            throw FixtureError.semanticMismatch("retired analytics cleanup")
         }
         guard defaults.data(forKey: "capture.toolbar.configuration.v1") != nil,
               (defaults.object(forKey: "watchPresetSelection.epoch.v1") as? NSNumber)?.int64Value == 1_700_000_000_000,

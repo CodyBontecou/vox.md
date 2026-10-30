@@ -30,6 +30,8 @@ struct VoxboardApp: App {
     @State private var pendingWidgetRecord = false
 
     init() {
+        RetiredAnalyticsCleanup.run()
+        if let defaults = AppConstants.sharedDefaults { RetiredAnalyticsCleanup.run(defaults: defaults) }
         #if DEBUG
         DebugSelfie.install()
         #endif
@@ -159,7 +161,16 @@ struct VoxboardApp: App {
         #endif
     }
 
+    @ViewBuilder
     private var standardRootContent: some View {
+        if !usageTracker.hasUnlocked {
+            PaywallView(context: .onboarding, isAccessGate: true, historyViewModel: quickCaptureViewModel, includesOnboarding: true)
+        } else {
+            unlockedRootContent
+        }
+    }
+
+    private var unlockedRootContent: some View {
         RootView(
             persistentRecorder: persistentRecorder,
             quickCaptureViewModel: quickCaptureViewModel,
@@ -167,6 +178,9 @@ struct VoxboardApp: App {
             pendingKeyboardLaunch: $pendingKeyboardLaunch,
             pendingWidgetRecord: $pendingWidgetRecord
         )
+        .voxboardReleaseNotesSheet {
+            defersCaptureInputFocusForReleaseNotes = false
+        }
     }
 
     var body: some Scene {
@@ -181,9 +195,6 @@ struct VoxboardApp: App {
                 \.defersCaptureInputFocusForReleaseNotes,
                 defersCaptureInputFocusForReleaseNotes
             )
-            .voxboardReleaseNotesSheet {
-                defersCaptureInputFocusForReleaseNotes = false
-            }
             .onAppear {
                 updateIdleTimer()
                 WatchRecordingController.shared.configure(
@@ -203,7 +214,6 @@ struct VoxboardApp: App {
                     usageTracker.reload()
                     await quickCaptureViewModel.processPendingInbox()
                 }
-                trackInitialOnboardingStartIfNeeded()
                 ReviewPromptManager.shared.recordAppUsageDay()
                 ReviewPromptManager.shared.requestPendingPromptIfPossible()
 
@@ -216,6 +226,12 @@ struct VoxboardApp: App {
                 for: PendingQuickRecordingRequest.didPersistNotification
             ).receive(on: RunLoop.main)) { _ in
                 consumePendingWidgetRecordIfNeeded()
+            }
+            .task {
+                while !Task.isCancelled {
+                    do { try await Task.sleep(for: .seconds(30)) } catch { return }
+                    await storeManager.syncCurrentEntitlements()
+                }
             }
             .onOpenURL { url in
                 handleURL(url)
@@ -328,20 +344,6 @@ struct VoxboardApp: App {
     private func openCaptureComposer() {
         rootDestination = .capture
     }
-
-    // MARK: - Onboarding Analytics
-
-    private func trackInitialOnboardingStartIfNeeded() {
-        let defaults = AppConstants.sharedDefaults ?? .standard
-        let key = "onboarding.analytics.started.v1"
-        guard !defaults.bool(forKey: key) else { return }
-
-        defaults.set(true, forKey: key)
-        OnboardingAnalyticsClient.shared.trackOnboardingStarted(
-            quotaState: usageTracker.onboardingAnalyticsQuotaState
-        )
-    }
-
     // MARK: - URL Handling
 
     private func handleURL(_ url: URL) {

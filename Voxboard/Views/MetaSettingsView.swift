@@ -137,7 +137,7 @@ struct MetaSettingsView: View {
                                 .foregroundColor(Geist.text)
                         }
                     } else if let price = storeManager.displayPrice {
-                        Text("From \(price)")
+                        Text("Lifetime \(price)")
                             .font(Geist.label(.headline))
                             .foregroundColor(Geist.text)
                     } else {
@@ -154,13 +154,13 @@ struct MetaSettingsView: View {
                         HStack(spacing: 8) {
                             Image(systemName: usageTracker.hasUnlocked ? "person.3.fill" : "lock.open.fill")
                                 .font(.system(.subheadline))
-                            if usageTracker.accessLevel == .individual,
+                            if usageTracker.isEligibleForFamilyUpgrade,
                                let price = storeManager.familyUpgradeDisplayPrice {
                                 Text("Upgrade to Family — \(price)")
-                            } else if usageTracker.accessLevel == .individual {
+                            } else if usageTracker.isEligibleForFamilyUpgrade {
                                 Text("Upgrade to Family")
                             } else {
-                                Text("View Lifetime Options")
+                                Text("View Plans")
                             }
                         }
                     }
@@ -191,15 +191,11 @@ struct MetaSettingsView: View {
     private var accessDetail: String {
         switch usageTracker.accessLevel {
         case .free:
-            String(
-                format: String(localized: "%.1f / 15 min · %d / 10 captures used"),
-                usageTracker.minutesUsed,
-                usageTracker.successfulCapturesUsed
-            )
+            String(localized: "Choose a plan to begin capturing and recording")
         case .individual:
-            String(localized: "Lifetime access — upgrade to share with family")
+            String(localized: "Unlimited individual access")
         case .family:
-            String(localized: "Lifetime access with Apple Family Sharing")
+            String(localized: "Unlimited access with Apple Family Sharing")
         }
     }
 

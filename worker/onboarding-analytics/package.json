@@ -7,11 +7,7 @@
     "dev": "wrangler dev",
     "test": "node --test test/*.test.mjs",
     "typecheck": "tsc --noEmit",
-    "deploy": "wrangler deploy",
-    "db:create": "wrangler d1 create voxboard-onboarding-analytics",
-    "db:migrate:local": "wrangler d1 migrations apply voxboard-onboarding-analytics --local",
-    "db:migrate:remote": "wrangler d1 migrations apply voxboard-onboarding-analytics --remote",
-    "query:recent": "wrangler d1 execute voxboard-onboarding-analytics --remote --command \"SELECT received_at,event_name,variant_id,platform,onboarding_step,paywall_context,purchase_outcome FROM onboarding_events ORDER BY received_at DESC LIMIT 20;\""
+    "deploy": "wrangler deploy"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260516.0",
