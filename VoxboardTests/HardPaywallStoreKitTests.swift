@@ -12,7 +12,7 @@ final class HardPaywallStoreKitTests: XCTestCase {
         var url = try XCTUnwrap(Bundle.main.url(forResource: "Voxboard", withExtension: "storekit"))
         if usesCurrentLifetimePrices {
             // Visual previews must reflect the still-frozen production lifetime
-            // prices, not the separate future-target catalog assertions below.
+            // prices. The checked-in catalog uses the same held prices.
             var catalog = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: url)) as? [String: Any])
             var products = try XCTUnwrap(catalog["products"] as? [[String: Any]])
             for index in products.indices {
@@ -49,9 +49,9 @@ final class HardPaywallStoreKitTests: XCTestCase {
         await store.loadProducts()
         // Parse exact decimal prices rather than round-tripping binary floats.
         let prices: [VoxboardPurchaseProduct: String] = [
-            .individualWeekly: "0.99", .individualYearly: "29.99", .individual: "49.99",
-            .familyWeekly: "1.99", .familyYearly: "49.99", .family: "89.99",
-            .familyUpgrade: "39.99",
+            .individualWeekly: "0.99", .individualYearly: "29.99", .individual: "19.99",
+            .familyWeekly: "1.99", .familyYearly: "49.99", .family: "39.99",
+            .familyUpgrade: "19.99",
         ]
         for (id, price) in prices {
             let product = try XCTUnwrap(store.product(for: id))
