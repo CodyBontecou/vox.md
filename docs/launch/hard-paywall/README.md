@@ -93,6 +93,10 @@ Previous analytics version: `f41053e5-a1d7-4a92-87a2-1c559a8e32e5`. A Worker rol
 
 ## StoreKit CI runtime
 
-The complete `HardPaywallStoreKitTests` class runs in the `storekit-tests` job on released Xcode 27.1 with its matching iOS simulator. This includes catalog/trial/family, purchase/refund, expiration/lifetime, onboarding, and paywall layout assertions. Other app-hosted iOS regression tests retain the existing Xcode 26.6 / SDK-matched baseline. No tests are dropped from the overall workflow.
+The complete `HardPaywallStoreKitTests` class runs in the `storekit-tests` job on released Xcode 27.1 with its matching iOS simulator. Other app-hosted iOS regression tests retain the existing Xcode 26.6 / SDK-matched baseline. No tests are dropped from the overall workflow.
 
-This isolates the iOS 26.5 CLI StoreKit configuration failure tracked in [Apple's FB22237318 discussion](https://developer.apple.com/forums/thread/826971). The 27.1 fixture uses the same unmodified prices and product IDs. CI builds are verification artifacts; they do not submit, release, deploy, or change App Store pricing.
+The dedicated `VoxboardStoreKitTests` scheme uses `VoxboardStoreKit.xctestplan` and a debug-only `--storekit-test-host` scene. This prevents the normal launch paywall and lifecycle tasks from binding StoreKit to Sandbox before the test creates `SKTestSession`. Tests still render the real onboarding/paywall and exercise the production StoreManager, catalog, trials, refunds, expiration, and lifetime state. Normal debug launches and Release builds keep the full application scene.
+
+The fixture uses the same unmodified prices and product IDs. CI artifacts do not submit, release, deploy, or change App Store pricing. The older CLI StoreKit configuration failures are also tracked in [Apple's FB22237318 discussion](https://developer.apple.com/forums/thread/826971).
+
+Run the StoreKit suite with `xcodebuild test -project Voxboard.xcodeproj -scheme VoxboardStoreKitTests -testPlan VoxboardStoreKit -destination 'platform=iOS Simulator,id=YOUR_UDID' CODE_SIGNING_ALLOWED=YES`.

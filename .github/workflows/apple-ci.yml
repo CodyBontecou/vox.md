@@ -266,9 +266,10 @@ jobs:
             build/test-results/Voxboard-Watch.xcresult
           retention-days: 14
 
-  # iOS 26.5 CLI StoreKitTest can fail to sync configuration (FB22237318).
-  # Keep the existing SDK/runtime regression baseline above; execute the entire
-  # StoreKit class here on the same released runtime verified locally.
+  # Apply the checked-in StoreKit test plan before host-app startup so a clean
+  # simulator cannot bind StoreKit to Sandbox before SKTestSession begins.
+  # Retain the existing regression baseline above; run the full StoreKit class
+  # on the released runtime verified from erased simulator state.
   # https://developer.apple.com/forums/thread/826971
   storekit-tests:
     runs-on: xcode-27
@@ -296,7 +297,8 @@ jobs:
           mkdir -p build/logs build/test-results
           xcodebuild test \
             -project Voxboard.xcodeproj \
-            -scheme VoxboardTests \
+            -scheme VoxboardStoreKitTests \
+            -testPlan VoxboardStoreKit \
             -configuration Debug \
             -destination '${{ steps.simulator.outputs.destination }}' \
             -derivedDataPath "$RUNNER_TEMP/Voxboard-StoreKit-Tests" \
