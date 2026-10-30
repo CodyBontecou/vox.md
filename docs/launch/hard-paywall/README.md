@@ -90,3 +90,9 @@ wrangler d1 execute voxboard-onboarding-analytics --remote --command "SELECT pla
 If product loading, entitlements, restores, or paid-user preservation fail, stop rollout/public promotion, keep lifetime prices frozen, gather coarse failure evidence, and prepare a tested fix. App Store releases cannot be instantly rolled back to an older binary. Do not delete products, purge user content, revoke legitimate purchases, or change lifetime prices as a rollback shortcut.
 
 Previous analytics version: `f41053e5-a1d7-4a92-87a2-1c559a8e32e5`. A Worker rollback is possible with owner authorization, but reverting this product allowlist will reject new-plan analytics. Do not roll it back automatically in response to app purchase errors; the Worker is not the entitlement authority.
+
+## StoreKit CI runtime
+
+The complete `HardPaywallStoreKitTests` class runs in the `storekit-tests` job on released Xcode 27.1 with its matching iOS simulator. This includes catalog/trial/family, purchase/refund, expiration/lifetime, onboarding, and paywall layout assertions. Other app-hosted iOS regression tests retain the existing Xcode 26.6 / SDK-matched baseline. No tests are dropped from the overall workflow.
+
+This isolates the iOS 26.5 CLI StoreKit configuration failure tracked in [Apple's FB22237318 discussion](https://developer.apple.com/forums/thread/826971). The 27.1 fixture uses the same unmodified prices and product IDs. CI builds are verification artifacts; they do not submit, release, deploy, or change App Store pricing.
