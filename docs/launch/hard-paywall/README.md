@@ -1,5 +1,7 @@
 # Hard-paywall launch and support runbook
 
+> **October 30, 2026 update:** The owner explicitly authorized releasing iOS 2.14 (59) now while Mac remains in review and applying shared lifetime pricing with regional adjustments. All 525 lifetime/upgrade prices are applied and verified; US prices are $49.99 Individual / $89.99 Family / $39.99 upgrade. Apple reports iOS **READY_FOR_DISTRIBUTION**. Version 2.14 Discord announcements are suppressed on both platforms. The earlier release hold and lifetime-price freeze below are historical for this operation. See [the release receipt](../../evidence/release-2.14-20261030/README.md).
+
 ## Current candidate policy — supersedes historical deployment approvals
 
 Custom in-app analytics is removed from this source. Upgrades erase retired local analytics state while retaining functional content, purchases, and essential services. Keep myself.md claims disabled and all live prices held. Privacy/site/store wording remains for review; this source merge does not authorize deployment, upload, submission, release, or historical-server-data deletion.

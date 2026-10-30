@@ -1,0 +1,109 @@
+{
+  "id": "5d9895dd-d9e1-4428-851f-3293bdf6d9e4",
+  "number": 29,
+  "metadata": {
+    "created_on": "2026-10-30T20:05:46.983779Z",
+    "source": "wrangler",
+    "author_id": "8901a34232ad9eaae51ee719c20e507d",
+    "author_email": "bontecouc@gmail.com",
+    "has_preview": true
+  },
+  "annotations": {
+    "workers/message": "Suppress Vox.md v2.14 Discord announcements on iOS and Mac",
+    "workers/triggered_by": "version_upload"
+  },
+  "resources": {
+    "script": {
+      "etag": "5b2d6d0b783b566976d9bfd232cd6d26ec2f9165952cf7468a3fba2289d33901",
+      "handlers": [
+        "fetch",
+        "queue"
+      ],
+      "named_handlers": [
+        {
+          "name": "handleQueue",
+          "handlers": [
+            "class"
+          ]
+        },
+        {
+          "name": "handleRequest",
+          "handlers": [
+            "class"
+          ]
+        }
+      ],
+      "last_deployed_from": "wrangler"
+    },
+    "script_runtime": {
+      "compatibility_date": "2026-04-01",
+      "usage_model": "standard"
+    },
+    "bindings": [
+      {
+        "name": "ADMIN_TOKEN",
+        "type": "secret_text"
+      },
+      {
+        "name": "ANNOUNCEMENTS_ENABLED",
+        "text": "true",
+        "type": "plain_text"
+      },
+      {
+        "name": "ASC_ISSUER_ID",
+        "type": "secret_text"
+      },
+      {
+        "name": "ASC_KEY_ID",
+        "type": "secret_text"
+      },
+      {
+        "name": "ASC_PRIVATE_KEY",
+        "type": "secret_text"
+      },
+      {
+        "name": "ASC_WEBHOOK_SECRET_HEALTHMD",
+        "type": "secret_text"
+      },
+      {
+        "name": "ASC_WEBHOOK_SECRET_IMGHOST",
+        "type": "secret_text"
+      },
+      {
+        "name": "ASC_WEBHOOK_SECRET_INSTAREPLY",
+        "type": "secret_text"
+      },
+      {
+        "name": "ASC_WEBHOOK_SECRET_ISOME",
+        "type": "secret_text"
+      },
+      {
+        "name": "ASC_WEBHOOK_SECRET_SYNCMD",
+        "type": "secret_text"
+      },
+      {
+        "name": "ASC_WEBHOOK_SECRET_VOXBOARD",
+        "type": "secret_text"
+      },
+      {
+        "database_id": "2ed4980e-1f5b-457a-9102-0c27e9d362c9",
+        "id": "2ed4980e-1f5b-457a-9102-0c27e9d362c9",
+        "name": "DB",
+        "type": "d1"
+      },
+      {
+        "name": "DISCORD_BOT_TOKEN",
+        "type": "secret_text"
+      },
+      {
+        "name": "EVENT_QUEUE",
+        "queue_name": "asc-webhook-events",
+        "type": "queue"
+      },
+      {
+        "name": "GITHUB_TOKEN",
+        "type": "secret_text"
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "verified_at": "2026-10-30T20:10:28.748763+00:00",
+  "owner_authorization": "Release iOS and update pricing now; regional adjustments included; no Discord announcement for 2.14. Explicitly proceed while Mac awaits review.",
+  "app_id": "6758967337",
+  "ios_version_id": "805e71b5-fba0-4e6c-85e5-1df5373c51b1",
+  "ios_build_id": "6aedefe1-ad65-48b8-8be6-6533a2fa6ef4",
+  "version": "2.14",
+  "ios_build": "59",
+  "mac_version_id": "045ffb94-b19a-4d5a-abc4-8c06f9947c51",
+  "mac_state_at_start": "WAITING_FOR_REVIEW",
+  "pricing_verified_rows": 525,
+  "territories": 175,
+  "us_lifetime_prices": {
+    "individual": "49.99",
+    "family": "89.99",
+    "family_upgrade": "39.99"
+  },
+  "discord_suppression": {
+    "versions": [
+      "2.14"
+    ],
+    "platforms": [
+      "IOS",
+      "MAC_OS"
+    ],
+    "worker_version": "5d9895dd-d9e1-4428-851f-3293bdf6d9e4",
+    "source_commit": "4dc3b18",
+    "tests_passed": 32
+  },
+  "production_purchase_or_restore_performed": false,
+  "pricing_verification": "Raw Apple API manual and automatic prices, included inAppPurchasePricePoint attributes and full IDs; the CLI --resolved summary returned inconsistent amounts and was not trusted.",
+  "ios_state_after": "READY_FOR_DISTRIBUTION",
+  "mac_state_after": "WAITING_FOR_REVIEW",
+  "public_us_listing_at_check": "2.13 (propagation pending)",
+  "release_webhook_observed": false,
+  "discord_delivery_audit": "No release delivery row or message recorded at verification; deployed skipVersions rule remains active for delayed webhooks and retries."
+}

@@ -1,0 +1,57 @@
+{"action":"admin_validation_complete","slug":"healthmd","appStoreVersionId":"version-1","platform":"IOS","version":"1.2.3","previewUtf16Length":156}
+✔ authenticated admin validation returns the exact preview without enqueueing or posting (18.709125ms)
+✔ admin validation rejects unauthenticated requests before external access (0.397333ms)
+✔ admin validation rejects an oversized authenticated body before external access (0.662167ms)
+✔ admin readiness authenticates before checking bindings or D1 (0.438542ms)
+✔ admin readiness returns 200 after querying both D1 tables and makes no external requests (0.362375ms)
+✔ admin readiness rejects a mistyped announcements flag (0.216834ms)
+✔ admin readiness returns only missing component names with 503 (0.229125ms)
+✔ ASC resolution returns authoritative version/platform/en-US notes and uses a bearer JWT (16.9805ms)
+✔ ASC resolution rejects a version belonging to another app (1.489792ms)
+✔ ASC resolution uses the generic fallback when 50 included localizations omit en-US What’s New (1.136125ms)
+✔ GET retries use exponential fallback when Retry-After is missing (0.278333ms)
+✔ Vox.md accepts its live ASC iOS and macOS version platforms (0.05ms)
+✔ release notes are normalized and generated Full Changelog is removed (0.949208ms)
+✔ announcement renders customer-facing Apple platform names (0.188166ms)
+✔ announcement respects Discord UTF-16 limit with astral characters (0.7625ms)
+✔ history matches the bot's new exact headline (12.01725ms)
+✔ history matches the bot's legacy exact headline (0.302625ms)
+✔ history does not use substring headline matches (0.217292ms)
+✔ message POST is attempted once and never retried in-process (0.643416ms)
+✔ message POST disables allowed mentions (0.83325ms)
+{"action":"review_dispatch_complete","slug":"healthmd","state":"READY_FOR_DISTRIBUTION","appStoreVersionId":"version-1","eventKey":"event-key-1"}
+{"action":"discord_delivery_failed","slug":"healthmd","state":"READY_FOR_DISTRIBUTION","appStoreVersionId":"version-1","eventKey":"event-key-1","error":"ambiguous connection failure"}
+{"action":"approval_dispatch_complete","slug":"healthmd","state":"READY_FOR_DISTRIBUTION","appStoreVersionId":"version-1","eventKey":"event-key-1"}
+{"action":"discord_reconciled","slug":"healthmd","state":"READY_FOR_DISTRIBUTION","appStoreVersionId":"version-1","eventKey":"event-key-1","messageId":"901"}
+✔ effects checkpoint independently and an ambiguous Discord POST reconciles on queue retry (18.809083ms)
+{"action":"review_dispatch_complete","slug":"healthmd","state":"READY_FOR_DISTRIBUTION","appStoreVersionId":"version-342","eventKey":"event-key-1"}
+{"action":"discord_skipped_version","slug":"healthmd","state":"READY_FOR_DISTRIBUTION","appStoreVersionId":"version-342","eventKey":"event-key-1","version":"3.4.2"}
+{"action":"approval_dispatch_complete","slug":"healthmd","state":"READY_FOR_DISTRIBUTION","appStoreVersionId":"version-342","eventKey":"event-key-1"}
+{"action":"discord_skipped_version","slug":"healthmd","state":"READY_FOR_DISTRIBUTION","appStoreVersionId":"version-342","eventKey":"event-key-1","version":"3.4.2"}
+✔ skipVersions suppresses Discord for a matching release while the approval dispatch proceeds (1.815375ms)
+{"action":"review_dispatch_complete","slug":"voxboard","state":"READY_FOR_DISTRIBUTION","appStoreVersionId":"version-214","eventKey":"event-key-1"}
+{"action":"discord_skipped_version","slug":"voxboard","state":"READY_FOR_DISTRIBUTION","appStoreVersionId":"version-214","eventKey":"event-key-1","version":"2.14"}
+{"action":"approval_dispatch_complete","slug":"voxboard","state":"READY_FOR_DISTRIBUTION","appStoreVersionId":"version-214","eventKey":"event-key-1"}
+{"action":"discord_skipped_version","slug":"voxboard","state":"READY_FOR_DISTRIBUTION","appStoreVersionId":"version-214","eventKey":"event-key-1","version":"2.14"}
+✔ Vox.md 2.14 suppresses Discord while release dispatch proceeds (1.930833ms)
+{"action":"review_dispatch_complete","slug":"healthmd","state":"READY_FOR_DISTRIBUTION","appStoreVersionId":"version-1","eventKey":"event-key-1"}
+{"action":"approval_dispatch_complete","slug":"healthmd","state":"READY_FOR_DISTRIBUTION","appStoreVersionId":"version-1","eventKey":"event-key-1"}
+✔ safe default skips Discord without creating a permanent sent checkpoint (0.820459ms)
+✔ handleQueue acknowledges a completed event and logs message metadata (10.946958ms)
+✔ handleQueue retries malformed events and never logs the queue body (0.203083ms)
+✔ signature verifier accepts exact Apple HMAC and rejects alterations (5.10125ms)
+✔ parser accepts only complete state-event shape (1.235709ms)
+{"action":"event_enqueued","slug":"healthmd","state":"IN_REVIEW","appStoreVersionId":"version-1","eventKey":"b89e826901318fdf6f38bde2fcb6ef4e9c6470d2f2571c6f235d851f6e97cc7e"}
+✔ valid ingress enqueues normalized event and makes no synchronous external request (12.974ms)
+{"action":"signature_rejected","slug":"healthmd"}
+✔ invalid signature does not enqueue (0.732042ms)
+✔ webhook rejects an oversized declared Content-Length before reading or verifying the body (0.285375ms)
+✔ webhook rejects an oversized body after reading when Content-Length is absent (0.753166ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 145.140458
