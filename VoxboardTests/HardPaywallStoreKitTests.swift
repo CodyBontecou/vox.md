@@ -28,6 +28,7 @@ final class HardPaywallStoreKitTests: XCTestCase {
         let session = try SKTestSession(contentsOf: url)
         session.resetToDefaultState()
         session.disableDialogs = true
+        session.timeRate = .realTime
         session.clearTransactions()
         addTeardownBlock { session.clearTransactions() }
         return session
@@ -70,8 +71,13 @@ final class HardPaywallStoreKitTests: XCTestCase {
         XCTAssertFalse(tracker.hasUnlocked)
         // Headless runners have no purchase-sheet anchor. Use StoreKitTest to
         // create the real transaction, then exercise production entitlement sync.
-        try await session.buyProduct(identifier: VoxboardPurchaseProduct.familyYearly.rawValue)
-        await store.syncCurrentEntitlements()
+        let purchase = try await session.buyProduct(identifier: VoxboardPurchaseProduct.familyYearly.rawValue)
+        await purchase.finish()
+        for _ in 0..<50 {
+            await store.syncCurrentEntitlements()
+            if tracker.hasFamilyAccess { break }
+            try await Task.sleep(for: .milliseconds(100))
+        }
         XCTAssertTrue(tracker.hasFamilyAccess, store.errorMessage ?? "Family trial must unlock access")
         let transaction = try XCTUnwrap(session.allTransactions().last)
         try session.refundTransaction(identifier: transaction.identifier)
@@ -229,8 +235,13 @@ final class HardPaywallStoreKitTests: XCTestCase {
         let session = try makeSession()
         let tracker = makeTracker()
         let store = StoreManager(usageTracker: tracker)
-        try await session.buyProduct(identifier: VoxboardPurchaseProduct.individualWeekly.rawValue)
-        await store.syncCurrentEntitlements()
+        let weekly = try await session.buyProduct(identifier: VoxboardPurchaseProduct.individualWeekly.rawValue)
+        await weekly.finish()
+        for _ in 0..<50 {
+            await store.syncCurrentEntitlements()
+            if tracker.hasUnlocked { break }
+            try await Task.sleep(for: .milliseconds(100))
+        }
         XCTAssertTrue(tracker.hasUnlocked)
         XCTAssertFalse(tracker.isEligibleForFamilyUpgrade)
 
@@ -254,8 +265,13 @@ final class HardPaywallStoreKitTests: XCTestCase {
         XCTAssertFalse(tracker.hasUnlocked)
         XCTAssertTrue(tracker.isCaptureAtLimit)
 
-        try await session.buyProduct(identifier: VoxboardPurchaseProduct.individual.rawValue)
-        await store.syncCurrentEntitlements()
+        let lifetime = try await session.buyProduct(identifier: VoxboardPurchaseProduct.individual.rawValue)
+        await lifetime.finish()
+        for _ in 0..<50 {
+            await store.syncCurrentEntitlements()
+            if tracker.hasUnlocked { break }
+            try await Task.sleep(for: .milliseconds(100))
+        }
         XCTAssertTrue(tracker.hasUnlocked)
         XCTAssertTrue(tracker.isEligibleForFamilyUpgrade)
     }
