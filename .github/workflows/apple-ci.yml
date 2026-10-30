@@ -94,6 +94,7 @@ jobs:
             -destination '${{ steps.simulator.outputs.destination }}' \
             -derivedDataPath "$RUNNER_TEMP/Voxboard-iOS-Tests" \
             -resultBundlePath "$PWD/build/test-results/Voxboard-iOS.xcresult" \
+            -skip-testing:VoxboardTests/HardPaywallStoreKitTests \
             -disableAutomaticPackageResolution \
             -onlyUsePackageVersionsFromResolvedFile \
             CODE_SIGNING_ALLOWED=YES \
@@ -264,3 +265,76 @@ jobs:
             build/logs/watch-tests.log
             build/test-results/Voxboard-Watch.xcresult
           retention-days: 14
+
+  # Apply the checked-in StoreKit test plan before host-app startup so a clean
+  # simulator cannot bind StoreKit to Sandbox before SKTestSession begins.
+  # Retain the existing regression baseline above; run the full StoreKit class
+  # on the released runtime verified from erased simulator state.
+  # https://developer.apple.com/forums/thread/826971
+  storekit-tests:
+    runs-on: xcode-27
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Select released StoreKit test Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '27.1'
+      - name: Attest StoreKit toolchain
+        run: |
+          xcodebuild -version
+          swift --version
+      - name: Select StoreKit simulator
+        id: simulator
+        run: |
+          python3 scripts/select-issue22-ios-test-simulator.py \
+            --github-output "$GITHUB_OUTPUT" \
+            --metadata build/logs/storekit-simulator.json
+      - name: Activate local StoreKit fixture
+        run: |
+          set -euo pipefail
+          mkdir -p build/logs build/test-results
+          # First activate the local catalog/trust material in its own host
+          # process. A cold CLI host can otherwise request Sandbox sign-in.
+          # This is setup, not a retry: every purchase assertion runs below.
+          xcodebuild test \
+            -project Voxboard.xcodeproj \
+            -scheme VoxboardStoreKitTests \
+            -testPlan VoxboardStoreKit \
+            -configuration Debug \
+            -destination '${{ steps.simulator.outputs.destination }}' \
+            -derivedDataPath "$RUNNER_TEMP/Voxboard-StoreKit-Tests" \
+            -resultBundlePath "$PWD/build/test-results/Voxboard-StoreKit-Activation.xcresult" \
+            -only-testing:VoxboardTests/HardPaywallStoreKitTests/testStoreKitFixtureActivation \
+            -disableAutomaticPackageResolution \
+            -onlyUsePackageVersionsFromResolvedFile \
+            CODE_SIGNING_ALLOWED=YES \
+            CODE_SIGNING_REQUIRED=YES \
+            2>&1 | tee build/logs/storekit-activation.log
+      - name: Run complete StoreKit and paywall test class
+        run: |
+          set -euo pipefail
+          xcodebuild test \
+            -project Voxboard.xcodeproj \
+            -scheme VoxboardStoreKitTests \
+            -testPlan VoxboardStoreKit \
+            -configuration Debug \
+            -destination '${{ steps.simulator.outputs.destination }}' \
+            -derivedDataPath "$RUNNER_TEMP/Voxboard-StoreKit-Tests" \
+            -resultBundlePath "$PWD/build/test-results/Voxboard-StoreKit.xcresult" \
+            -only-testing:VoxboardTests/HardPaywallStoreKitTests \
+            -disableAutomaticPackageResolution \
+            -onlyUsePackageVersionsFromResolvedFile \
+            CODE_SIGNING_ALLOWED=YES \
+            CODE_SIGNING_REQUIRED=YES \
+            2>&1 | tee build/logs/storekit-tests.log
+      - name: Retain StoreKit diagnostics
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: storekit-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            build/logs
+            build/test-results
+          if-no-files-found: warn

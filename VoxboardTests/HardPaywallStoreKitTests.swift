@@ -8,7 +8,7 @@ import VoxboardShared
 
 @MainActor
 final class HardPaywallStoreKitTests: XCTestCase {
-    private func makeSession(usesCurrentLifetimePrices: Bool = false) throws -> SKTestSession {
+    private func makeSession(usesCurrentLifetimePrices: Bool = false) async throws -> SKTestSession {
         var url = try XCTUnwrap(Bundle.main.url(forResource: "Voxboard", withExtension: "storekit"))
         if usesCurrentLifetimePrices {
             // Visual previews must reflect the still-frozen production lifetime
@@ -31,7 +31,33 @@ final class HardPaywallStoreKitTests: XCTestCase {
         session.timeRate = .realTime
         session.clearTransactions()
         addTeardownBlock { session.clearTransactions() }
+        // Fail fast if app startup bound StoreKit to Sandbox before the fixture.
+        // Matching live prices alone cannot prove this is a local test session.
+        switch try await AppTransaction.shared {
+        case .verified(let transaction):
+            _ = try XCTUnwrap(transaction.environment == .xcode ? transaction : nil,
+                "Run the StoreKit suite with the isolated VoxboardStoreKit test plan.")
+        case .unverified(_, let error):
+            throw error
+        }
         return session
+    }
+
+    /// The CLI installs the local catalog/trust material for a fresh simulator
+    /// during this separate setup invocation. Purchase tests then run in a new
+    /// host process and still require verified Xcode transactions.
+    func testStoreKitFixtureActivation() async throws {
+        let url = try XCTUnwrap(Bundle.main.url(forResource: "Voxboard", withExtension: "storekit"))
+        let session = try SKTestSession(contentsOf: url)
+        session.resetToDefaultState()
+        session.disableDialogs = true
+        session.clearTransactions()
+        defer { session.clearTransactions() }
+        let products = try await Product.products(for: [VoxboardPurchaseProduct.individualWeekly.rawValue])
+        let product = try XCTUnwrap(products.first)
+        let json = try XCTUnwrap(JSONSerialization.jsonObject(with: product.jsonRepresentation) as? [String: Any])
+        // This is the local fixture ID, not Apple's numeric storefront ID.
+        XCTAssertEqual(json["id"] as? String, "individual-weekly")
     }
 
     private func makeTracker() -> UsageTracker {
@@ -42,7 +68,7 @@ final class HardPaywallStoreKitTests: XCTestCase {
     }
 
     func testCatalogPricesTrialsAndFamilyOptions() async throws {
-        let session = try makeSession()
+        let session = try await makeSession()
         defer { withExtendedLifetime(session) {} }
         let tracker = makeTracker()
         let store = StoreManager(usageTracker: tracker)
@@ -64,7 +90,7 @@ final class HardPaywallStoreKitTests: XCTestCase {
     }
 
     func testCancelPendingAndOfflineRestoreKeepFreshUserLocked() async throws {
-        let session = try makeSession()
+        let session = try await makeSession()
         let tracker = makeTracker()
         let store = StoreManager(usageTracker: tracker)
         await store.prepareForPurchases()
@@ -86,7 +112,7 @@ final class HardPaywallStoreKitTests: XCTestCase {
     }
 
     func testRestoreRecoversFamilyLifetimeIntoFreshLocalState() async throws {
-        let session = try makeSession()
+        let session = try await makeSession()
         try await session.buyProduct(identifier: VoxboardPurchaseProduct.family.rawValue)
         let tracker = makeTracker()
         XCTAssertFalse(tracker.hasUnlocked)
@@ -97,7 +123,7 @@ final class HardPaywallStoreKitTests: XCTestCase {
     }
 
     func testTrialPurchaseAndRefundThroughStoreManager() async throws {
-        let session = try makeSession()
+        let session = try await makeSession()
         let tracker = makeTracker()
         let store = StoreManager(usageTracker: tracker)
         await store.prepareForPurchases()
@@ -115,7 +141,7 @@ final class HardPaywallStoreKitTests: XCTestCase {
     }
 
     func testPaywallLayoutLightDarkAndLargeType() async throws {
-        let session = try makeSession(usesCurrentLifetimePrices: true)
+        let session = try await makeSession(usesCurrentLifetimePrices: true)
         defer { withExtendedLifetime(session) {} }
         let tracker = makeTracker()
         let store = StoreManager(usageTracker: tracker)
@@ -221,7 +247,7 @@ final class HardPaywallStoreKitTests: XCTestCase {
     func testInteractiveDesignPreview() async throws {
         #if targetEnvironment(simulator)
         try XCTSkipUnless(FileManager.default.fileExists(atPath: "/tmp/vox-thoughtful-design-preview"))
-        let session = try makeSession(usesCurrentLifetimePrices: true)
+        let session = try await makeSession(usesCurrentLifetimePrices: true)
         defer { withExtendedLifetime(session) {} }
         let defaults = UserDefaults.standard
         let previous = defaults.object(forKey: Thoughtful.introductionKey)
@@ -257,7 +283,7 @@ final class HardPaywallStoreKitTests: XCTestCase {
     }
 
     func testSubscriptionExpirationRelocksButLifetimeSurvives() async throws {
-        let session = try makeSession()
+        let session = try await makeSession()
         let tracker = makeTracker()
         let store = StoreManager(usageTracker: tracker)
         try await session.buyProduct(identifier: VoxboardPurchaseProduct.individualWeekly.rawValue)
@@ -286,7 +312,13 @@ final class HardPaywallStoreKitTests: XCTestCase {
         XCTAssertTrue(tracker.isCaptureAtLimit)
 
         try await session.buyProduct(identifier: VoxboardPurchaseProduct.individual.rawValue)
-        await store.syncCurrentEntitlements()
+        // StoreKit also publishes a new lifetime entitlement asynchronously.
+        // Wait for that delivery, just as above for subscription expiration.
+        for _ in 0..<50 {
+            await store.syncCurrentEntitlements()
+            if tracker.hasUnlocked && tracker.isEligibleForFamilyUpgrade { break }
+            try await Task.sleep(for: .milliseconds(100))
+        }
         XCTAssertTrue(tracker.hasUnlocked)
         XCTAssertTrue(tracker.isEligibleForFamilyUpgrade)
     }

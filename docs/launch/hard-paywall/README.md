@@ -1,5 +1,11 @@
 # Hard-paywall launch and support runbook
 
+## Current candidate policy — supersedes historical deployment approvals
+
+Custom in-app analytics is removed from this source. Upgrades erase retired local analytics state while retaining functional content, purchases, and essential services. Keep myself.md claims disabled and all live prices held. Privacy/site/store wording remains for review; this source merge does not authorize deployment, upload, submission, release, or historical-server-data deletion.
+
+The deployment/version facts below describe the earlier transition and older released clients. They are audit history, not permission to deploy or reactivate a collector. Deploying the discard-only retirement responder or deleting historical records needs separate owner approval.
+
 > Source integration is authorized for main. App/website/Worker releases remain on hold. Keep current Lifetime prices unchanged; future price targets in historical proposals are not authorization to apply them. Physical-device and multi-account Family Sharing acceptance are deferred.
 
 ## Current controls
@@ -80,15 +86,16 @@ Family plans use Apple Family Sharing. Check that purchase/subscription sharing 
 
 ## Monitoring and rollback
 
-Monitor aggregated paywall views, purchase outcomes, restores, and coarse error categories by platform/build/product; never inspect/store note text or audio. Current onboarding telemetry is not a complete subscription-renewal/churn ledger: app-side purchase success is not proof of a later paid renewal or retained revenue. Use Apple subscription/sales reporting for those measures.
+Use Apple's subscription/sales reporting and essential service health checks to assess purchase validation, restores, and delivery availability. Custom analytics collectors, queues, IDs, experiment assignment, and event uploads are removed from this source. Do not deploy or reactivate a collector build, or use historical tables as a new product-event pipeline. Deployment of the discard-only retirement responder and historical-data deletion remain separate reviewed operations.
 
-Example read-only aggregate query:
+If product loading, entitlements, restores, or paid-user preservation fail, stop rollout/public promotion, keep lifetime prices frozen, gather coarse failure evidence without note text or audio, and prepare a tested fix. Do not delete products, purge user content, revoke legitimate purchases, or change lifetime prices as a rollback shortcut.
 
-```sh
-cd worker/onboarding-analytics
-wrangler d1 execute voxboard-onboarding-analytics --remote --command "SELECT platform,app_version,product_id,purchase_outcome,error_category,COUNT(*) AS events FROM onboarding_events WHERE received_at >= '2026-10-29' GROUP BY platform,app_version,product_id,purchase_outcome,error_category;"
-```
+## StoreKit CI runtime
 
-If product loading, entitlements, restores, or paid-user preservation fail, stop rollout/public promotion, keep lifetime prices frozen, gather coarse failure evidence, and prepare a tested fix. App Store releases cannot be instantly rolled back to an older binary. Do not delete products, purge user content, revoke legitimate purchases, or change lifetime prices as a rollback shortcut.
+The complete `HardPaywallStoreKitTests` class runs in the `storekit-tests` job on released Xcode 27.1 with its matching iOS simulator. Other app-hosted iOS regression tests retain the existing Xcode 26.6 / SDK-matched baseline. No tests are dropped from the overall workflow.
 
-Previous analytics version: `f41053e5-a1d7-4a92-87a2-1c559a8e32e5`. A Worker rollback is possible with owner authorization, but reverting this product allowlist will reject new-plan analytics. Do not roll it back automatically in response to app purchase errors; the Worker is not the entitlement authority.
+The dedicated `VoxboardStoreKitTests` scheme uses `VoxboardStoreKit.xctestplan` and a debug-only `--storekit-test-host` scene. This isolates normal launch paywall and lifecycle tasks from fixture setup. A separate `testStoreKitFixtureActivation` invocation verifies the local catalog identity before the complete class runs in a fresh host process; the purchase tests require verified Xcode transactions. This handles cold CLI catalog/trust initialization without retrying or skipping purchase tests. Tests still render the real onboarding/paywall and exercise the production StoreManager, catalog, trials, refunds, expiration, and lifetime state. Normal debug launches and Release builds keep the full application scene.
+
+The fixture uses the same unmodified prices and product IDs. CI artifacts do not submit, release, deploy, or change App Store pricing. The older CLI StoreKit configuration failures are also tracked in [Apple's FB22237318 discussion](https://developer.apple.com/forums/thread/826971).
+
+Run the StoreKit suite with `xcodebuild test -project Voxboard.xcodeproj -scheme VoxboardStoreKitTests -testPlan VoxboardStoreKit -destination 'platform=iOS Simulator,id=YOUR_UDID' CODE_SIGNING_ALLOWED=YES`.
