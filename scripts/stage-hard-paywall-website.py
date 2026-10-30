@@ -68,9 +68,16 @@ def main():
     <p>Existing purchases remain valid. Viewing and exporting existing history do not require a new purchase. Canceling a subscription does not delete existing local history or previously exported files. Apple's <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">standard Licensed Application End User License Agreement</a> also applies.</p>
 
     <h2>Speech Models</h2>''')
+        if name == 'terms.html':
+            after = after.replace('Effective: February 9, 2026 · Last updated: July 17, 2026',
+                'Applies to Vox.md 2.14 when released · Prepared October 30, 2026')
+            after = after.replace('production onboarding analytics are disabled by default as described in the Privacy Policy.',
+                'this release removes custom app usage analytics and advertising attribution as described in the Privacy Policy. Optional HTTP delivery sends configured text to the endpoint you explicitly choose.')
+            after = after.replace('production onboarding analytics are disabled by default.',
+                'this release removes custom app usage analytics and advertising attribution. Optional HTTP delivery is controlled by your destination settings.')
         if name == 'docs/index.html':
             after = after.replace('Production onboarding analytics are disabled by default. The app contains no third-party analytics SDK, ad network, or cross-app tracker.',
-                'This candidate removes custom in-app analytics and advertising attribution in all build configurations. Upgrades erase retired local event queues and analytics identifiers. Essential services and earlier retained server records have separate disclosures.')
+                'Vox.md 2.14 removes custom in-app analytics and advertising attribution. Upgrades erase retired local event queues and analytics identifiers. Essential services and earlier retained server records have separate disclosures.')
         if name == 'llms.txt':
             start = after.index('Production onboarding analytics are disabled by default.')
             end = after.index('Location is not collected by the developer or analytics.', start)

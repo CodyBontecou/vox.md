@@ -99,3 +99,7 @@ The dedicated `VoxboardStoreKitTests` scheme uses `VoxboardStoreKit.xctestplan` 
 The fixture uses the same unmodified prices and product IDs. CI artifacts do not submit, release, deploy, or change App Store pricing. The older CLI StoreKit configuration failures are also tracked in [Apple's FB22237318 discussion](https://developer.apple.com/forums/thread/826971).
 
 Run the StoreKit suite with `xcodebuild test -project Voxboard.xcodeproj -scheme VoxboardStoreKitTests -testPlan VoxboardStoreKit -destination 'platform=iOS Simulator,id=YOUR_UDID' CODE_SIGNING_ALLOWED=YES`.
+
+## Current-source upload preparation
+
+Prepared candidate: 2.14 (59). New signed iOS and Mac candidates are authorized for upload only. Keep the App Store versions on MANUAL release; do not submit a review, publish a GitHub release, deploy the website/Worker, change prices, or claim device qualification. Candidate metadata is platform-specific; the privacy proposal and staged website bundle are publication inputs, not deployed facts. Physical-device testing remains deferred. Record exact built source and processed ASC build IDs in task receipts.

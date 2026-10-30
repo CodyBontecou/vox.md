@@ -68,7 +68,7 @@
            <li>Completed Capture history stores delivery metadata, not note text, URLs, coordinates, location labels or templates, bookmarks, absolute paths, or attachment filenames.</li>
            <li>Pending and failed items retain only what is needed for local recovery, which may include a preset snapshot and its already privacy-adjusted location or unavailable outcome.</li>
 -          <li>Production onboarding analytics are disabled by default. The app contains no third-party analytics SDK, ad network, or cross-app tracker.</li>
-+          <li>This candidate removes custom in-app analytics and advertising attribution in all build configurations. Upgrades erase retired local event queues and analytics identifiers. Essential services and earlier retained server records have separate disclosures.</li>
++          <li>Vox.md 2.14 removes custom in-app analytics and advertising attribution. Upgrades erase retired local event queues and analytics identifiers. Essential services and earlier retained server records have separate disclosures.</li>
            <li>The composer fetches cached inspirational quotes from ZenQuotes without sending draft content or identifiers.</li>
          </ul>
          <p>For complete data handling, retention, and third-party service details, read the <a href="../privacy.html">Privacy Policy</a>.</p>
@@ -102,7 +102,21 @@
  
 --- a/website/terms.html
 +++ b/website/terms.html
-@@ -62,13 +62,12 @@
+@@ -45,7 +45,7 @@
+   <div class="container">
+     <div class="page-eyebrow">Legal · Terms</div>
+     <h1 class="page-title">Terms of Service</h1>
+-    <p class="page-meta">Effective: February 9, 2026 · Last updated: July 17, 2026</p>
++    <p class="page-meta">Applies to Vox.md 2.14 when released · Prepared October 30, 2026</p>
+   </div>
+ </section>
+ 
+@@ -58,17 +58,16 @@
+     <h2>Description of Service</h2>
+     <p>Vox.md is a quick capture application for iOS and macOS with keyboard, share, widget, and Shortcuts integrations. It writes text, links, images, files, scans, sketches, and voice captures into user-selected Markdown folders, including Obsidian vaults. Optional voice-to-text uses local speech recognition models on your device.</p>
+     <div class="callout">
+-      <p>Capture content and voice transcription are not sent to Vox.md servers. Completed files are written only to destinations you choose, and production onboarding analytics are disabled by default as described in the Privacy Policy.</p>
++      <p>Capture content and voice transcription are not sent to Vox.md servers. Completed files are written only to destinations you choose, and this release removes custom app usage analytics and advertising attribution as described in the Privacy Policy. Optional HTTP delivery sends configured text to the endpoint you explicitly choose.</p>
      </div>
  
      <h2>License</h2>
@@ -122,6 +136,15 @@
  
      <h2>Speech Models</h2>
      <p>On supported devices, Vox.md can use Apple's system-managed, on-device speech recognition. Vox.md also allows you to opt into downloads of OpenAI Whisper models, released under the MIT License, or other supported local models. Vox.md does not bundle speech model weights. These models and system services are provided "as is," and we make no guarantees regarding the accuracy, completeness, or reliability of transcription output.</p>
+@@ -99,7 +98,7 @@
+     <p>You retain full ownership of the text, links, media, files, scans, sketches, audio, and generated transcripts you capture. We claim no rights to your content.</p>
+ 
+     <h2>Privacy</h2>
+-    <p>Please review our <a href="privacy.html">Privacy Policy</a> for details. Capture drafts, attachments, file routes, audio, transcripts, keystrokes, and exported content are handled locally; production onboarding analytics are disabled by default.</p>
++    <p>Please review our <a href="privacy.html">Privacy Policy</a> for details. Capture drafts, attachments, file routes, audio, transcripts, keystrokes, and exported content are handled locally; this release removes custom app usage analytics and advertising attribution. Optional HTTP delivery is controlled by your destination settings.</p>
+ 
+     <h2>Disclaimer of Warranties</h2>
+     <p>Vox.md is provided <strong>"as is"</strong> and <strong>"as available"</strong> without warranties of any kind, either express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</p>
 --- a/website/privacy.html
 +++ b/website/privacy.html
 @@ -2,7 +2,6 @@
@@ -164,7 +187,7 @@
      <div class="page-eyebrow">Legal · Privacy</div>
      <h1 class="page-title">Privacy Policy</h1>
 -    <p class="page-meta">Effective: February 9, 2026 · Last updated: September 11, 2026</p>
-+    <p class="page-meta">Effective: February 9, 2026 · Last updated: October 22, 2026</p>
++    <p class="page-meta">Applies to Vox.md 2.14 when released · Prepared October 30, 2026</p>
    </div>
  </section>
  
@@ -183,7 +206,7 @@
      <ul>
        <li>Audio recordings or voice data</li>
        <li>Transcribed text or transcription history</li>
-@@ -71,16 +68,9 @@
+@@ -71,20 +68,13 @@
        <li>Advertising identifiers, raw IP address storage, or third-party tracking identifiers</li>
      </ul>
  
@@ -202,9 +225,21 @@
 +<p><strong>Earlier versions:</strong> older versions could send installation-linked onboarding and purchase-flow events. These were pseudonymous records, not anonymous counts. This update does not delete data already received by the service. Contact support about retained records. Historical analytics storage, exports, logs and recovery copies are addressed separately; do not assume deleting local data deletes them.</p>
  
      <h2>On-Device Processing</h2>
-     <p>All voice-to-text transcription is performed entirely on your device. On supported iOS 26 devices, Automatic uses Apple's system-managed Speech framework. You can also opt into local Whisper or Parakeet model downloads. Audio captured by the microphone is processed by the selected on-device backend and is never transmitted over a network connection.</p>
-@@ -116,21 +106,21 @@
+-    <p>All voice-to-text transcription is performed entirely on your device. On supported iOS 26 devices, Automatic uses Apple's system-managed Speech framework. You can also opt into local Whisper or Parakeet model downloads. Audio captured by the microphone is processed by the selected on-device backend and is never transmitted over a network connection.</p>
+-    <p>If you explicitly enable Capture Text processing for a Capture Preset, eligible typed text, on-device OCR, and voice transcripts can be cleaned or formatted locally with Apple Intelligence. Processing falls back to deterministic formatting or the original text when on-device intelligence is unavailable. Vox.md does not send captured text to its servers or third-party AI APIs.</p>
++    <p>All voice-to-text transcription is performed entirely on your device. On supported iOS 26 devices, Automatic uses Apple's system-managed Speech framework. You can also opt into local Whisper or Parakeet model downloads. Transcription does not upload microphone audio for recognition. You control any subsequent export or delivery of capture text and generated transcripts.</p>
++    <p>If you explicitly enable Capture Text processing for a Capture Preset, eligible typed text, on-device OCR, and voice transcripts can be cleaned or formatted locally with Apple Intelligence. Processing falls back to deterministic formatting or the original text when on-device intelligence is unavailable. Vox.md does not automatically send captured text to its own servers or third-party AI APIs for this processing. Separately configured HTTP delivery follows your explicit destination settings.</p>
+     <p>Transcription results, capture drafts, and retry requests are stored locally within the app's sandboxed container and shared App Group. This data is accessible only to signed Vox.md app components such as the app, keyboard, widgets, and share extension. No Vox.md service or server can access it.</p>
  
+     <h2>Keyboard Extension</h2>
+@@ -114,23 +104,27 @@
+     <h2>Speech Models</h2>
+     <p>Vox.md does not bundle speech model weights. Apple's supported language assets are managed by iOS. Optional Whisper, Parakeet, and voice-pause model downloads begin only after you choose them and are stored locally on your device. No account or personal information is required to prepare or download a model.</p>
+ 
++    <h2>Optional HTTP delivery</h2>
++    <p>If you configure and enable HTTP delivery for a Capture Preset or transcript, Vox.md sends the configured text payload to the endpoint you choose when you send it. Depending on your settings, this can include captured text, a generated transcript, cleaned text, dates, and configured metadata. Review the destination before sending sensitive content. The recipient's privacy, retention, and security terms apply. HTTP delivery is separate from local transcription and custom app analytics.</p>
++    <p>Endpoint credentials are held in the device Keychain. Pending delivery and recovery state remain local until an authorized send or retry. Local-network HTTP requires explicit permission; use HTTPS for remote endpoints. Exported files may also be processed by the storage or sync providers you choose.</p>
++
      <h2>Third-Party Services</h2>
      <p>Vox.md does not integrate with third-party analytics SDKs, advertising networks, crash-reporting SDKs, or cross-app tracking services. User-initiated Whisper and Parakeet model downloads connect to model-distribution infrastructure hosted by Hugging Face, either directly or through FluidAudio. Model requests never include capture drafts, typed text, audio, transcripts, attachments, file paths, or location, but the provider may receive ordinary HTTPS connection data and the requested model identifier under its own terms.</p>
 -    <p>The Capture editor requests batches of inspirational quotes from <a href="https://zenquotes.io/">ZenQuotes API</a> and rotates through them from an on-device cache. These requests never include capture drafts, typed text, audio, attachments, file paths, location, install identifiers, or analytics. Like any HTTPS service, ZenQuotes may receive technical connection data such as an IP address and user agent under its own terms. If first-party onboarding events are explicitly enabled in a development build, they are sent directly to a Vox.md Cloudflare Worker with the strict allowlist described above.</p>
@@ -229,7 +264,7 @@
  
      <h2>Changes to This Policy</h2>
      <p>We may update this Privacy Policy from time to time. Any changes will be reflected on this page with an updated "Last updated" date.</p>
-@@ -147,9 +137,6 @@
+@@ -147,9 +141,6 @@
    <div class="container">
      <div class="footer-inner">
        <ul class="footer-links">
@@ -239,7 +274,7 @@
          <li><a href="index.html">Home</a></li>
          <li><a href="docs/">Docs</a></li>
          <li><a href="blog/">Blog</a></li>
-@@ -189,42 +176,22 @@
+@@ -189,42 +180,22 @@
      document.head.appendChild(script);
    }
  
