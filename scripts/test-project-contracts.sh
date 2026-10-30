@@ -39,7 +39,7 @@ purchase_source = (
 storekit_config = json.loads((root / 'Voxboard/Voxboard.storekit').read_text())
 storekit_products = {
     product['productID']: product
-    for product in storekit_config.get('nonConsumableProducts', [])
+    for product in storekit_config.get('products', [])
 }
 expected_purchase_products = {
     'bontecou.Voxboard.unlock': False,
@@ -55,11 +55,34 @@ for product_id, family_sharable in expected_purchase_products.items():
     if product_id not in purchase_source:
         errors.append(f'PurchaseAccess does not recognize {product_id}')
     product = storekit_products.get(product_id)
-    if product is not None and product.get('familySharable') is not family_sharable:
+    if product is not None and product.get('familyShareable') is not family_sharable:
         errors.append(
             f'{product_id} familySharable={product.get("familySharable")}, '
             f'expected {family_sharable}'
         )
+
+subscriptions = {
+    product['productID']: product
+    for group in storekit_config.get('subscriptionGroups', [])
+    for product in group.get('subscriptions', [])
+}
+expected_subscriptions = {
+    'bontecou.Voxboard.individual.weekly': ('P1W', False),
+    'bontecou.Voxboard.individual.yearly': ('P1Y', False),
+    'bontecou.Voxboard.family.weekly': ('P1W', True),
+    'bontecou.Voxboard.family.yearly': ('P1Y', True),
+}
+if set(subscriptions) != set(expected_subscriptions):
+    errors.append('StoreKit subscription inventory must contain Individual and Family weekly/yearly plans')
+for product_id, (period, family_shareable) in expected_subscriptions.items():
+    product = subscriptions.get(product_id, {})
+    offer = product.get('introductoryOffer', {})
+    if product_id not in purchase_source:
+        errors.append(f'PurchaseAccess does not recognize {product_id}')
+    if product.get('recurringSubscriptionPeriod') != period or product.get('familyShareable') is not family_shareable:
+        errors.append(f'StoreKit subscription interval or Family Sharing differs for {product_id}')
+    if offer.get('paymentMode') != 'free' or offer.get('subscriptionPeriod') != 'P1W' or offer.get('numberOfPeriods') != 1:
+        errors.append(f'StoreKit subscription must offer one eligible 7-day free trial: {product_id}')
 
 storekit_release_patch = (
     root / 'artifacts/releases/mac-family-restore-diagnostics.patch'
@@ -629,12 +652,13 @@ for required in ['case "listen":', 'rootDestination = .capture', 'pendingKeyboar
     if required not in app_source:
         errors.append(f'legacy recording launch routing is missing {required}')
 
-analytics_source = (
-    root / 'Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift'
-).read_text()
-release_default = re.search(r'#else\s+(true|false)\s+#endif', analytics_source)
-if release_default is None or release_default.group(1) != 'true':
-    errors.append('release onboarding analytics must be enabled by default')
+retired_analytics_directory = root / 'Packages/VoxboardShared/Sources/VoxboardShared/Analytics'
+if retired_analytics_directory.exists():
+    errors.append('custom analytics producers must remain removed')
+cleanup_source = (root / 'Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift').read_text()
+for required in ['RetiredAnalyticsCleanup', 'onboarding.analytics.queue.v1', 'onboarding.analytics.install_id.v1', 'removeObject(forKey:']:
+    if required not in cleanup_source:
+        errors.append(f'retired analytics upgrade cleanup is missing {required}')
 
 share_source = (root / 'Voxboard Share Extension/ShareViewController.swift').read_text()
 for required in [
