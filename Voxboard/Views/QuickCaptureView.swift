@@ -85,6 +85,9 @@ struct QuickCaptureView: View {
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
     @Environment(\.timeZone) private var timeZone
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var workspaceWidth: CGFloat = 0
+    @State private var previewIsEnabled = false
 
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var selectedScreenshots: [PhotosPickerItem] = []
@@ -208,8 +211,11 @@ struct QuickCaptureView: View {
                 keyboardGuidance: keyboardGuidanceOverlay,
                 error: captureErrorOverlay,
                 fileExport: fileExportOverlay,
-                sentToast: sentToastOverlay
+                sentToast: sentToastOverlay,
+                showsPreview: showsInlinePreview,
+                preview: draftPreview
             )
+            .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { workspaceWidth = $0 }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     if isKeyboardListeningActive {
@@ -1370,6 +1376,34 @@ struct QuickCaptureView: View {
         }
     }
 
+    private var hasDraftContent: Bool {
+        !viewModel.draft.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            || !viewModel.draft.additionalPayloads.isEmpty
+    }
+
+    private var supportsInlinePreview: Bool {
+        AdaptiveCaptureWorkspace.supportsPreview(width: workspaceWidth, dynamicTypeSize: dynamicTypeSize)
+    }
+
+    private var showsInlinePreview: Bool {
+        supportsInlinePreview && previewIsEnabled && hasDraftContent
+    }
+
+    private var draftPreview: CaptureViewSection {
+        CaptureViewSection {
+            CaptureDraftPreview(
+                text: viewModel.draft.text,
+                presetName: selectedFlow.accessibilityName,
+                destination: viewModel.resolvedDestinationPreview,
+                attachmentCount: viewModel.draft.additionalPayloads.count,
+                configureDestination: {
+                    dismissComposer()
+                    showsRoutePicker = true
+                }
+            )
+        }
+    }
+
     private var watchRecordingStatusCard: CaptureViewSection {
         CaptureViewSection {
             if let item = watchRecordingPipeline.currentItem {
@@ -1758,6 +1792,17 @@ struct QuickCaptureView: View {
                     openSettings()
                 }
                 .accessibilityIdentifier("capture_settings")
+
+                if supportsInlinePreview {
+                    routeStatusButton(
+                        previewIsEnabled ? "Hide draft preview" : "Show draft preview",
+                        icon: "rectangle.split.2x1"
+                    ) {
+                        previewIsEnabled.toggle()
+                    }
+                    .disabled(!hasDraftContent)
+                    .accessibilityIdentifier("capture_toggle_preview")
+                }
 
                 Spacer(minLength: 4)
 

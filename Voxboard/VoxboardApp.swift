@@ -164,11 +164,20 @@ struct VoxboardApp: App {
 
     @ViewBuilder
     private var standardRootContent: some View {
-        if !usageTracker.hasUnlocked {
+        if showsPurchaseGate {
             PaywallView(context: .onboarding, isAccessGate: true, historyViewModel: quickCaptureViewModel, includesOnboarding: true)
         } else {
             unlockedRootContent
         }
+    }
+
+    private var showsPurchaseGate: Bool {
+        #if DEBUG
+        // Screenshot launches render the workspace without granting or persisting
+        // purchase access. Release builds always use the real entitlement gate.
+        if RootDestination.localizationScreenshotStory != nil { return false }
+        #endif
+        return !usageTracker.hasUnlocked
     }
 
     private var unlockedRootContent: some View {

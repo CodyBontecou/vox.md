@@ -78,6 +78,8 @@ struct QuickCaptureCanvas: View {
     let error: CaptureViewSection
     let fileExport: CaptureViewSection
     let sentToast: CaptureViewSection
+    var showsPreview = false
+    var preview = CaptureViewSection { EmptyView() }
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -92,7 +94,11 @@ struct QuickCaptureCanvas: View {
                     watchStatus
                     GeistDivider()
                 }
-                composer.layoutPriority(1)
+                AdaptiveCaptureWorkspace(
+                    showsPreview: showsPreview,
+                    primary: CaptureViewSection { composer.layoutPriority(1) },
+                    preview: preview
+                )
                 if showsAttachments {
                     attachments
                 }
