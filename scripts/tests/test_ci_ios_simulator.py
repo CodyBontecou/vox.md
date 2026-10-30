@@ -208,9 +208,10 @@ class CIiOSSimulatorTests(unittest.TestCase):
     def test_workflow_pins_toolchain_with_fixed_concurrency_runtime(self):
         workflow = (ROOT / ".github/workflows/apple-ci.yml").read_text()
         ios_job = workflow.split("  ios-tests:\n", 1)[1].split("  macos-build:\n", 1)[0]
-        self.assertIn("xcode-version: '26.6'", ios_job)
-        self.assertIn("IOS_TEST_RUNTIME_VERSION: '26.6'", ios_job)
-        self.assertIn('xcodebuild -downloadPlatform iOS -buildVersion "$IOS_TEST_RUNTIME_VERSION"', ios_job)
+        self.assertIn("xcode-version: '27.1'", ios_job)
+        self.assertIn("runs-on: xcode-27", ios_job)
+        self.assertIn("IOS_TEST_RUNTIME_VERSION: '27.1'", ios_job)
+        self.assertIn("Create pinned StoreKit test device", ios_job)
         self.assertIn('-test-timeouts-enabled YES', ios_job)
         self.assertIn('-maximum-test-execution-time-allowance 180', ios_job)
         self.assert_rejected([(runtime("26.2"), [device(OLD)])])

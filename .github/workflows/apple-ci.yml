@@ -49,17 +49,17 @@ jobs:
         run: swift test --package-path Packages/VoxboardShared
 
   ios-tests:
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 75
     env:
-      IOS_TEST_RUNTIME_VERSION: '26.6'
+      IOS_TEST_RUNTIME_VERSION: '27.1'
     steps:
       - name: Checkout
         uses: actions/checkout@v6
       - name: Select stable Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '26.6'
+          xcode-version: '27.1'
       - name: Attest toolchain and project
         run: |
           set -euo pipefail
@@ -72,11 +72,10 @@ jobs:
       - name: Guard capture view metadata boundaries
         run: ./scripts/test-capture-view-structure.sh
       # iOS 26.5's StoreKit Test daemon rejects CLI sessions (FB22237318).
-      # Keep the build compiler pinned and explicitly provision the fixed runtime.
+      # Test on the published Xcode 27 runner; other build jobs retain their pins.
       # https://developer.apple.com/forums/thread/826971
-      - name: Provision StoreKit test runtime
+      - name: Create pinned StoreKit test device
         run: |
-          xcodebuild -downloadPlatform iOS -buildVersion "$IOS_TEST_RUNTIME_VERSION"
           xcrun simctl create 'Vox StoreKit CI' \
             com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro \
             "com.apple.CoreSimulator.SimRuntime.iOS-${IOS_TEST_RUNTIME_VERSION//./-}"
