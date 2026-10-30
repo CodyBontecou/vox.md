@@ -43,6 +43,9 @@ final class StoreManager {
 
     typealias Purchase = @MainActor (Product) async throws -> Product.PurchaseResult
 
+    typealias SynchronizePurchases = @MainActor () async throws -> Void
+
+    private let synchronizePurchases: SynchronizePurchases
     private let purchaseProduct: Purchase
     private let usageTracker: UsageTracker
     private let legacyAccessDefaults: UserDefaults
@@ -57,8 +60,10 @@ final class StoreManager {
         usageTracker: UsageTracker,
         legacyAccessDefaults: UserDefaults? = nil,
         originalPaidAppOwnership: OriginalPaidAppOwnershipLoader? = nil,
-        purchaseProduct: Purchase? = nil
+        purchaseProduct: Purchase? = nil,
+        synchronizePurchases: SynchronizePurchases? = nil
     ) {
+        self.synchronizePurchases = synchronizePurchases ?? { try await AppStore.sync() }
         self.purchaseProduct = purchaseProduct ?? { try await $0.purchase() }
         self.usageTracker = usageTracker
         self.legacyAccessDefaults = legacyAccessDefaults ?? AppConstants.sharedDefaults ?? .standard
@@ -258,7 +263,7 @@ final class StoreManager {
         defer { isRestoring = false }
 
         do {
-            try await AppStore.sync()
+            try await synchronizePurchases()
             await verifyAppTransactionIfNeeded(forceRefresh: true)
             let restoredProducts = await syncCurrentEntitlements()
             let restored = !restoredProducts.isEmpty
@@ -333,10 +338,12 @@ final class StoreManager {
     }
 
     private func recordRestoreDiagnostics(syncSucceeded: Bool, syncError: String?) async {
-        let storefront = await Storefront.current
+        // Failure diagnostics must not initiate more StoreKit requests while
+        // the store is unavailable. Preserve the observations already gathered.
+        let storefront = syncSucceeded ? await Storefront.current : nil
         var observations = lastEntitlementObservations
         for product in VoxboardPurchaseProduct.allCases
-        where !observations.contains(where: { $0.productID == product.rawValue }) {
+        where syncSucceeded && !observations.contains(where: { $0.productID == product.rawValue }) {
             guard let latest = await Transaction.latest(for: product.rawValue) else { continue }
             switch latest {
             case .verified(let transaction):

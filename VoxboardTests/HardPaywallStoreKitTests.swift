@@ -43,7 +43,8 @@ final class HardPaywallStoreKitTests: XCTestCase {
 
     private func makeStore(
         usageTracker: UsageTracker,
-        purchase: StoreManager.Purchase? = nil
+        purchase: StoreManager.Purchase? = nil,
+        synchronizePurchases: StoreManager.SynchronizePurchases? = nil
     ) -> StoreManager {
         let suite = "HardPaywallOwnership.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!
@@ -52,7 +53,8 @@ final class HardPaywallStoreKitTests: XCTestCase {
         // sandbox Apple Account for AppTransaction. This fixture is a verified
         // new cohort, and has no authority to grant an active entitlement.
         return StoreManager(usageTracker: usageTracker, legacyAccessDefaults: defaults,
-                            originalPaidAppOwnership: { _ in false }, purchaseProduct: purchase)
+                            originalPaidAppOwnership: { _ in false }, purchaseProduct: purchase,
+                            synchronizePurchases: synchronizePurchases)
     }
 
     func testOwnershipVerificationFailureCannotGrantAccessOrCacheClassification() async throws {
@@ -101,11 +103,11 @@ final class HardPaywallStoreKitTests: XCTestCase {
         // hosted runtime. Exercise this terminal result at StoreManager's API
         // boundary; successful purchases/refunds still use native StoreKit below.
         var purchaseCalls = 0
-        let store = makeStore(usageTracker: tracker) { product in
+        let store = makeStore(usageTracker: tracker, purchase: { product in
             XCTAssertEqual(product.id, VoxboardPurchaseProduct.individualWeekly.rawValue)
             purchaseCalls += 1
             return .userCancelled
-        }
+        })
         await store.prepareForPurchases()
         _ = try XCTUnwrap(store.isEntitlementStateReady ? store : nil)
         await store.purchase(.individualWeekly)
@@ -130,15 +132,22 @@ final class HardPaywallStoreKitTests: XCTestCase {
 
     func testOfflineRestoreKeepsFreshUserLocked() async throws {
         let session = try makeSession()
+        defer { withExtendedLifetime(session) {} }
         let tracker = makeTracker()
-        let store = makeStore(usageTracker: tracker)
+        var syncCalls = 0
+        let store = makeStore(usageTracker: tracker, synchronizePurchases: {
+            syncCalls += 1
+            throw URLError(.notConnectedToInternet)
+        })
         await store.prepareForPurchases()
         _ = try XCTUnwrap(store.isEntitlementStateReady ? store : nil)
-        try await session.setSimulatedError(SKTestFailures.AppStoreSync.generic(.networkError(URLError(.notConnectedToInternet))), forAPI: .appStoreSync)
         await store.restorePurchases()
+        XCTAssertEqual(syncCalls, 1)
         XCTAssertFalse(tracker.hasUnlocked)
+        XCTAssertFalse(store.isRestoring)
         XCTAssertNotNil(store.errorMessage)
         XCTAssertEqual(store.lastRestoreDiagnostics?.syncSucceeded, false)
+        XCTAssertNil(store.lastRestoreDiagnostics?.storefrontCountryCode)
     }
 
     func testRestoreRecoversFamilyLifetimeIntoFreshLocalState() async throws {
