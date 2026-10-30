@@ -5,7 +5,7 @@
                Download Vox.md free
              </a>
 -            <span class="btn-note">15 transcription minutes + 10 Capture deliveries free</span>
-+            <span class="btn-note">Eligible subscriptions include a seven-day free trial</span>
++            <span class="btn-note">Seven-day free trial for eligible subscriptions</span>
            </div>
            <a href="blog/obsidian-quick-capture-iphone/" class="btn-secondary">Choose a capture method</a>
          </div>
@@ -102,18 +102,26 @@
  
 --- a/website/terms.html
 +++ b/website/terms.html
-@@ -70,6 +70,11 @@
-       <li>Use the app for any unlawful purpose</li>
-     </ul>
+@@ -62,13 +62,12 @@
+     </div>
  
+     <h2>License</h2>
+-    <p>We grant you a limited, non-exclusive, non-transferable, revocable license to use the Vox.md app on any Apple device that you own or control, subject to Apple's standard Licensed Application End User License Agreement (EULA) and these Terms. You may not:</p>
+-    <ul>
+-      <li>Copy, modify, or distribute the app or any part of it</li>
+-      <li>Reverse engineer, decompile, or disassemble the app</li>
+-      <li>Rent, lease, lend, sell, or sublicense the app</li>
+-      <li>Use the app for any unlawful purpose</li>
+-    </ul>
++    <p>Vox.md source code is available under the GNU Affero General Public License v3.0 (AGPL-3.0). Rights to use, modify, and redistribute that source are governed by its license. App Store distribution is also subject to Apple's standard Licensed Application End User License Agreement and applicable law.</p>
++
 +    <h2>Purchases and Subscriptions</h2>
 +    <p>New Capture deliveries and transcription require paid access. Individual and Family access are available through weekly or yearly auto-renewable subscriptions or a one-time lifetime purchase. Apple displays the applicable local price and terms before confirmation. Eligible subscriptions include a seven-day free trial; Apple determines introductory eligibility. Lifetime purchases do not include a trial and do not automatically renew.</p>
 +    <p>Subscriptions renew automatically unless canceled through Apple Account settings. Cancel a trial at least 24 hours before it ends to avoid renewal. Deleting the app or purchasing lifetime access does not automatically cancel an existing subscription. Use Apple's subscription-management controls to manage or cancel it separately. Purchase restoration, billing, refunds, and Family Sharing are handled through Apple under its applicable terms.</p>
 +    <p>Existing purchases remain valid. Viewing and exporting existing history do not require a new purchase. Canceling a subscription does not delete existing local history or previously exported files. Apple's <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">standard Licensed Application End User License Agreement</a> also applies.</p>
-+
+ 
      <h2>Speech Models</h2>
      <p>On supported devices, Vox.md can use Apple's system-managed, on-device speech recognition. Vox.md also allows you to opt into downloads of OpenAI Whisper models, released under the MIT License, or other supported local models. Vox.md does not bundle speech model weights. These models and system services are provided "as is," and we make no guarantees regarding the accuracy, completeness, or reliability of transcription output.</p>
-     <p>System asset preparation and optional local model downloads may require an internet connection and consume device storage. Transcription can run locally after the selected backend is ready. You are responsible for managing your device storage and data usage related to optional downloads.</p>
 --- a/website/privacy.html
 +++ b/website/privacy.html
 @@ -2,7 +2,6 @@

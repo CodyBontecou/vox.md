@@ -87,7 +87,21 @@ env "${env_args[@]}" \
   swift run --package-path "$repo/Packages/VoxboardShared" --disable-sandbox VoxboardM2Oracle > "$tmp"
 
 if [[ "$mode" == check ]]; then
-  cmp "$tmp" "$out"
+  # Compare cases and source provenance across compiler versions while retaining
+  # the truthful compiler identities recorded by the original producer.
+  python3 - "$tmp" "$out" <<'PYCOMPARE'
+import json
+import sys
+actual, recorded = [json.load(open(path)) for path in sys.argv[1:]]
+for value in (actual, recorded):
+    for key in ("swiftCompilerIdentity", "xcodeIdentity"):
+        identity = value["producer"].pop(key)
+        if not isinstance(identity, str) or not identity.strip():
+            raise SystemExit("error: oracle compiler provenance is missing")
+if actual != recorded:
+    raise SystemExit("error: oracle cases or source provenance changed")
+print("Oracle cases and source provenance match; producer compiler identities remain recorded.")
+PYCOMPARE
 else
   destination="${VOX_M2_ORACLE_OUTPUT:-}"
   [[ -n "$destination" ]] || {

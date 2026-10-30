@@ -5219,14 +5219,14 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "There is no resettable free-minute or Capture allowance in this source."
+          "symbol": "10 successful Capture deliveries"
         }
       ],
       "id": "cap.quota.capture",
       "milestone": "M3/M8",
-      "outcome": "10 successful Capture deliveries (Android historical allowance baseline; Apple paid-access policy is separate).",
+      "outcome": "10 successful Capture deliveries",
       "owner": "native",
-      "parity": "product-adjusted",
+      "parity": "exact",
       "platforms": [
         "iphone",
         "ipad",
@@ -5250,14 +5250,14 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "Existing lifetime/Family purchases and qualifying original paid-app ownership remain valid."
+          "symbol": "original paid app build are automatically grandfathered"
         }
       ],
       "id": "cap.quota.grandfather",
       "milestone": "M8",
-      "outcome": "Original paid Apple users remain unlimited on Apple (Android historical allowance baseline; Apple paid-access policy is separate).",
+      "outcome": "Original paid Apple users remain unlimited on Apple",
       "owner": "native",
-      "parity": "product-adjusted",
+      "parity": "commercial-equivalent",
       "platforms": [
         "iphone",
         "ipad",
@@ -5281,14 +5281,14 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "There is no resettable free-minute or Capture allowance in this source."
+          "symbol": "Failed writes and retries do not consume a Capture"
         }
       ],
       "id": "cap.quota.retry-no-charge",
       "milestone": "M3",
-      "outcome": "Failed writes and retries do not consume a Capture (Android historical allowance baseline; Apple paid-access policy is separate).",
+      "outcome": "Failed writes and retries do not consume a Capture",
       "owner": "native",
-      "parity": "product-adjusted",
+      "parity": "exact",
       "platforms": [
         "iphone",
         "ipad",
@@ -5312,14 +5312,14 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "There is no resettable free-minute or Capture allowance in this source."
+          "symbol": "15 minutes of free transcription"
         }
       ],
       "id": "cap.quota.transcription",
       "milestone": "M4/M8",
-      "outcome": "15 free transcription minutes (Android historical allowance baseline; Apple paid-access policy is separate).",
+      "outcome": "15 free transcription minutes",
       "owner": "native",
-      "parity": "product-adjusted",
+      "parity": "exact",
       "platforms": [
         "iphone",
         "ipad",
@@ -5343,14 +5343,14 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "There is no resettable free-minute or Capture allowance in this source."
+          "symbol": "voice transcripts routed to Markdown use only the transcription allowance"
         }
       ],
       "id": "cap.quota.voice-one-meter",
       "milestone": "M4",
-      "outcome": "Voice Markdown capture consumes transcription allowance only (Android historical allowance baseline; Apple paid-access policy is separate).",
+      "outcome": "Voice Markdown capture consumes transcription allowance only",
       "owner": "native",
-      "parity": "product-adjusted",
+      "parity": "exact",
       "platforms": [
         "iphone",
         "ipad",
@@ -7913,8 +7913,8 @@
     {
       "acceptance": [
         {
-          "assertion": "Every applicable compatibility dimension is executed through production evidence or explicitly not applicable with rationale.",
-          "evidencePath": "docs/architecture/android-wear-m0-compatibility-matrix.json",
+          "assertion": "Upgrade erases retired analytics state while preserving purchase, onboarding and user data.",
+          "evidencePath": "scripts/tests/test_custom_analytics_removal.py",
           "kind": "fixture",
           "status": "verified"
         }
@@ -7934,7 +7934,7 @@
       ],
       "id": "cap.store.analytics",
       "milestone": "M0/M1",
-      "outcome": "Erase retired analytics IDs, event queues, experiment assignments, and completion markers without collecting or uploading replacements",
+      "outcome": "Erase retired onboarding analytics queues, install identity, experiment assignment and completion markers on upgrade; no new collection",
       "owner": "native",
       "parity": "legacy-only",
       "platforms": [
@@ -8453,7 +8453,8 @@
   "notes": [
     "Inventoried means source evidence and planned acceptance are mapped; it does not mean Android/Wear implementation is complete.",
     "Unavailable or deferred parity rows are forbidden by the program definition of done; explicit non-goals are limited to macOS-only product surfaces.",
-    "Legacy-codec rows freeze Apple compatibility inputs and never make bookmark/path fields portable core contracts."
+    "Legacy-codec rows freeze Apple compatibility inputs and never make bookmark/path fields portable core contracts.",
+    "The Apple hard-paywall candidate supersedes free quota behavior; M0 quota rows preserve the prior Apple baseline and deferred Android behavior. Analytics storage is retired by erasure, never decoded or uploaded."
   ],
   "persistedKeyInventories": [
     {
@@ -8643,7 +8644,6 @@
           "cap.billing.lifetime"
         ],
         "lifetimeStoreAccessV1": [
-          "cap.store.usage",
           "cap.billing.lifetime"
         ],
         "permanentUnlimitedAccessLevelV1": [
@@ -8651,7 +8651,6 @@
           "cap.billing.lifetime"
         ],
         "storeAccessExpirationV1": [
-          "cap.store.usage",
           "cap.billing.lifetime"
         ],
         "totalTranscriptionSeconds": [
@@ -8782,12 +8781,29 @@
         ]
       },
       "path": "Voxboard/WatchRecordingController.swift"
-    }
-  ],
-  "policyUpdates": [
+    },
     {
-      "date": "2026-10-29",
-      "reason": "Approved Apple paid-access transition and removal of custom analytics. Stable capability IDs and historical baseline provenance are retained; current evidence is updated. Android allowance tests do not verify the new Apple trial policy."
+      "keys": {
+        "onboarding.analytics.completed.v1": [
+          "cap.store.analytics"
+        ],
+        "onboarding.analytics.install_id.v1": [
+          "cap.store.analytics"
+        ],
+        "onboarding.analytics.model_setup_completed.v1": [
+          "cap.store.analytics"
+        ],
+        "onboarding.analytics.queue.v1": [
+          "cap.store.analytics"
+        ],
+        "onboarding.analytics.started.v1": [
+          "cap.store.analytics"
+        ],
+        "onboarding.experiment.assignment.v1": [
+          "cap.store.analytics"
+        ]
+      },
+      "path": "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift"
     }
   ],
   "requiredClaims": [
@@ -8835,14 +8851,14 @@
         "cap.quota.transcription"
       ],
       "path": "README.md",
-      "text": "There is no resettable free-minute or Capture allowance in this source."
+      "text": "15 minutes of free transcription"
     },
     {
       "capabilityIDs": [
         "cap.quota.capture"
       ],
       "path": "README.md",
-      "text": "There is no resettable free-minute or Capture allowance in this source."
+      "text": "10 successful Capture deliveries"
     },
     {
       "capabilityIDs": [

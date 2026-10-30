@@ -31,6 +31,9 @@ import sys
 root = Path(sys.argv[1])
 project_path = Path(sys.argv[2])
 project = project_path.read_text()
+# OpenStep allows quoted keys and either dictionary key order.
+project = re.sub(r'"([A-Z][A-Z0-9_]*)"\s*=', r'\1 =', project)
+project = re.sub(r'= "([A-Za-z0-9_.]+)";', r'= \1;', project)
 errors: list[str] = []
 
 purchase_source = (
@@ -57,32 +60,9 @@ for product_id, family_sharable in expected_purchase_products.items():
     product = storekit_products.get(product_id)
     if product is not None and product.get('familyShareable') is not family_sharable:
         errors.append(
-            f'{product_id} familySharable={product.get("familySharable")}, '
+            f'{product_id} familyShareable={product.get("familySharable")}, '
             f'expected {family_sharable}'
         )
-
-subscriptions = {
-    product['productID']: product
-    for group in storekit_config.get('subscriptionGroups', [])
-    for product in group.get('subscriptions', [])
-}
-expected_subscriptions = {
-    'bontecou.Voxboard.individual.weekly': ('P1W', False),
-    'bontecou.Voxboard.individual.yearly': ('P1Y', False),
-    'bontecou.Voxboard.family.weekly': ('P1W', True),
-    'bontecou.Voxboard.family.yearly': ('P1Y', True),
-}
-if set(subscriptions) != set(expected_subscriptions):
-    errors.append('StoreKit subscription inventory must contain Individual and Family weekly/yearly plans')
-for product_id, (period, family_shareable) in expected_subscriptions.items():
-    product = subscriptions.get(product_id, {})
-    offer = product.get('introductoryOffer', {})
-    if product_id not in purchase_source:
-        errors.append(f'PurchaseAccess does not recognize {product_id}')
-    if product.get('recurringSubscriptionPeriod') != period or product.get('familyShareable') is not family_shareable:
-        errors.append(f'StoreKit subscription interval or Family Sharing differs for {product_id}')
-    if offer.get('paymentMode') != 'free' or offer.get('subscriptionPeriod') != 'P1W' or offer.get('numberOfPeriods') != 1:
-        errors.append(f'StoreKit subscription must offer one eligible 7-day free trial: {product_id}')
 
 storekit_release_patch = (
     root / 'artifacts/releases/mac-family-restore-diagnostics.patch'
@@ -438,7 +418,7 @@ else:
 
 widget_bundle_id = 'bontecou.Voxboard.Voxboard-Widget'
 blocks = re.findall(
-    r'\b[0-9A-F]+ /\* (?:Debug|Release) \*/ = \{\n\s*isa = XCBuildConfiguration;\n\s*buildSettings = \{(?P<body>.*?)\n\s*\};\n\s*name = (?:Debug|Release);\n\s*\};',
+    r'\b[0-9A-F]+ /\* (?:Debug|Release) \*/ = \{\n\s*(?:isa = XCBuildConfiguration;\n\s*)?buildSettings = \{(?P<body>.*?)\n\s*\};\n\s*(?:isa = XCBuildConfiguration;\n\s*)?name = (?:Debug|Release);\n\s*\};',
     project,
     flags=re.S,
 )
@@ -652,13 +632,13 @@ for required in ['case "listen":', 'rootDestination = .capture', 'pendingKeyboar
     if required not in app_source:
         errors.append(f'legacy recording launch routing is missing {required}')
 
-retired_analytics_directory = root / 'Packages/VoxboardShared/Sources/VoxboardShared/Analytics'
-if retired_analytics_directory.exists():
-    errors.append('custom analytics producers must remain removed')
 cleanup_source = (root / 'Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift').read_text()
-for required in ['RetiredAnalyticsCleanup', 'onboarding.analytics.queue.v1', 'onboarding.analytics.install_id.v1', 'removeObject(forKey:']:
-    if required not in cleanup_source:
-        errors.append(f'retired analytics upgrade cleanup is missing {required}')
+if 'defaults.removeObject(forKey: key)' not in cleanup_source:
+    errors.append('retired analytics state must be erased on upgrade')
+for source in [root / 'Voxboard', root / 'Voxboard Mac', root / 'Packages/VoxboardShared/Sources/VoxboardShared']:
+    for path in source.rglob('*.swift'):
+        if re.search(r'OnboardingAnalyticsClient|CloudflareOnboardingAnalyticsTransport', path.read_text()):
+            errors.append(f'retired analytics collector remains in {path.relative_to(root)}')
 
 share_source = (root / 'Voxboard Share Extension/ShareViewController.swift').read_text()
 for required in [

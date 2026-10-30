@@ -1019,9 +1019,7 @@ final class TranscriptCaptureDestinationExporterTests: XCTestCase {
             preferredFilename: "Original Recording.caf",
             locationOutcome: nil,
             captureRootURL: captureRoot,
-            pipeline: CapturePipeline(
-                writer: CoordinatedCaptureWriter(coordinator: ProcessLocalCaptureFileCoordinator.shared)
-            ),
+            pipeline: CapturePipeline(writer: InboxStateObservingWriter(captureRootURL: captureRoot)),
             audioFilenameContext: audioFilenameContext
         )
 

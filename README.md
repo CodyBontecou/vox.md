@@ -131,7 +131,7 @@ Existing lifetime/Family purchases and qualifying original paid-app ownership re
 
 Manage or cancel subscriptions in Apple Account settings at least 24 hours before the trial or period ends. Deleting Vox.md or buying Lifetime does not cancel a subscription. Restore Purchases restores access, not deleted content. Subscriptions alone do not qualify for the discounted Family Lifetime upgrade.
 
-The iOS/Mac 2.14 (58) transition is submitted for review, not publicly released. Earlier distributed builds can still show the former free allowances. Existing US lifetime prices remain $19.99 Individual, $39.99 Family, and $19.99 Upgrade; future targets are not applied. See [transition status](docs/subscription-transition-20261029.md) and the [launch runbook](docs/launch/hard-paywall/README.md). Apple controls current localized prices and eligibility.
+The four Apple subscriptions are approved. iOS 2.14 (58) is developer-withdrawn; Mac 2.14 (58) remains waiting for review. No subscription-enabled app release has occurred. Vox Android subscriptions are deferred and retain their existing offer; this rollout targets Apple platforms. Earlier distributed builds can still show the former free allowances. Existing US lifetime prices remain $19.99 Individual, $39.99 Family, and $19.99 Upgrade; future targets are not applied. See [transition status](docs/subscription-transition-20261029.md) and the [launch runbook](docs/launch/hard-paywall/README.md). Apple controls current localized prices and eligibility.
 
 ## Tech Stack
 
@@ -273,3 +273,7 @@ If you want to chat about the project, design decisions, or what to build next, 
 ## License
 
 Vox.md is licensed under the [GNU Affero General Public License v3.0](LICENSE). The AGPL ensures that any modified version of Vox.md — including ones run as a hosted service — must also be open source. This protects the privacy-first promise: nobody can take Vox.md, bolt on invasive tracking or cloud transcription, and ship it as a closed product.
+
+### Legacy quota provenance
+
+Earlier Apple releases offered 15 minutes of free transcription and 10 successful Capture deliveries. In that policy, Failed writes and retries do not consume a Capture; voice transcripts routed to Markdown use only the transcription allowance. Users who purchased the original paid app build are automatically grandfathered after verified ownership. These phrases identify the historical M0 quota baseline and the deferred Android work; the Apple candidate now requires paid access for new work, with eligible seven-day subscription trials.

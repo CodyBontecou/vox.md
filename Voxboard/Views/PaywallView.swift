@@ -5,6 +5,7 @@ import VoxboardShared
 /// The presentation changes; purchase/restore/eligibility remain StoreManager's.
 struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(UsageTracker.self) private var usageTracker
     @Environment(StoreManager.self) private var storeManager
     @AppStorage(Thoughtful.introductionKey) private var introductionCompleted = false
@@ -142,6 +143,12 @@ struct PaywallView: View {
                         }
                         .accessibilityIdentifier("paywall.historyLink")
                     }
+                    if dynamicTypeSize.isAccessibilitySize && !usageTracker.hasFamilyAccess {
+                        // A huge fixed footer would obscure the plan choices.
+                        // At accessibility sizes, keep the full checkout in
+                        // the same readable, scrollable document instead.
+                        purchaseControls.padding(.top, 8)
+                    }
                 }
                 .padding(24)
                 .frame(maxWidth: 488)
@@ -149,7 +156,7 @@ struct PaywallView: View {
             }
             .background(Thoughtful.background.ignoresSafeArea())
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                if !usageTracker.hasFamilyAccess { purchaseFooter }
+                if !usageTracker.hasFamilyAccess && !dynamicTypeSize.isAccessibilitySize { purchaseFooter }
             }
             .navigationTitle("Vox.md")
             .navigationBarTitleDisplayMode(.inline)
@@ -207,7 +214,7 @@ struct PaywallView: View {
         .accessibilityIdentifier("paywall.plan.\(product.rawValue)")
     }
 
-    private var purchaseFooter: some View {
+    private var purchaseControls: some View {
         let product = selectedProduct
         let trial = storeManager.offersFreeTrial(product)
         let price = storeManager.displayPrice(for: product)
@@ -247,6 +254,10 @@ struct PaywallView: View {
             .font(Geist.caption(.caption))
         }
         .frame(maxWidth: 440)
+    }
+
+    private var purchaseFooter: some View {
+        purchaseControls
         .padding(.horizontal, 24)
         .padding(.vertical, 12)
         .frame(maxWidth: .infinity)

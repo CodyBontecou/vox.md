@@ -1,8 +1,16 @@
 # Hard-paywall launch and support runbook
 
+## Current candidate policy — supersedes historical deployment approvals
+
+Custom in-app analytics is removed from this source. Upgrades erase retired local analytics state while retaining functional content, purchases, and essential services. Keep myself.md claims disabled and all live prices held. Privacy/site/store wording remains for review; this source merge does not authorize deployment, upload, submission, release, or historical-server-data deletion.
+
+The deployment/version facts below describe the earlier transition and older released clients. They are audit history, not permission to deploy or reactivate a collector. Deploying the discard-only retirement responder or deleting historical records needs separate owner approval.
+
+> Source integration is authorized for main. App/website/Worker releases remain on hold. Keep current Lifetime prices unchanged; future price targets in historical proposals are not authorization to apply them. Physical-device and multi-account Family Sharing acceptance are deferred.
+
 ## Current controls
 
-- Both 2.14 (58) app submissions and all four subscriptions are WAITING_FOR_REVIEW following successful October 29 submissions. No app release has occurred.
+- October 30 UTC readback: all four subscriptions are APPROVED; iOS 2.14 (58) is DEVELOPER_REJECTED (developer-withdrawn), while Mac 2.14 (58) remains WAITING_FOR_REVIEW. No app release has occurred. Qualify the intended current-source replacement before resubmission.
 - Owner approved the App Store descriptions/release notes; all 78 records (39/platform) were applied and verified. App Store notes are separate from the in-app Notelet slider. Do not add this pricing transition to that slider.
 - Both 2.14 (58) builds remain attached with MANUAL release. The submitted iOS review contains the app, group, and four subscription versions (six items); the submitted Mac review contains the app (one item).
 - Existing lifetime/upgrade prices remain frozen. Do not pre-schedule a later increase.
@@ -39,7 +47,7 @@ Local automated evidence already covers core entitlement, expiration/fallback, p
 
 1. **Done:** agreement resolved and concrete readiness issues checked/fixed. Existing exact drafts retained; no duplicate products/groups/submissions.
 2. **Done:** all 700 subscription prices/offers and availability, sharing, metadata/assets and 525 unchanged lifetime price records verified before submission, and pricing rechecked afterward.
-3. **Done:** submitted iOS `a8b73b42-df07-4283-a32a-169ed629a741` at 22:26:23 UTC (six items) and Mac `cfc0848f-82ac-48f2-a502-0418c3ec720f` at 22:26:30 UTC (one app item). Both WAITING_FOR_REVIEW. Monitor these exact submissions; do not submit duplicates or release approved versions automatically.
+3. **Done:** submitted iOS `a8b73b42-df07-4283-a32a-169ed629a741` at 22:26:23 UTC (six items) and Mac `cfc0848f-82ac-48f2-a502-0418c3ec720f` at 22:26:30 UTC (one app item). Their initial states were WAITING_FOR_REVIEW. Use the current-controls snapshot above and monitor these exact submissions; do not submit duplicates or release approved versions automatically.
 4. After approval and release QA, ask the owner for the explicit public-release go-ahead. Coordinate both platforms; if only one is approved, wait unless the owner changes scope.
 5. At public release, check the signed production builds, real StoreKit product loading/locale prices/trial eligibility, purchase/restore entitlement delivery and history access. Real charges require separate permission; do not make purchases merely to smoke-test production.
 6. Publish the prepared website/support patch only at the owner-approved release point. The patch uses current Apple lifetime prices rather than prematurely advertising the later proposed lifetime increases.
@@ -47,7 +55,7 @@ Local automated evidence already covers core entitlement, expiration/fallback, p
 
 ## Unpublished website bundle
 
-`scripts/stage-hard-paywall-website.py` generates `website.patch`, four staged files, and source/staged hashes here. It never edits `website/` or invokes deployment. `git apply --check docs/launch/hard-paywall/website.patch` passes against the current source.
+`scripts/stage-hard-paywall-website.py` generates `website.patch`, five staged files, and source/staged hashes here. It never edits `website/` or invokes deployment. `git apply --check docs/launch/hard-paywall/website.patch` passes against the current source.
 
 The staged copy removes obsolete free allowances/no-subscription claims, describes all plan types and eligible trials, adds billing/cancellation information, preserves old purchases, and explains unpaid history access. New numeric lifetime targets are deliberately absent. Support responses below are also drafts until release.
 
@@ -78,18 +86,9 @@ Family plans use Apple Family Sharing. Check that purchase/subscription sharing 
 
 ## Monitoring and rollback
 
-Monitor aggregated paywall views, purchase outcomes, restores, and coarse error categories by platform/build/product; never inspect/store note text or audio. Current onboarding telemetry is not a complete subscription-renewal/churn ledger: app-side purchase success is not proof of a later paid renewal or retained revenue. Use Apple subscription/sales reporting for those measures.
+Use Apple's subscription/sales reporting and essential service health checks to assess purchase validation, restores, and delivery availability. Custom analytics collectors, queues, IDs, experiment assignment, and event uploads are removed from this source. Do not deploy or reactivate a collector build, or use historical tables as a new product-event pipeline. Deployment of the discard-only retirement responder and historical-data deletion remain separate reviewed operations.
 
-Example read-only aggregate query:
-
-```sh
-cd worker/onboarding-analytics
-wrangler d1 execute voxboard-onboarding-analytics --remote --command "SELECT platform,app_version,product_id,purchase_outcome,error_category,COUNT(*) AS events FROM onboarding_events WHERE received_at >= '2026-10-29' GROUP BY platform,app_version,product_id,purchase_outcome,error_category;"
-```
-
-If product loading, entitlements, restores, or paid-user preservation fail, stop rollout/public promotion, keep lifetime prices frozen, gather coarse failure evidence, and prepare a tested fix. App Store releases cannot be instantly rolled back to an older binary. Do not delete products, purge user content, revoke legitimate purchases, or change lifetime prices as a rollback shortcut.
-
-Previous analytics version: `f41053e5-a1d7-4a92-87a2-1c559a8e32e5`. A Worker rollback is possible with owner authorization, but reverting this product allowlist will reject new-plan analytics. Do not roll it back automatically in response to app purchase errors; the Worker is not the entitlement authority.
+If product loading, entitlements, restores, or paid-user preservation fail, stop rollout/public promotion, keep lifetime prices frozen, gather coarse failure evidence without note text or audio, and prepare a tested fix. Do not delete products, purge user content, revoke legitimate purchases, or change lifetime prices as a rollback shortcut.
 
 ## StoreKit CI runtime
 

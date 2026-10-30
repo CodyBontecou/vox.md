@@ -26,7 +26,7 @@ public enum CaptureDeliveryQuotaError: Error, Equatable, LocalizedError, Sendabl
         switch self {
         case .limitReached(let limit):
             if limit == 0 {
-                return "Active access is required for new captures. Open Vox.md to review purchase options."
+                return "New Capture requires active access. Start an eligible seven-day trial, subscribe, buy Lifetime, or restore purchases."
             }
             return "You've used all \(limit) free captures. Unlock Vox.md Unlimited to keep capturing."
         }

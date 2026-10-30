@@ -19,17 +19,6 @@
       "mdObsidianEnabled" : false,
       "mode" : "newFile",
       "newFileNameTemplate" : "voxboard-{timestamp}-{id8}",
-      "urlDelivery" : {
-        "allowingInsecureLocal" : false,
-        "deliverOnFailureFallbackFile" : true,
-        "enabled" : false,
-        "hasBearerToken" : false,
-        "hasCustomHeaders" : false,
-        "includeCleanedText" : true,
-        "maxAttempts" : 5,
-        "requiresCredentialMigration" : false,
-        "urlString" : ""
-      },
       "usesCustomExportSettings" : true,
       "yamlProperties" : [
         "date",
@@ -43,7 +32,6 @@
     },
     "generateImageAltText" : false,
     "id" : "general",
-    "includeTranscriptInBody" : true,
     "isBuiltIn" : true,
     "isEnabled" : true,
     "kind" : "general",
@@ -90,7 +78,6 @@
       "type" : "capture"
     },
     "symbolName" : "waveform",
-    "transcriptPropertyName" : "",
     "watchOutputMode" : "transcript",
     "watchRecordingSettings" : {
       "filenameTemplate" : "recording-{timestamp}-{id8}",
@@ -123,17 +110,6 @@
       "mdObsidianEnabled" : true,
       "mode" : "newFile",
       "newFileNameTemplate" : "fixture-{timestamp}",
-      "urlDelivery" : {
-        "allowingInsecureLocal" : false,
-        "deliverOnFailureFallbackFile" : true,
-        "enabled" : false,
-        "hasBearerToken" : false,
-        "hasCustomHeaders" : false,
-        "includeCleanedText" : true,
-        "maxAttempts" : 5,
-        "requiresCredentialMigration" : false,
-        "urlString" : ""
-      },
       "usesCustomExportSettings" : true,
       "yamlProperties" : [
         "date",
@@ -150,7 +126,6 @@
     },
     "generateImageAltText" : false,
     "id" : "fixture",
-    "includeTranscriptInBody" : true,
     "isBuiltIn" : false,
     "isEnabled" : true,
     "kind" : "custom",
@@ -197,7 +172,6 @@
       "fixture" : "true"
     },
     "symbolName" : "waveform",
-    "transcriptPropertyName" : "",
     "watchOutputMode" : "recordingOnly",
     "watchRecordingSettings" : {
       "filenameTemplate" : "fixture-{timestamp}-{id8}",

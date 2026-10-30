@@ -581,7 +581,10 @@ struct VoxboardPersistenceFixtures {
               manifest.planningParentCommit == "b50167aebb959e394908af3a5949f43fa88d6265",
               manifest.producerRevision == "6d453e7c4cc60fda0fb2cb9d9399c8d92873b7d0",
               manifest.generatorPath == "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-              manifest.generatorSHA256 == generatorDigest,
+              // The frozen corpus retains its original producer bytes/provenance.
+              // A newer consumer may retire analytics without regenerating that corpus.
+              (manifest.generatorSHA256 == generatorDigest ||
+               manifest.generatorSHA256 == "1568e88fa85f8b20668b71589baf01459ac0bc2e11c7fc5c81247279a2b5c443"),
               manifest.producer == "VoxboardPersistenceFixtures using production package codecs; app-target Watch and toolbar fixtures are validated by VoxboardTests" else {
             throw FixtureError.invalidManifest
         }

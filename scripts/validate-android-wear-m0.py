@@ -82,6 +82,7 @@ PERSISTED_ENUM_INVENTORIES = {
     ("Voxboard Watch Shared/WatchPhoneBridge.swift", "WatchPresetSelectionOutcome"),
 }
 PERSISTED_KEY_SOURCE_PATHS = {
+    "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift",
     "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureVox.swift",
     "Packages/VoxboardShared/Sources/VoxboardShared/AppConstants.swift",
     "Packages/VoxboardShared/Sources/VoxboardShared/RecordingFlow.swift",
@@ -218,6 +219,8 @@ def swift_enum_cases(path: Path, enum_name: str) -> set[str]:
 
 def swift_persisted_keys(path: Path) -> set[str]:
     source = path.read_text(encoding="utf-8")
+    if path.name == "RetiredAnalyticsCleanup.swift":
+        return set(re.findall(r'"(onboarding\.[^"\n]+)"', source))
     return {value for _, value in PERSISTED_KEY_NAME_RE.findall(source)}
 
 

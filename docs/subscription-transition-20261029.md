@@ -1,10 +1,16 @@
 # Subscription transition — October 29, 2026
 
+## Current source policy
+
+The current candidate removes custom in-app analytics and clears retired local analytics state on upgrade. Preserve essential services, disabled myself.md claims, and held live prices. Privacy changes and release wording remain unpublished for owner review. This source merge does not authorize any deployment, upload, submission, release, or purge of historical server records.
+
+Deployment and metadata approvals recorded below belong to the earlier transition. They are historical evidence and are superseded by this candidate policy; do not reuse them to reactivate analytics collection. See the [current launch runbook](launch/hard-paywall/README.md).
+
 ## Current status
 
-**Both platforms and all four subscriptions were submitted on October 29 and are WAITING_FOR_REVIEW. Nothing is released. MANUAL release and the existing lifetime/upgrade price freeze remain in force.**
+**Verified October 30, 2026 UTC: all four subscriptions are APPROVED. iOS 2.14/build 58 is DEVELOPER_REJECTED (developer-withdrawn); Mac 2.14/build 58 remains WAITING_FOR_REVIEW. Both retain MANUAL release. Neither candidate is publicly released. Existing Lifetime/upgrade prices remain frozen.**
 
-Latest owner approvals: upload the drafted App Store descriptions/release notes, deploy analytics, prepare but do not publish website/support updates, and rely on existing Family Sharing behavior without a new second-account test. Keep this pricing transition out of the **in-app What's New slider**. App Store version notes are separate and were explicitly approved. Actual public app release and later lifetime repricing still require separate owner approval.
+Historical transition approvals (superseded for the current candidate): upload the drafted App Store descriptions/release notes, deploy analytics, prepare but do not publish website/support updates, and rely on existing Family Sharing behavior without a new second-account test. Keep this pricing transition out of the **in-app What's New slider**. App Store version notes are separate and were explicitly approved. Actual public app release and later lifetime repricing still require separate owner approval.
 
 ## Products and pricing
 
@@ -17,7 +23,7 @@ App: `6758967337`. Group: **Vox.md Unlimited**, `22526843`.
 | `bontecou.Voxboard.family.weekly` | `6828566714` | $1.99/week | 1 | Yes |
 | `bontecou.Voxboard.family.yearly` | `6828566853` | $49.99/year | 1 | Yes |
 
-All four are WAITING_FOR_REVIEW, not approved. Exact live readbacks verify **700 prices, 700 one-week introductory offers, 700 availability entries** across all 175 existing storefronts, with correct sharing and service levels. Apple controls introductory eligibility across the shared group. There is no monthly plan. Automatic availability in future territories is false pending a deliberate pricing review.
+All four are now APPROVED. The provisioning readbacks verified **700 prices, 700 one-week introductory offers, 700 availability entries** across all 175 existing storefronts, with correct sharing and service levels. Apple controls introductory eligibility across the shared group. There is no monthly plan. Automatic availability in future territories is false pending a deliberate pricing review.
 
 The October 25 PPP inputs/reference tiers were applied proportionally using each new subscription's own Apple ladder/equalizations. **35 Individual weekly benchmarks** hit the verified $0.29 subscription floor. Six Family weekly equalization collisions were corrected to the nearest legal local tier to `Individual weekly × (1.99 / 0.99)`:
 
@@ -45,7 +51,7 @@ The editable old Mac 2.9 draft was renamed 2.14, not a released version. Public 
 
 Unpaid users can open history from the iOS paywall's clock button or Mac's View and Export Existing History button. Read/search/copy/export/explicit deletion work without purchasing; new recordings, transcription, Capture deliveries, editing, and queued Capture retries remain gated. Mac has a native Markdown save-panel export. No content or usage ledger was deleted.
 
-After fresh checks, the two existing drafts were submitted successfully: **iOS at 22:26:23 UTC** (app version + group + four subscription versions, six items), then **Mac at 22:26:30 UTC** (one app-version item). Both submissions and both app versions are now **WAITING_FOR_REVIEW**; all four subscription products also read back WAITING_FOR_REVIEW. Both app versions retain MANUAL release. Exact submit receipts and post-submit readbacks are in `review-submission/`. No duplicate drafts were created and no release command was sent.
+After fresh checks, the two existing drafts were submitted successfully: **iOS at 22:26:23 UTC** (app version + group + four subscription versions, six items), then **Mac at 22:26:30 UTC** (one app-version item). At the time of submission, both app versions and all four subscription products read back **WAITING_FOR_REVIEW**; the current states are recorded above. Both app versions retain MANUAL release. Exact submit receipts and post-submit readbacks are in `review-submission/`. No duplicate drafts were created and no release command was sent.
 
 All four subscription review screenshots are COMPLETE and reviewer instructions are attached. Optional promotional images remain absent/advisory; no promoted-purchase setup was enabled.
 
@@ -70,13 +76,13 @@ The Mac and subscription canonical readiness rechecks had zero errors. The URL c
 
 The iOS validator still has a two-app-info resolver bug (published + editable). Its editable age rating was retrieved explicitly. A separate iOS audit confirmed the attached VALID build 58, no non-exempt encryption, iPad support in the IPA and a populated required iPad screenshot set, localized fields and review information. Do not delete app infos to work around a CLI issue. Apple's final submit validation accepted both prepared submissions.
 
-## Analytics and unpublished launch materials
+## Historical analytics deployment and unpublished launch materials
 
 The approved production analytics update was deployed: Worker version **`892fd12f-eda2-4539-bae2-4bb3fa82a596`**, preserving existing configuration and D1 binding. Seven Worker tests passed. Production health passed; validation-only batches proved all seven legacy/new product IDs accepted and unknown IDs rejected. The batches intentionally fail before database insertion, so no synthetic purchase events polluted the real funnel. No database migration or new data collection fields were introduced.
 
 Prior Worker version for an owner-approved rollback: `f41053e5-a1d7-4a92-87a2-1c559a8e32e5`. Deployment receipts, before/after versions and smoke evidence are in `analytics-deployment/`.
 
-Website/support preparation is **not published**: `docs/launch/hard-paywall/README.md`, four staged files, `website.patch` and source/staged hashes. The generator does not edit the deployable `website/` tree. The patch removes obsolete allowances/no-subscription claims, explains current plans/trials, unpaid history and cancellation, and deliberately omits future numeric lifetime targets. `git apply --check` passes. The runbook includes support responses, remaining QA, manual release, aggregate monitoring and rollback constraints. Do not deploy website copy before the approved app release point.
+Website/support preparation is **not published**: `docs/launch/hard-paywall/README.md`, five staged files, `website.patch` and source/staged hashes. The generator does not edit the deployable `website/` tree. The patch removes obsolete allowances/no-subscription claims, explains current plans/trials, unpaid history and cancellation, and deliberately omits future numeric lifetime targets. `git apply --check` passes. The runbook includes support responses, remaining QA, manual release, aggregate monitoring and rollback constraints. Do not deploy website copy before the approved app release point.
 
 ## Verification and remaining risk
 
@@ -101,3 +107,11 @@ python3 -m unittest discover -s scripts/tests -p test_subscription_transition.py
 ## Existing-price freeze
 
 Current US lifetime prices remain **$19.99 Individual / $39.99 Family / $19.99 upgrade**, with their regional schedules preserved. The later $49.99/$89.99/$39.99 targets are not applied or scheduled. Follow `docs/hard-paywall-pricing.md`: public subscription release, production verification and a separate owner repricing go-ahead are required first. Review approval and manual app release do not themselves authorize repricing.
+
+## Current working-checkout qualification — October 30 UTC
+
+The owner confirmed weekly/yearly plans and deferred Vox Android. Eight current-candidate local StoreKit/history/render tests passed; the opt-in interaction host was skipped in that normal run. Added cases call the real Restore Purchases path into fresh local state and prove cancellation, pending approval and network-failed restore cannot unlock a fresh user. Local StoreKit is not Apple sandbox-account or cross-account Family Sharing evidence.
+
+A separate opt-in preview host launched successfully, but Argent returned an empty accessibility tree and reported missing native instrumentation for the XCTest-owned process. No element coordinates were inferred from screenshots, no interaction was attempted and no new replay pass is claimed. The earlier search-focus failure remains unresolved until an instrumented, launchable fixture or equivalent UI-test path is available.
+
+This checkout remains on `fix/remove-recording-duration-limits` with uncommitted candidate work, while local and remote main differ. Candidate checks do not certify a committed main release. Do not replace an uploaded binary or publish the staged website until the intended source is reconciled and the matching release is ready. Existing Lifetime/upgrade prices are unchanged.

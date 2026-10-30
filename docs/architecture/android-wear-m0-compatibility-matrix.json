@@ -1,4 +1,5 @@
 {
+  "schemaVersion": 1,
   "dimensions": [
     "old",
     "missingFields",
@@ -11,1056 +12,1051 @@
     "enum",
     "crashRecovery"
   ],
+  "statuses": [
+    "executed",
+    "notApplicable",
+    "pending",
+    "external"
+  ],
   "formats": [
     {
+      "id": "capture-library-json",
       "capabilityID": "cap.store.library",
+      "production": [
+        "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureLibraryStore.swift:CaptureLibraryStore"
+      ],
       "dimensions": {
-        "crashRecovery": {
+        "old": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureLibraryStoreTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureLibraryStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureLibraryStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "enum": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/capture-library/unknown-note-target-enum.json"
-          ],
-          "rationale": "Production CaptureLibraryEnvelope decoding rejects an unknown CaptureNoteTarget discriminator.",
-          "status": "executed"
-        },
-        "futureVersion": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureLibraryStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "malformed": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureLibraryStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureModelCodableTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureLibraryStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "unknownFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
             "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureLibraryStoreTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "uuid": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureLibraryStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        }
-      },
-      "id": "capture-library-json",
-      "production": [
-        "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureLibraryStore.swift:CaptureLibraryStore"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.presets",
-      "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingFlowTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingFlowTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [],
-          "rationale": "CapturePreset has no persisted Date field.",
-          "status": "notApplicable"
-        },
-        "enum": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/presets/unknown-kind.json"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "The production defaults value has no envelope version.",
-          "status": "notApplicable"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "malformed": {
+          "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/presets/malformed-store.bin"
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureLibraryStoreTests.swift"
           ],
-          "rationale": "CapturePresetStore falls back to default flows without overwriting malformed source bytes.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "futureVersion": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureLibraryStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "date": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureLibraryStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureLibraryStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "uuid": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureLibraryStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "enum": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/capture-library/unknown-note-target-enum.json"
+          ],
+          "rationale": "Production CaptureLibraryEnvelope decoding rejects an unknown CaptureNoteTarget discriminator."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureLibraryStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        }
+      }
+    },
+    {
+      "id": "capture-presets-defaults",
+      "capabilityID": "cap.store.presets",
+      "production": [
+        "Packages/VoxboardShared/Sources/VoxboardShared/RecordingFlow.swift:CapturePresetStore"
+      ],
+      "dimensions": {
+        "old": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingFlowTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingFlowTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingFlowTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "unknownFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/presets/unknown-field.json"
           ],
-          "rationale": "CapturePresetStore production decoding accepts committed extra-key bytes.",
-          "status": "executed"
+          "rationale": "CapturePresetStore production decoding accepts committed extra-key bytes."
         },
-        "uuid": {
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/presets/malformed-store.bin"
+          ],
+          "rationale": "CapturePresetStore falls back to default flows without overwriting malformed source bytes."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "The production defaults value has no envelope version."
+        },
+        "date": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "CapturePreset has no persisted Date field."
+        },
+        "data": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
             "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingFlowTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        }
-      },
-      "id": "capture-presets-defaults",
-      "production": [
-        "Packages/VoxboardShared/Sources/VoxboardShared/RecordingFlow.swift:CapturePresetStore"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.drafts",
-      "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDraftStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
-        "data": {
+        "uuid": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDraftStoreTests.swift"
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingFlowTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDraftStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "enum": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/presets/unknown-kind.json"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingFlowTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        }
+      }
+    },
+    {
+      "id": "capture-drafts-prepared-assets",
+      "capabilityID": "cap.store.drafts",
+      "production": [
+        "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureDraftStore.swift:CaptureDraftStore"
+      ],
+      "dimensions": {
+        "old": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDraftStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "missingFields": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDraftStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "unknownFields": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDraftStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDraftStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Draft and prepared-request JSON are unversioned legacy formats."
+        },
+        "date": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDraftStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDraftStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "uuid": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDraftStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "enum": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/drafts/unknown-source-enum.json"
           ],
-          "rationale": "Production CaptureDraft decoding rejects an unknown CaptureSource raw value.",
-          "status": "executed"
+          "rationale": "Production CaptureDraft decoding rejects an unknown CaptureSource raw value."
         },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Draft and prepared-request JSON are unversioned legacy formats.",
-          "status": "notApplicable"
-        },
-        "malformed": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDraftStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "missingFields": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDraftStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
+        "crashRecovery": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDraftStoreTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "unknownFields": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDraftStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "uuid": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDraftStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         }
-      },
-      "id": "capture-drafts-prepared-assets",
-      "production": [
-        "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureDraftStore.swift:CaptureDraftStore"
-      ]
+      }
     },
     {
+      "id": "capture-inbox-files",
       "capabilityID": "cap.store.inbox",
+      "production": [
+        "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureInbox.swift:CaptureInbox"
+      ],
       "dimensions": {
-        "crashRecovery": {
+        "old": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureInboxTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureInboxTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureInboxTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "enum": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/inbox/pending-unknown-source-enum.json"
-          ],
-          "rationale": "Production CaptureInbox rejects and preserves a pending request with an unknown CaptureSource.",
-          "status": "executed"
-        },
-        "futureVersion": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureInboxTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "malformed": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureInboxTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/inbox/pending-missing-optional-fields.json",
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/inbox/pending-missing-required-field.json"
           ],
-          "rationale": "Production CaptureInbox accepts defaultable omissions and preserves/rejects requests missing required destination identity.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureInboxTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Production CaptureInbox accepts defaultable omissions and preserves/rejects requests missing required destination identity."
         },
         "unknownFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/inbox/pending-unknown-field.json",
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/inbox/completed-unknown-field.json"
           ],
-          "rationale": "Production pending-request and completion-receipt consumers accept committed extra keys.",
-          "status": "executed"
+          "rationale": "Production pending-request and completion-receipt consumers accept committed extra keys."
         },
-        "uuid": {
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureInboxTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "futureVersion": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
             "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureInboxTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        }
-      },
-      "id": "capture-inbox-files",
-      "production": [
-        "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureInbox.swift:CaptureInbox"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.history",
-      "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureHistoryStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [],
-          "rationale": "Privacy-safe history contains no Data field.",
-          "status": "notApplicable"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "date": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureHistoryStoreTests.swift"
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureInboxTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureInboxTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "uuid": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureInboxTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         },
         "enum": {
+          "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/history/unknown-source-enum.json"
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/inbox/pending-unknown-source-enum.json"
           ],
-          "rationale": "CaptureHistoryStore quarantines and preserves bytes containing an unknown CaptureSource.",
-          "status": "executed"
+          "rationale": "Production CaptureInbox rejects and preserves a pending request with an unknown CaptureSource."
         },
-        "futureVersion": {
+        "crashRecovery": {
+          "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureInboxTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        }
+      }
+    },
+    {
+      "id": "capture-history-json",
+      "capabilityID": "cap.store.history",
+      "production": [
+        "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureHistoryStore.swift:CaptureHistoryStore"
+      ],
+      "dimensions": {
+        "old": {
+          "status": "executed",
+          "evidence": [
             "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureHistoryStoreTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "malformed": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureHistoryStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureHistoryStoreTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureHistoryStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "unknownFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/history/unknown-field.json"
           ],
-          "rationale": "CaptureHistoryStore accepts envelope and record extra keys through its production file codec.",
-          "status": "executed"
+          "rationale": "CaptureHistoryStore accepts envelope and record extra keys through its production file codec."
         },
-        "uuid": {
+        "malformed": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
             "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureHistoryStoreTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        }
-      },
-      "id": "capture-history-json",
-      "production": [
-        "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureHistoryStore.swift:CaptureHistoryStore"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.stats",
-      "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/ActivityStatsStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [],
-          "rationale": "Activity ledger contains no Data field.",
-          "status": "notApplicable"
-        },
-        "date": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/ActivityStatsStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "enum": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/stats/unknown-source-enum.json"
-          ],
-          "rationale": "Production ActivityStatsStore quarantines and preserves unknown CaptureSource bytes.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "futureVersion": {
+          "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/stats/future-version.json"
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureHistoryStoreTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
-        "malformed": {
+        "date": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureHistoryStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "data": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Privacy-safe history contains no Data field."
+        },
+        "uuid": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureHistoryStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "enum": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/history/unknown-source-enum.json"
+          ],
+          "rationale": "CaptureHistoryStore quarantines and preserves bytes containing an unknown CaptureSource."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureHistoryStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        }
+      }
+    },
+    {
+      "id": "activity-stats-json",
+      "capabilityID": "cap.store.stats",
+      "production": [
+        "Packages/VoxboardShared/Sources/VoxboardCaptureCore/ActivityStatsStore.swift:ActivityStatsStore"
+      ],
+      "dimensions": {
+        "old": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/ActivityStatsStoreTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/stats/missing-schema-version.json"
           ],
-          "rationale": "Production ActivityStatsStore accepts the documented missing-schema legacy form; required array omissions remain covered by malformed/quarantine behavior.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/ActivityStatsStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Production ActivityStatsStore accepts the documented missing-schema legacy form; required array omissions remain covered by malformed/quarantine behavior."
         },
         "unknownFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/stats/unknown-field.json"
           ],
-          "rationale": "Production ActivityStatsStore accepts extra ledger/event keys.",
-          "status": "executed"
+          "rationale": "Production ActivityStatsStore accepts extra ledger/event keys."
         },
-        "uuid": {
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/ActivityStatsStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "futureVersion": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/stats/future-version.json"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "date": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
             "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/ActivityStatsStoreTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        }
-      },
-      "id": "activity-stats-json",
-      "production": [
-        "Packages/VoxboardShared/Sources/VoxboardCaptureCore/ActivityStatsStore.swift:ActivityStatsStore"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.transcripts",
-      "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptHistoryTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "data": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Transcript history has no Data field.",
-          "status": "notApplicable"
+          "rationale": "Activity ledger contains no Data field."
         },
-        "date": {
+        "uuid": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptHistoryTests.swift"
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/ActivityStatsStoreTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "enum": {
-          "evidence": [],
-          "rationale": "Transcript persistence contains no closed raw enum.",
-          "status": "notApplicable"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Transcript array has no envelope version.",
-          "status": "notApplicable"
-        },
-        "malformed": {
+          "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/transcripts/malformed.json"
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/stats/unknown-source-enum.json"
           ],
-          "rationale": "Production TranscriptStore surfaces a load error and preserves malformed source bytes.",
-          "status": "executed"
+          "rationale": "Production ActivityStatsStore quarantines and preserves unknown CaptureSource bytes."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/ActivityStatsStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        }
+      }
+    },
+    {
+      "id": "transcript-history-json",
+      "capabilityID": "cap.store.transcripts",
+      "production": [
+        "Packages/VoxboardShared/Sources/VoxboardShared/TranscriptStore.swift:TranscriptStore"
+      ],
+      "dimensions": {
+        "old": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptEnrichmentTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptEnrichmentTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptEnrichmentTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "unknownFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/transcripts/unknown-field.json"
           ],
-          "rationale": "Production TranscriptStore accepts committed extra transcript keys.",
-          "status": "executed"
+          "rationale": "Production TranscriptStore accepts committed extra transcript keys."
         },
-        "uuid": {
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/transcripts/malformed.json"
+          ],
+          "rationale": "Production TranscriptStore surfaces a load error and preserves malformed source bytes."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Transcript array has no envelope version."
+        },
+        "date": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
             "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptHistoryTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        }
-      },
-      "id": "transcript-history-json",
-      "production": [
-        "Packages/VoxboardShared/Sources/VoxboardShared/TranscriptStore.swift:TranscriptStore"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.recording-origin",
-      "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/CaptureRecordingOriginStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "data": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Snapshot contains no Data field.",
-          "status": "notApplicable"
+          "rationale": "Transcript history has no Data field."
         },
-        "date": {
+        "uuid": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/CaptureRecordingOriginStoreTests.swift"
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptHistoryTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "enum": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/recording-origin/unknown-source-enum.json"
-          ],
-          "rationale": "Production origin store rejects and preserves an unknown CaptureSource.",
-          "status": "executed"
-        },
-        "futureVersion": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Recording origin snapshot is unversioned.",
-          "status": "notApplicable"
+          "rationale": "Transcript persistence contains no closed raw enum."
         },
-        "malformed": {
+        "crashRecovery": {
+          "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/recording-origin/malformed.json"
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptHistoryTests.swift"
           ],
-          "rationale": "Production origin store surfaces decoding failure and preserves malformed bytes.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
+        }
+      }
+    },
+    {
+      "id": "recording-origin-json",
+      "capabilityID": "cap.store.recording-origin",
+      "production": [
+        "Packages/VoxboardShared/Sources/VoxboardShared/CaptureRecordingOriginStore.swift:CaptureRecordingOriginStore"
+      ],
+      "dimensions": {
+        "old": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No older shipped shape is documented."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/recording-origin/missing-preset-id.json"
           ],
-          "rationale": "Production origin store rejects and preserves a snapshot missing required preset identity.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [],
-          "rationale": "No older shipped shape is documented.",
-          "status": "notApplicable"
+          "rationale": "Production origin store rejects and preserves a snapshot missing required preset identity."
         },
         "unknownFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/recording-origin/unknown-field.json"
           ],
-          "rationale": "Production origin store accepts committed extra-key bytes.",
-          "status": "executed"
-        },
-        "uuid": {
-          "evidence": [],
-          "rationale": "Recording identity is an opaque filename-safe string.",
-          "status": "notApplicable"
-        }
-      },
-      "id": "recording-origin-json",
-      "production": [
-        "Packages/VoxboardShared/Sources/VoxboardShared/CaptureRecordingOriginStore.swift:CaptureRecordingOriginStore"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.capture-usage",
-      "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/CaptureDeliveryUsageStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [],
-          "rationale": "The installation-local ledger JSON has no Data field.",
-          "status": "notApplicable"
-        },
-        "date": {
-          "evidence": [],
-          "rationale": "Capture usage contains no Date field.",
-          "status": "notApplicable"
-        },
-        "enum": {
-          "evidence": [],
-          "rationale": "Capture usage contains no closed raw enum.",
-          "status": "notApplicable"
-        },
-        "futureVersion": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/usage/future-version.json"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Production origin store accepts committed extra-key bytes."
         },
         "malformed": {
+          "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/usage/malformed.json"
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/recording-origin/malformed.json"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Production origin store surfaces decoding failure and preserves malformed bytes."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Recording origin snapshot is unversioned."
+        },
+        "date": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/CaptureRecordingOriginStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "data": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Snapshot contains no Data field."
+        },
+        "uuid": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Recording identity is an opaque filename-safe string."
+        },
+        "enum": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/recording-origin/unknown-source-enum.json"
+          ],
+          "rationale": "Production origin store rejects and preserves an unknown CaptureSource."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/CaptureRecordingOriginStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        }
+      }
+    },
+    {
+      "id": "capture-usage-ledger",
+      "capabilityID": "cap.store.capture-usage",
+      "production": [
+        "Packages/VoxboardShared/Sources/VoxboardShared/CaptureDeliveryUsageStore.swift:CaptureDeliveryUsageStore"
+      ],
+      "dimensions": {
+        "old": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/usage/missing-default-fields.json"
+          ],
+          "rationale": "The production local-ledger decoder accepts the shipped schema with defaulted fields."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/usage/missing-default-fields.json"
           ],
-          "rationale": "Production ledger decoding applies defaults for the omitted unattributed count.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/usage/missing-default-fields.json"
-          ],
-          "rationale": "The production local-ledger decoder accepts the shipped schema with defaulted fields.",
-          "status": "executed"
+          "rationale": "Production ledger decoding applies defaults for the omitted unattributed count."
         },
         "unknownFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/usage/unknown-field.json"
           ],
-          "rationale": "Production CaptureDeliveryUsageStore accepts committed extra ledger keys.",
-          "status": "executed"
+          "rationale": "Production CaptureDeliveryUsageStore accepts committed extra ledger keys."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/usage/malformed.json"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "futureVersion": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/usage/future-version.json"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "date": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Capture usage contains no Date field."
+        },
+        "data": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "The installation-local ledger JSON has no Data field."
         },
         "uuid": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
             "Packages/VoxboardShared/Tests/VoxboardSharedTests/CaptureDeliveryUsageStoreTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "enum": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Capture usage contains no closed raw enum."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/CaptureDeliveryUsageStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         }
-      },
-      "id": "capture-usage-ledger",
-      "production": [
-        "Packages/VoxboardShared/Sources/VoxboardShared/CaptureDeliveryUsageStore.swift:CaptureDeliveryUsageStore"
-      ]
+      }
     },
     {
+      "id": "transcription-usage-defaults",
       "capabilityID": "cap.store.usage",
+      "production": [
+        "Packages/VoxboardShared/Sources/VoxboardShared/UsageTracker.swift:UsageTracker"
+      ],
       "dimensions": {
-        "crashRecovery": {
+        "old": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/VoxboardSharedTests/PurchaseAccessTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
-        "data": {
+        "missingFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
             "Packages/VoxboardShared/Tests/VoxboardSharedTests/PurchaseAccessTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
-        "date": {
+        "unknownFields": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Usage values contain no Date.",
-          "status": "notApplicable"
-        },
-        "enum": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/usage-settings/unknown-access-level.json"
-          ],
-          "rationale": "Production UsageTracker treats an unknown VoxboardAccessLevel raw value as no valid persisted entitlement.",
-          "status": "executed"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Keys are independently versioned; no envelope version.",
-          "status": "notApplicable"
+          "rationale": "Unrelated UserDefaults keys are ignored."
         },
         "malformed": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/usage-settings/wrong-types.json"
           ],
-          "rationale": "Production UsageTracker falls back safely for wrong-type totals, receipt ledgers, and unlock markers.",
-          "status": "executed"
-        },
-        "missingFields": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/PurchaseAccessTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/PurchaseAccessTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "unknownFields": {
-          "evidence": [],
-          "rationale": "Unrelated UserDefaults keys are ignored.",
-          "status": "notApplicable"
-        },
-        "uuid": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/PurchaseAccessTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        }
-      },
-      "id": "transcription-usage-defaults",
-      "production": [
-        "Packages/VoxboardShared/Sources/VoxboardShared/UsageTracker.swift:UsageTracker"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.recording-jobs",
-      "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "enum": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/recording-jobs/unknown-phase-enum.json"
-          ],
-          "rationale": "Production RecordingJob decoding rejects an unknown job phase raw value.",
-          "status": "executed"
+          "rationale": "Production UsageTracker falls back safely for wrong-type totals, receipt ledgers, and unlock markers."
         },
         "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Keys are independently versioned; no envelope version."
+        },
+        "date": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Usage values contain no Date."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/PurchaseAccessTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "uuid": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/PurchaseAccessTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "enum": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/usage-settings/unknown-access-level.json"
+          ],
+          "rationale": "Production UsageTracker treats an unknown VoxboardAccessLevel raw value as no valid persisted entitlement."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/PurchaseAccessTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        }
+      }
+    },
+    {
+      "id": "recording-jobs",
+      "capabilityID": "cap.store.recording-jobs",
+      "production": [
+        "Packages/VoxboardShared/Sources/VoxboardShared/RecordingJobStore.swift:RecordingJobStore"
+      ],
+      "dimensions": {
+        "old": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "missingFields": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "unknownFields": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "futureVersion": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/recording-jobs/future-job-version.json"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "malformed": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "missingFields": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "unknownFields": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "uuid": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        }
-      },
-      "id": "recording-jobs",
-      "production": [
-        "Packages/VoxboardShared/Sources/VoxboardShared/RecordingJobStore.swift:RecordingJobStore"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.delivery-journals",
-      "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptExportKitAdapterTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptExportKitAdapterTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "date": {
-          "evidence": [],
-          "rationale": "Journal contains no Date.",
-          "status": "notApplicable"
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "uuid": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         },
         "enum": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/recording-jobs/unknown-phase-enum.json"
+          ],
+          "rationale": "Production RecordingJob decoding rejects an unknown job phase raw value."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        }
+      }
+    },
+    {
+      "id": "external-delivery-journals",
+      "capabilityID": "cap.store.delivery-journals",
+      "production": [
+        "Packages/VoxboardShared/Sources/VoxboardShared/ExternalFileDeliveryTransaction.swift:ExternalFileDeliveryTransaction"
+      ],
+      "dimensions": {
+        "old": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Journal contains no closed raw enum.",
-          "status": "notApplicable"
-        },
-        "futureVersion": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/recording-jobs/delivery-journals/future-version/journal.json"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "malformed": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/recording-jobs/delivery-journals/digest-mismatch/journal.json"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Only journal version 1 shipped."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/recording-jobs/delivery-journals/journal-only/journal.json"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [],
-          "rationale": "Only journal version 1 shipped.",
-          "status": "notApplicable"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "unknownFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/recording-jobs/delivery-journals/unknown-field/journal.json",
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/recording-jobs/delivery-journals/unknown-field/payload"
           ],
-          "rationale": "The private production journal codec accepts extra keys while retaining digest verification.",
-          "status": "executed"
-        },
-        "uuid": {
-          "evidence": [],
-          "rationale": "Journal contains path/digests, not UUID.",
-          "status": "notApplicable"
-        }
-      },
-      "id": "external-delivery-journals",
-      "production": [
-        "Packages/VoxboardShared/Sources/VoxboardShared/ExternalFileDeliveryTransaction.swift:ExternalFileDeliveryTransaction"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.recording-jobs",
-      "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [],
-          "rationale": "No Date.",
-          "status": "notApplicable"
-        },
-        "enum": {
-          "evidence": [],
-          "rationale": "No enum.",
-          "status": "notApplicable"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Literal filename extension/version is not decoded as an envelope.",
-          "status": "notApplicable"
+          "rationale": "The private production journal codec accepts extra keys while retaining digest verification."
         },
         "malformed": {
-          "evidence": [],
-          "rationale": "The production receipt contract is marker-file existence only; marker contents are never decoded, so no byte sequence is malformed.",
-          "status": "notApplicable"
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/recording-jobs/delivery-journals/digest-mismatch/journal.json"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         },
-        "missingFields": {
-          "evidence": [],
-          "rationale": "Whole-file absence is state, not a missing field.",
-          "status": "notApplicable"
+        "futureVersion": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/recording-jobs/delivery-journals/future-version/journal.json"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         },
-        "old": {
+        "date": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Only literal marker v1 shipped.",
-          "status": "notApplicable"
+          "rationale": "Journal contains no Date."
         },
-        "unknownFields": {
-          "evidence": [],
-          "rationale": "Literal byte marker has no keyed fields.",
-          "status": "notApplicable"
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptExportKitAdapterTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         },
         "uuid": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "No UUID.",
-          "status": "notApplicable"
+          "rationale": "Journal contains path/digests, not UUID."
+        },
+        "enum": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Journal contains no closed raw enum."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptExportKitAdapterTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         }
-      },
+      }
+    },
+    {
       "id": "delivery-marker",
+      "capabilityID": "cap.store.recording-jobs",
       "production": [
         "Packages/VoxboardShared/Sources/VoxboardShared/RecordingJobStore.swift:RecordingArtifactDeliveryReceipt"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.keyboard-ipc",
+      ],
       "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "Voxboard Keyboard/VoiceKeyboardState.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/LiveTranscriptionDeliveryReducerTests.swift",
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/keyboard-ipc/crash/torn-delivery-checkpoint.json"
-          ],
-          "rationale": "The production keyboard consumes a shared persist-before-insert reducer; tests prove failed persistence emits no delta, restart restoration suppresses duplicate replay, and torn/non-monotonic inputs fail closed.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptionIPCTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptionIPCTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "enum": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/keyboard-ipc/unknown-status-phase.json",
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/keyboard-ipc/unknown-command-action.json"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "futureVersion": {
+        "old": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "IPC JSON members are unversioned.",
-          "status": "notApplicable"
+          "rationale": "Only literal marker v1 shipped."
+        },
+        "missingFields": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Whole-file absence is state, not a missing field."
+        },
+        "unknownFields": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Literal byte marker has no keyed fields."
         },
         "malformed": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "The production receipt contract is marker-file existence only; marker contents are never decoded, so no byte sequence is malformed."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Literal filename extension/version is not decoded as an envelope."
+        },
+        "date": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No Date."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "uuid": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No UUID."
+        },
+        "enum": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No enum."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        }
+      }
+    },
+    {
+      "id": "keyboard-ipc-family",
+      "capabilityID": "cap.store.keyboard-ipc",
+      "production": [
+        "Packages/VoxboardShared/Sources/VoxboardShared/TranscriptionIPC.swift:TranscriptionIPC"
+      ],
+      "dimensions": {
+        "old": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptionIPCTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "missingFields": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptionIPCTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "unknownFields": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptionIPCTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "malformed": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/keyboard-ipc/documents/request.json",
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/keyboard-ipc/documents/response.json",
@@ -1070,1185 +1066,1201 @@
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/keyboard-ipc/documents/live-snapshot.json",
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/keyboard-ipc/documents/live-delivery-checkpoint.json"
           ],
-          "rationale": "Every production JSON document model in the keyboard IPC family rejects committed malformed bytes.",
-          "status": "executed"
-        },
-        "missingFields": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptionIPCTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptionIPCTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "unknownFields": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptionIPCTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "uuid": {
-          "evidence": [],
-          "rationale": "IPC request IDs are opaque strings.",
-          "status": "notApplicable"
-        }
-      },
-      "id": "keyboard-ipc-family",
-      "production": [
-        "Packages/VoxboardShared/Sources/VoxboardShared/TranscriptionIPC.swift:TranscriptionIPC"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.live-state",
-      "dimensions": {
-        "crashRecovery": {
-          "evidence": [],
-          "rationale": "Single atomically replaced snapshot has no multi-file commit frontier.",
-          "status": "notApplicable"
-        },
-        "data": {
-          "evidence": [],
-          "rationale": "No Data field.",
-          "status": "notApplicable"
-        },
-        "date": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/VoxboardLiveActivityStateTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "enum": {
-          "evidence": [],
-          "rationale": "No persisted enum.",
-          "status": "notApplicable"
+          "rationale": "Every production JSON document model in the keyboard IPC family rejects committed malformed bytes."
         },
         "futureVersion": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "State is unversioned.",
-          "status": "notApplicable"
+          "rationale": "IPC JSON members are unversioned."
         },
-        "malformed": {
+        "date": {
+          "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/live-state/malformed.json"
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptionIPCTests.swift"
           ],
-          "rationale": "Production VoxboardLiveActivityState decoding rejects malformed bytes.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/TranscriptionIPCTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "uuid": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "IPC request IDs are opaque strings."
+        },
+        "enum": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/keyboard-ipc/unknown-status-phase.json",
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/keyboard-ipc/unknown-command-action.json"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Keyboard/VoiceKeyboardState.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/LiveTranscriptionDeliveryReducerTests.swift",
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/keyboard-ipc/crash/torn-delivery-checkpoint.json"
+          ],
+          "rationale": "The production keyboard consumes a shared persist-before-insert reducer; tests prove failed persistence emits no delta, restart restoration suppresses duplicate replay, and torn/non-monotonic inputs fail closed."
+        }
+      }
+    },
+    {
+      "id": "live-activity-state",
+      "capabilityID": "cap.store.live-state",
+      "production": [
+        "Packages/VoxboardShared/Sources/VoxboardShared/VoxboardLiveActivity.swift:VoxboardLiveActivityState"
+      ],
+      "dimensions": {
+        "old": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/VoxboardLiveActivityStateTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/VoxboardSharedTests/VoxboardLiveActivityStateTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/VoxboardLiveActivityStateTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "unknownFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/live-state/unknown-field.json"
           ],
-          "rationale": "Production VoxboardLiveActivityState decoding accepts extra keys.",
-          "status": "executed"
-        },
-        "uuid": {
-          "evidence": [],
-          "rationale": "Request ID is opaque string.",
-          "status": "notApplicable"
-        }
-      },
-      "id": "live-activity-state",
-      "production": [
-        "Packages/VoxboardShared/Sources/VoxboardShared/VoxboardLiveActivity.swift:VoxboardLiveActivityState"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.models",
-      "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/ModelDownloadSupportTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/ModelDownloadSupportTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [],
-          "rationale": "No Date.",
-          "status": "notApplicable"
-        },
-        "enum": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/models/unknown-selection.json"
-          ],
-          "rationale": "Production ModelManager normalizes unknown backend selection while retaining fallback as an opaque preference.",
-          "status": "executed"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Selection keys and opaque model files have no schema envelope.",
-          "status": "notApplicable"
+          "rationale": "Production VoxboardLiveActivityState decoding accepts extra keys."
         },
         "malformed": {
+          "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/models/wrong-types.json"
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/live-state/malformed.json"
           ],
-          "rationale": "Production ModelManager safely normalizes wrong-type selection, language, and fallback defaults.",
-          "status": "executed"
+          "rationale": "Production VoxboardLiveActivityState decoding rejects malformed bytes."
         },
-        "missingFields": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/ModelDownloadSupportTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/ModelDownloadSupportTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "unknownFields": {
+        "futureVersion": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Unrelated defaults and extra model files are ignored.",
-          "status": "notApplicable"
+          "rationale": "State is unversioned."
+        },
+        "date": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/VoxboardLiveActivityStateTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "data": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No Data field."
         },
         "uuid": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Model IDs are stable strings.",
-          "status": "notApplicable"
+          "rationale": "Request ID is opaque string."
+        },
+        "enum": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No persisted enum."
+        },
+        "crashRecovery": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Single atomically replaced snapshot has no multi-file commit frontier."
         }
-      },
+      }
+    },
+    {
       "id": "model-selection-and-files",
+      "capabilityID": "cap.store.models",
       "production": [
         "Packages/VoxboardShared/Sources/VoxboardShared/ModelManager.swift:ModelManager",
         "Packages/VoxboardShared/Sources/VoxboardShared/WhisperModelInfo.swift:WhisperModelInfo"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.queue-preferences",
+      ],
       "dimensions": {
-        "crashRecovery": {
-          "evidence": [],
-          "rationale": "Independent scalar defaults have no multi-file commit frontier.",
-          "status": "notApplicable"
-        },
-        "data": {
-          "evidence": [],
-          "rationale": "No Data.",
-          "status": "notApplicable"
-        },
-        "date": {
-          "evidence": [],
-          "rationale": "No Date.",
-          "status": "notApplicable"
-        },
-        "enum": {
+        "old": {
+          "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/queue-preferences/unknown-enums.json"
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/ModelDownloadSupportTests.swift"
           ],
-          "rationale": "Production RecordingQueuePreferences falls back for unknown retention and processing raw values.",
-          "status": "executed"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "No envelope version.",
-          "status": "notApplicable"
-        },
-        "malformed": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/queue-preferences/wrong-types.json"
-          ],
-          "rationale": "Production RecordingQueuePreferences safely falls back for wrong property-list types.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "missingFields": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/ModelDownloadSupportTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "unknownFields": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Unrelated defaults and extra model files are ignored."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/models/wrong-types.json"
+          ],
+          "rationale": "Production ModelManager safely normalizes wrong-type selection, language, and fallback defaults."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Selection keys and opaque model files have no schema envelope."
+        },
+        "date": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No Date."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/ModelDownloadSupportTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "uuid": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Model IDs are stable strings."
+        },
+        "enum": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/models/unknown-selection.json"
+          ],
+          "rationale": "Production ModelManager normalizes unknown backend selection while retaining fallback as an opaque preference."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/VoxboardSharedTests/ModelDownloadSupportTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        }
+      }
+    },
+    {
+      "id": "queue-preferences",
+      "capabilityID": "cap.store.queue-preferences",
+      "production": [
+        "Packages/VoxboardShared/Sources/VoxboardShared/RecordingJobStore.swift:RecordingQueuePreferences"
+      ],
+      "dimensions": {
+        "old": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Current independently versioned defaults keys are the first shipped queue preference format."
+        },
+        "missingFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/VoxboardSharedTests/RecordingJobStoreTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [],
-          "rationale": "Current independently versioned defaults keys are the first shipped queue preference format.",
-          "status": "notApplicable"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "unknownFields": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Unrelated UserDefaults keys are ignored.",
-          "status": "notApplicable"
+          "rationale": "Unrelated UserDefaults keys are ignored."
         },
-        "uuid": {
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/queue-preferences/wrong-types.json"
+          ],
+          "rationale": "Production RecordingQueuePreferences safely falls back for wrong property-list types."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "No UUID.",
-          "status": "notApplicable"
-        }
-      },
-      "id": "queue-preferences",
-      "production": [
-        "Packages/VoxboardShared/Sources/VoxboardShared/RecordingJobStore.swift:RecordingQueuePreferences"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.toolbar",
-      "dimensions": {
-        "crashRecovery": {
+          "rationale": "No envelope version."
+        },
+        "date": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Single UserDefaults Data value.",
-          "status": "notApplicable"
+          "rationale": "No Date."
         },
         "data": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No Data."
+        },
+        "uuid": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No UUID."
+        },
+        "enum": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/queue-preferences/unknown-enums.json"
+          ],
+          "rationale": "Production RecordingQueuePreferences falls back for unknown retention and processing raw values."
+        },
+        "crashRecovery": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Independent scalar defaults have no multi-file commit frontier."
+        }
+      }
+    },
+    {
+      "id": "toolbar-defaults",
+      "capabilityID": "cap.store.toolbar",
+      "production": [
+        "Voxboard App Shared/CaptureToolbarPreferences.swift:CaptureToolbarPreferences"
+      ],
+      "dimensions": {
+        "old": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/CaptureToolbarPreferencesTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "missingFields": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "unknownFields": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/CaptureToolbarPreferencesTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Toolbar configuration is unversioned."
+        },
+        "date": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No Date."
+        },
+        "data": {
+          "status": "executed",
           "evidence": [
             "VoxboardTests/CaptureToolbarPreferencesTests.swift",
             "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [],
-          "rationale": "No Date.",
-          "status": "notApplicable"
-        },
-        "enum": {
-          "evidence": [
-            "VoxboardTests/CaptureToolbarPreferencesTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Toolbar configuration is unversioned.",
-          "status": "notApplicable"
-        },
-        "malformed": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "missingFields": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "VoxboardTests/CaptureToolbarPreferencesTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "unknownFields": {
-          "evidence": [
-            "VoxboardTests/CaptureToolbarPreferencesTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "uuid": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "No UUID.",
-          "status": "notApplicable"
+          "rationale": "No UUID."
+        },
+        "enum": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/CaptureToolbarPreferencesTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "crashRecovery": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Single UserDefaults Data value."
         }
-      },
-      "id": "toolbar-defaults",
-      "production": [
-        "Voxboard App Shared/CaptureToolbarPreferences.swift:CaptureToolbarPreferences"
-      ]
+      }
     },
     {
-      "capabilityID": "cap.store.watch-controller-state",
-      "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
-          ],
-          "rationale": "Tests execute acknowledgement replay, transport-failure cursor rotation, clear/set recovery, and Int.max revision/epoch rollover through the production persistence seam.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [],
-          "rationale": "No Data blob is persisted in this key family.",
-          "status": "notApplicable"
-        },
-        "date": {
-          "evidence": [],
-          "rationale": "No Date is persisted in this key family.",
-          "status": "notApplicable"
-        },
-        "enum": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
-          ],
-          "rationale": "An unknown persisted preset acknowledgement outcome fails closed to no replayable acknowledgement.",
-          "status": "executed"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Each scalar/dictionary key is independently versioned and has no schema envelope.",
-          "status": "notApplicable"
-        },
-        "malformed": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
-          ],
-          "rationale": "Wrong-type failure dictionaries, cursors, epochs, revisions, and marker values fall back safely.",
-          "status": "executed"
-        },
-        "missingFields": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
-          ],
-          "rationale": "The production persistence seam handles absent failure, revision, epoch, cursor, and acknowledgement keys.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [],
-          "rationale": "These independently versioned keys are their first shipped formats; no older key shape is documented.",
-          "status": "notApplicable"
-        },
-        "unknownFields": {
-          "evidence": [],
-          "rationale": "Independent UserDefaults keys do not decode keyed envelopes; unrelated defaults are ignored.",
-          "status": "notApplicable"
-        },
-        "uuid": {
-          "evidence": [],
-          "rationale": "Request and recording identities are persisted as opaque strings; UUID validation belongs to incoming protocol handling.",
-          "status": "notApplicable"
-        }
-      },
       "id": "watch-controller-defaults",
+      "capabilityID": "cap.store.watch-controller-state",
       "production": [
         "Voxboard/WatchRecordingController.swift:WatchRecordingControllerPersistence"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.watch-phone-inbox",
+      ],
       "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
-            "VoxboardTests/WatchRecordingInboxItemTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
-            "VoxboardTests/WatchRecordingInboxItemTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "enum": {
-          "evidence": [
-            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/watch-inbox/unknown-phase-enum.json",
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
-          ],
-          "rationale": "The production phone Watch inbox rejects and leaves preserved a sidecar with an unknown processing phase.",
-          "status": "executed"
-        },
-        "futureVersion": {
+        "old": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Phone Watch inbox is unversioned.",
-          "status": "notApplicable"
-        },
-        "malformed": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
-            "VoxboardTests/WatchRecordingInboxItemTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "These independently versioned keys are their first shipped formats; no older key shape is documented."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
-            "VoxboardTests/WatchRecordingInboxItemTests.swift"
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "The production persistence seam handles absent failure, revision, epoch, cursor, and acknowledgement keys."
         },
+        "unknownFields": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Independent UserDefaults keys do not decode keyed envelopes; unrelated defaults are ignored."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+          ],
+          "rationale": "Wrong-type failure dictionaries, cursors, epochs, revisions, and marker values fall back safely."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Each scalar/dictionary key is independently versioned and has no schema envelope."
+        },
+        "date": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No Date is persisted in this key family."
+        },
+        "data": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No Data blob is persisted in this key family."
+        },
+        "uuid": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Request and recording identities are persisted as opaque strings; UUID validation belongs to incoming protocol handling."
+        },
+        "enum": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+          ],
+          "rationale": "An unknown persisted preset acknowledgement outcome fails closed to no replayable acknowledgement."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+          ],
+          "rationale": "Tests execute acknowledgement replay, transport-failure cursor rotation, clear/set recovery, and Int.max revision/epoch rollover through the production persistence seam."
+        }
+      }
+    },
+    {
+      "id": "watch-phone-inbox",
+      "capabilityID": "cap.store.watch-phone-inbox",
+      "production": [
+        "Voxboard/WatchRecordingInbox.swift:WatchRecordingInbox"
+      ],
+      "dimensions": {
         "old": {
+          "status": "executed",
           "evidence": [
             "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
             "VoxboardTests/WatchRecordingInboxItemTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "missingFields": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/WatchRecordingInboxItemTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         },
         "unknownFields": {
+          "status": "executed",
           "evidence": [
             "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/compatibility/watch-inbox/unknown-field.json",
             "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
           ],
-          "rationale": "The production phone Watch inbox store loads committed extra-key sidecars.",
-          "status": "executed"
+          "rationale": "The production phone Watch inbox store loads committed extra-key sidecars."
         },
-        "uuid": {
+        "malformed": {
+          "status": "executed",
           "evidence": [
             "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
             "VoxboardTests/WatchRecordingInboxItemTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Phone Watch inbox is unversioned."
+        },
+        "date": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
+            "VoxboardTests/WatchRecordingInboxItemTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
+            "VoxboardTests/WatchRecordingInboxItemTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "uuid": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
+            "VoxboardTests/WatchRecordingInboxItemTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "enum": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Tests/Fixtures/Persistence/v1/negative/watch-inbox/unknown-phase-enum.json",
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+          ],
+          "rationale": "The production phone Watch inbox rejects and leaves preserved a sidecar with an unknown processing phase."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         }
-      },
-      "id": "watch-phone-inbox",
-      "production": [
-        "Voxboard/WatchRecordingInbox.swift:WatchRecordingInbox"
-      ]
+      }
     },
     {
+      "id": "watch-connectivity-plists",
       "capabilityID": "cap.store.watch-plists",
+      "production": [
+        "Voxboard Watch Shared/WatchPhoneBridge.swift:WatchRecordingPayloadKey",
+        "Voxboard/WatchRecordingController.swift:WatchRecordingController"
+      ],
       "dimensions": {
+        "old": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "missingFields": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "unknownFields": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Property-list dictionaries ignore additional keys by design; add rationale test if policy changes."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Legacy protocol has no envelope version; unknown shape is malformed current input."
+        },
+        "date": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "uuid": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "IDs are opaque strings in transport dictionaries."
+        },
+        "enum": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Unknown snapshot phases fail closed to unavailable; unknown acknowledgement and remote phases are ignored by production Watch dictionary consumers."
+        },
         "crashRecovery": {
+          "status": "executed",
           "evidence": [
             "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift",
             "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
           ],
-          "rationale": "Watch production reconciliation persists the terminal-free queue before deleting source audio, reload verifies durable state, duplicate terminal replay is acknowledged idempotently, and phone inbox tests preserve its side until terminal tombstoning.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "enum": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Unknown snapshot phases fail closed to unavailable; unknown acknowledgement and remote phases are ignored by production Watch dictionary consumers.",
-          "status": "executed"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Legacy protocol has no envelope version; unknown shape is malformed current input.",
-          "status": "notApplicable"
-        },
-        "malformed": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "missingFields": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift",
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "unknownFields": {
-          "evidence": [],
-          "rationale": "Property-list dictionaries ignore additional keys by design; add rationale test if policy changes.",
-          "status": "notApplicable"
-        },
-        "uuid": {
-          "evidence": [],
-          "rationale": "IDs are opaque strings in transport dictionaries.",
-          "status": "notApplicable"
+          "rationale": "Watch production reconciliation persists the terminal-free queue before deleting source audio, reload verifies durable state, duplicate terminal replay is acknowledged idempotently, and phone inbox tests preserve its side until terminal tombstoning."
         }
-      },
-      "id": "watch-connectivity-plists",
-      "production": [
-        "Voxboard Watch Shared/WatchPhoneBridge.swift:WatchRecordingPayloadKey",
-        "Voxboard/WatchRecordingController.swift:WatchRecordingController"
-      ]
+      }
     },
     {
-      "capabilityID": "cap.store.watch-preset-confirmed",
-      "dimensions": {
-        "crashRecovery": {
-          "evidence": [],
-          "rationale": "Single UserDefaults Data value.",
-          "status": "notApplicable"
-        },
-        "data": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [],
-          "rationale": "No Date.",
-          "status": "notApplicable"
-        },
-        "enum": {
-          "evidence": [],
-          "rationale": "ConfirmedWatchCapturePreset stores opaque ID/display-name strings and Data; nested preset enum decoding is owned by the phone/application-context codec, not this store.",
-          "status": "notApplicable"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Unversioned JSON value.",
-          "status": "notApplicable"
-        },
-        "malformed": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "missingFields": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [],
-          "rationale": "First shipped format.",
-          "status": "notApplicable"
-        },
-        "unknownFields": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "WatchConfirmedPresetStore accepts extra keyed fields in watchOS tests.",
-          "status": "executed"
-        },
-        "uuid": {
-          "evidence": [],
-          "rationale": "Preset ID is stable string.",
-          "status": "notApplicable"
-        }
-      },
       "id": "watch-confirmed-preset",
+      "capabilityID": "cap.store.watch-preset-confirmed",
       "production": [
         "Voxboard Watch Shared/WatchPhoneBridge.swift:WatchConfirmedPresetStore"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.watch-preset-pending",
+      ],
       "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "data": {
+        "old": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "No Data.",
-          "status": "notApplicable"
-        },
-        "date": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "enum": {
-          "evidence": [],
-          "rationale": "No enum in persisted pending selection.",
-          "status": "notApplicable"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Unversioned JSON value.",
-          "status": "notApplicable"
-        },
-        "malformed": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "First shipped format."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
             "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
           ],
-          "rationale": "WatchPresetSelectionStore rejects a pending value missing its required epoch.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [],
-          "rationale": "First shipped format.",
-          "status": "notApplicable"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "unknownFields": {
+          "status": "executed",
           "evidence": [
             "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
           ],
-          "rationale": "WatchPresetSelectionStore accepts extra keyed fields in watchOS tests.",
-          "status": "executed"
+          "rationale": "WatchConfirmedPresetStore accepts extra keyed fields in watchOS tests."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Unversioned JSON value."
+        },
+        "date": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No Date."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         },
         "uuid": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Request ID is opaque string.",
-          "status": "notApplicable"
+          "rationale": "Preset ID is stable string."
+        },
+        "enum": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "ConfirmedWatchCapturePreset stores opaque ID/display-name strings and Data; nested preset enum decoding is owned by the phone/application-context codec, not this store."
+        },
+        "crashRecovery": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Single UserDefaults Data value."
         }
-      },
+      }
+    },
+    {
       "id": "watch-pending-selection",
+      "capabilityID": "cap.store.watch-preset-pending",
       "production": [
         "Voxboard Watch Shared/WatchPhoneBridge.swift:WatchPresetSelectionStore"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.watch-snapshot",
+      ],
       "dimensions": {
-        "crashRecovery": {
+        "old": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Single UserDefaults dictionary value.",
-          "status": "notApplicable"
-        },
-        "data": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "enum": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Legacy dictionary has no version field.",
-          "status": "notApplicable"
-        },
-        "malformed": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "First shipped format."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
             "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "WatchPresetSelectionStore rejects a pending value missing its required epoch."
         },
         "unknownFields": {
+          "status": "executed",
           "evidence": [
             "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
           ],
-          "rationale": "WatchLocalSnapshotStore ignores an extra snapshot dictionary key in the watchOS target.",
-          "status": "executed"
+          "rationale": "WatchPresetSelectionStore accepts extra keyed fields in watchOS tests."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Unversioned JSON value."
+        },
+        "date": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "data": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No Data."
         },
         "uuid": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "IDs are opaque strings.",
-          "status": "notApplicable"
+          "rationale": "Request ID is opaque string."
+        },
+        "enum": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No enum in persisted pending selection."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         }
-      },
+      }
+    },
+    {
       "id": "watch-local-snapshot",
+      "capabilityID": "cap.store.watch-snapshot",
       "production": [
         "Voxboard Watch Shared/WatchPhoneBridge.swift:WatchLocalSnapshotStore"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.watch-queue",
+      ],
       "dimensions": {
-        "crashRecovery": {
+        "old": {
+          "status": "executed",
           "evidence": [
             "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "enum": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "An unknown transport state triggers production corrupt-index backup and orphan-audio recovery without deleting source audio.",
-          "status": "executed"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Queue JSON is unversioned.",
-          "status": "notApplicable"
-        },
-        "malformed": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
             "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "unknownFields": {
+          "status": "executed",
           "evidence": [
             "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
           ],
-          "rationale": "WatchLocalRecordingQueueStore accepts extra index-entry keys in the watchOS target.",
-          "status": "executed"
+          "rationale": "WatchLocalSnapshotStore ignores an extra snapshot dictionary key in the watchOS target."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Legacy dictionary has no version field."
+        },
+        "date": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         },
         "uuid": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Recording IDs are opaque strings.",
-          "status": "notApplicable"
+          "rationale": "IDs are opaque strings."
+        },
+        "enum": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "crashRecovery": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Single UserDefaults dictionary value."
         }
-      },
+      }
+    },
+    {
       "id": "watch-local-queue",
+      "capabilityID": "cap.store.watch-queue",
       "production": [
         "Voxboard Watch Shared/WatchLocalRecordingQueueStore.swift:WatchLocalRecordingQueueStore"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.app-language",
+      ],
       "dimensions": {
-        "crashRecovery": {
+        "old": {
+          "status": "executed",
           "evidence": [
-            "VoxboardTests/AppLanguagePreferenceTests.swift"
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
           ],
-          "rationale": "App Group defaults persist atomically through the system; launch reconciliation repairs a dropped AppleLanguages mirror for a stored selection, preserves an existing OS-level per-app override when no in-app preference exists, and clears a stale mirror after an explicit Use System Language selection.",
-          "status": "executed"
-        },
-        "data": {
-          "evidence": [],
-          "rationale": "No binary data is persisted; only a language code string.",
-          "status": "notApplicable"
-        },
-        "date": {
-          "evidence": [],
-          "rationale": "No date fields are persisted.",
-          "status": "notApplicable"
-        },
-        "enum": {
-          "evidence": [
-            "VoxboardTests/AppLanguagePreferenceTests.swift"
-          ],
-          "rationale": "Raw language codes are validated against the localized catalog with regional variant matching.",
-          "status": "executed"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Plain string value with no envelope schema version.",
-          "status": "notApplicable"
-        },
-        "malformed": {
-          "evidence": [
-            "VoxboardTests/AppLanguagePreferenceTests.swift"
-          ],
-          "rationale": "An unknown or invalid stored code falls back to Use System Language instead of crashing.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
-            "VoxboardTests/AppLanguagePreferenceTests.swift"
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
           ],
-          "rationale": "An absent override resolves to Use System Language through production defaults reads.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [],
-          "rationale": "First shipped app language key version.",
-          "status": "notApplicable"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "unknownFields": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "WatchLocalRecordingQueueStore accepts extra index-entry keys in the watchOS target."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "A single scalar language-code string; there is no keyed container to hold unknown fields.",
-          "status": "notApplicable"
+          "rationale": "Queue JSON is unversioned."
+        },
+        "date": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         },
         "uuid": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "No UUID fields are persisted.",
-          "status": "notApplicable"
+          "rationale": "Recording IDs are opaque strings."
+        },
+        "enum": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "An unknown transport state triggers production corrupt-index backup and orphan-audio recovery without deleting source audio."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "Voxboard Watch Tests/AndroidWearM0WatchPersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         }
-      },
+      }
+    },
+    {
       "id": "app-language-defaults",
+      "capabilityID": "cap.store.app-language",
       "production": [
         "Packages/VoxboardShared/Sources/VoxboardShared/AppLanguagePreference.swift:AppLanguagePreference",
         "Voxboard/Views/AppLanguageSettingsView.swift:AppLanguageSettingsView"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.analytics",
+      ],
       "dimensions": {
-        "crashRecovery": {
-          "evidence": [
-            "scripts/tests/test_custom_analytics_removal.py"
-          ],
-          "rationale": "Host Swift test seeds retired keys with opaque invalid data, erases them, preserves functional defaults, and repeats cleanup idempotently.",
-          "status": "executed"
-        },
-        "data": {
+        "old": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "No analytics producer or decoder remains. Retired values are erased without interpreting payload fields, dates, data encodings, UUIDs, enums, or versions.",
-          "status": "notApplicable"
-        },
-        "date": {
-          "evidence": [],
-          "rationale": "No analytics producer or decoder remains. Retired values are erased without interpreting payload fields, dates, data encodings, UUIDs, enums, or versions.",
-          "status": "notApplicable"
-        },
-        "enum": {
-          "evidence": [],
-          "rationale": "No analytics producer or decoder remains. Retired values are erased without interpreting payload fields, dates, data encodings, UUIDs, enums, or versions.",
-          "status": "notApplicable"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "No analytics producer or decoder remains. Retired values are erased without interpreting payload fields, dates, data encodings, UUIDs, enums, or versions.",
-          "status": "notApplicable"
-        },
-        "malformed": {
-          "evidence": [
-            "scripts/tests/test_custom_analytics_removal.py"
-          ],
-          "rationale": "Host Swift test seeds retired keys with opaque invalid data, erases them, preserves functional defaults, and repeats cleanup idempotently.",
-          "status": "executed"
+          "rationale": "First shipped app language key version."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
-            "scripts/tests/test_custom_analytics_removal.py"
+            "VoxboardTests/AppLanguagePreferenceTests.swift"
           ],
-          "rationale": "Host Swift test seeds retired keys with opaque invalid data, erases them, preserves functional defaults, and repeats cleanup idempotently.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "scripts/tests/test_custom_analytics_removal.py"
-          ],
-          "rationale": "Host Swift test seeds retired keys with opaque invalid data, erases them, preserves functional defaults, and repeats cleanup idempotently.",
-          "status": "executed"
+          "rationale": "An absent override resolves to Use System Language through production defaults reads."
         },
         "unknownFields": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "No analytics producer or decoder remains. Retired values are erased without interpreting payload fields, dates, data encodings, UUIDs, enums, or versions.",
-          "status": "notApplicable"
+          "rationale": "A single scalar language-code string; there is no keyed container to hold unknown fields."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AppLanguagePreferenceTests.swift"
+          ],
+          "rationale": "An unknown or invalid stored code falls back to Use System Language instead of crashing."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Plain string value with no envelope schema version."
+        },
+        "date": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No date fields are persisted."
+        },
+        "data": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No binary data is persisted; only a language code string."
         },
         "uuid": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "No analytics producer or decoder remains. Retired values are erased without interpreting payload fields, dates, data encodings, UUIDs, enums, or versions.",
-          "status": "notApplicable"
+          "rationale": "No UUID fields are persisted."
+        },
+        "enum": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AppLanguagePreferenceTests.swift"
+          ],
+          "rationale": "Raw language codes are validated against the localized catalog with regional variant matching."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AppLanguagePreferenceTests.swift"
+          ],
+          "rationale": "App Group defaults persist atomically through the system; launch reconciliation repairs a dropped AppleLanguages mirror for a stored selection, preserves an existing OS-level per-app override when no in-app preference exists, and clears a stale mirror after an explicit Use System Language selection."
         }
-      },
+      }
+    },
+    {
       "id": "analytics-defaults",
+      "capabilityID": "cap.store.analytics",
       "production": [
         "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift:RetiredAnalyticsCleanup"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.inspiration-quotes",
+      ],
       "dimensions": {
-        "crashRecovery": {
-          "evidence": [],
-          "rationale": "Single cache value; remote refresh is non-authoritative.",
-          "status": "notApplicable"
-        },
-        "data": {
+        "old": {
+          "status": "executed",
           "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "enum": {
-          "evidence": [],
-          "rationale": "No closed enum.",
-          "status": "notApplicable"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Cache is unversioned.",
-          "status": "notApplicable"
-        },
-        "malformed": {
-          "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
-          ],
-          "rationale": "InspirationQuoteService serves its local fallback without overwriting malformed cache bytes when offline.",
-          "status": "executed"
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "InspirationQuoteService rejects a cache missing required fetchedAt and serves the local fallback while preserving bytes.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [],
-          "rationale": "First shipped cache key.",
-          "status": "notApplicable"
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
         },
         "unknownFields": {
+          "status": "executed",
           "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "InspirationQuoteService accepts extra cache and quote keys.",
-          "status": "executed"
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "scripts/tests/test_custom_analytics_removal.py"
+          ],
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+        },
+        "futureVersion": {
+          "status": "executed",
+          "evidence": [
+            "scripts/tests/test_custom_analytics_removal.py"
+          ],
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+        },
+        "date": {
+          "status": "executed",
+          "evidence": [
+            "scripts/tests/test_custom_analytics_removal.py"
+          ],
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "scripts/tests/test_custom_analytics_removal.py"
+          ],
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
         },
         "uuid": {
-          "evidence": [],
-          "rationale": "No UUID.",
-          "status": "notApplicable"
+          "status": "executed",
+          "evidence": [
+            "scripts/tests/test_custom_analytics_removal.py"
+          ],
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+        },
+        "enum": {
+          "status": "executed",
+          "evidence": [
+            "scripts/tests/test_custom_analytics_removal.py"
+          ],
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+        },
+        "crashRecovery": {
+          "status": "executed",
+          "evidence": [
+            "scripts/tests/test_custom_analytics_removal.py"
+          ],
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
         }
-      },
+      }
+    },
+    {
       "id": "quote-cache",
+      "capabilityID": "cap.store.inspiration-quotes",
       "production": [
         "Voxboard App Shared/InspirationQuoteService.swift:InspirationQuoteService"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.review-prompt",
+      ],
       "dimensions": {
-        "crashRecovery": {
+        "old": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Independent monotonic scalar state.",
-          "status": "notApplicable"
-        },
-        "data": {
-          "evidence": [],
-          "rationale": "No Data.",
-          "status": "notApplicable"
-        },
-        "date": {
-          "evidence": [
-            "VoxboardTests/ReviewPromptManagerTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "enum": {
-          "evidence": [],
-          "rationale": "No persisted enum.",
-          "status": "notApplicable"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Independent versioned scalar keys have no envelope.",
-          "status": "notApplicable"
-        },
-        "malformed": {
-          "evidence": [
-            "VoxboardTests/ReviewPromptManagerTests.swift"
-          ],
-          "rationale": "Production ReviewPromptManager falls back for wrong-type counters/dates/booleans and normalizes malformed usage-day storage.",
-          "status": "executed"
+          "rationale": "First shipped cache key."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
-            "VoxboardTests/ReviewPromptManagerTests.swift"
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [],
-          "rationale": "First shipped key versions.",
-          "status": "notApplicable"
+          "rationale": "InspirationQuoteService rejects a cache missing required fetchedAt and serves the local fallback while preserving bytes."
         },
         "unknownFields": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+          ],
+          "rationale": "InspirationQuoteService accepts extra cache and quote keys."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+          ],
+          "rationale": "InspirationQuoteService serves its local fallback without overwriting malformed cache bytes when offline."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Unrelated defaults keys ignored.",
-          "status": "notApplicable"
+          "rationale": "Cache is unversioned."
+        },
+        "date": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
         },
         "uuid": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "No UUID.",
-          "status": "notApplicable"
+          "rationale": "No UUID."
+        },
+        "enum": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No closed enum."
+        },
+        "crashRecovery": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Single cache value; remote refresh is non-authoritative."
         }
-      },
+      }
+    },
+    {
       "id": "review-prompt-defaults",
+      "capabilityID": "cap.store.review-prompt",
       "production": [
         "Voxboard/ReviewPromptManager.swift:ReviewPromptManager"
-      ]
-    },
-    {
-      "capabilityID": "cap.store.bookmarks",
+      ],
       "dimensions": {
-        "crashRecovery": {
+        "old": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Bookmarks are embedded fields in atomically persisted parent records.",
-          "status": "notApplicable"
-        },
-        "data": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureModelCodableTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "date": {
-          "evidence": [],
-          "rationale": "No Date inside the app codec.",
-          "status": "notApplicable"
-        },
-        "enum": {
-          "evidence": [],
-          "rationale": "Bookmark bytes are opaque.",
-          "status": "notApplicable"
-        },
-        "futureVersion": {
-          "evidence": [],
-          "rationale": "Bookmark versioning is owned by Apple and resolved natively.",
-          "status": "notApplicable"
-        },
-        "malformed": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureModelCodableTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "First shipped key versions."
         },
         "missingFields": {
+          "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureModelCodableTests.swift"
+            "VoxboardTests/ReviewPromptManagerTests.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
-        },
-        "old": {
-          "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
-            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureModelCodableTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer.",
-          "status": "executed"
+          "rationale": "Executed by a production codec/store consumer."
         },
         "unknownFields": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Bookmark bytes are opaque.",
-          "status": "notApplicable"
+          "rationale": "Unrelated defaults keys ignored."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/ReviewPromptManagerTests.swift"
+          ],
+          "rationale": "Production ReviewPromptManager falls back for wrong-type counters/dates/booleans and normalizes malformed usage-day storage."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Independent versioned scalar keys have no envelope."
+        },
+        "date": {
+          "status": "executed",
+          "evidence": [
+            "VoxboardTests/ReviewPromptManagerTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "data": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No Data."
         },
         "uuid": {
+          "status": "notApplicable",
           "evidence": [],
-          "rationale": "Bookmark bytes are opaque.",
-          "status": "notApplicable"
+          "rationale": "No UUID."
+        },
+        "enum": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No persisted enum."
+        },
+        "crashRecovery": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Independent monotonic scalar state."
         }
-      },
+      }
+    },
+    {
       "id": "bookmark-bytes",
+      "capabilityID": "cap.store.bookmarks",
       "production": [
         "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureModels.swift:CaptureDestination",
         "Packages/VoxboardShared/Sources/VoxboardShared/RecordingFlow.swift:CapturePresetExportSettings"
-      ]
+      ],
+      "dimensions": {
+        "old": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureModelCodableTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "missingFields": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureModelCodableTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "unknownFields": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Bookmark bytes are opaque."
+        },
+        "malformed": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureModelCodableTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "futureVersion": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Bookmark versioning is owned by Apple and resolved natively."
+        },
+        "date": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "No Date inside the app codec."
+        },
+        "data": {
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureModelCodableTests.swift"
+          ],
+          "rationale": "Executed by a production codec/store consumer."
+        },
+        "uuid": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Bookmark bytes are opaque."
+        },
+        "enum": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Bookmark bytes are opaque."
+        },
+        "crashRecovery": {
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Bookmarks are embedded fields in atomically persisted parent records."
+        }
+      }
     }
-  ],
-  "schemaVersion": 1,
-  "statuses": [
-    "executed",
-    "notApplicable",
-    "pending",
-    "external"
   ]
 }
