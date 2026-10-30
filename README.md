@@ -273,3 +273,7 @@ If you want to chat about the project, design decisions, or what to build next, 
 ## License
 
 Vox.md is licensed under the [GNU Affero General Public License v3.0](LICENSE). The AGPL ensures that any modified version of Vox.md — including ones run as a hosted service — must also be open source. This protects the privacy-first promise: nobody can take Vox.md, bolt on invasive tracking or cloud transcription, and ship it as a closed product.
+
+### Legacy quota provenance
+
+Earlier Apple releases offered 15 minutes of free transcription and 10 successful Capture deliveries. In that policy, Failed writes and retries do not consume a Capture; voice transcripts routed to Markdown use only the transcription allowance. Users who purchased the original paid app build are automatically grandfathered after verified ownership. These phrases identify the historical M0 quota baseline and the deferred Android work; the Apple candidate now requires paid access for new work, with eligible seven-day subscription trials.

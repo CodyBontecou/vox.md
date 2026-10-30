@@ -629,12 +629,13 @@ for required in ['case "listen":', 'rootDestination = .capture', 'pendingKeyboar
     if required not in app_source:
         errors.append(f'legacy recording launch routing is missing {required}')
 
-analytics_source = (
-    root / 'Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift'
-).read_text()
-release_default = re.search(r'#else\s+(true|false)\s+#endif', analytics_source)
-if release_default is None or release_default.group(1) != 'false':
-    errors.append('release analytics must remain disabled by default')
+cleanup_source = (root / 'Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift').read_text()
+if 'defaults.removeObject(forKey: key)' not in cleanup_source:
+    errors.append('retired analytics state must be erased on upgrade')
+for source in [root / 'Voxboard', root / 'Voxboard Mac', root / 'Packages/VoxboardShared/Sources/VoxboardShared']:
+    for path in source.rglob('*.swift'):
+        if re.search(r'OnboardingAnalyticsClient|CloudflareOnboardingAnalyticsTransport', path.read_text()):
+            errors.append(f'retired analytics collector remains in {path.relative_to(root)}')
 
 share_source = (root / 'Voxboard Share Extension/ShareViewController.swift').read_text()
 for required in [
