@@ -31,6 +31,9 @@ import sys
 root = Path(sys.argv[1])
 project_path = Path(sys.argv[2])
 project = project_path.read_text()
+# OpenStep allows quoted keys and either dictionary key order.
+project = re.sub(r'"([A-Z][A-Z0-9_]*)"\s*=', r'\1 =', project)
+project = re.sub(r'= "([A-Za-z0-9_.]+)";', r'= \1;', project)
 errors: list[str] = []
 
 purchase_source = (
@@ -39,7 +42,7 @@ purchase_source = (
 storekit_config = json.loads((root / 'Voxboard/Voxboard.storekit').read_text())
 storekit_products = {
     product['productID']: product
-    for product in storekit_config.get('nonConsumableProducts', [])
+    for product in storekit_config.get('products', [])
 }
 expected_purchase_products = {
     'bontecou.Voxboard.unlock': False,
@@ -55,9 +58,9 @@ for product_id, family_sharable in expected_purchase_products.items():
     if product_id not in purchase_source:
         errors.append(f'PurchaseAccess does not recognize {product_id}')
     product = storekit_products.get(product_id)
-    if product is not None and product.get('familySharable') is not family_sharable:
+    if product is not None and product.get('familyShareable') is not family_sharable:
         errors.append(
-            f'{product_id} familySharable={product.get("familySharable")}, '
+            f'{product_id} familyShareable={product.get("familySharable")}, '
             f'expected {family_sharable}'
         )
 
@@ -415,7 +418,7 @@ else:
 
 widget_bundle_id = 'bontecou.Voxboard.Voxboard-Widget'
 blocks = re.findall(
-    r'\b[0-9A-F]+ /\* (?:Debug|Release) \*/ = \{\n\s*isa = XCBuildConfiguration;\n\s*buildSettings = \{(?P<body>.*?)\n\s*\};\n\s*name = (?:Debug|Release);\n\s*\};',
+    r'\b[0-9A-F]+ /\* (?:Debug|Release) \*/ = \{\n\s*(?:isa = XCBuildConfiguration;\n\s*)?buildSettings = \{(?P<body>.*?)\n\s*\};\n\s*(?:isa = XCBuildConfiguration;\n\s*)?name = (?:Debug|Release);\n\s*\};',
     project,
     flags=re.S,
 )
@@ -629,12 +632,13 @@ for required in ['case "listen":', 'rootDestination = .capture', 'pendingKeyboar
     if required not in app_source:
         errors.append(f'legacy recording launch routing is missing {required}')
 
-analytics_source = (
-    root / 'Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift'
-).read_text()
-release_default = re.search(r'#else\s+(true|false)\s+#endif', analytics_source)
-if release_default is None or release_default.group(1) != 'false':
-    errors.append('release analytics must remain disabled by default')
+cleanup_source = (root / 'Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift').read_text()
+if 'defaults.removeObject(forKey: key)' not in cleanup_source:
+    errors.append('retired analytics state must be erased on upgrade')
+for source in [root / 'Voxboard', root / 'Voxboard Mac', root / 'Packages/VoxboardShared/Sources/VoxboardShared']:
+    for path in source.rglob('*.swift'):
+        if re.search(r'OnboardingAnalyticsClient|CloudflareOnboardingAnalyticsTransport', path.read_text()):
+            errors.append(f'retired analytics collector remains in {path.relative_to(root)}')
 
 share_source = (root / 'Voxboard Share Extension/ShareViewController.swift').read_text()
 for required in [

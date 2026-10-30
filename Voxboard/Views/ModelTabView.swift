@@ -164,12 +164,6 @@ struct ModelTabView: View {
                 } else {
                     Button("Use Automatic") {
                         modelManager.selectAutomatic()
-                        OnboardingAnalyticsClient.shared.trackModelSetupCompleted(
-                            metadata: OnboardingAnalyticsModelMetadata(
-                                engine: .appleSpeech,
-                                sizeBucket: .unknown
-                            )
-                        )
                     }
                     .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
                 }
@@ -283,9 +277,6 @@ struct ModelTabView: View {
                 } else {
                     Button("Select Model") {
                         modelManager.selectModel(model)
-                        OnboardingAnalyticsClient.shared.trackModelSetupCompleted(
-                            metadata: OnboardingAnalyticsModelMetadata(model: model)
-                        )
                     }
                     .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
                     .frame(width: 104)

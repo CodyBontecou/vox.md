@@ -103,7 +103,7 @@ struct QuickCaptureView: View {
     @State private var showsDueDate = false
     @State private var showsInternalLinks = false
     @State private var showsPaywall = false
-    @State private var paywallContext: OnboardingAnalyticsPaywallContext = .limit
+    @State private var paywallContext: PaywallContext = .limit
     @State private var showsAudioImporter = false
     @State private var showsVoiceCaptureDetails = false
     @State private var showsRecordingControlHelp = false
@@ -1228,7 +1228,7 @@ struct QuickCaptureView: View {
     private var recordingUsageLabel: String {
         usageTracker.isAtLimit
             ? String(localized: "Limit reached · Unlock")
-            : String(format: String(localized: "%.1f / 15 min free"), usageTracker.minutesUsed)
+            : String(localized: "Choose a plan")
     }
 
     private var captureControls: CaptureViewSection {
@@ -1685,13 +1685,13 @@ struct QuickCaptureView: View {
                         Text(
                             usageTracker.isCaptureAtLimit
                                 ? String(localized: "Unlock")
-                                : String(localized: "\(usageTracker.capturesRemaining) free")
+                                : String(localized: "Unlock Capture")
                         )
                         .font(Geist.mono(.caption2, medium: true))
                         .foregroundStyle(usageTracker.isCaptureAtLimit ? Geist.error : Geist.faint)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("\(usageTracker.capturesRemaining) free captures remaining")
+                    .accessibilityLabel("Unlock Capture")
                 }
 
                 voiceCapturePauseToggle
@@ -2544,10 +2544,6 @@ struct QuickCaptureView: View {
         if isLocalizationScreenshot { return }
         let granted = await AudioRecorder.requestMicrophonePermission()
         micPermissionGranted = granted
-        OnboardingAnalyticsClient.shared.trackMicrophonePermissionCompleted(
-            status: granted ? .granted : .denied,
-            quotaState: usageTracker.onboardingAnalyticsQuotaState
-        )
     }
 
     private func reloadPresetsIfDefaultsChanged() {
@@ -2638,7 +2634,7 @@ struct QuickCaptureView: View {
         }
     }
 
-    private func presentPaywall(context: OnboardingAnalyticsPaywallContext) {
+    private func presentPaywall(context: PaywallContext) {
         paywallContext = context
         showsPaywall = true
     }
@@ -2668,9 +2664,6 @@ struct QuickCaptureView: View {
     private func handleKeyboardLaunch(guidanceID: UUID? = nil) {
         keyboardLaunchPhase = .starting
         updateKeyboardReturnGuidance(.starting, id: guidanceID)
-        OnboardingAnalyticsClient.shared.trackKeyboardSetupStarted(
-            quotaState: usageTracker.onboardingAnalyticsQuotaState
-        )
         Task { @MainActor in
             if !persistentRecorder.isListening {
                 persistentRecorder.startListening()
@@ -2687,9 +2680,6 @@ struct QuickCaptureView: View {
                     : String(localized: "Keyboard listening could not start")
             )
             if isReady {
-                OnboardingAnalyticsClient.shared.trackKeyboardSetupCompleted(
-                    quotaState: usageTracker.onboardingAnalyticsQuotaState
-                )
             }
             try? await Task.sleep(for: .seconds(2.5))
             if keyboardLaunchPhase == completedPhase { keyboardLaunchPhase = nil }

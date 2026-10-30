@@ -1,380 +1,276 @@
 import SwiftUI
 import VoxboardShared
 
-/// Lifetime purchase screen shown from usage limits and Settings.
+/// Native first-run introduction and StoreKit-backed access gate.
+/// The presentation changes; purchase/restore/eligibility remain StoreManager's.
 struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(UsageTracker.self) private var usageTracker
     @Environment(StoreManager.self) private var storeManager
+    @AppStorage(Thoughtful.introductionKey) private var introductionCompleted = false
+    @State private var family = false
+    @State private var selectedPlanIndex = 1
+    @State private var showsHistory = false
+    private let historyViewModel: QuickCaptureViewModel?
+    private let includesOnboarding: Bool
 
-    let context: OnboardingAnalyticsPaywallContext
+    let context: PaywallContext
+    let isAccessGate: Bool
 
-    init(context: OnboardingAnalyticsPaywallContext = .limit) {
+    init(context: PaywallContext = .limit, isAccessGate: Bool = false,
+         historyViewModel: QuickCaptureViewModel? = nil, initialFamily: Bool = false,
+         includesOnboarding: Bool = false) {
         self.context = context
+        self.isAccessGate = isAccessGate
+        self.historyViewModel = historyViewModel
+        self.includesOnboarding = includesOnboarding
+        _family = State(initialValue: initialFamily)
+    }
+
+    private var offers: [VoxboardPurchaseProduct] {
+        if usageTracker.isEligibleForFamilyUpgrade { return [.familyUpgrade] }
+        return family ? [.familyWeekly, .familyYearly, .family] : [.individualWeekly, .individualYearly, .individual]
+    }
+
+    private var selectedProduct: VoxboardPurchaseProduct {
+        offers[min(selectedPlanIndex, offers.count - 1)]
     }
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: Geist.Spacing.eight) {
-                    hero
-                    if !usageTracker.hasUnlocked {
-                        usageCard
-                    }
-                    purchaseSection
-                    if let error = storeManager.errorMessage {
-                        Label(error, systemImage: "exclamationmark.triangle.fill")
-                            .font(Geist.caption())
-                            .foregroundStyle(Geist.error)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    features
-                    restorePurchases
-                }
-                .padding(.horizontal, Geist.Spacing.four)
-                .padding(.vertical, Geist.Spacing.six)
-                .frame(maxWidth: 680)
-                .frame(maxWidth: .infinity)
+        Group {
+            if includesOnboarding && isAccessGate && !introductionCompleted && !usageTracker.hasUnlocked {
+                ThoughtfulOnboarding(onFinish: { introductionCompleted = true },
+                                     onHistory: historyViewModel == nil ? nil : { showsHistory = true })
+            } else {
+                plans
             }
-            .background(Geist.Palette.background200.ignoresSafeArea())
-            .navigationTitle("Vox.md Unlimited")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Close") { dismiss() }
-                        .font(Geist.label())
-                        .foregroundStyle(Geist.text)
-                }
-            }
-            .toolbarBackground(Geist.Palette.background100, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
         }
-        .onAppear {
-            OnboardingAnalyticsClient.shared.trackPaywallShown(
-                context: context,
-                quotaState: usageTracker.onboardingAnalyticsQuotaState
-            )
+        .sheet(isPresented: $showsHistory) {
+            if let historyViewModel {
+                HistoryView(viewModel: historyViewModel, isReadOnly: true)
+            }
         }
         .task { await storeManager.prepareForPurchases() }
-    }
-
-    private var hero: some View {
-        VStack(alignment: .leading, spacing: Geist.Spacing.three) {
-            GeistStatusBadge(label: statusBadgeLabel, isActive: usageTracker.hasUnlocked)
-
-            Text(heroTitle)
-                .font(Geist.heading(.largeTitle))
-                .tracking(-1.28)
-                .foregroundStyle(Geist.text)
-
-            Text(heroDetail)
-                .font(Geist.body())
-                .foregroundStyle(Geist.muted)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-    }
-
-    private var usageCard: some View {
-        VStack(alignment: .leading, spacing: Geist.Spacing.four) {
-            Text("Free Usage")
-                .font(Geist.heading(.headline))
-                .foregroundStyle(Geist.text)
-
-            quotaMeter(
-                title: "Transcription",
-                value: String(
-                    format: String(localized: "%.1f / 15 min"),
-                    locale: Locale.current,
-                    min(usageTracker.minutesUsed, 15)
-                ),
-                progress: usageTracker.fractionUsed,
-                isAtLimit: usageTracker.isAtLimit
-            )
-
-            GeistDivider()
-
-            quotaMeter(
-                title: "Capture",
-                value: "\(min(usageTracker.successfulCapturesUsed, UsageTracker.freeCaptureLimit)) / \(UsageTracker.freeCaptureLimit)",
-                progress: usageTracker.captureFractionUsed,
-                isAtLimit: usageTracker.isCaptureAtLimit
-            )
-
-            Text(usageStatusMessage)
-                .font(Geist.caption())
-                .foregroundStyle(
-                    usageTracker.isAtLimit || usageTracker.isCaptureAtLimit ? Geist.error : Geist.muted
-                )
-        }
-        .geistCard(padding: Geist.Spacing.four)
-    }
-
-    private func quotaMeter(
-        title: LocalizedStringKey,
-        value: String,
-        progress: Double,
-        isAtLimit: Bool
-    ) -> some View {
-        VStack(alignment: .leading, spacing: Geist.Spacing.two) {
-            HStack(alignment: .firstTextBaseline) {
-                Text(title)
-                    .font(Geist.label())
-                    .foregroundStyle(Geist.text)
-                Spacer()
-                Text(value)
-                    .font(Geist.mono(.footnote, medium: true))
-                    .foregroundStyle(Geist.muted)
+        .onChange(of: usageTracker.hasUnlocked) { _, unlocked in
+            if unlocked {
+                introductionCompleted = true
+                if !isAccessGate { dismiss() }
             }
-            ProgressView(value: progress)
-                .progressViewStyle(.linear)
-                .tint(isAtLimit ? Geist.Palette.red800 : Geist.Palette.blue700)
         }
     }
 
-    @ViewBuilder
-    private var purchaseSection: some View {
-        if !storeManager.isEntitlementStateReady {
-            HStack(spacing: Geist.Spacing.three) {
-                ProgressView()
-                Text("Checking Purchases…")
-                    .font(Geist.body())
-                    .foregroundStyle(Geist.muted)
-            }
-            .frame(maxWidth: .infinity, alignment: .center)
-            .geistCard()
-        } else {
-            purchaseOptions
-        }
-    }
+    private var plans: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        ThoughtfulNoteIllustration(compact: true)
+                            .frame(maxWidth: .infinity)
+                        Text(usageTracker.hasUnlocked ? String(localized: "A little more room.") : String(localized: "A home for\nevery thought."))
+                            .font(Thoughtful.title)
+                            .foregroundStyle(Thoughtful.ink)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityAddTraits(.isHeader)
+                        Text("Unlimited Capture. Private, on-device transcription. Your words, in your own Markdown files.")
+                            .font(Geist.body(.callout))
+                            .foregroundStyle(Thoughtful.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
 
-    @ViewBuilder
-    private var purchaseOptions: some View {
-        switch usageTracker.accessLevel {
-        case .free:
-            VStack(alignment: .leading, spacing: Geist.Spacing.four) {
-                VStack(alignment: .leading, spacing: Geist.Spacing.one) {
-                    Text("Choose Lifetime Access")
-                        .font(Geist.heading(.headline))
-                        .foregroundStyle(Geist.text)
-                    Text("Pay once. No subscription or renewal.")
+                    if usageTracker.hasFamilyAccess {
+                        Label("Family Unlimited Is Unlocked", systemImage: "person.3.fill")
+                            .font(Geist.body())
+                    } else {
+                        if !usageTracker.isEligibleForFamilyUpgrade {
+                            VStack(alignment: .leading, spacing: 12) {
+                                Picker("Access", selection: $family) {
+                                    Text("Individual").tag(false)
+                                    Text("Family").tag(true)
+                                }
+                                .pickerStyle(.segmented)
+                                .accessibilityIdentifier("paywall.access")
+                                .disabled(storeManager.isPurchasing || storeManager.isRestoring)
+                                Text(family ? String(localized: "For your Apple Family Sharing group. Each person keeps their own notes.") : String(localized: "For you, across your Apple devices."))
+                                    .font(Geist.caption())
+                                    .foregroundStyle(Thoughtful.secondary)
+                            }
+                        }
+                        if !storeManager.isEntitlementStateReady {
+                            ProgressView("Checking Purchases…")
+                                .frame(maxWidth: .infinity, minHeight: 180)
+                        } else {
+                            VStack(spacing: 0) {
+                                ForEach(Array(offers.enumerated()), id: \.element.rawValue) { index, product in
+                                    planRow(product, index: index)
+                                    if index < offers.count - 1 {
+                                        Divider().padding(.horizontal, 16)
+                                    }
+                                }
+                            }
+                            .background(Thoughtful.paper, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                    .stroke(Thoughtful.rule, lineWidth: 1)
+                            }
+                        }
+                    }
+
+                    if let error = storeManager.errorMessage {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Label(error, systemImage: "exclamationmark.triangle")
+                                .font(Geist.caption())
+                                .foregroundStyle(Geist.error)
+                            Button("Retry Loading Purchases") {
+                                Task { await storeManager.prepareForPurchases() }
+                            }
+                            .disabled(storeManager.isPurchasing || storeManager.isRestoring)
+                        }
+                    }
+                    Text("Subscriptions renew automatically unless canceled at least 24 hours before the period ends. Manage or cancel in Apple Account settings. Lifetime is a one-time purchase with no trial. Deleting the app or buying Lifetime does not cancel an existing subscription.")
+                        .font(Geist.caption(.caption))
+                        .foregroundStyle(Thoughtful.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Link("Manage Subscriptions", destination: URL(string: "https://apps.apple.com/account/subscriptions")!)
                         .font(Geist.caption())
-                        .foregroundStyle(Geist.muted)
+                    if isAccessGate && historyViewModel != nil {
+                        Button {
+                            showsHistory = true
+                        } label: {
+                            Label("View and export existing history", systemImage: "clock")
+                                .font(Geist.caption())
+                                .frame(minHeight: 44)
+                        }
+                        .accessibilityIdentifier("paywall.historyLink")
+                    }
+                    if dynamicTypeSize.isAccessibilitySize && !usageTracker.hasFamilyAccess {
+                        // A huge fixed footer would obscure the plan choices.
+                        // At accessibility sizes, keep the full checkout in
+                        // the same readable, scrollable document instead.
+                        purchaseControls.padding(.top, 8)
+                    }
                 }
-
-                LazyVGrid(
-                    columns: [GridItem(.adaptive(minimum: 260), spacing: Geist.Spacing.four)],
-                    alignment: .leading,
-                    spacing: Geist.Spacing.four
-                ) {
-                    offerCard(
-                        product: .individual,
-                        title: "Individual Unlimited",
-                        detail: "Unlimited Capture and transcription on devices signed in to your Apple Account.",
-                        buttonTitle: "Unlock Individual"
-                    )
-                    offerCard(
-                        product: .family,
-                        title: "Family Unlimited",
-                        detail: "Unlimited access you can share with your Apple Family Sharing group.",
-                        buttonTitle: "Unlock Family",
-                        badge: "FAMILY"
-                    )
+                .padding(24)
+                .frame(maxWidth: 488)
+                .frame(maxWidth: .infinity)
+            }
+            .background(Thoughtful.background.ignoresSafeArea())
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                if !usageTracker.hasFamilyAccess && !dynamicTypeSize.isAccessibilitySize { purchaseFooter }
+            }
+            .navigationTitle("Vox.md")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    if isAccessGate && historyViewModel != nil {
+                        Button("History", systemImage: "clock") { showsHistory = true }
+                            .accessibilityIdentifier("paywall.existingHistory")
+                    } else if !isAccessGate {
+                        Button("Close") { dismiss() }
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(storeManager.isRestoring ? "Restoring…" : "Restore") {
+                        Task { await storeManager.restorePurchases() }
+                    }
+                    .disabled(storeManager.isRestoring || storeManager.isPurchasing)
+                    .accessibilityLabel("Restore Purchases")
                 }
             }
-
-        case .individual:
-            offerCard(
-                product: .familyUpgrade,
-                title: "Upgrade to Family",
-                detail: "Add Apple Family Sharing to your existing lifetime Unlimited purchase.",
-                buttonTitle: "Upgrade to Family",
-                badge: "EXISTING OWNER PRICE"
-            )
-
-        case .family:
-            VStack(alignment: .leading, spacing: Geist.Spacing.three) {
-                Label("Family Unlimited Is Unlocked", systemImage: "person.3.fill")
-                    .font(Geist.heading(.headline))
-                    .foregroundStyle(Geist.text)
-                Text("Your lifetime Unlimited access supports Apple Family Sharing.")
-                    .font(Geist.body())
-                    .foregroundStyle(Geist.muted)
-            }
-            .geistCard()
         }
+        .tint(Thoughtful.ink)
     }
 
-    private func offerCard(
-        product: VoxboardPurchaseProduct,
-        title: LocalizedStringKey,
-        detail: LocalizedStringKey,
-        buttonTitle: LocalizedStringKey,
-        badge: LocalizedStringKey? = nil
-    ) -> some View {
-        VStack(alignment: .leading, spacing: Geist.Spacing.four) {
-            VStack(alignment: .leading, spacing: Geist.Spacing.two) {
-                if let badge {
-                    Text(badge)
-                        .font(Geist.mono(.caption2, medium: true))
-                        .foregroundStyle(Geist.Palette.blue900)
+    private func planRow(_ product: VoxboardPurchaseProduct, index: Int) -> some View {
+        let selected = product == selectedProduct
+        return Button {
+            selectedPlanIndex = index
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: selected ? "checkmark.circle.fill" : "circle")
+                    .font(.title3)
+                    .foregroundStyle(selected ? Thoughtful.ink : Thoughtful.secondary)
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title(for: product)).font(Geist.label(.body))
+                    Text(product.isSubscription ? product.billingLabel : String(localized: "One-time purchase. No trial."))
+                        .font(Geist.caption(.caption))
+                        .foregroundStyle(Thoughtful.secondary)
                 }
-                Text(title)
-                    .font(Geist.heading(.headline))
-                    .foregroundStyle(Geist.text)
-                HStack(alignment: .lastTextBaseline, spacing: Geist.Spacing.two) {
-                    Text(storeManager.displayPrice(for: product) ?? String(localized: "Price unavailable"))
-                        .font(Geist.heading(.title))
-                        .foregroundStyle(Geist.text)
-                    Text("one time")
-                        .font(Geist.caption())
-                        .foregroundStyle(Geist.muted)
-                }
-                Text(detail)
-                    .font(Geist.caption())
-                    .foregroundStyle(Geist.muted)
+                Spacer(minLength: 8)
+                Text(storeManager.displayPrice(for: product) ?? String(localized: "Unavailable"))
+                    .font(Geist.label(.body))
+                    .monospacedDigit()
                     .fixedSize(horizontal: false, vertical: true)
             }
+            .foregroundStyle(Thoughtful.ink)
+            .padding(16)
+            .frame(maxWidth: .infinity, minHeight: 76, alignment: .leading)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .disabled(storeManager.isPurchasing || storeManager.isRestoring)
+        .accessibilityAddTraits(selected ? .isSelected : [])
+        .accessibilityIdentifier("paywall.plan.\(product.rawValue)")
+    }
 
-            Spacer(minLength: 0)
-
+    private var purchaseControls: some View {
+        let product = selectedProduct
+        let trial = storeManager.offersFreeTrial(product)
+        let price = storeManager.displayPrice(for: product)
+        return VStack(spacing: 8) {
+            if let price {
+                Text(trial ? String(localized: "7 days free, then \(price) \(product.billingLabel). Auto-renews.")
+                     : product.isSubscription ? String(localized: "\(price) \(product.billingLabel). Auto-renews until canceled.")
+                     : String(localized: "\(price), once. No subscription."))
+                    .font(Geist.caption())
+                    .foregroundStyle(Thoughtful.secondary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("paywall.billingSummary")
+            }
             Button {
                 Task { await storeManager.purchase(product, context: context) }
             } label: {
-                HStack(spacing: Geist.Spacing.two) {
-                    if storeManager.purchasingProductID == product.rawValue {
-                        ProgressView().tint(Geist.Palette.background100)
-                        Text("Purchasing…")
-                    } else {
-                        Image(systemName: product == .individual ? "person.fill" : "person.3.fill")
-                        Text(buttonTitle)
-                    }
+                HStack {
+                    if storeManager.isPurchasing { ProgressView().tint(Thoughtful.background) }
+                    Text(storeManager.isPurchasing ? String(localized: "Purchasing…")
+                         : trial ? String(localized: "Start 7-Day Free Trial")
+                         : product.isSubscription ? String(localized: "Subscribe") : String(localized: "Buy Lifetime"))
                 }
                 .frame(maxWidth: .infinity)
             }
             .buttonStyle(GeistButtonStyle(variant: .primary))
-            .disabled(storeManager.isPurchasing || storeManager.product(for: product) == nil)
-        }
-        .geistCard()
-    }
-
-    private var features: some View {
-        VStack(alignment: .leading, spacing: Geist.Spacing.three) {
-            Text("Included")
-                .font(Geist.heading(.headline))
-                .foregroundStyle(Geist.text)
-
-            VStack(spacing: 0) {
-                featureRow("Unlimited Capture", detail: "Send as many local notes as you like", icon: "square.and.pencil")
-                GeistDivider()
-                featureRow("Unlimited Transcription", detail: "No time caps", icon: "infinity")
-                GeistDivider()
-                featureRow("On-Device Processing", detail: "Voice data stays on your device", icon: "lock.shield")
-                GeistDivider()
-                featureRow("All Models", detail: "Use every supported local model", icon: "cpu")
-                GeistDivider()
-                featureRow("Family Sharing", detail: "Included with Family Unlimited", icon: "person.3")
-                GeistDivider()
-                featureRow("Lifetime Access", detail: "Pay once and keep it", icon: "checkmark.seal")
-            }
-            .background(Geist.Palette.background100)
-            .overlay(
-                RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous)
-                    .stroke(Geist.border, lineWidth: 1)
-            )
-            .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous))
-        }
-    }
-
-    private func featureRow(_ title: LocalizedStringKey, detail: LocalizedStringKey, icon: String) -> some View {
-        HStack(spacing: Geist.Spacing.three) {
-            Image(systemName: icon)
-                .foregroundStyle(Geist.Palette.blue900)
-                .frame(width: 24)
-            VStack(alignment: .leading, spacing: Geist.Spacing.one) {
-                Text(title)
-                    .font(Geist.label())
-                    .foregroundStyle(Geist.text)
-                Text(detail)
-                    .font(Geist.caption())
-                    .foregroundStyle(Geist.muted)
-            }
-            Spacer()
-        }
-        .padding(Geist.Spacing.four)
-    }
-
-    private var restorePurchases: some View {
-        VStack(spacing: Geist.Spacing.three) {
-            Button {
-                Task { await storeManager.restorePurchases(context: .restore) }
-            } label: {
-                HStack(spacing: Geist.Spacing.two) {
-                    if storeManager.isRestoring {
-                        ProgressView()
-                        Text("Restoring…")
-                    } else {
-                        Text("Restore Purchases")
-                    }
+            .disabled(storeManager.isPurchasing || storeManager.isRestoring || storeManager.product(for: product) == nil)
+            .accessibilityIdentifier("paywall.purchase")
+            HStack(spacing: 24) {
+                Link(destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!) {
+                    Text("Terms of Use").frame(minHeight: 44)
+                }
+                Link(destination: URL(string: "https://vox.isolated.tech/privacy.html")!) {
+                    Text("Privacy Policy").frame(minHeight: 44)
                 }
             }
-            .buttonStyle(GeistButtonStyle(variant: .secondary))
-            .disabled(storeManager.isRestoring || storeManager.isPurchasing)
-
-            Text("Restore purchases or Family Sharing access from your Apple Account.")
-                .font(Geist.caption())
-                .foregroundStyle(Geist.muted)
-                .multilineTextAlignment(.center)
+            .font(Geist.caption(.caption))
         }
+        .frame(maxWidth: 440)
+    }
+
+    private var purchaseFooter: some View {
+        purchaseControls
+        .padding(.horizontal, 24)
+        .padding(.vertical, 12)
         .frame(maxWidth: .infinity)
+        .background(Thoughtful.background)
+        .overlay(alignment: .top) { Divider() }
     }
 
-    private var statusBadgeLabel: LocalizedStringKey {
-        switch usageTracker.accessLevel {
-        case .family: "Family Unlimited"
-        case .individual: "Individual Unlimited"
-        case .free:
-            if usageTracker.isAtLimit || usageTracker.isCaptureAtLimit {
-                "Limit Reached"
-            } else {
-                "Free Tier"
-            }
+    private func title(for product: VoxboardPurchaseProduct) -> String {
+        switch product {
+        case .individualWeekly, .familyWeekly: String(localized: "Weekly")
+        case .individualYearly, .familyYearly: String(localized: "Yearly")
+        case .familyUpgrade: String(localized: "Upgrade to Family Lifetime")
+        default: String(localized: "Lifetime")
         }
-    }
-
-    private var heroTitle: LocalizedStringKey {
-        switch usageTracker.accessLevel {
-        case .family: "Family Unlimited Is Unlocked"
-        case .individual: "Unlimited Is Unlocked"
-        case .free: "Capture and Transcribe Without Limits"
-        }
-    }
-
-    private var heroDetail: LocalizedStringKey {
-        switch usageTracker.accessLevel {
-        case .family:
-            "Your lifetime purchase includes Unlimited access and Apple Family Sharing."
-        case .individual:
-            "You have lifetime Unlimited access. Upgrade once to share it with your Family Sharing group."
-        case .free:
-            "Choose individual or Family lifetime access for unlimited local Capture and private, on-device transcription."
-        }
-    }
-
-    private var usageStatusMessage: String {
-        if usageTracker.isAtLimit && usageTracker.isCaptureAtLimit {
-            return String(localized: "Your free transcription time and captures are used. Unlock Unlimited to continue.")
-        }
-        if usageTracker.isCaptureAtLimit {
-            return String(localized: "Your free captures are used. Unlock Unlimited to keep capturing.")
-        }
-        if usageTracker.isAtLimit {
-            return String(localized: "Free transcription time is used. Unlock Unlimited to keep recording.")
-        }
-        let remainingMinutes = max(0, UsageTracker.freeMinutesLimit - usageTracker.minutesUsed)
-        return String(
-            format: String(localized: "%.1f min and %d captures free remaining"),
-            remainingMinutes,
-            usageTracker.capturesRemaining
-        )
     }
 }

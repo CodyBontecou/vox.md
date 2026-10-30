@@ -257,9 +257,6 @@ enum IOSLegacyVoiceAudioDelivery {
 @Observable
 final class PersistentRecorder {
 
-    static let modelSetupAnalyticsKey = "onboarding.analytics.model_setup_completed.v1"
-    static let completionAnalyticsKey = "onboarding.analytics.completed.v1"
-
     /// The recorder instance owned by the running app scene. App Intents such
     /// as the recording toggle (Shortcuts, Apple Pencil squeeze, Action Button)
     /// perform inside the app process and use this reference to start or stop
@@ -273,14 +270,6 @@ final class PersistentRecorder {
     /// the configured folder (#11).
     private static let exportRoutingTimeout: TimeInterval = 30
 
-    static func claimOneShotAnalyticsMarker(
-        _ key: String,
-        defaults: UserDefaults
-    ) -> Bool {
-        guard !defaults.bool(forKey: key) else { return false }
-        defaults.set(true, forKey: key)
-        return true
-    }
     #if DEBUG
     private static let runtimeQueuePauseAfterClaimArgument =
         "--runtime-queue-pause-after-claim"
@@ -747,7 +736,6 @@ final class PersistentRecorder {
 
         // Pre-load the default whisper model so the first transcription is fast
         preloadModel()
-        trackModelSetupCompletedIfNeeded()
 
         // Observe audio session interruptions so we can auto-restart the engine
         registerInterruptionObserver()
@@ -836,43 +824,6 @@ final class PersistentRecorder {
             return canTranscribe
         }
     }
-
-    // MARK: - Onboarding Analytics
-
-    private func trackModelSetupCompletedIfNeeded() {
-        let defaults = AppConstants.sharedDefaults ?? .standard
-        guard let model = selectedModelForAnalytics(),
-              model.isDownloaded,
-              Self.claimOneShotAnalyticsMarker(
-                  Self.modelSetupAnalyticsKey,
-                  defaults: defaults
-              ) else { return }
-
-        OnboardingAnalyticsClient.shared.trackModelSetupCompleted(
-            metadata: OnboardingAnalyticsModelMetadata(model: model),
-            quotaState: usageTracker.onboardingAnalyticsQuotaState
-        )
-    }
-
-    private func trackOnboardingCompletedIfNeeded(metadata: OnboardingAnalyticsModelMetadata) {
-        let defaults = AppConstants.sharedDefaults ?? .standard
-        guard Self.claimOneShotAnalyticsMarker(
-            Self.completionAnalyticsKey,
-            defaults: defaults
-        ) else { return }
-
-        OnboardingAnalyticsClient.shared.trackOnboardingCompleted(
-            modelMetadata: metadata,
-            quotaState: usageTracker.onboardingAnalyticsQuotaState
-        )
-    }
-
-    private func selectedModelForAnalytics() -> WhisperModelInfo? {
-        let modelId = AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedModelKey)
-            ?? AppConstants.defaultTranscriptionBackendID
-        return WhisperModelInfo.availableModels.first { $0.id == modelId }
-    }
-
     // MARK: - Audio Interruption Handling
 
     private func registerInterruptionObserver() {
@@ -1017,7 +968,7 @@ final class PersistentRecorder {
         }
         if usageTracker.isAtLimit {
             needsUnlock = true
-            lastError = String(localized: "Free limit reached — unlock Vox.md to keep recording")
+            lastError = String(localized: "Choose a Vox.md plan to begin recording")
             return false
         }
 
@@ -1216,7 +1167,7 @@ final class PersistentRecorder {
         }
         if usageTracker.isAtLimit {
             needsUnlock = true
-            lastError = String(localized: "Free limit reached — unlock Vox.md to import audio")
+            lastError = String(localized: "Choose a Vox.md plan to import audio")
             return false
         }
         guard let dir = AppConstants.recordingsDirectoryURL else {
@@ -1438,7 +1389,7 @@ final class PersistentRecorder {
             DispatchQueue.main.async { [weak self] in
                 self?.writeErrorResponse(
                     requestId: command.requestId,
-                    message: String(localized: "Free limit reached — open Vox.md to unlock")
+                    message: String(localized: "Open Vox.md to choose a plan and begin recording")
                 )
                 self?.needsUnlock = true
             }
@@ -1527,12 +1478,12 @@ final class PersistentRecorder {
             )
             return
         }
-        // Paywall check — block if free tier exhausted
+        // Paywall check — recording requires paid access.
         if usageTracker.isAtLimit {
             log.log("[PersistentRecorder] 🔒 Free limit reached — blocking segment")
             writeErrorResponse(
                 requestId: command.requestId,
-                message: String(localized: "Free limit reached — open Vox.md to unlock")
+                message: String(localized: "Open Vox.md to choose a plan and begin recording")
             )
             needsUnlock = true
             return
@@ -3773,14 +3724,6 @@ final class PersistentRecorder {
                     }
                 }
 
-                let analyticsMetadata: OnboardingAnalyticsModelMetadata
-                if let localModel = WhisperModelInfo.availableModels.first(where: { $0.id == result.backendID }) {
-                    analyticsMetadata = OnboardingAnalyticsModelMetadata(model: localModel)
-                } else {
-                    analyticsMetadata = OnboardingAnalyticsModelMetadata(engine: .appleSpeech, sizeBucket: .unknown)
-                }
-                self.trackOnboardingCompletedIfNeeded(metadata: analyticsMetadata)
-
                 // Keyboard requests return through IPC. Do not also surface them
                 // as app-owned Capture results.
                 if originCaptureSource != .keyboard,
@@ -4215,7 +4158,7 @@ private enum PersistentRecordingJobError: LocalizedError, RecordingJobFailureCla
         case .recoveryRoutingRequired:
             return String(localized: "Choose a Capture Preset before retrying this recovered recording.")
         case .transcriptionLimitReached:
-            return String(localized: "You've used your free transcription time. Unlock Vox.md to process this recording.")
+            return String(localized: "Choose a Vox.md plan to process this recording.")
         case .deliveryFailed:
             return String(localized: "The transcript was saved, but its configured destination did not finish. The source recording was preserved for retry.")
         case .keyboardDeliveryFailed:

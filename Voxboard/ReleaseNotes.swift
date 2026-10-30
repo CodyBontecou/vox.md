@@ -18,6 +18,21 @@ enum VoxboardReleaseNotes {
 
     private static let versionNotes: [VersionNotes] = [
         .init(
+            version: "2.13",
+            items: [
+                .list(
+                    title: "What’s new in Vox.md",
+                    rows: [
+                        .init(
+                            symbolSystemName: "note.text",
+                            title: "A quick-capture maintenance update",
+                            description: "Refreshed app information for your voice and Markdown capture workflows."
+                        )
+                    ]
+                )
+            ]
+        ),
+        .init(
             version: "2.10",
             items: [
                 .list(

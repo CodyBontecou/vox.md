@@ -53,7 +53,7 @@ through `CapturePresetStore`, `RecordingQueuePreferences`, `UsageTracker`,
 through the same production consumers. App-hosted tests additionally load the
 committed toolbar bytes through `CaptureToolbarPreferences`, execute review and quote
 state, and Watch-target tests consume the committed preset/defaults corpus. The
-87-key inventory is broader than this main snapshot: completion/migration markers,
+91-key inventory is broader than this main snapshot: completion/migration markers,
 Watch controller state, transport failures, and executable absent/default/invalid
 cases also live in focused package, app-hosted, and Watch tests. Source-inventory
 completeness remains distinct from committed fixture completeness.
@@ -103,3 +103,5 @@ parity.
 
 A fixture change requires reviewing the byte diff and manifest SHA-256 diff;
 regeneration is not a compatibility test by itself.
+
+The Apple paywall candidate retires the analytics producer. The current fixture consumer erases its opaque legacy defaults and preserves all functional settings. The original corpus and its original generator SHA-256 remain frozen; validation accepts that pinned historical producer digest while executing the current cleanup consumer.

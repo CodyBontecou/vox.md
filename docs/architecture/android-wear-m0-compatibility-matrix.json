@@ -1981,79 +1981,78 @@
       "id": "analytics-defaults",
       "capabilityID": "cap.store.analytics",
       "production": [
-        "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift:OnboardingAnalyticsClient",
-        "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsStorage.swift:OnboardingExperimentAssignmentStore"
+        "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift:RetiredAnalyticsCleanup"
       ],
       "dimensions": {
         "old": {
-          "status": "notApplicable",
-          "evidence": [],
-          "rationale": "First shipped analytics key versions."
+          "status": "executed",
+          "evidence": [
+            "scripts/tests/test_custom_analytics_removal.py"
+          ],
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
         },
         "missingFields": {
           "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift",
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Executed by a production codec/store consumer."
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
         },
         "unknownFields": {
           "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift"
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Production analytics queue and assignment codecs accept extra keyed fields and safely discard unknown property keys."
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
         },
         "malformed": {
           "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift"
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Production queue initialization recovers from malformed bytes to an empty queue and removes the invalid value."
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
         },
         "futureVersion": {
-          "status": "notApplicable",
-          "evidence": [],
-          "rationale": "Keys are independently versioned; payloads have no envelope schema version."
+          "status": "executed",
+          "evidence": [
+            "scripts/tests/test_custom_analytics_removal.py"
+          ],
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
         },
         "date": {
           "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift",
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Executed by a production codec/store consumer."
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
         },
         "data": {
           "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift",
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Executed by a production codec/store consumer."
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
         },
         "uuid": {
           "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift",
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Executed by a production codec/store consumer."
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
         },
         "enum": {
           "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift"
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Opaque future event names remain queued, unknown property keys are dropped, and invalid experiment variants are replaced by the production baseline assignment."
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
         },
         "crashRecovery": {
           "status": "executed",
           "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Executed by a production codec/store consumer."
+          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
         }
       }
     },
