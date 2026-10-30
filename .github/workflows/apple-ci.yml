@@ -293,8 +293,25 @@ jobs:
             --metadata build/logs/storekit-simulator.json
       - name: Run complete StoreKit and paywall test class
         run: |
-          set -o pipefail
+          set -euo pipefail
           mkdir -p build/logs build/test-results
+          # First activate the local catalog/trust material in its own host
+          # process. A cold CLI host can otherwise request Sandbox sign-in.
+          # This is setup, not a retry: every purchase assertion runs below.
+          xcodebuild test \
+            -project Voxboard.xcodeproj \
+            -scheme VoxboardStoreKitTests \
+            -testPlan VoxboardStoreKit \
+            -configuration Debug \
+            -destination '${{ steps.simulator.outputs.destination }}' \
+            -derivedDataPath "$RUNNER_TEMP/Voxboard-StoreKit-Tests" \
+            -resultBundlePath "$PWD/build/test-results/Voxboard-StoreKit-Activation.xcresult" \
+            -only-testing:VoxboardTests/HardPaywallStoreKitTests/testStoreKitFixtureActivation \
+            -disableAutomaticPackageResolution \
+            -onlyUsePackageVersionsFromResolvedFile \
+            CODE_SIGNING_ALLOWED=YES \
+            CODE_SIGNING_REQUIRED=YES \
+            2>&1 | tee build/logs/storekit-activation.log
           xcodebuild test \
             -project Voxboard.xcodeproj \
             -scheme VoxboardStoreKitTests \

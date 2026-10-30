@@ -43,6 +43,23 @@ final class HardPaywallStoreKitTests: XCTestCase {
         return session
     }
 
+    /// The CLI installs the local catalog/trust material for a fresh simulator
+    /// during this separate setup invocation. Purchase tests then run in a new
+    /// host process and still require verified Xcode transactions.
+    func testStoreKitFixtureActivation() async throws {
+        let url = try XCTUnwrap(Bundle.main.url(forResource: "Voxboard", withExtension: "storekit"))
+        let session = try SKTestSession(contentsOf: url)
+        session.resetToDefaultState()
+        session.disableDialogs = true
+        session.clearTransactions()
+        defer { session.clearTransactions() }
+        let products = try await Product.products(for: [VoxboardPurchaseProduct.individualWeekly.rawValue])
+        let product = try XCTUnwrap(products.first)
+        let json = try XCTUnwrap(JSONSerialization.jsonObject(with: product.jsonRepresentation) as? [String: Any])
+        // This is the local fixture ID, not Apple's numeric storefront ID.
+        XCTAssertEqual(json["id"] as? String, "individual-weekly")
+    }
+
     private func makeTracker() -> UsageTracker {
         let suite = "HardPaywallStoreKitTests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!
