@@ -119,12 +119,18 @@ final class HardPaywallStoreKitTests: XCTestCase {
 
     func testPendingPurchaseKeepsFreshUserLocked() async throws {
         let session = try makeSession()
+        defer { withExtendedLifetime(session) {} }
         let tracker = makeTracker()
-        let store = makeStore(usageTracker: tracker)
+        var purchaseCalls = 0
+        let store = makeStore(usageTracker: tracker, purchase: { product in
+            XCTAssertEqual(product.id, VoxboardPurchaseProduct.individualWeekly.rawValue)
+            purchaseCalls += 1
+            return .pending
+        })
         await store.prepareForPurchases()
         _ = try XCTUnwrap(store.isEntitlementStateReady ? store : nil)
-        session.askToBuyEnabled = true
         await store.purchase(.individualWeekly)
+        XCTAssertEqual(purchaseCalls, 1)
         XCTAssertFalse(tracker.hasUnlocked)
         XCTAssertFalse(store.isPurchasing)
         XCTAssertNotNil(store.errorMessage)
