@@ -25,6 +25,9 @@ public enum CaptureDeliveryQuotaError: Error, Equatable, LocalizedError, Sendabl
     public var errorDescription: String? {
         switch self {
         case .limitReached(let limit):
+            if limit == 0 {
+                return "Active access is required for new captures. Open Vox.md to review purchase options."
+            }
             return "You've used all \(limit) free captures. Unlock Vox.md Unlimited to keep capturing."
         }
     }
