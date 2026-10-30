@@ -1012,6 +1012,27 @@ private struct MacCapturePresetEditor: View {
             URLDeliverySettingsSection(settings: $flow.exportSettings.urlDelivery)
 
             Section("Metadata") {
+                TextField("Transcript Property", text: $flow.transcriptPropertyName, prompt: Text("note"))
+                    .autocorrectionDisabled()
+                    .accessibilityIdentifier("preset_transcript_property")
+                if !flow.transcriptPropertyName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    if TranscriptPropertyMapping.normalizedKey(flow.transcriptPropertyName) != nil {
+                        Toggle("Also Include Transcript in Body", isOn: $flow.includeTranscriptInBody)
+                            .accessibilityIdentifier("preset_transcript_include_body")
+                        Text("Voice transcripts fill this note property. Later captures to the same note replace its value.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("Use letters, numbers, underscores, or hyphens for the property name.")
+                            .font(.caption)
+                            .foregroundStyle(MacBrand.orangeText)
+                    }
+                } else {
+                    Text("Leave empty to keep voice transcripts in the note body.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
                 Picker("Scope", selection: $flow.metadataScope) {
                     ForEach(CapturePresetMetadataScope.allCases) { scope in
                         Text(scope.displayName).tag(scope)

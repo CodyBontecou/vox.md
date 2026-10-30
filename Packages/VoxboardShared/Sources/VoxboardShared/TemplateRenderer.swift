@@ -23,7 +23,7 @@ public enum TemplateRenderer {
         }
     }
 
-    public static func render(template: String, context: Context) -> String {
+    public static func render(template: String, context: Context, includeTranscriptInBody: Bool = true) -> String {
         let normalized = template.replacingOccurrences(of: "\r\n", with: "\n")
         let split = splitFrontmatter(normalized)
 
@@ -40,7 +40,7 @@ public enum TemplateRenderer {
             renderedBody = resolveExpressions(in: body, context: context)
         }
 
-        return assemble(frontmatter: renderedFM, body: renderedBody, context: context)
+        return assemble(frontmatter: renderedFM, body: renderedBody, context: context, includeTranscriptInBody: includeTranscriptInBody)
     }
 
     // MARK: - Frontmatter split
@@ -228,7 +228,7 @@ public enum TemplateRenderer {
 
     // MARK: - Assembly
 
-    private static func assemble(frontmatter: String, body: String, context: Context) -> String {
+    private static func assemble(frontmatter: String, body: String, context: Context, includeTranscriptInBody: Bool) -> String {
         let transcriptBody = context.transcript.cleanedText?.isEmpty == false
             ? context.transcript.cleanedText!
             : context.transcript.text
@@ -236,7 +236,7 @@ public enum TemplateRenderer {
         var parts: [String] = []
         if !frontmatter.isEmpty { parts.append(frontmatter) }
         if !body.isEmpty { parts.append(body) }
-        if !transcriptBody.isEmpty { parts.append(transcriptBody) }
+        if includeTranscriptInBody, !transcriptBody.isEmpty { parts.append(transcriptBody) }
 
         return parts.joined(separator: "\n\n")
     }
