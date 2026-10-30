@@ -1,0 +1,28 @@
+name: Review oracle refresh
+on:
+  push:
+    branches: [codex/paywall-privacy-review-20261029]
+    paths: [.github/workflows/review-oracle-refresh.yml]
+permissions:
+  contents: read
+jobs:
+  generate:
+    runs-on: macos-26
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '26.6'
+      - name: Generate candidate from clean review commit
+        env:
+          VOX_M2_ORACLE_MODE: write
+          VOX_M2_ORACLE_OUTPUT: ${{ runner.temp }}/swift-m2-oracle-v1.json
+        run: Packages/vox-core-rust/scripts/generate-oracle-fixtures.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: review-swift-oracle
+          path: ${{ runner.temp }}/swift-m2-oracle-v1.json
+          retention-days: 1
