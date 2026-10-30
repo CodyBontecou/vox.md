@@ -1520,7 +1520,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Apple Watch/Wear capture",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "status": "verified"
         }
@@ -2731,9 +2731,9 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: City label",
-      "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
-      "status": "verified"
+          "status": "verified"
         }
       ],
       "dependencies": [
@@ -2757,7 +2757,7 @@
         "android"
       ],
       "programScope": "parity",
-    "status": "verified"
+      "status": "verified"
     },
     {
       "acceptance": [
@@ -2794,9 +2794,9 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Country label",
-      "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
-      "status": "verified"
+          "status": "verified"
         }
       ],
       "dependencies": [
@@ -2820,7 +2820,7 @@
         "android"
       ],
       "programScope": "parity",
-    "status": "verified"
+      "status": "verified"
     },
     {
       "acceptance": [
@@ -3012,9 +3012,9 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Place label",
-      "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
-      "status": "verified"
+          "status": "verified"
         }
       ],
       "dependencies": [
@@ -3038,15 +3038,15 @@
         "android"
       ],
       "programScope": "parity",
-    "status": "verified"
+      "status": "verified"
     },
     {
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Region label",
-      "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
-      "status": "verified"
+          "status": "verified"
         }
       ],
       "dependencies": [
@@ -3070,7 +3070,7 @@
         "android"
       ],
       "programScope": "parity",
-    "status": "verified"
+      "status": "verified"
     },
     {
       "acceptance": [
@@ -5219,14 +5219,14 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "10 successful Capture deliveries"
+          "symbol": "There is no resettable free-minute or Capture allowance in this source."
         }
       ],
       "id": "cap.quota.capture",
       "milestone": "M3/M8",
-      "outcome": "10 successful Capture deliveries",
+      "outcome": "10 successful Capture deliveries (Android historical allowance baseline; Apple paid-access policy is separate).",
       "owner": "native",
-      "parity": "exact",
+      "parity": "product-adjusted",
       "platforms": [
         "iphone",
         "ipad",
@@ -5250,14 +5250,14 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "original paid app build are automatically grandfathered"
+          "symbol": "Existing lifetime/Family purchases and qualifying original paid-app ownership remain valid."
         }
       ],
       "id": "cap.quota.grandfather",
       "milestone": "M8",
-      "outcome": "Original paid Apple users remain unlimited on Apple",
+      "outcome": "Original paid Apple users remain unlimited on Apple (Android historical allowance baseline; Apple paid-access policy is separate).",
       "owner": "native",
-      "parity": "commercial-equivalent",
+      "parity": "product-adjusted",
       "platforms": [
         "iphone",
         "ipad",
@@ -5281,14 +5281,14 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "Failed writes and retries do not consume a Capture"
+          "symbol": "There is no resettable free-minute or Capture allowance in this source."
         }
       ],
       "id": "cap.quota.retry-no-charge",
       "milestone": "M3",
-      "outcome": "Failed writes and retries do not consume a Capture",
+      "outcome": "Failed writes and retries do not consume a Capture (Android historical allowance baseline; Apple paid-access policy is separate).",
       "owner": "native",
-      "parity": "exact",
+      "parity": "product-adjusted",
       "platforms": [
         "iphone",
         "ipad",
@@ -5312,14 +5312,14 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "15 minutes of free transcription"
+          "symbol": "There is no resettable free-minute or Capture allowance in this source."
         }
       ],
       "id": "cap.quota.transcription",
       "milestone": "M4/M8",
-      "outcome": "15 free transcription minutes",
+      "outcome": "15 free transcription minutes (Android historical allowance baseline; Apple paid-access policy is separate).",
       "owner": "native",
-      "parity": "exact",
+      "parity": "product-adjusted",
       "platforms": [
         "iphone",
         "ipad",
@@ -5343,14 +5343,14 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "voice transcripts routed to Markdown use only the transcription allowance"
+          "symbol": "There is no resettable free-minute or Capture allowance in this source."
         }
       ],
       "id": "cap.quota.voice-one-meter",
       "milestone": "M4",
-      "outcome": "Voice Markdown capture consumes transcription allowance only",
+      "outcome": "Voice Markdown capture consumes transcription allowance only (Android historical allowance baseline; Apple paid-access policy is separate).",
       "owner": "native",
-      "parity": "exact",
+      "parity": "product-adjusted",
       "platforms": [
         "iphone",
         "ipad",
@@ -6777,7 +6777,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: vaultCommitted only after verified destination",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -6808,7 +6808,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: phoneIngested only after verified durable phone package",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -6839,7 +6839,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Source deletion only after correlated authorization threshold",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -6870,7 +6870,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Explicit durable discard",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -6901,7 +6901,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Recording Only filename template",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -6932,7 +6932,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Recording Only copies verified raw audio and excludes transcription/location",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -6994,7 +6994,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Pause and resume local wrist recording",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -7025,7 +7025,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents delivering state",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "status": "verified"
         }
@@ -7055,7 +7055,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents error state",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "status": "verified"
         }
@@ -7085,7 +7085,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents idle state",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "status": "verified"
         }
@@ -7115,7 +7115,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents listening state",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "status": "verified"
         }
@@ -7145,7 +7145,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents paused state",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "status": "verified"
         }
@@ -7175,7 +7175,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents pending state",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "status": "verified"
         }
@@ -7205,7 +7205,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents recording state",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "status": "verified"
         }
@@ -7235,7 +7235,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents syncing state",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "status": "verified"
         }
@@ -7265,7 +7265,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents transcribing state",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "status": "verified"
         }
@@ -7295,7 +7295,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear surface represents unavailable state",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "ui",
           "status": "verified"
         }
@@ -7325,7 +7325,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Choose and freeze complete preset snapshot per recording",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -7356,7 +7356,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Durable local watch queue survives phone absence and interruptions",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -7387,7 +7387,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Phone-side preset reassignment",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -7418,7 +7418,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Recording Only phone-owned folder capability",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -7659,7 +7659,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Retry transfer or processing",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -7690,7 +7690,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear app recording/preset/status/recovery UI",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -7721,7 +7721,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear complication status/action",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -7752,7 +7752,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Required local recording notification",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -7783,7 +7783,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear Ongoing Activity while recording",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -7814,7 +7814,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Wear Tile quick action and coarse status",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -7845,7 +7845,7 @@
       "acceptance": [
         {
           "assertion": "Verify Android/Wear preserves the inventoried outcome: Resumable idempotent media transfer",
-        "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
+          "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "device",
           "status": "verified"
         }
@@ -7924,25 +7924,17 @@
       ],
       "evidence": [
         {
-          "path": "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/CloudflareOnboardingAnalyticsTransport.swift",
-          "symbol": "OnboardingAnalyticsInstallIDStore"
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift",
+          "symbol": "RetiredAnalyticsCleanup"
         },
         {
-          "path": "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift",
-          "symbol": "onboarding.analytics.queue.v1"
-        },
-        {
-          "path": "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsStorage.swift",
-          "symbol": "OnboardingExperimentAssignmentStore"
-        },
-        {
-          "path": "Voxboard/PersistentRecorder.swift",
-          "symbol": "trackOnboardingCompletedIfNeeded"
+          "path": "scripts/tests/test_custom_analytics_removal.py",
+          "symbol": "test_upgrade_erases_analytics_and_preserves_functional_state"
         }
       ],
       "id": "cap.store.analytics",
       "milestone": "M0/M1",
-      "outcome": "Privacy-safe onboarding analytics install identity, queued events, experiment assignment, and completion markers",
+      "outcome": "Erase retired analytics IDs, event queues, experiment assignments, and completion markers without collecting or uploading replacements",
       "owner": "native",
       "parity": "legacy-only",
       "platforms": [
@@ -8483,30 +8475,6 @@
     },
     {
       "keys": {
-        "onboarding.analytics.install_id.v1": [
-          "cap.store.analytics"
-        ]
-      },
-      "path": "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/CloudflareOnboardingAnalyticsTransport.swift"
-    },
-    {
-      "keys": {
-        "onboarding.analytics.queue.v1": [
-          "cap.store.analytics"
-        ]
-      },
-      "path": "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift"
-    },
-    {
-      "keys": {
-        "onboarding.experiment.assignment.v1": [
-          "cap.store.analytics"
-        ]
-      },
-      "path": "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsStorage.swift"
-    },
-    {
-      "keys": {
         "appLanguageOverride": [
           "cap.store.app-language"
         ],
@@ -8674,7 +8642,15 @@
           "cap.store.usage",
           "cap.billing.lifetime"
         ],
+        "lifetimeStoreAccessV1": [
+          "cap.store.usage",
+          "cap.billing.lifetime"
+        ],
         "permanentUnlimitedAccessLevelV1": [
+          "cap.store.usage",
+          "cap.billing.lifetime"
+        ],
+        "storeAccessExpirationV1": [
           "cap.store.usage",
           "cap.billing.lifetime"
         ],
@@ -8738,14 +8714,7 @@
       "path": "Voxboard Watch Shared/WatchPhoneBridge.swift"
     },
     {
-      "keys": {
-        "onboarding.analytics.completed.v1": [
-          "cap.store.analytics"
-        ],
-        "onboarding.analytics.model_setup_completed.v1": [
-          "cap.store.analytics"
-        ]
-      },
+      "keys": {},
       "path": "Voxboard/PersistentRecorder.swift"
     },
     {
@@ -8815,6 +8784,12 @@
       "path": "Voxboard/WatchRecordingController.swift"
     }
   ],
+  "policyUpdates": [
+    {
+      "date": "2026-10-29",
+      "reason": "Approved Apple paid-access transition and removal of custom analytics. Stable capability IDs and historical baseline provenance are retained; current evidence is updated. Android allowance tests do not verify the new Apple trial policy."
+    }
+  ],
   "requiredClaims": [
     {
       "capabilityIDs": [
@@ -8860,14 +8835,14 @@
         "cap.quota.transcription"
       ],
       "path": "README.md",
-      "text": "15 minutes of free transcription"
+      "text": "There is no resettable free-minute or Capture allowance in this source."
     },
     {
       "capabilityIDs": [
         "cap.quota.capture"
       ],
       "path": "README.md",
-      "text": "10 successful Capture deliveries"
+      "text": "There is no resettable free-minute or Capture allowance in this source."
     },
     {
       "capabilityIDs": [

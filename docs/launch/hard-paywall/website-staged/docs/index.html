@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vox.md Documentation: Complete Feature Guide</title>
   <meta name="description" content="Complete documentation for Vox.md Quick Capture, Capture Presets, Markdown destinations, the iOS keyboard, local transcription models, widgets, Shortcuts, Apple Watch, and Mac.">
@@ -31,7 +32,7 @@
     "@type": "TechArticle",
     "headline": "Vox.md Complete Feature Guide",
     "description": "Documentation for every shipped Vox.md capture, routing, transcription, keyboard, system integration, Apple Watch, and Mac feature.",
-    "dateModified": "2026-08-22",
+    "dateModified": "2026-10-26",
     "author": {
       "@type": "Person",
       "name": "Cody Bontecou"
@@ -64,14 +65,16 @@
   }
   </script>
 
+  <link rel="preload" href="../fonts/Geist-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="../openapi.json" title="Vox.md Public Information API">
 </head>
 <body>
 
 <nav aria-label="Primary navigation">
   <div class="nav-inner">
     <a href="../index.html" class="logo" aria-label="Vox.md home">
-      <img class="logo-mark" src="../app-icon.png" alt="" width="32" height="32">
+      <img class="logo-mark" src="../app-icon.webp" alt="" width="32" height="32">
       <span>Vox.md</span>
     </a>
     <ul class="nav-links">
@@ -81,7 +84,7 @@
       <li><a href="../privacy.html">Privacy</a></li>
       <li><a href="../terms.html">Terms</a></li>
     </ul>
-    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener">Download Vox.md</a>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_docs">Download Vox.md</a>
   </div>
 </nav>
 
@@ -92,7 +95,7 @@
       <h1 class="page-title" id="docs-title">Everything You Can Do With Vox.md</h1>
       <p class="docs-hero-copy">A complete guide to capture, presets, Markdown routing, the voice keyboard, local models, Apple system integrations, Apple Watch, Mac, history, settings, and privacy.</p>
       <div class="docs-meta-row" aria-label="Documentation facts">
-        <span>Updated August 22, 2026</span>
+        <span>Updated October 26, 2026</span>
         <span>iOS 17.6+</span>
         <span>macOS 14+</span>
         <span>watchOS 10+</span>
@@ -151,6 +154,10 @@
           <p>Choose a Capture Preset, connect its destination, type or add content in Quick Capture, then tap Send. The preset decides how the content is processed, formatted, and placed in your notes.</p>
         </div>
 
+        <p>For a complete voice workflow, <a href="../blog/voice-notes-to-obsidian-iphone/">follow the iPhone voice notes to Obsidian guide</a>, from selecting a folder to checking the resulting Markdown.</p>
+
+        <p>Choosing a capture method? Read the <a href="../blog/obsidian-quick-capture-iphone/">iPhone capture decision guide</a> or <a href="../compare/vox-md-vs-obsidian-quick-capture/">compare Vox.md with native Obsidian</a>.</p>
+
         <h3 id="platform-availability">Platform availability</h3>
         <div class="docs-table-wrap">
           <table class="docs-table">
@@ -201,6 +208,8 @@
           <li>Retry-safe capture requests are journaled locally so a permission, file-provider, or sync failure can be retried.</li>
           <li>An empty composer shows a cached inspirational quote until you add text, even after you select a preset or attach a file; quote requests never include your draft.</li>
         </ul>
+
+        <p>For a task-focused walkthrough, see <a href="../blog/save-links-photos-obsidian-iphone/">save links, photos, and scans to Obsidian</a>.</p>
 
         <h3 id="capture-types">Capture types</h3>
         <div class="docs-feature-grid">
@@ -336,6 +345,10 @@
           <div><strong>Existing Note</strong><p>Choose a Markdown file already inside the selected vault or folder. Vox.md verifies that the target remains safely inside that root.</p></div>
         </div>
 
+        <p>For a complete route recipe, see <a href="../blog/append-to-obsidian-daily-note-iphone/">append text and voice to an Obsidian daily note</a>.</p>
+
+        <p><a href="../blog/obsidian-capture-templates/">Use an inbox, journal or task template recipe</a> to keep entry formatting predictable.</p>
+
         <h3 id="placement-templates">Placement, headings, and templates</h3>
         <ul>
           <li><strong>Bottom</strong> appends; <strong>Top</strong> prepends; <strong>Heading</strong> inserts beneath a chosen heading from level 1 through 6.</li>
@@ -363,6 +376,8 @@
         <div class="docs-section-label">04 / Models &amp; Transcription</div>
         <h2>Choose a System Backend or an Optional Local Model</h2>
         <p>All transcription runs on the Apple device. Automatic is the iOS default. Optional Whisper and Parakeet model files are downloaded only when you ask for them and can be selected, canceled during download, or deleted later.</p>
+
+        <p><a href="../blog/offline-transcription-iphone-markdown/">Prepare an offline transcription workflow</a> with a local backend and a writable destination.</p>
 
         <h3 id="model-options">Available transcription options</h3>
         <div class="docs-table-wrap">
@@ -463,17 +478,16 @@
 
         <h3 id="control-center-live-activities">Control Center, Live Activities, and Dynamic Island</h3>
         <ul>
-          <li>On iOS 18+, Control Center offers <strong>Quick Capture</strong> and a configurable <strong>Vox.md Record</strong> control. Choose its Preset, Action (Start, Stop, or Start or Stop), and Open App preference.</li>
-          <li>On iOS 26+, turn <strong>Open App</strong> off to record without switching apps when setup is complete. Older iOS opens the app. The old background control remains available as <strong>Vox.md Record (Legacy Background)</strong> to preserve installed assignments.</li>
+          <li>On iOS 18+, add available Vox.md capture and recording controls from Control Center. Configure the preset and options offered by your installed version.</li>
+          <li>Complete microphone, model, and destination setup in Vox.md before using a recording control. Depending on iOS and the installed app version, recording may open the app. Verify a short recording on your device before relying on background capture.</li>
           <li>The <strong>Live Activity Monitor</strong> setting controls recording status and Record/Stop actions on the Lock Screen and Dynamic Island.</li>
           <li>Live Activity states include Recording, timer, Processing, Ready, Record, and Stop.</li>
           <li>Live Activities are available from iOS 17; Control Center controls require iOS 18.</li>
         </ul>
 
         <h3 id="shortcuts">Shortcuts and App Intents</h3>
-        <p>Capture Presets appear as selectable entities in Shortcuts and supported controls. With Use Current Location enabled, direct-enqueue text, link, and file intents request location during invocation; actions that open Quick Capture request it at Send; and recording actions request it when recording stops. Metadata output does not change this timing. If an unattended <em>Ask</em> request cannot get location, its unavailable origin-time result is retained for a later decision rather than reacquired. Shipped intents include:</p>
+        <p>Capture Presets appear as selectable entities in Shortcuts and supported controls. With Use Current Location enabled, direct-enqueue text, link, and file intents request location during invocation; actions that open Quick Capture request it at Send; and recording actions request it when recording stops. Metadata output does not change this timing. If an unattended <em>Ask</em> request cannot get location, its unavailable origin-time result is retained for a later decision rather than reacquired. Use the actions available in your installed version of Vox.md. Capture actions include:</p>
         <ul class="docs-columns">
-          <li>Record Audio (Preset, Action, and native Open When Run — development work in progress, not released)</li>
           <li>Open Quick Capture</li>
           <li>Record a Capture</li>
           <li>Capture a Screenshot</li>
@@ -483,9 +497,8 @@
         </ul>
 
         <h3 id="action-button-recording">Action Button recording setup</h3>
-        <p>Open Vox.md once to grant microphone permission and prepare the transcription model/language. Enable <strong>Lock Screen Record Button</strong> and <strong>Shortcut Recording Live Activity</strong> in Vox.md Settings, and allow Live Activities in iOS Settings. On iOS 26+, select <strong>Vox.md Record</strong> under Settings → Action Button → Controls, choose its Preset, set Action to <strong>Start or Stop</strong>, and turn <strong>Open App</strong> off. Invoke once to start and again to stop; the Live Activity provides Stop too.</p>
-        <p>You can also create a regular Apple Shortcut: Shortcuts → + → Add Action → Vox.md → <strong>Record Audio</strong>, choose Preset and Action, turn <strong>Open When Run</strong> off for background execution, save, then assign it under Settings → Action Button → Shortcut → Choose a Shortcut or to Apple Pencil squeeze. For automations, explicit <strong>Start</strong> and <strong>Stop</strong> leave an already-started or already-stopped recording unchanged. Existing Record with Preset / Vox.md Record assignments keep Start with Open App on until edited; saved Toggle Recording shortcuts retain background start/stop without changes.</p>
-        <p class="docs-note">The unified recording changes are not ready to use or release: one native Open When Run switch and correct Stop decoding were observed on an iOS 27 beta iPhone with recording effects compiled out. The iOS 26.5 simulator still decodes saved Stop as Start; actual recording, foreground handoff and compatibility remain unverified. Do not execute the new action on a normal build until binding is fixed. Background recording requires a Live Activity. A failed background start may open Vox.md; Stop never falls back to starting a recording. Turning off Lock Screen Record Button disables invocation. Older iOS always opens the app. Direct-picker exposure, saved-assignment upgrades, and cold/warm, locked/unlocked execution remain pending device QA, not guaranteed by registration metadata.</p>
+        <p>Open Vox.md once to grant microphone permission, prepare your transcription backend, and connect a Capture Preset to a destination. In Shortcuts, add an available Vox.md capture action and select your preset. Run the shortcut while your phone is unlocked to confirm that it saves to the intended note before assigning it under Settings → Action Button → Shortcut.</p>
+        <p class="docs-note">Available actions and background recording behavior depend on your installed version and iOS. Use the actions shown in Shortcuts on your device. If recording needs the app open, open Vox.md to record. A shortcut appearing in the picker does not guarantee recording from a locked phone.</p>
 
         <h3 id="deep-links">Deep links</h3>
         <p>Vox.md registers the <code>voxboard://</code> URL scheme. Use URL encoding for query values.</p>
@@ -511,6 +524,8 @@
       <section class="docs-section" id="apple-watch">
         <div class="docs-section-label">07 / Apple Watch</div>
         <h2>Record Locally on Watch, Then Deliver Through iPhone</h2>
+
+        <p><a href="../blog/apple-watch-obsidian-voice-notes/">Follow the Apple Watch to Obsidian setup guide</a> for preset selection, transfer, and delivery checks.</p>
 
         <h3 id="watch-recording">Recording workflow</h3>
         <ul>
@@ -699,6 +714,9 @@
   <div class="container">
     <div class="footer-inner">
       <ul class="footer-links">
+        <li><a href="../developers.html">Developers</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
         <li><a href="../index.html">Home</a></li>
         <li><a href="./" aria-current="page">Docs</a></li>
         <li><a href="../blog/">Blog</a></li>
@@ -706,7 +724,7 @@
         <li><a href="../terms.html">Terms</a></li>
         <li><a href="../llms.txt">llms.txt</a></li>
         <li><a href="mailto:codybontecou@gmail.com">Support</a></li>
-        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">App Store</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_docs">App Store</a></li>
       </ul>
       <div class="footer-copy">© 2026 Vox.md · Complete feature documentation · Local-first capture.</div>
     </div>
@@ -742,22 +760,42 @@
     document.head.appendChild(script);
   }
 
-  fetch('https://img-host.costream.workers.dev/analytics-gate', {
-    cache: 'no-store',
-    mode: 'cors',
-    credentials: 'omit'
-  })
-    .then(function (response) {
-      return response.ok ? response.json() : { track: false };
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
     })
-    .then(function (gate) {
-      if (gate && gate.track) {
-        loadCloudflareBeacon();
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
       }
-    })
-    .catch(function () {
-      // Fail closed so excluded IPs are not accidentally tracked.
     });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
 })();
 </script>
 <!-- End Cloudflare Web Analytics -->

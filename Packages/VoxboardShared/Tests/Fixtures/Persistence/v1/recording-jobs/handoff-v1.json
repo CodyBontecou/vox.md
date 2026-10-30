@@ -37,6 +37,17 @@
           "mdObsidianEnabled" : true,
           "mode" : "newFile",
           "newFileNameTemplate" : "fixture-{timestamp}",
+          "urlDelivery" : {
+            "allowingInsecureLocal" : false,
+            "deliverOnFailureFallbackFile" : true,
+            "enabled" : false,
+            "hasBearerToken" : false,
+            "hasCustomHeaders" : false,
+            "includeCleanedText" : true,
+            "maxAttempts" : 5,
+            "requiresCredentialMigration" : false,
+            "urlString" : ""
+          },
           "usesCustomExportSettings" : true,
           "yamlProperties" : [
             "date",
@@ -50,6 +61,7 @@
         },
         "generateImageAltText" : false,
         "id" : "fixture",
+        "includeTranscriptInBody" : true,
         "isBuiltIn" : false,
         "isEnabled" : true,
         "kind" : "custom",
@@ -96,6 +108,7 @@
           "fixture" : "true"
         },
         "symbolName" : "waveform",
+        "transcriptPropertyName" : "",
         "watchOutputMode" : "recordingOnly",
         "watchRecordingSettings" : {
           "filenameTemplate" : "fixture-{timestamp}-{id8}",

@@ -56,8 +56,11 @@ def build(destination: Path) -> None:
             lambda _: '<style data-source="geist.css">\n' + css + '\n</style>',
             html,
         )
-        if count != 1:
-            raise SystemExit(f'Expected one shared stylesheet in {page}')
+        inline_count = len(re.findall(r'<style(?:\s[^>]*)?>', html))
+        # Authored localized landing pages may carry their own font/layout CSS.
+        # Preserve one self-contained stylesheet; still reject unstyled/duplicate pages.
+        if count != 1 and not (count == 0 and inline_count == 1):
+            raise SystemExit(f'Expected one shared or inline stylesheet in {page}')
         page.write_text(html)
     worker = (ROOT / 'worker/website/index.mjs').read_text()
     worker = worker.replace('/* @generated-markdown-routes */ {}', json.dumps(markdown_routes, sort_keys=True))

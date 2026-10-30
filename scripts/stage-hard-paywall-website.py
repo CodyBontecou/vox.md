@@ -3,6 +3,7 @@
 import difflib
 import hashlib
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,9 +23,14 @@ def main():
         before = (SOURCE / name).read_text()
         after = before
         if name == 'index.html':
-            after = replace_once(after,
-                'Vox.md is a free download from the App Store. Check the App Store listing for the current purchase options shown by Apple.',
-                'Vox.md is a free download. New Capture and transcription require paid access: choose Individual or Family, weekly, yearly, or lifetime. Eligible subscriptions include a seven-day free trial. Existing purchases remain valid, and viewing or exporting existing history requires no new purchase. Apple shows the current local price and renewal terms before you confirm.')
+            copy = 'Vox.md is a free download. New Capture and transcription require paid access: choose Individual or Family, weekly, yearly, or lifetime. Eligible subscriptions include a seven-day free trial. Existing purchases remain valid, and viewing or exporting existing history requires no new purchase. Apple shows the current local price and renewal terms before you confirm.'
+            if 'Vox.md is a free download from the App Store.' in after:
+                after = replace_once(after,
+                    'Vox.md is a free download from the App Store. Check the App Store listing for the current purchase options shown by Apple.', copy)
+            else:
+                after, count = re.subn(r'Vox\.md includes 15 minutes of transcription and 10 successful Capture deliveries free\..*?The App Store shows the current price for your region\.', lambda _: copy, after)
+                assert count == 1, 'Expected one current pricing FAQ'
+                after = replace_once(after, '15 transcription minutes + 10 Capture deliveries free', 'Eligible subscriptions include a seven-day free trial')
         elif name == 'docs/index.html':
             after = replace_once(after,
                 'The 15-minute free transcription allowance applies to keyboard dictation as well as app recordings and imports.',
@@ -49,9 +55,9 @@ def main():
         elif name == 'llms.txt':
             after = replace_once(after, 'settings map, free allowances, lifetime unlock, and data handling.',
                 'settings map, paid plans, trials, existing purchases, unpaid history access, and data handling.')
-            after = replace_once(after,
-                'The free tier includes 15 minutes of transcription and 10 successful Capture deliveries. Failed writes and idempotent retries do not consume a successful delivery. Unlimited use is a one-time lifetime purchase with no subscription or renewal. Localized App Store pricing is authoritative; the app uses $9.99 as a fallback display price.',
-                'New Capture and transcription require paid access. Individual and Family each offer weekly, yearly, or lifetime access. US subscriptions are $0.99/week or $29.99/year for Individual and $1.99/week or $49.99/year for Family. Eligible subscriptions include a seven-day trial and then renew automatically at the displayed price until canceled in Apple Account settings; Apple determines eligibility across the shared subscription group. Lifetime purchases have no trial or renewal. Existing purchases remain valid, and viewing/exporting existing history requires no new purchase. Local App Store prices are authoritative. Buying lifetime access does not automatically cancel an active subscription. There is no monthly plan or resettable free allowance.')
+            after, count = re.subn(r'^The free tier includes 15 minutes of transcription and 10 successful Capture deliveries\..*$',
+                'New Capture and transcription require paid access. Individual and Family each offer weekly, yearly, or lifetime access. US subscriptions are $0.99/week or $29.99/year for Individual and $1.99/week or $49.99/year for Family. Eligible subscriptions include a seven-day trial and then renew automatically at the displayed price until canceled in Apple Account settings; Apple determines eligibility across the shared subscription group. Lifetime purchases have no trial or renewal. Existing purchases remain valid, and viewing/exporting existing history requires no new purchase. Local App Store prices are authoritative. Buying lifetime access does not automatically cancel an active subscription. There is no monthly plan or resettable free allowance.', after, flags=re.M)
+            assert count == 1, 'Expected one current pricing paragraph'
         elif name == 'privacy.html':
             after = (OUT / 'privacy-policy-proposed.html').read_text()
         else:
@@ -65,7 +71,8 @@ def main():
             after = after.replace('Production onboarding analytics are disabled by default. The app contains no third-party analytics SDK, ad network, or cross-app tracker.',
                 'This candidate removes custom in-app analytics and advertising attribution in all build configurations. Upgrades erase retired local event queues and analytics identifiers. Essential services and earlier retained server records have separate disclosures.')
         if name == 'llms.txt':
-            start = after.index('Production builds send coarse first-party onboarding analytics')
+            start = after.index('Production ')
+            assert after[start:].startswith(('Production builds send coarse first-party onboarding analytics', 'Production onboarding analytics are disabled by default.'))
             end = after.index('Location is not collected by the developer or analytics.', start)
             after = after[:start] + 'The candidate removes custom app analytics, advertising attribution, persistent analytics identifiers and event uploads in every build configuration. Older binaries and previously received server records are unchanged until an approved cutover and deletion. Essential services remain. ' + after[end:]
         target = OUT / 'website-staged' / name

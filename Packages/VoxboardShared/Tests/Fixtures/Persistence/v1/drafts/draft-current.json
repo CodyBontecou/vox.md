@@ -55,6 +55,7 @@
     "customPostProcessingInstruction" : "",
     "generateImageAltText" : false,
     "id" : "fixture",
+    "includeTranscriptInBody" : true,
     "isBuiltIn" : false,
     "isEnabled" : true,
     "locationPolicy" : {
@@ -98,6 +99,7 @@
     "staticFrontmatter" : {
       "fixture" : "true"
     },
-    "symbolName" : "waveform"
+    "symbolName" : "waveform",
+    "transcriptPropertyName" : ""
   }
 }

@@ -5380,13 +5380,13 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "10 successful Capture deliveries"
+          "symbol": "There is no resettable free-minute or Capture allowance in this source."
         }
       ],
       "id": "cap.quota.capture",
-      "legacyParity": "exact",
+      "legacyParity": "product-adjusted",
       "milestone": "M3/M8",
-      "outcome": "10 successful Capture deliveries",
+      "outcome": "10 successful Capture deliveries (Android historical allowance baseline; Apple paid-access policy is separate).",
       "platforms": [
         "iphone",
         "ipad",
@@ -5412,13 +5412,13 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "original paid app build are automatically grandfathered"
+          "symbol": "Existing lifetime/Family purchases and qualifying original paid-app ownership remain valid."
         }
       ],
       "id": "cap.quota.grandfather",
-      "legacyParity": "commercial-equivalent",
+      "legacyParity": "product-adjusted",
       "milestone": "M8",
-      "outcome": "Original paid Apple users remain unlimited on Apple",
+      "outcome": "Original paid Apple users remain unlimited on Apple (Android historical allowance baseline; Apple paid-access policy is separate).",
       "platforms": [
         "iphone",
         "ipad",
@@ -5444,13 +5444,13 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "Failed writes and retries do not consume a Capture"
+          "symbol": "There is no resettable free-minute or Capture allowance in this source."
         }
       ],
       "id": "cap.quota.retry-no-charge",
-      "legacyParity": "exact",
+      "legacyParity": "product-adjusted",
       "milestone": "M3",
-      "outcome": "Failed writes and retries do not consume a Capture",
+      "outcome": "Failed writes and retries do not consume a Capture (Android historical allowance baseline; Apple paid-access policy is separate).",
       "platforms": [
         "iphone",
         "ipad",
@@ -5476,13 +5476,13 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "15 minutes of free transcription"
+          "symbol": "There is no resettable free-minute or Capture allowance in this source."
         }
       ],
       "id": "cap.quota.transcription",
-      "legacyParity": "exact",
+      "legacyParity": "product-adjusted",
       "milestone": "M4/M8",
-      "outcome": "15 free transcription minutes",
+      "outcome": "15 free transcription minutes (Android historical allowance baseline; Apple paid-access policy is separate).",
       "platforms": [
         "iphone",
         "ipad",
@@ -5508,13 +5508,13 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "voice transcripts routed to Markdown use only the transcription allowance"
+          "symbol": "There is no resettable free-minute or Capture allowance in this source."
         }
       ],
       "id": "cap.quota.voice-one-meter",
-      "legacyParity": "exact",
+      "legacyParity": "product-adjusted",
       "milestone": "M4",
-      "outcome": "Voice Markdown capture consumes transcription allowance only",
+      "outcome": "Voice Markdown capture consumes transcription allowance only (Android historical allowance baseline; Apple paid-access policy is separate).",
       "platforms": [
         "iphone",
         "ipad",
@@ -8172,26 +8172,18 @@
       ],
       "evidence": [
         {
-          "path": "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/CloudflareOnboardingAnalyticsTransport.swift",
-          "symbol": "OnboardingAnalyticsInstallIDStore"
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift",
+          "symbol": "RetiredAnalyticsCleanup"
         },
         {
-          "path": "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift",
-          "symbol": "onboarding.analytics.queue.v1"
-        },
-        {
-          "path": "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsStorage.swift",
-          "symbol": "OnboardingExperimentAssignmentStore"
-        },
-        {
-          "path": "Voxboard/PersistentRecorder.swift",
-          "symbol": "trackOnboardingCompletedIfNeeded"
+          "path": "scripts/tests/test_custom_analytics_removal.py",
+          "symbol": "test_upgrade_erases_analytics_and_preserves_functional_state"
         }
       ],
       "id": "cap.store.analytics",
       "legacyParity": "legacy-only",
       "milestone": "M0/M1",
-      "outcome": "Privacy-safe onboarding analytics install identity, queued events, experiment assignment, and completion markers",
+      "outcome": "Erase retired analytics IDs, event queues, experiment assignments, and completion markers without collecting or uploading replacements",
       "platforms": [
         "iphone",
         "ipad",
@@ -8723,6 +8715,6 @@
   "schemaVersion": 1,
   "source": {
     "path": "docs/architecture/android-wear-m0-capabilities.json",
-    "sha256": "dacdb6aa8103304a58f3cfe271483079c619c008bcfe57eedcc0061ce62c1295"
+    "sha256": "6a807bcb0e2be4efc08ebd9976c1e0499261900da73ef87ee68fa8d599b6ba6f"
   }
 }
