@@ -74,11 +74,6 @@ jobs:
       # iOS 26.5's StoreKit Test daemon rejects CLI sessions (FB22237318).
       # Test on the published Xcode 27 runner; other build jobs retain their pins.
       # https://developer.apple.com/forums/thread/826971
-      - name: Create pinned StoreKit test device
-        run: |
-          xcrun simctl create 'Vox StoreKit CI' \
-            com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro \
-            "com.apple.CoreSimulator.SimRuntime.iOS-${IOS_TEST_RUNTIME_VERSION//./-}"
       - name: Select iOS simulator
         id: simulator
         shell: bash

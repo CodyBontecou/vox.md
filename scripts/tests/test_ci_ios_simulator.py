@@ -132,6 +132,16 @@ class CIiOSSimulatorTests(unittest.TestCase):
         self.assertEqual(receipt["selected"]["runtime"]["version"], "26.6")
         self.assertEqual(output, f"destination=platform=iOS Simulator,id={CURRENT}\n")
 
+    def test_published_27_1_image_selects_its_compatible_iphone_duo(self):
+        result, output, receipt = self.select([
+            (runtime("27.0"), [device(OLD, name="iPhone 18 Pro")]),
+            (runtime("27.1"), [device(CURRENT, name="iPhone Duo")]),
+        ], sdk="27.1", runtime_override="27.1")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(receipt["selected"]["device"]["name"], "iPhone Duo")
+        self.assertEqual(receipt["selected"]["runtime"]["version"], "27.1")
+        self.assertEqual(output, f"destination=platform=iOS Simulator,id={CURRENT}\n")
+
     def test_explicit_runtime_rejects_older_or_different_major_versions(self):
         for requested in ("26.2", "27.0"):
             with self.subTest(requested=requested):
@@ -211,7 +221,7 @@ class CIiOSSimulatorTests(unittest.TestCase):
         self.assertIn("xcode-version: '27.1'", ios_job)
         self.assertIn("runs-on: xcode-27", ios_job)
         self.assertIn("IOS_TEST_RUNTIME_VERSION: '27.1'", ios_job)
-        self.assertIn("Create pinned StoreKit test device", ios_job)
+        self.assertNotIn("simctl create", ios_job)
         self.assertIn('-test-timeouts-enabled YES', ios_job)
         self.assertIn('-maximum-test-execution-time-allowance 180', ios_job)
         self.assert_rejected([(runtime("26.2"), [device(OLD)])])
