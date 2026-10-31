@@ -28,6 +28,16 @@ def build(destination: Path) -> None:
     for page in destination.rglob('*.html'):
         html = page.read_text()
         relative = page.relative_to(destination).as_posix()
+        if relative == 'index.html':
+            # The production edge localization layer recognizes the canonical path.
+            # Keep source links relative for the repository contract checker.
+            html = html.replace('href="zh-hans/"', 'href="/zh-hans/"')
+        if relative == 'zh-hans/index.html':
+            # Preserve the equivalent links served by the existing locale edge.
+            html = html.replace(
+                'href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-campaign="seo_home_zh"',
+                'href="https://apps.apple.com/app/id6758967337"',
+            )
         route = '/' + relative
         canonical = route[:-10] if route.endswith('index.html') else route[:-5]
         parser = MarkdownDocument('https://vox.isolated.tech' + canonical)
