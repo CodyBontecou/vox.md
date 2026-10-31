@@ -50,9 +50,9 @@ class WebsiteMarkdownTests(unittest.TestCase):
             self.assertIn('"/docs/": "/docs/index.md"', worker)
             self.assertIn('"/contact": "/contact.md"', worker)
             locale = (output / 'zh-hans/index.html').read_text()
+            self.assertIn('https://vox.isolated.tech/zh-hans/', locale)
             self.assertIn('<style>', locale)
-            self.assertIn('lang="zh-Hans"', locale)
-            self.assertIn('Vox.md', (output / 'zh-hans/index.md').read_text())
+            self.assertIn('# 先抓住灵感。', (output / 'zh-hans/index.md').read_text())
             self.assertIn('"/zh-hans/": "/zh-hans/index.md"', worker)
 
 
