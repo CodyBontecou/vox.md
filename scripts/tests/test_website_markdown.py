@@ -55,6 +55,10 @@ class WebsiteMarkdownTests(unittest.TestCase):
             locale = (output / 'zh-hans/index.html').read_text()
             self.assertIn('https://vox.isolated.tech/zh-hans/', locale)
             self.assertIn('<style>', locale)
+            self.assertEqual(locale.count('href="https://apps.apple.com/app/id6758967337"'), 2)
+            self.assertNotIn('data-download-campaign="seo_home_zh"', locale)
+            self.assertEqual((module.ROOT / 'website/zh-hans/index.html').read_text().count('data-download-campaign="seo_home_zh"'), 2)
+            self.assertIn('https://apps.apple.com/app/id6758967337', (output / 'zh-hans/index.md').read_text())
             self.assertIn('# 先抓住灵感。', (output / 'zh-hans/index.md').read_text())
             self.assertIn('"/zh-hans/": "/zh-hans/index.md"', worker)
 
