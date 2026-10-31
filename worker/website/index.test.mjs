@@ -78,3 +78,14 @@ test('HEAD and unsupported methods preserve HTTP semantics', async () => {
     assert.equal(await head.text(), '');
   }
 });
+
+ test('Pages aliases exclude generated APIs and negotiated responses from indexing', async () => {
+  for (const path of ['/', '/docs/', '/api/v1/product', '/api/v1/documents', '/missing']) {
+    for (const accept of ['text/html', 'text/markdown']) {
+      const preview = await fetch(new Request('https://codex-scheduler-preview.voxboard.pages.dev' + path, { headers: { Accept: accept } }), env);
+      assert.equal(preview.headers.get('X-Robots-Tag'), 'noindex');
+      const production = await fetch(request(path, accept), env);
+      assert.equal(production.headers.get('X-Robots-Tag'), null);
+    }
+  }
+});
