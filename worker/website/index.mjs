@@ -21,6 +21,10 @@ function negotiated(response, request, contentType) {
   headers.set('Vary', vary.join(', '));
   if (contentType) headers.set('Content-Type', contentType);
   headers.set('X-Content-Type-Options', 'nosniff');
+  // Pages aliases are duplicate hosts, including generated API responses.
+  if (new URL(request.url).hostname.endsWith('.pages.dev')) {
+    headers.set('X-Robots-Tag', 'noindex');
+  }
   return new Response(request.method === 'HEAD' ? null : response.body, {
     status: response.status, statusText: response.statusText, headers,
   });
