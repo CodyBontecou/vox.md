@@ -56,7 +56,8 @@ def build(destination: Path) -> None:
             lambda _: '<style data-source="geist.css">\n' + css + '\n</style>',
             html,
         )
-        if count != 1:
+        # The published Chinese landing page is a standalone page with its own CSS.
+        if count != 1 and not (relative == 'zh-hans/index.html' and count == 0):
             raise SystemExit(f'Expected one shared stylesheet in {page}')
         page.write_text(html)
     worker = (ROOT / 'worker/website/index.mjs').read_text()
