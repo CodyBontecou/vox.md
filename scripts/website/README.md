@@ -71,3 +71,28 @@ CSS, Markdown negotiation and read-only discovery API introduced on main. The
 site check covers extensionless public pages and excludes the noindex 404 page
 from sitemap requirements. After integration, 21 HTML pages and 20 sitemap URLs
 are checked.
+
+
+## Cloud publishing
+
+`.github/workflows/website-publish.yml` validates website changes on pull requests.
+After a checked merge to `main`, it builds once, deploys and verifies a preview,
+then publishes the same artifact to the existing Pages project `voxboard` and
+checks production HTML, canonical metadata, sitemap and public asset bytes.
+A dispatch on `main` verifies and republishes that revision. Publishing is
+serialized and refuses a main revision that has been superseded. The build
+uses Node24/Python3.12; Wrangler is pinned to4.156.0.
+
+GitHub Actions needs repository secret `CLOUDFLARE_API_TOKEN` with Pages Edit
+for the owning account, and repository variable `CLOUDFLARE_ACCOUNT_ID`. Never
+commit credentials. Secrets are available only to main-branch publishing steps;
+pull requests validate without deployment access. Deployment runs from the
+runner's temporary directory, preserving existing dashboard runtime/bindings
+rather than applying unrelated repository deployment configuration or D1 migrations.
+
+Keep the previous production deployment for rollback. Do not bypass checks or
+publish a source checkout missing content, locale/legal pages or privacy
+protections already live. The source checkpoint for this setup preserves that
+published baseline; subsequent changes must update owning generators and their
+committed output together. A successful deploy does not prove Google indexing
+or qualified downloads.
