@@ -45,7 +45,7 @@
   <div class="container">
     <div class="page-eyebrow">Legal · Privacy</div>
     <h1 class="page-title">Privacy Policy</h1>
-    <p class="page-meta">Effective: February 9, 2026 · Last updated: September 11, 2026</p>
+    <p class="page-meta">Effective: February 9, 2026 · Last updated: October 26, 2026</p>
   </div>
 </section>
 
@@ -54,12 +54,12 @@
 
     <h2>Overview</h2>
     <div class="callout">
-      <p>Vox.md keeps capture drafts, attachments, transcripts, and note routes on your device. It sends completed files only to destinations you choose and never sends capture content to Vox.md servers. Production builds keep onboarding analytics disabled by default.</p>
+      <p>Vox.md keeps capture drafts, attachments, transcripts, and note routes on your device. It sends completed files only to destinations you choose and never sends capture content to Vox.md servers. Production builds send the coarse first-party onboarding analytics described below.</p>
     </div>
     <p>This Privacy Policy describes how Vox.md ("we," "our," or "the app") handles information when you use our iOS and macOS applications and their extensions. Audio, transcripts, keystrokes, capture drafts, attachments, exported file contents, and user-entered text are handled locally. Files are written only to locations you select; your chosen storage provider may sync those files under its own terms.</p>
 
     <h2>Information We Do Not Collect</h2>
-    <p>Vox.md does not collect any of the following for the developer, analytics, advertising, or tracking. Data can leave the device only through a feature you choose, such as writing to a synced folder, requesting an Apple place label, or opening a map-provider link, as described below.</p>
+    <p>Vox.md does not collect any of the following for the developer, analytics, advertising, or tracking. The coarse onboarding metadata described below can leave the device automatically. Capture content leaves the device only through a feature you choose, such as writing to a synced folder or opening a map-provider link, as described below.</p>
     <ul>
       <li>Audio recordings or voice data</li>
       <li>Transcribed text or transcription history</li>
@@ -72,7 +72,7 @@
     </ul>
 
     <h2>Privacy-Safe Onboarding Analytics</h2>
-    <p>Production builds do not send onboarding analytics by default. Development builds can explicitly enable a small first-party event set for setup testing. These events are intentionally coarse and are not used for advertising or cross-app tracking.</p>
+    <p>Production builds send a small first-party event set to understand onboarding, setup friction, and purchase or restore outcomes. Development builds require explicit opt-in for setup testing. These events are intentionally coarse and are not used for advertising or cross-app tracking.</p>
     <p>Onboarding analytics may include:</p>
     <ul>
       <li>An anonymous Vox.md install ID used only to count funnel progress</li>
@@ -116,10 +116,10 @@
 
     <h2>Third-Party Services</h2>
     <p>Vox.md does not integrate with third-party analytics SDKs, advertising networks, crash-reporting SDKs, or cross-app tracking services. User-initiated Whisper and Parakeet model downloads connect to model-distribution infrastructure hosted by Hugging Face, either directly or through FluidAudio. Model requests never include capture drafts, typed text, audio, transcripts, attachments, file paths, or location, but the provider may receive ordinary HTTPS connection data and the requested model identifier under its own terms.</p>
-    <p>The Capture editor requests batches of inspirational quotes from <a href="https://zenquotes.io/">ZenQuotes API</a> and rotates through them from an on-device cache. These requests never include capture drafts, typed text, audio, attachments, file paths, location, install identifiers, or analytics. Like any HTTPS service, ZenQuotes may receive technical connection data such as an IP address and user agent under its own terms. If first-party onboarding events are explicitly enabled in a development build, they are sent directly to a Vox.md Cloudflare Worker with the strict allowlist described above.</p>
+    <p>The Capture editor requests batches of inspirational quotes from <a href="https://zenquotes.io/">ZenQuotes API</a> and rotates through them from an on-device cache. These requests never include capture drafts, typed text, audio, attachments, file paths, location, install identifiers, or analytics. Like any HTTPS service, ZenQuotes may receive technical connection data such as an IP address and user agent under its own terms. First-party onboarding events are sent directly to a Vox.md Cloudflare Worker and stored in its D1 database using the strict allowlist described above.</p>
 
     <h2>Data Storage &amp; Deletion</h2>
-    <p>All app data — including transcription history, capture drafts, staged attachments, downloaded models, templates, settings, and free-usage records — is stored locally on your device or in a file destination you explicitly choose. The content-free successful-Capture ledger contains only the count and random identifiers for up to ten successful requests, which prevent retries from being charged twice while local app data remains. It contains no captured text, filenames, destinations, or attachment metadata, is never stored in the system Keychain, and is never sent to Vox.md.</p>
+    <p>Capture content and local app data — including transcription history, capture drafts, staged attachments, downloaded models, templates, settings, and free-usage records — are stored locally on your device or in a file destination you explicitly choose. The content-free successful-Capture ledger contains only the count and random identifiers for up to ten successful requests, which prevent retries from being charged twice while local app data remains. It contains no captured text, filenames, destinations, or attachment metadata, is never stored in the system Keychain, and is never sent to Vox.md.</p>
     <p>Versions released before this policy change may have left an inert, content-free free-usage item in the system Keychain. Current versions do not access that item; it can be removed with Keychain Access without affecting captures, transcripts, or purchases.</p>
     <p>The local Recent Captures list contains delivery metadata only: outcome, source, Capture Preset identifier and display name, destination identifier and display name, relative note path, attachment count, timestamps, and a coarse failure category. It never duplicates note text, links, coordinates, location labels or templates, bookmarks, absolute paths, or attachment filenames. Pending and failed captures retain only the content needed for local recovery, which may include an already privacy-adjusted location snapshot or durable unavailable outcome. After successful delivery, a recoverable Capture request is immediately replaced by an identifier-and-timestamp-only tombstone; completed Watch queue items are likewise scrubbed, and upgrades sanitize legacy completed requests.</p>
     <p>You can delete locally stored user content and settings by:</p>
