@@ -1947,7 +1947,9 @@ for page in website_pages:
         parsed = urlsplit(reference)
         if parsed.scheme or reference.startswith(('#', 'mailto:', 'tel:', 'data:')):
             continue
-        referenced_path = (page.parent / parsed.path).resolve()
+        # Root-relative website links resolve from the public document root.
+        referenced_path = ((root / 'website' / parsed.path.lstrip('/'))
+                           if parsed.path.startswith('/') else (page.parent / parsed.path)).resolve()
         if parsed.path.endswith('/'):
             referenced_path /= 'index.html'
         if not referenced_path.exists():
