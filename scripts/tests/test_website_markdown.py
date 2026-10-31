@@ -38,6 +38,9 @@ class WebsiteMarkdownTests(unittest.TestCase):
             output = Path(directory) / 'site'
             module.build(output)
             html = (output / 'index.html').read_text()
+            self.assertEqual(html.count('<nav aria-label="Language">'), 1)
+            self.assertIn('href="/zh-hans/" lang="zh-Hans"', html)
+            self.assertNotIn('href="zh-hans/"', html)
             self.assertIn('<style data-source="geist.css">', html)
             self.assertNotIn('<link rel="stylesheet"', html)
             self.assertIn('Capture ideas into Obsidian', (output / 'index.md').read_text())
