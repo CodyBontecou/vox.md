@@ -88,7 +88,7 @@ def run_test(adb_path: Path, serial: str, method: str, model_id: str) -> None:
         RUNNER,
     )
     output = result.stdout + result.stderr
-    if "OK (1 test)" not in output or "FAILURES!!!" in output or "Process crashed" in output:
+    if "OK (1 test)" not in output or "FAILURES!!!" in output or "Process crashed" in output or "INSTRUMENTATION_STATUS_CODE: -4" in output or "INSTRUMENTATION_STATUS_CODE: -3" in output:
         fail(f"{method} did not pass:\n{output.strip()}")
 
 

@@ -4838,6 +4838,7 @@ private fun CapturePresetProcessingEditor(
             onSelected = { setProcessingMode(CaptureProcessingMode.valueOf(it)) },
         )
         if (processingMode == CaptureProcessingMode.CUSTOM) {
+            InstructionModelCard()
             OutlinedTextField(
                 value = customInstruction,
                 onValueChange = { setCustomInstruction(it.take(4_096)) },

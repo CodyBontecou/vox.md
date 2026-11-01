@@ -5,6 +5,8 @@ enum class CaptureTextProcessingOutcome {
     UNCHANGED,
     UNSUPPORTED_CUSTOM_INSTRUCTION,
     SKIPPED_TOO_LARGE,
+    MODEL_UNAVAILABLE,
+    MODEL_FAILURE,
 }
 
 data class CaptureTextProcessingResult(

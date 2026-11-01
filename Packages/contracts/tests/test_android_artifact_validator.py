@@ -59,6 +59,7 @@ class AndroidArtifactValidatorTests(unittest.TestCase):
                 header[16:18] = (3).to_bytes(2, "little")
                 header[18:20] = machine.to_bytes(2, "little")
                 archive.writestr(f"lib/{abi}/{VALIDATOR.VOX_LIBRARY}", header)
+                archive.writestr(f"lib/{abi}/{VALIDATOR.INTELLIGENCE_LIBRARY}", header)
                 archive.writestr(f"lib/{abi}/{VALIDATOR.JNA_LIBRARY}", header)
                 for library in VALIDATOR.SHERPA_LIBRARIES:
                     archive.writestr(f"lib/{abi}/{library}", header)
@@ -162,6 +163,15 @@ class AndroidArtifactValidatorTests(unittest.TestCase):
             for name, contents in entries.items():
                 archive.writestr(name, contents)
         with self.assertRaisesRegex(VALIDATOR.ValidationError, "sherpa-onnx native ABI set differs"):
+            self.validate()
+
+    def test_missing_intelligence_runtime_abi_is_rejected(self):
+        with zipfile.ZipFile(self.apk) as archive:
+            entries = {name: archive.read(name) for name in archive.namelist() if name != "lib/x86/libvox_intelligence.so"}
+        self.apk.unlink()
+        with zipfile.ZipFile(self.apk, "w") as archive:
+            for name, contents in entries.items(): archive.writestr(name, contents)
+        with self.assertRaisesRegex(VALIDATOR.ValidationError, "local intelligence native ABI set differs"):
             self.validate()
 
     def test_wrong_vox_elf_machine_is_rejected(self):

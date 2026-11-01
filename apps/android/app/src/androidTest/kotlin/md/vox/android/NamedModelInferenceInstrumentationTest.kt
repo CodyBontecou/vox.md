@@ -20,7 +20,6 @@ import md.vox.android.platformservices.SpeechModelInstallPhase
 import md.vox.android.platformservices.SpeechModelManager
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -28,12 +27,12 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class NamedModelInferenceInstrumentationTest {
     @Test
-    fun undersizedDeviceRejectsMediumBeforeDownload() {
+    fun undersizedDeviceRejectsOversizedModelBeforeDownload() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val memoryInfo = ActivityManager.MemoryInfo()
         (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).getMemoryInfo(memoryInfo)
-        val descriptor = requireNotNull(SpeechModelCatalog.find("ggml-medium"))
-        assumeTrue(
+        val descriptor = requireNotNull(SpeechModelCatalog.find("ggml-large-v3-turbo"))
+        assertTrue(
             "this assertion runs on the standard-memory qualification device",
             memoryInfo.totalMem < descriptor.minimumMemoryBytes,
         )
@@ -48,10 +47,10 @@ class NamedModelInferenceInstrumentationTest {
         )
     }
 
-    @Test
+    @Test @ProvisionedModelTest
     fun downloadsVerifiesInstallsAndSelectsRequestedModel() {
         val modelID = requestedModelID()
-        assumeTrue("named-model qualification requires -e voxModelID", modelID != null)
+        assertTrue("named-model qualification requires -e voxModelID", modelID != null)
         val context = ApplicationProvider.getApplicationContext<Context>()
         val manager = SpeechModelManager.get(context)
         val descriptor = requireNotNull(SpeechModelCatalog.find(requireNotNull(modelID)))
@@ -74,13 +73,13 @@ class NamedModelInferenceInstrumentationTest {
         }
     }
 
-    @Test
+    @Test @ProvisionedModelTest
     fun selectedRequestedModelTranscribesRealSpeechOfflineThroughProductionClient() {
         val modelID = requestedModelID()
-        assumeTrue("named-model qualification requires -e voxModelID", modelID != null)
+        assertTrue("named-model qualification requires -e voxModelID", modelID != null)
         val context = ApplicationProvider.getApplicationContext<Context>()
         val speechWav = File(context.filesDir, "local-speech-qualification/vosk-api-test.wav")
-        assumeTrue("exact-hash speech fixture is staged only by the host gate", speechWav.length() > 200_000)
+        assertTrue("exact-hash speech fixture is staged only by the host gate", speechWav.length() > 200_000)
         val manager = SpeechModelManager.get(context)
         val descriptor = requireNotNull(SpeechModelCatalog.find(requireNotNull(modelID)))
         val ready = manager.state.value.models.single { it.descriptor.id == descriptor.id }

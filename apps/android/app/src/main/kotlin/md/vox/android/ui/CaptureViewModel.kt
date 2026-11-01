@@ -22,6 +22,7 @@ import md.vox.android.capturedomain.CapturePreset
 import md.vox.android.capturedomain.CapturePresetCollection
 import md.vox.android.capturedomain.CaptureEntryTemplate
 import md.vox.android.capturedomain.CaptureRepository
+import md.vox.android.capturedomain.CaptureTextProcessingOutcome
 import md.vox.android.capturedomain.CaptureSubmitResult
 import md.vox.android.capturedomain.ActivityStats
 import md.vox.android.capturedomain.CompletedRecordingActivity
@@ -553,7 +554,7 @@ internal class CaptureViewModel private constructor(
                     isSending = false,
                     draft = draft,
                     history = history,
-                    notice = voxNotice("Capture sent"),
+                    notice = deliveredCaptureNotice(result.processingOutcome),
                     acceptedRequestID = acceptedRequestID,
                 )
                 CaptureSubmitResult.DestinationRequired -> state.copy(
@@ -660,3 +661,14 @@ internal class CaptureViewModel private constructor(
 
 private fun voxNotice(source: String, vararg arguments: Any): VoxUiText =
     VoxUiText(source, arguments.toList())
+
+internal fun deliveredCaptureNotice(outcome: CaptureTextProcessingOutcome?): md.vox.android.VoxUiText {
+    val detail = when (outcome) {
+        CaptureTextProcessingOutcome.MODEL_UNAVAILABLE -> voxNotice("Local model unavailable; the original text was kept.")
+        CaptureTextProcessingOutcome.MODEL_FAILURE -> voxNotice("Local processing failed; the original text was kept.")
+        CaptureTextProcessingOutcome.UNSUPPORTED_CUSTOM_INSTRUCTION -> voxNotice("Unsupported custom instruction")
+        CaptureTextProcessingOutcome.SKIPPED_TOO_LARGE -> voxNotice("Skipped because the capture is too large")
+        else -> null
+    }
+    return if (detail == null) voxNotice("Capture sent") else voxNotice("%@ · %@", voxNotice("Capture sent"), detail)
+}

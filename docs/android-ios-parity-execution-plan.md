@@ -3,9 +3,11 @@
 November 1 accepted monetization scope: Android remains individual-only under
 [ADR-0024](architecture/adr-0024-android-individual-only-monetization.md). Family access
 and discounted family upgrades are intentional Android platform differences. The
-ledger now retains 282 capabilities; 247 apply to Android/Wear: 233 verified, 13 implemented
+ledger now retains 283 capabilities; 248 apply to Android/Wear: 233 verified, 14 implemented
 with acceptance pending and one inventoried. Family IDs remain applicable to Apple.
 See [monetization status](android-monetization-parity-2026-11-01.md). The new localization row remains implemented pending native linguistic and visual qualification; see [localization status](android-localization-parity-2026-11-01.md).
+
+Local intelligence now has a pinned generative instruction runtime and shared model-backed instruction/speaker evaluations. The new quality row remains implemented pending broader physical and human qualification. See [local intelligence status](android-local-intelligence-parity-2026-11-01.md).
 
 Historical November 1 composer checkpoint: the ledger contained 281 capabilities, including
 248 applicable to Android/Wear: 233 verified, 10 implemented with acceptance planned,

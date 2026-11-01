@@ -439,7 +439,7 @@ data class CompletedRecordingActivity(
 )
 
 sealed interface CaptureSubmitResult {
-    data class Delivered(val requestID: String) : CaptureSubmitResult
+    data class Delivered(val requestID: String, val processingOutcome: CaptureTextProcessingOutcome? = null) : CaptureSubmitResult
     data class SavedForRetry(
         val requestID: String,
         val reason: String,

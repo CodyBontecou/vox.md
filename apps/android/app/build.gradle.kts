@@ -49,6 +49,8 @@ android {
             signingConfigs.findByName("voxRelease")?.let { signingConfig = it }
         }
     }
+    sourceSets.getByName("androidTest").assets.srcDir(rootProject.projectDir.parentFile.parentFile.resolve("evaluations/local-intelligence/v1"))
+    sourceSets.getByName("main").jniLibs.srcDir(layout.buildDirectory.dir("generated/intelligence-jni").get().asFile)
     sourceSets.getByName("main").res.directories.add("build/generated/res/geistFonts")
     sourceSets.getByName("main").res.directories.add("build/generated/res/launcherIcons")
 }
@@ -256,4 +258,15 @@ val validateSignedReleaseBundle by tasks.registering(Exec::class) {
 
 tasks.named("check") {
     dependsOn(validateDebugArtifacts)
+}
+
+val buildIntelligenceNative by tasks.registering(Exec::class) {
+    val script = rootProject.file("scripts/build-intelligence-native.py")
+    inputs.file(script)
+    inputs.files(fileTree("src/main/cpp"))
+    outputs.dir(layout.buildDirectory.dir("generated/intelligence-jni"))
+    commandLine("python3", script, layout.buildDirectory.dir("generated/intelligence-jni").get().asFile)
+}
+tasks.configureEach {
+    if (name == "mergeDebugJniLibFolders" || name == "mergeReleaseJniLibFolders") dependsOn(buildIntelligenceNative)
 }

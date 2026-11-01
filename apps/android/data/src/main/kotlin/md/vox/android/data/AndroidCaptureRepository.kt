@@ -115,6 +115,8 @@ class AndroidCaptureRepository(
     private val hasUnlimitedAccess: () -> Boolean = { false },
     private val prepareURLDelivery: suspend (String, String, Long, CaptureURLDeliverySettings) -> Unit = { _, _, _, _ -> },
     private val captureEnqueued: (String) -> Unit = {},
+    private val previouslyProcessedRecording: (String, String, CapturePreset) -> md.vox.android.capturedomain.CaptureTextProcessingResult? = { _, _, _ -> null },
+    private val processCaptureText: suspend (String, CapturePreset, Boolean) -> md.vox.android.capturedomain.CaptureTextProcessingResult? = { text, preset, voice -> LocalCaptureTextProcessor.process(text, preset, voice) },
     private val generateImageAltText: suspend (ByteArray, String) -> String? = { _, _ -> null },
 ) : CaptureRepository {
     private val appContext = context.applicationContext
@@ -616,11 +618,8 @@ class AndroidCaptureRepository(
             selectedPreset.copy(attachmentsFolder = audioPolicy.artifactFolder)
         } else selectedPreset
         val captureSource = draft.captureSource
-        val processingResult = LocalCaptureTextProcessor.process(
-            originalText = normalizedText,
-            preset = preset,
-            isVoiceCapture = draft.originRecordingID != null,
-        )
+        val processingResult = draft.originRecordingID?.let { previouslyProcessedRecording(it, normalizedText, preset) }
+            ?: processCaptureText(normalizedText, preset, draft.originRecordingID != null)
         if (processingResult != null && !processingAuditStore.save(
                 requestID = requestID,
                 createdAtEpochMillis = clock(),
@@ -729,7 +728,8 @@ class AndroidCaptureRepository(
             QuotaReservationResult.InvalidInput -> return CaptureSubmitResult.SavedForRetry(requestID, "quotaReservation")
         }
         runCatching { captureEnqueued(requestID) }
-        return drive(requestID, destination)
+        val delivered = drive(requestID, destination)
+        return if (delivered is CaptureSubmitResult.Delivered) delivered.copy(processingOutcome = processingResult?.outcome) else delivered
     }
 
     override suspend fun retry(requestID: String): CaptureSubmitResult = withContext(Dispatchers.IO) {

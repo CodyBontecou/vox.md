@@ -62,6 +62,7 @@ tasks.register("releaseReadiness") {
         ":wear:validateWearReleaseBundle",
         "validateAndroidSbom",
         "validateVisualParityEvidence",
+        "validateLocalIntelligenceEvaluations",
     )
 }
 
@@ -96,4 +97,20 @@ tasks.register<Exec>("connectedDebugAndroidTestNamedModel") {
         "app/src/androidTest/kotlin/md/vox/android/NamedModelInferenceInstrumentationTest.kt",
     )
     commandLine("python3", "scripts/validate-named-speech-model.py")
+}
+
+// Mandatory fixture gate: ordinary connected tests intentionally fail if model inputs
+// are missing. This task runs the general suite plus all provisioned inference cases.
+tasks.register<Exec>("connectedDebugAndroidTestLocalIntelligence") {
+    group = "verification"
+    description = "Runs the full phone suite, four required ASR model tests and shared intelligence benchmarks."
+    dependsOn(":app:assembleDebug", ":app:assembleDebugAndroidTest")
+    commandLine("python3", "scripts/validate-local-intelligence.py", "--download-fixtures", "--output",
+        layout.buildDirectory.dir("reports/local-intelligence").get().asFile)
+}
+
+tasks.register<Exec>("validateLocalIntelligenceEvaluations") {
+    group = "verification"
+    description = "Validates shared corpus integrity and retained model-backed parity results."
+    commandLine("python3", "scripts/validate-intelligence-evaluations.py")
 }

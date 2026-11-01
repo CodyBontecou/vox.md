@@ -66,6 +66,7 @@ VOX_ELF_TARGETS = {
 }
 VOX_LIBRARY = "libvox_core_uniffi.so"
 JNA_LIBRARY = "libjnidispatch.so"
+INTELLIGENCE_LIBRARY = "libvox_intelligence.so"
 SHERPA_LIBRARIES = (
     "libonnxruntime.so",
     "libsherpa-onnx-c-api.so",
@@ -195,7 +196,7 @@ def validate_vox_native_libraries(apk_path: Path) -> None:
             if len(names) != len(set(names)):
                 raise ValidationError("Android artifact contains duplicate ZIP entries")
             prefix = "base/" if apk_path.suffix == ".aab" else ""
-            native_libraries = (("Vox", VOX_LIBRARY), ("JNA", JNA_LIBRARY)) + tuple(
+            native_libraries = (("Vox", VOX_LIBRARY), ("JNA", JNA_LIBRARY), ("local intelligence", INTELLIGENCE_LIBRARY)) + tuple(
                 ("sherpa-onnx", library) for library in SHERPA_LIBRARIES
             )
             for label, library in native_libraries:

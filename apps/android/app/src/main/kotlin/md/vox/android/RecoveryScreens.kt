@@ -783,6 +783,7 @@ internal fun ModelsScreen(navigateBack: () -> Unit) {
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+            InstructionModelCard()
             AutomaticSpeechModelCard(modelState, manager::selectAutomatic)
             modelState.models.forEach { installState ->
                 SpeechModelCard(
@@ -1227,4 +1228,38 @@ private fun RecoveryTopBar(title: String, navigateBack: () -> Unit, action: @Com
         actions = { action() },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
     )
+}
+
+@Composable
+internal fun InstructionModelCard() {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val manager = remember(context) { md.vox.android.platformservices.InstructionModelManager.get(context) }
+    val state by manager.state.collectAsStateWithLifecycle()
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(voxString("Custom Instruction"), style = MaterialTheme.typography.titleMedium)
+            Text(voxFormat("%@ · %@", "Qwen2.5 1.5B", android.text.format.Formatter.formatShortFileSize(context, md.vox.android.platformservices.InstructionModel.BYTES)), style = MaterialTheme.typography.bodySmall)
+            Text(md.vox.android.platformservices.InstructionModel.SOURCE_LABEL, style = MaterialTheme.typography.bodySmall)
+            Text(md.vox.android.platformservices.InstructionModel.VERIFICATION_DISCLOSURE, style = MaterialTheme.typography.bodySmall)
+            Text(voxFormat("%@ RAM minimum", android.text.format.Formatter.formatShortFileSize(context, 3_000_000_000L)), style = MaterialTheme.typography.bodySmall)
+            Text(voxString(when (state.phase) {
+                md.vox.android.platformservices.InstructionModelPhase.ABSENT -> "Not Installed"
+                md.vox.android.platformservices.InstructionModelPhase.INSTALLING -> "Installing"
+                md.vox.android.platformservices.InstructionModelPhase.READY -> "Ready"
+                md.vox.android.platformservices.InstructionModelPhase.FAILED -> "Failed"
+            }))
+            state.failureCode?.let {
+                val message = if (it == "insufficientDeviceMemory") voxUiText("Local model unavailable; the original text was kept.") else modelInstallFailureMessage(it)
+                Text(message.localized(), color = MaterialTheme.colorScheme.error)
+            }
+            if (state.phase == md.vox.android.platformservices.InstructionModelPhase.INSTALLING) {
+                LinearProgressIndicator(progress = { state.progress }, modifier = Modifier.fillMaxWidth())
+                TextButton(onClick = manager::cancel) { Text(voxString("Cancel")) }
+            } else if (state.phase == md.vox.android.platformservices.InstructionModelPhase.READY) {
+                TextButton(onClick = manager::delete) { Text(voxString("Delete")) }
+            } else {
+                Button(onClick = manager::install) { Text(voxFormat("Download %@", android.text.format.Formatter.formatShortFileSize(context, md.vox.android.platformservices.InstructionModel.BYTES))) }
+            }
+        }
+    }
 }

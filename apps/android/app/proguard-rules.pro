@@ -23,3 +23,6 @@
 
 # WorkManager instantiates this durability-critical phone-side Watch delivery worker.
 -keep class md.vox.android.WearRecordingOnlyDeliveryWorker { public <init>(...); public *; }
+
+# Native JNI names are an ABI; inference is phone-only.
+-keep class md.vox.android.platformservices.NativeInstructionRuntime { *; }

@@ -240,6 +240,37 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/wear/src/main/res/values-uk/platform_plurals.xml",
     "apps/android/wear/src/main/res/values-ur/platform_plurals.xml",
     "apps/android/wear/src/main/res/values-vi/platform_plurals.xml",
+    "Packages/VoxboardShared/Sources/VoxboardIntelligenceEvaluation/SpeakerBenchmark.swift",
+    "Packages/VoxboardShared/Sources/VoxboardIntelligenceEvaluation/main.swift",
+    "Packages/VoxboardShared/Sources/VoxboardShared/IntelligenceEvaluation.swift",
+    "Packages/VoxboardShared/Tests/VoxboardSharedTests/IntelligenceEvaluationTests.swift",
+    "Packages/contracts/tests/test_local_intelligence_evaluation.py",
+    "apps/android/app/src/androidTest/kotlin/md/vox/android/OnDeviceIntelligenceEvaluationInstrumentationTest.kt",
+    "apps/android/app/src/androidTest/kotlin/md/vox/android/ProvisionedModelTest.kt",
+    "apps/android/app/src/main/assets/licenses/Qwen-Apache-2.0.txt",
+    "apps/android/app/src/main/assets/licenses/llama-cpp-MIT.txt",
+    "apps/android/app/src/main/cpp/CMakeLists.txt",
+    "apps/android/app/src/main/cpp/intelligence.cpp",
+    "apps/android/app/src/test/kotlin/md/vox/android/ui/LocalInstructionDeliveryNoticeTest.kt",
+    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/OnDeviceCaptureTextProcessor.kt",
+    "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/OnDeviceCaptureTextProcessorTest.kt",
+    "apps/android/platform-services/src/debug/kotlin/md/vox/android/platformservices/InstructionEvaluationProbe.kt",
+    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/InstructionModelManager.kt",
+    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/IntelligenceEvaluation.kt",
+    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalIntelligence.kt",
+    "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/IntelligenceEvaluationTest.kt",
+    "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingProcessingReuseTest.kt",
+    "apps/android/scripts/build-intelligence-native.py",
+    "apps/android/scripts/validate-intelligence-evaluations.py",
+    "apps/android/scripts/validate-local-intelligence.py",
+    "evaluations/local-intelligence/v1/README.md",
+    "evaluations/local-intelligence/v1/audio/2035-147960-0008.wav",
+    "evaluations/local-intelligence/v1/audio/2035-147960-0014.wav",
+    "evaluations/local-intelligence/v1/audio/2277-149896-0005.wav",
+    "evaluations/local-intelligence/v1/audio/2277-149896-0026.wav",
+    "evaluations/local-intelligence/v1/corpus.json",
+    "Packages/VoxboardShared/Package.swift",
+    "artifacts/android-release/vox-android-sbom.cdx.json",
 )
 
 
@@ -1027,9 +1058,9 @@ def main(argv=None):
         localization_audit["incompleteCatalogSourceCount"],
         localization_audit["missingCatalogSourceCount"],
     )
-    if counts != (779, 219, 6, 554, 0, 0) or counts[0] != sum(counts[1:]):
+    if counts != (782, 220, 6, 556, 0, 0) or counts[0] != sum(counts[1:]):
         fail("Android localization review source counts changed without review")
-    if localization_audit["runtimeSourceLiteralCount"] != 2577:
+    if localization_audit["runtimeSourceLiteralCount"] != 2617:
         fail("Android runtime localization lookup-source count changed without review")
     if localization_audit["fallbackSourceCount"] != counts[4] + counts[5]:
         fail("Android localization fallback count differs from incomplete and absent sources")

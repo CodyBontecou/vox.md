@@ -116,7 +116,7 @@ def main() -> None:
             RUNNER,
         )
         output = result.stdout + result.stderr
-        if "OK (2 tests)" not in output or "FAILURES!!!" in output or "Process crashed" in output:
+        if "OK (2 tests)" not in output or "FAILURES!!!" in output or "Process crashed" in output or "INSTRUMENTATION_STATUS_CODE: -4" in output or "INSTRUMENTATION_STATUS_CODE: -3" in output:
             fail(f"instrumented inference did not pass:\n{output.strip()}")
     finally:
         adb(adb_path, serial, "shell", "pm", "clear", PACKAGE, check=False)

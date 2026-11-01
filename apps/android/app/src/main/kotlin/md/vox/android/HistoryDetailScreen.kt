@@ -359,6 +359,8 @@ internal fun processingOutcomeUiText(outcome: CaptureTextProcessingOutcome?): Vo
     CaptureTextProcessingOutcome.UNCHANGED -> voxUiText("Unchanged")
     CaptureTextProcessingOutcome.UNSUPPORTED_CUSTOM_INSTRUCTION -> voxUiText("Unsupported custom instruction")
     CaptureTextProcessingOutcome.SKIPPED_TOO_LARGE -> voxUiText("Skipped because the capture is too large")
+    CaptureTextProcessingOutcome.MODEL_UNAVAILABLE -> voxUiText("Local model unavailable; the original text was kept.")
+    CaptureTextProcessingOutcome.MODEL_FAILURE -> voxUiText("Local processing failed; the original text was kept.")
     null -> voxUiText("Unknown")
 }
 

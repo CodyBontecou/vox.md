@@ -1,0 +1,346 @@
+{
+  "schemaVersion": 1,
+  "corpusID": "vox-local-intelligence-v1",
+  "instructionCases": [
+    {
+      "id": "sorted-people",
+      "instruction": "Extract the three people’s first names, sorted alphabetically. Output one name per line and nothing else.",
+      "source": "Zoe owns design. Maya owns testing. Arun owns the release.",
+      "containsAll": [
+        "Arun",
+        "Maya",
+        "Zoe"
+      ],
+      "ordered": [
+        "Arun",
+        "Maya",
+        "Zoe"
+      ],
+      "maximumWords": 6,
+      "containsAny": [],
+      "outputFormat": "one-term-per-line",
+      "forbiddenTerms": [],
+      "speakerOwnership": {}
+    },
+    {
+      "id": "formal-request",
+      "instruction": "Rewrite this as a polite, professional request. Preserve the person and deadline.",
+      "source": "hey Maya, pls send the launch notes by Friday.",
+      "containsAll": [
+        "Maya",
+        "Friday"
+      ],
+      "containsAny": [
+        [
+          "please",
+          "kindly",
+          "could you",
+          "would you"
+        ]
+      ],
+      "maximumWords": 40,
+      "ordered": [],
+      "outputFormat": "free-form",
+      "forbiddenTerms": [],
+      "speakerOwnership": {}
+    },
+    {
+      "id": "spanish-extraction",
+      "instruction": "Extrae los nombres de las dos ciudades. Devuelve solo los nombres, separados por una coma.",
+      "source": "El martes visitamos Madrid y el miércoles viajamos a Sevilla.",
+      "containsAll": [
+        "Madrid",
+        "Sevilla"
+      ],
+      "maximumWords": 6,
+      "containsAny": [],
+      "ordered": [],
+      "outputFormat": "comma-separated-terms",
+      "forbiddenTerms": [],
+      "speakerOwnership": {}
+    },
+    {
+      "id": "factual-summary",
+      "instruction": "Summarize this in one sentence of at most 25 words. Include the owner, date, and budget.",
+      "source": "We agreed to launch on Friday. Maya is the owner. The approved budget is $200.",
+      "containsAll": [
+        "Maya",
+        "Friday",
+        "$200"
+      ],
+      "maximumWords": 25,
+      "containsAny": [],
+      "ordered": [],
+      "outputFormat": "free-form",
+      "forbiddenTerms": [],
+      "speakerOwnership": {}
+    },
+    {
+      "id": "link-preservation",
+      "instruction": "Rewrite the note as a complete sentence with correct capitalization. Keep the URL exactly.",
+      "source": "maya shared the launch notes at https://example.com/notes?id=42",
+      "containsAll": [
+        "Maya",
+        "https://example.com/notes?id=42"
+      ],
+      "maximumWords": 35,
+      "containsAny": [],
+      "ordered": [],
+      "outputFormat": "free-form",
+      "forbiddenTerms": [],
+      "speakerOwnership": {}
+    },
+    {
+      "id": "speaker-ownership",
+      "instruction": "Remove filler words while retaining both speaker labels and their decisions.",
+      "source": "Speaker 1: um, I approve the launch.\nSpeaker 2: uh, I will send the checklist.",
+      "containsAll": [
+        "Speaker 1:",
+        "Speaker 2:",
+        "approve",
+        "launch",
+        "send",
+        "checklist"
+      ],
+      "maximumWords": 35,
+      "containsAny": [],
+      "ordered": [],
+      "outputFormat": "free-form",
+      "forbiddenTerms": [
+        "um",
+        "uh"
+      ],
+      "speakerOwnership": {
+        "Speaker 1:": [
+          "approve",
+          "launch"
+        ],
+        "Speaker 2:": [
+          "send",
+          "checklist"
+        ]
+      }
+    }
+  ],
+  "speakerAudio": [
+    {
+      "id": "2277-149896-0026",
+      "file": "audio/2277-149896-0026.wav",
+      "speaker": "2277",
+      "durationSeconds": 4.92,
+      "sha256": "c5617c8d07ac91a256b230e351e79041687b800c6e542788225509b3634f6cfd",
+      "sourceSHA256": "3909a6c5ae93112518681fcbf0a74df43615a4f88bd6d5cd788775255296e3f6"
+    },
+    {
+      "id": "2277-149896-0005",
+      "file": "audio/2277-149896-0005.wav",
+      "speaker": "2277",
+      "durationSeconds": 5.6,
+      "sha256": "4745faaa6f214cfdc7d3ae672d56b8f7c7f386392bb868c976e190fb3d8c30a7",
+      "sourceSHA256": "05013da97856ccce8ef62b3408643f144ae6b88d581731675fd1a70b03288849"
+    },
+    {
+      "id": "2035-147960-0008",
+      "file": "audio/2035-147960-0008.wav",
+      "speaker": "2035",
+      "durationSeconds": 6.21,
+      "sha256": "5e6528904ee1c2ad6f2d98e2fcfceebfe21bdcf25ba2a9b3ece4bc75c2c9023c",
+      "sourceSHA256": "1d69e4d4d2d0b952b9272fb1401fbb16fcacbe9de8d20013c5e093efa946cda1"
+    },
+    {
+      "id": "2035-147960-0014",
+      "file": "audio/2035-147960-0014.wav",
+      "speaker": "2035",
+      "durationSeconds": 4.4650625,
+      "sha256": "b1546135ab6cf4e00095d1ce15659bbede2b891fc5aa99c2464717f86a0eda30",
+      "sourceSHA256": "30c28fa00d28b9141eb03c9bc93d57a93167387e2e868f19721589b3943521cd"
+    }
+  ],
+  "speakerSequence": [
+    "2277-149896-0026",
+    "2035-147960-0008",
+    "2277-149896-0005",
+    "2035-147960-0014"
+  ],
+  "speakerMaximumAttributionError": 0.0,
+  "limitations": [
+    "Small functional corpus, not a general intelligence or multilingual-quality certification.",
+    "Speaker audio evaluates known-turn acoustic embedding and attribution; it does not establish overlap or spontaneous-conversation diarization quality."
+  ],
+  "scorerExamples": [
+    {
+      "caseID": "sorted-people",
+      "response": "Arun\nMaya\nZoe",
+      "passed": true
+    },
+    {
+      "caseID": "sorted-people",
+      "response": "Zoe\nMaya\nArun",
+      "passed": false
+    },
+    {
+      "caseID": "formal-request",
+      "response": "Maya, could you please send the launch notes by Friday?",
+      "passed": true
+    },
+    {
+      "caseID": "formal-request",
+      "response": "Maya sent the notes Friday.",
+      "passed": false
+    },
+    {
+      "caseID": "factual-summary",
+      "response": "Maya owns the Friday launch with a $200 budget.",
+      "passed": true
+    },
+    {
+      "caseID": "factual-summary",
+      "response": "Maya owns the launch with a $200 budget.",
+      "passed": false
+    },
+    {
+      "caseID": "spanish-extraction",
+      "response": "Madrid, Sevilla",
+      "passed": true
+    },
+    {
+      "caseID": "spanish-extraction",
+      "response": "Madrid, Sevilla. extra extra extra extra extra extra extra extra extra extra ",
+      "passed": false
+    },
+    {
+      "caseID": "link-preservation",
+      "response": "Maya shared https://example.com/notes?id=42",
+      "passed": true
+    },
+    {
+      "caseID": "link-preservation",
+      "response": "Maya shared https://example.com/notes?id=43",
+      "passed": false
+    },
+    {
+      "caseID": "speaker-ownership",
+      "response": "Speaker 1: I approve the launch.\nSpeaker 2: I will send the checklist.",
+      "passed": true
+    },
+    {
+      "caseID": "speaker-ownership",
+      "response": "I approve the launch and will send the checklist.",
+      "passed": false
+    },
+    {
+      "caseID": "sorted-people",
+      "response": "Arun, Maya, Zoe",
+      "passed": false
+    },
+    {
+      "caseID": "speaker-ownership",
+      "response": "Speaker 1: um, I approve the launch.\nSpeaker 2: uh, I will send the checklist.",
+      "passed": false
+    },
+    {
+      "caseID": "speaker-ownership",
+      "response": "Speaker 1: I will send the checklist.\nSpeaker 2: I approve the launch.",
+      "passed": false
+    },
+    {
+      "caseID": "speaker-ownership",
+      "response": "**Speaker 1:** I approve the launch.\n**Speaker 2:** I will send the checklist.",
+      "passed": true
+    }
+  ],
+  "speakerScorerExamples": [
+    {
+      "reference": [
+        "a",
+        "b",
+        "a",
+        "b"
+      ],
+      "predicted": [
+        "2",
+        "1",
+        "2",
+        "1"
+      ],
+      "durations": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "error": 0
+    },
+    {
+      "reference": [
+        "a",
+        "b",
+        "a",
+        "b"
+      ],
+      "predicted": [
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "durations": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "error": 0.5
+    },
+    {
+      "reference": [
+        "a",
+        "b",
+        "a",
+        "b"
+      ],
+      "predicted": [
+        "1",
+        "2",
+        "3",
+        "2"
+      ],
+      "durations": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "error": 0.25
+    },
+    {
+      "reference": [
+        "a",
+        "b"
+      ],
+      "predicted": [
+        "1"
+      ],
+      "durations": [
+        1,
+        1
+      ],
+      "error": 1
+    },
+    {
+      "reference": [
+        "a",
+        "b"
+      ],
+      "predicted": [
+        "1",
+        "2"
+      ],
+      "durations": [
+        -1,
+        1
+      ],
+      "error": 1
+    }
+  ]
+}

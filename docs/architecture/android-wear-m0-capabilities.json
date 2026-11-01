@@ -89,6 +89,10 @@
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardShared/SpeakerDiarizationService.swift",
           "symbol": "public actor SpeakerDiarizationService"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/OnDeviceIntelligenceEvaluationInstrumentationTest.kt",
+          "symbol": "fun realSpeechSpeakerAttributionBenchmark"
         }
       ],
       "id": "cap.ai.diarization",
@@ -182,6 +186,10 @@
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureVox.swift",
           "symbol": "case custom"
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalIntelligence.kt",
+          "symbol": "class LocalIntelligenceProcessor"
         }
       ],
       "id": "cap.ai.mode-custom",
@@ -8756,6 +8764,41 @@
         "android",
         "watch",
         "wear"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Pinned local inference, shared functional and real-audio quality gates and four mandatory model tests are implemented; physical/device-tier, multilingual, conversational/overlap and human quality qualification remain required.",
+          "evidencePath": "docs/android-local-intelligence-parity-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.local-intelligence"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalIntelligence.kt",
+          "symbol": "class LocalIntelligenceProcessor"
+        },
+        {
+          "path": "evaluations/local-intelligence/v1/corpus.json",
+          "symbol": "vox-local-intelligence-v1"
+        }
+      ],
+      "id": "cap.ai.intelligence-quality",
+      "milestone": "M9",
+      "outcome": "Model-backed on-device instructions with shared Apple/Android evaluations, real-audio speaker attribution and mandatory model regressions",
+      "owner": "adjusted",
+      "parity": "product-adjusted",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
       ],
       "programScope": "parity",
       "status": "implemented"
