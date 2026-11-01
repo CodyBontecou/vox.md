@@ -287,6 +287,7 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/scripts/physical_capture_provenance.py",
     "apps/android/scripts/qualify-physical-capture.py",
     "apps/android/scripts/validate-physical-capture.py",
+    "artifacts/validation/android-physical-capture-2026-11-01/interrupted-second-attempt.json",
 )
 
 

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "status": "incomplete",
+  "enduranceQualified": false,
+  "reason": "USB connection lost during host-sampled capture; final state and stop await reconnection. Installed harness has a 65-minute device safety stop; execution is not yet verified.",
+  "scenario": "physical-60-minute-microphone",
+  "device": {
+    "manufacturer": "Google",
+    "model": "Pixel 7",
+    "emulator": false
+  },
+  "sampleCount": 135,
+  "lastObservedHostElapsedSeconds": 2041.1283813750001,
+  "peakSampledPssKiB": 169418,
+  "maximumObservedThermalStatus": 0,
+  "lastObservedPhase": "RECORDING",
+  "lastObservedFinalizedBytes": 65088000,
+  "samplesSHA256": "317e85f0d0d213e060d9b16eeb40c5f51a1083424b314f505070b08d7cf0fd32",
+  "stopConfirmed": false,
+  "rawMicrophoneAudioExported": false
+}

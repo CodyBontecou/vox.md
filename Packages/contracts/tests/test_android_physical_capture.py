@@ -12,7 +12,7 @@ RUNNER=VALIDATOR.RUNNER
 class PhysicalCaptureQualificationTests(unittest.TestCase):
     def endurance(self):
         return {"scenario":"physical-60-minute-microphone","device":{"emulator":False,"manufacturer":"Google"},
-            "wallSeconds":3601,"final":{"finalizedBytes":115200000,"phase":"COMPLETED","wavExportVerified":True,"wavBytes":115200044,
+            "wallSeconds":3601,"final":{"finalizedBytes":115200000,"phase":"COMPLETED","wavExportVerified":True,"wavHeaderVerified":True,"wavBytes":115200044,
                 "finalizedChunks":1800,"chunks":[{"name":f"chunk-{i:06d}.pcm","bytes":64000,"sha256":"a"*64} for i in range(1800)]},
             "sampleCount":240,"maximumSampleGapSeconds":16,"processChanged":False,"recordingInterrupted":False,
             "startImplementationHashes":{"recorder":"a"*64},"endImplementationHashes":{"recorder":"a"*64},
@@ -20,7 +20,7 @@ class PhysicalCaptureQualificationTests(unittest.TestCase):
 
     def test_real_hour_and_microphone_workload_are_required(self):
         good=self.endurance();RUNNER.validate_endurance(good)
-        for key,value in [("wallSeconds",3599),("scenario","imported-hour"),("sampleCount",10),("processChanged",True)]:
+        for key,value in [("wallSeconds",3599),("wallSeconds",float("nan")),("scenario","imported-hour"),("sampleCount",10),("processChanged",True)]:
             bad=copy.deepcopy(good);bad[key]=value
             with self.subTest(key=key),self.assertRaises(ValueError):RUNNER.validate_endurance(bad)
         bad=copy.deepcopy(good);bad["device"]["emulator"]=True
@@ -71,6 +71,18 @@ class PhysicalCaptureQualificationTests(unittest.TestCase):
         for field,value in [("sessionID","different"),("wavSHA256","b"*64),("wavBytes",44),("wavHeaderVerified",False)]:
             proof=dict(final);proof[field]=value
             with self.subTest(field=field),self.assertRaises(ValueError):VALIDATOR.validate_export(final,proof)
+
+    def test_device_local_telemetry_cannot_hide_usb_gaps_or_process_changes(self):
+        report={"sampleCount":241,"measurementProducer":"device-local-monotonic","final":{"sessionID":"one"},"peakPssKiB":100000,"maximumThermalStatus":0}
+        samples=[{"phase":"RECORDING","sameProcess":True,"sessionID":"one","processToken":"process-one",
+            "uptimeMillis":i*15000,"finalizedBytes":i*480000,"pssKiB":100000,"thermalStatus":0} for i in range(241)]
+        VALIDATOR.validate_endurance_samples(report,samples)
+        for mutation in [{"uptimeMillis":0},{"processToken":"different"},{"sessionID":"other"},{"thermalStatus":-1},{"pssKiB":0}]:
+            bad=copy.deepcopy(samples);bad[120].update(mutation)
+            with self.subTest(mutation=mutation),self.assertRaises(ValueError):VALIDATOR.validate_endurance_samples(report,bad)
+        short=copy.deepcopy(samples)
+        for row in short:row["uptimeMillis"]//=2
+        with self.assertRaisesRegex(ValueError,"span"):VALIDATOR.validate_endurance_samples(report,short)
 
     def test_model_measurements_require_real_results_and_usable_thermal_samples(self):
         report={"modelID":"vosk-small-en-us-0.15","results":[{"round":i,"passed":True,"elapsedMillis":100} for i in range(3)]}

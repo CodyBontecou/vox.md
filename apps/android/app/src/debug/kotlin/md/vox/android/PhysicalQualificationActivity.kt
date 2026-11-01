@@ -22,6 +22,7 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.job
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.launch
 import md.vox.android.capturedomain.CapturePreset
 import md.vox.android.platformservices.*
@@ -36,7 +37,6 @@ class PhysicalQualificationActivity : Activity() {
     private lateinit var label: TextView
     private val worker = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val handler = Handler(Looper.getMainLooper())
-    private val safetyStop = Runnable { audio.stop() }
     private val root get() = File(filesDir, "physical-qualification").apply { mkdirs() }
     private val ticker = object : Runnable {
         override fun run() { worker.launch { report("status", false) }; handler.postDelayed(this, 10_000) }
@@ -61,18 +61,20 @@ class PhysicalQualificationActivity : Activity() {
         val action = intent.getStringExtra("command") ?: "status"
         label.text = "Physical qualification · $action\nMicrophone recordings stay private on this device."
         when (action) {
-            "start" -> {
-                if (RecordingStatusRegistry.status.value.isActive) {
+            "start", "device-endurance" -> {
+                if (RecordingStatusRegistry.status.value.isActive || PhysicalQualificationSafety.enduranceRunning.get()) {
                     write("start-refused", JSONObject().put("reason", "recordingAlreadyActive"))
                     return
                 }
+                if (action == "device-endurance" && !PhysicalQualificationSafety.enduranceRunning.compareAndSet(false, true)) return
                 VoiceAutoStopSettingsStore.get(this).update(VoiceAutoStopSettings(enabled = false))
                 audio.start(preset())
                 armSafetyStop()
+                if (action == "device-endurance") startDeviceEndurance()
             }
             "resume" -> { audio.resume(); armSafetyStop() }
             "pause" -> audio.pause()
-            "stop" -> { handler.removeCallbacks(safetyStop); audio.stop() }
+            "stop" -> { PhysicalQualificationSafety.cancel(); audio.stop() }
             "checkpoint", "status" -> worker.launch { report(action, action == "checkpoint") }
             "finalize" -> worker.launch {
                 val deadline = SystemClock.elapsedRealtime() + 30_000
@@ -100,8 +102,7 @@ class PhysicalQualificationActivity : Activity() {
     }
 
     private fun armSafetyStop() {
-        handler.removeCallbacks(safetyStop)
-        handler.postDelayed(safetyStop, 65 * 60_000L)
+        PhysicalQualificationSafety.arm(audio)
     }
 
     private fun launchCommand(name: String, block: suspend () -> Unit) = worker.launch {
@@ -118,8 +119,9 @@ class PhysicalQualificationActivity : Activity() {
         if (requestCode != 41) return
         val uri = data?.data
         if (resultCode == RESULT_OK && uri != null) {
-            val flags = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            contentResolver.takePersistableUriPermission(uri, flags)
+            val required = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            check(data.flags and required == required) { "Read/write test-folder permission required" }
+            contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
             // The URI may contain an account identifier; it stays device-private.
             File(root, "provider-uri").writeText(uri.toString())
             File(root, "provider-approved").delete()
@@ -131,7 +133,9 @@ class PhysicalQualificationActivity : Activity() {
         }
     }
 
-    private fun report(name: String, hashes: Boolean) {
+    private fun report(name: String, hashes: Boolean) = write(name, snapshot(hashes))
+
+    private fun snapshot(hashes: Boolean): JSONObject {
         val state = RecordingStatusRegistry.status.value
         val memory = Debug.MemoryInfo().also(Debug::getMemoryInfo)
         val value = JSONObject().put("schemaVersion", 1).put("package", packageName)
@@ -166,7 +170,86 @@ class PhysicalQualificationActivity : Activity() {
                     .put("wavHeaderVerified", headerLength == 44 && validWavHeader(header,count))
             }
         }
-        write(name, value)
+        return value
+    }
+
+    /** The mic foreground service keeps this process alive. This IO job intentionally
+     * survives Activity destruction; it neither needs a visible screen nor a USB host.
+     */
+    private fun startDeviceEndurance() {
+        val runID = java.util.UUID.randomUUID().toString()
+        val output = File(root, "device-endurance/$runID").apply { check(mkdirs()) }
+        write("device-endurance-latest", JSONObject().put("runID",runID))
+        worker.launch {
+            var sessionID: String? = null
+            try { withTimeout(65 * 60_000L + 30_000) {
+                val startDeadline = SystemClock.elapsedRealtime()+45_000
+                while (RecordingStatusRegistry.status.value.phase != RecordingPhase.RECORDING) {
+                    check(SystemClock.elapsedRealtime()<startDeadline); delay(100)
+                }
+                sessionID = requireNotNull(RecordingStatusRegistry.status.value.sessionID)
+                val started = SystemClock.elapsedRealtime()
+                val processToken = java.util.UUID.randomUUID().toString()
+                val pid = android.os.Process.myPid()
+                val source = JSONObject(assets.open("physical-build.json").bufferedReader().use { it.readText() })
+                val producer = JSONObject(assets.open("physical-model-build.json").bufferedReader().use { it.readText() })
+                val apkSHA256 = hash(File(applicationInfo.sourceDir))
+                val samples = mutableListOf<JSONObject>()
+                var last = started
+                var maximumGap = 0L
+                java.io.FileOutputStream(File(output,"samples.ndjson")).use { stream ->
+                    while (true) {
+                        val now = SystemClock.elapsedRealtime()
+                        val sample = snapshot(false).put("elapsedSeconds",(now-started)/1000.0)
+                            .put("processToken",processToken).put("sameProcess",android.os.Process.myPid()==pid)
+                            .put("battery",batterySnapshot())
+                        val elapsed = now-started
+                        val same = sample.optString("sessionID")==sessionID && android.os.Process.myPid()==pid
+                        val phase = sample.getString("phase")
+                        val enough = elapsed>=3_600_000 && sample.getLong("finalizedBytes")>=115_200_000L
+                        check(same && phase in setOf("RECORDING","COMPLETED")) { "recordingInterrupted" }
+                        check(sample.getInt("thermalStatus") in 0..2 && sample.getInt("pssKiB")<=512*1024) { "physicalSafetyTarget" }
+                        if (phase=="COMPLETED") { check(enough); break }
+                        maximumGap = maxOf(maximumGap,now-last); last=now
+                        samples.add(sample)
+                        stream.write((sample.toString()+"\n").toByteArray()); stream.flush(); stream.fd.sync()
+                        write("device-endurance-progress",JSONObject().put("runID",runID).put("elapsedSeconds",elapsed/1000.0).put("phase",phase))
+                        if (enough) break
+                        delay(15_000)
+                    }
+                }
+                audio.stop()
+                val stopDeadline = SystemClock.elapsedRealtime()+30_000
+                while (RecordingStatusRegistry.status.value.isActive) { check(SystemClock.elapsedRealtime()<stopDeadline); delay(100) }
+                val final = snapshot(true)
+                check(final.getString("phase")=="COMPLETED" && final.getBoolean("wavExportVerified") && final.getBoolean("wavHeaderVerified"))
+                check(samples.size>=200 && maximumGap<=45_000)
+                val device = JSONObject().put("manufacturer",android.os.Build.MANUFACTURER).put("model",android.os.Build.MODEL)
+                    .put("api",android.os.Build.VERSION.SDK_INT.toString()).put("buildFingerprint",android.os.Build.FINGERPRINT)
+                    .put("emulator",android.os.Build.HARDWARE in setOf("ranchu","goldfish") || android.os.Build.FINGERPRINT.startsWith("generic"))
+                val report = JSONObject().put("schemaVersion",1).put("scenario","physical-60-minute-microphone")
+                    .put("measurementProducer","device-local-monotonic").put("status","passed").put("device",device)
+                    .put("wallSeconds",(SystemClock.elapsedRealtime()-started)/1000.0).put("sampleCount",samples.size)
+                    .put("maximumSampleGapSeconds",maximumGap/1000.0).put("processChanged",false).put("recordingInterrupted",false)
+                    .put("startImplementationHashes",source).put("endImplementationHashes",source).put("installedBuildHashes",source)
+                    .put("producerBuildHashes",producer).put("apkSHA256",apkSHA256).put("final",final)
+                    .put("peakPssKiB",samples.maxOf { it.getInt("pssKiB") }).put("maximumThermalStatus",samples.maxOf { it.getInt("thermalStatus") })
+                    .put("chargingObserved",samples.any { it.getJSONObject("battery").optInt("plugged")!=0 })
+                atomicWrite(File(output,"endurance.json"),report)
+            } } catch (error: Exception) {
+                atomicWrite(File(output,"failure.json"),JSONObject().put("status","incomplete").put("failureType",error.javaClass.simpleName))
+            } finally {
+                PhysicalQualificationSafety.cancel()
+                if (RecordingStatusRegistry.status.value.sessionID==sessionID && RecordingStatusRegistry.status.value.isActive) audio.stop()
+                PhysicalQualificationSafety.enduranceRunning.set(false)
+            }
+        }
+    }
+
+    private fun batterySnapshot(): JSONObject {
+        val battery = applicationContext.registerReceiver(null,android.content.IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        return JSONObject().put("level",battery?.getIntExtra("level",-1)).put("temperatureTenthsC",battery?.getIntExtra("temperature",-1))
+            .put("plugged",battery?.getIntExtra("plugged",0))
     }
 
     private fun validWavHeader(header: ByteArray, count: Long): Boolean {
@@ -342,7 +425,11 @@ class PhysicalQualificationActivity : Activity() {
     }
 
     private fun write(name: String, value: JSONObject) {
-        val atomic = AtomicFile(File(root, "$name.json"))
+        atomicWrite(File(root,"$name.json"),value)
+    }
+
+    private fun atomicWrite(file: File, value: JSONObject) {
+        val atomic = AtomicFile(file)
         val stream = atomic.startWrite()
         try { stream.write(value.toString(2).toByteArray()); atomic.finishWrite(stream) }
         catch (error: Exception) { atomic.failWrite(stream); throw error }
@@ -358,4 +445,15 @@ class PhysicalQualificationActivity : Activity() {
 
     private fun preset() = CapturePreset(id = "cccccccc-cccc-4ccc-8ccc-cccccccccccc", name = "Physical qualification",
         symbol = "mic", revision = 1, logicalFolder = "Vox-Qualification", noteNameTemplate = "qualification-{id}", metadataFields = emptyList())
+}
+
+private object PhysicalQualificationSafety {
+    val enduranceRunning = java.util.concurrent.atomic.AtomicBoolean(false)
+    private val handler = Handler(Looper.getMainLooper())
+    private var stop: Runnable? = null
+    @Synchronized fun arm(audio: AudioCaptureClient) {
+        cancel()
+        stop = Runnable { audio.stop() }.also { handler.postDelayed(it,65*60_000L) }
+    }
+    @Synchronized fun cancel() { stop?.let(handler::removeCallbacks); stop=null }
 }

@@ -36,6 +36,19 @@ def validate_export(final,proof):
     require(proof["wavHeaderVerified"] is True and proof["wavExportVerified"] is True,"PCM WAV header/export failed")
     require(proof["sessionID"]==final["sessionID"] and proof["wavSHA256"]==final["wavSHA256"] and proof["wavBytes"]==final["wavBytes"],"export verification describes different audio")
 
+def validate_endurance_samples(report,samples):
+    require(len(samples)==report["sampleCount"] and len(samples)>=200,"endurance telemetry lost samples")
+    require(all(s["phase"]=="RECORDING" and s["sameProcess"] is True and s["sessionID"]==report["final"]["sessionID"] for s in samples),"interrupted telemetry")
+    times=[s["uptimeMillis"] for s in samples]
+    require(times[-1]-times[0]>=3_555_000,"telemetry does not span the hour")
+    require(all(0<b-a<=45_000 for a,b in zip(times,times[1:])),"stale or missing device telemetry")
+    require(all(b["finalizedBytes"]>=a["finalizedBytes"] for a,b in zip(samples,samples[1:])),"regressing device telemetry")
+    require(all(0<s["pssKiB"]<=512*1024 and 0<=s["thermalStatus"]<3 for s in samples),"recording memory/thermal target failed or unavailable")
+    if report.get("measurementProducer")=="device-local-monotonic":
+        require(len({s["processToken"] for s in samples})==1 and bool(samples[0]["processToken"]),"device observer process changed")
+    require(report["peakPssKiB"]==max(s["pssKiB"] for s in samples),"recording PSS peak misreported")
+    require(report["maximumThermalStatus"]==max(s["thermalStatus"] for s in samples),"recording thermal peak misreported")
+
 def validate_matrix(matrix,root=REPORTS,complete=False):
     require(matrix["schemaVersion"]==1,"physical evidence schema differs")
     require(set(matrix["cases"])==REQUIRED,"physical campaign inventory differs")
@@ -53,19 +66,12 @@ def validate_matrix(matrix,root=REPORTS,complete=False):
         if expected: require(report["device"]["manufacturer"].lower()==expected,"wrong physical device family")
         if case.endswith(".endurance"):
             RUNNER.validate_endurance(report)
-            if report["final"].get("wavHeaderVerified") is True: validate_export(report["final"],report["final"])
-            else:
-                verification=json.loads((path.parent/"export-verification.json").read_text())
-                require(verification["installedBuildHashes"]==RUNNER.hashes(),"export verifier source differs")
-                validate_export(report["final"],verification["verification"])
+            validate_export(report["final"],report["final"])
+            if report.get("measurementProducer")=="device-local-monotonic":
+                require(report["producerBuildHashes"]==RUNNER.model_hashes(),"on-device observer sources changed")
             require(report["startImplementationHashes"]==RUNNER.hashes(),"recorder implementation changed")
             samples=[json.loads(line) for line in (path.parent/"samples.ndjson").read_text().splitlines()]
-            require(len(samples)==report["sampleCount"],"endurance telemetry lost samples")
-            require(all(s["phase"]=="RECORDING" and s["sameProcess"] for s in samples),"interrupted telemetry")
-            require(all(b["uptimeMillis"]>=a["uptimeMillis"] and b["finalizedBytes"]>=a["finalizedBytes"] for a,b in zip(samples,samples[1:])),"regressing device telemetry")
-            require(all(samples[i]["uptimeMillis"]>samples[i-3]["uptimeMillis"] for i in range(3,len(samples))),"stale device telemetry")
-            require(report["peakPssKiB"]==max(s["pssKiB"] for s in samples) and report["peakPssKiB"]<=512*1024,"recording PSS target failed/misreported")
-            require(report["maximumThermalStatus"]==max(s["thermalStatus"] for s in samples) and 0<=report["maximumThermalStatus"]<3,"recording thermal target failed/unavailable")
+            validate_endurance_samples(report,samples)
         elif case.endswith((".sigkill",".force-stop",".reboot")):
             require(report["status"]=="passed" and report["processChanged"],"process recovery did not execute")
             require(report["recovered"]["phase"]=="INTERRUPTED" and report["final"]["phase"]=="COMPLETED","recovery states differ")

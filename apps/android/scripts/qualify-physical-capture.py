@@ -9,6 +9,7 @@ from pathlib import Path
 import re
 import subprocess
 import time
+import math
 from physical_capture_provenance import RECORDING_INPUTS, MODEL_INPUTS, source_hashes
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -22,10 +23,12 @@ def validate_endurance(report):
         raise ValueError("synthetic/imported audio is not microphone endurance evidence")
     if report["device"]["emulator"] or report["device"]["manufacturer"].lower() not in {"google", "samsung"}:
         raise ValueError("physical Pixel/Samsung required")
-    if report["wallSeconds"] < 3600 or report["final"]["finalizedBytes"] < 3600 * 32000:
+    if not math.isfinite(report["wallSeconds"]) or report["wallSeconds"] < 3600 or report["final"]["finalizedBytes"] < 3600 * 32000:
         raise ValueError("a real 60-minute microphone recording is required")
     if report["final"]["phase"] != "COMPLETED" or not report["final"]["wavExportVerified"]:
         raise ValueError("completed, exportable recording required")
+    if report["final"].get("wavHeaderVerified") is not True:
+        raise ValueError("PCM WAV header verification required")
     if report["final"]["wavBytes"] != report["final"]["finalizedBytes"] + 44:
         raise ValueError("WAV payload size differs")
     chunks=report["final"]["chunks"]
@@ -80,6 +83,31 @@ def install(device,apk):
     badging=subprocess.run([str(device.sdk/"build-tools/36.0.0/aapt2"),"dump","badging",str(apk)],capture_output=True,text=True,check=True).stdout
     validate_install_identity(badging)
     print(device.run("install","-r","-t",str(apk),timeout=180).strip())
+
+def start_device_record(device):
+    if device.identity()["emulator"]:raise ValueError("Physical on-device endurance requires hardware")
+    ensure_idle(device)
+    device.shell("run-as",PACKAGE,"rm","-f","files/physical-qualification/device-endurance-latest.json")
+    device.command("device-endurance")
+    run=wait_report(device,"device-endurance-latest")
+    print("On-device hour test started:",run["runID"],"; USB may disconnect. Collect its report after completion.")
+
+def collect_device_record(device,output):
+    identity=device.identity()
+    if identity["emulator"]:raise ValueError("Physical collector refuses emulators")
+    run= device.read("device-endurance-latest")["runID"]
+    if not re.fullmatch(r"[0-9a-f-]{36}",run):raise ValueError("Invalid on-device run identity")
+    base="files/physical-qualification/device-endurance/"+run+"/"
+    report=json.loads(device.run("exec-out","run-as",PACKAGE,"cat",base+"endurance.json"))
+    if report.get("measurementProducer")!="device-local-monotonic":raise ValueError("Wrong measurement producer")
+    if report["device"]!=identity:raise ValueError("Report came from a different device/build")
+    if report["producerBuildHashes"]!=model_hashes() or report["apkSHA256"]!=device.apk_hash():raise ValueError("Observer sources/APK changed")
+    validate_endurance(report)
+    output.mkdir(parents=True,exist_ok=False)
+    telemetry=device.run("exec-out","run-as",PACKAGE,"cat",base+"samples.ndjson")
+    (output/"samples.ndjson").write_text(telemetry)
+    (output/"endurance.json").write_text(json.dumps(report,indent=2)+"\n")
+    print("Collected complete on-device microphone endurance; raw audio remains private")
 
 def models(device,output,fixtures):
     identity=device.identity()
@@ -286,7 +314,7 @@ def battery(text):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("action", choices=["install", "record", "models", "identity", "sigkill", "force-stop", "reboot", "start", "stop", "pause", "resume", "status", "checkpoint", "finalize", "instructions", "speech", "choose-provider", "provider-capture", "provider-retry", "provider-revoke"])
+    parser.add_argument("action", choices=["install", "record", "record-device", "collect-device", "models", "identity", "sigkill", "force-stop", "reboot", "start", "stop", "pause", "resume", "status", "checkpoint", "finalize", "instructions", "speech", "choose-provider", "provider-capture", "provider-retry", "provider-revoke"])
     parser.add_argument("--serial", required=True)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--fixtures",type=Path,default=ROOT/"apps/android/app/build/qualification-fixtures")
@@ -295,6 +323,10 @@ def main():
     device = Device(args.serial)
     if args.action == "identity": print(json.dumps(device.identity(), indent=2))
     elif args.action == "install":install(device,args.apk)
+    elif args.action == "record-device":start_device_record(device)
+    elif args.action == "collect-device":
+        if args.output is None:parser.error("collect-device requires --output")
+        collect_device_record(device,args.output)
     elif args.action == "models":
         if args.output is None:parser.error("models requires --output")
         models(device,args.output,args.fixtures)

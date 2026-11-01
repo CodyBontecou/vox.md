@@ -1218,15 +1218,15 @@
     },
     {
       "path": "artifacts/validation/local-intelligence-2026-11-01/instruction-evaluation.json",
-      "sha256": "f494f4b954635362c673ca4a9e94430a517684cb66ec8e0e3f8ec4d01b6b15a5"
+      "sha256": "4c414cd22fe211535fefeb654b1616a29c850c74c2958ee84bfe7465bca30bec"
     },
     {
       "path": "artifacts/validation/local-intelligence-2026-11-01/receipt.json",
-      "sha256": "c744d356806d3af7ebe5f0f871e6cda51cf4d1d8832a842c0ac7adc58f39aae6"
+      "sha256": "5ea25ae3400348243596fbe1c340dce8f6268223686b36658d8e0459fd921d3d"
     },
     {
       "path": "artifacts/validation/local-intelligence-2026-11-01/speaker-evaluation.json",
-      "sha256": "4908290b7ee3c912ffdae509b2e05f99e7724e365e556360e437c7952655c7f8"
+      "sha256": "bd7fdb092b768cecb60b8e79c6c332599806473dcb732d6782be8a65f2021e28"
     },
     {
       "path": "artifacts/validation/android-physical-capture-2026-11-01/interrupted-first-attempt.json",
@@ -1234,7 +1234,7 @@
     },
     {
       "path": "artifacts/validation/android-physical-capture-2026-11-01/matrix.json",
-      "sha256": "cbb4e1d1d877ab6f278cce31732eeeb04856d8527fd90fdf4315c95c4f3f07c8"
+      "sha256": "f3d56d89dcbbd9bc31003412ddac9e3f249227547988045cce1b174f332e338c"
     },
     {
       "path": "artifacts/validation/android-physical-capture-2026-11-01/recording-native-profile.json",
@@ -1242,11 +1242,11 @@
     },
     {
       "path": "Packages/contracts/tests/test_android_physical_capture.py",
-      "sha256": "40ea477dcfe9ac47d4d405e8ce7798fc9606423b540590cc439320c1e1be9073"
+      "sha256": "3bd444f3394bfc216925325d141d9e92e6c062172ac3bca3678deca75b5ba286"
     },
     {
       "path": "apps/android/app/src/debug/kotlin/md/vox/android/PhysicalQualificationActivity.kt",
-      "sha256": "56dd36e963d49be216fba6f09357971e1210553f3a9ae4f6e650215131c5f758"
+      "sha256": "36593ba5e7752e0fb7843e2110ce1d5c2b3e9597803ceba1de3800523d325ba5"
     },
     {
       "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/RecordingFileRecovery.kt",
@@ -1262,11 +1262,15 @@
     },
     {
       "path": "apps/android/scripts/qualify-physical-capture.py",
-      "sha256": "f772cc7df5f794a31c7ecb7cc5cfe3f5e94b39308e457e212c2cae9d351c5d37"
+      "sha256": "abb861ff9289debcff17c3061a0373c32380b32086c1cb6b3457bef766a741f3"
     },
     {
       "path": "apps/android/scripts/validate-physical-capture.py",
-      "sha256": "c0a36043084957328bf5fa1c1e4e15e676db5f6124653098c668cb3fe142cb3e"
+      "sha256": "b46cb64e8099ca2bd1554ed94f010a566fb0b72591f70be45f128998ef6a5f10"
+    },
+    {
+      "path": "artifacts/validation/android-physical-capture-2026-11-01/interrupted-second-attempt.json",
+      "sha256": "7f671a9918e630cf379c6a63c3b2b1d158f545c6f801a4767ef2a8555ba49c33"
     }
   ],
   "rust": {

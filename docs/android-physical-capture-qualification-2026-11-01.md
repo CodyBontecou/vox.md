@@ -34,9 +34,12 @@ Perfetto traces are excluded from committed evidence.
 
 ## Campaign and targets
 
-- Endurance: at least 3,600 seconds of actual microphone PCM and host wall time in
+- Endurance: at least 3,600 seconds of actual microphone PCM and monotonic elapsed time in
   one uninterrupted process, at least 200 telemetry samples, no gaps over 45 seconds,
-  completed manifest and verified WAV size/hash. Imported/looped audio cannot qualify.
+  completed manifest and verified PCM WAV header, size and hash. Imported/looped audio cannot qualify.
+  The device-local sampler fsyncs metadata every 15 seconds, stops after both elapsed
+  time and PCM targets are met, and survives a USB outage. A changed process, stale
+  telemetry or an interrupted recording invalidates the run.
   The recording target is sampled PSS <=512 MiB and thermal status below Severe.
 - Recovery: actual SIGKILL, force-stop and OS reboot, each followed by interrupted
   recovery, explicit resume and verified export. Every finalized chunk from before
@@ -71,11 +74,15 @@ python3 apps/android/scripts/qualify-physical-capture.py install --serial "$ANDR
 Pregrant microphone/notification permissions only for the qualification installation.
 The installer checks the APK's actual application ID and debuggable flag before adb;
 it refuses an owner-app APK even if its filename looks like a qualification build.
-Keep the physical device connected and unlock it after the reboot. Run each output
+Unlock the physical device after the reboot. The device-local hour test can continue
+without USB; reconnect after completion to collect metadata. Other campaigns require
+a stable connection. Run each output
 into a fresh directory; no shortening flag is provided for the hour gate:
 
 ```sh
-python3 apps/android/scripts/qualify-physical-capture.py record --serial "$ANDROID_SERIAL" --output /tmp/vox-physical-hour
+python3 apps/android/scripts/qualify-physical-capture.py record-device --serial "$ANDROID_SERIAL"
+# After at least 61 minutes:
+python3 apps/android/scripts/qualify-physical-capture.py collect-device --serial "$ANDROID_SERIAL" --output /tmp/vox-physical-hour
 python3 apps/android/scripts/qualify-physical-capture.py sigkill --serial "$ANDROID_SERIAL" --output /tmp/vox-physical-kill
 python3 apps/android/scripts/qualify-physical-capture.py force-stop --serial "$ANDROID_SERIAL" --output /tmp/vox-physical-force-stop
 python3 apps/android/scripts/qualify-physical-capture.py reboot --serial "$ANDROID_SERIAL" --output /tmp/vox-physical-reboot
@@ -97,7 +104,12 @@ An unavailable device/account never becomes a passed case or a verified ledger r
 
 The first Pixel attempt lost USB telemetry after 152 seconds. Reconnection allowed
 the private recording to be stopped and its WAV to be verified; it does not qualify
-the hour gate. The restarted, guarded hour campaign is running. A 60-second physical
+the hour gate. The second host-sampled attempt lost USB after approximately 34 minutes
+(135 samples); it also remains incomplete. Stop/final-state verification awaits
+reconnection; the installed debug harness has a 65-minute device safety stop. A fresh
+device-local campaign is required; neither interrupted attempt is promoted.
+
+A 60-second physical
 Perfetto sample reported no UI hangs and RSS 235.1→238.4 MiB; its 3.3 MiB warm-up growth
 is not a confirmed leak. Kernel/context-switch frames are physical Linux frames;
 the analyzer's generic emulator classification is disregarded. The raw trace remains
