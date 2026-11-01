@@ -148,15 +148,34 @@ class PhysicalQualificationActivity : Activity() {
             if (state.phase != RecordingPhase.RECORDING && chunks.isNotEmpty()) {
                 val digest = MessageDigest.getInstance("SHA-256")
                 var count = 0L
+                val header = ByteArray(44)
+                var headerLength = 0
                 val sink = object : OutputStream() {
-                    override fun write(b: Int) { digest.update(b.toByte()); count++ }
-                    override fun write(b: ByteArray, offset: Int, length: Int) { digest.update(b, offset, length); count += length }
+                    override fun write(b: Int) {
+                        if (headerLength < 44) header[headerLength++] = b.toByte()
+                        digest.update(b.toByte()); count++
+                    }
+                    override fun write(b: ByteArray, offset: Int, length: Int) {
+                        val copied = minOf(44-headerLength,length)
+                        if (copied > 0) { b.copyInto(header,headerLength,offset,offset+copied); headerLength += copied }
+                        digest.update(b, offset, length); count += length
+                    }
                 }
                 value.put("wavExportVerified", audio.exportWav(requireNotNull(state.sessionID), sink))
                     .put("wavBytes", count).put("wavSHA256", digest.digest().joinToString("") { "%02x".format(it) })
+                    .put("wavHeaderVerified", headerLength == 44 && validWavHeader(header,count))
             }
         }
         write(name, value)
+    }
+
+    private fun validWavHeader(header: ByteArray, count: Long): Boolean {
+        val values = java.nio.ByteBuffer.wrap(header).order(java.nio.ByteOrder.LITTLE_ENDIAN)
+        return header.copyOfRange(0,4).decodeToString()=="RIFF" && header.copyOfRange(8,16).decodeToString()=="WAVEfmt " &&
+            header.copyOfRange(36,40).decodeToString()=="data" && (values.getInt(4).toLong() and 0xffffffffL)==count-8 &&
+            values.getInt(16)==16 && values.getShort(20).toInt()==1 && values.getShort(22).toInt()==1 &&
+            values.getInt(24)==16000 && values.getInt(28)==32000 && values.getShort(32).toInt()==2 &&
+            values.getShort(34).toInt()==16 && (values.getInt(40).toLong() and 0xffffffffL)==count-44
     }
 
     private suspend fun runInstructions() {

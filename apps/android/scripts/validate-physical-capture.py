@@ -32,6 +32,10 @@ def validate_model(report,samples,kind):
     require(all(0<=s["thermalStatus"]<3 and not s["lowMemory"] for s in samples),"thermal/memory safety target failed or unavailable")
     require(max(s["pssKiB"] for s in samples)<=2*1024*1024,"sampled model PSS exceeds 2 GiB target")
 
+def validate_export(final,proof):
+    require(proof["wavHeaderVerified"] is True and proof["wavExportVerified"] is True,"PCM WAV header/export failed")
+    require(proof["sessionID"]==final["sessionID"] and proof["wavSHA256"]==final["wavSHA256"] and proof["wavBytes"]==final["wavBytes"],"export verification describes different audio")
+
 def validate_matrix(matrix,root=REPORTS,complete=False):
     require(matrix["schemaVersion"]==1,"physical evidence schema differs")
     require(set(matrix["cases"])==REQUIRED,"physical campaign inventory differs")
@@ -49,6 +53,11 @@ def validate_matrix(matrix,root=REPORTS,complete=False):
         if expected: require(report["device"]["manufacturer"].lower()==expected,"wrong physical device family")
         if case.endswith(".endurance"):
             RUNNER.validate_endurance(report)
+            if report["final"].get("wavHeaderVerified") is True: validate_export(report["final"],report["final"])
+            else:
+                verification=json.loads((path.parent/"export-verification.json").read_text())
+                require(verification["installedBuildHashes"]==RUNNER.hashes(),"export verifier source differs")
+                validate_export(report["final"],verification["verification"])
             require(report["startImplementationHashes"]==RUNNER.hashes(),"recorder implementation changed")
             samples=[json.loads(line) for line in (path.parent/"samples.ndjson").read_text().splitlines()]
             require(len(samples)==report["sampleCount"],"endurance telemetry lost samples")
@@ -62,6 +71,7 @@ def validate_matrix(matrix,root=REPORTS,complete=False):
             require(report["recovered"]["phase"]=="INTERRUPTED" and report["final"]["phase"]=="COMPLETED","recovery states differ")
             require(RUNNER.preserved_prefix(report["before"],report["recovered"]) and RUNNER.preserved_prefix(report["recovered"],report["final"]),"recovery changed retained PCM")
             require(report["rebootVerified"]==case.endswith(".reboot"),"reboot proof missing")
+            validate_export(report["final"],report["final"])
             require(report["implementationHashes"]==report["installedBuildHashes"]==RUNNER.hashes(),"recovery source identity differs")
         elif case.endswith((".speech",".instructions")):
             kind=case.split('.')[1]

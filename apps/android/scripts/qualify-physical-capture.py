@@ -28,6 +28,12 @@ def validate_endurance(report):
         raise ValueError("completed, exportable recording required")
     if report["final"]["wavBytes"] != report["final"]["finalizedBytes"] + 44:
         raise ValueError("WAV payload size differs")
+    chunks=report["final"]["chunks"]
+    if len(chunks)!=report["final"]["finalizedChunks"] or sum(c["bytes"] for c in chunks)!=report["final"]["finalizedBytes"]:
+        raise ValueError("final chunk inventory differs from audio size")
+    if any(c["name"]!=f"chunk-{i:06d}.pcm" or not re.fullmatch(r"[0-9a-f]{64}",c["sha256"]) or
+           not 0<c["bytes"]<=64000 or (i<len(chunks)-1 and c["bytes"]!=64000) for i,c in enumerate(chunks)):
+        raise ValueError("uninterrupted PCM chunk sequence differs")
     if report["sampleCount"] < 200 or report["maximumSampleGapSeconds"] > 45:
         raise ValueError("telemetry coverage incomplete")
     if report["processChanged"] or report["recordingInterrupted"]:

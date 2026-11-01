@@ -12,7 +12,8 @@ RUNNER=VALIDATOR.RUNNER
 class PhysicalCaptureQualificationTests(unittest.TestCase):
     def endurance(self):
         return {"scenario":"physical-60-minute-microphone","device":{"emulator":False,"manufacturer":"Google"},
-            "wallSeconds":3601,"final":{"finalizedBytes":115200000,"phase":"COMPLETED","wavExportVerified":True,"wavBytes":115200044},
+            "wallSeconds":3601,"final":{"finalizedBytes":115200000,"phase":"COMPLETED","wavExportVerified":True,"wavBytes":115200044,
+                "finalizedChunks":1800,"chunks":[{"name":f"chunk-{i:06d}.pcm","bytes":64000,"sha256":"a"*64} for i in range(1800)]},
             "sampleCount":240,"maximumSampleGapSeconds":16,"processChanged":False,"recordingInterrupted":False,
             "startImplementationHashes":{"recorder":"a"*64},"endImplementationHashes":{"recorder":"a"*64},
             "installedBuildHashes":{"recorder":"a"*64}}
@@ -63,6 +64,13 @@ class PhysicalCaptureQualificationTests(unittest.TestCase):
         bad=copy.deepcopy(matrix);bad["status"]="passed"
         with self.assertRaisesRegex(ValueError,"overclaims"):VALIDATOR.validate_matrix(bad)
         with self.assertRaisesRegex(ValueError,"remains incomplete"):VALIDATOR.validate_matrix(matrix,complete=True)
+
+    def test_export_verification_must_match_the_exact_recording_and_bytes(self):
+        final={"sessionID":"recording","wavSHA256":"a"*64,"wavBytes":115200044,"wavHeaderVerified":True,"wavExportVerified":True}
+        VALIDATOR.validate_export(final,final)
+        for field,value in [("sessionID","different"),("wavSHA256","b"*64),("wavBytes",44),("wavHeaderVerified",False)]:
+            proof=dict(final);proof[field]=value
+            with self.subTest(field=field),self.assertRaises(ValueError):VALIDATOR.validate_export(final,proof)
 
     def test_model_measurements_require_real_results_and_usable_thermal_samples(self):
         report={"modelID":"vosk-small-en-us-0.15","results":[{"round":i,"passed":True,"elapsedMillis":100} for i in range(3)]}
