@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "corpusID": "vox-local-intelligence-v1",
+  "platform": "android",
+  "runtime": "llama.cpp-b5046-cpu",
+  "modelID": "qwen2.5-1.5b-instruct-q4_k_m",
+  "modelSHA256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+  "results": [
+    {
+      "id": "sorted-people",
+      "response": "Arun\nMaya\nZoe",
+      "outcome": "APPLIED",
+      "passed": true,
+      "elapsedSeconds": 10.445
+    },
+    {
+      "id": "formal-request",
+      "response": "Maya, please send the launch notes by Friday.",
+      "outcome": "APPLIED",
+      "passed": true,
+      "elapsedSeconds": 4.843
+    },
+    {
+      "id": "spanish-extraction",
+      "response": "Madrid, Sevilla",
+      "outcome": "APPLIED",
+      "passed": true,
+      "elapsedSeconds": 4.542
+    },
+    {
+      "id": "factual-summary",
+      "response": "Maya agreed to launch on Friday with an approved budget of $200.",
+      "outcome": "APPLIED",
+      "passed": true,
+      "elapsedSeconds": 7.29
+    },
+    {
+      "id": "link-preservation",
+      "response": "Maya shared the launch notes at https:\/\/example.com\/notes?id=42.",
+      "outcome": "APPLIED",
+      "passed": true,
+      "elapsedSeconds": 7.361
+    },
+    {
+      "id": "speaker-ownership",
+      "response": "Speaker 1: I approve the launch.\nSpeaker 2: I will send the checklist.",
+      "outcome": "APPLIED",
+      "passed": true,
+      "elapsedSeconds": 8.48
+    }
+  ],
+  "repositoryDeliveryVerified": true,
+  "retryWithoutModelVerified": true
+}

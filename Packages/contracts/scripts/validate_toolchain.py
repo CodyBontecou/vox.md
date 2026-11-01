@@ -272,6 +272,11 @@ EXPECTED_GOVERNED_PATHS = (
     "Packages/VoxboardShared/Package.swift",
     "artifacts/android-release/vox-android-sbom.cdx.json",
     "apps/android/scripts/device_model_network.py",
+    "artifacts/validation/local-intelligence-2026-11-01/apple-instruction-evaluation.json",
+    "artifacts/validation/local-intelligence-2026-11-01/apple-speaker-evaluation.json",
+    "artifacts/validation/local-intelligence-2026-11-01/instruction-evaluation.json",
+    "artifacts/validation/local-intelligence-2026-11-01/receipt.json",
+    "artifacts/validation/local-intelligence-2026-11-01/speaker-evaluation.json",
 )
 
 

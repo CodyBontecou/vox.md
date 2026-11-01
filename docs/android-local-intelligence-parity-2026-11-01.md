@@ -83,6 +83,34 @@ swift run --package-path Packages/VoxboardShared VoxboardIntelligenceEvaluation 
 VOXBOARD_SHARED_CONTAINER_OVERRIDE=/tmp/vox-apple-intelligence swift run --package-path Packages/VoxboardShared VoxboardIntelligenceEvaluation evaluations/local-intelligence/v1/corpus.json /tmp/apple-speakers.json speakers
 ```
 
-Full validation and retained final measurements will be recorded when checks finish.
+Retained measurements are in `artifacts/validation/local-intelligence-2026-11-01`.
+The full phone gate ran from clean implementation commit
+`733484425503e4bc111f3020a6150b367f41c7c1`: 84 general phone tests, two Vosk tests,
+two Whisper Tiny tests, one six-case native-instruction test and one real-audio
+speaker test — **90 passed, zero skipped**. All six instruction cases passed on both
+platforms. Production Android delivery and retry after model deletion were exercised.
+Android speaker attribution error was 0%; Apple was 29.2993%, with its unmet target
+preserved explicitly. Receipts bind implementation hashes, APKs, models and device identity.
+Validation completed so far:
+
+| Check | Result |
+| --- | --- |
+| Android JVM | 289 passed; zero failures/skips |
+| Full phone/model gate | 90 passed; zero skips, including all four formerly skipped tests |
+| Data/provider instrumentation | 22 passed; zero skips |
+| Actual uninstall/reinstall | Both phases passed |
+| Swift package suites | 655 + 381 XCTest tests and 12 Swift Testing tests passed |
+| Repository checks | 65 script tests + 148 contract tests passed |
+| Android artifacts | Lint, instrumentation builds, four-ABI debug checks and optimized phone/Wear release readiness passed |
+| Supply chain | 342-component SBOM, native build pins and byte-identical UniFFI bindings passed |
+| Governance | 347 inventoried features; 194 contract files and 266 implementation hashes validated |
+| Localization | 782 UI sources, 2,617 lookup literals, zero missing catalog sources; 22 languages |
+
+The parity ledger has 283 capabilities (262 verified, 14 implemented, seven inventoried).
+Of 248 Android/Wear-applicable capabilities, 233 are verified, 14 implemented and one
+inventoried. `cap.ai.intelligence-quality` remains implemented pending the broader
+qualification below. The disposable qualification AVD and temporary GGUF staging
+copies were removed after successful checks; the baseline AVD was preserved.
+Swift oracle regeneration and the final Rust workspace check follow the evidence commit.
 Physical devices, broader languages/instructions, noisy/overlapping/conversational
 speech, latency/memory/thermal budgets and human quality approval remain qualification.

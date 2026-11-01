@@ -1,0 +1,29 @@
+{
+  "attributionError" : 0.2929927665936347,
+  "corpusID" : "vox-local-intelligence-v1",
+  "durations" : [
+    4.92,
+    6.21,
+    5.6,
+    4.4650625
+  ],
+  "elapsedSeconds" : 16.770099997520447,
+  "meetsZeroErrorTarget" : false,
+  "metric" : "known-turn-duration-weighted-attribution-error",
+  "platform" : "apple",
+  "predicted" : [
+    "0",
+    "0",
+    "0",
+    "1"
+  ],
+  "reference" : [
+    "2277",
+    "2035",
+    "2277",
+    "2035"
+  ],
+  "runtime" : "FluidAudio \/ SpeakerDiarizationService",
+  "schemaVersion" : 1,
+  "status" : "completed"
+}

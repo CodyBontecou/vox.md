@@ -9043,7 +9043,7 @@
     {
       "acceptance": [
         {
-          "assertion": "Pinned local inference, shared functional and real-audio quality gates and four mandatory model tests are implemented; physical/device-tier, multilingual, conversational/overlap and human quality qualification remain required.",
+          "assertion": "Clean-commit emulator qualification passed 90 phone tests with zero skips, all six shared instruction cases on Android and Apple, Android 0% known-turn speaker attribution error, and actual delivery/retry checks. Physical/device-tier, multilingual, conversational/overlap and human quality qualification remain required; the Apple short-turn baseline is 29.3% error.",
           "evidencePath": "docs/android-local-intelligence-parity-2026-11-01.md",
           "kind": "device",
           "mappingID": "cap.ai.intelligence-quality.acceptance.1",
@@ -9062,6 +9062,18 @@
         {
           "path": "evaluations/local-intelligence/v1/corpus.json",
           "symbol": "vox-local-intelligence-v1"
+        },
+        {
+          "path": "artifacts/validation/local-intelligence-2026-11-01/receipt.json",
+          "symbol": "sourceTreeClean"
+        },
+        {
+          "path": "artifacts/validation/local-intelligence-2026-11-01/instruction-evaluation.json",
+          "symbol": "repositoryDeliveryVerified"
+        },
+        {
+          "path": "artifacts/validation/local-intelligence-2026-11-01/apple-speaker-evaluation.json",
+          "symbol": "meetsZeroErrorTarget"
         }
       ],
       "id": "cap.ai.intelligence-quality",
@@ -9164,6 +9176,6 @@
   "schemaVersion": 1,
   "source": {
     "path": "docs/architecture/android-wear-m0-capabilities.json",
-    "sha256": "49d18e278bc06f2819e9dbb6387987828ea83c142c240865e555f7216d2e5975"
+    "sha256": "e02fa3631a6e4fff926002f2a743f76b479d193dcc97f70de62314df9b8a6ec7"
   }
 }

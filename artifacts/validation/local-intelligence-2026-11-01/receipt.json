@@ -1,0 +1,58 @@
+{
+  "artifactsSHA256": {
+    "app": "0a35e50eb40e68b0fbd256aab5d2524c03f49114cf3fb74beeb279b4aa6264a2",
+    "tests": "9cb274334814ee201177c24856f81d360f506643ca1250d80024c7f6c35ede35"
+  },
+  "device": {
+    "serial": "emulator-5556",
+    "avd": "vox-intelligence-checks-api36-20261101",
+    "apiLevel": "36",
+    "abi": "arm64-v8a"
+  },
+  "implementationHashes": {
+    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalIntelligence.kt": "c522d443d9740072522f58d070901b249bbe1b63b068168aa163e1eaf97f7d74",
+    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/InstructionModelManager.kt": "7ec751fd37d6d474f2b602d64032b13ba1510ad1436aead0fe0e68608756bd98",
+    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/IntelligenceEvaluation.kt": "b70fde803e638d6b4997b79a0e5e96512f88122acad4cf651aaa0f6409e7955c",
+    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt": "573f5c71966af0536eb1d683c17f141a87653ab791ef1b74ad1208081e1ee1c0",
+    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SpeakerDiarization.kt": "70e8a93e0d4ae4305d675b529b2345b9136ca28f8c70557995bfaf6e1b5bff4f",
+    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/OnDeviceCaptureTextProcessor.kt": "9acb878c7e24bdc5b5074c1db275c9adee5734c5a3be48abd7fef3f05595fa20",
+    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRepository.kt": "aca0520d404f8cb0a95f330351f717488a43f6543217db93eb68f1b570d62d55",
+    "Packages/vox-core-rust/crates/vox-core/src/lib.rs": "26f0e9ba806519c0853123775f3377220bce6cfe40b087f4fb72da424acc3d71",
+    "apps/android/app/src/main/kotlin/md/vox/android/VoxApplication.kt": "96e570e6912d40d6d8626486f5e00cb8c9f5b945bb374c6659d807f7016ac5f0",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt": "79d05a0e1606ec8c51c80a7303f07cc92300795e476ef4c3e1dfce97778946f2",
+    "apps/android/app/src/main/cpp/intelligence.cpp": "00ed04da3c3ab010afce25d9a08dc74e3aa965346b4e7d3ff1be3ff14bbab6f8",
+    "apps/android/app/src/main/cpp/CMakeLists.txt": "78571488f580feb3981c7c73c75654fde4fb4b8dd0c215ac3b5b50fdb0f2589d",
+    "apps/android/scripts/validate-intelligence-evaluations.py": "e5564c53a0c260174fa08a8111e79f6def2c4c54088475ead6170e0266884bf6",
+    "apps/android/scripts/device_model_network.py": "fef20797c0179409848fbf853cae42638df0498179616010e79a9c06d4c47b3f",
+    "apps/android/scripts/build-intelligence-native.py": "636c222a1e3392dd41e88b0edd78536015d1f9d85818f12b6286da58ad4b33dc",
+    "apps/android/scripts/validate-local-intelligence.py": "68eb245675a9cdd6a31ac7334c67412aaf23479579ca78c5813f9cc4503cfe3b",
+    "apps/android/scripts/validate-local-speech.py": "ce1541efe22c0cf1d01329dc8e1b169ee747acad0197eea09f9a9d978d072add",
+    "apps/android/scripts/validate-named-speech-model.py": "a46e7431f05f1901f433988ad7d097f889e7eb869750845b5cf48cf99ee84d53",
+    "apps/android/app/src/androidTest/kotlin/md/vox/android/OnDeviceIntelligenceEvaluationInstrumentationTest.kt": "495da8b7bd676808f8c2b60c6c2fb2ceb807f26fa052cbf7761865afad0cd137",
+    "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalSpeechInferenceInstrumentationTest.kt": "c11a8a8cb6ef2fcc110bbec585cb21fc04e9a136a43b710cac02ac726b1971a1",
+    "apps/android/app/src/androidTest/kotlin/md/vox/android/NamedModelInferenceInstrumentationTest.kt": "d78c4c06e38507d77ea0d4450ddc44aaa39590219fa21435ecb28309a5bd0033",
+    "Packages/VoxboardShared/Sources/VoxboardShared/IntelligenceEvaluation.swift": "74f7924d5858317e1f226583ffb85ed443a21f93a216d8838e7e9330dcc6e73e",
+    "Packages/VoxboardShared/Sources/VoxboardShared/SpeakerDiarizationService.swift": "7dd22a0e82bcca97be50ff5d40c3061e604037f8becf10520d9e89d4fa47b225",
+    "Packages/VoxboardShared/Sources/VoxboardIntelligenceEvaluation/main.swift": "4d90b848906e82e6adc289bdecae8c5632e28e1e84fcb2c98b31e2abf41366db",
+    "Packages/VoxboardShared/Sources/VoxboardIntelligenceEvaluation/SpeakerBenchmark.swift": "b7874138ebd150d4288a53643d4add5dc7b454c29d130cb07ebcc1174dbdbe42",
+    "evaluations/local-intelligence/v1/corpus.json": "43b35c8f2401788ef7c476e576df4c67dabb7e908b3a3acf9a23e070fd2104aa"
+  },
+  "schemaVersion": 1,
+  "status": "passed",
+  "fullPhoneSuite": true,
+  "counts": {
+    "generalPhone": 84,
+    "validate-local-speech.py": 2,
+    "validate-named-speech-model.py": 2,
+    "pinnedModelRunsSharedInstructionsOffline": 1,
+    "realSpeechSpeakerAttributionBenchmark": 1
+  },
+  "fixtures": {
+    "instruction-model.gguf": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+    "vosk-model-small-en-us-0.15.zip": "30f26242c4eb449f948e42cb302dd7a686cb29a3423a8367f99ff41780942498",
+    "vosk-api-test.wav": "dcfea5712c43a43ba7ae8083afb39d36993e5a69c46e88b68aaa72b65cb615bb",
+    "vosk-model-spk-0.4.zip": "a74d8f51144484813e16af689bb0f916b7a111e2347f467c4933c1166097b5a7"
+  },
+  "sourceRevision": "733484425503e4bc111f3020a6150b367f41c7c1",
+  "sourceTreeClean": true
+}
