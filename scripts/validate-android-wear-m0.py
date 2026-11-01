@@ -31,7 +31,8 @@ PARITY = {
     "explicit-non-goal",
 }
 SCOPES = {"parity", "legacy-codec", "non-goal"}
-STATUSES = {"inventoried", "fixture-needed", "verified", "blocked"}
+# Implemented rows still require planned acceptance; only verified rows may claim verified evidence.
+STATUSES = {"inventoried", "implemented", "fixture-needed", "verified", "blocked"}
 ACCEPTANCE_KINDS = {"unit", "fixture", "ui", "device", "provider", "account", "manual", "ci"}
 ACCEPTANCE_STATUSES = {"planned", "verified", "blocked"}
 PLATFORMS = {"iphone", "ipad", "watch", "macos", "android", "wear"}
