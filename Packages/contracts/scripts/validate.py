@@ -201,7 +201,19 @@ def validate_android_capture_package(obj):
    prior=state
   return
 
+def validate_transcript_property_tree(value,path="$"):
+ if isinstance(value,dict):
+  policy=value.get("metadataPolicy")
+  if isinstance(policy,dict) and isinstance(policy.get("transcriptProperty"),dict):
+   name=policy["transcriptProperty"].get("name","")
+   if not name or any(not (c.isalnum() or c in "_-") for c in name):
+    reject("metadata.transcriptPropertyName",path+".metadataPolicy.transcriptProperty.name","property names must be alphanumeric, underscore or hyphen")
+  for key,child in value.items(): validate_transcript_property_tree(child,path+"."+key)
+ elif isinstance(value,list):
+  for index,child in enumerate(value): validate_transcript_property_tree(child,f"{path}[{index}]")
+
 def semantic(family,obj,context=None):
+ validate_transcript_property_tree(obj)
  if family=="android-capture-package": validate_android_capture_package(obj)
  if family=="required-observations":
   ids=[x["id"] for x in obj["observations"]]
@@ -463,7 +475,7 @@ def validate_capabilities(root,inventory,overlay):
  expected_inventory={"schemaVersion":1,"producerRevision":CLOSURE,"healthMdPrecedent":HEALTH,"source":{"path":"docs/architecture/android-wear-m0-capabilities.json","sha256":digest(m0_path)},"dependencyCatalog":copy.deepcopy(m0["dependencyCatalog"]),"capabilities":expected_caps}
  if inventory!=expected_inventory: reject("capability.conversionDrift","$","inventory must exactly equal deterministic M0 conversion, including acceptance and dependencies")
  old={x["id"]:x for x in m0["capabilities"]}; new={x["id"]:x for x in inventory["capabilities"]}
- if set(old)!=set(new) or len(new)!=271: reject("capability.oneToOne","$.capabilities","M0 IDs not retained")
+ if set(old)!=set(new) or len(new)!=275: reject("capability.oneToOne","$.capabilities","M0 IDs not retained")
  variances={x["capabilityID"]:x for x in overlay["variances"]}; decisions=accepted_decisions(root)
  if len(variances)!=len(overlay["variances"]): reject("variance.duplicate","$.variances","duplicate capability")
  for cid,o in old.items():
@@ -582,8 +594,8 @@ def validate(root):
   for rel in rels:
    if (target/rel).read_bytes()!=(base/rel).read_bytes(): reject("mirror.bytes",f"$.mirrors.{path}/{rel}","bytes differ")
  if seen!=set(MIRRORS): reject("mirror.inventory","$.mirrors","destination missing")
- overlay=load(base/"scope-variances.json"); validate_capabilities(root,load(base/"product-capabilities.json"),overlay)
- print(f"Contracts validation passed: {len(records)} governed files, {len(cases)} fixtures, 271 owner-preserving capabilities, {len(MIRRORS)} resource mirrors.")
+ overlay=load(base/"scope-variances.json"); inventory=load(base/"product-capabilities.json"); validate_capabilities(root,inventory,overlay)
+ print(f"Contracts validation passed: {len(records)} governed files, {len(cases)} fixtures, {len(inventory['capabilities'])} owner-preserving capabilities, {len(MIRRORS)} resource mirrors.")
 
 def main(argv=None):
  parser=argparse.ArgumentParser(); parser.add_argument("--root",type=Path); parser.add_argument("--regenerate-manifest",action="store_true"); args=parser.parse_args(argv); root=(args.root or Path(__file__).resolve().parents[3]).resolve()

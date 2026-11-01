@@ -31,6 +31,9 @@ import md.vox.android.capturedomain.CaptureMissingHeadingBehavior
 import md.vox.android.capturedomain.CaptureNoteTargetKind
 import md.vox.android.capturedomain.CapturePlacementKind
 import md.vox.android.capturedomain.CapturePreset
+import md.vox.android.capturedomain.CaptureDestination
+import md.vox.android.capturedomain.CaptureURLDeliverySettings
+import md.vox.android.capturedomain.normalizedTranscriptProperty
 import md.vox.android.capturedomain.CapturePresetExportSettings
 import md.vox.android.capturedomain.CapturePresetLocationPolicy
 import md.vox.android.capturedomain.CaptureProcessingMode
@@ -46,6 +49,16 @@ object RecordingPresetSnapshotCodec {
         put("attachmentsFolder", preset.attachmentsFolder)
         put("audioEmbedPlacement", preset.audioEmbedPlacement.name)
         put("audioSaveMode", preset.audioSaveMode.name)
+        preset.destination?.let { destination -> put("captureDestination", buildJsonObject {
+            put("id", destination.id); put("name", destination.displayName); put("tree", destination.treeUri)
+        }) }
+        put("transcriptPropertyName", preset.transcriptPropertyName)
+        put("includeTranscriptInBody", preset.includeTranscriptInBody)
+        put("urlDelivery", buildJsonObject {
+            put("enabled", preset.urlDelivery.enabled)
+            preset.urlDelivery.credentialID?.let { put("credentialID", it) }
+            put("origin", preset.urlDelivery.origin); put("maxAttempts", preset.urlDelivery.maxAttempts)
+        })
         put("capturePrompt", preset.capturePrompt)
         put("customProcessingInstruction", preset.customProcessingInstruction)
         put("embedAudioInMarkdown", preset.embedAudioInMarkdown)
@@ -135,6 +148,18 @@ object RecordingPresetSnapshotCodec {
         CapturePreset(
             id = root.string("id").also { require(UUID_PATTERN.matches(it)) },
             name = root.string("name").also { require(it.length in 1..64) },
+            destination = (root["captureDestination"] as? JsonObject)?.let {
+                CaptureDestination(it.string("id").also { id -> require(UUID_PATTERN.matches(id)) }, it.string("name"),
+                    it.string("tree").also { uri -> require(uri.startsWith("content://") && uri.length <= 2_048) })
+            },
+            transcriptPropertyName = root.optionalString("transcriptPropertyName").orEmpty().also {
+                require(it.isBlank() || normalizedTranscriptProperty(it) != null)
+            },
+            includeTranscriptInBody = root["includeTranscriptInBody"]?.jsonPrimitive?.booleanOrNull ?: true,
+            urlDelivery = (root["urlDelivery"] as? JsonObject)?.let {
+                CaptureURLDeliverySettings(it.boolean("enabled"), it.optionalString("credentialID"), it.string("origin"),
+                    it.int("maxAttempts").also { max -> require(max in 1..10) })
+            } ?: CaptureURLDeliverySettings(),
             symbol = root.string("symbol").also { require(it.length <= 64) },
             revision = root.int("revision").also { require(it > 0) },
             logicalFolder = root.string("logicalFolder").also { require(it.length <= 1_024) },

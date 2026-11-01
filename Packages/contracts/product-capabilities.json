@@ -8626,6 +8626,136 @@
       ],
       "programScope": "parity",
       "status": "verified"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Opt-in HTTPS capture/transcript delivery with encrypted credentials, frozen endpoint, durable outbox, explicit ambiguous retry and discard; device/provider fault qualification remains required",
+          "evidencePath": "docs/android-parity-implementation-2026-11-01.md",
+          "kind": "device",
+          "mappingID": "cap.delivery.url.acceptance.1",
+          "status": "planned"
+        }
+      ],
+      "classification": "native",
+      "dependencies": [
+        "dep.durable-queue"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/URLDelivery.kt",
+          "symbol": "class URLDeliveryOutbox"
+        }
+      ],
+      "id": "cap.delivery.url",
+      "legacyParity": "native-equivalent",
+      "milestone": "M6",
+      "outcome": "Opt-in HTTPS capture/transcript delivery with encrypted credentials, frozen endpoint, durable outbox, explicit ambiguous retry and discard",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Independent preset vaults with immutable capture-time native capability bindings; device/provider fault qualification remains required",
+          "evidencePath": "docs/android-parity-implementation-2026-11-01.md",
+          "kind": "device",
+          "mappingID": "cap.destination.preset-vault.acceptance.1",
+          "status": "planned"
+        }
+      ],
+      "classification": "native",
+      "dependencies": [
+        "dep.saf",
+        "dep.durable-queue"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDestinationBindings.kt",
+          "symbol": "class CaptureDestinationBindings"
+        }
+      ],
+      "id": "cap.destination.preset-vault",
+      "legacyParity": "native-equivalent",
+      "milestone": "M5",
+      "outcome": "Independent preset vaults with immutable capture-time native capability bindings",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Voice transcript YAML property replacement with optional body inclusion; device/provider fault qualification remains required",
+          "evidencePath": "docs/android-parity-implementation-2026-11-01.md",
+          "kind": "device",
+          "mappingID": "cap.metadata.transcript-property.acceptance.1",
+          "status": "planned"
+        }
+      ],
+      "classification": "shared",
+      "dependencies": [
+        "dep.shared-core"
+      ],
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn replace_transcript_property"
+        }
+      ],
+      "id": "cap.metadata.transcript-property",
+      "legacyParity": "exact",
+      "milestone": "M5",
+      "outcome": "Voice transcript YAML property replacement with optional body inclusion",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Durable one-off existing-note and prepend/append overrides without preset mutation; device/provider fault qualification remains required",
+          "evidencePath": "docs/android-parity-implementation-2026-11-01.md",
+          "kind": "device",
+          "mappingID": "cap.route.invocation-override.acceptance.1",
+          "status": "planned"
+        }
+      ],
+      "classification": "native",
+      "dependencies": [
+        "dep.saf",
+        "dep.shared-core"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRouting.kt",
+          "symbol": "data class CaptureRouteOverride"
+        }
+      ],
+      "id": "cap.route.invocation-override",
+      "legacyParity": "native-equivalent",
+      "milestone": "M5",
+      "outcome": "Durable one-off existing-note and prepend/append overrides without preset mutation",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
     }
   ],
   "dependencyCatalog": [
@@ -8715,6 +8845,6 @@
   "schemaVersion": 1,
   "source": {
     "path": "docs/architecture/android-wear-m0-capabilities.json",
-    "sha256": "bcfa71c623cccc7f5e3b3a0668a5caf0a46dce8694620c08550cc12773fd93bd"
+    "sha256": "2a54b1d87ec86b7aa8fff472794295f5c219e229bd9e25b6d99eb2bbc521921a"
   }
 }

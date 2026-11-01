@@ -8366,6 +8366,132 @@
       ],
       "programScope": "parity",
       "status": "verified"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Opt-in HTTPS capture/transcript delivery with encrypted credentials, frozen endpoint, durable outbox, explicit ambiguous retry and discard; device/provider fault qualification remains required",
+          "evidencePath": "docs/android-parity-implementation-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.durable-queue"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/URLDelivery.kt",
+          "symbol": "class URLDeliveryOutbox"
+        }
+      ],
+      "id": "cap.delivery.url",
+      "milestone": "M6",
+      "outcome": "Opt-in HTTPS capture/transcript delivery with encrypted credentials, frozen endpoint, durable outbox, explicit ambiguous retry and discard",
+      "owner": "native",
+      "parity": "native-equivalent",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Independent preset vaults with immutable capture-time native capability bindings; device/provider fault qualification remains required",
+          "evidencePath": "docs/android-parity-implementation-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.saf",
+        "dep.durable-queue"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDestinationBindings.kt",
+          "symbol": "class CaptureDestinationBindings"
+        }
+      ],
+      "id": "cap.destination.preset-vault",
+      "milestone": "M5",
+      "outcome": "Independent preset vaults with immutable capture-time native capability bindings",
+      "owner": "native",
+      "parity": "native-equivalent",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Voice transcript YAML property replacement with optional body inclusion; device/provider fault qualification remains required",
+          "evidencePath": "docs/android-parity-implementation-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.shared-core"
+      ],
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn replace_transcript_property"
+        }
+      ],
+      "id": "cap.metadata.transcript-property",
+      "milestone": "M5",
+      "outcome": "Voice transcript YAML property replacement with optional body inclusion",
+      "owner": "shared",
+      "parity": "exact",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Durable one-off existing-note and prepend/append overrides without preset mutation; device/provider fault qualification remains required",
+          "evidencePath": "docs/android-parity-implementation-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.saf",
+        "dep.shared-core"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRouting.kt",
+          "symbol": "data class CaptureRouteOverride"
+        }
+      ],
+      "id": "cap.route.invocation-override",
+      "milestone": "M5",
+      "outcome": "Durable one-off existing-note and prepend/append overrides without preset mutation",
+      "owner": "native",
+      "parity": "native-equivalent",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
     }
   ],
   "dependencyCatalog": [
@@ -8454,7 +8580,8 @@
     "Inventoried means source evidence and planned acceptance are mapped; it does not mean Android/Wear implementation is complete.",
     "Unavailable or deferred parity rows are forbidden by the program definition of done; explicit non-goals are limited to macOS-only product surfaces.",
     "Legacy-codec rows freeze Apple compatibility inputs and never make bookmark/path fields portable core contracts.",
-    "The Apple hard-paywall candidate supersedes free quota behavior; M0 quota rows preserve the prior Apple baseline and deferred Android behavior. Analytics storage is retired by erasure, never decoded or uploaded."
+    "The Apple hard-paywall candidate supersedes free quota behavior; M0 quota rows preserve the prior Apple baseline and deferred Android behavior. Analytics storage is retired by erasure, never decoded or uploaded.",
+    "2026-11-01: Four post-baseline parity capabilities added explicitly. Implemented does not imply device-verified; see docs/android-parity-implementation-2026-11-01.md."
   ],
   "persistedKeyInventories": [
     {

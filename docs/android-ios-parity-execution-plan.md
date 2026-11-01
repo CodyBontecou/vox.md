@@ -2,6 +2,8 @@
 
 Status: **Implementation in progress — broad local feature and release-engineering pass complete; physical parity and Play release evidence remain open**
 
+**2026-11-01 extension:** Four current-iOS capture gaps now have explicit implementation rows: URL delivery, preset vaults, one-off routing, and transcript-property mapping. The ledger contains 275 rows (242 Android/Wear applicable): 233 applicable rows verified, four implemented with device acceptance pending, and five inventoried. See [implementation and validation](android-parity-implementation-2026-11-01.md). Earlier counts below describe the September checkpoint.
+
 Planning date: **2026-09-12**
 
 Current repository baseline: `4dba398` plus the present working tree. The working tree is not clean, so implementation must record a clean, reviewed baseline before changing persisted contracts or claiming milestone completion.

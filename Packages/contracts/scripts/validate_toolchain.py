@@ -189,6 +189,15 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearSystemSurfaceInstrumentationTest.kt",
     "apps/android/gradle/verification-metadata.xml",
     "apps/android/settings-gradle.lockfile",
+    'apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRouting.kt',
+    'apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureRoutingTest.kt',
+    'apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDestinationBindings.kt',
+    'apps/android/app/src/main/kotlin/md/vox/android/CaptureParityControls.kt',
+    'apps/android/app/src/main/kotlin/md/vox/android/URLDelivery.kt',
+    'apps/android/app/src/test/kotlin/md/vox/android/URLDeliveryPolicyTest.kt',
+    'apps/android/app/src/androidTest/kotlin/md/vox/android/URLDeliveryInstrumentationTest.kt',
+    'apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityDeliveryInstrumentationTest.kt',
+    'apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityUiInstrumentationTest.kt',
 )
 
 
@@ -969,9 +978,9 @@ def main(argv=None):
         localization_audit["incompleteCatalogSourceCount"],
         localization_audit["missingCatalogSourceCount"],
     )
-    if counts != (709, 219, 6, 0, 484) or counts[0] != sum(counts[1:]):
+    if counts != (756, 220, 6, 0, 530) or counts[0] != sum(counts[1:]):
         fail("Android localization review source counts changed without review")
-    if localization_audit["runtimeSourceLiteralCount"] != 2_407:
+    if localization_audit["runtimeSourceLiteralCount"] != 2_507:
         fail("Android runtime localization lookup-source count changed without review")
     if localization_audit["fallbackSourceCount"] != counts[3] + counts[4]:
         fail("Android localization fallback count differs from incomplete and absent sources")
@@ -1003,7 +1012,7 @@ def main(argv=None):
     if any("source: String" == item.get("expression") for item in dynamic_calls):
         fail("Android localization dynamic-source audit includes function declarations")
     integer_sources = localization_audit["integerFormatSources"]
-    if localization_audit["integerFormatSourceCount"] != 16 or len(integer_sources) != 16:
+    if localization_audit["integerFormatSourceCount"] != 18 or len(integer_sources) != 18:
         fail("Android localization integer-format source inventory drift")
     main_activity_localization = (root / "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt").read_text()
     for needle in (

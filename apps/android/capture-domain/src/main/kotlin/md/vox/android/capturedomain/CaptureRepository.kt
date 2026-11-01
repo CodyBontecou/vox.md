@@ -248,6 +248,11 @@ data class CapturePreset(
     val audioEmbedPlacement: CaptureAudioEmbedPlacement = CaptureAudioEmbedPlacement.AFTER_TEXT,
     val watchOutputMode: CaptureWatchOutputMode = CaptureWatchOutputMode.TRANSCRIBE_AND_CAPTURE,
     val exportSettings: CapturePresetExportSettings = CapturePresetExportSettings(),
+    /** Null preserves the legacy global destination. Frozen on capture admission. */
+    val destination: CaptureDestination? = null,
+    val transcriptPropertyName: String = "",
+    val includeTranscriptInBody: Boolean = true,
+    val urlDelivery: CaptureURLDeliverySettings = CaptureURLDeliverySettings(),
 )
 
 data class CaptureEntryTemplate(
@@ -289,6 +294,7 @@ data class CaptureDraft(
     val originRecordingID: String? = null,
     val frozenPreset: CapturePreset? = null,
     val entryTemplateIDOverride: String? = null,
+    val routeOverride: CaptureRouteOverride? = null,
 )
 
 /** App-owned, hash-verified copy of a provider attachment in the current durable draft. */
@@ -473,6 +479,8 @@ interface CaptureRepository {
     suspend fun entryTemplates(): List<CaptureEntryTemplate>
     suspend fun saveEntryTemplate(template: CaptureEntryTemplate): List<CaptureEntryTemplate>
     suspend fun deleteEntryTemplate(templateID: String): List<CaptureEntryTemplate>
+    suspend fun setDraftRouteOverride(route: CaptureRouteOverride?): CaptureDraft = error("unsupportedRouteOverride")
+    suspend fun hasDurableCapture(requestID: String): Boolean = false
     suspend fun setDraftEntryTemplateOverride(templateID: String?): CaptureDraft
     suspend fun submit(
         text: String,

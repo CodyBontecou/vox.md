@@ -180,6 +180,9 @@ import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_FORMAT_JPEG
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_FORMAT_PDF
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.SCANNER_MODE_FULL
+import md.vox.android.capturedomain.CaptureRouteOverride
+import md.vox.android.capturedomain.CaptureURLDeliverySettings
+import md.vox.android.capturedomain.normalizedTranscriptProperty
 import md.vox.android.capturedomain.CaptureDestination
 import md.vox.android.capturedomain.CaptureAttachment
 import md.vox.android.ui.GeistMonoFontFamily
@@ -680,6 +683,7 @@ private fun VoxNavigation(
                     onSubmitRecording = model::submitRecording,
                     onDraftChanged = model::updateDraft,
                     onEntryTemplateSelected = model::setEntryTemplateOverride,
+                    onRouteChanged = model::setRouteOverride,
                     pinnedPresets = latestState.presetCollection?.let(CapturePresetQuickAccess::alternatePresets).orEmpty(),
                     isPresetRailExpanded = latestState.isPresetRailExpanded,
                     togglePresetRail = model::togglePresetRail,
@@ -1139,6 +1143,7 @@ internal fun CaptureScreen(
     onSubmitRecording: (String, String?, String, String?, String?, CapturePreset?, CaptureLocationOutcome) -> Unit,
     onDraftChanged: (String, String?) -> Unit,
     onEntryTemplateSelected: (String?) -> Unit,
+    onRouteChanged: (CaptureRouteOverride?) -> Unit = {},
     pinnedPresets: List<CapturePreset> = emptyList(),
     isPresetRailExpanded: Boolean = false,
     togglePresetRail: () -> Unit = {},
@@ -1788,6 +1793,11 @@ internal fun CaptureScreen(
                 .padding(padding)
                 .padding(horizontal = 20.dp, vertical = 16.dp),
         ) {
+            CaptureRouteControl(
+                route = state.draft.routeOverride,
+                destination = (state.draft.frozenPreset ?: state.presetCollection?.activePreset)?.destination ?: state.destination,
+                onChanged = onRouteChanged,
+            )
             if (state.entryTemplates.isNotEmpty()) {
                 PresetChoiceRow(
                     title = voxString("Entry template"),
@@ -3710,6 +3720,10 @@ private data class CapturePresetEditorDraft(
     val audioEmbedPlacement: CaptureAudioEmbedPlacement,
     val watchOutputMode: CaptureWatchOutputMode,
     val exportSettings: CapturePresetExportSettings,
+    val destination: CaptureDestination? = null,
+    val transcriptPropertyName: String = "",
+    val includeTranscriptInBody: Boolean = true,
+    val urlDelivery: CaptureURLDeliverySettings = CaptureURLDeliverySettings(),
 ) {
     fun toPreset(revision: Int, metadataFields: List<CaptureMetadataField>) = CapturePreset(
         id = id,
@@ -3759,6 +3773,10 @@ private data class CapturePresetEditorDraft(
         audioEmbedPlacement = audioEmbedPlacement,
         watchOutputMode = watchOutputMode,
         exportSettings = exportSettings,
+        destination = destination,
+        transcriptPropertyName = transcriptPropertyName,
+        includeTranscriptInBody = includeTranscriptInBody,
+        urlDelivery = urlDelivery,
     )
 
     companion object {
@@ -3858,6 +3876,10 @@ private data class CapturePresetEditorDraft(
                 audioEmbedPlacement = preset.audioEmbedPlacement,
                 watchOutputMode = preset.watchOutputMode,
                 exportSettings = preset.exportSettings,
+                destination = preset.destination,
+                transcriptPropertyName = preset.transcriptPropertyName,
+                includeTranscriptInBody = preset.includeTranscriptInBody,
+                urlDelivery = preset.urlDelivery,
             )
         }
     }
@@ -3907,7 +3929,8 @@ private fun CapturePresetEditorScreen(
         -> draft.locationLabelConsentVersion == null
     }
     val valid = draft.name.trim().isNotEmpty() && routeIsValid && headingIsValid && processingIsValid &&
-        exportIsValid && locationIsValid && locationLabelConsentIsValid && metadata != null
+        exportIsValid && locationIsValid && locationLabelConsentIsValid && metadata != null &&
+        (draft.transcriptPropertyName.isBlank() || normalizedTranscriptProperty(draft.transcriptPropertyName) != null)
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -3957,6 +3980,7 @@ private fun CapturePresetEditorScreen(
                 setEnabled = { draft = draft.copy(isEnabled = it) },
                 setPinned = { draft = draft.copy(isPinned = it) },
             )
+            PresetVaultControl(draft.destination) { draft = draft.copy(destination = it) }
             CapturePresetDestinationEditor(
                 noteTargetKind = draft.noteTargetKind,
                 rollingPeriod = draft.rollingPeriod,
@@ -4008,6 +4032,9 @@ private fun CapturePresetEditorScreen(
                 setAttachmentsFolder = { draft = draft.copy(attachmentsFolder = it) },
                 setRetryProtectionEnabled = { draft = draft.copy(retryProtectionEnabled = it) },
             )
+            TranscriptPropertyControls(draft.transcriptPropertyName, draft.includeTranscriptInBody,
+                { draft = draft.copy(transcriptPropertyName = it) }, { draft = draft.copy(includeTranscriptInBody = it) })
+            URLDeliverySettingsControl(draft.urlDelivery) { draft = draft.copy(urlDelivery = it) }
             CapturePresetMetadataEditor(
                 metadataScope = draft.metadataScope,
                 metadataText = draft.metadataText,
@@ -5122,6 +5149,7 @@ internal fun SettingsScreen(
                 icon = Icons.Outlined.BarChart,
                 onClick = openStats,
             )
+            URLDeliveryRecoveryControl()
             SettingsSection(voxUiText("Recordings"))
             SettingsNavigationRow(
                 title = voxUiText("Recordings"),
@@ -5189,9 +5217,9 @@ internal fun SettingsScreen(
             )
             SettingsValueRow(voxUiText("Audio capture"), voxString("On-device"))
             SettingsValueRow(voxUiText("Processing"), voxString("On-device"))
-            SettingsValueRow(voxUiText("Privacy"), voxString("Voice/text stay local"))
+            SettingsValueRow(voxUiText("Privacy"), voxString("Local processing; optional URL delivery"))
             SettingsValueRow(voxUiText("Version"), appVersionString(context))
-            Text(voxString("Capture contents stay on this device until Vox.md writes them to the folder you selected. Android backup is disabled for content-bearing storage."),
+            Text(voxString("Capture contents stay on this device until Vox.md writes them to your selected folder or sends text to an endpoint you explicitly enabled. Audio and attachments are not uploaded. Android backup is disabled for content-bearing storage."),
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,

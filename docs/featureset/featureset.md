@@ -419,3 +419,14 @@ No open real gaps remain. New gaps should be added here as they are discovered.
 
 - 270+ of 277 registry entries map to at least one docs surface.
 - Website docs guide is current and thorough; the three known gaps were closed on 2026-08-22, so the shipped-feature docs coverage is complete as of that date.
+
+
+## Android capture parity additions (2026-11-01)
+
+| ID | Feature | Platform | Status | Docs |
+|---|---|---|---|---|
+| F-AP-46 | Independent preset vaults and persisted one-off note/placement routing | Android | experimental | docs:none |
+| F-AP-47 | Explicit HTTPS delivery, encrypted outbox and recovery | Android | experimental | docs:none |
+| F-AP-48 | Voice transcript note-property mapping | Android/shared Rust | experimental | docs:none |
+
+Implementation and outstanding acceptance: [November capture parity](../android-parity-implementation-2026-11-01.md).

@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import md.vox.android.capturedomain.CaptureRouteOverride
 import md.vox.android.capturedomain.CaptureDestination
 import md.vox.android.capturedomain.CaptureDraft
 import md.vox.android.capturedomain.CaptureBarAction
@@ -53,6 +54,7 @@ internal class CaptureViewModel private constructor(
     private val mutableState = MutableStateFlow(CaptureUiState())
     val state: StateFlow<CaptureUiState> = mutableState.asStateFlow()
     private var draftSaveJob: Job? = null
+    private var routeSaveJob: Job? = null
 
     init {
         refresh(reconcile = true)
@@ -81,6 +83,7 @@ internal class CaptureViewModel private constructor(
         viewModelScope.launch {
             mutableState.update { it.copy(isSending = true, notice = null, acceptedRequestID = null) }
             draftSaveJob?.join()
+            routeSaveJob?.join()
             val result = runCatching { repository.submit(text, url, locationOutcome) }
                 .getOrElse { CaptureSubmitResult.SavedForRetry("unknown", "unexpectedFailure", durablySaved = false) }
             apply(result, acceptNewCapture = true)
@@ -97,6 +100,7 @@ internal class CaptureViewModel private constructor(
             originRecordingID = mutableState.value.draft.originRecordingID,
             frozenPreset = mutableState.value.draft.frozenPreset,
             entryTemplateIDOverride = mutableState.value.draft.entryTemplateIDOverride,
+            routeOverride = mutableState.value.draft.routeOverride,
         )
         mutableState.update { it.copy(draft = next) }
         draftSaveJob?.cancel()
@@ -124,6 +128,7 @@ internal class CaptureViewModel private constructor(
         viewModelScope.launch {
             mutableState.update { it.copy(isSending = true, notice = null, acceptedRequestID = null) }
             draftSaveJob?.join()
+            routeSaveJob?.join()
             val prepared = runCatching {
                 repository.prepareVoiceDraft(text, url, originRecordingID, audioContentUri, audioDisplayName, frozenPreset)
             }.getOrElse {
@@ -280,6 +285,18 @@ internal class CaptureViewModel private constructor(
                 .onFailure {
                     mutableState.update { it.copy(isSavingConfiguration = false, notice = voxNotice("The Default preset cannot be deleted.")) }
                 }
+        }
+    }
+
+    fun setRouteOverride(route: CaptureRouteOverride?) {
+        if (mutableState.value.isSending) return
+        // Serialize with draft saves; submission joins this job before freezing the request.
+        val previous = routeSaveJob
+        routeSaveJob = viewModelScope.launch {
+            previous?.join()
+            runCatching { repository.setDraftRouteOverride(route) }
+                .onSuccess { draft -> mutableState.update { it.copy(draft = it.draft.copy(routeOverride = draft.routeOverride), notice = null) } }
+                .onFailure { mutableState.update { it.copy(notice = voxNotice("The capture route could not be saved.")) } }
         }
     }
 

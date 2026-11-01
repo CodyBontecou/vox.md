@@ -87,6 +87,7 @@ val syncGeistFonts by tasks.registering(Sync::class) {
 }
 
 dependencies {
+    implementation(libs.serialization.json)
     implementation(project(":capture-domain"))
     implementation(project(":core-bridge"))
     implementation(project(":data"))

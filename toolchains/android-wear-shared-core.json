@@ -306,11 +306,11 @@
     },
     {
       "path": "apps/android/app/build.gradle.kts",
-      "sha256": "0ca63f94c51bdc22df257a7e9dcc7a9dee47e20e8b76b89d64a937fd4fe857dc"
+      "sha256": "c4be16ebf6b29549469d2ec4fbd43d79453248b3a96417346f57b875581d4b6c"
     },
     {
       "path": "apps/android/app/gradle.lockfile",
-      "sha256": "b5ea2a47f6fc88cf5cb58f55a3b7a1490db60cacc453dba0c0a7cd89b7523ca5"
+      "sha256": "7007ed87b6dc64fd30c24aa08a13957f481e3bdfb6762f08f0da4706c6916231"
     },
     {
       "path": "apps/android/app/proguard-rules.pro",
@@ -370,7 +370,7 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
-      "sha256": "7b8079eed083b849de4db4c12d941e71aca368dee4abcc8104ad371d0e7c7617"
+      "sha256": "73bd6f4d33c407e17547c4fe76860bf9a180ed811e7398c1469004c04d3d7fa1"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt",
@@ -398,7 +398,7 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/VoxApplication.kt",
-      "sha256": "58c619556fc0c0c8709a507cc41d9b5eef12539ea68059763ddfaf9387c6e99c"
+      "sha256": "6193eae07f8ceceab49b89a411c2d3cd3721b07bcb752464c5cf9e923e9d781e"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/PhoneWearBridge.kt",
@@ -422,7 +422,7 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/ui/CaptureViewModel.kt",
-      "sha256": "16ac0b7f8d5d21e1afd8f49935dccb85968d9902e91f1d9246b1a4c191c43ed3"
+      "sha256": "38ca34df114d7180e982f5229d1488b4c87285d891e3f50e5d18c9eba20888d0"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/ui/VoxTheme.kt",
@@ -494,7 +494,7 @@
     },
     {
       "path": "apps/android/localization-review.json",
-      "sha256": "a90d5f4fd21de567c7dd480d30e2ee78bf078cf311417b3adb8f572f5d8313cc"
+      "sha256": "26bde76c327ba2f432194f3ba1c0a0c7532f1e4d525ede1fc19580cc794fb9d1"
     },
     {
       "path": "apps/android/scripts/validate-debug-artifacts.py",
@@ -614,11 +614,11 @@
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt",
-      "sha256": "4c225dc935b77219152f8abf936f04b0614d0b5b2b256a14a78b2589ef40bc8a"
+      "sha256": "16dcad07612532ecfceae4cd23c7c29a892d76b638e4fca7a2121faa17b566c0"
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CapturePackageCodec.kt",
-      "sha256": "189cbdfe9834d3d6f7bef11513eddd1d438ff92faa47f941b24e626ed87fe2b7"
+      "sha256": "3c1f1c2af4fc0129e29b78fe539e985911027a8d779558e47b54731fbf12fb04"
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/DurableCaptureStore.kt",
@@ -875,6 +875,42 @@
     {
       "path": "apps/android/settings-gradle.lockfile",
       "sha256": "e58bb2ed80db9f829601a658d7c33b9802eb7d2191c31e79c28e01f14c225926"
+    },
+    {
+      "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRouting.kt",
+      "sha256": "b9786fb7599df73c3d6a8380c2b66bf339a481f0cbb3faab8ef0a22ff93f975d"
+    },
+    {
+      "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureRoutingTest.kt",
+      "sha256": "6c682234a55d4e2b14b490d879b795f211cfdc3fbe3771b6e074ccbd55ddd55f"
+    },
+    {
+      "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDestinationBindings.kt",
+      "sha256": "a823e9f2c09573a0c34c95d9791d63b4007fdbc9e7a893bb5f4917d3d184ebae"
+    },
+    {
+      "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureParityControls.kt",
+      "sha256": "d0fefa236e34856b369161d0db669ad24c152f07e80baf37cb28c78b5421c7ba"
+    },
+    {
+      "path": "apps/android/app/src/main/kotlin/md/vox/android/URLDelivery.kt",
+      "sha256": "98236a45e0552a05b57efec203efb9edab96595ee363653c881dbd35fd81e2f6"
+    },
+    {
+      "path": "apps/android/app/src/test/kotlin/md/vox/android/URLDeliveryPolicyTest.kt",
+      "sha256": "8e4847c736a9a3652c5add6fe7b6dfa4b6cdffc9051cac0ac7b67bbc8622af9c"
+    },
+    {
+      "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/URLDeliveryInstrumentationTest.kt",
+      "sha256": "7817a9343e275c8c0a87a599b9f2bdf69c749ee34dae46e2dc3bc1c5831d3d46"
+    },
+    {
+      "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityDeliveryInstrumentationTest.kt",
+      "sha256": "bcba7687f59340e67dc9c356c85a404f8efaf68d97b1b9cd284a151fa73dbe85"
+    },
+    {
+      "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityUiInstrumentationTest.kt",
+      "sha256": "e87186549a1491e2015f7a0181bde7d3c1797fa4d0410493675ebe7cb39e3c6c"
     }
   ],
   "rust": {

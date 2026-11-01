@@ -459,3 +459,30 @@ All below are **planned** unless noted. Parity classification from plan §9; mil
 4. **Whether the ADR-0021 Room instrumentation tests have since been executed** beyond the single Pixel 7 run recorded in the M3 audit; ADR text predates that run.
 5. **Wear module**: plan topology specifies `apps/android/wear`; it does not exist — assumed genuinely pending (M7) rather than relocated.
 6. ADR-0023 sections beyond the sampled range (§4 remainder, §5+) — decision intent captured from read portion and cross-referenced implementation.
+
+
+## November 2026 capture parity additions
+
+### F-AP-46 Independent preset vaults and one-off routing
+- Surface: Android Capture Preset editor and current-draft route dialog
+- Summary: A preset may select its own SAF vault; a draft may choose an existing note and prepend/append placement without editing its preset.
+- Details: Vault bindings are persisted before hash-bound capture admission; one-off route facts survive relaunch and clear after durable enqueue.
+- Constraints: Existing synthetic-vault packages retain legacy routing. Device/provider qualification remains pending.
+- Evidence: `apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRouting.kt`; `apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDestinationBindings.kt`; `docs/android-parity-implementation-2026-11-01.md`
+- Status: experimental
+
+### F-AP-47 URL delivery and recovery
+- Surface: Android preset URL settings and Settings → URL delivery recovery
+- Summary: Explicitly opted-in capture text and voice transcripts can be delivered to a frozen HTTPS endpoint independently of the local note.
+- Details: Keystore-backed encrypted endpoint/headers/body; durable receipt, stable idempotency key, redirect refusal, explicit ambiguous retry and discard.
+- Constraints: HTTPS without query parameters; iOS local-cleartext option not implemented. Device/endpoint qualification remains pending.
+- Evidence: `apps/android/app/src/main/kotlin/md/vox/android/URLDelivery.kt`; `apps/android/app/src/main/kotlin/md/vox/android/CaptureParityControls.kt`
+- Status: experimental
+
+### F-AP-48 Transcript note property mapping
+- Surface: Android Capture Preset → Transcript Property
+- Summary: Voice transcripts replace a named document property, with optional inclusion in the note body.
+- Details: Text is encoded as a quoted YAML string; prior multiline values are replaced; unrelated properties and body remain intact.
+- Constraints: Voice captures only; device qualification remains pending.
+- Evidence: `Packages/vox-core-rust/crates/vox-core/src/lib.rs` (`replace_transcript_property`); `apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityDeliveryInstrumentationTest.kt`
+- Status: experimental

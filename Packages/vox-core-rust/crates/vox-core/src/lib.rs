@@ -330,6 +330,13 @@ pub struct OrderedField {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TranscriptProperty {
+    pub name: String,
+    pub value: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MetadataPolicy {
     pub frontmatter_mode: String,
     pub ordered_fields: Vec<OrderedField>,
@@ -338,6 +345,8 @@ pub struct MetadataPolicy {
     pub final_newline: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub scope: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub transcript_property: Option<TranscriptProperty>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -858,6 +867,17 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
         "document" | "entry"
     ) {
         return Err(CoreError::InvalidEnum);
+    }
+    if let Some(property) = &metadata.transcript_property {
+        bounded_string(&property.name, 1, 128)?;
+        bounded_string(&property.value, 0, 65_536)?;
+        if !property
+            .name
+            .chars()
+            .all(|c| c.is_alphanumeric() || matches!(c, '_' | '-'))
+        {
+            return Err(CoreError::InvalidRendering);
+        }
     }
     bounded_array(metadata.ordered_fields.len(), 0, 128)?;
     let mut field_names = BTreeSet::new();
@@ -2413,7 +2433,7 @@ fn render_payload_entry(input: &MaterializationInput) -> Result<String, CoreErro
             Payload::Asset { .. } => {}
         }
     }
-    if blocks.is_empty() {
+    if blocks.is_empty() && input.preset.metadata_policy.transcript_property.is_none() {
         return Err(CoreError::InvalidRendering);
     }
     Ok(blocks.join("\n\n"))
@@ -2474,6 +2494,10 @@ fn apply_capture_metadata(
                 format!("{inline}\n{body}")
             };
         }
+    }
+    if let Some(property) = &input.preset.metadata_policy.transcript_property {
+        // JSON strings are YAML strings: never interpret dictated text as YAML syntax.
+        replace_transcript_property(frontmatter, property)?;
     }
     Ok(body)
 }
@@ -2555,6 +2579,9 @@ pub fn materialize(
             let (mut existing_frontmatter, existing_body) =
                 split_leading_frontmatter(&normalized_existing);
             merge_frontmatter(&mut existing_frontmatter, &frontmatter);
+            if let Some(property) = &input.preset.metadata_policy.transcript_property {
+                replace_transcript_property(&mut existing_frontmatter, property)?;
+            }
             let placement = match input.operation.as_str() {
                 "existingNoteAppend" => "append",
                 "existingNotePrepend" => "prepend",
@@ -2756,6 +2783,26 @@ fn merge_frontmatter(existing: &mut Vec<String>, incoming: &[String]) {
             existing.splice(insertion..insertion, group[1..].iter().cloned());
         }
     }
+}
+
+fn replace_transcript_property(
+    frontmatter: &mut Vec<String>,
+    property: &TranscriptProperty,
+) -> Result<(), CoreError> {
+    // Replace all old values, including indented multiline continuations.
+    while let Some(start) = frontmatter.iter().position(|line| {
+        frontmatter_entry_key(line)
+            .is_some_and(|key| key.trim_matches(['\'', '"']) == property.name)
+    }) {
+        let mut end = start + 1;
+        while end < frontmatter.len() && frontmatter_entry_key(&frontmatter[end]).is_none() {
+            end += 1;
+        }
+        frontmatter.drain(start..end);
+    }
+    let quoted = serde_json::to_string(&property.value).map_err(|_| CoreError::Serialization)?;
+    frontmatter.push(format!("{}: {}", yaml_key(&property.name), quoted));
+    Ok(())
 }
 
 fn assemble_markdown(frontmatter: &[String], body: &str) -> String {
@@ -3040,6 +3087,7 @@ mod tests {
                     missing_heading_behavior: None,
                 },
                 metadata_policy: MetadataPolicy {
+                    transcript_property: None,
                     frontmatter_mode: "merge".to_owned(),
                     ordered_fields: vec![],
                     template_policy: "frozenObservation".to_owned(),
@@ -3175,6 +3223,30 @@ mod tests {
         }];
         let (_, rendered) = materialize(&input, None, None).unwrap();
         assert_eq!(String::from_utf8(rendered).unwrap(), "captured payload");
+    }
+
+    #[test]
+    fn transcript_property_quotes_yaml_and_replaces_existing_property_without_touching_body() {
+        let mut input = mutation_input("existingNoteAppend");
+        input.operation = "existingNoteAppend".to_owned();
+        input.preset.route_policy.placement = Some("append".to_owned());
+        input.preset.metadata_policy.scope = Some("entry".to_owned());
+        input.preset.metadata_policy.transcript_property = Some(TranscriptProperty {
+            name: "note".to_owned(),
+            value: "yes\n---\nadmin: true\n\"quoted\"".to_owned(),
+        });
+        input.payloads = vec![Payload::Text {
+            id: input.request_id,
+            text: String::new(),
+        }];
+        let existing = b"---\n\"note\": |\n  previous value\nkeep: true\n---\n\nExisting body\n";
+        let (_, bytes) = materialize(&input, None, Some(existing)).unwrap();
+        let rendered = String::from_utf8(bytes).unwrap();
+        assert!(rendered.contains("note: \"yes\\n---\\nadmin: true\\n\\\"quoted\\\"\""));
+        assert!(rendered.contains("keep: true"));
+        assert!(rendered.contains("Existing body"));
+        assert!(!rendered.contains("previous value"));
+        assert!(!rendered.contains("note::"));
     }
 
     #[test]
