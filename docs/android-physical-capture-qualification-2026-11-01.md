@@ -115,6 +115,43 @@ is not a confirmed leak. Kernel/context-switch frames are physical Linux frames;
 the analyzer's generic emulator classification is disregarded. The raw trace remains
 temporary; the repository retains only its digest and content-free summary.
 
-Full regression results and completed physical measurements will be added after
-the campaigns finish. Existing implemented rows retain their pending broader
-physical/provider acceptance; no capability is promoted from these partial results.
+The autonomous sampler passed a short emulator smoke check: telemetry advanced,
+manual stopping correctly produced an incomplete result, and finalized PCM WAV
+header/export verification passed. This is harness validation, not physical evidence.
+The disposable emulator and its qualification installation were stopped/removed;
+the disconnected Pixel's private test audio still needs verified cleanup. The owner
+application has not been replaced or cleared.
+
+## Automated regression results
+
+The final Android CI command passed `check assembleDebugAndroidTest
+:app:validateDebugArtifacts :wear:validateWearDebugArtifacts releaseReadiness`,
+including lint, reviewed debug components, backup rules, four-ABI ELF checks,
+optimized phone/Wear bundles and the unchanged 342-component SBOM. Results:
+
+- 291 JVM tests, zero failures.
+- 90 phone/model tests, zero skips, including all four mandatory real-model cases;
+  the retained receipt records clean source `5aea785` and current production hashes.
+- 22 ordinary data instrumentation tests, plus both dedicated quota phases across
+  an actual fixture-package uninstall/reinstall boundary.
+- Shared Swift: 655 + 381 XCTest tests and 12 Swift Testing tests.
+- Rust: 49 workspace tests; formatting, strict Clippy and binding reproducibility.
+- 65 script tests and 158 contract tests. The final run kept generated mirrors stable.
+- Swift oracle: regenerated from clean `db43c26`, committed as `b5da62e`; all 14
+  cases unchanged and the subsequent clean-source provenance check passed.
+- Localization generation, intelligence evidence, ledger inventory and 277 governed
+  implementation hashes validate. No parity status was promoted.
+
+The initial combined data invocation incorrectly included two reinstall-only methods;
+the final ordinary run excludes that class and the dedicated harness executes both
+methods with the required uninstall. One contract run raced a mirror refresh; its
+stable final rerun passed. Debug provider-grant lint was fixed and the full CI command
+rerun successfully.
+
+`validatePhysicalCaptureEvidence` passes the truthful incomplete matrix (0/14 full
+physical cases). `physicalCaptureReadiness` correctly fails because the required
+hardware/provider evidence remains incomplete. Pixel reconnection is required for
+verified stop/cleanup, a fresh hour recording, actual fault/reboot recovery, model
+memory/thermal runs and Drive delivery/retry. Samsung and OneDrive remain unavailable.
+Existing implemented rows retain their pending broader physical/provider acceptance;
+no capability is promoted from these partial results.
