@@ -34,7 +34,36 @@ RTL Back control at 200% text size. Catalog mutations reject missing locales, ch
 format arguments, lost template tokens, missing plural categories, unclassified
 counts and false human approval. Existing iOS wording always wins over Android drafts.
 
-Validation results will be recorded after the full checks finish.
+## Validation
+
+Implementation commit: `d000ca3`. Oracle fixture commit: `7e9d459`, regenerated
+from that clean implementation revision. All 14 oracle cases are unchanged;
+clean-tree source/compiler provenance and fixture identity checks pass.
+
+- Android/Wear: `check assembleDebugAndroidTest :app:validateDebugArtifacts
+  :wear:validateWearDebugArtifacts releaseReadiness` passed, including lint,
+  all 274 JVM tests, four-ABI phone native artifacts, debug APK validation,
+  optimized phone/Wear release bundles and readiness checks.
+- Phone: 88 instrumentation tests completed on the dedicated API-36 Vox emulator;
+  84 passed, four inference-model-fixture tests were skipped, zero failed.
+  The five new localization tests also passed independently. Arabic-Indic digit
+  assertions use Egyptian Arabic (`ar-EG`); generic Arabic may legitimately use
+  Western digits on this Android/CLDR version.
+- Data/provider: all 22 database, entry-template and SAF tests passed. Both real
+  uninstall/reinstall quota phases passed; the isolated fixture package was removed.
+- Rust: all 49 workspace tests, rustfmt, strict Clippy and byte-identical
+  Swift/Kotlin binding regeneration passed.
+- Swift: 655 shared and 381 capture-core XCTest tests plus 10 Swift Testing tests
+  passed using an isolated shared container.
+- Project contracts: all 65 script and 140 contract/mutation tests passed. The
+  manifest validates 193 governed files, 98 fixtures, 282 capability rows and four
+  mirrors; toolchain validation binds 229 implementation hashes.
+- Localization generation/freshness, the 347-entry feature inventory, registry
+  coverage and whitespace checks passed.
+
+These are automated local/emulator results. Native-speaker approval, canonical RTL
+visual approval and physical OEM/Wear qualification remain open; no human or Play
+release approval is inferred.
 
 The parity ledger adds `cap.ui.localization` as implemented with automated-check evidence; acceptance remains planned
 until human device/linguistic qualification. The ledger now contains 282
