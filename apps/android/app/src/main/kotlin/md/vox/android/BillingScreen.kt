@@ -123,13 +123,11 @@ internal fun UpgradeScreen(
 
             Button(
                 onClick = purchase,
-                enabled = billingState.productAvailable &&
-                    billingState.entitlement == VoxEntitlement.FREE &&
-                    billingState.connectionPhase == BillingConnectionPhase.READY,
+                enabled = billingState.canPurchase(),
                 modifier = Modifier.fillMaxWidth().height(48.dp),
                 shape = RoundedCornerShape(12.dp),
             ) {
-                val purchaseLabel = when (billingState.entitlement) {
+                val purchaseLabel = if (billingState.isPurchasing) voxString("Waiting for Google Play…") else when (billingState.entitlement) {
                     VoxEntitlement.UNLIMITED -> voxString("Unlimited Active")
                     VoxEntitlement.PENDING -> voxString("Purchase Pending")
                     VoxEntitlement.FREE -> billingState.formattedPrice?.let {
@@ -140,11 +138,11 @@ internal fun UpgradeScreen(
             }
             OutlinedButton(
                 onClick = restore,
-                enabled = billingState.connectionPhase != BillingConnectionPhase.CONNECTING,
+                enabled = billingState.connectionPhase != BillingConnectionPhase.CONNECTING && !billingState.isRestoring && !billingState.isPurchasing,
                 modifier = Modifier.fillMaxWidth().height(48.dp),
                 shape = RoundedCornerShape(12.dp),
             ) {
-                Text(voxString("Restore Purchase"))
+                Text(if (billingState.isRestoring) voxString("Restoring purchase…") else voxString("Restore Purchase"))
             }
             Text(voxString("On Android, Unlimited applies only to the Google Play account that purchased it. Google Play does not share in-app purchases through Family Library, and Apple purchases do not transfer."),
                 style = MaterialTheme.typography.bodySmall,
@@ -198,6 +196,8 @@ internal fun billingMessage(state: BillingUiState): VoxUiText? = when {
         voxUiText("Google Play verified this purchase, but Vox.md could not protect offline proof on this device. Restore again before using Unlimited offline.")
     state.statusCode == "unrecognizedPurchase" ->
         voxUiText("Google Play returned a purchase that does not unlock this app. Your existing access remains unchanged.")
+    state.statusCode?.startsWith("acknowledge:") == true ->
+        voxUiText("Your purchase is active, but Google Play has not acknowledged it yet. Restore while connected to retry confirmation.")
     state.lastOutcome == BillingActionOutcome.PURCHASED -> voxUiText("Purchase complete. Unlimited access is active.")
     state.lastOutcome == BillingActionOutcome.RESTORED -> voxUiText("Purchase restored. Unlimited access is active.")
     state.lastOutcome == BillingActionOutcome.NOT_FOUND -> voxUiText("No Vox.md Unlimited purchase was found for this Google Play account.")

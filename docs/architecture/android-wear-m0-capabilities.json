@@ -353,8 +353,8 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: One-time lifetime unlimited entitlement with no subscription",
-          "evidencePath": "artifacts/validation/android-wear/cap.billing.lifetime.md",
+          "assertion": "Native lifetime purchase/restore with offer token, pending/cache continuity, callback ordering, duplicate-flow prevention and acknowledgement recovery; actual Play account qualification remains required.",
+          "evidencePath": "docs/android-monetization-parity-2026-11-01.md",
           "kind": "account",
           "status": "planned"
         }
@@ -364,8 +364,16 @@
       ],
       "evidence": [
         {
-          "path": "README.md",
-          "symbol": "one-time"
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt",
+          "symbol": "class PlayBillingManager"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/BillingOperationsTest.kt",
+          "symbol": "class BillingOperationsTest"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/BillingUiInstrumentationTest.kt",
+          "symbol": "class BillingUiInstrumentationTest"
         }
       ],
       "id": "cap.billing.lifetime",
@@ -379,7 +387,7 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "implemented"
     },
     {
       "acceptance": [
@@ -8092,8 +8100,8 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: One-time Family Sharing lifetime entitlement",
-          "evidencePath": "artifacts/validation/android-wear/cap.billing.family.md",
+          "assertion": "Family access and verified discounted upgrade require an app-account entitlement service; implementation direction pending. Play Family Library does not share in-app purchases.",
+          "evidencePath": "docs/android-monetization-parity-2026-11-01.md",
           "kind": "device",
           "status": "planned"
         }
@@ -8123,8 +8131,8 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: Discounted family upgrade for existing individual owners",
-          "evidencePath": "artifacts/validation/android-wear/cap.billing.family-upgrade.md",
+          "assertion": "Family access and verified discounted upgrade require an app-account entitlement service; implementation direction pending. Play Family Library does not share in-app purchases.",
+          "evidencePath": "docs/android-monetization-parity-2026-11-01.md",
           "kind": "device",
           "status": "planned"
         }
@@ -8154,8 +8162,8 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: Restore and reconcile current lifetime entitlements",
-          "evidencePath": "artifacts/validation/android-wear/cap.billing.restore.md",
+          "assertion": "Native lifetime purchase/restore with offer token, pending/cache continuity, callback ordering, duplicate-flow prevention and acknowledgement recovery; actual Play account qualification remains required.",
+          "evidencePath": "docs/android-monetization-parity-2026-11-01.md",
           "kind": "device",
           "status": "planned"
         }
@@ -8165,8 +8173,16 @@
       ],
       "evidence": [
         {
-          "path": "Voxboard/StoreManager.swift",
-          "symbol": "restorePurchases"
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt",
+          "symbol": "class PlayBillingManager"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/BillingOperationsTest.kt",
+          "symbol": "class BillingOperationsTest"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/BillingUiInstrumentationTest.kt",
+          "symbol": "class BillingUiInstrumentationTest"
         }
       ],
       "id": "cap.billing.restore",
@@ -8180,7 +8196,7 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "implemented"
     },
     {
       "acceptance": [

@@ -110,6 +110,7 @@ class PlayBillingTest {
     }
 
     @Test fun productQueryCannotHideEntitlementIntegrityWarnings() {
+        assertEquals("acknowledge:2", billingStatusAfterProductQuery("acknowledge:2", null))
         assertEquals(
             "entitlementCacheUnavailable",
             billingStatusAfterProductQuery(

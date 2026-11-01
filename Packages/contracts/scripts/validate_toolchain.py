@@ -208,6 +208,9 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/app/src/androidTest/kotlin/md/vox/android/ComposerPresetUiInstrumentationTest.kt",
     "apps/android/app/src/test/kotlin/md/vox/android/DraftPreviewTest.kt",
     "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CapturePresentationTest.kt",
+    "apps/android/app/src/main/kotlin/md/vox/android/BillingOperations.kt",
+    "apps/android/app/src/test/kotlin/md/vox/android/BillingOperationsTest.kt",
+    "apps/android/app/src/androidTest/kotlin/md/vox/android/BillingUiInstrumentationTest.kt",
 )
 
 
@@ -988,9 +991,9 @@ def main(argv=None):
         localization_audit["incompleteCatalogSourceCount"],
         localization_audit["missingCatalogSourceCount"],
     )
-    if counts != (782, 222, 6, 0, 554) or counts[0] != sum(counts[1:]):
+    if counts != (785, 222, 6, 0, 557) or counts[0] != sum(counts[1:]):
         fail("Android localization review source counts changed without review")
-    if localization_audit["runtimeSourceLiteralCount"] != 2567:
+    if localization_audit["runtimeSourceLiteralCount"] != 2573:
         fail("Android runtime localization lookup-source count changed without review")
     if localization_audit["fallbackSourceCount"] != counts[3] + counts[4]:
         fail("Android localization fallback count differs from incomplete and absent sources")

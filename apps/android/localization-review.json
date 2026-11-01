@@ -31,7 +31,7 @@
   "dynamicRuntimeCallSiteCount": 0,
   "dynamicRuntimeCalls": [],
   "dynamicRuntimeExpressionCount": 0,
-  "fallbackSourceCount": 554,
+  "fallbackSourceCount": 557,
   "formatArgumentContractStatus": "validated",
   "incompleteCatalogSourceCount": 0,
   "incompleteCatalogSources": [],
@@ -166,8 +166,8 @@
     "Dynamic-source call sites are inventoried; the current finite-domain trace has no unresolved dynamic expressions.",
     "Missing sources fall back to English until reviewed translations are added to the iOS catalog."
   ],
-  "literalRuntimeSourceCount": 782,
-  "missingCatalogSourceCount": 554,
+  "literalRuntimeSourceCount": 785,
+  "missingCatalogSourceCount": 557,
   "missingCatalogSources": [
     {
       "locations": [
@@ -1340,13 +1340,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:200"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:198"
       ],
       "source": "Google Play returned a purchase that does not unlock this app. Your existing access remains unchanged."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:198"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:196"
       ],
       "source": "Google Play verified this purchase, but Vox.md could not protect offline proof on this device. Restore again before using Unlimited offline."
     },
@@ -1394,7 +1394,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:157"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:155"
       ],
       "source": "If Play is temporarily unavailable, Vox.md keeps the last successfully confirmed paid entitlement on this device. A successful later query applies pending, refund, or cancellation changes."
     },
@@ -1904,7 +1904,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:149"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:147"
       ],
       "source": "On Android, Unlimited applies only to the Google Play account that purchased it. Google Play does not share in-app purchases through Family Library, and Apple purchases do not transfer."
     },
@@ -2147,7 +2147,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:134"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:132"
       ],
       "source": "Purchase Pending"
     },
@@ -2171,7 +2171,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:153"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:151"
       ],
       "source": "Purchases are processed by Google Play. Purchase checks contain only the Play product and account transaction state; capture text, audio, files, destinations, and transcripts are never sent with billing traffic."
     },
@@ -2360,6 +2360,12 @@
         "apps/android/app/src/main/kotlin/md/vox/android/CaptureParityControls.kt:76"
       ],
       "source": "Reset route"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:145"
+      ],
+      "source": "Restoring purchase…"
     },
     {
       "locations": [
@@ -3159,7 +3165,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:133"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:131"
       ],
       "source": "Unlimited Active"
     },
@@ -3177,7 +3183,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:196"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:194"
       ],
       "source": "Unlimited is active from this installation’s last verified Google Play purchase. Connect to Play to refresh its status."
     },
@@ -3189,7 +3195,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:136"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:134"
       ],
       "source": "Unlock for %@"
     },
@@ -3370,6 +3376,12 @@
     },
     {
       "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:130"
+      ],
+      "source": "Waiting for Google Play…"
+    },
+    {
+      "locations": [
         "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2643",
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:652"
       ],
@@ -3455,7 +3467,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:193"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:191"
       ],
       "source": "Your existing Unlimited access remains active while Google Play processes the pending purchase."
     },
@@ -3467,7 +3479,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:194"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:200"
+      ],
+      "source": "Your purchase is active, but Google Play has not acknowledged it yet. Restore while connected to retry confirmation."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:192"
       ],
       "source": "Your purchase is pending. Unlimited access starts after Google Play confirms payment."
     },
@@ -3540,7 +3558,7 @@
   ],
   "pluralReviewStatus": "requires-human-review",
   "reviewStatus": "requires-human-translation",
-  "runtimeSourceLiteralCount": 2567,
+  "runtimeSourceLiteralCount": 2573,
   "runtimeSourceScanRoots": [
     "apps/android/app/src/main/kotlin",
     "apps/android/capture-domain/src/main/kotlin",

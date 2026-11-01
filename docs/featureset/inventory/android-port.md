@@ -385,12 +385,12 @@ All below are **planned** unless noted. Parity classification from plan §9; mil
 - Status: **planned** (no `apps/android/wear` module exists)
 
 ### F-AP-43 Lifetime purchase (Play Billing non-consumable), restore, family
-- Surface: Billing/entitlement UI
-- Summary: See F-AP-14; plus restore flow, restore diagnostics, family-sharing/upgrade behavior (`cap.billing.family`, `family-upgrade`), grandfather policy (F-AP-09).
-- Evidence: ADR-0008/0009; ledger `cap.billing.*` (M8)
-- Details: contract behavior is fully described in Summary; see the cited ADR/contract for the normative statement.
-- Constraints: Android/Wear platform only; contract/substrate stage — not shipped to users.
-- Status: **planned**
+- Surface: Android Upgrade screen and native Play Billing manager
+- Summary: Individual lifetime purchase and restore are implemented with explicit Play offer tokens, stale-response fencing, duplicate-flow prevention, acknowledgement recovery and protected offline continuity.
+- Evidence: `apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt`; `apps/android/app/src/main/kotlin/md/vox/android/BillingOperations.kt`; `docs/android-monetization-parity-2026-11-01.md`
+- Details: Pending/cancelled/unavailable/refunded states preserve admitted content. Family sharing and discounted family upgrades require a separate entitlement service; implementation direction is pending.
+- Constraints: Real Play license-account qualification is pending. Play Family Library does not share in-app purchases; no shareable family product is advertised without an account service.
+- Status: experimental
 
 ### F-AP-44 Queue scheduling & recovery actions
 - Surface: Inbox/queue UI, notifications

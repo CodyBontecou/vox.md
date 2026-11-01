@@ -354,7 +354,7 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt",
-      "sha256": "6e407d9480b8b818261aadb9638f77474e990916deea994a4026eb86dbd5ca43"
+      "sha256": "40f331b1a57d0e824094496b37f419c08faeeca3ee1b655c976412d3a2a459d2"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureDrainWorker.kt",
@@ -374,7 +374,7 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt",
-      "sha256": "3d49cf4dc74091ba102bd4e2b3bd9f6093d9cee606c1b034a88a045c1db1f6f7"
+      "sha256": "a78dedd54629cb027ffafbe6ad8c4549e9e32f5dbf7559c4398cd578282ef47d"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/PlayEntitlementCache.kt",
@@ -478,7 +478,7 @@
     },
     {
       "path": "apps/android/app/src/test/kotlin/md/vox/android/PlayBillingTest.kt",
-      "sha256": "150b7b1b47bf5bd90756b128ddb25130a27279d44512a18c47aa51233c00f7b9"
+      "sha256": "13ef09b6b59bfb8fa7cb15207be1313571368f962f5443fa75e5b839fa9adba0"
     },
     {
       "path": "apps/android/app/src/test/kotlin/md/vox/android/RuntimeLocalizationTest.kt",
@@ -494,7 +494,7 @@
     },
     {
       "path": "apps/android/localization-review.json",
-      "sha256": "fe1d4faf873f4e46d841a6534c3607336e79d1d08da800519709bbaf8186591a"
+      "sha256": "22ad5d44cba622e655a7eccbb113c1ecd65e5811c64488659786953293cb4d94"
     },
     {
       "path": "apps/android/scripts/validate-debug-artifacts.py",
@@ -951,6 +951,18 @@
     {
       "path": "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CapturePresentationTest.kt",
       "sha256": "6578c6ad5fc847059fd3cf641a12609aebece7ade657f0932f7bece6f76e268e"
+    },
+    {
+      "path": "apps/android/app/src/main/kotlin/md/vox/android/BillingOperations.kt",
+      "sha256": "c45450eeb145dd48b3fccc2d2e433efe282581a09017dc4cfc1bb1ef6e68097a"
+    },
+    {
+      "path": "apps/android/app/src/test/kotlin/md/vox/android/BillingOperationsTest.kt",
+      "sha256": "3967ca45659f1639225cd74124c5b3300784b65f67acc025b4a4809de1b75570"
+    },
+    {
+      "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/BillingUiInstrumentationTest.kt",
+      "sha256": "c2d1dbcdfa7d0f8658f789430406e8a3211d6dfb13d62579bcc86d893fbe6faf"
     }
   ],
   "rust": {
