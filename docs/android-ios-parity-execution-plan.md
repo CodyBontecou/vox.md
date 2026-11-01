@@ -4,6 +4,8 @@ Status: **Implementation in progress — broad local feature and release-enginee
 
 **2026-11-01 extension:** Four current-iOS capture gaps now have explicit implementation rows: URL delivery, preset vaults, one-off routing, and transcript-property mapping. The ledger contains 275 rows (242 Android/Wear applicable): 233 applicable rows verified, four implemented with device acceptance pending, and five inventoried. See [implementation and validation](android-parity-implementation-2026-11-01.md). Earlier counts below describe the September checkpoint.
 
+**2026-11-01 validation closure:** The implementation and ledger validator are committed, the Swift oracle was regenerated from clean source `9d51443`, and the full Rust workspace, shared Swift package (isolated container), project contracts and Android CI check/release-readiness commands now pass. See the implementation report above for commands and remaining physical-device release qualification. Historical checkpoint blockers below are retained as history.
+
 Planning date: **2026-09-12**
 
 Current repository baseline: `4dba398` plus the present working tree. The working tree is not clean, so implementation must record a clean, reviewed baseline before changing persisted contracts or claiming milestone completion.
