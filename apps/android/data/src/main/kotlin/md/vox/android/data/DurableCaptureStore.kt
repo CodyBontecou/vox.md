@@ -629,13 +629,13 @@ class DurableCapturePackageStore(
         }
         when (snapshot.state) {
             CaptureState.QUEUED -> if (observationsDir != null || preparedDir != null || markerFile != null || receiptsDir != null) throw PackageCodecException("entryInventory")
-            CaptureState.PREPARING -> if (markerFile != null || receiptsDir != null) throw PackageCodecException("entryInventory")
+            CaptureState.PREPARING -> if ((markerFile != null && markerState != CommitMarker.MarkerState.CLEARED) || receiptsDir != null) throw PackageCodecException("entryInventory")
             CaptureState.RETRYABLE_FAILURE, CaptureState.NEEDS_USER_ACTION -> {
                 if (receiptsDir != null) throw PackageCodecException("entryInventory")
                 // Only a CLEARED marker (proof of non-commit already recorded) may exist here.
                 if (markerFile != null && markerState != CommitMarker.MarkerState.CLEARED) throw PackageCodecException("markerState")
             }
-            CaptureState.MATERIALIZED -> if (!preparedVerified || markerFile != null || receiptsDir != null) throw PackageCodecException("preparedRequired")
+            CaptureState.MATERIALIZED -> if (!preparedVerified || (markerFile != null && markerState != CommitMarker.MarkerState.CLEARED) || receiptsDir != null) throw PackageCodecException("preparedRequired")
             CaptureState.COMMITTING, CaptureState.UNKNOWN_OUTCOME -> {
                 if (!preparedVerified) throw PackageCodecException("preparedRequired")
                 // receipts/ is optional here: the verified-receipt→journal-append replay window.
@@ -805,8 +805,14 @@ class DurableCapturePackageStore(
             if (fileOps.exists(markerFile)) {
                 val existing = CapturePackageCodec.decodeMarker(fileOps.readBounded(markerFile, CONTROL_LIMIT_BYTES))
                 if (existing.state == CommitMarker.MarkerState.ACTIVE) throw PackageCodecException("markerActiveExists")
+                // Preserve causal non-commit proof until the new attempt's marker is
+                // durable. A crash observes either CLEARED or ACTIVE, never a gap.
+                val temporary = File(directory, ".commit-attempt.${UUID.randomUUID()}.tmp")
+                fileOps.writeNewFileDurably(temporary, bytes) { phase -> fileOps.checkpoint("$phase:marker") }
+                fileOps.replaceFileAtomically(temporary, markerFile)
+            } else {
+                fileOps.writeNewFileDurably(markerFile, bytes) { phase -> fileOps.checkpoint("$phase:marker") }
             }
-            fileOps.writeNewFileDurably(markerFile, bytes) { phase -> fileOps.checkpoint("$phase:marker") }
             fileOps.syncDirectory(directory)
         }
         return DurableMarkerToken(requestID, marker.planHash, marker.recordedAtEpochMillis)

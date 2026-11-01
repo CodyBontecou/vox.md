@@ -466,7 +466,7 @@ All below are **planned** unless noted. Parity classification from plan §9; mil
 ### F-AP-46 Independent preset vaults and one-off routing
 - Surface: Android Capture Preset editor and current-draft route dialog
 - Summary: A preset may select its own SAF vault; a draft may choose an existing note and prepend/append placement without editing its preset.
-- Details: Vault bindings are persisted before hash-bound capture admission; one-off route facts survive relaunch and clear after durable enqueue.
+- Details: Vault bindings are persisted before hash-bound capture admission; one-off route facts survive relaunch and clear after durable enqueue. Recovery rejects a substituted commit destination; real-provider regression campaigns cover revoked grants, interrupted writes and repeated reconciliation. See `docs/android-capture-recovery-2026-11-01.md`.
 - Constraints: Existing synthetic-vault packages retain legacy routing. Device/provider qualification remains pending.
 - Evidence: `apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRouting.kt`; `apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDestinationBindings.kt`; `docs/android-parity-implementation-2026-11-01.md`
 - Status: experimental

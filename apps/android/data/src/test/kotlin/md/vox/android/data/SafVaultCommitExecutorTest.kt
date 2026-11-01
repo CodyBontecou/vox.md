@@ -128,8 +128,8 @@ class SafVaultCommitExecutorTest {
         return CapturePackageCodec.canonical(JsonObject(request))
     }
 
-    private fun executor(fixture: Fixture, gateway: FakeGateway) = SafVaultCommitExecutor(
-        fixture.store, fixture.coordinator, gateway, destination,
+    private fun executor(fixture: Fixture, gateway: FakeGateway, selectedDestination: VaultDestination = destination) = SafVaultCommitExecutor(
+        fixture.store, fixture.coordinator, gateway, selectedDestination,
         buildInfo = { CoreResult.Success(CoreBuildInfo(1U, "0.1.0-alpha.1", "f".repeat(40), "debug", "a".repeat(64), listOf("newNoteTextLink"), listOf("apple-parity-v1"))) },
         clock = { fixture.nextTime() },
     )
@@ -312,6 +312,105 @@ class SafVaultCommitExecutorTest {
         assertEquals(CaptureState.UNKNOWN_OUTCOME, fixture.store.loadJournal(requestID)!!.state)
     }
 
+    @Test fun restoredGrantResumesFrozenPreparedPlanWithoutRerendering() {
+        val fixture = fixture()
+        val gateway = FakeGateway(grantValid = false)
+        val retained = fixture.store.loadPreparedArtifacts(requestID,fixture.planHash)!!
+        assertEquals(CommitOutcome.PermissionLost,(executor(fixture,gateway).execute(requestID,leaseToken) as ExecutorOutcome.Ok).value)
+        val blocked = fixture.store.loadJournal(requestID)!!
+        assertEquals(CaptureState.MATERIALIZED,blocked.resumeState)
+        repeat(3) { assertTrue(executor(fixture,gateway).execute(requestID,leaseToken) is ExecutorOutcome.Err) }
+        assertTrue(gateway.documents.isEmpty())
+        gateway.grantValid = true
+        assertTrue(fixture.coordinator.mutate(JournalMutationCommand(requestID,blocked.revision,
+            JournalEvent(blocked.revision+1,CaptureState.NEEDS_PERMISSION,blocked.resumeState!!,JournalCode.PERMISSION_RESTORED,100)),100) is JournalMutationResult.Applied)
+        assertTrue((executor(fixture,gateway).execute(requestID,leaseToken) as ExecutorOutcome.Ok).value is CommitOutcome.VerifiedCommitted)
+        assertEquals(1,gateway.created.size)
+        assertArrayEquals(retained.noteBytes,fixture.store.loadPreparedArtifacts(requestID,fixture.planHash)!!.noteBytes)
+        assertArrayEquals(retained.planBytes,fixture.store.loadPreparedArtifacts(requestID,fixture.planHash)!!.planBytes)
+    }
+
+    @Test fun delayedVisibilityNeverAuthorizesAnotherCreateAcrossRepeatedRetries() {
+        val fixture = fixture()
+        val gateway = FakeGateway(failCreate = true)
+        assertEquals(CommitOutcome.Ambiguous,(executor(fixture,gateway).execute(requestID,leaseToken) as ExecutorOutcome.Ok).value)
+        gateway.failCreate = false
+        repeat(5) {
+            assertEquals(CommitOutcome.Ambiguous,(executor(fixture,gateway).execute(requestID,leaseToken) as ExecutorOutcome.Ok).value)
+            assertEquals(CaptureState.UNKNOWN_OUTCOME,fixture.store.loadJournal(requestID)!!.state)
+            assertEquals(CommitMarker.MarkerState.ACTIVE,fixture.store.readCommitMarker(requestID)!!.state)
+        }
+        assertTrue(gateway.documents.isEmpty()); assertTrue(gateway.created.isEmpty())
+        gateway.documents[documentKey("Inbox","capture.md")] = note
+        assertTrue((executor(fixture,gateway).execute(requestID,leaseToken) as ExecutorOutcome.Ok).value is CommitOutcome.VerifiedCommitted)
+        assertTrue(gateway.created.isEmpty())
+    }
+
+    @Test fun partialProviderBytesAreNeverOverwrittenDuringReconciliation() {
+        val fixture = fixture()
+        val gateway = FakeGateway(failCreate = true)
+        executor(fixture,gateway).execute(requestID,leaseToken)
+        val key = documentKey("Inbox","capture.md")
+        val partial = note.copyOf(4)
+        gateway.documents[key] = partial
+        repeat(5) {
+            assertEquals(CommitOutcome.Ambiguous,(executor(fixture,gateway).execute(requestID,leaseToken) as ExecutorOutcome.Ok).value)
+            assertArrayEquals(partial,gateway.documents[key])
+            assertNotNull(fixture.store.loadPreparedArtifacts(requestID,fixture.planHash))
+        }
+        assertTrue(gateway.created.isEmpty())
+    }
+
+    @Test fun clearedPriorAttemptAllowsSafeRematerializationAndFreshCommit() {
+        val fixture = fixture()
+        val gateway = FakeGateway()
+        fun transition(state: CaptureState, code: JournalCode, clear: Boolean = false) {
+            val snapshot = fixture.store.loadJournal(requestID)!!
+            val at = fixture.nextTime()
+            assertTrue(fixture.coordinator.mutate(JournalMutationCommand(requestID,snapshot.revision,
+                JournalEvent(snapshot.revision+1,snapshot.state,state,code,at,
+                    planHash=if (state in setOf(CaptureState.MATERIALIZED,CaptureState.COMMITTING)) fixture.planHash else null),
+                leaseToken,clearCommitMarker=clear),at) is JournalMutationResult.Applied)
+        }
+        transition(CaptureState.COMMITTING,JournalCode.COMMIT_STARTED)
+        fixture.store.persistCommitMarker(requestID,CommitMarker.validated(CommitMarker.MarkerState.ACTIVE,
+            destination.destinationID,fixture.planHash,"capture.md",fixture.nextTime()))
+        transition(CaptureState.RETRYABLE_FAILURE,JournalCode.PROVED_NOT_COMMITTED,clear=true)
+        assertEquals(CommitMarker.MarkerState.CLEARED,fixture.store.readCommitMarker(requestID)!!.state)
+        transition(CaptureState.PREPARING,JournalCode.PREPARATION_STARTED)
+        transition(CaptureState.MATERIALIZED,JournalCode.MATERIALIZED)
+        transition(CaptureState.COMMITTING,JournalCode.COMMIT_STARTED)
+        val replacement = destination.copy(destinationID="99999999-9999-4999-8999-999999999999")
+        val outcome = executor(fixture,gateway,replacement).execute(requestID,leaseToken)
+        assertTrue("Causal non-commit proof: $outcome",outcome is ExecutorOutcome.Ok && outcome.value == CommitOutcome.ProvedNotCommitted)
+        assertEquals(CaptureState.RETRYABLE_FAILURE,fixture.store.loadJournal(requestID)!!.state)
+        assertTrue(gateway.created.isEmpty()); assertEquals(0,gateway.readbackCalls)
+        assertNotNull(fixture.store.loadPreparedArtifacts(requestID,fixture.planHash))
+        transition(CaptureState.PREPARING,JournalCode.PREPARATION_STARTED)
+        transition(CaptureState.MATERIALIZED,JournalCode.MATERIALIZED)
+        val delivered = executor(fixture,gateway).execute(requestID,leaseToken)
+        assertTrue("Fresh commit after cleared proof: $delivered",delivered is ExecutorOutcome.Ok && delivered.value is CommitOutcome.VerifiedCommitted)
+        assertEquals(CaptureState.COMPLETED,fixture.store.loadJournal(requestID)!!.state)
+        assertEquals(CommitMarker.MarkerState.ACTIVE,fixture.store.readCommitMarker(requestID)!!.state)
+        assertEquals(1,gateway.created.size)
+    }
+
+    @Test fun recoveryRejectsDifferentVaultEvenIfCandidateBytesMatch() {
+        val fixture = fixture()
+        val gateway = FakeGateway(failCreate = true)
+        executor(fixture,gateway).execute(requestID,leaseToken)
+        gateway.documents[documentKey("Inbox","capture.md")] = note
+        val replacement = destination.copy(destinationID = "99999999-9999-4999-8999-999999999999")
+        val outcome = SafVaultCommitExecutor(fixture.store,fixture.coordinator,gateway,replacement,
+            { CoreResult.Success(CoreBuildInfo(1U,"0.1.0-alpha.1","f".repeat(40),"debug","a".repeat(64),listOf("newNoteTextLink"),listOf("apple-parity-v1"))) },
+            { fixture.nextTime() }).execute(requestID,leaseToken)
+        assertTrue("A different vault must not satisfy the old commit: $outcome",outcome is ExecutorOutcome.Err)
+        assertEquals(0,gateway.readbackCalls)
+        assertEquals(CaptureState.UNKNOWN_OUTCOME,fixture.store.loadJournal(requestID)!!.state)
+        assertNotNull(fixture.store.loadPreparedArtifacts(requestID,fixture.planHash))
+        assertTrue(gateway.created.isEmpty())
+    }
+
     @Test fun markerTypeGateForbidsCreateWithoutDurableToken() {
         val fixture = fixture()
         val gateway = FakeGateway()
@@ -330,13 +429,14 @@ class SafVaultCommitExecutorTest {
     // ---- fake provider ----
 
     private class FakeGateway(
-        private val grantValid: Boolean = true,
+        internal var grantValid: Boolean = true,
         private val preexistingNames: Set<String> = emptySet(),
         internal var failCreate: Boolean = false,
         internal var duplicateNames: Boolean = false,
     ) : SafDocumentsGateway {
         val documents = LinkedHashMap<String, ByteArray>()
         val created = mutableListOf<String>()
+        var readbackCalls = 0
 
         override fun revalidateGrant(destination: VaultDestination) = grantValid
 
@@ -368,6 +468,7 @@ class SafVaultCommitExecutorTest {
         }
 
         override fun readBackDocument(handle: SafDocumentHandle): SafResult<Pair<Long, String>> {
+            readbackCalls++
             val key = handle.key.removePrefix("doc/")
             val bytes = documents[key] ?: return SafResult.error(GatewayError.ProviderFailure.name)
             val digest = MessageDigest.getInstance("SHA-256").digest(bytes).joinToString("") { "%02x".format(it) }

@@ -240,6 +240,11 @@ internal class SafVaultCommitExecutor(
     private fun reconcile(requestID: String, leaseToken: String, snapshot: JournalSnapshot): ExecutorOutcome<CommitOutcome> {
         val planHash = authoritativePlanHash(snapshot) ?: return ExecutorOutcome.err("planHashBinding")
         val marker = store.readCommitMarker(requestID)
+        // A repaired or accidentally substituted vault must never satisfy an old
+        // attempt, even when another document has byte-identical prepared content.
+        if (marker?.state == CommitMarker.MarkerState.ACTIVE && (marker.destinationID != destination.destinationID || marker.planHash != planHash)) {
+            return ExecutorOutcome.err("commitMarkerBinding")
+        }
 
         // No marker, or a CLEARED marker whose PROVED_NOT_COMMITTED append may have been
         // interrupted: both are causal proof create-never-issued (ADR-0023 §4 refinement).

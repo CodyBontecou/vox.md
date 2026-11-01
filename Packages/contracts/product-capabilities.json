@@ -5445,6 +5445,10 @@
         {
           "path": "README.md",
           "symbol": "Failed writes and retries do not consume a Capture"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
+          "symbol": "fun revokedGrantBeforeCommitPreservesPreparedCaptureUntilReauthorized"
         }
       ],
       "id": "cap.quota.retry-no-charge",
@@ -5800,6 +5804,10 @@
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureDraftStore.swift",
           "symbol": "draftsDirectoryURL"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
+          "symbol": "fun interruptedAfterWriteRecoversFromReopenedRoomAndPackage"
         }
       ],
       "id": "cap.store.drafts",
@@ -5866,6 +5874,10 @@
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureInbox.swift",
           "symbol": "CaptureCompletionReceipt"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
+          "symbol": "fun partialProviderWriteStaysUnknownAcrossRepeatedRetries"
         }
       ],
       "id": "cap.store.inbox",
@@ -8662,8 +8674,8 @@
     {
       "acceptance": [
         {
-          "assertion": "Independent preset vaults with immutable capture-time native capability bindings; device/provider fault qualification remains required",
-          "evidencePath": "docs/android-parity-implementation-2026-11-01.md",
+          "assertion": "Independent preset vault bindings; emulator real-provider grant revocation, interruption, repeated reconciliation and idempotent quota covered. Physical/cloud-provider and process-kill qualification remains required.",
+          "evidencePath": "docs/android-capture-recovery-2026-11-01.md",
           "kind": "device",
           "mappingID": "cap.destination.preset-vault.acceptance.1",
           "status": "planned"
@@ -8678,6 +8690,10 @@
         {
           "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDestinationBindings.kt",
           "symbol": "class CaptureDestinationBindings"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
+          "symbol": "fun revokedGrantAfterInterruptedWriteReconcilesWithoutDuplicate"
         }
       ],
       "id": "cap.destination.preset-vault",
@@ -9037,6 +9053,6 @@
   "schemaVersion": 1,
   "source": {
     "path": "docs/architecture/android-wear-m0-capabilities.json",
-    "sha256": "deadd7e83780fd1ab456bd23547bbb850dcd7587883404892501f9a76876f612"
+    "sha256": "3f468efe2e62a2eb322a75f0996b69b0158b08261a07144f11dea7cae48c66e9"
   }
 }
