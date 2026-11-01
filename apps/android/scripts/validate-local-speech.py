@@ -7,6 +7,7 @@ import hashlib
 import os
 from pathlib import Path
 import subprocess
+from device_model_network import wait_for_network_state
 
 
 ANDROID_ROOT = Path(__file__).resolve().parents[1]
@@ -102,6 +103,7 @@ def main() -> None:
         stage_fixture(adb_path, serial, model, "vosk-model-small-en-us-0.15.zip")
         stage_fixture(adb_path, serial, audio, "vosk-api-test.wav")
         adb(adb_path, serial, "shell", "cmd", "connectivity", "airplane-mode", "enable")
+        wait_for_network_state(lambda: adb(adb_path, serial, "shell", "dumpsys", "connectivity").stdout, online=False)
         result = adb(
             adb_path,
             serial,

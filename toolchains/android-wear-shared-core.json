@@ -458,7 +458,7 @@
     },
     {
       "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/NamedModelInferenceInstrumentationTest.kt",
-      "sha256": "8384ff7889bcc6a14fd1e2e1404cfbd4d38e56aef856a4648e78c63247a538da"
+      "sha256": "d78c4c06e38507d77ea0d4450ddc44aaa39590219fa21435ecb28309a5bd0033"
     },
     {
       "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/PhoneWearInboxInstrumentationTest.kt",
@@ -506,11 +506,11 @@
     },
     {
       "path": "apps/android/scripts/validate-local-speech.py",
-      "sha256": "68e865833d96cc7160456097421caa1d245fe84951eb1a90707a255abe9a5ed5"
+      "sha256": "ce1541efe22c0cf1d01329dc8e1b169ee747acad0197eea09f9a9d978d072add"
     },
     {
       "path": "apps/android/scripts/validate-named-speech-model.py",
-      "sha256": "bc41d87e9d42c1a2ceb3301b07c98e09609659d76202bb369f2b66a2f28e8b8f"
+      "sha256": "a46e7431f05f1901f433988ad7d097f889e7eb869750845b5cf48cf99ee84d53"
     },
     {
       "path": "apps/android/scripts/validate-reinstall-quota.py",
@@ -1098,7 +1098,7 @@
     },
     {
       "path": "Packages/contracts/tests/test_local_intelligence_evaluation.py",
-      "sha256": "9be209476409d214601b27451600d68580ab506b2d947b22da9600f236f7495f"
+      "sha256": "1429adb808566a5bd96e0581a66b9475f7f9cf3b191ec537d220d6507124a9ed"
     },
     {
       "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/OnDeviceIntelligenceEvaluationInstrumentationTest.kt",
@@ -1166,11 +1166,11 @@
     },
     {
       "path": "apps/android/scripts/validate-intelligence-evaluations.py",
-      "sha256": "2a236d5050bc083eac8790bded022863d474953a1a52adb268a85be1211cbb39"
+      "sha256": "e5564c53a0c260174fa08a8111e79f6def2c4c54088475ead6170e0266884bf6"
     },
     {
       "path": "apps/android/scripts/validate-local-intelligence.py",
-      "sha256": "64d0069442738ef1c6a1c9a13c00519516fe9ac5258ff8641d92f61277648d7a"
+      "sha256": "68eb245675a9cdd6a31ac7334c67412aaf23479579ca78c5813f9cc4503cfe3b"
     },
     {
       "path": "evaluations/local-intelligence/v1/README.md",
@@ -1203,6 +1203,10 @@
     {
       "path": "artifacts/android-release/vox-android-sbom.cdx.json",
       "sha256": "26257d66b6d0f0a590d7d21cfada419fcd9e227bfaaad2ead19eb6980d8a0e53"
+    },
+    {
+      "path": "apps/android/scripts/device_model_network.py",
+      "sha256": "fef20797c0179409848fbf853cae42638df0498179616010e79a9c06d4c47b3f"
     }
   ],
   "rust": {

@@ -7,6 +7,7 @@ import hashlib
 import os
 from pathlib import Path
 import subprocess
+from device_model_network import wait_for_network_state
 
 
 ANDROID_ROOT = Path(__file__).resolve().parents[1]
@@ -121,8 +122,10 @@ def main() -> None:
         adb(adb_path, serial, "install", "-r", "-t", str(TEST_APK))
         stage_audio(adb_path, serial, audio)
         adb(adb_path, serial, "shell", "cmd", "connectivity", "airplane-mode", "disable")
+        wait_for_network_state(lambda: adb(adb_path, serial, "shell", "dumpsys", "connectivity").stdout, online=True)
         run_test(adb_path, serial, "downloadsVerifiesInstallsAndSelectsRequestedModel", model_id)
         adb(adb_path, serial, "shell", "cmd", "connectivity", "airplane-mode", "enable")
+        wait_for_network_state(lambda: adb(adb_path, serial, "shell", "dumpsys", "connectivity").stdout, online=False)
         run_test(
             adb_path,
             serial,

@@ -11,6 +11,7 @@ import re
 import subprocess
 import sys
 import urllib.request
+from device_model_network import wait_for_network_state
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = {
@@ -88,6 +89,7 @@ def main():
             device("shell", "run-as", package, "cp", "/data/local/tmp/vox-intelligence-" + name, "files/local-intelligence-qualification/" + name)
             device("shell", "rm", "-f", "/data/local/tmp/vox-intelligence-" + name)
         device("shell", "cmd", "connectivity", "airplane-mode", "enable")
+        wait_for_network_state(lambda: device("shell", "dumpsys", "connectivity"), online=False)
         phases = [("realSpeechSpeakerAttributionBenchmark", "speaker-evaluation.json")]
         if not args.only_speakers: phases.insert(0, ("pinnedModelRunsSharedInstructionsOffline", "instruction-evaluation.json"))
         for method, report in phases:

@@ -31,6 +31,7 @@ EVALUATION_INPUTS = (
     "apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt",
     "apps/android/app/src/main/cpp/intelligence.cpp", "apps/android/app/src/main/cpp/CMakeLists.txt",
     "apps/android/scripts/validate-intelligence-evaluations.py",
+    "apps/android/scripts/device_model_network.py",
     "apps/android/scripts/build-intelligence-native.py", "apps/android/scripts/validate-local-intelligence.py",
     "apps/android/scripts/validate-local-speech.py", "apps/android/scripts/validate-named-speech-model.py",
     "apps/android/app/src/androidTest/kotlin/md/vox/android/OnDeviceIntelligenceEvaluationInstrumentationTest.kt",

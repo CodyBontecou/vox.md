@@ -67,7 +67,13 @@ mandatory Vosk and named Whisper Tiny phases, then real instruction and speaker
 inference. Fixture hashes are checked before modifying the explicitly selected
 emulator; inference runs with connectivity disabled and prior connectivity is restored.
 Missing fixtures, skipped tests, incomplete reports and development-only runs fail
-qualification. A separate 4 GB AVD is used; the baseline AVD is preserved.
+qualification. A separate 4 GB AVD is used; the baseline AVD is preserved. Qualification
+launches that AVD with `-dns-server 8.8.8.8,1.1.1.1`; host DNS/VPN settings are unchanged.
+Host gates wait for the current default network to become validated before acquisition
+and to disconnect before inference. The Whisper acquisition test opens the app and
+waits for its default-network callback to report unblocked access: Android 16 otherwise
+blocks a background instrumentation UID even when shell DNS works. No production
+network-policy exception or TLS bypass is introduced.
 
 Run with `ANDROID_HOME` and `ANDROID_SERIAL` set:
 

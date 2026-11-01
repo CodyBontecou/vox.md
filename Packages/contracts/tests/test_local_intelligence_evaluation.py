@@ -37,6 +37,17 @@ class LocalIntelligenceEvaluationTests(unittest.TestCase):
         sbom=json.loads((ROOT/"artifacts/android-release/vox-android-sbom.cdx.json").read_text())
         self.assertEqual(sum(VALIDATOR.MODEL_SHA256 in json.dumps(c) for c in sbom["components"]),1)
         self.assertNotIn("java.net",(ROOT/"apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalIntelligence.kt").read_text())
+    def test_radio_transition_waits_for_the_current_validated_network(self):
+        spec=importlib.util.spec_from_file_location("device_model_network",ROOT/"apps/android/scripts/device_model_network.py")
+        network=importlib.util.module_from_spec(spec);spec.loader.exec_module(network)
+        self.assertFalse(network.network_state_matches("Active default network: none",True))
+        self.assertTrue(network.network_state_matches("Active default network: none",False))
+        stale="Active default network: 2\nNetworkAgentInfo{network{1} Capabilities: INTERNET&VALIDATED}"
+        self.assertFalse(network.network_state_matches(stale,True))
+        ready="Active default network: 2\nNetworkAgentInfo{network{2} Capabilities: INTERNET&VALIDATED}"
+        self.assertTrue(network.network_state_matches(ready,True))
+        self.assertFalse(network.network_state_matches(ready,False))
+
     def test_retained_full_model_and_cross_platform_reports_are_truthful(self):
         VALIDATOR.validate_reports(self.corpus,VALIDATOR.REPORTS)
         with tempfile.TemporaryDirectory() as directory:

@@ -271,6 +271,7 @@ EXPECTED_GOVERNED_PATHS = (
     "evaluations/local-intelligence/v1/corpus.json",
     "Packages/VoxboardShared/Package.swift",
     "artifacts/android-release/vox-android-sbom.cdx.json",
+    "apps/android/scripts/device_model_network.py",
 )
 
 

@@ -2,6 +2,11 @@ package md.vox.android
 
 import android.app.ActivityManager
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import androidx.test.core.app.ActivityScenario
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import android.os.SystemClock
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -57,19 +62,24 @@ class NamedModelInferenceInstrumentationTest {
         assertTrue(descriptor.engine != SpeechModelEngine.VOSK)
         assertTrue(descriptor.remoteFiles.isNotEmpty())
 
-        manager.install(descriptor.id)
-        val ready = awaitModel(manager, descriptor.id)
-        assertEquals(descriptor.id, ready.descriptor.id)
-        assertEquals(descriptor.approximateBytes, descriptor.remoteFiles.sumOf { it.expectedBytes })
-        assertTrue(manager.select(descriptor.id))
-        assertEquals(descriptor.id, manager.selectedModelID())
-        val directory = requireNotNull(manager.selectedModelDirectory())
-        val receipt = File(directory, "vox-model.properties").readText()
-        assertTrue(receipt.contains("version=2"))
-        assertTrue(receipt.contains("id=${descriptor.id}"))
-        assertTrue(receipt.contains("engine=${descriptor.engine.name}"))
-        descriptor.remoteFiles.forEach { artifact ->
-            assertEquals(artifact.expectedBytes, File(directory, artifact.relativePath).length())
+        // Android 16 blocks background UID networking even when shell DNS works.
+        // Acquisition is a foreground user action in production, so exercise that state.
+        ActivityScenario.launch(MainActivity::class.java).use {
+            awaitUnblockedNetwork(context)
+            manager.install(descriptor.id)
+            val ready = awaitModel(manager, descriptor.id)
+            assertEquals(descriptor.id, ready.descriptor.id)
+            assertEquals(descriptor.approximateBytes, descriptor.remoteFiles.sumOf { it.expectedBytes })
+            assertTrue(manager.select(descriptor.id))
+            assertEquals(descriptor.id, manager.selectedModelID())
+            val directory = requireNotNull(manager.selectedModelDirectory())
+            val receipt = File(directory, "vox-model.properties").readText()
+            assertTrue(receipt.contains("version=2"))
+            assertTrue(receipt.contains("id=${descriptor.id}"))
+            assertTrue(receipt.contains("engine=${descriptor.engine.name}"))
+            descriptor.remoteFiles.forEach { artifact ->
+                assertEquals(artifact.expectedBytes, File(directory, artifact.relativePath).length())
+            }
         }
     }
 
@@ -142,6 +152,22 @@ class NamedModelInferenceInstrumentationTest {
             SystemClock.sleep(250)
         }
         error("timed out installing $modelID")
+    }
+
+    private fun awaitUnblockedNetwork(context: Context) {
+        val connectivity = context.getSystemService(ConnectivityManager::class.java)
+        val unblocked = CountDownLatch(1)
+        val callback = object : ConnectivityManager.NetworkCallback() {
+            override fun onBlockedStatusChanged(network: Network, blocked: Boolean) {
+                if (!blocked) unblocked.countDown()
+            }
+        }
+        connectivity.registerDefaultNetworkCallback(callback)
+        try {
+            assertTrue("foreground model acquisition requires unblocked networking", unblocked.await(30, TimeUnit.SECONDS))
+        } finally {
+            connectivity.unregisterNetworkCallback(callback)
+        }
     }
 
     private fun awaitTranscription(
