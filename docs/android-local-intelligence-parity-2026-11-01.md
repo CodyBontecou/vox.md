@@ -101,6 +101,8 @@ Validation completed so far:
 | Actual uninstall/reinstall | Both phases passed |
 | Swift package suites | 655 + 381 XCTest tests and 12 Swift Testing tests passed |
 | Repository checks | 65 script tests + 148 contract tests passed |
+| Rust workspace | 49 tests passed; strict Clippy and rustfmt passed |
+| Swift oracle | Regenerated from clean commit `1687d1c`; all 14 cases unchanged, provenance check passed |
 | Android artifacts | Lint, instrumentation builds, four-ABI debug checks and optimized phone/Wear release readiness passed |
 | Supply chain | 342-component SBOM, native build pins and byte-identical UniFFI bindings passed |
 | Governance | 347 inventoried features; 194 contract files and 266 implementation hashes validated |
@@ -111,6 +113,9 @@ Of 248 Android/Wear-applicable capabilities, 233 are verified, 14 implemented an
 inventoried. `cap.ai.intelligence-quality` remains implemented pending the broader
 qualification below. The disposable qualification AVD and temporary GGUF staging
 copies were removed after successful checks; the baseline AVD was preserved.
-Swift oracle regeneration and the final Rust workspace check follow the evidence commit.
+Implementation and foreground harness changes are committed as `c192d1f` and `7334844`.
+Measurements/ledger are committed as `1687d1c`; the regenerated oracle is `7c76c07`.
+All requested repository checks pass. Source inventory, localization freshness,
+manifest/toolchain validation and whitespace checks were repeated after oracle generation.
 Physical devices, broader languages/instructions, noisy/overlapping/conversational
 speech, latency/memory/thermal budgets and human quality approval remain qualification.
