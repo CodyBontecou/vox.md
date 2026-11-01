@@ -27,5 +27,34 @@ they do not imply human visual or cloud-provider approval.
 
 ## Validation
 
-Implementation checks and clean-commit oracle provenance will be recorded after the
-full Android, Rust, Swift, project-contract and emulator gates finish.
+The implementation is committed as `ba83d48`. The Swift oracle was regenerated from
+that clean source revision and committed as `1904ece`; its cases are unchanged and
+its source/compiler provenance check passes.
+
+- Android CI task set passed: `check assembleDebugAndroidTest
+  :app:validateDebugArtifacts :wear:validateWearDebugArtifacts releaseReadiness`.
+  This includes lint, 256 JVM tests, four-ABI phone native artifacts, phone/Wear debug
+  artifacts, release bundles and readiness validation.
+- Rust: all 49 workspace tests passed (27 library, 18 contract/integration, four
+  UniFFI), plus formatting, strict Clippy and byte-identical Swift/Kotlin bindings.
+- Swift package: 655 shared XCTest tests, 381 capture-core XCTest tests and 10 Swift
+  Testing tests passed. Host tests used an isolated shared container via
+  `VOXBOARD_SHARED_CONTAINER_OVERRIDE=/tmp/vox-shared-clean-tests`.
+- Project contracts: 65 script tests and 136 contract tests passed, including
+  deterministic capability conversion, 197 implementation hashes, schema mirrors,
+  localization audit and validation definitions. Feature inventory: 347 entries;
+  registry coverage and whitespace checks pass.
+- Phone instrumentation: all 79 tests completed on the dedicated API-36 Vox AVD:
+  75 passed, four model-fixture-gated tests skipped, zero failures. Run from a clean
+  app sandbox (`adb -s <test-emulator> shell pm clear md.vox.android`) before
+  instrumentation: the language test requires first-launch destination state.
+  The suite covers the new preview/resize, RTL setting selection, preference
+  persistence, widget configuration/RemoteViews, SAF heading-bottom insertion,
+  recording snapshot round trip, frozen filename context and export collision checks.
+
+The ledger now contains 281 capabilities: 262 verified, ten implemented and nine
+inventoried. Of 248 Android/Wear-applicable rows, 233 are verified, ten implemented
+and five inventoried. These six additions remain implemented with acceptance planned;
+physical/provider, launcher/OEM, accessibility and human visual qualification are
+still required for release claims. Android translation/plural review also remains
+open: the generated audit explicitly retains 554 catalog-missing English fallbacks.
