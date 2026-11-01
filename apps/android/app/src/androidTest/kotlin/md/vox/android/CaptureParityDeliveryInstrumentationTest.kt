@@ -17,6 +17,54 @@ import org.junit.runner.RunWith
 class CaptureParityDeliveryInstrumentationTest {
     private val context: Context get() = ApplicationProvider.getApplicationContext()
 
+    @Test fun bottomHeadingAndAudioTemplateSurvivePresetSnapshotAndSafDelivery() = runBlocking {
+        val repository = (context.applicationContext as VoxApplication).compositionRoot.captureRepository
+        val originalDestination = repository.currentDestination()
+        val originalPresetID = repository.capturePresets().activePresetID
+        val tree = DocumentsContract.buildTreeDocumentUri(TestDocumentsProvider.AUTHORITY, TestDocumentsProvider.ROOT_ID)
+        val root = DocumentsContract.buildDocumentUriUsingTree(tree, TestDocumentsProvider.ROOT_ID)
+        val resolver = context.contentResolver
+        val work = DocumentsContract.createDocument(resolver, root, DocumentsContract.Document.MIME_TYPE_DIR, "composer-${UUID.randomUUID()}")!!
+        val workTree = DocumentsContract.buildTreeDocumentUri(TestDocumentsProvider.AUTHORITY, DocumentsContract.getDocumentId(work))
+        val preset = CapturePreset(UUID.randomUUID().toString(), "Meetings", "", revision=1,
+            logicalFolder="Inbox", noteNameTemplate="capture-{id}.md", metadataFields=emptyList(),
+            destination=CaptureDestination(UUID.randomUUID().toString(), "Composer test", workTree.toString()),
+            noteTargetKind=CaptureNoteTargetKind.EXISTING_NOTE, existingNotePath="existing.md",
+            placement=CapturePlacementKind.BENEATH_HEADING, headingTitle="Notes", headingLevel=2,
+            headingPosition=CaptureHeadingPosition.BOTTOM, audioSaveMode=CaptureAudioSaveMode.ATTACHMENTS_FOLDER,
+            attachmentsFolder="Audio", audioFilenameTemplate="{preset}-{id8}.mp3", embedAudioInMarkdown=true)
+        val recordingID=UUID.randomUUID().toString()
+        try {
+            repository.saveCapturePreset(preset); repository.selectCapturePreset(preset.id)
+            val frozen=repository.capturePresets().activePreset
+            val snapshot=RecordingPresetSnapshotCodec.decode(RecordingPresetSnapshotCodec.encode(frozen))!!
+            assertEquals(CaptureHeadingPosition.BOTTOM,snapshot.headingPosition)
+            assertEquals("{preset}-{id8}.mp3",snapshot.audioFilenameTemplate)
+            val note=DocumentsContract.createDocument(resolver,work,"text/markdown","existing.md")!!
+            resolver.openOutputStream(note,"wt")!!.use { it.write("## Notes\nExisting\n### Nested\nKeep\n```\n## Fake\n```\n## Next\nTail\n".toByteArray()) }
+            val audio=DocumentsContract.createDocument(resolver,root,"audio/wav","source-${UUID.randomUUID()}.wav")!!
+            val bytes=byteArrayOf(82,73,70,70,1,2,3,4)
+            try {
+                resolver.openOutputStream(audio,"wt")!!.use { it.write(bytes) }
+                val prepared=repository.prepareVoiceDraft("New transcript",null,recordingID,audio.toString(),"source.wav",snapshot)
+                repository.saveDraft("Edited transcript",null)
+                assertEquals(prepared.originRecordingCreatedAtEpochMillis,repository.currentDraft().originRecordingCreatedAtEpochMillis)
+                val result=repository.submit("Edited transcript",null)
+                assertTrue("delivery: $result", result is CaptureSubmitResult.Delivered)
+                val content=resolver.openInputStream(note)!!.bufferedReader().use { it.readText() }
+                assertTrue(content,content.indexOf("Edited transcript") > content.indexOf("## Fake"))
+                assertTrue(content,content.indexOf("Edited transcript") < content.indexOf("## Next"))
+                assertTrue(content,content.contains("Audio/Meetings-${recordingID.take(8)}.wav"))
+                assertArrayEquals(bytes,resolver.openInputStream(audio)!!.use { it.readBytes() })
+            } finally { DocumentsContract.deleteDocument(resolver,audio) }
+        } finally {
+            repository.selectCapturePreset(originalPresetID)
+            if (repository.capturePresets().presets.any { it.id == preset.id }) repository.deleteCapturePreset(preset.id)
+            if(originalDestination!=null) repository.saveDestination(originalDestination.treeUri,originalDestination.displayName)
+            DocumentsContract.deleteDocument(resolver,work)
+        }
+    }
+
     @Test fun presetVaultAndPersistedOneOffRouteDeliverVoicePropertyThroughNativeCore() = runBlocking {
         val repository = (context.applicationContext as VoxApplication).compositionRoot.captureRepository
         val originalDestination = repository.currentDestination()

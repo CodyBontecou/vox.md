@@ -1,5 +1,14 @@
 # Android Application: iOS Functionality and UI Parity Plan
 
+November 1 composer update: the current ledger contains 281 capabilities, including
+248 applicable to Android/Wear: 233 verified, 10 implemented with acceptance planned,
+and five inventoried. The ten implemented additions cover URL delivery, independent
+preset vaults, one-off routing, transcript-property mapping, audio filename templates,
+heading position, configurable preset widgets, draft preview, rail side and timestamp
+format selection. See `android-composer-parity-2026-11-01.md` for current validation.
+Historical milestone counts below describe their original checkpoints.
+
+
 Status: **Implementation in progress — broad local feature and release-engineering pass complete; physical parity and Play release evidence remain open**
 
 **2026-11-01 extension:** Four current-iOS capture gaps now have explicit implementation rows: URL delivery, preset vaults, one-off routing, and transcript-property mapping. The ledger contains 275 rows (242 Android/Wear applicable): 233 applicable rows verified, four implemented with device acceptance pending, and five inventoried. See [implementation and validation](android-parity-implementation-2026-11-01.md). Earlier counts below describe the September checkpoint.

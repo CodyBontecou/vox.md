@@ -13,6 +13,8 @@ import md.vox.android.capturedomain.CapturePresetExportSettings
 import md.vox.android.platformservices.RecordingTranscriptionPhase
 import md.vox.android.platformservices.RecordingTranscriptionState
 import org.junit.After
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -204,6 +206,21 @@ class ConfiguredTranscriptSafInstrumentationTest {
         assertTrue(content.startsWith("---\naudio: \"$relativePath\"\n---"))
         assertTrue(content.endsWith("![[$relativePath]]"))
         assertTrue(content.indexOf("## Transcript") < content.indexOf("![[$relativePath]]"))
+    }
+
+    @Test fun audioFilenameTemplateUsesActualExtensionAndAvoidsOverwrite() {
+        val bytes=byteArrayOf(82,73,70,70,4,3,2,1)
+        val source=createDocument("template-source.wav","audio/wav",bytes)
+        val occupied=createDocument("Meetings-11111111.wav","audio/wav",byteArrayOf(9))
+        val exporter=AndroidConfiguredTranscriptExporter(context)
+        val result=exporter.export(state(),settings(format=CaptureExportFileFormat.MARKDOWN,embedAudioInMarkdown=true),
+            ConfiguredTranscriptAudioSource(source.toString(),"source.wav",CaptureAudioSaveMode.ALONGSIDE_NOTE,"Attachments",
+                audioFilenameTemplate="{preset}-{id8}.mp3",presetName="Meetings")) as ConfiguredTranscriptExportResult.Exported
+        assertArrayEquals(byteArrayOf(9),readDocument(occupied))
+        val content=readTextDocument(Uri.parse(result.documentUri))
+        assertTrue(content,content.contains("Meetings-11111111"))
+        assertFalse(content,content.contains(".mp3"))
+        assertFalse(content,content.contains("![[Meetings-11111111.wav]]"))
     }
 
     private fun settings(

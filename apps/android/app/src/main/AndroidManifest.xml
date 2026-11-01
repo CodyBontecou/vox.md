@@ -85,6 +85,13 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
+        <activity android:name=".VoxPresetWidgetConfigureActivity" android:exported="true">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" /></intent-filter>
+        </activity>
+        <receiver android:name=".VoxPresetWidgetProvider" android:label="@string/preset_widget_title" android:exported="true">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/vox_preset_widget_info" />
+        </receiver>
         <receiver
             android:name=".VoxCaptureWidgetProvider"
             android:exported="true">

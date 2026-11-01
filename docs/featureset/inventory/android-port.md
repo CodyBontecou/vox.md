@@ -486,3 +486,51 @@ All below are **planned** unless noted. Parity classification from plan §9; mil
 - Constraints: Voice captures only; device qualification remains pending.
 - Evidence: `Packages/vox-core-rust/crates/vox-core/src/lib.rs` (`replace_transcript_property`); `apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityDeliveryInstrumentationTest.kt`
 - Status: experimental
+
+### F-AP-49 Audio filename templates
+- Surface: Saved recording audio across Capture, configured transcript export and Wear Recording Only
+- Summary: Shared token renderer sanitizes and bounds names, preserves the encoded extension and freezes capture names before enqueue. Empty templates retain automatic naming.
+- Details: Persisted settings and deterministic renderers are covered by composer/preset regression checks.
+- Constraints: Release device and human acceptance remain planned.
+- Evidence: `apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CapturePresentation.kt`; `docs/android-composer-parity-2026-11-01.md`
+- Status: experimental
+
+### F-AP-50 Heading placement
+- Surface: Capture Preset editor → Beneath heading → Top/Bottom
+- Summary: Bottom insertion retains nested subsections and ignores fenced headings. Legacy snapshots default to Top.
+- Details: Persisted settings and deterministic renderers are covered by composer/preset regression checks.
+- Constraints: Release device and human acceptance remain planned.
+- Evidence: `Packages/vox-core-rust/crates/vox-core/src/lib.rs`; `docs/android-composer-parity-2026-11-01.md`
+- Status: experimental
+
+### F-AP-51 Configurable preset widgets
+- Surface: Android launcher widget and per-instance configuration
+- Summary: Follow pins or retain six explicit ordered slots, including empty, repeated and unavailable targets. Small widgets use the first slot; changing a nonempty draft route requires confirmation.
+- Details: Persisted settings and deterministic renderers are covered by composer/preset regression checks.
+- Constraints: Release device and human acceptance remain planned.
+- Evidence: `apps/android/app/src/main/kotlin/md/vox/android/PresetWidgets.kt`; `docs/android-composer-parity-2026-11-01.md`
+- Status: experimental
+
+### F-AP-52 Draft preview
+- Surface: Wide-window Capture composer
+- Summary: Opt-in local Markdown preview includes route, attachments and copy action. Editor identity survives resize and preview changes; hidden below 760 dp or at large font scale.
+- Details: Persisted settings and deterministic renderers are covered by composer/preset regression checks.
+- Constraints: Release device and human acceptance remain planned.
+- Evidence: `apps/android/app/src/main/kotlin/md/vox/android/CaptureComposerOptions.kt`; `docs/android-composer-parity-2026-11-01.md`
+- Status: experimental
+
+### F-AP-53 Preset rail side
+- Surface: Capture Bar settings
+- Summary: Physical left/right rail preference persists and applies in RTL.
+- Details: Persisted settings and deterministic renderers are covered by composer/preset regression checks.
+- Constraints: Release device and human acceptance remain planned.
+- Evidence: `apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt`; `docs/android-composer-parity-2026-11-01.md`
+- Status: experimental
+
+### F-AP-54 Timestamp formats
+- Surface: Capture Bar settings
+- Summary: Explicit 12-hour/24-hour selector preserves existing preference migration and timestamp insertion patterns.
+- Details: Persisted settings and deterministic renderers are covered by composer/preset regression checks.
+- Constraints: Release device and human acceptance remain planned.
+- Evidence: `apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CapturePresentation.kt`; `docs/android-composer-parity-2026-11-01.md`
+- Status: experimental

@@ -344,6 +344,7 @@ object CapturePackageCodec {
                 "headingTitle",
                 "headingLevel",
                 "missingHeadingBehavior",
+                "headingPosition",
             ),
         )
         boundedString(route, "noteNameTemplate", 1, 1024); validateSegments(array(route, "logicalFolder"), allow32 = false); validateSegments(array(route, "attachmentFolder"), allow32 = true)
@@ -354,6 +355,7 @@ object CapturePackageCodec {
         if (rollingPeriod != null && rollingPeriod !in setOf("daily", "weekly", "monthly", "quarterly", "yearly")) fail("rollingPeriod")
         val placement = (route["placement"] as? JsonPrimitive)?.content
         if (placement != null && placement !in setOf("append", "prepend", "beneathHeading")) fail("placement")
+        if (route["headingPosition"] != null && string(route, "headingPosition") !in setOf("top", "bottom")) fail("headingPosition")
         val headingTitle = (route["headingTitle"] as? JsonPrimitive)?.content
         val headingLevel = (route["headingLevel"] as? JsonPrimitive)?.content?.toLongOrNull()
         val missingHeadingBehavior = (route["missingHeadingBehavior"] as? JsonPrimitive)?.content
@@ -426,7 +428,7 @@ object CapturePackageCodec {
         if (operation != "newNote" && (placement ?: "append") != expectedPlacement) fail("placementProfile")
         if (expectedPlacement == "beneathHeading") {
             if (headingTitle.isNullOrBlank() || headingLevel !in 1L..6L || missingHeadingBehavior !in setOf("fail", "create")) fail("headingProfile")
-        } else if (headingTitle != null || headingLevel != null || missingHeadingBehavior != null) {
+        } else if (headingTitle != null || headingLevel != null || missingHeadingBehavior != null || route["headingPosition"] != null) {
             fail("headingProfile")
         }
         val frontmatterMode = string(metadata, "frontmatterMode")

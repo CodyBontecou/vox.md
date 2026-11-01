@@ -22,6 +22,8 @@ enum class CapturePlacementKind { APPEND, PREPEND, BENEATH_HEADING }
 
 enum class CaptureMissingHeadingBehavior { FAIL, CREATE }
 
+enum class CaptureHeadingPosition { TOP, BOTTOM }
+
 enum class CaptureProcessingMode { NONE, CLEAN, TODO_LIST, MEETING_NOTES, CUSTOM }
 
 enum class CaptureProcessingScope { BOTH, VOICE_ONLY, TEXT_ONLY }
@@ -228,6 +230,7 @@ data class CapturePreset(
     val headingTitle: String = "",
     val headingLevel: Int = 1,
     val missingHeadingBehavior: CaptureMissingHeadingBehavior = CaptureMissingHeadingBehavior.FAIL,
+    val headingPosition: CaptureHeadingPosition = CaptureHeadingPosition.TOP,
     val entryPrefix: String = "",
     val entrySuffix: String = "",
     /** Reusable entry template bound to this preset. Prefix/suffix remain its safe last-known snapshot. */
@@ -244,6 +247,7 @@ data class CapturePreset(
     val generateImageAltText: Boolean = false,
     val locationPolicy: CapturePresetLocationPolicy = CapturePresetLocationPolicy(),
     val audioSaveMode: CaptureAudioSaveMode = CaptureAudioSaveMode.OFF,
+    val audioFilenameTemplate: String = "",
     val embedAudioInMarkdown: Boolean = false,
     val audioEmbedPlacement: CaptureAudioEmbedPlacement = CaptureAudioEmbedPlacement.AFTER_TEXT,
     val watchOutputMode: CaptureWatchOutputMode = CaptureWatchOutputMode.TRANSCRIBE_AND_CAPTURE,
@@ -292,6 +296,7 @@ data class CaptureDraft(
     val captureSource: String = "app",
     val attachments: List<CaptureAttachment> = emptyList(),
     val originRecordingID: String? = null,
+    val originRecordingCreatedAtEpochMillis: Long? = null,
     val frozenPreset: CapturePreset? = null,
     val entryTemplateIDOverride: String? = null,
     val routeOverride: CaptureRouteOverride? = null,
@@ -306,6 +311,7 @@ data class CaptureAttachment(
     val byteCount: Long,
     val sha256: String,
     val includeInMarkdown: Boolean = true,
+    val isRecordingSource: Boolean = false,
 ) {
     val isImage: Boolean get() = mediaType.startsWith("image/")
 }
@@ -349,9 +355,11 @@ data class CaptureBarConfiguration(
     val orderedActions: List<CaptureBarAction> = CaptureBarAction.entries,
     val hiddenActions: Set<CaptureBarAction> = emptySet(),
     val usesTwentyFourHourTimestamps: Boolean = false,
+    val railSide: CaptureRailSide = CaptureRailSide.LEFT,
     val confirmsVoiceNotesBeforeAdding: Boolean = false,
     val voiceRecordingResult: VoiceRecordingResult = VoiceRecordingResult.ADD_TO_DRAFT,
 ) {
+    val timestampFormat: CaptureTimestampFormat get() = if (usesTwentyFourHourTimestamps) CaptureTimestampFormat.TWENTY_FOUR_HOUR else CaptureTimestampFormat.TWELVE_HOUR
     val visibleActions: List<CaptureBarAction>
         get() = orderedActions.filterNot(hiddenActions::contains)
 }
@@ -473,6 +481,7 @@ interface CaptureRepository {
     suspend fun presetQuickAccessRailExpanded(): Boolean
     suspend fun setPresetQuickAccessRailExpanded(expanded: Boolean)
     suspend fun capturePresets(): CapturePresetCollection
+    suspend fun selectCapturePresetForDraft(presetID: String): CapturePresetCollection = selectCapturePreset(presetID)
     suspend fun selectCapturePreset(presetID: String): CapturePresetCollection
     suspend fun saveCapturePreset(preset: CapturePreset): CapturePresetCollection
     suspend fun deleteCapturePreset(presetID: String): CapturePresetCollection

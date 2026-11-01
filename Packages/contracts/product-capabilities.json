@@ -8756,6 +8756,198 @@
       ],
       "programScope": "parity",
       "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Per-preset safe saved-audio filename templates, deterministic tokens and preview; retained device and visual qualification required",
+          "evidencePath": "docs/android-composer-parity-2026-11-01.md",
+          "kind": "device",
+          "mappingID": "cap.preset.audio-filename.acceptance.1",
+          "status": "planned"
+        }
+      ],
+      "classification": "native",
+      "dependencies": [
+        "dep.exporter"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CapturePresentation.kt",
+          "symbol": "object CaptureAudioFilename"
+        }
+      ],
+      "id": "cap.preset.audio-filename",
+      "legacyParity": "native-equivalent",
+      "milestone": "M5",
+      "outcome": "Per-preset safe saved-audio filename templates, deterministic tokens and preview",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Top or bottom insertion within a heading section, including nested headings and fenced code; retained device and visual qualification required",
+          "evidencePath": "docs/android-composer-parity-2026-11-01.md",
+          "kind": "device",
+          "mappingID": "cap.placement.heading-position.acceptance.1",
+          "status": "planned"
+        }
+      ],
+      "classification": "shared",
+      "dependencies": [
+        "dep.shared-core"
+      ],
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn insert_beneath_heading"
+        }
+      ],
+      "id": "cap.placement.heading-position",
+      "legacyParity": "exact",
+      "milestone": "M5",
+      "outcome": "Top or bottom insertion within a heading section, including nested headings and fenced code",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Per-instance configurable preset widgets following pins or six ordered custom slots; retained device and visual qualification required",
+          "evidencePath": "docs/android-composer-parity-2026-11-01.md",
+          "kind": "device",
+          "mappingID": "cap.entry.preset-widget.acceptance.1",
+          "status": "planned"
+        }
+      ],
+      "classification": "native",
+      "dependencies": [
+        "dep.durable-queue"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/PresetWidgets.kt",
+          "symbol": "class VoxPresetWidgetProvider"
+        }
+      ],
+      "id": "cap.entry.preset-widget",
+      "legacyParity": "native-equivalent",
+      "milestone": "M5",
+      "outcome": "Per-instance configurable preset widgets following pins or six ordered custom slots",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Opt-in local Markdown draft preview on wide windows without resetting editor state; retained device and visual qualification required",
+          "evidencePath": "docs/android-composer-parity-2026-11-01.md",
+          "kind": "device",
+          "mappingID": "cap.editor.draft-preview.acceptance.1",
+          "status": "planned"
+        }
+      ],
+      "classification": "native",
+      "dependencies": [
+        "dep.durable-queue"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureComposerOptions.kt",
+          "symbol": "fun CaptureWorkspace"
+        }
+      ],
+      "id": "cap.editor.draft-preview",
+      "legacyParity": "native-equivalent",
+      "milestone": "M5",
+      "outcome": "Opt-in local Markdown draft preview on wide windows without resetting editor state",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Persisted physical left or right pinned-preset rail including RTL layouts; retained device and visual qualification required",
+          "evidencePath": "docs/android-composer-parity-2026-11-01.md",
+          "kind": "device",
+          "mappingID": "cap.editor.rail-side.acceptance.1",
+          "status": "planned"
+        }
+      ],
+      "classification": "native",
+      "dependencies": [
+        "dep.durable-queue"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "symbol": "AbsoluteAlignment.BottomRight"
+        }
+      ],
+      "id": "cap.editor.rail-side",
+      "legacyParity": "native-equivalent",
+      "milestone": "M5",
+      "outcome": "Persisted physical left or right pinned-preset rail including RTL layouts",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Explicit persisted twelve-hour or twenty-four-hour timestamp selection with examples and legacy migration; retained device and visual qualification required",
+          "evidencePath": "docs/android-composer-parity-2026-11-01.md",
+          "kind": "device",
+          "mappingID": "cap.editor.timestamp-format.acceptance.1",
+          "status": "planned"
+        }
+      ],
+      "classification": "native",
+      "dependencies": [
+        "dep.durable-queue"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CapturePresentation.kt",
+          "symbol": "enum class CaptureTimestampFormat"
+        }
+      ],
+      "id": "cap.editor.timestamp-format",
+      "legacyParity": "native-equivalent",
+      "milestone": "M5",
+      "outcome": "Explicit persisted twelve-hour or twenty-four-hour timestamp selection with examples and legacy migration",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
     }
   ],
   "dependencyCatalog": [
@@ -8845,6 +9037,6 @@
   "schemaVersion": 1,
   "source": {
     "path": "docs/architecture/android-wear-m0-capabilities.json",
-    "sha256": "2a54b1d87ec86b7aa8fff472794295f5c219e229bd9e25b6d99eb2bbc521921a"
+    "sha256": "deadd7e83780fd1ab456bd23547bbb850dcd7587883404892501f9a76876f612"
   }
 }

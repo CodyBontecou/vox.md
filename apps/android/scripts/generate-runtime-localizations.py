@@ -35,6 +35,14 @@ ANDROID_QUALIFIERS = {
     "ur": "ur", "vi": "vi", "zh-Hans": "b+zh+Hans", "zh-Hant": "b+zh+Hant",
 }
 PLATFORM_STRINGS = {
+    "preset_widget_title": "Capture Presets",
+    "preset_widget_description": "Open Vox.md directly to a durable Markdown capture draft.",
+    "preset_widget_configure": "Settings",
+    "preset_widget_unconfigured": "Choose Preset",
+    "preset_widget_disabled": "Disabled",
+    "preset_widget_missing": "Unavailable",
+    "preset_widget_no_pins": "Choose Capture Preset",
+    "preset_widget_storage_unavailable": "Shared Capture storage is unavailable.",
     "shortcut_capture_short": "Capture",
     "shortcut_capture_long": "Capture to Vox.md",
     "shortcut_voice_short": "Record voice note",

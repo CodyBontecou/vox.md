@@ -198,6 +198,16 @@ EXPECTED_GOVERNED_PATHS = (
     'apps/android/app/src/androidTest/kotlin/md/vox/android/URLDeliveryInstrumentationTest.kt',
     'apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityDeliveryInstrumentationTest.kt',
     'apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityUiInstrumentationTest.kt',
+    "apps/android/app/src/main/kotlin/md/vox/android/CaptureComposerOptions.kt",
+    "apps/android/app/src/main/kotlin/md/vox/android/PresetWidgets.kt",
+    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CapturePresentation.kt",
+    "apps/android/app/src/main/res/layout/widget_preset_row.xml",
+    "apps/android/app/src/main/res/layout/widget_preset_slot.xml",
+    "apps/android/app/src/main/res/layout/widget_presets.xml",
+    "apps/android/app/src/main/res/xml/vox_preset_widget_info.xml",
+    "apps/android/app/src/androidTest/kotlin/md/vox/android/ComposerPresetUiInstrumentationTest.kt",
+    "apps/android/app/src/test/kotlin/md/vox/android/DraftPreviewTest.kt",
+    "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CapturePresentationTest.kt",
 )
 
 
@@ -978,9 +988,9 @@ def main(argv=None):
         localization_audit["incompleteCatalogSourceCount"],
         localization_audit["missingCatalogSourceCount"],
     )
-    if counts != (756, 220, 6, 0, 530) or counts[0] != sum(counts[1:]):
+    if counts != (782, 222, 6, 0, 554) or counts[0] != sum(counts[1:]):
         fail("Android localization review source counts changed without review")
-    if localization_audit["runtimeSourceLiteralCount"] != 2_507:
+    if localization_audit["runtimeSourceLiteralCount"] != 2566:
         fail("Android runtime localization lookup-source count changed without review")
     if localization_audit["fallbackSourceCount"] != counts[3] + counts[4]:
         fail("Android localization fallback count differs from incomplete and absent sources")
@@ -1012,7 +1022,7 @@ def main(argv=None):
     if any("source: String" == item.get("expression") for item in dynamic_calls):
         fail("Android localization dynamic-source audit includes function declarations")
     integer_sources = localization_audit["integerFormatSources"]
-    if localization_audit["integerFormatSourceCount"] != 18 or len(integer_sources) != 18:
+    if localization_audit["integerFormatSourceCount"] != 20 or len(integer_sources) != 20:
         fail("Android localization integer-format source inventory drift")
     main_activity_localization = (root / "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt").read_text()
     for needle in (

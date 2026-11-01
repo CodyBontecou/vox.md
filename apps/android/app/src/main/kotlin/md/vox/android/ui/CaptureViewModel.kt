@@ -42,6 +42,7 @@ internal data class CaptureUiState(
     val notice: VoxUiText? = null,
     val acceptedRequestID: String? = null,
     val pendingExternalDraftID: String? = null,
+    val pendingWidgetPresetID: String? = null,
     val historyDetail: CaptureHistoryDetail? = null,
     val isLoadingHistoryDetail: Boolean = false,
     val activityStats: ActivityStats = ActivityStats.Empty,
@@ -98,6 +99,7 @@ internal class CaptureViewModel private constructor(
             captureSource = mutableState.value.draft.captureSource,
             attachments = mutableState.value.draft.attachments,
             originRecordingID = mutableState.value.draft.originRecordingID,
+            originRecordingCreatedAtEpochMillis = mutableState.value.draft.originRecordingCreatedAtEpochMillis,
             frozenPreset = mutableState.value.draft.frozenPreset,
             entryTemplateIDOverride = mutableState.value.draft.entryTemplateIDOverride,
             routeOverride = mutableState.value.draft.routeOverride,
@@ -189,6 +191,25 @@ internal class CaptureViewModel private constructor(
     ) {
         draftSaveJob?.cancel()
         draftSaveJob = viewModelScope.launch {
+            if (captureSource == "widget" && presetID != null && text.isBlank() && url == null && attachmentUris.isEmpty()) {
+                val loaded = runCatching { repository.capturePresets() to repository.currentDraft() }.getOrElse {
+                    mutableState.update { it.copy(notice = voxNotice("That capture preset could not be selected."), pendingExternalDraftID = correlationID) }
+                    return@launch
+                }
+                val (presets, draft) = loaded
+                val target = presets.presets.firstOrNull { it.id == presetID && it.isEnabled }
+                if (target == null) {
+                    mutableState.update { it.copy(notice = voxNotice("The requested Capture Preset no longer exists or is disabled."), pendingExternalDraftID = correlationID) }
+                } else if ((draft.text.isNotBlank() || draft.url != null || draft.attachments.isNotEmpty()) &&
+                    (draft.frozenPreset?.id ?: presets.activePresetID) != target.id) {
+                    mutableState.update { it.copy(draft = draft, presetCollection = presets, pendingWidgetPresetID = target.id, pendingExternalDraftID = correlationID) }
+                } else {
+                    runCatching { repository.selectCapturePresetForDraft(target.id) to repository.currentDraft() }
+                        .onSuccess { (selected, current) -> mutableState.update { it.copy(draft = current, presetCollection = selected, pendingExternalDraftID = correlationID) } }
+                        .onFailure { mutableState.update { it.copy(notice = voxNotice("That capture preset could not be selected."), pendingExternalDraftID = correlationID) } }
+                }
+                return@launch
+            }
             runCatching { repository.setDraftEntryTemplateOverride(null) }
             var draft = runCatching { repository.saveDraft(text, url, captureSource) }.getOrElse {
                 mutableState.update { state ->
@@ -237,6 +258,19 @@ internal class CaptureViewModel private constructor(
         mutableState.update { it.copy(isPresetRailExpanded = expanded) }
         viewModelScope.launch {
             runCatching { repository.setPresetQuickAccessRailExpanded(expanded) }
+        }
+    }
+
+    fun dismissWidgetPreset() { mutableState.update { it.copy(pendingWidgetPresetID = null) } }
+    fun confirmWidgetPreset() {
+        val id = mutableState.value.pendingWidgetPresetID ?: return
+        viewModelScope.launch {
+            draftSaveJob?.join(); routeSaveJob?.join()
+            runCatching { repository.selectCapturePresetForDraft(id) }
+                .onSuccess { presets ->
+                    val draft = repository.currentDraft()
+                    mutableState.update { it.copy(presetCollection = presets, draft = draft, pendingWidgetPresetID = null) }
+                }.onFailure { mutableState.update { it.copy(pendingWidgetPresetID = null, notice = voxNotice("That capture preset could not be selected.")) } }
         }
     }
 
@@ -386,6 +420,10 @@ internal class CaptureViewModel private constructor(
             add(to, action)
         }
         saveCaptureBar(current.copy(orderedActions = order))
+    }
+
+    fun setRailSide(side: md.vox.android.capturedomain.CaptureRailSide) {
+        saveCaptureBar(mutableState.value.captureBar.copy(railSide = side))
     }
 
     fun setTwentyFourHourTimestamps(enabled: Boolean) {

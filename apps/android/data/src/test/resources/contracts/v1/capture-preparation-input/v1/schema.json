@@ -756,6 +756,13 @@
                 "quarterly",
                 "yearly"
               ]
+            },
+            "headingPosition": {
+              "type": "string",
+              "enum": [
+                "top",
+                "bottom"
+              ]
             }
           },
           "required": [

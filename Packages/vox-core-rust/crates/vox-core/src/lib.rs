@@ -319,6 +319,8 @@ pub struct RoutePolicy {
     pub heading_level: Option<u8>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub missing_heading_behavior: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub heading_position: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -819,6 +821,13 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
             return Err(CoreError::InvalidEnum);
         }
     }
+    if route
+        .heading_position
+        .as_deref()
+        .is_some_and(|p| !matches!(p, "top" | "bottom"))
+    {
+        return Err(CoreError::InvalidEnum);
+    }
     let expected_placement = match input.operation.as_str() {
         "existingNoteAppend" => Some("append"),
         "existingNotePrepend" => Some("prepend"),
@@ -845,6 +854,7 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
     } else if route.heading_title.is_some()
         || route.heading_level.is_some()
         || route.missing_heading_behavior.is_some()
+        || route.heading_position.is_some()
     {
         return Err(CoreError::InvalidControl);
     }
@@ -2617,6 +2627,12 @@ pub fn materialize(
                         .missing_heading_behavior
                         .as_deref()
                         .ok_or(CoreError::InvalidControl)?,
+                    input
+                        .preset
+                        .route_policy
+                        .heading_position
+                        .as_deref()
+                        .unwrap_or("top"),
                 )?,
                 _ => return Err(CoreError::InvalidEnum),
             };
@@ -2647,6 +2663,7 @@ fn insert_beneath_heading(
     title: &str,
     level: u8,
     missing_behavior: &str,
+    position: &str,
 ) -> Result<String, CoreError> {
     if !(1..=6).contains(&level) {
         return Err(CoreError::IntegerOutOfRange);
@@ -2680,8 +2697,43 @@ fn insert_beneath_heading(
         }
         let heading_title = leading[hashes..].trim().trim_end_matches('#').trim();
         if heading_title == title {
-            let before = lines[..=index].join("\n");
-            let after = lines.get(index + 1..).unwrap_or_default().join("\n");
+            let mut insertion = index + 1;
+            if position == "bottom" {
+                let mut section_fence: Option<(u8, usize)> = None;
+                insertion = lines.len();
+                for (next, line) in lines.iter().enumerate().skip(index + 1) {
+                    let leading = line.trim_start_matches([' ', '\t']);
+                    let first = leading.as_bytes().first().copied();
+                    if matches!(first, Some(b'`' | b'~')) {
+                        let character = first.unwrap_or_default();
+                        let count = leading.bytes().take_while(|b| *b == character).count();
+                        if count >= 3 {
+                            section_fence = match section_fence {
+                                Some((open, minimum)) if open == character && count >= minimum => {
+                                    None
+                                }
+                                None => Some((character, count)),
+                                current => current,
+                            };
+                            continue;
+                        }
+                    }
+                    if section_fence.is_some() {
+                        continue;
+                    }
+                    let hashes = leading.bytes().take_while(|b| *b == b'#').count();
+                    if (1..=level as usize).contains(&hashes)
+                        && leading[hashes..].starts_with([' ', '\t'])
+                    {
+                        insertion = next;
+                        break;
+                    }
+                }
+            } else if position != "top" {
+                return Err(CoreError::InvalidEnum);
+            }
+            let before = lines[..insertion].join("\n");
+            let after = lines.get(insertion..).unwrap_or_default().join("\n");
             return Ok(join_markdown_blocks(&[&before, capture_block, &after]));
         }
     }
@@ -3085,6 +3137,7 @@ mod tests {
                     heading_title: None,
                     heading_level: None,
                     missing_heading_behavior: None,
+                    heading_position: None,
                 },
                 metadata_policy: MetadataPolicy {
                     transcript_property: None,
@@ -3314,6 +3367,27 @@ mod tests {
             String::from_utf8(rendered).unwrap(),
             "```md\n## Inbox\n```\n\nBody\n\n## Inbox\n\ncaptured payload"
         );
+    }
+
+    #[test]
+    fn heading_bottom_keeps_subsections_and_fenced_headings_inside_section() {
+        let mut input = mutation_input("existingNoteHeading");
+        input.preset.route_policy.placement = Some("beneathHeading".to_owned());
+        input.preset.route_policy.heading_title = Some("Inbox".to_owned());
+        input.preset.route_policy.heading_level = Some(2);
+        input.preset.route_policy.missing_heading_behavior = Some("fail".to_owned());
+        input.preset.route_policy.heading_position = Some("bottom".to_owned());
+        let body = b"## Inbox\n\nOriginal\n\n### Child\n\nChild body\n\n```md\n## Not a boundary\n```\n\n## Next\n\nOutside";
+        let (_, bytes) = materialize(&input, None, Some(body)).unwrap();
+        let rendered = String::from_utf8(bytes).unwrap();
+        let inserted = rendered.find("captured payload").unwrap();
+        assert!(inserted > rendered.find("Child body").unwrap());
+        assert!(inserted > rendered.find("Not a boundary").unwrap());
+        assert!(inserted < rendered.find("## Next").unwrap());
+        input.preset.route_policy.heading_position = None;
+        let (_, bytes) = materialize(&input, None, Some(body)).unwrap();
+        let rendered = String::from_utf8(bytes).unwrap();
+        assert!(rendered.find("captured payload").unwrap() < rendered.find("Original").unwrap());
     }
 
     #[test]

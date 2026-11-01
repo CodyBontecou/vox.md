@@ -43,6 +43,8 @@ REVIEWED_NON_PLATFORM_PERMISSIONS = {
 REVIEWED_EXPORTED = {
     "md.vox.android.PhoneWearDataListenerService",
     "md.vox.android.VoxCaptureWidgetProvider",
+    "md.vox.android.VoxPresetWidgetProvider",
+    "md.vox.android.VoxPresetWidgetConfigureActivity",
 }
 REVIEWED_DEBUG_ONLY_EXPORTED = {
     "androidx.activity.ComponentActivity",

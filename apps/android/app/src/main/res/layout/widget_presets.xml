@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="8dp" android:background="@drawable/widget_background">
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/preset_widget_title" android:textColor="@color/widget_text_primary" android:textStyle="bold" android:textSize="16sp" android:fontFamily="@font/geist_semibold" />
+    <TextView android:id="@+id/preset_widget_empty" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/preset_widget_no_pins" android:textColor="@color/widget_text_secondary" android:fontFamily="@font/geist_regular" />
+    <LinearLayout android:id="@+id/preset_widget_rows" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" />
+    <Button android:id="@+id/preset_widget_configure" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp" android:text="@string/preset_widget_configure" android:fontFamily="@font/geist_regular" />
+</LinearLayout>

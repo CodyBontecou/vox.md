@@ -58,7 +58,9 @@ internal class AndroidWearRecordingOnlyExporter(context: Context) {
             val root = DocumentsContract.buildDocumentUriUsingTree(tree, DocumentsContract.getTreeDocumentId(tree))
             val folderSegments = safeFolderSegments(preset.logicalFolder)
             val parent = resolveOrCreateFolder(tree, root, folderSegments)
-            val baseName = recordingOnlyBaseName(
+            val baseName = md.vox.android.capturedomain.CaptureAudioFilename.render(
+                preset.audioFilenameTemplate, sessionID, recordedAtEpochMillis, preset.name, "Recording.wav",
+            )?.substringBeforeLast('.') ?: recordingOnlyBaseName(
                 template = preset.exportSettings.newFileNameTemplate,
                 sessionID = sessionID,
                 recordedAtEpochMillis = recordedAtEpochMillis,

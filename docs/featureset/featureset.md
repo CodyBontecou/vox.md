@@ -430,3 +430,9 @@ No open real gaps remain. New gaps should be added here as they are discovered.
 | F-AP-48 | Voice transcript note-property mapping | Android/shared Rust | experimental | docs:none |
 
 Implementation and outstanding acceptance: [November capture parity](../android-parity-implementation-2026-11-01.md).
+| F-AP-49 | Audio filename templates | Android/shared core | experimental | docs:none |
+| F-AP-50 | Heading placement | Android/shared core | experimental | docs:none |
+| F-AP-51 | Configurable preset widgets | Android/shared core | experimental | docs:none |
+| F-AP-52 | Draft preview | Android/shared core | experimental | docs:none |
+| F-AP-53 | Preset rail side | Android/shared core | experimental | docs:none |
+| F-AP-54 | Timestamp formats | Android/shared core | experimental | docs:none |

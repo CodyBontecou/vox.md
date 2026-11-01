@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -137,6 +138,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -183,6 +185,8 @@ import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.SCANNER
 import md.vox.android.capturedomain.CaptureRouteOverride
 import md.vox.android.capturedomain.CaptureURLDeliverySettings
 import md.vox.android.capturedomain.normalizedTranscriptProperty
+import md.vox.android.capturedomain.CaptureHeadingPosition
+import md.vox.android.capturedomain.CaptureRailSide
 import md.vox.android.capturedomain.CaptureDestination
 import md.vox.android.capturedomain.CaptureAttachment
 import md.vox.android.ui.GeistMonoFontFamily
@@ -332,6 +336,14 @@ private fun VoxApp(
 ) {
     val state by model.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    LaunchedEffect(state.presetCollection) { VoxPresetWidgetProvider.refreshAll(context) }
+    if (state.pendingWidgetPresetID != null) {
+        AlertDialog(onDismissRequest = model::dismissWidgetPreset,
+            title = { Text(voxString("Use this preset for your draft?")) },
+            text = { Text(voxString("Your text and attachments will be kept. One-off routing will reset.")) },
+            confirmButton = { TextButton(onClick = model::confirmWidgetPreset) { Text(voxString("Use preset")) } },
+            dismissButton = { TextButton(onClick = model::dismissWidgetPreset) { Text(voxString("Cancel")) } })
+    }
     val recordingClient = remember(context) { AudioCaptureClient(context) }
     val recordingStatus by RecordingStatusRegistry.status.collectAsStateWithLifecycle()
     val liveSpeechState by LiveSpeechRegistry.state.collectAsStateWithLifecycle()
@@ -944,6 +956,7 @@ private fun VoxNavigation(
                                     setVisible = model::setCaptureBarActionVisible,
                                     move = model::moveCaptureBarAction,
                                     setTwentyFourHour = model::setTwentyFourHourTimestamps,
+                                    setRailSide = model::setRailSide,
                                     setVoiceConfirmation = model::setConfirmsVoiceNotesBeforeAdding,
                                     setVoiceRecordingResult = model::setVoiceRecordingResult,
                                     reset = model::resetCaptureBar,
@@ -1036,6 +1049,7 @@ private fun VoxNavigation(
                     setVisible = model::setCaptureBarActionVisible,
                     move = model::moveCaptureBarAction,
                     setTwentyFourHour = model::setTwentyFourHourTimestamps,
+                                    setRailSide = model::setRailSide,
                     setVoiceConfirmation = model::setConfirmsVoiceNotesBeforeAdding,
                     setVoiceRecordingResult = model::setVoiceRecordingResult,
                     reset = model::resetCaptureBar,
@@ -1787,10 +1801,17 @@ internal fun CaptureScreen(
             )
         },
     ) { padding ->
+        CaptureWorkspace(
+            text = editorValue.text,
+            preset = state.draft.frozenPreset ?: state.presetCollection?.activePreset,
+            destination = (state.draft.frozenPreset ?: state.presetCollection?.activePreset)?.destination ?: state.destination,
+            route = state.draft.routeOverride,
+            attachmentCount = state.draft.attachments.size,
+            modifier = Modifier.fillMaxSize().padding(padding),
+        ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
                 .padding(horizontal = 20.dp, vertical = 16.dp),
         ) {
             CaptureRouteControl(
@@ -1818,6 +1839,9 @@ internal fun CaptureScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .focusRequester(focusRequester)
+                        .then(if (isPresetRailExpanded && pinnedPresets.isNotEmpty()) {
+                            if (state.captureBar.railSide == CaptureRailSide.LEFT) Modifier.absolutePadding(left = 52.dp) else Modifier.absolutePadding(right = 52.dp)
+                        } else Modifier)
                         .testTag("capture-editor")
                         .semantics { contentDescription = captureTextDescription },
                 textStyle = TextStyle(
@@ -1860,7 +1884,7 @@ internal fun CaptureScreen(
                     isExpanded = isPresetRailExpanded,
                     canSelectPreset = !state.isSending && !state.isSavingConfiguration,
                     selectPreset = onSelectPreset,
-                    modifier = Modifier.align(Alignment.BottomStart),
+                    modifier = Modifier.align(if (state.captureBar.railSide == CaptureRailSide.LEFT) AbsoluteAlignment.BottomLeft else AbsoluteAlignment.BottomRight),
                 )
             }
             if (capturedURL != null) {
@@ -1885,6 +1909,7 @@ internal fun CaptureScreen(
                 }
             }
         }
+    }
     }
 }
 
@@ -2759,6 +2784,8 @@ private suspend fun configuredTranscriptAudioSource(
         displayName = "Recording-${sessionID.take(8)}.wav",
         saveMode = resolvedPreset.audioSaveMode,
         attachmentsFolder = resolvedPreset.attachmentsFolder,
+        audioFilenameTemplate = resolvedPreset.audioFilenameTemplate,
+        presetName = resolvedPreset.name,
     )
 }
 
@@ -3724,6 +3751,8 @@ private data class CapturePresetEditorDraft(
     val transcriptPropertyName: String = "",
     val includeTranscriptInBody: Boolean = true,
     val urlDelivery: CaptureURLDeliverySettings = CaptureURLDeliverySettings(),
+    val headingPosition: CaptureHeadingPosition = CaptureHeadingPosition.TOP,
+    val audioFilenameTemplate: String = "",
 ) {
     fun toPreset(revision: Int, metadataFields: List<CaptureMetadataField>) = CapturePreset(
         id = id,
@@ -3777,6 +3806,8 @@ private data class CapturePresetEditorDraft(
         transcriptPropertyName = transcriptPropertyName,
         includeTranscriptInBody = includeTranscriptInBody,
         urlDelivery = urlDelivery,
+        headingPosition = headingPosition,
+        audioFilenameTemplate = audioFilenameTemplate,
     )
 
     companion object {
@@ -3880,6 +3911,8 @@ private data class CapturePresetEditorDraft(
                 transcriptPropertyName = preset.transcriptPropertyName,
                 includeTranscriptInBody = preset.includeTranscriptInBody,
                 urlDelivery = preset.urlDelivery,
+                headingPosition = preset.headingPosition,
+                audioFilenameTemplate = preset.audioFilenameTemplate,
             )
         }
     }
@@ -4035,6 +4068,14 @@ private fun CapturePresetEditorScreen(
             TranscriptPropertyControls(draft.transcriptPropertyName, draft.includeTranscriptInBody,
                 { draft = draft.copy(transcriptPropertyName = it) }, { draft = draft.copy(includeTranscriptInBody = it) })
             URLDeliverySettingsControl(draft.urlDelivery) { draft = draft.copy(urlDelivery = it) }
+            if (draft.noteTargetKind != CaptureNoteTargetKind.NEW_NOTE && draft.placement == CapturePlacementKind.BENEATH_HEADING) {
+                PresetChoiceRow(voxString("Position in heading"),
+                    listOf("TOP" to voxString("Top"), "BOTTOM" to voxString("Bottom")), draft.headingPosition.name,
+                    { draft = draft.copy(headingPosition = CaptureHeadingPosition.valueOf(it)) })
+            }
+            if (draft.audioSaveMode != CaptureAudioSaveMode.OFF || draft.watchOutputMode == CaptureWatchOutputMode.RECORDING_ONLY) {
+                AudioFilenameControls(draft.audioFilenameTemplate, draft.name) { draft = draft.copy(audioFilenameTemplate = it) }
+            }
             CapturePresetMetadataEditor(
                 metadataScope = draft.metadataScope,
                 metadataText = draft.metadataText,
@@ -5362,6 +5403,7 @@ internal fun CaptureBarSettingsScreen(
     setVisible: (CaptureBarAction, Boolean) -> Unit,
     move: (CaptureBarAction, Int) -> Unit,
     setTwentyFourHour: (Boolean) -> Unit,
+    setRailSide: (CaptureRailSide) -> Unit = {},
     setVoiceConfirmation: (Boolean) -> Unit,
     setVoiceRecordingResult: (VoiceRecordingResult) -> Unit = {},
     reset: () -> Unit,
@@ -5415,20 +5457,7 @@ internal fun CaptureBarSettingsScreen(
                 HorizontalDivider(color = MaterialTheme.colorScheme.outline)
             }
             item {
-                SettingsSection(voxUiText("Timestamp"))
-                ListItem(
-                    headlineContent = { Text(voxString("24-hour timestamps")) },
-                    supportingContent = { Text(voxString("Off uses the iOS-compatible 12-hour format with AM or PM.")) },
-                    trailingContent = {
-                        Switch(
-                            checked = configuration.usesTwentyFourHourTimestamps,
-                            onCheckedChange = setTwentyFourHour,
-                            enabled = !isBusy,
-                        )
-                    },
-                    colors = androidx.compose.material3.ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.background),
-                )
-                HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+                CaptureAppearanceControls(configuration, isBusy, setTwentyFourHour, setRailSide)
                 ListItem(
                     headlineContent = { Text(voxString("Review Before Adding")) },
                     supportingContent = {
