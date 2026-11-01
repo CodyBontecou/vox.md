@@ -22,6 +22,10 @@ November composer/preset work; it adds no new feature rows or verification promo
 - A cleared prior-attempt marker remains valid through re-preparation and is replaced
   atomically by the next active marker. This fixes a second reproduced bug: a safely
   abandoned attempt could become stuck because preparation rejected its cleared marker.
+- Re-materialization may reuse an existing immutable plan only after exact plan and
+  note comparison against the new verified drain. Conflicting bytes remain rejected.
+  This fixes the third reproduced blocker: identical plans previously failed promotion
+  on retry merely because their immutable directory already existed.
 - Delivery proof and repeated compaction produce one quota unit, one activity event,
   one completion/tombstone and no remaining reservation. Failed or uncertain attempts
   consume zero committed quota units and preserve byte-identical prepared content.
@@ -29,7 +33,7 @@ November composer/preset work; it adds no new feature rows or verification promo
 ## Executable coverage
 
 `SafVaultCommitExecutorTest`: permission repair, delayed visibility, partial-byte
-preservation and substituted-vault rejection, plus the existing executor taxonomy.
+preservation, cleared-marker retry and substituted-vault rejection, plus the existing executor taxonomy.
 
 `SafVaultCommitExecutorInstrumentationTest`: eight campaigns through the real
 `com.android.externalstorage.documents` provider and system tree picker:
