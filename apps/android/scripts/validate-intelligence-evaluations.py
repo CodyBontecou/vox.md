@@ -23,6 +23,8 @@ EVALUATION_INPUTS = (
     "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/InstructionModelManager.kt",
     "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/IntelligenceEvaluation.kt",
     "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt",
+    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/RecordingFileRecovery.kt",
     "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SpeakerDiarization.kt",
     "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/OnDeviceCaptureTextProcessor.kt",
     "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRepository.kt",

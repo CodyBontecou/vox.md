@@ -5237,6 +5237,14 @@
         {
           "path": "docs/recording-queue-storekit-completion-audit.md",
           "symbol": "Relaunch recovery"
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/RecordingFileRecovery.kt",
+          "symbol": "recoverRecordingFiles"
+        },
+        {
+          "path": "apps/android/scripts/qualify-physical-capture.py",
+          "symbol": "def recovery"
         }
       ],
       "id": "cap.queue.recovery",
@@ -6129,6 +6137,14 @@
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardShared/RecordingJobStore.swift",
           "symbol": "public struct RecordingJob"
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/RecordingFileRecovery.kt",
+          "symbol": "recoverRecordingFiles"
+        },
+        {
+          "path": "apps/android/scripts/qualify-physical-capture.py",
+          "symbol": "def recovery"
         }
       ],
       "id": "cap.store.recording-jobs",
@@ -8724,6 +8740,10 @@
         {
           "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
           "symbol": "fun revokedGrantAfterInterruptedWriteReconcilesWithoutDuplicate"
+        },
+        {
+          "path": "docs/android-physical-capture-qualification-2026-11-01.md",
+          "symbol": "Campaign and targets"
         }
       ],
       "id": "cap.destination.preset-vault",
@@ -9074,6 +9094,10 @@
         {
           "path": "artifacts/validation/local-intelligence-2026-11-01/apple-speaker-evaluation.json",
           "symbol": "meetsZeroErrorTarget"
+        },
+        {
+          "path": "docs/android-physical-capture-qualification-2026-11-01.md",
+          "symbol": "Campaign and targets"
         }
       ],
       "id": "cap.ai.intelligence-quality",
@@ -9176,6 +9200,6 @@
   "schemaVersion": 1,
   "source": {
     "path": "docs/architecture/android-wear-m0-capabilities.json",
-    "sha256": "e02fa3631a6e4fff926002f2a743f76b479d193dcc97f70de62314df9b8a6ec7"
+    "sha256": "42d9ceef6825d1b3b419161207272c2a9421d85d113d0b8d0ae79e50f9c160ad"
   }
 }

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "status": "incomplete",
+  "cases": {
+    "drive.delivery-retry": {
+      "status": "planned",
+      "reason": "Physical Pixel/Drive qualification is in progress; evidence is promoted only after direct verification."
+    },
+    "onedrive.delivery-retry": {
+      "status": "unavailable",
+      "reason": "OneDrive is not installed; the user requested proceeding with available providers."
+    },
+    "pixel.endurance": {
+      "status": "planned",
+      "reason": "Physical Pixel/Drive qualification is in progress; evidence is promoted only after direct verification."
+    },
+    "pixel.force-stop": {
+      "status": "planned",
+      "reason": "Physical Pixel/Drive qualification is in progress; evidence is promoted only after direct verification."
+    },
+    "pixel.instructions": {
+      "status": "planned",
+      "reason": "Physical Pixel/Drive qualification is in progress; evidence is promoted only after direct verification."
+    },
+    "pixel.reboot": {
+      "status": "planned",
+      "reason": "Physical Pixel/Drive qualification is in progress; evidence is promoted only after direct verification."
+    },
+    "pixel.sigkill": {
+      "status": "planned",
+      "reason": "Physical Pixel/Drive qualification is in progress; evidence is promoted only after direct verification."
+    },
+    "pixel.speech": {
+      "status": "planned",
+      "reason": "Physical Pixel/Drive qualification is in progress; evidence is promoted only after direct verification."
+    },
+    "samsung.endurance": {
+      "status": "unavailable",
+      "reason": "The user has no Samsung device; no emulator substitute is claimed."
+    },
+    "samsung.force-stop": {
+      "status": "unavailable",
+      "reason": "The user has no Samsung device; no emulator substitute is claimed."
+    },
+    "samsung.instructions": {
+      "status": "unavailable",
+      "reason": "The user has no Samsung device; no emulator substitute is claimed."
+    },
+    "samsung.reboot": {
+      "status": "unavailable",
+      "reason": "The user has no Samsung device; no emulator substitute is claimed."
+    },
+    "samsung.sigkill": {
+      "status": "unavailable",
+      "reason": "The user has no Samsung device; no emulator substitute is claimed."
+    },
+    "samsung.speech": {
+      "status": "unavailable",
+      "reason": "The user has no Samsung device; no emulator substitute is claimed."
+    }
+  }
+}

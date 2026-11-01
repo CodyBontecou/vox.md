@@ -246,7 +246,7 @@
     },
     {
       "path": "apps/android/build.gradle.kts",
-      "sha256": "18281110ea58f5a586b23306293a6781cbf111b0a1780c4cac607606ed9ea290"
+      "sha256": "9221ab3fd971fa6a76cb93370ca3ed06bcb1f32b7b82ddfef91a028fd2daad4e"
     },
     {
       "path": "apps/android/settings.gradle.kts",
@@ -306,7 +306,7 @@
     },
     {
       "path": "apps/android/app/build.gradle.kts",
-      "sha256": "6316dafcd46324a4682a7969c9d4dadf232f2acff7564257765f79805344c830"
+      "sha256": "1b54a8fb24d3bdc553f9a595ebfc97343afff13b119957c9c7c9726b998ef17b"
     },
     {
       "path": "apps/android/app/gradle.lockfile",
@@ -322,7 +322,7 @@
     },
     {
       "path": "apps/android/app/src/debug/AndroidManifest.xml",
-      "sha256": "35f2526964756a82f0b94a1d8d598b4a8a4af0665cfbaa0346d6b07b214b04f1"
+      "sha256": "ff6e570618e2551689351fdd585fdbbc93fed6c821f35ecb1e66b527f9b2bec4"
     },
     {
       "path": "apps/android/app/src/debug/kotlin/md/vox/android/VisualStoryActivity.kt",
@@ -494,11 +494,11 @@
     },
     {
       "path": "apps/android/localization-review.json",
-      "sha256": "660243d93ab4c18b636c60581ce04575290b9a9a0d937ad6587394f501364667"
+      "sha256": "c9e78e8a7fc0e06b04d7f48a5ab46cd50a9e41edb2b4c7ba9edf55f644ecf819"
     },
     {
       "path": "apps/android/scripts/validate-debug-artifacts.py",
-      "sha256": "faacb4aec2215d3cf4bd5176187ea2cbfd0529ae4aca6bd39e9d8f572591f78b"
+      "sha256": "5c125f26535b88d1186b82a4673a8e27cf9cb8c540eeabddb216c0b6ace297ab"
     },
     {
       "path": "apps/android/scripts/validate-visual-parity.py",
@@ -786,7 +786,7 @@
     },
     {
       "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt",
-      "sha256": "5d358134e42a078fbc6f9572516efcfd63d36ed02a5d53074cac2f0ea54aba94"
+      "sha256": "4126b3ff675d398a05ae63ce739ec0a35514e1b1374a568fa39100f30d71a268"
     },
     {
       "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LiveSpeech.kt",
@@ -1166,7 +1166,7 @@
     },
     {
       "path": "apps/android/scripts/validate-intelligence-evaluations.py",
-      "sha256": "e5564c53a0c260174fa08a8111e79f6def2c4c54088475ead6170e0266884bf6"
+      "sha256": "9a00c99c2d286c52d364206f7c780862412374498d728382c50195676ea189f0"
     },
     {
       "path": "apps/android/scripts/validate-local-intelligence.py",
@@ -1227,6 +1227,46 @@
     {
       "path": "artifacts/validation/local-intelligence-2026-11-01/speaker-evaluation.json",
       "sha256": "4908290b7ee3c912ffdae509b2e05f99e7724e365e556360e437c7952655c7f8"
+    },
+    {
+      "path": "artifacts/validation/android-physical-capture-2026-11-01/interrupted-first-attempt.json",
+      "sha256": "b336595c7616b1441a970c580a3790d088b1af4007a55f5027589215c2f07ec8"
+    },
+    {
+      "path": "artifacts/validation/android-physical-capture-2026-11-01/matrix.json",
+      "sha256": "cbb4e1d1d877ab6f278cce31732eeeb04856d8527fd90fdf4315c95c4f3f07c8"
+    },
+    {
+      "path": "artifacts/validation/android-physical-capture-2026-11-01/recording-native-profile.json",
+      "sha256": "adb2f9784f531b40f90eaee15b0f4ec3d751814ceadb69de058d5dc069540af4"
+    },
+    {
+      "path": "Packages/contracts/tests/test_android_physical_capture.py",
+      "sha256": "108adb43e5d9639be464200fb7933856469375c928bf93cde898f677ce06e30b"
+    },
+    {
+      "path": "apps/android/app/src/debug/kotlin/md/vox/android/PhysicalQualificationActivity.kt",
+      "sha256": "8f8a7c44790df29fa61042841a990eb217a63a6d021813b159f1d1dd39fb6226"
+    },
+    {
+      "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/RecordingFileRecovery.kt",
+      "sha256": "328df6514114abb5e71292d8243bce081747149ff07b5eac27f469475f18d5e3"
+    },
+    {
+      "path": "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingFileRecoveryTest.kt",
+      "sha256": "0d361f7ea0081bdf1492a71ad1e0a10bfa55516514cc2d1420801d024c992647"
+    },
+    {
+      "path": "apps/android/scripts/physical_capture_provenance.py",
+      "sha256": "ec7c3887a4a4068d562c43032a5f277cc899889a303a8df0d9f430e390a00c67"
+    },
+    {
+      "path": "apps/android/scripts/qualify-physical-capture.py",
+      "sha256": "89df3b8ea4def7cf06f398a758d08af6cca09530cd3fe5eda8eba456a7168d69"
+    },
+    {
+      "path": "apps/android/scripts/validate-physical-capture.py",
+      "sha256": "feba1432ae4fcf379262b51c626695fe2d0132d07c07265ff3ffd6ecca3e9c73"
     }
   ],
   "rust": {

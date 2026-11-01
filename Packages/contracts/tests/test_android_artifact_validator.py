@@ -102,7 +102,19 @@ class AndroidArtifactValidatorTests(unittest.TestCase):
         self.validate()
 
         self.manifest.write_text(text.replace(' android:debuggable="true"', ""))
-        with self.assertRaisesRegex(VALIDATOR.ValidationError, "unpermissioned exported"):
+        with self.assertRaisesRegex(VALIDATOR.ValidationError, "debug-only"):
+            self.validate()
+
+    def test_physical_control_requires_shell_permission_and_cannot_leak_into_release(self):
+        component = '<activity android:name="md.vox.android.PhysicalQualificationActivity" android:exported="true" android:permission="android.permission.DUMP" />'
+        text = self.manifest.read_text().replace("<application ", '<application android:debuggable="true" ').replace("</application>", component+"</application>")
+        self.manifest.write_text(text)
+        self.validate()
+        self.manifest.write_text(text.replace(' android:permission="android.permission.DUMP"', ""))
+        with self.assertRaisesRegex(VALIDATOR.ValidationError, "shell-only"):
+            self.validate()
+        self.manifest.write_text(text.replace(' android:debuggable="true"', ""))
+        with self.assertRaisesRegex(VALIDATOR.ValidationError, "debug-only"):
             self.validate()
 
     def test_exported_documents_provider_with_platform_signature_permission_is_allowed(self):

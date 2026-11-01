@@ -63,6 +63,7 @@ tasks.register("releaseReadiness") {
         "validateAndroidSbom",
         "validateVisualParityEvidence",
         "validateLocalIntelligenceEvaluations",
+        "validatePhysicalCaptureEvidence",
     )
 }
 
@@ -113,4 +114,16 @@ tasks.register<Exec>("validateLocalIntelligenceEvaluations") {
     group = "verification"
     description = "Validates shared corpus integrity and retained model-backed parity results."
     commandLine("python3", "scripts/validate-intelligence-evaluations.py")
+}
+
+tasks.register<Exec>("validatePhysicalCaptureEvidence") {
+    group = "verification"
+    description = "Checks physical campaign evidence integrity without relabeling unavailable hardware as passed."
+    commandLine("python3", "scripts/validate-physical-capture.py")
+}
+
+tasks.register<Exec>("physicalCaptureReadiness") {
+    group = "verification"
+    description = "Requires the complete Pixel/Samsung and Drive/OneDrive hardware qualification matrix."
+    commandLine("python3", "scripts/validate-physical-capture.py", "--require-complete")
 }

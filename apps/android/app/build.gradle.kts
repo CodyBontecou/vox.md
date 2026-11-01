@@ -12,6 +12,18 @@ val releaseSigningEnvironment = mapOf(
 )
 val hasCompleteReleaseSigning = releaseSigningEnvironment.values.all { !it.isNullOrBlank() }
 
+val physicalProvenance by tasks.registering(Exec::class) {
+    val script = rootProject.file("scripts/physical_capture_provenance.py")
+    inputs.file(script)
+    inputs.files(rootProject.fileTree("platform-services/src/main/kotlin"))
+    inputs.files(rootProject.fileTree("capture-domain/src/main/kotlin"))
+    inputs.files(fileTree("src/main/cpp"))
+    inputs.files(fileTree("src/debug"))
+    val output = layout.buildDirectory.dir("generated/physical-provenance")
+    outputs.dir(output)
+    commandLine("python3", script, output.get().asFile)
+}
+
 android {
     namespace = "md.vox.android"
     assetPacks += listOf(":whisper_small")
@@ -38,6 +50,13 @@ android {
         }
     }
     buildTypes {
+        debug {
+            // Isolated physical QA installation; never replaces the owner's app/data.
+            if (providers.gradleProperty("voxPhysicalQualification").orNull == "true") {
+                applicationIdSuffix = ".qualification"
+                versionNameSuffix = "-qualification"
+            }
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -50,10 +69,13 @@ android {
         }
     }
     sourceSets.getByName("androidTest").assets.srcDir(rootProject.projectDir.parentFile.parentFile.resolve("evaluations/local-intelligence/v1"))
+    sourceSets.getByName("debug").assets.directories.add(layout.buildDirectory.dir("generated/physical-provenance").get().asFile.path)
     sourceSets.getByName("main").jniLibs.srcDir(layout.buildDirectory.dir("generated/intelligence-jni").get().asFile)
     sourceSets.getByName("main").res.directories.add("build/generated/res/geistFonts")
     sourceSets.getByName("main").res.directories.add("build/generated/res/launcherIcons")
 }
+
+tasks.matching { it.name == "preDebugBuild" }.configureEach { dependsOn(physicalProvenance) }
 
 val generateLauncherIcons by tasks.registering(Exec::class) {
     group = "build setup"

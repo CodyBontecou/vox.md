@@ -277,6 +277,16 @@ EXPECTED_GOVERNED_PATHS = (
     "artifacts/validation/local-intelligence-2026-11-01/instruction-evaluation.json",
     "artifacts/validation/local-intelligence-2026-11-01/receipt.json",
     "artifacts/validation/local-intelligence-2026-11-01/speaker-evaluation.json",
+    "artifacts/validation/android-physical-capture-2026-11-01/interrupted-first-attempt.json",
+    "artifacts/validation/android-physical-capture-2026-11-01/matrix.json",
+    "artifacts/validation/android-physical-capture-2026-11-01/recording-native-profile.json",
+    "Packages/contracts/tests/test_android_physical_capture.py",
+    "apps/android/app/src/debug/kotlin/md/vox/android/PhysicalQualificationActivity.kt",
+    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/RecordingFileRecovery.kt",
+    "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingFileRecoveryTest.kt",
+    "apps/android/scripts/physical_capture_provenance.py",
+    "apps/android/scripts/qualify-physical-capture.py",
+    "apps/android/scripts/validate-physical-capture.py",
 )
 
 
@@ -1066,7 +1076,7 @@ def main(argv=None):
     )
     if counts != (782, 220, 6, 556, 0, 0) or counts[0] != sum(counts[1:]):
         fail("Android localization review source counts changed without review")
-    if localization_audit["runtimeSourceLiteralCount"] != 2617:
+    if localization_audit["runtimeSourceLiteralCount"] != 2622:
         fail("Android runtime localization lookup-source count changed without review")
     if localization_audit["fallbackSourceCount"] != counts[4] + counts[5]:
         fail("Android localization fallback count differs from incomplete and absent sources")

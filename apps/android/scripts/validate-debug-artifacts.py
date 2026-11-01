@@ -50,6 +50,7 @@ REVIEWED_DEBUG_ONLY_EXPORTED = {
     "androidx.activity.ComponentActivity",
     "androidx.compose.ui.tooling.PreviewActivity",
     "md.vox.android.VisualStoryActivity",
+    "md.vox.android.PhysicalQualificationActivity",
 }
 REVIEWED_PLATFORM_COMPONENT_PERMISSIONS = {
     "android.permission.BIND_INPUT_METHOD",
@@ -171,6 +172,10 @@ def validate_merged_manifest(path: Path) -> None:
             launcher_count += 1
             if name != "md.vox.android.MainActivity" or exported != "true":
                 raise ValidationError(f"unexpected launcher component: {name}")
+        if name in REVIEWED_DEBUG_ONLY_EXPORTED and not is_debuggable:
+            raise ValidationError(f"debug-only component in release artifact: {name}")
+        if name == "md.vox.android.PhysicalQualificationActivity" and android(component, "permission") != "android.permission.DUMP":
+            raise ValidationError("physical qualification control requires shell-only DUMP permission")
         if exported == "true" and not is_launcher:
             permission = android(component, "permission")
             explicitly_reviewed = (
