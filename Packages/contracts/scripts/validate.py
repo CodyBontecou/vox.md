@@ -475,7 +475,7 @@ def validate_capabilities(root,inventory,overlay):
  expected_inventory={"schemaVersion":1,"producerRevision":CLOSURE,"healthMdPrecedent":HEALTH,"source":{"path":"docs/architecture/android-wear-m0-capabilities.json","sha256":digest(m0_path)},"dependencyCatalog":copy.deepcopy(m0["dependencyCatalog"]),"capabilities":expected_caps}
  if inventory!=expected_inventory: reject("capability.conversionDrift","$","inventory must exactly equal deterministic M0 conversion, including acceptance and dependencies")
  old={x["id"]:x for x in m0["capabilities"]}; new={x["id"]:x for x in inventory["capabilities"]}
- if set(old)!=set(new) or len(new)!=281: reject("capability.oneToOne","$.capabilities","M0 IDs not retained")
+ if set(old)!=set(new) or len(new)!=282: reject("capability.oneToOne","$.capabilities","M0 IDs not retained")
  variances={x["capabilityID"]:x for x in overlay["variances"]}; decisions=accepted_decisions(root)
  if len(variances)!=len(overlay["variances"]): reject("variance.duplicate","$.variances","duplicate capability")
  for cid,o in old.items():

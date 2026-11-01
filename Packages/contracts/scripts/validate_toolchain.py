@@ -189,15 +189,15 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearSystemSurfaceInstrumentationTest.kt",
     "apps/android/gradle/verification-metadata.xml",
     "apps/android/settings-gradle.lockfile",
-    'apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRouting.kt',
-    'apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureRoutingTest.kt',
-    'apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDestinationBindings.kt',
-    'apps/android/app/src/main/kotlin/md/vox/android/CaptureParityControls.kt',
-    'apps/android/app/src/main/kotlin/md/vox/android/URLDelivery.kt',
-    'apps/android/app/src/test/kotlin/md/vox/android/URLDeliveryPolicyTest.kt',
-    'apps/android/app/src/androidTest/kotlin/md/vox/android/URLDeliveryInstrumentationTest.kt',
-    'apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityDeliveryInstrumentationTest.kt',
-    'apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityUiInstrumentationTest.kt',
+    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRouting.kt",
+    "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureRoutingTest.kt",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDestinationBindings.kt",
+    "apps/android/app/src/main/kotlin/md/vox/android/CaptureParityControls.kt",
+    "apps/android/app/src/main/kotlin/md/vox/android/URLDelivery.kt",
+    "apps/android/app/src/test/kotlin/md/vox/android/URLDeliveryPolicyTest.kt",
+    "apps/android/app/src/androidTest/kotlin/md/vox/android/URLDeliveryInstrumentationTest.kt",
+    "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityDeliveryInstrumentationTest.kt",
+    "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityUiInstrumentationTest.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/CaptureComposerOptions.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/PresetWidgets.kt",
     "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CapturePresentation.kt",
@@ -211,6 +211,35 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/app/src/main/kotlin/md/vox/android/BillingOperations.kt",
     "apps/android/app/src/test/kotlin/md/vox/android/BillingOperationsTest.kt",
     "apps/android/app/src/androidTest/kotlin/md/vox/android/BillingUiInstrumentationTest.kt",
+    "apps/android/localization/android-strings.json",
+    "apps/android/localization/android-overrides.json",
+    "apps/android/localization/plural-spec.json",
+    "apps/android/scripts/translate-android-localizations.py",
+    "apps/android/app/src/main/res/raw/vox_runtime_plurals.json",
+    "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalizationParityInstrumentationTest.kt",
+    "apps/android/wear/src/main/res/values/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-ar/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-b+id/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-b+zh+Hans/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-b+zh+Hant/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-bn/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-de/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-es/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-fr/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-hi/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-it/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-ja/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-ko/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-nl/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-pl/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-pt-rBR/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-ru/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-ta/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-th/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-tr/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-uk/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-ur/platform_plurals.xml",
+    "apps/android/wear/src/main/res/values-vi/platform_plurals.xml",
 )
 
 
@@ -916,7 +945,7 @@ def main(argv=None):
         "dynamic_runtime_calls()",
         "validate_format_compatibility(source, value, locale)",
         "localization review audit is stale",
-        '"requires-human-translation"',
+        '"requires-human-review"',
     ):
         if needle not in localization_generator:
             fail(f"Android localization review generator drift: {needle}")
@@ -942,7 +971,8 @@ def main(argv=None):
     localization_audit = load(root / "apps/android/localization-review.json")
     exact(localization_audit, (
         "schemaVersion", "reviewStatus", "formatArgumentContractStatus", "pluralReviewStatus",
-        "catalog", "runtimeSourceScanRoots", "runtimeSourceLiteralCount", "supportedLocales",
+        "androidCatalog", "androidCatalogBackedSourceCount", "translationCoverageStatus",
+        "pluralImplementationStatus", "pluralSourceCount", "catalog", "runtimeSourceScanRoots", "runtimeSourceLiteralCount", "supportedLocales",
         "literalRuntimeSourceCount", "catalogBackedSourceCount", "aliasBackedSourceCount",
         "incompleteCatalogSourceCount", "missingCatalogSourceCount", "fallbackSourceCount",
         "dynamicRuntimeCallSiteCount", "dynamicRuntimeExpressionCount",
@@ -952,7 +982,7 @@ def main(argv=None):
     ), "Android localization review audit")
     if localization_audit["schemaVersion"] != 1:
         fail("Android localization review audit schema version drift")
-    if localization_audit["reviewStatus"] != "requires-human-translation":
+    if localization_audit["reviewStatus"] != "requires-human-review":
         fail("Android localization review audit overclaims translation approval")
     if localization_audit["formatArgumentContractStatus"] != "validated":
         fail("Android localization format argument contracts are not validated")
@@ -960,6 +990,11 @@ def main(argv=None):
         fail("Android localization audit overclaims plural approval")
     if localization_audit["catalog"] != "Voxboard/Localizable.xcstrings":
         fail("Android localization review audit catalog drift")
+    if (localization_audit["androidCatalog"] != "apps/android/localization/android-strings.json"
+        or localization_audit["translationCoverageStatus"] != "complete"
+        or localization_audit["pluralImplementationStatus"] != "cldr-aware"
+        or localization_audit["pluralSourceCount"] != 12):
+        fail("Android translation and quantity coverage drift")
     expected_source_roots = [
         "apps/android/app/src/main/kotlin",
         "apps/android/capture-domain/src/main/kotlin",
@@ -988,17 +1023,18 @@ def main(argv=None):
         localization_audit["literalRuntimeSourceCount"],
         localization_audit["catalogBackedSourceCount"],
         localization_audit["aliasBackedSourceCount"],
+        localization_audit["androidCatalogBackedSourceCount"],
         localization_audit["incompleteCatalogSourceCount"],
         localization_audit["missingCatalogSourceCount"],
     )
-    if counts != (785, 222, 6, 0, 557) or counts[0] != sum(counts[1:]):
+    if counts != (779, 219, 6, 554, 0, 0) or counts[0] != sum(counts[1:]):
         fail("Android localization review source counts changed without review")
-    if localization_audit["runtimeSourceLiteralCount"] != 2573:
+    if localization_audit["runtimeSourceLiteralCount"] != 2577:
         fail("Android runtime localization lookup-source count changed without review")
-    if localization_audit["fallbackSourceCount"] != counts[3] + counts[4]:
+    if localization_audit["fallbackSourceCount"] != counts[4] + counts[5]:
         fail("Android localization fallback count differs from incomplete and absent sources")
     missing_sources = localization_audit["missingCatalogSources"]
-    if len(missing_sources) != counts[4]:
+    if len(missing_sources) != counts[5]:
         fail("Android localization review missing-source inventory differs from count")
     if localization_audit["incompleteCatalogSources"]:
         fail("Android localized runtime source has incomplete locale coverage")
@@ -1025,7 +1061,7 @@ def main(argv=None):
     if any("source: String" == item.get("expression") for item in dynamic_calls):
         fail("Android localization dynamic-source audit includes function declarations")
     integer_sources = localization_audit["integerFormatSources"]
-    if localization_audit["integerFormatSourceCount"] != 20 or len(integer_sources) != 20:
+    if localization_audit["integerFormatSourceCount"] != 17 or len(integer_sources) != 17:
         fail("Android localization integer-format source inventory drift")
     main_activity_localization = (root / "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt").read_text()
     for needle in (

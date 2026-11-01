@@ -8986,6 +8986,51 @@
       ],
       "programScope": "parity",
       "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Complete 22-locale Android catalog and explicit CLDR quantities preserve placeholders and template tokens; mutations reject incomplete or falsely approved drafts.",
+          "evidencePath": "Packages/contracts/tests/test_android_localization_audit.py",
+          "kind": "unit",
+          "mappingID": "cap.ui.localization.acceptance.1",
+          "status": "planned"
+        },
+        {
+          "assertion": "Native-speaker source fidelity, plural grammar, canonical RTL presentation and OEM/Wear fit require human release qualification. Automated emulator checks are supporting evidence, not linguistic approval.",
+          "evidencePath": "docs/android-localization-parity-2026-11-01.md",
+          "kind": "device",
+          "mappingID": "cap.ui.localization.acceptance.2",
+          "status": "planned"
+        }
+      ],
+      "classification": "native",
+      "dependencies": [
+        "dep.legacy-fixtures"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/RuntimeLocalization.kt",
+          "symbol": "RuntimeLocalization"
+        },
+        {
+          "path": "apps/android/scripts/generate-runtime-localizations.py",
+          "symbol": "generate_plurals"
+        }
+      ],
+      "id": "cap.ui.localization",
+      "legacyParity": "native-equivalent",
+      "milestone": "M5",
+      "outcome": "Runtime translation coverage, CLDR quantity selection and bidirectional presentation for supported app languages",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android",
+        "watch",
+        "wear"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
     }
   ],
   "dependencyCatalog": [
@@ -9075,6 +9120,6 @@
   "schemaVersion": 1,
   "source": {
     "path": "docs/architecture/android-wear-m0-capabilities.json",
-    "sha256": "ed74cf209e3eb7da140628b7c659a0b909ea9eaf4ea386f4ddee659dfaefd8e4"
+    "sha256": "5908bbe3c12fe9d0b6375a6c7b06081c938ef9baf8b6b826ea2cce5d318fc703"
   }
 }

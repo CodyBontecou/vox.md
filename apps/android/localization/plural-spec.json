@@ -1,0 +1,1262 @@
+{
+  "nonPluralSources": [
+    "%lld of %lld",
+    "%lld of %lld used",
+    "%lld%%",
+    "%lld: %@",
+    "HTTP %lld",
+    "Heading %lld"
+  ],
+  "plurals": {
+    "%1$@ is ready, but %2$lld shared files could not be copied.": {
+      "countArgument": 2,
+      "english": {
+        "one": "%1$@ is ready, but %2$lld shared file could not be copied.",
+        "other": "%1$@ is ready, but %2$lld shared files could not be copied."
+      },
+      "overrides": {
+        "ar": {
+          "few": "جاهز: %1$@. ملفات تعذر نسخها: %2$lld ملفات",
+          "many": "جاهز: %1$@. ملفات تعذر نسخها: %2$lld ملفًا",
+          "one": "جاهز: %1$@. ملفات تعذر نسخها: %2$lld ملف",
+          "other": "جاهز: %1$@. ملفات تعذر نسخها: %2$lld ملف",
+          "two": "جاهز: %1$@. ملفات تعذر نسخها: ملفان (%2$lld)",
+          "zero": "جاهز: %1$@. ملفات تعذر نسخها: %2$lld ملفات"
+        },
+        "bn": {
+          "one": "প্রস্তুত: %1$@। কপি করা যায়নি এমন ফাইল: %2$lldটি ফাইল",
+          "other": "প্রস্তুত: %1$@। কপি করা যায়নি এমন ফাইল: %2$lldটি ফাইল"
+        },
+        "de": {
+          "one": "Bereit: %1$@. Nicht kopierte Dateien: %2$lld Datei",
+          "other": "Bereit: %1$@. Nicht kopierte Dateien: %2$lld Dateien"
+        },
+        "es": {
+          "many": "Listo: %1$@. Archivos que no se pudieron copiar: %2$lld archivos",
+          "one": "Listo: %1$@. Archivos que no se pudieron copiar: %2$lld archivo",
+          "other": "Listo: %1$@. Archivos que no se pudieron copiar: %2$lld archivos"
+        },
+        "fr": {
+          "many": "Prêt : %1$@. Fichiers non copiés : %2$lld fichiers",
+          "one": "Prêt : %1$@. Fichiers non copiés : %2$lld fichier",
+          "other": "Prêt : %1$@. Fichiers non copiés : %2$lld fichiers"
+        },
+        "hi": {
+          "one": "तैयार: %1$@। कॉपी नहीं की गई फ़ाइलें: %2$lld फ़ाइल",
+          "other": "तैयार: %1$@। कॉपी नहीं की गई फ़ाइलें: %2$lld फ़ाइलें"
+        },
+        "id": {
+          "other": "Siap: %1$@. Berkas yang tidak dapat disalin: %2$lld berkas"
+        },
+        "it": {
+          "many": "Pronto: %1$@. File non copiati: %2$lld file",
+          "one": "Pronto: %1$@. File non copiati: %2$lld file",
+          "other": "Pronto: %1$@. File non copiati: %2$lld file"
+        },
+        "ja": {
+          "other": "%1$@ の準備ができました。コピーできなかったファイル：%2$lld個のファイル"
+        },
+        "ko": {
+          "other": "%1$@ 준비 완료. 복사하지 못한 파일: 파일 %2$lld개"
+        },
+        "nl": {
+          "one": "Gereed: %1$@. Niet gekopieerde bestanden: %2$lld bestand",
+          "other": "Gereed: %1$@. Niet gekopieerde bestanden: %2$lld bestanden"
+        },
+        "pl": {
+          "few": "Gotowe: %1$@. Nieskopiowane pliki: %2$lld pliki",
+          "many": "Gotowe: %1$@. Nieskopiowane pliki: %2$lld plików",
+          "one": "Gotowe: %1$@. Nieskopiowane pliki: %2$lld plik",
+          "other": "Gotowe: %1$@. Nieskopiowane pliki: %2$lld pliku"
+        },
+        "pt-BR": {
+          "many": "Pronto: %1$@. Arquivos não copiados: %2$lld arquivos",
+          "one": "Pronto: %1$@. Arquivos não copiados: %2$lld arquivo",
+          "other": "Pronto: %1$@. Arquivos não copiados: %2$lld arquivos"
+        },
+        "ru": {
+          "few": "Готово: %1$@. Не удалось скопировать файлы: %2$lld файла",
+          "many": "Готово: %1$@. Не удалось скопировать файлы: %2$lld файлов",
+          "one": "Готово: %1$@. Не удалось скопировать файлы: %2$lld файл",
+          "other": "Готово: %1$@. Не удалось скопировать файлы: %2$lld файла"
+        },
+        "ta": {
+          "one": "%1$@ தயார். நகலெடுக்க முடியாத கோப்புகள்: %2$lld கோப்பு",
+          "other": "%1$@ தயார். நகலெடுக்க முடியாத கோப்புகள்: %2$lld கோப்புகள்"
+        },
+        "th": {
+          "other": "%1$@ พร้อมแล้ว ไฟล์ที่คัดลอกไม่ได้: ไฟล์ %2$lld ไฟล์"
+        },
+        "tr": {
+          "one": "%1$@ hazır. Kopyalanamayan dosyalar: %2$lld dosya",
+          "other": "%1$@ hazır. Kopyalanamayan dosyalar: %2$lld dosya"
+        },
+        "uk": {
+          "few": "Готово: %1$@. Не вдалося скопіювати файли: %2$lld файли",
+          "many": "Готово: %1$@. Не вдалося скопіювати файли: %2$lld файлів",
+          "one": "Готово: %1$@. Не вдалося скопіювати файли: %2$lld файл",
+          "other": "Готово: %1$@. Не вдалося скопіювати файли: %2$lld файлу"
+        },
+        "ur": {
+          "one": "%1$@ تیار ہے۔ کاپی نہ ہونے والی فائلیں: %2$lld فائل",
+          "other": "%1$@ تیار ہے۔ کاپی نہ ہونے والی فائلیں: %2$lld فائلیں"
+        },
+        "vi": {
+          "other": "%1$@ đã sẵn sàng. Tệp không sao chép được: %2$lld tệp"
+        },
+        "zh-Hans": {
+          "other": "%1$@ 已准备就绪。无法复制的文件：%2$lld 个文件"
+        },
+        "zh-Hant": {
+          "other": "%1$@ 已準備就緒。無法複製的檔案：%2$lld 個檔案"
+        }
+      }
+    },
+    "%@ · %lld attachments": {
+      "countArgument": 2,
+      "english": {
+        "one": "%@ · %lld attachment",
+        "other": "%@ · %lld attachments"
+      },
+      "overrides": {
+        "ar": {
+          "few": "%@ · %lld مرفقات",
+          "many": "%@ · %lld مرفقًا",
+          "one": "%@ · %lld مرفق",
+          "other": "%@ · %lld مرفق",
+          "two": "%@ · مرفقان (%lld)",
+          "zero": "%@ · %lld مرفقات"
+        },
+        "bn": {
+          "one": "%@ · %lldটি সংযুক্তি",
+          "other": "%@ · %lldটি সংযুক্তি"
+        },
+        "de": {
+          "one": "%@ · %lld Anhang",
+          "other": "%@ · %lld Anhänge"
+        },
+        "es": {
+          "many": "%@ · %lld archivos adjuntos",
+          "one": "%@ · %lld archivo adjunto",
+          "other": "%@ · %lld archivos adjuntos"
+        },
+        "fr": {
+          "many": "%@ · %lld pièces jointes",
+          "one": "%@ · %lld pièce jointe",
+          "other": "%@ · %lld pièces jointes"
+        },
+        "hi": {
+          "one": "%@ · %lld अटैचमेंट",
+          "other": "%@ · %lld अटैचमेंट"
+        },
+        "id": {
+          "other": "%@ · %lld lampiran"
+        },
+        "it": {
+          "many": "%@ · %lld allegati",
+          "one": "%@ · %lld allegato",
+          "other": "%@ · %lld allegati"
+        },
+        "ja": {
+          "other": "%@ · %lld件の添付ファイル"
+        },
+        "ko": {
+          "other": "%@ · 첨부 파일 %lld개"
+        },
+        "nl": {
+          "one": "%@ · %lld bijlage",
+          "other": "%@ · %lld bijlagen"
+        },
+        "pl": {
+          "few": "%@ · %lld załączniki",
+          "many": "%@ · %lld załączników",
+          "one": "%@ · %lld załącznik",
+          "other": "%@ · %lld załącznika"
+        },
+        "pt-BR": {
+          "many": "%@ · %lld anexos",
+          "one": "%@ · %lld anexo",
+          "other": "%@ · %lld anexos"
+        },
+        "ru": {
+          "few": "%@ · %lld вложения",
+          "many": "%@ · %lld вложений",
+          "one": "%@ · %lld вложение",
+          "other": "%@ · %lld вложения"
+        },
+        "ta": {
+          "one": "%@ · %lld இணைப்பு",
+          "other": "%@ · %lld இணைப்புகள்"
+        },
+        "th": {
+          "other": "%@ · ไฟล์แนบ %lld ไฟล์"
+        },
+        "tr": {
+          "one": "%@ · %lld ek",
+          "other": "%@ · %lld ek"
+        },
+        "uk": {
+          "few": "%@ · %lld вкладення",
+          "many": "%@ · %lld вкладень",
+          "one": "%@ · %lld вкладення",
+          "other": "%@ · %lld вкладення"
+        },
+        "ur": {
+          "one": "%@ · %lld منسلک فائل",
+          "other": "%@ · %lld منسلک فائلیں"
+        },
+        "vi": {
+          "other": "%@ · %lld tệp đính kèm"
+        },
+        "zh-Hans": {
+          "other": "%@ · %lld 个附件"
+        },
+        "zh-Hant": {
+          "other": "%@ · %lld 個附件"
+        }
+      }
+    },
+    "%@ · %lld attempts": {
+      "countArgument": 2,
+      "english": {
+        "one": "%@ · %lld attempt",
+        "other": "%@ · %lld attempts"
+      },
+      "overrides": {
+        "ar": {
+          "few": "%@ · %lld محاولات",
+          "many": "%@ · %lld محاولة",
+          "one": "%@ · %lld محاولة",
+          "other": "%@ · %lld محاولة",
+          "two": "%@ · محاولتان (%lld)",
+          "zero": "%@ · %lld محاولات"
+        },
+        "bn": {
+          "one": "%@ · %lldটি প্রচেষ্টা",
+          "other": "%@ · %lldটি প্রচেষ্টা"
+        },
+        "de": {
+          "one": "%@ · %lld Versuch",
+          "other": "%@ · %lld Versuche"
+        },
+        "es": {
+          "many": "%@ · %lld intentos",
+          "one": "%@ · %lld intento",
+          "other": "%@ · %lld intentos"
+        },
+        "fr": {
+          "many": "%@ · %lld tentatives",
+          "one": "%@ · %lld tentative",
+          "other": "%@ · %lld tentatives"
+        },
+        "hi": {
+          "one": "%@ · %lld प्रयास",
+          "other": "%@ · %lld प्रयास"
+        },
+        "id": {
+          "other": "%@ · %lld percobaan"
+        },
+        "it": {
+          "many": "%@ · %lld tentativi",
+          "one": "%@ · %lld tentativo",
+          "other": "%@ · %lld tentativi"
+        },
+        "ja": {
+          "other": "%@ · %lld回の試行"
+        },
+        "ko": {
+          "other": "%@ · 시도 %lld회"
+        },
+        "nl": {
+          "one": "%@ · %lld poging",
+          "other": "%@ · %lld pogingen"
+        },
+        "pl": {
+          "few": "%@ · %lld próby",
+          "many": "%@ · %lld prób",
+          "one": "%@ · %lld próba",
+          "other": "%@ · %lld próby"
+        },
+        "pt-BR": {
+          "many": "%@ · %lld tentativas",
+          "one": "%@ · %lld tentativa",
+          "other": "%@ · %lld tentativas"
+        },
+        "ru": {
+          "few": "%@ · %lld попытки",
+          "many": "%@ · %lld попыток",
+          "one": "%@ · %lld попытка",
+          "other": "%@ · %lld попытки"
+        },
+        "ta": {
+          "one": "%@ · %lld முயற்சி",
+          "other": "%@ · %lld முயற்சிகள்"
+        },
+        "th": {
+          "other": "%@ · การลอง %lld ครั้ง"
+        },
+        "tr": {
+          "one": "%@ · %lld deneme",
+          "other": "%@ · %lld deneme"
+        },
+        "uk": {
+          "few": "%@ · %lld спроби",
+          "many": "%@ · %lld спроб",
+          "one": "%@ · %lld спроба",
+          "other": "%@ · %lld спроби"
+        },
+        "ur": {
+          "one": "%@ · %lld کوشش",
+          "other": "%@ · %lld کوششیں"
+        },
+        "vi": {
+          "other": "%@ · %lld lần thử"
+        },
+        "zh-Hans": {
+          "other": "%@ · %lld 次尝试"
+        },
+        "zh-Hant": {
+          "other": "%@ · %lld 次嘗試"
+        }
+      }
+    },
+    "%lld attachments": {
+      "countArgument": 1,
+      "english": {
+        "one": "%lld attachment",
+        "other": "%lld attachments"
+      },
+      "overrides": {
+        "ar": {
+          "few": "%lld مرفقات",
+          "many": "%lld مرفقًا",
+          "one": "%lld مرفق",
+          "other": "%lld مرفق",
+          "two": "مرفقان (%lld)",
+          "zero": "%lld مرفقات"
+        },
+        "bn": {
+          "one": "%lldটি সংযুক্তি",
+          "other": "%lldটি সংযুক্তি"
+        },
+        "de": {
+          "one": "%lld Anhang",
+          "other": "%lld Anhänge"
+        },
+        "es": {
+          "many": "%lld archivos adjuntos",
+          "one": "%lld archivo adjunto",
+          "other": "%lld archivos adjuntos"
+        },
+        "fr": {
+          "many": "%lld pièces jointes",
+          "one": "%lld pièce jointe",
+          "other": "%lld pièces jointes"
+        },
+        "hi": {
+          "one": "%lld अटैचमेंट",
+          "other": "%lld अटैचमेंट"
+        },
+        "id": {
+          "other": "%lld lampiran"
+        },
+        "it": {
+          "many": "%lld allegati",
+          "one": "%lld allegato",
+          "other": "%lld allegati"
+        },
+        "ja": {
+          "other": "%lld件の添付ファイル"
+        },
+        "ko": {
+          "other": "첨부 파일 %lld개"
+        },
+        "nl": {
+          "one": "%lld bijlage",
+          "other": "%lld bijlagen"
+        },
+        "pl": {
+          "few": "%lld załączniki",
+          "many": "%lld załączników",
+          "one": "%lld załącznik",
+          "other": "%lld załącznika"
+        },
+        "pt-BR": {
+          "many": "%lld anexos",
+          "one": "%lld anexo",
+          "other": "%lld anexos"
+        },
+        "ru": {
+          "few": "%lld вложения",
+          "many": "%lld вложений",
+          "one": "%lld вложение",
+          "other": "%lld вложения"
+        },
+        "ta": {
+          "one": "%lld இணைப்பு",
+          "other": "%lld இணைப்புகள்"
+        },
+        "th": {
+          "other": "ไฟล์แนบ %lld ไฟล์"
+        },
+        "tr": {
+          "one": "%lld ek",
+          "other": "%lld ek"
+        },
+        "uk": {
+          "few": "%lld вкладення",
+          "many": "%lld вкладень",
+          "one": "%lld вкладення",
+          "other": "%lld вкладення"
+        },
+        "ur": {
+          "one": "%lld منسلک فائل",
+          "other": "%lld منسلک فائلیں"
+        },
+        "vi": {
+          "other": "%lld tệp đính kèm"
+        },
+        "zh-Hans": {
+          "other": "%lld 个附件"
+        },
+        "zh-Hant": {
+          "other": "%lld 個附件"
+        }
+      }
+    },
+    "%lld captures": {
+      "countArgument": 1,
+      "english": {
+        "one": "%lld capture",
+        "other": "%lld captures"
+      },
+      "overrides": {
+        "ar": {
+          "few": "%lld عمليات التقاط",
+          "many": "%lld عملية التقاط",
+          "one": "%lld عملية التقاط",
+          "other": "%lld عملية التقاط",
+          "two": "عمليتا التقاط (%lld)",
+          "zero": "%lld عمليات التقاط"
+        },
+        "bn": {
+          "one": "%lldটি নোট",
+          "other": "%lldটি নোট"
+        },
+        "de": {
+          "one": "%lld Notiz",
+          "other": "%lld Notizen"
+        },
+        "es": {
+          "many": "%lld notas",
+          "one": "%lld nota",
+          "other": "%lld notas"
+        },
+        "fr": {
+          "many": "%lld notes",
+          "one": "%lld note",
+          "other": "%lld notes"
+        },
+        "hi": {
+          "one": "%lld नोट",
+          "other": "%lld नोट"
+        },
+        "id": {
+          "other": "%lld catatan"
+        },
+        "it": {
+          "many": "%lld note",
+          "one": "%lld nota",
+          "other": "%lld note"
+        },
+        "ja": {
+          "other": "%lld件のメモ"
+        },
+        "ko": {
+          "other": "메모 %lld개"
+        },
+        "nl": {
+          "one": "%lld notitie",
+          "other": "%lld notities"
+        },
+        "pl": {
+          "few": "%lld przechwycenia",
+          "many": "%lld przechwyceń",
+          "one": "%lld przechwycenie",
+          "other": "%lld przechwycenia"
+        },
+        "pt-BR": {
+          "many": "%lld notas",
+          "one": "%lld nota",
+          "other": "%lld notas"
+        },
+        "ru": {
+          "few": "%lld заметки",
+          "many": "%lld заметок",
+          "one": "%lld заметка",
+          "other": "%lld заметки"
+        },
+        "ta": {
+          "one": "%lld குறிப்பு",
+          "other": "%lld குறிப்புகள்"
+        },
+        "th": {
+          "other": "โน้ต %lld รายการ"
+        },
+        "tr": {
+          "one": "%lld not",
+          "other": "%lld not"
+        },
+        "uk": {
+          "few": "%lld нотатки",
+          "many": "%lld нотаток",
+          "one": "%lld нотатка",
+          "other": "%lld нотатки"
+        },
+        "ur": {
+          "one": "%lld نوٹ",
+          "other": "%lld نوٹ"
+        },
+        "vi": {
+          "other": "%lld ghi chú"
+        },
+        "zh-Hans": {
+          "other": "%lld 条笔记"
+        },
+        "zh-Hant": {
+          "other": "%lld 則筆記"
+        }
+      }
+    },
+    "%lld captures removed from History.": {
+      "countArgument": 1,
+      "english": {
+        "one": "%lld capture removed from History.",
+        "other": "%lld captures removed from History."
+      },
+      "overrides": {
+        "ar": {
+          "few": "أُزيل من السجل: %lld عمليات التقاط",
+          "many": "أُزيل من السجل: %lld عملية التقاط",
+          "one": "أُزيل من السجل: %lld عملية التقاط",
+          "other": "أُزيل من السجل: %lld عملية التقاط",
+          "two": "أُزيل من السجل: عمليتا التقاط (%lld)",
+          "zero": "أُزيل من السجل: %lld عمليات التقاط"
+        },
+        "bn": {
+          "one": "ইতিহাস থেকে সরানো হয়েছে: %lldটি নোট",
+          "other": "ইতিহাস থেকে সরানো হয়েছে: %lldটি নোট"
+        },
+        "de": {
+          "one": "Aus dem Verlauf entfernt: %lld Notiz",
+          "other": "Aus dem Verlauf entfernt: %lld Notizen"
+        },
+        "es": {
+          "many": "Eliminado del historial: %lld notas",
+          "one": "Eliminado del historial: %lld nota",
+          "other": "Eliminado del historial: %lld notas"
+        },
+        "fr": {
+          "many": "Supprimé de l’historique : %lld notes",
+          "one": "Supprimé de l’historique : %lld note",
+          "other": "Supprimé de l’historique : %lld notes"
+        },
+        "hi": {
+          "one": "इतिहास से हटाया गया: %lld नोट",
+          "other": "इतिहास से हटाया गया: %lld नोट"
+        },
+        "id": {
+          "other": "Dihapus dari riwayat: %lld catatan"
+        },
+        "it": {
+          "many": "Rimosso dalla cronologia: %lld note",
+          "one": "Rimosso dalla cronologia: %lld nota",
+          "other": "Rimosso dalla cronologia: %lld note"
+        },
+        "ja": {
+          "other": "履歴から削除しました：%lld件のメモ"
+        },
+        "ko": {
+          "other": "기록에서 삭제됨: 메모 %lld개"
+        },
+        "nl": {
+          "one": "Verwijderd uit de geschiedenis: %lld notitie",
+          "other": "Verwijderd uit de geschiedenis: %lld notities"
+        },
+        "pl": {
+          "few": "Usunięte z historii: %lld przechwycenia",
+          "many": "Usunięte z historii: %lld przechwyceń",
+          "one": "Usunięte z historii: %lld przechwycenie",
+          "other": "Usunięte z historii: %lld przechwycenia"
+        },
+        "pt-BR": {
+          "many": "Removido do histórico: %lld notas",
+          "one": "Removido do histórico: %lld nota",
+          "other": "Removido do histórico: %lld notas"
+        },
+        "ru": {
+          "few": "Удалено из истории: %lld заметки",
+          "many": "Удалено из истории: %lld заметок",
+          "one": "Удалено из истории: %lld заметка",
+          "other": "Удалено из истории: %lld заметки"
+        },
+        "ta": {
+          "one": "வரலாற்றிலிருந்து அகற்றப்பட்டது: %lld குறிப்பு",
+          "other": "வரலாற்றிலிருந்து அகற்றப்பட்டது: %lld குறிப்புகள்"
+        },
+        "th": {
+          "other": "ลบออกจากประวัติแล้ว: โน้ต %lld รายการ"
+        },
+        "tr": {
+          "one": "Geçmişten kaldırılan: %lld not",
+          "other": "Geçmişten kaldırılan: %lld not"
+        },
+        "uk": {
+          "few": "Видалено з історії: %lld нотатки",
+          "many": "Видалено з історії: %lld нотаток",
+          "one": "Видалено з історії: %lld нотатка",
+          "other": "Видалено з історії: %lld нотатки"
+        },
+        "ur": {
+          "one": "تاریخ سے ہٹایا گیا: %lld نوٹ",
+          "other": "تاریخ سے ہٹایا گیا: %lld نوٹ"
+        },
+        "vi": {
+          "other": "Đã xóa khỏi lịch sử: %lld ghi chú"
+        },
+        "zh-Hans": {
+          "other": "已从历史记录中移除：%lld 条笔记"
+        },
+        "zh-Hant": {
+          "other": "已從歷史記錄中移除：%lld 則筆記"
+        }
+      }
+    },
+    "%lld durable chunks · %@": {
+      "countArgument": 1,
+      "english": {
+        "one": "%lld durable chunk · %@",
+        "other": "%lld durable chunks · %@"
+      },
+      "overrides": {
+        "ar": {
+          "few": "%lld مقاطع صوتية محفوظة · %@",
+          "many": "%lld مقطعًا صوتيًا محفوظًا · %@",
+          "one": "%lld مقطع صوتي محفوظ · %@",
+          "other": "%lld مقطع صوتي محفوظ · %@",
+          "two": "مقطعان صوتيان محفوظان (%lld) · %@",
+          "zero": "%lld مقاطع صوتية محفوظة · %@"
+        },
+        "bn": {
+          "one": "%lldটি সংরক্ষিত অডিও অংশ · %@",
+          "other": "%lldটি সংরক্ষিত অডিও অংশ · %@"
+        },
+        "de": {
+          "one": "%lld gespeicherter Audioabschnitt · %@",
+          "other": "%lld gespeicherte Audioabschnitte · %@"
+        },
+        "es": {
+          "many": "%lld segmentos de audio guardados · %@",
+          "one": "%lld segmento de audio guardado · %@",
+          "other": "%lld segmentos de audio guardados · %@"
+        },
+        "fr": {
+          "many": "%lld segments audio enregistrés · %@",
+          "one": "%lld segment audio enregistré · %@",
+          "other": "%lld segments audio enregistrés · %@"
+        },
+        "hi": {
+          "one": "%lld सहेजा गया ऑडियो खंड · %@",
+          "other": "%lld सहेजे गए ऑडियो खंड · %@"
+        },
+        "id": {
+          "other": "%lld segmen audio tersimpan · %@"
+        },
+        "it": {
+          "many": "%lld segmenti audio salvati · %@",
+          "one": "%lld segmento audio salvato · %@",
+          "other": "%lld segmenti audio salvati · %@"
+        },
+        "ja": {
+          "other": "%lld個の保存済み音声セグメント · %@"
+        },
+        "ko": {
+          "other": "저장된 오디오 구간 %lld개 · %@"
+        },
+        "nl": {
+          "one": "%lld opgeslagen audiosegment · %@",
+          "other": "%lld opgeslagen audiosegmenten · %@"
+        },
+        "pl": {
+          "few": "%lld trwałe fragmenty audio · %@",
+          "many": "%lld trwałych fragmentów audio · %@",
+          "one": "%lld trwały fragment audio · %@",
+          "other": "%lld trwałego fragmentu audio · %@"
+        },
+        "pt-BR": {
+          "many": "%lld segmentos de áudio salvos · %@",
+          "one": "%lld segmento de áudio salvo · %@",
+          "other": "%lld segmentos de áudio salvos · %@"
+        },
+        "ru": {
+          "few": "%lld сохранённых аудиофрагмента · %@",
+          "many": "%lld сохранённых аудиофрагментов · %@",
+          "one": "%lld сохранённый аудиофрагмент · %@",
+          "other": "%lld сохранённого аудиофрагмента · %@"
+        },
+        "ta": {
+          "one": "%lld சேமித்த ஒலிப்பகுதி · %@",
+          "other": "%lld சேமித்த ஒலிப்பகுதிகள் · %@"
+        },
+        "th": {
+          "other": "ส่วนเสียงที่บันทึกไว้ %lld ส่วน · %@"
+        },
+        "tr": {
+          "one": "%lld kaydedilmiş ses bölümü · %@",
+          "other": "%lld kaydedilmiş ses bölümü · %@"
+        },
+        "uk": {
+          "few": "%lld збережені аудіофрагменти · %@",
+          "many": "%lld збережених аудіофрагментів · %@",
+          "one": "%lld збережений аудіофрагмент · %@",
+          "other": "%lld збереженого аудіофрагмента · %@"
+        },
+        "ur": {
+          "one": "%lld محفوظ آڈیو حصہ · %@",
+          "other": "%lld محفوظ آڈیو حصے · %@"
+        },
+        "vi": {
+          "other": "%lld đoạn âm thanh đã lưu · %@"
+        },
+        "zh-Hans": {
+          "other": "%lld 个已保存的音频片段 · %@"
+        },
+        "zh-Hant": {
+          "other": "%lld 個已儲存的音訊片段 · %@"
+        }
+      }
+    },
+    "%lld non-screenshot images were skipped.": {
+      "countArgument": 1,
+      "english": {
+        "one": "%lld non-screenshot image was skipped.",
+        "other": "%lld non-screenshot images were skipped."
+      },
+      "overrides": {
+        "ar": {
+          "few": "صور تم تخطيها لأنها ليست لقطات شاشة: %lld صور",
+          "many": "صور تم تخطيها لأنها ليست لقطات شاشة: %lld صورة",
+          "one": "صور تم تخطيها لأنها ليست لقطات شاشة: %lld صورة",
+          "other": "صور تم تخطيها لأنها ليست لقطات شاشة: %lld صورة",
+          "two": "صور تم تخطيها لأنها ليست لقطات شاشة: صورتان (%lld)",
+          "zero": "صور تم تخطيها لأنها ليست لقطات شاشة: %lld صور"
+        },
+        "bn": {
+          "one": "স্ক্রিনশট নয় এমন বাদ দেওয়া ছবি: %lldটি ছবি",
+          "other": "স্ক্রিনশট নয় এমন বাদ দেওয়া ছবি: %lldটি ছবি"
+        },
+        "de": {
+          "one": "Übersprungene Bilder, die keine Screenshots sind: %lld Bild",
+          "other": "Übersprungene Bilder, die keine Screenshots sind: %lld Bilder"
+        },
+        "es": {
+          "many": "Imágenes omitidas que no son capturas de pantalla: %lld imágenes",
+          "one": "Imágenes omitidas que no son capturas de pantalla: %lld imagen",
+          "other": "Imágenes omitidas que no son capturas de pantalla: %lld imágenes"
+        },
+        "fr": {
+          "many": "Images ignorées qui ne sont pas des captures d’écran : %lld images",
+          "one": "Images ignorées qui ne sont pas des captures d’écran : %lld image",
+          "other": "Images ignorées qui ne sont pas des captures d’écran : %lld images"
+        },
+        "hi": {
+          "one": "स्क्रीनशॉट न होने के कारण छोड़े गए चित्र: %lld चित्र",
+          "other": "स्क्रीनशॉट न होने के कारण छोड़े गए चित्र: %lld चित्र"
+        },
+        "id": {
+          "other": "Gambar yang dilewati karena bukan tangkapan layar: %lld gambar"
+        },
+        "it": {
+          "many": "Immagini ignorate perché non sono screenshot: %lld immagini",
+          "one": "Immagini ignorate perché non sono screenshot: %lld immagine",
+          "other": "Immagini ignorate perché non sono screenshot: %lld immagini"
+        },
+        "ja": {
+          "other": "スクリーンショット以外のためスキップした画像：%lld枚の画像"
+        },
+        "ko": {
+          "other": "스크린샷이 아니어서 건너뛴 이미지: 이미지 %lld개"
+        },
+        "nl": {
+          "one": "Overgeslagen afbeeldingen die geen schermafbeeldingen zijn: %lld afbeelding",
+          "other": "Overgeslagen afbeeldingen die geen schermafbeeldingen zijn: %lld afbeeldingen"
+        },
+        "pl": {
+          "few": "Pominięte obrazy inne niż zrzuty ekranu: %lld obrazy",
+          "many": "Pominięte obrazy inne niż zrzuty ekranu: %lld obrazów",
+          "one": "Pominięte obrazy inne niż zrzuty ekranu: %lld obraz",
+          "other": "Pominięte obrazy inne niż zrzuty ekranu: %lld obrazu"
+        },
+        "pt-BR": {
+          "many": "Imagens ignoradas que não são capturas de tela: %lld imagens",
+          "one": "Imagens ignoradas que não são capturas de tela: %lld imagem",
+          "other": "Imagens ignoradas que não são capturas de tela: %lld imagens"
+        },
+        "ru": {
+          "few": "Пропущенные изображения, не являющиеся снимками экрана: %lld изображения",
+          "many": "Пропущенные изображения, не являющиеся снимками экрана: %lld изображений",
+          "one": "Пропущенные изображения, не являющиеся снимками экрана: %lld изображение",
+          "other": "Пропущенные изображения, не являющиеся снимками экрана: %lld изображения"
+        },
+        "ta": {
+          "one": "திரைப்பிடிப்புகள் அல்லாததால் தவிர்க்கப்பட்ட படங்கள்: %lld படம்",
+          "other": "திரைப்பிடிப்புகள் அல்லாததால் தவிர்க்கப்பட்ட படங்கள்: %lld படங்கள்"
+        },
+        "th": {
+          "other": "รูปภาพที่ข้ามเพราะไม่ใช่ภาพหน้าจอ: รูปภาพ %lld ภาพ"
+        },
+        "tr": {
+          "one": "Ekran görüntüsü olmadığı için atlanan görüntüler: %lld görüntü",
+          "other": "Ekran görüntüsü olmadığı için atlanan görüntüler: %lld görüntü"
+        },
+        "uk": {
+          "few": "Пропущені зображення, які не є знімками екрана: %lld зображення",
+          "many": "Пропущені зображення, які не є знімками екрана: %lld зображень",
+          "one": "Пропущені зображення, які не є знімками екрана: %lld зображення",
+          "other": "Пропущені зображення, які не є знімками екрана: %lld зображення"
+        },
+        "ur": {
+          "one": "اسکرین شاٹ نہ ہونے کی وجہ سے چھوڑی گئی تصاویر: %lld تصویر",
+          "other": "اسکرین شاٹ نہ ہونے کی وجہ سے چھوڑی گئی تصاویر: %lld تصاویر"
+        },
+        "vi": {
+          "other": "Hình ảnh bị bỏ qua vì không phải ảnh chụp màn hình: %lld hình ảnh"
+        },
+        "zh-Hans": {
+          "other": "因不是屏幕截图而跳过的图片：%lld 张图片"
+        },
+        "zh-Hant": {
+          "other": "因不是螢幕截圖而略過的圖片：%lld 張圖片"
+        }
+      }
+    },
+    "%lld recordings": {
+      "countArgument": 1,
+      "english": {
+        "one": "%lld recording",
+        "other": "%lld recordings"
+      },
+      "overrides": {
+        "ar": {
+          "few": "%lld تسجيلات",
+          "many": "%lld تسجيلًا",
+          "one": "%lld تسجيل",
+          "other": "%lld تسجيل",
+          "two": "تسجيلان (%lld)",
+          "zero": "%lld تسجيلات"
+        },
+        "bn": {
+          "one": "%lldটি রেকর্ডিং",
+          "other": "%lldটি রেকর্ডিং"
+        },
+        "de": {
+          "one": "%lld Aufnahme",
+          "other": "%lld Aufnahmen"
+        },
+        "es": {
+          "many": "%lld grabaciones",
+          "one": "%lld grabación",
+          "other": "%lld grabaciones"
+        },
+        "fr": {
+          "many": "%lld enregistrements",
+          "one": "%lld enregistrement",
+          "other": "%lld enregistrements"
+        },
+        "hi": {
+          "one": "%lld रिकॉर्डिंग",
+          "other": "%lld रिकॉर्डिंग"
+        },
+        "id": {
+          "other": "%lld rekaman"
+        },
+        "it": {
+          "many": "%lld registrazioni",
+          "one": "%lld registrazione",
+          "other": "%lld registrazioni"
+        },
+        "ja": {
+          "other": "%lld件の録音"
+        },
+        "ko": {
+          "other": "녹음 %lld개"
+        },
+        "nl": {
+          "one": "%lld opname",
+          "other": "%lld opnamen"
+        },
+        "pl": {
+          "few": "%lld nagrania",
+          "many": "%lld nagrań",
+          "one": "%lld nagranie",
+          "other": "%lld nagrania"
+        },
+        "pt-BR": {
+          "many": "%lld gravações",
+          "one": "%lld gravação",
+          "other": "%lld gravações"
+        },
+        "ru": {
+          "few": "%lld записи",
+          "many": "%lld записей",
+          "one": "%lld запись",
+          "other": "%lld записи"
+        },
+        "ta": {
+          "one": "%lld ஒலிப்பதிவு",
+          "other": "%lld ஒலிப்பதிவுகள்"
+        },
+        "th": {
+          "other": "การบันทึกเสียง %lld รายการ"
+        },
+        "tr": {
+          "one": "%lld kayıt",
+          "other": "%lld kayıt"
+        },
+        "uk": {
+          "few": "%lld записи",
+          "many": "%lld записів",
+          "one": "%lld запис",
+          "other": "%lld запису"
+        },
+        "ur": {
+          "one": "%lld ریکارڈنگ",
+          "other": "%lld ریکارڈنگز"
+        },
+        "vi": {
+          "other": "%lld bản ghi âm"
+        },
+        "zh-Hans": {
+          "other": "%lld 条录音"
+        },
+        "zh-Hant": {
+          "other": "%lld 則錄音"
+        }
+      }
+    },
+    "%lld recordings saved on Watch.": {
+      "countArgument": 1,
+      "english": {
+        "one": "%lld recording saved on Watch.",
+        "other": "%lld recordings saved on Watch."
+      },
+      "overrides": {
+        "ar": {
+          "few": "حُفظ على الساعة: %lld تسجيلات",
+          "many": "حُفظ على الساعة: %lld تسجيلًا",
+          "one": "حُفظ على الساعة: %lld تسجيل",
+          "other": "حُفظ على الساعة: %lld تسجيل",
+          "two": "حُفظ على الساعة: تسجيلان (%lld)",
+          "zero": "حُفظ على الساعة: %lld تسجيلات"
+        },
+        "bn": {
+          "one": "ঘড়িতে সংরক্ষিত: %lldটি রেকর্ডিং",
+          "other": "ঘড়িতে সংরক্ষিত: %lldটি রেকর্ডিং"
+        },
+        "de": {
+          "one": "Auf der Uhr gespeichert: %lld Aufnahme",
+          "other": "Auf der Uhr gespeichert: %lld Aufnahmen"
+        },
+        "es": {
+          "many": "Guardado en el reloj: %lld grabaciones",
+          "one": "Guardado en el reloj: %lld grabación",
+          "other": "Guardado en el reloj: %lld grabaciones"
+        },
+        "fr": {
+          "many": "Enregistré sur la montre : %lld enregistrements",
+          "one": "Enregistré sur la montre : %lld enregistrement",
+          "other": "Enregistré sur la montre : %lld enregistrements"
+        },
+        "hi": {
+          "one": "घड़ी पर सहेजा गया: %lld रिकॉर्डिंग",
+          "other": "घड़ी पर सहेजा गया: %lld रिकॉर्डिंग"
+        },
+        "id": {
+          "other": "Disimpan di jam: %lld rekaman"
+        },
+        "it": {
+          "many": "Salvato sull’orologio: %lld registrazioni",
+          "one": "Salvato sull’orologio: %lld registrazione",
+          "other": "Salvato sull’orologio: %lld registrazioni"
+        },
+        "ja": {
+          "other": "時計に保存済み：%lld件の録音"
+        },
+        "ko": {
+          "other": "시계에 저장됨: 녹음 %lld개"
+        },
+        "nl": {
+          "one": "Op het horloge opgeslagen: %lld opname",
+          "other": "Op het horloge opgeslagen: %lld opnamen"
+        },
+        "pl": {
+          "few": "Zapisane na zegarku: %lld nagrania",
+          "many": "Zapisane na zegarku: %lld nagrań",
+          "one": "Zapisane na zegarku: %lld nagranie",
+          "other": "Zapisane na zegarku: %lld nagrania"
+        },
+        "pt-BR": {
+          "many": "Salvo no relógio: %lld gravações",
+          "one": "Salvo no relógio: %lld gravação",
+          "other": "Salvo no relógio: %lld gravações"
+        },
+        "ru": {
+          "few": "Сохранено на часах: %lld записи",
+          "many": "Сохранено на часах: %lld записей",
+          "one": "Сохранено на часах: %lld запись",
+          "other": "Сохранено на часах: %lld записи"
+        },
+        "ta": {
+          "one": "கடிகாரத்தில் சேமிக்கப்பட்டது: %lld ஒலிப்பதிவு",
+          "other": "கடிகாரத்தில் சேமிக்கப்பட்டது: %lld ஒலிப்பதிவுகள்"
+        },
+        "th": {
+          "other": "บันทึกไว้ในนาฬิกาแล้ว: การบันทึกเสียง %lld รายการ"
+        },
+        "tr": {
+          "one": "Saate kaydedilen: %lld kayıt",
+          "other": "Saate kaydedilen: %lld kayıt"
+        },
+        "uk": {
+          "few": "Збережено на годиннику: %lld записи",
+          "many": "Збережено на годиннику: %lld записів",
+          "one": "Збережено на годиннику: %lld запис",
+          "other": "Збережено на годиннику: %lld запису"
+        },
+        "ur": {
+          "one": "گھڑی پر محفوظ: %lld ریکارڈنگ",
+          "other": "گھڑی پر محفوظ: %lld ریکارڈنگز"
+        },
+        "vi": {
+          "other": "Đã lưu trên đồng hồ: %lld bản ghi âm"
+        },
+        "zh-Hans": {
+          "other": "已保存到手表：%lld 条录音"
+        },
+        "zh-Hant": {
+          "other": "已儲存到手錶：%lld 則錄音"
+        }
+      }
+    },
+    "%lld speakers": {
+      "countArgument": 1,
+      "english": {
+        "one": "%lld speaker",
+        "other": "%lld speakers"
+      },
+      "overrides": {
+        "ar": {
+          "few": "%lld متحدثين",
+          "many": "%lld متحدثًا",
+          "one": "%lld متحدث",
+          "other": "%lld متحدث",
+          "two": "متحدثان (%lld)",
+          "zero": "%lld متحدثين"
+        },
+        "bn": {
+          "one": "%lldজন বক্তা",
+          "other": "%lldজন বক্তা"
+        },
+        "de": {
+          "one": "%lld Sprecher",
+          "other": "%lld Sprecher"
+        },
+        "es": {
+          "many": "%lld hablantes",
+          "one": "%lld hablante",
+          "other": "%lld hablantes"
+        },
+        "fr": {
+          "many": "%lld locuteurs",
+          "one": "%lld locuteur",
+          "other": "%lld locuteurs"
+        },
+        "hi": {
+          "one": "%lld वक्ता",
+          "other": "%lld वक्ता"
+        },
+        "id": {
+          "other": "%lld pembicara"
+        },
+        "it": {
+          "many": "%lld parlanti",
+          "one": "%lld parlante",
+          "other": "%lld parlanti"
+        },
+        "ja": {
+          "other": "%lld人の話者"
+        },
+        "ko": {
+          "other": "화자 %lld명"
+        },
+        "nl": {
+          "one": "%lld spreker",
+          "other": "%lld sprekers"
+        },
+        "pl": {
+          "few": "%lld mówcy",
+          "many": "%lld mówców",
+          "one": "%lld mówca",
+          "other": "%lld mówcy"
+        },
+        "pt-BR": {
+          "many": "%lld falantes",
+          "one": "%lld falante",
+          "other": "%lld falantes"
+        },
+        "ru": {
+          "few": "%lld спикера",
+          "many": "%lld спикеров",
+          "one": "%lld спикер",
+          "other": "%lld спикера"
+        },
+        "ta": {
+          "one": "%lld பேச்சாளர்",
+          "other": "%lld பேச்சாளர்கள்"
+        },
+        "th": {
+          "other": "ผู้พูด %lld คน"
+        },
+        "tr": {
+          "one": "%lld konuşmacı",
+          "other": "%lld konuşmacı"
+        },
+        "uk": {
+          "few": "%lld мовці",
+          "many": "%lld мовців",
+          "one": "%lld мовець",
+          "other": "%lld мовця"
+        },
+        "ur": {
+          "one": "%lld بولنے والا",
+          "other": "%lld بولنے والے"
+        },
+        "vi": {
+          "other": "%lld người nói"
+        },
+        "zh-Hans": {
+          "other": "%lld 位说话人"
+        },
+        "zh-Hant": {
+          "other": "%lld 位說話者"
+        }
+      }
+    },
+    "Saved locally in %lld durable chunks.": {
+      "countArgument": 1,
+      "english": {
+        "one": "Saved locally in %lld durable chunk.",
+        "other": "Saved locally in %lld durable chunks."
+      },
+      "overrides": {
+        "ar": {
+          "few": "حُفظ محليًا: %lld مقاطع صوتية محفوظة",
+          "many": "حُفظ محليًا: %lld مقطعًا صوتيًا محفوظًا",
+          "one": "حُفظ محليًا: %lld مقطع صوتي محفوظ",
+          "other": "حُفظ محليًا: %lld مقطع صوتي محفوظ",
+          "two": "حُفظ محليًا: مقطعان صوتيان محفوظان (%lld)",
+          "zero": "حُفظ محليًا: %lld مقاطع صوتية محفوظة"
+        },
+        "bn": {
+          "one": "ডিভাইসে সংরক্ষিত: %lldটি সংরক্ষিত অডিও অংশ",
+          "other": "ডিভাইসে সংরক্ষিত: %lldটি সংরক্ষিত অডিও অংশ"
+        },
+        "de": {
+          "one": "Lokal gespeichert: %lld gespeicherter Audioabschnitt",
+          "other": "Lokal gespeichert: %lld gespeicherte Audioabschnitte"
+        },
+        "es": {
+          "many": "Guardado localmente: %lld segmentos de audio guardados",
+          "one": "Guardado localmente: %lld segmento de audio guardado",
+          "other": "Guardado localmente: %lld segmentos de audio guardados"
+        },
+        "fr": {
+          "many": "Enregistré sur cet appareil : %lld segments audio enregistrés",
+          "one": "Enregistré sur cet appareil : %lld segment audio enregistré",
+          "other": "Enregistré sur cet appareil : %lld segments audio enregistrés"
+        },
+        "hi": {
+          "one": "डिवाइस पर सहेजा गया: %lld सहेजा गया ऑडियो खंड",
+          "other": "डिवाइस पर सहेजा गया: %lld सहेजे गए ऑडियो खंड"
+        },
+        "id": {
+          "other": "Disimpan secara lokal: %lld segmen audio tersimpan"
+        },
+        "it": {
+          "many": "Salvato sul dispositivo: %lld segmenti audio salvati",
+          "one": "Salvato sul dispositivo: %lld segmento audio salvato",
+          "other": "Salvato sul dispositivo: %lld segmenti audio salvati"
+        },
+        "ja": {
+          "other": "このデバイスに保存済み：%lld個の保存済み音声セグメント"
+        },
+        "ko": {
+          "other": "기기에 저장됨: 저장된 오디오 구간 %lld개"
+        },
+        "nl": {
+          "one": "Lokaal opgeslagen: %lld opgeslagen audiosegment",
+          "other": "Lokaal opgeslagen: %lld opgeslagen audiosegmenten"
+        },
+        "pl": {
+          "few": "Zapisane lokalnie: %lld trwałe fragmenty audio",
+          "many": "Zapisane lokalnie: %lld trwałych fragmentów audio",
+          "one": "Zapisane lokalnie: %lld trwały fragment audio",
+          "other": "Zapisane lokalnie: %lld trwałego fragmentu audio"
+        },
+        "pt-BR": {
+          "many": "Salvo no dispositivo: %lld segmentos de áudio salvos",
+          "one": "Salvo no dispositivo: %lld segmento de áudio salvo",
+          "other": "Salvo no dispositivo: %lld segmentos de áudio salvos"
+        },
+        "ru": {
+          "few": "Сохранено локально: %lld сохранённых аудиофрагмента",
+          "many": "Сохранено локально: %lld сохранённых аудиофрагментов",
+          "one": "Сохранено локально: %lld сохранённый аудиофрагмент",
+          "other": "Сохранено локально: %lld сохранённого аудиофрагмента"
+        },
+        "ta": {
+          "one": "சாதனத்தில் சேமிக்கப்பட்டது: %lld சேமித்த ஒலிப்பகுதி",
+          "other": "சாதனத்தில் சேமிக்கப்பட்டது: %lld சேமித்த ஒலிப்பகுதிகள்"
+        },
+        "th": {
+          "other": "บันทึกไว้ในอุปกรณ์แล้ว: ส่วนเสียงที่บันทึกไว้ %lld ส่วน"
+        },
+        "tr": {
+          "one": "Cihaza kaydedilen: %lld kaydedilmiş ses bölümü",
+          "other": "Cihaza kaydedilen: %lld kaydedilmiş ses bölümü"
+        },
+        "uk": {
+          "few": "Збережено на пристрої: %lld збережені аудіофрагменти",
+          "many": "Збережено на пристрої: %lld збережених аудіофрагментів",
+          "one": "Збережено на пристрої: %lld збережений аудіофрагмент",
+          "other": "Збережено на пристрої: %lld збереженого аудіофрагмента"
+        },
+        "ur": {
+          "one": "ڈیوائس پر محفوظ: %lld محفوظ آڈیو حصہ",
+          "other": "ڈیوائس پر محفوظ: %lld محفوظ آڈیو حصے"
+        },
+        "vi": {
+          "other": "Đã lưu trên thiết bị: %lld đoạn âm thanh đã lưu"
+        },
+        "zh-Hans": {
+          "other": "已保存到本机：%lld 个已保存的音频片段"
+        },
+        "zh-Hant": {
+          "other": "已儲存到本機：%lld 個已儲存的音訊片段"
+        }
+      }
+    }
+  },
+  "reviewStatus": "requires-human-review",
+  "schemaVersion": 1
+}

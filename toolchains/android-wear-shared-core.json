@@ -306,7 +306,7 @@
     },
     {
       "path": "apps/android/app/build.gradle.kts",
-      "sha256": "c4be16ebf6b29549469d2ec4fbd43d79453248b3a96417346f57b875581d4b6c"
+      "sha256": "714e4dd99f8b13e1a3385c24c0c58f9d6a1739e3f7628d890e04de18a99e91fa"
     },
     {
       "path": "apps/android/app/gradle.lockfile",
@@ -370,7 +370,7 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
-      "sha256": "0d2c91129b208b8ad790c6f4746cc18eab6b5384e5867116c621b31bab9dc4a8"
+      "sha256": "7414d7a221e9b4adc33bb42536301785707308600076f56427cc4d73aa29e987"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt",
@@ -386,7 +386,7 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt",
-      "sha256": "bfbbde5a7edd42d1f4040b048bd739ca54f099e1347fc681218fc1f9f7a32aac"
+      "sha256": "b53cd39ffa284e5d0d5c1725349c60a8e0565e5e507d0c558abd669e41b514ef"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/SettingsSupportScreens.kt",
@@ -394,7 +394,7 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
-      "sha256": "92278df00f4a442dc55829ddc1a7154524f1d9ec09c5b00efe90ab609b840e46"
+      "sha256": "e983252f795353a656e0a28b4924a74b7379860f5a10afe30392d7b6b991547c"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/VoxApplication.kt",
@@ -406,7 +406,7 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/RuntimeLocalization.kt",
-      "sha256": "fcf218274ffcad9eba999cdcc81452690faf57ebf50408a74fc47852cd122c7c"
+      "sha256": "0016d588ce1b5a78509b10100f39e288c1c5ab05e7dc97fa5016c07ed12c81ea"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/VoxInputMethodService.kt",
@@ -422,7 +422,7 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/ui/CaptureViewModel.kt",
-      "sha256": "4813ebfb98e4415c4515e3cf21329dd2ee09410648e0ccbe5e5d826fcbe1862c"
+      "sha256": "3baa0f85ff190e88e3c6043c00351d3f4c340dad03cfa7c930fe8ad23beed126"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/ui/VoxTheme.kt",
@@ -482,7 +482,7 @@
     },
     {
       "path": "apps/android/app/src/test/kotlin/md/vox/android/RuntimeLocalizationTest.kt",
-      "sha256": "8344cb25d62497ffc4d414a05b9dbb59c4f39e017af6b7dd47719641a9bfda92"
+      "sha256": "a88493a658128da04ed7cd8fc743f62f114950fd7f04f8032a834809329dffec"
     },
     {
       "path": "apps/android/scripts/generate-android-sbom.py",
@@ -490,11 +490,11 @@
     },
     {
       "path": "apps/android/scripts/generate-runtime-localizations.py",
-      "sha256": "695ebd1aaa583a647f6c87d5df4d179738a05de07ed3c7700b9ed2ad2a5f8ab7"
+      "sha256": "d4f916c67894cf8dfcef2b51fcd1e8acc90ecbc2bc0fea95d8f356257638523f"
     },
     {
       "path": "apps/android/localization-review.json",
-      "sha256": "22ad5d44cba622e655a7eccbb113c1ecd65e5811c64488659786953293cb4d94"
+      "sha256": "73bebaf69a871602c65042e9c933def0afaea395fb6dfcc7c5dca09f55ac04e7"
     },
     {
       "path": "apps/android/scripts/validate-debug-artifacts.py",
@@ -846,7 +846,7 @@
     },
     {
       "path": "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearSystemSurfaces.kt",
-      "sha256": "c7db1b7631fd13c1809d58f607a63c61f4d99e1a6958fc905b14e03f43cb3331"
+      "sha256": "7057b2627cfd6c91e8ecd6a4cf3b4414744c1c9116370b49b781e46ecc5f4828"
     },
     {
       "path": "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearDataBridgeInstrumentationTest.kt",
@@ -963,6 +963,122 @@
     {
       "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/BillingUiInstrumentationTest.kt",
       "sha256": "c2d1dbcdfa7d0f8658f789430406e8a3211d6dfb13d62579bcc86d893fbe6faf"
+    },
+    {
+      "path": "apps/android/localization/android-strings.json",
+      "sha256": "fb04877a5b1640e68f2924bceb3cc4399cbb9a1dd4a777e0158d41786f76f549"
+    },
+    {
+      "path": "apps/android/localization/android-overrides.json",
+      "sha256": "474a2cf5831cb252ec7a0cbffb236b063649ce8ba125069cd5b0ee0983c5c882"
+    },
+    {
+      "path": "apps/android/localization/plural-spec.json",
+      "sha256": "4a1ef8c8f40ab6dbd7d0824d2ae842576d1f136f869faba89b5e926705991e2d"
+    },
+    {
+      "path": "apps/android/scripts/translate-android-localizations.py",
+      "sha256": "ebfcbd8346ab68371b2c924406dc3fbf2872a37d8ccf19402d0ea8a67bdd982d"
+    },
+    {
+      "path": "apps/android/app/src/main/res/raw/vox_runtime_plurals.json",
+      "sha256": "ea8520b7ce50e615e5be7a59142ced284a5d1158ee7c09764f5a0ddb6d79c0d9"
+    },
+    {
+      "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalizationParityInstrumentationTest.kt",
+      "sha256": "e9d31a7fecfea77d5c8b00990da6797cc2d37e03915dab9f87c9c6a2b56ea874"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values/platform_plurals.xml",
+      "sha256": "ece6c55902bbab13ed57144385cd626d94fc5d5debd8a80d5ccb9b7cffec134a"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-ar/platform_plurals.xml",
+      "sha256": "8e4f0891f2437e297db29401e92bc386bebf557fea5230c2fe83764e287a1920"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-b+id/platform_plurals.xml",
+      "sha256": "63f424c16385c69c4204ad7500aa8b1f0a3f7d0eefcf8629416e69beb3709d88"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-b+zh+Hans/platform_plurals.xml",
+      "sha256": "a20818c3133a3a2f059f24bd402badee415b7a9045588e64b57b64c4bc2a7d7d"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-b+zh+Hant/platform_plurals.xml",
+      "sha256": "246eaca2772a045a6865cdf81392e1171ffb112ac5c5c392f25a59fc4fa5af00"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-bn/platform_plurals.xml",
+      "sha256": "2523abc13146f680e3acc24523dc7b01b5f632128d1590efd48a6f95e851e001"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-de/platform_plurals.xml",
+      "sha256": "fc5ab494bc5977f450993d8155bbec656381c60f04a3f6a34a28e145d1235cda"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-es/platform_plurals.xml",
+      "sha256": "aa162eecc2a082c55a21469bd9c32f11eae1ca115f745d6e0072fd42f4619845"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-fr/platform_plurals.xml",
+      "sha256": "6cacf64187e6e1d24fd364ffdd56186b2aceac529ed5e62288c8a0d818212467"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-hi/platform_plurals.xml",
+      "sha256": "46bd06ef93267a6422a74a370e834665b2aa24af1692074ad071af776848ddc1"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-it/platform_plurals.xml",
+      "sha256": "430b03db3ff970a6530745938dc2decce9134e60f7a08a061719114fb36c4a3c"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-ja/platform_plurals.xml",
+      "sha256": "073af2dae5e3668f46f9f7267567d05c3cea9102d383c35941396ba2d1297ca9"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-ko/platform_plurals.xml",
+      "sha256": "7de2ee1a66f95f9ae2f9f0f27bca64fa5f171435ed7cc70db983cf4394b32812"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-nl/platform_plurals.xml",
+      "sha256": "1fce6d5e656957023ab73fcce29be38a4e9ee256048337ab3bbcb34784577cf1"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-pl/platform_plurals.xml",
+      "sha256": "f486b92cd791ecb0ef149103488136a5584b79b63b623c4c688673c6a5332ca9"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-pt-rBR/platform_plurals.xml",
+      "sha256": "61475c435337724f0dadac930e342ae3f41960bd9e84059d70b8ca557c6ec54e"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-ru/platform_plurals.xml",
+      "sha256": "cdbc7c53894a38ae2e4c77412c1968158842cf1175a9976d2cf85218b3caacda"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-ta/platform_plurals.xml",
+      "sha256": "d1d8c6d9229f13af5945e3e9bc7ea4fc22c8feb23b31fa4b668b4338ccbf1202"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-th/platform_plurals.xml",
+      "sha256": "1304d5e6ba23ab6c8fe8056edc65cff5cbb0c87f7da315249d6e087d7a26a691"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-tr/platform_plurals.xml",
+      "sha256": "88b6e0d469afdb1ddcc7c3ff023c42cf3171719e014168da20001abfc5cd4057"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-uk/platform_plurals.xml",
+      "sha256": "d258879f9208abe80e84239e008b158cd4d262162e3193ca4cf35b639e1c4e7c"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-ur/platform_plurals.xml",
+      "sha256": "0592281853fa01131ae7256ef7ee40aa947b02fa2c54e5a01d218263b5a36d0b"
+    },
+    {
+      "path": "apps/android/wear/src/main/res/values-vi/platform_plurals.xml",
+      "sha256": "401fad2a9f2526acdaa77a07889a5dd695c6b2254383b8eaddc3ae0894ea629c"
     }
   ],
   "rust": {

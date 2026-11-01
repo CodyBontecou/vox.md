@@ -129,11 +129,13 @@ val generateRuntimeLocalizations by tasks.registering(Exec::class) {
     val catalog = rootProject.projectDir.parentFile.parentFile.resolve("Voxboard/Localizable.xcstrings")
     inputs.file(generator)
     inputs.file(catalog)
+    inputs.files(rootProject.fileTree("localization") { include("*.json") })
     inputs.files(fileTree("src/main/kotlin") { include("**/*.kt") })
     inputs.files(rootProject.fileTree("capture-domain/src/main/kotlin") { include("**/*.kt") })
     inputs.files(rootProject.fileTree("data/src/main/kotlin") { include("**/*.kt") })
     inputs.files(rootProject.fileTree("platform-services/src/main/kotlin") { include("**/*.kt") })
     outputs.file("src/main/res/raw/vox_runtime_localizations.json")
+    outputs.file("src/main/res/raw/vox_runtime_plurals.json")
     outputs.file(rootProject.file("localization-review.json"))
     val localeQualifiers = listOf(
         "ar", "bn", "de", "es", "fr", "hi", "b+id", "it", "ja", "ko", "nl", "pl",
@@ -142,6 +144,9 @@ val generateRuntimeLocalizations by tasks.registering(Exec::class) {
     outputs.files(localeQualifiers.map { file("src/main/res/values-$it/platform_localizations.xml") })
     outputs.files(localeQualifiers.map {
         rootProject.file("wear/src/main/res/values-$it/platform_localizations.xml")
+    })
+    outputs.files((listOf("") + localeQualifiers.map { "-$it" }).map {
+        rootProject.file("wear/src/main/res/values$it/platform_plurals.xml")
     })
     commandLine("python3", generator)
 }

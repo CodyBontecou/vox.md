@@ -1,6 +1,8 @@
 package md.vox.android
 
 import android.content.Context
+import android.icu.text.PluralRules
+import android.text.BidiFormatter
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
@@ -73,16 +75,32 @@ internal object RuntimeLocalization {
 
     fun translate(context: Context, locale: Locale, source: String): String {
         val localeTable = load(context)
-        val candidates = listOf(
-            locale.toLanguageTag(),
-            locale.language + locale.script.takeIf(String::isNotBlank)?.let { "-$it" }.orEmpty(),
-            locale.language,
-        ).distinct()
-        return candidates.firstNotNullOfOrNull { localeTable[it]?.get(source) } ?: source
+        return localizationCandidates(locale).firstNotNullOfOrNull { localeTable[it]?.get(source) } ?: source
     }
 
-    fun format(context: Context, locale: Locale, source: String, vararg arguments: Any): String =
-        formatLocalized(translate(context, locale, source), source, locale, *arguments)
+    fun format(context: Context, locale: Locale, source: String, vararg arguments: Any): String {
+        val plural = pluralPatterns(context).optJSONObject(source)
+        val count = plural?.optInt("countArgument", 0)?.let { arguments.getOrNull(it - 1) as? Number }
+        val category = count?.let { PluralRules.forLocale(locale).select(it.toDouble()) }
+        val localeForms = plural?.optJSONObject("forms")
+        val forms = localizationCandidates(locale).firstNotNullOfOrNull { localeForms?.optJSONObject(it) }
+            ?: localeForms?.optJSONObject("en")
+        val pattern = if (category != null && forms != null) forms.optString(category, forms.optString("other", source))
+            else translate(context, locale, source)
+        // Isolation is presentation-only: URLs, paths and user labels retain their raw
+        // underlying value in capture/export/clipboard storage.
+        val bidi = BidiFormatter.getInstance(locale)
+        val safeArguments = arguments.map { if (it is String) bidi.unicodeWrap(it) else it }.toTypedArray()
+        return formatLocalized(pattern, source, locale, *safeArguments)
+    }
+
+    @Volatile private var pluralCache: JSONObject? = null
+    private fun pluralPatterns(context: Context): JSONObject = pluralCache ?: synchronized(this) {
+        pluralCache ?: runCatching {
+            context.resources.openRawResource(R.raw.vox_runtime_plurals)
+                .bufferedReader(Charsets.UTF_8).use { JSONObject(it.readText()) }
+        }.getOrDefault(JSONObject()).also { pluralCache = it }
+    }
 
     private fun load(context: Context): Map<String, Map<String, String>> = cached ?: synchronized(this) {
         cached ?: runCatching {
@@ -95,4 +113,19 @@ internal object RuntimeLocalization {
             }
         }.getOrDefault(emptyMap()).also { cached = it }
     }
+}
+
+internal fun localizationCandidates(locale: Locale): List<String> {
+    val script = locale.script.ifBlank {
+        if (locale.language == "zh") {
+            if (locale.country in setOf("TW", "HK", "MO")) "Hant" else "Hans"
+        } else ""
+    }
+    val availableVariant = if (locale.language == "pt") "pt-BR" else null
+    return listOfNotNull(
+        locale.toLanguageTag(),
+        locale.language + script.takeIf(String::isNotBlank)?.let { "-$it" }.orEmpty(),
+        availableVariant,
+        locale.language,
+    ).distinct()
 }

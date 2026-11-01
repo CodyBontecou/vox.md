@@ -8716,6 +8716,49 @@
       ],
       "programScope": "parity",
       "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Complete 22-locale Android catalog and explicit CLDR quantities preserve placeholders and template tokens; mutations reject incomplete or falsely approved drafts.",
+          "evidencePath": "Packages/contracts/tests/test_android_localization_audit.py",
+          "kind": "unit",
+          "status": "planned"
+        },
+        {
+          "assertion": "Native-speaker source fidelity, plural grammar, canonical RTL presentation and OEM/Wear fit require human release qualification. Automated emulator checks are supporting evidence, not linguistic approval.",
+          "evidencePath": "docs/android-localization-parity-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.legacy-fixtures"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/RuntimeLocalization.kt",
+          "symbol": "RuntimeLocalization"
+        },
+        {
+          "path": "apps/android/scripts/generate-runtime-localizations.py",
+          "symbol": "generate_plurals"
+        }
+      ],
+      "id": "cap.ui.localization",
+      "milestone": "M5",
+      "outcome": "Runtime translation coverage, CLDR quantity selection and bidirectional presentation for supported app languages",
+      "owner": "native",
+      "parity": "native-equivalent",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android",
+        "watch",
+        "wear"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
     }
   ],
   "dependencyCatalog": [
@@ -9237,7 +9280,7 @@
         "cap.store.watch-plists"
       ],
       "path": "docs/android-wear-shared-core-implementation-plan.md",
-      "text": "M0 \u2014 Baseline stabilization"
+      "text": "M0 — Baseline stabilization"
     }
   ],
   "schemaVersion": 1,

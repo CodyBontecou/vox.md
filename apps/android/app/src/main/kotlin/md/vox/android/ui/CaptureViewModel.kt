@@ -227,9 +227,7 @@ internal class CaptureViewModel private constructor(
             } else {
                 null
             }
-            val notice = if (failedAttachments == 1) {
-                voxNotice("%@ is ready, but 1 shared file could not be copied.", sourceLabel)
-            } else if (failedAttachments > 1) {
+            val notice = if (failedAttachments > 0) {
                 voxNotice(
                     "%1\$@ is ready, but %2\$lld shared files could not be copied.",
                     sourceLabel,
@@ -485,8 +483,6 @@ internal class CaptureViewModel private constructor(
                     activityStats = stats,
                     notice = if (removed == 0) {
                         voxNotice("No completed captures were removed.")
-                    } else if (removed == 1) {
-                        voxNotice("1 capture removed from History.")
                     } else {
                         voxNotice("%lld captures removed from History.", removed.toLong())
                     },

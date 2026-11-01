@@ -661,10 +661,10 @@
       "sha256": "f27454d91f8b3a969994be8a4970165404979c3b4c65a3b23754926fa0a649b0"
     },
     {
-      "bytes": 278103,
+      "bytes": 279834,
       "category": "capabilityInventory",
       "path": "Packages/contracts/product-capabilities.json",
-      "sha256": "d1479c4574249a35f02b0de054d24a577af096d9882d39b46e297df46f44af73"
+      "sha256": "fe8acd4c69dde99270e4f983de8e35a7a6643c8e4407cd023f9cf62204517a9b"
     },
     {
       "bytes": 751,
@@ -802,13 +802,13 @@
       "bytes": 49637,
       "category": "validatorScript",
       "path": "Packages/contracts/scripts/validate.py",
-      "sha256": "28b4a1887a6f5805f7adccba44faa2a24afc2fed5060b6349021c247fc968a12"
+      "sha256": "a93fa1952e8af5dcbc03da6edc98bff9dd68132ef01e84ad301a0cbad6ac58dd"
     },
     {
-      "bytes": 80173,
+      "bytes": 82735,
       "category": "validatorScript",
       "path": "Packages/contracts/scripts/validate_toolchain.py",
-      "sha256": "183941d6281d13885057ec0f2c9c3f784e5061cef074e78f34c28267b192e0de"
+      "sha256": "e5c50d0b53d8a29286399798391283d12dac4b3ef9f47b8aa5f029042772ed68"
     },
     {
       "bytes": 113792,
@@ -823,10 +823,10 @@
       "sha256": "a83779a92299fd676b1be7d8026b956d653a13c4a98a81ff374b6e969088cbeb"
     },
     {
-      "bytes": 6776,
+      "bytes": 9807,
       "category": "validatorTest",
       "path": "Packages/contracts/tests/test_android_localization_audit.py",
-      "sha256": "73ed72643844d92b41b9d6d84fadf3412457ec6b108efd97d4690781d413e3ed"
+      "sha256": "21f06034e4c550da2d63d3c405ba2a9d4ae209cc9389c44e15cc1b60476c4f4c"
     },
     {
       "bytes": 15020,
@@ -1147,10 +1147,10 @@
       "sha256": "c5643936bec325aeefd92e66806321e7aa1fff9d907cf4c7eeff072906f6a2cb"
     },
     {
-      "bytes": 43064,
+      "bytes": 48134,
       "category": "toolchainDefinition",
       "path": "toolchains/android-wear-shared-core.json",
-      "sha256": "6ce3038af2cd98fd1bc670584f071fd57f70db1e67950cc1402b545b4a46fbe8"
+      "sha256": "231575fbb540a34c322273740c5de6ad61a31b85f926cb2d048005084c01924d"
     },
     {
       "bytes": 11216,
@@ -2961,7 +2961,7 @@
   "producer": {
     "name": "vox-contract-manifest-generator",
     "script": "Packages/contracts/scripts/validate.py",
-    "scriptSHA256": "28b4a1887a6f5805f7adccba44faa2a24afc2fed5060b6349021c247fc968a12"
+    "scriptSHA256": "a93fa1952e8af5dcbc03da6edc98bff9dd68132ef01e84ad301a0cbad6ac58dd"
   },
   "producerRevision": "29ec869c8bda4d511af787af394658d0274b339b",
   "schemaVersion": 2

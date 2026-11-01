@@ -427,7 +427,7 @@ internal fun TranscriptDetailScreen(
                         )
                         if (state.speakerCount > 0) {
                             Text(
-                                voxFormat("%lld speaker%@", state.speakerCount, if (state.speakerCount == 1) "" else "s"),
+                                voxFormat("%lld speakers", state.speakerCount),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }

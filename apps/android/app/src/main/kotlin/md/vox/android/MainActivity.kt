@@ -63,7 +63,7 @@ import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.CheckBox
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.ContentPaste
 import androidx.compose.material.icons.outlined.Dashboard
@@ -1256,8 +1256,6 @@ internal fun CaptureScreen(
         if (rejected > 0) {
             presentNotice(if (screenshots.isEmpty()) {
                 voxUiText("No screenshots were added. Choose images from a Screenshots album.")
-            } else if (rejected == 1) {
-                voxUiText("1 non-screenshot image was skipped.")
             } else {
                 voxUiText("%lld non-screenshot images were skipped.", rejected.toLong())
             })
@@ -2187,7 +2185,7 @@ private fun CaptureBottomControls(
                 )
                 val chevronDescription = if (expandsRail) selectorClickLabel else voxString("Choose Capture Preset")
                 Icon(
-                    Icons.Outlined.ChevronRight,
+                    Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                     contentDescription = chevronDescription,
                     modifier = Modifier.size(20.dp),
                     tint = selectorTint,
@@ -2737,11 +2735,7 @@ private fun recordingDetailUiText(status: RecordingStatus): VoxUiText = when (st
     RecordingPhase.COMPLETED -> when (status.failureCode) {
         "voiceAutoStop" -> voxUiText("Voice Auto-Stop detected the end of speech. The recording was saved locally.")
         "segmentBoundaryPersistence" -> voxUiText("A segment boundary could not be saved, so recording stopped with all audio preserved.")
-        else -> if (status.chunkCount == 1) {
-            voxUiText("Saved locally in %lld durable chunk.", 1L)
-        } else {
-            voxUiText("Saved locally in %lld durable chunks.", status.chunkCount.toLong())
-        }
+        else -> voxUiText("Saved locally in %lld durable chunks.", status.chunkCount.toLong())
     }
     RecordingPhase.INTERRUPTED -> voxUiText("The audio recorded before interruption is safe and available for recovery.")
     RecordingPhase.FAILED -> voxUiText("The microphone stopped, but completed chunks remain local.")
@@ -3332,7 +3326,6 @@ private fun HistoryCard(
                 Text(
                     when (item.attachmentCount) {
                         0 -> sourceLabel
-                        1 -> voxFormat("%@ · %lld attachment", sourceLabel, 1L)
                         else -> voxFormat("%@ · %lld attachments", sourceLabel, item.attachmentCount.toLong())
                     },
                     style = MaterialTheme.typography.labelMedium,
@@ -5178,7 +5171,7 @@ internal fun SettingsScreen(
                 headlineContent = { Text(voxString("Capture Destination")) },
                 supportingContent = { Text(destination.displayName, maxLines = 2, overflow = TextOverflow.Ellipsis) },
                 leadingContent = { Icon(Icons.Outlined.FolderOpen, contentDescription = null) },
-                trailingContent = { Icon(Icons.Outlined.ChevronRight, contentDescription = null) },
+                trailingContent = { Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, contentDescription = null) },
                 colors = androidx.compose.material3.ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.background),
                 modifier = Modifier.clickable(onClick = chooseFolder),
             )
@@ -5314,7 +5307,7 @@ private fun StatsScreen(stats: ActivityStats, navigateBack: () -> Unit) {
                     val dayDescription = voxFormat(
                         "%@: %@",
                         dayName,
-                        voxFormat("%lld recordings, %lld captures", day.recordingCount, day.captureCount),
+                        voxFormat("%@ · %@", voxFormat("%lld recordings", day.recordingCount), voxFormat("%lld captures", day.captureCount)),
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth().semantics {
@@ -5340,8 +5333,8 @@ private fun StatsScreen(stats: ActivityStats, navigateBack: () -> Unit) {
                                 color = if (androidx.compose.foundation.isSystemInDarkTheme()) VoxColors.GreenDark else VoxColors.Green,
                             )
                         }
-                        Text(voxFormat("%lld recordings · %lld captures", day.recordingCount, day.captureCount),
-                            modifier = Modifier.width(48.dp),
+                        Text(voxFormat("%@ · %@", voxFormat("%lld recordings", day.recordingCount), voxFormat("%lld captures", day.captureCount)),
+                            modifier = Modifier.widthIn(min = 48.dp, max = 140.dp),
                             style = MaterialTheme.typography.labelMedium.copy(fontFamily = GeistMonoFontFamily),
                         )
                     }
@@ -5551,7 +5544,7 @@ private fun SettingsNavigationRow(title: VoxUiText, subtitle: VoxUiText, value: 
                     Text(value, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.width(8.dp))
                 }
-                Icon(Icons.Outlined.ChevronRight, contentDescription = null)
+                Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, contentDescription = null)
             }
         },
         colors = androidx.compose.material3.ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.background),

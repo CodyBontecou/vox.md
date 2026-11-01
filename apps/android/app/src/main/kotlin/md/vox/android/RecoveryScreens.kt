@@ -526,7 +526,7 @@ internal fun RecordingQueueCard(
             )
             Text(
                 voxFormat(
-                    if (recording.chunkCount == 1) "%lld durable chunk · %@" else "%lld durable chunks · %@",
+                    "%lld durable chunks · %@",
                     recording.chunkCount,
                     recording.sessionID?.take(8).orEmpty(),
                 ),

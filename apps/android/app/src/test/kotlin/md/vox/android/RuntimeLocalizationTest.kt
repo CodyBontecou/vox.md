@@ -7,6 +7,16 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class RuntimeLocalizationTest {
+    @Test fun `Chinese region locales resolve to the available script catalog`() {
+        assertEquals(listOf("zh-TW", "zh-Hant", "zh"),localizationCandidates(Locale.forLanguageTag("zh-TW")))
+        assertEquals(listOf("zh-CN", "zh-Hans", "zh"),localizationCandidates(Locale.forLanguageTag("zh-CN")))
+        assertEquals(listOf("zh-Hant-HK", "zh-Hant", "zh"),localizationCandidates(Locale.forLanguageTag("zh-Hant-HK")))
+    }
+
+    @Test fun `regional Portuguese uses the available Brazilian catalog`() {
+        assertEquals(listOf("pt-PT", "pt", "pt-BR"), localizationCandidates(Locale.forLanguageTag("pt-PT")))
+    }
+
     @Test
     fun `Apple placeholders become Java formatter placeholders`() {
         assertEquals("%1\$d recordings · %2\$s", appleFormatToJava("%1\$lld recordings · %2\$@"))
