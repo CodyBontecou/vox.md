@@ -42,7 +42,37 @@ and `docs/architecture/adr-0008-play-billing-network-isolation.md`.
 
 ## Validation
 
-Full checks and clean-commit oracle provenance will be recorded after completion.
+Client-side implementation commit: `1c0fa09`. Oracle fixture commit: `c0b8b79`.
+The oracle was regenerated from clean source
+`1c0fa095bcec8ab507cb8432c11ff267d69ed8d0`; all 14 cases are unchanged and clean-tree
+provenance reproduction passes.
+
+- Full Android CI gate passed: `check assembleDebugAndroidTest
+  :app:validateDebugArtifacts :wear:validateWearDebugArtifacts releaseReadiness`.
+  Includes lint, 272 JVM tests, four-ABI native packaging, phone/Wear debug and
+  optimized release artifacts, SBOM and readiness validation.
+- Phone instrumentation: 83 discovered, 79 passed, four existing separately provisioned
+  model-fixture cases skipped, zero failures. All four new billing UI tests execute.
+  Both matching app/test APKs were installed, and the dedicated API-36 Vox emulator
+  app sandbox was reset before the full run.
+- Routine data instrumentation: all 22 tests passed, including Room, quota and eight
+  real-provider recovery campaigns. The separate quota driver passed both phases
+  across an actual uninstall/reinstall of the isolated data-test application.
+- Rust: all 49 workspace tests passed, plus formatting, strict Clippy and byte-identical
+  Swift/Kotlin bindings. Swift: 655 shared XCTest, 381 core XCTest and 10 Swift Testing
+  tests passed using the isolated shared-container override.
+- Project contracts: 65 script tests and 136 contract tests passed, with 281 capability
+  rows, 200 implementation hashes and four schema/resource mirrors. Localization
+  freshness, 347-feature inventory coverage and whitespace checks pass.
+
+Lifetime and restore rows are now `implemented` with account acceptance planned.
+The ledger contains 262 verified, 12 implemented and seven inventoried capabilities;
+of 248 Android/Wear-applicable rows, 233 are verified, 12 implemented and three
+inventoried. Family, family upgrade and Apple-grandfathering scope remain unresolved.
+Android translation review remains open (557 catalog-missing English fallbacks).
+These checks qualify the completed individual-client implementation; they do not
+claim an implemented family service or actual store-account transactions.
+
 Actual Play license-account purchase, pending payment, acknowledgement, refund and
 reinstall/restore campaigns remain account qualification; fixture/UI checks do not
 claim real store transactions.
