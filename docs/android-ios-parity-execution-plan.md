@@ -1,6 +1,13 @@
 # Android Application: iOS Functionality and UI Parity Plan
 
-November 1 composer update: the current ledger contains 281 capabilities, including
+November 1 accepted monetization scope: Android remains individual-only under
+[ADR-0024](architecture/adr-0024-android-individual-only-monetization.md). Family access
+and discounted family upgrades are intentional Android platform differences. The
+ledger retains 281 capabilities; 246 apply to Android/Wear: 233 verified, 12 implemented
+with acceptance pending and one inventoried. Family IDs remain applicable to Apple.
+See [monetization status](android-monetization-parity-2026-11-01.md).
+
+Historical November 1 composer checkpoint: the ledger contained 281 capabilities, including
 248 applicable to Android/Wear: 233 verified, 10 implemented with acceptance planned,
 and five inventoried. The ten implemented additions cover URL delivery, independent
 preset vaults, one-off routing, transcript-property mapping, audio filename templates,

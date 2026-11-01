@@ -20,20 +20,20 @@ non-consumable. This update hardens its existing purchase/restore path:
 
 ## Family access and discounted family upgrade
 
-These remain unresolved implementation scope, not enabled purchase products. Google
-Play Family Library does not share in-app purchases. The repository currently has no
-app-account entitlement service, and ADR-0008 explicitly records individual-only
-Android access until a separate account/backend design exists.
+The accepted decision is **individual-only Android access**. Family access and
+discounted family upgrades are intentional platform differences, excluded from the
+Android parity objective. The user selected this direction on November 1, 2026;
+[ADR-0024](architecture/adr-0024-android-individual-only-monetization.md) records it.
 
-A direction question is pending: build an account-and-invite family service, integrate
-an existing service, or retain the disclosed Android platform difference. An actual
-family implementation needs identity, server-side Play purchase verification, ownership
-binding, family invitations/membership, revocation and restore. Discounted upgrade
-eligibility must be verified against an existing individual entitlement; creating a
-second cheap Play product and gating it only in client UI would not enforce eligibility.
+Google Play Family Library does not share in-app purchases. The existing Android
+purchase screen already explains that Unlimited belongs to the purchasing Google Play
+account and that Apple purchases do not transfer. No family or discounted-family
+product, app-account system or family entitlement backend is introduced.
 
-No family or discounted-family purchase is advertised as shareable without that service.
-Apple purchases and grandfathering remain Apple-only under the current policy.
+The two family capability IDs remain in the ledger for iPhone and iPad; Android is
+removed from their platform lists. Their Apple statuses are unchanged. This resolves
+the Android scope decision without claiming an implemented or verified family feature.
+Apple purchases and grandfathering remain governed by the separate existing policy.
 
 Sources: [Play Family Library](https://support.google.com/googleplay/answer/7007852),
 [one-time product offers](https://developer.android.com/google/play/billing/one-time-product-multi-purchase-options-offers),
@@ -67,8 +67,9 @@ provenance reproduction passes.
 
 Lifetime and restore rows are now `implemented` with account acceptance planned.
 The ledger contains 262 verified, 12 implemented and seven inventoried capabilities;
-of 248 Android/Wear-applicable rows, 233 are verified, 12 implemented and three
-inventoried. Family, family upgrade and Apple-grandfathering scope remain unresolved.
+of 246 Android/Wear-applicable rows, 233 are verified, 12 implemented and one
+inventoried. Family and family-upgrade scope is resolved by ADR-0024; the separate
+Apple-grandfathering row remains inventoried.
 Android translation review remains open (557 catalog-missing English fallbacks).
 These checks qualify the completed individual-client implementation; they do not
 claim an implemented family service or actual store-account transactions.
@@ -76,3 +77,14 @@ claim an implemented family service or actual store-account transactions.
 Actual Play license-account purchase, pending payment, acknowledgement, refund and
 reinstall/restore campaigns remain account qualification; fixture/UI checks do not
 claim real store transactions.
+
+## Individual-only scope follow-up
+
+ADR-0024 confirms the user's decision and updates the base/derived parity ledger,
+feature inventory and execution plan. Runtime purchase behavior and product IDs are
+unchanged; the existing individual-only disclosure already matches the decision.
+The full project-contract gate passed: 65 script tests and 136 contract tests, with
+193 governed files, 281 capabilities, 200 implementation hashes and four resource
+mirrors. Localization freshness, 347-feature inventory coverage and whitespace checks
+also passed. The full implementation checks above remain the evidence for unchanged
+application code; this follow-up changes policy, documentation and ledger applicability.

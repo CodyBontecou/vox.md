@@ -8351,8 +8351,8 @@
     {
       "acceptance": [
         {
-          "assertion": "Family access and verified discounted upgrade require an app-account entitlement service; implementation direction pending. Play Family Library does not share in-app purchases.",
-          "evidencePath": "docs/android-monetization-parity-2026-11-01.md",
+          "assertion": "Retain the Apple family entitlement outcome. Android is explicitly excluded by accepted decision PD-M1-ANDROID-INDIVIDUAL-ONLY-001; no Android family implementation or verification is claimed.",
+          "evidencePath": "docs/architecture/adr-0024-android-individual-only-monetization.md",
           "kind": "device",
           "mappingID": "cap.billing.family.acceptance.1",
           "status": "planned"
@@ -8366,6 +8366,10 @@
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardShared/PurchaseAccess.swift",
           "symbol": "case family"
+        },
+        {
+          "path": "docs/architecture/adr-0024-android-individual-only-monetization.md",
+          "symbol": "PD-M1-ANDROID-INDIVIDUAL-ONLY-001"
         }
       ],
       "id": "cap.billing.family",
@@ -8374,8 +8378,7 @@
       "outcome": "One-time Family Sharing lifetime entitlement",
       "platforms": [
         "iphone",
-        "ipad",
-        "android"
+        "ipad"
       ],
       "programScope": "parity",
       "status": "inventoried"
@@ -8383,8 +8386,8 @@
     {
       "acceptance": [
         {
-          "assertion": "Family access and verified discounted upgrade require an app-account entitlement service; implementation direction pending. Play Family Library does not share in-app purchases.",
-          "evidencePath": "docs/android-monetization-parity-2026-11-01.md",
+          "assertion": "Retain the Apple family entitlement outcome. Android is explicitly excluded by accepted decision PD-M1-ANDROID-INDIVIDUAL-ONLY-001; no Android family implementation or verification is claimed.",
+          "evidencePath": "docs/architecture/adr-0024-android-individual-only-monetization.md",
           "kind": "device",
           "mappingID": "cap.billing.family-upgrade.acceptance.1",
           "status": "planned"
@@ -8398,6 +8401,10 @@
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardShared/PurchaseAccess.swift",
           "symbol": "case familyUpgrade"
+        },
+        {
+          "path": "docs/architecture/adr-0024-android-individual-only-monetization.md",
+          "symbol": "PD-M1-ANDROID-INDIVIDUAL-ONLY-001"
         }
       ],
       "id": "cap.billing.family-upgrade",
@@ -8406,8 +8413,7 @@
       "outcome": "Discounted family upgrade for existing individual owners",
       "platforms": [
         "iphone",
-        "ipad",
-        "android"
+        "ipad"
       ],
       "programScope": "parity",
       "status": "inventoried"
@@ -9069,6 +9075,6 @@
   "schemaVersion": 1,
   "source": {
     "path": "docs/architecture/android-wear-m0-capabilities.json",
-    "sha256": "b5c97ed81452773ce2f850868eb58523cfaf2cb1812bd67e2b52ee9effc3eb1f"
+    "sha256": "ed74cf209e3eb7da140628b7c659a0b909ea9eaf4ea386f4ddee659dfaefd8e4"
   }
 }
