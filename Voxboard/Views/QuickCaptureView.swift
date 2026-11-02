@@ -500,10 +500,12 @@ struct QuickCaptureView: View {
         }
     }
 
-    private func routePathText(_ text: String) -> some View {
-        Text(verbatim: text)
-            .strikethrough(!vaultIsReachable && viewModel.selectedDestination != nil)
-            .lineLimit(1)
+    private func routePathText(_ text: String) -> CaptureViewSection {
+        CaptureViewSection {
+            Text(verbatim: text)
+                .strikethrough(!vaultIsReachable && viewModel.selectedDestination != nil)
+                .lineLimit(1)
+        }
     }
 
     /// Progressively shorter forms of `Vault / Folder / note.md · ## Heading`:
