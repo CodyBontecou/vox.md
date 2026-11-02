@@ -61,6 +61,10 @@ struct AdaptiveHingeObserver: UIViewRepresentable {
         let view = UIView(frame: .zero)
         view.isUserInteractionEnabled = false
         view.isAccessibilityElement = false
+        // UIHingeInteraction ships in the iOS 27.1 SDK (Xcode 27, Swift 6.4).
+        // Older SDKs, such as CI's Xcode 26.6, build without it and report
+        // `.unavailable`, so layout falls back to geometry alone.
+        #if compiler(>=6.4)
         if #available(iOS 27.1, *) {
             let binding = $state
             let interaction = UIHingeInteraction { _, update in
@@ -75,6 +79,7 @@ struct AdaptiveHingeObserver: UIViewRepresentable {
             }
             view.addInteraction(interaction)
         }
+        #endif
         return view
     }
 
