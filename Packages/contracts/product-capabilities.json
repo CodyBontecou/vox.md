@@ -5245,6 +5245,10 @@
         {
           "path": "apps/android/scripts/qualify-physical-capture.py",
           "symbol": "def recovery"
+        },
+        {
+          "path": "artifacts/validation/android-physical-capture-2026-11-01/pixel-sigkill/recovery.json",
+          "symbol": "physical-recording-sigkill"
         }
       ],
       "id": "cap.queue.recovery",
@@ -6145,6 +6149,10 @@
         {
           "path": "apps/android/scripts/qualify-physical-capture.py",
           "symbol": "def recovery"
+        },
+        {
+          "path": "artifacts/validation/android-physical-capture-2026-11-01/pixel-sigkill/recovery.json",
+          "symbol": "physical-recording-sigkill"
         }
       ],
       "id": "cap.store.recording-jobs",
@@ -9200,6 +9208,6 @@
   "schemaVersion": 1,
   "source": {
     "path": "docs/architecture/android-wear-m0-capabilities.json",
-    "sha256": "42d9ceef6825d1b3b419161207272c2a9421d85d113d0b8d0ae79e50f9c160ad"
+    "sha256": "5bf88939c65b182f6bfe7ef8c8fa8218455e0c0622d5706f0fa56a74b9b1299a"
   }
 }

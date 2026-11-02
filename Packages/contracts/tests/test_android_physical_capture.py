@@ -3,6 +3,8 @@ import importlib.util
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
+import json
 
 ROOT=Path(__file__).resolve().parents[3]
 SPEC=importlib.util.spec_from_file_location("physical_validation",ROOT/"apps/android/scripts/validate-physical-capture.py")
@@ -51,6 +53,36 @@ class PhysicalCaptureQualificationTests(unittest.TestCase):
             def command(self,*args):raise AssertionError("must not mutate emulator")
         with tempfile.TemporaryDirectory() as directory:
             with self.assertRaises(SystemExit):RUNNER.record(Emulator(),Path(directory)/"run")
+
+    def test_reboot_requires_explicit_unlocked_state_and_accessible_credential_storage(self):
+        class Phone:
+            def __init__(self,state,accessible=True):self.state,self.accessible=state,accessible
+            def shell(self,*args):
+                if args==("am","get-started-user-state","0"):return self.state
+                self.assert_ce_lookup(args)
+                if not self.accessible:raise OSError("Credential storage locked")
+                return ""
+            def assert_ce_lookup(self,args):
+                if args!=("run-as",RUNNER.PACKAGE,"test","-d","files"):raise AssertionError(args)
+        self.assertTrue(RUNNER.credential_storage_unlocked(Phone("RUNNING_UNLOCKED\n")))
+        for state in ["RUNNING_LOCKED","RUNNING_UNLOCKING","Unknown command: is-user-unlocked"]:
+            self.assertFalse(RUNNER.credential_storage_unlocked(Phone(state)))
+        with self.assertRaises(OSError):RUNNER.credential_storage_unlocked(Phone("RUNNING_UNLOCKED",False))
+
+    def test_recovery_setup_disconnect_still_attempts_stop_and_records_cleanup(self):
+        class DisconnectedPhone:
+            def __init__(self):self.commands=[]
+            def identity(self):return {"emulator":False,"manufacturer":"Google"}
+            def command(self,command):
+                self.commands.append(command)
+                raise RuntimeError("Connection lost during setup")
+        phone=DisconnectedPhone()
+        with tempfile.TemporaryDirectory() as directory,patch.object(RUNNER,"ensure_idle"):
+            out=Path(directory)/"attempt"
+            with self.assertRaisesRegex(RuntimeError,"Connection lost"):RUNNER.recovery(phone,out,"force-stop")
+            self.assertEqual(phone.commands,["start","stop"])
+            self.assertEqual(json.loads((out/"failure.json").read_text())["status"],"incomplete")
+            self.assertFalse(json.loads((out/"cleanup-required.json").read_text())["stopConfirmed"])
 
     def test_install_refuses_owner_application_and_nondebug_apks(self):
         RUNNER.validate_install_identity("package: name='md.vox.android.qualification' versionCode='3'\napplication-debuggable\n")

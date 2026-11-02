@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "status": "incomplete",
   "enduranceQualified": false,
-  "reason": "USB connection lost during host-sampled capture; final state and stop await reconnection. Installed harness has a 65-minute device safety stop; execution is not yet verified.",
+  "reason": "USB telemetry was lost after approximately 34 minutes. Reconnection confirmed the device safety stop completed at 65 minutes with verified WAV export; the missing telemetry prevents hour qualification.",
   "scenario": "physical-60-minute-microphone",
   "device": {
     "manufacturer": "Google",
@@ -16,6 +16,15 @@
   "lastObservedPhase": "RECORDING",
   "lastObservedFinalizedBytes": 65088000,
   "samplesSHA256": "317e85f0d0d213e060d9b16eeb40c5f51a1083424b314f505070b08d7cf0fd32",
-  "stopConfirmed": false,
-  "rawMicrophoneAudioExported": false
+  "stopConfirmed": true,
+  "rawMicrophoneAudioExported": false,
+  "finalAfterReconnect": {
+    "phase": "COMPLETED",
+    "elapsedMillis": 3900048,
+    "finalizedBytes": 124797436,
+    "finalizedChunks": 1950,
+    "wavBytes": 124797480,
+    "wavSHA256": "09e481810acbdb4c5ac84e9bc3761f6b9007c189498328651d06eab1c7e8782a",
+    "wavExportVerified": true
+  }
 }

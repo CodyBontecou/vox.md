@@ -5089,6 +5089,10 @@
         {
           "path": "apps/android/scripts/qualify-physical-capture.py",
           "symbol": "def recovery"
+        },
+        {
+          "path": "artifacts/validation/android-physical-capture-2026-11-01/pixel-sigkill/recovery.json",
+          "symbol": "physical-recording-sigkill"
         }
       ],
       "id": "cap.queue.recovery",
@@ -5962,6 +5966,10 @@
         {
           "path": "apps/android/scripts/qualify-physical-capture.py",
           "symbol": "def recovery"
+        },
+        {
+          "path": "artifacts/validation/android-physical-capture-2026-11-01/pixel-sigkill/recovery.json",
+          "symbol": "physical-recording-sigkill"
         }
       ],
       "id": "cap.store.recording-jobs",

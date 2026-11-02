@@ -12,11 +12,11 @@
     },
     "pixel.endurance": {
       "status": "incomplete",
-      "reason": "Two host-sampled attempts lost USB telemetry (152 seconds and approximately 34 minutes). Neither meets the hour gate. Fresh device-local capture and verified stop/cleanup require Pixel reconnection."
+      "reason": "Device-local hour run 3e4b54e9-2cd7-47f8-ba94-b66b9a32d6b7 started; last host observation was uninterrupted recording beyond 16 minutes with thermal status None. USB then disappeared. Final on-device telemetry, retained PCM and WAV verification must be collected before qualification."
     },
     "pixel.force-stop": {
-      "status": "planned",
-      "reason": "Physical Pixel/Drive qualification is in progress; evidence is promoted only after direct verification."
+      "status": "incomplete",
+      "reason": "USB disappeared during recording setup before the force-stop fault was issued. The setup recording was subsequently verified COMPLETED with zero PCM, and a separate autonomous hour run was started. No force-stop recovery verdict."
     },
     "pixel.instructions": {
       "status": "planned",
@@ -27,8 +27,9 @@
       "reason": "Physical Pixel/Drive qualification is in progress; evidence is promoted only after direct verification."
     },
     "pixel.sigkill": {
-      "status": "planned",
-      "reason": "Physical Pixel/Drive qualification is in progress; evidence is promoted only after direct verification."
+      "status": "passed",
+      "artifact": "pixel-sigkill/recovery.json",
+      "sha256": "db05b2784ec94292c2f5ec55a03d62ee9adfc293f734ddb612b030ef5d72e5c5"
     },
     "pixel.speech": {
       "status": "planned",

@@ -9,7 +9,7 @@ See [monetization status](android-monetization-parity-2026-11-01.md). The new lo
 
 Local intelligence now has a pinned generative instruction runtime and shared model-backed instruction/speaker evaluations. The new quality row remains implemented pending broader physical and human qualification. See [local intelligence status](android-local-intelligence-parity-2026-11-01.md).
 
-Physical capture qualification is now tracked in [the hardware campaign](android-physical-capture-qualification-2026-11-01.md). Pixel/Drive measurements are in progress; Samsung and OneDrive are unavailable. The recording recovery fix and guarded test harness do not promote incomplete hardware acceptance.
+Physical capture qualification is now tracked in [the hardware campaign](android-physical-capture-qualification-2026-11-01.md). Pixel SIGKILL recovery is physically verified; force-stop, reboot, Drive, model performance and endurance remain in progress. Samsung and OneDrive are unavailable. The recording recovery fix and guarded test harness do not promote incomplete hardware acceptance.
 
 Historical November 1 composer checkpoint: the ledger contained 281 capabilities, including
 248 applicable to Android/Wear: 233 verified, 10 implemented with acceptance planned,

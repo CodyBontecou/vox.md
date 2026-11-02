@@ -175,18 +175,25 @@ def ensure_idle(device):
     if checkpoint(device)["phase"] in {"RECORDING","PAUSED"}:
         raise ValueError("Another recording is active; it was left untouched")
 
+def credential_storage_unlocked(device):
+    # API 37 does not expose `cmd user is-user-unlocked`. ActivityManager's
+    # explicit state plus an app-private CE lookup proves reboot recovery can read it.
+    if device.shell("am","get-started-user-state","0").strip()!="RUNNING_UNLOCKED":return False
+    device.shell("run-as",PACKAGE,"test","-d","files")
+    return True
+
 def recovery(device, output, mode):
     identity = device.identity()
     if identity["emulator"]: raise ValueError("Physical recovery campaign refuses emulators")
     ensure_idle(device)
     output.mkdir(parents=True,exist_ok=False)
-    device.command("start")
-    wait_report(device,"status",lambda r:r["phase"]=="RECORDING")
-    time.sleep(15)
-    before = checkpoint(device)
-    pid_before = device.shell("pidof",PACKAGE).strip()
-    boot_before = device.shell("cat","/proc/sys/kernel/random/boot_id").strip()
     try:
+        device.command("start")
+        wait_report(device,"status",lambda r:r["phase"]=="RECORDING")
+        time.sleep(15)
+        before = checkpoint(device)
+        pid_before = device.shell("pidof",PACKAGE).strip()
+        boot_before = device.shell("cat","/proc/sys/kernel/random/boot_id").strip()
         if mode == "sigkill": device.shell("run-as",PACKAGE,"kill","-9",pid_before)
         elif mode == "force-stop": device.shell("am","force-stop",PACKAGE)
         elif mode == "reboot": device.run("reboot")
@@ -195,7 +202,7 @@ def recovery(device, output, mode):
         while time.monotonic()<deadline:
             try:
                 booted = device.shell("getprop","sys.boot_completed").strip()=="1"
-                unlocked = "true" in device.shell("cmd","user","is-user-unlocked","0").lower()
+                unlocked = credential_storage_unlocked(device)
                 if booted and unlocked: break
             except subprocess.SubprocessError: pass
             time.sleep(5)

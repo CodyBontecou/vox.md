@@ -1,0 +1,334 @@
+{
+  "schemaVersion": 1,
+  "scenario": "physical-recording-sigkill",
+  "status": "passed",
+  "device": {
+    "manufacturer": "Google",
+    "model": "Pixel 7",
+    "api": "37",
+    "buildFingerprint": "google/panther/panther:17/CP3A.261005.002.A1/16269273:user/release-keys",
+    "emulator": false
+  },
+  "before": {
+    "schemaVersion": 1,
+    "package": "md.vox.android.qualification",
+    "uptimeMillis": 962594969,
+    "phase": "RECORDING",
+    "sessionID": "fae6df6d-5130-41dc-a63f-2497a6d03567",
+    "elapsedMillis": 24582,
+    "chunkCount": 12,
+    "pssKiB": 172198,
+    "nativeHeapBytes": 13668128,
+    "thermalStatus": 0,
+    "finalizedBytes": 768000,
+    "finalizedChunks": 12,
+    "chunks": [
+      {
+        "name": "chunk-000000.pcm",
+        "bytes": 64000,
+        "sha256": "0155b20c8add3fbf396e9b5e98dc88ebac819894cbfcf5913043bd90fe6457bc"
+      },
+      {
+        "name": "chunk-000001.pcm",
+        "bytes": 64000,
+        "sha256": "32acc3cd10dad8807a14dbfd6c4baf40a0e86c79a6b0ae8dd0ffa929cacdd6b5"
+      },
+      {
+        "name": "chunk-000002.pcm",
+        "bytes": 64000,
+        "sha256": "85fc3dc0e031b999e9cc49cf7fb4b6cad55738ec44da227ab6fcc919620f5d4e"
+      },
+      {
+        "name": "chunk-000003.pcm",
+        "bytes": 64000,
+        "sha256": "a3fe4cb7663032afba92cdf039966f173f0472c8800930b2b4e4d6e5c6a34e13"
+      },
+      {
+        "name": "chunk-000004.pcm",
+        "bytes": 64000,
+        "sha256": "42451251c95beb322db790495e235f3ecda8740597da1eeba84822e4cad487e0"
+      },
+      {
+        "name": "chunk-000005.pcm",
+        "bytes": 64000,
+        "sha256": "c5cfe2825d6374894c09a1898c323e2c4384726332f76e9f91ed80d4fb44c737"
+      },
+      {
+        "name": "chunk-000006.pcm",
+        "bytes": 64000,
+        "sha256": "f0b51a37c790ecec84c2bf4358a24417d488e59c02cdaf979651764d8df1f72b"
+      },
+      {
+        "name": "chunk-000007.pcm",
+        "bytes": 64000,
+        "sha256": "36f8ec78b9769aeee6cd8aebe8948408a562c8f077c1cb17bbca8e5d1ed0abe6"
+      },
+      {
+        "name": "chunk-000008.pcm",
+        "bytes": 64000,
+        "sha256": "4b0a0a28645c6a0474e7d1e16c8e3ca5422c89bca4c908d11fe5836becda6d86"
+      },
+      {
+        "name": "chunk-000009.pcm",
+        "bytes": 64000,
+        "sha256": "6e438a31b2f2aafabfb85847c612a4e36e5ab83bfeeadff961086339b01cecc9"
+      },
+      {
+        "name": "chunk-000010.pcm",
+        "bytes": 64000,
+        "sha256": "983c6b52b42fbf2a058d614e8f3368484cb8e57552aa33f69f38daa49d4163ae"
+      },
+      {
+        "name": "chunk-000011.pcm",
+        "bytes": 64000,
+        "sha256": "cd50ef87d8ec2ab2eff5a7adf1ed5bda905f4ff30956cdb15a03395d5cd354c0"
+      }
+    ]
+  },
+  "recovered": {
+    "schemaVersion": 1,
+    "package": "md.vox.android.qualification",
+    "uptimeMillis": 962596031,
+    "phase": "INTERRUPTED",
+    "sessionID": "fae6df6d-5130-41dc-a63f-2497a6d03567",
+    "elapsedMillis": 24800,
+    "chunkCount": 13,
+    "failureCode": "processInterrupted",
+    "pssKiB": 111058,
+    "nativeHeapBytes": 10593104,
+    "thermalStatus": 0,
+    "finalizedBytes": 793600,
+    "finalizedChunks": 13,
+    "chunks": [
+      {
+        "name": "chunk-000000.pcm",
+        "bytes": 64000,
+        "sha256": "0155b20c8add3fbf396e9b5e98dc88ebac819894cbfcf5913043bd90fe6457bc"
+      },
+      {
+        "name": "chunk-000001.pcm",
+        "bytes": 64000,
+        "sha256": "32acc3cd10dad8807a14dbfd6c4baf40a0e86c79a6b0ae8dd0ffa929cacdd6b5"
+      },
+      {
+        "name": "chunk-000002.pcm",
+        "bytes": 64000,
+        "sha256": "85fc3dc0e031b999e9cc49cf7fb4b6cad55738ec44da227ab6fcc919620f5d4e"
+      },
+      {
+        "name": "chunk-000003.pcm",
+        "bytes": 64000,
+        "sha256": "a3fe4cb7663032afba92cdf039966f173f0472c8800930b2b4e4d6e5c6a34e13"
+      },
+      {
+        "name": "chunk-000004.pcm",
+        "bytes": 64000,
+        "sha256": "42451251c95beb322db790495e235f3ecda8740597da1eeba84822e4cad487e0"
+      },
+      {
+        "name": "chunk-000005.pcm",
+        "bytes": 64000,
+        "sha256": "c5cfe2825d6374894c09a1898c323e2c4384726332f76e9f91ed80d4fb44c737"
+      },
+      {
+        "name": "chunk-000006.pcm",
+        "bytes": 64000,
+        "sha256": "f0b51a37c790ecec84c2bf4358a24417d488e59c02cdaf979651764d8df1f72b"
+      },
+      {
+        "name": "chunk-000007.pcm",
+        "bytes": 64000,
+        "sha256": "36f8ec78b9769aeee6cd8aebe8948408a562c8f077c1cb17bbca8e5d1ed0abe6"
+      },
+      {
+        "name": "chunk-000008.pcm",
+        "bytes": 64000,
+        "sha256": "4b0a0a28645c6a0474e7d1e16c8e3ca5422c89bca4c908d11fe5836becda6d86"
+      },
+      {
+        "name": "chunk-000009.pcm",
+        "bytes": 64000,
+        "sha256": "6e438a31b2f2aafabfb85847c612a4e36e5ab83bfeeadff961086339b01cecc9"
+      },
+      {
+        "name": "chunk-000010.pcm",
+        "bytes": 64000,
+        "sha256": "983c6b52b42fbf2a058d614e8f3368484cb8e57552aa33f69f38daa49d4163ae"
+      },
+      {
+        "name": "chunk-000011.pcm",
+        "bytes": 64000,
+        "sha256": "cd50ef87d8ec2ab2eff5a7adf1ed5bda905f4ff30956cdb15a03395d5cd354c0"
+      },
+      {
+        "name": "chunk-000012.pcm",
+        "bytes": 25600,
+        "sha256": "f5983900f59a2f434c17b7dfa67279e120eb208fbcdcd3fd7133510e4d72c833"
+      }
+    ],
+    "wavExportVerified": true,
+    "wavBytes": 793644,
+    "wavSHA256": "3aca94e04a751204003f93b865b75abc896e86709ab763ee9af8d799a0e16e01",
+    "wavHeaderVerified": true
+  },
+  "final": {
+    "schemaVersion": 1,
+    "package": "md.vox.android.qualification",
+    "uptimeMillis": 962621631,
+    "phase": "COMPLETED",
+    "sessionID": "fae6df6d-5130-41dc-a63f-2497a6d03567",
+    "elapsedMillis": 49929,
+    "chunkCount": 26,
+    "pssKiB": 128706,
+    "nativeHeapBytes": 12721264,
+    "thermalStatus": 0,
+    "finalizedBytes": 1594876,
+    "finalizedChunks": 26,
+    "chunks": [
+      {
+        "name": "chunk-000000.pcm",
+        "bytes": 64000,
+        "sha256": "0155b20c8add3fbf396e9b5e98dc88ebac819894cbfcf5913043bd90fe6457bc"
+      },
+      {
+        "name": "chunk-000001.pcm",
+        "bytes": 64000,
+        "sha256": "32acc3cd10dad8807a14dbfd6c4baf40a0e86c79a6b0ae8dd0ffa929cacdd6b5"
+      },
+      {
+        "name": "chunk-000002.pcm",
+        "bytes": 64000,
+        "sha256": "85fc3dc0e031b999e9cc49cf7fb4b6cad55738ec44da227ab6fcc919620f5d4e"
+      },
+      {
+        "name": "chunk-000003.pcm",
+        "bytes": 64000,
+        "sha256": "a3fe4cb7663032afba92cdf039966f173f0472c8800930b2b4e4d6e5c6a34e13"
+      },
+      {
+        "name": "chunk-000004.pcm",
+        "bytes": 64000,
+        "sha256": "42451251c95beb322db790495e235f3ecda8740597da1eeba84822e4cad487e0"
+      },
+      {
+        "name": "chunk-000005.pcm",
+        "bytes": 64000,
+        "sha256": "c5cfe2825d6374894c09a1898c323e2c4384726332f76e9f91ed80d4fb44c737"
+      },
+      {
+        "name": "chunk-000006.pcm",
+        "bytes": 64000,
+        "sha256": "f0b51a37c790ecec84c2bf4358a24417d488e59c02cdaf979651764d8df1f72b"
+      },
+      {
+        "name": "chunk-000007.pcm",
+        "bytes": 64000,
+        "sha256": "36f8ec78b9769aeee6cd8aebe8948408a562c8f077c1cb17bbca8e5d1ed0abe6"
+      },
+      {
+        "name": "chunk-000008.pcm",
+        "bytes": 64000,
+        "sha256": "4b0a0a28645c6a0474e7d1e16c8e3ca5422c89bca4c908d11fe5836becda6d86"
+      },
+      {
+        "name": "chunk-000009.pcm",
+        "bytes": 64000,
+        "sha256": "6e438a31b2f2aafabfb85847c612a4e36e5ab83bfeeadff961086339b01cecc9"
+      },
+      {
+        "name": "chunk-000010.pcm",
+        "bytes": 64000,
+        "sha256": "983c6b52b42fbf2a058d614e8f3368484cb8e57552aa33f69f38daa49d4163ae"
+      },
+      {
+        "name": "chunk-000011.pcm",
+        "bytes": 64000,
+        "sha256": "cd50ef87d8ec2ab2eff5a7adf1ed5bda905f4ff30956cdb15a03395d5cd354c0"
+      },
+      {
+        "name": "chunk-000012.pcm",
+        "bytes": 25600,
+        "sha256": "f5983900f59a2f434c17b7dfa67279e120eb208fbcdcd3fd7133510e4d72c833"
+      },
+      {
+        "name": "chunk-000013.pcm",
+        "bytes": 64000,
+        "sha256": "e83d57b7bbf8237fe3a2fb82d866f1ad2bfa8555959845d26c4c6cfc456df986"
+      },
+      {
+        "name": "chunk-000014.pcm",
+        "bytes": 64000,
+        "sha256": "23bf26a2b11c08f1b0e7a8c6c0456728cdd285d0a789d1a7360e9dc7b51105e3"
+      },
+      {
+        "name": "chunk-000015.pcm",
+        "bytes": 64000,
+        "sha256": "8d295be5db4d8ac04edb040a9b1024f86c9cc34dfa9c5ce4b3746a684b769385"
+      },
+      {
+        "name": "chunk-000016.pcm",
+        "bytes": 64000,
+        "sha256": "6a7f9b4d87b061f0261265623865781968493eada69d61a3be7b12b9f06780cf"
+      },
+      {
+        "name": "chunk-000017.pcm",
+        "bytes": 64000,
+        "sha256": "19f06e7fed1474fe1081948c81475770c83151ee3304b8d6883d60c4518d84d8"
+      },
+      {
+        "name": "chunk-000018.pcm",
+        "bytes": 64000,
+        "sha256": "c6e22b92f19d2433819f3b84d14ceff66def4e764909264eb1e21d16cd70abe9"
+      },
+      {
+        "name": "chunk-000019.pcm",
+        "bytes": 64000,
+        "sha256": "2044b274a786258080809e908699ed72bc395edb9a39c5751c873268df798496"
+      },
+      {
+        "name": "chunk-000020.pcm",
+        "bytes": 64000,
+        "sha256": "93f6f968f3549e71d96b807bf02a5ea9cc7c149e85885f449356defe4eb4ecbc"
+      },
+      {
+        "name": "chunk-000021.pcm",
+        "bytes": 64000,
+        "sha256": "83068c21da02211f513909976d6d54252079a63266605cc057b636ee3f5e70c0"
+      },
+      {
+        "name": "chunk-000022.pcm",
+        "bytes": 64000,
+        "sha256": "966c813139e096b943ff6f42ef6b0d0838d594120de09dd97f51945da0c3457e"
+      },
+      {
+        "name": "chunk-000023.pcm",
+        "bytes": 64000,
+        "sha256": "70ee75e600235c0a480d95abf5d046f3da9316b0f77d5e30f6699dfc650767c1"
+      },
+      {
+        "name": "chunk-000024.pcm",
+        "bytes": 64000,
+        "sha256": "489c03e87067084c460ca7fa31699505853500297b980b51ec057a040cbcff4c"
+      },
+      {
+        "name": "chunk-000025.pcm",
+        "bytes": 33276,
+        "sha256": "415420f86acefdc74bd618eab3f9de263ae3625c1761c2a2c05f874631ed31f6"
+      }
+    ],
+    "wavExportVerified": true,
+    "wavBytes": 1594920,
+    "wavSHA256": "607b8981857582555c08da35dc0436796502a89697c963e753d447f6c696e35a",
+    "wavHeaderVerified": true
+  },
+  "implementationHashes": {
+    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt": "4126b3ff675d398a05ae63ce739ec0a35514e1b1374a568fa39100f30d71a268",
+    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/RecordingFileRecovery.kt": "328df6514114abb5e71292d8243bce081747149ff07b5eac27f469475f18d5e3"
+  },
+  "installedBuildHashes": {
+    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt": "4126b3ff675d398a05ae63ce739ec0a35514e1b1374a568fa39100f30d71a268",
+    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/RecordingFileRecovery.kt": "328df6514114abb5e71292d8243bce081747149ff07b5eac27f469475f18d5e3"
+  },
+  "processChanged": true,
+  "rebootVerified": false
+}

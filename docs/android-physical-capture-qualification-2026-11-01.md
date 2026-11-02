@@ -1,6 +1,6 @@
 # Android physical capture reliability and performance — November 1, 2026
 
-Status: **In progress; the complete hardware/provider matrix is not qualified.**
+Status: **In progress; Pixel SIGKILL passed, and the complete hardware/provider matrix is not qualified.**
 The user has no Samsung device and requested proceeding with available providers;
 OneDrive is not installed. A physical Pixel 7 and signed-in Google Drive are available.
 These availability limits remain explicit; emulators cannot substitute for them.
@@ -105,8 +105,9 @@ An unavailable device/account never becomes a passed case or a verified ledger r
 The first Pixel attempt lost USB telemetry after 152 seconds. Reconnection allowed
 the private recording to be stopped and its WAV to be verified; it does not qualify
 the hour gate. The second host-sampled attempt lost USB after approximately 34 minutes
-(135 samples); it also remains incomplete. Stop/final-state verification awaits
-reconnection; the installed debug harness has a 65-minute device safety stop. A fresh
+(135 samples); it also remains incomplete. Reconnection confirmed the
+65-minute device safety stop and verified WAV export. The missing telemetry still
+invalidates that attempt. A fresh
 device-local campaign is required; neither interrupted attempt is promoted.
 
 A 60-second physical
@@ -119,7 +120,7 @@ The autonomous sampler passed a short emulator smoke check: telemetry advanced,
 manual stopping correctly produced an incomplete result, and finalized PCM WAV
 header/export verification passed. This is harness validation, not physical evidence.
 The disposable emulator and its qualification installation were stopped/removed;
-the disconnected Pixel's private test audio still needs verified cleanup. The owner
+the Pixel's private test audio will be removed after all physical checks. The owner
 application has not been replaced or cleared.
 
 ## Automated regression results
@@ -148,10 +149,53 @@ methods with the required uninstall. One contract run raced a mirror refresh; it
 stable final rerun passed. Debug provider-grant lint was fixed and the full CI command
 rerun successfully.
 
-`validatePhysicalCaptureEvidence` passes the truthful incomplete matrix (0/14 full
+`validatePhysicalCaptureEvidence` passes the truthful incomplete matrix (1/14 full
 physical cases). `physicalCaptureReadiness` correctly fails because the required
 hardware/provider evidence remains incomplete. Pixel reconnection is required for
 verified stop/cleanup, a fresh hour recording, actual fault/reboot recovery, model
 memory/thermal runs and Drive delivery/retry. Samsung and OneDrive remain unavailable.
 Existing implemented rows retain their pending broader physical/provider acceptance;
 no capability is promoted from these partial results.
+
+
+## Resumed physical campaign — November 2
+
+The Pixel reconnected after resetting USB debugging. The earlier run was confirmed
+COMPLETED at 3,900,048 ms with 124,797,436 bytes of retained PCM and a verified WAV
+export. Its missing host telemetry still prevents endurance qualification.
+
+The real Pixel SIGKILL campaign passed: all 12 finalized chunks before process death
+retained exact hashes after recovery and explicit resume; the final recording held
+26 chunks with a verified PCM WAV header/export. The report retains only metadata
+and hashes. Both recording-recovery ledger rows now link this physical evidence;
+broader acceptance remains open.
+
+The API 37 device rejected `cmd user is-user-unlocked`. The host harness now checks
+ActivityManager's explicit RUNNING_UNLOCKED state and access to app-private
+credential storage. The corrected physical SIGKILL campaign exercised this path.
+A second regression proves that a disconnect during setup still attempts Stop and
+records an unconfirmed-cleanup receipt. Eleven focused harness regressions pass.
+
+USB disappeared again during setup for force-stop, before that fault was issued.
+Force-stop is incomplete, and reboot, Drive, model performance and the fresh hour
+remain pending. The setup recording was later verified COMPLETED with zero retained PCM; no
+WAV header is expected for an empty recording. Two attempts to start a separate Pixel-only
+libusb ADB server were blocked by automatic approval review timeouts before execution;
+the shared ADB server and other devices were left running.
+
+
+The device-local hour run `3e4b54e9-2cd7-47f8-ba94-b66b9a32d6b7` is now running.
+Host observations passed sixteen minutes with sampled PSS below 100 MiB and thermal
+status None. A content-free power query confirmed Dozing during the recording after
+an explicit sleep key; the UI tool's two power-button actions had left wakefulness
+unconfirmed. USB subsequently disappeared. These partial observations do not qualify
+the hour. The run must complete its on-device time/PCM targets, then its report,
+continuous telemetry, exact chunk hashes, source/APK identity and PCM WAV proof must
+be collected and validated. The user was asked to reconnect after its bounded finish.
+
+The resumed full checks pass: Android CI (`check`, phone/Wear instrumentation builds,
+debug artifact checks, optimized release readiness), 65 script tests and 160 contract
+tests. The first script run exposed an evidence-symbol mismatch in the new ledger
+entry; the exact report symbol was corrected and the full suite rerun successfully.
+The toolchain inventory now binds 278 implementation/evidence files. No production
+recorder/model source changed during this resumed campaign.
