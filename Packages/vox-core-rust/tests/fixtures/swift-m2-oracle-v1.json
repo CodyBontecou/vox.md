@@ -580,12 +580,12 @@
       {
         "name" : "CaptureEntryTemplateRenderer",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureEntryTemplateRenderer.swift",
-        "sha256" : "b9b5f0e5bcaed2432a342bf21bf6631b3e2174841faff80af90142e4ded723aa"
+        "sha256" : "4cb4f1153e771f992915393b032cac6bf9d08041e8b73c8d33f44ca77687fc81"
       },
       {
         "name" : "CaptureFileBusyDetection",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureFileBusyDetection.swift",
-        "sha256" : "401e912d8b102ac89621af262db9cb49f82a18c860d32cecb1d144496e6d024e"
+        "sha256" : "a3d63ef153aa090b12cfdca8f687bcb0a44ebaa8fbfd789fb9c5fc8f8900271b"
       },
       {
         "name" : "CaptureHistoryDetails",
@@ -645,12 +645,12 @@
       {
         "name" : "CapturePathPlanner",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CapturePathPlanner.swift",
-        "sha256" : "cd491e989a4791c3984ba3b4c1bdc27bf49bc4d656df0f3061dfb6c606c56c96"
+        "sha256" : "97c66b4e89232f534ba845f8e1062331049be77fe5629bdf51ef57aab85d3146"
       },
       {
         "name" : "CapturePipeline",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CapturePipeline.swift",
-        "sha256" : "cdf3971163b08b62f838c9047cc279ec83fcc2c79079dae91ef37d4eff651bdd"
+        "sha256" : "8fe563ff8eaf05ec97ddb0cc286b0ead7a9975f7714c98c21f97491f3e84be1d"
       },
       {
         "name" : "CapturePresetEmoji",
@@ -695,7 +695,12 @@
       {
         "name" : "CaptureRouteTodaySnapshot",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureRouteTodaySnapshot.swift",
-        "sha256" : "5dd52152910a59c6a083072a7f65d143dad17c79598dee970dcf07bc57ddab6a"
+        "sha256" : "582d37b5d014d9006f5dcdeb9ed3f6376d1d18d8f32627009e73fc493dc4112e"
+      },
+      {
+        "name" : "CaptureTitleText",
+        "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureTitleText.swift",
+        "sha256" : "3e9e13eeb6b56561274b28762652c39ebec8190bee405be444aa175f6a4bd56a"
       },
       {
         "name" : "CaptureVaultMarkdownTemplate",
@@ -720,7 +725,7 @@
       {
         "name" : "CoordinatedCaptureWriter",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CoordinatedCaptureWriter.swift",
-        "sha256" : "4d22a9255b03e4419b89c79c8b176441824f160fe0b8bec0263f0d9987776d52"
+        "sha256" : "cd19180a7c63565e97e45633d624c338cf8eb5166c4a954901b7296eebef338c"
       },
       {
         "name" : "MarkdownDocumentEditor",
@@ -743,7 +748,7 @@
         "sha256" : "dda9b75f64b106eb544de201f599122d75abc483c5b156bba6c05c0f956dbc3c"
       }
     ],
-    "sourceRevision" : "c69f7ff17ff78d99003670e60ae24f1747211f91",
+    "sourceRevision" : "38a6107cdd991dcb5dc0c9e4ec42d1a7c0aefc2e",
     "swiftCompilerIdentity" : "Apple Swift version 6.4.2 (swiftlang-6.4.2.1.9 clang-2100.4.1.1) Target: arm64-apple-macosx27.2.0",
     "toolchainManifestSHA256" : "ef6ca93e6ae222d588c5b1107b77720efb1777db95cf1efd4ea4ffb9c85d294b",
     "xcodeIdentity" : "Xcode 27.2 Build version 27B52"
