@@ -19,6 +19,7 @@ host="$bin_dir/VoxboardM2MaterializationEvidence"
 [[ -x "$host" ]] || { echo "error: materialization host executable missing" >&2; exit 1; }
 cp "$host" "$external/executables/vox-m2-materialization-evidence"
 chmod 755 "$external/executables/vox-m2-materialization-evidence"
+"$external/executables/vox-m2-materialization-evidence" --verify-rss-high-water
 
 runs=("warmup-000:warmup:1048576")
 n=1

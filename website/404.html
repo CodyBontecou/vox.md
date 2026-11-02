@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found — Vox.md</title>
+  <meta name="robots" content="noindex">
+  <meta name="description" content="This Vox.md page could not be found. Find product information, documentation, support, and the sitemap.">
+  <link rel="canonical" href="https://vox.isolated.tech/404">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md documentation for language models">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Page Not Found — Vox.md">
+  <meta property="og:description" content="This Vox.md page could not be found. Find product information, documentation, support, and the sitemap.">
+  <meta property="og:url" content="https://vox.isolated.tech/404">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="preload" href="/fonts/Geist-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md Public Information API">
+</head>
+<body>
+
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="/index.html" class="logo" aria-label="Vox.md home">
+      <img class="logo-mark" src="/app-icon.webp" alt="" width="32" height="32">
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/docs/">Docs</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/terms.html">Terms</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_not_found">Download Vox.md</a>
+  </div>
+</nav>
+
+<main id="main">
+<section class="page-hero"><div class="container"><div class="page-eyebrow">Vox.md</div><h1 class="page-title">Page Not Found</h1></div></section>
+<div class="container"><div class="legal-content">
+<h2>Find what you need</h2>
+<p>The requested page does not exist. It may have moved, or the address may contain a typo. Return to the <a href="/">Vox.md homepage</a>, read the <a href="/docs/">documentation</a>, browse the <a href="/sitemap.xml">sitemap</a>, or use the <a href="/llms.txt">agent guide</a>. For help finding a specific feature or resolving a broken link, <a href="/contact">contact the developer</a>.</p></div></div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/developers">Developers</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/docs/">Docs</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/privacy.html">Privacy</a></li>
+        <li><a href="/terms.html">Terms</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Local capture · User-controlled files.</div>
+    </div>
+  </div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

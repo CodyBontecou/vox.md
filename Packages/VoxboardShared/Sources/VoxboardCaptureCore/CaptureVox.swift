@@ -14,6 +14,9 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
     public var isEnabled: Bool
     public var isBuiltIn: Bool
     public var staticFrontmatter: [String: String]
+    /// Voice-only transcript mapping, frozen with the delivery policy.
+    public var transcriptPropertyName: String
+    public var includeTranscriptInBody: Bool
     /// Opt-in origin-time location capture and rendering policy. Missing legacy
     /// values decode disabled.
     public var locationPolicy: CapturePresetLocationPolicy
@@ -47,6 +50,8 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
         isEnabled: Bool = true,
         isBuiltIn: Bool = false,
         staticFrontmatter: [String: String] = [:],
+        transcriptPropertyName: String = "",
+        includeTranscriptInBody: Bool = true,
         locationPolicy: CapturePresetLocationPolicy = CapturePresetLocationPolicy(),
         metadataScope: CapturePresetMetadataScope = .document,
         postProcessingMode: CapturePresetProcessingMode = .clean,
@@ -66,6 +71,8 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
         self.isEnabled = isEnabled
         self.isBuiltIn = isBuiltIn
         self.staticFrontmatter = staticFrontmatter
+        self.transcriptPropertyName = transcriptPropertyName
+        self.includeTranscriptInBody = includeTranscriptInBody
         self.locationPolicy = locationPolicy
         self.metadataScope = metadataScope
         self.postProcessingMode = postProcessingMode
@@ -133,6 +140,8 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
         case isEnabled
         case isBuiltIn
         case staticFrontmatter
+        case transcriptPropertyName
+        case includeTranscriptInBody
         case locationPolicy
         case metadataScope
         case postProcessingMode
@@ -156,6 +165,8 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
             isEnabled: try container.decodeIfPresent(Bool.self, forKey: .isEnabled) ?? true,
             isBuiltIn: try container.decodeIfPresent(Bool.self, forKey: .isBuiltIn) ?? false,
             staticFrontmatter: try container.decodeIfPresent([String: String].self, forKey: .staticFrontmatter) ?? [:],
+            transcriptPropertyName: try container.decodeIfPresent(String.self, forKey: .transcriptPropertyName) ?? "",
+            includeTranscriptInBody: try container.decodeIfPresent(Bool.self, forKey: .includeTranscriptInBody) ?? true,
             locationPolicy: try container.decodeIfPresent(CapturePresetLocationPolicy.self, forKey: .locationPolicy)
                 ?? CapturePresetLocationPolicy(),
             metadataScope: try container.decodeIfPresent(CapturePresetMetadataScope.self, forKey: .metadataScope) ?? .document,

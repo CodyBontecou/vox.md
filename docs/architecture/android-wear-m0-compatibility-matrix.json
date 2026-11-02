@@ -2002,7 +2002,9 @@
         },
         "unknownFields": {
           "status": "notApplicable",
-          "evidence": [],
+          "evidence": [
+            "scripts/tests/test_custom_analytics_removal.py"
+          ],
           "rationale": "Retired values are never decoded; cleanup removes them by key without reading their contents."
         },
         "malformed": {
@@ -2014,13 +2016,17 @@
           "rationale": "Arbitrary or malformed retired bytes are removed without decoding."
         },
         "futureVersion": {
-          "status": "notApplicable",
-          "evidence": [],
+          "status": "executed",
+          "evidence": [
+            "scripts/tests/test_custom_analytics_removal.py"
+          ],
           "rationale": "No producer remains, so no future analytics format can be written."
         },
         "date": {
           "status": "notApplicable",
-          "evidence": [],
+          "evidence": [
+            "scripts/tests/test_custom_analytics_removal.py"
+          ],
           "rationale": "Retired values are removed without decoding dates."
         },
         "data": {
@@ -2034,13 +2040,16 @@
         "uuid": {
           "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift"
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
           "rationale": "The former UUID install identity is erased and never regenerated."
         },
         "enum": {
           "status": "notApplicable",
-          "evidence": [],
+          "evidence": [
+            "scripts/tests/test_custom_analytics_removal.py"
+          ],
           "rationale": "Retired experiment variants are removed without decoding."
         },
         "crashRecovery": {

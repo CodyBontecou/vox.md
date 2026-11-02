@@ -23,3 +23,15 @@ Purchase validation/restoration, scheduling, provider authorization, selected fi
 Before submission, review App Privacy / Play Data Safety for the exact candidate and every essential processor. Remove analytics purposes only where no remaining collection supports them; retain App Functionality declarations for applicable identifiers, purchase verification and scheduling. Verify provider logs, account linkage, legal URLs and native-language text. No questionnaire or store metadata was changed remotely. Prices and product IDs are unchanged. Myself.md claim entry points remain disabled; earlier retained grants need their existing disclosure.
 
 Website traffic measurement is separate from in-app collection and remains disclosed under the website policy. No website measurement exemptions are asserted by this change.
+
+## Prepared candidate cutover
+
+Candidate 2.14 (59) is prepared from committed current source. Physical-device, Apple sandbox-account and multi-account testing are deferred by the owner; simulation and compilation are not represented as those checks. Public policy/terms and App Privacy publication remain held. The staged policy applies to this candidate when released and preserves earlier-version and historical-record disclosures.
+
+The candidate has no custom event collection. Prepared store copy and policy explicitly cover user-configured HTTP text/transcript delivery, Keychain-held endpoint credentials, local recovery, model downloads, quotes, and Apple reverse geocoding. These are distinct from developer analytics. The candidate questionnaire proposal removes the analytics-only User ID, Purchase History and Product Interaction declarations after retirement; it conservatively discloses ordinary provider connection metadata as Other Data Types for App Functionality, not linked and not used for tracking. Do not substitute a blanket Data Not Collected claim. Apple-only billing data is not developer collection.
+
+The current published questionnaire remains accurate for older clients while their collector is live. Do not publish a reduced declaration or claim that historic data is erased before the coordinated service cutover. No Worker deployment, database deletion or questionnaire publication is included in candidate preparation.
+
+The final App Store description and staged terms distinguish eligible seven-day trials, auto-renewal, immediate one-time Lifetime billing, cancellation in Apple Account settings, existing paid rights, and Family access versus private content. No live lifetime price or regional schedule is changed. New Mac listing translations are machine assisted and checked mechanically; native-language sign-off is not claimed.
+
+Reference: [Apple App Privacy Details](https://developer.apple.com/app-store/app-privacy-details/) and [App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/).

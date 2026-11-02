@@ -34,6 +34,8 @@ public struct MarkdownCaptureMutation: Equatable, Sendable {
     public var entryPrefix: String
     public var entrySuffix: String
     public var frontmatter: [String: String]
+    /// Only explicitly mapped fields may replace user-owned document values.
+    public var replacingFrontmatterKeys: Set<String>
     /// Contract-order metadata used only by the bounded M2 adapter. Existing
     /// dictionary callers remain byte-compatible through `frontmatter`.
     public var orderedFrontmatter: [MarkdownOrderedFrontmatterField]?
@@ -56,6 +58,7 @@ public struct MarkdownCaptureMutation: Equatable, Sendable {
         entryPrefix: String = "",
         entrySuffix: String = "",
         frontmatter: [String: String] = [:],
+        replacingFrontmatterKeys: Set<String> = [],
         orderedFrontmatter: [MarkdownOrderedFrontmatterField]? = nil,
         locationMetadata: CaptureLocationRenderedMetadata? = nil,
         retryProtectionEnabled: Bool = false,
@@ -69,6 +72,7 @@ public struct MarkdownCaptureMutation: Equatable, Sendable {
         self.entryPrefix = entryPrefix
         self.entrySuffix = entrySuffix
         self.frontmatter = frontmatter
+        self.replacingFrontmatterKeys = replacingFrontmatterKeys
         self.orderedFrontmatter = orderedFrontmatter
         self.locationMetadata = locationMetadata
         self.retryProtectionEnabled = retryProtectionEnabled
@@ -123,7 +127,8 @@ public struct MarkdownDocumentEditor: Sendable {
             existing: mergeFrontmatter(
                 existing: mergeFrontmatter(
                     existing: documentParts.frontmatter,
-                    incoming: entryParts.frontmatter
+                    incoming: entryParts.frontmatter,
+                    replacingKeys: mutation.replacingFrontmatterKeys
                 ),
                 incoming: voxFrontmatter
             ),
@@ -322,7 +327,7 @@ public struct MarkdownDocumentEditor: Sendable {
         return MarkdownParts(frontmatter: frontmatter, body: body)
     }
 
-    private func mergeFrontmatter(existing: [String]?, incoming: [String]?) -> [String]? {
+    private func mergeFrontmatter(existing: [String]?, incoming: [String]?, replacingKeys: Set<String> = []) -> [String]? {
         guard let incoming else { return existing }
         guard var merged = existing else { return incoming }
 
@@ -346,7 +351,10 @@ public struct MarkdownDocumentEditor: Sendable {
                 continue
             }
 
-            if Self.additiveFrontmatterKeys.contains(incomingEntry.key) {
+            if replacingKeys.contains(incomingEntry.key) {
+                let existingEnd = sectionEnd(startingAt: existingIndex, in: merged)
+                merged.replaceSubrange(existingIndex..<existingEnd, with: incomingSection)
+            } else if Self.additiveFrontmatterKeys.contains(incomingEntry.key) {
                 let existingEnd = sectionEnd(startingAt: existingIndex, in: merged)
                 let existingValues = frontmatterValues(
                     in: Array(merged[existingIndex..<existingEnd])

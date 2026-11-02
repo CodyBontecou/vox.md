@@ -77,3 +77,69 @@ To reproduce the fragment, explicitly run only `testInteractiveDesignPreview` wi
 - Signed sandbox/TestFlight purchasing and restore checks; existing Family Sharing test waiver remains as previously recorded.
 - Complete gesture interruption/sheet-drag/Reduce Motion cases and release-build performance measurement on supported hardware. A variable-frame-rate screen recording is **not** evidence of sustained 60fps performance.
 - Preserve all existing purchase/history/price-freeze constraints. Design approval is not permission to publish the website, change prices or release apps.
+
+## 2026-10-30 onboarding audit follow-up
+
+The introduction uses three illustrated pages: “A place for the small things,”
+“Say it. Keep the thought,” and “Your words. Your own home.” Its final primary
+action is **View plans**. At accessibility text sizes, the actions scroll with
+the document. Long action labels wrap without reducing the user's text size.
+
+After unlocking, Capture guides the first note through folder selection, writing,
+and an actual saved-file confirmation. The iOS shortcut uses the system folder
+picker and creates a normal reusable preset destination with a new Markdown note
+per Send. Choosing a folder preserves the draft and writes no note. The saved
+note opens through native Quick Look while folder access is retained. Returning
+users with delivered history bypass the guidance; its completion preference is
+separate from purchase access and toolbar preferences. Mac retains its existing
+folder setup and gains the same writing/saved guidance; a local transcription
+model and microphone permission are optional for starting with typed notes.
+
+Microphone permission is requested on the first explicit Record action, with an
+Open Settings recovery action after denial. A suspended request rechecks the
+active draft, preset, route and paid-access guards before recording; backgrounding
+or leaving Capture cancels the pending start. Purchases, product IDs, pricing,
+restore and the root paid-access gate are unchanged.
+
+Verification: StoreKit/access/history checks, Capture rendering checks and two
+isolated first-note routing/file-write tests pass. Compact 320×568 renders cover
+all three introduction pages at the largest accessibility size, including their
+scrolled actions. Layout assertions prevent the intro footer from consuming the
+reading area and the editor from collapsing the first-note guide. Light/dark
+introduction snapshots and all three first-note states are retained in XCTest.
+The Capture structure checker and Mac Debug build pass.
+
+Two opt-in simulator previews exercised folder creation/selection, typing, Send,
+and opening the resulting Markdown file. Both checked the written file contents
+and unchanged microphone permission. The writer was isolated/unmetered and access
+came from StoreKitTest; this is not a production purchase or signed-device test.
+The recorded Argent fragments are diagnostic only: XCTest owns the app process,
+so native runner selectors were unavailable, and the live path needed coordinate
+and keyboard-focus recovery. They are not portable CI tests or release sign-off.
+No release, website deployment, price change or analytics collection was added.
+
+### Approved illustrated onboarding refinement
+
+The owner selected the illustrated design originally previewed from worktree
+`f130`. Its shared theme and three onboarding pages are preserved here. The
+notebook, window and botanical pen artwork continues behind the transparent
+footer. Continue and View plans occupy the right half of the action row; Back
+is plain text on the left after the first page. Accessibility sizes stack the
+actions to preserve readable labels. The native top back button and
+top-right View plans shortcut are hidden.
+
+The account tagline and explanatory example captions were removed at the owner's
+request, including the final folder card's post-plan instruction. The spoken
+example remains interactive and does not record audio or save a file. The paid
+access gate and first-note setup after unlocking are unchanged.
+
+The preferred design and final copy were built and inspected live on the
+“Vox Paper Ink QA” simulator. Forward and bottom-back navigation were exercised.
+The separate staged QA launcher used for that simulator is not part of the app
+source changes in this branch. No app release or website publication is included.
+
+Final-source verification before push: 28 tests passed (26 XCTest cases and two
+Swift Testing cases); two interactive preview hosts were skipped as intended.
+The Mac Debug build and Capture structure checker (14 fixtures) passed. A final
+small-phone screenshot exposed excessive wrapping in the half-width forward
+button at the largest text size; accessibility actions now stack at full width.

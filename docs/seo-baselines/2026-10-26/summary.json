@@ -1,0 +1,78 @@
+{
+  "observed_on": "2026-10-26",
+  "site": "https://vox.isolated.tech/",
+  "source_property": "sc-domain:isolated.tech",
+  "page_filter": "+https://vox.isolated.tech/",
+  "search_type": "Web (text-based)",
+  "windows": {
+    "baseline90": {
+      "start": "2026-07-26",
+      "end": "2026-10-23",
+      "days": 90,
+      "clicks": 2,
+      "impressions": 139,
+      "ctr_pct": 1.4388489208633093,
+      "average_position_estimate_from_rounded_daily_export": 17.535971223021583
+    },
+    "recent28": {
+      "start": "2026-09-26",
+      "end": "2026-10-23",
+      "days": 28,
+      "clicks": 0,
+      "impressions": 0,
+      "ctr_pct": null,
+      "average_position_estimate_from_rounded_daily_export": null
+    },
+    "previous28": {
+      "start": "2026-08-29",
+      "end": "2026-09-25",
+      "days": 28,
+      "clicks": 1,
+      "impressions": 108,
+      "ctr_pct": 0.9259259259259259,
+      "average_position_estimate_from_rounded_daily_export": 13.428703703703704
+    }
+  },
+  "ui_average_position_90days": 17.5,
+  "legacy_host_90days": {
+    "site": "https://voxboard.isolated.tech/",
+    "clicks": 0,
+    "impressions": 0,
+    "ctr_pct": null,
+    "average_position": null,
+    "source": "Observed Search Console UI; no data rows"
+  },
+  "last_impression_date": "2026-09-23",
+  "visible_query_rows": {
+    "count": 10,
+    "clicks": 0,
+    "impressions": 25,
+    "brand_rule": "case-insensitive regex vox[. ]?md|voxboard",
+    "reported_brand_impressions": 6
+  },
+  "connection": {
+    "property": "https://vox.isolated.tech/",
+    "verification": "Ownership auto verified via Domain name provider",
+    "property_reporting_state": "Processing data; check again in a day or so",
+    "sitemap": "https://vox.isolated.tech/sitemap.xml",
+    "sitemap_status": "Success",
+    "discovered_pages": 7,
+    "submitted": "2026-10-26"
+  },
+  "indexing": {
+    "homepage": "https://vox.isolated.tech/",
+    "status": "Crawled - currently not indexed",
+    "inspection_source": "Google Index via Search Console UI",
+    "last_crawl_displayed": "Sep 9, 2026, 1:36:40 AM (UI timezone not established)",
+    "crawl_allowed": true,
+    "page_fetch": "Successful",
+    "indexing_allowed": true,
+    "declared_canonical": "https://vox.isolated.tech/",
+    "google_selected_canonical": "Inspected URL",
+    "live_test": "URL is available to Google; Page can be indexed",
+    "indexing_request": "Accepted: Indexing requested; URL added to a priority crawl queue on 2026-10-26",
+    "live_test_displayed": "Oct 26, 2026, 7:50 AM (UI display)"
+  },
+  "export_sha256": "4a268b698a4104f9ed04a16a10e99f07feba07bb21bc926a692b2bf8239da0d7",
+  "report_url": "https://search.google.com/search-console/performance/search-analytics?resource_id=sc-domain%3Aisolated.tech&page=*https%3A%2F%2Fvox.isolated.tech%2F&start_date=20260726&end_date=20261023&metrics=CLICKS%2CIMPRESSIONS%2CCTR%2CPOSITION"
+}

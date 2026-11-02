@@ -101,6 +101,9 @@ struct QuickCaptureView: View {
     @Environment(\.adaptiveCanExpandWindow) private var canExpandWindow
     @Environment(\.adaptiveHingeState) private var hingeState
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var workspaceWidth: CGFloat = 0
+    @State private var previewIsEnabled = false
 
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var selectedScreenshots: [PhotosPickerItem] = []
@@ -138,7 +141,15 @@ struct QuickCaptureView: View {
     )
     @State private var attachRecordingAudio = false
     @State private var lastStartedRecordingMode: CaptureRecordingMode = .preset
-    @State private var micPermissionGranted = Self.currentMicrophonePermissionGranted()
+    @State private var microphonePermissionTask: Task<Void, Never>?
+    @State private var showsMicrophoneSettings = false
+    @State private var showsFirstNoteFolderPicker = false
+    @State private var isSavingFirstNoteFolder = false
+    @State private var firstNoteReceipt: CaptureReceipt?
+    @State private var firstNoteDocument: FirstNoteDocument?
+    @AppStorage(CapturePreferenceKeys.firstNoteSaved, store: AppConstants.sharedDefaults)
+    private var hasSavedFirstNote = false
+    @State private var setupChoseFolder = false
     @State private var keyboardLaunchPhase: KeyboardLaunchPhase?
     @State private var keyboardReturnGuidance: KeyboardReturnGuidance?
     @State private var fileExportToast: FileExportToast?
@@ -229,13 +240,13 @@ struct QuickCaptureView: View {
     private var captureContent: CaptureViewSection {
         CaptureViewSection {
             QuickCaptureCanvas(
-                showsDestination: (viewModel.selectedDestination == nil || !vaultIsReachable)
-                    && !isLocalizationScreenshot,
+                showsDestination: !isLocalizationScreenshot
+                    && (showsFirstNoteGuide || viewModel.selectedDestination == nil || !vaultIsReachable),
                 showsWatchStatus: watchRecordingPipeline.hasVisibleItems,
                 showsAttachments: !viewModel.draft.additionalPayloads.isEmpty,
                 header: captureHeader,
                 ocrProgress: captureOCRProgressBanner,
-                destination: emptyDestinationBanner,
+                destination: destinationGuidance,
                 watchStatus: watchRecordingStatusCard,
                 composer: composerWithInlineTools,
                 attachments: attachmentStrip,
@@ -243,9 +254,12 @@ struct QuickCaptureView: View {
                 keyboardGuidance: keyboardGuidanceOverlay,
                 error: captureErrorOverlay,
                 fileExport: fileExportOverlay,
-                sentToast: sentToastOverlay
+                sentToast: sentToastOverlay,
+                showsPreview: showsInlinePreview,
+                preview: draftPreview
             )
             .overlay { liveRecordingScreen }
+            .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { workspaceWidth = $0 }
             // The Signal header (route pill, Activity, Settings) replaces the
             // empty navigation bar on the capture root.
             .toolbar(.hidden, for: .navigationBar)
@@ -651,6 +665,13 @@ struct QuickCaptureView: View {
                 }
                 .onChange(of: viewModel.lastReceipt) { _, receipt in
                     guard receipt != nil else { return }
+                    if !hasSavedFirstNote {
+                        hasSavedFirstNote = true
+                        if !setupChoseFolder {
+                            firstNoteReceipt = receipt
+                            dismissComposer()
+                        }
+                    }
                     usageTracker.reload()
                     ReviewPromptManager.shared.recordSuccessfulCapture(
                         totalCaptureCount: usageTracker.successfulCapturesUsed
@@ -679,7 +700,6 @@ struct QuickCaptureView: View {
         CaptureViewSection {
             draftLifecycleContent
                 .onAppear(perform: prepareRecordingFeatures)
-                .task { await requestMicrophonePermissionIfNeeded() }
                 .onChange(of: pendingKeyboardLaunch) { _, isPending in
                     if isPending { consumePendingKeyboardLaunchIfNeeded() }
                 }
@@ -729,6 +749,25 @@ struct QuickCaptureView: View {
     private var lifecycleContent: CaptureViewSection {
         CaptureViewSection {
             recordingLifecycleContent
+                .sheet(item: $firstNoteDocument) { document in
+                    FirstNoteDocumentPreview(document: document)
+                }
+                .sheet(isPresented: $showsFirstNoteFolderPicker) {
+                    CaptureFolderPicker(initialDirectoryURL: nil, onPick: { url in
+                        showsFirstNoteFolderPicker = false
+                        Task { await saveFirstNoteFolder(url) }
+                    }, onCancel: { showsFirstNoteFolderPicker = false })
+                }
+                .alert("Microphone access is off", isPresented: $showsMicrophoneSettings) {
+                    Button("Open Settings") {
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            UIApplication.shared.open(url)
+                        }
+                    }
+                    Button("Cancel", role: .cancel) {}
+                } message: {
+                    Text("Allow microphone access in Settings to record. You can still type and save notes.")
+                }
                 .task(id: fileExportToast?.id) { await dismissExportToastAfterDelay() }
                 .onChange(of: scenePhase) { _, phase in handleScenePhaseChange(phase) }
                 .onChange(of: persistentRecorder.isAppRecordingSegmentActive) { _, isActive in
@@ -1930,6 +1969,34 @@ struct QuickCaptureView: View {
         }
     }
 
+    private var hasDraftContent: Bool {
+        !viewModel.draft.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            || !viewModel.draft.additionalPayloads.isEmpty
+    }
+
+    private var supportsInlinePreview: Bool {
+        AdaptiveCaptureWorkspace.supportsPreview(width: workspaceWidth, dynamicTypeSize: dynamicTypeSize)
+    }
+
+    private var showsInlinePreview: Bool {
+        supportsInlinePreview && previewIsEnabled && hasDraftContent
+    }
+
+    private var draftPreview: CaptureViewSection {
+        CaptureViewSection {
+            CaptureDraftPreview(
+                text: viewModel.draft.text,
+                presetName: selectedFlow.accessibilityName,
+                destination: viewModel.resolvedDestinationPreview,
+                attachmentCount: viewModel.draft.additionalPayloads.count,
+                configureDestination: {
+                    dismissComposer()
+                    showsRoutePicker = true
+                }
+            )
+        }
+    }
+
     private var watchRecordingStatusCard: CaptureViewSection {
         CaptureViewSection {
             if let item = watchRecordingPipeline.currentItem {
@@ -2047,6 +2114,63 @@ struct QuickCaptureView: View {
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("capture_destination_banner")
+        }
+    }
+
+    /// Onboarding Setup already chose a folder and starter routes, so the
+    /// first-note walkthrough (folder → write → saved) is only for people who
+    /// skipped it.
+    private var showsFirstNoteGuide: Bool {
+        hasCompletedInitialLoad && !setupChoseFolder
+            && (!hasSavedFirstNote || firstNoteReceipt != nil)
+    }
+
+    private var firstNoteStep: FirstNoteGuide.Step {
+        if let receipt = firstNoteReceipt { return .saved(file: receipt.noteURL.lastPathComponent) }
+        if let destination = viewModel.selectedDestination { return .writeNote(folder: destination.rootName) }
+        return .chooseFolder
+    }
+
+    private var destinationGuidance: CaptureViewSection {
+        CaptureViewSection {
+            if showsFirstNoteGuide {
+                QuickCaptureFirstNoteGuide(step: firstNoteStep, action: advanceFirstNote, dismiss: {
+                    firstNoteReceipt = nil
+                })
+                .disabled(isSavingFirstNoteFolder || !viewModel.canChangeCaptureRoute)
+            } else {
+                emptyDestinationBanner
+            }
+        }
+    }
+
+    private func advanceFirstNote() {
+        if let receipt = firstNoteReceipt {
+            do {
+                guard let destination = viewModel.destinations.first(where: { $0.id == receipt.destinationID }) else { return }
+                let root = try CaptureBookmarkResolver.resolve(destination.rootBookmark)
+                guard !root.isStale else { throw QuickCaptureViewModelError.staleDestination(destination.rootName) }
+                firstNoteDocument = FirstNoteDocument(noteURL: receipt.noteURL, rootURL: root.url)
+            } catch {
+                viewModel.errorMessage = error.localizedDescription
+            }
+        } else if viewModel.selectedDestination == nil {
+            dismissComposer()
+            showsFirstNoteFolderPicker = true
+        } else {
+            focusComposer()
+        }
+    }
+
+    private func saveFirstNoteFolder(_ url: URL) async {
+        guard usageTracker.hasUnlocked, viewModel.selectedDestination == nil,
+              !isSavingFirstNoteFolder else { return }
+        isSavingFirstNoteFolder = true
+        defer { isSavingFirstNoteFolder = false }
+        do {
+            try await viewModel.setUpFirstNoteFolder(url)
+        } catch {
+            viewModel.errorMessage = error.localizedDescription
         }
     }
 
@@ -2382,6 +2506,23 @@ struct QuickCaptureView: View {
                     .accessibilityIdentifier("capture_recording_options")
                 }
 
+
+                if supportsInlinePreview {
+                    Button {
+                        previewIsEnabled.toggle()
+                    } label: {
+                        Image(systemName: "rectangle.split.2x1")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(previewIsEnabled ? Geist.accentText : Geist.muted)
+                            .frame(width: 28, height: 24)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(!hasDraftContent)
+                    .accessibilityLabel(previewIsEnabled ? "Hide draft preview" : "Show draft preview")
+                    .accessibilityIdentifier("capture_toggle_preview")
+                }
+
                 if !usageTracker.hasUnlocked, usageTracker.successfulCapturesUsed >= 7 {
                     Button {
                         presentPaywall(context: .usageMeter)
@@ -2657,14 +2798,14 @@ struct QuickCaptureView: View {
     private func handleScenePhaseChange(_ phase: ScenePhase) {
         if phase == .active {
             reloadFlows()
-            // Returning from Settings may have changed microphone or folder access.
-            micPermissionGranted = Self.currentMicrophonePermissionGranted()
+            // Returning from Settings may have changed folder access.
             refreshVaultReachability()
             Task { await refreshPendingCaptureCount() }
         }
         // Permission prompts make the scene temporarily inactive. Keep explicit
         // one-shot requests alive until the app actually backgrounds.
         guard phase == .background else { return }
+        microphonePermissionTask?.cancel()
         locationRequestTask?.cancel()
         let backgroundTask = UIApplication.shared.beginBackgroundTask(
             withName: "Save Capture draft"
@@ -2680,6 +2821,7 @@ struct QuickCaptureView: View {
     }
 
     private func handleCaptureDisappear() {
+        microphonePermissionTask?.cancel()
         locationRequestTask?.cancel()
         initialComposerFocusIsPending = false
         sentToastPresentationID = nil
@@ -2796,6 +2938,9 @@ struct QuickCaptureView: View {
             || showsLinkPrompt
             || showsCaptureHistory
             || showsRoutePicker
+            || showsFirstNoteFolderPicker
+            || firstNoteDocument != nil
+            || showsMicrophoneSettings
             || showsDueDate
             || showsInternalLinks
             || showsPaywall
@@ -2842,6 +2987,11 @@ struct QuickCaptureView: View {
 
         await viewModel.load()
         guard !Task.isCancelled else { return }
+        if viewModel.historyRecords.contains(where: { $0.outcome == .delivered }) {
+            hasSavedFirstNote = true
+        }
+        setupChoseFolder = VoxVaultStore.stored() != nil
+        if !hasSavedFirstNote, !setupChoseFolder { initialComposerFocusIsPending = false }
         reloadFlows()
         handleRequestedInputChange(viewModel.requestedInput)
         if shouldAutoFocus {
@@ -3322,13 +3472,6 @@ struct QuickCaptureView: View {
 
     // MARK: - Inline recording
 
-    private static func currentMicrophonePermissionGranted() -> Bool {
-        if #available(iOS 17.0, *) {
-            return AVAudioApplication.shared.recordPermission == .granted
-        }
-        return AVAudioSession.sharedInstance().recordPermission == .granted
-    }
-
     private var enabledFlows: [CapturePreset] {
         let enabled = flows.filter(\.isEnabled)
         return enabled.isEmpty ? CapturePresetStore.defaultFlows : enabled
@@ -3472,12 +3615,6 @@ struct QuickCaptureView: View {
         watchRecordingPipeline.resume()
     }
 
-    private func requestMicrophonePermissionIfNeeded() async {
-        if isLocalizationScreenshot { return }
-        let granted = await AudioRecorder.requestMicrophonePermission()
-        micPermissionGranted = granted
-    }
-
     private func reloadPresetsIfDefaultsChanged() {
         let defaults = AppConstants.sharedDefaults
         // Ignore unrelated defaults (including draft autosaves). Compare before
@@ -3508,6 +3645,7 @@ struct QuickCaptureView: View {
     }
 
     private func startInlineRecording() {
+        guard microphonePermissionTask == nil else { return }
         guard viewModel.requireCaptureRouteAvailable(),
               selectedFlow.id == viewModel.draft.voxID,
               CapturePresetStore.loadFlows().contains(where: { $0.id == selectedFlow.id && $0.isEnabled }) else { return }
@@ -3515,8 +3653,28 @@ struct QuickCaptureView: View {
             presentPaywall(context: .recording)
             return
         }
-        guard micPermissionGranted else {
-            persistentRecorder.lastError = String(localized: "Enable microphone access in Settings to record audio.")
+        let permission = AVAudioApplication.shared.recordPermission
+        if permission == .undetermined {
+            let flowID = selectedFlow.id
+            let requestID = viewModel.draft.requestID
+            microphonePermissionTask = Task {
+                defer { microphonePermissionTask = nil }
+                let granted = await AudioRecorder.requestMicrophonePermission()
+                guard !Task.isCancelled, scenePhase != .background,
+                      selectedFlow.id == flowID, viewModel.draft.requestID == requestID else { return }
+                if granted {
+                    // Re-enter through all route and paid-access guards after
+                    // the system prompt; state may have changed while suspended.
+                    microphonePermissionTask = nil
+                    startInlineRecording()
+                } else {
+                    showsMicrophoneSettings = true
+                }
+            }
+            return
+        }
+        guard permission == .granted else {
+            showsMicrophoneSettings = true
             return
         }
         guard !persistentRecorder.ownsCaptureRoute else { return }

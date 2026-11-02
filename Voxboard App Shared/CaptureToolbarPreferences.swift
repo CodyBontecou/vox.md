@@ -3,6 +3,8 @@ import SwiftUI
 import VoxboardShared
 
 enum CapturePreferenceKeys {
+    /// Completed only after a delivered note; independent of purchase access.
+    static let firstNoteSaved = "capture.firstNote.saved.v1"
     static let confirmVoiceNoteBeforeAdding = "capture.voice.confirmBeforeAdding.v1"
     static let confirmPresetSend = "capture.voice.confirmPresetSend.v1"
     /// Persisted default recording result mode ("Add to Draft" vs

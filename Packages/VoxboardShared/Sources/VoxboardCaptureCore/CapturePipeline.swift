@@ -25,6 +25,9 @@ public enum CaptureDeliveryQuotaError: Error, Equatable, LocalizedError, Sendabl
     public var errorDescription: String? {
         switch self {
         case .limitReached(let limit):
+            if limit == 0 {
+                return "New Capture requires active access. Start an eligible seven-day trial, subscribe, buy Lifetime, or restore purchases."
+            }
             return "You've used all \(limit) free captures. Unlock Vox.md Unlimited to keep capturing."
         }
     }
@@ -252,12 +255,18 @@ public actor CapturePipeline {
             if vaultTemplate == nil {
                 entry = CaptureEntryTemplateRenderer.entry(entry, under: effectiveDestination.entryPrefix, for: request)
             }
+            let mappedKey = request.deliveryKind == .meteredVoiceTranscript
+                ? TranscriptPropertyMapping.normalizedKey(request.voxProfile?.transcriptPropertyName ?? "") : nil
+            let propertyOnly = mappedKey != nil && request.voxProfile?.includeTranscriptInBody == false
             let renderedPrefix: String
             let renderedSuffix: String
             if let vaultTemplate {
                 let rendered = vaultTemplateRenderer.render(vaultTemplate, for: request)
                     .trimmingCharacters(in: .newlines)
                 renderedPrefix = rendered.isEmpty ? "" : rendered + "\n\n"
+                renderedSuffix = ""
+            } else if propertyOnly {
+                renderedPrefix = ""
                 renderedSuffix = ""
             } else {
                 renderedPrefix = templateRenderer.render(effectiveDestination.entryPrefix, for: request)
@@ -272,7 +281,8 @@ public actor CapturePipeline {
                 placement: effectiveDestination.placement,
                 entryPrefix: renderedPrefix,
                 entrySuffix: renderedSuffix,
-                frontmatter: request.voxProfile?.metadataScope == .entry ? [:] : request.frontmatter,
+                frontmatter: request.voxProfile?.metadataScope == .entry ? [:] : request.frontmatter.filter { $0.key != mappedKey },
+                replacingFrontmatterKeys: Set(mappedKey.map { [$0] } ?? []),
                 locationMetadata: documentMetadata,
                 retryProtectionEnabled: effectiveDestination.retryProtectionEnabled,
                 destinationRootURL: rootURL,

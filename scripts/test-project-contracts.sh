@@ -32,6 +32,9 @@ import sys
 root = Path(sys.argv[1])
 project_path = Path(sys.argv[2])
 project = project_path.read_text()
+# OpenStep allows quoted keys and either dictionary key order.
+project = re.sub(r'"([A-Z][A-Z0-9_]*)"\s*=', r'\1 =', project)
+project = re.sub(r'= "([A-Za-z0-9_.]+)";', r'= \1;', project)
 errors: list[str] = []
 
 # Parse the project as an OpenStep property list rather than matching Xcode's
@@ -232,13 +235,16 @@ for required in [
 ]:
     if required not in readme_source:
         errors.append(f'README subscription policy is missing {required!r}')
+# The "Legacy quota provenance" section records the retired offer as history
+# for the M0 baseline; only the rest of the README must stop advertising it.
+readme_current_offer = readme_source.split('### Legacy quota provenance', 1)[0]
 for retired_claim in [
     '15 minutes of free transcription',
     '10 successful Capture deliveries',
     'No subscription, no renewal',
     'StoreKit 2 one-time purchase',
 ]:
-    if retired_claim in readme_source:
+    if retired_claim in readme_current_offer:
         errors.append(f'README still advertises the retired free-allowance offer: {retired_claim!r}')
 
 storekit_release_patch = (

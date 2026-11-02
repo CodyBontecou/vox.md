@@ -1,0 +1,74 @@
+<!--{
+  "slug": "save-links-photos-obsidian-iphone",
+  "title": "Save links, photos, and scans to Obsidian from iPhone",
+  "description": "Capture URLs, photos, files, and document scans into an Obsidian vault with Vox.md. Understand Markdown links, attachment paths, OCR, and file-provider access.",
+  "subtitle": "Keep the source material beside the thought. Send a link, an image, or a scan to the Markdown destination you choose.",
+  "eyebrow": "iPhone · Share Sheet · Media capture",
+  "requirements": "iOS 17.6+ · writable vault folder",
+  "published": "2026-10-26",
+  "modified": "2026-10-26",
+  "image": "/screenshots/00-capture-light.png"
+}-->
+<div class="answer-box" id="short-answer"><div class="label">The short answer</div>
+        <p>Connect a Vox.md Capture Preset to a writable vault folder, add a URL, photo, file or scan in Quick Capture, and send it. The preset chooses the note and attachment location. Review the delivered Markdown and confirm that its attachments open in Obsidian.</p>
+      </div>
+      <p>Saving a link and saving an article are different tasks. Vox.md accepts web URLs as Markdown links; do not assume that adding a URL downloads or extracts the entire page. Choose the capture method for the material you want to keep.</p>
+      <nav class="toc" aria-label="In this guide"><div class="toc-title">In this guide</div><ol>
+        <li><a href="#destination">Prepare the vault destination</a></li>
+        <li><a href="#links">Save a web link</a></li>
+        <li><a href="#photos">Add a photo, screenshot, or file</a></li>
+        <li><a href="#scans">Scan a document and review OCR</a></li>
+        <li><a href="#verify">Check attachments and synchronization</a></li>
+      </ol></nav>
+
+      <h2 id="destination">1. Prepare the vault destination</h2>
+      <p>In Settings → Capture Presets, create or choose an enabled preset and connect its destination through Files. Select the folder containing your vault’s Markdown files. If the folder is not exposed to another app, Vox.md cannot write into it just because it is visible inside Obsidian.</p>
+      <p>For the first example, choose New Note and Keep Original processing. A separate inbox folder makes mixed captures easy to find. You can later choose a Rolling Note or Existing Note when you want material added to the same file.</p>
+      <p>Set an attachment subfolder in the destination settings; the default is <code>attachments</code>. Check the resolved note path and attachment rules before sending. For a daily journal, follow the <a href="../append-to-obsidian-daily-note-iphone/">daily-note routing guide</a>.</p>
+      <figure class="guide-figure">
+        <img src="../../screenshots/optimized/00-capture-light-640.webp" alt="Vox.md composer with Markdown, photo, file, scan, sketch and voice controls" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>Add context in the composer, then choose the preset and destination for the complete capture.</figcaption>
+      </figure>
+
+      <h2 id="links">2. Save a web link</h2>
+      <p>Copy the URL you want to keep. In Quick Capture, use the Web Link control and review the link text and address. Add a short explanation of why you saved it, then Send.</p>
+      <p>A simple note might contain this illustrative Markdown:</p>
+      <pre class="guide-code"><code>Read before planning the trip:
+[Trail information](https://example.com/trail)</code></pre>
+      <p>The address above is an example, not a resource recommendation. Replace it with the actual page. A link gives you a route back to the source; it does not preserve the source’s contents if that site changes or disappears.</p>
+      <p>Vox.md’s Share Sheet also accepts supported content from other apps. What an app shares can be a URL, text, or a file. Review the received payload and selected preset rather than assuming that everything visible on the source screen was included.</p>
+
+      <h2 id="photos">3. Add a photo, screenshot, or file</h2>
+      <ol>
+        <li>Select the preset for your inbox or project note.</li>
+        <li>Use the photo or screenshot picker, camera, or Add Files control to choose the material.</li>
+        <li>Add a short title or explanation in the composer.</li>
+        <li>Send, then open the note in Obsidian and check the embedded image or file link.</li>
+      </ol>
+      <p>Images are embedded in the Markdown output. Other file types use links. For example, a note could reference a configured attachment path like this:</p>
+      <pre class="guide-code"><code>## Reference
+![[attachments/whiteboard.png]]
+[[attachments/brief.pdf]]</code></pre>
+      <p>These are illustrative filenames and paths; Vox.md’s actual output depends on the selected files and destination rules. Keep the referenced files with the vault. Moving only the Markdown file to another folder can break relative links.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md free</a></p>
+      <p>Try 10 successful Capture deliveries and 15 transcription minutes. Unlimited use is a one-time lifetime purchase.</p>
+
+      <h2 id="scans">4. Scan a document and review OCR</h2>
+      <p>Choose Scan Document in the Capture Bar and follow the scanner. Vox.md preserves page images, creates a PDF, and includes best-effort on-device text recognition. Review the recognized words before sending, especially names, dates, amounts, and handwriting.</p>
+      <p>For journal photos, the separate Extract Text flow supports manually captured or selected pages. OCR can miss structure or misread a word even when the image looks clear. Keep the source image or scan when you need to verify the text later.</p>
+      <p>Choose Keep Original if you do not want optional processing to rewrite the captured text. Typed and mixed-text processing is a separate preset opt-in. The <a href="../../docs/#capture-types">capture reference</a> describes supported inputs and the <a href="../../docs/#capture-limits">input limits</a>.</p>
+
+      <h2 id="verify">Check attachments and synchronization</h2>
+      <p>After delivery, open the note in Obsidian, follow each link, and confirm that the intended file is present. A note appearing on another device does not prove every attachment has finished syncing. Check the image or PDF on that device too.</p>
+      <p>A failed write can remain pending in Vox.md. Fix destination access and retry the existing capture before creating another copy. Files stored with a cloud provider can need connectivity for access or synchronization, even though the capture processing itself is local.</p>
+      <p>If you need full web-page extraction, compare the relevant tools directly. Obsidian documents its native sharing options in the <a href="https://obsidian.md/help/ios">official iOS guide</a>. You can use native sharing for one task and a Vox.md preset for another.</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Keep the context.<br>Put it beside the note.</h2>
+        <p>Try a small capture with one link or image, then check the complete file and attachment output.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">Download Vox.md free</a></p>
+      </section>
+      <nav class="toc" aria-label="Related guides"><div class="toc-title">Continue your setup</div><ul>
+        <li><a href="../obsidian-quick-capture-iphone/">Choose an iPhone capture method</a></li>
+        <li><a href="../obsidian-capture-templates/">Inbox, journal and task templates</a></li>
+        <li><a href="../../docs/#quick-capture">Capture controls and supported inputs</a></li>
+      </ul></nav>

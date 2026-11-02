@@ -1,10 +1,16 @@
 # Subscription transition — October 29, 2026
 
+## Current source policy
+
+The current candidate removes custom in-app analytics and clears retired local analytics state on upgrade. Preserve essential services, disabled myself.md claims, and held live prices. Privacy changes and release wording remain unpublished for owner review. This source merge does not authorize any deployment, upload, submission, release, or purge of historical server records.
+
+Deployment and metadata approvals recorded below belong to the earlier transition. They are historical evidence and are superseded by this candidate policy; do not reuse them to reactivate analytics collection. See the [current launch runbook](launch/hard-paywall/README.md).
+
 ## Current status
 
 **Verified October 30, 2026 UTC: all four subscriptions are APPROVED. iOS 2.14/build 58 is DEVELOPER_REJECTED (developer-withdrawn); Mac 2.14/build 58 remains WAITING_FOR_REVIEW. Both retain MANUAL release. Neither candidate is publicly released. Existing Lifetime/upgrade prices remain frozen.**
 
-Latest owner approvals: upload the drafted App Store descriptions/release notes, deploy analytics, prepare but do not publish website/support updates, and rely on existing Family Sharing behavior without a new second-account test. Keep this pricing transition out of the **in-app What's New slider**. App Store version notes are separate and were explicitly approved. Actual public app release and later lifetime repricing still require separate owner approval.
+Historical transition approvals (superseded for the current candidate): upload the drafted App Store descriptions/release notes, deploy analytics, prepare but do not publish website/support updates, and rely on existing Family Sharing behavior without a new second-account test. Keep this pricing transition out of the **in-app What's New slider**. App Store version notes are separate and were explicitly approved. Actual public app release and later lifetime repricing still require separate owner approval.
 
 ## Products and pricing
 
@@ -70,7 +76,7 @@ The Mac and subscription canonical readiness rechecks had zero errors. The URL c
 
 The iOS validator still has a two-app-info resolver bug (published + editable). Its editable age rating was retrieved explicitly. A separate iOS audit confirmed the attached VALID build 58, no non-exempt encryption, iPad support in the IPA and a populated required iPad screenshot set, localized fields and review information. Do not delete app infos to work around a CLI issue. Apple's final submit validation accepted both prepared submissions.
 
-## Analytics and unpublished launch materials
+## Historical analytics deployment and unpublished launch materials
 
 The approved production analytics update was deployed: Worker version **`892fd12f-eda2-4539-bae2-4bb3fa82a596`**, preserving existing configuration and D1 binding. Seven Worker tests passed. Production health passed; validation-only batches proved all seven legacy/new product IDs accepted and unknown IDs rejected. The batches intentionally fail before database insertion, so no synthetic purchase events polluted the real funnel. No database migration or new data collection fields were introduced.
 

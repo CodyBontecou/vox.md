@@ -273,6 +273,38 @@ class Tests(unittest.TestCase):
   def cadence(c): self.mutate_receipt(c,'materializationRunSet',lambda r:r['runs'][-1]['rss']['samples'][1].update(elapsedNanoseconds=10_000_001))
   self.mutate_campaign(cadence,'RSS sample cadence')
   self.mutate_campaign(lambda c:self.mutate_receipt(c,'materializationRunSet',lambda r:r['runs'][-1]['rss']['samples'][0].update(elapsedNanoseconds=1)),'filtered, unordered, or outside run')
+ def adopt_kernel_peak(self,c):
+  def convert(receipt):
+   run=receipt['runs'][-1]; rss=run['rss']; run['durationNanoseconds']=50_000_000
+   rss.update(method='macosMachTaskResidentSizeHighWater',kernelPeakBytes=130_000_000,peakDefinition='process lifetime resident-memory high-water mark; conservative for the measured session',samples=[{'elapsedNanoseconds':0,'residentBytes':rss['baselineBytes']},{'elapsedNanoseconds':run['durationNanoseconds'],'residentBytes':105_000_000}])
+   rss.pop('sampleIntervalNanoseconds')
+  self.mutate_receipt(c,'materializationRunSet',convert)
+ def test_kernel_peak_retains_transient_memory_without_polling_cadence(self):
+  c=self.build_m2(); self.adopt_kernel_peak(c)
+  self.refresh(c,json.loads((c/'aggregate.json').read_text())['scope'],{'level':'repositoryObservation'})
+  q=self.execute(campaign=c,qualification='repositoryObservation'); self.assertEqual(q.returncode,0,q.stderr)
+ def test_kernel_peak_underreporting_and_missing_observation_rejected(self):
+  def invalid(c):
+   self.adopt_kernel_peak(c)
+   self.mutate_receipt(c,'materializationRunSet',lambda r:r['runs'][-1]['rss'].update(kernelPeakBytes=99_000_000))
+  self.mutate_campaign(invalid,'kernel peak is below an observed resident size')
+  def wrong_peak(c):
+   self.adopt_kernel_peak(c)
+   self.mutate_receipt(c,'materializationRunSet',lambda r:r['runs'][-1]['rss'].update(peakBytes=105_000_000))
+  self.mutate_campaign(wrong_peak,'peak/additional')
+  def missing(c):
+   self.adopt_kernel_peak(c)
+   self.mutate_receipt(c,'materializationRunSet',lambda r:r['runs'][-1]['rss'].pop('kernelPeakBytes'))
+  self.mutate_campaign(missing,'oneOf matched 0')
+  def wrong_baseline(c):
+   self.adopt_kernel_peak(c)
+   self.mutate_receipt(c,'materializationRunSet',lambda r:r['runs'][-1]['rss']['samples'][0].update(residentBytes=99_000_000))
+  self.mutate_campaign(wrong_baseline,'exact baseline/final observations')
+  def ambiguous_method(c):
+   self.adopt_kernel_peak(c)
+   self.mutate_receipt(c,'materializationRunSet',lambda r:r['runs'][-1]['rss'].update(sampleIntervalNanoseconds=10_000_000))
+  self.mutate_campaign(ambiguous_method,'oneOf matched 0')
+
  def test_threshold_measurement_self_assertion_and_provenance_rejected(self):
   def threshold(c):
    p=self.evidence(c,'PERF-003'); e=json.loads(p.read_text()); rp=c/e['materializationRunSet']['id']; receipt=json.loads(rp.read_text())

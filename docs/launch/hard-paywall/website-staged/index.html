@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" class="js">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vox.md: Quick Capture for Obsidian and Local Notes</title>
+  <title>Quick capture for Obsidian on iPhone and Apple Watch | Vox.md</title>
   <meta name="description" content="Capture text, links, photos, files, scans, sketches, and private voice notes into Obsidian vaults or local Markdown files on iPhone.">
   <link rel="canonical" href="https://vox.isolated.tech/">
   <link rel="alternate" type="text/plain" href="llms.txt" title="Vox.md documentation for language models">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Vox.md">
-  <meta property="og:title" content="Vox.md: Fast Capture for Obsidian and Markdown">
+  <meta property="og:title" content="Quick capture for Obsidian on iPhone and Apple Watch | Vox.md">
   <meta property="og:description" content="Send each idea to the right vault, note, or heading without opening Obsidian. Voice transcription stays on your device.">
   <meta property="og:url" content="https://vox.isolated.tech/">
   <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Vox.md: Quick Capture for Obsidian and Local Notes">
+  <meta name="twitter:title" content="Quick capture for Obsidian on iPhone and Apple Watch | Vox.md">
   <meta name="twitter:description" content="Capture first, then let precise Markdown routes put everything in the right note.">
   <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
 
@@ -24,8 +25,6 @@
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="preload" as="image" href="screenshots/optimized/00-capture-light-640.webp" type="image/webp" media="(prefers-color-scheme: light)" fetchpriority="high">
-  <link rel="preload" as="image" href="screenshots/optimized/00-capture-dark-640.webp" type="image/webp" media="(prefers-color-scheme: dark)" fetchpriority="high">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -66,401 +65,264 @@
   }
   </script>
 
+  <link rel="preload" href="fonts/Geist-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="geist.css">
-  <link rel="stylesheet" href="reviews.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://isolated.tech/#organization",
+  "name": "Isolated Tech",
+  "url": "https://isolated.tech/",
+  "sameAs": [
+    "https://github.com/CodyBontecou"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer support",
+    "email": "codybontecou@gmail.com",
+    "url": "https://vox.isolated.tech/contact",
+    "availableLanguage": "English"
+  }
+}
+  </script>
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="openapi.json" title="Vox.md Public Information API">
 <link rel="alternate" hreflang="en" href="https://vox.isolated.tech/">
 <link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/">
 <link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/">
+<meta name="naver-site-verification" content="cae11a861102ae94853f1f7e773318e17525df3a">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
 <nav aria-label="Primary navigation">
   <div class="nav-inner">
     <a href="index.html" class="logo" aria-label="Vox.md home">
-      <img class="logo-mark" src="app-icon.png" alt="" width="32" height="32">
+      <span class="logo-mark" aria-hidden="true">md</span>
       <span>Vox.md</span>
     </a>
     <ul class="nav-links">
-      <li><a href="#how">How It Works</a></li>
-      <li><a href="#features">Capture</a></li>
-      <li><a href="#destinations">Presets</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#capture">Capture</a></li>
+      <li><a href="#presets">Routes</a></li>
       <li><a href="#privacy">Privacy</a></li>
       <li><a href="docs/">Docs</a></li>
-      <li><a href="blog/">Blog</a></li>
+      <li><a href="blog/">Guides</a></li>
+      <li><a href="compare/">Compare</a></li>
     </ul>
-    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener">Download Vox.md</a>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_home">Download Vox.md free</a>
   </div>
 </nav>
 
-<main>
-<section class="hero" aria-labelledby="hero-title">
-  <div class="hero-grid-bg"></div>
-  <div class="container">
-    <div class="hero-inner">
-      <div class="hero-content">
-        <div class="hero-label">Quick Capture for iPhone · Obsidian Ready · Local Markdown</div>
-
-        <h1 class="hero-title" id="hero-title">Capture Now. File It Exactly Where It Belongs.</h1>
-
-        <p class="hero-subtitle">
-          Type a thought, save a link, add a photo or file, scan a document, sketch, or dictate. Vox.md writes clean Markdown into the Obsidian vault or Files folder you choose.
-        </p>
-
-        <div class="hero-actions">
-          <div>
-            <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="btn-primary" target="_blank" rel="noopener">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-              </svg>
-              Download Vox.md
-            </a>
-            <span class="btn-note">Free download · iOS 17.6+</span>
-          </div>
-          <a href="#how" class="btn-secondary">Explore Capture</a>
-        </div>
-
-        <div class="trust-grid" aria-label="Capture and storage facts">
-          <div class="trust-card"><strong>Any Capture</strong><span>Text, links, photos, files, scans, sketches, and voice all start in one composer.</span></div>
-          <div class="trust-card"><strong>Precise Routes</strong><span>Send each item to a new note, a rolling note, or an existing document.</span></div>
-          <div class="trust-card"><strong>Obsidian Native</strong><span>Keep standard Markdown, wikilinks, and embedded attachments in your vault.</span></div>
-          <div class="trust-card"><strong>Local by Default</strong><span>Drafts and voice processing stay on the device. You choose the destination folder.</span></div>
-        </div>
+<main id="main">
+<section class="home-hero" aria-labelledby="hero-title">
+  <div class="wrap">
+    <div class="home-hero-copy">
+      <p class="eyebrow">Obsidian capture · iPhone, Mac &amp; Apple Watch</p>
+      <h1 class="display" id="hero-title">Capture ideas into Obsidian from iPhone, Mac, and Apple Watch.</h1>
+      <p class="lead lead-lg">Save text, voice, links, photos, scans, sketches, and files to the note or heading you choose. Vox.md writes Markdown to your folder, with voice transcription on your device.</p>
+      <div class="hero-actions">
+        <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="btn-primary btn-lg" target="_blank" rel="noopener" data-download-campaign="seo_home">Download Vox.md free</a>
+        <a href="blog/obsidian-quick-capture-iphone/" class="btn-secondary btn-lg">Choose a capture method</a>
       </div>
+      <p class="mono-note">Seven-day free trial for eligible subscriptions · iOS 17.6+ · no account</p>
+      <details class="desktop-download-qr">
+        <summary>Scan to download on your iPhone</summary>
+        <div class="download-qr-panel">
+          <a href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-kind="qr" aria-label="Open Vox.md on the App Store" data-download-campaign="seo_home_qr">
+            <img src="assets/download-qr.svg" alt="QR code to open Vox.md on the App Store" width="176" height="176" decoding="async">
+          </a>
+          <p>Scan with your iPhone camera to open Vox.md on the App Store.</p>
+        </div>
+      </details>
+    </div>
 
-      <div class="hero-visual" aria-label="Vox.md quick capture composer for local Markdown notes">
-        <div class="terminal-card" aria-hidden="true">
-          <div class="k">Capture Route</div>
-          <div class="v">Vault · Inbox.md</div>
-        </div>
-        <div class="phone-shell">
-          <picture>
-            <source srcset="screenshots/optimized/00-capture-dark-640.webp" media="(prefers-color-scheme: dark)" type="image/webp">
-            <source srcset="screenshots/optimized/00-capture-light-640.webp" type="image/webp">
-            <img src="screenshots/00-capture-light.png" alt="Vox.md Capture screen with Markdown tools and destination controls" width="1206" height="2622" fetchpriority="high" decoding="async">
-          </picture>
-        </div>
-        <div class="privacy-rail" aria-hidden="true">
-          <div class="rail-row"><span>Format</span><span>Markdown</span></div>
-          <div class="rail-row"><span>Destination</span><span>Obsidian</span></div>
-          <div class="rail-row"><span>Draft</span><span>Local</span></div>
-        </div>
+    <div class="home-hero-visual" role="img" aria-label="Vox.md capture preview: the Meeting Notes route selected, and the Markdown it will write">
+      <div class="hero-phone" aria-hidden="true">
+        <span class="hero-chip"><b class="hero-tile">M</b>Meeting Notes</span>
+        <span class="hero-dest">Meetings / 2026-11-01.md · ## Notes</span>
+        <span class="hero-note-title">Project sync</span>
+        <span class="hero-note-body">☐ Review final designs<br>☐ Loop in design before Friday</span>
+        <span class="hero-note-body hero-note-muted">Decision: ship routing first.</span>
+        <span class="hero-speak">Speak</span>
+      </div>
+      <div class="float-card" aria-hidden="true">
+        <span class="kicker">Will write</span>
+        <pre>### 10:42 · Project sync
+- [ ] Review final designs
+- [ ] Loop in design before Friday</pre>
       </div>
     </div>
   </div>
 </section>
 
-<section class="how-section" id="how">
-  <div class="container">
-    <div class="section-header reveal rd1">
-      <div class="section-label">01 / How It Works</div>
-      <h2 class="section-title">Get It Into Your Notes Before the Moment Passes</h2>
+<section class="strip" aria-label="How a capture travels">
+  <div class="wrap strip-grid">
+    <div class="strip-item"><span class="kicker">Any capture</span><strong>One composer</strong><span>Text, links, photos, files, scans, sketches, and voice all start in one composer.</span></div>
+    <div class="strip-item"><span class="kicker">Precise routes</span><strong>Exactly where it goes</strong><span>Send each item to a new note, a rolling note, or an existing document.</span></div>
+    <div class="strip-item"><span class="kicker">Obsidian native</span><strong>Plain Markdown</strong><span>Keep standard Markdown, wikilinks, and embedded attachments in your vault.</span></div>
+    <div class="strip-item"><span class="kicker">Local by default</span><strong>On your device</strong><span>Drafts and voice processing stay on the device. You choose the destination folder.</span></div>
+  </div>
+</section>
+
+<section class="section" id="how" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="section-label">01 / How it works</p>
+      <h2 class="section-title" id="how-title">Get it into your notes before the moment passes</h2>
       <p class="section-kicker">Opening a vault, finding a note, and choosing the right spot is too much work for a fleeting thought. Set the route once, then capture.</p>
     </div>
-    <div class="workflow-rail reveal rd2" aria-label="Capture workflow">
-      <div class="workflow-step">
-        <div class="workflow-step-label">Input</div>
-        <strong>Capture</strong>
-        <span>Text · Media · Voice</span>
-      </div>
-      <div class="workflow-connector" aria-hidden="true">→</div>
-      <div class="workflow-step">
-        <div class="workflow-step-label">Rule</div>
-        <strong>Route</strong>
-        <span>Vault · Note · Heading</span>
-      </div>
-      <div class="workflow-connector" aria-hidden="true">→</div>
-      <div class="workflow-step">
-        <div class="workflow-step-label">Output</div>
-        <strong>Markdown</strong>
-        <span>Your folder · Your file</span>
-      </div>
-    </div>
-    <div class="steps">
-      <div class="step">
-        <div class="step-number">01</div>
-        <div class="step-title">Connect a Vault or Folder</div>
-        <p class="step-desc">Choose an Obsidian vault or any writable folder in Files. Vox.md works with the Markdown files you already own.</p>
-        <div class="step-arrow" aria-hidden="true">→</div>
-      </div>
-      <div class="step">
-        <div class="step-number">02</div>
-        <div class="step-title">Capture What You Have</div>
-        <p class="step-desc">Write, paste a link, add media or a file, scan a document, sketch, or record a private voice note.</p>
-        <div class="step-arrow" aria-hidden="true">→</div>
-      </div>
-      <div class="step">
-        <div class="step-number">03</div>
-        <div class="step-title">Let the Route File It</div>
-        <p class="step-desc">Create a note, update a rolling note, or target an existing one. Place the capture at the top, bottom, or under a heading.</p>
-      </div>
-    </div>
+    <ol class="step-list">
+      <li class="step-card"><span class="step-num">1</span><h3>Connect a vault or folder</h3><p>Choose an Obsidian vault or any writable folder in Files. Vox.md works with the Markdown files you already own.</p></li>
+      <li class="step-card"><span class="step-num">2</span><h3>Capture what you have</h3><p>Write, paste a link, add media or a file, scan a document, sketch, or record a private voice note.</p></li>
+      <li class="step-card"><span class="step-num">3</span><h3>Let the route file it</h3><p>Create a note, update a rolling note, or target an existing one. Place the capture at the top, bottom, or under a heading.</p></li>
+    </ol>
   </div>
 </section>
 
-<section class="features-section" id="features">
-  <div class="container">
-    <div class="section-header reveal rd1">
-      <div class="section-label">02 / Capture</div>
-      <h2 class="section-title">A Capture Tool for Markdown People</h2>
+<section class="section" id="capture" aria-labelledby="capture-title">
+  <span class="anchor" id="features" aria-hidden="true"></span>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="section-label">02 / Capture</p>
+      <h2 class="section-title" id="capture-title">A capture tool for Markdown people</h2>
       <p class="section-kicker">Vox.md treats your notes as files. It writes readable Markdown and Obsidian-style links directly into folders you control.</p>
     </div>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-num">001</div>
-        <div class="feature-icon">Vaults</div>
-        <div class="feature-title">Obsidian Ready</div>
-        <p class="feature-desc">Choose an Obsidian vault through Files and write to it directly. You do not need a plugin or a Vox.md cloud account.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-num">002</div>
-        <div class="feature-icon">Placement</div>
-        <div class="feature-title">Precise Note Placement</div>
-        <p class="feature-desc">Insert at the top or bottom of a note, or place the capture beneath a heading that Vox.md can create when needed.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-num">003</div>
-        <div class="feature-icon">Inputs</div>
-        <div class="feature-title">More Than Text</div>
-        <p class="feature-desc">Capture links, photos, files, document scans with extracted text, editable sketches, and voice alongside typed notes.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-num">004</div>
-        <div class="feature-icon">Rolling Notes</div>
-        <div class="feature-title">Daily Notes and Beyond</div>
-        <p class="feature-desc">Route captures into daily, weekly, monthly, quarterly, or yearly notes with predictable filename templates.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-num">005</div>
-        <div class="feature-icon">Templates</div>
-        <div class="feature-title">Reusable Entry Formats</div>
-        <p class="feature-desc">Wrap each capture in reusable Markdown or YAML. Add date, time, source, and identifier tokens automatically.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-num">006</div>
-        <div class="feature-icon">Voice</div>
-        <div class="feature-title">Private Voice When You Want It</div>
-        <p class="feature-desc">Record from the composer or keyboard. Transcription runs on the device, and Vox.md does not upload the audio.</p>
-      </div>
+    <div class="cell-grid">
+      <article class="cell"><span class="kicker">001 · Vaults</span><h3>Obsidian ready</h3><p>Choose an Obsidian vault through Files and write to it directly. You do not need a plugin or a Vox.md cloud account.</p></article>
+      <article class="cell"><span class="kicker">002 · Placement</span><h3>Precise note placement</h3><p>Insert at the top or bottom of a note, or place the capture beneath a heading that Vox.md can create when needed.</p></article>
+      <article class="cell"><span class="kicker">003 · Inputs</span><h3>More than text</h3><p>Capture links, photos, files, document scans with extracted text, editable sketches, and voice alongside typed notes. <a href="blog/save-links-photos-obsidian-iphone/">Follow the media capture guide.</a></p></article>
+      <article class="cell"><span class="kicker">004 · Rolling notes</span><h3>Daily notes and beyond</h3><p>Route captures into daily, weekly, monthly, quarterly, or yearly notes with predictable filename templates.</p></article>
+      <article class="cell"><span class="kicker">005 · Templates</span><h3>Reusable entry formats</h3><p>Wrap each capture in reusable Markdown or YAML. Add date, time, source, and identifier tokens automatically.</p></article>
+      <article class="cell"><span class="kicker">006 · Voice</span><h3>Private voice when you want it</h3><p>Record from the composer or keyboard. Transcription runs on the device, and Vox.md does not upload the audio. <a href="blog/voice-notes-to-obsidian-iphone/">Follow the iPhone voice notes guide.</a></p></article>
     </div>
   </div>
 </section>
 
-<section class="screenshots-section" id="screenshots">
-  <div class="container">
-    <div class="section-header reveal rd1">
-      <div class="section-label">03 / See It in Action</div>
-      <h2 class="section-title">The Full Capture Workflow, From Draft to Destination</h2>
-      <p class="section-kicker">These are real app screens. Each panel shows where a capture starts, how it is routed, and which local tools are available when you need them.</p>
+<section class="section" id="presets" aria-labelledby="presets-title">
+  <span class="anchor" id="destinations" aria-hidden="true"></span>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="section-label">03 / Routes</p>
+      <h2 class="section-title" id="presets-title">One route for intent and destination</h2>
+      <p class="section-kicker">A Route remembers how to process and format a capture, plus the vault, note target, placement, attachments, retry behavior, and optional one-shot Current Location.</p>
     </div>
-
-    <div class="visual-grid" aria-label="Vox.md capability screenshots">
-      <article class="visual-panel visual-panel-capture reveal rd1">
-        <div class="visual-panel-copy">
-          <div class="visual-panel-index">01 / Composer</div>
-          <h3>One Draft for Anything You Need to Save</h3>
-          <p>Start with Markdown, then add the material that belongs with it.</p>
-        </div>
-        <ul class="capture-chip-list" aria-label="Supported capture types">
-          <li>Text</li><li>Links</li><li>Photos</li><li>Files</li><li>Scans</li><li>Sketches</li><li>Voice</li>
-        </ul>
-        <div class="visual-phone visual-phone-capture">
-          <picture>
-            <source srcset="screenshots/optimized/00-capture-dark-640.webp" media="(prefers-color-scheme: dark)" type="image/webp">
-            <source srcset="screenshots/optimized/00-capture-light-640.webp" type="image/webp">
-            <img src="screenshots/00-capture-light.png" alt="Vox.md composer with Markdown, photo, file, scan, sketch, and voice controls" width="1206" height="2622" loading="lazy" decoding="async">
-          </picture>
-        </div>
-      </article>
-
-      <article class="visual-panel visual-panel-route reveal rd2">
-        <div class="visual-panel-copy">
-          <div class="visual-panel-index">02 / Route</div>
-          <h3>Choose the Note and the Exact Insertion Point</h3>
-          <p>New, rolling, or existing note. Bottom, top, or beneath a heading.</p>
-        </div>
-        <div class="route-option-stack" aria-hidden="true">
-          <span>Rolling Note</span>
-          <span>Daily</span>
-          <span>Heading Level 2</span>
-        </div>
-        <div class="visual-phone visual-phone-route">
-          <picture>
-            <source srcset="screenshots/optimized/01-route-heading-dark-640.webp" media="(prefers-color-scheme: dark)" type="image/webp">
-            <source srcset="screenshots/optimized/01-route-heading-light-640.webp" type="image/webp">
-            <img src="screenshots/01-route-heading-light.png" alt="Vox.md destination editor showing rolling notes and heading placement" width="1206" height="2622" loading="lazy" decoding="async">
-          </picture>
-        </div>
-      </article>
-
-      <article class="visual-panel visual-panel-anywhere reveal rd3">
-        <div class="visual-panel-copy">
-          <div class="visual-panel-index">03 / Anywhere</div>
-          <h3>Capture Without Changing What You Are Doing</h3>
-          <p>Use the keyboard in any text field, or send content through widgets, Shortcuts, and the share sheet.</p>
-        </div>
-        <div class="entry-point-list" aria-label="System capture entry points">
-          <span>Keyboard</span><span>Widget</span><span>Shortcut</span><span>Share Sheet</span>
-        </div>
-        <div class="visual-phone visual-phone-keyboard">
-          <picture>
-            <source srcset="screenshots/optimized/06-keyboard-safari-360.webp" type="image/webp">
-            <img src="screenshots/06-keyboard-safari.png" alt="Vox.md keyboard capturing text in Safari" width="1206" height="2622" loading="lazy" decoding="async">
-          </picture>
-        </div>
-      </article>
-
-      <article class="visual-panel visual-panel-voice reveal rd4">
-        <div class="visual-panel-copy">
-          <div class="visual-panel-index">04 / Private Voice</div>
-          <h3>Speak When Typing Is Slower</h3>
-          <p>Record a voice capture, transcribe it on the device, and send the result through the same Markdown routes.</p>
-        </div>
-        <div class="local-status" aria-hidden="true"><span></span>On-device transcription</div>
-        <div class="visual-phone visual-phone-recording">
-          <picture>
-            <source srcset="screenshots/optimized/04-listening-360.webp" type="image/webp">
-            <img src="screenshots/04-listening.png" alt="Vox.md active local voice recording" width="1206" height="2622" loading="lazy" decoding="async">
-          </picture>
-        </div>
-        <div class="visual-phone visual-phone-models">
-          <picture>
-            <source srcset="screenshots/optimized/02-settings-360.webp" type="image/webp">
-            <img src="screenshots/02-settings.png" alt="Vox.md local Whisper and Parakeet model picker" width="1206" height="2622" loading="lazy" decoding="async">
-          </picture>
-        </div>
-      </article>
-
-      <article class="visual-panel visual-panel-local reveal rd5">
-        <div class="visual-panel-copy">
-          <div class="visual-panel-index">05 / Local Control</div>
-          <h3>Search, Review, and Manage Everything on Your Device</h3>
-          <p>Keep local history for recovery and review, choose speech models, and control privacy-sensitive settings yourself.</p>
-        </div>
-        <div class="local-screen-stack" aria-label="Local history and settings screens">
-          <div class="visual-phone"><picture><source srcset="screenshots/optimized/03-history-360.webp" type="image/webp"><img src="screenshots/03-history.png" alt="Vox.md local searchable history" width="1206" height="2622" loading="lazy" decoding="async"></picture></div>
-          <div class="visual-phone"><picture><source srcset="screenshots/optimized/05-settings-local-360.webp" type="image/webp"><img src="screenshots/05-settings-local.png" alt="Vox.md local privacy and processing settings" width="1206" height="2622" loading="lazy" decoding="async"></picture></div>
-        </div>
-      </article>
+    <div class="pipeline" role="img" aria-label="A spoken capture goes through the Daily Note Tasks route and becomes a Markdown task line">
+      <div class="pipe"><span class="kicker">Capture</span><strong>Remember to book the dentist</strong><span>Example spoken capture</span></div>
+      <div class="pipe pipe-selected"><span class="kicker">Route</span><strong>Daily Note · Tasks</strong><span>Bottom of heading level 2</span></div>
+      <div class="pipe pipe-output"><span class="kicker">MARKDOWN OUTPUT · Journal/2026-10-26.md</span><pre>## Tasks
+- Remember to book the dentist</pre></div>
     </div>
+    <p class="section-kicker">Example output depends on your preset and transcription. <a href="blog/append-to-obsidian-daily-note-iphone/">Set up daily notes and heading placement.</a></p>
+    <div class="target-grid">
+      <div class="target"><div class="target-head"><strong>Existing note</strong><code>Projects/Ideas.md</code></div><p>Keep adding to a document already in your vault.</p></div>
+      <div class="target"><div class="target-head"><strong>Rolling note</strong><code>Journal/&#123;period&#125;.md</code></div><p>Use daily, weekly, monthly, quarterly, or yearly notes.</p></div>
+      <div class="target"><div class="target-head"><strong>New note</strong><code>Inbox/&#123;timestamp&#125;.md</code></div><p>Create a clean file for every new capture.</p></div>
+      <div class="target"><div class="target-head"><strong>Exact placement</strong><code>Top · Bottom · Heading</code></div><p>Put the content in the right part of the note, under any heading level, created for you if it is missing.</p></div>
+      <div class="target"><div class="target-head"><strong>Entry template</strong><code>Markdown · YAML · Tokens</code></div><p>Keep repeated captures consistent without reformatting them.</p></div>
+      <div class="target"><div class="target-head"><strong>Current location</strong><code>&#123;location&#125;</code></div><p>Insert one origin-time map link without adding metadata, or separately opt into frontmatter and inline fields.</p></div>
+    </div>
+    <p class="section-link"><a href="docs/location/">Read the guide <span aria-hidden="true">→</span></a></p>
   </div>
 </section>
 
-<section class="destinations-section" id="destinations">
-  <div class="container">
-    <div class="section-header reveal rd1">
-      <div class="section-label">04 / Capture Presets</div>
-      <h2 class="section-title">One Preset for Intent and Destination</h2>
-      <p class="section-kicker">A Capture Preset remembers how to process and format a capture, plus the vault, note target, placement, attachments, retry behavior, and optional one-shot Current Location. Template links and metadata output are separate choices.</p>
+<section class="section" id="everywhere" aria-labelledby="everywhere-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="section-label">04 / Anywhere</p>
+      <h2 class="section-title" id="everywhere-title">Capture without changing what you are doing</h2>
     </div>
-    <div class="route-pipeline reveal rd2" aria-label="Example Markdown route">
-      <div class="route-pipeline-step">
-        <div class="route-pipeline-label">Capture</div>
-        <strong>Book dentist appointment</strong>
-        <span>Typed in the composer</span>
-      </div>
-      <div class="route-pipeline-arrow" aria-hidden="true">→</div>
-      <div class="route-pipeline-step selected">
-        <div class="route-pipeline-label">Capture Preset</div>
-        <strong>Daily Note · Tasks</strong>
-        <span>Bottom of heading level 2</span>
-      </div>
-      <div class="route-pipeline-arrow" aria-hidden="true">→</div>
-      <div class="route-pipeline-step output">
-        <div class="route-pipeline-label">Markdown Output</div>
-        <code>Journal/2026-07-17.md</code>
-        <span>## Tasks<br>- Book dentist appointment</span>
-      </div>
-    </div>
-    <div class="destinations-grid">
-      <div class="destination-card">
-        <div class="destination-name">Existing Note</div>
-        <div class="destination-meta">Projects/Ideas.md</div>
-        <div class="destination-label">Keep adding to a document already in your vault.</div>
-      </div>
-      <div class="destination-card featured">
-        <div class="destination-name">Rolling Note</div>
-        <div class="destination-meta">Journal/{period}.md</div>
-        <div class="destination-label">Use daily, weekly, monthly, quarterly, or yearly notes.</div>
-      </div>
-      <div class="destination-card">
-        <div class="destination-name">New Note</div>
-        <div class="destination-meta">Inbox/{timestamp}.md</div>
-        <div class="destination-label">Create a clean file for every new capture.</div>
-      </div>
-      <div class="destination-card">
-        <div class="destination-name">Exact Placement</div>
-        <div class="destination-meta">Top · Bottom · Heading</div>
-        <div class="destination-label">Put the content in the right part of the note.</div>
-      </div>
-      <div class="destination-card">
-        <div class="destination-name">Entry Template</div>
-        <div class="destination-meta">Markdown · YAML · Tokens</div>
-        <div class="destination-label">Keep repeated captures consistent without reformatting them.</div>
-      </div>
-      <div class="destination-card">
-        <div class="destination-name">Current Location</div>
-        <div class="destination-meta">{location} · Optional Metadata</div>
-        <div class="destination-label">Insert one origin-time map link without adding metadata, or separately opt into frontmatter and inline fields. <a href="docs/location/">Read the guide.</a></div>
-      </div>
-    </div>
+    <ul class="surface-pills" aria-label="Capture entry points">
+      <li>Keyboard</li><li>Widgets</li><li>Shortcuts</li><li>Share sheet</li><li>Apple Watch</li><li>Mac</li><li>Control Center</li>
+    </ul>
   </div>
 </section>
 
-<section class="specs-section" id="specs">
-  <div class="container">
-    <div class="section-header reveal rd1">
-      <div class="section-label">05 / Details</div>
-      <h2 class="section-title">Built Around Files You Can Keep</h2>
+<section class="section" id="specs" aria-labelledby="specs-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="section-label">05 / Details</p>
+      <h2 class="section-title" id="specs-title">Built around files you can keep</h2>
     </div>
-    <div class="specs-table reveal rd2">
-      <div class="spec-row"><div class="spec-key">Capture types</div><div class="spec-val">Text, links, photos, files, scans, sketches, and voice</div></div>
-      <div class="spec-row"><div class="spec-key">Note format</div><div class="spec-val">Standard Markdown</div></div>
-      <div class="spec-row"><div class="spec-key">Destinations</div><div class="spec-val">Obsidian vaults and writable Files folders</div></div>
-      <div class="spec-row"><div class="spec-key">Note targets</div><div class="spec-val">New, rolling, or existing notes</div></div>
-      <div class="spec-row"><div class="spec-key">Placement</div><div class="spec-val">Top, bottom, or beneath a heading</div></div>
-      <div class="spec-row"><div class="spec-key">Rolling periods</div><div class="spec-val">Daily, weekly, monthly, quarterly, and yearly</div></div>
-      <div class="spec-row"><div class="spec-key">Obsidian syntax</div><div class="spec-val">Wikilinks and embedded attachments</div></div>
-      <div class="spec-row"><div class="spec-key">Entry formats</div><div class="spec-val">Reusable Markdown and YAML templates</div></div>
-      <div class="spec-row"><div class="spec-key">System entry points</div><div class="spec-val">App, widgets, Shortcuts, share extension, keyboard, Apple Watch, and Mac</div></div>
-      <div class="spec-row"><div class="spec-key">Preset Current Location</div><div class="spec-val">Opt-in one-shot origin snapshot; {location} works without metadata; no background tracking</div></div>
-      <div class="spec-row"><div class="spec-key">Location metadata</div><div class="spec-val">Separate opt-in for frontmatter or inline fields; Exact default or City rounding</div></div>
-      <div class="spec-row"><div class="spec-key">Voice processing</div><div class="spec-val">On-device Apple Speech, Whisper, or Parakeet</div></div>
-      <div class="spec-row"><div class="spec-key">Audio uploads</div><div class="spec-val">None for transcription</div></div>
-      <div class="spec-row"><div class="spec-key">Account</div><div class="spec-val">Not required</div></div>
-      <div class="spec-row"><div class="spec-key">Platforms</div><div class="spec-val">iOS/iPadOS 17.6+, macOS 14+, watchOS 10+</div></div>
-    </div>
+    <dl class="spec-list">
+      <div><dt>Capture types</dt><dd>Text, links, photos, files, scans, sketches, and voice</dd></div>
+      <div><dt>Note format</dt><dd>Standard Markdown</dd></div>
+      <div><dt>Destinations</dt><dd>Obsidian vaults and writable Files folders</dd></div>
+      <div><dt>Note targets</dt><dd>New, rolling, or existing notes</dd></div>
+      <div><dt>Placement</dt><dd>Top, bottom, or beneath a heading</dd></div>
+      <div><dt>Rolling periods</dt><dd>Daily, weekly, monthly, quarterly, and yearly</dd></div>
+      <div><dt>Obsidian syntax</dt><dd>Wikilinks and embedded attachments</dd></div>
+      <div><dt>Entry formats</dt><dd>Reusable Markdown and YAML templates</dd></div>
+      <div><dt>Entry points</dt><dd>App, widgets, Shortcuts, share extension, keyboard, Apple Watch, Mac, and Control Center</dd></div>
+      <div><dt>Voice processing</dt><dd>On-device Apple Speech, Whisper, or Parakeet</dd></div>
+      <div><dt>Audio uploads</dt><dd>None for transcription</dd></div>
+      <div><dt>Account</dt><dd>Not required</dd></div>
+      <div><dt>Platforms</dt><dd>iOS/iPadOS 17.6+, macOS 14+, watchOS 10+</dd></div>
+      <div><dt>Location</dt><dd>Opt-in one-shot snapshot; &#123;location&#125; works without metadata; no background tracking</dd></div>
+      <div><dt>Location metadata</dt><dd>Separate opt-in for frontmatter or inline fields; Exact default or City rounding</dd></div>
+    </dl>
+    <p class="section-kicker"><a href="blog/apple-watch-obsidian-voice-notes/">Set up Apple Watch voice notes to Obsidian</a>. Record on Watch, then transcribe and deliver through your paired iPhone.</p>
   </div>
 </section>
 
-<section class="privacy-section" id="privacy">
-  <div class="container reveal rd1">
-    <div class="privacy-eyebrow">Local First · User Controlled</div>
-    <h2 class="privacy-title">Your Notes<br>Stay Yours</h2>
-    <p class="privacy-desc">
-      Capture drafts, attachments, note paths, templates, typed text, transcripts, and opted-in location are not collected by Vox.md servers or analytics. Files go only to the destination you choose, voice transcription runs on your device, and location is never tracked continuously or in the background.
-    </p>
-    <div class="privacy-flow" aria-label="Local data flow">
-      <div><span>01</span><strong>Capture Draft</strong><small>On your device</small></div>
-      <div class="privacy-flow-arrow" aria-hidden="true">→</div>
-      <div><span>02</span><strong>Local Processing</strong><small>No content upload</small></div>
-      <div class="privacy-flow-arrow" aria-hidden="true">→</div>
-      <div><span>03</span><strong>Chosen Folder</strong><small>Your file provider</small></div>
-    </div>
+<section class="band" id="privacy" aria-labelledby="privacy-title">
+  <div class="wrap">
+    <p class="eyebrow">Local first · User controlled</p>
+    <h2 id="privacy-title">Your notes stay yours.</h2>
+    <p>Capture drafts, attachments, note paths, templates, typed text, transcripts, and opted-in location are not collected by Vox.md servers or analytics. Files go only to the destination you choose, voice transcription runs on your device, and location is never tracked continuously or in the background.</p>
+    <ol class="band-flow" aria-label="Local data flow">
+      <li><span>01</span><strong>Capture draft</strong><small>On your device</small></li>
+      <li><span>02</span><strong>Local processing</strong><small>No content upload</small></li>
+      <li><span>03</span><strong>Chosen folder</strong><small>Your file provider</small></li>
+    </ol>
   </div>
 </section>
 
-<section class="faq-section" id="faq">
-  <div class="container">
-    <div class="faq-grid">
-      <div class="section-header reveal rd1">
-        <div class="section-label">06 / FAQ</div>
-        <h2 class="section-title">Questions About Vaults, Files, and Privacy</h2>
+<section class="reviews-section section" id="reviews" aria-labelledby="reviews-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="section-label">From the App Store</p>
+      <h2 class="section-title" id="reviews-title">Less friction. More captured.</h2>
+          </div>
+    <div class="review-grid">
+      <figure class="review-card review" data-review-id="00000192-dda8-2903-5a77-5cb500000000">
+        <p class="review-stars" role="img" aria-label="5 out of 5 stars"><span aria-hidden="true">★★★★★</span></p>
+        <h3>Underrated, Overlooked, Not forgotten</h3>
+        <blockquote><p>“Quickly becoming one of my favorite and most used apps in 2026!”</p></blockquote>
+        <figcaption><span class="review-author">PromisedOne</span> · App Store review · <time datetime="2026-08-08">Aug 8, 2026</time></figcaption>
+      </figure>
+      <figure class="review-card review" data-review-id="00000192-dda8-2903-5b29-4b3500000000">
+        <p class="review-stars" role="img" aria-label="5 out of 5 stars"><span aria-hidden="true">★★★★★</span></p>
+        <h3>Exactly What I Needed</h3>
+        <blockquote><p>“For a while now, I’ve been trying to find a way for me to verbally take notes quickly, add in attachments, transcribe locally, and sync to an Obsidian folder. This app does it perfectly.”</p></blockquote>
+        <figcaption><span class="review-author">SteamingCoax</span> · App Store review · <time datetime="2026-08-11">Aug 11, 2026</time></figcaption>
+      </figure>
+      <figure class="review-card review" data-review-id="00000192-dda8-2903-5bf7-fadc00000000">
+        <p class="review-stars" role="img" aria-label="5 out of 5 stars"><span aria-hidden="true">★★★★★</span></p>
+        <h3>The quiet capture powerhouse</h3>
+        <blockquote>
+          <p>“Vox.md has become one of my most-used tools. I picked it up for voice memos into Obsidian, and it quietly transformed my daily capture flow.</p>
+          <p>The Capture Presets system is brilliant — each preset owns its destination, template, and placement. My voice memos land directly in the right daily note, formatted exactly as I want, zero friction.”</p>
+        </blockquote>
+        <figcaption><span class="review-author">Eric Know</span> · App Store review · <time datetime="2026-08-14">Aug 14, 2026</time></figcaption>
+      </figure>
+    </div>
+    <p class="fine-print">Selected App Store reviews. Eric’s quote is an excerpt; wording is unchanged. <a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_home">Read App Store reviews <span aria-hidden="true">→</span></a></p>
+  </div>
+</section>
+
+<section class="section" id="faq" aria-labelledby="faq-title">
+  <div class="wrap">
+    <div class="faq-layout">
+      <div class="section-head">
+        <p class="section-label">06 / FAQ</p>
+        <h2 class="section-title" id="faq-title">Questions about vaults, files, and privacy</h2>
         <p class="section-kicker">Vox.md works directly with Markdown folders you choose. Obsidian is a natural fit, but it is not required.</p>
       </div>
-      <div class="faq-list reveal rd2">
-        <details open>
+      <div class="faq-list">
+        <details>
           <summary>Does Vox.md work with Obsidian?</summary>
-          <p>Yes. Create a Capture Preset and choose your Obsidian vault as its destination. Vox.md writes standard Markdown, wikilinks, and attachment embeds directly into the vault. It does not require an Obsidian plugin. <a href="blog/obsidian-daily-note-iphone/">Set up a daily-note capture workflow</a>.</p>
+          <p>Yes. Create a Route and choose your Obsidian vault as its destination. Vox.md writes standard Markdown, wikilinks, and attachment embeds directly into the vault. It does not require an Obsidian plugin. <a href="compare/vox-md-vs-obsidian-quick-capture/">Compare Vox.md with native Obsidian capture.</a> <a href="blog/obsidian-daily-note-iphone/">Set up a daily-note capture workflow.</a></p>
         </details>
         <details>
           <summary>What can I capture?</summary>
@@ -468,7 +330,7 @@
         </details>
         <details>
           <summary>Where can a capture go?</summary>
-          <p>Each Capture Preset owns a destination that can create a new note, update a rolling daily or periodic note, or write to an existing Markdown file. A single capture can temporarily choose another note without changing the preset.</p>
+          <p>Each Route owns a destination that can create a new note, update a rolling daily or periodic note, or write to an existing Markdown file. A single capture can temporarily choose another note without changing the route.</p>
         </details>
         <details>
           <summary>Can Vox.md insert beneath a heading?</summary>
@@ -476,15 +338,15 @@
         </details>
         <details>
           <summary>Can I use it without Obsidian?</summary>
-          <p>Yes. A Capture Preset can use any writable folder exposed through Files. The output is plain Markdown with ordinary attachments, so the notes are not locked to Vox.md.</p>
+          <p>Yes. A Route can use any writable folder exposed through Files. The output is plain Markdown with ordinary attachments, so the notes are not locked to Vox.md.</p>
         </details>
         <details>
           <summary>Does Vox.md upload my notes or audio?</summary>
-          <p>No capture content is sent to Vox.md servers. Drafts and voice processing stay on the device, while completed files are written to the folder you selected. If that folder belongs to a sync provider, the provider handles it under its own terms.</p>
+          <p>No capture content is sent to Vox.md servers. Drafts and voice processing stay on the device, while completed files are written to the folder you selected. If that folder belongs to a sync provider, the provider handles it under its own terms. <a href="blog/offline-transcription-iphone-markdown/">Check the offline setup requirements.</a></p>
         </details>
         <details>
           <summary>Can I use location in a template without adding metadata?</summary>
-          <p>Yes. Turn on Use Current Location for that Capture Preset, keep Write Location Metadata off, and add <code>{location}</code> to its entry formatting. Vox.md inserts a one-shot map link without adding frontmatter or inline location fields. <a href="docs/location/">Read the complete location guide.</a></p>
+          <p>Yes. Turn on Use Current Location for that Route, keep Write Location Metadata off, and add <code>{location}</code> to its entry formatting. Vox.md inserts a one-shot map link without adding frontmatter or inline location fields. <a href="docs/location/">Read the complete location guide.</a></p>
         </details>
         <details>
           <summary>Can I capture outside the app?</summary>
@@ -499,57 +361,18 @@
   </div>
 </section>
 
-<section class="reviews-section" id="reviews" aria-labelledby="reviews-title">
-  <div class="container">
-    <header class="reviews-heading">
-      <div class="section-label">From the App Store</div>
-      <h2 class="section-title" id="reviews-title">Less Friction.<br>More Captured.</h2>
-      <p class="section-kicker">Real notes. Real workflows. In their own words.</p>
-    </header>
-    <div class="reviews-grid">
-      <figure class="review-card" data-review-id="00000192-dda8-2903-5a77-5cb500000000">
-        <span class="review-quote-mark" aria-hidden="true">“</span>
-        <h3>Underrated, Overlooked, Not forgotten</h3>
-        <blockquote><p>“Quickly becoming one of my favorite and most used apps in 2026!”</p></blockquote>
-        <figcaption><span class="review-author">PromisedOne</span><span class="review-source">App Store review · <time datetime="2026-08-08">Aug 8, 2026</time></span></figcaption>
-        <p class="review-stars" role="img" aria-label="5 out of 5 stars"><span aria-hidden="true">★★★★★</span></p>
-      </figure>
-      <figure class="review-card" data-review-id="00000192-dda8-2903-5b29-4b3500000000">
-        <span class="review-quote-mark" aria-hidden="true">“</span>
-        <h3>Exactly What I Needed</h3>
-        <blockquote><p>“For a while now, I’ve been trying to find a way for me to verbally take notes quickly, add in attachments, transcribe locally, and sync to an Obsidian folder. This app does it perfectly.”</p></blockquote>
-        <figcaption><span class="review-author">SteamingCoax</span><span class="review-source">App Store review · <time datetime="2026-08-11">Aug 11, 2026</time></span></figcaption>
-        <p class="review-stars" role="img" aria-label="5 out of 5 stars"><span aria-hidden="true">★★★★★</span></p>
-      </figure>
-      <figure class="review-card review-card-featured" data-review-id="00000192-dda8-2903-5bf7-fadc00000000">
-        <span class="review-quote-mark" aria-hidden="true">“</span>
-        <h3>The quiet capture powerhouse</h3>
-        <blockquote>
-          <p>“Vox.md has become one of my most-used tools. I picked it up for voice memos into Obsidian, and it quietly transformed my daily capture flow.</p>
-          <p>The Capture Presets system is brilliant — each preset owns its destination, template, and placement. My voice memos land directly in the right daily note, formatted exactly as I want, zero friction.”</p>
-        </blockquote>
-        <figcaption><span class="review-author">Eric Know</span><span class="review-source">App Store review · <time datetime="2026-08-14">Aug 14, 2026</time></span></figcaption>
-        <p class="review-stars" role="img" aria-label="5 out of 5 stars"><span aria-hidden="true">★★★★★</span></p>
-      </figure>
+<section class="cta-section section" id="download" aria-labelledby="download-title">
+  <div class="wrap cta-wrap">
+    <div class="cta-card">
+      <div>
+        <h2 id="download-title">Put the next thought in the right note.</h2>
+        <p>Connect a vault or local folder once. The next idea can go straight to the note, heading, and format you chose.</p>
+      </div>
+      <div class="cta-actions">
+        <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="btn-accent btn-lg" target="_blank" rel="noopener" data-download-campaign="seo_home">Download Vox.md free</a>
+        <span class="mono-note">Seven-day trial for eligible subscriptions · Lifetime available · no account required</span>
+      </div>
     </div>
-    <div class="reviews-footer">
-      <p>Selected App Store reviews. Eric’s quote is an excerpt; wording is unchanged.</p>
-      <a href="https://apps.apple.com/us/app/voxboard/id6758967337?see-all=reviews" target="_blank" rel="noopener">Read App Store reviews <span aria-hidden="true">→</span></a>
-    </div>
-  </div>
-</section>
-
-<section class="cta-section" id="download">
-  <div class="container reveal rd1">
-    <h2 class="cta-title">Put the Next Thought<br>in the Right Note</h2>
-    <p class="cta-sub">Connect a vault or local folder once. The next idea can go straight to the note, heading, and format you chose.</p>
-    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="btn-primary" target="_blank" rel="noopener">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-      </svg>
-      Download Vox.md
-    </a>
-    <span class="btn-note">Free download · no account required</span>
   </div>
 </section>
 </main>
@@ -558,48 +381,24 @@
   <div class="container">
     <div class="footer-inner">
       <ul class="footer-links">
+        <li><a href="developers.html">Developers</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
         <li><a href="docs/">Docs</a></li>
-        <li><a href="blog/">Blog</a></li>
+        <li><a href="blog/">Guides</a></li>
+        <li><a href="compare/">Compare</a></li>
         <li><a href="privacy.html">Privacy</a></li>
         <li><a href="terms.html">Terms</a></li>
         <li><a href="llms.txt">llms.txt</a></li>
         <li><a href="mailto:codybontecou@gmail.com">Support</a></li>
-        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">App Store</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_home">App Store</a></li>
       </ul>
       <div class="footer-copy">© 2026 Vox.md · Built by <a href="https://codybontecou.com/">Cody Bontecou</a> at <a href="https://isolated.tech/">Isolated Tech</a> · No content uploads.</div>
+      <nav aria-label="Language"><a href="zh-hans/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></nav>
     </div>
   </div>
-<a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></footer>
+</footer>
 
-<script>
-  const revealEls = document.querySelectorAll('.reveal');
-  const animatedEls = document.querySelectorAll('.feature-card, .step, .destination-card');
-
-  if ('IntersectionObserver' in window) {
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-
-    revealEls.forEach(el => obs.observe(el));
-
-    const cardObs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.style.animationPlayState = 'running';
-          cardObs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.08 });
-
-    animatedEls.forEach((el, i) => {
-      el.style.animationDelay = (i % 6 * 0.08) + 's';
-      cardObs.observe(el);
-    });
-  } else {
-    revealEls.forEach(el => el.classList.add('visible'));
-    animatedEls.forEach(el => { el.style.animationPlayState = 'running'; });
-  }
-</script>
 <!-- Cloudflare Web Analytics -->
 <script>
 (function () {
@@ -629,22 +428,42 @@
     document.head.appendChild(script);
   }
 
-  fetch('https://img-host.costream.workers.dev/analytics-gate', {
-    cache: 'no-store',
-    mode: 'cors',
-    credentials: 'omit'
-  })
-    .then(function (response) {
-      return response.ok ? response.json() : { track: false };
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
     })
-    .then(function (gate) {
-      if (gate && gate.track) {
-        loadCloudflareBeacon();
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
       }
-    })
-    .catch(function () {
-      // Fail closed so excluded IPs are not accidentally tracked.
     });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
 })();
 </script>
 <!-- End Cloudflare Web Analytics -->

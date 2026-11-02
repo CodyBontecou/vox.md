@@ -1,0 +1,3 @@
+import VoxboardCaptureCore
+
+public typealias TranscriptPropertyMapping = VoxboardCaptureCore.TranscriptPropertyMapping

@@ -21,6 +21,120 @@ final class QuickCaptureRenderingTests: XCTestCase {
         XCTAssertLessThan(name.utf8.count, 4_096, "Canvas metadata expanded: \(name)")
     }
 
+    func testFirstNoteGuideRetainsReadingSpaceBesideTheEditor() async throws {
+        let steps: [FirstNoteGuide.Step] = [.chooseFolder, .writeNote(folder: "My Notes"), .saved(file: "Note.md")]
+        for size in [DynamicTypeSize.large, .accessibility5] {
+            for (index, step) in steps.enumerated() {
+                let guide = CaptureViewSection {
+                    QuickCaptureFirstNoteGuide(step: step, action: {}, dismiss: {})
+                        .background { RenderProbe(id: "first-note-viewport") }
+                }
+                let empty = CaptureViewSection { EmptyView() }
+                let content = QuickCaptureCanvas(showsDestination: true, showsWatchStatus: false,
+                    showsAttachments: false, header: empty, ocrProgress: empty, destination: guide, watchStatus: empty,
+                    composer: slot("composer", expands: true), attachments: empty, controls: slot("controls"),
+                    keyboardGuidance: empty, error: empty, fileExport: empty, sentToast: empty)
+                    .environment(\.dynamicTypeSize, size)
+                let host = UIHostingController(rootView: content)
+                let window = show(host, size: CGSize(width: 320, height: 568))
+                defer { window.isHidden = true }
+                try await settle(window)
+                let viewport = try XCTUnwrap(find("first-note-viewport", in: host.view))
+                let editor = try XCTUnwrap(find("composer", in: host.view))
+                XCTAssertGreaterThanOrEqual(viewport.bounds.height, 180,
+                    "The editor must not squeeze first-note guidance to zero height")
+                XCTAssertGreaterThan(editor.bounds.height, 80, "Leave usable space to type")
+                XCTAssertLessThanOrEqual(viewport.convert(viewport.bounds, to: window).maxY,
+                                         editor.convert(editor.bounds, to: window).minY + 1)
+                let image = UIGraphicsImageRenderer(bounds: host.view.bounds).image { _ in
+                    host.view.drawHierarchy(in: host.view.bounds, afterScreenUpdates: true)
+                }
+                let attachment = XCTAttachment(image: image)
+                attachment.name = "first-note-\(index)-\(size)-compact"
+                attachment.lifetime = .keepAlways
+                add(attachment)
+                if size.isAccessibilitySize {
+                    let scroll = try XCTUnwrap(findScrollView(in: host.view))
+                    scroll.setContentOffset(CGPoint(x: 0, y: max(0, scroll.contentSize.height - scroll.bounds.height)), animated: false)
+                    try await settle(window)
+                    let bottom = UIGraphicsImageRenderer(bounds: host.view.bounds).image { _ in
+                        host.view.drawHierarchy(in: host.view.bounds, afterScreenUpdates: true)
+                    }
+                    let bottomAttachment = XCTAttachment(image: bottom)
+                    bottomAttachment.name = "first-note-\(index)-largest-actions-compact"
+                    bottomAttachment.lifetime = .keepAlways
+                    add(bottomAttachment)
+                }
+            }
+        }
+    }
+
+    private func findScrollView(in view: UIView) -> UIScrollView? {
+        if let scroll = view as? UIScrollView { return scroll }
+        for child in view.subviews {
+            if let scroll = findScrollView(in: child) { return scroll }
+        }
+        return nil
+    }
+
+    func testWorkspaceResizesWithoutReplacingEditorOrLosingSelection() async throws {
+        let editor = LiveTranscriptRenderingState()
+        editor.text = "A draft survives folding and unfolding."
+        editor.selection = NSRange(location: 8, length: 7)
+        let host = UIHostingController(rootView: ResizingCaptureWorkspaceHarness(editor: editor))
+        let window = show(host, size: CGSize(width: 390, height: 680))
+        defer { window.isHidden = true; window.rootViewController = nil }
+        try await settle(window)
+        let original = try XCTUnwrap(find("quick_capture_text", in: host.view) as? UITextView)
+        let selection = original.selectedRange
+
+        for size in [CGSize(width: 960, height: 680), CGSize(width: 960, height: 340),
+                     CGSize(width: 390, height: 680)] {
+            window.frame.size = size
+            host.view.frame = window.bounds
+            try await settle(window)
+            let current = try XCTUnwrap(find("quick_capture_text", in: host.view) as? UITextView)
+            XCTAssertTrue(current === original, "Resizing must retain the real text editor")
+            XCTAssertEqual(current.text, editor.text)
+            XCTAssertEqual(current.selectedRange, selection)
+            XCTAssertEqual(find("workspace_preview_probe", in: host.view) != nil, size.width >= 760)
+            XCTAssertGreaterThan(current.bounds.width, 0)
+            retainScreenshot("Capture workspace \(size.width)x\(size.height)", in: host.view)
+        }
+    }
+
+    func testWorkspaceKeepsAccessibleTextInASingleColumn() {
+        XCTAssertFalse(AdaptiveCaptureWorkspace.supportsPreview(width: 759, dynamicTypeSize: .large))
+        XCTAssertTrue(AdaptiveCaptureWorkspace.supportsPreview(width: 760, dynamicTypeSize: .large))
+        XCTAssertFalse(AdaptiveCaptureWorkspace.supportsPreview(width: 960, dynamicTypeSize: .accessibility3))
+    }
+
+    func testDraftPreviewRemainsScrollableWithLongContentAndAccessibilityText() async throws {
+        let content = "# A long idea worth keeping\n\n"
+            + String(repeating: "- [ ] A longer task that wraps onto more than one line\n", count: 30)
+            + "> Keep the original Markdown."
+        let host = UIHostingController(rootView:
+            CaptureDraftPreview(
+                text: content,
+                presetName: "Journal",
+                destination: "Personal vault / Journal / A long idea worth keeping.md",
+                attachmentCount: 2,
+                configureDestination: {}
+            )
+            .environment(\.dynamicTypeSize, .accessibility3)
+            .environment(\.colorScheme, .dark)
+            .environment(\.layoutDirection, .rightToLeft)
+        )
+        let window = show(host, size: CGSize(width: 320, height: 430))
+        defer { window.isHidden = true; window.rootViewController = nil }
+        try await settle(window)
+        let scroll = try XCTUnwrap(scrollViews(in: host.view).first)
+        XCTAssertTrue(scroll.isScrollEnabled)
+        XCTAssertGreaterThan(scroll.contentSize.height, scroll.bounds.height)
+        XCTAssertLessThanOrEqual(scroll.contentSize.width, scroll.bounds.width + 1)
+        retainScreenshot("Draft preview — large text, RTL, dark", in: host.view)
+    }
+
     func testCanvasMountsOptionalSectionsAndRetainsComposerIdentity() async throws {
         let host = UIHostingController(rootView: canvas(optionalSections: false))
         let window = show(host)
@@ -813,6 +927,22 @@ private struct LiveTranscriptComposerHarness: View {
             isFocused: $editor.isFocused,
             controller: editor.controller
         )
+    }
+}
+
+private struct ResizingCaptureWorkspaceHarness: View {
+    let editor: LiveTranscriptRenderingState
+
+    var body: some View {
+        GeometryReader { geometry in
+            AdaptiveCaptureWorkspace(
+                showsPreview: AdaptiveCaptureWorkspace.supportsPreview(
+                    width: geometry.size.width, dynamicTypeSize: .large
+                ),
+                primary: CaptureViewSection { LiveTranscriptComposerHarness(editor: editor) },
+                preview: CaptureViewSection { RenderProbe(id: "workspace_preview_probe") }
+            )
+        }
     }
 }
 

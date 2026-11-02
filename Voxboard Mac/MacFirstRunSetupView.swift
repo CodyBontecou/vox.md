@@ -92,7 +92,7 @@ struct MacFirstRunSetupView: View {
             VStack(spacing: 5) {
                 Text("Welcome to Vox.md")
                     .font(.system(size: 28, weight: .semibold))
-                Text("Capture thoughts without breaking your flow.")
+                Text("Choose a folder, then type or record a thought and select Send to save it.")
                     .font(.title3)
                     .foregroundStyle(.secondary)
             }
@@ -305,7 +305,7 @@ struct MacFirstRunSetupView: View {
                     openSettingsPane(.general)
                 }
 
-                Button(isSaving ? "Finishing…" : "Finish Setup") {
+                Button(isSaving ? "Finishing…" : "Write a note") {
                     Task { await finish() }
                 }
                 .keyboardShortcut(.defaultAction)
@@ -352,25 +352,8 @@ struct MacFirstRunSetupView: View {
         return MacHotKeyStore.load(for: .selectedPreset)
     }
 
-    private var selectedModelIsReady: Bool {
-        guard let model = modelManager.selectedModel else { return false }
-        return modelManager.isModelDownloaded(model)
-            && modelManager.downloadState(for: model.id) == nil
-    }
-
-    private var selectedModelIsInstalling: Bool {
-        guard let model = modelManager.selectedModel,
-              let downloadState = modelManager.downloadState(for: model.id) else { return false }
-        return !downloadState.isCancelling
-    }
-
-    private var selectedModelAllowsSetupCompletion: Bool {
-        selectedModelIsReady || selectedModelIsInstalling
-    }
-
     private var canFinishSetup: Bool {
         !notesFolderBookmark.isEmpty
-            && selectedModelAllowsSetupCompletion
             && !isPreparing
             && !isSaving
     }
@@ -471,17 +454,8 @@ struct MacFirstRunSetupView: View {
             errorMessage = String(localized: "Choose a notes folder to finish setup.")
             return
         }
-        guard selectedModelAllowsSetupCompletion else {
-            errorMessage = String(localized: "Choose a ready transcription model or start a model download to finish setup.")
-            return
-        }
-
         isSaving = true
         errorMessage = nil
-
-        if microphoneAuthorization == .notDetermined {
-            await requestMicrophoneAccess()
-        }
 
         guard let preset = viewModel.selectedVoxProfile else {
             isSaving = false

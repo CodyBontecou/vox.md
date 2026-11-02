@@ -7,6 +7,7 @@ import VoxboardShared
 struct VoxboardApp: App {
     #if DEBUG
     private static let runtimeQueueValidationArgument = "--runtime-queue-validation"
+    private static let storeKitTestHostArgument = "--storekit-test-host"
     #endif
 
     @UIApplicationDelegateAdaptor(VoxboardAppDelegate.self) private var appDelegate
@@ -167,11 +168,20 @@ struct VoxboardApp: App {
         // trial or subscription ends, the app opens read-only instead: the
         // Library stays readable, Speak is locked, "See plans" opens the
         // paywall (EmptyStates C).
-        if !usageTracker.hasUnlocked && !usageTracker.hasAccessEnded {
+        if showsPurchaseGate {
             PaywallView(context: .onboarding, isAccessGate: true, historyViewModel: quickCaptureViewModel, includesOnboarding: true)
         } else {
             unlockedRootContent
         }
+    }
+
+    private var showsPurchaseGate: Bool {
+        #if DEBUG
+        // Screenshot launches render the workspace without granting or persisting
+        // purchase access. Release builds always use the real entitlement gate.
+        if RootDestination.localizationScreenshotStory != nil { return false }
+        #endif
+        return !usageTracker.hasUnlocked && !usageTracker.hasAccessEnded
     }
 
     private var unlockedRootContent: some View {
@@ -189,101 +199,22 @@ struct VoxboardApp: App {
 
     var body: some Scene {
         WindowGroup {
-            rootContent
-            .tint(Geist.tint)
-            .environment(modelManager)
-            .environment(transcriptStore)
-            .environment(usageTracker)
-            .environment(storeManager)
-            .environment(watchRecordingPipeline)
-            .environment(
-                \.defersCaptureInputFocusForReleaseNotes,
-                defersCaptureInputFocusForReleaseNotes
-            )
-            .onAppear {
-                #if DEBUG
-                AdaptiveLayout.requestDebugLandscapeIfNeeded()
-                #endif
-                updateIdleTimer()
-                CaptureToolbarPreferences.observeSharedPinChanges()
-                WatchRecordingController.shared.configure(
-                    recorder: persistentRecorder,
-                    usageTracker: usageTracker,
-                    watchPipeline: watchRecordingPipeline
-                )
-                watchRecordingPipeline.resume()
-                persistentRecorder.resumeRecordingQueue()
-                consumePendingWidgetRecordIfNeeded()
-                consumePendingQuickCaptureOpenIfNeeded()
-
-                transcriptionServer.start()
-                storeManager.start()
-                Task {
-                    await storeManager.syncCurrentEntitlements()
-                    usageTracker.reload()
-                    await quickCaptureViewModel.processPendingInbox()
-                }
-                ReviewPromptManager.shared.recordAppUsageDay()
-                ReviewPromptManager.shared.requestPendingPromptIfPossible()
-
-                // Auto-start listening if user previously enabled it
-                if AppConstants.sharedDefaults?.bool(forKey: AppConstants.autoListenEnabledKey) == true {
-                    persistentRecorder.startListening()
-                }
+            #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains(Self.storeKitTestHostArgument) {
+                // Let SKTestSession initialize before any StoreKit 2 calls.
+                // Tests render the real paywall in their own host windows.
+                Color.clear
+            } else {
+                applicationContent
             }
-            .onReceive(NotificationCenter.default.publisher(
-                for: PendingQuickRecordingRequest.didPersistNotification
-            ).receive(on: RunLoop.main)) { _ in
-                consumePendingWidgetRecordIfNeeded()
-            }
-            .task {
-                while !Task.isCancelled {
-                    do { try await Task.sleep(for: .seconds(30)) } catch { return }
-                    await storeManager.syncCurrentEntitlements()
-                }
-            }
-            .onOpenURL { url in
-                handleURL(url)
-            }
-            .onContinueUserActivity(WatchSetupHandoffRouter.activityType) { _ in
-                // Watch "Open on iPhone": land on Settings › Apple Watch.
-                KeyboardDebugLog.shared.log("[App] Watch setup Handoff — opening Watch settings")
-                WatchSetupHandoffRouter.shared.isPending = true
-                rootDestination = .settings
-            }
-            .onChange(of: usageTracker.hasUnlocked) { _, hasUnlocked in
-                guard hasUnlocked else { return }
-                watchRecordingPipeline.resume()
-                persistentRecorder.resumeRecordingQueue()
-                Task { await quickCaptureViewModel.processPendingInbox() }
-            }
-            .onChange(of: modelManager.hasActiveDownloads) { _, _ in
-                updateIdleTimer()
-            }
-            .task(id: "\(modelManager.selectedModelId)|\(modelManager.selectedLanguage)") {
-                let service = AppTranscriptionServices.shared
-                let fallbackID = modelManager.preferredFallbackModelID
-                if modelManager.isAutomaticSelection {
-                    AppConstants.sharedDefaults?.set(false, forKey: AppConstants.automaticBackendReadyKey)
-                }
-                do {
-                    try await service.prepare(
-                        modelID: modelManager.selectedModelId,
-                        fallbackModelID: fallbackID,
-                        language: modelManager.selectedLanguage
-                    )
-                    AppConstants.sharedDefaults?.set(true, forKey: AppConstants.automaticBackendReadyKey)
-                } catch {
-                    let ready = await service.canTranscribe(
-                        modelID: modelManager.selectedModelId,
-                        fallbackModelID: fallbackID,
-                        language: modelManager.selectedLanguage
-                    )
-                    AppConstants.sharedDefaults?.set(ready, forKey: AppConstants.automaticBackendReadyKey)
-                }
-            }
+            #else
+            applicationContent
+            #endif
         }
         .onChange(of: scenePhase) { _, phase in
+            #if DEBUG
+            guard !ProcessInfo.processInfo.arguments.contains(Self.storeKitTestHostArgument) else { return }
+            #endif
             updateIdleTimer(for: phase)
             if phase == .active {
                 transcriptionServer.checkForPendingRequest()
@@ -318,6 +249,102 @@ struct VoxboardApp: App {
                 // while the app is backgrounded instead of waiting for the
                 // next foreground (#11).
                 CaptureInboxBackgroundDrain.schedule()
+            }
+        }
+    }
+
+    private var applicationContent: some View {
+        rootContent
+        .tint(Geist.tint)
+        .environment(modelManager)
+        .environment(transcriptStore)
+        .environment(usageTracker)
+        .environment(storeManager)
+        .environment(watchRecordingPipeline)
+        .environment(
+            \.defersCaptureInputFocusForReleaseNotes,
+            defersCaptureInputFocusForReleaseNotes
+        )
+        .onAppear {
+            #if DEBUG
+            AdaptiveLayout.requestDebugLandscapeIfNeeded()
+            #endif
+            updateIdleTimer()
+            CaptureToolbarPreferences.observeSharedPinChanges()
+            WatchRecordingController.shared.configure(
+                recorder: persistentRecorder,
+                usageTracker: usageTracker,
+                watchPipeline: watchRecordingPipeline
+            )
+            watchRecordingPipeline.resume()
+            persistentRecorder.resumeRecordingQueue()
+            consumePendingWidgetRecordIfNeeded()
+            consumePendingQuickCaptureOpenIfNeeded()
+
+            transcriptionServer.start()
+            storeManager.start()
+            Task {
+                await storeManager.syncCurrentEntitlements()
+                usageTracker.reload()
+                await quickCaptureViewModel.processPendingInbox()
+            }
+            ReviewPromptManager.shared.recordAppUsageDay()
+            ReviewPromptManager.shared.requestPendingPromptIfPossible()
+
+            // Auto-start listening if user previously enabled it
+            if AppConstants.sharedDefaults?.bool(forKey: AppConstants.autoListenEnabledKey) == true {
+                persistentRecorder.startListening()
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(
+            for: PendingQuickRecordingRequest.didPersistNotification
+        ).receive(on: RunLoop.main)) { _ in
+            consumePendingWidgetRecordIfNeeded()
+        }
+        .task {
+            while !Task.isCancelled {
+                do { try await Task.sleep(for: .seconds(30)) } catch { return }
+                await storeManager.syncCurrentEntitlements()
+            }
+        }
+        .onOpenURL { url in
+            handleURL(url)
+        }
+        .onContinueUserActivity(WatchSetupHandoffRouter.activityType) { _ in
+            // Watch "Open on iPhone": land on Settings › Apple Watch.
+            KeyboardDebugLog.shared.log("[App] Watch setup Handoff — opening Watch settings")
+            WatchSetupHandoffRouter.shared.isPending = true
+            rootDestination = .settings
+        }
+        .onChange(of: usageTracker.hasUnlocked) { _, hasUnlocked in
+            guard hasUnlocked else { return }
+            watchRecordingPipeline.resume()
+            persistentRecorder.resumeRecordingQueue()
+            Task { await quickCaptureViewModel.processPendingInbox() }
+        }
+        .onChange(of: modelManager.hasActiveDownloads) { _, _ in
+            updateIdleTimer()
+        }
+        .task(id: "\(modelManager.selectedModelId)|\(modelManager.selectedLanguage)") {
+            let service = AppTranscriptionServices.shared
+            let fallbackID = modelManager.preferredFallbackModelID
+            if modelManager.isAutomaticSelection {
+                AppConstants.sharedDefaults?.set(false, forKey: AppConstants.automaticBackendReadyKey)
+            }
+            do {
+                try await service.prepare(
+                    modelID: modelManager.selectedModelId,
+                    fallbackModelID: fallbackID,
+                    language: modelManager.selectedLanguage
+                )
+                AppConstants.sharedDefaults?.set(true, forKey: AppConstants.automaticBackendReadyKey)
+            } catch {
+                let ready = await service.canTranscribe(
+                    modelID: modelManager.selectedModelId,
+                    fallbackModelID: fallbackID,
+                    language: modelManager.selectedLanguage
+                )
+                AppConstants.sharedDefaults?.set(ready, forKey: AppConstants.automaticBackendReadyKey)
             }
         }
     }

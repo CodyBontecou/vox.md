@@ -1354,6 +1354,29 @@ struct CapturePresetEditorView: View {
 
     private var frontmatterSection: some View {
         Section(header: PresetListSectionHeader(title: "Metadata")) {
+            TextField("Transcript Property", text: $flow.transcriptPropertyName, prompt: Text("note"))
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .accessibilityIdentifier("preset_transcript_property")
+            if !flow.transcriptPropertyName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                if TranscriptPropertyMapping.normalizedKey(flow.transcriptPropertyName) != nil {
+                    Toggle("Also Include Transcript in Body", isOn: $flow.includeTranscriptInBody)
+                        .tint(Geist.accent)
+                        .accessibilityIdentifier("preset_transcript_include_body")
+                    Text("Voice transcripts fill this note property. Later captures to the same note replace its value.")
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.muted)
+                } else {
+                    Text("Use letters, numbers, underscores, or hyphens for the property name.")
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.error)
+                }
+            } else {
+                Text("Leave empty to keep voice transcripts in the note body.")
+                    .font(Geist.caption())
+                    .foregroundStyle(Geist.muted)
+            }
+
             Picker("Scope", selection: $flow.metadataScope) {
                 ForEach(CapturePresetMetadataScope.allCases) { scope in
                     Text(scope.displayName).tag(scope)

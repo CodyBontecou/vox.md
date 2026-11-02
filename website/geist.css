@@ -1,11 +1,12 @@
 /* Vox.md "Signal" site styles: the single shared stylesheet for every page.
    Tokens, base, shared chrome (nav/footer/buttons), and page components. */
 
-@font-face { font-family: "Geist Sans"; src: url("fonts/Geist-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
-@font-face { font-family: "Geist Sans"; src: url("fonts/Geist-Medium.ttf") format("truetype"); font-weight: 500; font-style: normal; font-display: swap; }
-@font-face { font-family: "Geist Sans"; src: url("fonts/Geist-SemiBold.ttf") format("truetype"); font-weight: 600 700; font-style: normal; font-display: swap; }
-@font-face { font-family: "Geist Mono"; src: url("fonts/GeistMono-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
-@font-face { font-family: "Geist Mono"; src: url("fonts/GeistMono-Medium.ttf") format("truetype"); font-weight: 500 600; font-style: normal; font-display: swap; }
+/* Variable fonts share all used weights in one download per family; the latin
+   subset is preloaded by each page and the full file covers other scripts. */
+@font-face { font-family: "Geist Sans"; src: url("fonts/Geist-Variable.woff2") format("woff2"); font-weight: 400 700; font-style: normal; font-display: optional; unicode-range: U+0100-1FFF, U+2070-218F, U+2200-2211, U+2213-2604, U+2606-10FFFF; }
+@font-face { font-family: "Geist Sans"; src: url("fonts/Geist-Variable-latin.woff2") format("woff2"); font-weight: 400 700; font-style: normal; font-display: optional; unicode-range: U+0000-00FF, U+2000-206F, U+2190-21FF, U+2212, U+2605; }
+@font-face { font-family: "Geist Mono"; src: url("fonts/GeistMono-Variable.woff2") format("woff2"); font-weight: 400 700; font-style: normal; font-display: optional; unicode-range: U+0100-1FFF, U+2070-218F, U+2200-2211, U+2213-2604, U+2606-10FFFF; }
+@font-face { font-family: "Geist Mono"; src: url("fonts/GeistMono-Variable-latin.woff2") format("woff2"); font-weight: 400 700; font-style: normal; font-display: optional; unicode-range: U+0000-00FF, U+2000-206F, U+2190-21FF, U+2212, U+2605; }
 
 /* ------------------------------------------------------------------ tokens */
 :root {
@@ -980,3 +981,104 @@ span.logo-mark {
   .docs-header-links a { padding: 0 6px; font-size: 14px; }
 }
 .section > .anchor { margin: 0; }
+
+/* ====================================================== GUIDES & COMPARE
+   Generated guides (scripts/website/templates/guide.html), the compare pages,
+   and About / Contact / Developers / 404 keep their published markup. These
+   rules render that markup with the Signal tokens so every page matches. */
+
+/* Logo mark as an image (generated guides use app-icon.webp). */
+img.logo-mark { object-fit: cover; }
+
+/* Simple page header (About, Contact, Developers, 404). */
+.page-hero { padding: 72px 0 8px; }
+.page-hero > .container { display: flex; flex-direction: column; gap: 16px; }
+.page-hero + .container > .legal-content { padding: 40px 0 96px; }
+@media (max-width: 720px) {
+  .page-hero { padding-top: 48px; }
+  .page-hero + .container > .legal-content { padding: 32px 0 64px; }
+}
+
+/* Guide / compare hero with a side card. */
+.hero { position: relative; padding: 72px 0 48px; border-bottom: 1px solid var(--line); }
+.hero-grid-bg { display: none; }
+.hero-inner { display: flex; flex-wrap: wrap; gap: 32px 56px; align-items: flex-end; }
+.hero-inner > div:first-child { flex: 999 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+.hero-inner > aside { flex: 1 1 280px; max-width: 380px; }
+.hero .hero-title { font-size: clamp(34px, 5vw, 60px); line-height: 1.05; letter-spacing: -0.03em; }
+.voice-guide .hero-title { max-width: 760px; }
+.hero-card, .meta-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+.hero-card-label, .meta-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-text); }
+.hero-card p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink-2); }
+.meta-card dl { margin: 0; display: flex; flex-direction: column; }
+.meta-card dl > div { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid var(--line-soft); }
+.meta-card dl > div:first-child { border-top: 0; padding-top: 0; }
+.meta-card dl > div:last-child { padding-bottom: 0; }
+.meta-card dt { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.meta-card dd { margin: 0; font-size: 14px; font-weight: 500; text-align: right; overflow-wrap: anywhere; }
+@media (max-width: 720px) {
+  .hero { padding: 48px 0 32px; }
+  .hero-inner > aside { max-width: none; }
+}
+
+/* Article column for generated guides. */
+.voice-guide [id] { scroll-margin-top: 24px; }
+.article-container { width: 100%; max-width: calc(760px + 2 * var(--gutter)); margin: 0 auto; padding: 48px var(--gutter) 96px; }
+.article-container.article-body > h2 { margin-top: 28px; }
+.article-container.article-body > p a:not([class]), .article-container.article-body li a:not([class]) { overflow-wrap: anywhere; }
+.toc { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 8px; }
+.toc .toc-title { padding: 0; }
+.toc ol, .toc ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 15px; line-height: 1.5; color: var(--muted); }
+.toc a { text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+.guide-code {
+  margin: 0; background: var(--code-bg); color: var(--code-ink); border: 1px solid var(--code-line); border-radius: 16px;
+  padding: 18px 20px; font-family: var(--font-mono); font-size: 14px; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.guide-code code { background: transparent; color: inherit; padding: 0; font-size: inherit; }
+.guide-figure img { display: block; width: min(100%, 300px); height: auto; margin: 0 auto; border: 1px solid var(--line); border-radius: 28px; }
+.guide-figure figcaption { text-align: center; }
+.guide-comparison { max-width: 100%; overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 16px; }
+.guide-comparison:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.guide-comparison table.comparison { min-width: 640px; table-layout: fixed; }
+.guide-comparison caption { padding: 14px 16px 4px; text-align: left; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.guide-comparison th[scope="row"] { text-align: left; padding: 12px 16px; border-top: 1px solid var(--line-soft); vertical-align: top; font-size: 14.5px; font-weight: 600; color: var(--ink); }
+.guide-table-hint { font-family: var(--font-mono); font-size: 12px !important; line-height: 1.5 !important; color: var(--muted); }
+@media (min-width: 768px) { .guide-table-hint { display: none; } }
+.cta { background: var(--band-bg); color: var(--band-ink); border-radius: var(--radius-xl); padding: 32px; margin-top: 24px; display: flex; flex-direction: column; gap: 16px; }
+.cta h2 { margin: 0; color: var(--band-ink); font-size: clamp(26px, 3.4vw, 36px); line-height: 1.1; font-weight: 650; letter-spacing: -0.025em; }
+.cta p { margin: 0; color: var(--band-body); font-size: 16.5px; line-height: 1.6; }
+.cta a:not([class]) { color: #9DA4FF; }
+.cta .btn-primary { background: #FFFFFF; color: #121212; }
+.cta .btn-primary:hover { background: #E9E9E4; color: #121212; }
+@media (max-width: 720px) { .cta { padding: 24px; } }
+
+/* Compare index cards. */
+.blog-section > .container { display: flex; flex-direction: column; gap: 32px; padding-top: 48px; padding-bottom: 96px; }
+.post-card > div:first-child { display: flex; flex-direction: column; gap: 12px; }
+.post-status { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-text); }
+.post-card .post-meta { display: flex; flex-wrap: wrap; gap: 4px 16px; color: var(--muted); }
+.link-row { margin-top: auto; display: flex; flex-wrap: wrap; gap: 12px; }
+.text-link { position: relative; z-index: 1; font-size: 15px; font-weight: 600; text-decoration: none; }
+.text-link:hover { text-decoration: underline; }
+
+/* Desktop visitors can hand the download off to their iPhone. */
+.desktop-download-qr { position: relative; width: fit-content; }
+.desktop-download-qr summary {
+  min-height: 32px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; list-style: none;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; color: var(--ink-2);
+  text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--line-strong);
+}
+.desktop-download-qr summary::-webkit-details-marker { display: none; }
+.desktop-download-qr summary:hover { color: var(--ink); }
+.download-qr-panel {
+  position: absolute; top: calc(100% + 10px); left: 0; z-index: 20; width: 240px; padding: 20px;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.download-qr-panel img { display: block; width: 176px; height: 176px; margin: 0 auto; padding: 8px; background: #FFFFFF; border-radius: 10px; }
+.download-qr-panel p { margin: 12px 0 0; font-size: 13px; line-height: 1.5; color: var(--muted); }
+@media (max-width: 767px) { .desktop-download-qr { display: none; } }
+
+/* Language switch in the home footer. */
+.footer-inner > nav[aria-label="Language"] { flex-basis: 100%; font-size: 14px; }
+.footer-inner > nav[aria-label="Language"] a { color: var(--ink-2); }

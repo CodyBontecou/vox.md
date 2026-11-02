@@ -1,0 +1,266 @@
+{
+  "lighthouseVersion": "13.5.0",
+  "base": "https://vox.isolated.tech",
+  "auditedAt": "2026-10-26T12:53:19.252Z",
+  "results": [
+    {
+      "device": "mobile",
+      "route": "/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 1040.711,
+        "largest-contentful-paint": 1454.711,
+        "total-blocking-time": 0,
+        "cumulative-layout-shift": 0,
+        "speed-index": 2515.4771320112586
+      },
+      "report": "output/lighthouse-verified/mobile-_.report.html"
+    },
+    {
+      "device": "mobile",
+      "route": "/docs/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 1028.5845,
+        "largest-contentful-paint": 1288.5845,
+        "total-blocking-time": 0,
+        "cumulative-layout-shift": 0,
+        "speed-index": 1596.3529200076937
+      },
+      "report": "output/lighthouse-verified/mobile-_docs_.report.html"
+    },
+    {
+      "device": "mobile",
+      "route": "/docs/location/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 1076.229,
+        "largest-contentful-paint": 1315.229,
+        "total-blocking-time": 0,
+        "cumulative-layout-shift": 0,
+        "speed-index": 2439.756745964682
+      },
+      "report": "output/lighthouse-verified/mobile-_docs_location_.report.html"
+    },
+    {
+      "device": "mobile",
+      "route": "/blog/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 977.316,
+        "largest-contentful-paint": 1127.316,
+        "total-blocking-time": 0,
+        "cumulative-layout-shift": 0,
+        "speed-index": 2294.4697899973626
+      },
+      "report": "output/lighthouse-verified/mobile-_blog_.report.html"
+    },
+    {
+      "device": "mobile",
+      "route": "/blog/best-voice-to-text-keyboard-iphone/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 1015.277,
+        "largest-contentful-paint": 1280.277,
+        "total-blocking-time": 0,
+        "cumulative-layout-shift": 0,
+        "speed-index": 2331.974684005427
+      },
+      "report": "output/lighthouse-verified/mobile-_blog_best-voice-to-text-keyboard-iphone_.report.html"
+    },
+    {
+      "device": "mobile",
+      "route": "/privacy",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 1005.847,
+        "largest-contentful-paint": 1274.847,
+        "total-blocking-time": 0,
+        "cumulative-layout-shift": 0,
+        "speed-index": 2453.175700013268
+      },
+      "report": "output/lighthouse-verified/mobile-_privacy.report.html"
+    },
+    {
+      "device": "mobile",
+      "route": "/terms",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 980.7139999999999,
+        "largest-contentful-paint": 1130.714,
+        "total-blocking-time": 0,
+        "cumulative-layout-shift": 0,
+        "speed-index": 2243.3487999909876
+      },
+      "report": "output/lighthouse-verified/mobile-_terms.report.html"
+    },
+    {
+      "device": "desktop",
+      "route": "/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 364.554,
+        "largest-contentful-paint": 395.554,
+        "total-blocking-time": 0,
+        "cumulative-layout-shift": 0,
+        "speed-index": 483.38262624158256
+      },
+      "report": "output/lighthouse-verified/desktop-_.report.html"
+    },
+    {
+      "device": "desktop",
+      "route": "/docs/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 331.38,
+        "largest-contentful-paint": 359.38,
+        "total-blocking-time": 0,
+        "cumulative-layout-shift": 0,
+        "speed-index": 383.0746904941723
+      },
+      "report": "output/lighthouse-verified/desktop-_docs_.report.html"
+    },
+    {
+      "device": "desktop",
+      "route": "/docs/location/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 329.199,
+        "largest-contentful-paint": 357.199,
+        "total-blocking-time": 0,
+        "cumulative-layout-shift": 0,
+        "speed-index": 359.5745250058949
+      },
+      "report": "output/lighthouse-verified/desktop-_docs_location_.report.html"
+    },
+    {
+      "device": "desktop",
+      "route": "/blog/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 306.116,
+        "largest-contentful-paint": 337.116,
+        "total-blocking-time": 0,
+        "cumulative-layout-shift": 0,
+        "speed-index": 384.15138333305913
+      },
+      "report": "output/lighthouse-verified/desktop-_blog_.report.html"
+    },
+    {
+      "device": "desktop",
+      "route": "/blog/best-voice-to-text-keyboard-iphone/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 322.044,
+        "largest-contentful-paint": 322.044,
+        "total-blocking-time": 0,
+        "cumulative-layout-shift": 0,
+        "speed-index": 403.9542017451182
+      },
+      "report": "output/lighthouse-verified/desktop-_blog_best-voice-to-text-keyboard-iphone_.report.html"
+    },
+    {
+      "device": "desktop",
+      "route": "/privacy",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 337.227,
+        "largest-contentful-paint": 337.227,
+        "total-blocking-time": 0,
+        "cumulative-layout-shift": 0,
+        "speed-index": 358.71106574054204
+      },
+      "report": "output/lighthouse-verified/desktop-_privacy.report.html"
+    },
+    {
+      "device": "desktop",
+      "route": "/terms",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 344.214,
+        "largest-contentful-paint": 344.214,
+        "total-blocking-time": 0,
+        "cumulative-layout-shift": 0,
+        "speed-index": 413.0935890028953
+      },
+      "report": "output/lighthouse-verified/desktop-_terms.report.html"
+    }
+  ],
+  "baselineHomepageMobile": {
+    "performance": 88,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100,
+    "largestContentfulPaintMs": 3300
+  }
+}

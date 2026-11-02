@@ -28,6 +28,8 @@ public struct TranscriptExportConfiguration: Equatable, Sendable {
     public var mdObsidianEnabled: Bool
     public var enrichmentOptions: TranscriptExportEnrichmentOptions
     public var staticFrontmatter: [String: String]
+    public var transcriptPropertyName: String
+    public var includeTranscriptInBody: Bool
     public var audioAttachmentRelativePath: String?
     public var newFileNameTemplate: String
     public var appendFileName: String
@@ -42,6 +44,8 @@ public struct TranscriptExportConfiguration: Equatable, Sendable {
         mdObsidianEnabled: Bool = false,
         enrichmentOptions: TranscriptExportEnrichmentOptions = .default,
         staticFrontmatter: [String: String] = [:],
+        transcriptPropertyName: String = "",
+        includeTranscriptInBody: Bool = true,
         audioAttachmentRelativePath: String? = nil,
         newFileNameTemplate: String = TranscriptFileExporter.defaultNewFileNameTemplate,
         appendFileName: String = TranscriptFileExporter.defaultAppendFileName,
@@ -55,6 +59,8 @@ public struct TranscriptExportConfiguration: Equatable, Sendable {
         self.mdObsidianEnabled = mdObsidianEnabled
         self.enrichmentOptions = enrichmentOptions
         self.staticFrontmatter = staticFrontmatter
+        self.transcriptPropertyName = transcriptPropertyName
+        self.includeTranscriptInBody = includeTranscriptInBody
         self.audioAttachmentRelativePath = audioAttachmentRelativePath
         self.newFileNameTemplate = newFileNameTemplate
         self.appendFileName = appendFileName

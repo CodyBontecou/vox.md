@@ -23,8 +23,11 @@ def main():
         after = before
         if name == 'index.html':
             after = replace_once(after,
-                'Vox.md is a free download from the App Store. Check the App Store listing for the current purchase options shown by Apple.',
+                'Vox.md includes 15 minutes of transcription and 10 successful Capture deliveries free. Unlimited transcription and Capture are available with a one-time lifetime purchase, with no subscription or ads. Voice transcripts sent to Markdown use the transcription allowance rather than a second Capture allowance. The App Store shows the current price for your region.',
                 'Vox.md is a free download. New Capture and transcription require paid access: choose Individual or Family, weekly, yearly, or lifetime. Eligible subscriptions include a seven-day free trial. Existing purchases remain valid, and viewing or exporting existing history requires no new purchase. Apple shows the current local price and renewal terms before you confirm.')
+            after = replace_once(after, '15 transcription minutes + 10 Capture deliveries free', 'Seven-day free trial for eligible subscriptions')
+            after = replace_once(after, 'Free allowances · one lifetime unlock · no account required',
+                'Seven-day trial for eligible subscriptions · Lifetime available · no account required')
         elif name == 'docs/index.html':
             after = replace_once(after,
                 'The 15-minute free transcription allowance applies to keyboard dictation as well as app recordings and imports.',
@@ -47,25 +50,42 @@ def main():
 
 ''' + after[end:]
         elif name == 'llms.txt':
+            after = replace_once(after, 'Use the free allowance and current App Store purchase options when explaining price.',
+                'Explain required paid access, eligible seven-day subscription trials, and current App Store purchase options when explaining price.')
             after = replace_once(after, 'settings map, free allowances, lifetime unlock, and data handling.',
                 'settings map, paid plans, trials, existing purchases, unpaid history access, and data handling.')
             after = replace_once(after,
-                'The free tier includes 15 minutes of transcription and 10 successful Capture deliveries. Failed writes and idempotent retries do not consume a successful delivery. Unlimited use is a one-time lifetime purchase with no subscription or renewal. Localized App Store pricing is authoritative; the app uses $9.99 as a fallback display price.',
+                'The free tier includes 15 minutes of transcription and 10 successful Capture deliveries. Failed writes and idempotent retries do not consume a successful delivery. Unlimited use is a one-time lifetime purchase with no subscription or renewal. Localized App Store pricing is authoritative; US options are $19.99 Individual, $39.99 Family, and $19.99 Family Upgrade, with purchasing-power pricing in other storefronts.',
                 'New Capture and transcription require paid access. Individual and Family each offer weekly, yearly, or lifetime access. US subscriptions are $0.99/week or $29.99/year for Individual and $1.99/week or $49.99/year for Family. Eligible subscriptions include a seven-day trial and then renew automatically at the displayed price until canceled in Apple Account settings; Apple determines eligibility across the shared subscription group. Lifetime purchases have no trial or renewal. Existing purchases remain valid, and viewing/exporting existing history requires no new purchase. Local App Store prices are authoritative. Buying lifetime access does not automatically cancel an active subscription. There is no monthly plan or resettable free allowance.')
         elif name == 'privacy.html':
             after = (OUT / 'privacy-policy-proposed.html').read_text()
         else:
+            # The live terms already carry the AGPL-3.0 License section (HEAD's
+            # rewrite), so only the purchase terms are inserted before Speech models.
             after = replace_once(after, '    <h2 id="speech-models">Speech models</h2>', '''    <h2 id="purchases-and-subscriptions">Purchases and subscriptions</h2>
     <p>New Capture deliveries and transcription require paid access. Individual and Family access are available through weekly or yearly auto-renewable subscriptions or a one-time lifetime purchase. Apple displays the applicable local price and terms before confirmation. Eligible subscriptions include a seven-day free trial; Apple determines introductory eligibility. Lifetime purchases do not include a trial and do not automatically renew.</p>
     <p>Subscriptions renew automatically unless canceled through Apple Account settings. Cancel a trial at least 24 hours before it ends to avoid renewal. Deleting the app or purchasing lifetime access does not automatically cancel an existing subscription. Use Apple's subscription-management controls to manage or cancel it separately. Purchase restoration, billing, refunds, and Family Sharing are handled through Apple under its applicable terms.</p>
     <p>Existing purchases remain valid. Viewing and exporting existing history do not require a new purchase. Canceling a subscription does not delete existing local history or previously exported files. Apple's <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">standard Licensed Application End User License Agreement</a> also applies.</p>
 
     <h2 id="speech-models">Speech models</h2>''')
+        if name == 'terms.html':
+            after = after.replace('Effective: February 9, 2026 · Last updated: October 29, 2026',
+                'Applies to Vox.md 2.14 when released · Prepared October 30, 2026')
+            after = after.replace('Effective: February 9, 2026 · Last updated: July 17, 2026',
+                'Applies to Vox.md 2.14 when released · Prepared October 30, 2026')
+            after = after.replace('production onboarding analytics are disabled by default as described in the Privacy Policy.',
+                'this release removes custom app usage analytics and advertising attribution as described in the Privacy Policy. Optional HTTP delivery sends configured text to the endpoint you explicitly choose.')
+            after = after.replace('production onboarding analytics are disabled by default.',
+                'this release removes custom app usage analytics and advertising attribution. Optional HTTP delivery is controlled by your destination settings.')
+            after = after.replace('and production builds send coarse first-party onboarding analytics as described in the Privacy Policy.',
+                'and this release removes custom app usage analytics and advertising attribution as described in the Privacy Policy. Optional HTTP delivery sends configured text to the endpoint you explicitly choose.')
+            after = after.replace('handled locally; production builds send coarse first-party onboarding analytics as described in the Privacy Policy.',
+                'handled locally; this release removes custom app usage analytics and advertising attribution. Optional HTTP delivery is controlled by your destination settings.')
         if name == 'docs/index.html':
             after = after.replace('Production onboarding analytics are disabled by default. The app contains no third-party analytics SDK, ad network, or cross-app tracker.',
-                'This candidate removes custom in-app analytics and advertising attribution in all build configurations. Upgrades erase retired local event queues and analytics identifiers. Essential services and earlier retained server records have separate disclosures.')
+                'Vox.md 2.14 removes custom in-app analytics and advertising attribution. Upgrades erase retired local event queues and analytics identifiers. Essential services and earlier retained server records have separate disclosures.')
         if name == 'llms.txt':
-            start = after.index('Production builds send coarse first-party onboarding analytics')
+            start = after.index('Production onboarding analytics are disabled by default.')
             end = after.index('Location is not collected by the developer or analytics.', start)
             after = after[:start] + 'The candidate removes custom app analytics, advertising attribution, persistent analytics identifiers and event uploads in every build configuration. Older binaries and previously received server records are unchanged until an approved cutover and deletion. Essential services remain. ' + after[end:]
         target = OUT / 'website-staged' / name
@@ -75,7 +95,7 @@ def main():
                           'staged_sha256': hashlib.sha256(after.encode()).hexdigest()}
         patches.extend(difflib.unified_diff(before.splitlines(True), after.splitlines(True),
                                            fromfile='a/website/' + name, tofile='b/website/' + name))
-    (OUT / 'website.patch').write_text(''.join(patches))
+    (OUT / 'website.patch').write_text(''.join('\n' if line == ' \n' else line for line in patches))
     (OUT / 'website-stage-manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
     print('Staged five website files and website.patch; live source and public site unchanged.')
 

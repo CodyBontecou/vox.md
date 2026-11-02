@@ -1062,3 +1062,85 @@ struct ThoughtfulOnboarding: View {
         .padding(.vertical, 12)
     }
 }
+
+/// Shared guidance for choosing a destination and saving the first real note.
+/// Shown on Capture after unlocking when Setup didn't already pick a folder.
+struct FirstNoteGuide: View {
+    enum Step {
+        case chooseFolder
+        case writeNote(folder: String)
+        case saved(file: String)
+    }
+
+    let step: Step
+    let action: () -> Void
+    let dismiss: () -> Void
+
+    private var title: String {
+        switch step {
+        case .chooseFolder: String(localized: "Save your first note")
+        case .writeNote: String(localized: "Make it yours")
+        case .saved: String(localized: "Your first note is saved")
+        }
+    }
+
+    private var detail: String {
+        switch step {
+        case .chooseFolder:
+            String(localized: "Choose a folder for your Markdown notes. Nothing is saved until you tap Send.")
+        case .writeNote(let folder):
+            String(localized: "Type a thought or tap Record, then tap Send to save it in \(folder).")
+        case .saved(let file):
+            String(localized: "\(file) is ready in your folder.")
+        }
+    }
+
+    private var actionTitle: String {
+        switch step {
+        case .chooseFolder: String(localized: "Choose a folder")
+        case .writeNote: String(localized: "Write a note")
+        case .saved: String(localized: "Open saved note")
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title)
+                .font(Geist.heading(.callout))
+                .foregroundStyle(Geist.text)
+                .accessibilityAddTraits(.isHeader)
+            Text(detail)
+                .font(Geist.body(.subheadline))
+                .foregroundStyle(Geist.muted)
+                .fixedSize(horizontal: false, vertical: true)
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 16) { actions }
+                VStack(alignment: .leading, spacing: 12) { actions }
+            }
+            .padding(.top, 2)
+        }
+        .padding(Geist.Spacing.four)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Geist.card, in: RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous)
+                .stroke(Geist.border, lineWidth: 1)
+        )
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("capture.firstNoteGuide")
+    }
+
+    @ViewBuilder private var actions: some View {
+        Button(actionTitle, action: action)
+            .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
+            .accessibilityIdentifier("capture.firstNoteAction")
+        if case .saved = step {
+            Button("Done", action: dismiss)
+                .font(Geist.label(.subheadline))
+                .foregroundStyle(Geist.accentText)
+                .buttonStyle(.plain)
+                .frame(minHeight: 44)
+                .accessibilityIdentifier("capture.firstNoteDone")
+        }
+    }
+}

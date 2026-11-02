@@ -7941,8 +7941,8 @@
     {
       "acceptance": [
         {
-          "assertion": "Every applicable compatibility dimension is executed through production evidence or explicitly not applicable with rationale.",
-          "evidencePath": "docs/architecture/android-wear-m0-compatibility-matrix.json",
+          "assertion": "Upgrade erases retired analytics state while preserving purchase, onboarding and user data.",
+          "evidencePath": "scripts/tests/test_custom_analytics_removal.py",
           "kind": "fixture",
           "status": "verified"
         }
@@ -8489,7 +8489,8 @@
   "notes": [
     "Inventoried means source evidence and planned acceptance are mapped; it does not mean Android/Wear implementation is complete.",
     "Unavailable or deferred parity rows are forbidden by the program definition of done; explicit non-goals are limited to macOS-only product surfaces.",
-    "Legacy-codec rows freeze Apple compatibility inputs and never make bookmark/path fields portable core contracts."
+    "Legacy-codec rows freeze Apple compatibility inputs and never make bookmark/path fields portable core contracts.",
+    "The Apple hard-paywall candidate supersedes free quota behavior; M0 quota rows preserve the prior Apple baseline and deferred Android behavior. Analytics storage is retired by erasure, never decoded or uploaded."
   ],
   "persistedKeyInventories": [
     {

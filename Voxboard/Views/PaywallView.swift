@@ -72,6 +72,7 @@ struct PaywallView: View {
                             .foregroundStyle(Geist.text)
                             .fixedSize(horizontal: false, vertical: true)
                             .accessibilityAddTraits(.isHeader)
+                            .accessibilityIdentifier("paywall.title")
                         VStack(alignment: .leading, spacing: 8) {
                             benefitRow(1, "Unlimited on-device transcription")
                             benefitRow(2, "Routes on keyboard, Watch, Mac and widgets")
@@ -180,6 +181,7 @@ struct PaywallView: View {
                     .font(Geist.label())
                     .disabled(storeManager.isRestoring || storeManager.isPurchasing)
                     .accessibilityLabel("Restore Purchases")
+                    .accessibilityIdentifier("paywall.restore")
                 }
             }
             .toolbarBackground(Geist.bg, for: .navigationBar)

@@ -59,7 +59,12 @@ private func sha256(_ data: Data) -> String {
     SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
 }
 
-private func residentBytes() -> UInt64 {
+private struct ResidentMemory {
+    let currentBytes: UInt64
+    let lifetimePeakBytes: UInt64
+}
+
+private func residentMemory() -> ResidentMemory {
     var info = mach_task_basic_info()
     var count = mach_msg_type_number_t(
         MemoryLayout<mach_task_basic_info_data_t>.size / MemoryLayout<natural_t>.size
@@ -70,57 +75,33 @@ private func residentBytes() -> UInt64 {
         }
     }
     precondition(result == KERN_SUCCESS, "resident-size sampling failed")
-    return UInt64(info.resident_size)
+    return ResidentMemory(
+        currentBytes: UInt64(info.resident_size),
+        lifetimePeakBytes: UInt64(info.resident_size_max)
+    )
 }
 
-private final class RSSSampler: @unchecked Sendable {
-    private let queue = DispatchQueue(
-        label: "md.vox.m2-rss-sampler",
-        qos: .userInteractive,
-        autoreleaseFrequency: .workItem
-    )
-    private let start: UInt64
-    private var timer: DispatchSourceTimer?
-    private var values: [[String: Any]] = []
-    let baseline: UInt64
-
-    init(start: UInt64) {
-        self.start = start
-        baseline = residentBytes()
-        values = [["elapsedNanoseconds": 0, "residentBytes": baseline]]
-        let source = DispatchSource.makeTimerSource(queue: queue)
-        // The evidence contract permits at most 10 ms between observed samples.
-        // Sample at 0.5 ms with zero timer leeway so a loaded hosted runner retains
-        // ample scheduling margin without inventing intermediate observations.
-        source.schedule(
-            deadline: .now() + .microseconds(500),
-            repeating: .microseconds(500),
-            leeway: .nanoseconds(0)
-        )
-        source.setEventHandler { [weak self] in self?.appendSample() }
-        timer = source
-        source.resume()
+/// Exercise the kernel's peak accounting with memory that disappears before the
+/// final observation. This runs in its own process, outside measured sessions.
+private func verifyResidentMemoryPeak() throws {
+    let byteCount = 64 * 1_048_576
+    let baseline = residentMemory()
+    guard let allocation = mmap(nil, byteCount, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0),
+          allocation != MAP_FAILED else {
+        throw NSError(domain: "RSSKernelPeak", code: 1)
     }
-
-    private func appendSample() {
-        let elapsed = DispatchTime.now().uptimeNanoseconds - start
-        guard (values.last?["elapsedNanoseconds"] as? UInt64) != elapsed else { return }
-        values.append(["elapsedNanoseconds": elapsed, "residentBytes": residentBytes()])
+    memset(allocation, 1, byteCount)
+    let allocated = residentMemory()
+    guard munmap(allocation, byteCount) == 0 else {
+        throw NSError(domain: "RSSKernelPeak", code: 2)
     }
-
-    func sample() {
-        queue.sync { appendSample() }
+    let released = residentMemory()
+    guard allocated.currentBytes >= baseline.currentBytes + UInt64(byteCount / 2),
+          released.currentBytes + UInt64(byteCount / 2) < allocated.currentBytes,
+          released.lifetimePeakBytes >= allocated.currentBytes else {
+        throw NSError(domain: "RSSKernelPeak", code: 3)
     }
-
-    func finish(duration: UInt64) -> [[String: Any]] {
-        queue.sync {
-            timer?.cancel()
-            timer = nil
-            values.removeAll { ($0["elapsedNanoseconds"] as? UInt64 ?? 0) >= duration && ($0["elapsedNanoseconds"] as? UInt64 ?? 0) != 0 }
-            values.append(["elapsedNanoseconds": duration, "residentBytes": residentBytes()])
-            return values
-        }
-    }
+    print("Kernel RSS peak verification passed: transient allocation retained after unmapping")
 }
 
 private func preparation() throws -> (Data, [String: Any]) {
@@ -151,6 +132,10 @@ private func preparation() throws -> (Data, [String: Any]) {
 }
 
 private func main() throws {
+    if CommandLine.arguments.dropFirst() == ["--verify-rss-high-water"] {
+        try verifyResidentMemoryPeak()
+        return
+    }
     guard CommandLine.arguments.count == 5 else {
         throw NSError(domain: "VoxboardM2MaterializationEvidence", code: 64)
     }
@@ -186,11 +171,14 @@ private func main() throws {
     ]
     let materializationData = try canonicalJSON(materialization)
 
+    // Each benchmark invocation is a fresh process. The kernel's lifetime RSS
+    // peak cannot miss a transient allocation when a hosted runner deschedules
+    // us. Setup allocations are included, making this conservative for the
+    // measured session rather than relying on a wall-clock sampling deadline.
+    let baseline = residentMemory().currentBytes
     let start = DispatchTime.now().uptimeNanoseconds
-    let sampler = RSSSampler(start: start)
     failureStage = "startSession"
     let session = try coreStartMaterialization(controlJson: materializationData)
-    sampler.sample()
     var ingress: [[String: Any]] = []
     failureStage = "pushObservation"
     for sequence in 0..<((inputData.count + maximumChunkBytes - 1) / maximumChunkBytes) {
@@ -198,12 +186,10 @@ private func main() throws {
         let upper = min(inputData.count, lower + maximumChunkBytes)
         let chunk = inputData.subdata(in: lower..<upper)
         try session.pushObservation(streamId: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", sequence: UInt32(sequence), bytes: chunk, eof: upper == inputData.count)
-        sampler.sample()
         ingress.append(["sequence": sequence, "bytes": chunk.count, "sha256": sha256(chunk)])
     }
     failureStage = "seal"
     let descriptors = try session.seal()
-    sampler.sample()
     guard descriptors.artifacts.count == 1 else { throw NSError(domain: "VoxboardM2MaterializationEvidence", code: 3) }
     let descriptor = descriptors.artifacts[0]
     var output = Data()
@@ -213,7 +199,6 @@ private func main() throws {
     while true {
         let chunk = try session.drain(artifactId: descriptor.artifactId, sequence: sequence, maximumBytes: UInt64(maximumChunkBytes))
         output.append(chunk.bytes)
-        sampler.sample()
         drain.append(["sequence": Int(sequence), "bytes": chunk.bytes.count, "sha256": chunk.chunkSha256])
         if chunk.eof { break }
         sequence += 1
@@ -224,13 +209,15 @@ private func main() throws {
     ])
     failureStage = "finalize"
     _ = try session.finalize(drainedHashesJson: drained)
-    sampler.sample()
+    let memory = residentMemory()
     let duration = max(1, DispatchTime.now().uptimeNanoseconds - start)
-    let samples = sampler.finish(duration: duration)
+    let samples: [[String: Any]] = [
+        ["elapsedNanoseconds": UInt64(0), "residentBytes": baseline],
+        ["elapsedNanoseconds": duration, "residentBytes": memory.currentBytes],
+    ]
     failureStage = "writeEvidence"
     try output.write(to: outputURL, options: .atomic)
-    let resident = samples.compactMap { $0["residentBytes"] as? UInt64 }
-    let peak = resident.max() ?? sampler.baseline
+    let peak = memory.lifetimePeakBytes
     let report: [String: Any] = [
         "drainChunks": drain,
         "durationNanoseconds": duration,
@@ -238,12 +225,13 @@ private func main() throws {
         "outputBytes": output.count,
         "outputSha256": sha256(output),
         "rss": [
-            "additionalBytes": peak > sampler.baseline ? peak - sampler.baseline : 0,
-            "baselineBytes": sampler.baseline,
+            "additionalBytes": peak > baseline ? peak - baseline : 0,
+            "baselineBytes": baseline,
             "baselineDefinition": "resident bytes immediately before opening the measured production session",
-            "method": "macosMachTaskResidentSizeSampled",
+            "method": "macosMachTaskResidentSizeHighWater",
+            "kernelPeakBytes": memory.lifetimePeakBytes,
+            "peakDefinition": "process lifetime resident-memory high-water mark; conservative for the measured session",
             "peakBytes": peak,
-            "sampleIntervalNanoseconds": 10_000_000,
             "samples": samples,
         ],
         "verifiedDrain": ["descriptorOutputBytes": descriptor.length, "descriptorOutputSha256": descriptor.resultSha256, "terminalState": "completed"],

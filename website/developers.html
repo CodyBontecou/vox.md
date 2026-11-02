@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vox.md Developer Guide — Vox.md</title>
+  <meta name="description" content="Read public Vox.md product facts and documentation through a free, read-only JSON API and Markdown content negotiation.">
+  <link rel="canonical" href="https://vox.isolated.tech/developers">
+  <link rel="alternate" type="text/plain" href="llms.txt" title="Vox.md documentation for language models">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Vox.md Developer Guide — Vox.md">
+  <meta property="og:description" content="Read public Vox.md product facts and documentation through a free, read-only JSON API and Markdown content negotiation.">
+  <meta property="og:url" content="https://vox.isolated.tech/developers">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="preload" href="fonts/Geist-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="openapi.json" title="Vox.md Public Information API">
+</head>
+<body>
+
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="logo" aria-label="Vox.md home">
+      <img class="logo-mark" src="app-icon.webp" alt="" width="32" height="32">
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="docs/">Docs</a></li>
+      <li><a href="blog/">Blog</a></li>
+      <li><a href="terms.html">Terms</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_developers">Download Vox.md</a>
+  </div>
+</nav>
+
+<main id="main">
+<section class="page-hero"><div class="container"><div class="page-eyebrow">Vox.md · Developers</div><h1 class="page-title">Public Information API</h1></div></section>
+<div class="container"><div class="legal-content">
+<h2>Discover product facts and documentation</h2>
+<p>The Vox.md Public Information API serves product information and links to published documentation. It is free to read and requires no account, API key, OAuth flow, or payment. These endpoints return information already available on this public website. Read the <a href="openapi.json">OpenAPI 3.1 contract</a> for typed response schemas, operation identifiers, errors, and descriptions.</p>
+<h2>Get product information</h2>
+<p><code>GET https://vox.isolated.tech/api/v1/product</code> returns the product name, description, supported operating systems, App Store listing, documentation URL, and support URL. The build derives these facts from the homepage structured data.</p>
+<pre><code>curl https://vox.isolated.tech/api/v1/product</code></pre>
+<p><a href="https://vox.isolated.tech/api/v1/product">View product JSON</a></p>
+<h2>Find a document</h2>
+<p><code>GET https://vox.isolated.tech/api/v1/documents</code> lists public page titles, summaries, and URLs. Use this to find the relevant feature guide, policy, blog article, or support page before requesting the content.</p>
+<pre><code>curl https://vox.isolated.tech/api/v1/documents</code></pre>
+<p><a href="https://vox.isolated.tech/api/v1/documents">View document index JSON</a></p>
+<h2>Read the page as Markdown</h2>
+<p>Request any listed page with <code>Accept: text/markdown</code> for its main content. Requests with <code>Accept: text/html</code> continue to receive HTML. Both representations include <code>Vary: Accept</code>. The <a href="llms.txt">agent guide</a> explains which use cases fit Vox.md and points to feature details.</p>
+<pre><code>curl -H 'Accept: text/markdown' https://vox.isolated.tech/docs/</code></pre>
+<h2>Errors, caching, and methods</h2>
+<p>The JSON endpoints support GET and HEAD. Unknown API paths return HTTP 404 with <code>application/problem+json</code>, a stable <code>code</code>, an explanation, and a recovery hint. Unsupported methods return HTTP 405 and <code>Allow: GET, HEAD</code>. Public metadata responses permit cross-origin reading and advertise a five minute cache lifetime. No credentials or user-specific data are involved.</p>
+<h2>Automate the installed app</h2>
+<p>Capture, transcription, local vault access, and note writes run in the installed Apple app. Use the documented <a href="docs/#system-integrations">Shortcuts and URL scheme integrations</a> with the device owner's permission. The public information API does not expose capture actions, recordings, transcripts, private notes, or destination folders. Contact <a href="contact">Vox.md support</a> for questions.</p>
+</div></div></main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="developers.html">Developers</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="docs/">Docs</a></li>
+        <li><a href="blog/">Blog</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Local capture · User-controlled files.</div>
+    </div>
+  </div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

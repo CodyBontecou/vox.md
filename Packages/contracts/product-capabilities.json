@@ -8187,8 +8187,8 @@
     {
       "acceptance": [
         {
-          "assertion": "Every applicable compatibility dimension is executed through production evidence or explicitly not applicable with rationale.",
-          "evidencePath": "docs/architecture/android-wear-m0-compatibility-matrix.json",
+          "assertion": "Upgrade erases retired analytics state while preserving purchase, onboarding and user data.",
+          "evidencePath": "scripts/tests/test_custom_analytics_removal.py",
           "kind": "fixture",
           "mappingID": "cap.store.analytics.acceptance.1",
           "status": "verified"
@@ -8751,6 +8751,6 @@
   "schemaVersion": 1,
   "source": {
     "path": "docs/architecture/android-wear-m0-capabilities.json",
-    "sha256": "1431f33ac74c44b59b22a20b1dc421f85c71ac079863929cc0ce10ced89f305c"
+    "sha256": "9d70dea9d0b5c65383ee47441121d9bb13536645fd86e7c507abad46802f2683"
   }
 }

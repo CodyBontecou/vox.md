@@ -178,6 +178,8 @@ public enum TranscriptFileExporter {
         mdObsidianEnabled: Bool = false,
         enrichmentOptions: TranscriptExportEnrichmentOptions = .default,
         staticFrontmatter: [String: String] = [:],
+        transcriptPropertyName: String = "",
+        includeTranscriptInBody: Bool = true,
         audioAttachmentRelativePath: String? = nil,
         newFileNameTemplateOverride: String? = nil,
         appendFileNameOverride: String? = nil,
@@ -192,6 +194,8 @@ public enum TranscriptFileExporter {
             mdObsidianEnabled: mdObsidianEnabled,
             enrichmentOptions: enrichmentOptions,
             staticFrontmatter: staticFrontmatter,
+            transcriptPropertyName: transcriptPropertyName,
+            includeTranscriptInBody: includeTranscriptInBody,
             audioAttachmentRelativePath: audioAttachmentRelativePath,
             newFileNameTemplateOverride: newFileNameTemplateOverride,
             appendFileNameOverride: appendFileNameOverride,
@@ -659,6 +663,11 @@ public enum TranscriptFileExporter {
     private static func yamlFrontmatterValue(_ raw: String) -> String {
         let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return "\"\"" }
+        if trimmed.hasPrefix("\""),
+           let data = trimmed.data(using: .utf8),
+           (try? JSONDecoder().decode(String.self, from: data)) != nil {
+            return trimmed
+        }
         if (trimmed.hasPrefix("[") && trimmed.hasSuffix("]")) ||
             trimmed == "true" || trimmed == "false" ||
             Double(trimmed) != nil {
@@ -897,6 +906,8 @@ public enum TranscriptFileExporter {
         mdObsidianEnabled: Bool,
         enrichmentOptions: TranscriptExportEnrichmentOptions,
         staticFrontmatter: [String: String],
+        transcriptPropertyName: String = "",
+        includeTranscriptInBody: Bool = true,
         audioAttachmentRelativePath: String?,
         newFileNameTemplateOverride: String?,
         appendFileNameOverride: String?,
@@ -914,6 +925,8 @@ public enum TranscriptFileExporter {
             mdObsidianEnabled: mdObsidianEnabled,
             enrichmentOptions: enrichmentOptions,
             staticFrontmatter: staticFrontmatter,
+            transcriptPropertyName: transcriptPropertyName,
+            includeTranscriptInBody: includeTranscriptInBody,
             audioAttachmentRelativePath: audioAttachmentRelativePath,
             newFileNameTemplate: nonEmptyTrimmed(configuredNewFileTemplate) ?? defaultNewFileNameTemplate,
             appendFileName: nonEmptyTrimmed(configuredAppendFileName) ?? defaultAppendFileName,
@@ -932,6 +945,29 @@ public enum TranscriptFileExporter {
             }
             let data = try jsonEncoder.encode(transcript)
             return String(decoding: data, as: UTF8.self)
+        }
+
+        if configuration.format == .md || (configuration.format == .yaml && configuration.yamlUsesMarkdownExtension),
+           let key = TranscriptPropertyMapping.normalizedKey(configuration.transcriptPropertyName) {
+            var metadata = resolvedFrontmatter(
+                transcript,
+                options: configuration.enrichmentOptions,
+                staticFrontmatter: configuration.staticFrontmatter,
+                audioAttachmentRelativePath: configuration.audioAttachmentRelativePath
+            )
+            metadata[key] = TranscriptPropertyMapping.yamlString(bodyText(transcript, options: configuration.enrichmentOptions))
+            let body: String
+            if let template = configuration.markdownTemplateContent {
+                body = TemplateRenderer.render(
+                    template: template,
+                    context: TemplateRenderer.Context(transcript: transcript),
+                    includeTranscriptInBody: configuration.includeTranscriptInBody
+                )
+            } else {
+                body = configuration.includeTranscriptInBody
+                    ? formatMarkdown(transcript, options: configuration.enrichmentOptions) : ""
+            }
+            return applyMarkdownFrontmatter(to: body, frontmatter: metadata)
         }
 
         if let templateContent = configuration.markdownTemplateContent {
@@ -1090,6 +1126,8 @@ public enum TranscriptFileExporter {
                         folderURL: folderURL,
                         enrichmentOptions: enrichmentOptions,
                         staticFrontmatter: staticFrontmatter,
+                        transcriptPropertyName: flow?.transcriptPropertyName ?? "",
+                        includeTranscriptInBody: flow?.includeTranscriptInBody ?? true,
                         audioAttachmentRelativePath: audioAttachmentRelativePath,
                         mode: mode,
                         newFileNameTemplateOverride: newFileNameTemplateOverride,
@@ -1108,6 +1146,8 @@ public enum TranscriptFileExporter {
                     mdObsidianEnabled: mdObsidianEnabled,
                     enrichmentOptions: enrichmentOptions,
                     staticFrontmatter: staticFrontmatter,
+                    transcriptPropertyName: flow?.transcriptPropertyName ?? "",
+                    includeTranscriptInBody: flow?.includeTranscriptInBody ?? true,
                     audioAttachmentRelativePath: audioAttachmentRelativePath,
                     newFileNameTemplateOverride: newFileNameTemplateOverride,
                     appendFileNameOverride: appendFileNameOverride,
@@ -1268,6 +1308,8 @@ public enum TranscriptFileExporter {
         folderURL: URL,
         enrichmentOptions: TranscriptExportEnrichmentOptions = .default,
         staticFrontmatter: [String: String] = [:],
+        transcriptPropertyName: String = "",
+        includeTranscriptInBody: Bool = true,
         audioAttachmentRelativePath: String? = nil,
         mode: ExportFileMode = .newFile,
         newFileNameTemplateOverride: String? = nil,
@@ -1287,6 +1329,8 @@ public enum TranscriptFileExporter {
             mdObsidianEnabled: false,
             enrichmentOptions: enrichmentOptions,
             staticFrontmatter: staticFrontmatter,
+            transcriptPropertyName: transcriptPropertyName,
+            includeTranscriptInBody: includeTranscriptInBody,
             audioAttachmentRelativePath: audioAttachmentRelativePath,
             newFileNameTemplateOverride: newFileNameTemplateOverride,
             appendFileNameOverride: appendFileNameOverride,
