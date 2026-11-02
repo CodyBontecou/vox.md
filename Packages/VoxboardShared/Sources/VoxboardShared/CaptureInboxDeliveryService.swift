@@ -110,11 +110,13 @@ public enum CaptureInboxDeliveryService {
         var receipts: [CaptureReceipt] = []
         var failures: [UUID] = []
         var quotaBlocked: [UUID] = []
+        var busyBlocked: [UUID] = []
         var decisionsRequired: [CaptureInboxDecisionRequired] = []
         var latestFailureDescription: String?
         do {
             while let claimedRequest = try await inbox.claimNext(
                 excludingRequestIDs: Set(quotaBlocked)
+                    .union(busyBlocked)
                     .union(decisionsRequired.map(\.requestID))
             ) {
                 var request = claimedRequest
@@ -211,6 +213,14 @@ public enum CaptureInboxDeliveryService {
                         presetID: request.voxProfile?.id,
                         presetName: request.voxProfile?.accessibilityName
                     ))
+                    continue
+                } catch is CaptureFileBusyError {
+                    // The target note is open or locked in another app. Not a
+                    // failure: the request stays pending (durably, across
+                    // relaunches) and the next drain retries it. Skip it for
+                    // the rest of this drain so it is not retried in a loop.
+                    try? await inbox.returnToPending(requestID: request.id)
+                    busyBlocked.append(request.id)
                     continue
                 } catch {
                     let storedDestination = library.destinations.first(where: {

@@ -12,6 +12,12 @@ final class CaptureRouteTodaySnapshotTests: XCTestCase {
     func test_firstLineStripsMarkdownMarkersAndCapsLength() {
         XCTAssertEqual(CaptureRouteTodaySnapshot.firstLine(of: "\n- [ ] Book flights for Lisbon\nsecond"), "Book flights for Lisbon")
         XCTAssertEqual(CaptureRouteTodaySnapshot.firstLine(of: "### Design sync\n- notes"), "Design sync")
+        // Same rules as the `{title}` token.
+        XCTAssertEqual(CaptureRouteTodaySnapshot.firstLine(of: "1. Ship it"), "Ship it")
+        XCTAssertEqual(
+            CaptureRouteTodaySnapshot.firstLine(of: "1. Ship it"),
+            CaptureEntryTemplateRenderer.displayTitle("1. Ship it")
+        )
         XCTAssertNil(CaptureRouteTodaySnapshot.firstLine(of: "  \n\n"))
         let long = String(repeating: "a", count: 200)
         let capped = CaptureRouteTodaySnapshot.firstLine(of: long)

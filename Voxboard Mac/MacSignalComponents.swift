@@ -556,8 +556,13 @@ enum MacFileBusyRetry {
                 delivery: nil
             )
         }
-        if viewModel.failedInboxCount > 0 {
-            await viewModel.retryFailedInbox()
+        // Only the busy captures: other failed requests wait for the person.
+        let stillQueued = await viewModel.retryInboxRequests(ids)
+        for requestID in ids.subtracting(stillQueued)
+        where CaptureFileBusyMonitor.shared.entry(for: requestID) != nil
+            && !recorder.recordingQueue.actionableJobs.contains(where: { $0.id == requestID })
+            && requestID != viewModel.draft.requestID {
+            CaptureFileBusyMonitor.shared.clear(requestID: requestID)
         }
     }
 }

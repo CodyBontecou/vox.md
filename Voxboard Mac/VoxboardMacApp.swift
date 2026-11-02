@@ -187,7 +187,9 @@ struct VoxboardMacApp: App {
     var body: some Scene {
         WindowGroup("Vox.md", id: "main") {
             Group {
-                if usageTracker.hasUnlocked {
+                // Ended access opens read-only, as on iOS: Library stays
+                // readable while recording and capture ask for a plan.
+                if usageTracker.hasUnlocked || usageTracker.hasAccessEnded {
                     MacRootView(
                         recorder: recorder,
                         quickCaptureViewModel: quickCaptureViewModel,

@@ -567,8 +567,7 @@ struct MacActivityView: View {
             await retry(job)
             return
         }
-        await viewModel.retryFailedInbox()
-        if viewModel.failedInboxCount == 0 {
+        if await viewModel.retryInboxRequests([requestID]).isEmpty {
             // Nothing is queued for this entry any more (delivered or removed).
             CaptureFileBusyMonitor.shared.clear(requestID: requestID)
         }

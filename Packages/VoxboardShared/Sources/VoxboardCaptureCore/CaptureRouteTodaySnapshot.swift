@@ -91,24 +91,17 @@ public struct CaptureRouteTodaySnapshot: Codable, Equatable, Sendable {
         }
     }
 
-    /// The first non-empty line, with leading Markdown list, task, heading and
-    /// quote markers removed and capped at `maximumLineLength`.
+    /// The first non-empty line, with leading Markdown list, task, heading,
+    /// quote and numbered-item markers removed and capped at `maximumLineLength`.
     public static func firstLine(of text: String) -> String? {
-        for rawLine in text.split(whereSeparator: \.isNewline) {
-            var line = rawLine.trimmingCharacters(in: .whitespaces)
-            for prefix in ["- [ ] ", "- [x] ", "- [X] ", "* [ ] ", "- ", "* ", "+ ", "> "] where line.hasPrefix(prefix) {
-                line = String(line.dropFirst(prefix.count))
-                break
-            }
-            while line.hasPrefix("#") { line.removeFirst() }
-            line = line.trimmingCharacters(in: .whitespaces)
-            guard !line.isEmpty else { continue }
+        CaptureTitleText.firstLine(of: text) { rawLine in
+            var line = CaptureTitleText.strippingLineMarkers(rawLine)
+            guard !line.isEmpty else { return nil }
             if line.count > maximumLineLength {
                 line = String(line.prefix(maximumLineLength - 1)).trimmingCharacters(in: .whitespaces) + "…"
             }
             return line
         }
-        return nil
     }
 
     public static func fileURL(forHistoryFileURL historyURL: URL) -> URL {

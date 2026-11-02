@@ -155,13 +155,22 @@ public enum CaptureInboxRecovery {
         guard let defaultID = await defaultDestinationID(captureRootURL: captureRootURL) else { return false }
         let inbox = CaptureInbox(rootDirectoryURL: captureRootURL)
         return try await inbox.reviseFailedRequest(requestID: requestID) { request in
-            request.destinationID = defaultID
-            request.placementOverride = nil
-            request.relativeNotePathOverride = nil
-            request.entryTemplateIDOverride = nil
-            // The default route uses its own placement, not this preset's.
-            request.voxProfile?.capturePlacementOverride = nil
+            reroute(&request, to: defaultID)
         }
+    }
+
+    /// Points `request` at `destinationID` and drops every route-specific
+    /// override, so the destination's own note, placement, entry template and
+    /// attachments folder apply instead of the original preset's.
+    static func reroute(_ request: inout CaptureRequest, to destinationID: UUID) {
+        request.destinationID = destinationID
+        request.placementOverride = nil
+        request.relativeNotePathOverride = nil
+        request.entryTemplateIDOverride = nil
+        request.attachmentsFolderNameOverride = nil
+        request.voxProfile?.capturePlacementOverride = nil
+        request.voxProfile?.captureEntryTemplateID = nil
+        request.voxProfile?.captureDestinationID = nil
     }
 
     public static func defaultDestination(captureRootURL: URL) async -> CaptureDestination? {

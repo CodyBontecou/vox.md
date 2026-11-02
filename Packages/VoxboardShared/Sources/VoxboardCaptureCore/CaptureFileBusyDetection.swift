@@ -170,9 +170,30 @@ public enum CaptureFileBusyDetector {
         return sidecarNames(for: fileURL.lastPathComponent).contains { name in
             let sidecar = directory.appendingPathComponent(name).path
             // Emacs lock files are dangling symlinks, so check the link itself.
-            return (try? fileManager.attributesOfItem(atPath: sidecar)) != nil
-                || fileManager.fileExists(atPath: sidecar)
+            guard (try? fileManager.attributesOfItem(atPath: sidecar)) != nil
+                || fileManager.fileExists(atPath: sidecar) else { return false }
+            // Vim creates its swap file as soon as a note is opened, so only a
+            // swap marked dirty means the buffer has unsaved changes.
+            if name.hasSuffix(".swp") || name.hasSuffix(".swo") {
+                return isDirtyVimSwapFile(atPath: sidecar)
+            }
+            return true
         }
+    }
+
+    /// Offset of `b0_dirty` in Vim's swap block 0 (`b0_fname[B0_FNAME_SIZE_ORG - 1]`)
+    /// and the value Vim stores there while the buffer is modified.
+    static let vimSwapDirtyOffset = 1007
+    static let vimSwapDirtyValue: UInt8 = 0x55
+
+    /// True when the Vim swap file at `path` says its buffer is modified. An
+    /// unreadable or truncated swap file is treated as dirty, to stay safe.
+    static func isDirtyVimSwapFile(atPath path: String) -> Bool {
+        guard let handle = FileHandle(forReadingAtPath: path) else { return true }
+        defer { try? handle.close() }
+        guard let header = try? handle.read(upToCount: vimSwapDirtyOffset + 1),
+              header.count > vimSwapDirtyOffset else { return true }
+        return header[header.startIndex + vimSwapDirtyOffset] == vimSwapDirtyValue
     }
 
     /// True when another process holds an exclusive `flock` on the file.
@@ -202,28 +223,37 @@ public enum CaptureFileBusyDetector {
     }
 
     /// A sibling path for "Write a new note instead", e.g.
-    /// `Tasks/Tasks (Vox.md 2026-11-01 1105).md`.
+    /// `Tasks/Tasks (Vox.md 2026-11-01 1105).md`. Errors from `exists`
+    /// propagate, and the search gives up after `maximumNewNoteAttempts`
+    /// candidates rather than looping forever.
     public static func newNoteRelativePath(
         for relativePath: String,
         at date: Date = Date(),
-        exists: (String) -> Bool
-    ) -> String {
+        exists: (String) throws -> Bool
+    ) throws -> String {
         let nsPath = relativePath as NSString
         let directory = nsPath.deletingLastPathComponent
-        let stem = (nsPath.lastPathComponent as NSString).deletingPathExtension
         let pathExtension = nsPath.pathExtension.isEmpty ? "md" : nsPath.pathExtension
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyy-MM-dd HHmm"
-        let base = "\(stem) (Vox.md \(formatter.string(from: date)))"
-        var attempt = 1
-        while true {
+        let base = newNoteNamePrefix(for: relativePath) + "\(formatter.string(from: date)))"
+        for attempt in 1...maximumNewNoteAttempts {
             let name = attempt == 1 ? base : "\(base) \(attempt)"
             let filename = "\(name).\(pathExtension)"
             let candidate = directory.isEmpty ? filename : directory + "/" + filename
-            if !exists(candidate) { return candidate }
-            attempt += 1
+            if try !exists(candidate) { return candidate }
         }
+        throw CocoaError(.fileWriteFileExists)
+    }
+
+    static let maximumNewNoteAttempts = 1000
+
+    /// The file-name prefix every "Write a new note instead" sibling of
+    /// `relativePath` starts with, e.g. `Tasks (Vox.md `.
+    public static func newNoteNamePrefix(for relativePath: String) -> String {
+        let stem = ((relativePath as NSString).lastPathComponent as NSString).deletingPathExtension
+        return "\(stem) (Vox.md "
     }
 }
 

@@ -95,33 +95,13 @@ public struct CapturePathPlanner: Sendable {
     /// The sanitized title for `request`, or nil when the capture has no text
     /// to name it by (callers fall back to the timestamp).
     static func titleComponent(for request: CaptureRequest) -> String? {
-        for payload in request.payloads {
-            let candidate: String?
-            switch payload {
-            case .text(let text): candidate = text
-            case .url(let url, let title): candidate = title ?? url.host
-            case .audio(_, let transcript): candidate = transcript
-            case .scannedDocument(_, _, let extractedText): candidate = extractedText
-            case .image(_, let altText, _), .sketch(_, _, let altText, _): candidate = altText
-            case .retainedAudio, .file: candidate = nil
-            }
-            guard let candidate else { continue }
-            for line in candidate.split(whereSeparator: \.isNewline) {
-                if let title = sanitizedTitle(String(line)) { return title }
-            }
-        }
-        return nil
+        CaptureTitleText.firstLine(in: request, sanitizedTitle)
     }
 
     /// Strips Markdown line markers and characters that are unsafe in file
     /// names, collapses whitespace and caps the length.
     static func sanitizedTitle(_ line: String) -> String? {
-        var text = line.trimmingCharacters(in: .whitespaces)
-        // Leading Markdown markers: headings, quotes, list bullets, checkboxes.
-        let markerPattern = #"^(?:#{1,6}\s+|>\s*|[-*+]\s+(?:\[[ xX]\]\s+)?|\d+[.)]\s+)+"#
-        if let range = text.range(of: markerPattern, options: .regularExpression) {
-            text.removeSubrange(range)
-        }
+        var text = CaptureTitleText.strippingLineMarkers(line)
         let unsafe = CharacterSet(charactersIn: "/\\:*?\"<>|#^[]")
             .union(.controlCharacters)
             .union(.newlines)

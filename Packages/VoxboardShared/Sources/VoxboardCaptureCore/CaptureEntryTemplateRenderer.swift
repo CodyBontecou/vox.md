@@ -58,31 +58,11 @@ public struct CaptureEntryTemplateRenderer: Sendable {
     /// The display title for `request`: its first non-empty text line without
     /// heading, quote, list or checkbox markers, at most 80 characters.
     public static func title(for request: CaptureRequest) -> String? {
-        for payload in request.payloads {
-            let candidate: String?
-            switch payload {
-            case .text(let text): candidate = text
-            case .url(let url, let title): candidate = title ?? url.host
-            case .audio(_, let transcript): candidate = transcript
-            case .scannedDocument(_, _, let extractedText): candidate = extractedText
-            case .image(_, let altText, _), .sketch(_, _, let altText, _): candidate = altText
-            case .retainedAudio, .file: candidate = nil
-            }
-            guard let candidate else { continue }
-            for line in candidate.split(whereSeparator: \.isNewline) {
-                if let title = displayTitle(String(line)) { return title }
-            }
-        }
-        return nil
+        CaptureTitleText.firstLine(in: request, displayTitle)
     }
 
     static func displayTitle(_ line: String) -> String? {
-        var text = line.trimmingCharacters(in: .whitespaces)
-        let markerPattern = #"^(?:#{1,6}\s+|>\s*|[-*+]\s+(?:\[[ xX]\]\s+)?|\d+[.)]\s+)+"#
-        if let range = text.range(of: markerPattern, options: .regularExpression) {
-            text.removeSubrange(range)
-        }
-        text = text.split(whereSeparator: \.isWhitespace).joined(separator: " ")
+        var text = CaptureTitleText.strippingLineMarkers(line)
         if text.count > 80 {
             text = String(text.prefix(80)).trimmingCharacters(in: .whitespaces) + "…"
         }

@@ -2085,6 +2085,28 @@ final class QuickCaptureViewModel {
         }
     }
 
+    /// Retries only the given inbox requests (for example captures waiting on
+    /// a busy note), leaving unrelated failed requests for the person to
+    /// decide on. Returns the IDs that are still queued afterwards.
+    @discardableResult
+    func retryInboxRequests(_ requestIDs: Set<UUID>) async -> Set<UUID> {
+        guard let captureRootURL else { return [] }
+        guard hasPaidCaptureAccess() else {
+            needsCaptureUnlock = true
+            return requestIDs
+        }
+        let inbox = CaptureInbox(rootDirectoryURL: captureRootURL)
+        for requestID in requestIDs {
+            // Captures held by older builds were parked in `failed`.
+            _ = try? await inbox.retryFailed(requestID: requestID)
+        }
+        await processPendingInbox()
+        let queued = Set((try? await inbox.requestIDs(in: .pending)) ?? [])
+            .union((try? await inbox.requestIDs(in: .failed)) ?? [])
+            .union((try? await inbox.requestIDs(in: .processing)) ?? [])
+        return requestIDs.intersection(queued)
+    }
+
     /// Failed inbox requests for foreground recovery UI, oldest first, each
     /// with the Markdown entry its route would write. Nothing here is copied
     /// into history or Activity storage; it is read on demand only.
@@ -2098,15 +2120,25 @@ final class QuickCaptureViewModel {
             var destinationName: String?
             if let library,
                let stored = library.destinations.first(where: { $0.id == request.destinationID }) {
+                // Resolve the route exactly as inbox delivery does.
                 var destination = library.resolvedDestination(
                     stored,
-                    overrideEntryTemplateID: request.voxProfile?.captureEntryTemplateID
+                    overrideEntryTemplateID: request.entryTemplateIDOverride
+                        ?? request.voxProfile?.captureEntryTemplateID
                 )
+                if let relativePath = request.relativeNotePathOverride {
+                    destination.noteTarget = .existingNote(relativePath: relativePath)
+                }
                 if let placement = request.placementOverride ?? request.voxProfile?.capturePlacementOverride {
                     destination.placement = placement
                 }
                 destinationName = destination.name
-                markdown = try? pipeline.previewEntryMarkdown(for: request, destination: destination)
+                // The vault may be unreachable (that is often why the capture
+                // failed); the preview then leaves out the template header.
+                let rootURL = (try? CaptureBookmarkResolver.resolve(destination.rootBookmark))?.url
+                let didAccess = rootURL?.startAccessingSecurityScopedResource() ?? false
+                markdown = try? pipeline.previewEntryMarkdown(for: request, destination: destination, rootURL: rootURL)
+                if didAccess { rootURL?.stopAccessingSecurityScopedResource() }
                 if let entry = markdown, let heading = CaptureHistoryRecord.placementHeading(for: destination.placement) {
                     let level: Int
                     if case .beneathHeading(let selector, _, _) = destination.placement {

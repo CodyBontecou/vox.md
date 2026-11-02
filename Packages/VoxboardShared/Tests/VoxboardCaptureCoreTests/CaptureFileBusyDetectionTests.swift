@@ -13,6 +13,22 @@ final class CaptureFileBusyDetectionTests: XCTestCase {
         XCTAssertEqual(CaptureFileBusyDetector.busyReason(for: note), .unsavedChanges)
     }
 
+    func test_detector_ignoresCleanVimSwapFile() throws {
+        let folder = try temporaryFolder()
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let note = folder.appendingPathComponent("Tasks.md")
+        try "# Tasks".write(to: note, atomically: true, encoding: .utf8)
+        let swap = folder.appendingPathComponent(".Tasks.md.swp")
+
+        var header = Data(repeating: 0, count: 4096)
+        try header.write(to: swap)
+        XCTAssertNil(CaptureFileBusyDetector.busyReason(for: note), "open in Vim, no unsaved edits")
+
+        header[CaptureFileBusyDetector.vimSwapDirtyOffset] = CaptureFileBusyDetector.vimSwapDirtyValue
+        try header.write(to: swap)
+        XCTAssertEqual(CaptureFileBusyDetector.busyReason(for: note), .unsavedChanges)
+    }
+
     func test_detector_reportsDanglingEmacsLockAsUnsavedChanges() throws {
         let folder = try temporaryFolder()
         defer { try? FileManager.default.removeItem(at: folder) }
@@ -97,6 +113,49 @@ final class CaptureFileBusyDetectionTests: XCTestCase {
         XCTAssertTrue(try String(contentsOf: receipt.fileURL, encoding: .utf8).contains("Captured"))
     }
 
+    func test_writer_neverWritesANewNoteEntryTwice() async throws {
+        let folder = try temporaryFolder()
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let note = folder.appendingPathComponent("Tasks.md")
+        try "# Tasks".write(to: note, atomically: true, encoding: .utf8)
+        let swap = folder.appendingPathComponent(".Tasks.md.swp")
+        try "swap".write(to: swap, atomically: true, encoding: .utf8)
+        let monitor = CaptureFileBusyMonitor()
+        monitor.isDetectionEnabled = true
+        monitor.policy = .writeNewNote
+        let writer = CoordinatedCaptureWriter(
+            coordinator: ProcessLocalCaptureFileCoordinator.shared,
+            busyMonitor: monitor
+        )
+        let requestID = UUID()
+        var protected = mutation(requestID, entry: "Captured")
+        protected.retryProtectionEnabled = true
+
+        let first = try await writer.write(protected, to: note)
+        // The request was never marked complete, so it is delivered again:
+        // once while the note is still busy, once after it is free.
+        let busyRetry = try await writer.write(protected, to: note)
+        try FileManager.default.removeItem(at: swap)
+        let freeRetry = try await writer.write(protected, to: note)
+
+        XCTAssertFalse(first.wasAlreadyApplied)
+        XCTAssertTrue(busyRetry.wasAlreadyApplied)
+        XCTAssertTrue(freeRetry.wasAlreadyApplied)
+        XCTAssertEqual(busyRetry.fileURL, first.fileURL)
+        XCTAssertEqual(freeRetry.fileURL, first.fileURL)
+        XCTAssertEqual(try String(contentsOf: note, encoding: .utf8), "# Tasks")
+        let siblings = try FileManager.default.contentsOfDirectory(atPath: folder.path)
+            .filter { $0.hasPrefix("Tasks (Vox.md ") }
+        XCTAssertEqual(siblings.count, 1)
+    }
+
+    func test_newNoteRelativePath_propagatesExistsErrors() {
+        XCTAssertThrowsError(try CaptureFileBusyDetector.newNoteRelativePath(for: "Tasks.md") { _ in
+            throw CocoaError(.fileReadNoPermission)
+        })
+        XCTAssertThrowsError(try CaptureFileBusyDetector.newNoteRelativePath(for: "Tasks.md") { _ in true })
+    }
+
     func test_requestedNewNoteBypassesWaitPolicy() async throws {
         let folder = try temporaryFolder()
         defer { try? FileManager.default.removeItem(at: folder) }
@@ -173,12 +232,12 @@ final class CaptureFileBusyDetectionTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: root.appendingPathComponent("Inbox.md").path))
     }
 
-    func test_newNoteRelativePath_keepsFolderAndAvoidsCollisions() {
+    func test_newNoteRelativePath_keepsFolderAndAvoidsCollisions() throws {
         let date = Date(timeIntervalSince1970: 0)
         var taken: Set<String> = []
-        let first = CaptureFileBusyDetector.newNoteRelativePath(for: "Lists/Tasks.md", at: date) { taken.contains($0) }
+        let first = try CaptureFileBusyDetector.newNoteRelativePath(for: "Lists/Tasks.md", at: date) { taken.contains($0) }
         taken.insert(first)
-        let second = CaptureFileBusyDetector.newNoteRelativePath(for: "Lists/Tasks.md", at: date) { taken.contains($0) }
+        let second = try CaptureFileBusyDetector.newNoteRelativePath(for: "Lists/Tasks.md", at: date) { taken.contains($0) }
         XCTAssertTrue(first.hasPrefix("Lists/Tasks (Vox.md "))
         XCTAssertTrue(first.hasSuffix(").md"))
         XCTAssertNotEqual(first, second)

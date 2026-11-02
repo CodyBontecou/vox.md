@@ -158,6 +158,17 @@ public actor CoordinatedCaptureWriter: CaptureMutationWriting {
             )
             let edited = try editor.applying(mutation, to: existing)
 
+            if detectsBusyFiles, !wasAlreadyApplied, mutation.retryProtectionEnabled,
+               let receipt = Self.existingNewNoteReceipt(
+                   for: mutation,
+                   besideFileAt: coordinatedURL,
+                   secureLocation: secureLocation,
+                   fileManager: fileManager
+               ) {
+                busyMonitor.clear(requestID: mutation.requestID)
+                return receipt
+            }
+
             if detectsBusyFiles, !wasAlreadyApplied {
                 if busyReason == nil, let preReadSnapshot,
                    CaptureFileBusyDetector.snapshot(of: busyTargetURL, fileManager: fileManager) != preReadSnapshot {
@@ -252,35 +263,84 @@ public actor CoordinatedCaptureWriter: CaptureMutationWriting {
         newNoteMutation.placement = .append
         let content = try editor.applying(newNoteMutation, to: "")
         let data = Data(content.utf8)
-        let writtenURL: URL
+        let directory = coordinatedURL.deletingLastPathComponent()
+
+        func read(_ relativePath: String) throws -> String? {
+            let data: Data?
+            if let secureLocation {
+                data = try SecureCaptureFileIO.read(relativePath: relativePath, rootURL: secureLocation.root)
+            } else {
+                let url = directory.appendingPathComponent((relativePath as NSString).lastPathComponent)
+                data = fileManager.fileExists(atPath: url.path) ? try Data(contentsOf: url) : nil
+            }
+            return data.flatMap { String(data: $0, encoding: .utf8) }
+        }
+        func url(for relativePath: String) -> URL {
+            secureLocation.map { $0.root.appendingPathComponent(relativePath) }
+                ?? directory.appendingPathComponent((relativePath as NSString).lastPathComponent)
+        }
+
+        let relativePath: String
         if let secureLocation {
-            let relativePath = CaptureFileBusyDetector.newNoteRelativePath(
-                for: secureLocation.relativePath
-            ) { candidate in
-                (try? SecureCaptureFileIO.exists(relativePath: candidate, rootURL: secureLocation.root)) ?? true
+            relativePath = try CaptureFileBusyDetector.newNoteRelativePath(for: secureLocation.relativePath) {
+                try SecureCaptureFileIO.exists(relativePath: $0, rootURL: secureLocation.root)
             }
-            try SecureCaptureFileIO.writeAtomically(
-                data,
-                relativePath: relativePath,
-                rootURL: secureLocation.root
-            )
-            writtenURL = secureLocation.root.appendingPathComponent(relativePath)
+            try SecureCaptureFileIO.writeAtomically(data, relativePath: relativePath, rootURL: secureLocation.root)
         } else {
-            let directory = coordinatedURL.deletingLastPathComponent()
-            let relativePath = CaptureFileBusyDetector.newNoteRelativePath(
-                for: coordinatedURL.lastPathComponent
-            ) { candidate in
-                fileManager.fileExists(atPath: directory.appendingPathComponent(candidate).path)
+            relativePath = try CaptureFileBusyDetector.newNoteRelativePath(for: coordinatedURL.lastPathComponent) {
+                fileManager.fileExists(atPath: directory.appendingPathComponent($0).path)
             }
-            writtenURL = directory.appendingPathComponent(relativePath)
             try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
-            try data.write(to: writtenURL, options: .atomic)
+            try data.write(to: url(for: relativePath), options: .atomic)
+        }
+        guard try read(relativePath) == content else {
+            throw CaptureWriteError.verificationFailed(mutation.requestID)
         }
         return CaptureWriteReceipt(
-            fileURL: writtenURL,
+            fileURL: url(for: relativePath),
             requestID: mutation.requestID,
             byteCount: data.count,
             wasAlreadyApplied: false
         )
+    }
+
+    /// A "Write a new note instead" sibling that already carries this
+    /// request's marker: an earlier attempt wrote it but the request was never
+    /// marked complete. Reported instead of writing the entry a second time,
+    /// either into another sibling or into the original note.
+    nonisolated private static func existingNewNoteReceipt(
+        for mutation: MarkdownCaptureMutation,
+        besideFileAt coordinatedURL: URL,
+        secureLocation: (root: URL, relativePath: String)?,
+        fileManager: FileManager
+    ) -> CaptureWriteReceipt? {
+        let directory = coordinatedURL.deletingLastPathComponent()
+        let notePath = secureLocation?.relativePath ?? coordinatedURL.lastPathComponent
+        let noteDirectory = (notePath as NSString).deletingLastPathComponent
+        let prefix = CaptureFileBusyDetector.newNoteNamePrefix(for: notePath)
+        let siblings = ((try? fileManager.contentsOfDirectory(atPath: directory.path)) ?? [])
+            .filter { $0.hasPrefix(prefix) }
+            .sorted()
+        for sibling in siblings {
+            let data: Data?
+            let fileURL: URL
+            if let secureLocation {
+                let relativePath = noteDirectory.isEmpty ? sibling : noteDirectory + "/" + sibling
+                data = try? SecureCaptureFileIO.read(relativePath: relativePath, rootURL: secureLocation.root)
+                fileURL = secureLocation.root.appendingPathComponent(relativePath)
+            } else {
+                fileURL = directory.appendingPathComponent(sibling)
+                data = try? Data(contentsOf: fileURL)
+            }
+            guard let data, let existing = String(data: data, encoding: .utf8),
+                  CaptureRequestMarker.isPresent(in: existing, requestID: mutation.requestID) else { continue }
+            return CaptureWriteReceipt(
+                fileURL: fileURL,
+                requestID: mutation.requestID,
+                byteCount: data.count,
+                wasAlreadyApplied: true
+            )
+        }
+        return nil
     }
 }

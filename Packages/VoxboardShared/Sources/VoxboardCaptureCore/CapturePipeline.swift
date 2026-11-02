@@ -247,31 +247,17 @@ public actor CapturePipeline {
         )
 
         do {
-            var entry = try renderer.render(
-                request,
-                for: effectiveDestination,
-                attachmentPaths: attachments.attachmentPaths
+            let (entry, renderedPrefix, renderedSuffix) = renderedParts(
+                of: try renderer.render(
+                    request,
+                    for: effectiveDestination,
+                    attachmentPaths: attachments.attachmentPaths
+                ),
+                for: request,
+                destination: effectiveDestination,
+                vaultTemplate: vaultTemplate
             )
-            if vaultTemplate == nil {
-                entry = CaptureEntryTemplateRenderer.entry(entry, under: effectiveDestination.entryPrefix, for: request)
-            }
-            let mappedKey = request.deliveryKind == .meteredVoiceTranscript
-                ? TranscriptPropertyMapping.normalizedKey(request.voxProfile?.transcriptPropertyName ?? "") : nil
-            let propertyOnly = mappedKey != nil && request.voxProfile?.includeTranscriptInBody == false
-            let renderedPrefix: String
-            let renderedSuffix: String
-            if let vaultTemplate {
-                let rendered = vaultTemplateRenderer.render(vaultTemplate, for: request)
-                    .trimmingCharacters(in: .newlines)
-                renderedPrefix = rendered.isEmpty ? "" : rendered + "\n\n"
-                renderedSuffix = ""
-            } else if propertyOnly {
-                renderedPrefix = ""
-                renderedSuffix = ""
-            } else {
-                renderedPrefix = templateRenderer.render(effectiveDestination.entryPrefix, for: request)
-                renderedSuffix = templateRenderer.render(effectiveDestination.entrySuffix, for: request)
-            }
+            let mappedKey = Self.mappedTranscriptKey(for: request)
             let documentMetadata = request.voxProfile?.metadataScope == .entry
                 ? nil
                 : try CaptureLocationMetadataRenderer().render(request: request)
@@ -396,31 +382,80 @@ public actor CapturePipeline {
 
 extension CapturePipeline {
     /// Renders the entry Markdown a request would write, without touching the
-    /// vault: no attachments are copied and the vault template file is not
-    /// read. Used by recovery UI ("Copy Markdown") for requests that could not
-    /// be delivered. Attachment embeds use the paths the delivery would plan.
+    /// vault: no attachments are copied. Used by recovery UI ("Copy Markdown")
+    /// for requests that could not be delivered. Attachment embeds use the
+    /// paths the delivery would plan. The route's vault Markdown template is
+    /// read only when `rootURL` is given and reachable; otherwise its header
+    /// is left out but the entry is still shaped as the template route would.
     nonisolated public func previewEntryMarkdown(
         for request: CaptureRequest,
-        destination: CaptureDestination
+        destination: CaptureDestination,
+        rootURL: URL? = nil
     ) throws -> String {
         var effectiveDestination = destination
         if let folderOverride = request.attachmentsFolderNameOverride {
             effectiveDestination.attachmentsFolderName = folderOverride
         }
+        let notePath = request.relativeNotePathOverride
+            ?? (try? pathPlanner.relativePath(for: request, destination: effectiveDestination))
         if effectiveDestination.attachmentsFolderName == CaptureDestination.besideNoteAttachmentsFolder {
-            let notePath = request.relativeNotePathOverride
-                ?? (try? pathPlanner.relativePath(for: request, destination: effectiveDestination))
             effectiveDestination.attachmentsFolderName = notePath
                 .map { ($0 as NSString).deletingLastPathComponent } ?? ""
         }
-        let entry = CaptureEntryTemplateRenderer.entry(
-            try renderer.render(request, for: effectiveDestination),
-            under: effectiveDestination.entryPrefix,
-            for: request
+        var vaultTemplate: String?
+        if effectiveDestination.markdownTemplatePath != nil {
+            vaultTemplate = rootURL.flatMap { rootURL in
+                notePath.flatMap { notePath in
+                    try? CaptureVaultMarkdownTemplateLoader.load(
+                        relativePath: effectiveDestination.markdownTemplatePath,
+                        destinationNotePath: notePath,
+                        rootURL: rootURL
+                    )
+                }
+            } ?? ""
+        }
+        let (entry, prefix, suffix) = renderedParts(
+            of: try renderer.render(request, for: effectiveDestination),
+            for: request,
+            destination: effectiveDestination,
+            vaultTemplate: vaultTemplate
         )
-        let prefix = templateRenderer.render(effectiveDestination.entryPrefix, for: request)
-        let suffix = templateRenderer.render(effectiveDestination.entrySuffix, for: request)
         return (prefix + entry + suffix).trimmingCharacters(in: .newlines)
+    }
+
+    /// The frontmatter key a metered voice transcript is mapped to, if any.
+    static func mappedTranscriptKey(for request: CaptureRequest) -> String? {
+        request.deliveryKind == .meteredVoiceTranscript
+            ? TranscriptPropertyMapping.normalizedKey(request.voxProfile?.transcriptPropertyName ?? "") : nil
+    }
+
+    /// Shapes a rendered entry exactly as delivery writes it: the vault
+    /// template header (or the route's entry prefix and suffix), nothing
+    /// around a transcript kept only in a property, and a leading heading
+    /// that repeats `{title}` dropped. Shared by delivery and the preview so
+    /// "Copy Markdown" always matches what would be written.
+    nonisolated func renderedParts(
+        of renderedEntry: String,
+        for request: CaptureRequest,
+        destination: CaptureDestination,
+        vaultTemplate: String?
+    ) -> (entry: String, prefix: String, suffix: String) {
+        if let vaultTemplate {
+            let rendered = vaultTemplateRenderer.render(vaultTemplate, for: request)
+                .trimmingCharacters(in: .newlines)
+            return (renderedEntry, rendered.isEmpty ? "" : rendered + "\n\n", "")
+        }
+        let entry = CaptureEntryTemplateRenderer.entry(renderedEntry, under: destination.entryPrefix, for: request)
+        let propertyOnly = Self.mappedTranscriptKey(for: request) != nil
+            && request.voxProfile?.includeTranscriptInBody == false
+        if propertyOnly {
+            return (entry, "", "")
+        }
+        return (
+            entry,
+            templateRenderer.render(destination.entryPrefix, for: request),
+            templateRenderer.render(destination.entrySuffix, for: request)
+        )
     }
 }
 
