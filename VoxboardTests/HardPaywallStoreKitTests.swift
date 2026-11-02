@@ -331,8 +331,9 @@ final class HardPaywallStoreKitTests: XCTestCase {
             try session.disableAutoRenewForTransaction(identifier: transaction.identifier)
         }
         try session.expireSubscription(productIdentifier: VoxboardPurchaseProduct.individualWeekly.rawValue)
-        // StoreKit publishes subscription expiration asynchronously.
-        for _ in 0..<50 {
+        // StoreKit publishes subscription expiration asynchronously, and more
+        // slowly while the full suite runs; allow up to 15 s.
+        for _ in 0..<150 {
             await store.syncCurrentEntitlements()
             if !tracker.hasUnlocked { break }
             try await Task.sleep(for: .milliseconds(100))

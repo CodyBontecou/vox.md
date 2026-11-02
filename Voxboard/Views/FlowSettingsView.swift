@@ -638,7 +638,13 @@ struct CapturePresetEditorView: View {
         }
         .toolbarBackground(Geist.bg, for: .navigationBar)
         .onAppear {
-            pinnedSurfaces = CapturePresetSurfacePinStore.surfaces(for: flow.id, defaults: AppConstants.sharedDefaults)
+            // Effective pins: Watch and the keyboard list every enabled route
+            // until configured, so the editor matches what those surfaces show.
+            pinnedSurfaces = CapturePresetPinSurface.allCases.filter { surface in
+                RouteSurfacePins.isUnconfiguredFallback(surface)
+                    ? flow.isEnabled
+                    : RouteSurfacePins.isPinned(surface, id: flow.id)
+            }
         }
         .task {
             await loadCaptureDestinations()

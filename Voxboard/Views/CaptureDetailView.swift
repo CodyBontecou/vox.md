@@ -521,7 +521,7 @@ struct CaptureDetailView: View {
         .overlay(Capsule().stroke(Geist.border, lineWidth: 1))
         .contentShape(Capsule())
         .accessibilityElement(children: .combine)
-        .accessibilityHint(isLocked ? Text("Your trial has ended. See plans to capture again.") : Text(verbatim: ""))
+        .accessibilityHint(isLocked ? usageTracker.readOnlyHint : Text(verbatim: ""))
     }
 
     // MARK: Actions

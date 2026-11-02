@@ -782,13 +782,15 @@ struct LibraryRouteTileView: View {
     }
 }
 
-/// "Your trial has ended" card shown wherever the Library is read-only.
+/// Read-only card shown wherever the Library is read-only: "Your trial has
+/// ended" once paid access ran out, otherwise a first-run read-only title.
 struct LibraryTrialEndedCard: View {
+    @Environment(UsageTracker.self) private var usageTracker
     let onSeePlans: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Your trial has ended")
+            Text(usageTracker.readOnlyTitle)
                 .font(Geist.heading(.callout))
                 .foregroundStyle(Geist.Palette.background100)
             Text("You can still read, search, copy, export and delete everything here. New captures and edits need Vox.md.")
@@ -814,6 +816,7 @@ struct LibraryTrialEndedCard: View {
 /// Capture screen can place this in place of its Speak control while
 /// `UsageTracker.isLibraryReadOnly` is true.
 struct LockedSpeakBar: View {
+    @Environment(UsageTracker.self) private var usageTracker
     var body: some View {
         Label("Speak", systemImage: "lock")
             .font(Geist.label(.body))
@@ -821,7 +824,7 @@ struct LockedSpeakBar: View {
             .frame(maxWidth: .infinity, minHeight: Geist.ControlHeight.hero)
             .background(Geist.well, in: Capsule())
             .accessibilityLabel("Speak, locked")
-            .accessibilityHint("Your trial has ended. See plans to capture again.")
+            .accessibilityHint(usageTracker.readOnlyHint)
             .accessibilityAddTraits(.isButton)
             .accessibilityRemoveTraits(.isButton)
     }
@@ -831,6 +834,18 @@ extension UsageTracker {
     /// True when the trial has ended: the Library stays readable but new
     /// captures and edits are disabled.
     var isLibraryReadOnly: Bool { !hasUnlocked }
+
+    /// "Your trial has ended" is only true once paid access actually ended;
+    /// a first-run user browsing from the onboarding paywall never had one.
+    var readOnlyTitle: LocalizedStringKey {
+        hasAccessEnded ? "Your trial has ended" : "Read-only for now"
+    }
+
+    var readOnlyHint: Text {
+        hasAccessEnded
+            ? Text("Your trial has ended. See plans to capture again.")
+            : Text("Start a plan to capture.")
+    }
 
     /// The single read-only gate (docs/launch/hard-paywall): read, search,
     /// copy, export and explicit deletion stay available; editing, new
@@ -849,6 +864,7 @@ extension UsageTracker {
 /// Label for a control gated by `UsageTracker.requirePaidAccess`: the
 /// control stays visible and shows a lock while access is read-only.
 struct PaidAccessLabel: View {
+    @Environment(UsageTracker.self) private var usageTracker
     let title: LocalizedStringKey
     var systemImage: String?
     let isLocked: Bool
@@ -863,7 +879,7 @@ struct PaidAccessLabel: View {
         if isLocked {
             Label(title, systemImage: "lock")
                 .labelStyle(.titleAndIcon)
-                .accessibilityHint(Text("Your trial has ended. See plans to capture again."))
+                .accessibilityHint(usageTracker.readOnlyHint)
         } else if let systemImage {
             Label(title, systemImage: systemImage)
         } else {

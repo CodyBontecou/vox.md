@@ -1296,6 +1296,8 @@ struct QuickCaptureView: View {
 
     private var shouldShowMicHoldHint: Bool {
         !micHoldHintDismissed
+            // A locked Speak bar can't be held; the tip waits for paid access.
+            && !isCaptureReadOnly
             && hasCompletedInitialLoad
             && scenePhase == .active
             && !defersCaptureInputFocusForReleaseNotes
@@ -1827,6 +1829,9 @@ struct QuickCaptureView: View {
                     addTask: { viewModel.insertRecordingActionLine("- [ ] ") },
                     snapWhiteboard: snapWhiteboardDuringRecording
                 )
+                // Full-screen: keep VoiceOver off the Capture chrome
+                // (Activity, Settings) underneath while recording.
+                .accessibilityAddTraits(.isModal)
                 .transition(.opacity.combined(with: .move(edge: .bottom)))
                 .zIndex(10)
             }

@@ -46,27 +46,38 @@ extension CapturePresetPinSurface {
 enum RouteSurfacePins {
     static var defaults: UserDefaults? { AppConstants.sharedDefaults }
 
+    /// Watch and the keyboard offer every enabled route until the user
+    /// configures them (`effectivePinnedIDs`); other surfaces start empty.
+    static func offersEveryRouteUntilConfigured(_ surface: CapturePresetPinSurface) -> Bool {
+        surface == .watch || surface == .keyboard
+    }
+
+    static func isUnconfiguredFallback(_ surface: CapturePresetPinSurface) -> Bool {
+        offersEveryRouteUntilConfigured(surface)
+            && !CapturePresetSurfacePinStore.isConfigured(surface, defaults: defaults)
+    }
+
     static func toggle(_ surface: CapturePresetPinSurface, id: String) {
-        let pinned = CapturePresetSurfacePinStore.isPinned(id: id, to: surface, defaults: defaults)
-        set(!pinned, surface: surface, id: id)
+        set(!isPinned(surface, id: id), surface: surface, id: id)
     }
 
     static func set(_ pinned: Bool, surface: CapturePresetPinSurface, id: String) {
-        // The first explicit choice for Watch replaces "every route" with an
-        // explicit list; seed it with the enabled routes so unpinning one does
-        // not silently hide all others.
-        if surface == .watch, !CapturePresetSurfacePinStore.isConfigured(.watch, defaults: defaults) {
+        // The first explicit choice for Watch or the keyboard replaces "every
+        // route" with an explicit list; seed it with the enabled routes so
+        // unpinning one does not silently hide all others.
+        if isUnconfiguredFallback(surface) {
             for flow in CapturePresetStore.loadFlows().filter(\.isEnabled) where flow.id != id {
-                CapturePresetSurfacePinStore.setPinned(true, id: flow.id, to: .watch, defaults: defaults)
+                CapturePresetSurfacePinStore.setPinned(true, id: flow.id, to: surface, defaults: defaults)
             }
         }
         CapturePresetSurfacePinStore.setPinned(pinned, id: id, to: surface, defaults: defaults)
         surface.reloadConsumers()
     }
 
-    /// Effective membership shown in the UI (Watch shows every route until configured).
+    /// Effective membership shown in the UI (Watch and the keyboard show every
+    /// route until configured).
     static func isPinned(_ surface: CapturePresetPinSurface, id: String) -> Bool {
-        if surface == .watch, !CapturePresetSurfacePinStore.isConfigured(.watch, defaults: defaults) {
+        if isUnconfiguredFallback(surface) {
             return true
         }
         return CapturePresetSurfacePinStore.isPinned(id: id, to: surface, defaults: defaults)
@@ -74,8 +85,8 @@ enum RouteSurfacePins {
 
     static func pinnedFlows(_ surface: CapturePresetPinSurface) -> [CapturePreset] {
         let enabled = CapturePresetStore.loadFlows().filter(\.isEnabled)
-        let ids = surface == .watch
-            ? CapturePresetSurfacePinStore.effectivePinnedIDs(for: .watch, allIDs: enabled.map(\.id), defaults: defaults)
+        let ids = offersEveryRouteUntilConfigured(surface)
+            ? CapturePresetSurfacePinStore.effectivePinnedIDs(for: surface, allIDs: enabled.map(\.id), defaults: defaults)
             : CapturePresetSurfacePinStore.pinnedIDs(for: surface, defaults: defaults)
         return ids.compactMap { id in enabled.first { $0.id == id } }
     }
