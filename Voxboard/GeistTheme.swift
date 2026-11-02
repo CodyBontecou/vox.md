@@ -700,8 +700,12 @@ struct ThoughtfulOnboarding: View {
                 page(initialPage)
                     .navigationDestination(for: Int.self) { page($0) }
             }
-            footer
-                .environment(\.colorScheme, currentPage == 0 ? .dark : colorScheme)
+            // At accessibility sizes the actions scroll with each page (see
+            // `inlineActions`) so a tall pinned footer can't crowd out the text.
+            if !dynamicTypeSize.isAccessibilitySize {
+                footer
+                    .environment(\.colorScheme, currentPage == 0 ? .dark : colorScheme)
+            }
         }
         .background(
             Thoughtful.background
@@ -715,6 +719,7 @@ struct ThoughtfulOnboarding: View {
     }
 
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     /// "Start capturing": creates the chosen starter routes in the vault, then
     /// hands over to the plans (purchase) step exactly as before.
@@ -744,6 +749,25 @@ struct ThoughtfulOnboarding: View {
     }
 
     private var footer: some View {
+        footerActions
+            .frame(maxWidth: 440)
+            .padding(.horizontal, 24)
+            .padding(.top, 12)
+            .padding(.bottom, 24)
+            .frame(maxWidth: .infinity)
+            .background(Thoughtful.background)
+    }
+
+    /// The footer's actions placed at the end of a page's scrolling content,
+    /// used instead of the pinned footer at accessibility text sizes.
+    @ViewBuilder
+    private var inlineActions: some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            footerActions.padding(.top, 32)
+        }
+    }
+
+    private var footerActions: some View {
         VStack(spacing: 14) {
             Button(currentPage == 0 ? String(localized: "Get started") : String(localized: "Start capturing")) {
                 if currentPage == 0 {
@@ -760,12 +784,6 @@ struct ThoughtfulOnboarding: View {
                     .multilineTextAlignment(.center)
             }
         }
-        .frame(maxWidth: 440)
-        .padding(.horizontal, 24)
-        .padding(.top, 12)
-        .padding(.bottom, 24)
-        .frame(maxWidth: .infinity)
-        .background(Thoughtful.background)
     }
 
     @ViewBuilder
@@ -848,6 +866,8 @@ struct ThoughtfulOnboarding: View {
                     welcomeBullet("Your words are never sent to us")
                 }
                 .padding(.top, 40)
+
+                inlineActions
             }
             .frame(maxWidth: 440, alignment: .topLeading)
             .padding(.horizontal, 24)
@@ -969,6 +989,8 @@ struct ThoughtfulOnboarding: View {
                         .foregroundStyle(Thoughtful.secondary)
                         .padding(.top, 10)
                 }
+
+                inlineActions
             }
             .frame(maxWidth: 440, alignment: .topLeading)
             .padding(.horizontal, 20)
@@ -1034,6 +1056,8 @@ struct ThoughtfulOnboarding: View {
                         .stroke(Geist.border, lineWidth: 1)
                 )
                 .padding(.top, 24)
+
+                inlineActions
             }
             .frame(maxWidth: 440, alignment: .topLeading)
             .padding(.horizontal, 20)
