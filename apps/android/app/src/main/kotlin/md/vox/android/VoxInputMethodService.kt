@@ -3,8 +3,6 @@ package md.vox.android
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.content.res.Configuration
-import android.graphics.Color
 import android.graphics.Typeface
 import android.text.InputType
 import android.util.AtomicFile
@@ -16,9 +14,13 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.inputmethodservice.InputMethodService
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import java.util.Locale
 import java.io.File
 import kotlinx.coroutines.CoroutineScope
@@ -44,12 +46,12 @@ class VoxInputMethodService : InputMethodService() {
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private lateinit var audioCapture: AudioCaptureClient
     private lateinit var transcription: RecordingTranscriptionClient
-    private var statusView: TextView? = null
-    private var voiceButton: Button? = null
+    private var panel: VoxKeyboardPanel? = null
+    private val voiceButton: View? get() = panel?.voiceView
     private var isListening = false
     private var shifted = false
     private var symbols = false
-    private var root: LinearLayout? = null
+    private val root: View? get() = panel?.root
     private var editorGeneration = 0L
     private var activeVoiceGeneration: Long? = null
     private var activeSessionID: String? = null
@@ -82,7 +84,7 @@ class VoxInputMethodService : InputMethodService() {
                     RecordingTranscriptionPhase.QUEUED,
                     RecordingTranscriptionPhase.PROCESSING,
                     RecordingTranscriptionPhase.FINALIZING ->
-                        updateVoiceState("Transcribing on device…", listening = true)
+                        updateVoiceState("Transcribing on device…", listening = true, mode = KeyboardVoiceMode.PROCESSING)
                     RecordingTranscriptionPhase.COMPLETED -> completeVoiceResult(
                         sessionID,
                         state.preferredTranscript.orEmpty(),
@@ -95,7 +97,25 @@ class VoxInputMethodService : InputMethodService() {
     }
 
     override fun onCreateInputView(): View {
-        return buildKeyboard().also { root = it }
+        val panel = VoxKeyboardPanel(
+            context = this,
+            localize = ::localize,
+            onKey = ::handleKey,
+            onDeleteLongPress = { view ->
+                currentInputConnection?.deleteSurroundingTextInCodePoints(1, 0)
+                performKeyboardHaptic(view)
+            },
+            onVoice = {
+                when {
+                    isListening -> stopVoice()
+                    pendingText != null && !sensitiveInput -> insertPendingText()
+                    else -> startVoice()
+                }
+            },
+        )
+        panel.rebuildKeyRows(shifted, symbols)
+        this.panel = panel
+        return panel.root
     }
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
@@ -106,7 +126,7 @@ class VoxInputMethodService : InputMethodService() {
         pendingText = PendingVoiceTextStore.read(this)
         shifted = shouldStartShifted(info)
         symbols = false
-        root?.let { rebuildKeyRows(it) }
+        panel?.rebuildKeyRows(shifted, symbols)
         updateIdleVoiceState()
     }
 
@@ -122,114 +142,18 @@ class VoxInputMethodService : InputMethodService() {
         super.onDestroy()
     }
 
-    private fun buildKeyboard(): LinearLayout {
-        val dark = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-        val background = Color.parseColor(if (dark) "#1A1A1C" else "#E2E4E8")
-        val foreground = Color.parseColor(if (dark) "#F2F1EE" else "#171614")
-        val root = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setBackgroundColor(background)
-            setPadding(dp(5), dp(5), dp(5), dp(6))
-            tag = KEYBOARD_ROOT_TAG
-        }
-        val toolbar = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            setPadding(dp(5), 0, dp(5), dp(4))
-        }
-        statusView = TextView(this).apply {
-            text = localize("On-device voice")
-            setTextColor(foreground)
-            textSize = 13f
-            maxLines = 1
-            ellipsize = android.text.TextUtils.TruncateAt.END
-            contentDescription = localize("Voice status")
-        }
-        toolbar.addView(statusView, LinearLayout.LayoutParams(0, dp(40), 1f))
-        voiceButton = keyButton("Mic", wide = false).apply {
-            text = "●"
-            contentDescription = localize("Start voice typing")
-            setOnClickListener {
-                when {
-                    isListening -> stopVoice()
-                    pendingText != null && !sensitiveInput -> insertPendingText()
-                    else -> startVoice()
-                }
-            }
-        }
-        toolbar.addView(voiceButton, LinearLayout.LayoutParams(dp(52), dp(40)))
-        root.addView(toolbar, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(44)))
-        rebuildKeyRows(root)
-        return root
-    }
-
-    private fun rebuildKeyRows(root: LinearLayout) {
-        while (root.childCount > 1) root.removeViewAt(root.childCount - 1)
-        val rows = if (symbols) SYMBOL_ROWS else LETTER_ROWS
-        rows.forEach { row ->
-            val rowView = LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL
-                gravity = Gravity.CENTER
-            }
-            row.forEach { key ->
-                val label = when (key) {
-                    SHIFT -> if (shifted) "⇧" else "↑"
-                    DELETE -> "⌫"
-                    SYMBOLS -> if (symbols) "ABC" else "123"
-                    NEXT_IME -> "◎"
-                    SPACE -> "space"
-                    ENTER -> "↵"
-                    else -> if (shifted && !symbols) key.uppercase(Locale.getDefault()) else key
-                }
-                val weight = when (key) {
-                    SPACE -> 4.5f
-                    SHIFT, DELETE, SYMBOLS, NEXT_IME, ENTER -> 1.45f
-                    else -> 1f
-                }
-                val button = keyButton(label, wide = weight > 1f).apply {
-                    contentDescription = keyDescription(key, label)
-                    setOnClickListener { handleKey(key) }
-                    if (key == DELETE) {
-                        setOnLongClickListener {
-                            currentInputConnection?.deleteSurroundingTextInCodePoints(1, 0)
-                            performKeyboardHaptic(this)
-                            true
-                        }
-                    }
-                }
-                rowView.addView(
-                    button,
-                    LinearLayout.LayoutParams(0, dp(48), weight).apply {
-                        setMargins(dp(2), dp(2), dp(2), dp(2))
-                    },
-                )
-            }
-            root.addView(rowView, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(52)))
-        }
-    }
-
-    private fun keyButton(label: String, wide: Boolean): Button = Button(this).apply {
-        text = label
-        textSize = if (wide) 13f else 17f
-        isAllCaps = false
-        typeface = Typeface.create("sans", Typeface.NORMAL)
-        minWidth = 0
-        minHeight = 0
-        setPadding(0, 0, 0, 0)
-    }
-
     private fun handleKey(key: String) {
         performKeyboardHaptic(root)
         when (key) {
             SHIFT -> {
                 shifted = !shifted
-                root?.let(::rebuildKeyRows)
+                panel?.rebuildKeyRows(shifted, symbols)
             }
             DELETE -> currentInputConnection?.deleteSurroundingTextInCodePoints(1, 0)
             SYMBOLS -> {
                 symbols = !symbols
                 shifted = false
-                root?.let(::rebuildKeyRows)
+                panel?.rebuildKeyRows(shifted, symbols)
             }
             NEXT_IME -> switchToNextInputMethod(false)
             SPACE -> currentInputConnection?.commitText(" ", 1)
@@ -239,7 +163,7 @@ class VoxInputMethodService : InputMethodService() {
                 currentInputConnection?.commitText(text, 1)
                 if (shifted && !symbols) {
                     shifted = false
-                    root?.let(::rebuildKeyRows)
+                    panel?.rebuildKeyRows(shifted, symbols)
                 }
             }
         }
@@ -247,19 +171,19 @@ class VoxInputMethodService : InputMethodService() {
 
     private fun startVoice() {
         if (sensitiveInput) {
-            updateVoiceState("Voice typing is unavailable in sensitive fields", listening = false)
+            updateVoiceState("Voice typing is unavailable in sensitive fields", listening = false, mode = KeyboardVoiceMode.ERROR)
             return
         }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            updateVoiceState("Open Vox.md to allow microphone access", listening = false)
+            updateVoiceState("Open Vox.md to allow microphone access", listening = false, mode = KeyboardVoiceMode.ERROR)
             return
         }
         if (SpeechModelManager.get(this).selectedModelDirectory() == null) {
-            updateVoiceState("Install and select a local model in Vox.md", listening = false)
+            updateVoiceState("Install and select a local model in Vox.md", listening = false, mode = KeyboardVoiceMode.ERROR)
             return
         }
         if (RecordingStatusRegistry.status.value.isActive) {
-            updateVoiceState("Another Vox.md recording is active", listening = false)
+            updateVoiceState("Another Vox.md recording is active", listening = false, mode = KeyboardVoiceMode.ERROR)
             return
         }
         activeVoiceGeneration = editorGeneration
@@ -275,16 +199,17 @@ class VoxInputMethodService : InputMethodService() {
     private fun stopVoice() {
         if (!isListening) return
         audioCapture.stop()
-        updateVoiceState("Saving voice recording…", listening = true)
-        voiceButton?.isEnabled = false
+        updateVoiceState("Saving voice recording…", listening = true, mode = KeyboardVoiceMode.PROCESSING)
+        panel?.setVoiceEnabled(false)
     }
 
-    private fun updateVoiceState(status: String, listening: Boolean, localizeStatus: Boolean = true) {
-        statusView?.text = if (localizeStatus) localize(status) else status
-        voiceButton?.apply {
-            text = if (listening) "■" else "●"
-            contentDescription = localize(if (listening) "Stop voice typing" else "Start voice typing")
-        }
+    private fun updateVoiceState(
+        status: String,
+        listening: Boolean,
+        localizeStatus: Boolean = true,
+        mode: KeyboardVoiceMode = if (listening) KeyboardVoiceMode.LISTENING else KeyboardVoiceMode.IDLE,
+    ) {
+        panel?.showVoiceState(if (localizeStatus) localize(status) else status, listening, mode)
     }
 
     private fun handleRecordingStatus(status: RecordingStatus) {
@@ -299,7 +224,7 @@ class VoxInputMethodService : InputMethodService() {
             RecordingPhase.PAUSED -> updateVoiceState("Voice recording paused", listening = true)
             RecordingPhase.COMPLETED -> if (!transcriptionRequested) {
                 transcriptionRequested = true
-                updateVoiceState("Transcribing on device…", listening = true)
+                updateVoiceState("Transcribing on device…", listening = true, mode = KeyboardVoiceMode.PROCESSING)
                 transcription.process(sessionID)
             }
             RecordingPhase.FAILED, RecordingPhase.INTERRUPTED -> retainFailedVoiceRecording(sessionID)
@@ -330,7 +255,7 @@ class VoxInputMethodService : InputMethodService() {
         transcriptionRequested = false
         activeVoiceGeneration = null
         activeSessionID = null
-        updateVoiceState("Voice recording saved in Vox.md", listening = false)
+        updateVoiceState("Voice recording saved in Vox.md", listening = false, mode = KeyboardVoiceMode.ERROR)
     }
 
     private fun resetVoiceSession() {
@@ -355,19 +280,10 @@ class VoxInputMethodService : InputMethodService() {
 
     private fun updateIdleVoiceState() {
         when {
-            sensitiveInput -> {
-                statusView?.text = localize("Voice typing is unavailable in sensitive fields")
-                voiceButton?.isEnabled = false
-                voiceButton?.contentDescription = localize("Voice typing unavailable in sensitive field")
-            }
-            pendingText != null -> {
-                statusView?.text = localize("Recovered voice text")
-                voiceButton?.isEnabled = true
-                voiceButton?.text = "+"
-                voiceButton?.contentDescription = localize("Insert recovered voice text")
-            }
+            sensitiveInput -> panel?.showSensitiveField()
+            pendingText != null -> panel?.showRecoveredText()
             else -> {
-                voiceButton?.isEnabled = true
+                panel?.setVoiceEnabled(true)
                 updateVoiceState("On-device voice", listening = false)
             }
         }
@@ -388,18 +304,6 @@ class VoxInputMethodService : InputMethodService() {
         if (enabled) view?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
     }
 
-    private fun keyDescription(key: String, label: String): String = when (key) {
-        SHIFT -> "Shift"
-        DELETE -> "Delete"
-        SYMBOLS -> if (symbols) "Letters" else "Numbers and symbols"
-        NEXT_IME -> "Next keyboard"
-        SPACE -> "Space"
-        ENTER -> "Enter"
-        else -> label
-    }
-
-    private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
-
     private fun keyboardPreset() = CapturePreset(
         id = KEYBOARD_PRESET_ID,
         name = "Keyboard Voice",
@@ -410,7 +314,7 @@ class VoxInputMethodService : InputMethodService() {
         metadataFields = listOf(CaptureMetadataField("source", "keyboard")),
     )
 
-    private companion object {
+    internal companion object {
         const val SETTINGS_FILE = "vox-settings"
         const val HAPTICS_KEY = "keyboard-haptics"
         const val KEYBOARD_PRESET_ID = "6b65ab02-e77a-4a0c-bef7-b48813e95fbb"
@@ -435,6 +339,203 @@ class VoxInputMethodService : InputMethodService() {
             listOf(SYMBOLS, NEXT_IME, ",", SPACE, ".", ENTER),
         )
     }
+}
+
+/** Visual state of the keyboard voice control. Presentation only; behaviour lives in [VoxInputMethodService]. */
+internal enum class KeyboardVoiceMode { IDLE, LISTENING, PROCESSING, ERROR, UNAVAILABLE, RECOVERED }
+
+/**
+ * The Signal-styled keyboard view: paper ground, a toolbar with mono status text and the
+ * VoicePad-style voice capsule (ink when idle, recording red while listening), and white
+ * hairline key cards in Geist. It holds no editor or capture state: [VoxInputMethodService]
+ * owns all behaviour and drives this view, which also lets debug stories host it directly.
+ */
+internal class VoxKeyboardPanel(
+    private val context: Context,
+    private val localize: (String) -> String,
+    private val onKey: (String) -> Unit,
+    private val onDeleteLongPress: (View) -> Unit,
+    onVoice: () -> Unit,
+) {
+    private val density = context.resources.displayMetrics.density
+    private val sans: Typeface? = font(R.font.geist_regular)
+    private val sansMedium: Typeface? = font(R.font.geist_medium)
+    private val mono: Typeface? = font(R.font.geist_mono_regular)
+    private var symbols = false
+
+    val root: LinearLayout = LinearLayout(context).apply {
+        orientation = LinearLayout.VERTICAL
+        setBackgroundColor(color(R.color.signal_bg))
+        setPadding(dp(6), dp(6), dp(6), dp(8))
+        tag = VoxInputMethodService.KEYBOARD_ROOT_TAG
+    }
+
+    private val statusView: TextView = TextView(context).apply {
+        text = localize("On-device voice")
+        setTextColor(color(R.color.signal_muted))
+        typeface = mono
+        textSize = 12.5f
+        maxLines = 1
+        ellipsize = android.text.TextUtils.TruncateAt.END
+        gravity = Gravity.CENTER_VERTICAL
+        compoundDrawablePadding = dp(7)
+        contentDescription = localize("Voice status")
+    }
+
+    /** The voice capsule. Exposed for haptics; click handling is wired to `onVoice`. */
+    val voiceView: ImageButton = ImageButton(context).apply {
+        contentDescription = localize("Start voice typing")
+        scaleType = android.widget.ImageView.ScaleType.CENTER
+        setPadding(0, 0, 0, 0)
+        stateListAnimator = null
+        setOnClickListener { onVoice() }
+    }
+
+    init {
+        val toolbar = LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(dp(8), 0, dp(2), dp(6))
+        }
+        toolbar.addView(statusView, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f))
+        toolbar.addView(voiceView, LinearLayout.LayoutParams(dp(104), dp(48)).apply { marginStart = dp(10) })
+        root.addView(toolbar, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(56)))
+        applyVoiceMode(KeyboardVoiceMode.IDLE)
+    }
+
+    /** Status line plus the start/stop voice control. */
+    fun showVoiceState(status: String, listening: Boolean, mode: KeyboardVoiceMode) {
+        statusView.text = status
+        voiceView.contentDescription = localize(if (listening) "Stop voice typing" else "Start voice typing")
+        applyVoiceMode(mode)
+    }
+
+    /** Password-style fields: voice is disabled and the status explains why. */
+    fun showSensitiveField() {
+        statusView.text = localize("Voice typing is unavailable in sensitive fields")
+        setVoiceEnabled(false)
+        voiceView.contentDescription = localize("Voice typing unavailable in sensitive field")
+        applyVoiceMode(KeyboardVoiceMode.UNAVAILABLE)
+    }
+
+    /** Recovered text from an earlier session can be inserted with the voice control. */
+    fun showRecoveredText() {
+        statusView.text = localize("Recovered voice text")
+        setVoiceEnabled(true)
+        voiceView.contentDescription = localize("Insert recovered voice text")
+        applyVoiceMode(KeyboardVoiceMode.RECOVERED)
+    }
+
+    fun setVoiceEnabled(enabled: Boolean) {
+        voiceView.isEnabled = enabled
+        voiceView.alpha = if (enabled) 1f else 0.55f
+    }
+
+    private fun applyVoiceMode(mode: KeyboardVoiceMode) {
+        val (background, icon, iconColor) = when (mode) {
+            KeyboardVoiceMode.IDLE, KeyboardVoiceMode.ERROR ->
+                Triple(R.drawable.keyboard_voice_idle, R.drawable.keyboard_ic_mic, R.color.signal_on_ink)
+            KeyboardVoiceMode.LISTENING ->
+                Triple(R.drawable.keyboard_voice_recording, R.drawable.keyboard_ic_stop, R.color.signal_on_accent)
+            KeyboardVoiceMode.PROCESSING ->
+                Triple(R.drawable.keyboard_voice_muted, R.drawable.keyboard_ic_stop, R.color.signal_text)
+            KeyboardVoiceMode.UNAVAILABLE ->
+                Triple(R.drawable.keyboard_voice_muted, R.drawable.keyboard_ic_mic, R.color.signal_faint)
+            KeyboardVoiceMode.RECOVERED ->
+                Triple(R.drawable.keyboard_voice_recovered, R.drawable.keyboard_ic_plus, R.color.signal_on_accent)
+        }
+        voiceView.background = drawable(background)
+        voiceView.setImageDrawable(drawable(icon)?.mutate()?.apply { setTint(color(iconColor)) })
+        statusView.setTextColor(color(when (mode) {
+            KeyboardVoiceMode.LISTENING -> R.color.signal_recording
+            KeyboardVoiceMode.PROCESSING -> R.color.signal_text
+            KeyboardVoiceMode.ERROR -> R.color.signal_error
+            KeyboardVoiceMode.RECOVERED -> R.color.signal_tint
+            KeyboardVoiceMode.IDLE, KeyboardVoiceMode.UNAVAILABLE -> R.color.signal_muted
+        }))
+        val dot = if (mode == KeyboardVoiceMode.LISTENING) drawable(R.drawable.keyboard_status_dot) else null
+        statusView.setCompoundDrawablesRelativeWithIntrinsicBounds(dot, null, null, null)
+    }
+
+    fun rebuildKeyRows(shifted: Boolean, symbols: Boolean) {
+        this.symbols = symbols
+        while (root.childCount > 1) root.removeViewAt(root.childCount - 1)
+        val rows = if (symbols) VoxInputMethodService.SYMBOL_ROWS else VoxInputMethodService.LETTER_ROWS
+        rows.forEach { row ->
+            val rowView = LinearLayout(context).apply {
+                orientation = LinearLayout.HORIZONTAL
+                gravity = Gravity.CENTER
+            }
+            row.forEach { key ->
+                val label = when (key) {
+                    VoxInputMethodService.SHIFT -> if (shifted) "⇧" else "↑"
+                    VoxInputMethodService.DELETE -> "⌫"
+                    VoxInputMethodService.SYMBOLS -> if (symbols) "ABC" else "123"
+                    VoxInputMethodService.NEXT_IME -> "◎"
+                    VoxInputMethodService.SPACE -> "space"
+                    VoxInputMethodService.ENTER -> "↵"
+                    else -> if (shifted && !symbols) key.uppercase(Locale.getDefault()) else key
+                }
+                val weight = when (key) {
+                    VoxInputMethodService.SPACE -> 4.5f
+                    VoxInputMethodService.SHIFT, VoxInputMethodService.DELETE, VoxInputMethodService.SYMBOLS,
+                    VoxInputMethodService.NEXT_IME, VoxInputMethodService.ENTER -> 1.45f
+                    else -> 1f
+                }
+                val modifier = weight > 1f && key != VoxInputMethodService.SPACE
+                val button = keyButton(label, wide = weight > 1f, modifier = modifier).apply {
+                    contentDescription = keyDescription(key, label)
+                    setOnClickListener { onKey(key) }
+                    if (key == VoxInputMethodService.SPACE) setTextColor(color(R.color.signal_muted))
+                    if (key == VoxInputMethodService.DELETE) {
+                        setOnLongClickListener {
+                            onDeleteLongPress(it)
+                            true
+                        }
+                    }
+                }
+                rowView.addView(
+                    button,
+                    LinearLayout.LayoutParams(0, dp(48), weight).apply {
+                        setMargins(dp(2), dp(2), dp(2), dp(2))
+                    },
+                )
+            }
+            root.addView(rowView, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(52)))
+        }
+    }
+
+    private fun keyButton(label: String, wide: Boolean, modifier: Boolean): Button = Button(context).apply {
+        text = label
+        textSize = if (wide) 14f else 19f
+        isAllCaps = false
+        typeface = if (modifier) sansMedium else sans
+        setTextColor(color(R.color.signal_text))
+        background = drawable(if (modifier) R.drawable.keyboard_key_modifier_background else R.drawable.keyboard_key_background)
+        stateListAnimator = null
+        elevation = 0f
+        minWidth = 0
+        minHeight = 0
+        minimumWidth = 0
+        minimumHeight = 0
+        setPadding(0, 0, 0, 0)
+    }
+
+    private fun keyDescription(key: String, label: String): String = when (key) {
+        VoxInputMethodService.SHIFT -> "Shift"
+        VoxInputMethodService.DELETE -> "Delete"
+        VoxInputMethodService.SYMBOLS -> if (symbols) "Letters" else "Numbers and symbols"
+        VoxInputMethodService.NEXT_IME -> "Next keyboard"
+        VoxInputMethodService.SPACE -> "Space"
+        VoxInputMethodService.ENTER -> "Enter"
+        else -> label
+    }
+
+    private fun color(@ColorRes id: Int): Int = ContextCompat.getColor(context, id)
+    private fun drawable(@DrawableRes id: Int) = ContextCompat.getDrawable(context, id)
+    private fun font(id: Int): Typeface? = runCatching { ResourcesCompat.getFont(context, id) }.getOrNull()
+        ?: Typeface.create("sans", Typeface.NORMAL)
+    private fun dp(value: Int): Int = (value * density).toInt()
 }
 
 internal fun isSensitiveEditorInput(inputType: Int): Boolean {

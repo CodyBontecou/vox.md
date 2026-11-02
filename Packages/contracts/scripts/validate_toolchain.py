@@ -63,6 +63,10 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/app/src/main/kotlin/md/vox/android/ConfiguredTranscriptExporter.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/HistoryDetailScreen.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+    "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
+    "apps/android/app/src/main/kotlin/md/vox/android/HistoryScreen.kt",
+    "apps/android/app/src/main/kotlin/md/vox/android/CapturePresetScreens.kt",
+    "apps/android/app/src/main/kotlin/md/vox/android/SettingsScreens.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/PlayEntitlementCache.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/PrivacySafeDebugLog.kt",
@@ -301,6 +305,13 @@ def load(path):
         return json.loads(path.read_text())
     except Exception as error:
         fail(f"{path}: {error}")
+
+
+def android_app_ui_source(root):
+    """MainActivity plus the screen files split out of it, read as one source."""
+    base = root / "apps/android/app/src/main/kotlin/md/vox/android"
+    names = ("MainActivity.kt", "CaptureScreen.kt", "HistoryScreen.kt", "CapturePresetScreens.kt", "SettingsScreens.kt")
+    return "\n".join((base / name).read_text() for name in names)
 
 
 def digest(path):
@@ -1076,9 +1087,9 @@ def main(argv=None):
         localization_audit["incompleteCatalogSourceCount"],
         localization_audit["missingCatalogSourceCount"],
     )
-    if counts != (782, 220, 6, 556, 0, 0) or counts[0] != sum(counts[1:]):
+    if counts != (781, 221, 6, 554, 0, 0) or counts[0] != sum(counts[1:]):
         fail("Android localization review source counts changed without review")
-    if localization_audit["runtimeSourceLiteralCount"] != 2622:
+    if localization_audit["runtimeSourceLiteralCount"] != 2626:
         fail("Android runtime localization lookup-source count changed without review")
     if localization_audit["fallbackSourceCount"] != counts[4] + counts[5]:
         fail("Android localization fallback count differs from incomplete and absent sources")
@@ -1112,7 +1123,7 @@ def main(argv=None):
     integer_sources = localization_audit["integerFormatSources"]
     if localization_audit["integerFormatSourceCount"] != 17 or len(integer_sources) != 17:
         fail("Android localization integer-format source inventory drift")
-    main_activity_localization = (root / "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt").read_text()
+    main_activity_localization = android_app_ui_source(root)
     for needle in (
         "snackbarHost.showSnackbar(localizedNotice)",
         "state.notice?.localized()",
@@ -1133,7 +1144,7 @@ def main(argv=None):
     ):
         if needle not in history_detail_localization:
             fail(f"Android generated History label bypasses typed localization: {needle}")
-    for needle in ("mutableStateOf<VoxUiText?>(null)", "Text(it.localized()"):
+    for needle in ("initialOperationMessage: VoxUiText? = null", "message = message.localized()"):
         if needle not in history_detail_localization:
             fail(f"Android Capture History operation result bypasses typed localization: {needle}")
     runtime_localization = (root / "apps/android/app/src/main/kotlin/md/vox/android/RuntimeLocalization.kt").read_text()
@@ -1149,7 +1160,7 @@ def main(argv=None):
         if needle not in capture_view_model:
             fail(f"Android typed capture notice drift: {needle}")
     transcript_history = (root / "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt").read_text()
-    if "operationMessage?.let { Text(it.localized()" not in transcript_history:
+    if "initialOperationMessage: VoxUiText? = null" not in transcript_history or "message = message.localized()" not in transcript_history:
         fail("Android transcript operation result bypasses typed localization")
     configured_export = (root / "apps/android/app/src/main/kotlin/md/vox/android/ConfiguredTranscriptExporter.kt").read_text()
     for needle in (
@@ -1170,7 +1181,7 @@ def main(argv=None):
     ):
         if needle not in recovery_screens:
             fail(f"Android generated recovery label bypasses typed localization: {needle}")
-    for needle in ("var operationMessage by remember { mutableStateOf<VoxUiText?>(null) }", "Text(message.localized()"):
+    for needle in ("var operationMessage by remember { mutableStateOf<VoxUiText?>(null) }", "message = message.localized()"):
         if needle not in recovery_screens:
             fail(f"Android recording operation result bypasses typed localization: {needle}")
     for label, build_text, task_name in (
@@ -1372,15 +1383,15 @@ def main(argv=None):
     ):
         if needle not in visual_validator_test:
             fail(f"Android motion evidence mutation coverage drift: {needle}")
-    capture_ui = (root / "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt").read_text()
+    capture_ui = android_app_ui_source(root)
     for needle in (
         "items(UnifiedHistoryKind.entries, key = UnifiedHistoryKind::name)",
-        "label = { Text(option.label, maxLines = 1) }",
+        "text = option.label,",
         "FlowRow(",
-        'Text(voxString("Cancel"), maxLines = 1)',
-        "modifier = Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp * 0.42f)",
+        'voxString("Cancel"),',
+        ".heightIn(max = LocalConfiguration.current.screenHeightDp.dp * 0.42f)",
         ".verticalScroll(rememberScrollState())",
-        ".padding(horizontal = 16.dp, vertical = 12.dp)",
+        ".padding(horizontal = SignalMetrics.PageGutter, vertical = 4.dp)",
         "liveRegion = LiveRegionMode.Polite",
     ):
         if needle not in capture_ui:

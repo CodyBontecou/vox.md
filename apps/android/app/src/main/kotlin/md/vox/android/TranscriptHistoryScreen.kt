@@ -3,6 +3,36 @@ package md.vox.android
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
+import md.vox.android.ui.Signal
+import md.vox.android.ui.SignalBanner
+import md.vox.android.ui.SignalButton
+import md.vox.android.ui.SignalButtonSize
+import md.vox.android.ui.SignalButtonVariant
+import md.vox.android.ui.SignalCard
+import md.vox.android.ui.SignalChip
+import md.vox.android.ui.SignalCircleButton
+import md.vox.android.ui.SignalEmptyState
+import md.vox.android.ui.SignalFieldShape
+import md.vox.android.ui.SignalMetrics
+import md.vox.android.ui.SignalSectionLabel
+import md.vox.android.ui.SignalStatus
+import md.vox.android.ui.SignalStatusBadge
+import md.vox.android.ui.SignalType
+import md.vox.android.ui.signalTextFieldColors
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -234,7 +264,7 @@ internal fun isoTranscriptDate(epochMillis: Long): String = DateTimeFormatterBui
     .toFormatter()
     .format(Instant.ofEpochMilli(epochMillis.coerceAtLeast(0)))
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun TranscriptDetailScreen(
     state: RecordingTranscriptionState?,
@@ -246,11 +276,15 @@ internal fun TranscriptDetailScreen(
     save: (String, String, String, String, List<String>, String) -> Boolean,
     delete: (String) -> Unit,
     addToDraft: (String, String) -> Unit,
+    initialEditing: Boolean = false,
+    initialOperationMessage: VoxUiText? = null,
+    initialShowsDeleteConfirmation: Boolean = false,
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val signal = Signal.colors
     val configuredExporter = remember(context) { AndroidConfiguredTranscriptExporter(context) }
-    var editing by remember(state?.sessionID) { mutableStateOf(false) }
+    var editing by remember(state?.sessionID) { mutableStateOf(initialEditing) }
     var editedRawText by remember(state?.sessionID, state?.transcript) { mutableStateOf(state?.transcript.orEmpty()) }
     var editedCleanedText by remember(state?.sessionID, state?.cleanedTranscript) {
         mutableStateOf(state?.cleanedTranscript.orEmpty())
@@ -260,8 +294,8 @@ internal fun TranscriptDetailScreen(
     var editedCategory by remember(state?.sessionID, state?.category) { mutableStateOf(state?.category.orEmpty()) }
     var exportMenuOpen by remember { mutableStateOf(false) }
     var pendingFormat by remember { mutableStateOf<TranscriptExportFormat?>(null) }
-    var operationMessage by remember { mutableStateOf<VoxUiText?>(null) }
-    var showsDeleteConfirmation by remember { mutableStateOf(false) }
+    var operationMessage by remember { mutableStateOf(initialOperationMessage) }
+    var showsDeleteConfirmation by remember { mutableStateOf(initialShowsDeleteConfirmation) }
     val createDocument = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("*/*")) { uri ->
         val format = pendingFormat
         pendingFormat = null
@@ -284,41 +318,106 @@ internal fun TranscriptDetailScreen(
         }
     }
 
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        topBar = {
-            TopAppBar(
-                title = { Text(voxString("Transcript"), style = MaterialTheme.typography.titleLarge) },
-                navigationIcon = {
-                    IconButton(onClick = navigateBack) {
-                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = voxString("Back"))
-                    }
-                },
-                actions = {
-                    if (state?.phase == RecordingTranscriptionPhase.COMPLETED) {
-                        IconButton(onClick = { editing = !editing }) {
-                            Icon(Icons.Outlined.Edit, contentDescription = voxString(if (editing) "Stop editing" else "Edit transcript"))
-                        }
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
-            )
-        },
-    ) { padding ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(signal.bg)
+            .navigationBarsPadding()
+            .imePadding(),
+    ) {
+        VoxTopBar(
+            title = voxUiText("Transcript"),
+            navigateBack = navigateBack,
+            actions = {
+                if (state?.phase == RecordingTranscriptionPhase.COMPLETED) {
+                    SignalCircleButton(
+                        icon = if (editing) Icons.Outlined.Check else Icons.Outlined.Edit,
+                        contentDescription = voxString(if (editing) "Stop editing" else "Edit transcript"),
+                        onClick = { editing = !editing },
+                        filled = if (editing) signal.text else null,
+                        contentColor = if (editing) signal.bg else null,
+                    )
+                }
+            },
+        )
         if (state == null) {
-            Column(Modifier.fillMaxSize().padding(padding).padding(24.dp)) {
-                Text(voxString("Transcript unavailable"), style = MaterialTheme.typography.titleMedium)
-                Spacer(Modifier.height(8.dp))
-                Text(voxString("It may have been deleted while its original recording was retained."))
+            Column(
+                modifier = Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState()).padding(top = 24.dp),
+            ) {
+                SignalEmptyState(
+                    icon = Icons.Outlined.ErrorOutline,
+                    title = voxString("Transcript unavailable"),
+                    message = voxString("It may have been deleted while its original recording was retained."),
+                    iconTint = signal.muted,
+                )
             }
         } else {
+            val hasText = !state.preferredTranscript.isNullOrBlank()
             Column(
-                modifier = Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = SignalMetrics.PageGutter)
+                    .padding(top = 2.dp, bottom = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                operationMessage?.let { Text(it.localized(), color = MaterialTheme.colorScheme.primary) }
+                SignalCard(modifier = Modifier.fillMaxWidth(), padding = PaddingValues(16.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        LibraryTranscriptTile(state.phase, size = 40.dp)
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Text(
+                                formatTranscriptDuration(state.durationMillis),
+                                style = MaterialTheme.typography.titleMedium.copy(fontFamily = GeistMonoFontFamily),
+                                color = signal.text,
+                            )
+                            state.completedAtEpochMillis?.let {
+                                Text(DateFormat.getDateTimeInstance().format(Date(it)), style = SignalType.monoCaption, color = signal.muted)
+                            }
+                        }
+                        if (state.phase != RecordingTranscriptionPhase.COMPLETED) {
+                            SignalStatusBadge(
+                                text = libraryTranscriptPhaseTitle(state),
+                                status = libraryTranscriptStatus(state.phase),
+                                liveRegion = true,
+                            )
+                        }
+                    }
+                    LibraryTranscriptProgress(state, Modifier.padding(top = 12.dp))
+                    state.title?.let {
+                        Spacer(Modifier.height(12.dp))
+                        Text(it, style = MaterialTheme.typography.titleLarge, color = signal.text)
+                    }
+                    Spacer(Modifier.height(10.dp))
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalArrangement = Arrangement.spacedBy(6.dp),
+                    ) {
+                        SignalChip(state.modelName ?: state.modelID ?: "Local model", color = signal.well, contentColor = signal.text)
+                        state.languageTag?.let { SignalChip(it, mono = true, color = signal.well, contentColor = signal.text) }
+                        state.category?.let {
+                            SignalChip(voxFormat("%@: %@", voxString("Category"), it), color = signal.well, contentColor = signal.text)
+                        }
+                        if (state.speakerCount > 0) {
+                            SignalChip(voxFormat("%lld speakers", state.speakerCount), color = signal.well, contentColor = signal.text)
+                        }
+                        state.tags.forEach { tag -> SignalChip("#$tag", mono = true, color = signal.bg) }
+                    }
+                    state.diarizationSkipReason?.let {
+                        Spacer(Modifier.height(10.dp))
+                        Text(it, style = SignalType.caption, color = signal.muted)
+                    }
+                }
+                operationMessage?.let { message ->
+                    SignalBanner(
+                        message = message.localized(),
+                        status = SignalStatus.ACTIVE,
+                        liveRegion = true,
+                    )
+                }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(
+                    SignalButton(
+                        text = voxString("Share"),
                         onClick = {
                             val text = state.preferredTranscript.orEmpty()
                             if (shareTranscript != null) {
@@ -335,38 +434,43 @@ internal fun TranscriptDetailScreen(
                                 )
                             }
                         },
-                        enabled = !state.preferredTranscript.isNullOrBlank(),
-                    ) {
-                        Icon(Icons.Outlined.Share, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(Modifier.width(6.dp))
-                        Text(voxString("Share"))
-                    }
-                    androidx.compose.foundation.layout.Box {
-                        Button(onClick = { exportMenuOpen = true }, enabled = !state.preferredTranscript.isNullOrBlank()) {
-                            Icon(Icons.Outlined.FileDownload, contentDescription = null, modifier = Modifier.size(18.dp))
-                            Spacer(Modifier.width(6.dp))
-                            Text(voxString("Export"))
-                        }
-                        DropdownMenu(expanded = exportMenuOpen, onDismissRequest = { exportMenuOpen = false }) {
-                            TranscriptExportFormat.entries.forEach { format ->
-                                DropdownMenuItem(
-                                    text = { Text(format.label) },
-                                    onClick = {
-                                        exportMenuOpen = false
-                                        if (exportTranscript != null) {
-                                            exportTranscript(state, format)
-                                        } else {
-                                            pendingFormat = format
-                                            createDocument.launch("vox-transcript-${state.sessionID.take(8)}.${format.extension}")
-                                        }
-                                    },
-                                )
-                            }
-                        }
+                        modifier = Modifier.weight(1f),
+                        variant = SignalButtonVariant.SECONDARY,
+                        size = SignalButtonSize.MEDIUM,
+                        enabled = hasText,
+                        icon = Icons.Outlined.Share,
+                        fillWidth = true,
+                    )
+                    Box(Modifier.weight(1f)) {
+                        SignalButton(
+                            text = voxString("Export"),
+                            onClick = { exportMenuOpen = true },
+                            variant = SignalButtonVariant.SECONDARY,
+                            size = SignalButtonSize.MEDIUM,
+                            enabled = hasText,
+                            icon = Icons.Outlined.FileDownload,
+                            fillWidth = true,
+                        )
+                        LibraryExportMenu(
+                            expanded = exportMenuOpen,
+                            onDismiss = { exportMenuOpen = false },
+                            labels = TranscriptExportFormat.entries.map { it.label },
+                            onSelect = { index ->
+                                val format = TranscriptExportFormat.entries[index]
+                                exportMenuOpen = false
+                                if (exportTranscript != null) {
+                                    exportTranscript(state, format)
+                                } else {
+                                    pendingFormat = format
+                                    createDocument.launch("vox-transcript-${state.sessionID.take(8)}.${format.extension}")
+                                }
+                            },
+                        )
                     }
                 }
                 if (preset?.exportSettings?.let { it.usesCustomExportSettings && it.exportEnabled } == true) {
-                    Button(
+                    SignalButton(
+                        text = voxString("Export with Preset"),
                         onClick = {
                             scope.launch {
                                 val audioSource = if (preset.audioSaveMode == CaptureAudioSaveMode.OFF) {
@@ -395,83 +499,48 @@ internal fun TranscriptDetailScreen(
                                 }
                             }
                         },
-                        enabled = !state.preferredTranscript.isNullOrBlank(),
-                    ) {
-                        Icon(Icons.Outlined.FileDownload, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(Modifier.width(6.dp))
-                        Text(voxString("Export with Preset"))
-                    }
-                }
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                    shape = RoundedCornerShape(16.dp),
-                ) {
-                    Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(formatTranscriptDuration(state.durationMillis), style = MaterialTheme.typography.titleMedium)
-                        state.completedAtEpochMillis?.let {
-                            Text(DateFormat.getDateTimeInstance().format(Date(it)), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                        Text(state.modelName ?: state.modelID ?: "Local model", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        state.languageTag?.let { Text(it, style = MaterialTheme.typography.labelMedium.copy(fontFamily = GeistMonoFontFamily)) }
-                        state.title?.let { Text(it, style = MaterialTheme.typography.bodyLarge) }
-                        state.category?.let {
-                            Text(
-                                voxFormat("%@: %@", voxString("Category"), it),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                        if (state.tags.isNotEmpty()) Text(
-                            state.tags.joinToString(" · ") { "#$it" },
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                        if (state.speakerCount > 0) {
-                            Text(
-                                voxFormat("%lld speakers", state.speakerCount),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                        state.diarizationSkipReason?.let { Text(it, color = MaterialTheme.colorScheme.onSurfaceVariant) }
-                    }
+                        variant = SignalButtonVariant.SECONDARY,
+                        size = SignalButtonSize.MEDIUM,
+                        enabled = hasText,
+                        icon = Icons.Outlined.FileDownload,
+                        fillWidth = true,
+                    )
                 }
                 if (editing) {
-                    OutlinedTextField(
-                        value = editedTitle,
-                        onValueChange = { editedTitle = it.take(128) },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
-                        label = { Text(voxString("Title")) },
-                    )
-                    OutlinedTextField(
-                        value = editedTags,
-                        onValueChange = { editedTags = it.take(1_280) },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
-                        label = { Text(voxString("Tags, comma separated")) },
-                    )
-                    OutlinedTextField(
-                        value = editedCategory,
-                        onValueChange = { editedCategory = it.take(64) },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
-                        label = { Text(voxString("Category")) },
-                    )
-                    OutlinedTextField(
-                        value = editedCleanedText,
-                        onValueChange = { editedCleanedText = it.take(500_000) },
-                        modifier = Modifier.fillMaxWidth(),
+                    SignalSectionLabel(voxString("Edit transcript"), Modifier.padding(start = 4.dp, top = 4.dp))
+                    TranscriptEditField(editedTitle, { editedTitle = it.take(128) }, voxString("Title"))
+                    TranscriptEditField(editedTags, { editedTags = it.take(1_280) }, voxString("Tags, comma separated"))
+                    TranscriptEditField(editedCategory, { editedCategory = it.take(64) }, voxString("Category"))
+                    TranscriptEditField(
+                        editedCleanedText,
+                        { editedCleanedText = it.take(500_000) },
+                        voxString("Cleaned text"),
                         minLines = 5,
-                        label = { Text(voxString("Cleaned text")) },
                     )
-                    OutlinedTextField(
-                        value = editedRawText,
-                        onValueChange = { editedRawText = it.take(500_000) },
-                        modifier = Modifier.fillMaxWidth(),
+                    TranscriptEditField(
+                        editedRawText,
+                        { editedRawText = it.take(500_000) },
+                        voxString("Raw transcript"),
                         minLines = 7,
-                        label = { Text(voxString("Raw transcript")) },
                     )
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Button(
+                        SignalButton(
+                            text = voxString("Cancel"),
+                            onClick = {
+                                editedRawText = state.transcript.orEmpty()
+                                editedCleanedText = state.cleanedTranscript.orEmpty()
+                                editedTitle = state.title.orEmpty()
+                                editedTags = state.tags.joinToString(", ")
+                                editedCategory = state.category.orEmpty()
+                                editing = false
+                            },
+                            modifier = Modifier.weight(1f),
+                            variant = SignalButtonVariant.SECONDARY,
+                            size = SignalButtonSize.MEDIUM,
+                            fillWidth = true,
+                        )
+                        SignalButton(
+                            text = voxString("Save"),
                             onClick = {
                                 val saved = save(
                                     state.sessionID,
@@ -486,55 +555,73 @@ internal fun TranscriptDetailScreen(
                                 )
                                 if (saved) editing = false
                             },
+                            modifier = Modifier.weight(1f),
+                            variant = SignalButtonVariant.PRIMARY,
+                            size = SignalButtonSize.MEDIUM,
                             enabled = editedRawText.isNotBlank(),
-                        ) { Text(voxString("Save")) }
-                        TextButton(onClick = {
-                            editedRawText = state.transcript.orEmpty()
-                            editedCleanedText = state.cleanedTranscript.orEmpty()
-                            editedTitle = state.title.orEmpty()
-                            editedTags = state.tags.joinToString(", ")
-                            editedCategory = state.category.orEmpty()
-                            editing = false
-                        }) { Text(voxString("Cancel")) }
+                            fillWidth = true,
+                        )
                     }
-                } else {
-                    Card(
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                        shape = RoundedCornerShape(16.dp),
-                    ) {
+                } else if (hasText) {
+                    SignalCard(modifier = Modifier.fillMaxWidth(), padding = PaddingValues(18.dp)) {
                         Text(
                             state.preferredTranscript.orEmpty(),
-                            modifier = Modifier.fillMaxWidth().padding(16.dp),
+                            modifier = Modifier.fillMaxWidth(),
                             style = MaterialTheme.typography.bodyLarge,
+                            color = signal.text,
                         )
                     }
                 }
-                Button(
+                Spacer(Modifier.height(4.dp))
+                SignalButton(
+                    text = voxString("Add to Capture"),
                     onClick = { addToDraft(state.sessionID, state.preferredTranscript.orEmpty()) },
-                    enabled = !state.preferredTranscript.isNullOrBlank(),
-                ) { Text(voxString("Add to Capture")) }
-                TextButton(onClick = { showsDeleteConfirmation = true }) {
-                    Icon(Icons.Outlined.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.error)
-                    Spacer(Modifier.width(6.dp))
-                    Text(voxString("Delete Transcript"), color = MaterialTheme.colorScheme.error)
-                }
+                    variant = SignalButtonVariant.PRIMARY,
+                    size = SignalButtonSize.LARGE,
+                    enabled = hasText,
+                    icon = Icons.Outlined.Add,
+                )
+                LibraryDestructiveButton(
+                    text = voxString("Delete Transcript"),
+                    onClick = { showsDeleteConfirmation = true },
+                )
             }
         }
     }
     if (showsDeleteConfirmation && state != null) {
-        AlertDialog(
-            onDismissRequest = { showsDeleteConfirmation = false },
-            title = { Text(voxString("Delete this transcript?")) },
-            text = { Text(voxString("The transcript will be removed. Its original local recording is kept in the Recording Queue.")) },
-            confirmButton = {
-                TextButton(onClick = { showsDeleteConfirmation = false; delete(state.sessionID) }) {
-                    Text(voxString("Delete"), color = MaterialTheme.colorScheme.error)
-                }
+        LibraryConfirmDialog(
+            title = voxString("Delete this transcript?"),
+            message = voxString("The transcript will be removed. Its original local recording is kept in the Recording Queue."),
+            confirmLabel = voxString("Delete"),
+            onConfirm = {
+                showsDeleteConfirmation = false
+                delete(state.sessionID)
             },
-            dismissButton = { TextButton(onClick = { showsDeleteConfirmation = false }) { Text(voxString("Cancel")) } },
+            onDismiss = { showsDeleteConfirmation = false },
         )
     }
 }
+
+@Composable
+private fun TranscriptEditField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    minLines: Int = 1,
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = minLines == 1,
+        minLines = minLines,
+        label = { Text(label) },
+        shape = SignalFieldShape,
+        colors = signalTextFieldColors(),
+        textStyle = MaterialTheme.typography.bodyLarge,
+    )
+}
+
 
 internal fun formatTranscriptDuration(milliseconds: Long): String {
     val totalSeconds = milliseconds.coerceAtLeast(0) / 1_000

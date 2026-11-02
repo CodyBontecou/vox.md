@@ -3,6 +3,38 @@ package md.vox.android
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
+import md.vox.android.ui.Signal
+import md.vox.android.ui.SignalBanner
+import md.vox.android.ui.SignalButton
+import md.vox.android.ui.SignalButtonSize
+import md.vox.android.ui.SignalButtonVariant
+import md.vox.android.ui.SignalCard
+import md.vox.android.ui.SignalChip
+import md.vox.android.ui.SignalDivider
+import md.vox.android.ui.SignalEmptyState
+import md.vox.android.ui.SignalIconTile
+import md.vox.android.ui.SignalMetrics
+import md.vox.android.ui.SignalSectionLabel
+import md.vox.android.ui.SignalStatus
+import md.vox.android.ui.SignalStatusBadge
+import md.vox.android.ui.SignalType
+import md.vox.android.ui.signalStatusColors
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -145,7 +177,6 @@ internal object HistoryDetailExporter {
     private fun yamlSingleQuoted(value: String): String = value.replace("'", "''")
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HistoryDetailScreen(
     detail: CaptureHistoryDetail?,
@@ -153,13 +184,16 @@ internal fun HistoryDetailScreen(
     isDeleting: Boolean,
     navigateBack: () -> Unit,
     delete: (String) -> Unit,
+    initialOperationMessage: VoxUiText? = null,
+    initialShowsDeleteConfirmation: Boolean = false,
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val signal = Signal.colors
     var exportMenuOpen by remember { mutableStateOf(false) }
     var pendingFormat by remember { mutableStateOf<HistoryExportFormat?>(null) }
-    var operationMessage by remember { mutableStateOf<VoxUiText?>(null) }
-    var showsDeleteConfirmation by remember { mutableStateOf(false) }
+    var operationMessage by remember { mutableStateOf(initialOperationMessage) }
+    var showsDeleteConfirmation by remember { mutableStateOf(initialShowsDeleteConfirmation) }
     val createDocument = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("*/*")) { uri ->
         val format = pendingFormat
         pendingFormat = null
@@ -182,36 +216,55 @@ internal fun HistoryDetailScreen(
         }
     }
 
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        topBar = {
-            TopAppBar(
-                title = { Text(voxString("Capture Detail"), style = MaterialTheme.typography.titleLarge) },
-                navigationIcon = {
-                    IconButton(onClick = navigateBack) {
-                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = voxString("Back"))
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
-            )
-        },
-    ) { padding ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(signal.bg)
+            .navigationBarsPadding(),
+    ) {
+        VoxTopBar(title = voxUiText("Capture Detail"), navigateBack = navigateBack)
         when {
-            isLoading -> Box(Modifier.fillMaxSize().padding(padding)) {
-                CircularProgressIndicator(modifier = Modifier.padding(32.dp).size(28.dp), strokeWidth = 3.dp)
+            isLoading -> Box(
+                modifier = Modifier.fillMaxWidth().weight(1f).padding(top = 48.dp),
+                contentAlignment = Alignment.TopCenter,
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(28.dp),
+                    strokeWidth = 3.dp,
+                    color = signal.tint,
+                    trackColor = signal.well,
+                )
             }
-            detail == null -> Column(Modifier.fillMaxSize().padding(padding).padding(24.dp)) {
-                Text(voxString("Capture unavailable"), style = MaterialTheme.typography.titleMedium)
-                Spacer(Modifier.height(8.dp))
-                Text(voxString("Its verified local package could not be opened."), color = MaterialTheme.colorScheme.onSurfaceVariant)
+            detail == null -> Column(
+                modifier = Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState()).padding(top = 24.dp),
+            ) {
+                SignalEmptyState(
+                    icon = Icons.Outlined.ErrorOutline,
+                    title = voxString("Capture unavailable"),
+                    message = voxString("Its verified local package could not be opened."),
+                    iconTint = signal.muted,
+                )
             }
             else -> Column(
-                modifier = Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = SignalMetrics.PageGutter)
+                    .padding(top = 2.dp, bottom = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                operationMessage?.let { Text(it.localized(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary) }
+                DetailMetadataCard(detail)
+                operationMessage?.let { message ->
+                    SignalBanner(
+                        message = message.localized(),
+                        status = SignalStatus.ACTIVE,
+                        liveRegion = true,
+                    )
+                }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(
+                    SignalButton(
+                        text = voxString("Share"),
                         onClick = {
                             val content = HistoryDetailExporter.render(detail, HistoryExportFormat.MARKDOWN)
                             val share = Intent(Intent.ACTION_SEND).apply {
@@ -220,40 +273,34 @@ internal fun HistoryDetailScreen(
                             }
                             context.startActivity(Intent.createChooser(share, "Share Capture"))
                         },
-                    ) {
-                        Icon(Icons.Outlined.Share, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(Modifier.width(6.dp))
-                        Text(voxString("Share"))
-                    }
-                    Box {
-                        Button(onClick = { exportMenuOpen = true }) {
-                            Icon(Icons.Outlined.FileDownload, contentDescription = null, modifier = Modifier.size(18.dp))
-                            Spacer(Modifier.width(6.dp))
-                            Text(voxString("Export"))
-                        }
-                        DropdownMenu(expanded = exportMenuOpen, onDismissRequest = { exportMenuOpen = false }) {
-                            HistoryExportFormat.entries.forEach { format ->
-                                DropdownMenuItem(
-                                    text = { Text(format.uiText().localized()) },
-                                    onClick = {
-                                        exportMenuOpen = false
-                                        pendingFormat = format
-                                        createDocument.launch("vox-capture-${detail.requestID.take(8)}.${format.extension}")
-                                    },
-                                )
-                            }
-                        }
-                    }
-                }
-                if (detail.state == CaptureState.COMPLETED) {
-                    TextButton(onClick = { showsDeleteConfirmation = true }, enabled = !isDeleting) {
-                        if (isDeleting) CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
-                        else Icon(Icons.Outlined.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(Modifier.width(6.dp))
-                        Text(voxString("Remove from History"), color = MaterialTheme.colorScheme.error)
+                        modifier = Modifier.weight(1f),
+                        variant = SignalButtonVariant.SECONDARY,
+                        size = SignalButtonSize.MEDIUM,
+                        icon = Icons.Outlined.Share,
+                        fillWidth = true,
+                    )
+                    Box(Modifier.weight(1f)) {
+                        SignalButton(
+                            text = voxString("Export"),
+                            onClick = { exportMenuOpen = true },
+                            variant = SignalButtonVariant.SECONDARY,
+                            size = SignalButtonSize.MEDIUM,
+                            icon = Icons.Outlined.FileDownload,
+                            fillWidth = true,
+                        )
+                        LibraryExportMenu(
+                            expanded = exportMenuOpen,
+                            onDismiss = { exportMenuOpen = false },
+                            labels = HistoryExportFormat.entries.map { it.uiText().localized() },
+                            onSelect = { index ->
+                                val format = HistoryExportFormat.entries[index]
+                                exportMenuOpen = false
+                                pendingFormat = format
+                                createDocument.launch("vox-capture-${detail.requestID.take(8)}.${format.extension}")
+                            },
+                        )
                     }
                 }
-                DetailMetadataCard(detail)
                 if (detail.capturedText.isNotBlank()) ContentCard("Processed Text", detail.capturedText)
                 detail.originalCapturedText?.let { original -> ContentCard("Original Text", original) }
                 detail.processingNotice?.let { notice -> ContentCard("Processing Note", notice) }
@@ -266,71 +313,167 @@ internal fun HistoryDetailScreen(
                 }
                 detail.preparedMarkdown?.let { ContentCard("Rendered Markdown", it) }
                 if (detail.preparedMarkdown == null) {
-                    Text(voxString("Rendered Markdown is unavailable until local preparation succeeds."),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    Text(
+                        voxString("Rendered Markdown is unavailable until local preparation succeeds."),
+                        style = SignalType.caption,
+                        color = signal.muted,
+                        modifier = Modifier.padding(horizontal = 4.dp),
                     )
                 }
-                Spacer(Modifier.height(24.dp))
+                if (detail.state == CaptureState.COMPLETED) {
+                    Spacer(Modifier.height(4.dp))
+                    LibraryDestructiveButton(
+                        text = voxString("Remove from History"),
+                        onClick = { showsDeleteConfirmation = true },
+                        enabled = !isDeleting,
+                        loading = isDeleting,
+                    )
+                }
             }
         }
     }
     if (showsDeleteConfirmation && detail != null) {
-        AlertDialog(
-            onDismissRequest = { showsDeleteConfirmation = false },
-            title = { Text(voxString("Remove this capture from History?")) },
-            text = { Text(voxString("The completed local History package will be removed. Its exported Markdown note is not deleted, and lifetime Stats remain intact.")) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showsDeleteConfirmation = false
-                        delete(detail.requestID)
-                    },
-                ) { Text(voxString("Remove"), color = MaterialTheme.colorScheme.error) }
+        LibraryConfirmDialog(
+            title = voxString("Remove this capture from History?"),
+            message = voxString("The completed local History package will be removed. Its exported Markdown note is not deleted, and lifetime Stats remain intact."),
+            confirmLabel = voxString("Remove"),
+            onConfirm = {
+                showsDeleteConfirmation = false
+                delete(detail.requestID)
             },
-            dismissButton = { TextButton(onClick = { showsDeleteConfirmation = false }) { Text(voxString("Cancel")) } },
+            onDismiss = { showsDeleteConfirmation = false },
         )
     }
 }
 
+/** Export format menu on a white card, shared by capture and transcript detail. */
+@Composable
+internal fun LibraryExportMenu(
+    expanded: Boolean,
+    onDismiss: () -> Unit,
+    labels: List<String>,
+    onSelect: (Int) -> Unit,
+) {
+    val signal = Signal.colors
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismiss,
+        containerColor = signal.card,
+        shape = RoundedCornerShape(SignalMetrics.FieldRadius),
+        border = BorderStroke(1.dp, signal.border),
+        tonalElevation = 0.dp,
+        shadowElevation = 6.dp,
+    ) {
+        labels.forEachIndexed { index, label ->
+            DropdownMenuItem(
+                text = { Text(label, style = MaterialTheme.typography.bodyLarge, color = signal.text) },
+                onClick = { onSelect(index) },
+            )
+        }
+    }
+}
+
+/** White bordered capsule with red text, for removing an item from the Library. */
+@Composable
+internal fun LibraryDestructiveButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    loading: Boolean = false,
+) {
+    val signal = Signal.colors
+    OutlinedButton(
+        onClick = onClick,
+        enabled = enabled,
+        modifier = modifier.fillMaxWidth().heightIn(min = SignalMetrics.ControlMedium),
+        shape = CircleShape,
+        border = BorderStroke(1.dp, signal.border),
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = signal.card,
+            contentColor = signal.error,
+            disabledContainerColor = signal.disabledFill,
+            disabledContentColor = signal.faint,
+        ),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 0.dp),
+    ) {
+        if (loading) {
+            CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp, color = signal.faint)
+        } else {
+            Icon(Icons.Outlined.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
+        }
+        Spacer(Modifier.width(8.dp))
+        Text(text, style = MaterialTheme.typography.labelMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun DetailMetadataCard(detail: CaptureHistoryDetail) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        shape = RoundedCornerShape(16.dp),
-    ) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text(
-                captureStateUiText(detail.state).localized(),
-                style = MaterialTheme.typography.titleMedium,
+    val signal = Signal.colors
+    val status = libraryCaptureStatus(detail.state)
+    val statusColors = signalStatusColors(status)
+    SignalCard(modifier = Modifier.fillMaxWidth(), padding = PaddingValues(16.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            SignalIconTile(
+                icon = libraryCaptureIcon(detail.state),
+                size = 40.dp,
+                fill = statusColors.fill,
+                tint = statusColors.ink,
             )
-            Text(
-                DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(detail.createdAtEpochMillis)),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            detail.logicalPath?.let { Text(it, style = MaterialTheme.typography.bodyMedium.copy(fontFamily = GeistMonoFontFamily)) }
-            Text(
-                voxFormat("%@: %@", voxString("Capture Sources"), captureSourceUiText(detail.captureSource).localized()),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            HorizontalDivider(color = MaterialTheme.colorScheme.outline, modifier = Modifier.padding(vertical = 4.dp))
-            Text(voxFormat("%@: %@", voxString("Capture"), detail.requestID), style = MaterialTheme.typography.labelSmall.copy(fontFamily = GeistMonoFontFamily))
-            Text(voxFormat("%@: %@", voxString("Preset"), detail.presetID), style = MaterialTheme.typography.labelSmall.copy(fontFamily = GeistMonoFontFamily))
-            detail.processingMode?.let { mode ->
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                SignalStatusBadge(captureStateUiText(detail.state).localized(), status)
                 Text(
+                    DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(detail.createdAtEpochMillis)),
+                    style = SignalType.monoCaption,
+                    color = signal.muted,
+                )
+            }
+        }
+        detail.logicalPath?.let { path ->
+            Spacer(Modifier.height(12.dp))
+            Text(path, style = SignalType.mono, color = signal.text)
+        }
+        Spacer(Modifier.height(12.dp))
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            SignalChip(
+                voxFormat("%@: %@", voxString("Capture Sources"), captureSourceUiText(detail.captureSource).localized()),
+                color = signal.well,
+                contentColor = signal.text,
+            )
+            detail.processingMode?.let { mode ->
+                SignalChip(
                     voxFormat(
                         "%@ · %@",
                         voxFormat("%@: %@", voxString("Processing"), processingModeUiText(mode).localized()),
                         processingOutcomeUiText(detail.processingOutcome).localized(),
                     ),
-                    style = MaterialTheme.typography.labelSmall,
+                    color = signal.well,
+                    contentColor = signal.text,
                 )
             }
         }
+        Spacer(Modifier.height(12.dp))
+        SignalDivider()
+        Spacer(Modifier.height(12.dp))
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                voxFormat("%@: %@", voxString("Capture"), detail.requestID),
+                style = SignalType.monoCaption,
+                color = signal.muted,
+            )
+            Text(
+                voxFormat("%@: %@", voxString("Preset"), detail.presetID),
+                style = SignalType.monoCaption,
+                color = signal.muted,
+            )
+        }
     }
 }
+
 
 internal fun captureStateUiText(state: CaptureState): VoxUiText = when (state) {
     CaptureState.QUEUED -> voxUiText("Queued")
@@ -375,17 +518,14 @@ internal fun captureSourceUiText(source: String): VoxUiText = when (source) {
 
 @Composable
 private fun ContentCard(title: String, content: String) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(title, style = MaterialTheme.typography.titleMedium)
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-            shape = RoundedCornerShape(16.dp),
-        ) {
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        SignalSectionLabel(title, Modifier.padding(start = 4.dp, top = 4.dp))
+        SignalCard(modifier = Modifier.fillMaxWidth(), padding = PaddingValues(16.dp), radius = SignalMetrics.GroupRadius) {
             Text(
                 content,
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                style = MaterialTheme.typography.bodyMedium.copy(fontFamily = GeistMonoFontFamily),
+                modifier = Modifier.fillMaxWidth(),
+                style = SignalType.mono,
+                color = Signal.colors.text,
             )
         }
     }

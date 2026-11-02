@@ -1,66 +1,196 @@
 package md.vox.android.ui
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.shape.RoundedCornerShape
 import md.vox.android.R
 
+/**
+ * Tokens for the "Signal" design shared with the iOS app (`Voxboard/GeistTheme.swift`):
+ * a warm paper ground, near-black ink, white bordered cards, one indigo accent and a
+ * recording red. Dark mode inverts to a near-black ground with raised charcoal cards.
+ */
+@Immutable
+data class SignalColors(
+    val isDark: Boolean,
+    /** Page ground. */
+    val bg: Color,
+    /** Raised cards, pills and secondary controls. */
+    val card: Color,
+    /** Inset wells, segmented-control tracks and neutral chips. */
+    val well: Color,
+    val border: Color,
+    val borderHi: Color,
+    val divider: Color,
+    /** Near-black ink; also the primary button fill. */
+    val text: Color,
+    val muted: Color,
+    val faint: Color,
+    val disabledFill: Color,
+    /** Fixed indigo fill for Send and the first route tile in both modes. */
+    val accent: Color,
+    val onAccent: Color,
+    /** Interactive tint: links, toggles, focus and progress. */
+    val tint: Color,
+    val accentSoft: Color,
+    val accentText: Color,
+    val recording: Color,
+    val recordingSoft: Color,
+    val error: Color,
+    val errorSoft: Color,
+    /** "Needs you" orange. */
+    val warning: Color,
+    val warningSoft: Color,
+    val warningText: Color,
+    /** Delivered green. */
+    val success: Color,
+    val successSoft: Color,
+    val pressed: Color,
+)
+
 object VoxColors {
-    val BackgroundLight = Color(0xFFE2E4E8)
-    val BackgroundDark = Color(0xFF1A1A1C)
-    val TextLight = Color(0xFF171717)
-    val TextDark = Color(0xFFEDEDED)
-    val MutedLight = Color(0xFF4D4D4D)
-    val MutedDark = Color(0xFFA0A0A0)
-    val BorderLight = Color(0x24000000)
-    val BorderDark = Color(0x3DFFFFFF)
-    val Blue = Color(0xFF006BFF)
-    val BlueDark = Color(0xFF47A8FF)
-    val Red = Color(0xFFD8001B)
-    val RedDark = Color(0xFFFF565F)
-    val Amber = Color(0xFFAA4D00)
-    val AmberDark = Color(0xFFFF9300)
-    val Green = Color(0xFF107D32)
-    val GreenDark = Color(0xFF00CA50)
+    val Light = SignalColors(
+        isDark = false,
+        bg = Color(0xFFF2F2EE),
+        card = Color(0xFFFFFFFF),
+        well = Color(0xFFE3E3DC),
+        border = Color(0xFFDEDED8),
+        borderHi = Color(0xFFC9C9C3),
+        divider = Color(0xFFECECE6),
+        text = Color(0xFF121212),
+        muted = Color(0xFF5E5E5A),
+        faint = Color(0xFF8A8A85),
+        disabledFill = Color(0xFFF7F7F4),
+        accent = Color(0xFF2F3BE8),
+        onAccent = Color.White,
+        tint = Color(0xFF2F3BE8),
+        accentSoft = Color(0xFFE6E6FC),
+        accentText = Color(0xFF2F3BE8),
+        recording = Color(0xFFF0474A),
+        recordingSoft = Color(0xFFFDEEEE),
+        error = Color(0xFFC42A2D),
+        errorSoft = Color(0xFFFDEEEE),
+        warning = Color(0xFFE8590C),
+        warningSoft = Color(0xFFFDF0E8),
+        warningText = Color(0xFFC2410C),
+        success = Color(0xFF0F7B5F),
+        successSoft = Color(0xFFE7F4EF),
+        pressed = Color(0x12121212),
+    )
+
+    val Dark = SignalColors(
+        isDark = true,
+        bg = Color(0xFF0B0B0B),
+        card = Color(0xFF161616),
+        well = Color(0xFF222220),
+        border = Color(0xFF2A2A28),
+        borderHi = Color(0xFF3A3A38),
+        divider = Color(0xFF1C1C1C),
+        text = Color(0xFFF4F4F1),
+        muted = Color(0xFF9A9A95),
+        faint = Color(0xFF8A8A85),
+        disabledFill = Color(0xFF161616),
+        accent = Color(0xFF2F3BE8),
+        onAccent = Color.White,
+        tint = Color(0xFF9DA4FF),
+        accentSoft = Color(0xFF1B1E4A),
+        accentText = Color(0xFF9DA4FF),
+        recording = Color(0xFFF0474A),
+        recordingSoft = Color(0xFF2A1112),
+        error = Color(0xFFFF7A7C),
+        errorSoft = Color(0xFF2A1112),
+        warning = Color(0xFFFF8A4C),
+        warningSoft = Color(0xFF2A1508),
+        warningText = Color(0xFFFF8A4C),
+        success = Color(0xFF4CC9A0),
+        successSoft = Color(0xFF0D251E),
+        pressed = Color(0x14F4F4F1),
+    )
+
+    // Earlier names, kept for existing call sites and tests.
+    val BackgroundLight = Light.bg
+    val BackgroundDark = Dark.bg
+    val Blue = Light.accent
+    val BlueDark = Dark.tint
+    val Red = Light.recording
+    val RedDark = Dark.recording
+    val Amber = Light.warning
+    val AmberDark = Dark.warning
+    val Green = Light.success
+    val GreenDark = Dark.success
 }
 
-private val VoxLightColors = lightColorScheme(
-    primary = VoxColors.Blue,
-    onPrimary = Color.White,
-    background = VoxColors.BackgroundLight,
-    onBackground = VoxColors.TextLight,
-    surface = VoxColors.BackgroundLight,
-    onSurface = VoxColors.TextLight,
-    surfaceVariant = Color(0x14000000),
-    onSurfaceVariant = VoxColors.MutedLight,
-    outline = VoxColors.BorderLight,
-    error = VoxColors.Red,
-)
+val LocalSignalColors = staticCompositionLocalOf { VoxColors.Light }
 
-private val VoxDarkColors = darkColorScheme(
-    primary = VoxColors.BlueDark,
-    onPrimary = Color.Black,
-    background = VoxColors.BackgroundDark,
-    onBackground = VoxColors.TextDark,
-    surface = VoxColors.BackgroundDark,
-    onSurface = VoxColors.TextDark,
-    surfaceVariant = Color(0x24FFFFFF),
-    onSurfaceVariant = VoxColors.MutedDark,
-    outline = VoxColors.BorderDark,
-    error = VoxColors.RedDark,
-)
+/** Access point for Signal tokens inside composables: `Signal.colors.card`. */
+object Signal {
+    val colors: SignalColors
+        @Composable get() = LocalSignalColors.current
+}
+
+/**
+ * Material roles map onto Signal so stock components pick up the design:
+ * `primary` is the interactive tint (text buttons, switches, progress, focus),
+ * every surface container is the white card, and outlines are the hairline border.
+ * Filled actions use the Signal buttons, whose primary fill is ink.
+ */
+private fun SignalColors.toMaterial(): ColorScheme {
+    val base = if (isDark) darkColorScheme() else lightColorScheme()
+    return base.copy(
+        primary = tint,
+        onPrimary = if (isDark) bg else onAccent,
+        primaryContainer = accentSoft,
+        onPrimaryContainer = accentText,
+        inversePrimary = accent,
+        secondary = text,
+        onSecondary = bg,
+        secondaryContainer = accentSoft,
+        onSecondaryContainer = accentText,
+        tertiary = recording,
+        onTertiary = Color.White,
+        tertiaryContainer = recordingSoft,
+        onTertiaryContainer = error,
+        background = bg,
+        onBackground = text,
+        surface = bg,
+        onSurface = text,
+        surfaceVariant = well,
+        onSurfaceVariant = muted,
+        surfaceTint = Color.Transparent,
+        surfaceBright = card,
+        surfaceDim = bg,
+        surfaceContainerLowest = card,
+        surfaceContainerLow = card,
+        surfaceContainer = card,
+        surfaceContainerHigh = card,
+        surfaceContainerHighest = card,
+        inverseSurface = text,
+        inverseOnSurface = bg,
+        outline = borderHi,
+        outlineVariant = border,
+        error = error,
+        onError = Color.White,
+        errorContainer = errorSoft,
+        onErrorContainer = error,
+    )
+}
 
 internal val GeistFontFamily = FontFamily(
     Font(R.font.geist_regular, weight = FontWeight.Normal),
@@ -73,30 +203,40 @@ internal val GeistMonoFontFamily = FontFamily(
     Font(R.font.geist_mono_medium, weight = FontWeight.Medium),
 )
 
+private fun geist(weight: FontWeight, size: Int, line: Int, tracking: Double = 0.0) = TextStyle(
+    fontFamily = GeistFontFamily,
+    fontWeight = weight,
+    fontSize = size.sp,
+    lineHeight = line.sp,
+    letterSpacing = tracking.em,
+)
+
 private val VoxTypography = Typography(
-    displayLarge = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 32.sp, lineHeight = 38.sp),
-    displayMedium = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 32.sp, lineHeight = 38.sp),
-    displaySmall = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 24.sp, lineHeight = 30.sp),
-    headlineLarge = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 32.sp, lineHeight = 38.sp),
-    headlineMedium = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 24.sp, lineHeight = 30.sp),
-    headlineSmall = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 20.sp, lineHeight = 26.sp),
-    titleLarge = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 24.sp, lineHeight = 30.sp),
-    titleMedium = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, lineHeight = 22.sp),
-    titleSmall = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.SemiBold, fontSize = 14.sp, lineHeight = 20.sp),
-    bodyLarge = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.Normal, fontSize = 16.sp, lineHeight = 24.sp),
-    bodyMedium = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.Normal, fontSize = 14.sp, lineHeight = 20.sp),
-    bodySmall = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.Normal, fontSize = 13.sp, lineHeight = 18.sp),
-    labelLarge = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 20.sp),
-    labelMedium = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.Medium, fontSize = 13.sp, lineHeight = 18.sp),
-    labelSmall = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.Medium, fontSize = 12.sp, lineHeight = 16.sp),
+    // Hero copy, e.g. "Say it. It lands in Markdown."
+    displayLarge = geist(FontWeight.SemiBold, 46, 48, -0.035),
+    displayMedium = geist(FontWeight.SemiBold, 34, 38, -0.024),
+    displaySmall = geist(FontWeight.SemiBold, 32, 36, -0.025),
+    // Signal page titles ("Library", "Settings").
+    headlineLarge = geist(FontWeight.SemiBold, 34, 38, -0.024),
+    headlineMedium = geist(FontWeight.SemiBold, 24, 30, -0.01),
+    headlineSmall = geist(FontWeight.SemiBold, 20, 26),
+    titleLarge = geist(FontWeight.SemiBold, 20, 26),
+    titleMedium = geist(FontWeight.SemiBold, 17, 22),
+    titleSmall = geist(FontWeight.SemiBold, 14, 20),
+    bodyLarge = geist(FontWeight.Normal, 16, 24),
+    bodyMedium = geist(FontWeight.Normal, 14, 20),
+    bodySmall = geist(FontWeight.Normal, 13, 18),
+    labelLarge = geist(FontWeight.Medium, 16, 22),
+    labelMedium = geist(FontWeight.Medium, 14, 20),
+    labelSmall = geist(FontWeight.Medium, 12, 16),
 )
 
 private val VoxShapes = Shapes(
-    extraSmall = RoundedCornerShape(6.dp),
-    small = RoundedCornerShape(6.dp),
-    medium = RoundedCornerShape(12.dp),
-    large = RoundedCornerShape(16.dp),
-    extraLarge = RoundedCornerShape(16.dp),
+    extraSmall = RoundedCornerShape(8.dp),
+    small = RoundedCornerShape(8.dp),
+    medium = RoundedCornerShape(14.dp),
+    large = RoundedCornerShape(18.dp),
+    extraLarge = RoundedCornerShape(24.dp),
 )
 
 @Composable
@@ -104,10 +244,13 @@ fun VoxTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
-    MaterialTheme(
-        colorScheme = if (darkTheme) VoxDarkColors else VoxLightColors,
-        typography = VoxTypography,
-        shapes = VoxShapes,
-        content = content,
-    )
+    val colors = if (darkTheme) VoxColors.Dark else VoxColors.Light
+    CompositionLocalProvider(LocalSignalColors provides colors) {
+        MaterialTheme(
+            colorScheme = colors.toMaterial(),
+            typography = VoxTypography,
+            shapes = VoxShapes,
+            content = content,
+        )
+    }
 }

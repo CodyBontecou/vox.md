@@ -1,0 +1,179 @@
+package md.vox.android
+
+import androidx.compose.runtime.Composable
+import md.vox.android.capturedomain.ActivityDay
+import md.vox.android.capturedomain.ActivityStats
+import md.vox.android.capturedomain.CaptureBarAction
+import md.vox.android.capturedomain.CaptureBarConfiguration
+import md.vox.android.capturedomain.CaptureRailSide
+import md.vox.android.capturedomain.VoiceRecordingResult
+import md.vox.android.platformservices.TranscriptionUsageState
+
+/**
+ * Signal redesign stories for the settings area. Story ids use the
+ * "settings-" prefix; launch with
+ * `adb shell am start -n md.vox.android/.VisualStoryActivity --es story <id> --ez dark <bool>`.
+ * Returns false when [story] is not one of these.
+ */
+@Composable
+internal fun SettingsStories(story: String): Boolean {
+    when (story) {
+        // Settings
+        "settings-free" -> SettingsStateStory(BillingUiState(BillingConnectionPhase.READY, VoxEntitlement.FREE, "$9.99", true))
+        "settings-unlimited" -> SettingsStateStory(BillingUiState(BillingConnectionPhase.READY, VoxEntitlement.UNLIMITED, "$9.99", true))
+        "settings-price-loading" -> SettingsStateStory(BillingUiState(BillingConnectionPhase.CONNECTING, VoxEntitlement.FREE, null, false))
+
+        // Stats
+        "settings-stats-empty" -> StatsScreen(stats = ActivityStats.Empty, navigateBack = {})
+        "settings-stats-populated" -> StatsScreen(stats = settingsStoryStats, navigateBack = {})
+
+        // Capture Bar
+        "settings-capture-bar" -> CaptureBarStory(CaptureBarConfiguration())
+        "settings-capture-bar-customized" -> CaptureBarStory(
+            CaptureBarConfiguration(
+                orderedActions = listOf(CaptureBarAction.CHECKLIST, CaptureBarAction.ADD_MEDIA) +
+                    CaptureBarAction.entries.filterNot { it == CaptureBarAction.CHECKLIST || it == CaptureBarAction.ADD_MEDIA },
+                hiddenActions = setOf(CaptureBarAction.SKETCH, CaptureBarAction.TEXT_CASE, CaptureBarAction.INTERNAL_LINK, CaptureBarAction.UNDO),
+                usesTwentyFourHourTimestamps = true,
+                railSide = CaptureRailSide.RIGHT,
+                confirmsVoiceNotesBeforeAdding = true,
+                voiceRecordingResult = VoiceRecordingResult.SEND_IMMEDIATELY,
+            ),
+        )
+        "settings-capture-bar-busy" -> CaptureBarStory(
+            CaptureBarConfiguration(hiddenActions = setOf(CaptureBarAction.SKETCH)),
+            isBusy = true,
+        )
+
+        // Debug Log
+        "settings-debug-log-empty" -> DebugLogContent(logText = "", navigateBack = {}, refresh = {}, copy = {}, clear = {})
+        "settings-debug-log-populated" -> DebugLogContent(logText = settingsStoryLog, navigateBack = {}, refresh = {}, copy = {}, clear = {})
+
+        // App Language
+        "settings-app-language" -> AppLanguageSettingsScreen(navigateBack = {}, initialSelection = AppLanguage.SYSTEM)
+        "settings-app-language-selected" -> AppLanguageSettingsScreen(navigateBack = {}, initialSelection = AppLanguage.JAPANESE)
+
+        // Upgrade (paywall)
+        "settings-upgrade-free" -> UpgradeStateStory(storyBilling())
+        "settings-upgrade-connecting" -> UpgradeStateStory(
+            storyBilling(connectionPhase = BillingConnectionPhase.CONNECTING, productAvailable = false, formattedPrice = null),
+        )
+        "settings-upgrade-purchasing" -> UpgradeStateStory(storyBilling(isPurchasing = true))
+        "settings-upgrade-restoring" -> UpgradeStateStory(storyBilling(isRestoring = true))
+        "settings-upgrade-error" -> UpgradeStateStory(storyBilling(lastOutcome = BillingActionOutcome.ERROR))
+        "settings-upgrade-not-found" -> UpgradeStateStory(storyBilling(lastOutcome = BillingActionOutcome.NOT_FOUND))
+        "settings-upgrade-cancelled" -> UpgradeStateStory(storyBilling(lastOutcome = BillingActionOutcome.CANCELLED))
+        "settings-upgrade-not-configured" -> UpgradeStateStory(
+            storyBilling(statusCode = "productNotConfigured", productAvailable = false, formattedPrice = null),
+        )
+        "settings-upgrade-purchased" -> UpgradeStateStory(
+            storyBilling(entitlement = VoxEntitlement.UNLIMITED, lastOutcome = BillingActionOutcome.PURCHASED),
+        )
+        "settings-upgrade-unacknowledged" -> UpgradeStateStory(
+            storyBilling(entitlement = VoxEntitlement.UNLIMITED, lastOutcome = BillingActionOutcome.PURCHASED, statusCode = "acknowledge:2"),
+        )
+        "settings-upgrade-stale" -> UpgradeStateStory(
+            storyBilling(entitlement = VoxEntitlement.UNLIMITED, connectionPhase = BillingConnectionPhase.UNAVAILABLE, isEntitlementStale = true),
+        )
+        else -> return false
+    }
+    return true
+}
+
+@Composable
+private fun SettingsStateStory(billingState: BillingUiState) {
+    SettingsScreen(
+        destination = visualDestination,
+        navigateBack = {},
+        chooseFolder = {},
+        openPresets = {},
+        openCaptureBar = {},
+        openStats = {},
+        openModels = {},
+        openRecordingQueue = {},
+        openAppLanguage = {},
+        openDebugLog = {},
+        openUpgrade = {},
+        billingState = billingState,
+    )
+}
+
+@Composable
+private fun CaptureBarStory(configuration: CaptureBarConfiguration, isBusy: Boolean = false) {
+    CaptureBarSettingsScreen(
+        configuration = configuration,
+        isBusy = isBusy,
+        navigateBack = {},
+        setVisible = { _, _ -> },
+        move = { _, _ -> },
+        setTwentyFourHour = {},
+        setRailSide = {},
+        setVoiceConfirmation = {},
+        setVoiceRecordingResult = {},
+        reset = {},
+    )
+}
+
+@Composable
+private fun UpgradeStateStory(billingState: BillingUiState, captureCount: Int = 6, usedMillis: Long = 7 * 60_000L) {
+    UpgradeScreen(
+        billingState = billingState,
+        stats = settingsStoryStats.copy(captureCount = captureCount),
+        transcriptionUsage = TranscriptionUsageState(usedMillis = usedMillis),
+        navigateBack = {},
+        purchase = {},
+        restore = {},
+    )
+}
+
+private fun storyBilling(
+    entitlement: VoxEntitlement = VoxEntitlement.FREE,
+    connectionPhase: BillingConnectionPhase = BillingConnectionPhase.READY,
+    formattedPrice: String? = "$9.99",
+    productAvailable: Boolean = true,
+    lastOutcome: BillingActionOutcome? = null,
+    statusCode: String? = null,
+    isEntitlementStale: Boolean = false,
+    isPurchasing: Boolean = false,
+    isRestoring: Boolean = false,
+) = BillingUiState(
+    connectionPhase = connectionPhase,
+    entitlement = entitlement,
+    formattedPrice = formattedPrice,
+    productAvailable = productAvailable,
+    lastOutcome = lastOutcome,
+    statusCode = statusCode,
+    isEntitlementStale = isEntitlementStale,
+    isPurchasing = isPurchasing,
+    isRestoring = isRestoring,
+)
+
+private val settingsStoryToday = FIXED_TIME / 86_400_000L
+
+private val settingsStoryStats = ActivityStats(
+    recordingCount = 42,
+    captureCount = 128,
+    recordedDurationMillis = 3 * 3_600_000L + 25 * 60_000L,
+    attachmentCount = 17,
+    lastSevenDays = listOf(
+        ActivityDay(settingsStoryToday - 6, captureCount = 3, recordingCount = 1),
+        ActivityDay(settingsStoryToday - 5, captureCount = 8, recordingCount = 2),
+        ActivityDay(settingsStoryToday - 4, captureCount = 0, recordingCount = 0),
+        ActivityDay(settingsStoryToday - 3, captureCount = 5, recordingCount = 4),
+        ActivityDay(settingsStoryToday - 2, captureCount = 12, recordingCount = 3),
+        ActivityDay(settingsStoryToday - 1, captureCount = 2, recordingCount = 0),
+        ActivityDay(settingsStoryToday, captureCount = 6, recordingCount = 2),
+    ),
+    captureSources = linkedMapOf("app" to 74, "keyboard" to 31, "share" to 12, "widget" to 7, "wear" to 4),
+)
+
+private val settingsStoryLog = """
+    2023-11-14T22:13:20Z app.launch version=1.8.0 build=180
+    2023-11-14T22:13:21Z capture.queue.drain pending=0
+    2023-11-14T22:14:02Z recording.start chunks=0
+    2023-11-14T22:14:44Z recording.stop chunks=2 durationMs=42000
+    2023-11-14T22:14:45Z transcription.start engine=whisper model=ggml-small
+    2023-11-14T22:15:03Z transcription.complete durationMs=18000
+    2023-11-14T22:15:04Z capture.delivered state=completed attempts=1
+    2023-11-14T22:16:10Z app.language.changed language=system
+""".trimIndent()

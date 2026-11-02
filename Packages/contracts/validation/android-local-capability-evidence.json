@@ -281,7 +281,7 @@
       "capabilityID": "cap.editor.add-files",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureBarAction.ADD_FILES"
         },
         {
@@ -301,7 +301,7 @@
       "capabilityID": "cap.editor.add-media",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureBarAction.ADD_MEDIA"
         },
         {
@@ -381,7 +381,7 @@
       "capabilityID": "cap.editor.current-location",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureInsertionFormatter.googleMapsLink"
         },
         {
@@ -435,7 +435,7 @@
       "capabilityID": "cap.editor.extract-text",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureBarAction.EXTRACT_TEXT"
         },
         {
@@ -570,7 +570,7 @@
       "capabilityID": "cap.editor.paste",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureBarAction.PASTE"
         },
         {
@@ -610,7 +610,7 @@
       "capabilityID": "cap.editor.scan",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureBarAction.SCAN_DOCUMENT"
         },
         {
@@ -650,7 +650,7 @@
       "capabilityID": "cap.editor.sketch",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureBarAction.SKETCH"
         },
         {
@@ -725,7 +725,7 @@
       "capabilityID": "cap.editor.toolbar-order",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/SettingsScreens.kt",
           "symbol": "internal fun CaptureBarSettingsScreen"
         },
         {
@@ -749,7 +749,7 @@
       "capabilityID": "cap.editor.undo",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureBarAction.UNDO"
         },
         {
@@ -789,7 +789,7 @@
       "capabilityID": "cap.editor.voice-confirm",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "internal fun RecordingDetails"
         },
         {
@@ -833,7 +833,7 @@
       "capabilityID": "cap.entry.app",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "internal fun CaptureScreen"
         },
         {
@@ -2059,7 +2059,7 @@
       "capabilityID": "cap.location.unavailable-ask",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureLocationUnavailableBehavior.ASK -> locationDecision"
         },
         {
@@ -2078,7 +2078,7 @@
       "capabilityID": "cap.location.unavailable-cancel",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureLocationUnavailableBehavior.CANCEL -> presentNotice"
         },
         {
@@ -2101,7 +2101,7 @@
           "symbol": "CaptureLocationUnavailableReason.entries.forEach"
         },
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureLocationUnavailableReason.CANCELLED"
         },
         {
@@ -2125,7 +2125,7 @@
           "symbol": "CaptureLocationUnavailableReason.entries.forEach"
         },
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureLocationUnavailableReason.NOT_DETERMINED"
         },
         {
@@ -2149,7 +2149,7 @@
           "symbol": "CaptureLocationUnavailableReason.entries.forEach"
         },
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureLocationUnavailableReason.PERMISSION_DENIED"
         },
         {
@@ -2173,7 +2173,7 @@
           "symbol": "CaptureLocationUnavailableReason.entries.forEach"
         },
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureLocationUnavailableReason.REDUCED_ACCURACY"
         },
         {
@@ -2197,7 +2197,7 @@
           "symbol": "CaptureLocationUnavailableReason.entries.forEach"
         },
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureLocationUnavailableReason.RESTRICTED"
         },
         {
@@ -2217,7 +2217,7 @@
       "capabilityID": "cap.location.unavailable-send",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureLocationUnavailableBehavior.SEND_WITHOUT_LOCATION -> deliverPending"
         },
         {
@@ -2240,7 +2240,7 @@
           "symbol": "CaptureLocationUnavailableReason.entries.forEach"
         },
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureLocationUnavailableReason.TIMEOUT"
         },
         {
@@ -2264,7 +2264,7 @@
           "symbol": "CaptureLocationUnavailableReason.entries.forEach"
         },
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "CaptureLocationUnavailableReason.UNAVAILABLE"
         },
         {
@@ -2712,7 +2712,7 @@
       "capabilityID": "cap.payload.scan-pdf",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": ".setResultFormats(RESULT_FORMAT_JPEG, RESULT_FORMAT_PDF)"
         },
         {
@@ -2739,7 +2739,7 @@
           "symbol": "internal fun screenshotMetadataMatches("
         },
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "val screenshotPicker = rememberLauncherForActivityResult"
         },
         {
@@ -3177,7 +3177,7 @@
       "capabilityID": "cap.queue.capture-concurrency",
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
           "symbol": "recordingTranscription: RecordingTranscriptionState?"
         },
         {

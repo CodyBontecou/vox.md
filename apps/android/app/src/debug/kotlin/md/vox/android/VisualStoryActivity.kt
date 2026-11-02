@@ -154,12 +154,22 @@ internal fun VisualParityStory(story: String) {
             presets = railStoryPresets,
             isPresetRailExpanded = true,
         )
-        else -> Text("Unknown visual story: $story")
+        else -> if (
+            !CaptureStories(story) &&
+            !LibraryStories(story) &&
+            !SettingsStories(story) &&
+            !RecoveryStories(story) &&
+            !RouteStories(story) &&
+            !KeyboardStories(story) &&
+            !OnboardingStories(story)
+        ) {
+            Text("Unknown visual story: $story")
+        }
     }
 }
 
 @androidx.compose.runtime.Composable
-private fun CaptureStory(
+internal fun CaptureStory(
     recordingPhase: RecordingPhase = RecordingPhase.IDLE,
     recordingTranscription: RecordingTranscriptionState? = null,
     presets: CapturePresetCollection = visualPresets,
@@ -233,7 +243,7 @@ private fun CaptureStory(
 }
 
 @androidx.compose.runtime.Composable
-private fun EmptyHistoryStory() {
+internal fun EmptyHistoryStory() {
     HistoryScreen(
         items = emptyList(),
         transcripts = emptyList(),
@@ -249,7 +259,7 @@ private fun EmptyHistoryStory() {
 }
 
 @androidx.compose.runtime.Composable
-private fun FolderRepairHistoryStory() {
+internal fun FolderRepairHistoryStory() {
     HistoryScreen(
         items = listOf(
             CaptureHistoryItem(
@@ -276,7 +286,7 @@ private fun FolderRepairHistoryStory() {
 }
 
 @androidx.compose.runtime.Composable
-private fun HistoryStateStory(
+internal fun HistoryStateStory(
     state: CaptureState,
     requestID: String,
     title: String,
@@ -308,7 +318,7 @@ private fun HistoryStateStory(
 }
 
 @androidx.compose.runtime.Composable
-private fun UpgradeStory(
+internal fun UpgradeStory(
     entitlement: VoxEntitlement,
     connectionPhase: BillingConnectionPhase = BillingConnectionPhase.READY,
     lastOutcome: BillingActionOutcome? = if (entitlement == VoxEntitlement.PENDING) {
@@ -345,7 +355,7 @@ private fun UpgradeStory(
 }
 
 @androidx.compose.runtime.Composable
-private fun HistoryStory() {
+internal fun HistoryStory() {
     HistoryScreen(
         items = listOf(
             CaptureHistoryItem(
@@ -400,7 +410,7 @@ private fun HistoryStory() {
 }
 
 @androidx.compose.runtime.Composable
-private fun SettingsStory() {
+internal fun SettingsStory() {
     SettingsScreen(
         destination = visualDestination,
         navigateBack = {},
@@ -423,7 +433,7 @@ private fun SettingsStory() {
 }
 
 @androidx.compose.runtime.Composable
-private fun PresetsStory() {
+internal fun PresetsStory() {
     CapturePresetsScreen(
         collection = visualPresets,
         entryTemplates = listOf(
@@ -443,13 +453,13 @@ private fun PresetsStory() {
     )
 }
 
-private val visualDestination = CaptureDestination(
+internal val visualDestination = CaptureDestination(
     id = "local",
     displayName = "Vox Notes",
     treeUri = "content://md.vox.android.visual/vault",
 )
 
-private val visualPresets = CapturePresetCollection(
+internal val visualPresets = CapturePresetCollection(
     activePresetID = "33333333-3333-4333-8333-333333333333",
     presets = listOf(
         CapturePreset(
@@ -474,10 +484,10 @@ private val visualPresets = CapturePresetCollection(
     ),
 )
 
-private const val FIXED_TIME = 1_700_000_000_000L
+internal const val FIXED_TIME = 1_700_000_000_000L
 
 /** Rail story fixtures: the active pin stays in the selector, disabled and unpinned presets stay off the rail. */
-private val railStoryPresets = CapturePresetCollection(
+internal val railStoryPresets = CapturePresetCollection(
     activePresetID = "33333333-3333-4333-8333-333333333333",
     presets = listOf(
         CapturePreset(
@@ -534,4 +544,4 @@ private val railStoryPresets = CapturePresetCollection(
         ),
     ),
 )
-private const val RECORDING_ID = "66666666-6666-4666-8666-666666666666"
+internal const val RECORDING_ID = "66666666-6666-4666-8666-666666666666"

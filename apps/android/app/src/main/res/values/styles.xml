@@ -4,7 +4,9 @@
         <item name="android:fontFamily">sans</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowActionModeOverlay">true</item>
-        <item name="android:navigationBarColor">#FAF8F5</item>
-        <item name="android:statusBarColor">#FAF8F5</item>
+        <item name="android:windowBackground">@color/vox_window_background</item>
+        <item name="android:windowSplashScreenBackground">#F2F2EE</item>
+        <item name="android:navigationBarColor">#F2F2EE</item>
+        <item name="android:statusBarColor">#F2F2EE</item>
     </style>
 </resources>

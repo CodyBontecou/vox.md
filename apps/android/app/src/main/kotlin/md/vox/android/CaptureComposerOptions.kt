@@ -21,31 +21,81 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import md.vox.android.capturedomain.*
 import java.time.ZoneId
+import androidx.compose.foundation.background
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.ui.Alignment
+import md.vox.android.ui.Signal
+import md.vox.android.ui.SignalDivider
+import md.vox.android.ui.SignalFieldShape
+import md.vox.android.ui.SignalGroup
+import md.vox.android.ui.SignalMetrics
+import md.vox.android.ui.SignalPillButton
+import md.vox.android.ui.SignalRowDivider
+import md.vox.android.ui.SignalType
+import md.vox.android.ui.signalTextFieldColors
 
 @Composable internal fun AudioFilenameControls(template: String, presetName: String, change: (String) -> Unit) {
     OutlinedTextField(template, { change(it.take(1024)) }, modifier = Modifier.fillMaxWidth(),
         label = { Text(voxString("Audio Filename Template")) }, singleLine = true,
+        shape = SignalFieldShape, colors = signalTextFieldColors(),
         supportingText = { Text(voxString("Tokens: {timestamp}, {date}, {time}, {YR}, {id}, {id8}, {preset}, {original}. Leave empty for automatic naming. The recorded format determines the extension.")) })
     val preview = CaptureAudioFilename.render(template, "12345678-1234-4234-8234-123456789abc", 1700000000000,
         presetName, "Recording.wav", zone = ZoneId.of("UTC"))
-    if (preview != null) Text(voxFormat("Example: %@", preview), style = MaterialTheme.typography.bodySmall)
+    if (preview != null) Text(voxFormat("Example: %@", preview), style = SignalType.monoCaption, color = Signal.colors.muted)
 }
 
 @Composable internal fun CaptureAppearanceControls(configuration: CaptureBarConfiguration, busy: Boolean,
     setTwentyFourHour: (Boolean) -> Unit, setRailSide: (CaptureRailSide) -> Unit) {
-    Text(voxString("Timestamp Format"), modifier = Modifier.padding(20.dp), style = MaterialTheme.typography.titleMedium)
-    for (format in CaptureTimestampFormat.entries) {
-        ListItem(headlineContent = { Text(if (format == CaptureTimestampFormat.TWELVE_HOUR) voxString("12-hour") else voxString("24-hour")) },
-            supportingContent = { Text(format.render(1700000000000, ZoneId.of("UTC"))) },
-            leadingContent = { RadioButton(configuration.timestampFormat == format, modifier = Modifier.testTag("timestamp-${format.wireName}"),
-                onClick = { setTwentyFourHour(format == CaptureTimestampFormat.TWENTY_FOUR_HOUR) }, enabled = !busy) })
+    val c = Signal.colors
+    Column(
+        Modifier.fillMaxWidth().padding(horizontal = SignalMetrics.PageGutter, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        SignalGroup(voxString("Timestamp Format")) {
+            CaptureTimestampFormat.entries.forEachIndexed { index, format ->
+                if (index > 0) SignalRowDivider()
+                CaptureAppearanceRadioRow(
+                    title = if (format == CaptureTimestampFormat.TWELVE_HOUR) voxString("12-hour") else voxString("24-hour"),
+                    subtitle = format.render(1700000000000, ZoneId.of("UTC")),
+                    selected = configuration.timestampFormat == format,
+                    enabled = !busy,
+                    testTag = "timestamp-${format.wireName}",
+                    onClick = { setTwentyFourHour(format == CaptureTimestampFormat.TWENTY_FOUR_HOUR) },
+                )
+            }
+        }
+        SignalGroup(voxString("Pinned Preset Rail")) {
+            CaptureRailSide.entries.forEachIndexed { index, side ->
+                if (index > 0) SignalRowDivider()
+                CaptureAppearanceRadioRow(
+                    title = if (side == CaptureRailSide.LEFT) voxString("Left edge") else voxString("Right edge"),
+                    subtitle = null,
+                    selected = configuration.railSide == side,
+                    enabled = !busy,
+                    testTag = "rail-${side.name}",
+                    onClick = { setRailSide(side) },
+                )
+            }
+        }
     }
-    Text(voxString("Pinned Preset Rail"), modifier = Modifier.padding(20.dp), style = MaterialTheme.typography.titleMedium)
-    for (side in CaptureRailSide.entries) {
-        ListItem(headlineContent = { Text(if (side == CaptureRailSide.LEFT) voxString("Left edge") else voxString("Right edge")) },
-            leadingContent = { RadioButton(configuration.railSide == side, { setRailSide(side) }, modifier = Modifier.testTag("rail-${side.name}"), enabled = !busy) })
+    Spacer(Modifier.height(8.dp))
+}
+
+@Composable private fun CaptureAppearanceRadioRow(title: String, subtitle: String?, selected: Boolean, enabled: Boolean,
+    testTag: String, onClick: () -> Unit) {
+    val c = Signal.colors
+    Row(
+        Modifier.fillMaxWidth().heightIn(min = 52.dp).padding(start = 4.dp, end = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        RadioButton(selected, onClick = onClick, modifier = Modifier.testTag(testTag), enabled = enabled,
+            colors = RadioButtonDefaults.colors(selectedColor = c.tint, unselectedColor = c.faint))
+        Column(Modifier.weight(1f).padding(vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(title, style = SignalType.rowTitle, color = if (enabled) c.text else c.faint)
+            if (subtitle != null) Text(subtitle, style = SignalType.monoCaption, color = c.muted)
+        }
     }
-    HorizontalDivider()
 }
 
 /** Primary content has a stable structural identity through resize, preview and font-scale changes. */
@@ -58,14 +108,17 @@ import java.time.ZoneId
         Row(Modifier.fillMaxSize()) {
             Column(Modifier.weight(1f).fillMaxHeight()) {
                 Box {
-                    if (supported) TextButton(onClick = { enabled = !enabled }) {
-                        Text(if (enabled) voxString("Hide draft preview") else voxString("Show draft preview"))
-                    }
+                    if (supported) SignalPillButton(
+                        text = if (enabled) voxString("Hide draft preview") else voxString("Show draft preview"),
+                        onClick = { enabled = !enabled },
+                        modifier = Modifier.padding(start = SignalMetrics.PageGutter, top = 4.dp),
+                        icon = Icons.Outlined.Visibility,
+                    )
                 }
                 Box(Modifier.weight(1f).fillMaxWidth()) { primary() }
             }
             if (visible) {
-                VerticalDivider()
+                VerticalDivider(color = Signal.colors.border)
                 CaptureDraftPreview(text, preset?.name.orEmpty(), destination?.displayName,
                     route?.relativeNotePath ?: preset?.let { if (it.noteTargetKind == CaptureNoteTargetKind.EXISTING_NOTE) it.existingNotePath else "${it.logicalFolder}/${it.noteNameTemplate}" },
                     attachmentCount, Modifier.width(300.dp).fillMaxHeight())
@@ -78,10 +131,11 @@ import java.time.ZoneId
     attachmentCount: Int, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val lines = remember(text) { previewLines(text) }
-    SelectionContainer(modifier) {
+    val c = Signal.colors
+    SelectionContainer(modifier.background(c.card)) {
         LazyColumn(contentPadding = PaddingValues(22.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             item {
-                Text(voxString("Draft preview"), style = MaterialTheme.typography.titleMedium)
+                Text(voxString("Draft preview"), style = MaterialTheme.typography.titleMedium, color = c.text)
                 TextButton(onClick = { context.getSystemService(ClipboardManager::class.java).setPrimaryClip(ClipData.newPlainText("Markdown", text)) }) {
                     Text(voxString("Copy draft Markdown"))
                 }
@@ -92,15 +146,19 @@ import java.time.ZoneId
                     2 -> MaterialTheme.typography.headlineSmall
                     3 -> MaterialTheme.typography.titleLarge
                     else -> MaterialTheme.typography.bodyMedium
-                }, fontFamily = if (line.code) md.vox.android.ui.GeistMonoFontFamily else null,
+                }, color = if (line.quote) c.muted else c.text,
+                    fontFamily = if (line.code) md.vox.android.ui.GeistMonoFontFamily else null,
                     fontStyle = if (line.quote) FontStyle.Italic else null)
             }
             item {
-                HorizontalDivider()
-                Text(presetName, style = MaterialTheme.typography.titleSmall)
-                vaultName?.let { Text(it) }; path?.let { Text(it) }
-                if (attachmentCount > 0) Text(voxFormat("%lld attachments", attachmentCount))
-                Text(voxString("Draft preview. Preset formatting and processing are applied when you send."), style = MaterialTheme.typography.bodySmall)
+                SignalDivider()
+                Spacer(Modifier.height(12.dp))
+                Text(presetName, style = MaterialTheme.typography.titleSmall, color = c.text)
+                vaultName?.let { Text(it, style = SignalType.monoCaption, color = c.muted) }
+                path?.let { Text(it, style = SignalType.monoCaption, color = c.muted) }
+                if (attachmentCount > 0) Text(voxFormat("%lld attachments", attachmentCount), style = SignalType.caption, color = c.muted)
+                Spacer(Modifier.height(6.dp))
+                Text(voxString("Draft preview. Preset formatting and processing are applied when you send."), style = SignalType.caption, color = c.faint)
             }
         }
     }

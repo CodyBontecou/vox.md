@@ -326,7 +326,7 @@
     },
     {
       "path": "apps/android/app/src/debug/kotlin/md/vox/android/VisualStoryActivity.kt",
-      "sha256": "40169b94bc78cdda1d49a4af3d5e62e0a9c3dc34a3538f5167a081d9408180d5"
+      "sha256": "f3dc7d5b1b17d40680cece0f74cd46b0646861fa0ed850a2bb1634e483beb92d"
     },
     {
       "path": "Voxboard/Fonts/Geist-Regular.ttf",
@@ -350,11 +350,11 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/AdaptiveLayout.kt",
-      "sha256": "dc422065b39a0af7dea31c1324aee777da2bdc2270ededed458186d253188319"
+      "sha256": "a9dde94e49478dd9c4f2c7b08a0b57ba8a0040ee14202d19b67f75219a0ff5f2"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt",
-      "sha256": "40f331b1a57d0e824094496b37f419c08faeeca3ee1b655c976412d3a2a459d2"
+      "sha256": "570edd2a95e127cd43e8e6fd44c13bbe48c254139e2fc42a2bce034ad7bda962"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureDrainWorker.kt",
@@ -366,11 +366,27 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/HistoryDetailScreen.kt",
-      "sha256": "84915efa6d8cec80ba1ed1fdafd0ef4c98b4a0db95e43bb2141e9ced5865c82e"
+      "sha256": "86144b766a69aec65e28287b1e77870d2258625eb21f17b98c72308256372321"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
-      "sha256": "2b9f6eeb774429c2518889cae5434d5782ff6a82ac992ed3f41f283e69241978"
+      "sha256": "50865423943da08286634fa8aca7029a131b0744f3fef8e1f07b6385b55300b7"
+    },
+    {
+      "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
+      "sha256": "5fbbd5069d78b6bb021b620cf9f4952dbcbdcdcfdfddb03b34fb832f5bb42a5d"
+    },
+    {
+      "path": "apps/android/app/src/main/kotlin/md/vox/android/HistoryScreen.kt",
+      "sha256": "f2eabcf83278dff329f50e643bb6a2935a71848d1bc15ee4808b84c4091f838b"
+    },
+    {
+      "path": "apps/android/app/src/main/kotlin/md/vox/android/CapturePresetScreens.kt",
+      "sha256": "93b5eb5123260198d1886a0817e1101bec71e1894ed31372ae65155511acea22"
+    },
+    {
+      "path": "apps/android/app/src/main/kotlin/md/vox/android/SettingsScreens.kt",
+      "sha256": "165a31de98b43c5e860ba3ebecd9edc683363ff42c4e6e181b7cbd6d1c84d390"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt",
@@ -386,15 +402,15 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt",
-      "sha256": "2724d1d632c44902086665d956bc2c2ef2e0f8cfaca8c10ab89f157eb6a20939"
+      "sha256": "4927892370c2101813746ea33ef97458922b1e44030fb88ae4a43c8a5143660d"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/SettingsSupportScreens.kt",
-      "sha256": "e7cc1077edf26d1499c1103ceb20fd1c09c3b1cd94d71633ee7e657e746048aa"
+      "sha256": "8f3d732aa19dd7b5eca4a8a2a501273b6a0bc1881ad3b33d9dc6ec08c3c13335"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
-      "sha256": "e983252f795353a656e0a28b4924a74b7379860f5a10afe30392d7b6b991547c"
+      "sha256": "9f18eb9de13b9dd1b6cbe36807fe2f7f9f8eb7647fd7dc5b7b06577edad04777"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/VoxApplication.kt",
@@ -410,7 +426,7 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/VoxInputMethodService.kt",
-      "sha256": "c012488623a54de5824c501631e7db5061fc781ac4d4a196d9c89ed10b39538c"
+      "sha256": "332efad9f764413209927cd5a2ccfcb86d0aab84d27d754f436b4b538b5ca562"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/WearRecordingOnlyDelivery.kt",
@@ -426,7 +442,7 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/ui/VoxTheme.kt",
-      "sha256": "2d2784ea6a912f1ee9625ce865a5ad13f8926d419cf8c3940ec52a3753f6d370"
+      "sha256": "796d953695d0bf48c016cf37caf614f49ad9a6518a7adb2d5784d4829b45e39e"
     },
     {
       "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/BillingRestoreDiagnosticsInstrumentationTest.kt",
@@ -494,7 +510,7 @@
     },
     {
       "path": "apps/android/localization-review.json",
-      "sha256": "c9e78e8a7fc0e06b04d7f48a5ab46cd50a9e41edb2b4c7ba9edf55f644ecf819"
+      "sha256": "56543cf58d60bbc1d80e0fed72e7785852c856037bf958b65f5ffdc5e97f0b97"
     },
     {
       "path": "apps/android/scripts/validate-debug-artifacts.py",
@@ -890,7 +906,7 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureParityControls.kt",
-      "sha256": "d0fefa236e34856b369161d0db669ad24c152f07e80baf37cb28c78b5421c7ba"
+      "sha256": "0e71f770f5de94e5ea17bd916e69c2866a64ae6676b43e35e4d8f148a196bb5d"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/URLDelivery.kt",
@@ -914,11 +930,11 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureComposerOptions.kt",
-      "sha256": "c153d3aba2b9ff65fe3b1569ad71152705ea6b06736a82e6383e63a3f079c666"
+      "sha256": "686067732e6c3f498afd87c547435bd906d20c986c2f7b611637feecdeaa1b01"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/PresetWidgets.kt",
-      "sha256": "9945488e5fd02bd13a9809f18c247de98b4fe73a44c515538e8b44eb9eb3ced0"
+      "sha256": "c4c116345e3e14ec45f11e0809866b535138fe3ec4f4dd6893bf37795fc1d250"
     },
     {
       "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CapturePresentation.kt",
@@ -926,15 +942,15 @@
     },
     {
       "path": "apps/android/app/src/main/res/layout/widget_preset_row.xml",
-      "sha256": "89a08ec67a4a12b71ce39cca5e0c3f5f96bfaf0875c90114de9bd6cfa69bb6ad"
+      "sha256": "787cec94059c4554020780e181b1bf0e014807334c292b4322420366802b99ea"
     },
     {
       "path": "apps/android/app/src/main/res/layout/widget_preset_slot.xml",
-      "sha256": "cf2195f1d50fd30645e15654b1d46b151dcbbbe7a241baa70dc330f301113934"
+      "sha256": "a91ff32c3345e6f168811d3e8bdffea3307ff80bfe4ca77335bd08fc91d463ec"
     },
     {
       "path": "apps/android/app/src/main/res/layout/widget_presets.xml",
-      "sha256": "ddc574b7a6d7f57f7383f38c278a34b43e0b29bd6b30d9b6bccfe42054673866"
+      "sha256": "bf34a90086b704c3c1a9f829abac31e0fc879b75b73faa7fb4ca1596f6086261"
     },
     {
       "path": "apps/android/app/src/main/res/xml/vox_preset_widget_info.xml",

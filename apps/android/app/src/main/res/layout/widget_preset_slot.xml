@@ -1,2 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/preset_widget_slot" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:minHeight="48dp" android:padding="8dp" android:gravity="center" android:maxLines="2" android:ellipsize="end" android:textColor="@color/widget_text_primary" android:fontFamily="@font/geist_medium" android:textSize="14sp" android:background="@drawable/widget_background" />
+<!-- Route slot: white Signal card; the leading route tile is set per position from Kotlin. -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/preset_widget_slot"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:layout_margin="3dp"
+    android:minHeight="52dp"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:drawableStart="@drawable/widget_route_tile_neutral"
+    android:drawablePadding="10dp"
+    android:gravity="start|center_vertical"
+    android:maxLines="2"
+    android:ellipsize="end"
+    android:textColor="@color/signal_text"
+    android:fontFamily="@font/geist_medium"
+    android:textSize="13sp"
+    android:background="@drawable/widget_card_background" />

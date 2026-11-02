@@ -19,11 +19,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import md.vox.android.ui.Signal
+import md.vox.android.ui.SignalButton
+import md.vox.android.ui.SignalButtonSize
+import md.vox.android.ui.SignalButtonVariant
+import md.vox.android.ui.SignalMetrics
+import md.vox.android.ui.SignalType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -66,23 +76,34 @@ internal fun SketchDialog(
     val strokes = remember { mutableStateListOf<SketchStroke>() }
     var isSaving by remember { mutableStateOf(false) }
 
+    val c = Signal.colors
     Dialog(onDismissRequest = onDismiss) {
         Surface(
-            modifier = Modifier.fillMaxWidth().height(520.dp),
-            shape = RoundedCornerShape(20.dp),
-            color = MaterialTheme.colorScheme.surface,
+            modifier = Modifier.fillMaxWidth().height(580.dp),
+            shape = RoundedCornerShape(22.dp),
+            color = c.bg,
+            border = BorderStroke(1.dp, c.border),
         ) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(voxString("Sketch"), style = MaterialTheme.typography.headlineSmall)
-                Text(voxString("Draw with a finger or stylus. Vox.md keeps an editable source file with the PNG preview."),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                Text(
+                    voxString("Sketch"),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = c.text,
+                    modifier = Modifier.semantics { heading() },
                 )
+                Text(voxString("Draw with a finger or stylus. Vox.md keeps an editable source file with the PNG preview."),
+                    style = SignalType.caption,
+                    color = c.muted,
+                )
+                // The exported PNG is ink on white, so the canvas stays white in
+                // dark mode too and strokes remain visible while drawing.
                 Canvas(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
-                        .background(MaterialTheme.colorScheme.background, RoundedCornerShape(12.dp))
+                        .clip(RoundedCornerShape(SignalMetrics.GroupRadius))
+                        .background(androidx.compose.ui.graphics.Color.White)
+                        .border(1.dp, c.border, RoundedCornerShape(SignalMetrics.GroupRadius))
                         .pointerInput(Unit) {
                             awaitEachGesture {
                                 val down = awaitFirstDown(requireUnconsumed = false)
@@ -128,14 +149,42 @@ internal fun SketchDialog(
                     }
                     drawIntoCanvas { }
                 }
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    TextButton(onClick = { if (strokes.isNotEmpty()) strokes.removeAt(strokes.lastIndex) }, enabled = strokes.isNotEmpty() && !isSaving) {
-                        Text(voxString("Undo"))
-                    }
-                    TextButton(onClick = { strokes.clear() }, enabled = strokes.isNotEmpty() && !isSaving) { Text(voxString("Clear")) }
-                    Spacer(Modifier.weight(1f))
-                    TextButton(onClick = onDismiss, enabled = !isSaving) { Text(voxString("Cancel")) }
-                    Button(
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    SignalButton(
+                        text = voxString("Undo"),
+                        onClick = { if (strokes.isNotEmpty()) strokes.removeAt(strokes.lastIndex) },
+                        variant = SignalButtonVariant.TERTIARY,
+                        size = SignalButtonSize.MEDIUM,
+                        enabled = strokes.isNotEmpty() && !isSaving,
+                    )
+                    SignalButton(
+                        text = voxString("Clear"),
+                        onClick = { strokes.clear() },
+                        variant = SignalButtonVariant.TERTIARY,
+                        size = SignalButtonSize.MEDIUM,
+                        enabled = strokes.isNotEmpty() && !isSaving,
+                    )
+                }
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    SignalButton(
+                        text = voxString("Cancel"),
+                        onClick = onDismiss,
+                        modifier = Modifier.weight(1f),
+                        variant = SignalButtonVariant.SECONDARY,
+                        size = SignalButtonSize.MEDIUM,
+                        enabled = !isSaving,
+                        fillWidth = true,
+                    )
+                    SignalButton(
+                        text = voxString("Add Sketch"),
                         onClick = {
                             isSaving = true
                             runCatching { createSketchAssets(context, strokes) }
@@ -143,8 +192,12 @@ internal fun SketchDialog(
                                 .onFailure { onFailure() }
                             isSaving = false
                         },
+                        modifier = Modifier.weight(1f),
+                        size = SignalButtonSize.MEDIUM,
                         enabled = strokes.isNotEmpty() && !isSaving,
-                    ) { Text(voxString("Add Sketch")) }
+                        loading = isSaving,
+                        fillWidth = true,
+                    )
                 }
             }
         }

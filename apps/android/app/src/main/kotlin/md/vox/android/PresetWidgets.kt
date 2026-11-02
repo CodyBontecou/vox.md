@@ -25,6 +25,20 @@ import kotlinx.coroutines.*
 import kotlinx.serialization.json.*
 import md.vox.android.capturedomain.*
 import md.vox.android.ui.VoxTheme
+import md.vox.android.ui.Signal
+import md.vox.android.ui.SignalButton
+import md.vox.android.ui.SignalButtonVariant
+import md.vox.android.ui.SignalGroup
+import md.vox.android.ui.SignalMetrics
+import md.vox.android.ui.SignalPageTitle
+import md.vox.android.ui.SignalRowDivider
+import md.vox.android.ui.SignalType
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.KeyboardArrowDown
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.semantics.Role
 
 internal class PresetWidgetPreferences(context: Context) {
     private val preferences = context.getSharedPreferences("preset-widgets-v1", Context.MODE_PRIVATE)
@@ -89,6 +103,7 @@ class VoxPresetWidgetProvider : AppWidgetProvider() {
                     }
                     child.setTextViewText(R.id.preset_widget_slot, label)
                     child.setContentDescription(R.id.preset_widget_slot, label)
+                    child.setTextViewCompoundDrawablesRelative(R.id.preset_widget_slot, routeTileDrawable(tile, tiles.indexOf(tile)), 0, 0, 0)
                     val target = if (tile.presetID != null) Intent(Intent.ACTION_VIEW,
                         Uri.Builder().scheme("voxboard").authority("capture").appendQueryParameter("source", "widget")
                             .appendQueryParameter("preset", tile.presetID).appendQueryParameter("widget", id.toString())
@@ -103,6 +118,13 @@ class VoxPresetWidgetProvider : AppWidgetProvider() {
             views.setOnClickPendingIntent(R.id.preset_widget_configure, PendingIntent.getActivity(context, id,
                 configurationIntent(context,id), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
             return views
+        }
+        /** Signal route tiles: the first position is indigo, the second ink, the rest (and any unavailable slot) neutral. */
+        private fun routeTileDrawable(tile: PresetWidgetTile, position: Int): Int = when {
+            tile.availability != PresetWidgetAvailability.AVAILABLE -> R.drawable.widget_route_tile_neutral
+            position == 0 -> R.drawable.widget_route_tile_primary
+            position == 1 -> R.drawable.widget_route_tile_ink
+            else -> R.drawable.widget_route_tile_neutral
         }
         private fun configurationIntent(context: Context, id: Int): Intent = Intent(context, VoxPresetWidgetConfigureActivity::class.java)
             .setData(Uri.parse("vox-widget://configure/$id")).putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,id)
@@ -138,37 +160,86 @@ class VoxPresetWidgetConfigureActivity : AppCompatActivity() {
 @Composable internal fun PresetWidgetConfigurationScreen(presets: List<CapturePreset>, initial: PresetWidgetSelection,
     cancel: () -> Unit, save: (PresetWidgetSelection) -> Unit) {
     var selection by remember(initial) { mutableStateOf(initial.copy(slots = List(6) { initial.slots.getOrNull(it) })) }
-    Surface {
-        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(voxString("Capture Presets Widget"), style = MaterialTheme.typography.headlineSmall)
-            Text(voxString("Open a preset without sending or recording. Small widgets show the first slot. Larger widgets show all six positions."))
-            TextButton(onClick = { selection = selection.copy(source = PresetWidgetSource.FOLLOW_CAPTURE_BAR) }) {
-                Text(voxString("Follow Capture Bar")); RadioButton(selection.source == PresetWidgetSource.FOLLOW_CAPTURE_BAR, null)
+    val c = Signal.colors
+    Surface(color = c.bg, contentColor = c.text) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .systemBarsPadding()
+                .padding(horizontal = SignalMetrics.PageGutter, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            SignalPageTitle(
+                title = voxString("Capture Presets Widget"),
+                subtitle = voxString("Open a preset without sending or recording. Small widgets show the first slot. Larger widgets show all six positions."),
+                modifier = Modifier.padding(start = 4.dp, end = 4.dp, top = 24.dp, bottom = 8.dp),
+            )
+            SignalGroup(title = null) {
+                PresetWidgetSourceRow(voxString("Follow Capture Bar"), selection.source == PresetWidgetSource.FOLLOW_CAPTURE_BAR) {
+                    selection = selection.copy(source = PresetWidgetSource.FOLLOW_CAPTURE_BAR)
+                }
+                SignalRowDivider()
+                PresetWidgetSourceRow(voxString("Custom slots"), selection.source == PresetWidgetSource.CUSTOM) {
+                    selection = selection.copy(source = PresetWidgetSource.CUSTOM)
+                }
             }
-            TextButton(onClick = { selection = selection.copy(source = PresetWidgetSource.CUSTOM) }) {
-                Text(voxString("Custom slots")); RadioButton(selection.source == PresetWidgetSource.CUSTOM,null)
-            }
-            if (selection.source == PresetWidgetSource.CUSTOM) repeat(6) { slot ->
-                var expanded by remember { mutableStateOf(false) }
-                val target = presets.firstOrNull { it.id == selection.slots[slot] }
-                Box {
-                    OutlinedButton(onClick = { expanded = true }) {
-                        Text(voxFormat("%lld: %@", slot + 1, target?.name ?: voxString("Empty or unavailable")))
-                    }
-                    DropdownMenu(expanded, { expanded = false }) {
-                        DropdownMenuItem(text = { Text(voxString("Empty")) }, onClick = {
-                            selection = selection.copy(slots = selection.slots.toMutableList().apply { set(slot,null) }); expanded = false
-                        })
-                        presets.filter { it.isEnabled }.forEach { preset ->
-                            DropdownMenuItem(text = { Text(preset.name) }, onClick = {
-                                selection = selection.copy(slots = selection.slots.toMutableList().apply { set(slot,preset.id) }); expanded = false
+            if (selection.source == PresetWidgetSource.CUSTOM) SignalGroup(title = null, modifier = Modifier.padding(top = 8.dp)) {
+                repeat(6) { slot ->
+                    var expanded by remember { mutableStateOf(false) }
+                    val target = presets.firstOrNull { it.id == selection.slots[slot] }
+                    if (slot > 0) SignalRowDivider()
+                    Box {
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 56.dp)
+                                .clickable(role = Role.Button) { expanded = true }
+                                .padding(horizontal = 14.dp, vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        ) {
+                            Text(
+                                voxFormat("%lld: %@", slot + 1, target?.name ?: voxString("Empty or unavailable")),
+                                style = SignalType.rowTitle,
+                                color = if (target == null) c.muted else c.text,
+                                modifier = Modifier.weight(1f),
+                            )
+                            Icon(Icons.Outlined.KeyboardArrowDown, contentDescription = null, tint = c.faint, modifier = Modifier.size(20.dp))
+                        }
+                        DropdownMenu(expanded, { expanded = false }, containerColor = c.card) {
+                            DropdownMenuItem(text = { Text(voxString("Empty"), color = c.muted) }, onClick = {
+                                selection = selection.copy(slots = selection.slots.toMutableList().apply { set(slot,null) }); expanded = false
                             })
+                            presets.filter { it.isEnabled }.forEach { preset ->
+                                DropdownMenuItem(text = { Text(preset.name, color = c.text) }, onClick = {
+                                    selection = selection.copy(slots = selection.slots.toMutableList().apply { set(slot,preset.id) }); expanded = false
+                                })
+                            }
                         }
                     }
                 }
             }
-            Button(onClick = { save(selection) }) { Text(voxString("Save widget")) }
-            TextButton(onClick = cancel) { Text(voxString("Cancel")) }
+            Spacer(Modifier.height(16.dp))
+            SignalButton(text = voxString("Save widget"), onClick = { save(selection) })
+            SignalButton(text = voxString("Cancel"), onClick = cancel, variant = SignalButtonVariant.TERTIARY)
         }
+    }
+}
+
+/** Radio row choosing where the widget's slots come from. */
+@Composable private fun PresetWidgetSourceRow(label: String, selected: Boolean, onClick: () -> Unit) {
+    val c = Signal.colors
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .heightIn(min = 56.dp)
+            .selectable(selected = selected, role = Role.RadioButton, onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text(label, style = SignalType.rowTitle, color = c.text, modifier = Modifier.weight(1f))
+        RadioButton(selected, null, colors = RadioButtonDefaults.colors(selectedColor = c.accent, unselectedColor = c.borderHi))
     }
 }

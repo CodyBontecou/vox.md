@@ -1,14 +1,19 @@
 package md.vox.android
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import md.vox.android.ui.Signal
+import md.vox.android.ui.SignalEmptyState
+import md.vox.android.ui.SignalMetrics
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Description
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,22 +42,25 @@ internal fun AdaptiveDetailPlaceholder(
     detail: VoxUiText,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier.fillMaxSize().padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Signal.colors.bg),
+        contentAlignment = Alignment.Center,
     ) {
-        Icon(
-            Icons.Outlined.Description,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Text(title.localized(), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 16.dp))
-        Text(
-            detail.localized(),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(top = 8.dp),
-        )
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = SignalMetrics.PageGutter, vertical = 32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            SignalEmptyState(
+                icon = Icons.Outlined.Description,
+                title = title.localized(),
+                message = detail.localized(),
+                iconTint = Signal.colors.muted,
+                modifier = Modifier.widthIn(max = 420.dp),
+            )
+        }
     }
 }

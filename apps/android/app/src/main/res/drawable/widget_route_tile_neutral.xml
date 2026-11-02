@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Signal route tile (28dp rounded square) used as the slot's leading compound drawable. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="28dp" android:height="28dp" android:viewportWidth="28" android:viewportHeight="28">
+    <path android:fillColor="@color/signal_well"
+        android:pathData="M8,0h12a8,8 0,0 1,8 8v12a8,8 0,0 1,-8 8h-12a8,8 0,0 1,-8 -8v-12a8,8 0,0 1,8 -8z" />
+    <group android:translateX="7" android:translateY="7" android:scaleX="0.5833" android:scaleY="0.5833">
+        <path android:fillColor="@color/signal_muted" android:pathData="M9,5v2h6.59L4,18.59 5.41,20 17,8.41V15h2V5z" />
+    </group>
+</vector>
