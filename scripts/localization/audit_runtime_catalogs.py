@@ -57,6 +57,36 @@ PROTECTED_PATTERN = re.compile(
         )
     )
 )
+# CLDR cardinal plural categories that String Catalog plural variations must
+# provide for each shipped locale. Every category is required, and no other
+# category may appear, so a translation cannot silently fall back to "other"
+# (for example Russian "few"/"many" or Arabic "zero"/"two").
+PLURAL_CATEGORIES = {
+    "ar": ("zero", "one", "two", "few", "many", "other"),
+    "bn": ("one", "other"),
+    "de": ("one", "other"),
+    "en": ("one", "other"),
+    "es": ("one", "many", "other"),
+    "fr": ("one", "many", "other"),
+    "hi": ("one", "other"),
+    "id": ("other",),
+    "it": ("one", "many", "other"),
+    "ja": ("other",),
+    "ko": ("other",),
+    "nl": ("one", "other"),
+    "pl": ("one", "few", "many", "other"),
+    "pt-BR": ("one", "many", "other"),
+    "ru": ("one", "few", "many", "other"),
+    "ta": ("one", "other"),
+    "th": ("other",),
+    "tr": ("one", "other"),
+    "uk": ("one", "few", "many", "other"),
+    "ur": ("one", "other"),
+    "vi": ("other",),
+    "zh-Hans": ("other",),
+    "zh-Hant": ("other",),
+}
+INTEGER_FORMAT_PATTERN = re.compile(r"%(?:\d+\$)?[-+#0 ']*\d*(?:hh|h|ll|l|q|z|j|t)?[diuoxX]")
 CANONICAL_CASE_INSENSITIVE = {
     term.casefold(): term for term in PROTECTED_TERMS
 }
@@ -66,16 +96,39 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--json", action="store_true", help="Emit machine-readable JSON")
     parser.add_argument("--output", type=Path, help="Write the JSON report to this path")
+    parser.add_argument("--root", type=Path, help="Repository root to audit (defaults to this checkout)")
     return parser.parse_args()
 
 
 def source_value(key: str, entry: dict) -> str:
-    return (
-        entry.get("localizations", {})
-        .get("en", {})
-        .get("stringUnit", {})
-        .get("value", key)
-    )
+    english = entry.get("localizations", {}).get("en", {})
+    plural = english.get("variations", {}).get("plural", {})
+    if plural:
+        return plural.get("other", {}).get("stringUnit", {}).get("value", key)
+    return english.get("stringUnit", {}).get("value", key)
+
+
+def localized_units(localization: dict) -> tuple[list[tuple[str | None, dict]], list[dict]]:
+    """Return (variant, stringUnit) pairs for a locale plus structural problems.
+
+    Plain entries yield one unit with variant None. Plural entries yield one
+    unit per CLDR category and are checked against PLURAL_CATEGORIES.
+    """
+    problems: list[dict] = []
+    unit = localization.get("stringUnit")
+    variations = localization.get("variations")
+    if variations is None:
+        return ([(None, unit)] if unit else []), problems
+    if unit is not None:
+        problems.append({"kind": "mixed-string-unit-and-variations"})
+    unsupported = sorted(set(variations) - {"plural"})
+    if unsupported:
+        problems.append({"kind": "unsupported-variation", "variations": unsupported})
+    plural = variations.get("plural")
+    if not isinstance(plural, dict) or not plural:
+        problems.append({"kind": "missing"})
+        return [], problems
+    return [(category, plural[category].get("stringUnit")) for category in plural], problems
 
 
 def protected_tokens(value: str) -> Counter[str]:
@@ -103,7 +156,7 @@ def forbidden_controls(value: str) -> list[str]:
 
 def main() -> int:
     args = parse_args()
-    root = Path(__file__).resolve().parents[2]
+    root = (args.root or Path(__file__).resolve().parents[2]).resolve()
     errors: list[dict] = []
     identical: dict[str, list[dict]] = defaultdict(list)
     duplicates: dict[str, dict[str, list[str]]] = defaultdict(lambda: defaultdict(list))
@@ -123,32 +176,64 @@ def main() -> int:
             completed = 0
             for key, entry in entries:
                 source = source_value(key, entry)
-                unit = entry.get("localizations", {}).get(locale, {}).get("stringUnit")
-                if not unit:
-                    errors.append({"kind": "missing", "catalog": relative_path, "locale": locale, "key": key})
+                localization = entry.get("localizations", {}).get(locale, {})
+                units, problems = localized_units(localization)
+                for problem in problems:
+                    errors.append({**problem, "catalog": relative_path, "locale": locale, "key": key})
+                if not units:
+                    if not problems:
+                        errors.append({"kind": "missing", "catalog": relative_path, "locale": locale, "key": key})
                     continue
-                state = unit.get("state")
-                value = unit.get("value")
-                if state != "translated":
-                    errors.append({"kind": "state", "catalog": relative_path, "locale": locale, "key": key, "state": state})
-                if not isinstance(value, str) or not value.strip():
-                    errors.append({"kind": "empty", "catalog": relative_path, "locale": locale, "key": key})
+                is_plural = units[0][0] is not None
+                if is_plural:
+                    expected_categories = PLURAL_CATEGORIES[locale]
+                    found_categories = [category for category, _ in units]
+                    missing_categories = [c for c in expected_categories if c not in found_categories]
+                    unexpected_categories = sorted(set(found_categories) - set(expected_categories))
+                    if missing_categories:
+                        errors.append({"kind": "plural-category-missing", "catalog": relative_path, "locale": locale, "key": key, "categories": missing_categories})
+                    if unexpected_categories:
+                        errors.append({"kind": "plural-category-unexpected", "catalog": relative_path, "locale": locale, "key": key, "categories": unexpected_categories})
+                    if not INTEGER_FORMAT_PATTERN.search(source):
+                        errors.append({"kind": "plural-without-integer-argument", "catalog": relative_path, "locale": locale, "key": key})
+                    if missing_categories or unexpected_categories:
+                        continue
+                locale_complete = True
+                representative = None
+                for category, unit in units:
+                    location = {"catalog": relative_path, "locale": locale, "key": key}
+                    if category is not None:
+                        location["plural"] = category
+                    if not unit:
+                        errors.append({"kind": "missing", **location})
+                        locale_complete = False
+                        continue
+                    state = unit.get("state")
+                    value = unit.get("value")
+                    if state != "translated":
+                        errors.append({"kind": "state", **location, "state": state})
+                    if not isinstance(value, str) or not value.strip():
+                        errors.append({"kind": "empty", **location})
+                        locale_complete = False
+                        continue
+                    if category in (None, "other"):
+                        representative = value
+                    if protected_tokens(source) != protected_tokens(value):
+                        errors.append(
+                            {
+                                "kind": "protected-token-mismatch",
+                                **location,
+                                "source_tokens": dict(protected_tokens(source)),
+                                "value_tokens": dict(protected_tokens(value)),
+                            }
+                        )
+                    controls = forbidden_controls(value)
+                    if controls:
+                        errors.append({"kind": "control-character", **location, "controls": controls})
+                if not locale_complete or representative is None:
                     continue
                 completed += 1
-                if protected_tokens(source) != protected_tokens(value):
-                    errors.append(
-                        {
-                            "kind": "protected-token-mismatch",
-                            "catalog": relative_path,
-                            "locale": locale,
-                            "key": key,
-                            "source_tokens": dict(protected_tokens(source)),
-                            "value_tokens": dict(protected_tokens(value)),
-                        }
-                    )
-                controls = forbidden_controls(value)
-                if controls:
-                    errors.append({"kind": "control-character", "catalog": relative_path, "locale": locale, "key": key, "controls": controls})
+                value = representative
                 if locale != "en" and value == source and re.search(r"[A-Za-z]{3}", natural_text(source)):
                     identical[locale].append({"catalog": relative_path, "key": key})
                 if locale != "en" and len(natural_text(source)) >= 4:

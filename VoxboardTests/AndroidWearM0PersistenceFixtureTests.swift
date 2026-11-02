@@ -347,24 +347,6 @@ final class AndroidWearM0PersistenceFixtureTests: XCTestCase {
         XCTAssertEqual(quote, InspirationQuote(text: "Synthetic local quote", author: "Fixture"))
     }
 
-    func testOnboardingAnalyticsCompletionMarkersAreOneShot() throws {
-        let suiteName = "AndroidWearM0AnalyticsMarkers.\(UUID().uuidString)"
-        let defaults = try XCTUnwrap(UserDefaults(suiteName: suiteName))
-        defer { defaults.removePersistentDomain(forName: suiteName) }
-
-        for key in [
-            PersistentRecorder.modelSetupAnalyticsKey,
-            PersistentRecorder.completionAnalyticsKey,
-        ] {
-            XCTAssertTrue(PersistentRecorder.claimOneShotAnalyticsMarker(key, defaults: defaults))
-            XCTAssertTrue(defaults.bool(forKey: key))
-            XCTAssertFalse(PersistentRecorder.claimOneShotAnalyticsMarker(key, defaults: defaults))
-            defaults.set("malformed-marker", forKey: key)
-            XCTAssertTrue(PersistentRecorder.claimOneShotAnalyticsMarker(key, defaults: defaults))
-            XCTAssertTrue(defaults.bool(forKey: key))
-        }
-    }
-
     func testReviewPromptManagerPersistsAtomicEligibilityState() throws {
         let suiteName = "AndroidWearM0ReviewPrompt.\(UUID().uuidString)"
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suiteName))

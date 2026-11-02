@@ -1,0 +1,233 @@
+[
+  {
+    "method": "GET",
+    "path": "/v1/inAppPurchasePriceSchedules/{id}",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true
+      },
+      {
+        "name": "fields[inAppPurchasePriceSchedules]",
+        "in": "query",
+        "enum": [
+          "baseTerritory",
+          "manualPrices",
+          "automaticPrices"
+        ]
+      },
+      {
+        "name": "fields[territories]",
+        "in": "query",
+        "enum": [
+          "currency"
+        ]
+      },
+      {
+        "name": "fields[inAppPurchasePrices]",
+        "in": "query",
+        "enum": [
+          "startDate",
+          "endDate",
+          "manual",
+          "inAppPurchasePricePoint",
+          "territory"
+        ]
+      },
+      {
+        "name": "include",
+        "in": "query",
+        "enum": [
+          "baseTerritory",
+          "manualPrices",
+          "automaticPrices"
+        ]
+      },
+      {
+        "name": "limit[automaticPrices]",
+        "in": "query"
+      },
+      {
+        "name": "limit[manualPrices]",
+        "in": "query"
+      }
+    ],
+    "responseSchema": "InAppPurchasePriceScheduleResponse"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/inAppPurchasePriceSchedules/{id}/automaticPrices",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true
+      },
+      {
+        "name": "filter[territory]",
+        "in": "query"
+      },
+      {
+        "name": "fields[inAppPurchasePrices]",
+        "in": "query",
+        "enum": [
+          "startDate",
+          "endDate",
+          "manual",
+          "inAppPurchasePricePoint",
+          "territory"
+        ]
+      },
+      {
+        "name": "fields[inAppPurchasePricePoints]",
+        "in": "query",
+        "enum": [
+          "customerPrice",
+          "proceeds",
+          "territory",
+          "equalizations"
+        ]
+      },
+      {
+        "name": "fields[territories]",
+        "in": "query",
+        "enum": [
+          "currency"
+        ]
+      },
+      {
+        "name": "limit",
+        "in": "query"
+      },
+      {
+        "name": "include",
+        "in": "query",
+        "enum": [
+          "inAppPurchasePricePoint",
+          "territory"
+        ]
+      }
+    ],
+    "responseSchema": "InAppPurchasePricesResponse"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/inAppPurchasePriceSchedules/{id}/baseTerritory",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true
+      },
+      {
+        "name": "fields[territories]",
+        "in": "query",
+        "enum": [
+          "currency"
+        ]
+      }
+    ],
+    "responseSchema": "TerritoryResponse"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/inAppPurchasePriceSchedules/{id}/manualPrices",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true
+      },
+      {
+        "name": "filter[territory]",
+        "in": "query"
+      },
+      {
+        "name": "fields[inAppPurchasePrices]",
+        "in": "query",
+        "enum": [
+          "startDate",
+          "endDate",
+          "manual",
+          "inAppPurchasePricePoint",
+          "territory"
+        ]
+      },
+      {
+        "name": "fields[inAppPurchasePricePoints]",
+        "in": "query",
+        "enum": [
+          "customerPrice",
+          "proceeds",
+          "territory",
+          "equalizations"
+        ]
+      },
+      {
+        "name": "fields[territories]",
+        "in": "query",
+        "enum": [
+          "currency"
+        ]
+      },
+      {
+        "name": "limit",
+        "in": "query"
+      },
+      {
+        "name": "include",
+        "in": "query",
+        "enum": [
+          "inAppPurchasePricePoint",
+          "territory"
+        ]
+      }
+    ],
+    "responseSchema": "InAppPurchasePricesResponse"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/inAppPurchasePriceSchedules/{id}/relationships/automaticPrices",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true
+      },
+      {
+        "name": "limit",
+        "in": "query"
+      }
+    ],
+    "responseSchema": "InAppPurchasePriceScheduleAutomaticPricesLinkagesResponse"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/inAppPurchasePriceSchedules/{id}/relationships/baseTerritory",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true
+      }
+    ],
+    "responseSchema": "InAppPurchasePriceScheduleBaseTerritoryLinkageResponse"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/inAppPurchasePriceSchedules/{id}/relationships/manualPrices",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true
+      },
+      {
+        "name": "limit",
+        "in": "query"
+      }
+    ],
+    "responseSchema": "InAppPurchasePriceScheduleManualPricesLinkagesResponse"
+  }
+]

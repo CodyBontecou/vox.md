@@ -18,7 +18,7 @@ final class CapturePresetWidgetSnapshotTests: XCTestCase {
         unnamed.name = "  \n"
         let value = snapshot(.custom(slots: ["icon"]), profiles: [unnamed])
         XCTAssertEqual(value.tiles.first?.identity?.name, "")
-        XCTAssertEqual(value.tiles.first?.identity?.accessibilityName, "Icon-only Capture Preset")
+        XCTAssertEqual(value.tiles.first?.identity?.accessibilityName, "Icon-only Route")
     }
 
     func testSnapshotsRetainIdentityOrderAndURLAfterStoreChanges() throws {

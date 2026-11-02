@@ -1,0 +1,27 @@
+{
+  "version_id": "892fd12f-eda2-4539-bae2-4bb3fa82a596",
+  "validated_products": [
+    "bontecou.Voxboard.unlock",
+    "bontecou.Voxboard.family",
+    "bontecou.Voxboard.familyUpgrade",
+    "bontecou.Voxboard.individual.weekly",
+    "bontecou.Voxboard.individual.yearly",
+    "bontecou.Voxboard.family.weekly",
+    "bontecou.Voxboard.family.yearly"
+  ],
+  "known_validation_batch_response": [
+    400,
+    {
+      "ok": false,
+      "error": "unknown_event_name"
+    }
+  ],
+  "unknown_product_response": [
+    400,
+    {
+      "ok": false,
+      "error": "unknown_property_value:productId"
+    }
+  ],
+  "synthetic_events_inserted": 0
+}

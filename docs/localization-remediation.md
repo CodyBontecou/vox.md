@@ -86,6 +86,14 @@ Safe-default exclusions retained unchanged: `ca`, `cs`, `da`, `el`, `fi`,
   indicate a semantic problem; source-identical technical terms alone are not a
   release blocker.
 
+- Count-dependent copy uses String Catalog plural variations (for example
+  `Keep for %lld days`, `%lld days`, `%lld speakers`), never an English `s`
+  suffix built in code. The audit requires exactly the CLDR cardinal categories
+  for each locale (`ar` zero/one/two/few/many/other; `pl`, `ru`, `uk`
+  one/few/many/other; `es`, `fr`, `it`, `pt-BR` one/many/other; `id`, `ja`,
+  `ko`, `th`, `vi`, `zh-Hans`, `zh-Hant` other only; the rest one/other) and
+  checks every variant's state and protected tokens.
+
 Audit artifact: `artifacts/localization/runtime-audit.json`.
 
 ## Build and test evidence

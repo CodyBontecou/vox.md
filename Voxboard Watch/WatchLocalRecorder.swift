@@ -2,7 +2,24 @@ import AVFoundation
 import CoreLocation
 import Foundation
 import VoxboardCaptureCore
+import WatchKit
 import WidgetKit
+
+/// Outcome screen shown after Stop (Signal WatchStates).
+struct WatchRecordingResult: Equatable {
+    enum Kind: Equatable {
+        /// iPhone is reachable and the transfer is underway or complete.
+        case handedOff
+        /// iPhone is away; the recording waits on Watch and delivers itself.
+        case savedOnWatch
+    }
+
+    let recordingID: String
+    var kind: Kind
+    let routeID: String?
+    let routeName: String?
+    let duration: TimeInterval
+}
 
 @MainActor
 final class WatchLocalRecorder: ObservableObject {
@@ -27,6 +44,22 @@ final class WatchLocalRecorder: ObservableObject {
     @Published private(set) var duration: TimeInterval = 0
     @Published private(set) var message: String? { didSet { publishWidgetSnapshot() } }
     @Published private(set) var queuedRecordings: [QueuedRecording] { didSet { publishWidgetSnapshot() } }
+    /// Rolling input-level history (0...1), newest last, for the waveform.
+    @Published private(set) var levels: [Float] = Array(repeating: 0, count: WatchLocalRecorder.levelHistoryCount)
+    /// Route the in-progress recording is going to.
+    @Published private(set) var recordingRoute: WatchCapturePresetSummary?
+    /// Result screen to show after Stop; nil returns to the route list.
+    @Published private(set) var result: WatchRecordingResult?
+    /// Last-used (or iPhone default) route published to complications.
+    @Published private(set) var complicationRoute: WatchCapturePresetSummary? { didSet { publishWidgetSnapshot() } }
+
+    nonisolated static let levelHistoryCount = 26
+    private static let lastUsedRouteKey = "watchLastUsedRouteID.v1"
+    private static var routeDefaults: UserDefaults {
+        UserDefaults(suiteName: "group.bontecou.Voxboard") ?? .standard
+    }
+    private weak var bridge: WatchPhoneBridge?
+    private var lastAutoRetryAt: [String: Date] = [:]
 
     private var recorder: AVAudioRecorder?
     private var currentRecordingID: String?
@@ -126,7 +159,7 @@ final class WatchLocalRecorder: ObservableObject {
         switch phase {
         case .idle:
             if queuedCount > 0 {
-                return queueSummary + " " + String(localized: "Tap Sync Queue when your iPhone is nearby.")
+                return queueSummary + " " + String(localized: "It’ll deliver when iPhone reconnects.")
             }
             return String(localized: "Record on this Watch. Syncs to iPhone later.")
         case .recording:
@@ -156,11 +189,6 @@ final class WatchLocalRecorder: ObservableObject {
 
     var actionSymbol: String {
         isRecording ? "stop.fill" : "mic.fill"
-    }
-
-    var syncTitle: String {
-        if hasUnuploadedRecordings { return String(localized: "Sync Queue (\(queuedCount))") }
-        return queuedCount > 0 ? String(localized: "Refresh Status") : String(localized: "Sync Status")
     }
 
     var queueSummary: String {
@@ -234,13 +262,23 @@ final class WatchLocalRecorder: ObservableObject {
         let widgetTimerStartedAt = phase == .recording
             ? Date().addingTimeInterval(-duration).timeIntervalSince1970
             : nil
+        let route = isRecording ? (recordingRoute ?? complicationRoute) : complicationRoute
+        var seenRouteNames = Set<String>()
+        let queuedRouteNames = queuedRecordings.compactMap { item -> String? in
+            let name = bridge?.snapshot.route(id: item.presetID)?.shownName ?? item.presetName
+            guard let name, !name.isEmpty, seenRouteNames.insert(name).inserted else { return nil }
+            return name
+        }
         let snapshot = WatchRecordingSnapshot(
             phase: widgetPhase,
             isQuickRecordEnabled: true,
             recordingStartedAt: widgetTimerStartedAt,
             recordingDuration: isRecording ? duration : nil,
             message: message,
-            queuedCount: queuedCount
+            queuedCount: queuedCount,
+            selectedPresetID: route?.id,
+            selectedPresetName: route?.shownName,
+            queuedRouteNames: queuedRouteNames
         )
         WatchLocalSnapshotStore.save(snapshot)
         WidgetCenter.shared.reloadTimelines(ofKind: "VoxboardWatchRecordWidget")
@@ -290,7 +328,8 @@ final class WatchLocalRecorder: ObservableObject {
         let action = url.host ?? url.path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
         switch action {
         case WatchRecordingDeepLink.startHost:
-            await start(using: bridge)
+            let route = bridge.snapshot.route(id: WatchRecordingDeepLink.routeID(from: url))
+            await start(using: bridge, route: route)
         case WatchRecordingDeepLink.stopHost:
             await stopAndQueue(using: bridge)
         case WatchRecordingDeepLink.toggleHost:
@@ -300,16 +339,67 @@ final class WatchLocalRecorder: ObservableObject {
         }
     }
 
-    func start(using bridge: WatchPhoneBridge) async {
-        guard !isRecording else { return }
-        cancelTransientSuccessReset()
+    /// Route used when a recording starts without an explicit choice
+    /// (complication, Siri, legacy deep links): last used, else iPhone default.
+    func preferredRoute(in snapshot: WatchRecordingSnapshot) -> WatchCapturePresetSummary? {
+        let lastUsedID = Self.routeDefaults.string(forKey: Self.lastUsedRouteKey)
+        return snapshot.route(id: lastUsedID) ?? snapshot.defaultRoute
+    }
 
-        if bridge.snapshot.hasPresetSelectionAvailabilityPayload {
-            guard bridge.snapshot.presetSelectionIsAvailable,
-                  bridge.snapshot.selectedPresetID != nil,
-                  bridge.snapshot.selectedPresetName != nil,
-                  bridge.snapshot.selectedPresetSnapshot != nil else {
-                setError(String(localized: "Enable a Capture Preset in Vox.md on iPhone before recording."))
+    /// Keeps the complication's route in sync with the iPhone route snapshot.
+    func updateRouteContext(using bridge: WatchPhoneBridge) {
+        self.bridge = bridge
+        let route = preferredRoute(in: bridge.snapshot)
+        if route != complicationRoute {
+            complicationRoute = route
+        }
+    }
+
+    func dismissResult() {
+        result = nil
+        if case .transferred = phase {
+            phase = .idle
+            message = nil
+        }
+    }
+
+    func start(
+        using bridge: WatchPhoneBridge,
+        route requestedRoute: WatchCapturePresetSummary? = nil
+    ) async {
+        guard !isRecording else { return }
+        self.bridge = bridge
+        cancelTransientSuccessReset()
+        result = nil
+
+        let snapshot = bridge.snapshot
+        let route = requestedRoute ?? preferredRoute(in: snapshot)
+        if snapshot.hasPresetSelectionAvailabilityPayload {
+            guard snapshot.presetSelectionIsAvailable,
+                  route != nil || snapshot.selectedPresetID != nil else {
+                setError(String(localized: "Pick a vault and routes in Vox.md on your iPhone first."))
+                return
+            }
+        }
+        // A tapped route records with its own snapshot. The iPhone resolves the
+        // route by id when the payload budget left no snapshot for it.
+        let presetID = route?.id ?? snapshot.selectedPresetID
+        let presetName = route?.displayName ?? snapshot.selectedPresetName
+        let presetSnapshot: Data? = {
+            if let route {
+                return route.snapshot
+                    ?? (route.id == snapshot.selectedPresetID ? snapshot.selectedPresetSnapshot : nil)
+            }
+            return snapshot.selectedPresetSnapshot
+        }()
+        // When iPhone advertises Route selection, a Watch recording must carry
+        // the exact Route it was made with; never let the iPhone fall back to
+        // a different (current or edited) Route on arrival.
+        if snapshot.hasPresetSelectionAvailabilityPayload {
+            guard presetID != nil,
+                  presetName != nil,
+                  presetSnapshot != nil else {
+                setError(String(localized: "Open Vox.md on iPhone to sync your Routes."))
                 return
             }
         }
@@ -328,7 +418,7 @@ final class WatchLocalRecorder: ObservableObject {
             let id = UUID().uuidString
             let url = try makeRecordingURL(id: id)
             let recorder = try AVAudioRecorder(url: url, settings: recordingSettings)
-            recorder.isMeteringEnabled = false
+            recorder.isMeteringEnabled = true
 
             let recordingStartedAt = Date()
             let activeRecording = QueuedRecording(
@@ -336,9 +426,9 @@ final class WatchLocalRecorder: ObservableObject {
                 filename: url.lastPathComponent,
                 createdAt: recordingStartedAt,
                 duration: 0,
-                presetID: bridge.snapshot.selectedPresetID,
-                presetName: bridge.snapshot.selectedPresetName,
-                presetSnapshot: bridge.snapshot.selectedPresetSnapshot
+                presetID: presetID,
+                presetName: presetName,
+                presetSnapshot: presetSnapshot
             )
             do {
                 try Self.saveActiveRecording(activeRecording)
@@ -358,14 +448,21 @@ final class WatchLocalRecorder: ObservableObject {
 
             self.recorder = recorder
             currentRecordingID = id
-            currentPresetID = bridge.snapshot.selectedPresetID
-            currentPresetName = bridge.snapshot.selectedPresetName
-            currentPresetSnapshot = bridge.snapshot.selectedPresetSnapshot
+            currentPresetID = presetID
+            currentPresetName = presetName
+            currentPresetSnapshot = presetSnapshot
+            recordingRoute = route
+            if let route {
+                Self.routeDefaults.set(route.id, forKey: Self.lastUsedRouteKey)
+                complicationRoute = route
+            }
+            levels = Array(repeating: 0, count: Self.levelHistoryCount)
             startedAt = recordingStartedAt
             duration = 0
             message = nil
             phase = .recording
             startTimer()
+            WKInterfaceDevice.current().play(.start)
         } catch {
             setError(String(localized: "Watch microphone error: \(error.localizedDescription)"))
         }
@@ -383,11 +480,13 @@ final class WatchLocalRecorder: ObservableObject {
         currentPresetID = nil
         currentPresetName = nil
         currentPresetSnapshot = nil
+        recordingRoute = nil
         startedAt = nil
         duration = 0
         stopTimer()
         try? AVAudioSession.sharedInstance().setActive(false)
         Self.clearActiveRecording()
+        WKInterfaceDevice.current().play(.directionDown)
 
         if FileManager.default.fileExists(atPath: url.path) {
             do {
@@ -405,7 +504,10 @@ final class WatchLocalRecorder: ObservableObject {
 
     func stopAndQueue(using bridge: WatchPhoneBridge) async {
         guard let recorder else { return }
+        self.bridge = bridge
         cancelTransientSuccessReset()
+        WKInterfaceDevice.current().play(.stop)
+        let stoppedRoute = recordingRoute
 
         let url = recorder.url
         let id = currentRecordingID ?? url.deletingPathExtension().lastPathComponent
@@ -490,6 +592,43 @@ final class WatchLocalRecorder: ObservableObject {
         phase = .idle
         message = String(localized: "Saved on Watch. Syncing to iPhone…")
         syncPending(using: bridge)
+
+        recordingRoute = nil
+        let isHandedOff = bridge.isPhoneReachable
+            && queuedRecordings.first(where: { $0.id == item.id })?.transportState == .transferring
+        result = WatchRecordingResult(
+            recordingID: item.id,
+            kind: isHandedOff ? .handedOff : .savedOnWatch,
+            routeID: stoppedRoute?.id ?? presetID,
+            routeName: stoppedRoute?.shownName ?? presetName,
+            duration: recordedDuration
+        )
+        WKInterfaceDevice.current().play(isHandedOff ? .success : .notification)
+    }
+
+    /// Retries Watch-held recordings without user action whenever the iPhone
+    /// becomes reachable, the app activates, or iPhone reports a failed transfer.
+    func autoSyncIfNeeded(using bridge: WatchPhoneBridge) {
+        self.bridge = bridge
+        guard !isRecording else { return }
+        let now = Date()
+        let candidates = queuedRecordings.filter { item in
+            item.transportState == .local
+                && !inFlightTransferIDs.contains(item.id)
+                && now.timeIntervalSince(lastAutoRetryAt[item.id] ?? .distantPast) > 15
+        }
+        guard !candidates.isEmpty else { return }
+        for item in candidates { lastAutoRetryAt[item.id] = now }
+        syncPending(using: bridge)
+    }
+
+    private func upgradeResultToHandedOffIfNeeded(recordingID: String) {
+        guard var current = result,
+              current.recordingID == recordingID,
+              current.kind == .savedOnWatch else { return }
+        current.kind = .handedOff
+        result = current
+        WKInterfaceDevice.current().play(.success)
     }
 
     func syncPending(using bridge: WatchPhoneBridge) {
@@ -556,8 +695,9 @@ final class WatchLocalRecorder: ObservableObject {
                 ? String(localized: "Syncing 1 Watch recording to iPhone…")
                 : String(localized: "Syncing \(queuedCount) Watch recordings to iPhone…")
         } else {
-            phase = .error(String(localized: "Saved on Watch, but iPhone sync is unavailable."))
-            message = String(localized: "Saved on Watch. Tap Sync Queue after your iPhone is nearby.")
+            // Not an error: the queue retries on its own when iPhone reconnects.
+            phase = .idle
+            message = String(localized: "Saved on Watch. It’ll deliver when iPhone reconnects.")
         }
     }
 
@@ -582,15 +722,15 @@ final class WatchLocalRecorder: ObservableObject {
         case .uploaded:
             phase = .waitingForPhone
             message = String(localized: "Safely queued on iPhone. Waiting to process.")
+            upgradeResultToHandedOffIfNeeded(recordingID: id)
         case .retryRequired:
-            phase = .error(String(localized: "iPhone could not save the transfer."))
-            message = String(localized: "Recording is safe on Watch. Tap Sync Queue to retry.")
+            phase = .idle
+            message = String(localized: "Recording is safe on Watch. Retrying automatically.")
+            if let bridge { autoSyncIfNeeded(using: bridge) }
         case .failed:
             cancelTransientSuccessReset()
-            let errorMessage = notification.userInfo?[WatchRecordingTransferNotificationKey.errorMessage] as? String
-            phase = .error(String(localized: "Saved on Watch, sync failed."))
-            message = errorMessage.map { String(localized: "Saved on Watch. Sync failed: \($0)") }
-                ?? String(localized: "Saved on Watch. Tap Sync Queue after your iPhone is nearby.")
+            phase = .idle
+            message = String(localized: "Saved on Watch. It’ll deliver when iPhone reconnects.")
         case .unknownRecording:
             break
         }
@@ -620,6 +760,12 @@ final class WatchLocalRecorder: ObservableObject {
                 revision: acknowledgement.revision
             )
         }
+        for acknowledgement in reconciliation.terminalAcknowledgements {
+            upgradeResultToHandedOffIfNeeded(recordingID: acknowledgement.recordingID)
+        }
+        if bridge.isPhoneReachable {
+            autoSyncIfNeeded(using: bridge)
+        }
 
         guard !isRecording else { return }
         if queuedRecordings.isEmpty, !reconciliation.terminalAcknowledgements.isEmpty {
@@ -637,7 +783,7 @@ final class WatchLocalRecorder: ObservableObject {
         if queuedRecordings.contains(where: { $0.remotePhase == .transcribing }) { return .transcribing }
         if queuedRecordings.contains(where: { $0.transportState == .transferring }) { return .transferring }
         if queuedRecordings.contains(where: { $0.remotePhase == .transportFailed }) {
-            return .error(String(localized: "iPhone could not save the transfer."))
+            return .waitingForPhone
         }
         if queuedRecordings.contains(where: { $0.remotePhase == .failed }) {
             return .error(String(localized: "The recording is saved and needs attention on iPhone."))
@@ -657,8 +803,7 @@ final class WatchLocalRecorder: ObservableObject {
             return String(localized: "Syncing recording to iPhone…")
         }
         if queuedRecordings.contains(where: { $0.remotePhase == .transportFailed }) {
-            return remoteMessage(for: .transportFailed)
-                ?? String(localized: "Recording is safe on Watch. Tap Sync Queue to retry.")
+            return String(localized: "Recording is safe on Watch. Retrying automatically.")
         }
         if queuedRecordings.contains(where: { $0.remotePhase == .failed }) {
             return remoteMessage(for: .failed)
@@ -718,6 +863,24 @@ final class WatchLocalRecorder: ObservableObject {
                 phase: .transferred,
                 queuedCount: 0,
                 message: String(localized: "Synced to iPhone queue. You can record another.")
+            )
+        case "04-handed-off":
+            resetDemoState(phase: .waitingForPhone, queuedCount: 0, message: nil)
+            result = WatchRecordingResult(
+                recordingID: "demo-handed-off",
+                kind: .handedOff,
+                routeID: "inbox",
+                routeName: "Inbox",
+                duration: 18
+            )
+        case "05-saved-on-watch":
+            resetDemoState(phase: .idle, queuedCount: 1, message: nil)
+            result = WatchRecordingResult(
+                recordingID: "demo-saved",
+                kind: .savedOnWatch,
+                routeID: "journal",
+                routeName: "Journal",
+                duration: 42
             )
         default:
             return false
@@ -979,10 +1142,13 @@ final class WatchLocalRecorder: ObservableObject {
 
     private func startTimer() {
         stopTimer()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 0.12, repeats: true) { [weak self] _ in
             Task { @MainActor [weak self] in
                 guard let self, let recorder = self.recorder else { return }
                 self.duration = max(self.duration, recorder.currentTime)
+                guard recorder.isRecording, recorder.isMeteringEnabled else { return }
+                recorder.updateMeters()
+                self.appendLevel(Self.normalizedLevel(decibels: recorder.averagePower(forChannel: 0)))
             }
         }
     }
@@ -992,8 +1158,28 @@ final class WatchLocalRecorder: ObservableObject {
         timer = nil
     }
 
+    private func appendLevel(_ level: Float) {
+        var next = levels
+        next.append(level)
+        if next.count > Self.levelHistoryCount {
+            next.removeFirst(next.count - Self.levelHistoryCount)
+        }
+        levels = next
+    }
+
+    /// Maps AVAudioRecorder average power (-160...0 dBFS) onto 0...1 with a
+    /// 50 dB visible floor so speech fills the bar range.
+    nonisolated static func normalizedLevel(decibels: Float) -> Float {
+        guard decibels.isFinite else { return 0 }
+        let floor: Float = -50
+        guard decibels > floor else { return 0 }
+        return min(1, max(0, (decibels - floor) / -floor))
+    }
+
     private func setError(_ error: String) {
         cancelTransientSuccessReset()
+        WKInterfaceDevice.current().play(.failure)
+        recordingRoute = nil
         phase = .error(error)
         message = error
         recorder = nil

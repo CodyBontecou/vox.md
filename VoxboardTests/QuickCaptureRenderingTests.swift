@@ -743,6 +743,7 @@ final class QuickCaptureRenderingTests: XCTestCase {
             showsDestination: optionalSections,
             showsWatchStatus: optionalSections,
             showsAttachments: optionalSections,
+            header: CaptureViewSection { EmptyView() },
             ocrProgress: CaptureViewSection { EmptyView() },
             destination: slot("destination"),
             watchStatus: slot("watch"),
@@ -837,6 +838,7 @@ private struct PresetComposerHarness: View {
         QuickCaptureCanvas(
             showsDestination: false, showsWatchStatus: false,
             showsAttachments: false,
+            header: empty,
             ocrProgress: empty, destination: empty, watchStatus: empty,
             composer: CaptureViewSection {
                 MarkdownComposerTextView(text: $vm.draft.text, selection: $editor.selection,

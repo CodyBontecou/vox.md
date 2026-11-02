@@ -1,0 +1,35 @@
+{
+  "recorded_at": "2026-10-30T00:08:30.682857+00:00",
+  "status": "local design iteration; release QA incomplete",
+  "source_sha256": {
+    "Voxboard/GeistTheme.swift": "56e7281fe711a6ac7cc28b57cdba3f2bf7e8ac28ffca297eaddec915edb0e26e",
+    "Voxboard/Views/PaywallView.swift": "c123a5b35dc182fd853ca93c9644cff1cc6678855e772ece0ec68b312df308ef",
+    "Voxboard/VoxboardApp.swift": "edb9c0adcb9d099ca335321155ceabaef6be5633689ed27f07a543d1d52c6b4a",
+    "Voxboard Mac/MacRootView.swift": "a87f253582a4dc2abfbc7d736ef4e56a3d26bf54429e80e80ec1e499478415a2",
+    "VoxboardTests/HardPaywallStoreKitTests.swift": "6e6f3505eda1121c5fe7970fee85e6b41d1f89197aad1394acb5a6c859ef22af"
+  },
+  "ios_focused_tests": {
+    "executed": 6,
+    "failures": 0
+  },
+  "mac_app_build": "passed",
+  "isolated_native_mac_intro": "both pages inspected; separate preview app closed",
+  "python_checks": {
+    "executed": 20,
+    "failures": 0
+  },
+  "latest_diagnostic_replay": {
+    "ok": false,
+    "passed": 20,
+    "failed": 1,
+    "warnings": 9,
+    "blocker": "Coordinate replay typed before history search had focus; injected runner tree unavailable under XCTest-owned fixture."
+  },
+  "release_or_upload_performed": false,
+  "review_submissions_modified": false,
+  "website_published": false,
+  "live_prices_modified": false,
+  "in_app_release_notes_modified": false,
+  "preview_sentinels_removed": true,
+  "accessibility_checkout": "Inline scrollable controls at accessibility sizes; final render inspected"
+}

@@ -72,6 +72,23 @@ public struct CaptureHistoryRecord: Identifiable, Codable, Equatable, Sendable {
     public var relativeNotePath: String?
     public var attachmentCount: Int
     public var failureCategory: CaptureHistoryFailureCategory?
+    /// The heading a capture was placed beneath, when the route places
+    /// captures under a heading. Route configuration only, never content.
+    public var placementHeading: String?
+    /// Status-only steps (capture, process, shape, deliver) with outcomes and
+    /// timestamps. Missing for records written by older versions.
+    public var routeLog: [CaptureRouteLogStep]?
+    /// A specific, privacy-safe explanation of a failed delivery, such as the
+    /// heading that was missing from the target note.
+    public var failureReason: CaptureDeliveryFailureReason?
+    /// Optional finer-grained origin within `source`, such as
+    /// `macQuickCaptureSourceDetail` for the Mac ⌥Space panel. A free-form
+    /// string (not an enum) so older builds, which ignore unknown keys, and
+    /// newer values never break decoding. Missing for older records.
+    public var sourceDetail: String?
+
+    /// `sourceDetail` for captures sent from the Mac Quick Capture panel.
+    public static let macQuickCaptureSourceDetail = "mac.quickCapture"
 
     public var id: UUID { requestID }
 
@@ -104,9 +121,14 @@ public struct CaptureHistoryRecord: Identifiable, Codable, Equatable, Sendable {
         voxName: String? = nil,
         relativeNotePath: String?,
         attachmentCount: Int,
-        failureCategory: CaptureHistoryFailureCategory? = nil
+        failureCategory: CaptureHistoryFailureCategory? = nil,
+        placementHeading: String? = nil,
+        routeLog: [CaptureRouteLogStep]? = nil,
+        failureReason: CaptureDeliveryFailureReason? = nil,
+        sourceDetail: String? = nil
     ) throws {
         try Self.validate(relativeNotePath: relativeNotePath, attachmentCount: attachmentCount)
+        try Self.validate(failureReason: failureReason)
         self.schemaVersion = Self.currentSchemaVersion
         self.requestID = requestID
         self.createdAt = createdAt
@@ -120,6 +142,10 @@ public struct CaptureHistoryRecord: Identifiable, Codable, Equatable, Sendable {
         self.relativeNotePath = relativeNotePath
         self.attachmentCount = attachmentCount
         self.failureCategory = failureCategory
+        self.placementHeading = placementHeading
+        self.routeLog = routeLog
+        self.failureReason = failureReason
+        self.sourceDetail = sourceDetail
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -136,6 +162,10 @@ public struct CaptureHistoryRecord: Identifiable, Codable, Equatable, Sendable {
         case relativeNotePath
         case attachmentCount
         case failureCategory
+        case placementHeading
+        case routeLog
+        case failureReason
+        case sourceDetail
     }
 
     public init(from decoder: Decoder) throws {
@@ -160,7 +190,19 @@ public struct CaptureHistoryRecord: Identifiable, Codable, Equatable, Sendable {
             failureCategory: container.decodeIfPresent(
                 CaptureHistoryFailureCategory.self,
                 forKey: .failureCategory
-            )
+            ),
+            placementHeading: container.decodeIfPresent(String.self, forKey: .placementHeading),
+            // Additive fields are best-effort: an unreadable log must never
+            // hide the delivery record itself.
+            routeLog: (try? container.decodeIfPresent(
+                [CaptureRouteLogStep].self,
+                forKey: .routeLog
+            )) ?? nil,
+            failureReason: (try? container.decodeIfPresent(
+                CaptureDeliveryFailureReason.self,
+                forKey: .failureReason
+            )) ?? nil,
+            sourceDetail: (try? container.decodeIfPresent(String.self, forKey: .sourceDetail)) ?? nil
         )
     }
 
@@ -183,6 +225,10 @@ public struct CaptureHistoryRecord: Identifiable, Codable, Equatable, Sendable {
         try container.encodeIfPresent(relativeNotePath, forKey: .relativeNotePath)
         try container.encode(attachmentCount, forKey: .attachmentCount)
         try container.encodeIfPresent(failureCategory, forKey: .failureCategory)
+        try container.encodeIfPresent(placementHeading, forKey: .placementHeading)
+        try container.encodeIfPresent(routeLog, forKey: .routeLog)
+        try container.encodeIfPresent(failureReason, forKey: .failureReason)
+        try container.encodeIfPresent(sourceDetail, forKey: .sourceDetail)
     }
 
     fileprivate func validateForPersistence() throws {
@@ -190,6 +236,12 @@ public struct CaptureHistoryRecord: Identifiable, Codable, Equatable, Sendable {
             throw CaptureHistoryError.unsupportedRecordSchemaVersion(schemaVersion)
         }
         try Self.validate(relativeNotePath: relativeNotePath, attachmentCount: attachmentCount)
+        try Self.validate(failureReason: failureReason)
+    }
+
+    private static func validate(failureReason: CaptureDeliveryFailureReason?) throws {
+        guard let path = failureReason?.relativeNotePath else { return }
+        try validate(relativeNotePath: path, attachmentCount: 0)
     }
 
     private static func validate(relativeNotePath: String?, attachmentCount: Int) throws {
@@ -267,10 +319,25 @@ private struct CaptureHistoryFile: Codable {
     }
 }
 
+private struct CaptureLibraryContentFile: Codable {
+    static let currentSchemaVersion = 1
+
+    var schemaVersion: Int = Self.currentSchemaVersion
+    var entries: [CaptureLibraryContent]
+}
+
 public actor CaptureHistoryStore {
     public static let defaultMaximumRecordCount = 500
+    public static let contentFilenameSuffix = "-library-content.json"
 
     public nonisolated let fileURL: URL
+    /// Library-only content (rendered Markdown, audio path) kept beside the
+    /// privacy-limited history file and pruned with it.
+    public nonisolated var contentFileURL: URL {
+        let stem = fileURL.deletingPathExtension().lastPathComponent
+        return fileURL.deletingLastPathComponent()
+            .appendingPathComponent(stem + Self.contentFilenameSuffix, isDirectory: false)
+    }
     public nonisolated let maximumRecordCount: Int
 
     private let coordinator: any CaptureFileCoordinating
@@ -347,11 +414,86 @@ public actor CaptureHistoryStore {
     /// Replaces the record for the same request ID. Retrying a failed request
     /// therefore updates its one history row instead of adding a duplicate.
     @discardableResult
+    public func upsert(
+        _ record: CaptureHistoryRecord,
+        content: CaptureLibraryContent?
+    ) throws -> CaptureHistoryRecord {
+        let persisted = try upsert(record)
+        if let content, content.requestID == record.requestID {
+            // Content is best-effort: delivery metadata stays authoritative.
+            try? updateContent { entries in
+                entries.removeAll { $0.requestID == content.requestID }
+                entries.append(content)
+            }
+            recordRouteToday(persisted, content: content)
+        }
+        return persisted
+    }
+
+    /// The Lock Screen "Route Today" snapshot beside this history file.
+    public nonisolated var routeTodaySnapshotURL: URL {
+        CaptureRouteTodaySnapshot.fileURL(forHistoryFileURL: fileURL)
+    }
+
+    /// Deleted Library items also leave the Lock Screen snapshot.
+    private func removeFromRouteToday(_ requestIDs: Set<UUID>) {
+        try? coordinator.coordinateWriting(at: routeTodaySnapshotURL) { url in
+            guard var snapshot = CaptureRouteTodaySnapshot.load(historyFileURL: fileURL) else { return }
+            var changed = false
+            for (routeID, var route) in snapshot.routes {
+                let before = route.items.count
+                route.items.removeAll { requestIDs.contains($0.requestID) }
+                guard route.items.count != before else { continue }
+                changed = true
+                route.count = max(route.items.count, route.count - (before - route.items.count))
+                snapshot.routes[routeID] = route.count == 0 ? nil : route
+            }
+            guard changed else { return }
+            try JSONEncoder().encode(snapshot).write(to: url, options: [.atomic, .completeFileProtectionUntilFirstUserAuthentication])
+        }
+    }
+
+    /// Best-effort: adds a delivered item's first line to today's snapshot.
+    private func recordRouteToday(_ record: CaptureHistoryRecord, content: CaptureLibraryContent) {
+        guard record.outcome == .delivered,
+              let routeID = record.voxID, !routeID.isEmpty,
+              let text = content.text ?? content.renderedMarkdown else { return }
+        let date = record.deliveredAt ?? record.createdAt
+        try? coordinator.coordinateWriting(at: routeTodaySnapshotURL) { url in
+            var snapshot = CaptureRouteTodaySnapshot.load(historyFileURL: fileURL)
+                ?? CaptureRouteTodaySnapshot(day: CaptureRouteTodaySnapshot.dayKey(for: date))
+            snapshot.record(requestID: record.requestID, routeID: routeID, text: text, at: date)
+            let data = try JSONEncoder().encode(snapshot)
+            try fileManager.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try data.write(to: url, options: [.atomic, .completeFileProtectionUntilFirstUserAuthentication])
+        }
+    }
+
+    /// Library content for one request, if it was recorded at delivery.
+    public func content(requestID: UUID) -> CaptureLibraryContent? {
+        (try? loadContent())?.first { $0.requestID == requestID }
+    }
+
+    /// All recorded Library content keyed by request ID.
+    public func allContent() -> [UUID: CaptureLibraryContent] {
+        Dictionary(
+            ((try? loadContent()) ?? []).map { ($0.requestID, $0) },
+            uniquingKeysWith: { _, latest in latest }
+        )
+    }
+
+    @discardableResult
     public func upsert(_ record: CaptureHistoryRecord) throws -> CaptureHistoryRecord {
         do {
             try record.validateForPersistence()
             let persisted = try coordinator.coordinateWriting(at: fileURL) { coordinatedURL in
                 var records = try loadLatest(from: coordinatedURL)
+                var record = record
+                // A retry or later delivery of the same request keeps the
+                // origin detail recorded by the first attempt.
+                if record.sourceDetail == nil {
+                    record.sourceDetail = records.first { $0.requestID == record.requestID }?.sourceDetail
+                }
                 records.removeAll { $0.requestID == record.requestID }
                 records.append(record)
                 records = normalized(records)
@@ -390,6 +532,10 @@ public actor CaptureHistoryStore {
                     try persist(records, to: coordinatedURL)
                 }
             }
+            try? updateContent { entries in
+                entries.removeAll { requestIDs.contains($0.requestID) }
+            }
+            removeFromRouteToday(requestIDs)
         } catch let error as CaptureHistoryWriteError {
             throw error
         } catch {
@@ -400,6 +546,14 @@ public actor CaptureHistoryStore {
     public func clear() throws {
         do {
             try coordinator.coordinateWriting(at: fileURL) { coordinatedURL in
+                guard fileManager.fileExists(atPath: coordinatedURL.path) else { return }
+                try fileManager.removeItem(at: coordinatedURL)
+            }
+            try coordinator.coordinateWriting(at: contentFileURL) { coordinatedURL in
+                guard fileManager.fileExists(atPath: coordinatedURL.path) else { return }
+                try fileManager.removeItem(at: coordinatedURL)
+            }
+            try coordinator.coordinateWriting(at: routeTodaySnapshotURL) { coordinatedURL in
                 guard fileManager.fileExists(atPath: coordinatedURL.path) else { return }
                 try fileManager.removeItem(at: coordinatedURL)
             }
@@ -425,6 +579,21 @@ public actor CaptureHistoryStore {
     }
 
     @discardableResult
+    public func upsertBestEffort(
+        _ record: CaptureHistoryRecord,
+        content: CaptureLibraryContent?
+    ) -> CaptureHistoryWriteError? {
+        do {
+            try upsert(record, content: content)
+            return nil
+        } catch let error as CaptureHistoryWriteError {
+            return error
+        } catch {
+            return CaptureHistoryWriteError(operation: .upsert, underlyingError: error)
+        }
+    }
+
+    @discardableResult
     public func clearBestEffort() -> CaptureHistoryWriteError? {
         do {
             try clear()
@@ -433,6 +602,46 @@ public actor CaptureHistoryStore {
             return error
         } catch {
             return CaptureHistoryWriteError(operation: .clear, underlyingError: error)
+        }
+    }
+
+    private func loadContent() throws -> [CaptureLibraryContent] {
+        try coordinator.coordinateWriting(at: contentFileURL) { coordinatedURL in
+            try loadContentLatest(from: coordinatedURL)
+        }
+    }
+
+    private func loadContentLatest(from url: URL) throws -> [CaptureLibraryContent] {
+        guard fileManager.fileExists(atPath: url.path) else { return [] }
+        guard let file = try? decoder.decode(
+            CaptureLibraryContentFile.self,
+            from: Data(contentsOf: url)
+        ), file.schemaVersion == CaptureLibraryContentFile.currentSchemaVersion else {
+            return []
+        }
+        return file.entries
+    }
+
+    private func updateContent(_ mutation: (inout [CaptureLibraryContent]) -> Void) throws {
+        // Keep content only for rows the history still lists. Read history
+        // first so the two coordinated accesses never nest.
+        let historyIDs = Set(((try? load()) ?? []).map(\.requestID))
+        try coordinator.coordinateWriting(at: contentFileURL) { coordinatedURL in
+            var entries = try loadContentLatest(from: coordinatedURL)
+            mutation(&entries)
+            entries.removeAll { !historyIDs.contains($0.requestID) }
+            if entries.isEmpty {
+                if fileManager.fileExists(atPath: coordinatedURL.path) {
+                    try fileManager.removeItem(at: coordinatedURL)
+                }
+                return
+            }
+            let data = try encoder.encode(CaptureLibraryContentFile(entries: entries))
+            try fileManager.createDirectory(
+                at: coordinatedURL.deletingLastPathComponent(),
+                withIntermediateDirectories: true
+            )
+            try data.write(to: coordinatedURL, options: .atomic)
         }
     }
 

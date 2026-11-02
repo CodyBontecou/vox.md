@@ -180,7 +180,12 @@ final class WatchRecordingPipeline {
             reconcileDeliveredCaptureRequests()
             return
         }
-        if usageTracker.isAtLimit && !processableItems.contains(where: canRunWithoutTranscriptionUsage) {
+        // Without paid access nothing is processed: recording-only Files
+        // copies, audio-only captures and delivery-only retries are new
+        // Capture deliveries or queued retries too (docs/launch/hard-paywall).
+        // Items stay queued with a "choose a plan" status and resume once
+        // access returns.
+        if usageTracker.isAtLimit {
             incomingLease?.end(.noProcessableWork)
             markQueuedItemsWaitingForUnlock()
             return
@@ -410,17 +415,11 @@ final class WatchRecordingPipeline {
             let processableItems = items.filter {
                 $0.phase == .queued && (!recorderIsBusy || canRunWhileRecorderIsBusy($0))
             }
-            let item: WatchRecordingInboxItem?
             if usageTracker.isAtLimit {
-                item = processableItems.first(where: canRunWithoutTranscriptionUsage)
-                if item == nil {
-                    markQueuedItemsWaitingForUnlock()
-                    return
-                }
-            } else {
-                item = processableItems.first
+                markQueuedItemsWaitingForUnlock()
+                return
             }
-            guard let item else { return }
+            guard let item = processableItems.first else { return }
 
             activeRecordingID = item.id
             do {
@@ -463,10 +462,10 @@ final class WatchRecordingPipeline {
             throw WatchRecordingPipelineError(
                 stage: .storage,
                 message: item.requiresPresetSelection
-                    ? String(localized: "Choose a Capture Preset for this recovered recording.")
+                    ? String(localized: "Choose a Route for this recovered recording.")
                     : item.flowSnapshotPayload == nil
-                        ? String(localized: "Choose a Capture Preset on iPhone, then retry.")
-                        : String(localized: "Update Vox.md on iPhone to use this recording's Capture Preset.")
+                        ? String(localized: "Choose a Route on iPhone, then retry.")
+                        : String(localized: "Update Vox.md on iPhone to use this recording's Route.")
             )
         }
         // Recording Only is a privacy-minimizing raw audio export, not Capture
@@ -478,7 +477,7 @@ final class WatchRecordingPipeline {
         if item.shouldCancelForUnavailableLocation {
             _ = inbox.discard(
                 id: item.id,
-                message: String(localized: "Canceled because the preset requires an origin-time location")
+                message: String(localized: "Canceled because the route requires an origin-time location")
             )
             refresh()
             WatchRecordingController.shared.publishState()
@@ -721,7 +720,7 @@ final class WatchRecordingPipeline {
            reservationFolderBookmark != settings.folderBookmark {
             throw WatchRecordingPipelineError(
                 stage: .storage,
-                message: String(localized: "The reserved filename belongs to another Files folder. Choose a recording-only preset to retarget it explicitly.")
+                message: String(localized: "The reserved filename belongs to another Files folder. Choose a recording-only route to retarget it explicitly.")
             )
         }
 
@@ -875,8 +874,7 @@ final class WatchRecordingPipeline {
         }
 
         try Task.checkCancellation()
-        let modelID = AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedModelKey)
-            ?? AppConstants.defaultTranscriptionBackendID
+        let modelID = CapturePresetStore.resolvedTranscriptionModelID(flowID: flow.id)
         let language = AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedLanguageKey)
             ?? "auto"
         do {
@@ -982,11 +980,6 @@ final class WatchRecordingPipeline {
         }
     }
 
-    private func isDeliveryOnlyRetry(_ item: WatchRecordingInboxItem) -> Bool {
-        item.phase == .queued
-            && transcriptStore.transcripts.contains(where: { $0.id == item.requestID })
-    }
-
     private func isRecordingOnly(_ item: WatchRecordingInboxItem) -> Bool {
         item.flowSnapshot?.watchOutputMode == .recordingOnly
     }
@@ -995,17 +988,8 @@ final class WatchRecordingPipeline {
         isRecordingOnly(item) || item.capturesRecordingWithoutTranscript
     }
 
-    private func canRunWithoutTranscriptionUsage(_ item: WatchRecordingInboxItem) -> Bool {
-        (item.phase == .queued
-            && (isRecordingOnly(item) || item.capturesRecordingWithoutTranscript))
-            || isDeliveryOnlyRetry(item)
-    }
-
     private func markQueuedItemsWaitingForUnlock() {
         for item in items where item.phase == .queued
-            && !isRecordingOnly(item)
-            && !item.capturesRecordingWithoutTranscript
-            && !isDeliveryOnlyRetry(item)
             && item.statusMessage != WatchRecordingStatusMessage.transcriptionLimitReached {
             _ = inbox.transition(
                 id: item.id,

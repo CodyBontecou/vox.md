@@ -235,7 +235,7 @@ final class CapturePresetSettingsPinsTests: XCTestCase {
                             pins.move(fromOffsets: offsets, toOffset: destination)
                         }
                     }
-                    Section("Other Presets") {
+                    Section("Other Routes") {
                         ForEach(pins.unpinnedIDs(in: ["journal", "disabled"]), id: \.self) { id in
                             if let profile = pins.profile(id: id) {
                                 HStack(spacing: 12) {
@@ -251,7 +251,7 @@ final class CapturePresetSettingsPinsTests: XCTestCase {
                     }
                 }
                 .environment(\.editMode, .constant(mode))
-                .navigationTitle("Capture Presets")
+                .navigationTitle("Routes")
                 .toolbar { EditButton() }
                 .onAppear { appeared.fulfill() }
             }

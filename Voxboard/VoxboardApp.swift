@@ -30,6 +30,8 @@ struct VoxboardApp: App {
     @State private var pendingWidgetRecord = false
 
     init() {
+        RetiredAnalyticsCleanup.run()
+        if let defaults = AppConstants.sharedDefaults { RetiredAnalyticsCleanup.run(defaults: defaults) }
         #if DEBUG
         DebugSelfie.install()
         #endif
@@ -159,7 +161,20 @@ struct VoxboardApp: App {
         #endif
     }
 
+    @ViewBuilder
     private var standardRootContent: some View {
+        // First run (never had access): onboarding + paywall gate. After a
+        // trial or subscription ends, the app opens read-only instead: the
+        // Library stays readable, Speak is locked, "See plans" opens the
+        // paywall (EmptyStates C).
+        if !usageTracker.hasUnlocked && !usageTracker.hasAccessEnded {
+            PaywallView(context: .onboarding, isAccessGate: true, historyViewModel: quickCaptureViewModel, includesOnboarding: true)
+        } else {
+            unlockedRootContent
+        }
+    }
+
+    private var unlockedRootContent: some View {
         RootView(
             persistentRecorder: persistentRecorder,
             quickCaptureViewModel: quickCaptureViewModel,
@@ -167,11 +182,15 @@ struct VoxboardApp: App {
             pendingKeyboardLaunch: $pendingKeyboardLaunch,
             pendingWidgetRecord: $pendingWidgetRecord
         )
+        .voxboardReleaseNotesSheet {
+            defersCaptureInputFocusForReleaseNotes = false
+        }
     }
 
     var body: some Scene {
         WindowGroup {
             rootContent
+            .tint(Geist.tint)
             .environment(modelManager)
             .environment(transcriptStore)
             .environment(usageTracker)
@@ -181,11 +200,12 @@ struct VoxboardApp: App {
                 \.defersCaptureInputFocusForReleaseNotes,
                 defersCaptureInputFocusForReleaseNotes
             )
-            .voxboardReleaseNotesSheet {
-                defersCaptureInputFocusForReleaseNotes = false
-            }
             .onAppear {
+                #if DEBUG
+                AdaptiveLayout.requestDebugLandscapeIfNeeded()
+                #endif
                 updateIdleTimer()
+                CaptureToolbarPreferences.observeSharedPinChanges()
                 WatchRecordingController.shared.configure(
                     recorder: persistentRecorder,
                     usageTracker: usageTracker,
@@ -203,7 +223,6 @@ struct VoxboardApp: App {
                     usageTracker.reload()
                     await quickCaptureViewModel.processPendingInbox()
                 }
-                trackInitialOnboardingStartIfNeeded()
                 ReviewPromptManager.shared.recordAppUsageDay()
                 ReviewPromptManager.shared.requestPendingPromptIfPossible()
 
@@ -217,8 +236,20 @@ struct VoxboardApp: App {
             ).receive(on: RunLoop.main)) { _ in
                 consumePendingWidgetRecordIfNeeded()
             }
+            .task {
+                while !Task.isCancelled {
+                    do { try await Task.sleep(for: .seconds(30)) } catch { return }
+                    await storeManager.syncCurrentEntitlements()
+                }
+            }
             .onOpenURL { url in
                 handleURL(url)
+            }
+            .onContinueUserActivity(WatchSetupHandoffRouter.activityType) { _ in
+                // Watch "Open on iPhone": land on Settings › Apple Watch.
+                KeyboardDebugLog.shared.log("[App] Watch setup Handoff — opening Watch settings")
+                WatchSetupHandoffRouter.shared.isPending = true
+                rootDestination = .settings
             }
             .onChange(of: usageTracker.hasUnlocked) { _, hasUnlocked in
                 guard hasUnlocked else { return }
@@ -257,6 +288,8 @@ struct VoxboardApp: App {
             if phase == .active {
                 transcriptionServer.checkForPendingRequest()
                 usageTracker.reload()
+                // Pins may have changed in the keyboard or another process.
+                CaptureToolbarPreferences.shared.reloadSharedPins()
 
                 consumePendingWidgetRecordIfNeeded()
                 consumePendingQuickCaptureOpenIfNeeded()
@@ -267,6 +300,9 @@ struct VoxboardApp: App {
                     persistentRecorder.resumeRecordingQueue()
                     await quickCaptureViewModel.processPendingInbox()
                     watchRecordingPipeline.resume()
+                    // Summaries that couldn't run at delivery (offline
+                    // processing) are added under their notes once possible.
+                    await persistentRecorder.processPendingRouteSummaries()
                 }
                 ReviewPromptManager.shared.recordAppUsageDay()
                 ReviewPromptManager.shared.requestPendingPromptIfPossible()
@@ -328,20 +364,6 @@ struct VoxboardApp: App {
     private func openCaptureComposer() {
         rootDestination = .capture
     }
-
-    // MARK: - Onboarding Analytics
-
-    private func trackInitialOnboardingStartIfNeeded() {
-        let defaults = AppConstants.sharedDefaults ?? .standard
-        let key = "onboarding.analytics.started.v1"
-        guard !defaults.bool(forKey: key) else { return }
-
-        defaults.set(true, forKey: key)
-        OnboardingAnalyticsClient.shared.trackOnboardingStarted(
-            quotaState: usageTracker.onboardingAnalyticsQuotaState
-        )
-    }
-
     // MARK: - URL Handling
 
     private func handleURL(_ url: URL) {
@@ -396,4 +418,16 @@ struct VoxboardApp: App {
             log.log("[App] ❌ Unknown host: \(url.host ?? "nil")")
         }
     }
+}
+
+/// Carries the Watch "Open on iPhone" Handoff to Settings, which pushes its
+/// Apple Watch page and clears the flag.
+@MainActor
+@Observable
+final class WatchSetupHandoffRouter {
+    /// Matches `WatchSetupHandoff.activityType` (Watch target) and the
+    /// `NSUserActivityTypes` entry in Info.plist.
+    nonisolated static let activityType = "bontecou.Voxboard.watchSetup"
+    static let shared = WatchSetupHandoffRouter()
+    var isPending = false
 }

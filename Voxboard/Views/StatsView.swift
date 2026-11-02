@@ -28,10 +28,10 @@ struct StatsView: View {
 
     var body: some View {
         ZStack {
-            Geist.Palette.background200.ignoresSafeArea()
+            Geist.bg.ignoresSafeArea()
 
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: Geist.Spacing.six) {
+                LazyVStack(alignment: .leading, spacing: 20) {
                     overviewSection
                     recentActivitySection
 
@@ -103,14 +103,18 @@ struct StatsView: View {
         VStack(alignment: .leading, spacing: Geist.Spacing.four) {
             HStack {
                 Image(systemName: systemImage)
-                    .font(.system(.body, weight: .medium))
-                    .foregroundStyle(Geist.muted)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Geist.text)
+                    .frame(width: 32, height: 32)
+                    .background(Geist.well, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    .accessibilityHidden(true)
                 Spacer()
             }
 
             VStack(alignment: .leading, spacing: Geist.Spacing.one) {
                 Text(value)
-                    .font(Geist.display(26))
+                    .font(.custom("Geist-SemiBold", size: 28, relativeTo: .title))
+                    .tracking(-0.6)
                     .foregroundStyle(Geist.text)
                     .lineLimit(1)
                     .minimumScaleFactor(0.72)
@@ -121,7 +125,7 @@ struct StatsView: View {
             }
         }
         .frame(maxWidth: .infinity, minHeight: 104, alignment: .leading)
-        .geistCard(padding: Geist.Spacing.four)
+        .geistCard(padding: 14)
         .accessibilityElement(children: .combine)
     }
 
@@ -133,7 +137,7 @@ struct StatsView: View {
                 sectionLabel("Last 7 Days")
                 Spacer()
                 Text("\(stats.recentRecordingCount) recordings · \(stats.recentCaptureCount) captures")
-                    .font(Geist.caption(.caption2))
+                    .font(Geist.mono(size: 11, relativeTo: .caption2))
                     .foregroundStyle(Geist.muted)
             }
 
@@ -145,11 +149,11 @@ struct StatsView: View {
                 }
 
                 HStack(spacing: Geist.Spacing.four) {
-                    legendItem("Recordings", color: Geist.text)
-                    legendItem("Captures", color: Geist.Palette.gray600)
+                    legendItem("Recordings", color: Geist.accent)
+                    legendItem("Captures", color: Geist.Palette.gray500)
                 }
             }
-            .geistCard(padding: Geist.Spacing.four)
+            .geistCard(padding: 14)
         }
     }
 
@@ -162,19 +166,19 @@ struct StatsView: View {
             VStack(spacing: 2) {
                 Spacer(minLength: 0)
                 if day.captureCount > 0 {
-                    RoundedRectangle(cornerRadius: 2, style: .continuous)
-                        .fill(Geist.Palette.gray600)
+                    RoundedRectangle(cornerRadius: 3, style: .continuous)
+                        .fill(Geist.Palette.gray500)
                         .frame(height: captureHeight)
                 }
                 if day.recordingCount > 0 {
-                    RoundedRectangle(cornerRadius: 2, style: .continuous)
-                        .fill(Geist.text)
+                    RoundedRectangle(cornerRadius: 3, style: .continuous)
+                        .fill(Geist.accent)
                         .frame(height: recordingHeight)
                 }
                 if day.totalCount == 0 {
-                    Rectangle()
-                        .fill(Geist.Palette.grayAlpha400)
-                        .frame(height: 1)
+                    Capsule()
+                        .fill(Geist.well)
+                        .frame(height: 4)
                 }
             }
             .frame(maxWidth: .infinity)
@@ -227,9 +231,11 @@ struct StatsView: View {
     private func captureSourceRow(_ total: ActivityStats.CaptureSourceTotal) -> some View {
         HStack(spacing: Geist.Spacing.three) {
             Image(systemName: captureSourceIcon(total.source))
-                .font(.system(.body, weight: .medium))
+                .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(Geist.text)
-                .frame(width: 24)
+                .frame(width: 32, height: 32)
+                .background(Geist.well, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .accessibilityHidden(true)
 
             Text(captureSourceName(total.source))
                 .font(Geist.label())
@@ -241,22 +247,24 @@ struct StatsView: View {
                 .font(Geist.mono(medium: true))
                 .foregroundStyle(Geist.muted)
         }
-        .padding(.horizontal, Geist.Spacing.four)
-        .padding(.vertical, Geist.Spacing.four)
+        .padding(.horizontal, 14)
+        .padding(.vertical, Geist.Spacing.three)
         .accessibilityElement(children: .combine)
     }
 
     private var privacyNote: some View {
-        Label {
+        HStack(alignment: .firstTextBaseline, spacing: Geist.Spacing.two) {
+            Image(systemName: "lock")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Geist.muted)
+                .accessibilityHidden(true)
             Text("Lifetime totals stay on device. No captured content, filenames, or destinations are stored with stats.")
-                .font(Geist.caption(.caption2))
+                .font(Geist.caption(.footnote))
                 .foregroundStyle(Geist.muted)
-        } icon: {
-            Image(systemName: "lock.fill")
-                .font(.system(.caption2, weight: .semibold))
-                .foregroundStyle(Geist.muted)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .padding(.horizontal, Geist.Spacing.two)
+        .padding(.top, Geist.Spacing.two)
     }
 
     private func statsErrorCard(_ message: String) -> some View {
@@ -270,17 +278,20 @@ struct StatsView: View {
                     .foregroundStyle(Geist.muted)
             }
         } icon: {
-            Image(systemName: "exclamationmark.triangle")
-                .foregroundStyle(Geist.error)
+            ActivitySignalDot(color: Geist.warning)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .geistCard(padding: Geist.Spacing.four)
+        .activitySignalCard(needsAttention: true)
     }
 
     private func sectionLabel(_ title: LocalizedStringKey) -> some View {
         Text(title)
-            .font(Geist.heading(.footnote))
-            .foregroundStyle(Geist.text)
+            .textCase(.uppercase)
+            .font(Geist.mono(size: 11, relativeTo: .caption))
+            .tracking(0.66)
+            .foregroundStyle(Geist.muted)
+            .padding(.horizontal, 4)
+            .accessibilityAddTraits(.isHeader)
     }
 
     // MARK: - Data

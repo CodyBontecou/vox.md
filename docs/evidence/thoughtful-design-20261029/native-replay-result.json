@@ -1,0 +1,568 @@
+{
+  "flow": "native-walkthrough",
+  "device": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A",
+  "executionPrerequisite": "Opt-in HardPaywallStoreKitTests/testInteractiveDesignPreview running, first introduction page visible, isolated free tracker, current frozen US lifetime prices in local StoreKit, no dialogs. XCTest owns the app; do not restart or purchase.",
+  "ok": true,
+  "passed": 30,
+  "failed": 0,
+  "skipped": 0,
+  "errored": 0,
+  "steps": [
+    {
+      "index": 0,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 106
+      },
+      "args": {
+        "condition": "visible",
+        "selector": {
+          "identifier": "onboarding.continue"
+        },
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 107
+    },
+    {
+      "index": 1,
+      "kind": "tap",
+      "flow": "native-walkthrough",
+      "target": "(0.5, 0.8745)",
+      "status": "pass",
+      "warning": "dispatched without settling the screen first: the UI tree could not be read (no app is connected to native devtools, so e2e test selectors have no instrumented process to read the view hierarchy from (No native-devtools-connected apps are available for auto-targeting.). Relaunch with restart-app (or an e2e test `launch` step): launch-app does not terminate, so on an app already running from Metro/Expo, Xcode, or its icon it only foregrounds that uninstrumented process. Argent treats an Apple system app (com.apple.*) as non-injectable — the native-devtools feature tools refuse it too — so if one never connects, drive it with raw point taps and tool: await-ui-element steps.), so there was no way to tell whether anything was moving. The gesture went out against whatever was in flight, and one aimed at a moving element can miss it entirely - this step passing says it was sent, not that it landed. Restore the tree source, or put an explicit `wait:` in front of gestures that follow a transition.",
+      "durationMs": 3067
+    },
+    {
+      "index": 2,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 250
+      },
+      "args": {
+        "condition": "visible",
+        "selector": {
+          "identifier": "onboarding.plans"
+        },
+        "timeoutMs": 5000,
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 251
+    },
+    {
+      "index": 3,
+      "kind": "echo",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "message": "On the second introduction page, use native Back; expect the first page.",
+      "durationMs": 0
+    },
+    {
+      "index": 4,
+      "kind": "tap",
+      "flow": "native-walkthrough",
+      "target": "(0.0945, 0.096)",
+      "status": "pass",
+      "warning": "dispatched without settling the screen first: the UI tree could not be read (no app is connected to native devtools, so e2e test selectors have no instrumented process to read the view hierarchy from (No native-devtools-connected apps are available for auto-targeting.). Relaunch with restart-app (or an e2e test `launch` step): launch-app does not terminate, so on an app already running from Metro/Expo, Xcode, or its icon it only foregrounds that uninstrumented process. Argent treats an Apple system app (com.apple.*) as non-injectable — the native-devtools feature tools refuse it too — so if one never connects, drive it with raw point taps and tool: await-ui-element steps.), so there was no way to tell whether anything was moving. The gesture went out against whatever was in flight, and one aimed at a moving element can miss it entirely - this step passing says it was sent, not that it landed. Restore the tree source, or put an explicit `wait:` in front of gestures that follow a transition.",
+      "durationMs": 51
+    },
+    {
+      "index": 5,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 201
+      },
+      "args": {
+        "condition": "visible",
+        "selector": {
+          "identifier": "onboarding.continue"
+        },
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 201
+    },
+    {
+      "index": 6,
+      "kind": "echo",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "message": "Continue to the privacy/ownership page again.",
+      "durationMs": 0
+    },
+    {
+      "index": 7,
+      "kind": "tap",
+      "flow": "native-walkthrough",
+      "target": "(0.5, 0.8745)",
+      "status": "pass",
+      "warning": "dispatched without settling the screen first: the UI tree could not be read (no app is connected to native devtools, so e2e test selectors have no instrumented process to read the view hierarchy from (No native-devtools-connected apps are available for auto-targeting.). Relaunch with restart-app (or an e2e test `launch` step): launch-app does not terminate, so on an app already running from Metro/Expo, Xcode, or its icon it only foregrounds that uninstrumented process. Argent treats an Apple system app (com.apple.*) as non-injectable — the native-devtools feature tools refuse it too — so if one never connects, drive it with raw point taps and tool: await-ui-element steps.), so there was no way to tell whether anything was moving. The gesture went out against whatever was in flight, and one aimed at a moving element can miss it entirely - this step passing says it was sent, not that it landed. Restore the tree source, or put an explicit `wait:` in front of gestures that follow a transition.",
+      "durationMs": 52
+    },
+    {
+      "index": 8,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 222
+      },
+      "args": {
+        "condition": "visible",
+        "selector": {
+          "identifier": "onboarding.plans"
+        },
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 222
+    },
+    {
+      "index": 9,
+      "kind": "echo",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "message": "Complete introduction; expect the selected-plan paywall and no onboarding Back route.",
+      "durationMs": 0
+    },
+    {
+      "index": 10,
+      "kind": "tap",
+      "flow": "native-walkthrough",
+      "target": "(0.5, 0.8745)",
+      "status": "pass",
+      "warning": "dispatched without settling the screen first: the UI tree could not be read (no app is connected to native devtools, so e2e test selectors have no instrumented process to read the view hierarchy from (No native-devtools-connected apps are available for auto-targeting.). Relaunch with restart-app (or an e2e test `launch` step): launch-app does not terminate, so on an app already running from Metro/Expo, Xcode, or its icon it only foregrounds that uninstrumented process. Argent treats an Apple system app (com.apple.*) as non-injectable — the native-devtools feature tools refuse it too — so if one never connects, drive it with raw point taps and tool: await-ui-element steps.), so there was no way to tell whether anything was moving. The gesture went out against whatever was in flight, and one aimed at a moving element can miss it entirely - this step passing says it was sent, not that it landed. Restore the tree source, or put an explicit `wait:` in front of gestures that follow a transition.",
+      "durationMs": 51
+    },
+    {
+      "index": 11,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 436
+      },
+      "args": {
+        "condition": "visible",
+        "selector": {
+          "identifier": "paywall.purchase"
+        },
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 437
+    },
+    {
+      "index": 12,
+      "kind": "echo",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "message": "Select Family; yearly selection must carry across and show the Family price.",
+      "durationMs": 0
+    },
+    {
+      "index": 13,
+      "kind": "tap",
+      "flow": "native-walkthrough",
+      "target": "(0.72, 0.4375)",
+      "status": "pass",
+      "warning": "dispatched without settling the screen first: the UI tree could not be read (no app is connected to native devtools, so e2e test selectors have no instrumented process to read the view hierarchy from (No native-devtools-connected apps are available for auto-targeting.). Relaunch with restart-app (or an e2e test `launch` step): launch-app does not terminate, so on an app already running from Metro/Expo, Xcode, or its icon it only foregrounds that uninstrumented process. Argent treats an Apple system app (com.apple.*) as non-injectable — the native-devtools feature tools refuse it too — so if one never connects, drive it with raw point taps and tool: await-ui-element steps.), so there was no way to tell whether anything was moving. The gesture went out against whatever was in flight, and one aimed at a moving element can miss it entirely - this step passing says it was sent, not that it landed. Restore the tree source, or put an explicit `wait:` in front of gestures that follow a transition.",
+      "durationMs": 52
+    },
+    {
+      "index": 14,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 185
+      },
+      "args": {
+        "condition": "visible",
+        "selector": {
+          "identifier": "paywall.plan.bontecou.Voxboard.family.yearly"
+        },
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 185
+    },
+    {
+      "index": 15,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 147
+      },
+      "args": {
+        "condition": "text",
+        "selector": {
+          "identifier": "paywall.billingSummary"
+        },
+        "expectedText": "$49.99",
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 149
+    },
+    {
+      "index": 16,
+      "kind": "echo",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "message": "Select Family weekly; billing summary must match that plan.",
+      "durationMs": 0
+    },
+    {
+      "index": 17,
+      "kind": "tap",
+      "flow": "native-walkthrough",
+      "target": "(0.5, 0.555)",
+      "status": "pass",
+      "warning": "dispatched without settling the screen first: the UI tree could not be read (no app is connected to native devtools, so e2e test selectors have no instrumented process to read the view hierarchy from (No native-devtools-connected apps are available for auto-targeting.). Relaunch with restart-app (or an e2e test `launch` step): launch-app does not terminate, so on an app already running from Metro/Expo, Xcode, or its icon it only foregrounds that uninstrumented process. Argent treats an Apple system app (com.apple.*) as non-injectable — the native-devtools feature tools refuse it too — so if one never connects, drive it with raw point taps and tool: await-ui-element steps.), so there was no way to tell whether anything was moving. The gesture went out against whatever was in flight, and one aimed at a moving element can miss it entirely - this step passing says it was sent, not that it landed. Restore the tree source, or put an explicit `wait:` in front of gestures that follow a transition.",
+      "durationMs": 52
+    },
+    {
+      "index": 18,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 239
+      },
+      "args": {
+        "condition": "text",
+        "selector": {
+          "identifier": "paywall.billingSummary"
+        },
+        "expectedText": "$1.99",
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 239
+    },
+    {
+      "index": 19,
+      "kind": "echo",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "message": "Select Family lifetime; show one-time pricing and no trial/subscription.",
+      "durationMs": 0
+    },
+    {
+      "index": 20,
+      "kind": "tap",
+      "flow": "native-walkthrough",
+      "target": "(0.5, 0.729)",
+      "status": "pass",
+      "warning": "dispatched without settling the screen first: the UI tree could not be read (no app is connected to native devtools, so e2e test selectors have no instrumented process to read the view hierarchy from (No native-devtools-connected apps are available for auto-targeting.). Relaunch with restart-app (or an e2e test `launch` step): launch-app does not terminate, so on an app already running from Metro/Expo, Xcode, or its icon it only foregrounds that uninstrumented process. Argent treats an Apple system app (com.apple.*) as non-injectable — the native-devtools feature tools refuse it too — so if one never connects, drive it with raw point taps and tool: await-ui-element steps.), so there was no way to tell whether anything was moving. The gesture went out against whatever was in flight, and one aimed at a moving element can miss it entirely - this step passing says it was sent, not that it landed. Restore the tree source, or put an explicit `wait:` in front of gestures that follow a transition.",
+      "durationMs": 52
+    },
+    {
+      "index": 21,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 160
+      },
+      "args": {
+        "condition": "text",
+        "selector": {
+          "identifier": "paywall.billingSummary"
+        },
+        "expectedText": "No subscription",
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 160
+    },
+    {
+      "index": 22,
+      "kind": "echo",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "message": "Open existing history without buying or unlocking access.",
+      "durationMs": 0
+    },
+    {
+      "index": 23,
+      "kind": "tap",
+      "flow": "native-walkthrough",
+      "target": "(0.095, 0.096)",
+      "status": "pass",
+      "warning": "dispatched without settling the screen first: the UI tree could not be read (no app is connected to native devtools, so e2e test selectors have no instrumented process to read the view hierarchy from (No native-devtools-connected apps are available for auto-targeting.). Relaunch with restart-app (or an e2e test `launch` step): launch-app does not terminate, so on an app already running from Metro/Expo, Xcode, or its icon it only foregrounds that uninstrumented process. Argent treats an Apple system app (com.apple.*) as non-injectable — the native-devtools feature tools refuse it too — so if one never connects, drive it with raw point taps and tool: await-ui-element steps.), so there was no way to tell whether anything was moving. The gesture went out against whatever was in flight, and one aimed at a moving element can miss it entirely - this step passing says it was sent, not that it landed. Restore the tree source, or put an explicit `wait:` in front of gestures that follow a transition.",
+      "durationMs": 51
+    },
+    {
+      "index": 24,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 845
+      },
+      "args": {
+        "condition": "visible",
+        "selector": {
+          "text": "History"
+        },
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 845
+    },
+    {
+      "index": 25,
+      "kind": "echo",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "message": "Focus history search and type a sample query; check keyboard/layout without buying.",
+      "durationMs": 0
+    },
+    {
+      "index": 26,
+      "kind": "tap",
+      "flow": "native-walkthrough",
+      "target": "(0.5, 0.94)",
+      "status": "pass",
+      "warning": "dispatched without settling the screen first: the UI tree could not be read (no app is connected to native devtools, so e2e test selectors have no instrumented process to read the view hierarchy from (No native-devtools-connected apps are available for auto-targeting.). Relaunch with restart-app (or an e2e test `launch` step): launch-app does not terminate, so on an app already running from Metro/Expo, Xcode, or its icon it only foregrounds that uninstrumented process. Argent treats an Apple system app (com.apple.*) as non-injectable — the native-devtools feature tools refuse it too — so if one never connects, drive it with raw point taps and tool: await-ui-element steps.), so there was no way to tell whether anything was moving. The gesture went out against whatever was in flight, and one aimed at a moving element can miss it entirely - this step passing says it was sent, not that it landed. Restore the tree source, or put an explicit `wait:` in front of gestures that follow a transition.",
+      "durationMs": 53
+    },
+    {
+      "index": 27,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "keyboard",
+      "result": {
+        "typed": "morning",
+        "keys": 7
+      },
+      "args": {
+        "text": "morning",
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 713
+    },
+    {
+      "index": 28,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 1620
+      },
+      "args": {
+        "condition": "text",
+        "selector": {
+          "text": "Search history"
+        },
+        "expectedText": "morning",
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 1621
+    },
+    {
+      "index": 29,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 480
+      },
+      "args": {
+        "condition": "visible",
+        "selector": {
+          "identifier": "Search"
+        },
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 481
+    },
+    {
+      "index": 30,
+      "kind": "echo",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "message": "Dismiss the active native search; keyboard must disappear and history remain visible.",
+      "durationMs": 0
+    },
+    {
+      "index": 31,
+      "kind": "tap",
+      "flow": "native-walkthrough",
+      "target": "(0.9205, 0.5855)",
+      "status": "pass",
+      "warning": "dispatched without settling the screen first: the UI tree could not be read (no app is connected to native devtools, so e2e test selectors have no instrumented process to read the view hierarchy from (No native-devtools-connected apps are available for auto-targeting.). Relaunch with restart-app (or an e2e test `launch` step): launch-app does not terminate, so on an app already running from Metro/Expo, Xcode, or its icon it only foregrounds that uninstrumented process. Argent treats an Apple system app (com.apple.*) as non-injectable — the native-devtools feature tools refuse it too — so if one never connects, drive it with raw point taps and tool: await-ui-element steps.), so there was no way to tell whether anything was moving. The gesture went out against whatever was in flight, and one aimed at a moving element can miss it entirely - this step passing says it was sent, not that it landed. Restore the tree source, or put an explicit `wait:` in front of gestures that follow a transition.",
+      "durationMs": 53
+    },
+    {
+      "index": 32,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 592,
+        "note": "condition met immediately — the selector never matched any element, so it may have already been hidden before the wait, or the selector is wrong"
+      },
+      "args": {
+        "condition": "hidden",
+        "selector": {
+          "identifier": "Search"
+        },
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 592
+    },
+    {
+      "index": 33,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 246
+      },
+      "args": {
+        "condition": "visible",
+        "selector": {
+          "identifier": "xmark"
+        },
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 247
+    },
+    {
+      "index": 34,
+      "kind": "echo",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "message": "Close history; return to the selected Family lifetime plan without granting paid access.",
+      "durationMs": 0
+    },
+    {
+      "index": 35,
+      "kind": "tap",
+      "flow": "native-walkthrough",
+      "target": "(0.094, 0.1145)",
+      "status": "pass",
+      "warning": "dispatched without settling the screen first: the UI tree could not be read (no app is connected to native devtools, so e2e test selectors have no instrumented process to read the view hierarchy from (No native-devtools-connected apps are available for auto-targeting.). Relaunch with restart-app (or an e2e test `launch` step): launch-app does not terminate, so on an app already running from Metro/Expo, Xcode, or its icon it only foregrounds that uninstrumented process. Argent treats an Apple system app (com.apple.*) as non-injectable — the native-devtools feature tools refuse it too — so if one never connects, drive it with raw point taps and tool: await-ui-element steps.), so there was no way to tell whether anything was moving. The gesture went out against whatever was in flight, and one aimed at a moving element can miss it entirely - this step passing says it was sent, not that it landed. Restore the tree source, or put an explicit `wait:` in front of gestures that follow a transition.",
+      "durationMs": 52
+    },
+    {
+      "index": 36,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 840
+      },
+      "args": {
+        "condition": "text",
+        "selector": {
+          "identifier": "paywall.billingSummary"
+        },
+        "expectedText": "No subscription",
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 840
+    },
+    {
+      "index": 37,
+      "kind": "echo",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "message": "Attempt iOS edge-back after completed onboarding; the paywall must remain and onboarding must not reappear.",
+      "durationMs": 0
+    },
+    {
+      "index": 38,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "gesture-swipe",
+      "result": {
+        "swiped": true,
+        "timestampMs": 1793316244533
+      },
+      "args": {
+        "fromX": 0.01,
+        "fromY": 0.3,
+        "toX": 0.85,
+        "toY": 0.3,
+        "durationMs": 400,
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 436
+    },
+    {
+      "index": 39,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 185
+      },
+      "args": {
+        "condition": "visible",
+        "selector": {
+          "identifier": "paywall.purchase"
+        },
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 186
+    },
+    {
+      "index": 40,
+      "kind": "tool",
+      "flow": "native-walkthrough",
+      "status": "pass",
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 168,
+        "note": "condition met immediately — the selector never matched any element, so it may have already been hidden before the wait, or the selector is wrong"
+      },
+      "args": {
+        "condition": "hidden",
+        "selector": {
+          "identifier": "onboarding.plans"
+        },
+        "udid": "9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A"
+      },
+      "durationMs": 168
+    }
+  ],
+  "startedAt": 1793316232936,
+  "durationMs": 12653
+}

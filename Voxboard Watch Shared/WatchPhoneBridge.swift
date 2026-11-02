@@ -19,6 +19,15 @@ enum WatchRecordingPayloadKey {
     static let presetSummariesTruncated = "presetSummariesTruncated"
     static let presetSelectionAvailable = "presetSelectionAvailable"
     static let presetSymbolName = "presetSymbolName"
+    /// Optional per-route letter shown in the Watch route tile (Signal "Speak to…").
+    static let presetInitial = "presetInitial"
+    /// Optional per-route tile color token: `accent`, `light` or `graphite`.
+    static let presetTileStyle = "presetTileStyle"
+    /// Optional per-route encoded `CapturePreset` so a Watch recording made
+    /// while iPhone is away can carry its exact route.
+    static let presetSnapshot = "presetSnapshot"
+    /// Local widget snapshot: visible names of routes waiting on the Watch.
+    static let queuedRouteNames = "queuedRouteNames"
     static let requestedPresetID = "requestedPresetID"
     static let presetSelectionRequestID = "presetSelectionRequestID"
     static let presetSelectionEpoch = "presetSelectionEpoch"
@@ -64,6 +73,28 @@ struct WatchRemoteRecordingStatus: Equatable, Sendable {
     }
 }
 
+/// Signal route-tile colors used on the Watch "Speak to…" list.
+enum WatchRouteTileStyle: String, Codable, Equatable, Sendable, CaseIterable {
+    /// Indigo fill (#2F3BE8) with white letter — the default/primary route.
+    case accent
+    /// Bone fill (#F4F4F1) with black letter.
+    case light
+    /// Graphite fill (#3A3A3C) with bone letter.
+    case graphite
+
+    /// Signal route order, matching the iPhone/Mac `SignalRouteTile`: the
+    /// first route indigo, the second the "ink" tile (bone on the Watch's
+    /// black ground), every other route neutral graphite. Also the
+    /// deterministic fallback for older iPhone payloads without a style.
+    static func fallback(forIndex index: Int) -> WatchRouteTileStyle {
+        switch index {
+        case ..<1: return .accent
+        case 1: return .light
+        default: return .graphite
+        }
+    }
+}
+
 struct WatchCapturePresetSummary: Identifiable, Equatable, Sendable {
     let id: String
     /// Non-empty accessibility/system fallback name.
@@ -71,6 +102,55 @@ struct WatchCapturePresetSummary: Identifiable, Equatable, Sendable {
     /// Visible row title. Nil means the preset intentionally renders icon-only.
     let visibleName: String?
     let symbolName: String
+    /// One uppercase letter for the route tile; empty for icon-only routes.
+    let initial: String
+    let tileStyle: WatchRouteTileStyle
+    /// Encoded route snapshot, when the iPhone had payload budget for it.
+    let snapshot: Data?
+
+    init(
+        id: String,
+        displayName: String,
+        visibleName: String?,
+        symbolName: String = "waveform",
+        initial: String? = nil,
+        tileStyle: WatchRouteTileStyle = .accent,
+        snapshot: Data? = nil
+    ) {
+        self.id = id
+        self.displayName = displayName
+        self.visibleName = visibleName
+        self.symbolName = symbolName
+        self.initial = Self.normalizedInitial(initial, visibleName: visibleName)
+        self.tileStyle = tileStyle
+        self.snapshot = snapshot
+    }
+
+    /// Name shown on screens and complications.
+    var shownName: String { visibleName ?? displayName }
+
+    private static func normalizedInitial(_ raw: String?, visibleName: String?) -> String {
+        let candidate = (raw?.trimmingCharacters(in: .whitespacesAndNewlines))
+            .flatMap { $0.isEmpty ? nil : $0 }
+            ?? visibleName
+        guard let first = candidate?.first(where: { !$0.isWhitespace }) else { return "" }
+        return String(first).uppercased()
+    }
+
+    init?(dictionary: [String: Any], index: Int) {
+        self.init(dictionary: dictionary)
+        if dictionary[WatchRecordingPayloadKey.presetTileStyle] == nil {
+            self = WatchCapturePresetSummary(
+                id: id,
+                displayName: displayName,
+                visibleName: visibleName,
+                symbolName: symbolName,
+                initial: initial,
+                tileStyle: .fallback(forIndex: index),
+                snapshot: snapshot
+            )
+        }
+    }
 
     init?(dictionary: [String: Any]) {
         guard let id = dictionary[WatchRecordingPayloadKey.selectedPresetID] as? String,
@@ -89,15 +169,32 @@ struct WatchCapturePresetSummary: Identifiable, Equatable, Sendable {
         self.symbolName = (dictionary[WatchRecordingPayloadKey.presetSymbolName] as? String)
             .flatMap { $0.isEmpty ? nil : $0 }
             ?? "waveform"
+        self.initial = Self.normalizedInitial(
+            dictionary[WatchRecordingPayloadKey.presetInitial] as? String,
+            visibleName: visibleName
+        )
+        self.tileStyle = (dictionary[WatchRecordingPayloadKey.presetTileStyle] as? String)
+            .flatMap(WatchRouteTileStyle.init(rawValue:))
+            ?? .accent
+        self.snapshot = (dictionary[WatchRecordingPayloadKey.presetSnapshot] as? Data)
+            .flatMap { $0.isEmpty ? nil : $0 }
     }
 
     var dictionary: [String: Any] {
-        [
+        var payload: [String: Any] = [
             WatchRecordingPayloadKey.selectedPresetID: id,
             WatchRecordingPayloadKey.selectedPresetName: displayName,
             WatchRecordingPayloadKey.presetVisibleName: visibleName ?? "",
             WatchRecordingPayloadKey.presetSymbolName: symbolName,
+            WatchRecordingPayloadKey.presetTileStyle: tileStyle.rawValue,
         ]
+        if !initial.isEmpty {
+            payload[WatchRecordingPayloadKey.presetInitial] = initial
+        }
+        if let snapshot {
+            payload[WatchRecordingPayloadKey.presetSnapshot] = snapshot
+        }
+        return payload
     }
 }
 
@@ -280,6 +377,8 @@ enum WatchRecordingCommand: String {
     case status
     case acknowledge
     case selectPreset
+    /// Asks the iPhone app to surface Watch setup (vault + routes).
+    case requestSetup
 }
 
 enum WatchRecordingFileMetadataKey {
@@ -303,6 +402,31 @@ enum WatchRecordingDeepLink {
     static let startURL = URL(string: "\(scheme)://\(startHost)")!
     static let stopURL = URL(string: "\(scheme)://\(stopHost)")!
     static let toggleURL = URL(string: "\(scheme)://\(toggleHost)")!
+    static let routeQueryItem = "route"
+
+    /// Starts a Watch recording to a specific route (complication tap).
+    static func startURL(routeID: String?) -> URL {
+        guard let routeID, !routeID.isEmpty else { return startURL }
+        var components = URLComponents()
+        components.scheme = scheme
+        components.host = startHost
+        components.queryItems = [URLQueryItem(name: routeQueryItem, value: routeID)]
+        return components.url ?? startURL
+    }
+
+    static func routeID(from url: URL) -> String? {
+        URLComponents(url: url, resolvingAgainstBaseURL: false)?
+            .queryItems?
+            .first(where: { $0.name == routeQueryItem })?
+            .value
+            .flatMap { $0.isEmpty ? nil : $0 }
+    }
+}
+
+/// Handoff activity the Watch advertises from setup screens so the iPhone
+/// app can be opened from the iPhone App Switcher / Lock Screen.
+enum WatchSetupHandoff {
+    static let activityType = "bontecou.Voxboard.watchSetup"
 }
 
 enum WatchRecordingTransferNotificationKey {
@@ -348,6 +472,8 @@ struct WatchRecordingSnapshot: Equatable {
     let hasPresetSelectionAvailabilityPayload: Bool
     let presetSelectionAcknowledgement: WatchPresetSelectionAcknowledgement?
     let recordingStatuses: [WatchRemoteRecordingStatus]
+    /// Local widget snapshot only: visible route names of Watch-held recordings.
+    let queuedRouteNames: [String]
 
     static let unavailable = WatchRecordingSnapshot(
         phase: .unavailable,
@@ -392,7 +518,8 @@ struct WatchRecordingSnapshot: Equatable {
         presetSelectionIsAvailable: Bool = true,
         hasPresetSelectionAvailabilityPayload: Bool = false,
         presetSelectionAcknowledgement: WatchPresetSelectionAcknowledgement? = nil,
-        recordingStatuses: [WatchRemoteRecordingStatus] = []
+        recordingStatuses: [WatchRemoteRecordingStatus] = [],
+        queuedRouteNames: [String] = []
     ) {
         self.phase = phase
         self.sentAt = sentAt
@@ -413,6 +540,7 @@ struct WatchRecordingSnapshot: Equatable {
         self.hasPresetSelectionAvailabilityPayload = hasPresetSelectionAvailabilityPayload
         self.presetSelectionAcknowledgement = presetSelectionAcknowledgement
         self.recordingStatuses = recordingStatuses
+        self.queuedRouteNames = queuedRouteNames
     }
 
     init(dictionary: [String: Any]) {
@@ -431,13 +559,16 @@ struct WatchRecordingSnapshot: Equatable {
         let selectedPresetSnapshot = dictionary[WatchRecordingPayloadKey.selectedPresetSnapshot] as? Data
         let hasPresetSummariesPayload = dictionary.keys.contains(WatchRecordingPayloadKey.presetSummaries)
         let availablePresets = (dictionary[WatchRecordingPayloadKey.presetSummaries] as? [[String: Any]] ?? [])
-            .compactMap(WatchCapturePresetSummary.init(dictionary:))
+            .enumerated()
+            .compactMap { WatchCapturePresetSummary(dictionary: $0.element, index: $0.offset) }
         let presetSummariesAreTruncated = dictionary[WatchRecordingPayloadKey.presetSummariesTruncated] as? Bool ?? false
         let hasPresetSelectionAvailabilityPayload = dictionary.keys.contains(WatchRecordingPayloadKey.presetSelectionAvailable)
         let presetSelectionIsAvailable = dictionary[WatchRecordingPayloadKey.presetSelectionAvailable] as? Bool ?? true
         let presetSelectionAcknowledgement = WatchPresetSelectionAcknowledgement(dictionary: dictionary)
         let recordingStatuses = (dictionary[WatchRecordingPayloadKey.recordingStatuses] as? [[String: Any]] ?? [])
             .compactMap(WatchRemoteRecordingStatus.init(dictionary:))
+        let queuedRouteNames = (dictionary[WatchRecordingPayloadKey.queuedRouteNames] as? [String] ?? [])
+            .filter { !$0.isEmpty }
         self.init(
             phase: phase,
             sentAt: sentAt,
@@ -457,7 +588,8 @@ struct WatchRecordingSnapshot: Equatable {
             presetSelectionIsAvailable: presetSelectionIsAvailable,
             hasPresetSelectionAvailabilityPayload: hasPresetSelectionAvailabilityPayload,
             presetSelectionAcknowledgement: presetSelectionAcknowledgement,
-            recordingStatuses: recordingStatuses
+            recordingStatuses: recordingStatuses,
+            queuedRouteNames: queuedRouteNames
         )
     }
 
@@ -506,7 +638,20 @@ struct WatchRecordingSnapshot: Equatable {
         if let presetSelectionAcknowledgement {
             payload.merge(presetSelectionAcknowledgement.dictionary) { _, new in new }
         }
+        if !queuedRouteNames.isEmpty {
+            payload[WatchRecordingPayloadKey.queuedRouteNames] = queuedRouteNames
+        }
         return payload
+    }
+
+    /// Route the Watch should treat as primary when none was chosen locally.
+    var defaultRoute: WatchCapturePresetSummary? {
+        availablePresets.first(where: { $0.id == selectedPresetID }) ?? availablePresets.first
+    }
+
+    func route(id: String?) -> WatchCapturePresetSummary? {
+        guard let id else { return nil }
+        return availablePresets.first(where: { $0.id == id })
     }
 
     func replacingSelectedPreset(
@@ -633,6 +778,9 @@ final class WatchPhoneBridge: NSObject, ObservableObject {
 
     @Published private(set) var snapshot: WatchRecordingSnapshot
     @Published private(set) var presetSelectionState: WatchPresetSelectionState
+    /// Live WatchConnectivity reachability. Watch-held recordings retry
+    /// automatically whenever this flips back to true.
+    @Published private(set) var isPhoneReachable = false
 
     private var hasActivatedSession = false
 
@@ -662,8 +810,39 @@ final class WatchPhoneBridge: NSObject, ObservableObject {
         session.delegate = self
         session.activate()
         apply(session.receivedApplicationContext)
+        updateReachability(using: session)
         if session.activationState == .activated {
             resendPendingPresetSelectionIfNeeded(using: session)
+        }
+    }
+
+    private func updateReachability(using session: WCSession) {
+        let reachable = session.activationState == .activated && session.isReachable
+        DispatchQueue.main.async { [weak self] in
+            guard let self, self.isPhoneReachable != reachable else { return }
+            self.isPhoneReachable = reachable
+        }
+    }
+
+    /// Asks Vox.md on iPhone to surface Watch setup. Delivery is best effort:
+    /// a reachable phone shows it immediately, otherwise it is queued.
+    func requestPhoneSetup() {
+        guard WCSession.isSupported() else { return }
+        activate()
+        let session = WCSession.default
+        let payload: [String: Any] = [
+            WatchRecordingPayloadKey.command: WatchRecordingCommand.requestSetup.rawValue,
+            WatchRecordingPayloadKey.sentAt: Date().timeIntervalSince1970,
+        ]
+        guard session.activationState == .activated else { return }
+        if session.isReachable {
+            session.sendMessage(payload) { [weak self] reply in
+                self?.apply(reply)
+            } errorHandler: { _ in
+                session.transferUserInfo(payload)
+            }
+        } else {
+            session.transferUserInfo(payload)
         }
     }
 
@@ -676,7 +855,7 @@ final class WatchPhoneBridge: NSObject, ObservableObject {
         guard snapshot.availablePresets.contains(where: { $0.id == id }) else {
             presetSelectionState = .failed(
                 presetID: id,
-                message: "This Capture Preset is no longer available. Refresh from iPhone."
+                message: "This Route is no longer available. Refresh from iPhone."
             )
             return
         }
@@ -715,7 +894,7 @@ final class WatchPhoneBridge: NSObject, ObservableObject {
             DispatchQueue.main.async { [weak self] in
                 self?.presetSelectionState = .failed(
                     presetID: pending.presetID,
-                    message: "Install Vox.md on iPhone to change presets."
+                    message: "Install Vox.md on iPhone to change routes."
                 )
             }
             return
@@ -734,6 +913,28 @@ final class WatchPhoneBridge: NSObject, ObservableObject {
             session.transferUserInfo(payload)
         }
     }
+
+    #if DEBUG
+    /// Screenshot/demo hook (`--watch-demo-routes`): installs Signal sample routes.
+    func applyDemoRoutesIfRequested() {
+        guard ProcessInfo.processInfo.arguments.contains("--watch-demo-routes") else { return }
+        let routes = [("meetings", "Meetings"), ("inbox", "Inbox"), ("tasks", "Tasks")]
+        apply([
+            WatchRecordingPayloadKey.phase: WatchRecordingPhase.idle.rawValue,
+            WatchRecordingPayloadKey.sentAt: Date().timeIntervalSince1970,
+            WatchRecordingPayloadKey.presetSelectionAvailable: true,
+            WatchRecordingPayloadKey.selectedPresetID: "meetings",
+            WatchRecordingPayloadKey.selectedPresetName: "Meetings",
+            WatchRecordingPayloadKey.selectedPresetSnapshot: Data("{}".utf8),
+            WatchRecordingPayloadKey.presetSummaries: routes.map {
+                [
+                    WatchRecordingPayloadKey.selectedPresetID: $0.0,
+                    WatchRecordingPayloadKey.selectedPresetName: $0.1,
+                ] as [String: Any]
+            },
+        ])
+    }
+    #endif
 
     func clearPresetSelectionError() {
         guard case .failed = presetSelectionState else { return }
@@ -931,7 +1132,7 @@ final class WatchPhoneBridge: NSObject, ObservableObject {
 
     private func shouldAvoidQueuedBackgroundStart(_ command: WatchRecordingCommand) -> Bool {
         switch command {
-        case .status, .stop, .acknowledge, .selectPreset:
+        case .status, .stop, .acknowledge, .selectPreset, .requestSetup:
             return false
         case .start:
             return snapshot.phase != .listening && snapshot.phase != .recording
@@ -976,7 +1177,7 @@ final class WatchPhoneBridge: NSObject, ObservableObject {
                     self.presetSelectionState = .failed(
                         presetID: pending.presetID,
                         message: acknowledgement.errorMessage
-                            ?? "The Capture Preset could not be selected."
+                            ?? "The Route could not be selected."
                     )
                 }
                 return
@@ -1007,7 +1208,7 @@ final class WatchPhoneBridge: NSObject, ObservableObject {
                         WatchPresetSelectionStore.savePending(nil)
                         nextSelectionState = .failed(
                             presetID: pending.presetID,
-                            message: "Enable a Capture Preset in Vox.md on iPhone first."
+                            message: "Enable a Route in Vox.md on iPhone first."
                         )
                     }
                 } else if let pending, acknowledgementMatchesPending {
@@ -1050,7 +1251,7 @@ final class WatchPhoneBridge: NSObject, ObservableObject {
                         nextSelectionState = .failed(
                             presetID: pending.presetID,
                             message: incoming.presetSelectionAcknowledgement?.errorMessage
-                                ?? "The Capture Preset could not be selected."
+                                ?? "The Route could not be selected."
                         )
                     case .none:
                         break
@@ -1160,7 +1361,12 @@ extension WatchPhoneBridge: WCSessionDelegate {
         error: Error?
     ) {
         apply(session.receivedApplicationContext)
+        updateReachability(using: session)
         resendPendingPresetSelectionIfNeeded(using: session)
+    }
+
+    func sessionReachabilityDidChange(_ session: WCSession) {
+        updateReachability(using: session)
     }
 
     #if os(iOS)

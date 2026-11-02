@@ -9,7 +9,7 @@ public enum CaptureDraftError: Error, Equatable, LocalizedError, Sendable {
         case .draftNotFound(let id):
             return "Capture draft \(id.uuidString) was not found."
         case .destinationRequired:
-            return "Configure a destination for this Capture Preset before capturing."
+            return "Configure a destination for this Route before capturing."
         }
     }
 }

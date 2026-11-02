@@ -91,7 +91,7 @@ struct CaptureEntryLocationTokenPreview: View {
                 .font(.caption.monospaced())
                 .foregroundStyle(.secondary)
                 .textSelection(.enabled)
-            Text("The {location} token inserts this map link only when the Capture Preset delivering the capture uses Current Location. Location metadata is optional.")
+            Text("The {location} token inserts this map link only when the Route delivering the capture uses Current Location. Location metadata is optional.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }

@@ -1,3 +1,5 @@
+import Photos
+import PhotosUI
 import ImageIO
 import PencilKit
 import SwiftUI
@@ -430,6 +432,17 @@ struct CaptureSketchEditor: View {
     var onCancel: () -> Void
     @State private var drawing = PKDrawing()
 
+    /// PencilKit data plus a 2x PNG preview of the drawn area, as staged by
+    /// `QuickCaptureViewModel.stageSketch`. Shared with the inline iPad canvas.
+    static func sketchPayload(for drawing: PKDrawing) -> (drawing: Data, preview: Data)? {
+        let bounds = drawing.bounds.isEmpty
+            ? CGRect(x: 0, y: 0, width: 1024, height: 768)
+            : drawing.bounds.insetBy(dx: -24, dy: -24)
+        let preview = drawing.image(from: bounds, scale: 2)
+        guard let png = preview.pngData() else { return nil }
+        return (drawing.dataRepresentation(), png)
+    }
+
     var body: some View {
         NavigationStack {
             PencilCanvas(drawing: $drawing)
@@ -443,12 +456,8 @@ struct CaptureSketchEditor: View {
                     }
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Add") {
-                            let bounds = drawing.bounds.isEmpty
-                                ? CGRect(x: 0, y: 0, width: 1024, height: 768)
-                                : drawing.bounds.insetBy(dx: -24, dy: -24)
-                            let preview = drawing.image(from: bounds, scale: 2)
-                            guard let png = preview.pngData() else { return }
-                            onSave(drawing.dataRepresentation(), png)
+                            guard let payload = Self.sketchPayload(for: drawing) else { return }
+                            onSave(payload.drawing, payload.preview)
                         }
                         .disabled(drawing.strokes.isEmpty)
                     }
@@ -488,5 +497,157 @@ private struct PencilCanvas: UIViewRepresentable {
         var toolPicker: PKToolPicker?
         init(drawing: Binding<PKDrawing>) { _drawing = drawing }
         func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) { drawing = canvasView.drawing }
+    }
+}
+
+// MARK: - Attach sheet (Signal)
+
+/// One attach tool. The coordinator runs it after the sheet has dismissed so the
+/// follow-up picker/camera sheet never races this one.
+enum CaptureAttachAction: String, CaseIterable, Identifiable {
+    case camera, scan, journal, sketch, file, link, location, screenshot, photos, journalPhotos
+
+    var id: String { rawValue }
+
+    static let gridActions: [CaptureAttachAction] = [
+        .camera, .scan, .journal, .sketch, .file, .link, .location, .screenshot,
+    ]
+
+    var title: String {
+        switch self {
+        case .camera: return String(localized: "Camera")
+        case .scan: return String(localized: "Scan")
+        case .journal: return String(localized: "Journal")
+        case .sketch: return String(localized: "Sketch")
+        case .file: return String(localized: "File")
+        case .link: return String(localized: "Link")
+        case .location: return String(localized: "Location")
+        case .screenshot: return String(localized: "Screenshot")
+        case .photos: return String(localized: "Photo")
+        case .journalPhotos: return String(localized: "Choose Journal Photos")
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .camera: return "camera"
+        case .scan: return "doc.viewfinder"
+        case .journal: return "book.closed"
+        case .sketch: return "pencil.tip"
+        case .file: return "doc"
+        case .link: return "link"
+        case .location: return "location"
+        case .screenshot: return "rectangle.inset.filled.and.person.filled"
+        case .photos: return "photo"
+        case .journalPhotos: return "photo.on.rectangle"
+        }
+    }
+}
+
+/// Lets a limited-access Photos user extend the selection Vox.md can read.
+@MainActor
+private func presentLimitedLibraryPicker() {
+    guard let scene = UIApplication.shared.connectedScenes
+        .compactMap({ $0 as? UIWindowScene })
+        .first(where: { $0.activationState == .foregroundActive }),
+          var presenter = scene.keyWindow?.rootViewController else { return }
+    while let presented = presenter.presentedViewController { presenter = presented }
+    PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: presenter)
+}
+
+struct CaptureAttachSheet: View {
+    let isProcessingMedia: Bool
+    let canExtractText: Bool
+    let isAvailable: (CaptureAttachAction) -> Bool
+    let choose: (CaptureAttachAction) -> Void
+    var recentPhotos: CaptureRecentPhotosModel?
+    var pickRecentPhoto: ((PHAsset) -> Void)?
+
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 4)
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Text("Add to note")
+                    .font(.custom("Geist-SemiBold", size: 20, relativeTo: .title3))
+                    .foregroundStyle(Geist.text)
+                Spacer()
+                Button {
+                    choose(.photos)
+                } label: {
+                    Text("All photos")
+                        .font(Geist.label(.subheadline))
+                        .foregroundStyle(Geist.accentText)
+                        .frame(height: 32)
+                }
+                .buttonStyle(.plain)
+                .disabled(isProcessingMedia)
+            }
+            .padding(.horizontal, 4)
+
+            if let recentPhotos, let pickRecentPhoto {
+                CaptureRecentPhotosStrip(
+                    model: recentPhotos,
+                    isDisabled: isProcessingMedia,
+                    pick: pickRecentPhoto,
+                    manageLimitedAccess: presentLimitedLibraryPicker
+                )
+            }
+
+            LazyVGrid(columns: columns, spacing: 8) {
+                ForEach(CaptureAttachAction.gridActions) { action in
+                    Button {
+                        choose(action)
+                    } label: {
+                        VStack(spacing: 8) {
+                            Image(systemName: action.systemImage)
+                                .font(.system(size: 20, weight: .regular))
+                            Text(verbatim: action.title)
+                                .font(.custom("Geist-Medium", size: 12, relativeTo: .caption))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.75)
+                        }
+                        .foregroundStyle(Geist.text)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 84)
+                        .background(Geist.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                .stroke(Geist.border, lineWidth: 1)
+                        )
+                        .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(isProcessingMedia || !isAvailable(action))
+                    .opacity(isProcessingMedia || !isAvailable(action) ? 0.4 : 1)
+                    .accessibilityIdentifier("capture_attach_\(action.rawValue)")
+                }
+            }
+
+            Button {
+                choose(.journalPhotos)
+            } label: {
+                Label(CaptureAttachAction.journalPhotos.title, systemImage: CaptureAttachAction.journalPhotos.systemImage)
+                    .font(Geist.label(.subheadline))
+                    .foregroundStyle(Geist.accentText)
+            }
+            .buttonStyle(.plain)
+            .disabled(isProcessingMedia || !canExtractText)
+            .padding(.horizontal, 4)
+
+            Text("Scans and journal pages are read on device and saved as Markdown, with the original image alongside.")
+                .font(Geist.caption())
+                .foregroundStyle(Geist.muted)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 4)
+        }
+        .padding(.horizontal, 16)
+        .padding(.top, 20)
+        .padding(.bottom, 16)
+        .frame(maxWidth: .infinity, alignment: .topLeading)
+        .background(Geist.bg.ignoresSafeArea())
+        .presentationDetents([.height(recentPhotos == nil ? 430 : 520), .large])
+        .presentationDragIndicator(.visible)
+        .presentationCornerRadius(28)
     }
 }

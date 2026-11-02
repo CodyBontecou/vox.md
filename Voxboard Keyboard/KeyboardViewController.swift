@@ -6,12 +6,14 @@ import VoxboardShared
 private let log = KeyboardDebugLog.shared
 
 /// The keyboard extension's root controller.
-/// Uses KeyboardKit for the standard keyboard layout and adds a custom voice toolbar on top.
+/// Voice-first Signal pad by default; "ABC" switches to the KeyboardKit letter
+/// keyboard (with the same quick actions above it) and back.
 class KeyboardViewController: KeyboardInputViewController {
 
     private let voiceState = VoiceKeyboardState()
 
     override func viewDidLoad() {
+        KeyboardSignal.registerFonts()
         super.viewDidLoad()
         log.log("viewDidLoad — keyboard extension loaded")
 
@@ -30,11 +32,26 @@ class KeyboardViewController: KeyboardInputViewController {
             log.log("textInserter — inserting \(text.count) chars into textDocumentProxy")
             self.textDocumentProxy.insertText(text)
         }
+
+        voiceState.textDeleter = { [weak self] count in
+            guard let self, count > 0 else { return }
+            for _ in 0..<count { self.textDocumentProxy.deleteBackward() }
+        }
+
+        voiceState.cursorMover = { [weak self] offset in
+            self?.textDocumentProxy.adjustTextPosition(byCharacterOffset: offset)
+        }
+
+        voiceState.contextBeforeInput = { [weak self] in
+            self?.textDocumentProxy.documentContextBeforeInput
+        }
     }
 
     override func viewWillSetupKeyboardView() {
         super.viewWillSetupKeyboardView()
         log.log("viewWillSetupKeyboardView — hasFullAccess=\(hasFullAccess)")
+        // Lets Settings show "Full access on" (the App Group is only writable with full access).
+        CapturePresetSurfacePinStore.recordKeyboardFullAccess(hasFullAccess, defaults: AppConstants.sharedDefaults)
 
         applyHapticsSetting()
 
@@ -58,6 +75,8 @@ class KeyboardViewController: KeyboardInputViewController {
 
         // Refresh model cache in case models were downloaded while keyboard was hidden
         voiceState.refreshModelCache()
+        // Routes and their pinned quick actions may have changed in the app.
+        voiceState.refreshFlowCache()
 
         // Try to insert any pending text recovered from a previous session
         voiceState.tryInsertPendingText()
@@ -154,56 +173,54 @@ class KeyboardViewController: KeyboardInputViewController {
     }
 }
 
-/// Combines the voice toolbar + standard KeyboardKit keyboard in a VStack.
+/// Voice pad (default) or the KeyboardKit letter keyboard, on the Signal
+/// #121212 ground in every host appearance.
 private struct VoxboardKeyboardView: View {
-    private static let lightBackground = Color(
-        red: 226.0 / 255.0,
-        green: 228.0 / 255.0,
-        blue: 232.0 / 255.0
-    )
-    private static let darkBackground = Color(
-        red: 26.0 / 255.0,
-        green: 26.0 / 255.0,
-        blue: 28.0 / 255.0
-    )
-
-    @Environment(\.colorScheme) private var colorScheme
     @State var voiceState: VoiceKeyboardState
     let controller: KeyboardInputViewController
 
-    private var keyboardBackground: Color {
-        colorScheme == .dark ? Self.darkBackground : Self.lightBackground
-    }
+    @State private var showsLetters = false
 
     var body: some View {
-        VStack(spacing: 0) {
-            VoiceToolbarView(
-                voiceState: voiceState,
-                hasFullAccess: controller.hasFullAccess
-            )
+        Group {
+            if showsLetters {
+                VStack(spacing: 0) {
+                    LetterModeBar(voiceState: voiceState) { showsLetters = false }
 
-            KeyboardView(
-                services: controller.services,
-                buttonContent: { $0.view },
-                buttonView: { $0.view },
-                collapsedView: { $0.view },
-                emojiKeyboard: { $0.view },
-                toolbar: { _ in EmptyView() }
-            )
-            .keyboardCalloutActions { params in
-                let lang = AppConstants.sharedDefaults?
-                    .string(forKey: AppConstants.selectedLanguageKey) ?? "auto"
-                return CalloutActionsProvider.actions(
-                    for: params.action,
-                    languageCode: lang
-                ) ?? params.standardActions()
+                    KeyboardView(
+                        services: controller.services,
+                        buttonContent: { $0.view },
+                        buttonView: { $0.view },
+                        collapsedView: { $0.view },
+                        emojiKeyboard: { $0.view },
+                        toolbar: { _ in EmptyView() }
+                    )
+                    .keyboardCalloutActions { params in
+                        let lang = AppConstants.sharedDefaults?
+                            .string(forKey: AppConstants.selectedLanguageKey) ?? "auto"
+                        return CalloutActionsProvider.actions(
+                            for: params.action,
+                            languageCode: lang
+                        ) ?? params.standardActions()
+                    }
+                }
+            } else {
+                VoicePadView(
+                    voiceState: voiceState,
+                    hasFullAccess: controller.hasFullAccess,
+                    text: KeyboardTextActions(insert: { [weak controller] text in
+                        controller?.textDocumentProxy.insertText(text)
+                    }),
+                    showLetters: { showsLetters = true }
+                )
             }
         }
-        // KeyboardKit's standard background is translucent, so it changes when
-        // the app canvas changes. Use the same opaque color in both appearances.
-        .background(keyboardBackground)
+        // KeyboardKit's standard background is translucent; the Signal
+        // keyboard is an opaque dark ground regardless of the host.
+        .background(KeyboardSignal.ground)
         .keyboardViewStyle(
-            KeyboardViewStyle(background: .color(keyboardBackground))
+            KeyboardViewStyle(background: .color(KeyboardSignal.ground))
         )
+        .environment(\.colorScheme, .dark)
     }
 }

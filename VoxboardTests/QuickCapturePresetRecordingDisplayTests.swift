@@ -32,9 +32,9 @@ final class QuickCapturePresetRecordingDisplayTests: XCTestCase {
         let display = try XCTUnwrap(RecordingCompletionMode.runVox(flowID: "not-a-display-name")
             .originDisplay(presetSnapshot: nil))
         XCTAssertEqual(display, .preset(id: nil, name: nil))
-        XCTAssertEqual(display.transcribingSubtitle, String(localized: "Running Capture Preset"))
+        XCTAssertEqual(display.transcribingSubtitle, String(localized: "Running Route"))
         XCTAssertEqual(QuickCapturePresetRecordingDisplay.preset(id: "id", name: " \n").transcribingSubtitle,
-                       String(localized: "Running Capture Preset"))
+                       String(localized: "Running Route"))
     }
 
     func testQueuedDeliveryProjectsItsSnapshotRatherThanTheRequestedIDOrLastMode() throws {

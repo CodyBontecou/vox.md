@@ -1,0 +1,4 @@
+Error: validate: failed to fetch age rating declaration: 2 app infos match app "6758967337":
+  0961e5e0-10b1-496a-ac5f-24fc48558c0d  READY_FOR_DISTRIBUTION
+  ce433bc5-11da-4802-b94a-90727c979533  READY_FOR_REVIEW
+Inspect them with `asc apps info list --app "6758967337"`, then read the declaration with `asc age-rating view --app-info-id <ID>`.

@@ -3,6 +3,11 @@ import XCTest
 
 @MainActor
 final class CapturePresetWidgetStoreRefreshTests: XCTestCase {
+    override class func setUp() {
+        super.setUp()
+        CapturePresetTestLock.install()
+    }
+
     func testPreferencesSuccessfulSeedPinOrderEmptyNoopAndRefusal() throws {
         try withDefaults { defaults in
             let counter = WidgetStoreRefreshCounter()

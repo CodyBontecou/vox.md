@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vox.md Documentation: Complete Feature Guide</title>
-  <meta name="description" content="Complete documentation for Vox.md Quick Capture, Capture Presets, Markdown destinations, the iOS keyboard, local transcription models, widgets, Shortcuts, Apple Watch, and Mac.">
+  <meta name="description" content="Complete documentation for Vox.md Quick Capture, Routes, Markdown destinations, the iOS keyboard, local transcription models, widgets, Shortcuts, Apple Watch, and Mac.">
   <link rel="canonical" href="https://vox.isolated.tech/docs/">
   <link rel="alternate" type="text/plain" href="../llms.txt" title="Vox.md documentation for language models">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Vox.md">
   <meta property="og:title" content="Vox.md Documentation: Complete Feature Guide">
-  <meta property="og:description" content="Learn every shipped Vox.md feature, from durable Markdown capture and presets to local speech models, the keyboard, Apple Watch, and Mac.">
+  <meta property="og:description" content="Learn every shipped Vox.md feature, from durable Markdown capture and routes to local speech models, the keyboard, Apple Watch, and Mac.">
   <meta property="og:url" content="https://vox.isolated.tech/docs/">
   <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -68,108 +68,108 @@
 </head>
 <body>
 
+<header class="docs-header">
 <nav aria-label="Primary navigation">
-  <div class="nav-inner">
+  <div class="nav-inner docs-header-inner">
     <a href="../index.html" class="logo" aria-label="Vox.md home">
-      <img class="logo-mark" src="../app-icon.png" alt="" width="32" height="32">
-      <span>Vox.md</span>
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ docs</span></span>
     </a>
-    <ul class="nav-links">
-      <li><a href="../index.html">Home</a></li>
-      <li><a href="./" aria-current="page">Docs</a></li>
+    <form class="docs-search" role="search" action="./" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="Search docs" aria-label="Search docs" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Search results" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
       <li><a href="../blog/">Blog</a></li>
       <li><a href="../privacy.html">Privacy</a></li>
-      <li><a href="../terms.html">Terms</a></li>
+      <li><a class="mono" href="../llms.txt">llms.txt</a></li>
     </ul>
-    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener">Download Vox.md</a>
   </div>
 </nav>
+</header>
 
 <main>
-  <section class="page-hero docs-hero" aria-labelledby="docs-title">
-    <div class="container">
-      <div class="page-eyebrow">Documentation · Current Product Guide</div>
-      <h1 class="page-title" id="docs-title">Everything You Can Do With Vox.md</h1>
-      <p class="docs-hero-copy">A complete guide to capture, presets, Markdown routing, the voice keyboard, local models, Apple system integrations, Apple Watch, Mac, history, settings, and privacy.</p>
-      <div class="docs-meta-row" aria-label="Documentation facts">
-        <span>Updated August 22, 2026</span>
-        <span>iOS 17.6+</span>
-        <span>macOS 14+</span>
-        <span>watchOS 10+</span>
-        <a href="../llms.txt">llms.txt</a>
-      </div>
-    </div>
-  </section>
 
-  <section class="docs-directory" aria-labelledby="browse-docs">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-label">Browse by Category</div>
-        <h2 class="section-title" id="browse-docs">Start With the Part of Vox.md You Use</h2>
-      </div>
-      <div class="docs-category-grid">
-        <a class="docs-category-card" href="#getting-started"><span>01</span><strong>Getting Started</strong><small>Platforms, setup, permissions, and first capture</small></a>
-        <a class="docs-category-card" href="#quick-capture"><span>02</span><strong>Quick Capture</strong><small>Composer, media, voice, Capture Bar, and drafts</small></a>
-        <a class="docs-category-card" href="#presets"><span>03</span><strong>Capture Presets</strong><small>Processing, metadata, destinations, and templates</small></a>
-        <a class="docs-category-card" href="location/"><span>Guide</span><strong>Current Location &amp; <code>{location}</code></strong><small>Token-only links, optional metadata, precision, privacy, and migration</small></a>
-        <a class="docs-category-card" href="#models"><span>04</span><strong>Models</strong><small>Automatic, Apple Speech, Whisper, and Parakeet</small></a>
-        <a class="docs-category-card" href="#keyboard"><span>05</span><strong>Keyboard</strong><small>Setup, dictation, insertion, haptics, and auto-stop</small></a>
-        <a class="docs-category-card" href="#system-integrations"><span>06</span><strong>System Integrations</strong><small>Widgets, Share Sheet, Shortcuts, and deep links</small></a>
-        <a class="docs-category-card" href="#apple-watch"><span>07</span><strong>Apple Watch</strong><small>Recording, preset sync, queue, and complications</small></a>
-        <a class="docs-category-card" href="#mac"><span>08</span><strong>Mac</strong><small>Meeting capture, workspace, menu bar, and global keybinds</small></a>
-        <a class="docs-category-card" href="#history-settings"><span>09</span><strong>History &amp; Settings</strong><small>Recovery, stats, privacy, limits, purchase, and support</small></a>
-      </div>
-    </div>
-  </section>
 
-  <div class="container docs-shell">
+  <div class="docs-shell">
     <aside class="docs-sidebar" aria-label="On this page">
       <div class="docs-sidebar-title">On This Page</div>
       <ol>
         <li><a href="#getting-started">Getting Started</a></li>
         <li><a href="#quick-capture">Quick Capture</a></li>
-        <li><a href="#presets">Capture Presets &amp; Routes</a></li>
+        <li><a href="#presets">Routes</a></li>
         <li><a href="location/">Current Location &amp; {location}</a></li>
         <li><a href="#models">Models &amp; Transcription</a></li>
         <li><a href="#keyboard">iOS Keyboard</a></li>
         <li><a href="#system-integrations">System Integrations</a></li>
         <li><a href="#apple-watch">Apple Watch</a></li>
         <li><a href="#mac">Mac Companion</a></li>
-        <li><a href="#history-settings">History, Settings &amp; Privacy</a></li>
+        <li><a href="#history-settings">Library, Settings &amp; Privacy</a></li>
         <li><a href="#troubleshooting">Troubleshooting</a></li>
       </ol>
     </aside>
 
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="docs-title">
+      <div class="page-eyebrow">Documentation · Current Product Guide</div>
+      <h1 class="page-title" id="docs-title">Everything you can do with Vox.md</h1>
+      <p class="docs-hero-copy">A complete guide to capture, routes, Markdown routing, the voice keyboard, local models, Apple system integrations, Apple Watch, Mac, history, settings, and privacy.</p>
+      <div class="docs-meta-row" aria-label="Documentation facts">
+        <span>Updated Aug 22, 2026</span>
+        <span>iOS 17.6+</span>
+        <span>macOS 14+</span>
+        <span>watchOS 10+</span>
+      </div>
+      </header>
+
+      <section class="docs-directory" aria-labelledby="browse-docs">
+      <h2 class="visually-hidden" id="browse-docs">Browse by category</h2>
+      <div class="docs-category-grid">
+        <a class="docs-category-card" href="#getting-started"><span>01</span><strong>Getting Started</strong><small>Platforms, setup, permissions, and first capture</small></a>
+        <a class="docs-category-card" href="#quick-capture"><span>02</span><strong>Quick Capture</strong><small>Composer, media, voice, Capture Bar, and drafts</small></a>
+        <a class="docs-category-card" href="#presets"><span>03</span><strong>Routes</strong><small>Processing, metadata, destinations, and templates</small></a>
+        <a class="docs-category-card is-guide" href="location/"><span>Guide</span><strong>Current Location &amp; <code>{location}</code></strong><small>Token-only links, optional metadata, precision, privacy, and migration</small></a>
+        <a class="docs-category-card" href="#models"><span>04</span><strong>Models</strong><small>Automatic, Apple Speech, Whisper, and Parakeet</small></a>
+        <a class="docs-category-card" href="#keyboard"><span>05</span><strong>Keyboard</strong><small>Setup, dictation, insertion, haptics, and auto-stop</small></a>
+        <a class="docs-category-card" href="#system-integrations"><span>06</span><strong>System Integrations</strong><small>Widgets, Share Sheet, Shortcuts, and deep links</small></a>
+        <a class="docs-category-card" href="#apple-watch"><span>07</span><strong>Apple Watch</strong><small>Recording, route sync, queue, and complications</small></a>
+        <a class="docs-category-card" href="#mac"><span>08</span><strong>Mac</strong><small>Meeting capture, workspace, menu bar, and global keybinds</small></a>
+        <a class="docs-category-card" href="#history-settings"><span>09</span><strong>Library &amp; Settings</strong><small>Recovery, stats, privacy, limits, purchase, and support</small></a>
+      </div>
+      </section>
+
+
     <article class="docs-content">
       <section class="docs-section" id="getting-started">
         <div class="docs-section-label">01 / Getting Started</div>
-        <h2>Capture Into Markdown Without Building a New Notes Silo</h2>
+        <h2>Capture into Markdown without building a new notes silo</h2>
         <p>Vox.md is a local-first quick-capture app. It writes standard Markdown and attachments into an Obsidian vault or another writable folder you select through Files. No Vox.md account, plugin, or hosted note database is required.</p>
 
-        <div class="docs-callout">
-          <strong>The basic workflow</strong>
-          <p>Choose a Capture Preset, connect its destination, type or add content in Quick Capture, then tap Send. The preset decides how the content is processed, formatted, and placed in your notes.</p>
-        </div>
-
-        <h3 id="platform-availability">Platform availability</h3>
-        <div class="docs-table-wrap">
+        <div class="docs-table-wrap" id="platform-availability">
           <table class="docs-table">
-            <thead><tr><th>Platform or feature</th><th>Requirement</th><th>What is available</th></tr></thead>
+            <thead><tr><th>Platform</th><th>Requirement</th><th>What is available</th></tr></thead>
             <tbody>
-              <tr><td>iPhone and iPad</td><td>iOS/iPadOS 17.6+</td><td>Quick Capture, keyboard, Share Sheet, widgets, Shortcuts, Live Activities, history, and settings</td></tr>
-              <tr><td>Mac</td><td>macOS 14+</td><td>Capture workspace, recording/import, presets, models, history, menu bar, and global keybinds</td></tr>
-              <tr><td>Apple Watch</td><td>watchOS 10+</td><td>Local recording, preset selection, sync queue, recording-only delivery, and complication</td></tr>
-              <tr><td>Control Center controls</td><td>iOS 18+</td><td>Quick Capture and preset-aware recording controls</td></tr>
-              <tr><td>Apple Speech Automatic backend</td><td>Supported iOS 26 device and language</td><td>System-managed, on-device live and batch transcription</td></tr>
-              <tr><td>Apple Intelligence processing</td><td>Compatible iOS/macOS 26 device</td><td>On-device cleanup, structured output, and custom instructions with fallbacks</td></tr>
+              <tr><td>iPhone and iPad</td><td class="req">iOS/iPadOS 17.6+</td><td>Quick Capture, keyboard, Share Sheet, widgets, Shortcuts, Live Activities, history, and settings</td></tr>
+              <tr><td>Mac</td><td class="req">macOS 14+</td><td>Capture workspace, recording/import, routes, models, history, menu bar, and global keybinds</td></tr>
+              <tr><td>Apple Watch</td><td class="req">watchOS 10+</td><td>Local recording, route selection, sync queue, recording-only delivery, and complication</td></tr>
+              <tr><td>Control Center controls</td><td class="req">iOS 18+</td><td>Quick Capture and route-aware recording controls</td></tr>
+              <tr><td>Apple Speech Automatic backend</td><td class="req">Supported iOS 26 device and language</td><td>System-managed, on-device live and batch transcription</td></tr>
+              <tr><td>Apple Intelligence processing</td><td class="req">Compatible iOS/macOS 26 device</td><td>On-device cleanup, structured output, and custom instructions with fallbacks</td></tr>
             </tbody>
           </table>
         </div>
 
+        <div class="docs-callout">
+          <p><strong>The basic workflow.</strong> Choose a Route, connect its destination, type or add content in Quick Capture, then tap Send. The route decides how the content is processed, formatted, and placed in your notes.</p>
+        </div>
+
+
         <h3 id="first-capture">Make your first capture</h3>
         <ol class="docs-steps">
           <li><strong>Open Vox.md.</strong><span>The app opens directly to the durable Markdown composer.</span></li>
-          <li><strong>Select a Capture Preset.</strong><span>The built-in Default preset cannot be deleted, but it can be disabled. Keep at least one preset enabled and give it a destination.</span></li>
+          <li><strong>Select a Route.</strong><span>The built-in Default route cannot be deleted, but it can be disabled. Keep at least one route enabled and give it a destination.</span></li>
           <li><strong>Set up its destination.</strong><span>Tap <em>Set up destination</em>, choose an Obsidian vault or Files folder, then choose a new, rolling, or existing note.</span></li>
           <li><strong>Add content.</strong><span>Type Markdown or add a link, photo, file, scan, sketch, location, or voice recording.</span></li>
           <li><strong>Tap Send.</strong><span>Vox.md saves into the selected route and reports <em>Capture Sent</em>. Failed or queued work remains available for recovery.</span></li>
@@ -181,7 +181,7 @@
           <li><strong>Speech recognition:</strong> Apple Speech on supported systems.</li>
           <li><strong>Files folder access:</strong> destinations, templates, imports, and recording-only Watch output.</li>
           <li><strong>Camera and selected photos:</strong> only when you add media, screenshots, journal photos, or scans.</li>
-          <li><strong>Location When In Use:</strong> only for the independent Current Location Capture Bar command or when an opted-in Capture Preset needs its one origin-time location. Vox.md never tracks location continuously or in the background.</li>
+          <li><strong>Location When In Use:</strong> only for the independent Current Location Capture Bar command or when an opted-in Route needs its one origin-time location. Vox.md never tracks location continuously or in the background.</li>
           <li><strong>Notifications:</strong> optional delivery status, including unattended Apple Watch failures.</li>
           <li><strong>Keyboard Allow Full Access:</strong> required for the Vox.md keyboard to use its shared on-device app workflow. See <a href="#keyboard-setup">Keyboard setup</a>.</li>
         </ul>
@@ -189,17 +189,17 @@
 
       <section class="docs-section" id="quick-capture">
         <div class="docs-section-label">02 / Quick Capture</div>
-        <h2>One Durable Composer for Text, Media, Files, and Voice</h2>
-        <p>Quick Capture is the main iOS and iPadOS workspace. The preset menu changes the current workflow; the destination menu previews or temporarily overrides where this draft will be delivered. The bottom bar also opens History and Settings and can show or dismiss the software keyboard.</p>
+        <h2>One durable composer for text, media, files, and voice</h2>
+        <p>Quick Capture is the main iOS and iPadOS workspace. The route menu changes the current workflow; the destination menu previews or temporarily overrides where this draft will be delivered. The bottom bar also opens Library and Settings and can show or dismiss the software keyboard.</p>
 
         <h3 id="durable-drafts">Durable drafts and safe delivery</h3>
         <ul>
-          <li>Text, attachments, the selected preset, destination overrides, and capture source survive suspension and relaunch.</li>
+          <li>Text, attachments, the selected route, destination overrides, and capture source survive suspension and relaunch.</li>
           <li>Edits are saved after a short debounce, and moving the app to the background triggers an immediate save.</li>
           <li>If you continue editing while a send is in progress, those newer edits are preserved in a fresh draft rather than being discarded.</li>
           <li>A destination must be configured before delivery. The composer shows <em>Destination Not Configured</em> with a Set Up action when needed.</li>
           <li>Retry-safe capture requests are journaled locally so a permission, file-provider, or sync failure can be retried.</li>
-          <li>An empty composer shows a cached inspirational quote until you add text, even after you select a preset or attach a file; quote requests never include your draft.</li>
+          <li>An empty composer shows a cached inspirational quote until you add text, even after you select a route or attach a file; quote requests never include your draft.</li>
         </ul>
 
         <h3 id="capture-types">Capture types</h3>
@@ -211,7 +211,7 @@
           <div><strong>Document scans</strong><p>Scan pages with VisionKit. Vox.md preserves page images, creates a PDF, and includes best-effort on-device OCR.</p></div>
           <div><strong>Journal OCR</strong><p>Capture up to 10 manual-shutter journal pages or choose journal photos. Accurate Vision OCR uses automatic language detection.</p></div>
           <div><strong>Sketches</strong><p>Draw on a white PencilKit canvas with a black pen. Vox.md stores editable drawing data and a PNG preview.</p></div>
-          <div><strong>Current Location action</strong><p>Request one location and insert a validated Google Maps Markdown link in the draft. This independent Capture Bar action does not change either per-preset location control.</p></div>
+          <div><strong>Current Location action</strong><p>Request one location and insert a validated Google Maps Markdown link in the draft. This independent Capture Bar action does not change either per-route location control.</p></div>
           <div><strong>Voice and imported audio</strong><p>Record from the composer or import audio/video, transcribe locally, and add the result to the draft or send it immediately.</p></div>
         </div>
         <p class="docs-note">Accessibility: OCR shows an “Extracting text on this device” progress banner, and VoiceOver announces OCR progress and completion, “Capture sent”, and “Transcript added to Capture” across capture flows.</p>
@@ -248,11 +248,11 @@
         <ul>
           <li>Tap the voice button to start or stop. Long-press for about 0.45 seconds to reveal detailed controls.</li>
           <li>While recording, a <strong>Pause</strong> button appears next to the voice button — one tap pauses, one tap resumes. The final note stays one recording with paused audio and time excluded. Pausing also suspends the live transcript preview and voice auto-stop until you resume.</li>
-          <li><strong>Add to Draft</strong> appends the finished transcript. <strong>Send Immediately</strong> runs the selected preset and its destination.</li>
+          <li><strong>Add to Draft</strong> appends the finished transcript. <strong>Send Immediately</strong> runs the selected route and its destination.</li>
           <li><strong>Send Immediately is selected by default</strong> in the iOS and Mac capture workspaces. Opening the iOS voice action through <code>voxboard://capture?action=voice</code> switches that recording to Add to Draft.</li>
           <li>The <strong>Audio</strong> option retains the source recording as part of a draft when requested.</li>
           <li><strong>Import audio</strong> accepts audio or movie files and uses the same local transcription pipeline.</li>
-          <li><strong>Identify Speakers</strong> is an opt-in Capture Preset voice-processing step for recordings and imported audio. It prepares a separate speaker model on first use, adds anonymous best-effort labels locally, and preserves the plain transcript with a visible History reason when it cannot run.</li>
+          <li><strong>Identify Speakers</strong> is an opt-in Route voice-processing step for recordings and imported audio. It prepares a separate speaker model on first use, adds anonymous best-effort labels locally, and preserves the plain transcript with a visible Library reason when it cannot run.</li>
           <li>Automatic can show finalized and tentative Apple Speech text directly in the editable composer while recording. Explicit Whisper and Parakeet models transcribe after recording stops.</li>
           <li>A failed transcription does not destroy the source recording; it remains recoverable.</li>
           <li>Persistent keyboard listening is kept across launches only when explicitly enabled. A one-shot app recording returns the audio session to idle.</li>
@@ -265,17 +265,17 @@
       </section>
 
       <section class="docs-section" id="presets">
-        <div class="docs-section-label">03 / Capture Presets &amp; Routes</div>
-        <h2>Save the Entire Workflow, Not Just a Folder</h2>
-        <p>A Capture Preset stores what a capture means, whether text is processed, how metadata and audio are handled, and exactly where Markdown is written. Presets apply to typed text, links, media, scans, files, sketches, voice, Shortcuts, widgets, the Share Sheet, Watch, and Mac.</p>
+        <div class="docs-section-label">03 / Routes</div>
+        <h2>Save the entire workflow, not just a folder</h2>
+        <p>A Route stores what a capture means, whether text is processed, how metadata and audio are handled, and exactly where Markdown is written. Routes apply to typed text, links, media, scans, files, sketches, voice, Shortcuts, widgets, the Share Sheet, Watch, and Mac.</p>
 
-        <h3 id="preset-management">Create and manage presets</h3>
+        <h3 id="preset-management">Create and manage routes</h3>
         <ul>
-          <li>Open Settings → Capture Presets to create, rename, enable, disable, select an icon for, or delete a custom preset.</li>
+          <li>Open Settings → Routes to create, rename, enable, disable, select an icon for, or delete a custom route.</li>
           <li>The searchable icon picker groups symbols under Writing, Voice, Tasks, Personal, and Work.</li>
-          <li>Disabled presets are hidden from normal selectors. The built-in Default preset cannot be deleted.</li>
-          <li>The built-in Default preset uses the waveform symbol, the prompt <em>Capture an idea, task, link, file, scan, or recording.</em>, <code>type: capture</code> metadata, Clean Prose processing, typed-text processing off, and audio saving off.</li>
-          <li>A new custom preset begins as <em>Custom Preset</em>, uses the slider icon and <em>What do you want to capture?</em> prompt, and starts with Custom Instruction selected but typed/mixed-text processing off.</li>
+          <li>Disabled routes are hidden from normal selectors. The built-in Default route cannot be deleted.</li>
+          <li>The built-in Default route uses the waveform symbol, the prompt <em>Capture an idea, task, link, file, scan, or recording.</em>, <code>type: capture</code> metadata, Clean Prose processing, typed-text processing off, and audio saving off.</li>
+          <li>A new custom route begins as <em>Custom Route</em>, uses the slider icon and <em>What do you want to capture?</em> prompt, and starts with Custom Instruction selected but typed/mixed-text processing off.</li>
         </ul>
 
         <h3 id="processing-modes">Processing modes</h3>
@@ -291,23 +291,23 @@
             </tbody>
           </table>
         </div>
-        <p>Voice transcripts use the selected preset mode. <strong>Apply to Capture Text</strong> is a separate opt-in, off by default, that allows processing of typed Markdown, OCR, and other text-bearing mixed captures. Leaving it off prevents unexpected rewriting of authored Markdown. The exact processed request is saved before delivery, so retries do not rerun processing against changed settings.</p>
+        <p>Voice transcripts use the selected route mode. <strong>Apply to Capture Text</strong> is a separate opt-in, off by default, that allows processing of typed Markdown, OCR, and other text-bearing mixed captures. Leaving it off prevents unexpected rewriting of authored Markdown. The exact processed request is saved before delivery, so retries do not rerun processing against changed settings.</p>
 
         <h3 id="preset-metadata">Metadata</h3>
         <ul>
           <li>Enter static metadata as one <code>key: value</code> pair per line, such as <code>tags: [journal, idea]</code>.</li>
           <li><strong>Note Frontmatter</strong> writes metadata at document scope.</li>
           <li><strong>Inline Entry Fields</strong> writes <code>key:: value</code> fields beside each entry in a rolling note.</li>
-          <li>When available, on-device enrichment can add a title, tags, category, and cleaned text alongside static preset metadata.</li>
+          <li>When available, on-device enrichment can add a title, tags, category, and cleaned text alongside static route metadata.</li>
         </ul>
 
         <h3 id="preset-location">Opt-in location</h3>
-        <p>Current Location is off by default and belongs to each Capture Preset. When enabled, Vox.md requests one location at the capture’s origin: at Send for iOS/iPadOS, Share Sheet, deep-link/composer, Mac, and system actions that open the composer; during invocation for direct-enqueue text, link, and file intents; or when an immediate voice, keyboard-driven preset recording, widget/control recording, or Apple Watch recording routed through normal Capture delivery stops. Watch Recording Only is a raw audio Files export with no Markdown location surface and does not request location. Vox.md never continuously monitors location and never runs background location tracking.</p>
+        <p>Current Location is off by default and belongs to each Route. When enabled, Vox.md requests one location at the capture’s origin: at Send for iOS/iPadOS, Share Sheet, deep-link/composer, Mac, and system actions that open the composer; during invocation for direct-enqueue text, link, and file intents; or when an immediate voice, keyboard-driven route recording, widget/control recording, or Apple Watch recording routed through normal Capture delivery stops. Watch Recording Only is a raw audio Files export with no Markdown location surface and does not request location. Vox.md never continuously monitors location and never runs background location tracking.</p>
         <div class="docs-table-wrap">
           <table class="docs-table">
             <thead><tr><th>Setting</th><th>Behavior</th></tr></thead>
             <tbody>
-              <tr><td>Use Current Location</td><td>Requests one origin-time location for this preset and powers <code>{location}</code>. It does not automatically write metadata.</td></tr>
+              <tr><td>Use Current Location</td><td>Requests one origin-time location for this route and powers <code>{location}</code>. It does not automatically write metadata.</td></tr>
               <tr><td>Exact (default)</td><td>Keeps the privacy-adjusted origin fix and can include a point-of-interest label when selected metadata needs one.</td></tr>
               <tr><td>City</td><td>Rounds latitude and longitude to two decimal places and omits point-of-interest labels. All derived fields and links use those rounded coordinates.</td></tr>
               <tr><td>Write Location Metadata</td><td>Separately opts into structured or advanced metadata in addition to any <code>{location}</code> entry-template link.</td></tr>
@@ -317,19 +317,19 @@
           </table>
         </div>
         <p>When Write Location Metadata is enabled, document scope appends each result to the configured frontmatter collection keyed by Capture ID. One note can retain multiple locations, while an idempotent retry cannot append the same location twice. Entry scope instead renders selected structured fields as <code>key:: value</code> beside that captured entry.</p>
-        <p>Place, city, region, and country use Apple’s system reverse geocoder only when enabled metadata fields need them. Token-only location skips reverse geocoding. The service is free and requires no API key, but may use a network connection; if lookup fails, Capture continues with coordinate-only metadata. Entry prefixes, suffixes, and vault Markdown templates can use <code>{location}</code> to insert a clickable Google Maps link from the preset’s available privacy-adjusted snapshot without enabling metadata output; the token is empty when Current Location is off or unavailable. Creating a provider link does not contact Apple, Google, or OpenStreetMap. Opening one discloses the same exact or rounded coordinates stored in the link to that provider.</p>
-        <p>New and previously disabled presets keep both controls off. Presets that already wrote location metadata keep both controls on after upgrading, preserving their existing output.</p>
+        <p>Place, city, region, and country use Apple’s system reverse geocoder only when enabled metadata fields need them. Token-only location skips reverse geocoding. The service is free and requires no API key, but may use a network connection; if lookup fails, Capture continues with coordinate-only metadata. Entry prefixes, suffixes, and vault Markdown templates can use <code>{location}</code> to insert a clickable Google Maps link from the route’s available privacy-adjusted snapshot without enabling metadata output; the token is empty when Current Location is off or unavailable. Creating a provider link does not contact Apple, Google, or OpenStreetMap. Opening one discloses the same exact or rounded coordinates stored in the link to that provider.</p>
+        <p>New and previously disabled routes keep both controls off. Routes that already wrote location metadata keep both controls on after upgrading, preserving their existing output.</p>
         <div class="docs-callout">
           <strong>Complete Current Location guide</strong>
           <p>See <a href="location/">Current Location, <code>{location}</code>, and Metadata</a> for setup patterns, examples, capture-source timing, migration behavior, privacy, and troubleshooting.</p>
         </div>
         <div class="docs-callout docs-callout-neutral">
           <strong>Unavailable location</strong>
-          <p>Interactive surfaces can retry, cancel, send once without location, or choose <em>Always Send Without Location</em> for that preset. Reset that saved choice in the preset’s Location settings. An unattended <em>Ask</em> capture persists its unavailable origin-time outcome until you decide; retry and recovery never reacquire a later location.</p>
+          <p>Interactive surfaces can retry, cancel, send once without location, or choose <em>Always Send Without Location</em> for that route. Reset that saved choice in the route’s Location settings. An unattended <em>Ask</em> capture persists its unavailable origin-time outcome until you decide; retry and recovery never reacquire a later location.</p>
         </div>
 
         <h3 id="destinations">Markdown destinations</h3>
-        <p>Each preset owns one destination rooted in an Obsidian vault or writable Files folder.</p>
+        <p>Each route owns one destination rooted in an Obsidian vault or writable Files folder.</p>
         <div class="docs-feature-grid docs-feature-grid-three">
           <div><strong>New Note</strong><p>Create a separate Markdown file for every capture with tokens such as <code>{timestamp}</code>, <code>{date}</code>, <code>{time}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{id8}</code>, and <code>{id}</code>.</p></div>
           <div><strong>Rolling Note</strong><p>Append to daily, weekly, monthly, quarterly, or yearly notes. Paths also support <code>{period}</code> and <code>{week}</code>. The new-destination default is <code>Journal/{period}.md</code> with a daily period.</p></div>
@@ -348,20 +348,20 @@
         </ul>
 
         <h3 id="capture-overrides">One-capture overrides</h3>
-        <p>The Destination control can use Preset Default, place this capture at the Top or Bottom, apply a one-off Entry Template, or choose another note in the same vault. <strong>Use Preset destination defaults</strong> removes the override. These choices affect only the current draft and never mutate the preset.</p>
+        <p>The Destination control can use Route Default, place this capture at the Top or Bottom, apply a one-off Entry Template, or choose another note in the same vault. <strong>Use Route destination defaults</strong> removes the override. These choices affect only the current draft and never mutate the route.</p>
 
         <h3 id="audio-export">Audio retention and compatibility export</h3>
         <ul>
           <li>Audio save modes are <strong>Off</strong>, <strong>Alongside Note</strong>, or <strong>Attachments Folder</strong>.</li>
           <li>Markdown can embed retained audio at the Top or Bottom with Obsidian syntax such as <code>![[recording.m4a]]</code>.</li>
           <li>For legacy direct-voice configurations without a unified Markdown destination, <strong>Save Notes to Files</strong> supports TXT, MD, JSON, and YAML; New File or Append; filename tokens including model and language; Markdown templates; Obsidian Bases options; selectable YAML properties; and optional <code>.md</code> extension for YAML.</li>
-          <li>Compatibility export settings apply only to direct voice runs when the preset does not have a unified Capture destination.</li>
+          <li>Compatibility export settings apply only to direct voice runs when the route does not have a unified Capture destination.</li>
         </ul>
       </section>
 
       <section class="docs-section" id="models">
         <div class="docs-section-label">04 / Models &amp; Transcription</div>
-        <h2>Choose a System Backend or an Optional Local Model</h2>
+        <h2>Choose a system backend or an optional local model</h2>
         <p>All transcription runs on the Apple device. Automatic is the iOS default. Optional Whisper and Parakeet model files are downloaded only when you ask for them and can be selected, canceled during download, or deleted later.</p>
 
         <h3 id="model-options">Available transcription options</h3>
@@ -412,7 +412,7 @@
 
       <section class="docs-section" id="keyboard">
         <div class="docs-section-label">05 / iOS Keyboard</div>
-        <h2>Dictate Into the Text Field You Are Already Editing</h2>
+        <h2>Dictate into the text field you are already editing</h2>
         <p>The Vox.md keyboard works in apps such as Messages, Notes, Mail, Safari, Slack, and any other app that accepts a standard iOS keyboard. A voice toolbar sits above the KeyboardKit layout and communicates with the main Vox.md app through the private shared App Group.</p>
 
         <h3 id="keyboard-setup">Set up the keyboard</h3>
@@ -449,10 +449,10 @@
 
       <section class="docs-section" id="system-integrations">
         <div class="docs-section-label">06 / System Integrations</div>
-        <h2>Start a Capture From the Share Sheet, Home Screen, Lock Screen, or Shortcuts</h2>
+        <h2>Start a capture from the Share Sheet, Home Screen, Lock Screen, or Shortcuts</h2>
 
         <h3 id="share-extension">Share Extension</h3>
-        <p>The iOS Share Sheet action is named <strong>Capture to Vox.md</strong>. It accepts text, HTTP/HTTPS URLs, images, files, and movies, up to the shared item and asset limits. Choose a Capture Preset and destination, add an optional note, then Send. If that preset uses Current Location, Share requests its one origin-time location at this Send action whether or not metadata output is enabled. Content is staged in the private App Group, queued durably, and opened in Vox.md for delivery. If delivery needs the main app, use <strong>Open Vox.md</strong>.</p>
+        <p>The iOS Share Sheet action is named <strong>Capture to Vox.md</strong>. It accepts text, HTTP/HTTPS URLs, images, files, and movies, up to the shared item and asset limits. Choose a Route and destination, add an optional note, then Send. If that route uses Current Location, Share requests its one origin-time location at this Send action whether or not metadata output is enabled. Content is staged in the private App Group, queued durably, and opened in Vox.md for delivery. If delivery needs the main app, use <strong>Open Vox.md</strong>.</p>
 
         <h3 id="widgets">Home Screen and Lock Screen widgets</h3>
         <div class="docs-feature-grid docs-feature-grid-three">
@@ -463,7 +463,7 @@
 
         <h3 id="control-center-live-activities">Control Center, Live Activities, and Dynamic Island</h3>
         <ul>
-          <li>On iOS 18+, Control Center offers <strong>Quick Capture</strong> and a configurable <strong>Vox.md Record</strong> control. Choose its Preset, Action (Start, Stop, or Start or Stop), and Open App preference.</li>
+          <li>On iOS 18+, Control Center offers <strong>Quick Capture</strong> and a configurable <strong>Vox.md Record</strong> control. Choose its Route, Action (Start, Stop, or Start or Stop), and Open App preference.</li>
           <li>On iOS 26+, turn <strong>Open App</strong> off to record without switching apps when setup is complete. Older iOS opens the app. The old background control remains available as <strong>Vox.md Record (Legacy Background)</strong> to preserve installed assignments.</li>
           <li>The <strong>Live Activity Monitor</strong> setting controls recording status and Record/Stop actions on the Lock Screen and Dynamic Island.</li>
           <li>Live Activity states include Recording, timer, Processing, Ready, Record, and Stop.</li>
@@ -471,9 +471,9 @@
         </ul>
 
         <h3 id="shortcuts">Shortcuts and App Intents</h3>
-        <p>Capture Presets appear as selectable entities in Shortcuts and supported controls. With Use Current Location enabled, direct-enqueue text, link, and file intents request location during invocation; actions that open Quick Capture request it at Send; and recording actions request it when recording stops. Metadata output does not change this timing. If an unattended <em>Ask</em> request cannot get location, its unavailable origin-time result is retained for a later decision rather than reacquired. Shipped intents include:</p>
+        <p>Routes appear as selectable entities in Shortcuts and supported controls. With Use Current Location enabled, direct-enqueue text, link, and file intents request location during invocation; actions that open Quick Capture request it at Send; and recording actions request it when recording stops. Metadata output does not change this timing. If an unattended <em>Ask</em> request cannot get location, its unavailable origin-time result is retained for a later decision rather than reacquired. Shipped intents include:</p>
         <ul class="docs-columns">
-          <li>Record Audio (Preset, Action, and native Open When Run — development work in progress, not released)</li>
+          <li>Record Audio (Route, Action, and native Open When Run — development work in progress, not released)</li>
           <li>Open Quick Capture</li>
           <li>Record a Capture</li>
           <li>Capture a Screenshot</li>
@@ -483,8 +483,8 @@
         </ul>
 
         <h3 id="action-button-recording">Action Button recording setup</h3>
-        <p>Open Vox.md once to grant microphone permission and prepare the transcription model/language. Enable <strong>Lock Screen Record Button</strong> and <strong>Shortcut Recording Live Activity</strong> in Vox.md Settings, and allow Live Activities in iOS Settings. On iOS 26+, select <strong>Vox.md Record</strong> under Settings → Action Button → Controls, choose its Preset, set Action to <strong>Start or Stop</strong>, and turn <strong>Open App</strong> off. Invoke once to start and again to stop; the Live Activity provides Stop too.</p>
-        <p>You can also create a regular Apple Shortcut: Shortcuts → + → Add Action → Vox.md → <strong>Record Audio</strong>, choose Preset and Action, turn <strong>Open When Run</strong> off for background execution, save, then assign it under Settings → Action Button → Shortcut → Choose a Shortcut or to Apple Pencil squeeze. For automations, explicit <strong>Start</strong> and <strong>Stop</strong> leave an already-started or already-stopped recording unchanged. Existing Record with Preset / Vox.md Record assignments keep Start with Open App on until edited; saved Toggle Recording shortcuts retain background start/stop without changes.</p>
+        <p>Open Vox.md once to grant microphone permission and prepare the transcription model/language. Enable <strong>Lock Screen Record Button</strong> and <strong>Shortcut Recording Live Activity</strong> in Vox.md Settings, and allow Live Activities in iOS Settings. On iOS 26+, select <strong>Vox.md Record</strong> under Settings → Action Button → Controls, choose its Route, set Action to <strong>Start or Stop</strong>, and turn <strong>Open App</strong> off. Invoke once to start and again to stop; the Live Activity provides Stop too.</p>
+        <p>You can also create a regular Apple Shortcut: Shortcuts → + → Add Action → Vox.md → <strong>Record Audio</strong>, choose Route and Action, turn <strong>Open When Run</strong> off for background execution, save, then assign it under Settings → Action Button → Shortcut → Choose a Shortcut or to Apple Pencil squeeze. For automations, explicit <strong>Start</strong> and <strong>Stop</strong> leave an already-started or already-stopped recording unchanged. Existing Record with Route / Vox.md Record assignments keep Start with Open App on until edited; saved Toggle Recording shortcuts retain background start/stop without changes.</p>
         <p class="docs-note">The unified recording changes are not ready to use or release: one native Open When Run switch and correct Stop decoding were observed on an iOS 27 beta iPhone with recording effects compiled out. The iOS 26.5 simulator still decodes saved Stop as Start; actual recording, foreground handoff and compatibility remain unverified. Do not execute the new action on a normal build until binding is fixed. Background recording requires a Live Activity. A failed background start may open Vox.md; Stop never falls back to starting a recording. Turning off Lock Screen Record Button disables invocation. Older iOS always opens the app. Direct-picker exposure, saved-assignment upgrades, and cold/warm, locked/unlocked execution remain pending device QA, not guaranteed by registration metadata.</p>
 
         <h3 id="deep-links">Deep links</h3>
@@ -497,7 +497,7 @@
               <tr><td><code>voxboard://capture?action=photos</code></td><td>Open the photo picker. Other actions: <code>screenshots</code>, <code>camera</code>, <code>files</code>, <code>scan</code>, <code>sketch</code>, <code>link</code>, and <code>voice</code>.</td></tr>
               <tr><td><code>voxboard://capture?text=...</code></td><td>Open a draft with bounded text.</td></tr>
               <tr><td><code>voxboard://capture?url=https%3A%2F%2F...</code></td><td>Open a draft with an HTTP/HTTPS link.</td></tr>
-              <tr><td><code>voxboard://capture?preset=...</code></td><td>Select an enabled Capture Preset. It can be combined with a supported action, text, or URL.</td></tr>
+              <tr><td><code>voxboard://capture?route=...</code></td><td>Select an enabled Route. It can be combined with a supported action, text, or URL.</td></tr>
               <tr><td><code>voxboard://capture-request?id=...</code></td><td>Claim a durable request created by a system extension or intent.</td></tr>
               <tr><td><code>voxboard://listen</code></td><td>Start the keyboard listening launch flow.</td></tr>
               <tr><td><code>voxboard://record</code></td><td>Legacy recording entry point redirected into listening.</td></tr>
@@ -505,12 +505,12 @@
             </tbody>
           </table>
         </div>
-        <p class="docs-note">Unknown or duplicate parameters, malformed UUIDs, unsafe preset identifiers, non-HTTP URLs, and text beyond the shared limit are rejected.</p>
+        <p class="docs-note">Unknown or duplicate parameters, malformed UUIDs, unsafe route identifiers, non-HTTP URLs, and text beyond the shared limit are rejected.</p>
       </section>
 
       <section class="docs-section" id="apple-watch">
         <div class="docs-section-label">07 / Apple Watch</div>
-        <h2>Record Locally on Watch, Then Deliver Through iPhone</h2>
+        <h2>Record locally on Watch, then deliver through iPhone</h2>
 
         <h3 id="watch-recording">Recording workflow</h3>
         <ul>
@@ -518,20 +518,20 @@
           <li>Use Record, Pause/Resume, Stop, Cancel, Sync, and Refresh. Pause gathers your thoughts without splitting the note — paused time freezes the timer and is excluded from the recording. Cancel explicitly deletes the local recording instead of syncing it.</li>
           <li>Recordings are journaled locally and recovered after interruptions or crashes.</li>
           <li>A recording remains on Watch until iPhone confirms delivery or discard.</li>
-          <li>For a preset with Use Current Location enabled and routed through normal Capture delivery, Watch requests one Watch-origin location when recording stops and transfers that privacy-adjusted outcome with the preset snapshot. iPhone never substitutes its own location. Recording Only skips location because it exports raw audio without a Markdown surface.</li>
+          <li>For a route with Use Current Location enabled and routed through normal Capture delivery, Watch requests one Watch-origin location when recording stops and transfers that privacy-adjusted outcome with the route snapshot. iPhone never substitutes its own location. Recording Only skips location because it exports raw audio without a Markdown surface.</li>
         </ul>
 
-        <h3 id="watch-presets">Capture Presets on Watch</h3>
-        <p>Select an enabled iPhone Capture Preset from the Watch <strong>Capture Preset</strong> card. Vox.md transfers a safe snapshot with the recording. If iPhone is unavailable, the requested selection remains pending and the last confirmed preset stays active.</p>
+        <h3 id="watch-presets">Routes on Watch</h3>
+        <p>Select an enabled iPhone Route from the Watch <strong>Route</strong> card. Vox.md transfers a safe snapshot with the recording. If iPhone is unavailable, the requested selection remains pending and the last confirmed route stays active.</p>
 
         <h3 id="watch-queue">Watch Recordings queue on iPhone</h3>
-        <p>The iPhone queue shows recording time, duration, preset, processing state, and delivery actions. Failed items can be retried, assigned a different preset, discarded, or captured without a transcript. Discard removes retained audio and queued delivery.</p>
+        <p>The iPhone queue shows recording time, duration, route, processing state, and delivery actions. Failed items can be retried, assigned a different route, discarded, or captured without a transcript. Discard removes retained audio and queued delivery.</p>
 
         <h3 id="watch-recording-only">Recording Only output</h3>
         <ul>
-          <li>Set a preset's Output to <strong>Recording Only</strong> to copy M4A audio to a Files folder without transcription, AI processing, or transcription quota use.</li>
+          <li>Set a route's Output to <strong>Recording Only</strong> to copy M4A audio to a Files folder without transcription, AI processing, or transcription quota use.</li>
           <li>The default filename template is <code>recording-{timestamp}-{id8}</code>.</li>
-          <li>Choose the recording folder once on iPhone before using the preset.</li>
+          <li>Choose the recording folder once on iPhone before using the route.</li>
           <li>Background delivery can be delayed by iOS. Force-quitting Vox.md prevents delivery until the app is opened again.</li>
         </ul>
 
@@ -541,8 +541,8 @@
 
       <section class="docs-section" id="mac">
         <div class="docs-section-label">08 / Mac Companion</div>
-        <h2>Use the Same Capture System From macOS</h2>
-        <p>The Mac app has Capture, History, and Settings destinations and shares the local model, preset, route, export, and retry architecture used by iOS.</p>
+        <h2>Use the same capture system from macOS</h2>
+        <p>The Mac app has Capture, Library, and Settings destinations and shares the local model, route, route, export, and retry architecture used by iOS.</p>
 
         <h3 id="mac-workspace">Capture workspace</h3>
         <ul>
@@ -552,8 +552,8 @@
           <li>Record with <strong>Add to Draft</strong> or <strong>Send Immediately</strong>; optionally retain Audio in draft mode.</li>
           <li><strong>Pause</strong> and <strong>Resume</strong> a microphone recording from the status bar. Paused audio is excluded, so one finished note can be recorded in pieces. Meeting capture does not pause.</li>
           <li>Import audio or video for local transcription.</li>
-          <li>Press Command-Return to Send Capture. A preset with Use Current Location enabled requests one Mac-origin location at Send or recording stop, whether or not metadata output is enabled.</li>
-          <li>A destination setup banner and route inspector expose the selected preset's resolved note and placement.</li>
+          <li>Press Command-Return to Send Capture. A route with Use Current Location enabled requests one Mac-origin location at Send or recording stop, whether or not metadata output is enabled.</li>
+          <li>A destination setup banner and route inspector expose the selected route's resolved note and placement.</li>
         </ul>
 
         <h3 id="mac-meeting">Meeting capture with separate stems</h3>
@@ -562,20 +562,20 @@
           <li>While recording, the status bar shows live system and microphone level meters, per-source status, and any capture warnings.</li>
           <li>Both stems are written in durable chunks with a recovery manifest, so an interruption — a stopped stream, an unplugged microphone, or a forced quit — finalizes safely and the meeting can still be transcribed. Interrupted sessions are recovered automatically the next time the recording queue resumes.</li>
           <li>After you stop, each stem is transcribed separately on device and the results are interleaved on a shared timeline: your microphone shows as <strong>You</strong>, and the application stem is labeled as a remote speaker. Optional speaker identification can further separate multiple remote voices.</li>
-          <li>A playback mix of both stems is kept as the recording's audio, and the finished transcript follows your Capture Preset, Add to Draft or Send Immediately, and clipboard settings like any other recording.</li>
+          <li>A playback mix of both stems is kept as the recording's audio, and the finished transcript follows your Route, Add to Draft or Send Immediately, and clipboard settings like any other recording.</li>
         </ul>
 
         <h3 id="mac-keybinds">Global keybinds</h3>
-        <p>Settings → Global Keybinds can assign shortcuts to <strong>Transcribe to Clipboard</strong>, <strong>Selected Capture Preset</strong>, or any enabled preset. Shortcuts are off by default, require a non-modifier key plus Control, Option, or Command, may also include Shift, and reject conflicts. Press the active shortcut again to stop recording.</p>
+        <p>Settings → Global Keybinds can assign shortcuts to <strong>Transcribe to Clipboard</strong>, <strong>Selected Route</strong>, or any enabled route. Shortcuts are off by default, require a non-modifier key plus Control, Option, or Command, may also include Shift, and reject conflicts. Press the active shortcut again to stop recording.</p>
         <div class="docs-callout docs-callout-neutral">
-          <p><strong>Transcribe to Clipboard</strong> creates no note, History item, or retained audio. It is intended for quick dictation into any Mac app.</p>
+          <p><strong>Transcribe to Clipboard</strong> creates no note, Library item, or retained audio. It is intended for quick dictation into any Mac app.</p>
         </div>
 
         <h3 id="mac-menu-bar">Menu bar and app visibility</h3>
         <ul>
           <li>Visibility choices are <strong>Dock + Menu Bar</strong> (default), <strong>Menu Bar Only</strong>, <strong>Dock Only</strong>, and <strong>Hidden</strong>.</li>
           <li>The menu bar reports recording, transcribing, and exporting state.</li>
-          <li>Menu actions include Start Recording, Stop + Transcribe, Import Audio…, Copy Last Transcript, Reveal Last Export, Capture Preset selection, Show Capture, Show History, Reveal Data Folder, and Quit Vox.md.</li>
+          <li>Menu actions include Start Recording, Stop + Transcribe, Import Audio…, Copy Last Transcript, Reveal Last Export, Route selection, Show Capture, Show Library, Reveal Data Folder, and Quit Vox.md.</li>
           <li>Press Control-B in the Mac app to show keyboard hints over clickable controls.</li>
         </ul>
 
@@ -584,16 +584,16 @@
       </section>
 
       <section class="docs-section" id="history-settings">
-        <div class="docs-section-label">09 / History, Settings &amp; Privacy</div>
-        <h2>Recover Work, Control Local Data, and Unlock Unlimited Use</h2>
+        <div class="docs-section-label">09 / Library, Settings &amp; Privacy</div>
+        <h2>Recover work, control local data, and unlock unlimited use</h2>
 
-        <h3 id="history">Unified History on iOS</h3>
+        <h3 id="history">Unified Library on iOS</h3>
         <ul>
-          <li>History combines local voice transcripts and Capture delivery records in one searchable list.</li>
+          <li>Library combines local voice transcripts and Capture delivery records in one searchable list.</li>
           <li>Search raw text, cleaned text, titles, tags, and categories; pull to refresh.</li>
           <li>Copy cleaned or raw transcript text, edit transcript metadata and text, or export a Markdown copy through the share sheet.</li>
           <li>Delete one transcript or clear all local history. Clearing history does not delete Markdown notes or attachments already written to your destination.</li>
-          <li>Retry queued captures and inspect coarse source, preset, destination, note path, attachment count, time, outcome, and failure category.</li>
+          <li>Retry queued captures and inspect coarse source, route, destination, note path, attachment count, time, outcome, and failure category.</li>
           <li>Transcript editing includes Title, Tags, Category, Cleaned text, and Raw transcript.</li>
         </ul>
 
@@ -610,7 +610,7 @@
             <thead><tr><th>Section</th><th>Controls</th></tr></thead>
             <tbody>
               <tr><td>Vox.md Unlimited</td><td>Free usage status, lifetime unlock, and purchase restore.</td></tr>
-              <tr><td>Customization</td><td>Models; Capture Presets; Capture Bar action visibility and order.</td></tr>
+              <tr><td>Customization</td><td>Models; Routes; Capture Bar action visibility and order.</td></tr>
               <tr><td>Keyboard</td><td>Haptic Feedback.</td></tr>
               <tr><td>Lock Screen</td><td>Live Activity Monitor and Lock Screen Record Button.</td></tr>
               <tr><td>About</td><td>Default transcription, Whisper, Parakeet, on-device processing, privacy, app version, and Apple Intelligence availability.</td></tr>
@@ -619,7 +619,7 @@
             </tbody>
           </table>
         </div>
-        <p>Release notes can appear after an update and describe current features such as Watch sync, Mac global keybinds, preset icons, Lock Screen controls, preset routing, audio rules, and post-processing.</p>
+        <p>Release notes can appear after an update and describe current features such as Watch sync, Mac global keybinds, route icons, Lock Screen controls, route routing, audio rules, and post-processing.</p>
 
         <h3 id="pricing-limits">Free use and lifetime unlock</h3>
         <ul>
@@ -638,9 +638,9 @@
           <div><strong>Your destination</strong><p>Completed files go only to the folder you chose. A third-party file provider may sync them under its own terms.</p></div>
         </div>
         <ul>
-          <li>After successful delivery, recoverable Capture requests become content-free receipts and completed Watch queue items retain only coarse terminal delivery fields. Neither retains coordinates, labels, provider URLs, location templates, or preset payloads.</li>
+          <li>After successful delivery, recoverable Capture requests become content-free receipts and completed Watch queue items retain only coarse terminal delivery fields. Neither retains coordinates, labels, provider URLs, location templates, or route payloads.</li>
           <li>Completed Capture history stores delivery metadata, not note text, URLs, coordinates, location labels or templates, bookmarks, absolute paths, or attachment filenames.</li>
-          <li>Pending and failed items retain only what is needed for local recovery, which may include a preset snapshot and its already privacy-adjusted location or unavailable outcome.</li>
+          <li>Pending and failed items retain only what is needed for local recovery, which may include a route snapshot and its already privacy-adjusted location or unavailable outcome.</li>
           <li>Production onboarding analytics are disabled by default. The app contains no third-party analytics SDK, ad network, or cross-app tracker.</li>
           <li>The composer fetches cached inspirational quotes from ZenQuotes without sending draft content or identifiers.</li>
         </ul>
@@ -649,11 +649,11 @@
 
       <section class="docs-section" id="troubleshooting">
         <div class="docs-section-label">10 / Troubleshooting</div>
-        <h2>Common Setup and Delivery Problems</h2>
+        <h2>Common setup and delivery problems</h2>
         <div class="docs-troubleshooting">
           <details open>
             <summary>A capture cannot send</summary>
-            <p>Open the Destination control and configure the selected Capture Preset. If the folder was moved or access expired, select the vault/folder again. Queued work remains available in History.</p>
+            <p>Open the Destination control and configure the selected Route. If the folder was moved or access expired, select the vault/folder again. Queued work remains available in Library.</p>
           </details>
           <details>
             <summary>The keyboard says Enable Full Access</summary>
@@ -669,19 +669,19 @@
           </details>
           <details>
             <summary>A heading route fails</summary>
-            <p>Edit the preset's destination and confirm the heading text and level. Choose Create Heading if delivery should create a missing heading instead of stopping.</p>
+            <p>Edit the route's destination and confirm the heading text and level. Choose Create Heading if delivery should create a missing heading instead of stopping.</p>
           </details>
           <details>
             <summary>A Watch recording is queued</summary>
-            <p>Open Vox.md on iPhone, then open Watch Recordings. Refresh or retry, choose a valid preset when requested, and keep the app installed and available for background handoff. Force-quit blocks background delivery until reopen.</p>
+            <p>Open Vox.md on iPhone, then open Watch Recordings. Refresh or retry, choose a valid route when requested, and keep the app installed and available for background handoff. Force-quit blocks background delivery until reopen.</p>
           </details>
           <details>
             <summary><code>{location}</code> renders empty</summary>
-            <p>Turn on Use Current Location for the delivering preset; for detected entry prefixes, suffixes, and reusable Entry Templates, the composer’s one-tap fix does this without enabling metadata. Live vault template files require manual preset setup. If permission is unavailable or the capture continues without location, the token intentionally renders empty. See the <a href="location/">complete location guide</a>.</p>
+            <p>Turn on Use Current Location for the delivering route; for detected entry prefixes, suffixes, and reusable Entry Templates, the composer’s one-tap fix does this without enabling metadata. Live vault template files require manual route setup. If permission is unavailable or the capture continues without location, the token intentionally renders empty. See the <a href="location/">complete location guide</a>.</p>
           </details>
           <details>
-            <summary>Preset location is unavailable</summary>
-            <p>Use Retry only while you are still resolving the original interactive Send. You can instead cancel, send once without location, or always send without location for that preset. Reset a saved choice in the preset’s Location settings. A queued unattended request keeps its original unavailable result and will not fetch a newer location.</p>
+            <summary>Route location is unavailable</summary>
+            <p>Use Retry only while you are still resolving the original interactive Send. You can instead cancel, send once without location, or always send without location for that route. Reset a saved choice in the route’s Location settings. A queued unattended request keeps its original unavailable result and will not fetch a newer location.</p>
           </details>
         </div>
         <div class="docs-callout docs-support-callout">
@@ -690,6 +690,7 @@
         </div>
       </section>
     </article>
+    </div>
   </div>
 </main>
 
@@ -711,6 +712,7 @@
   </div>
 </footer>
 
+<script src="../site.js" defer></script>
 <!-- Cloudflare Web Analytics -->
 <script>
 (function () {

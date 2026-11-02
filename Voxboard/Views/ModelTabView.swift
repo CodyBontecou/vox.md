@@ -5,6 +5,7 @@ import VoxboardShared
 struct ModelTabView: View {
     @Environment(ModelManager.self) private var modelManager
     @State private var automaticAvailability: SystemTranscriptionAvailability = .unavailable
+    @State private var storageSummary: String?
     @State private var voiceAutoStopEnabled = AppConstants.voiceAutoStopEnabled
     @State private var isVoiceAutoStopAdvancedOptionsExpanded = false
     @State private var voiceAutoStopPauseDuration = AppConstants.voiceAutoStopPauseDuration
@@ -31,23 +32,31 @@ struct ModelTabView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: Geist.Spacing.eight) {
+            VStack(alignment: .leading, spacing: Geist.Spacing.six) {
                 header
                 automaticSection
-                modelSection(title: "Whisper", description: "Optional local models you can download and select explicitly.", models: whisperModels)
-                modelSection(title: "Parakeet", description: "Optional optimized local models you can download and select explicitly.", models: parakeetModels)
+                modelSection(title: "Parakeet · Fast, English-first", models: parakeetModels)
+                modelSection(title: "Whisper · Most languages", models: whisperModels)
                 voiceAutoStopSection
                 languageSection
+                if let storageSummary {
+                    Text(storageSummary)
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.muted)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .accessibilityIdentifier("models.storage")
+                }
             }
             .padding(.horizontal, Geist.Spacing.four)
-            .padding(.vertical, Geist.Spacing.six)
+            .padding(.top, Geist.Spacing.two)
+            .padding(.bottom, Geist.Spacing.six)
             .frame(maxWidth: 760)
             .frame(maxWidth: .infinity)
         }
-        .background(Geist.Palette.background200.ignoresSafeArea())
-        .navigationTitle("Models")
+        .background(Geist.bg.ignoresSafeArea())
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Geist.Palette.background100, for: .navigationBar)
+        .toolbarBackground(Geist.bg, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .task(id: "\(modelManager.selectedModelId)|\(modelManager.selectedLanguage)|\(modelManager.installedModelsRevision)") {
             let service = AppTranscriptionServices.shared
@@ -74,6 +83,9 @@ struct ModelTabView: View {
                 )
                 AppConstants.sharedDefaults?.set(ready, forKey: AppConstants.automaticBackendReadyKey)
             }
+        }
+        .task(id: modelManager.installedModelsRevision) {
+            storageSummary = await Self.storageSummary()
         }
         .onChange(of: voiceAutoStopEnabled) { _, enabled in
             AppConstants.voiceAutoStopEnabled = enabled
@@ -114,40 +126,40 @@ struct ModelTabView: View {
     }
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: Geist.Spacing.two) {
-            Text("On-Device Models")
-                .font(Geist.heading(.title))
-                .tracking(-0.96)
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Models")
+                .font(.custom("Geist-SemiBold", size: 34, relativeTo: .largeTitle))
+                .tracking(-0.8)
                 .foregroundStyle(Geist.text)
-            Text("Automatic uses Apple Speech on supported iOS 26 devices. Whisper and Parakeet downloads are optional local overrides and fallbacks.")
-                .font(Geist.body())
+                .accessibilityAddTraits(.isHeader)
+                .accessibilityLabel("On-Device Models")
+            Text("Everything runs on this iPhone. Routes can override the model.")
+                .font(Geist.body(.callout))
                 .foregroundStyle(Geist.muted)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
 
     private var automaticSection: some View {
+        // The board folds the old "Native" header into the Automatic card,
+        // which already says it is Apple's system-managed recognizer.
         VStack(alignment: .leading, spacing: Geist.Spacing.three) {
-            VStack(alignment: .leading, spacing: Geist.Spacing.one) {
-                Text("Native")
-                    .font(Geist.heading(.headline))
-                    .foregroundStyle(Geist.text)
-                Text("Uses Apple's system-managed, on-device speech recognizer when this device and language support it.")
-                    .font(Geist.caption())
-                    .foregroundStyle(Geist.muted)
-            }
-
             HStack(alignment: .center, spacing: Geist.Spacing.four) {
                 VStack(alignment: .leading, spacing: Geist.Spacing.one) {
-                    Text("Automatic")
-                        .font(Geist.label(.body))
-                        .foregroundStyle(Geist.text)
+                    HStack(spacing: Geist.Spacing.two) {
+                        Text("Automatic")
+                            .font(.custom("Geist-SemiBold", size: 17, relativeTo: .body))
+                            .foregroundStyle(Geist.text)
+                        SignalBadge(text: "Recommended")
+                    }
                     Text("System managed · No app model download")
                         .font(Geist.mono())
                         .foregroundStyle(Geist.muted)
-                    Text("Falls back only to a model you have chosen to download.")
+                    Text(automaticFallbackDescription)
                         .font(Geist.caption())
                         .foregroundStyle(Geist.muted)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("models.automatic.fallback")
                     Label(automaticAvailabilityLabel, systemImage: automaticAvailabilityIcon)
                         .font(Geist.caption())
                         .foregroundStyle(automaticAvailability == .unavailable ? Geist.Palette.amber900 : Geist.muted)
@@ -156,33 +168,75 @@ struct ModelTabView: View {
                 if modelManager.isAutomaticSelection {
                     Label("Selected", systemImage: "checkmark.circle.fill")
                         .font(Geist.caption())
-                        .foregroundStyle(Geist.Palette.blue900)
+                        .foregroundStyle(Geist.accentText)
                         .padding(.horizontal, Geist.Spacing.three)
                         .frame(height: Geist.ControlHeight.small)
-                        .background(Geist.Palette.blue100)
+                        .background(Geist.accentSoft)
                         .clipShape(Capsule())
                 } else {
                     Button("Use Automatic") {
                         modelManager.selectAutomatic()
-                        OnboardingAnalyticsClient.shared.trackModelSetupCompleted(
-                            metadata: OnboardingAnalyticsModelMetadata(
-                                engine: .appleSpeech,
-                                sizeBucket: .unknown
-                            )
-                        )
                     }
                     .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
                 }
             }
             .padding(Geist.Spacing.four)
             .frame(minHeight: 88)
-            .background(Geist.Palette.background100)
+            .background(Geist.card)
             .overlay(
-                RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous)
-                    .stroke(Geist.border, lineWidth: 1)
+                RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous)
+                    .stroke(
+                        modelManager.isAutomaticSelection ? Geist.accent : Geist.border,
+                        lineWidth: modelManager.isAutomaticSelection ? 2 : 1
+                    )
             )
-            .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous))
         }
+    }
+
+    private var fallbackModel: WhisperModelInfo? {
+        guard let id = modelManager.preferredFallbackModelID else { return nil }
+        return WhisperModelInfo.availableModels.first { $0.id == id && modelManager.isModelDownloaded($0) }
+    }
+
+    private var automaticFallbackDescription: String {
+        if let fallbackModel {
+            return String(localized: "Apple Speech for live text. Falls back to \(fallbackModel.name) when a language isn’t supported or you’re offline.")
+        }
+        return String(localized: "Apple Speech for live text. Download a local model below to use as its fallback.")
+    }
+
+    /// "Using 1.2 GB of 64 GB free": installed model files vs. free space.
+    nonisolated private static func storageSummary() async -> String? {
+        await Task.detached(priority: .utility) { () -> String? in
+            var used: Int64 = 0
+            for model in WhisperModelInfo.availableModels {
+                guard let url = model.localURL else { continue }
+                used += directorySize(url)
+            }
+            let home = URL(fileURLWithPath: NSHomeDirectory())
+            guard let free = try? home.resourceValues(forKeys: [.volumeAvailableCapacityForImportantUsageKey])
+                .volumeAvailableCapacityForImportantUsage else { return nil }
+            let style = ByteCountFormatStyle(style: .file)
+            return String(localized: "Using \(used.formatted(style)) of \(free.formatted(style)) free")
+        }.value
+    }
+
+    nonisolated private static func directorySize(_ url: URL) -> Int64 {
+        let keys: Set<URLResourceKey> = [.totalFileAllocatedSizeKey, .fileAllocatedSizeKey, .isRegularFileKey]
+        var isDirectory: ObjCBool = false
+        guard FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory) else { return 0 }
+        if !isDirectory.boolValue {
+            let values = try? url.resourceValues(forKeys: keys)
+            return Int64(values?.totalFileAllocatedSize ?? values?.fileAllocatedSize ?? 0)
+        }
+        var total: Int64 = 0
+        let enumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: Array(keys))
+        while let file = enumerator?.nextObject() as? URL {
+            guard let values = try? file.resourceValues(forKeys: keys), values.isRegularFile == true else { continue }
+            total += Int64(values.totalFileAllocatedSize ?? values.fileAllocatedSize ?? 0)
+        }
+        return total
     }
 
     private var automaticAvailabilityLabel: String {
@@ -203,18 +257,11 @@ struct ModelTabView: View {
 
     private func modelSection(
         title: LocalizedStringKey,
-        description: LocalizedStringKey,
         models: [WhisperModelInfo]
     ) -> some View {
         VStack(alignment: .leading, spacing: Geist.Spacing.three) {
-            VStack(alignment: .leading, spacing: Geist.Spacing.one) {
-                Text(title)
-                    .font(Geist.heading(.headline))
-                    .foregroundStyle(Geist.text)
-                Text(description)
-                    .font(Geist.caption())
-                    .foregroundStyle(Geist.muted)
-            }
+            Text(title)
+                .modelsSectionTitle()
 
             VStack(spacing: 0) {
                 ForEach(Array(models.enumerated()), id: \.element.id) { index, model in
@@ -222,12 +269,12 @@ struct ModelTabView: View {
                     if index < models.count - 1 { GeistDivider() }
                 }
             }
-            .background(Geist.Palette.background100)
+            .background(Geist.card)
             .overlay(
-                RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous)
+                RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous)
                     .stroke(Geist.border, lineWidth: 1)
             )
-            .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous))
         }
     }
 
@@ -249,9 +296,20 @@ struct ModelTabView: View {
                     }
                 }
 
-                Text(model.sizeLabel)
+                Text(modelMetaLine(model))
                     .font(Geist.mono())
                     .foregroundStyle(Geist.muted)
+                    .accessibilityIdentifier("models.meta.\(model.id)")
+
+                if let state = modelManager.downloadState(for: model.id),
+                   !modelManager.isModelDownloaded(model) {
+                    downloadProgressView(state)
+                        .frame(maxWidth: 180)
+                        .accessibilityLabel(Text("Downloading"))
+                    Text("Keep Vox.md open")
+                        .font(Geist.caption(.caption))
+                        .foregroundStyle(Geist.faint)
+                }
 
                 if let modelDescription = model.localizedModelDescription {
                     Text(modelDescription)
@@ -268,6 +326,50 @@ struct ModelTabView: View {
         .frame(minHeight: 88)
     }
 
+    private func isFallback(_ model: WhisperModelInfo) -> Bool {
+        modelManager.isAutomaticSelection && fallbackModel?.id == model.id
+    }
+
+    /// "Not installed · 1.6 GB · best accuracy", "Downloading · 38%",
+    /// "Installed · lowest battery use", "Installed · fallback for Automatic".
+    private func modelMetaLine(_ model: WhisperModelInfo) -> String {
+        guard modelManager.isModelDownloaded(model) else {
+            if let state = modelManager.downloadState(for: model.id) {
+                guard state.phase == .transferring else { return downloadStatusText(state) }
+                if let progress = state.fractionCompleted {
+                    let percent = progress.formatted(.percent.precision(.fractionLength(0)))
+                    return String(localized: "Downloading · \(percent)")
+                }
+                return downloadStatusText(state)
+            }
+            if let trait = modelTrait(model) {
+                return String(localized: "Not installed · \(model.sizeLabel) · \(trait)")
+            }
+            return String(localized: "Not installed · \(model.sizeLabel)")
+        }
+        if isFallback(model) {
+            return String(localized: "Installed · fallback for Automatic")
+        }
+        if modelManager.selectedModelId == model.id {
+            return String(localized: "Installed · in use")
+        }
+        return String(localized: "Installed · \(modelTrait(model) ?? model.sizeLabel)")
+    }
+
+    /// Short trade-off note per model for its meta line.
+    private func modelTrait(_ model: WhisperModelInfo) -> String? {
+        switch model.id {
+        case "ggml-tiny": String(localized: "fastest")
+        case "ggml-base": String(localized: "lowest battery use")
+        case "ggml-small": String(localized: "balanced")
+        case "ggml-medium": String(localized: "more accurate")
+        case "ggml-large-v3-turbo": String(localized: "best accuracy")
+        case "parakeet-v2": String(localized: "English only")
+        case "parakeet-v3": String(localized: "25 languages")
+        default: nil
+        }
+    }
+
     @ViewBuilder
     private func modelActionView(for model: WhisperModelInfo) -> some View {
         if modelManager.isModelDownloaded(model) {
@@ -275,20 +377,42 @@ struct ModelTabView: View {
                 if modelManager.selectedModelId == model.id {
                     Label("Selected", systemImage: "checkmark.circle.fill")
                         .font(Geist.caption())
-                        .foregroundStyle(Geist.Palette.blue900)
+                        .foregroundStyle(Geist.accentText)
                         .padding(.horizontal, Geist.Spacing.three)
                         .frame(height: Geist.ControlHeight.small)
-                        .background(Geist.Palette.blue100)
+                        .background(Geist.accentSoft)
                         .clipShape(Capsule())
-                } else {
-                    Button("Select Model") {
-                        modelManager.selectModel(model)
-                        OnboardingAnalyticsClient.shared.trackModelSetupCompleted(
-                            metadata: OnboardingAnalyticsModelMetadata(model: model)
-                        )
+                } else if isFallback(model) {
+                    Menu {
+                        Button("Use for All Captures") { modelManager.selectModel(model) }
+                    } label: {
+                        Text("Fallback")
+                            .font(Geist.label(.caption))
+                            .foregroundStyle(Geist.accentText)
+                            .padding(.horizontal, Geist.Spacing.three)
+                            .frame(height: Geist.ControlHeight.small)
+                            .background(Geist.accentSoft, in: Capsule())
                     }
-                    .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
-                    .frame(width: 104)
+                    .accessibilityLabel("\(model.name) is Automatic’s fallback")
+                    .accessibilityIdentifier("models.fallback.\(model.id)")
+                } else {
+                    Menu {
+                        Button("Use for All Captures") { modelManager.selectModel(model) }
+                        Button("Make Automatic’s Fallback") {
+                            if !modelManager.isAutomaticSelection { modelManager.selectAutomatic() }
+                            modelManager.setFallbackModel(model)
+                        }
+                    } label: {
+                        Text("Use")
+                            .font(Geist.label(.caption))
+                            .foregroundStyle(Geist.text)
+                            .padding(.horizontal, Geist.Spacing.four)
+                            .frame(height: Geist.ControlHeight.small)
+                            .background(Geist.card, in: Capsule())
+                            .overlay(Capsule().stroke(Geist.border, lineWidth: 1))
+                    }
+                    .accessibilityLabel("Use \(model.name)")
+                    .accessibilityIdentifier("models.use.\(model.id)")
                 }
 
                 Button {
@@ -303,11 +427,22 @@ struct ModelTabView: View {
         } else if let state = modelManager.downloadState(for: model.id) {
             downloadingView(for: model, state: state)
         } else {
-            Button("Download Model") {
+            Button {
                 modelManager.startDownload(model)
+            } label: {
+                Text("Get")
+                    .font(Geist.label(.caption))
+                    .foregroundStyle(Geist.bg)
+                    .padding(.horizontal, Geist.Spacing.four)
+                    .frame(height: Geist.ControlHeight.small)
+                    .background(Geist.text, in: Capsule())
+                    .contentShape(Capsule())
             }
-            .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
-            .frame(width: 128)
+            .buttonStyle(.plain)
+            .lineLimit(1)
+            .fixedSize()
+            .accessibilityLabel(Text("Download \(model.name)"))
+            .accessibilityIdentifier("models.get.\(model.id)")
         }
     }
 
@@ -315,28 +450,25 @@ struct ModelTabView: View {
         for model: WhisperModelInfo,
         state: ModelDownloadState
     ) -> some View {
-        HStack(spacing: Geist.Spacing.two) {
-            VStack(alignment: .trailing, spacing: Geist.Spacing.one) {
-                downloadProgressView(state)
-                    .frame(width: 104)
-                Text(downloadStatusText(state))
-                    .font(Geist.mono())
-                    .foregroundStyle(Geist.muted)
-                    .lineLimit(1)
-                Text("Keep Vox.md open")
-                    .font(Geist.caption(.caption))
-                    .foregroundStyle(Geist.faint)
-            }
-            Button {
-                modelManager.cancelDownload(model)
-            } label: {
-                Image(systemName: "xmark")
-            }
-            .buttonStyle(GeistButtonStyle(variant: .tertiary, size: .small))
-            .frame(width: Geist.ControlHeight.small)
-            .disabled(state.isCancelling)
-            .accessibilityLabel("Cancel \(model.name) download")
+        // Progress and status sit in the row's meta line; the trailing
+        // control is the board's ghost "Cancel" pill.
+        Button {
+            modelManager.cancelDownload(model)
+        } label: {
+            Text("Cancel")
+                .font(Geist.label(.caption))
+                .foregroundStyle(Geist.text)
+                .padding(.horizontal, Geist.Spacing.four)
+                .frame(height: Geist.ControlHeight.small)
+                .background(Geist.card, in: Capsule())
+                .overlay(Capsule().stroke(Geist.border, lineWidth: 1))
+                .contentShape(Capsule())
         }
+        .buttonStyle(.plain)
+        .fixedSize()
+        .disabled(state.isCancelling)
+        .opacity(state.isCancelling ? 0.5 : 1)
+        .accessibilityLabel("Cancel \(model.name) download")
     }
 
     @ViewBuilder
@@ -381,8 +513,7 @@ struct ModelTabView: View {
         return VStack(alignment: .leading, spacing: Geist.Spacing.three) {
             VStack(alignment: .leading, spacing: Geist.Spacing.one) {
                 Text("Voice Auto-Stop")
-                    .font(Geist.heading(.headline))
-                    .foregroundStyle(Geist.text)
+                    .modelsSectionTitle()
                 Text("A small on-device voice detector can stop any live recording on this iPhone or iPad after you finish speaking, regardless of the transcription model or capture destination.")
                     .font(Geist.caption())
                     .foregroundStyle(Geist.muted)
@@ -468,7 +599,7 @@ struct ModelTabView: View {
                                             .foregroundStyle(Geist.muted)
                                     }
                                 }
-                                .tint(Color(uiColor: .systemGreen))
+                                .tint(Geist.accent)
                                 .padding(.trailing, Geist.Spacing.one)
                             }
                         }
@@ -500,12 +631,12 @@ struct ModelTabView: View {
                 .tint(Geist.text)
             }
             .padding(Geist.Spacing.four)
-            .background(Geist.Palette.background100)
+            .background(Geist.card)
             .overlay(
-                RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous)
+                RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous)
                     .stroke(Geist.border, lineWidth: 1)
             )
-            .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous))
         }
     }
 
@@ -632,8 +763,7 @@ struct ModelTabView: View {
     private var languageSection: some View {
         VStack(alignment: .leading, spacing: Geist.Spacing.three) {
             Text("Transcription Language")
-                .font(Geist.heading(.headline))
-                .foregroundStyle(Geist.text)
+                .modelsSectionTitle()
 
             Group {
                 if modelManager.selectedModel?.engine.isParakeet == true {
@@ -657,9 +787,9 @@ struct ModelTabView: View {
                         .tint(Geist.text)
                         .frame(maxWidth: .infinity, minHeight: Geist.ControlHeight.large, alignment: .leading)
                         .padding(.horizontal, Geist.Spacing.four)
-                        .background(Geist.Palette.background100)
+                        .background(Geist.card, in: RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous))
                         .overlay(
-                            RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous)
+                            RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous)
                                 .stroke(Geist.border, lineWidth: 1)
                         )
 
@@ -706,5 +836,17 @@ private struct VoiceAutoStopMenuLabel: View {
         .padding(.vertical, Geist.Spacing.two)
         .frame(maxWidth: .infinity, minHeight: 56, alignment: .leading)
         .contentShape(Rectangle())
+    }
+}
+
+private extension View {
+    /// Signal section label: mono, uppercase, muted.
+    func modelsSectionTitle() -> some View {
+        self
+            .textCase(.uppercase)
+            .font(Geist.mono(size: 11, relativeTo: .caption))
+            .tracking(0.66)
+            .foregroundStyle(Geist.muted)
+            .accessibilityAddTraits(.isHeader)
     }
 }

@@ -71,7 +71,7 @@ public actor CaptureDeliveryUsageStore: CaptureDeliveryAccounting {
         coordinator: any CaptureFileCoordinating = NSFileCoordinatorCaptureFileCoordinator.shared,
         fileManager: FileManager = .default,
         isUnlocked: @escaping @Sendable () -> Bool = {
-            AppConstants.sharedDefaults?.bool(forKey: UsageTracker.hasUnlockedKey) ?? false
+            !UsageTracker.staticIsAtLimit
         },
         mirrorSuccessfulCount: @escaping @Sendable (Int) -> Void = { count in
             AppConstants.sharedDefaults?.set(count, forKey: AppConstants.captureUsageMirrorKey)

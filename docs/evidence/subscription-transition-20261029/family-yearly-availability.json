@@ -1,0 +1,24 @@
+{
+  "data": {
+    "attributes": {
+      "availableInNewTerritories": false,
+      "planType": "UPFRONT"
+    },
+    "id": "eyJhIjoiNjgyODU2Njg1MyIsInAiOiIwIn0",
+    "links": {
+      "self": "https://api.appstoreconnect.apple.com/v1/subscriptionPlanAvailabilities/eyJhIjoiNjgyODU2Njg1MyIsInAiOiIwIn0"
+    },
+    "relationships": {
+      "availableTerritories": {
+        "links": {
+          "related": "https://api.appstoreconnect.apple.com/v1/subscriptionPlanAvailabilities/eyJhIjoiNjgyODU2Njg1MyIsInAiOiIwIn0/availableTerritories",
+          "self": "https://api.appstoreconnect.apple.com/v1/subscriptionPlanAvailabilities/eyJhIjoiNjgyODU2Njg1MyIsInAiOiIwIn0/relationships/availableTerritories"
+        }
+      }
+    },
+    "type": "subscriptionPlanAvailabilities"
+  },
+  "links": {
+    "self": "https://api.appstoreconnect.apple.com/v1/subscriptionPlanAvailabilities"
+  }
+}

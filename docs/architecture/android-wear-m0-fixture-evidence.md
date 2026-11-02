@@ -49,11 +49,13 @@ orphan, and corrupt-index recovery on a watchOS simulator.
 
 `settings/allowlisted-settings-v1.json` is produced by isolated `UserDefaults`
 through `CapturePresetStore`, `RecordingQueuePreferences`, `UsageTracker`,
-`ModelManager`, and the package-owned onboarding analytics stores, then reloaded
-through the same production consumers. App-hosted tests additionally load the
+and `ModelManager`, then reloaded through the same production consumers. Retired
+onboarding analytics keys are seeded only as upgrade input and must be erased by
+`RetiredAnalyticsCleanup` while functional settings survive; no analytics store or
+producer remains. App-hosted tests additionally load the
 committed toolbar bytes through `CaptureToolbarPreferences`, execute review and quote
 state, and Watch-target tests consume the committed preset/defaults corpus. The
-87-key inventory is broader than this main snapshot: completion/migration markers,
+86-key inventory is broader than this main snapshot: completion/migration markers,
 Watch controller state, transport failures, and executable absent/default/invalid
 cases also live in focused package, app-hosted, and Watch tests. Source-inventory
 completeness remains distinct from committed fixture completeness.

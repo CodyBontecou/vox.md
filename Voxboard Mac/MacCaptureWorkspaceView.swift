@@ -73,12 +73,16 @@ struct MacCaptureWorkspaceView: View {
     @State private var isDropTargeted = false
     @State private var showsSentToast = false
     @State private var lastRevealedReceiptURL: URL?
+    @State private var showsAllShortcuts = false
+    @State private var isFindingLocation = false
+    @State private var locationService = CaptureLocationService()
+    @State private var toolbarPreferences = CaptureToolbarPreferences.shared
     @State private var inspirationQuote = InspirationQuote.fallback
     @State private var hasLoadedInspirationQuote = false
 
     var body: some View {
         ZStack(alignment: .top) {
-            Color(nsColor: .underPageBackgroundColor)
+            Geist.bg
                 .ignoresSafeArea()
 
             VStack(spacing: 0) {
@@ -91,6 +95,7 @@ struct MacCaptureWorkspaceView: View {
                 documentWorkspace
                     .layoutPriority(1)
             }
+            .macUnderTitleBar()
 
             if let message = displayedError {
                 errorBanner(message)
@@ -103,21 +108,20 @@ struct MacCaptureWorkspaceView: View {
 
             if showsSentToast {
                 Label("Capture Sent", systemImage: "checkmark.circle.fill")
-                    .font(.callout.weight(.medium))
-                    .foregroundStyle(Color(nsColor: .windowBackgroundColor))
+                    .font(Geist.label())
+                    .foregroundStyle(Geist.Palette.background100)
                     .padding(.horizontal, 14)
-                    .frame(height: 32)
-                    .background(.primary)
-                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .frame(height: 36)
+                    .background(Geist.text)
+                    .clipShape(Capsule(style: .continuous))
                     .padding(.top, 18)
                     .transition(.move(edge: .top).combined(with: .opacity))
                     .zIndex(5)
             }
         }
         .navigationTitle("Capture")
-        .toolbar {
-            captureToolbar
-        }
+        // No window toolbar (MacWorkspace): its commands live in the menu bar.
+        .focusedSceneValue(\.macCaptureMenuActions, menuActions)
         .task {
             await viewModel.load()
             guard !Task.isCancelled else { return }
@@ -148,6 +152,9 @@ struct MacCaptureWorkspaceView: View {
         }
         .onChange(of: viewModel.lastReceipt) { _, receipt in
             guard let receipt else { return }
+            if !MacQuickCapturePanelController.shared.isVisible {
+                MacSoundEffects.play(.captureSent)
+            }
             usageTracker.reload()
             lastRevealedReceiptURL = receipt.noteURL
             Task { await presentSentToast() }
@@ -165,7 +172,9 @@ struct MacCaptureWorkspaceView: View {
         }
         .inspector(isPresented: inspectorPresentationBinding) {
             captureInspector
-                .inspectorColumnWidth(min: 340, ideal: 440, max: 620)
+                .macUnderTitleBar()
+                // MacWorkspace: the route inspector is a 300–340pt column.
+                .inspectorColumnWidth(min: 300, ideal: 340, max: 480)
         }
         .sheet(isPresented: $showsPaywall) {
             MacPaywallView(context: .captureLimit)
@@ -197,14 +206,14 @@ struct MacCaptureWorkspaceView: View {
             Text("Your unsent text and attachments will be removed from this Mac.")
         }
         .alert(
-            "Switch Capture Preset?",
+            "Switch Route?",
             isPresented: Binding(
                 get: { viewModel.pendingPresetSwitch != nil },
                 set: { _ in }
             ),
             presenting: viewModel.pendingPresetSwitch
         ) { pending in
-            Button("Switch Preset") {
+            Button("Switch Route") {
                 Task { await confirmPresetSwitch(id: pending.id) }
             }
             Button("Cancel", role: .cancel) {
@@ -237,40 +246,14 @@ struct MacCaptureWorkspaceView: View {
         }
     }
 
-    @ToolbarContentBuilder
-    private var captureToolbar: some ToolbarContent {
-        ToolbarItem(placement: .automatic) {
-            presetToolbarMenu
-        }
-        if isCaptureActivityVisible {
-            ToolbarItem(placement: .automatic) {
-                captureActivityToolbarStatus
-            }
-        }
-        ToolbarItem(placement: .automatic) {
-            attachmentToolbarMenu
-        }
-        ToolbarItem(placement: .automatic) {
-            formattingToolbarMenu
-        }
-        ToolbarItem(placement: .automatic) {
-            recordingOptionsToolbarMenu
-        }
-        ToolbarItem(placement: .automatic) {
-            moreToolbarMenu
-        }
-        ToolbarItemGroup(placement: .primaryAction) {
-            routeToolbarButton
-            recordToolbarButton
-            sendToolbarButton
-        }
-    }
-
     private var documentWorkspace: some View {
         HStack(spacing: 0) {
             Spacer(minLength: 0)
 
             VStack(spacing: 0) {
+                signalHeader
+                quickActionRow
+
                 if viewModel.selectedDestination == nil && !isLocalizationScreenshot {
                     destinationSetupNotice
                 }
@@ -280,75 +263,235 @@ struct MacCaptureWorkspaceView: View {
                     Divider()
                 }
 
-                composer
-                    .layoutPriority(1)
+                HStack(spacing: 0) {
+                    Spacer(minLength: 0)
+                    composer.frame(maxWidth: 720)
+                    Spacer(minLength: 0)
+                }
+                .background(isDropTargeted ? MacBrand.subtleOrange : Geist.bg)
+                .layoutPriority(1)
 
-                if !viewModel.draft.additionalPayloads.isEmpty {
+                if !stripPayloads.isEmpty {
                     Divider()
                     attachmentStrip
                 }
             }
-            .frame(maxWidth: 900, maxHeight: .infinity)
-
-            Spacer(minLength: 0)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .background(Color(nsColor: .textBackgroundColor))
+        .background(Geist.bg)
+        .onReceive(NotificationCenter.default.publisher(for: .macShowAllShortcuts)) { _ in
+            showsAllShortcuts = true
+        }
     }
 
-    private var presetToolbarMenu: some View {
-        Menu {
-            ForEach(enabledFlows) { flow in
-                Button {
-                    selectFlow(flow)
-                } label: {
-                    Label {
-                        Text(flow.visibleName ?? String(localized: "Icon-only preset"))
-                    } icon: {
-                        CapturePresetIconView(symbolName: flow.symbolName, emoji: flow.emoji)
+    // MARK: Signal header and quick actions
+
+    /// "Vault / folder / note.md · ## Heading" with Speak and Send.
+    private var signalHeader: some View {
+        HStack(spacing: 12) {
+            Text(verbatim: MacRouteCatalog.breadcrumb(for: viewModel) ?? String(localized: "Choose a destination"))
+                .font(Geist.mono(size: 12, relativeTo: .caption))
+                .foregroundStyle(Geist.muted)
+                .lineLimit(1)
+                .truncationMode(.middle)
+                .textSelection(.enabled)
+                .help(viewModel.resolvedDestinationPreview ?? "")
+            Spacer(minLength: 8)
+            // The breadcrumb truncates first; Speak and Send never do.
+            headerAttachButton
+            recordToolbarButton.fixedSize()
+            sendToolbarButton.fixedSize()
+        }
+        .padding(.horizontal, 28)
+        .frame(height: 56)
+        .overlay(alignment: .bottom) { Rectangle().fill(Geist.border).frame(height: 1) }
+    }
+
+    private var quickActions: [CaptureToolbarAction] {
+        toolbarPreferences.pinnedActions(
+            forRoute: selectedFlow.id,
+            surfaceDefault: CaptureToolbarAction.macWorkspaceDefault
+        ).filter { !$0.isMedia }
+    }
+
+    private var quickActionRow: some View {
+        HStack(spacing: 6) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 6) {
+                    ForEach(quickActions) { action in
+                        quickActionChip(action)
                     }
                 }
-                .accessibilityLabel(flow.accessibilityName)
-                .accessibilityAddTraits(flow.id == viewModel.draft.voxID ? .isSelected : [])
             }
-        } label: {
-            Label {
-                if let name = selectedFlow.visibleName {
-                    Text(name)
-                        .lineLimit(1)
-                }
-            } icon: {
-                CapturePresetIconView(symbolName: selectedFlow.symbolName, emoji: selectedFlow.emoji)
+            Button {
+                showsAllShortcuts = true
+            } label: {
+                Text(verbatim: "All shortcuts ⌘/")
+                    .font(Geist.mono(size: 11, relativeTo: .caption))
+                    .foregroundStyle(Geist.muted)
+                    .fixedSize()
+            }
+            .buttonStyle(.plain)
+            // A transient popover, not a sheet: the StoreKit paywall stays the
+            // only modal surface over a Capture draft.
+            .popover(isPresented: $showsAllShortcuts, arrowEdge: .bottom) {
+                MacAllShortcutsSheet(
+                    quickActions: quickActions,
+                    routes: MacRouteCatalog.enabledRoutes(in: viewModel)
+                )
             }
         }
-        .fixedSize()
-        .disabled(!viewModel.canChangeCaptureRoute)
-        .help("Capture Preset: \(selectedFlow.accessibilityName)")
-        .accessibilityLabel("Capture Preset \(selectedFlow.accessibilityName)")
-        .accessibilityIdentifier("mac_capture_preset_selector")
+        .padding(.horizontal, 28)
+        .padding(.vertical, 8)
+        .overlay(alignment: .bottom) { Rectangle().fill(Geist.border).frame(height: 1) }
+        .onReceive(NotificationCenter.default.publisher(for: CaptureQuickActionPins.didChangeNotification)) { _ in
+            toolbarPreferences.reloadSharedPins()
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Quick actions")
+    }
+
+    @ViewBuilder
+    private func quickActionChip(_ action: CaptureToolbarAction) -> some View {
+        let shortcut = MacQuickActionShortcut.shortcut(for: action)
+        let help = [action.accessibilityLabel, MacQuickActionShortcut.displayString(for: action)]
+            .compactMap { $0 }
+            .joined(separator: " ")
+        switch action {
+        case .textCase:
+            Menu {
+                Button("Lowercase") { applyComposerCommand(.lowercase) }
+                Button("Uppercase") { applyComposerCommand(.uppercase) }
+                Button("Sentence case") { applyComposerCommand(.sentenceCase) }
+                Button("Capitalize Words") { applyComposerCommand(.capitalizeWords) }
+                Button("Slugify") { applyComposerCommand(.slugify) }
+            } label: {
+                chipLabel(action)
+            } primaryAction: {
+                applyComposerCommand(.sentenceCase)
+            }
+            .menuStyle(.button)
+            .buttonStyle(.plain)
+            .fixedSize()
+            .modifier(MacOptionalShortcut(shortcut: shortcut))
+            .help(help)
+            .accessibilityLabel(action.accessibilityLabel)
+        case .formatMarkdown:
+            Menu {
+                ForEach(1...6, id: \.self) { level in
+                    Button("Heading \(level)") { applyComposerCommand(.heading(level: level)) }
+                }
+                Button("Bold") { applyComposerCommand(.toggleBold) }
+                Button("Italic") { applyComposerCommand(.toggleItalic) }
+                Button("Checklist") { applyComposerCommand(.taskCheckbox) }
+                Button("Bullet list") { applyComposerCommand(.bullet) }
+            } label: {
+                chipLabel(action)
+            }
+            .menuStyle(.button)
+            .buttonStyle(.plain)
+            .fixedSize()
+            .help(help)
+            .accessibilityLabel(action.accessibilityLabel)
+        default:
+            Button {
+                performQuickAction(action)
+            } label: {
+                chipLabel(action)
+            }
+            .buttonStyle(.plain)
+            .modifier(MacOptionalShortcut(shortcut: shortcut))
+            .disabled(action == .currentLocation && isFindingLocation)
+            .help(help)
+            .accessibilityLabel(action.accessibilityLabel)
+        }
+    }
+
+    private func chipLabel(_ action: CaptureToolbarAction) -> some View {
+        Text(verbatim: chipGlyph(action))
+            .font(Geist.mono(size: 12.5, relativeTo: .caption))
+            .foregroundStyle(Geist.text)
+            .padding(.horizontal, 9)
+            .frame(minWidth: 30, minHeight: 30)
+            .background(Geist.card, in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 9, style: .continuous).stroke(Geist.border, lineWidth: 1)
+            }
+            .contentShape(Rectangle())
+    }
+
+    private func chipGlyph(_ action: CaptureToolbarAction) -> String {
+        switch action {
+        case .timestamp:
+            return Self.chipTimeString(locale: locale, timeZone: timeZone)
+        case .date:
+            return captureDateString()
+        default:
+            return action.glyph
+        }
+    }
+
+    /// "10:42" without a day period: HH:mm for 24-hour locales, else h:mm.
+    static func chipTimeString(locale: Locale, timeZone: TimeZone, date: Date = Date()) -> String {
+        let template = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: locale) ?? ""
+        let uses12Hour = template.contains("a") || template.contains("h") || template.contains("K")
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.timeZone = timeZone
+        formatter.dateFormat = uses12Hour ? "h:mm" : "HH:mm"
+        return formatter.string(from: date)
+    }
+
+    private func performQuickAction(_ action: CaptureToolbarAction) {
+        switch action {
+        case .timestamp:
+            applyComposerCommand(.replaceSelection(with: insertionFormatter.currentTimestamp()))
+        case .date:
+            applyComposerCommand(.replaceSelection(with: captureDateString()))
+        case .checklist: applyComposerCommand(.taskCheckbox)
+        case .bulletList: applyComposerCommand(.bullet)
+        case .heading: applyComposerCommand(.heading(level: 2))
+        case .bold: applyComposerCommand(.toggleBold)
+        case .italic: applyComposerCommand(.toggleItalic)
+        case .tag: applyComposerCommand(.insertHashtag)
+        case .markdownLink: applyComposerCommand(.markdownLink())
+        case .internalLink: selectInspectorTool(.internalLink)
+        case .dueDate: selectInspectorTool(.dueDate)
+        case .currentLocation: insertCurrentLocation()
+        case .paste: pasteIntoCapture()
+        case .undo: composerController.undo()
+        case .textCase: applyComposerCommand(.sentenceCase)
+        case .formatMarkdown: applyComposerCommand(.heading(level: 2))
+        case .addMedia: chooseImages()
+        case .addFiles: chooseFiles()
+        case .scanDocument, .extractText: chooseScan()
+        case .sketch: selectInspectorTool(.sketch)
+        }
+    }
+
+    private func insertCurrentLocation() {
+        guard !isFindingLocation else { return }
+        isFindingLocation = true
+        Task { @MainActor in
+            defer { isFindingLocation = false }
+            do {
+                let location = try await locationService.requestCurrentLocation()
+                let markdown = try insertionFormatter.googleMapsLink(
+                    latitude: location.latitude,
+                    longitude: location.longitude,
+                    label: location.label
+                )
+                applyComposerCommand(.replaceSelection(with: markdown))
+            } catch {
+                viewModel.errorMessage = error.localizedDescription
+            }
+        }
     }
 
     private var isCaptureActivityVisible: Bool {
         recorder.isRecording || recorder.isTranscribing || recorder.isExporting
             || viewModel.isSubmitting || viewModel.isResolvingLocation
             || recorder.isResolvingLocation || isProcessingAttachments
-    }
-
-    private var captureActivityToolbarStatus: some View {
-        HStack(spacing: 6) {
-            if recorder.isRecording {
-                Image(systemName: recorder.isRecordingPaused ? "pause.fill" : "waveform")
-                    .foregroundStyle(MacBrand.orange)
-            } else {
-                ProgressView()
-                    .controlSize(.small)
-            }
-
-            Text(captureActivityLabel)
-                .font(.caption)
-                .monospacedDigit()
-        }
-        .fixedSize()
-        .accessibilityElement(children: .combine)
     }
 
     private var captureActivityLabel: String {
@@ -367,9 +510,34 @@ struct MacCaptureWorkspaceView: View {
         return String(localized: "Adding Attachments…")
     }
 
-    private var attachmentToolbarMenu: some View {
+    /// Signal header paperclip: the same items as the menu bar's Capture › Add.
+    private var headerAttachButton: some View {
         Menu {
-            Button("Images or Screenshots…", systemImage: "photo") { chooseImages() }
+            attachmentMenuItems
+        } label: {
+            Image(systemName: isProcessingAttachments ? "hourglass" : "paperclip")
+                .font(.system(size: 15, weight: .medium))
+                .foregroundStyle(Geist.text)
+                .frame(width: 36, height: 36)
+                .background(Geist.card, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(Geist.border, lineWidth: 1)
+                }
+                .contentShape(Rectangle())
+        }
+        .menuStyle(.button)
+        .buttonStyle(.plain)
+        .menuIndicator(.hidden)
+        .fixedSize()
+        .disabled(isProcessingAttachments)
+        .help("Add an attachment or link")
+        .accessibilityLabel("Add an attachment or link")
+        .accessibilityIdentifier("mac_capture_header_attach")
+    }
+
+    @ViewBuilder
+    private var attachmentMenuItems: some View {
+        Button("Images or Screenshots…", systemImage: "photo") { chooseImages() }
             Button("Take Photo…", systemImage: "camera") { selectInspectorTool(.camera) }
             Button("Import Scan or PDF…", systemImage: "doc.viewfinder") { chooseScan() }
             Button("Sketch…", systemImage: "pencil.tip") { selectInspectorTool(.sketch) }
@@ -381,157 +549,72 @@ struct MacCaptureWorkspaceView: View {
             Divider()
             Button("Web Link…", systemImage: "link") { selectInspectorTool(.webLink) }
             Button("Paste", systemImage: "clipboard") { pasteIntoCapture() }
-        } label: {
-            Label("Add", systemImage: isProcessingAttachments ? "hourglass" : "paperclip")
-                .labelStyle(.iconOnly)
-        }
-        .disabled(isProcessingAttachments)
-        .help("Add an attachment or link")
-        .accessibilityLabel("Add an attachment or link")
     }
 
-    private var formattingToolbarMenu: some View {
-        Menu {
-            Button("Undo", systemImage: "arrow.uturn.backward") { composerController.undo() }
-            Button("Redo", systemImage: "arrow.uturn.forward") { composerController.redo() }
-            Divider()
-            Button("Bold", systemImage: "bold") { applyComposerCommand(.toggleBold) }
-                .keyboardShortcut("b", modifiers: [.command])
-            Button("Italic", systemImage: "italic") { applyComposerCommand(.toggleItalic) }
-                .keyboardShortcut("i", modifiers: [.command])
-            Button("Hashtag", systemImage: "number") { applyComposerCommand(.insertHashtag) }
-            Menu("Heading", systemImage: "textformat.size") {
-                ForEach(1...6, id: \.self) { level in
-                    Button("Heading \(level)") { applyComposerCommand(.heading(level: level)) }
+    /// Menu-bar commands (Capture › Add to Capture, Format, …) for this
+    /// window; they replace the old toolbar menus one for one.
+    private var menuActions: MacCaptureMenuActions {
+        MacCaptureMenuActions(
+            attach: { item in
+                switch item {
+                case .images: chooseImages()
+                case .photo: selectInspectorTool(.camera)
+                case .scan: chooseScan()
+                case .sketch: selectInspectorTool(.sketch)
+                case .files: chooseFiles()
+                case .audio: chooseAudio()
+                case .transcribe: importAudioForTranscription()
+                case .webLink: selectInspectorTool(.webLink)
+                case .paste: pasteIntoCapture()
                 }
-            }
-            Divider()
-            Button("Markdown link", systemImage: "link") {
-                applyComposerCommand(.markdownLink())
-            }
-            Button("Internal link", systemImage: "link.badge.plus") {
-                selectInspectorTool(.internalLink)
-            }
-            Button("Due date", systemImage: "alarm") {
-                selectInspectorTool(.dueDate)
-            }
-            Button("Checklist", systemImage: "checkmark.square") {
-                applyComposerCommand(.taskCheckbox)
-            }
-            Button("Bullet list", systemImage: "list.bullet") {
-                applyComposerCommand(.bullet)
-            }
-            Button("Timestamp", systemImage: "clock") {
-                applyComposerCommand(.replaceSelection(with: insertionFormatter.currentTimestamp()))
-            }
-            Button("Date", systemImage: "calendar") {
-                applyComposerCommand(.replaceSelection(with: captureDateString()))
-            }
-            Menu("Change Case", systemImage: "textformat") {
-                Button("Lowercase") { applyComposerCommand(.lowercase) }
-                Button("Uppercase") { applyComposerCommand(.uppercase) }
-                Button("Sentence case") { applyComposerCommand(.sentenceCase) }
-                Button("Capitalize Words") { applyComposerCommand(.capitalizeWords) }
-                Button("Slugify") { applyComposerCommand(.slugify) }
-            }
-        } label: {
-            Label("Format", systemImage: "textformat")
-                .labelStyle(.iconOnly)
-        }
-        .help("Markdown formatting")
-        .accessibilityLabel("Markdown formatting")
-    }
-
-    private var recordingOptionsToolbarMenu: some View {
-        Menu {
-            Picker("Audio Source", selection: $inputMode) {
-                Label("Microphone", systemImage: "mic").tag(MacCaptureInputMode.microphone)
-                Label("Meeting", systemImage: "person.2.wave.2").tag(MacCaptureInputMode.meeting)
-            }
-            .disabled(recorder.isRecording)
-
-            Picker("After Recording", selection: $recordingMode) {
-                Text("Add to Draft").tag(MacCaptureRecordingMode.draft)
-                Text("Send Immediately").tag(MacCaptureRecordingMode.preset)
-            }
-            .disabled(recorder.isRecording)
-
-            if recordingMode == .draft {
-                Toggle("Attach Audio to Draft", isOn: $attachRecordingAudio)
-                    .disabled(recorder.isRecording)
-            }
-
-            Divider()
-            Button("Transcribe Audio or Video…", systemImage: "waveform.badge.plus") {
-                importAudioForTranscription()
-            }
-            .disabled(recorder.isRecording)
-        } label: {
-            Label("Recording Options", systemImage: "slider.horizontal.3")
-                .labelStyle(.iconOnly)
-        }
-        .help("Choose the audio source and what happens after recording")
-        .accessibilityLabel("Recording Options")
-        .accessibilityIdentifier("mac_capture_recording_mode")
-    }
-
-    private var moreToolbarMenu: some View {
-        Menu {
-            Button("New Capture", systemImage: "square.and.pencil") {
-                requestNewCapture()
-            }
-            .disabled(
-                recorder.isRecording || recorder.isTranscribing || recorder.isExporting
-                    || viewModel.isSubmitting || isProcessingAttachments
-            )
-
-            Divider()
-            Button("History", systemImage: "clock.arrow.circlepath", action: openHistory)
-
-            if let lastRevealedReceiptURL {
-                Button("Reveal Last Capture", systemImage: "folder") {
-                    revealInFinder(lastRevealedReceiptURL)
+            },
+            canAttach: !isProcessingAttachments,
+            format: { item in
+                switch item {
+                case .undo: composerController.undo()
+                case .redo: composerController.redo()
+                case .bold: applyComposerCommand(.toggleBold)
+                case .italic: applyComposerCommand(.toggleItalic)
+                case .hashtag: applyComposerCommand(.insertHashtag)
+                case .heading(let level): applyComposerCommand(.heading(level: level))
+                case .markdownLink: applyComposerCommand(.markdownLink())
+                case .internalLink: selectInspectorTool(.internalLink)
+                case .dueDate: selectInspectorTool(.dueDate)
+                case .checklist: applyComposerCommand(.taskCheckbox)
+                case .bullet: applyComposerCommand(.bullet)
+                case .timestamp: applyComposerCommand(.replaceSelection(with: insertionFormatter.currentTimestamp()))
+                case .date: applyComposerCommand(.replaceSelection(with: captureDateString()))
+                case .lowercase: applyComposerCommand(.lowercase)
+                case .uppercase: applyComposerCommand(.uppercase)
+                case .sentenceCase: applyComposerCommand(.sentenceCase)
+                case .capitalizeWords: applyComposerCommand(.capitalizeWords)
+                case .slugify: applyComposerCommand(.slugify)
                 }
-            }
-
-            if !usageTracker.hasUnlocked {
-                Divider()
-                Button {
-                    showsPaywall = true
-                } label: {
-                    Label(
-                        usageTracker.isCaptureAtLimit
-                            ? String(localized: "Unlock Capture")
-                            : "\(usageTracker.capturesRemaining) captures · \(String(format: "%.1f", usageTracker.minutesRemaining)) min",
-                        systemImage: usageTracker.isCaptureAtLimit ? "lock.fill" : "gauge.with.dots.needle.33percent"
-                    )
+            },
+            isMeetingAudio: Binding(
+                get: { inputMode == .meeting },
+                set: { inputMode = $0 ? .meeting : .microphone }
+            ),
+            sendsAfterRecording: Binding(
+                get: { recordingMode == .preset },
+                set: { recordingMode = $0 ? .preset : .draft }
+            ),
+            attachesRecordingAudio: $attachRecordingAudio,
+            isRecording: recorder.isRecording,
+            revealLastCapture: lastRevealedReceiptURL.map { url in { revealInFinder(url) } },
+            unlock: usageTracker.hasUnlocked ? nil : { showsPaywall = true },
+            unlockTitle: usageTracker.isCaptureAtLimit
+                ? String(localized: "Unlock Capture")
+                : String(localized: "\(usageTracker.capturesRemaining) captures · \(String(format: "%.1f", usageTracker.minutesRemaining)) min"),
+            toggleDetails: {
+                if selectedInspectorTool == .route {
+                    dismissInspectorTool()
+                } else {
+                    selectInspectorTool(.route)
                 }
-            }
-
-            Divider()
-            Button("Settings…", systemImage: "gearshape", action: openSettings)
-        } label: {
-            Label("More", systemImage: "ellipsis.circle")
-                .labelStyle(.iconOnly)
-        }
-        .help("More Capture actions")
-        .accessibilityLabel("More Capture actions")
-    }
-
-    private var routeToolbarButton: some View {
-        Button {
-            if selectedInspectorTool == .route {
-                dismissInspectorTool()
-            } else {
-                selectInspectorTool(.route)
-            }
-        } label: {
-            Label("Capture Details", systemImage: "sidebar.trailing")
-                .labelStyle(.iconOnly)
-        }
-        .help("Show Capture details")
-        .accessibilityLabel("Capture Destination: \(routeLabel)")
-        .accessibilityIdentifier("mac_capture_route")
+            },
+            isShowingDetails: selectedInspectorTool == .route
+        )
     }
 
     private var recordToolbarButton: some View {
@@ -542,15 +625,24 @@ struct MacCaptureWorkspaceView: View {
                 startRecording()
             }
         } label: {
-            Label(
-                recorder.isRecording ? String(localized: "Stop") : String(localized: "Record"),
-                systemImage: recorder.isRecording
-                    ? "stop.fill"
-                    : (inputMode == .meeting ? "person.2.wave.2" : "mic")
-            )
+            HStack(spacing: 8) {
+                Image(systemName: recorder.isRecording
+                      ? "stop.fill"
+                      : (inputMode == .meeting ? "person.2.wave.2" : "mic"))
+                Text(recorder.isRecording ? String(localized: "Stop") : String(localized: "Speak"))
+                if !recorder.isRecording, let shortcut = MacHotKeyStore.quickCaptureDisplayString {
+                    Text(verbatim: shortcut)
+                        .font(Geist.mono(size: 11, relativeTo: .caption))
+                        .foregroundStyle(Geist.Palette.gray600)
+                }
+            }
+            .font(Geist.label(.footnote))
         }
-        .buttonStyle(.bordered)
-        .tint(MacBrand.orange)
+        .buttonStyle(.borderedProminent)
+        .controlSize(.large)
+        // Signal: Speak is an ink pill; it turns red while recording.
+        .tint(recorder.isRecording ? MacBrand.recording : Geist.text)
+        .foregroundStyle(recorder.isRecording ? Color.white : Geist.Palette.background100)
         .accessibilityIdentifier("mac_capture_record")
     }
 
@@ -558,19 +650,27 @@ struct MacCaptureWorkspaceView: View {
         Button {
             sendCapture()
         } label: {
-            Label(
-                captureAllowanceBlocked
-                    ? String(localized: "Unlock")
-                    : (viewModel.isSubmitting
-                       ? (viewModel.isDescribingImages
-                          ? String(localized: "Describing images…")
-                          : String(localized: "Sending…"))
-                       : String(localized: "Send")),
-                systemImage: captureAllowanceBlocked ? "lock.fill" : "paperplane.fill"
-            )
+            HStack(spacing: 6) {
+                if captureAllowanceBlocked { Image(systemName: "lock.fill") }
+                Text(
+                    captureAllowanceBlocked
+                        ? String(localized: "Unlock")
+                        : (viewModel.isSubmitting
+                           ? (viewModel.isDescribingImages
+                              ? String(localized: "Describing images…")
+                              : String(localized: "Sending…"))
+                           : String(localized: "Send"))
+                )
+                .font(Geist.label(.footnote))
+                Text(verbatim: "⌘↩")
+                    .font(Geist.mono(size: 11, relativeTo: .caption))
+                    .opacity(0.75)
+            }
         }
         .buttonStyle(.borderedProminent)
-        .foregroundStyle(MacBrand.onOrange)
+        .controlSize(.large)
+        .tint(MacBrand.accent)
+        .foregroundStyle(MacBrand.onAccent)
         .disabled(!viewModel.canSubmit || isProcessingAttachments || recorder.isRecording || recorder.isTranscribing)
         .keyboardShortcut(.return, modifiers: [.command])
         .accessibilityIdentifier("mac_quick_capture_submit")
@@ -589,8 +689,15 @@ struct MacCaptureWorkspaceView: View {
                 Text("Choose…")
                     .foregroundStyle(.tint)
             }
-            .font(.callout)
-            .padding(.horizontal, 30)
+            .font(Geist.label())
+            .padding(.horizontal, 14)
+            .frame(height: 44)
+            .background(Geist.card, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(Geist.border, lineWidth: 1)
+            }
+            .padding(.horizontal, 28)
             .padding(.top, 18)
             .contentShape(Rectangle())
         }
@@ -614,7 +721,8 @@ struct MacCaptureWorkspaceView: View {
         .padding(.horizontal, Geist.Spacing.four)
         .padding(.vertical, Geist.Spacing.three)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(MacBrand.subtleOrange)
+        .background(MacBrand.attentionSoft)
+        .overlay(alignment: .bottom) { Rectangle().fill(Geist.border).frame(height: 1) }
         .accessibilityIdentifier("mac_capture_location_decision")
     }
 
@@ -626,7 +734,7 @@ struct MacCaptureWorkspaceView: View {
         Button("Send Without Location") {
             Task { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: false) }
         }
-        Button("Always Send Without for Preset") {
+        Button("Always Send Without for Route") {
             Task { await viewModel.sendWithoutUnavailableLocation(alwaysForPreset: true) }
         }
         Button("Cancel") {
@@ -649,7 +757,8 @@ struct MacCaptureWorkspaceView: View {
         .padding(.horizontal, Geist.Spacing.four)
         .padding(.vertical, Geist.Spacing.three)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(MacBrand.subtleOrange)
+        .background(MacBrand.attentionSoft)
+        .overlay(alignment: .bottom) { Rectangle().fill(Geist.border).frame(height: 1) }
         .accessibilityIdentifier("mac_capture_inbox_location_decision")
     }
 
@@ -658,7 +767,7 @@ struct MacCaptureWorkspaceView: View {
         Button("Send Without Location") {
             Task { await viewModel.sendInboxRequestWithoutLocation() }
         }
-        Button("Always Send Without for Preset") {
+        Button("Always Send Without for Route") {
             Task { await viewModel.sendInboxRequestWithoutLocation(alwaysForPreset: true) }
         }
         Button("Discard Capture", role: .destructive) {
@@ -671,24 +780,27 @@ struct MacCaptureWorkspaceView: View {
             text: $viewModel.draft.text,
             selection: $composerSelection,
             isFocused: $composerIsFocused,
-            controller: composerController
+            controller: composerController,
+            inlineAudio: inlineAudioAttachments,
+            onRemoveInlineAudio: { id in removeInlineAudio(id: id) }
         )
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             isDropTargeted
                 ? MacBrand.subtleOrange
-                : Color(nsColor: .textBackgroundColor)
+                : Geist.bg
         )
         .overlay(alignment: .center) {
-            if InspirationQuotePresentation.shouldShow(forDraftText: viewModel.draft.text) {
+            if InspirationQuotePresentation.shouldShow(forDraftText: viewModel.draft.text),
+               inlineAudioAttachments.isEmpty {
                 emptyComposerPrompt
                     .allowsHitTesting(false)
             }
         }
         .overlay {
             if isDropTargeted {
-                RoundedRectangle(cornerRadius: 5, style: .continuous)
-                    .stroke(MacBrand.orange, style: StrokeStyle(lineWidth: 2, dash: [8, 5]))
+                RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous)
+                    .stroke(MacBrand.accent, style: StrokeStyle(lineWidth: 2, dash: [8, 5]))
                     .padding(8)
                     .allowsHitTesting(false)
             }
@@ -700,18 +812,48 @@ struct MacCaptureWorkspaceView: View {
         } isTargeted: { isDropTargeted = $0 }
     }
 
+    /// Staged audio shown as chips inside the document (Signal MacWorkspace).
+    private var inlineAudioAttachments: [MacComposerInlineAudio] {
+        guard let stagingURL = viewModel.sentCaptureUndoSourceDirectoryURL else { return [] }
+        return viewModel.draft.additionalPayloads.compactMap { payload in
+            guard case .audio(let asset, let transcript) = payload else { return nil }
+            return MacComposerInlineAudio(
+                id: asset.relativePath,
+                url: stagingURL.appendingPathComponent(asset.relativePath),
+                filename: asset.originalFilename,
+                speakerCount: MacAudioAttachmentChip.speakerCount(in: transcript)
+            )
+        }
+    }
+
+    private var stripPayloads: [(offset: Int, element: CapturePayload)] {
+        let inlineIDs = Set(inlineAudioAttachments.map(\.id))
+        return viewModel.draft.additionalPayloads.enumerated().filter { _, payload in
+            if case .audio(let asset, _) = payload { return !inlineIDs.contains(asset.relativePath) }
+            return true
+        }.map { ($0.offset, $0.element) }
+    }
+
+    private func removeInlineAudio(id: String) {
+        guard let index = viewModel.draft.additionalPayloads.firstIndex(where: { payload in
+            if case .audio(let asset, _) = payload { return asset.relativePath == id }
+            return false
+        }) else { return }
+        Task { await viewModel.removePayload(at: index) }
+    }
+
     private var emptyComposerPrompt: some View {
         VStack(spacing: 10) {
             Text(verbatim: "“\(inspirationQuote.text)”")
-                .font(.title3)
+                .font(Geist.heading(.title2))
             Text(verbatim: "— \(inspirationQuote.author)")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .font(Geist.mono(size: 12, relativeTo: .caption))
+                .foregroundStyle(Geist.muted)
             Text("Type Markdown, dictate, paste, or drop files anywhere in this window.")
-                .font(.caption)
-                .foregroundStyle(.tertiary)
+                .font(Geist.caption())
+                .foregroundStyle(Geist.faint)
         }
-        .foregroundStyle(.secondary)
+        .foregroundStyle(Geist.muted)
         .multilineTextAlignment(.center)
         .frame(maxWidth: 560)
         .padding(32)
@@ -720,7 +862,7 @@ struct MacCaptureWorkspaceView: View {
     private var attachmentStrip: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: Geist.Spacing.two) {
-                ForEach(Array(viewModel.draft.additionalPayloads.enumerated()), id: \.offset) { index, payload in
+                ForEach(stripPayloads, id: \.offset) { index, payload in
                     HStack(spacing: Geist.Spacing.two) {
                         Image(systemName: payloadIcon(payload))
                         Text(payloadLabel(payload))
@@ -733,18 +875,22 @@ struct MacCaptureWorkspaceView: View {
                         .buttonStyle(.plain)
                         .accessibilityLabel("Remove \(payloadLabel(payload))")
                     }
-                    .font(.caption)
-                    .foregroundStyle(.primary)
-                    .padding(.horizontal, 10)
+                    .font(Geist.mono(size: 12, relativeTo: .caption))
+                    .foregroundStyle(Geist.text)
+                    .padding(.horizontal, 12)
                     .frame(height: 34)
-                    .background(Color(nsColor: .controlBackgroundColor))
-                    .clipShape(Capsule())
+                    .background(Geist.card)
+                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            .stroke(Geist.border, lineWidth: 1)
+                    }
                 }
             }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 8)
+            .padding(.horizontal, 28)
+            .padding(.vertical, 10)
         }
-        .background(Color(nsColor: .textBackgroundColor))
+        .background(Geist.bg)
         .accessibilityLabel("Capture attachments")
     }
 
@@ -753,7 +899,7 @@ struct MacCaptureWorkspaceView: View {
             Image(systemName: recorder.isRecording
                   ? (recorder.isRecordingPaused ? "pause.circle.fill" : "record.circle.fill")
                   : "waveform.badge.magnifyingglass")
-                .foregroundStyle(MacBrand.orange)
+                .foregroundStyle(recorder.isRecording ? MacBrand.recording : MacBrand.accent)
             VStack(alignment: .leading, spacing: 2) {
                 Text(
                     recorder.isRecording
@@ -789,7 +935,7 @@ struct MacCaptureWorkspaceView: View {
                     if let warning = recorder.meetingCapture.warnings.last {
                         Text(warning)
                             .font(Geist.caption())
-                            .foregroundStyle(MacBrand.orangeText)
+                            .foregroundStyle(MacBrand.attention)
                             .lineLimit(2)
                     }
                 }
@@ -839,7 +985,13 @@ struct MacCaptureWorkspaceView: View {
         }
         .padding(.horizontal, Geist.Spacing.four)
         .padding(.vertical, Geist.Spacing.three)
-        .background(Geist.Palette.background200)
+        .background(Geist.card, in: RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous)
+                .stroke(Geist.border, lineWidth: 1)
+        }
+        .padding(.horizontal, 28)
+        .padding(.vertical, Geist.Spacing.three)
     }
 
     private var inspectorPresentationBinding: Binding<Bool> {
@@ -954,7 +1106,7 @@ struct MacCaptureWorkspaceView: View {
                     } label: {
                         HStack(alignment: .top, spacing: Geist.Spacing.three) {
                             Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundStyle(MacBrand.orangeText)
+                                .foregroundStyle(MacBrand.attention)
                             Text(message)
                                 .font(Geist.caption())
                             Spacer()
@@ -971,7 +1123,7 @@ struct MacCaptureWorkspaceView: View {
                     .accessibilityIdentifier("mac_error_open_models")
                 } else {
                     Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundStyle(MacBrand.orangeText)
+                        .foregroundStyle(MacBrand.attention)
                     Text(message)
                         .font(Geist.caption())
                     Spacer()
@@ -1005,12 +1157,13 @@ struct MacCaptureWorkspaceView: View {
         }
         .padding(Geist.Spacing.three)
         .foregroundStyle(Geist.text)
-        .background(MacBrand.subtleOrange)
+        .background(Geist.card)
         .overlay {
-            RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous)
-                .stroke(MacBrand.orangeBorder, lineWidth: 1)
+            RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous)
+                .stroke(MacBrand.attentionBorder, lineWidth: 1)
         }
-        .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous))
+        .shadow(color: Color.black.opacity(0.08), radius: 12, y: 4)
     }
 
     private var shouldOpenModelsFromError: Bool {
@@ -1099,13 +1252,13 @@ struct MacCaptureWorkspaceView: View {
         guard let decision = viewModel.inboxLocationDecision else {
             return String(localized: "Send Capture Without Location?")
         }
-        let preset = decision.presetName ?? String(localized: "Unknown Preset")
+        let preset = decision.presetName ?? String(localized: "Unknown Route")
         return String(localized: "Location Needed for \(preset)")
     }
 
     private var inboxLocationDecisionMessage: String {
         guard let decision = viewModel.inboxLocationDecision else { return "" }
-        let preset = decision.presetName ?? String(localized: "Unknown Preset")
+        let preset = decision.presetName ?? String(localized: "Unknown Route")
         return String(localized: "Send Capture Without Location?")
             + " " + preset + ". "
             + String(localized: "Location is unavailable. Open Vox.md to send this exact Capture without location or discard it.")
@@ -1547,31 +1700,35 @@ struct MacCaptureRouteInspector: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                destinationSection
+            // Signal inspector: header, four step cards and WILL WRITE sit
+            // directly on the panel; the editable details follow as cards.
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    routeHeader
+                    routeStepsSection
+                    willWriteSection
 
-                if viewModel.selectedDestination != nil {
-                    captureOverridesSection
-                }
+                    destinationSection
 
-                processingSection
-                attachmentsSection
-            }
-            .disabled(!viewModel.canChangeCaptureRoute)
-            .formStyle(.grouped)
-            .navigationTitle("Capture Details")
-            .toolbar {
-                if let onClose {
-                    ToolbarItem(placement: .primaryAction) {
-                        Button("Close", systemImage: "xmark", action: onClose)
+                    if viewModel.selectedDestination != nil {
+                        captureOverridesSection
                     }
+
+                    processingSection
+                    attachmentsSection
                 }
+                .padding(20)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .groupBoxStyle(MacSignalGroupBoxStyle())
+            .disabled(!viewModel.canChangeCaptureRoute)
+            .background(Geist.Palette.gray100)
+            .navigationTitle("Capture Details")
             .navigationDestination(isPresented: $isEditingDestination) {
                 MacCaptureDestinationEditor(
                     existing: viewModel.selectedPresetDestination,
                     templates: viewModel.entryTemplates,
-                    fixedName: viewModel.selectedVoxProfile.map { $0.visibleName ?? String(localized: "Icon-only preset") },
+                    fixedName: viewModel.selectedVoxProfile.map { $0.visibleName ?? String(localized: "Icon-only route") },
                     embeddedInNavigation: true,
                     onClose: { isEditingDestination = false }
                 ) { destination in
@@ -1581,13 +1738,85 @@ struct MacCaptureRouteInspector: View {
         }
     }
 
+    /// Signal route header: indigo letter tile + route name.
+    @ViewBuilder
+    private var routeHeader: some View {
+        if let preset = viewModel.selectedVoxProfile {
+            HStack(spacing: 10) {
+                // Same tile as the sidebar: color by route position, emoji
+                // or first letter.
+                MacRouteTile(
+                    letter: MacRouteCatalog.letter(preset),
+                    index: MacRouteCatalog.enabledRoutes(in: viewModel)
+                        .firstIndex { $0.id == preset.id } ?? Int.max,
+                    size: 32
+                )
+                Text(preset.visibleName ?? String(localized: "Icon-only route"))
+                    .font(Geist.heading(.headline))
+                    .foregroundStyle(Geist.text)
+                    .lineLimit(1)
+                Spacer(minLength: 0)
+            }
+            .listRowBackground(Color.clear)
+            .accessibilityElement(children: .combine)
+        }
+    }
+
+    /// CAPTURE / PROCESS / SHAPE / DELIVER for the selected route.
+    @ViewBuilder
+    private var routeStepsSection: some View {
+        if viewModel.selectedVoxProfile != nil {
+            // Four separate cards, as in the Signal MacWorkspace inspector.
+            Section {
+                VStack(spacing: 8) {
+                    ForEach(MacCapturePreview.steps(for: viewModel)) { step in
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(verbatim: step.kind)
+                                .font(Geist.mono(size: 10.5, relativeTo: .caption2))
+                                .tracking(0.63)
+                                .foregroundStyle(Geist.muted)
+                            Text(step.title)
+                                .font(Geist.label(.callout))
+                                .foregroundStyle(Geist.text)
+                                .lineLimit(2)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 10)
+                        .background(Geist.card, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                .stroke(Geist.border, lineWidth: 1)
+                        }
+                        .accessibilityElement(children: .combine)
+                    }
+                }
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+            }
+        }
+    }
+
+    /// "WILL WRITE": the Markdown this draft will append, rendered with the
+    /// pipeline's CaptureMarkdownRenderer.
+    @ViewBuilder
+    private var willWriteSection: some View {
+        if let markdown = MacCapturePreview.willWrite(for: viewModel) {
+            Section {
+                MacMarkdownBlock(label: "Will write", markdown: markdown)
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+            }
+        }
+    }
+
     @ViewBuilder
     private var destinationSection: some View {
-        Section("Destination") {
+        inspectorGroup("Destination") {
             if let preset = viewModel.selectedVoxProfile {
-                LabeledContent("Preset") {
+                LabeledContent("Route") {
                     Label {
-                        Text(preset.visibleName ?? String(localized: "Icon-only preset"))
+                        Text(preset.visibleName ?? String(localized: "Icon-only route"))
                             .foregroundStyle(preset.visibleName == nil ? .secondary : .primary)
                     } icon: {
                         CapturePresetIconView(symbolName: preset.symbolName, emoji: preset.emoji)
@@ -1600,8 +1829,8 @@ struct MacCaptureRouteInspector: View {
                     if let preview = viewModel.resolvedDestinationPreview {
                         LabeledContent("Note") {
                             Text(preview)
-                                .font(.caption.monospaced())
-                                .foregroundStyle(.secondary)
+                                .font(Geist.mono(size: 12, relativeTo: .caption))
+                                .foregroundStyle(Geist.muted)
                                 .lineLimit(2)
                                 .textSelection(.enabled)
                         }
@@ -1618,16 +1847,16 @@ struct MacCaptureRouteInspector: View {
                     .accessibilityIdentifier("mac_capture_destination_setup")
                 }
             } else {
-                Label("No Capture Preset Selected", systemImage: "exclamationmark.triangle")
+                Label("No Route Selected", systemImage: "exclamationmark.triangle")
                     .foregroundStyle(.secondary)
             }
         }
     }
 
     private var captureOverridesSection: some View {
-        Section("This Capture") {
+        inspectorGroup("This Capture") {
             Picker("Placement", selection: placementBinding) {
-                Text("Preset Default").tag(PlacementChoice.default)
+                Text("Route Default").tag(PlacementChoice.default)
                 Text("Top").tag(PlacementChoice.top)
                 Text("Bottom").tag(PlacementChoice.bottom)
             }
@@ -1636,7 +1865,7 @@ struct MacCaptureRouteInspector: View {
                 get: { viewModel.draft.entryTemplateID },
                 set: { viewModel.setEntryTemplateOverride($0) }
             )) {
-                Text("Preset Default").tag(UUID?.none)
+                Text("Route Default").tag(UUID?.none)
                 ForEach(viewModel.entryTemplates) { template in
                     Text(template.name).tag(Optional(template.id))
                 }
@@ -1652,7 +1881,7 @@ struct MacCaptureRouteInspector: View {
             }
 
             if viewModel.hasAnyRouteOverride {
-                Button("Use Preset Defaults", systemImage: "arrow.uturn.backward") {
+                Button("Use Route Defaults", systemImage: "arrow.uturn.backward") {
                     viewModel.useVoxRouteDefaults()
                 }
             }
@@ -1661,7 +1890,7 @@ struct MacCaptureRouteInspector: View {
 
     @ViewBuilder
     private var processingSection: some View {
-        Section("Processing") {
+        inspectorGroup("Processing") {
             LabeledContent("Transcription", value: transcriptionModelLabel)
 
             if let preset = viewModel.selectedVoxProfile {
@@ -1683,7 +1912,7 @@ struct MacCaptureRouteInspector: View {
                         : String(localized: "Off")
                 )
 
-                Text("Processing follows the selected Capture Preset and runs on this Mac.")
+                Text("Processing follows the selected Route and runs on this Mac.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -1696,7 +1925,7 @@ struct MacCaptureRouteInspector: View {
 
     @ViewBuilder
     private var attachmentsSection: some View {
-        Section("Attachments") {
+        inspectorGroup("Attachments") {
             if viewModel.draft.additionalPayloads.isEmpty {
                 Label("No Attachments", systemImage: "paperclip")
                     .foregroundStyle(.secondary)
@@ -1725,6 +1954,19 @@ struct MacCaptureRouteInspector: View {
             Text("You can also drag files anywhere onto the Capture document.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+        }
+    }
+
+    private func inspectorGroup<Content: View>(
+        _ title: LocalizedStringKey,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        GroupBox(title) {
+            VStack(alignment: .leading, spacing: 10) {
+                content()
+            }
+            .buttonStyle(.link)
+            .labeledContentStyle(MacInspectorLabeledContentStyle())
         }
     }
 
@@ -1804,6 +2046,19 @@ struct MacCaptureRouteInspector: View {
     }
 }
 
+/// Label leading, value trailing in the inspector cards (as in a Form).
+private struct MacInspectorLabeledContentStyle: LabeledContentStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 12) {
+            configuration.label
+            Spacer(minLength: 8)
+            configuration.content
+                .foregroundStyle(Geist.muted)
+                .multilineTextAlignment(.trailing)
+        }
+    }
+}
+
 private struct MacCaptureTextInspectorView: View {
     let title: LocalizedStringKey
     let detail: LocalizedStringKey
@@ -1829,13 +2084,14 @@ private struct MacCaptureTextInspectorView: View {
                 .onSubmit(onSubmit)
             Button(actionTitle, action: onSubmit)
                 .buttonStyle(.borderedProminent)
-                .foregroundStyle(MacBrand.onOrange)
+                .tint(MacBrand.accent)
+                .foregroundStyle(MacBrand.onAccent)
                 .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             Spacer()
         }
         .padding(Geist.Spacing.four)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(Geist.Palette.background100)
+        .background(Geist.Palette.gray100)
     }
 }
 
@@ -1863,12 +2119,13 @@ private struct MacCaptureDueDateInspectorView: View {
                 onInsert(date, includesTime)
             }
             .buttonStyle(.borderedProminent)
-            .foregroundStyle(MacBrand.onOrange)
+            .tint(MacBrand.accent)
+            .foregroundStyle(MacBrand.onAccent)
             Spacer()
         }
         .padding(Geist.Spacing.four)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(Geist.Palette.background100)
+        .background(Geist.Palette.gray100)
     }
 }
 
@@ -1876,4 +2133,137 @@ private func formatDuration(_ duration: TimeInterval) -> String {
     let minutes = Int(duration) / 60
     let seconds = Int(duration) % 60
     return String(format: "%d:%02d", minutes, seconds)
+}
+
+/// Applies a keyboard shortcut only when one is defined.
+private struct MacOptionalShortcut: ViewModifier {
+    let shortcut: KeyboardShortcut?
+
+    func body(content: Content) -> some View {
+        if let shortcut {
+            content.keyboardShortcut(shortcut)
+        } else {
+            content
+        }
+    }
+}
+
+// MARK: - Menu bar (formerly the Capture window toolbar)
+
+/// The Capture window's Add, recording-option and Capture Details commands
+/// (the window has no toolbar), shown at the end of the menu bar's Capture
+/// menu. They act on the focused Capture window through `MacCaptureMenuActions`.
+struct MacCaptureMenuItems: View {
+    @FocusedValue(\.macCaptureMenuActions) private var actions
+
+    var body: some View {
+        Menu("Add") {
+            Button("Images or Screenshots…") { actions?.attach(.images) }
+            Button("Take Photo…") { actions?.attach(.photo) }
+            Button("Import Scan or PDF…") { actions?.attach(.scan) }
+            Button("Sketch…") { actions?.attach(.sketch) }
+            Button("Files…") { actions?.attach(.files) }
+            Button("Audio Attachment…") { actions?.attach(.audio) }
+            Divider()
+            Button("Web Link…") { actions?.attach(.webLink) }
+            Button("Paste") { actions?.attach(.paste) }
+        }
+        .disabled(actions?.canAttach != true)
+
+        Button("Transcribe Audio or Video…") { actions?.attach(.transcribe) }
+            .disabled(actions == nil || actions?.isRecording == true)
+
+        Toggle("Capture Details", isOn: Binding(
+            get: { actions?.isShowingDetails == true },
+            set: { _ in actions?.toggleDetails() }
+        ))
+        .keyboardShortcut("i", modifiers: [.command, .option])
+        .disabled(actions == nil)
+
+        Divider()
+
+        Menu("Audio Source") {
+            Toggle("Microphone", isOn: radio(\.isMeetingAudio, on: false))
+            Toggle("Meeting", isOn: radio(\.isMeetingAudio, on: true))
+        }
+        .disabled(actions == nil || actions?.isRecording == true)
+        Menu("After Recording") {
+            Toggle("Add to Draft", isOn: radio(\.sendsAfterRecording, on: false))
+            Toggle("Send Immediately", isOn: radio(\.sendsAfterRecording, on: true))
+        }
+        .disabled(actions == nil || actions?.isRecording == true)
+        if actions?.sendsAfterRecording.wrappedValue == false {
+            Toggle("Attach Audio to Draft", isOn: radio(\.attachesRecordingAudio, on: true))
+                .disabled(actions?.isRecording == true)
+        }
+
+        if let reveal = actions?.revealLastCapture {
+            Divider()
+            Button("Reveal Last Capture", action: reveal)
+        }
+        if let unlock = actions?.unlock, let title = actions?.unlockTitle {
+            Divider()
+            Button(title, action: unlock)
+        }
+    }
+
+    /// A checkmark item that is on when the Bool equals `on`; choosing it sets that value.
+    private func radio(_ keyPath: KeyPath<MacCaptureMenuActions, Binding<Bool>>, on: Bool) -> Binding<Bool> {
+        Binding(
+            get: { actions?[keyPath: keyPath].wrappedValue == on },
+            set: { isOn in
+                guard let actions else { return }
+                if isOn {
+                    actions[keyPath: keyPath].wrappedValue = on
+                } else if keyPath == \.attachesRecordingAudio {
+                    actions[keyPath: keyPath].wrappedValue = false
+                }
+            }
+        )
+    }
+}
+
+/// The menu bar's "Format" menu for the Capture composer. Undo and Redo stay in
+/// the system Edit menu, which reaches the composer through the responder chain.
+struct MacCaptureFormatCommands: Commands {
+    var body: some Commands {
+        CommandMenu("Format") {
+            MacCaptureFormatMenuItems()
+        }
+    }
+}
+
+private struct MacCaptureFormatMenuItems: View {
+    @FocusedValue(\.macCaptureMenuActions) private var actions
+
+    var body: some View {
+        Group {
+            Button("Bold") { actions?.format(.bold) }
+            Button("Italic") { actions?.format(.italic) }
+            Button("Hashtag") { actions?.format(.hashtag) }
+            Menu("Heading") {
+                ForEach(1...6, id: \.self) { level in
+                    Button("Heading \(level)") { actions?.format(.heading(level)) }
+                }
+            }
+            Divider()
+            Button("Markdown link") { actions?.format(.markdownLink) }
+            // Same action and ⌘K as the "[[ ]]" (Link note) quick-action chip.
+            Button("Internal link") { actions?.format(.internalLink) }
+                .keyboardShortcut("k", modifiers: .command)
+            Button("Due date") { actions?.format(.dueDate) }
+            Button("Checklist") { actions?.format(.checklist) }
+            Button("Bullet list") { actions?.format(.bullet) }
+            Button("Timestamp") { actions?.format(.timestamp) }
+            Button("Date") { actions?.format(.date) }
+            Menu("Change Case") {
+                Button("Lowercase") { actions?.format(.lowercase) }
+                Button("Uppercase") { actions?.format(.uppercase) }
+                Button("Sentence case") { actions?.format(.sentenceCase) }
+                Button("Capitalize Words") { actions?.format(.capitalizeWords) }
+                Button("Slugify") { actions?.format(.slugify) }
+            }
+        }
+        .disabled(actions == nil)
+    }
 }

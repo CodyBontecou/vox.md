@@ -1,0 +1,10 @@
+{
+  "command": [
+    "asc",
+    "api",
+    "GET",
+    "/v2/inAppPurchases/6796785976/iapPriceSchedule",
+    "--paginate"
+  ],
+  "stderr": "Error: api: page 1: --paginate requires a collection response with a data array\n"
+}

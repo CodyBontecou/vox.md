@@ -54,85 +54,68 @@
 <nav aria-label="Primary navigation">
   <div class="nav-inner">
     <a href="../index.html" class="logo" aria-label="Vox.md home">
-      <img class="logo-mark" src="../app-icon.png" alt="" width="32" height="32">
+      <span class="logo-mark" aria-hidden="true">md</span>
       <span>Vox.md</span>
     </a>
     <ul class="nav-links">
-      <li><a href="../index.html#how">How It Works</a></li>
+      <li><a href="../index.html#how">How it works</a></li>
       <li><a href="../docs/">Docs</a></li>
       <li><a href="./" aria-current="page">Blog</a></li>
       <li><a href="../privacy.html">Privacy</a></li>
-      <li><a href="../terms.html">Terms</a></li>
     </ul>
     <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener">Download Vox.md</a>
   </div>
 </nav>
 
 <main>
-  <section class="hero" aria-labelledby="blog-title">
-    <div class="hero-grid-bg" aria-hidden="true"></div>
-    <div class="container">
-      <div class="hero-inner">
-        <div>
-          <div class="hero-label">Vox.md Notes · Obsidian Workflows · Product Updates</div>
-          <h1 class="hero-title" id="blog-title">Notes on Faster Capture</h1>
-          <p class="hero-subtitle">Product notes and practical guides for getting ideas into local Markdown with less sorting, tapping, and app switching.</p>
-        </div>
-        <aside class="hero-card" aria-label="Blog status">
-          <div class="hero-card-label">Capture Guides</div>
-          <p>Start with a daily-note capture workflow or the private voice keyboard guide, then explore the full feature documentation.</p>
-        </aside>
-      </div>
+  <section class="blog-hero" aria-labelledby="blog-title">
+    <div class="wrap">
+      <p class="hero-label">Vox.md Notes · Obsidian Workflows · Product Updates</p>
+      <h1 class="hero-title" id="blog-title">Notes on faster capture</h1>
+      <p class="hero-subtitle">Product notes and practical guides for getting ideas into local Markdown with less sorting, tapping, and app switching.</p>
     </div>
   </section>
 
   <section class="blog-section" aria-labelledby="latest-posts">
-    <div class="container">
-      <div class="section-header">
-        <div>
-          <div class="section-label">01 / Latest</div>
-          <h2 class="section-title" id="latest-posts">Capture Workflows Start Here</h2>
-        </div>
-        <p class="section-kicker">Guides for using Vox.md with Obsidian, local Markdown folders, system capture tools, and private on-device voice.</p>
-      </div>
+    <div class="wrap" style="display: flex; flex-direction: column; gap: 56px; padding-top: 16px; padding-bottom: 96px">
+      <h2 class="visually-hidden" id="latest-posts">Latest</h2>
 
       <div class="post-grid">
-        <article class="post-card featured">
-          <div><div class="post-status">Workflow guide</div>
-            <h3 class="post-title">Capture into an Obsidian Daily Note from iPhone</h3>
-            <p class="post-desc">Configure a Capture Preset, choose a daily note and heading, verify the saved Markdown, and recover failed deliveries.</p></div>
-          <div class="post-meta"><span>October 25, 2026</span><span>Obsidian workflow</span></div>
-          <div class="link-row"><a class="text-link" href="obsidian-daily-note-iphone/">Read the daily-note guide</a></div>
-        </article>
-
-        <article class="post-card featured">
-          <div>
-            <div class="post-status">Guide</div>
-            <h3 class="post-title">Best Voice-to-Text Keyboard for iPhone</h3>
-            <p class="post-desc">A practical guide to choosing an iPhone dictation keyboard that works in every text field, explains Full Access clearly, and runs transcription locally after setup.</p>
-          </div>
-          <div class="post-meta">
-            <span>June 13, 2026</span>
-            <span>6 min read</span>
-            <span>Private dictation</span>
-          </div>
-          <div class="link-row" aria-label="Read latest post">
-            <a class="text-link" href="best-voice-to-text-keyboard-iphone/">Read Guide</a>
-          </div>
+        <article class="post-card">
+          <dl class="post-preview" aria-label="Example capture route">
+            <div><dt>Route</dt><dd>Daily Inbox</dd></div>
+            <div><dt>Note</dt><dd>Journal/{period}.md</dd></div>
+            <div><dt>Heading</dt><dd>## Inbox</dd></div>
+          </dl>
+          <p class="post-meta">Workflow guide · <time datetime="2026-10-25">Oct 25, 2026</time></p>
+          <h3 class="post-title"><a href="obsidian-daily-note-iphone/">Capture into an Obsidian daily note from iPhone</a></h3>
+          <p class="post-desc">Configure a Route, choose a daily note and heading, verify the saved Markdown, and recover failed deliveries.</p>
+          <span class="post-more" aria-hidden="true">Read the daily-note guide →</span>
         </article>
 
         <article class="post-card">
-          <div>
-            <div class="post-status">Start Here</div>
-            <h3 class="post-title">Read the Product and Privacy Notes</h3>
-            <p class="post-desc">The homepage and legal pages explain how Vox.md handles capture drafts, Markdown destinations, attachments, local transcription, and file-provider sync.</p>
+          <div class="post-preview post-preview-rec" aria-hidden="true">
+            <span class="rec-dot"></span>
+            <span class="rec-text">and the updated presets list…</span>
           </div>
-          <div class="link-row" aria-label="Starter links">
-            <a class="text-link" href="../docs/">Feature Documentation</a>
-            <a class="text-link" href="../index.html#how">Product Tour</a>
-            <a class="text-link" href="../privacy.html">Privacy Policy</a>
-          </div>
+          <p class="post-meta">Guide · <time datetime="2026-06-13">Jun 13, 2026</time> · 6 min read</p>
+          <h3 class="post-title"><a href="best-voice-to-text-keyboard-iphone/">Best voice-to-text keyboard for iPhone</a></h3>
+          <p class="post-desc">A practical guide to choosing an iPhone dictation keyboard that works in every text field, explains Full Access clearly, and runs transcription locally after setup.</p>
+          <span class="post-more" aria-hidden="true">Read guide →</span>
         </article>
+      </div>
+
+      <div class="start-here">
+        <div>
+          <p class="section-label">Start here</p>
+          <h2>Read the product and privacy notes</h2>
+          <p>The homepage and legal pages explain how Vox.md handles capture drafts, Markdown destinations, attachments, local transcription, and file-provider sync.</p>
+        </div>
+        <div class="btn-row" aria-label="Starter links">
+          <a class="btn-secondary" href="../docs/">Feature documentation</a>
+          <a class="btn-secondary" href="../index.html#how">Product tour</a>
+          <a class="btn-secondary" href="../privacy.html">Privacy policy</a>
+        </div>
       </div>
     </div>
   </section>
@@ -150,7 +133,7 @@
         <li><a href="mailto:codybontecou@gmail.com">Support</a></li>
         <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">App Store</a></li>
       </ul>
-      <div class="footer-copy">© 2026 Vox.md · Quick capture for local notes · No content uploads.</div>
+      <div class="footer-copy">© 2026 Vox.md · No content uploads</div>
     </div>
   </div>
 </footer>

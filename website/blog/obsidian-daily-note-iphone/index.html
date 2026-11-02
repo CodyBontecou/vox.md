@@ -18,69 +18,100 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="../../favicon.ico" sizes="any">
   <link rel="stylesheet" href="../../geist.css">
-  <style>.daily-note-shot { width: min(100%, 320px); margin: 32px auto; }</style>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Capture into an Obsidian Daily Note from iPhone", "description": "Set up Vox.md to append text and on-device voice transcripts to an Obsidian daily note, choose a heading, verify Markdown output, and recover failed deliveries.", "datePublished": "2026-10-25", "dateModified": "2026-10-25", "author": {"@type": "Person", "name": "Cody Bontecou"}, "mainEntityOfPage": "https://vox.isolated.tech/blog/obsidian-daily-note-iphone/"}</script>
 </head>
 <body>
 <nav aria-label="Primary navigation">
   <div class="nav-inner">
     <a href="../../index.html" class="logo" aria-label="Vox.md home">
-      <img class="logo-mark" src="../../app-icon.png" alt="" width="32" height="32">
+      <span class="logo-mark" aria-hidden="true">md</span>
       <span>Vox.md</span>
     </a>
     <ul class="nav-links">
-      <li><a href="../../index.html#how">How It Works</a></li>
       <li><a href="../../docs/">Docs</a></li>
       <li><a href="../" aria-current="page">Blog</a></li>
       <li><a href="../../privacy.html">Privacy</a></li>
-      <li><a href="../../terms.html">Terms</a></li>
     </ul>
     <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener">Download Vox.md</a>
   </div>
 </nav>
 
 
-<header class="hero"><div class="container"><div class="hero-inner"><div>
-  <div class="eyebrow">Vox.md · Obsidian · iPhone</div>
-  <h1 class="hero-title">Capture into an Obsidian Daily Note from iPhone</h1>
-  <p class="hero-subtitle">Vox.md sends text, links, scans, photos, and on-device voice transcripts into an Obsidian vault or Markdown folder. Set up one Capture Preset to append entries to a daily note under a chosen heading.</p>
-  <p>By Cody Bontecou · October 25, 2026</p>
-</div><aside class="meta-card" aria-label="Example capture route"><div class="meta-label">Example route</div><dl><div><dt>Preset</dt><dd>Daily Inbox</dd></div><div><dt>Note</dt><dd>Journal/{period}.md</dd></div><div><dt>Heading</dt><dd>Inbox · Level 2</dd></div></dl></aside></div></div></header>
-<main><article><div class="article-container article-body">
-  <h2>Before you start</h2>
+<main>
+<div class="article-layout">
+  <article class="article-main">
+    <header>
+      <a class="back-link" href="../">← All notes</a>
+      <p class="eyebrow">Vox.md · Obsidian · iPhone</p>
+      <h1 class="hero-title">Capture into an Obsidian daily note from iPhone</h1>
+      <p class="hero-subtitle">Vox.md sends text, links, scans, photos, and on-device voice transcripts into an Obsidian vault or Markdown folder. Set up one Route to append entries to a daily note under a chosen heading.</p>
+      <p class="byline">By Cody Bontecou · October 25, 2026</p>
+      <dl class="meta-strip" aria-label="Example capture route">
+        <div><dt>Route</dt><dd>Daily Inbox</dd></div>
+        <div><dt>Note</dt><dd class="mono">Journal/{period}.md</dd></div>
+        <div><dt>Heading</dt><dd>Inbox · Level 2</dd></div>
+      </dl>
+    </header>
+    <div class="article-body">
+  <h2 id="before-you-start">Before you start</h2>
   <p>Install Vox.md and open your vault in Obsidian on the same iPhone. Identify that vault's folder in Files. No Obsidian plugin or Vox.md account is required. This guide covers the iPhone workflow; file-provider availability and app labels can vary.</p>
-  <h2>1. Create a daily-note Capture Preset</h2>
+  <h2 id="create-preset">1. Create a daily-note Route</h2>
   <ol>
-    <li>Open Settings → Capture Presets in Vox.md. Create a preset called Daily Inbox.</li>
+    <li>Open Settings → Routes in Vox.md. Create a route called Daily Inbox.</li>
     <li>For a first test, choose Keep Original and leave typed-text processing off. This makes it easier to compare the text you send with the saved note.</li>
     <li>Set up the destination and select the folder of the vault you opened in Obsidian.</li>
     <li>Choose Rolling Note with a daily period. Use a path such as <code>Journal/{period}.md</code>, or match your vault's actual daily-note folder and naming convention.</li>
     <li>Choose heading placement, enter Inbox, and set the heading level to 2. Use bottom placement instead if you do not want a heading.</li>
   </ol>
   <p>See <a href="../../docs/#destinations">destination options</a> and <a href="../../docs/#placement-templates">placement rules</a>. Existing Note is for one fixed file; Rolling Note follows the selected period.</p>
-  <figure class="screenshot-item daily-note-shot"><div class="screenshot-frame"><img src="../../screenshots/01-route-heading-light.png" alt="Vox.md destination editor with rolling-note and heading-placement controls" width="1206" height="2622" loading="lazy"></div><figcaption>Choose a rolling daily note and heading placement. Labels may vary by app version.</figcaption></figure>
-  <h2>2. Send one test and inspect the file</h2>
+  <figure class="shot"><div class="phone"><img src="../../screenshots/01-route-heading-light.png" alt="Vox.md destination editor with rolling-note and heading-placement controls" width="1206" height="2622" loading="lazy"></div><figcaption>Choose a rolling daily note and heading placement. Labels may vary by app version.</figcaption></figure>
+  <h2 id="send-test">2. Send one test and inspect the file</h2>
   <p>Select Daily Inbox in Quick Capture, type <em>Book dentist appointment</em>, then tap Send. Wait for Capture Sent. In Obsidian, open the note for that day and check the heading and entry. Verify the folder in Files too if you have similarly named vaults.</p>
-  <p>This illustrative output uses a synthetic capture and a daily note dated October 25. Your template, metadata, and placement settings determine the exact file contents.</p>
-  <pre class="docs-code-block"><code># October 25
+  <figure class="code-figure">
+    <pre class="docs-code-block"><code># October 25
 
 ## Inbox
 Book dentist appointment</code></pre>
-  <p>The example path is <code>Journal/2026-10-25.md</code>. Match the preview and saved filename to your own daily-note convention rather than creating a second daily-note series by accident.</p>
-  <h2>3. Add voice after text delivery works</h2>
-  <p>Record a short voice capture using the same preset. Transcription runs on the device. A local model may need downloading before first use; Apple Speech availability depends on the device, system, and language. Check the transcript and destination before relying on unattended capture. See <a href="../../docs/#models">models and transcription</a>.</p>
+    <figcaption>Journal/2026-10-25.md · illustrative output</figcaption>
+  </figure>
+  <p>This illustrative output uses a synthetic capture and a daily note dated October 25. Your template, metadata, and placement settings determine the exact file contents. Match the preview and saved filename to your own daily-note convention rather than creating a second daily-note series by accident.</p>
+  <h2 id="add-voice">3. Add voice after text delivery works</h2>
+  <p>Record a short voice capture using the same route. Transcription runs on the device. A local model may need downloading before first use; Apple Speech availability depends on the device, system, and language. Check the transcript and destination before relying on unattended capture. See <a href="../../docs/#models">models and transcription</a>.</p>
   <p>Then add the <a href="../../docs/#system-integrations">Share Sheet, widgets, or Shortcuts</a> to the workflow. Keep one verified destination as the starting point.</p>
-  <h2>If a capture does not arrive</h2>
-  <ul>
-    <li>Check the selected preset and any one-capture destination override.</li>
-    <li>If the folder moved or access expired, select it again. Make sure your file provider is available.</li>
-    <li>Review History for queued or failed work and use its recovery options after fixing the destination. Repeatedly sending a new capture can create separate entries.</li>
-    <li>If transcription fails, check that the selected model is downloaded and appropriate for the language.</li>
-  </ul>
-  <p><a href="../../docs/#troubleshooting">Troubleshooting reference</a> · <a href="../../docs/#history-settings">History, limits, and purchases</a> · <a href="../../privacy.html">Privacy details</a></p>
+  <aside class="trouble-card" id="troubleshooting" aria-labelledby="troubleshooting-title">
+    <h2 class="trouble-label" id="troubleshooting-title">If a capture does not arrive</h2>
+    <ul>
+      <li>Check the selected route and any one-capture destination override.</li>
+      <li>If the folder moved or access expired, select it again. Make sure your file provider is available.</li>
+      <li>Review Library for queued or failed work and use its recovery options after fixing the destination. Repeatedly sending a new capture can create separate entries.</li>
+      <li>If transcription fails, check that the selected model is downloaded and appropriate for the language.</li>
+    </ul>
+  </aside>
+  <p><a href="../../docs/#troubleshooting">Troubleshooting reference</a> · <a href="../../docs/#history-settings">Library, limits, and purchases</a> · <a href="../../privacy.html">Privacy details</a></p>
   <p>Vox.md writes files to the destination you choose. If that vault syncs through iCloud or another service, its copies follow that service's settings. Content reviewed against the product documentation on October 25, 2026.</p>
   <p><a href="https://apps.apple.com/us/app/vox-md-quick-capture-notes/id6758967337">Get Vox.md on the App Store</a> or <a href="../../docs/">read the complete documentation</a>.</p>
-</div></article></main>
+    </div>
+  </article>
+
+  <aside class="article-aside" aria-label="On this page">
+    <nav class="aside-card" aria-label="Table of contents">
+      <div class="side-nav-title">On This Page</div>
+      <ol>
+        <li><a href="#before-you-start">Before you start</a></li>
+        <li><a href="#create-preset">1. Create a route</a></li>
+        <li><a href="#send-test">2. Send one test</a></li>
+        <li><a href="#add-voice">3. Add voice</a></li>
+        <li><a href="#troubleshooting">If a capture does not arrive</a></li>
+      </ol>
+    </nav>
+    <div class="aside-cta">
+      <strong>Get Vox.md</strong>
+      <p>Quick capture for local notes. No content uploads.</p>
+      <a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">App Store</a>
+    </div>
+  </aside>
+</div>
+</main>
 <footer>
   <div class="container">
     <div class="footer-inner">
@@ -93,7 +124,7 @@ Book dentist appointment</code></pre>
         <li><a href="mailto:codybontecou@gmail.com">Support</a></li>
         <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener">App Store</a></li>
       </ul>
-      <div class="footer-copy">© 2026 Vox.md · Quick capture for local notes · No content uploads.</div>
+      <div class="footer-copy">© 2026 Vox.md · Quick capture for local notes · No content uploads</div>
     </div>
   </div>
 </footer>

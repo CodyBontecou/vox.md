@@ -22,7 +22,7 @@ nonisolated enum WatchRecordingFailureStage: String, Codable, Sendable {
 
 nonisolated enum WatchRecordingStatusMessage {
     static var transcriptionLimitReached: String {
-        String(localized: "You've used your free transcription time. Get Vox.md Unlimited to continue.")
+        String(localized: "Choose a Vox.md plan on your iPhone to process this recording.")
     }
 }
 
@@ -70,8 +70,8 @@ nonisolated struct WatchRecordingInboxItem: Codable, Equatable, Identifiable, Se
     }
 
     var displayPresetName: String {
-        if requiresPresetSelection { return String(localized: "Choose a Preset") }
-        return flowSnapshot?.accessibilityName ?? String(localized: "Capture Preset")
+        if requiresPresetSelection { return String(localized: "Choose a Route") }
+        return flowSnapshot?.accessibilityName ?? String(localized: "Route")
     }
 
     var shouldCancelForUnavailableLocation: Bool {
@@ -296,7 +296,7 @@ nonisolated final class WatchRecordingInbox: @unchecked Sendable {
                 phase: metadataIsIncompatible ? .failed : .queued,
                 failureStage: metadataIsIncompatible ? .storage : nil,
                 statusMessage: snapshotIsIncompatible
-                    ? String(localized: "Update Vox.md on iPhone to use this recording's Capture Preset.")
+                    ? String(localized: "Update Vox.md on iPhone to use this recording's Route.")
                     : locationOutcomeIsIncompatible
                         ? String(localized: "Update Vox.md on iPhone to use this recording's location metadata.")
                         : String(localized: "Received from Apple Watch")
@@ -532,7 +532,7 @@ nonisolated final class WatchRecordingInbox: @unchecked Sendable {
                 requiresPresetSelection: true,
                 phase: .failed,
                 failureStage: .storage,
-                statusMessage: String(localized: "Recovered after an interrupted save. Choose a Preset to continue.")
+                statusMessage: String(localized: "Recovered after an interrupted save. Choose a Route to continue.")
             ))
             recovered = true
         }

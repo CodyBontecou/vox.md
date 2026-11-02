@@ -1,0 +1,173 @@
+[
+  {
+    "method": "GET",
+    "path": "/v1/subscriptionPricePoints/{id}",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true
+      },
+      {
+        "name": "fields[subscriptionPricePoints]",
+        "in": "query",
+        "enum": [
+          "customerPrice",
+          "proceeds",
+          "proceedsYear2",
+          "territory",
+          "equalizations",
+          "adjustedEqualizations"
+        ]
+      },
+      {
+        "name": "fields[territories]",
+        "in": "query",
+        "enum": [
+          "currency"
+        ]
+      },
+      {
+        "name": "include",
+        "in": "query",
+        "enum": [
+          "territory"
+        ]
+      }
+    ],
+    "responseSchema": "SubscriptionPricePointResponse"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/subscriptionPricePoints/{id}/adjustedEqualizations",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true
+      },
+      {
+        "name": "filter[territory]",
+        "in": "query"
+      },
+      {
+        "name": "filter[subscription]",
+        "in": "query"
+      },
+      {
+        "name": "filter[upfrontPricePointId]",
+        "in": "query"
+      },
+      {
+        "name": "filter[planType]",
+        "in": "query",
+        "required": true
+      },
+      {
+        "name": "fields[subscriptionPricePoints]",
+        "in": "query",
+        "enum": [
+          "customerPrice",
+          "proceeds",
+          "proceedsYear2",
+          "territory",
+          "equalizations",
+          "adjustedEqualizations"
+        ]
+      },
+      {
+        "name": "fields[territories]",
+        "in": "query",
+        "enum": [
+          "currency"
+        ]
+      },
+      {
+        "name": "limit",
+        "in": "query"
+      },
+      {
+        "name": "include",
+        "in": "query",
+        "enum": [
+          "territory"
+        ]
+      }
+    ],
+    "responseSchema": "SubscriptionPricePointsResponse"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/subscriptionPricePoints/{id}/equalizations",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true
+      },
+      {
+        "name": "filter[territory]",
+        "in": "query"
+      },
+      {
+        "name": "filter[subscription]",
+        "in": "query"
+      },
+      {
+        "name": "filter[upfrontPricePointId]",
+        "in": "query"
+      },
+      {
+        "name": "filter[planType]",
+        "in": "query"
+      },
+      {
+        "name": "fields[subscriptionPricePoints]",
+        "in": "query",
+        "enum": [
+          "customerPrice",
+          "proceeds",
+          "proceedsYear2",
+          "territory",
+          "equalizations",
+          "adjustedEqualizations"
+        ]
+      },
+      {
+        "name": "fields[territories]",
+        "in": "query",
+        "enum": [
+          "currency"
+        ]
+      },
+      {
+        "name": "limit",
+        "in": "query"
+      },
+      {
+        "name": "include",
+        "in": "query",
+        "enum": [
+          "territory"
+        ]
+      }
+    ],
+    "responseSchema": "SubscriptionPricePointsResponse"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/subscriptionPricePoints/{id}/relationships/equalizations",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true
+      },
+      {
+        "name": "limit",
+        "in": "query"
+      }
+    ],
+    "responseSchema": "SubscriptionPricePointEqualizationsLinkagesResponse"
+  }
+]

@@ -220,7 +220,7 @@ public enum ConfiguredTranscriptCaptureError: Error, LocalizedError, Sendable {
         case .storageUnavailable:
             return "Shared capture storage is unavailable."
         case .destinationMissing:
-            return "This Capture Preset’s destination no longer exists. Open Capture destination or Settings to configure it again."
+            return "This Route’s destination no longer exists. Open Capture destination or Settings to configure it again."
         case .staleDestination(let name):
             return "The Files permission for ‘\(name)’ expired. Edit the capture destination and choose its folder again."
         case .audioPreparationFailed:
@@ -228,7 +228,7 @@ public enum ConfiguredTranscriptCaptureError: Error, LocalizedError, Sendable {
         case .requestPreparationFailed:
             return "The voice note could not be prepared for capture. The local transcript and recording were kept for retry."
         case .locationUnavailableCancelled:
-            return "The Capture was cancelled because its preset requires an origin-time location. The local transcript was kept."
+            return "The Capture was cancelled because its route requires an origin-time location. The local transcript was kept."
         case .queuedForRetry(let message):
             return "The voice note is queued for retry because its destination could not be written: \(message)"
         }
@@ -587,7 +587,16 @@ public enum ConfiguredTranscriptCaptureDestinationExporter {
                 ),
                 attachmentCount: receipt.attachmentURLs.count
             ) {
-                _ = await history.upsertBestEffort(record)
+                let routed = TranscriptCaptureDestinationExporter.routedDestination(destination, for: flow)
+                _ = await history.upsertBestEffort(
+                    record.withDeliveryDetails(request: claimedRequest, placement: routed.placement),
+                    content: CaptureLibraryContent.make(
+                        request: claimedRequest,
+                        receipt: receipt,
+                        destination: routed,
+                        rootURL: destinationRootURL
+                    )
+                )
             }
             try? fileManager.removeItem(at: stagingDirectoryURL)
             return receipt
@@ -617,7 +626,11 @@ public enum ConfiguredTranscriptCaptureDestinationExporter {
                 attachmentCount: historyAttachmentCount(in: request),
                 failureCategory: historyFailureCategory(for: error)
             ) {
-                _ = await history.upsertBestEffort(record)
+                _ = await history.upsertBestEffort(record.withDeliveryDetails(
+                    request: request,
+                    placement: flow.capturePlacementOverride,
+                    error: error
+                ))
             }
             if didClaimRequest {
                 try? await inbox.fail(requestID: request.id)

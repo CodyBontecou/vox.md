@@ -75,7 +75,7 @@ struct MacFirstRunSetupView: View {
         }
         .frame(width: 620)
         .fixedSize(horizontal: false, vertical: true)
-        .tint(MacBrand.orange)
+        .tint(MacBrand.tint)
         .task {
             await prepare()
         }
@@ -103,7 +103,7 @@ struct MacFirstRunSetupView: View {
     private var notesFolderRow: some View {
         setupRow(
             symbol: "folder.fill",
-            symbolColor: MacBrand.orangeText,
+            symbolColor: MacBrand.accentText,
             title: String(localized: "Notes Folder"),
             detail: notesFolderPath.isEmpty
                 ? String(localized: "Choose where Vox.md should write Markdown")
@@ -120,7 +120,7 @@ struct MacFirstRunSetupView: View {
     private var transcriptionRow: some View {
         setupRow(
             symbol: "waveform.badge.magnifyingglass",
-            symbolColor: MacBrand.orangeText,
+            symbolColor: MacBrand.accentText,
             title: String(localized: "Transcription Model"),
             detail: transcriptionModelDetail
         ) {
@@ -141,7 +141,7 @@ struct MacFirstRunSetupView: View {
             case .authorized:
                 Label("Ready", systemImage: "checkmark.circle.fill")
                     .font(.callout)
-                    .foregroundStyle(MacBrand.complete)
+                    .foregroundStyle(MacBrand.success)
             case .notDetermined:
                 Button(isRequestingMicrophone ? "Requesting…" : "Allow…") {
                     Task { await requestMicrophoneAccess() }
@@ -164,8 +164,8 @@ struct MacFirstRunSetupView: View {
             symbolColor: .secondary,
             title: String(localized: "Quick Capture"),
             detail: quickCaptureShortcut == nil
-                ? String(localized: "Set a global shortcut for the selected preset")
-                : String(localized: "Starts or stops the selected preset from anywhere")
+                ? String(localized: "Set a global shortcut for the selected route")
+                : String(localized: "Starts or stops the selected route from anywhere")
         ) {
             Button(quickCaptureShortcut?.displayString ?? String(localized: "Configure…")) {
                 openSettingsPane(.shortcuts)
@@ -234,7 +234,7 @@ struct MacFirstRunSetupView: View {
                 } else if let model = modelManager.selectedModel,
                           modelManager.isModelDownloaded(model) {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(MacBrand.complete)
+                        .foregroundStyle(MacBrand.success)
                 }
                 Text(transcriptionActionTitle)
                 Image(systemName: "chevron.down")
@@ -284,7 +284,7 @@ struct MacFirstRunSetupView: View {
             if let setupErrorMessage {
                 Label(setupErrorMessage, systemImage: "exclamationmark.triangle.fill")
                     .font(.callout)
-                    .foregroundStyle(MacBrand.orangeText)
+                    .foregroundStyle(MacBrand.attention)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityIdentifier("mac_first_run_error")
             }
@@ -315,7 +315,7 @@ struct MacFirstRunSetupView: View {
                 .accessibilityIdentifier("mac_first_run_finish")
             }
         }
-        .tint(MacBrand.orange)
+        .tint(MacBrand.tint)
     }
 
     private var transcriptionModelDetail: String {
@@ -485,7 +485,7 @@ struct MacFirstRunSetupView: View {
 
         guard let preset = viewModel.selectedVoxProfile else {
             isSaving = false
-            errorMessage = String(localized: "No enabled Capture Preset is available.")
+            errorMessage = String(localized: "No enabled Route is available.")
             return
         }
 

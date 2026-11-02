@@ -175,7 +175,15 @@ public enum CaptureInboxDeliveryService {
                         ),
                         attachmentCount: receipt.attachmentURLs.count
                     ) {
-                        _ = await history.upsertBestEffort(record)
+                        _ = await history.upsertBestEffort(
+                            record.withDeliveryDetails(request: request, placement: destination.placement),
+                            content: CaptureLibraryContent.make(
+                                request: request,
+                                receipt: receipt,
+                                destination: destination,
+                                rootURL: rootURL
+                            )
+                        )
                     }
                     receipts.append(receipt)
                 } catch is CancellationError {
@@ -205,9 +213,13 @@ public enum CaptureInboxDeliveryService {
                     ))
                     continue
                 } catch {
-                    let destinationName = library.destinations.first(where: {
+                    let storedDestination = library.destinations.first(where: {
                         $0.id == request.destinationID
-                    })?.name ?? "Unavailable destination"
+                    })
+                    let destinationName = storedDestination?.name ?? "Unavailable destination"
+                    let attempted = storedDestination.map {
+                        attemptedDelivery(request: request, destination: $0, library: library)
+                    }
                     if let record = try? CaptureHistoryRecord(
                         requestID: request.id,
                         createdAt: request.createdAt,
@@ -222,7 +234,12 @@ public enum CaptureInboxDeliveryService {
                         attachmentCount: attachmentCount(in: request),
                         failureCategory: failureCategory(for: error)
                     ) {
-                        _ = await history.upsertBestEffort(record)
+                        _ = await history.upsertBestEffort(record.withDeliveryDetails(
+                            request: request,
+                            placement: attempted?.placement,
+                            error: error,
+                            attemptedNotePath: attempted?.notePath
+                        ))
                     }
                     try? await inbox.fail(requestID: request.id)
                     failures.append(request.id)
@@ -246,6 +263,28 @@ public enum CaptureInboxDeliveryService {
             decisionsRequired: decisionsRequired,
             latestFailureDescription: latestFailureDescription
         )
+    }
+
+    /// The placement and note path a failed attempt was targeting, derived
+    /// from route configuration only.
+    static func attemptedDelivery(
+        request: CaptureRequest,
+        destination storedDestination: CaptureDestination,
+        library: CaptureLibraryEnvelope
+    ) -> (placement: CapturePlacement, notePath: String?) {
+        var destination = library.resolvedDestination(
+            storedDestination,
+            overrideEntryTemplateID: request.entryTemplateIDOverride
+                ?? request.voxProfile?.captureEntryTemplateID
+        )
+        if let relativePath = request.relativeNotePathOverride {
+            destination.noteTarget = .existingNote(relativePath: relativePath)
+        }
+        if let placement = request.placementOverride ?? request.voxProfile?.capturePlacementOverride {
+            destination.placement = placement
+        }
+        let notePath = try? CapturePathPlanner().relativePath(for: request, destination: destination)
+        return (destination.placement, notePath)
     }
 
     private static func attachmentCount(in request: CaptureRequest) -> Int {

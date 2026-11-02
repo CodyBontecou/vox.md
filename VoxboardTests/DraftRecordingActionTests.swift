@@ -402,6 +402,19 @@ final class DraftRecordingActionTests: XCTestCase {
     }
 
     func testRepeatedStopsPreserveShortQuietAndSilentRecordingAudio() async throws {
+        guard AppConstants.recordingsDirectoryURL != nil else {
+            throw XCTSkip("Requires a signed host with the App Group recordings container")
+        }
+        // The recorder's background fast path reads the App Group access mirror.
+        let shared = try XCTUnwrap(AppConstants.sharedDefaults)
+        let previousUnlock = shared.object(forKey: "hasUnlocked")
+        let previousExpiration = shared.object(forKey: "storeAccessExpirationV1")
+        shared.set(true, forKey: "hasUnlocked")
+        shared.removeObject(forKey: "storeAccessExpirationV1")
+        defer {
+            shared.set(previousUnlock, forKey: "hasUnlocked")
+            shared.set(previousExpiration, forKey: "storeAccessExpirationV1")
+        }
         let fixture = try await makeDraftFixture()
         let jobStore = RecordingJobStore(rootDirectoryURL: fixture.root.appendingPathComponent("jobs"))
         let buffer = CircularAudioBuffer(capacity: 100_000)
@@ -479,6 +492,8 @@ final class DraftRecordingActionTests: XCTestCase {
     private func makeDraftFixture() async throws -> DraftActionFixture {
         let root = try makeRoot()
         let defaults = try makeDefaults()
+        // These exercise paid recording/delivery, not purchase eligibility.
+        UsageTracker(defaults: defaults).unlock()
         let vault = root.appendingPathComponent("vault")
         try FileManager.default.createDirectory(at: vault, withIntermediateDirectories: true)
         let destination = CaptureDestination(name: "Review destination", rootBookmark: try vault.bookmarkData(), rootName: "Synthetic vault",

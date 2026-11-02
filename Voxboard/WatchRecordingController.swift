@@ -209,6 +209,8 @@ final class WatchRecordingController: NSObject {
             }
         case .selectPreset:
             presetSelectionResponse = handlePresetSelection(payload)
+        case .requestSetup:
+            notifyWatchSetupRequested()
         case .status:
             break
         }
@@ -270,7 +272,14 @@ final class WatchRecordingController: NSObject {
             ?? activeJobs.first(where: { $0.phase == .transcribing })
             ?? activeJobs.first(where: { $0.phase == .queued })
             ?? activeJobs.first(where: { $0.phase == .failed })
-        let enabledPresets = CapturePresetStore.loadFlows().filter(\.isEnabled)
+        let allEnabledPresets = CapturePresetStore.loadFlows().filter(\.isEnabled)
+        // Routes pinned to Apple Watch (Routes long-press / Settings); every
+        // enabled route until the user configures Watch pins.
+        let watchPresetIDs = Set(CapturePresetSurfacePinStore.effectivePinnedIDs(
+            for: .watch, allIDs: allEnabledPresets.map(\.id), defaults: AppConstants.sharedDefaults
+        ))
+        let pinnedWatchPresets = allEnabledPresets.filter { watchPresetIDs.contains($0.id) }
+        let enabledPresets = pinnedWatchPresets.isEmpty ? allEnabledPresets : pinnedWatchPresets
         let selectedPresetID = CapturePresetProfileStore.selectedProfileID(
             defaults: AppConstants.sharedDefaults
         )
@@ -288,6 +297,10 @@ final class WatchRecordingController: NSObject {
         } else if usageAppliesToCurrentWork
                     && (usageTracker?.isAtLimit == true || recorder?.needsUnlock == true) {
             message = String(localized: "Free transcription time used. Get Vox.md Unlimited on iPhone.")
+        } else if usageTracker?.isAtLimit == true {
+            // Recording-only Files delivery needs paid access too; say so on
+            // the Watch instead of queueing work the iPhone will hold.
+            message = WatchRecordingStatusMessage.transcriptionLimitReached
         } else if let activeJob {
             message = activeJob.statusMessage
         } else {
@@ -387,7 +400,7 @@ final class WatchRecordingController: NSObject {
               epoch > 0,
               let sequence = watchInt64(payload[WatchRecordingPayloadKey.presetSelectionSequence]),
               sequence > 0 else {
-            watchLog.error("Rejected malformed Watch Capture Preset selection")
+            watchLog.error("Rejected malformed Watch Route selection")
             return nil
         }
 
@@ -407,7 +420,7 @@ final class WatchRecordingController: NSObject {
                 epoch: epoch,
                 sequence: sequence,
                 outcome: .stale,
-                errorMessage: String(localized: "A newer Capture Preset selection was already applied.")
+                errorMessage: String(localized: "A newer Route selection was already applied.")
             )
         }
 
@@ -423,7 +436,7 @@ final class WatchRecordingController: NSObject {
                 epoch: epoch,
                 sequence: sequence,
                 outcome: .stale,
-                errorMessage: String(localized: "This Capture Preset request was superseded.")
+                errorMessage: String(localized: "This Route request was superseded.")
             )
         }
 
@@ -439,7 +452,7 @@ final class WatchRecordingController: NSObject {
             outcome: didSelect ? .accepted : .rejected,
             errorMessage: didSelect
                 ? nil
-                : String(localized: "This Capture Preset is disabled or no longer exists on iPhone.")
+                : String(localized: "This Route is disabled or no longer exists on iPhone.")
         )
         persistPresetSelectionAcknowledgement(response)
         return response
@@ -463,7 +476,12 @@ final class WatchRecordingController: NSObject {
         selectedPreset: CapturePreset?
     ) -> (summaries: [[String: Any]], isTruncated: Bool) {
         let maximumPresetCount = 32
-        let flows = CapturePresetStore.loadFlows().filter(\.isEnabled)
+        let enabledFlows = CapturePresetStore.loadFlows().filter(\.isEnabled)
+        let watchIDs = CapturePresetSurfacePinStore.effectivePinnedIDs(
+            for: .watch, allIDs: enabledFlows.map(\.id), defaults: AppConstants.sharedDefaults
+        )
+        let pinnedFlows = watchIDs.compactMap { id in enabledFlows.first { $0.id == id } }
+        let flows = pinnedFlows.isEmpty ? enabledFlows : pinnedFlows
         var seen = Set<String>()
         let ordered = ([selectedPreset].compactMap { $0 } + flows).filter { preset in
             guard isValidWatchPresetID(preset.id), !seen.contains(preset.id) else { return false }
@@ -471,13 +489,22 @@ final class WatchRecordingController: NSObject {
             return true
         }
         let included = ordered.prefix(maximumPresetCount)
-        let summaries = included.map { preset in
-            [
+        // Per-route snapshots let a Watch recording made while iPhone is away
+        // carry its exact route. Keep them inside a conservative budget so the
+        // application context and live message stay well under WatchConnectivity
+        // limits; routes without one are resolved by id when the file arrives.
+        let snapshotBudgetBytes = 24 * 1_024
+        let maximumSnapshotBytes = 6 * 1_024
+        var snapshotBytesUsed = 0
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        let summaries = included.enumerated().map { index, preset in
+            var summary: [String: Any] = [
                 WatchRecordingPayloadKey.selectedPresetID: preset.id,
                 WatchRecordingPayloadKey.selectedPresetName: watchSafeText(
                     preset.accessibilityName,
                     maximumCharacters: 64,
-                    fallback: String(localized: "Icon-only Capture Preset")
+                    fallback: String(localized: "Icon-only Route")
                 ),
                 WatchRecordingPayloadKey.presetVisibleName: watchSafeText(
                     preset.visibleName ?? "",
@@ -485,9 +512,63 @@ final class WatchRecordingController: NSObject {
                     fallback: ""
                 ),
                 WatchRecordingPayloadKey.presetSymbolName: watchSafeSymbolName(preset.symbolName),
-            ] as [String: Any]
+                // Color by the route's place in the user's route order so a
+                // route keeps the same tile on iPhone, Mac and Watch.
+                WatchRecordingPayloadKey.presetTileStyle: watchRouteTileStyle(
+                    forIndex: enabledFlows.firstIndex(where: { $0.id == preset.id }) ?? index
+                ),
+            ]
+            if let initial = preset.visibleName?
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+                .first(where: { !$0.isWhitespace }) {
+                summary[WatchRecordingPayloadKey.presetInitial] = String(initial).uppercased()
+            }
+            if let data = try? encoder.encode(preset),
+               data.count <= maximumSnapshotBytes,
+               snapshotBytesUsed + data.count <= snapshotBudgetBytes {
+                snapshotBytesUsed += data.count
+                summary[WatchRecordingPayloadKey.presetSnapshot] = data
+            }
+            return summary
         }
         return (summaries, ordered.count > maximumPresetCount)
+    }
+
+    /// Signal route tiles in route order (mirrors `WatchRouteTileStyle.fallback`
+    /// and `SignalRouteTileTone`): first indigo, second ink (bone on the
+    /// Watch), the rest neutral graphite.
+    private func watchRouteTileStyle(forIndex index: Int) -> String {
+        switch index {
+        case ..<1: return "accent"
+        case 1: return "light"
+        default: return "graphite"
+        }
+    }
+
+    /// The Watch "Open on iPhone" action. Foreground: nothing to do beyond the
+    /// Handoff the Watch advertises. Background: post a local notification that
+    /// opens Vox.md so the user can pick a vault and routes.
+    @MainActor
+    private func notifyWatchSetupRequested() {
+        guard UIApplication.shared.applicationState != .active else { return }
+        Task {
+            let center = UNUserNotificationCenter.current()
+            let settings = await center.notificationSettings()
+            guard settings.authorizationStatus == .authorized
+                    || settings.authorizationStatus == .provisional
+                    || settings.authorizationStatus == .ephemeral else {
+                return
+            }
+            let content = UNMutableNotificationContent()
+            content.title = String(localized: "Finish Apple Watch setup")
+            content.body = String(localized: "Pick a vault and routes in Vox.md, then they appear on your Watch.")
+            content.sound = .default
+            try? await center.add(UNNotificationRequest(
+                identifier: "watch-setup-requested",
+                content: content,
+                trigger: nil
+            ))
+        }
     }
 
     private func isValidWatchPresetID(_ id: String) -> Bool {
@@ -682,7 +763,7 @@ extension WatchRecordingController: WCSessionDelegate {
             backgroundLease.end(.enqueueFailed)
             logger.error("Failed to queue watch recording: \(String(describing: error))")
             Task { @MainActor in
-                let message = String(localized: "iPhone could not save this transfer. Tap Sync on Watch to retry.")
+                let message = String(localized: "iPhone could not save this transfer. Watch will retry automatically.")
                 if let recordingID {
                     WatchRecordingController.shared.setTransportFailure(
                         recordingID: recordingID,
@@ -711,6 +792,9 @@ nonisolated enum WatchRecordingPayloadKey {
     static let presetSummariesTruncated = "presetSummariesTruncated"
     static let presetSelectionAvailable = "presetSelectionAvailable"
     static let presetSymbolName = "presetSymbolName"
+    static let presetInitial = "presetInitial"
+    static let presetTileStyle = "presetTileStyle"
+    static let presetSnapshot = "presetSnapshot"
     static let requestedPresetID = "requestedPresetID"
     static let presetSelectionRequestID = "presetSelectionRequestID"
     static let presetSelectionEpoch = "presetSelectionEpoch"
@@ -733,6 +817,7 @@ nonisolated enum WatchRecordingCommand: String {
     case status
     case acknowledge
     case selectPreset
+    case requestSetup
 }
 
 nonisolated enum WatchPresetSelectionOutcome: String {

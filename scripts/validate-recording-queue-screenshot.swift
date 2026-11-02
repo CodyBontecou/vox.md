@@ -11,23 +11,23 @@ struct ScreenshotExpectation {
 
 let expectations: [String: ScreenshotExpectation] = [
     "ios-failed": .init(
-        required: ["Recording Queue", "Recovered Recording", "Needs attention", "Choose Preset", "Share Audio", "Keep Audio", "Delete"],
+        required: ["Activity", "Recovered Recording", "Needs attention", "Choose Route", "Share Audio", "Keep Audio", "Delete"],
         forbidden: ["What's new in Vox.md"]
     ),
     "ios-failed-accessibility": .init(
-        required: ["Recording Queue", "Needs attention", "Choose Preset", "Share Audio", "Keep Audio"],
+        required: ["Activity", "Needs attention", "Choose Route", "Share Audio", "Keep Audio"],
         forbidden: ["What's new in Vox.md"]
     ),
     "ios-queued": .init(
-        required: ["Recording Queue", "Recovered Recording", "Queued", "Process Now", "Share Audio", "Keep Audio", "Delete"],
+        required: ["Activity", "Recovered Recording", "Queued", "Process Now", "Share Audio", "Keep Audio", "Delete"],
         forbidden: ["What's new in Vox.md"]
     ),
     "ios-copy-ready": .init(
-        required: ["Recording Queue", "Clipboard Transcription", "Ready to copy", "Copy", "Share Audio", "Keep Audio", "Delete"],
+        required: ["Activity", "Clipboard Transcription", "Ready to copy", "Copy", "Share Audio", "Keep Audio", "Delete"],
         forbidden: ["What's new in Vox.md"]
     ),
     "mac-failed": .init(
-        required: ["Recovered Recording", "Needs attention", "Choose Preset", "Reveal", "Keep Audio", "Delete"],
+        required: ["Recovered Recording", "Needs attention", "Choose Route", "Reveal", "Keep Audio", "Delete"],
         forbidden: []
     ),
     "mac-queued": .init(

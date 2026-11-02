@@ -99,26 +99,42 @@ public actor CoordinatedCaptureWriter: CaptureMutationWriting {
     private let coordinator: any CaptureFileCoordinating
     private let editor: MarkdownDocumentEditor
     private let fileManager: FileManager
+    private let busyMonitor: CaptureFileBusyMonitor
 
     public init(
         coordinator: any CaptureFileCoordinating = NSFileCoordinatorCaptureFileCoordinator.shared,
         editor: MarkdownDocumentEditor = MarkdownDocumentEditor(),
-        fileManager: FileManager = .default
+        fileManager: FileManager = .default,
+        busyMonitor: CaptureFileBusyMonitor = .shared
     ) {
         self.coordinator = coordinator
         self.editor = editor
         self.fileManager = fileManager
+        self.busyMonitor = busyMonitor
     }
 
     public func write(
         _ mutation: MarkdownCaptureMutation,
         to fileURL: URL
     ) async throws -> CaptureWriteReceipt {
-        try coordinator.coordinateWriting(at: fileURL) { coordinatedURL in
+        let busyMonitor = busyMonitor
+        return try coordinator.coordinateWriting(at: fileURL) { coordinatedURL in
             let marker = CaptureRequestMarker.text(for: mutation.requestID)
             let secureLocation = mutation.destinationRootURL.flatMap { root in
                 mutation.relativeNotePath.map { (root: root, relativePath: $0) }
             }
+            // Busy-file detection: never overwrite a note another app is
+            // editing. Checked before reading and again right before writing.
+            let detectsBusyFiles = busyMonitor.isDetectionEnabled
+            let busyTargetURL = secureLocation.map {
+                $0.root.appendingPathComponent($0.relativePath)
+            } ?? coordinatedURL
+            var busyReason = detectsBusyFiles
+                ? CaptureFileBusyDetector.busyReason(for: busyTargetURL, fileManager: fileManager)
+                : nil
+            let preReadSnapshot = detectsBusyFiles
+                ? CaptureFileBusyDetector.snapshot(of: busyTargetURL, fileManager: fileManager)
+                : nil
             let existing: String
             if let secureLocation,
                let data = try SecureCaptureFileIO.read(
@@ -141,6 +157,42 @@ public actor CoordinatedCaptureWriter: CaptureMutationWriting {
                 requestID: mutation.requestID
             )
             let edited = try editor.applying(mutation, to: existing)
+
+            if detectsBusyFiles, !wasAlreadyApplied {
+                if busyReason == nil, let preReadSnapshot,
+                   CaptureFileBusyDetector.snapshot(of: busyTargetURL, fileManager: fileManager) != preReadSnapshot {
+                    busyReason = .changedDuringWrite
+                }
+                let forcedNewNote = busyMonitor.consumeNewNoteRequest(for: mutation.requestID)
+                if forcedNewNote || busyReason != nil {
+                    if forcedNewNote || busyMonitor.policy == .writeNewNote {
+                        let receipt = try Self.writeNewNote(
+                            mutation,
+                            besideFileAt: coordinatedURL,
+                            secureLocation: secureLocation,
+                            editor: editor,
+                            fileManager: fileManager
+                        )
+                        busyMonitor.clear(requestID: mutation.requestID)
+                        return receipt
+                    }
+                    let busyError = CaptureFileBusyError(
+                        requestID: mutation.requestID,
+                        fileName: busyTargetURL.lastPathComponent,
+                        relativeNotePath: mutation.relativeNotePath,
+                        reason: busyReason ?? .changedDuringWrite
+                    )
+                    busyMonitor.record(CaptureFileBusyEntry(
+                        requestID: mutation.requestID,
+                        fileName: busyError.fileName,
+                        relativeNotePath: busyError.relativeNotePath,
+                        reason: busyError.reason,
+                        markdown: (mutation.entryPrefix + mutation.entry + mutation.entrySuffix)
+                            .trimmingCharacters(in: .newlines)
+                    ))
+                    throw busyError
+                }
+            }
 
             if !wasAlreadyApplied {
                 if let secureLocation {
@@ -177,6 +229,7 @@ public actor CoordinatedCaptureWriter: CaptureMutationWriting {
             guard writeWasVerified else {
                 throw CaptureWriteError.verificationFailed(mutation.requestID)
             }
+            if detectsBusyFiles { busyMonitor.clear(requestID: mutation.requestID) }
             return CaptureWriteReceipt(
                 fileURL: coordinatedURL,
                 requestID: mutation.requestID,
@@ -184,5 +237,50 @@ public actor CoordinatedCaptureWriter: CaptureMutationWriting {
                 wasAlreadyApplied: wasAlreadyApplied
             )
         }
+    }
+
+    /// "Write a new note instead": writes the entry into a new sibling note
+    /// so the busy note is left untouched.
+    nonisolated private static func writeNewNote(
+        _ mutation: MarkdownCaptureMutation,
+        besideFileAt coordinatedURL: URL,
+        secureLocation: (root: URL, relativePath: String)?,
+        editor: MarkdownDocumentEditor,
+        fileManager: FileManager
+    ) throws -> CaptureWriteReceipt {
+        var newNoteMutation = mutation
+        newNoteMutation.placement = .append
+        let content = try editor.applying(newNoteMutation, to: "")
+        let data = Data(content.utf8)
+        let writtenURL: URL
+        if let secureLocation {
+            let relativePath = CaptureFileBusyDetector.newNoteRelativePath(
+                for: secureLocation.relativePath
+            ) { candidate in
+                (try? SecureCaptureFileIO.exists(relativePath: candidate, rootURL: secureLocation.root)) ?? true
+            }
+            try SecureCaptureFileIO.writeAtomically(
+                data,
+                relativePath: relativePath,
+                rootURL: secureLocation.root
+            )
+            writtenURL = secureLocation.root.appendingPathComponent(relativePath)
+        } else {
+            let directory = coordinatedURL.deletingLastPathComponent()
+            let relativePath = CaptureFileBusyDetector.newNoteRelativePath(
+                for: coordinatedURL.lastPathComponent
+            ) { candidate in
+                fileManager.fileExists(atPath: directory.appendingPathComponent(candidate).path)
+            }
+            writtenURL = directory.appendingPathComponent(relativePath)
+            try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
+            try data.write(to: writtenURL, options: .atomic)
+        }
+        return CaptureWriteReceipt(
+            fileURL: writtenURL,
+            requestID: mutation.requestID,
+            byteCount: data.count,
+            wasAlreadyApplied: false
+        )
     }
 }

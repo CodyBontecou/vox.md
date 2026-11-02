@@ -66,7 +66,7 @@ public enum CaptureDeepLinkError: Error, Equatable, LocalizedError, Sendable {
         case .forbiddenParameter(let name): return "The capture link contains a forbidden parameter: \(name)"
         case .duplicateParameter(let name): return "The capture link repeats a parameter: \(name)"
         case .invalidDestination: return "The capture destination identifier is invalid."
-        case .invalidVox: return "The Capture Preset identifier is invalid."
+        case .invalidVox: return "The Route identifier is invalid."
         case .invalidURL: return "Only HTTP and HTTPS links can be captured."
         case .invalidRequestID: return "The capture inbox request identifier is invalid."
         case .invalidAction: return "The requested capture input is not supported."

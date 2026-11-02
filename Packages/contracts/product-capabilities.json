@@ -353,7 +353,7 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: One-time lifetime unlimited entitlement with no subscription",
+          "assertion": "Verify Android/Wear preserves the inventoried outcome: One-time lifetime unlimited entitlement with no trial, offered alongside optional weekly/yearly subscriptions",
           "evidencePath": "artifacts/validation/android-wear/cap.billing.lifetime.md",
           "kind": "account",
           "mappingID": "cap.billing.lifetime.acceptance.1",
@@ -367,13 +367,13 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "one-time"
+          "symbol": "Lifetime is a one-time purchase with no trial"
         }
       ],
       "id": "cap.billing.lifetime",
       "legacyParity": "commercial-equivalent",
       "milestone": "M8",
-      "outcome": "One-time lifetime unlimited entitlement with no subscription",
+      "outcome": "One-time lifetime unlimited entitlement with no trial, offered alongside optional weekly/yearly subscriptions",
       "platforms": [
         "iphone",
         "ipad",
@@ -492,7 +492,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case addFiles"
         }
       ],
@@ -522,7 +522,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case addMedia"
         }
       ],
@@ -642,7 +642,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case currentLocation"
         }
       ],
@@ -672,7 +672,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case date"
         }
       ],
@@ -702,7 +702,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case dueDate"
         }
       ],
@@ -732,7 +732,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case extractText"
         }
       ],
@@ -762,7 +762,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case formatMarkdown"
         }
       ],
@@ -942,7 +942,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case paste"
         }
       ],
@@ -1002,7 +1002,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case scanDocument"
         }
       ],
@@ -1062,7 +1062,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case sketch"
         }
       ],
@@ -1152,7 +1152,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case timestamp"
         }
       ],
@@ -1212,7 +1212,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case undo"
         }
       ],
@@ -5366,7 +5366,7 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: 10 successful Capture deliveries",
+          "assertion": "Verify Android/Wear preserves the inventoried outcome: Android retains 10 successful Capture deliveries; Apple platforms require paid access instead",
           "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.quota.capture.acceptance.1",
@@ -5380,16 +5380,22 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "10 successful Capture deliveries"
+          "symbol": "Vox Android subscriptions are deferred and retain their existing offer"
+        },
+        {
+          "path": "README.md",
+          "symbol": "There is no resettable free-minute or Capture allowance in this source"
+        },
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureDurability.kt",
+          "symbol": "const val FREE_CAPACITY = 10"
         }
       ],
       "id": "cap.quota.capture",
-      "legacyParity": "exact",
+      "legacyParity": "product-adjusted",
       "milestone": "M3/M8",
-      "outcome": "10 successful Capture deliveries",
+      "outcome": "Android retains 10 successful Capture deliveries; Apple platforms require paid access instead",
       "platforms": [
-        "iphone",
-        "ipad",
         "android"
       ],
       "programScope": "parity",
@@ -5412,7 +5418,11 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "original paid app build are automatically grandfathered"
+          "symbol": "qualifying original paid-app ownership remain valid"
+        },
+        {
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/UsageTracker.swift",
+          "symbol": "public func grantPermanentIndividualAccess()"
         }
       ],
       "id": "cap.quota.grandfather",
@@ -5430,7 +5440,7 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: Failed writes and retries do not consume a Capture",
+          "assertion": "Verify Android/Wear preserves the inventoried outcome: Android failed writes and retries do not consume a Capture",
           "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.quota.retry-no-charge.acceptance.1",
@@ -5444,16 +5454,22 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "Failed writes and retries do not consume a Capture"
+          "symbol": "Vox Android subscriptions are deferred and retain their existing offer"
+        },
+        {
+          "path": "README.md",
+          "symbol": "There is no resettable free-minute or Capture allowance in this source"
+        },
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureDurability.kt",
+          "symbol": "if (requestID in snapshot.committedRequestIDs) return QuotaPlan.AlreadyCommitted"
         }
       ],
       "id": "cap.quota.retry-no-charge",
-      "legacyParity": "exact",
+      "legacyParity": "product-adjusted",
       "milestone": "M3",
-      "outcome": "Failed writes and retries do not consume a Capture",
+      "outcome": "Android failed writes and retries do not consume a Capture",
       "platforms": [
-        "iphone",
-        "ipad",
         "android"
       ],
       "programScope": "parity",
@@ -5462,7 +5478,7 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: 15 free transcription minutes",
+          "assertion": "Verify Android/Wear preserves the inventoried outcome: Android retains 15 free transcription minutes; Apple platforms require paid access instead",
           "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.quota.transcription.acceptance.1",
@@ -5476,16 +5492,22 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "15 minutes of free transcription"
+          "symbol": "Vox Android subscriptions are deferred and retain their existing offer"
+        },
+        {
+          "path": "README.md",
+          "symbol": "There is no resettable free-minute or Capture allowance in this source"
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/TranscriptionQuota.kt",
+          "symbol": "const val FREE_TRANSCRIPTION_LIMIT_MILLIS = 15L * 60 * 1_000"
         }
       ],
       "id": "cap.quota.transcription",
-      "legacyParity": "exact",
+      "legacyParity": "product-adjusted",
       "milestone": "M4/M8",
-      "outcome": "15 free transcription minutes",
+      "outcome": "Android retains 15 free transcription minutes; Apple platforms require paid access instead",
       "platforms": [
-        "iphone",
-        "ipad",
         "android"
       ],
       "programScope": "parity",
@@ -5494,7 +5516,7 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: Voice Markdown capture consumes transcription allowance only",
+          "assertion": "Verify Android/Wear preserves the inventoried outcome: Android voice Markdown capture consumes transcription allowance only",
           "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "mappingID": "cap.quota.voice-one-meter.acceptance.1",
@@ -5508,16 +5530,22 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "voice transcripts routed to Markdown use only the transcription allowance"
+          "symbol": "Vox Android subscriptions are deferred and retain their existing offer"
+        },
+        {
+          "path": "README.md",
+          "symbol": "There is no resettable free-minute or Capture allowance in this source"
+        },
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRepository.kt",
+          "symbol": "Voice/recording captures consume transcription allowance, never the text Capture allowance."
         }
       ],
       "id": "cap.quota.voice-one-meter",
-      "legacyParity": "exact",
+      "legacyParity": "product-adjusted",
       "milestone": "M4",
-      "outcome": "Voice Markdown capture consumes transcription allowance only",
+      "outcome": "Android voice Markdown capture consumes transcription allowance only",
       "platforms": [
-        "iphone",
-        "ipad",
         "android"
       ],
       "programScope": "parity",
@@ -7911,7 +7939,7 @@
       "evidence": [
         {
           "path": "Voxboard Watch/WatchLocalRecorder.swift",
-          "symbol": "Tap Sync Queue to retry"
+          "symbol": "Recording is safe on Watch. Retrying automatically."
         }
       ],
       "id": "cap.watch.retry",
@@ -8172,26 +8200,26 @@
       ],
       "evidence": [
         {
-          "path": "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/CloudflareOnboardingAnalyticsTransport.swift",
-          "symbol": "OnboardingAnalyticsInstallIDStore"
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift",
+          "symbol": "public enum RetiredAnalyticsCleanup"
         },
         {
-          "path": "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift",
-          "symbol": "onboarding.analytics.queue.v1"
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift",
+          "symbol": "\"onboarding.analytics.install_id.v1\""
         },
         {
-          "path": "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsStorage.swift",
-          "symbol": "OnboardingExperimentAssignmentStore"
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift",
+          "symbol": "\"onboarding.analytics.queue.v1\""
         },
         {
-          "path": "Voxboard/PersistentRecorder.swift",
-          "symbol": "trackOnboardingCompletedIfNeeded"
+          "path": "Voxboard/VoxboardApp.swift",
+          "symbol": "RetiredAnalyticsCleanup.run()"
         }
       ],
       "id": "cap.store.analytics",
       "legacyParity": "legacy-only",
       "milestone": "M0/M1",
-      "outcome": "Privacy-safe onboarding analytics install identity, queued events, experiment assignment, and completion markers",
+      "outcome": "Retired onboarding analytics: upgrades erase the former install identity, queued events, experiment assignment, and completion markers, and no analytics collection remains",
       "platforms": [
         "iphone",
         "ipad",
@@ -8723,6 +8751,6 @@
   "schemaVersion": 1,
   "source": {
     "path": "docs/architecture/android-wear-m0-capabilities.json",
-    "sha256": "dacdb6aa8103304a58f3cfe271483079c619c008bcfe57eedcc0061ce62c1295"
+    "sha256": "1431f33ac74c44b59b22a20b1dc421f85c71ac079863929cc0ce10ced89f305c"
   }
 }

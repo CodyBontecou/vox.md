@@ -1,11 +1,13 @@
 import SwiftUI
+import WatchKit
 
 // MARK: - Watch design system
 
-/// A compact watchOS translation of the iOS Geist theme. The Watch keeps the
-/// system typeface for legibility while sharing the iOS palette, spacing,
-/// rounded controls, and semantic status colors.
-private enum WatchGeist {
+/// The watchOS translation of the iOS "Signal" theme: true-black ground,
+/// #1C1C1E cards, indigo accent, recording red, Geist + Geist Mono type.
+/// Geist is bundled in the Watch app (UIAppFonts); `Font.custom` falls back
+/// to the system face if a font ever fails to register.
+enum WatchGeist {
     enum Spacing {
         static let one: CGFloat = 4
         static let two: CGFloat = 8
@@ -14,194 +16,129 @@ private enum WatchGeist {
     }
 
     enum Radius {
-        static let small: CGFloat = 8
-        static let medium: CGFloat = 12
+        static let small: CGFloat = 14
+        static let medium: CGFloat = 16
         static let full: CGFloat = 9_999
     }
 
-    // Dark values from the iOS Geist palette.
-    static let background = Color(red: 0.102, green: 0.102, blue: 0.110)
-    static let surface = Color(red: 0.122, green: 0.122, blue: 0.122)
-    static let surfacePressed = Color(red: 0.161, green: 0.161, blue: 0.161)
-    static let border = Color.white.opacity(0.141)
-    static let borderHigh = Color.white.opacity(0.239)
-    static let text = Color(red: 0.929, green: 0.929, blue: 0.929)
-    static let muted = Color(red: 0.627, green: 0.627, blue: 0.627)
-    static let faint = Color(red: 0.561, green: 0.561, blue: 0.561)
-    static let blue = Color(red: 0.278, green: 0.659, blue: 1.0)
-    static let blueBackground = Color(red: 0.024, green: 0.098, blue: 0.227)
-    static let red = Color(red: 1.0, green: 0.337, blue: 0.373)
-    static let redBackground = Color(red: 0.200, green: 0.039, blue: 0.067)
+    static let background = Color.black                                                  // #000000
+    static let surface = Color(red: 28 / 255, green: 28 / 255, blue: 30 / 255)            // #1C1C1E
+    static let surfacePressed = Color(red: 58 / 255, green: 58 / 255, blue: 60 / 255)     // #3A3A3C
+    static let border = Color.white.opacity(0.06)
+    static let text = Color(red: 244 / 255, green: 244 / 255, blue: 241 / 255)            // #F4F4F1
+    static let muted = Color(red: 154 / 255, green: 154 / 255, blue: 149 / 255)           // #9A9A95
+    static let faint = Color(red: 110 / 255, green: 110 / 255, blue: 106 / 255)           // #6E6E6A
+    static let idleBar = Color(red: 72 / 255, green: 72 / 255, blue: 74 / 255)            // #48484A
+    /// Indigo tint for text/glyphs on black (#8A8FFF).
+    static let accent = Color(red: 138 / 255, green: 143 / 255, blue: 255 / 255)
+    /// Indigo fill for primary controls and route tiles (#2F3BE8).
+    static let accentFill = Color(red: 47 / 255, green: 59 / 255, blue: 232 / 255)
+    static let red = Color(red: 240 / 255, green: 71 / 255, blue: 74 / 255)               // #F0474A
+    static let green = Color(red: 76 / 255, green: 201 / 255, blue: 160 / 255)            // #4CC9A0
+    static let greenBackground = Color(red: 15 / 255, green: 59 / 255, blue: 46 / 255)    // #0F3B2E
 
-    static func heading(_ size: CGFloat) -> Font {
-        .system(size: size, weight: .semibold, design: .default)
-    }
-
-    static func label(_ style: Font.TextStyle = .footnote) -> Font {
-        .system(style, design: .default, weight: .medium)
-    }
-
-    static func body(_ style: Font.TextStyle = .footnote) -> Font {
-        .system(style, design: .default, weight: .regular)
-    }
-
-    static func caption(_ style: Font.TextStyle = .caption2) -> Font {
-        .system(style, design: .default, weight: .regular)
-    }
-}
-
-private enum WatchStatusTone: Equatable {
-    case neutral
-    case active
-    case destructive
-
-    var foreground: Color {
-        switch self {
-        case .neutral: WatchGeist.muted
-        case .active: WatchGeist.blue
-        case .destructive: WatchGeist.red
+    static func sans(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
+        let name: String
+        switch weight {
+        case .semibold, .bold, .heavy, .black: name = "Geist-SemiBold"
+        case .medium: name = "Geist-Medium"
+        default: name = "Geist-Regular"
         }
+        return .custom(name, size: size, relativeTo: .body)
     }
 
-    var background: Color {
-        switch self {
-        case .neutral: WatchGeist.surface
-        case .active: WatchGeist.blueBackground
-        case .destructive: WatchGeist.redBackground
+    static func mono(_ size: CGFloat, medium: Bool = true) -> Font {
+        .custom(medium ? "GeistMono-Medium" : "GeistMono-Regular", size: size, relativeTo: .title)
+    }
+
+    static func tileColors(_ style: WatchRouteTileStyle) -> (fill: Color, letter: Color) {
+        switch style {
+        case .accent: return (accentFill, .white)
+        case .light: return (text, .black)
+        case .graphite: return (surfacePressed, text)
         }
     }
 }
 
-private struct WatchStatusBadge: View {
-    let label: String
-    let tone: WatchStatusTone
-
-    var body: some View {
-        HStack(spacing: 5) {
-            Circle()
-                .fill(tone.foreground)
-                .frame(width: 5, height: 5)
-            Text(label)
-                .font(WatchGeist.caption())
-                .foregroundStyle(tone.foreground)
-                .lineLimit(1)
-                .minimumScaleFactor(0.75)
-        }
-        .padding(.horizontal, WatchGeist.Spacing.two)
-        .frame(height: 26)
-        .background(tone.background)
-        .clipShape(Capsule())
-    }
-}
-
-private struct WatchWaveformView: View {
-    let color: Color
-    private let barCount = 9
-
-    var body: some View {
-        TimelineView(.animation(minimumInterval: 0.12)) { timeline in
-            let time = timeline.date.timeIntervalSinceReferenceDate
-            HStack(spacing: 3) {
-                ForEach(0..<barCount, id: \.self) { index in
-                    let phase = time * 4.5 + Double(index) * 0.62
-                    let height = (sin(phase) + 1) / 2 * 16 + 5
-                    Capsule()
-                        .fill(color)
-                        .frame(width: 3, height: height)
-                }
-            }
-            .frame(height: 24)
-        }
-        .accessibilityHidden(true)
-    }
-}
-
-private struct WatchGeistButtonStyle: ButtonStyle {
-    enum Variant: Equatable {
-        case primary
-        case secondary
-        case destructive
-    }
+private struct WatchCapsuleButtonStyle: ButtonStyle {
+    enum Variant { case primary, secondary, destructive }
 
     let variant: Variant
+    var height: CGFloat = 44
     @Environment(\.isEnabled) private var isEnabled
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(WatchGeist.label())
-            .foregroundStyle(foregroundColor)
+            .font(WatchGeist.sans(15, .semibold))
+            .foregroundStyle(variant == .secondary ? WatchGeist.text : .white)
             .frame(maxWidth: .infinity)
-            .frame(minHeight: 44)
-            .padding(.horizontal, WatchGeist.Spacing.two)
-            .background(backgroundColor(isPressed: configuration.isPressed))
-            .overlay {
-                if variant == .secondary {
-                    RoundedRectangle(cornerRadius: WatchGeist.Radius.small, style: .continuous)
-                        .stroke(configuration.isPressed ? WatchGeist.borderHigh : WatchGeist.border, lineWidth: 1)
-                }
-            }
-            .clipShape(RoundedRectangle(cornerRadius: WatchGeist.Radius.small, style: .continuous))
-            .contentShape(RoundedRectangle(cornerRadius: WatchGeist.Radius.small, style: .continuous))
+            .frame(height: height)
+            .background(background.opacity(configuration.isPressed ? 0.78 : 1))
+            .clipShape(Capsule())
+            .contentShape(Capsule())
             .opacity(isEnabled ? 1 : 0.55)
     }
 
-    private var foregroundColor: Color {
-        guard isEnabled else { return WatchGeist.faint }
+    private var background: Color {
         switch variant {
-        case .primary:
-            return WatchGeist.background
-        case .secondary, .destructive:
-            return WatchGeist.text
-        }
-    }
-
-    private func backgroundColor(isPressed: Bool) -> Color {
-        guard isEnabled else { return WatchGeist.surface }
-        switch variant {
-        case .primary:
-            return isPressed ? WatchGeist.muted : WatchGeist.text
-        case .secondary:
-            return isPressed ? WatchGeist.surfacePressed : WatchGeist.surface
-        case .destructive:
-            return isPressed ? WatchGeist.red.opacity(0.78) : WatchGeist.red
+        case .primary: WatchGeist.accentFill
+        case .secondary: WatchGeist.surface
+        case .destructive: WatchGeist.red
         }
     }
 }
 
+/// Lettered circle identifying a route, with its per-route Signal color.
+struct WatchRouteTile: View {
+    let route: WatchCapturePresetSummary
+    var size: CGFloat = 28
+
+    var body: some View {
+        let colors = WatchGeist.tileColors(route.tileStyle)
+        ZStack {
+            Circle().fill(colors.fill)
+            if route.initial.isEmpty {
+                Image(systemName: route.symbolName)
+                    .font(.system(size: size * 0.42, weight: .bold))
+            } else {
+                Text(route.initial)
+                    .font(WatchGeist.sans(size * 0.43, .bold))
+            }
+        }
+        .foregroundStyle(colors.letter)
+        .frame(width: size, height: size)
+        .accessibilityHidden(true)
+    }
+}
+
+// MARK: - Root
+
 struct WatchRecorderView: View {
     @EnvironmentObject private var bridge: WatchPhoneBridge
     @EnvironmentObject private var localRecorder: WatchLocalRecorder
-    @State private var isSending = false
-    @State private var showsPresetPicker = false
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         ZStack {
             WatchGeist.background.ignoresSafeArea()
-
-            ScrollView(.vertical) {
-                VStack(spacing: WatchGeist.Spacing.two) {
-                    header
-                    statusCard
-                    actionButtons
-                    captureContextCard
-                }
-                .padding(.horizontal, WatchGeist.Spacing.two)
-                .padding(.top, 2)
-                .padding(.bottom, WatchGeist.Spacing.three)
-            }
-            .scrollIndicators(.hidden)
+            content
         }
         .preferredColorScheme(.dark)
-        .sheet(isPresented: $showsPresetPicker) {
-            WatchCapturePresetPickerView()
-                .environmentObject(bridge)
-                .environmentObject(localRecorder)
-        }
         .task {
             #if DEBUG
             if localRecorder.configureLocalizationScreenshotIfNeeded() { return }
             #endif
             bridge.activate()
+            #if DEBUG
+            bridge.applyDemoRoutesIfRequested()
+            if let url = ProcessInfo.processInfo.arguments
+                .first(where: { $0.hasPrefix("\(WatchRecordingDeepLink.scheme)://") })
+                .flatMap(URL.init(string:)) {
+                try? await Task.sleep(nanoseconds: 300_000_000)
+                await localRecorder.handleDeepLink(url, using: bridge)
+            }
+            #endif
+            localRecorder.updateRouteContext(using: bridge)
             try? await Task.sleep(nanoseconds: 750_000_000)
             #if DEBUG
             if localRecorder.runDemoScriptIfNeeded(using: bridge) { return }
@@ -209,742 +146,504 @@ struct WatchRecorderView: View {
             // Reconcile terminal iPhone state before scheduling any transfer so
             // a delivered/discarded recording cannot be retransmitted on launch.
             localRecorder.applyRemoteStatuses(bridge.snapshot.recordingStatuses, using: bridge)
-            localRecorder.syncPending(using: bridge)
+            if localRecorder.hasUnuploadedRecordings {
+                localRecorder.syncPending(using: bridge)
+            }
         }
         .onChange(of: bridge.snapshot) { _, snapshot in
             localRecorder.applyRemoteStatuses(snapshot.recordingStatuses, using: bridge)
+            localRecorder.updateRouteContext(using: bridge)
         }
-    }
-
-    private var header: some View {
-        HStack(spacing: WatchGeist.Spacing.two) {
-            Image("WatchTopBarIcon")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 22, height: 22)
-                .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-                .accessibilityHidden(true)
-
-            Text("Vox.md")
-                .font(WatchGeist.label(.caption))
-                .foregroundStyle(WatchGeist.text)
-
-            Spacer(minLength: WatchGeist.Spacing.one)
-            WatchStatusBadge(label: phaseBadgeLabel, tone: statusTone)
+        .onChange(of: bridge.isPhoneReachable) { _, isReachable in
+            guard isReachable else { return }
+            localRecorder.autoSyncIfNeeded(using: bridge)
         }
-        .padding(.horizontal, 2)
-        .frame(minHeight: 30)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("Vox.md, \(phaseBadgeLabel)")
-    }
-
-    private var statusCard: some View {
-        Group {
-            if localRecorder.isRecording {
-                recordingStatusContent
-            } else {
-                compactStatusContent
-            }
+        .onChange(of: scenePhase) { _, phase in
+            guard phase == .active else { return }
+            localRecorder.autoSyncIfNeeded(using: bridge)
         }
-        .frame(maxWidth: .infinity)
-        .padding(10)
-        .background(WatchGeist.surface)
-        .overlay(
-            RoundedRectangle(cornerRadius: WatchGeist.Radius.medium, style: .continuous)
-                .stroke(WatchGeist.border, lineWidth: 1)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: WatchGeist.Radius.medium, style: .continuous))
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(accessibilityStatusLabel)
-    }
-
-    private var compactStatusContent: some View {
-        HStack(spacing: WatchGeist.Spacing.two) {
-            statusIcon(size: 38, symbolSize: 16)
-
-            VStack(alignment: .leading, spacing: 3) {
-                Text(statusHeadline)
-                    .font(WatchGeist.heading(statusHeadlineSize))
-                    .foregroundStyle(statusTone == .destructive ? WatchGeist.red : WatchGeist.text)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.68)
-
-                Text(statusSubtitle)
-                    .font(WatchGeist.caption())
-                    .foregroundStyle(statusTone == .destructive ? WatchGeist.red : WatchGeist.muted)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.75)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
-
-    private var recordingStatusContent: some View {
-        VStack(spacing: WatchGeist.Spacing.two) {
-            HStack(spacing: WatchGeist.Spacing.three) {
-                statusIcon(size: 44, symbolSize: 18)
-
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(localRecorder.isPaused ? String(localized: "Paused") : String(localized: "Recording"))
-                        .font(WatchGeist.label(.caption))
-                        .foregroundStyle(WatchGeist.text)
-                    Text(formattedDuration(localRecorder.duration))
-                        .font(.system(size: 27, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(WatchGeist.text)
-                        .monospacedDigit()
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.72)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-
-            HStack(spacing: WatchGeist.Spacing.two) {
-                if localRecorder.isPaused {
-                    Image(systemName: "pause.fill")
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(WatchGeist.blue)
-                        .frame(width: 64, height: 24)
-                        .accessibilityHidden(true)
-                } else {
-                    WatchWaveformView(color: WatchGeist.red)
-                        .frame(width: 64)
-                }
-                Text(localRecorder.isPaused
-                     ? String(localized: "Resume • Stop • Cancel")
-                     : String(localized: "Pause • Stop • Cancel"))
-                    .font(WatchGeist.caption())
-                    .foregroundStyle(WatchGeist.muted)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.62)
-            }
-            .frame(maxWidth: .infinity)
-        }
-    }
-
-    private func statusIcon(size: CGFloat, symbolSize: CGFloat) -> some View {
-        ZStack {
-            Circle()
-                .fill(statusTone.background)
-                .frame(width: size, height: size)
-
-            Image(systemName: statusSymbolName)
-                .font(.system(size: symbolSize, weight: .semibold))
-                .foregroundStyle(statusTone.foreground)
-        }
-        .accessibilityHidden(true)
     }
 
     @ViewBuilder
-    private var actionButtons: some View {
+    private var content: some View {
         if localRecorder.isRecording {
-            VStack(spacing: WatchGeist.Spacing.two) {
-                HStack(spacing: WatchGeist.Spacing.two) {
-                    recordingButton
-                    pauseResumeButton
-                }
-                cancelRecordingButton
-            }
-        } else if shouldShowSecondaryAction {
-            HStack(spacing: WatchGeist.Spacing.two) {
-                recordingButton
-                secondarySyncButton
-            }
+            WatchRecordingScreen()
+        } else if let result = localRecorder.result {
+            WatchResultScreen(result: result)
+        } else if needsSetup {
+            WatchSetupScreen()
         } else {
-            recordingButton
+            WatchRouteListScreen()
         }
     }
 
-    private var recordingButton: some View {
-        Button {
-            Task { await toggleRecording() }
-        } label: {
-            HStack(spacing: 6) {
-                if isSending {
-                    ProgressView()
-                        .controlSize(.small)
-                        .tint(localRecorder.isRecording ? WatchGeist.text : WatchGeist.background)
-                } else {
-                    Image(systemName: localRecorder.actionSymbol)
+    private var needsSetup: Bool {
+        guard bridge.snapshot.availablePresets.isEmpty else { return false }
+        if bridge.snapshot.hasPresetSelectionAvailabilityPayload { return true }
+        // Never synced with iPhone, or iPhone app not installed yet.
+        return !bridge.snapshot.hasPresetSummariesPayload || bridge.snapshot.phase == .unavailable
+    }
+}
+
+// MARK: - WatchRoutes: "Speak to…"
+
+private struct WatchRouteListScreen: View {
+    @EnvironmentObject private var bridge: WatchPhoneBridge
+    @EnvironmentObject private var localRecorder: WatchLocalRecorder
+    @State private var startingRouteID: String?
+
+    var body: some View {
+        ScrollView(.vertical) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Speak to…")
+                    .font(WatchGeist.sans(13, .semibold))
+                    .foregroundStyle(WatchGeist.accent)
+                    .padding(.horizontal, 6)
+                    .padding(.bottom, 2)
+                    .accessibilityAddTraits(.isHeader)
+
+                ForEach(bridge.snapshot.availablePresets) { route in
+                    routeRow(route)
                 }
-                Text(localRecorder.actionTitle)
-            }
-        }
-        .buttonStyle(
-            WatchGeistButtonStyle(
-                variant: localRecorder.isRecording ? .destructive : .primary
-            )
-        )
-        .disabled(isSending || (!localRecorder.isRecording && !canStartRecording))
-        .accessibilityLabel(localRecorder.isRecording
-                            ? String(localized: "Stop Watch recording")
-                            : String(localized: "Start Watch recording"))
-        .accessibilityHint(localRecorder.isRecording
-                           ? String(localized: "Stops and safely saves this recording.")
-                           : String(localized: "Starts a recording stored locally on this Watch."))
-    }
 
-    private var pauseResumeButton: some View {
-        Button {
-            localRecorder.togglePause()
-        } label: {
-            HStack(spacing: 6) {
-                Image(systemName: localRecorder.isPaused ? "play.fill" : "pause.fill")
-                Text(localRecorder.isPaused ? String(localized: "Resume") : String(localized: "Pause"))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-            }
-        }
-        .buttonStyle(WatchGeistButtonStyle(variant: .secondary))
-        .disabled(isSending)
-        .accessibilityLabel(localRecorder.isPaused
-                            ? String(localized: "Resume Watch recording")
-                            : String(localized: "Pause Watch recording"))
-        .accessibilityHint(localRecorder.isPaused
-                           ? String(localized: "Continues adding audio to this recording.")
-                           : String(localized: "Temporarily stops adding audio without ending the recording."))
-    }
-
-    private var cancelRecordingButton: some View {
-        Button {
-            Task { await cancelRecording() }
-        } label: {
-            HStack(spacing: 6) {
-                Image(systemName: "xmark")
-                Text("Cancel")
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-            }
-        }
-        .buttonStyle(WatchGeistButtonStyle(variant: .secondary))
-        .disabled(isSending)
-        .accessibilityLabel("Cancel and delete Watch recording")
-        .accessibilityHint("Stops and permanently deletes this recording without syncing it to your iPhone.")
-    }
-
-    private var secondarySyncButton: some View {
-        Button {
-            Task { await syncQueueOrRefreshStatus() }
-        } label: {
-            HStack(spacing: 6) {
-                Image(systemName: isSending ? "arrow.triangle.2.circlepath" : "arrow.clockwise")
-                Text(localRecorder.hasUnuploadedRecordings
-                     ? String(localized: "Sync")
-                     : String(localized: "Refresh"))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-            }
-        }
-        .buttonStyle(WatchGeistButtonStyle(variant: .secondary))
-        .disabled(isSending || localRecorder.isRecording)
-        .accessibilityHint(localRecorder.queuedCount > 0
-                           ? String(localized: "Sends saved Watch recordings to your iPhone.")
-                           : String(localized: "Refreshes the connection with your iPhone."))
-    }
-
-    private var captureContextCard: some View {
-        Button {
-            showsPresetPicker = true
-        } label: {
-            HStack(spacing: WatchGeist.Spacing.two) {
-                Image(systemName: selectedPresetSymbolName)
-                    .font(.system(size: 15, weight: .medium))
-                    .foregroundStyle(WatchGeist.blue)
-                    .frame(width: 26, height: 26)
-                    .background(WatchGeist.blueBackground)
-                    .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
-                    .accessibilityHidden(true)
-
-                VStack(alignment: .leading, spacing: 1) {
-                    Text("Capture Preset")
-                        .font(WatchGeist.caption())
+                if bridge.snapshot.presetSummariesAreTruncated {
+                    Text("More routes are in Vox.md on iPhone.")
+                        .font(WatchGeist.sans(12))
                         .foregroundStyle(WatchGeist.muted)
-                    if let visibleName = displayedPresetVisibleName {
-                        Text(visibleName)
-                            .font(WatchGeist.label(.caption2))
-                            .foregroundStyle(WatchGeist.text)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.72)
-                    }
+                        .padding(.horizontal, 6)
                 }
 
-                Spacer(minLength: WatchGeist.Spacing.one)
-
-                VStack(alignment: .trailing, spacing: 1) {
-                    Text("Queue")
-                        .font(WatchGeist.caption())
-                        .foregroundStyle(WatchGeist.muted)
-                    Text("\(localRecorder.queuedCount)")
-                        .font(WatchGeist.label(.caption2))
-                        .foregroundStyle(localRecorder.queuedCount > 0 ? WatchGeist.blue : WatchGeist.text)
-                        .monospacedDigit()
-                }
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 9, weight: .semibold))
-                    .foregroundStyle(WatchGeist.faint)
+                WatchQueueStatusCard()
+                    .padding(.top, 4)
             }
-            .padding(WatchGeist.Spacing.two)
-            .background(WatchGeist.background)
-            .overlay(
-                RoundedRectangle(cornerRadius: WatchGeist.Radius.small, style: .continuous)
-                    .stroke(WatchGeist.border, lineWidth: 1)
-            )
-            .clipShape(RoundedRectangle(cornerRadius: WatchGeist.Radius.small, style: .continuous))
-            .contentShape(RoundedRectangle(cornerRadius: WatchGeist.Radius.small, style: .continuous))
+            .padding(.horizontal, 2)
+            .padding(.bottom, WatchGeist.Spacing.three)
+        }
+        .scrollIndicators(.hidden)
+    }
+
+    private func routeRow(_ route: WatchCapturePresetSummary) -> some View {
+        Button {
+            guard startingRouteID == nil else { return }
+            startingRouteID = route.id
+            Task {
+                await localRecorder.start(using: bridge, route: route)
+                startingRouteID = nil
+            }
+        } label: {
+            HStack(spacing: 10) {
+                WatchRouteTile(route: route)
+                if let name = route.visibleName {
+                    Text(name)
+                        .font(WatchGeist.sans(15, .semibold))
+                        .foregroundStyle(WatchGeist.text)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+                }
+                Spacer(minLength: 0)
+                if startingRouteID == route.id {
+                    ProgressView().controlSize(.small).tint(WatchGeist.accent)
+                }
+            }
+            .padding(.horizontal, 10)
+            .frame(height: 52)
+            .background(WatchGeist.surface)
+            .clipShape(RoundedRectangle(cornerRadius: WatchGeist.Radius.medium, style: .continuous))
+            .contentShape(RoundedRectangle(cornerRadius: WatchGeist.Radius.medium, style: .continuous))
         }
         .buttonStyle(.plain)
-        .disabled(localRecorder.isRecording)
-        .opacity(localRecorder.isRecording ? 0.55 : 1)
-        .accessibilityLabel("Capture Preset \(displayedPresetName). Change preset. \(localRecorder.queuedCount) recordings in the Watch queue.")
-        .accessibilityHint(localRecorder.isRecording
-                           ? String(localized: "Finish recording before changing presets.")
-                           : String(localized: "Shows Capture Presets from your iPhone."))
+        .disabled(startingRouteID != nil)
+        .accessibilityLabel(String(localized: "Speak to \(route.displayName)"))
+        .accessibilityHint(String(localized: "Starts recording to this route."))
     }
+}
 
-    private var displayedPresetName: String {
-        localRecorder.recordingPresetName
-            ?? selectedPresetSummary?.displayName
-            ?? bridge.snapshot.selectedPresetName
-            ?? String(localized: "iPhone Default")
-    }
+/// Compact queue / pipeline status under the route list. Hidden when idle.
+private struct WatchQueueStatusCard: View {
+    @EnvironmentObject private var bridge: WatchPhoneBridge
+    @EnvironmentObject private var localRecorder: WatchLocalRecorder
 
-    private var displayedPresetVisibleName: String? {
-        if let localName = localRecorder.recordingPresetName { return localName }
-        if let summary = selectedPresetSummary { return summary.visibleName }
-        return bridge.snapshot.selectedPresetName ?? String(localized: "iPhone Default")
-    }
-
-    private var selectedPresetSummary: WatchCapturePresetSummary? {
-        bridge.snapshot.availablePresets.first(where: {
-            $0.id == bridge.snapshot.selectedPresetID
-        })
-    }
-
-    private var selectedPresetSymbolName: String {
-        selectedPresetSummary?.symbolName ?? "waveform"
-    }
-
-    private var canStartRecording: Bool {
-        guard bridge.snapshot.hasPresetSelectionAvailabilityPayload else { return true }
-        return bridge.snapshot.presetSelectionIsAvailable
-            && bridge.snapshot.selectedPresetSnapshot != nil
-    }
-
-    private var statusHeadline: String {
-        if !localRecorder.isRecording, !canStartRecording {
-            return String(localized: "Preset needed")
-        }
-        switch localRecorder.phase {
-        case .recording:
-            return String(localized: "Recording")
-        case .paused:
-            return String(localized: "Paused")
-        case .locating:
-            return String(localized: "Adding Watch Location")
-        case .transferring:
-            return String(localized: "Syncing to iPhone")
-        case .waitingForPhone:
-            return String(localized: "On iPhone")
-        case .transcribing:
-            return String(localized: "Transcribing")
-        case .delivering:
-            return String(localized: "Saving on iPhone")
-        case .transferred:
-            return String(localized: "Saved on iPhone")
-        case .error:
-            return String(localized: "Needs attention")
-        case .idle:
-            return localRecorder.queuedCount > 0
-                ? String(localized: "Ready")
-                : String(localized: "Voice Capture")
-        }
-    }
-
-    private var statusHeadlineSize: CGFloat {
-        switch localRecorder.phase {
-        case .locating, .transferring, .delivering, .transferred:
-            return 16
-        case .recording, .paused, .waitingForPhone, .transcribing, .error:
-            return 18
-        case .idle:
-            return 17
-        }
-    }
-
-    private var statusSubtitle: String {
-        if !localRecorder.isRecording, !canStartRecording {
-            return String(localized: "Enable a Capture Preset in Vox.md on iPhone.")
-        }
-        switch localRecorder.phase {
-        case .recording:
-            return String(localized: "Pause for a break, Stop to save, or Cancel to delete.")
-        case .paused:
-            if let message = localRecorder.message, !message.isEmpty {
-                return message
+    var body: some View {
+        if let status {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(status.title)
+                    .font(WatchGeist.sans(14, .semibold))
+                    .foregroundStyle(status.isError ? WatchGeist.red : WatchGeist.text)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.8)
+                if let detail = status.detail {
+                    Text(detail)
+                        .font(WatchGeist.sans(12))
+                        .foregroundStyle(WatchGeist.muted)
+                        .lineLimit(3)
+                        .minimumScaleFactor(0.8)
+                }
             }
-            return String(localized: "Resume to continue, Stop to save, or Cancel to delete.")
-        case .locating:
-            return String(localized: "The recording is safe. Vox.md is requesting one location from this Watch.")
-        case .transferring:
-            return String(localized: "Your recording remains safe while it moves to iPhone.")
-        case .waitingForPhone:
-            return String(localized: "Safely queued and waiting to process.")
-        case .transcribing:
-            return String(localized: "Your iPhone is transcribing on device.")
-        case .delivering:
-            return String(localized: "Saving through your selected Capture Preset.")
-        case .transferred:
-            return String(localized: "Delivered successfully. You can record another.")
-        case .error(let message):
-            return message
-        case .idle:
-            if localRecorder.queuedCount == 1 {
-                return String(localized: "1 recording safe on Watch.")
-            }
-            if localRecorder.queuedCount > 1 {
-                return String(localized: "\(localRecorder.queuedCount) recordings safe on Watch.")
-            }
-            return String(localized: "Capture on Watch. Syncs to iPhone.")
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(WatchGeist.surface)
+            .clipShape(RoundedRectangle(cornerRadius: WatchGeist.Radius.small, style: .continuous))
+            .accessibilityElement(children: .combine)
         }
     }
 
-    private var shouldShowSecondaryAction: Bool {
-        guard !localRecorder.isRecording else { return false }
-        if localRecorder.queuedCount > 0 { return true }
-        if case .error = localRecorder.phase { return true }
-        return false
+    private struct Status {
+        let title: String
+        let detail: String?
+        var isError = false
     }
 
-    private var phaseBadgeLabel: String {
+    private var status: Status? {
+        if case .error(let error) = localRecorder.phase {
+            let detail = localRecorder.message.flatMap { $0 == error ? nil : $0 }
+            return Status(title: error, detail: detail, isError: true)
+        }
+        let waiting = localRecorder.queuedRecordings.filter { $0.transportState != .uploaded }
+        if !waiting.isEmpty {
+            let title = waiting.count == 1
+                ? String(localized: "1 waiting for iPhone")
+                : String(localized: "\(waiting.count) waiting for iPhone")
+            let names = routeNames(for: waiting)
+            let detail = names.isEmpty
+                ? String(localized: "Saved on Watch")
+                : names.joined(separator: " · ") + " · " + String(localized: "saved on Watch")
+            return Status(title: title, detail: detail)
+        }
         switch localRecorder.phase {
-        case .recording:
-            return String(localized: "Live")
-        case .paused:
-            return String(localized: "Paused")
         case .locating:
-            return String(localized: "Location")
-        case .transferring:
-            return String(localized: "Sync")
-        case .waitingForPhone:
-            return String(localized: "Queued")
+            return Status(title: String(localized: "Adding Watch location"), detail: localRecorder.message)
         case .transcribing:
-            return String(localized: "Text")
+            return Status(title: String(localized: "Transcribing on iPhone"), detail: localRecorder.message)
         case .delivering:
-            return String(localized: "Save")
+            return Status(title: String(localized: "Saving on iPhone"), detail: localRecorder.message)
+        case .waitingForPhone where localRecorder.queuedCount > 0:
+            return Status(title: String(localized: "On iPhone"), detail: localRecorder.message)
         case .transferred:
-            return String(localized: "Sent")
-        case .error:
-            return String(localized: "Alert")
-        case .idle:
-            return localRecorder.queuedCount > 0
-                ? String(localized: "Queue")
-                : String(localized: "Ready")
+            return Status(title: String(localized: "Delivered"), detail: nil)
+        default:
+            return nil
         }
     }
 
-    private var statusTone: WatchStatusTone {
-        switch localRecorder.phase {
-        case .recording, .error:
-            return .destructive
-        case .paused, .locating, .transferring, .waitingForPhone, .transcribing, .delivering, .transferred:
-            return .active
-        case .idle:
-            return localRecorder.queuedCount > 0 ? .active : .neutral
-        }
-    }
-
-    private var statusSymbolName: String {
-        switch localRecorder.phase {
-        case .recording:
-            return "waveform"
-        case .paused:
-            return "pause.fill"
-        case .locating:
-            return "location.fill"
-        case .transferring:
-            return "iphone.radiowaves.left.and.right"
-        case .waitingForPhone:
-            return "iphone.badge.checkmark"
-        case .transcribing:
-            return "waveform.badge.magnifyingglass"
-        case .delivering:
-            return "arrow.up.doc"
-        case .transferred:
-            return "checkmark"
-        case .error:
-            return "exclamationmark.triangle.fill"
-        case .idle:
-            return localRecorder.queuedCount > 0 ? "tray.full" : "mic.fill"
-        }
-    }
-
-    private var accessibilityStatusLabel: String {
-        if localRecorder.isRecording {
-            let state = localRecorder.isPaused
-                ? String(localized: "paused")
-                : String(localized: "recording")
-            return String(localized: "Vox.md \(state) at \(formattedDuration(localRecorder.duration)). \(statusSubtitle)")
-        }
-        return String(localized: "Vox.md Watch status: \(phaseBadgeLabel). \(statusSubtitle)")
-    }
-
-    private func formattedDuration(_ duration: TimeInterval) -> String {
-        let totalSeconds = max(0, Int(duration))
-        let hours = totalSeconds / 3_600
-        let minutes = (totalSeconds % 3_600) / 60
-        let seconds = totalSeconds % 60
-        if hours > 0 {
-            return String(format: "%d:%02d:%02d", hours, minutes, seconds)
-        }
-        return String(format: "%d:%02d", minutes, seconds)
-    }
-
-    private func toggleRecording() async {
-        isSending = true
-        defer { isSending = false }
-        await localRecorder.toggle(using: bridge)
-    }
-
-    private func cancelRecording() async {
-        isSending = true
-        defer { isSending = false }
-        localRecorder.cancelRecording()
-    }
-
-    private func syncQueueOrRefreshStatus() async {
-        isSending = true
-        defer { isSending = false }
-        if localRecorder.hasUnuploadedRecordings {
-            localRecorder.syncPending(using: bridge)
-        } else {
-            let snapshot = await bridge.requestStatus()
-            localRecorder.applyRemoteStatuses(snapshot.recordingStatuses, using: bridge)
+    private func routeNames(for items: [WatchLocalQueuedRecording]) -> [String] {
+        var seen = Set<String>()
+        return items.compactMap { item in
+            let name = bridge.snapshot.route(id: item.presetID)?.shownName ?? item.presetName
+            guard let name, !name.isEmpty, seen.insert(name).inserted else { return nil }
+            return name
         }
     }
 }
 
-private struct WatchCapturePresetPickerView: View {
-    @Environment(\.dismiss) private var dismiss
+// MARK: - WatchRecord
+
+private struct WatchRecordingScreen: View {
     @EnvironmentObject private var bridge: WatchPhoneBridge
     @EnvironmentObject private var localRecorder: WatchLocalRecorder
-    @State private var requestedPresetID: String?
-    @State private var isRefreshing = false
+    @State private var isStopping = false
 
     var body: some View {
-        ZStack {
-            WatchGeist.background.ignoresSafeArea()
-
-            ScrollView {
-                VStack(spacing: WatchGeist.Spacing.two) {
-                    pickerHeader
-
-                    if bridge.snapshot.availablePresets.isEmpty {
-                        emptyState
-                    } else {
-                        ForEach(bridge.snapshot.availablePresets) { preset in
-                            presetRow(preset)
-                        }
-                    }
-
-                    if bridge.snapshot.presetSummariesAreTruncated {
-                        Text("More presets are available in Vox.md on iPhone.")
-                            .font(WatchGeist.caption())
-                            .foregroundStyle(WatchGeist.muted)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, WatchGeist.Spacing.two)
-                    }
-
-                    selectionStatus
-                }
-                .padding(.horizontal, WatchGeist.Spacing.two)
-                .padding(.bottom, WatchGeist.Spacing.three)
+        ScrollView(.vertical) {
+            VStack(spacing: WatchGeist.Spacing.two) {
+                primary
+                    .containerRelativeFrame(.vertical) { length, _ in max(0, length - 6) }
+                secondaryControls
             }
-            .scrollIndicators(.hidden)
+            .padding(.horizontal, 2)
         }
-        .preferredColorScheme(.dark)
-        .onAppear {
-            requestedPresetID = bridge.presetSelectionState.pendingPresetID
+        .scrollIndicators(.hidden)
+    }
+
+    private var primary: some View {
+        VStack(spacing: WatchGeist.Spacing.two) {
+            routeChip
+            Text(formattedDuration(localRecorder.duration))
+                .font(WatchGeist.mono(30))
+                .monospacedDigit()
+                .foregroundStyle(WatchGeist.text)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .accessibilityLabel(String(localized: "Recording time \(formattedDuration(localRecorder.duration))"))
+            WatchLevelWaveform(levels: localRecorder.levels, isPaused: localRecorder.isPaused)
+                .frame(height: 26)
+            Spacer(minLength: 0)
+            Button {
+                guard !isStopping else { return }
+                isStopping = true
+                Task {
+                    await localRecorder.stopAndQueue(using: bridge)
+                    isStopping = false
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    RoundedRectangle(cornerRadius: 3, style: .continuous)
+                        .fill(.white)
+                        .frame(width: 12, height: 12)
+                    Text("Stop")
+                }
+            }
+            .buttonStyle(WatchCapsuleButtonStyle(variant: .destructive, height: 50))
+            .disabled(isStopping)
+            .accessibilityLabel(String(localized: "Stop and send to iPhone"))
         }
-        .onChange(of: bridge.presetSelectionState) { _, state in
-            guard case .idle = state,
-                  let requestedPresetID,
-                  bridge.snapshot.selectedPresetID == requestedPresetID else { return }
-            dismiss()
+    }
+
+    private var routeChip: some View {
+        HStack(spacing: 6) {
+            if let route = localRecorder.recordingRoute {
+                WatchRouteTile(route: route, size: 16)
+                Text(route.shownName)
+            } else {
+                Text(localRecorder.isPaused ? String(localized: "Paused") : String(localized: "Recording"))
+            }
+            if localRecorder.isPaused, localRecorder.recordingRoute != nil {
+                Text("· Paused").foregroundStyle(WatchGeist.muted)
+            }
+        }
+        .font(WatchGeist.sans(13, .semibold))
+        .foregroundStyle(WatchGeist.text)
+        .lineLimit(1)
+        .minimumScaleFactor(0.75)
+        .accessibilityElement(children: .combine)
+    }
+
+    /// Pause and Cancel stay reachable below the fold; Stop is the one
+    /// prominent action, matching the Signal recording screen.
+    private var secondaryControls: some View {
+        VStack(spacing: WatchGeist.Spacing.two) {
+            Button {
+                localRecorder.togglePause()
+            } label: {
+                Label(
+                    localRecorder.isPaused ? String(localized: "Resume") : String(localized: "Pause"),
+                    systemImage: localRecorder.isPaused ? "play.fill" : "pause.fill"
+                )
+            }
+            .buttonStyle(WatchCapsuleButtonStyle(variant: .secondary))
+            .disabled(isStopping)
+
+            Button(role: .destructive) {
+                localRecorder.cancelRecording()
+            } label: {
+                Label(String(localized: "Cancel"), systemImage: "xmark")
+            }
+            .buttonStyle(WatchCapsuleButtonStyle(variant: .secondary))
+            .disabled(isStopping)
+            .accessibilityLabel(String(localized: "Cancel and delete Watch recording"))
+        }
+        .padding(.bottom, WatchGeist.Spacing.three)
+    }
+}
+
+/// 26-bar level history; the most recent bars are recording red.
+private struct WatchLevelWaveform: View {
+    let levels: [Float]
+    let isPaused: Bool
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 2) {
+            ForEach(Array(levels.enumerated()), id: \.offset) { index, level in
+                RoundedRectangle(cornerRadius: 1, style: .continuous)
+                    .fill(color(for: index))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 4 + CGFloat(level) * 22)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .animation(.linear(duration: 0.1), value: levels)
+        .accessibilityHidden(true)
+    }
+
+    private func color(for index: Int) -> Color {
+        guard !isPaused else { return WatchGeist.idleBar }
+        return index >= levels.count - 5 ? WatchGeist.red : WatchGeist.idleBar
+    }
+}
+
+// MARK: - WatchStates
+
+private struct WatchResultScreen: View {
+    @EnvironmentObject private var bridge: WatchPhoneBridge
+    @EnvironmentObject private var localRecorder: WatchLocalRecorder
+    let result: WatchRecordingResult
+
+    var body: some View {
+        ScrollView(.vertical) {
+            switch result.kind {
+            case .handedOff: handedOff
+            case .savedOnWatch: savedOnWatch
+            }
+        }
+        .scrollIndicators(.hidden)
+    }
+
+    private var routeName: String {
+        result.routeName ?? String(localized: "iPhone")
+    }
+
+    private var handedOff: some View {
+        VStack(spacing: WatchGeist.Spacing.two) {
+            ZStack {
+                Circle().fill(WatchGeist.greenBackground)
+                Image(systemName: "checkmark")
+                    .font(.system(size: 22, weight: .bold))
+                    .foregroundStyle(WatchGeist.green)
+            }
+            .frame(width: 52, height: 52)
+            .padding(.top, 6)
+            .accessibilityHidden(true)
+
+            Text("Sent to \(routeName)")
+                .font(WatchGeist.sans(17, .semibold))
+                .foregroundStyle(WatchGeist.text)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .minimumScaleFactor(0.75)
+            Text("\(formattedDuration(result.duration)) · iPhone is on it")
+                .font(WatchGeist.sans(12.5))
+                .foregroundStyle(WatchGeist.muted)
+                .multilineTextAlignment(.center)
+
+            Button {
+                Task { await speakAgain() }
+            } label: {
+                Text("Speak again")
+            }
+            .buttonStyle(WatchCapsuleButtonStyle(variant: .primary))
+            .padding(.top, 6)
+
+            Button("Done") { localRecorder.dismissResult() }
+                .buttonStyle(WatchCapsuleButtonStyle(variant: .secondary))
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 2)
+        .padding(.bottom, WatchGeist.Spacing.three)
+    }
+
+    private var savedOnWatch: some View {
+        VStack(alignment: .leading, spacing: WatchGeist.Spacing.two) {
+            Text(routeName)
+                .font(WatchGeist.sans(13, .semibold))
+                .foregroundStyle(WatchGeist.accent)
+            Text("Saved on Watch")
+                .font(WatchGeist.sans(18, .semibold))
+                .foregroundStyle(WatchGeist.text)
+            Text("iPhone isn’t nearby. It’ll transcribe and deliver when they reconnect.")
+                .font(WatchGeist.sans(13))
+                .foregroundStyle(WatchGeist.muted)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Button("Done") { localRecorder.dismissResult() }
+                .buttonStyle(WatchCapsuleButtonStyle(variant: .secondary))
+                .padding(.top, 6)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 4)
+        .padding(.bottom, WatchGeist.Spacing.three)
+    }
+
+    private func speakAgain() async {
+        let route = bridge.snapshot.route(id: result.routeID)
+        localRecorder.dismissResult()
+        await localRecorder.start(using: bridge, route: route)
+    }
+}
+
+/// "Needs iPhone": no vault/routes have reached this Watch yet.
+private struct WatchSetupScreen: View {
+    @EnvironmentObject private var bridge: WatchPhoneBridge
+    @EnvironmentObject private var localRecorder: WatchLocalRecorder
+    @State private var didAskPhone = false
+
+    var body: some View {
+        ScrollView(.vertical) {
+            VStack(alignment: .leading, spacing: WatchGeist.Spacing.two) {
+                Text("Finish setup on iPhone")
+                    .font(WatchGeist.sans(18, .semibold))
+                    .foregroundStyle(WatchGeist.text)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(detail)
+                    .font(WatchGeist.sans(13))
+                    .foregroundStyle(WatchGeist.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Button {
+                    bridge.requestPhoneSetup()
+                    didAskPhone = true
+                    WKInterfaceDeviceHaptics.click()
+                } label: {
+                    Text(didAskPhone ? String(localized: "Check your iPhone") : String(localized: "Open on iPhone"))
+                }
+                .buttonStyle(WatchCapsuleButtonStyle(variant: .secondary))
+                .padding(.top, 6)
+                .accessibilityHint(String(localized: "Shows Vox.md setup on your iPhone."))
+
+                if canRecordWithoutRoutes {
+                    Button {
+                        Task { await localRecorder.start(using: bridge) }
+                    } label: {
+                        Text("Record anyway")
+                            .font(WatchGeist.sans(13, .medium))
+                            .foregroundStyle(WatchGeist.accent)
+                            .frame(maxWidth: .infinity)
+                            .frame(minHeight: 36)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityHint(String(localized: "Records now and delivers to your iPhone default when it connects."))
+                }
+
+                if case .error(let error) = localRecorder.phase {
+                    Text(error)
+                        .font(WatchGeist.sans(12))
+                        .foregroundStyle(WatchGeist.red)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 4)
+            .padding(.bottom, WatchGeist.Spacing.three)
+        }
+        .scrollIndicators(.hidden)
+        .userActivity(WatchSetupHandoff.activityType) { activity in
+            activity.title = String(localized: "Finish Vox.md setup")
+            activity.isEligibleForHandoff = true
         }
         .task {
-            guard bridge.snapshot.availablePresets.isEmpty else { return }
-            await refreshPresets()
+            // Ask once for fresh routes in case the iPhone was set up meanwhile.
+            _ = await bridge.requestStatus()
         }
     }
 
-    private var pickerHeader: some View {
-        HStack(spacing: WatchGeist.Spacing.two) {
-            VStack(alignment: .leading, spacing: 1) {
-                Text("Capture Preset")
-                    .font(WatchGeist.heading(17))
-                    .foregroundStyle(WatchGeist.text)
-                Text("Used for your next recording")
-                    .font(WatchGeist.caption())
-                    .foregroundStyle(WatchGeist.muted)
-            }
-            Spacer(minLength: WatchGeist.Spacing.one)
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: "xmark")
-                    .font(.system(size: 11, weight: .semibold))
-                    .frame(width: 28, height: 28)
-                    .background(WatchGeist.surface)
-                    .clipShape(Circle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Close Capture Preset picker")
+    private var detail: String {
+        if bridge.snapshot.message == "Install Vox.md on iPhone" {
+            return String(localized: "Install Vox.md on your iPhone, pick a vault and routes, then they appear here.")
         }
-        .padding(.horizontal, 2)
-        .padding(.vertical, WatchGeist.Spacing.one)
+        return String(localized: "Pick a vault and routes in Vox.md on your iPhone, then they appear here.")
     }
 
-    private func presetRow(_ preset: WatchCapturePresetSummary) -> some View {
-        let isSelected = bridge.snapshot.selectedPresetID == preset.id
-        let isPending = bridge.presetSelectionState.pendingPresetID == preset.id
-        return Button {
-            guard !localRecorder.isRecording else { return }
-            guard !isSelected else {
-                dismiss()
-                return
-            }
-            requestedPresetID = preset.id
-            bridge.clearPresetSelectionError()
-            bridge.selectPreset(id: preset.id)
-        } label: {
-            HStack(spacing: WatchGeist.Spacing.two) {
-                Image(systemName: preset.symbolName)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(isSelected || isPending ? WatchGeist.blue : WatchGeist.text)
-                    .frame(width: 28, height: 28)
-                    .background(isSelected || isPending ? WatchGeist.blueBackground : WatchGeist.surface)
-                    .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
-
-                if let visibleName = preset.visibleName {
-                    Text(visibleName)
-                        .font(WatchGeist.label(.caption))
-                        .foregroundStyle(WatchGeist.text)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.75)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                } else {
-                    Spacer(minLength: 0)
-                }
-
-                if isPending {
-                    ProgressView()
-                        .controlSize(.small)
-                        .tint(WatchGeist.blue)
-                        .accessibilityLabel("Waiting for iPhone")
-                } else if isSelected {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(WatchGeist.blue)
-                }
-            }
-            .padding(WatchGeist.Spacing.two)
-            .background(WatchGeist.surface)
-            .overlay(
-                RoundedRectangle(cornerRadius: WatchGeist.Radius.small, style: .continuous)
-                    .stroke(isSelected ? WatchGeist.blue.opacity(0.65) : WatchGeist.border, lineWidth: 1)
-            )
-            .clipShape(RoundedRectangle(cornerRadius: WatchGeist.Radius.small, style: .continuous))
-            .contentShape(RoundedRectangle(cornerRadius: WatchGeist.Radius.small, style: .continuous))
-        }
-        .buttonStyle(.plain)
-        .disabled(localRecorder.isRecording)
-        .opacity(localRecorder.isRecording ? 0.55 : 1)
-        .accessibilityLabel(isSelected
-                            ? String(localized: "\(preset.displayName) Capture Preset, selected")
-                            : String(localized: "\(preset.displayName) Capture Preset"))
-        .accessibilityHint(isSelected
-                           ? String(localized: "Closes the picker.")
-                           : String(localized: "Uses this preset for future Watch recordings."))
+    /// Before the iPhone has ever reported routes, recording still works and
+    /// delivers to the iPhone default once it connects.
+    private var canRecordWithoutRoutes: Bool {
+        !bridge.snapshot.hasPresetSelectionAvailabilityPayload
     }
+}
 
-    @ViewBuilder
-    private var selectionStatus: some View {
-        if localRecorder.isRecording {
-            Text("Finish the current recording before changing presets.")
-                .font(WatchGeist.caption())
-                .foregroundStyle(WatchGeist.muted)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, WatchGeist.Spacing.two)
-        } else {
-            switch bridge.presetSelectionState {
-            case .idle:
-                EmptyView()
-            case .pending:
-                Text("Waiting for iPhone. Until confirmed, recordings keep using the selected preset above.")
-                    .font(WatchGeist.caption())
-                    .foregroundStyle(WatchGeist.muted)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, WatchGeist.Spacing.two)
-            case .failed(_, let message):
-                VStack(spacing: WatchGeist.Spacing.two) {
-                    Text(message)
-                        .font(WatchGeist.caption())
-                        .foregroundStyle(WatchGeist.red)
-                        .multilineTextAlignment(.center)
-                    Button("Dismiss") {
-                        bridge.clearPresetSelectionError()
-                    }
-                    .buttonStyle(WatchGeistButtonStyle(variant: .secondary))
-                }
-            }
-        }
+private enum WKInterfaceDeviceHaptics {
+    static func click() {
+        WKInterfaceDevice.current().play(.click)
     }
+}
 
-    private var emptyState: some View {
-        VStack(spacing: WatchGeist.Spacing.two) {
-            Image(systemName: "iphone")
-                .font(.system(size: 24, weight: .medium))
-                .foregroundStyle(WatchGeist.muted)
-            Text(emptyStateMessage)
-                .font(WatchGeist.caption())
-                .foregroundStyle(WatchGeist.muted)
-                .multilineTextAlignment(.center)
-            Button {
-                Task { await refreshPresets() }
-            } label: {
-                HStack(spacing: 6) {
-                    if isRefreshing {
-                        ProgressView().controlSize(.small)
-                    } else {
-                        Image(systemName: "arrow.clockwise")
-                    }
-                    Text("Refresh")
-                }
-            }
-            .buttonStyle(WatchGeistButtonStyle(variant: .secondary))
-            .disabled(isRefreshing)
-        }
-        .padding(WatchGeist.Spacing.three)
-        .frame(maxWidth: .infinity)
-        .background(WatchGeist.surface)
-        .clipShape(RoundedRectangle(cornerRadius: WatchGeist.Radius.medium, style: .continuous))
+private func formattedDuration(_ duration: TimeInterval) -> String {
+    let totalSeconds = max(0, Int(duration))
+    let hours = totalSeconds / 3_600
+    let minutes = (totalSeconds % 3_600) / 60
+    let seconds = totalSeconds % 60
+    if hours > 0 {
+        return String(format: "%d:%02d:%02d", hours, minutes, seconds)
     }
-
-    private var emptyStateMessage: String {
-        if bridge.snapshot.hasPresetSelectionAvailabilityPayload,
-           !bridge.snapshot.presetSelectionIsAvailable {
-            return String(localized: "Enable a Capture Preset in Vox.md on iPhone.")
-        }
-        return String(localized: "Open Vox.md on iPhone to sync your Capture Presets.")
-    }
-
-    @MainActor
-    private func refreshPresets() async {
-        guard !isRefreshing else { return }
-        isRefreshing = true
-        _ = await bridge.requestStatus()
-        isRefreshing = false
-    }
+    return String(format: "%d:%02d", minutes, seconds)
 }
 
 #Preview {

@@ -19,7 +19,7 @@ struct CapturePresetSettingsIdentitySection: View {
                     CapturePresetIconView(symbolName: preset.symbolName, emoji: preset.emoji)
                         .frame(minWidth: 24)
                     Text(iconDescription)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Geist.muted)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
@@ -27,11 +27,18 @@ struct CapturePresetSettingsIdentitySection: View {
             .accessibilityValue(iconDescription)
             .accessibilityIdentifier("capture_preset_icon_picker")
             Toggle("Enabled", isOn: $preset.isEnabled)
-                .tint(Color.accentColor)
+                .tint(Geist.accent)
         } header: {
             Text("Identity")
+                .textCase(.uppercase)
+                .font(Geist.mono(size: 11, relativeTo: .caption))
+                .tracking(0.66)
+                .foregroundStyle(Geist.muted)
+                .accessibilityAddTraits(.isHeader)
         } footer: {
             Text("Leave the name blank to show only the icon in compact Capture controls.")
+                .font(Geist.caption())
+                .foregroundStyle(Geist.muted)
         }
     }
 
@@ -71,8 +78,10 @@ struct CapturePresetSettingsIconPickerView: View {
                 CapturePresetEmojiEditorView(preset: $preset)
             }
         }
+        .background(Geist.bg.ignoresSafeArea())
         .navigationTitle("Icon")
         .navigationBarTitleDisplayMode(.inline)
-        .tint(Color.accentColor)
+        .toolbarBackground(Geist.bg, for: .navigationBar)
+        .tint(Geist.accent)
     }
 }

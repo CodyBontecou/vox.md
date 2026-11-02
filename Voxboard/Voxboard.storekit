@@ -1,63 +1,76 @@
 {
-  "identifier" : "VoxboardStore",
-  "nonConsumableProducts" : [
+  "identifier": "VoxboardStore",
+  "nonRenewingSubscriptions": [],
+  "products": [
     {
-      "displayPrice" : "19.99",
-      "familySharable" : false,
-      "internalID" : "bontecou.Voxboard.unlock",
-      "localizations" : [
-        {
-          "description" : "Unlock unlimited transcription and Capture for one user. One-time purchase, no subscription.",
-          "displayName" : "Vox.md Individual Unlimited",
-          "locale" : "en_US"
-        }
-      ],
-      "productID" : "bontecou.Voxboard.unlock",
-      "referenceName" : "Vox.md Individual Unlimited",
-      "type" : "NonConsumable"
+      "displayPrice": "49.99",
+      "familyShareable": false,
+      "internalID": "bontecou.Voxboard.unlock",
+      "localizations": [{"description": "Unlimited Capture and transcription for one user. Pay once.", "displayName": "Individual Lifetime", "locale": "en_US"}],
+      "productID": "bontecou.Voxboard.unlock",
+      "referenceName": "Individual Lifetime",
+      "type": "NonConsumable"
     },
     {
-      "displayPrice" : "39.99",
-      "familySharable" : true,
-      "internalID" : "bontecou.Voxboard.family",
-      "localizations" : [
-        {
-          "description" : "Unlock unlimited transcription and Capture with Apple Family Sharing. One-time purchase, no subscription.",
-          "displayName" : "Vox.md Family Unlimited",
-          "locale" : "en_US"
-        }
-      ],
-      "productID" : "bontecou.Voxboard.family",
-      "referenceName" : "Vox.md Family Unlimited",
-      "type" : "NonConsumable"
+      "displayPrice": "89.99",
+      "familyShareable": true,
+      "internalID": "bontecou.Voxboard.family",
+      "localizations": [{"description": "Unlimited lifetime access with Apple Family Sharing.", "displayName": "Family Lifetime", "locale": "en_US"}],
+      "productID": "bontecou.Voxboard.family",
+      "referenceName": "Family Lifetime",
+      "type": "NonConsumable"
     },
     {
-      "displayPrice" : "19.99",
-      "familySharable" : true,
-      "internalID" : "bontecou.Voxboard.familyUpgrade",
-      "localizations" : [
-        {
-          "description" : "Upgrade an existing Vox.md Individual Unlimited purchase to support Apple Family Sharing.",
-          "displayName" : "Vox.md Family Upgrade",
-          "locale" : "en_US"
-        }
-      ],
-      "productID" : "bontecou.Voxboard.familyUpgrade",
-      "referenceName" : "Vox.md Family Upgrade",
-      "type" : "NonConsumable"
+      "displayPrice": "39.99",
+      "familyShareable": true,
+      "internalID": "bontecou.Voxboard.familyUpgrade",
+      "localizations": [{"description": "Add Family Sharing to an existing lifetime purchase.", "displayName": "Legacy Family Upgrade", "locale": "en_US"}],
+      "productID": "bontecou.Voxboard.familyUpgrade",
+      "referenceName": "Legacy Family Upgrade",
+      "type": "NonConsumable"
     }
   ],
-  "consumableProducts" : [
-
+  "settings": {"_applicationInternalID": "", "_developerTeamID": "", "_failTransactionsEnabled": false, "_locale": "en_US", "_storefront": "USA", "_storeKitErrors": []},
+  "subscriptionGroups": [
+    {
+      "id": "voxboard-unlimited",
+      "localizations": [{"description": "Unlimited Capture and transcription", "displayName": "Vox.md Unlimited", "locale": "en_US"}],
+      "name": "Vox.md Unlimited",
+      "subscriptions": [
+        {
+          "adHocOffers": [], "codeOffers": [], "displayPrice": "0.99", "familyShareable": false,
+          "groupNumber": 2, "internalID": "individual-weekly",
+          "introductoryOffer": {"internalID": "individual-weekly-trial", "numberOfPeriods": 1, "paymentMode": "free", "subscriptionPeriod": "P1W"},
+          "localizations": [{"description": "Unlimited individual access, billed weekly after a 7-day trial.", "displayName": "Individual Weekly", "locale": "en_US"}],
+          "productID": "bontecou.Voxboard.individual.weekly", "recurringSubscriptionPeriod": "P1W",
+          "referenceName": "Individual Weekly", "subscriptionGroupID": "voxboard-unlimited", "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [], "codeOffers": [], "displayPrice": "29.99", "familyShareable": false,
+          "groupNumber": 2, "internalID": "individual-yearly",
+          "introductoryOffer": {"internalID": "individual-yearly-trial", "numberOfPeriods": 1, "paymentMode": "free", "subscriptionPeriod": "P1W"},
+          "localizations": [{"description": "Unlimited individual access, billed yearly after a 7-day trial.", "displayName": "Individual Yearly", "locale": "en_US"}],
+          "productID": "bontecou.Voxboard.individual.yearly", "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "Individual Yearly", "subscriptionGroupID": "voxboard-unlimited", "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [], "codeOffers": [], "displayPrice": "1.99", "familyShareable": true,
+          "groupNumber": 1, "internalID": "family-weekly",
+          "introductoryOffer": {"internalID": "family-weekly-trial", "numberOfPeriods": 1, "paymentMode": "free", "subscriptionPeriod": "P1W"},
+          "localizations": [{"description": "Unlimited Family Sharing access, billed weekly after a 7-day trial.", "displayName": "Family Weekly", "locale": "en_US"}],
+          "productID": "bontecou.Voxboard.family.weekly", "recurringSubscriptionPeriod": "P1W",
+          "referenceName": "Family Weekly", "subscriptionGroupID": "voxboard-unlimited", "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [], "codeOffers": [], "displayPrice": "49.99", "familyShareable": true,
+          "groupNumber": 1, "internalID": "family-yearly",
+          "introductoryOffer": {"internalID": "family-yearly-trial", "numberOfPeriods": 1, "paymentMode": "free", "subscriptionPeriod": "P1W"},
+          "localizations": [{"description": "Unlimited Family Sharing access, billed yearly after a 7-day trial.", "displayName": "Family Yearly", "locale": "en_US"}],
+          "productID": "bontecou.Voxboard.family.yearly", "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "Family Yearly", "subscriptionGroupID": "voxboard-unlimited", "type": "RecurringSubscription"
+        }
+      ]
+    }
   ],
-  "autoRenewableSubscriptions" : [
-
-  ],
-  "nonRenewingSubscriptions" : [
-
-  ],
-  "version" : {
-    "major" : 2,
-    "minor" : 0
-  }
+  "version": {"major": 3, "minor": 0}
 }

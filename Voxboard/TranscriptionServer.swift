@@ -101,6 +101,10 @@ final class TranscriptionServer {
     }
 
     private func processRequest(_ request: TranscriptionRequest) async {
+        guard !UsageTracker.staticIsAtLimit else {
+            writeResponse(.init(requestId: request.id, error: String(localized: "Choose a Vox.md plan to begin transcribing.")))
+            return
+        }
         guard let audioURL = AppConstants.recordingsDirectoryURL?
                 .appendingPathComponent(request.audioFileName),
               FileManager.default.fileExists(atPath: audioURL.path) else {

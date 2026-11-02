@@ -2,6 +2,11 @@ import XCTest
 @testable import VoxboardShared
 
 final class CapturePresetTests: XCTestCase {
+    override class func setUp() {
+        super.setUp()
+        CapturePresetTestLock.install()
+    }
+
 
     func test_defaultFlows_includeOnlyDefaultFlow() {
         XCTAssertEqual(CapturePresetStore.flowsKey, "recordingFlows")

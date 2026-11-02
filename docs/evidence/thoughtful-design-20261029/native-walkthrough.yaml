@@ -1,0 +1,157 @@
+steps:
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: onboarding.continue
+  - tap:
+      x: 0.5
+      y: 0.8745
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: onboarding.plans
+      timeoutMs: 5000
+  - echo: On the second introduction page, use native Back; expect the first page.
+  - tap:
+      x: 0.0945
+      y: 0.096
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: onboarding.continue
+  - echo: Continue to the privacy/ownership page again.
+  - tap:
+      x: 0.5
+      y: 0.8745
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: onboarding.plans
+  - echo: Complete introduction; expect the selected-plan paywall and no onboarding
+      Back route.
+  - tap:
+      x: 0.5
+      y: 0.8745
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: paywall.purchase
+  - echo: Select Family; yearly selection must carry across and show the Family
+      price.
+  - tap:
+      x: 0.72
+      y: 0.4375
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: paywall.plan.bontecou.Voxboard.family.yearly
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: paywall.billingSummary
+      expectedText: $49.99
+  - echo: Select Family weekly; billing summary must match that plan.
+  - tap:
+      x: 0.5
+      y: 0.555
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: paywall.billingSummary
+      expectedText: $1.99
+  - echo: Select Family lifetime; show one-time pricing and no trial/subscription.
+  - tap:
+      x: 0.5
+      y: 0.729
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: paywall.billingSummary
+      expectedText: No subscription
+  - echo: Open existing history without buying or unlocking access.
+  - tap:
+      x: 0.095
+      y: 0.096
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        text: History
+  - echo: Focus history search and type a sample query; check keyboard/layout
+      without buying.
+  - tap:
+      x: 0.5
+      y: 0.94
+  - tool: keyboard
+    args:
+      text: morning
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        text: Search history
+      expectedText: morning
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: Search
+  - echo: Dismiss the active native search; keyboard must disappear and history
+      remain visible.
+  - tap:
+      x: 0.9205
+      y: 0.5855
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: Search
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: xmark
+  - echo: Close history; return to the selected Family lifetime plan without
+      granting paid access.
+  - tap:
+      x: 0.094
+      y: 0.1145
+  - tool: await-ui-element
+    args:
+      condition: text
+      selector:
+        identifier: paywall.billingSummary
+      expectedText: No subscription
+  - echo: Attempt iOS edge-back after completed onboarding; the paywall must remain
+      and onboarding must not reappear.
+  - tool: gesture-swipe
+    args:
+      fromX: 0.01
+      fromY: 0.3
+      toX: 0.85
+      toY: 0.3
+      durationMs: 400
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: paywall.purchase
+  - tool: await-ui-element
+    args:
+      condition: hidden
+      selector:
+        identifier: onboarding.plans
+executionPrerequisite: Opt-in
+  HardPaywallStoreKitTests/testInteractiveDesignPreview running, first
+  introduction page visible, isolated free tracker, current frozen US lifetime
+  prices in local StoreKit, no dialogs. XCTest owns the app; do not restart or
+  purchase.

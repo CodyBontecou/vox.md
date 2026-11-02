@@ -47,28 +47,12 @@ enum CapturePresetQuickAccessRailSide: String, CaseIterable, Hashable, Identifia
     }
 }
 
-/// The quick actions users can place in the capture bar.
-enum CaptureToolbarAction: String, CaseIterable, Identifiable {
-    case addMedia
-    case addFiles
-    case scanDocument
-    case extractText
-    case undo
-    case formatMarkdown
-    case markdownLink
-    case dueDate
-    case checklist
-    case bulletList
-    case paste
-    case internalLink
-    case sketch
-    case currentLocation
-    case timestamp
-    case date
-    case textCase
+/// The quick actions users can place in the capture bar. The catalog (raw
+/// values, design glyphs, groups) lives in `VoxboardShared.CaptureQuickAction`
+/// so the keyboard extension can read the same pins from the App Group.
+typealias CaptureToolbarAction = CaptureQuickAction
 
-    var id: String { rawValue }
-
+extension CaptureQuickAction {
     var title: LocalizedStringKey {
         switch self {
         case .addMedia: "Add Media"
@@ -88,6 +72,37 @@ enum CaptureToolbarAction: String, CaseIterable, Identifiable {
         case .timestamp: "Insert Timestamp"
         case .date: "Insert Date"
         case .textCase: "Change Text Case"
+        case .heading: "Heading"
+        case .bold: "Bold"
+        case .italic: "Italic"
+        case .tag: "Tag"
+        }
+    }
+
+    /// Short label used under glyphs (design: "Task", "Link note" …).
+    var shortTitle: LocalizedStringKey {
+        switch self {
+        case .checklist: "Task"
+        case .bulletList: "Bullet"
+        case .heading: "Heading"
+        case .bold: "Bold"
+        case .italic: "Italic"
+        case .markdownLink: "Web link"
+        case .internalLink: "Link note"
+        case .tag: "Tag"
+        case .formatMarkdown: "Format"
+        case .timestamp: "Time"
+        case .date: "Date"
+        case .dueDate: "Due date"
+        case .currentLocation: "Location"
+        case .textCase: "Text case"
+        case .paste: "Paste"
+        case .undo: "Undo"
+        case .addMedia: "Media"
+        case .addFiles: "Files"
+        case .scanDocument: "Scan"
+        case .extractText: "Extract text"
+        case .sketch: "Sketch"
         }
     }
 
@@ -110,9 +125,15 @@ enum CaptureToolbarAction: String, CaseIterable, Identifiable {
         case .timestamp: String(localized: "Insert timestamp")
         case .date: String(localized: "Insert date")
         case .textCase: String(localized: "Change text case")
+        case .heading: String(localized: "Heading")
+        case .bold: String(localized: "Bold")
+        case .italic: String(localized: "Italic")
+        case .tag: String(localized: "Tag")
         }
     }
 
+    /// SF Symbol, used only where the design has no text glyph (media and
+    /// legacy list rows).
     var systemImage: String? {
         switch self {
         case .addMedia: "photo"
@@ -132,18 +153,40 @@ enum CaptureToolbarAction: String, CaseIterable, Identifiable {
         case .timestamp: "clock"
         case .date: "calendar"
         case .textCase: nil
+        case .heading, .bold, .italic, .tag: nil
         }
     }
 
+    /// Mono text glyph for chips. `nil` for media actions, which keep SF
+    /// Symbols (the design has no text glyph for them).
     var textIcon: String? {
+        isMedia ? nil : glyph
+    }
+}
+
+extension CaptureQuickActionGroup {
+    var title: LocalizedStringKey {
         switch self {
-        case .internalLink: "[["
-        case .textCase: "Abc"
-        default: nil
+        case .markdown: "MARKDOWN"
+        case .insert: "INSERT"
+        case .edit: "EDIT"
+        case .media: "ATTACH"
         }
     }
 }
 
+/// Capture Bar preferences.
+///
+/// Two layers of quick-action pins:
+/// - **Default row** (`orderedActions` minus `hiddenActions`, i.e.
+///   `visibleActions`): the original global Capture Bar configuration. It is
+///   the fallback for every route without its own pins.
+/// - **Per-route pins** (`pinnedActions(forRoute:)`): an ordered list per
+///   `CapturePreset.id`, stored in App Group defaults via
+///   `CaptureQuickActionPins` so the keyboard, iPad and Mac read the same row.
+///
+/// Use `CaptureToolbarPreferences.shared` from views that are not handed an
+/// instance (e.g. `RouteQuickActionsView`).
 @MainActor
 @Observable
 final class CaptureToolbarPreferences {
@@ -154,25 +197,51 @@ final class CaptureToolbarPreferences {
 
     static let storageKey = "capture.toolbar.configuration.v1"
 
+    /// App-wide instance (standard defaults + App Group pins).
+    static let shared = CaptureToolbarPreferences()
+
     private let defaults: UserDefaults
+    private let pinDefaults: UserDefaults?
     private(set) var orderedActions: [CaptureToolbarAction]
     private(set) var hiddenActions: Set<CaptureToolbarAction>
     private(set) var confirmsVoiceNotesBeforeAdding: Bool
     private(set) var presetQuickAccessRailSide: CapturePresetQuickAccessRailSide
     private(set) var timestampFormat: CaptureTimestampFormat
+    /// Ordered pins for routes the user customized. Routes absent here use
+    /// `visibleActions`.
+    private(set) var routePins: [String: [CaptureToolbarAction]]
+    /// "Same actions on Mac, iPad and keyboard". Default `true`.
+    private(set) var syncsQuickActionsAcrossSurfaces: Bool
 
     // Avoid an actor-isolated synthesized destructor; this type owns no
     // main-actor resources that require isolated teardown.
     nonisolated deinit {}
 
-    init(defaults: UserDefaults = .standard) {
+    /// - Parameters:
+    ///   - defaults: storage for the global Capture Bar settings.
+    ///   - pinDefaults: storage for per-route pins. When omitted, `.standard`
+    ///     uses the App Group (`AppConstants.sharedDefaults`); any other
+    ///     `defaults` (tests) keeps the pins in that same suite.
+    init(defaults: UserDefaults = .standard, pinDefaults: UserDefaults? = nil) {
         self.defaults = defaults
+        let resolvedPinDefaults = pinDefaults
+            ?? (defaults === UserDefaults.standard ? (AppConstants.sharedDefaults ?? defaults) : defaults)
+        self.pinDefaults = resolvedPinDefaults
 
         let stored = defaults.data(forKey: Self.storageKey)
             .flatMap { try? JSONDecoder().decode(StoredConfiguration.self, from: $0) }
 
         orderedActions = Self.migratedActionOrder(from: stored?.order)
-        hiddenActions = Set(stored?.hidden.compactMap(CaptureToolbarAction.init(rawValue:)) ?? [])
+        var hidden = Set(stored?.hidden.compactMap(CaptureToolbarAction.init(rawValue:)) ?? [])
+        if let storedOrder = stored?.order {
+            // Saved bars predate the split Markdown chips; keep those bars as
+            // they were (the chips stay reachable under •••).
+            for action in CaptureToolbarAction.introducedInSignalRedesign
+            where !storedOrder.contains(action.rawValue) {
+                hidden.insert(action)
+            }
+        }
+        hiddenActions = hidden
         confirmsVoiceNotesBeforeAdding = defaults.bool(forKey: CapturePreferenceKeys.confirmVoiceNoteBeforeAdding)
         presetQuickAccessRailSide = CapturePresetQuickAccessRailSide(
             persistedRawValue: defaults.string(forKey: CapturePreferenceKeys.presetQuickAccessRailSide)
@@ -180,7 +249,40 @@ final class CaptureToolbarPreferences {
         timestampFormat = defaults.string(forKey: CapturePreferenceKeys.timestampFormat)
             .flatMap(CaptureTimestampFormat.init(rawValue:))
             ?? .default
+        let sharedPins = CaptureQuickActionPins.load(from: resolvedPinDefaults)
+        routePins = sharedPins.routePins
+        syncsQuickActionsAcrossSurfaces = sharedPins.syncsAcrossSurfaces
         persist()
+        mirrorTimestampFormat()
+    }
+
+    /// Re-reads pins whenever another process (keyboard, share extension)
+    /// saves them. Call once for the app-wide instance; the observer lives
+    /// for the process.
+    static func observeSharedPinChanges() {
+        guard !isObservingSharedPinChanges else { return }
+        isObservingSharedPinChanges = true
+        CFNotificationCenterAddObserver(
+            CFNotificationCenterGetDarwinNotifyCenter(),
+            nil,
+            { _, _, _, _, _ in
+                Task { @MainActor in
+                    CaptureToolbarPreferences.shared.reloadSharedPins()
+                }
+            },
+            CaptureQuickActionPins.darwinDidChangeNotificationName as CFString,
+            nil,
+            .deliverImmediately
+        )
+    }
+
+    private static var isObservingSharedPinChanges = false
+
+    /// Mirrors the Insert Timestamp hour cycle to the App Group so the
+    /// keyboard's Time quick action follows the app setting.
+    private func mirrorTimestampFormat() {
+        guard let pinDefaults, pinDefaults !== defaults else { return }
+        pinDefaults.set(timestampFormat.rawValue, forKey: CaptureQuickActionPins.sharedTimestampFormatKey)
     }
 
     nonisolated static func migratedActionOrder(from storedRawValues: [String]?) -> [CaptureToolbarAction] {
@@ -206,6 +308,7 @@ final class CaptureToolbarPreferences {
         return order
     }
 
+    /// The global default row (fallback for routes without their own pins).
     var visibleActions: [CaptureToolbarAction] {
         orderedActions.filter { !hiddenActions.contains($0) }
     }
@@ -228,6 +331,97 @@ final class CaptureToolbarPreferences {
         persist()
     }
 
+    // MARK: Per-route pins
+
+    /// Ordered pinned row for a route (`CapturePreset.id`); `nil` or an
+    /// uncustomized route returns the global default row.
+    func pinnedActions(forRoute routeID: String?) -> [CaptureToolbarAction] {
+        if let routeID, let pins = routePins[routeID] { return pins }
+        return visibleActions
+    }
+
+    /// Like `pinnedActions(forRoute:)`, but a surface with its own design row
+    /// (the Mac workspace) shows `surfaceDefault` when the person has neither
+    /// pinned actions for the route nor customized the default row, or when
+    /// "Same actions on Mac, iPad and keyboard" is off.
+    func pinnedActions(
+        forRoute routeID: String?,
+        surfaceDefault: [CaptureToolbarAction]
+    ) -> [CaptureToolbarAction] {
+        guard syncsQuickActionsAcrossSurfaces else { return surfaceDefault }
+        if let routeID, let pins = routePins[routeID] { return pins }
+        return hasCustomizedDefaultRow ? visibleActions : surfaceDefault
+    }
+
+    /// `false` while the default row is still the built-in one: every action
+    /// in catalog order with nothing hidden, or a pre-redesign bar whose only
+    /// hidden actions are the chips added by the Signal redesign.
+    var hasCustomizedDefaultRow: Bool {
+        guard orderedActions == CaptureToolbarAction.allCases else { return true }
+        return !(hiddenActions.isEmpty || hiddenActions == CaptureToolbarAction.introducedInSignalRedesign)
+    }
+
+    /// Every action not pinned on the route, in catalog group order.
+    func unpinnedActions(forRoute routeID: String?) -> [CaptureToolbarAction] {
+        let pinned = Set(pinnedActions(forRoute: routeID))
+        return CaptureQuickActionGroup.allCases
+            .flatMap(\.actions)
+            .filter { !pinned.contains($0) }
+    }
+
+    func hasCustomPins(forRoute routeID: String) -> Bool {
+        routePins[routeID] != nil
+    }
+
+    func isPinned(_ action: CaptureToolbarAction, forRoute routeID: String?) -> Bool {
+        pinnedActions(forRoute: routeID).contains(action)
+    }
+
+    /// Replaces a route's pins (creates the override if needed).
+    func setPinnedActions(_ actions: [CaptureToolbarAction], forRoute routeID: String) {
+        var seen = Set<CaptureToolbarAction>()
+        routePins[routeID] = actions.filter { seen.insert($0).inserted }
+        persistPins()
+    }
+
+    /// Appends `action` to the route's row (copying the default row first).
+    func pin(_ action: CaptureToolbarAction, forRoute routeID: String) {
+        var pins = pinnedActions(forRoute: routeID)
+        guard !pins.contains(action) else { return }
+        pins.append(action)
+        setPinnedActions(pins, forRoute: routeID)
+    }
+
+    func unpin(_ action: CaptureToolbarAction, forRoute routeID: String) {
+        setPinnedActions(pinnedActions(forRoute: routeID).filter { $0 != action }, forRoute: routeID)
+    }
+
+    func movePinnedActions(from source: IndexSet, to destination: Int, forRoute routeID: String) {
+        var pins = pinnedActions(forRoute: routeID)
+        pins.move(fromOffsets: source, toOffset: destination)
+        setPinnedActions(pins, forRoute: routeID)
+    }
+
+    /// Drops the route's override so it follows the global default row again.
+    func resetPins(forRoute routeID: String) {
+        routePins[routeID] = nil
+        persistPins()
+    }
+
+    func setSyncsQuickActionsAcrossSurfaces(_ syncs: Bool) {
+        syncsQuickActionsAcrossSurfaces = syncs
+        persistPins()
+    }
+
+    /// Re-reads App Group pins (e.g. after another process changed them).
+    func reloadSharedPins() {
+        let sharedPins = CaptureQuickActionPins.load(from: pinDefaults)
+        if routePins != sharedPins.routePins { routePins = sharedPins.routePins }
+        if syncsQuickActionsAcrossSurfaces != sharedPins.syncsAcrossSurfaces {
+            syncsQuickActionsAcrossSurfaces = sharedPins.syncsAcrossSurfaces
+        }
+    }
+
     func setConfirmsVoiceNotesBeforeAdding(_ shouldConfirm: Bool) {
         confirmsVoiceNotesBeforeAdding = shouldConfirm
         defaults.set(shouldConfirm, forKey: CapturePreferenceKeys.confirmVoiceNoteBeforeAdding)
@@ -241,8 +435,11 @@ final class CaptureToolbarPreferences {
     func setTimestampFormat(_ format: CaptureTimestampFormat) {
         timestampFormat = format
         defaults.set(format.rawValue, forKey: CapturePreferenceKeys.timestampFormat)
+        mirrorTimestampFormat()
     }
 
+    /// Resets the global default row. Per-route pins are left alone; use
+    /// `resetPins(forRoute:)` for those.
     func reset() {
         orderedActions = CaptureToolbarAction.allCases
         hiddenActions = []
@@ -254,8 +451,19 @@ final class CaptureToolbarPreferences {
             order: orderedActions.map(\.rawValue),
             hidden: hiddenActions.map(\.rawValue).sorted()
         )
-        guard let data = try? JSONEncoder().encode(configuration) else { return }
-        defaults.set(data, forKey: Self.storageKey)
+        if let data = try? JSONEncoder().encode(configuration) {
+            defaults.set(data, forKey: Self.storageKey)
+        }
+        persistPins()
+    }
+
+    /// Mirrors the default row and writes route pins to the App Group.
+    private func persistPins() {
+        CaptureQuickActionPins(
+            defaultPins: visibleActions,
+            routePins: routePins,
+            syncsAcrossSurfaces: syncsQuickActionsAcrossSurfaces
+        ).save(to: pinDefaults)
     }
 }
 
@@ -281,9 +489,39 @@ struct CaptureToolbarSettingsView: View {
                 }
                 .onMove(perform: preferences.moveActions)
             } header: {
-                Text("Quick Actions")
+                Text("Default Quick Actions")
             } footer: {
-                Text("Drag actions into the order you want. Turn off actions you do not want on the capture bar.")
+                Text("Drag actions into the order you want. Turn off actions you do not want on the capture bar. Routes without their own quick actions use this row.")
+            }
+
+            Section {
+                ForEach(routes) { route in
+                    // Buttons stay tappable while the list is in edit mode
+                    // (NavigationLink rows do not).
+                    Button {
+                        editingRouteID = route.id
+                    } label: {
+                        HStack(spacing: Geist.Spacing.three) {
+                            CapturePresetIconView(symbolName: route.symbolName, emoji: route.emoji)
+                                .frame(width: 24)
+                            Text(verbatim: route.displayName)
+                            Spacer()
+                            Text(preferences.hasCustomPins(forRoute: route.id) ? "Custom" : "Default")
+                                .font(Geist.mono(.caption))
+                                .foregroundStyle(Geist.muted)
+                            Image(systemName: "chevron.right")
+                                .font(.footnote.weight(.semibold))
+                                .foregroundStyle(Geist.faint)
+                        }
+                        .foregroundStyle(Geist.text)
+                        .contentShape(Rectangle())
+                    }
+                    .accessibilityIdentifier("capture_route_quick_actions_\(route.id)")
+                }
+            } header: {
+                Text("Quick Actions per Route")
+            } footer: {
+                Text("Pin a different row for each route. It shows above the keyboard while that route is selected.")
             }
 
             Section {
@@ -294,9 +532,9 @@ struct CaptureToolbarSettingsView: View {
                 .pickerStyle(.segmented)
                 .accessibilityIdentifier("capture_preset_rail_side")
             } header: {
-                Text("Pinned Preset Rail")
+                Text("Pinned Route Rail")
             } footer: {
-                Text("Choose the physical screen edge for pinned preset alternatives. The selected preset and Send stay in their usual positions.")
+                Text("Choose the physical screen edge for pinned route alternatives. The selected route and Send stay in their usual positions.")
             }
 
             Section {
@@ -327,15 +565,15 @@ struct CaptureToolbarSettingsView: View {
 
             Section {
                 Toggle(
-                    "Confirm Preset Sends",
+                    "Confirm Route Sends",
                     isOn: presetSendConfirmationBinding
                 )
                 .tint(Geist.Palette.gray1000)
                 .accessibilityIdentifier("capture_preset_send_confirmation")
             } header: {
-                Text("Presets")
+                Text("Routes")
             } footer: {
-                Text("Off by default. Turn this on to confirm before a Capture is sent with a preset. The sent-note toast also offers Undo for a few seconds after every composer send.")
+                Text("Off by default. Turn this on to confirm before a Capture is sent with a route. The sent-note toast also offers Undo for a few seconds after every composer send.")
             }
 
             Section {
@@ -347,7 +585,17 @@ struct CaptureToolbarSettingsView: View {
         .navigationTitle("Capture Bar")
         .navigationBarTitleDisplayMode(.inline)
         .environment(\.editMode, $editMode)
+        .navigationDestination(item: $editingRouteID) { routeID in
+            RouteQuickActionsView(presetID: routeID, preferences: preferences)
+        }
+        .onAppear {
+            routes = CapturePresetStore.loadFlows(persistMigrations: false).filter(\.isEnabled)
+        }
     }
+
+    @State private var editingRouteID: String?
+    @State private var routes: [CapturePreset] = CapturePresetStore.loadFlows(persistMigrations: false)
+        .filter(\.isEnabled)
 
     private func visibilityBinding(for action: CaptureToolbarAction) -> Binding<Bool> {
         Binding(

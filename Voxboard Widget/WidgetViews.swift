@@ -21,6 +21,15 @@ struct VoxboardWidgetEntryView: View {
     }
 }
 
+// MARK: - Signal palette (extension-local; GeistTheme is app-only)
+
+private enum SignalWidget {
+    static let accent = Color(red: 47 / 255, green: 59 / 255, blue: 232 / 255)   // #2F3BE8
+    static let red = Color(red: 240 / 255, green: 71 / 255, blue: 74 / 255)      // #F0474A
+    static let muted = Color(red: 94 / 255, green: 94 / 255, blue: 90 / 255)     // #5E5E5A
+    static let mutedDark = Color(red: 154 / 255, green: 154 / 255, blue: 149 / 255) // #9A9A95
+}
+
 // MARK: - Lock Screen: Circular
 
 struct CircularWidgetView: View {
@@ -29,10 +38,18 @@ struct CircularWidgetView: View {
     var body: some View {
         ZStack {
             AccessoryWidgetBackground()
-            Image(systemName: entry.isQuickRecordEnabled ? (entry.isListening ? "mic.fill" : "mic") : "mic.slash")
-                .font(.system(size: 22, weight: .semibold))
-                .widgetAccentable()
-                .foregroundStyle(entry.isQuickRecordEnabled ? .primary : .secondary)
+            VStack(spacing: 1) {
+                Image(systemName: entry.isQuickRecordEnabled ? (entry.isListening ? "mic.fill" : "mic") : "mic.slash")
+                    .font(.system(size: 20, weight: .semibold))
+                    .widgetAccentable()
+                    .foregroundStyle(entry.isQuickRecordEnabled ? .primary : .secondary)
+                if entry.isQuickRecordEnabled && entry.isListening {
+                    Circle()
+                        .frame(width: 4, height: 4)
+                        .widgetAccentable()
+                        .accessibilityHidden(true)
+                }
+            }
         }
     }
 }
@@ -45,18 +62,21 @@ struct RectangularWidgetView: View {
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: "mic.fill")
-                .font(.system(size: 20, weight: .semibold))
+                .font(.system(size: 18, weight: .semibold))
                 .widgetAccentable()
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 1) {
                 Text("Vox.md")
-                    .font(.system(size: 12, weight: .semibold, design: .default))
+                    .font(.system(size: 11, weight: .semibold))
+                    .textCase(.uppercase)
                     .widgetAccentable()
                 Text(entry.isQuickRecordEnabled
                      ? (entry.isListening ? String(localized: "Listening") : String(localized: "Tap to record"))
                      : String(localized: "Disabled"))
-                    .font(.system(size: 10, weight: .regular, design: .default))
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 14, weight: .medium))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
+            Spacer(minLength: 0)
         }
     }
 }
@@ -64,36 +84,55 @@ struct RectangularWidgetView: View {
 // MARK: - Home Screen: Small
 
 struct SmallWidgetView: View {
+    @Environment(\.colorScheme) private var colorScheme
     let entry: VoxboardWidgetEntry
 
+    private var isLive: Bool { entry.isQuickRecordEnabled && entry.isListening }
+    private var muted: Color { colorScheme == .dark ? SignalWidget.mutedDark : SignalWidget.muted }
+
     var body: some View {
-        ZStack {
-            Color.clear
-            VStack(spacing: 12) {
-                HStack {
-                    Circle()
-                        .fill(entry.isQuickRecordEnabled && entry.isListening ? Color.accentColor : Color.secondary)
-                        .frame(width: 6, height: 6)
-                    Text(entry.isQuickRecordEnabled
-                         ? (entry.isListening ? String(localized: "Listening") : String(localized: "Ready"))
-                         : String(localized: "Disabled"))
-                        .font(.system(size: 9, weight: .medium, design: .default))
-                        .foregroundStyle(entry.isQuickRecordEnabled && entry.isListening ? .primary : .secondary)
-                    Spacer()
-                }
-                Spacer()
-                Image(systemName: "mic.fill")
-                    .font(.system(size: 36, weight: .semibold))
-                    .foregroundStyle(.primary)
-                Spacer()
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 6) {
+                Circle()
+                    .fill(isLive ? SignalWidget.accent : muted)
+                    .frame(width: 6, height: 6)
                 Text(entry.isQuickRecordEnabled
-                     ? String(localized: "Tap to Record")
-                     : String(localized: "Enable in Settings"))
-                    .font(.system(size: 9, weight: .medium, design: .default))
-                    .foregroundStyle(.secondary)
+                     ? (entry.isListening ? String(localized: "Listening") : String(localized: "Ready"))
+                     : String(localized: "Disabled"))
+                    .font(.system(size: 11, weight: .medium, design: .monospaced))
+                    .textCase(.uppercase)
+                    .foregroundStyle(isLive ? Color.primary : muted)
+                    .lineLimit(1)
+                Spacer(minLength: 0)
             }
-            .padding(16)
+            Spacer(minLength: 8)
+            HStack {
+                Spacer(minLength: 0)
+                ZStack {
+                    Circle()
+                        .fill(entry.isQuickRecordEnabled ? SignalWidget.red.opacity(0.14) : muted.opacity(0.12))
+                        .frame(width: 76, height: 76)
+                    Circle()
+                        .fill(entry.isQuickRecordEnabled ? SignalWidget.red : muted.opacity(0.5))
+                        .frame(width: 58, height: 58)
+                    Image(systemName: entry.isQuickRecordEnabled ? "mic.fill" : "mic.slash")
+                        .font(.system(size: 24, weight: .semibold))
+                        .foregroundStyle(.white)
+                }
+                .widgetAccentable()
+                .accessibilityHidden(true)
+                Spacer(minLength: 0)
+            }
+            Spacer(minLength: 8)
+            Text(entry.isQuickRecordEnabled
+                 ? String(localized: "Tap to Record")
+                 : String(localized: "Enable in Settings"))
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(entry.isQuickRecordEnabled ? Color.primary : muted)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
     }
 }
 

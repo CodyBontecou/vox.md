@@ -1981,79 +1981,74 @@
       "id": "analytics-defaults",
       "capabilityID": "cap.store.analytics",
       "production": [
-        "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift:OnboardingAnalyticsClient",
-        "Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsStorage.swift:OnboardingExperimentAssignmentStore"
+        "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift:RetiredAnalyticsCleanup",
+        "Voxboard/VoxboardApp.swift:RetiredAnalyticsCleanup.run(defaults: defaults)"
       ],
       "dimensions": {
         "old": {
-          "status": "notApplicable",
-          "evidence": [],
-          "rationale": "First shipped analytics key versions."
+          "status": "executed",
+          "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "scripts/tests/test_custom_analytics_removal.py"
+          ],
+          "rationale": "Upgrade cleanup erases every former analytics key version written by earlier releases."
         },
         "missingFields": {
           "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift",
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Executed by a production codec/store consumer."
+          "rationale": "Cleanup is idempotent when the retired keys are already absent."
         },
         "unknownFields": {
-          "status": "executed",
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift"
-          ],
-          "rationale": "Production analytics queue and assignment codecs accept extra keyed fields and safely discard unknown property keys."
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Retired values are never decoded; cleanup removes them by key without reading their contents."
         },
         "malformed": {
           "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift"
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Production queue initialization recovers from malformed bytes to an empty queue and removes the invalid value."
+          "rationale": "Arbitrary or malformed retired bytes are removed without decoding."
         },
         "futureVersion": {
           "status": "notApplicable",
           "evidence": [],
-          "rationale": "Keys are independently versioned; payloads have no envelope schema version."
+          "rationale": "No producer remains, so no future analytics format can be written."
         },
         "date": {
-          "status": "executed",
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift",
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
-          ],
-          "rationale": "Executed by a production codec/store consumer."
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Retired values are removed without decoding dates."
         },
         "data": {
           "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift",
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Executed by a production codec/store consumer."
+          "rationale": "Data-valued retired queue and assignment entries are erased."
         },
         "uuid": {
           "status": "executed",
           "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift",
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift"
           ],
-          "rationale": "Executed by a production codec/store consumer."
+          "rationale": "The former UUID install identity is erased and never regenerated."
         },
         "enum": {
-          "status": "executed",
-          "evidence": [
-            "Packages/VoxboardShared/Tests/VoxboardSharedTests/Analytics/OnboardingAnalyticsClientTests.swift"
-          ],
-          "rationale": "Opaque future event names remain queued, unknown property keys are dropped, and invalid experiment variants are replaced by the production baseline assignment."
+          "status": "notApplicable",
+          "evidence": [],
+          "rationale": "Retired experiment variants are removed without decoding."
         },
         "crashRecovery": {
           "status": "executed",
           "evidence": [
-            "VoxboardTests/AndroidWearM0PersistenceFixtureTests.swift"
+            "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Executed by a production codec/store consumer."
+          "rationale": "Cleanup runs on every launch, so an interrupted upgrade is completed by the next launch while functional state is preserved."
         }
       }
     },

@@ -3,6 +3,11 @@ import XCTest
 @testable import VoxboardShared
 
 final class URLDeliveryRecoveryTests: XCTestCase {
+    override class func setUp() {
+        super.setUp()
+        CapturePresetTestLock.install()
+    }
+
     private var directory: URL!
     private let endpoint = "https://example.invalid/private/path?collection=synthetic"
 

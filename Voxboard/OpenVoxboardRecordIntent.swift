@@ -5,7 +5,7 @@ import VoxboardShared
 // MARK: - Capture Preset App Entity (legacy type name retained for App Intents)
 
 struct VoxEntity: AppEntity, Identifiable, Hashable {
-    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Capture Preset"
+    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Route"
     static var defaultQuery = VoxEntityQuery()
 
     let id: String
@@ -43,7 +43,10 @@ struct VoxEntity: AppEntity, Identifiable, Hashable {
     }
 
     static func requestedFlowID(for entity: VoxEntity?) -> String? {
-        guard let id = entity?.id,
+        // A control/shortcut without a chosen Route uses Settings' Action
+        // button → Route mapping (Shortcuts & Control Center), if set.
+        guard let id = entity?.id
+                ?? CapturePresetSurfacePinStore.actionButtonRouteID(defaults: AppConstants.sharedDefaults),
               let flow = CapturePresetStore.flow(id: id), flow.isEnabled else { return nil }
         return flow.id
     }
@@ -56,7 +59,11 @@ struct VoxEntityQuery: EntityQuery, EnumerableEntityQuery {
     }
 
     func suggestedEntities() async throws -> [VoxEntity] {
-        Self.enabledVoxes()
+        // Routes pinned to Control Center lead the control's route picker.
+        let voxes = Self.enabledVoxes()
+        let pinned = CapturePresetSurfacePinStore.pinnedIDs(for: .controlCenter, defaults: AppConstants.sharedDefaults)
+        let first = pinned.compactMap { id in voxes.first { $0.id == id } }
+        return first + voxes.filter { !pinned.contains($0.id) }
     }
 
     func allEntities() async throws -> [VoxEntity] {
@@ -80,7 +87,7 @@ struct VoxEntityQuery: EntityQuery, EnumerableEntityQuery {
 @available(iOS 17.0, *)
 struct OpenVoxboardRecordIntent: AppIntent {
     static let title: LocalizedStringResource = "Record Audio"
-    static let description = IntentDescription("Start, stop, or start/stop a Vox.md recording with a Capture Preset. Send immediately or add to your draft for review. Draft delivery opens Vox.md; immediate delivery can record in the background on iOS 26+.")
+    static let description = IntentDescription("Start, stop, or start/stop a Vox.md recording with a Route. Send immediately or add to your draft for review. Draft delivery opens Vox.md; immediate delivery can record in the background on iOS 26+.")
 
     // Keep the saved Record action's foreground default, including older iOS.
     // Shortcuts owns the single Open When Run preference; do not export a
@@ -90,7 +97,7 @@ struct OpenVoxboardRecordIntent: AppIntent {
     @available(iOS 26.0, *)
     static var supportedModes: IntentModes { [.background, .foreground(.immediate)] }
 
-    @Parameter(title: "Preset", description: "The Capture Preset to use for this recording.")
+    @Parameter(title: "Route", description: "The Route to use for this recording.")
     var vox: VoxEntity?
 
     // Keep Start for saved Record shortcuts whose serialized parameters
@@ -98,7 +105,7 @@ struct OpenVoxboardRecordIntent: AppIntent {
     @Parameter(title: "Action", description: "Start and Stop leave an already-started or already-stopped recording unchanged. Start or Stop switches the current recording state.", default: .start)
     var recordingAction: RecordingAction
 
-    @Parameter(title: "Delivery", description: "Send Immediately runs the preset after recording. Add to Draft opens Capture and waits for explicit Send.", default: .immediate)
+    @Parameter(title: "Delivery", description: "Send Immediately runs the route after recording. Add to Draft opens Capture and waits for explicit Send.", default: .immediate)
     var delivery: RecordingDelivery
 
     @Parameter(title: "Attach Audio", description: "Keep audio as a draft attachment when Delivery is Add to Draft.", default: false)
@@ -153,7 +160,7 @@ struct VoxboardRecordingControlIntent: AppIntent {
     @available(iOS 26.0, *)
     static var supportedModes: IntentModes { .background }
 
-    @Parameter(title: "Preset")
+    @Parameter(title: "Route")
     var vox: VoxEntity?
 
     @Parameter(title: "Action", default: .start)
@@ -295,9 +302,9 @@ struct WidgetRecordingFlowSelection {
 @available(iOS 18.0, *)
 struct SelectVoxboardRecordVoxIntent: ControlConfigurationIntent {
     static let title: LocalizedStringResource = "Configure Recording"
-    static let description = IntentDescription("Choose a Capture Preset, recording action, delivery, and whether to open Vox.md. Draft delivery always opens Capture for review.")
+    static let description = IntentDescription("Choose a Route, recording action, delivery, and whether to open Vox.md. Draft delivery always opens Capture for review.")
 
-    @Parameter(title: "Preset", description: "The Capture Preset to use for recordings started by this control.")
+    @Parameter(title: "Route", description: "The Route to use for recordings started by this control.")
     var vox: VoxEntity?
 
     // Optional fields preserve configurations saved before these choices
@@ -309,7 +316,7 @@ struct SelectVoxboardRecordVoxIntent: ControlConfigurationIntent {
     @Parameter(title: "Open App", description: "Open Vox.md when recording. Background recording requires iOS 26+. Leave unset to keep this control's original behavior.")
     var openApp: Bool?
 
-    @Parameter(title: "Delivery", description: "Send Immediately runs the preset; Add to Draft opens Capture and waits for Send. Leave unset to retain immediate delivery.")
+    @Parameter(title: "Delivery", description: "Send Immediately runs the route; Add to Draft opens Capture and waits for Send. Leave unset to retain immediate delivery.")
     var delivery: RecordingDelivery?
 
     @Parameter(title: "Attach Audio", description: "Keep audio as a draft attachment when Delivery is Add to Draft.")

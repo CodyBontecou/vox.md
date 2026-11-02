@@ -1,0 +1,1065 @@
+--- ios/da/before
++++ ios/da/proposed
+@@ -8,4 +8,7 @@
+ 
+ Vox.md skriver almindelige Markdown-filer i de mapper, du vælger. Du behøver ingen konto eller appens egen notedatabase.
+ 
+-Nye brugere får 15 minutters gratis transskription og 10 vellykkede indholdsoverførsler. Et engangskøb giver ubegrænset brug uden abonnement.+Nye registreringer og transskriptioner kræver betalt adgang. Vælg individuel adgang eller familieadgang: ugentligt, årligt eller livsvarigt. Berettigede abonnementer omfatter syv gratis prøvedage og fornyes derefter automatisk til den viste pris, indtil de opsiges i indstillingerne for Apple-kontoen. Eksisterende køb er fortsat gyldige. Visning og eksport af eksisterende historik kræver ikke et nyt køb.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/no/before
++++ ios/no/proposed
+@@ -8,4 +8,7 @@
+ 
+ Vox.md skriver vanlige Markdown-filer i mappene du velger. Du trenger ingen konto eller egen notedatabase fra appen.
+ 
+-Nye brukere får 15 minutter gratis transkripsjon og 10 vellykkede innholdsoverføringer. Et engangskjøp gir ubegrenset bruk uten abonnement.+Nye registreringer og transkripsjoner krever betalt tilgang. Velg individuell tilgang eller familietilgang: ukentlig, årlig eller livsvarig. Kvalifiserte abonnementer inkluderer sju dagers gratis prøveperiode og fornyes deretter automatisk til den viste prisen til de sies opp i innstillingene for Apple-kontoen. Eksisterende kjøp er fortsatt gyldige. Visning og eksport av eksisterende historikk krever ikke et nytt kjøp.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/es-MX/before
++++ ios/es-MX/proposed
+@@ -4,4 +4,7 @@
+ 
+ La conversión de voz a texto se ejecuta en el dispositivo con Apple Speech, Whisper o Parakeet. El audio, las transcripciones, el contenido escrito, las rutas de archivos y los marcadores no se envían a los servidores de Vox.md. Vox.md escribe Markdown estándar en las carpetas y bóvedas de Obsidian que elijas; no requiere una cuenta ni una base de datos de notas propietaria.
+ 
+-Los nuevos usuarios reciben 15 minutos gratuitos de transcripción y 10 envíos correctos. Una compra única desbloquea el uso ilimitado.+Las nuevas capturas y transcripciones requieren acceso de pago. Elija un plan individual o familiar: semanal, anual o de por vida. Las suscripciones que cumplan los requisitos incluyen siete días de prueba gratuita y después se renuevan automáticamente al precio indicado hasta que se cancelen en los ajustes de la Cuenta de Apple. Las compras existentes siguen siendo válidas. Consultar y exportar el historial existente no requiere una nueva compra.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/fr-FR/before
++++ ios/fr-FR/proposed
+@@ -4,4 +4,7 @@
+ 
+ La conversion de la parole en texte s’exécute sur l’appareil avec Apple Speech, Whisper ou Parakeet. L’audio, les transcriptions, le contenu saisi, les chemins de fichiers et les signets ne sont pas envoyés aux serveurs de Vox.md. Vox.md écrit du Markdown standard dans les dossiers et coffres Obsidian choisis ; aucun compte ni aucune base de données de notes propriétaire n’est requis.
+ 
+-Les nouveaux utilisateurs bénéficient de 15 minutes de transcription gratuites et de 10 envois réussis. Un achat unique déverrouille l’utilisation illimitée.+Les nouvelles captures et transcriptions nécessitent un accès payant. Choisissez une formule individuelle ou familiale : hebdomadaire, annuelle ou à vie. Les abonnements éligibles comprennent sept jours d’essai gratuit, puis se renouvellent automatiquement au prix affiché jusqu’à leur résiliation dans les réglages du compte Apple. Les achats existants restent valables. La consultation et l’exportation de l’historique existant ne nécessitent aucun nouvel achat.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/id/before
++++ ios/id/proposed
+@@ -4,4 +4,7 @@
+ 
+ Ucapan-ke-teks berjalan di perangkat dengan Apple Speech, Whisper, atau Parakeet. Audio, transkrip, konten ketikan, jalur file, dan penanda tidak dikirim ke server Vox.md. Vox.md menulis Markdown standar ke folder dan vault Obsidian yang Anda pilih; akun atau basis data catatan milik vendor tidak diperlukan.
+ 
+-Pengguna baru memperoleh 15 menit transkripsi gratis dan 10 pengiriman berhasil. Satu pembelian membuka penggunaan tanpa batas.+Tangkapan dan transkripsi baru memerlukan akses berbayar. Pilih akses individu atau keluarga: mingguan, tahunan, atau seumur hidup. Langganan yang memenuhi syarat mencakup uji coba gratis tujuh hari, lalu diperpanjang otomatis dengan harga yang ditampilkan hingga dibatalkan di pengaturan Akun Apple. Pembelian sebelumnya tetap berlaku. Melihat dan mengekspor riwayat yang sudah ada tidak memerlukan pembelian baru.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/el/before
++++ ios/el/proposed
+@@ -8,4 +8,7 @@
+ 
+ Το Vox.md γράφει τυπικά αρχεία Markdown στους φακέλους που επιλέγεις. Δεν χρειάζεται λογαριασμός ή ιδιόκτητη βάση σημειώσεων.
+ 
+-Οι νέοι χρήστες λαμβάνουν 15 δωρεάν λεπτά μεταγραφής και 10 επιτυχημένες μεταφορές περιεχομένου. Μία εφάπαξ αγορά ξεκλειδώνει απεριόριστη χρήση, χωρίς συνδρομή.+Οι νέες καταγραφές και μεταγραφές απαιτούν πρόσβαση επί πληρωμή. Επιλέξτε ατομική ή οικογενειακή πρόσβαση: εβδομαδιαία, ετήσια ή εφ’ όρου ζωής. Οι συνδρομές που πληρούν τις προϋποθέσεις περιλαμβάνουν επτά ημέρες δωρεάν δοκιμής και στη συνέχεια ανανεώνονται αυτόματα στην εμφανιζόμενη τιμή, μέχρι να ακυρωθούν στις ρυθμίσεις του λογαριασμού Apple. Οι υπάρχουσες αγορές παραμένουν έγκυρες. Η προβολή και εξαγωγή του υπάρχοντος ιστορικού δεν απαιτούν νέα αγορά.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/hr/before
++++ ios/hr/proposed
+@@ -8,4 +8,7 @@
+ 
+ Vox.md zapisuje standardne Markdown datoteke u mape koje odaberete. Nisu potrebni račun ni vlasnička baza bilježaka.
+ 
+-Novi korisnici dobivaju 15 minuta besplatne transkripcije i 10 uspješnih prijenosa sadržaja. Jednokratna kupnja otključava neograničenu upotrebu bez pretplate.+Nove snimke i prijepisi zahtijevaju plaćeni pristup. Odaberite pojedinačni ili obiteljski pristup: tjedni, godišnji ili doživotni. Pretplate koje ispunjavaju uvjete uključuju sedam dana besplatnog probnog razdoblja, a zatim se automatski obnavljaju po prikazanoj cijeni do otkazivanja u postavkama Apple računa. Postojeće kupnje ostaju valjane. Pregled i izvoz postojeće povijesti ne zahtijevaju novu kupnju.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/ru/before
++++ ios/ru/proposed
+@@ -4,4 +4,7 @@
+ 
+ Распознавание речи выполняется на устройстве с Apple Speech, Whisper или Parakeet. Аудио, транскрипции, введённый текст, пути к файлам и закладки не отправляются на серверы Vox.md. Vox.md записывает стандартный Markdown в выбранные папки и хранилища Obsidian; учётная запись и закрытая база заметок не требуются.
+ 
+-Новые пользователи получают 15 бесплатных минут транскрипции и 10 успешных отправок. Одна покупка открывает безлимитное использование.+Для новых записей и расшифровок нужен платный доступ. Выберите индивидуальный или семейный план: на неделю, на год или навсегда. Доступные пользователю подписки включают семь дней бесплатного пробного периода, затем автоматически продлеваются по указанной цене до отмены в настройках Аккаунта Apple. Ранее совершённые покупки остаются действительными. Просмотр и экспорт существующей истории не требуют новой покупки.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/ja/before
++++ ios/ja/proposed
+@@ -4,4 +4,7 @@
+ 
+ 音声の文字起こしはApple Speech、Whisper、Parakeetを使ってデバイス上で実行されます。音声、文字起こし、入力内容、ファイルパス、ブックマークがVox.mdのサーバーへ送信されることはありません。Vox.mdは選択したフォルダやObsidian保管庫に標準のMarkdownを書き込みます。アカウントや独自形式のノートデータベースは不要です。
+ 
+-新規ユーザーは15分間の無料文字起こしと10回の送信を利用できます。買い切りで無制限利用を解除できます。+新しいキャプチャと文字起こしには有料アクセスが必要です。個人用またはファミリー用の週額・年額プラン、または買い切りの無期限アクセスをお選びいただけます。対象のサブスクリプションには7日間の無料トライアルが含まれ、その後はApple Accountの設定で解約するまで表示価格で自動更新されます。既存の購入は引き続き有効です。既存の履歴の閲覧と書き出しに新たな購入は必要ありません。
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/fr-CA/before
++++ ios/fr-CA/proposed
+@@ -4,4 +4,7 @@
+ 
+ La conversion de la parole en texte s’exécute sur l’appareil avec Apple Speech, Whisper ou Parakeet. L’audio, les transcriptions, le contenu saisi, les chemins de fichiers et les signets ne sont pas envoyés aux serveurs de Vox.md. Vox.md écrit du Markdown standard dans les dossiers et coffres Obsidian choisis ; aucun compte ni aucune base de données de notes propriétaire n’est requis.
+ 
+-Les nouveaux utilisateurs bénéficient de 15 minutes de transcription gratuites et de 10 envois réussis. Un achat unique déverrouille l’utilisation illimitée.+Les nouvelles captures et transcriptions nécessitent un accès payant. Choisissez une formule individuelle ou familiale : hebdomadaire, annuelle ou à vie. Les abonnements éligibles comprennent sept jours d’essai gratuit, puis se renouvellent automatiquement au prix affiché jusqu’à leur résiliation dans les réglages du compte Apple. Les achats existants restent valables. La consultation et l’exportation de l’historique existant ne nécessitent aucun nouvel achat.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/hi/before
++++ ios/hi/proposed
+@@ -4,4 +4,7 @@
+ 
+ Apple Speech, Whisper या Parakeet से स्पीच-टू-टेक्स्ट डिवाइस पर ही चलता है। ऑडियो, ट्रांसक्रिप्ट, टाइप किया गया कंटेंट, फ़ाइल पाथ और बुकमार्क Vox.md सर्वर पर नहीं भेजे जाते। Vox.md आपकी चुनी हुई फ़ोल्डर और Obsidian वॉल्ट में मानक Markdown लिखता है; किसी अकाउंट या निजी नोट डेटाबेस की ज़रूरत नहीं है।
+ 
+-नए उपयोगकर्ताओं को 15 मिनट का मुफ़्त ट्रांसक्रिप्शन और 10 सफल डिलीवरी मिलती हैं। एक बार की खरीद अनलिमिटेड उपयोग खोलती है।+नए कैप्चर और ट्रांसक्रिप्शन के लिए सशुल्क ऐक्सेस आवश्यक है। व्यक्तिगत या पारिवारिक ऐक्सेस चुनें: साप्ताहिक, वार्षिक या आजीवन। पात्र सदस्यताओं में सात दिन का मुफ़्त ट्रायल शामिल है, फिर Apple खाते की सेटिंग में रद्द किए जाने तक दिखाई गई कीमत पर अपने आप नवीनीकरण होता है। मौजूदा खरीदारी मान्य रहती है। पुराना इतिहास देखने और एक्सपोर्ट करने के लिए नई खरीदारी की आवश्यकता नहीं है।
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/ms/before
++++ ios/ms/proposed
+@@ -8,4 +8,7 @@
+ 
+ Vox.md menulis fail Markdown standard dalam folder yang anda pilih. Tiada akaun atau pangkalan data nota proprietari diperlukan.
+ 
+-Pengguna baharu menerima 15 minit transkripsi percuma dan 10 penghantaran tangkapan yang berjaya. Pembelian sekali sahaja membuka penggunaan tanpa had, tanpa langganan.+Tangkapan dan transkripsi baharu memerlukan akses berbayar. Pilih akses individu atau keluarga: mingguan, tahunan atau seumur hidup. Langganan yang layak termasuk percubaan percuma tujuh hari, kemudian diperbaharui secara automatik pada harga yang dipaparkan sehingga dibatalkan dalam tetapan Akaun Apple. Pembelian sedia ada kekal sah. Melihat dan mengeksport sejarah sedia ada tidak memerlukan pembelian baharu.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/en-GB/before
++++ ios/en-GB/proposed
+@@ -22,10 +22,11 @@
+ 
+ Vox.md writes standard Markdown to the folders and Obsidian vaults you choose. You do not need an account or a proprietary notes database. Your files remain readable in any Markdown app.
+ 
+-FREE TO TRY
+-
+-New users receive 15 minutes of free transcription and 10 successful Capture deliveries. A single one-time purchase unlocks unlimited use. There is no recurring subscription.
++New Capture and transcription require paid access. Choose Individual or Family: weekly, yearly, or lifetime. Eligible subscriptions include a seven-day free trial, then renew automatically at the displayed price until canceled in Apple Account settings. Existing purchases remain valid. Viewing and exporting existing history require no new purchase.
+ 
+ PRIVACY
+ 
+-Capture contents, exported notes, audio, transcripts, keystrokes, file paths, and bookmarks are not sent to Vox.md servers. Vox.md collects limited, privacy-safe onboarding analytics to understand setup problems. Microphone, camera, photo, and file access are used only when you choose those capture types.+Capture contents, exported notes, audio, transcripts, keystrokes, file paths, and bookmarks are not sent to Vox.md servers. Vox.md collects limited, privacy-safe onboarding analytics to understand setup problems. Microphone, camera, photo, and file access are used only when you choose those capture types.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/es-ES/before
++++ ios/es-ES/proposed
+@@ -4,4 +4,7 @@
+ 
+ La conversión de voz a texto se ejecuta en el dispositivo con Apple Speech, Whisper o Parakeet. El audio, las transcripciones, el contenido escrito, las rutas de archivos y los marcadores no se envían a los servidores de Vox.md. Vox.md escribe Markdown estándar en las carpetas y bóvedas de Obsidian que elijas; no requiere una cuenta ni una base de datos de notas propietaria.
+ 
+-Los nuevos usuarios reciben 15 minutos gratuitos de transcripción y 10 envíos correctos. Una compra única desbloquea el uso ilimitado.+Las nuevas capturas y transcripciones requieren acceso de pago. Elija un plan individual o familiar: semanal, anual o de por vida. Las suscripciones que cumplan los requisitos incluyen siete días de prueba gratuita y después se renuevan automáticamente al precio indicado hasta que se cancelen en los ajustes de la Cuenta de Apple. Las compras existentes siguen siendo válidas. Consultar y exportar el historial existente no requiere una nueva compra.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/de-DE/before
++++ ios/de-DE/proposed
+@@ -4,4 +4,7 @@
+ 
+ Die Spracherkennung läuft mit Apple Speech, Whisper oder Parakeet auf dem Gerät. Audio, Transkripte, eingegebene Inhalte, Dateipfade und Lesezeichen werden nicht an Vox.md-Server gesendet. Vox.md schreibt Standard-Markdown in ausgewählte Ordner und Obsidian-Vaults; ein Konto oder eine proprietäre Notizdatenbank ist nicht erforderlich.
+ 
+-Neue Nutzer erhalten 15 kostenlose Transkriptionsminuten und 10 erfolgreiche Übertragungen. Ein einmaliger Kauf schaltet die unbegrenzte Nutzung frei.+Neue Erfassungen und Transkriptionen erfordern kostenpflichtigen Zugriff. Wählen Sie Einzel- oder Familienzugriff: wöchentlich, jährlich oder auf Lebenszeit. Berechtigte Abonnements enthalten sieben kostenlose Testtage und verlängern sich danach automatisch zum angezeigten Preis, bis Sie sie in den Einstellungen Ihres Apple Accounts kündigen. Bestehende Käufe bleiben gültig. Das Anzeigen und Exportieren des bisherigen Verlaufs erfordert keinen neuen Kauf.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/en-US/before
++++ ios/en-US/proposed
+@@ -22,10 +22,11 @@
+ 
+ Vox.md writes standard Markdown to the folders and Obsidian vaults you choose. You do not need an account or a proprietary notes database. Your files remain readable in any Markdown app.
+ 
+-FREE TO TRY
+-
+-New users receive 15 minutes of free transcription and 10 successful Capture deliveries. A single one-time purchase unlocks unlimited use. There is no recurring subscription.
++New Capture and transcription require paid access. Choose Individual or Family: weekly, yearly, or lifetime. Eligible subscriptions include a seven-day free trial, then renew automatically at the displayed price until canceled in Apple Account settings. Existing purchases remain valid. Viewing and exporting existing history require no new purchase.
+ 
+ PRIVACY
+ 
+-Capture contents, exported notes, audio, transcripts, keystrokes, file paths, and bookmarks are not sent to Vox.md servers. Vox.md collects limited, privacy-safe onboarding analytics to understand setup problems. Microphone, camera, photo, and file access are used only when you choose those capture types.+Capture contents, exported notes, audio, transcripts, keystrokes, file paths, and bookmarks are not sent to Vox.md servers. Vox.md collects limited, privacy-safe onboarding analytics to understand setup problems. Microphone, camera, photo, and file access are used only when you choose those capture types.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/pt-BR/before
++++ ios/pt-BR/proposed
+@@ -4,4 +4,7 @@
+ 
+ A conversão de voz em texto é executada no dispositivo com Apple Speech, Whisper ou Parakeet. Áudio, transcrições, conteúdo digitado, caminhos de arquivos e favoritos não são enviados aos servidores do Vox.md. O Vox.md grava Markdown padrão nas pastas e cofres do Obsidian escolhidos; não exige conta nem banco de notas proprietário.
+ 
+-Novos usuários recebem 15 minutos gratuitos de transcrição e 10 envios concluídos. Uma compra única libera o uso ilimitado.+Novas capturas e transcrições exigem acesso pago. Escolha um plano individual ou familiar: semanal, anual ou vitalício. As assinaturas elegíveis incluem sete dias de teste grátis e depois são renovadas automaticamente pelo preço exibido até serem canceladas nos ajustes da Conta Apple. As compras existentes continuam válidas. Consultar e exportar o histórico existente não exige uma nova compra.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/uk/before
++++ ios/uk/proposed
+@@ -4,4 +4,7 @@
+ 
+ Розпізнавання мовлення виконується на пристрої за допомогою Apple Speech, Whisper або Parakeet. Аудіо, транскрипції, введений вміст, шляхи до файлів і закладки не надсилаються на сервери Vox.md. Vox.md записує стандартний Markdown у вибрані папки та сховища Obsidian; обліковий запис і закрита база нотаток не потрібні.
+ 
+-Нові користувачі отримують 15 безплатних хвилин транскрипції та 10 успішних надсилань. Одна покупка відкриває безлімітне використання.+Нові записи та транскрипції потребують платного доступу. Виберіть індивідуальний або сімейний план: щотижневий, щорічний або довічний. Підписки, що відповідають умовам, включають сім днів безкоштовного пробного періоду, а потім автоматично поновлюються за вказаною ціною до скасування в налаштуваннях облікового запису Apple. Попередні покупки залишаються чинними. Перегляд та експорт наявної історії не потребують нової покупки.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/pl/before
++++ ios/pl/proposed
+@@ -4,4 +4,7 @@
+ 
+ Zamiana mowy na tekst działa na urządzeniu z Apple Speech, Whisper lub Parakeet. Dźwięk, transkrypcje, wpisana treść, ścieżki plików i zakładki nie są wysyłane na serwery Vox.md. Vox.md zapisuje standardowy Markdown w wybranych folderach i magazynach Obsidian; konto ani własnościowa baza notatek nie są wymagane.
+ 
+-Nowi użytkownicy otrzymują 15 bezpłatnych minut transkrypcji i 10 udanych dostaw. Jednorazowy zakup odblokowuje korzystanie bez limitu.+Nowe przechwytywanie i transkrypcja wymagają płatnego dostępu. Proszę wybrać dostęp indywidualny lub rodzinny: tygodniowy, roczny albo dożywotni. Uprawnione subskrypcje obejmują siedem dni bezpłatnego okresu próbnego, a następnie odnawiają się automatycznie po wyświetlonej cenie do czasu anulowania w ustawieniach konta Apple. Dotychczasowe zakupy pozostają ważne. Przeglądanie i eksport dotychczasowej historii nie wymagają nowego zakupu.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/nl-NL/before
++++ ios/nl-NL/proposed
+@@ -4,4 +4,7 @@
+ 
+ Spraak-naar-tekst draait op het apparaat met Apple Speech, Whisper of Parakeet. Audio, transcripties, getypte inhoud, bestandspaden en bladwijzers worden niet naar Vox.md-servers gestuurd. Vox.md schrijft standaard-Markdown naar gekozen mappen en Obsidian-kluizen; een account of bedrijfseigen notitiedatabase is niet nodig.
+ 
+-Nieuwe gebruikers krijgen 15 gratis transcriptieminuten en 10 geslaagde leveringen. Een eenmalige aankoop ontgrendelt onbeperkt gebruik.+Nieuwe vastleggingen en transcripties vereisen betaalde toegang. Kies individuele of gezinstoegang: wekelijks, jaarlijks of levenslang. In aanmerking komende abonnementen bieden zeven gratis proefdagen en worden daarna automatisch verlengd tegen de getoonde prijs totdat u ze opzegt in de instellingen van uw Apple Account. Bestaande aankopen blijven geldig. Uw bestaande geschiedenis bekijken en exporteren vereist geen nieuwe aankoop.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/pt-PT/before
++++ ios/pt-PT/proposed
+@@ -8,4 +8,7 @@
+ 
+ O Vox.md escreve ficheiros Markdown padrão nas pastas que escolher. Não precisa de uma conta nem de uma base de dados de notas proprietária.
+ 
+-Os novos utilizadores recebem 15 minutos de transcrição gratuita e 10 entregas de captura bem-sucedidas. Uma compra única desbloqueia a utilização ilimitada, sem subscrição.+Novas capturas e transcrições exigem acesso pago. Escolha um plano individual ou familiar: semanal, anual ou vitalício. As assinaturas elegíveis incluem sete dias de avaliação gratuita e depois renovam-se automaticamente ao preço apresentado até serem canceladas nas definições da Conta Apple. As compras existentes continuam válidas. Consultar e exportar o histórico existente não exige uma nova compra.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/cs/before
++++ ios/cs/proposed
+@@ -8,4 +8,7 @@
+ 
+ Vox.md zapisuje standardní soubory Markdown do složek, které si vyberete. Nepotřebujete účet ani vlastní databázi poznámek aplikace.
+ 
+-Noví uživatelé získají zdarma 15 minut přepisu a 10 úspěšných uložení obsahu. Jednorázový nákup odemkne neomezené používání bez předplatného.+Nové záznamy a přepisy vyžadují placený přístup. Zvolte individuální nebo rodinný přístup: týdenní, roční či doživotní. Způsobilá předplatná zahrnují sedmidenní bezplatnou zkušební dobu a poté se automaticky obnovují za zobrazenou cenu až do zrušení v nastavení účtu Apple. Stávající nákupy zůstávají platné. Zobrazení a export dosavadní historie nevyžadují nový nákup.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/he/before
++++ ios/he/proposed
+@@ -8,4 +8,7 @@
+ 
+ Vox.md כותבת קובצי Markdown רגילים בתיקיות שבחרת. אין צורך בחשבון או במסד נתונים ייעודי של פתקים.
+ 
+-משתמשים חדשים מקבלים 15 דקות תמלול בחינם ו־10 העברות תוכן מוצלחות. רכישה חד־פעמית פותחת שימוש ללא הגבלה, ללא מנוי.+לכידות ותמלולים חדשים דורשים גישה בתשלום. ניתן לבחור גישה אישית או משפחתית: שבועית, שנתית או לכל החיים. מינויים זכאים כוללים שבעה ימי ניסיון בחינם, ולאחר מכן מתחדשים אוטומטית במחיר המוצג עד לביטולם בהגדרות חשבון Apple. רכישות קיימות נשארות בתוקף. צפייה בהיסטוריה קיימת וייצואה אינן דורשות רכישה חדשה.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/th/before
++++ ios/th/proposed
+@@ -4,4 +4,7 @@
+ 
+ การแปลงเสียงเป็นข้อความทำงานบนอุปกรณ์ด้วย Apple Speech, Whisper หรือ Parakeet เสียง ข้อความถอดเสียง เนื้อหาที่พิมพ์ เส้นทางไฟล์ และบุ๊กมาร์กจะไม่ถูกส่งไปยังเซิร์ฟเวอร์ Vox.md โดย Vox.md จะเขียน Markdown มาตรฐานลงในโฟลเดอร์และคลัง Obsidian ที่คุณเลือก โดยไม่ต้องมีบัญชีหรือฐานข้อมูลโน้ตเฉพาะ
+ 
+-ผู้ใช้ใหม่ได้รับเวลาถอดเสียงฟรี 15 นาทีและการส่งสำเร็จ 10 ครั้ง การซื้อครั้งเดียวจะปลดล็อกการใช้งานไม่จำกัด+การบันทึกและถอดเสียงใหม่ต้องมีสิทธิ์ใช้งานแบบชำระเงิน เลือกแบบบุคคลหรือครอบครัว: รายสัปดาห์ รายปี หรือตลอดชีพ การสมัครสมาชิกที่มีสิทธิ์จะได้ทดลองฟรีเจ็ดวัน จากนั้นจะต่ออายุอัตโนมัติตามราคาที่แสดงจนกว่าจะยกเลิกในการตั้งค่าบัญชี Apple การซื้อเดิมยังคงใช้ได้ การดูและส่งออกประวัติเดิมไม่ต้องซื้อใหม่
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/en-AU/before
++++ ios/en-AU/proposed
+@@ -22,10 +22,11 @@
+ 
+ Vox.md writes standard Markdown to the folders and Obsidian vaults you choose. You do not need an account or a proprietary notes database. Your files remain readable in any Markdown app.
+ 
+-FREE TO TRY
+-
+-New users receive 15 minutes of free transcription and 10 successful Capture deliveries. A single one-time purchase unlocks unlimited use. There is no recurring subscription.
++New Capture and transcription require paid access. Choose Individual or Family: weekly, yearly, or lifetime. Eligible subscriptions include a seven-day free trial, then renew automatically at the displayed price until canceled in Apple Account settings. Existing purchases remain valid. Viewing and exporting existing history require no new purchase.
+ 
+ PRIVACY
+ 
+-Capture contents, exported notes, audio, transcripts, keystrokes, file paths, and bookmarks are not sent to Vox.md servers. Vox.md collects limited, privacy-safe onboarding analytics to understand setup problems. Microphone, camera, photo, and file access are used only when you choose those capture types.+Capture contents, exported notes, audio, transcripts, keystrokes, file paths, and bookmarks are not sent to Vox.md servers. Vox.md collects limited, privacy-safe onboarding analytics to understand setup problems. Microphone, camera, photo, and file access are used only when you choose those capture types.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/ar-SA/before
++++ ios/ar-SA/proposed
+@@ -4,4 +4,7 @@
+ 
+ يعمل تحويل الكلام إلى نص على الجهاز باستخدام Apple Speech أو Whisper أو Parakeet. لا يتم إرسال الصوت أو النصوص المنسوخة أو المحتوى المكتوب أو مسارات الملفات أو الإشارات المرجعية إلى خوادم Vox.md. يكتب Vox.md ملفات Markdown قياسية في المجلدات وخزائن Obsidian التي تختارها، ولا يتطلب حسابًا أو قاعدة بيانات ملاحظات خاصة.
+ 
+-يحصل المستخدمون الجدد على 15 دقيقة مجانية للنسخ الصوتي و10 عمليات تسليم ناجحة. تفتح عملية شراء واحدة الاستخدام غير المحدود.+تتطلب عمليات الالتقاط والتفريغ النصي الجديدة وصولًا مدفوعًا. يمكن اختيار وصول فردي أو عائلي: أسبوعي أو سنوي أو مدى الحياة. تشمل الاشتراكات المؤهلة تجربة مجانية لمدة سبعة أيام، ثم تتجدد تلقائيًا بالسعر المعروض حتى إلغائها من إعدادات حساب Apple. تبقى المشتريات الحالية سارية. لا يتطلب عرض السجل الحالي وتصديره أي عملية شراء جديدة.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/tr/before
++++ ios/tr/proposed
+@@ -4,4 +4,7 @@
+ 
+ Konuşmayı metne dönüştürme Apple Speech, Whisper veya Parakeet ile aygıtta çalışır. Ses, transkriptler, yazılan içerik, dosya yolları ve yer imleri Vox.md sunucularına gönderilmez. Vox.md, seçtiğiniz klasörlere ve Obsidian kasalarına standart Markdown yazar; hesap veya özel bir not veritabanı gerekmez.
+ 
+-Yeni kullanıcılar 15 ücretsiz transkripsiyon dakikası ve 10 başarılı teslim alır. Tek seferlik satın alma sınırsız kullanımı açar.+Yeni yakalamalar ve transkripsiyonlar ücretli erişim gerektirir. Bireysel veya aile erişimini haftalık, yıllık ya da ömür boyu seçenekleriyle seçebilirsiniz. Uygun abonelikler yedi günlük ücretsiz deneme içerir; ardından Apple Hesabı ayarlarından iptal edilene kadar gösterilen fiyat üzerinden otomatik yenilenir. Mevcut satın alımlar geçerliliğini korur. Mevcut geçmişi görüntülemek ve dışa aktarmak yeni satın alma gerektirmez.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/sv/before
++++ ios/sv/proposed
+@@ -8,4 +8,7 @@
+ 
+ Vox.md skriver vanliga Markdown-filer i de mappar du väljer. Du behöver inget konto eller någon egen anteckningsdatabas från appen.
+ 
+-Nya användare får 15 minuters gratis transkription och 10 lyckade innehållsöverföringar. Ett engångsköp ger obegränsad användning utan abonnemang.+Nya insamlingar och transkriptioner kräver betald åtkomst. Välj individuell åtkomst eller familjeåtkomst: veckovis, årsvis eller livstid. Berättigade abonnemang omfattar sju kostnadsfria provdagar och förnyas sedan automatiskt till det visade priset tills de sägs upp i inställningarna för Apple-kontot. Befintliga köp fortsätter att gälla. Att visa och exportera befintlig historik kräver inget nytt köp.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/ca/before
++++ ios/ca/proposed
+@@ -8,4 +8,7 @@
+ 
+ Vox.md escriu fitxers Markdown estàndard a les carpetes que triïs. No cal cap compte ni una base de dades de notes pròpia.
+ 
+-Els nous usuaris reben 15 minuts de transcripció gratuïta i 10 enviaments de captura completats correctament. Una única compra desbloqueja l'ús il·limitat, sense subscripció.+Les captures i transcripcions noves requereixen accés de pagament. Triï accés individual o familiar: setmanal, anual o de per vida. Les subscripcions elegibles inclouen set dies de prova gratuïta i després es renoven automàticament al preu indicat fins que es cancel·len a la configuració del compte d’Apple. Les compres existents continuen sent vàlides. Consultar i exportar l’historial existent no requereix una nova compra.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/ro/before
++++ ios/ro/proposed
+@@ -8,4 +8,7 @@
+ 
+ Vox.md scrie fișiere Markdown standard în dosarele alese. Nu ai nevoie de un cont sau de o bază de date de note proprietară.
+ 
+-Utilizatorii noi primesc 15 minute de transcriere gratuită și 10 transferuri de captură reușite. O singură achiziție deblochează utilizarea nelimitată, fără abonament.+Capturile și transcrierile noi necesită acces plătit. Alegeți acces individual sau pentru familie: săptămânal, anual sau pe viață. Abonamentele eligibile includ șapte zile de probă gratuită, apoi se reînnoiesc automat la prețul afișat până la anularea din configurările contului Apple. Achizițiile existente rămân valabile. Vizualizarea și exportarea istoricului existent nu necesită o nouă achiziție.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/sk/before
++++ ios/sk/proposed
+@@ -8,4 +8,7 @@
+ 
+ Vox.md zapisuje štandardné súbory Markdown do priečinkov, ktoré si vyberiete. Nepotrebujete účet ani vlastnú databázu poznámok aplikácie.
+ 
+-Noví používatelia získajú 15 minút bezplatného prepisu a 10 úspešných prenosov obsahu. Jednorazový nákup odomkne neobmedzené používanie bez predplatného.+Nové záznamy a prepisy vyžadujú platený prístup. Vyberte si individuálny alebo rodinný prístup: týždenný, ročný alebo doživotný. Oprávnené predplatné zahŕňa sedemdňové bezplatné skúšobné obdobie a potom sa automaticky obnovuje za zobrazenú cenu až do zrušenia v nastaveniach účtu Apple. Existujúce nákupy zostávajú platné. Zobrazenie a export doterajšej histórie nevyžadujú nový nákup.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/ko/before
++++ ios/ko/proposed
+@@ -4,4 +4,7 @@
+ 
+ 음성 텍스트 변환은 Apple Speech, Whisper 또는 Parakeet을 사용해 기기에서 실행됩니다. 오디오, 전사, 입력한 내용, 파일 경로 및 북마크는 Vox.md 서버로 전송되지 않습니다. Vox.md는 선택한 폴더와 Obsidian 보관함에 표준 Markdown을 기록하며 계정이나 독점 메모 데이터베이스가 필요하지 않습니다.
+ 
+-신규 사용자는 15분의 무료 전사와 10회의 성공적인 전송을 이용할 수 있습니다. 일회성 구매로 무제한 이용을 잠금 해제할 수 있습니다.+새로운 캡처와 전사에는 유료 이용 권한이 필요합니다. 개인 또는 가족용 주간, 연간 구독이나 평생 이용권을 선택할 수 있습니다. 자격을 충족하는 구독에는 7일 무료 체험이 포함되며, 이후 Apple 계정 설정에서 취소할 때까지 표시된 가격으로 자동 갱신됩니다. 기존 구매는 계속 유효합니다. 기존 기록을 보고 내보내는 데는 새로운 구매가 필요하지 않습니다.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/zh-Hant/before
++++ ios/zh-Hant/proposed
+@@ -4,4 +4,7 @@
+ 
+ 語音轉文字透過 Apple Speech、Whisper 或 Parakeet 在裝置上執行。音訊、轉錄文字、輸入內容、檔案路徑和書籤不會傳送到 Vox.md 伺服器。Vox.md 會將標準 Markdown 寫入你選擇的資料夾和 Obsidian 資料庫；不需要帳號或專有筆記資料庫。
+ 
+-新使用者可獲得 15 分鐘免費轉錄和 10 次成功傳送。一次性購買即可解鎖無限使用。+新的擷取和轉錄需要付費使用權限。您可以選擇個人或家庭的週訂閱、年訂閱，或一次購買終身使用權限。符合資格的訂閱包含七天免費試用，之後將按顯示的價格自動續訂，直到您在 Apple 帳號設定中取消。現有購買仍然有效。查看和匯出現有歷史記錄無須再次購買。
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/vi/before
++++ ios/vi/proposed
+@@ -4,4 +4,7 @@
+ 
+ Chuyển giọng nói thành văn bản chạy trên thiết bị bằng Apple Speech, Whisper hoặc Parakeet. Âm thanh, bản chép lời, nội dung đã nhập, đường dẫn tệp và dấu trang không được gửi đến máy chủ Vox.md. Vox.md ghi Markdown chuẩn vào các thư mục và kho Obsidian bạn chọn; không cần tài khoản hoặc cơ sở dữ liệu ghi chú độc quyền.
+ 
+-Người dùng mới có 15 phút chép lời miễn phí và 10 lần gửi thành công. Một lần mua sẽ mở khóa quyền sử dụng không giới hạn.+Nội dung ghi nhanh và bản chép lời mới yêu cầu quyền truy cập trả phí. Quý vị có thể chọn gói cá nhân hoặc gia đình: hằng tuần, hằng năm hoặc trọn đời. Đăng ký đủ điều kiện bao gồm bảy ngày dùng thử miễn phí, sau đó tự động gia hạn theo giá hiển thị cho đến khi bị hủy trong cài đặt Tài khoản Apple. Các giao dịch mua trước đây vẫn có hiệu lực. Xem và xuất lịch sử hiện có không yêu cầu mua thêm.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/fi/before
++++ ios/fi/proposed
+@@ -8,4 +8,7 @@
+ 
+ Vox.md kirjoittaa tavallisia Markdown-tiedostoja valitsemiisi kansioihin. Et tarvitse käyttäjätiliä tai sovelluksen omaa muistiinpanotietokantaa.
+ 
+-Uudet käyttäjät saavat 15 minuuttia ilmaista litterointia ja 10 onnistunutta sisällön siirtoa. Kertaostos avaa rajattoman käytön ilman tilausta.+Uudet tallennukset ja litteroinnit edellyttävät maksullista käyttöoikeutta. Valitse henkilökohtainen tai perheen käyttöoikeus: viikko-, vuosi- tai elinikäinen käyttöoikeus. Ehdot täyttävät tilaukset sisältävät seitsemän päivän maksuttoman kokeilun ja uusiutuvat sen jälkeen automaattisesti näytetyllä hinnalla, kunnes ne perutaan Apple-tilin asetuksissa. Aiemmat ostot pysyvät voimassa. Aiemman historian katselu ja vienti eivät edellytä uutta ostoa.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/en-CA/before
++++ ios/en-CA/proposed
+@@ -22,10 +22,11 @@
+ 
+ Vox.md writes standard Markdown to the folders and Obsidian vaults you choose. You do not need an account or a proprietary notes database. Your files remain readable in any Markdown app.
+ 
+-FREE TO TRY
+-
+-New users receive 15 minutes of free transcription and 10 successful Capture deliveries. A single one-time purchase unlocks unlimited use. There is no recurring subscription.
++New Capture and transcription require paid access. Choose Individual or Family: weekly, yearly, or lifetime. Eligible subscriptions include a seven-day free trial, then renew automatically at the displayed price until canceled in Apple Account settings. Existing purchases remain valid. Viewing and exporting existing history require no new purchase.
+ 
+ PRIVACY
+ 
+-Capture contents, exported notes, audio, transcripts, keystrokes, file paths, and bookmarks are not sent to Vox.md servers. Vox.md collects limited, privacy-safe onboarding analytics to understand setup problems. Microphone, camera, photo, and file access are used only when you choose those capture types.+Capture contents, exported notes, audio, transcripts, keystrokes, file paths, and bookmarks are not sent to Vox.md servers. Vox.md collects limited, privacy-safe onboarding analytics to understand setup problems. Microphone, camera, photo, and file access are used only when you choose those capture types.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/it/before
++++ ios/it/proposed
+@@ -4,4 +4,7 @@
+ 
+ La conversione da voce a testo avviene sul dispositivo con Apple Speech, Whisper o Parakeet. Audio, trascrizioni, contenuti digitati, percorsi dei file e segnalibri non vengono inviati ai server Vox.md. Vox.md scrive Markdown standard nelle cartelle e nei vault Obsidian scelti; non servono un account o un database di note proprietario.
+ 
+-I nuovi utenti ricevono 15 minuti gratuiti di trascrizione e 10 invii riusciti. Un unico acquisto sblocca l’uso illimitato.+Le nuove acquisizioni e trascrizioni richiedono un accesso a pagamento. Scelga un piano individuale o famiglia: settimanale, annuale o a vita. Gli abbonamenti idonei includono sette giorni di prova gratuita, poi si rinnovano automaticamente al prezzo indicato fino alla disdetta nelle impostazioni dell’Apple Account. Gli acquisti esistenti restano validi. Consultare ed esportare la cronologia esistente non richiede nuovi acquisti.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/zh-Hans/before
++++ ios/zh-Hans/proposed
+@@ -4,4 +4,7 @@
+ 
+ 语音转文字通过 Apple Speech、Whisper 或 Parakeet 在设备上运行。音频、转录文本、输入内容、文件路径和书签不会发送到 Vox.md 服务器。Vox.md 会将标准 Markdown 写入你选择的文件夹和 Obsidian 仓库；无需帐户或专有笔记数据库。
+ 
+-新用户可获得 15 分钟免费转录和 10 次成功发送。一次性购买即可解锁无限使用。+新的采集和转写需要付费使用权限。您可以选择个人或家庭的周订阅、年订阅，或一次性购买终身使用权限。符合条件的订阅包含七天免费试用，之后将按显示的价格自动续订，直至您在 Apple 账户设置中取消。现有购买仍然有效。查看和导出现有历史记录无需再次购买。
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- ios/hu/before
++++ ios/hu/proposed
+@@ -8,4 +8,7 @@
+ 
+ A Vox.md szabványos Markdown-fájlokat ír a kiválasztott mappákba. Nincs szükség fiókra vagy az alkalmazás saját jegyzet-adatbázisára.
+ 
+-Az új felhasználók 15 perc ingyenes átírást és 10 sikeres tartalomátvitelt kapnak. Egyszeri vásárlással korlátlan használat érhető el, előfizetés nélkül.+Új tartalmak rögzítéséhez és átírásához fizetős hozzáférés szükséges. Válasszon egyéni vagy családi hozzáférést: heti, éves vagy élethosszig tartó változatban. A jogosult előfizetések hét nap ingyenes próbaidőt tartalmaznak, majd automatikusan megújulnak a feltüntetett áron, amíg az Apple-fiók beállításaiban le nem mondja őket. A korábbi vásárlások érvényesek maradnak. A meglévő előzmények megtekintése és exportálása nem igényel új vásárlást.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/en-GB/before
++++ mac/en-GB/proposed
+@@ -22,10 +22,11 @@
+ 
+ Vox.md writes standard Markdown to the folders and Obsidian vaults you choose. You do not need an account or a proprietary notes database. Your files remain readable in any Markdown app.
+ 
+-FREE TO TRY
+-
+-New users receive 15 minutes of free transcription and 10 successful Capture deliveries. A single one-time purchase unlocks unlimited use. There is no recurring subscription.
++New Capture and transcription require paid access. Choose Individual or Family: weekly, yearly, or lifetime. Eligible subscriptions include a seven-day free trial, then renew automatically at the displayed price until canceled in Apple Account settings. Existing purchases remain valid. Viewing and exporting existing history require no new purchase.
+ 
+ PRIVACY
+ 
+-Capture contents, exported notes, audio, transcripts, keystrokes, file paths, and bookmarks are not sent to Vox.md servers. Vox.md collects limited, privacy-safe onboarding analytics to understand setup problems. Microphone, camera, photo, and file access are used only when you choose those capture types.+Capture contents, exported notes, audio, transcripts, keystrokes, file paths, and bookmarks are not sent to Vox.md servers. Vox.md collects limited, privacy-safe onboarding analytics to understand setup problems. Microphone, camera, photo, and file access are used only when you choose those capture types.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/el/before
++++ mac/el/proposed
+@@ -1,4 +1,4 @@
+-Το Vox.md είναι ένα offline, τοπικό πληκτρολόγιο φωνής σε κείμενο για μετατροπή ομιλίας σε κείμενο και φωνητική πληκτρολόγηση — χωρίς διαδίκτυο, χωρίς διακομιστές, χωρίς συνδρομή.
++Το Vox.md είναι ένα offline, τοπικό πληκτρολόγιο φωνής σε κείμενο για μετατροπή ομιλίας σε κείμενο και φωνητική πληκτρολόγηση.
+ 
+ Πατήστε το κουμπί του μικροφώνου σε οποιαδήποτε εφαρμογή, μιλήστε φυσικά και οι λέξεις σας εμφανίζονται ως κείμενο. Όλα επεξεργάζονται τοπικά χρησιμοποιώντας το Apple Silicon, οπότε τίποτα δεν εγκαταλείπει ποτέ το τηλέφωνό σας.
+ 
+@@ -17,13 +17,10 @@
+ • Λειτουργία συνεχούς ακρόασης — ξεκινήστε μια συνεδρία από την κύρια εφαρμογή, στη συνέχεια χρησιμοποιήστε υπαγόρευση hands-free σε οποιαδήποτε εφαρμογή
+ • Ιστορικό μεταγραφών — κάντε κύλιση πίσω σε όλα όσα έχετε υπαγορεύσει
+ • Πολλαπλά μοντέλα Whisper — επιλέξτε ανάμεσα σε Tiny, Base και Small ανάλογα με την προτίμησή σας για ταχύτητα/ακρίβεια
+-• Χωρίς συνδρομή — πληρώστε μία φορά, χρησιμοποιήστε για πάντα
+ 
+ —
+ 
+-ΔΩΡΕΑΝ ΕΠΙΠΕΔΟ
+-
+-Οι νέοι χρήστες λαμβάνουν 15 λεπτά δωρεάν μεταγραφής για να δοκιμάσουν τα πάντα. Αναβαθμίστε στο Vox.md Unlimited με μια μοναδική αγορά μιας φοράς για να αφαιρέσετε όλους τους περιορισμούς.
++Οι νέες καταγραφές και μεταγραφές απαιτούν πρόσβαση επί πληρωμή. Επιλέξτε ατομική ή οικογενειακή πρόσβαση: εβδομαδιαία, ετήσια ή εφ’ όρου ζωής. Οι συνδρομές που πληρούν τις προϋποθέσεις περιλαμβάνουν επτά ημέρες δωρεάν δοκιμής και στη συνέχεια ανανεώνονται αυτόματα στην εμφανιζόμενη τιμή, μέχρι να ακυρωθούν στις ρυθμίσεις του λογαριασμού Apple. Οι υπάρχουσες αγορές παραμένουν έγκυρες. Η προβολή και εξαγωγή του υπάρχοντος ιστορικού δεν απαιτούν νέα αγορά.
+ 
+ —
+ 
+@@ -31,4 +28,7 @@
+ 
+ Όλη η επεξεργασία ήχου συμβαίνει στο iPhone σας χρησιμοποιώντας τοπική μηχανική μάθηση. Καμία ηχογράφηση, μεταγραφή ή προσωπικά δεδομένα δεν μεταδίδονται ποτέ σε εξωτερικούς διακομιστές. Η πρόσβαση στο μικρόφωνο απαιτείται για μεταγραφή και χρησιμοποιείται μόνο όταν ξεκινάτε ενεργά την εγγραφή.
+ 
+-Είναι επίσης χρήσιμο για: ιδιωτικότητα, σημειώσεις, ήχος.+Είναι επίσης χρήσιμο για: ιδιωτικότητα, σημειώσεις, ήχος.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/th/before
++++ mac/th/proposed
+@@ -4,4 +4,7 @@
+ 
+ การแปลงเสียงเป็นข้อความทำงานบนอุปกรณ์ด้วย Apple Speech, Whisper หรือ Parakeet เสียง ข้อความถอดเสียง เนื้อหาที่พิมพ์ เส้นทางไฟล์ และบุ๊กมาร์กจะไม่ถูกส่งไปยังเซิร์ฟเวอร์ Vox.md โดย Vox.md จะเขียน Markdown มาตรฐานลงในโฟลเดอร์และคลัง Obsidian ที่คุณเลือก โดยไม่ต้องมีบัญชีหรือฐานข้อมูลโน้ตเฉพาะ
+ 
+-ผู้ใช้ใหม่ได้รับเวลาถอดเสียงฟรี 15 นาทีและการส่งสำเร็จ 10 ครั้ง การซื้อครั้งเดียวจะปลดล็อกการใช้งานไม่จำกัด+การบันทึกและถอดเสียงใหม่ต้องมีสิทธิ์ใช้งานแบบชำระเงิน เลือกแบบบุคคลหรือครอบครัว: รายสัปดาห์ รายปี หรือตลอดชีพ การสมัครสมาชิกที่มีสิทธิ์จะได้ทดลองฟรีเจ็ดวัน จากนั้นจะต่ออายุอัตโนมัติตามราคาที่แสดงจนกว่าจะยกเลิกในการตั้งค่าบัญชี Apple การซื้อเดิมยังคงใช้ได้ การดูและส่งออกประวัติเดิมไม่ต้องซื้อใหม่
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/en-CA/before
++++ mac/en-CA/proposed
+@@ -22,10 +22,11 @@
+ 
+ Vox.md writes standard Markdown to the folders and Obsidian vaults you choose. You do not need an account or a proprietary notes database. Your files remain readable in any Markdown app.
+ 
+-FREE TO TRY
+-
+-New users receive 15 minutes of free transcription and 10 successful Capture deliveries. A single one-time purchase unlocks unlimited use. There is no recurring subscription.
++New Capture and transcription require paid access. Choose Individual or Family: weekly, yearly, or lifetime. Eligible subscriptions include a seven-day free trial, then renew automatically at the displayed price until canceled in Apple Account settings. Existing purchases remain valid. Viewing and exporting existing history require no new purchase.
+ 
+ PRIVACY
+ 
+-Capture contents, exported notes, audio, transcripts, keystrokes, file paths, and bookmarks are not sent to Vox.md servers. Vox.md collects limited, privacy-safe onboarding analytics to understand setup problems. Microphone, camera, photo, and file access are used only when you choose those capture types.+Capture contents, exported notes, audio, transcripts, keystrokes, file paths, and bookmarks are not sent to Vox.md servers. Vox.md collects limited, privacy-safe onboarding analytics to understand setup problems. Microphone, camera, photo, and file access are used only when you choose those capture types.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/pt-PT/before
++++ mac/pt-PT/proposed
+@@ -1,4 +1,4 @@
+-Vox.md é um teclado de voz para texto offline para reconhecimento de voz e escrita por voz — sem internet, sem servidores, sem subscrição.
++Vox.md é um teclado de voz para texto offline para reconhecimento de voz e escrita por voz.
+ 
+ Toque no botão do microfone em qualquer aplicação, fale naturalmente, e as suas palavras aparecem como texto. Tudo é processado no dispositivo usando Apple Silicon, portanto nada sai jamais do seu telefone.
+ 
+@@ -17,13 +17,10 @@
+ • Modo de escuta sempre activo — inicie uma sessão da aplicação principal, depois use ditado mãos livres em qualquer aplicação
+ • Histórico de transcrição — role para trás através de tudo o que ditou
+ • Múltiplos modelos Whisper — escolha entre Tiny, Base e Small dependendo da sua preferência velocidade/precisão
+-• Sem subscrição — pague uma vez, use para sempre
+ 
+ —
+ 
+-NÍVEL GRATUITO
+-
+-Novos utilizadores ganham 15 minutos de transcrição gratuita para experimentar tudo. Actualize para Vox.md Unlimited com uma única compra única para remover todos os limites.
++Novas capturas e transcrições exigem acesso pago. Escolha um plano individual ou familiar: semanal, anual ou vitalício. As assinaturas elegíveis incluem sete dias de avaliação gratuita e depois renovam-se automaticamente ao preço apresentado até serem canceladas nas definições da Conta Apple. As compras existentes continuam válidas. Consultar e exportar o histórico existente não exige uma nova compra.
+ 
+ —
+ 
+@@ -31,4 +28,7 @@
+ 
+ Todo o processamento de áudio acontece no seu iPhone usando aprendizagem automática no dispositivo. Nenhuma gravação de áudio, transcrição ou dados pessoais são jamais transmitidos para servidores externos. Acesso ao microfone é necessário para transcrição e é usado apenas quando inicia activamente uma gravação.
+ 
+-Também é útil para: local.+Também é útil para: local.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/id/before
++++ mac/id/proposed
+@@ -4,4 +4,7 @@
+ 
+ Ucapan-ke-teks berjalan di perangkat dengan Apple Speech, Whisper, atau Parakeet. Audio, transkrip, konten ketikan, jalur file, dan penanda tidak dikirim ke server Vox.md. Vox.md menulis Markdown standar ke folder dan vault Obsidian yang Anda pilih; akun atau basis data catatan milik vendor tidak diperlukan.
+ 
+-Pengguna baru memperoleh 15 menit transkripsi gratis dan 10 pengiriman berhasil. Satu pembelian membuka penggunaan tanpa batas.+Tangkapan dan transkripsi baru memerlukan akses berbayar. Pilih akses individu atau keluarga: mingguan, tahunan, atau seumur hidup. Langganan yang memenuhi syarat mencakup uji coba gratis tujuh hari, lalu diperpanjang otomatis dengan harga yang ditampilkan hingga dibatalkan di pengaturan Akun Apple. Pembelian sebelumnya tetap berlaku. Melihat dan mengekspor riwayat yang sudah ada tidak memerlukan pembelian baru.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/hu/before
++++ mac/hu/proposed
+@@ -1,4 +1,4 @@
+-A Vox.md egy offline, eszközön futó beszéd-szöveg billentyűzet beszédfelismeréshez és hangos gépeléshez — nincs internet, nincsenek szerverek, nincs előfizetés.
++A Vox.md egy offline, eszközön futó beszéd-szöveg billentyűzet beszédfelismeréshez és hangos gépeléshez.
+ 
+ Koppintson a mikrofon gombra bármilyen alkalmazásban, beszéljen természetesen, és a szavai szövegként jelennek meg. Minden az eszközön kerül feldolgozásra Apple Silicon használatával, így semmi sem hagyja el a telefonját.
+ 
+@@ -17,13 +17,10 @@
+ • Mindig aktív figyelő mód — indítson munkamenetet a főalkalmazásból, majd használja a kéz nélküli diktálást bármely alkalmazásban
+ • Átírási előzmények — görgessen végig mindenen, amit diktált
+ • Több Whisper modell — válasszon Tiny, Base és Small között a sebesség/pontosság preferenciája szerint
+-• Nincs előfizetés — fizessen egyszer, használja örökké
+ 
+ —
+ 
+-INGYENES SZINT
+-
+-Az új felhasználók 15 perc ingyenes átírást kapnak, hogy mindent kipróbálhassanak. Frissítsen Vox.md Unlimited-re egyetlen egyszeri vásárlással minden korlátozás eltávolításához.
++Új tartalmak rögzítéséhez és átírásához fizetős hozzáférés szükséges. Válasszon egyéni vagy családi hozzáférést: heti, éves vagy élethosszig tartó változatban. A jogosult előfizetések hét nap ingyenes próbaidőt tartalmaznak, majd automatikusan megújulnak a feltüntetett áron, amíg az Apple-fiók beállításaiban le nem mondja őket. A korábbi vásárlások érvényesek maradnak. A meglévő előzmények megtekintése és exportálása nem igényel új vásárlást.
+ 
+ —
+ 
+@@ -31,4 +28,7 @@
+ 
+ Minden hangfeldolgozás az iPhone-on történik eszközön futó gépi tanulás használatával. Semmilyen hangfelvétel, átírás vagy személyes adat nem kerül át külső szerverekre. A mikrofon hozzáférés szükséges az átíráshoz és csak akkor használatos, amikor aktívan elindítja a felvételt.
+ 
+-Hasznos ehhez is: adatvédelem, mesterséges, intelligencia.+Hasznos ehhez is: adatvédelem, mesterséges, intelligencia.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/ro/before
++++ mac/ro/proposed
+@@ -1,4 +1,4 @@
+-Vox.md este o tastatură voce-în-text offline, pe dispozitiv pentru recunoașterea vocii și tastarea vocală — fără internet, fără servere, fără abonament.
++Vox.md este o tastatură voce-în-text offline, pe dispozitiv pentru recunoașterea vocii și tastarea vocală.
+ 
+ Atingeți butonul microfonului în orice aplicație, vorbiți natural și cuvintele dvs. apar ca text. Tot se procesează pe dispozitiv folosind Apple Silicon, deci nimic nu părăsește vreodată telefonul dvs.
+ 
+@@ -17,13 +17,10 @@
+ • Mod de ascultare mereu activ — începeți o sesiune din aplicația principală, apoi folosiți dictarea fără mâini în orice aplicație
+ • Istoric transcriere — derulați prin tot ce ați dictat
+ • Modele Whisper multiple — alegeți între Tiny, Base și Small în funcție de preferința dvs. de viteză/acuratețe
+-• Fără abonament — plătiți o dată, folosiți pentru totdeauna
+ 
+ —
+ 
+-NIVEL GRATUIT
+-
+-Utilizatorii noi primesc 15 minute de transcriere gratuită pentru a încerca totul. Actualizați la Vox.md Unlimited cu o singură achiziție unică pentru a elimina toate limitările.
++Capturile și transcrierile noi necesită acces plătit. Alegeți acces individual sau pentru familie: săptămânal, anual sau pe viață. Abonamentele eligibile includ șapte zile de probă gratuită, apoi se reînnoiesc automat la prețul afișat până la anularea din configurările contului Apple. Achizițiile existente rămân valabile. Vizualizarea și exportarea istoricului existent nu necesită o nouă achiziție.
+ 
+ —
+ 
+@@ -31,4 +28,7 @@
+ 
+ Toată procesarea audio se întâmplă pe iPhone-ul dvs. folosind învățare automată pe dispozitiv. Nicio înregistrare audio, transcriere sau date personale nu sunt transmise vreodată pe servere externe. Accesul la microfon este necesar pentru transcriere și este folosit doar când începeți în mod activ înregistrarea.
+ 
+-Util și pentru: recunoastere, vocala, transcriptie, confidentialitate, notite.+Util și pentru: recunoastere, vocala, transcriptie, confidentialitate, notite.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/fr-FR/before
++++ mac/fr-FR/proposed
+@@ -4,4 +4,7 @@
+ 
+ La conversion de la parole en texte s’exécute sur l’appareil avec Apple Speech, Whisper ou Parakeet. L’audio, les transcriptions, le contenu saisi, les chemins de fichiers et les signets ne sont pas envoyés aux serveurs de Vox.md. Vox.md écrit du Markdown standard dans les dossiers et coffres Obsidian choisis ; aucun compte ni aucune base de données de notes propriétaire n’est requis.
+ 
+-Les nouveaux utilisateurs bénéficient de 15 minutes de transcription gratuites et de 10 envois réussis. Un achat unique déverrouille l’utilisation illimitée.+Les nouvelles captures et transcriptions nécessitent un accès payant. Choisissez une formule individuelle ou familiale : hebdomadaire, annuelle ou à vie. Les abonnements éligibles comprennent sept jours d’essai gratuit, puis se renouvellent automatiquement au prix affiché jusqu’à leur résiliation dans les réglages du compte Apple. Les achats existants restent valables. La consultation et l’exportation de l’historique existant ne nécessitent aucun nouvel achat.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/sk/before
++++ mac/sk/proposed
+@@ -1,4 +1,4 @@
+-Vox.md je offline klávesnica hlas na text fungujúca na zariadení pre rozpoznávanie reči a hlasové písanie — bez internetu, bez serverov, bez predplatného.
++Vox.md je offline klávesnica hlas na text fungujúca na zariadení pre rozpoznávanie reči a hlasové písanie.
+ 
+ Dotkite sa tlačidla mikrofónu v akejkoľvek aplikácii, hovorte prirodzene a vaše slová sa objavia ako text. Všetko sa spracováva na zariadení pomocou Apple Silicon, takže nič nikdy neopustí váš telefón.
+ 
+@@ -17,13 +17,10 @@
+ • Režim stáleho načúvania — spustite reláciu z hlavnej aplikácie, potom používajte diktovanie bez rúk v akejkoľvek aplikácii
+ • História prepisov — prechádzajte cez všetko, čo ste nadiktovali
+ • Viacero Whisper modelov — vyberte si medzi Tiny, Base a Small v závislosti od vašich preferencií rýchlosť/presnosť
+-• Bez predplatného — zaplaťte raz, používajte navždy
+ 
+ —
+ 
+-BEZPLATNÁ ÚROVEŇ
+-
+-Noví používatelia získajú 15 minút bezplatného prepisu na vyskúšanie všetkého. Inovujte na Vox.md Unlimited jednou jednorazovou kúpou na odstránenie všetkých obmedzení.
++Nové záznamy a prepisy vyžadujú platený prístup. Vyberte si individuálny alebo rodinný prístup: týždenný, ročný alebo doživotný. Oprávnené predplatné zahŕňa sedemdňové bezplatné skúšobné obdobie a potom sa automaticky obnovuje za zobrazenú cenu až do zrušenia v nastaveniach účtu Apple. Existujúce nákupy zostávajú platné. Zobrazenie a export doterajšej histórie nevyžadujú nový nákup.
+ 
+ —
+ 
+@@ -31,4 +28,7 @@
+ 
+ Všetko spracovanie zvuku sa deje vo vašom iPhone pomocou strojového učenia na zariadení. Žiadne zvukové nahrávky, prepisy alebo osobné údaje sa nikdy neposielajú na externé servery. Prístup k mikrofónu je potrebný pre prepis a používa sa iba keď aktívne spustíte nahrávanie.
+ 
+-Hodí sa aj na: rozpoznavanie, poznámky, lokálne.+Hodí sa aj na: rozpoznavanie, poznámky, lokálne.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/hi/before
++++ mac/hi/proposed
+@@ -4,4 +4,7 @@
+ 
+ Apple Speech, Whisper या Parakeet से स्पीच-टू-टेक्स्ट डिवाइस पर ही चलता है। ऑडियो, ट्रांसक्रिप्ट, टाइप किया गया कंटेंट, फ़ाइल पाथ और बुकमार्क Vox.md सर्वर पर नहीं भेजे जाते। Vox.md आपकी चुनी हुई फ़ोल्डर और Obsidian वॉल्ट में मानक Markdown लिखता है; किसी अकाउंट या निजी नोट डेटाबेस की ज़रूरत नहीं है।
+ 
+-नए उपयोगकर्ताओं को 15 मिनट का मुफ़्त ट्रांसक्रिप्शन और 10 सफल डिलीवरी मिलती हैं। एक बार की खरीद अनलिमिटेड उपयोग खोलती है।+नए कैप्चर और ट्रांसक्रिप्शन के लिए सशुल्क ऐक्सेस आवश्यक है। व्यक्तिगत या पारिवारिक ऐक्सेस चुनें: साप्ताहिक, वार्षिक या आजीवन। पात्र सदस्यताओं में सात दिन का मुफ़्त ट्रायल शामिल है, फिर Apple खाते की सेटिंग में रद्द किए जाने तक दिखाई गई कीमत पर अपने आप नवीनीकरण होता है। मौजूदा खरीदारी मान्य रहती है। पुराना इतिहास देखने और एक्सपोर्ट करने के लिए नई खरीदारी की आवश्यकता नहीं है।
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/da/before
++++ mac/da/proposed
+@@ -1,4 +1,4 @@
+-Vox.md er et offline, on-device stemme-til-tekst tastatur til talediktering og stemmeindtastning — intet internet, ingen servere, intet abonnement.
++Vox.md er et offline, on-device stemme-til-tekst tastatur til talediktering og stemmeindtastning.
+ 
+ Tryk på mikrofonknappen i enhver app, tal naturligt, og dine ord vises som tekst. Alt behandles på enheden ved hjælp af Apple Silicon, så intet forlader nogensinde din telefon.
+ 
+@@ -17,13 +17,10 @@
+ • Altid-på lyttetilstand — start en session fra hovedappen, brug derefter håndfri diktering i enhver app
+ • Transskriptionshistorik — rul tilbage gennem alt, hvad du har dikteret
+ • Flere Whisper-modeller — vælg mellem Tiny, Base og Small afhængigt af din hastigheds-/nøjagtighedspræference
+-• Intet abonnement — betal én gang, brug for evigt
+ 
+ —
+ 
+-GRATIS NIVEAU
+-
+-Nye brugere får 15 minutters gratis transskription til at prøve alt. Opgrader til Vox.md Unlimited med et enkelt engangskøb for at fjerne alle begrænsninger.
++Nye registreringer og transskriptioner kræver betalt adgang. Vælg individuel adgang eller familieadgang: ugentligt, årligt eller livsvarigt. Berettigede abonnementer omfatter syv gratis prøvedage og fornyes derefter automatisk til den viste pris, indtil de opsiges i indstillingerne for Apple-kontoen. Eksisterende køb er fortsat gyldige. Visning og eksport af eksisterende historik kræver ikke et nyt køb.
+ 
+ —
+ 
+@@ -31,4 +28,7 @@
+ 
+ Al lydbehandling sker på din iPhone ved hjælp af on-device maskinlæring. Ingen lydoptagelser, transskripter eller personlige data transmitteres nogensinde til eksterne servere. Mikrofonadgang er påkrævet til transskription og bruges kun, når du aktivt starter optagelse.
+ 
+-Også nyttig til: stemmediktering, diktat.+Også nyttig til: stemmediktering, diktat.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/uk/before
++++ mac/uk/proposed
+@@ -4,4 +4,7 @@
+ 
+ Розпізнавання мовлення виконується на пристрої за допомогою Apple Speech, Whisper або Parakeet. Аудіо, транскрипції, введений вміст, шляхи до файлів і закладки не надсилаються на сервери Vox.md. Vox.md записує стандартний Markdown у вибрані папки та сховища Obsidian; обліковий запис і закрита база нотаток не потрібні.
+ 
+-Нові користувачі отримують 15 безплатних хвилин транскрипції та 10 успішних надсилань. Одна покупка відкриває безлімітне використання.+Нові записи та транскрипції потребують платного доступу. Виберіть індивідуальний або сімейний план: щотижневий, щорічний або довічний. Підписки, що відповідають умовам, включають сім днів безкоштовного пробного періоду, а потім автоматично поновлюються за вказаною ціною до скасування в налаштуваннях облікового запису Apple. Попередні покупки залишаються чинними. Перегляд та експорт наявної історії не потребують нової покупки.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/vi/before
++++ mac/vi/proposed
+@@ -4,4 +4,7 @@
+ 
+ Chuyển giọng nói thành văn bản chạy trên thiết bị bằng Apple Speech, Whisper hoặc Parakeet. Âm thanh, bản chép lời, nội dung đã nhập, đường dẫn tệp và dấu trang không được gửi đến máy chủ Vox.md. Vox.md ghi Markdown chuẩn vào các thư mục và kho Obsidian bạn chọn; không cần tài khoản hoặc cơ sở dữ liệu ghi chú độc quyền.
+ 
+-Người dùng mới có 15 phút chép lời miễn phí và 10 lần gửi thành công. Một lần mua sẽ mở khóa quyền sử dụng không giới hạn.+Nội dung ghi nhanh và bản chép lời mới yêu cầu quyền truy cập trả phí. Quý vị có thể chọn gói cá nhân hoặc gia đình: hằng tuần, hằng năm hoặc trọn đời. Đăng ký đủ điều kiện bao gồm bảy ngày dùng thử miễn phí, sau đó tự động gia hạn theo giá hiển thị cho đến khi bị hủy trong cài đặt Tài khoản Apple. Các giao dịch mua trước đây vẫn có hiệu lực. Xem và xuất lịch sử hiện có không yêu cầu mua thêm.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/zh-Hans/before
++++ mac/zh-Hans/proposed
+@@ -4,4 +4,7 @@
+ 
+ 语音转文字通过 Apple Speech、Whisper 或 Parakeet 在设备上运行。音频、转录文本、输入内容、文件路径和书签不会发送到 Vox.md 服务器。Vox.md 会将标准 Markdown 写入你选择的文件夹和 Obsidian 仓库；无需帐户或专有笔记数据库。
+ 
+-新用户可获得 15 分钟免费转录和 10 次成功发送。一次性购买即可解锁无限使用。+新的采集和转写需要付费使用权限。您可以选择个人或家庭的周订阅、年订阅，或一次性购买终身使用权限。符合条件的订阅包含七天免费试用，之后将按显示的价格自动续订，直至您在 Apple 账户设置中取消。现有购买仍然有效。查看和导出现有历史记录无需再次购买。
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/nl-NL/before
++++ mac/nl-NL/proposed
+@@ -4,4 +4,7 @@
+ 
+ Spraak-naar-tekst draait op het apparaat met Apple Speech, Whisper of Parakeet. Audio, transcripties, getypte inhoud, bestandspaden en bladwijzers worden niet naar Vox.md-servers gestuurd. Vox.md schrijft standaard-Markdown naar gekozen mappen en Obsidian-kluizen; een account of bedrijfseigen notitiedatabase is niet nodig.
+ 
+-Nieuwe gebruikers krijgen 15 gratis transcriptieminuten en 10 geslaagde leveringen. Een eenmalige aankoop ontgrendelt onbeperkt gebruik.+Nieuwe vastleggingen en transcripties vereisen betaalde toegang. Kies individuele of gezinstoegang: wekelijks, jaarlijks of levenslang. In aanmerking komende abonnementen bieden zeven gratis proefdagen en worden daarna automatisch verlengd tegen de getoonde prijs totdat u ze opzegt in de instellingen van uw Apple Account. Bestaande aankopen blijven geldig. Uw bestaande geschiedenis bekijken en exporteren vereist geen nieuwe aankoop.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/es-MX/before
++++ mac/es-MX/proposed
+@@ -4,4 +4,7 @@
+ 
+ La conversión de voz a texto se ejecuta en el dispositivo con Apple Speech, Whisper o Parakeet. El audio, las transcripciones, el contenido escrito, las rutas de archivos y los marcadores no se envían a los servidores de Vox.md. Vox.md escribe Markdown estándar en las carpetas y bóvedas de Obsidian que elijas; no requiere una cuenta ni una base de datos de notas propietaria.
+ 
+-Los nuevos usuarios reciben 15 minutos gratuitos de transcripción y 10 envíos correctos. Una compra única desbloquea el uso ilimitado.+Las nuevas capturas y transcripciones requieren acceso de pago. Elija un plan individual o familiar: semanal, anual o de por vida. Las suscripciones que cumplan los requisitos incluyen siete días de prueba gratuita y después se renuevan automáticamente al precio indicado hasta que se cancelen en los ajustes de la Cuenta de Apple. Las compras existentes siguen siendo válidas. Consultar y exportar el historial existente no requiere una nueva compra.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/en-US/before
++++ mac/en-US/proposed
+@@ -1,4 +1,4 @@
+-Vox.md turns speech into clean, useful text on your Mac — privately, locally, and without a subscription.
++Vox.md turns speech into clean, useful text on your Mac.
+ 
+ Record directly from the macOS app or menu bar, import audio and video files, pick the local model that fits your workflow, then copy or export transcripts as notes. Your audio and transcript data stay on your device.
+ 
+@@ -20,16 +20,16 @@
+ • Transcript history — browse, search, copy, and reuse past dictation
+ • Flexible exports — save TXT, Markdown, JSON, or YAML notes with optional audio attachments
+ • Apple Intelligence enrichment — generate titles, tags, cleaned text, and smart folders on supported Macs
+-• One-time unlock — no subscription or recurring fee
+ 
+ —
+ 
+-FREE TIER
+-
+-New users get 15 minutes of free transcription to try the full workflow. Upgrade to Vox.md Unlimited with a single one-time purchase to remove limits.
++New Capture and transcription require paid access. Choose Individual or Family: weekly, yearly, or lifetime. Eligible subscriptions include a seven-day free trial, then renew automatically at the displayed price until canceled in Apple Account settings. Existing purchases remain valid. Viewing and exporting existing history require no new purchase.
+ 
+ —
+ 
+ PRIVACY
+ 
+-Vox.md is built for private transcription. Audio processing happens on your Mac using local machine learning models. No audio recordings, transcripts, or personal voice data are sent to Vox.md servers. Microphone access is used only when you actively record or import audio for transcription.+Vox.md is built for private transcription. Audio processing happens on your Mac using local machine learning models. No audio recordings, transcripts, or personal voice data are sent to Vox.md servers. Microphone access is used only when you actively record or import audio for transcription.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/cs/before
++++ mac/cs/proposed
+@@ -1,4 +1,4 @@
+-Vox.md je offline klávesnice pro převod hlasu na text fungující přímo v zařízení pro přepis řeči a hlasové psaní — bez internetu, bez serverů, bez předplatného.
++Vox.md je offline klávesnice pro převod hlasu na text fungující přímo v zařízení pro přepis řeči a hlasové psaní.
+ 
+ Klepněte na tlačítko mikrofonu v jakékoliv aplikaci, mluvte přirozeně a vaše slova se zobrazí jako text. Vše se zpracovává v zařízení pomocí Apple Silicon, takže nic nikdy neopustí váš telefon.
+ 
+@@ -17,13 +17,10 @@
+ • Režim neustálého naslouchání — zahajte relaci z hlavní aplikace, poté používejte diktování bez rukou v jakékoliv aplikaci
+ • Historie přepisů — procházejte vším, co jste nadiktovali
+ • Více modelů Whisper — vyberte si mezi Tiny, Base a Small podle vašich preferencí rychlosti/přesnosti
+-• Bez předplatného — zaplaťte jednou, používejte navždy
+ 
+ —
+ 
+-BEZPLATNÁ VERZE
+-
+-Noví uživatelé získají 15 minut bezplatného přepisu k vyzkoušení všech funkcí. Upgradujte na Vox.md Unlimited jediným jednorázovým nákupem pro odstranění všech omezení.
++Nové záznamy a přepisy vyžadují placený přístup. Zvolte individuální nebo rodinný přístup: týdenní, roční či doživotní. Způsobilá předplatná zahrnují sedmidenní bezplatnou zkušební dobu a poté se automaticky obnovují za zobrazenou cenu až do zrušení v nastavení účtu Apple. Stávající nákupy zůstávají platné. Zobrazení a export dosavadní historie nevyžadují nový nákup.
+ 
+ —
+ 
+@@ -31,4 +28,7 @@
+ 
+ Veškeré zpracování zvuku probíhá ve vašem iPhone pomocí strojového učení v zařízení. Žádné zvukové záznamy, přepisy ani osobní údaje se nikdy nepřenášejí na externí servery. Přístup k mikrofonu je vyžadován pro přepis a používá se pouze při aktivním spuštění nahrávání.
+ 
+-Hodí se také pro: poznámky, lokálně, rychlé, poznámka.+Hodí se také pro: poznámky, lokálně, rychlé, poznámka.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/no/before
++++ mac/no/proposed
+@@ -1,4 +1,4 @@
+-Vox.md er et offline, på-enhet tale-til-tekst tastatur for talegjenkjenning og stemmeskriving — intet internett, ingen servere, intet abonnement.
++Vox.md er et offline, på-enhet tale-til-tekst tastatur for talegjenkjenning og stemmeskriving.
+ 
+ Trykk på mikrofonknappen i hvilken som helst app, snakk naturlig og ordene dine vises som tekst. Alt prosesseres på enheten ved hjelp av Apple Silicon, så ingenting forlater noensinne telefonen din.
+ 
+@@ -17,13 +17,10 @@
+ • Alltid-på lyttemodus — start en økt fra hovedappen, bruk deretter håndfri diktering i hvilken som helst app
+ • Transkripsjonhistorikk — bla tilbake gjennom alt du har diktert
+ • Flere Whisper-modeller — velg mellom Tiny, Base og Small avhengig av din hastighet/nøyaktighet-preferanse
+-• Intet abonnement — betal én gang, bruk for alltid
+ 
+ —
+ 
+-GRATIS NIVÅ
+-
+-Nye brukere får 15 minutter gratis transkripsjon for å prøve alt. Oppgrader til Vox.md Unlimited med et enkelt engangs-kjøp for å fjerne alle begrensninger.
++Nye registreringer og transkripsjoner krever betalt tilgang. Velg individuell tilgang eller familietilgang: ukentlig, årlig eller livsvarig. Kvalifiserte abonnementer inkluderer sju dagers gratis prøveperiode og fornyes deretter automatisk til den viste prisen til de sies opp i innstillingene for Apple-kontoen. Eksisterende kjøp er fortsatt gyldige. Visning og eksport av eksisterende historikk krever ikke et nytt kjøp.
+ 
+ —
+ 
+@@ -31,4 +28,7 @@
+ 
+ Alle lydbehandling skjer på din iPhone ved hjelp av på-enhet maskinlæring. Ingen lydopptak, transkripsjoner eller personlige data overføres noensinne til eksterne servere. Mikrofonilgang kreves for transkripsjon og brukes kun når du aktivt starter opptak.
+ 
+-Også nyttig for: diktat.+Også nyttig for: diktat.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/he/before
++++ mac/he/proposed
+@@ -1,4 +1,4 @@
+-Vox.md היא מקלדת קול לטקסט הפועלת במצב אופליין במכשיר לדיבור לטקסט והקלדה קולית — ללא אינטרנט, ללא שרתים, ללא מנויים.
++Vox.md היא מקלדת קול לטקסט הפועלת במצב אופליין במכשיר לדיבור לטקסט והקלדה קולית.
+ 
+ הקש על כפתור המיקרופון בכל אפליקציה, דבר באופן טבעי, והמילים שלך יופיעו כטקסט. הכל מעובד במכשיר באמצעות Apple Silicon, כך ששום דבר לא יוצא מהטלפון שלך.
+ 
+@@ -17,13 +17,10 @@
+ • מצב האזנה תמידי — התחל סשן מהאפליקציה הראשית, ואז השתמש בהכתבה ללא ידיים בכל אפליקציה
+ • היסטוריית תמלול — גלול חזרה דרך כל מה שהכתבת
+ • מודלים מרובים של Whisper — בחר בין Tiny, Base ו-Small בהתאם להעדפת מהירות/דיוק
+-• ללא מנוי — שלם פעם אחת, השתמש לנצח
+ 
+ —
+ 
+-רמה חינמית
+-
+-משתמשים חדשים מקבלים 15 דקות של תמלול חינם כדי לנסות הכל. שדרג ל-Vox.md Unlimited עם רכישה חד-פעמית להסרת כל ההגבלות.
++לכידות ותמלולים חדשים דורשים גישה בתשלום. ניתן לבחור גישה אישית או משפחתית: שבועית, שנתית או לכל החיים. מינויים זכאים כוללים שבעה ימי ניסיון בחינם, ולאחר מכן מתחדשים אוטומטית במחיר המוצג עד לביטולם בהגדרות חשבון Apple. רכישות קיימות נשארות בתוקף. צפייה בהיסטוריה קיימת וייצואה אינן דורשות רכישה חדשה.
+ 
+ —
+ 
+@@ -31,4 +28,7 @@
+ 
+ כל עיבוד השמע קורה ב-iPhone שלך באמצעות למידת מכונה במכשיר. אף הקלטת שמע, תמלילים או נתונים אישיים לא מועברים אף פעם לשרתים חיצוניים. גישה למיקרופון נדרשת לתמלול ומשמשת רק כשאתה מתחיל הקלטה באופן פעיל.
+ 
+-שימושי גם עבור: ויספר, בינה מלאכותית, פתקים, אייפון.+שימושי גם עבור: ויספר, בינה מלאכותית, פתקים, אייפון.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/ca/before
++++ mac/ca/proposed
+@@ -1,4 +1,4 @@
+-Vox.md és un teclat de veu a text offline que funciona al dispositiu per a la transcripció de veu i l'escriptura per veu — sense internet, sense servidors, sense subscripció.
++Vox.md és un teclat de veu a text offline que funciona al dispositiu per a la transcripció de veu i l'escriptura per veu.
+ 
+ Toqueu el botó del micròfon en qualsevol app, parleu de forma natural i les vostres paraules apareixen com a text. Tot es processa al dispositiu amb Apple Silicon, així que res no surt mai del vostre telèfon.
+ 
+@@ -17,13 +17,10 @@
+ • Mode d'escolta sempre actiu — inicieu una sessió des de l'app principal, després utilitzeu el dictat sense mans lliures en qualsevol app
+ • Historial de transcripció — reviseu tot el que hàgiu dictat
+ • Múltiples models Whisper — trieu entre Tiny, Base i Small segons la vostra preferència de velocitat/precisió
+-• Sense subscripció — pagueu un cop, utilitzeu per sempre
+ 
+ —
+ 
+-NIVELL GRATUÏT
+-
+-Els nous usuaris obtenen 15 minuts de transcripció gratuïta per provar-ho tot. Actualitzeu a Vox.md Unlimited amb una sola compra única per eliminar tots els límits.
++Les captures i transcripcions noves requereixen accés de pagament. Triï accés individual o familiar: setmanal, anual o de per vida. Les subscripcions elegibles inclouen set dies de prova gratuïta i després es renoven automàticament al preu indicat fins que es cancel·len a la configuració del compte d’Apple. Les compres existents continuen sent vàlides. Consultar i exportar l’historial existent no requereix una nova compra.
+ 
+ —
+ 
+@@ -31,4 +28,7 @@
+ 
+ Tot el processament d'àudio es fa al vostre iPhone utilitzant aprenentatge automàtic al dispositiu. Cap gravació d'àudio, transcripció o dada personal es transmet mai a servidors externs. L'accés al micròfon és necessari per a la transcripció i només s'utilitza quan inicieu activament la gravació.
+ 
+-També és útil per a: local, parlar, ràpid.+També és útil per a: local, parlar, ràpid.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/es-ES/before
++++ mac/es-ES/proposed
+@@ -4,4 +4,7 @@
+ 
+ La conversión de voz a texto se ejecuta en el dispositivo con Apple Speech, Whisper o Parakeet. El audio, las transcripciones, el contenido escrito, las rutas de archivos y los marcadores no se envían a los servidores de Vox.md. Vox.md escribe Markdown estándar en las carpetas y bóvedas de Obsidian que elijas; no requiere una cuenta ni una base de datos de notas propietaria.
+ 
+-Los nuevos usuarios reciben 15 minutos gratuitos de transcripción y 10 envíos correctos. Una compra única desbloquea el uso ilimitado.+Las nuevas capturas y transcripciones requieren acceso de pago. Elija un plan individual o familiar: semanal, anual o de por vida. Las suscripciones que cumplan los requisitos incluyen siete días de prueba gratuita y después se renuevan automáticamente al precio indicado hasta que se cancelen en los ajustes de la Cuenta de Apple. Las compras existentes siguen siendo válidas. Consultar y exportar el historial existente no requiere una nueva compra.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/it/before
++++ mac/it/proposed
+@@ -4,4 +4,7 @@
+ 
+ La conversione da voce a testo avviene sul dispositivo con Apple Speech, Whisper o Parakeet. Audio, trascrizioni, contenuti digitati, percorsi dei file e segnalibri non vengono inviati ai server Vox.md. Vox.md scrive Markdown standard nelle cartelle e nei vault Obsidian scelti; non servono un account o un database di note proprietario.
+ 
+-I nuovi utenti ricevono 15 minuti gratuiti di trascrizione e 10 invii riusciti. Un unico acquisto sblocca l’uso illimitato.+Le nuove acquisizioni e trascrizioni richiedono un accesso a pagamento. Scelga un piano individuale o famiglia: settimanale, annuale o a vita. Gli abbonamenti idonei includono sette giorni di prova gratuita, poi si rinnovano automaticamente al prezzo indicato fino alla disdetta nelle impostazioni dell’Apple Account. Gli acquisti esistenti restano validi. Consultare ed esportare la cronologia esistente non richiede nuovi acquisti.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/sv/before
++++ mac/sv/proposed
+@@ -1,4 +1,4 @@
+-Vox.md är ett offline, på-enhet röst-till-text-tangentbord för taligenkänning och röstskrivning — inget internet, inga servrar, ingen prenumeration.
++Vox.md är ett offline, på-enhet röst-till-text-tangentbord för taligenkänning och röstskrivning.
+ 
+ Tryck på mikrofonknappen i vilken app som helst, tala naturligt och dina ord visas som text. Allt bearbetas på enheten med Apple Silicon, så inget lämnar någonsin din telefon.
+ 
+@@ -17,13 +17,10 @@
+ • Alltid-på lyssningsläge — starta en session från huvudappen, använd sedan handsfree diktering i vilken app som helst
+ • Transkriptionshistorik — bläddra tillbaka genom allt du har dikterat
+ • Flera Whisper-modeller — välj mellan Tiny, Base och Small beroende på din hastighet/noggrannhet-preferens
+-• Ingen prenumeration — betala en gång, använd för evigt
+ 
+ —
+ 
+-GRATIS NIVÅ
+-
+-Nya användare får 15 minuter gratis transkribering för att prova allt. Uppgradera till Vox.md Unlimited med ett enda engångsköp för att ta bort alla begränsningar.
++Nya insamlingar och transkriptioner kräver betald åtkomst. Välj individuell åtkomst eller familjeåtkomst: veckovis, årsvis eller livstid. Berättigade abonnemang omfattar sju kostnadsfria provdagar och förnyas sedan automatiskt till det visade priset tills de sägs upp i inställningarna för Apple-kontot. Befintliga köp fortsätter att gälla. Att visa och exportera befintlig historik kräver inget nytt köp.
+ 
+ —
+ 
+@@ -31,4 +28,7 @@
+ 
+ All ljudbearbetning sker på din iPhone med hjälp av på-enhet maskininlärning. Inga ljudinspelningar, transkriptioner eller personuppgifter överförs någonsin till externa servrar. Mikrofonåtkomst krävs för transkribering och används endast när du aktivt startar inspelning.
+ 
+-Även användbart för: röstdiktering, diktat.+Även användbart för: röstdiktering, diktat.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/de-DE/before
++++ mac/de-DE/proposed
+@@ -4,4 +4,7 @@
+ 
+ Die Spracherkennung läuft mit Apple Speech, Whisper oder Parakeet auf dem Gerät. Audio, Transkripte, eingegebene Inhalte, Dateipfade und Lesezeichen werden nicht an Vox.md-Server gesendet. Vox.md schreibt Standard-Markdown in ausgewählte Ordner und Obsidian-Vaults; ein Konto oder eine proprietäre Notizdatenbank ist nicht erforderlich.
+ 
+-Neue Nutzer erhalten 15 kostenlose Transkriptionsminuten und 10 erfolgreiche Übertragungen. Ein einmaliger Kauf schaltet die unbegrenzte Nutzung frei.+Neue Erfassungen und Transkriptionen erfordern kostenpflichtigen Zugriff. Wählen Sie Einzel- oder Familienzugriff: wöchentlich, jährlich oder auf Lebenszeit. Berechtigte Abonnements enthalten sieben kostenlose Testtage und verlängern sich danach automatisch zum angezeigten Preis, bis Sie sie in den Einstellungen Ihres Apple Accounts kündigen. Bestehende Käufe bleiben gültig. Das Anzeigen und Exportieren des bisherigen Verlaufs erfordert keinen neuen Kauf.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/pt-BR/before
++++ mac/pt-BR/proposed
+@@ -4,4 +4,7 @@
+ 
+ A conversão de voz em texto é executada no dispositivo com Apple Speech, Whisper ou Parakeet. Áudio, transcrições, conteúdo digitado, caminhos de arquivos e favoritos não são enviados aos servidores do Vox.md. O Vox.md grava Markdown padrão nas pastas e cofres do Obsidian escolhidos; não exige conta nem banco de notas proprietário.
+ 
+-Novos usuários recebem 15 minutos gratuitos de transcrição e 10 envios concluídos. Uma compra única libera o uso ilimitado.+Novas capturas e transcrições exigem acesso pago. Escolha um plano individual ou familiar: semanal, anual ou vitalício. As assinaturas elegíveis incluem sete dias de teste grátis e depois são renovadas automaticamente pelo preço exibido até serem canceladas nos ajustes da Conta Apple. As compras existentes continuam válidas. Consultar e exportar o histórico existente não exige uma nova compra.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/ms/before
++++ mac/ms/proposed
+@@ -1,4 +1,4 @@
+-Vox.md ialah papan kekunci suara-ke-teks luar talian dan dalam-peranti untuk speech-to-text dan voice typing — tiada internet, tiada pelayan, tiada langganan.
++Vox.md ialah papan kekunci suara-ke-teks luar talian dan dalam-peranti untuk speech-to-text dan voice typing.
+ 
+ Ketik butang mikrofon dalam mana-mana apl, bertutur secara semula jadi, dan perkataan anda muncul sebagai teks. Semua diproses dalam-peranti menggunakan Apple Silicon, jadi tiada apa-apa yang meninggalkan telefon anda.
+ 
+@@ -17,13 +17,10 @@
+ • Mod mendengar sentiasa-hidup — mulakan sesi dari apl utama, kemudian gunakan imlak tanpa-tangan dalam mana-mana apl
+ • Sejarah transkripsi — skrol kembali melalui semua yang telah anda diktekan
+ • Pelbagai model Whisper — pilih antara Tiny, Base, dan Small bergantung pada keutamaan kelajuan/ketepatan anda
+-• Tiada langganan — bayar sekali, guna selamanya
+ 
+ —
+ 
+-TAHAP PERCUMA
+-
+-Pengguna baru mendapat 15 minit transkripsi percuma untuk mencuba semuanya. Naik taraf ke Vox.md Unlimited dengan satu pembelian sekali untuk mengeluarkan semua had.
++Tangkapan dan transkripsi baharu memerlukan akses berbayar. Pilih akses individu atau keluarga: mingguan, tahunan atau seumur hidup. Langganan yang layak termasuk percubaan percuma tujuh hari, kemudian diperbaharui secara automatik pada harga yang dipaparkan sehingga dibatalkan dalam tetapan Akaun Apple. Pembelian sedia ada kekal sah. Melihat dan mengeksport sejarah sedia ada tidak memerlukan pembelian baharu.
+ 
+ —
+ 
+@@ -31,4 +28,7 @@
+ 
+ Semua pemprosesan audio berlaku pada iPhone anda menggunakan pembelajaran mesin dalam-peranti. Tiada rakaman audio, transkrip, atau data peribadi yang dihantar ke pelayan luar. Akses mikrofon diperlukan untuk transkripsi dan hanya digunakan apabila anda secara aktif memulakan rakaman.
+ 
+-Juga berguna untuk: menaip suara, pertuturan ke teks.+Juga berguna untuk: menaip suara, pertuturan ke teks.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/pl/before
++++ mac/pl/proposed
+@@ -4,4 +4,7 @@
+ 
+ Zamiana mowy na tekst działa na urządzeniu z Apple Speech, Whisper lub Parakeet. Dźwięk, transkrypcje, wpisana treść, ścieżki plików i zakładki nie są wysyłane na serwery Vox.md. Vox.md zapisuje standardowy Markdown w wybranych folderach i magazynach Obsidian; konto ani własnościowa baza notatek nie są wymagane.
+ 
+-Nowi użytkownicy otrzymują 15 bezpłatnych minut transkrypcji i 10 udanych dostaw. Jednorazowy zakup odblokowuje korzystanie bez limitu.+Nowe przechwytywanie i transkrypcja wymagają płatnego dostępu. Proszę wybrać dostęp indywidualny lub rodzinny: tygodniowy, roczny albo dożywotni. Uprawnione subskrypcje obejmują siedem dni bezpłatnego okresu próbnego, a następnie odnawiają się automatycznie po wyświetlonej cenie do czasu anulowania w ustawieniach konta Apple. Dotychczasowe zakupy pozostają ważne. Przeglądanie i eksport dotychczasowej historii nie wymagają nowego zakupu.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/tr/before
++++ mac/tr/proposed
+@@ -4,4 +4,7 @@
+ 
+ Konuşmayı metne dönüştürme Apple Speech, Whisper veya Parakeet ile aygıtta çalışır. Ses, transkriptler, yazılan içerik, dosya yolları ve yer imleri Vox.md sunucularına gönderilmez. Vox.md, seçtiğiniz klasörlere ve Obsidian kasalarına standart Markdown yazar; hesap veya özel bir not veritabanı gerekmez.
+ 
+-Yeni kullanıcılar 15 ücretsiz transkripsiyon dakikası ve 10 başarılı teslim alır. Tek seferlik satın alma sınırsız kullanımı açar.+Yeni yakalamalar ve transkripsiyonlar ücretli erişim gerektirir. Bireysel veya aile erişimini haftalık, yıllık ya da ömür boyu seçenekleriyle seçebilirsiniz. Uygun abonelikler yedi günlük ücretsiz deneme içerir; ardından Apple Hesabı ayarlarından iptal edilene kadar gösterilen fiyat üzerinden otomatik yenilenir. Mevcut satın alımlar geçerliliğini korur. Mevcut geçmişi görüntülemek ve dışa aktarmak yeni satın alma gerektirmez.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/zh-Hant/before
++++ mac/zh-Hant/proposed
+@@ -4,4 +4,7 @@
+ 
+ 語音轉文字透過 Apple Speech、Whisper 或 Parakeet 在裝置上執行。音訊、轉錄文字、輸入內容、檔案路徑和書籤不會傳送到 Vox.md 伺服器。Vox.md 會將標準 Markdown 寫入你選擇的資料夾和 Obsidian 資料庫；不需要帳號或專有筆記資料庫。
+ 
+-新使用者可獲得 15 分鐘免費轉錄和 10 次成功傳送。一次性購買即可解鎖無限使用。+新的擷取和轉錄需要付費使用權限。您可以選擇個人或家庭的週訂閱、年訂閱，或一次購買終身使用權限。符合資格的訂閱包含七天免費試用，之後將按顯示的價格自動續訂，直到您在 Apple 帳號設定中取消。現有購買仍然有效。查看和匯出現有歷史記錄無須再次購買。
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/ar-SA/before
++++ mac/ar-SA/proposed
+@@ -4,4 +4,7 @@
+ 
+ يعمل تحويل الكلام إلى نص على الجهاز باستخدام Apple Speech أو Whisper أو Parakeet. لا يتم إرسال الصوت أو النصوص المنسوخة أو المحتوى المكتوب أو مسارات الملفات أو الإشارات المرجعية إلى خوادم Vox.md. يكتب Vox.md ملفات Markdown قياسية في المجلدات وخزائن Obsidian التي تختارها، ولا يتطلب حسابًا أو قاعدة بيانات ملاحظات خاصة.
+ 
+-يحصل المستخدمون الجدد على 15 دقيقة مجانية للنسخ الصوتي و10 عمليات تسليم ناجحة. تفتح عملية شراء واحدة الاستخدام غير المحدود.+تتطلب عمليات الالتقاط والتفريغ النصي الجديدة وصولًا مدفوعًا. يمكن اختيار وصول فردي أو عائلي: أسبوعي أو سنوي أو مدى الحياة. تشمل الاشتراكات المؤهلة تجربة مجانية لمدة سبعة أيام، ثم تتجدد تلقائيًا بالسعر المعروض حتى إلغائها من إعدادات حساب Apple. تبقى المشتريات الحالية سارية. لا يتطلب عرض السجل الحالي وتصديره أي عملية شراء جديدة.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/hr/before
++++ mac/hr/proposed
+@@ -1,4 +1,4 @@
+-Vox.md je offline tipkovnica za pretvaranje govora u tekst koja radi na uređaju za govor u tekst i glasovno tipkanje — bez interneta, bez servera, bez pretplate.
++Vox.md je offline tipkovnica za pretvaranje govora u tekst koja radi na uređaju za govor u tekst i glasovno tipkanje.
+ 
+ Dodirnite dugme mikrofona u bilo kojoj aplikaciji, govorite prirodno i vaše riječi će se pojaviti kao tekst. Sve se obrađuje na uređaju koristeći Apple Silicon, tako da ništa nikada ne napušta vaš telefon.
+ 
+@@ -17,13 +17,10 @@
+ • Način stalne audio nadzore — pokrenite sesiju iz glavne aplikacije, zatim koristite diktiranje bez ruku u bilo kojoj aplikaciji
+ • Historija transkribovanja — prođite kroz sve što ste diktirali
+ • Više Whisper modela — birajte između Tiny, Base i Small ovisno o vašoj preferenciji brzine/točnosti
+-• Bez pretplate — platite jednom, koristite zauvijek
+ 
+ —
+ 
+-BESPLATNA RAZINA
+-
+-Novi korisnici dobivaju 15 minuta besplatnog transkribovanja da isprobaju sve. Nadogradite na Vox.md Unlimited jednom jednosatnom kupovinom da uklonite sva ograničenja.
++Nove snimke i prijepisi zahtijevaju plaćeni pristup. Odaberite pojedinačni ili obiteljski pristup: tjedni, godišnji ili doživotni. Pretplate koje ispunjavaju uvjete uključuju sedam dana besplatnog probnog razdoblja, a zatim se automatski obnavljaju po prikazanoj cijeni do otkazivanja u postavkama Apple računa. Postojeće kupnje ostaju valjane. Pregled i izvoz postojeće povijesti ne zahtijevaju novu kupnju.
+ 
+ —
+ 
+@@ -31,4 +28,7 @@
+ 
+ Sva obrada zvuka odvija se na vašem iPhone-u koristeći mašinsko učenje na uređaju. Nijedna audio snimka, transkript ili osobni podatak se nikada ne prenose vanjskim serverima. Pristup mikrofonu je potreban za transkribovanje i koristi se samo kada aktivno pokrenete snimanje.
+ 
+-Korisno i za: transkripija, bilješke, brzo.+Korisno i za: transkripija, bilješke, brzo.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/ja/before
++++ mac/ja/proposed
+@@ -4,4 +4,7 @@
+ 
+ 音声の文字起こしはApple Speech、Whisper、Parakeetを使ってデバイス上で実行されます。音声、文字起こし、入力内容、ファイルパス、ブックマークがVox.mdのサーバーへ送信されることはありません。Vox.mdは選択したフォルダやObsidian保管庫に標準のMarkdownを書き込みます。アカウントや独自形式のノートデータベースは不要です。
+ 
+-新規ユーザーは15分間の無料文字起こしと10回の送信を利用できます。買い切りで無制限利用を解除できます。+新しいキャプチャと文字起こしには有料アクセスが必要です。個人用またはファミリー用の週額・年額プラン、または買い切りの無期限アクセスをお選びいただけます。対象のサブスクリプションには7日間の無料トライアルが含まれ、その後はApple Accountの設定で解約するまで表示価格で自動更新されます。既存の購入は引き続き有効です。既存の履歴の閲覧と書き出しに新たな購入は必要ありません。
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/en-AU/before
++++ mac/en-AU/proposed
+@@ -22,10 +22,11 @@
+ 
+ Vox.md writes standard Markdown to the folders and Obsidian vaults you choose. You do not need an account or a proprietary notes database. Your files remain readable in any Markdown app.
+ 
+-FREE TO TRY
+-
+-New users receive 15 minutes of free transcription and 10 successful Capture deliveries. A single one-time purchase unlocks unlimited use. There is no recurring subscription.
++New Capture and transcription require paid access. Choose Individual or Family: weekly, yearly, or lifetime. Eligible subscriptions include a seven-day free trial, then renew automatically at the displayed price until canceled in Apple Account settings. Existing purchases remain valid. Viewing and exporting existing history require no new purchase.
+ 
+ PRIVACY
+ 
+-Capture contents, exported notes, audio, transcripts, keystrokes, file paths, and bookmarks are not sent to Vox.md servers. Vox.md collects limited, privacy-safe onboarding analytics to understand setup problems. Microphone, camera, photo, and file access are used only when you choose those capture types.+Capture contents, exported notes, audio, transcripts, keystrokes, file paths, and bookmarks are not sent to Vox.md servers. Vox.md collects limited, privacy-safe onboarding analytics to understand setup problems. Microphone, camera, photo, and file access are used only when you choose those capture types.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/ru/before
++++ mac/ru/proposed
+@@ -4,4 +4,7 @@
+ 
+ Распознавание речи выполняется на устройстве с Apple Speech, Whisper или Parakeet. Аудио, транскрипции, введённый текст, пути к файлам и закладки не отправляются на серверы Vox.md. Vox.md записывает стандартный Markdown в выбранные папки и хранилища Obsidian; учётная запись и закрытая база заметок не требуются.
+ 
+-Новые пользователи получают 15 бесплатных минут транскрипции и 10 успешных отправок. Одна покупка открывает безлимитное использование.+Для новых записей и расшифровок нужен платный доступ. Выберите индивидуальный или семейный план: на неделю, на год или навсегда. Доступные пользователю подписки включают семь дней бесплатного пробного периода, затем автоматически продлеваются по указанной цене до отмены в настройках Аккаунта Apple. Ранее совершённые покупки остаются действительными. Просмотр и экспорт существующей истории не требуют новой покупки.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/ko/before
++++ mac/ko/proposed
+@@ -4,4 +4,7 @@
+ 
+ 음성 텍스트 변환은 Apple Speech, Whisper 또는 Parakeet을 사용해 기기에서 실행됩니다. 오디오, 전사, 입력한 내용, 파일 경로 및 북마크는 Vox.md 서버로 전송되지 않습니다. Vox.md는 선택한 폴더와 Obsidian 보관함에 표준 Markdown을 기록하며 계정이나 독점 메모 데이터베이스가 필요하지 않습니다.
+ 
+-신규 사용자는 15분의 무료 전사와 10회의 성공적인 전송을 이용할 수 있습니다. 일회성 구매로 무제한 이용을 잠금 해제할 수 있습니다.+새로운 캡처와 전사에는 유료 이용 권한이 필요합니다. 개인 또는 가족용 주간, 연간 구독이나 평생 이용권을 선택할 수 있습니다. 자격을 충족하는 구독에는 7일 무료 체험이 포함되며, 이후 Apple 계정 설정에서 취소할 때까지 표시된 가격으로 자동 갱신됩니다. 기존 구매는 계속 유효합니다. 기존 기록을 보고 내보내는 데는 새로운 구매가 필요하지 않습니다.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/fi/before
++++ mac/fi/proposed
+@@ -1,4 +1,4 @@
+-Vox.md on offline-ääni-tekstiksi-näppäimistö, joka toimii laitteessa puheentunnistusta ja äänellä kirjoittamista varten — ei internettiä, ei palvelimia, ei tilausta.
++Vox.md on offline-ääni-tekstiksi-näppäimistö, joka toimii laitteessa puheentunnistusta ja äänellä kirjoittamista varten.
+ 
+ Napauta mikrofonikuvaketta missä tahansa sovelluksessa, puhu luonnollisesti, ja sanasi ilmestyvät tekstinä. Kaikki käsitellään laitteessa Apple Siliconin avulla, joten mikään ei koskaan poistu puhelimestasi.
+ 
+@@ -17,13 +17,10 @@
+ • Aina päällä -kuuntelutila — aloita istunto pääsovelluksesta, käytä sitten kädetöntä sanelua missä tahansa sovelluksessa
+ • Transkriptiohistoria — selaa kaikkea, mitä olet sanellut
+ • Useita Whisper-malleja — valitse Tiny, Base tai Small riippuen nopeuden/tarkkuuden mieltymyksestäsi
+-• Ei tilausta — maksa kerran, käytä ikuisesti
+ 
+ —
+ 
+-ILMAINEN TASO
+-
+-Uudet käyttäjät saavat 15 minuuttia ilmaista transkriptiota kokeillakseen kaikkea. Päivitä Vox.md Unlimitediin yhdellä kertamaksulla poistaaksesi kaikki rajoitukset.
++Uudet tallennukset ja litteroinnit edellyttävät maksullista käyttöoikeutta. Valitse henkilökohtainen tai perheen käyttöoikeus: viikko-, vuosi- tai elinikäinen käyttöoikeus. Ehdot täyttävät tilaukset sisältävät seitsemän päivän maksuttoman kokeilun ja uusiutuvat sen jälkeen automaattisesti näytetyllä hinnalla, kunnes ne perutaan Apple-tilin asetuksissa. Aiemmat ostot pysyvät voimassa. Aiemman historian katselu ja vienti eivät edellytä uutta ostoa.
+ 
+ —
+ 
+@@ -31,4 +28,7 @@
+ 
+ Kaikki äänen käsittely tapahtuu iPhonessasi laitteessa tapahtuvan koneoppimisen avulla. Mitään äänitallenteita, transkriptioita tai henkilökohtaisia tietoja ei koskaan siirretä ulkoisille palvelimille. Mikrofonin käyttöoikeus vaaditaan transkriptiota varten ja sitä käytetään vain, kun käynnistät aktiivisesti tallennuksen.
+ 
+-Sopii myös: tekoäly.+Sopii myös: tekoäly.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html--- mac/fr-CA/before
++++ mac/fr-CA/proposed
+@@ -4,4 +4,7 @@
+ 
+ La conversion de la parole en texte s’exécute sur l’appareil avec Apple Speech, Whisper ou Parakeet. L’audio, les transcriptions, le contenu saisi, les chemins de fichiers et les signets ne sont pas envoyés aux serveurs de Vox.md. Vox.md écrit du Markdown standard dans les dossiers et coffres Obsidian choisis ; aucun compte ni aucune base de données de notes propriétaire n’est requis.
+ 
+-Les nouveaux utilisateurs bénéficient de 15 minutes de transcription gratuites et de 10 envois réussis. Un achat unique déverrouille l’utilisation illimitée.+Les nouvelles captures et transcriptions nécessitent un accès payant. Choisissez une formule individuelle ou familiale : hebdomadaire, annuelle ou à vie. Les abonnements éligibles comprennent sept jours d’essai gratuit, puis se renouvellent automatiquement au prix affiché jusqu’à leur résiliation dans les réglages du compte Apple. Les achats existants restent valables. La consultation et l’exportation de l’historique existant ne nécessitent aucun nouvel achat.
++
++Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
++Privacy: https://vox.isolated.tech/privacy.html

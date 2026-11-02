@@ -61,7 +61,7 @@ const supplemental = {
 
 const iphonePlans = [
   { file: "01-capture-anything.png", story: "01-quick-capture", headline: "subtitle", subheadline: "Capture an idea, task, link, file, scan, or recording." },
-  { file: "02-capture-workflows.png", story: "05-capture-presets", headline: "Capture Presets", subheadline: "A Capture Preset is a complete reusable workflow: what happens to a capture and exactly where it is delivered." },
+  { file: "02-capture-workflows.png", story: "05-capture-presets", headline: "Routes", subheadline: "A Route is a complete reusable workflow: what happens to a capture and exactly where it is delivered." },
   { file: "03-send-every-capture.png", story: "05-capture-presets", headline: "Destination", subheadline: "Processing, formatting, metadata, and destinations" },
   { file: "04-speak-into-any-app.png", story: "07-keyboard", headline: "speakAnyApp", subheadline: "Keyboard" },
   { file: "05-private-by-design.png", story: "06-privacy-local", headline: "private", subheadline: "Everything stays on this device." },
@@ -85,7 +85,7 @@ const watchPlans = [
 
 const macPlans = [
   { file: "01-history.png", story: "02-history", number: "05", label: "history", headline: "history", subheadline: "Recordings, recording time, and Capture activity" },
-  { file: "02-workflow.png", story: "05-presets", number: "04", label: "workflow", headline: "Capture Presets", subheadline: "A Capture Preset is a complete reusable workflow: what happens to a capture and exactly where it is delivered." },
+  { file: "02-workflow.png", story: "05-presets", number: "04", label: "workflow", headline: "Routes", subheadline: "A Route is a complete reusable workflow: what happens to a capture and exactly where it is delivered." },
   { file: "03-models.png", story: "04-models", number: "03", label: "models", headline: "On-Device Models", subheadline: "Optional local models you can download and select explicitly." },
   { file: "04-record.png", story: "01-capture", number: "02", label: "record", headline: "Record", subheadline: "Live transcript · sending immediately" },
   { file: "05-capture.png", story: "01-capture", number: "01", label: "capture", headline: "subtitle", subheadline: "Everything stays on this device." },

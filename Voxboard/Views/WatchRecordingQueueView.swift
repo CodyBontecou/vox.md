@@ -3,6 +3,7 @@ import VoxboardShared
 
 struct WatchRecordingQueueView: View {
     @Bindable var pipeline: WatchRecordingPipeline
+    @Environment(UsageTracker.self) private var usageTracker
     @Environment(\.dismiss) private var dismiss
     @State private var pendingDiscard: WatchRecordingInboxItem?
     @State private var showsPaywall = false
@@ -11,15 +12,20 @@ struct WatchRecordingQueueView: View {
         NavigationStack {
             Group {
                 if visibleItems.isEmpty {
-                    ContentUnavailableView(
-                        "No Watch Recordings",
+                    ActivitySignalEmptyState(
                         systemImage: "applewatch",
-                        description: Text("Record on Apple Watch and it will appear here automatically.")
+                        tint: Geist.success,
+                        title: "No Watch Recordings",
+                        message: "Record on Apple Watch and it will appear here automatically."
                     )
+                    .frame(maxHeight: .infinity)
                 } else {
                     List(visibleItems) { item in
                         recordingRow(item)
-                            .listRowBackground(Geist.Palette.background200)
+                            .activitySignalCard(needsAttention: item.phase == .failed)
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
                     }
                     .listStyle(.plain)
                     .scrollContentBackground(.hidden)
@@ -29,7 +35,8 @@ struct WatchRecordingQueueView: View {
                     }
                 }
             }
-            .background(Geist.Palette.background200)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Geist.bg.ignoresSafeArea())
             .navigationTitle("Watch Recordings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -76,61 +83,52 @@ struct WatchRecordingQueueView: View {
     private func recordingRow(_ item: WatchRecordingInboxItem) -> some View {
         VStack(alignment: .leading, spacing: Geist.Spacing.three) {
             HStack(alignment: .top, spacing: Geist.Spacing.three) {
-                Image(systemName: item.watchStatusSymbol)
-                    .foregroundStyle(item.phase == .failed ? Geist.error : Geist.text)
-                    .frame(width: 30, height: 30)
+                statusIndicator(item)
+                    .padding(.top, item.phase == .delivered ? 2 : 6)
 
-                VStack(alignment: .leading, spacing: Geist.Spacing.one) {
-                    Text(item.watchStatusTitle)
-                        .font(Geist.heading(.headline))
-                        .foregroundStyle(Geist.text)
-                    Text(item.createdAt, style: .relative)
-                        .font(Geist.mono())
-                        .foregroundStyle(Geist.muted)
-                    Text(item.watchStatusSubtitle)
-                        .font(Geist.caption())
-                        .foregroundStyle(item.phase == .failed ? Geist.error : Geist.muted)
-                }
-
-                Spacer()
-                if item.phase == .transcribing || item.phase == .delivering {
-                    ProgressView()
-                        .controlSize(.small)
-                }
-            }
-
-            HStack(spacing: Geist.Spacing.two) {
-                Label(item.displayPresetName, systemImage: "waveform.circle")
-                if let duration = item.duration {
-                    Label(formatDuration(duration), systemImage: "timer")
-                }
-            }
-            .font(Geist.caption(.caption2))
-            .foregroundStyle(Geist.faint)
-
-            if item.phase == .failed {
-                HStack(spacing: Geist.Spacing.two) {
-                    if item.requiresPresetSelection {
-                        Menu("Choose Preset") {
-                            ForEach(
-                                CapturePresetStore.loadFlows().filter(\.isEnabled),
-                                id: \.id
-                            ) { preset in
-                                Button(preset.accessibilityName) {
-                                    pipeline.choosePreset(preset, for: item)
-                                }
-                            }
+                VStack(alignment: .leading, spacing: Geist.Spacing.two) {
+                    HStack(alignment: .firstTextBaseline, spacing: Geist.Spacing.two) {
+                        Text(item.watchStatusTitle)
+                            .font(Geist.heading(.callout))
+                            .foregroundStyle(Geist.text)
+                        Spacer(minLength: Geist.Spacing.two)
+                        Text(item.createdAt, style: .relative)
+                            .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                            .foregroundStyle(Geist.muted)
+                            .lineLimit(1)
+                    }
+                    HStack(alignment: .firstTextBaseline, spacing: Geist.Spacing.two) {
+                        Text(item.watchStatusSubtitle)
+                            .font(Geist.body(.subheadline))
+                            .foregroundStyle(Geist.muted)
+                            .fixedSize(horizontal: false, vertical: true)
+                        if item.phase == .transcribing || item.phase == .delivering {
+                            Spacer(minLength: 0)
+                            ProgressView()
+                                .controlSize(.small)
+                                .tint(Geist.accent)
                         }
-                        .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
-                    } else {
-                        Button("Retry") { pipeline.retry(item) }
-                            .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
-                        if item.flowSnapshot?.watchOutputMode == .recordingOnly {
-                            Menu("Change Preset") {
+                    }
+
+                    HStack(spacing: Geist.Spacing.two) {
+                        Label(item.displayPresetName, systemImage: "waveform.circle")
+                        if let duration = item.duration {
+                            Label(formatDuration(duration), systemImage: "timer")
+                        }
+                    }
+                    .labelStyle(.titleOnly)
+                    .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                    .foregroundStyle(Geist.faint)
+                }
+            }
+
+            Group {
+                if item.phase == .failed {
+                    HStack(spacing: Geist.Spacing.two) {
+                        if item.requiresPresetSelection {
+                            Menu("Choose Route") {
                                 ForEach(
-                                    CapturePresetStore.loadFlows().filter {
-                                        $0.isEnabled && $0.watchOutputMode == .recordingOnly
-                                    },
+                                    CapturePresetStore.loadFlows().filter(\.isEnabled),
                                     id: \.id
                                 ) { preset in
                                     Button(preset.accessibilityName) {
@@ -138,35 +136,84 @@ struct WatchRecordingQueueView: View {
                                     }
                                 }
                             }
-                            .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+                            .buttonStyle(ActivitySignalPillButtonStyle(kind: .primary))
+                        } else {
+                            Button {
+                                usageTracker.requirePaidAccess(otherwise: { showsPaywall = true }) {
+                                    pipeline.retry(item)
+                                }
+                            } label: {
+                                PaidAccessLabel("Retry", isLocked: usageTracker.isLibraryReadOnly)
+                            }
+                            .buttonStyle(ActivitySignalPillButtonStyle(kind: .primary))
+                            if item.flowSnapshot?.watchOutputMode == .recordingOnly {
+                                Menu("Change Route") {
+                                    ForEach(
+                                        CapturePresetStore.loadFlows().filter {
+                                            $0.isEnabled && $0.watchOutputMode == .recordingOnly
+                                        },
+                                        id: \.id
+                                    ) { preset in
+                                        Button(preset.accessibilityName) {
+                                            pipeline.choosePreset(preset, for: item)
+                                        }
+                                    }
+                                }
+                                .buttonStyle(ActivitySignalPillButtonStyle(kind: .secondary))
+                            }
                         }
+                        Button("Discard", role: .destructive) { pendingDiscard = item }
+                            .buttonStyle(ActivitySignalPillButtonStyle(kind: .destructive))
                     }
-                    Button("Discard", role: .destructive) { pendingDiscard = item }
-                        .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
-                }
 
-                if item.canCaptureRecordingWithoutTranscript {
-                    Button {
-                        pipeline.captureRecordingWithoutTranscript(item)
-                    } label: {
-                        Label("Capture Recording Without Transcript", systemImage: "waveform")
-                            .frame(maxWidth: .infinity)
+                    if item.canCaptureRecordingWithoutTranscript {
+                        Button {
+                            usageTracker.requirePaidAccess(otherwise: { showsPaywall = true }) {
+                                pipeline.captureRecordingWithoutTranscript(item)
+                            }
+                        } label: {
+                            PaidAccessLabel(
+                                "Capture Recording Without Transcript",
+                                systemImage: "waveform",
+                                isLocked: usageTracker.isLibraryReadOnly
+                            )
+                        }
+                        .buttonStyle(ActivitySignalPillButtonStyle(kind: .secondary))
+                        .accessibilityHint("Saves the retained audio to Capture without transcription")
                     }
-                    .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
-                    .accessibilityHint("Saves the retained audio to Capture without transcription")
-                }
-            } else if item.phase == .queued {
-                HStack(spacing: Geist.Spacing.two) {
-                    if item.isWaitingForTranscriptionUpgrade {
-                        Button("Get Unlimited") { showsPaywall = true }
-                            .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
+                } else if item.phase == .queued {
+                    HStack(spacing: Geist.Spacing.two) {
+                        if item.isWaitingForTranscriptionUpgrade {
+                            Button("Get Unlimited") { showsPaywall = true }
+                                .buttonStyle(ActivitySignalPillButtonStyle(kind: .primary))
+                        }
+                        Button("Discard", role: .destructive) { pendingDiscard = item }
+                            .buttonStyle(ActivitySignalPillButtonStyle(kind: .destructive))
                     }
-                    Button("Discard", role: .destructive) { pendingDiscard = item }
-                        .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
                 }
             }
+            .padding(.leading, 30)
         }
-        .padding(.vertical, Geist.Spacing.two)
+    }
+
+    @ViewBuilder
+    private func statusIndicator(_ item: WatchRecordingInboxItem) -> some View {
+        switch item.phase {
+        case .delivered:
+            Image(systemName: "checkmark")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(Geist.success)
+                .frame(width: 18, height: 18)
+                .accessibilityHidden(true)
+        case .failed:
+            ActivitySignalDot(color: Geist.warning)
+        case .transcribing, .delivering:
+            ActivitySignalDot(color: Geist.accent)
+        case .queued:
+            ActivitySignalDot(color: Geist.Palette.gray600)
+        case .discarded:
+            ActivitySignalDot(color: Geist.faint)
+        }
     }
 
     private func formatDuration(_ duration: TimeInterval) -> String {

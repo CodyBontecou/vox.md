@@ -610,7 +610,7 @@ private final class MacKeyboardHintOverlayView: NSView {
                     width: suffixWidth,
                     height: textRect.height
                 ),
-                withAttributes: attributes.merging([.foregroundColor: NSColor.black]) { _, new in new }
+                withAttributes: attributes.merging([.foregroundColor: NSColor.white]) { _, new in new }
             )
         }
     }

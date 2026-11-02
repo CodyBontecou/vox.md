@@ -1,0 +1,675 @@
+{
+  "data" : {
+    "type" : "appStoreVersions",
+    "id" : "805e71b5-fba0-4e6c-85e5-1df5373c51b1",
+    "attributes" : {
+      "platform" : "IOS",
+      "versionString" : "2.14",
+      "appStoreState" : "READY_FOR_REVIEW",
+      "appVersionState" : "READY_FOR_REVIEW",
+      "copyright" : "2026 Voxboard",
+      "reviewType" : "APP_STORE",
+      "releaseType" : "MANUAL",
+      "earliestReleaseDate" : null,
+      "usesIdfa" : null,
+      "downloadable" : true,
+      "createdDate" : "2026-10-29T12:49:17-07:00"
+    },
+    "relationships" : {
+      "appStoreVersionLocalizations" : {
+        "meta" : {
+          "paging" : {
+            "total" : 39,
+            "limit" : 10
+          }
+        },
+        "data" : [ {
+          "type" : "appStoreVersionLocalizations",
+          "id" : "df0d6699-0fef-44d0-908a-5bad42be8bfc"
+        }, {
+          "type" : "appStoreVersionLocalizations",
+          "id" : "f58fdce7-88e6-4684-a21d-77871e839c16"
+        }, {
+          "type" : "appStoreVersionLocalizations",
+          "id" : "8e4d0237-8581-48d2-bb78-d6ebcadd207c"
+        }, {
+          "type" : "appStoreVersionLocalizations",
+          "id" : "aeb8c089-6a13-4829-908d-7678e590654e"
+        }, {
+          "type" : "appStoreVersionLocalizations",
+          "id" : "bc5d2ee1-f079-4fe6-8fa8-f10894f14f1c"
+        }, {
+          "type" : "appStoreVersionLocalizations",
+          "id" : "215ab26a-1722-474d-8543-92d7f1066a44"
+        }, {
+          "type" : "appStoreVersionLocalizations",
+          "id" : "c3d16760-a30c-4db7-9bf6-fdf4909b7d1e"
+        }, {
+          "type" : "appStoreVersionLocalizations",
+          "id" : "d5b4112c-3c28-4356-9354-eebeea6b1571"
+        }, {
+          "type" : "appStoreVersionLocalizations",
+          "id" : "7dcf720c-8568-4598-b51a-9fd8eae14469"
+        }, {
+          "type" : "appStoreVersionLocalizations",
+          "id" : "444b9360-3549-4799-8bac-b3588d8b8db8"
+        } ],
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/relationships/appStoreVersionLocalizations",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/appStoreVersionLocalizations"
+        }
+      },
+      "build" : {
+        "data" : {
+          "type" : "builds",
+          "id" : "5ce910e1-8d3f-4f6e-be5f-c133b6299c7e"
+        },
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/relationships/build",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/build"
+        }
+      },
+      "appStoreVersionPhasedRelease" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/relationships/appStoreVersionPhasedRelease",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/appStoreVersionPhasedRelease"
+        }
+      },
+      "gameCenterAppVersion" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/relationships/gameCenterAppVersion",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/gameCenterAppVersion"
+        }
+      },
+      "routingAppCoverage" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/relationships/routingAppCoverage",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/routingAppCoverage"
+        }
+      },
+      "appStoreReviewDetail" : {
+        "data" : {
+          "type" : "appStoreReviewDetails",
+          "id" : "c8d35f6a-f335-4ae9-a6ff-fc9061d4fbe6"
+        },
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/relationships/appStoreReviewDetail",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/appStoreReviewDetail"
+        }
+      },
+      "appStoreVersionSubmission" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/relationships/appStoreVersionSubmission",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/appStoreVersionSubmission"
+        }
+      },
+      "appClipDefaultExperience" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/relationships/appClipDefaultExperience",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/appClipDefaultExperience"
+        }
+      },
+      "appStoreVersionExperiments" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/relationships/appStoreVersionExperiments",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/appStoreVersionExperiments"
+        }
+      },
+      "appStoreVersionExperimentsV2" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/relationships/appStoreVersionExperimentsV2",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/appStoreVersionExperimentsV2"
+        }
+      },
+      "customerReviews" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/relationships/customerReviews",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/customerReviews"
+        }
+      },
+      "alternativeDistributionPackage" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/relationships/alternativeDistributionPackage",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1/alternativeDistributionPackage"
+        }
+      }
+    },
+    "links" : {
+      "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1"
+    }
+  },
+  "included" : [ {
+    "type" : "appStoreVersionLocalizations",
+    "id" : "df0d6699-0fef-44d0-908a-5bad42be8bfc",
+    "attributes" : {
+      "description" : "Vox.md er en app til hurtig indsamling af indhold i dine Markdown-mapper og Obsidian-bokse. Gem tekst, links, billeder, filer, dokumentscanninger, skitser og tale i den rette note.\n\nForudindstillinger husker destination, skabelon, metadata og mappe til vedhæftninger. Opret en note, tilføj indhold i starten eller slutningen af en fil, indsæt det under en overskrift, eller gem det i daglige, ugentlige, månedlige, kvartalsvise eller årlige noter.\n\nIndsaml indhold fra appen, delingsmenuen, det tilpassede tastatur, widgets, Genveje eller Apple Watch. Dokumentscanneren genkender tekst på enheden. Ventende og mislykkede overførsler kan prøves igen.\n\nTale transskriberes på enheden med Apple Speech, Whisper eller Parakeet afhængigt af dine indstillinger og din enhed. Indsamlet indhold, lyd, transskriptioner, tastetryk, filstier og bogmærker sendes ikke til Vox.md-servere. Der indsamles begrænsede analysedata om den første opsætning for at finde problemer.\n\nVox.md skriver almindelige Markdown-filer i de mapper, du vælger. Du behøver ingen konto eller appens egen notedatabase.\n\nNye registreringer og transskriptioner kræver betalt adgang. Vælg individuel adgang eller familieadgang: ugentligt, årligt eller livsvarigt. Berettigede abonnementer omfatter syv gratis prøvedage og fornyes derefter automatisk til den viste pris, indtil de opsiges i indstillingerne for Apple-kontoen. Eksisterende køb er fortsat gyldige. Visning og eksport af eksisterende historik kræver ikke et nyt køb.\n\nTerms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/\nPrivacy: https://vox.isolated.tech/privacy.html",
+      "locale" : "da",
+      "keywords" : "stemmediktering,transskription,offline,privatliv,whisper,AI,mikrofon,noter,diktat,lyd,iphone",
+      "marketingUrl" : null,
+      "promotionalText" : null,
+      "supportUrl" : "https://vox.isolated.tech/",
+      "whatsNew" : "Nye registreringer og transskriptioner kræver betalt adgang. Vælg individuel adgang eller familieadgang: ugentligt, årligt eller livsvarigt. Berettigede abonnementer omfatter syv gratis prøvedage og fornyes derefter automatisk til den viste pris, indtil de opsiges i indstillingerne for Apple-kontoen. Eksisterende køb er fortsat gyldige. Visning og eksport af eksisterende historik kræver ikke et nyt køb."
+    },
+    "relationships" : {
+      "appScreenshotSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/df0d6699-0fef-44d0-908a-5bad42be8bfc/relationships/appScreenshotSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/df0d6699-0fef-44d0-908a-5bad42be8bfc/appScreenshotSets"
+        }
+      },
+      "appPreviewSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/df0d6699-0fef-44d0-908a-5bad42be8bfc/relationships/appPreviewSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/df0d6699-0fef-44d0-908a-5bad42be8bfc/appPreviewSets"
+        }
+      },
+      "searchKeywords" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/df0d6699-0fef-44d0-908a-5bad42be8bfc/relationships/searchKeywords",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/df0d6699-0fef-44d0-908a-5bad42be8bfc/searchKeywords"
+        }
+      },
+      "placements" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/df0d6699-0fef-44d0-908a-5bad42be8bfc/relationships/placements",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/df0d6699-0fef-44d0-908a-5bad42be8bfc/placements"
+        }
+      }
+    },
+    "links" : {
+      "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/df0d6699-0fef-44d0-908a-5bad42be8bfc"
+    }
+  }, {
+    "type" : "appStoreVersionLocalizations",
+    "id" : "f58fdce7-88e6-4684-a21d-77871e839c16",
+    "attributes" : {
+      "description" : "Vox.md er en app for rask innsamling av innhold til Markdown-mappene og Obsidian-hvelvene dine. Lagre tekst, lenker, bilder, filer, dokumentskanninger, skisser og tale i riktig notat.\n\nForhåndsinnstillinger husker mål, mal, metadata og mappe for vedlegg. Opprett et notat, legg til innhold i starten eller slutten av en fil, sett det inn under en overskrift, eller lagre det i daglige, ukentlige, månedlige, kvartalsvise eller årlige notater.\n\nSamle innhold fra appen, delingsmenyen, det tilpassede tastaturet, widgeter, Snarveier eller Apple Watch. Dokumentskanneren gjenkjenner tekst på enheten. Ventende og mislykkede overføringer kan forsøkes på nytt.\n\nTale transkriberes på enheten med Apple Speech, Whisper eller Parakeet, avhengig av innstillingene og enheten din. Innsamlet innhold, lyd, transkripsjoner, tastetrykk, filbaner og bokmerker sendes ikke til Vox.md-servere. Begrensede analysedata om førstegangsoppsett samles inn for å finne problemer.\n\nVox.md skriver vanlige Markdown-filer i mappene du velger. Du trenger ingen konto eller egen notedatabase fra appen.\n\nNye registreringer og transkripsjoner krever betalt tilgang. Velg individuell tilgang eller familietilgang: ukentlig, årlig eller livsvarig. Kvalifiserte abonnementer inkluderer sju dagers gratis prøveperiode og fornyes deretter automatisk til den viste prisen til de sies opp i innstillingene for Apple-kontoen. Eksisterende kjøp er fortsatt gyldige. Visning og eksport av eksisterende historikk krever ikke et nytt kjøp.\n\nTerms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/\nPrivacy: https://vox.isolated.tech/privacy.html",
+      "locale" : "no",
+      "keywords" : "diktere,talegjenkjenning,stemme,offline,personvern,whisper,AI,mikrofon,notater,iphone,diktat,lyd",
+      "marketingUrl" : null,
+      "promotionalText" : null,
+      "supportUrl" : "https://vox.isolated.tech/",
+      "whatsNew" : "Nye registreringer og transkripsjoner krever betalt tilgang. Velg individuell tilgang eller familietilgang: ukentlig, årlig eller livsvarig. Kvalifiserte abonnementer inkluderer sju dagers gratis prøveperiode og fornyes deretter automatisk til den viste prisen til de sies opp i innstillingene for Apple-kontoen. Eksisterende kjøp er fortsatt gyldige. Visning og eksport av eksisterende historikk krever ikke et nytt kjøp."
+    },
+    "relationships" : {
+      "appScreenshotSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/f58fdce7-88e6-4684-a21d-77871e839c16/relationships/appScreenshotSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/f58fdce7-88e6-4684-a21d-77871e839c16/appScreenshotSets"
+        }
+      },
+      "appPreviewSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/f58fdce7-88e6-4684-a21d-77871e839c16/relationships/appPreviewSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/f58fdce7-88e6-4684-a21d-77871e839c16/appPreviewSets"
+        }
+      },
+      "searchKeywords" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/f58fdce7-88e6-4684-a21d-77871e839c16/relationships/searchKeywords",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/f58fdce7-88e6-4684-a21d-77871e839c16/searchKeywords"
+        }
+      },
+      "placements" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/f58fdce7-88e6-4684-a21d-77871e839c16/relationships/placements",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/f58fdce7-88e6-4684-a21d-77871e839c16/placements"
+        }
+      }
+    },
+    "links" : {
+      "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/f58fdce7-88e6-4684-a21d-77871e839c16"
+    }
+  }, {
+    "type" : "appStoreVersionLocalizations",
+    "id" : "8e4d0237-8581-48d2-bb78-d6ebcadd207c",
+    "attributes" : {
+      "description" : "Vox.md es una app de captura local para Obsidian y Markdown. Envía texto, enlaces, fotos, archivos, escaneos de documentos, dibujos y voz a la nota adecuada.\n\nLos preajustes de captura recuerdan el destino, la plantilla, los metadatos, los adjuntos y la ubicación. Usa Vox.md desde la app, la hoja para compartir, el teclado personalizado, los widgets, Atajos o el Apple Watch. Los envíos pendientes permanecen disponibles para volver a intentarlo.\n\nLa conversión de voz a texto se ejecuta en el dispositivo con Apple Speech, Whisper o Parakeet. El audio, las transcripciones, el contenido escrito, las rutas de archivos y los marcadores no se envían a los servidores de Vox.md. Vox.md escribe Markdown estándar en las carpetas y bóvedas de Obsidian que elijas; no requiere una cuenta ni una base de datos de notas propietaria.\n\nLas nuevas capturas y transcripciones requieren acceso de pago. Elija un plan individual o familiar: semanal, anual o de por vida. Las suscripciones que cumplan los requisitos incluyen siete días de prueba gratuita y después se renuevan automáticamente al precio indicado hasta que se cancelen en los ajustes de la Cuenta de Apple. Las compras existentes siguen siendo válidas. Consultar y exportar el historial existente no requiere una nueva compra.\n\nTerms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/\nPrivacy: https://vox.isolated.tech/privacy.html",
+      "locale" : "es-MX",
+      "keywords" : "dictado por voz,transcripción,sin conexión,ia,privacidad,micrófono,notas,reconocimiento,iphone",
+      "marketingUrl" : "https://vox.isolated.tech/",
+      "promotionalText" : null,
+      "supportUrl" : "https://vox.isolated.tech/",
+      "whatsNew" : "Las nuevas capturas y transcripciones requieren acceso de pago. Elija un plan individual o familiar: semanal, anual o de por vida. Las suscripciones que cumplan los requisitos incluyen siete días de prueba gratuita y después se renuevan automáticamente al precio indicado hasta que se cancelen en los ajustes de la Cuenta de Apple. Las compras existentes siguen siendo válidas. Consultar y exportar el historial existente no requiere una nueva compra."
+    },
+    "relationships" : {
+      "appScreenshotSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/8e4d0237-8581-48d2-bb78-d6ebcadd207c/relationships/appScreenshotSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/8e4d0237-8581-48d2-bb78-d6ebcadd207c/appScreenshotSets"
+        }
+      },
+      "appPreviewSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/8e4d0237-8581-48d2-bb78-d6ebcadd207c/relationships/appPreviewSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/8e4d0237-8581-48d2-bb78-d6ebcadd207c/appPreviewSets"
+        }
+      },
+      "searchKeywords" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/8e4d0237-8581-48d2-bb78-d6ebcadd207c/relationships/searchKeywords",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/8e4d0237-8581-48d2-bb78-d6ebcadd207c/searchKeywords"
+        }
+      },
+      "placements" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/8e4d0237-8581-48d2-bb78-d6ebcadd207c/relationships/placements",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/8e4d0237-8581-48d2-bb78-d6ebcadd207c/placements"
+        }
+      }
+    },
+    "links" : {
+      "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/8e4d0237-8581-48d2-bb78-d6ebcadd207c"
+    }
+  }, {
+    "type" : "appStoreVersionLocalizations",
+    "id" : "aeb8c089-6a13-4829-908d-7678e590654e",
+    "attributes" : {
+      "description" : "Vox.md est une app de capture locale pour Obsidian et Markdown. Envoyez du texte, des liens, des photos, des fichiers, des scans de documents, des croquis et de la voix vers la bonne note.\n\nLes préréglages de capture mémorisent la destination, le modèle, les métadonnées, les pièces jointes et l’emplacement. Utilisez Vox.md depuis l’app, la feuille de partage, le clavier personnalisé, les widgets, Raccourcis ou l’Apple Watch. Les envois en attente restent disponibles pour une nouvelle tentative.\n\nLa conversion de la parole en texte s’exécute sur l’appareil avec Apple Speech, Whisper ou Parakeet. L’audio, les transcriptions, le contenu saisi, les chemins de fichiers et les signets ne sont pas envoyés aux serveurs de Vox.md. Vox.md écrit du Markdown standard dans les dossiers et coffres Obsidian choisis ; aucun compte ni aucune base de données de notes propriétaire n’est requis.\n\nLes nouvelles captures et transcriptions nécessitent un accès payant. Choisissez une formule individuelle ou familiale : hebdomadaire, annuelle ou à vie. Les abonnements éligibles comprennent sept jours d’essai gratuit, puis se renouvellent automatiquement au prix affiché jusqu’à leur résiliation dans les réglages du compte Apple. Les achats existants restent valables. La consultation et l’exportation de l’historique existant ne nécessitent aucun nouvel achat.\n\nTerms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/\nPrivacy: https://vox.isolated.tech/privacy.html",
+      "locale" : "fr-FR",
+      "keywords" : "dictée,transcription,hors ligne,clavier,scanner,journal,modèles,raccourcis,fichiers",
+      "marketingUrl" : "https://vox.isolated.tech/",
+      "promotionalText" : null,
+      "supportUrl" : "https://vox.isolated.tech/",
+      "whatsNew" : "Les nouvelles captures et transcriptions nécessitent un accès payant. Choisissez une formule individuelle ou familiale : hebdomadaire, annuelle ou à vie. Les abonnements éligibles comprennent sept jours d’essai gratuit, puis se renouvellent automatiquement au prix affiché jusqu’à leur résiliation dans les réglages du compte Apple. Les achats existants restent valables. La consultation et l’exportation de l’historique existant ne nécessitent aucun nouvel achat."
+    },
+    "relationships" : {
+      "appScreenshotSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/aeb8c089-6a13-4829-908d-7678e590654e/relationships/appScreenshotSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/aeb8c089-6a13-4829-908d-7678e590654e/appScreenshotSets"
+        }
+      },
+      "appPreviewSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/aeb8c089-6a13-4829-908d-7678e590654e/relationships/appPreviewSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/aeb8c089-6a13-4829-908d-7678e590654e/appPreviewSets"
+        }
+      },
+      "searchKeywords" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/aeb8c089-6a13-4829-908d-7678e590654e/relationships/searchKeywords",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/aeb8c089-6a13-4829-908d-7678e590654e/searchKeywords"
+        }
+      },
+      "placements" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/aeb8c089-6a13-4829-908d-7678e590654e/relationships/placements",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/aeb8c089-6a13-4829-908d-7678e590654e/placements"
+        }
+      }
+    },
+    "links" : {
+      "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/aeb8c089-6a13-4829-908d-7678e590654e"
+    }
+  }, {
+    "type" : "appStoreVersionLocalizations",
+    "id" : "bc5d2ee1-f079-4fe6-8fa8-f10894f14f1c",
+    "attributes" : {
+      "description" : "Vox.md adalah aplikasi tangkapan lokal untuk Obsidian dan Markdown. Kirim teks, tautan, foto, file, pindaian dokumen, sketsa, dan suara ke catatan yang tepat.\n\nPreset Tangkapan mengingat tujuan, templat, metadata, lampiran, dan penempatan. Gunakan Vox.md dari aplikasi, lembar berbagi, papan ketik khusus, widget, Pintasan, atau Apple Watch. Pengiriman tertunda tetap tersedia untuk dicoba lagi.\n\nUcapan-ke-teks berjalan di perangkat dengan Apple Speech, Whisper, atau Parakeet. Audio, transkrip, konten ketikan, jalur file, dan penanda tidak dikirim ke server Vox.md. Vox.md menulis Markdown standar ke folder dan vault Obsidian yang Anda pilih; akun atau basis data catatan milik vendor tidak diperlukan.\n\nTangkapan dan transkripsi baru memerlukan akses berbayar. Pilih akses individu atau keluarga: mingguan, tahunan, atau seumur hidup. Langganan yang memenuhi syarat mencakup uji coba gratis tujuh hari, lalu diperpanjang otomatis dengan harga yang ditampilkan hingga dibatalkan di pengaturan Akun Apple. Pembelian sebelumnya tetap berlaku. Melihat dan mengekspor riwayat yang sudah ada tidak memerlukan pembelian baru.\n\nTerms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/\nPrivacy: https://vox.isolated.tech/privacy.html",
+      "locale" : "id",
+      "keywords" : "mengetik suara,bicara ke teks,transkripsi,whisper,dikte,lokal,ai,privasi,offline,mic,catatan",
+      "marketingUrl" : "https://vox.isolated.tech/",
+      "promotionalText" : null,
+      "supportUrl" : "https://vox.isolated.tech/",
+      "whatsNew" : "Tangkapan dan transkripsi baru memerlukan akses berbayar. Pilih akses individu atau keluarga: mingguan, tahunan, atau seumur hidup. Langganan yang memenuhi syarat mencakup uji coba gratis tujuh hari, lalu diperpanjang otomatis dengan harga yang ditampilkan hingga dibatalkan di pengaturan Akun Apple. Pembelian sebelumnya tetap berlaku. Melihat dan mengekspor riwayat yang sudah ada tidak memerlukan pembelian baru."
+    },
+    "relationships" : {
+      "appScreenshotSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/bc5d2ee1-f079-4fe6-8fa8-f10894f14f1c/relationships/appScreenshotSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/bc5d2ee1-f079-4fe6-8fa8-f10894f14f1c/appScreenshotSets"
+        }
+      },
+      "appPreviewSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/bc5d2ee1-f079-4fe6-8fa8-f10894f14f1c/relationships/appPreviewSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/bc5d2ee1-f079-4fe6-8fa8-f10894f14f1c/appPreviewSets"
+        }
+      },
+      "searchKeywords" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/bc5d2ee1-f079-4fe6-8fa8-f10894f14f1c/relationships/searchKeywords",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/bc5d2ee1-f079-4fe6-8fa8-f10894f14f1c/searchKeywords"
+        }
+      },
+      "placements" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/bc5d2ee1-f079-4fe6-8fa8-f10894f14f1c/relationships/placements",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/bc5d2ee1-f079-4fe6-8fa8-f10894f14f1c/placements"
+        }
+      }
+    },
+    "links" : {
+      "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/bc5d2ee1-f079-4fe6-8fa8-f10894f14f1c"
+    }
+  }, {
+    "type" : "appStoreVersionLocalizations",
+    "id" : "215ab26a-1722-474d-8543-92d7f1066a44",
+    "attributes" : {
+      "description" : "Το Vox.md είναι μια εφαρμογή γρήγορης καταγραφής για τους φακέλους Markdown και τις συλλογές σημειώσεων Obsidian που επιλέγεις. Αποθήκευσε κείμενο, συνδέσμους, φωτογραφίες, αρχεία, σαρωμένα έγγραφα, σκίτσα και φωνή στη σωστή σημείωση.\n\nΟι προεπιλογές καταγραφής θυμούνται τον προορισμό, το πρότυπο, τα μεταδεδομένα και τον φάκελο συνημμένων. Δημιούργησε μια σημείωση, πρόσθεσε περιεχόμενο στην αρχή ή στο τέλος ενός αρχείου, εισήγαγέ το κάτω από μια επικεφαλίδα ή αποθήκευσέ το σε ημερήσιες, εβδομαδιαίες, μηνιαίες, τριμηνιαίες ή ετήσιες σημειώσεις.\n\nΚατάγραψε περιεχόμενο από την εφαρμογή, το μενού κοινής χρήσης, το προσαρμοσμένο πληκτρολόγιο, τα widget, τις Συντομεύσεις ή το Apple Watch. Ο σαρωτής εγγράφων αναγνωρίζει κείμενο στη συσκευή. Οι εκκρεμείς ή αποτυχημένες μεταφορές μπορούν να επαναληφθούν.\n\nΗ μεταγραφή φωνής γίνεται στη συσκευή με Apple Speech, Whisper ή Parakeet, ανάλογα με τις ρυθμίσεις και τη συσκευή. Το περιεχόμενο, ο ήχος, οι μεταγραφές, οι πληκτρολογήσεις, οι διαδρομές αρχείων και οι σελιδοδείκτες δεν αποστέλλονται σε διακομιστές του Vox.md. Συλλέγονται περιορισμένα αναλυτικά δεδομένα για τον εντοπισμό προβλημάτων κατά την αρχική ρύθμιση.\n\nΤο Vox.md γράφει τυπικά αρχεία Markdown στους φακέλους που επιλέγεις. Δεν χρειάζεται λογαριασμός ή ιδιόκτητη βάση σημειώσεων.\n\nΟι νέες καταγραφές και μεταγραφές απαιτούν πρόσβαση επί πληρωμή. Επιλέξτε ατομική ή οικογενειακή πρόσβαση: εβδομαδιαία, ετήσια ή εφ’ όρου ζωής. Οι συνδρομές που πληρούν τις προϋποθέσεις περιλαμβάνουν επτά ημέρες δωρεάν δοκιμής και στη συνέχεια ανανεώνονται αυτόματα στην εμφανιζόμενη τιμή, μέχρι να ακυρωθούν στις ρυθμίσεις του λογαριασμού Apple. Οι υπάρχουσες αγορές παραμένουν έγκυρες. Η προβολή και εξαγωγή του υπάρχοντος ιστορικού δεν απαιτούν νέα αγορά.\n\nTerms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/\nPrivacy: https://vox.isolated.tech/privacy.html",
+      "locale" : "el",
+      "keywords" : "υπαγόρευση,μεταγραφή,whisper,ai,ιδιωτικότητα,offline,μικρόφωνο,σημειώσεις,iphone,ήχος",
+      "marketingUrl" : null,
+      "promotionalText" : null,
+      "supportUrl" : "https://vox.isolated.tech/",
+      "whatsNew" : "Οι νέες καταγραφές και μεταγραφές απαιτούν πρόσβαση επί πληρωμή. Επιλέξτε ατομική ή οικογενειακή πρόσβαση: εβδομαδιαία, ετήσια ή εφ’ όρου ζωής. Οι συνδρομές που πληρούν τις προϋποθέσεις περιλαμβάνουν επτά ημέρες δωρεάν δοκιμής και στη συνέχεια ανανεώνονται αυτόματα στην εμφανιζόμενη τιμή, μέχρι να ακυρωθούν στις ρυθμίσεις του λογαριασμού Apple. Οι υπάρχουσες αγορές παραμένουν έγκυρες. Η προβολή και εξαγωγή του υπάρχοντος ιστορικού δεν απαιτούν νέα αγορά."
+    },
+    "relationships" : {
+      "appScreenshotSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/215ab26a-1722-474d-8543-92d7f1066a44/relationships/appScreenshotSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/215ab26a-1722-474d-8543-92d7f1066a44/appScreenshotSets"
+        }
+      },
+      "appPreviewSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/215ab26a-1722-474d-8543-92d7f1066a44/relationships/appPreviewSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/215ab26a-1722-474d-8543-92d7f1066a44/appPreviewSets"
+        }
+      },
+      "searchKeywords" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/215ab26a-1722-474d-8543-92d7f1066a44/relationships/searchKeywords",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/215ab26a-1722-474d-8543-92d7f1066a44/searchKeywords"
+        }
+      },
+      "placements" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/215ab26a-1722-474d-8543-92d7f1066a44/relationships/placements",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/215ab26a-1722-474d-8543-92d7f1066a44/placements"
+        }
+      }
+    },
+    "links" : {
+      "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/215ab26a-1722-474d-8543-92d7f1066a44"
+    }
+  }, {
+    "type" : "appStoreVersionLocalizations",
+    "id" : "c3d16760-a30c-4db7-9bf6-fdf4909b7d1e",
+    "attributes" : {
+      "description" : "Vox.md je aplikacija za brzo spremanje sadržaja u Markdown mape i Obsidian zbirke bilježaka. Spremite tekst, poveznice, fotografije, datoteke, skenirane dokumente, skice i glas u odgovarajuću bilješku.\n\nUnaprijed zadane postavke pamte odredište, predložak, metapodatke i mapu privitaka. Izradite bilješku, dodajte sadržaj na početak ili kraj datoteke, umetnite ga ispod naslova ili ga spremite u dnevne, tjedne, mjesečne, tromjesečne ili godišnje bilješke.\n\nSpremajte sadržaj iz aplikacije, izbornika za dijeljenje, prilagođene tipkovnice, widgeta, Prečaca ili Apple Watcha. Skener dokumenata prepoznaje tekst na uređaju. Prijenose na čekanju i neuspjele prijenose možete ponovno pokušati.\n\nGovor se pretvara u tekst na uređaju uz Apple Speech, Whisper ili Parakeet, ovisno o postavkama i uređaju. Spremljeni sadržaj, zvuk, prijepisi, pritisci tipki, putanje datoteka i knjižne oznake ne šalju se na poslužitelje Vox.md. Prikupljaju se ograničeni analitički podaci radi otkrivanja problema pri početnom postavljanju.\n\nVox.md zapisuje standardne Markdown datoteke u mape koje odaberete. Nisu potrebni račun ni vlasnička baza bilježaka.\n\nNove snimke i prijepisi zahtijevaju plaćeni pristup. Odaberite pojedinačni ili obiteljski pristup: tjedni, godišnji ili doživotni. Pretplate koje ispunjavaju uvjete uključuju sedam dana besplatnog probnog razdoblja, a zatim se automatski obnavljaju po prikazanoj cijeni do otkazivanja u postavkama Apple računa. Postojeće kupnje ostaju valjane. Pregled i izvoz postojeće povijesti ne zahtijevaju novu kupnju.\n\nTerms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/\nPrivacy: https://vox.isolated.tech/privacy.html",
+      "locale" : "hr",
+      "keywords" : "diktiranje,transkripija,offline,privatnost,whisper,AI,mikrofon,bilješke,iphone,glasovno,brzo",
+      "marketingUrl" : null,
+      "promotionalText" : null,
+      "supportUrl" : "https://vox.isolated.tech/",
+      "whatsNew" : "Nove snimke i prijepisi zahtijevaju plaćeni pristup. Odaberite pojedinačni ili obiteljski pristup: tjedni, godišnji ili doživotni. Pretplate koje ispunjavaju uvjete uključuju sedam dana besplatnog probnog razdoblja, a zatim se automatski obnavljaju po prikazanoj cijeni do otkazivanja u postavkama Apple računa. Postojeće kupnje ostaju valjane. Pregled i izvoz postojeće povijesti ne zahtijevaju novu kupnju."
+    },
+    "relationships" : {
+      "appScreenshotSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/c3d16760-a30c-4db7-9bf6-fdf4909b7d1e/relationships/appScreenshotSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/c3d16760-a30c-4db7-9bf6-fdf4909b7d1e/appScreenshotSets"
+        }
+      },
+      "appPreviewSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/c3d16760-a30c-4db7-9bf6-fdf4909b7d1e/relationships/appPreviewSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/c3d16760-a30c-4db7-9bf6-fdf4909b7d1e/appPreviewSets"
+        }
+      },
+      "searchKeywords" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/c3d16760-a30c-4db7-9bf6-fdf4909b7d1e/relationships/searchKeywords",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/c3d16760-a30c-4db7-9bf6-fdf4909b7d1e/searchKeywords"
+        }
+      },
+      "placements" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/c3d16760-a30c-4db7-9bf6-fdf4909b7d1e/relationships/placements",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/c3d16760-a30c-4db7-9bf6-fdf4909b7d1e/placements"
+        }
+      }
+    },
+    "links" : {
+      "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/c3d16760-a30c-4db7-9bf6-fdf4909b7d1e"
+    }
+  }, {
+    "type" : "appStoreVersionLocalizations",
+    "id" : "d5b4112c-3c28-4356-9354-eebeea6b1571",
+    "attributes" : {
+      "description" : "Vox.md — локальное приложение для быстрого сохранения материалов в Obsidian и Markdown. Отправляйте текст, ссылки, фотографии, файлы, сканы документов, рисунки и голос в нужную заметку.\n\nПредустановки захвата запоминают место назначения, шаблон, метаданные, вложения и позицию. Используйте Vox.md в приложении, меню «Поделиться», пользовательской клавиатуре, виджетах, Командах или на Apple Watch. Ожидающие отправки можно повторить.\n\nРаспознавание речи выполняется на устройстве с Apple Speech, Whisper или Parakeet. Аудио, транскрипции, введённый текст, пути к файлам и закладки не отправляются на серверы Vox.md. Vox.md записывает стандартный Markdown в выбранные папки и хранилища Obsidian; учётная запись и закрытая база заметок не требуются.\n\nДля новых записей и расшифровок нужен платный доступ. Выберите индивидуальный или семейный план: на неделю, на год или навсегда. Доступные пользователю подписки включают семь дней бесплатного пробного периода, затем автоматически продлеваются по указанной цене до отмены в настройках Аккаунта Apple. Ранее совершённые покупки остаются действительными. Просмотр и экспорт существующей истории не требуют новой покупки.\n\nTerms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/\nPrivacy: https://vox.isolated.tech/privacy.html",
+      "locale" : "ru",
+      "keywords" : "голосовой набор,речь в текст,транскрипция,whisper,ии",
+      "marketingUrl" : "https://vox.isolated.tech/",
+      "promotionalText" : null,
+      "supportUrl" : "https://vox.isolated.tech/",
+      "whatsNew" : "Для новых записей и расшифровок нужен платный доступ. Выберите индивидуальный или семейный план: на неделю, на год или навсегда. Доступные пользователю подписки включают семь дней бесплатного пробного периода, затем автоматически продлеваются по указанной цене до отмены в настройках Аккаунта Apple. Ранее совершённые покупки остаются действительными. Просмотр и экспорт существующей истории не требуют новой покупки."
+    },
+    "relationships" : {
+      "appScreenshotSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/d5b4112c-3c28-4356-9354-eebeea6b1571/relationships/appScreenshotSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/d5b4112c-3c28-4356-9354-eebeea6b1571/appScreenshotSets"
+        }
+      },
+      "appPreviewSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/d5b4112c-3c28-4356-9354-eebeea6b1571/relationships/appPreviewSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/d5b4112c-3c28-4356-9354-eebeea6b1571/appPreviewSets"
+        }
+      },
+      "searchKeywords" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/d5b4112c-3c28-4356-9354-eebeea6b1571/relationships/searchKeywords",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/d5b4112c-3c28-4356-9354-eebeea6b1571/searchKeywords"
+        }
+      },
+      "placements" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/d5b4112c-3c28-4356-9354-eebeea6b1571/relationships/placements",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/d5b4112c-3c28-4356-9354-eebeea6b1571/placements"
+        }
+      }
+    },
+    "links" : {
+      "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/d5b4112c-3c28-4356-9354-eebeea6b1571"
+    }
+  }, {
+    "type" : "appStoreVersionLocalizations",
+    "id" : "7dcf720c-8568-4598-b51a-9fd8eae14469",
+    "attributes" : {
+      "description" : "Vox.mdは、ObsidianとMarkdown向けのローカルファーストなキャプチャアプリです。テキスト、リンク、写真、ファイル、書類スキャン、スケッチ、音声を適切なノートへ送れます。\n\nキャプチャプリセットには、保存先、テンプレート、メタデータ、添付ファイル、挿入位置を記憶できます。アプリ、共有シート、カスタムキーボード、ウィジェット、ショートカット、Apple WatchからVox.mdを利用できます。保留中の送信は再試行できます。\n\n音声の文字起こしはApple Speech、Whisper、Parakeetを使ってデバイス上で実行されます。音声、文字起こし、入力内容、ファイルパス、ブックマークがVox.mdのサーバーへ送信されることはありません。Vox.mdは選択したフォルダやObsidian保管庫に標準のMarkdownを書き込みます。アカウントや独自形式のノートデータベースは不要です。\n\n新しいキャプチャと文字起こしには有料アクセスが必要です。個人用またはファミリー用の週額・年額プラン、または買い切りの無期限アクセスをお選びいただけます。対象のサブスクリプションには7日間の無料トライアルが含まれ、その後はApple Accountの設定で解約するまで表示価格で自動更新されます。既存の購入は引き続き有効です。既存の履歴の閲覧と書き出しに新たな購入は必要ありません。\n\nTerms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/\nPrivacy: https://vox.isolated.tech/privacy.html",
+      "locale" : "ja",
+      "keywords" : "音声入力,音声認識,文字起こし,ウィスパー,聞き取り,オフライン,AI,マイク",
+      "marketingUrl" : "https://vox.isolated.tech/",
+      "promotionalText" : null,
+      "supportUrl" : "https://vox.isolated.tech/",
+      "whatsNew" : "新しいキャプチャと文字起こしには有料アクセスが必要です。個人用またはファミリー用の週額・年額プラン、または買い切りの無期限アクセスをお選びいただけます。対象のサブスクリプションには7日間の無料トライアルが含まれ、その後はApple Accountの設定で解約するまで表示価格で自動更新されます。既存の購入は引き続き有効です。既存の履歴の閲覧と書き出しに新たな購入は必要ありません。"
+    },
+    "relationships" : {
+      "appScreenshotSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/7dcf720c-8568-4598-b51a-9fd8eae14469/relationships/appScreenshotSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/7dcf720c-8568-4598-b51a-9fd8eae14469/appScreenshotSets"
+        }
+      },
+      "appPreviewSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/7dcf720c-8568-4598-b51a-9fd8eae14469/relationships/appPreviewSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/7dcf720c-8568-4598-b51a-9fd8eae14469/appPreviewSets"
+        }
+      },
+      "searchKeywords" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/7dcf720c-8568-4598-b51a-9fd8eae14469/relationships/searchKeywords",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/7dcf720c-8568-4598-b51a-9fd8eae14469/searchKeywords"
+        }
+      },
+      "placements" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/7dcf720c-8568-4598-b51a-9fd8eae14469/relationships/placements",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/7dcf720c-8568-4598-b51a-9fd8eae14469/placements"
+        }
+      }
+    },
+    "links" : {
+      "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/7dcf720c-8568-4598-b51a-9fd8eae14469"
+    }
+  }, {
+    "type" : "appStoreVersionLocalizations",
+    "id" : "444b9360-3549-4799-8bac-b3588d8b8db8",
+    "attributes" : {
+      "description" : "Vox.md est une app de capture locale pour Obsidian et Markdown. Envoyez du texte, des liens, des photos, des fichiers, des scans de documents, des croquis et de la voix vers la bonne note.\n\nLes préréglages de capture mémorisent la destination, le modèle, les métadonnées, les pièces jointes et l’emplacement. Utilisez Vox.md depuis l’app, la feuille de partage, le clavier personnalisé, les widgets, Raccourcis ou l’Apple Watch. Les envois en attente restent disponibles pour une nouvelle tentative.\n\nLa conversion de la parole en texte s’exécute sur l’appareil avec Apple Speech, Whisper ou Parakeet. L’audio, les transcriptions, le contenu saisi, les chemins de fichiers et les signets ne sont pas envoyés aux serveurs de Vox.md. Vox.md écrit du Markdown standard dans les dossiers et coffres Obsidian choisis ; aucun compte ni aucune base de données de notes propriétaire n’est requis.\n\nLes nouvelles captures et transcriptions nécessitent un accès payant. Choisissez une formule individuelle ou familiale : hebdomadaire, annuelle ou à vie. Les abonnements éligibles comprennent sept jours d’essai gratuit, puis se renouvellent automatiquement au prix affiché jusqu’à leur résiliation dans les réglages du compte Apple. Les achats existants restent valables. La consultation et l’exportation de l’historique existant ne nécessitent aucun nouvel achat.\n\nTerms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/\nPrivacy: https://vox.isolated.tech/privacy.html",
+      "locale" : "fr-CA",
+      "keywords" : "saisie vocale,dictée,transcription,hors ligne,ia,confidentialité,micro,notes,reconnaissance",
+      "marketingUrl" : "https://vox.isolated.tech/",
+      "promotionalText" : null,
+      "supportUrl" : "https://vox.isolated.tech/",
+      "whatsNew" : "Les nouvelles captures et transcriptions nécessitent un accès payant. Choisissez une formule individuelle ou familiale : hebdomadaire, annuelle ou à vie. Les abonnements éligibles comprennent sept jours d’essai gratuit, puis se renouvellent automatiquement au prix affiché jusqu’à leur résiliation dans les réglages du compte Apple. Les achats existants restent valables. La consultation et l’exportation de l’historique existant ne nécessitent aucun nouvel achat."
+    },
+    "relationships" : {
+      "appScreenshotSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/444b9360-3549-4799-8bac-b3588d8b8db8/relationships/appScreenshotSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/444b9360-3549-4799-8bac-b3588d8b8db8/appScreenshotSets"
+        }
+      },
+      "appPreviewSets" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/444b9360-3549-4799-8bac-b3588d8b8db8/relationships/appPreviewSets",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/444b9360-3549-4799-8bac-b3588d8b8db8/appPreviewSets"
+        }
+      },
+      "searchKeywords" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/444b9360-3549-4799-8bac-b3588d8b8db8/relationships/searchKeywords",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/444b9360-3549-4799-8bac-b3588d8b8db8/searchKeywords"
+        }
+      },
+      "placements" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/444b9360-3549-4799-8bac-b3588d8b8db8/relationships/placements",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/444b9360-3549-4799-8bac-b3588d8b8db8/placements"
+        }
+      }
+    },
+    "links" : {
+      "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersionLocalizations/444b9360-3549-4799-8bac-b3588d8b8db8"
+    }
+  }, {
+    "type" : "builds",
+    "id" : "5ce910e1-8d3f-4f6e-be5f-c133b6299c7e",
+    "attributes" : {
+      "version" : "58",
+      "uploadedDate" : "2026-10-29T13:02:55-07:00",
+      "expirationDate" : "2027-01-27T12:02:55-08:00",
+      "expired" : false,
+      "minOsVersion" : "17.6",
+      "lsMinimumSystemVersion" : null,
+      "computedMinMacOsVersion" : "14.6",
+      "computedMinVisionOsVersion" : "1.3",
+      "iconAssetToken" : {
+        "templateUrl" : "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/1c/e8/14/1ce81431-a246-2105-6d94-8ade8ab331a5/AppIcon76x76@2x_U007eipad.png/{w}x{h}bb.{f}",
+        "width" : 152,
+        "height" : 152
+      },
+      "processingState" : "VALID",
+      "buildAudienceType" : "APP_STORE_ELIGIBLE",
+      "usesNonExemptEncryption" : false
+    },
+    "relationships" : {
+      "preReleaseVersion" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/relationships/preReleaseVersion",
+          "related" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/preReleaseVersion"
+        }
+      },
+      "individualTesters" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/relationships/individualTesters",
+          "related" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/individualTesters"
+        }
+      },
+      "betaGroups" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/relationships/betaGroups"
+        }
+      },
+      "betaBuildLocalizations" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/relationships/betaBuildLocalizations",
+          "related" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/betaBuildLocalizations"
+        }
+      },
+      "appEncryptionDeclaration" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/relationships/appEncryptionDeclaration",
+          "related" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/appEncryptionDeclaration"
+        }
+      },
+      "betaAppReviewSubmission" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/relationships/betaAppReviewSubmission",
+          "related" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/betaAppReviewSubmission"
+        }
+      },
+      "app" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/relationships/app",
+          "related" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/app"
+        }
+      },
+      "buildBetaDetail" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/relationships/buildBetaDetail",
+          "related" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/buildBetaDetail"
+        }
+      },
+      "appStoreVersion" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/relationships/appStoreVersion",
+          "related" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/appStoreVersion"
+        }
+      },
+      "icons" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/relationships/icons",
+          "related" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/icons"
+        }
+      },
+      "perfPowerMetrics" : {
+        "links" : {
+          "related" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/perfPowerMetrics"
+        }
+      },
+      "diagnosticSignatures" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/relationships/diagnosticSignatures",
+          "related" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e/diagnosticSignatures"
+        }
+      }
+    },
+    "links" : {
+      "self" : "https://api.appstoreconnect.apple.com/v1/builds/5ce910e1-8d3f-4f6e-be5f-c133b6299c7e"
+    }
+  }, {
+    "type" : "appStoreReviewDetails",
+    "id" : "c8d35f6a-f335-4ae9-a6ff-fc9061d4fbe6",
+    "attributes" : {
+      "contactFirstName" : "Cody",
+      "contactLastName" : "Bontecou",
+      "contactPhone" : "8083841335",
+      "contactEmail" : "cody@isolated.tech",
+      "demoAccountName" : null,
+      "demoAccountPassword" : null,
+      "demoAccountRequired" : false,
+      "notes" : "Vox.md 2.14 (58) introduces required paid access for new Capture deliveries and transcription on iOS and macOS. This review includes our first auto-renewable subscriptions in group Vox.md Unlimited (22526843).\n\nNo app account, login, or demo credentials are required. Please test purchases with the App Review sandbox account.\n\nNew subscription products:\n- bontecou.Voxboard.individual.weekly: US $0.99/week\n- bontecou.Voxboard.individual.yearly: US $29.99/year\n- bontecou.Voxboard.family.weekly: US $1.99/week, Apple Family Sharing\n- bontecou.Voxboard.family.yearly: US $49.99/year, Apple Family Sharing\n\nEach subscription offers one free week to eligible Apple Accounts, then auto-renews at the price displayed in the paywall. All four products share one group; Apple determines introductory eligibility. Prices are localized with purchasing-power adjustments across the existing 175 storefronts. There is no monthly subscription.\n\nExisting Individual lifetime, Family lifetime, and Family upgrade products remain available. Their existing live prices have NOT been increased for this submission. Previously purchased lifetime access and verified original paid-app ownership are preserved; Restore Purchases reconciles StoreKit access. Lifetime purchases do not cancel an existing subscription; subscription-management and Terms/Privacy links are on the paywall.\n\nAn unpaid user sees the paywall before new Capture or transcription. Existing history remains accessible without subscribing: use the History clock button at the top of the iOS paywall, or View and Export Existing History on the Mac paywall. Search, read, copy, export, and deletion of existing content do not require a new purchase. This path does not allow new recordings, new Capture deliveries, edits, or retrying queued captures. Existing exported files remain in the user's chosen folders.\n\nAfter starting a trial or restoring a purchase, create/select a Capture Preset and choose a writable destination folder. Send a short typed note and confirm Markdown output. For voice, grant microphone access and record, stop, preview, and send. Transcription runs locally with Apple Speech or downloaded Whisper/Parakeet models. Exported notes, audio, and transcript contents are not sent to Vox.md servers.\n\nThis transition is prepared for iOS and macOS together with manual release. Subscription review/approval must not trigger any changes to existing lifetime pricing or automatic app release."
+    },
+    "relationships" : {
+      "appStoreReviewAttachments" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/appStoreReviewDetails/c8d35f6a-f335-4ae9-a6ff-fc9061d4fbe6/relationships/appStoreReviewAttachments",
+          "related" : "https://api.appstoreconnect.apple.com/v1/appStoreReviewDetails/c8d35f6a-f335-4ae9-a6ff-fc9061d4fbe6/appStoreReviewAttachments"
+        }
+      }
+    },
+    "links" : {
+      "self" : "https://api.appstoreconnect.apple.com/v1/appStoreReviewDetails/c8d35f6a-f335-4ae9-a6ff-fc9061d4fbe6"
+    }
+  } ],
+  "links" : {
+    "self" : "https://api.appstoreconnect.apple.com/v1/appStoreVersions/805e71b5-fba0-4e6c-85e5-1df5373c51b1?include=appStoreVersionLocalizations%2Cbuild%2CappStoreReviewDetail"
+  }
+}

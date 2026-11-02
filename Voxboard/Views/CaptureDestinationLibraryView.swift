@@ -11,27 +11,50 @@ struct CaptureEntryTemplateLibraryView: View {
 
     var body: some View {
         List {
+            Section {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Entry Templates")
+                        .font(.custom("Geist-SemiBold", size: 34, relativeTo: .largeTitle))
+                        .tracking(-0.8)
+                        .foregroundStyle(Geist.text)
+                        .accessibilityAddTraits(.isHeader)
+                    Text("Create reusable Markdown or YAML formatting for your Routes.")
+                        .font(Geist.body(.callout))
+                        .foregroundStyle(Geist.muted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets(top: 4, leading: 20, bottom: 4, trailing: 20))
+            }
+
             if templates.isEmpty {
                 ContentUnavailableView(
                     "No Entry Templates",
                     systemImage: "doc.badge.plus",
-                    description: Text("Create reusable Markdown or YAML formatting for your Capture Presets.")
+                    description: Text("Create reusable Markdown or YAML formatting for your Routes.")
                 )
             } else {
                 ForEach(templates) { template in
                     Button {
                         templateToEdit = template
                     } label: {
-                        HStack {
-                            Image(systemName: "doc.text")
+                        HStack(spacing: 12) {
+                            SignalRouteTile(letter: String(template.name.first ?? "#"), size: 40)
                             Text(template.name)
+                                .font(.custom("Geist-SemiBold", size: 17, relativeTo: .body))
+                                .foregroundStyle(Geist.text)
                             Spacer()
                             Image(systemName: "chevron.right")
-                                .font(.caption)
-                                .foregroundStyle(.tertiary)
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(Geist.faint)
+                                .accessibilityHidden(true)
                         }
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
+                    .signalCardRow()
                     .swipeActions {
                         Button("Delete", role: .destructive) {
                             Task { await delete(template.id) }
@@ -56,12 +79,25 @@ struct CaptureEntryTemplateLibraryView: View {
             }
 
             if let errorMessage {
-                Section("Error") {
-                    Text(errorMessage).foregroundStyle(.red)
+                Section(header: DestinationSectionHeader("Error")) {
+                    Text(errorMessage).foregroundStyle(Geist.error)
                 }
             }
         }
+        .listStyle(.insetGrouped)
+        .scrollContentBackground(.hidden)
+        .background(Geist.bg.ignoresSafeArea())
+        .tint(Geist.accent)
+        .font(Geist.body())
         .navigationTitle("Entry Templates")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                // The large in-content title replaces the bar title.
+                Text(verbatim: "").accessibilityHidden(true)
+            }
+        }
+        .toolbarBackground(Geist.bg, for: .navigationBar)
         .task { await load() }
         .sheet(isPresented: $isAdding) {
             NavigationStack {
@@ -240,6 +276,7 @@ struct CaptureDestinationEditorView: View {
     @State private var entryPrefix: String
     @State private var entrySuffix: String
     @State private var attachmentsFolderName: String
+    @State private var attachmentsChoice: DestinationAttachmentsFolderChoice
     @State private var retryProtectionEnabled: Bool
     @State private var isChoosingFolder = false
     @State private var isChoosingExistingNote = false
@@ -318,14 +355,17 @@ struct CaptureDestinationEditorView: View {
         _entryPrefix = State(initialValue: selectedTemplate?.entryPrefix ?? existing?.entryPrefix ?? "")
         _entrySuffix = State(initialValue: selectedTemplate?.entrySuffix ?? existing?.entrySuffix ?? "")
         _attachmentsFolderName = State(initialValue: existing?.attachmentsFolderName ?? "attachments")
+        _attachmentsChoice = State(
+            initialValue: DestinationAttachmentsFolderChoice(folderName: existing?.attachmentsFolderName ?? "attachments")
+        )
         _retryProtectionEnabled = State(initialValue: existing?.retryProtectionEnabled ?? false)
     }
 
     var body: some View {
         Form {
-            Section(fixedName == nil ? String(localized: "Identity") : String(localized: "Preset Destination")) {
+            Section(header: DestinationSectionHeader(verbatim: fixedName == nil ? String(localized: "Identity") : String(localized: "Route Destination"))) {
                 if let fixedName {
-                    LabeledContent("Preset", value: fixedName)
+                    LabeledContent("Route", value: fixedName)
                 } else {
                     TextField("Destination Name (Optional)", text: $name)
                 }
@@ -336,13 +376,13 @@ struct CaptureDestinationEditorView: View {
                         Text("Vault / Folder")
                         Spacer()
                         Text(rootName.isEmpty ? "Choose…" : rootName)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Geist.muted)
                         Image(systemName: "folder")
                     }
                 }
             }
 
-            Section("Note Target") {
+            Section(header: DestinationSectionHeader("Note Target")) {
                 Picker("Target", selection: $targetKind) {
                     ForEach(TargetKind.allCases) { kind in
                         Text(kind.label).tag(kind)
@@ -370,11 +410,11 @@ struct CaptureDestinationEditorView: View {
                 }
 
                 Text(pathHelp)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(Geist.caption())
+                    .foregroundStyle(Geist.muted)
             }
 
-            Section("Placement") {
+            Section(header: DestinationSectionHeader("Placement")) {
                 Picker("Insert", selection: $placementKind) {
                     ForEach(PlacementKind.allCases) { kind in
                         Text(kind.label).tag(kind)
@@ -395,12 +435,12 @@ struct CaptureDestinationEditorView: View {
                     }
                     .pickerStyle(.segmented)
                     Text("Top inserts directly beneath the heading. Bottom appends to the end of the heading’s section, before the next heading.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.muted)
                 }
             }
 
-            Section("Entry Formatting") {
+            Section(header: DestinationSectionHeader("Entry Formatting")) {
                 if let markdownTemplatePath {
                     LabeledContent("Vault Template", value: markdownTemplatePath)
                     Button("Choose Another Template…") {
@@ -410,11 +450,11 @@ struct CaptureDestinationEditorView: View {
                         self.markdownTemplatePath = nil
                     }
                     Text("Vox.md reads this file from your vault for every capture, so edits made in Obsidian apply automatically.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text("Vault templates support the same tokens, including {location}, which follows the delivering Capture Preset's location setting.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.muted)
+                    Text("Vault templates support the same tokens, including {location}, which follows the delivering Route's location setting.")
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.muted)
                 } else {
                     Button("Choose Template from Vault…") {
                         isChoosingMarkdownTemplate = true
@@ -434,13 +474,13 @@ struct CaptureDestinationEditorView: View {
                             entrySuffix = template.entrySuffix
                         }
                     }
-                    Text("Prefix").font(.caption).foregroundStyle(.secondary)
+                    Text("Prefix").font(Geist.caption()).foregroundStyle(Geist.muted)
                     TextEditor(text: $entryPrefix)
                         .font(.body.monospaced())
                         .frame(minHeight: 90)
                         .disabled(selectedTemplateID != nil)
                         .accessibilityLabel("Entry prefix")
-                    Text("Suffix").font(.caption).foregroundStyle(.secondary)
+                    Text("Suffix").font(Geist.caption()).foregroundStyle(Geist.muted)
                     TextEditor(text: $entrySuffix)
                         .font(.body.monospaced())
                         .frame(minHeight: 70)
@@ -448,12 +488,12 @@ struct CaptureDestinationEditorView: View {
                         .accessibilityLabel("Entry suffix")
                     if selectedTemplateID != nil {
                         Text("This destination stays linked to the reusable template. Choose Custom to edit a private snapshot.")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .font(Geist.caption())
+                            .foregroundStyle(Geist.muted)
                     }
                     Text("Multiline Markdown and YAML frontmatter are supported. Tokens: {date}, {time}, {hour}, {minute}, {second}, {timestamp}, {source}, {id8}, {location}.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.muted)
                     if let locationSample = CaptureEntryLocationTokenSupport.renderedSample(
                         prefix: entryPrefix,
                         suffix: entrySuffix
@@ -461,24 +501,36 @@ struct CaptureDestinationEditorView: View {
                         CaptureEntryLocationTokenPreview(sample: locationSample)
                     }
                 }
-                TextField("Attachments Folder", text: $attachmentsFolderName)
-                    .textInputAutocapitalization(.never)
-                    .disableAutocorrection(true)
+                // Same stored values as the Mac Settings picker: "Beside the
+                // note" is the {{note-folder}} sentinel the pipeline resolves.
+                Picker("Attachments", selection: attachmentsChoiceBinding) {
+                    Text("Beside the note").tag(DestinationAttachmentsFolderChoice.besideNote)
+                    Text(verbatim: "Attachments/").tag(DestinationAttachmentsFolderChoice.attachmentsFolder)
+                    Text("Custom").tag(DestinationAttachmentsFolderChoice.custom)
+                }
+                if attachmentsChoice == .custom {
+                    TextField("Attachments Folder", text: $attachmentsFolderName)
+                        .textInputAutocapitalization(.never)
+                        .disableAutocorrection(true)
+                }
             }
 
-            Section("Delivery") {
+            Section(header: DestinationSectionHeader("Delivery")) {
                 Toggle("Retry Protection", isOn: $retryProtectionEnabled)
                 Text("Prevents duplicate entries when delivery is retried. This adds a vox-capture HTML comment to each captured entry, which may be visible while editing Markdown.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(Geist.caption())
+                    .foregroundStyle(Geist.muted)
             }
 
             if let errorMessage {
-                Section("Error") {
-                    Text(errorMessage).foregroundStyle(.red)
+                Section(header: DestinationSectionHeader("Error")) {
+                    Text(errorMessage).foregroundStyle(Geist.error)
                 }
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(Geist.bg.ignoresSafeArea())
+        .tint(Geist.accent)
         .navigationTitle(
             fixedName == nil
                 ? (existing == nil ? String(localized: "Add Destination") : String(localized: "Edit Destination"))
@@ -554,7 +606,7 @@ struct CaptureDestinationEditorView: View {
     private var pathHelp: String {
         switch targetKind {
         case .newNote:
-            return String(localized: "Tokens: {timestamp}, {date}, {time}, {hour}, {minute}, {second}, {year}, {YR} (2-digit year), {month}, {day}, {id8}, {id}. Existing filenames are automatically uniqued.")
+            return String(localized: "Tokens: {title} (first line of the capture), {timestamp}, {date}, {time}, {hour}, {minute}, {second}, {year}, {YR} (2-digit year), {month}, {day}, {id8}, {id}. Existing filenames are automatically uniqued.")
         case .rollingNote:
             return String(localized: "Use {period} for the selected daily, weekly, monthly, quarterly, or yearly bucket. Tokens also include {date}, {hour}, {minute}, {second}, {year}, {YR} (2-digit year), {month}, {day}, and {week}.")
         case .existingNote:
@@ -592,6 +644,27 @@ struct CaptureDestinationEditorView: View {
         }
     }
 
+    private var attachmentsChoiceBinding: Binding<DestinationAttachmentsFolderChoice> {
+        Binding(
+            get: { attachmentsChoice },
+            set: { choice in
+                attachmentsChoice = choice
+                switch choice {
+                case .besideNote:
+                    attachmentsFolderName = CaptureDestination.besideNoteAttachmentsFolder
+                case .attachmentsFolder:
+                    if attachmentsFolderName.lowercased() != "attachments" {
+                        attachmentsFolderName = "Attachments"
+                    }
+                case .custom:
+                    if attachmentsFolderName == CaptureDestination.besideNoteAttachmentsFolder {
+                        attachmentsFolderName = ""
+                    }
+                }
+            }
+        )
+    }
+
     private func saveFolderBookmark(_ url: URL) {
         let didAccess = url.startAccessingSecurityScopedResource()
         defer { if didAccess { url.stopAccessingSecurityScopedResource() } }
@@ -619,7 +692,8 @@ struct CaptureDestinationEditorView: View {
                 : (trimmedName.isEmpty ? rootName : trimmedName)
             let trimmedPath = pathTemplate.trimmingCharacters(in: .whitespacesAndNewlines)
             try CapturePathValidation.validateRelativePath(trimmedPath)
-            if !attachmentsFolderName.isEmpty {
+            if !attachmentsFolderName.isEmpty,
+               attachmentsFolderName != CaptureDestination.besideNoteAttachmentsFolder {
                 try CapturePathValidation.validateRelativePath(attachmentsFolderName)
             }
 
@@ -812,18 +886,18 @@ struct CaptureEntryTemplateEditorView: View {
         Form {
             Section {
                 TextField("Name", text: $name)
-                Text("Prefix").font(.caption).foregroundStyle(.secondary)
+                Text("Prefix").font(Geist.caption()).foregroundStyle(Geist.muted)
                 TextEditor(text: $entryPrefix)
                     .font(.body.monospaced())
                     .frame(minHeight: 150)
                     .accessibilityLabel("Template prefix")
-                Text("Suffix").font(.caption).foregroundStyle(.secondary)
+                Text("Suffix").font(Geist.caption()).foregroundStyle(Geist.muted)
                 TextEditor(text: $entrySuffix)
                     .font(.body.monospaced())
                     .frame(minHeight: 100)
                     .accessibilityLabel("Template suffix")
             } header: {
-                Text("Template")
+                DestinationSectionHeader("Template")
             } footer: {
                 Text("Use multiline Markdown or a leading --- YAML frontmatter block. Available tokens: {date}, {time}, {hour}, {minute}, {second}, {timestamp}, {year}, {YR} (2-digit year), {month}, {day}, {week}, {source}, {id8}, {id}, {location}.")
             }
@@ -834,13 +908,16 @@ struct CaptureEntryTemplateEditorView: View {
                 Section {
                     CaptureEntryLocationTokenPreview(sample: locationSample)
                 } header: {
-                    Text("{location} token")
+                    DestinationSectionHeader("{location} token")
                 }
             }
             if let errorMessage {
-                Section("Error") { Text(errorMessage).foregroundStyle(.red) }
+                Section(header: DestinationSectionHeader("Error")) { Text(errorMessage).foregroundStyle(Geist.error) }
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(Geist.bg.ignoresSafeArea())
+        .tint(Geist.accent)
         .navigationTitle(existing == nil ? String(localized: "Add Template") : String(localized: "Edit Template"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -896,6 +973,59 @@ private enum DestinationEditorError: Error, LocalizedError {
         case .noteOutsideRoot: return String(localized: "Choose a Markdown note inside the selected vault or folder.")
         case .templateOutsideRoot: return String(localized: "Choose a Markdown template inside the selected vault or folder.")
         case .markdownTemplateRequired: return String(localized: "Choose a Markdown (.md) template file.")
+        }
+    }
+}
+
+/// Mono uppercase Signal section label for destination and template forms.
+private struct DestinationSectionHeader: View {
+    private let title: Text
+
+    init(_ key: LocalizedStringKey) { title = Text(key) }
+    init(verbatim string: String) { title = Text(verbatim: string) }
+
+    var body: some View {
+        title
+            .textCase(.uppercase)
+            .font(Geist.mono(size: 11, relativeTo: .caption))
+            .tracking(0.66)
+            .foregroundStyle(Geist.muted)
+            .accessibilityAddTraits(.isHeader)
+    }
+}
+
+private extension View {
+    /// White, bordered 18pt Signal card behind a List row.
+    func signalCardRow() -> some View {
+        self
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets(top: 17, leading: 18, bottom: 17, trailing: 18))
+            .listRowBackground(
+                RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous)
+                    .fill(Geist.card)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous)
+                            .stroke(Geist.border, lineWidth: 1)
+                    )
+                    .padding(.vertical, 5)
+            )
+    }
+}
+
+/// iOS destination editor choice for where attachments are written. Maps to
+/// the same `attachmentsFolderName` values as the Mac Settings picker.
+private enum DestinationAttachmentsFolderChoice: Hashable {
+    case besideNote
+    case attachmentsFolder
+    case custom
+
+    init(folderName: String) {
+        if folderName == CaptureDestination.besideNoteAttachmentsFolder {
+            self = .besideNote
+        } else if folderName.lowercased() == "attachments" {
+            self = .attachmentsFolder
+        } else {
+            self = .custom
         }
     }
 }

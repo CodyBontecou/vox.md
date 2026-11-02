@@ -29,7 +29,22 @@ final class VoiceKeyboardState {
         case appNotListening    // App isn't running the persistent recorder
     }
 
+    /// Where a dictation goes: typed into the focused field, or delivered to
+    /// the selected Route without touching the host document.
+    enum Destination: String, Equatable {
+        case typeHere
+        case route
+    }
+
     var status: Status = .idle
+    var destination: Destination = VoiceKeyboardState.persistedDestination() {
+        didSet {
+            guard oldValue != destination else { return }
+            AppConstants.sharedDefaults?.set(destination.rawValue, forKey: Self.destinationKey)
+        }
+    }
+    /// Brief confirmation shown in the preview line (e.g. "Sent to Tasks").
+    var confirmationMessage: String?
     var recordingDuration: TimeInterval = 0
     var transcriptionProgress: Double?
     var selectedModelIndex: Int = 0
@@ -56,6 +71,28 @@ final class VoiceKeyboardState {
 
     /// Closure provided by KeyboardViewController to insert text via textDocumentProxy.
     var textInserter: ((String) -> Void)?
+
+    /// Deletes the given number of characters before the cursor.
+    var textDeleter: ((Int) -> Void)?
+
+    /// Moves the host cursor by a character offset (negative moves left).
+    var cursorMover: ((Int) -> Void)?
+
+    /// Returns the host document's text before the cursor, when available.
+    var contextBeforeInput: (() -> String?)?
+
+    /// Text this keyboard inserted for the most recent dictation; the target of
+    /// "Delete last phrase" while it is still at the cursor.
+    private(set) var lastInsertedPhrase = ""
+
+    /// The destination captured when the active request started, so toggling
+    /// mid-recording never changes where an in-flight dictation goes.
+    private var activeDestination: Destination = .typeHere
+    private var activeRouteName: String?
+    private var confirmationTask: Task<Void, Never>?
+
+    private static let destinationKey = "keyboard.voice.destination.v1"
+    private static let activeRequestDestinationKey = "keyboard.voice.activeRequestDestination.v1"
 
     private struct BackendOption {
         let id: String
@@ -173,6 +210,36 @@ final class VoiceKeyboardState {
         selectedFlowId = CapturePresetStore.selectedFlowId()
     }
 
+    /// Enabled Routes pinned to the keyboard, in pin order, for the route
+    /// picker. A keyboard surface the user never configured offers every
+    /// enabled Route in its user-defined order. The current Route stays
+    /// listed so the picker always shows what the keyboard is sending to.
+    var enabledFlows: [CapturePreset] {
+        let enabled = cachedFlows.filter(\.isEnabled)
+        let ids = CapturePresetSurfacePinStore.effectivePinnedIDs(
+            for: .keyboard,
+            allIDs: enabled.map(\.id),
+            defaults: AppConstants.sharedDefaults
+        )
+        let byID = Dictionary(enabled.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        var pinned = ids.compactMap { byID[$0] }
+        if !pinned.contains(where: { $0.id == currentFlow.id }) {
+            pinned.insert(currentFlow, at: 0)
+        }
+        return pinned
+    }
+
+    func selectFlow(id: String) {
+        CapturePresetStore.selectFlow(id: id)
+        refreshFlowCache()
+        log.log("Flow selected: \(currentFlow.accessibilityName)")
+    }
+
+    /// Committed live text for the preview line (most recent last).
+    var livePreviewCommittedText: String {
+        deliveredLiveText
+    }
+
     func nextFlow() {
         refreshFlowCache()
         let next = CapturePresetStore.selectNextFlow()
@@ -263,7 +330,16 @@ final class VoiceKeyboardState {
         refreshFlowCache()
         let requestId = UUID().uuidString
         let language = AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedLanguageKey) ?? "auto"
-        let flowId = currentFlow.id
+        // "Type here" sends no Route so the app treats the segment as
+        // transcription-only (`RecordingCompletionMode.keyboardTranscription`).
+        // "Send to <Route>" carries the Route and the keyboard skips insertion.
+        let requestDestination = destination
+        let flowId: String? = requestDestination == .route ? currentFlow.id : nil
+        activeDestination = requestDestination
+        activeRouteName = requestDestination == .route ? currentFlow.accessibilityName : nil
+        persistActiveDestination(requestId: requestId)
+        lastInsertedPhrase = ""
+        confirmationMessage = nil
 
         // Update UI immediately — don't wait for IPC round-trip
         TranscriptionIPC.clearLiveTranscriptionState()
@@ -291,7 +367,7 @@ final class VoiceKeyboardState {
         TranscriptionIPC.postCommandNotification()
         lastCommandNotificationAt = Date().timeIntervalSince1970
 
-        log.log("📤 Sent startSegment command (requestId=\(requestId), backend=\(backend.id), flow=\(flowId))")
+        log.log("📤 Sent startSegment command (requestId=\(requestId), backend=\(backend.id), flow=\(flowId ?? "insert-only"))")
 
         // Start local duration timer
         startDurationTimer()
@@ -418,6 +494,7 @@ final class VoiceKeyboardState {
             if statusRequestId == nil || statusRequestId == response.requestId {
                 log.log("♻️ Recovering orphaned transcription response for \(response.requestId.prefix(8))")
                 pendingRequestId = response.requestId
+                restoreActiveDestination(requestId: response.requestId)
                 restoreLiveDeliveryCheckpoint(for: response.requestId)
                 finishWithResponse(response)
                 return
@@ -439,6 +516,7 @@ final class VoiceKeyboardState {
             }
             log.log("♻️ Reconnecting to existing segment: \(ipcStatus.requestId)")
             pendingRequestId = ipcStatus.requestId
+            restoreActiveDestination(requestId: ipcStatus.requestId)
             restoreLiveDeliveryCheckpoint(for: ipcStatus.requestId)
             processLiveSnapshot(for: ipcStatus.requestId)
             recordingStartedAt = ipcStatus.recordingStartedAt
@@ -467,6 +545,7 @@ final class VoiceKeyboardState {
             } else {
                 log.log("♻️ Reconnecting to existing transcription: \(ipcStatus.requestId)")
                 pendingRequestId = ipcStatus.requestId
+                restoreActiveDestination(requestId: ipcStatus.requestId)
                 restoreLiveDeliveryCheckpoint(for: ipcStatus.requestId)
                 processLiveSnapshot(for: ipcStatus.requestId)
                 transcribingStartedAt = stoppedAt
@@ -592,9 +671,12 @@ final class VoiceKeyboardState {
         }
 
         guard !delta.isEmpty else { return }
+        // Route deliveries never type into the host document.
+        guard activeDestination == .typeHere else { return }
         if let textInserter {
             log.log("📝 Inserting live Apple Speech delta (\(delta.count) chars)")
             textInserter(delta)
+            lastInsertedPhrase += delta
         } else {
             let pending = (pendingTranscription ?? "") + delta
             pendingTranscription = pending
@@ -777,10 +859,15 @@ final class VoiceKeyboardState {
         }
 
         let existingPendingText = pendingTranscription ?? ""
-        let textToInsert: String?
+        var textToInsert: String?
         var reconciliationFailed = false
+        let deliveredToRoute = activeDestination == .route
+        let routeName = activeRouteName
 
-        if let text = response.text, !text.isEmpty {
+        if deliveredToRoute, let text = response.text, !text.isEmpty {
+            log.log("✅ Transcription delivered to Route (\(text.count) chars) — not inserting")
+            textToInsert = nil
+        } else if let text = response.text, !text.isEmpty {
             log.log("✅ Transcription ready (\(text.count) chars)")
             if response.usesLiveTranscription == true {
                 switch TranscriptionInsertionPlanner.plan(
@@ -824,6 +911,10 @@ final class VoiceKeyboardState {
         }
 
         status = .idle
+        if deliveredToRoute {
+            showConfirmation(routeName.map { String(localized: "Sent to \($0)") }
+                ?? String(localized: "Sent"))
+        }
         let pending = existingPendingText + (textToInsert ?? "")
         guard !pending.isEmpty else {
             pendingTranscription = nil
@@ -835,6 +926,7 @@ final class VoiceKeyboardState {
         if let textInserter {
             log.log("📝 Inserting remaining transcription (\(pending.count) chars)")
             textInserter(pending)
+            lastInsertedPhrase += pending
             pendingTranscription = nil
             clearPendingText()
         } else {
@@ -884,6 +976,9 @@ final class VoiceKeyboardState {
         deliveredLiveText = ""
         deliveredLiveRevision = 0
         pollCount = 0
+        activeDestination = .typeHere
+        activeRouteName = nil
+        AppConstants.sharedDefaults?.removeObject(forKey: Self.activeRequestDestinationKey)
     }
 
     // MARK: - Darwin Notification Observers
@@ -964,6 +1059,89 @@ final class VoiceKeyboardState {
                 refreshListeningState()
             }
         }
+    }
+
+    // MARK: - Destination
+
+    private static func persistedDestination() -> Destination {
+        AppConstants.sharedDefaults?.string(forKey: destinationKey)
+            .flatMap(Destination.init(rawValue:)) ?? .typeHere
+    }
+
+    private func persistActiveDestination(requestId: String) {
+        AppConstants.sharedDefaults?.set(
+            [requestId, activeDestination.rawValue, activeRouteName ?? ""],
+            forKey: Self.activeRequestDestinationKey
+        )
+    }
+
+    /// Recovered requests keep the destination they started with; unknown
+    /// requests stay insert-only, matching the app's legacy keyboard behavior.
+    private func restoreActiveDestination(requestId: String) {
+        guard let stored = AppConstants.sharedDefaults?.stringArray(forKey: Self.activeRequestDestinationKey),
+              stored.count == 3, stored[0] == requestId,
+              let restored = Destination(rawValue: stored[1]) else {
+            activeDestination = .typeHere
+            activeRouteName = nil
+            return
+        }
+        activeDestination = restored
+        activeRouteName = stored[2].isEmpty ? nil : stored[2]
+    }
+
+    private func showConfirmation(_ message: String) {
+        confirmationMessage = message
+        confirmationTask?.cancel()
+        confirmationTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(2.5))
+            guard !Task.isCancelled else { return }
+            self?.confirmationMessage = nil
+        }
+    }
+
+    // MARK: - Delete Last Phrase
+
+    /// Removes the last dictated phrase when it is still directly before the
+    /// cursor; otherwise removes the trailing phrase back to the previous
+    /// sentence boundary.
+    func deleteLastPhrase() {
+        let before = contextBeforeInput?() ?? ""
+        let count: Int
+        if !lastInsertedPhrase.isEmpty, before.hasSuffix(lastInsertedPhrase) {
+            count = lastInsertedPhrase.count
+        } else {
+            count = Self.trailingPhraseLength(in: before)
+        }
+        lastInsertedPhrase = ""
+        guard count > 0 else {
+            textDeleter?(1)
+            return
+        }
+        log.log("⌫ Deleting last phrase (\(count) chars)")
+        textDeleter?(count)
+    }
+
+    static func trailingPhraseLength(in text: String) -> Int {
+        guard !text.isEmpty else { return 0 }
+        let characters = Array(text)
+        var index = characters.count
+        // Trailing whitespace and the phrase's own terminal punctuation belong
+        // to the phrase being removed.
+        while index > 0, characters[index - 1].isWhitespace { index -= 1 }
+        while index > 0, ".!?…".contains(characters[index - 1]) { index -= 1 }
+        while index > 0 {
+            let character = characters[index - 1]
+            if ".!?…\n".contains(character) { break }
+            index -= 1
+        }
+        return characters.count - index
+    }
+
+    /// Inserts a quick-action snippet, optionally moving the cursor back into it.
+    func insertSnippet(_ text: String, cursorOffset: Int = 0) {
+        textInserter?(text)
+        if cursorOffset != 0 { cursorMover?(cursorOffset) }
+        lastInsertedPhrase = ""
     }
 
     // MARK: - Pending Text Persistence

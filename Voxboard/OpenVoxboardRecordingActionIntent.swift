@@ -14,7 +14,7 @@ struct OpenVoxboardRecordingActionIntent: AppIntent {
     @available(iOS 26.0, *)
     static var supportedModes: IntentModes { .foreground(.immediate) }
 
-    @Parameter(title: "Preset")
+    @Parameter(title: "Route")
     var vox: VoxEntity?
 
     @Parameter(title: "Action", default: .start)

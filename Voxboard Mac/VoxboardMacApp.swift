@@ -22,7 +22,10 @@ struct VoxboardMacApp: App {
     private var visibilityModeRaw = MacAppVisibilityMode.dockAndMenuBar.rawValue
 
     init() {
+        RetiredAnalyticsCleanup.run()
+        if let defaults = AppConstants.sharedDefaults { RetiredAnalyticsCleanup.run(defaults: defaults) }
         Geist.registerBundledFonts()
+        MacFileBusyRetry.configureMonitor()
         let modelManager = ModelManager()
         let store = TranscriptStore()
         let usage = UsageTracker()
@@ -126,6 +129,11 @@ struct VoxboardMacApp: App {
                 )
             }
         }
+        if MacDebugSignalFixtures.isRequested {
+            Task { @MainActor in
+                await MacDebugSignalFixtures.seedIfRequested(viewModel: quickCaptureViewModel)
+            }
+        }
         if ProcessInfo.processInfo.arguments.contains("--localization-screenshot") {
             DispatchQueue.main.async {
                 let root = MacLocalizationScreenshotRoot(
@@ -138,7 +146,9 @@ struct VoxboardMacApp: App {
                 .environment(usage)
                 .environment(storeManager)
                 .tint(MacBrand.orange)
-                .preferredColorScheme(.light)
+                .preferredColorScheme(
+                    ProcessInfo.processInfo.arguments.contains("--localization-screenshot-dark") ? .dark : .light
+                )
 
                 let controller = NSHostingController(rootView: root)
                 let window = NSWindow(contentViewController: controller)
@@ -146,7 +156,13 @@ struct VoxboardMacApp: App {
                     "VoxboardLocalizationScreenshot"
                 )
                 window.title = "Vox.md"
-                window.setContentSize(NSSize(width: 1180, height: 760))
+                // Match the main window's hidden title bar.
+                if !ProcessInfo.processInfo.arguments.contains("03-settings") {
+                    window.styleMask.insert(.fullSizeContentView)
+                    window.titlebarAppearsTransparent = true
+                    window.titleVisibility = .hidden
+                }
+                window.setContentSize(MacLocalizationScreenshotRoot.storySize)
                 window.center()
                 window.isReleasedWhenClosed = false
                 window.makeKeyAndOrderFront(nil)
@@ -170,18 +186,37 @@ struct VoxboardMacApp: App {
 
     var body: some Scene {
         WindowGroup("Vox.md", id: "main") {
-            MacRootView(
-                recorder: recorder,
-                quickCaptureViewModel: quickCaptureViewModel,
-                windowCoordinator: windowCoordinator
-            )
+            Group {
+                if usageTracker.hasUnlocked {
+                    MacRootView(
+                        recorder: recorder,
+                        quickCaptureViewModel: quickCaptureViewModel,
+                        windowCoordinator: windowCoordinator
+                    )
+                } else {
+                    MacPaywallView(context: .onboarding, isAccessGate: true, historyViewModel: quickCaptureViewModel)
+                }
+            }
                 .tint(MacBrand.orange)
+                .task {
+                    // Busy notes (open with unsaved changes or locked in
+                    // another app) are retried every minute while Vox.md runs.
+                    while !Task.isCancelled {
+                        do { try await Task.sleep(for: .seconds(CaptureFileBusyMonitor.retryInterval)) } catch { return }
+                        await MacFileBusyRetry.retryDue(
+                            viewModel: quickCaptureViewModel,
+                            recorder: recorder,
+                            modelManager: modelManager
+                        )
+                    }
+                }
                 .task {
                     // Drain the shared capture inbox on a cadence while the Mac
                     // app runs, so queued captures retry without waiting for the
                     // next foreground activation (#11).
                     while !Task.isCancelled {
-                        try? await Task.sleep(for: .seconds(300))
+                        do { try await Task.sleep(for: .seconds(30)) } catch { return }
+                        await storeManager.syncCurrentEntitlements()
                         await quickCaptureViewModel.processPendingInbox()
                     }
                 }
@@ -192,7 +227,8 @@ struct VoxboardMacApp: App {
                 .onAppear {
                     appDelegate.configureURLHandler(handleURL)
                     appDelegate.configureLifecycleHandlers(
-                        didBecomeActive: { [weak quickCaptureViewModel, weak recorder, weak windowCoordinator] in
+                        didBecomeActive: { [weak quickCaptureViewModel, weak recorder, weak windowCoordinator, weak storeManager] in
+                            await storeManager?.syncCurrentEntitlements()
                             if let quickCaptureViewModel, let windowCoordinator {
                                 Self.consumePendingQuickCaptureOpenIfNeeded(
                                     quickCaptureViewModel: quickCaptureViewModel,
@@ -218,7 +254,19 @@ struct VoxboardMacApp: App {
                     storeManager.start()
                     transcriptStore.reload()
                     usageTracker.reload()
+                    MacQuickCapturePanelController.shared.configure(
+                        recorder: recorder,
+                        viewModel: quickCaptureViewModel,
+                        modelManager: modelManager,
+                        usageTracker: usageTracker,
+                        transcriptStore: transcriptStore,
+                        storeManager: storeManager,
+                        windowCoordinator: windowCoordinator
+                    )
                     configureGlobalHotKeys()
+                    #if DEBUG
+                    MacGlobalHotKeyCenter.shared.debugSimulateQuickCaptureIfRequested()
+                    #endif
                     recorder.resumeRecordingQueue()
                     Self.consumePendingQuickCaptureOpenIfNeeded(
                         quickCaptureViewModel: quickCaptureViewModel,
@@ -239,10 +287,19 @@ struct VoxboardMacApp: App {
                 }
         }
         .handlesExternalEvents(matching: ["capture", "capture-request", "listen"])
-        .windowToolbarStyle(.unified(showsTitle: true))
+        // The Signal boards are drawn at 1440×900; open roomy enough that the
+        // breadcrumb, Speak and Send fit beside the route inspector.
+        .defaultSize(width: 1_280, height: 820)
+        // Signal chrome: no title bar or toolbar; the traffic lights sit at
+        // the top of the sidebar as on the boards. Commands are in the menu bar.
+        .windowStyle(.hiddenTitleBar)
         .commands {
             SidebarCommands()
             InspectorCommands()
+            MacCaptureFormatCommands()
+            CommandGroup(after: .sidebar) {
+                MacListMenuItems()
+            }
 
             CommandGroup(replacing: .newItem) {
                 Button("New Capture") {
@@ -252,20 +309,59 @@ struct VoxboardMacApp: App {
             }
 
             CommandMenu("Navigate") {
+                // ⌘1–⌘4 pick routes (Signal); views move to ⌃⌘1–⌃⌘3.
                 Button("Capture") {
                     windowCoordinator.showMain(.navigate(.capture))
                 }
-                .keyboardShortcut("1", modifiers: .command)
+                .keyboardShortcut("1", modifiers: [.command, .control])
 
                 Button("Activity") {
                     windowCoordinator.showMain(.navigate(.activity))
                 }
-                .keyboardShortcut("2", modifiers: .command)
+                .keyboardShortcut("2", modifiers: [.command, .control])
 
                 Button("Library") {
                     windowCoordinator.showMain(.navigate(.library))
                 }
-                .keyboardShortcut("3", modifiers: .command)
+                .keyboardShortcut("3", modifiers: [.command, .control])
+
+                Divider()
+
+                Button("All Shortcuts") {
+                    NotificationCenter.default.post(name: .macShowAllShortcuts, object: nil)
+                }
+                .keyboardShortcut("/", modifiers: .command)
+            }
+
+            CommandMenu("Route") {
+                // Every enabled route (the old toolbar route menu); ⌘1–⌘4 for
+                // the first four, as in the sidebar.
+                ForEach(Array(MacRouteCatalog.enabledRoutes(in: quickCaptureViewModel).enumerated()), id: \.element.id) { index, route in
+                    let button = Button {
+                        MacRouteCatalog.select(route, in: quickCaptureViewModel)
+                        if !MacQuickCapturePanelController.shared.isKeyWindow {
+                            windowCoordinator.showMain(.navigate(.capture))
+                        }
+                    } label: {
+                        if route.id == quickCaptureViewModel.selectedVoxProfile?.id {
+                            Label(MacRouteCatalog.displayName(route), systemImage: "checkmark")
+                        } else {
+                            Text(MacRouteCatalog.displayName(route))
+                        }
+                    }
+                    .disabled(!quickCaptureViewModel.canChangeCaptureRoute)
+                    if index < 4 {
+                        button.keyboardShortcut(KeyEquivalent(Character("\(index + 1)")), modifiers: .command)
+                    } else {
+                        button
+                    }
+                }
+
+                Divider()
+
+                Button("Quick Capture") {
+                    MacQuickCapturePanelController.shared.toggle()
+                }
             }
 
             CommandMenu("Capture") {
@@ -307,6 +403,11 @@ struct VoxboardMacApp: App {
                     windowCoordinator.showMain(.newCapture)
                 }
                 .disabled(!quickCaptureViewModel.draft.hasCaptureContent)
+
+                Divider()
+
+                // Formerly the Capture window's toolbar menus.
+                MacCaptureMenuItems()
             }
 
             CommandMenu("Vox.md") {
@@ -436,6 +537,9 @@ struct VoxboardMacApp: App {
             let flowID: String?
             let completionMode: MacRecordingCompletionMode?
             switch target {
+            case .quickCapture:
+                // Routed through MacQuickCapturePanelController (press/hold).
+                return
             case .transcriptionOnly:
                 flowID = nil
                 completionMode = .transcriptionOnly
@@ -823,6 +927,12 @@ final class VoxboardMacAppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         #if DEBUG
+        // `--debug-appearance=light|dark` pins the appearance for visual QA.
+        if let raw = ProcessInfo.processInfo.arguments
+            .first(where: { $0.hasPrefix("--debug-appearance=") })?
+            .dropFirst("--debug-appearance=".count) {
+            NSApp.appearance = NSAppearance(named: raw == "dark" ? .darkAqua : .aqua)
+        }
         if ProcessInfo.processInfo.arguments.contains("--localization-screenshot") {
             NSApp.setActivationPolicy(.regular)
             NSApp.activate(ignoringOtherApps: true)
@@ -903,12 +1013,15 @@ final class VoxboardMacAppDelegate: NSObject, NSApplicationDelegate {
 }
 
 enum MacHotKeyTarget: Hashable, Identifiable {
+    /// Press opens the floating Quick Capture panel; hold to talk.
+    case quickCapture
     case transcriptionOnly
     case selectedPreset
     case preset(String)
 
     var id: String {
         switch self {
+        case .quickCapture: "quick-capture"
         case .transcriptionOnly: "transcription-only"
         case .selectedPreset: "selected-preset"
         case .preset(let presetID): "preset:\(presetID)"
@@ -923,6 +1036,12 @@ struct MacHotKeyShortcut: Codable, Equatable {
     let keyCode: UInt32
     let modifierFlagsRawValue: UInt
     let keyEquivalent: String
+
+    init(keyCode: UInt32, modifierFlags: NSEvent.ModifierFlags, keyEquivalent: String) {
+        self.keyCode = keyCode
+        self.modifierFlagsRawValue = modifierFlags.intersection(Self.allowedModifierFlags).rawValue
+        self.keyEquivalent = keyEquivalent
+    }
 
     init?(event: NSEvent) {
         let modifiers = event.modifierFlags.intersection(Self.allowedModifierFlags)
@@ -1012,9 +1131,37 @@ enum MacHotKeyStore {
     static let storageKey = "macGlobalHotKeyShortcut"
     static let transcriptionOnlyStorageKey = "macTranscriptionOnlyHotKeyShortcut"
     static let presetStorageKey = "macCapturePresetHotKeyShortcuts"
+    static let quickCaptureStorageKey = "macQuickCaptureHotKeyShortcut"
+    /// Stored when the person turns the Quick Capture shortcut off, so the
+    /// ⌥Space default is not re-applied.
+    private static let disabledSentinel = "off"
+    /// ⌥Space: the Signal default for Quick Capture.
+    static let defaultQuickCaptureShortcut = MacHotKeyShortcut(
+        keyCode: 49,
+        modifierFlags: [.option],
+        keyEquivalent: "Space"
+    )
+
+    /// Display string for the Quick Capture shortcut ("⌥Space"), or nil when
+    /// it is turned off.
+    static var quickCaptureDisplayString: String? {
+        load(for: .quickCapture)?.displayString
+    }
 
     static func load(for target: MacHotKeyTarget = .selectedPreset) -> MacHotKeyShortcut? {
         switch target {
+        case .quickCapture:
+            let encoded = AppConstants.sharedDefaults?.string(forKey: quickCaptureStorageKey)
+            if encoded == disabledSentinel { return nil }
+            if let encoded, let shortcut = decode(encoded) { return shortcut }
+            // Default ⌥Space unless an older recording keybind already uses it.
+            let defaultShortcut = defaultQuickCaptureShortcut
+            let others = [load(for: .transcriptionOnly), load(for: .selectedPreset)]
+                + loadPresetShortcuts().values.map(Optional.some)
+            guard !others.contains(where: { $0?.conflicts(with: defaultShortcut) == true }) else {
+                return nil
+            }
+            return defaultShortcut
         case .transcriptionOnly:
             guard let encoded = AppConstants.sharedDefaults?.string(forKey: transcriptionOnlyStorageKey) else { return nil }
             return decode(encoded)
@@ -1028,6 +1175,9 @@ enum MacHotKeyStore {
 
     static func save(_ shortcut: MacHotKeyShortcut, for target: MacHotKeyTarget = .selectedPreset) {
         switch target {
+        case .quickCapture:
+            guard let encoded = encode(shortcut) else { return }
+            AppConstants.sharedDefaults?.set(encoded, forKey: quickCaptureStorageKey)
         case .transcriptionOnly:
             guard let encoded = encode(shortcut) else { return }
             AppConstants.sharedDefaults?.set(encoded, forKey: transcriptionOnlyStorageKey)
@@ -1043,6 +1193,8 @@ enum MacHotKeyStore {
 
     static func clear(_ target: MacHotKeyTarget = .selectedPreset) {
         switch target {
+        case .quickCapture:
+            AppConstants.sharedDefaults?.set(disabledSentinel, forKey: quickCaptureStorageKey)
         case .transcriptionOnly:
             AppConstants.sharedDefaults?.removeObject(forKey: transcriptionOnlyStorageKey)
         case .selectedPreset:
@@ -1056,6 +1208,9 @@ enum MacHotKeyStore {
 
     static func configuredBindings() -> [(target: MacHotKeyTarget, shortcut: MacHotKeyShortcut)] {
         var bindings: [(MacHotKeyTarget, MacHotKeyShortcut)] = []
+        if let shortcut = load(for: .quickCapture) {
+            bindings.append((.quickCapture, shortcut))
+        }
         if let shortcut = load(for: .transcriptionOnly) {
             bindings.append((.transcriptionOnly, shortcut))
         }
@@ -1077,7 +1232,7 @@ enum MacHotKeyStore {
             guard binding.target != excludedTarget,
                   binding.shortcut.conflicts(with: shortcut) else { return false }
             switch binding.target {
-            case .transcriptionOnly, .selectedPreset:
+            case .quickCapture, .transcriptionOnly, .selectedPreset:
                 return true
             case .preset(let presetID):
                 return activePresetIDs.contains(presetID)
@@ -1135,8 +1290,13 @@ nonisolated private func macHotKeyHandler(
     }
 
     let pressedHotKeyID = hotKeyID.id
+    let isRelease = eventRef.map { GetEventKind($0) == UInt32(kEventHotKeyReleased) } ?? false
     Task { @MainActor in
-        MacGlobalHotKeyCenter.shared.handleHotKeyPressed(id: pressedHotKeyID)
+        if isRelease {
+            MacGlobalHotKeyCenter.shared.handleHotKeyReleased(id: pressedHotKeyID)
+        } else {
+            MacGlobalHotKeyCenter.shared.handleHotKeyPressed(id: pressedHotKeyID)
+        }
     }
     return noErr
 }
@@ -1146,6 +1306,10 @@ final class MacGlobalHotKeyCenter {
     static let shared = MacGlobalHotKeyCenter()
 
     private var action: ((MacHotKeyTarget) -> Void)?
+    /// Quick Capture distinguishes press (open) from hold (push-to-talk), so
+    /// it receives both key-down and key-up.
+    var quickCapturePressHandler: (() -> Void)?
+    var quickCaptureReleaseHandler: (() -> Void)?
     private var eventHandlerRef: EventHandlerRef?
     private var hotKeyRefs: [EventHotKeyRef] = []
     private var targetsByHotKeyID: [UInt32: MacHotKeyTarget] = [:]
@@ -1169,7 +1333,7 @@ final class MacGlobalHotKeyCenter {
         )
         let bindings = MacHotKeyStore.configuredBindings().filter { binding in
             switch binding.target {
-            case .transcriptionOnly, .selectedPreset:
+            case .quickCapture, .transcriptionOnly, .selectedPreset:
                 true
             case .preset(let presetID):
                 enabledPresetIDs.contains(presetID)
@@ -1209,24 +1373,75 @@ final class MacGlobalHotKeyCenter {
         lastRegistrationError = errors.isEmpty ? nil : errors.joined(separator: "\n")
     }
 
+    #if DEBUG
+    static let debugOpenQuickCaptureArgument = "--debug-open-quick-capture"
+
+    /// `--debug-open-quick-capture`: drives the registered ⌥Space Carbon
+    /// hotkey's own press/release handlers (the path a real key event takes
+    /// after `macHotKeyHandler`) once the main scene is ready, and records
+    /// whether RegisterEventHotKey succeeded in keyboard_debug.log.
+    func debugSimulateQuickCaptureIfRequested() {
+        guard ProcessInfo.processInfo.arguments.contains(Self.debugOpenQuickCaptureArgument) else { return }
+        let id = targetsByHotKeyID.first { $0.value == .quickCapture }?.key
+        KeyboardDebugLog.shared.log(
+            "[MacHotKey] debug: quickCapture registered=\(id != nil) id=\(id.map(String.init) ?? "nil") error=\(lastRegistrationError ?? "none")"
+        )
+        guard let id else { return }
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(2))
+            handleHotKeyPressed(id: id)
+            try? await Task.sleep(for: .milliseconds(60))
+            handleHotKeyReleased(id: id)
+            KeyboardDebugLog.shared.log(
+                "[MacHotKey] debug: released; panel visible=\(MacQuickCapturePanelController.shared.isVisible)"
+            )
+            guard ProcessInfo.processInfo.arguments.contains("--debug-quick-capture-esc") else { return }
+            // Queue a real esc key-down through the app's event loop so the
+            // panel's local key monitor handles it as it would a keypress.
+            try? await Task.sleep(for: .seconds(3))
+            if let panel = NSApp.keyWindow,
+               let esc = NSEvent.keyEvent(
+                   with: .keyDown, location: .zero, modifierFlags: [], timestamp: ProcessInfo.processInfo.systemUptime,
+                   windowNumber: panel.windowNumber, context: nil, characters: "\u{1b}",
+                   charactersIgnoringModifiers: "\u{1b}", isARepeat: false, keyCode: 53
+               ) {
+                NSApp.postEvent(esc, atStart: false)
+            }
+            try? await Task.sleep(for: .milliseconds(500))
+            KeyboardDebugLog.shared.log(
+                "[MacHotKey] debug: after esc; panel visible=\(MacQuickCapturePanelController.shared.isVisible)"
+            )
+        }
+    }
+    #endif
+
     func handleHotKeyPressed(id: UInt32) {
         guard let target = targetsByHotKeyID[id] else { return }
         KeyboardDebugLog.shared.log("[MacHotKey] Hotkey pressed for \(target.id)")
+        if target == .quickCapture {
+            quickCapturePressHandler?()
+            return
+        }
         action?(target)
+    }
+
+    func handleHotKeyReleased(id: UInt32) {
+        guard targetsByHotKeyID[id] == .quickCapture else { return }
+        quickCaptureReleaseHandler?()
     }
 
     private func installEventHandlerIfNeeded() {
         guard eventHandlerRef == nil else { return }
-        var eventType = EventTypeSpec(
-            eventClass: OSType(kEventClassKeyboard),
-            eventKind: UInt32(kEventHotKeyPressed)
-        )
+        var eventTypes = [
+            EventTypeSpec(eventClass: OSType(kEventClassKeyboard), eventKind: UInt32(kEventHotKeyPressed)),
+            EventTypeSpec(eventClass: OSType(kEventClassKeyboard), eventKind: UInt32(kEventHotKeyReleased)),
+        ]
         let handler: EventHandlerUPP = macHotKeyHandler
         let status = InstallEventHandler(
             GetApplicationEventTarget(),
             handler,
-            1,
-            &eventType,
+            eventTypes.count,
+            &eventTypes,
             nil,
             &eventHandlerRef
         )
@@ -1305,7 +1520,7 @@ private struct MacMenuBarMenu: View {
         }
         if let reason = recorder.lastSpeakerDiarizationSkipReason {
             Label(reason.displayText, systemImage: "exclamationmark.triangle")
-                .foregroundStyle(MacBrand.orangeText)
+                .foregroundStyle(MacBrand.attention)
         }
 
         if let exportURL = recorder.lastExportURL {
@@ -1318,14 +1533,24 @@ private struct MacMenuBarMenu: View {
 
         Divider()
 
-        Picker("Capture Preset", selection: $selectedFlowId) {
+        Picker("Route", selection: $selectedFlowId) {
             ForEach(enabledFlows) { flow in
-                Label(flow.visibleName ?? String(localized: "Icon-only preset"), systemImage: iconName(for: flow.symbolName))
+                Label(flow.visibleName ?? String(localized: "Icon-only route"), systemImage: iconName(for: flow.symbolName))
                     .tag(flow.id)
                     .accessibilityLabel(flow.accessibilityName)
             }
         }
         .disabled(recorder.isRecording)
+
+        Button {
+            MacQuickCapturePanelController.shared.show()
+        } label: {
+            Label(
+                MacHotKeyStore.quickCaptureDisplayString.map { String(localized: "Quick Capture (\($0))") }
+                    ?? String(localized: "Quick Capture"),
+                systemImage: "bolt.fill"
+            )
+        }
 
         Button {
             windowCoordinator.showMain(.navigate(.capture))
@@ -1436,3 +1661,215 @@ private struct MacMenuBarMenu: View {
         return String(format: "%d:%02d", minutes, seconds)
     }
 }
+
+#if DEBUG
+/// `--debug-seed-signal-fixtures`: DEBUG-only visual-QA data for the Signal
+/// boards. It writes four routes (Meeting Notes, Inbox, Journal, Tasks) whose
+/// destinations live in this app's own sandbox container (no folder picker
+/// needed), three delivered Library records, and one busy-file entry so the
+/// Activity "Needs you" card renders. Run it only against an isolated debug
+/// container (for example an ad-hoc build with a separate bundle ID).
+@MainActor
+enum MacDebugSignalFixtures {
+    static let argument = "--debug-seed-signal-fixtures"
+
+    static var isRequested: Bool {
+        ProcessInfo.processInfo.arguments.contains(argument)
+    }
+
+    /// Appends to `<sandbox tmp>/signal-fixtures.log` so a QA run can check
+    /// the seed without Console.
+    private static func trace(_ message: String) {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("signal-fixtures.log")
+        let line = Data("\(Date()) \(message)\n".utf8)
+        if let handle = try? FileHandle(forWritingTo: url) {
+            handle.seekToEndOfFile(); handle.write(line); try? handle.close()
+        } else {
+            try? line.write(to: url)
+        }
+    }
+
+    private static let busyRequestID = UUID(uuidString: "00000000-0000-4000-8000-0000000000B5")!
+
+    static func seedIfRequested(viewModel: QuickCaptureViewModel) async {
+        trace("start")
+        guard isRequested, let defaults = AppConstants.sharedDefaults else { return }
+        await viewModel.load()
+        trace("loaded profiles=\(viewModel.voxProfiles.count)")
+
+        let routes: [(id: String, name: String, path: String, heading: String?)] = [
+            ("debug-meeting-notes", "Meeting Notes", "Meetings/{date}.md", "Notes"),
+            ("debug-inbox", "Inbox", "Inbox/Inbox.md", nil),
+            ("debug-journal", "Journal", "Journal/{period}.md", nil),
+            ("debug-tasks", "Tasks", "Tasks.md", "Today"),
+        ]
+        let existing = CapturePresetStore.loadFlows(defaults: defaults)
+        if !existing.contains(where: { $0.id == routes[0].id }) {
+            let presets = routes.map { route -> CapturePreset in
+                var preset = CapturePresetStore.makeCustomFlow()
+                preset.id = route.id
+                preset.name = route.name
+                return preset
+            }
+            // Keep the built-in Default route but hide it, so the sidebar
+            // shows exactly the four board routes.
+            let builtIns = existing.map { flow -> CapturePreset in
+                var flow = flow
+                flow.isEnabled = false
+                return flow
+            }
+            CapturePresetStore.saveFlows(presets + builtIns, defaults: defaults)
+            viewModel.refreshVoxProfiles()
+
+            let vault = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                .appendingPathComponent("Vox Notes", isDirectory: true)
+            try? FileManager.default.createDirectory(at: vault, withIntermediateDirectories: true)
+            let bookmark = (try? vault.bookmarkData(options: [.withSecurityScope], includingResourceValuesForKeys: nil, relativeTo: nil))
+                ?? (try? vault.bookmarkData()) ?? Data()
+
+            for route in routes {
+                // The main window's own cold load briefly holds the route; wait for it.
+                for _ in 0..<50 where !viewModel.canChangeCaptureRoute {
+                    try? await Task.sleep(for: .milliseconds(100))
+                }
+                guard viewModel.selectVox(route.id) || viewModel.selectedVoxProfile?.id == route.id else {
+                    trace("could not select \(route.name)")
+                    continue
+                }
+                let target: CaptureNoteTarget = route.path.contains("{period}")
+                    ? .rollingNote(pathTemplate: route.path, period: .weekly)
+                    : route.path.contains("{date}")
+                        ? .newNote(pathTemplate: route.path)
+                        : .existingNote(relativePath: route.path)
+                let placement: CapturePlacement = route.heading.map {
+                    .beneathHeading(
+                        CaptureHeadingSelector(title: $0, level: 2),
+                        missingHeadingBehavior: .create,
+                        headingPosition: .bottom
+                    )
+                } ?? .append
+                let destination = CaptureDestination(
+                    name: route.name,
+                    rootBookmark: bookmark,
+                    rootName: "Vox Notes",
+                    noteTarget: target,
+                    placement: placement,
+                    attachmentsFolderName: "attachments"
+                )
+                do {
+                    try await viewModel.saveSelectedPresetDestination(destination)
+                } catch {
+                    trace("route \(route.name) failed: \(error)")
+                }
+            }
+            trace("seeded \(viewModel.voxProfiles.count) routes")
+            _ = viewModel.selectVox(routes[0].id)
+            viewModel.errorMessage = nil
+        }
+        if viewModel.draft.text.isEmpty {
+            viewModel.draft.text = "# Project sync\n- [ ] Review final designs\n- [ ] Loop in design before Friday\n\nDecision: ship routing first and keep the composer as calm as it is now. The keyboard and Watch get the same route picker.\n"
+            viewModel.scheduleDraftSave()
+        }
+
+        if let historyURL = AppConstants.captureDirectoryURL?
+            .appendingPathComponent(AppConstants.captureHistoryFilename) {
+            let store = CaptureHistoryStore(fileURL: historyURL)
+            let destinationsByName = Dictionary(
+                viewModel.destinations.map { ($0.name, $0.id) },
+                uniquingKeysWith: { first, _ in first }
+            )
+            let now = Date()
+            let seeds: [(String, String, String, CaptureSource, TimeInterval)] = [
+                ("debug-meeting-notes", "Meeting Notes", "Meetings/2026-11-01.md", .app, 40 * 60),
+                ("debug-inbox", "Inbox", "Inbox/Book recs from Sam.md", .keyboard, 2 * 3_600),
+                ("debug-journal", "Journal", "Journal/2026-W44.md", .watch, 4 * 3_600),
+            ]
+            for (index, seed) in seeds.enumerated() {
+                let id = UUID(uuidString: String(format: "00000000-0000-4000-8000-%012d", index + 1))!
+                if let record = try? CaptureHistoryRecord(
+                    requestID: id,
+                    createdAt: now.addingTimeInterval(-seed.4),
+                    deliveredAt: now.addingTimeInterval(-seed.4 + 4),
+                    source: seed.3,
+                    outcome: .delivered,
+                    destinationID: destinationsByName[seed.1] ?? UUID(),
+                    destinationName: seed.1,
+                    voxID: seed.0,
+                    voxName: seed.1,
+                    relativeNotePath: seed.2,
+                    attachmentCount: 0
+                ) {
+                    _ = try? await store.upsert(record)
+                }
+            }
+            if let busy = try? CaptureHistoryRecord(
+                requestID: busyRequestID,
+                createdAt: now.addingTimeInterval(-15 * 60),
+                deliveredAt: nil,
+                source: .mac,
+                outcome: .failed,
+                destinationID: destinationsByName["Tasks"] ?? UUID(),
+                destinationName: "Tasks",
+                voxID: "debug-tasks",
+                voxName: "Tasks",
+                relativeNotePath: "Tasks.md",
+                attachmentCount: 0,
+                failureCategory: .fileWrite
+            ) {
+                _ = try? await store.upsert(busy)
+            }
+            await viewModel.refreshHistory()
+        }
+
+        if ProcessInfo.processInfo.arguments.contains("--debug-dump-menus") {
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(10))
+                @MainActor func dump(_ menu: NSMenu, _ depth: Int) {
+                    // Let SwiftUI refresh the items as if the menu were opening.
+                    menu.delegate?.menuNeedsUpdate?(menu)
+                    menu.update()
+                    for item in menu.items where !item.isSeparatorItem {
+                        let key = item.keyEquivalent.isEmpty ? "" : " [\(item.keyEquivalentModifierMask.rawValue >> 16):\(item.keyEquivalent)]"
+                        trace(String(repeating: "  ", count: depth) + (item.state == .on ? "✓ " : "") + item.title + key + (item.isEnabled ? "" : " (disabled)"))
+                        if let submenu = item.submenu { dump(submenu, depth + 1) }
+                    }
+                }
+                if let menu = NSApp.mainMenu { dump(menu, 0) }
+            }
+        }
+        // `--debug-perform-menu=Format>Internal link`: invokes a menu bar
+        // item by title path, as a click would, for menu-command QA.
+        if let path = ProcessInfo.processInfo.arguments
+            .first(where: { $0.hasPrefix("--debug-perform-menu=") })?
+            .dropFirst("--debug-perform-menu=".count) {
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(8))
+                var menu = NSApp.mainMenu
+                let titles = path.split(separator: ">").map(String.init)
+                for (depth, title) in titles.enumerated() {
+                    guard let current = menu else { break }
+                    current.delegate?.menuNeedsUpdate?(current)
+                    current.update()
+                    guard let index = current.items.firstIndex(where: { $0.title == title }) else {
+                        trace("menu item not found: \(title)"); break
+                    }
+                    if depth == titles.count - 1 {
+                        trace("perform \(path) enabled=\(current.items[index].isEnabled)")
+                        current.performActionForItem(at: index)
+                    } else {
+                        menu = current.items[index].submenu
+                    }
+                }
+            }
+        }
+
+        CaptureFileBusyMonitor.shared.record(CaptureFileBusyEntry(
+            requestID: busyRequestID,
+            fileName: "Tasks.md",
+            relativeNotePath: "Tasks.md",
+            reason: .unsavedChanges,
+            markdown: "- [ ] Pricing page monthly toggle\n- [ ] Email Dana\n- [ ] Book design crit"
+        ))
+    }
+}
+#endif

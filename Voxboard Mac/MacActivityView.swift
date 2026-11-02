@@ -15,6 +15,11 @@ struct MacActivityView: View {
     @State private var localErrorMessage: String?
     @State private var isRefreshing = false
     @State private var pendingDeletion: MacActivityDeletion?
+    @State private var showsDetail = false
+    @State private var progressStarts: [UUID: (date: Date, fraction: Double)] = [:]
+    @State private var busyStore = MacFileBusyStore.shared
+    @State private var failedInboxEntries: [CaptureFailedInboxEntry] = []
+    @Environment(ModelManager.self) private var modelManager
 
     private let retryCoordinator: MacActivityRetryCoordinator?
     private let recoveryPresets: [CapturePreset]
@@ -34,55 +39,43 @@ struct MacActivityView: View {
     }
 
     var body: some View {
-        Group {
-            if allItems.isEmpty {
-                firstRunEmptyState
-            } else if visibleItems.isEmpty {
-                filteredEmptyState
-            } else {
-                HSplitView {
-                    activityList
-                        .frame(minWidth: 300, idealWidth: 350, maxWidth: 430)
-                    activityDetail
-                        .frame(minWidth: 480, maxWidth: .infinity, maxHeight: .infinity)
-                }
-            }
-        }
+        signalPage
+        .macUnderTitleBar()
+        .background(Geist.bg)
+        .groupBoxStyle(MacSignalGroupBoxStyle())
         .navigationTitle("Activity")
-        .searchable(text: $searchText, placement: .toolbar, prompt: "Search Activity")
-        .toolbar {
-            ToolbarItem {
-                Picker("Activity Filter", selection: $scope) {
-                    ForEach(MacActivityScope.allCases) { filter in
-                        Text(filter.title).tag(filter)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-                .frame(width: 300)
-            }
-
-            ToolbarItemGroup {
-                if !queue.retryAllEligibleJobs.isEmpty {
-                    Button("Retry All", systemImage: "arrow.clockwise") {
-                        Task { await retryAllFailedJobs() }
-                    }
-                }
-
-                Button("Refresh", systemImage: "arrow.clockwise") {
-                    Task { await reloadActivity() }
-                }
-                .disabled(isRefreshing)
-            }
-        }
+        // No window toolbar (MacActivity): Refresh and Retry All are in the
+        // View menu.
+        .focusedSceneValue(\.macActivityMenuActions, MacActivityMenuActions(
+            refresh: { Task { await reloadActivity() } },
+            isRefreshing: isRefreshing,
+            retryAll: queue.retryAllEligibleJobs.isEmpty ? nil : { Task { await retryAllFailedJobs() } }
+        ))
         .task {
             await reloadActivity()
         }
         .task {
             await queue.monitorDurableChanges()
         }
-        .onChange(of: visibleItems.map(\.id)) { _, _ in
-            reconcileSelection()
+        .task(id: viewModel.failedInboxCount) {
+            await reloadFailedInboxEntries()
+        }
+        .onChange(of: queue.transcriptionProgress?.exactFractionCompleted) { _, fraction in
+            guard let id = queue.activeJobID, let fraction, fraction > 0 else { return }
+            if progressStarts[id] == nil { progressStarts[id] = (Date(), fraction) }
+        }
+        .sheet(isPresented: $showsDetail) {
+            VStack(spacing: 0) {
+                HStack {
+                    Spacer()
+                    Button("Done") { showsDetail = false }
+                        .keyboardShortcut(.defaultAction)
+                }
+                .padding(12)
+                GeistDivider()
+                activityDetail
+            }
+            .frame(minWidth: 620, minHeight: 520)
         }
         .alert("Activity Error", isPresented: errorPresented) {
             Button("Dismiss") {}
@@ -102,6 +95,482 @@ struct MacActivityView: View {
             }
         } message: {
             Text(pendingDeletion?.message ?? "")
+        }
+    }
+
+    // MARK: Signal single page
+
+    private var failedJobs: [RecordingJob] {
+        queue.actionableJobs
+            .filter { $0.phase == .failed && busyStore.entry(for: $0.id) == nil }
+            .sorted { $0.createdAt > $1.createdAt }
+    }
+
+    private var inFlightJobs: [RecordingJob] {
+        queue.actionableJobs
+            .filter { $0.phase == .queued || $0.phase == .processing || $0.phase == .finalizing }
+            .sorted { lhs, rhs in
+                if lhs.id == queue.activeJobID { return true }
+                if rhs.id == queue.activeJobID { return false }
+                return lhs.createdAt < rhs.createdAt
+            }
+    }
+
+    private var readyJobs: [RecordingJob] {
+        queue.actionableJobs.filter { $0.phase == .completed }
+    }
+
+    private var deliveredRecords: [CaptureHistoryRecord] {
+        viewModel.historyRecords
+            .filter { $0.outcome == .delivered }
+            .sorted { ($0.deliveredAt ?? $0.createdAt) > ($1.deliveredAt ?? $1.createdAt) }
+    }
+
+    private var jobsTodayCount: Int {
+        let calendar = Calendar.current
+        let records = viewModel.historyRecords.filter {
+            calendar.isDateInToday($0.deliveredAt ?? $0.createdAt)
+        }
+        let recordIDs = Set(records.map(\.requestID))
+        let jobs = queue.actionableJobs.filter {
+            calendar.isDateInToday($0.createdAt) && !recordIDs.contains($0.id)
+        }
+        return records.count + jobs.count
+    }
+
+    private var hasNeedsYou: Bool {
+        !busyStore.entries.isEmpty || !failedJobs.isEmpty || viewModel.failedInboxCount > 0 || !readyJobs.isEmpty
+    }
+
+    private var signalPage: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text("Activity")
+                        .font(Geist.display(28))
+                        .tracking(-0.56)
+                    Spacer(minLength: 12)
+                    Text(verbatim: String(localized: "Queue runs while Vox.md is open · \(jobsTodayCount) jobs today"))
+                        .font(Geist.mono(size: 12, relativeTo: .caption))
+                        .foregroundStyle(Geist.muted)
+                }
+
+                if !hasNeedsYou && inFlightJobs.isEmpty && deliveredRecords.isEmpty && transcriptStore.transcripts.isEmpty {
+                    firstRunEmptyState
+                        .frame(minHeight: 360)
+                }
+
+                if hasNeedsYou {
+                    MacSignalSectionHeader("Needs you", color: MacBrand.attention)
+                        .padding(.top, 6)
+                    ForEach(busyStore.entries) { entry in
+                        busyCard(entry)
+                    }
+                    ForEach(failedJobs) { job in
+                        failedJobCard(job)
+                    }
+                    ForEach(readyJobs) { job in
+                        readyJobCard(job)
+                    }
+                    if viewModel.failedInboxCount > 0 {
+                        if failedInboxEntries.isEmpty {
+                            failedInboxCard
+                        } else {
+                            ForEach(failedInboxEntries) { entry in
+                                failedInboxEntryCard(entry)
+                            }
+                        }
+                    }
+                }
+
+                if !inFlightJobs.isEmpty {
+                    MacSignalSectionHeader("In flight")
+                        .padding(.top, 10)
+                    VStack(spacing: 0) {
+                        ForEach(Array(inFlightJobs.enumerated()), id: \.element.id) { index, job in
+                            if index > 0 { Rectangle().fill(Geist.Palette.gray200).frame(height: 1) }
+                            inFlightRow(job)
+                        }
+                    }
+                    .padding(.horizontal, 18)
+                    .background(Geist.card, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    .overlay { RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(Geist.border, lineWidth: 1) }
+                }
+
+                if !deliveredRecords.isEmpty {
+                    deliveredSection
+                }
+            }
+            .padding(.horizontal, 36)
+            .padding(.top, 28)
+            .padding(.bottom, 40)
+            .frame(maxWidth: 1_040, alignment: .leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .overlay(alignment: .bottomTrailing) {
+            if isRefreshing {
+                ProgressView().controlSize(.small).padding(10)
+            }
+        }
+    }
+
+    private func needsYouCard<Actions: View>(
+        title: String,
+        detail: String,
+        @ViewBuilder actions: () -> Actions
+    ) -> some View {
+        // MacActivity: text (flex 1 1 320px) beside compact buttons; the
+        // buttons wrap below only when that does not fit. The text's ideal
+        // width is its 320pt basis so ViewThatFits does not measure the
+        // whole sentence on one line.
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .top, spacing: 16) {
+                needsYouText(title: title, detail: detail)
+                    .frame(minWidth: 320, idealWidth: 320, maxWidth: .infinity, alignment: .leading)
+                HStack(spacing: 8) { actions() }.fixedSize()
+            }
+            VStack(alignment: .leading, spacing: 12) {
+                needsYouText(title: title, detail: detail)
+                HStack(spacing: 8) { actions() }.fixedSize()
+            }
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 16)
+        .background(Geist.card, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(MacBrand.attentionBorder, lineWidth: 1)
+        }
+    }
+
+    private func needsYouText(title: String, detail: String) -> some View {
+        HStack(alignment: .top, spacing: 16) {
+            Circle()
+                .fill(MacBrand.attentionIndicator)
+                .frame(width: 10, height: 10)
+                .padding(.top, 6)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(Geist.label(.body).weight(.semibold))
+                    .foregroundStyle(Geist.text)
+                Text(detail)
+                    .font(Geist.body(.callout))
+                    .foregroundStyle(Geist.muted)
+                    .lineSpacing(2)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    private func busyCard(_ entry: CaptureFileBusyEntry) -> some View {
+        let route = busyRouteName(entry)
+        let items = entry.markdown.components(separatedBy: "\n").filter {
+            let line = $0.trimmingCharacters(in: .whitespaces)
+            return line.hasPrefix("- ") || line.hasPrefix("* ")
+        }.count
+        var meta = [route, entry.firstDetectedAt.formatted(date: .omitted, time: .shortened)]
+        if items > 1 { meta.append(String(localized: "\(items) items")) }
+        let detail = meta.compactMap { $0 }.joined(separator: " · ") + ". "
+            + String(localized: "Vox.md waits rather than overwrite. It retries automatically every minute.")
+        return needsYouCard(title: entry.reason.headline(fileName: entry.fileName), detail: detail) {
+            Button("Retry now") { Task { await retryBusy(entry.requestID) } }
+                .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
+            Button("Write as new note") {
+                CaptureFileBusyMonitor.shared.requestNewNote(for: entry.requestID)
+                Task { await retryBusy(entry.requestID) }
+            }
+            .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+            Button("Copy Markdown") { copyToPasteboard(entry.markdown) }
+                .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+        }
+    }
+
+    private func busyRouteName(_ entry: CaptureFileBusyEntry) -> String? {
+        if let record = viewModel.historyRecords.first(where: { $0.requestID == entry.requestID }) {
+            return record.voxName ?? record.destinationName
+        }
+        if let job = queue.actionableJobs.first(where: { $0.id == entry.requestID }) {
+            return job.activityTitle
+        }
+        if entry.requestID == viewModel.draft.requestID {
+            return viewModel.selectedVoxProfile.map(MacRouteCatalog.displayName)
+        }
+        return nil
+    }
+
+    private func failedJobCard(_ job: RecordingJob) -> some View {
+        let detail = [
+            job.createdAt.formatted(date: .omitted, time: .shortened),
+            job.duration.activityDuration,
+            job.statusMessage,
+        ].compactMap { $0 }.joined(separator: " · ")
+        return needsYouCard(title: String(localized: "\(job.activityTitle) could not finish"), detail: detail) {
+            recordingPrimaryAction(for: job)
+                .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
+            if let transcript = job.transcriptText, !transcript.isEmpty {
+                Button("Copy Markdown") { copyToPasteboard(transcript) }
+                    .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+            }
+            Button("Details…") { showDetail(.recording(job.id)) }
+                .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+        }
+    }
+
+    private func readyJobCard(_ job: RecordingJob) -> some View {
+        needsYouCard(
+            title: String(localized: "\(job.activityTitle) is ready to copy"),
+            detail: String(localized: "Deferred transcripts wait here so they never overwrite your clipboard later.")
+        ) {
+            if let transcript = job.transcriptText, !transcript.isEmpty {
+                Button("Copy Transcript") {
+                    if copyToPasteboard(transcript) {
+                        Task { await queue.acknowledgeCopiedResult(job) }
+                    }
+                }
+                .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
+            }
+            Button("Details…") { showDetail(.recording(job.id)) }
+                .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+        }
+    }
+
+    private var failedInboxCard: some View {
+        let count = viewModel.failedInboxCount
+        let reasons = Set(viewModel.historyRecords
+            .filter { $0.outcome == .failed && busyStore.entry(for: $0.requestID) == nil }
+            .prefix(5)
+            .compactMap { $0.failureCategory?.displayName })
+        let detail = (reasons.isEmpty ? "" : reasons.sorted().joined(separator: " · ") + ". ")
+            + String(localized: "Queued captures stay safe on this Mac and retry automatically.")
+        return needsYouCard(
+            title: count == 1
+                ? String(localized: "1 capture could not be delivered")
+                : String(localized: "\(count) captures could not be delivered"),
+            detail: detail
+        ) {
+            Button("Retry now") { Task { await viewModel.retryFailedInbox() } }
+                .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
+            Button("Details…") { showDetail(.failedInbox) }
+                .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+        }
+    }
+
+    /// One failed inbox request: its route, when it was captured and why it
+    /// failed, with the Markdown it would have written ready to copy.
+    private func failedInboxEntryCard(_ entry: CaptureFailedInboxEntry) -> some View {
+        let record = viewModel.historyRecords.first {
+            $0.requestID == entry.requestID && $0.outcome == .failed
+        }
+        let reason: String? = {
+            if let failure = record?.failureReason, failure.kind == .headingNotFound,
+               let heading = failure.headingMarkdown {
+                return String(localized: "Heading not found: \(heading)")
+            }
+            return record?.failureCategory?.displayName
+        }()
+        let detail = [
+            entry.createdAt.formatted(date: .omitted, time: .shortened),
+            reason,
+        ].compactMap { $0 }.joined(separator: " · ") + ". "
+            + String(localized: "Queued captures stay safe on this Mac and retry automatically.")
+        let title = entry.routeName.map { String(localized: "\($0) could not be delivered") }
+            ?? String(localized: "A capture could not be delivered")
+        return needsYouCard(title: title, detail: detail) {
+            Button("Retry now") { Task { await viewModel.retryFailedInbox() } }
+                .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
+            if let markdown = entry.markdown, !markdown.isEmpty {
+                Button("Copy Markdown") { copyToPasteboard(markdown) }
+                    .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+            }
+            Button("Details…") {
+                if let record {
+                    showDetail(.capture(record.requestID))
+                } else {
+                    showDetail(.failedInbox)
+                }
+            }
+            .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+        }
+    }
+
+    private func reloadFailedInboxEntries() async {
+        failedInboxEntries = viewModel.failedInboxCount > 0
+            ? await viewModel.failedInboxEntries()
+            : []
+    }
+
+    private func inFlightRow(_ job: RecordingJob) -> some View {
+        let isActive = job.id == queue.activeJobID
+        let fraction = isActive ? queue.transcriptionProgress?.exactFractionCompleted : nil
+        return HStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(inFlightTitle(job))
+                    .font(Geist.label(.callout).weight(.semibold))
+                    .lineLimit(1)
+                Text(inFlightSubtitle(job, isActive: isActive))
+                    .font(Geist.body(.footnote))
+                    .foregroundStyle(Geist.muted)
+                    .lineLimit(1)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            ProgressView(value: fraction ?? (job.phase == .finalizing ? 0.95 : (isActive ? nil : 0.1)))
+                .progressViewStyle(.linear)
+                .tint(MacBrand.accent)
+                .frame(maxWidth: 240)
+                .accessibilityLabel(inFlightTitle(job))
+            Text(verbatim: eta(for: job, fraction: fraction))
+                .font(Geist.mono(size: 12, relativeTo: .caption))
+                .foregroundStyle(Geist.muted)
+                .frame(width: 64, alignment: .trailing)
+        }
+        .padding(.vertical, 14)
+        .contentShape(Rectangle())
+        .onTapGesture { showDetail(.recording(job.id)) }
+        .contextMenu { contextMenu(for: .recording(job)) }
+    }
+
+    private func inFlightTitle(_ job: RecordingJob) -> String {
+        if job.captureSource == .watch { return String(localized: "From Apple Watch") }
+        if let name = job.originalFilename, !name.isEmpty {
+            return "\(name) · \(job.duration.activityDuration)"
+        }
+        return "\(job.activityTitle) · \(job.duration.activityDuration)"
+    }
+
+    private func inFlightSubtitle(_ job: RecordingJob, isActive: Bool) -> String {
+        let model = WhisperModelInfo.availableModels.first(where: { $0.id == job.modelID })?.name
+            ?? (job.modelID == TranscriptionBackendID.automatic ? String(localized: "Automatic") : job.modelID)
+        switch job.phase {
+        case .processing:
+            return job.activityTitle + " · " + String(localized: "transcribing with \(model)")
+        case .finalizing:
+            return job.activityTitle + " · " + String(localized: "writing to the vault")
+        default:
+            if job.captureSource == .watch {
+                return job.activityTitle + " · " + String(localized: "waiting to transcribe on this Mac")
+            }
+            return job.activityTitle + " · " + (isActive ? String(localized: "starting") : String(localized: "queued"))
+        }
+    }
+
+    private func eta(for job: RecordingJob, fraction: Double?) -> String {
+        switch job.phase {
+        case .queued: return String(localized: "queued")
+        case .finalizing: return String(localized: "saving")
+        default: break
+        }
+        guard let fraction, fraction > 0.02, let start = progressStarts[job.id], fraction > start.fraction else {
+            return "…"
+        }
+        let elapsed = Date().timeIntervalSince(start.date)
+        let remaining = elapsed / (fraction - start.fraction) * (1 - fraction)
+        if remaining < 60 { return String(localized: "<1 min") }
+        return String(localized: "~\(Int((remaining / 60).rounded())) min")
+    }
+
+    private var deliveredSection: some View {
+        let calendar = Calendar.current
+        let today = deliveredRecords.filter { calendar.isDateInToday($0.deliveredAt ?? $0.createdAt) }
+        let earlier = Array(deliveredRecords.filter { !calendar.isDateInToday($0.deliveredAt ?? $0.createdAt) }.prefix(30))
+        return VStack(alignment: .leading, spacing: 14) {
+            MacSignalSectionHeader("Delivered")
+                .padding(.top, 10)
+            if !today.isEmpty {
+                deliveredTable(today, showsDay: false)
+            }
+            if !earlier.isEmpty {
+                MacSignalSectionHeader("Earlier")
+                deliveredTable(earlier, showsDay: true)
+            }
+        }
+    }
+
+    private func deliveredTable(_ records: [CaptureHistoryRecord], showsDay: Bool) -> some View {
+        VStack(spacing: 0) {
+            ForEach(Array(records.enumerated()), id: \.element.requestID) { index, record in
+                if index > 0 { Rectangle().fill(Geist.Palette.gray200).frame(height: 1) }
+                HStack(spacing: 8) {
+                    Text(verbatim: "✓")
+                        .foregroundStyle(MacBrand.success)
+                        .frame(width: 20, alignment: .leading)
+                    Text(record.voxName ?? record.destinationName)
+                        .font(Geist.label(.callout))
+                        .lineLimit(1)
+                        .frame(minWidth: 120, alignment: .leading)
+                    Text(verbatim: deliveredDestination(record))
+                        .font(Geist.mono(size: 12, relativeTo: .caption))
+                        .foregroundStyle(Geist.muted)
+                        .lineLimit(1)
+                        .truncationMode(.middle)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Text(verbatim: showsDay
+                         ? (record.deliveredAt ?? record.createdAt).formatted(.dateTime.month(.abbreviated).day().hour().minute())
+                         : (record.deliveredAt ?? record.createdAt).formatted(date: .omitted, time: .shortened))
+                        .font(Geist.mono(size: 12, relativeTo: .caption))
+                        .foregroundStyle(Geist.muted)
+                }
+                .padding(.horizontal, 18)
+                .padding(.vertical, 11)
+                .contentShape(Rectangle())
+                .onTapGesture { openDelivered(record) }
+                .contextMenu { deliveredContextMenu(record) }
+                .accessibilityElement(children: .combine)
+            }
+        }
+        .background(Geist.card, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay { RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(Geist.border, lineWidth: 1) }
+    }
+
+    private func deliveredDestination(_ record: CaptureHistoryRecord) -> String {
+        let path = record.relativeNotePath ?? record.destinationName
+        if let heading = record.placementHeading, !heading.isEmpty {
+            return "\(path) · ## \(heading)"
+        }
+        if let destination = viewModel.destinations.first(where: { $0.id == record.destinationID }),
+           let heading = MacRouteCatalog.headingMarkdown(for: destination) {
+            return "\(path) · \(heading)"
+        }
+        return path
+    }
+
+    private func openDelivered(_ record: CaptureHistoryRecord) {
+        if transcriptStore.transcripts.contains(where: { $0.id == record.requestID }) {
+            showDetail(.transcript(record.requestID))
+        } else {
+            showDetail(.capture(record.requestID))
+        }
+    }
+
+    @ViewBuilder
+    private func deliveredContextMenu(_ record: CaptureHistoryRecord) -> some View {
+        Button("Show Details") { openDelivered(record) }
+        if record.relativeNotePath != nil {
+            Button("Reveal Note in Finder", systemImage: "folder") { reveal(record) }
+        }
+        Divider()
+        Button("Delete Capture Record", systemImage: "trash", role: .destructive) {
+            pendingDeletion = .capture(record)
+        }
+    }
+
+    private func showDetail(_ id: MacActivitySelection) {
+        selection = id
+        showsDetail = true
+    }
+
+    private func retryBusy(_ requestID: UUID) async {
+        if requestID == viewModel.draft.requestID {
+            if !viewModel.isSubmitting { await viewModel.submit() }
+            return
+        }
+        if let job = queue.actionableJobs.first(where: { $0.id == requestID }) {
+            await retry(job)
+            return
+        }
+        await viewModel.retryFailedInbox()
+        if viewModel.failedInboxCount == 0 {
+            // Nothing is queued for this entry any more (delivered or removed).
+            CaptureFileBusyMonitor.shared.clear(requestID: requestID)
         }
     }
 
@@ -163,7 +632,7 @@ struct MacActivityView: View {
     private var activityList: some View {
         List(selection: $selection) {
             if !nowItems.isEmpty {
-                Section("Now") {
+                Section {
                     ForEach(nowItems) { item in
                         MacActivityRow(
                             item: item,
@@ -175,20 +644,26 @@ struct MacActivityView: View {
                         .tag(item.id)
                         .contextMenu { contextMenu(for: item) }
                     }
+                } header: {
+                    MacSignalSectionHeader("Now")
                 }
             }
 
             if !recentItems.isEmpty {
-                Section("Recent") {
+                Section {
                     ForEach(recentItems) { item in
                         MacActivityRow(item: item)
                             .tag(item.id)
                             .contextMenu { contextMenu(for: item) }
                     }
+                } header: {
+                    MacSignalSectionHeader("Recent")
                 }
             }
         }
-        .listStyle(.inset(alternatesRowBackgrounds: true))
+        .listStyle(.inset)
+        .scrollContentBackground(.hidden)
+        .background(Geist.Palette.gray100)
         .overlay(alignment: .bottomTrailing) {
             if isRefreshing {
                 ProgressView()
@@ -346,9 +821,9 @@ struct MacActivityView: View {
             }
 
         case .failed where job.delivery == .recovery:
-            Menu("Retry with Preset", systemImage: "arrow.clockwise") {
+            Menu("Retry with Route", systemImage: "arrow.clockwise") {
                 if recoveryPresets.isEmpty {
-                    Text("No Enabled Capture Presets")
+                    Text("No Enabled Routes")
                 } else {
                     ForEach(recoveryPresets) { preset in
                         Button(preset.accessibilityName) {
@@ -566,7 +1041,7 @@ private enum MacActivityDeletion {
     var title: String {
         switch self {
         case .recording:
-            String(localized: "Delete Recording?")
+            String(localized: "Delete this recording?")
         case .transcript:
             String(localized: "Delete Transcript?")
         case .capture:
@@ -588,7 +1063,7 @@ private enum MacActivityDeletion {
     var message: String {
         switch self {
         case .recording:
-            String(localized: "This removes the queued recording and its retained audio. This action can’t be undone.")
+            String(localized: "The audio and any transcript are removed from this Mac. This can’t be undone.")
         case .transcript:
             String(localized: "This deletes the saved transcript and its Activity and Library record. Any delivered Markdown file stays in place.")
         case .capture:
@@ -697,18 +1172,18 @@ private enum MacActivityItem: Identifiable {
     }
 
     var statusColor: Color {
-        if needsAttention { return MacBrand.orangeText }
+        if needsAttention { return MacBrand.attention }
         switch self {
         case .recording(let job) where job.phase == .processing || job.phase == .finalizing:
             return MacBrand.orange
         case .recording(let job) where job.phase == .completed:
-            return MacBrand.complete
+            return MacBrand.success
         case .transcript(_, let delivery) where delivery?.outcome == .delivered:
-            return MacBrand.complete
+            return MacBrand.success
         case .capture(let delivery) where delivery.outcome == .delivered:
-            return MacBrand.complete
+            return MacBrand.success
         default:
-            return .secondary
+            return Geist.muted
         }
     }
 
@@ -749,30 +1224,31 @@ private struct MacActivityRow: View {
     var body: some View {
         HStack(spacing: 11) {
             Image(systemName: item.symbolName)
-                .font(.system(size: 15, weight: .medium))
+                .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(item.statusColor)
                 .frame(width: 28, height: 28)
-                .background(.quaternary, in: RoundedRectangle(cornerRadius: 7))
+                .background(Geist.well, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                 .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 3) {
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text(item.title)
-                        .font(.body.weight(.medium))
+                        .font(Geist.label())
+                        .foregroundStyle(Geist.text)
                         .lineLimit(1)
                     Spacer(minLength: 4)
                     if item.date != .distantFuture {
                         Text(item.date, format: .dateTime.hour().minute())
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .font(Geist.mono(size: 12, relativeTo: .caption))
+                            .foregroundStyle(Geist.muted)
                     }
                 }
 
                 HStack(spacing: 6) {
                     Text(item.subtitle)
-                        .font(.caption)
+                        .font(Geist.caption())
                         .foregroundStyle(
-                            item.needsAttention ? MacBrand.orangeText : Color.secondary
+                            item.needsAttention ? MacBrand.attention : Geist.muted
                         )
                         .lineLimit(1)
                     if isActive {
@@ -826,7 +1302,7 @@ private struct MacActivityRecordingDetail: View {
             .padding(28)
             .frame(maxWidth: .infinity)
         }
-        .background(Color(nsColor: .textBackgroundColor))
+        .background(Geist.bg)
     }
 
     private var header: some View {
@@ -834,19 +1310,19 @@ private struct MacActivityRecordingDetail: View {
             Image(systemName: job.activitySymbolName)
                 .font(.system(size: 30, weight: .medium))
                 .foregroundStyle(
-                    job.phase == .failed ? MacBrand.orangeText : MacBrand.orange
+                    job.phase == .failed ? MacBrand.attention : MacBrand.orange
                 )
                 .frame(width: 64, height: 64)
-                .background(.quaternary, in: RoundedRectangle(cornerRadius: 14))
+                .background(Geist.well, in: RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous))
                 .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 6) {
                 Text(job.activityTitle)
-                    .font(.largeTitle.weight(.semibold))
+                    .font(Geist.display(28))
                     .textSelection(.enabled)
                 Text("\(job.createdAt.formatted(date: .abbreviated, time: .shortened))  ·  \(job.duration.activityDuration)")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .font(Geist.mono(size: 12, relativeTo: .subheadline))
+                    .foregroundStyle(Geist.muted)
             }
 
             Spacer(minLength: 16)
@@ -860,7 +1336,7 @@ private struct MacActivityRecordingDetail: View {
                 Label(job.activityStatus, systemImage: job.activitySymbolName)
                     .font(.headline)
                     .foregroundStyle(
-                        job.phase == .failed ? MacBrand.orangeText : Color.primary
+                        job.phase == .failed ? MacBrand.attention : Color.primary
                     )
                 Spacer()
                 if queue.activeJobID == job.id,
@@ -883,12 +1359,14 @@ private struct MacActivityRecordingDetail: View {
                 Text(message)
                     .font(.callout)
                     .foregroundStyle(
-                        job.phase == .failed ? MacBrand.orangeText : Color.secondary
+                        job.phase == .failed ? MacBrand.attention : Color.secondary
                     )
             }
         }
-        .padding(16)
-        .background(.quaternary.opacity(0.45), in: RoundedRectangle(cornerRadius: 10))
+        .macSignalCard(
+            padding: 16,
+            border: job.phase == .failed ? MacBrand.attentionBorder : Geist.border
+        )
     }
 
     private var metadata: some View {
@@ -953,9 +1431,9 @@ private struct MacActivityRecordingDetail: View {
             .help("Process Now")
 
         case .failed where job.delivery == .recovery:
-            Menu("Retry with Preset", systemImage: "arrow.clockwise") {
+            Menu("Retry with Route", systemImage: "arrow.clockwise") {
                 if recoveryPresets.isEmpty {
-                    Text("No Enabled Capture Presets")
+                    Text("No Enabled Routes")
                 } else {
                     ForEach(recoveryPresets) { preset in
                         Button(preset.accessibilityName) {
@@ -1011,14 +1489,14 @@ private struct MacActivityTranscriptDetail: View {
                         .font(.system(size: 30, weight: .medium))
                         .foregroundStyle(MacBrand.orange)
                         .frame(width: 64, height: 64)
-                        .background(.quaternary, in: RoundedRectangle(cornerRadius: 14))
+                        .background(Geist.well, in: RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous))
                     VStack(alignment: .leading, spacing: 6) {
                         Text(transcript.activityTitle)
-                            .font(.largeTitle.weight(.semibold))
+                            .font(Geist.display(28))
                             .textSelection(.enabled)
                         Text("\(transcript.date.formatted(date: .long, time: .shortened))  ·  \(transcript.duration.activityDuration)")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .font(Geist.mono(size: 12, relativeTo: .subheadline))
+                            .foregroundStyle(Geist.muted)
                     }
                     Spacer(minLength: 16)
                     Button("Copy", systemImage: "doc.on.doc") { onCopy(primaryText) }
@@ -1062,7 +1540,7 @@ private struct MacActivityTranscriptDetail: View {
             .padding(28)
             .frame(maxWidth: .infinity)
         }
-        .background(Color(nsColor: .textBackgroundColor))
+        .background(Geist.bg)
     }
 
     private var transcriptMetadata: some View {
@@ -1104,14 +1582,14 @@ private struct MacActivityCaptureDetail: View {
                         .font(.system(size: 28, weight: .medium))
                         .foregroundStyle(
                             record.outcome == .delivered
-                                ? MacBrand.complete
-                                : MacBrand.orangeText
+                                ? MacBrand.success
+                                : MacBrand.attention
                         )
                         .frame(width: 64, height: 64)
-                        .background(.quaternary, in: RoundedRectangle(cornerRadius: 14))
+                        .background(Geist.well, in: RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous))
                     VStack(alignment: .leading, spacing: 6) {
                         Text(record.destinationName)
-                            .font(.largeTitle.weight(.semibold))
+                            .font(Geist.display(28))
                             .textSelection(.enabled)
                         Label(
                             record.outcome == .delivered ? "Delivered" : "Delivery Failed",
@@ -1119,10 +1597,11 @@ private struct MacActivityCaptureDetail: View {
                                 ? "checkmark.circle.fill"
                                 : "exclamationmark.triangle.fill"
                         )
+                        .font(Geist.label())
                         .foregroundStyle(
                             record.outcome == .delivered
-                                ? Color.secondary
-                                : MacBrand.orangeText
+                                ? MacBrand.success
+                                : MacBrand.attention
                         )
                     }
                     Spacer(minLength: 16)
@@ -1141,7 +1620,7 @@ private struct MacActivityCaptureDetail: View {
             .padding(28)
             .frame(maxWidth: .infinity)
         }
-        .background(Color(nsColor: .textBackgroundColor))
+        .background(Geist.bg)
     }
 }
 
@@ -1162,7 +1641,7 @@ private struct MacActivityDeliveryMetadata: View {
                     .foregroundStyle(
                         record.outcome == .delivered
                             ? Color.secondary
-                            : MacBrand.orangeText
+                            : MacBrand.attention
                     )
                 }
                 Divider()
@@ -1175,7 +1654,7 @@ private struct MacActivityDeliveryMetadata: View {
                 }
                 if let preset = record.voxName, !preset.isEmpty {
                     Divider()
-                    LabeledContent("Capture Preset", value: preset)
+                    LabeledContent("Route", value: preset)
                 }
                 if let path = record.relativeNotePath {
                     Divider()
@@ -1191,7 +1670,7 @@ private struct MacActivityDeliveryMetadata: View {
                     Divider()
                     LabeledContent("Failure") {
                         Text(failure.displayName)
-                            .foregroundStyle(MacBrand.orangeText)
+                            .foregroundStyle(MacBrand.attention)
                     }
                 }
             }
@@ -1207,7 +1686,7 @@ private struct MacActivityInboxDetail: View {
     var body: some View {
         ContentUnavailableView {
             Label("Captures Need Attention", systemImage: "exclamationmark.triangle.fill")
-                .foregroundStyle(MacBrand.orangeText)
+                .foregroundStyle(MacBrand.attention)
         } description: {
             Text(
                 count == 1

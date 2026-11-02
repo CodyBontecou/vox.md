@@ -13,11 +13,11 @@ struct CaptureRoutePickerView: View {
         NavigationStack {
             List {
                 if let preset = viewModel.selectedVoxProfile {
-                    Section("Capture Preset") {
-                        LabeledContent("Preset") {
+                    Section("Route") {
+                        LabeledContent("Route") {
                             HStack(spacing: 6) {
                                 CapturePresetIconView(symbolName: preset.symbolName, emoji: preset.emoji)
-                                Text(preset.visibleName ?? String(localized: "Icon-only preset"))
+                                Text(preset.visibleName ?? String(localized: "Icon-only route"))
                                     .foregroundStyle(preset.visibleName == nil ? .secondary : .primary)
                             }
                             .accessibilityElement(children: .ignore)
@@ -28,14 +28,14 @@ struct CaptureRoutePickerView: View {
                             Button {
                                 isEditingPresetDestination = true
                             } label: {
-                                Label("Edit Preset Destination", systemImage: "square.and.pencil")
+                                Label("Edit Route Destination", systemImage: "square.and.pencil")
                             }
                             .accessibilityIdentifier("capture_preset_destination_edit")
                         } else if viewModel.selectedDestination != nil {
                             Button {
                                 isEditingPresetDestination = true
                             } label: {
-                                Label("Set Up Preset Destination", systemImage: "folder.badge.plus")
+                                Label("Set Up Route Destination", systemImage: "folder.badge.plus")
                             }
                             .accessibilityIdentifier("capture_preset_destination_edit")
                         }
@@ -45,7 +45,7 @@ struct CaptureRoutePickerView: View {
                 if viewModel.selectedDestination != nil {
                     Section("Only for this capture") {
                         Picker("Placement", selection: placementBinding) {
-                            Text("Preset Default").tag(PlacementChoice.default)
+                            Text("Route Default").tag(PlacementChoice.default)
                             Text("Top").tag(PlacementChoice.top)
                             Text("Bottom").tag(PlacementChoice.bottom)
                         }
@@ -54,7 +54,7 @@ struct CaptureRoutePickerView: View {
                             get: { viewModel.draft.entryTemplateID },
                             set: { viewModel.setEntryTemplateOverride($0) }
                         )) {
-                            Text("Preset Default").tag(UUID?.none)
+                            Text("Route Default").tag(UUID?.none)
                             ForEach(viewModel.entryTemplates) { template in
                                 Text(template.name).tag(Optional(template.id))
                             }
@@ -73,7 +73,7 @@ struct CaptureRoutePickerView: View {
                             Button {
                                 viewModel.useVoxRouteDefaults()
                             } label: {
-                                Label("Use Preset defaults", systemImage: "arrow.uturn.backward")
+                                Label("Use Route defaults", systemImage: "arrow.uturn.backward")
                             }
                         }
                     }
@@ -116,7 +116,7 @@ struct CaptureRoutePickerView: View {
                             Text("Destination Not Configured")
                                 .font(.headline)
                                 .multilineTextAlignment(.center)
-                            Text("Choose a vault or folder and define where this Capture Preset writes Markdown.")
+                            Text("Choose a vault or folder and define where this Route writes Markdown.")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                                 .multilineTextAlignment(.center)
@@ -155,7 +155,7 @@ struct CaptureRoutePickerView: View {
                     CaptureDestinationEditorView(
                         existing: viewModel.selectedPresetDestination,
                         templates: viewModel.entryTemplates,
-                        fixedName: viewModel.selectedVoxProfile.map { $0.visibleName ?? String(localized: "Icon-only preset") }
+                        fixedName: viewModel.selectedVoxProfile.map { $0.visibleName ?? String(localized: "Icon-only route") }
                     ) { destination in
                         try await viewModel.saveSelectedPresetDestination(destination)
                     }

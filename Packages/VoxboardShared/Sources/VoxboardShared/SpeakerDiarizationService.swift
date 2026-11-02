@@ -182,6 +182,42 @@ public actor SpeakerDiarizationService {
         }
     }
 
+    /// Best-effort speaker spans for a snapshot of an in-progress recording.
+    /// Speakers are numbered by first appearance so labels stay stable while
+    /// the same growing recording is re-analyzed.
+    public func liveSpeakerSpans(audioURL: URL) async throws -> [LiveSpeakerSpan] {
+        try await processingGate.withExclusiveAccess { [self] in
+            try await self.liveSpeakerSpansExclusively(audioURL: audioURL)
+        }
+    }
+
+    private func liveSpeakerSpansExclusively(audioURL: URL) async throws -> [LiveSpeakerSpan] {
+        try Task.checkCancellation()
+        guard let baseDirectory = modelsDirectoryProvider() else {
+            throw SpeakerDiarizationError.storageUnavailable
+        }
+        let modelDirectory = baseDirectory
+            .appendingPathComponent("SpeakerDiarization", isDirectory: true)
+        try? FileManager.default.createDirectory(at: modelDirectory, withIntermediateDirectories: true)
+        if !modelsArePrepared {
+            try await engine.prepareModels(directory: modelDirectory)
+            modelsArePrepared = true
+        }
+        try Task.checkCancellation()
+        let segments = try await engine.process(audioURL)
+        var order: [String: Int] = [:]
+        return segments.sorted { $0.startTime < $1.startTime }.map { segment in
+            let index: Int
+            if let existing = order[segment.speakerID] {
+                index = existing
+            } else {
+                index = order.count
+                order[segment.speakerID] = index
+            }
+            return LiveSpeakerSpan(speaker: index, startTime: segment.startTime, endTime: segment.endTime)
+        }
+    }
+
     public func diarize(
         audioURL: URL,
         transcriptText: String,
@@ -266,6 +302,19 @@ public actor SpeakerDiarizationService {
         KeyboardDebugLog.shared.log(
             "[SpeakerDiarizationService] \(stage) failed for \(audioURL.lastPathComponent): \(String(reflecting: error))"
         )
+    }
+}
+
+/// A speaker span from the incremental pass over an in-progress recording.
+public struct LiveSpeakerSpan: Equatable, Sendable {
+    public let speaker: Int
+    public let startTime: TimeInterval
+    public let endTime: TimeInterval
+
+    public init(speaker: Int, startTime: TimeInterval, endTime: TimeInterval) {
+        self.speaker = speaker
+        self.startTime = startTime
+        self.endTime = endTime
     }
 }
 

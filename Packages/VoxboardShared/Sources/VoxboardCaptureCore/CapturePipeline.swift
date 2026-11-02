@@ -73,19 +73,24 @@ public struct CaptureReceipt: Equatable, Sendable {
     public var noteURL: URL
     public var attachmentURLs: [URL]
     public var writeReceipt: CaptureWriteReceipt
+    /// The entry Markdown exactly as rendered for this delivery (prefix,
+    /// entry and suffix). Nil for idempotent replays that wrote nothing.
+    public var renderedEntry: String?
 
     public init(
         requestID: UUID,
         destinationID: UUID,
         noteURL: URL,
         attachmentURLs: [URL],
-        writeReceipt: CaptureWriteReceipt
+        writeReceipt: CaptureWriteReceipt,
+        renderedEntry: String? = nil
     ) {
         self.requestID = requestID
         self.destinationID = destinationID
         self.noteURL = noteURL
         self.attachmentURLs = attachmentURLs
         self.writeReceipt = writeReceipt
+        self.renderedEntry = renderedEntry
     }
 }
 
@@ -221,6 +226,10 @@ public actor CapturePipeline {
             destination: effectiveDestination,
             rootURL: rootURL
         )
+        if effectiveDestination.attachmentsFolderName == CaptureDestination.besideNoteAttachmentsFolder {
+            // "Beside the note": attachments land in the note's own folder.
+            effectiveDestination.attachmentsFolderName = (relativeNotePath as NSString).deletingLastPathComponent
+        }
         let noteURL = try containedNoteURL(relativePath: relativeNotePath, root: rootURL)
         let vaultTemplate = try CaptureVaultMarkdownTemplateLoader.load(
             relativePath: effectiveDestination.markdownTemplatePath,
@@ -235,11 +244,14 @@ public actor CapturePipeline {
         )
 
         do {
-            let entry = try renderer.render(
+            var entry = try renderer.render(
                 request,
                 for: effectiveDestination,
                 attachmentPaths: attachments.attachmentPaths
             )
+            if vaultTemplate == nil {
+                entry = CaptureEntryTemplateRenderer.entry(entry, under: effectiveDestination.entryPrefix, for: request)
+            }
             let renderedPrefix: String
             let renderedSuffix: String
             if let vaultTemplate {
@@ -267,12 +279,22 @@ public actor CapturePipeline {
                 relativeNotePath: relativeNotePath
             )
             let writeReceipt = try await writer.write(mutation, to: noteURL)
+            let renderedEntry = (renderedPrefix + entry + renderedSuffix)
+                .trimmingCharacters(in: .newlines)
+            // "Write a new note instead" puts the entry in a sibling note in
+            // the same folder; report that note so history and Library point
+            // at the file that was actually written.
+            let writtenName = writeReceipt.fileURL.lastPathComponent
+            let deliveredNoteURL = writtenName == noteURL.lastPathComponent
+                ? noteURL
+                : noteURL.deletingLastPathComponent().appendingPathComponent(writtenName)
             return CaptureReceipt(
                 requestID: request.id,
                 destinationID: destination.id,
-                noteURL: noteURL,
+                noteURL: deliveredNoteURL,
                 attachmentURLs: attachments.attachmentURLs,
-                writeReceipt: writeReceipt
+                writeReceipt: writeReceipt,
+                renderedEntry: renderedEntry.isEmpty ? nil : renderedEntry
             )
         } catch {
             attachments.rollback(fileManager: fileManager)
@@ -359,6 +381,36 @@ public actor CapturePipeline {
         } catch {
             throw CapturePipelineError.unsafeNotePath(relativePath)
         }
+    }
+}
+
+extension CapturePipeline {
+    /// Renders the entry Markdown a request would write, without touching the
+    /// vault: no attachments are copied and the vault template file is not
+    /// read. Used by recovery UI ("Copy Markdown") for requests that could not
+    /// be delivered. Attachment embeds use the paths the delivery would plan.
+    nonisolated public func previewEntryMarkdown(
+        for request: CaptureRequest,
+        destination: CaptureDestination
+    ) throws -> String {
+        var effectiveDestination = destination
+        if let folderOverride = request.attachmentsFolderNameOverride {
+            effectiveDestination.attachmentsFolderName = folderOverride
+        }
+        if effectiveDestination.attachmentsFolderName == CaptureDestination.besideNoteAttachmentsFolder {
+            let notePath = request.relativeNotePathOverride
+                ?? (try? pathPlanner.relativePath(for: request, destination: effectiveDestination))
+            effectiveDestination.attachmentsFolderName = notePath
+                .map { ($0 as NSString).deletingLastPathComponent } ?? ""
+        }
+        let entry = CaptureEntryTemplateRenderer.entry(
+            try renderer.render(request, for: effectiveDestination),
+            under: effectiveDestination.entryPrefix,
+            for: request
+        )
+        let prefix = templateRenderer.render(effectiveDestination.entryPrefix, for: request)
+        let suffix = templateRenderer.render(effectiveDestination.entrySuffix, for: request)
+        return (prefix + entry + suffix).trimmingCharacters(in: .newlines)
     }
 }
 

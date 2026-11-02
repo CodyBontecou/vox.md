@@ -290,6 +290,40 @@ public actor CaptureInbox {
         }
     }
 
+    /// Applies a foreground recovery decision (for example a heading
+    /// override or a different route) to one failed request and returns it to
+    /// the pending queue. The request ID is preserved so delivery stays
+    /// idempotent. Returns false when the request is no longer failed.
+    @discardableResult
+    public func reviseFailedRequest(
+        requestID: UUID,
+        _ mutation: (inout CaptureRequest) -> Void
+    ) throws -> Bool {
+        try coordinator.coordinateWriting(at: rootDirectoryURL) { _ in
+            try ensureDirectories()
+            let failedURL = itemURL(for: requestID, state: .failed)
+            guard fileManager.fileExists(atPath: failedURL.path) else { return false }
+            var request = try decoder.decode(CaptureRequest.self, from: Data(contentsOf: failedURL))
+            mutation(&request)
+            request.id = requestID
+            let pendingURL = itemURL(for: requestID, state: .pending)
+            try encoder.encode(request).write(to: pendingURL, options: .atomic)
+            try fileManager.removeItem(at: failedURL)
+            return true
+        }
+    }
+
+    /// Loads failed requests for foreground recovery UI, oldest first.
+    /// Callers must not copy the payloads into history or Activity.
+    public func failedRequests() throws -> [CaptureRequest] {
+        try coordinator.coordinateWriting(at: rootDirectoryURL) { _ in
+            try ensureDirectories()
+            return try itemURLs(in: .failed).compactMap { url in
+                try? decoder.decode(CaptureRequest.self, from: Data(contentsOf: url))
+            }
+        }
+    }
+
     @discardableResult
     public func retryFailed(requestID: UUID) throws -> Bool {
         try coordinator.coordinateWriting(at: rootDirectoryURL) { _ in

@@ -1,0 +1,25 @@
+{
+  "data" : {
+    "type" : "reviewSubmissions",
+    "id" : "cfc0848f-82ac-48f2-a502-0418c3ec720f",
+    "attributes" : {
+      "platform" : "MAC_OS",
+      "submittedDate" : null,
+      "state" : "READY_FOR_REVIEW"
+    },
+    "relationships" : {
+      "items" : {
+        "links" : {
+          "self" : "https://api.appstoreconnect.apple.com/v1/reviewSubmissions/cfc0848f-82ac-48f2-a502-0418c3ec720f/relationships/items",
+          "related" : "https://api.appstoreconnect.apple.com/v1/reviewSubmissions/cfc0848f-82ac-48f2-a502-0418c3ec720f/items"
+        }
+      }
+    },
+    "links" : {
+      "self" : "https://api.appstoreconnect.apple.com/v1/reviewSubmissions/cfc0848f-82ac-48f2-a502-0418c3ec720f"
+    }
+  },
+  "links" : {
+    "self" : "https://api.appstoreconnect.apple.com/v1/reviewSubmissions/cfc0848f-82ac-48f2-a502-0418c3ec720f"
+  }
+}

@@ -32,11 +32,11 @@ public enum TranscriptConfiguredExportError: Error, Equatable, LocalizedError, S
         case .missingDestination:
             return "File export is enabled, but no destination folder is selected."
         case .invalidDestinationBookmark:
-            return "Vox.md can no longer access the selected export folder. Choose it again in the Capture Preset settings."
+            return "Vox.md can no longer access the selected export folder. Choose it again in the Route settings."
         case .missingTemplate:
             return "Markdown template export is enabled, but no template is selected."
         case .invalidTemplateBookmark:
-            return "Vox.md can no longer access the selected Markdown template. Choose it again in the Capture Preset settings."
+            return "Vox.md can no longer access the selected Markdown template. Choose it again in the Route settings."
         case .subfolderCreationFailed(let message):
             return "Vox.md could not create the export subfolder: \(message)"
         case .writeFailed(let message):

@@ -53,6 +53,11 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
     public var captureDestinationID: UUID?
     public var captureEntryTemplateID: UUID?
     public var capturePlacementOverride: CapturePlacement?
+    /// Optional per-route transcription model (`TranscriptionBackendID` or a
+    /// `WhisperModelInfo.id`). Nil follows the app-wide model selection. A
+    /// missing or uninstalled override also falls back to the app-wide choice;
+    /// see `CapturePresetStore.resolvedTranscriptionModelID(flowID:defaults:)`.
+    public var transcriptionModelID: String?
 
     public init(
         id: String,
@@ -80,7 +85,8 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         attachmentsFolderName: String = "attachments",
         captureDestinationID: UUID? = nil,
         captureEntryTemplateID: UUID? = nil,
-        capturePlacementOverride: CapturePlacement? = nil
+        capturePlacementOverride: CapturePlacement? = nil,
+        transcriptionModelID: String? = nil
     ) {
         self.id = id
         self.name = name
@@ -108,6 +114,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         self.captureDestinationID = captureDestinationID
         self.captureEntryTemplateID = captureEntryTemplateID
         self.capturePlacementOverride = capturePlacementOverride
+        self.transcriptionModelID = transcriptionModelID
     }
 
     public var visibleName: String? {
@@ -119,11 +126,11 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
     }
 
     public var accessibilityName: String {
-        visibleName ?? String(localized: "Icon-only Capture Preset", bundle: .main)
+        visibleName ?? String(localized: "Icon-only Route", bundle: .main)
     }
 
     public var displayName: String {
-        visibleName ?? String(localized: "Untitled Preset", bundle: .main)
+        visibleName ?? String(localized: "Untitled Route", bundle: .main)
     }
 
     public var displayCapturePrompt: String {
@@ -219,6 +226,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         case captureDestinationID
         case captureEntryTemplateID
         case capturePlacementOverride
+        case transcriptionModelID
     }
 
     public init(from decoder: Decoder) throws {
@@ -253,7 +261,8 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
             attachmentsFolderName: try container.decodeIfPresent(String.self, forKey: .attachmentsFolderName) ?? "attachments",
             captureDestinationID: try container.decodeIfPresent(UUID.self, forKey: .captureDestinationID),
             captureEntryTemplateID: try container.decodeIfPresent(UUID.self, forKey: .captureEntryTemplateID),
-            capturePlacementOverride: try container.decodeIfPresent(CapturePlacement.self, forKey: .capturePlacementOverride)
+            capturePlacementOverride: try container.decodeIfPresent(CapturePlacement.self, forKey: .capturePlacementOverride),
+            transcriptionModelID: try container.decodeIfPresent(String.self, forKey: .transcriptionModelID)
         )
     }
 
@@ -287,6 +296,7 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         try container.encodeIfPresent(captureDestinationID, forKey: .captureDestinationID)
         try container.encodeIfPresent(captureEntryTemplateID, forKey: .captureEntryTemplateID)
         try container.encodeIfPresent(capturePlacementOverride, forKey: .capturePlacementOverride)
+        try container.encodeIfPresent(transcriptionModelID, forKey: .transcriptionModelID)
     }
 }
 
@@ -561,7 +571,7 @@ public enum CapturePresetStore {
     public static func makeCustomFlow() -> CapturePreset {
         CapturePreset(
             id: "custom-\(UUID().uuidString.lowercased())",
-            name: "Custom Preset",
+            name: "Custom Route",
             symbolName: "slider.horizontal.3",
             isBuiltIn: false,
             kind: .custom,
@@ -877,9 +887,23 @@ public enum CapturePresetStore {
         }
     }
 
+    /// Directory for the cross-process preset write lock. Nil uses the App
+    /// Group capture directory. Tests inject a temporary directory so preset
+    /// saves never touch (or depend on) the real App Group container.
+    public static var writeLockDirectoryOverride: URL?
+
     private static var presetWriteLockURL: URL {
-        (AppConstants.captureDirectoryURL ?? FileManager.default.temporaryDirectory)
-            .appendingPathComponent("capture-preset-writes.lock", isDirectory: false)
+        let lockName = "capture-preset-writes.lock"
+        if let writeLockDirectoryOverride {
+            return writeLockDirectoryOverride.appendingPathComponent(lockName, isDirectory: false)
+        }
+        if let captureDirectory = AppConstants.captureDirectoryURL,
+           (try? FileManager.default.createDirectory(at: captureDirectory, withIntermediateDirectories: true)) != nil {
+            return captureDirectory.appendingPathComponent(lockName, isDirectory: false)
+        }
+        // No writable App Group (unsigned builds, sandboxed test runners):
+        // a process-local lock is still better than silently dropping saves.
+        return FileManager.default.temporaryDirectory.appendingPathComponent(lockName, isDirectory: false)
     }
 
     fileprivate static func withPresetWriteLock(
@@ -1008,7 +1032,7 @@ public enum CapturePresetStore {
                     sourceRouteID: requestedID
                 )
             }
-            owned.name = presets[index].visibleName ?? String(localized: "Icon-only preset", bundle: .main)
+            owned.name = presets[index].visibleName ?? String(localized: "Icon-only route", bundle: .main)
             if let placement = presets[index].capturePlacementOverride {
                 owned.placement = placement
             }
@@ -1308,6 +1332,23 @@ public enum CapturePresetStore {
     public static func flow(id: String?, defaults: UserDefaults? = AppConstants.sharedDefaults) -> CapturePreset? {
         guard let id else { return nil }
         return loadFlows(defaults: defaults).first(where: { $0.id == id })
+    }
+
+    /// The model a capture made with `flowID` should transcribe with: the
+    /// route's override when it names Automatic or an installed local model,
+    /// otherwise the app-wide selection.
+    public static func resolvedTranscriptionModelID(
+        flowID: String?,
+        defaults: UserDefaults? = AppConstants.sharedDefaults
+    ) -> String {
+        let global = defaults?.string(forKey: AppConstants.selectedModelKey)
+            ?? AppConstants.defaultTranscriptionBackendID
+        guard let raw = flow(id: flowID, defaults: defaults)?.transcriptionModelID?
+            .trimmingCharacters(in: .whitespacesAndNewlines), !raw.isEmpty else { return global }
+        if raw == TranscriptionBackendID.automatic { return raw }
+        guard let model = WhisperModelInfo.availableModels.first(where: { $0.id == raw }),
+              model.installedModelAccess(defaults: defaults) != nil else { return global }
+        return raw
     }
 
     public static func selectFlow(id: String, defaults: UserDefaults? = AppConstants.sharedDefaults) {

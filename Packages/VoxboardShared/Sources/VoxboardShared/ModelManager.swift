@@ -67,6 +67,7 @@ public final class ModelManager {
             settingsDefaults?.set(selectedModelId, forKey: AppConstants.selectedModelKey)
             if WhisperModelInfo.availableModels.contains(where: { $0.id == selectedModelId }) {
                 settingsDefaults?.set(selectedModelId, forKey: AppConstants.selectedFallbackModelKey)
+                fallbackSelectionRevision &+= 1
             }
             ensureSelectedLanguageIsSupported()
         }
@@ -87,7 +88,21 @@ public final class ModelManager {
     /// Last explicitly selected local model. Automatic uses it only when the
     /// system recognizer is unavailable or fails before producing a transcript.
     public var preferredFallbackModelID: String? {
-        settingsDefaults?.string(forKey: AppConstants.selectedFallbackModelKey)
+        _ = fallbackSelectionRevision
+        return settingsDefaults?.string(forKey: AppConstants.selectedFallbackModelKey)
+    }
+
+    /// Bumped when the fallback role changes so SwiftUI re-reads
+    /// `preferredFallbackModelID` from the shared defaults.
+    public private(set) var fallbackSelectionRevision = 0
+
+    /// Assigns the Automatic fallback role to an installed local model without
+    /// leaving Automatic. Selecting a model explicitly still also makes it the
+    /// fallback, matching earlier behavior.
+    public func setFallbackModel(_ model: WhisperModelInfo) {
+        guard WhisperModelInfo.availableModels.contains(where: { $0.id == model.id }) else { return }
+        settingsDefaults?.set(model.id, forKey: AppConstants.selectedFallbackModelKey)
+        fallbackSelectionRevision &+= 1
     }
 
     public func selectAutomatic() {
@@ -710,6 +725,7 @@ public final class ModelManager {
 
         if preferredFallbackModelID == model.id {
             settingsDefaults?.removeObject(forKey: AppConstants.selectedFallbackModelKey)
+            fallbackSelectionRevision &+= 1
         }
         if selectedModelId == model.id {
             selectedModelId = AppConstants.defaultTranscriptionBackendID

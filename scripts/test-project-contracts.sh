@@ -19,6 +19,7 @@ python3 - "$ROOT" "$PROJECT" <<'PY'
 from __future__ import annotations
 
 from html.parser import HTMLParser
+import ast
 from pathlib import Path
 import json
 import os
@@ -33,13 +34,93 @@ project_path = Path(sys.argv[2])
 project = project_path.read_text()
 errors: list[str] = []
 
+# Parse the project as an OpenStep property list rather than matching Xcode's
+# serialization: Xcode (and other tools) may quote keys and values or reorder
+# fields such as `isa`, and the contracts below must hold either way.
+_PBX_TOKEN = re.compile(r'''\s+|/\*.*?\*/|//[^\n]*|"((?:[^"\\]|\\.)*)"|([A-Za-z0-9_$/:.\-+]+)|([{}()=;,])''', re.S)
+def parse_pbxproj(text):
+    tokens = []
+    for match in _PBX_TOKEN.finditer(text):
+        if match.group(1) is not None:
+            tokens.append(('s', re.sub(r'\\(.)', lambda m: {'n': '\n', 't': '\t'}.get(m.group(1), m.group(1)), match.group(1))))
+        elif match.group(2) is not None:
+            tokens.append(('s', match.group(2)))
+        elif match.group(3) is not None:
+            tokens.append(('p', match.group(3)))
+    consumed = sum(len(m.group(0)) for m in _PBX_TOKEN.finditer(text))
+    if consumed != len(text):
+        raise ValueError('pbxproj contains unrecognized characters')
+    position = 0
+    def value():
+        nonlocal position
+        kind, token = tokens[position]; position += 1
+        if kind == 's':
+            return token
+        if token == '{':
+            result = {}
+            while tokens[position] != ('p', '}'):
+                key = value()
+                if not isinstance(key, str) or tokens[position] != ('p', '='):
+                    raise ValueError(f'pbxproj dictionary key expected near token {position}')
+                position += 1
+                result[key] = value()
+                if tokens[position] != ('p', ';'):
+                    raise ValueError(f'pbxproj ";" expected near token {position}')
+                position += 1
+            position += 1
+            return result
+        if token == '(':
+            result = []
+            while tokens[position] != ('p', ')'):
+                result.append(value())
+                if tokens[position] == ('p', ','):
+                    position += 1
+            position += 1
+            return result
+        raise ValueError(f'unexpected pbxproj token {token!r}')
+    parsed = value()
+    if position != len(tokens):
+        raise ValueError('trailing pbxproj tokens')
+    return parsed
+
+
+def pbx_render(value) -> str:
+    if isinstance(value, list):
+        return '(\n' + ''.join(f'{pbx_render(item)},\n' for item in value) + ')'
+    if isinstance(value, dict):
+        return '{' + ''.join(f'{pbx_render(k)} = {pbx_render(v)}; ' for k, v in value.items()) + '}'
+    if re.fullmatch(r'[A-Za-z0-9_$/.]+', value):
+        return value
+    return '"' + value.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n') + '"'
+
+
+def pbx_settings_text(settings: dict) -> str:
+    """Canonical one-setting-per-line text, e.g. `IPHONEOS_DEPLOYMENT_TARGET = 17.6;`."""
+    return '\n' + '\n'.join(f'{key} = {pbx_render(value)};' for key, value in settings.items()) + '\n'
+
+
+try:
+    project_objects = parse_pbxproj(project)['objects']
+except (ValueError, IndexError, KeyError, TypeError) as error:
+    errors.append(f'Xcode project cannot be parsed: {error}')
+    project_objects = {}
+build_configurations = [
+    (item.get('name'), item.get('buildSettings', {}))
+    for item in project_objects.values()
+    if isinstance(item, dict) and item.get('isa') == 'XCBuildConfiguration'
+]
+
 purchase_source = (
     root / 'Packages/VoxboardShared/Sources/VoxboardShared/PurchaseAccess.swift'
 ).read_text()
 storekit_config = json.loads((root / 'Voxboard/Voxboard.storekit').read_text())
+# Hard paywall: lifetime non-consumables stay valid beside one Apple subscription
+# group of weekly/yearly Individual and Family plans with an eligible 7-day trial.
+if storekit_config.get('version') != {'major': 3, 'minor': 0} or 'nonConsumableProducts' in storekit_config:
+    errors.append('Voxboard.storekit must use the StoreKit configuration v3 product layout')
 storekit_products = {
     product['productID']: product
-    for product in storekit_config.get('nonConsumableProducts', [])
+    for product in storekit_config.get('products', [])
 }
 expected_purchase_products = {
     'bontecou.Voxboard.unlock': False,
@@ -48,18 +129,117 @@ expected_purchase_products = {
 }
 if set(storekit_products) != set(expected_purchase_products):
     errors.append(
-        f'StoreKit product IDs are {sorted(storekit_products)}, '
+        f'StoreKit lifetime product IDs are {sorted(storekit_products)}, '
         f'expected {sorted(expected_purchase_products)}'
     )
-for product_id, family_sharable in expected_purchase_products.items():
+for product_id, family_shareable in expected_purchase_products.items():
     if product_id not in purchase_source:
         errors.append(f'PurchaseAccess does not recognize {product_id}')
     product = storekit_products.get(product_id)
-    if product is not None and product.get('familySharable') is not family_sharable:
+    if product is None:
+        continue
+    if product.get('type') != 'NonConsumable':
+        errors.append(f'{product_id} must remain a one-time NonConsumable purchase')
+    if product.get('familyShareable') is not family_shareable:
         errors.append(
-            f'{product_id} familySharable={product.get("familySharable")}, '
-            f'expected {family_sharable}'
+            f'{product_id} familyShareable={product.get("familyShareable")}, '
+            f'expected {family_shareable}'
         )
+if storekit_config.get('nonRenewingSubscriptions'):
+    errors.append('StoreKit must not configure non-renewing subscriptions')
+# The App Store Connect staging script is the source of truth for plan prices.
+staged_subscription_products = {}
+staged_source = (root / 'scripts/prepare-vox-subscriptions.py').read_text()
+staged_match = re.search(r'^PRODUCTS = (\{.*?^\})', staged_source, flags=re.M | re.S)
+if staged_match is None:
+    errors.append('staged subscription policy PRODUCTS table is missing')
+else:
+    staged_subscription_products = {
+        product_id: (price, name)
+        for _, product_id, price, name in ast.literal_eval(staged_match.group(1)).values()
+    }
+subscription_groups = storekit_config.get('subscriptionGroups', [])
+if len(subscription_groups) != 1:
+    errors.append(f'StoreKit must configure exactly one subscription group, found {len(subscription_groups)}')
+storekit_subscriptions = {
+    subscription['productID']: (group, subscription)
+    for group in subscription_groups
+    for subscription in group.get('subscriptions', [])
+}
+expected_subscriptions = {
+    'bontecou.Voxboard.individual.weekly': ('P1W', False),
+    'bontecou.Voxboard.individual.yearly': ('P1Y', False),
+    'bontecou.Voxboard.family.weekly': ('P1W', True),
+    'bontecou.Voxboard.family.yearly': ('P1Y', True),
+}
+if set(storekit_subscriptions) != set(expected_subscriptions) or set(staged_subscription_products) != set(expected_subscriptions):
+    errors.append(
+        f'StoreKit subscriptions {sorted(storekit_subscriptions)} and staged products '
+        f'{sorted(staged_subscription_products)} must both equal {sorted(expected_subscriptions)}'
+    )
+for product_id, (period, family_shareable) in expected_subscriptions.items():
+    if product_id not in purchase_source:
+        errors.append(f'PurchaseAccess does not recognize {product_id}')
+    group, subscription = storekit_subscriptions.get(product_id, (None, None))
+    if subscription is None:
+        continue
+    staged_price, staged_name = staged_subscription_products.get(product_id, (None, None))
+    if subscription.get('type') != 'RecurringSubscription' or subscription.get('recurringSubscriptionPeriod') != period:
+        errors.append(f'{product_id} must auto-renew every {period}')
+    if subscription.get('familyShareable') is not family_shareable:
+        errors.append(f'{product_id} familyShareable must be {family_shareable}')
+    if subscription.get('subscriptionGroupID') != group.get('id'):
+        errors.append(f'{product_id} must belong to its single shared subscription group')
+    if subscription.get('displayPrice') != staged_price or subscription.get('referenceName') != staged_name:
+        errors.append(f'{product_id} local StoreKit price/name differs from the staged subscription policy')
+    if subscription.get('introductoryOffer') != {
+        'internalID': subscription.get('internalID', '') + '-trial',
+        'numberOfPeriods': 1,
+        'paymentMode': 'free',
+        'subscriptionPeriod': 'P1W',
+    }:
+        errors.append(f'{product_id} must offer exactly one free 7-day introductory trial')
+    if subscription.get('groupNumber') != (1 if family_shareable else 2):
+        errors.append(f'{product_id} must rank Family above Individual within the subscription group')
+
+usage_tracker_source = (
+    root / 'Packages/VoxboardShared/Sources/VoxboardShared/UsageTracker.swift'
+).read_text()
+for required in [
+    'public static let freeMinutesLimit: Double = 0',
+    'public static let freeCaptureLimit: Int = 0',
+    'guard !product.isSubscription else { return }',
+]:
+    if required not in usage_tracker_source:
+        errors.append(f'hard paywall access policy is missing {required}')
+for pattern, label in [
+    (r'public var isAtLimit: Bool \{\s*!hasUnlocked\s*\}', 'transcription'),
+    (r'public var isCaptureAtLimit: Bool \{\s*!hasUnlocked\s*\}', 'Capture'),
+]:
+    if not re.search(pattern, usage_tracker_source):
+        errors.append(f'{label} must require paid access with no free allowance')
+readme_source = (root / 'README.md').read_text()
+for required in [
+    'requires paid access for new Capture deliveries and transcription',
+    'Eligible subscriptions include a 7-day free trial',
+    'Lifetime is a one-time purchase with no trial',
+    'There is no resettable free-minute or Capture allowance in this source',
+    'qualifying original paid-app ownership remain valid',
+    'you can read, search, copy, export, and delete existing history',
+    'Subscriptions alone do not qualify for the discounted Family Lifetime upgrade',
+    'Vox Android subscriptions are deferred and retain their existing offer',
+    'StoreKit 2 weekly/yearly subscriptions, eligible 7-day trials, and lifetime purchases',
+]:
+    if required not in readme_source:
+        errors.append(f'README subscription policy is missing {required!r}')
+for retired_claim in [
+    '15 minutes of free transcription',
+    '10 successful Capture deliveries',
+    'No subscription, no renewal',
+    'StoreKit 2 one-time purchase',
+]:
+    if retired_claim in readme_source:
+        errors.append(f'README still advertises the retired free-allowance offer: {retired_claim!r}')
 
 storekit_release_patch = (
     root / 'artifacts/releases/mac-family-restore-diagnostics.patch'
@@ -378,16 +558,92 @@ for required in [
     if required not in ios_runtime_harness:
         errors.append(f'iOS extended action harness is missing exact fixture-ID check {required}')
 
+# Recording queue card actions. macOS keeps a full action row; iOS shows one
+# primary pill (failed: "Retry"), an optional Copy Transcript pill and a •••
+# menu holding Share Audio, Keep Audio and Delete Recording. Every action stays
+# reachable and Delete Recording is always confirmed before discarding.
 for required in [
-    '#if os(macOS)\n        HStack(spacing: 12)',
-    'LazyVGrid(',
-    'GridItem(.adaptive(minimum: 135)',
-    'dynamicTypeSize.isAccessibilitySize',
-    'return [GridItem(.flexible())]',
     '.navigationBarTitleDisplayMode(dynamicTypeSize.isAccessibilitySize ? .inline : .large)',
 ]:
     if required not in recording_queue_views:
-        errors.append(f'recording queue compact action layout is missing {required}')
+        errors.append(f'recording queue layout is missing {required}')
+queue_row_start = recording_queue_views.find('private struct RecordingQueueRow: View {')
+queue_row_end = recording_queue_views.find('\nstruct ', queue_row_start + 1)
+queue_row = recording_queue_views[queue_row_start:queue_row_end] if queue_row_start >= 0 else ''
+if not queue_row:
+    errors.append('recording queue row (RecordingQueueRow) is missing')
+action_area_start = queue_row.find('private var actionArea: some View {')
+action_area_end = queue_row.find('    #if !os(macOS)\n    @ViewBuilder\n    private var compactActions', action_area_start)
+action_area = queue_row[action_area_start:action_area_end] if action_area_start >= 0 and action_area_end > action_area_start else ''
+for required in [
+    '#if os(macOS)\n            HStack(spacing: 12) {\n                applicableActions\n                Spacer()\n                deleteAction\n            }',
+    'if dynamicTypeSize.isAccessibilitySize {\n                VStack(alignment: .leading, spacing: Geist.Spacing.two) { compactActions }\n            } else {\n                HStack(spacing: Geist.Spacing.two) { compactActions }\n            }',
+    '.confirmationDialog(\n            String(localized: "Delete this recording?"),\n            isPresented: $confirmsDelete,',
+    'Button("Delete Recording", role: .destructive) {\n                Task { await queue.discard(job) }\n            }',
+    'Button("Cancel", role: .cancel) {}',
+    'Text("The audio and any transcript are removed from this Mac. This can’t be undone.")',
+    'Text("The audio and any transcript are removed from this iPhone. This can’t be undone.")',
+]:
+    if required not in action_area:
+        errors.append(f'recording queue action area is missing {required}')
+if action_area.find('.confirmationDialog(') < action_area.find('#endif'):
+    errors.append('recording queue Delete Recording confirmation must cover both macOS and iOS layouts')
+if queue_row.count('await queue.discard(job)') != 1 or 'await queue.discard(job)' not in action_area:
+    errors.append('recording queue rows may discard a recording only from the Delete Recording confirmation')
+if '@State private var confirmsDelete = false' not in queue_row:
+    errors.append('recording queue row must own its Delete Recording confirmation state')
+
+compact_start = queue_row.find('private var compactActions: some View {')
+compact_end = queue_row.find('    #endif', compact_start)
+compact_actions = queue_row[compact_start:compact_end] if compact_start >= 0 else ''
+if not compact_actions:
+    errors.append('iOS recording queue compact actions are missing')
+for required in [
+    'primaryAction',
+    'Button("Copy Transcript", systemImage: "doc.on.doc")',
+    'await queue.acknowledgeCopiedResult(job)',
+    'Menu {',
+    'ShareLink(item: audioURL) {\n                    Label("Share Audio", systemImage: "square.and.arrow.up")',
+    'keepAudioMenu',
+    'if job.phase != .processing && job.phase != .finalizing {',
+    'Button("Delete Recording", systemImage: "trash", role: .destructive) {\n                    confirmsDelete = true\n                }',
+    'Label("More options", systemImage: "ellipsis")',
+    '.accessibilityLabel("More options")',
+]:
+    if required not in compact_actions:
+        errors.append(f'iOS recording queue ••• actions are missing {required}')
+for forbidden in ['LazyVGrid(', 'GridItem(']:
+    if forbidden in compact_actions:
+        errors.append(f'iOS recording queue actions must not return to the 2×2 grid: {forbidden}')
+
+delete_action_start = queue_row.find('private var deleteAction: some View {')
+delete_action = queue_row[delete_action_start:queue_row.find('    @ViewBuilder', delete_action_start)]
+if 'confirmsDelete = true' not in delete_action or 'discard' in delete_action:
+    errors.append('macOS recording queue Delete Recording must ask for confirmation first')
+
+keep_audio_start = queue_row.find('private var keepAudioMenu: some View {')
+keep_audio = queue_row[keep_audio_start:queue_row.find('    @ViewBuilder', keep_audio_start)]
+for required in [
+    'policy: .deleteAfterSuccess',
+    'policy: .timed(interval)',
+    'policy: .permanent',
+]:
+    if required not in keep_audio:
+        errors.append(f'recording queue Keep Audio menu is missing {required}')
+
+primary_start = queue_row.find('private var primaryAction: some View {')
+primary_action = queue_row[primary_start:queue_row.find('    @ViewBuilder', primary_start)]
+for required in [
+    'Button("Process Now", systemImage: "play.fill")',
+    'Menu("Choose Route", systemImage: "arrow.triangle.branch")',
+    'await retryCoordinator.retry(job)',
+    'await queue.retry(job)',
+    'Text("Retry")',
+    'Label("Retry Recording", systemImage: "arrow.clockwise")',
+    '.accessibilityLabel("Retry Recording")',
+]:
+    if required not in primary_action:
+        errors.append(f'recording queue failed-card Retry pill is missing {required}')
 
 storekit_preflight_path = root / 'scripts/preflight-mac-family-restore-release.sh'
 if not storekit_preflight_path.exists():
@@ -414,12 +670,16 @@ else:
         errors.append('Mac StoreKit preflight script is not executable')
 
 widget_bundle_id = 'bontecou.Voxboard.Voxboard-Widget'
-blocks = re.findall(
-    r'\b[0-9A-F]+ /\* (?:Debug|Release) \*/ = \{\n\s*isa = XCBuildConfiguration;\n\s*buildSettings = \{(?P<body>.*?)\n\s*\};\n\s*name = (?:Debug|Release);\n\s*\};',
-    project,
-    flags=re.S,
-)
-widget_blocks = [body for body in blocks if widget_bundle_id in body]
+blocks = [
+    pbx_settings_text(settings)
+    for name, settings in build_configurations
+    if name in ('Debug', 'Release')
+]
+widget_blocks = [
+    pbx_settings_text(settings)
+    for name, settings in build_configurations
+    if name in ('Debug', 'Release') and settings.get('PRODUCT_BUNDLE_IDENTIFIER') == widget_bundle_id
+]
 if len(widget_blocks) != 2:
     errors.append(f'expected 2 widget build configurations, found {len(widget_blocks)}')
 
@@ -465,16 +725,24 @@ if not re.search(
 ):
     errors.append('macOS app must allow outgoing network connections for model downloads')
 
-main_target_matches = re.findall(
-    r'PRODUCT_BUNDLE_IDENTIFIER = bontecou\.Voxboard;.*?IPHONEOS_DEPLOYMENT_TARGET = ([^;]+);',
-    project,
-    flags=re.S,
-)
-if not main_target_matches or any(value.strip() != '17.6' for value in main_target_matches):
+main_target_matches = [
+    settings.get('IPHONEOS_DEPLOYMENT_TARGET')
+    for name, settings in build_configurations
+    if settings.get('PRODUCT_BUNDLE_IDENTIFIER') == 'bontecou.Voxboard'
+    and settings.get('SDKROOT') != 'macosx'
+]
+if sorted(
+    name for name, settings in build_configurations
+    if settings.get('PRODUCT_BUNDLE_IDENTIFIER') == 'bontecou.Voxboard' and settings.get('SDKROOT') != 'macosx'
+) != ['Debug', 'Release'] or any(value != '17.6' for value in main_target_matches):
     errors.append('main app deployment target contract is not iOS 17.6')
 
 share_bundle_id = 'bontecou.Voxboard.ShareExtension'
-share_blocks = [body for body in blocks if share_bundle_id in body]
+share_blocks = [
+    pbx_settings_text(settings)
+    for name, settings in build_configurations
+    if name in ('Debug', 'Release') and settings.get('PRODUCT_BUNDLE_IDENTIFIER') == share_bundle_id
+]
 if len(share_blocks) != 2:
     errors.append(f'expected 2 share-extension build configurations, found {len(share_blocks)}')
 for index, body in enumerate(share_blocks, start=1):
@@ -516,25 +784,25 @@ location_purpose_contracts = [
         root / 'Voxboard/Info.plist',
         root / 'Voxboard/InfoPlist.xcstrings',
         'NSLocationWhenInUseUsageDescription',
-        'Vox.md gets your location once when you insert a map link, or when you send or stop recording with a location-enabled Capture Preset.',
+        'Vox.md gets your location once when you insert a map link, or when you send or stop recording with a location-enabled Route.',
     ),
     (
         root / 'Voxboard Share Extension/Info.plist',
         root / 'Voxboard Share Extension/InfoPlist.xcstrings',
         'NSLocationWhenInUseUsageDescription',
-        'When location metadata is enabled for a Capture Preset, Vox.md gets one location when you send shared content.',
+        'When location metadata is enabled for a Route, Vox.md gets one location when you send shared content.',
     ),
     (
         root / 'Voxboard Watch/Info.plist',
         root / 'Voxboard Watch/InfoPlist.xcstrings',
         'NSLocationWhenInUseUsageDescription',
-        'When location is enabled for a Capture Preset, Vox.md gets one location from this Apple Watch when recording stops.',
+        'When location is enabled for a Route, Vox.md gets one location from this Apple Watch when recording stops.',
     ),
     (
         root / 'Voxboard Mac/Info.plist',
         root / 'Voxboard Mac/InfoPlist.xcstrings',
         'NSLocationUsageDescription',
-        'When location is enabled for a Capture Preset, Vox.md gets one location when you send or stop a recording.',
+        'When location is enabled for a Route, Vox.md gets one location when you send or stop a recording.',
     ),
 ]
 expected_location_locales = {
@@ -619,7 +887,7 @@ recording_only_settings_gate = '''            if flow.watchOutputMode != .record
                 }
                 audioExportSection
             }'''
-if recording_only_settings_gate not in flow_settings_source:
+if re.sub(r'\n\s+', '\n', recording_only_settings_gate.strip()) not in re.sub(r'\n\s+', '\n', flow_settings_source):
     errors.append('Recording Only Apple Watch presets must hide transcript workflow settings')
 if (root / 'Voxboard/Views/HomeView.swift').exists():
     errors.append('the standalone Home/Listen recording view must be removed')
@@ -629,12 +897,73 @@ for required in ['case "listen":', 'rootDestination = .capture', 'pendingKeyboar
     if required not in app_source:
         errors.append(f'legacy recording launch routing is missing {required}')
 
-analytics_source = (
-    root / 'Packages/VoxboardShared/Sources/VoxboardShared/Analytics/OnboardingAnalyticsClient.swift'
-).read_text()
-release_default = re.search(r'#else\s+(true|false)\s+#endif', analytics_source)
-if release_default is None or release_default.group(1) != 'true':
-    errors.append('release onboarding analytics must be enabled by default')
+# Custom onboarding analytics is retired: no client, transport, endpoint
+# configuration, or producer may remain in any shipped target, upgrades must erase
+# the retired local state, and the endpoint only discards legacy uploads.
+retired_analytics_directory = root / 'Packages/VoxboardShared/Sources/VoxboardShared/Analytics'
+if retired_analytics_directory.is_dir() and any(p.is_file() for p in retired_analytics_directory.rglob('*')):
+    errors.append('retired onboarding analytics sources must be absent')
+retired_analytics_pattern = re.compile(
+    r'OnboardingAnalytics|PricingAnalytics|Cloudflare(?:Onboarding|Pricing)AnalyticsTransport'
+    r'|ONBOARDING_ANALYTICS|PRICING_ANALYTICS|trackOnboarding|claimOneShotAnalyticsMarker'
+    r'|AAAttribution|AppleAdsAttribution|/v1/events'
+)
+retired_analytics_cleanup_path = 'Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift'
+for target in [
+    'Voxboard', 'Voxboard Mac', 'Voxboard App Shared', 'Voxboard Keyboard', 'Voxboard Widget',
+    'Voxboard Share Extension', 'Voxboard Watch', 'Voxboard Watch Shared', 'Voxboard Watch Widget',
+    'Packages/VoxboardShared/Sources',
+]:
+    for path in sorted((root / target).rglob('*')):
+        if path.suffix not in ('.swift', '.plist', '.xcconfig', '.entitlements') or not path.is_file():
+            continue
+        if path.relative_to(root).as_posix() == retired_analytics_cleanup_path:
+            continue
+        match = retired_analytics_pattern.search(path.read_text(errors='ignore'))
+        if match:
+            errors.append(f'retired analytics reference {match.group(0)!r} remains in {path.relative_to(root)}')
+match = retired_analytics_pattern.search(project)
+if match:
+    errors.append(f'Xcode project still configures retired analytics: {match.group(0)!r}')
+retired_analytics_cleanup = (root / retired_analytics_cleanup_path).read_text()
+retired_analytics_keys = {
+    'onboarding.analytics.install_id.v1',
+    'onboarding.analytics.queue.v1',
+    'onboarding.experiment.assignment.v1',
+    'onboarding.analytics.started.v1',
+    'onboarding.analytics.model_setup_completed.v1',
+    'onboarding.analytics.completed.v1',
+}
+if set(re.findall(r'"(onboarding\.[^"\n]+)"', retired_analytics_cleanup)) != retired_analytics_keys:
+    errors.append('RetiredAnalyticsCleanup must erase exactly the retired onboarding analytics keys')
+if 'defaults.removeObject(forKey: key)' not in retired_analytics_cleanup:
+    errors.append('RetiredAnalyticsCleanup must remove each retired key')
+for forbidden in ('URLSession', 'URLRequest', 'UUID()', 'defaults.set('):
+    if forbidden in retired_analytics_cleanup:
+        errors.append(f'RetiredAnalyticsCleanup must not create identifiers, write state, or send requests: {forbidden}')
+for launch_path in ['Voxboard/VoxboardApp.swift', 'Voxboard Mac/VoxboardMacApp.swift']:
+    launch_source = (root / launch_path).read_text()
+    for required in [
+        'RetiredAnalyticsCleanup.run()',
+        'if let defaults = AppConstants.sharedDefaults { RetiredAnalyticsCleanup.run(defaults: defaults) }',
+    ]:
+        if required not in launch_source:
+            errors.append(f'{launch_path} must erase retired analytics state at launch: {required}')
+retired_worker = root / 'worker/onboarding-analytics'
+retired_worker_source = (retired_worker / 'src/index.ts').read_text()
+for required in [
+    'return Response.json({ status: "retired", collection: false }, { headers });',
+    'return new Response(null, { status: 410, headers });',
+]:
+    if required not in retired_worker_source:
+        errors.append(f'retired analytics endpoint is missing {required}')
+for forbidden in ['request.json(', 'request.text(', 'request.arrayBuffer(', 'env.', 'fetch(env', 'console.']:
+    if forbidden in retired_worker_source:
+        errors.append(f'retired analytics endpoint must not read bodies, bindings, or log: {forbidden}')
+if not (retired_worker / 'test/retired-analytics.test.mjs').is_file():
+    errors.append('retired analytics endpoint test is missing')
+if (retired_worker / 'test/onboarding-analytics.test.mjs').exists():
+    errors.append('the collecting onboarding analytics endpoint test must be removed')
 
 share_source = (root / 'Voxboard Share Extension/ShareViewController.swift').read_text()
 for required in [
@@ -804,17 +1133,25 @@ if 'typealias QueuedRecording = WatchLocalQueuedRecording' not in watch_recorder
 
 for required in [
     'hasPresetSelectionAvailabilityPayload',
-    'selectedPresetSnapshot != nil',
+    # Each Watch recording must carry its exact Route snapshot when iPhone
+    # advertises Route selection; arrival must never fall back to another Route.
+    'presetSnapshot != nil else {',
 ]:
     if required not in watch_recorder_source:
         errors.append(f'Watch local recording preset guard is missing {required}')
+# Signal Watch: routes are picked per recording from the iPhone-synced list,
+# and the list is replaced by the recording screen while recording, so the
+# Route cannot change mid-recording.
 for required in [
-    'WatchCapturePresetPickerView',
-    'bridge.selectPreset(id:',
-    'Finish the current recording before changing presets.',
+    'private struct WatchRouteListScreen: View',
+    'ForEach(bridge.snapshot.availablePresets)',
+    'await localRecorder.start(using: bridge, route: route)',
+    'if localRecorder.isRecording {\n            WatchRecordingScreen()',
 ]:
     if required not in watch_view_source:
-        errors.append(f'Watch Capture Preset picker is missing {required}')
+        errors.append(f'Watch Route picker is missing {required}')
+if 'guard !isRecording else { return }' not in watch_recorder_source:
+    errors.append('Watch recorder must refuse to start (and re-route) while a recording is active')
 for required in [
     'CaptureFilePicker(',
     'UIDocumentPickerViewController(',
@@ -823,17 +1160,19 @@ for required in [
     'matching: .screenshots',
     'CaptureRoutePickerView(viewModel: viewModel)',
     'capture_destination_banner',
-    'HistoryView(viewModel: viewModel)',
+    'ActivityFeedView(\n                        viewModel: viewModel,',
     'locationRequestTask?.cancel()',
     'voiceCaptureButton',
     'voiceCaptureDetailsBar',
-    'Long-press for detailed recording controls.',
+    'Touch and hold to talk, then release to stop.',
+    '.accessibilityAction(named: "Show detailed recording controls")',
+    'capture_recording_options',
     'capture_recording_details',
     'capture_voice_recording',
     'Add to Draft',
     'Send Immediately',
     'capture_vox_selector',
-    'Use Preset destination defaults',
+    'Use Route destination defaults',
     'Attach audio to Capture',
     'capture_keyboard_listening',
     'capture_audio_import',
@@ -841,6 +1180,10 @@ for required in [
 ]:
     if required not in quick_capture_ui_source:
         errors.append(f'Quick Capture hardening is missing {required}')
+
+activity_feed_source = (root / 'Voxboard/Views/ActivityFeedView.swift').read_text()
+if 'HistoryView(viewModel: viewModel, embedsInNavigationStack: false)' not in activity_feed_source:
+    errors.append('Quick Capture history (Activity feed) must embed the unified HistoryView')
 
 capture_route_picker_source = (root / 'Voxboard/Capture/CaptureRoutePickerView.swift').read_text()
 for required in [
@@ -861,7 +1204,7 @@ for required in [
         errors.append(f'Capture Preset destination persistence is missing {required}')
 
 history_view_source = (root / 'Voxboard/Views/HistoryView.swift').read_text()
-for required in ['UnifiedHistoryItem', 'viewModel.historyRecords', 'Search history', 'viewModel.clearHistory()']:
+for required in ['LibraryItem.build(', 'viewModel.historyRecords', 'TextField("Search words, routes, files"', 'viewModel.clearHistory()']:
     if required not in history_view_source:
         errors.append(f'unified Capture and transcript history is missing {required}')
 
@@ -996,23 +1339,41 @@ else:
     mac_brand_source = mac_brand_path.read_text()
     for required in [
         'enum MacBrand',
-        'static let orange = Color(',
-        '253.0 / 255.0',
-        'static let onOrange = Color.black',
-        'static let nativeSelectionOrange = Color(',
-        '180.0 / 255.0',
-        'static let orangeText = Color(nsColor:',
+        'static let orange = Geist.accent',
+        'static let onOrange = Geist.onAccent',
+        'static let nativeSelectionOrange = Geist.accent',
+        'static let orangeText = Geist.accentText',
+        'static let attention = Geist.Palette.amber900',
         'static let appKitOrange = NSColor(',
+        'srgbRed: 47.0 / 255.0',
         'struct MacAppIconView: View',
         'NSApplication.shared.applicationIconImage',
-        'struct MacSidebarBrandView: View',
     ]:
         if required not in mac_brand_source:
             errors.append(f'Mac app-icon brand system is missing {required}')
 
 mac_first_run_brand_source = (root / 'Voxboard Mac/MacFirstRunSetupView.swift').read_text()
+# The Signal sidebar has no app-icon brand row. In Capture it starts directly
+# with its ROUTES section, followed by ACTIVITY.
+mac_sidebar_start = mac_root.find('struct MacSidebar: View {')
+mac_sidebar_end = mac_root.find('\n}\n', mac_sidebar_start)
+mac_sidebar_source = mac_root[mac_sidebar_start:mac_sidebar_end] if mac_sidebar_start >= 0 and mac_sidebar_end > mac_sidebar_start else ''
+if not mac_sidebar_source:
+    errors.append('Mac Signal sidebar (struct MacSidebar) could not be inspected')
+else:
+    capture_branch = re.search(
+        r'if navigationState\.destination == \.capture \{\s*routesSection\s*activitySection\s*\}',
+        mac_sidebar_source,
+    )
+    if capture_branch is None:
+        errors.append('Mac Signal sidebar must show ROUTES then ACTIVITY in Capture')
+    for required in ['sidebarHeader("ROUTES")', 'sidebarHeader("ACTIVITY")', 'private var routesSection: some View', 'private var activitySection: some View']:
+        if required not in mac_sidebar_source:
+            errors.append(f'Mac Signal sidebar is missing {required}')
+    for forbidden in ['MacSidebarBrandView', 'MacAppIconView(']:
+        if forbidden in mac_sidebar_source:
+            errors.append(f'Mac Signal sidebar must not include an app-icon brand row: {forbidden}')
 for source_name, source, required in [
-    ('main sidebar', mac_root, 'MacSidebarBrandView()'),
     ('About settings', mac_root, 'MacAppIconView(size: 64)'),
     ('first-run setup', mac_first_run_brand_source, 'MacAppIconView(size: 76)'),
     ('Activity first-run state', (root / 'Voxboard Mac/MacActivityView.swift').read_text(), 'MacAppIconView(size: 52)'),
@@ -1060,7 +1421,15 @@ for filename in mac_icon_filenames:
         errors.append(f'AppIcon catalog references missing Mac rendition {filename}')
 if 'Assets.xcassets in Resources' not in project:
     errors.append('Mac target must retain the asset catalog that contains AppIcon')
-if project.count('ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;') < 2:
+mac_app_configurations = {
+    name: settings
+    for name, settings in build_configurations
+    if settings.get('PRODUCT_BUNDLE_IDENTIFIER') == 'bontecou.Voxboard' and settings.get('SDKROOT') == 'macosx'
+}
+if sorted(mac_app_configurations) != ['Debug', 'Release'] or any(
+    settings.get('ASSETCATALOG_COMPILER_APPICON_NAME') != 'AppIcon'
+    for settings in mac_app_configurations.values()
+):
     errors.append('Mac Debug and Release builds must retain AppIcon as their compiled app icon')
 
 mac_accent_directory = root / 'Voxboard/Assets.xcassets/MacAccentColor.colorset'
@@ -1075,14 +1444,23 @@ else:
         .get('components', {})
     )
     expected_mac_accent = {
-        'red': '0.706',
-        'green': '0.373',
-        'blue': '0.039',
+        'red': '0.184',
+        'green': '0.231',
+        'blue': '0.910',
         'alpha': '1.000',
     }
     if mac_accent_components != expected_mac_accent:
-        errors.append('Mac native selection accent must remain accessible orange #B45F0A')
-if project.count('ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = MacAccentColor;') != 2:
+        errors.append('Mac native selection accent must be Signal indigo #2F3BE8')
+mac_accent_configurations = [
+    settings for _, settings in build_configurations
+    if settings.get('ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME') == 'MacAccentColor'
+]
+if len(mac_accent_configurations) != 2 or any(
+    settings.get('SDKROOT') != 'macosx' for settings in mac_accent_configurations
+) or any(
+    settings.get('ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME') != 'MacAccentColor'
+    for settings in mac_app_configurations.values()
+):
     errors.append('only Mac Debug and Release builds must compile the MacAccentColor asset')
 
 # The main window is intentionally small and task-oriented. Configuration is a
@@ -1119,12 +1497,21 @@ for required in [
     'retryOverride: { job, delivery in',
     'openCapture: { navigationState.select(.capture) }',
     'case .library:',
-    'MacHistoryView(viewModel: quickCaptureViewModel)',
-    '.badge(destination == .activity ? activityBadgeCount : 0)',
+    'MacHistoryView(\n                viewModel: quickCaptureViewModel,',
+    'MacActivityCounts.needsYou(queue: recorder.recordingQueue, viewModel: viewModel)',
+    '.accessibilityLabel("Needs you")',
     'private func openSettingsPane(_ destination: MacSettingsDestination)',
 ]:
     if required not in mac_root:
         errors.append(f'macOS native main-window navigation is missing {required}')
+
+mac_signal_components_source = (root / 'Voxboard Mac/MacSignalComponents.swift').read_text()
+for required in [
+    'let failedJobs = queue.actionableJobs.filter { $0.phase == .failed }',
+    'failedJobs.count + viewModel.failedInboxCount',
+]:
+    if required not in mac_signal_components_source:
+        errors.append(f'macOS Activity needs-you indicator is missing {required}')
 
 mac_activity_path = root / 'Voxboard Mac/MacActivityView.swift'
 if not mac_activity_path.exists() or 'MacActivityView.swift in Sources' not in project:
@@ -1139,9 +1526,9 @@ else:
         '.filter { !actionableJobIDs.contains($0.id) }',
         'viewModel.historyRecords',
         'transcriptStore.transcripts',
-        'HSplitView',
-        'List(selection: $selection)',
-        '.searchable(text: $searchText, placement: .toolbar, prompt: "Search Activity")',
+        'private var signalPage: some View',
+        '.sheet(isPresented: $showsDetail)',
+        'activityDetail',
         'case inProgress',
         'case needsAttention',
         'await queue.refresh(recoverInterrupted: true)',
@@ -1214,7 +1601,13 @@ language_index = model_view_source.find('languageSection')
 whisper_index = model_view_source.find('modelSection("02", "Whisper Models"')
 if model_view_start < 0 or model_view_end < 0 or not (0 <= language_index < whisper_index):
     errors.append('macOS Models must keep Language visible before the model lists')
-if mac_root.count('case .transcription:\n            MacModelView()') != 1:
+transcription_settings_start = mac_root.find('private var transcriptionSettings: some View')
+transcription_settings_end = mac_root.find('private var transcriptionChoice:', transcription_settings_start)
+if (
+    mac_root.count('case .transcription:\n            transcriptionSettings') != 1
+    or transcription_settings_start < 0
+    or 'MacModelView()' not in mac_root[transcription_settings_start:transcription_settings_end]
+):
     errors.append('macOS Transcription must have exactly one production Settings destination')
 if 'case "04-models":\n            NavigationStack { MacModelView() }' not in mac_root:
     errors.append('macOS Models localization story must keep rendering the Settings model surface')
@@ -1236,7 +1629,7 @@ for required in [
     'List(selection: $selectedFlowId)',
     '.frame(width: 260)',
     'MacCapturePresetEditor(preset: $flows[index]',
-    'Text("Select a Capture Preset")',
+    'Text("Select a Route")',
 ]:
     if required not in preset_view_source:
         errors.append(f'macOS Capture Presets Settings list/detail is missing {required}')
@@ -1260,15 +1653,26 @@ settings_cases = [
     'case about',
 ]
 settings_case_indexes = [settings_destination_source.find(case) for case in settings_cases]
+# Every Settings destination must stay reachable from exactly one Signal tab.
+settings_destination_cases = re.findall(r'^    case ([a-z]+)$', settings_destination_source, flags=re.M)
+tab_panes_match = re.search(r'var panes: \[MacSettingsDestination\] \{(.*?)\n    \}', settings_destination_source, flags=re.S)
+tab_pane_cases = [
+    case
+    for pane_list in re.findall(r'\[([^\]]*)\]', tab_panes_match.group(1) if tab_panes_match else '')
+    for case in re.findall(r'\.([a-z]+)', pane_list)
+]
+if not settings_destination_cases or sorted(tab_pane_cases) != sorted(settings_destination_cases):
+    errors.append('every macOS Settings destination must be reachable from exactly one Settings tab')
 if any(index < 0 for index in settings_case_indexes) or settings_case_indexes != sorted(settings_case_indexes):
     errors.append(
         'macOS Settings category order must be General, Recording, Transcription, '
         'Presets, Templates, Shortcuts, Access, Diagnostics, About'
     )
 for required in [
-    'NavigationSplitView',
-    'List(selection: $selectedDestination)',
-    'ForEach(MacSettingsDestination.allCases)',
+    'settingsTabBar',
+    'ForEach(MacSettingsTab.allCases)',
+    'settingsLinkRows(Array(MacSettingsTab.general.panes.dropFirst()))',
+    'settingsLinkRows(Array(MacSettingsTab.vault.panes.dropFirst()))',
     'case .access:',
     'case .general:',
     'case .recording:',
@@ -1358,10 +1762,13 @@ history_view_end = mac_root.find('private enum MacUnifiedHistoryItem', history_v
 history_view_source = mac_root[history_view_start:history_view_end]
 for required in [
     '@State private var selectedItemID: UUID?',
-    'List(selection: $selectedItemID)',
-    'private var historyDetail: some View',
-    'MacTranscriptDetailView(',
-    'MacCaptureHistoryDetailView(',
+    'HSplitView {\n            libraryTablePane',
+    'libraryPreviewPane',
+    'ForEach(filteredItems)',
+    'TextField("Search  ⌘F", text: $searchText)',
+    'private var libraryPreviewPane: some View',
+    'MacSignalSectionHeader("Transcript")',
+    'MacCaptureDeliveryMetadataView(record: record) { reveal($0) }',
     'MacCaptureDeliveryMetadataView',
     'selectFallback(removing:',
     'reconcileSelection(requiringVisibleItem:',
@@ -1423,26 +1830,155 @@ for required in [
     if required not in mac_workspace_source:
         errors.append(f'macOS Capture workspace is missing {required}')
 
+def swift_brace_block(source: str, header: str) -> str | None:
+    """Return `header` through its matching closing brace, or None."""
+    start = source.find(header)
+    if start < 0:
+        return None
+    open_index = source.find('{', start + len(header) - 1)
+    if open_index < 0:
+        return None
+    depth = 0
+    for index in range(open_index, len(source)):
+        if source[index] == '{':
+            depth += 1
+        elif source[index] == '}':
+            depth -= 1
+            if depth == 0:
+                return source[start:index + 1]
+    return None
+
+
+# The Capture window has no toolbar (Signal: hidden title bar); every former
+# toolbar command lives in the menu bar and acts on the focused Capture window.
+mac_app_source = (root / 'Voxboard Mac/VoxboardMacApp.swift').read_text()
 for required in [
-    '.toolbar {\n            captureToolbar',
-    '@ToolbarContentBuilder',
-    'private var captureToolbar: some ToolbarContent',
-    'Button("New Capture", systemImage: "square.and.pencil")',
     'requestNewCapture()',
     'showsClearDraftConfirmation',
     '@State private var selectedInspectorTool: MacCaptureInspectorTool? = .route',
+    'recordToolbarButton',
+    'sendToolbarButton',
+    '.focusedSceneValue(\\.macCaptureMenuActions, menuActions)',
+    'private var menuActions: MacCaptureMenuActions {',
+]:
+    if required not in mac_workspace_source:
+        errors.append(f'native macOS Capture menu-bar commands are missing {required}')
+for forbidden in [
+    '.toolbar {',
+    'ToolbarItem(',
+    '@ToolbarContentBuilder',
+    'captureToolbar',
     'presetToolbarMenu',
     'attachmentToolbarMenu',
     'formattingToolbarMenu',
     'recordingOptionsToolbarMenu',
     'moreToolbarMenu',
     'routeToolbarButton',
-    'recordToolbarButton',
-    'sendToolbarButton',
-    'ToolbarItem(placement: .primaryAction)',
 ]:
-    if required not in mac_workspace_source:
-        errors.append(f'native macOS Capture toolbar is missing {required}')
+    if forbidden in mac_workspace_source:
+        errors.append(f'macOS Capture window must not keep the removed toolbar: {forbidden}')
+
+if '.windowStyle(.hiddenTitleBar)' not in mac_app_source:
+    errors.append('macOS main window must use .windowStyle(.hiddenTitleBar)')
+if '.windowToolbarStyle(' in mac_app_source:
+    errors.append('macOS main window must not configure the removed window toolbar style')
+mac_commands_block = swift_brace_block(mac_app_source, '.commands {') or ''
+if 'MacCaptureFormatCommands()' not in mac_commands_block:
+    errors.append('macOS app commands must install MacCaptureFormatCommands()')
+new_item_block = swift_brace_block(mac_commands_block, 'CommandGroup(replacing: .newItem) {') or ''
+for required in [
+    'Button("New Capture") {',
+    'windowCoordinator.showMain(.newCapture)',
+    '.keyboardShortcut("n", modifiers: .command)',
+]:
+    if required not in new_item_block:
+        errors.append(f'macOS File › New Capture is missing {required}')
+
+capture_command_menu = swift_brace_block(mac_commands_block, 'CommandMenu("Capture") {')
+if capture_command_menu is None:
+    errors.append('macOS menu bar is missing CommandMenu("Capture")')
+elif capture_command_menu.count('MacCaptureMenuItems()') != 1:
+    errors.append('MacCaptureMenuItems() must appear once inside CommandMenu("Capture")')
+if mac_app_source.count('MacCaptureMenuItems()') != 1:
+    errors.append('MacCaptureMenuItems() must be installed only in the Capture menu')
+
+route_command_menu = swift_brace_block(mac_commands_block, 'CommandMenu("Route") {')
+if route_command_menu is None:
+    errors.append('macOS menu bar is missing CommandMenu("Route")')
+else:
+    for required in [
+        'ForEach(Array(MacRouteCatalog.enabledRoutes(in: quickCaptureViewModel).enumerated()), id: \\.element.id) { index, route in',
+        'MacRouteCatalog.select(route, in: quickCaptureViewModel)',
+        '.disabled(!quickCaptureViewModel.canChangeCaptureRoute)',
+        'if index < 4 {',
+        'button.keyboardShortcut(KeyEquivalent(Character("\\(index + 1)")), modifiers: .command)',
+        'Button("Quick Capture") {',
+    ]:
+        if required not in route_command_menu:
+            errors.append(f'macOS Route menu (⌘1–⌘4) is missing {required}')
+navigate_command_menu = swift_brace_block(mac_commands_block, 'CommandMenu("Navigate") {') or ''
+for digit in '123':
+    if f'.keyboardShortcut("{digit}", modifiers: [.command, .control])' not in navigate_command_menu:
+        errors.append(f'macOS Navigate menu must move view {digit} to ⌃⌘{digit}')
+for digit in '1234':
+    if re.search(rf'keyboardShortcut\("{digit}", modifiers: \.command\)', mac_app_source):
+        errors.append(f'⌘{digit} must stay reserved for the Route menu')
+
+capture_menu_items = swift_brace_block(mac_workspace_source, 'struct MacCaptureMenuItems: View {')
+if capture_menu_items is None:
+    errors.append('macOS Capture menu items (MacCaptureMenuItems) are missing')
+else:
+    if '@FocusedValue(\\.macCaptureMenuActions) private var actions' not in capture_menu_items:
+        errors.append('MacCaptureMenuItems must act on the focused Capture window')
+    add_menu = swift_brace_block(capture_menu_items, 'Menu("Add") {') or ''
+    for item in ['images', 'photo', 'scan', 'sketch', 'files', 'audio', 'webLink', 'paste']:
+        if f'actions?.attach(.{item})' not in add_menu:
+            errors.append(f'Capture › Add menu is missing attach(.{item})')
+    after_recording = swift_brace_block(capture_menu_items, 'Menu("After Recording") {')
+    if after_recording is None:
+        errors.append('Capture menu is missing Menu("After Recording")')
+    else:
+        for required in [
+            'Toggle("Add to Draft", isOn: radio(\\.sendsAfterRecording, on: false))',
+            'Toggle("Send Immediately", isOn: radio(\\.sendsAfterRecording, on: true))',
+        ]:
+            if required not in after_recording:
+                errors.append(f'Capture › After Recording is missing {required}')
+    for required in [
+        'Button("Transcribe Audio or Video…") { actions?.attach(.transcribe) }',
+        'Toggle("Capture Details", isOn: Binding(',
+        'set: { _ in actions?.toggleDetails() }',
+        '.keyboardShortcut("i", modifiers: [.command, .option])',
+        'Menu("Audio Source") {',
+        'Toggle("Attach Audio to Draft"',
+        'Button("Reveal Last Capture", action: reveal)',
+        'Button(title, action: unlock)',
+    ]:
+        if required not in capture_menu_items:
+            errors.append(f'MacCaptureMenuItems is missing {required}')
+
+format_commands = swift_brace_block(mac_workspace_source, 'struct MacCaptureFormatCommands: Commands {')
+if format_commands is None or 'CommandMenu("Format") {\n            MacCaptureFormatMenuItems()' not in format_commands:
+    errors.append('MacCaptureFormatCommands must place MacCaptureFormatMenuItems under CommandMenu("Format")')
+format_menu_items = swift_brace_block(mac_workspace_source, 'private struct MacCaptureFormatMenuItems: View {')
+if format_menu_items is None:
+    errors.append('macOS Format menu items (MacCaptureFormatMenuItems) are missing')
+else:
+    if '@FocusedValue(\\.macCaptureMenuActions) private var actions' not in format_menu_items:
+        errors.append('MacCaptureFormatMenuItems must act on the focused Capture window')
+    for required in [
+        'Button("Internal link") { actions?.format(.internalLink) }\n                .keyboardShortcut("k", modifiers: .command)',
+        'actions?.format(.bold)',
+        'actions?.format(.italic)',
+        'actions?.format(.heading(level))',
+        'actions?.format(.markdownLink)',
+        'actions?.format(.dueDate)',
+        'actions?.format(.checklist)',
+        'actions?.format(.bullet)',
+        '.disabled(actions == nil)',
+    ]:
+        if required not in format_menu_items:
+            errors.append(f'macOS Format menu is missing {required}')
 
 capture_load_index = mac_workspace_source.find('await viewModel.load()')
 capture_ready_index = mac_workspace_source.find(
@@ -1517,7 +2053,7 @@ for removed in [
         errors.append(f'macOS Capture accessory tools must not retain primary modal state: {removed}')
 # The one consent alert protects a nonempty draft from external widget rerouting;
 # accessory tools remain inline and may not introduce additional alerts.
-preset_alert_start = workspace_surface_source.find('.alert(\n            "Switch Capture Preset?"')
+preset_alert_start = workspace_surface_source.find('.alert(\n            "Switch Route?"')
 preset_alert_end = workspace_surface_source.find('.onReceive(', preset_alert_start)
 preset_alert_source = workspace_surface_source[preset_alert_start:preset_alert_end]
 if workspace_surface_source.count('.alert(') != 1 or preset_alert_start < 0 or preset_alert_end < 0:
@@ -1671,7 +2207,7 @@ for required in [
     'showMain(.navigate(.activity))',
     'showMain(.navigate(.library))',
     'Settings {',
-    '.windowToolbarStyle(.unified(showsTitle: true))',
+    '.windowStyle(.hiddenTitleBar)',
     'CommandMenu("Navigate")',
     'Button("Activity")',
     'Button("Library")',
@@ -1845,7 +2381,7 @@ else:
         'https://vox.isolated.tech/docs/',
         '## Keyboard Safety Note',
         'Allow Full Access',
-        'Per-preset location metadata is opt-in',
+        'Per-route location metadata is opt-in',
         'unattended Ask result is durable',
         'completed Watch queue items',
     ]:
@@ -1870,14 +2406,15 @@ for font_name in [
         errors.append(f'website is missing bundled Geist font asset {font_name}')
 
 if not website_css.exists():
-    errors.append('website is missing its shared Geist stylesheet')
+    errors.append('website is missing its shared Signal stylesheet')
 else:
     css = website_css.read_text()
     for required in [
-        '--background-100: #ffffff',
-        '--gray-1000: #171717',
-        '--background-100: #000000',
-        '--gray-1000: #ededed',
+        '--bg: #F2F2EE',
+        '--ink: #121212',
+        '--accent: #2F3BE8',
+        '--bg: #0B0B0B',
+        '--ink: #F4F4F1',
         '--font-sans: "Geist Sans"',
         '--font-mono: "Geist Mono"',
         '@media (prefers-color-scheme: dark)',
@@ -1885,10 +2422,10 @@ else:
         ':focus-visible',
     ]:
         if required not in css:
-            errors.append(f'website Geist stylesheet is missing {required}')
-    for forbidden in ['JetBrains Mono', '#30D158', 'text-transform: uppercase']:
+            errors.append(f'website Signal stylesheet is missing {required}')
+    for forbidden in ['JetBrains Mono', '#30D158', '--background-100: #ffffff']:
         if forbidden in css:
-            errors.append(f'website Geist stylesheet still contains legacy styling {forbidden}')
+            errors.append(f'website Signal stylesheet still contains legacy styling {forbidden}')
     for asset in re.findall(r'url\(["\']?([^"\')]+)', css):
         parsed = urlsplit(asset)
         if parsed.scheme or asset.startswith('data:'):

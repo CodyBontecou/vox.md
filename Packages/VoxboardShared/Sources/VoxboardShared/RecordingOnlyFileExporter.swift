@@ -53,7 +53,7 @@ public enum RecordingOnlyFileExportError: Error, Equatable, LocalizedError, Send
     public var errorDescription: String? {
         switch self {
         case .folderNotConfigured:
-            return "Choose a Recording Folder in this Capture Preset on iPhone, then retry."
+            return "Choose a Recording Folder in this Route on iPhone, then retry."
         case .invalidFolderBookmark:
             return "The Recording Folder permission is unavailable. Choose the folder again, then retry."
         case .staleFolderBookmark(let name):
