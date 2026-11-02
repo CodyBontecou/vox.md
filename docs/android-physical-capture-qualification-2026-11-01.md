@@ -199,3 +199,10 @@ tests. The first script run exposed an evidence-symbol mismatch in the new ledge
 entry; the exact report symbol was corrected and the full suite rerun successfully.
 The toolchain inventory now binds 278 implementation/evidence files. No production
 recorder/model source changed during this resumed campaign.
+
+
+Resumed validation provenance: implementation/evidence commit `c46f6523`; Swift
+oracle regenerated from that clean commit and committed as `3a1df419`. All 14 cases
+are unchanged, the clean-source oracle check passes, and all 49 locked Rust workspace
+tests pass. The working tree was clean after validation. The hour result and remaining
+physical cases are still pending; none of these automated checks substitutes for them.
