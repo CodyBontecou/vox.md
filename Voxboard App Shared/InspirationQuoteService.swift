@@ -1,3 +1,4 @@
+import CoreGraphics
 import Foundation
 
 struct InspirationQuote: Codable, Equatable, Sendable {
@@ -17,6 +18,18 @@ enum InspirationQuotePresentation {
     /// It behaves like a placeholder and leaves only when text is inserted.
     static func shouldShow(forDraftText text: String) -> Bool {
         text.isEmpty
+    }
+
+    /// Editor height (pt) below which a centered quote would run into a
+    /// Route prompt drawn at the top of the editor.
+    static let minimumEditorHeightBesidePrompt: CGFloat = 260
+
+    /// iPhone composer: the quote shares the empty editor with the Route's
+    /// prompt, so it only shows while the editor is tall enough for both
+    /// (it steps aside when the keyboard and attachments squeeze the editor).
+    static func shouldShow(forDraftText text: String, hasPrompt: Bool, editorHeight: CGFloat) -> Bool {
+        shouldShow(forDraftText: text)
+            && (!hasPrompt || editorHeight >= minimumEditorHeightBesidePrompt)
     }
 }
 

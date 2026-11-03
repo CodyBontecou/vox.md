@@ -179,6 +179,9 @@ struct QuickCaptureView: View {
     @State private var composerIsFocused = false
     /// The editor's text height, so the iPad Pencil card can sit right under it.
     @State private var composerContentHeight: CGFloat = 0
+    /// The editor's on-screen height, so the quote can step aside when the
+    /// keyboard and attachments leave no room beside the Route prompt.
+    @State private var composerViewportHeight: CGFloat = .infinity
     /// True while an on-screen keyboard (or the ••• panel in its place) is up.
     /// A hardware keyboard only shows the accessory bar, which stays false.
     @State private var isSoftwareKeyboardVisible = false
@@ -1906,7 +1909,7 @@ struct QuickCaptureView: View {
                 // middle of the Route prompt instead of before it.
                 ZStack(alignment: .topLeading) {
                 if viewModel.draft.text.isEmpty, let prompt = composerPlaceholderPrompt {
-                    // The Route's own empty prompt replaces the inspirational quote.
+                    // The Route's own empty prompt, above the centered quote.
                     Text(verbatim: prompt)
                         .font(Geist.body())
                         .foregroundStyle(Geist.faint)
@@ -1926,9 +1929,15 @@ struct QuickCaptureView: View {
                 }
                 }
             }
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { composerViewportHeight = $0 }
             .overlay(alignment: .center) {
-                if composerPlaceholderPrompt == nil,
-                   InspirationQuotePresentation.shouldShow(forDraftText: viewModel.draft.text) {
+                // The quote sits mid-editor on empty drafts, as before the
+                // redesign; the Route prompt keeps its own line at the top.
+                if InspirationQuotePresentation.shouldShow(
+                    forDraftText: viewModel.draft.text,
+                    hasPrompt: composerPlaceholderPrompt != nil,
+                    editorHeight: composerViewportHeight
+                ) {
                     inspirationPlaceholder
                         .task { await loadInspirationQuote() }
                 }
