@@ -395,6 +395,38 @@ final class CaptureDraftStoreTests: XCTestCase {
         XCTAssertEqual(try restored.makeRequest(source: .app).createdAt, firstStartedAt)
     }
 
+    func test_clearedDraftRestartsCaptureTimeWhenNewContentArrives() async throws {
+        let root = try temporaryFolder()
+        defer { try? FileManager.default.removeItem(at: root) }
+        let store = CaptureDraftStore(
+            rootDirectoryURL: root,
+            coordinator: ProcessLocalCaptureFileCoordinator.shared
+        )
+        let firstStartedAt = Date(timeIntervalSince1970: 500)
+        let clearedAt = Date(timeIntervalSince1970: 600)
+        let restartedAt = Date(timeIntervalSince1970: 90_000)
+        var draft = CaptureDraft(createdAt: Date(timeIntervalSince1970: 100), destinationID: UUID())
+
+        draft.text = "Abandoned thought"
+        draft = try await store.save(draft, now: firstStartedAt)
+        XCTAssertEqual(draft.captureStartedAt, firstStartedAt)
+
+        draft.text = ""
+        let clearedSaved = try await store.save(draft, now: clearedAt)
+        draft.preserveCaptureStart(from: clearedSaved)
+        XCTAssertNil(clearedSaved.captureStartedAt)
+        XCTAssertNil(draft.captureStartedAt)
+
+        draft.text = "Sent a day later"
+        XCTAssertTrue(draft.beginCaptureIfNeeded(at: restartedAt))
+        try await store.save(draft, now: restartedAt)
+        let loaded = try await store.load(id: draft.id)
+        let restored = try XCTUnwrap(loaded)
+
+        XCTAssertEqual(restored.captureStartedAt, restartedAt)
+        XCTAssertEqual(try restored.makeRequest(source: .app).createdAt, restartedAt)
+    }
+
     func test_staleEmptyDraftStartsWhenFirstDurableContentIsAPayload() async throws {
         let root = try temporaryFolder()
         defer { try? FileManager.default.removeItem(at: root) }
