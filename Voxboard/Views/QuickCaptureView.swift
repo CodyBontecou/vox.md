@@ -1046,10 +1046,16 @@ struct QuickCaptureView: View {
                             pendingAttachAction = action
                             showsAttachSheet = false
                         },
+                        routeName: selectedFlow.visibleName ?? selectedFlow.accessibilityName,
+                        destinationPath: routeDestinationPath,
                         recentPhotos: recentPhotos,
-                        pickRecentPhoto: { asset in
+                        pickRecentPhotos: { assets in
                             showsAttachSheet = false
-                            Task { await attachRecentPhoto(asset) }
+                            Task { await attachRecentPhotos(assets) }
+                        },
+                        paste: { providers in
+                            showsAttachSheet = false
+                            Task { await attachPastedItems(providers) }
                         }
                     )
                 }
@@ -3454,26 +3460,99 @@ struct QuickCaptureView: View {
         }
     }
 
-    private func attachRecentPhoto(_ asset: PHAsset) async {
-        guard viewModel.requireCaptureRouteAvailable() else { return }
+    /// Stages the photos picked in the Attach sheet's recent strip, in pick
+    /// order, then describes them together.
+    private func attachRecentPhotos(_ assets: [PHAsset]) async {
+        guard !assets.isEmpty, viewModel.requireCaptureRouteAvailable() else { return }
         isProcessingMedia = true
         defer {
             isProcessingMedia = false
             focusComposer()
         }
-        guard let (data, identifier) = await CaptureRecentPhotosModel.imageData(for: asset) else {
-            viewModel.errorMessage = String(localized: "That photo could not be loaded.")
-            return
-        }
-        let type = UTType(identifier) ?? .jpeg
         let firstNewPayloadIndex = viewModel.draft.additionalPayloads.count
+        var failedCount = 0
+        for asset in assets {
+            guard let (data, identifier) = await CaptureRecentPhotosModel.imageData(for: asset) else {
+                failedCount += 1
+                continue
+            }
+            await stagePhoto(data: data, typeIdentifier: identifier)
+        }
+        if failedCount > 0 {
+            viewModel.errorMessage = assets.count == 1
+                ? String(localized: "That photo could not be loaded.")
+                : failedCount == 1
+                    ? String(localized: "One photo could not be loaded.")
+                    : String(localized: "\(failedCount) photos could not be loaded.")
+        }
+        await viewModel.describeStagedImagesIfNeeded(from: firstNewPayloadIndex)
+    }
+
+    /// The Attach sheet's clipboard card: a copied link joins the draft like
+    /// the Link prompt; a copied image is staged like a photo.
+    private func attachPastedItems(_ providers: [NSItemProvider]) async {
+        guard viewModel.requireCaptureRouteAvailable() else { return }
+        for provider in providers {
+            if provider.canLoadObject(ofClass: URL.self), let url = await Self.loadURL(from: provider) {
+                await viewModel.addURL(url)
+                return
+            }
+            // A link copied as plain text (many apps copy it this way).
+            if provider.canLoadObject(ofClass: String.self),
+               let text = await Self.loadString(from: provider),
+               let url = URL(string: text.trimmingCharacters(in: .whitespacesAndNewlines)),
+               let scheme = url.scheme?.lowercased(), scheme == "http" || scheme == "https" {
+                await viewModel.addURL(url)
+                return
+            }
+            if let imageType = provider.registeredContentTypes.first(where: { $0.conforms(to: .image) }),
+               let data = await Self.loadData(from: provider, type: imageType) {
+                isProcessingMedia = true
+                defer {
+                    isProcessingMedia = false
+                    focusComposer()
+                }
+                let firstNewPayloadIndex = viewModel.draft.additionalPayloads.count
+                await stagePhoto(data: data, typeIdentifier: imageType.identifier)
+                await viewModel.describeStagedImagesIfNeeded(from: firstNewPayloadIndex)
+                return
+            }
+        }
+        viewModel.errorMessage = String(localized: "Nothing on the clipboard could be added.")
+    }
+
+    private func stagePhoto(data: Data, typeIdentifier: String) async {
+        let type = UTType(typeIdentifier) ?? .jpeg
         await viewModel.stageImage(
             data: data,
             filename: "photo-\(UUID().uuidString.lowercased()).\(type.preferredFilenameExtension ?? "jpg")",
             contentTypeIdentifier: type.identifier,
             describeImmediately: false
         )
-        await viewModel.describeStagedImagesIfNeeded(from: firstNewPayloadIndex)
+    }
+
+    private static func loadURL(from provider: NSItemProvider) async -> URL? {
+        await withCheckedContinuation { continuation in
+            _ = provider.loadObject(ofClass: URL.self) { url, _ in
+                continuation.resume(returning: url)
+            }
+        }
+    }
+
+    private static func loadString(from provider: NSItemProvider) async -> String? {
+        await withCheckedContinuation { continuation in
+            _ = provider.loadObject(ofClass: String.self) { text, _ in
+                continuation.resume(returning: text)
+            }
+        }
+    }
+
+    private static func loadData(from provider: NSItemProvider, type: UTType) async -> Data? {
+        await withCheckedContinuation { continuation in
+            _ = provider.loadDataRepresentation(for: type) { data, _ in
+                continuation.resume(returning: data)
+            }
+        }
     }
 
     // MARK: - Inline recording

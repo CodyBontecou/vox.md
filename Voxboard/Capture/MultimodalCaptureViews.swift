@@ -509,8 +509,10 @@ enum CaptureAttachAction: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
+    /// Revised Attach sheet, ATTACH grid (3 × 2). Scan and Journal page sit in
+    /// their own READ INTO MARKDOWN row.
     static let gridActions: [CaptureAttachAction] = [
-        .camera, .scan, .journal, .sketch, .file, .link, .location, .screenshot,
+        .camera, .file, .sketch, .link, .location, .screenshot,
     ]
 
     var title: String {
@@ -555,99 +557,319 @@ private func presentLimitedLibraryPicker() {
     PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: presenter)
 }
 
+/// What the clipboard holds, read without triggering the paste prompt:
+/// `hasURLs` / `hasImages` only report presence, and pattern detection says
+/// whether copied text looks like a web link. The content itself is read
+/// through `PasteButton`, which needs no prompt.
+enum CaptureClipboardKind: Equatable {
+    case link, image
+
+    static func detect() async -> CaptureClipboardKind? {
+        let pasteboard = UIPasteboard.general
+        if pasteboard.hasURLs { return .link }
+        if pasteboard.hasImages { return .image }
+        guard pasteboard.hasStrings,
+              let patterns = try? await pasteboard.detectedPatterns(for: [\.probableWebURL]),
+              patterns.contains(\.probableWebURL) else { return nil }
+        return .link
+    }
+
+    var contentTypes: [UTType] {
+        switch self {
+        case .link: [.url, .plainText]
+        case .image: [.image]
+        }
+    }
+}
+
+/// Attach sheet (Signal "Attach sheet · revised"): where the note lands, a
+/// clipboard shortcut, multi-select recent photos, the two tools that read
+/// text into Markdown, then the remaining attachments.
 struct CaptureAttachSheet: View {
     let isProcessingMedia: Bool
     let canExtractText: Bool
     let isAvailable: (CaptureAttachAction) -> Bool
     let choose: (CaptureAttachAction) -> Void
+    /// "Meeting Notes", shown with `destinationPath` under the title.
+    var routeName: String? = nil
+    var destinationPath: String? = nil
     var recentPhotos: CaptureRecentPhotosModel?
-    var pickRecentPhoto: ((PHAsset) -> Void)?
+    var pickRecentPhotos: (([PHAsset]) -> Void)?
+    var paste: (([NSItemProvider]) -> Void)?
 
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 4)
+    @State private var selectedPhotoIDs: [String] = []
+    @State private var clipboard: CaptureClipboardKind?
+    @State private var contentHeight: CGFloat = 560
+
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 3)
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Text("Add to note")
-                    .font(.custom("Geist-SemiBold", size: 20, relativeTo: .title3))
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                header
+                if let clipboard, paste != nil {
+                    clipboardCard(clipboard)
+                }
+                if let recentPhotos, pickRecentPhotos != nil {
+                    recentSection(recentPhotos)
+                }
+                readIntoMarkdownSection
+                attachSection
+                if !selectedPhotoIDs.isEmpty {
+                    addSelectedPhotosButton
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 20)
+            .padding(.bottom, 16)
+            .frame(maxWidth: .infinity, alignment: .topLeading)
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { contentHeight = $0 }
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .background(Geist.bg.ignoresSafeArea())
+        .presentationDetents([.height(contentHeight), .large])
+        .presentationDragIndicator(.visible)
+        .presentationCornerRadius(28)
+        .task { clipboard = await CaptureClipboardKind.detect() }
+        .onReceive(NotificationCenter.default.publisher(for: UIPasteboard.changedNotification)) { _ in
+            Task { clipboard = await CaptureClipboardKind.detect() }
+        }
+    }
+
+    // MARK: Sections
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Add to note")
+                .font(.custom("Geist-SemiBold", size: 20, relativeTo: .title3))
+                .foregroundStyle(Geist.text)
+            if let line = destinationLine {
+                Text(verbatim: line)
+                    .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                    .foregroundStyle(Geist.muted)
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+            }
+        }
+        .padding(.horizontal, 4)
+        .accessibilityElement(children: .combine)
+    }
+
+    private var destinationLine: String? {
+        switch (routeName, destinationPath) {
+        case let (name?, path?) where name != path: "→ \(name) · \(path)"
+        case let (name?, _): "→ \(name)"
+        case let (nil, path?): "→ \(path)"
+        default: nil
+        }
+    }
+
+    private func clipboardCard(_ kind: CaptureClipboardKind) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: kind == .link ? "link" : "photo")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(width: 36, height: 36)
+                .background(Geist.accent, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(kind == .link ? "Paste copied link" : "Paste copied image")
+                    .font(.custom("Geist-SemiBold", size: 14, relativeTo: .subheadline))
                     .foregroundStyle(Geist.text)
+                Text("From your clipboard")
+                    .font(Geist.caption())
+                    .foregroundStyle(Geist.muted)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            PasteButton(supportedContentTypes: kind.contentTypes) { providers in
+                paste?(providers)
+            }
+            .labelStyle(.titleOnly)
+            .buttonBorderShape(.capsule)
+            .tint(Geist.accent)
+            .disabled(isProcessingMedia)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(Geist.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(Geist.accent.opacity(0.25), lineWidth: 1)
+        )
+        .accessibilityIdentifier("capture_attach_clipboard")
+    }
+
+    private func recentSection(_ model: CaptureRecentPhotosModel) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .firstTextBaseline) {
+                sectionLabel("RECENT")
                 Spacer()
-                Button {
-                    choose(.photos)
-                } label: {
-                    Text("All photos")
-                        .font(Geist.label(.subheadline))
-                        .foregroundStyle(Geist.accentText)
-                        .frame(height: 32)
+                Text(selectedPhotoIDs.isEmpty
+                     ? String(localized: "Tap to pick one or more")
+                     : String(localized: "\(selectedPhotoIDs.count) selected"))
+                    .font(Geist.caption(.caption2))
+                    .foregroundStyle(Geist.muted)
+                    .padding(.trailing, 4)
+            }
+            CaptureRecentPhotosStrip(
+                model: model,
+                isDisabled: isProcessingMedia,
+                selection: selectedPhotoIDs,
+                toggle: { asset in
+                    if let index = selectedPhotoIDs.firstIndex(of: asset.localIdentifier) {
+                        selectedPhotoIDs.remove(at: index)
+                    } else {
+                        selectedPhotoIDs.append(asset.localIdentifier)
+                    }
+                },
+                showAllPhotos: { choose(.photos) },
+                manageLimitedAccess: presentLimitedLibraryPicker
+            )
+        }
+    }
+
+    private var readIntoMarkdownSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            sectionLabel("READ INTO MARKDOWN")
+            HStack(spacing: 8) {
+                Button { choose(.scan) } label: {
+                    readTile(title: String(localized: "Scan"),
+                             subtitle: String(localized: "Documents, whiteboards"),
+                             systemImage: CaptureAttachAction.scan.systemImage)
                 }
                 .buttonStyle(.plain)
-                .disabled(isProcessingMedia)
-            }
-            .padding(.horizontal, 4)
+                .attachAvailability(isAvailable(.scan), processing: isProcessingMedia)
+                .accessibilityIdentifier("capture_attach_scan")
 
-            if let recentPhotos, let pickRecentPhoto {
-                CaptureRecentPhotosStrip(
-                    model: recentPhotos,
-                    isDisabled: isProcessingMedia,
-                    pick: pickRecentPhoto,
-                    manageLimitedAccess: presentLimitedLibraryPicker
-                )
-            }
-
-            LazyVGrid(columns: columns, spacing: 8) {
-                ForEach(CaptureAttachAction.gridActions) { action in
-                    Button {
-                        choose(action)
-                    } label: {
-                        VStack(spacing: 8) {
-                            Image(systemName: action.systemImage)
-                                .font(.system(size: 20, weight: .regular))
-                            Text(verbatim: action.title)
-                                .font(.custom("Geist-Medium", size: 12, relativeTo: .caption))
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.75)
-                        }
-                        .foregroundStyle(Geist.text)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 84)
-                        .background(Geist.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                .stroke(Geist.border, lineWidth: 1)
-                        )
-                        .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                Menu {
+                    Button { choose(.journal) } label: {
+                        Label("Capture Journal Pages", systemImage: "camera.viewfinder")
                     }
-                    .buttonStyle(.plain)
-                    .disabled(isProcessingMedia || !isAvailable(action))
-                    .opacity(isProcessingMedia || !isAvailable(action) ? 0.4 : 1)
-                    .accessibilityIdentifier("capture_attach_\(action.rawValue)")
+                    .disabled(!isAvailable(.journal))
+                    Button { choose(.journalPhotos) } label: {
+                        Label(CaptureAttachAction.journalPhotos.title,
+                              systemImage: CaptureAttachAction.journalPhotos.systemImage)
+                    }
+                    .disabled(!isAvailable(.journalPhotos))
+                } label: {
+                    readTile(title: String(localized: "Journal page"),
+                             subtitle: String(localized: "Camera or photos"),
+                             systemImage: CaptureAttachAction.journal.systemImage)
                 }
+                .attachAvailability(canExtractText, processing: isProcessingMedia)
+                .accessibilityIdentifier("capture_attach_journal")
             }
-
-            Button {
-                choose(.journalPhotos)
-            } label: {
-                Label(CaptureAttachAction.journalPhotos.title, systemImage: CaptureAttachAction.journalPhotos.systemImage)
-                    .font(Geist.label(.subheadline))
-                    .foregroundStyle(Geist.accentText)
-            }
-            .buttonStyle(.plain)
-            .disabled(isProcessingMedia || !canExtractText)
-            .padding(.horizontal, 4)
-
-            Text("Scans and journal pages are read on device and saved as Markdown, with the original image alongside.")
+            Text("Read on this device. The original image is kept alongside.")
                 .font(Geist.caption())
                 .foregroundStyle(Geist.muted)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, 4)
         }
-        .padding(.horizontal, 16)
-        .padding(.top, 20)
-        .padding(.bottom, 16)
-        .frame(maxWidth: .infinity, alignment: .topLeading)
-        .background(Geist.bg.ignoresSafeArea())
-        .presentationDetents([.height(recentPhotos == nil ? 430 : 520), .large])
-        .presentationDragIndicator(.visible)
-        .presentationCornerRadius(28)
+    }
+
+    private var attachSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            sectionLabel("ATTACH")
+            LazyVGrid(columns: columns, spacing: 8) {
+                ForEach(CaptureAttachAction.gridActions) { action in
+                    Button {
+                        choose(action)
+                    } label: {
+                        HStack(spacing: 8) {
+                            Image(systemName: action.systemImage)
+                                .font(.system(size: 16, weight: .regular))
+                                .frame(width: 20)
+                            Text(verbatim: action.title)
+                                .font(.custom("Geist-Medium", size: 13, relativeTo: .footnote))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.75)
+                            Spacer(minLength: 0)
+                        }
+                        .foregroundStyle(Geist.text)
+                        .padding(.horizontal, 12)
+                        .frame(maxWidth: .infinity, minHeight: 48)
+                        .background(Geist.card, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .stroke(Geist.border, lineWidth: 1)
+                        )
+                        .contentShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    }
+                    .buttonStyle(.plain)
+                    .attachAvailability(isAvailable(action), processing: isProcessingMedia)
+                    .accessibilityIdentifier("capture_attach_\(action.rawValue)")
+                }
+            }
+        }
+    }
+
+    private var addSelectedPhotosButton: some View {
+        Button {
+            guard let recentPhotos else { return }
+            let byID = Dictionary(
+                recentPhotos.assets.map { ($0.localIdentifier, $0) },
+                uniquingKeysWith: { first, _ in first }
+            )
+            let assets = selectedPhotoIDs.compactMap { byID[$0] }
+            selectedPhotoIDs = []
+            pickRecentPhotos?(assets)
+        } label: {
+            Text(selectedPhotoIDs.count == 1
+                 ? String(localized: "Add 1 photo")
+                 : String(localized: "Add \(selectedPhotoIDs.count) photos"))
+                .font(.custom("Geist-SemiBold", size: 16, relativeTo: .body))
+                .foregroundStyle(Geist.bg)
+                .frame(maxWidth: .infinity, minHeight: 52)
+                .background(Geist.text, in: Capsule(style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .disabled(isProcessingMedia)
+        .accessibilityIdentifier("capture_attach_add_photos")
+    }
+
+    // MARK: Pieces
+
+    private func sectionLabel(_ text: LocalizedStringKey) -> some View {
+        Text(text)
+            .font(Geist.mono(size: 10.5, relativeTo: .caption2))
+            .tracking(0.6)
+            .foregroundStyle(Geist.muted)
+            .padding(.horizontal, 4)
+    }
+
+    private func readTile(title: String, subtitle: String, systemImage: String) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: systemImage)
+                .font(.system(size: 20, weight: .regular))
+                .frame(width: 24)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(verbatim: title)
+                    .font(.custom("Geist-SemiBold", size: 14, relativeTo: .subheadline))
+                    .foregroundStyle(Geist.text)
+                Text(verbatim: subtitle)
+                    .font(Geist.caption(.caption2))
+                    .foregroundStyle(Geist.muted)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+            Spacer(minLength: 0)
+        }
+        .foregroundStyle(Geist.text)
+        .padding(.horizontal, 12)
+        .frame(maxWidth: .infinity, minHeight: 64)
+        .background(Geist.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Geist.border, lineWidth: 1)
+        )
+        .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+}
+
+private extension View {
+    /// Dims and disables an Attach tool that is unavailable or busy.
+    func attachAvailability(_ isAvailable: Bool, processing: Bool) -> some View {
+        disabled(processing || !isAvailable)
+            .opacity(processing || !isAvailable ? 0.4 : 1)
     }
 }

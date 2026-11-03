@@ -548,31 +548,48 @@ private final class CaptureResumeGate: @unchecked Sendable {
     }
 }
 
+/// Attach sheet (revised) recent photos: tapping toggles a photo into an
+/// ordered selection (numbered badges); a leading "All" tile opens the full
+/// Photos picker.
 struct CaptureRecentPhotosStrip: View {
     let model: CaptureRecentPhotosModel
     let isDisabled: Bool
-    let pick: (PHAsset) -> Void
+    /// Selected assets' `localIdentifier`s, in pick order.
+    let selection: [String]
+    let toggle: (PHAsset) -> Void
+    let showAllPhotos: () -> Void
     let manageLimitedAccess: () -> Void
 
     var body: some View {
         Group {
             switch model.access {
             case .unknown:
-                placeholderRow
+                HStack(spacing: 8) {
+                    allPhotosTile
+                    placeholderRow
+                }
             case .denied:
-                Text("Allow Photos access in Settings to see recent photos here. All photos still works.")
-                    .font(Geist.caption())
-                    .foregroundStyle(Geist.muted)
-                    .padding(.horizontal, 4)
+                HStack(spacing: 12) {
+                    Text("Allow Photos access in Settings to see recent photos here.")
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.muted)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    allPhotosTile
+                }
+                .padding(.leading, 4)
             case .authorized, .limited:
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
+                        // First, so it stays on screen ahead of up to 12 photos.
+                        allPhotosTile
                         ForEach(Array(model.assets.enumerated()), id: \.element.localIdentifier) { index, asset in
                             CaptureRecentPhotoButton(
                                 model: model,
                                 asset: asset,
-                                label: String(localized: "Recent photo \(index + 1)")
-                            ) { pick(asset) }
+                                label: String(localized: "Recent photo \(index + 1)"),
+                                selectionNumber: selection.firstIndex(of: asset.localIdentifier).map { $0 + 1 }
+                            ) { toggle(asset) }
                             .disabled(isDisabled)
                         }
                         if model.access == .limited {
@@ -599,9 +616,29 @@ struct CaptureRecentPhotosStrip: View {
         .task { await model.load() }
     }
 
+    private var allPhotosTile: some View {
+        Button(action: showAllPhotos) {
+            VStack(spacing: 4) {
+                Image(systemName: "photo.on.rectangle")
+                    .font(.system(size: 18, weight: .regular))
+                Text("All")
+                    .font(.custom("Geist-Medium", size: 11, relativeTo: .caption2))
+            }
+            .foregroundStyle(Geist.text)
+            .frame(width: 64, height: 72)
+            .background(Geist.card, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(Geist.border, lineWidth: 1))
+            .contentShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .disabled(isDisabled)
+        .accessibilityLabel(Text("All photos"))
+        .accessibilityIdentifier("capture_attach_all_photos")
+    }
+
     private var placeholderRow: some View {
         HStack(spacing: 8) {
-            ForEach(0..<5, id: \.self) { _ in
+            ForEach(0..<4, id: \.self) { _ in
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .fill(Geist.Palette.gray300)
                     .frame(width: 72, height: 72)
@@ -615,6 +652,8 @@ private struct CaptureRecentPhotoButton: View {
     let model: CaptureRecentPhotosModel
     let asset: PHAsset
     let label: String
+    /// 1-based position in the selection, or nil when not selected.
+    let selectionNumber: Int?
     let action: () -> Void
 
     @State private var image: UIImage?
@@ -632,10 +671,28 @@ private struct CaptureRecentPhotoButton: View {
             }
             .frame(width: 72, height: 72)
             .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .overlay {
+                if selectionNumber != nil {
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .strokeBorder(Geist.accent, lineWidth: 3)
+                }
+            }
+            .overlay(alignment: .topTrailing) {
+                if let selectionNumber {
+                    Text(verbatim: "\(selectionNumber)")
+                        .font(.custom("Geist-Bold", size: 12, relativeTo: .caption2))
+                        .foregroundStyle(.white)
+                        .frame(width: 22, height: 22)
+                        .background(Geist.accent, in: Circle())
+                        .overlay(Circle().stroke(.white, lineWidth: 2))
+                        .padding(6)
+                }
+            }
             .contentShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         }
         .buttonStyle(.plain)
         .accessibilityLabel(Text(verbatim: label))
+        .accessibilityAddTraits(selectionNumber != nil ? .isSelected : [])
         .task(id: asset.localIdentifier) {
             image = await model.thumbnail(for: asset, side: 72)
         }
