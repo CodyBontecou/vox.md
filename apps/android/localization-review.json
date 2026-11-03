@@ -27,15 +27,15 @@
     }
   ],
   "catalog": "Voxboard/Localizable.xcstrings",
-  "catalogBackedSourceCount": 261,
+  "catalogBackedSourceCount": 267,
   "dynamicRuntimeCallSiteCount": 0,
   "dynamicRuntimeCalls": [],
   "dynamicRuntimeExpressionCount": 0,
-  "fallbackSourceCount": 442,
+  "fallbackSourceCount": 474,
   "formatArgumentContractStatus": "validated",
   "incompleteCatalogSourceCount": 0,
   "incompleteCatalogSources": [],
-  "integerFormatSourceCount": 16,
+  "integerFormatSourceCount": 25,
   "integerFormatSources": [
     {
       "locations": [
@@ -45,21 +45,52 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3298"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3300"
       ],
       "source": "%@ · %lld attachment"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3299"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3301"
       ],
       "source": "%@ · %lld attachments"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:349",
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:359"
+      ],
+      "source": "%@ · DAY %lld"
     },
     {
       "locations": [
         "apps/android/app/src/main/kotlin/md/vox/android/ui/CaptureViewModel.kt:436"
       ],
       "source": "%lld captures removed from History."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:174"
+      ],
+      "source": "%lld days free, then %@/wk"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:145"
+      ],
+      "source": "%lld days free, then %@/wk. Auto-renews."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:169"
+      ],
+      "source": "%lld days free, then %@/yr"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:140"
+      ],
+      "source": "%lld days free, then %@/yr. Auto-renews."
     },
     {
       "locations": [
@@ -75,31 +106,25 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1243"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1245"
       ],
       "source": "%lld non-screenshot images were skipped."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3136"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3138"
       ],
       "source": "%lld of %lld"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:90"
-      ],
-      "source": "%lld of %lld used"
-    },
-    {
-      "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5274"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5275"
       ],
       "source": "%lld recordings · %lld captures"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5248"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5249"
       ],
       "source": "%lld recordings, %lld captures"
     },
@@ -111,30 +136,60 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2343",
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2493",
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2595",
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2345",
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2495",
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2597",
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:655"
       ],
       "source": "%lld%%"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2851"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2853"
       ],
       "source": "Heading %lld"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2706"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:633"
       ],
-      "source": "Saved locally in %lld durable chunk."
+      "source": "Page %lld of %lld"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:631"
+      ],
+      "source": "Page %lld of %lld, current"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:470"
+      ],
+      "source": "Save %lld%%"
     },
     {
       "locations": [
         "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2708"
       ],
+      "source": "Saved locally in %lld durable chunk."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2710"
+      ],
       "source": "Saved locally in %lld durable chunks."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:158"
+      ],
+      "source": "Start %lld-day free trial"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:328"
+      ],
+      "source": "Use everything for %lld days. Cancel before %@ and you pay nothing."
     }
   ],
   "limitations": [
@@ -142,8 +197,8 @@
     "Dynamic-source call sites are inventoried; the current finite-domain trace has no unresolved dynamic expressions.",
     "Missing sources fall back to English until reviewed translations are added to the iOS catalog."
   ],
-  "literalRuntimeSourceCount": 709,
-  "missingCatalogSourceCount": 442,
+  "literalRuntimeSourceCount": 747,
+  "missingCatalogSourceCount": 474,
   "missingCatalogSources": [
     {
       "locations": [
@@ -191,45 +246,84 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:99"
-      ],
-      "source": "%@ of 15 min used"
-    },
-    {
-      "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5183"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5184"
       ],
       "source": "%@ · %@ · local %@"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3642"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3644"
       ],
       "source": "%@ · %@/%@"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3298"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3300"
       ],
       "source": "%@ · %lld attachment"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3299"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3301"
       ],
       "source": "%@ · %lld attachments"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5185"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:349",
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:359"
+      ],
+      "source": "%@ · DAY %lld"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5186"
       ],
       "source": "%@ · local %@"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:147",
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:176"
+      ],
+      "source": "%@/wk, renews automatically"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:142",
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:171"
+      ],
+      "source": "%@/yr, renews automatically"
     },
     {
       "locations": [
         "apps/android/app/src/main/kotlin/md/vox/android/ui/CaptureViewModel.kt:436"
       ],
       "source": "%lld captures removed from History."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:174"
+      ],
+      "source": "%lld days free, then %@/wk"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:145"
+      ],
+      "source": "%lld days free, then %@/wk. Auto-renews."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:169"
+      ],
+      "source": "%lld days free, then %@/yr"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:140"
+      ],
+      "source": "%lld days free, then %@/yr. Auto-renews."
     },
     {
       "locations": [
@@ -245,28 +339,40 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1243"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1245"
       ],
       "source": "%lld non-screenshot images were skipped."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3136"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3138"
       ],
       "source": "%lld of %lld"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:90"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:289"
       ],
-      "source": "%lld of %lld used"
+      "source": "- Draft for "
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3600",
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4415"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:288"
+      ],
+      "source": "- [ ] Call Sam about the venue"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3602",
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4417"
       ],
       "source": "- {time} "
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:249"
+      ],
+      "source": "0:12"
     },
     {
       "locations": [
@@ -283,13 +389,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1241"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1243"
       ],
       "source": "1 non-screenshot image was skipped."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5392"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5393"
       ],
       "source": "24-hour timestamps"
     },
@@ -309,7 +415,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1516"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1518"
       ],
       "source": "A camera file could not be prepared."
     },
@@ -321,19 +427,19 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1898"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1900"
       ],
       "source": "A current location is unavailable. Your draft is preserved."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5439"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5440"
       ],
       "source": "A finished voice transcript is sent straight to the active preset without stopping in the composer."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5425"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5426"
       ],
       "source": "A finished voice transcript lands in the composer, ready to review before sending."
     },
@@ -345,25 +451,31 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3440"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:351"
+      ],
+      "source": "A notification two days before your trial ends."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3442"
       ],
       "source": "A preset freezes the folder, filename, and frontmatter used by a capture before delivery starts."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2704"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2706"
       ],
       "source": "A segment boundary could not be saved, so recording stopped with all audio preserved."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4966"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4968"
       ],
       "source": "Accuracy"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3391"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3393"
       ],
       "source": "Action needed"
     },
@@ -375,19 +487,19 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4528"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4530"
       ],
       "source": "Add an audio link to the Markdown entry."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4866"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4868"
       ],
       "source": "Add the frozen result to note frontmatter or inline entry fields."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2516",
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2518",
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:670"
       ],
       "source": "Added"
@@ -400,13 +512,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4875"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4877"
       ],
       "source": "Advanced YAML"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4534"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4536"
       ],
       "source": "After Text"
     },
@@ -418,19 +530,19 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:79"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:135"
       ],
       "source": "All capture presets and entry points"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1924"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1926"
       ],
       "source": "Always Send Without Location"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5188"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5189"
       ],
       "source": "Android Speech when explicitly on-device"
     },
@@ -442,13 +554,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4939"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4941"
       ],
       "source": "Android's system geocoder may contact a remote service and transmit the privacy-adjusted coordinates. This consent applies only to this preset."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4962"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4964"
       ],
       "source": "Apple Maps URL"
     },
@@ -460,7 +572,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4857"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4859"
       ],
       "source": "Ask Every Time"
     },
@@ -478,7 +590,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5190"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5191"
       ],
       "source": "Audio capture"
     },
@@ -502,40 +614,46 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2700"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2702"
       ],
       "source": "Audio is staying on this device and is checkpointed every second."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4531"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4533"
       ],
       "source": "Audio link placement"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4533"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4535"
       ],
       "source": "Before Text"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3665"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3667"
       ],
       "source": "Beneath Heading"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4521"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4523"
       ],
       "source": "Beside Note"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2497",
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2499",
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:630"
       ],
       "source": "Cancel Processing"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:476"
+      ],
+      "source": "Cancel anytime in Google Play › Payments & subscriptions. Access belongs to the Google Play account that buys it; Apple purchases don’t transfer."
     },
     {
       "locations": [
@@ -551,25 +669,25 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4969"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4971"
       ],
       "source": "Capture ID"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4898"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4900"
       ],
       "source": "Capture ID is always written as id. Choose other fields and rename their output keys below."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1356"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1358"
       ],
       "source": "Capture cancelled because location was unavailable. Your draft is preserved."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5194"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5195"
       ],
       "source": "Capture contents stay on this device until Vox.md writes them to the folder you selected. Android backup is disabled for content-bearing storage."
     },
@@ -581,19 +699,19 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3394"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3396"
       ],
       "source": "Capture discarded"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3393"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3395"
       ],
       "source": "Capture failed"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3388"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3390"
       ],
       "source": "Capture in progress"
     },
@@ -635,7 +753,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4792"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4794"
       ],
       "source": "Capture prompt"
     },
@@ -653,19 +771,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:55"
-      ],
-      "source": "Capture without limits"
-    },
-    {
-      "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4598"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4600"
       ],
       "source": "Change Export Folder"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4664"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4666"
       ],
       "source": "Change Markdown Template"
     },
@@ -683,13 +795,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3392"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3394"
       ],
       "source": "Checking delivery"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4664"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4666"
       ],
       "source": "Choose Markdown Template"
     },
@@ -701,7 +813,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:973"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:974"
       ],
       "source": "Choose a setting"
     },
@@ -719,15 +831,21 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1603"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1605"
       ],
       "source": "Choose photos, filter a selection to screenshots, or take a new photo."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5350"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5351"
       ],
       "source": "Choose which actions appear below Capture. Move actions into the order that works for you."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:459"
+      ],
+      "source": "Choose your plan"
     },
     {
       "locations": [
@@ -738,19 +856,19 @@
     {
       "locations": [
         "apps/android/app/src/main/kotlin/md/vox/android/HistoryDetailScreen.kt:351",
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4771"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4773"
       ],
       "source": "Clean"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3177"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3179"
       ],
       "source": "Clear completed History?"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4884"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4886"
       ],
       "source": "Collection key"
     },
@@ -762,61 +880,61 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3179"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3181"
       ],
       "source": "Completed local History markers will be removed. Markdown notes already written to your folder are not deleted, and lifetime Stats remain content-free and intact."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:205"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:235"
       ],
       "source": "Connecting to Google Play…"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5206"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5207"
       ],
       "source": "Content-free operational events stored only on this device"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4955"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4957"
       ],
       "source": "Coordinates"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4681"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4683"
       ],
       "source": "Copy retained audio beside the transcript and add an Obsidian audio embed."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4677"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4679"
       ],
       "source": "Copy retained audio into %@ and add an Obsidian audio embed."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4961"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4963"
       ],
       "source": "Country"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4839"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4841"
       ],
       "source": "Current location"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1310"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1312"
       ],
       "source": "Current location is unavailable. Try again when location services have a fix."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3614"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3616"
       ],
       "source": "Delete Template"
     },
@@ -828,25 +946,25 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4798"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4800"
       ],
       "source": "Describe attached images locally when a compatible model is installed."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5068"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5070"
       ],
       "source": "Document"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4461"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4463"
       ],
       "source": "Document Frontmatter"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1526"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1528"
       ],
       "source": "Document scanning is unavailable in this window."
     },
@@ -870,37 +988,37 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3916"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3918"
       ],
       "source": "Edit Preset"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1072"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1074"
       ],
       "source": "Edit routing, formatting, metadata, voice, and local processing here."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4443"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4445"
       ],
       "source": "Embed an invisible request marker so interrupted writes can be reconciled safely."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4528"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4530"
       ],
       "source": "Embed audio"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4674"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4676"
       ],
       "source": "Embed exported audio"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4402"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4404"
       ],
       "source": "Entry"
     },
@@ -918,19 +1036,31 @@
     },
     {
       "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:340"
+      ],
+      "source": "Everything unlocks"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:241"
+      ],
+      "source": "Example: a 12-second voice note, transcribed on-device into today’s Markdown note."
+    },
+    {
+      "locations": [
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:642"
       ],
       "source": "Export Audio"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4654"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4656"
       ],
       "source": "Export Markdown as YAML frontmatter followed by the transcript metadata."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4589"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4591"
       ],
       "source": "Export completed transcripts"
     },
@@ -948,7 +1078,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4687"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4689"
       ],
       "source": "Exported audio placement"
     },
@@ -966,32 +1096,32 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5067"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5069"
       ],
       "source": "Favorite"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4606"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4608"
       ],
       "source": "File mode"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2597"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2599"
       ],
       "source": "Finalizing transcript"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2500",
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2502",
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:660"
       ],
       "source": "Finalizing transcript…"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2573",
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2575",
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:603",
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:614"
       ],
@@ -1005,7 +1135,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3390"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3392"
       ],
       "source": "Folder access needed"
     },
@@ -1018,97 +1148,97 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4404"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4406"
       ],
       "source": "Formatting"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:86"
-      ],
-      "source": "Free captures"
-    },
-    {
-      "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4797"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4799"
       ],
       "source": "Generate image alt text"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4963"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4965"
       ],
       "source": "Google Maps URL"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:208"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:238"
       ],
       "source": "Google Play could not complete that request. No capture data was affected."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:207"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:237"
       ],
       "source": "Google Play is unavailable. Your last confirmed access remains unchanged; try again when Play is connected."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:200"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:230"
       ],
       "source": "Google Play returned a purchase that does not unlock this app. Your existing access remains unchanged."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:198"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:228"
       ],
       "source": "Google Play verified this purchase, but Vox.md could not protect offline proof on this device. Restore again before using Unlimited offline."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4386"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4388"
       ],
       "source": "Heading level"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2109"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2111"
       ],
       "source": "Hide pinned capture presets"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5065"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:326"
+      ],
+      "source": "How your free\ntrial works"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5067"
       ],
       "source": "Idea"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4726"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4728"
       ],
       "source": "Identifier"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:157"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:171"
       ],
       "source": "If Play is temporarily unavailable, Vox.md keeps the last successfully confirmed paid entitlement on this device. A successful later query applies pending, refund, or cancellation changes."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4392"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4394"
       ],
       "source": "If heading is missing"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4855"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4857"
       ],
       "source": "If unavailable"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4945"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4947"
       ],
       "source": "If you leave this off, capture still writes coordinates and map links; place, city, region, and country fields are omitted."
     },
@@ -1132,13 +1262,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4462"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4464"
       ],
       "source": "Inline Entry"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2909"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2911"
       ],
       "source": "Insert an Obsidian-compatible due-date token at the current selection."
     },
@@ -1187,7 +1317,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4344"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4346"
       ],
       "source": "Journal/Inbox.md"
     },
@@ -1199,61 +1329,67 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4394"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4396"
       ],
       "source": "Keep Pending"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4124"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4126"
       ],
       "source": "Keep this preset at the top of the list."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4497"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:232"
+      ],
+      "source": "Keyboard, widget, Quick Settings, Wear OS"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4499"
       ],
       "source": "Label detected speakers when the installed transcription engine supports it."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4956"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4958"
       ],
       "source": "Latitude"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4438"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4440"
       ],
       "source": "Leave empty to store files beside the note."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5224"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5225"
       ],
       "source": "Lifetime on-device activity calculated from a content-free local ledger."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2470"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2472"
       ],
       "source": "Listening on this device…"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2476"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2478"
       ],
       "source": "Live preview fell behind. The complete durable recording is unaffected."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2482"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2484"
       ],
       "source": "Live preview is unavailable. The recording remains safe for final on-device transcription."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2470"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2472"
       ],
       "source": "Live transcript paused"
     },
@@ -1271,74 +1407,74 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:96"
-      ],
-      "source": "Local transcription"
-    },
-    {
-      "locations": [
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:1199"
       ],
       "source": "Local transcription failed. The original audio is still safe."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2529"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2531"
       ],
       "source": "Local transcription failed. The original recording is still safe."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1893"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1895"
       ],
       "source": "Location access is restricted on this device. Your draft is preserved."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1894"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1896"
       ],
       "source": "Location permission has not been decided. Your draft is preserved."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1307"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1309"
       ],
       "source": "Location permission is required to add your current location."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1892"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1894"
       ],
       "source": "Location permission was denied. Your draft is preserved."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1316"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1318"
       ],
       "source": "Location permission was not granted."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1309"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1311"
       ],
       "source": "Location timed out. Try again when location services have a fix."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1912"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1914"
       ],
       "source": "Location unavailable"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4957"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4959"
       ],
       "source": "Longitude"
     },
     {
       "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:152"
+      ],
+      "source": "Manage Subscription"
+    },
+    {
+      "locations": [
         "apps/android/app/src/main/kotlin/md/vox/android/HistoryDetailScreen.kt:70",
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4617"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4619"
       ],
       "source": "Markdown"
     },
@@ -1356,19 +1492,19 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4471"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4473"
       ],
       "source": "Metadata fields"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5381"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5382"
       ],
       "source": "Move Down"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5375"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5376"
       ],
       "source": "Move Up"
     },
@@ -1386,25 +1522,25 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3423"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3425"
       ],
       "source": "New Capture Preset"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3916"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3918"
       ],
       "source": "New Preset"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4638"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4640"
       ],
       "source": "New filename template"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4667"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4669"
       ],
       "source": "No Markdown template selected"
     },
@@ -1416,19 +1552,25 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:203"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:233"
       ],
       "source": "No Vox.md Unlimited purchase was found for this Google Play account."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5238"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:385"
+      ],
+      "source": "No account to create. Google Play handles payment; your notes, audio and transcripts are never sent with billing checks."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5239"
       ],
       "source": "No activity yet"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5299"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5300"
       ],
       "source": "No captured content, filenames, or destinations are stored with stats."
     },
@@ -1452,19 +1594,19 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5290"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5291"
       ],
       "source": "No delivered captures yet"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4601"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4603"
       ],
       "source": "No export folder selected"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3570"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3572"
       ],
       "source": "No prefix or suffix"
     },
@@ -1476,13 +1618,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1239"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1241"
       ],
       "source": "No screenshots were added. Choose images from a Screenshots album."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:80"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:136"
       ],
       "source": "No subscription"
     },
@@ -1494,61 +1636,67 @@
     },
     {
       "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:164"
+      ],
+      "source": "Not available right now"
+    },
+    {
+      "locations": [
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:1177"
       ],
       "source": "Not enough local storage is available for this model."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4360"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4362"
       ],
       "source": "Note filename template"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4319"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4321"
       ],
       "source": "Note target"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2801"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2803"
       ],
       "source": "Nothing to undo"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4653"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4655"
       ],
       "source": "Obsidian frontmatter"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5407"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5408"
       ],
       "source": "Off adds a finished voice transcript to the draft automatically. Turn this on to review it first."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5393"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5394"
       ],
       "source": "Off uses the iOS-compatible 12-hour format with AM or PM."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:149"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:163"
       ],
       "source": "On Android, Unlimited applies only to the Google Play account that purchased it. Google Play does not share in-app purchases through Family Library, and Apple purchases do not transfer."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4749"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4751"
       ],
       "source": "On-device Processing"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4474"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4476"
       ],
       "source": "One key/value pair per line."
     },
@@ -1560,21 +1708,27 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4964"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4966"
       ],
       "source": "OpenStreetMap URL"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4793"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4795"
       ],
       "source": "Optional local context supplied to the processor."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4928"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4930"
       ],
       "source": "Output key"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:631"
+      ],
+      "source": "Page %lld of %lld, current"
     },
     {
       "locations": [
@@ -1590,38 +1744,38 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1609"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1611"
       ],
       "source": "Photo Library"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4958"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4960"
       ],
       "source": "Place"
     },
     {
       "locations": [
         "apps/android/app/src/main/kotlin/md/vox/android/HistoryDetailScreen.kt:71",
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4618"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4620"
       ],
       "source": "Plain Text"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5547"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5548"
       ],
       "source": "Planned"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1895"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1897"
       ],
       "source": "Precise location is required by this preset, but only approximate location is available. Your draft is preserved."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1308"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1310"
       ],
       "source": "Precise location is required for this action."
     },
@@ -1633,13 +1787,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2592"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2594"
       ],
       "source": "Preparing transcript"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4084"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4086"
       ],
       "source": "Preset changes only affect new captures. A pending capture keeps the exact preset snapshot it started with."
     },
@@ -1669,25 +1823,25 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2543"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2545"
       ],
       "source": "Process Recording"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4751"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4753"
       ],
       "source": "Process before delivery"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2611"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2613"
       ],
       "source": "Processing audio on this device"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2538",
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2540",
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:682"
       ],
       "source": "Processing discarded. The original audio is still safe."
@@ -1700,31 +1854,31 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:134"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:155"
       ],
       "source": "Purchase Pending"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:204"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:234"
       ],
       "source": "Purchase cancelled. Nothing was charged."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:201"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:231"
       ],
       "source": "Purchase complete. Unlimited access is active."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:202"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:232"
       ],
       "source": "Purchase restored. Unlimited access is active."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:153"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:167"
       ],
       "source": "Purchases are processed by Google Play. Purchase checks contain only the Play product and account transaction state; capture text, audio, files, destinations, and transcripts are never sent with billing traffic."
     },
@@ -1742,7 +1896,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3389"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3391"
       ],
       "source": "Ready to retry"
     },
@@ -1754,31 +1908,31 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5233"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5234"
       ],
       "source": "Recorded duration"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4505"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4507"
       ],
       "source": "Recording Only"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4512"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4514"
       ],
       "source": "Recording Only writes verified WAV audio to this preset's export folder using the new-file name template. It skips transcription and location."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5421"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5422"
       ],
       "source": "Recording Result"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2628"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2630"
       ],
       "source": "Recording cancelled"
     },
@@ -1796,19 +1950,19 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2627"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2629"
       ],
       "source": "Recording failed"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2626"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2628"
       ],
       "source": "Recording interrupted"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2624"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2626"
       ],
       "source": "Recording paused"
     },
@@ -1820,7 +1974,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2625"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2627"
       ],
       "source": "Recording saved"
     },
@@ -1832,7 +1986,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5128"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5129"
       ],
       "source": "Recover, export, and manage durable audio"
     },
@@ -1844,7 +1998,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4960"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4962"
       ],
       "source": "Region"
     },
@@ -1862,7 +2016,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4659"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4661"
       ],
       "source": "Render a selected Markdown template, fill its known frontmatter fields, then append the transcript."
     },
@@ -1874,37 +2028,43 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3313"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3315"
       ],
       "source": "Repair Folder Access"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4840"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4842"
       ],
       "source": "Request one location at send or recording stop; never track in the background."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5455"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5456"
       ],
       "source": "Reset Capture Bar"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2535"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:611"
+      ],
+      "source": "Restore purchase"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2537"
       ],
       "source": "Retry Processing"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4442"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4444"
       ],
       "source": "Retry protection marker"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1916"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1918"
       ],
       "source": "Retry, send this capture without location, or cancel. No new location is requested after the capture is queued."
     },
@@ -1916,55 +2076,67 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3508"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3510"
       ],
       "source": "Reusable prefix and suffix formatting. Linked presets receive edits automatically."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2615"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2617"
       ],
       "source": "Review the transcript or send it with the selected preset"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4330"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4332"
       ],
       "source": "Rolling period"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3932"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:470"
+      ],
+      "source": "Save %lld%%"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3934"
       ],
       "source": "Save Capture Preset"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4518"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4520"
       ],
       "source": "Save original audio"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2706"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2708"
       ],
       "source": "Saved locally in %lld durable chunk."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2708"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2710"
       ],
       "source": "Saved locally in %lld durable chunks."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1613"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1615"
       ],
       "source": "Screenshots"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1071"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:606"
+      ],
+      "source": "See all plans"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1073"
       ],
       "source": "Select a capture preset"
     },
@@ -1976,37 +2148,37 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4858"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4860"
       ],
       "source": "Send Without"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5162"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5163"
       ],
       "source": "Set Up Vox.md Keyboard"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:974"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:975"
       ],
       "source": "Settings and supporting tools open here while Quick Capture stays one step away."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5359"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5360"
       ],
       "source": "Show"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2109"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2111"
       ],
       "source": "Show pinned capture presets"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4123"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4125"
       ],
       "source": "Show this preset in capture pickers."
     },
@@ -2018,25 +2190,37 @@
     },
     {
       "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:228"
+      ],
+      "source": "Speak it.\nIt lands in your vault."
+    },
+    {
+      "locations": [
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:872"
       ],
       "source": "Speaker Identification"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4496"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4498"
       ],
       "source": "Speaker diarization"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2070"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:158"
+      ],
+      "source": "Start %lld-day free trial"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2072"
       ],
       "source": "Start voice capture"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2461"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2463"
       ],
       "source": "Starting private live transcript…"
     },
@@ -2048,31 +2232,43 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2067"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2069"
       ],
       "source": "Stop voice capture"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4362"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4364"
       ],
       "source": "Supports {id}, {date}, {time}, {year}, {month}, {week}, and {quarter}."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4639"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4641"
       ],
       "source": "Supports {timestamp}, {date}, {YR}, {time}, {id}, {id8}, {model}, and {language}."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4158"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4160"
       ],
       "source": "Symbol"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3110"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:339"
+      ],
+      "source": "TODAY"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:274"
+      ],
+      "source": "TRANSCRIBED ON-DEVICE"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3112"
       ],
       "source": "Text, model, status, or ID"
     },
@@ -2174,13 +2370,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1684"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1686"
       ],
       "source": "The audio could not be prepared. The original recording is still safe."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2711"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2713"
       ],
       "source": "The audio recorded before interruption is safe and available for recovery."
     },
@@ -2240,13 +2436,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:63"
-      ],
-      "source": "The free tier includes 10 delivered captures and 15 minutes of on-device transcription. A single purchase unlocks both for the lifetime of this app."
-    },
-    {
-      "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2527"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2529"
       ],
       "source": "The free transcription limit has been reached. The original recording is still safe."
     },
@@ -2264,13 +2454,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1896"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1898"
       ],
       "source": "The location request timed out. Your draft is preserved."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1897"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1899"
       ],
       "source": "The location request was cancelled. Your draft is preserved."
     },
@@ -2282,7 +2472,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2712"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2714"
       ],
       "source": "The microphone stopped, but completed chunks remain local."
     },
@@ -2307,31 +2497,31 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1540"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1542"
       ],
       "source": "The on-device document scanner is unavailable. You can still attach a PDF from Files."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1288"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1290"
       ],
       "source": "The original images are attached, but no readable text was found."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2617"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2619"
       ],
       "source": "The original recording is still safe on this device"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2618"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2620"
       ],
       "source": "The original recording remains available"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2701"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2703"
       ],
       "source": "The recorded chunks are safe. Resume or stop when you’re ready."
     },
@@ -2343,19 +2533,19 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1676"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1678"
       ],
       "source": "The recording is no longer available."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1275"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1277"
       ],
       "source": "The scan sources are attached, but no readable text was found."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1265"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1267"
       ],
       "source": "The scanner did not return any pages or a PDF."
     },
@@ -2367,13 +2557,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2713"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2715"
       ],
       "source": "The session is marked cancelled; its source remains recoverable for now."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1636"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1638"
       ],
       "source": "The sketch could not be saved."
     },
@@ -2415,13 +2605,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2767"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2769"
       ],
       "source": "This action is not available yet"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:206"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:236"
       ],
       "source": "This build is not connected to the Vox.md Play listing. Install a Play-distributed test or release build to purchase."
     },
@@ -2451,36 +2641,36 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4427"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4429"
       ],
       "source": "This preset uses the linked template. Template edits apply automatically; the last formatting remains safe if the template is removed."
     },
     {
       "locations": [
         "apps/android/app/src/main/kotlin/md/vox/android/HistoryDetailScreen.kt:352",
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4772"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4774"
       ],
       "source": "To-do List"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4504"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4506"
       ],
       "source": "Transcribe & Capture"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4587"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4589"
       ],
       "source": "Transcript File Export"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1016",
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1669",
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1018",
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1671",
         "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:788",
         "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:821",
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:925"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:926"
       ],
       "source": "Transcript added to the current draft."
     },
@@ -2492,7 +2682,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2598"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2600"
       ],
       "source": "Transcript ready"
     },
@@ -2510,21 +2700,27 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2600"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2602"
       ],
       "source": "Transcription cancelled"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2599"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2601"
       ],
       "source": "Transcription needs attention"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4752"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4754"
       ],
       "source": "Transform captured text locally after transcription and before Markdown rendering."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:360"
+      ],
+      "source": "Trial ends"
     },
     {
       "locations": [
@@ -2540,33 +2736,45 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:133"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallPlans.kt:154"
       ],
       "source": "Unlimited Active"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:77"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:133"
       ],
       "source": "Unlimited Markdown captures"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:55"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:341"
+      ],
+      "source": "Unlimited captures and transcription on every entry point."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:112"
       ],
       "source": "Unlimited is active"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:196"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:226"
       ],
       "source": "Unlimited is active from this installation’s last verified Google Play purchase. Connect to Play to refresh its status."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:78"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:134"
       ],
       "source": "Unlimited local transcription"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5105"
+      ],
+      "source": "Unlock unlimited local Capture and private, on-device transcription."
     },
     {
       "locations": [
@@ -2583,25 +2791,31 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4704"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4706"
       ],
       "source": "Use .md extension"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4658"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4660"
       ],
       "source": "Use Markdown template"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4938"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:328"
+      ],
+      "source": "Use everything for %lld days. Cancel before %@ and you pay nothing."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4940"
       ],
       "source": "Use place labels"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4474"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4476"
       ],
       "source": "Use unique letters, numbers, _ or - for each key."
     },
@@ -2610,6 +2824,12 @@
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:843"
       ],
       "source": "Using %@ · %@"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:284"
+      ],
+      "source": "Vault / Inbox / %@.md"
     },
     {
       "locations": [
@@ -2631,37 +2851,37 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5165"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5166"
       ],
       "source": "Vibrate on key press"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2703"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2705"
       ],
       "source": "Voice Auto-Stop detected the end of speech. The recording was saved locally."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4494"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4496"
       ],
       "source": "Voice and Audio"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2629"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2631"
       ],
       "source": "Voice capture"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2068"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2070"
       ],
       "source": "Voice capture is being transcribed. Show detailed recording controls"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2069"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2071"
       ],
       "source": "Voice capture needs attention. Show detailed recording controls"
     },
@@ -2679,20 +2899,26 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2608",
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2610",
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:652"
       ],
       "source": "Waiting for the local model…"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4502"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4504"
       ],
       "source": "Watch output"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:2999"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:350"
+      ],
+      "source": "We remind you"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:3001"
       ],
       "source": "Web address"
     },
@@ -2704,37 +2930,37 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4214"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4216"
       ],
       "source": "Without an icon, the preset's first letter is shown where an icon is required."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5066"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5068"
       ],
       "source": "Work"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4705"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4707"
       ],
       "source": "Wrap YAML in Markdown frontmatter for Obsidian-compatible files."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4906"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4908"
       ],
       "source": "Write %@ when the frozen snapshot contains it."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4590"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4592"
       ],
       "source": "Write completed recordings to a separate document folder using this preset's format."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4865"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4867"
       ],
       "source": "Write location metadata"
     },
@@ -2746,27 +2972,51 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4708"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4710"
       ],
       "source": "YAML properties"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:193"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:223"
       ],
       "source": "Your existing Unlimited access remains active while Google Play processes the pending purchase."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:61"
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:120"
       ],
       "source": "Your one-time purchase is active for this Google Play account."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:194"
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:362"
+      ],
+      "source": "Your plan starts at %@/wk. Cancel anytime in Google Play."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:364"
+      ],
+      "source": "Your plan starts at %@/yr. Cancel anytime in Google Play."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:224"
       ],
       "source": "Your purchase is pending. Unlimited access starts after Google Play confirms payment."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt:118"
+      ],
+      "source": "Your subscription is active for this Google Play account. Manage or cancel it anytime in Google Play › Payments & subscriptions."
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/PaywallCarousel.kt:290"
+      ],
+      "source": "[[Weekly review]]"
     },
     {
       "locations": [
@@ -2782,50 +3032,50 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4361"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4363"
       ],
       "source": "capture-{id}.md"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4965"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4967"
       ],
       "source": "geo URI"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4893"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4895"
       ],
       "source": "lat: {latitude}\nlon: {longitude}"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4472"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:4474"
       ],
       "source": "source: android\ntags: inbox"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1837"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:1839"
       ],
       "source": "— Theodore Roosevelt"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5283"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5284"
       ],
       "source": "● Captures"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5282"
+        "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt:5283"
       ],
       "source": "● Recordings"
     }
   ],
   "pluralReviewStatus": "requires-human-review",
   "reviewStatus": "requires-human-translation",
-  "runtimeSourceLiteralCount": 2407,
+  "runtimeSourceLiteralCount": 2460,
   "runtimeSourceScanRoots": [
     "apps/android/app/src/main/kotlin",
     "apps/android/capture-domain/src/main/kotlin",

@@ -899,8 +899,9 @@ private fun VoxNavigation(
                                     stats = latestState.activityStats,
                                     transcriptionUsage = transcriptionUsage,
                                     navigateBack = closeAdaptiveSettingsDetail,
-                                    purchase = { context.findActivity()?.let(billingManager::launchPurchase) },
+                                    purchase = { kind -> context.findActivity()?.let { billingManager.launchPurchase(it, kind) } },
                                     restore = billingManager::restore,
+                                    onTrialReminderPrompted = billingManager::consumeTrialReminderPrompt,
                                 )
                                 adaptiveSettingsDestination == Destination.Stats.route -> StatsScreen(
                                     stats = latestState.activityStats,
@@ -985,8 +986,9 @@ private fun VoxNavigation(
                     stats = latestState.activityStats,
                     transcriptionUsage = transcriptionUsage,
                     navigateBack = { navController.popBackStack() },
-                    purchase = { activity?.let(billingManager::launchPurchase) },
+                    purchase = { kind -> activity?.let { billingManager.launchPurchase(it, kind) } },
                     restore = billingManager::restore,
+                    onTrialReminderPrompted = billingManager::consumeTrialReminderPrompt,
                 )
             }
             composable(Destination.Stats.route) {
@@ -5100,9 +5102,8 @@ internal fun SettingsScreen(
                 subtitle = if (billingState.hasUnlimitedAccess) {
                     voxUiText("Unlimited is unlocked on this device.")
                 } else {
-                    voxUiText("Unlock unlimited local Capture and private, on-device transcription. Pay once with no subscription.")
+                    voxUiText("Unlock unlimited local Capture and private, on-device transcription.")
                 },
-                value = billingState.formattedPrice,
                 onClick = openUpgrade,
             )
             SettingsSection(voxUiText("Capture"))

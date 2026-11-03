@@ -76,6 +76,10 @@ class VisualStoryActivity : AppCompatActivity() {
         const val STORY_HISTORY_UNKNOWN_OUTCOME = "20-history-unknown-outcome"
         const val STORY_HISTORY_PERMANENT_FAILURE = "21-history-permanent-failure"
         const val STORY_PRESET_RAIL = "22-preset-rail"
+        const val STORY_PAYWALL_BENEFIT = "23-paywall-benefit"
+        const val STORY_PAYWALL_TRIAL = "24-paywall-trial"
+        const val STORY_PAYWALL_PLANS = "25-paywall-plans"
+        const val STORY_PAYWALL_LIFETIME_ONLY = "26-paywall-lifetime-only"
     }
 }
 
@@ -120,8 +124,7 @@ internal fun VisualParityStory(story: String) {
             entitlement = VoxEntitlement.FREE,
             connectionPhase = BillingConnectionPhase.UNAVAILABLE,
             lastOutcome = BillingActionOutcome.UNAVAILABLE,
-            productAvailable = false,
-            formattedPrice = null,
+            plans = emptyList(),
         )
         VisualStoryActivity.STORY_RECORDING_QUOTA_REACHED -> CaptureStory(
             recordingPhase = RecordingPhase.COMPLETED,
@@ -153,6 +156,14 @@ internal fun VisualParityStory(story: String) {
         VisualStoryActivity.STORY_PRESET_RAIL -> CaptureStory(
             presets = railStoryPresets,
             isPresetRailExpanded = true,
+        )
+        VisualStoryActivity.STORY_PAYWALL_BENEFIT -> UpgradeStory(VoxEntitlement.FREE, initialPage = 0)
+        VisualStoryActivity.STORY_PAYWALL_TRIAL -> UpgradeStory(VoxEntitlement.FREE, initialPage = 1)
+        VisualStoryActivity.STORY_PAYWALL_PLANS -> UpgradeStory(VoxEntitlement.FREE, initialPage = 2)
+        VisualStoryActivity.STORY_PAYWALL_LIFETIME_ONLY -> UpgradeStory(
+            entitlement = VoxEntitlement.FREE,
+            plans = storyPlans.filter { it.kind == PaywallPlanKind.LIFETIME },
+            initialPage = 1,
         )
         else -> Text("Unknown visual story: $story")
     }
@@ -316,17 +327,17 @@ private fun UpgradeStory(
     } else {
         null
     },
-    productAvailable: Boolean = true,
-    formattedPrice: String? = "$9.99",
+    plans: List<PaywallPlan> = storyPlans,
     captureCount: Int = 9,
     transcriptionUsedMillis: Long = 13 * 60_000L,
+    initialPage: Int = 0,
 ) {
     UpgradeScreen(
         billingState = BillingUiState(
             connectionPhase = connectionPhase,
             entitlement = entitlement,
-            formattedPrice = formattedPrice,
-            productAvailable = productAvailable,
+            plans = plans,
+            activeProductID = if (entitlement == VoxEntitlement.UNLIMITED) PlayBillingManager.LIFETIME_PRODUCT_ID else null,
             lastOutcome = lastOutcome,
         ),
         stats = ActivityStats(
@@ -341,8 +352,17 @@ private fun UpgradeStory(
         navigateBack = {},
         purchase = {},
         restore = {},
+        initialPage = initialPage,
+        today = java.time.LocalDate.of(2026, 11, 2),
     )
 }
+
+/** Deterministic Play-like fixtures; real prices always come from ProductDetails at runtime. */
+private val storyPlans = listOf(
+    PaywallPlan(PaywallPlanKind.YEARLY, "$29.99", 29_990_000L, "USD", offerToken = "story-yearly", freeTrialDays = 7),
+    PaywallPlan(PaywallPlanKind.WEEKLY, "$0.99", 990_000L, "USD", offerToken = "story-weekly", freeTrialDays = 7),
+    PaywallPlan(PaywallPlanKind.LIFETIME, "$49.99", 49_990_000L, "USD"),
+)
 
 @androidx.compose.runtime.Composable
 private fun HistoryStory() {
@@ -416,8 +436,7 @@ private fun SettingsStory() {
         billingState = BillingUiState(
             connectionPhase = BillingConnectionPhase.READY,
             entitlement = VoxEntitlement.FREE,
-            formattedPrice = "$9.99",
-            productAvailable = true,
+            plans = storyPlans,
         ),
     )
 }

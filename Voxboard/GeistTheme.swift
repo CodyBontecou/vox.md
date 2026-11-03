@@ -278,7 +278,7 @@ private func rgbaComponents(_ hex: String) -> (CGFloat, CGFloat, CGFloat, CGFloa
 // MARK: - Components
 
 struct GeistButtonStyle: ButtonStyle {
-    enum Variant { case primary, secondary, tertiary, destructive }
+    enum Variant { case primary, accent, secondary, tertiary, destructive }
     enum Size { case small, medium, large }
 
     let variant: Variant
@@ -328,6 +328,7 @@ struct GeistButtonStyle: ButtonStyle {
         guard isEnabled else { return Geist.Palette.gray700 }
         switch variant {
         case .primary: return Geist.Palette.background100
+        case .accent: return Geist.onAccent
         case .secondary, .tertiary: return Geist.Palette.gray1000
         case .destructive: return .white
         }
@@ -337,6 +338,7 @@ struct GeistButtonStyle: ButtonStyle {
         guard isEnabled else { return Geist.Palette.gray100 }
         switch variant {
         case .primary: return pressed ? Geist.Palette.gray900 : Geist.Palette.gray1000
+        case .accent: return pressed ? Geist.Palette.blue800 : Geist.accent
         case .secondary: return pressed ? Geist.Palette.gray200 : Geist.card
         case .tertiary: return pressed ? Geist.Palette.grayAlpha200 : .clear
         case .destructive: return pressed ? Geist.Palette.red700 : Geist.Palette.red800

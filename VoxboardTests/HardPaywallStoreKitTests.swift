@@ -157,13 +157,16 @@ final class HardPaywallStoreKitTests: XCTestCase {
         window.rootViewController = controller
         window.makeKeyAndVisible()
         defer { window.isHidden = true }
-        for (name, style, category, family) in [
-            ("paywall-individual-review", UIUserInterfaceStyle.light, UIContentSizeCategory.large, false),
-            ("paywall-family-review", .light, .large, true),
-            ("paywall-dark", .dark, .large, false),
-            ("paywall-large-type", .light, .accessibilityExtraExtraExtraLarge, false),
+        for (name, style, category, family, page) in [
+            ("paywall-benefit", UIUserInterfaceStyle.light, UIContentSizeCategory.large, false, 0),
+            ("paywall-trial", .light, .large, false, 1),
+            ("paywall-individual-review", .light, .large, false, 2),
+            ("paywall-family-review", .light, .large, true, 2),
+            ("paywall-dark", .dark, .large, false, 0),
+            ("paywall-dark-plans", .dark, .large, false, 2),
+            ("paywall-large-type", .light, .accessibilityExtraExtraExtraLarge, false, 0),
         ] {
-            controller.rootView = AnyView(PaywallView(isAccessGate: true, historyViewModel: model, initialFamily: family)
+            controller.rootView = AnyView(PaywallView(isAccessGate: true, historyViewModel: model, initialFamily: family, initialPage: page)
                 .environment(tracker).environment(store).id(name))
             window.overrideUserInterfaceStyle = style
             controller.traitOverrides.preferredContentSizeCategory = category

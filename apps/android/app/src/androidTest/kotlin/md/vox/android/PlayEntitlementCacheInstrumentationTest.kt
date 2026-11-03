@@ -19,7 +19,7 @@ class PlayEntitlementCacheInstrumentationTest {
     private val cache by lazy {
         PlayEntitlementCache(
             context = context,
-            productID = PlayBillingManager.PRODUCT_ID,
+            productID = PlayBillingManager.LIFETIME_PRODUCT_ID,
             preferencesName = preferencesName,
             keyAlias = keyAlias,
         )
@@ -34,7 +34,7 @@ class PlayEntitlementCacheInstrumentationTest {
         assertTrue(cache.write(isOwned = true, checkedAtEpochMillis = checkedAt))
         assertEquals(
             CachedPlayEntitlement(
-                productID = PlayBillingManager.PRODUCT_ID,
+                productID = PlayBillingManager.LIFETIME_PRODUCT_ID,
                 isOwned = true,
                 checkedAtEpochMillis = checkedAt,
             ),

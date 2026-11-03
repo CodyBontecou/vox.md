@@ -34,6 +34,9 @@ object VoxColors {
     val AmberDark = Color(0xFFFF9300)
     val Green = Color(0xFF107D32)
     val GreenDark = Color(0xFF00CA50)
+    /** Raised card surface used by the paywall illustration, timeline, and plan rows. */
+    val CardLight = Color(0xFFFFFFFF)
+    val CardDark = Color(0xFF262628)
 }
 
 private val VoxLightColors = lightColorScheme(
