@@ -21,7 +21,8 @@ enum CaptureEditorToolbarCommand: Equatable {
     case slugify
 }
 
-/// Signal quick-actions bar shown above the keyboard.
+/// Signal quick-actions bar: rests above the Capture footer while the keyboard
+/// is down (`isResting`) and rides on the keyboard while typing.
 ///
 /// The row shows the pins of the composer's current route
 /// (`CaptureToolbarPreferences.pinnedActions(forRoute:)`, falling back to the
@@ -59,8 +60,20 @@ struct CaptureEditorToolbar: View {
     /// Regular-width editor header: the row sits inline on the page (no bar
     /// background or rule) and "•••" opens the full panel as a popover.
     var isInline = false
+    /// Keyboard down (CaptureRestActions board): the row rests bare above the
+    /// footer, without the bar's band or rule, and "•••" expands the panel
+    /// inline instead of into the keyboard area.
+    var isResting = false
 
     @State private var showsAllActions = false
+
+    private var usesKeyboardAreaPanel: Bool {
+        presentAllActionsInKeyboardArea != nil && !isResting
+    }
+
+    private var showsBand: Bool {
+        !isInline && (!isResting || showsAllActions)
+    }
 
     private var pinnedActions: [CaptureToolbarAction] {
         preferences.pinnedActions(forRoute: routeID)
@@ -85,7 +98,7 @@ struct CaptureEditorToolbar: View {
                     .accessibilityHidden(true)
 
                 Button {
-                    if let presentAllActionsInKeyboardArea {
+                    if usesKeyboardAreaPanel, let presentAllActionsInKeyboardArea {
                         showsAllActions.toggle()
                         presentAllActionsInKeyboardArea(
                             showsAllActions ? AnyView(keyboardAreaPanel) : nil
@@ -121,21 +134,29 @@ struct CaptureEditorToolbar: View {
             .padding(.leading, isInline ? 0 : 8)
             .padding(.trailing, isInline ? 0 : 8)
             .padding(.vertical, isInline ? 0 : 8)
-            .background(isInline ? Color.clear : Geist.Palette.gray200)
+            .background(showsBand ? Geist.Palette.gray200 : Color.clear)
 
-            if showsAllActions, presentAllActionsInKeyboardArea == nil, !isInline {
+            if showsAllActions, !usesKeyboardAreaPanel, !isInline {
                 allActionsPanel
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
         .overlay(alignment: .top) {
-            if !isInline {
+            if showsBand {
                 Rectangle().fill(Geist.border).frame(height: 1)
             }
         }
+        .onChange(of: isResting) {
+            // The keyboard came up or went down: close whichever panel was
+            // open so it never lingers inline over the keys, or stays
+            // installed as the text view's input view after it resigns.
+            guard showsAllActions else { return }
+            showsAllActions = false
+            presentAllActionsInKeyboardArea?(nil)
+        }
         .onDisappear {
-            // The bar leaves with the keyboard; never leave the panel installed
-            // as the text view's input view.
+            // Recording or a layout change can remove the bar; never leave the
+            // panel installed as the text view's input view.
             if showsAllActions { presentAllActionsInKeyboardArea?(nil) }
         }
     }
@@ -174,7 +195,7 @@ struct CaptureEditorToolbar: View {
                             .tracking(0.6)
                             .foregroundStyle(Geist.muted)
                         Spacer()
-                        if group == .markdown, let dismissKeyboard {
+                        if group == .markdown, !isResting, let dismissKeyboard {
                             Button(action: dismissKeyboard) {
                                 Label("Hide keyboard", systemImage: "keyboard.chevron.compact.down")
                                     .labelStyle(.iconOnly)

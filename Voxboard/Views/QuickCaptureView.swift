@@ -1759,9 +1759,6 @@ struct QuickCaptureView: View {
                     locationProgressBar
                 }
                 entryLocationTokenHintSection
-                if layout == .compact, composerIsFocused && !persistentRecorder.isAppRecordingSegmentActive {
-                    captureQuickActionsBar
-                }
                 if layout == .compact, canExpandWindow, !composerIsFocused,
                    !persistentRecorder.isAppRecordingSegmentActive {
                     AdaptiveExpandHint(kind: .capture)
@@ -1774,9 +1771,14 @@ struct QuickCaptureView: View {
                         .padding(.horizontal, Geist.Spacing.four)
                         .padding(.top, Geist.Spacing.three)
                 }
-                // CaptureKeyboard board: while typing, the quick-action row
-                // sits directly on the keyboard; Speak/Send return when the
-                // keyboard goes down (swipe down on the note, or ⌨ in •••).
+                // CaptureRestActions board: the route's quick-action row is
+                // always there, resting bare above Attach / Speak / Send.
+                // CaptureKeyboard board: while typing it sits directly on the
+                // keyboard; Speak/Send return when the keyboard goes down
+                // (swipe down on the note, or ⌨ in •••).
+                if layout == .compact, !persistentRecorder.isAppRecordingSegmentActive {
+                    captureQuickActionsBar
+                }
                 if !hidesActionBarWhileTyping {
                     captureActionBar
                 }
@@ -1797,14 +1799,15 @@ struct QuickCaptureView: View {
         }
     }
 
-    /// Markdown quick actions shown above the keyboard while typing.
+    /// The route's quick actions: resting above the footer, or on the keyboard
+    /// while typing.
     private var captureQuickActionsBar: CaptureViewSection {
-        quickActionsToolbar(isInline: false)
+        quickActionsToolbar(isInline: false, isResting: !composerIsFocused)
     }
 
     /// `isInline` places the row in the regular-width editor header instead of
     /// above the keyboard; its "•••" panel then opens as a popover.
-    private func quickActionsToolbar(isInline: Bool) -> CaptureViewSection {
+    private func quickActionsToolbar(isInline: Bool, isResting: Bool = false) -> CaptureViewSection {
         CaptureViewSection {
             CaptureEditorToolbar(
                 command: handleToolbarCommand,
@@ -1831,7 +1834,8 @@ struct QuickCaptureView: View {
                 presentAllActionsInKeyboardArea: isInline ? nil : { panel in
                     composerController.setInputPanel(panel)
                 },
-                isInline: isInline
+                isInline: isInline,
+                isResting: isResting
             )
         }
     }
