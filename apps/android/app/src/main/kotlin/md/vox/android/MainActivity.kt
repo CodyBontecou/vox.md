@@ -10,7 +10,15 @@ import md.vox.android.ui.SignalStatus
 import md.vox.android.ui.SignalType
 import md.vox.android.ui.SignalWordmark
 import md.vox.android.ui.VoxTheme
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.isImeVisible
+import androidx.compose.foundation.layout.navigationBars
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.PaddingValues
@@ -632,6 +640,9 @@ internal fun VaultSetupScreen(notice: String?, onChooseFolder: () -> Unit) {
     }
 }
 
+/** Project license identifier shown under Welcome; kept verbatim like the license name itself. */
+private const val WELCOME_LICENSE_LINE = "Open source · AGPL-3.0"
+
 /** The Welcome artboard is always dark, so the system bars use light icons while it shows. */
 @Composable
 private fun WelcomeSystemBars() {
@@ -654,7 +665,7 @@ private fun WelcomeSystemBars() {
 @Composable
 private fun VaultSetupContent(notice: String?, onChooseFolder: () -> Unit) {
     val c = Signal.colors
-    val welcomeAccent = Color(0xFF8A8FFF)
+    val welcomeAccent = c.tint
     Surface(modifier = Modifier.fillMaxSize(), color = c.bg) {
         BoxWithConstraints(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
             Column(
@@ -715,7 +726,7 @@ private fun VaultSetupContent(notice: String?, onChooseFolder: () -> Unit) {
                 )
                 Spacer(Modifier.height(14.dp))
                 Text(
-                    "Open source · AGPL-3.0",
+                    WELCOME_LICENSE_LINE,
                     style = SignalType.monoCaption,
                     color = c.muted,
                     textAlign = TextAlign.Center,
@@ -726,6 +737,7 @@ private fun VaultSetupContent(notice: String?, onChooseFolder: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun VoxNavigation(
     state: CaptureUiState,
@@ -756,7 +768,39 @@ internal fun VoxNavigation(
         model.clearNotice()
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentTopLevel = VoxTopLevelDestination.forRoute(backStackEntry?.destination?.route)
+    val usesNavigationRail = currentVoxWindowWidthClass() != VoxWindowWidthClass.COMPACT
+    val imeVisible = WindowInsets.isImeVisible
+    val showsTopLevelChrome = currentTopLevel != null && !recordingStatus.isActive
+    val showsNavigationBar = showsTopLevelChrome && !usesNavigationRail && !imeVisible
+    val activityBadge = activityAttentionCount(state.history, transcriptionStates.values)
+    val selectTopLevel: (VoxTopLevelDestination) -> Unit = { destination ->
+        navController.navigate(destination.route) {
+            popUpTo(Destination.Capture.route) { saveState = true }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+    Row(modifier = Modifier.fillMaxSize().background(Signal.colors.bg)) {
+    if (showsTopLevelChrome && usesNavigationRail) {
+        VoxNavigationRail(
+            current = currentTopLevel,
+            activityBadge = activityBadge,
+            onSelect = selectTopLevel,
+            startVoiceCapture = {
+                selectTopLevel(VoxTopLevelDestination.CAPTURE)
+                startRecording()
+            },
+        )
+    }
+    Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
+    Box(
+        modifier = Modifier
+            .weight(1f)
+            .fillMaxWidth()
+            .then(if (showsNavigationBar) Modifier.consumeWindowInsets(WindowInsets.navigationBars) else Modifier),
+    ) {
         NavHost(navController = navController, startDestination = Destination.Capture.route) {
             composable(Destination.Capture.route) {
                 CaptureScreen(
@@ -786,8 +830,8 @@ internal fun VoxNavigation(
                     },
                     consumeAcceptedCapture = model::consumeAcceptedCapture,
                     consumeExternalDraft = model::consumeExternalDraft,
-                    openHistory = { navController.navigate(Destination.History.route) },
-                    openSettings = { navController.navigate(Destination.Settings.route) },
+                    openHistory = { selectTopLevel(VoxTopLevelDestination.HISTORY) },
+                    openSettings = { selectTopLevel(VoxTopLevelDestination.SETTINGS) },
                     openPresets = { navController.navigate(Destination.Presets.route) },
                     startRecording = startRecording,
                     pauseRecording = recordingClient::pause,
@@ -802,6 +846,7 @@ internal fun VoxNavigation(
                         exportRecordingForCapture(context, recordingClient, sessionID)
                     },
                     frozenRecordingPreset = recordingClient::frozenPreset,
+                    setVoiceRecordingResult = model::setVoiceRecordingResult,
                 )
             }
             composable(Destination.History.route) {
@@ -822,7 +867,7 @@ internal fun VoxNavigation(
                     HistoryScreen(
                         items = latestState.history,
                         isBusy = latestState.isSending || latestState.isDeletingHistory,
-                        navigateBack = { navController.popBackStack() },
+                        navigateBack = null,
                         refresh = { model.refresh(reconcile = true) },
                         retry = model::retry,
                         repairAccess = openTree,
@@ -837,10 +882,7 @@ internal fun VoxNavigation(
                 if (!expanded) {
                     historyList()
                 } else {
-                    Row(Modifier.fillMaxSize()) {
-                        Box(Modifier.weight(0.43f)) { historyList() }
-                        VerticalDivider(color = Signal.colors.border)
-                        Box(Modifier.weight(0.57f)) {
+                    HingeAwareTwoPane(firstFraction = 0.4f, first = historyList, second = {
                             when {
                                 adaptiveHistorySelection?.startsWith("capture:") == true -> HistoryDetailScreen(
                                     detail = latestState.historyDetail,
@@ -885,9 +927,24 @@ internal fun VoxNavigation(
                                     detail = voxUiText("Capture details and private on-device transcripts open here."),
                                 )
                             }
-                        }
-                    }
+                    })
                 }
+            }
+            composable(ACTIVITY_ROUTE) {
+                ActivityScreen(
+                    items = latestState.history,
+                    transcripts = transcriptionStates.values.toList(),
+                    isBusy = latestState.isSending || latestState.isDeletingHistory,
+                    refresh = { model.refresh(reconcile = true) },
+                    retry = model::retry,
+                    repairAccess = openTree,
+                    openDetail = { requestID ->
+                        model.loadHistoryDetail(requestID)
+                        navController.navigate("$HISTORY_DETAIL_ROUTE/$requestID")
+                    },
+                    openTranscript = { sessionID -> navController.navigate("$TRANSCRIPT_DETAIL_ROUTE/$sessionID") },
+                    openCapture = { selectTopLevel(VoxTopLevelDestination.CAPTURE) },
+                )
             }
             composable("$TRANSCRIPT_DETAIL_ROUTE/{sessionID}") { entry ->
                 val sessionID = entry.arguments?.getString("sessionID")
@@ -938,7 +995,7 @@ internal fun VoxNavigation(
                 val settingsList: @Composable () -> Unit = {
                     SettingsScreen(
                         destination = requireNotNull(latestState.destination),
-                        navigateBack = { navController.popBackStack() },
+                        navigateBack = null,
                         chooseFolder = { openTree(null) },
                         openPresets = {
                             if (expanded) adaptiveSettingsDestination = Destination.Presets.route
@@ -973,22 +1030,21 @@ internal fun VoxNavigation(
                             else navController.navigate(Destination.Upgrade.route)
                         },
                         billingState = billingState,
+                        presets = latestState.presetCollection?.presets.orEmpty(),
                     )
                 }
                 if (!expanded) {
                     settingsList()
                 } else {
-                    Row(Modifier.fillMaxSize()) {
-                        Box(Modifier.weight(0.4f)) { settingsList() }
-                        VerticalDivider(color = Signal.colors.border)
-                        Box(Modifier.weight(0.6f)) {
+                    HingeAwareTwoPane(firstFraction = 0.4f, first = settingsList, second = {
                             when {
                                 adaptiveSettingsDestination == Destination.Upgrade.route -> UpgradeScreen(
                                     billingState = billingState,
                                     stats = latestState.activityStats,
                                     transcriptionUsage = transcriptionUsage,
                                     navigateBack = closeAdaptiveSettingsDetail,
-                                    purchase = { context.findActivity()?.let(billingManager::launchPurchase) },
+                                    purchase = { plan -> context.findActivity()?.let { billingManager.launchPurchase(it, plan) } },
+                                    manageSubscriptions = { context.findActivity()?.let(billingManager::manageSubscriptions) },
                                     restore = billingManager::restore,
                                 )
                                 adaptiveSettingsDestination == Destination.Stats.route -> StatsScreen(
@@ -1064,8 +1120,7 @@ internal fun VoxNavigation(
                                     detail = voxUiText("Settings and supporting tools open here while Quick Capture stays one step away."),
                                 )
                             }
-                        }
-                    }
+                    })
                 }
             }
             composable(Destination.Upgrade.route) {
@@ -1075,7 +1130,8 @@ internal fun VoxNavigation(
                     stats = latestState.activityStats,
                     transcriptionUsage = transcriptionUsage,
                     navigateBack = { navController.popBackStack() },
-                    purchase = { activity?.let(billingManager::launchPurchase) },
+                    purchase = { plan -> activity?.let { billingManager.launchPurchase(it, plan) } },
+                    manageSubscriptions = { activity?.let(billingManager::manageSubscriptions) },
                     restore = billingManager::restore,
                 )
             }
@@ -1152,10 +1208,7 @@ internal fun VoxNavigation(
                 if (!expanded) {
                     presetsList()
                 } else {
-                    Row(Modifier.fillMaxSize()) {
-                        Box(Modifier.weight(0.4f)) { presetsList() }
-                        VerticalDivider(color = Signal.colors.border)
-                        Box(Modifier.weight(0.6f)) {
+                    HingeAwareTwoPane(firstFraction = 0.4f, first = presetsList, second = {
                             val presetID = adaptivePresetEditorID
                             if (presetID == null) {
                                 AdaptiveDetailPlaceholder(
@@ -1175,8 +1228,7 @@ internal fun VoxNavigation(
                                     },
                                 )
                             }
-                        }
-                    }
+                    })
                 }
             }
             composable("$PRESET_EDITOR_ROUTE/{presetID}") { entry ->
@@ -1198,6 +1250,15 @@ internal fun VoxNavigation(
             hostState = snackbarHost,
             modifier = Modifier.align(Alignment.TopCenter).statusBarsPadding().padding(16.dp),
         )
+    }
+    if (showsNavigationBar) {
+        VoxNavigationBar(
+            current = currentTopLevel,
+            activityBadge = activityBadge,
+            onSelect = selectTopLevel,
+        )
+    }
+    }
     }
 }
 

@@ -596,7 +596,7 @@ internal fun RecordingQueueCard(
         transcription?.phase == RecordingTranscriptionPhase.FAILED
     SignalCard(
         modifier = Modifier.fillMaxWidth(),
-        borderColor = if (needsAttention) statusColors.dot.copy(alpha = 0.55f) else c.border,
+        color = if (needsAttention) statusColors.fill else c.card,
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             // Header: status indicator, phase title, elapsed time, mono metadata.

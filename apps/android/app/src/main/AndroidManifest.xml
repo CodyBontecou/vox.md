@@ -26,6 +26,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Vox">
+        <meta-data
+            android:name="md.vox.android.RECORDING_NOTIFICATION_EXTENDER"
+            android:value="md.vox.android.PhoneRecordingNotificationExtender" />
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
             android:enabled="false"

@@ -90,6 +90,7 @@ import androidx.compose.material.icons.outlined.AttachFile
 import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.CheckBox
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Close
@@ -325,7 +326,7 @@ internal fun HistoryScreen(
     items: List<CaptureHistoryItem>,
     transcripts: List<RecordingTranscriptionState>,
     isBusy: Boolean,
-    navigateBack: () -> Unit,
+    navigateBack: (() -> Unit)?,
     refresh: () -> Unit,
     retry: (String) -> Unit,
     repairAccess: (String?) -> Unit,
@@ -501,11 +502,11 @@ private fun LibrarySearchField(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = SignalMetrics.ControlMedium)
+                    .heightIn(min = 56.dp)
                     .clip(CircleShape)
-                    .background(signal.card)
-                    .border(if (focused) 2.dp else 1.dp, if (focused) signal.tint else signal.border, CircleShape)
-                    .padding(horizontal = 14.dp, vertical = 10.dp),
+                    .background(signal.well)
+                    .then(if (focused) Modifier.border(2.dp, signal.tint, CircleShape) else Modifier)
+                    .padding(horizontal = 20.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
@@ -545,24 +546,24 @@ private fun LibraryFilterChip(
     Row(
         modifier = modifier
             .minimumInteractiveComponentSize()
-            .heightIn(min = 36.dp)
-            .clip(CircleShape)
-            .background(if (selected) signal.text else signal.card)
-            .then(if (selected) Modifier else Modifier.border(1.dp, signal.border, CircleShape))
+            .heightIn(min = 32.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(if (selected) signal.secondarySoft else Color.Transparent)
+            .then(if (selected) Modifier else Modifier.border(1.dp, signal.border, RoundedCornerShape(8.dp)))
             .then(selection)
-            .padding(horizontal = 14.dp, vertical = 6.dp),
+            .padding(start = if (selected) 8.dp else 16.dp, end = 16.dp, top = 6.dp, bottom = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        if (dotColor != null) {
-            Box(Modifier.size(6.dp).clip(CircleShape).background(if (selected) signal.bg else dotColor))
+        if (selected) {
+            Icon(Icons.Outlined.Check, contentDescription = null, tint = signal.secondaryText, modifier = Modifier.size(18.dp))
+        } else if (dotColor != null) {
+            Box(Modifier.size(8.dp).clip(CircleShape).background(dotColor))
         }
         Text(
             text,
-            style = MaterialTheme.typography.labelMedium.copy(
-                fontWeight = if (selected) FontWeight.Medium else FontWeight.Normal,
-            ),
-            color = if (selected) signal.bg else signal.text,
+            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Medium),
+            color = if (selected) signal.secondaryText else signal.muted,
             maxLines = 1,
         )
     }

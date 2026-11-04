@@ -306,7 +306,7 @@ import kotlin.math.roundToLong
 @Composable
 internal fun SettingsScreen(
     destination: CaptureDestination,
-    navigateBack: () -> Unit,
+    navigateBack: (() -> Unit)?,
     chooseFolder: () -> Unit,
     openPresets: () -> Unit,
     openCaptureBar: () -> Unit,
@@ -317,6 +317,7 @@ internal fun SettingsScreen(
     openDebugLog: () -> Unit,
     openUpgrade: () -> Unit,
     billingState: BillingUiState,
+    presets: List<md.vox.android.capturedomain.CapturePreset> = emptyList(),
 ) {
     val context = LocalContext.current
     val speechModels by remember(context) { SpeechModelManager.get(context) }.state.collectAsStateWithLifecycle()
@@ -337,84 +338,51 @@ internal fun SettingsScreen(
                 .padding(bottom = 32.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            SettingsSignalGroup(voxUiText("Unlimited")) {
-                SettingsNavigationRow(
-                    title = if (billingState.hasUnlimitedAccess) voxUiText("Vox.md Unlimited") else voxUiText("Get Vox.md Unlimited"),
-                    subtitle = if (billingState.hasUnlimitedAccess) {
-                        voxUiText("Unlimited is unlocked on this device.")
-                    } else {
-                        voxUiText("Unlock unlimited local Capture and private, on-device transcription. Pay once with no subscription.")
-                    },
-                    value = billingState.formattedPrice,
-                    icon = if (billingState.hasUnlimitedAccess) Icons.Outlined.CheckCircle else Icons.Outlined.LockOpen,
-                    iconTone = if (billingState.hasUnlimitedAccess) SettingsIconTone.SUCCESS else SettingsIconTone.ACCENT,
-                    onClick = openUpgrade,
-                )
-            }
+            SettingsUnlimitedCard(billingState = billingState, onClick = openUpgrade)
             SettingsSignalGroup(voxUiText("Capture")) {
                 SettingsSignalNavRow(
                     title = voxString("Capture Destination"),
                     subtitle = destination.displayName,
-                    monoSubtitle = true,
+                    value = voxString("Change"),
                     subtitleMaxLines = 2,
-                    icon = Icons.Outlined.FolderOpen,
                     onClick = chooseFolder,
                 )
-            }
-            SettingsSignalGroup(voxUiText("Activity")) {
-                SettingsNavigationRow(
-                    title = voxUiText("Stats"),
-                    subtitle = voxUiText("Recordings, recording time, and Capture activity"),
-                    icon = Icons.Outlined.BarChart,
-                    onClick = openStats,
-                )
                 SignalRowDivider()
-                Box(Modifier.fillMaxWidth().heightIn(min = 52.dp).padding(horizontal = 4.dp), contentAlignment = Alignment.CenterStart) {
-                    URLDeliveryRecoveryControl()
-                }
-            }
-            SettingsSignalGroup(voxUiText("Recordings")) {
-                SettingsNavigationRow(
-                    title = voxUiText("Recordings"),
-                    subtitle = voxUiText("Recover, export, and manage durable audio"),
-                    icon = Icons.Outlined.GraphicEq,
-                    onClick = openRecordingQueue,
-                )
-            }
-            SettingsSignalGroup(voxUiText("Customization")) {
-                SettingsNavigationRow(
-                    title = voxUiText("Models"),
-                    subtitle = voxUiText("Transcription engines, model downloads, and language"),
-                    icon = Icons.Outlined.Memory,
-                    onClick = openModels,
-                )
-                SignalRowDivider()
-                SettingsNavigationRow(
-                    title = voxUiText("Capture Presets"),
-                    subtitle = voxUiText("Processing, formatting, metadata, and destinations"),
-                    icon = Icons.Outlined.Tune,
+                SettingsSignalNavRow(
+                    title = voxString("Capture Presets"),
+                    subtitle = presets.filter { it.isEnabled }.joinToString(" · ") { it.name }
+                        .ifBlank { voxString("Processing, formatting, metadata, and destinations") },
+                    value = presets.count { it.isEnabled }.takeIf { it > 0 }?.toString(),
+                    subtitleMaxLines = 1,
                     onClick = openPresets,
                 )
                 SignalRowDivider()
                 SettingsNavigationRow(
                     title = voxUiText("Capture Bar"),
                     subtitle = voxUiText("Choose, reorder, and hide quick actions"),
-                    icon = Icons.Outlined.Dashboard,
                     onClick = openCaptureBar,
                 )
-                SignalRowDivider()
-                SettingsNavigationRow(
-                    title = VoxUiText(stringResource(R.string.app_language_title)),
-                    subtitle = VoxUiText(stringResource(R.string.app_language_choose)),
-                    icon = Icons.Outlined.Language,
-                    value = AppLanguage.current().let { language ->
-                        if (language == AppLanguage.SYSTEM) stringResource(R.string.system_language_short) else language.nativeDisplayName
-                    },
-                    onClick = openAppLanguage,
+            }
+            SettingsSignalGroup(voxUiText("Transcription")) {
+                SettingsSignalNavRow(
+                    title = voxString("Models"),
+                    subtitle = speechModels.selectedReadyModel?.descriptor?.let {
+                        if (speechModels.selectionMode == SpeechModelSelectionMode.AUTOMATIC) {
+                            voxFormat("%@ · %@ · local %@", voxString("Automatic"), it.displayName, it.engine.displayName)
+                        } else {
+                            voxFormat("%@ · local %@", it.displayName, it.engine.displayName)
+                        }
+                    } ?: voxString("Transcription engines, model downloads, and language"),
+                    subtitleMaxLines = 1,
+                    onClick = openModels,
                 )
             }
-            SettingsSignalGroup(voxUiText("Keyboard")) {
-                SettingsActionRow(voxUiText("Set Up Vox.md Keyboard")) { openInputMethodSettings(context) }
+            SettingsSignalGroup(voxUiText("Everywhere")) {
+                SettingsSignalNavRow(
+                    title = voxString("Vox.md Keyboard"),
+                    subtitle = voxString("Set Up Vox.md Keyboard"),
+                    onClick = { openInputMethodSettings(context) },
+                )
                 SignalRowDivider()
                 SignalToggleRow(
                     title = voxString("Haptic Feedback"),
@@ -425,27 +393,47 @@ internal fun SettingsScreen(
                         keyboardPreferences.edit().putBoolean("keyboard-haptics", enabled).apply()
                     },
                 )
-            }
-            SettingsSignalGroup(voxUiText("About")) {
-                SettingsValueRow(
-                    voxUiText("Default transcription"),
-                    speechModels.selectedReadyModel?.descriptor?.let {
-                        if (speechModels.selectionMode == SpeechModelSelectionMode.AUTOMATIC) {
-                            voxFormat("%@ · %@ · local %@", voxString("Automatic"), it.displayName, it.engine.displayName)
-                        } else {
-                            voxFormat("%@ · local %@", it.displayName, it.engine.displayName)
-                        }
-                    }
-                        ?: voxString("Android Speech when explicitly on-device"),
+                SignalRowDivider()
+                SettingsSignalNavRow(
+                    title = voxString("Quick Settings & widgets"),
+                    subtitle = voxString("Quick Capture"),
+                    onClick = { requestQuickCaptureTile(context) },
                 )
                 SignalRowDivider()
-                SettingsValueRow(voxUiText("Audio capture"), voxString("On-device"))
+                SettingsSignalNavRow(
+                    title = voxString("Wear OS"),
+                    subtitle = presets.filter { it.isEnabled && it.isPinned }.joinToString(" · ") { it.name }
+                        .ifBlank { voxString("Capture Presets") },
+                    subtitleMaxLines = 1,
+                    onClick = openPresets,
+                )
+            }
+            SettingsSignalGroup(voxUiText("Recordings")) {
+                SettingsNavigationRow(
+                    title = voxUiText("Recordings"),
+                    subtitle = voxUiText("Recover, export, and manage durable audio"),
+                    onClick = openRecordingQueue,
+                )
+            }
+            SettingsSignalGroup(voxUiText("Activity")) {
+                SettingsNavigationRow(
+                    title = voxUiText("Stats"),
+                    subtitle = voxUiText("Recordings, recording time, and Capture activity"),
+                    onClick = openStats,
+                )
                 SignalRowDivider()
-                SettingsValueRow(voxUiText("Processing"), voxString("On-device"))
+                Box(Modifier.fillMaxWidth().heightIn(min = 52.dp).padding(horizontal = 4.dp), contentAlignment = Alignment.CenterStart) {
+                    URLDeliveryRecoveryControl()
+                }
                 SignalRowDivider()
-                SettingsValueRow(voxUiText("Privacy"), voxString("Local processing; optional URL delivery"))
-                SignalRowDivider()
-                SettingsValueRow(voxUiText("Version"), appVersionString(context))
+                SettingsNavigationRow(
+                    title = VoxUiText(stringResource(R.string.app_language_title)),
+                    subtitle = VoxUiText(stringResource(R.string.app_language_choose)),
+                    value = AppLanguage.current().let { language ->
+                        if (language == AppLanguage.SYSTEM) stringResource(R.string.system_language_short) else language.nativeDisplayName
+                    },
+                    onClick = openAppLanguage,
+                )
             }
             SettingsPrivacyFooter(
                 voxString("Capture contents stay on this device until Vox.md writes them to your selected folder or sends text to an endpoint you explicitly enabled. Audio and attachments are not uploaded. Android backup is disabled for content-bearing storage."),
@@ -462,6 +450,17 @@ internal fun SettingsScreen(
                     onClick = openDebugLog,
                 )
             }
+            val footer = listOf(
+                voxString("Audio capture and processing stay on-device. Voice and text stay local."),
+                voxString("Version"),
+                appVersionString(context),
+            ).joinToString(" ")
+            Text(
+                footer,
+                style = MaterialTheme.typography.bodySmall,
+                color = Signal.colors.muted,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+            )
         }
     }
 }
@@ -920,7 +919,11 @@ private fun SettingsPrivacyFooter(text: String) {
     }
 }
 
-/** Title + subtitle row with optional leading tile, trailing value and a faint chevron. */
+/**
+ * Settings list item from the Settings board: 60dp segmented row with a 16sp title, a
+ * 13sp `onSurfaceVariant` subtitle, an optional trailing value in primary and a chevron.
+ * The leading tile is optional and only drawn when an icon is passed.
+ */
 @Composable
 private fun SettingsSignalNavRow(
     title: String,
@@ -929,16 +932,16 @@ private fun SettingsSignalNavRow(
     value: String? = null,
     icon: ImageVector? = null,
     iconTone: SettingsIconTone = SettingsIconTone.NEUTRAL,
-    monoSubtitle: Boolean = true,
+    monoSubtitle: Boolean = false,
     subtitleMaxLines: Int = Int.MAX_VALUE,
 ) {
     val c = Signal.colors
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 56.dp)
+            .heightIn(min = 60.dp)
             .clickable(onClick = onClick)
-            .padding(horizontal = 14.dp, vertical = 12.dp),
+            .padding(start = 16.dp, end = 12.dp, top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -949,12 +952,12 @@ private fun SettingsSignalNavRow(
                 SettingsIconTone.SUCCESS -> SignalIconTile(icon, fill = c.successSoft, tint = c.success)
             }
         }
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(title, style = SignalType.rowTitle, color = c.text)
+        Column(Modifier.weight(1f)) {
+            Text(title, style = MaterialTheme.typography.bodyLarge.copy(lineHeight = 22.sp), color = c.text)
             if (subtitle != null) {
                 Text(
                     subtitle,
-                    style = if (monoSubtitle) SignalType.monoCaption else SignalType.caption,
+                    style = if (monoSubtitle) SignalType.monoCaption else MaterialTheme.typography.bodySmall.copy(fontSize = 13.sp, lineHeight = 18.sp),
                     color = c.muted,
                     maxLines = subtitleMaxLines,
                     overflow = TextOverflow.Ellipsis,
@@ -964,8 +967,8 @@ private fun SettingsSignalNavRow(
         if (value != null) {
             Text(
                 value,
-                style = MaterialTheme.typography.bodyMedium,
-                color = c.muted,
+                style = MaterialTheme.typography.labelMedium.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.Medium),
+                color = c.tint,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.widthIn(max = 140.dp),
@@ -974,9 +977,89 @@ private fun SettingsSignalNavRow(
         Icon(
             Icons.AutoMirrored.Outlined.KeyboardArrowRight,
             contentDescription = null,
-            tint = c.faint,
+            tint = c.muted,
             modifier = Modifier.size(20.dp),
         )
+    }
+}
+
+/**
+ * "Get Vox.md Unlimited" card at the top of Settings: a 20dp `primaryContainer` card with
+ * a 40dp primary mic tile. Once Unlimited is active it confirms that instead.
+ */
+@Composable
+private fun SettingsUnlimitedCard(billingState: BillingUiState, onClick: () -> Unit) {
+    val c = Signal.colors
+    val active = billingState.hasUnlimitedAccess
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp))
+            .background(c.accentSoft)
+            .clickable(role = androidx.compose.ui.semantics.Role.Button, onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 14.dp)
+            .testTag("settings-unlimited"),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
+    ) {
+        Box(
+            Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(if (active) c.success else c.accent),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                if (active) Icons.Outlined.CheckCircle else Icons.Outlined.MicNone,
+                contentDescription = null,
+                tint = if (active) c.successSoft else c.onAccent,
+                modifier = Modifier.size(22.dp),
+            )
+        }
+        Column(Modifier.weight(1f)) {
+            Text(
+                voxString(if (active) "Vox.md Unlimited" else "Get Vox.md Unlimited"),
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold),
+                color = c.accentText,
+            )
+            Text(
+                when {
+                    billingState.hasActiveSubscription && !billingState.ownsLifetime -> voxString("Unlimited subscription is active.")
+                    active -> voxString("Unlimited is unlocked on this device.")
+                    else -> voxString("Unlock unlimited local Capture and private, on-device transcription.")
+                },
+                style = MaterialTheme.typography.bodySmall.copy(fontSize = 13.sp, lineHeight = 18.sp),
+                color = c.accentText,
+            )
+        }
+    }
+}
+
+/**
+ * Asks System UI to add the Quick Capture tile (Android 13+); on older releases, or when
+ * the tile is already added, it asks the launcher to pin the Capture widget instead.
+ */
+internal fun requestQuickCaptureTile(context: Context) {
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+        val manager = context.getSystemService(android.app.StatusBarManager::class.java)
+        if (manager != null) {
+            manager.requestAddTileService(
+                android.content.ComponentName(context, CaptureTileService::class.java),
+                context.getString(R.string.tile_capture_label),
+                android.graphics.drawable.Icon.createWithResource(context, R.drawable.keyboard_ic_mic),
+                context.mainExecutor,
+            ) { result ->
+                if (result == android.app.StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED) {
+                    requestCaptureWidgetPin(context)
+                }
+            }
+            return
+        }
+    }
+    requestCaptureWidgetPin(context)
+}
+
+private fun requestCaptureWidgetPin(context: Context) {
+    val widgets = android.appwidget.AppWidgetManager.getInstance(context)
+    if (widgets.isRequestPinAppWidgetSupported) {
+        widgets.requestPinAppWidget(android.content.ComponentName(context, VoxCaptureWidgetProvider::class.java), null, null)
     }
 }
 
@@ -1034,14 +1117,14 @@ internal fun PlaceholderSettingsRow(title: VoxUiText, subtitle: VoxUiText) {
 
 /** Keeps `VoxTopBar(title) { back() }` binding the trailing lambda to Back. */
 @Composable
-internal fun VoxTopBar(title: VoxUiText, navigateBack: () -> Unit) {
+internal fun VoxTopBar(title: VoxUiText, navigateBack: (() -> Unit)?) {
     VoxTopBar(title = title, navigateBack = navigateBack, subtitle = null)
 }
 
 @Composable
 internal fun VoxTopBar(
     title: VoxUiText,
-    navigateBack: () -> Unit,
+    navigateBack: (() -> Unit)?,
     subtitle: VoxUiText? = null,
     actions: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {},
 ) {

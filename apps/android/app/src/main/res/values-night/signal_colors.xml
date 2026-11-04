@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Signal tokens for View/RemoteViews surfaces (keyboard, widgets). Mirrors VoxColors.Dark in ui/VoxTheme.kt. -->
+<!-- Material 3 tokens for View/RemoteViews surfaces (keyboard, widgets): signal_bg is surfaceContainer,
+     signal_card the raised key / widget card, signal_well secondaryContainer and signal_accent primary.
+     Mirrors VoxColors.Dark in ui/VoxTheme.kt. -->
 <resources>
-    <color name="signal_bg">#0B0B0B</color>
-    <color name="signal_card">#161616</color>
-    <color name="signal_well">#222220</color>
-    <color name="signal_border">#2A2A28</color>
-    <color name="signal_border_hi">#3A3A38</color>
-    <color name="signal_text">#F4F4F1</color>
-    <color name="signal_on_ink">#121212</color>
-    <color name="signal_muted">#9A9A95</color>
-    <color name="signal_faint">#8A8A85</color>
-    <color name="signal_accent">#2F3BE8</color>
-    <color name="signal_on_accent">#FFFFFF</color>
-    <color name="signal_tint">#9DA4FF</color>
-    <color name="signal_recording">#F0474A</color>
-    <color name="signal_recording_soft">#2A1112</color>
-    <color name="signal_error">#FF7A7C</color>
+    <color name="signal_bg">#1F1F23</color>
+    <color name="signal_card">#353438</color>
+    <color name="signal_well">#44465A</color>
+    <color name="signal_border">#46464F</color>
+    <color name="signal_border_hi">#918F9A</color>
+    <color name="signal_text">#E5E1E6</color>
+    <color name="signal_on_ink">#0E1690</color>
+    <color name="signal_muted">#C7C5D0</color>
+    <color name="signal_faint">#918F9A</color>
+    <color name="signal_accent">#BEC2FF</color>
+    <color name="signal_on_accent">#0E1690</color>
+    <color name="signal_tint">#BEC2FF</color>
+    <color name="signal_recording">#FF6B6B</color>
+    <color name="signal_recording_soft">#5C1A1F</color>
+    <color name="signal_on_recording">#2D0004</color>
+    <color name="signal_error">#FFB4AB</color>
 </resources>

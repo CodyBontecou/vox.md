@@ -21,8 +21,10 @@ internal class BillingOperations {
     @Synchronized fun isRestoring(): Boolean = restorePending
     @Synchronized fun beginProductQuery(): Long = ++productGeneration
     @Synchronized fun isCurrentProductQuery(generation: Long): Boolean = generation == productGeneration
-    @Synchronized fun beginPurchase(entitlement: VoxEntitlement, pending: Boolean): Boolean {
-        if (purchasing || restorePending || entitlement != VoxEntitlement.FREE || pending) return false
+    /** [upgradeAllowed] lets an active subscriber switch plans or move to Lifetime. */
+    @Synchronized fun beginPurchase(entitlement: VoxEntitlement, pending: Boolean, upgradeAllowed: Boolean = false): Boolean {
+        if (purchasing || restorePending || pending) return false
+        if (entitlement != VoxEntitlement.FREE && !(upgradeAllowed && entitlement == VoxEntitlement.UNLIMITED)) return false
         purchasing = true
         return true
     }
@@ -34,5 +36,6 @@ internal class BillingOperations {
 }
 
 internal fun BillingUiState.canPurchase(): Boolean = productAvailable &&
-    entitlement == VoxEntitlement.FREE && !hasPendingPurchase && !isPurchasing && !isRestoring &&
+    (entitlement == VoxEntitlement.FREE || (entitlement == VoxEntitlement.UNLIMITED && hasActiveSubscription && !ownsLifetime)) &&
+    !hasPendingPurchase && !isPurchasing && !isRestoring &&
     connectionPhase == BillingConnectionPhase.READY

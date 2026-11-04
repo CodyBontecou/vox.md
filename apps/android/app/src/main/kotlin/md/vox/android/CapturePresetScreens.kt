@@ -446,10 +446,9 @@ private fun PresetRouteCard(
         modifier = Modifier
             .fillMaxWidth()
             .clip(shape)
-            .background(c.card)
-            .border(1.dp, if (active) c.borderHi else c.border, shape)
+            .background(if (active) c.secondarySoft else c.card)
             .clickable(enabled = !isBusy && preset.isEnabled, onClick = select)
-            .padding(start = 14.dp, end = 4.dp, top = 12.dp, bottom = 12.dp),
+            .padding(start = 16.dp, end = 4.dp, top = 16.dp, bottom = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -563,8 +562,8 @@ internal fun PresetRouteTile(
     }
     val (fill, ink) = when (tone) {
         SignalRouteTone.PRIMARY -> c.accent to c.onAccent
-        SignalRouteTone.INK -> c.text to c.bg
-        SignalRouteTone.NEUTRAL -> c.well to c.text
+        SignalRouteTone.INK -> c.inverse to c.onInverse
+        SignalRouteTone.NEUTRAL -> c.tertiarySoft to c.tertiaryText
     }
     Box(
         modifier = modifier
@@ -2389,20 +2388,20 @@ private fun PresetChoiceChip(
         onClick = onClick,
         label = { Text(label, style = MaterialTheme.typography.labelMedium) },
         leadingIcon = leadingIcon?.let { icon -> { Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp)) } },
-        shape = CircleShape,
+        shape = RoundedCornerShape(8.dp),
         colors = FilterChipDefaults.filterChipColors(
-            containerColor = c.card,
-            labelColor = c.text,
+            containerColor = androidx.compose.ui.graphics.Color.Transparent,
+            labelColor = c.muted,
             iconColor = c.muted,
-            selectedContainerColor = c.text,
-            selectedLabelColor = c.bg,
-            selectedLeadingIconColor = c.bg,
+            selectedContainerColor = c.secondarySoft,
+            selectedLabelColor = c.secondaryText,
+            selectedLeadingIconColor = c.secondaryText,
         ),
         border = FilterChipDefaults.filterChipBorder(
             enabled = true,
             selected = selected,
             borderColor = c.border,
-            selectedBorderColor = c.text,
+            selectedBorderColor = c.secondarySoft,
             borderWidth = 1.dp,
             selectedBorderWidth = 1.dp,
         ),

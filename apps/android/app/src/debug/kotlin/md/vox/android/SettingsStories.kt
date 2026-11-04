@@ -55,6 +55,14 @@ internal fun SettingsStories(story: String): Boolean {
 
         // Upgrade (paywall)
         "settings-upgrade-free" -> UpgradeStateStory(storyBilling())
+        "settings-upgrade-plans" -> UpgradeStateStory(storyBilling().copy(plans = storySubscriptionPlans(trial = true)))
+        "settings-upgrade-plans-no-trial" -> UpgradeStateStory(storyBilling().copy(plans = storySubscriptionPlans(trial = false)))
+        "settings-upgrade-subscribed" -> UpgradeStateStory(
+            storyBilling(entitlement = VoxEntitlement.UNLIMITED).copy(
+                plans = storySubscriptionPlans(trial = false),
+                hasActiveSubscription = true,
+            ),
+        )
         "settings-upgrade-connecting" -> UpgradeStateStory(
             storyBilling(connectionPhase = BillingConnectionPhase.CONNECTING, productAvailable = false, formattedPrice = null),
         )
@@ -177,3 +185,10 @@ private val settingsStoryLog = """
     2023-11-14T22:15:04Z capture.delivered state=completed attempts=1
     2023-11-14T22:16:10Z app.language.changed language=system
 """.trimIndent()
+
+/** Story prices as Play would format them for a US account; only stories use fixed values. */
+internal fun storySubscriptionPlans(trial: Boolean): List<VoxPlanOption> = listOf(
+    VoxPlanOption(VoxPlan.YEARLY, "$29.99", 29_990_000L, "USD", "P1Y", if (trial) "P1W" else null, "story-yearly"),
+    VoxPlanOption(VoxPlan.WEEKLY, "$0.99", 990_000L, "USD", "P1W", if (trial) "P1W" else null, "story-weekly"),
+    VoxPlanOption(VoxPlan.LIFETIME, "$49.99", 49_990_000L, "USD", null, null, "story-lifetime"),
+)

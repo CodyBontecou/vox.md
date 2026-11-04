@@ -101,12 +101,14 @@ import md.vox.android.ui.signalTextFieldColors
 /** Primary content has a stable structural identity through resize, preview and font-scale changes. */
 @Composable internal fun CaptureWorkspace(text: String, preset: CapturePreset?, destination: CaptureDestination?,
     route: CaptureRouteOverride?, attachmentCount: Int, modifier: Modifier = Modifier, primary: @Composable () -> Unit) {
-    var enabled by rememberSaveable { mutableStateOf(false) }
+    // On tablets and unfolded foldables the draft preview is the side panel of the
+    // design's tablet board; it starts open and, on a foldable, begins past the hinge.
+    var enabled by rememberSaveable { mutableStateOf(true) }
     BoxWithConstraints(modifier) {
         val supported = maxWidth >= 760.dp && LocalDensity.current.fontScale < 1.5f
         val visible = supported && enabled && (text.isNotBlank() || attachmentCount > 0)
-        Row(Modifier.fillMaxSize()) {
-            Column(Modifier.weight(1f).fillMaxHeight()) {
+        val composer: @Composable () -> Unit = {
+            Column(Modifier.fillMaxSize()) {
                 Box {
                     if (supported) SignalPillButton(
                         text = if (enabled) voxString("Hide draft preview") else voxString("Show draft preview"),
@@ -117,12 +119,19 @@ import md.vox.android.ui.signalTextFieldColors
                 }
                 Box(Modifier.weight(1f).fillMaxWidth()) { primary() }
             }
-            if (visible) {
-                VerticalDivider(color = Signal.colors.border)
-                CaptureDraftPreview(text, preset?.name.orEmpty(), destination?.displayName,
-                    route?.relativeNotePath ?: preset?.let { if (it.noteTargetKind == CaptureNoteTargetKind.EXISTING_NOTE) it.existingNotePath else "${it.logicalFolder}/${it.noteNameTemplate}" },
-                    attachmentCount, Modifier.width(300.dp).fillMaxHeight())
-            }
+        }
+        if (visible) {
+            HingeAwareTwoPane(
+                firstFraction = 0.62f,
+                first = composer,
+                second = {
+                    CaptureDraftPreview(text, preset?.name.orEmpty(), destination?.displayName,
+                        route?.relativeNotePath ?: preset?.let { if (it.noteTargetKind == CaptureNoteTargetKind.EXISTING_NOTE) it.existingNotePath else "${it.logicalFolder}/${it.noteNameTemplate}" },
+                        attachmentCount, Modifier.fillMaxSize())
+                },
+            )
+        } else {
+            composer()
         }
     }
 }
@@ -132,7 +141,7 @@ import md.vox.android.ui.signalTextFieldColors
     val context = LocalContext.current
     val lines = remember(text) { previewLines(text) }
     val c = Signal.colors
-    SelectionContainer(modifier.background(c.card)) {
+    SelectionContainer(modifier) {
         LazyColumn(contentPadding = PaddingValues(22.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             item {
                 Text(voxString("Draft preview"), style = MaterialTheme.typography.titleMedium, color = c.text)

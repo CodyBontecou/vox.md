@@ -39,6 +39,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.isImeVisible
+import androidx.compose.material3.minimumInteractiveComponentSize
+import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -80,6 +83,7 @@ import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Keyboard
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.Lightbulb
@@ -356,6 +360,7 @@ internal fun CaptureScreen(
     markRecordingAdded: () -> Unit,
     exportRecordingAudio: suspend (String) -> String?,
     frozenRecordingPreset: (String) -> CapturePreset?,
+    setVoiceRecordingResult: (md.vox.android.capturedomain.VoiceRecordingResult) -> Unit = {},
     requestEditorFocus: Boolean = true,
     initialShowsVoiceCaptureDetails: Boolean = false,
 ) {
@@ -754,13 +759,33 @@ internal fun CaptureScreen(
             consumeAcceptedCapture()
         }
     }
+    var showsShareSheet by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(state.pendingExternalDraftID) {
         if (state.pendingExternalDraftID != null) {
             editorValue = TextFieldValue(state.draft.text, TextRange(state.draft.text.length))
             capturedURL = state.draft.url
             undoStack.clear()
+            if (state.draft.captureSource == "share") showsShareSheet = true
             consumeExternalDraft()
         }
+    }
+
+    if (showsShareSheet) {
+        ShareCaptureSheet(
+            sharedText = editorValue.text,
+            sharedURL = capturedURL,
+            attachmentCount = state.draft.attachments.size,
+            presets = state.presetCollection?.presets.orEmpty(),
+            activePresetID = state.presetCollection?.activePreset?.id,
+            isSending = state.isSending || isResolvingPresetLocation,
+            selectPreset = onSelectPreset,
+            send = { note ->
+                val combined = listOf(editorValue.text.trim(), note).filter(String::isNotBlank).joinToString("\n\n")
+                showsShareSheet = false
+                submitCapture(combined, capturedURL)
+            },
+            dismiss = { showsShareSheet = false },
+        )
     }
 
     if (showsLinkDialog) {
@@ -905,6 +930,7 @@ internal fun CaptureScreen(
     val activePreset = state.draft.frozenPreset ?: state.presetCollection?.activePreset
     val routeDestination = activePreset?.destination ?: state.destination
     val c = Signal.colors
+    Box(Modifier.fillMaxSize()) {
     Scaffold(
         containerColor = c.bg,
         topBar = {
@@ -919,6 +945,10 @@ internal fun CaptureScreen(
                 openPresets = openPresets,
                 openHistory = openHistory,
                 openSettings = openSettings,
+                hideKeyboard = {
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                },
             )
         },
         bottomBar = {
@@ -1079,15 +1109,31 @@ internal fun CaptureScreen(
         }
     }
     }
+    if (recordingStatus.isActive) {
+        LiveRecordingScreen(
+            preset = recordingStatus.sessionID?.let(frozenRecordingPreset) ?: activePreset,
+            status = recordingStatus,
+            liveSpeech = liveSpeech,
+            recordingResult = state.captureBar.voiceRecordingResult,
+            setRecordingResult = setVoiceRecordingResult,
+            pause = pauseRecording,
+            resume = resumeRecording,
+            stop = stopRecording,
+            cancel = cancelRecording,
+        )
+    }
+    }
 }
 
 /**
- * Signal capture header (iOS QuickCaptureView): the route selector capsule on the
- * leading edge, circular Activity and Settings buttons on the trailing edge, and the
- * mono route line underneath. The selector keeps Android's preset semantics: tap
- * toggles the pinned rail when pins exist, long-press always opens all presets.
+ * Material 3 capture header: the preset selector as a 40dp `secondaryContainer` pill
+ * (route tile, preset name, chevron), the on-device indicator on the trailing edge
+ * (or Done while the keyboard is open) and the mono route line underneath. The
+ * selector keeps Android's preset semantics: tap toggles the pinned rail when pins
+ * exist, long-press always opens all presets. History and Settings live in the
+ * navigation bar or rail.
  */
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
 internal fun CaptureTopControls(
     preset: CapturePreset?,
@@ -1100,6 +1146,7 @@ internal fun CaptureTopControls(
     openPresets: () -> Unit,
     openHistory: () -> Unit,
     openSettings: () -> Unit,
+    hideKeyboard: () -> Unit = {},
 ) {
     val c = Signal.colors
     val expandsRail = hasPinnedAlternates
@@ -1108,26 +1155,28 @@ internal fun CaptureTopControls(
     )
     val chooseLabel = voxString("Choose Capture Preset")
     val railOpen = expandsRail && isPresetRailExpanded
+    val selectorDescription = if (expandsRail) selectorClickLabel else chooseLabel
+    val imeVisible = androidx.compose.foundation.layout.WindowInsets.isImeVisible
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(c.bg)
-            .statusBarsPadding()
-            .padding(horizontal = SignalMetrics.PageGutter)
-            .padding(top = 8.dp),
+            .statusBarsPadding(),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 64.dp)
+                .padding(start = 12.dp, end = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             Box(Modifier.weight(1f)) {
                 Row(
                     modifier = Modifier
-                        .heightIn(min = SignalMetrics.ControlMedium)
+                        .heightIn(min = 40.dp)
                         .clip(CircleShape)
-                        .background(if (railOpen) c.accentSoft else c.card)
-                        .border(1.dp, if (railOpen) c.tint else c.border, CircleShape)
+                        .background(if (railOpen) c.accentSoft else c.secondarySoft)
                         .combinedClickable(
                             enabled = true,
                             role = Role.Button,
@@ -1137,7 +1186,7 @@ internal fun CaptureTopControls(
                             onLongClick = openPresets,
                         )
                         .testTag("capture-preset-selector")
-                        .padding(start = 7.dp, end = 12.dp),
+                        .padding(start = 4.dp, end = 12.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
@@ -1149,28 +1198,42 @@ internal fun CaptureTopControls(
                     )
                     Text(
                         preset?.name ?: "Default",
-                        style = MaterialTheme.typography.titleMedium.copy(fontSize = 16.sp),
-                        color = if (railOpen) c.accentText else c.text,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = if (railOpen) c.accentText else c.secondaryText,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f, fill = false),
                     )
                     Icon(
                         if (railOpen) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.KeyboardArrowDown,
-                        contentDescription = if (expandsRail) selectorClickLabel else chooseLabel,
-                        modifier = Modifier.size(20.dp),
-                        tint = if (railOpen) c.accentText else c.text,
+                        contentDescription = selectorDescription,
+                        modifier = Modifier.size(18.dp),
+                        tint = if (railOpen) c.accentText else c.secondaryText,
                     )
                 }
             }
-            SignalCircleButton(Icons.Outlined.History, voxString("Recent captures"), openHistory)
-            SignalCircleButton(Icons.Outlined.Settings, voxString("Settings"), openSettings)
+            if (imeVisible) {
+                androidx.compose.material3.TextButton(onClick = hideKeyboard) {
+                    Text(voxString("Done"), style = MaterialTheme.typography.labelMedium, color = c.tint)
+                }
+            } else {
+                Row(
+                    modifier = Modifier.heightIn(min = 32.dp).padding(horizontal = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                ) {
+                    Icon(Icons.Outlined.Lock, contentDescription = null, tint = c.muted, modifier = Modifier.size(14.dp))
+                    Text(voxString("On-device"), style = MaterialTheme.typography.labelSmall, color = c.muted, maxLines = 1)
+                }
+            }
         }
-        CaptureRouteControl(
-            route = route,
-            destination = destination,
-            onChanged = onRouteChanged,
-        )
+        Box(Modifier.padding(horizontal = 16.dp)) {
+            CaptureRouteControl(
+                route = route,
+                destination = destination,
+                onChanged = onRouteChanged,
+            )
+        }
     }
 }
 
@@ -1515,9 +1578,9 @@ internal fun CaptureBottomControls(
         }
         if (captureBar.visibleActions.isNotEmpty()) {
             LazyRow(
-                modifier = Modifier.fillMaxWidth().height(52.dp),
-                contentPadding = PaddingValues(horizontal = 10.dp),
-                horizontalArrangement = Arrangement.spacedBy(2.dp),
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                contentPadding = PaddingValues(horizontal = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 items(captureBar.visibleActions, key = CaptureBarAction::persistedName) { action ->
@@ -1548,42 +1611,55 @@ internal fun CaptureBottomControls(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
+            val actionShape = RoundedCornerShape(SignalMetrics.ActionRadius)
             if (recordingStatus.isActive) {
                 SignalCircleButton(
                     icon = if (isPaused) Icons.Outlined.PlayArrow else Icons.Outlined.Pause,
                     contentDescription = pauseDescription,
                     onClick = if (isPaused) resumeRecording else pauseRecording,
                     diameter = 56.dp,
-                    filled = if (isPaused) c.accent else c.text,
-                    contentColor = if (isPaused) c.onAccent else c.bg,
+                    filled = if (isPaused) c.accent else c.well,
+                    contentColor = if (isPaused) c.onAccent else c.text,
                     enabled = !isSending,
                 )
             } else {
-                SignalCircleButton(
-                    icon = Icons.Outlined.KeyboardHide,
-                    contentDescription = "Hide keyboard",
-                    onClick = toggleKeyboard,
-                    diameter = 56.dp,
-                )
+                // Add media: 56dp `surfaceContainerHigh` action with a 16dp radius.
+                val addMediaDescription = voxString("Add media")
+                Box(
+                    modifier = Modifier
+                        .size(56.dp)
+                        .clip(actionShape)
+                        .background(c.well)
+                        .clickable(enabled = !isSending, role = Role.Button, onClick = addMedia)
+                        .testTag("capture-add-media")
+                        .semantics { contentDescription = addMediaDescription },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(Icons.Outlined.Add, contentDescription = null, tint = c.text, modifier = Modifier.size(24.dp))
+                }
             }
             val (capsuleFill, capsuleContent) = when {
-                isSending -> c.disabledFill to c.faint
-                recordingStatus.phase == RecordingPhase.RECORDING -> c.recording to Color.White
-                isPaused -> c.text to c.bg
+                isSending -> c.well to c.faint
+                recordingStatus.phase == RecordingPhase.RECORDING -> c.recording to c.onRecording
+                isPaused -> c.secondarySoft to c.secondaryText
                 recordingIsProcessing -> c.well to c.text
                 recordingTranscription?.phase == RecordingTranscriptionPhase.COMPLETED && !recordingTranscription.addedToDraft ->
-                    c.successSoft to c.success
+                    c.successSoft to c.successText
                 recordingStatus.phase == RecordingPhase.COMPLETED && recordingTranscription == null -> c.accentSoft to c.accentText
-                recordingNeedsAttention -> c.errorSoft to c.error
-                else -> c.text to c.bg
+                recordingNeedsAttention -> c.errorSoft to c.errorText
+                else -> c.accent to c.onAccent
             }
+            // Speak: the 64dp primary action, 20dp radius.
+            val speakShape = RoundedCornerShape(20.dp)
+            // On tablets and unfolded foldables the voice FAB also lives in the rail, so
+            // Speak keeps a phone-like width instead of spanning the whole composer.
+            val wideComposer = LocalConfiguration.current.screenWidthDp >= 600
             Box(
                 modifier = Modifier
-                    .weight(1f)
+                    .then(if (wideComposer) Modifier.widthIn(min = 200.dp, max = 360.dp) else Modifier.weight(1f))
                     .height(SignalMetrics.ControlHero)
-                    .clip(CircleShape)
+                    .clip(speakShape)
                     .background(capsuleFill)
-                    .then(if (isSending) Modifier.border(1.dp, c.border, CircleShape) else Modifier)
                     .combinedClickable(
                         enabled = !isSending,
                         role = Role.Button,
@@ -1603,12 +1679,13 @@ internal fun CaptureBottomControls(
                     )
                 }
             }
+            if (wideComposer) Spacer(Modifier.weight(1f))
             val canSend = hasContent && !isSending
             Box(
                 modifier = Modifier
                     .size(56.dp)
-                    .clip(CircleShape)
-                    .background(if (canSend || isSending) c.accent else c.accent.copy(alpha = 0.3f))
+                    .clip(actionShape)
+                    .background(if (canSend || isSending) c.accentSoft else c.well)
                     .clickable(enabled = canSend, role = Role.Button, onClick = onSubmit)
                     .testTag("send-capture")
                     .semantics { contentDescription = sendDescription },
@@ -1618,13 +1695,13 @@ internal fun CaptureBottomControls(
                     CircularProgressIndicator(
                         modifier = Modifier.size(22.dp),
                         strokeWidth = 2.dp,
-                        color = c.onAccent,
+                        color = c.accentText,
                     )
                 } else {
                     Icon(
-                        Icons.Outlined.ArrowUpward,
+                        Icons.AutoMirrored.Outlined.Send,
                         contentDescription = null,
-                        tint = c.onAccent.copy(alpha = if (canSend) 1f else 0.8f),
+                        tint = if (canSend) c.accentText else c.faint,
                         modifier = Modifier.size(24.dp),
                     )
                 }
@@ -2304,13 +2381,38 @@ internal fun ToolbarAction(
     onClick: () -> Unit = {},
 ) {
     val c = Signal.colors
-    IconButton(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = Modifier.size(48.dp),
-        colors = IconButtonDefaults.iconButtonColors(contentColor = c.text, disabledContentColor = c.faint.copy(alpha = 0.6f)),
+    val description = (if (enabled) label else disabledDescription).localized()
+    CaptureBarChip(onClick = onClick, enabled = enabled, description = description) {
+        Icon(icon, contentDescription = null, tint = if (enabled) c.text else c.faint.copy(alpha = 0.6f), modifier = Modifier.size(20.dp))
+    }
+}
+
+/**
+ * Capture Bar quick action: a 36dp outlined chip with an 8dp radius inside a 48dp
+ * touch target, holding an icon or a short mono glyph ("[[", "Abc").
+ */
+@Composable
+internal fun CaptureBarChip(
+    onClick: () -> Unit,
+    enabled: Boolean,
+    description: String,
+    content: @Composable () -> Unit,
+) {
+    val c = Signal.colors
+    val shape = RoundedCornerShape(8.dp)
+    Box(
+        modifier = Modifier
+            .minimumInteractiveComponentSize()
+            .heightIn(min = 36.dp)
+            .widthIn(min = 44.dp)
+            .clip(shape)
+            .border(1.dp, c.border, shape)
+            .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
+            .semantics { contentDescription = description }
+            .padding(horizontal = 12.dp, vertical = 8.dp),
+        contentAlignment = Alignment.Center,
     ) {
-        Icon(icon, contentDescription = (if (enabled) label else disabledDescription).localized(), modifier = Modifier.size(22.dp))
+        content()
     }
 }
 
@@ -2374,8 +2476,8 @@ internal fun CaptureBarActionItem(
 @Composable
 internal fun ToolbarTextAction(text: String, label: VoxUiText, onClick: () -> Unit) {
     val localizedLabel = label.localized()
-    IconButton(onClick = onClick, modifier = Modifier.size(48.dp).semantics { contentDescription = localizedLabel }) {
-        Text(text, style = MaterialTheme.typography.labelLarge.copy(fontFamily = GeistMonoFontFamily), color = Signal.colors.text)
+    CaptureBarChip(onClick = onClick, enabled = true, description = localizedLabel) {
+        Text(text, style = MaterialTheme.typography.labelMedium.copy(fontFamily = GeistMonoFontFamily, fontWeight = FontWeight.Medium), color = Signal.colors.text)
     }
 }
 

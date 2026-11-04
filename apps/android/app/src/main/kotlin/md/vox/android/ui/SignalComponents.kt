@@ -68,36 +68,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 
-/** Spacing, radius and control heights shared with iOS `Geist`. */
+/** Material 3 spacing, radius and control heights from the Vox.md design. */
 object SignalMetrics {
-    val CardRadius = 18.dp
+    val CardRadius = 20.dp
     val GroupRadius = 16.dp
-    val FieldRadius = 14.dp
-    val ControlSmall = 32.dp
+    /** Inner corners of segmented list rows (16dp outer, 4dp between rows). */
+    val SegmentRadius = 4.dp
+    val FieldRadius = 16.dp
+    val ControlSmall = 36.dp
     val ControlMedium = 48.dp
-    val ControlLarge = 52.dp
+    val ControlLarge = 56.dp
     val ControlHero = 64.dp
+    /** Square-ish 56dp action buttons (Add media, Send) use a 16dp radius. */
+    val ActionRadius = 16.dp
     val PageGutter = 16.dp
 }
 
 // region Text styles
 
 object SignalType {
-    /** Mono uppercase section label above a grouped card ("VAULT"). */
+    /** Material list subheader above a group of rows ("Today", "Vault"). */
     val sectionLabel = TextStyle(
-        fontFamily = GeistMonoFontFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 11.sp,
-        lineHeight = 14.sp,
-        letterSpacing = 0.06.em,
+        fontFamily = GeistFontFamily,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.007.em,
     )
 
     /** Mono metadata under a row title: paths, counts, model names. */
     val monoCaption = TextStyle(
         fontFamily = GeistMonoFontFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 11.5.sp,
-        lineHeight = 15.sp,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
     )
 
     val mono = TextStyle(
@@ -111,14 +115,14 @@ object SignalType {
         fontFamily = GeistFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
-        lineHeight = 21.sp,
+        lineHeight = 24.sp,
     )
 
     val caption = TextStyle(
         fontFamily = GeistFontFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 13.sp,
-        lineHeight = 18.sp,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
     )
 }
 
@@ -126,17 +130,19 @@ object SignalType {
 
 // region Buttons
 
-enum class SignalButtonVariant { PRIMARY, SECONDARY, TERTIARY, DESTRUCTIVE, ACCENT }
+/**
+ * Material 3 button roles: PRIMARY is filled, SECONDARY outlined, TERTIARY a text
+ * button, TONAL the secondary-container fill, ACCENT the primary-container fill used
+ * by Send, and DESTRUCTIVE the error fill.
+ */
+enum class SignalButtonVariant { PRIMARY, SECONDARY, TERTIARY, DESTRUCTIVE, ACCENT, TONAL }
 enum class SignalButtonSize(val height: Dp, val horizontalPadding: Dp) {
-    SMALL(SignalMetrics.ControlSmall, 12.dp),
-    MEDIUM(SignalMetrics.ControlMedium, 16.dp),
-    LARGE(SignalMetrics.ControlLarge, 20.dp),
+    SMALL(SignalMetrics.ControlSmall, 16.dp),
+    MEDIUM(40.dp, 20.dp),
+    LARGE(SignalMetrics.ControlLarge, 24.dp),
 }
 
-/**
- * Capsule button matching iOS `GeistButtonStyle`: ink primary, white bordered
- * secondary, clear tertiary, red destructive, and the indigo accent fill used by Send.
- */
+/** Full-pill Material 3 button in one of the [SignalButtonVariant] roles. */
 @Composable
 fun SignalButton(
     text: String,
@@ -153,11 +159,12 @@ fun SignalButton(
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
     val (container, content) = when (variant) {
-        SignalButtonVariant.PRIMARY -> (if (pressed) c.muted else c.text) to c.bg
-        SignalButtonVariant.SECONDARY -> (if (pressed) c.divider else c.card) to c.text
-        SignalButtonVariant.TERTIARY -> (if (pressed) c.pressed else Color.Transparent) to c.text
-        SignalButtonVariant.DESTRUCTIVE -> c.recording to Color.White
-        SignalButtonVariant.ACCENT -> c.accent to c.onAccent
+        SignalButtonVariant.PRIMARY -> c.accent to c.onAccent
+        SignalButtonVariant.SECONDARY -> (if (pressed) c.pressed else Color.Transparent) to c.tint
+        SignalButtonVariant.TERTIARY -> (if (pressed) c.pressed else Color.Transparent) to c.tint
+        SignalButtonVariant.DESTRUCTIVE -> c.error to c.onError
+        SignalButtonVariant.ACCENT -> c.accentSoft to c.accentText
+        SignalButtonVariant.TONAL -> c.secondarySoft to c.secondaryText
     }
     Button(
         onClick = onClick,
@@ -169,10 +176,10 @@ fun SignalButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = container,
             contentColor = content,
-            disabledContainerColor = if (variant == SignalButtonVariant.TERTIARY) Color.Transparent else c.disabledFill,
+            disabledContainerColor = if (variant == SignalButtonVariant.TERTIARY || variant == SignalButtonVariant.SECONDARY) Color.Transparent else c.disabledFill,
             disabledContentColor = c.faint,
         ),
-        border = if (variant == SignalButtonVariant.SECONDARY) BorderStroke(1.dp, if (pressed) c.borderHi else c.border) else null,
+        border = if (variant == SignalButtonVariant.SECONDARY) BorderStroke(1.dp, if (enabled) c.borderHi else c.border) else null,
         contentPadding = PaddingValues(horizontal = size.horizontalPadding, vertical = 0.dp),
         elevation = null,
         interactionSource = interaction,
@@ -198,7 +205,10 @@ fun SignalButton(
     }
 }
 
-/** 44dp circular icon button on a bordered card, used for Back, Activity, Settings and Attach. */
+/**
+ * 48dp Material icon button. Without [filled] it is a standard (transparent) icon
+ * button in `onSurfaceVariant`; with [filled] it is a filled icon button.
+ */
 @Composable
 fun SignalCircleButton(
     icon: ImageVector,
@@ -215,8 +225,7 @@ fun SignalCircleButton(
         modifier = modifier
             .size(diameter)
             .clip(CircleShape)
-            .background(filled ?: c.card)
-            .then(if (filled == null) Modifier.border(1.dp, c.border, CircleShape) else Modifier)
+            .background(filled ?: Color.Transparent)
             .clickable(enabled = enabled, role = Role.Button, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
@@ -227,14 +236,14 @@ fun SignalCircleButton(
                 !enabled -> c.faint
                 contentColor != null -> contentColor
                 filled != null -> c.onAccent
-                else -> c.text
+                else -> c.muted
             },
-            modifier = Modifier.size(diameter * 0.45f),
+            modifier = Modifier.size(24.dp.coerceAtMost(diameter * 0.5f)),
         )
     }
 }
 
-/** Bordered capsule holding a short label, e.g. the "Library" button on Activity. */
+/** Outlined Material pill with a short label. */
 @Composable
 fun SignalPillButton(
     text: String,
@@ -245,17 +254,16 @@ fun SignalPillButton(
     val c = Signal.colors
     Row(
         modifier = modifier
-            .heightIn(min = SignalMetrics.ControlMedium)
+            .heightIn(min = 40.dp)
             .clip(CircleShape)
-            .background(c.card)
-            .border(1.dp, c.border, CircleShape)
+            .border(1.dp, c.borderHi, CircleShape)
             .clickable(role = Role.Button, onClick = onClick)
-            .padding(horizontal = 14.dp),
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        if (icon != null) Icon(icon, contentDescription = null, tint = c.text, modifier = Modifier.size(16.dp))
-        Text(text, style = MaterialTheme.typography.labelMedium, color = c.text)
+        if (icon != null) Icon(icon, contentDescription = null, tint = c.tint, modifier = Modifier.size(18.dp))
+        Text(text, style = MaterialTheme.typography.labelMedium, color = c.tint)
     }
 }
 
@@ -264,8 +272,10 @@ fun SignalPillButton(
 // region Page structure
 
 /**
- * Signal page header: a row of circular controls, then a large 34sp title with an
- * optional muted subtitle. Replaces Material top app bars across the app.
+ * Material 3 top app bar. With [navigateBack] it is a small app bar: a back icon
+ * button and a 22sp title on one 64dp row. Without it (a top-level destination) the
+ * 28sp headline sits on the row beside the actions. An optional muted [subtitle]
+ * follows underneath.
  */
 @Composable
 fun SignalTopBar(
@@ -276,26 +286,46 @@ fun SignalTopBar(
     backDescription: String = "Back",
     actions: @Composable RowScope.() -> Unit = {},
 ) {
+    val c = Signal.colors
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(Signal.colors.bg)
+            .background(c.bg)
             .statusBarsPadding()
-            .padding(horizontal = SignalMetrics.PageGutter)
-            .padding(top = 8.dp, bottom = 12.dp),
+            .padding(bottom = 8.dp),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().heightIn(min = SignalMetrics.ControlMedium),
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 64.dp)
+                .padding(start = if (navigateBack != null) 4.dp else 20.dp, end = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             if (navigateBack != null) {
-                SignalCircleButton(Icons.AutoMirrored.Outlined.ArrowBack, backDescription, navigateBack)
+                SignalCircleButton(Icons.AutoMirrored.Outlined.ArrowBack, backDescription, navigateBack, contentColor = c.text)
             }
-            Spacer(Modifier.weight(1f))
+            Text(
+                title,
+                style = if (navigateBack != null) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineLarge,
+                color = c.text,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = if (navigateBack != null) 4.dp else 0.dp)
+                    .semantics { heading() },
+            )
             actions()
         }
-        SignalPageTitle(title, subtitle, Modifier.padding(top = 14.dp))
+        if (subtitle != null) {
+            Text(
+                subtitle,
+                style = MaterialTheme.typography.bodyMedium,
+                color = c.muted,
+                modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 4.dp),
+            )
+        }
     }
 }
 
@@ -314,25 +344,25 @@ fun SignalPageTitle(title: String, subtitle: String? = null, modifier: Modifier 
     }
 }
 
-/** Mono uppercase label, iOS `GeistSectionLabel`. */
+/** Material list subheader in the primary color ("Today", "Delivered today"). */
 @Composable
-fun SignalSectionLabel(text: String, modifier: Modifier = Modifier, color: Color = Signal.colors.muted) {
+fun SignalSectionLabel(text: String, modifier: Modifier = Modifier, color: Color = Signal.colors.tint) {
     Text(
-        text.uppercase(),
+        text,
         style = SignalType.sectionLabel,
         color = color,
         modifier = modifier.semantics { heading() },
     )
 }
 
-/** White card with an 18dp radius and a hairline border (iOS `geistCard`). */
+/** Tonal Material card: `surfaceContainerLow`, 20dp radius, no outline by default. */
 @Composable
 fun SignalCard(
     modifier: Modifier = Modifier,
     padding: PaddingValues = PaddingValues(16.dp),
     radius: Dp = SignalMetrics.CardRadius,
     color: Color = Signal.colors.card,
-    borderColor: Color? = Signal.colors.border,
+    borderColor: Color? = null,
     onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
@@ -348,7 +378,10 @@ fun SignalCard(
     )
 }
 
-/** Mono section label above a white bordered card of rows (iOS `settingsGroup`). */
+/**
+ * Subheader above a segmented group of rows. Rows share one tonal container with
+ * 16dp outer corners; [SignalRowDivider] draws the 2dp surface gap between them.
+ */
 @Composable
 fun SignalGroup(
     title: String?,
@@ -358,7 +391,7 @@ fun SignalGroup(
 ) {
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(6.dp)) {
         if (title != null) {
-            SignalSectionLabel(title, Modifier.padding(start = 4.dp, top = 14.dp))
+            SignalSectionLabel(title, Modifier.padding(start = 4.dp, top = 16.dp, bottom = 2.dp))
         }
         SignalCard(
             modifier = Modifier.fillMaxWidth(),
@@ -382,32 +415,32 @@ fun SignalDivider(modifier: Modifier = Modifier, inset: Dp = 0.dp) {
     HorizontalDivider(modifier = modifier.padding(start = inset), thickness = 1.dp, color = Signal.colors.divider)
 }
 
-/** Divider between rows inside a [SignalGroup]. */
+/** The 2dp surface gap between segmented rows inside a [SignalGroup]. */
 @Composable
-fun SignalRowDivider() = SignalDivider(inset = 14.dp)
+fun SignalRowDivider() = HorizontalDivider(thickness = 2.dp, color = Signal.colors.bg)
 
 @Composable
 private fun SignalChevron() {
     Icon(
         Icons.AutoMirrored.Outlined.KeyboardArrowRight,
         contentDescription = null,
-        tint = Signal.colors.faint,
+        tint = Signal.colors.muted,
         modifier = Modifier.size(20.dp),
     )
 }
 
-/** Leading 32dp rounded icon tile; `primary` uses the indigo accent fill. */
+/** Leading 40dp circular icon tile; `primary` uses the primary fill. */
 @Composable
-fun SignalIconTile(icon: ImageVector, modifier: Modifier = Modifier, primary: Boolean = false, size: Dp = 32.dp, tint: Color? = null, fill: Color? = null) {
+fun SignalIconTile(icon: ImageVector, modifier: Modifier = Modifier, primary: Boolean = false, size: Dp = 40.dp, tint: Color? = null, fill: Color? = null) {
     val c = Signal.colors
     Box(
         modifier = modifier
             .size(size)
-            .clip(RoundedCornerShape(size * 0.31f))
-            .background(fill ?: if (primary) c.accent else c.well),
+            .clip(CircleShape)
+            .background(fill ?: if (primary) c.accent else c.secondarySoft),
         contentAlignment = Alignment.Center,
     ) {
-        Icon(icon, contentDescription = null, tint = tint ?: if (primary) c.onAccent else c.text, modifier = Modifier.size(size * 0.5f))
+        Icon(icon, contentDescription = null, tint = tint ?: if (primary) c.onAccent else c.secondaryText, modifier = Modifier.size(size * 0.5f))
     }
 }
 
@@ -429,11 +462,11 @@ fun SignalNavRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = 52.dp)
+            .heightIn(min = 56.dp)
             .then(if (onClick != null) Modifier.clickable(enabled = enabled, onClick = onClick) else Modifier)
-            .padding(horizontal = 14.dp, vertical = 12.dp),
+            .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         if (icon != null) SignalIconTile(icon)
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -452,12 +485,12 @@ fun SignalNavRow(
 
 @Composable
 fun signalSwitchColors() = SwitchDefaults.colors(
-    checkedThumbColor = Color.White,
+    checkedThumbColor = Signal.colors.onAccent,
     checkedTrackColor = Signal.colors.accent,
     checkedBorderColor = Signal.colors.accent,
-    uncheckedThumbColor = Color.White,
-    uncheckedTrackColor = Signal.colors.well,
-    uncheckedBorderColor = Signal.colors.well,
+    uncheckedThumbColor = Signal.colors.borderHi,
+    uncheckedTrackColor = Signal.colors.wellHigh,
+    uncheckedBorderColor = Signal.colors.borderHi,
 )
 
 @Composable
@@ -478,9 +511,9 @@ fun SignalToggleRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = 52.dp)
+            .heightIn(min = 56.dp)
             .clickable(enabled = enabled, role = Role.Switch) { onCheckedChange(!checked) }
-            .padding(horizontal = 14.dp, vertical = 10.dp),
+            .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -495,7 +528,7 @@ fun SignalToggleRow(
 @Composable
 fun SignalValueRow(title: String, value: String, modifier: Modifier = Modifier) {
     Row(
-        modifier = modifier.fillMaxWidth().heightIn(min = 48.dp).padding(horizontal = 14.dp, vertical = 12.dp),
+        modifier = modifier.fillMaxWidth().heightIn(min = 56.dp).padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
@@ -510,9 +543,9 @@ fun SignalActionRow(title: String, onClick: () -> Unit, modifier: Modifier = Mod
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = 52.dp)
+            .heightIn(min = 56.dp)
             .clickable(role = Role.Button, onClick = onClick)
-            .padding(horizontal = 14.dp, vertical = 12.dp),
+            .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -528,7 +561,7 @@ fun SignalActionRow(title: String, onClick: () -> Unit, modifier: Modifier = Mod
 
 enum class SignalRouteTone { PRIMARY, INK, NEUTRAL;
     companion object {
-        /** First enabled route indigo, second ink, every other neutral — as on iOS. */
+        /** First enabled route primary, second inverse, every other tertiary container. */
         fun forIndex(index: Int?): SignalRouteTone = when (index) {
             0 -> PRIMARY
             1 -> INK
@@ -549,8 +582,8 @@ fun SignalRouteTile(
     val c = Signal.colors
     val (fill, ink) = when (tone) {
         SignalRouteTone.PRIMARY -> c.accent to c.onAccent
-        SignalRouteTone.INK -> c.text to c.bg
-        SignalRouteTone.NEUTRAL -> c.well to c.text
+        SignalRouteTone.INK -> c.inverse to c.onInverse
+        SignalRouteTone.NEUTRAL -> c.tertiarySoft to c.tertiaryText
     }
     val glyph = label.trim().let { trimmed ->
         val first = trimmed.codePointAtOrNull(0) ?: return@let "•"
@@ -559,47 +592,47 @@ fun SignalRouteTile(
     Box(
         modifier = modifier
             .size(size)
-            .clip(if (circular) CircleShape else RoundedCornerShape(size * 0.3f))
+            .clip(if (circular) CircleShape else RoundedCornerShape(size * 0.5f))
             .background(fill),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             glyph,
             color = ink,
-            style = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.SemiBold, fontSize = (size.value * 0.42f).sp),
+            style = TextStyle(fontFamily = GeistFontFamily, fontWeight = FontWeight.Bold, fontSize = (size.value * 0.4f).sp),
         )
     }
 }
 
 private fun String.codePointAtOrNull(index: Int): Int? = if (isEmpty()) null else codePointAt(index)
 
-/** Small neutral capsule for route steps and metadata. */
+/** Small 8dp-radius chip for route steps and metadata (`surfaceContainerHigh`). */
 @Composable
-fun SignalChip(text: String, modifier: Modifier = Modifier, mono: Boolean = false, color: Color = Signal.colors.bg, contentColor: Color = Signal.colors.muted) {
+fun SignalChip(text: String, modifier: Modifier = Modifier, mono: Boolean = false, color: Color = Signal.colors.well, contentColor: Color = Signal.colors.text) {
     Text(
         text,
-        style = if (mono) SignalType.monoCaption else MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Normal),
+        style = if (mono) SignalType.monoCaption else MaterialTheme.typography.labelSmall,
         color = contentColor,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         modifier = modifier
-            .clip(CircleShape)
+            .clip(RoundedCornerShape(8.dp))
             .background(color)
-            .padding(horizontal = 9.dp, vertical = 4.dp),
+            .padding(horizontal = 10.dp, vertical = 6.dp),
     )
 }
 
-/** Mono uppercase badge such as DEFAULT. */
+/** Small label badge such as "Default" (`primaryContainer`). */
 @Composable
 fun SignalBadge(text: String, modifier: Modifier = Modifier, color: Color = Signal.colors.accentSoft, contentColor: Color = Signal.colors.accentText) {
     Text(
-        text.uppercase(),
-        style = SignalType.monoCaption.copy(fontSize = 10.5.sp, letterSpacing = 0.04.em),
+        text,
+        style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
         color = contentColor,
         modifier = modifier
-            .clip(RoundedCornerShape(5.dp))
+            .clip(RoundedCornerShape(6.dp))
             .background(color)
-            .padding(horizontal = 6.dp, vertical = 2.dp),
+            .padding(horizontal = 8.dp, vertical = 2.dp),
     )
 }
 
@@ -611,32 +644,32 @@ data class SignalStatusColors(val fill: Color, val ink: Color, val dot: Color)
 fun signalStatusColors(status: SignalStatus): SignalStatusColors {
     val c = Signal.colors
     return when (status) {
-        SignalStatus.ACTIVE -> SignalStatusColors(c.accentSoft, c.accentText, c.accentText)
+        SignalStatus.ACTIVE -> SignalStatusColors(c.accentSoft, c.accentText, c.tint)
         SignalStatus.NEUTRAL -> SignalStatusColors(c.well, c.muted, c.faint)
-        SignalStatus.SUCCESS -> SignalStatusColors(c.successSoft, c.success, c.success)
+        SignalStatus.SUCCESS -> SignalStatusColors(c.successSoft, c.successText, c.success)
         SignalStatus.WARNING -> SignalStatusColors(c.warningSoft, c.warningText, c.warning)
-        SignalStatus.ERROR -> SignalStatusColors(c.errorSoft, c.error, c.error)
-        SignalStatus.RECORDING -> SignalStatusColors(c.recordingSoft, c.recording, c.recording)
+        SignalStatus.ERROR -> SignalStatusColors(c.errorSoft, c.errorText, c.error)
+        SignalStatus.RECORDING -> SignalStatusColors(c.recordingSoft, c.text, c.recording)
     }
 }
 
-/** Dot + label capsule (iOS `GeistStatusBadge`). */
+/** Dot + label status chip (8dp radius, tonal container). */
 @Composable
 fun SignalStatusBadge(text: String, status: SignalStatus, modifier: Modifier = Modifier, liveRegion: Boolean = false) {
     val s = signalStatusColors(status)
     Row(
         modifier = modifier
-            .heightIn(min = 26.dp)
-            .clip(CircleShape)
+            .heightIn(min = 32.dp)
+            .clip(RoundedCornerShape(8.dp))
             .background(s.fill)
-            .padding(horizontal = 10.dp),
+            .padding(horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Box(Modifier.size(6.dp).clip(CircleShape).background(s.dot))
+        Box(Modifier.size(8.dp).clip(CircleShape).background(s.dot))
         Text(
             text,
-            style = SignalType.caption.copy(fontSize = 12.sp),
+            style = SignalType.caption.copy(fontSize = 13.sp, fontWeight = FontWeight.Medium),
             color = s.ink,
             maxLines = 1,
             modifier = if (liveRegion) Modifier.semantics { this.liveRegion = LiveRegionMode.Polite } else Modifier,
@@ -644,9 +677,9 @@ fun SignalStatusBadge(text: String, status: SignalStatus, modifier: Modifier = M
     }
 }
 
-/** `vox.md` mono wordmark with the indigo extension. */
+/** `vox.md` mono wordmark with the primary-colored extension. */
 @Composable
-fun SignalWordmark(modifier: Modifier = Modifier, extensionColor: Color = Signal.colors.accentText, size: Int = 15) {
+fun SignalWordmark(modifier: Modifier = Modifier, extensionColor: Color = Signal.colors.tint, size: Int = 15) {
     val c = Signal.colors
     Text(
         buildAnnotatedString {
@@ -663,8 +696,8 @@ fun SignalWordmark(modifier: Modifier = Modifier, extensionColor: Color = Signal
 // region States
 
 /**
- * Centered empty / caught-up state: a 56dp bordered card tile, a title and a muted
- * explanation, with an optional action (iOS Activity "All caught up").
+ * Centered empty / caught-up state: a 72dp tonal tile, a 22sp title and a muted
+ * explanation, with an optional action (Activity "All caught up").
  */
 @Composable
 fun SignalEmptyState(
@@ -683,15 +716,14 @@ fun SignalEmptyState(
     ) {
         Box(
             modifier = Modifier
-                .size(56.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(c.card)
-                .border(1.dp, c.border, RoundedCornerShape(16.dp)),
+                .size(72.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(c.well),
             contentAlignment = Alignment.Center,
         ) {
-            Icon(icon, contentDescription = null, tint = iconTint, modifier = Modifier.size(26.dp))
+            Icon(icon, contentDescription = null, tint = iconTint, modifier = Modifier.size(32.dp))
         }
-        Text(title, style = MaterialTheme.typography.titleLarge, color = c.text, textAlign = TextAlign.Center, modifier = Modifier.padding(top = 4.dp))
+        Text(title, style = MaterialTheme.typography.headlineSmall, color = c.text, textAlign = TextAlign.Center, modifier = Modifier.padding(top = 4.dp))
         if (message != null) {
             Text(message, style = MaterialTheme.typography.bodyMedium, color = c.muted, textAlign = TextAlign.Center)
         }
@@ -702,7 +734,7 @@ fun SignalEmptyState(
     }
 }
 
-/** Inverted ink card for prominent notices ("Read-only for now"). */
+/** Primary-container card for prominent notices ("Your trial has ended"). */
 @Composable
 fun SignalInvertedCard(
     title: String,
@@ -712,22 +744,22 @@ fun SignalInvertedCard(
     onAction: (() -> Unit)? = null,
 ) {
     val c = Signal.colors
-    SignalCard(modifier = modifier.fillMaxWidth(), color = c.text, borderColor = null, padding = PaddingValues(16.dp)) {
-        Text(title, style = MaterialTheme.typography.titleSmall, color = c.bg)
+    SignalCard(modifier = modifier.fillMaxWidth(), color = c.accentSoft, radius = 16.dp, padding = PaddingValues(16.dp)) {
+        Text(title, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold), color = c.accentText)
         Spacer(Modifier.size(6.dp))
-        Text(message, style = MaterialTheme.typography.bodyMedium, color = c.bg.copy(alpha = 0.78f))
+        Text(message, style = MaterialTheme.typography.bodyMedium, color = c.accentText)
         if (actionLabel != null && onAction != null) {
             Spacer(Modifier.size(12.dp))
             Box(
                 Modifier
                     .clip(CircleShape)
-                    .background(c.bg)
+                    .background(c.accent)
                     .clickable(role = Role.Button, onClick = onAction)
                     .heightIn(min = 40.dp)
-                    .padding(horizontal = 14.dp),
+                    .padding(horizontal = 20.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                Text(actionLabel, style = MaterialTheme.typography.labelMedium, color = c.text)
+                Text(actionLabel, style = MaterialTheme.typography.labelMedium, color = c.onAccent)
             }
         }
     }
@@ -749,19 +781,19 @@ fun SignalBanner(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(SignalMetrics.FieldRadius))
+            .clip(RoundedCornerShape(16.dp))
             .background(s.fill)
-            .padding(horizontal = 14.dp, vertical = 12.dp),
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        if (icon != null) Icon(icon, contentDescription = null, tint = s.ink, modifier = Modifier.size(18.dp))
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            if (title != null) Text(title, style = MaterialTheme.typography.titleSmall, color = s.ink)
+        if (icon != null) Icon(icon, contentDescription = null, tint = s.ink, modifier = Modifier.size(22.dp))
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            if (title != null) Text(title, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold), color = s.ink)
             Text(
                 message,
                 style = SignalType.caption,
-                color = if (title != null) Signal.colors.text else s.ink,
+                color = s.ink,
                 modifier = if (liveRegion) Modifier.semantics { this.liveRegion = LiveRegionMode.Polite } else Modifier,
             )
         }
@@ -773,17 +805,17 @@ fun SignalBanner(
 
 // region Fields
 
-/** Outlined text field colors: white field, hairline border, indigo focus. */
+/** Outlined Material text field colors: transparent field, outline, primary focus. */
 @Composable
 fun signalTextFieldColors(): TextFieldColors {
     val c = Signal.colors
     return OutlinedTextFieldDefaults.colors(
-        focusedContainerColor = c.card,
-        unfocusedContainerColor = c.card,
-        disabledContainerColor = c.disabledFill,
-        errorContainerColor = c.card,
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        disabledContainerColor = Color.Transparent,
+        errorContainerColor = Color.Transparent,
         focusedBorderColor = c.tint,
-        unfocusedBorderColor = c.border,
+        unfocusedBorderColor = c.borderHi,
         disabledBorderColor = c.border,
         errorBorderColor = c.error,
         focusedTextColor = c.text,
@@ -798,9 +830,9 @@ fun signalTextFieldColors(): TextFieldColors {
     )
 }
 
-val SignalFieldShape: Shape = RoundedCornerShape(SignalMetrics.FieldRadius)
+val SignalFieldShape: Shape = RoundedCornerShape(12.dp)
 
-/** Capsule search field on a card, as on Library. */
+/** Material 3 search bar: 56dp `surfaceContainerHigh` pill, as on History. */
 @Composable
 fun SignalSearchField(
     value: String,
@@ -813,17 +845,16 @@ fun SignalSearchField(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = SignalMetrics.ControlMedium)
+            .heightIn(min = 56.dp)
             .clip(CircleShape)
-            .background(c.card)
-            .border(1.dp, c.border, CircleShape)
-            .padding(horizontal = 14.dp),
+            .background(c.well)
+            .padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Icon(Icons.Outlined.Search, contentDescription = null, tint = c.muted, modifier = Modifier.size(18.dp))
+        Icon(Icons.Outlined.Search, contentDescription = null, tint = c.muted, modifier = Modifier.size(24.dp))
         Box(Modifier.weight(1f)) {
-            if (value.isEmpty()) Text(placeholder, style = MaterialTheme.typography.bodyLarge, color = c.faint)
+            if (value.isEmpty()) Text(placeholder, style = MaterialTheme.typography.bodyLarge, color = c.muted)
             androidx.compose.foundation.text.BasicTextField(
                 value = value,
                 onValueChange = onValueChange,

@@ -345,9 +345,10 @@ class VoxInputMethodService : InputMethodService() {
 internal enum class KeyboardVoiceMode { IDLE, LISTENING, PROCESSING, ERROR, UNAVAILABLE, RECOVERED }
 
 /**
- * The Signal-styled keyboard view: paper ground, a toolbar with mono status text and the
- * VoicePad-style voice capsule (ink when idle, recording red while listening), and white
- * hairline key cards in Geist. It holds no editor or capture state: [VoxInputMethodService]
+ * The Material 3 keyboard view: a `surfaceContainer` ground, a toolbar with mono status
+ * text and the voice control (primary when idle, a recording-red squircle while
+ * listening), and raised `surfaceContainerLowest` keys with `secondaryContainer`
+ * modifiers in Geist. It holds no editor or capture state: [VoxInputMethodService]
  * owns all behaviour and drives this view, which also lets debug stories host it directly.
  */
 internal class VoxKeyboardPanel(
@@ -398,7 +399,7 @@ internal class VoxKeyboardPanel(
             setPadding(dp(8), 0, dp(2), dp(6))
         }
         toolbar.addView(statusView, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f))
-        toolbar.addView(voiceView, LinearLayout.LayoutParams(dp(104), dp(48)).apply { marginStart = dp(10) })
+        toolbar.addView(voiceView, LinearLayout.LayoutParams(dp(88), dp(48)).apply { marginStart = dp(10) })
         root.addView(toolbar, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(56)))
         applyVoiceMode(KeyboardVoiceMode.IDLE)
     }
@@ -496,8 +497,8 @@ internal class VoxKeyboardPanel(
                 }
                 rowView.addView(
                     button,
-                    LinearLayout.LayoutParams(0, dp(48), weight).apply {
-                        setMargins(dp(2), dp(2), dp(2), dp(2))
+                    LinearLayout.LayoutParams(0, dp(46), weight).apply {
+                        setMargins(dp(3), dp(3), dp(3), dp(3))
                     },
                 )
             }
@@ -507,7 +508,7 @@ internal class VoxKeyboardPanel(
 
     private fun keyButton(label: String, wide: Boolean, modifier: Boolean): Button = Button(context).apply {
         text = label
-        textSize = if (wide) 14f else 19f
+        textSize = if (wide) 14f else 20f
         isAllCaps = false
         typeface = if (modifier) sansMedium else sans
         setTextColor(color(R.color.signal_text))
