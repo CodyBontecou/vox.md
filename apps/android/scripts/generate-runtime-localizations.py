@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the bounded Android runtime phrase table from the reviewed iOS catalog."""
+"""Generate Android phrase tables and CLDR quantities from iOS and Android catalogs."""
 
 from __future__ import annotations
 
@@ -18,6 +18,9 @@ RUNTIME_SOURCE_ROOTS = tuple(
     for module in ("app", "capture-domain", "data", "platform-services")
 )
 OUTPUT = ROOT / "apps" / "android" / "app" / "src" / "main" / "res" / "raw" / "vox_runtime_localizations.json"
+ANDROID_CATALOG = ROOT / "apps/android/localization/android-strings.json"
+ANDROID_OVERRIDES = ROOT / "apps/android/localization/android-overrides.json"
+PLURAL_SPEC = ROOT / "apps/android/localization/plural-spec.json"
 AUDIT = ROOT / "apps" / "android" / "localization-review.json"
 DYNAMIC_AUDIT_EXCLUDED_PATHS = {
     "apps/android/app/src/main/kotlin/md/vox/android/RuntimeLocalization.kt",
@@ -35,6 +38,14 @@ ANDROID_QUALIFIERS = {
     "ur": "ur", "vi": "vi", "zh-Hans": "b+zh+Hans", "zh-Hant": "b+zh+Hant",
 }
 PLATFORM_STRINGS = {
+    "preset_widget_title": "Capture Presets",
+    "preset_widget_description": "Open Vox.md directly to a durable Markdown capture draft.",
+    "preset_widget_configure": "Settings",
+    "preset_widget_unconfigured": "Choose Preset",
+    "preset_widget_disabled": "Disabled",
+    "preset_widget_missing": "Unavailable",
+    "preset_widget_no_pins": "Choose Capture Preset",
+    "preset_widget_storage_unavailable": "Shared Capture storage is unavailable.",
     "shortcut_capture_short": "Capture",
     "shortcut_capture_long": "Capture to Vox.md",
     "shortcut_voice_short": "Record voice note",
@@ -177,6 +188,14 @@ def missing_translation_locales(entry: dict) -> list[str]:
     return [locale for locale in LOCALES if translated_value(entry, locale) is None]
 
 
+def is_plural_variation_entry(entry: object) -> bool:
+    """iOS plural entries carry `variations` instead of a stringUnit; Android serves those
+    sources from plural-spec.json and its own catalog, never from the iOS phrase table."""
+    return isinstance(entry, dict) and any(
+        "variations" in localization for localization in entry.get("localizations", {}).values()
+    )
+
+
 def validate_source_aliases(catalog: dict) -> None:
     for source, catalog_source in SOURCE_ALIASES.items():
         if source in catalog:
@@ -236,18 +255,80 @@ def android_string(value: str) -> str:
     return escape(escaped)
 
 
+def validate_android_catalog(data: dict) -> dict:
+    if data.get("schemaVersion") != 1 or data.get("reviewStatus") != "requires-human-review":
+        raise SystemExit("Android catalog must retain explicit human-review status")
+    if data.get("provenance", {}).get("humanApproved") is not False:
+        raise SystemExit("Android machine translations must not claim human approval")
+    strings = data["strings"]
+    for source, translations in strings.items():
+        if set(translations) != set(LOCALES):
+            raise SystemExit(f"Android translation locale coverage differs: {source}")
+        for locale, value in translations.items():
+            if not isinstance(value, str) or not value.strip():
+                raise SystemExit(f"Empty Android translation: {locale}: {source}")
+            validate_format_compatibility(source, value, locale)
+            for token in re.findall(r"\{[A-Za-z][A-Za-z0-9_]*\}", source):
+                if token not in value: raise SystemExit(f"Android template token lost: {locale}: {token}")
+    return strings
+
+
+def android_catalog() -> dict:
+    strings = validate_android_catalog(json.loads(ANDROID_CATALOG.read_text(encoding="utf-8")))
+    overrides = validate_android_catalog(json.loads(ANDROID_OVERRIDES.read_text(encoding="utf-8")))
+    return strings | overrides
+
+
+def phrase_translation(catalog: dict, android: dict, source: str, locale: str) -> str | None:
+    key = resolved_catalog_source(catalog, source)
+    value = translated_value(catalog[key], locale) if key is not None else None
+    return value if value is not None else android.get(source, {}).get(locale)
+
+
+PLURAL_CATEGORIES = {
+    "ar": ("zero", "one", "two", "few", "many", "other"),
+    "ru": ("one", "few", "many", "other"), "pl": ("one", "few", "many", "other"),
+    "uk": ("one", "few", "many", "other"),
+    **{locale: ("other",) for locale in ("id", "ja", "ko", "th", "vi", "zh-Hans", "zh-Hant")},
+    **{locale: ("one", "many", "other") for locale in ("es", "fr", "it", "pt-BR")},
+    **{locale: ("one", "other") for locale in ("bn", "de", "hi", "nl", "ta", "tr", "ur")},
+}
+
+
+def generate_plurals(catalog: dict, android: dict) -> dict:
+    spec = json.loads(PLURAL_SPEC.read_text(encoding="utf-8"))
+    if spec.get("reviewStatus") != "requires-human-review": raise SystemExit("Plural review must remain explicit")
+    result = {}
+    for source, item in spec["plurals"].items():
+        if dict(format_signature(source)).get(item["countArgument"]) != "integer":
+            raise SystemExit(f"Plural count must select an integer argument: {source}")
+        forms = {"en": item["english"]}
+        for locale in LOCALES:
+            overrides = item.get("overrides", {}).get(locale, {})
+            if set(overrides) != set(PLURAL_CATEGORIES[locale]):
+                raise SystemExit(f"Plural categories differ: {locale}: {source}")
+            forms[locale] = overrides
+        for locale, quantities in forms.items():
+            if set(quantities) != set(("one", "other") if locale == "en" else PLURAL_CATEGORIES[locale]):
+                raise SystemExit(f"Plural categories differ: {locale}: {source}")
+            for text in quantities.values(): validate_format_compatibility(source, text, locale)
+        result[source] = {"countArgument": item["countArgument"], "forms": forms}
+    sources = literal_runtime_sources()
+    integer = {source for source in sources if any(t == "integer" for _, t in format_signature(source))}
+    if integer - set(result) - set(spec["nonPluralSources"]):
+        raise SystemExit("Unclassified integer format sources: " + str(sorted(integer - set(result) - set(spec["nonPluralSources"]))))
+    return result
+
+
 def generate(catalog: dict) -> dict[str, dict[str, str]]:
     validate_source_aliases(catalog)
+    android = android_catalog()
     phrases = source_literals()
     table: dict[str, dict[str, str]] = {}
     for locale in LOCALES:
         translations: dict[str, str] = {}
         for source in sorted(phrases):
-            catalog_source = resolved_catalog_source(catalog, source)
-            if catalog_source is None:
-                continue
-            entry = catalog[catalog_source]
-            value = translated_value(entry, locale)
+            value = phrase_translation(catalog, android, source, locale)
             if value is not None:
                 validate_format_compatibility(source, value, locale)
                 if value != source:
@@ -454,17 +535,26 @@ def localization_audit(catalog: dict) -> dict:
     sources = literal_runtime_sources()
     exact = sorted(
         source for source in sources
-        if isinstance(catalog.get(source), dict) and not missing_translation_locales(catalog[source])
+        if isinstance(catalog.get(source), dict) and not is_plural_variation_entry(catalog[source])
+        and not missing_translation_locales(catalog[source])
     )
     incomplete = sorted(
         source for source in sources
-        if isinstance(catalog.get(source), dict) and missing_translation_locales(catalog[source])
+        if isinstance(catalog.get(source), dict) and not is_plural_variation_entry(catalog[source])
+        and missing_translation_locales(catalog[source])
     )
     aliases = sorted(
         source for source in sources
         if source in SOURCE_ALIASES and resolved_catalog_source(catalog, source) is not None
     )
-    missing = sorted(source for source in sources if resolved_catalog_source(catalog, source) is None)
+    android = android_catalog()
+    android_backed = sorted(
+        source for source in sources
+        if source in android and (
+            resolved_catalog_source(catalog, source) is None or is_plural_variation_entry(catalog.get(source))
+        )
+    )
+    missing = sorted(source for source in sources if resolved_catalog_source(catalog, source) is None and source not in android)
     dynamic_calls = dynamic_runtime_calls()
     integer_sources = sorted(
         source for source in sources
@@ -472,10 +562,15 @@ def localization_audit(catalog: dict) -> dict:
     )
     return {
         "schemaVersion": 1,
-        "reviewStatus": "requires-human-translation",
+        "reviewStatus": "requires-human-review",
         "formatArgumentContractStatus": "validated",
         "pluralReviewStatus": "requires-human-review",
         "catalog": str(CATALOG.relative_to(ROOT)),
+        "androidCatalog": str(ANDROID_CATALOG.relative_to(ROOT)),
+        "androidCatalogBackedSourceCount": len(android_backed),
+        "translationCoverageStatus": "complete" if not missing and not incomplete else "incomplete",
+        "pluralImplementationStatus": "cldr-aware",
+        "pluralSourceCount": len(json.loads(PLURAL_SPEC.read_text())["plurals"]),
         "runtimeSourceScanRoots": [str(path.relative_to(ROOT)) for path in RUNTIME_SOURCE_ROOTS],
         "runtimeSourceLiteralCount": len(source_literals()),
         "supportedLocales": list(LOCALES),
@@ -512,7 +607,7 @@ def localization_audit(catalog: dict) -> dict:
         "limitations": [
             "This is a deterministic literal-source audit, not translation approval.",
             "Dynamic-source call sites are inventoried; the current finite-domain trace has no unresolved dynamic expressions.",
-            "Missing sources fall back to English until reviewed translations are added to the iOS catalog.",
+            "Missing sources fall back to English; Android machine translations require human linguistic review.",
         ],
     }
 
@@ -578,6 +673,16 @@ def main() -> None:
     audit = localization_audit(catalog)
     encoded_audit = json.dumps(audit, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     platform_files = platform_resource_files(catalog)
+    plurals = generate_plurals(catalog, android_catalog())
+    platform_files[RESOURCES / "raw/vox_runtime_plurals.json"] = json.dumps(plurals, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
+    watch_source = "%lld recordings saved on Watch."
+    for locale, qualifier in [("en", ""), *ANDROID_QUALIFIERS.items()]:
+        forms = plurals[watch_source]["forms"][locale]
+        lines = ['<?xml version="1.0" encoding="utf-8"?>', '<resources>', '    <plurals name="wear_recordings_saved">']
+        for category, value in forms.items():
+            lines.append(f'        <item quantity="{category}">{android_string(value.replace("%lld", "%1$d"))}</item>')
+        lines.extend(['    </plurals>', '</resources>'])
+        platform_files[WEAR_RESOURCES / ("values" + ("-" + qualifier if qualifier else "")) / "platform_plurals.xml"] = "\n".join(lines) + "\n"
     if args.check:
         raw_paths = raw_text_literal_paths()
         if raw_paths:

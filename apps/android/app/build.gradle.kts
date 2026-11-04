@@ -12,6 +12,18 @@ val releaseSigningEnvironment = mapOf(
 )
 val hasCompleteReleaseSigning = releaseSigningEnvironment.values.all { !it.isNullOrBlank() }
 
+val physicalProvenance by tasks.registering(Exec::class) {
+    val script = rootProject.file("scripts/physical_capture_provenance.py")
+    inputs.file(script)
+    inputs.files(rootProject.fileTree("platform-services/src/main/kotlin"))
+    inputs.files(rootProject.fileTree("capture-domain/src/main/kotlin"))
+    inputs.files(fileTree("src/main/cpp"))
+    inputs.files(fileTree("src/debug"))
+    val output = layout.buildDirectory.dir("generated/physical-provenance")
+    outputs.dir(output)
+    commandLine("python3", script, output.get().asFile)
+}
+
 android {
     namespace = "md.vox.android"
     assetPacks += listOf(":whisper_small")
@@ -38,6 +50,13 @@ android {
         }
     }
     buildTypes {
+        debug {
+            // Isolated physical QA installation; never replaces the owner's app/data.
+            if (providers.gradleProperty("voxPhysicalQualification").orNull == "true") {
+                applicationIdSuffix = ".qualification"
+                versionNameSuffix = "-qualification"
+            }
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -49,9 +68,14 @@ android {
             signingConfigs.findByName("voxRelease")?.let { signingConfig = it }
         }
     }
+    sourceSets.getByName("androidTest").assets.srcDir(rootProject.projectDir.parentFile.parentFile.resolve("evaluations/local-intelligence/v1"))
+    sourceSets.getByName("debug").assets.directories.add(layout.buildDirectory.dir("generated/physical-provenance").get().asFile.path)
+    sourceSets.getByName("main").jniLibs.srcDir(layout.buildDirectory.dir("generated/intelligence-jni").get().asFile)
     sourceSets.getByName("main").res.directories.add("build/generated/res/geistFonts")
     sourceSets.getByName("main").res.directories.add("build/generated/res/launcherIcons")
 }
+
+tasks.matching { it.name == "preDebugBuild" }.configureEach { dependsOn(physicalProvenance) }
 
 val generateLauncherIcons by tasks.registering(Exec::class) {
     group = "build setup"
@@ -87,6 +111,7 @@ val syncGeistFonts by tasks.registering(Sync::class) {
 }
 
 dependencies {
+    implementation(libs.serialization.json)
     implementation(project(":capture-domain"))
     implementation(project(":core-bridge"))
     implementation(project(":data"))
@@ -111,6 +136,7 @@ dependencies {
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
     implementation(libs.compose.material.icons.extended)
+    implementation(libs.window)
 
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
@@ -128,11 +154,13 @@ val generateRuntimeLocalizations by tasks.registering(Exec::class) {
     val catalog = rootProject.projectDir.parentFile.parentFile.resolve("Voxboard/Localizable.xcstrings")
     inputs.file(generator)
     inputs.file(catalog)
+    inputs.files(rootProject.fileTree("localization") { include("*.json") })
     inputs.files(fileTree("src/main/kotlin") { include("**/*.kt") })
     inputs.files(rootProject.fileTree("capture-domain/src/main/kotlin") { include("**/*.kt") })
     inputs.files(rootProject.fileTree("data/src/main/kotlin") { include("**/*.kt") })
     inputs.files(rootProject.fileTree("platform-services/src/main/kotlin") { include("**/*.kt") })
     outputs.file("src/main/res/raw/vox_runtime_localizations.json")
+    outputs.file("src/main/res/raw/vox_runtime_plurals.json")
     outputs.file(rootProject.file("localization-review.json"))
     val localeQualifiers = listOf(
         "ar", "bn", "de", "es", "fr", "hi", "b+id", "it", "ja", "ko", "nl", "pl",
@@ -141,6 +169,9 @@ val generateRuntimeLocalizations by tasks.registering(Exec::class) {
     outputs.files(localeQualifiers.map { file("src/main/res/values-$it/platform_localizations.xml") })
     outputs.files(localeQualifiers.map {
         rootProject.file("wear/src/main/res/values-$it/platform_localizations.xml")
+    })
+    outputs.files((listOf("") + localeQualifiers.map { "-$it" }).map {
+        rootProject.file("wear/src/main/res/values$it/platform_plurals.xml")
     })
     commandLine("python3", generator)
 }
@@ -250,4 +281,15 @@ val validateSignedReleaseBundle by tasks.registering(Exec::class) {
 
 tasks.named("check") {
     dependsOn(validateDebugArtifacts)
+}
+
+val buildIntelligenceNative by tasks.registering(Exec::class) {
+    val script = rootProject.file("scripts/build-intelligence-native.py")
+    inputs.file(script)
+    inputs.files(fileTree("src/main/cpp"))
+    outputs.dir(layout.buildDirectory.dir("generated/intelligence-jni"))
+    commandLine("python3", script, layout.buildDirectory.dir("generated/intelligence-jni").get().asFile)
+}
+tasks.configureEach {
+    if (name == "mergeDebugJniLibFolders" || name == "mergeReleaseJniLibFolders") dependsOn(buildIntelligenceNative)
 }

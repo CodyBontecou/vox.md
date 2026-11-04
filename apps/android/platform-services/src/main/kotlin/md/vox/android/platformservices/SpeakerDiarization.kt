@@ -259,6 +259,7 @@ data class SpeakerDiarizationResult(
     val transcript: String,
     val speakerCount: Int,
     val skipReason: String? = null,
+    val speakerAssignments: List<Int> = emptyList(),
 )
 
 /** Conservative online clustering over Vosk x-vectors; it never drops recognized text. */
@@ -319,6 +320,7 @@ object LocalSpeakerDiarizer {
         return SpeakerDiarizationResult(
             transcript = transcript.ifBlank { fallbackTranscript },
             speakerCount = centroids.size.coerceAtLeast(1),
+            speakerAssignments = assignments.map { requireNotNull(it) },
         )
     }
 

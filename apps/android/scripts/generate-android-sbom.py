@@ -102,7 +102,17 @@ def cargo_components() -> list[dict]:
 
 
 def render() -> str:
-    components = maven_components() + cargo_components()
+    components = maven_components() + cargo_components() + [
+        {"type": "library", "bom-ref": "pkg:github/ggml-org/llama.cpp@74d4f5b041ad837153b0e90fc864b8290e01d8d5",
+         "name": "llama.cpp", "version": "b5046", "licenses": [{"license": {"id": "MIT"}}],
+         "hashes": [{"alg": "SHA-256", "content": "8dd9fcc7c17f972673960ffdcc7521f52de5a9ec594aa6acebd9dfd8c17c0a5c"}],
+         "properties": [{"name": "vox.android.modules", "value": "app"}, {"name": "vox.native.sourceRevision", "value": "74d4f5b041ad837153b0e90fc864b8290e01d8d5"}]},
+        {"type": "machine-learning-model", "bom-ref": "pkg:generic/Qwen/qwen2.5-1.5b-instruct-q4_k_m@91cad51170dc346986eccefdc2dd33a9da36ead9",
+         "name": "Qwen2.5-1.5B-Instruct Q4_K_M", "version": "91cad51170dc346986eccefdc2dd33a9da36ead9", "scope": "optional",
+         "licenses": [{"license": {"id": "Apache-2.0"}}],
+         "hashes": [{"alg": "SHA-256", "content": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e"}],
+         "properties": [{"name": "vox.android.modules", "value": "app"}, {"name": "vox.distribution", "value": "optional verified download; not bundled"}]},
+    ]
     references = [component["bom-ref"] for component in components]
     if len(references) != len(set(references)):
         duplicates = sorted(reference for reference in set(references) if references.count(reference) > 1)
@@ -119,7 +129,7 @@ def render() -> str:
                 "version": "0.1.0-foundation",
             },
             "properties": [
-                {"name": "vox.sbom.inputs", "value": "Gradle releaseRuntimeClasspath locks and Cargo.lock"},
+                {"name": "vox.sbom.inputs", "value": "Gradle releaseRuntimeClasspath locks, Cargo.lock and pinned local-inference source/model"},
                 {"name": "vox.sbom.networkContent", "value": "none"},
             ],
         },

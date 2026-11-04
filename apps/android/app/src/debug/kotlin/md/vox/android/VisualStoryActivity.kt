@@ -119,6 +119,8 @@ internal fun VisualParityStory(story: String) {
             entitlement = VoxEntitlement.FREE,
             captureCount = 10,
             transcriptionUsedMillis = 15 * 60_000L,
+            // The usage meters live on the "how it works" page of the Material 3 paywall.
+            initialPage = 1,
         )
         VisualStoryActivity.STORY_UPGRADE_OFFLINE -> UpgradeStory(
             entitlement = VoxEntitlement.FREE,
@@ -162,15 +164,25 @@ internal fun VisualParityStory(story: String) {
         VisualStoryActivity.STORY_PAYWALL_PLANS -> UpgradeStory(VoxEntitlement.FREE, initialPage = 2)
         VisualStoryActivity.STORY_PAYWALL_LIFETIME_ONLY -> UpgradeStory(
             entitlement = VoxEntitlement.FREE,
-            plans = storyPlans.filter { it.kind == PaywallPlanKind.LIFETIME },
+            plans = storyPlans.filter { it.plan == VoxPlan.LIFETIME },
             initialPage = 1,
         )
-        else -> Text("Unknown visual story: $story")
+        else -> if (
+            !CaptureStories(story) &&
+            !LibraryStories(story) &&
+            !SettingsStories(story) &&
+            !RecoveryStories(story) &&
+            !RouteStories(story) &&
+            !KeyboardStories(story) &&
+            !OnboardingStories(story)
+        ) {
+            Text("Unknown visual story: $story")
+        }
     }
 }
 
 @androidx.compose.runtime.Composable
-private fun CaptureStory(
+internal fun CaptureStory(
     recordingPhase: RecordingPhase = RecordingPhase.IDLE,
     recordingTranscription: RecordingTranscriptionState? = null,
     presets: CapturePresetCollection = visualPresets,
@@ -244,7 +256,7 @@ private fun CaptureStory(
 }
 
 @androidx.compose.runtime.Composable
-private fun EmptyHistoryStory() {
+internal fun EmptyHistoryStory() {
     HistoryScreen(
         items = emptyList(),
         transcripts = emptyList(),
@@ -260,7 +272,7 @@ private fun EmptyHistoryStory() {
 }
 
 @androidx.compose.runtime.Composable
-private fun FolderRepairHistoryStory() {
+internal fun FolderRepairHistoryStory() {
     HistoryScreen(
         items = listOf(
             CaptureHistoryItem(
@@ -287,7 +299,7 @@ private fun FolderRepairHistoryStory() {
 }
 
 @androidx.compose.runtime.Composable
-private fun HistoryStateStory(
+internal fun HistoryStateStory(
     state: CaptureState,
     requestID: String,
     title: String,
@@ -319,7 +331,7 @@ private fun HistoryStateStory(
 }
 
 @androidx.compose.runtime.Composable
-private fun UpgradeStory(
+internal fun UpgradeStory(
     entitlement: VoxEntitlement,
     connectionPhase: BillingConnectionPhase = BillingConnectionPhase.READY,
     lastOutcome: BillingActionOutcome? = if (entitlement == VoxEntitlement.PENDING) {
@@ -327,7 +339,7 @@ private fun UpgradeStory(
     } else {
         null
     },
-    plans: List<PaywallPlan> = storyPlans,
+    plans: List<VoxPlanOption> = storyPlans,
     captureCount: Int = 9,
     transcriptionUsedMillis: Long = 13 * 60_000L,
     initialPage: Int = 0,
@@ -337,7 +349,8 @@ private fun UpgradeStory(
             connectionPhase = connectionPhase,
             entitlement = entitlement,
             plans = plans,
-            activeProductID = if (entitlement == VoxEntitlement.UNLIMITED) PlayBillingManager.LIFETIME_PRODUCT_ID else null,
+            productAvailable = plans.isNotEmpty(),
+            ownsLifetime = entitlement == VoxEntitlement.UNLIMITED,
             lastOutcome = lastOutcome,
         ),
         stats = ActivityStats(
@@ -353,19 +366,15 @@ private fun UpgradeStory(
         purchase = {},
         restore = {},
         initialPage = initialPage,
-        today = java.time.LocalDate.of(2026, 11, 2),
+        nowEpochMillis = 1_793_620_800_000L, // 2026-11-02 12:00 UTC, so trial dates stay deterministic
     )
 }
 
 /** Deterministic Play-like fixtures; real prices always come from ProductDetails at runtime. */
-private val storyPlans = listOf(
-    PaywallPlan(PaywallPlanKind.YEARLY, "$29.99", 29_990_000L, "USD", offerToken = "story-yearly", freeTrialDays = 7),
-    PaywallPlan(PaywallPlanKind.WEEKLY, "$0.99", 990_000L, "USD", offerToken = "story-weekly", freeTrialDays = 7),
-    PaywallPlan(PaywallPlanKind.LIFETIME, "$49.99", 49_990_000L, "USD"),
-)
+private val storyPlans: List<VoxPlanOption> = storySubscriptionPlans(trial = true)
 
 @androidx.compose.runtime.Composable
-private fun HistoryStory() {
+internal fun HistoryStory() {
     HistoryScreen(
         items = listOf(
             CaptureHistoryItem(
@@ -420,7 +429,7 @@ private fun HistoryStory() {
 }
 
 @androidx.compose.runtime.Composable
-private fun SettingsStory() {
+internal fun SettingsStory() {
     SettingsScreen(
         destination = visualDestination,
         navigateBack = {},
@@ -442,7 +451,7 @@ private fun SettingsStory() {
 }
 
 @androidx.compose.runtime.Composable
-private fun PresetsStory() {
+internal fun PresetsStory() {
     CapturePresetsScreen(
         collection = visualPresets,
         entryTemplates = listOf(
@@ -462,13 +471,13 @@ private fun PresetsStory() {
     )
 }
 
-private val visualDestination = CaptureDestination(
+internal val visualDestination = CaptureDestination(
     id = "local",
     displayName = "Vox Notes",
     treeUri = "content://md.vox.android.visual/vault",
 )
 
-private val visualPresets = CapturePresetCollection(
+internal val visualPresets = CapturePresetCollection(
     activePresetID = "33333333-3333-4333-8333-333333333333",
     presets = listOf(
         CapturePreset(
@@ -493,10 +502,10 @@ private val visualPresets = CapturePresetCollection(
     ),
 )
 
-private const val FIXED_TIME = 1_700_000_000_000L
+internal const val FIXED_TIME = 1_700_000_000_000L
 
 /** Rail story fixtures: the active pin stays in the selector, disabled and unpinned presets stay off the rail. */
-private val railStoryPresets = CapturePresetCollection(
+internal val railStoryPresets = CapturePresetCollection(
     activePresetID = "33333333-3333-4333-8333-333333333333",
     presets = listOf(
         CapturePreset(
@@ -553,4 +562,4 @@ private val railStoryPresets = CapturePresetCollection(
         ),
     ),
 )
-private const val RECORDING_ID = "66666666-6666-4666-8666-666666666666"
+internal const val RECORDING_ID = "66666666-6666-4666-8666-666666666666"

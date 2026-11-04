@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="widget_surface">#1D1C1A</color>
-    <color name="widget_outline">#45423E</color>
-    <color name="widget_text_primary">#F4F1EC</color>
-    <color name="widget_text_secondary">#B9B4AC</color>
+    <!-- Widget aliases onto the Signal tokens (values-night/signal_colors.xml carries the dark set). -->
+    <color name="widget_surface">@color/signal_bg</color>
+    <color name="widget_outline">@color/signal_border</color>
+    <color name="widget_text_primary">@color/signal_text</color>
+    <color name="widget_text_secondary">@color/signal_muted</color>
 </resources>

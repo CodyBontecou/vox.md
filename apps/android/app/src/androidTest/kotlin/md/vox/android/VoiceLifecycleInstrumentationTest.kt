@@ -48,6 +48,9 @@ class VoiceLifecycleInstrumentationTest {
             assertFalse("another recording was already active", RecordingStatusRegistry.status.value.isActive)
             audio.start(testPreset())
             val recording = awaitPhase(RecordingPhase.RECORDING)
+            // A second UI/client must not mistake a live recorder for a dead process.
+            AudioCaptureClient(context)
+            assertEquals(RecordingPhase.RECORDING, RecordingStatusRegistry.status.value.phase)
             val id = requireNotNull(recording.sessionID)
             sessionID = id
             assertEquals(

@@ -1960,6 +1960,65 @@
       "version": "0.1.0-alpha.1"
     },
     {
+      "bom-ref": "pkg:generic/Qwen/qwen2.5-1.5b-instruct-q4_k_m@91cad51170dc346986eccefdc2dd33a9da36ead9",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "name": "Qwen2.5-1.5B-Instruct Q4_K_M",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        },
+        {
+          "name": "vox.distribution",
+          "value": "optional verified download; not bundled"
+        }
+      ],
+      "scope": "optional",
+      "type": "machine-learning-model",
+      "version": "91cad51170dc346986eccefdc2dd33a9da36ead9"
+    },
+    {
+      "bom-ref": "pkg:github/ggml-org/llama.cpp@74d4f5b041ad837153b0e90fc864b8290e01d8d5",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8dd9fcc7c17f972673960ffdcc7521f52de5a9ec594aa6acebd9dfd8c17c0a5c"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "llama.cpp",
+      "properties": [
+        {
+          "name": "vox.android.modules",
+          "value": "app"
+        },
+        {
+          "name": "vox.native.sourceRevision",
+          "value": "74d4f5b041ad837153b0e90fc864b8290e01d8d5"
+        }
+      ],
+      "type": "library",
+      "version": "b5046"
+    },
+    {
       "bom-ref": "pkg:maven/androidx.activity/activity-compose@1.13.0",
       "group": "androidx.activity",
       "name": "activity-compose",
@@ -5274,7 +5333,7 @@
     "properties": [
       {
         "name": "vox.sbom.inputs",
-        "value": "Gradle releaseRuntimeClasspath locks and Cargo.lock"
+        "value": "Gradle releaseRuntimeClasspath locks, Cargo.lock and pinned local-inference source/model"
       },
       {
         "name": "vox.sbom.networkContent",

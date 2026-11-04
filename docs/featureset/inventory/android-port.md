@@ -385,12 +385,12 @@ All below are **planned** unless noted. Parity classification from plan §9; mil
 - Status: **planned** (no `apps/android/wear` module exists)
 
 ### F-AP-43 Lifetime purchase (Play Billing non-consumable), restore, family
-- Surface: Billing/entitlement UI
-- Summary: See F-AP-14; plus restore flow, restore diagnostics, family-sharing/upgrade behavior (`cap.billing.family`, `family-upgrade`), grandfather policy (F-AP-09).
-- Evidence: ADR-0008/0009; ledger `cap.billing.*` (M8)
-- Details: contract behavior is fully described in Summary; see the cited ADR/contract for the normative statement.
-- Constraints: Android/Wear platform only; contract/substrate stage — not shipped to users.
-- Status: **planned**
+- Surface: Android Upgrade screen and native Play Billing manager
+- Summary: Individual lifetime purchase and restore are implemented with explicit Play offer tokens, stale-response fencing, duplicate-flow prevention, acknowledgement recovery and protected offline continuity.
+- Evidence: `apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt`; `apps/android/app/src/main/kotlin/md/vox/android/BillingOperations.kt`; `docs/android-monetization-parity-2026-11-01.md`
+- Details: Pending/cancelled/unavailable/refunded states preserve admitted content. Android remains individual-only under accepted ADR-0024; family sharing and discounted family upgrades are intentional platform differences.
+- Constraints: Real Play license-account qualification is pending. Play Family Library does not share in-app purchases. Android offers no family or discounted-family product; Apple family capabilities remain unchanged.
+- Status: experimental
 
 ### F-AP-44 Queue scheduling & recovery actions
 - Surface: Inbox/queue UI, notifications
@@ -459,3 +459,78 @@ All below are **planned** unless noted. Parity classification from plan §9; mil
 4. **Whether the ADR-0021 Room instrumentation tests have since been executed** beyond the single Pixel 7 run recorded in the M3 audit; ADR text predates that run.
 5. **Wear module**: plan topology specifies `apps/android/wear`; it does not exist — assumed genuinely pending (M7) rather than relocated.
 6. ADR-0023 sections beyond the sampled range (§4 remainder, §5+) — decision intent captured from read portion and cross-referenced implementation.
+
+
+## November 2026 capture parity additions
+
+### F-AP-46 Independent preset vaults and one-off routing
+- Surface: Android Capture Preset editor and current-draft route dialog
+- Summary: A preset may select its own SAF vault; a draft may choose an existing note and prepend/append placement without editing its preset.
+- Details: Vault bindings are persisted before hash-bound capture admission; one-off route facts survive relaunch and clear after durable enqueue. Recovery rejects a substituted commit destination; real-provider regression campaigns cover revoked grants, interrupted writes and repeated reconciliation. See `docs/android-capture-recovery-2026-11-01.md`.
+- Constraints: Existing synthetic-vault packages retain legacy routing. Device/provider qualification remains pending.
+- Evidence: `apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRouting.kt`; `apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDestinationBindings.kt`; `docs/android-parity-implementation-2026-11-01.md`
+- Status: experimental
+
+### F-AP-47 URL delivery and recovery
+- Surface: Android preset URL settings and Settings → URL delivery recovery
+- Summary: Explicitly opted-in capture text and voice transcripts can be delivered to a frozen HTTPS endpoint independently of the local note.
+- Details: Keystore-backed encrypted endpoint/headers/body; durable receipt, stable idempotency key, redirect refusal, explicit ambiguous retry and discard.
+- Constraints: HTTPS without query parameters; iOS local-cleartext option not implemented. Device/endpoint qualification remains pending.
+- Evidence: `apps/android/app/src/main/kotlin/md/vox/android/URLDelivery.kt`; `apps/android/app/src/main/kotlin/md/vox/android/CaptureParityControls.kt`
+- Status: experimental
+
+### F-AP-48 Transcript note property mapping
+- Surface: Android Capture Preset → Transcript Property
+- Summary: Voice transcripts replace a named document property, with optional inclusion in the note body.
+- Details: Text is encoded as a quoted YAML string; prior multiline values are replaced; unrelated properties and body remain intact.
+- Constraints: Voice captures only; device qualification remains pending.
+- Evidence: `Packages/vox-core-rust/crates/vox-core/src/lib.rs` (`replace_transcript_property`); `apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityDeliveryInstrumentationTest.kt`
+- Status: experimental
+
+### F-AP-49 Audio filename templates
+- Surface: Saved recording audio across Capture, configured transcript export and Wear Recording Only
+- Summary: Shared token renderer sanitizes and bounds names, preserves the encoded extension and freezes capture names before enqueue. Empty templates retain automatic naming.
+- Details: Persisted settings and deterministic renderers are covered by composer/preset regression checks.
+- Constraints: Release device and human acceptance remain planned.
+- Evidence: `apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CapturePresentation.kt`; `docs/android-composer-parity-2026-11-01.md`
+- Status: experimental
+
+### F-AP-50 Heading placement
+- Surface: Capture Preset editor → Beneath heading → Top/Bottom
+- Summary: Bottom insertion retains nested subsections and ignores fenced headings. Legacy snapshots default to Top.
+- Details: Persisted settings and deterministic renderers are covered by composer/preset regression checks.
+- Constraints: Release device and human acceptance remain planned.
+- Evidence: `Packages/vox-core-rust/crates/vox-core/src/lib.rs`; `docs/android-composer-parity-2026-11-01.md`
+- Status: experimental
+
+### F-AP-51 Configurable preset widgets
+- Surface: Android launcher widget and per-instance configuration
+- Summary: Follow pins or retain six explicit ordered slots, including empty, repeated and unavailable targets. Small widgets use the first slot; changing a nonempty draft route requires confirmation.
+- Details: Persisted settings and deterministic renderers are covered by composer/preset regression checks.
+- Constraints: Release device and human acceptance remain planned.
+- Evidence: `apps/android/app/src/main/kotlin/md/vox/android/PresetWidgets.kt`; `docs/android-composer-parity-2026-11-01.md`
+- Status: experimental
+
+### F-AP-52 Draft preview
+- Surface: Wide-window Capture composer
+- Summary: Opt-in local Markdown preview includes route, attachments and copy action. Editor identity survives resize and preview changes; hidden below 760 dp or at large font scale.
+- Details: Persisted settings and deterministic renderers are covered by composer/preset regression checks.
+- Constraints: Release device and human acceptance remain planned.
+- Evidence: `apps/android/app/src/main/kotlin/md/vox/android/CaptureComposerOptions.kt`; `docs/android-composer-parity-2026-11-01.md`
+- Status: experimental
+
+### F-AP-53 Preset rail side
+- Surface: Capture Bar settings
+- Summary: Physical left/right rail preference persists and applies in RTL.
+- Details: Persisted settings and deterministic renderers are covered by composer/preset regression checks.
+- Constraints: Release device and human acceptance remain planned.
+- Evidence: `apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt`; `docs/android-composer-parity-2026-11-01.md`
+- Status: experimental
+
+### F-AP-54 Timestamp formats
+- Surface: Capture Bar settings
+- Summary: Explicit 12-hour/24-hour selector preserves existing preference migration and timestamp insertion patterns.
+- Details: Persisted settings and deterministic renderers are covered by composer/preset regression checks.
+- Constraints: Release device and human acceptance remain planned.
+- Evidence: `apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CapturePresentation.kt`; `docs/android-composer-parity-2026-11-01.md`
+- Status: experimental

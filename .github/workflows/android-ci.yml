@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/android-ci.yml'
       - 'apps/android/**'
+      - 'evaluations/local-intelligence/**'
       - 'artifacts/android-release/vox-android-sbom.cdx.json'
       - 'Packages/contracts/**'
       - 'Packages/vox-core-rust/**'
@@ -15,6 +16,7 @@ on:
     paths:
       - '.github/workflows/android-ci.yml'
       - 'apps/android/**'
+      - 'evaluations/local-intelligence/**'
       - 'artifacts/android-release/vox-android-sbom.cdx.json'
       - 'Packages/contracts/**'
       - 'Packages/vox-core-rust/**'
@@ -80,7 +82,8 @@ jobs:
           "$sdkmanager" --sdk_root="$ANDROID_SDK_ROOT" \
             'platforms;android-37.0' \
             'build-tools;36.0.0' \
-            'ndk;27.1.12297006'
+            'ndk;27.1.12297006' \
+            'cmake;3.22.1'
           ndk_path="$ANDROID_SDK_ROOT/ndk/27.1.12297006"
           test -f "$ndk_path/source.properties"
           echo "ANDROID_NDK_HOME=$ndk_path" >> "$GITHUB_ENV"

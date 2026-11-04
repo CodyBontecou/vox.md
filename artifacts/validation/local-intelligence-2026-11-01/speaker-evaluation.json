@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "corpusID": "vox-local-intelligence-v1",
+  "platform": "android",
+  "runtime": "Vosk-spk-0.4 \/ LocalSpeakerDiarizer",
+  "metric": "known-turn-duration-weighted-attribution-error",
+  "reference": [
+    "2277",
+    "2035",
+    "2277",
+    "2035"
+  ],
+  "predicted": [
+    "0",
+    "1",
+    "0",
+    "1"
+  ],
+  "durations": [
+    4.92,
+    6.21,
+    5.6,
+    4.4650625
+  ],
+  "speakerCount": 2,
+  "attributionError": 0,
+  "elapsedSeconds": 7.387
+}

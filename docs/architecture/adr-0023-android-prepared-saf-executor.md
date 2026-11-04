@@ -264,3 +264,14 @@ provider commits gated by receipts and quota. Ambiguous outcomes are honest
 and user-inspectable. M3 still cannot close without the non-local provider
 campaign, process-death injection across every durable transition, and
 composer/WorkManager wiring.
+
+## November 2026 retry lifecycle clarification
+
+A `CLEARED` marker is causal non-commit proof and may remain alongside PREPARING
+and MATERIALIZED state during a retry. An ACTIVE marker remains forbidden in those
+states. Starting the next commit atomically replaces the cleared marker (temporary
+file, fsync, atomic replacement, parent fsync); it never removes proof before the
+replacement is durable. Reconciliation checks ACTIVE marker destination and plan
+bindings before provider I/O. A cleared marker still proves that the interrupted
+new attempt did not issue create. Regression evidence:
+`SafVaultCommitExecutorTest.clearedPriorAttemptAllowsSafeRematerializationAndFreshCommit`.

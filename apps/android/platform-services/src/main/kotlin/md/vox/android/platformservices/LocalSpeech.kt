@@ -888,7 +888,7 @@ class RecordingTranscriptionClient private constructor(context: Context) {
                 )
                 val transcript = transcription.transcript
                 val cleanedTranscript = recordingPreset(sessionID)
-                    ?.let { preset -> LocalCaptureTextProcessor.process(transcript, preset, isVoiceCapture = true) }
+                    ?.let { preset -> LocalIntelligenceProcessor.get(appContext).process(transcript, preset, isVoiceCapture = true) }
                     ?.processedText
                     ?.takeIf { it.isNotBlank() && it != transcript }
                 val metadata = DeterministicTranscriptEnrichment.enrich(cleanedTranscript ?: transcription.plainTranscript)
@@ -1458,7 +1458,7 @@ private fun sha256(file: File): String {
 
 private fun jsonText(json: String): String = runCatching { JSONObject(json).optString("text").trim() }.getOrDefault("")
 
-private fun jsonSpeakerObservation(json: String, paragraph: Int): SpeakerObservation? = runCatching {
+fun jsonSpeakerObservation(json: String, paragraph: Int): SpeakerObservation? = runCatching {
     val root = JSONObject(json)
     val text = root.optString("text").trim()
     if (text.isEmpty()) return@runCatching null

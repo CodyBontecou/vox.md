@@ -55,6 +55,8 @@ internal data class ConfiguredTranscriptAudioSource(
     val displayName: String,
     val saveMode: CaptureAudioSaveMode,
     val attachmentsFolder: String,
+    val audioFilenameTemplate: String = "",
+    val presetName: String = "",
 )
 
 internal object ConfiguredTranscriptExportPlanner {
@@ -503,7 +505,9 @@ internal class AndroidConfiguredTranscriptExporter(context: Context) {
         }
         val parent = resolveOrCreateFolder(tree, transcriptParent, folderSegments)
         val suffix = if (mode == CaptureExportFileMode.APPEND) "-${state.sessionID.take(8).lowercase(Locale.ROOT)}" else ""
-        val target = createUniqueDocument(tree, parent, plan.baseName + suffix, extension, audioMimeType(extension))
+        val preferred = md.vox.android.capturedomain.CaptureAudioFilename.render(source.audioFilenameTemplate,
+            state.sessionID, state.recordedAtEpochMillis ?: System.currentTimeMillis(), source.presetName, source.displayName, extension)
+        val target = createUniqueDocument(tree, parent, preferred?.substringBeforeLast('.') ?: (plan.baseName + suffix), extension, audioMimeType(extension))
         writeBytesAndVerify(target, bytes)
         val displayName = queryDisplayName(target) ?: error("The audio export name could not be verified.")
         return PublishedAudio(target, (folderSegments + displayName).joinToString("/"))

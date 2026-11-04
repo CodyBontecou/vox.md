@@ -28,6 +28,7 @@ class VoxApplication : Application(), Configuration.Provider {
             PrivacySafeDebugLog.Event.APP_STARTED,
             mapOf("version" to appVersionString(this)),
         )
+        URLDeliveryWorker.schedule(this)
         CaptureDrainWorker.schedule(this)
         RecordingRetentionWorker.scheduleSweep(this)
     }
@@ -45,7 +46,15 @@ class AppCompositionRoot private constructor(
             val repository = AndroidCaptureRepository(
                 app,
                 coreBridge,
+                prepareURLDelivery = { id, text, date, settings -> URLDeliveryOutbox(app).prepare(id, text, date, settings) },
+                captureEnqueued = { id -> URLDeliveryOutbox(app).admit(id); URLDeliveryWorker.schedule(app) },
                 hasUnlimitedAccess = { billingManager.state.value.hasUnlimitedAccess },
+                previouslyProcessedRecording = { id, text, preset ->
+                    md.vox.android.platformservices.reusableRecordingProcessing(
+                        md.vox.android.platformservices.RecordingTranscriptionClient.get(app).states.value[id],
+                        md.vox.android.platformservices.AudioCaptureClient(app).frozenPreset(id), text, preset)
+                },
+                processCaptureText = md.vox.android.platformservices.LocalIntelligenceProcessor.get(app)::process,
                 generateImageAltText = LocalImageAltTextGenerator.get()::describe,
             )
             return AppCompositionRoot(repository, billingManager)

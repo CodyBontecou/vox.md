@@ -3,6 +3,7 @@ import importlib.util
 import json
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -42,7 +43,7 @@ class AndroidLocalizationAuditTests(unittest.TestCase):
             ))
 
     def test_audit_stays_explicitly_unapproved(self):
-        self.assertEqual(self.audit["reviewStatus"], "requires-human-translation")
+        self.assertEqual(self.audit["reviewStatus"], "requires-human-review")
         self.assertIn("not translation approval", self.audit["limitations"][0])
         self.assertIn("Dynamic-source call sites are inventoried", self.audit["limitations"][1])
         self.assertIn("fall back to English", self.audit["limitations"][2])
@@ -60,16 +61,16 @@ class AndroidLocalizationAuditTests(unittest.TestCase):
         )
 
     def test_audit_inventory_requires_deliberate_review_when_copy_changes(self):
-        self.assertEqual(self.audit["runtimeSourceLiteralCount"], 2_407)
-        self.assertEqual(self.audit["literalRuntimeSourceCount"], 709)
-        self.assertEqual(self.audit["catalogBackedSourceCount"], 261)
+        self.assertEqual(self.audit["runtimeSourceLiteralCount"], 2700)
+        self.assertEqual(self.audit["literalRuntimeSourceCount"], 822)
+        self.assertEqual(self.audit["catalogBackedSourceCount"], 288)
         self.assertEqual(self.audit["aliasBackedSourceCount"], 6)
         self.assertEqual(self.audit["incompleteCatalogSourceCount"], 0)
-        self.assertEqual(self.audit["missingCatalogSourceCount"], 442)
-        self.assertEqual(self.audit["fallbackSourceCount"], 442)
+        self.assertEqual(self.audit["missingCatalogSourceCount"], 0)
+        self.assertEqual(self.audit["fallbackSourceCount"], 0)
         self.assertEqual(self.audit["dynamicRuntimeCallSiteCount"], 0)
         self.assertEqual(self.audit["dynamicRuntimeExpressionCount"], 0)
-        self.assertEqual(self.audit["integerFormatSourceCount"], 16)
+        self.assertEqual(self.audit["integerFormatSourceCount"], 17)
         self.assertEqual(self.audit["pluralReviewStatus"], "requires-human-review")
         self.assertNotIn(
             "source: String",
@@ -79,9 +80,57 @@ class AndroidLocalizationAuditTests(unittest.TestCase):
             self.audit["literalRuntimeSourceCount"],
             self.audit["catalogBackedSourceCount"]
             + self.audit["aliasBackedSourceCount"]
+            + self.audit["androidCatalogBackedSourceCount"]
             + self.audit["incompleteCatalogSourceCount"]
             + self.audit["missingCatalogSourceCount"],
         )
+
+    def test_android_catalog_rejects_missing_locale_and_changed_placeholders(self):
+        data = json.loads(GENERATOR.ANDROID_CATALOG.read_text())
+        broken = copy.deepcopy(data)
+        del broken["strings"]["Audio Filename Template"]["ar"]
+        with self.assertRaisesRegex(SystemExit, "locale coverage"):
+            GENERATOR.validate_android_catalog(broken)
+        broken = copy.deepcopy(data)
+        broken["strings"]["%lld attachments"]["de"] = "%@ Anhänge"
+        with self.assertRaisesRegex(SystemExit, "format arguments differ"):
+            GENERATOR.validate_android_catalog(broken)
+        broken = copy.deepcopy(data)
+        broken["provenance"]["humanApproved"] = True
+        with self.assertRaisesRegex(SystemExit, "human approval"):
+            GENERATOR.validate_android_catalog(broken)
+        broken = copy.deepcopy(data)
+        broken["strings"]["capture-{id}.md"]["de"] = "capture.md"
+        with self.assertRaisesRegex(SystemExit, "template token lost"):
+            GENERATOR.validate_android_catalog(broken)
+
+    def test_plural_patterns_cover_every_quantity_and_preserve_argument_contracts(self):
+        table = GENERATOR.generate_plurals(self.catalog, GENERATOR.android_catalog())
+        self.assertEqual(len(table), 12)
+        for source, item in table.items():
+            for locale, forms in item["forms"].items():
+                self.assertEqual(set(forms), set(("one", "other") if locale == "en" else GENERATOR.PLURAL_CATEGORIES[locale]))
+                for value in forms.values():
+                    GENERATOR.validate_format_compatibility(source, value, locale)
+        self.assertEqual(set(table["%lld attachments"]["forms"]["ar"]), {"zero", "one", "two", "few", "many", "other"})
+        self.assertEqual(self.audit["translationCoverageStatus"], "complete")
+        self.assertEqual(self.audit["androidCatalogBackedSourceCount"], 528)
+        self.assertEqual(self.audit["pluralImplementationStatus"], "cldr-aware")
+
+    def test_missing_plural_category_and_unclassified_count_fail_closed(self):
+        spec = json.loads(GENERATOR.PLURAL_SPEC.read_text())
+        del spec["plurals"]["%lld attachments"]["overrides"]["ar"]["few"]
+        with patch.object(Path, "read_text", return_value=json.dumps(spec)):
+            with self.assertRaisesRegex(SystemExit, "Plural categories differ"):
+                GENERATOR.generate_plurals(self.catalog, {})
+        with patch.object(GENERATOR, "literal_runtime_sources", return_value={"%lld new things": []}):
+            with self.assertRaisesRegex(SystemExit, "Unclassified integer"):
+                GENERATOR.generate_plurals(self.catalog, {})
+
+    def test_ios_catalog_values_take_precedence_over_android_drafts(self):
+        source = "Selected"
+        self.assertEqual(GENERATOR.phrase_translation(self.catalog, {source: {"de": "WRONG"}}, source, "de"),
+                         GENERATOR.translated_value(self.catalog[source], "de"))
 
     def test_conditional_predicate_literals_are_not_reported_as_copy(self):
         expression = (

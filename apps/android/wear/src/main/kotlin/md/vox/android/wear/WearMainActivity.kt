@@ -329,7 +329,7 @@ internal fun WearRecorderContent(
                                 contentDescription = stopActionLabel
                                 role = Role.Button
                             },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFFF565F)),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFFF6B6B)),
                         ) { Text("■") }
                         Button(
                             onClick = cancel,
@@ -347,7 +347,7 @@ internal fun WearRecorderContent(
                             contentDescription = startActionLabel
                             role = Role.Button
                         },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF2F1EE), contentColor = Color(0xFF171614)),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFBEC2FF), contentColor = Color(0xFF0E1690)),
                     ) { Text("REC") }
                 }
                 Text(
@@ -416,7 +416,7 @@ internal fun WearQueueScreen(
                         discard(pending.recordingID)
                         pendingDiscard = null
                     },
-                    colors = ChipDefaults.primaryChipColors(backgroundColor = Color(0xFFFF565F)),
+                    colors = ChipDefaults.primaryChipColors(backgroundColor = Color(0xFFFF6B6B)),
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
                 )
             }
@@ -460,7 +460,7 @@ internal fun WearQueueScreen(
                                     contentDescription = discardLabel
                                     role = Role.Button
                                 },
-                                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFFF565F)),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFFF6B6B)),
                             ) { Text("×") }
                         }
                     }
@@ -569,10 +569,11 @@ private fun formatWearDuration(milliseconds: Long): String {
 internal fun WearVoxTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colors = MaterialTheme.colors.copy(
-            primary = Color(0xFFF2F1EE),
-            background = Color(0xFF1A1A1C),
-            surface = Color(0xFF1F1F1F),
-            error = Color(0xFFFF565F),
+            primary = Color(0xFFBEC2FF),
+            onPrimary = Color(0xFF0E1690),
+            background = Color(0xFF000000),
+            surface = Color(0xFF1F1F23),
+            error = Color(0xFFFF6B6B),
         ),
         typography = Typography(defaultFontFamily = WearGeistFontFamily),
         content = content,

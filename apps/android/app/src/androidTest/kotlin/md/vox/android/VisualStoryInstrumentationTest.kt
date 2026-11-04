@@ -70,7 +70,7 @@ class VisualStoryInstrumentationTest {
             VisualStoryActivity.STORY_RECORDING_FAILED to "Local transcription failed",
             VisualStoryActivity.STORY_UPGRADE_PENDING to "Purchase Pending",
             VisualStoryActivity.STORY_UPGRADE_ACTIVE to "Unlimited is active",
-            VisualStoryActivity.STORY_UPGRADE_QUOTA_REACHED to "Unlimited on-device transcription",
+            VisualStoryActivity.STORY_UPGRADE_QUOTA_REACHED to "10 of 10 used",
             VisualStoryActivity.STORY_UPGRADE_OFFLINE to "Google Play is unavailable",
             VisualStoryActivity.STORY_RECORDING_QUOTA_REACHED to "free transcription limit has been reached",
             VisualStoryActivity.STORY_RECORDING_INTERRUPTED to "Recording interrupted",
@@ -155,7 +155,7 @@ class VisualStoryInstrumentationTest {
         compose.onNodeWithText("Purchase Pending", useUnmergedTree = true)
             .performScrollTo()
             .assertIsDisplayed()
-        assertScrollableControlIsWiderThanTall("Restore purchase")
+        assertScrollableControlIsWiderThanTall("Restore Purchase")
     }
 
     @Test
@@ -176,16 +176,16 @@ class VisualStoryInstrumentationTest {
             }
         }
 
-        compose.onNodeWithText("Unlimited on-device transcription", useUnmergedTree = true)
+        compose.onNodeWithText("10 of 10 used", useUnmergedTree = true)
             .performScrollTo()
             .assertIsDisplayed()
-        assertScrollableControlIsWiderThanTall("Restore purchase")
+        assertScrollableControlIsWiderThanTall("Restore Purchase")
         compose.runOnIdle { story = VisualStoryActivity.STORY_UPGRADE_OFFLINE }
         compose.waitForIdle()
         compose.onNodeWithText("Google Play is unavailable", substring = true, useUnmergedTree = true)
             .performScrollTo()
             .assertIsDisplayed()
-        assertScrollableControlIsWiderThanTall("Restore purchase")
+        assertScrollableControlIsWiderThanTall("Restore Purchase")
         compose.runOnIdle { story = VisualStoryActivity.STORY_RECORDING_QUOTA_REACHED }
         compose.waitForIdle()
         assertScrollableControlIsWiderThanTall("Retry Processing")
@@ -263,10 +263,10 @@ class VisualStoryInstrumentationTest {
             VisualStoryActivity.STORY_HISTORY_FOLDER_REPAIR to listOf("Repair Folder Access"),
             VisualStoryActivity.STORY_RECORDING_PAUSED to listOf("Resume", "Stop", "Cancel"),
             VisualStoryActivity.STORY_RECORDING_FAILED to listOf("Retry Processing", "Dismiss"),
-            VisualStoryActivity.STORY_UPGRADE_PENDING to listOf("Restore purchase"),
+            VisualStoryActivity.STORY_UPGRADE_PENDING to listOf("Restore Purchase"),
             VisualStoryActivity.STORY_UPGRADE_ACTIVE to listOf("Restore Purchase"),
-            VisualStoryActivity.STORY_UPGRADE_QUOTA_REACHED to listOf("Restore purchase"),
-            VisualStoryActivity.STORY_UPGRADE_OFFLINE to listOf("Restore purchase"),
+            VisualStoryActivity.STORY_UPGRADE_QUOTA_REACHED to listOf("Restore Purchase"),
+            VisualStoryActivity.STORY_UPGRADE_OFFLINE to listOf("Restore Purchase"),
             VisualStoryActivity.STORY_RECORDING_QUOTA_REACHED to listOf("Retry Processing", "Dismiss"),
             VisualStoryActivity.STORY_RECORDING_INTERRUPTED to listOf("Resume", "Finish", "Cancel"),
             VisualStoryActivity.STORY_HISTORY_UNKNOWN_OUTCOME to listOf("Retry"),

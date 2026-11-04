@@ -31,6 +31,10 @@ import md.vox.android.capturedomain.CaptureMissingHeadingBehavior
 import md.vox.android.capturedomain.CaptureNoteTargetKind
 import md.vox.android.capturedomain.CapturePlacementKind
 import md.vox.android.capturedomain.CapturePreset
+import md.vox.android.capturedomain.CaptureHeadingPosition
+import md.vox.android.capturedomain.CaptureDestination
+import md.vox.android.capturedomain.CaptureURLDeliverySettings
+import md.vox.android.capturedomain.normalizedTranscriptProperty
 import md.vox.android.capturedomain.CapturePresetExportSettings
 import md.vox.android.capturedomain.CapturePresetLocationPolicy
 import md.vox.android.capturedomain.CaptureProcessingMode
@@ -46,6 +50,17 @@ object RecordingPresetSnapshotCodec {
         put("attachmentsFolder", preset.attachmentsFolder)
         put("audioEmbedPlacement", preset.audioEmbedPlacement.name)
         put("audioSaveMode", preset.audioSaveMode.name)
+        put("audioFilenameTemplate", preset.audioFilenameTemplate)
+        preset.destination?.let { destination -> put("captureDestination", buildJsonObject {
+            put("id", destination.id); put("name", destination.displayName); put("tree", destination.treeUri)
+        }) }
+        put("transcriptPropertyName", preset.transcriptPropertyName)
+        put("includeTranscriptInBody", preset.includeTranscriptInBody)
+        put("urlDelivery", buildJsonObject {
+            put("enabled", preset.urlDelivery.enabled)
+            preset.urlDelivery.credentialID?.let { put("credentialID", it) }
+            put("origin", preset.urlDelivery.origin); put("maxAttempts", preset.urlDelivery.maxAttempts)
+        })
         put("capturePrompt", preset.capturePrompt)
         put("customProcessingInstruction", preset.customProcessingInstruction)
         put("embedAudioInMarkdown", preset.embedAudioInMarkdown)
@@ -75,6 +90,7 @@ object RecordingPresetSnapshotCodec {
         })
         put("generateImageAltText", preset.generateImageAltText)
         put("headingLevel", preset.headingLevel)
+        put("headingPosition", preset.headingPosition.name)
         put("headingTitle", preset.headingTitle)
         put("id", preset.id)
         put("isEnabled", preset.isEnabled)
@@ -135,6 +151,18 @@ object RecordingPresetSnapshotCodec {
         CapturePreset(
             id = root.string("id").also { require(UUID_PATTERN.matches(it)) },
             name = root.string("name").also { require(it.length in 1..64) },
+            destination = (root["captureDestination"] as? JsonObject)?.let {
+                CaptureDestination(it.string("id").also { id -> require(UUID_PATTERN.matches(id)) }, it.string("name"),
+                    it.string("tree").also { uri -> require(uri.startsWith("content://") && uri.length <= 2_048) })
+            },
+            transcriptPropertyName = root.optionalString("transcriptPropertyName").orEmpty().also {
+                require(it.isBlank() || normalizedTranscriptProperty(it) != null)
+            },
+            includeTranscriptInBody = root["includeTranscriptInBody"]?.jsonPrimitive?.booleanOrNull ?: true,
+            urlDelivery = (root["urlDelivery"] as? JsonObject)?.let {
+                CaptureURLDeliverySettings(it.boolean("enabled"), it.optionalString("credentialID"), it.string("origin"),
+                    it.int("maxAttempts").also { max -> require(max in 1..10) })
+            } ?: CaptureURLDeliverySettings(),
             symbol = root.string("symbol").also { require(it.length <= 64) },
             revision = root.int("revision").also { require(it > 0) },
             logicalFolder = root.string("logicalFolder").also { require(it.length <= 1_024) },
@@ -154,6 +182,7 @@ object RecordingPresetSnapshotCodec {
             existingNotePath = root.string("existingNotePath").also { require(it.length <= 1_024) },
             placement = enumValue(root, "placement"),
             headingTitle = root.string("headingTitle").also { require(it.length <= 256) },
+            headingPosition = root.optionalString("headingPosition")?.let(CaptureHeadingPosition::valueOf) ?: CaptureHeadingPosition.TOP,
             headingLevel = root.int("headingLevel").also { require(it in 1..6) },
             missingHeadingBehavior = enumValue(root, "missingHeadingBehavior"),
             entryPrefix = root.string("entryPrefix").also { require(it.length <= 16_384) },
@@ -206,6 +235,7 @@ object RecordingPresetSnapshotCodec {
                 )
             },
             audioSaveMode = enumValue(root, "audioSaveMode"),
+            audioFilenameTemplate = root.optionalString("audioFilenameTemplate").orEmpty().also { require(it.length <= 1_024) },
             embedAudioInMarkdown = root.boolean("embedAudioInMarkdown"),
             audioEmbedPlacement = enumValue(root, "audioEmbedPlacement"),
             watchOutputMode = enumValue(root, "watchOutputMode"),

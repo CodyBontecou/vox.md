@@ -22,7 +22,6 @@ import md.vox.android.platformservices.SpeechModelManager
 import md.vox.android.platformservices.SpeechModelSelectionMode
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -32,13 +31,13 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 class LocalSpeechInferenceInstrumentationTest {
-    @Test
+    @Test @ProvisionedModelTest
     fun installedModelTranscribesRealSpeechThroughTheProductionClientWhileOffline() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val qualification = File(context.filesDir, "local-speech-qualification")
         val modelArchive = File(qualification, "vosk-model-small-en-us-0.15.zip")
         val speechWav = File(qualification, "vosk-api-test.wav")
-        assumeTrue(
+        assertTrue(
             "exact-hash host fixtures are staged only by connectedDebugAndroidTestLocalSpeech",
             modelArchive.isFile && modelArchive.length() > 40_000_000 &&
                 speechWav.isFile && speechWav.length() > 200_000,
@@ -104,13 +103,13 @@ class LocalSpeechInferenceInstrumentationTest {
         }
     }
 
-    @Test
+    @Test @ProvisionedModelTest
     fun frozenWearPresetRoutesRealSpeechThroughPhoneLocalTranscriptionAndMarkdownDelivery() = runBlocking {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val qualification = File(context.filesDir, "local-speech-qualification")
         val modelArchive = File(qualification, "vosk-model-small-en-us-0.15.zip")
         val speechWav = File(qualification, "vosk-api-test.wav")
-        assumeTrue(
+        assertTrue(
             "exact-hash host fixtures are staged only by connectedDebugAndroidTestLocalSpeech",
             modelArchive.isFile && modelArchive.length() > 40_000_000 &&
                 speechWav.isFile && speechWav.length() > 200_000,

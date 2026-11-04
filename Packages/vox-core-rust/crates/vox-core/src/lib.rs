@@ -319,11 +319,20 @@ pub struct RoutePolicy {
     pub heading_level: Option<u8>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub missing_heading_behavior: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub heading_position: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct OrderedField {
+    pub name: String,
+    pub value: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TranscriptProperty {
     pub name: String,
     pub value: String,
 }
@@ -338,6 +347,8 @@ pub struct MetadataPolicy {
     pub final_newline: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub scope: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub transcript_property: Option<TranscriptProperty>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -810,6 +821,13 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
             return Err(CoreError::InvalidEnum);
         }
     }
+    if route
+        .heading_position
+        .as_deref()
+        .is_some_and(|p| !matches!(p, "top" | "bottom"))
+    {
+        return Err(CoreError::InvalidEnum);
+    }
     let expected_placement = match input.operation.as_str() {
         "existingNoteAppend" => Some("append"),
         "existingNotePrepend" => Some("prepend"),
@@ -836,6 +854,7 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
     } else if route.heading_title.is_some()
         || route.heading_level.is_some()
         || route.missing_heading_behavior.is_some()
+        || route.heading_position.is_some()
     {
         return Err(CoreError::InvalidControl);
     }
@@ -858,6 +877,17 @@ fn validate_preparation(input: &PreparationInput) -> Result<(), CoreError> {
         "document" | "entry"
     ) {
         return Err(CoreError::InvalidEnum);
+    }
+    if let Some(property) = &metadata.transcript_property {
+        bounded_string(&property.name, 1, 128)?;
+        bounded_string(&property.value, 0, 65_536)?;
+        if !property
+            .name
+            .chars()
+            .all(|c| c.is_alphanumeric() || matches!(c, '_' | '-'))
+        {
+            return Err(CoreError::InvalidRendering);
+        }
     }
     bounded_array(metadata.ordered_fields.len(), 0, 128)?;
     let mut field_names = BTreeSet::new();
@@ -2413,7 +2443,7 @@ fn render_payload_entry(input: &MaterializationInput) -> Result<String, CoreErro
             Payload::Asset { .. } => {}
         }
     }
-    if blocks.is_empty() {
+    if blocks.is_empty() && input.preset.metadata_policy.transcript_property.is_none() {
         return Err(CoreError::InvalidRendering);
     }
     Ok(blocks.join("\n\n"))
@@ -2474,6 +2504,10 @@ fn apply_capture_metadata(
                 format!("{inline}\n{body}")
             };
         }
+    }
+    if let Some(property) = &input.preset.metadata_policy.transcript_property {
+        // JSON strings are YAML strings: never interpret dictated text as YAML syntax.
+        replace_transcript_property(frontmatter, property)?;
     }
     Ok(body)
 }
@@ -2555,6 +2589,9 @@ pub fn materialize(
             let (mut existing_frontmatter, existing_body) =
                 split_leading_frontmatter(&normalized_existing);
             merge_frontmatter(&mut existing_frontmatter, &frontmatter);
+            if let Some(property) = &input.preset.metadata_policy.transcript_property {
+                replace_transcript_property(&mut existing_frontmatter, property)?;
+            }
             let placement = match input.operation.as_str() {
                 "existingNoteAppend" => "append",
                 "existingNotePrepend" => "prepend",
@@ -2590,6 +2627,12 @@ pub fn materialize(
                         .missing_heading_behavior
                         .as_deref()
                         .ok_or(CoreError::InvalidControl)?,
+                    input
+                        .preset
+                        .route_policy
+                        .heading_position
+                        .as_deref()
+                        .unwrap_or("top"),
                 )?,
                 _ => return Err(CoreError::InvalidEnum),
             };
@@ -2620,6 +2663,7 @@ fn insert_beneath_heading(
     title: &str,
     level: u8,
     missing_behavior: &str,
+    position: &str,
 ) -> Result<String, CoreError> {
     if !(1..=6).contains(&level) {
         return Err(CoreError::IntegerOutOfRange);
@@ -2653,8 +2697,43 @@ fn insert_beneath_heading(
         }
         let heading_title = leading[hashes..].trim().trim_end_matches('#').trim();
         if heading_title == title {
-            let before = lines[..=index].join("\n");
-            let after = lines.get(index + 1..).unwrap_or_default().join("\n");
+            let mut insertion = index + 1;
+            if position == "bottom" {
+                let mut section_fence: Option<(u8, usize)> = None;
+                insertion = lines.len();
+                for (next, line) in lines.iter().enumerate().skip(index + 1) {
+                    let leading = line.trim_start_matches([' ', '\t']);
+                    let first = leading.as_bytes().first().copied();
+                    if matches!(first, Some(b'`' | b'~')) {
+                        let character = first.unwrap_or_default();
+                        let count = leading.bytes().take_while(|b| *b == character).count();
+                        if count >= 3 {
+                            section_fence = match section_fence {
+                                Some((open, minimum)) if open == character && count >= minimum => {
+                                    None
+                                }
+                                None => Some((character, count)),
+                                current => current,
+                            };
+                            continue;
+                        }
+                    }
+                    if section_fence.is_some() {
+                        continue;
+                    }
+                    let hashes = leading.bytes().take_while(|b| *b == b'#').count();
+                    if (1..=level as usize).contains(&hashes)
+                        && leading[hashes..].starts_with([' ', '\t'])
+                    {
+                        insertion = next;
+                        break;
+                    }
+                }
+            } else if position != "top" {
+                return Err(CoreError::InvalidEnum);
+            }
+            let before = lines[..insertion].join("\n");
+            let after = lines.get(insertion..).unwrap_or_default().join("\n");
             return Ok(join_markdown_blocks(&[&before, capture_block, &after]));
         }
     }
@@ -2756,6 +2835,26 @@ fn merge_frontmatter(existing: &mut Vec<String>, incoming: &[String]) {
             existing.splice(insertion..insertion, group[1..].iter().cloned());
         }
     }
+}
+
+fn replace_transcript_property(
+    frontmatter: &mut Vec<String>,
+    property: &TranscriptProperty,
+) -> Result<(), CoreError> {
+    // Replace all old values, including indented multiline continuations.
+    while let Some(start) = frontmatter.iter().position(|line| {
+        frontmatter_entry_key(line)
+            .is_some_and(|key| key.trim_matches(['\'', '"']) == property.name)
+    }) {
+        let mut end = start + 1;
+        while end < frontmatter.len() && frontmatter_entry_key(&frontmatter[end]).is_none() {
+            end += 1;
+        }
+        frontmatter.drain(start..end);
+    }
+    let quoted = serde_json::to_string(&property.value).map_err(|_| CoreError::Serialization)?;
+    frontmatter.push(format!("{}: {}", yaml_key(&property.name), quoted));
+    Ok(())
 }
 
 fn assemble_markdown(frontmatter: &[String], body: &str) -> String {
@@ -3038,8 +3137,10 @@ mod tests {
                     heading_title: None,
                     heading_level: None,
                     missing_heading_behavior: None,
+                    heading_position: None,
                 },
                 metadata_policy: MetadataPolicy {
+                    transcript_property: None,
                     frontmatter_mode: "merge".to_owned(),
                     ordered_fields: vec![],
                     template_policy: "frozenObservation".to_owned(),
@@ -3178,6 +3279,30 @@ mod tests {
     }
 
     #[test]
+    fn transcript_property_quotes_yaml_and_replaces_existing_property_without_touching_body() {
+        let mut input = mutation_input("existingNoteAppend");
+        input.operation = "existingNoteAppend".to_owned();
+        input.preset.route_policy.placement = Some("append".to_owned());
+        input.preset.metadata_policy.scope = Some("entry".to_owned());
+        input.preset.metadata_policy.transcript_property = Some(TranscriptProperty {
+            name: "note".to_owned(),
+            value: "yes\n---\nadmin: true\n\"quoted\"".to_owned(),
+        });
+        input.payloads = vec![Payload::Text {
+            id: input.request_id,
+            text: String::new(),
+        }];
+        let existing = b"---\n\"note\": |\n  previous value\nkeep: true\n---\n\nExisting body\n";
+        let (_, bytes) = materialize(&input, None, Some(existing)).unwrap();
+        let rendered = String::from_utf8(bytes).unwrap();
+        assert!(rendered.contains("note: \"yes\\n---\\nadmin: true\\n\\\"quoted\\\"\""));
+        assert!(rendered.contains("keep: true"));
+        assert!(rendered.contains("Existing body"));
+        assert!(!rendered.contains("previous value"));
+        assert!(!rendered.contains("note::"));
+    }
+
+    #[test]
     fn existing_note_append_and_prepend_preserve_frontmatter() {
         let existing = b"---\ntitle: Original\n---\n\nExisting body\n";
 
@@ -3242,6 +3367,27 @@ mod tests {
             String::from_utf8(rendered).unwrap(),
             "```md\n## Inbox\n```\n\nBody\n\n## Inbox\n\ncaptured payload"
         );
+    }
+
+    #[test]
+    fn heading_bottom_keeps_subsections_and_fenced_headings_inside_section() {
+        let mut input = mutation_input("existingNoteHeading");
+        input.preset.route_policy.placement = Some("beneathHeading".to_owned());
+        input.preset.route_policy.heading_title = Some("Inbox".to_owned());
+        input.preset.route_policy.heading_level = Some(2);
+        input.preset.route_policy.missing_heading_behavior = Some("fail".to_owned());
+        input.preset.route_policy.heading_position = Some("bottom".to_owned());
+        let body = b"## Inbox\n\nOriginal\n\n### Child\n\nChild body\n\n```md\n## Not a boundary\n```\n\n## Next\n\nOutside";
+        let (_, bytes) = materialize(&input, None, Some(body)).unwrap();
+        let rendered = String::from_utf8(bytes).unwrap();
+        let inserted = rendered.find("captured payload").unwrap();
+        assert!(inserted > rendered.find("Child body").unwrap());
+        assert!(inserted > rendered.find("Not a boundary").unwrap());
+        assert!(inserted < rendered.find("## Next").unwrap());
+        input.preset.route_policy.heading_position = None;
+        let (_, bytes) = materialize(&input, None, Some(body)).unwrap();
+        let rendered = String::from_utf8(bytes).unwrap();
+        assert!(rendered.find("captured payload").unwrap() < rendered.find("Original").unwrap());
     }
 
     #[test]

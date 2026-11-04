@@ -62,18 +62,24 @@ class TrialReminderWorker(
             return Result.success()
         }
         val locale = context.resources.configuration.locales[0] ?: Locale.getDefault()
-        fun text(source: String) = RuntimeLocalization.translate(context, locale, source)
+        // voxUiText keeps each source visible to the localization pipeline.
+        fun text(source: VoxUiText) = RuntimeLocalization.translate(context, locale, source.source)
         val manager = context.getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(
             NotificationChannel(
                 CHANNEL_ID,
-                text("Trial reminders"),
+                text(voxUiText("Trial reminders")),
                 NotificationManager.IMPORTANCE_DEFAULT,
-            ).apply { description = text("A reminder two days before a Vox.md free trial ends.") },
+            ).apply { description = text(voxUiText("A reminder two days before a Vox.md free trial ends.")) },
         )
         val manageIntent = Intent(
             Intent.ACTION_VIEW,
-            Uri.parse("https://play.google.com/store/account/subscriptions?package=${context.packageName}"),
+            Uri.parse(
+                VoxPlayCatalog.manageSubscriptionsUrl(
+                    context.packageName,
+                    evidence?.productID?.takeIf { it in PlayBillingManager.SUBSCRIPTION_PRODUCT_IDS },
+                ),
+            ),
         )
         val pendingIntent = PendingIntent.getActivity(
             context,
@@ -83,11 +89,11 @@ class TrialReminderWorker(
         )
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_popup_reminder)
-            .setContentTitle(text("Your Vox.md trial ends in 2 days"))
-            .setContentText(text("Keep Unlimited, or cancel anytime in Google Play › Payments & subscriptions."))
+            .setContentTitle(text(voxUiText("Your Vox.md trial ends in 2 days")))
+            .setContentText(text(voxUiText("Keep Unlimited, or cancel anytime in Google Play › Payments & subscriptions.")))
             .setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText(text("Keep Unlimited, or cancel anytime in Google Play › Payments & subscriptions.")),
+                    .bigText(text(voxUiText("Keep Unlimited, or cancel anytime in Google Play › Payments & subscriptions."))),
             )
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)

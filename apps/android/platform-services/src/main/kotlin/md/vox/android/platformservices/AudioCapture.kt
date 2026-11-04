@@ -100,9 +100,12 @@ class AudioCaptureClient(context: Context) {
     private val appContext = context.applicationContext
 
     init {
-        RecordingManifestStore.recoverInterrupted(appContext)
-        RecordingManifestStore.latest(appContext)?.let { persisted ->
-            RecordingStatusRegistry.publish(persisted)
+        // Opening another screen/client must not interrupt the live owner.
+        if (!RecordingStatusRegistry.status.value.isActive) {
+            RecordingManifestStore.recoverInterrupted(appContext)
+            RecordingManifestStore.latest(appContext)?.let { persisted ->
+                RecordingStatusRegistry.publish(persisted)
+            }
         }
     }
 
@@ -227,6 +230,7 @@ class AudioCaptureService : Service() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        RecordingManifestStore.recoverInterrupted(this)
         val recovered = RecordingManifestStore.latest(this)
         if (recovered != null && recovered.phase in setOf(RecordingPhase.RECORDING, RecordingPhase.PAUSED, RecordingPhase.INTERRUPTED)) {
             val recoveredDirectory = File(noBackupFilesDir, "recordings/${recovered.sessionID}")
@@ -590,7 +594,10 @@ class AudioCaptureService : Service() {
     private class ChunkSink(private val directory: File, index: Int) {
         private val temporary = File(directory, "chunk-${index.toString().padStart(6, '0')}.pcm.part")
         private val finished = File(directory, "chunk-${index.toString().padStart(6, '0')}.pcm")
-        private val stream = FileOutputStream(temporary)
+        private val stream = run {
+            check(!finished.exists() && temporary.createNewFile()) { "chunkAlreadyExists" }
+            FileOutputStream(temporary)
+        }
         var length: Int = 0
             private set
         val isFull: Boolean get() = length >= CHUNK_BYTES
@@ -672,7 +679,7 @@ private object RecordingManifestStore {
         val statuses = all(context)
         var changed = false
         val recovered = statuses.map { status ->
-            recoverInterruptedRecording(status).also { next ->
+            recoverRecordingFiles(File(root, requireNotNull(status.sessionID)), status).also { next ->
                 if (next != status) {
                     val id = requireNotNull(next.sessionID)
                     val directory = File(root, id)

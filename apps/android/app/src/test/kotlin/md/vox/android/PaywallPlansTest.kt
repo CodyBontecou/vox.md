@@ -128,131 +128,86 @@ class PaywallPlansTest {
 
     // endregion
 
-    // region Offer selection
+    // region Offer selection, trial length and reminder (VoxPlayCatalog)
 
-    private fun phase(micros: Long, period: String, cycles: Int = 0, recurrence: Int = RECURRENCE_INFINITE) =
-        PaywallPricingPhase(
-            priceAmountMicros = micros,
-            formattedPrice = if (micros == 0L) "Free" else "P$micros",
-            currencyCode = "USD",
-            billingPeriod = period,
-            billingCycleCount = cycles,
-            recurrenceMode = recurrence,
-        )
+    private fun phase(micros: Long, period: String, cycles: Int = 0, infinite: Boolean = true) =
+        PlayPricingPhase(if (micros == 0L) "Free" else "P$micros", micros, "USD", period, cycles, infinite)
 
-    private val basePlan = PaywallOfferCandidate(
+    private val basePlan = PlaySubscriptionOffer(
+        productID = PlayBillingManager.YEARLY_PRODUCT_ID,
         basePlanID = "yearly",
         offerID = null,
         offerToken = "base-token",
         phases = listOf(phase(29_990_000L, "P1Y")),
     )
 
-    private val trialOffer = PaywallOfferCandidate(
-        basePlanID = "yearly",
-        offerID = "free-trial-7d",
+    private val trialOffer = basePlan.copy(
+        offerID = "free-trial-1w",
         offerToken = "trial-token",
-        phases = listOf(phase(0L, "P1W", cycles = 1, recurrence = 2), phase(29_990_000L, "P1Y")),
+        phases = listOf(phase(0L, "P1W", cycles = 1, infinite = false), phase(29_990_000L, "P1Y")),
     )
 
     @Test fun eligibleFreeTrialOfferIsPreferredOverBasePlan() {
-        val selected = selectSubscriptionOffer(listOf(basePlan, trialOffer))
-        assertEquals("trial-token", selected?.offerToken)
-        assertEquals(7, selected?.freeTrialDays)
-        assertEquals(29_990_000L, selected?.recurringPhase?.priceAmountMicros)
+        val selected = subscriptionPlanOptions(listOf(basePlan, trialOffer)).single()
+        assertEquals("trial-token", selected.offerToken)
+        assertEquals(7, isoPeriodDays(selected.freeTrialPeriod))
+        assertEquals(29_990_000L, selected.priceAmountMicros)
     }
 
     @Test fun basePlanIsUsedWhenNoFreePhaseIsOffered() {
-        val introductoryPaid = PaywallOfferCandidate(
-            basePlanID = "yearly",
-            offerID = "intro",
+        val introductoryPaid = basePlan.copy(
+            offerID = "free-trial-1w",
             offerToken = "intro-token",
-            phases = listOf(phase(9_990_000L, "P1Y", cycles = 1, recurrence = 2), phase(29_990_000L, "P1Y")),
+            phases = listOf(phase(9_990_000L, "P1Y", cycles = 1, infinite = false), phase(29_990_000L, "P1Y")),
         )
-        val selected = selectSubscriptionOffer(listOf(introductoryPaid, basePlan))
-        assertEquals("base-token", selected?.offerToken)
-        assertNull(selected?.freeTrialDays)
+        val selected = subscriptionPlanOptions(listOf(introductoryPaid, basePlan)).single()
+        assertEquals("base-token", selected.offerToken)
+        assertNull(selected.freeTrialPeriod)
     }
 
     @Test fun ineligibleUserWithOnlyBasePlanGetsNoTrial() {
-        val selected = selectSubscriptionOffer(listOf(basePlan))
-        assertEquals("base-token", selected?.offerToken)
-        assertNull(selected?.freeTrialDays)
-        assertNull(selectSubscriptionOffer(emptyList()))
+        val selected = subscriptionPlanOptions(listOf(basePlan)).single()
+        assertEquals("base-token", selected.offerToken)
+        assertFalse(selected.hasFreeTrial)
+        assertTrue(subscriptionPlanOptions(emptyList()).isEmpty())
     }
 
-    @Test fun trialLengthUnderstandsDayAndWeekPeriods() {
-        assertEquals(7, freeTrialDays(phase(0L, "P7D", cycles = 1)))
-        assertEquals(7, freeTrialDays(phase(0L, "P1W", cycles = 1)))
-        assertEquals(14, freeTrialDays(phase(0L, "P1W", cycles = 2)))
-        assertNull(freeTrialDays(phase(0L, "not-a-period", cycles = 1)))
-        assertEquals(365, isoPeriodDays("P1Y"))
+    @Test fun trialLengthUnderstandsDayAndWeekPeriodsAndRepeatedCycles() {
+        assertEquals(7, isoPeriodDays("P7D"))
+        assertEquals(7, isoPeriodDays("P1W"))
+        assertNull(isoPeriodDays("not-a-period"))
+        val twoWeeks = trialOffer.copy(phases = listOf(phase(0L, "P1W", cycles = 2, infinite = false), phase(29_990_000L, "P1Y")))
+        assertEquals(14, isoPeriodDays(subscriptionPlanOptions(listOf(twoWeeks)).single().freeTrialPeriod))
+    }
+
+    @Test fun reminderDayIsTwoDaysBeforeTheTrialEnds() {
+        assertEquals(5, trialReminderDay(7))
+        assertNull(trialReminderDay(2))
+        val trial = subscriptionPlanOptions(listOf(trialOffer)).single()
+        assertEquals(1_000L + 5 * 86_400_000L, trialReminderEpochMillis(trial, 1_000L))
+        assertNull(trialReminderEpochMillis(trial.copy(freeTrialPeriod = "P2D"), 1_000L))
+        assertNull(trialReminderEpochMillis(trial.copy(freeTrialPeriod = null), 1_000L))
     }
 
     // endregion
 
-    // region Savings and copy
+    // region Savings
 
-    private val yearly = PaywallPlan(PaywallPlanKind.YEARLY, "$29.99", 29_990_000L, "USD", "y", freeTrialDays = 7)
-    private val weekly = PaywallPlan(PaywallPlanKind.WEEKLY, "$0.99", 990_000L, "USD", "w", freeTrialDays = 7)
-    private val lifetime = PaywallPlan(PaywallPlanKind.LIFETIME, "$49.99", 49_990_000L, "USD")
+    private val yearly = VoxPlanOption(VoxPlan.YEARLY, "$29.99", 29_990_000L, "USD", "P1Y", "P1W", "y")
+    private val weekly = VoxPlanOption(VoxPlan.WEEKLY, "$0.99", 990_000L, "USD", "P1W", "P1W", "w")
 
     @Test fun savingsPercentIsRoundedDown() {
-        // 1 - 29.99 / (0.99 × 52) = 41.74 %
-        assertEquals(41, yearlySavingsPercent(yearly, weekly))
-        assertEquals(50, yearlySavingsPercent(26_000_000L, 1_000_000L))
-        assertNull(yearlySavingsPercent(52_000_000L, 1_000_000L))
+        // 1 - 29.99 / (0.99 x 52) = 41.74 %
+        assertEquals(41, yearlySavingsPercent(weekly, yearly))
+        assertEquals(50, yearlySavingsPercent(weekly.copy(priceAmountMicros = 1_000_000L), yearly.copy(priceAmountMicros = 26_000_000L)))
+        assertNull(yearlySavingsPercent(weekly.copy(priceAmountMicros = 1_000_000L), yearly.copy(priceAmountMicros = 52_000_000L)))
     }
 
     @Test fun savingsBadgeIsHiddenWhenAPriceIsMissingOrCurrenciesDiffer() {
-        assertNull(yearlySavingsPercent(yearly, null))
-        assertNull(yearlySavingsPercent(null, weekly))
-        assertNull(yearlySavingsPercent(yearly, weekly.copy(currencyCode = "EUR")))
-        assertNull(yearlySavingsPercent(0L, 990_000L))
-    }
-
-    @Test fun summaryUsesTrialCopyOnlyWithAnEligibleTrial() {
-        assertEquals(
-            voxUiText("%lld days free, then %@/yr. Auto-renews.", 7, "$29.99"),
-            paywallSummary(yearly),
-        )
-        assertEquals(
-            voxUiText("%@/yr, renews automatically", "$29.99"),
-            paywallSummary(yearly.copy(freeTrialDays = null)),
-        )
-        assertEquals(
-            voxUiText("%lld days free, then %@/wk. Auto-renews.", 7, "$0.99"),
-            paywallSummary(weekly),
-        )
-        assertEquals(
-            voxUiText("%@/wk, renews automatically", "$0.99"),
-            paywallSummary(weekly.copy(freeTrialDays = null)),
-        )
-        assertEquals(voxUiText("%@, once. No subscription.", "$49.99"), paywallSummary(lifetime))
-        assertNull(paywallSummary(null))
-    }
-
-    @Test fun callToActionMatchesPlanAndEntitlement() {
-        assertEquals(voxUiText("Start %lld-day free trial", 7), paywallCallToAction(yearly, VoxEntitlement.FREE))
-        assertEquals(voxUiText("Subscribe"), paywallCallToAction(weekly.copy(freeTrialDays = null), VoxEntitlement.FREE))
-        assertEquals(voxUiText("Unlock for %@", "$49.99"), paywallCallToAction(lifetime, VoxEntitlement.FREE))
-        assertEquals(voxUiText("Unlock Unlimited"), paywallCallToAction(null, VoxEntitlement.FREE))
-        assertEquals(voxUiText("Purchase Pending"), paywallCallToAction(yearly, VoxEntitlement.PENDING))
-    }
-
-    @Test fun selectionAndTimelineFollowLoadedPlans() {
-        assertEquals(PaywallPlanKind.YEARLY, defaultPaywallPlanKind(listOf(lifetime, weekly, yearly)))
-        assertEquals(PaywallPlanKind.LIFETIME, defaultPaywallPlanKind(listOf(lifetime)))
-        assertEquals(PaywallPlanKind.WEEKLY, trialTimelinePlan(listOf(yearly, weekly), PaywallPlanKind.WEEKLY)?.kind)
-        assertEquals(PaywallPlanKind.YEARLY, trialTimelinePlan(listOf(yearly, lifetime), PaywallPlanKind.LIFETIME)?.kind)
-        assertNull(trialTimelinePlan(listOf(lifetime, yearly.copy(freeTrialDays = null)), PaywallPlanKind.LIFETIME))
-        assertEquals(5, trialReminderDay(7))
-        assertNull(trialReminderDay(2))
-    }
-
-    @Test fun planNotesExplainUnavailablePlans() {
-        assertEquals(voxUiText("Not available right now"), paywallPlanNote(PaywallPlanKind.WEEKLY, null))
-        assertEquals(voxUiText("%lld days free, then %@/yr", 7, "$29.99"), paywallPlanNote(PaywallPlanKind.YEARLY, yearly))
-        assertEquals(voxUiText("One purchase, no renewals"), paywallPlanNote(PaywallPlanKind.LIFETIME, lifetime))
+        assertNull(yearlySavingsPercent(null, yearly))
+        assertNull(yearlySavingsPercent(weekly, null))
+        assertNull(yearlySavingsPercent(weekly.copy(currencyCode = "EUR"), yearly))
+        assertNull(yearlySavingsPercent(weekly, yearly.copy(priceAmountMicros = 0L)))
     }
 
     // endregion

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "status": "measured",
+  "process": "md.vox.android.qualification",
+  "physicalDevice": "Pixel 7",
+  "windowSeconds": 60,
+  "traceSHA256": "f64e2f6eda377e69927567157f3417decf9417285b6805e9dcc50287dd63bf1f",
+  "rssStartMiB": 235.1,
+  "rssPeakMiB": 238.4,
+  "rssGrowthMiB": 3.3,
+  "reportedUiHangs": 0,
+  "mainThreadSampleCount": 2,
+  "limits": [
+    "Debug build with profiling/sampling overhead.",
+    "RSS differs from PSS; warm-up growth is not proof of a leak.",
+    "Kernel/context-switch frames exist on physical Android; the analyzer emulator heuristic is disregarded.",
+    "Raw trace stays outside the repository because it can contain unrelated system metadata."
+  ]
+}
