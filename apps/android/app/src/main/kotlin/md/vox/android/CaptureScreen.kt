@@ -155,6 +155,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
@@ -932,6 +933,10 @@ internal fun CaptureScreen(
     val c = Signal.colors
     Box(Modifier.fillMaxSize()) {
     Scaffold(
+        // While the full-screen live recording covers the composer, the covered
+        // composer (and its inline recording card) must not be read, announced or
+        // targeted by TalkBack and Switch Access a second time.
+        modifier = if (recordingStatus.isActive) Modifier.clearAndSetSemantics {} else Modifier,
         containerColor = c.bg,
         topBar = {
             CaptureTopControls(
@@ -1555,7 +1560,8 @@ internal fun CaptureBottomControls(
             .background(c.bg)
             .imePadding(),
     ) {
-        if (showsVoiceCaptureDetails) {
+        // The full-screen live recording supersedes the inline card while it is active.
+        if (showsVoiceCaptureDetails && !recordingStatus.isActive) {
             RecordingDetails(
                 modifier = Modifier
                     .padding(horizontal = SignalMetrics.PageGutter, vertical = 4.dp)

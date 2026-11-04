@@ -29,6 +29,11 @@ class ComposerPresetUiInstrumentationTest {
             }
         } }
         compose.onNodeWithTag("preview-source").performTextInput(" edited")
+        // The wide-layout preview is the tablet board's side panel and starts open.
+        compose.onNodeWithText("Copy draft Markdown").assertExists()
+        compose.onNodeWithText("Hide draft preview").performClick()
+        compose.onNodeWithText("Copy draft Markdown").assertDoesNotExist()
+        compose.onNodeWithTag("preview-source").assertTextContains("edited",substring=true)
         compose.onNodeWithText("Show draft preview").performClick()
         compose.onNodeWithText("Copy draft Markdown").assertExists()
         compose.runOnIdle { width=400 }

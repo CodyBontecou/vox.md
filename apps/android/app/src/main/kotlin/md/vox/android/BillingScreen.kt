@@ -11,6 +11,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -57,6 +59,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
@@ -73,6 +76,7 @@ import md.vox.android.ui.SignalStatus
 import md.vox.android.ui.SignalType
 import md.vox.android.ui.signalStatusColors
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun UpgradeScreen(
     billingState: BillingUiState,
@@ -101,11 +105,15 @@ internal fun UpgradeScreen(
         containerColor = c.bg,
         topBar = { VoxTopBar(voxUiText("Vox.md Unlimited"), navigateBack) },
         bottomBar = {
+            // The footer stays put at default sizes; at large text it is capped and
+            // scrolls so purchase and restore remain reachable above the pages.
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(c.bg)
                     .navigationBarsPadding()
+                    .heightIn(max = LocalConfiguration.current.screenHeightDp.dp * 0.6f)
+                    .verticalScroll(rememberScrollState())
                     .padding(start = 24.dp, end = 24.dp, top = 14.dp, bottom = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -141,7 +149,10 @@ internal fun UpgradeScreen(
                     loading = billingState.isPurchasing,
                     variant = SignalButtonVariant.PRIMARY,
                 )
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
+                    itemVerticalAlignment = Alignment.CenterVertically,
+                ) {
                     if (pager.currentPage != pager.pageCount - 1) {
                         SignalButton(
                             text = voxString("See all plans"),
