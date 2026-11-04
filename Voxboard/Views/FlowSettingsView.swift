@@ -16,6 +16,7 @@ struct CapturePresetSettingsView: View {
     @State private var destinations: [UUID: CaptureDestination] = [:]
     @State private var surfacePinRevision = 0
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         List {
@@ -25,38 +26,14 @@ struct CapturePresetSettingsView: View {
         }
         .listStyle(.grouped)
         .navigationTitle("Routes")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                // The large in-content title replaces the bar title.
-                Text(verbatim: "").accessibilityHidden(true)
-            }
-            ToolbarItemGroup(placement: .topBarTrailing) {
-                Button {
-                    persistedFlows.wrappedValue.append(CapturePresetStore.makeCustomFlow())
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "plus")
-                            .font(.system(size: 15, weight: .bold))
-                        Text("New")
-                            .font(.custom("Geist-SemiBold", size: 15, relativeTo: .body))
-                    }
-                    .foregroundStyle(Geist.bg)
-                    .padding(.horizontal, 14)
-                    .frame(minHeight: 36)
-                    .background(Geist.text, in: Capsule())
-                    .contentShape(Capsule())
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Add Route")
-                .accessibilityIdentifier("capture_preset_add")
-            }
-        }
+        // Signal header (Routes board): a 44pt circular Back and the "New"
+        // pill replace the system bar, as on Library and Activity.
+        .toolbar(.hidden, for: .navigationBar)
+        .safeAreaInset(edge: .top, spacing: 0) { routesHeader }
         .font(Geist.body())
         .tint(Geist.accent)
         .scrollContentBackground(.hidden)
         .background(Geist.bg.ignoresSafeArea())
-        .toolbarBackground(Geist.bg, for: .navigationBar)
         .task { await migrateRoutesAndReload() }
         .onAppear { pins.reload() }
         .alert("Route Could Not Be Deleted", isPresented: Binding(
@@ -69,6 +46,36 @@ struct CapturePresetSettingsView: View {
             watchStatePublishTask?.cancel()
             WatchRecordingController.shared.publishState()
         }
+    }
+
+    private var routesHeader: some View {
+        HStack {
+            Button { dismiss() } label: { Image(systemName: "chevron.left") }
+                .buttonStyle(SignalCircleButtonStyle())
+                .accessibilityLabel("Back")
+            Spacer()
+            Button {
+                persistedFlows.wrappedValue.append(CapturePresetStore.makeCustomFlow())
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "plus")
+                        .font(.system(size: 15, weight: .bold))
+                    Text("New")
+                        .font(.custom("Geist-SemiBold", size: 15, relativeTo: .body))
+                }
+                .foregroundStyle(Geist.bg)
+                .padding(.horizontal, Geist.Spacing.four)
+                .frame(minHeight: Geist.ControlHeight.medium)
+                .background(Geist.text, in: Capsule())
+                .contentShape(Capsule())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Add Route")
+            .accessibilityIdentifier("capture_preset_add")
+        }
+        .padding(.horizontal, Geist.Spacing.four + 4)
+        .padding(.vertical, Geist.Spacing.two)
+        .background(Geist.bg)
     }
 
     /// Save at the edit boundary: the list's onChange is not guaranteed to run
@@ -215,7 +222,7 @@ struct CapturePresetSettingsView: View {
     private func presetSettingsRow(flow: Binding<CapturePreset>) -> some View {
         let preset = flow.wrappedValue
         return NavigationLink {
-            CapturePresetEditorView(preset: flow)
+            CapturePresetEditorView(preset: flow, usesSignalHeader: true)
         } label: {
             CapturePresetSettingsListLabel(
                 preset: preset,
@@ -546,6 +553,10 @@ struct CapturePresetEditorView: View {
     @Environment(ModelManager.self) private var modelManager
     @State private var pinnedSurfaces: [CapturePresetPinSurface] = []
     @Binding var flow: CapturePreset
+    /// True when pushed from the Routes list: a Signal header (circular Back
+    /// and a Done pill) replaces the navigation bar, as on the Route editor
+    /// board. Hosts with their own toolbar (the iPad inspector) keep the bar.
+    var usesSignalHeader = false
     @State private var frontmatterText: String
     @State private var showBookmarkPicker = false
     @State private var bookmarkPickerKind: BookmarkKind = .exportFolder
@@ -574,8 +585,9 @@ struct CapturePresetEditorView: View {
         }
     }
 
-    init(preset: Binding<CapturePreset>) {
+    init(preset: Binding<CapturePreset>, usesSignalHeader: Bool = false) {
         self._flow = preset
+        self.usesSignalHeader = usesSignalHeader
         self._frontmatterText = State(initialValue: Self.renderFrontmatter(preset.wrappedValue.staticFrontmatter))
     }
 
@@ -620,23 +632,14 @@ struct CapturePresetEditorView: View {
                 Text(verbatim: "").accessibilityHidden(true)
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button {
-                    flow.staticFrontmatter = Self.parseFrontmatter(frontmatterText)
-                    dismiss()
-                } label: {
-                    Text("Done")
-                        .font(.custom("Geist-SemiBold", size: 15, relativeTo: .body))
-                        .foregroundStyle(Geist.bg)
-                        .padding(.horizontal, 16)
-                        .frame(minHeight: 36)
-                        .background(Geist.text, in: Capsule())
-                        .contentShape(Capsule())
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("capture_preset_editor_done")
+                doneButton(height: 36)
             }
         }
         .toolbarBackground(Geist.bg, for: .navigationBar)
+        .toolbar(usesSignalHeader ? .hidden : .automatic, for: .navigationBar)
+        .safeAreaInset(edge: .top, spacing: 0) {
+            if usesSignalHeader { signalHeader }
+        }
         .onAppear {
             // Effective pins: Watch and the keyboard list every enabled route
             // until configured, so the editor matches what those surfaces show.
@@ -690,6 +693,38 @@ struct CapturePresetEditorView: View {
             flow.staticFrontmatter = Self.parseFrontmatter(frontmatterText)
         }
         }
+    }
+
+    private func finishEditing() {
+        flow.staticFrontmatter = Self.parseFrontmatter(frontmatterText)
+        dismiss()
+    }
+
+    private func doneButton(height: CGFloat) -> some View {
+        Button(action: finishEditing) {
+            Text("Done")
+                .font(.custom("Geist-SemiBold", size: 15, relativeTo: .body))
+                .foregroundStyle(Geist.bg)
+                .padding(.horizontal, height > 40 ? 18 : 16)
+                .frame(minHeight: height)
+                .background(Geist.text, in: Capsule())
+                .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("capture_preset_editor_done")
+    }
+
+    private var signalHeader: some View {
+        HStack {
+            Button(action: finishEditing) { Image(systemName: "chevron.left") }
+                .buttonStyle(SignalCircleButtonStyle())
+                .accessibilityLabel("Back to routes")
+            Spacer()
+            doneButton(height: Geist.ControlHeight.medium)
+        }
+        .padding(.horizontal, Geist.Spacing.four + 4)
+        .padding(.vertical, Geist.Spacing.two)
+        .background(Geist.bg)
     }
 
     private var showsFrontmatterSection: Bool { true }

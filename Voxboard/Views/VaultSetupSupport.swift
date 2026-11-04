@@ -411,41 +411,83 @@ struct VaultPickerCard: View {
     var embedded = false
     let onPick: (VoxVault) -> Void
     @State private var errorMessage: String?
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private var title: String { vault?.name ?? String(localized: "Choose a folder") }
+    private var detail: String { vault?.detail ?? String(localized: "An Obsidian vault or any folder in Files") }
+    private var actionTitle: String { vault == nil ? String(localized: "Choose") : String(localized: "Change") }
+
+    /// Setup board: ink-bordered card with a 40pt ink folder tile and an
+    /// indigo Change.
+    private var setupCard: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "folder")
+                .font(.system(size: 18, weight: .medium))
+                .foregroundStyle(Geist.bg)
+                .frame(width: 40, height: 40)
+                .background(Geist.text, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.custom("Geist-SemiBold", size: 16, relativeTo: .body))
+                    .foregroundStyle(Geist.text)
+                Text(detail)
+                    .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                    .foregroundStyle(Geist.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: 8)
+            Text(actionTitle)
+                .font(Geist.label())
+                .foregroundStyle(Geist.accentText)
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Geist.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(Geist.text, lineWidth: 1.5))
+        .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+
+    /// Settings board VAULT row: title, mono detail, muted Change and a
+    /// chevron, like the other Settings rows.
+    private var settingsRow: some View {
+        HStack(spacing: 10) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(title)
+                    .font(Geist.label(.body))
+                    .foregroundStyle(Geist.text)
+                Text(detail)
+                    .font(Geist.mono(size: 11, relativeTo: .caption))
+                    .foregroundStyle(Geist.muted)
+                    .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+            }
+            Spacer(minLength: 8)
+            Text(actionTitle)
+                .font(Geist.body(.callout))
+                .foregroundStyle(Geist.muted)
+            Image(systemName: "chevron.right")
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(Geist.faint)
+                .accessibilityHidden(true)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .frame(maxWidth: .infinity, minHeight: 50, alignment: .leading)
+        .contentShape(Rectangle())
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Button { isPicking = true } label: {
-                HStack(spacing: 12) {
-                    Image(systemName: "folder.fill")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(Geist.onAccent)
-                        .frame(width: 44, height: 44)
-                        .background(Geist.accent, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-                        .accessibilityHidden(true)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(vault?.name ?? String(localized: "Choose a folder"))
-                            .font(.custom("Geist-SemiBold", size: 17, relativeTo: .body))
-                            .foregroundStyle(Geist.text)
-                        Text(vault?.detail ?? String(localized: "An Obsidian vault or any folder in Files"))
-                            .font(Geist.caption())
-                            .foregroundStyle(Geist.muted)
-                    }
-                    Spacer(minLength: 8)
-                    Text(vault == nil ? String(localized: "Choose") : String(localized: "Change"))
-                        .font(Geist.label())
-                        .foregroundStyle(Geist.accentText)
-                }
-                .padding(14)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(embedded ? Color.clear : Geist.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(embedded ? Color.clear : Geist.border, lineWidth: 1))
-                .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                if embedded { settingsRow } else { setupCard }
             }
             .buttonStyle(.plain)
             .accessibilityHint(Text("Opens Files to choose the folder notes are written to."))
             .accessibilityIdentifier("vault.change")
             if let errorMessage {
                 Text(errorMessage).font(Geist.caption()).foregroundStyle(Geist.error)
+                    .padding(.horizontal, embedded ? 14 : 0)
+                    .padding(.bottom, embedded ? 10 : 0)
             }
         }
         .fileImporter(isPresented: $isPicking, allowedContentTypes: [.folder], allowsMultipleSelection: false) { result in

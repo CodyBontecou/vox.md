@@ -24,7 +24,7 @@ struct VoxboardLiveActivity: Widget {
                                 .font(.headline)
                         }
                         Text(context.state.routeName ?? context.state.activityTitle)
-                            .font(.subheadline.weight(.semibold))
+                            .font(SignalWidgetFont.sans(15, .semibold))
                             .foregroundStyle(SignalActivity.text)
                             .liveActivitySingleLine(minimumScaleFactor: 0.72)
                     }
@@ -38,7 +38,7 @@ struct VoxboardLiveActivity: Widget {
                         Text(context.state.isTranscribing
                              ? String(localized: "Working")
                              : String(localized: "Ready"))
-                            .font(.headline)
+                            .font(SignalWidgetFont.sans(17, .semibold))
                             .foregroundStyle(SignalActivity.muted)
                             .liveActivitySingleLine(minimumScaleFactor: 0.72)
                     }
@@ -48,7 +48,7 @@ struct VoxboardLiveActivity: Widget {
                         if let path = context.state.destinationPath,
                            context.state.isSegmentActive || context.state.isTranscribing {
                             Text("→ \(path)")
-                                .font(.system(size: 11, design: .monospaced))
+                                .font(SignalWidgetFont.mono(11))
                                 .foregroundStyle(SignalActivity.muted)
                                 .liveActivitySingleLine(minimumScaleFactor: 0.72)
                                 .truncationMode(.middle)
@@ -82,31 +82,31 @@ struct VoxboardLiveActivity: Widget {
                 if let paused = context.state.pausedElapsed, context.state.isSegmentActive {
                     Text(ElapsedReadout.format(paused))
                         .monospacedDigit()
-                        .font(.system(.body, design: .monospaced))
+                        .font(SignalWidgetFont.mono(17, medium: true))
                         .foregroundStyle(SignalActivity.muted)
                         .frame(maxWidth: 44)
                         .liveActivitySingleLine(minimumScaleFactor: 0.7)
                 } else if let started = context.state.segmentStartedAt, context.state.isSegmentActive {
                     Text(Date(timeIntervalSince1970: started), style: .timer)
                         .monospacedDigit()
-                        .font(.system(.body, design: .monospaced))
+                        .font(SignalWidgetFont.mono(17, medium: true))
                         .foregroundStyle(SignalActivity.red)
                         .frame(maxWidth: 44)
                         .liveActivitySingleLine(minimumScaleFactor: 0.7)
                 } else if let percent = context.state.transcriptionPercentLabel {
                     Text(percent)
                         .monospacedDigit()
-                        .font(.caption2.weight(.bold))
+                        .font(SignalWidgetFont.sans(11, .semibold))
                         .foregroundStyle(SignalActivity.text)
                         .liveActivitySingleLine(minimumScaleFactor: 0.7)
                 } else if context.state.isTranscribing {
                     Text("…")
-                        .font(.caption.weight(.bold))
+                        .font(SignalWidgetFont.sans(12, .semibold))
                         .foregroundStyle(SignalActivity.muted)
                         .liveActivitySingleLine()
                 } else {
                     Text("Ready")
-                        .font(.caption2)
+                        .font(SignalWidgetFont.sans(11))
                         .foregroundStyle(SignalActivity.muted)
                         .liveActivitySingleLine(minimumScaleFactor: 0.7)
                 }
@@ -129,7 +129,7 @@ private struct LockScreenBanner: View {
 
                 VStack(alignment: .leading, spacing: 1) {
                     Text(state.routeName ?? "Vox.md")
-                        .font(.system(size: 15, weight: .semibold))
+                        .font(SignalWidgetFont.sans(15, .semibold))
                         .foregroundStyle(SignalActivity.text)
                         .liveActivitySingleLine()
                     subtitle
@@ -189,7 +189,7 @@ private struct LockScreenBanner: View {
                      : String(localized: "Tap to record"))
             }
         }
-        .font(.system(size: 11, design: .monospaced))
+        .font(SignalWidgetFont.mono(11))
         .foregroundStyle(SignalActivity.muted)
         .liveActivitySingleLine(minimumScaleFactor: 0.72)
         .truncationMode(.middle)
@@ -209,7 +209,7 @@ private struct RouteTile: View {
                 .fill(state.routeMonogram == nil && state.isSegmentActive ? SignalActivity.red : SignalActivity.accent)
             if let monogram = state.routeMonogram {
                 Text(monogram)
-                    .font(.system(size: size * 0.46, weight: .bold))
+                    .font(SignalWidgetFont.sans(size * 0.46, .bold))
                     .foregroundStyle(.white)
                     .minimumScaleFactor(0.6)
             } else {
@@ -240,13 +240,13 @@ private struct ElapsedReadout: View {
                         .foregroundStyle(SignalActivity.red)
                 }
             }
-            .font(.system(size: size, weight: .medium, design: .monospaced))
+            .font(SignalWidgetFont.mono(size, medium: true))
             .monospacedDigit()
             .multilineTextAlignment(.trailing)
             .liveActivitySingleLine(minimumScaleFactor: 0.7)
         } else if let percent = state.transcriptionPercentLabel {
             Text(percent)
-                .font(.system(size: size * 0.8, weight: .medium, design: .monospaced))
+                .font(SignalWidgetFont.mono(size * 0.8, medium: true))
                 .monospacedDigit()
                 .foregroundStyle(SignalActivity.text)
                 .liveActivitySingleLine(minimumScaleFactor: 0.7)
@@ -347,7 +347,7 @@ private struct RecordButton: View {
                 } else {
                     Label("Stop and send", systemImage: "stop.fill")
                         .labelStyle(.titleAndIcon)
-                        .font(.headline)
+                        .font(SignalWidgetFont.sans(17, .semibold))
                         .padding(.horizontal, 20)
                         .padding(.vertical, 12)
                         .background(SignalActivity.red, in: Capsule())
@@ -365,7 +365,7 @@ private struct RecordButton: View {
                 }
             }
                 .labelStyle(.titleAndIcon)
-                .font(compact ? .subheadline.weight(.semibold).monospacedDigit() : .headline.monospacedDigit())
+                .font(compact ? SignalWidgetFont.sans(15, .semibold).monospacedDigit() : SignalWidgetFont.sans(17, .semibold).monospacedDigit())
                 .padding(.horizontal, compact ? 14 : 20)
                 .padding(.vertical, compact ? 8 : 12)
                 .background(SignalActivity.control, in: Capsule())
@@ -381,7 +381,7 @@ private struct RecordButton: View {
                         .frame(width: 10, height: 10)
                 }
                     .labelStyle(.titleAndIcon)
-                    .font(compact ? .subheadline.weight(.semibold) : .headline)
+                    .font(compact ? SignalWidgetFont.sans(15, .semibold) : SignalWidgetFont.sans(17, .semibold))
                     .padding(.horizontal, compact ? 14 : 20)
                     .padding(.vertical, compact ? 8 : 12)
                     .background(SignalActivity.text, in: Capsule())

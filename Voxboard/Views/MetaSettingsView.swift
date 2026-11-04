@@ -14,6 +14,7 @@ struct MetaSettingsView: View {
     @Environment(StoreManager.self) private var storeManager
     @Environment(ModelManager.self) private var modelManager
     @Environment(\.openURL) private var openURL
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var showPaywall = false
     @State private var showDebugLog = false
@@ -39,7 +40,7 @@ struct MetaSettingsView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(alignment: .leading, spacing: 6) {
-                        SettingsSignalPageHeader(title: "Settings")
+                        SettingsSignalPageHeader(title: "Settings", backLabel: "Back to capture")
                             .padding(.horizontal, 4)
                             .padding(.top, 8)
                             .padding(.bottom, 8)
@@ -73,10 +74,11 @@ struct MetaSettingsView: View {
                 #endif
             }
         }
-        .navigationTitle("")
+        .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Geist.bg, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
+        // The Settings board has no bar: the page header carries the circular
+        // Back button and the large title.
+        .toolbar(.hidden, for: .navigationBar)
         .navigationDestination(isPresented: $showsWatchSetup) {
             RouteSurfacePinsView(surface: .watch)
         }
@@ -130,7 +132,7 @@ struct MetaSettingsView: View {
     }
 
     private var rowDivider: some View {
-        GeistDivider().padding(.leading, 14)
+        GeistDivider().padding(.horizontal, 14)
     }
 
     private var chevron: some View {
@@ -329,35 +331,24 @@ struct MetaSettingsView: View {
     private var accountSection: some View {
         if usageTracker.hasUnlocked {
             settingsGroup("Account") {
-                HStack(spacing: 10) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(planTitle)
-                            .font(Geist.label(.body))
-                            .foregroundColor(Geist.text)
-                        Text(planDetail)
-                            .font(Geist.mono(size: 11.5, relativeTo: .caption))
-                            .foregroundColor(Geist.muted)
-                            .fixedSize(horizontal: false, vertical: true)
+                if isSubscriptionPlan {
+                    // "Vox.md Yearly · Renews … — Manage ›": the whole row
+                    // opens the App Store subscription sheet.
+                    Button { manageSubscription() } label: {
+                        planRowLabel(value: String(localized: "Manage"), showsChevron: true)
                     }
-                    Spacer(minLength: 8)
-                    if isSubscriptionPlan {
-                        Button("Manage") { manageSubscription() }
-                            .font(Geist.label())
-                            .foregroundStyle(Geist.accentText)
-                            .buttonStyle(.plain)
-                            .accessibilityIdentifier("settings.manageSubscription")
-                    } else if usageTracker.isEligibleForFamilyUpgrade {
-                        Button("Upgrade") { showPaywall = true }
-                            .font(Geist.label())
-                            .foregroundStyle(Geist.accentText)
-                            .buttonStyle(.plain)
-                            .accessibilityIdentifier("settings.familyUpgradeButton")
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("settings.manageSubscription")
+                } else if usageTracker.isEligibleForFamilyUpgrade {
+                    Button { showPaywall = true } label: {
+                        planRowLabel(value: String(localized: "Upgrade"), showsChevron: true)
                     }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("settings.familyUpgradeButton")
+                } else {
+                    planRowLabel(value: nil, showsChevron: false)
+                        .accessibilityElement(children: .combine)
                 }
-                .padding(.horizontal, 14)
-                .padding(.vertical, 12)
-                .frame(minHeight: 50)
-                .accessibilityElement(children: .combine)
                 rowDivider
                 helpRow
             }
@@ -367,6 +358,36 @@ struct MetaSettingsView: View {
                 helpRow
             }
         }
+    }
+
+    private func planRowLabel(value: String?, showsChevron: Bool) -> some View {
+        HStack(spacing: 10) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(planTitle)
+                    .font(Geist.label(.body))
+                    .foregroundColor(Geist.text)
+                Text(planDetail)
+                    .font(Geist.mono(size: 11, relativeTo: .caption))
+                    .foregroundColor(Geist.muted)
+                    .lineLimit(subtitleLineLimit)
+            }
+            Spacer(minLength: 8)
+            if let value {
+                Text(value)
+                    .font(Geist.body(.callout))
+                    .foregroundColor(Geist.muted)
+            }
+            if showsChevron { chevron }
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .frame(minHeight: 50)
+        .contentShape(Rectangle())
+    }
+
+    /// Board subtitles stay on one line; accessibility sizes wrap instead.
+    private var subtitleLineLimit: Int? {
+        dynamicTypeSize.isAccessibilitySize ? nil : 1
     }
 
     /// "Help & feedback · Version 2.14 (58)": Discord, feedback and the
@@ -456,14 +477,14 @@ struct MetaSettingsView: View {
             destination()
         } label: {
             HStack(spacing: 10) {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 1) {
                     Text(title)
                         .font(Geist.label(.body))
                         .foregroundColor(Geist.text)
                     Text(subtitle)
-                        .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                        .font(Geist.mono(size: 11, relativeTo: .caption))
                         .foregroundColor(Geist.muted)
-                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(subtitleLineLimit)
                 }
                 Spacer(minLength: 8)
                 if let value {
@@ -493,7 +514,7 @@ struct MetaSettingsView: View {
                             .font(Geist.label(.body))
                             .foregroundColor(Geist.text)
                         Text(accessDetail)
-                            .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                            .font(Geist.mono(size: 11, relativeTo: .caption))
                             .foregroundColor(Geist.muted)
                     }
                     Spacer()
@@ -636,7 +657,7 @@ struct MetaSettingsView: View {
                         .font(Geist.label(.body))
                         .foregroundColor(Geist.text)
                     Text("Choose which language Vox.md uses")
-                        .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                        .font(Geist.mono(size: 11, relativeTo: .caption))
                         .foregroundColor(Geist.muted)
                 }
 
@@ -683,7 +704,7 @@ struct MetaSettingsView: View {
                         .font(Geist.label(.body))
                         .foregroundColor(Geist.text)
                     Text(description)
-                        .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                        .font(Geist.mono(size: 11, relativeTo: .caption))
                         .foregroundColor(Geist.muted)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -910,13 +931,26 @@ struct MetaSettingsView: View {
 
 // MARK: - Signal page header
 
-/// Large 34pt Signal title with an optional muted subtitle.
-private struct SettingsSignalPageHeader: View {
+/// Large 34pt Signal title with an optional muted subtitle. On a pushed page
+/// (Settings over Capture, Models over Settings) it leads with the boards'
+/// 44pt circular Back button, standing in for the hidden navigation bar.
+struct SettingsSignalPageHeader: View {
     let title: LocalizedStringKey
     var subtitle: LocalizedStringKey? = nil
+    var backLabel: LocalizedStringKey? = nil
+
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.isPresented) private var isPresented
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
+            if let backLabel, isPresented {
+                Button { dismiss() } label: { Image(systemName: "chevron.left") }
+                    .buttonStyle(SignalCircleButtonStyle())
+                    .accessibilityLabel(Text(backLabel))
+                    .accessibilityIdentifier("signal.back")
+                    .padding(.bottom, 14)
+            }
             Text(title)
                 .font(.custom("Geist-SemiBold", size: 34, relativeTo: .largeTitle))
                 .tracking(-0.8)

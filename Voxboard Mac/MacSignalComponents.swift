@@ -85,6 +85,33 @@ struct MacRouteTile: View {
     }
 }
 
+/// Signal MacWorkspace header buttons (Speak, Send): 36pt rounded
+/// rectangles with 10pt corners, matching the header's Attach button,
+/// instead of the native capsule-shaped prominent control.
+struct MacSignalHeaderButtonStyle: ButtonStyle {
+    let fill: Color
+    let foreground: Color
+    var horizontalPadding: CGFloat = 12
+    @Environment(\.isEnabled) private var isEnabled
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(Geist.label(.footnote))
+            .foregroundStyle(foreground)
+            .padding(.horizontal, horizontalPadding)
+            .frame(height: 36)
+            .background(fill, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay {
+                if configuration.isPressed {
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .fill(Color.black.opacity(0.14))
+                }
+            }
+            .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .opacity(isEnabled ? 1 : 0.5)
+    }
+}
+
 // MARK: - Quick actions
 
 /// Mac keyboard shortcuts for the composer quick-action chips (Signal

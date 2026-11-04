@@ -66,13 +66,13 @@ struct RectangularWidgetView: View {
                 .widgetAccentable()
             VStack(alignment: .leading, spacing: 1) {
                 Text("Vox.md")
-                    .font(.system(size: 11, weight: .semibold))
+                    .font(SignalWidgetFont.sans(11, .semibold))
                     .textCase(.uppercase)
                     .widgetAccentable()
                 Text(entry.isQuickRecordEnabled
                      ? (entry.isListening ? String(localized: "Listening") : String(localized: "Tap to record"))
                      : String(localized: "Disabled"))
-                    .font(.system(size: 14, weight: .medium))
+                    .font(SignalWidgetFont.sans(14, .medium))
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
             }
@@ -99,7 +99,7 @@ struct SmallWidgetView: View {
                 Text(entry.isQuickRecordEnabled
                      ? (entry.isListening ? String(localized: "Listening") : String(localized: "Ready"))
                      : String(localized: "Disabled"))
-                    .font(.system(size: 11, weight: .medium, design: .monospaced))
+                    .font(SignalWidgetFont.mono(11, medium: true))
                     .textCase(.uppercase)
                     .foregroundStyle(isLive ? Color.primary : muted)
                     .lineLimit(1)
@@ -127,7 +127,7 @@ struct SmallWidgetView: View {
             Text(entry.isQuickRecordEnabled
                  ? String(localized: "Tap to Record")
                  : String(localized: "Enable in Settings"))
-                .font(.system(size: 13, weight: .semibold))
+                .font(SignalWidgetFont.sans(13, .semibold))
                 .foregroundStyle(entry.isQuickRecordEnabled ? Color.primary : muted)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)

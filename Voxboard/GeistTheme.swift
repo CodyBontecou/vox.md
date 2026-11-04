@@ -525,7 +525,8 @@ struct SignalChip: View {
             .foregroundStyle(Geist.Palette.gray900)
             .padding(.horizontal, 9)
             .padding(.vertical, 4)
-            .background(Geist.bg, in: Capsule())
+            // Board: #F2F2EE chip in light, #222220 on the #161616 card in dark.
+            .background(adaptive("#f2f2ee", "#222220"), in: Capsule())
     }
 }
 
@@ -781,7 +782,7 @@ struct ThoughtfulOnboarding: View {
             .accessibilityIdentifier(currentPage == 0 ? "onboarding.continue" : "onboarding.plans")
             if currentPage == 0 {
                 Text(verbatim: "Open source · AGPL-3.0")
-                    .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                    .font(Geist.caption())
                     .foregroundStyle(Thoughtful.secondary)
                     .multilineTextAlignment(.center)
             }
@@ -845,6 +846,7 @@ struct ThoughtfulOnboarding: View {
     // MARK: Welcome
 
     private var welcomePage: some View {
+        GeometryReader { proxy in
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 wordmark(extensionColor: Thoughtful.welcomeAccent)
@@ -857,24 +859,27 @@ struct ThoughtfulOnboarding: View {
                     .foregroundStyle(Geist.text)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityAddTraits(.isHeader)
-                    .padding(.top, 40)
+                    .padding(.top, 48)
 
                 welcomeExample
                     .padding(.top, 36)
+
+                // The board pins the promises just above Get started.
+                Spacer(minLength: 40)
 
                 VStack(alignment: .leading, spacing: 10) {
                     welcomeBullet("Transcribed on this device")
                     welcomeBullet("Written to your Obsidian vault or Files")
                     welcomeBullet("Your words are never sent to us")
                 }
-                .padding(.top, 40)
 
                 inlineActions
             }
             .frame(maxWidth: 440, alignment: .topLeading)
             .padding(.horizontal, 24)
-            .padding(.bottom, 24)
-            .frame(maxWidth: .infinity)
+            .padding(.bottom, 16)
+            .frame(maxWidth: .infinity, minHeight: proxy.size.height, alignment: .top)
+        }
         }
         .background(Thoughtful.background.ignoresSafeArea())
     }
@@ -889,8 +894,8 @@ struct ThoughtfulOnboarding: View {
                     .background(Geist.recording, in: Circle())
                     .accessibilityHidden(true)
                 Text("“Remind me to book flights for Lisbon”")
-                    .font(Geist.body(.callout))
-                    .foregroundStyle(Geist.Palette.gray800)
+                    .font(Geist.body(.body))
+                    .foregroundStyle(Geist.text.opacity(0.72))
                     .fixedSize(horizontal: false, vertical: true)
             }
             Rectangle()
@@ -921,8 +926,9 @@ struct ThoughtfulOnboarding: View {
                 .frame(width: 6, height: 6)
                 .accessibilityHidden(true)
             Text(text)
-                .font(Geist.body(.callout))
-                .foregroundStyle(Geist.Palette.gray800)
+                .font(.custom("Geist-Regular", size: 15, relativeTo: .callout))
+                // Welcome is always dark: #C9C9C4 on the near-black ground.
+                .foregroundStyle(Geist.text.opacity(0.8))
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
@@ -954,15 +960,16 @@ struct ThoughtfulOnboarding: View {
                 VaultPickerCard(vault: vault, isPicking: $isPickingVault) { picked in
                     vault = picked
                 }
-                .padding(.top, 24)
+                .padding(.top, 20)
 
                 Text("Start with these routes")
-                    .font(.custom("Geist-SemiBold", size: 17, relativeTo: .headline))
+                    .font(.custom("Geist-SemiBold", size: 15, relativeTo: .headline))
                     .foregroundStyle(Thoughtful.ink)
                     .accessibilityAddTraits(.isHeader)
                     .padding(.top, 28)
                 Text("You can edit or add more any time.")
                     .font(Geist.body(.callout))
+                    .fixedSize(horizontal: false, vertical: true)
                     .foregroundStyle(Thoughtful.secondary)
                     .padding(.top, 4)
 
@@ -1002,28 +1009,36 @@ struct ThoughtfulOnboarding: View {
         .background(Thoughtful.background.ignoresSafeArea())
     }
 
+    /// Setup board row: route tile (ink when chosen), name, mono path and
+    /// a trailing indigo checkbox. The whole row toggles.
     private func starterRouteRow(_ route: StarterRoute) -> some View {
         let isOn = starterRoutes.contains(route)
-        return Toggle(isOn: Binding(
-            get: { isOn },
-            set: { on in
-                if on { starterRoutes.insert(route) } else { starterRoutes.remove(route) }
-            }
-        )) {
+        return Button {
+            if isOn { starterRoutes.remove(route) } else { starterRoutes.insert(route) }
+        } label: {
             HStack(spacing: 12) {
                 SignalRouteTile(letter: route.name, size: 32, isInk: isOn)
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 1) {
                     Text(route.name)
                         .font(Geist.label(.body))
                         .foregroundStyle(Thoughtful.ink)
                     Text(verbatim: route.pathLabel)
-                        .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                        .font(Geist.mono(size: 11, relativeTo: .caption))
                         .foregroundStyle(Thoughtful.secondary)
                 }
+                Spacer(minLength: 8)
+                Image(systemName: isOn ? "checkmark.square.fill" : "square")
+                    .font(.system(size: 22, weight: .regular))
+                    .foregroundStyle(isOn ? Geist.accent : Geist.borderHi)
+                    .accessibilityHidden(true)
             }
+            .frame(maxWidth: .infinity, minHeight: 60, alignment: .leading)
+            .contentShape(Rectangle())
         }
-        .tint(Geist.accent)
-        .frame(minHeight: 60)
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isToggle)
+        .accessibilityValue(isOn ? Text("On") : Text("Off"))
         .accessibilityIdentifier("onboarding.starter.\(route.rawValue)")
     }
     #else

@@ -7,6 +7,30 @@ import WidgetKit
 // Lock Screen accessories bound to one Route: "Speak to <Route>" (circular),
 // "<ROUTE> · TODAY" (rectangular), and "Scan to <Route>" (circular).
 
+// MARK: - Signal type
+
+/// Geist + Geist Mono for the widget extension (bundled under Fonts/ and
+/// listed in UIAppFonts). Lives here because this file is also compiled into
+/// VoxboardTests; `Font.custom` falls back to the system face if a font is
+/// missing.
+enum SignalWidgetFont {
+    /// Fixed sizes, like the `.system(size:)` faces they replace: accessory
+    /// and Live Activity layouts are sized to the point.
+    static func sans(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
+        let name: String
+        switch weight {
+        case .semibold, .bold, .heavy, .black: name = "Geist-SemiBold"
+        case .medium: name = "Geist-Medium"
+        default: name = "Geist-Regular"
+        }
+        return .custom(name, fixedSize: size)
+    }
+
+    static func mono(_ size: CGFloat, medium: Bool = false) -> Font {
+        .custom(medium ? "GeistMono-Medium" : "GeistMono-Regular", fixedSize: size)
+    }
+}
+
 // MARK: - Configuration
 
 struct RouteAccessoryWidgetConfiguration: WidgetConfigurationIntent {
@@ -261,7 +285,7 @@ private struct RouteCircleAccessory: View {
                     .font(.system(size: 18, weight: .semibold))
                     .widgetAccentable()
                 Text(label)
-                    .font(.system(size: 10, weight: .semibold))
+                    .font(SignalWidgetFont.sans(10, .semibold))
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
                     .padding(.horizontal, 4)
@@ -320,27 +344,27 @@ struct RouteTodayAccessoryView: View {
     private func content(_ summary: RouteAccessoryEntry.TodaySummary) -> some View {
         VStack(alignment: .leading, spacing: 1) {
             Text("\(entry.visibleName.uppercased()) · TODAY")
-                .font(.system(size: 11, weight: .semibold))
+                .font(SignalWidgetFont.sans(11, .semibold))
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
                 .widgetAccentable()
             if let title = summary.latestTitle, summary.count > 0 {
                 Text(title)
-                    .font(.system(size: 14, weight: .medium))
+                    .font(SignalWidgetFont.sans(14, .medium))
                     .lineLimit(1)
                     .truncationMode(.middle)
                 if summary.count > 1 {
                     Text("+\(summary.count - 1) more")
-                        .font(.system(size: 12))
+                        .font(SignalWidgetFont.sans(12))
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
             } else {
                 Text("Nothing yet")
-                    .font(.system(size: 14, weight: .medium))
+                    .font(SignalWidgetFont.sans(14, .medium))
                     .lineLimit(1)
                 Text(entry.isAvailable || entry.identity == nil ? "Tap to capture" : "Route unavailable")
-                    .font(.system(size: 12))
+                    .font(SignalWidgetFont.sans(12))
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }

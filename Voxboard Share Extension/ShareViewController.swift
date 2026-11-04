@@ -1,6 +1,7 @@
 #if canImport(FoundationModels)
 import FoundationModels
 #endif
+import CoreText
 import LinkPresentation
 import Observation
 import SwiftUI
@@ -11,6 +12,7 @@ import VoxboardShared
 final class ShareViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        ShareSignal.registerFonts()
         let providers = extensionContext?.inputItems
             .compactMap { $0 as? NSExtensionItem }
             .flatMap { $0.attachments ?? [] } ?? []
@@ -629,6 +631,46 @@ private enum ShareSignal {
     static let warningBorder = dynamic(0xF1C9B4, 0x6B3A1F)
     static let warning = dynamic(0xE8590C, 0xFF8A4C)
 
+    // MARK: Type (Geist + Geist Mono)
+
+    static func sans(_ size: CGFloat, _ weight: Font.Weight = .regular, relativeTo style: Font.TextStyle = .body) -> Font {
+        let name: String
+        switch weight {
+        case .semibold, .bold, .heavy, .black: name = "Geist-SemiBold"
+        case .medium: name = "Geist-Medium"
+        default: name = "Geist-Regular"
+        }
+        return .custom(name, size: size, relativeTo: style)
+    }
+
+    static func mono(_ size: CGFloat, relativeTo style: Font.TextStyle = .caption) -> Font {
+        .custom("GeistMono-Regular", size: size, relativeTo: style)
+    }
+
+    private static var didRegisterFonts = false
+
+    /// Extensions do not inherit the app's `UIAppFonts`. Registers Geist from
+    /// this extension's bundle when present, otherwise from the containing
+    /// app bundle (the .appex sits in Vox.md.app/PlugIns). If neither has the
+    /// fonts, `Font.custom` falls back to the system face.
+    static func registerFonts() {
+        guard !didRegisterFonts else { return }
+        didRegisterFonts = true
+        let ownBundle = Bundle.main.bundleURL
+        let appBundle = ownBundle.deletingLastPathComponent().deletingLastPathComponent()
+        for name in ["Geist-Regular", "Geist-Medium", "Geist-SemiBold", "GeistMono-Regular", "GeistMono-Medium"] {
+            let file = "\(name).ttf"
+            let candidates = [
+                ownBundle.appendingPathComponent(file),
+                ownBundle.appendingPathComponent("Fonts/\(file)"),
+                appBundle.appendingPathComponent(file),
+                appBundle.appendingPathComponent("Fonts/\(file)"),
+            ]
+            guard let url = candidates.first(where: { FileManager.default.isReadableFile(atPath: $0.path) }) else { continue }
+            CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
+        }
+    }
+
     private static func dynamic(_ light: UInt32, _ dark: UInt32) -> Color {
         Color(uiColor: UIColor { traits in
             UIColor(hex: traits.userInterfaceStyle == .dark ? dark : light)
@@ -670,7 +712,7 @@ private struct ShareCaptureView: View {
                         VStack(alignment: .leading, spacing: 6) {
                             fieldLabel("Add a note")
                             TextEditor(text: $model.note)
-                                .font(.body)
+                                .font(ShareSignal.sans(16))
                                 .foregroundStyle(ShareSignal.text)
                                 .scrollContentBackground(.hidden)
                                 .frame(minHeight: 110)
@@ -683,7 +725,7 @@ private struct ShareCaptureView: View {
                                 .overlay(alignment: .topLeading) {
                                     if model.note.isEmpty {
                                         Text("Why it matters…")
-                                            .font(.body)
+                                            .font(ShareSignal.sans(16))
                                             .foregroundStyle(ShareSignal.muted)
                                             .padding(.horizontal, 13)
                                             .padding(.vertical, 16)
@@ -702,7 +744,7 @@ private struct ShareCaptureView: View {
 
                         if let line = model.destinationLine {
                             Text(verbatim: line)
-                                .font(.system(.caption, design: .monospaced))
+                                .font(ShareSignal.mono(11.5))
                                 .foregroundStyle(ShareSignal.muted)
                                 .fixedSize(horizontal: false, vertical: true)
                                 .accessibilityLabel(Text("Destination: \(line)"))
@@ -717,7 +759,7 @@ private struct ShareCaptureView: View {
                                     .padding(.top, 5)
                                     .accessibilityHidden(true)
                                 Text(error)
-                                    .font(.subheadline)
+                                    .font(ShareSignal.sans(15, relativeTo: .subheadline))
                                     .foregroundStyle(ShareSignal.text)
                                     .fixedSize(horizontal: false, vertical: true)
                             }
@@ -772,7 +814,7 @@ private struct ShareCaptureView: View {
                            : (model.isQueuedForLater ? String(localized: "Open Vox.md") : String(localized: "Send"))) {
                         Task { await model.submit() }
                     }
-                    .fontWeight(.semibold)
+                    .font(ShareSignal.sans(15, .semibold))
                     // Filled accent pill, as on the Share sheet board.
                     .buttonStyle(.borderedProminent)
                     .tint(ShareSignal.accent)
@@ -789,7 +831,7 @@ private struct ShareCaptureView: View {
 
     private func fieldLabel(_ title: LocalizedStringKey) -> some View {
         Text(title)
-            .font(.footnote.weight(.medium))
+            .font(ShareSignal.sans(13, .medium, relativeTo: .footnote))
             .foregroundStyle(ShareSignal.muted)
     }
 
@@ -813,11 +855,11 @@ private struct ShareCaptureView: View {
             .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 3) {
                 Text(summary.title)
-                    .font(.subheadline.weight(.semibold))
+                    .font(ShareSignal.sans(15, .semibold, relativeTo: .subheadline))
                     .foregroundStyle(ShareSignal.text)
                     .lineLimit(2)
                 Text(summary.detail)
-                    .font(.system(.caption, design: .monospaced))
+                    .font(ShareSignal.mono(11.5))
                     .foregroundStyle(ShareSignal.muted)
                     .lineLimit(1)
                     .truncationMode(.middle)
@@ -826,7 +868,7 @@ private struct ShareCaptureView: View {
         }
             if let pageSummary = model.pageSummary {
                 Text(pageSummary)
-                    .font(.footnote)
+                    .font(ShareSignal.sans(13, relativeTo: .footnote))
                     .foregroundStyle(ShareSignal.muted)
                     .lineLimit(4)
                     .fixedSize(horizontal: false, vertical: true)
@@ -870,7 +912,7 @@ private struct ShareCaptureView: View {
                 Group {
                     if let letter = preset.visibleName?.first {
                         Text(String(letter).uppercased())
-                            .font(.system(size: 12, weight: .bold))
+                            .font(ShareSignal.sans(12, .bold, relativeTo: .caption))
                     } else if let emoji = CapturePresetEmoji.normalized(preset.emoji) {
                         Text(verbatim: emoji)
                             .font(.system(size: 12))
@@ -884,7 +926,7 @@ private struct ShareCaptureView: View {
                 .background(tone.fill, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                 .accessibilityHidden(true)
                 Text(preset.visibleName ?? String(localized: "Icon-only route"))
-                    .font(.subheadline.weight(.medium))
+                    .font(ShareSignal.sans(15, .medium, relativeTo: .subheadline))
                     .foregroundStyle(ShareSignal.text)
                     .lineLimit(1)
                 Spacer(minLength: 0)

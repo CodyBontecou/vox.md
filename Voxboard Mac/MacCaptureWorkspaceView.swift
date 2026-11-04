@@ -283,7 +283,8 @@ struct MacCaptureWorkspaceView: View {
 
                 HStack(spacing: 0) {
                     Spacer(minLength: 0)
-                    composer.frame(maxWidth: 720)
+                    // MacWorkspace: a 640pt text column inside 28pt insets.
+                    composer.frame(maxWidth: 696)
                     Spacer(minLength: 0)
                 }
                 .background(isDropTargeted ? MacBrand.subtleOrange : Geist.bg)
@@ -656,11 +657,11 @@ struct MacCaptureWorkspaceView: View {
             }
             .font(Geist.label(.footnote))
         }
-        .buttonStyle(.borderedProminent)
-        .controlSize(.large)
-        // Signal: Speak is an ink pill; it turns red while recording.
-        .tint(recorder.isRecording ? MacBrand.recording : Geist.text)
-        .foregroundStyle(recorder.isRecording ? Color.white : Geist.Palette.background100)
+        // Signal: Speak is an ink button; it turns red while recording.
+        .buttonStyle(MacSignalHeaderButtonStyle(
+            fill: recorder.isRecording ? MacBrand.recording : Geist.text,
+            foreground: recorder.isRecording ? Color.white : Geist.Palette.background100
+        ))
         .accessibilityIdentifier("mac_capture_record")
     }
 
@@ -685,10 +686,11 @@ struct MacCaptureWorkspaceView: View {
                     .opacity(0.75)
             }
         }
-        .buttonStyle(.borderedProminent)
-        .controlSize(.large)
-        .tint(MacBrand.accent)
-        .foregroundStyle(MacBrand.onAccent)
+        .buttonStyle(MacSignalHeaderButtonStyle(
+            fill: MacBrand.accent,
+            foreground: MacBrand.onAccent,
+            horizontalPadding: 14
+        ))
         .disabled(!viewModel.canSubmit || isProcessingAttachments || recorder.isRecording || recorder.isTranscribing)
         .keyboardShortcut(.return, modifiers: [.command])
         .accessibilityIdentifier("mac_quick_capture_submit")

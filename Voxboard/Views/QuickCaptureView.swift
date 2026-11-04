@@ -351,8 +351,8 @@ struct QuickCaptureView: View {
 
     private var compactCaptureHeader: CaptureViewSection {
         CaptureViewSection {
-            HStack(alignment: .top, spacing: Geist.Spacing.three) {
-                VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(alignment: .top, spacing: Geist.Spacing.three) {
                     // The foldable cover screen always shows the route radio
                     // row; the phone shows it only while typing.
                     if enabledFlows.count > 1, composerIsFocused || isCoverScreen {
@@ -360,11 +360,12 @@ struct QuickCaptureView: View {
                     } else {
                         routeSelectionRow
                     }
-                    routeDestinationLine
+                    Spacer(minLength: 0)
+                    captureHeaderActions
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-                captureHeaderActions
+                // Full width under the actions row, so the vault/folder
+                // prefix is kept wherever it fits (Main board).
+                routeDestinationLine
             }
             .padding(.horizontal, 20)
             .padding(.top, Geist.Spacing.two)
@@ -390,19 +391,39 @@ struct QuickCaptureView: View {
                     .accessibilityIdentifier("capture_keyboard_listening_status")
                 }
 
-                activityButton
+                if showsTypingDoneButton {
+                    // While typing, Activity and Settings give way to Done
+                    // (CaptureKeyboard / CaptureRestActions boards).
+                    Button(action: dismissComposer) {
+                        Text("Done")
+                            .font(Geist.body(.subheadline).weight(.semibold))
+                            .foregroundStyle(Geist.accentText)
+                            .padding(.horizontal, 12)
+                            .frame(minHeight: 44)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("capture_done_typing")
+                } else {
+                    activityButton
 
-                Button {
-                    dismissComposer()
-                    openSettings()
-                } label: {
-                    Image(systemName: "gearshape")
-                        .accessibilityLabel("Settings")
+                    Button {
+                        dismissComposer()
+                        openSettings()
+                    } label: {
+                        Image(systemName: "gearshape")
+                            .accessibilityLabel("Settings")
+                    }
+                    .buttonStyle(SignalCircleButtonStyle())
+                    .accessibilityIdentifier("capture_settings")
                 }
-                .buttonStyle(SignalCircleButtonStyle())
-                .accessibilityIdentifier("capture_settings")
             }
         }
+    }
+
+    /// Phone only: the cover screen and the iPad panes keep their actions.
+    private var showsTypingDoneButton: Bool {
+        layout == .compact && composerIsFocused && !isCoverScreen
     }
 
     /// Activity (recent captures) with an orange dot while queued captures

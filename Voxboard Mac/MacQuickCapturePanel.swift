@@ -302,7 +302,7 @@ struct MacQuickCaptureView: View {
                 recordingBar
             }
             .padding(.horizontal, 22)
-            .padding(.vertical, 18)
+            .padding(.vertical, 20)
             footer
         }
         .background(

@@ -474,11 +474,8 @@ struct HistoryView: View {
                             .foregroundStyle(Geist.Palette.amber900)
                             .accessibilityLabel("Delivery failed")
                     }
-                    Text(item.date, format: libraryIsReadOnly
-                        ? .dateTime.month(.abbreviated).day()
-                        : .dateTime.hour().minute())
-                        .font(Geist.mono(size: 11, relativeTo: .caption))
-                        .foregroundStyle(Geist.muted)
+                    // Day-grouped rows carry the time beside the title.
+                    if !libraryIsReadOnly { rowDate(item) }
                 }
                 if let excerpt = item.excerpt {
                     Text(verbatim: excerpt)
@@ -487,11 +484,23 @@ struct HistoryView: View {
                         .lineLimit(1)
                 }
             }
+            // The flat read-only list ("Trial ended" board) centers the date
+            // ("Oct 28") at the trailing edge of the row.
+            if libraryIsReadOnly { rowDate(item) }
         }
         .padding(.vertical, Geist.Spacing.three)
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
         .accessibilityHint("Opens the capture")
+    }
+
+    private func rowDate(_ item: LibraryItem) -> some View {
+        Text(item.date, format: libraryIsReadOnly
+            ? .dateTime.month(.abbreviated).day()
+            : .dateTime.hour().minute())
+            .font(Geist.mono(size: 11, relativeTo: .caption))
+            .foregroundStyle(Geist.muted)
+            .fixedSize()
     }
 
     @ViewBuilder

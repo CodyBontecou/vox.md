@@ -1009,12 +1009,21 @@ struct ActivitySignalDot: View {
 struct ActivitySignalProgressBar: View {
     let fraction: Double
 
+    /// Indigo that lifts to #6E78FF in dark mode, per the dark Activity board.
+    private static var fill: Color {
+        #if os(macOS)
+        Geist.accent
+        #else
+        Geist.Palette.blue700
+        #endif
+    }
+
     var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .leading) {
                 Capsule().fill(Geist.well)
                 Capsule()
-                    .fill(Geist.accent)
+                    .fill(Self.fill)
                     .frame(width: proxy.size.width * min(max(fraction, 0), 1))
             }
         }

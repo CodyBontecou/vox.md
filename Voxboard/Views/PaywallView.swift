@@ -26,6 +26,7 @@ struct PaywallView: View {
 
     private static let pageCount = 3
     private static let plansPage = 2
+    private static let manageSubscriptionsURL = URL(string: "https://apps.apple.com/account/subscriptions")!
 
     init(context: PaywallContext = .limit, isAccessGate: Bool = false,
          historyViewModel: QuickCaptureViewModel? = nil, initialFamily: Bool = false,
@@ -99,7 +100,9 @@ struct PaywallView: View {
                         Button("Library", systemImage: "clock") { showsHistory = true }
                             .accessibilityIdentifier("paywall.existingHistory")
                     } else if !isAccessGate {
-                        Button("Close") { dismiss() }
+                        Button("Close", systemImage: "xmark") { dismiss() }
+                            .labelStyle(.iconOnly)
+                            .foregroundStyle(Geist.muted)
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
@@ -407,11 +410,11 @@ struct PaywallView: View {
                 .font(Geist.caption(.caption))
                 .foregroundStyle(Geist.muted)
                 .fixedSize(horizontal: false, vertical: true)
-            Link("Manage Subscriptions", destination: URL(string: "https://apps.apple.com/account/subscriptions")!)
-                .font(Geist.caption())
-                .foregroundStyle(Geist.accentText)
             if usageTracker.hasFamilyAccess {
-                // No purchase footer: keep the Library link reachable.
+                // No purchase footer: keep Manage and the Library link reachable.
+                Link("Manage Subscriptions", destination: Self.manageSubscriptionsURL)
+                    .font(Geist.caption())
+                    .foregroundStyle(Geist.accentText)
                 historyLink
             }
         }
@@ -558,7 +561,15 @@ struct PaywallView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityIdentifier("paywall.finePrint")
             HStack(spacing: 8) {
-                if page != Self.plansPage {
+                if page == Self.plansPage {
+                    // Plans page (pw_Slide3): "Manage · Terms · Privacy".
+                    Link(destination: Self.manageSubscriptionsURL) {
+                        Text("Manage").frame(minWidth: 44, minHeight: 44)
+                    }
+                    .accessibilityLabel(Text("Manage Subscriptions"))
+                    .accessibilityIdentifier("paywall.manage")
+                    Text(verbatim: "·").accessibilityHidden(true)
+                } else {
                     Button {
                         withAnimation { page = Self.plansPage }
                     } label: {
@@ -721,6 +732,14 @@ private struct PaywallPageIndicator: View {
 
 /// Labeled example: a short voice capture becoming a Markdown note.
 private struct PaywallCaptureIllustration: View {
+    /// `[[Weekly review]]` on the soft indigo wash, as in the board.
+    private static var wikiLink: AttributedString {
+        var link = AttributedString("[[Weekly review]]")
+        link.foregroundColor = Geist.accentText
+        link.backgroundColor = Geist.accentSoft
+        return link
+    }
+
     private static let bars: [CGFloat] = [6, 10, 16, 9, 20, 24, 14, 8, 18, 22, 12, 6, 10, 19, 24, 15, 9, 13, 21, 17, 8, 11, 16, 7, 12, 9, 5, 4]
 
     var body: some View {
@@ -763,7 +782,7 @@ private struct PaywallCaptureIllustration: View {
                     .foregroundStyle(Geist.muted)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(verbatim: "- [ ] Call Sam about the venue")
-                    Text("- Draft for \(Text(verbatim: "[[Weekly review]]").foregroundStyle(Geist.accentText))")
+                    Text("- Draft for \(Text(Self.wikiLink))")
                 }
                 .font(Geist.mono(size: 13, relativeTo: .footnote))
                 .foregroundStyle(Geist.text)

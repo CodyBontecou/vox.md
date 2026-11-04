@@ -233,16 +233,11 @@ struct CaptureDetailView: View {
             .accessibilityLabel(player.isPlaying ? "Pause recording" : "Play recording")
 
             VStack(alignment: .leading, spacing: 4) {
-                Slider(
-                    value: Binding(
-                        get: { player.progress },
-                        set: { player.seek(toFraction: $0) }
-                    ),
-                    in: 0...1
+                CapturePlaybackScrubber(
+                    progress: player.progress,
+                    isEnabled: player.isReady,
+                    onSeek: { player.seek(toFraction: $0) }
                 )
-                .controlSize(.mini)
-                .tint(Geist.accent)
-                .disabled(!player.isReady)
                 .accessibilityLabel("Playback position")
                 .accessibilityValue(LibraryFormatting.clock(player.currentTime))
 
@@ -610,6 +605,47 @@ struct CaptureDetailView: View {
             sharePayload = TranscriptSharePayload(url: copy)
         } catch {
             errorMessage = error.localizedDescription
+        }
+    }
+}
+
+/// Thin 4pt playback track from the capture detail board. Tap or drag
+/// anywhere on the (taller) hit area to seek; VoiceOver adjusts in 5% steps.
+private struct CapturePlaybackScrubber: View {
+    let progress: Double
+    let isEnabled: Bool
+    let onSeek: (Double) -> Void
+
+    var body: some View {
+        GeometryReader { proxy in
+            let width = max(proxy.size.width, 1)
+            ZStack(alignment: .leading) {
+                Capsule().fill(Geist.well)
+                Capsule()
+                    .fill(Geist.accent)
+                    .frame(width: width * min(max(progress, 0), 1))
+            }
+            .frame(height: 4)
+            .frame(maxHeight: .infinity)
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { value in
+                        guard isEnabled else { return }
+                        onSeek(min(max(value.location.x / width, 0), 1))
+                    }
+            )
+        }
+        .frame(height: 16)
+        .opacity(isEnabled ? 1 : 0.6)
+        .accessibilityElement()
+        .accessibilityAdjustableAction { direction in
+            guard isEnabled else { return }
+            switch direction {
+            case .increment: onSeek(min(progress + 0.05, 1))
+            case .decrement: onSeek(max(progress - 0.05, 0))
+            @unknown default: break
+            }
         }
     }
 }
