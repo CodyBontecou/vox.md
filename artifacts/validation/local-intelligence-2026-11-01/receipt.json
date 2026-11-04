@@ -1,11 +1,11 @@
 {
   "artifactsSHA256": {
-    "app": "fed6a26e3db22541e3a4e7f61aec7dec5b77ded977a291d36f8688b2cab360d1",
-    "tests": "d7157f52d10e48d02ad0f06ea05e1e12f6657893c11c718bab0c6c914daf876c"
+    "app": "b50beee6e6bb02199f3e9d1030b9dcc8b566d279e4c58ed53de688d188dc9a5a",
+    "tests": "ecfcec93d7771ced294e9a4cc1b461a29f8b508382e214d7c8e849f57540340e"
   },
   "device": {
-    "serial": "emulator-5556",
-    "avd": "vox-physical-companion-checks-api36-20261101",
+    "serial": "emulator-5570",
+    "avd": "vox-qualification-api36-20261104",
     "apiLevel": "36",
     "abi": "arm64-v8a"
   },
@@ -34,7 +34,7 @@
     "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalSpeechInferenceInstrumentationTest.kt": "c11a8a8cb6ef2fcc110bbec585cb21fc04e9a136a43b710cac02ac726b1971a1",
     "apps/android/app/src/androidTest/kotlin/md/vox/android/NamedModelInferenceInstrumentationTest.kt": "d78c4c06e38507d77ea0d4450ddc44aaa39590219fa21435ecb28309a5bd0033",
     "Packages/VoxboardShared/Sources/VoxboardShared/IntelligenceEvaluation.swift": "74f7924d5858317e1f226583ffb85ed443a21f93a216d8838e7e9330dcc6e73e",
-    "Packages/VoxboardShared/Sources/VoxboardShared/SpeakerDiarizationService.swift": "7dd22a0e82bcca97be50ff5d40c3061e604037f8becf10520d9e89d4fa47b225",
+    "Packages/VoxboardShared/Sources/VoxboardShared/SpeakerDiarizationService.swift": "bd311accf549a55fbe1cb2eaff678a4cadb28a19c9c5e9fda2822c56430814a9",
     "Packages/VoxboardShared/Sources/VoxboardIntelligenceEvaluation/main.swift": "4d90b848906e82e6adc289bdecae8c5632e28e1e84fcb2c98b31e2abf41366db",
     "Packages/VoxboardShared/Sources/VoxboardIntelligenceEvaluation/SpeakerBenchmark.swift": "b7874138ebd150d4288a53643d4add5dc7b454c29d130cb07ebcc1174dbdbe42",
     "evaluations/local-intelligence/v1/corpus.json": "43b35c8f2401788ef7c476e576df4c67dabb7e908b3a3acf9a23e070fd2104aa"
@@ -55,6 +55,6 @@
     "vosk-api-test.wav": "dcfea5712c43a43ba7ae8083afb39d36993e5a69c46e88b68aaa72b65cb615bb",
     "vosk-model-spk-0.4.zip": "a74d8f51144484813e16af689bb0f916b7a111e2347f467c4933c1166097b5a7"
   },
-  "sourceRevision": "5aea785cffc9be146fdfb21e90540ca22d4ee5c9",
+  "sourceRevision": "c225bd93d37d55e0be3f22675c0200cef540d516",
   "sourceTreeClean": true
 }
