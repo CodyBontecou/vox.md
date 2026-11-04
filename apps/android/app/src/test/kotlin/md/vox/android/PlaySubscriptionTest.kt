@@ -17,17 +17,34 @@ class PlaySubscriptionTest {
 
     private val freeWeek = phase("Free", 0L, "P1W", cycles = 1, infinite = false)
 
+    private val yearlyProduct = VoxPlayCatalog.YEARLY_PRODUCT_ID
+    private val weeklyProduct = VoxPlayCatalog.WEEKLY_PRODUCT_ID
+
+    /** Mirrors the live catalog: two subscription products, one base plan each, one trial offer each. */
     private fun fakeOffers(trialEligible: Boolean) = buildList {
-        add(PlaySubscriptionOffer(VoxPlayCatalog.YEARLY_BASE_PLAN_ID, null, "yearly-base", listOf(phase("$29.99", 29_990_000L, "P1Y"))))
-        add(PlaySubscriptionOffer(VoxPlayCatalog.WEEKLY_BASE_PLAN_ID, null, "weekly-base", listOf(phase("$0.99", 990_000L, "P1W"))))
+        add(PlaySubscriptionOffer(yearlyProduct, "yearly", null, "yearly-base", listOf(phase("$29.99", 29_990_000L, "P1Y"))))
+        add(PlaySubscriptionOffer(weeklyProduct, "weekly", null, "weekly-base", listOf(phase("$0.99", 990_000L, "P1W"))))
         if (trialEligible) {
-            add(PlaySubscriptionOffer(VoxPlayCatalog.YEARLY_BASE_PLAN_ID, VoxPlayCatalog.YEARLY_TRIAL_OFFER_ID, "yearly-trial",
+            add(PlaySubscriptionOffer(yearlyProduct, "yearly", "free-trial-1w", "yearly-trial",
                 listOf(freeWeek, phase("$29.99", 29_990_000L, "P1Y"))))
-            add(PlaySubscriptionOffer(VoxPlayCatalog.WEEKLY_BASE_PLAN_ID, VoxPlayCatalog.WEEKLY_TRIAL_OFFER_ID, "weekly-trial",
+            add(PlaySubscriptionOffer(weeklyProduct, "weekly", "free-trial-1w", "weekly-trial",
                 listOf(freeWeek, phase("$0.99", 990_000L, "P1W"))))
         }
         // An unrelated base plan Play might return must never become a Vox.md plan.
-        add(PlaySubscriptionOffer("legacy-monthly", null, "monthly", listOf(phase("$4.99", 4_990_000L, "P1M"))))
+        add(PlaySubscriptionOffer(yearlyProduct, "legacy-monthly", null, "monthly", listOf(phase("$4.99", 4_990_000L, "P1M"))))
+        // A base plan ID on the wrong product must not be mistaken for the other plan.
+        add(PlaySubscriptionOffer(weeklyProduct, "yearly", null, "misplaced", listOf(phase("$9.99", 9_990_000L, "P1Y"))))
+    }
+
+    @Test fun catalogMatchesTheLivePlayConsoleProducts() {
+        assertEquals("vox_unlimited_lifetime", VoxPlan.LIFETIME.productID)
+        assertEquals("vox_unlimited_weekly", VoxPlan.WEEKLY.productID)
+        assertEquals("weekly", VoxPlan.WEEKLY.basePlanID)
+        assertEquals("vox_unlimited_yearly", VoxPlan.YEARLY.productID)
+        assertEquals("yearly", VoxPlan.YEARLY.basePlanID)
+        assertEquals("free-trial-1w", VoxPlan.YEARLY.trialOfferID)
+        assertEquals("free-trial-1w", VoxPlan.WEEKLY.trialOfferID)
+        assertEquals(listOf("vox_unlimited_yearly", "vox_unlimited_weekly"), VoxPlayCatalog.SUBSCRIPTION_PRODUCT_IDS)
     }
 
     @Test fun eligibleCustomersGetTheTrialOfferPricedFromItsRecurringPhase() {
@@ -47,7 +64,7 @@ class PlaySubscriptionTest {
     }
 
     @Test fun missingBasePlansAreOmittedInsteadOfInvented() {
-        val plans = subscriptionPlanOptions(fakeOffers(trialEligible = true).filter { it.basePlanID != VoxPlayCatalog.WEEKLY_BASE_PLAN_ID })
+        val plans = subscriptionPlanOptions(fakeOffers(trialEligible = true).filter { it.productID != weeklyProduct })
         assertEquals(listOf(VoxPlan.YEARLY), plans.map { it.plan })
         assertTrue(subscriptionPlanOptions(emptyList()).isEmpty())
     }
@@ -80,6 +97,16 @@ class PlaySubscriptionTest {
     @Test fun activeSubscribersReplaceTheirPlanAndLifetimeOwnersCannotBuyAgain() {
         val plans = subscriptionPlanOptions(fakeOffers(trialEligible = false))
         val weekly = plans.first { it.plan == VoxPlan.WEEKLY }
+        // A yearly subscriber moving to weekly replaces the yearly purchase across products.
+        assertEquals(
+            VoxPurchaseRequest.ReplaceSubscription("weekly-base", "yearly-token"),
+            voxPurchaseRequest(weekly, false, "yearly-token", false, activeSubscriptionProductID = yearlyProduct),
+        )
+        // Buying the product already held is refused instead of opening a duplicate flow.
+        assertEquals(
+            VoxPurchaseRequest.Blocked("alreadySubscribed"),
+            voxPurchaseRequest(weekly, false, "weekly-token", false, activeSubscriptionProductID = weeklyProduct),
+        )
         val lifetime = VoxPlanOption(VoxPlan.LIFETIME, "$49.99", 49_990_000L, "USD", null, null, "lifetime")
         assertEquals(VoxPurchaseRequest.NewSubscription("weekly-base"), voxPurchaseRequest(weekly, false, null, false))
         assertEquals(
@@ -94,10 +121,15 @@ class PlaySubscriptionTest {
 
     @Test fun unlimitedIsAnActiveSubscriptionOrLifetimeAndPendingGrantsNothing() {
         val lifetime = listOf(VoxPlayCatalog.LIFETIME_PRODUCT_ID)
-        val subscription = listOf(VoxPlayCatalog.SUBSCRIPTION_PRODUCT_ID)
+        val subscription = listOf(weeklyProduct)
         val subscribed = voxOwnershipFrom(listOf(Triple(subscription, Purchase.PurchaseState.PURCHASED, "sub-token")))
         assertFalse(subscribed.ownsLifetime)
         assertEquals("sub-token", subscribed.activeSubscriptionToken)
+        assertEquals(weeklyProduct, subscribed.activeSubscriptionProductID)
+        val yearly = voxOwnershipFrom(listOf(Triple(listOf(yearlyProduct), Purchase.PurchaseState.PURCHASED, "yearly-token")))
+        assertEquals(yearlyProduct, yearly.activeSubscriptionProductID)
+        val unrelated = voxOwnershipFrom(listOf(Triple(listOf("other_app_sub"), Purchase.PurchaseState.PURCHASED, "x")))
+        assertNull(unrelated.activeSubscriptionToken)
         val both = voxOwnershipFrom(listOf(
             Triple(lifetime, Purchase.PurchaseState.PURCHASED, "life-token"),
             Triple(subscription, Purchase.PurchaseState.PURCHASED, "sub-token"),
@@ -134,10 +166,18 @@ class PlaySubscriptionTest {
         assertFalse(operations.beginPurchase(VoxEntitlement.PENDING, pending = true, upgradeAllowed = true))
     }
 
-    @Test fun manageSubscriptionsLinkTargetsTheVoxSubscription() {
+    @Test fun manageSubscriptionsLinkTargetsTheActiveProduct() {
         assertEquals(
-            "https://play.google.com/store/account/subscriptions?sku=vox_unlimited_individual&package=md.vox.android",
-            VoxPlayCatalog.manageSubscriptionsUrl("md.vox.android"),
+            "https://play.google.com/store/account/subscriptions?sku=vox_unlimited_yearly&package=md.vox.android",
+            VoxPlayCatalog.manageSubscriptionsUrl("md.vox.android", "vox_unlimited_yearly"),
+        )
+        assertEquals(
+            "https://play.google.com/store/account/subscriptions?sku=vox_unlimited_weekly&package=md.vox.android",
+            VoxPlayCatalog.manageSubscriptionsUrl("md.vox.android", "vox_unlimited_weekly"),
+        )
+        assertEquals(
+            "https://play.google.com/store/account/subscriptions?package=md.vox.android",
+            VoxPlayCatalog.manageSubscriptionsUrl("md.vox.android", null),
         )
     }
 

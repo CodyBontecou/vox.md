@@ -5,41 +5,49 @@ import java.util.Locale
 import kotlin.math.roundToInt
 
 /**
- * Every Google Play identifier Vox.md uses, in one place, so the Play Console catalog can
- * be created to match. Individual plans only: Play has no counterpart to Apple Family
- * Sharing, so the iOS Family products have no Android equivalent.
+ * Every Google Play identifier Vox.md uses, in one place, matching the live Play Console
+ * catalog. Individual plans only: Play has no counterpart to Apple Family Sharing, so the
+ * iOS Family products have no Android equivalent.
  *
- * | Play Console object              | ID                         | iOS counterpart                        |
- * |----------------------------------|----------------------------|----------------------------------------|
- * | One-time product (Lifetime)      | `vox_unlimited_lifetime`   | `bontecou.Voxboard.unlock`             |
- * | Subscription                     | `vox_unlimited_individual` | group "Vox.md Unlimited"               |
- * | Base plan, auto-renewing P1W     | `individual-weekly`        | `bontecou.Voxboard.individual.weekly`  |
- * | Base plan, auto-renewing P1Y     | `individual-yearly`        | `bontecou.Voxboard.individual.yearly`  |
- * | Offer on weekly: 7-day free trial| `individual-weekly-trial`  | intro offer `individual-weekly-trial`  |
- * | Offer on yearly: 7-day free trial| `individual-yearly-trial`  | intro offer `individual-yearly-trial`  |
+ * | Play Console object                   | ID                       | iOS counterpart                       |
+ * |---------------------------------------|--------------------------|---------------------------------------|
+ * | One-time product (Lifetime)           | `vox_unlimited_lifetime` | `bontecou.Voxboard.unlock`            |
+ * | Subscription product (Weekly)         | `vox_unlimited_weekly`   | `bontecou.Voxboard.individual.weekly` |
+ * |   base plan, auto-renewing P1W        | `weekly`                 |                                       |
+ * |   offer: 1 week free                  | `free-trial-1w`          | intro offer `individual-weekly-trial` |
+ * | Subscription product (Yearly)         | `vox_unlimited_yearly`   | `bontecou.Voxboard.individual.yearly` |
+ * |   base plan, auto-renewing P1Y        | `yearly`                 |                                       |
+ * |   offer: 1 week free                  | `free-trial-1w`          | intro offer `individual-yearly-trial` |
  *
- * Prices, currencies, trial length and trial eligibility are never hard-coded: they come
- * only from the `ProductDetails` offers Play returns. Play omits a trial offer for a
- * customer who is not eligible (eligibility is configured on the offer as "new customers").
+ * The two subscription products correspond to the iOS "Vox.md Unlimited" subscription
+ * group; moving between them replaces the active subscription. Prices, currencies, trial
+ * length and trial eligibility are never hard-coded: they come only from the
+ * `ProductDetails` offers Play returns, and Play omits a trial offer for a customer who is
+ * not eligible.
  */
 object VoxPlayCatalog {
     const val LIFETIME_PRODUCT_ID = "vox_unlimited_lifetime"
-    const val SUBSCRIPTION_PRODUCT_ID = "vox_unlimited_individual"
-    const val WEEKLY_BASE_PLAN_ID = "individual-weekly"
-    const val YEARLY_BASE_PLAN_ID = "individual-yearly"
-    const val WEEKLY_TRIAL_OFFER_ID = "individual-weekly-trial"
-    const val YEARLY_TRIAL_OFFER_ID = "individual-yearly-trial"
+    const val WEEKLY_PRODUCT_ID = "vox_unlimited_weekly"
+    const val YEARLY_PRODUCT_ID = "vox_unlimited_yearly"
+    const val WEEKLY_BASE_PLAN_ID = "weekly"
+    const val YEARLY_BASE_PLAN_ID = "yearly"
+    const val FREE_TRIAL_OFFER_ID = "free-trial-1w"
+    val SUBSCRIPTION_PRODUCT_IDS: List<String> = listOf(YEARLY_PRODUCT_ID, WEEKLY_PRODUCT_ID)
 
-    /** Play's subscription center, scoped to the Vox.md subscription. */
-    fun manageSubscriptionsUrl(packageName: String): String =
-        "https://play.google.com/store/account/subscriptions?sku=$SUBSCRIPTION_PRODUCT_ID&package=$packageName"
+    /** Play's subscription center, scoped to the active subscription product when known. */
+    fun manageSubscriptionsUrl(packageName: String, subscriptionProductID: String?): String =
+        if (subscriptionProductID != null && subscriptionProductID in SUBSCRIPTION_PRODUCT_IDS) {
+            "https://play.google.com/store/account/subscriptions?sku=$subscriptionProductID&package=$packageName"
+        } else {
+            "https://play.google.com/store/account/subscriptions?package=$packageName"
+        }
 }
 
 /** What a person can buy, in the order the plans page lists them. */
-enum class VoxPlan(val basePlanID: String?, val trialOfferID: String?) {
-    YEARLY(VoxPlayCatalog.YEARLY_BASE_PLAN_ID, VoxPlayCatalog.YEARLY_TRIAL_OFFER_ID),
-    WEEKLY(VoxPlayCatalog.WEEKLY_BASE_PLAN_ID, VoxPlayCatalog.WEEKLY_TRIAL_OFFER_ID),
-    LIFETIME(null, null),
+enum class VoxPlan(val productID: String, val basePlanID: String?, val trialOfferID: String?) {
+    YEARLY(VoxPlayCatalog.YEARLY_PRODUCT_ID, VoxPlayCatalog.YEARLY_BASE_PLAN_ID, VoxPlayCatalog.FREE_TRIAL_OFFER_ID),
+    WEEKLY(VoxPlayCatalog.WEEKLY_PRODUCT_ID, VoxPlayCatalog.WEEKLY_BASE_PLAN_ID, VoxPlayCatalog.FREE_TRIAL_OFFER_ID),
+    LIFETIME(VoxPlayCatalog.LIFETIME_PRODUCT_ID, null, null),
     ;
 
     val isSubscription: Boolean get() = basePlanID != null
@@ -58,6 +66,7 @@ data class PlayPricingPhase(
 
 /** Play-independent copy of one `ProductDetails.SubscriptionOfferDetails`. */
 data class PlaySubscriptionOffer(
+    val productID: String,
     val basePlanID: String,
     val offerID: String?,
     val offerToken: String,
@@ -85,7 +94,9 @@ data class VoxPlanOption(
  */
 internal fun subscriptionPlanOptions(offers: Collection<PlaySubscriptionOffer>): List<VoxPlanOption> =
     listOf(VoxPlan.YEARLY, VoxPlan.WEEKLY).mapNotNull { plan ->
-        val forPlan = offers.filter { it.basePlanID == plan.basePlanID && it.offerToken.isNotBlank() }
+        val forPlan = offers.filter {
+            it.productID == plan.productID && it.basePlanID == plan.basePlanID && it.offerToken.isNotBlank()
+        }
         val trial = forPlan.firstOrNull { it.offerID == plan.trialOfferID && freeTrialPhase(it) != null }
         val base = forPlan.firstOrNull { it.offerID == null }
         val chosen = trial ?: base ?: return@mapNotNull null
@@ -139,25 +150,29 @@ internal fun formatSavingsPercent(percent: Int, locale: Locale = Locale.getDefau
 internal sealed interface VoxPurchaseRequest {
     data class Lifetime(val offerToken: String) : VoxPurchaseRequest
     data class NewSubscription(val offerToken: String) : VoxPurchaseRequest
-    /** Switch the active base plan; Play prorates the remaining time. */
+    /** Move to the other subscription product; Play prorates the remaining time. */
     data class ReplaceSubscription(val offerToken: String, val oldPurchaseToken: String) : VoxPurchaseRequest
     data class Blocked(val reason: String) : VoxPurchaseRequest
 }
 
 /**
- * Lifetime owners never buy again; an active subscriber switching base plans replaces the
- * existing subscription instead of opening a second one, and can still move to Lifetime.
+ * Lifetime owners never buy again; an active subscriber switching between Weekly and
+ * Yearly replaces the existing subscription instead of opening a second one, cannot buy
+ * the product they already have, and can still move to Lifetime.
  */
 internal fun voxPurchaseRequest(
     option: VoxPlanOption?,
     ownsLifetime: Boolean,
     activeSubscriptionToken: String?,
     hasPendingPurchase: Boolean,
+    activeSubscriptionProductID: String? = null,
 ): VoxPurchaseRequest = when {
     option == null -> VoxPurchaseRequest.Blocked("productUnavailable")
     ownsLifetime -> VoxPurchaseRequest.Blocked("alreadyOwned")
     hasPendingPurchase -> VoxPurchaseRequest.Blocked("pending")
     option.plan == VoxPlan.LIFETIME -> VoxPurchaseRequest.Lifetime(option.offerToken)
+    activeSubscriptionToken != null && option.plan.productID == activeSubscriptionProductID ->
+        VoxPurchaseRequest.Blocked("alreadySubscribed")
     activeSubscriptionToken != null -> VoxPurchaseRequest.ReplaceSubscription(option.offerToken, activeSubscriptionToken)
     else -> VoxPurchaseRequest.NewSubscription(option.offerToken)
 }

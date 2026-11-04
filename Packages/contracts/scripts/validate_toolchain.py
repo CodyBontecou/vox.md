@@ -1089,7 +1089,7 @@ def main(argv=None):
     )
     if counts != (815, 231, 6, 578, 0, 0) or counts[0] != sum(counts[1:]):
         fail("Android localization review source counts changed without review")
-    if localization_audit["runtimeSourceLiteralCount"] != 2689:
+    if localization_audit["runtimeSourceLiteralCount"] != 2687:
         fail("Android runtime localization lookup-source count changed without review")
     if localization_audit["fallbackSourceCount"] != counts[4] + counts[5]:
         fail("Android localization fallback count differs from incomplete and absent sources")

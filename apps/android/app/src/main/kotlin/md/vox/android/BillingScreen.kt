@@ -120,13 +120,15 @@ internal fun UpgradeScreen(
                     billingState.isPurchasing -> voxString("Waiting for Google Play…")
                     billingState.entitlement == VoxEntitlement.PENDING -> voxString("Purchase Pending")
                     billingState.entitlement == VoxEntitlement.UNLIMITED && !billingState.canPurchase() -> voxString("Unlimited Active")
+                    selected != null && selected.plan.productID == billingState.activeSubscriptionProductID -> voxString("Unlimited Active")
                     selected == null -> voxString("Unlock Unlimited")
                     else -> paywallCallToAction(selected)
                 }
                 SignalButton(
                     text = purchaseLabel,
                     onClick = { selected?.let { purchase(it.plan) } },
-                    enabled = billingState.canPurchase() && selected != null,
+                    enabled = billingState.canPurchase() && selected != null &&
+                        selected.plan.productID != billingState.activeSubscriptionProductID,
                     loading = billingState.isPurchasing,
                     variant = SignalButtonVariant.PRIMARY,
                 )

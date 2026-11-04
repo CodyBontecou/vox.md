@@ -61,6 +61,7 @@ internal fun SettingsStories(story: String): Boolean {
             storyBilling(entitlement = VoxEntitlement.UNLIMITED).copy(
                 plans = storySubscriptionPlans(trial = false),
                 hasActiveSubscription = true,
+                activeSubscriptionProductID = VoxPlayCatalog.WEEKLY_PRODUCT_ID,
             ),
         )
         "settings-upgrade-connecting" -> UpgradeStateStory(

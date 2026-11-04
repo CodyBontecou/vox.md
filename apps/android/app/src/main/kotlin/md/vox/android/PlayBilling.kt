@@ -151,6 +151,8 @@ data class BillingUiState(
     val plans: List<VoxPlanOption> = emptyList(),
     val ownsLifetime: Boolean = false,
     val hasActiveSubscription: Boolean = false,
+    /** Product ID (not a token) of the active Weekly or Yearly subscription, if any. */
+    val activeSubscriptionProductID: String? = null,
 ) {
     val hasUnlimitedAccess: Boolean get() = entitlement == VoxEntitlement.UNLIMITED
 
@@ -173,9 +175,14 @@ internal fun entitlementForPurchaseStates(states: Collection<Int>): VoxEntitleme
 
 internal fun isVoxPurchase(purchase: Purchase): Boolean =
     PlayBillingManager.PRODUCT_ID in purchase.products ||
-        PlayBillingManager.SUBSCRIPTION_PRODUCT_ID in purchase.products
+        purchase.products.any { it in PlayBillingManager.SUBSCRIPTION_PRODUCT_IDS }
 
-internal data class VoxOwnership(val ownsLifetime: Boolean, val activeSubscriptionToken: String?)
+internal data class VoxOwnership(
+    val ownsLifetime: Boolean,
+    val activeSubscriptionToken: String?,
+    /** Which subscription product (Weekly or Yearly) is active, for plan switching and the manage link. */
+    val activeSubscriptionProductID: String? = null,
+)
 
 /**
  * Unlimited = an active subscription OR Lifetime. Play's purchase query returns only
@@ -187,9 +194,11 @@ internal fun voxOwnership(purchases: Collection<Purchase>): VoxOwnership = voxOw
 
 internal fun voxOwnershipFrom(purchases: Collection<Triple<List<String>, Int, String>>): VoxOwnership {
     val purchased = purchases.filter { it.second == Purchase.PurchaseState.PURCHASED }
+    val subscription = purchased.firstOrNull { purchase -> purchase.first.any { it in PlayBillingManager.SUBSCRIPTION_PRODUCT_IDS } }
     return VoxOwnership(
         ownsLifetime = purchased.any { PlayBillingManager.PRODUCT_ID in it.first },
-        activeSubscriptionToken = purchased.firstOrNull { PlayBillingManager.SUBSCRIPTION_PRODUCT_ID in it.first }?.third,
+        activeSubscriptionToken = subscription?.third,
+        activeSubscriptionProductID = subscription?.first?.firstOrNull { it in PlayBillingManager.SUBSCRIPTION_PRODUCT_IDS },
     )
 }
 
@@ -264,7 +273,8 @@ class PlayBillingManager private constructor(context: Context) {
     private val operations = BillingOperations()
     private val acknowledging = java.util.concurrent.ConcurrentHashMap.newKeySet<String>()
     @Volatile private var productDetails: ProductDetails? = null
-    @Volatile private var subscriptionDetails: ProductDetails? = null
+    /** Weekly and Yearly subscription products, keyed by product ID. */
+    @Volatile private var subscriptionDetails: Map<String, ProductDetails> = emptyMap()
     /** Held only in memory to switch base plans; never logged, cached or put in UI state. */
     @Volatile private var activeSubscriptionToken: String? = null
     @Volatile private var connectionStarted = false
@@ -314,7 +324,7 @@ class PlayBillingManager private constructor(context: Context) {
                     restoreRequested = operations.disconnected() || restoreRequested
                 }
                 productDetails = null
-                subscriptionDetails = null
+                subscriptionDetails = emptyMap()
                 mutableState.update {
                     it.copy(
                         plans = emptyList(),
@@ -354,7 +364,9 @@ class PlayBillingManager private constructor(context: Context) {
             activity.startActivity(
                 android.content.Intent(
                     android.content.Intent.ACTION_VIEW,
-                    android.net.Uri.parse(VoxPlayCatalog.manageSubscriptionsUrl(appContext.packageName)),
+                    android.net.Uri.parse(
+                        VoxPlayCatalog.manageSubscriptionsUrl(appContext.packageName, mutableState.value.activeSubscriptionProductID),
+                    ),
                 ),
             )
         }
@@ -369,8 +381,14 @@ class PlayBillingManager private constructor(context: Context) {
             )
         ) return
         val option = current.plans.firstOrNull { it.plan == plan }
-        val details = if (plan == VoxPlan.LIFETIME) productDetails else subscriptionDetails
-        val request = voxPurchaseRequest(option, current.ownsLifetime, activeSubscriptionToken, current.hasPendingPurchase)
+        val details = if (plan == VoxPlan.LIFETIME) productDetails else subscriptionDetails[plan.productID]
+        val request = voxPurchaseRequest(
+            option,
+            current.ownsLifetime,
+            activeSubscriptionToken,
+            current.hasPendingPurchase,
+            current.activeSubscriptionProductID,
+        )
         val offerToken = when (request) {
             is VoxPurchaseRequest.Lifetime -> request.offerToken
             is VoxPurchaseRequest.NewSubscription -> request.offerToken
@@ -416,7 +434,7 @@ class PlayBillingManager private constructor(context: Context) {
     private fun queryProduct() {
         val generation = synchronized(operations) {
             productDetails = null
-            subscriptionDetails = null
+            subscriptionDetails = emptyMap()
             mutableState.update { it.copy(productAvailable = false, formattedPrice = null, plans = emptyList()) }
             operations.beginProductQuery()
         }
@@ -453,19 +471,23 @@ class PlayBillingManager private constructor(context: Context) {
         }
     }
 
-    /** Weekly and Yearly base plans live on one subscription product; offers carry prices and trials. */
+    /** Weekly and Yearly are separate subscription products; their offers carry prices and trials. */
     private fun querySubscriptionProduct(generation: Long) {
-        val subscription = QueryProductDetailsParams.Product.newBuilder()
-            .setProductId(SUBSCRIPTION_PRODUCT_ID)
-            .setProductType(BillingClient.ProductType.SUBS)
-            .build()
-        val params = QueryProductDetailsParams.newBuilder().setProductList(listOf(subscription)).build()
+        val subscriptions = SUBSCRIPTION_PRODUCT_IDS.map { productID ->
+            QueryProductDetailsParams.Product.newBuilder()
+                .setProductId(productID)
+                .setProductType(BillingClient.ProductType.SUBS)
+                .build()
+        }
+        val params = QueryProductDetailsParams.newBuilder().setProductList(subscriptions).build()
         billingClient.queryProductDetailsAsync(params) { result, detailsResult ->
             synchronized(operations) {
                 if (!operations.isCurrentProductQuery(generation)) return@queryProductDetailsAsync
                 subscriptionDetails = if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                    detailsResult.productDetailsList.firstOrNull { it.productId == SUBSCRIPTION_PRODUCT_ID }
-                } else null
+                    detailsResult.productDetailsList
+                        .filter { it.productId in SUBSCRIPTION_PRODUCT_IDS }
+                        .associateBy { it.productId }
+                } else emptyMap()
                 publishPlans()
             }
         }
@@ -484,8 +506,11 @@ class PlayBillingManager private constructor(context: Context) {
             )
         }
         val subscriptions = subscriptionPlanOptions(
-            subscriptionDetails?.subscriptionOfferDetails.orEmpty().map { offer ->
+            subscriptionDetails.values.flatMap { details ->
+                details.subscriptionOfferDetails.orEmpty().map { offer -> details.productId to offer }
+            }.map { (productID, offer) ->
                 PlaySubscriptionOffer(
+                    productID = productID,
                     basePlanID = offer.basePlanId,
                     offerID = offer.offerId,
                     offerToken = offer.offerToken,
@@ -564,6 +589,7 @@ class PlayBillingManager private constructor(context: Context) {
                 entitlement = decision.entitlement,
                 ownsLifetime = ownership.ownsLifetime,
                 hasActiveSubscription = ownership.activeSubscriptionToken != null,
+                activeSubscriptionProductID = ownership.activeSubscriptionProductID,
                 lastCheckedAtEpochMillis = if (decision.authoritativeOwned != null) checkedAt else it.lastCheckedAtEpochMillis,
                 lastOutcome = when {
                     decision.hasPendingPurchase -> BillingActionOutcome.PENDING
@@ -600,8 +626,8 @@ class PlayBillingManager private constructor(context: Context) {
     private fun recordRestoreDiagnostics(responseCode: Int, purchases: Collection<Purchase>) {
         val diagnostics = billingRestoreDiagnosticsFromPurchases(
             responseCode = responseCode,
-            requestedProductIDs = listOf(PRODUCT_ID, SUBSCRIPTION_PRODUCT_ID),
-            loadedProductIDs = listOfNotNull(productDetails?.productId, subscriptionDetails?.productId),
+            requestedProductIDs = listOf(PRODUCT_ID) + SUBSCRIPTION_PRODUCT_IDS,
+            loadedProductIDs = listOfNotNull(productDetails?.productId) + subscriptionDetails.keys,
             purchases = purchases,
         )
         mutableState.update { it.copy(lastRestoreDiagnostics = diagnostics) }
@@ -633,6 +659,7 @@ class PlayBillingManager private constructor(context: Context) {
                         entitlement = decision.entitlement,
                         ownsLifetime = it.ownsLifetime || ownership.ownsLifetime,
                         hasActiveSubscription = it.hasActiveSubscription || ownership.activeSubscriptionToken != null,
+                        activeSubscriptionProductID = ownership.activeSubscriptionProductID ?: it.activeSubscriptionProductID,
                         lastCheckedAtEpochMillis = if (decision.authoritativeOwned != null) checkedAt else it.lastCheckedAtEpochMillis,
                         lastOutcome = when {
                             decision.authoritativeOwned == true -> BillingActionOutcome.PURCHASED
@@ -699,7 +726,7 @@ class PlayBillingManager private constructor(context: Context) {
     companion object {
         /** Lifetime one-time product; also the key that binds the signed entitlement cache. */
         const val PRODUCT_ID = VoxPlayCatalog.LIFETIME_PRODUCT_ID
-        const val SUBSCRIPTION_PRODUCT_ID = VoxPlayCatalog.SUBSCRIPTION_PRODUCT_ID
+        val SUBSCRIPTION_PRODUCT_IDS: List<String> = VoxPlayCatalog.SUBSCRIPTION_PRODUCT_IDS
 
         @Volatile private var shared: PlayBillingManager? = null
 
