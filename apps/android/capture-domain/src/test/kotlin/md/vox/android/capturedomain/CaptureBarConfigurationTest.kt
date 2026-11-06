@@ -24,4 +24,26 @@ class CaptureBarConfigurationTest {
         assertFalse(CaptureBarAction.ADD_MEDIA in normalized.visibleActions)
         assertTrue(normalized.usesTwentyFourHourTimestamps)
     }
+
+    @Test fun routePinsOverrideTheGlobalRowOnlyForTheirRoute() {
+        val global = CaptureBarConfiguration(hiddenActions = setOf(CaptureBarAction.PASTE))
+        val pins = listOf(CaptureBarAction.TIMESTAMP, CaptureBarAction.CHECKLIST, CaptureBarAction.TIMESTAMP)
+        val configured = global.withRoutePins("meetings", pins)
+
+        assertEquals(listOf(CaptureBarAction.TIMESTAMP, CaptureBarAction.CHECKLIST), configured.pinnedActions("meetings"))
+        assertEquals(global.visibleActions, configured.pinnedActions("inbox"))
+        assertEquals(global.visibleActions, configured.pinnedActions(null))
+        assertTrue(configured.hasCustomPins("meetings"))
+        assertFalse(configured.hasCustomPins("inbox"))
+        assertEquals(listOf(CaptureBarAction.TIMESTAMP, CaptureBarAction.CHECKLIST), configured.forRoute("meetings").visibleActions)
+        assertEquals(global.visibleActions, configured.forRoute("inbox").visibleActions)
+        assertFalse(CaptureBarAction.TIMESTAMP in configured.unpinnedActions("meetings"))
+        assertEquals(CaptureBarAction.entries.size - 2, configured.unpinnedActions("meetings").size)
+
+        val emptied = configured.withRoutePins("meetings", emptyList())
+        assertTrue(emptied.forRoute("meetings").visibleActions.isEmpty())
+        val reset = emptied.withRoutePins("meetings", null)
+        assertFalse(reset.hasCustomPins("meetings"))
+        assertEquals(global, reset)
+    }
 }

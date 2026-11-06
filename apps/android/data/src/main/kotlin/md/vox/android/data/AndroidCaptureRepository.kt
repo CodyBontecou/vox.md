@@ -1908,6 +1908,18 @@ internal fun encodeCaptureBarConfiguration(configuration: CaptureBarConfiguratio
         put("twentyFourHour", configuration.usesTwentyFourHourTimestamps)
         put("timestampFormat", configuration.timestampFormat.wireName)
         put("railSide", configuration.railSide.name)
+        // Optional and additive: omitted when no route has its own pins, so existing
+        // payloads encode byte-for-byte as before and older readers ignore it.
+        if (configuration.routePins.isNotEmpty()) {
+            put(
+                "routePins",
+                buildJsonObject {
+                    configuration.routePins.toSortedMap().forEach { (routeID, pins) ->
+                        put(routeID, JsonArray(pins.map { JsonPrimitive(it.persistedName) }))
+                    }
+                },
+            )
+        }
         put("version", 1)
     },
 ).toString(StandardCharsets.UTF_8)
@@ -1927,6 +1939,12 @@ internal fun decodeCaptureBarConfiguration(value: String): CaptureBarConfigurati
         voiceRecordingResult = VoiceRecordingResult.fromPersistedName(
             root["voiceRecordingResult"]?.jsonPrimitive?.contentOrNull,
         ),
+        // Tolerant: a missing or malformed map means "no per-route pins", never a reset.
+        routePins = runCatching {
+            root["routePins"]?.jsonObject?.mapValues { (_, pins) ->
+                pins.jsonArray.mapNotNull { byName[it.jsonPrimitive.content] }
+            }
+        }.getOrNull().orEmpty(),
     ).normalized()
 }.getOrDefault(CaptureBarConfiguration())
 

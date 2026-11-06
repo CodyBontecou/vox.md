@@ -152,6 +152,11 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.heading
+import md.vox.android.ui.SignalToggleRow
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.Role
@@ -314,25 +319,38 @@ internal fun CapturePresetsScreen(
     createPreset: () -> Unit,
     saveEntryTemplate: (CaptureEntryTemplate) -> Unit,
     deleteEntryTemplate: (String) -> Unit,
+    /** The app's vault name, shown as the root of route paths that use the app destination. */
+    defaultDestinationName: String? = null,
+    /** Pins or unpins a route on the capture bar from its long-press menu; hidden when null. */
+    togglePinned: ((CapturePreset) -> Unit)? = null,
 ) {
     var editingEntryTemplateID by rememberSaveable { mutableStateOf<String?>(null) }
     val c = Signal.colors
     Scaffold(
         containerColor = c.bg,
         topBar = {
-            SignalTopBar(
-                title = voxString("Capture Presets"),
-                navigateBack = navigateBack,
-                backDescription = voxString("Back"),
-                actions = {
-                    SignalCircleButton(
-                        icon = Icons.Outlined.Add,
-                        contentDescription = voxString("New Capture Preset"),
-                        onClick = createPreset,
-                        enabled = !isBusy && collection != null,
-                    )
-                },
-            )
+            // Routes board header: a circular Back and a "New" pill; the page title sits below.
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(c.bg)
+                    .statusBarsPadding()
+                    .heightIn(min = 64.dp)
+                    .padding(start = 4.dp, end = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                SignalCircleButton(Icons.AutoMirrored.Outlined.ArrowBack, voxString("Back"), navigateBack, contentColor = c.text)
+                Spacer(Modifier.weight(1f))
+                val addRoute = voxString("Add Route")
+                SignalButton(
+                    text = voxString("New"),
+                    onClick = createPreset,
+                    size = SignalButtonSize.MEDIUM,
+                    icon = Icons.Outlined.Add,
+                    enabled = !isBusy && collection != null,
+                    modifier = Modifier.semantics { contentDescription = addRoute }.testTag("capture_presets_new"),
+                )
+            }
         },
     ) { padding ->
         if (collection == null) {
@@ -340,30 +358,55 @@ internal fun CapturePresetsScreen(
                 CircularProgressIndicator(modifier = Modifier.size(28.dp), strokeWidth = 3.dp, color = c.tint)
             }
         } else {
-            val sortedPresets = collection.presets
-                .sortedWith(compareByDescending<CapturePreset> { it.isPinned }.thenBy { it.name.lowercase() })
+            val defaultID = collection.activePreset.id
+            val sortedPresets = collection.presets.sortedWith(
+                compareByDescending<CapturePreset> { it.id == defaultID }
+                    .thenByDescending { it.isPinned }
+                    .thenBy { it.name.lowercase() },
+            )
             val enabledOrder = sortedPresets.filter(CapturePreset::isEnabled).map(CapturePreset::id)
             LazyColumn(
                 modifier = Modifier.fillMaxSize().padding(padding),
                 contentPadding = PaddingValues(start = SignalMetrics.PageGutter, end = SignalMetrics.PageGutter, bottom = 32.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                item {
-                    Text(voxString("A preset freezes the folder, filename, and frontmatter used by a capture before delivery starts."),
-                        modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 6.dp),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = c.muted,
-                    )
+                item(key = "routes-header") {
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(start = 4.dp, end = 4.dp, top = 4.dp, bottom = 6.dp),
+                        verticalArrangement = Arrangement.spacedBy(6.dp),
+                    ) {
+                        Text(
+                            voxString("Routes"),
+                            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.SemiBold),
+                            color = c.text,
+                            modifier = Modifier.semantics { heading() },
+                        )
+                        Text(
+                            voxString("Where a capture goes, and what happens on the way."),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = c.muted,
+                        )
+                    }
                 }
                 items(sortedPresets, key = CapturePreset::id) { preset ->
                     val orderIndex = enabledOrder.indexOf(preset.id).takeIf { it >= 0 }
                     PresetRouteCard(
                         preset = preset,
                         tone = if (preset.isEnabled) SignalRouteTone.forIndex(orderIndex) else SignalRouteTone.NEUTRAL,
-                        active = preset.id == collection.activePreset.id,
+                        isDefault = preset.id == defaultID,
+                        path = routeListPath(preset, defaultDestinationName),
                         isBusy = isBusy,
                         select = { selectPreset(preset.id) },
                         edit = { editPreset(preset.id) },
+                        togglePinned = togglePinned?.let { toggle -> { toggle(preset) } },
+                    )
+                }
+                item(key = "routes-footer") {
+                    Text(
+                        voxString("Long-press a route to make it your default or pin it to the capture bar."),
+                        modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 2.dp),
+                        style = SignalType.caption,
+                        color = c.muted,
                     )
                 }
                 item {
@@ -375,7 +418,7 @@ internal fun CapturePresetsScreen(
                         Column(modifier = Modifier.weight(1f).padding(start = 4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             SignalSectionLabel(voxString("Entry Templates"))
                             Text(
-                                voxString("Reusable prefix and suffix formatting. Linked presets receive edits automatically."),
+                                voxString("Reusable prefix and suffix formatting. Linked routes receive edits automatically."),
                                 style = SignalType.caption,
                                 color = c.muted,
                             )
@@ -426,82 +469,159 @@ internal fun CapturePresetsScreen(
 }
 
 /**
- * Signal route card for one capture preset: a toned route tile, the name with
- * Pinned / Disabled badges, the mono route path, and an edit affordance.
- * Tapping the card selects the preset (enabled presets only).
+ * Routes board card: a toned route tile, the name with DEFAULT / Pinned / Disabled
+ * badges, the mono route path and a chevron, then Input → Process → Deliver chips.
+ * Tapping opens the editor; long-press offers "Use as Capture Default" and capture
+ * bar pinning (also exposed as accessibility actions).
  */
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun PresetRouteCard(
     preset: CapturePreset,
     tone: SignalRouteTone,
-    active: Boolean,
+    isDefault: Boolean,
+    path: String,
     isBusy: Boolean,
     select: () -> Unit,
     edit: () -> Unit,
+    togglePinned: (() -> Unit)?,
 ) {
     val c = Signal.colors
-    val shape = RoundedCornerShape(SignalMetrics.CardRadius)
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(shape)
-            .background(if (active) c.secondarySoft else c.card)
-            .clickable(enabled = !isBusy && preset.isEnabled, onClick = select)
-            .padding(start = 16.dp, end = 4.dp, top = 16.dp, bottom = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        PresetRouteTile(
-            name = preset.name,
-            symbol = preset.symbol,
-            emoji = preset.emoji,
-            tone = tone,
-            modifier = Modifier.alpha(if (preset.isEnabled) 1f else 0.55f),
-        )
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+    val shape = RoundedCornerShape(18.dp)
+    var menuOpen by remember { mutableStateOf(false) }
+    val canSelect = !isBusy && preset.isEnabled && !isDefault
+    val useAsDefault = voxString("Use as Capture Default")
+    val pinLabel = voxString(if (preset.isPinned) "Unpin from Capture Bar" else "Pin to Capture Bar")
+    val editLabel = voxString("Edit")
+    val optionsLabel = voxString("More options")
+    Box {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(shape)
+                .background(c.card)
+                .border(1.dp, c.border, shape)
+                .combinedClickable(
+                    enabled = !isBusy,
+                    role = Role.Button,
+                    onClickLabel = editLabel,
+                    onLongClickLabel = optionsLabel,
+                    onLongClick = { menuOpen = true },
+                    onClick = edit,
+                )
+                .semantics {
+                    customActions = buildList {
+                        if (canSelect) add(CustomAccessibilityAction(useAsDefault) { select(); true })
+                        if (togglePinned != null && !isBusy) add(CustomAccessibilityAction(pinLabel) { togglePinned(); true })
+                    }
+                }
+                .testTag("capture_preset_route_${preset.id}")
+                .padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                PresetRouteTile(
+                    name = preset.name,
+                    symbol = preset.symbol,
+                    emoji = preset.emoji,
+                    tone = tone,
+                    modifier = Modifier.alpha(if (preset.isEnabled) 1f else 0.55f),
+                )
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        itemVerticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            preset.name,
+                            style = SignalType.rowTitle.copy(fontWeight = FontWeight.SemiBold, fontSize = 17.sp),
+                            color = if (preset.isEnabled) c.text else c.muted,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        if (isDefault) {
+                            Text(
+                                voxString("Default").uppercase(),
+                                style = SignalType.monoCaption.copy(fontSize = 10.5.sp),
+                                color = c.accentText,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(5.dp))
+                                    .background(c.accentSoft)
+                                    .padding(horizontal = 6.dp, vertical = 2.dp),
+                            )
+                        }
+                        if (preset.isPinned) {
+                            SignalBadge(voxString("Pinned"), color = c.well, contentColor = c.muted)
+                        }
+                        if (!preset.isEnabled) {
+                            SignalBadge(voxString("Disabled"), color = c.warningSoft, contentColor = c.warningText)
+                        }
+                    }
+                    if (path.isNotBlank()) {
+                        Text(
+                            path,
+                            style = SignalType.monoCaption.copy(fontSize = 11.5.sp),
+                            color = c.muted,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                }
+                Icon(
+                    Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                    contentDescription = null,
+                    tint = c.faint,
+                    modifier = Modifier.size(20.dp),
+                )
+            }
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
                 itemVerticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    preset.name,
-                    style = SignalType.rowTitle.copy(fontWeight = FontWeight.SemiBold, fontSize = 17.sp),
-                    color = if (preset.isEnabled) c.text else c.muted,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                if (preset.isPinned) {
-                    SignalBadge(voxString("Pinned"), color = c.well, contentColor = c.muted)
-                }
-                if (!preset.isEnabled) {
-                    SignalBadge(voxString("Disabled"), color = c.warningSoft, contentColor = c.warningText)
+                routeStepChips(preset).forEachIndexed { index, chip ->
+                    if (index > 0) {
+                        Text("→", style = SignalType.caption.copy(fontSize = 12.sp), color = c.faint, modifier = Modifier.clearAndSetSemantics {})
+                    }
+                    Text(
+                        chip,
+                        style = SignalType.caption.copy(fontSize = 12.5.sp, lineHeight = 16.sp),
+                        color = c.secondaryText,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .background(c.well)
+                            .padding(horizontal = 9.dp, vertical = 4.dp),
+                    )
                 }
             }
-            Text(
-                presetRouteDescription(preset),
-                style = SignalType.monoCaption,
-                color = c.muted,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
         }
-        if (active) {
-            Icon(
-                Icons.Outlined.CheckCircle,
-                contentDescription = voxString("Selected"),
-                tint = c.accentText,
-                modifier = Modifier.size(22.dp),
+        DropdownMenu(
+            expanded = menuOpen,
+            onDismissRequest = { menuOpen = false },
+            containerColor = c.card,
+        ) {
+            DropdownMenuItem(
+                text = { Text(editLabel) },
+                leadingIcon = { Icon(Icons.Outlined.Edit, contentDescription = null) },
+                onClick = { menuOpen = false; edit() },
             )
-        }
-        IconButton(onClick = edit, enabled = !isBusy) {
-            Icon(
-                Icons.Outlined.Edit,
-                contentDescription = voxFormat("%@: %@", voxString("Edit"), preset.name),
-                tint = if (isBusy) c.faint else c.muted,
-                modifier = Modifier.size(20.dp),
+            DropdownMenuItem(
+                text = { Text(useAsDefault) },
+                leadingIcon = { Icon(Icons.Outlined.CheckCircle, contentDescription = null) },
+                enabled = canSelect,
+                onClick = { menuOpen = false; select() },
             )
+            if (togglePinned != null) {
+                DropdownMenuItem(
+                    text = { Text(pinLabel) },
+                    leadingIcon = { Icon(Icons.Outlined.Dashboard, contentDescription = null) },
+                    enabled = !isBusy,
+                    onClick = { menuOpen = false; togglePinned() },
+                )
+            }
         }
     }
 }
@@ -939,6 +1059,26 @@ internal data class CapturePresetEditorDraft(
     }
 }
 
+/** What the route editor is showing: the step overview (null), one step's settings, or quick actions. */
+internal enum class RouteEditorPage { CAPTURE, PROCESS, SHAPE, DELIVER, QUICK_ACTIONS }
+
+private fun RouteEditorStep.page(): RouteEditorPage = when (this) {
+    RouteEditorStep.CAPTURE -> RouteEditorPage.CAPTURE
+    RouteEditorStep.PROCESS -> RouteEditorPage.PROCESS
+    RouteEditorStep.SHAPE -> RouteEditorPage.SHAPE
+    RouteEditorStep.DELIVER -> RouteEditorPage.DELIVER
+}
+
+/**
+ * Route editor (Route editor board): a header, the CAPTURE → PROCESS → SHAPE → DELIVER
+ * rail, a Markdown preview, the route's quick actions and two quick toggles. Each step
+ * opens a sub-page holding that step's existing settings; nothing is saved until Done.
+ *
+ * - CAPTURE: voice and audio, Watch output, location, audio filename.
+ * - PROCESS: on-device processing (mode, scope, custom instruction, prompt, alt text).
+ * - SHAPE: entry formatting and template, attachments, retry marker, metadata, transcript property.
+ * - DELIVER: vault, note target and placement, heading position, URL delivery, file export.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CapturePresetEditorScreen(
@@ -948,8 +1088,22 @@ internal fun CapturePresetEditorScreen(
     navigateBack: () -> Unit,
     save: (CapturePreset) -> Unit,
     delete: (() -> Unit)?,
+    /** True when this route is the app's default (active) route. */
+    isDefault: Boolean = false,
+    /** The app vault's name, used as the path root when the route has no vault of its own. */
+    defaultDestinationName: String? = null,
+    /** Capture bar configuration holding per-route quick actions; the card is hidden when null. */
+    captureBar: CaptureBarConfiguration? = null,
+    /** Applies a route's quick actions immediately (`null` = follow the global row). */
+    setRouteQuickActions: ((String, List<CaptureBarAction>?) -> Unit)? = null,
+    /** Opens directly on a sub-page; used by debug stories. */
+    initialPage: RouteEditorPage? = null,
 ) {
     var draft by remember(preset?.id) { mutableStateOf(CapturePresetEditorDraft.from(preset)) }
+    var pageName by rememberSaveable(preset?.id) { mutableStateOf(initialPage?.name) }
+    val page = pageName?.let(RouteEditorPage::valueOf)
+    BackHandler(enabled = page != null) { pageName = null }
+
     val metadata = parseMetadataFields(draft.metadataText)
     val routeIsValid = when (draft.noteTargetKind) {
         CaptureNoteTargetKind.EXISTING_NOTE -> draft.existingNotePath.trim().endsWith(".md", ignoreCase = true)
@@ -982,25 +1136,360 @@ internal fun CapturePresetEditorScreen(
         CaptureLocationLabelLookupClass.OFFLINE,
         -> draft.locationLabelConsentVersion == null
     }
+    val transcriptPropertyIsValid =
+        draft.transcriptPropertyName.isBlank() || normalizedTranscriptProperty(draft.transcriptPropertyName) != null
     val valid = draft.name.trim().isNotEmpty() && routeIsValid && headingIsValid && processingIsValid &&
-        exportIsValid && locationIsValid && locationLabelConsentIsValid && metadata != null &&
-        (draft.transcriptPropertyName.isBlank() || normalizedTranscriptProperty(draft.transcriptPropertyName) != null)
+        exportIsValid && locationIsValid && locationLabelConsentIsValid && metadata != null && transcriptPropertyIsValid
+    val invalidSteps = buildSet {
+        if (!locationIsValid || !locationLabelConsentIsValid) add(RouteEditorStep.CAPTURE)
+        if (!processingIsValid) add(RouteEditorStep.PROCESS)
+        if (metadata == null || !transcriptPropertyIsValid) add(RouteEditorStep.SHAPE)
+        if (!routeIsValid || !headingIsValid || !exportIsValid) add(RouteEditorStep.DELIVER)
+    }
+    val revision = preset?.revision ?: 1
+    val livePreset = draft.toPreset(revision, metadata.orEmpty())
+    val onDone = { save(draft.toPreset(revision, requireNotNull(metadata))) }
     val c = Signal.colors
 
+    when (page) {
+        RouteEditorPage.QUICK_ACTIONS -> if (captureBar != null && setRouteQuickActions != null) {
+            RouteQuickActionsScreen(
+                routeName = draft.name.ifBlank { voxString("this route") },
+                routeID = draft.id,
+                captureBar = captureBar,
+                isBusy = isBusy,
+                navigateBack = { pageName = null },
+                setActions = { setRouteQuickActions(draft.id, it) },
+            )
+        } else {
+            LaunchedEffect(Unit) { pageName = null }
+        }
+        RouteEditorPage.CAPTURE, RouteEditorPage.PROCESS, RouteEditorPage.SHAPE, RouteEditorPage.DELIVER -> {
+            val step = RouteEditorStep.valueOf(page.name)
+            RouteEditorStepPage(step = step, navigateBack = { pageName = null }) {
+                when (step) {
+                    RouteEditorStep.CAPTURE -> {
+                        CapturePresetVoiceEditor(
+                            speakerDiarizationEnabled = draft.speakerDiarizationEnabled,
+                            watchOutputMode = draft.watchOutputMode,
+                            audioSaveMode = draft.audioSaveMode,
+                            embedAudio = draft.embedAudio,
+                            audioEmbedPlacement = draft.audioEmbedPlacement,
+                            setSpeakerDiarizationEnabled = { draft = draft.copy(speakerDiarizationEnabled = it) },
+                            setWatchOutputMode = { draft = draft.copy(watchOutputMode = it) },
+                            setAudioSaveMode = { draft = draft.copy(audioSaveMode = it) },
+                            setEmbedAudio = { draft = draft.copy(embedAudio = it) },
+                            setAudioEmbedPlacement = { draft = draft.copy(audioEmbedPlacement = it) },
+                        )
+                        if (draft.audioSaveMode != CaptureAudioSaveMode.OFF || draft.watchOutputMode == CaptureWatchOutputMode.RECORDING_ONLY) {
+                            SignalGroup(title = null, modifier = Modifier.padding(top = 14.dp)) {
+                                PresetBlock { AudioFilenameControls(draft.audioFilenameTemplate, draft.name) { draft = draft.copy(audioFilenameTemplate = it) } }
+                            }
+                        }
+                        CapturePresetLocationEditor(
+                            locationEnabled = draft.locationEnabled,
+                            locationPrecision = draft.locationPrecision,
+                            locationUnavailableBehavior = draft.locationUnavailableBehavior,
+                            locationMetadataEnabled = draft.locationMetadataEnabled,
+                            locationOutputMode = draft.locationOutputMode,
+                            locationStructuredFields = draft.locationStructuredFields,
+                            locationCollectionKey = draft.locationCollectionKey,
+                            locationAdvancedTemplate = draft.locationAdvancedTemplate,
+                            locationLabelLookupClass = draft.locationLabelLookupClass,
+                            locationLabelConsentVersion = draft.locationLabelConsentVersion,
+                            setLocationEnabled = { draft = draft.copy(locationEnabled = it) },
+                            setLocationPrecision = { draft = draft.copy(locationPrecision = it) },
+                            setLocationUnavailableBehavior = { draft = draft.copy(locationUnavailableBehavior = it) },
+                            setLocationMetadataEnabled = { draft = draft.copy(locationMetadataEnabled = it) },
+                            setLocationOutputMode = { draft = draft.copy(locationOutputMode = it) },
+                            setLocationStructuredFields = { draft = draft.copy(locationStructuredFields = it) },
+                            setLocationCollectionKey = { draft = draft.copy(locationCollectionKey = it) },
+                            setLocationAdvancedTemplate = { draft = draft.copy(locationAdvancedTemplate = it) },
+                            setLocationLabelConsent = { consented ->
+                                draft = draft.copy(
+                                    locationLabelLookupClass = if (consented) {
+                                        CaptureLocationLabelLookupClass.SYSTEM_MAY_USE_NETWORK
+                                    } else {
+                                        CaptureLocationLabelLookupClass.NONE
+                                    },
+                                    locationLabelConsentVersion = if (consented) CURRENT_LOCATION_LABEL_CONSENT_VERSION else null,
+                                )
+                            },
+                        )
+                    }
+                    RouteEditorStep.PROCESS -> CapturePresetProcessingEditor(
+                        processingEnabled = draft.processingEnabled,
+                        processingScope = draft.processingScope,
+                        processingMode = draft.processingMode,
+                        customInstruction = draft.customInstruction,
+                        capturePrompt = draft.capturePrompt,
+                        generateImageAltText = draft.generateImageAltText,
+                        setProcessingEnabled = { draft = draft.copy(processingEnabled = it) },
+                        setProcessingScope = { draft = draft.copy(processingScope = it) },
+                        setProcessingMode = { draft = draft.copy(processingMode = it) },
+                        setCustomInstruction = { draft = draft.copy(customInstruction = it) },
+                        setCapturePrompt = { draft = draft.copy(capturePrompt = it) },
+                        setGenerateImageAltText = { draft = draft.copy(generateImageAltText = it) },
+                    )
+                    RouteEditorStep.SHAPE -> {
+                        CapturePresetDestinationEditorFor(draft, entryTemplates, showDestination = false, showEntry = true) { draft = it }
+                        CapturePresetMetadataEditor(
+                            metadataScope = draft.metadataScope,
+                            metadataText = draft.metadataText,
+                            metadataIsValid = metadata != null,
+                            setMetadataScope = { draft = draft.copy(metadataScope = it) },
+                            setMetadataText = { draft = draft.copy(metadataText = it) },
+                        )
+                        SignalGroup(title = null, modifier = Modifier.padding(top = 14.dp)) {
+                            PresetBlock {
+                                TranscriptPropertyControls(draft.transcriptPropertyName, draft.includeTranscriptInBody,
+                                    { draft = draft.copy(transcriptPropertyName = it) }, { draft = draft.copy(includeTranscriptInBody = it) })
+                            }
+                        }
+                    }
+                    RouteEditorStep.DELIVER -> {
+                        SignalGroup(title = null, modifier = Modifier.padding(top = 14.dp)) {
+                            PresetBlock { PresetVaultControl(draft.destination) { draft = draft.copy(destination = it) } }
+                        }
+                        CapturePresetDestinationEditorFor(draft, entryTemplates, showDestination = true, showEntry = false) { draft = it }
+                        SignalGroup(title = null, modifier = Modifier.padding(top = 14.dp)) {
+                            if (draft.noteTargetKind != CaptureNoteTargetKind.NEW_NOTE && draft.placement == CapturePlacementKind.BENEATH_HEADING) {
+                                PresetBlock {
+                                    PresetChoiceRow(voxString("Position in heading"),
+                                        listOf("TOP" to voxString("Top"), "BOTTOM" to voxString("Bottom")), draft.headingPosition.name,
+                                        { draft = draft.copy(headingPosition = CaptureHeadingPosition.valueOf(it)) })
+                                }
+                                SignalRowDivider()
+                            }
+                            PresetBlock { URLDeliverySettingsControl(draft.urlDelivery) { draft = draft.copy(urlDelivery = it) } }
+                        }
+                        CapturePresetTranscriptExportEditor(
+                            settings = draft.exportSettings,
+                            audioSaveMode = draft.audioSaveMode,
+                            attachmentsFolder = draft.attachmentsFolder,
+                            onSettingsChanged = { draft = draft.copy(exportSettings = it) },
+                        )
+                    }
+                }
+            }
+        }
+        null -> Scaffold(
+            containerColor = c.bg,
+            topBar = {
+                // Route editor board header: circular Back and a "Done" pill that saves.
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(c.bg)
+                        .statusBarsPadding()
+                        .heightIn(min = 64.dp)
+                        .padding(start = 4.dp, end = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    SignalCircleButton(Icons.AutoMirrored.Outlined.ArrowBack, voxString("Back"), navigateBack, contentColor = c.text)
+                    Spacer(Modifier.weight(1f))
+                    SignalButton(
+                        text = voxString("Done"),
+                        onClick = onDone,
+                        size = SignalButtonSize.MEDIUM,
+                        enabled = valid && !isBusy,
+                        loading = isBusy,
+                        modifier = Modifier.testTag("capture_preset_editor_done"),
+                    )
+                }
+            },
+        ) { padding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = SignalMetrics.PageGutter)
+                    .padding(top = 4.dp, bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                PresetEditorSummary(
+                    name = draft.name,
+                    symbol = draft.symbol,
+                    emoji = draft.emoji,
+                    isEnabled = draft.isEnabled,
+                    subtitle = routeEditorSubtitle(isDefault = isDefault, isEnabled = draft.isEnabled, isPinned = draft.isPinned),
+                )
+                // A new route needs a name before anything else; existing routes keep identity below.
+                if (preset == null) RouteIdentityEditor(draft) { draft = it }
+                Spacer(Modifier.height(8.dp))
+                RouteStepRail(
+                    steps = routeStepSummaries(
+                        preset = livePreset,
+                        entryTemplateName = entryTemplates.firstOrNull { it.id == draft.entryTemplateID }?.name,
+                        rootName = defaultDestinationName,
+                        invalidSteps = invalidSteps,
+                    ),
+                    openStep = { pageName = it.page().name },
+                )
+                RoutePreviewCard(routeSamplePreview(livePreset))
+                if (captureBar != null && setRouteQuickActions != null) {
+                    RouteQuickActionsCard(
+                        actions = captureBar.pinnedActions(draft.id),
+                        onClick = { pageName = RouteEditorPage.QUICK_ACTIONS.name },
+                        enabled = true,
+                        modifier = Modifier.padding(top = 8.dp),
+                    )
+                }
+                // Quick toggles; the same settings as CAPTURE › Voice and Audio / Location.
+                SignalGroup(title = null, modifier = Modifier.padding(top = 8.dp)) {
+                    SignalToggleRow(
+                        title = voxString("Speaker labels"),
+                        checked = draft.speakerDiarizationEnabled,
+                        onCheckedChange = { draft = draft.copy(speakerDiarizationEnabled = it) },
+                    )
+                    SignalRowDivider()
+                    SignalToggleRow(
+                        title = voxString("Attach location"),
+                        checked = draft.locationEnabled,
+                        onCheckedChange = { draft = draft.copy(locationEnabled = it) },
+                    )
+                }
+                if (preset != null) RouteIdentityEditor(draft) { draft = it }
+                SignalCard(
+                    modifier = Modifier.fillMaxWidth().padding(top = 14.dp),
+                    color = c.well,
+                    borderColor = null,
+                    radius = SignalMetrics.GroupRadius,
+                    padding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                ) {
+                    Text(voxString("Route changes only affect new captures. A pending capture keeps the exact route it started with."),
+                        style = SignalType.caption,
+                        color = c.muted,
+                    )
+                }
+                if (delete != null) {
+                    SignalButton(
+                        text = voxString("Delete Route"),
+                        onClick = delete,
+                        modifier = Modifier.padding(top = 12.dp),
+                        variant = SignalButtonVariant.DESTRUCTIVE,
+                        enabled = !isBusy,
+                        icon = Icons.Outlined.Delete,
+                    )
+                }
+                Spacer(Modifier.height(24.dp))
+            }
+        }
+    }
+}
+
+/** Header subtitle: "Default route · pinned to Capture Bar", "Disabled", or "Route". */
+@Composable
+private fun routeEditorSubtitle(isDefault: Boolean, isEnabled: Boolean, isPinned: Boolean): String {
+    val parts = buildList {
+        if (isDefault) add(voxString("Default route"))
+        if (!isEnabled) add(voxString("Disabled"))
+        if (isPinned) add(voxFormat("pinned to %@", voxString("Capture Bar")))
+    }.ifEmpty { listOf(voxString("Route")) }
+    val joined = parts.joinToString(" · ")
+    return joined.replaceFirstChar { it.titlecase(Locale.getDefault()) }
+}
+
+@Composable
+private fun RouteIdentityEditor(draft: CapturePresetEditorDraft, update: (CapturePresetEditorDraft) -> Unit) {
+    CapturePresetIdentityEditor(
+        name = draft.name,
+        symbol = draft.symbol,
+        emoji = draft.emoji,
+        isEnabled = draft.isEnabled,
+        isPinned = draft.isPinned,
+        setName = { update(draft.copy(name = it)) },
+        setSymbol = { update(draft.copy(symbol = it, emoji = null)) },
+        setEmoji = { update(draft.copy(emoji = it)) },
+        setEnabled = { update(draft.copy(isEnabled = it)) },
+        setPinned = { update(draft.copy(isPinned = it)) },
+    )
+}
+
+/** The destination editor bound to a draft, showing its Destination and/or Entry groups. */
+@Composable
+private fun CapturePresetDestinationEditorFor(
+    draft: CapturePresetEditorDraft,
+    entryTemplates: List<CaptureEntryTemplate>,
+    showDestination: Boolean,
+    showEntry: Boolean,
+    update: (CapturePresetEditorDraft) -> Unit,
+) {
+    CapturePresetDestinationEditor(
+        noteTargetKind = draft.noteTargetKind,
+        rollingPeriod = draft.rollingPeriod,
+        logicalFolder = draft.logicalFolder,
+        noteNameTemplate = draft.noteNameTemplate,
+        existingNotePath = draft.existingNotePath,
+        placement = draft.placement,
+        headingTitle = draft.headingTitle,
+        headingLevel = draft.headingLevel,
+        missingHeadingBehavior = draft.missingHeadingBehavior,
+        entryPrefix = draft.entryPrefix,
+        entrySuffix = draft.entrySuffix,
+        entryTemplateID = draft.entryTemplateID,
+        entryTemplates = entryTemplates,
+        attachmentsFolder = draft.attachmentsFolder,
+        retryProtectionEnabled = draft.retryProtectionEnabled,
+        setNoteTargetKind = { kind ->
+            update(
+                draft.copy(
+                    noteTargetKind = kind,
+                    noteNameTemplate = when {
+                        kind == CaptureNoteTargetKind.ROLLING_NOTE && draft.noteNameTemplate == "capture-{id}.md" -> "{period}.md"
+                        kind == CaptureNoteTargetKind.NEW_NOTE && draft.noteNameTemplate == "{period}.md" -> "capture-{id}.md"
+                        else -> draft.noteNameTemplate
+                    },
+                ),
+            )
+        },
+        setRollingPeriod = { update(draft.copy(rollingPeriod = it)) },
+        setLogicalFolder = { update(draft.copy(logicalFolder = it)) },
+        setNoteNameTemplate = { update(draft.copy(noteNameTemplate = it)) },
+        setExistingNotePath = { update(draft.copy(existingNotePath = it)) },
+        setPlacement = { update(draft.copy(placement = it)) },
+        setHeadingTitle = { update(draft.copy(headingTitle = it)) },
+        setHeadingLevel = { update(draft.copy(headingLevel = it)) },
+        setMissingHeadingBehavior = { update(draft.copy(missingHeadingBehavior = it)) },
+        setEntryPrefix = { update(draft.copy(entryPrefix = it)) },
+        setEntrySuffix = { update(draft.copy(entrySuffix = it)) },
+        setEntryTemplateID = { templateID ->
+            val template = entryTemplates.firstOrNull { it.id == templateID }
+            update(
+                if (template == null) {
+                    draft.copy(entryTemplateID = null)
+                } else {
+                    draft.copy(
+                        entryTemplateID = template.id,
+                        entryPrefix = template.entryPrefix,
+                        entrySuffix = template.entrySuffix,
+                    )
+                },
+            )
+        },
+        setAttachmentsFolder = { update(draft.copy(attachmentsFolder = it)) },
+        setRetryProtectionEnabled = { update(draft.copy(retryProtectionEnabled = it)) },
+        showDestination = showDestination,
+        showEntry = showEntry,
+    )
+}
+
+/** One step's settings, on its own page with a back button to the step overview. */
+@Composable
+private fun RouteEditorStepPage(
+    step: RouteEditorStep,
+    navigateBack: () -> Unit,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    val c = Signal.colors
     Scaffold(
         containerColor = c.bg,
         topBar = {
             SignalTopBar(
-                title = voxString(if (preset == null) "New Preset" else "Edit Preset"),
+                title = voxString(step.kindSource),
                 navigateBack = navigateBack,
                 backDescription = voxString("Back"),
-                actions = {
-                    PresetEditorSaveButton(
-                        isBusy = isBusy,
-                        enabled = valid && !isBusy,
-                        onClick = { save(draft.toPreset(preset?.revision ?: 1, requireNotNull(metadata))) },
-                    )
-                },
             )
         },
     ) { padding ->
@@ -1010,227 +1499,17 @@ internal fun CapturePresetEditorScreen(
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = SignalMetrics.PageGutter)
-                .padding(top = 4.dp, bottom = 16.dp),
+                .padding(top = 4.dp, bottom = 32.dp)
+                .testTag("route_step_page_${step.number}"),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            PresetEditorSummary(
-                name = draft.name,
-                symbol = draft.symbol,
-                emoji = draft.emoji,
-                isEnabled = draft.isEnabled,
-                route = presetRouteDescription(draft.toPreset(preset?.revision ?: 1, metadata.orEmpty())),
-            )
-            CapturePresetIdentityEditor(
-                name = draft.name,
-                symbol = draft.symbol,
-                emoji = draft.emoji,
-                isEnabled = draft.isEnabled,
-                isPinned = draft.isPinned,
-                setName = { draft = draft.copy(name = it) },
-                setSymbol = { draft = draft.copy(symbol = it, emoji = null) },
-                setEmoji = { draft = draft.copy(emoji = it) },
-                setEnabled = { draft = draft.copy(isEnabled = it) },
-                setPinned = { draft = draft.copy(isPinned = it) },
-            )
-            SignalGroup(title = null, modifier = Modifier.padding(top = 14.dp)) {
-                PresetBlock { PresetVaultControl(draft.destination) { draft = draft.copy(destination = it) } }
-            }
-            CapturePresetDestinationEditor(
-                noteTargetKind = draft.noteTargetKind,
-                rollingPeriod = draft.rollingPeriod,
-                logicalFolder = draft.logicalFolder,
-                noteNameTemplate = draft.noteNameTemplate,
-                existingNotePath = draft.existingNotePath,
-                placement = draft.placement,
-                headingTitle = draft.headingTitle,
-                headingLevel = draft.headingLevel,
-                missingHeadingBehavior = draft.missingHeadingBehavior,
-                entryPrefix = draft.entryPrefix,
-                entrySuffix = draft.entrySuffix,
-                entryTemplateID = draft.entryTemplateID,
-                entryTemplates = entryTemplates,
-                attachmentsFolder = draft.attachmentsFolder,
-                retryProtectionEnabled = draft.retryProtectionEnabled,
-                setNoteTargetKind = { kind ->
-                    draft = draft.copy(
-                        noteTargetKind = kind,
-                        noteNameTemplate = when {
-                            kind == CaptureNoteTargetKind.ROLLING_NOTE && draft.noteNameTemplate == "capture-{id}.md" -> "{period}.md"
-                            kind == CaptureNoteTargetKind.NEW_NOTE && draft.noteNameTemplate == "{period}.md" -> "capture-{id}.md"
-                            else -> draft.noteNameTemplate
-                        },
-                    )
-                },
-                setRollingPeriod = { draft = draft.copy(rollingPeriod = it) },
-                setLogicalFolder = { draft = draft.copy(logicalFolder = it) },
-                setNoteNameTemplate = { draft = draft.copy(noteNameTemplate = it) },
-                setExistingNotePath = { draft = draft.copy(existingNotePath = it) },
-                setPlacement = { draft = draft.copy(placement = it) },
-                setHeadingTitle = { draft = draft.copy(headingTitle = it) },
-                setHeadingLevel = { draft = draft.copy(headingLevel = it) },
-                setMissingHeadingBehavior = { draft = draft.copy(missingHeadingBehavior = it) },
-                setEntryPrefix = { draft = draft.copy(entryPrefix = it) },
-                setEntrySuffix = { draft = draft.copy(entrySuffix = it) },
-                setEntryTemplateID = { templateID ->
-                    val template = entryTemplates.firstOrNull { it.id == templateID }
-                    draft = if (template == null) {
-                        draft.copy(entryTemplateID = null)
-                    } else {
-                        draft.copy(
-                            entryTemplateID = template.id,
-                            entryPrefix = template.entryPrefix,
-                            entrySuffix = template.entrySuffix,
-                        )
-                    }
-                },
-                setAttachmentsFolder = { draft = draft.copy(attachmentsFolder = it) },
-                setRetryProtectionEnabled = { draft = draft.copy(retryProtectionEnabled = it) },
-            )
-            SignalGroup(title = null, modifier = Modifier.padding(top = 14.dp)) {
-                PresetBlock {
-                    TranscriptPropertyControls(draft.transcriptPropertyName, draft.includeTranscriptInBody,
-                        { draft = draft.copy(transcriptPropertyName = it) }, { draft = draft.copy(includeTranscriptInBody = it) })
-                }
-                SignalRowDivider()
-                PresetBlock { URLDeliverySettingsControl(draft.urlDelivery) { draft = draft.copy(urlDelivery = it) } }
-                if (draft.noteTargetKind != CaptureNoteTargetKind.NEW_NOTE && draft.placement == CapturePlacementKind.BENEATH_HEADING) {
-                    SignalRowDivider()
-                    PresetBlock {
-                        PresetChoiceRow(voxString("Position in heading"),
-                            listOf("TOP" to voxString("Top"), "BOTTOM" to voxString("Bottom")), draft.headingPosition.name,
-                            { draft = draft.copy(headingPosition = CaptureHeadingPosition.valueOf(it)) })
-                    }
-                }
-                if (draft.audioSaveMode != CaptureAudioSaveMode.OFF || draft.watchOutputMode == CaptureWatchOutputMode.RECORDING_ONLY) {
-                    SignalRowDivider()
-                    PresetBlock { AudioFilenameControls(draft.audioFilenameTemplate, draft.name) { draft = draft.copy(audioFilenameTemplate = it) } }
-                }
-            }
-            CapturePresetMetadataEditor(
-                metadataScope = draft.metadataScope,
-                metadataText = draft.metadataText,
-                metadataIsValid = metadata != null,
-                setMetadataScope = { draft = draft.copy(metadataScope = it) },
-                setMetadataText = { draft = draft.copy(metadataText = it) },
-            )
-            CapturePresetVoiceEditor(
-                speakerDiarizationEnabled = draft.speakerDiarizationEnabled,
-                watchOutputMode = draft.watchOutputMode,
-                audioSaveMode = draft.audioSaveMode,
-                embedAudio = draft.embedAudio,
-                audioEmbedPlacement = draft.audioEmbedPlacement,
-                setSpeakerDiarizationEnabled = { draft = draft.copy(speakerDiarizationEnabled = it) },
-                setWatchOutputMode = { draft = draft.copy(watchOutputMode = it) },
-                setAudioSaveMode = { draft = draft.copy(audioSaveMode = it) },
-                setEmbedAudio = { draft = draft.copy(embedAudio = it) },
-                setAudioEmbedPlacement = { draft = draft.copy(audioEmbedPlacement = it) },
-            )
-            CapturePresetTranscriptExportEditor(
-                settings = draft.exportSettings,
-                audioSaveMode = draft.audioSaveMode,
-                attachmentsFolder = draft.attachmentsFolder,
-                onSettingsChanged = { draft = draft.copy(exportSettings = it) },
-            )
-            CapturePresetProcessingEditor(
-                processingEnabled = draft.processingEnabled,
-                processingScope = draft.processingScope,
-                processingMode = draft.processingMode,
-                customInstruction = draft.customInstruction,
-                capturePrompt = draft.capturePrompt,
-                generateImageAltText = draft.generateImageAltText,
-                setProcessingEnabled = { draft = draft.copy(processingEnabled = it) },
-                setProcessingScope = { draft = draft.copy(processingScope = it) },
-                setProcessingMode = { draft = draft.copy(processingMode = it) },
-                setCustomInstruction = { draft = draft.copy(customInstruction = it) },
-                setCapturePrompt = { draft = draft.copy(capturePrompt = it) },
-                setGenerateImageAltText = { draft = draft.copy(generateImageAltText = it) },
-            )
-            CapturePresetLocationEditor(
-                locationEnabled = draft.locationEnabled,
-                locationPrecision = draft.locationPrecision,
-                locationUnavailableBehavior = draft.locationUnavailableBehavior,
-                locationMetadataEnabled = draft.locationMetadataEnabled,
-                locationOutputMode = draft.locationOutputMode,
-                locationStructuredFields = draft.locationStructuredFields,
-                locationCollectionKey = draft.locationCollectionKey,
-                locationAdvancedTemplate = draft.locationAdvancedTemplate,
-                locationLabelLookupClass = draft.locationLabelLookupClass,
-                locationLabelConsentVersion = draft.locationLabelConsentVersion,
-                setLocationEnabled = { draft = draft.copy(locationEnabled = it) },
-                setLocationPrecision = { draft = draft.copy(locationPrecision = it) },
-                setLocationUnavailableBehavior = { draft = draft.copy(locationUnavailableBehavior = it) },
-                setLocationMetadataEnabled = { draft = draft.copy(locationMetadataEnabled = it) },
-                setLocationOutputMode = { draft = draft.copy(locationOutputMode = it) },
-                setLocationStructuredFields = { draft = draft.copy(locationStructuredFields = it) },
-                setLocationCollectionKey = { draft = draft.copy(locationCollectionKey = it) },
-                setLocationAdvancedTemplate = { draft = draft.copy(locationAdvancedTemplate = it) },
-                setLocationLabelConsent = { consented ->
-                    draft = draft.copy(
-                        locationLabelLookupClass = if (consented) {
-                            CaptureLocationLabelLookupClass.SYSTEM_MAY_USE_NETWORK
-                        } else {
-                            CaptureLocationLabelLookupClass.NONE
-                        },
-                        locationLabelConsentVersion = if (consented) CURRENT_LOCATION_LABEL_CONSENT_VERSION else null,
-                    )
-                },
-            )
-            SignalCard(
-                modifier = Modifier.fillMaxWidth().padding(top = 14.dp),
-                color = c.well,
-                borderColor = null,
-                radius = SignalMetrics.GroupRadius,
-                padding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
-            ) {
-                Text(voxString("Preset changes only affect new captures. A pending capture keeps the exact preset snapshot it started with."),
-                    style = SignalType.caption,
-                    color = c.muted,
-                )
-            }
-            if (delete != null) {
-                SignalButton(
-                    text = voxString("Delete Preset"),
-                    onClick = delete,
-                    modifier = Modifier.padding(top = 12.dp),
-                    variant = SignalButtonVariant.DESTRUCTIVE,
-                    enabled = !isBusy,
-                    icon = Icons.Outlined.Delete,
-                )
-            }
-            Spacer(Modifier.height(24.dp))
-        }
-    }
-}
-
-/** Circular save control in the editor header; indigo when the draft can be saved. */
-@Composable
-private fun PresetEditorSaveButton(isBusy: Boolean, enabled: Boolean, onClick: () -> Unit) {
-    val c = Signal.colors
-    if (isBusy) {
-        Box(
-            modifier = Modifier
-                .size(SignalMetrics.ControlMedium)
-                .clip(CircleShape)
-                .background(c.card)
-                .border(1.dp, c.border, CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp, color = c.tint)
-        }
-    } else {
-        SignalCircleButton(
-            icon = Icons.Outlined.Check,
-            contentDescription = voxString("Save Capture Preset"),
-            onClick = onClick,
-            filled = if (enabled) c.accent else null,
-            enabled = enabled,
+            content = content,
         )
     }
 }
 
-/** Route header under the page title: toned tile, live name and the mono route path. */
+/** Route header: toned tile, live name and a status subtitle ("Default route · pinned to Capture Bar"). */
 @Composable
-private fun PresetEditorSummary(name: String, symbol: String, emoji: String?, isEnabled: Boolean, route: String) {
+private fun PresetEditorSummary(name: String, symbol: String, emoji: String?, isEnabled: Boolean, subtitle: String) {
     val c = Signal.colors
     Row(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 4.dp),
@@ -1241,21 +1520,19 @@ private fun PresetEditorSummary(name: String, symbol: String, emoji: String?, is
             name = name,
             symbol = symbol,
             emoji = emoji,
-            tone = if (isEnabled) SignalRouteTone.INK else SignalRouteTone.NEUTRAL,
+            tone = if (isEnabled) SignalRouteTone.PRIMARY else SignalRouteTone.NEUTRAL,
             size = 52.dp,
         )
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(
                 name.ifBlank { voxString("Name") },
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.SemiBold),
                 color = if (name.isBlank()) c.faint else c.text,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.semantics { heading() },
             )
-            Text(route, style = SignalType.monoCaption, color = c.muted, maxLines = 2, overflow = TextOverflow.Ellipsis)
-            if (!isEnabled) {
-                SignalBadge(voxString("Disabled"), color = c.warningSoft, contentColor = c.warningText, modifier = Modifier.padding(top = 2.dp))
-            }
+            Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = c.muted)
         }
     }
 }
@@ -1287,9 +1564,9 @@ internal fun CapturePresetIdentityEditor(
             )
         }
         SignalRowDivider()
-        PresetSwitchRow(voxString("Enabled"), voxString("Show this preset in capture pickers."), isEnabled, setEnabled)
+        PresetSwitchRow(voxString("Enabled"), voxString("Show this route in capture pickers."), isEnabled, setEnabled)
         SignalRowDivider()
-        PresetSwitchRow(voxString("Pinned"), voxString("Keep this preset at the top of the list."), isPinned, setPinned)
+        PresetSwitchRow(voxString("Pinned"), voxString("Pin this route to the capture bar and the top of the list."), isPinned, setPinned)
     }
     // One mode at a time: a symbol, an emoji, or no icon at all. The selection is
     // local state so an empty emoji field still shows Emoji mode; switching away
@@ -1378,7 +1655,7 @@ internal fun CapturePresetIdentityEditor(
                     PresetHint(voxString("Your symbol is kept as a fallback for surfaces that cannot display emoji."))
                 }
                 PresetIconMode.NONE -> PresetHint(
-                    voxString("Without an icon, the preset's first letter is shown where an icon is required."),
+                    voxString("Without an icon, the route's first letter is shown where an icon is required."),
                 )
             }
         }
@@ -1494,8 +1771,11 @@ internal fun CapturePresetDestinationEditor(
     setEntryTemplateID: (String?) -> Unit,
     setAttachmentsFolder: (String) -> Unit,
     setRetryProtectionEnabled: (Boolean) -> Unit,
+    /** The route editor shows the Destination group under DELIVER and the Entry group under SHAPE. */
+    showDestination: Boolean = true,
+    showEntry: Boolean = true,
 ) {
-    SignalGroup(voxString("Destination")) {
+    if (showDestination) SignalGroup(voxString("Destination")) {
         PresetBlock {
             PresetChoiceRow(
                 title = voxString("Note target"),
@@ -1611,7 +1891,7 @@ internal fun CapturePresetDestinationEditor(
             }
         }
     }
-    SignalGroup(voxString("Entry")) {
+    if (showEntry) SignalGroup(voxString("Entry")) {
         PresetBlock {
             PresetChoiceRow(
                 title = voxString("Formatting"),
@@ -1645,7 +1925,7 @@ internal fun CapturePresetDestinationEditor(
                     colors = signalTextFieldColors(),
                 )
             } else {
-                PresetHint(voxString("This preset uses the linked template. Template edits apply automatically; the last formatting remains safe if the template is removed."))
+                PresetHint(voxString("This route uses the linked template. Template edits apply automatically; the last formatting remains safe if the template is removed."))
                 Text(
                     entryTemplateDescription(CaptureEntryTemplate(entryTemplateID, "", entryPrefix, entrySuffix)),
                     style = SignalType.mono,
@@ -1755,7 +2035,7 @@ internal fun CapturePresetVoiceEditor(
                 onSelected = { setWatchOutputMode(CaptureWatchOutputMode.valueOf(it)) },
             )
             if (watchOutputMode == CaptureWatchOutputMode.RECORDING_ONLY) {
-                PresetHint(voxString("Recording Only writes verified WAV audio to this preset's export folder using the new-file name template. It skips transcription and location."))
+                PresetHint(voxString("Recording Only writes verified WAV audio to this route's export folder using the new-file name template. It skips transcription and location."))
             }
         }
         SignalRowDivider()
@@ -1839,7 +2119,7 @@ internal fun CapturePresetTranscriptExportEditor(
     SignalGroup(voxString("Transcript File Export")) {
         PresetSwitchRow(
             voxString("Export completed transcripts"),
-            voxString("Write completed recordings to a separate document folder using this preset's format."),
+            voxString("Write completed recordings to a separate document folder using this route's format."),
             exportEnabled,
         ) { enabled ->
             onSettingsChanged(settings.copy(usesCustomExportSettings = true, exportEnabled = enabled))
@@ -2291,7 +2571,7 @@ internal fun CapturePresetLocationEditor(
                     SignalRowDivider()
                     PresetSwitchRow(
                         voxString("Use place labels"),
-                        voxString("Android's system geocoder may contact a remote service and transmit the privacy-adjusted coordinates. This consent applies only to this preset."),
+                        voxString("Android's system geocoder may contact a remote service and transmit the privacy-adjusted coordinates. This consent applies only to this route."),
                         locationLabelLookupClass == CaptureLocationLabelLookupClass.SYSTEM_MAY_USE_NETWORK &&
                             locationLabelConsentVersion == CURRENT_LOCATION_LABEL_CONSENT_VERSION,
                         setLocationLabelConsent,

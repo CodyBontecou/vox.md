@@ -55,4 +55,33 @@ class CaptureBarPersistenceTest {
         assertEquals(VoiceRecordingResult.SEND_IMMEDIATELY, VoiceRecordingResult.fromPersistedName("sendImmediately"))
         assertEquals(CaptureBarConfiguration(), decodeCaptureBarConfiguration("{\"version\":999}"))
     }
+
+    @Test
+    fun routePinsRoundTripAndStayOptionalForOlderPayloads() {
+        val configuration = CaptureBarConfiguration()
+            .withRoutePins("b-route", listOf(CaptureBarAction.TIMESTAMP, CaptureBarAction.CHECKLIST))
+            .withRoutePins("a-route", emptyList())
+            .normalized()
+
+        val encoded = encodeCaptureBarConfiguration(configuration)
+        val decoded = decodeCaptureBarConfiguration(encoded)
+
+        assertEquals(configuration, decoded)
+        assertTrue(encoded.contains("\"routePins\""))
+        assertEquals(listOf(CaptureBarAction.TIMESTAMP, CaptureBarAction.CHECKLIST), decoded.pinnedActions("b-route"))
+        assertTrue(decoded.pinnedActions("a-route").isEmpty())
+
+        // No pins: the field is omitted, so the payload is unchanged from before per-route pins.
+        assertFalse(encodeCaptureBarConfiguration(CaptureBarConfiguration()).contains("routePins"))
+        // A payload written before per-route pins decodes with none.
+        val older = """{"hidden":[],"order":["addMedia"],"twentyFourHour":false,"version":1}"""
+        assertTrue(decodeCaptureBarConfiguration(older).routePins.isEmpty())
+        // Unknown actions are dropped and a malformed map is ignored without resetting the row.
+        val tolerant = """{"hidden":["paste"],"order":["addMedia"],"routePins":{"r":["timestamp","nope"]},"version":1}"""
+        assertEquals(listOf(CaptureBarAction.TIMESTAMP), decodeCaptureBarConfiguration(tolerant).pinnedActions("r"))
+        val malformed = """{"hidden":["paste"],"order":["addMedia"],"routePins":"bad","version":1}"""
+        val decodedMalformed = decodeCaptureBarConfiguration(malformed)
+        assertTrue(decodedMalformed.routePins.isEmpty())
+        assertFalse(CaptureBarAction.PASTE in decodedMalformed.visibleActions)
+    }
 }

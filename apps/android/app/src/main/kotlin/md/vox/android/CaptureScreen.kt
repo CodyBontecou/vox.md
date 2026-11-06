@@ -958,7 +958,8 @@ internal fun CaptureScreen(
         },
         bottomBar = {
             CaptureBottomControls(
-                captureBar = state.captureBar,
+                // The route being typed into shows its own quick actions when it has them.
+                captureBar = state.captureBar.forRoute(activePreset?.id),
                 hasContent = editorValue.text.isNotBlank() || capturedURL != null || state.draft.attachments.isNotEmpty(),
                 isSending = state.isSending || isResolvingPresetLocation,
                 onSubmit = { submitCapture(editorValue.text, capturedURL) },
