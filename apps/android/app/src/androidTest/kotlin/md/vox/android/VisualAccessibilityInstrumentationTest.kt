@@ -13,10 +13,13 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.test.assertHasClickAction
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -79,7 +82,8 @@ class VisualAccessibilityInstrumentationTest {
         var direction by mutableStateOf(LayoutDirection.Ltr)
         var locale by mutableStateOf(Locale.ENGLISH)
         var renderedBackground = VoxColors.BackgroundLight
-        var launches = 0
+        var folderLaunches = 0
+        var started: Set<StarterRoute>? = null
         compose.setContent {
             val configuration = Configuration(baseConfiguration).apply {
                 setLocales(LocaleList(locale))
@@ -93,16 +97,25 @@ class VisualAccessibilityInstrumentationTest {
                 VoxTheme(darkTheme = dark) {
                     val background = MaterialTheme.colorScheme.background
                     SideEffect { renderedBackground = background }
-                    VaultSetupScreen(notice = null) { launches += 1 }
+                    FirstRunFlow(
+                        destination = null,
+                        notice = null,
+                        isBusy = false,
+                        onChooseFolder = { folderLaunches += 1 },
+                        onStartCapturing = { started = it },
+                    )
                 }
             }
         }
 
-        val folderAction = compose.onNode(hasText("Choose vault or folder") and hasClickAction())
-        folderAction.assertIsDisplayed().assertHasClickAction()
-        val defaultBounds = folderAction.fetchSemanticsNode().boundsInRoot
-        assertTrue(defaultBounds.height / deviceDensity >= 48f)
+        val getStarted = compose.onNode(hasText("Get started") and hasClickAction())
+        getStarted.assertIsDisplayed().assertHasClickAction()
+        assertTrue(getStarted.fetchSemanticsNode().boundsInRoot.height / deviceDensity >= 48f)
         compose.runOnIdle { assertEquals(VoxColors.BackgroundLight, renderedBackground) }
+        getStarted.performClick()
+
+        // Setup: Journal starts off; toggling it is a whole-row checkbox.
+        compose.onNodeWithTag("onboarding.starter.journal").performScrollTo().assertIsOff().performClick().assertIsOn()
 
         compose.runOnIdle {
             dark = true
@@ -111,15 +124,17 @@ class VisualAccessibilityInstrumentationTest {
             locale = Locale.forLanguageTag("ar")
         }
         compose.waitForIdle()
-        compose.onNodeWithText("خطوط محددة Markdown").performScrollTo().assertIsDisplayed()
-        compose.onNode(hasText("اختيار كوكب أو ملف") and hasClickAction())
+        compose.onNodeWithText("ابدأ بهذه المسارات").performScrollTo().assertIsDisplayed()
+        // Without a folder, Start capturing opens the folder picker instead of finishing.
+        compose.onNode(hasText("ابدأ الالتقاط") and hasClickAction())
             .performScrollTo()
             .assertIsDisplayed()
             .assertHasClickAction()
             .performClick()
         compose.runOnIdle {
             assertEquals(VoxColors.BackgroundDark, renderedBackground)
-            assertEquals(1, launches)
+            assertEquals(1, folderLaunches)
+            assertEquals(null, started)
         }
     }
 

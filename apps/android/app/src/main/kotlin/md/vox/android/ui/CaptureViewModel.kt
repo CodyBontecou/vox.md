@@ -304,6 +304,35 @@ internal class CaptureViewModel private constructor(
         }
     }
 
+    /**
+     * First-run "Start with these routes": saves each chosen starter preset through the normal
+     * preset store, skipping any whose name already exists, then makes [activePresetID] (else the
+     * first new route) the active route. Mirrors iOS StarterRouteInstaller.
+     */
+    fun installStarterPresets(presets: List<CapturePreset>, activePresetID: String?, onInstalled: () -> Unit) {
+        if (mutableState.value.isSavingConfiguration) return
+        viewModelScope.launch {
+            mutableState.update { it.copy(isSavingConfiguration = true, notice = null) }
+            runCatching {
+                val existingNames = repository.capturePresets().presets.map { it.name.trim().lowercase() }.toSet()
+                val created = presets.filter { it.name.trim().lowercase() !in existingNames }
+                var collection: CapturePresetCollection? = null
+                created.forEach { collection = repository.saveCapturePreset(it) }
+                val active = created.firstOrNull { it.id == activePresetID }?.id ?: created.firstOrNull()?.id
+                if (active != null) collection = repository.selectCapturePreset(active)
+                collection ?: repository.capturePresets()
+            }
+                .onSuccess { collection ->
+                    mutableState.update { it.copy(isSavingConfiguration = false, presetCollection = collection) }
+                    onInstalled()
+                }
+                .onFailure { error ->
+                    if (error is CancellationException) throw error
+                    mutableState.update { it.copy(isSavingConfiguration = false, notice = voxNotice("The capture route could not be saved.")) }
+                }
+        }
+    }
+
     fun deletePreset(presetID: String, onDeleted: () -> Unit = {}) {
         if (mutableState.value.isSavingConfiguration) return
         viewModelScope.launch {

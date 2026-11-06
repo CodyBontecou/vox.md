@@ -154,6 +154,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -581,7 +582,43 @@ internal fun VoxApp(
         treePicker.launch(null)
     }
 
+    // First run shows once: it starts only without a destination and stays up (across the folder
+    // pick) until Start capturing. Anyone who already has a destination is marked complete.
+    var onboardingCompleted by remember { mutableStateOf(OnboardingPreferences.isCompleted(context)) }
+    var onboardingActive by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(state.isLoading, state.destination != null, onboardingActive, onboardingCompleted) {
+        if (!state.isLoading && state.destination != null && !onboardingActive && !onboardingCompleted) {
+            OnboardingPreferences.markCompleted(context)
+            onboardingCompleted = true
+        }
+    }
+    val finishOnboarding = {
+        OnboardingPreferences.markCompleted(context)
+        onboardingCompleted = true
+        onboardingActive = false
+    }
+    val starterPresets = starterPresets(StarterRoute.entries.toSet()).toMap()
+
+    val showFirstRun = !onboardingCompleted && (onboardingActive || (!state.isLoading && state.destination == null))
+    if (showFirstRun && !onboardingActive) SideEffect { onboardingActive = true }
+
     when {
+        showFirstRun -> FirstRunFlow(
+            destination = state.destination,
+            notice = state.notice?.localized(),
+            isBusy = state.isLoading || state.isSavingConfiguration,
+            onChooseFolder = { openTree(null) },
+            onStartCapturing = { selection ->
+                val presets = StarterRoute.installOrder.filter { it in selection }.mapNotNull(starterPresets::get)
+                if (presets.isEmpty()) {
+                    finishOnboarding()
+                } else {
+                    model.installStarterPresets(presets, activePresetID = starterPresets[StarterRoute.MEETING_NOTES]?.id) {
+                        finishOnboarding()
+                    }
+                }
+            },
+        )
         state.isLoading -> LoadingScreen()
         state.destination == null -> VaultSetupScreen(state.notice?.localized(), onChooseFolder = { openTree(null) })
         else -> VoxNavigation(
@@ -618,121 +655,6 @@ internal fun LoadingScreen() {
                 trackColor = Signal.colors.well,
                 strokeWidth = 2.dp,
             )
-        }
-    }
-}
-
-/**
- * First run and folder repair. Mirrors the iOS Signal onboarding: the first run is
- * the always-dark Welcome artboard (wordmark, hero line, local-first bullets); a
- * repair (with [notice]) follows the system appearance and leads with the problem.
- * The folder action sits at the end of the scrolling content so it stays reachable
- * at large text sizes.
- */
-@Composable
-internal fun VaultSetupScreen(notice: String?, onChooseFolder: () -> Unit) {
-    val isRepair = notice != null
-    if (isRepair) {
-        VaultSetupContent(notice, onChooseFolder)
-    } else {
-        WelcomeSystemBars()
-        VoxTheme(darkTheme = true) { VaultSetupContent(null, onChooseFolder) }
-    }
-}
-
-/** Project license identifier shown under Welcome; kept verbatim like the license name itself. */
-private const val WELCOME_LICENSE_LINE = "Open source · AGPL-3.0"
-
-/** The Welcome artboard is always dark, so the system bars use light icons while it shows. */
-@Composable
-private fun WelcomeSystemBars() {
-    val view = androidx.compose.ui.platform.LocalView.current
-    if (view.isInEditMode) return
-    DisposableEffect(view) {
-        val window = (view.context as? Activity)?.window
-        val controller = window?.let { androidx.core.view.WindowCompat.getInsetsController(it, view) }
-        val lightStatus = controller?.isAppearanceLightStatusBars
-        val lightNavigation = controller?.isAppearanceLightNavigationBars
-        controller?.isAppearanceLightStatusBars = false
-        controller?.isAppearanceLightNavigationBars = false
-        onDispose {
-            if (lightStatus != null) controller.isAppearanceLightStatusBars = lightStatus
-            if (lightNavigation != null) controller.isAppearanceLightNavigationBars = lightNavigation
-        }
-    }
-}
-
-@Composable
-private fun VaultSetupContent(notice: String?, onChooseFolder: () -> Unit) {
-    val c = Signal.colors
-    val welcomeAccent = c.tint
-    Surface(modifier = Modifier.fillMaxSize(), color = c.bg) {
-        BoxWithConstraints(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = maxHeight)
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 24.dp)
-                    .padding(top = 16.dp, bottom = 24.dp),
-            ) {
-                SignalWordmark(extensionColor = if (notice == null) welcomeAccent else c.accentText)
-                Spacer(Modifier.height(40.dp))
-                Text(
-                    voxString("Local drafts → precise Markdown routes"),
-                    style = if (notice == null) MaterialTheme.typography.displaySmall else MaterialTheme.typography.headlineLarge,
-                    color = c.text,
-                    modifier = Modifier.semantics { heading() },
-                )
-                Spacer(Modifier.height(12.dp))
-                Text(
-                    voxString("Choose a vault or folder."),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = c.muted,
-                )
-                if (notice != null) {
-                    Spacer(Modifier.height(24.dp))
-                    SignalBanner(
-                        message = notice,
-                        status = SignalStatus.WARNING,
-                        icon = Icons.Outlined.FolderOpen,
-                        liveRegion = true,
-                    )
-                }
-                Spacer(Modifier.height(28.dp))
-                SignalCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    radius = SignalMetrics.GroupRadius,
-                    padding = PaddingValues(horizontal = 14.dp, vertical = 14.dp),
-                    onClick = onChooseFolder,
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        SignalIconTile(Icons.Outlined.FolderOpen, primary = true, size = 40.dp)
-                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                            Text(voxString("Everything stays on this device."), style = SignalType.rowTitle, color = c.text)
-                            Text(
-                                voxString("Your captured text is processed locally and is not sent to a cloud AI service."),
-                                style = SignalType.caption,
-                                color = c.muted,
-                            )
-                        }
-                    }
-                }
-                Spacer(Modifier.weight(1f).heightIn(min = 32.dp))
-                SignalButton(
-                    text = voxString("Choose vault or folder"),
-                    onClick = onChooseFolder,
-                    icon = Icons.Outlined.FolderOpen,
-                )
-                Spacer(Modifier.height(14.dp))
-                Text(
-                    WELCOME_LICENSE_LINE,
-                    style = SignalType.monoCaption,
-                    color = c.muted,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
         }
     }
 }
