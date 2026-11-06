@@ -4,7 +4,8 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import re
-from urllib.error import HTTPError
+import time
+from urllib.error import HTTPError, URLError
 from urllib.parse import unquote, urlsplit
 from urllib.request import Request, urlopen
 import xml.etree.ElementTree as ET
@@ -39,7 +40,25 @@ def local_page(root, url, origin):
     return target
 
 
+# A fresh Pages deployment can answer 404 or 5xx for a few seconds while new files
+# propagate. Retry those briefly; every other check stays exact.
+RETRY_DELAYS = (2, 4, 8, 15, 30)
+
+
 def fetch(url, accept='text/html'):
+    for delay in (*RETRY_DELAYS, None):
+        try:
+            return fetch_once(url, accept)
+        except HTTPError as error:
+            if delay is None or not (error.code == 404 or error.code >= 500):
+                raise
+        except URLError:
+            if delay is None:
+                raise
+        time.sleep(delay)
+
+
+def fetch_once(url, accept='text/html'):
     request = Request(url, headers={'Accept': accept, 'User-Agent': 'Pages-release-verification/1.0'})
     with urlopen(request, timeout=30) as response:
         if response.status != 200:
