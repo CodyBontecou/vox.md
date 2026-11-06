@@ -61,7 +61,7 @@ class VisualStoryInstrumentationTest {
             VisualStoryActivity.STORY_HISTORY to "History",
             VisualStoryActivity.STORY_SETTINGS to "Settings",
             VisualStoryActivity.STORY_MODELS to "Models",
-            VisualStoryActivity.STORY_PRESETS to "Capture Presets",
+            VisualStoryActivity.STORY_PRESETS to "Routes",
             VisualStoryActivity.STORY_APP_LANGUAGE to "App Language",
             VisualStoryActivity.STORY_LIVE_RECORDING to "Recording",
             VisualStoryActivity.STORY_VAULT_REPAIR to "Choose vault or folder",

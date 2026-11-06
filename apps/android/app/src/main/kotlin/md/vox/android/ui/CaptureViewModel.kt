@@ -343,6 +343,8 @@ internal class CaptureViewModel private constructor(
                         it.copy(isSavingConfiguration = false, presetCollection = collection, notice = voxNotice("Capture preset deleted"))
                     }
                     onDeleted()
+                    // Drop the deleted route's own quick actions so they cannot resurface.
+                    if (mutableState.value.captureBar.hasCustomPins(presetID)) setRouteQuickActions(presetID, null)
                 }
                 .onFailure {
                     mutableState.update { it.copy(isSavingConfiguration = false, notice = voxNotice("The Default preset cannot be deleted.")) }
@@ -466,8 +468,17 @@ internal class CaptureViewModel private constructor(
         saveCaptureBar(mutableState.value.captureBar.copy(voiceRecordingResult = result))
     }
 
+    /** Resets the global row. Per-route quick actions are kept; reset those from each route. */
     fun resetCaptureBar() {
-        saveCaptureBar(CaptureBarConfiguration(), successNotice = voxNotice("Capture Bar reset"))
+        saveCaptureBar(
+            CaptureBarConfiguration(routePins = mutableState.value.captureBar.routePins),
+            successNotice = voxNotice("Capture Bar reset"),
+        )
+    }
+
+    /** Sets a route's own quick actions; `null` makes the route follow the global Capture Bar again. */
+    fun setRouteQuickActions(routeID: String, actions: List<CaptureBarAction>?) {
+        saveCaptureBar(mutableState.value.captureBar.withRoutePins(routeID, actions))
     }
 
     fun retry(requestID: String) {

@@ -358,10 +358,42 @@ data class CaptureBarConfiguration(
     val railSide: CaptureRailSide = CaptureRailSide.LEFT,
     val confirmsVoiceNotesBeforeAdding: Boolean = false,
     val voiceRecordingResult: VoiceRecordingResult = VoiceRecordingResult.ADD_TO_DRAFT,
+    /**
+     * Per-route quick actions, keyed by [CapturePreset.id], in pinned order. A route
+     * absent here follows the global row ([visibleActions]); an empty list pins nothing.
+     * Mirrors iOS `CaptureToolbarPreferences.routePins`.
+     */
+    val routePins: Map<String, List<CaptureBarAction>> = emptyMap(),
 ) {
     val timestampFormat: CaptureTimestampFormat get() = if (usesTwentyFourHourTimestamps) CaptureTimestampFormat.TWENTY_FOUR_HOUR else CaptureTimestampFormat.TWELVE_HOUR
     val visibleActions: List<CaptureBarAction>
         get() = orderedActions.filterNot(hiddenActions::contains)
+
+    /** The quick actions shown while typing into [routeID]: its own pins, else the global row. */
+    fun pinnedActions(routeID: String?): List<CaptureBarAction> =
+        routeID?.let(routePins::get) ?: visibleActions
+
+    fun hasCustomPins(routeID: String?): Boolean = routeID != null && routePins.containsKey(routeID)
+
+    /** Every action not pinned on [routeID], in catalog order. */
+    fun unpinnedActions(routeID: String?): List<CaptureBarAction> {
+        val pinned = pinnedActions(routeID).toSet()
+        return CaptureBarAction.entries.filterNot(pinned::contains)
+    }
+
+    /** Replaces [routeID]'s pins; `null` drops the override so the route follows the global row again. */
+    fun withRoutePins(routeID: String, pins: List<CaptureBarAction>?): CaptureBarConfiguration =
+        copy(routePins = if (pins == null) routePins - routeID else routePins + (routeID to pins.distinct()))
+
+    /**
+     * This configuration as the capture bar renders it for [routeID]: a route with its own
+     * pins shows exactly those, in order; any other route keeps the global row.
+     */
+    fun forRoute(routeID: String?): CaptureBarConfiguration {
+        val pins = routeID?.let(routePins::get) ?: return this
+        val rest = CaptureBarAction.entries.filterNot(pins::contains)
+        return copy(orderedActions = pins + rest, hiddenActions = rest.toSet())
+    }
 }
 
 fun CaptureBarConfiguration.normalized(): CaptureBarConfiguration {
@@ -372,6 +404,9 @@ fun CaptureBarConfiguration.normalized(): CaptureBarConfiguration {
     return copy(
         orderedActions = order,
         hiddenActions = hiddenActions.intersect(CaptureBarAction.entries.toSet()),
+        routePins = routePins
+            .filterKeys(String::isNotBlank)
+            .mapValues { (_, pins) -> pins.distinct() },
     )
 }
 

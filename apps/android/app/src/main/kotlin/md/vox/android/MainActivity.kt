@@ -1023,6 +1023,8 @@ internal fun VoxNavigation(
                                     createPreset = { adaptiveSettingsDestination = "$PRESET_EDITOR_ROUTE/new" },
                                     saveEntryTemplate = { model.saveEntryTemplate(it) },
                                     deleteEntryTemplate = { model.deleteEntryTemplate(it) },
+                                    defaultDestinationName = latestState.destination?.displayName,
+                                    togglePinned = { model.savePreset(it.copy(isPinned = !it.isPinned)) },
                                 )
                                 adaptiveSettingsDestination?.startsWith("$PRESET_EDITOR_ROUTE/") == true -> {
                                     val presetID = adaptiveSettingsDestination?.substringAfter("$PRESET_EDITOR_ROUTE/") ?: "new"
@@ -1030,6 +1032,10 @@ internal fun VoxNavigation(
                                     CapturePresetEditorScreen(
                                         preset = preset,
                                         entryTemplates = latestState.entryTemplates,
+                                        isDefault = preset?.id == latestState.presetCollection?.activePreset?.id,
+                                        defaultDestinationName = latestState.destination?.displayName,
+                                        captureBar = latestState.captureBar,
+                                        setRouteQuickActions = model::setRouteQuickActions,
                                         isBusy = latestState.isSavingConfiguration,
                                         navigateBack = closeAdaptiveSettingsDetail,
                                         save = { draft -> model.savePreset(draft) { adaptiveSettingsDestination = Destination.Presets.route } },
@@ -1127,6 +1133,8 @@ internal fun VoxNavigation(
                         },
                         saveEntryTemplate = { model.saveEntryTemplate(it) },
                         deleteEntryTemplate = { model.deleteEntryTemplate(it) },
+                        defaultDestinationName = latestState.destination?.displayName,
+                        togglePinned = { model.savePreset(it.copy(isPinned = !it.isPinned)) },
                     )
                 }
                 if (!expanded) {
@@ -1144,6 +1152,10 @@ internal fun VoxNavigation(
                                 CapturePresetEditorScreen(
                                     preset = preset,
                                     entryTemplates = latestState.entryTemplates,
+                                    isDefault = preset?.id == latestState.presetCollection?.activePreset?.id,
+                                    defaultDestinationName = latestState.destination?.displayName,
+                                    captureBar = latestState.captureBar,
+                                    setRouteQuickActions = model::setRouteQuickActions,
                                     isBusy = latestState.isSavingConfiguration,
                                     navigateBack = { adaptivePresetEditorID = null },
                                     save = { draft -> model.savePreset(draft) { adaptivePresetEditorID = null } },
@@ -1161,6 +1173,10 @@ internal fun VoxNavigation(
                 CapturePresetEditorScreen(
                     preset = preset,
                     entryTemplates = latestState.entryTemplates,
+                    isDefault = preset?.id == latestState.presetCollection?.activePreset?.id,
+                    defaultDestinationName = latestState.destination?.displayName,
+                    captureBar = latestState.captureBar,
+                    setRouteQuickActions = model::setRouteQuickActions,
                     isBusy = latestState.isSavingConfiguration,
                     navigateBack = { navController.popBackStack() },
                     save = { draft -> model.savePreset(draft) { navController.popBackStack() } },

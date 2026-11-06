@@ -17,6 +17,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import md.vox.android.capturedomain.CaptureAudioSaveMode
+import md.vox.android.capturedomain.CaptureBarAction
+import md.vox.android.capturedomain.CaptureBarConfiguration
+import md.vox.android.capturedomain.CaptureHeadingPosition
 import md.vox.android.capturedomain.CaptureEntryTemplate
 import md.vox.android.capturedomain.CaptureExportFileFormat
 import md.vox.android.capturedomain.CaptureExportFileMode
@@ -100,6 +103,38 @@ internal fun RouteStories(story: String): Boolean {
         "routes-editor-disabled" -> RouteEditorStory(preset = routeStoryCollection.presets[1].copy(isEnabled = false))
         "routes-editor-invalid" -> RouteEditorStory(
             preset = routeStoryCollection.presets[1].copy(name = "", noteNameTemplate = "meeting"),
+        )
+        // Route editor board: default route with its own quick actions, a meeting-summary
+        // daily note under a heading, and each step's sub-page.
+        "routes-editor-default" -> RouteEditorStory(preset = routeStoryMeetingRoute, isDefault = true, captureBar = routeStoryCustomBar)
+        "routes-editor-recording-only" -> RouteEditorStory(
+            preset = routeStoryCollection.presets[2].copy(watchOutputMode = CaptureWatchOutputMode.RECORDING_ONLY),
+        )
+        "routes-editor-step-capture" -> RouteEditorStory(preset = routeStoryMeetingRoute, page = RouteEditorPage.CAPTURE)
+        "routes-editor-step-process" -> RouteEditorStory(preset = routeStoryMeetingRoute, page = RouteEditorPage.PROCESS)
+        "routes-editor-step-shape" -> RouteEditorStory(preset = routeStoryMeetingRoute, page = RouteEditorPage.SHAPE)
+        "routes-editor-step-deliver" -> RouteEditorStory(preset = routeStoryMeetingRoute, page = RouteEditorPage.DELIVER)
+        "routes-editor-step-invalid" -> RouteEditorStory(
+            preset = routeStoryMeetingRoute.copy(headingTitle = "", existingNotePath = ""),
+            page = RouteEditorPage.DELIVER,
+        )
+
+        // Route quick actions board
+        "routes-quick-actions" -> RouteEditorStory(preset = routeStoryMeetingRoute, page = RouteEditorPage.QUICK_ACTIONS)
+        "routes-quick-actions-custom" -> RouteEditorStory(
+            preset = routeStoryMeetingRoute,
+            page = RouteEditorPage.QUICK_ACTIONS,
+            captureBar = routeStoryCustomBar,
+        )
+        "routes-quick-actions-empty" -> RouteEditorStory(
+            preset = routeStoryMeetingRoute,
+            page = RouteEditorPage.QUICK_ACTIONS,
+            captureBar = CaptureBarConfiguration().withRoutePins(ROUTE_MEETINGS_ID, emptyList()),
+        )
+        "routes-quick-actions-all-pinned" -> RouteEditorStory(
+            preset = routeStoryMeetingRoute,
+            page = RouteEditorPage.QUICK_ACTIONS,
+            captureBar = CaptureBarConfiguration().withRoutePins(ROUTE_MEETINGS_ID, CaptureBarAction.entries),
         )
 
         // Identity
@@ -321,6 +356,37 @@ private val routeStoryTemplates = listOf(
     ),
 )
 
+/** Meeting Notes from the Route editor board: meeting summary into a daily note under "## Notes". */
+private val routeStoryMeetingRoute = routeStoryCollection.presets[1].copy(
+    name = "Meeting Notes",
+    logicalFolder = "Meetings",
+    noteNameTemplate = "{date}.md",
+    noteTargetKind = CaptureNoteTargetKind.ROLLING_NOTE,
+    placement = CapturePlacementKind.BENEATH_HEADING,
+    headingTitle = "Notes",
+    headingLevel = 2,
+    headingPosition = CaptureHeadingPosition.BOTTOM,
+    entryTemplateID = null,
+    entryPrefix = "### {time} · {title}\n",
+    processingEnabled = true,
+    processingMode = CaptureProcessingMode.MEETING_NOTES,
+    speakerDiarizationEnabled = true,
+    audioSaveMode = CaptureAudioSaveMode.ATTACHMENTS_FOLDER,
+    embedAudioInMarkdown = true,
+)
+
+private val routeStoryCustomBar = CaptureBarConfiguration().withRoutePins(
+    ROUTE_MEETINGS_ID,
+    listOf(
+        CaptureBarAction.TIMESTAMP,
+        CaptureBarAction.CHECKLIST,
+        CaptureBarAction.INTERNAL_LINK,
+        CaptureBarAction.FORMAT_MARKDOWN,
+        CaptureBarAction.BULLET_LIST,
+        CaptureBarAction.ADD_MEDIA,
+    ),
+)
+
 @Composable
 private fun RouteListStory(collection: CapturePresetCollection?, templates: List<CaptureEntryTemplate>, isBusy: Boolean = false) {
     CapturePresetsScreen(
@@ -333,6 +399,8 @@ private fun RouteListStory(collection: CapturePresetCollection?, templates: List
         createPreset = {},
         saveEntryTemplate = {},
         deleteEntryTemplate = {},
+        defaultDestinationName = "Vox Notes",
+        togglePinned = {},
     )
 }
 
@@ -349,7 +417,15 @@ private fun RouteTemplateDialogStory(template: CaptureEntryTemplate?) {
 }
 
 @Composable
-private fun RouteEditorStory(preset: CapturePreset?, isBusy: Boolean = false) {
+private fun RouteEditorStory(
+    preset: CapturePreset?,
+    isBusy: Boolean = false,
+    isDefault: Boolean = false,
+    page: RouteEditorPage? = null,
+    captureBar: CaptureBarConfiguration = CaptureBarConfiguration(),
+) {
+    // Quick actions apply immediately, so the story keeps them in local state.
+    var bar by remember { mutableStateOf(captureBar) }
     CapturePresetEditorScreen(
         preset = preset,
         entryTemplates = routeStoryTemplates,
@@ -357,6 +433,11 @@ private fun RouteEditorStory(preset: CapturePreset?, isBusy: Boolean = false) {
         navigateBack = {},
         save = {},
         delete = preset?.let { { } },
+        isDefault = isDefault,
+        defaultDestinationName = "Vox Notes",
+        captureBar = bar,
+        setRouteQuickActions = { routeID, actions -> bar = bar.withRoutePins(routeID, actions) },
+        initialPage = page,
     )
 }
 
