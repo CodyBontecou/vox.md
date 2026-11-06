@@ -117,7 +117,7 @@ struct CapturePresetQuickAccessSelector: View {
                 }
             }
         }
-        .accessibilityLabel(Text(verbatim: "Capture Preset \(selectedProfile.accessibilityName)"))
+        .accessibilityLabel(Text(verbatim: "Route \(selectedProfile.accessibilityName)"))
         .accessibilityAddTraits(accessibilitySelectionTraits)
         .accessibilityHint(accessibilityHint)
         .accessibilityValue(accessibilityValue)
@@ -148,36 +148,55 @@ struct CapturePresetQuickAccessSelector: View {
         }
     }
 
+    /// Signal route pill: the route's letter tile (toned by route order),
+    /// preset name and a chevron.
     private var selectorLabel: some View {
-        HStack(spacing: 6) {
-            CapturePresetIconView(
-                symbolName: selectedProfile.symbolName,
-                emoji: selectedProfile.emoji
+        HStack(spacing: 8) {
+            SignalRouteTile(
+                letter: selectedProfile.routeTileLetter,
+                size: 24,
+                circular: true,
+                tone: SignalRouteTileTone.forRoute(
+                    at: profiles.filter(\.isEnabled).firstIndex { $0.id == selectedProfile.id }
+                )
             )
             if let name = selectedProfile.visibleName {
                 Text(name)
+                    .font(.custom("Geist-SemiBold", size: 15, relativeTo: .subheadline))
+                    .foregroundStyle(Geist.text)
                     .lineLimit(1)
             }
-            Image(systemName: "chevron.up.chevron.down")
-                .font(.caption2)
+            Image(systemName: isRailExpanded && hasQuickAccessProfiles ? "chevron.up" : "chevron.down")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Geist.text)
         }
+        .padding(.leading, 6)
+        .padding(.trailing, 12)
+        .frame(height: 36)
+        .background(Geist.card, in: Capsule(style: .continuous))
+        .overlay(
+            Capsule(style: .continuous)
+                .stroke(
+                    isRailExpanded && hasQuickAccessProfiles ? Geist.accent : Geist.border,
+                    lineWidth: isRailExpanded && hasQuickAccessProfiles ? 1.5 : 1
+                )
+        )
         .frame(
             minWidth: CapturePresetQuickAccessButton.hitTargetSide,
             minHeight: CapturePresetQuickAccessButton.hitTargetSide
         )
         .contentShape(Rectangle())
-        .foregroundStyle(isRailExpanded && hasQuickAccessProfiles ? Geist.Palette.blue700 : Geist.muted)
     }
 
     var accessibilitySelectionTraits: AccessibilityTraits { .isSelected }
 
     var accessibilityHint: String {
         guard hasQuickAccessProfiles else {
-            return String(localized: "Show all Capture Presets")
+            return String(localized: "Show all Routes")
         }
         return isRailExpanded
-            ? String(localized: "Collapse pinned Capture Presets. Use the Show Menu action for all Capture Presets.")
-            : String(localized: "Expand pinned Capture Presets. Use the Show Menu action for all Capture Presets.")
+            ? String(localized: "Collapse pinned Routes. Use the Show Menu action for all Routes.")
+            : String(localized: "Expand pinned Routes. Use the Show Menu action for all Routes.")
     }
 
     var accessibilityValue: String {
@@ -216,8 +235,10 @@ struct CapturePresetQuickAccessButton: View {
         Button(action: action) {
             CapturePresetIconView(symbolName: profile.symbolName, emoji: profile.emoji)
                 .font(.system(size: Self.iconSize, weight: isSelected ? .semibold : .medium))
-                .foregroundStyle(isSelected ? Geist.Palette.blue700 : Geist.muted)
-                .opacity(isSelected ? 1 : 0.68)
+                .foregroundStyle(isSelected ? Geist.onAccent : Geist.text)
+                .frame(width: 32, height: 32)
+                .background(isSelected ? Geist.accent : Geist.card, in: Circle())
+                .overlay(Circle().stroke(isSelected ? Color.clear : Geist.border, lineWidth: 1))
                 .frame(width: Self.hitTargetSide, height: Self.hitTargetSide)
                 .contentShape(Rectangle())
         }
@@ -231,6 +252,6 @@ struct CapturePresetQuickAccessButton: View {
     var accessibilityHint: String {
         isSelected
             ? String(localized: "Already selected. One-off routing is kept.")
-            : String(localized: "Use this preset for the current draft. Text and attachments stay in place; one-off route overrides reset.")
+            : String(localized: "Use this route for the current draft. Text and attachments stay in place; one-off route overrides reset.")
     }
 }

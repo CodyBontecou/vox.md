@@ -240,7 +240,6 @@
             }
           ]
         },
-
         "originRecordingID": {
           "oneOf": [
             {
@@ -585,7 +584,6 @@
           ],
           "type": "object"
         },
-
         "metadataPolicy": {
           "additionalProperties": false,
           "properties": {
@@ -640,6 +638,25 @@
                 "none",
                 "frozenObservation"
               ]
+            },
+            "transcriptProperty": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "value"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "value": {
+                  "type": "string",
+                  "maxLength": 65536
+                }
+              }
             }
           },
           "required": [
@@ -738,6 +755,13 @@
                 "monthly",
                 "quarterly",
                 "yearly"
+              ]
+            },
+            "headingPosition": {
+              "type": "string",
+              "enum": [
+                "top",
+                "bottom"
               ]
             }
           },

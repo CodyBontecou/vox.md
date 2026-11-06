@@ -29,6 +29,17 @@ public final class UsageTracker {
     private var lifetimeStoreAccess: VoxboardAccessLevel = .free
     private static let lifetimeStoreAccessKey = "lifetimeStoreAccessV1"
     private static let storeAccessExpirationKey = "storeAccessExpirationV1"
+    static let hasHadUnlimitedAccessKey = "hasHadUnlimitedAccessV1"
+
+    /// True once this installation has had paid access (a trial, subscription
+    /// or purchase), or StoreKit shows an ended subscription. Never cleared, so
+    /// an expired user can be told apart from one who never had access.
+    public private(set) var hasHadUnlimitedAccess = false
+
+    /// The trial or subscription has ended: the app opens read-only (Library
+    /// readable, Speak locked, "See plans" opens the paywall) instead of the
+    /// first-run onboarding paywall gate.
+    public var hasAccessEnded: Bool { !hasUnlocked && hasHadUnlimitedAccess }
 
     public var accessLevel: VoxboardAccessLevel {
         if let storeAccessExpiration, storeAccessExpiration <= Date() {
@@ -37,6 +48,8 @@ public final class UsageTracker {
         return storedAccessLevel
     }
     public private(set) var isLegacyAccessClassificationPending = false
+    /// Renewal/expiry date of the current StoreKit subscription, if any.
+    public var subscriptionExpirationDate: Date? { storeAccessExpiration }
     public private(set) var hasCurrentIndividualStoreEntitlement = false
 
     private let defaults: UserDefaults?
@@ -173,6 +186,14 @@ public final class UsageTracker {
         persist()
     }
 
+    /// Records StoreKit evidence of an earlier subscription or trial (e.g. an
+    /// expired transaction after a reinstall cleared the App Group).
+    public func recordPreviousUnlimitedAccess() {
+        guard !hasHadUnlimitedAccess else { return }
+        hasHadUnlimitedAccess = true
+        persist()
+    }
+
     /// Replaces StoreKit-derived access with the complete current entitlement set,
     /// while retaining access granted to owners of the original paid app.
     public func reconcileStoreEntitlements(
@@ -227,6 +248,7 @@ public final class UsageTracker {
         isLegacyAccessClassificationPending = defaults?.bool(
             forKey: Self.legacyAccessClassificationPendingKey
         ) ?? false
+        hasHadUnlimitedAccess = defaults?.bool(forKey: Self.hasHadUnlimitedAccessKey) ?? false
 
         if let persistedLevel = Self.persistedAccessLevel(
             forKey: Self.accessLevelKey,
@@ -241,6 +263,12 @@ public final class UsageTracker {
             persist()
         } else {
             storedAccessLevel = permanentAccessLevel
+        }
+        // Builds before this flag still left evidence: a stored subscription
+        // expiration or a paid access level.
+        if !hasHadUnlimitedAccess, storeAccessExpiration != nil || storedAccessLevel.hasUnlimitedAccess {
+            hasHadUnlimitedAccess = true
+            defaults?.set(true, forKey: Self.hasHadUnlimitedAccessKey)
         }
     }
 
@@ -281,5 +309,9 @@ public final class UsageTracker {
         )
         // Keep the legacy mirror for extensions and older app builds.
         defaults?.set(hasUnlocked, forKey: Self.hasUnlockedKey)
+        if hasUnlocked || storeAccessExpiration != nil { hasHadUnlimitedAccess = true }
+        if hasHadUnlimitedAccess {
+            defaults?.set(true, forKey: Self.hasHadUnlimitedAccessKey)
+        }
     }
 }

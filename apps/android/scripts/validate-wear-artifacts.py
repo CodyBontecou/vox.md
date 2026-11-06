@@ -10,6 +10,7 @@ from zipfile import ZipFile
 
 
 FORBIDDEN = (
+    "libvox_intelligence.so",
     "libvosk.so",
     "libvox_core_uniffi.so",
     "libmlkit_google_ocr_pipeline.so",
@@ -23,6 +24,7 @@ FORBIDDEN = (
 )
 
 FORBIDDEN_DEX_MARKERS = (
+    b"Lmd/vox/android/platformservices/NativeInstructionRuntime;",
     b"Lorg/vosk/",
     b"Lcom/k2fsa/sherpa/onnx/",
     b"Lmd/vox/android/platformservices/LocalLiveSpeechSession;",

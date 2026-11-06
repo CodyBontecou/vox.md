@@ -6,7 +6,7 @@ enum CapturePresetWidgetSource: String, AppEnum {
     case followCaptureBar
     case custom
 
-    static let typeDisplayRepresentation: TypeDisplayRepresentation = "Preset Source"
+    static let typeDisplayRepresentation: TypeDisplayRepresentation = "Route Source"
     static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
         .followCaptureBar: "Follow Capture Bar",
         .custom: "Custom",
@@ -16,15 +16,15 @@ enum CapturePresetWidgetSource: String, AppEnum {
 /// Native collection parameters expose cardinality, but the selected SDK does
 /// not guarantee a reorder UI. Named slots make per-instance order explicit.
 struct CapturePresetWidgetConfiguration: WidgetConfigurationIntent {
-    static let title: LocalizedStringResource = "Capture Presets"
+    static let title: LocalizedStringResource = "Routes"
     static let description = IntentDescription(
-        "Follow your Capture Bar, or choose up to six presets in order. Small shows First; medium and large show all chosen slots. Empty positions are not replaced."
+        "Follow your Capture Bar, or choose up to six routes in order. Small shows First; medium and large show all chosen slots. Empty positions are not replaced."
     )
 
-    @Parameter(title: "Preset Source", default: .followCaptureBar)
+    @Parameter(title: "Route Source", default: .followCaptureBar)
     var source: CapturePresetWidgetSource
 
-    @Parameter(title: "First", description: "First position. This is the preset shown in a small widget.")
+    @Parameter(title: "First", description: "First position. This is the route shown in a small widget.")
     var first: CapturePresetWidgetEntity?
     @Parameter(title: "Second", description: "Second position in medium and large widgets.")
     var second: CapturePresetWidgetEntity?

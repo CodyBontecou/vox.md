@@ -1,0 +1,51 @@
+[
+  {
+    "id": "6dcd79fc-c455-46b9-bebb-bc1edcde2c49",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "author_email": "bontecouc@gmail.com",
+    "annotations": {
+      "workers/message": "Automatic deployment on upload.",
+      "workers/triggered_by": "upload"
+    },
+    "versions": [
+      {
+        "version_id": "b22b66b2-985e-451c-bd8c-5eb897a7aefd",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-05-31T10:10:05.221123Z"
+  },
+  {
+    "id": "e6fb9e19-fff8-4c83-8cc1-ef5e18c0fe03",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "author_email": "bontecouc@gmail.com",
+    "annotations": {
+      "workers/triggered_by": "deployment"
+    },
+    "versions": [
+      {
+        "version_id": "f41053e5-a1d7-4a92-87a2-1c559a8e32e5",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-05-31T10:23:19.682567Z"
+  },
+  {
+    "id": "a2736287-1629-4898-9213-4bd3b14795fc",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "author_email": "bontecouc@gmail.com",
+    "annotations": {
+      "workers/triggered_by": "deployment"
+    },
+    "versions": [
+      {
+        "version_id": "892fd12f-eda2-4539-bae2-4bb3fa82a596",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-10-29T22:03:10.280176Z"
+  }
+]

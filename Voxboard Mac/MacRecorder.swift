@@ -1,4 +1,5 @@
 import AppKit
+import AVFoundation
 import Foundation
 @preconcurrency import Speech
 import UniformTypeIdentifiers
@@ -108,6 +109,11 @@ final class MacRecorder {
             || recordingQueue.isCaptureActive || recordingQueue.isProcessing
     }
     var recordingDuration: TimeInterval = 0
+    /// Rolling microphone levels (0…1, oldest first) for live waveforms,
+    /// sampled ten times a second while recording.
+    var inputLevels: [Float] = Array(repeating: 0, count: MacRecorder.inputLevelHistoryCount)
+    static let inputLevelHistoryCount = 40
+    @ObservationIgnored private let levelMeter = MacAudioLevelMeter()
     var transcriptionProgress: TranscriptionProgress?
     var lastTranscriptionResult: String?
     var lastSpeakerDiarizationSkipReason: SpeakerDiarizationSkipReason?
@@ -257,6 +263,8 @@ final class MacRecorder {
         let selectedPreset = presetSnapshot(id: flowId)
         let resolvedCompletionMode = completionMode ?? .runPreset(flow: selectedPreset)
         if recorder.startRecording() {
+            installLevelMeter()
+            MacSoundEffects.play(.recordingStarted)
             activeCompletionMode = resolvedCompletionMode
             if case .captureDraft = resolvedCompletionMode {
                 activeVoiceProcessingConfiguration = RecordingVoiceProcessingConfiguration(
@@ -318,6 +326,7 @@ final class MacRecorder {
         }
         stopDurationTimer()
         isRecording = false
+        MacSoundEffects.play(.recordingStopped)
 
         let duration = max(recordingDuration, recorder.recordingDuration)
         let completionMode = activeCompletionMode ?? .runPreset(flow: presetSnapshot(id: flowId))
@@ -1776,7 +1785,7 @@ final class MacRecorder {
                     let shouldExposeRecovery = !canRemoveRetainedAudio
                     await MainActor.run {
                         recorderForExport.lastError = canceledForLocation
-                            ? String(localized: "Capture canceled because this preset requires an origin-time location.")
+                            ? String(localized: "Capture canceled because this route requires an origin-time location.")
                             : String(localized: "Your transcript was saved locally. \(error.localizedDescription)")
                         recorderForExport.lastExportURL = nil
                         if shouldExposeRecovery {
@@ -1961,7 +1970,7 @@ final class MacRecorder {
         guard resolveSecurityScopedURL(from: flow.exportSettings.folderBookmark) == nil else { return flow }
         guard let selection = requestDirectoryAccess(
             title: String(localized: "Choose Export Folder"),
-            message: String(localized: "Vox.md needs permission to save notes for the \"\(flow.accessibilityName)\" Capture Preset.")
+            message: String(localized: "Vox.md needs permission to save notes for the \"\(flow.accessibilityName)\" Route.")
         ) else {
             KeyboardDebugLog.shared.log("[MacRecorder] Export folder selection cancelled for flow \(flow.id)")
             return flow
@@ -2096,7 +2105,9 @@ final class MacRecorder {
                     ))
                 }
             }
+            let meter = self.levelMeter
             self.recorder.audioBufferHandler = { [weak request] buffer in
+                meter.ingest(buffer)
                 request?.append(buffer)
             }
         }
@@ -2142,6 +2153,15 @@ final class MacRecorder {
             Task { @MainActor [weak self] in
                 guard let self else { return }
                 self.recordingDuration = self.recorder.recordingDuration
+                let level: Float = self.isMeetingRecording
+                    ? Float(self.meetingCapture.microphoneLevel)
+                    : (self.isRecordingPaused ? 0 : self.levelMeter.consumeLevel())
+                var levels = self.inputLevels
+                levels.append(min(1, max(0, level)))
+                if levels.count > Self.inputLevelHistoryCount {
+                    levels.removeFirst(levels.count - Self.inputLevelHistoryCount)
+                }
+                self.inputLevels = levels
             }
         }
     }
@@ -2149,6 +2169,15 @@ final class MacRecorder {
     private func stopDurationTimer() {
         durationTimer?.invalidate()
         durationTimer = nil
+        inputLevels = Array(repeating: 0, count: Self.inputLevelHistoryCount)
+    }
+
+    /// Meters microphone buffers for the live waveform. Live preview replaces
+    /// this handler with one that both meters and transcribes.
+    private func installLevelMeter() {
+        levelMeter.reset()
+        let meter = levelMeter
+        recorder.audioBufferHandler = { buffer in meter.ingest(buffer) }
     }
 }
 
@@ -2186,11 +2215,77 @@ private enum MacRecordingHandoffError: LocalizedError, RecordingJobFailureClassi
         case .transcriptStagingFailed:
             return String(localized: "The transcript could not be attached to the Capture draft.")
         case .recoveryRoutingRequired:
-            return String(localized: "Choose a Capture Preset before retrying this recovered recording.")
+            return String(localized: "Choose a Route before retrying this recovered recording.")
         case .transcriptionLimitReached:
             return String(localized: "Choose a Vox.md plan to process this recording.")
         case .deliveryFailed:
             return String(localized: "The transcript was saved, but its configured destination did not finish. The source recording was preserved for retry.")
         }
+    }
+}
+
+/// Thread-safe peak meter fed from the audio render queue.
+final class MacAudioLevelMeter: @unchecked Sendable {
+    private let lock = NSLock()
+    private var peak: Float = 0
+
+    func reset() {
+        lock.withLock { peak = 0 }
+    }
+
+    func ingest(_ buffer: AVAudioPCMBuffer) {
+        guard let channel = buffer.floatChannelData?[0] else { return }
+        let frames = Int(buffer.frameLength)
+        guard frames > 0 else { return }
+        var sum: Float = 0
+        for index in 0..<frames {
+            let sample = channel[index]
+            sum += sample * sample
+        }
+        let rms = (sum / Float(frames)).squareRoot()
+        // Map roughly -50 dB…0 dB onto 0…1 so speech fills the bars.
+        let decibels = 20 * log10(max(rms, 0.000_01))
+        let normalized = max(0, min(1, (decibels + 50) / 50))
+        lock.withLock { peak = max(peak, normalized) }
+    }
+
+    /// Returns the loudest level since the last call and resets it.
+    func consumeLevel() -> Float {
+        lock.withLock {
+            let value = peak
+            peak = 0
+            return value
+        }
+    }
+}
+
+/// Start/stop cues, gated by Settings › General › Sounds.
+enum MacSoundEffects {
+    static let storageKey = "macRecordingSoundsEnabled"
+
+    enum Cue {
+        case recordingStarted
+        case recordingStopped
+        case captureSent
+
+        var soundName: NSSound.Name {
+            switch self {
+            case .recordingStarted: "Tink"
+            case .recordingStopped: "Pop"
+            case .captureSent: "Glass"
+            }
+        }
+    }
+
+    static var isEnabled: Bool {
+        let defaults = AppConstants.sharedDefaults ?? .standard
+        guard defaults.object(forKey: storageKey) != nil else { return true }
+        return defaults.bool(forKey: storageKey)
+    }
+
+    @MainActor
+    static func play(_ cue: Cue) {
+        guard isEnabled else { return }
+        NSSound(named: cue.soundName)?.play()
     }
 }

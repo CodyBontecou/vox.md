@@ -2,6 +2,38 @@ import XCTest
 @testable import VoxboardCaptureCore
 
 final class CaptureEntryTemplateRendererTests: XCTestCase {
+    func test_titleTokenRendersFirstLineAndDropsTheRepeatedHeading() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        let request = CaptureRequest(
+            createdAt: Date(timeIntervalSince1970: 1_704_192_120), // 2024-01-02 10:42 UTC
+            source: .app,
+            destinationID: UUID(),
+            payloads: [.text("# Project sync\n- [ ] Review final designs\n\nDecision: ship {title} literally")]
+        )
+        let template = "### {hour}:{minute} · {title}\n"
+        let prefix = CaptureEntryTemplateRenderer(calendar: calendar).render(template, for: request)
+        XCTAssertEqual(prefix, "### 10:42 · Project sync\n")
+
+        let entry = "# Project sync\n- [ ] Review final designs\n\nDecision: ship {title} literally"
+        XCTAssertEqual(
+            CaptureEntryTemplateRenderer.entry(entry, under: template, for: request),
+            "- [ ] Review final designs\n\nDecision: ship {title} literally"
+        )
+        // Without {title} in the template, or when the first line isn't a
+        // heading repeating the title, the entry is unchanged.
+        XCTAssertEqual(CaptureEntryTemplateRenderer.entry(entry, under: "### {hour}:{minute}\n", for: request), entry)
+        XCTAssertEqual(
+            CaptureEntryTemplateRenderer.entry("Book recs\nThe Overstory", droppingHeadingFor: "Book recs"),
+            "Book recs\nThe Overstory"
+        )
+    }
+
+    func test_titleTokenIsEmptyWithoutText() {
+        let request = CaptureRequest(source: .app, destinationID: UUID(), payloads: [])
+        XCTAssertEqual(CaptureEntryTemplateRenderer().render("### {title}", for: request), "### ")
+    }
+
     func test_locationTokenSpellingAndDetectionStayAligned() {
         XCTAssertEqual(CaptureEntryTemplateRenderer.locationToken, "{location}")
         XCTAssertTrue(CaptureEntryTemplateRenderer.referencesLocation(in: "📍 {location}"))

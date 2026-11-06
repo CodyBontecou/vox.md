@@ -1,5 +1,6 @@
 import Foundation
 import StoreKit
+import UserNotifications
 import VoxboardShared
 
 /// Manages subscriptions and lifetime individual / Family Sharing purchases.
@@ -12,6 +13,10 @@ final class StoreManager {
     static let unlockProductID = VoxboardPurchaseProduct.individual.rawValue
     static let familyProductID = VoxboardPurchaseProduct.family.rawValue
     static let familyUpgradeProductID = VoxboardPurchaseProduct.familyUpgrade.rawValue
+
+    /// The paywall's trial timeline promises a reminder on this day of the
+    /// seven-day trial; `TrialReminder` schedules it two days before the end.
+    nonisolated static let trialReminderDay = 5
 
     // MARK: - Migration
 
@@ -27,6 +32,8 @@ final class StoreManager {
         trialEligibleProductIDs.contains(product.rawValue)
     }
     private(set) var isEntitlementStateReady = false
+    /// Verified, unexpired products from the last entitlement sync (Settings' plan row).
+    private(set) var currentEntitlementProducts: [VoxboardPurchaseProduct] = []
     var purchasingProductID: String?
     var isRestoring = false
     var errorMessage: String?
@@ -211,6 +218,9 @@ final class StoreManager {
                         throw StoreError.failedVerification
                     }
                     usageTracker.applyVerifiedPurchase(verifiedProduct)
+                    if transaction.offer?.paymentMode == .freeTrial, let trialEnd = transaction.expirationDate {
+                        Task { await TrialReminder.schedule(trialEndsAt: trialEnd) }
+                    }
                     await transaction.finish()
                     await syncCurrentEntitlements(including: [verifiedProduct])
                 } catch {
@@ -311,9 +321,27 @@ final class StoreManager {
         }
 
         lastEntitlementObservations = observations
+        currentEntitlementProducts = currentProducts
         usageTracker.reconcileStoreEntitlements(currentProducts, expirationDate: expirationDates.max())
+        if !usageTracker.hasUnlocked, !usageTracker.hasHadUnlimitedAccess,
+           await Self.hasEndedSubscription() {
+            // Reinstalls clear the App Group; StoreKit still knows about an
+            // ended trial or subscription, so open read-only, not first-run.
+            usageTracker.recordPreviousUnlimitedAccess()
+        }
         isEntitlementStateReady = hasVerifiedAppTransaction || !currentProducts.isEmpty
         return currentProducts
+    }
+
+    /// True when StoreKit holds a verified, non-revoked subscription
+    /// transaction (including a free trial) for this Apple Account.
+    private static func hasEndedSubscription() async -> Bool {
+        for product in VoxboardPurchaseProduct.allCases where product.isSubscription {
+            guard case .verified(let transaction)? = await Transaction.latest(for: product.rawValue),
+                  transaction.revocationDate == nil else { continue }
+            return true
+        }
+        return false
     }
 
     private func recordRestoreDiagnostics(syncSucceeded: Bool, syncError: String?) async {
@@ -399,5 +427,28 @@ enum StoreError: LocalizedError {
         case .unrecognizedProduct:
             String(localized: "The transaction did not match a Vox.md product")
         }
+    }
+}
+
+// MARK: - Trial reminder
+
+/// Local notification two days before a free trial converts, as the
+/// paywall's trial timeline promises. Permission is requested only after a
+/// trial actually starts; if it is declined, nothing else changes.
+enum TrialReminder {
+    static let identifier = "vox.trialReminder"
+
+    static func schedule(trialEndsAt trialEnd: Date) async {
+        guard let fireDate = Calendar.current.date(byAdding: .day, value: StoreManager.trialReminderDay - 7, to: trialEnd),
+              fireDate > Date() else { return }
+        let center = UNUserNotificationCenter.current()
+        guard (try? await center.requestAuthorization(options: [.alert, .sound])) == true else { return }
+        let content = UNMutableNotificationContent()
+        content.title = String(localized: "Your Vox.md trial ends in 2 days")
+        content.body = String(localized: "Your plan starts on \(trialEnd.formatted(.dateTime.month(.abbreviated).day())) unless you cancel in Settings.")
+        content.sound = .default
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: fireDate.timeIntervalSinceNow, repeats: false)
+        center.removePendingNotificationRequests(withIdentifiers: [identifier])
+        try? await center.add(UNNotificationRequest(identifier: identifier, content: content, trigger: trigger))
     }
 }

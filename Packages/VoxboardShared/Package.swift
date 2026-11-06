@@ -59,6 +59,7 @@ let package = Package(
             name: "VoxboardPersistenceFixtures",
             dependencies: ["VoxboardCaptureCore", "VoxboardShared"]
         ),
+        .executableTarget(name: "VoxboardIntelligenceEvaluation", dependencies: ["VoxboardShared"]),
         .executableTarget(
             name: "VoxboardM2Oracle",
             dependencies: ["VoxboardCaptureCore"]

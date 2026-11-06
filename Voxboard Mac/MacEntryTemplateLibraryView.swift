@@ -82,7 +82,7 @@ struct MacEntryTemplateLibraryView: View {
                 GeistDivider()
                 Label(errorMessage, systemImage: "exclamationmark.triangle.fill")
                     .font(Geist.caption())
-                    .foregroundStyle(MacBrand.orangeText)
+                    .foregroundStyle(MacBrand.attention)
                     .padding(12)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -315,7 +315,7 @@ private struct MacEntryTemplateEditor: View {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(isDraft ? String(localized: "New Entry Template") : template.name)
                             .font(Geist.heading(.title2))
-                        Text("Reusable Markdown and YAML formatting for Capture Presets.")
+                        Text("Reusable Markdown and YAML formatting for Routes.")
                             .font(Geist.caption())
                             .foregroundStyle(Geist.muted)
                     }
@@ -356,7 +356,7 @@ private struct MacEntryTemplateEditor: View {
                 if let errorMessage {
                     Label(errorMessage, systemImage: "exclamationmark.triangle.fill")
                         .font(Geist.caption())
-                        .foregroundStyle(MacBrand.orangeText)
+                        .foregroundStyle(MacBrand.attention)
                 } else if let statusMessage {
                     Label(statusMessage, systemImage: "checkmark.circle.fill")
                         .font(Geist.caption())

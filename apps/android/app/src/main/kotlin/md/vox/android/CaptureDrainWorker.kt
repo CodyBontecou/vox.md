@@ -51,6 +51,7 @@ class VoxWorkerFactory(
     ): ListenableWorker? = when (workerClassName) {
         CaptureDrainWorker::class.java.name -> CaptureDrainWorker(appContext, workerParameters, repository())
         RecordingRetentionWorker::class.java.name -> RecordingRetentionWorker(appContext, workerParameters)
+        TrialReminderWorker::class.java.name -> TrialReminderWorker(appContext, workerParameters)
         WearTranscriptDeliveryWorker::class.java.name ->
             WearTranscriptDeliveryWorker(appContext, workerParameters, repository())
         else -> null

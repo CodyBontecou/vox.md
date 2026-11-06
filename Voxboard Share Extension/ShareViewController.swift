@@ -1,3 +1,8 @@
+#if canImport(FoundationModels)
+import FoundationModels
+#endif
+import CoreText
+import LinkPresentation
 import Observation
 import SwiftUI
 import UIKit
@@ -7,6 +12,7 @@ import VoxboardShared
 final class ShareViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        ShareSignal.registerFonts()
         let providers = extensionContext?.inputItems
             .compactMap { $0 as? NSExtensionItem }
             .flatMap { $0.attachments ?? [] } ?? []
@@ -39,6 +45,9 @@ private final class ShareCaptureModel {
     var isQueuedForLater = false
     var errorMessage: String?
     var locationDecision: (reason: CaptureLocationUnavailableReason, attemptedAt: Date)?
+    /// Shared page preview: thumbnail and an on-device summary of its text.
+    var pageThumbnail: UIImage?
+    var pageSummary: String?
 
     private let providers: [NSItemProvider]
     private weak var extensionContext: NSExtensionContext?
@@ -93,6 +102,7 @@ private final class ShareCaptureModel {
                 return
             }
             isLoading = false
+            loadPagePreview()
         } catch is CancellationError {
             removeStagingDirectory()
             if cancellationRequested { finishCancellation() }
@@ -106,9 +116,84 @@ private final class ShareCaptureModel {
         }
     }
 
+    /// Lightweight description of the first shared item for the preview card.
+    var sharedItemSummary: (title: String, detail: String, symbol: String)? {
+        guard let first = loadedPayloads.first else { return nil }
+        let extra = loadedPayloads.count > 1
+            ? String(localized: " · \(loadedPayloads.count) items")
+            : ""
+        switch first {
+        case .url(let url, let title):
+            let host = url.host().map { $0 + url.path() } ?? url.absoluteString
+            return (title?.isEmpty == false ? title! : host, host + extra, "link")
+        case .text(let text):
+            let line = text.split(whereSeparator: \.isNewline).first.map(String.init) ?? text
+            return (line, String(localized: "Text") + extra, "text.alignleft")
+        case .image(let asset, _, _):
+            return (asset.originalFilename, String(localized: "Image") + extra, "photo")
+        case .audio(let asset, _), .retainedAudio(let asset, _):
+            return (asset.originalFilename, String(localized: "Audio") + extra, "waveform")
+        case .file(let asset):
+            return (asset.originalFilename, String(localized: "File") + extra, "doc")
+        case .scannedDocument(let pages, _, _):
+            return (String(localized: "Scanned document"), String(localized: "\(pages.count) pages") + extra, "doc.text.viewfinder")
+        case .sketch:
+            return (String(localized: "Sketch"), String(localized: "Drawing") + extra, "scribble")
+        }
+    }
+
     var selectedPreset: CapturePresetProfile? {
         guard let selectedPresetID else { return nil }
         return presets.first(where: { $0.id == selectedPresetID })
+    }
+
+    private var sharedPageURL: URL? {
+        for payload in loadedPayloads {
+            if case .url(let url, _) = payload { return url }
+        }
+        return nil
+    }
+
+    /// Thumbnail via LinkPresentation and a short summary of the page. Both
+    /// are best-effort and never block sending.
+    private func loadPagePreview() {
+        guard let url = sharedPageURL else { return }
+        Task { @MainActor [weak self] in
+            if let image = await SharePagePreview.thumbnail(for: url) { self?.pageThumbnail = image }
+        }
+        Task { @MainActor [weak self] in
+            if let summary = await SharePagePreview.summary(for: url) { self?.pageSummary = summary }
+        }
+    }
+
+    /// "→ Inbox/{title}.md · link, note and page summary" for the selected route.
+    var destinationLine: String? {
+        guard let destination = destinations.first(where: { $0.id == selectedDestinationID }) else { return nil }
+        var path: String
+        switch destination.noteTarget {
+        case .newNote(let template), .rollingNote(let template, _): path = template
+        case .existingNote(let relativePath): path = relativePath
+        }
+        if (path as NSString).pathExtension.isEmpty { path += ".md" }
+        if case .beneathHeading(let heading, _, _) = destination.placement {
+            path += " › ## \(heading.title)"
+        }
+        var parts: [String] = []
+        for payload in loadedPayloads {
+            let part: String
+            switch payload {
+            case .url: part = String(localized: "link")
+            case .text: part = String(localized: "text")
+            case .image: part = String(localized: "image")
+            case .audio, .retainedAudio: part = String(localized: "audio")
+            case .file, .scannedDocument, .sketch: part = String(localized: "file")
+            }
+            if !parts.contains(part) { parts.append(part) }
+        }
+        if !note.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { parts.append(String(localized: "note")) }
+        if pageSummary != nil { parts.append(String(localized: "page summary")) }
+        let contents = parts.isEmpty ? "" : " · " + ListFormatter.localizedString(byJoining: parts)
+        return "→ \(path)\(contents)"
     }
 
     func applySelectedPresetDestination() {
@@ -156,6 +241,16 @@ private final class ShareCaptureModel {
         }
         if !trimmed.isEmpty { payloads.append(.text(trimmed)) }
         payloads.append(contentsOf: loadedPayloads)
+        // The page summary follows its link as a quote; skipped if it would
+        // exceed the text budget.
+        if let summary = pageSummary,
+           let linkIndex = payloads.firstIndex(where: { if case .url = $0 { return true } else { return false } }) {
+            var summaryBudget = CaptureInputBudget()
+            let quoted = summary.split(whereSeparator: \.isNewline).map { "> \($0)" }.joined(separator: "\n")
+            if (try? summaryBudget.reserveText(characters: quoted.count + trimmed.count)) != nil {
+                payloads.insert(.text(quoted), at: linkIndex + 1)
+            }
+        }
         guard !payloads.isEmpty else {
             fail(ShareCaptureError.emptyShare.localizedDescription)
             return
@@ -491,45 +586,199 @@ private enum ShareItemLoader {
     }
 }
 
+/// Route tile tone by route order, mirroring the app's `SignalRouteTileTone`
+/// (the extension does not compile GeistTheme): the first route indigo, the
+/// second near-black ink (inverted in dark mode), every other route neutral.
+private enum ShareRouteTileTone {
+    case primary
+    case ink
+    case neutral
+
+    static func forRoute(at index: Int?) -> ShareRouteTileTone {
+        switch index {
+        case 0: .primary
+        case 1: .ink
+        default: .neutral
+        }
+    }
+
+    var fill: Color {
+        switch self {
+        case .primary: ShareSignal.accent
+        case .ink: ShareSignal.text
+        case .neutral: ShareSignal.well
+        }
+    }
+
+    var letter: Color {
+        switch self {
+        case .primary: .white
+        case .ink: ShareSignal.bg
+        case .neutral: ShareSignal.text
+        }
+    }
+}
+
+/// Signal palette for the extension, which does not link the app's theme.
+private enum ShareSignal {
+    static let bg = dynamic(0xF2F2EE, 0x0B0B0B)
+    static let card = dynamic(0xFFFFFF, 0x161616)
+    static let well = dynamic(0xE3E3DC, 0x222220)
+    static let border = dynamic(0xDEDED8, 0x2A2A28)
+    static let text = dynamic(0x121212, 0xF4F4F1)
+    static let muted = dynamic(0x5E5E5A, 0x9A9A95)
+    static let accent = Color(uiColor: UIColor(hex: 0x2F3BE8))
+    static let warningBorder = dynamic(0xF1C9B4, 0x6B3A1F)
+    static let warning = dynamic(0xE8590C, 0xFF8A4C)
+
+    // MARK: Type (Geist + Geist Mono)
+
+    static func sans(_ size: CGFloat, _ weight: Font.Weight = .regular, relativeTo style: Font.TextStyle = .body) -> Font {
+        let name: String
+        switch weight {
+        case .semibold, .bold, .heavy, .black: name = "Geist-SemiBold"
+        case .medium: name = "Geist-Medium"
+        default: name = "Geist-Regular"
+        }
+        return .custom(name, size: size, relativeTo: style)
+    }
+
+    static func mono(_ size: CGFloat, relativeTo style: Font.TextStyle = .caption) -> Font {
+        .custom("GeistMono-Regular", size: size, relativeTo: style)
+    }
+
+    private static var didRegisterFonts = false
+
+    /// Extensions do not inherit the app's `UIAppFonts`. Registers Geist from
+    /// this extension's bundle when present, otherwise from the containing
+    /// app bundle (the .appex sits in Vox.md.app/PlugIns). If neither has the
+    /// fonts, `Font.custom` falls back to the system face.
+    static func registerFonts() {
+        guard !didRegisterFonts else { return }
+        didRegisterFonts = true
+        let ownBundle = Bundle.main.bundleURL
+        let appBundle = ownBundle.deletingLastPathComponent().deletingLastPathComponent()
+        for name in ["Geist-Regular", "Geist-Medium", "Geist-SemiBold", "GeistMono-Regular", "GeistMono-Medium"] {
+            let file = "\(name).ttf"
+            let candidates = [
+                ownBundle.appendingPathComponent(file),
+                ownBundle.appendingPathComponent("Fonts/\(file)"),
+                appBundle.appendingPathComponent(file),
+                appBundle.appendingPathComponent("Fonts/\(file)"),
+            ]
+            guard let url = candidates.first(where: { FileManager.default.isReadableFile(atPath: $0.path) }) else { continue }
+            CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
+        }
+    }
+
+    private static func dynamic(_ light: UInt32, _ dark: UInt32) -> Color {
+        Color(uiColor: UIColor { traits in
+            UIColor(hex: traits.userInterfaceStyle == .dark ? dark : light)
+        })
+    }
+}
+
+private extension UIColor {
+    convenience init(hex: UInt32) {
+        self.init(
+            red: CGFloat((hex >> 16) & 0xFF) / 255,
+            green: CGFloat((hex >> 8) & 0xFF) / 255,
+            blue: CGFloat(hex & 0xFF) / 255,
+            alpha: 1
+        )
+    }
+}
+
 private struct ShareCaptureView: View {
     @Bindable var model: ShareCaptureModel
 
+    private let routeColumns = [
+        GridItem(.flexible(), spacing: 8),
+        GridItem(.flexible(), spacing: 8),
+    ]
+
     var body: some View {
         NavigationStack {
-            Form {
-                if model.isLoading {
-                    HStack { Spacer(); ProgressView("Loading shared items…"); Spacer() }
-                } else {
-                    if !model.presets.isEmpty {
-                        Section("Capture Preset") {
-                            Picker("Preset", selection: $model.selectedPresetID) {
-                                ForEach(model.presets) { preset in
-                                    Label(preset.visibleName ?? String(localized: "Icon-only preset"), systemImage: preset.symbolName)
-                                        .tag(Optional(preset.id))
-                                        .accessibilityLabel(preset.accessibilityName)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    if model.isLoading {
+                        HStack { Spacer(); ProgressView("Loading shared items…"); Spacer() }
+                            .padding(.vertical, 40)
+                    } else {
+                        if let summary = model.sharedItemSummary {
+                            previewCard(summary)
+                        }
+
+                        VStack(alignment: .leading, spacing: 6) {
+                            fieldLabel("Add a note")
+                            TextEditor(text: $model.note)
+                                .font(ShareSignal.sans(16))
+                                .foregroundStyle(ShareSignal.text)
+                                .scrollContentBackground(.hidden)
+                                .frame(minHeight: 110)
+                                .padding(8)
+                                .background(ShareSignal.card, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                        .stroke(ShareSignal.border, lineWidth: 1)
+                                )
+                                .overlay(alignment: .topLeading) {
+                                    if model.note.isEmpty {
+                                        Text("Why it matters…")
+                                            .font(ShareSignal.sans(16))
+                                            .foregroundStyle(ShareSignal.muted)
+                                            .padding(.horizontal, 13)
+                                            .padding(.vertical, 16)
+                                            .allowsHitTesting(false)
+                                            .accessibilityHidden(true)
+                                    }
                                 }
+                                .disabled(model.isQueuedForLater)
+                                .accessibilityLabel("Optional capture note")
+                                .accessibilityHint("Adds text before the shared content")
+                        }
+
+                        if !model.presets.isEmpty {
+                            routePicker
+                        }
+
+                        if let line = model.destinationLine {
+                            Text(verbatim: line)
+                                .font(ShareSignal.mono(11.5))
+                                .foregroundStyle(ShareSignal.muted)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .accessibilityLabel(Text("Destination: \(line)"))
+                                .accessibilityIdentifier("share.destinationLine")
+                        }
+
+                        if let error = model.errorMessage {
+                            HStack(alignment: .top, spacing: 12) {
+                                Circle()
+                                    .fill(ShareSignal.warning)
+                                    .frame(width: 10, height: 10)
+                                    .padding(.top, 5)
+                                    .accessibilityHidden(true)
+                                Text(error)
+                                    .font(ShareSignal.sans(15, relativeTo: .subheadline))
+                                    .foregroundStyle(ShareSignal.text)
+                                    .fixedSize(horizontal: false, vertical: true)
                             }
-                            .disabled(model.isQueuedForLater)
-                            .onChange(of: model.selectedPresetID) { _, _ in
-                                model.applySelectedPresetDestination()
-                            }
-                            if let destination = model.destinations.first(where: { $0.id == model.selectedDestinationID }) {
-                                LabeledContent("Destination", value: destination.rootName)
-                            }
+                            .padding(14)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(ShareSignal.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                    .stroke(ShareSignal.warningBorder, lineWidth: 1)
+                            )
+                            .accessibilityElement(children: .combine)
+                            .accessibilityLabel(Text("Error: \(error)"))
                         }
                     }
-                    Section("Add a note") {
-                        TextEditor(text: $model.note)
-                            .frame(minHeight: 130)
-                            .disabled(model.isQueuedForLater)
-                            .accessibilityLabel("Optional capture note")
-                            .accessibilityHint("Adds text before the shared content")
-                    }
-                    if let error = model.errorMessage {
-                        Section("Error") { Text(error).foregroundStyle(.red) }
-                    }
                 }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
             }
+            .background(ShareSignal.bg.ignoresSafeArea())
             .confirmationDialog(
                 "Location",
                 isPresented: Binding(
@@ -542,20 +791,22 @@ private struct ShareCaptureView: View {
                 Button("Send Without Location") {
                     Task { await model.sendWithoutUnavailableLocation(alwaysForPreset: false) }
                 }
-                Button("Always Send Without Location for This Preset") {
+                Button("Always Send Without Location for This Route") {
                     Task { await model.sendWithoutUnavailableLocation(alwaysForPreset: true) }
                 }
                 Button("Cancel", role: .cancel) { model.cancelUnavailableLocation() }
             } message: {
                 Text("The shared items are preserved while you decide.")
             }
-            .navigationTitle("Capture to Vox.md")
+            .navigationTitle("Send to Vox.md")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(ShareSignal.bg, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(model.isQueuedForLater ? String(localized: "Done") : String(localized: "Cancel")) {
                         model.cancel()
                     }
+                    .tint(ShareSignal.text)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(model.isSubmitting
@@ -563,6 +814,10 @@ private struct ShareCaptureView: View {
                            : (model.isQueuedForLater ? String(localized: "Open Vox.md") : String(localized: "Send"))) {
                         Task { await model.submit() }
                     }
+                    .font(ShareSignal.sans(15, .semibold))
+                    // Filled accent pill, as on the Share sheet board.
+                    .buttonStyle(.borderedProminent)
+                    .tint(ShareSignal.accent)
                     .disabled(model.isLoading || model.isSubmitting || model.selectedDestinationID == nil)
                 }
             }
@@ -573,6 +828,215 @@ private struct ShareCaptureView: View {
             }
         }
     }
+
+    private func fieldLabel(_ title: LocalizedStringKey) -> some View {
+        Text(title)
+            .font(ShareSignal.sans(13, .medium, relativeTo: .footnote))
+            .foregroundStyle(ShareSignal.muted)
+    }
+
+    private func previewCard(_ summary: (title: String, detail: String, symbol: String)) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+        HStack(spacing: 12) {
+            Group {
+                if let thumbnail = model.pageThumbnail {
+                    Image(uiImage: thumbnail)
+                        .resizable()
+                        .scaledToFill()
+                } else {
+                    Image(systemName: summary.symbol)
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundStyle(ShareSignal.muted)
+                }
+            }
+            .frame(width: 56, height: 56)
+            .background(ShareSignal.well)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(summary.title)
+                    .font(ShareSignal.sans(15, .semibold, relativeTo: .subheadline))
+                    .foregroundStyle(ShareSignal.text)
+                    .lineLimit(2)
+                Text(summary.detail)
+                    .font(ShareSignal.mono(11.5))
+                    .foregroundStyle(ShareSignal.muted)
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+            }
+            Spacer(minLength: 0)
+        }
+            if let pageSummary = model.pageSummary {
+                Text(pageSummary)
+                    .font(ShareSignal.sans(13, relativeTo: .footnote))
+                    .foregroundStyle(ShareSignal.muted)
+                    .lineLimit(4)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityLabel(Text("Page summary: \(pageSummary)"))
+            }
+        }
+        .padding(12)
+        .background(ShareSignal.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(ShareSignal.border, lineWidth: 1)
+        )
+        .accessibilityElement(children: .combine)
+    }
+
+    private var routePicker: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            fieldLabel("Route")
+            LazyVGrid(columns: routeColumns, spacing: 8) {
+                ForEach(Array(model.presets.enumerated()), id: \.element.id) { index, preset in
+                    routeOption(preset, tone: ShareRouteTileTone.forRoute(at: index))
+                }
+            }
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel("Route")
+        }
+        .disabled(model.isQueuedForLater)
+        .onChange(of: model.selectedPresetID) { _, _ in
+            model.applySelectedPresetDestination()
+        }
+    }
+
+    /// `presets` are the enabled routes in the user's order (App Group
+    /// `recordingFlows`), so the tile tone matches the app's route tiles.
+    private func routeOption(_ preset: CapturePresetProfile, tone: ShareRouteTileTone) -> some View {
+        let isSelected = model.selectedPresetID == preset.id
+        return Button {
+            model.selectedPresetID = preset.id
+        } label: {
+            HStack(spacing: 10) {
+                Group {
+                    if let letter = preset.visibleName?.first {
+                        Text(String(letter).uppercased())
+                            .font(ShareSignal.sans(12, .bold, relativeTo: .caption))
+                    } else if let emoji = CapturePresetEmoji.normalized(preset.emoji) {
+                        Text(verbatim: emoji)
+                            .font(.system(size: 12))
+                    } else {
+                        Image(systemName: preset.symbolName)
+                            .font(.system(size: 12, weight: .semibold))
+                    }
+                }
+                .foregroundStyle(tone.letter)
+                .frame(width: 26, height: 26)
+                .background(tone.fill, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                .accessibilityHidden(true)
+                Text(preset.visibleName ?? String(localized: "Icon-only route"))
+                    .font(ShareSignal.sans(15, .medium, relativeTo: .subheadline))
+                    .foregroundStyle(ShareSignal.text)
+                    .lineLimit(1)
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 12)
+            .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
+            .background(ShareSignal.card, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .stroke(isSelected ? ShareSignal.accent : ShareSignal.border, lineWidth: isSelected ? 2 : 1)
+            )
+            .contentShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(preset.accessibilityName)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+}
+
+/// Best-effort page preview for a shared link. Network access goes only to
+/// the shared page's own host; summarizing runs on device.
+private enum SharePagePreview {
+    static func thumbnail(for url: URL) async -> UIImage? {
+        let provider = LPMetadataProvider()
+        provider.timeout = 8
+        guard let metadata = try? await provider.startFetchingMetadata(for: url),
+              let imageProvider = metadata.imageProvider ?? metadata.iconProvider else { return nil }
+        return await withCheckedContinuation { continuation in
+            imageProvider.loadObject(ofClass: UIImage.self) { object, _ in
+                continuation.resume(returning: object as? UIImage)
+            }
+        }
+    }
+
+    /// One or two sentences: Foundation Models when available, otherwise the
+    /// page's meta description or first paragraph.
+    static func summary(for url: URL) async -> String? {
+        guard let page = await fetchText(url) else { return nil }
+        let fallback = page.description ?? page.firstParagraph
+        #if canImport(FoundationModels)
+        if #available(iOS 26.0, *), SystemLanguageModel.default.isAvailable, !page.body.isEmpty {
+            let excerpt = String(page.body.prefix(4_000))
+            do {
+                let session = LanguageModelSession(
+                    instructions: "Summarize the web page text in one or two plain sentences. Do not add facts that are not in the text."
+                )
+                let response = try await session.respond(to: excerpt)
+                let summary = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !summary.isEmpty { return String(summary.prefix(400)) }
+            } catch {}
+        }
+        #endif
+        return fallback.map { String($0.prefix(400)) }
+    }
+
+    private struct PageText {
+        var description: String?
+        var firstParagraph: String?
+        var body: String
+    }
+
+    private static func fetchText(_ url: URL) async -> PageText? {
+        guard let scheme = url.scheme?.lowercased(), scheme == "http" || scheme == "https" else { return nil }
+        var request = URLRequest(url: url, timeoutInterval: 8)
+        request.setValue("text/html", forHTTPHeaderField: "Accept")
+        guard let (data, response) = try? await URLSession.shared.data(for: request),
+              (response as? HTTPURLResponse).map({ (200..<300).contains($0.statusCode) }) ?? true,
+              let html = String(data: data.prefix(1_500_000), encoding: .utf8)
+                ?? String(data: data.prefix(1_500_000), encoding: .isoLatin1) else { return nil }
+        let description = metaContent(html, names: ["og:description", "description", "twitter:description"])
+        let paragraphs = matches(html, pattern: "<p[^>]*>(.*?)</p>")
+            .map(plainText)
+            .filter { $0.count > 60 }
+        return PageText(
+            description: description.map(plainText).flatMap { $0.isEmpty ? nil : $0 },
+            firstParagraph: paragraphs.first,
+            body: paragraphs.prefix(20).joined(separator: "\n")
+        )
+    }
+
+    private static func metaContent(_ html: String, names: [String]) -> String? {
+        for name in names {
+            let escaped = NSRegularExpression.escapedPattern(for: name)
+            let patterns = [
+                "<meta[^>]+(?:name|property)=[\"']\(escaped)[\"'][^>]*content=[\"']([^\"']*)[\"']",
+                "<meta[^>]+content=[\"']([^\"']*)[\"'][^>]*(?:name|property)=[\"']\(escaped)[\"']",
+            ]
+            for pattern in patterns {
+                if let value = matches(html, pattern: pattern).first, !value.isEmpty { return value }
+            }
+        }
+        return nil
+    }
+
+    private static func matches(_ text: String, pattern: String) -> [String] {
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive, .dotMatchesLineSeparators]) else { return [] }
+        let range = NSRange(text.startIndex..., in: text)
+        return regex.matches(in: text, range: range).compactMap { match in
+            guard match.numberOfRanges > 1, let r = Range(match.range(at: 1), in: text) else { return nil }
+            return String(text[r])
+        }
+    }
+
+    private static func plainText(_ html: String) -> String {
+        var text = html.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
+        let entities = ["&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": "\"", "&#39;": "'", "&apos;": "'", "&nbsp;": " ", "&#x27;": "'"]
+        for (entity, value) in entities { text = text.replacingOccurrences(of: entity, with: value) }
+        return text.replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 }
 
 private enum ShareCaptureError: Error, LocalizedError {
@@ -582,7 +1046,7 @@ private enum ShareCaptureError: Error, LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .destinationRequired: return String(localized: "Configure a destination for a Capture Preset in Vox.md first.")
+        case .destinationRequired: return String(localized: "Configure a destination for a Route in Vox.md first.")
         case .emptyShare: return String(localized: "There is no supported content to capture.")
         case .missingSharedFile: return String(localized: "The shared file disappeared before Vox.md could copy it.")
         }

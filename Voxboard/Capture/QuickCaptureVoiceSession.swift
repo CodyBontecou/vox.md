@@ -44,21 +44,25 @@ final class QuickCaptureVoiceSession: NSObject, AVAudioRecorderDelegate, AVAudio
     private let stageRecording: (URL, String?) async -> CaptureAssetReference?
     private let updateRecording: (CaptureAssetReference, String?) async -> Bool
     private let removeRecording: (CaptureAssetReference) async -> Bool
+    /// The composer's current route (`CapturePreset.id`), read each time so a
+    /// route switch before recording picks up that route's model override.
+    private let routeID: () -> String?
 
     init(
         microphoneIsBusy: @escaping () -> Bool,
         transcriptionService: OnDeviceTranscriptionService? = nil,
+        routeID: @escaping () -> String? = { CapturePresetStore.selectedFlowId() },
         stageRecording: @escaping (URL, String?) async -> CaptureAssetReference? = { _, _ in nil },
         updateRecording: @escaping (CaptureAssetReference, String?) async -> Bool = { _, _ in false },
         removeRecording: @escaping (CaptureAssetReference) async -> Bool = { _ in true }
     ) {
         self.microphoneIsBusy = microphoneIsBusy
         self.transcriptionService = transcriptionService ?? AppTranscriptionServices.shared
+        self.routeID = routeID
         self.stageRecording = stageRecording
         self.updateRecording = updateRecording
         self.removeRecording = removeRecording
-        let selectedID = AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedModelKey)
-            ?? AppConstants.defaultTranscriptionBackendID
+        let selectedID = CapturePresetStore.resolvedTranscriptionModelID(flowID: routeID())
         if selectedID == TranscriptionBackendID.automatic {
             // Automatic resolves availability asynchronously when recording opens.
             // Start from the user's default intent to include a transcript, then
@@ -71,14 +75,18 @@ final class QuickCaptureVoiceSession: NSObject, AVAudioRecorderDelegate, AVAudio
         super.init()
     }
 
+    /// The route's model override, falling back to the app-wide model.
+    private var resolvedModelID: String {
+        CapturePresetStore.resolvedTranscriptionModelID(flowID: routeID())
+    }
+
     var audioURL: URL? { temporaryAudioURL }
     var duration: TimeInterval {
         if let player { return player.duration }
         return elapsed
     }
     var hasTranscriptionBackend: Bool {
-        let selectedID = AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedModelKey)
-            ?? AppConstants.defaultTranscriptionBackendID
+        let selectedID = resolvedModelID
         if selectedID == TranscriptionBackendID.automatic {
             return AppConstants.sharedDefaults?.bool(forKey: AppConstants.automaticBackendReadyKey) == true
                 || WhisperModelInfo.availableModels.contains(where: { $0.isDownloaded })
@@ -91,8 +99,7 @@ final class QuickCaptureVoiceSession: NSObject, AVAudioRecorderDelegate, AVAudio
         cleanupPlayback()
         purgeStaleTemporaryAudio()
 
-        let selectedID = AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedModelKey)
-            ?? AppConstants.defaultTranscriptionBackendID
+        let selectedID = resolvedModelID
         let selectedLanguage = AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedLanguageKey) ?? "auto"
         let backendReady = await transcriptionService.canTranscribe(
             modelID: selectedID,
@@ -211,8 +218,7 @@ final class QuickCaptureVoiceSession: NSObject, AVAudioRecorderDelegate, AVAudio
             guard await persistCurrentRecording(generation: generation),
                   let url = temporaryAudioURL else { return }
             phase = .transcribing
-            let modelID = AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedModelKey)
-                ?? AppConstants.defaultTranscriptionBackendID
+            let modelID = resolvedModelID
             let language = AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedLanguageKey)
                 ?? "auto"
             progressGeneration = generation

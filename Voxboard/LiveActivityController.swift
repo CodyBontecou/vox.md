@@ -1,6 +1,8 @@
 import Foundation
 import os.log
+import VoxboardCaptureCore
 import VoxboardShared
+import WidgetKit
 
 #if canImport(ActivityKit)
 import ActivityKit
@@ -28,6 +30,19 @@ enum LiveActivityPresentationReason {
             return AppConstants.shortcutRecordingLiveActivityEnabled
         }
     }
+}
+
+/// Read-only snapshot of the recorder's active segment used to decorate the
+/// Live Activity with its route, pause clock, and Pause availability.
+struct LiveActivitySegmentContext {
+    let requestId: String?
+    let flow: CapturePreset?
+    let isPaused: Bool
+    let canPause: Bool
+    /// Wall-clock start minus already-recorded time.
+    let effectiveStartedAt: TimeInterval
+    /// Recorded time excluding pauses.
+    let elapsed: TimeInterval
 }
 
 /// Owns the lock-screen / Dynamic Island Live Activity for Voxboard.
@@ -61,6 +76,27 @@ final class LiveActivityController {
     /// existing activity is reused so a monitor card is never re-gated by the
     /// shortcut-recording setting or vice versa.
     private var presentationReason: LiveActivityPresentationReason = .monitor
+
+    // Route context for the displayed segment.
+    private var routeRequestID: String?
+    private var routeName: String?
+    private var routeMonogram: String?
+    private var destinationPath: String?
+    private var destinationTask: Task<Void, Never>?
+
+    // Waveform + pause sampling. Levels are bucketed (peak per bucket) and
+    // pushed to ActivityKit at most once per `pushInterval` to respect the
+    // system's update budget while keeping the bars visibly live.
+    private var levelSampler: Timer?
+    private var levelHistory: [UInt8] = []
+    private var bucketPeak: Float = 0
+    private var lastBucketAt: TimeInterval = 0
+    private var lastPushAt: TimeInterval = 0
+    private var levelsDirty = false
+    private var lastPausedState: Bool?
+    private static let sampleInterval: TimeInterval = 0.15
+    private static let bucketInterval: TimeInterval = 0.5
+    private static let pushInterval: TimeInterval = 1.0
     #endif
 
     private init() {}
@@ -178,13 +214,25 @@ final class LiveActivityController {
     ) {
         #if canImport(ActivityKit)
         guard #available(iOS 16.1, *) else { return }
-        let state = VoxboardLiveActivityState(
+        let wasTranscribing = desiredState.isTranscribing || desiredState.isSegmentActive
+        let base = VoxboardLiveActivityState(
             isSegmentActive: isSegmentActive,
             isTranscribing: isTranscribing,
             segmentStartedAt: isSegmentActive ? startedAt : nil,
             segmentRequestId: isSegmentActive ? requestId : nil,
             transcriptionProgress: isTranscribing ? transcriptionProgress : nil
         )
+        if isSegmentActive {
+            prepareRouteContext(requestId: requestId)
+            startLevelSampler()
+        } else {
+            stopLevelSampler()
+            if !isTranscribing { clearRouteContext() }
+        }
+        if wasTranscribing, !isSegmentActive, !isTranscribing {
+            reloadRouteWidgets()
+        }
+        let state = decorated(base)
         desiredState = state
         guard presentationReason.isAllowed else {
             end()
@@ -209,6 +257,8 @@ final class LiveActivityController {
         }
         activity = nil
         desiredState = .idle
+        stopLevelSampler()
+        clearRouteContext()
         shouldStartAfterPendingEnd = false
         presentationReason = .monitor
         endActivities(activities)
@@ -226,7 +276,169 @@ final class LiveActivityController {
         end()
     }
 
+    /// Re-reads pause/clock state from the recorder and pushes it immediately.
+    /// Called by the Pause/Resume intent so the card reflects the tap at once.
+    func refreshRecordingState() {
+        #if canImport(ActivityKit)
+        guard #available(iOS 16.1, *) else { return }
+        guard desiredState.isSegmentActive else { return }
+        lastPausedState = PersistentRecorder.active?.liveActivitySegmentContext?.isPaused
+        pushDecoratedState()
+        #endif
+    }
+
     #if canImport(ActivityKit)
+    // MARK: - Route context
+
+    private func prepareRouteContext(requestId: String?) {
+        guard routeRequestID != requestId || routeRequestID == nil else { return }
+        routeRequestID = requestId
+        levelHistory = []
+        bucketPeak = 0
+        levelsDirty = false
+        lastPausedState = nil
+        destinationTask?.cancel()
+        destinationPath = nil
+
+        let flow = PersistentRecorder.active?.liveActivitySegmentContext?.flow
+        routeName = flow?.visibleName
+        routeMonogram = VoxboardLiveActivityState.monogram(name: flow?.visibleName, emoji: flow?.emoji)
+        guard let flow else { return }
+        destinationTask = Task { @MainActor [weak self] in
+            let path = await Self.resolveDestinationPath(flow: flow)
+            guard let self, !Task.isCancelled, self.routeRequestID == requestId, let path else { return }
+            self.destinationPath = path
+            self.pushDecoratedState()
+        }
+    }
+
+    private func clearRouteContext() {
+        destinationTask?.cancel()
+        destinationTask = nil
+        routeRequestID = nil
+        routeName = nil
+        routeMonogram = nil
+        destinationPath = nil
+        levelHistory = []
+    }
+
+    /// Preview of where this segment will land, e.g. `Meetings/2026-11-01.md`.
+    /// Uses the same route precedence as delivery; nil for legacy exports.
+    private static func resolveDestinationPath(flow: CapturePreset) async -> String? {
+        guard let destinationID = await ConfiguredTranscriptCaptureDestinationExporter
+                .resolvedDestinationID(flow: flow),
+              let root = AppConstants.captureDirectoryURL else { return nil }
+        let store = CaptureLibraryStore(
+            fileURL: root.appendingPathComponent(CaptureLibraryStore.defaultFilename)
+        )
+        guard let library = try? await store.load(),
+              let destination = library.destinations.first(where: { $0.id == destinationID }) else {
+            return nil
+        }
+        let request = CaptureRequest(
+            source: .voice,
+            destinationID: destinationID,
+            payloads: [],
+            voxProfile: flow.captureProfile
+        )
+        if let path = try? CapturePathPlanner().relativePath(for: request, destination: destination) {
+            return path
+        }
+        let name = destination.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        return name.isEmpty ? nil : name
+    }
+
+    private func decorated(_ base: VoxboardLiveActivityState) -> VoxboardLiveActivityState {
+        var state = base
+        guard base.isSegmentActive || base.isTranscribing else { return state }
+        state.routeName = routeName
+        state.routeMonogram = routeMonogram
+        state.destinationPath = destinationPath
+        guard base.isSegmentActive else { return state }
+        if let context = PersistentRecorder.active?.liveActivitySegmentContext,
+           context.requestId == nil || context.requestId == base.segmentRequestId {
+            state.segmentStartedAt = context.effectiveStartedAt
+            state.pausedElapsed = context.isPaused ? context.elapsed : nil
+            state.canPause = context.canPause
+        }
+        state.audioLevels = levelHistory.isEmpty ? nil : levelHistory
+        return state
+    }
+
+    private func pushDecoratedState() {
+        guard #available(iOS 16.1, *) else { return }
+        let state = decorated(desiredState)
+        desiredState = state
+        lastPushAt = Date().timeIntervalSince1970
+        levelsDirty = false
+        guard presentationReason.isAllowed, let activity else { return }
+        enqueueUpdate(activity, state: state)
+    }
+
+    // MARK: - Level sampling
+
+    private func startLevelSampler() {
+        guard levelSampler == nil else { return }
+        let now = Date().timeIntervalSince1970
+        lastBucketAt = now
+        lastPushAt = now
+        let timer = Timer(timeInterval: Self.sampleInterval, repeats: true) { _ in
+            Task { @MainActor in LiveActivityController.shared.sampleLevel() }
+        }
+        levelSampler = timer
+        RunLoop.main.add(timer, forMode: .common)
+    }
+
+    private func stopLevelSampler() {
+        levelSampler?.invalidate()
+        levelSampler = nil
+        bucketPeak = 0
+        levelsDirty = false
+    }
+
+    private func sampleLevel() {
+        guard desiredState.isSegmentActive else {
+            stopLevelSampler()
+            return
+        }
+        let context = PersistentRecorder.active?.liveActivitySegmentContext
+        let paused = context?.isPaused ?? false
+        if let lastPausedState, lastPausedState != paused {
+            self.lastPausedState = paused
+            pushDecoratedState()
+            return
+        }
+        lastPausedState = paused
+
+        let now = Date().timeIntervalSince1970
+        if !paused {
+            bucketPeak = max(bucketPeak, TranscriptionIPC.readAudioLevel() ?? 0)
+            if now - lastBucketAt >= Self.bucketInterval {
+                levelHistory.append(VoxboardLiveActivityState.encodedLevel(bucketPeak))
+                if levelHistory.count > VoxboardLiveActivityState.maximumAudioLevelCount {
+                    levelHistory.removeFirst(levelHistory.count - VoxboardLiveActivityState.maximumAudioLevelCount)
+                }
+                bucketPeak = 0
+                lastBucketAt = now
+                levelsDirty = true
+            }
+        } else {
+            lastBucketAt = now
+        }
+        if levelsDirty, now - lastPushAt >= Self.pushInterval {
+            pushDecoratedState()
+        }
+    }
+
+    private func reloadRouteWidgets() {
+        WidgetCenter.shared.reloadTimelines(ofKind: VoxboardRouteWidgetKinds.today)
+        // Delivery can land shortly after processing ends; refresh once more.
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 6_000_000_000)
+            WidgetCenter.shared.reloadTimelines(ofKind: VoxboardRouteWidgetKinds.today)
+        }
+    }
+
     @available(iOS 16.1, *)
     private func enqueueUpdate(
         _ activity: Activity<VoxboardActivityAttributes>,

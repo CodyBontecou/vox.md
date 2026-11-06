@@ -7,6 +7,9 @@ struct VoxboardWidgetBundle: WidgetBundle {
         VoxboardRecordWidget()
         VoxboardCaptureWidget()
         CapturePresetWidget()
+        RouteSpeakWidget()
+        RouteTodayWidget()
+        RouteScanWidget()
         if #available(iOSApplicationExtension 17.0, *) {
             VoxboardLiveActivity()
         }

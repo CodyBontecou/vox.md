@@ -3,12 +3,30 @@ import SwiftUI
 import WidgetKit
 
 private enum WatchWidgetGeist {
-    // Semantic colors shared with the iOS Geist theme.
-    static let active = Color(red: 0.278, green: 0.659, blue: 1.0)
-    static let error = Color(red: 1.0, green: 0.337, blue: 0.373)
+    // Signal semantic colors (dark/watch variants).
+    /// Indigo tint for glyphs and text on black (#8A8FFF).
+    static let active = Color(red: 138 / 255, green: 143 / 255, blue: 255 / 255)
+    /// Indigo ring for the idle record mark (#2F3BE8).
+    static let accentRing = Color(red: 47 / 255, green: 59 / 255, blue: 232 / 255)
+    /// Recording red (#F0474A).
+    static let error = Color(red: 240 / 255, green: 71 / 255, blue: 74 / 255)
+    static let disc = Color(red: 28 / 255, green: 28 / 255, blue: 30 / 255)   // #1C1C1E
+    static let muted = Color(red: 154 / 255, green: 154 / 255, blue: 149 / 255) // #9A9A95
 
+    /// Geist (bundled in this extension via UIAppFonts) at a fixed size, so
+    /// face layouts stay put; falls back to the system face if unregistered.
     static func label(_ size: CGFloat, weight: Font.Weight = .medium) -> Font {
-        .system(size: size, weight: weight, design: .default)
+        let name: String
+        switch weight {
+        case .semibold, .bold, .heavy, .black: name = "Geist-SemiBold"
+        case .medium: name = "Geist-Medium"
+        default: name = "Geist-Regular"
+        }
+        return .custom(name, fixedSize: size)
+    }
+
+    static func mono(_ size: CGFloat) -> Font {
+        .custom("GeistMono-Medium", fixedSize: size)
     }
 }
 
@@ -70,7 +88,7 @@ struct VoxboardWatchRecordWidget: Widget {
         ) { entry in
             VoxboardWatchRecordWidgetView(entry: entry)
                 .containerBackground(.background, for: .widget)
-                .widgetURL(WatchRecordingDeepLink.toggleURL)
+                .widgetURL(Self.tapURL(for: entry.snapshot))
         }
         .configurationDisplayName("Record voice note")
         .description("Start a voice note from your Apple Watch face and sync it to Vox.md on iPhone.")
@@ -79,6 +97,17 @@ struct VoxboardWatchRecordWidget: Widget {
         #else
         .supportedFamilies([.accessoryCircular, .accessoryRectangular, .accessoryInline])
         #endif
+    }
+
+    /// Idle taps start recording straight to the published route; taps while
+    /// recording open the in-progress recording.
+    static func tapURL(for snapshot: WatchRecordingSnapshot) -> URL {
+        switch snapshot.phase {
+        case .recording, .paused:
+            return WatchRecordingDeepLink.toggleURL
+        default:
+            return WatchRecordingDeepLink.startURL(routeID: snapshot.selectedPresetID)
+        }
     }
 }
 
@@ -119,12 +148,12 @@ struct VoxboardWatchRecordWidgetView: View {
                         .frame(width: proxy.size.height, height: proxy.size.height)
 
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Record voice note")
+                            Text(routeName ?? String(localized: "Record voice note"))
                                 .font(WatchWidgetGeist.label(12, weight: .bold))
                                 .widgetAccentable()
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.68)
-                            Text("Tap to start")
+                            Text("Tap to speak")
                                 .font(WatchWidgetGeist.label(10, weight: .regular))
                                 .foregroundStyle(.secondary)
                                 .lineLimit(1)
@@ -138,8 +167,23 @@ struct VoxboardWatchRecordWidgetView: View {
                 } else {
                     ZStack {
                         AccessoryWidgetBackground()
-                        VoxboardComplicationMark(phase: entry.snapshot.phase)
-                            .frame(width: markSize, height: markSize)
+                        if entry.snapshot.shouldShowTimer, let started = entry.snapshot.recordingStartedAt {
+                            // Signal "while recording": red ring + mono timer.
+                            Circle()
+                                .strokeBorder(WatchWidgetGeist.error, lineWidth: 2)
+                                .widgetAccentable()
+                                .padding(2)
+                            Text(Date(timeIntervalSince1970: started), style: .timer)
+                                .font(WatchWidgetGeist.mono(12))
+                                .monospacedDigit()
+                                .multilineTextAlignment(.center)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.6)
+                                .padding(.horizontal, 6)
+                        } else {
+                            VoxboardComplicationMark(phase: entry.snapshot.phase)
+                                .frame(width: markSize, height: markSize)
+                        }
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
@@ -147,30 +191,78 @@ struct VoxboardWatchRecordWidgetView: View {
         }
         .buttonStyle(.plain)
         .widgetLabel {
-            Text("Record note")
+            Text(routeName ?? String(localized: "Record note"))
         }
     }
 
+    /// Selected / last-used route published by the Watch app.
+    private var routeName: String? {
+        guard let name = entry.snapshot.selectedPresetName?
+            .trimmingCharacters(in: .whitespacesAndNewlines),
+            !name.isEmpty else { return nil }
+        return name
+    }
+
+    private var isIdle: Bool {
+        switch entry.snapshot.phase {
+        case .idle, .listening, .unavailable: return true
+        default: return false
+        }
+    }
+
+    /// Idle with nothing queued, no timer and no paused take: the two-line
+    /// "Tap to speak" state.
+    private var isIdleReady: Bool {
+        isIdle && entry.snapshot.queuedCount == 0
+            && !entry.snapshot.shouldShowTimer && entry.snapshot.pausedDuration == nil
+    }
+
+    /// Signal rectangular header: "VOX.MD · <ROUTE>" (just "VOX.MD" for queue).
+    private var rectangularHeader: String {
+        if let routeName, !(isIdle && entry.snapshot.queuedCount > 0) {
+            return "Vox.md · \(routeName)"
+        }
+        return "Vox.md"
+    }
+
+    /// Signal rectangular: a dark card with the "VOX.MD · <ROUTE>" header
+    /// in indigo, then "Tap to speak", the queue status, or the live state.
     private var rectangular: some View {
         RecordIntentButton {
-            HStack(spacing: 8) {
-                VoxboardComplicationMark(phase: entry.snapshot.phase)
-                    .frame(width: 24, height: 24)
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(spacing: 4) {
-                        Circle()
-                            .fill(stateColor)
-                            .frame(width: 5, height: 5)
-                            .widgetAccentable()
-                        Text("Vox.md")
-                            .font(WatchWidgetGeist.label(11, weight: .bold))
-                            .widgetAccentable()
-                    }
-                    subtitleText
-                        .font(WatchWidgetGeist.label(10, weight: .regular))
-                        .foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(rectangularHeader)
+                    .font(WatchWidgetGeist.label(11, weight: .semibold))
+                    .textCase(.uppercase)
+                    .foregroundStyle(WatchWidgetGeist.active)
+                    .widgetAccentable()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                if isIdleReady {
+                    Text("Tap to speak")
+                        .font(WatchWidgetGeist.label(13, weight: .regular))
                         .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                } else {
+                    Text(rectangularTitle)
+                        .font(WatchWidgetGeist.label(14, weight: .semibold))
+                        .foregroundStyle(entry.snapshot.phase == .error ? WatchWidgetGeist.error : .primary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+                    subtitleText
+                        .font(WatchWidgetGeist.label(12, weight: .regular))
+                        .foregroundStyle(WatchWidgetGeist.muted)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                 }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background {
+                // System accessory backdrop (#1C1C1E-like in full color) so the
+                // card adapts to tinted and accented faces.
+                AccessoryWidgetBackground()
+                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
             }
         }
         .buttonStyle(.plain)
@@ -183,11 +275,13 @@ struct VoxboardWatchRecordWidgetView: View {
                     Text(Date(timeIntervalSince1970: started), style: .timer)
                 } else if let pausedDuration = entry.snapshot.pausedDuration {
                     Text("Paused \(formattedDuration(pausedDuration))")
+                } else if isIdle, entry.snapshot.queuedCount == 0, let routeName {
+                    Text("\(routeName) · tap to speak")
                 } else {
                     Text(inlineTitle)
                 }
             } icon: {
-                Image(systemName: stateSymbolName)
+                Image(systemName: isIdle && entry.snapshot.queuedCount == 0 ? "circle.fill" : stateSymbolName)
             }
         }
         .buttonStyle(.plain)
@@ -208,28 +302,42 @@ struct VoxboardWatchRecordWidgetView: View {
     private var subtitleText: some View {
         if entry.snapshot.shouldShowTimer, let started = entry.snapshot.recordingStartedAt {
             Text(Date(timeIntervalSince1970: started), style: .timer)
+                .font(WatchWidgetGeist.mono(12))
                 .monospacedDigit()
         } else if let pausedDuration = entry.snapshot.pausedDuration {
             Text("Paused · \(formattedDuration(pausedDuration))")
+                .font(WatchWidgetGeist.mono(12))
                 .monospacedDigit()
+        } else if isIdle, entry.snapshot.queuedCount > 0 {
+            Text(queueBreakdown)
+        } else if isIdle {
+            Text("Tap to speak")
         } else {
             Text(entry.snapshot.subtitle)
         }
     }
 
-    private var stateSymbolName: String {
-        entry.snapshot.actionSymbol
+    private var rectangularTitle: String {
+        if isIdle, entry.snapshot.queuedCount > 0 {
+            return entry.snapshot.queuedCount == 1
+                ? String(localized: "1 waiting for iPhone")
+                : String(localized: "\(entry.snapshot.queuedCount) waiting for iPhone")
+        }
+        if isIdle {
+            return routeName ?? String(localized: "Record to Vox.md")
+        }
+        return inlineTitle
     }
 
-    private var stateColor: Color {
-        switch entry.snapshot.phase {
-        case .recording, .error, .unavailable:
-            return WatchWidgetGeist.error
-        case .paused, .syncing, .transcribing, .delivering, .pending:
-            return WatchWidgetGeist.active
-        case .idle, .listening:
-            return .primary
-        }
+    /// "Journal · Inbox · saved on Watch".
+    private var queueBreakdown: String {
+        let names = entry.snapshot.queuedRouteNames
+        guard !names.isEmpty else { return String(localized: "Saved on Watch") }
+        return names.joined(separator: " · ") + " · " + String(localized: "saved on Watch")
+    }
+
+    private var stateSymbolName: String {
+        entry.snapshot.actionSymbol
     }
 
     private var inlineTitle: String {
@@ -251,9 +359,13 @@ struct VoxboardWatchRecordWidgetView: View {
         case .unavailable:
             return String(localized: "Open iPhone")
         case .idle, .listening:
-            return entry.snapshot.queuedCount > 0
-                ? entry.snapshot.subtitle
-                : String(localized: "Record to Vox.md")
+            if entry.snapshot.queuedCount > 0 {
+                return entry.snapshot.queuedCount == 1
+                    ? String(localized: "1 waiting for iPhone")
+                    : String(localized: "\(entry.snapshot.queuedCount) waiting for iPhone")
+            }
+            return routeName.map { String(localized: "\($0) · tap to speak") }
+                ?? String(localized: "Record to Vox.md")
         }
     }
 
@@ -273,8 +385,8 @@ struct VoxboardWatchRecordWidgetView: View {
             return String(localized: "Open")
         default:
             return entry.snapshot.queuedCount > 0
-                ? String(localized: "Sync")
-                : String(localized: "Record")
+                ? String(localized: "\(entry.snapshot.queuedCount) waiting")
+                : (routeName ?? String(localized: "Speak"))
         }
     }
 
@@ -290,35 +402,25 @@ struct VoxboardWatchRecordWidgetView: View {
     }
 }
 
+/// Signal record mark: a dark disc with a phase-colored ring (indigo idle,
+/// red recording/error, indigo tint while syncing) around a red record dot.
 private struct VoxboardComplicationMark: View {
     let phase: WatchRecordingPhase
-
-    private let barHeights: [CGFloat] = [0.66, 0.48, 0.82, 0.56, 0.72]
 
     var body: some View {
         GeometryReader { proxy in
             let side = min(proxy.size.width, proxy.size.height)
-            let barWidth = max(side * 0.105, 2)
-            let spacing = max(side * 0.055, 1)
-            let waveformWidth = CGFloat(barHeights.count) * barWidth + CGFloat(barHeights.count - 1) * spacing
+            let ring = max(side * 0.06, 1.5)
 
             ZStack {
-                HStack(alignment: .center, spacing: spacing) {
-                    ForEach(barHeights.indices, id: \.self) { index in
-                        RoundedRectangle(cornerRadius: barWidth / 2, style: .continuous)
-                            .fill(.primary)
-                            .frame(width: barWidth, height: side * barHeights[index])
-                            .widgetAccentable()
-                    }
-                }
-                .frame(width: waveformWidth, height: side * 0.86)
-                .position(x: side * 0.5, y: side * 0.58)
-
+                Circle()
+                    .fill(WatchWidgetGeist.disc)
+                Circle()
+                    .strokeBorder(ringColor, lineWidth: ring)
+                    .widgetAccentable()
                 Circle()
                     .fill(dotColor)
-                    .frame(width: max(side * 0.16, 4), height: max(side * 0.16, 4))
-                    .position(x: side * 0.5, y: side * 0.20)
-                    .shadow(color: dotColor.opacity(0.45), radius: side * 0.06)
+                    .frame(width: side * dotFraction, height: side * dotFraction)
             }
             .frame(width: side, height: side)
             .position(x: proxy.size.width / 2, y: proxy.size.height / 2)
@@ -327,14 +429,30 @@ private struct VoxboardComplicationMark: View {
         .accessibilityHidden(true)
     }
 
-    private var dotColor: Color {
+    private var ringColor: Color {
         switch phase {
         case .recording, .error, .unavailable:
             return WatchWidgetGeist.error
         case .paused, .syncing, .transcribing, .delivering, .pending:
             return WatchWidgetGeist.active
         case .idle, .listening:
-            return .primary
+            return WatchWidgetGeist.accentRing
+        }
+    }
+
+    private var dotColor: Color {
+        switch phase {
+        case .paused, .syncing, .transcribing, .delivering, .pending:
+            return WatchWidgetGeist.active
+        default:
+            return WatchWidgetGeist.error
+        }
+    }
+
+    private var dotFraction: CGFloat {
+        switch phase {
+        case .recording: return 0.34
+        default: return 0.28
         }
     }
 }

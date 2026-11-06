@@ -34,7 +34,7 @@ public enum CaptureLocationError: Error, LocalizedError, Equatable, Sendable {
         case .notDetermined:
             return String(localized: "Open Vox.md to choose whether location access is allowed.")
         case .reducedAccuracy:
-            return String(localized: "Precise Location is off, so this preset’s exact location could not be captured.")
+            return String(localized: "Precise Location is off, so this route’s exact location could not be captured.")
         case .unavailable:
             return String(localized: "Your current location is unavailable. Try again outside or after location services reconnect.")
         case .timedOut:

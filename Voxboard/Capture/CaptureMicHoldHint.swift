@@ -93,10 +93,10 @@ struct CaptureMicHoldHint: View {
                 .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("Hold down on mic")
+                Text("Hold Speak to talk")
                     .font(Geist.label())
                     .foregroundStyle(Geist.Palette.blue1000)
-                Text("Discover recording controls")
+                Text("Release to stop. Tap once to record hands-free.")
                     .font(Geist.caption(.caption2))
                     .foregroundStyle(Geist.Palette.blue900)
             }

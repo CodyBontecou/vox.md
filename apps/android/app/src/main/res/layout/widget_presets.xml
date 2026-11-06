@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingStart="11dp"
+    android:paddingEnd="11dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="11dp"
+    android:background="@drawable/widget_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="3dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/preset_widget_title"
+            android:textColor="@color/signal_text"
+            android:fontFamily="@font/geist_semibold"
+            android:textSize="15sp"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <Button
+            android:id="@+id/preset_widget_configure"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:background="@drawable/widget_button_settings"
+            android:stateListAnimator="@null"
+            android:elevation="0dp"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:textAllCaps="false"
+            android:textColor="@color/signal_text"
+            android:fontFamily="@font/geist_medium"
+            android:textSize="13sp"
+            android:maxLines="1"
+            android:text="@string/preset_widget_configure" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/preset_widget_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="3dp"
+        android:paddingEnd="3dp"
+        android:paddingBottom="6dp"
+        android:text="@string/preset_widget_no_pins"
+        android:textColor="@color/signal_muted"
+        android:fontFamily="@font/geist_regular"
+        android:textSize="13sp" />
+
+    <LinearLayout
+        android:id="@+id/preset_widget_rows"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+</LinearLayout>

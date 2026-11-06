@@ -7,20 +7,54 @@ import VoxboardShared
 struct AppLanguageSettingsView: View {
     @State private var selection: AppLanguage = AppLanguagePreference.current()
 
-    var body: some View {
-        List {
-            Section {
-                systemRow
+    private var languages: [AppLanguage] {
+        AppLanguage.allCases.filter { $0 != .system }
+    }
 
-                ForEach(AppLanguage.allCases.filter { $0 != .system }) { language in
-                    languageRow(language)
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("App Language")
+                        .font(.custom("Geist-SemiBold", size: 34, relativeTo: .largeTitle))
+                        .tracking(-0.8)
+                        .foregroundStyle(Geist.text)
+                        .accessibilityAddTraits(.isHeader)
+                    Text("Choose which language Vox.md uses")
+                        .font(Geist.body(.callout))
+                        .foregroundStyle(Geist.muted)
                 }
-            } footer: {
+                .padding(.horizontal, 4)
+                .padding(.top, 8)
+                .padding(.bottom, 4)
+
+                VStack(spacing: 0) {
+                    systemRow
+                    ForEach(languages) { language in
+                        GeistDivider().padding(.leading, 14)
+                        languageRow(language)
+                    }
+                }
+                .background(Geist.card, in: RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous)
+                        .stroke(Geist.border, lineWidth: 1)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous))
+
                 Text("Language changes take effect the next time Vox.md is opened.")
+                    .font(Geist.caption())
+                    .foregroundStyle(Geist.muted)
+                    .padding(.horizontal, 8)
             }
+            .padding(.horizontal, 16)
+            .padding(.bottom, 24)
         }
-        .navigationTitle("App Language")
+        .background(Geist.bg.ignoresSafeArea())
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Geist.bg, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
     }
 
     // MARK: - Rows
@@ -46,28 +80,35 @@ struct AppLanguageSettingsView: View {
         caption: Text?,
         language: AppLanguage
     ) -> some View {
-        Button {
+        let isSelected = language == selection
+        return Button {
             select(language)
         } label: {
-            HStack {
-                VStack(alignment: .leading, spacing: 3) {
+            HStack(spacing: 10) {
+                VStack(alignment: .leading, spacing: 2) {
                     title
+                        .font(Geist.label(.body))
+                        .foregroundStyle(Geist.text)
                     if let caption {
                         caption
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                            .foregroundStyle(Geist.muted)
                     }
                 }
                 Spacer()
-                if language == selection {
+                if isSelected {
                     Image(systemName: "checkmark")
-                        .fontWeight(.semibold)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(Geist.accent)
                 }
             }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .frame(minHeight: 50)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .foregroundStyle(.primary)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     private func select(_ language: AppLanguage) {

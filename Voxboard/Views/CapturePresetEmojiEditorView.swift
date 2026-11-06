@@ -91,7 +91,7 @@ struct CapturePresetEmojiEditorForm: View {
                     )
                     .font(.largeTitle)
                     .frame(minWidth: 44, minHeight: 44)
-                    Text(preset.visibleName ?? String(localized: "Icon-only preset"))
+                    Text(preset.visibleName ?? String(localized: "Icon-only route"))
                         .foregroundStyle(preset.visibleName == nil ? .secondary : .primary)
                         .fixedSize(horizontal: false, vertical: true)
                 }

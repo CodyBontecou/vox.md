@@ -145,14 +145,14 @@ final class CapturePresetQuickAccessRailTests: XCTestCase {
         XCTAssertTrue(collapsed.accessibilitySelectionTraits.contains(.isSelected))
         XCTAssertEqual(
             collapsed.accessibilityHint,
-            String(localized: "Expand pinned Capture Presets. Use the Show Menu action for all Capture Presets.")
+            String(localized: "Expand pinned Routes. Use the Show Menu action for all Routes.")
         )
         XCTAssertEqual(collapsed.accessibilityValue, String(localized: "Collapsed"))
 
         let expanded = f.selector(isRailExpanded: true, toggleRail: {})
         XCTAssertEqual(
             expanded.accessibilityHint,
-            String(localized: "Collapse pinned Capture Presets. Use the Show Menu action for all Capture Presets.")
+            String(localized: "Collapse pinned Routes. Use the Show Menu action for all Routes.")
         )
         XCTAssertEqual(expanded.accessibilityValue, String(localized: "Expanded"))
 
@@ -163,7 +163,7 @@ final class CapturePresetQuickAccessRailTests: XCTestCase {
         )
         XCTAssertEqual(
             alternative.accessibilityHint,
-            String(localized: "Use this preset for the current draft. Text and attachments stay in place; one-off route overrides reset.")
+            String(localized: "Use this route for the current draft. Text and attachments stay in place; one-off route overrides reset.")
         )
     }
 

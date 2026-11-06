@@ -30,8 +30,19 @@ class SafVaultCommitExecutorInstrumentationTest {
     private fun requestBytes(): ByteArray = InstrumentationRegistry.getInstrumentation().context.assets
         .open("capture-preparation-input/valid-android-m3-text-link.json").use { it.readBytes() }
 
-    @Test
-    fun enqueueMaterializeCommitAndVerifyThroughRealProvider() {
+    @Test fun enqueueMaterializeCommitAndVerifyThroughRealProvider() = runCampaign(Fault.NONE)
+    @Test fun revokedGrantBeforeCommitPreservesPreparedCaptureUntilReauthorized() = runCampaign(Fault.REVOKED_BEFORE)
+    @Test fun revokedGrantAfterInterruptedWriteReconcilesWithoutDuplicate() = runCampaign(Fault.REVOKED_AFTER_WRITE)
+    @Test fun interruptedAfterWriteRecoversFromReopenedRoomAndPackage() = runCampaign(Fault.AFTER_WRITE)
+    @Test fun interruptedAfterCreateNeverBlindlyRewritesEmptyDocument() = runCampaign(Fault.AFTER_CREATE)
+    @Test fun partialProviderWriteStaysUnknownAcrossRepeatedRetries() = runCampaign(Fault.PARTIAL_WRITE)
+    @Test fun unavailableReadbackRetainsExactPlanAndReconcilesWhenProviderRecovers() = runCampaign(Fault.READBACK_FAILURE)
+    @Test fun clearedNonCommitProofCanRematerializeAndCommitAfterReopen() = runCampaign(Fault.CLEARED_RETRY)
+
+    private enum class Fault { NONE, REVOKED_BEFORE, REVOKED_AFTER_WRITE, AFTER_WRITE, AFTER_CREATE, PARTIAL_WRITE, READBACK_FAILURE, CLEARED_RETRY }
+    private class InterruptedDelivery : Error("syntheticDeliveryBoundary")
+
+    private fun runCampaign(fault: Fault) {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         val context = instrumentation.targetContext
         // SAF child-listing is restricted under Android/data on Android 11+, so the
@@ -62,11 +73,11 @@ class SafVaultCommitExecutorInstrumentationTest {
         )
         val destination = VaultDestination("33333333-3333-4333-8333-333333333333", treeUri.toString())
 
-        val database = CaptureDatabase.create(context)
-        val store = DurableCapturePackageStore(context.noBackupFilesDir, RoomCaptureIndex(database), AndroidDurableFileOps())
+        var database = CaptureDatabase.create(context)
+        var store = DurableCapturePackageStore(context.noBackupFilesDir, RoomCaptureIndex(database), AndroidDurableFileOps())
         val coordination = RoomCaptureCoordination(database)
-        val coordinator = CaptureDurabilityCoordinator(store, coordination)
-        val quota = RoomQuotaLedger(database)
+        var coordinator = CaptureDurabilityCoordinator(store, coordination)
+        var quota = RoomQuotaLedger(database)
         quota.initializeInstallation("44444444-4444-4444-8444-444444444444", 1_700_000_000_000)
         assertEquals(
             QuotaReservationResult.Reserved("55555555-5555-4555-8555-555555555555"),
@@ -110,14 +121,150 @@ class SafVaultCommitExecutorInstrumentationTest {
         assertEquals(listOf("Inbox"), logicalFolderOf(artifacts.planBytes))
         assertEquals("capture-$requestID.md", candidateNameOf(artifacts.planBytes))
 
-        // 4. Commit through the real local DocumentsProvider (Phase 5 executor).
-        val executor = SafVaultCommitExecutor(
-            store, coordinator, gateway, destination,
-            buildInfo = { bridge.buildInfo() },
-            clock = { time++ },
-        )
-        val outcome = executor.execute(requestID, leaseToken)
+        // Provider calls use the real external-storage provider. Faults are injected only
+        // at executor boundaries; neither grant validation nor readback is substituted.
+        var activeToken = leaseToken
+        val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        val provider = object : SafDocumentsGateway by gateway {
+            var creates = 0
+            var writes = 0
+            var readbackUnavailable = fault == Fault.READBACK_FAILURE
+            override fun createDocument(marker: DurableMarkerToken, parent: SafFolderHandle, displayName: String, mediaType: String): SafResult<SafDocumentHandle> {
+                creates++
+                val result = gateway.createDocument(marker,parent,displayName,mediaType)
+                if (fault == Fault.AFTER_CREATE && result is SafResult.Success) throw InterruptedDelivery()
+                return result
+            }
+            override fun writeDocument(handle: SafDocumentHandle, bytes: ByteArray, expectedLength: Long): SafResult<Unit> {
+                writes++
+                if (fault == Fault.PARTIAL_WRITE) {
+                    val partial = bytes.copyOf(bytes.size / 2)
+                    assertTrue(gateway.writeDocument(handle,partial,partial.size.toLong()) is SafResult.Success)
+                    return SafResult.error(GatewayError.ProviderFailure.name)
+                }
+                val result = gateway.writeDocument(handle,bytes,expectedLength)
+                if (result is SafResult.Success && fault in setOf(Fault.AFTER_WRITE,Fault.REVOKED_AFTER_WRITE)) {
+                    if (fault == Fault.REVOKED_AFTER_WRITE) context.contentResolver.releasePersistableUriPermission(treeUri,flags)
+                    throw InterruptedDelivery()
+                }
+                return result
+            }
+            override fun readBackDocument(handle: SafDocumentHandle): SafResult<Pair<Long,String>> =
+                if (readbackUnavailable) SafResult.error(GatewayError.ProviderFailure.name) else gateway.readBackDocument(handle)
+        }
+        fun attempt() = SafVaultCommitExecutor(store,coordinator,provider,destination,bridge::buildInfo,{ time++ }).execute(requestID,activeToken)
+        fun preserved(expected: CaptureState) {
+            assertEquals(expected,store.loadJournal(requestID)!!.state)
+            assertArrayEquals(requestBytes(),store.loadRequestBytes(requestID))
+            val retained = store.loadPreparedArtifacts(requestID,planHash)!!
+            assertArrayEquals(artifacts.noteBytes,retained.noteBytes)
+            assertArrayEquals(artifacts.planBytes,retained.planBytes)
+            assertEquals(0,database.captureCoordinationDao().committedUnits())
+            assertEquals(1,database.captureCoordinationDao().allReservations().size)
+            assertTrue(database.captureCoordinationDao().allTombstones().isEmpty())
+        }
+        fun resumePermission() {
+            val snapshot = store.loadJournal(requestID)!!
+            val restored = coordinator.mutate(JournalMutationCommand(requestID,snapshot.revision,
+                JournalEvent(snapshot.revision+1,CaptureState.NEEDS_PERMISSION,snapshot.resumeState!!,
+                    JournalCode.PERMISSION_RESTORED,time++)),time++)
+            assertTrue("permission resume: $restored",restored is JournalMutationResult.Applied)
+        }
+        if (fault == Fault.CLEARED_RETRY) {
+            var snapshot = store.loadJournal(requestID)!!
+            assertTrue(coordinator.mutate(JournalMutationCommand(requestID,snapshot.revision,
+                JournalEvent(snapshot.revision+1,CaptureState.MATERIALIZED,CaptureState.COMMITTING,JournalCode.COMMIT_STARTED,time++,planHash=planHash),activeToken),time++) is JournalMutationResult.Applied)
+            store.persistCommitMarker(requestID,CommitMarker.validated(CommitMarker.MarkerState.ACTIVE,destination.destinationID,planHash,candidateNameOf(artifacts.planBytes),time++))
+            // The fixture has not issued any provider create. Record that causal proof
+            // through the same durable transition used by reconciliation.
+            snapshot = store.loadJournal(requestID)!!
+            assertTrue(coordinator.mutate(JournalMutationCommand(requestID,snapshot.revision,
+                JournalEvent(snapshot.revision+1,CaptureState.COMMITTING,CaptureState.RETRYABLE_FAILURE,JournalCode.PROVED_NOT_COMMITTED,time++),activeToken,clearCommitMarker=true),time++) is JournalMutationResult.Applied)
+            preserved(CaptureState.RETRYABLE_FAILURE)
+            assertEquals(CommitMarker.MarkerState.CLEARED,store.readCommitMarker(requestID)!!.state)
+            assertEquals(0,provider.creates)
+        } else if (fault == Fault.REVOKED_BEFORE) {
+            context.contentResolver.releasePersistableUriPermission(treeUri,flags)
+            assertFalse(gateway.revalidateGrant(destination))
+            assertEquals(CommitOutcome.PermissionLost,(attempt() as ExecutorOutcome.Ok).value)
+            preserved(CaptureState.NEEDS_PERMISSION)
+            assertEquals(CaptureState.MATERIALIZED,store.loadJournal(requestID)!!.resumeState)
+            assertNull(store.readCommitMarker(requestID))
+            assertEquals(0,provider.creates)
+        } else if (fault != Fault.NONE) {
+            if (fault in setOf(Fault.AFTER_WRITE,Fault.AFTER_CREATE,Fault.REVOKED_AFTER_WRITE)) {
+                try { attempt(); fail("Expected interruption at provider boundary") } catch (_: InterruptedDelivery) { }
+                preserved(CaptureState.COMMITTING)
+            } else {
+                assertEquals(CommitOutcome.Ambiguous,(attempt() as ExecutorOutcome.Ok).value)
+                preserved(CaptureState.UNKNOWN_OUTCOME)
+            }
+            assertEquals(CommitMarker.MarkerState.ACTIVE,store.readCommitMarker(requestID)!!.state)
+            assertEquals(1,provider.creates)
+        }
+        if (fault != Fault.NONE) {
+            // A fresh Room connection/store/coordinator must recover solely from persisted
+            // bytes and the expired lease. No in-memory executor state is carried over.
+            database.close()
+            database = CaptureDatabase.create(context)
+            store = DurableCapturePackageStore(context.noBackupFilesDir,RoomCaptureIndex(database),AndroidDurableFileOps())
+            coordinator = CaptureDurabilityCoordinator(store,RoomCaptureCoordination(database))
+            quota = RoomQuotaLedger(database)
+            store.reconcile()
+            time += 600_001
+            activeToken = "77777777-7777-4777-8777-777777777777"
+            assertTrue(coordinator.acquire(requestID,activeToken,time++,600_000) is LeasePlan.Grant)
+            assertEquals(QuotaReservationResult.Existing("55555555-5555-4555-8555-555555555555"),
+                quota.reserve(requestID,"88888888-8888-4888-8888-888888888888",time++))
+            if (fault == Fault.CLEARED_RETRY) {
+                val snapshot = store.loadJournal(requestID)!!
+                assertTrue(coordinator.mutate(JournalMutationCommand(requestID,snapshot.revision,
+                    JournalEvent(snapshot.revision+1,CaptureState.RETRYABLE_FAILURE,CaptureState.PREPARING,JournalCode.PREPARATION_STARTED,time++),activeToken),time++) is JournalMutationResult.Applied)
+                val recovered = CoreMaterializationCoordinator(bridge,store,coordinator,occupancy,occupancy,destination) { time++ }
+                    .materialize(requestID,activeToken,store.loadJournal(requestID)!!.revision)
+                assertTrue("rematerialization: $recovered",recovered is CoreMaterializationCoordinator.MaterializationResult.Materialized)
+                assertEquals(planHash,(recovered as CoreMaterializationCoordinator.MaterializationResult.Materialized).planHash)
+                preserved(CaptureState.MATERIALIZED)
+            }
+            if (fault in setOf(Fault.REVOKED_BEFORE,Fault.REVOKED_AFTER_WRITE)) {
+                if (fault == Fault.REVOKED_AFTER_WRITE) {
+                    assertEquals(CommitOutcome.PermissionLost,(attempt() as ExecutorOutcome.Ok).value)
+                    preserved(CaptureState.NEEDS_PERMISSION)
+                    assertEquals(CaptureState.COMMITTING,store.loadJournal(requestID)!!.resumeState)
+                }
+                // No provider mutation is attempted while waiting for explicit repair.
+                val creates = provider.creates; val writes = provider.writes
+                repeat(3) { assertTrue(attempt() is ExecutorOutcome.Err); preserved(CaptureState.NEEDS_PERMISSION) }
+                assertEquals(creates,provider.creates); assertEquals(writes,provider.writes)
+                assertEquals(treeUri,grantTreeThroughSystemPicker(instrumentation,requestedTreeUri))
+                assertTrue(gateway.revalidateGrant(destination))
+                resumePermission()
+            }
+            if (fault in setOf(Fault.AFTER_CREATE,Fault.PARTIAL_WRITE,Fault.READBACK_FAILURE)) {
+                val creates = provider.creates; val writes = provider.writes
+                repeat(3) {
+                    assertEquals(CommitOutcome.Ambiguous,(attempt() as ExecutorOutcome.Ok).value)
+                    preserved(CaptureState.UNKNOWN_OUTCOME)
+                }
+                assertEquals(creates,provider.creates); assertEquals(writes,provider.writes)
+                val folder = gateway.resolveFolder(destination,logicalFolderOf(artifacts.planBytes),false)!!
+                val target = gateway.findChildByDisplayName(folder,candidateNameOf(artifacts.planBytes)).single()
+                if (fault != Fault.READBACK_FAILURE) {
+                    val actual = (gateway.readDocument(target,1_048_576) as SafResult.Success).value
+                    assertArrayEquals(if (fault == Fault.AFTER_CREATE) byteArrayOf() else artifacts.noteBytes.copyOf(artifacts.noteBytes.size/2),actual)
+                    // Simulate the provider completing its delayed write. Recovery itself
+                    // never overwrites or deletes the ambiguous document.
+                    assertTrue(gateway.writeDocument(target,artifacts.noteBytes,artifacts.noteBytes.size.toLong()) is SafResult.Success)
+                }
+                provider.readbackUnavailable = false
+            }
+        }
+        val outcome = attempt()
         assertTrue("commit failed: $outcome", outcome is ExecutorOutcome.Ok && outcome.value is CommitOutcome.VerifiedCommitted)
+        assertEquals(1,provider.creates)
+        assertEquals(if (fault == Fault.AFTER_CREATE) 0 else 1,provider.writes)
+        val committedFolder = gateway.resolveFolder(destination,logicalFolderOf(artifacts.planBytes),false)!!
+        assertEquals(listOf(candidateNameOf(artifacts.planBytes)),gateway.listChildDisplayNames(committedFolder))
 
         // 5. Terminal state: COMPLETED journal with the deterministic receipt on disk.
         val snapshot = store.loadJournal(requestID)!!
@@ -158,6 +305,8 @@ class SafVaultCommitExecutorInstrumentationTest {
         assertNull(RoomCaptureIndex(database).read(requestID))
         assertEquals(1, database.captureActivityDao().all().size)
         assertEquals(1, database.captureCoordinationDao().allTombstones().size)
+        assertEquals(1, database.captureCoordinationDao().committedUnits())
+        assertTrue(database.captureCoordinationDao().allReservations().isEmpty())
         val completion = completions.read(requestID)
         assertNotNull(completion)
         assertEquals(snapshot.events.last().occurredAtEpochMillis, completion!!.completedAtEpochMillis)

@@ -307,6 +307,12 @@ final class PersistentRecorder {
     /// unsupported backends intentionally have no exact fraction.
     var transcriptionProgress: TranscriptionProgress?
     var lastError: String?
+    /// The backend-preparation failure that `startListening` reports in the
+    /// background. It concerns transcribing *this* recording, so discarding
+    /// the recording also clears it instead of surfacing a stale
+    /// "Apple Speech is unavailable" banner on the composer afterwards.
+    private var lastBackendPreparationError: String?
+    private var discardedSegmentCount = 0
 
     /// Keyboard recordings share this recorder but are not app-owned Capture
     /// recordings. Keep the app mic UI independent from the keyboard mic UI.
@@ -335,6 +341,28 @@ final class PersistentRecorder {
     /// Last transcription result from an in-app recording. Observable for UI display.
     var lastTranscriptionResult: String?
     var lastSpeakerDiarizationSkipReason: SpeakerDiarizationSkipReason?
+
+    // MARK: Live recording surface
+
+    /// Finalized live Apple Speech phrases for the active app recording (both
+    /// result modes), each stamped with its approximate recording offset.
+    private(set) var liveTranscriptLines: [CaptureLiveTranscriptLine] = []
+    /// Tentative words still being recognized after the last finalized phrase.
+    private(set) var liveTranscriptVolatileText = ""
+    /// Distinct speakers found by the incremental on-device pass, when the
+    /// Route opted in to speaker identification.
+    private(set) var liveSpeakerCount = 0
+    /// True once the live Apple Speech session has delivered an update.
+    private(set) var isLiveTranscriptionStreaming = false
+    private var liveTranscriptConsumedFinalized = ""
+    private var liveTranscriptPendingStart: TimeInterval?
+    private var liveSpeakerSpans: [LiveSpeakerSpan] = []
+    private var liveSpeakerDiarizationTask: Task<Void, Never>?
+    /// Set when a Route's optional on-device processing could not run and the
+    /// raw transcript was delivered instead (Signal "Offline processing").
+    var lastRouteProgress: CaptureRouteProgress?
+    /// Guards `processPendingRouteSummaries` against overlapping runs.
+    var isProcessingPendingRouteSummaries = false
 
     /// Updated every time a configured transcript export succeeds or fails.
     var lastFileExportEvent: FileExportEvent?
@@ -451,6 +479,19 @@ final class PersistentRecorder {
     /// The launch argument is absent from production launches, so normal recording
     /// behavior and persisted user data are untouched.
     func configureLocalizationScreenshot(story: String?) {
+        if story == "capture-states-c" {
+            // Capture states C: a voice capture delivered as raw transcript
+            // because its route's processing paused (no Apple Intelligence).
+            lastRouteProgress = CaptureRouteProgress(
+                transcriptID: UUID(),
+                flowID: CapturePresetStore.selectedFlowId(),
+                audioDuration: 119,
+                engineName: "Parakeet",
+                processingName: "Meeting summary",
+                placementLabel: "## Notes"
+            )
+            return
+        }
         guard story == "02-live-recording" || story == "05-live-recording" else { return }
         isListening = true
         isSegmentActive = true
@@ -462,6 +503,12 @@ final class PersistentRecorder {
         liveCaptureRequestId = requestID
         liveCaptureComposerRequestId = requestID
         liveCaptureSessionID = sessionID
+        // The full-screen recording surface reads the recorder's own live
+        // lines, so feed them too (not only the composer draft).
+        recordLiveTranscript(
+            finalized: String(localized: "Capture ideas as they arrive."),
+            volatile: String(localized: "Everything stays on this device.")
+        )
         guard let captureDraftEventHandler else { return }
         Task { @MainActor in
             _ = await captureDraftEventHandler(.liveTranscript(
@@ -800,6 +847,7 @@ final class PersistentRecorder {
         let language = AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedLanguageKey) ?? "auto"
 
         log.log("[PersistentRecorder] Preparing transcription backend: \(modelID)…")
+        let discardsAtStart = discardedSegmentCount
         if modelID == TranscriptionBackendID.automatic {
             AppConstants.sharedDefaults?.set(false, forKey: AppConstants.automaticBackendReadyKey)
         }
@@ -820,7 +868,11 @@ final class PersistentRecorder {
             )
             AppConstants.sharedDefaults?.set(canTranscribe, forKey: AppConstants.automaticBackendReadyKey)
             log.log("[PersistentRecorder] ⚠️ Backend preparation failed: \(error.localizedDescription)")
-            if !canTranscribe { lastError = error.localizedDescription }
+            // A recording discarded meanwhile no longer needs transcribing.
+            if !canTranscribe, discardedSegmentCount == discardsAtStart {
+                lastError = error.localizedDescription
+                lastBackendPreparationError = error.localizedDescription
+            }
             return canTranscribe
         }
     }
@@ -1027,8 +1079,10 @@ final class PersistentRecorder {
         lastSpeakerDiarizationSkipReason = nil
         lastError = nil
 
-        let modelId = AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedModelKey)
-            ?? AppConstants.defaultTranscriptionBackendID
+        // Honour the route's optional model override (falls back to the app-wide model).
+        let modelId = CapturePresetStore.resolvedTranscriptionModelID(
+            flowID: requestedFlowId ?? CapturePresetStore.selectedFlowId()
+        )
         let language = AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedLanguageKey)
             ?? "auto"
         let requestId = "inapp-\(UUID().uuidString)"
@@ -1064,6 +1118,31 @@ final class PersistentRecorder {
     }
 
     /// Stop the current in-app recording segment and transcribe.
+    /// Live recording board: "Add to draft / Send on stop" stays switchable
+    /// while recording. Only what Stop does changes — audio, the live
+    /// transcript and the composer preview carry on untouched (both in-app
+    /// modes preview in the composer). Keyboard dictation can't be switched.
+    func setActiveSegmentCompletionMode(_ mode: RecordingCompletionMode) {
+        guard isAppRecordingSegmentActive,
+              let current = segmentCompletionMode,
+              current != .keyboardTranscription,
+              mode != .keyboardTranscription,
+              current != mode else { return }
+        segmentCompletionMode = mode
+        segmentPresetSnapshot = RecordingCompletionMode.presetSnapshot(
+            for: mode,
+            lookup: { CapturePresetStore.flow(id: $0) },
+            fallback: { CapturePresetStore.selectedFlow() }
+        )
+        let flowID = mode.flowID ?? segmentFlowId
+        segmentVoiceProcessingConfiguration = RecordingCompletionMode.voiceProcessingConfiguration(
+            for: mode,
+            selectedPreset: flowID.flatMap { CapturePresetStore.flow(id: $0) } ?? CapturePresetStore.selectedFlow()
+        )
+        segmentOrigin = mode.defaultCommandOrigin
+        log.log("[PersistentRecorder] Stop action switched while recording")
+    }
+
     func stopInAppSegment() {
         guard isSegmentActive else {
             log.log("[PersistentRecorder] ⚠️ stopInAppSegment but no active segment")
@@ -1187,8 +1266,7 @@ final class PersistentRecorder {
             for: completionMode,
             selectedPreset: importFlow
         )
-        let modelId = AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedModelKey)
-            ?? AppConstants.defaultTranscriptionBackendID
+        let modelId = CapturePresetStore.resolvedTranscriptionModelID(flowID: importFlow.id)
         let language = AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedLanguageKey)
             ?? "auto"
         let fallbackModelID = AppConstants.sharedDefaults?.string(
@@ -1562,6 +1640,7 @@ final class PersistentRecorder {
             command: command,
             startIndex: currentIndex
         )
+        startLiveSpeakerDiarizationIfNeeded()
 
         // Start duration timer
         startDurationTimer()
@@ -1669,6 +1748,10 @@ final class PersistentRecorder {
                                 guard let self,
                                       self.liveCaptureRequestId == requestId,
                                       self.liveCaptureSessionID == captureSessionID else { return false }
+                                self.recordLiveTranscript(
+                                    finalized: update.finalizedText,
+                                    volatile: update.volatileText
+                                )
                                 return true
                             }
                             guard requestIsCurrent else { return }
@@ -2645,6 +2728,7 @@ final class PersistentRecorder {
 
     private func clearSegmentState() {
         cancelLiveTranscription()
+        resetLiveRecordingSurface()
         cancelEndOfSpeechDetection()
         continuousDictationSession = nil
         continuousDictationCommand = nil
@@ -2680,6 +2764,11 @@ final class PersistentRecorder {
         }
         clearSegmentState()
         recordingQueue.setCaptureActive(false)
+        if let preparationError = lastBackendPreparationError, lastError == preparationError {
+            lastError = nil
+        }
+        lastBackendPreparationError = nil
+        if !preserveAudioForRecovery { discardedSegmentCount &+= 1 }
 
         TranscriptionIPC.clearStatus()
         LiveActivityController.shared.update(isSegmentActive: false, isTranscribing: false, startedAt: nil)
@@ -3631,7 +3720,7 @@ final class PersistentRecorder {
                                 if audioWasRequested {
                                     await MainActor.run {
                                         self.lastFileExportEvent = FileExportEvent(
-                                            result: .failure("Audio retention is enabled, but this Preset has no export destination.")
+                                            result: .failure("Audio retention is enabled, but this Route has no export destination.")
                                         )
                                     }
                                     return .failed
@@ -3715,9 +3804,28 @@ final class PersistentRecorder {
                 }
 
                     if !text.isEmpty, let enricher = self.transcriptEnricher, flowForExport.usesAIEnrichment {
+                        let reportsRouteProgress = originCaptureSource != .keyboard
+                            && completionMode != .keyboardTranscription
+                        let progressDuration = duration
+                        let progressEngine = result.backendName
                         deliveryTask = Task.detached(priority: .utility) {
                             await enricher.enrichAndUpdate(transcript: initialTranscript, flow: flowForExport, into: store)
-                            return await runExport()
+                            let delivery = await runExport()
+                            if reportsRouteProgress {
+                                let progressHeading = await PersistentRecorder
+                                    .routeProgressPlacementHeading(flow: flowForExport)
+                                await MainActor.run {
+                                    guard delivery.completedRecordingJob else { return }
+                                    self.publishRouteProgressIfProcessingPaused(
+                                        transcriptID: savedId,
+                                        audioDuration: progressDuration,
+                                        engineName: progressEngine,
+                                        flow: flowForExport,
+                                        placementHeading: progressHeading
+                                    )
+                                }
+                            }
+                            return delivery
                         }
                     } else {
                         deliveryTask = Task.detached(priority: .utility) { await runExport() }
@@ -4156,7 +4264,7 @@ private enum PersistentRecordingJobError: LocalizedError, RecordingJobFailureCla
         case .originMetadataPersistenceFailed:
             return String(localized: "Shared capture storage is unavailable.")
         case .recoveryRoutingRequired:
-            return String(localized: "Choose a Capture Preset before retrying this recovered recording.")
+            return String(localized: "Choose a Route before retrying this recovered recording.")
         case .transcriptionLimitReached:
             return String(localized: "Choose a Vox.md plan to process this recording.")
         case .deliveryFailed:
@@ -4178,5 +4286,326 @@ private extension Data {
     mutating func appendUInt32LE(_ value: UInt32) {
         var v = value.littleEndian
         Swift.withUnsafeBytes(of: &v) { append(contentsOf: $0) }
+    }
+}
+
+// MARK: - Live Activity Context (read-only)
+
+extension PersistentRecorder {
+    /// Route, pause clock, and Pause availability for the Live Activity.
+    /// Read-only: LiveActivityController polls this; it never mutates state.
+    var liveActivitySegmentContext: LiveActivitySegmentContext? {
+        guard isSegmentActive else { return nil }
+        let isKeyboard = segmentOrigin == .keyboardExtension
+            || segmentCompletionMode == .keyboardTranscription
+        let flow = isKeyboard ? nil : (segmentPresetSnapshot ?? segmentFlowId.flatMap { CapturePresetStore.flow(id: $0) })
+        let now = Date().timeIntervalSince1970
+        let elapsed = isSegmentPaused
+            ? segmentElapsedBeforePause
+            : segmentElapsedBeforePause + max(0, now - segmentStartedAt)
+        return LiveActivitySegmentContext(
+            requestId: segmentRequestId,
+            flow: flow,
+            isPaused: isSegmentPaused,
+            canPause: isAppRecordingSegmentActive,
+            effectiveStartedAt: isSegmentPaused ? now - elapsed : segmentStartedAt - segmentElapsedBeforePause,
+            elapsed: elapsed
+        )
+    }
+}
+
+// MARK: - Live recording surface
+
+/// One finalized live phrase shown on the full-screen recording surface.
+struct CaptureLiveTranscriptLine: Identifiable, Equatable {
+    let id: Int
+    let text: String
+    /// Approximate offset from the start of the recording, in seconds.
+    let start: TimeInterval
+    /// Zero-based speaker index from the incremental on-device pass.
+    var speaker: Int?
+
+    var speakerLabel: String? { speaker.map { "S\($0 + 1)" } }
+}
+
+extension PersistentRecorder {
+    /// True when the active recording's Route opted in to speaker identification.
+    var segmentIdentifiesSpeakers: Bool {
+        segmentVoiceProcessingConfiguration?.speakerDiarizationEnabled == true
+    }
+
+    /// Recognition engine shown under the live timer, for example
+    /// "Apple Speech · live" or a downloaded local model's name.
+    var segmentEngineLabel: String {
+        let modelID = segmentModelId
+            ?? AppConstants.sharedDefaults?.string(forKey: AppConstants.selectedModelKey)
+            ?? AppConstants.defaultTranscriptionBackendID
+        if modelID == TranscriptionBackendID.automatic || modelID == TranscriptionBackendID.appleSpeech {
+            return isLiveTranscriptionStreaming
+                ? String(localized: "Apple Speech · live")
+                : String(localized: "Apple Speech")
+        }
+        return WhisperModelInfo.availableModels.first(where: { $0.id == modelID })?.name ?? modelID
+    }
+
+    /// Current recording offset in seconds, for timestamp markers.
+    var segmentElapsedForMarkers: TimeInterval { segmentDuration }
+
+    fileprivate func resetLiveRecordingSurface() {
+        liveSpeakerDiarizationTask?.cancel()
+        liveSpeakerDiarizationTask = nil
+        liveTranscriptLines = []
+        liveTranscriptVolatileText = ""
+        liveTranscriptConsumedFinalized = ""
+        liveTranscriptPendingStart = nil
+        liveSpeakerSpans = []
+        liveSpeakerCount = 0
+        isLiveTranscriptionStreaming = false
+    }
+
+    /// Splits cumulative live recognition into stamped phrases so speaker
+    /// spans found later can be attributed to the words spoken at that time.
+    fileprivate func recordLiveTranscript(finalized: String, volatile: String?) {
+        guard isSegmentActive else { return }
+        isLiveTranscriptionStreaming = true
+        let volatileText = (volatile ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        if !volatileText.isEmpty, liveTranscriptPendingStart == nil {
+            liveTranscriptPendingStart = max(0, segmentDuration - 1)
+        }
+        if finalized != liveTranscriptConsumedFinalized {
+            let delta: String
+            if finalized.hasPrefix(liveTranscriptConsumedFinalized) {
+                delta = String(finalized.dropFirst(liveTranscriptConsumedFinalized.count))
+            } else {
+                // Recognition revised earlier text: rebuild from the new total.
+                liveTranscriptLines = []
+                delta = finalized
+            }
+            let phrase = delta.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !phrase.isEmpty {
+                let start = liveTranscriptPendingStart ?? max(0, segmentDuration - 2)
+                liveTranscriptLines.append(CaptureLiveTranscriptLine(
+                    id: liveTranscriptLines.count,
+                    text: phrase,
+                    start: start,
+                    speaker: liveSpeaker(at: start)
+                ))
+            }
+            liveTranscriptConsumedFinalized = finalized
+            liveTranscriptPendingStart = volatileText.isEmpty ? nil : max(0, segmentDuration - 1)
+        }
+        liveTranscriptVolatileText = volatileText
+    }
+
+    /// Live speaker labels: Apple Speech has no streaming diarization, so the
+    /// opted-in on-device diarizer re-runs on the buffered recording every few
+    /// seconds and its spans are mapped onto the stamped live phrases.
+    fileprivate func startLiveSpeakerDiarizationIfNeeded() {
+        liveSpeakerDiarizationTask?.cancel()
+        liveSpeakerDiarizationTask = nil
+        guard isAppRecordingSegmentActive, segmentIdentifiesSpeakers else { return }
+        let service = speakerDiarizationService
+        liveSpeakerDiarizationTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(10))
+            while !Task.isCancelled {
+                guard let recorder = self, recorder.isSegmentActive else { return }
+                // The buffered pass re-reads the whole take; stop refreshing
+                // labels on very long recordings to protect the live UI.
+                guard recorder.segmentDuration <= Self.liveDiarizationMaximumDuration else { return }
+                if !recorder.isSegmentPaused,
+                   recorder.segmentDuration >= 4,
+                   let samples = recorder.extractSegmentSamples(
+                       endIndex: recorder.circularBuffer.totalSamplesWritten
+                   ),
+                   let url = recorder.writeWAV(samples: samples) {
+                    let spans = try? await service.liveSpeakerSpans(audioURL: url)
+                    try? FileManager.default.removeItem(at: url)
+                    guard !Task.isCancelled, recorder.isSegmentActive else { return }
+                    if let spans { recorder.applyLiveSpeakerSpans(spans) }
+                }
+                try? await Task.sleep(for: .seconds(12))
+            }
+        }
+    }
+
+    fileprivate static var liveDiarizationMaximumDuration: TimeInterval { 10 * 60 }
+
+    private func applyLiveSpeakerSpans(_ spans: [LiveSpeakerSpan]) {
+        liveSpeakerSpans = spans
+        liveSpeakerCount = Set(spans.map(\.speaker)).count
+        liveTranscriptLines = liveTranscriptLines.map { line in
+            var line = line
+            line.speaker = liveSpeaker(at: line.start)
+            return line
+        }
+    }
+
+    private func liveSpeaker(at recordingOffset: TimeInterval) -> Int? {
+        guard !liveSpeakerSpans.isEmpty else { return nil }
+        // Extracted audio includes the pre-roll before the tap.
+        let audioTime = recordingOffset + preRollSeconds + 0.3
+        if let span = liveSpeakerSpans.first(where: { $0.startTime <= audioTime && audioTime <= $0.endTime }) {
+            return span.speaker
+        }
+        return liveSpeakerSpans.min(by: {
+            min(abs($0.startTime - audioTime), abs($0.endTime - audioTime))
+                < min(abs($1.startTime - audioTime), abs($1.endTime - audioTime))
+        })?.speaker
+    }
+}
+
+// MARK: - Route progress (optional processing paused)
+
+extension PersistentRecorder {
+    fileprivate func publishRouteProgressIfProcessingPaused(
+        transcriptID: UUID,
+        audioDuration: TimeInterval,
+        engineName: String,
+        flow: CapturePreset,
+        placementHeading: String? = nil
+    ) {
+        guard let stored = transcriptStore.transcripts.first(where: { $0.id == transcriptID }),
+              stored.title == nil, stored.cleanedText == nil else { return }
+        lastRouteProgress = CaptureRouteProgress(
+            transcriptID: transcriptID,
+            flowID: flow.id,
+            audioDuration: audioDuration,
+            engineName: engineName,
+            // "Meeting summary · paused" / "Delivered · ## Notes".
+            processingName: flow.postProcessingMode.displayName,
+            placementLabel: placementHeading ?? flow.displayName
+        )
+        // Queue the summary so it is added under the delivered note once
+        // processing is available (app foreground or "Retry summary").
+        var notePath: String?
+        if case .success(let url)? = lastFileExportEvent?.result { notePath = url.path }
+        PendingRouteSummaryQueue.enqueue(PendingRouteSummaryJob(
+            transcriptID: transcriptID,
+            flowID: flow.id,
+            notePath: notePath,
+            createdAt: Date()
+        ))
+    }
+
+    /// The Markdown heading (for example `## Notes`) a route delivers beneath,
+    /// or nil when its placement is the top or bottom of the note.
+    nonisolated static func routeProgressPlacementHeading(flow: CapturePreset) async -> String? {
+        var placement = flow.capturePlacementOverride
+        if placement == nil,
+           let destinationID = await ConfiguredTranscriptCaptureDestinationExporter
+               .resolvedDestinationID(flow: flow),
+           let root = AppConstants.captureDirectoryURL {
+            let store = CaptureLibraryStore(
+                fileURL: root.appendingPathComponent(CaptureLibraryStore.defaultFilename)
+            )
+            placement = (try? await store.load())?
+                .destinations.first { $0.id == destinationID }?
+                .placement
+        }
+        guard case .beneathHeading(let selector, _, _)? = placement else { return nil }
+        let title = selector.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !title.isEmpty else { return nil }
+        return String(repeating: "#", count: max(1, min(6, selector.level ?? 2))) + " " + title
+    }
+
+    /// "Retry summary": runs the pending summary job for the card's
+    /// transcript now.
+    func retryRouteProcessing() async {
+        guard var progress = lastRouteProgress, !progress.isRetrying else { return }
+        if !PendingRouteSummaryQueue.load().contains(where: { $0.transcriptID == progress.transcriptID }) {
+            PendingRouteSummaryQueue.enqueue(PendingRouteSummaryJob(
+                transcriptID: progress.transcriptID,
+                flowID: progress.flowID,
+                notePath: nil,
+                createdAt: Date()
+            ))
+        }
+        progress.isRetrying = true
+        lastRouteProgress = progress
+        let completed = await processPendingRouteSummaries(only: progress.transcriptID)
+        guard lastRouteProgress?.id == progress.id else { return }
+        progress.isRetrying = false
+        if completed.contains(progress.transcriptID) {
+            progress.processingState = .done
+        }
+        lastRouteProgress = progress
+    }
+
+    /// Runs queued summary jobs: enriches the stored transcript on device and,
+    /// when a summary comes back, adds it under the raw transcript in the
+    /// delivered note and the Library copy. Jobs that still can't run stay
+    /// queued for the next foreground. Returns the completed transcript IDs.
+    @discardableResult
+    func processPendingRouteSummaries(only transcriptID: UUID? = nil) async -> Set<UUID> {
+        guard !isProcessingPendingRouteSummaries else { return [] }
+        isProcessingPendingRouteSummaries = true
+        defer { isProcessingPendingRouteSummaries = false }
+        var completed = Set<UUID>()
+        let jobs = PendingRouteSummaryQueue.load()
+            .filter { transcriptID == nil || $0.transcriptID == transcriptID }
+        for var job in jobs {
+            guard let flow = CapturePresetStore.flow(id: job.flowID), flow.usesAIEnrichment,
+                  let stored = transcriptStore.transcripts.first(where: { $0.id == job.transcriptID }) else {
+                // Route deleted / processing turned off / transcript removed.
+                PendingRouteSummaryQueue.remove(transcriptID: job.transcriptID)
+                continue
+            }
+            var enriched = stored
+            if stored.cleanedText == nil, stored.title == nil {
+                guard let enricher = transcriptEnricher else { continue }
+                await enricher.enrichAndUpdate(transcript: stored, flow: flow, into: transcriptStore)
+                enriched = transcriptStore.transcripts.first(where: { $0.id == job.transcriptID }) ?? stored
+            }
+            let summary = enriched.cleanedText ?? enriched.title
+            guard let summary, !summary.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                job.attempts += 1
+                job.lastAttemptAt = Date()
+                PendingRouteSummaryQueue.update(job)
+                continue
+            }
+            if let notePath = job.notePath {
+                let block = DeliveredNoteSummaryWriter.block(
+                    title: String(localized: "\(flow.displayName) summary"),
+                    summary: summary
+                )
+                do {
+                    try DeliveredNoteSummaryWriter.write(
+                        block: block,
+                        after: stored.text,
+                        noteURL: URL(fileURLWithPath: notePath),
+                        scopeURL: TranscriptFileExporter.resolveExportFolderURL(flow: flow)
+                    )
+                } catch {
+                    KeyboardDebugLog.shared.log("[PersistentRecorder] ⚠️ Pending summary write failed: \(error.localizedDescription)")
+                    job.attempts += 1
+                    job.lastAttemptAt = Date()
+                    PendingRouteSummaryQueue.update(job)
+                    continue
+                }
+            }
+            PendingRouteSummaryQueue.remove(transcriptID: job.transcriptID)
+            completed.insert(job.transcriptID)
+            if var progress = lastRouteProgress, progress.transcriptID == job.transcriptID, !progress.isRetrying {
+                progress.processingState = .done
+                lastRouteProgress = progress
+            }
+        }
+        return completed
+    }
+
+    func dismissRouteProgress(keepTranscriptOnly: Bool) {
+        guard var progress = lastRouteProgress else { return }
+        if keepTranscriptOnly {
+            // The user chose the raw transcript; drop the queued summary.
+            PendingRouteSummaryQueue.remove(transcriptID: progress.transcriptID)
+            progress.processingState = .skipped
+            lastRouteProgress = progress
+            Task { @MainActor [weak self] in
+                try? await Task.sleep(for: .seconds(2))
+                if self?.lastRouteProgress?.id == progress.id { self?.lastRouteProgress = nil }
+            }
+        } else {
+            lastRouteProgress = nil
+        }
     }
 }

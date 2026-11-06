@@ -138,7 +138,7 @@ SCREENSHOT_REVIEWED_OVERRIDES = {
         "ค่าจับภาพที่ตั้งไว้", "YAKALAMA ÖN AYARLARI", "ПЕРЕДУСТАНОВКИ ЗАХОПЛЕННЯ",
         "کیپچر پری سیٹس", "CẤU HÌNH GHI NHANH", "采集预设", "擷取預設",
     ),
-    "Capture Presets": values(
+    "Routes": values(
         "إعدادات الالتقاط المسبقة", "ক্যাপচার প্রিসেট", "Aufnahmevoreinstellungen",
         "Preajustes de captura", "Préréglages de capture", "कैप्चर प्रीसेट", "Preset Tangkapan",
         "Preimpostazioni di acquisizione", "キャプチャプリセット", "캡처 프리셋",
@@ -465,7 +465,7 @@ SCREENSHOT_REVIEWED_OVERRIDES.update({
         "Що таке передустановка захоплення?", "کیپچر پری سیٹ کیا ہے؟",
         "Cấu hình ghi nhanh là gì?", "什么是采集预设？", "什麼是擷取預設？",
     ),
-    "Add Preset": values(
+    "Add Route": values(
         "إضافة إعداد مسبق", "প্রিসেট যোগ করুন", "Voreinstellung hinzufügen",
         "Añadir preajuste", "Ajouter un préréglage", "प्रीसेट जोड़ें", "Tambah Preset",
         "Aggiungi preimpostazione", "プリセットを追加", "프리셋 추가",
@@ -907,7 +907,7 @@ SCREENSHOT_REVIEWED_OVERRIDES.update({
         "输入 Markdown、使用听写、粘贴内容，或将文件拖放到此窗口中的任意位置。",
         "輸入 Markdown、使用聽寫、貼上內容，或將檔案拖放到此視窗中的任意位置。",
     ),
-    "A Capture Preset is a complete reusable workflow: what happens to a capture and exactly where it is delivered.": values(
+    "A Route is a complete reusable workflow: what happens to a capture and exactly where it is delivered.": values(
         "إعداد الالتقاط المسبق هو سير عمل كامل قابل لإعادة الاستخدام يحدد ما يحدث للمحتوى وأين يتم تسليمه بالضبط.",
         "ক্যাপচার প্রিসেট হলো সম্পূর্ণ পুনর্ব্যবহারযোগ্য কর্মপ্রবাহ: ক্যাপচারের কী হবে এবং ঠিক কোথায় পাঠানো হবে।",
         "Ein Aufnahme-Preset ist ein vollständig wiederverwendbarer Ablauf: was mit einer Aufnahme geschieht und wohin sie gesendet wird.",

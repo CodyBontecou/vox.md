@@ -44,7 +44,7 @@ def main():
           <li>Eligible subscriptions include a seven-day free trial, then renew automatically at the displayed price unless canceled. Apple determines introductory-offer eligibility across the subscription group. Lifetime purchases have no trial or automatic renewal.</li>
           <li>Manage or cancel subscriptions in Apple Account settings. Cancel a trial at least 24 hours before it ends to avoid renewal. Canceling does not delete existing history. Buying lifetime access does not automatically cancel an active subscription; manage that subscription separately.</li>
           <li>Existing lifetime purchases remain valid. Verified owners of qualifying original paid-app versions keep their existing access. Use Restore Purchases with the Apple Account that purchased access.</li>
-          <li>Without paid access, use the History clock button on the iOS paywall or View and Export Existing History on Mac. Read, search, copy, export, and explicit deletion remain available. Editing, new recordings, new Capture deliveries, and queued Capture retries require paid access.</li>
+          <li>Without paid access, use the Library clock button on the iOS paywall or View and Export Your Library on Mac. Read, search, copy, export, and explicit deletion remain available. Editing, new recordings, new Capture deliveries, and queued Capture retries require paid access.</li>
           <li>The discounted Individual-to-Family lifetime upgrade is for existing Individual lifetime owners, not subscription-only users. There is no monthly plan. Reinstalling does not reset Apple's trial eligibility.</li>
         </ul>
 
@@ -60,25 +60,27 @@ def main():
         elif name == 'privacy.html':
             after = (OUT / 'privacy-policy-proposed.html').read_text()
         else:
-            start = after.index('    <h2>License</h2>')
-            end = after.index('    <h2>Speech Models</h2>', start)
-            after = after[:start] + '''    <h2>License</h2>
-    <p>Vox.md source code is available under the GNU Affero General Public License v3.0 (AGPL-3.0). Rights to use, modify, and redistribute that source are governed by its license. App Store distribution is also subject to Apple's standard Licensed Application End User License Agreement and applicable law.</p>
-
-''' + after[end:]
-            after = replace_once(after, '    <h2>Speech Models</h2>', '''    <h2>Purchases and Subscriptions</h2>
+            # The live terms already carry the AGPL-3.0 License section (HEAD's
+            # rewrite), so only the purchase terms are inserted before Speech models.
+            after = replace_once(after, '    <h2 id="speech-models">Speech models</h2>', '''    <h2 id="purchases-and-subscriptions">Purchases and subscriptions</h2>
     <p>New Capture deliveries and transcription require paid access. Individual and Family access are available through weekly or yearly auto-renewable subscriptions or a one-time lifetime purchase. Apple displays the applicable local price and terms before confirmation. Eligible subscriptions include a seven-day free trial; Apple determines introductory eligibility. Lifetime purchases do not include a trial and do not automatically renew.</p>
     <p>Subscriptions renew automatically unless canceled through Apple Account settings. Cancel a trial at least 24 hours before it ends to avoid renewal. Deleting the app or purchasing lifetime access does not automatically cancel an existing subscription. Use Apple's subscription-management controls to manage or cancel it separately. Purchase restoration, billing, refunds, and Family Sharing are handled through Apple under its applicable terms.</p>
     <p>Existing purchases remain valid. Viewing and exporting existing history do not require a new purchase. Canceling a subscription does not delete existing local history or previously exported files. Apple's <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">standard Licensed Application End User License Agreement</a> also applies.</p>
 
-    <h2>Speech Models</h2>''')
+    <h2 id="speech-models">Speech models</h2>''')
         if name == 'terms.html':
+            after = after.replace('Effective: February 9, 2026 · Last updated: October 29, 2026',
+                'Applies to Vox.md 2.14 when released · Prepared October 30, 2026')
             after = after.replace('Effective: February 9, 2026 · Last updated: July 17, 2026',
                 'Applies to Vox.md 2.14 when released · Prepared October 30, 2026')
             after = after.replace('production onboarding analytics are disabled by default as described in the Privacy Policy.',
                 'this release removes custom app usage analytics and advertising attribution as described in the Privacy Policy. Optional HTTP delivery sends configured text to the endpoint you explicitly choose.')
             after = after.replace('production onboarding analytics are disabled by default.',
                 'this release removes custom app usage analytics and advertising attribution. Optional HTTP delivery is controlled by your destination settings.')
+            after = after.replace('and production builds send coarse first-party onboarding analytics as described in the Privacy Policy.',
+                'and this release removes custom app usage analytics and advertising attribution as described in the Privacy Policy. Optional HTTP delivery sends configured text to the endpoint you explicitly choose.')
+            after = after.replace('handled locally; production builds send coarse first-party onboarding analytics as described in the Privacy Policy.',
+                'handled locally; this release removes custom app usage analytics and advertising attribution. Optional HTTP delivery is controlled by your destination settings.')
         if name == 'docs/index.html':
             after = after.replace('Production onboarding analytics are disabled by default. The app contains no third-party analytics SDK, ad network, or cross-app tracker.',
                 'Vox.md 2.14 removes custom in-app analytics and advertising attribution. Upgrades erase retired local event queues and analytics identifiers. Essential services and earlier retained server records have separate disclosures.')

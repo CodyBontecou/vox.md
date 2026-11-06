@@ -180,7 +180,7 @@ REVIEWED_OVERRIDES = {
     "Queue": {"ko": "대기열"},
     "Resume • Stop • Cancel": {"ko": "재개 • 중지 • 취소"},
     "Sent": {"ko": "전송됨"},
-    "Use Preset Defaults": {"ko": "프리셋 기본값 사용"},
+    "Use Route Defaults": {"ko": "프리셋 기본값 사용"},
     "Enter a complete http:// or https:// link.": {
         "tr": "Tam bir http:// veya https:// bağlantısı girin."
     },
@@ -340,6 +340,11 @@ def source_value(key: str, entry: dict) -> str:
     )
 
 
+def has_variations(entry: dict) -> bool:
+    """Plural (or other) variations are hand-reviewed; machine passes never rewrite them."""
+    return any("variations" in localization for localization in entry.get("localizations", {}).values())
+
+
 def translated_value(entry: dict, locale: str) -> str | None:
     unit = entry.get("localizations", {}).get(locale, {}).get("stringUnit")
     if not unit or unit.get("state") not in {"translated", "needs_review"}:
@@ -404,7 +409,7 @@ def apply_reviewed_overrides(catalogs: list[dict], locales: list[str]) -> int:
     count = 0
     for catalog in catalogs:
         for key, entry in catalog["strings"].items():
-            if not key or entry.get("shouldTranslate") is False:
+            if not key or entry.get("shouldTranslate") is False or has_variations(entry):
                 continue
             source = source_value(key, entry)
             for locale in locales:
@@ -651,7 +656,7 @@ def tasks_for_locale(catalogs: list[dict], locale: str, overwrite: bool) -> list
     tasks: list[TranslationTask] = []
     for catalog_index, catalog in enumerate(catalogs):
         for key, entry in catalog["strings"].items():
-            if not key or entry.get("shouldTranslate") is False:
+            if not key or entry.get("shouldTranslate") is False or has_variations(entry):
                 continue
             if not overwrite and translated_value(entry, locale) is not None:
                 continue
@@ -663,7 +668,7 @@ def complete_english(catalogs: list[dict]) -> int:
     count = 0
     for catalog in catalogs:
         for key, entry in catalog["strings"].items():
-            if not key or entry.get("shouldTranslate") is False:
+            if not key or entry.get("shouldTranslate") is False or has_variations(entry):
                 continue
             if translated_value(entry, "en") is None:
                 set_translation(entry, "en", source_value(key, entry))
@@ -678,7 +683,7 @@ def complete_traditional_chinese(catalogs: list[dict], overwrite: bool) -> int:
     count = 0
     for catalog in catalogs:
         for key, entry in catalog["strings"].items():
-            if not key or entry.get("shouldTranslate") is False:
+            if not key or entry.get("shouldTranslate") is False or has_variations(entry):
                 continue
             if not overwrite and translated_value(entry, "zh-Hant") is not None:
                 continue

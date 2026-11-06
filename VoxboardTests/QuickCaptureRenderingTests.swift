@@ -31,7 +31,7 @@ final class QuickCaptureRenderingTests: XCTestCase {
                 }
                 let empty = CaptureViewSection { EmptyView() }
                 let content = QuickCaptureCanvas(showsDestination: true, showsWatchStatus: false,
-                    showsAttachments: false, ocrProgress: empty, destination: guide, watchStatus: empty,
+                    showsAttachments: false, header: empty, ocrProgress: empty, destination: guide, watchStatus: empty,
                     composer: slot("composer", expands: true), attachments: empty, controls: slot("controls"),
                     keyboardGuidance: empty, error: empty, fileExport: empty, sentToast: empty)
                     .environment(\.dynamicTypeSize, size)
@@ -857,6 +857,7 @@ final class QuickCaptureRenderingTests: XCTestCase {
             showsDestination: optionalSections,
             showsWatchStatus: optionalSections,
             showsAttachments: optionalSections,
+            header: CaptureViewSection { EmptyView() },
             ocrProgress: CaptureViewSection { EmptyView() },
             destination: slot("destination"),
             watchStatus: slot("watch"),
@@ -967,6 +968,7 @@ private struct PresetComposerHarness: View {
         QuickCaptureCanvas(
             showsDestination: false, showsWatchStatus: false,
             showsAttachments: false,
+            header: empty,
             ocrProgress: empty, destination: empty, watchStatus: empty,
             composer: CaptureViewSection {
                 MarkdownComposerTextView(text: $vm.draft.text, selection: $editor.selection,

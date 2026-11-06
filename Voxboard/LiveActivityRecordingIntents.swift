@@ -52,3 +52,38 @@ struct StopRecordingLiveActivityIntent: LiveActivityIntent {
         return .result()
     }
 }
+
+/// Pauses or resumes the segment shown on the Live Activity. Runs in the app
+/// process (LiveActivityIntent); bound to the activity's exact request ID so a
+/// stale card can never pause a newer recording.
+@available(iOS 17.0, *)
+struct TogglePauseRecordingLiveActivityIntent: LiveActivityIntent {
+    static let title: LocalizedStringResource = "Pause or Resume Recording"
+    static let description = IntentDescription("Pauses or resumes the active Vox.md recording segment.")
+    static var isDiscoverable: Bool = false
+
+    @Parameter(title: "Recording")
+    var requestId: String?
+
+    init() {
+        requestId = nil
+    }
+
+    init(requestId: String?) {
+        self.requestId = requestId
+    }
+
+    @MainActor
+    func perform() async throws -> some IntentResult {
+#if !VOXBOARD_WIDGET_EXTENSION
+        guard let requestId, !requestId.isEmpty,
+              let recorder = PersistentRecorder.active,
+              let context = recorder.liveActivitySegmentContext,
+              context.requestId == requestId,
+              context.canPause else { return .result() }
+        recorder.toggleInAppSegmentPause()
+        LiveActivityController.shared.refreshRecordingState()
+#endif
+        return .result()
+    }
+}

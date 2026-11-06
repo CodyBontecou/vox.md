@@ -24,12 +24,12 @@ class AppLanguageInstrumentationTest {
         try {
             AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("ar"))
             compose.waitUntil(timeoutMillis = 10_000) {
-                compose.onAllNodes(hasText("خطوط محددة Markdown"))
+                compose.onAllNodes(hasText("يُنسخ صوتيًا على هذا الجهاز"))
                     .fetchSemanticsNodes()
                     .isNotEmpty()
             }
-            compose.onNodeWithText("خطوط محددة Markdown").performScrollTo().assertIsDisplayed()
-            compose.onNode(hasText("اختيار كوكب أو ملف") and hasClickAction())
+            compose.onNodeWithText("يُنسخ صوتيًا على هذا الجهاز").performScrollTo().assertIsDisplayed()
+            compose.onNode(hasText("ابدأ") and hasClickAction())
                 .performScrollTo()
                 .assertIsDisplayed()
         } finally {

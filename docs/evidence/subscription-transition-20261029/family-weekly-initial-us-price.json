@@ -1,0 +1,133 @@
+{
+  "data": {
+    "attributes": {
+      "familySharable": true,
+      "groupLevel": 1,
+      "marketSettings": [
+        "APP_STORE",
+        "APPLE_BUSINESS",
+        "APPLE_SCHOOL"
+      ],
+      "multiSeatStatus": "ENABLED",
+      "name": "Vox.md Family Weekly",
+      "productId": "bontecou.Voxboard.family.weekly",
+      "reviewNote": "Seven-day introductory free trial for eligible accounts, then auto-renews at the displayed localized price. Individual is for one Apple Account; Family supports Apple Family Sharing. Existing lifetime purchases remain valid. Unpaid users may view/export existing history but cannot create new recordings or Capture deliveries. First subscriptions will be reviewed with the updated iOS and macOS paywall builds; existing lifetime prices remain unchanged. No release before owner approval.",
+      "state": "MISSING_METADATA",
+      "subscriptionPeriod": "ONE_WEEK"
+    },
+    "id": "6828566714",
+    "links": {
+      "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714"
+    },
+    "relationships": {
+      "appStoreReviewScreenshot": {
+        "links": {
+          "related": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/appStoreReviewScreenshot",
+          "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/relationships/appStoreReviewScreenshot"
+        }
+      },
+      "images": {
+        "links": {
+          "related": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/images",
+          "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/relationships/images"
+        }
+      },
+      "introductoryOffers": {
+        "links": {
+          "related": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/introductoryOffers",
+          "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/relationships/introductoryOffers"
+        }
+      },
+      "offerCodes": {
+        "links": {
+          "related": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/offerCodes",
+          "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/relationships/offerCodes"
+        }
+      },
+      "planAvailabilities": {
+        "links": {
+          "related": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/planAvailabilities",
+          "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/relationships/planAvailabilities"
+        }
+      },
+      "pricePoints": {
+        "links": {
+          "related": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/pricePoints",
+          "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/relationships/pricePoints"
+        }
+      },
+      "prices": {
+        "data": [
+          {
+            "id": "eyJhIjoiNjgyODU2NjcxNCIsImMiOiJVUyIsImQiOjAsInAiOiIwIn0",
+            "type": "subscriptionPrices"
+          }
+        ],
+        "links": {
+          "related": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/prices",
+          "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/relationships/prices"
+        },
+        "meta": {
+          "paging": {
+            "limit": 10,
+            "total": 1
+          }
+        }
+      },
+      "promotedPurchase": {
+        "links": {
+          "related": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/promotedPurchase",
+          "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/relationships/promotedPurchase"
+        }
+      },
+      "promotionalOffers": {
+        "links": {
+          "related": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/promotionalOffers",
+          "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/relationships/promotionalOffers"
+        }
+      },
+      "subscriptionAvailability": {
+        "links": {
+          "related": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/subscriptionAvailability",
+          "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/relationships/subscriptionAvailability"
+        }
+      },
+      "subscriptionLocalizations": {
+        "links": {
+          "related": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/subscriptionLocalizations",
+          "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/relationships/subscriptionLocalizations"
+        }
+      },
+      "versions": {
+        "links": {
+          "related": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/versions",
+          "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/relationships/versions"
+        }
+      },
+      "winBackOffers": {
+        "links": {
+          "related": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/winBackOffers",
+          "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714/relationships/winBackOffers"
+        }
+      }
+    },
+    "type": "subscriptions"
+  },
+  "included": [
+    {
+      "attributes": {
+        "planType": "UPFRONT",
+        "preserved": false,
+        "startDate": null
+      },
+      "id": "eyJhIjoiNjgyODU2NjcxNCIsImMiOiJVUyIsImQiOjAsInAiOiIwIn0",
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionPrices/eyJhIjoiNjgyODU2NjcxNCIsImMiOiJVUyIsImQiOjAsInAiOiIwIn0"
+      },
+      "type": "subscriptionPrices"
+    }
+  ],
+  "links": {
+    "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566714"
+  }
+}

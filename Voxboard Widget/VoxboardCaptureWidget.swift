@@ -63,7 +63,10 @@ private struct VoxboardCaptureWidgetView: View {
             }
         case .systemMedium:
             VStack(alignment: .leading, spacing: 12) {
-                Text("Quick Capture").font(.caption.bold())
+                Text("Quick Capture")
+                    .font(.system(.caption, design: .monospaced).weight(.medium))
+                    .textCase(.uppercase)
+                    .foregroundStyle(.secondary)
                 HStack(spacing: 8) {
                     action("Note", icon: "square.and.pencil", url: captureURL())
                     action("Photo", icon: "photo", url: captureURL(action: "photos"))
@@ -74,7 +77,7 @@ private struct VoxboardCaptureWidgetView: View {
             }
         case .systemLarge:
             VStack(alignment: .leading, spacing: 12) {
-                Text("Quick Capture").font(.headline.bold())
+                Text("Quick Capture").font(.headline.weight(.semibold))
                 Text("Local drafts → precise Markdown routes")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -95,6 +98,7 @@ private struct VoxboardCaptureWidgetView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     Image(systemName: "square.and.pencil")
                         .font(.title.bold())
+                        .foregroundStyle(signalAccent)
                         .widgetAccentable()
                     Spacer()
                     Text("Quick Capture")
@@ -112,17 +116,26 @@ private struct VoxboardCaptureWidgetView: View {
         Link(destination: url) {
             VStack(spacing: 7) {
                 Image(systemName: icon)
-                    .font(.title3.bold())
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(icon == "mic.fill" ? signalRed : signalAccent)
                     .widgetAccentable()
                 Text(title)
-                    .font(.system(size: 9, weight: .bold))
+                    .font(.system(size: 9, weight: .semibold, design: .monospaced))
                     .lineLimit(1)
             }
             .frame(maxWidth: .infinity, minHeight: 54)
-            .background(.primary.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
+            .background(.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .strokeBorder(.primary.opacity(0.08), lineWidth: 1)
+            )
         }
         .accessibilityLabel(Text(title))
     }
+
+    // Signal tokens (extension-local; GeistTheme is app-only).
+    private var signalAccent: Color { Color(red: 47 / 255, green: 59 / 255, blue: 232 / 255) } // #2F3BE8
+    private var signalRed: Color { Color(red: 240 / 255, green: 71 / 255, blue: 74 / 255) }    // #F0474A
 
     private func captureURL(action: String? = nil) -> URL {
         var components = URLComponents()

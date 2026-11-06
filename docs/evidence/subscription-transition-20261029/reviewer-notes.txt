@@ -1,0 +1,19 @@
+Vox.md 2.14 (58) introduces required paid access for new Capture deliveries and transcription on iOS and macOS. This review includes our first auto-renewable subscriptions in group Vox.md Unlimited (22526843).
+
+No app account, login, or demo credentials are required. Please test purchases with the App Review sandbox account.
+
+New subscription products:
+- bontecou.Voxboard.individual.weekly: US $0.99/week
+- bontecou.Voxboard.individual.yearly: US $29.99/year
+- bontecou.Voxboard.family.weekly: US $1.99/week, Apple Family Sharing
+- bontecou.Voxboard.family.yearly: US $49.99/year, Apple Family Sharing
+
+Each subscription offers one free week to eligible Apple Accounts, then auto-renews at the price displayed in the paywall. All four products share one group; Apple determines introductory eligibility. Prices are localized with purchasing-power adjustments across the existing 175 storefronts. There is no monthly subscription.
+
+Existing Individual lifetime, Family lifetime, and Family upgrade products remain available. Their existing live prices have NOT been increased for this submission. Previously purchased lifetime access and verified original paid-app ownership are preserved; Restore Purchases reconciles StoreKit access. Lifetime purchases do not cancel an existing subscription; subscription-management and Terms/Privacy links are on the paywall.
+
+An unpaid user sees the paywall before new Capture or transcription. Existing history remains accessible without subscribing: use the History clock button at the top of the iOS paywall, or View and Export Existing History on the Mac paywall. Search, read, copy, export, and deletion of existing content do not require a new purchase. This path does not allow new recordings, new Capture deliveries, edits, or retrying queued captures. Existing exported files remain in the user's chosen folders.
+
+After starting a trial or restoring a purchase, create/select a Capture Preset and choose a writable destination folder. Send a short typed note and confirm Markdown output. For voice, grant microphone access and record, stop, preview, and send. Transcription runs locally with Apple Speech or downloaded Whisper/Parakeet models. Exported notes, audio, and transcript contents are not sent to Vox.md servers.
+
+This transition is prepared for iOS and macOS together with manual release. Subscription review/approval must not trigger any changes to existing lifetime pricing or automatic app release.

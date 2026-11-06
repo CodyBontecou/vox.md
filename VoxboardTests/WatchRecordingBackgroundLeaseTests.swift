@@ -142,9 +142,12 @@ final class WatchRecordingBackgroundLeaseTests: XCTestCase {
             ]
         )
         let service = FakeBackgroundTaskService(identifier: identifier(46))
+        // Watch deliveries, recording-only included, require paid access.
+        let paidTracker = UsageTracker(defaults: nil)
+        paidTracker.unlock()
         let pipeline = WatchRecordingPipeline(
             transcriptStore: TranscriptStore(),
-            usageTracker: UsageTracker(),
+            usageTracker: paidTracker,
             transcriptionService: AppTranscriptionServices.shared,
             transcriptEnricher: nil,
             backgroundTaskService: service

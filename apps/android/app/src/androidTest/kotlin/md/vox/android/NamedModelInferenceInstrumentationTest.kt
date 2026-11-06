@@ -2,6 +2,11 @@ package md.vox.android
 
 import android.app.ActivityManager
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import androidx.test.core.app.ActivityScenario
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import android.os.SystemClock
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -20,7 +25,6 @@ import md.vox.android.platformservices.SpeechModelInstallPhase
 import md.vox.android.platformservices.SpeechModelManager
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -28,12 +32,12 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class NamedModelInferenceInstrumentationTest {
     @Test
-    fun undersizedDeviceRejectsMediumBeforeDownload() {
+    fun undersizedDeviceRejectsOversizedModelBeforeDownload() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val memoryInfo = ActivityManager.MemoryInfo()
         (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).getMemoryInfo(memoryInfo)
-        val descriptor = requireNotNull(SpeechModelCatalog.find("ggml-medium"))
-        assumeTrue(
+        val descriptor = requireNotNull(SpeechModelCatalog.find("ggml-large-v3-turbo"))
+        assertTrue(
             "this assertion runs on the standard-memory qualification device",
             memoryInfo.totalMem < descriptor.minimumMemoryBytes,
         )
@@ -48,39 +52,44 @@ class NamedModelInferenceInstrumentationTest {
         )
     }
 
-    @Test
+    @Test @ProvisionedModelTest
     fun downloadsVerifiesInstallsAndSelectsRequestedModel() {
         val modelID = requestedModelID()
-        assumeTrue("named-model qualification requires -e voxModelID", modelID != null)
+        assertTrue("named-model qualification requires -e voxModelID", modelID != null)
         val context = ApplicationProvider.getApplicationContext<Context>()
         val manager = SpeechModelManager.get(context)
         val descriptor = requireNotNull(SpeechModelCatalog.find(requireNotNull(modelID)))
         assertTrue(descriptor.engine != SpeechModelEngine.VOSK)
         assertTrue(descriptor.remoteFiles.isNotEmpty())
 
-        manager.install(descriptor.id)
-        val ready = awaitModel(manager, descriptor.id)
-        assertEquals(descriptor.id, ready.descriptor.id)
-        assertEquals(descriptor.approximateBytes, descriptor.remoteFiles.sumOf { it.expectedBytes })
-        assertTrue(manager.select(descriptor.id))
-        assertEquals(descriptor.id, manager.selectedModelID())
-        val directory = requireNotNull(manager.selectedModelDirectory())
-        val receipt = File(directory, "vox-model.properties").readText()
-        assertTrue(receipt.contains("version=2"))
-        assertTrue(receipt.contains("id=${descriptor.id}"))
-        assertTrue(receipt.contains("engine=${descriptor.engine.name}"))
-        descriptor.remoteFiles.forEach { artifact ->
-            assertEquals(artifact.expectedBytes, File(directory, artifact.relativePath).length())
+        // Android 16 blocks background UID networking even when shell DNS works.
+        // Acquisition is a foreground user action in production, so exercise that state.
+        ActivityScenario.launch(MainActivity::class.java).use {
+            awaitUnblockedNetwork(context)
+            manager.install(descriptor.id)
+            val ready = awaitModel(manager, descriptor.id)
+            assertEquals(descriptor.id, ready.descriptor.id)
+            assertEquals(descriptor.approximateBytes, descriptor.remoteFiles.sumOf { it.expectedBytes })
+            assertTrue(manager.select(descriptor.id))
+            assertEquals(descriptor.id, manager.selectedModelID())
+            val directory = requireNotNull(manager.selectedModelDirectory())
+            val receipt = File(directory, "vox-model.properties").readText()
+            assertTrue(receipt.contains("version=2"))
+            assertTrue(receipt.contains("id=${descriptor.id}"))
+            assertTrue(receipt.contains("engine=${descriptor.engine.name}"))
+            descriptor.remoteFiles.forEach { artifact ->
+                assertEquals(artifact.expectedBytes, File(directory, artifact.relativePath).length())
+            }
         }
     }
 
-    @Test
+    @Test @ProvisionedModelTest
     fun selectedRequestedModelTranscribesRealSpeechOfflineThroughProductionClient() {
         val modelID = requestedModelID()
-        assumeTrue("named-model qualification requires -e voxModelID", modelID != null)
+        assertTrue("named-model qualification requires -e voxModelID", modelID != null)
         val context = ApplicationProvider.getApplicationContext<Context>()
         val speechWav = File(context.filesDir, "local-speech-qualification/vosk-api-test.wav")
-        assumeTrue("exact-hash speech fixture is staged only by the host gate", speechWav.length() > 200_000)
+        assertTrue("exact-hash speech fixture is staged only by the host gate", speechWav.length() > 200_000)
         val manager = SpeechModelManager.get(context)
         val descriptor = requireNotNull(SpeechModelCatalog.find(requireNotNull(modelID)))
         val ready = manager.state.value.models.single { it.descriptor.id == descriptor.id }
@@ -143,6 +152,22 @@ class NamedModelInferenceInstrumentationTest {
             SystemClock.sleep(250)
         }
         error("timed out installing $modelID")
+    }
+
+    private fun awaitUnblockedNetwork(context: Context) {
+        val connectivity = context.getSystemService(ConnectivityManager::class.java)
+        val unblocked = CountDownLatch(1)
+        val callback = object : ConnectivityManager.NetworkCallback() {
+            override fun onBlockedStatusChanged(network: Network, blocked: Boolean) {
+                if (!blocked) unblocked.countDown()
+            }
+        }
+        connectivity.registerDefaultNetworkCallback(callback)
+        try {
+            assertTrue("foreground model acquisition requires unblocked networking", unblocked.await(30, TimeUnit.SECONDS))
+        } finally {
+            connectivity.unregisterNetworkCallback(callback)
+        }
     }
 
     private fun awaitTranscription(

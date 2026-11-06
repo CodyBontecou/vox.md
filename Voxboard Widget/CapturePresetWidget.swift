@@ -48,8 +48,8 @@ struct CapturePresetWidget: Widget {
             CapturePresetWidgetEntryView(snapshot: entry.snapshot)
                 .containerBackground(.background, for: .widget)
         }
-        .configurationDisplayName("Capture Presets")
-        .description("Open a preset without sending or recording. Follow the Capture Bar or choose six ordered custom slots; small shows the first position.")
-        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+        .configurationDisplayName("Routes")
+        .description("Open a route without sending or recording. Follow the Capture Bar or choose six ordered custom slots; small shows the first position.")
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryRectangular])
     }
 }

@@ -138,8 +138,7 @@ internal fun captureTileEvidence(context: Context, state: WearSurfaceState) = Ca
 
 private fun wearSurfaceDetail(context: Context, state: WearSurfaceState): String = when {
     state.recording -> context.getString(R.string.wear_open_controls)
-    state.queued == 1 -> context.getString(R.string.wear_one_recording_saved)
-    state.queued > 1 -> context.getString(R.string.wear_recordings_saved_count, state.queued)
+    state.queued > 0 -> context.resources.getQuantityString(R.plurals.wear_recordings_saved, state.queued, state.queued)
     else -> context.getString(R.string.wear_ready)
 }
 
@@ -161,8 +160,7 @@ internal fun complicationData(
     }
     val description = when {
         state.recording -> context.getString(R.string.wear_is_recording)
-        state.queued == 1 -> context.getString(R.string.wear_one_recording_saved)
-        state.queued > 1 -> context.getString(R.string.wear_recordings_saved_count, state.queued)
+        state.queued > 0 -> context.resources.getQuantityString(R.plurals.wear_recordings_saved, state.queued, state.queued)
         else -> context.getString(R.string.wear_quick_capture)
     }
     val intent = Intent(context, WearMainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)

@@ -1,6 +1,7 @@
 import SwiftUI
 import Combine
 import CoreText
+import VoxboardShared
 
 #if canImport(UIKit)
 import UIKit
@@ -10,9 +11,10 @@ import AppKit
 
 // MARK: - Geist design system
 
-/// The app's UI source of truth is vendored in `docs/geist/design.md` and
-/// `docs/geist/design.dark.md`. Semantic aliases below only point at values
-/// defined by those documents; no product-specific colors are introduced.
+/// The app's UI tokens follow the "Signal" redesign: a warm paper ground,
+/// near-black ink, white cards, one indigo accent and a recording red. Dark
+/// mode inverts to a near-black ground with raised charcoal cards. Names keep
+/// the original Geist scale so existing call sites pick up the new values.
 enum Geist {
     enum Spacing {
         static let one: CGFloat = 4
@@ -27,90 +29,113 @@ enum Geist {
     }
 
     enum Radius {
-        static let small: CGFloat = 6
-        static let medium: CGFloat = 12
-        static let large: CGFloat = 16
+        static let small: CGFloat = 8
+        static let medium: CGFloat = 14
+        static let large: CGFloat = 18
         static let full: CGFloat = 9_999
     }
 
     enum ControlHeight {
         static let small: CGFloat = 32
-        static let medium: CGFloat = 40
-        static let large: CGFloat = 48
+        static let medium: CGFloat = 44
+        static let large: CGFloat = 52
+        /// The primary Speak / Record control.
+        static let hero: CGFloat = 64
     }
 
     enum Palette {
-        // Shared with the keyboard's opaque backdrop for a seamless transition.
-        static let background100 = adaptive("#e2e4e8", "#1a1a1c")
-        static let background200 = adaptive("#e2e4e8", "#1a1a1c")
+        // Page ground. Shared with the keyboard's opaque backdrop for a seamless transition.
+        static let background100 = adaptive("#f2f2ee", "#0b0b0b")
+        static let background200 = adaptive("#f2f2ee", "#0b0b0b")
+        /// Raised cards, pills and secondary controls.
+        static let card = adaptive("#ffffff", "#161616")
 
-        static let gray100 = adaptive("#f2f2f2", "#1a1a1a")
-        static let gray200 = adaptive("#ebebeb", "#1f1f1f")
-        static let gray300 = adaptive("#e6e6e6", "#292929")
-        static let gray400 = adaptive("#eaeaea", "#2e2e2e")
-        static let gray500 = adaptive("#c9c9c9", "#454545")
-        static let gray600 = adaptive("#a8a8a8", "#878787")
-        static let gray700 = adaptive("#8f8f8f", "#8f8f8f")
-        static let gray800 = adaptive("#7d7d7d", "#7d7d7d")
-        static let gray900 = adaptive("#4d4d4d", "#a0a0a0")
-        static let gray1000 = adaptive("#171717", "#ededed")
+        static let gray100 = adaptive("#f7f7f4", "#161616")
+        static let gray200 = adaptive("#ecece6", "#1c1c1c")
+        static let gray300 = adaptive("#e3e3dc", "#222220")
+        static let gray400 = adaptive("#deded8", "#2a2a28")
+        static let gray500 = adaptive("#c9c9c3", "#3a3a38")
+        static let gray600 = adaptive("#a3a39e", "#6a6a66")
+        static let gray700 = adaptive("#8a8a85", "#8a8a85")
+        static let gray800 = adaptive("#6b6b66", "#9a9a95")
+        static let gray900 = adaptive("#5e5e5a", "#9a9a95")
+        static let gray1000 = adaptive("#121212", "#f4f4f1")
 
-        static let grayAlpha100 = adaptive("#0000000d", "#ffffff12")
-        static let grayAlpha200 = adaptive("#00000015", "#ffffff17")
-        static let grayAlpha300 = adaptive("#0000001a", "#ffffff21")
-        static let grayAlpha400 = adaptive("#00000014", "#ffffff24")
-        static let grayAlpha500 = adaptive("#00000036", "#ffffff3d")
-        static let grayAlpha600 = adaptive("#0000003d", "#ffffff82")
-        static let grayAlpha700 = adaptive("#00000070", "#ffffff8a")
-        static let grayAlpha800 = adaptive("#00000082", "#ffffff78")
-        static let grayAlpha900 = adaptive("#000000b3", "#ffffff9c")
-        static let grayAlpha1000 = adaptive("#000000e8", "#ffffffeb")
+        static let grayAlpha100 = adaptive("#1212120a", "#f4f4f10f")
+        static let grayAlpha200 = adaptive("#12121212", "#f4f4f114")
+        static let grayAlpha300 = adaptive("#1212121a", "#f4f4f11f")
+        static let grayAlpha400 = adaptive("#1212121f", "#f4f4f11f")
+        static let grayAlpha500 = adaptive("#12121236", "#f4f4f13d")
+        static let grayAlpha600 = adaptive("#1212123d", "#f4f4f170")
+        static let grayAlpha700 = adaptive("#12121270", "#f4f4f18a")
+        static let grayAlpha800 = adaptive("#12121282", "#f4f4f178")
+        static let grayAlpha900 = adaptive("#121212b3", "#f4f4f19c")
+        static let grayAlpha1000 = adaptive("#121212e8", "#f4f4f1eb")
 
-        static let blue100 = adaptive("#f0f7ff", "#06193a")
-        static let blue200 = adaptive("#e9f4ff", "#022248")
-        static let blue300 = adaptive("#dfefff", "#002f62")
-        static let blue400 = adaptive("#cae7ff", "#003674")
-        static let blue500 = adaptive("#94ccff", "#00418b")
-        static let blue600 = adaptive("#48aeff", "#0090ff")
-        static let blue700 = adaptive("#006bff", "#006efe")
-        static let blue800 = adaptive("#0059ec", "#005be7")
-        static let blue900 = adaptive("#005ff2", "#47a8ff")
-        static let blue1000 = adaptive("#002359", "#eaf6ff")
+        // Indigo accent. `blue700` is the tint; `Geist.accent` is the fixed fill.
+        static let blue100 = adaptive("#f0f0fd", "#12142e")
+        static let blue200 = adaptive("#e6e6fc", "#1b1e4a")
+        static let blue300 = adaptive("#dadafb", "#22265c")
+        static let blue400 = adaptive("#c4c8ff", "#2c3170")
+        static let blue500 = adaptive("#9da4ff", "#3a4090")
+        static let blue600 = adaptive("#6e78ff", "#2f3be8")
+        static let blue700 = adaptive("#2f3be8", "#6e78ff")
+        static let blue800 = adaptive("#1e27b0", "#5a64f0")
+        static let blue900 = adaptive("#2f3be8", "#9da4ff")
+        static let blue1000 = adaptive("#10165e", "#e6e6fc")
 
-        static let red100 = adaptive("#ffeeef", "#330a11")
-        static let red200 = adaptive("#ffe8ea", "#440d13")
-        static let red300 = adaptive("#ffe3e4", "#5d0e17")
-        static let red400 = adaptive("#ffd7d6", "#6f101b")
-        static let red500 = adaptive("#ffb1b3", "#88151f")
-        static let red600 = adaptive("#ff676d", "#f32e40")
-        static let red700 = adaptive("#fc0035", "#f13242")
-        static let red800 = adaptive("#ea001d", "#e2162a")
-        static let red900 = adaptive("#d8001b", "#ff565f")
-        static let red1000 = adaptive("#47000c", "#ffe9ed")
+        // Recording red.
+        static let red100 = adaptive("#fdeeee", "#2a1112")
+        static let red200 = adaptive("#fce6e6", "#351416")
+        static let red300 = adaptive("#fadada", "#43181a")
+        static let red400 = adaptive("#f6c9c9", "#521c1f")
+        static let red500 = adaptive("#f2a6a7", "#6b2427")
+        static let red600 = adaptive("#f0474a", "#f0474a")
+        static let red700 = adaptive("#f0474a", "#f0474a")
+        static let red800 = adaptive("#d93235", "#e03a3d")
+        static let red900 = adaptive("#c42a2d", "#ff7a7c")
+        static let red1000 = adaptive("#4a0e0f", "#fde6e6")
 
-        static let amber100 = adaptive("#fff6de", "#2a1700")
-        static let amber700 = adaptive("#ffae00", "#ffae00")
-        static let amber900 = adaptive("#aa4d00", "#ff9300")
-        static let amber1000 = adaptive("#561900", "#fff3d5")
+        // "Needs you" orange.
+        static let amber100 = adaptive("#fdf0e8", "#2a1508")
+        static let amber400 = adaptive("#f1c9b4", "#6b3a1f")
+        static let amber700 = adaptive("#e8590c", "#ff8a4c")
+        static let amber900 = adaptive("#c2410c", "#ff8a4c")
+        static let amber1000 = adaptive("#5a1e05", "#fde8dc")
 
-        static let green100 = adaptive("#ecfdec", "#002608")
-        static let green700 = adaptive("#28a948", "#00ac3a")
-        static let green900 = adaptive("#107d32", "#00ca50")
-        static let green1000 = adaptive("#003a00", "#d8ffe4")
+        // Delivered green.
+        static let green100 = adaptive("#e7f4ef", "#0d251e")
+        static let green700 = adaptive("#0f7b5f", "#4cc9a0")
+        static let green900 = adaptive("#0f7b5f", "#4cc9a0")
+        static let green1000 = adaptive("#06362a", "#d7f5ea")
     }
 
-    // Semantic roles from the documented scale intent.
+    // Semantic roles.
     static let bg = Palette.background100
-    static let surface = Palette.background100
+    static let surface = Palette.card
     static let surface2 = Palette.background200
-    static let border = Palette.grayAlpha400
-    static let borderHi = Palette.grayAlpha500
+    static let card = Palette.card
+    /// Inset wells, segmented-control tracks and neutral chips.
+    static let well = Palette.gray300
+    static let border = Palette.gray400
+    static let borderHi = Palette.gray500
     static let text = Palette.gray1000
     static let muted = Palette.gray900
     static let faint = Palette.gray700
     static let error = Palette.red900
     static let focus = Palette.blue700
-    static let success = Palette.blue900
+    static let success = Palette.green900
+    static let warning = Palette.amber700
+    /// Fixed indigo fill for Send and the default route tile in both modes.
+    static let accent = adaptive("#2f3be8", "#2f3be8")
+    static let onAccent = adaptive("#ffffff", "#ffffff")
+    /// Soft indigo wash behind `[[links]]` and the DEFAULT badge.
+    /// App-wide `.tint` (matches the AccentColor asset): indigo in light,
+    /// lifted lavender on the near-black dark ground.
+    static let tint = adaptive("#2f3be8", "#9da4ff")
+    static let accentSoft = Palette.blue200
+    static let accentText = Palette.blue900
+    static let recording = Palette.red700
 
     // MARK: Typography tokens
 
@@ -253,7 +278,7 @@ private func rgbaComponents(_ hex: String) -> (CGFloat, CGFloat, CGFloat, CGFloa
 // MARK: - Components
 
 struct GeistButtonStyle: ButtonStyle {
-    enum Variant { case primary, secondary, tertiary, destructive }
+    enum Variant { case primary, accent, secondary, tertiary, destructive }
     enum Size { case small, medium, large }
 
     let variant: Variant
@@ -270,22 +295,23 @@ struct GeistButtonStyle: ButtonStyle {
             .padding(.horizontal, horizontalPadding)
             .background(backgroundColor(configuration.isPressed))
             .overlay(
-                RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous)
+                Capsule(style: .continuous)
                     .stroke(borderColor(configuration.isPressed), lineWidth: borderWidth)
             )
-            .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous))
+            .clipShape(Capsule(style: .continuous))
             .overlay {
                 if isFocused {
-                    RoundedRectangle(cornerRadius: Geist.Radius.small + 2, style: .continuous)
+                    Capsule(style: .continuous)
                         .stroke(Geist.Palette.background100, lineWidth: 2)
                         .padding(-2)
-                    RoundedRectangle(cornerRadius: Geist.Radius.small + 4, style: .continuous)
+                    Capsule(style: .continuous)
                         .stroke(Geist.focus, lineWidth: 2)
                         .padding(-4)
                 }
             }
-            .contentShape(RoundedRectangle(cornerRadius: Geist.Radius.small, style: .continuous))
+            .contentShape(Capsule(style: .continuous))
             .opacity(isEnabled ? 1 : 0.72)
+            .scaleEffect(configuration.isPressed ? 0.98 : 1)
     }
 
     private var height: CGFloat {
@@ -296,12 +322,13 @@ struct GeistButtonStyle: ButtonStyle {
         }
     }
 
-    private var horizontalPadding: CGFloat { size == .small ? 6 : (size == .large ? 14 : 10) }
+    private var horizontalPadding: CGFloat { size == .small ? 10 : (size == .large ? 18 : 14) }
 
     private var foregroundColor: Color {
         guard isEnabled else { return Geist.Palette.gray700 }
         switch variant {
         case .primary: return Geist.Palette.background100
+        case .accent: return Geist.onAccent
         case .secondary, .tertiary: return Geist.Palette.gray1000
         case .destructive: return .white
         }
@@ -311,7 +338,8 @@ struct GeistButtonStyle: ButtonStyle {
         guard isEnabled else { return Geist.Palette.gray100 }
         switch variant {
         case .primary: return pressed ? Geist.Palette.gray900 : Geist.Palette.gray1000
-        case .secondary: return pressed ? Geist.Palette.grayAlpha300 : Geist.Palette.background100
+        case .accent: return pressed ? Geist.Palette.blue800 : Geist.accent
+        case .secondary: return pressed ? Geist.Palette.gray200 : Geist.card
         case .tertiary: return pressed ? Geist.Palette.grayAlpha200 : .clear
         case .destructive: return pressed ? Geist.Palette.red700 : Geist.Palette.red800
         }
@@ -319,7 +347,7 @@ struct GeistButtonStyle: ButtonStyle {
 
     private func borderColor(_ pressed: Bool) -> Color {
         guard variant == .secondary else { return .clear }
-        return pressed ? Geist.Palette.grayAlpha600 : Geist.Palette.grayAlpha400
+        return pressed ? Geist.borderHi : Geist.border
     }
 
     private var borderWidth: CGFloat { variant == .secondary ? 1 : 0 }
@@ -327,7 +355,7 @@ struct GeistButtonStyle: ButtonStyle {
 
 struct GeistDivider: View {
     var body: some View {
-        Rectangle().fill(Geist.Palette.grayAlpha400).frame(height: 1)
+        Rectangle().fill(Geist.Palette.gray200).frame(height: 1)
     }
 }
 
@@ -357,10 +385,163 @@ struct GeistSectionLabel: View {
 
     var body: some View {
         Text(title)
-            .font(Geist.heading(.footnote))
-            .foregroundStyle(Geist.Palette.gray1000)
+            .textCase(.uppercase)
+            .font(Geist.mono(size: 11, relativeTo: .caption))
+            .tracking(0.66)
+            .foregroundStyle(Geist.muted)
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityLabel(title)
+    }
+}
+
+// MARK: - Signal components
+
+/// 44pt circular icon button on a bordered card, used for Back, Activity and
+/// Attach in the Signal layouts.
+struct SignalCircleButtonStyle: ButtonStyle {
+    var diameter: CGFloat = Geist.ControlHeight.medium
+    var filled: Color? = nil
+    var foreground: Color = Geist.text
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(size: diameter * 0.4, weight: .semibold))
+            .foregroundStyle(filled == nil ? foreground : Geist.onAccent)
+            .frame(width: diameter, height: diameter)
+            .background(filled ?? Geist.card, in: Circle())
+            .overlay {
+                if filled == nil {
+                    Circle().stroke(Geist.border, lineWidth: 1)
+                }
+            }
+            .contentShape(Circle())
+            .opacity(configuration.isPressed ? 0.75 : 1)
+    }
+}
+
+/// Signal route tile colors by route order, as on the Routes, Capture and
+/// Library boards: the first route indigo, the second near-black "ink"
+/// (inverted in dark mode), every other route neutral. The Watch payload
+/// (`WatchRouteTileStyle.fallback`) and Mac (`MacRouteTile`) use the same order.
+enum SignalRouteTileTone: Equatable {
+    case primary
+    case ink
+    case neutral
+
+    static func forRoute(at index: Int?) -> SignalRouteTileTone {
+        switch index {
+        case 0: .primary
+        case 1: .ink
+        default: .neutral
+        }
+    }
+
+    /// Tone for a route by its position among the enabled routes, in the
+    /// user's order.
+    @MainActor
+    static func forRoute(id: String?) -> SignalRouteTileTone {
+        guard let id else { return .neutral }
+        return forRoute(at: RouteOrderCache.enabledRoutes().firstIndex { $0.id == id })
+    }
+
+    /// Tone for a route known only by its display name (Library items).
+    @MainActor
+    static func forRoute(named name: String?) -> SignalRouteTileTone {
+        guard let name else { return .neutral }
+        return forRoute(at: RouteOrderCache.enabledRoutes().firstIndex {
+            $0.visibleName == name || $0.accessibilityName == name
+        })
+    }
+
+    /// Decoded enabled routes, re-read only when the stored routes change, so
+    /// list rows can resolve tones cheaply.
+    @MainActor
+    private enum RouteOrderCache {
+        private static var data: Data?
+        private static var routes: [CapturePreset] = []
+        private static var hasLoaded = false
+
+        static func enabledRoutes() -> [CapturePreset] {
+            let current = AppConstants.sharedDefaults?.data(forKey: CapturePresetStore.flowsKey)
+            if !hasLoaded || current != data {
+                data = current
+                routes = CapturePresetStore.loadFlows(persistMigrations: false).filter(\.isEnabled)
+                hasLoaded = true
+            }
+            return routes
+        }
+    }
+}
+
+/// Rounded letter tile identifying a route (capture preset).
+struct SignalRouteTile: View {
+    let letter: String
+    var size: CGFloat = 40
+    var isPrimary = false
+    var circular = false
+    /// Near-black ink tile (inverted in dark mode), the Signal "second" route.
+    var isInk = false
+    /// Explicit route-order tone; overrides `isPrimary` / `isInk` when set.
+    var tone: SignalRouteTileTone? = nil
+
+    private var resolvedTone: SignalRouteTileTone {
+        tone ?? (isPrimary ? .primary : isInk ? .ink : .neutral)
+    }
+
+    var body: some View {
+        let shape = RoundedRectangle(cornerRadius: circular ? size / 2 : size * 0.3, style: .continuous)
+        Text(letter.prefix(1).uppercased())
+            .font(.custom("Geist-SemiBold", fixedSize: size * 0.42))
+            .foregroundStyle(Self.letterColor(resolvedTone))
+            .frame(width: size, height: size)
+            .background(Self.fillColor(resolvedTone), in: shape)
+            .accessibilityHidden(true)
+    }
+
+    static func fillColor(_ tone: SignalRouteTileTone) -> Color {
+        switch tone {
+        case .primary: Geist.accent
+        case .ink: Geist.text
+        case .neutral: Geist.well
+        }
+    }
+
+    static func letterColor(_ tone: SignalRouteTileTone) -> Color {
+        switch tone {
+        case .primary: Geist.onAccent
+        case .ink: Geist.bg
+        case .neutral: Geist.text
+        }
+    }
+}
+
+/// Small neutral capsule used for route steps and metadata.
+struct SignalChip: View {
+    let text: String
+
+    var body: some View {
+        Text(verbatim: text)
+            .font(Geist.caption(.caption))
+            .foregroundStyle(Geist.Palette.gray900)
+            .padding(.horizontal, 9)
+            .padding(.vertical, 4)
+            // Board: #F2F2EE chip in light, #222220 on the #161616 card in dark.
+            .background(adaptive("#f2f2ee", "#222220"), in: Capsule())
+    }
+}
+
+/// Mono uppercase badge such as DEFAULT.
+struct SignalBadge: View {
+    let text: LocalizedStringKey
+
+    var body: some View {
+        Text(text)
+            .textCase(.uppercase)
+            .font(Geist.mono(size: 10.5, relativeTo: .caption2))
+            .foregroundStyle(Geist.accentText)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(Geist.accentSoft, in: RoundedRectangle(cornerRadius: 5, style: .continuous))
     }
 }
 
@@ -407,23 +588,16 @@ struct TranscribingDotsView: View {
 
 struct GeistCardModifier: ViewModifier {
     var padding: CGFloat = Geist.Spacing.six
-    @Environment(\.colorScheme) private var colorScheme
 
     func body(content: Content) -> some View {
         content
             .padding(padding)
-            .background(Geist.Palette.background100)
+            .background(Geist.card)
             .overlay(
-                RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous)
-                    .stroke(Geist.Palette.grayAlpha400, lineWidth: 1)
+                RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous)
+                    .stroke(Geist.border, lineWidth: 1)
             )
-            .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous))
-            .shadow(
-                color: .black.opacity(colorScheme == .dark ? 0.16 : 0.04),
-                radius: 2,
-                x: 0,
-                y: colorScheme == .dark ? 1 : 2
-            )
+            .clipShape(RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous))
     }
 }
 
@@ -438,12 +612,15 @@ extension View {
 /// An isolated, warmer treatment for onboarding/purchasing. The rest of Geist
 /// stays unchanged. Blue ink and charcoal actions retain the app's identity.
 enum Thoughtful {
-    static let background = adaptive("#eeeae3", "#201f1c")
-    static let paper = adaptive("#faf7f1", "#2c2b27")
+    static let background = Geist.bg
+    static let paper = Geist.card
     static let ink = Geist.text
     static let secondary = Geist.muted
     static let rule = Geist.borderHi
     static let introductionKey = "vox.thoughtfulIntroduction.completed.v1"
+    /// Welcome artboard's periwinkle (#8A8FFF): the wordmark extension and
+    /// bullet dots on the always-dark Welcome page.
+    static let welcomeAccent = Color(red: 138 / 255, green: 143 / 255, blue: 1)
 
     static var title: Font { .system(.largeTitle, design: .serif).weight(.regular) }
 }
@@ -502,325 +679,433 @@ struct ThoughtfulNoteIllustration: View {
     }
 }
 
-/// Original full-bleed ink drawing. The notebook, window and growing stems sit
-/// behind the interface rather than taking up a separate illustration header.
-struct ThoughtfulBackdrop: View {
-    var page = 0
-    var quiet = false
-
-    var body: some View {
-        GeometryReader { geometry in
-            Canvas { context, size in
-                let sx = size.width / 400
-                let sy = size.height / 820
-                context.scaleBy(x: sx, y: sy)
-                let ink = Geist.Palette.blue900.opacity(quiet ? 0.16 : 0.26)
-                let fine = StrokeStyle(lineWidth: 1.2, lineCap: .round, lineJoin: .round)
-                // A loosely drawn window, cropped by the upper-right edge.
-                var window = Path()
-                window.move(to: CGPoint(x: 276, y: -35))
-                window.addLine(to: CGPoint(x: 278, y: 202))
-                window.addQuadCurve(to: CGPoint(x: 440, y: 197), control: CGPoint(x: 360, y: 193))
-                window.move(to: CGPoint(x: 287, y: -30))
-                window.addLine(to: CGPoint(x: 289, y: 188))
-                window.addLine(to: CGPoint(x: 437, y: 184))
-                window.move(to: CGPoint(x: 354, y: -20))
-                window.addLine(to: CGPoint(x: 357, y: 186))
-                window.move(to: CGPoint(x: 289, y: 89))
-                window.addQuadCurve(to: CGPoint(x: 434, y: 86), control: CGPoint(x: 365, y: 94))
-                context.stroke(window, with: .color(ink), style: fine)
-                // Open journal: asymmetric pages and a curved, stitched spine.
-                var journal = Path()
-                journal.move(to: CGPoint(x: 42, y: 535))
-                journal.addCurve(to: CGPoint(x: 239, y: 568), control1: CGPoint(x: 124, y: 508), control2: CGPoint(x: 174, y: 540))
-                journal.addCurve(to: CGPoint(x: 439, y: 533), control1: CGPoint(x: 303, y: 532), control2: CGPoint(x: 358, y: 518))
-                journal.addLine(to: CGPoint(x: 467, y: 777))
-                journal.addCurve(to: CGPoint(x: 252, y: 810), control1: CGPoint(x: 387, y: 751), control2: CGPoint(x: 326, y: 774))
-                journal.addCurve(to: CGPoint(x: 16, y: 782), control1: CGPoint(x: 171, y: 776), control2: CGPoint(x: 104, y: 748))
-                journal.closeSubpath()
-                context.fill(journal, with: .color(Thoughtful.paper.opacity(0.65)))
-                context.stroke(journal, with: .color(ink), style: fine)
-                var details = Path()
-                details.move(to: CGPoint(x: 239, y: 568))
-                details.addQuadCurve(to: CGPoint(x: 252, y: 810), control: CGPoint(x: 226, y: 682))
-                details.move(to: CGPoint(x: 24, y: 794))
-                details.addQuadCurve(to: CGPoint(x: 252, y: 823), control: CGPoint(x: 152, y: 769))
-                details.addQuadCurve(to: CGPoint(x: 465, y: 789), control: CGPoint(x: 365, y: 769))
-                for row in 0..<7 {
-                    let y = CGFloat(580 + row * 24)
-                    details.move(to: CGPoint(x: 65, y: y))
-                    details.addQuadCurve(to: CGPoint(x: row == 6 ? 162 : 202, y: y + 14), control: CGPoint(x: 140, y: y - 7))
-                    details.move(to: CGPoint(x: 277, y: y + 6))
-                    details.addQuadCurve(to: CGPoint(x: row == 5 ? 353 : 406, y: y - 7), control: CGPoint(x: 340, y: y - 19))
-                }
-                context.stroke(details, with: .color(ink.opacity(0.6)), style: fine)
-                // A botanical margin, deliberately extending off the canvas.
-                var stem = Path()
-                stem.move(to: CGPoint(x: -20, y: 677))
-                stem.addCurve(to: CGPoint(x: 104, y: 320), control1: CGPoint(x: 52, y: 597), control2: CGPoint(x: 8, y: 393))
-                for i in 0..<8 {
-                    let y = CGFloat(366 + i * 36)
-                    let x = CGFloat(73 - i * 7)
-                    let side: CGFloat = i.isMultiple(of: 2) ? 1 : -1
-                    stem.move(to: CGPoint(x: x, y: y + 24))
-                    stem.addQuadCurve(to: CGPoint(x: x + side * 52, y: y - 19), control: CGPoint(x: x + side * 5, y: y - 16))
-                    stem.addQuadCurve(to: CGPoint(x: x, y: y + 24), control: CGPoint(x: x + side * 48, y: y + 22))
-                }
-                context.stroke(stem, with: .color(ink), style: fine)
-                // Loose blue pen marks and the edge of a writing instrument.
-                var pen = Path()
-                pen.move(to: CGPoint(x: 336, y: 419)); pen.addLine(to: CGPoint(x: 418, y: 266))
-                pen.addLine(to: CGPoint(x: 430, y: 274)); pen.addLine(to: CGPoint(x: 348, y: 425))
-                pen.addLine(to: CGPoint(x: 333, y: 439)); pen.closeSubpath()
-                pen.move(to: CGPoint(x: 336, y: 419)); pen.addLine(to: CGPoint(x: 348, y: 425))
-                pen.move(to: CGPoint(x: 310, y: 469))
-                pen.addCurve(to: CGPoint(x: 421, y: 451), control1: CGPoint(x: 339, y: 443), control2: CGPoint(x: 377, y: 493))
-                context.stroke(pen, with: .color(ink), style: fine)
-            }
-            .rotationEffect(.degrees(page == 1 ? 5 : 0))
-            .frame(width: geometry.size.width, height: geometry.size.height)
-        }
-        .background(Thoughtful.background)
-        .ignoresSafeArea()
-        .allowsHitTesting(false)
-        .accessibilityHidden(true)
-    }
-}
-
-struct ThoughtfulBlueButtonStyle: ButtonStyle {
-    @Environment(\.isEnabled) private var isEnabled
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(Geist.label(.body))
-            .foregroundStyle(.white)
-            .padding(.horizontal, 20)
-            .padding(.vertical, 14)
-            .frame(minHeight: 54)
-            .frame(maxWidth: .infinity)
-            .background(Geist.Palette.blue800.opacity(!isEnabled ? 0.55 : configuration.isPressed ? 0.78 : 1),
-                        in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-    }
-}
-
+/// Signal first-run: a dark "Welcome" page followed by a light "Setup"-style
+/// page. Page 0 renders in the dark scheme in both appearances so the Geist
+/// tokens resolve to the Welcome artboard's near-black ground and ink.
 struct ThoughtfulOnboarding: View {
     var onFinish: () -> Void
     var onHistory: (() -> Void)? = nil
     var initialPage = 0
     @State private var path: [Int] = []
-    @State private var exampleCaptured = false
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @ScaledMetric(relativeTo: .largeTitle) private var headlineSize: CGFloat = 44
+    @State private var isInstallingRoutes = false
+    #if os(iOS)
+    @State private var vault: VoxVault?
+    @State private var isPickingVault = false
+    @State private var starterRoutes: Set<StarterRoute> = Set(StarterRoute.allCases.filter(\.isOnByDefault))
+    @State private var setupError: String?
+    #endif
 
     private var currentPage: Int { path.last ?? initialPage }
 
     var body: some View {
-        NavigationStack(path: $path) {
-            page(initialPage)
-                .navigationDestination(for: Int.self) { page($0) }
+        VStack(spacing: 0) {
+            NavigationStack(path: $path) {
+                page(initialPage)
+                    .navigationDestination(for: Int.self) { page($0) }
+            }
+            // At accessibility sizes the actions scroll with each page (see
+            // `inlineActions`) so a tall pinned footer can't crowd out the text.
+            if !dynamicTypeSize.isAccessibilitySize {
+                footer
+                    .environment(\.colorScheme, currentPage == 0 ? .dark : colorScheme)
+            }
         }
-        .tint(Geist.Palette.blue900)
+        .background(
+            Thoughtful.background
+                .environment(\.colorScheme, currentPage == 0 ? .dark : colorScheme)
+                .ignoresSafeArea()
+        )
+        .tint(Thoughtful.ink)
+        #if os(iOS)
+        .task { if vault == nil { vault = await VoxVaultStore.current() } }
+        #endif
     }
 
-    private func footer(_ index: Int) -> some View {
-        VStack(spacing: 16) {
-            HStack(spacing: 6) {
-                ForEach(0..<3) { step in
-                    Capsule().fill(step == index ? Geist.Palette.blue900 : Thoughtful.rule)
-                        .frame(width: step == index ? 24 : 6, height: 6)
-                }
-                Spacer()
-                Text(verbatim: "\(index + 1) / 3")
-                    .font(Geist.mono(.caption))
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    /// "Start capturing": creates the chosen starter routes in the vault, then
+    /// hands over to the plans (purchase) step exactly as before.
+    private func startCapturing() {
+        #if os(iOS)
+        guard !isInstallingRoutes else { return }
+        guard let vault else {
+            if starterRoutes.isEmpty { onFinish() } else { isPickingVault = true }
+            return
+        }
+        isInstallingRoutes = true
+        Task { @MainActor in
+            defer { isInstallingRoutes = false }
+            do {
+                try await StarterRouteInstaller.install(
+                    StarterRoute.allCases.filter { starterRoutes.contains($0) }, in: vault
+                )
+                setupError = nil
+                onFinish()
+            } catch {
+                setupError = error.localizedDescription
+            }
+        }
+        #else
+        onFinish()
+        #endif
+    }
+
+    private var footer: some View {
+        footerActions
+            .frame(maxWidth: 440)
+            .padding(.horizontal, 24)
+            .padding(.top, 12)
+            .padding(.bottom, 24)
+            .frame(maxWidth: .infinity)
+            .background(Thoughtful.background)
+    }
+
+    /// The footer's actions placed at the end of a page's scrolling content,
+    /// used instead of the pinned footer at accessibility text sizes.
+    @ViewBuilder
+    private var inlineActions: some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            footerActions.padding(.top, 32)
+        }
+    }
+
+    private var footerActions: some View {
+        VStack(spacing: 14) {
+            Button(currentPage == 0 ? String(localized: "Get started") : String(localized: "Start capturing")) {
+                if currentPage == 0 {
+                    if path.isEmpty { path.append(1) }
+                } else { startCapturing() }
+            }
+            .buttonStyle(GeistButtonStyle(variant: .primary))
+            .disabled(isInstallingRoutes)
+            .accessibilityIdentifier(currentPage == 0 ? "onboarding.continue" : "onboarding.plans")
+            if currentPage == 0 {
+                Text(verbatim: "Open source · AGPL-3.0")
+                    .font(Geist.caption())
                     .foregroundStyle(Thoughtful.secondary)
-            }
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Introduction, page \(index + 1) of 3")
-            let actionLayout = dynamicTypeSize.isAccessibilitySize
-                ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12))
-                : AnyLayout(HStackLayout(spacing: 20))
-            actionLayout {
-                Group {
-                    if index > initialPage {
-                        Button {
-                            guard currentPage == index, !path.isEmpty else { return }
-                            path.removeLast()
-                        } label: {
-                            Text("Back")
-                                .font(Geist.body())
-                                .frame(minHeight: 44, alignment: .leading)
-                                .contentShape(Rectangle())
-                        }
-                        .buttonStyle(.plain)
-                        .foregroundStyle(Thoughtful.ink)
-                        .accessibilityIdentifier("onboarding.back")
-                    } else if !dynamicTypeSize.isAccessibilitySize {
-                        Color.clear.frame(height: 44).accessibilityHidden(true)
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-                Button {
-                    if index < 2 {
-                        guard currentPage == index else { return }
-                        path.append(index + 1)
-                    } else { onFinish() }
-                } label: {
-                    HStack(spacing: 12) {
-                        Text(index == 2 ? String(localized: "View plans") : String(localized: "Continue"))
-                            .fixedSize(horizontal: false, vertical: true)
-                        if !dynamicTypeSize.isAccessibilitySize {
-                            Spacer(minLength: 0)
-                            Image(systemName: "arrow.right")
-                        }
-                    }
-                }
-                .buttonStyle(ThoughtfulBlueButtonStyle())
-                .frame(maxWidth: .infinity)
-                .accessibilityIdentifier(index == 2 ? "onboarding.plans" : "onboarding.continue")
+                    .multilineTextAlignment(.center)
             }
         }
-        .padding(.horizontal, 24)
-        .padding(.vertical, 16)
-        .frame(maxWidth: 488)
-        .frame(maxWidth: .infinity)
     }
 
+    @ViewBuilder
     private func page(_ index: Int) -> some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 28) {
-                Text(index == 0 ? "A place for the\nsmall things."
-                     : index == 1 ? "Say it.\nKeep the thought."
-                     : "Your words.\nYour own home.")
-                    .font(.system(size: headlineSize, weight: .regular, design: .serif))
-                    .tracking(-1.4)
-                    .foregroundStyle(Thoughtful.ink)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .accessibilityAddTraits(.isHeader)
-                Text(index == 0 ? "The passing idea. The long way home. The thing you’ll want to remember."
-                     : index == 1 ? "Speak naturally. Vox.md turns your voice into text, right on your device."
-                     : "Plain Markdown files, in a folder you choose. Yours to open, move, and make your own.")
-                    .font(Geist.body())
-                    .foregroundStyle(Thoughtful.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: 330, alignment: .leading)
-                if index == 0 { exampleNote }
-                else if index == 1 { voiceExample }
-                else { folderExample }
-                if dynamicTypeSize.isAccessibilitySize { footer(index).padding(.horizontal, -24) }
+        Group {
+            if index == 0 {
+                welcomePage
+                    .environment(\.colorScheme, .dark)
+            } else {
+                setupPage
             }
-            .padding(.horizontal, 28)
-            .padding(.top, 28)
-            .padding(.bottom, 32)
-            .frame(maxWidth: 488, alignment: .leading)
-            .frame(maxWidth: .infinity, alignment: .center)
         }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            if !dynamicTypeSize.isAccessibilitySize { footer(index) }
-        }
-        .background(ThoughtfulBackdrop(page: index))
+        .id(index)
+        .navigationTitle("Vox.md")
+        #if os(iOS)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarColorScheme(index == 0 ? .dark : nil, for: .navigationBar)
+        #endif
         .toolbar {
+            // Only the active page contributes tools; pushed pages must not
+            // accumulate another History button from their ancestor.
+            // The plans are reached through the flow itself (Get started →
+            // Setup → Start capturing), so there is no separate skip button.
             if index == currentPage {
+                ToolbarItem(placement: .principal) {
+                    // Welcome carries the wordmark in its content instead.
+                    if index == 0 {
+                        Text(verbatim: "").accessibilityHidden(true)
+                    } else {
+                        wordmark
+                            .environment(\.colorScheme, colorScheme)
+                    }
+                }
                 ToolbarItem(placement: .cancellationAction) {
                     if let onHistory {
-                        Button("History", systemImage: "clock", action: onHistory)
+                        Button("Library", systemImage: "clock", action: onHistory)
                             .accessibilityIdentifier("paywall.existingHistory")
                     }
                 }
             }
         }
-        #if os(iOS)
-        .navigationBarBackButtonHidden(true)
-        .toolbarBackground(.hidden, for: .navigationBar)
-        #endif
-        .id(index)
     }
 
-    private var exampleNote: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            HStack {
-                Image(systemName: "text.book.closed")
-                Text("SMALL THINGS")
-                    .font(Geist.mono(.caption))
-                Spacer()
-                Image(systemName: "paperclip")
-            }
-            .foregroundStyle(Geist.Palette.blue900)
-            Text("Take the long\nway home.")
-                .font(.system(.title, design: .serif))
-                .foregroundStyle(Thoughtful.ink)
-                .fixedSize(horizontal: false, vertical: true)
-            Text("Stop for coffee. Call someone you miss.\nLeave a little room for a good idea.")
-                .font(Geist.body(.callout))
-                .foregroundStyle(Thoughtful.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(24)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Thoughtful.paper.opacity(0.97), in: RoundedRectangle(cornerRadius: 16))
-        .overlay { RoundedRectangle(cornerRadius: 16).stroke(Thoughtful.rule.opacity(0.5)) }
-        .rotationEffect(.degrees(dynamicTypeSize.isAccessibilitySize ? 0 : -2))
-        .padding(.vertical, 12)
+    /// `vox.md` mono wordmark with the indigo extension.
+    private var wordmark: some View {
+        wordmark(extensionColor: Geist.accentText)
     }
 
-    private var voiceExample: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            HStack(alignment: .center, spacing: 4) {
-                ForEach(0..<27) { i in
-                    Capsule().fill(Geist.Palette.blue900.opacity(0.65))
-                        .frame(width: 3, height: CGFloat([12, 24, 38, 18, 46, 30, 16][i % 7]))
+    private func wordmark(extensionColor: Color) -> some View {
+        (Text(verbatim: "vox").foregroundColor(Geist.text)
+            + Text(verbatim: ".md").foregroundColor(extensionColor))
+            .font(Geist.mono(size: 15, relativeTo: .headline, medium: true))
+            .accessibilityLabel(Text(verbatim: "Vox.md"))
+            .accessibilityAddTraits(.isHeader)
+    }
+
+    // MARK: Welcome
+
+    private var welcomePage: some View {
+        GeometryReader { proxy in
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                wordmark(extensionColor: Thoughtful.welcomeAccent)
+                    .padding(.top, 8)
+
+                Text(String(localized: "Say it.\nIt lands in\nMarkdown."))
+                    .font(.custom("Geist-SemiBold", size: 46, relativeTo: .largeTitle))
+                    .tracking(-1.6)
+                    .lineSpacing(-4)
+                    .foregroundStyle(Geist.text)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
+                    .padding(.top, 48)
+
+                welcomeExample
+                    .padding(.top, 36)
+
+                // The board pins the promises just above Get started.
+                Spacer(minLength: 40)
+
+                VStack(alignment: .leading, spacing: 10) {
+                    welcomeBullet("Transcribed on this device")
+                    welcomeBullet("Written to your Obsidian vault or Files")
+                    welcomeBullet("Your words are never sent to us")
                 }
-                Spacer(minLength: 0)
+
+                inlineActions
             }
-            .accessibilityHidden(true)
-            Text(exampleCaptured ? "# A thought for later\n\nTake the long way home." : "“Take the long way home.”")
-                .font(exampleCaptured ? Geist.mono(.body) : .system(.title2, design: .serif))
-                .foregroundStyle(Thoughtful.ink)
-                .fixedSize(horizontal: false, vertical: true)
-                .accessibilityIdentifier("onboarding.exampleText")
-            Button {
-                exampleCaptured.toggle()
-            } label: {
-                Label(exampleCaptured ? "Play example again" : "Turn it into a note",
-                      systemImage: exampleCaptured ? "arrow.counterclockwise" : "arrow.down.doc")
-                    .font(Geist.label(.callout))
-                    .frame(minHeight: 44)
-            }
-            .accessibilityIdentifier("onboarding.tryExample")
+            .frame(maxWidth: 440, alignment: .topLeading)
+            .padding(.horizontal, 24)
+            .padding(.bottom, 16)
+            .frame(maxWidth: .infinity, minHeight: proxy.size.height, alignment: .top)
         }
-        .padding(24)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Thoughtful.paper.opacity(0.97), in: RoundedRectangle(cornerRadius: 16))
-        .overlay { RoundedRectangle(cornerRadius: 16).stroke(Thoughtful.rule.opacity(0.5)) }
-        .padding(.vertical, 12)
+        }
+        .background(Thoughtful.background.ignoresSafeArea())
     }
 
-    private var folderExample: some View {
-        VStack(alignment: .leading, spacing: 22) {
-            Label("Your folder", systemImage: "folder")
-                .font(Geist.label(.body))
-                .foregroundStyle(Geist.Palette.blue900)
-            HStack(alignment: .top, spacing: 16) {
-                Image(systemName: "doc.text")
-                    .font(.title)
-                    .foregroundStyle(Geist.Palette.blue900)
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Small things.md").font(Geist.label())
-                    Text("Readable anywhere.\nNo special format. No lock-in.")
-                        .font(Geist.body(.callout))
+    private var welcomeExample: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 10) {
+                Image(systemName: "mic.fill")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(Color.white)
+                    .frame(width: 28, height: 28)
+                    .background(Geist.recording, in: Circle())
+                    .accessibilityHidden(true)
+                Text("“Remind me to book flights for Lisbon”")
+                    .font(Geist.body(.body))
+                    .foregroundStyle(Geist.text.opacity(0.72))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Rectangle()
+                .fill(Geist.Palette.gray500)
+                .frame(width: 2, height: 18)
+                .padding(.leading, 13)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(verbatim: "Tasks.md › ## Today")
+                    .foregroundStyle(Geist.faint)
+                Text("- [ ] Book flights for Lisbon")
+                    .foregroundStyle(Geist.text)
+            }
+            .font(Geist.mono(size: 13, relativeTo: .footnote))
+            .lineSpacing(3)
+            .padding(14)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Geist.card, in: RoundedRectangle(cornerRadius: Geist.Radius.medium, style: .continuous))
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text("Example: say “Remind me to book flights for Lisbon” and it lands in Tasks.md under Today as a task."))
+    }
+
+    private func welcomeBullet(_ text: LocalizedStringKey) -> some View {
+        HStack(spacing: 10) {
+            Circle()
+                .fill(Thoughtful.welcomeAccent)
+                .frame(width: 6, height: 6)
+                .accessibilityHidden(true)
+            Text(text)
+                .font(.custom("Geist-Regular", size: 15, relativeTo: .callout))
+                // Welcome is always dark: #C9C9C4 on the near-black ground.
+                .foregroundStyle(Geist.text.opacity(0.8))
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    // MARK: Setup
+
+    #if os(iOS)
+    private var setupPage: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(spacing: 6) {
+                    ForEach(0..<2, id: \.self) { step in
+                        Capsule()
+                            .fill(step <= 1 ? Geist.text : Geist.well)
+                            .frame(height: 4)
+                    }
+                }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text("Step 2 of 2"))
+
+                Text(String(localized: "Where should\nnotes land?"))
+                    .font(.custom("Geist-SemiBold", size: 32, relativeTo: .largeTitle))
+                    .tracking(-0.8)
+                    .foregroundStyle(Thoughtful.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
+                    .padding(.top, 28)
+
+                VaultPickerCard(vault: vault, isPicking: $isPickingVault) { picked in
+                    vault = picked
+                }
+                .padding(.top, 20)
+
+                Text("Start with these routes")
+                    .font(.custom("Geist-SemiBold", size: 15, relativeTo: .headline))
+                    .foregroundStyle(Thoughtful.ink)
+                    .accessibilityAddTraits(.isHeader)
+                    .padding(.top, 28)
+                Text("You can edit or add more any time.")
+                    .font(Geist.body(.callout))
+                    .fixedSize(horizontal: false, vertical: true)
+                    .foregroundStyle(Thoughtful.secondary)
+                    .padding(.top, 4)
+
+                VStack(spacing: 0) {
+                    ForEach(Array(StarterRoute.allCases.enumerated()), id: \.element) { index, route in
+                        if index > 0 { GeistDivider() }
+                        starterRouteRow(route)
+                    }
+                }
+                .padding(.horizontal, 14)
+                .background(Thoughtful.paper, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .stroke(Geist.border, lineWidth: 1)
+                )
+                .padding(.top, 12)
+
+                if let setupError {
+                    Text(setupError)
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.error)
+                        .padding(.top, 10)
+                } else if vault == nil && !starterRoutes.isEmpty {
+                    Text("Choose a folder so these routes know where to write.")
+                        .font(Geist.caption())
+                        .foregroundStyle(Thoughtful.secondary)
+                        .padding(.top, 10)
+                }
+
+                inlineActions
+            }
+            .frame(maxWidth: 440, alignment: .topLeading)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+            .frame(maxWidth: .infinity)
+        }
+        .background(Thoughtful.background.ignoresSafeArea())
+    }
+
+    /// Setup board row: route tile (ink when chosen), name, mono path and
+    /// a trailing indigo checkbox. The whole row toggles.
+    private func starterRouteRow(_ route: StarterRoute) -> some View {
+        let isOn = starterRoutes.contains(route)
+        return Button {
+            if isOn { starterRoutes.remove(route) } else { starterRoutes.insert(route) }
+        } label: {
+            HStack(spacing: 12) {
+                SignalRouteTile(letter: route.name, size: 32, isInk: isOn)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(route.name)
+                        .font(Geist.label(.body))
+                        .foregroundStyle(Thoughtful.ink)
+                    Text(verbatim: route.pathLabel)
+                        .font(Geist.mono(size: 11, relativeTo: .caption))
                         .foregroundStyle(Thoughtful.secondary)
                 }
+                Spacer(minLength: 8)
+                Image(systemName: isOn ? "checkmark.square.fill" : "square")
+                    .font(.system(size: 22, weight: .regular))
+                    .foregroundStyle(isOn ? Geist.accent : Geist.borderHi)
+                    .accessibilityHidden(true)
             }
+            .frame(maxWidth: .infinity, minHeight: 60, alignment: .leading)
+            .contentShape(Rectangle())
         }
-        .foregroundStyle(Thoughtful.ink)
-        .padding(24)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Thoughtful.paper.opacity(0.97), in: RoundedRectangle(cornerRadius: 16))
-        .overlay { RoundedRectangle(cornerRadius: 16).stroke(Thoughtful.rule.opacity(0.5)) }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isToggle)
+        .accessibilityValue(isOn ? Text("On") : Text("Off"))
+        .accessibilityIdentifier("onboarding.starter.\(route.rawValue)")
+    }
+    #else
+    private var setupPage: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                Text(String(localized: "Your words.\nYour own space."))
+                    .font(.custom("Geist-SemiBold", size: 32, relativeTo: .largeTitle))
+                    .tracking(-0.8)
+                    .foregroundStyle(Thoughtful.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
+                    .padding(.top, 28)
+
+                Text(String(localized: "Plain Markdown, saved to the folders you choose. Voice transcription stays on your device."))
+                    .font(Geist.body(.callout))
+                    .foregroundStyle(Thoughtful.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.top, 10)
+
+                VStack(spacing: 0) {
+                    setupRow("Capture a moment in words or voice", systemImage: "waveform", primary: true)
+                    GeistDivider()
+                    setupRow("Keep notes in your own folders", systemImage: "folder")
+                    GeistDivider()
+                    setupRow("Read and export your Library anytime", systemImage: "clock")
+                }
+                .padding(.horizontal, 14)
+                .background(Thoughtful.paper, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .stroke(Geist.border, lineWidth: 1)
+                )
+                .padding(.top, 24)
+
+                inlineActions
+            }
+            .frame(maxWidth: 440, alignment: .topLeading)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+            .frame(maxWidth: .infinity)
+        }
+        .background(Thoughtful.background.ignoresSafeArea())
+    }
+    #endif
+
+    private func setupRow(_ title: LocalizedStringKey, systemImage: String, primary: Bool = false) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: systemImage)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(primary ? Geist.onAccent : Geist.text)
+                .frame(width: 32, height: 32)
+                .background(primary ? Geist.accent : Geist.well,
+                            in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .accessibilityHidden(true)
+            Text(title)
+                .font(Geist.label(.body))
+                .foregroundStyle(Thoughtful.ink)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
+        }
         .padding(.vertical, 12)
     }
 }
 
 /// Shared guidance for choosing a destination and saving the first real note.
+/// Shown on Capture after unlocking when Setup didn't already pick a folder.
 struct FirstNoteGuide: View {
     enum Step {
         case chooseFolder
@@ -834,59 +1119,68 @@ struct FirstNoteGuide: View {
 
     private var title: String {
         switch step {
-        case .chooseFolder: "Save your first note"
-        case .writeNote: "Make it yours"
-        case .saved: "Your first note is saved"
+        case .chooseFolder: String(localized: "Save your first note")
+        case .writeNote: String(localized: "Make it yours")
+        case .saved: String(localized: "Your first note is saved")
         }
     }
 
     private var detail: String {
         switch step {
         case .chooseFolder:
-            "Choose a folder for your Markdown notes. Nothing is saved until you tap Send."
+            String(localized: "Choose a folder for your Markdown notes. Nothing is saved until you tap Send.")
         case .writeNote(let folder):
-            "Type a thought or tap Record, then tap Send to save it in \(folder)."
+            String(localized: "Type a thought or tap Record, then tap Send to save it in \(folder).")
         case .saved(let file):
-            "\(file) is ready in your folder."
+            String(localized: "\(file) is ready in your folder.")
         }
     }
 
     private var actionTitle: String {
         switch step {
-        case .chooseFolder: "Choose a folder"
-        case .writeNote: "Write a note"
-        case .saved: "Open saved note"
+        case .chooseFolder: String(localized: "Choose a folder")
+        case .writeNote: String(localized: "Write a note")
+        case .saved: String(localized: "Open saved note")
         }
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 10) {
             Text(title)
-                .font(Geist.label())
+                .font(Geist.heading(.callout))
+                .foregroundStyle(Geist.text)
                 .accessibilityAddTraits(.isHeader)
             Text(detail)
-                .font(Geist.body(.callout))
-                .foregroundStyle(Thoughtful.secondary)
+                .font(Geist.body(.subheadline))
+                .foregroundStyle(Geist.muted)
                 .fixedSize(horizontal: false, vertical: true)
             ViewThatFits(in: .horizontal) {
                 HStack(spacing: 16) { actions }
                 VStack(alignment: .leading, spacing: 12) { actions }
             }
+            .padding(.top, 2)
         }
-        .foregroundStyle(Thoughtful.ink)
-        .padding(16)
+        .padding(Geist.Spacing.four)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Thoughtful.paper, in: RoundedRectangle(cornerRadius: 16))
+        .background(Geist.card, in: RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous)
+                .stroke(Geist.border, lineWidth: 1)
+        )
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("capture.firstNoteGuide")
     }
 
     @ViewBuilder private var actions: some View {
         Button(actionTitle, action: action)
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
             .accessibilityIdentifier("capture.firstNoteAction")
         if case .saved = step {
             Button("Done", action: dismiss)
+                .font(Geist.label(.subheadline))
+                .foregroundStyle(Geist.accentText)
                 .buttonStyle(.plain)
+                .frame(minHeight: 44)
                 .accessibilityIdentifier("capture.firstNoteDone")
         }
     }

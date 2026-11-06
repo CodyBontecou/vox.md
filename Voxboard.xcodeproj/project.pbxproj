@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA7300012FA10000AABB0101 /* Geist-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA7200012FA10000AABB0001 /* Geist-Regular.ttf */; };
+		AA7300012FA10000AABB0201 /* Geist-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA7200012FA10000AABB0001 /* Geist-Regular.ttf */; };
+		AA7300022FA10000AABB0102 /* Geist-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA7200022FA10000AABB0002 /* Geist-Medium.ttf */; };
+		AA7300022FA10000AABB0202 /* Geist-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA7200022FA10000AABB0002 /* Geist-Medium.ttf */; };
+		AA7300032FA10000AABB0103 /* Geist-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA7200032FA10000AABB0003 /* Geist-SemiBold.ttf */; };
+		AA7300032FA10000AABB0203 /* Geist-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA7200032FA10000AABB0003 /* Geist-SemiBold.ttf */; };
+		AA7300042FA10000AABB0104 /* GeistMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA7200042FA10000AABB0004 /* GeistMono-Regular.ttf */; };
+		AA7300042FA10000AABB0204 /* GeistMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA7200042FA10000AABB0004 /* GeistMono-Regular.ttf */; };
+		AA7300052FA10000AABB0105 /* GeistMono-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA7200052FA10000AABB0005 /* GeistMono-Medium.ttf */; };
+		AA7300052FA10000AABB0205 /* GeistMono-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA7200052FA10000AABB0005 /* GeistMono-Medium.ttf */; };
 		154ED7783EDFF91EC1D07921 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B42D87F76743327017AE80B3 /* Assets.xcassets */; };
 		1A730FB345D4C90BB942A23D /* WatchPhoneBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C07AF00903494E63299712 /* WatchPhoneBridge.swift */; };
 		297BB61327EC182072BDB12C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DA1EF2BDE8054CD5132FD0 /* Foundation.framework */; };
@@ -68,6 +78,8 @@
 		AC23000130020000AABB0001 /* MacActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC23000230020000AABB0002 /* MacActivityView.swift */; };
 		AC23000330020000AABB0003 /* MacFirstRunSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC23000430020000AABB0004 /* MacFirstRunSetupView.swift */; };
 		AC24000130030000AABB0001 /* MacBrand.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC24000230030000AABB0002 /* MacBrand.swift */; };
+		AD51000330050000AABB0003 /* MacQuickCapturePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD51000430050000AABB0004 /* MacQuickCapturePanel.swift */; };
+		AD51000130050000AABB0001 /* MacSignalComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD51000230050000AABB0002 /* MacSignalComponents.swift */; };
 		AC5100012FD00000AABB0001 /* AppIntents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2716061A8670082BD64BD6 /* AppIntents.framework */; };
 		B2D00855F0FF7DCEB1C58193 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 622B4C7F2F78B09600FDC4CA /* WidgetKit.framework */; };
 		B697081A9BF8FA5A952C4260 /* WatchRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614794E6E2D71284FDBD73B5 /* WatchRecorderView.swift */; };
@@ -224,6 +236,8 @@
 		AC23000230020000AABB0002 /* MacActivityView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MacActivityView.swift; path = "Voxboard Mac/MacActivityView.swift"; sourceTree = "<group>"; };
 		AC23000430020000AABB0004 /* MacFirstRunSetupView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MacFirstRunSetupView.swift; path = "Voxboard Mac/MacFirstRunSetupView.swift"; sourceTree = "<group>"; };
 		AC24000230030000AABB0002 /* MacBrand.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MacBrand.swift; path = "Voxboard Mac/MacBrand.swift"; sourceTree = "<group>"; };
+		AD51000430050000AABB0004 /* MacQuickCapturePanel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MacQuickCapturePanel.swift; path = "Voxboard Mac/MacQuickCapturePanel.swift"; sourceTree = "<group>"; };
+		AD51000230050000AABB0002 /* MacSignalComponents.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MacSignalComponents.swift; path = "Voxboard Mac/MacSignalComponents.swift"; sourceTree = "<group>"; };
 		B3C07AF00903494E63299712 /* WatchPhoneBridge.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchPhoneBridge.swift; sourceTree = "<group>"; };
 		B42D87F76743327017AE80B3 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Voxboard/Assets.xcassets; sourceTree = "<group>"; };
 		B7CCD1646C8EA9E9C4F0979E /* Voxboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Voxboard.app; path = Vox.md.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -281,6 +295,7 @@
 				CapturePresetWidgetConfiguration.swift,
 				CapturePresetWidgetEntity.swift,
 				CapturePresetWidgetView.swift,
+				RouteLockScreenWidgets.swift,
 			);
 			target = AAE000032FC00000AABB0003 /* VoxboardTests */;
 		};
@@ -442,6 +457,8 @@
 				AC23000230020000AABB0002 /* MacActivityView.swift */,
 				AC23000430020000AABB0004 /* MacFirstRunSetupView.swift */,
 				AC24000230030000AABB0002 /* MacBrand.swift */,
+				AD51000430050000AABB0004 /* MacQuickCapturePanel.swift */,
+				AD51000230050000AABB0002 /* MacSignalComponents.swift */,
 				8CA2E8D9B126FE68EF96A0C1 /* MacStoreManager.swift */,
 				1926268D6D235EA2E6308151 /* VoxboardMac.entitlements */,
 				B42D87F76743327017AE80B3 /* Assets.xcassets */,
@@ -929,6 +946,11 @@
 				2A924FF497500A771ED48B42 /* Assets.xcassets in Resources */,
 				AAF000032FD10000AABB0103 /* Shared Localizable.xcstrings in Resources */,
 				AAF100032FD20000AABB0103 /* InfoPlist.xcstrings in Resources */,
+				AA7300012FA10000AABB0201 /* Geist-Regular.ttf in Resources */,
+				AA7300022FA10000AABB0202 /* Geist-Medium.ttf in Resources */,
+				AA7300032FA10000AABB0203 /* Geist-SemiBold.ttf in Resources */,
+				AA7300042FA10000AABB0204 /* GeistMono-Regular.ttf in Resources */,
+				AA7300052FA10000AABB0205 /* GeistMono-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -939,6 +961,11 @@
 				36A8248FC9457C0B6D996F12 /* Assets.xcassets in Resources */,
 				AAF000022FD10000AABB0102 /* Shared Localizable.xcstrings in Resources */,
 				AAF100022FD20000AABB0102 /* InfoPlist.xcstrings in Resources */,
+				AA7300012FA10000AABB0101 /* Geist-Regular.ttf in Resources */,
+				AA7300022FA10000AABB0102 /* Geist-Medium.ttf in Resources */,
+				AA7300032FA10000AABB0103 /* Geist-SemiBold.ttf in Resources */,
+				AA7300042FA10000AABB0104 /* GeistMono-Regular.ttf in Resources */,
+				AA7300052FA10000AABB0105 /* GeistMono-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1021,6 +1048,8 @@
 				AC23000130020000AABB0001 /* MacActivityView.swift in Sources */,
 				AC23000330020000AABB0003 /* MacFirstRunSetupView.swift in Sources */,
 				AC24000130030000AABB0001 /* MacBrand.swift in Sources */,
+				AD51000330050000AABB0003 /* MacQuickCapturePanel.swift in Sources */,
+				AD51000130050000AABB0001 /* MacSignalComponents.swift in Sources */,
 				643BAC287FB3B9EB19C8A1D8 /* MacStoreManager.swift in Sources */,
 				4C3693BE5FAD3AE5C0A78C74 /* GeistTheme.swift in Sources */,
 				AB2600022F901000AABB0002 /* FoundationModelsBackend.swift in Sources */,
@@ -1110,7 +1139,7 @@
 			"@executable_path/Frameworks",
 			"@executable_path/../../Frameworks",
 		);
-		"MARKETING_VERSION" = "2.14";
+		"MARKETING_VERSION" = "3.0";
 		"PRODUCT_BUNDLE_IDENTIFIER" = "bontecou.Voxboard.watchkitapp.Widget";
 		"PRODUCT_NAME" = "$(TARGET_NAME)";
 		SDKROOT = watchos;
@@ -1143,7 +1172,7 @@
 			"@executable_path/Frameworks",
 			"@executable_path/../../Frameworks",
 		);
-		"MARKETING_VERSION" = "2.14";
+		"MARKETING_VERSION" = "3.0";
 		"PRODUCT_BUNDLE_IDENTIFIER" = "bontecou.Voxboard.Voxboard-Widget";
 		"PRODUCT_NAME" = "$(TARGET_NAME)";
 		"SKIP_INSTALL" = YES;
@@ -1176,7 +1205,7 @@
 			"@executable_path/Frameworks",
 			"@executable_path/../../Frameworks",
 		);
-		"MARKETING_VERSION" = "2.14";
+		"MARKETING_VERSION" = "3.0";
 		"PRODUCT_BUNDLE_IDENTIFIER" = "bontecou.Voxboard.Voxboard-Widget";
 		"PRODUCT_NAME" = "$(TARGET_NAME)";
 		"SKIP_INSTALL" = YES;
@@ -1336,7 +1365,7 @@
 			"$(inherited)",
 			"@executable_path/Frameworks",
 		);
-		"MARKETING_VERSION" = "2.14";
+		"MARKETING_VERSION" = "3.0";
 		"PRODUCT_BUNDLE_IDENTIFIER" = "bontecou.Voxboard";
 		"PRODUCT_NAME" = "$(TARGET_NAME)";
 		"STRING_CATALOG_GENERATE_SYMBOLS" = YES;
@@ -1372,7 +1401,7 @@
 			"$(inherited)",
 			"@executable_path/Frameworks",
 		);
-		"MARKETING_VERSION" = "2.14";
+		"MARKETING_VERSION" = "3.0";
 		"PRODUCT_BUNDLE_IDENTIFIER" = "bontecou.Voxboard";
 		"PRODUCT_NAME" = "$(TARGET_NAME)";
 		"STRING_CATALOG_GENERATE_SYMBOLS" = YES;
@@ -1402,7 +1431,7 @@
 			"@executable_path/Frameworks",
 			"@executable_path/../../Frameworks",
 		);
-		"MARKETING_VERSION" = "2.14";
+		"MARKETING_VERSION" = "3.0";
 		"PRODUCT_BUNDLE_IDENTIFIER" = "bontecou.Voxboard.Voxboard-Keyboard";
 		"PRODUCT_NAME" = "$(TARGET_NAME)";
 		"SKIP_INSTALL" = YES;
@@ -1432,7 +1461,7 @@
 			"@executable_path/Frameworks",
 			"@executable_path/../../Frameworks",
 		);
-		"MARKETING_VERSION" = "2.14";
+		"MARKETING_VERSION" = "3.0";
 		"PRODUCT_BUNDLE_IDENTIFIER" = "bontecou.Voxboard.Voxboard-Keyboard";
 		"PRODUCT_NAME" = "$(TARGET_NAME)";
 		"SKIP_INSTALL" = YES;
@@ -1463,7 +1492,7 @@
 			"@executable_path/Frameworks",
 			"@executable_path/../../Frameworks",
 		);
-		"MARKETING_VERSION" = "2.14";
+		"MARKETING_VERSION" = "3.0";
 		"PRODUCT_BUNDLE_IDENTIFIER" = "bontecou.Voxboard.watchkitapp.Widget";
 		"PRODUCT_NAME" = "$(TARGET_NAME)";
 		SDKROOT = watchos;
@@ -1504,7 +1533,7 @@
 			"@executable_path/../Frameworks",
 		);
 		"MACOSX_DEPLOYMENT_TARGET" = "14.0";
-		"MARKETING_VERSION" = "2.14";
+		"MARKETING_VERSION" = "3.0";
 		"PRODUCT_BUNDLE_IDENTIFIER" = "bontecou.Voxboard";
 		"PRODUCT_NAME" = "Vox.md";
 		SDKROOT = macosx;
@@ -1536,7 +1565,7 @@
 			"$(inherited)",
 			"@executable_path/Frameworks",
 		);
-		"MARKETING_VERSION" = "2.14";
+		"MARKETING_VERSION" = "3.0";
 		"PRODUCT_BUNDLE_IDENTIFIER" = "bontecou.Voxboard.watchkitapp";
 		"PRODUCT_NAME" = "$(TARGET_NAME)";
 		SDKROOT = watchos;
@@ -1578,7 +1607,7 @@
 			"@executable_path/../Frameworks",
 		);
 		"MACOSX_DEPLOYMENT_TARGET" = "14.0";
-		"MARKETING_VERSION" = "2.14";
+		"MARKETING_VERSION" = "3.0";
 		"PRODUCT_BUNDLE_IDENTIFIER" = "bontecou.Voxboard";
 		"PRODUCT_NAME" = "Vox.md";
 		SDKROOT = macosx;
@@ -1609,7 +1638,7 @@
 			"@executable_path/Frameworks",
 			"@executable_path/../../Frameworks",
 		);
-		"MARKETING_VERSION" = "2.14";
+		"MARKETING_VERSION" = "3.0";
 		"PRODUCT_BUNDLE_IDENTIFIER" = "bontecou.Voxboard.ShareExtension";
 		"PRODUCT_NAME" = "$(TARGET_NAME)";
 		SDKROOT = iphoneos;
@@ -1637,7 +1666,7 @@
 			"@executable_path/Frameworks",
 			"@executable_path/../../Frameworks",
 		);
-		"MARKETING_VERSION" = "2.14";
+		"MARKETING_VERSION" = "3.0";
 		"PRODUCT_BUNDLE_IDENTIFIER" = "bontecou.Voxboard.ShareExtension";
 		"PRODUCT_NAME" = "$(TARGET_NAME)";
 		SDKROOT = iphoneos;
@@ -1737,7 +1766,7 @@
 			"$(inherited)",
 			"@executable_path/Frameworks",
 		);
-		"MARKETING_VERSION" = "2.14";
+		"MARKETING_VERSION" = "3.0";
 		"PRODUCT_BUNDLE_IDENTIFIER" = "bontecou.Voxboard.watchkitapp";
 		"PRODUCT_NAME" = "$(TARGET_NAME)";
 		SDKROOT = watchos;

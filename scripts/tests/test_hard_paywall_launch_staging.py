@@ -46,7 +46,7 @@ class WebsiteStagingTests(unittest.TestCase):
             self.assertIn('Viewing', (output / 'website-staged/terms.html').read_text())
             self.assertIn('Cancel a trial at least 24 hours', docs)
             self.assertIn('Existing lifetime purchases remain valid', docs)
-            self.assertIn('History clock button', docs)
+            self.assertIn('Library clock button', docs)
             privacy = (output / 'website-staged/privacy.html').read_text()
             self.assertIn('pseudonymous', privacy)
             self.assertIn('does not collect custom usage analytics', privacy)

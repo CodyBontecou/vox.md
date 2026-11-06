@@ -24,24 +24,24 @@ struct URLDeliverySettingsSection: View {
             Toggle("Deliver to URL", isOn: $settings.enabled)
                 .accessibilityIdentifier("preset_url_delivery_enabled")
             if settings.enabled {
-                Text("Endpoint").font(.subheadline)
+                fieldLabel("Endpoint")
                 endpointField
                 Toggle("Allow insecure local HTTP", isOn: $settings.allowingInsecureLocal)
                     .accessibilityIdentifier("preset_url_delivery_insecure_local")
                 Text("HTTP sends your capture and credentials without encryption. Only enable this for a trusted local endpoint.")
-                    .font(.caption).foregroundStyle(.secondary)
+                    .font(Geist.caption()).foregroundStyle(Geist.muted)
                 Button("Save URL", action: saveURL)
                     .accessibilityIdentifier("preset_url_delivery_save_url")
                 inlineError(.endpoint)
 
-                Text("Bearer Token (Optional)").font(.subheadline)
+                fieldLabel("Bearer Token (Optional)")
                 tokenField
                 Button("Save Token", action: saveToken)
                     .disabled(tokenDraft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || settings.requiresCredentialMigration)
                     .accessibilityIdentifier("preset_url_delivery_save_token")
                 if settings.hasBearerToken {
                     Label("A bearer token is saved in the Keychain.", systemImage: "lock.fill")
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(Geist.caption()).foregroundStyle(Geist.muted)
                     Button("Remove Token", role: .destructive, action: removeToken)
                         .disabled(settings.requiresCredentialMigration)
                 }
@@ -51,13 +51,13 @@ struct URLDeliverySettingsSection: View {
 
                 inlineError(.credentials)
 
-                Text("Custom Headers").font(.subheadline)
+                fieldLabel("Custom Headers")
                 headersField
                 Button("Save Headers", action: saveHeaders)
                     .disabled(settings.requiresCredentialMigration)
                     .accessibilityIdentifier("preset_url_delivery_save_headers")
                 Text("One per line: Name: Value. Values are saved only in the Keychain. Content-Type, Idempotency-Key, and bearer authorization are managed by Vox.md.")
-                    .font(.caption).foregroundStyle(.secondary)
+                    .font(Geist.caption()).foregroundStyle(Geist.muted)
 
                 inlineError(.headers)
                 Button {
@@ -70,7 +70,7 @@ struct URLDeliverySettingsSection: View {
                     || headersDraft != savedHeadersDraft || urlDraft != settings.urlString
                     || settings.urlString.isEmpty || !tokenDraft.isEmpty)
                 .accessibilityIdentifier("preset_url_delivery_test")
-                if let testResult { Text(testResult).font(.caption).foregroundStyle(.secondary) }
+                if let testResult { Text(testResult).font(Geist.caption()).foregroundStyle(Geist.muted) }
             }
             #if os(iOS)
             NavigationLink("URL Deliveries") { URLDeliveryRecoveryView(coordinator: URLDeliveryRuntime.coordinator) }
@@ -81,9 +81,16 @@ struct URLDeliverySettingsSection: View {
             #endif
         } header: {
             Text("Deliver to URL")
+                .textCase(.uppercase)
+                .font(Geist.mono(size: 11, relativeTo: .caption))
+                .tracking(0.66)
+                .foregroundStyle(Geist.muted)
         } footer: {
-            Text("Adds a JSON POST to this preset’s existing destinations; it does not replace note delivery. Off by default. Draft recordings are not sent until you choose Send. Redirects are not followed. Failed deliveries are retained for HTTP-only retry or discard in URL Deliveries.")
+            Text("Adds a JSON POST to this route’s existing destinations; it does not replace note delivery. Off by default. Draft recordings are not sent until you choose Send. Redirects are not followed. Failed deliveries are retained for HTTP-only retry or discard in URL Deliveries.")
+                .font(Geist.caption())
+                .foregroundStyle(Geist.muted)
         }
+        .tint(Geist.accent)
         .onAppear(perform: loadCredentials)
         .onDisappear {
             testTask?.cancel()
@@ -102,10 +109,16 @@ struct URLDeliverySettingsSection: View {
         #endif
     }
 
+    private func fieldLabel(_ title: LocalizedStringKey) -> some View {
+        Text(title)
+            .font(Geist.label())
+            .foregroundStyle(Geist.text)
+    }
+
     @ViewBuilder
     private func inlineError(_ area: ErrorArea) -> some View {
         if errorArea == area, let errorMessage {
-            Text(errorMessage).font(.caption).foregroundStyle(.red)
+            Text(errorMessage).font(Geist.caption()).foregroundStyle(Geist.error)
                 .accessibilityIdentifier("preset_url_delivery_error")
         }
     }
@@ -161,7 +174,7 @@ struct URLDeliverySettingsSection: View {
         errorArea = .credentials
         urlDraft = settings.urlString
         guard !settings.requiresCredentialMigration else {
-            errorMessage = String(localized: "Remove Saved Credentials, then re-enter your URL delivery credentials. Legacy values are no longer read from presets or host-scoped accounts.")
+            errorMessage = String(localized: "Remove Saved Credentials, then re-enter your URL delivery credentials. Legacy values are no longer read from routes or host-scoped accounts.")
             return
         }
         guard let id = settings.credentialID else { return }

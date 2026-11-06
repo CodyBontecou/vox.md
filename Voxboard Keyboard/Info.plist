@@ -20,6 +20,8 @@
 		<key>NSExtensionPrincipalClass</key>
 		<string>$(PRODUCT_MODULE_NAME).KeyboardViewController</string>
 	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Vox.md uses your location only when you tap the Location quick action to insert where you are.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Vox.md needs microphone access to transcribe your voice into text.</string>
 </dict>

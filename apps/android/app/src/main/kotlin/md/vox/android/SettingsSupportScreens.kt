@@ -11,40 +11,43 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.os.LocaleListCompat
-import md.vox.android.ui.GeistMonoFontFamily
+import md.vox.android.ui.Signal
+import md.vox.android.ui.SignalCard
+import md.vox.android.ui.SignalCircleButton
+import md.vox.android.ui.SignalGroup
+import md.vox.android.ui.SignalMetrics
+import md.vox.android.ui.SignalRowDivider
+import md.vox.android.ui.SignalTopBar
+import md.vox.android.ui.SignalType
 
 internal enum class AppLanguage(val languageTag: String?, val nativeDisplayName: String) {
     SYSTEM(null, "System"),
@@ -94,55 +97,70 @@ internal enum class AppLanguage(val languageTag: String?, val nativeDisplayName:
 }
 
 @Composable
-internal fun AppLanguageSettingsScreen(navigateBack: () -> Unit) {
+internal fun AppLanguageSettingsScreen(
+    navigateBack: () -> Unit,
+    initialSelection: AppLanguage = AppLanguage.current(),
+) {
     val context = LocalContext.current
-    var selection by remember { mutableStateOf(AppLanguage.current()) }
+    val c = Signal.colors
+    var selection by remember { mutableStateOf(initialSelection) }
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = c.bg,
         topBar = { SupportTopBar(stringResource(R.string.app_language_title), navigateBack) },
     ) { padding ->
-        Column(modifier = Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState())) {
-            AppLanguage.entries.forEachIndexed { index, language ->
-                ListItem(
-                    headlineContent = {
-                        Text(if (language == AppLanguage.SYSTEM) stringResource(R.string.app_language_system) else language.nativeDisplayName)
-                    },
-                    supportingContent = if (language == AppLanguage.SYSTEM) {
-                        { Text(stringResource(R.string.app_language_follows_device)) }
-                    } else {
-                        null
-                    },
-                    trailingContent = {
-                        if (language == selection) {
-                            Icon(Icons.Outlined.Check, contentDescription = stringResource(R.string.selected))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = SignalMetrics.PageGutter)
+                .padding(top = 4.dp, bottom = 32.dp),
+        ) {
+            SignalGroup(title = null, footer = stringResource(R.string.app_language_applies_immediately)) {
+                AppLanguage.entries.forEachIndexed { index, language ->
+                    if (index > 0) SignalRowDivider()
+                    val selected = language == selection
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 52.dp)
+                            .clickable {
+                                if (language == selection) return@clickable
+                                selection = language
+                                PrivacySafeDebugLog.record(
+                                    context,
+                                    PrivacySafeDebugLog.Event.APP_LANGUAGE_CHANGED,
+                                    mapOf("language" to (language.languageTag ?: "system")),
+                                )
+                                val locales = language.languageTag?.let(LocaleListCompat::forLanguageTags)
+                                    ?: LocaleListCompat.getEmptyLocaleList()
+                                AppCompatDelegate.setApplicationLocales(locales)
+                            }
+                            .padding(horizontal = 14.dp, vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Text(
+                                if (language == AppLanguage.SYSTEM) stringResource(R.string.app_language_system) else language.nativeDisplayName,
+                                style = SignalType.rowTitle,
+                                color = c.text,
+                            )
+                            if (language == AppLanguage.SYSTEM) {
+                                Text(stringResource(R.string.app_language_follows_device), style = SignalType.caption, color = c.muted)
+                            }
                         }
-                    },
-                    colors = androidx.compose.material3.ListItemDefaults.colors(
-                        containerColor = MaterialTheme.colorScheme.background,
-                    ),
-                    modifier = Modifier.clickable {
-                        if (language == selection) return@clickable
-                        selection = language
-                        PrivacySafeDebugLog.record(
-                            context,
-                            PrivacySafeDebugLog.Event.APP_LANGUAGE_CHANGED,
-                            mapOf("language" to (language.languageTag ?: "system")),
-                        )
-                        val locales = language.languageTag?.let(LocaleListCompat::forLanguageTags)
-                            ?: LocaleListCompat.getEmptyLocaleList()
-                        AppCompatDelegate.setApplicationLocales(locales)
-                    },
-                )
-                if (index < AppLanguage.entries.lastIndex) {
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+                        if (selected) {
+                            Icon(
+                                Icons.Outlined.Check,
+                                contentDescription = stringResource(R.string.selected),
+                                tint = c.accentText,
+                                modifier = Modifier.size(20.dp),
+                            )
+                        }
+                    }
                 }
             }
-            Text(
-                stringResource(R.string.app_language_applies_immediately),
-                modifier = Modifier.padding(20.dp),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
         }
     }
 }
@@ -151,34 +169,56 @@ internal fun AppLanguageSettingsScreen(navigateBack: () -> Unit) {
 internal fun DebugLogScreen(navigateBack: () -> Unit) {
     val context = LocalContext.current
     var logText by remember { mutableStateOf(PrivacySafeDebugLog.read(context)) }
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        topBar = {
-            DebugLogTopBar(
-                navigateBack = navigateBack,
-                refresh = { logText = PrivacySafeDebugLog.read(context) },
-                copy = {
-                    context.getSystemService(ClipboardManager::class.java)
-                        .setPrimaryClip(ClipData.newPlainText("Vox.md Debug Log", logText))
-                },
-                clear = {
-                    PrivacySafeDebugLog.clear(context)
-                    PrivacySafeDebugLog.record(context, PrivacySafeDebugLog.Event.DEBUG_LOG_CLEARED)
-                    logText = PrivacySafeDebugLog.read(context)
-                },
-            )
+    DebugLogContent(
+        logText = logText,
+        navigateBack = navigateBack,
+        refresh = { logText = PrivacySafeDebugLog.read(context) },
+        copy = {
+            context.getSystemService(ClipboardManager::class.java)
+                .setPrimaryClip(ClipData.newPlainText("Vox.md Debug Log", logText))
         },
+        clear = {
+            PrivacySafeDebugLog.clear(context)
+            PrivacySafeDebugLog.record(context, PrivacySafeDebugLog.Event.DEBUG_LOG_CLEARED)
+            logText = PrivacySafeDebugLog.read(context)
+        },
+    )
+}
+
+/** Stateless Debug Log page so previews and visual stories can supply fixed text. */
+@Composable
+internal fun DebugLogContent(
+    logText: String,
+    navigateBack: () -> Unit,
+    refresh: () -> Unit,
+    copy: () -> Unit,
+    clear: () -> Unit,
+) {
+    val c = Signal.colors
+    Scaffold(
+        containerColor = c.bg,
+        topBar = { DebugLogTopBar(navigateBack = navigateBack, refresh = refresh, copy = copy, clear = clear) },
     ) { padding ->
-        Text(
-            logText.ifBlank { "(empty)" },
-            modifier = Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(16.dp),
-            style = MaterialTheme.typography.bodySmall.copy(fontFamily = GeistMonoFontFamily),
-            color = MaterialTheme.colorScheme.onBackground,
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = SignalMetrics.PageGutter)
+                .padding(top = 4.dp, bottom = 32.dp),
+        ) {
+            SignalCard(modifier = Modifier.fillMaxWidth(), radius = SignalMetrics.GroupRadius, padding = PaddingValues(14.dp)) {
+                Text(
+                    logText.ifBlank { "(empty)" },
+                    modifier = Modifier.fillMaxWidth(),
+                    style = SignalType.mono.copy(fontSize = 12.sp, lineHeight = 18.sp),
+                    color = if (logText.isBlank()) c.faint else c.text,
+                )
+            }
+        }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DebugLogTopBar(
     navigateBack: () -> Unit,
@@ -186,33 +226,23 @@ private fun DebugLogTopBar(
     copy: () -> Unit,
     clear: () -> Unit,
 ) {
-    TopAppBar(
-        title = { Text(voxString("Debug Log"), style = MaterialTheme.typography.titleLarge) },
-        navigationIcon = {
-            IconButton(onClick = navigateBack) {
-                Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = voxString("Back"))
-            }
-        },
-        actions = {
-            IconButton(onClick = refresh) { Icon(Icons.Outlined.Refresh, contentDescription = voxString("Refresh")) }
-            IconButton(onClick = copy) { Icon(Icons.Outlined.ContentCopy, contentDescription = voxString("Copy")) }
-            IconButton(onClick = clear) { Icon(Icons.Outlined.DeleteOutline, contentDescription = voxString("Clear")) }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
-    )
+    SignalTopBar(
+        title = voxString("Debug Log"),
+        navigateBack = navigateBack,
+        backDescription = voxString("Back"),
+    ) {
+        SignalCircleButton(Icons.Outlined.Refresh, voxString("Refresh"), refresh)
+        SignalCircleButton(Icons.Outlined.ContentCopy, voxString("Copy"), copy)
+        SignalCircleButton(Icons.Outlined.DeleteOutline, voxString("Clear"), clear, contentColor = Signal.colors.error)
+    }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SupportTopBar(title: String, navigateBack: () -> Unit) {
-    TopAppBar(
-        title = { Text(title, style = MaterialTheme.typography.titleLarge) },
-        navigationIcon = {
-            IconButton(onClick = navigateBack) {
-                Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = voxString("Back"))
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
+    SignalTopBar(
+        title = title,
+        navigateBack = navigateBack,
+        backDescription = voxString("Back"),
     )
 }
 

@@ -570,22 +570,32 @@
       {
         "name" : "CaptureDeepLinkParser",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureDeepLinkParser.swift",
-        "sha256" : "44f48ab3602f50219f498963f3dd4e4b67e317eabcf8e9afedec985f925d7693"
+        "sha256" : "dcd1b5a3b55a507a2c2fde12c5db7abf82197ac1d489a5cebcfda70f35ff7bf2"
       },
       {
         "name" : "CaptureDraftStore",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureDraftStore.swift",
-        "sha256" : "8dc1784be56bb635b4775cf86c0391d1abb00cc810770f69a17d63fa5d627bb8"
+        "sha256" : "3265ce38549f71fac64fa8857f2fa0629e24ac5153508614a765504b236e53c4"
       },
       {
         "name" : "CaptureEntryTemplateRenderer",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureEntryTemplateRenderer.swift",
-        "sha256" : "bc9e9ad1dfb3360229f38a25a0c912928387bdcc69dd77c67cada6fd06402c1a"
+        "sha256" : "4cb4f1153e771f992915393b032cac6bf9d08041e8b73c8d33f44ca77687fc81"
+      },
+      {
+        "name" : "CaptureFileBusyDetection",
+        "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureFileBusyDetection.swift",
+        "sha256" : "a3d63ef153aa090b12cfdca8f687bcb0a44ebaa8fbfd789fb9c5fc8f8900271b"
+      },
+      {
+        "name" : "CaptureHistoryDetails",
+        "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureHistoryDetails.swift",
+        "sha256" : "a2225b3df5bec7486db9238315aa58ee49edd5b68c3e986811352c1c2f83eb07"
       },
       {
         "name" : "CaptureHistoryStore",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureHistoryStore.swift",
-        "sha256" : "2867ff1b5077036d19a1e38bee541a6d13e3d048af8aee42e9e0e65374c91d14"
+        "sha256" : "f4fa4b3010a0c7200b151815481a184d944d06b0e75acb1ce3f63dae1ac70470"
       },
       {
         "name" : "CaptureImageDescription",
@@ -595,7 +605,7 @@
       {
         "name" : "CaptureInbox",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureInbox.swift",
-        "sha256" : "fbc7af05343d33ca6918e899a1178c5dae5608295e525f0d8bfcd1d89b979c45"
+        "sha256" : "80529ec47e47be1772c082b27dfd22ba09585001add79486b8d74f6ea4637bdd"
       },
       {
         "name" : "CaptureInputLimits",
@@ -635,12 +645,12 @@
       {
         "name" : "CapturePathPlanner",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CapturePathPlanner.swift",
-        "sha256" : "d9359cb6b5a829e5091f5305c214be8b7cd46ce1ec35e77f45e7220b9ca561bc"
+        "sha256" : "97c66b4e89232f534ba845f8e1062331049be77fe5629bdf51ef57aab85d3146"
       },
       {
         "name" : "CapturePipeline",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CapturePipeline.swift",
-        "sha256" : "ac540fdb653480fce962928352762614093c3e02d33e17ac4b321a38b01a4b33"
+        "sha256" : "8fe563ff8eaf05ec97ddb0cc286b0ead7a9975f7714c98c21f97491f3e84be1d"
       },
       {
         "name" : "CapturePresetEmoji",
@@ -656,6 +666,11 @@
         "name" : "CapturePresetQuickAccessStore",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CapturePresetQuickAccessStore.swift",
         "sha256" : "df39e6fb6a4398c783b3b66c4844fc5d6aaf1eb5c531b7d1bb5084c7906f1bfd"
+      },
+      {
+        "name" : "CapturePresetSurfacePins",
+        "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CapturePresetSurfacePins.swift",
+        "sha256" : "4ff6e4cc44aca042bf041c62e6d094894ddcbb0c24dd04605f09dca2f4311a5a"
       },
       {
         "name" : "CapturePresetSwitchConfirmation",
@@ -678,6 +693,16 @@
         "sha256" : "de371ad6fa90afd7792df75cafdf5b4e7cac870d26ba501d4d9b042e3a9ecb74"
       },
       {
+        "name" : "CaptureRouteTodaySnapshot",
+        "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureRouteTodaySnapshot.swift",
+        "sha256" : "582d37b5d014d9006f5dcdeb9ed3f6376d1d18d8f32627009e73fc493dc4112e"
+      },
+      {
+        "name" : "CaptureTitleText",
+        "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureTitleText.swift",
+        "sha256" : "3e9e13eeb6b56561274b28762652c39ebec8190bee405be444aa175f6a4bd56a"
+      },
+      {
         "name" : "CaptureVaultMarkdownTemplate",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureVaultMarkdownTemplate.swift",
         "sha256" : "4edc0ee5a97083ced6abb406c11cb5c4b34f6a3237b69177b69d7401a80ced85"
@@ -690,7 +715,7 @@
       {
         "name" : "CaptureVox",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureVox.swift",
-        "sha256" : "47b33583a9e07d2bc7ce980245048a6425714caad4ed4b860b84cb0837e37c30"
+        "sha256" : "d742df4e061a4db8c9a5858fefcd377b0cfc4f42cb454e5cce18433333daff4a"
       },
       {
         "name" : "CaptureVoxRequestProcessor",
@@ -700,7 +725,7 @@
       {
         "name" : "CoordinatedCaptureWriter",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CoordinatedCaptureWriter.swift",
-        "sha256" : "e93cc902713819d6df1a78d93ffb9fcc04740f3c52cd55018df56760fe14359b"
+        "sha256" : "cd19180a7c63565e97e45633d624c338cf8eb5166c4a954901b7296eebef338c"
       },
       {
         "name" : "MarkdownDocumentEditor",
@@ -723,9 +748,9 @@
         "sha256" : "dda9b75f64b106eb544de201f599122d75abc483c5b156bba6c05c0f956dbc3c"
       }
     ],
-    "sourceRevision" : "c8fbf76b8b47451580f999766f148797180fa895",
-    "swiftCompilerIdentity" : "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1) Target: arm64-apple-macosx27.2.0",
-    "toolchainManifestSHA256" : "b064e6ea3be912d3be0ad0896619cc3df6affe405080e860f9ecd271846412a1",
-    "xcodeIdentity" : "Xcode 27.1 Build version 27A9275"
+    "sourceRevision" : "059682f49d927e2f9cdec985491c8e794fae4425",
+    "swiftCompilerIdentity" : "Apple Swift version 6.4.2 (swiftlang-6.4.2.1.9 clang-2100.4.1.1) Target: arm64-apple-macosx27.2.0",
+    "toolchainManifestSHA256" : "837ab50f1e3e99cfb79975cdb5836a9a1d7886a5b092d798a3ca5341218fc20f",
+    "xcodeIdentity" : "Xcode 27.2 Build version 27B52"
   }
 }

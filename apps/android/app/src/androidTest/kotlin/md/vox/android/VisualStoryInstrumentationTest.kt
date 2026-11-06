@@ -15,6 +15,7 @@ import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -57,14 +58,14 @@ class VisualStoryInstrumentationTest {
 
         val expectations = listOf(
             VisualStoryActivity.STORY_CAPTURE to "Launch notes",
-            VisualStoryActivity.STORY_HISTORY to "History",
+            VisualStoryActivity.STORY_HISTORY to "Library",
             VisualStoryActivity.STORY_SETTINGS to "Settings",
             VisualStoryActivity.STORY_MODELS to "Models",
-            VisualStoryActivity.STORY_PRESETS to "Capture Presets",
+            VisualStoryActivity.STORY_PRESETS to "Routes",
             VisualStoryActivity.STORY_APP_LANGUAGE to "App Language",
             VisualStoryActivity.STORY_LIVE_RECORDING to "Recording",
             VisualStoryActivity.STORY_VAULT_REPAIR to "Choose vault or folder",
-            VisualStoryActivity.STORY_HISTORY_EMPTY to "No history yet",
+            VisualStoryActivity.STORY_HISTORY_EMPTY to "Nothing in Library Yet",
             VisualStoryActivity.STORY_HISTORY_FOLDER_REPAIR to "Folder access needed",
             VisualStoryActivity.STORY_RECORDING_PAUSED to "Recording paused",
             VisualStoryActivity.STORY_RECORDING_FAILED to "Local transcription failed",
@@ -125,7 +126,10 @@ class VisualStoryInstrumentationTest {
         assertControlIsWiderThanTall("Transcripts")
         compose.runOnIdle { story = VisualStoryActivity.STORY_LIVE_RECORDING }
         compose.waitForIdle()
-        listOf("Pause", "Stop", "Cancel").forEach(::assertControlIsWiderThanTall)
+        // The full-screen live recording uses labeled icon controls (no text to wrap);
+        // at 200% text they must still be on screen and meet the minimum target size.
+        listOf("Pause recording", "Stop Recording", "Cancel voice recording")
+            .forEach { assertLabeledIconTarget(it, deviceDensity) }
     }
 
     @Test
@@ -225,7 +229,6 @@ class VisualStoryInstrumentationTest {
             VisualStoryActivity.STORY_RECORDING_FAILED to "Local transcription failed",
             VisualStoryActivity.STORY_UPGRADE_PENDING to "Your purchase is pending",
             VisualStoryActivity.STORY_UPGRADE_ACTIVE to "Unlimited is active",
-            VisualStoryActivity.STORY_UPGRADE_QUOTA_REACHED to "Capture without limits",
             VisualStoryActivity.STORY_UPGRADE_OFFLINE to "Google Play is unavailable",
             VisualStoryActivity.STORY_RECORDING_QUOTA_REACHED to "free transcription limit",
             VisualStoryActivity.STORY_RECORDING_INTERRUPTED to "Recording interrupted",
@@ -262,7 +265,7 @@ class VisualStoryInstrumentationTest {
         val actionMatrix = listOf(
             VisualStoryActivity.STORY_VAULT_REPAIR to listOf("Choose vault or folder"),
             VisualStoryActivity.STORY_HISTORY_FOLDER_REPAIR to listOf("Repair Folder Access"),
-            VisualStoryActivity.STORY_RECORDING_PAUSED to listOf("Resume", "Stop", "Cancel"),
+            VisualStoryActivity.STORY_RECORDING_PAUSED to listOf("Resume recording", "Stop Recording", "Cancel voice recording"),
             VisualStoryActivity.STORY_RECORDING_FAILED to listOf("Retry Processing", "Dismiss"),
             VisualStoryActivity.STORY_UPGRADE_PENDING to listOf("Restore Purchase"),
             VisualStoryActivity.STORY_UPGRADE_ACTIVE to listOf("Restore Purchase"),
@@ -276,7 +279,10 @@ class VisualStoryInstrumentationTest {
         actionMatrix.forEach { (nextStory, actions) ->
             compose.runOnIdle { story = nextStory }
             compose.waitForIdle()
-            actions.forEach { label -> assertAccessibleSwitchTarget(label, deviceDensity) }
+            actions.forEach { label ->
+                if (nextStory == VisualStoryActivity.STORY_RECORDING_PAUSED) assertLabeledIconTarget(label, deviceDensity)
+                else assertAccessibleSwitchTarget(label, deviceDensity)
+            }
         }
     }
 
@@ -298,6 +304,16 @@ class VisualStoryInstrumentationTest {
     private fun assertAccessibleSwitchTarget(label: String, deviceDensity: Float) {
         val action = compose.onNode(hasText(label) and hasClickAction())
             .performScrollTo()
+            .assertIsDisplayed()
+            .assertHasClickAction()
+            .fetchSemanticsNode()
+        assertTrue("$label switch target is narrower than 48 dp", action.touchBoundsInRoot.width / deviceDensity >= 48f)
+        assertTrue("$label switch target is shorter than 48 dp", action.touchBoundsInRoot.height / deviceDensity >= 48f)
+    }
+
+    /** Full-screen live recording controls: icon buttons labeled by content description, never scrolled. */
+    private fun assertLabeledIconTarget(label: String, deviceDensity: Float) {
+        val action = compose.onNode(hasContentDescription(label) and hasClickAction())
             .assertIsDisplayed()
             .assertHasClickAction()
             .fetchSemanticsNode()

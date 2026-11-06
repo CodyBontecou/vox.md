@@ -157,13 +157,16 @@ final class HardPaywallStoreKitTests: XCTestCase {
         window.rootViewController = controller
         window.makeKeyAndVisible()
         defer { window.isHidden = true }
-        for (name, style, category, family) in [
-            ("paywall-individual-review", UIUserInterfaceStyle.light, UIContentSizeCategory.large, false),
-            ("paywall-family-review", .light, .large, true),
-            ("paywall-dark", .dark, .large, false),
-            ("paywall-large-type", .light, .accessibilityExtraExtraExtraLarge, false),
+        for (name, style, category, family, page) in [
+            ("paywall-benefit", UIUserInterfaceStyle.light, UIContentSizeCategory.large, false, 0),
+            ("paywall-trial", .light, .large, false, 1),
+            ("paywall-individual-review", .light, .large, false, 2),
+            ("paywall-family-review", .light, .large, true, 2),
+            ("paywall-dark", .dark, .large, false, 0),
+            ("paywall-dark-plans", .dark, .large, false, 2),
+            ("paywall-large-type", .light, .accessibilityExtraExtraExtraLarge, false, 0),
         ] {
-            controller.rootView = AnyView(PaywallView(isAccessGate: true, historyViewModel: model, initialFamily: family)
+            controller.rootView = AnyView(PaywallView(isAccessGate: true, historyViewModel: model, initialFamily: family, initialPage: page)
                 .environment(tracker).environment(store).id(name))
             window.overrideUserInterfaceStyle = style
             controller.traitOverrides.preferredContentSizeCategory = category
@@ -199,7 +202,14 @@ final class HardPaywallStoreKitTests: XCTestCase {
         let scene = try XCTUnwrap(UIApplication.shared.connectedScenes.first as? UIWindowScene)
         let window = UIWindow(windowScene: scene)
         window.frame = scene.coordinateSpace.bounds
-        window.rootViewController = UIHostingController(rootView: view.environment(historyStore))
+        // The Signal Library reads UsageTracker and StoreManager from the environment.
+        let storeManager = StoreManager(usageTracker: tracker)
+        window.rootViewController = UIHostingController(
+            rootView: view
+                .environment(historyStore)
+                .environment(tracker)
+                .environment(storeManager)
+        )
         window.makeKeyAndVisible()
         defer { window.isHidden = true }
         try await Task.sleep(for: .milliseconds(400))
@@ -447,8 +457,9 @@ final class HardPaywallStoreKitTests: XCTestCase {
             try session.disableAutoRenewForTransaction(identifier: transaction.identifier)
         }
         try session.expireSubscription(productIdentifier: VoxboardPurchaseProduct.individualWeekly.rawValue)
-        // StoreKit publishes subscription expiration asynchronously.
-        for _ in 0..<50 {
+        // StoreKit publishes subscription expiration asynchronously, and more
+        // slowly while the full suite runs; allow up to 15 s.
+        for _ in 0..<150 {
             await store.syncCurrentEntitlements()
             if !tracker.hasUnlocked { break }
             try await Task.sleep(for: .milliseconds(100))
@@ -473,5 +484,55 @@ final class HardPaywallStoreKitTests: XCTestCase {
         }
         XCTAssertTrue(tracker.hasUnlocked)
         XCTAssertTrue(tracker.isEligibleForFamilyUpgrade)
+    }
+
+    func testPaywallPlanRowsOnScreen() async throws {
+        #if targetEnvironment(simulator)
+        let hold = ProcessInfo.processInfo.environment["VOX_PAYWALL_PLANS_HOLD"].flatMap(Double.init)
+        try XCTSkipUnless(hold != nil, "Set TEST_RUNNER_VOX_PAYWALL_PLANS_HOLD to run")
+        // Outside Xcode, SKTestSession has no account, so AppTransaction fails
+        // with noAccount and the gate stays on "Checking Purchases…". Mark the
+        // legacy classification done for this preview only, then restore it.
+        let sharedDefaults = AppConstants.sharedDefaults ?? .standard
+        let migrationKey = "v3_verifiedLegacyPaidAccessMigrationDone"
+        let previousMigration = sharedDefaults.object(forKey: migrationKey)
+        sharedDefaults.set(true, forKey: migrationKey)
+        defer {
+            if let previousMigration { sharedDefaults.set(previousMigration, forKey: migrationKey) }
+            else { sharedDefaults.removeObject(forKey: migrationKey) }
+        }
+        let session = try await makeSession()
+        defer { withExtendedLifetime(session) {} }
+        let tracker = makeTracker()
+        let store = StoreManager(usageTracker: tracker)
+        await store.prepareForPurchases()
+        XCTAssertTrue(store.isEntitlementStateReady)
+        for product in [VoxboardPurchaseProduct.individualYearly, .individualWeekly, .individual] {
+            XCTAssertNotNil(store.displayPrice(for: product), "\(product.rawValue) did not load")
+        }
+        let model = QuickCaptureViewModel(captureRootURL: FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
+        let scene = try XCTUnwrap(UIApplication.shared.connectedScenes.first as? UIWindowScene)
+        let window = UIWindow(windowScene: scene)
+        window.frame = scene.coordinateSpace.bounds
+        window.overrideUserInterfaceStyle = .light
+        window.rootViewController = UIHostingController(rootView: PaywallView(isAccessGate: true, historyViewModel: model)
+            .environment(tracker).environment(store).environment(TranscriptStore()))
+        window.windowLevel = .normal + 1
+        window.makeKeyAndVisible()
+        defer { window.isHidden = true }
+        try await Task.sleep(for: .milliseconds(600))
+        let image = UIGraphicsImageRenderer(bounds: window.bounds).image { _ in
+            window.drawHierarchy(in: window.bounds, afterScreenUpdates: true)
+        }
+        let attachment = XCTAttachment(image: image)
+        attachment.name = "paywall-plans"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+        print("[PaywallPlans] READY")
+        try await Task.sleep(for: .seconds(hold ?? 0))
+        XCTAssertFalse(tracker.hasUnlocked, "Preview must not buy anything")
+        #else
+        throw XCTSkip("Simulator-only preview")
+        #endif
     }
 }

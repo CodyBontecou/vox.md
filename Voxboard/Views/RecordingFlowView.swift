@@ -211,7 +211,7 @@ final class CapturePresetController {
     }
 }
 
-// MARK: - View (fully redesigned — Geist design system)
+// MARK: - View (Signal live recording — dark surface, mono timer)
 
 struct CapturePresetView: View {
     let controller: CapturePresetController
@@ -220,22 +220,50 @@ struct CapturePresetView: View {
     var body: some View {
         ZStack {
             Geist.bg.ignoresSafeArea()
-            GeistGridBackground().ignoresSafeArea().allowsHitTesting(false)
 
-            VStack(spacing: 0) {
-                // Top rule
-                GeistDivider()
+            VStack(alignment: .leading, spacing: 0) {
+                header
+                    .padding(.top, Geist.Spacing.two)
 
-                Spacer()
                 phaseContent
-                Spacer()
+                    .padding(.top, 28)
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
-                GeistDivider()
+                Spacer(minLength: Geist.Spacing.four)
+
                 actionBar
             }
             .padding(.horizontal, 24)
         }
+        // The live recording artboard is a dark surface in either theme.
+        .environment(\.colorScheme, .dark)
         .onAppear { controller.start() }
+    }
+
+    private var header: some View {
+        HStack {
+            HStack(spacing: 8) {
+                Image(systemName: "keyboard")
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(Geist.onAccent)
+                    .frame(width: 22, height: 22)
+                    .background(Geist.accent, in: Circle())
+                Text("Keyboard")
+                    .font(.custom("Geist-SemiBold", size: 14, relativeTo: .subheadline))
+                    .foregroundStyle(Geist.text)
+            }
+            .padding(.leading, 6)
+            .padding(.trailing, 12)
+            .frame(height: 32)
+            .background(Geist.Palette.gray200, in: Capsule(style: .continuous))
+            .accessibilityHidden(true)
+
+            Spacer()
+
+            Label("On device", systemImage: "lock")
+                .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                .foregroundStyle(Geist.muted)
+        }
     }
 
     // MARK: - Phase Content
@@ -244,65 +272,72 @@ struct CapturePresetView: View {
     private var phaseContent: some View {
         switch controller.phase {
         case .starting:
-            VStack(spacing: 20) {
+            VStack(alignment: .leading, spacing: 20) {
                 GeistSectionLabel(number: "01", title: "Status")
-                Text("Starting…")
-                    .font(Geist.display(52))
-                    .foregroundColor(Geist.muted)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.3)
-                ProgressView()
-                    .scaleEffect(1.2)
-                    .tint(Geist.text)
+                HStack(spacing: 12) {
+                    ProgressView()
+                        .tint(Geist.text)
+                    Text("Starting…")
+                        .font(Geist.display(34))
+                        .foregroundStyle(Geist.muted)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.3)
+                }
             }
 
         case .recording:
-            VStack(spacing: 24) {
-                GeistSectionLabel(number: "01", title: "Status")
-                VStack(spacing: 12) {
-                    Text("Recording")
-                        .font(Geist.display(48))
-                        .foregroundColor(Geist.text)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.3)
+            VStack(alignment: .leading, spacing: 28) {
+                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                    Circle()
+                        .fill(Geist.recording)
+                        .frame(width: 10, height: 10)
+                        .alignmentGuide(.firstTextBaseline) { $0[VerticalAlignment.center] + 6 }
+                        .accessibilityHidden(true)
                     Text(formatDuration(controller.recordingDuration))
-                        .font(Geist.display(54))
-                        .foregroundColor(Geist.text)
+                        .font(.custom("GeistMono-Medium", size: 44, relativeTo: .largeTitle))
+                        .tracking(-0.9)
                         .monospacedDigit()
+                        .foregroundStyle(Geist.text)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
+                    Text("Recording")
+                        .font(Geist.caption())
+                        .foregroundStyle(Geist.muted)
                 }
+                .accessibilityElement(children: .combine)
 
                 // Swipe-back prompt
-                VStack(spacing: 8) {
+                VStack(alignment: .leading, spacing: 8) {
                     HStack(spacing: 6) {
                         Text("←")
                             .font(Geist.label(.headline))
                         Text("Return to Your App")
-                            .font(Geist.label())
+                            .font(.custom("Geist-SemiBold", size: 21, relativeTo: .title3))
                     }
-                    .foregroundColor(Geist.text)
+                    .foregroundStyle(Geist.text)
                     Text("Recording continues. Tap Stop on the keyboard when done.")
                         .font(Geist.body())
-                        .foregroundColor(Geist.muted)
-                        .multilineTextAlignment(.center)
+                        .foregroundStyle(Geist.muted)
                         .lineSpacing(3)
                 }
-                .padding(16)
-                .overlay(Rectangle().stroke(Geist.border, lineWidth: 1))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .geistCard(padding: Geist.Spacing.four)
             }
 
         case .transcribing:
-            VStack(spacing: 24) {
+            VStack(alignment: .leading, spacing: 20) {
                 GeistSectionLabel(number: "01", title: "Status")
                 if let progress = controller.transcriptionProgress,
                    let fraction = progress.exactFractionCompleted,
                    let percent = progress.formattedWholePercentCompleted {
-                    VStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 12) {
                         Text("Transcribing \(percent)")
-                            .font(Geist.display(48))
-                            .foregroundColor(Geist.text)
+                            .font(Geist.display(34))
+                            .foregroundStyle(Geist.text)
                             .minimumScaleFactor(0.4)
                         ProgressView(value: fraction)
-                            .frame(maxWidth: 280)
+                            .tint(Geist.accent)
+                            .frame(maxWidth: 320)
                     }
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel("Transcription \(percent) complete")
@@ -310,44 +345,40 @@ struct CapturePresetView: View {
                     TranscribingDotsView()
                 }
                 Text("Processing audio on-device")
-                    .font(Geist.body())
-                    .foregroundColor(Geist.muted)
+                    .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                    .foregroundStyle(Geist.muted)
             }
 
         case .done:
-            VStack(spacing: 24) {
+            VStack(alignment: .leading, spacing: 20) {
                 GeistSectionLabel(number: "01", title: "Status")
                 Text("Transcript Ready")
-                    .font(Geist.display(52))
-                    .foregroundColor(Geist.text)
+                    .font(Geist.display(34))
+                    .foregroundStyle(Geist.text)
                     .lineLimit(1)
                     .minimumScaleFactor(0.3)
                 if let result = controller.transcriptionResult {
                     Text(result)
-                        .font(Geist.body())
-                        .foregroundColor(Geist.text)
-                        .multilineTextAlignment(.center)
+                        .font(.custom("Geist-Medium", size: 21, relativeTo: .title3))
+                        .foregroundStyle(Geist.text)
                         .lineSpacing(4)
-                        .lineLimit(5)
-                        .padding(16)
-                        .overlay(Rectangle().stroke(Geist.border, lineWidth: 1))
+                        .lineLimit(8)
                 }
             }
 
         case .error:
-            VStack(spacing: 20) {
+            VStack(alignment: .leading, spacing: 20) {
                 GeistSectionLabel(number: "01", title: "Status")
                 Text("Transcription Error")
-                    .font(Geist.display(52))
-                    .foregroundColor(Geist.error)
+                    .font(Geist.display(34))
+                    .foregroundStyle(Geist.recording)
                     .lineLimit(1)
                     .minimumScaleFactor(0.3)
                 Text(controller.errorMessage ?? String(localized: "Something went wrong"))
                     .font(Geist.body())
-                    .foregroundColor(Geist.muted)
-                    .multilineTextAlignment(.center)
-                    .padding(16)
-                    .overlay(Rectangle().stroke(Geist.error.opacity(0.4), lineWidth: 1))
+                    .foregroundStyle(Geist.muted)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .geistCard(padding: Geist.Spacing.four)
             }
         }
     }
@@ -356,32 +387,37 @@ struct CapturePresetView: View {
 
     @ViewBuilder
     private var actionBar: some View {
-        Group {
+        HStack {
+            Spacer()
             switch controller.phase {
             case .recording:
                 Button(action: { controller.stopAndTranscribe() }) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "stop.fill").font(.system(.footnote))
-                        Text("Stop and Transcribe")
+                    ZStack {
+                        Circle()
+                            .strokeBorder(Geist.text, lineWidth: 3)
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .fill(Geist.recording)
+                            .frame(width: 34, height: 34)
                     }
+                    .frame(width: 88, height: 88)
+                    .contentShape(Circle())
                 }
-                .buttonStyle(GeistButtonStyle(variant: .destructive))
+                .buttonStyle(.plain)
+                .accessibilityLabel("Stop and Transcribe")
 
             case .done, .error:
                 Button(action: { onDismiss() }) {
                     Image(systemName: "xmark")
-                        .font(.system(.body, weight: .bold))
                 }
-                .buttonStyle(GeistButtonStyle(variant: .secondary))
+                .buttonStyle(SignalCircleButtonStyle(diameter: 56, filled: Geist.Palette.gray200))
                 .accessibilityLabel("Close")
 
             default:
-                Rectangle()
-                    .fill(Color.clear)
-                    .frame(height: 54)
+                Color.clear
+                    .frame(width: 88, height: 88)
             }
+            Spacer()
         }
-        .padding(.horizontal, 0)
         .padding(.vertical, 16)
     }
 

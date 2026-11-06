@@ -13,6 +13,10 @@
         <intent>
             <action android:name="android.speech.RecognitionService" />
         </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="obsidian" />
+        </intent>
     </queries>
 
     <application
@@ -26,6 +30,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Vox">
+        <meta-data
+            android:name="md.vox.android.RECORDING_NOTIFICATION_EXTENDER"
+            android:value="md.vox.android.PhoneRecordingNotificationExtender" />
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
             android:enabled="false"
@@ -85,6 +92,13 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
+        <activity android:name=".VoxPresetWidgetConfigureActivity" android:exported="true">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" /></intent-filter>
+        </activity>
+        <receiver android:name=".VoxPresetWidgetProvider" android:label="@string/preset_widget_title" android:exported="true">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/vox_preset_widget_info" />
+        </receiver>
         <receiver
             android:name=".VoxCaptureWidgetProvider"
             android:exported="true">

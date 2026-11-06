@@ -59,6 +59,7 @@ class AndroidArtifactValidatorTests(unittest.TestCase):
                 header[16:18] = (3).to_bytes(2, "little")
                 header[18:20] = machine.to_bytes(2, "little")
                 archive.writestr(f"lib/{abi}/{VALIDATOR.VOX_LIBRARY}", header)
+                archive.writestr(f"lib/{abi}/{VALIDATOR.INTELLIGENCE_LIBRARY}", header)
                 archive.writestr(f"lib/{abi}/{VALIDATOR.JNA_LIBRARY}", header)
                 for library in VALIDATOR.SHERPA_LIBRARIES:
                     archive.writestr(f"lib/{abi}/{library}", header)
@@ -101,7 +102,19 @@ class AndroidArtifactValidatorTests(unittest.TestCase):
         self.validate()
 
         self.manifest.write_text(text.replace(' android:debuggable="true"', ""))
-        with self.assertRaisesRegex(VALIDATOR.ValidationError, "unpermissioned exported"):
+        with self.assertRaisesRegex(VALIDATOR.ValidationError, "debug-only"):
+            self.validate()
+
+    def test_physical_control_requires_shell_permission_and_cannot_leak_into_release(self):
+        component = '<activity android:name="md.vox.android.PhysicalQualificationActivity" android:exported="true" android:permission="android.permission.DUMP" />'
+        text = self.manifest.read_text().replace("<application ", '<application android:debuggable="true" ').replace("</application>", component+"</application>")
+        self.manifest.write_text(text)
+        self.validate()
+        self.manifest.write_text(text.replace(' android:permission="android.permission.DUMP"', ""))
+        with self.assertRaisesRegex(VALIDATOR.ValidationError, "shell-only"):
+            self.validate()
+        self.manifest.write_text(text.replace(' android:debuggable="true"', ""))
+        with self.assertRaisesRegex(VALIDATOR.ValidationError, "debug-only"):
             self.validate()
 
     def test_exported_documents_provider_with_platform_signature_permission_is_allowed(self):
@@ -162,6 +175,15 @@ class AndroidArtifactValidatorTests(unittest.TestCase):
             for name, contents in entries.items():
                 archive.writestr(name, contents)
         with self.assertRaisesRegex(VALIDATOR.ValidationError, "sherpa-onnx native ABI set differs"):
+            self.validate()
+
+    def test_missing_intelligence_runtime_abi_is_rejected(self):
+        with zipfile.ZipFile(self.apk) as archive:
+            entries = {name: archive.read(name) for name in archive.namelist() if name != "lib/x86/libvox_intelligence.so"}
+        self.apk.unlink()
+        with zipfile.ZipFile(self.apk, "w") as archive:
+            for name, contents in entries.items(): archive.writestr(name, contents)
+        with self.assertRaisesRegex(VALIDATOR.ValidationError, "local intelligence native ABI set differs"):
             self.validate()
 
     def test_wrong_vox_elf_machine_is_rejected(self):

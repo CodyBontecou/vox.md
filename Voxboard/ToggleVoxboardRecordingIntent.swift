@@ -12,7 +12,7 @@ struct ToggleVoxboardRecordingIntent: AudioRecordingIntent, LiveActivityIntent {
     static var openAppWhenRun: Bool = false
     static var supportedModes: IntentModes { [.background, .foreground(.dynamic)] }
 
-    @Parameter(title: "Preset", description: "The Capture Preset to use when this intent starts a recording.")
+    @Parameter(title: "Route", description: "The Route to use when this intent starts a recording.")
     var vox: VoxEntity?
 
     static var parameterSummary: some ParameterSummary {

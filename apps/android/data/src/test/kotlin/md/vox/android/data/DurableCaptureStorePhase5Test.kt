@@ -173,6 +173,31 @@ class DurableCaptureStorePhase5Test {
         assertTrue(missing is JournalMutationResult.ReducerRejected || missing is JournalMutationResult.PackageCorrupt || missing is JournalMutationResult.CoordinationFailure)
     }
 
+    @Test fun identicalRematerializedPlanReusesImmutableBytesAndRemovesOnlyStaging() {
+        val (store,_,base) = preparedFixture()
+        val note = "# Stable retry\n".toByteArray()
+        val plan = minimalPlan(note.size.toLong(),CapturePackageCodec.sha256(note))
+        val hash = PreparedPlanVerifier.verifiedPlanHash(plan)!!
+        stageAndPromote(store,note,plan,hash)
+        stageAndPromote(store,note,plan,hash)
+        assertArrayEquals(note,store.loadPreparedArtifacts(requestID,hash)!!.noteBytes)
+        assertArrayEquals(plan,store.loadPreparedArtifacts(requestID,hash)!!.planBytes)
+        val directory = File(base,"vox-captures/$requestID/prepared")
+        assertEquals(listOf(hash),directory.listFiles()!!.map { it.name })
+    }
+
+    @Test fun conflictingRematerializedBytesNeverReplaceExistingPreparedNote() {
+        val (store,_,_) = preparedFixture()
+        val note = "# Stable retry\n".toByteArray()
+        val plan = minimalPlan(note.size.toLong(),CapturePackageCodec.sha256(note))
+        val hash = PreparedPlanVerifier.verifiedPlanHash(plan)!!
+        stageAndPromote(store,note,plan,hash)
+        try { stageAndPromote(store,"different".toByteArray(),plan,hash); fail("Conflicting bytes accepted") }
+        catch (_: PackageCodecException) { }
+        assertArrayEquals(note,store.loadPreparedArtifacts(requestID,hash)!!.noteBytes)
+        assertArrayEquals(plan,store.loadPreparedArtifacts(requestID,hash)!!.planBytes)
+    }
+
     @Test fun markerPersistsReadsClearsAndRefusesActiveOverwrite() {
         val (store, _, _) = preparedFixture()
         val note = "n".toByteArray()

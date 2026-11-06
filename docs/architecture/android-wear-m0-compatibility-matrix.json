@@ -1981,78 +1981,83 @@
       "id": "analytics-defaults",
       "capabilityID": "cap.store.analytics",
       "production": [
-        "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift:RetiredAnalyticsCleanup"
+        "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift:RetiredAnalyticsCleanup",
+        "Voxboard/VoxboardApp.swift:RetiredAnalyticsCleanup.run(defaults: defaults)"
       ],
       "dimensions": {
         "old": {
           "status": "executed",
           "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
             "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+          "rationale": "Upgrade cleanup erases every former analytics key version written by earlier releases."
         },
         "missingFields": {
           "status": "executed",
           "evidence": [
             "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+          "rationale": "Cleanup is idempotent when the retired keys are already absent."
         },
         "unknownFields": {
-          "status": "executed",
+          "status": "notApplicable",
           "evidence": [
             "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+          "rationale": "Retired values are never decoded; cleanup removes them by key without reading their contents."
         },
         "malformed": {
           "status": "executed",
           "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
             "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+          "rationale": "Arbitrary or malformed retired bytes are removed without decoding."
         },
         "futureVersion": {
           "status": "executed",
           "evidence": [
             "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+          "rationale": "No producer remains, so no future analytics format can be written."
         },
         "date": {
-          "status": "executed",
+          "status": "notApplicable",
           "evidence": [
             "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+          "rationale": "Retired values are removed without decoding dates."
         },
         "data": {
           "status": "executed",
           "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
             "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+          "rationale": "Data-valued retired queue and assignment entries are erased."
         },
         "uuid": {
           "status": "executed",
           "evidence": [
+            "Packages/VoxboardShared/Sources/VoxboardPersistenceFixtures/main.swift",
             "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+          "rationale": "The former UUID install identity is erased and never regenerated."
         },
         "enum": {
-          "status": "executed",
+          "status": "notApplicable",
           "evidence": [
             "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+          "rationale": "Retired experiment variants are removed without decoding."
         },
         "crashRecovery": {
           "status": "executed",
           "evidence": [
             "scripts/tests/test_custom_analytics_removal.py"
           ],
-          "rationale": "Retired payloads are erased as opaque defaults on upgrade, regardless of codec fields or payload type. Idempotent cleanup preserves functional state."
+          "rationale": "Cleanup runs on every launch, so an interrupted upgrade is completed by the next launch while functional state is preserved."
         }
       }
     },

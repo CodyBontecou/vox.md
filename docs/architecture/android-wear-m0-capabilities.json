@@ -89,6 +89,10 @@
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardShared/SpeakerDiarizationService.swift",
           "symbol": "public actor SpeakerDiarizationService"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/OnDeviceIntelligenceEvaluationInstrumentationTest.kt",
+          "symbol": "fun realSpeechSpeakerAttributionBenchmark"
         }
       ],
       "id": "cap.ai.diarization",
@@ -182,6 +186,10 @@
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureVox.swift",
           "symbol": "case custom"
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalIntelligence.kt",
+          "symbol": "class LocalIntelligenceProcessor"
         }
       ],
       "id": "cap.ai.mode-custom",
@@ -353,8 +361,8 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: One-time lifetime unlimited entitlement with no subscription",
-          "evidencePath": "artifacts/validation/android-wear/cap.billing.lifetime.md",
+          "assertion": "Native lifetime purchase/restore with offer token, pending/cache continuity, callback ordering, duplicate-flow prevention and acknowledgement recovery; actual Play account qualification remains required.",
+          "evidencePath": "docs/android-monetization-parity-2026-11-01.md",
           "kind": "account",
           "status": "planned"
         }
@@ -364,13 +372,21 @@
       ],
       "evidence": [
         {
-          "path": "README.md",
-          "symbol": "one-time"
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt",
+          "symbol": "class PlayBillingManager"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/BillingOperationsTest.kt",
+          "symbol": "class BillingOperationsTest"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/BillingUiInstrumentationTest.kt",
+          "symbol": "class BillingUiInstrumentationTest"
         }
       ],
       "id": "cap.billing.lifetime",
       "milestone": "M8",
-      "outcome": "One-time lifetime unlimited entitlement with no subscription",
+      "outcome": "One-time lifetime unlimited entitlement with no trial, offered alongside optional weekly/yearly subscriptions",
       "owner": "adjusted",
       "parity": "commercial-equivalent",
       "platforms": [
@@ -379,7 +395,7 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "implemented"
     },
     {
       "acceptance": [
@@ -486,7 +502,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case addFiles"
         }
       ],
@@ -515,7 +531,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case addMedia"
         }
       ],
@@ -631,7 +647,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case currentLocation"
         }
       ],
@@ -660,7 +676,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case date"
         }
       ],
@@ -689,7 +705,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case dueDate"
         }
       ],
@@ -718,7 +734,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case extractText"
         }
       ],
@@ -747,7 +763,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case formatMarkdown"
         }
       ],
@@ -921,7 +937,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case paste"
         }
       ],
@@ -979,7 +995,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case scanDocument"
         }
       ],
@@ -1037,7 +1053,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case sketch"
         }
       ],
@@ -1124,7 +1140,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case timestamp"
         }
       ],
@@ -1182,7 +1198,7 @@
       "dependencies": [],
       "evidence": [
         {
-          "path": "Voxboard App Shared/CaptureToolbarPreferences.swift",
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift",
           "symbol": "case undo"
         }
       ],
@@ -5065,6 +5081,18 @@
         {
           "path": "docs/recording-queue-storekit-completion-audit.md",
           "symbol": "Relaunch recovery"
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/RecordingFileRecovery.kt",
+          "symbol": "recoverRecordingFiles"
+        },
+        {
+          "path": "apps/android/scripts/qualify-physical-capture.py",
+          "symbol": "def recovery"
+        },
+        {
+          "path": "artifacts/validation/android-physical-capture-2026-11-01/pixel-sigkill/recovery.json",
+          "symbol": "physical-recording-sigkill"
         }
       ],
       "id": "cap.queue.recovery",
@@ -5207,7 +5235,7 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: 10 successful Capture deliveries",
+          "assertion": "Verify Android/Wear preserves the inventoried outcome: Android retains 10 successful Capture deliveries; Apple platforms require paid access instead",
           "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "status": "verified"
@@ -5219,17 +5247,23 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "10 successful Capture deliveries"
+          "symbol": "Vox Android subscriptions are deferred and retain their existing offer"
+        },
+        {
+          "path": "README.md",
+          "symbol": "There is no resettable free-minute or Capture allowance in this source"
+        },
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureDurability.kt",
+          "symbol": "const val FREE_CAPACITY = 10"
         }
       ],
       "id": "cap.quota.capture",
       "milestone": "M3/M8",
-      "outcome": "10 successful Capture deliveries",
+      "outcome": "Android retains 10 successful Capture deliveries; Apple platforms require paid access instead",
       "owner": "native",
-      "parity": "exact",
+      "parity": "product-adjusted",
       "platforms": [
-        "iphone",
-        "ipad",
         "android"
       ],
       "programScope": "parity",
@@ -5250,7 +5284,11 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "original paid app build are automatically grandfathered"
+          "symbol": "qualifying original paid-app ownership remain valid"
+        },
+        {
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/UsageTracker.swift",
+          "symbol": "public func grantPermanentIndividualAccess()"
         }
       ],
       "id": "cap.quota.grandfather",
@@ -5269,7 +5307,7 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: Failed writes and retries do not consume a Capture",
+          "assertion": "Verify Android/Wear preserves the inventoried outcome: Android failed writes and retries do not consume a Capture",
           "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "status": "verified"
@@ -5282,16 +5320,18 @@
         {
           "path": "README.md",
           "symbol": "Failed writes and retries do not consume a Capture"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
+          "symbol": "fun revokedGrantBeforeCommitPreservesPreparedCaptureUntilReauthorized"
         }
       ],
       "id": "cap.quota.retry-no-charge",
       "milestone": "M3",
-      "outcome": "Failed writes and retries do not consume a Capture",
+      "outcome": "Android failed writes and retries do not consume a Capture",
       "owner": "native",
-      "parity": "exact",
+      "parity": "product-adjusted",
       "platforms": [
-        "iphone",
-        "ipad",
         "android"
       ],
       "programScope": "parity",
@@ -5300,7 +5340,7 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: 15 free transcription minutes",
+          "assertion": "Verify Android/Wear preserves the inventoried outcome: Android retains 15 free transcription minutes; Apple platforms require paid access instead",
           "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "status": "verified"
@@ -5312,17 +5352,23 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "15 minutes of free transcription"
+          "symbol": "Vox Android subscriptions are deferred and retain their existing offer"
+        },
+        {
+          "path": "README.md",
+          "symbol": "There is no resettable free-minute or Capture allowance in this source"
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/TranscriptionQuota.kt",
+          "symbol": "const val FREE_TRANSCRIPTION_LIMIT_MILLIS = 15L * 60 * 1_000"
         }
       ],
       "id": "cap.quota.transcription",
       "milestone": "M4/M8",
-      "outcome": "15 free transcription minutes",
+      "outcome": "Android retains 15 free transcription minutes; Apple platforms require paid access instead",
       "owner": "native",
-      "parity": "exact",
+      "parity": "product-adjusted",
       "platforms": [
-        "iphone",
-        "ipad",
         "android"
       ],
       "programScope": "parity",
@@ -5331,7 +5377,7 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: Voice Markdown capture consumes transcription allowance only",
+          "assertion": "Verify Android/Wear preserves the inventoried outcome: Android voice Markdown capture consumes transcription allowance only",
           "evidencePath": "Packages/contracts/validation/android-local-capability-evidence.json",
           "kind": "fixture",
           "status": "verified"
@@ -5343,17 +5389,23 @@
       "evidence": [
         {
           "path": "README.md",
-          "symbol": "voice transcripts routed to Markdown use only the transcription allowance"
+          "symbol": "Vox Android subscriptions are deferred and retain their existing offer"
+        },
+        {
+          "path": "README.md",
+          "symbol": "There is no resettable free-minute or Capture allowance in this source"
+        },
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRepository.kt",
+          "symbol": "Voice/recording captures consume transcription allowance, never the text Capture allowance."
         }
       ],
       "id": "cap.quota.voice-one-meter",
       "milestone": "M4",
-      "outcome": "Voice Markdown capture consumes transcription allowance only",
+      "outcome": "Android voice Markdown capture consumes transcription allowance only",
       "owner": "native",
-      "parity": "exact",
+      "parity": "product-adjusted",
       "platforms": [
-        "iphone",
-        "ipad",
         "android"
       ],
       "programScope": "parity",
@@ -5626,6 +5678,10 @@
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureDraftStore.swift",
           "symbol": "draftsDirectoryURL"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
+          "symbol": "fun interruptedAfterWriteRecoversFromReopenedRoomAndPackage"
         }
       ],
       "id": "cap.store.drafts",
@@ -5690,6 +5746,10 @@
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureInbox.swift",
           "symbol": "CaptureCompletionReceipt"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
+          "symbol": "fun partialProviderWriteStaysUnknownAcrossRepeatedRetries"
         }
       ],
       "id": "cap.store.inbox",
@@ -5918,6 +5978,18 @@
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardShared/RecordingJobStore.swift",
           "symbol": "public struct RecordingJob"
+        },
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/RecordingFileRecovery.kt",
+          "symbol": "recoverRecordingFiles"
+        },
+        {
+          "path": "apps/android/scripts/qualify-physical-capture.py",
+          "symbol": "def recovery"
+        },
+        {
+          "path": "artifacts/validation/android-physical-capture-2026-11-01/pixel-sigkill/recovery.json",
+          "symbol": "physical-recording-sigkill"
         }
       ],
       "id": "cap.store.recording-jobs",
@@ -7671,7 +7743,7 @@
       "evidence": [
         {
           "path": "Voxboard Watch/WatchLocalRecorder.swift",
-          "symbol": "Tap Sync Queue to retry"
+          "symbol": "Recording is safe on Watch. Retrying automatically."
         }
       ],
       "id": "cap.watch.retry",
@@ -7925,16 +7997,24 @@
       "evidence": [
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift",
-          "symbol": "RetiredAnalyticsCleanup"
+          "symbol": "public enum RetiredAnalyticsCleanup"
         },
         {
-          "path": "scripts/tests/test_custom_analytics_removal.py",
-          "symbol": "test_upgrade_erases_analytics_and_preserves_functional_state"
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift",
+          "symbol": "\"onboarding.analytics.install_id.v1\""
+        },
+        {
+          "path": "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift",
+          "symbol": "\"onboarding.analytics.queue.v1\""
+        },
+        {
+          "path": "Voxboard/VoxboardApp.swift",
+          "symbol": "RetiredAnalyticsCleanup.run()"
         }
       ],
       "id": "cap.store.analytics",
       "milestone": "M0/M1",
-      "outcome": "Erase retired onboarding analytics queues, install identity, experiment assignment and completion markers on upgrade; no new collection",
+      "outcome": "Retired onboarding analytics: upgrades erase the former install identity, queued events, experiment assignment, and completion markers, and no analytics collection remains",
       "owner": "native",
       "parity": "legacy-only",
       "platforms": [
@@ -8080,8 +8160,8 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: One-time Family Sharing lifetime entitlement",
-          "evidencePath": "artifacts/validation/android-wear/cap.billing.family.md",
+          "assertion": "Retain the Apple family entitlement outcome. Android is explicitly excluded by accepted decision PD-M1-ANDROID-INDIVIDUAL-ONLY-001; no Android family implementation or verification is claimed.",
+          "evidencePath": "docs/architecture/adr-0024-android-individual-only-monetization.md",
           "kind": "device",
           "status": "planned"
         }
@@ -8093,6 +8173,10 @@
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardShared/PurchaseAccess.swift",
           "symbol": "case family"
+        },
+        {
+          "path": "docs/architecture/adr-0024-android-individual-only-monetization.md",
+          "symbol": "PD-M1-ANDROID-INDIVIDUAL-ONLY-001"
         }
       ],
       "id": "cap.billing.family",
@@ -8102,8 +8186,7 @@
       "parity": "commercial-equivalent",
       "platforms": [
         "iphone",
-        "ipad",
-        "android"
+        "ipad"
       ],
       "programScope": "parity",
       "status": "inventoried"
@@ -8111,8 +8194,8 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: Discounted family upgrade for existing individual owners",
-          "evidencePath": "artifacts/validation/android-wear/cap.billing.family-upgrade.md",
+          "assertion": "Retain the Apple family entitlement outcome. Android is explicitly excluded by accepted decision PD-M1-ANDROID-INDIVIDUAL-ONLY-001; no Android family implementation or verification is claimed.",
+          "evidencePath": "docs/architecture/adr-0024-android-individual-only-monetization.md",
           "kind": "device",
           "status": "planned"
         }
@@ -8124,6 +8207,10 @@
         {
           "path": "Packages/VoxboardShared/Sources/VoxboardShared/PurchaseAccess.swift",
           "symbol": "case familyUpgrade"
+        },
+        {
+          "path": "docs/architecture/adr-0024-android-individual-only-monetization.md",
+          "symbol": "PD-M1-ANDROID-INDIVIDUAL-ONLY-001"
         }
       ],
       "id": "cap.billing.family-upgrade",
@@ -8133,8 +8220,7 @@
       "parity": "commercial-equivalent",
       "platforms": [
         "iphone",
-        "ipad",
-        "android"
+        "ipad"
       ],
       "programScope": "parity",
       "status": "inventoried"
@@ -8142,8 +8228,8 @@
     {
       "acceptance": [
         {
-          "assertion": "Verify Android/Wear preserves the inventoried outcome: Restore and reconcile current lifetime entitlements",
-          "evidencePath": "artifacts/validation/android-wear/cap.billing.restore.md",
+          "assertion": "Native lifetime purchase/restore with offer token, pending/cache continuity, callback ordering, duplicate-flow prevention and acknowledgement recovery; actual Play account qualification remains required.",
+          "evidencePath": "docs/android-monetization-parity-2026-11-01.md",
           "kind": "device",
           "status": "planned"
         }
@@ -8153,8 +8239,16 @@
       ],
       "evidence": [
         {
-          "path": "Voxboard/StoreManager.swift",
-          "symbol": "restorePurchases"
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt",
+          "symbol": "class PlayBillingManager"
+        },
+        {
+          "path": "apps/android/app/src/test/kotlin/md/vox/android/BillingOperationsTest.kt",
+          "symbol": "class BillingOperationsTest"
+        },
+        {
+          "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/BillingUiInstrumentationTest.kt",
+          "symbol": "class BillingUiInstrumentationTest"
         }
       ],
       "id": "cap.billing.restore",
@@ -8168,7 +8262,7 @@
         "android"
       ],
       "programScope": "parity",
-      "status": "inventoried"
+      "status": "implemented"
     },
     {
       "acceptance": [
@@ -8366,6 +8460,420 @@
       ],
       "programScope": "parity",
       "status": "verified"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Opt-in HTTPS capture/transcript delivery with encrypted credentials, frozen endpoint, durable outbox, explicit ambiguous retry and discard; device/provider fault qualification remains required",
+          "evidencePath": "docs/android-parity-implementation-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.durable-queue"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/URLDelivery.kt",
+          "symbol": "class URLDeliveryOutbox"
+        }
+      ],
+      "id": "cap.delivery.url",
+      "milestone": "M6",
+      "outcome": "Opt-in HTTPS capture/transcript delivery with encrypted credentials, frozen endpoint, durable outbox, explicit ambiguous retry and discard",
+      "owner": "native",
+      "parity": "native-equivalent",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Independent preset vault bindings; emulator real-provider grant revocation, interruption, repeated reconciliation and idempotent quota covered. Physical/cloud-provider and process-kill qualification remains required.",
+          "evidencePath": "docs/android-capture-recovery-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.saf",
+        "dep.durable-queue"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDestinationBindings.kt",
+          "symbol": "class CaptureDestinationBindings"
+        },
+        {
+          "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
+          "symbol": "fun revokedGrantAfterInterruptedWriteReconcilesWithoutDuplicate"
+        },
+        {
+          "path": "docs/android-physical-capture-qualification-2026-11-01.md",
+          "symbol": "Campaign and targets"
+        }
+      ],
+      "id": "cap.destination.preset-vault",
+      "milestone": "M5",
+      "outcome": "Independent preset vaults with immutable capture-time native capability bindings",
+      "owner": "native",
+      "parity": "native-equivalent",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Voice transcript YAML property replacement with optional body inclusion; device/provider fault qualification remains required",
+          "evidencePath": "docs/android-parity-implementation-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.shared-core"
+      ],
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn replace_transcript_property"
+        }
+      ],
+      "id": "cap.metadata.transcript-property",
+      "milestone": "M5",
+      "outcome": "Voice transcript YAML property replacement with optional body inclusion",
+      "owner": "shared",
+      "parity": "exact",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Durable one-off existing-note and prepend/append overrides without preset mutation; device/provider fault qualification remains required",
+          "evidencePath": "docs/android-parity-implementation-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.saf",
+        "dep.shared-core"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRouting.kt",
+          "symbol": "data class CaptureRouteOverride"
+        }
+      ],
+      "id": "cap.route.invocation-override",
+      "milestone": "M5",
+      "outcome": "Durable one-off existing-note and prepend/append overrides without preset mutation",
+      "owner": "native",
+      "parity": "native-equivalent",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Per-preset safe saved-audio filename templates, deterministic tokens and preview; retained device and visual qualification required",
+          "evidencePath": "docs/android-composer-parity-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.exporter"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CapturePresentation.kt",
+          "symbol": "object CaptureAudioFilename"
+        }
+      ],
+      "id": "cap.preset.audio-filename",
+      "milestone": "M5",
+      "outcome": "Per-preset safe saved-audio filename templates, deterministic tokens and preview",
+      "owner": "native",
+      "parity": "native-equivalent",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Top or bottom insertion within a heading section, including nested headings and fenced code; retained device and visual qualification required",
+          "evidencePath": "docs/android-composer-parity-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.shared-core"
+      ],
+      "evidence": [
+        {
+          "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+          "symbol": "fn insert_beneath_heading"
+        }
+      ],
+      "id": "cap.placement.heading-position",
+      "milestone": "M5",
+      "outcome": "Top or bottom insertion within a heading section, including nested headings and fenced code",
+      "owner": "shared",
+      "parity": "exact",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Per-instance configurable preset widgets following pins or six ordered custom slots; retained device and visual qualification required",
+          "evidencePath": "docs/android-composer-parity-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.durable-queue"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/PresetWidgets.kt",
+          "symbol": "class VoxPresetWidgetProvider"
+        }
+      ],
+      "id": "cap.entry.preset-widget",
+      "milestone": "M5",
+      "outcome": "Per-instance configurable preset widgets following pins or six ordered custom slots",
+      "owner": "native",
+      "parity": "native-equivalent",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Opt-in local Markdown draft preview on wide windows without resetting editor state; retained device and visual qualification required",
+          "evidencePath": "docs/android-composer-parity-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.durable-queue"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureComposerOptions.kt",
+          "symbol": "fun CaptureWorkspace"
+        }
+      ],
+      "id": "cap.editor.draft-preview",
+      "milestone": "M5",
+      "outcome": "Opt-in local Markdown draft preview on wide windows without resetting editor state",
+      "owner": "native",
+      "parity": "native-equivalent",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Persisted physical left or right pinned-preset rail including RTL layouts; retained device and visual qualification required",
+          "evidencePath": "docs/android-composer-parity-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.durable-queue"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
+          "symbol": "AbsoluteAlignment.BottomRight"
+        }
+      ],
+      "id": "cap.editor.rail-side",
+      "milestone": "M5",
+      "outcome": "Persisted physical left or right pinned-preset rail including RTL layouts",
+      "owner": "native",
+      "parity": "native-equivalent",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Explicit persisted twelve-hour or twenty-four-hour timestamp selection with examples and legacy migration; retained device and visual qualification required",
+          "evidencePath": "docs/android-composer-parity-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.durable-queue"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CapturePresentation.kt",
+          "symbol": "enum class CaptureTimestampFormat"
+        }
+      ],
+      "id": "cap.editor.timestamp-format",
+      "milestone": "M5",
+      "outcome": "Explicit persisted twelve-hour or twenty-four-hour timestamp selection with examples and legacy migration",
+      "owner": "native",
+      "parity": "native-equivalent",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Complete 22-locale Android catalog and explicit CLDR quantities preserve placeholders and template tokens; mutations reject incomplete or falsely approved drafts.",
+          "evidencePath": "Packages/contracts/tests/test_android_localization_audit.py",
+          "kind": "unit",
+          "status": "planned"
+        },
+        {
+          "assertion": "Native-speaker source fidelity, plural grammar, canonical RTL presentation and OEM/Wear fit require human release qualification. Automated emulator checks are supporting evidence, not linguistic approval.",
+          "evidencePath": "docs/android-localization-parity-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.legacy-fixtures"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/RuntimeLocalization.kt",
+          "symbol": "RuntimeLocalization"
+        },
+        {
+          "path": "apps/android/scripts/generate-runtime-localizations.py",
+          "symbol": "generate_plurals"
+        }
+      ],
+      "id": "cap.ui.localization",
+      "milestone": "M5",
+      "outcome": "Runtime translation coverage, CLDR quantity selection and bidirectional presentation for supported app languages",
+      "owner": "native",
+      "parity": "native-equivalent",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android",
+        "watch",
+        "wear"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
+    },
+    {
+      "acceptance": [
+        {
+          "assertion": "Clean-commit emulator qualification passed 90 phone tests with zero skips, all six shared instruction cases on Android and Apple, Android 0% known-turn speaker attribution error, and actual delivery/retry checks. Physical/device-tier, multilingual, conversational/overlap and human quality qualification remain required; the Apple short-turn baseline is 29.3% error.",
+          "evidencePath": "docs/android-local-intelligence-parity-2026-11-01.md",
+          "kind": "device",
+          "status": "planned"
+        }
+      ],
+      "dependencies": [
+        "dep.local-intelligence"
+      ],
+      "evidence": [
+        {
+          "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalIntelligence.kt",
+          "symbol": "class LocalIntelligenceProcessor"
+        },
+        {
+          "path": "evaluations/local-intelligence/v1/corpus.json",
+          "symbol": "vox-local-intelligence-v1"
+        },
+        {
+          "path": "artifacts/validation/local-intelligence-2026-11-01/receipt.json",
+          "symbol": "sourceTreeClean"
+        },
+        {
+          "path": "artifacts/validation/local-intelligence-2026-11-01/instruction-evaluation.json",
+          "symbol": "repositoryDeliveryVerified"
+        },
+        {
+          "path": "artifacts/validation/local-intelligence-2026-11-01/apple-speaker-evaluation.json",
+          "symbol": "meetsZeroErrorTarget"
+        },
+        {
+          "path": "docs/android-physical-capture-qualification-2026-11-01.md",
+          "symbol": "Campaign and targets"
+        }
+      ],
+      "id": "cap.ai.intelligence-quality",
+      "milestone": "M9",
+      "outcome": "Model-backed on-device instructions with shared Apple/Android evaluations, real-audio speaker attribution and mandatory model regressions",
+      "owner": "adjusted",
+      "parity": "product-adjusted",
+      "platforms": [
+        "iphone",
+        "ipad",
+        "android"
+      ],
+      "programScope": "parity",
+      "status": "implemented"
     }
   ],
   "dependencyCatalog": [
@@ -8454,7 +8962,9 @@
     "Inventoried means source evidence and planned acceptance are mapped; it does not mean Android/Wear implementation is complete.",
     "Unavailable or deferred parity rows are forbidden by the program definition of done; explicit non-goals are limited to macOS-only product surfaces.",
     "Legacy-codec rows freeze Apple compatibility inputs and never make bookmark/path fields portable core contracts.",
-    "The Apple hard-paywall candidate supersedes free quota behavior; M0 quota rows preserve the prior Apple baseline and deferred Android behavior. Analytics storage is retired by erasure, never decoded or uploaded."
+    "The Apple hard-paywall candidate supersedes free quota behavior; M0 quota rows preserve the prior Apple baseline and deferred Android behavior. Analytics storage is retired by erasure, never decoded or uploaded.",
+    "2026-11-01: Four post-baseline parity capabilities added explicitly. Implemented does not imply device-verified; see docs/android-parity-implementation-2026-11-01.md.",
+    "2026-11-01 composer follow-up: six explicit composer/preset rows added. Timestamp rendering already supported the iOS hour cycles; this change adds explicit format selection and migration."
   ],
   "persistedKeyInventories": [
     {
@@ -8635,6 +9145,10 @@
     },
     {
       "keys": {
+        "hasHadUnlimitedAccessV1": [
+          "cap.store.usage",
+          "cap.billing.lifetime"
+        ],
         "hasUnlocked": [
           "cap.store.usage",
           "cap.billing.lifetime"
@@ -8644,6 +9158,7 @@
           "cap.billing.lifetime"
         ],
         "lifetimeStoreAccessV1": [
+          "cap.store.usage",
           "cap.billing.lifetime"
         ],
         "permanentUnlimitedAccessLevelV1": [
@@ -8651,7 +9166,8 @@
           "cap.billing.lifetime"
         ],
         "storeAccessExpirationV1": [
-          "cap.billing.lifetime"
+          "cap.store.usage",
+          "cap.billing.restore"
         ],
         "totalTranscriptionSeconds": [
           "cap.store.usage",
@@ -8781,29 +9297,6 @@
         ]
       },
       "path": "Voxboard/WatchRecordingController.swift"
-    },
-    {
-      "keys": {
-        "onboarding.analytics.completed.v1": [
-          "cap.store.analytics"
-        ],
-        "onboarding.analytics.install_id.v1": [
-          "cap.store.analytics"
-        ],
-        "onboarding.analytics.model_setup_completed.v1": [
-          "cap.store.analytics"
-        ],
-        "onboarding.analytics.queue.v1": [
-          "cap.store.analytics"
-        ],
-        "onboarding.analytics.started.v1": [
-          "cap.store.analytics"
-        ],
-        "onboarding.experiment.assignment.v1": [
-          "cap.store.analytics"
-        ]
-      },
-      "path": "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift"
     }
   ],
   "requiredClaims": [
@@ -8848,17 +9341,30 @@
     },
     {
       "capabilityIDs": [
-        "cap.quota.transcription"
-      ],
-      "path": "README.md",
-      "text": "15 minutes of free transcription"
-    },
-    {
-      "capabilityIDs": [
+        "cap.quota.transcription",
         "cap.quota.capture"
       ],
       "path": "README.md",
-      "text": "10 successful Capture deliveries"
+      "text": "There is no resettable free-minute or Capture allowance in this source"
+    },
+    {
+      "capabilityIDs": [
+        "cap.quota.transcription",
+        "cap.quota.capture",
+        "cap.quota.retry-no-charge",
+        "cap.quota.voice-one-meter"
+      ],
+      "path": "README.md",
+      "text": "Vox Android subscriptions are deferred and retain their existing offer"
+    },
+    {
+      "capabilityIDs": [
+        "cap.quota.grandfather",
+        "cap.billing.lifetime",
+        "cap.billing.family"
+      ],
+      "path": "README.md",
+      "text": "Existing lifetime/Family purchases and qualifying original paid-app ownership remain valid"
     },
     {
       "capabilityIDs": [
@@ -8885,7 +9391,7 @@
         "cap.store.watch-plists"
       ],
       "path": "docs/android-wear-shared-core-implementation-plan.md",
-      "text": "M0 — Baseline stabilization"
+      "text": "M0 \u2014 Baseline stabilization"
     }
   ],
   "schemaVersion": 1,
@@ -9406,6 +9912,9 @@
         "addMedia": [
           "cap.editor.add-media"
         ],
+        "bold": [
+          "cap.editor.bold"
+        ],
         "bulletList": [
           "cap.editor.bullet"
         ],
@@ -9427,8 +9936,14 @@
         "formatMarkdown": [
           "cap.editor.format-menu"
         ],
+        "heading": [
+          "cap.editor.heading"
+        ],
         "internalLink": [
           "cap.editor.wiki-link"
+        ],
+        "italic": [
+          "cap.editor.italic"
         ],
         "markdownLink": [
           "cap.editor.markdown-link"
@@ -9441,6 +9956,9 @@
         ],
         "sketch": [
           "cap.editor.sketch"
+        ],
+        "tag": [
+          "cap.editor.hashtag"
         ],
         "textCase": [
           "cap.editor.lowercase",
@@ -9456,8 +9974,8 @@
           "cap.editor.undo"
         ]
       },
-      "enum": "CaptureToolbarAction",
-      "path": "Voxboard App Shared/CaptureToolbarPreferences.swift"
+      "enum": "CaptureQuickAction",
+      "path": "Packages/VoxboardShared/Sources/VoxboardShared/CaptureQuickActions.swift"
     },
     {
       "cases": {
@@ -9867,6 +10385,9 @@
     {
       "cases": {
         "acknowledge": [
+          "cap.store.watch-plists"
+        ],
+        "requestSetup": [
           "cap.store.watch-plists"
         ],
         "selectPreset": [

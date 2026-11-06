@@ -39,16 +39,16 @@ class BillingRestoreDiagnosticsInstrumentationTest {
 
         val diagnostics = billingRestoreDiagnosticsFromPurchases(
             responseCode = BillingClient.BillingResponseCode.OK,
-            requestedProductIDs = listOf(PlayBillingManager.PRODUCT_ID),
-            loadedProductIDs = listOf(PlayBillingManager.PRODUCT_ID),
+            requestedProductIDs = listOf(PlayBillingManager.LIFETIME_PRODUCT_ID),
+            loadedProductIDs = listOf(PlayBillingManager.LIFETIME_PRODUCT_ID),
             purchases = listOf(purchase),
         )
         recordBillingRestoreDiagnostics(context, diagnostics)
 
         assertTrue(diagnostics.syncSucceeded)
         assertEquals(null, diagnostics.syncError)
-        assertEquals(listOf(PlayBillingManager.PRODUCT_ID), diagnostics.requestedProductIDs)
-        assertEquals(listOf(PlayBillingManager.PRODUCT_ID), diagnostics.loadedProductIDs)
+        assertEquals(listOf(PlayBillingManager.LIFETIME_PRODUCT_ID), diagnostics.requestedProductIDs)
+        assertEquals(listOf(PlayBillingManager.LIFETIME_PRODUCT_ID), diagnostics.loadedProductIDs)
         assertEquals("purchased", diagnostics.observations.single().purchaseState)
         assertTrue(diagnostics.observations.single().isRecognized)
         assertFalse(diagnostics.observations.single().isAcknowledged)

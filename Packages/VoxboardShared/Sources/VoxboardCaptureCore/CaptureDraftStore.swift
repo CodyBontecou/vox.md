@@ -9,7 +9,7 @@ public enum CaptureDraftError: Error, Equatable, LocalizedError, Sendable {
         case .draftNotFound(let id):
             return "Capture draft \(id.uuidString) was not found."
         case .destinationRequired:
-            return "Configure a destination for this Capture Preset before capturing."
+            return "Configure a destination for this Route before capturing."
         }
     }
 }
@@ -127,16 +127,27 @@ public struct CaptureDraft: Identifiable, Codable, Equatable, Sendable {
 
     /// Starts an allocated draft exactly once, and only for substantive content.
     /// Route changes, provenance, and whitespace-only edits do not start it.
+    /// Clearing every bit of content ends that capture, so the next content
+    /// starts a new one instead of inheriting a stale start time.
     @discardableResult
     public mutating func beginCaptureIfNeeded(at date: Date = Date()) -> Bool {
-        guard captureStartedAt == nil, hasCaptureContent else { return false }
+        guard hasCaptureContent else {
+            captureStartedAt = nil
+            return false
+        }
+        guard captureStartedAt == nil else { return false }
         captureStartedAt = date
         return true
     }
 
     /// Carries an already-durable lifecycle transition into a concurrently
     /// edited in-memory version without refreshing an existing capture time.
+    /// An emptied in-memory draft drops the start rather than reviving it.
     public mutating func preserveCaptureStart(from persistedDraft: CaptureDraft) {
+        guard hasCaptureContent else {
+            captureStartedAt = nil
+            return
+        }
         guard id == persistedDraft.id,
               requestID == persistedDraft.requestID,
               let persistedStart = persistedDraft.captureStartedAt else { return }

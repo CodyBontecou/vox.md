@@ -76,19 +76,24 @@ public struct CaptureReceipt: Equatable, Sendable {
     public var noteURL: URL
     public var attachmentURLs: [URL]
     public var writeReceipt: CaptureWriteReceipt
+    /// The entry Markdown exactly as rendered for this delivery (prefix,
+    /// entry and suffix). Nil for idempotent replays that wrote nothing.
+    public var renderedEntry: String?
 
     public init(
         requestID: UUID,
         destinationID: UUID,
         noteURL: URL,
         attachmentURLs: [URL],
-        writeReceipt: CaptureWriteReceipt
+        writeReceipt: CaptureWriteReceipt,
+        renderedEntry: String? = nil
     ) {
         self.requestID = requestID
         self.destinationID = destinationID
         self.noteURL = noteURL
         self.attachmentURLs = attachmentURLs
         self.writeReceipt = writeReceipt
+        self.renderedEntry = renderedEntry
     }
 }
 
@@ -224,6 +229,10 @@ public actor CapturePipeline {
             destination: effectiveDestination,
             rootURL: rootURL
         )
+        if effectiveDestination.attachmentsFolderName == CaptureDestination.besideNoteAttachmentsFolder {
+            // "Beside the note": attachments land in the note's own folder.
+            effectiveDestination.attachmentsFolderName = (relativeNotePath as NSString).deletingLastPathComponent
+        }
         let noteURL = try containedNoteURL(relativePath: relativeNotePath, root: rootURL)
         let vaultTemplate = try CaptureVaultMarkdownTemplateLoader.load(
             relativePath: effectiveDestination.markdownTemplatePath,
@@ -238,28 +247,17 @@ public actor CapturePipeline {
         )
 
         do {
-            let entry = try renderer.render(
-                request,
-                for: effectiveDestination,
-                attachmentPaths: attachments.attachmentPaths
+            let (entry, renderedPrefix, renderedSuffix) = renderedParts(
+                of: try renderer.render(
+                    request,
+                    for: effectiveDestination,
+                    attachmentPaths: attachments.attachmentPaths
+                ),
+                for: request,
+                destination: effectiveDestination,
+                vaultTemplate: vaultTemplate
             )
-            let mappedKey = request.deliveryKind == .meteredVoiceTranscript
-                ? TranscriptPropertyMapping.normalizedKey(request.voxProfile?.transcriptPropertyName ?? "") : nil
-            let propertyOnly = mappedKey != nil && request.voxProfile?.includeTranscriptInBody == false
-            let renderedPrefix: String
-            let renderedSuffix: String
-            if let vaultTemplate {
-                let rendered = vaultTemplateRenderer.render(vaultTemplate, for: request)
-                    .trimmingCharacters(in: .newlines)
-                renderedPrefix = rendered.isEmpty ? "" : rendered + "\n\n"
-                renderedSuffix = ""
-            } else if propertyOnly {
-                renderedPrefix = ""
-                renderedSuffix = ""
-            } else {
-                renderedPrefix = templateRenderer.render(effectiveDestination.entryPrefix, for: request)
-                renderedSuffix = templateRenderer.render(effectiveDestination.entrySuffix, for: request)
-            }
+            let mappedKey = Self.mappedTranscriptKey(for: request)
             let documentMetadata = request.voxProfile?.metadataScope == .entry
                 ? nil
                 : try CaptureLocationMetadataRenderer().render(request: request)
@@ -277,12 +275,22 @@ public actor CapturePipeline {
                 relativeNotePath: relativeNotePath
             )
             let writeReceipt = try await writer.write(mutation, to: noteURL)
+            let renderedEntry = (renderedPrefix + entry + renderedSuffix)
+                .trimmingCharacters(in: .newlines)
+            // "Write a new note instead" puts the entry in a sibling note in
+            // the same folder; report that note so history and Library point
+            // at the file that was actually written.
+            let writtenName = writeReceipt.fileURL.lastPathComponent
+            let deliveredNoteURL = writtenName == noteURL.lastPathComponent
+                ? noteURL
+                : noteURL.deletingLastPathComponent().appendingPathComponent(writtenName)
             return CaptureReceipt(
                 requestID: request.id,
                 destinationID: destination.id,
-                noteURL: noteURL,
+                noteURL: deliveredNoteURL,
                 attachmentURLs: attachments.attachmentURLs,
-                writeReceipt: writeReceipt
+                writeReceipt: writeReceipt,
+                renderedEntry: renderedEntry.isEmpty ? nil : renderedEntry
             )
         } catch {
             attachments.rollback(fileManager: fileManager)
@@ -369,6 +377,85 @@ public actor CapturePipeline {
         } catch {
             throw CapturePipelineError.unsafeNotePath(relativePath)
         }
+    }
+}
+
+extension CapturePipeline {
+    /// Renders the entry Markdown a request would write, without touching the
+    /// vault: no attachments are copied. Used by recovery UI ("Copy Markdown")
+    /// for requests that could not be delivered. Attachment embeds use the
+    /// paths the delivery would plan. The route's vault Markdown template is
+    /// read only when `rootURL` is given and reachable; otherwise its header
+    /// is left out but the entry is still shaped as the template route would.
+    nonisolated public func previewEntryMarkdown(
+        for request: CaptureRequest,
+        destination: CaptureDestination,
+        rootURL: URL? = nil
+    ) throws -> String {
+        var effectiveDestination = destination
+        if let folderOverride = request.attachmentsFolderNameOverride {
+            effectiveDestination.attachmentsFolderName = folderOverride
+        }
+        let notePath = request.relativeNotePathOverride
+            ?? (try? pathPlanner.relativePath(for: request, destination: effectiveDestination))
+        if effectiveDestination.attachmentsFolderName == CaptureDestination.besideNoteAttachmentsFolder {
+            effectiveDestination.attachmentsFolderName = notePath
+                .map { ($0 as NSString).deletingLastPathComponent } ?? ""
+        }
+        var vaultTemplate: String?
+        if effectiveDestination.markdownTemplatePath != nil {
+            vaultTemplate = rootURL.flatMap { rootURL in
+                notePath.flatMap { notePath in
+                    try? CaptureVaultMarkdownTemplateLoader.load(
+                        relativePath: effectiveDestination.markdownTemplatePath,
+                        destinationNotePath: notePath,
+                        rootURL: rootURL
+                    )
+                }
+            } ?? ""
+        }
+        let (entry, prefix, suffix) = renderedParts(
+            of: try renderer.render(request, for: effectiveDestination),
+            for: request,
+            destination: effectiveDestination,
+            vaultTemplate: vaultTemplate
+        )
+        return (prefix + entry + suffix).trimmingCharacters(in: .newlines)
+    }
+
+    /// The frontmatter key a metered voice transcript is mapped to, if any.
+    static func mappedTranscriptKey(for request: CaptureRequest) -> String? {
+        request.deliveryKind == .meteredVoiceTranscript
+            ? TranscriptPropertyMapping.normalizedKey(request.voxProfile?.transcriptPropertyName ?? "") : nil
+    }
+
+    /// Shapes a rendered entry exactly as delivery writes it: the vault
+    /// template header (or the route's entry prefix and suffix), nothing
+    /// around a transcript kept only in a property, and a leading heading
+    /// that repeats `{title}` dropped. Shared by delivery and the preview so
+    /// "Copy Markdown" always matches what would be written.
+    nonisolated func renderedParts(
+        of renderedEntry: String,
+        for request: CaptureRequest,
+        destination: CaptureDestination,
+        vaultTemplate: String?
+    ) -> (entry: String, prefix: String, suffix: String) {
+        if let vaultTemplate {
+            let rendered = vaultTemplateRenderer.render(vaultTemplate, for: request)
+                .trimmingCharacters(in: .newlines)
+            return (renderedEntry, rendered.isEmpty ? "" : rendered + "\n\n", "")
+        }
+        let entry = CaptureEntryTemplateRenderer.entry(renderedEntry, under: destination.entryPrefix, for: request)
+        let propertyOnly = Self.mappedTranscriptKey(for: request) != nil
+            && request.voxProfile?.includeTranscriptInBody == false
+        if propertyOnly {
+            return (entry, "", "")
+        }
+        return (
+            entry,
+            templateRenderer.render(destination.entryPrefix, for: request),
+            templateRenderer.render(destination.entrySuffix, for: request)
+        )
     }
 }
 

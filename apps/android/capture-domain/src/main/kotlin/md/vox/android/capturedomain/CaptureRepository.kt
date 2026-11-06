@@ -22,6 +22,8 @@ enum class CapturePlacementKind { APPEND, PREPEND, BENEATH_HEADING }
 
 enum class CaptureMissingHeadingBehavior { FAIL, CREATE }
 
+enum class CaptureHeadingPosition { TOP, BOTTOM }
+
 enum class CaptureProcessingMode { NONE, CLEAN, TODO_LIST, MEETING_NOTES, CUSTOM }
 
 enum class CaptureProcessingScope { BOTH, VOICE_ONLY, TEXT_ONLY }
@@ -228,6 +230,7 @@ data class CapturePreset(
     val headingTitle: String = "",
     val headingLevel: Int = 1,
     val missingHeadingBehavior: CaptureMissingHeadingBehavior = CaptureMissingHeadingBehavior.FAIL,
+    val headingPosition: CaptureHeadingPosition = CaptureHeadingPosition.TOP,
     val entryPrefix: String = "",
     val entrySuffix: String = "",
     /** Reusable entry template bound to this preset. Prefix/suffix remain its safe last-known snapshot. */
@@ -244,10 +247,16 @@ data class CapturePreset(
     val generateImageAltText: Boolean = false,
     val locationPolicy: CapturePresetLocationPolicy = CapturePresetLocationPolicy(),
     val audioSaveMode: CaptureAudioSaveMode = CaptureAudioSaveMode.OFF,
+    val audioFilenameTemplate: String = "",
     val embedAudioInMarkdown: Boolean = false,
     val audioEmbedPlacement: CaptureAudioEmbedPlacement = CaptureAudioEmbedPlacement.AFTER_TEXT,
     val watchOutputMode: CaptureWatchOutputMode = CaptureWatchOutputMode.TRANSCRIBE_AND_CAPTURE,
     val exportSettings: CapturePresetExportSettings = CapturePresetExportSettings(),
+    /** Null preserves the legacy global destination. Frozen on capture admission. */
+    val destination: CaptureDestination? = null,
+    val transcriptPropertyName: String = "",
+    val includeTranscriptInBody: Boolean = true,
+    val urlDelivery: CaptureURLDeliverySettings = CaptureURLDeliverySettings(),
 )
 
 data class CaptureEntryTemplate(
@@ -287,8 +296,10 @@ data class CaptureDraft(
     val captureSource: String = "app",
     val attachments: List<CaptureAttachment> = emptyList(),
     val originRecordingID: String? = null,
+    val originRecordingCreatedAtEpochMillis: Long? = null,
     val frozenPreset: CapturePreset? = null,
     val entryTemplateIDOverride: String? = null,
+    val routeOverride: CaptureRouteOverride? = null,
 )
 
 /** App-owned, hash-verified copy of a provider attachment in the current durable draft. */
@@ -300,6 +311,7 @@ data class CaptureAttachment(
     val byteCount: Long,
     val sha256: String,
     val includeInMarkdown: Boolean = true,
+    val isRecordingSource: Boolean = false,
 ) {
     val isImage: Boolean get() = mediaType.startsWith("image/")
 }
@@ -343,11 +355,45 @@ data class CaptureBarConfiguration(
     val orderedActions: List<CaptureBarAction> = CaptureBarAction.entries,
     val hiddenActions: Set<CaptureBarAction> = emptySet(),
     val usesTwentyFourHourTimestamps: Boolean = false,
+    val railSide: CaptureRailSide = CaptureRailSide.LEFT,
     val confirmsVoiceNotesBeforeAdding: Boolean = false,
     val voiceRecordingResult: VoiceRecordingResult = VoiceRecordingResult.ADD_TO_DRAFT,
+    /**
+     * Per-route quick actions, keyed by [CapturePreset.id], in pinned order. A route
+     * absent here follows the global row ([visibleActions]); an empty list pins nothing.
+     * Mirrors iOS `CaptureToolbarPreferences.routePins`.
+     */
+    val routePins: Map<String, List<CaptureBarAction>> = emptyMap(),
 ) {
+    val timestampFormat: CaptureTimestampFormat get() = if (usesTwentyFourHourTimestamps) CaptureTimestampFormat.TWENTY_FOUR_HOUR else CaptureTimestampFormat.TWELVE_HOUR
     val visibleActions: List<CaptureBarAction>
         get() = orderedActions.filterNot(hiddenActions::contains)
+
+    /** The quick actions shown while typing into [routeID]: its own pins, else the global row. */
+    fun pinnedActions(routeID: String?): List<CaptureBarAction> =
+        routeID?.let(routePins::get) ?: visibleActions
+
+    fun hasCustomPins(routeID: String?): Boolean = routeID != null && routePins.containsKey(routeID)
+
+    /** Every action not pinned on [routeID], in catalog order. */
+    fun unpinnedActions(routeID: String?): List<CaptureBarAction> {
+        val pinned = pinnedActions(routeID).toSet()
+        return CaptureBarAction.entries.filterNot(pinned::contains)
+    }
+
+    /** Replaces [routeID]'s pins; `null` drops the override so the route follows the global row again. */
+    fun withRoutePins(routeID: String, pins: List<CaptureBarAction>?): CaptureBarConfiguration =
+        copy(routePins = if (pins == null) routePins - routeID else routePins + (routeID to pins.distinct()))
+
+    /**
+     * This configuration as the capture bar renders it for [routeID]: a route with its own
+     * pins shows exactly those, in order; any other route keeps the global row.
+     */
+    fun forRoute(routeID: String?): CaptureBarConfiguration {
+        val pins = routeID?.let(routePins::get) ?: return this
+        val rest = CaptureBarAction.entries.filterNot(pins::contains)
+        return copy(orderedActions = pins + rest, hiddenActions = rest.toSet())
+    }
 }
 
 fun CaptureBarConfiguration.normalized(): CaptureBarConfiguration {
@@ -358,6 +404,9 @@ fun CaptureBarConfiguration.normalized(): CaptureBarConfiguration {
     return copy(
         orderedActions = order,
         hiddenActions = hiddenActions.intersect(CaptureBarAction.entries.toSet()),
+        routePins = routePins
+            .filterKeys(String::isNotBlank)
+            .mapValues { (_, pins) -> pins.distinct() },
     )
 }
 
@@ -372,6 +421,8 @@ data class CaptureHistoryItem(
     val logicalPath: String? = null,
     val captureSource: String = "app",
     val attachmentCount: Int = 0,
+    /** Route (capture preset) the request was frozen with; null for content-free completion markers. */
+    val presetID: String? = null,
 )
 
 data class CaptureHistoryDetail(
@@ -425,7 +476,7 @@ data class CompletedRecordingActivity(
 )
 
 sealed interface CaptureSubmitResult {
-    data class Delivered(val requestID: String) : CaptureSubmitResult
+    data class Delivered(val requestID: String, val processingOutcome: CaptureTextProcessingOutcome? = null) : CaptureSubmitResult
     data class SavedForRetry(
         val requestID: String,
         val reason: String,
@@ -467,12 +518,15 @@ interface CaptureRepository {
     suspend fun presetQuickAccessRailExpanded(): Boolean
     suspend fun setPresetQuickAccessRailExpanded(expanded: Boolean)
     suspend fun capturePresets(): CapturePresetCollection
+    suspend fun selectCapturePresetForDraft(presetID: String): CapturePresetCollection = selectCapturePreset(presetID)
     suspend fun selectCapturePreset(presetID: String): CapturePresetCollection
     suspend fun saveCapturePreset(preset: CapturePreset): CapturePresetCollection
     suspend fun deleteCapturePreset(presetID: String): CapturePresetCollection
     suspend fun entryTemplates(): List<CaptureEntryTemplate>
     suspend fun saveEntryTemplate(template: CaptureEntryTemplate): List<CaptureEntryTemplate>
     suspend fun deleteEntryTemplate(templateID: String): List<CaptureEntryTemplate>
+    suspend fun setDraftRouteOverride(route: CaptureRouteOverride?): CaptureDraft = error("unsupportedRouteOverride")
+    suspend fun hasDurableCapture(requestID: String): Boolean = false
     suspend fun setDraftEntryTemplateOverride(templateID: String?): CaptureDraft
     suspend fun submit(
         text: String,

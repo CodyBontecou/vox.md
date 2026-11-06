@@ -1,0 +1,44 @@
+{
+  "data": [
+    {
+      "attributes": {
+        "state": "PREPARE_FOR_SUBMISSION",
+        "version": 1
+      },
+      "id": "46ea9da7-0cf0-4639-bbe1-e79ada36312d",
+      "links": {
+        "self": "https://api.appstoreconnect.apple.com/v1/subscriptionVersions/46ea9da7-0cf0-4639-bbe1-e79ada36312d"
+      },
+      "relationships": {
+        "image": {
+          "links": {
+            "related": "https://api.appstoreconnect.apple.com/v1/subscriptionVersions/46ea9da7-0cf0-4639-bbe1-e79ada36312d/image",
+            "self": "https://api.appstoreconnect.apple.com/v1/subscriptionVersions/46ea9da7-0cf0-4639-bbe1-e79ada36312d/relationships/image"
+          }
+        },
+        "images": {
+          "links": {
+            "related": "https://api.appstoreconnect.apple.com/v1/subscriptionVersions/46ea9da7-0cf0-4639-bbe1-e79ada36312d/images",
+            "self": "https://api.appstoreconnect.apple.com/v1/subscriptionVersions/46ea9da7-0cf0-4639-bbe1-e79ada36312d/relationships/images"
+          }
+        },
+        "localizations": {
+          "links": {
+            "related": "https://api.appstoreconnect.apple.com/v1/subscriptionVersions/46ea9da7-0cf0-4639-bbe1-e79ada36312d/localizations",
+            "self": "https://api.appstoreconnect.apple.com/v1/subscriptionVersions/46ea9da7-0cf0-4639-bbe1-e79ada36312d/relationships/localizations"
+          }
+        }
+      },
+      "type": "subscriptionVersions"
+    }
+  ],
+  "links": {
+    "self": "https://api.appstoreconnect.apple.com/v1/subscriptions/6828566827/versions"
+  },
+  "meta": {
+    "paging": {
+      "limit": 50,
+      "total": 1
+    }
+  }
+}

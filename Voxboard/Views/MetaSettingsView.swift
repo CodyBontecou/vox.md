@@ -1,3 +1,4 @@
+import StoreKit
 import SwiftUI
 import VoxboardShared
 import WidgetKit
@@ -13,6 +14,7 @@ struct MetaSettingsView: View {
     @Environment(StoreManager.self) private var storeManager
     @Environment(ModelManager.self) private var modelManager
     @Environment(\.openURL) private var openURL
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @State private var showPaywall = false
     @State private var showDebugLog = false
@@ -23,34 +25,41 @@ struct MetaSettingsView: View {
     @State private var liveActivityMonitorEnabled: Bool = AppConstants.liveActivityMonitorEnabled
     @State private var shortcutRecordingLiveActivityEnabled: Bool = AppConstants.shortcutRecordingLiveActivityEnabled
     @State private var lockScreenQuickRecordEnabled: Bool = AppConstants.lockScreenQuickRecordEnabled
+    @State private var vault: VoxVault?
+    @State private var isPickingVault = false
+    @State private var vaultMessage: String?
+    @State private var routeFlows: [CapturePreset] = []
+    @State private var surfaceRevision = 0
+    @State private var showsWatchSetup = false
+    private let watchSetupHandoff = WatchSetupHandoffRouter.shared
 
     var body: some View {
         ZStack {
-            Geist.Palette.background200.ignoresSafeArea()
+            Geist.bg.ignoresSafeArea()
 
             ScrollViewReader { proxy in
                 ScrollView {
-                    VStack(spacing: 0) {
-                        upgradeSection
-                        GeistDivider()
+                    VStack(alignment: .leading, spacing: 6) {
+                        SettingsSignalPageHeader(title: "Settings", backLabel: "Back to capture")
+                            .padding(.horizontal, 4)
+                            .padding(.top, 8)
+                            .padding(.bottom, 8)
+                        vaultSection
+                        transcriptionSection
+                        everywhereSection
+                        accountSection
+                            .id("settings-about")
                         activitySection
-                        GeistDivider()
                         recordingQueueSection
-                        GeistDivider()
                         customizationSection
-                        GeistDivider()
                         keyboardSection
                             .id("settings-keyboard")
-                        GeistDivider()
                         lockScreenSection
-                        GeistDivider()
-                        aboutSection
-                            .id("settings-about")
-                        GeistDivider()
-                        feedbackSection
-                        GeistDivider()
                         debugSection
+                        privacyFooter
                     }
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 24)
                 }
                 #if DEBUG
                 .task {
@@ -65,17 +74,16 @@ struct MetaSettingsView: View {
                 #endif
             }
         }
-        .navigationTitle("")
+        .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("Settings")
-                    .font(Geist.heading(.headline))
-                    .foregroundColor(Geist.text)
-            }
+        // The Settings board has no bar: the page header carries the circular
+        // Back button and the large title.
+        .toolbar(.hidden, for: .navigationBar)
+        .navigationDestination(isPresented: $showsWatchSetup) {
+            RouteSurfacePinsView(surface: .watch)
         }
-        .toolbarBackground(Geist.bg, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
+        .onAppear(perform: consumeWatchSetupHandoff)
+        .onChange(of: watchSetupHandoff.isPending) { _, _ in consumeWatchSetupHandoff() }
         .sheet(isPresented: $showPaywall) {
             PaywallView(context: .settings)
                 .environment(usageTracker)
@@ -87,6 +95,11 @@ struct MetaSettingsView: View {
         // Settings can be opened before StoreKit finishes its launch sync.
         // Refresh here so existing owners always get the Family upgrade offer.
         .task { await storeManager.prepareForPurchases() }
+        .task { vault = await VoxVaultStore.current() }
+        .onAppear {
+            routeFlows = CapturePresetStore.loadFlows().filter(\.isEnabled)
+            surfaceRevision &+= 1
+        }
 #if os(iOS)
         .sheet(isPresented: $showMailCompose) {
             MailComposeView()
@@ -94,60 +107,429 @@ struct MetaSettingsView: View {
 #endif
     }
 
-    // MARK: - Section header
+    // MARK: - Group scaffolding
 
-    private func sectionHeader(_ number: String, _ title: LocalizedStringKey) -> some View {
-        HStack {
-            GeistSectionLabel(number: number, title: title)
-            Spacer()
+    /// Mono uppercase label above a white, bordered Signal card.
+    private func settingsGroup<Content: View>(
+        _ title: LocalizedStringKey,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            GeistSectionLabel(number: "", title: title)
+                .padding(.horizontal, 4)
+                .padding(.top, 10)
+                .accessibilityAddTraits(.isHeader)
+            VStack(spacing: 0) {
+                content()
+            }
+            .background(Geist.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .stroke(Geist.border, lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 28)
-        .padding(.bottom, 16)
-        .background(Geist.bg)
+    }
+
+    private var rowDivider: some View {
+        GeistDivider().padding(.horizontal, 14)
+    }
+
+    private var chevron: some View {
+        Image(systemName: "chevron.right")
+            .font(.system(size: 13, weight: .semibold))
+            .foregroundStyle(Geist.faint)
+            .accessibilityHidden(true)
+    }
+
+    private var privacyFooter: some View {
+        HStack(alignment: .top, spacing: 8) {
+            Image(systemName: "lock")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Geist.muted)
+                .padding(.top, 2)
+                .accessibilityHidden(true)
+            Text("Audio and transcripts stay on your devices and in your vault. No custom analytics.")
+                .font(Geist.caption())
+                .foregroundStyle(Geist.muted)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.horizontal, 8)
+        .padding(.top, 14)
+        .accessibilityElement(children: .combine)
+    }
+
+    // MARK: - Vault
+
+    private var vaultSection: some View {
+        settingsGroup("Vault") {
+            VaultPickerCard(vault: vault, isPicking: $isPickingVault, embedded: true) { picked in
+                Task { @MainActor in
+                    do {
+                        let moved = try await VoxVaultStore.change(to: picked)
+                        vault = picked
+                        vaultMessage = moved > 0
+                            ? String(localized: "\(moved) routes now write to \(picked.name).")
+                            : nil
+                    } catch {
+                        vaultMessage = error.localizedDescription
+                    }
+                }
+            }
+            if let vaultMessage {
+                Text(vaultMessage)
+                    .font(Geist.caption())
+                    .foregroundStyle(Geist.muted)
+                    .padding(.horizontal, 14)
+                    .padding(.bottom, 10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            rowDivider
+            summaryRow(
+                String(localized: "Routes"),
+                subtitle: routesSummary,
+                value: "\(routeFlows.count)",
+                identifier: "settings_routes"
+            ) {
+                CapturePresetSettingsView()
+            }
+        }
+    }
+
+    private var routesSummary: String {
+        let defaultID = CapturePresetProfileStore.selectedProfileID(defaults: AppConstants.sharedDefaults)
+        let ordered = routeFlows.filter { $0.id == defaultID } + routeFlows.filter { $0.id != defaultID }
+        let names = ordered.map { flow in
+            flow.id == defaultID
+                ? String(localized: "\(flow.displayName) (default)")
+                : flow.displayName
+        }
+        return names.isEmpty ? String(localized: "No routes yet") : names.joined(separator: " · ")
+    }
+
+    // MARK: - Transcription
+
+    private var transcriptionSection: some View {
+        settingsGroup("Transcription") {
+            summaryRow(String(localized: "Model"), subtitle: modelSummary, identifier: "settings_model") {
+                ModelTabView()
+            }
+            rowDivider
+            summaryRow(String(localized: "Language"), subtitle: languageSummary, identifier: "settings_language") {
+                TranscriptionLanguageSettingsView()
+            }
+        }
+    }
+
+    private var modelSummary: String {
+        if modelManager.isAutomaticSelection {
+            if let id = modelManager.preferredFallbackModelID,
+               let fallback = modelManager.downloadedModels.first(where: { $0.id == id }) {
+                return String(localized: "Automatic · Apple Speech, falls back to \(fallback.name)")
+            }
+            return String(localized: "Automatic · Apple Speech")
+        }
+        return modelManager.selectedModel?.name ?? String(localized: "Automatic")
+    }
+
+    /// "English (US) · detect others": the language transcription uses, and
+    /// whether other languages are detected.
+    private var languageSummary: String {
+        if modelManager.selectedModel?.engine.isParakeet == true {
+            return String(localized: "Detected automatically")
+        }
+        let code = modelManager.selectedLanguage
+        guard code == "auto" else { return languageName(code: code) }
+        guard modelManager.isAutomaticSelection else {
+            // Whisper's Auto Detect.
+            return String(localized: "Detected automatically")
+        }
+        // Automatic follows the device language with Apple Speech; a
+        // downloaded multilingual fallback (Whisper, Parakeet v3) detects the
+        // language for recordings Apple Speech cannot handle.
+        let device = deviceLanguageName
+        return automaticFallbackDetectsLanguage
+            ? String(localized: "\(device) · detect others")
+            : device
+    }
+
+    private var automaticFallbackDetectsLanguage: Bool {
+        guard let id = modelManager.preferredFallbackModelID,
+              let fallback = modelManager.downloadedModels.first(where: { $0.id == id }) else { return false }
+        return fallback.engine != .parakeetV2
+    }
+
+    /// "English (US)" from the device locale.
+    private var deviceLanguageName: String {
+        let locale = Locale.current
+        guard let languageCode = locale.language.languageCode?.identifier else {
+            return String(localized: "System Language")
+        }
+        let name = locale.localizedString(forLanguageCode: languageCode)?.localizedCapitalized ?? languageCode
+        guard let region = locale.region?.identifier else { return name }
+        return "\(name) (\(region))"
+    }
+
+    private func languageName(code: String) -> String {
+        if let name = Locale.current.localizedString(forLanguageCode: code), !name.isEmpty {
+            return name.localizedCapitalized
+        }
+        return modelManager.availableLanguages.first { $0.code == code }?.name ?? code
+    }
+
+    /// Watch "Open on iPhone" Handoff (see `WatchSetupHandoffRouter`).
+    private func consumeWatchSetupHandoff() {
+        guard watchSetupHandoff.isPending else { return }
+        watchSetupHandoff.isPending = false
+        showsWatchSetup = true
+    }
+
+    // MARK: - Everywhere
+
+    private var everywhereSection: some View {
+        let _ = surfaceRevision
+        return settingsGroup("Everywhere") {
+            summaryRow(String(localized: "Keyboard"), subtitle: keyboardSummary, identifier: "settings_keyboard_routes") {
+                RouteSurfacePinsView(surface: .keyboard)
+            }
+            rowDivider
+            summaryRow(String(localized: "Apple Watch"), subtitle: surfaceNames(.watch), identifier: "settings_watch_routes") {
+                RouteSurfacePinsView(surface: .watch)
+            }
+            rowDivider
+            summaryRow(String(localized: "Shortcuts & Control Center"), subtitle: actionButtonSummary, identifier: "settings_shortcuts") {
+                ShortcutsControlCenterSettingsView()
+            }
+        }
+    }
+
+    private var keyboardSummary: String {
+        let count = RouteSurfacePins.pinnedFlows(.keyboard).count
+        let pinned = String(localized: "\(count) routes pinned")
+        switch CapturePresetSurfacePinStore.keyboardHasFullAccess(defaults: AppConstants.sharedDefaults) {
+        case true?: return String(localized: "Full access on · \(pinned)")
+        case false?: return String(localized: "Full access off · \(pinned)")
+        case nil: return pinned
+        }
+    }
+
+    private func surfaceNames(_ surface: CapturePresetPinSurface) -> String {
+        let names = RouteSurfacePins.pinnedFlows(surface).map(\.displayName)
+        return names.isEmpty ? String(localized: "No routes pinned") : names.joined(separator: " · ")
+    }
+
+    private var actionButtonSummary: String {
+        let id = CapturePresetSurfacePinStore.actionButtonRouteID(defaults: AppConstants.sharedDefaults)
+        let name = id.flatMap { id in routeFlows.first { $0.id == id }?.displayName }
+            ?? String(localized: "Default route")
+        return String(localized: "Action button → \(name)")
+    }
+
+    // MARK: - Account
+
+    @ViewBuilder
+    private var accountSection: some View {
+        if usageTracker.hasUnlocked {
+            settingsGroup("Account") {
+                if isSubscriptionPlan {
+                    // "Vox.md Yearly · Renews … — Manage ›": the whole row
+                    // opens the App Store subscription sheet.
+                    Button { manageSubscription() } label: {
+                        planRowLabel(value: String(localized: "Manage"), showsChevron: true)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("settings.manageSubscription")
+                } else if usageTracker.isEligibleForFamilyUpgrade {
+                    Button { showPaywall = true } label: {
+                        planRowLabel(value: String(localized: "Upgrade"), showsChevron: true)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("settings.familyUpgradeButton")
+                } else {
+                    planRowLabel(value: nil, showsChevron: false)
+                        .accessibilityElement(children: .combine)
+                }
+                rowDivider
+                helpRow
+            }
+        } else {
+            upgradeSection
+            settingsGroup("Account") {
+                helpRow
+            }
+        }
+    }
+
+    private func planRowLabel(value: String?, showsChevron: Bool) -> some View {
+        HStack(spacing: 10) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(planTitle)
+                    .font(Geist.label(.body))
+                    .foregroundColor(Geist.text)
+                Text(planDetail)
+                    .font(Geist.mono(size: 11, relativeTo: .caption))
+                    .foregroundColor(Geist.muted)
+                    .lineLimit(subtitleLineLimit)
+            }
+            Spacer(minLength: 8)
+            if let value {
+                Text(value)
+                    .font(Geist.body(.callout))
+                    .foregroundColor(Geist.muted)
+            }
+            if showsChevron { chevron }
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .frame(minHeight: 50)
+        .contentShape(Rectangle())
+    }
+
+    /// Board subtitles stay on one line; accessibility sizes wrap instead.
+    private var subtitleLineLimit: Int? {
+        dynamicTypeSize.isAccessibilitySize ? nil : 1
+    }
+
+    /// "Help & feedback · Version 2.14 (58)": Discord, feedback and the
+    /// About details, on one page.
+    private var helpRow: some View {
+        summaryRow(
+            String(localized: "Help & feedback"),
+            subtitle: String(localized: "Version \(appVersionString)"),
+            identifier: "settings_help"
+        ) {
+            helpPage
+        }
+    }
+
+    private var helpPage: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 6) {
+                SettingsSignalPageHeader(title: "Help & feedback")
+                    .padding(.horizontal, 4)
+                    .padding(.top, 8)
+                    .padding(.bottom, 8)
+                feedbackSection
+                aboutSection
+            }
+            .padding(.horizontal, 16)
+            .padding(.bottom, 24)
+        }
+        .background(Geist.bg.ignoresSafeArea())
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Geist.bg, for: .navigationBar)
+    }
+
+    private var entitlementProducts: [VoxboardPurchaseProduct] { storeManager.currentEntitlementProducts }
+
+    private var isSubscriptionPlan: Bool {
+        entitlementProducts.contains(where: \.isSubscription) || usageTracker.subscriptionExpirationDate != nil
+    }
+
+    private var planTitle: String {
+        if entitlementProducts.contains(where: { $0 == .individualYearly || $0 == .familyYearly }) {
+            return String(localized: "Vox.md Yearly")
+        }
+        if entitlementProducts.contains(where: { $0 == .individualWeekly || $0 == .familyWeekly }) {
+            return String(localized: "Vox.md Weekly")
+        }
+        if isSubscriptionPlan { return String(localized: "Vox.md Subscription") }
+        return String(localized: "Vox.md Lifetime")
+    }
+
+    private var planDetail: String {
+        let family = usageTracker.hasFamilyAccess
+            ? String(localized: "Family Sharing on")
+            : String(localized: "Family Sharing off")
+        if let renewal = usageTracker.subscriptionExpirationDate, isSubscriptionPlan {
+            let date = renewal.formatted(.iso8601.year().month().day())
+            return String(localized: "Renews \(date) · \(family)")
+        }
+        return String(localized: "One-time purchase · \(family)")
+    }
+
+    private func manageSubscription() {
+        let scene = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first { $0.activationState == .foregroundActive }
+        Task { @MainActor in
+            if let scene {
+                do {
+                    try await AppStore.showManageSubscriptions(in: scene)
+                    await storeManager.syncCurrentEntitlements()
+                    return
+                } catch {}
+            }
+            if let url = URL(string: "https://apps.apple.com/account/subscriptions") { openURL(url) }
+        }
+    }
+
+    /// Title + muted mono subtitle row with an optional trailing value.
+    private func summaryRow<Destination: View>(
+        _ title: String,
+        subtitle: String,
+        value: String? = nil,
+        identifier: String,
+        @ViewBuilder destination: () -> Destination
+    ) -> some View {
+        NavigationLink {
+            destination()
+        } label: {
+            HStack(spacing: 10) {
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(title)
+                        .font(Geist.label(.body))
+                        .foregroundColor(Geist.text)
+                    Text(subtitle)
+                        .font(Geist.mono(size: 11, relativeTo: .caption))
+                        .foregroundColor(Geist.muted)
+                        .lineLimit(subtitleLineLimit)
+                }
+                Spacer(minLength: 8)
+                if let value {
+                    Text(value)
+                        .font(Geist.body(.callout))
+                        .foregroundColor(Geist.muted)
+                }
+                chevron
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .frame(minHeight: 50)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier(identifier)
     }
 
     // MARK: - Upgrade Section
 
     private var upgradeSection: some View {
-        VStack(spacing: 0) {
-            sectionHeader("—", "Vox.md Unlimited")
-            GeistDivider()
-
-            VStack(spacing: 16) {
+        settingsGroup("Vox.md Unlimited") {
+            VStack(spacing: 14) {
                 HStack(spacing: 12) {
-                    VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 2) {
                         Text(accessTitle)
-                            .font(Geist.label())
+                            .font(Geist.label(.body))
                             .foregroundColor(Geist.text)
                         Text(accessDetail)
-                            .font(Geist.caption())
+                            .font(Geist.mono(size: 11, relativeTo: .caption))
                             .foregroundColor(Geist.muted)
                     }
                     Spacer()
                     if usageTracker.hasUnlocked {
-                        HStack(spacing: 6) {
-                            Rectangle()
-                                .fill(Geist.text)
-                                .frame(width: 6, height: 6)
-                            Text(usageTracker.hasFamilyAccess
-                                 ? String(localized: "Family")
-                                 : String(localized: "Purchased"))
-                                .font(Geist.caption())
-                                .foregroundColor(Geist.text)
-                        }
+                        SignalBadge(text: usageTracker.hasFamilyAccess ? "Family" : "Purchased")
                     } else if let price = storeManager.displayPrice {
                         Text("Lifetime \(price)")
-                            .font(Geist.label(.headline))
-                            .foregroundColor(Geist.text)
+                            .font(Geist.body(.callout))
+                            .foregroundColor(Geist.muted)
                     } else {
                         Text("Checking price…")
                             .font(Geist.caption())
                             .foregroundColor(Geist.muted)
                     }
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 16)
 
                 if !usageTracker.hasFamilyAccess {
                     Button(action: { showPaywall = true }) {
@@ -169,14 +551,10 @@ struct MetaSettingsView: View {
                             ? "settings.familyUpgradeButton"
                             : "settings.lifetimeOptionsButton"
                     )
-                    .buttonStyle(GeistButtonStyle(variant: .primary))
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 16)
-                } else {
-                    Spacer().frame(height: 1)
+                    .buttonStyle(GeistButtonStyle(variant: .primary, size: .medium))
                 }
             }
-            .background(Geist.bg)
+            .padding(14)
         }
     }
 
@@ -202,10 +580,7 @@ struct MetaSettingsView: View {
     // MARK: - Activity Section
 
     private var activitySection: some View {
-        VStack(spacing: 0) {
-            sectionHeader("01", "Activity")
-            GeistDivider()
-
+        settingsGroup("Activity") {
             settingsNavigationRow(
                 "Stats",
                 description: "Recordings, recording time, and Capture activity",
@@ -219,12 +594,9 @@ struct MetaSettingsView: View {
     // MARK: - Recording Queue Section
 
     private var recordingQueueSection: some View {
-        VStack(spacing: 0) {
-            sectionHeader("02", "Queues & Recovery")
-            GeistDivider()
-
+        settingsGroup("Queues & Recovery") {
             settingsNavigationRow(
-                "Open Recording Queue",
+                "Open Activity",
                 description: "Manage queued audio and choose processing and retention defaults",
                 systemImage: "waveform"
             ) {
@@ -242,7 +614,7 @@ struct MetaSettingsView: View {
                     )
                 }
             }
-            GeistDivider()
+            rowDivider
             settingsNavigationRow(
                 "URL Deliveries",
                 description: "Review saved HTTP payloads, retry with corrected credentials, or discard",
@@ -257,30 +629,7 @@ struct MetaSettingsView: View {
     // MARK: - Customization Section
 
     private var customizationSection: some View {
-        VStack(spacing: 0) {
-            sectionHeader("03", "Customization")
-            GeistDivider()
-
-            settingsNavigationRow(
-                "Models",
-                description: "Transcription engines, model downloads, and language",
-                systemImage: "cpu"
-            ) {
-                ModelTabView()
-            }
-
-            GeistDivider()
-
-            settingsNavigationRow(
-                "Capture Presets",
-                description: "Processing, formatting, metadata, and destinations",
-                systemImage: "slider.horizontal.3"
-            ) {
-                CapturePresetSettingsView()
-            }
-
-            GeistDivider()
-
+        settingsGroup("Customization") {
             settingsNavigationRow(
                 "Capture Bar",
                 description: "Choose, reorder, and hide quick actions",
@@ -289,7 +638,7 @@ struct MetaSettingsView: View {
                 CaptureToolbarSettingsView(preferences: captureToolbarPreferences)
             }
 
-            GeistDivider()
+            rowDivider
 
             appLanguageRow
                 .id("settings-app-language")
@@ -302,34 +651,27 @@ struct MetaSettingsView: View {
         NavigationLink {
             AppLanguageSettingsView()
         } label: {
-            HStack(spacing: 12) {
-                Image(systemName: "globe")
-                    .font(.system(.body, weight: .medium))
-                    .foregroundColor(Geist.text)
-                    .frame(width: 24)
-
-                VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 10) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text("App Language")
-                        .font(Geist.label())
+                        .font(Geist.label(.body))
                         .foregroundColor(Geist.text)
                     Text("Choose which language Vox.md uses")
-                        .font(Geist.caption())
+                        .font(Geist.mono(size: 11, relativeTo: .caption))
                         .foregroundColor(Geist.muted)
                 }
 
-                Spacer()
+                Spacer(minLength: 8)
 
                 Text(currentLanguageLabel)
-                    .font(Geist.caption())
+                    .font(Geist.body(.callout))
                     .foregroundColor(Geist.muted)
 
-                Image(systemName: "chevron.right")
-                    .font(.system(.caption, weight: .semibold))
-                    .foregroundColor(Geist.muted)
+                chevron
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 16)
-            .background(Geist.bg)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .frame(minHeight: 50)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -356,30 +698,66 @@ struct MetaSettingsView: View {
         NavigationLink {
             destination()
         } label: {
-            HStack(spacing: 12) {
-                Image(systemName: systemImage)
-                    .font(.system(.body, weight: .medium))
-                    .foregroundColor(Geist.text)
-                    .frame(width: 24)
-
-                VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 10) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text(title)
-                        .font(Geist.label())
+                        .font(Geist.label(.body))
                         .foregroundColor(Geist.text)
                     Text(description)
-                        .font(Geist.caption())
+                        .font(Geist.mono(size: 11, relativeTo: .caption))
                         .foregroundColor(Geist.muted)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
 
-                Spacer()
+                Spacer(minLength: 8)
 
-                Image(systemName: "chevron.right")
-                    .font(.system(.caption, weight: .semibold))
-                    .foregroundColor(Geist.muted)
+                chevron
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 16)
-            .background(Geist.bg)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .frame(minHeight: 50)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func toggleRow(
+        _ title: LocalizedStringKey,
+        description: LocalizedStringKey,
+        isOn: Binding<Bool>
+    ) -> some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(Geist.label(.body))
+                    .foregroundColor(Geist.text)
+                Text(description)
+                    .font(Geist.caption())
+                    .foregroundColor(Geist.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: 8)
+            Toggle("", isOn: isOn)
+                .labelsHidden()
+                .tint(Geist.accent)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .frame(minHeight: 50)
+    }
+
+    private func actionRow(_ title: LocalizedStringKey, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack {
+                Text(title)
+                    .font(Geist.label(.body))
+                    .foregroundColor(Geist.text)
+                Spacer()
+                chevron
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .frame(minHeight: 50)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -388,164 +766,111 @@ struct MetaSettingsView: View {
     // MARK: - Keyboard Section
 
     private var keyboardSection: some View {
-        VStack(spacing: 0) {
-            sectionHeader("04", "Keyboard")
-            GeistDivider()
-
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Haptic Feedback")
-                        .font(Geist.label())
-                        .foregroundColor(Geist.text)
-                    Text("Vibrate on key press. Requires Allow Full Access.")
-                        .font(Geist.caption())
-                        .foregroundColor(Geist.muted)
-                }
-                Spacer()
-                Toggle("", isOn: $hapticsEnabled)
-                    .labelsHidden()
-                    .tint(Color.accentColor)
-                    .onChange(of: hapticsEnabled) { _, val in
-                        AppConstants.sharedDefaults?.set(val, forKey: AppConstants.hapticsEnabledKey)
-                    }
+        settingsGroup("Keyboard") {
+            toggleRow(
+                "Haptic Feedback",
+                description: "Vibrate on key press. Requires Allow Full Access.",
+                isOn: $hapticsEnabled
+            )
+            .onChange(of: hapticsEnabled) { _, val in
+                AppConstants.sharedDefaults?.set(val, forKey: AppConstants.hapticsEnabledKey)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 14)
-            .background(Geist.bg)
         }
     }
 
     // MARK: - Lock Screen Section
 
     private var lockScreenSection: some View {
-        VStack(spacing: 0) {
-            sectionHeader("05", "Lock Screen")
-            GeistDivider()
-
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Live Activity Monitor")
-                        .font(Geist.label())
-                        .foregroundColor(Geist.text)
-                    Text("Show Vox.md status and Record/Stop controls on the Lock Screen and Dynamic Island while listening.")
-                        .font(Geist.caption())
-                        .foregroundColor(Geist.muted)
-                }
-                Spacer()
-                Toggle("", isOn: $liveActivityMonitorEnabled)
-                    .labelsHidden()
-                    .tint(Color.accentColor)
-                    .onChange(of: liveActivityMonitorEnabled) { _, val in
-                        AppConstants.sharedDefaults?.set(val, forKey: AppConstants.liveActivityMonitorEnabledKey)
-                        if val {
-                            if persistentRecorder.isListening {
-                                LiveActivityController.shared.startIfNeeded()
-                            }
-                        } else {
-                            LiveActivityController.shared.end()
-                        }
+        settingsGroup("Lock Screen") {
+            toggleRow(
+                "Live Activity Monitor",
+                description: "Show Vox.md status and Record/Stop controls on the Lock Screen and Dynamic Island while listening.",
+                isOn: $liveActivityMonitorEnabled
+            )
+            .onChange(of: liveActivityMonitorEnabled) { _, val in
+                AppConstants.sharedDefaults?.set(val, forKey: AppConstants.liveActivityMonitorEnabledKey)
+                if val {
+                    if persistentRecorder.isListening {
+                        LiveActivityController.shared.startIfNeeded()
                     }
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 14)
-            .background(Geist.bg)
-
-            GeistDivider()
-
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Shortcut Recording Live Activity")
-                        .font(Geist.label())
-                        .foregroundColor(Geist.text)
-                    Text("Show a Live Activity for background shortcut and control recordings, including Apple Pencil squeeze and Action Button recordings. Required for background recording on iOS 26+ — when unavailable, starting a recording opens the app instead.")
-                        .font(Geist.caption())
-                        .foregroundColor(Geist.muted)
+                } else {
+                    LiveActivityController.shared.end()
                 }
-                Spacer()
-                Toggle("", isOn: $shortcutRecordingLiveActivityEnabled)
-                    .labelsHidden()
-                    .tint(Color.accentColor)
-                    .onChange(of: shortcutRecordingLiveActivityEnabled) { _, val in
-                        AppConstants.sharedDefaults?.set(val, forKey: AppConstants.shortcutRecordingLiveActivityEnabledKey)
-                        if !val {
-                            LiveActivityController.shared.endShortcutRecordingActivityIfNeeded()
-                        }
-                    }
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 14)
-            .background(Geist.bg)
 
-            GeistDivider()
+            rowDivider
 
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Lock Screen Record Button")
-                        .font(Geist.label())
-                        .foregroundColor(Geist.text)
-                    Text("Allow recording from widgets, controls, and Shortcuts. Choose a Preset and Action. Shortcuts uses Open When Run; the Vox.md Record control uses Open App. Background recording requires iOS 26+ and completed setup.")
-                        .font(Geist.caption())
-                        .foregroundColor(Geist.muted)
+            toggleRow(
+                "Shortcut Recording Live Activity",
+                description: "Show a Live Activity for background shortcut and control recordings, including Apple Pencil squeeze and Action Button recordings. Required for background recording on iOS 26+ — when unavailable, starting a recording opens the app instead.",
+                isOn: $shortcutRecordingLiveActivityEnabled
+            )
+            .onChange(of: shortcutRecordingLiveActivityEnabled) { _, val in
+                AppConstants.sharedDefaults?.set(val, forKey: AppConstants.shortcutRecordingLiveActivityEnabledKey)
+                if !val {
+                    LiveActivityController.shared.endShortcutRecordingActivityIfNeeded()
                 }
-                Spacer()
-                Toggle("", isOn: $lockScreenQuickRecordEnabled)
-                    .labelsHidden()
-                    .tint(Color.accentColor)
-                    .onChange(of: lockScreenQuickRecordEnabled) { _, val in
-                        AppConstants.sharedDefaults?.set(val, forKey: AppConstants.lockScreenQuickRecordEnabledKey)
-                        WidgetCenter.shared.reloadTimelines(ofKind: "VoxboardRecordWidget")
-                        if #available(iOS 18.0, *) {
-                            ControlCenter.shared.reloadControls(ofKind: "VoxboardRecordControl")
-                        }
-                        if #available(iOS 26.0, *) {
-                            ControlCenter.shared.reloadControls(ofKind: VoxboardToggleRecordingControl.kind)
-                        }
-                    }
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 14)
-            .background(Geist.bg)
+
+            rowDivider
+
+            toggleRow(
+                "Lock Screen Record Button",
+                description: "Allow recording from widgets, controls, and Shortcuts. Choose a Route and Action. Shortcuts uses Open When Run; the Vox.md Record control uses Open App. Background recording requires iOS 26+ and completed setup.",
+                isOn: $lockScreenQuickRecordEnabled
+            )
+            .onChange(of: lockScreenQuickRecordEnabled) { _, val in
+                AppConstants.sharedDefaults?.set(val, forKey: AppConstants.lockScreenQuickRecordEnabledKey)
+                WidgetCenter.shared.reloadTimelines(ofKind: "VoxboardRecordWidget")
+                if #available(iOS 18.0, *) {
+                    ControlCenter.shared.reloadControls(ofKind: "VoxboardRecordControl")
+                }
+                if #available(iOS 26.0, *) {
+                    ControlCenter.shared.reloadControls(ofKind: VoxboardToggleRecordingControl.kind)
+                }
+            }
         }
     }
 
     // MARK: - About Section
 
+    private var aboutRows: [(String, String)] {
+        var rows: [(String, String)] = [
+            (String(localized: "Default transcription"), String(localized: "Apple Speech when available")),
+            (String(localized: "Optional Whisper engine"), "whisper.cpp"),
+            (String(localized: "Optional Parakeet engine"), "FluidAudio (CoreML)"),
+            (String(localized: "Processing"), String(localized: "On-device")),
+            (String(localized: "Privacy"), String(localized: "Voice/text stay local")),
+            (String(localized: "Version"), appVersionString),
+        ]
+        if #available(iOS 26, *) {
+            let status = FoundationModelsBackend.isAvailable
+                ? String(localized: "Available")
+                : String(localized: "Unavailable")
+            rows.append((String(localized: "Apple Intelligence"), status))
+        }
+        return rows
+    }
+
     private var aboutSection: some View {
-        VStack(spacing: 0) {
-            sectionHeader("06", "About")
-            GeistDivider()
-
-            var rows: [(String, String)] = [
-                (String(localized: "Default transcription"), String(localized: "Apple Speech when available")),
-                (String(localized: "Optional Whisper engine"), "whisper.cpp"),
-                (String(localized: "Optional Parakeet engine"), "FluidAudio (CoreML)"),
-                (String(localized: "Processing"), String(localized: "On-device")),
-                (String(localized: "Privacy"), String(localized: "Voice/text stay local")),
-                (String(localized: "Version"), appVersionString),
-            ]
-            let _ = { // build Apple Intelligence row lazily, gated by availability
-                if #available(iOS 26, *) {
-                    let status = FoundationModelsBackend.isAvailable
-                        ? String(localized: "Available")
-                        : String(localized: "Unavailable")
-                    rows.append((String(localized: "Apple Intelligence"), status))
-                }
-            }()
-
-            ForEach(rows, id: \.0) { key, val in
-                HStack {
-                    Text(key)
-                        .font(Geist.caption())
-                        .foregroundColor(Geist.muted)
-                    Spacer()
-                    Text(val)
-                        .font(Geist.caption())
+        settingsGroup("About") {
+            let rows = aboutRows
+            ForEach(Array(rows.enumerated()), id: \.element.0) { index, row in
+                if index > 0 { rowDivider }
+                HStack(spacing: 12) {
+                    Text(row.0)
+                        .font(Geist.body(.callout))
                         .foregroundColor(Geist.text)
+                    Spacer(minLength: 8)
+                    Text(row.1)
+                        .font(Geist.mono(size: 12, relativeTo: .caption))
+                        .foregroundColor(Geist.muted)
+                        .multilineTextAlignment(.trailing)
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 14)
-                .background(Geist.bg)
-                GeistDivider()
+                .padding(.horizontal, 14)
+                .padding(.vertical, 12)
+                .frame(minHeight: 46)
+                .accessibilityElement(children: .combine)
             }
         }
     }
@@ -553,47 +878,16 @@ struct MetaSettingsView: View {
     // MARK: - Feedback Section
 
     private var feedbackSection: some View {
-        VStack(spacing: 0) {
-            sectionHeader("07", "Feedback")
-            GeistDivider()
+        settingsGroup("Help & Feedback") {
+            actionRow("Join Our Discord", action: openDiscord)
+                .accessibilityLabel("Join our Discord")
+                .accessibilityHint("Opens the Vox.md Discord community in your browser")
 
-            Button(action: openDiscord) {
-                HStack {
-                    Text("Join Our Discord")
-                        .font(Geist.label())
-                        .foregroundColor(Geist.text)
-                    Spacer()
-                    Text("→")
-                        .font(Geist.label())
-                        .foregroundColor(Geist.muted)
-                }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 16)
-                .background(Geist.bg)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Join our Discord")
-            .accessibilityHint("Opens the Vox.md Discord community in your browser")
+            rowDivider
 
-            GeistDivider()
-
-            Button(action: sendFeedback) {
-                HStack {
-                    Text("Send Feedback")
-                        .font(Geist.label())
-                        .foregroundColor(Geist.text)
-                    Spacer()
-                    Text("→")
-                        .font(Geist.label())
-                        .foregroundColor(Geist.muted)
-                }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 16)
-                .background(Geist.bg)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Send Feedback")
-            .accessibilityHint("Opens an email draft to contact support with app diagnostics")
+            actionRow("Send Feedback", action: sendFeedback)
+                .accessibilityLabel("Send Feedback")
+                .accessibilityHint("Opens an email draft to contact support with app diagnostics")
         }
     }
 
@@ -605,27 +899,10 @@ struct MetaSettingsView: View {
     // MARK: - Debug Section
 
     private var debugSection: some View {
-        VStack(spacing: 0) {
-            sectionHeader("08", "Debug")
-            GeistDivider()
-
-            Button {
+        settingsGroup("Debug") {
+            actionRow("View Debug Log") {
                 showDebugLog = true
-            } label: {
-                HStack {
-                    Text("View Debug Log")
-                        .font(Geist.label())
-                        .foregroundColor(Geist.text)
-                    Spacer()
-                    Text("→")
-                        .font(Geist.label())
-                        .foregroundColor(Geist.muted)
-                }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 16)
-                .background(Geist.bg)
             }
-            .buttonStyle(.plain)
         }
     }
 
@@ -649,6 +926,44 @@ struct MetaSettingsView: View {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
         let build   = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "—"
         return "\(version) (\(build))"
+    }
+}
+
+// MARK: - Signal page header
+
+/// Large 34pt Signal title with an optional muted subtitle. On a pushed page
+/// (Settings over Capture, Models over Settings) it leads with the boards'
+/// 44pt circular Back button, standing in for the hidden navigation bar.
+struct SettingsSignalPageHeader: View {
+    let title: LocalizedStringKey
+    var subtitle: LocalizedStringKey? = nil
+    var backLabel: LocalizedStringKey? = nil
+
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.isPresented) private var isPresented
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            if let backLabel, isPresented {
+                Button { dismiss() } label: { Image(systemName: "chevron.left") }
+                    .buttonStyle(SignalCircleButtonStyle())
+                    .accessibilityLabel(Text(backLabel))
+                    .accessibilityIdentifier("signal.back")
+                    .padding(.bottom, 14)
+            }
+            Text(title)
+                .font(.custom("Geist-SemiBold", size: 34, relativeTo: .largeTitle))
+                .tracking(-0.8)
+                .foregroundStyle(Geist.text)
+                .accessibilityAddTraits(.isHeader)
+            if let subtitle {
+                Text(subtitle)
+                    .font(Geist.body(.callout))
+                    .foregroundStyle(Geist.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 

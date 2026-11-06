@@ -31,7 +31,8 @@ PARITY = {
     "explicit-non-goal",
 }
 SCOPES = {"parity", "legacy-codec", "non-goal"}
-STATUSES = {"inventoried", "fixture-needed", "verified", "blocked"}
+# Implemented rows still require planned acceptance; only verified rows may claim verified evidence.
+STATUSES = {"inventoried", "implemented", "fixture-needed", "verified", "blocked"}
 ACCEPTANCE_KINDS = {"unit", "fixture", "ui", "device", "provider", "account", "manual", "ci"}
 ACCEPTANCE_STATUSES = {"planned", "verified", "blocked"}
 PLATFORMS = {"iphone", "ipad", "watch", "macos", "android", "wear"}
@@ -82,7 +83,6 @@ PERSISTED_ENUM_INVENTORIES = {
     ("Voxboard Watch Shared/WatchPhoneBridge.swift", "WatchPresetSelectionOutcome"),
 }
 PERSISTED_KEY_SOURCE_PATHS = {
-    "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift",
     "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureVox.swift",
     "Packages/VoxboardShared/Sources/VoxboardShared/AppConstants.swift",
     "Packages/VoxboardShared/Sources/VoxboardShared/RecordingFlow.swift",
@@ -96,6 +96,19 @@ PERSISTED_KEY_SOURCE_PATHS = {
     "Voxboard/StoreManager.swift",
     "Voxboard/WatchRecordingController.swift",
 }
+# Onboarding analytics is retired. No source may produce these keys again, and the
+# upgrade cleanup must erase every one of them from standard and App Group defaults.
+RETIRED_ANALYTICS_DIRECTORY = "Packages/VoxboardShared/Sources/VoxboardShared/Analytics"
+RETIRED_ANALYTICS_CLEANUP = "Packages/VoxboardShared/Sources/VoxboardShared/RetiredAnalyticsCleanup.swift"
+RETIRED_ANALYTICS_KEYS = {
+    "onboarding.analytics.install_id.v1",
+    "onboarding.analytics.queue.v1",
+    "onboarding.experiment.assignment.v1",
+    "onboarding.analytics.started.v1",
+    "onboarding.analytics.model_setup_completed.v1",
+    "onboarding.analytics.completed.v1",
+}
+RETIRED_ANALYTICS_CLEANUP_CALLERS = ("Voxboard/VoxboardApp.swift", "Voxboard Mac/VoxboardMacApp.swift")
 MILESTONE_RE = re.compile(r"^M(?:[0-9]|10)(?:/M(?:[0-9]|10))*$")
 ID_RE = re.compile(r"^cap\.[a-z0-9]+(?:[.-][a-z0-9]+)*$")
 DEP_RE = re.compile(r"^dep\.[a-z0-9]+(?:[.-][a-z0-9]+)*$")
@@ -219,9 +232,59 @@ def swift_enum_cases(path: Path, enum_name: str) -> set[str]:
 
 def swift_persisted_keys(path: Path) -> set[str]:
     source = path.read_text(encoding="utf-8")
-    if path.name == "RetiredAnalyticsCleanup.swift":
-        return set(re.findall(r'"(onboarding\.[^"\n]+)"', source))
     return {value for _, value in PERSISTED_KEY_NAME_RE.findall(source)}
+
+
+def validate_retired_analytics(errors: list[str], persisted_key_inventories: list[Any]) -> None:
+    retired_directory = ROOT / RETIRED_ANALYTICS_DIRECTORY
+    retired_files = sorted(
+        str(path.relative_to(ROOT)) for path in retired_directory.rglob("*") if path.is_file()
+    ) if retired_directory.is_dir() else []
+    if retired_files:
+        fail(errors, f"retired onboarding analytics sources must be absent: {retired_files}")
+    for inventory in persisted_key_inventories:
+        if not isinstance(inventory, dict):
+            continue
+        relative = inventory.get("path")
+        if isinstance(relative, str) and relative.startswith(RETIRED_ANALYTICS_DIRECTORY + "/"):
+            fail(errors, f"persisted key inventory still lists retired analytics source: {relative}")
+        mapping = inventory.get("keys") if isinstance(inventory.get("keys"), dict) else {}
+        revived = sorted(RETIRED_ANALYTICS_KEYS & set(mapping))
+        if revived:
+            fail(errors, f"{relative} still maps retired analytics keys: {revived}")
+    for relative in sorted(PERSISTED_KEY_SOURCE_PATHS):
+        path = ROOT / relative
+        if path.is_file():
+            revived = sorted(RETIRED_ANALYTICS_KEYS & swift_persisted_keys(path))
+            if revived:
+                fail(errors, f"{relative} still declares retired analytics keys: {revived}")
+    cleanup_path = ROOT / RETIRED_ANALYTICS_CLEANUP
+    if not cleanup_path.is_file():
+        fail(errors, f"retired analytics upgrade cleanup is missing: {RETIRED_ANALYTICS_CLEANUP}")
+        return
+    cleanup = cleanup_path.read_text(encoding="utf-8")
+    listed = set(re.findall(r'"((?:onboarding)\.[^"\n]+)"', cleanup))
+    if listed != RETIRED_ANALYTICS_KEYS:
+        fail(
+            errors,
+            "retired analytics cleanup must erase exactly the retired keys: "
+            f"missing {sorted(RETIRED_ANALYTICS_KEYS - listed)}, unexpected {sorted(listed - RETIRED_ANALYTICS_KEYS)}",
+        )
+    for required in ("public static func run(defaults: UserDefaults = .standard)", "defaults.removeObject(forKey: key)"):
+        if required not in cleanup:
+            fail(errors, f"retired analytics cleanup is missing {required!r}")
+    for forbidden in ("URLSession", "URLRequest", "UUID()", "defaults.set("):
+        if forbidden in cleanup:
+            fail(errors, f"retired analytics cleanup must not create identifiers, write state, or send requests: {forbidden}")
+    for relative in RETIRED_ANALYTICS_CLEANUP_CALLERS:
+        path = ROOT / relative
+        source = path.read_text(encoding="utf-8") if path.is_file() else ""
+        for required in (
+            "RetiredAnalyticsCleanup.run()",
+            "if let defaults = AppConstants.sharedDefaults { RetiredAnalyticsCleanup.run(defaults: defaults) }",
+        ):
+            if required not in source:
+                fail(errors, f"{relative} must run retired analytics cleanup at launch: {required}")
 
 
 def git_commit_exists(sha: str) -> bool:
@@ -472,6 +535,7 @@ def validate(ledger_path: Path) -> list[str]:
         fail(errors, f"persisted key source paths are not inventoried: {missing_key_sources}")
     if stale_key_sources:
         fail(errors, f"persisted key inventories include unapproved source paths: {stale_key_sources}")
+    validate_retired_analytics(errors, persisted_key_inventories)
     fixture_evidence_path = ROOT / "docs/architecture/android-wear-m0-fixture-evidence.md"
     if fixture_evidence_path.is_file() and str(inventoried_persisted_key_count) not in fixture_evidence_path.read_text():
         fail(errors, "fixture evidence must record the current total inventoried persisted-key count")

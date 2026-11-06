@@ -84,85 +84,48 @@
 <nav aria-label="Primary navigation">
   <div class="nav-inner">
     <a href="../../index.html" class="logo" aria-label="Vox.md home">
-      <img class="logo-mark" src="../../app-icon.webp" alt="" width="32" height="32">
+      <span class="logo-mark" aria-hidden="true">md</span>
       <span>Vox.md</span>
     </a>
     <ul class="nav-links">
-      <li><a href="../../index.html#how">How It Works</a></li>
       <li><a href="../../docs/">Docs</a></li>
       <li><a href="../" aria-current="page">Blog</a></li>
       <li><a href="../../privacy.html">Privacy</a></li>
-      <li><a href="../../terms.html">Terms</a></li>
     </ul>
     <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_keyboard">Download Vox.md</a>
   </div>
 </nav>
 
-<header class="hero">
-  <div class="hero-grid-bg" aria-hidden="true"></div>
-  <div class="container">
-    <div class="hero-inner">
-      <div>
-        <div class="eyebrow">Private Dictation · iPhone Keyboard · Local Workflow</div>
-        <h1 class="hero-title">Private voice-to-text on iPhone: keyboard setup and options</h1>
-        <p class="hero-subtitle">Choose between Apple Dictation, a local voice keyboard, and a recording app. Here is how to set up Vox.md and understand its keyboard permissions and limitations.</p>
-      </div>
-      <aside class="meta-card" aria-label="Article metadata">
-        <div class="meta-label">Guide Status</div>
-        <dl>
-          <div>
-            <dt>Published</dt>
-            <dd>June 13, 2026</dd>
-          </div>
-          <div>
-            <dt>Updated</dt>
-            <dd>October 26, 2026</dd>
-          </div>
-          <div>
-            <dt>Reading Time</dt>
-            <dd>6 minutes</dd>
-          </div>
-          <div>
-            <dt>Focus</dt>
-            <dd>Private iPhone dictation</dd>
-          </div>
-        </dl>
-      </aside>
-    </div>
-  </div>
-</header>
-
-<section class="lead-strip" aria-label="Quick criteria">
-  <div class="container">
-    <div class="lead-grid">
+<main>
+<div class="article-layout">
+  <article class="article-main">
+    <header>
+      <a class="back-link" href="../">← All notes</a>
+      <p class="eyebrow">Private Dictation · iPhone Keyboard · Local Workflow</p>
+      <h1 class="hero-title">Private voice-to-text on iPhone: keyboard setup and options</h1>
+      <p class="hero-subtitle">Choose between Apple Dictation, a local voice keyboard, and a recording app. Here is how to set up Vox.md and understand its keyboard permissions and limitations.</p>
+      <p class="byline">By Cody Bontecou · June 13, 2026 · Updated October 26, 2026</p>
+      <dl class="meta-strip" aria-label="Article metadata">
+        <div><dt>Published</dt><dd>June 13, 2026</dd></div>
+        <div><dt>Updated</dt><dd>October 26, 2026</dd></div>
+        <div><dt>Reading Time</dt><dd>6 minutes</dd></div>
+        <div><dt>Focus</dt><dd>Private iPhone dictation</dd></div>
+      </dl>
+      <div class="lead-grid" aria-label="Quick criteria">
       <div class="lead-card"><strong>Supported text fields</strong><span>Dictate where the host app allows custom keyboards. Secure fields and some apps use the system keyboard.</span></div>
       <div class="lead-card"><strong>Transparent Access</strong><span>Understand why Vox.md requires Full Access for its shared on-device app workflow.</span></div>
       <div class="lead-card"><strong>No Audio Uploads</strong><span>Prefer local transcription so microphone audio is processed on your iPhone.</span></div>
-      <div class="lead-card"><strong>Local History</strong><span>Keep a local record of transcripts you can review, copy, or delete.</span></div>
-    </div>
-  </div>
-</section>
-
-<main>
-  <article>
-    <div class="article-container article-body">
-      <nav class="toc" aria-label="Table of contents">
-        <div class="toc-title">In This Guide</div>
-        <ol>
-          <li><a href="#short-answer">Short Answer</a></li>
-          <li><a href="#what-matters">What Matters in an iPhone Voice Keyboard</a></li>
-          <li><a href="#voxboard-workflow">How Vox.md Handles Private Dictation</a></li>
-          <li><a href="#use-cases">Best Use Cases</a></li>
-          <li><a href="#choose">How to Choose</a></li>
-        </ol>
-      </nav>
+      <div class="lead-card"><strong>Local Library</strong><span>Keep a local record of transcripts you can review, copy, or delete.</span></div>
+      </div>
+    </header>
+    <div class="article-body">
 
       <p>If you are searching for the <strong>best voice-to-text keyboard for iPhone</strong>, you probably want something more specific than a generic notes recorder. You want to speak into the exact text field you are editing: a Safari form, a message thread, an email draft, a note, a search box, or a team chat.</p>
 
       <p>That distinction matters. A voice memo app records audio. A transcription app creates a document you copy from later. A voice-to-text keyboard should behave like a keyboard: open the text field, switch keyboards, tap the microphone, speak, and insert the text where your cursor already is.</p>
 
       <div class="answer-box" id="short-answer">
-        <div class="label">Short Answer</div>
+        <div class="label">Short answer</div>
         <p><strong>Vox.md is built for people who want private iPhone dictation in every app.</strong> It adds a microphone keyboard to iOS, uses on-device transcription after setup, explains the required Full Access setting, and keeps transcripts in local history instead of sending your spoken text to a server.</p>
       </div>
 
@@ -173,11 +136,11 @@
         <div class="screenshot-note">
           <div class="num">Quick Capture · Voice</div>
           <h3 id="main-screenshot-title">Record from the capture composer</h3>
-          <p>The main Vox.md app opens to Quick Capture, where you can type, add attachments, or record a voice note. The keyboard inserts dictated text into another app’s active field. To save directly to a Markdown destination, use a Capture Preset in the main app.</p>
+          <p>The main Vox.md app opens to Quick Capture, where you can type, add attachments, or record a voice note. The keyboard inserts dictated text into another app’s active field. To save directly to a Markdown destination, use a Route in the main app.</p>
         </div>
       </section>
 
-      <h2 id="what-matters">What Matters in an iPhone Voice-to-Text Keyboard?</h2>
+      <h2 id="what-matters">What matters in an iPhone voice-to-text keyboard?</h2>
 
       <p>There are plenty of ways to dictate on an iPhone, including Apple's built-in keyboard microphone. But when you are choosing a dedicated voice-to-text keyboard, the important criteria are practical and privacy-specific.</p>
 
@@ -206,7 +169,7 @@
 
       <p>The key tradeoff is not simply "voice-to-text versus typing." The real question is whether you want a cloud-connected assistant, Apple's default system dictation, or a local keyboard workflow designed around private text entry.</p>
 
-      <table class="comparison">
+      <div class="table-card"><table class="comparison">
         <thead>
           <tr>
             <th>Option</th>
@@ -231,7 +194,7 @@
             <td>Requires installing and enabling a custom keyboard, plus local model setup for on-device transcription.</td>
           </tr>
         </tbody>
-      </table>
+      </table></div>
 
       <h2 id="keyboard-setup">Set up the Vox.md keyboard</h2>
       <ol>
@@ -240,9 +203,9 @@
         <li>Open the Vox.md keyboard’s settings and enable Allow Full Access. This is required for coordination with the main app; read the explanation below before enabling it.</li>
         <li>Open a supported text field, switch to Vox.md using the keyboard selector, and follow the recording controls. Review the inserted transcript before sending.</li>
       </ol>
-      <p>The keyboard inserts text; it does not also run a Capture Preset to export a note. If you want the transcript saved directly into your vault, <a href="../voice-notes-to-obsidian-iphone/">follow the iPhone voice notes to Obsidian guide</a>. For available controls and troubleshooting, see the <a href="../../docs/#keyboard">keyboard reference</a>.</p>
+      <p>The keyboard inserts text; it does not also run a Route to export a note. If you want the transcript saved directly into your vault, <a href="../voice-notes-to-obsidian-iphone/">follow the iPhone voice notes to Obsidian guide</a>. For available controls and troubleshooting, see the <a href="../../docs/#keyboard">keyboard reference</a>.</p>
 
-      <h2 id="voxboard-workflow">How Vox.md Handles Private Dictation</h2>
+      <h2 id="voxboard-workflow">How Vox.md handles private dictation</h2>
 
       <p>Vox.md is an iOS app and keyboard extension. After installing the app, you enable the Vox.md keyboard in iOS Settings. In text fields that allow third-party keyboards, switch to Vox.md and dictate into the active field. Secure fields and apps that disable custom keyboards use the system keyboard instead. Recording coordinates with the main app, so keep Vox.md installed and complete microphone and backend setup there first.</p>
 
@@ -267,21 +230,21 @@
 
       <p>The local history view is useful for real work. If a transcript matters, you can return to it. If it does not, delete it. This is the difference between dictation as a disposable keyboard action and dictation as a recoverable writing workflow.</p>
 
-      <h2 id="use-cases">Best iPhone Voice-to-Text Keyboard Use Cases</h2>
+      <h2 id="use-cases">Best iPhone voice-to-text keyboard use cases</h2>
 
-      <h3>Messages and Short Replies</h3>
+      <h3>Messages and short replies</h3>
       <p>When a reply is too long to thumb-type but too casual for a full recording workflow, a keyboard-based dictation app is the fastest path. Open the thread, switch to Vox.md, speak, and send after reviewing the text.</p>
 
-      <h3>Safari Forms and Search Boxes</h3>
+      <h3>Safari forms and search boxes</h3>
       <p>Most transcription apps are awkward for web forms because they put the transcript somewhere else. Vox.md's keyboard approach is meant for the active field: search queries, support forms, product feedback, account notes, and any browser text box.</p>
 
-      <h3>Notes, Drafts, and Outlines</h3>
+      <h3>Notes, drafts, and outlines</h3>
       <p>Voice is excellent for first drafts. Use Vox.md when you want to capture a thought in Notes, start an email, rough out a paragraph, or leave yourself a local transcript you can clean up later.</p>
 
-      <h3>Work Chat Without a Cloud Dictation Service</h3>
+      <h3>Work chat without a cloud dictation service</h3>
       <p>For Slack, Discord, email, and project tools, privacy expectations can be higher than in a casual note. Vox.md is designed for people who prefer local transcription and do not want their raw audio uploaded just to get words into a field.</p>
 
-      <h2 id="choose">How to Choose the Best Voice-to-Text Keyboard for Your iPhone</h2>
+      <h2 id="choose">How to choose the best voice-to-text keyboard for your iPhone</h2>
 
       <p>Use Apple's built-in dictation if you want the default option and do not need a separate local history or custom keyboard workflow. Use a cloud transcription product if you need meeting notes, summaries, speaker labels, or team collaboration around long recordings.</p>
 
@@ -289,17 +252,37 @@
 
       <p>One final note: speech recognition is still machine learning. Transcription quality can vary based on model choice, microphone quality, background noise, accent, cadence, and the words being spoken. Always review important text before sending it, and do not rely on any dictation tool for critical legal, medical, safety, or emergency transcription without independent verification.</p>
 
-      <section class="cta" aria-labelledby="cta-title">
-        <h2 id="cta-title">Try Private Voice-to-Text on iPhone</h2>
+      <section class="article-cta" aria-labelledby="cta-title">
+        <h2 id="cta-title">Try private voice-to-text on iPhone</h2>
         <p>Install Vox.md, enable the keyboard and Allow Full Access, prepare an on-device backend, and start speaking into the places you already type.</p>
         <div class="button-row">
-          <a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_keyboard">Download Vox.md</a>
+          <a class="btn-primary btn-accent" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_keyboard">Download Vox.md</a>
           <a class="btn-secondary" href="../../privacy.html">Read Privacy Policy</a>
           <a class="btn-secondary" href="../../index.html#how">See How It Works</a>
         </div>
       </section>
     </div>
   </article>
+
+  <aside class="article-aside" aria-label="On this page">
+    <nav class="aside-card" aria-label="Table of contents">
+        <div class="side-nav-title">In this guide</div>
+        <ol>
+          <li><a href="#short-answer">Short answer</a></li>
+          <li><a href="#what-matters">What matters in an iPhone voice keyboard</a></li>
+          <li><a href="#keyboard-setup">Set up the Vox.md keyboard</a></li>
+          <li><a href="#voxboard-workflow">How Vox.md handles private dictation</a></li>
+          <li><a href="#use-cases">Best use cases</a></li>
+          <li><a href="#choose">How to choose</a></li>
+        </ol>
+    </nav>
+    <div class="aside-cta">
+      <strong>Get Vox.md</strong>
+      <p>Quick capture for local notes. No content uploads.</p>
+      <a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_keyboard">App Store</a>
+    </div>
+  </aside>
+</div>
 </main>
 
 <footer>
@@ -317,7 +300,7 @@
         <li><a href="mailto:codybontecou@gmail.com">Support</a></li>
         <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_keyboard">App Store</a></li>
       </ul>
-      <div class="footer-copy">© 2026 Vox.md · Quick capture for local notes · No content uploads.</div>
+      <div class="footer-copy">© 2026 Vox.md · Quick capture for local notes · No content uploads</div>
     </div>
   </div>
 </footer>

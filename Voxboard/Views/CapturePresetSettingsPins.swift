@@ -45,7 +45,7 @@ final class CapturePresetSettingsPins {
         // Read-modify-write from fresh storage, not a stale settings snapshot.
         reload()
         if pinned, profile(id: id) == nil {
-            errorMessage = String(localized: "This preset is unavailable. Reload before pinning it to the Capture Bar.")
+            errorMessage = String(localized: "This route is unavailable. Reload before pinning it to the Capture Bar.")
             return false
         }
         var ids = orderedIDs.filter { $0 != id }
@@ -78,7 +78,7 @@ final class CapturePresetSettingsPins {
     func pruneAfterPersistedDeletion(id: String) -> Bool {
         reload()
         guard let profiles, !profiles.contains(where: { $0.id == id }) else {
-            errorMessage = String(localized: "The preset deletion could not be confirmed. Its Capture Bar pin was kept.")
+            errorMessage = String(localized: "The route deletion could not be confirmed. Its Capture Bar pin was kept.")
             return false
         }
         return write(orderedIDs)
@@ -86,10 +86,10 @@ final class CapturePresetSettingsPins {
 
     var storageMessage: String? {
         if profiles == nil || preferences.state == .unavailable {
-            return String(localized: "Capture Bar storage is unavailable. Reload after your presets are available.")
+            return String(localized: "Capture Bar storage is unavailable. Reload after your routes are available.")
         }
         if preferences.state == .malformed {
-            return String(localized: "The saved Capture Bar order could not be read. Pin a preset to replace it.")
+            return String(localized: "The saved Capture Bar order could not be read. Pin a route to replace it.")
         }
         return nil
     }

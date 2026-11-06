@@ -3,3 +3,8 @@
 Normative encoding is canonical UTF-8 JSON. Required nullable fields encode absence explicitly; additive optional location fields remain omitted when inapplicable, unknown fields/kinds fail closed, and no content-bearing default is inferred. UUID/hash casing, integer/string/array bounds, order, and exact tagged variants are schema normative.
 
 This repeats every deterministic preparation fact (source, time/calendar/locale, operation, pins, complete frozen preset/destination/route/metadata/location policy, typed unavailable reason, consent-classed label observation and nullable place/city/region/country values, ordered structured location fields, and ordered payloads) and adds the correlated preparation revision/hash plus every exact observation result. No materialization or retry path may reacquire coordinates, invoke a geocoder, change lookup class, or replace a frozen unavailable label result. Candidate occupancy, template presence/stream/length/hash, existing note identity/stream/length/hash, and ordered staged assets cannot be mixed between attempts. Control JSON is at most 1 MiB; streamed input chunks are at most 1 MiB and note/template aggregate is at most 256 MiB. One ordered input, seal, and finalize are allowed; incomplete/cancelled/duplicate/out-of-order/post-terminal sessions produce no plan.
+
+The optional `preset.metadataPolicy.transcriptProperty` follows the preparation
+contract's November 2026 extension. Its quoted value replaces the matching
+document property after ordinary metadata merging. Existing-note reads, expected
+hash checks, idempotency markers, and provider-commit reconciliation still apply.

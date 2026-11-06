@@ -31,6 +31,13 @@ import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import md.vox.android.capturedomain.CaptureRouteOverride
+import md.vox.android.capturedomain.CaptureURLDeliverySettings
+import md.vox.android.capturedomain.normalizedTranscriptProperty
+import md.vox.android.capturedomain.CaptureHeadingPosition
+import md.vox.android.capturedomain.CaptureTimestampFormat
+import md.vox.android.capturedomain.CaptureRailSide
+import md.vox.android.capturedomain.CaptureAudioFilename
 import md.vox.android.capturedomain.CaptureDestination
 import md.vox.android.capturedomain.CapturePresetEmoji
 import md.vox.android.capturedomain.CaptureDraft
@@ -106,6 +113,10 @@ class AndroidCaptureRepository(
     private val bridge: CoreBridge,
     private val clock: () -> Long = System::currentTimeMillis,
     private val hasUnlimitedAccess: () -> Boolean = { false },
+    private val prepareURLDelivery: suspend (String, String, Long, CaptureURLDeliverySettings) -> Unit = { _, _, _, _ -> },
+    private val captureEnqueued: (String) -> Unit = {},
+    private val previouslyProcessedRecording: (String, String, CapturePreset) -> md.vox.android.capturedomain.CaptureTextProcessingResult? = { _, _, _ -> null },
+    private val processCaptureText: suspend (String, CapturePreset, Boolean) -> md.vox.android.capturedomain.CaptureTextProcessingResult? = { text, preset, voice -> LocalCaptureTextProcessor.process(text, preset, voice) },
     private val generateImageAltText: suspend (ByteArray, String) -> String? = { _, _ -> null },
 ) : CaptureRepository {
     private val appContext = context.applicationContext
@@ -127,6 +138,7 @@ class AndroidCaptureRepository(
     )
     private val draftAssetDirectory = File(appContext.noBackupFilesDir, "vox-draft-assets")
     private val processingAuditStore = CaptureProcessingAuditStore(File(appContext.noBackupFilesDir, "capture-processing"))
+    private val destinationBindings = CaptureDestinationBindings(File(appContext.noBackupFilesDir, "capture-vaults"))
     private val draftAttachmentMutex = Mutex()
     private val preferences: DataStore<Preferences> = PreferenceDataStoreFactory.create(
         scope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
@@ -142,7 +154,7 @@ class AndroidCaptureRepository(
         require(parsed.scheme == "content" && treeUri.toByteArray().size in 1..2_048) { "invalidDestination" }
         val existing = destinationFrom(preferences.data.first())
         val destination = CaptureDestination(
-            id = existing?.id ?: UUID.randomUUID().toString().lowercase(),
+            id = existing?.takeIf { it.treeUri == treeUri }?.id ?: UUID.randomUUID().toString().lowercase(),
             displayName = displayName.trim().ifEmpty { "Markdown folder" }.take(128),
             treeUri = treeUri,
         )
@@ -171,8 +183,10 @@ class AndroidCaptureRepository(
             captureSource = captureSource,
             attachments = present.attachments,
             originRecordingID = present.originRecordingID,
+            originRecordingCreatedAtEpochMillis = present.originRecordingCreatedAtEpochMillis,
             frozenPreset = present.frozenPreset,
             entryTemplateIDOverride = present.entryTemplateIDOverride,
+            routeOverride = present.routeOverride,
         )
         preferences.edit { values ->
             if (draft.text.isEmpty()) values.remove(draftTextKey) else values[draftTextKey] = draft.text
@@ -214,6 +228,8 @@ class AndroidCaptureRepository(
             attachments = current.attachments,
             originRecordingID = originRecordingID,
             frozenPreset = preset,
+            originRecordingCreatedAtEpochMillis = if (current.originRecordingID == originRecordingID) current.originRecordingCreatedAtEpochMillis ?: clock() else clock(),
+            routeOverride = current.routeOverride,
         )
         preferences.edit { values ->
             if (prepared.text.isEmpty()) values.remove(draftTextKey) else values[draftTextKey] = prepared.text
@@ -222,6 +238,7 @@ class AndroidCaptureRepository(
             values[draftUpdatedAtKey] = prepared.updatedAtEpochMillis
             values[draftSourceKey] = prepared.captureSource
             values[draftOriginRecordingIDKey] = originRecordingID
+            values[draftOriginRecordingAtKey] = requireNotNull(prepared.originRecordingCreatedAtEpochMillis)
             values[draftFrozenPresetKey] = encodePresets(listOf(preset))
         }
         if (!recordingAudioArtifactPolicy(preset).retainsSourceAudio) {
@@ -233,6 +250,7 @@ class AndroidCaptureRepository(
                 audioDisplayName ?: "Recording.wav",
                 "audio/wav",
                 includeInMarkdown = preset.embedAudioInMarkdown,
+                isRecordingSource = true,
             )
         }
     }
@@ -242,6 +260,7 @@ class AndroidCaptureRepository(
         displayName: String?,
         mediaType: String?,
         includeInMarkdown: Boolean,
+        isRecordingSource: Boolean = false,
     ): CaptureDraft = withContext(Dispatchers.IO) {
         draftAttachmentMutex.withLock {
         val uri = Uri.parse(contentUri)
@@ -304,6 +323,7 @@ class AndroidCaptureRepository(
                 byteCount = byteCount,
                 sha256 = digest.digest().joinToString("") { "%02x".format(it) },
                 includeInMarkdown = includeInMarkdown,
+                isRecordingSource = isRecordingSource,
             )
             val updated = current.attachments + attachment
             val updatedAt = clock()
@@ -360,6 +380,17 @@ class AndroidCaptureRepository(
 
     override suspend fun capturePresets(): CapturePresetCollection = withContext(Dispatchers.IO) {
         presetCollectionFrom(preferences.data.first())
+    }
+
+    override suspend fun selectCapturePresetForDraft(presetID: String): CapturePresetCollection = withContext(Dispatchers.IO) {
+        val current = presetCollectionFrom(preferences.data.first())
+        val target = current.presets.firstOrNull { it.id == presetID && it.isEnabled } ?: error("unknownOrDisabledPreset")
+        preferences.edit { values ->
+            values[activePresetIDKey] = target.id
+            if (values[draftFrozenPresetKey] != null) values[draftFrozenPresetKey] = encodePresets(listOf(target))
+            values.remove(draftRouteKey); values.remove(draftEntryTemplateIDKey)
+        }
+        current.copy(activePresetID = target.id)
     }
 
     override suspend fun selectCapturePreset(presetID: String): CapturePresetCollection = withContext(Dispatchers.IO) {
@@ -463,6 +494,24 @@ class AndroidCaptureRepository(
         draftFrom(values).copy(entryTemplateIDOverride = templateID)
     }
 
+    override suspend fun setDraftRouteOverride(route: CaptureRouteOverride?): CaptureDraft = withContext(Dispatchers.IO) {
+        route?.validated()
+        preferences.edit {
+            if (route == null) it.remove(draftRouteKey) else it[draftRouteKey] = buildJsonObject {
+                route.relativeNotePath?.let { path -> put("note", path) }
+                route.placement?.let { placement -> put("placement", placement.name) }
+            }.toString()
+        }
+        draftFrom(preferences.data.first())
+    }
+
+    override suspend fun hasDurableCapture(requestID: String): Boolean = withContext(Dispatchers.IO) {
+        UUID_PATTERN.matches(requestID) && (
+            database.captureCoordinationDao().readTombstone(requestID) != null ||
+                (store.loadJournal(requestID) != null && database.captureCoordinationDao().readReservation(requestID) != null)
+            )
+    }
+
     override suspend fun submit(
         text: String,
         url: String?,
@@ -519,6 +568,7 @@ class AndroidCaptureRepository(
             url = url,
             updatedAtEpochMillis = clock(),
             captureSource = captureSource,
+            originRecordingCreatedAtEpochMillis = clock(),
             attachments = preparedAssets.map(PreparedRecordingAsset::attachment),
             originRecordingID = originRecordingID,
             frozenPreset = preset,
@@ -543,7 +593,6 @@ class AndroidCaptureRepository(
             if (clearPersistedDraft) clearDraftOnWorker()
             return CaptureSubmitResult.Delivered(requestID)
         }
-        val destination = currentDestinationOnWorker() ?: return CaptureSubmitResult.DestinationRequired
         val normalizedText = draft.text.trimEnd()
         val normalizedURL = draft.url?.trim()?.takeIf(String::isNotEmpty)
         if (normalizedText.length > MAX_TEXT_CHARACTERS) {
@@ -557,18 +606,20 @@ class AndroidCaptureRepository(
         }
 
         val currentPreferences = preferences.data.first()
-        val selectedPreset = (draft.frozenPreset ?: presetCollectionFrom(currentPreferences).activePreset)
+        val basePreset = (draft.frozenPreset ?: presetCollectionFrom(currentPreferences).activePreset)
             .resolvingEntryTemplate(entryTemplatesFrom(currentPreferences), draft.entryTemplateIDOverride)
+        val selectedPreset = draft.routeOverride?.applyTo(basePreset) ?: basePreset
+        val destination = selectedPreset.destination ?: destinationFrom(currentPreferences)
+            ?: return CaptureSubmitResult.DestinationRequired
+        // Persist the native capability before the request that references it. Never rebind an ID.
+        destinationBindings.save(destination)
         val preset = if (draft.originRecordingID != null) {
             val audioPolicy = recordingAudioArtifactPolicy(selectedPreset)
             selectedPreset.copy(attachmentsFolder = audioPolicy.artifactFolder)
         } else selectedPreset
         val captureSource = draft.captureSource
-        val processingResult = LocalCaptureTextProcessor.process(
-            originalText = normalizedText,
-            preset = preset,
-            isVoiceCapture = draft.originRecordingID != null,
-        )
+        val processingResult = draft.originRecordingID?.let { previouslyProcessedRecording(it, normalizedText, preset) }
+            ?: processCaptureText(normalizedText, preset, draft.originRecordingID != null)
         if (processingResult != null && !processingAuditStore.save(
                 requestID = requestID,
                 createdAtEpochMillis = clock(),
@@ -588,6 +639,24 @@ class AndroidCaptureRepository(
             processingAuditStore.delete(requestID)
             return CaptureSubmitResult.InvalidInput("One or more attachments are no longer available. Remove them and add them again.")
         }
+        val deliveryAttachments = if (draft.originRecordingID != null && preset.audioFilenameTemplate.isNotBlank()) {
+            val gateway = AndroidSafDocumentsGateway(appContext)
+            val folder = gateway.resolveFolder(VaultDestination(destination.id, destination.treeUri),
+                preset.attachmentsFolder.split('/').filter(String::isNotBlank), createMissing = false)
+            val occupied = folder?.let { gateway.listChildDisplayNames(it) ?: error("audioFilenameObservation") }.orEmpty().toMutableSet()
+            draft.attachments.map { attachment ->
+                if (!attachment.isRecordingSource) attachment else {
+                    val desired = CaptureAudioFilename.render(preset.audioFilenameTemplate, requireNotNull(draft.originRecordingID),
+                        draft.originRecordingCreatedAtEpochMillis ?: draft.updatedAtEpochMillis, preset.name, attachment.displayName, "wav")!!
+                    var target = desired
+                    if (target in occupied) target = desired.substringBeforeLast('.') + "-${attachment.id.take(8)}.wav"
+                    require(target !in occupied) { "audioFilenameCollision" }
+                    occupied.add(target)
+                    attachment.copy(displayName = target, vaultFileName = target)
+                }
+            }
+        } else draft.attachments
+        val deliveryAssets = packagedAssets.zip(deliveryAttachments).map { (asset, attachment) -> asset.copy(fileName = attachment.vaultFileName) }
         val imageDescriptions = if (preset.generateImageAltText) {
             draft.attachments.zip(packagedAssets).associate { (attachment, asset) ->
                 attachment.id to if (attachment.isImage) {
@@ -595,9 +664,11 @@ class AndroidCaptureRepository(
                 } else null
             }
         } else emptyMap()
+        val processedText = processingResult?.processedText ?: normalizedText
+        val propertyName = if (draft.originRecordingID != null) normalizedTranscriptProperty(preset.transcriptPropertyName) else null
         val requestText = composeCaptureRequestText(
-            body = processingResult?.processedText ?: normalizedText,
-            attachments = draft.attachments,
+            body = if (propertyName != null && !preset.includeTranscriptInBody) "" else processedText,
+            attachments = deliveryAttachments,
             preset = preset,
             imageDescriptions = imageDescriptions,
         )
@@ -614,9 +685,16 @@ class AndroidCaptureRepository(
             captureSource,
             locationOutcome,
             draft.originRecordingID,
-            draft.attachments,
+            deliveryAttachments,
+            destination.id,
+            propertyName?.let { CaptureMetadataField(it, processedText) },
         )
-        when (val enqueued = store.enqueue(requestBytes, clock(), packagedAssets)) {
+        try {
+            prepareURLDelivery(requestID, listOfNotNull(processedText.takeIf(String::isNotEmpty), normalizedURL).joinToString("\n\n"), clock(), preset.urlDelivery)
+        } catch (_: Exception) {
+            return CaptureSubmitResult.SavedForRetry(requestID, "urlDeliveryPreparation", durablySaved = false)
+        }
+        when (val enqueued = store.enqueue(requestBytes, clock(), deliveryAssets)) {
             is EnqueueResult.SavedLocally -> Unit
             is EnqueueResult.CorrelationConflict -> {
                 processingAuditStore.delete(requestID)
@@ -649,7 +727,9 @@ class AndroidCaptureRepository(
             QuotaReservationResult.LimitReached -> return CaptureSubmitResult.LimitReached(requestID)
             QuotaReservationResult.InvalidInput -> return CaptureSubmitResult.SavedForRetry(requestID, "quotaReservation")
         }
-        return drive(requestID, destination)
+        runCatching { captureEnqueued(requestID) }
+        val delivered = drive(requestID, destination)
+        return if (delivered is CaptureSubmitResult.Delivered) delivered.copy(processingOutcome = processingResult?.outcome) else delivered
     }
 
     override suspend fun retry(requestID: String): CaptureSubmitResult = withContext(Dispatchers.IO) {
@@ -737,7 +817,6 @@ class AndroidCaptureRepository(
 
     private suspend fun retryOnWorker(requestID: String): CaptureSubmitResult {
         if (completions.read(requestID) != null) return CaptureSubmitResult.Delivered(requestID)
-        val destination = currentDestinationOnWorker() ?: return CaptureSubmitResult.DestinationRequired
         val snapshot = store.loadJournal(requestID) ?: return CaptureSubmitResult.InvalidInput("Capture is no longer available.")
         if (snapshot.state == CaptureState.COMPLETED) {
             compactCompletedPackage(requestID)
@@ -746,6 +825,12 @@ class AndroidCaptureRepository(
         val admitted = store.loadRequestBytes(requestID)?.let { bytes ->
             runCatching { CapturePackageCodec.decodeHistoricalRequest(bytes) }.getOrNull()
         } ?: return CaptureSubmitResult.SavedForRetry(requestID, "requestUnavailable")
+        val pinnedReference = store.loadRequestBytes(requestID)?.let { bytes ->
+            CapturePackageCodec.parseCanonical(bytes)["preset"]!!.jsonObject["destinationPolicy"]!!.jsonObject["capabilityReference"]!!.jsonPrimitive.content
+        } ?: return CaptureSubmitResult.SavedForRetry(requestID, "requestUnavailable")
+        val destination = if (pinnedReference == "synthetic-vault-capability") currentDestinationOnWorker()
+            else destinationBindings.load(pinnedReference)
+        if (destination == null) return CaptureSubmitResult.NeedsPermission(requestID)
         quota.initializeInstallation(UUID.randomUUID().toString().lowercase(), clock())
         when (val result = quota.reserve(
             requestID,
@@ -761,6 +846,7 @@ class AndroidCaptureRepository(
             QuotaReservationResult.LimitReached -> return CaptureSubmitResult.LimitReached(requestID)
             QuotaReservationResult.InvalidInput -> return CaptureSubmitResult.SavedForRetry(requestID, "quotaReservation")
         }
+        runCatching { captureEnqueued(requestID) }
         return drive(requestID, destination)
     }
 
@@ -968,7 +1054,9 @@ class AndroidCaptureRepository(
         return runCatching {
             val request = CapturePackageCodec.parseCanonical(requestBytes)
             val payloads = request.getValue("payloads").jsonArray.map { it.jsonObject }
-            val text = payloads.filter { it.getValue("kind").jsonPrimitive.content == "text" }
+            val mappedTranscript = request.getValue("preset").jsonObject.getValue("metadataPolicy").jsonObject["transcriptProperty"]
+                ?.jsonObject?.get("value")?.jsonPrimitive?.content
+            val text = mappedTranscript ?: payloads.filter { it.getValue("kind").jsonPrimitive.content == "text" }
                 .joinToString("\n\n") { it.getValue("text").jsonPrimitive.content }
             val url = payloads.firstOrNull { it.getValue("kind").jsonPrimitive.content == "link" }
                 ?.get("url")?.jsonPrimitive?.content
@@ -1034,6 +1122,7 @@ class AndroidCaptureRepository(
                 logicalPath = detail?.logicalPath,
                 captureSource = detail?.captureSource ?: "app",
                 attachmentCount = detail?.attachments?.size ?: 0,
+                presetID = detail?.presetID,
             )
         }
         val tombstoneRows = completionRows.map { completion ->
@@ -1057,7 +1146,14 @@ class AndroidCaptureRepository(
         captureSource = values[draftSourceKey]?.takeIf(CAPTURE_SOURCES::contains) ?: "app",
         attachments = draftAttachmentsFrom(values),
         originRecordingID = values[draftOriginRecordingIDKey]?.takeIf(UUID_PATTERN::matches),
+        originRecordingCreatedAtEpochMillis = values[draftOriginRecordingAtKey],
         frozenPreset = values[draftFrozenPresetKey]?.let(::decodePresets)?.singleOrNull(),
+        routeOverride = values[draftRouteKey]?.let { raw ->
+            runCatching {
+                val value = Json.parseToJsonElement(raw).jsonObject
+                CaptureRouteOverride(value["note"]?.jsonPrimitive?.content, value["placement"]?.jsonPrimitive?.content?.let(CapturePlacementKind::valueOf)).validated()
+            }.getOrThrow()
+        },
         entryTemplateIDOverride = values[draftEntryTemplateIDKey]
             ?.takeIf(PRESET_UUID_PATTERN::matches)
             ?.takeIf { id -> entryTemplatesFrom(values).any { it.id == id } },
@@ -1069,9 +1165,11 @@ class AndroidCaptureRepository(
             values.remove(draftURLKey)
             values.remove(draftSourceKey)
             values.remove(draftOriginRecordingIDKey)
+            values.remove(draftOriginRecordingAtKey)
             values.remove(draftFrozenPresetKey)
             values.remove(draftAttachmentsKey)
             values.remove(draftEntryTemplateIDKey)
+            values.remove(draftRouteKey)
             values[draftUpdatedAtKey] = clock()
         }
         if (draftAssetDirectory.exists()) draftAssetDirectory.deleteRecursively()
@@ -1150,6 +1248,20 @@ class AndroidCaptureRepository(
         put("attachmentsFolder", preset.attachmentsFolder)
         put("audioEmbedPlacement", preset.audioEmbedPlacement.name)
         put("audioSaveMode", preset.audioSaveMode.name)
+        put("audioFilenameTemplate", preset.audioFilenameTemplate)
+        preset.destination?.let { destination ->
+            put("captureDestination", buildJsonObject {
+                put("id", destination.id); put("name", destination.displayName); put("tree", destination.treeUri)
+            })
+        }
+        put("transcriptPropertyName", preset.transcriptPropertyName)
+        put("includeTranscriptInBody", preset.includeTranscriptInBody)
+        put("urlDelivery", buildJsonObject {
+            put("enabled", preset.urlDelivery.enabled)
+            put("credentialID", preset.urlDelivery.credentialID?.let(::JsonPrimitive) ?: JsonNull)
+            put("origin", preset.urlDelivery.origin)
+            put("maxAttempts", preset.urlDelivery.maxAttempts)
+        })
         put("capturePrompt", preset.capturePrompt)
         put("customProcessingInstruction", preset.customProcessingInstruction)
         put("embedAudioInMarkdown", preset.embedAudioInMarkdown)
@@ -1178,6 +1290,7 @@ class AndroidCaptureRepository(
         })
         put("generateImageAltText", preset.generateImageAltText)
         put("headingLevel", preset.headingLevel)
+        put("headingPosition", preset.headingPosition.name)
         put("headingTitle", preset.headingTitle)
         put("id", preset.id)
         put("isEnabled", preset.isEnabled)
@@ -1234,6 +1347,14 @@ class AndroidCaptureRepository(
                 CapturePreset(
                     id = preset.getValue("id").jsonPrimitive.content,
                     name = preset.getValue("name").jsonPrimitive.content,
+                    destination = (preset["captureDestination"] as? JsonObject)?.let {
+                        CaptureDestination(it.getValue("id").jsonPrimitive.content, it.getValue("name").jsonPrimitive.content, it.getValue("tree").jsonPrimitive.content)
+                    },
+                    transcriptPropertyName = preset.stringOr("transcriptPropertyName", ""),
+                    includeTranscriptInBody = preset.booleanOr("includeTranscriptInBody", true),
+                    urlDelivery = (preset["urlDelivery"] as? JsonObject)?.let {
+                        CaptureURLDeliverySettings(it.booleanOr("enabled", false), it.nullableString("credentialID"), it.stringOr("origin", ""), it.intOr("maxAttempts", 5))
+                    } ?: CaptureURLDeliverySettings(),
                     symbol = preset.getValue("symbol").jsonPrimitive.content,
                     emoji = CapturePresetEmoji.normalized(preset["emoji"]?.jsonPrimitive?.contentOrNull),
                     revision = preset.getValue("revision").jsonPrimitive.intOrNull ?: error("presetRevision"),
@@ -1254,6 +1375,7 @@ class AndroidCaptureRepository(
                     placement = preset.enumOr("placement", CapturePlacementKind.APPEND),
                     headingTitle = preset.stringOr("headingTitle", ""),
                     headingLevel = preset.intOr("headingLevel", 1),
+                    headingPosition = preset.enumOr("headingPosition", CaptureHeadingPosition.TOP),
                     missingHeadingBehavior = preset.enumOr("missingHeadingBehavior", CaptureMissingHeadingBehavior.FAIL),
                     entryPrefix = preset.stringOr("entryPrefix", ""),
                     entrySuffix = preset.stringOr("entrySuffix", ""),
@@ -1290,6 +1412,7 @@ class AndroidCaptureRepository(
                         labelConsentVersion = location?.get("labelConsentVersion")?.jsonPrimitive?.intOrNull,
                     ),
                     audioSaveMode = preset.enumOr("audioSaveMode", CaptureAudioSaveMode.OFF),
+                    audioFilenameTemplate = preset.stringOr("audioFilenameTemplate", ""),
                     embedAudioInMarkdown = preset.booleanOr("embedAudioInMarkdown", false),
                     audioEmbedPlacement = preset.enumOr("audioEmbedPlacement", CaptureAudioEmbedPlacement.AFTER_TEXT),
                     watchOutputMode = preset.enumOr("watchOutputMode", CaptureWatchOutputMode.TRANSCRIBE_AND_CAPTURE),
@@ -1325,6 +1448,12 @@ class AndroidCaptureRepository(
     }.getOrDefault(emptyList())
 
     private fun normalizePreset(preset: CapturePreset): CapturePreset {
+        require(preset.transcriptPropertyName.isBlank() || normalizedTranscriptProperty(preset.transcriptPropertyName) != null) { "invalidTranscriptProperty" }
+        preset.destination?.let {
+            require(PRESET_UUID_PATTERN.matches(it.id) && it.displayName.length <= 128 && it.treeUri.length <= 2_048 && Uri.parse(it.treeUri).scheme == "content") { "invalidDestination" }
+        }
+        require(preset.urlDelivery.maxAttempts in 1..10) { "invalidURLAttempts" }
+        require(!preset.urlDelivery.enabled || preset.urlDelivery.credentialID?.let(PRESET_UUID_PATTERN::matches) == true) { "urlCredentialsRequired" }
         require(PRESET_UUID_PATTERN.matches(preset.id)) { "invalidPresetID" }
         val name = preset.name.trim()
         require(name.length in 1..64) { "invalidPresetName" }
@@ -1360,6 +1489,7 @@ class AndroidCaptureRepository(
         if (preset.placement == CapturePlacementKind.BENEATH_HEADING) {
             require(preset.headingTitle.trim().isNotEmpty() && preset.headingTitle.length <= 256) { "invalidHeadingTitle" }
         }
+        require(preset.audioFilenameTemplate.length <= 1_024) { "invalidAudioFilenameTemplate" }
         require(preset.entryPrefix.length <= 16_384 && preset.entrySuffix.length <= 16_384) { "entryFormattingLimit" }
         require(preset.entryTemplateID?.let(PRESET_UUID_PATTERN::matches) != false) { "invalidEntryTemplateID" }
         val attachmentSegments = preset.attachmentsFolder.split('/').map(String::trim).filter(String::isNotEmpty)
@@ -1490,6 +1620,7 @@ class AndroidCaptureRepository(
             byteCount = bytes.size.toLong(),
             sha256 = sha256,
             includeInMarkdown = includeInMarkdown,
+                isRecordingSource = true,
         )
         return PreparedRecordingAsset(
             attachment,
@@ -1523,6 +1654,7 @@ class AndroidCaptureRepository(
                     put("sha256", attachment.sha256)
                     put("vaultFileName", attachment.vaultFileName)
                     put("includeInMarkdown", attachment.includeInMarkdown)
+                    put("isRecordingSource", attachment.isRecordingSource)
                 }
             }))
             put("version", 2)
@@ -1542,6 +1674,7 @@ class AndroidCaptureRepository(
                 byteCount = asset.getValue("byteCount").jsonPrimitive.content.toLong().also { require(it in 1..MAX_DRAFT_ATTACHMENT_BYTES) },
                 sha256 = asset.getValue("sha256").jsonPrimitive.content.also { require(SHA_PATTERN.matches(it)) },
                 includeInMarkdown = asset.booleanOr("includeInMarkdown", true),
+                isRecordingSource = asset.booleanOr("isRecordingSource", false),
             )
         }.distinctBy(CaptureAttachment::id)
     }.getOrDefault(emptyList())
@@ -1577,9 +1710,11 @@ class AndroidCaptureRepository(
         locationOutcome: CaptureLocationOutcome,
         originRecordingID: String?,
         attachments: List<CaptureAttachment>,
+        destinationReference: String,
+        transcriptProperty: CaptureMetadataField?,
     ): ByteArray {
         val payloads = buildList {
-            if (text.isNotBlank()) add(buildJsonObject {
+            if (text.isNotBlank() || transcriptProperty != null) add(buildJsonObject {
                 put("id", UUID.randomUUID().toString().lowercase())
                 put("kind", "text")
                 put("text", text)
@@ -1592,7 +1727,7 @@ class AndroidCaptureRepository(
             })
             addAll(captureAssetPayloads(attachments))
         }
-        val presetWithoutHash = presetSnapshot(preset, ZERO_SHA)
+        val presetWithoutHash = presetSnapshot(preset, ZERO_SHA, destinationReference, transcriptProperty)
         val presetHash = CapturePackageCodec.sha256(CapturePackageCodec.canonical(presetWithoutHash))
         return CapturePackageCodec.canonical(buildJsonObject {
             put("calendar", "gregorian")
@@ -1660,21 +1795,25 @@ class AndroidCaptureRepository(
                 put("profileVersion", 1)
                 put("rendererRevision", RENDERER_REVISION)
             })
-            put("preset", presetSnapshot(preset, presetHash))
+            put("preset", presetSnapshot(preset, presetHash, destinationReference, transcriptProperty))
             put("requestID", requestID)
             put("timezone", TimeZone.getDefault().id.ifBlank { "UTC" })
         })
     }
 
-    private fun presetSnapshot(preset: CapturePreset, snapshotHash: String): JsonObject = buildJsonObject {
+    private fun presetSnapshot(preset: CapturePreset, snapshotHash: String, destinationReference: String, transcriptProperty: CaptureMetadataField?): JsonObject = buildJsonObject {
         put("destinationPolicy", buildJsonObject {
             put("capabilityClass", "userVault")
-            put("capabilityReference", "synthetic-vault-capability")
+            put("capabilityReference", destinationReference)
             put("expectedCaseSensitivity", "sensitive")
         })
         put("id", preset.id)
         put("locationPolicy", captureLocationPolicyFor(preset.locationPolicy))
-        put("metadataPolicy", captureMetadataPolicyFor(preset))
+        put("metadataPolicy", JsonObject(captureMetadataPolicyFor(preset).toMutableMap().apply {
+            transcriptProperty?.let { property -> put("transcriptProperty", buildJsonObject {
+                put("name", property.name); put("value", property.value)
+            }) }
+        }))
         put("retryMarkerPolicy", captureRetryMarkerPolicyFor(preset))
         put("revision", preset.revision)
         put("routePolicy", captureRoutePolicyFor(preset))
@@ -1691,10 +1830,12 @@ class AndroidCaptureRepository(
         val destinationIDKey = stringPreferencesKey("capture.destination.id")
         val destinationNameKey = stringPreferencesKey("capture.destination.name")
         val destinationTreeKey = stringPreferencesKey("capture.destination.tree")
+        val draftRouteKey = stringPreferencesKey("capture.draft.route.v1")
         val draftTextKey = stringPreferencesKey("capture.draft.text")
         val draftURLKey = stringPreferencesKey("capture.draft.url")
         val draftUpdatedAtKey = longPreferencesKey("capture.draft.updated-at")
         val draftSourceKey = stringPreferencesKey("capture.draft.capture-source")
+        val draftOriginRecordingAtKey = longPreferencesKey("capture.draft.origin-recording-created-at")
         val draftOriginRecordingIDKey = stringPreferencesKey("capture.draft.origin-recording-id")
         val draftFrozenPresetKey = stringPreferencesKey("capture.draft.frozen-preset.v1")
         val draftEntryTemplateIDKey = stringPreferencesKey("capture.draft.entry-template-id")
@@ -1766,6 +1907,20 @@ internal fun encodeCaptureBarConfiguration(configuration: CaptureBarConfiguratio
         put("confirmVoiceNoteBeforeAdding", configuration.confirmsVoiceNotesBeforeAdding)
         put("voiceRecordingResult", configuration.voiceRecordingResult.persistedName)
         put("twentyFourHour", configuration.usesTwentyFourHourTimestamps)
+        put("timestampFormat", configuration.timestampFormat.wireName)
+        put("railSide", configuration.railSide.name)
+        // Optional and additive: omitted when no route has its own pins, so existing
+        // payloads encode byte-for-byte as before and older readers ignore it.
+        if (configuration.routePins.isNotEmpty()) {
+            put(
+                "routePins",
+                buildJsonObject {
+                    configuration.routePins.toSortedMap().forEach { (routeID, pins) ->
+                        put(routeID, JsonArray(pins.map { JsonPrimitive(it.persistedName) }))
+                    }
+                },
+            )
+        }
         put("version", 1)
     },
 ).toString(StandardCharsets.UTF_8)
@@ -1777,11 +1932,20 @@ internal fun decodeCaptureBarConfiguration(value: String): CaptureBarConfigurati
     CaptureBarConfiguration(
         orderedActions = root.getValue("order").jsonArray.mapNotNull { byName[it.jsonPrimitive.content] },
         hiddenActions = root.getValue("hidden").jsonArray.mapNotNull { byName[it.jsonPrimitive.content] }.toSet(),
-        usesTwentyFourHourTimestamps = root["twentyFourHour"]?.jsonPrimitive?.booleanOrNull ?: false,
+        usesTwentyFourHourTimestamps = root["timestampFormat"]?.jsonPrimitive?.contentOrNull?.let {
+            CaptureTimestampFormat.fromWireName(it) == CaptureTimestampFormat.TWENTY_FOUR_HOUR
+        } ?: (root["twentyFourHour"]?.jsonPrimitive?.booleanOrNull ?: false),
+        railSide = root["railSide"]?.jsonPrimitive?.contentOrNull?.let { raw -> CaptureRailSide.entries.firstOrNull { it.name == raw } } ?: CaptureRailSide.LEFT,
         confirmsVoiceNotesBeforeAdding = root["confirmVoiceNoteBeforeAdding"]?.jsonPrimitive?.booleanOrNull ?: false,
         voiceRecordingResult = VoiceRecordingResult.fromPersistedName(
             root["voiceRecordingResult"]?.jsonPrimitive?.contentOrNull,
         ),
+        // Tolerant: a missing or malformed map means "no per-route pins", never a reset.
+        routePins = runCatching {
+            root["routePins"]?.jsonObject?.mapValues { (_, pins) ->
+                pins.jsonArray.mapNotNull { byName[it.jsonPrimitive.content] }
+            }
+        }.getOrNull().orEmpty(),
     ).normalized()
 }.getOrDefault(CaptureBarConfiguration())
 
@@ -1879,7 +2043,9 @@ internal fun captureRoutePolicyFor(preset: CapturePreset): JsonObject = buildJso
     if (preset.placement == CapturePlacementKind.BENEATH_HEADING && preset.noteTargetKind != CaptureNoteTargetKind.NEW_NOTE) {
         put("headingTitle", preset.headingTitle)
         put("headingLevel", preset.headingLevel)
+        put("headingPosition", preset.headingPosition.name)
         put("missingHeadingBehavior", preset.missingHeadingBehavior.name.lowercase())
+        if (preset.headingPosition == CaptureHeadingPosition.BOTTOM) put("headingPosition", "bottom")
     }
     put("logicalFolder", JsonArray(routeFolder.map(::JsonPrimitive)))
     put("noteNameTemplate", routeName)

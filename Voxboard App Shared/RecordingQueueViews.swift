@@ -77,13 +77,13 @@ private struct RecordingQueuePreferencesView: View {
 
                     if retentionMode == .timed {
                         Stepper(value: $timedRetentionDays, in: 1...365) {
-                            Text("Keep for \(timedRetentionDays) day\(timedRetentionDays == 1 ? "" : "s")")
+                            Text("Keep for \(timedRetentionDays) days")
                                 .font(Geist.label())
                                 .foregroundStyle(Geist.text)
                         }
                         .tint(Geist.focus)
                         .accessibilityLabel("Original Audio Retention")
-                        .accessibilityValue("\(timedRetentionDays) day\(timedRetentionDays == 1 ? "" : "s")")
+                        .accessibilityValue("\(timedRetentionDays) days")
                     }
                 }
             }
@@ -248,39 +248,48 @@ struct RecordingQueueView: View {
         self.retryCoordinator = retryOverride.map(RecordingQueueRetryCoordinator.init(action:))
     }
 
+    @State private var filter: ActivitySignalFilter = .all
+
     var body: some View {
         ZStack {
-            Geist.surface2.ignoresSafeArea()
+            Geist.bg.ignoresSafeArea()
 
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: Geist.Spacing.eight) {
-                    RecordingQueuePreferencesView()
+                LazyVStack(alignment: .leading, spacing: 10) {
+                    if queue.actionableJobs.isEmpty {
+                        emptyQueueView
+                    } else {
+                        filterControl
+                            .padding(.bottom, 6)
 
-                    VStack(alignment: .leading, spacing: Geist.Spacing.four) {
-                        queueSectionHeader
+                        if visibleOpenJobs.isEmpty && visibleCompletedJobs.isEmpty {
+                            filteredEmptyView
+                        }
 
-                        if queue.actionableJobs.isEmpty {
-                            emptyQueueView
-                        } else {
-                            ForEach(queue.actionableJobs) { job in
-                                RecordingQueueRow(
-                                    job: job,
-                                    queue: queue,
-                                    retryCoordinator: retryCoordinator,
-                                    recoveryPresets: recoveryPresets
-                                )
-                                .geistCard(padding: Geist.Spacing.four)
+                        ForEach(visibleOpenJobs) { job in
+                            queueRow(job)
+                        }
+
+                        if !visibleCompletedJobs.isEmpty {
+                            GeistSectionLabel(number: "", title: "Done")
+                                .padding(.horizontal, 4)
+                                .padding(.top, 10)
+                            ForEach(visibleCompletedJobs) { job in
+                                queueRow(job)
                             }
                         }
                     }
+
+                    RecordingQueuePreferencesView()
+                        .padding(.top, 14)
                 }
                 .frame(maxWidth: 1_200)
                 .padding(.horizontal, Geist.Spacing.four)
-                .padding(.vertical, Geist.Spacing.six)
+                .padding(.vertical, Geist.Spacing.four)
                 .frame(maxWidth: .infinity)
             }
         }
-        .navigationTitle("Recording Queue")
+        .navigationTitle("Activity")
         #if !os(macOS)
         .navigationBarTitleDisplayMode(dynamicTypeSize.isAccessibilitySize ? .inline : .large)
         #endif
@@ -332,43 +341,83 @@ struct RecordingQueueView: View {
         .accessibilityIdentifier("recording-queue-runtime-actions")
         .accessibilityLabel(runtimeValidationStatus ?? "Runtime queue actions pending")
         #endif
-        .alert("Recording Queue Error", isPresented: errorPresented) {
+        .alert("Activity Error", isPresented: errorPresented) {
             Button("Dismiss Error") {}
         } message: {
             Text(queue.lastError ?? String(localized: "Unknown error"))
         }
     }
 
-    private var queueSectionHeader: some View {
-        HStack(alignment: .firstTextBaseline, spacing: Geist.Spacing.three) {
-            Text("Recordings")
-                .font(Geist.heading(.headline))
-                .foregroundStyle(Geist.text)
-            Spacer()
-            if !queue.actionableJobs.isEmpty {
-                Text("\(queue.actionableJobs.count)")
-                    .font(Geist.mono(.footnote, medium: true))
-                    .foregroundStyle(Geist.muted)
-                    .accessibilityLabel("\(queue.actionableJobs.count) recordings")
-            }
+    private func queueRow(_ job: RecordingJob) -> some View {
+        RecordingQueueRow(
+            job: job,
+            queue: queue,
+            retryCoordinator: retryCoordinator,
+            recoveryPresets: recoveryPresets
+        )
+        .activitySignalCard(needsAttention: job.phase == .failed)
+    }
+
+    private var needsAttentionJobs: [RecordingJob] {
+        queue.actionableJobs.filter { $0.phase == .failed }
+    }
+
+    private var inFlightJobs: [RecordingJob] {
+        queue.actionableJobs.filter {
+            $0.phase == .queued || $0.phase == .processing || $0.phase == .finalizing
         }
     }
 
-    private var emptyQueueView: some View {
-        VStack(alignment: .leading, spacing: Geist.Spacing.three) {
-            Image(systemName: "waveform.badge.checkmark")
-                .font(.system(size: 24, weight: .medium))
-                .foregroundStyle(Geist.muted)
-                .accessibilityHidden(true)
-            Text("No Recordings Yet")
-                .font(Geist.heading(.headline))
-                .foregroundStyle(Geist.text)
-            Text("Record audio to stage it here before transcription. Interrupted recordings return here for recovery.")
-                .font(Geist.body(.subheadline))
-                .foregroundStyle(Geist.muted)
+    /// Jobs that still need the queue: failures first (they need you), then
+    /// work in flight, matching the Signal Activity ordering.
+    private var visibleOpenJobs: [RecordingJob] {
+        switch filter {
+        case .all: return needsAttentionJobs + inFlightJobs
+        case .needsAttention: return needsAttentionJobs
+        case .inFlight: return inFlightJobs
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .geistCard(padding: Geist.Spacing.six)
+    }
+
+    private var visibleCompletedJobs: [RecordingJob] {
+        guard filter == .all else { return [] }
+        return queue.actionableJobs.filter { $0.phase == .completed }
+    }
+
+    private var filterControl: some View {
+        ActivitySignalSegmentedControl(
+            selection: $filter,
+            segments: [
+                (.all, String(localized: "All")),
+                (
+                    .needsAttention,
+                    needsAttentionJobs.isEmpty
+                        ? String(localized: "Needs you")
+                        : String(localized: "Needs you · \(needsAttentionJobs.count)")
+                ),
+                (.inFlight, String(localized: "In flight")),
+            ]
+        )
+        .accessibilityLabel("Filter recordings")
+    }
+
+    private var filteredEmptyView: some View {
+        Text(filter == .needsAttention
+             ? String(localized: "Nothing needs you right now.")
+             : String(localized: "Nothing is in flight right now."))
+            .font(Geist.body(.subheadline))
+            .foregroundStyle(Geist.muted)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.vertical, Geist.Spacing.six)
+    }
+
+    private var emptyQueueView: some View {
+        ActivitySignalEmptyState(
+            systemImage: "checkmark",
+            tint: Geist.success,
+            title: "All caught up",
+            message: "Nothing waiting. Recordings show up here while they’re queued or transcribing, and interrupted recordings return here for recovery."
+        )
+        .padding(.vertical, Geist.Spacing.eight)
     }
 
     #if DEBUG
@@ -520,111 +569,198 @@ struct RecordingQueueView: View {
     }
 }
 
+/// One recording job rendered as a Signal Activity card, with the same
+/// retry, copy, retention and delete actions as the full queue. Used by the
+/// combined iOS Activity feed.
+struct RecordingQueueJobCard: View {
+    let job: RecordingJob
+    @Bindable var queue: RecordingJobQueue
+    let recoveryPresets: [CapturePreset]
+    private let retryCoordinator: RecordingQueueRetryCoordinator?
+
+    init(
+        job: RecordingJob,
+        queue: RecordingJobQueue,
+        recoveryPresets: [CapturePreset] = [],
+        retryOverride: (@MainActor (RecordingJob, RecordingJobDelivery?) async -> Void)? = nil
+    ) {
+        self.job = job
+        self.queue = queue
+        self.recoveryPresets = recoveryPresets.filter(\.isEnabled)
+        self.retryCoordinator = retryOverride.map(RecordingQueueRetryCoordinator.init(action:))
+    }
+
+    var body: some View {
+        RecordingQueueRow(
+            job: job,
+            queue: queue,
+            retryCoordinator: retryCoordinator,
+            recoveryPresets: recoveryPresets
+        )
+        .activitySignalCard(needsAttention: job.phase == .failed)
+    }
+}
+
 private struct RecordingQueueRow: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var confirmsDelete = false
     let job: RecordingJob
     @Bindable var queue: RecordingJobQueue
     let retryCoordinator: RecordingQueueRetryCoordinator?
     let recoveryPresets: [CapturePreset]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Geist.Spacing.three) {
-            if dynamicTypeSize.isAccessibilitySize {
-                VStack(alignment: .leading, spacing: Geist.Spacing.two) {
-                    titleLabel
-                    statusLabel
+        HStack(alignment: .top, spacing: Geist.Spacing.three) {
+            leadingIndicator
+                .padding(.top, job.phase == .completed ? 2 : 6)
+
+            VStack(alignment: .leading, spacing: Geist.Spacing.two) {
+                if dynamicTypeSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: Geist.Spacing.two) {
+                        titleLabel
+                        statusLabel
+                    }
+                } else {
+                    HStack(alignment: .firstTextBaseline, spacing: Geist.Spacing.three) {
+                        titleLabel
+                        Spacer()
+                        statusLabel
+                    }
                 }
-            } else {
-                HStack(alignment: .firstTextBaseline, spacing: Geist.Spacing.three) {
-                    titleLabel
-                    Spacer()
-                    statusLabel
+
+                Text("\(job.createdAt.formatted(date: .abbreviated, time: .shortened)) · \(formattedDuration(job.duration))")
+                    .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                    .foregroundStyle(Geist.muted)
+
+                if !dynamicTypeSize.isAccessibilitySize,
+                   let message = job.statusMessage,
+                   !message.isEmpty {
+                    Text(message)
+                        .font(Geist.body(.subheadline))
+                        .foregroundStyle(Geist.muted)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
+
+                if queue.activeJobID == job.id,
+                   let progress = queue.transcriptionProgress,
+                   let fraction = progress.exactFractionCompleted {
+                    ActivitySignalProgressBar(fraction: fraction)
+                        .accessibilityLabel(status)
+                        .accessibilityValue("\(Int((fraction * 100).rounded())) percent")
+                }
+
+                actionArea
+                    .padding(.top, Geist.Spacing.one)
             }
+        }
+    }
 
-            Text("\(job.createdAt.formatted(date: .abbreviated, time: .shortened)) · \(formattedDuration(job.duration))")
-                .font(Geist.mono(.footnote))
-                .foregroundStyle(Geist.muted)
-
-            if !dynamicTypeSize.isAccessibilitySize,
-               let message = job.statusMessage,
-               !message.isEmpty {
-                Text(message)
-                    .font(Geist.caption())
-                    .foregroundStyle(job.phase == .failed ? Geist.error : Geist.muted)
-            }
-
-            if queue.activeJobID == job.id,
-               let progress = queue.transcriptionProgress,
-               let fraction = progress.exactFractionCompleted {
-                ProgressView(value: fraction)
-                    .tint(Geist.focus)
-            }
-
-            GeistDivider()
-
-            actionArea
+    @ViewBuilder
+    private var leadingIndicator: some View {
+        switch job.phase {
+        case .completed:
+            Image(systemName: "checkmark")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(Geist.success)
+                .frame(width: 18, height: 18)
+                .accessibilityHidden(true)
+        case .failed:
+            ActivitySignalDot(color: Geist.warning)
+        case .discarded:
+            ActivitySignalDot(color: Geist.faint)
+        case .queued:
+            ActivitySignalDot(color: Geist.Palette.gray600)
+        case .processing, .finalizing:
+            ActivitySignalDot(color: Geist.accent)
         }
     }
 
     private var titleLabel: some View {
-        Label(title, systemImage: symbolName)
-            .font(Geist.heading(.headline))
+        Text(title)
+            .font(Geist.heading(.callout))
             .foregroundStyle(Geist.text)
+            .accessibilityLabel(title)
     }
 
     private var statusLabel: some View {
         Label(status, systemImage: statusSymbolName)
-            .font(Geist.caption())
+            .labelStyle(.titleOnly)
+            .font(Geist.mono(size: 11.5, relativeTo: .caption, medium: job.phase == .failed))
             .foregroundStyle(statusColor)
     }
 
     @ViewBuilder
     private var actionArea: some View {
-        #if os(macOS)
-        HStack(spacing: 12) {
-            applicableActions
-            Spacer()
-            deleteAction
+        Group {
+            #if os(macOS)
+            HStack(spacing: 12) {
+                applicableActions
+                Spacer()
+                deleteAction
+            }
+            #else
+            // Activity board: one primary pill, an optional secondary and a •••
+            // menu, on one line (the 2×2 grid wrapped "Retry↵Recording").
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: Geist.Spacing.two) { compactActions }
+            } else {
+                HStack(spacing: Geist.Spacing.two) { compactActions }
+            }
+            #endif
         }
-        #else
-        LazyVGrid(
-            columns: compactActionColumns,
-            alignment: .leading,
-            spacing: Geist.Spacing.two
+        .confirmationDialog(
+            String(localized: "Delete this recording?"),
+            isPresented: $confirmsDelete,
+            titleVisibility: .visible
         ) {
-            applicableActions
-            deleteAction
+            Button("Delete Recording", role: .destructive) {
+                Task { await queue.discard(job) }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            #if os(macOS)
+            Text("The audio and any transcript are removed from this Mac. This can’t be undone.")
+            #else
+            Text("The audio and any transcript are removed from this iPhone. This can’t be undone.")
+            #endif
         }
-        #endif
     }
 
     #if !os(macOS)
-    private var compactActionColumns: [GridItem] {
-        if dynamicTypeSize.isAccessibilitySize {
-            return [GridItem(.flexible())]
-        }
-        return [GridItem(.adaptive(minimum: 135), spacing: Geist.Spacing.two)]
-    }
-    #endif
-
     @ViewBuilder
-    private var applicableActions: some View {
+    private var compactActions: some View {
         primaryAction
-
         if let text = job.transcriptText, !text.isEmpty {
             Button("Copy Transcript", systemImage: "doc.on.doc") {
                 if copy(text) {
                     Task { await queue.acknowledgeCopiedResult(job) }
                 }
             }
-            .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+            .buttonStyle(ActivitySignalPillButtonStyle(kind: .secondary))
         }
-
-        if let audioURL = queue.audioURL(for: job) {
-            audioAction(audioURL)
+        Menu {
+            if let audioURL = queue.audioURL(for: job) {
+                ShareLink(item: audioURL) {
+                    Label("Share Audio", systemImage: "square.and.arrow.up")
+                }
+            }
+            keepAudioMenu
+            if job.phase != .processing && job.phase != .finalizing {
+                Divider()
+                Button("Delete Recording", systemImage: "trash", role: .destructive) {
+                    confirmsDelete = true
+                }
+            }
+        } label: {
+            Label("More options", systemImage: "ellipsis")
+                .labelStyle(.iconOnly)
         }
+        .buttonStyle(ActivitySignalPillButtonStyle(kind: .secondary))
+        .accessibilityLabel("More options")
+    }
+    #endif
 
+    private var keepAudioMenu: some View {
         Menu("Keep Audio", systemImage: "externaldrive") {
             Button("Delete After Processing") {
                 Task { await queue.updateRetention(job, policy: .deleteAfterSuccess) }
@@ -640,16 +776,36 @@ private struct RecordingQueueRow: View {
                 Task { await queue.updateRetention(job, policy: .permanent) }
             }
         }
-        .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+    }
+
+    @ViewBuilder
+    private var applicableActions: some View {
+        primaryAction
+
+        if let text = job.transcriptText, !text.isEmpty {
+            Button("Copy Transcript", systemImage: "doc.on.doc") {
+                if copy(text) {
+                    Task { await queue.acknowledgeCopiedResult(job) }
+                }
+            }
+            .buttonStyle(ActivitySignalPillButtonStyle(kind: .secondary))
+        }
+
+        if let audioURL = queue.audioURL(for: job) {
+            audioAction(audioURL)
+        }
+
+        keepAudioMenu
+            .buttonStyle(ActivitySignalPillButtonStyle(kind: .secondary))
     }
 
     @ViewBuilder
     private var deleteAction: some View {
         if job.phase != .processing && job.phase != .finalizing {
             Button("Delete Recording", systemImage: "trash", role: .destructive) {
-                Task { await queue.discard(job) }
+                confirmsDelete = true
             }
-            .buttonStyle(GeistButtonStyle(variant: .destructive, size: .small))
+            .buttonStyle(ActivitySignalPillButtonStyle(kind: .destructive))
         }
     }
 
@@ -660,11 +816,11 @@ private struct RecordingQueueRow: View {
             Button("Process Now", systemImage: "play.fill") {
                 Task { await queue.processNow(job) }
             }
-            .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
+            .buttonStyle(ActivitySignalPillButtonStyle(kind: .primary))
         case .failed where job.delivery == .recovery:
-            Menu("Choose Preset", systemImage: "arrow.triangle.branch") {
+            Menu("Choose Route", systemImage: "arrow.triangle.branch") {
                 if recoveryPresets.isEmpty {
-                    Text("No enabled Capture Presets")
+                    Text("No enabled Routes")
                 } else {
                     ForEach(recoveryPresets) { preset in
                         Button(preset.accessibilityName) {
@@ -685,9 +841,9 @@ private struct RecordingQueueRow: View {
                     }
                 }
             }
-            .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
+            .buttonStyle(ActivitySignalPillButtonStyle(kind: .primary))
         case .failed:
-            Button("Retry Recording", systemImage: "arrow.clockwise") {
+            Button {
                 Task {
                     if let retryCoordinator {
                         await retryCoordinator.retry(job)
@@ -695,8 +851,16 @@ private struct RecordingQueueRow: View {
                         await queue.retry(job)
                     }
                 }
+            } label: {
+                #if os(macOS)
+                Label("Retry Recording", systemImage: "arrow.clockwise")
+                #else
+                // Short pill label, as on the Activity board.
+                Text("Retry")
+                #endif
             }
-            .buttonStyle(GeistButtonStyle(variant: .primary, size: .small))
+            .buttonStyle(ActivitySignalPillButtonStyle(kind: .primary))
+            .accessibilityLabel("Retry Recording")
         case .completed where job.transcriptText != nil:
             EmptyView()
         default:
@@ -710,12 +874,12 @@ private struct RecordingQueueRow: View {
         Button("Reveal Audio", systemImage: "folder") {
             NSWorkspace.shared.activateFileViewerSelecting([url])
         }
-        .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+        .buttonStyle(ActivitySignalPillButtonStyle(kind: .secondary))
         #else
         ShareLink(item: url) {
             Label("Share Audio", systemImage: "square.and.arrow.up")
         }
-        .buttonStyle(GeistButtonStyle(variant: .secondary, size: .small))
+        .buttonStyle(ActivitySignalPillButtonStyle(kind: .secondary))
         #endif
     }
 
@@ -769,7 +933,12 @@ private struct RecordingQueueRow: View {
     }
 
     private var statusColor: Color {
-        job.phase == .failed ? Geist.error : Geist.muted
+        switch job.phase {
+        case .failed: return Geist.Palette.amber900
+        case .completed: return Geist.success
+        case .processing, .finalizing: return Geist.accentText
+        default: return Geist.muted
+        }
     }
 
     @discardableResult
@@ -787,5 +956,241 @@ private struct RecordingQueueRow: View {
     private func formattedDuration(_ duration: TimeInterval) -> String {
         let total = max(0, Int(duration.rounded()))
         return String(format: "%d:%02d", total / 60, total % 60)
+    }
+}
+
+// MARK: - Signal Activity components
+
+enum ActivitySignalFilter: Hashable {
+    case all
+    case needsAttention
+    case inFlight
+}
+
+/// White Activity card; an orange border marks work that needs the user.
+struct ActivitySignalCardModifier: ViewModifier {
+    var needsAttention = false
+
+    func body(content: Content) -> some View {
+        content
+            .padding(14)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                Geist.card,
+                in: RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous)
+                    .stroke(needsAttention ? Geist.Palette.amber400 : Geist.border, lineWidth: 1)
+            )
+    }
+}
+
+extension View {
+    func activitySignalCard(needsAttention: Bool = false) -> some View {
+        modifier(ActivitySignalCardModifier(needsAttention: needsAttention))
+    }
+}
+
+/// 10pt status dot used at the leading edge of Activity cards.
+struct ActivitySignalDot: View {
+    let color: Color
+
+    var body: some View {
+        Circle()
+            .fill(color)
+            .frame(width: 10, height: 10)
+            .frame(width: 18, alignment: .leading)
+            .accessibilityHidden(true)
+    }
+}
+
+/// Thin 4pt accent progress track.
+struct ActivitySignalProgressBar: View {
+    let fraction: Double
+
+    /// Indigo that lifts to #6E78FF in dark mode, per the dark Activity board.
+    private static var fill: Color {
+        #if os(macOS)
+        Geist.accent
+        #else
+        Geist.Palette.blue700
+        #endif
+    }
+
+    var body: some View {
+        GeometryReader { proxy in
+            ZStack(alignment: .leading) {
+                Capsule().fill(Geist.well)
+                Capsule()
+                    .fill(Self.fill)
+                    .frame(width: proxy.size.width * min(max(fraction, 0), 1))
+            }
+        }
+        .frame(height: 4)
+        .accessibilityElement()
+    }
+}
+
+/// Content-sized pill used for card actions (Fix, Retry, Discard…).
+struct ActivitySignalPillButtonStyle: ButtonStyle {
+    enum Kind { case primary, secondary, destructive }
+
+    let kind: Kind
+    @Environment(\.isEnabled) private var isEnabled
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(Geist.label(.subheadline))
+            .multilineTextAlignment(.center)
+            .foregroundStyle(foreground)
+            .padding(.horizontal, Geist.Spacing.four)
+            .padding(.vertical, 6)
+            .frame(minHeight: Geist.ControlHeight.medium)
+            .background(background(configuration.isPressed), in: Capsule(style: .continuous))
+            .overlay {
+                if kind != .primary {
+                    Capsule(style: .continuous).stroke(Geist.border, lineWidth: 1)
+                }
+            }
+            .contentShape(Capsule(style: .continuous))
+            .opacity(isEnabled ? 1 : 0.5)
+            .scaleEffect(configuration.isPressed ? 0.98 : 1)
+    }
+
+    private var foreground: Color {
+        switch kind {
+        case .primary: return Geist.Palette.background100
+        case .secondary: return Geist.text
+        case .destructive: return Geist.error
+        }
+    }
+
+    private func background(_ pressed: Bool) -> Color {
+        switch kind {
+        case .primary: return pressed ? Geist.Palette.gray900 : Geist.text
+        case .secondary, .destructive: return pressed ? Geist.Palette.gray200 : Geist.card
+        }
+    }
+}
+
+/// Track-and-thumb segmented control from the Signal Activity layout.
+struct ActivitySignalSegmentedControl<Value: Hashable>: View {
+    @Binding var selection: Value
+    let segments: [(Value, String)]
+
+    var body: some View {
+        HStack(spacing: 4) {
+            ForEach(Array(segments.enumerated()), id: \.offset) { _, segment in
+                let isSelected = segment.0 == selection
+                Button {
+                    selection = segment.0
+                } label: {
+                    Text(segment.1)
+                        .font(isSelected ? Geist.label(.subheadline) : Geist.body(.subheadline))
+                        .foregroundStyle(isSelected ? Geist.text : Geist.Palette.gray800)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                        .frame(maxWidth: .infinity, minHeight: 34)
+                        .background(
+                            isSelected ? Geist.card : Color.clear,
+                            in: Capsule(style: .continuous)
+                        )
+                        .contentShape(Capsule(style: .continuous))
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(isSelected ? .isSelected : [])
+            }
+        }
+        .padding(4)
+        .background(Geist.well, in: Capsule(style: .continuous))
+        .accessibilityElement(children: .contain)
+    }
+}
+
+/// Centered "all caught up" style empty state.
+struct ActivitySignalEmptyState: View {
+    let systemImage: String
+    var tint: Color = Geist.success
+    let title: LocalizedStringKey
+    let message: LocalizedStringKey
+
+    var body: some View {
+        VStack(spacing: Geist.Spacing.three) {
+            Image(systemName: systemImage)
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundStyle(tint)
+                .frame(width: 56, height: 56)
+                .background(Geist.card, in: RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous)
+                        .stroke(Geist.border, lineWidth: 1)
+                )
+                .accessibilityHidden(true)
+            Text(title)
+                .font(Geist.heading(.title3))
+                .foregroundStyle(Geist.text)
+            Text(message)
+                .font(Geist.body(.callout))
+                .foregroundStyle(Geist.muted)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .multilineTextAlignment(.center)
+        .padding(.horizontal, Geist.Spacing.six)
+        .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+    }
+}
+
+/// Wraps content-sized action pills onto as many lines as needed.
+struct ActivitySignalFlowLayout: Layout {
+    var spacing: CGFloat = 8
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let rows = arrange(width: proposal.width ?? .infinity, subviews: subviews)
+        let width = rows.map(\.width).max() ?? 0
+        let height = rows.reduce(0) { $0 + $1.height } + spacing * CGFloat(max(rows.count - 1, 0))
+        return CGSize(width: proposal.width ?? width, height: height)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        var y = bounds.minY
+        for row in arrange(width: bounds.width, subviews: subviews) {
+            var x = bounds.minX
+            for index in row.indices {
+                let size = subviews[index].sizeThatFits(.init(width: bounds.width, height: nil))
+                subviews[index].place(
+                    at: CGPoint(x: x, y: y),
+                    proposal: ProposedViewSize(width: min(size.width, bounds.width), height: size.height)
+                )
+                x += min(size.width, bounds.width) + spacing
+            }
+            y += row.height + spacing
+        }
+    }
+
+    private struct Row {
+        var indices: [Int] = []
+        var width: CGFloat = 0
+        var height: CGFloat = 0
+    }
+
+    private func arrange(width maxWidth: CGFloat, subviews: Subviews) -> [Row] {
+        var rows: [Row] = []
+        var current = Row()
+        for index in subviews.indices {
+            let size = subviews[index].sizeThatFits(.init(width: maxWidth, height: nil))
+            let itemWidth = min(size.width, maxWidth)
+            let proposedWidth = current.indices.isEmpty ? itemWidth : current.width + spacing + itemWidth
+            if !current.indices.isEmpty && proposedWidth > maxWidth {
+                rows.append(current)
+                current = Row()
+            }
+            current.width = current.indices.isEmpty ? itemWidth : current.width + spacing + itemWidth
+            current.height = max(current.height, size.height)
+            current.indices.append(index)
+        }
+        if !current.indices.isEmpty { rows.append(current) }
+        return rows
     }
 }

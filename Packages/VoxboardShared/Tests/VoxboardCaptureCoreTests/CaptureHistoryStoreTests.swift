@@ -153,6 +153,39 @@ final class CaptureHistoryStoreTests: XCTestCase {
         }
     }
 
+    func test_sourceDetailRoundTripsAndOlderRecordsDecodeWithoutIt() throws {
+        var record = try makeRecord(requestID: UUID(), deliveredAt: date(20))
+        let legacyData = try JSONEncoder().encode(record)
+        XCTAssertFalse(String(decoding: legacyData, as: UTF8.self).contains("sourceDetail"))
+        XCTAssertNil(try JSONDecoder().decode(CaptureHistoryRecord.self, from: legacyData).sourceDetail)
+
+        record.sourceDetail = CaptureHistoryRecord.macQuickCaptureSourceDetail
+        let data = try JSONEncoder().encode(record)
+        XCTAssertEqual(try JSONDecoder().decode(CaptureHistoryRecord.self, from: data), record)
+
+        // Older builds decode with their own keys and ignore unknown ones; a
+        // malformed value never hides the record.
+        var object = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        object["sourceDetail"] = 42
+        let malformed = try JSONSerialization.data(withJSONObject: object)
+        XCTAssertNil(try JSONDecoder().decode(CaptureHistoryRecord.self, from: malformed).sourceDetail)
+    }
+
+    func test_retryUpsertKeepsFirstAttemptSourceDetail() async throws {
+        let fixture = try Fixture()
+        defer { fixture.remove() }
+        let store = fixture.store()
+        var failed = try makeRecord(requestID: fixture.firstID, deliveredAt: date(20), outcome: .failed)
+        failed.sourceDetail = CaptureHistoryRecord.macQuickCaptureSourceDetail
+        let delivered = try makeRecord(requestID: fixture.firstID, deliveredAt: date(40))
+
+        try await store.upsert(failed)
+        try await store.upsert(delivered)
+
+        let records = try await store.list()
+        XCTAssertEqual(records.first?.sourceDetail, CaptureHistoryRecord.macQuickCaptureSourceDetail)
+    }
+
     func test_relativeNotePathDerivesNestedPathOnlyInsideRoot() throws {
         let root = URL(fileURLWithPath: "/tmp/Vault", isDirectory: true)
         XCTAssertEqual(

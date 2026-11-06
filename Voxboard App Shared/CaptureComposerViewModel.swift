@@ -2,6 +2,9 @@ import Foundation
 import Observation
 import UniformTypeIdentifiers
 import VoxboardShared
+#if canImport(WidgetKit)
+import WidgetKit
+#endif
 
 @MainActor
 @Observable
@@ -22,10 +25,19 @@ final class QuickCaptureViewModel {
     private var routeOperationIDs = Set<UUID>()
     private var hostOwnsCaptureRoute: @MainActor () -> Bool = { false }
     private var hostBlocksCapturePresetSelection: @MainActor () -> Bool = { false }
+    /// Queued Capture retries and inbox deliveries require paid access
+    /// (docs/launch/hard-paywall). Read once per drain from the shared
+    /// entitlement mirror; injectable for tests.
+    @ObservationIgnored private let hasPaidCaptureAccess: @MainActor () -> Bool
     var errorMessage: String?
     var lastReceipt: CaptureReceipt?
+    /// Set when Send held the capture because its vault was unreachable.
+    var lastHeldForVaultRequestID: UUID?
     var failedInboxCount = 0
     var historyRecords: [CaptureHistoryRecord] = []
+    /// Optional Library origin detail per request ID (for example the Mac
+    /// Quick Capture panel). Stored on the history record as `sourceDetail`.
+    @ObservationIgnored var historySourceDetails: [UUID: String] = [:]
     var requestedInput: CaptureRequestedInput?
     var needsCaptureUnlock = false
     /// Non-nil keeps the draft intact while the foreground UI asks how to
@@ -58,8 +70,10 @@ final class QuickCaptureViewModel {
         pipeline: CapturePipeline = AppCapturePipeline.shared,
         requestProcessor: CapturePresetRequestProcessor = CapturePresetRequestProcessor(),
         locationProvider: (any CaptureLocationOutcomeProviding)? = nil,
-        urlDeliveryCoordinator: URLDeliveryCoordinator? = nil
+        urlDeliveryCoordinator: URLDeliveryCoordinator? = nil,
+        hasPaidCaptureAccess: @escaping @MainActor () -> Bool = { !UsageTracker.staticIsAtLimit }
     ) {
+        self.hasPaidCaptureAccess = hasPaidCaptureAccess
         self.captureRootURL = captureRootURL
         self.defaults = defaults
         self.voxProfiles = CapturePresetProfileStore.enabledProfiles(defaults: defaults)
@@ -147,6 +161,43 @@ final class QuickCaptureViewModel {
         case .beneathHeading: return String(localized: "Heading")
         case nil: return String(localized: "Default")
         }
+    }
+
+    /// The placement that delivery will use for this capture.
+    var effectivePlacement: CapturePlacement? {
+        draft.placementOverride
+            ?? selectedVoxProfile?.capturePlacementOverride
+            ?? selectedDestination?.placement
+    }
+
+    /// Path-line suffix for the effective placement: the Markdown heading for
+    /// a beneath-heading placement (for example `## Notes`), nil otherwise.
+    var effectivePlacementDisplay: String? {
+        guard case .beneathHeading(let selector, _, _) = effectivePlacement else { return nil }
+        let title = selector.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !title.isEmpty else { return nil }
+        return String(repeating: "#", count: max(1, min(6, selector.level ?? 2))) + " " + title
+    }
+
+    /// True when the capture lands in one fixed existing note rather than a
+    /// note created from a path template.
+    var targetsExistingNote: Bool {
+        if draft.relativeNotePathOverride != nil { return true }
+        if case .existingNote = selectedDestination?.noteTarget { return true }
+        return false
+    }
+
+    /// Spaced destination path plus the effective heading, as shown under the
+    /// route pill: `Vox Notes / Meetings / 2026-11-01.md · ## Notes` or
+    /// `Vox Notes / Tasks.md › ## Today`.
+    var resolvedDestinationDisplayLine: String? {
+        guard let preview = resolvedDestinationPreview else { return nil }
+        let spaced = preview
+            .components(separatedBy: " / ")
+            .map { $0.split(separator: "/", omittingEmptySubsequences: true).joined(separator: " / ") }
+            .joined(separator: " / ")
+        guard let heading = effectivePlacementDisplay else { return spaced }
+        return spaced + (targetsExistingNote ? " › " : " · ") + heading
     }
 
     var canSubmit: Bool {
@@ -284,10 +335,19 @@ final class QuickCaptureViewModel {
         historyRecords = (try? await historyStore?.list()) ?? []
     }
 
+    /// The Lock Screen "Route Today" widget reads the snapshot the history
+    /// store keeps; refresh it after a delivery or a Library clear.
+    nonisolated static func reloadRouteTodayWidget() {
+        #if canImport(WidgetKit) && os(iOS)
+        WidgetCenter.shared.reloadTimelines(ofKind: VoxboardRouteWidgetKinds.today)
+        #endif
+    }
+
     func clearHistory() async {
         do {
             try await historyStore?.clear()
             historyRecords = []
+            Self.reloadRouteTodayWidget()
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -649,6 +709,31 @@ final class QuickCaptureViewModel {
         liveRecordedTranscriptPreview = preview
         draft.text = updatedText
         draft.updatedAt = Date()
+    }
+
+    /// Adds a recording-action line (timestamp marker, empty task) to the
+    /// draft. While a live transcript preview is rendering, the line goes just
+    /// ahead of the volatile Speech block so the preview can still be replaced.
+    func insertRecordingActionLine(_ line: String) {
+        let insertion = line.hasSuffix("\n") ? line : line + "\n"
+        var base = draft.text
+        var liveBlock = ""
+        if var preview = liveRecordedTranscriptPreview {
+            let withoutPreview = preview.cancel(in: draft.text)
+            if draft.text.hasPrefix(withoutPreview) {
+                base = withoutPreview
+                liveBlock = String(draft.text.dropFirst(withoutPreview.count))
+            }
+        }
+        let separator = base.isEmpty || base.hasSuffix("\n") ? "" : "\n"
+        let updated = base + separator + insertion + liveBlock
+        guard updated.count <= CaptureInputLimits.maximumTextCharacters else {
+            errorMessage = QuickCaptureViewModelError.textTooLarge.localizedDescription
+            return
+        }
+        draft.text = updated
+        draft.updatedAt = Date()
+        scheduleDraftSave()
     }
 
     func invalidateLiveRecordedTranscriptSession(_ sessionID: UUID) {
@@ -1500,7 +1585,7 @@ final class QuickCaptureViewModel {
             locationDecision = nil
             let pipeline = self.pipeline
             let requestProcessor = self.requestProcessor
-            let receipt = try await draftStore.submit(draftID: submittedDraftID) { draft in
+            let outcome = try await draftStore.submit(draftID: submittedDraftID) { draft in
                 let library = try await libraryStore.load()
                 guard let storedDestination = library.destinations.first(where: {
                     $0.id == submittedDestinationID
@@ -1543,12 +1628,24 @@ final class QuickCaptureViewModel {
                     try await draftStore.savePreparedRequest(processed, draftID: draft.id)
                     request = processed
                 }
-                let rootURL = try Self.resolveRootURL(for: destination)
-                let didAccess = rootURL.startAccessingSecurityScopedResource()
-                defer { if didAccess { rootURL.stopAccessingSecurityScopedResource() } }
                 let stagingURL = captureRootURL
                     .appendingPathComponent("staging", isDirectory: true)
                     .appendingPathComponent(draft.id.uuidString.lowercased(), isDirectory: true)
+                // Vault unreachable (stale bookmark, revoked access, folder
+                // gone): hold the capture in the inbox with its attachments,
+                // as the "Vault folder access expired" card promises. It shows
+                // in Activity and delivers after Re-grant access.
+                guard let rootURL = Self.reachableRootURL(for: destination) else {
+                    let heldID = try await CaptureInboxVaultHold.hold(
+                        request,
+                        stagedAssetRootURL: stagingURL,
+                        destinationName: destination.name,
+                        captureRootURL: captureRootURL
+                    )
+                    return ComposerSubmitOutcome.heldForVault(heldID)
+                }
+                let didAccess = rootURL.startAccessingSecurityScopedResource()
+                defer { if didAccess { rootURL.stopAccessingSecurityScopedResource() } }
                 let cancellation = URLDeliveryCancellation()
                 return try await withTaskCancellationHandler {
                     // Explicit Send freezes processed bytes before a note
@@ -1566,10 +1663,33 @@ final class QuickCaptureViewModel {
                     if case .queued? = urlEvent?.result {
                         await self.dispatchCaptureURLDelivery(id: request.id, cancellation: cancellation)
                     }
-                    return receipt
+                    return ComposerSubmitOutcome.delivered(receipt)
                 } onCancel: { cancellation.cancel() }
             }
 
+            guard case .delivered(let receipt) = outcome else {
+                // Held for an unreachable vault: the draft is cleared like a
+                // send; the capture now waits in the inbox (Activity).
+                try? await draftStore.removePreparedRequest(draftID: submittedDraftID)
+                if let concurrentlyEdited = try await draftStore.load(id: submittedDraftID),
+                   case let rebased = concurrentlyEdited.rebased(afterSubmitting: submittedDraft),
+                   rebased.hasCaptureContent {
+                    draft = rebased
+                    try await draftStore.save(rebased)
+                } else {
+                    try? await draftStore.complete(draftID: submittedDraftID)
+                    draft = CaptureDraft(
+                        voxID: submittedVoxProfile?.id,
+                        destinationSelectionMode: .inherited
+                    )
+                    try await draftStore.save(draft)
+                }
+                if case .heldForVault(let heldID) = outcome { lastHeldForVaultRequestID = heldID }
+                failedInboxCount = (try? await CaptureInbox(rootDirectoryURL: captureRootURL)
+                    .requestIDs(in: .failed).count) ?? failedInboxCount
+                isSubmitting = false
+                return
+            }
             lastReceipt = receipt
             needsCaptureUnlock = false
             try? await draftStore.removePreparedRequest(draftID: submittedDraftID)
@@ -1583,11 +1703,14 @@ final class QuickCaptureViewModel {
                     request: request,
                     destinationName: library.destinations.first(where: { $0.id == request.destinationID })?.name
                         ?? String(localized: "Deleted destination"),
-                    relativeNotePath: submittedDraft.relativeNotePathOverride
-                        ?? historyRelativeNotePath(for: receipt, destinationID: request.destinationID),
+                    // The receipt names the note actually written, which is a
+                    // sibling note when "Write a new note instead" was used.
+                    relativeNotePath: historyRelativeNotePath(for: receipt, destinationID: request.destinationID)
+                        ?? submittedDraft.relativeNotePathOverride,
                     attachmentCount: receipt.attachmentURLs.count,
                     outcome: .delivered,
-                    failureCategory: nil
+                    failureCategory: nil,
+                    receipt: receipt
                 )
             }
             if let concurrentlyEdited = try await draftStore.load(id: submittedDraftID) {
@@ -1632,7 +1755,8 @@ final class QuickCaptureViewModel {
                     relativeNotePath: submittedDraft.relativeNotePathOverride,
                     attachmentCount: request.payloads.flatMap(Self.assets(in:)).count,
                     outcome: .failed,
-                    failureCategory: Self.historyFailureCategory(for: error)
+                    failureCategory: Self.historyFailureCategory(for: error),
+                    error: error
                 )
             }
             errorMessage = error.localizedDescription
@@ -1844,6 +1968,17 @@ final class QuickCaptureViewModel {
     func processPendingInbox() async {
         guard let captureRootURL else { return }
         let inbox = CaptureInbox(rootDirectoryURL: captureRootURL)
+        guard hasPaidCaptureAccess() else {
+            // Read-only (trial or subscription ended): queued Captures stay
+            // safely queued and are not delivered — including metered voice
+            // transcripts the delivery quota would otherwise let through.
+            // Waiting work asks for a plan instead of failing silently; the
+            // app drains again as soon as access returns.
+            let pendingCount = (try? await inbox.requestIDs(in: .pending).count) ?? 0
+            if pendingCount > 0 { needsCaptureUnlock = true }
+            failedInboxCount = (try? await inbox.requestIDs(in: .failed).count) ?? failedInboxCount
+            return
+        }
         let result = await CaptureInboxDeliveryService.drain(
             captureRootURL: captureRootURL,
             defaults: defaults,
@@ -1869,6 +2004,10 @@ final class QuickCaptureViewModel {
     }
 
     func sendInboxRequestWithoutLocation(alwaysForPreset: Bool = false) async {
+        guard hasPaidCaptureAccess() else {
+            needsCaptureUnlock = true
+            return
+        }
         guard let decision = inboxLocationDecision,
               let captureRootURL else { return }
         let inbox = CaptureInbox(rootDirectoryURL: captureRootURL)
@@ -1920,6 +2059,10 @@ final class QuickCaptureViewModel {
     }
 
     func retryFailedInbox() async {
+        guard hasPaidCaptureAccess() else {
+            needsCaptureUnlock = true
+            return
+        }
         guard let captureRootURL, let libraryStore else { return }
         let inbox = CaptureInbox(rootDirectoryURL: captureRootURL)
         do {
@@ -1939,6 +2082,80 @@ final class QuickCaptureViewModel {
             await processPendingInbox()
         } catch {
             errorMessage = error.localizedDescription
+        }
+    }
+
+    /// Retries only the given inbox requests (for example captures waiting on
+    /// a busy note), leaving unrelated failed requests for the person to
+    /// decide on. Returns the IDs that are still queued afterwards.
+    @discardableResult
+    func retryInboxRequests(_ requestIDs: Set<UUID>) async -> Set<UUID> {
+        guard let captureRootURL else { return [] }
+        guard hasPaidCaptureAccess() else {
+            needsCaptureUnlock = true
+            return requestIDs
+        }
+        let inbox = CaptureInbox(rootDirectoryURL: captureRootURL)
+        for requestID in requestIDs {
+            // Captures held by older builds were parked in `failed`.
+            _ = try? await inbox.retryFailed(requestID: requestID)
+        }
+        await processPendingInbox()
+        let queued = Set((try? await inbox.requestIDs(in: .pending)) ?? [])
+            .union((try? await inbox.requestIDs(in: .failed)) ?? [])
+            .union((try? await inbox.requestIDs(in: .processing)) ?? [])
+        return requestIDs.intersection(queued)
+    }
+
+    /// Failed inbox requests for foreground recovery UI, oldest first, each
+    /// with the Markdown entry its route would write. Nothing here is copied
+    /// into history or Activity storage; it is read on demand only.
+    func failedInboxEntries() async -> [CaptureFailedInboxEntry] {
+        guard let captureRootURL, let libraryStore else { return [] }
+        let inbox = CaptureInbox(rootDirectoryURL: captureRootURL)
+        guard let requests = try? await inbox.failedRequests() else { return [] }
+        let library = try? await libraryStore.load()
+        return requests.map { request in
+            var markdown: String?
+            var destinationName: String?
+            if let library,
+               let stored = library.destinations.first(where: { $0.id == request.destinationID }) {
+                // Resolve the route exactly as inbox delivery does.
+                var destination = library.resolvedDestination(
+                    stored,
+                    overrideEntryTemplateID: request.entryTemplateIDOverride
+                        ?? request.voxProfile?.captureEntryTemplateID
+                )
+                if let relativePath = request.relativeNotePathOverride {
+                    destination.noteTarget = .existingNote(relativePath: relativePath)
+                }
+                if let placement = request.placementOverride ?? request.voxProfile?.capturePlacementOverride {
+                    destination.placement = placement
+                }
+                destinationName = destination.name
+                // The vault may be unreachable (that is often why the capture
+                // failed); the preview then leaves out the template header.
+                let rootURL = (try? CaptureBookmarkResolver.resolve(destination.rootBookmark))?.url
+                let didAccess = rootURL?.startAccessingSecurityScopedResource() ?? false
+                markdown = try? pipeline.previewEntryMarkdown(for: request, destination: destination, rootURL: rootURL)
+                if didAccess { rootURL?.stopAccessingSecurityScopedResource() }
+                if let entry = markdown, let heading = CaptureHistoryRecord.placementHeading(for: destination.placement) {
+                    let level: Int
+                    if case .beneathHeading(let selector, _, _) = destination.placement {
+                        level = max(1, min(6, selector.level ?? 2))
+                    } else {
+                        level = 2
+                    }
+                    markdown = String(repeating: "#", count: level) + " " + heading + "\n" + entry
+                }
+            }
+            return CaptureFailedInboxEntry(
+                requestID: request.id,
+                createdAt: request.createdAt,
+                source: request.source,
+                routeName: request.voxReference?.name ?? destinationName,
+                markdown: markdown ?? CaptureLibraryContent.plainText(of: request)
+            )
         }
     }
 
@@ -2050,7 +2267,9 @@ final class QuickCaptureViewModel {
         relativeNotePath: String?,
         attachmentCount: Int,
         outcome: CaptureHistoryOutcome,
-        failureCategory: CaptureHistoryFailureCategory?
+        failureCategory: CaptureHistoryFailureCategory?,
+        receipt: CaptureReceipt? = nil,
+        error: Error? = nil
     ) async {
         guard let historyStore,
               let record = try? CaptureHistoryRecord(
@@ -2065,10 +2284,29 @@ final class QuickCaptureViewModel {
                 voxName: request.voxReference?.name,
                 relativeNotePath: relativeNotePath,
                 attachmentCount: attachmentCount,
-                failureCategory: failureCategory
+                failureCategory: failureCategory,
+                sourceDetail: historySourceDetails[request.id]
               ) else { return }
-        _ = await historyStore.upsertBestEffort(record)
+        // Library detail: status-only route log plus the delivered entry.
+        let destination = destinations.first(where: { $0.id == request.destinationID })
+        let placement = request.placementOverride
+            ?? request.voxProfile?.capturePlacementOverride
+            ?? destination?.placement
+        let detailed = record.withDeliveryDetails(request: request, placement: placement, error: error)
+        var content: CaptureLibraryContent?
+        if let receipt, let destination, let rootURL = try? Self.resolveRootURL(for: destination) {
+            var routed = destination
+            if let placement { routed.placement = placement }
+            content = CaptureLibraryContent.make(
+                request: request,
+                receipt: receipt,
+                destination: routed,
+                rootURL: rootURL
+            )
+        }
+        _ = await historyStore.upsertBestEffort(detailed, content: content)
         historyRecords = (try? await historyStore.list()) ?? historyRecords
+        if outcome == .delivered { Self.reloadRouteTodayWidget() }
     }
 
     /// Called only inside explicit Send. A preparation failure preserves the
@@ -2214,7 +2452,8 @@ final class QuickCaptureViewModel {
                 ),
                 attachmentCount: receipt.attachmentURLs.count,
                 outcome: .delivered,
-                failureCategory: nil
+                failureCategory: nil,
+                receipt: receipt
             )
         } catch is CancellationError {
             try? await inbox.returnToPending(requestID: request.id)
@@ -2247,7 +2486,8 @@ final class QuickCaptureViewModel {
                 relativeNotePath: nil,
                 attachmentCount: request.payloads.flatMap(Self.assets(in:)).count,
                 outcome: .failed,
-                failureCategory: Self.historyFailureCategory(for: error)
+                failureCategory: Self.historyFailureCategory(for: error),
+                error: error
             )
             try? await inbox.fail(requestID: request.id)
             throw error
@@ -2259,11 +2499,24 @@ final class QuickCaptureViewModel {
                 relativeNotePath: nil,
                 attachmentCount: request.payloads.flatMap(Self.assets(in:)).count,
                 outcome: .failed,
-                failureCategory: Self.historyFailureCategory(for: error)
+                failureCategory: Self.historyFailureCategory(for: error),
+                error: error
             )
             try? await inbox.fail(requestID: request.id)
             throw error
         }
+    }
+
+    /// The destination's folder when it can be opened right now; nil for a
+    /// stale or unresolvable bookmark, or a folder that no longer exists.
+    nonisolated private static func reachableRootURL(for destination: CaptureDestination) -> URL? {
+        guard let url = try? resolveRootURL(for: destination) else { return nil }
+        let didAccess = url.startAccessingSecurityScopedResource()
+        defer { if didAccess { url.stopAccessingSecurityScopedResource() } }
+        var isDirectory: ObjCBool = false
+        guard FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory),
+              isDirectory.boolValue else { return nil }
+        return url
     }
 
     nonisolated private static func resolveRootURL(for destination: CaptureDestination) throws -> URL {
@@ -2273,6 +2526,13 @@ final class QuickCaptureViewModel {
         }
         return resolution.url
     }
+}
+
+/// What a composer Send did with the capture.
+enum ComposerSubmitOutcome: Sendable {
+    case delivered(CaptureReceipt)
+    /// Held in the inbox because the vault folder couldn't be reached.
+    case heldForVault(UUID)
 }
 
 struct CaptureInboxLocationDecision: Equatable {
@@ -2314,7 +2574,7 @@ enum QuickCaptureViewModelError: Error, LocalizedError {
         case .unknownDestination:
             return String(localized: "The requested capture destination no longer exists.")
         case .unknownVox:
-            return String(localized: "The requested Capture Preset no longer exists or is disabled.")
+            return String(localized: "The requested Route no longer exists or is disabled.")
         case .inboxRequestUnavailable:
             return String(localized: "The shared capture request is no longer pending.")
         case .noteMustBeMarkdown:
@@ -2326,9 +2586,21 @@ enum QuickCaptureViewModelError: Error, LocalizedError {
         case .assetsTooLarge:
             return String(localized: "Capture attachments exceed the 250 MB total safety limit.")
         case .captureRouteBusy:
-            return String(localized: "Finish the current recording, import, send or preset decision before changing this Capture’s route.")
+            return String(localized: "Finish the current recording, import, send or route decision before changing this Capture’s route.")
         case .stalePresetSwitch:
-            return String(localized: "This Capture changed or became busy. Open the preset again to switch safely.")
+            return String(localized: "This Capture changed or became busy. Open the route again to switch safely.")
         }
     }
+}
+
+/// One failed inbox request as shown by recovery UI.
+struct CaptureFailedInboxEntry: Identifiable, Equatable {
+    let requestID: UUID
+    let createdAt: Date
+    let source: CaptureSource
+    let routeName: String?
+    /// The rendered entry, or the plain captured text when it cannot render.
+    let markdown: String?
+
+    var id: UUID { requestID }
 }

@@ -43,11 +43,14 @@ REVIEWED_NON_PLATFORM_PERMISSIONS = {
 REVIEWED_EXPORTED = {
     "md.vox.android.PhoneWearDataListenerService",
     "md.vox.android.VoxCaptureWidgetProvider",
+    "md.vox.android.VoxPresetWidgetProvider",
+    "md.vox.android.VoxPresetWidgetConfigureActivity",
 }
 REVIEWED_DEBUG_ONLY_EXPORTED = {
     "androidx.activity.ComponentActivity",
     "androidx.compose.ui.tooling.PreviewActivity",
     "md.vox.android.VisualStoryActivity",
+    "md.vox.android.PhysicalQualificationActivity",
 }
 REVIEWED_PLATFORM_COMPONENT_PERMISSIONS = {
     "android.permission.BIND_INPUT_METHOD",
@@ -64,6 +67,7 @@ VOX_ELF_TARGETS = {
 }
 VOX_LIBRARY = "libvox_core_uniffi.so"
 JNA_LIBRARY = "libjnidispatch.so"
+INTELLIGENCE_LIBRARY = "libvox_intelligence.so"
 SHERPA_LIBRARIES = (
     "libonnxruntime.so",
     "libsherpa-onnx-c-api.so",
@@ -168,6 +172,10 @@ def validate_merged_manifest(path: Path) -> None:
             launcher_count += 1
             if name != "md.vox.android.MainActivity" or exported != "true":
                 raise ValidationError(f"unexpected launcher component: {name}")
+        if name in REVIEWED_DEBUG_ONLY_EXPORTED and not is_debuggable:
+            raise ValidationError(f"debug-only component in release artifact: {name}")
+        if name == "md.vox.android.PhysicalQualificationActivity" and android(component, "permission") != "android.permission.DUMP":
+            raise ValidationError("physical qualification control requires shell-only DUMP permission")
         if exported == "true" and not is_launcher:
             permission = android(component, "permission")
             explicitly_reviewed = (
@@ -193,7 +201,7 @@ def validate_vox_native_libraries(apk_path: Path) -> None:
             if len(names) != len(set(names)):
                 raise ValidationError("Android artifact contains duplicate ZIP entries")
             prefix = "base/" if apk_path.suffix == ".aab" else ""
-            native_libraries = (("Vox", VOX_LIBRARY), ("JNA", JNA_LIBRARY)) + tuple(
+            native_libraries = (("Vox", VOX_LIBRARY), ("JNA", JNA_LIBRARY), ("local intelligence", INTELLIGENCE_LIBRARY)) + tuple(
                 ("sherpa-onnx", library) for library in SHERPA_LIBRARIES
             )
             for label, library in native_libraries:

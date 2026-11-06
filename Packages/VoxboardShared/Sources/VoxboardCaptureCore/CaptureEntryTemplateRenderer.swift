@@ -39,9 +39,55 @@ public struct CaptureEntryTemplateRenderer: Sendable {
             "{id8}": String(id.prefix(8)),
             Self.locationToken: locationMapLink(for: request),
         ]
-        return replacements.reduce(template) { rendered, replacement in
+        let rendered = replacements.reduce(template) { rendered, replacement in
             rendered.replacingOccurrences(of: replacement.key, with: replacement.value)
         }
+        // Last, so capture text that looks like a token is never re-rendered.
+        guard rendered.contains(Self.titleToken) else { return rendered }
+        return rendered.replacingOccurrences(of: Self.titleToken, with: Self.title(for: request) ?? "")
+    }
+
+    /// `{title}` in entry formatting: the capture's first meaningful line,
+    /// Markdown line markers stripped (e.g. `### {hour}:{minute} · {title}`).
+    public static let titleToken = "{title}"
+
+    public static func usesTitle(_ template: String) -> Bool {
+        template.contains(titleToken)
+    }
+
+    /// The display title for `request`: its first non-empty text line without
+    /// heading, quote, list or checkbox markers, at most 80 characters.
+    public static func title(for request: CaptureRequest) -> String? {
+        CaptureTitleText.firstLine(in: request, displayTitle)
+    }
+
+    static func displayTitle(_ line: String) -> String? {
+        var text = CaptureTitleText.strippingLineMarkers(line)
+        if text.count > 80 {
+            text = String(text.prefix(80)).trimmingCharacters(in: .whitespaces) + "…"
+        }
+        return text.isEmpty ? nil : text
+    }
+
+    /// When entry formatting already carries `{title}`, a leading Markdown
+    /// heading that only repeats that title is dropped from the entry body,
+    /// so `# Project sync` + `### 10:42 · {title}` writes the title once.
+    public static func entry(_ entry: String, droppingHeadingFor title: String?) -> String {
+        guard let title else { return entry }
+        var lines = entry.components(separatedBy: "\n")
+        guard let index = lines.firstIndex(where: { !$0.trimmingCharacters(in: .whitespaces).isEmpty }),
+              lines[index].trimmingCharacters(in: .whitespaces).hasPrefix("#"),
+              displayTitle(lines[index]) == title else { return entry }
+        lines.remove(at: index)
+        while index < lines.count, lines[index].trimmingCharacters(in: .whitespaces).isEmpty {
+            lines.remove(at: index)
+        }
+        return lines.joined(separator: "\n")
+    }
+
+    /// Entry body to write under `prefix` (a raw template, before rendering).
+    public static func entry(_ entry: String, under prefixTemplate: String, for request: CaptureRequest) -> String {
+        usesTitle(prefixTemplate) ? Self.entry(entry, droppingHeadingFor: title(for: request)) : entry
     }
 
     private func locationMapLink(for request: CaptureRequest) -> String {

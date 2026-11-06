@@ -1,4 +1,6 @@
+import contextlib
 import importlib.util
+import io
 import json
 import os
 from pathlib import Path
@@ -93,8 +95,9 @@ class Issue22SimulatorTests(unittest.TestCase):
                 "selector", "--github-output", str(output), "--metadata", str(metadata),
             ]), patch.object(selector.subprocess, "check_output", side_effect=[
                 "26.5\n", json.dumps({"runtimes": self.runtimes}), json.dumps({"devices": self.devices}),
-            ]):
+            ]), contextlib.redirect_stdout(io.StringIO()) as stdout:
                 self.assertEqual(selector.main(), 0)
+            self.assertIn("Using SDK-matched simulator:", stdout.getvalue())
             self.assertEqual(output.read_text(), f"destination=platform=iOS Simulator,id={CURRENT}\n")
             receipt = json.loads(metadata.read_text())
             self.assertEqual(receipt["selected"]["runtime"]["version"], "26.5")
@@ -109,8 +112,11 @@ class Issue22SimulatorTests(unittest.TestCase):
                 "selector", "--github-output", str(output), "--metadata", str(metadata),
             ]), patch.object(selector.subprocess, "check_output", side_effect=[
                 "26.5\n", json.dumps({"runtimes": self.runtimes}), json.dumps({"devices": self.devices}),
-            ]):
+            ]), contextlib.redirect_stderr(io.StringIO()) as stderr:
                 self.assertEqual(selector.main(), 1)
+            # The GitHub annotation is the expected output of this synthetic
+            # failure; capture it so it is not mistaken for a real simulator error.
+            self.assertIn("::error::No available iPhone simulator for the selected iOS SDK 26.5", stderr.getvalue())
             self.assertFalse(output.exists())
             self.assertIn("No available iPhone simulator", json.loads(metadata.read_text())["error"])
 

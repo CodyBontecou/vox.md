@@ -19,10 +19,15 @@ internal data class CachedPlayEntitlement(
 /**
  * Installation-scoped, tamper-evident continuity evidence for the last authoritative
  * Google Play ownership query. App backup is disabled, and the HMAC key is non-exportable.
+ *
+ * The signed product ID records which recognized product (lifetime or a subscription) granted the
+ * entitlement; [productID] is the default written for a negative answer. The record format is
+ * unchanged from v2, so existing lifetime evidence keeps working after an update.
  */
 internal class PlayEntitlementCache(
     context: Context,
     private val productID: String,
+    private val recognizedProductIDs: Set<String> = setOf(productID),
     private val preferencesName: String = PREFERENCES_NAME,
     private val keyAlias: String = KEY_ALIAS,
 ) {
@@ -42,7 +47,8 @@ internal class PlayEntitlementCache(
         val cachedProductID = preferences.getString(KEY_PRODUCT_ID, null)
         val checkedAt = preferences.getLong(KEY_CHECKED_AT, Long.MIN_VALUE)
         val encodedMac = preferences.getString(KEY_MAC, null)
-        if (cachedProductID != productID ||
+        if (cachedProductID == null ||
+            cachedProductID !in recognizedProductIDs ||
             !preferences.contains(KEY_OWNED) ||
             checkedAt <= 0L ||
             encodedMac.isNullOrBlank()
@@ -62,15 +68,20 @@ internal class PlayEntitlementCache(
         return CachedPlayEntitlement(cachedProductID, isOwned, checkedAt)
     }
 
-    fun write(isOwned: Boolean, checkedAtEpochMillis: Long): Boolean {
+    fun write(
+        isOwned: Boolean,
+        checkedAtEpochMillis: Long,
+        ownedProductID: String = productID,
+    ): Boolean {
         if (checkedAtEpochMillis <= 0L) return false
+        val recordedProductID = ownedProductID.takeIf { isOwned && it in recognizedProductIDs } ?: productID
         return runCatching {
             val encodedMac = Base64.encodeToString(
-                signature(payload(productID, isOwned, checkedAtEpochMillis)),
+                signature(payload(recordedProductID, isOwned, checkedAtEpochMillis)),
                 Base64.NO_WRAP,
             )
             preferences.edit()
-                .putString(KEY_PRODUCT_ID, productID)
+                .putString(KEY_PRODUCT_ID, recordedProductID)
                 .putBoolean(KEY_OWNED, isOwned)
                 .putLong(KEY_CHECKED_AT, checkedAtEpochMillis)
                 .putString(KEY_MAC, encodedMac)

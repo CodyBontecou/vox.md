@@ -51,7 +51,25 @@ class SubscriptionTransitionTests(unittest.TestCase):
         mac = (ROOT / "Voxboard Mac/MacRootView.swift").read_text()
         self.assertIn('accessibilityIdentifier("paywall.existingHistory")', ios)
         self.assertIn("HistoryView(viewModel: historyViewModel, isReadOnly: true)", ios)
-        self.assertIn("if !isReadOnly && viewModel.failedInboxCount > 0", history)
+        # The Library rewrite moved failed-inbox retry out of HistoryView into
+        # Activity: History offers no capture retry at all, and every Activity
+        # retry path goes through the single paid-access gate.
+        self.assertNotIn("retryFailedInbox", history)
+        self.assertNotIn("failedInboxCount", history)
+        self.assertIn("func requirePaidAccess(otherwise showPlans: () -> Void, _ action: () -> Void)", history)
+        activity = (ROOT / "Voxboard/Views/ActivityFeedView.swift").read_text()
+        self.assertIn("usageTracker.requirePaidAccess(otherwise: { showsPlans = true }, action)", activity)
+        self.assertIn("requirePaidAccess { retry(problem) }", activity)
+        self.assertIn("requirePaidAccess { watchPipeline.retry(item) }", activity)
+        self.assertNotIn('Button("Retry") {', activity)
+        recovery = (ROOT / "Voxboard/Views/DeliveryRecoverySheet.swift").read_text()
+        self.assertIn("performPaid { try await retry() }", recovery)
+        self.assertNotIn("perform { try await retry() }", recovery)
+        # Queued retries need paid access, so automatic drains hold the queue.
+        composer = (ROOT / "Voxboard App Shared/CaptureComposerViewModel.swift").read_text()
+        self.assertIn("guard hasPaidCaptureAccess() else {", composer)
+        background = (ROOT / "Voxboard/CaptureInboxBackgroundDrain.swift").read_text()
+        self.assertIn("guard !UsageTracker.staticIsAtLimit else { return true }", background)
         self.assertIn('Button("Export", systemImage: "square.and.arrow.up")', history)
         self.assertIn("MacHistoryView(viewModel: historyViewModel, isReadOnly: true)", mac)
         self.assertIn("if !isReadOnly && viewModel.failedInboxCount > 0", mac)

@@ -170,3 +170,79 @@ final class CapturePathPlannerTests: XCTestCase {
         )
     }
 }
+
+final class CapturePathPlannerTitleTokenTests: XCTestCase {
+    private let destinationID = UUID(uuidString: "11111111-2222-3333-4444-555555555555")!
+    private let requestID = UUID(uuidString: "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE")!
+    private let date = Date(timeIntervalSince1970: 1_704_164_645) // 2024-01-02T03:04:05Z
+
+    func test_titleToken_usesFirstLineOfTypedText() throws {
+        let path = try plan("Inbox/{title}", payloads: [.text("Book recs from Sam\nThe Overstory")])
+        XCTAssertEqual(path, "Inbox/Book recs from Sam.md")
+    }
+
+    func test_titleToken_stripsMarkdownMarkersAndUnsafeCharacters() throws {
+        XCTAssertEqual(try plan("Inbox/{title}", payloads: [.text("## Q3: plan/review?")]), "Inbox/Q3 plan review.md")
+        XCTAssertEqual(try plan("Inbox/{title}", payloads: [.text("- [ ] Call <Ana> | \"today\"")]), "Inbox/Call Ana today.md")
+        XCTAssertEqual(try plan("Inbox/{title}", payloads: [.text("../../etc")]), "Inbox/etc.md")
+    }
+
+    func test_titleToken_skipsBlankLinesAndUsesLinkTitle() throws {
+        XCTAssertEqual(try plan("Inbox/{title}", payloads: [.text("\n   \n#\nSecond line")]), "Inbox/Second line.md")
+        XCTAssertEqual(
+            try plan("Inbox/{title}", payloads: [.url(URL(string: "https://example.com/a")!, title: "Example Article")]),
+            "Inbox/Example Article.md"
+        )
+    }
+
+    func test_titleToken_fallsBackToTimestampWithoutText() throws {
+        XCTAssertEqual(try plan("Inbox/{title}", payloads: []), "Inbox/2024-01-02-030405.md")
+        XCTAssertEqual(try plan("Inbox/{title}", payloads: [.text("  /// ")]), "Inbox/2024-01-02-030405.md")
+    }
+
+    func test_titleToken_capsLengthAndKeepsMarkdownExtension() throws {
+        let long = String(repeating: "word ", count: 40)
+        let path = try plan("Inbox/{title}", payloads: [.text(long)])
+        let title = ((path as NSString).lastPathComponent as NSString).deletingPathExtension
+        XCTAssertLessThanOrEqual(title.count, CapturePathPlanner.maximumTitleLength)
+        XCTAssertTrue(path.hasSuffix(".md"))
+        XCTAssertEqual(try plan("Inbox/{title}", payloads: [.text("Release 2.5")]), "Inbox/Release 2.5.md")
+    }
+
+    func test_titleToken_doesNotRenderTokensInsideCaptureText() throws {
+        XCTAssertEqual(try plan("Inbox/{title}", payloads: [.text("Notes {date}")]), "Inbox/Notes {date}.md")
+    }
+
+    func test_titleToken_newNoteStaysUnique() throws {
+        let destination = makeDestination(target: .newNote(pathTemplate: "Inbox/{title}"))
+        let request = makeRequest(payloads: [.text("Idea")])
+        let path = try planner().relativePath(
+            for: request,
+            destination: destination,
+            existingRelativePaths: ["Inbox/Idea.md"]
+        )
+        XCTAssertEqual(path, "Inbox/Idea-2.md")
+    }
+
+    private func plan(_ template: String, payloads: [CapturePayload]) throws -> String {
+        try planner().relativePath(
+            for: makeRequest(payloads: payloads),
+            destination: makeDestination(target: .newNote(pathTemplate: template))
+        )
+    }
+
+    private func planner() -> CapturePathPlanner {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = Locale(identifier: "en_US_POSIX")
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        return CapturePathPlanner(calendar: calendar)
+    }
+
+    private func makeRequest(payloads: [CapturePayload]) -> CaptureRequest {
+        CaptureRequest(id: requestID, createdAt: date, source: .app, destinationID: destinationID, payloads: payloads)
+    }
+
+    private func makeDestination(target: CaptureNoteTarget) -> CaptureDestination {
+        CaptureDestination(id: destinationID, name: "Test", rootBookmark: Data([1, 2, 3]), rootName: "Vault", noteTarget: target)
+    }
+}

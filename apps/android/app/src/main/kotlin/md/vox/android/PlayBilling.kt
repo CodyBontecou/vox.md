@@ -145,14 +145,164 @@ data class BillingUiState(
     val lastRestoreDiagnostics: BillingRestoreDiagnostics? = null,
     val isEntitlementStale: Boolean = false,
     val hasPendingPurchase: Boolean = false,
+    val isPurchasing: Boolean = false,
+    val isRestoring: Boolean = false,
+    /** Plans priced from Play's offers; empty until product details load. */
+    val plans: List<VoxPlanOption> = emptyList(),
+    val ownsLifetime: Boolean = false,
+    val hasActiveSubscription: Boolean = false,
+    /** Product ID (not a token) of the active Weekly or Yearly subscription, if any. */
+    val activeSubscriptionProductID: String? = null,
+    /**
+     * Subscription product this person switched to with a deferred replacement (Yearly to
+     * Weekly); it starts at the next renewal. Recorded from our own completed Play flow,
+     * because Play's client API does not report scheduled plan changes.
+     */
+    val scheduledSubscriptionProductID: String? = null,
+    /** Set once when a free-trial purchase succeeds so the UI can ask for notification permission. */
+    val trialReminderPromptPending: Boolean = false,
 ) {
     val hasUnlimitedAccess: Boolean get() = entitlement == VoxEntitlement.UNLIMITED
+
+    /** Plans to offer; a hand-built state with only a Lifetime price still shows Lifetime. */
+    val purchasablePlans: List<VoxPlanOption>
+        get() = plans.ifEmpty {
+            listOfNotNull(
+                formattedPrice?.takeIf { productAvailable }?.let {
+                    VoxPlanOption(VoxPlan.LIFETIME, it, 0L, "", null, null, "")
+                },
+            )
+        }
 }
 
 internal fun entitlementForPurchaseStates(states: Collection<Int>): VoxEntitlement = when {
     Purchase.PurchaseState.PURCHASED in states -> VoxEntitlement.UNLIMITED
     Purchase.PurchaseState.PENDING in states -> VoxEntitlement.PENDING
     else -> VoxEntitlement.FREE
+}
+
+/**
+ * Privacy-safe projection of a Play purchase used for entitlement decisions: product IDs and
+ * transaction state only. No token, order ID, account ID, or capture data.
+ */
+internal data class PlayPurchaseSnapshot(
+    val productIDs: List<String>,
+    val purchaseState: Int,
+    val isAcknowledged: Boolean,
+    val isSuspended: Boolean = false,
+    val isAutoRenewing: Boolean = false,
+)
+
+internal fun Purchase.snapshot(): PlayPurchaseSnapshot = PlayPurchaseSnapshot(
+    productIDs = products,
+    purchaseState = purchaseState,
+    isAcknowledged = isAcknowledged,
+    isSuspended = isSuspended,
+    isAutoRenewing = isAutoRenewing,
+)
+
+internal data class UnlimitedEntitlementDecision(
+    val decision: BillingEntitlementDecision,
+    /** Recognized product currently granting Unlimited (lifetime preferred), when any. */
+    val grantingProductID: String?,
+    val hasRecognizedPurchase: Boolean,
+)
+
+/**
+ * Lifetime purchases grant Unlimited once PURCHASED. Subscriptions grant only while Play
+ * reports them PURCHASED, acknowledged, and not suspended (payment hold). Expired or revoked
+ * subscriptions are absent from Play's query, so an authoritative query without them drops
+ * access. A purchased-but-unacknowledged subscription counts as pending until acknowledged.
+ */
+internal fun unlimitedEntitlementDecision(
+    priorEntitlement: VoxEntitlement,
+    purchases: Collection<PlayPurchaseSnapshot>,
+    authoritativeOwnershipQuery: Boolean,
+): UnlimitedEntitlementDecision {
+    val recognizedIDs = PlayBillingManager.ALL_PRODUCT_IDS
+    val relevant = purchases.filter { purchase -> purchase.productIDs.any { it in recognizedIDs } }
+    val effective = relevant.mapNotNull { purchase ->
+        val isLifetime = PlayBillingManager.LIFETIME_PRODUCT_ID in purchase.productIDs
+        val state = when {
+            isLifetime -> purchase.purchaseState
+            purchase.purchaseState != Purchase.PurchaseState.PURCHASED -> purchase.purchaseState
+            purchase.isSuspended -> return@mapNotNull null
+            !purchase.isAcknowledged -> Purchase.PurchaseState.PENDING
+            else -> Purchase.PurchaseState.PURCHASED
+        }
+        purchase to state
+    }
+    val decision = billingEntitlementDecision(
+        priorEntitlement = priorEntitlement,
+        states = effective.map { it.second },
+        authoritativeOwnershipQuery = authoritativeOwnershipQuery,
+    )
+    val grantingIDs = effective
+        .filter { it.second == Purchase.PurchaseState.PURCHASED }
+        .flatMap { it.first.productIDs }
+        .filter { it in recognizedIDs }
+    val granting = grantingIDs.firstOrNull { it == PlayBillingManager.LIFETIME_PRODUCT_ID } ?: grantingIDs.firstOrNull()
+    return UnlimitedEntitlementDecision(decision, granting, relevant.isNotEmpty())
+}
+
+/** Whether a known subscription is still set to renew, so the trial reminder remains useful. */
+internal fun hasRenewingSubscription(purchases: Collection<PlayPurchaseSnapshot>): Boolean = purchases.any { purchase ->
+    purchase.purchaseState == Purchase.PurchaseState.PURCHASED &&
+        purchase.isAutoRenewing &&
+        purchase.productIDs.any { it in PlayBillingManager.SUBSCRIPTION_PRODUCT_IDS }
+}
+
+/**
+ * Merges the two ProductDetails queries (one-time + subscriptions) into the status shown to
+ * users. Missing products are only an error when nothing at all could be sold.
+ */
+internal fun productStatusAfterQueries(
+    loadedPlanCount: Int,
+    failedResponseCodes: List<Int>,
+): String? = when {
+    loadedPlanCount > 0 -> null
+    failedResponseCodes.isNotEmpty() -> "productQuery:${failedResponseCodes.first()}"
+    else -> "productNotConfigured"
+}
+
+/**
+ * A deferred switch stays scheduled until Play shows the new product active, or until no
+ * subscription remains (for example after cancellation).
+ */
+internal fun scheduledPlanAfterQuery(scheduledProductID: String?, activeSubscriptionProductID: String?): String? = when {
+    scheduledProductID == null -> null
+    activeSubscriptionProductID == null -> null
+    activeSubscriptionProductID == scheduledProductID -> null
+    else -> scheduledProductID
+}
+
+internal fun isVoxPurchase(purchase: Purchase): Boolean =
+    PlayBillingManager.PRODUCT_ID in purchase.products ||
+        purchase.products.any { it in PlayBillingManager.SUBSCRIPTION_PRODUCT_IDS }
+
+internal data class VoxOwnership(
+    val ownsLifetime: Boolean,
+    val activeSubscriptionToken: String?,
+    /** Which subscription product (Weekly or Yearly) is active, for plan switching and the manage link. */
+    val activeSubscriptionProductID: String? = null,
+)
+
+/**
+ * Unlimited = an active subscription OR Lifetime. Play's purchase query returns only
+ * subscriptions that are currently entitled (active, grace period, or canceled but unexpired).
+ */
+internal fun voxOwnership(purchases: Collection<Purchase>): VoxOwnership = voxOwnershipFrom(
+    purchases.map { purchase -> Triple(purchase.products, purchase.purchaseState, purchase.purchaseToken) },
+)
+
+internal fun voxOwnershipFrom(purchases: Collection<Triple<List<String>, Int, String>>): VoxOwnership {
+    val purchased = purchases.filter { it.second == Purchase.PurchaseState.PURCHASED }
+    val subscription = purchased.firstOrNull { purchase -> purchase.first.any { it in PlayBillingManager.SUBSCRIPTION_PRODUCT_IDS } }
+    return VoxOwnership(
+        ownsLifetime = purchased.any { PlayBillingManager.PRODUCT_ID in it.first },
+        activeSubscriptionToken = subscription?.third,
+        activeSubscriptionProductID = subscription?.first?.firstOrNull { it in PlayBillingManager.SUBSCRIPTION_PRODUCT_IDS },
+    )
 }
 
 internal data class BillingEntitlementDecision(
@@ -201,13 +351,14 @@ internal fun billingStatusAfterProductQuery(
     existingStatus: String?,
     productStatus: String?,
 ): String? = existingStatus?.takeIf {
-    it == "entitlementCacheUnavailable" || it == "unrecognizedPurchase"
+    it == "entitlementCacheUnavailable" || it == "unrecognizedPurchase" || it.startsWith("acknowledge:")
 } ?: productStatus
 
 /** Phone-only Play Billing owner; no purchase data enters capture packages or the Wear app. */
 class PlayBillingManager private constructor(context: Context) {
     private val appContext = context.applicationContext
-    private val entitlementCache = PlayEntitlementCache(appContext, PRODUCT_ID)
+    private val entitlementCache = PlayEntitlementCache(appContext, PRODUCT_ID, ALL_PRODUCT_IDS)
+    private val planChangePreferences = appContext.getSharedPreferences(PLAN_CHANGE_PREFERENCES, Context.MODE_PRIVATE)
     private val cachedEvidence = entitlementCache.read()
     private val cachedEntitlement = if (cachedEvidence?.isOwned == true) {
         VoxEntitlement.UNLIMITED
@@ -217,13 +368,27 @@ class PlayBillingManager private constructor(context: Context) {
     private val mutableState = MutableStateFlow(
         BillingUiState(
             entitlement = cachedEntitlement,
+            ownsLifetime = cachedEvidence?.takeIf { it.isOwned }?.productID == LIFETIME_PRODUCT_ID,
+            activeSubscriptionProductID = cachedEvidence?.takeIf { it.isOwned }?.productID?.takeIf { it in SUBSCRIPTION_PRODUCT_IDS },
+            scheduledSubscriptionProductID = planChangePreferences.getString(KEY_SCHEDULED_PRODUCT, null)
+                ?.takeIf { it in SUBSCRIPTION_PRODUCT_IDS },
             lastCheckedAtEpochMillis = cachedEvidence?.checkedAtEpochMillis,
             isEntitlementStale = cachedEvidence?.isOwned == true,
         ),
     )
     val state: StateFlow<BillingUiState> = mutableState.asStateFlow()
 
+    private val operations = BillingOperations()
+    private val acknowledging = java.util.concurrent.ConcurrentHashMap.newKeySet<String>()
     @Volatile private var productDetails: ProductDetails? = null
+    /** Weekly and Yearly subscription products, keyed by product ID. */
+    @Volatile private var subscriptionDetails: Map<String, ProductDetails> = emptyMap()
+    /** Held only in memory to switch plans; never logged, cached or put in UI state. */
+    @Volatile private var activeSubscriptionToken: String? = null
+    /** The free-trial plan whose billing flow is open, so a success can schedule the reminder. */
+    @Volatile private var trialLaunch: VoxPlanOption? = null
+    /** Product a deferred replacement flow is switching to while that flow is open. */
+    @Volatile private var deferredLaunchProductID: String? = null
     @Volatile private var connectionStarted = false
     @Volatile private var restoreRequested = false
 
@@ -267,11 +432,21 @@ class PlayBillingManager private constructor(context: Context) {
 
             override fun onBillingServiceDisconnected() {
                 connectionStarted = false
+                synchronized(this@PlayBillingManager) {
+                    restoreRequested = operations.disconnected() || restoreRequested
+                }
+                productDetails = null
+                subscriptionDetails = emptyMap()
                 mutableState.update {
                     it.copy(
+                        plans = emptyList(),
                         connectionPhase = BillingConnectionPhase.UNAVAILABLE,
                         lastOutcome = BillingActionOutcome.UNAVAILABLE,
                         statusCode = "billingDisconnected",
+                        productAvailable = false,
+                        formattedPrice = null,
+                        isPurchasing = false,
+                        isRestoring = false,
                         isEntitlementStale = it.entitlement == VoxEntitlement.UNLIMITED,
                     )
                 }
@@ -280,7 +455,10 @@ class PlayBillingManager private constructor(context: Context) {
     }
 
     fun refresh(restored: Boolean = false) {
-        if (restored) restoreRequested = true
+        if (restored) {
+            synchronized(this) { restoreRequested = true }
+            mutableState.update { it.copy(isRestoring = true) }
+        }
         mutableState.update { it.copy(lastOutcome = null, statusCode = null) }
         if (!billingClient.isReady) {
             start()
@@ -292,33 +470,94 @@ class PlayBillingManager private constructor(context: Context) {
 
     fun restore() = refresh(restored = true)
 
-    fun launchPurchase(activity: Activity) {
-        val details = productDetails
-        if (!billingClient.isReady || details == null) {
-            mutableState.update {
-                it.copy(
-                    lastOutcome = BillingActionOutcome.UNAVAILABLE,
-                    statusCode = if (billingClient.isReady) "productUnavailable" else "billingUnavailable",
-                )
-            }
+    /** Opens Play's subscription center for the Vox.md subscription. */
+    fun manageSubscriptions(activity: Activity) {
+        runCatching {
+            activity.startActivity(
+                android.content.Intent(
+                    android.content.Intent.ACTION_VIEW,
+                    android.net.Uri.parse(
+                        VoxPlayCatalog.manageSubscriptionsUrl(appContext.packageName, mutableState.value.activeSubscriptionProductID),
+                    ),
+                ),
+            )
+        }
+    }
+
+    fun launchPurchase(activity: Activity, plan: VoxPlan = VoxPlan.LIFETIME) {
+        val current = mutableState.value
+        if (!current.canPurchase() || !operations.beginPurchase(
+                current.entitlement,
+                current.hasPendingPurchase,
+                upgradeAllowed = current.hasActiveSubscription && !current.ownsLifetime,
+            )
+        ) return
+        val option = current.plans.firstOrNull { it.plan == plan }
+        val details = if (plan == VoxPlan.LIFETIME) productDetails else subscriptionDetails[plan.productID]
+        if (current.hasActiveSubscription && activeSubscriptionToken == null && plan.isSubscription) {
+            // Cached access without this session's Play answer: refresh before replacing anything.
+            operations.finishPurchase()
             refresh()
             return
         }
-        val params = BillingFlowParams.newBuilder()
-            .setProductDetailsParamsList(
-                listOf(
-                    BillingFlowParams.ProductDetailsParams.newBuilder()
-                        .setProductDetails(details)
-                        .build(),
-                ),
-            )
-            .build()
-        val result = billingClient.launchBillingFlow(activity, params)
-        if (result.responseCode != BillingClient.BillingResponseCode.OK) {
-            mutableState.update {
-                it.copy(lastOutcome = BillingActionOutcome.ERROR, statusCode = "billingLaunch:${result.responseCode}")
-            }
+        val request = voxPurchaseRequest(
+            option,
+            current.ownsLifetime,
+            activeSubscriptionToken,
+            current.hasPendingPurchase,
+            current.activeSubscriptionProductID,
+            current.scheduledSubscriptionProductID,
+        )
+        val offerToken = when (request) {
+            is VoxPurchaseRequest.Lifetime -> request.offerToken
+            is VoxPurchaseRequest.NewSubscription -> request.offerToken
+            is VoxPurchaseRequest.ReplaceSubscription -> request.offerToken
+            is VoxPurchaseRequest.Blocked -> null
         }
+        if (!billingClient.isReady || details == null || offerToken.isNullOrBlank()) {
+            operations.finishPurchase()
+            mutableState.update { it.copy(lastOutcome = BillingActionOutcome.UNAVAILABLE, statusCode = "productUnavailable", isPurchasing = false) }
+            refresh()
+            return
+        }
+        trialLaunch = option?.takeIf { it.hasFreeTrial && request is VoxPurchaseRequest.NewSubscription }
+        deferredLaunchProductID = (request as? VoxPurchaseRequest.ReplaceSubscription)
+            ?.takeIf { it.mode == VoxReplacementMode.DEFERRED }
+            ?.let { plan.productID }
+        mutableState.update { it.copy(isPurchasing = true, lastOutcome = null) }
+        val result = runCatching {
+            val builder = BillingFlowParams.newBuilder()
+                .setProductDetailsParamsList(listOf(BillingFlowParams.ProductDetailsParams.newBuilder()
+                    .setProductDetails(details).setOfferToken(offerToken).build()))
+            if (request is VoxPurchaseRequest.ReplaceSubscription) {
+                builder.setSubscriptionUpdateParams(
+                    BillingFlowParams.SubscriptionUpdateParams.newBuilder()
+                        .setOldPurchaseToken(request.oldPurchaseToken)
+                        .setSubscriptionReplacementMode(
+                            when (request.mode) {
+                                VoxReplacementMode.WITH_TIME_PRORATION ->
+                                    BillingFlowParams.SubscriptionUpdateParams.ReplacementMode.WITH_TIME_PRORATION
+                                VoxReplacementMode.DEFERRED ->
+                                    BillingFlowParams.SubscriptionUpdateParams.ReplacementMode.DEFERRED
+                            },
+                        )
+                        .build(),
+                )
+            }
+            billingClient.launchBillingFlow(activity, builder.build())
+        }.getOrElse {
+            operations.finishPurchase()
+            mutableState.update { it.copy(lastOutcome = BillingActionOutcome.ERROR, statusCode = "billingLaunchFailed", isPurchasing = false) }
+            return
+        }
+        if (result.responseCode != BillingClient.BillingResponseCode.OK) {
+            onPurchasesUpdated(result,emptyList())
+        }
+    }
+
+    /** Clears the one-shot request to ask for notification permission after a trial starts. */
+    fun consumeTrialReminderPrompt() {
+        mutableState.update { it.copy(trialReminderPromptPending = false) }
     }
 
     fun consumeOutcome() {
@@ -326,84 +565,192 @@ class PlayBillingManager private constructor(context: Context) {
     }
 
     private fun queryProduct() {
-        val product = QueryProductDetailsParams.Product.newBuilder()
+        val generation = synchronized(operations) {
+            productDetails = null
+            subscriptionDetails = emptyMap()
+            mutableState.update { it.copy(productAvailable = false, formattedPrice = null, plans = emptyList()) }
+            operations.beginProductQuery()
+        }
+        val lifetime = QueryProductDetailsParams.Product.newBuilder()
             .setProductId(PRODUCT_ID)
             .setProductType(BillingClient.ProductType.INAPP)
             .build()
-        val params = QueryProductDetailsParams.newBuilder().setProductList(listOf(product)).build()
+        val params = QueryProductDetailsParams.newBuilder().setProductList(listOf(lifetime)).build()
         billingClient.queryProductDetailsAsync(params) { result, detailsResult ->
-            if (result.responseCode != BillingClient.BillingResponseCode.OK) {
-                productDetails = null
-                mutableState.update {
-                    it.copy(
-                        productAvailable = false,
-                        formattedPrice = null,
-                        statusCode = billingStatusAfterProductQuery(
-                            existingStatus = it.statusCode,
-                            productStatus = "productQuery:${result.responseCode}",
-                        ),
-                    )
+            synchronized(operations) {
+                if (!operations.isCurrentProductQuery(generation)) return@queryProductDetailsAsync
+                if (result.responseCode != BillingClient.BillingResponseCode.OK) {
+                    productDetails = null
+                    mutableState.update {
+                        it.copy(
+                            productAvailable = false,
+                            formattedPrice = null,
+                            statusCode = billingStatusAfterProductQuery(
+                                existingStatus = it.statusCode,
+                                productStatus = "productQuery:${result.responseCode}",
+                            ),
+                        )
+                    }
+                } else {
+                    productDetails = detailsResult.productDetailsList.firstOrNull {
+                        it.productId == PRODUCT_ID && it.oneTimePurchaseOfferDetails?.let { offer ->
+                            offer.rentalDetails == null && offer.preorderDetails == null && !offer.offerToken.isNullOrBlank()
+                        } == true
+                    }
+                    publishPlans()
                 }
-                return@queryProductDetailsAsync
             }
-            val details = detailsResult.productDetailsList.firstOrNull { it.productId == PRODUCT_ID }
-            productDetails = details
-            mutableState.update {
-                it.copy(
-                    productAvailable = details != null,
-                    formattedPrice = details?.oneTimePurchaseOfferDetails?.formattedPrice,
-                    statusCode = billingStatusAfterProductQuery(
-                        existingStatus = it.statusCode,
-                        productStatus = if (details == null) "productNotConfigured" else null,
-                    ),
-                )
+            querySubscriptionProduct(generation)
+        }
+    }
+
+    /** Weekly and Yearly are separate subscription products; their offers carry prices and trials. */
+    private fun querySubscriptionProduct(generation: Long) {
+        val subscriptions = SUBSCRIPTION_PRODUCT_IDS.map { productID ->
+            QueryProductDetailsParams.Product.newBuilder()
+                .setProductId(productID)
+                .setProductType(BillingClient.ProductType.SUBS)
+                .build()
+        }
+        val params = QueryProductDetailsParams.newBuilder().setProductList(subscriptions).build()
+        billingClient.queryProductDetailsAsync(params) { result, detailsResult ->
+            synchronized(operations) {
+                if (!operations.isCurrentProductQuery(generation)) return@queryProductDetailsAsync
+                subscriptionDetails = if (result.responseCode == BillingClient.BillingResponseCode.OK) {
+                    detailsResult.productDetailsList
+                        .filter { it.productId in SUBSCRIPTION_PRODUCT_IDS }
+                        .associateBy { it.productId }
+                } else emptyMap()
+                publishPlans()
             }
         }
     }
 
-    private fun queryOwnership(restored: Boolean) {
-        val params = QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP).build()
-        billingClient.queryPurchasesAsync(params) { result, purchasesResult ->
-            if (result.responseCode != BillingClient.BillingResponseCode.OK) {
-                publishUnavailable("purchaseQuery:${result.responseCode}")
-                if (restored) recordRestoreDiagnostics(result.responseCode, purchasesResult)
-                return@queryPurchasesAsync
-            }
-            val relevant = purchasesResult.filter { PRODUCT_ID in it.products }
-            val decision = billingEntitlementDecision(
-                priorEntitlement = mutableState.value.entitlement,
-                states = relevant.map(Purchase::getPurchaseState),
-                authoritativeOwnershipQuery = true,
+    private fun publishPlans() {
+        val lifetime = productDetails?.oneTimePurchaseOfferDetails?.let { offer ->
+            VoxPlanOption(
+                plan = VoxPlan.LIFETIME,
+                formattedPrice = offer.formattedPrice,
+                priceAmountMicros = offer.priceAmountMicros,
+                currencyCode = offer.priceCurrencyCode,
+                billingPeriod = null,
+                freeTrialPeriod = null,
+                offerToken = offer.offerToken.orEmpty(),
             )
-            val checkedAt = System.currentTimeMillis()
-            val cachePersisted = decision.authoritativeOwned?.let { owned ->
-                entitlementCache.write(owned, checkedAt)
-            } ?: true
-            UnlimitedAccessRegistry.update(decision.entitlement == VoxEntitlement.UNLIMITED)
-            relevant.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED && !it.isAcknowledged }
-                .forEach(::acknowledge)
-            mutableState.update {
-                it.copy(
-                    connectionPhase = BillingConnectionPhase.READY,
-                    entitlement = decision.entitlement,
-                    lastCheckedAtEpochMillis = if (decision.authoritativeOwned != null) checkedAt else it.lastCheckedAtEpochMillis,
-                    lastOutcome = when {
-                        decision.hasPendingPurchase -> BillingActionOutcome.PENDING
-                        restored && decision.authoritativeOwned == true -> BillingActionOutcome.RESTORED
-                        restored -> BillingActionOutcome.NOT_FOUND
-                        else -> it.lastOutcome
-                    },
-                    statusCode = if (cachePersisted) retainedProductStatus(it.statusCode) else "entitlementCacheUnavailable",
-                    isEntitlementStale = if (decision.authoritativeOwned != null) {
-                        false
-                    } else {
-                        it.isEntitlementStale
-                    },
-                    hasPendingPurchase = decision.hasPendingPurchase,
-                )
-            }
-            if (restored) recordRestoreDiagnostics(result.responseCode, purchasesResult)
         }
+        val subscriptions = subscriptionPlanOptions(
+            subscriptionDetails.values.flatMap { details ->
+                details.subscriptionOfferDetails.orEmpty().map { offer -> details.productId to offer }
+            }.map { (productID, offer) ->
+                PlaySubscriptionOffer(
+                    productID = productID,
+                    basePlanID = offer.basePlanId,
+                    offerID = offer.offerId,
+                    offerToken = offer.offerToken,
+                    phases = offer.pricingPhases.pricingPhaseList.map { phase ->
+                        PlayPricingPhase(
+                            formattedPrice = phase.formattedPrice,
+                            priceAmountMicros = phase.priceAmountMicros,
+                            currencyCode = phase.priceCurrencyCode,
+                            billingPeriod = phase.billingPeriod,
+                            billingCycleCount = phase.billingCycleCount,
+                            isInfiniteRecurring = phase.recurrenceMode == ProductDetails.RecurrenceMode.INFINITE_RECURRING,
+                        )
+                    },
+                )
+            },
+        )
+        val plans = subscriptions + listOfNotNull(lifetime)
+        mutableState.update {
+            it.copy(
+                plans = plans,
+                productAvailable = plans.isNotEmpty(),
+                formattedPrice = lifetime?.formattedPrice,
+                statusCode = billingStatusAfterProductQuery(
+                    existingStatus = it.statusCode,
+                    productStatus = productStatusAfterQueries(plans.size, emptyList()),
+                ),
+            )
+        }
+    }
+
+    private fun queryOwnership(restored: Boolean) {
+        val generation = operations.beginOwnershipQuery(restored)
+        mutableState.update { it.copy(isRestoring = operations.isRestoring()) }
+        val lifetimeParams = QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP).build()
+        billingClient.queryPurchasesAsync(lifetimeParams) { lifetimeResult, lifetimePurchases ->
+            val subscriptionParams = QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS).build()
+            billingClient.queryPurchasesAsync(subscriptionParams) { subscriptionResult, subscriptionPurchases ->
+                finishOwnershipQuery(generation, lifetimeResult, lifetimePurchases, subscriptionResult, subscriptionPurchases)
+            }
+        }
+    }
+
+    /** Ownership is authoritative only when both the one-time and the subscription queries succeed. */
+    private fun finishOwnershipQuery(
+        generation: Long,
+        lifetimeResult: BillingResult,
+        lifetimePurchases: List<Purchase>,
+        subscriptionResult: BillingResult,
+        subscriptionPurchases: List<Purchase>,
+    ) = synchronized(operations) {
+        val wasRestoring = operations.finishOwnershipQuery(generation) ?: return@synchronized
+        mutableState.update { it.copy(isRestoring = false) }
+        val failed = listOf(lifetimeResult, subscriptionResult).firstOrNull { it.responseCode != BillingClient.BillingResponseCode.OK }
+        val purchasesResult = lifetimePurchases + subscriptionPurchases
+        if (failed != null) {
+            publishUnavailable("purchaseQuery:${failed.responseCode}")
+            if (wasRestoring) recordRestoreDiagnostics(failed.responseCode, purchasesResult)
+            return@synchronized
+        }
+        val relevant = purchasesResult.filter(::isVoxPurchase)
+        val snapshots = relevant.map { it.snapshot() }
+        val evaluation = unlimitedEntitlementDecision(
+            priorEntitlement = mutableState.value.entitlement,
+            purchases = snapshots,
+            authoritativeOwnershipQuery = true,
+        )
+        val decision = evaluation.decision
+        val ownership = voxOwnership(relevant.filter { !it.isSuspended })
+        activeSubscriptionToken = ownership.activeSubscriptionToken
+        if (!hasRenewingSubscription(snapshots)) TrialReminderScheduler.cancel(appContext)
+        val scheduled = scheduledPlanAfterQuery(
+            mutableState.value.scheduledSubscriptionProductID,
+            ownership.activeSubscriptionProductID,
+        )
+        persistScheduledPlan(scheduled)
+        val checkedAt = System.currentTimeMillis()
+        val cachePersisted = decision.authoritativeOwned?.let { owned ->
+            entitlementCache.write(owned, checkedAt, evaluation.grantingProductID ?: PRODUCT_ID)
+        } ?: true
+        UnlimitedAccessRegistry.update(decision.entitlement == VoxEntitlement.UNLIMITED)
+        mutableState.update {
+            it.copy(
+                connectionPhase = BillingConnectionPhase.READY,
+                entitlement = decision.entitlement,
+                ownsLifetime = ownership.ownsLifetime,
+                hasActiveSubscription = ownership.activeSubscriptionToken != null,
+                activeSubscriptionProductID = ownership.activeSubscriptionProductID,
+                scheduledSubscriptionProductID = scheduled,
+                lastCheckedAtEpochMillis = if (decision.authoritativeOwned != null) checkedAt else it.lastCheckedAtEpochMillis,
+                lastOutcome = when {
+                    decision.hasPendingPurchase -> BillingActionOutcome.PENDING
+                    wasRestoring && decision.authoritativeOwned == true -> BillingActionOutcome.RESTORED
+                    wasRestoring -> BillingActionOutcome.NOT_FOUND
+                    else -> it.lastOutcome
+                },
+                statusCode = if (cachePersisted) retainedProductStatus(it.statusCode) else "entitlementCacheUnavailable",
+                isEntitlementStale = if (decision.authoritativeOwned != null) {
+                    false
+                } else {
+                    it.isEntitlementStale
+                },
+                hasPendingPurchase = decision.hasPendingPurchase,
+            )
+        }
+        relevant.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED && !it.isAcknowledged }
+            .forEach(::acknowledge)
+        if (wasRestoring) recordRestoreDiagnostics(BillingClient.BillingResponseCode.OK, purchasesResult)
     }
 
     private fun consumeRestoreRequest(): Boolean = synchronized(this) {
@@ -414,42 +761,60 @@ class PlayBillingManager private constructor(context: Context) {
 
     private fun recordPendingRestoreIfNeeded(responseCode: Int) {
         if (!consumeRestoreRequest()) return
+        mutableState.update { it.copy(isRestoring = false) }
         recordRestoreDiagnostics(responseCode, emptyList())
     }
 
     private fun recordRestoreDiagnostics(responseCode: Int, purchases: Collection<Purchase>) {
         val diagnostics = billingRestoreDiagnosticsFromPurchases(
             responseCode = responseCode,
-            requestedProductIDs = listOf(PRODUCT_ID),
-            loadedProductIDs = listOfNotNull(productDetails?.productId),
+            requestedProductIDs = listOf(PRODUCT_ID) + SUBSCRIPTION_PRODUCT_IDS.sorted(),
+            loadedProductIDs = listOfNotNull(productDetails?.productId) + subscriptionDetails.keys,
             purchases = purchases,
         )
         mutableState.update { it.copy(lastRestoreDiagnostics = diagnostics) }
         recordBillingRestoreDiagnostics(appContext, diagnostics)
     }
 
-    private fun onPurchasesUpdated(result: BillingResult, purchases: List<Purchase>) {
+    private fun onPurchasesUpdated(result: BillingResult, purchases: List<Purchase>) = synchronized(operations) {
+        operations.finishPurchase()
+        operations.invalidateOwnershipQueries()
+        mutableState.update { it.copy(isPurchasing = false) }
         when (result.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
-                val relevant = purchases.filter { PRODUCT_ID in it.products }
-                val decision = billingEntitlementDecision(
+                val relevant = purchases.filter(::isVoxPurchase)
+                val evaluation = unlimitedEntitlementDecision(
                     priorEntitlement = mutableState.value.entitlement,
-                    states = relevant.map(Purchase::getPurchaseState),
+                    purchases = relevant.map { it.snapshot() },
                     authoritativeOwnershipQuery = false,
                 )
+                val decision = evaluation.decision
+                val ownership = voxOwnership(relevant.filter { !it.isSuspended })
+                ownership.activeSubscriptionToken?.let { activeSubscriptionToken = it }
+                val trialStarted = scheduleTrialReminderIfStarted(relevant)
+                val scheduled = deferredLaunchProductID?.also { persistScheduledPlan(it) }
+                deferredLaunchProductID = null
                 val checkedAt = System.currentTimeMillis()
                 val cachePersisted = decision.authoritativeOwned?.let { owned ->
-                    entitlementCache.write(owned, checkedAt)
+                    entitlementCache.write(owned, checkedAt, evaluation.grantingProductID ?: PRODUCT_ID)
                 } ?: true
                 UnlimitedAccessRegistry.update(decision.entitlement == VoxEntitlement.UNLIMITED)
-                relevant.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED && !it.isAcknowledged }
-                    .forEach(::acknowledge)
                 mutableState.update {
                     it.copy(
                         connectionPhase = BillingConnectionPhase.READY,
                         entitlement = decision.entitlement,
+                        ownsLifetime = it.ownsLifetime || ownership.ownsLifetime,
+                        hasActiveSubscription = it.hasActiveSubscription || ownership.activeSubscriptionToken != null,
+                        activeSubscriptionProductID = if (scheduled != null) {
+                            it.activeSubscriptionProductID
+                        } else {
+                            ownership.activeSubscriptionProductID ?: it.activeSubscriptionProductID
+                        },
+                        scheduledSubscriptionProductID = scheduled ?: it.scheduledSubscriptionProductID,
+                        trialReminderPromptPending = it.trialReminderPromptPending || trialStarted,
                         lastCheckedAtEpochMillis = if (decision.authoritativeOwned != null) checkedAt else it.lastCheckedAtEpochMillis,
                         lastOutcome = when {
+                            scheduled != null -> BillingActionOutcome.PURCHASED
                             decision.authoritativeOwned == true -> BillingActionOutcome.PURCHASED
                             decision.hasPendingPurchase -> BillingActionOutcome.PENDING
                             else -> it.lastOutcome
@@ -463,7 +828,12 @@ class PlayBillingManager private constructor(context: Context) {
                         hasPendingPurchase = decision.hasPendingPurchase,
                     )
                 }
+                relevant.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED && !it.isAcknowledged }
+                    .forEach(::acknowledge)
+                // A replacement changes which purchase token is live; confirm with Play.
+                if (scheduled != null || ownership.activeSubscriptionToken != null) queryOwnership(restored = false)
             }
+            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> queryOwnership(restored = true)
             BillingClient.BillingResponseCode.USER_CANCELED -> mutableState.update {
                 it.copy(lastOutcome = BillingActionOutcome.CANCELLED, statusCode = null)
             }
@@ -471,15 +841,60 @@ class PlayBillingManager private constructor(context: Context) {
                 it.copy(lastOutcome = BillingActionOutcome.ERROR, statusCode = "purchaseUpdate:${result.responseCode}")
             }
         }
+        if (result.responseCode != BillingClient.BillingResponseCode.OK) {
+            trialLaunch = null
+            deferredLaunchProductID = null
+        }
+        // A callback invalidates older ownership queries; finish any outstanding restore
+        // with a new authoritative query instead of losing its diagnostics or busy state.
+        if (operations.isRestoring() && result.responseCode != BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) queryOwnership(restored = false)
     }
 
     private fun acknowledge(purchase: Purchase) {
+        if (!acknowledging.add(purchase.purchaseToken)) return
         val params = AcknowledgePurchaseParams.newBuilder().setPurchaseToken(purchase.purchaseToken).build()
-        billingClient.acknowledgePurchase(params) { result ->
-            if (result.responseCode != BillingClient.BillingResponseCode.OK) {
-                mutableState.update { it.copy(statusCode = "acknowledge:${result.responseCode}") }
+        try {
+            billingClient.acknowledgePurchase(params) { result ->
+                acknowledging.remove(purchase.purchaseToken)
+                mutableState.update {
+                    if (result.responseCode == BillingClient.BillingResponseCode.OK) {
+                        it.copy(statusCode = it.statusCode?.takeUnless { code -> code.startsWith("acknowledge:") })
+                    } else it.copy(statusCode = "acknowledge:${result.responseCode}")
+                }
+                // Subscriptions grant only once acknowledged; re-check ownership so access lands.
+                if (result.responseCode == BillingClient.BillingResponseCode.OK &&
+                    purchase.products.any { it in SUBSCRIPTION_PRODUCT_IDS }
+                ) {
+                    refresh()
+                }
             }
+        } catch (_: Exception) {
+            acknowledging.remove(purchase.purchaseToken)
+            mutableState.update { it.copy(statusCode = "acknowledge:unavailable") }
         }
+    }
+
+    /** Schedules the reminder two days before a free trial that this flow just started ends. */
+    private fun scheduleTrialReminderIfStarted(purchases: List<Purchase>): Boolean {
+        val plan = trialLaunch ?: return false
+        val purchase = purchases.firstOrNull { purchase ->
+            plan.plan.productID in purchase.products && purchase.purchaseState == Purchase.PurchaseState.PURCHASED
+        } ?: return false
+        trialLaunch = null
+        val trialDays = isoPeriodDays(plan.freeTrialPeriod) ?: return false
+        val reminderDay = trialReminderDay(trialDays) ?: return false
+        val startedAt = purchase.purchaseTime.takeIf { it > 0L } ?: System.currentTimeMillis()
+        TrialReminderScheduler.schedule(
+            context = appContext,
+            triggerAtEpochMillis = startedAt + reminderDay * DAY_MILLIS,
+        )
+        return true
+    }
+
+    private fun persistScheduledPlan(productID: String?) {
+        planChangePreferences.edit().apply {
+            if (productID == null) remove(KEY_SCHEDULED_PRODUCT) else putString(KEY_SCHEDULED_PRODUCT, productID)
+        }.apply()
     }
 
     private fun publishUnavailable(code: String) {
@@ -497,7 +912,16 @@ class PlayBillingManager private constructor(context: Context) {
         statusCode?.takeIf { it == "productNotConfigured" || it.startsWith("productQuery:") }
 
     companion object {
-        const val PRODUCT_ID = "vox_unlimited_lifetime"
+        /** Lifetime one-time product; also the default key of the signed entitlement cache. */
+        const val PRODUCT_ID = VoxPlayCatalog.LIFETIME_PRODUCT_ID
+        const val LIFETIME_PRODUCT_ID = VoxPlayCatalog.LIFETIME_PRODUCT_ID
+        const val YEARLY_PRODUCT_ID = VoxPlayCatalog.YEARLY_PRODUCT_ID
+        const val WEEKLY_PRODUCT_ID = VoxPlayCatalog.WEEKLY_PRODUCT_ID
+        val SUBSCRIPTION_PRODUCT_IDS: Set<String> = VoxPlayCatalog.SUBSCRIPTION_PRODUCT_IDS.toSet()
+        val ALL_PRODUCT_IDS: Set<String> = setOf(LIFETIME_PRODUCT_ID) + SUBSCRIPTION_PRODUCT_IDS
+        private const val DAY_MILLIS = 24L * 60L * 60L * 1000L
+        private const val PLAN_CHANGE_PREFERENCES = "vox-play-plan-change-v1"
+        private const val KEY_SCHEDULED_PRODUCT = "scheduled-product-id"
 
         @Volatile private var shared: PlayBillingManager? = null
 

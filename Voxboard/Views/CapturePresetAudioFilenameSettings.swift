@@ -19,14 +19,14 @@ struct CapturePresetAudioFilenameSettings: View {
         localized: "Leave blank to keep the existing automatic name. A typed extension is ignored; Vox.md uses the actual encoded or copied audio extension. Unsafe characters and path-like input are sanitized into one filename."
     )
     static let fieldAccessibilityHint = String(
-        localized: "Sets this preset’s saved voice-audio filename. Leave blank for automatic naming. Unsafe path input is sanitized, and the actual audio extension replaces any typed extension."
+        localized: "Sets this route’s saved voice-audio filename. Leave blank for automatic naming. Unsafe path input is sanitized, and the actual audio extension replaces any typed extension."
     )
 
     var body: some View {
         if preset.audioSaveMode != .off {
             VStack(alignment: .leading, spacing: 6) {
                 Text(Self.fieldLabel)
-                    .font(.subheadline.weight(.semibold))
+                    .font(Geist.label())
                     .accessibilityHidden(true)
                 TextField(Self.fieldPlaceholder, text: $preset.audioFilenameTemplate)
                     .textInputAutocapitalization(.never)
@@ -40,8 +40,8 @@ struct CapturePresetAudioFilenameSettings: View {
                 Text(Self.tokensHelp)
                 Text(Self.behaviorHelp)
             }
-            .font(.caption)
-            .foregroundStyle(.secondary)
+            .font(Geist.caption())
+            .foregroundStyle(Geist.muted)
             .fixedSize(horizontal: false, vertical: true)
             .accessibilityElement(children: .combine)
             .accessibilityIdentifier(Self.helpAccessibilityIdentifier)
@@ -49,12 +49,12 @@ struct CapturePresetAudioFilenameSettings: View {
             if let preview = Self.previewFilename(for: preset) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Example")
-                        .font(.caption.weight(.semibold))
+                        .font(Geist.label(.caption))
                     Text(preview)
-                        .font(.system(.caption, design: .monospaced))
+                        .font(Geist.mono(.caption))
                         .textSelection(.enabled)
                 }
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Geist.muted)
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel("Example Audio Filename")

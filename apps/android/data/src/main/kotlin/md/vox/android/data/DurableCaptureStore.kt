@@ -629,13 +629,13 @@ class DurableCapturePackageStore(
         }
         when (snapshot.state) {
             CaptureState.QUEUED -> if (observationsDir != null || preparedDir != null || markerFile != null || receiptsDir != null) throw PackageCodecException("entryInventory")
-            CaptureState.PREPARING -> if (markerFile != null || receiptsDir != null) throw PackageCodecException("entryInventory")
+            CaptureState.PREPARING -> if ((markerFile != null && markerState != CommitMarker.MarkerState.CLEARED) || receiptsDir != null) throw PackageCodecException("entryInventory")
             CaptureState.RETRYABLE_FAILURE, CaptureState.NEEDS_USER_ACTION -> {
                 if (receiptsDir != null) throw PackageCodecException("entryInventory")
                 // Only a CLEARED marker (proof of non-commit already recorded) may exist here.
                 if (markerFile != null && markerState != CommitMarker.MarkerState.CLEARED) throw PackageCodecException("markerState")
             }
-            CaptureState.MATERIALIZED -> if (!preparedVerified || markerFile != null || receiptsDir != null) throw PackageCodecException("preparedRequired")
+            CaptureState.MATERIALIZED -> if (!preparedVerified || (markerFile != null && markerState != CommitMarker.MarkerState.CLEARED) || receiptsDir != null) throw PackageCodecException("preparedRequired")
             CaptureState.COMMITTING, CaptureState.UNKNOWN_OUTCOME -> {
                 if (!preparedVerified) throw PackageCodecException("preparedRequired")
                 // receipts/ is optional here: the verified-receipt→journal-append replay window.
@@ -745,7 +745,7 @@ class DurableCapturePackageStore(
     /**
      * Promotes staged note bytes into prepared/<plan-hash>/ (append-only): durably writes
      * artifact-plan.json, atomically moves the staged note.bin, fsyncs, and removes the
-     * staging directory. Fails closed if the plan directory already exists.
+     * staging directory. Reuses an existing plan only when both plan and note bytes match.
      */
     fun promotePreparedArtifacts(requestID: String, planHash: String, planBytes: ByteArray, stagingUUID: String) {
         if (!SHA_PATTERN.matches(planHash) || planBytes.isEmpty() || planBytes.size > CONTROL_LIMIT_BYTES || !UUID_PATTERN.matches(stagingUUID)) throw PackageCodecException("preparedPlanBounds")
@@ -757,7 +757,22 @@ class DurableCapturePackageStore(
             val stagedNote = File(staging, "note.bin")
             if (!fileOps.isRegularFileNoFollow(stagedNote)) throw PackageCodecException("stagedNoteMissing")
             val planDir = File(preparedRoot, planHash)
-            if (fileOps.exists(planDir)) throw PackageCodecException("preparedPlanExists")
+            if (fileOps.exists(planDir)) {
+                // Re-materialization may reproduce an already sealed immutable plan.
+                // Verify both files against the new core-verified drain; never overwrite.
+                val existingPlan = File(planDir, "artifact-plan.json")
+                val existingNote = File(planDir, "note.bin")
+                if (!fileOps.isDirectoryNoFollow(planDir) ||
+                    !fileOps.isRegularFileNoFollow(existingPlan) || !fileOps.isRegularFileNoFollow(existingNote) ||
+                    !fileOps.readBounded(existingPlan, CONTROL_LIMIT_BYTES).contentEquals(planBytes) ||
+                    PreparedPlanVerifier.verifiedPlanHash(planBytes) != planHash ||
+                    !fileOps.readBounded(existingNote, MAX_PREPARED_NOTE_BYTES.toInt())
+                        .contentEquals(fileOps.readBounded(stagedNote, MAX_PREPARED_NOTE_BYTES.toInt()))
+                ) throw PackageCodecException("preparedPlanExists")
+                fileOps.deleteOwnedTemporary(staging)
+                fileOps.syncDirectory(preparedRoot)
+                return@withRootMutationLock
+            }
             if (fileOps.list(preparedRoot).size >= MAX_PREPARED_PLAN_DIRECTORIES + 1) throw PackageCodecException("preparedInventory")
             fileOps.createDirectory(planDir)
             fileOps.writeNewFileDurably(File(planDir, "artifact-plan.json"), planBytes) { phase -> fileOps.checkpoint("$phase:plan:$planHash") }
@@ -805,8 +820,14 @@ class DurableCapturePackageStore(
             if (fileOps.exists(markerFile)) {
                 val existing = CapturePackageCodec.decodeMarker(fileOps.readBounded(markerFile, CONTROL_LIMIT_BYTES))
                 if (existing.state == CommitMarker.MarkerState.ACTIVE) throw PackageCodecException("markerActiveExists")
+                // Preserve causal non-commit proof until the new attempt's marker is
+                // durable. A crash observes either CLEARED or ACTIVE, never a gap.
+                val temporary = File(directory, ".commit-attempt.${UUID.randomUUID()}.tmp")
+                fileOps.writeNewFileDurably(temporary, bytes) { phase -> fileOps.checkpoint("$phase:marker") }
+                fileOps.replaceFileAtomically(temporary, markerFile)
+            } else {
+                fileOps.writeNewFileDurably(markerFile, bytes) { phase -> fileOps.checkpoint("$phase:marker") }
             }
-            fileOps.writeNewFileDurably(markerFile, bytes) { phase -> fileOps.checkpoint("$phase:marker") }
             fileOps.syncDirectory(directory)
         }
         return DurableMarkerToken(requestID, marker.planHash, marker.recordedAtEpochMillis)

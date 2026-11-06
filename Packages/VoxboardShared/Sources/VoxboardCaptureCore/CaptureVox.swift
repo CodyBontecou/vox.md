@@ -92,11 +92,11 @@ public struct CapturePresetProfile: Identifiable, Codable, Equatable, Sendable {
     }
 
     public var accessibilityName: String {
-        visibleName ?? "Icon-only Capture Preset"
+        visibleName ?? "Icon-only Route"
     }
 
     public var displayName: String {
-        visibleName ?? "Untitled Preset"
+        visibleName ?? "Untitled Route"
     }
 
     public var resolvedPostProcessingInstruction: String? {
@@ -208,10 +208,10 @@ public enum CapturePresetProcessingMode: String, Codable, CaseIterable, Sendable
 
     public var displayName: String {
         switch self {
-        case .none: return String(localized: "Keep Original", bundle: .main)
-        case .clean: return String(localized: "Clean Prose", bundle: .main)
-        case .todoList: return String(localized: "Todo Checklist", bundle: .main)
-        case .meetingNotes: return String(localized: "Meeting Notes", bundle: .main)
+        case .none: return String(localized: "Keep original", bundle: .main)
+        case .clean: return String(localized: "Clean prose", bundle: .main)
+        case .todoList: return String(localized: "Checklist", bundle: .main)
+        case .meetingNotes: return String(localized: "Meeting summary", bundle: .main)
         case .custom: return String(localized: "Custom Instruction", bundle: .main)
         }
     }

@@ -49,6 +49,10 @@ enum CaptureInboxBackgroundDrain {
         guard let captureRootURL = AppConstants.captureDirectoryURL else {
             return false
         }
+        // Queued Capture retries require paid access (docs/launch/hard-paywall).
+        // Read-only users keep their queue intact; nothing is delivered until
+        // access returns and the foreground drain runs.
+        guard !UsageTracker.staticIsAtLimit else { return true }
         let result = await CaptureInboxDeliveryService.drain(captureRootURL: captureRootURL)
         return result.setupError == nil
     }

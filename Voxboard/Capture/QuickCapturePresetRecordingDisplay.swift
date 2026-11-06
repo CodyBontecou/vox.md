@@ -14,7 +14,7 @@ enum QuickCapturePresetRecordingDisplay: Equatable, Sendable {
             return String(localized: "Adding transcript to this Capture")
         case .preset(_, let name):
             guard let name, !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-                return String(localized: "Running Capture Preset")
+                return String(localized: "Running Route")
             }
             return String(localized: "Running \(name)")
         }

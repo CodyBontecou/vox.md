@@ -1,0 +1,20 @@
+steps:
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: onboarding.continue
+      timeoutMs: 5000
+  - tap:
+      x: 0.5
+      y: 0.8745
+  - tool: await-ui-element
+    args:
+      condition: visible
+      selector:
+        identifier: onboarding.plans
+      timeoutMs: 4000
+executionPrerequisite: Opt-in
+  HardPaywallStoreKitTests/testInteractiveDesignPreview running on an iOS
+  simulator, first introduction page visible, fresh isolated free tracker and
+  local StoreKit fixture with current frozen lifetime prices; do not purchase.

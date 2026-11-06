@@ -94,6 +94,30 @@ final class CaptureToolbarPreferencesTests: XCTestCase {
         XCTAssertEqual(defaults.string(forKey: CapturePreferenceKeys.timestampFormat), "12-hour")
     }
 
+    func testMacSurfaceDefaultAppliesOnlyWithoutCustomPinsOrDefaultRow() throws {
+        let (defaults, _) = try makeDefaults()
+        let preferences = CaptureToolbarPreferences(defaults: defaults)
+        let mac = CaptureToolbarAction.macWorkspaceDefault
+
+        XCTAssertEqual(mac, [.timestamp, .checklist, .internalLink, .heading, .bulletList,
+                             .tag, .bold, .italic, .currentLocation, .textCase])
+        XCTAssertFalse(preferences.hasCustomizedDefaultRow)
+        XCTAssertEqual(preferences.pinnedActions(forRoute: "route", surfaceDefault: mac), mac)
+        // iOS keeps its own default row.
+        XCTAssertEqual(preferences.pinnedActions(forRoute: "route"), CaptureToolbarAction.allCases)
+
+        preferences.setPinnedActions([.bold], forRoute: "route")
+        XCTAssertEqual(preferences.pinnedActions(forRoute: "route", surfaceDefault: mac), [.bold])
+        XCTAssertEqual(preferences.pinnedActions(forRoute: "other", surfaceDefault: mac), mac)
+
+        preferences.setVisible(false, for: .undo)
+        XCTAssertTrue(preferences.hasCustomizedDefaultRow)
+        XCTAssertEqual(preferences.pinnedActions(forRoute: "other", surfaceDefault: mac), preferences.visibleActions)
+
+        preferences.setSyncsQuickActionsAcrossSurfaces(false)
+        XCTAssertEqual(preferences.pinnedActions(forRoute: "route", surfaceDefault: mac), mac)
+    }
+
     func testToolbarResetLeavesEachRailSideAndTimestampChoiceIndependent() throws {
         for side in CapturePresetQuickAccessRailSide.allCases {
             for format in CaptureTimestampFormat.allCases {

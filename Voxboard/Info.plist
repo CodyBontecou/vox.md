@@ -17,6 +17,10 @@
 		<string>GeistMono-Regular.ttf</string>
 		<string>GeistMono-Medium.ttf</string>
 	</array>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>bontecou.Voxboard.watchSetup</string>
+	</array>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -42,7 +46,7 @@
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Vox.md uses Apple Speech to transcribe your recording locally while you speak.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Vox.md gets your location once when you insert a map link, or when you send or stop recording with a location-enabled Capture Preset.</string>
+	<string>Vox.md gets your location once when you insert a map link, or when you send or stop recording with a location-enabled Route.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Vox.md uses the camera only when you choose to capture a photo or scan into your local Markdown notes.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

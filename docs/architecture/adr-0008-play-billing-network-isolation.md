@@ -36,7 +36,11 @@ The Android product is individual. Google Play Family Library does not share in-
 purchases, so the Android purchase screen must not advertise Apple-style Family Sharing
 or a family-upgrade product and must disclose that platform difference. Implementing an
 Android family entitlement would require the separate account/backend decision above;
-the family payment method alone is not entitlement sharing. See the current
+the family payment method alone is not entitlement sharing. On November 1, 2026 the
+user explicitly confirmed individual-only Android access; ADR-0024 excludes family
+access and discounted family upgrades from Android parity while retaining the Apple
+capabilities. There is no pending account/backend decision for the current Android
+product. See the current
 [Google Play Family Library policy](https://support.google.com/googleplay/answer/7007852).
 
 The M1-approved restore and offline policy is:

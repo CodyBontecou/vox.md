@@ -109,9 +109,9 @@ struct MacCaptureDestinationEditor: View {
 
     private var editorForm: some View {
         Form {
-                Section(fixedName == nil ? String(localized: "Identity") : String(localized: "Preset Destination")) {
+                Section(fixedName == nil ? String(localized: "Identity") : String(localized: "Route Destination")) {
                     if let fixedName {
-                        LabeledContent("Preset", value: fixedName)
+                        LabeledContent("Route", value: fixedName)
                     } else {
                         TextField("Destination Name (Optional)", text: $name)
                     }
@@ -154,6 +154,7 @@ struct MacCaptureDestinationEditor: View {
                             Text("Bottom").tag(CaptureHeadingPosition.bottom)
                         }
                         .pickerStyle(.segmented)
+                        .tint(MacBrand.accent) // white glyph on indigo, legible in dark
                         Text("Top inserts directly beneath the heading. Bottom appends to the end of the heading’s section, before the next heading.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -169,7 +170,7 @@ struct MacCaptureDestinationEditor: View {
                         Text("Vox.md reads this file from your vault for every capture, so edits made in Obsidian apply automatically.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        Text("Vault templates support the same tokens, including {location}, which follows the delivering Capture Preset's location setting.")
+                        Text("Vault templates support the same tokens, including {location}, which follows the delivering Route's location setting.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     } else {
@@ -208,7 +209,7 @@ struct MacCaptureDestinationEditor: View {
                         .foregroundStyle(.secondary)
                 }
                 if let errorMessage {
-                    Text(errorMessage).foregroundStyle(MacBrand.orangeText)
+                    Text(errorMessage).foregroundStyle(MacBrand.attention)
                 }
         }
         .formStyle(.grouped)

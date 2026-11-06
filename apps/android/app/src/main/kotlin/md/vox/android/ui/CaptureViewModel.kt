@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import md.vox.android.capturedomain.CaptureRouteOverride
 import md.vox.android.capturedomain.CaptureDestination
 import md.vox.android.capturedomain.CaptureDraft
 import md.vox.android.capturedomain.CaptureBarAction
@@ -21,6 +22,7 @@ import md.vox.android.capturedomain.CapturePreset
 import md.vox.android.capturedomain.CapturePresetCollection
 import md.vox.android.capturedomain.CaptureEntryTemplate
 import md.vox.android.capturedomain.CaptureRepository
+import md.vox.android.capturedomain.CaptureTextProcessingOutcome
 import md.vox.android.capturedomain.CaptureSubmitResult
 import md.vox.android.capturedomain.ActivityStats
 import md.vox.android.capturedomain.CompletedRecordingActivity
@@ -41,6 +43,7 @@ internal data class CaptureUiState(
     val notice: VoxUiText? = null,
     val acceptedRequestID: String? = null,
     val pendingExternalDraftID: String? = null,
+    val pendingWidgetPresetID: String? = null,
     val historyDetail: CaptureHistoryDetail? = null,
     val isLoadingHistoryDetail: Boolean = false,
     val activityStats: ActivityStats = ActivityStats.Empty,
@@ -53,6 +56,7 @@ internal class CaptureViewModel private constructor(
     private val mutableState = MutableStateFlow(CaptureUiState())
     val state: StateFlow<CaptureUiState> = mutableState.asStateFlow()
     private var draftSaveJob: Job? = null
+    private var routeSaveJob: Job? = null
 
     init {
         refresh(reconcile = true)
@@ -81,6 +85,7 @@ internal class CaptureViewModel private constructor(
         viewModelScope.launch {
             mutableState.update { it.copy(isSending = true, notice = null, acceptedRequestID = null) }
             draftSaveJob?.join()
+            routeSaveJob?.join()
             val result = runCatching { repository.submit(text, url, locationOutcome) }
                 .getOrElse { CaptureSubmitResult.SavedForRetry("unknown", "unexpectedFailure", durablySaved = false) }
             apply(result, acceptNewCapture = true)
@@ -95,8 +100,10 @@ internal class CaptureViewModel private constructor(
             captureSource = mutableState.value.draft.captureSource,
             attachments = mutableState.value.draft.attachments,
             originRecordingID = mutableState.value.draft.originRecordingID,
+            originRecordingCreatedAtEpochMillis = mutableState.value.draft.originRecordingCreatedAtEpochMillis,
             frozenPreset = mutableState.value.draft.frozenPreset,
             entryTemplateIDOverride = mutableState.value.draft.entryTemplateIDOverride,
+            routeOverride = mutableState.value.draft.routeOverride,
         )
         mutableState.update { it.copy(draft = next) }
         draftSaveJob?.cancel()
@@ -124,6 +131,7 @@ internal class CaptureViewModel private constructor(
         viewModelScope.launch {
             mutableState.update { it.copy(isSending = true, notice = null, acceptedRequestID = null) }
             draftSaveJob?.join()
+            routeSaveJob?.join()
             val prepared = runCatching {
                 repository.prepareVoiceDraft(text, url, originRecordingID, audioContentUri, audioDisplayName, frozenPreset)
             }.getOrElse {
@@ -184,6 +192,25 @@ internal class CaptureViewModel private constructor(
     ) {
         draftSaveJob?.cancel()
         draftSaveJob = viewModelScope.launch {
+            if (captureSource == "widget" && presetID != null && text.isBlank() && url == null && attachmentUris.isEmpty()) {
+                val loaded = runCatching { repository.capturePresets() to repository.currentDraft() }.getOrElse {
+                    mutableState.update { it.copy(notice = voxNotice("That capture preset could not be selected."), pendingExternalDraftID = correlationID) }
+                    return@launch
+                }
+                val (presets, draft) = loaded
+                val target = presets.presets.firstOrNull { it.id == presetID && it.isEnabled }
+                if (target == null) {
+                    mutableState.update { it.copy(notice = voxNotice("The requested Capture Preset no longer exists or is disabled."), pendingExternalDraftID = correlationID) }
+                } else if ((draft.text.isNotBlank() || draft.url != null || draft.attachments.isNotEmpty()) &&
+                    (draft.frozenPreset?.id ?: presets.activePresetID) != target.id) {
+                    mutableState.update { it.copy(draft = draft, presetCollection = presets, pendingWidgetPresetID = target.id, pendingExternalDraftID = correlationID) }
+                } else {
+                    runCatching { repository.selectCapturePresetForDraft(target.id) to repository.currentDraft() }
+                        .onSuccess { (selected, current) -> mutableState.update { it.copy(draft = current, presetCollection = selected, pendingExternalDraftID = correlationID) } }
+                        .onFailure { mutableState.update { it.copy(notice = voxNotice("That capture preset could not be selected."), pendingExternalDraftID = correlationID) } }
+                }
+                return@launch
+            }
             runCatching { repository.setDraftEntryTemplateOverride(null) }
             var draft = runCatching { repository.saveDraft(text, url, captureSource) }.getOrElse {
                 mutableState.update { state ->
@@ -201,9 +228,7 @@ internal class CaptureViewModel private constructor(
             } else {
                 null
             }
-            val notice = if (failedAttachments == 1) {
-                voxNotice("%@ is ready, but 1 shared file could not be copied.", sourceLabel)
-            } else if (failedAttachments > 1) {
+            val notice = if (failedAttachments > 0) {
                 voxNotice(
                     "%1\$@ is ready, but %2\$lld shared files could not be copied.",
                     sourceLabel,
@@ -232,6 +257,19 @@ internal class CaptureViewModel private constructor(
         mutableState.update { it.copy(isPresetRailExpanded = expanded) }
         viewModelScope.launch {
             runCatching { repository.setPresetQuickAccessRailExpanded(expanded) }
+        }
+    }
+
+    fun dismissWidgetPreset() { mutableState.update { it.copy(pendingWidgetPresetID = null) } }
+    fun confirmWidgetPreset() {
+        val id = mutableState.value.pendingWidgetPresetID ?: return
+        viewModelScope.launch {
+            draftSaveJob?.join(); routeSaveJob?.join()
+            runCatching { repository.selectCapturePresetForDraft(id) }
+                .onSuccess { presets ->
+                    val draft = repository.currentDraft()
+                    mutableState.update { it.copy(presetCollection = presets, draft = draft, pendingWidgetPresetID = null) }
+                }.onFailure { mutableState.update { it.copy(pendingWidgetPresetID = null, notice = voxNotice("That capture preset could not be selected.")) } }
         }
     }
 
@@ -266,6 +304,35 @@ internal class CaptureViewModel private constructor(
         }
     }
 
+    /**
+     * First-run "Start with these routes": saves each chosen starter preset through the normal
+     * preset store, skipping any whose name already exists, then makes [activePresetID] (else the
+     * first new route) the active route. Mirrors iOS StarterRouteInstaller.
+     */
+    fun installStarterPresets(presets: List<CapturePreset>, activePresetID: String?, onInstalled: () -> Unit) {
+        if (mutableState.value.isSavingConfiguration) return
+        viewModelScope.launch {
+            mutableState.update { it.copy(isSavingConfiguration = true, notice = null) }
+            runCatching {
+                val existingNames = repository.capturePresets().presets.map { it.name.trim().lowercase() }.toSet()
+                val created = presets.filter { it.name.trim().lowercase() !in existingNames }
+                var collection: CapturePresetCollection? = null
+                created.forEach { collection = repository.saveCapturePreset(it) }
+                val active = created.firstOrNull { it.id == activePresetID }?.id ?: created.firstOrNull()?.id
+                if (active != null) collection = repository.selectCapturePreset(active)
+                collection ?: repository.capturePresets()
+            }
+                .onSuccess { collection ->
+                    mutableState.update { it.copy(isSavingConfiguration = false, presetCollection = collection) }
+                    onInstalled()
+                }
+                .onFailure { error ->
+                    if (error is CancellationException) throw error
+                    mutableState.update { it.copy(isSavingConfiguration = false, notice = voxNotice("The capture route could not be saved.")) }
+                }
+        }
+    }
+
     fun deletePreset(presetID: String, onDeleted: () -> Unit = {}) {
         if (mutableState.value.isSavingConfiguration) return
         viewModelScope.launch {
@@ -276,10 +343,24 @@ internal class CaptureViewModel private constructor(
                         it.copy(isSavingConfiguration = false, presetCollection = collection, notice = voxNotice("Capture preset deleted"))
                     }
                     onDeleted()
+                    // Drop the deleted route's own quick actions so they cannot resurface.
+                    if (mutableState.value.captureBar.hasCustomPins(presetID)) setRouteQuickActions(presetID, null)
                 }
                 .onFailure {
                     mutableState.update { it.copy(isSavingConfiguration = false, notice = voxNotice("The Default preset cannot be deleted.")) }
                 }
+        }
+    }
+
+    fun setRouteOverride(route: CaptureRouteOverride?) {
+        if (mutableState.value.isSending) return
+        // Serialize with draft saves; submission joins this job before freezing the request.
+        val previous = routeSaveJob
+        routeSaveJob = viewModelScope.launch {
+            previous?.join()
+            runCatching { repository.setDraftRouteOverride(route) }
+                .onSuccess { draft -> mutableState.update { it.copy(draft = it.draft.copy(routeOverride = draft.routeOverride), notice = null) } }
+                .onFailure { mutableState.update { it.copy(notice = voxNotice("The capture route could not be saved.")) } }
         }
     }
 
@@ -371,6 +452,10 @@ internal class CaptureViewModel private constructor(
         saveCaptureBar(current.copy(orderedActions = order))
     }
 
+    fun setRailSide(side: md.vox.android.capturedomain.CaptureRailSide) {
+        saveCaptureBar(mutableState.value.captureBar.copy(railSide = side))
+    }
+
     fun setTwentyFourHourTimestamps(enabled: Boolean) {
         saveCaptureBar(mutableState.value.captureBar.copy(usesTwentyFourHourTimestamps = enabled))
     }
@@ -383,8 +468,17 @@ internal class CaptureViewModel private constructor(
         saveCaptureBar(mutableState.value.captureBar.copy(voiceRecordingResult = result))
     }
 
+    /** Resets the global row. Per-route quick actions are kept; reset those from each route. */
     fun resetCaptureBar() {
-        saveCaptureBar(CaptureBarConfiguration(), successNotice = voxNotice("Capture Bar reset"))
+        saveCaptureBar(
+            CaptureBarConfiguration(routePins = mutableState.value.captureBar.routePins),
+            successNotice = voxNotice("Capture Bar reset"),
+        )
+    }
+
+    /** Sets a route's own quick actions; `null` makes the route follow the global Capture Bar again. */
+    fun setRouteQuickActions(routeID: String, actions: List<CaptureBarAction>?) {
+        saveCaptureBar(mutableState.value.captureBar.withRoutePins(routeID, actions))
     }
 
     fun retry(requestID: String) {
@@ -411,6 +505,10 @@ internal class CaptureViewModel private constructor(
         }
     }
 
+    /** Reads one capture's local package without touching the screen's selected detail. */
+    suspend fun historyDetailSnapshot(requestID: String): CaptureHistoryDetail? =
+        runCatching { repository.historyDetail(requestID) }.getOrNull()
+
     fun clearHistoryDetail() {
         mutableState.update { it.copy(historyDetail = null, isLoadingHistoryDetail = false) }
     }
@@ -430,8 +528,6 @@ internal class CaptureViewModel private constructor(
                     activityStats = stats,
                     notice = if (removed == 0) {
                         voxNotice("No completed captures were removed.")
-                    } else if (removed == 1) {
-                        voxNotice("1 capture removed from History.")
                     } else {
                         voxNotice("%lld captures removed from History.", removed.toLong())
                     },
@@ -502,7 +598,7 @@ internal class CaptureViewModel private constructor(
                     isSending = false,
                     draft = draft,
                     history = history,
-                    notice = voxNotice("Capture sent"),
+                    notice = deliveredCaptureNotice(result.processingOutcome),
                     acceptedRequestID = acceptedRequestID,
                 )
                 CaptureSubmitResult.DestinationRequired -> state.copy(
@@ -609,3 +705,14 @@ internal class CaptureViewModel private constructor(
 
 private fun voxNotice(source: String, vararg arguments: Any): VoxUiText =
     VoxUiText(source, arguments.toList())
+
+internal fun deliveredCaptureNotice(outcome: CaptureTextProcessingOutcome?): md.vox.android.VoxUiText {
+    val detail = when (outcome) {
+        CaptureTextProcessingOutcome.MODEL_UNAVAILABLE -> voxNotice("Local model unavailable; the original text was kept.")
+        CaptureTextProcessingOutcome.MODEL_FAILURE -> voxNotice("Local processing failed; the original text was kept.")
+        CaptureTextProcessingOutcome.UNSUPPORTED_CUSTOM_INSTRUCTION -> voxNotice("Unsupported custom instruction")
+        CaptureTextProcessingOutcome.SKIPPED_TOO_LARGE -> voxNotice("Skipped because the capture is too large")
+        else -> null
+    }
+    return if (detail == null) voxNotice("Capture sent") else voxNotice("%@ · %@", voxNotice("Capture sent"), detail)
+}

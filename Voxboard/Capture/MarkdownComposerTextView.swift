@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import UniformTypeIdentifiers
 
 /// Imperative bridge used by the Markdown toolbar so selection-aware edits use
 /// the same UITextView undo stack as keyboard typing on the iOS 17 target.
@@ -15,10 +16,41 @@ final class MarkdownComposerController {
 
     func dismissKeyboard() {
         textView?.resignFirstResponder()
+        setInputPanel(nil)
+    }
+
+    /// Hosting controller for a SwiftUI panel shown in place of the system
+    /// keyboard (the Capture Bar's "•••" panel).
+    private var inputPanelHost: UIViewController?
+
+    var showsInputPanel: Bool { inputPanelHost != nil }
+
+    /// Replaces the system keyboard with `content` (nil restores the
+    /// keyboard). The caret and first-responder state are kept, so actions in
+    /// the panel insert at the selection like the pinned row does.
+    func setInputPanel(_ content: AnyView?, height: CGFloat = 300) {
+        guard let textView else {
+            inputPanelHost = nil
+            return
+        }
+        if let content {
+            let host = UIHostingController(rootView: content)
+            host.view.frame = CGRect(x: 0, y: 0, width: textView.window?.bounds.width ?? textView.bounds.width, height: height)
+            host.view.autoresizingMask = [.flexibleWidth]
+            host.view.backgroundColor = .clear
+            inputPanelHost = host
+            textView.inputView = host.view
+        } else {
+            guard inputPanelHost != nil || textView.inputView != nil else { return }
+            inputPanelHost = nil
+            textView.inputView = nil
+        }
+        textView.reloadInputViews()
     }
 
     func undo() {
         textView?.undoManager?.undo()
+        restyle()
         publishCurrentState()
     }
 
@@ -40,6 +72,21 @@ final class MarkdownComposerController {
         apply(text: next, selection: nextSelection, registeringUndo: true)
     }
 
+    /// Replaces one UTF-16 range without moving the caret more than needed.
+    func replace(range: NSRange, with replacement: String) {
+        guard let textView else { return }
+        let current = textView.text ?? ""
+        let safe = Self.clamped(range, utf16Count: current.utf16.count)
+        guard let swiftRange = Range(safe, in: current) else { return }
+        let next = current.replacingCharacters(in: swiftRange, with: replacement)
+        var selection = textView.selectedRange
+        let delta = replacement.utf16.count - safe.length
+        if selection.location >= safe.location + safe.length {
+            selection.location += delta
+        }
+        apply(text: next, selection: selection, registeringUndo: true)
+    }
+
     private func apply(text: String, selection: NSRange, registeringUndo: Bool) {
         guard let textView else { return }
         let oldText = textView.text ?? ""
@@ -51,9 +98,14 @@ final class MarkdownComposerController {
             textView.undoManager?.setActionName(String(localized: "Edit Markdown"))
         }
         textView.text = text
+        restyle()
         textView.selectedRange = Self.clamped(selection, utf16Count: text.utf16.count)
         publishCurrentState()
         textView.scrollRangeToVisible(textView.selectedRange)
+    }
+
+    fileprivate func restyle() {
+        (textView as? MarkdownComposerUITextView)?.restyleMarkdown()
     }
 
     fileprivate func publishCurrentState() {
@@ -83,22 +135,25 @@ struct MarkdownComposerTextView: UIViewRepresentable {
     @Binding var selection: NSRange
     @Binding var isFocused: Bool
     let controller: MarkdownComposerController
+    /// Receives the text's laid-out height (content size), for layouts that
+    /// place content directly under the text (iPad Pencil card).
+    var contentHeight: Binding<CGFloat>? = nil
 
     func makeCoordinator() -> Coordinator {
         Coordinator(parent: self)
     }
 
     func makeUIView(context: Context) -> UITextView {
-        let textView = UITextView()
+        let textView = MarkdownComposerUITextView()
         textView.delegate = context.coordinator
+        textView.textDropDelegate = context.coordinator
         textView.backgroundColor = .clear
         textView.textColor = UIColor(Geist.text)
-        textView.tintColor = UIColor(Geist.focus)
-        let baseFont = UIFont(name: "GeistMono-Regular", size: 16)
-            ?? UIFont.monospacedSystemFont(ofSize: 16, weight: .regular)
-        textView.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: baseFont)
+        textView.tintColor = UIColor(Geist.accent)
+        // Signal composer: 17pt Geist body on the ground, generous side gutter.
+        textView.font = MarkdownComposerStyler.baseFont
         textView.adjustsFontForContentSizeCategory = true
-        textView.textContainerInset = UIEdgeInsets(top: 24, left: 16, bottom: 24, right: 16)
+        textView.textContainerInset = UIEdgeInsets(top: 12, left: 20, bottom: 24, right: 20)
         textView.keyboardDismissMode = .interactive
         textView.smartQuotesType = .no
         textView.smartDashesType = .no
@@ -109,7 +164,18 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         textView.accessibilityHint = String(localized: "Enter raw Markdown to send to the selected destination")
         textView.accessibilityIdentifier = "quick_capture_text"
         textView.text = text
+        textView.restyleMarkdown()
         textView.selectedRange = MarkdownComposerController.clamped(selection, utf16Count: text.utf16.count)
+        textView.toggleTask = { [weak coordinator = context.coordinator] location in
+            coordinator?.toggleTask(at: location)
+        }
+        textView.contentHeightDidChange = { [weak coordinator = context.coordinator] height in
+            guard let binding = coordinator?.parent.contentHeight else { return }
+            // Never write SwiftUI state from inside a layout pass.
+            DispatchQueue.main.async {
+                if abs(binding.wrappedValue - height) > 0.5 { binding.wrappedValue = height }
+            }
+        }
         connect(textView, coordinator: context.coordinator)
         return textView
     }
@@ -121,6 +187,7 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         let textChanged = textView.text != text
         if textChanged {
             textView.text = text
+            (textView as? MarkdownComposerUITextView)?.restyleMarkdown()
         }
         let textEnd = text.utf16.count
         let desired = MarkdownComposerController.clamped(selection, utf16Count: textEnd)
@@ -166,14 +233,24 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         }
     }
 
-    final class Coordinator: NSObject, UITextViewDelegate {
+    final class Coordinator: NSObject, UITextViewDelegate, UITextDropDelegate {
         var parent: MarkdownComposerTextView
+        /// A drop from another app, captured before UIKit inserts its text.
+        private var pendingExternalDrop: (location: Int, previousLength: Int, sourceURL: URL?)?
+        private var droppedQuoteEnd: Int?
+        private var dropGeneration = 0
 
         init(parent: MarkdownComposerTextView) {
             self.parent = parent
         }
 
         func textViewDidChange(_ textView: UITextView) {
+            if let drop = pendingExternalDrop {
+                pendingExternalDrop = nil
+                convertDroppedText(in: textView, drop: drop)
+                return
+            }
+            (textView as? MarkdownComposerUITextView)?.restyleMarkdown()
             parent.controller.publishCurrentState()
         }
 
@@ -188,5 +265,552 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         func textViewDidEndEditing(_ textView: UITextView) {
             parent.controller.publishCurrentState()
         }
+
+        /// Tapping a rendered checkbox toggles `- [ ]` and `- [x]` in place.
+        func toggleTask(at bracketLocation: Int) {
+            let text = parent.controller.text as NSString
+            guard bracketLocation + 3 <= text.length else { return }
+            let marker = text.substring(with: NSRange(location: bracketLocation, length: 3))
+            let replacement: String
+            switch marker {
+            case "[ ]": replacement = "[x]"
+            case "[x]", "[X]": replacement = "[ ]"
+            default: return
+            }
+            UISelectionFeedbackGenerator().selectionChanged()
+            parent.controller.replace(range: NSRange(location: bracketLocation, length: 3), with: replacement)
+        }
+
+        // MARK: Drops from other apps become quotes
+
+        func textDroppableView(
+            _ textDroppableView: UIView & UITextDroppable,
+            willPerformDrop drop: UITextDropRequest
+        ) {
+            guard !drop.isSameView,
+                  drop.dropSession.localDragSession == nil,
+                  let textView = textDroppableView as? UITextView else { return }
+            let location = textView.offset(from: textView.beginningOfDocument, to: drop.dropPosition)
+            pendingExternalDrop = (location, (textView.text as NSString?)?.length ?? 0, nil)
+            dropGeneration += 1
+            let generation = dropGeneration
+            let providers = drop.dropSession.items.map(\.itemProvider)
+            Task { @MainActor [weak self, weak textView] in
+                guard let url = await Self.sourceURL(from: providers),
+                      let self, let textView, generation == self.dropGeneration else { return }
+                self.appendSourceLink(url, in: textView)
+            }
+        }
+
+        private func convertDroppedText(
+            in textView: UITextView,
+            drop: (location: Int, previousLength: Int, sourceURL: URL?)
+        ) {
+            let current = textView.text as NSString
+            let insertedLength = current.length - drop.previousLength
+            guard insertedLength > 0, drop.location + insertedLength <= current.length else {
+                (textView as? MarkdownComposerUITextView)?.restyleMarkdown()
+                parent.controller.publishCurrentState()
+                return
+            }
+            let range = NSRange(location: drop.location, length: insertedLength)
+            let dropped = current.substring(with: range).trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !dropped.isEmpty else { return }
+            let quoted = dropped
+                .components(separatedBy: .newlines)
+                .map { "> " + $0 }
+                .joined(separator: "\n")
+            let needsLeadingBreak = drop.location > 0
+                && current.character(at: drop.location - 1) != 0x0A
+            let end = drop.location + insertedLength
+            let followedByBreak = end < current.length && current.character(at: end) == 0x0A
+            // A blank line ends the quote so text typed next stays outside it.
+            let lead = needsLeadingBreak ? "\n" : ""
+            let block = lead + quoted + (followedByBreak ? "\n" : "\n\n")
+            let blockLength = (block as NSString).length
+            droppedQuoteEnd = drop.location + (lead as NSString).length + (quoted as NSString).length
+            parent.controller.replace(range: range, with: block)
+            if let controllerTextView = parent.controller.textView {
+                controllerTextView.selectedRange = NSRange(location: drop.location + blockLength, length: 0)
+                parent.controller.publishCurrentState()
+            }
+        }
+
+        private func appendSourceLink(_ url: URL, in textView: UITextView) {
+            guard let end = droppedQuoteEnd else { return }
+            droppedQuoteEnd = nil
+            let current = parent.controller.text as NSString
+            guard end <= current.length else { return }
+            let title = url.host(percentEncoded: false) ?? url.absoluteString
+            let line = "\n> — [\(title)](\(url.absoluteString))"
+            parent.controller.replace(range: NSRange(location: end, length: 0), with: line)
+        }
+
+        private static func sourceURL(from providers: [NSItemProvider]) async -> URL? {
+            for provider in providers where provider.canLoadObject(ofClass: URL.self) {
+                let url: URL? = await withCheckedContinuation { continuation in
+                    _ = provider.loadObject(ofClass: URL.self) { value, _ in
+                        continuation.resume(returning: value)
+                    }
+                }
+                if let url, let scheme = url.scheme?.lowercased(), scheme == "http" || scheme == "https" {
+                    return url
+                }
+            }
+            return nil
+        }
+    }
+}
+
+// MARK: - Live Markdown rendering
+
+/// UITextView that renders Markdown attributes over plain Markdown text and
+/// overlays tappable checkboxes on task markers. The text itself never changes
+/// unless the user toggles a task.
+final class MarkdownComposerUITextView: UITextView {
+    var toggleTask: ((Int) -> Void)?
+    var contentHeightDidChange: ((CGFloat) -> Void)?
+    private var reportedContentHeight: CGFloat = -1
+    private var taskMarkers: [(range: NSRange, isChecked: Bool)] = []
+    private var checkboxButtons: [UIButton] = []
+
+    /// Dropped-quote cards (a `>` quote ending in its source line) drawn
+    /// behind the quote text; the Markdown itself is unchanged.
+    private var droppedQuotes: [MarkdownComposerStyler.DroppedQuoteBlock] = []
+    private var droppedQuoteCards: [MarkdownComposerDroppedQuoteCardView] = []
+
+    func restyleMarkdown() {
+        guard markedTextRange == nil else { return }
+        let selection = selectedRange
+        droppedQuotes = MarkdownComposerStyler.droppedQuoteBlocks(in: textStorage.string as NSString)
+        updateLeadingDroppedQuoteInset()
+        taskMarkers = MarkdownComposerStyler.apply(to: textStorage)
+        typingAttributes = MarkdownComposerStyler.baseAttributes
+        if selectedRange != selection { selectedRange = selection }
+        setNeedsLayout()
+    }
+
+    /// Text layout drops `paragraphSpacingBefore` on the first paragraph, so a
+    /// dropped quote at the very top of the draft (DuoSplitView) would push
+    /// its card and "DROPPED QUOTE" label above the text container, where the
+    /// text view clips them. Make that room with the top inset instead.
+    private var leadingDroppedQuoteInset: CGFloat = 0
+
+    private func updateLeadingDroppedQuoteInset() {
+        let needed = droppedQuotes.first?.range.location == 0
+            ? MarkdownComposerStyler.droppedQuoteLabelSpace
+            : 0
+        guard needed != leadingDroppedQuoteInset else { return }
+        var inset = textContainerInset
+        inset.top += needed - leadingDroppedQuoteInset
+        leadingDroppedQuoteInset = needed
+        textContainerInset = inset
+    }
+
+    private var observesTraitChanges = false
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        guard window != nil, !observesTraitChanges else { return }
+        observesTraitChanges = true
+        // Rendered fonts are fixed per pass; restyle when Dynamic Type or
+        // light/dark appearance changes.
+        registerForTraitChanges(
+            [UITraitPreferredContentSizeCategory.self, UITraitUserInterfaceStyle.self]
+        ) { (textView: MarkdownComposerUITextView, _: UITraitCollection) in
+            textView.restyleMarkdown()
+        }
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layoutCheckboxes()
+        layoutDroppedQuoteCards()
+        if contentHeightDidChange != nil, abs(contentSize.height - reportedContentHeight) > 0.5 {
+            reportedContentHeight = contentSize.height
+            contentHeightDidChange?(contentSize.height)
+        }
+    }
+
+    private func layoutDroppedQuoteCards() {
+        while droppedQuoteCards.count < droppedQuotes.count {
+            let card = MarkdownComposerDroppedQuoteCardView()
+            // Behind the text so the quote stays selectable and editable.
+            insertSubview(card, at: 0)
+            droppedQuoteCards.append(card)
+        }
+        let length = (text as NSString?)?.length ?? 0
+        for (index, card) in droppedQuoteCards.enumerated() {
+            guard index < droppedQuotes.count else {
+                card.isHidden = true
+                continue
+            }
+            let block = droppedQuotes[index]
+            guard NSMaxRange(block.range) <= length,
+                  let quoteTop = caretRect(at: block.quoteRange.location),
+                  let sourceTop = caretRect(at: block.sourceLineRange.location),
+                  let sourceEnd = caretRect(at: NSMaxRange(block.sourceLineRange)) else {
+                card.isHidden = true
+                continue
+            }
+            let inset = textContainerInset
+            let minX = inset.left
+            let width = max(0, bounds.width - inset.left - inset.right)
+            let top = quoteTop.minY - MarkdownComposerStyler.droppedQuoteLabelSpace + 4
+            let bottom = max(sourceTop.maxY, sourceEnd.maxY) + 10
+            card.isHidden = false
+            card.frame = CGRect(x: minX, y: top, width: width, height: bottom - top)
+            card.sourceLabelOriginY = sourceTop.minY - top
+            card.setNeedsLayout()
+        }
+    }
+
+    private func caretRect(at offset: Int) -> CGRect? {
+        guard let position = position(from: beginningOfDocument, offset: offset) else { return nil }
+        let rect = caretRect(for: position)
+        guard !rect.isNull, !rect.isInfinite, rect.height > 0 else { return nil }
+        return rect
+    }
+
+    private func layoutCheckboxes() {
+        while checkboxButtons.count < taskMarkers.count {
+            let button = UIButton(type: .custom)
+            button.addTarget(self, action: #selector(checkboxTapped(_:)), for: .touchUpInside)
+            addSubview(button)
+            checkboxButtons.append(button)
+        }
+        for (index, button) in checkboxButtons.enumerated() {
+            guard index < taskMarkers.count else {
+                button.isHidden = true
+                continue
+            }
+            let marker = taskMarkers[index]
+            guard let start = position(from: beginningOfDocument, offset: marker.range.location),
+                  let end = position(from: start, offset: marker.range.length),
+                  let textRange = textRange(from: start, to: end) else {
+                button.isHidden = true
+                continue
+            }
+            let rect = firstRect(for: textRange)
+            guard !rect.isNull, !rect.isInfinite, rect.height > 0 else {
+                button.isHidden = true
+                continue
+            }
+            let side: CGFloat = 20
+            button.isHidden = false
+            button.tag = marker.range.location
+            button.frame = CGRect(x: rect.minX - 2, y: rect.midY - 22, width: 44, height: 44)
+            let configuration = UIImage.SymbolConfiguration(pointSize: side, weight: .regular)
+            let image = UIImage(
+                systemName: marker.isChecked ? "checkmark.square.fill" : "square",
+                withConfiguration: configuration
+            )
+            button.setImage(image, for: .normal)
+            button.tintColor = marker.isChecked ? UIColor(Geist.accent) : UIColor(Geist.Palette.gray600)
+            button.contentHorizontalAlignment = .left
+            button.accessibilityLabel = marker.isChecked
+                ? String(localized: "Completed task")
+                : String(localized: "Open task")
+            button.accessibilityHint = String(localized: "Double-tap to toggle this task.")
+            button.accessibilityTraits = marker.isChecked ? [.button, .selected] : .button
+        }
+    }
+
+    @objc private func checkboxTapped(_ sender: UIButton) {
+        // The marker range starts at "-"; the brackets follow "- ".
+        guard let marker = taskMarkers.first(where: { $0.range.location == sender.tag }) else { return }
+        let text = (self.text ?? "") as NSString
+        let bracket = text.range(of: "[", options: [], range: marker.range).location
+        guard bracket != NSNotFound else { return }
+        toggleTask?(bracket)
+    }
+}
+
+enum MarkdownComposerStyler {
+    static var baseFont: UIFont {
+        scaled(UIFont(name: "Geist-Regular", size: 17) ?? .systemFont(ofSize: 17), style: .body)
+    }
+
+    static var baseAttributes: [NSAttributedString.Key: Any] {
+        [
+            .font: baseFont,
+            .foregroundColor: UIColor(Geist.text),
+            .paragraphStyle: paragraph(spacing: 4),
+        ]
+    }
+
+    private static func scaled(_ font: UIFont, style: UIFont.TextStyle) -> UIFont {
+        UIFontMetrics(forTextStyle: style).scaledFont(for: font)
+    }
+
+    private static func font(_ name: String, _ size: CGFloat, _ style: UIFont.TextStyle, weight: UIFont.Weight) -> UIFont {
+        scaled(UIFont(name: name, size: size) ?? .systemFont(ofSize: size, weight: weight), style: style)
+    }
+
+    private static func paragraph(spacing: CGFloat, before: CGFloat = 0) -> NSParagraphStyle {
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = spacing
+        style.paragraphSpacingBefore = before
+        return style
+    }
+
+    private static let heading = try! NSRegularExpression(pattern: "^(#{1,6})([ \\t]+)(.*)$", options: .anchorsMatchLines)
+    private static let task = try! NSRegularExpression(pattern: "^([ \\t]*)([-*+] \\[( |x|X)\\])(?=[ \\t]|$)(.*)$", options: .anchorsMatchLines)
+    private static let bullet = try! NSRegularExpression(pattern: "^[ \\t]*([-*+])(?= (?!\\[[ xX]\\]))", options: .anchorsMatchLines)
+    private static let quote = try! NSRegularExpression(pattern: "^(>[ \\t]?)(.*)$", options: .anchorsMatchLines)
+    private static let wikilink = try! NSRegularExpression(pattern: "!?\\[\\[[^\\]\\n]+\\]\\]")
+    private static let link = try! NSRegularExpression(pattern: "(?<!!)\\[([^\\]\\n]+)\\]\\(([^)\\s]+)\\)")
+    private static let bold = try! NSRegularExpression(pattern: "(\\*\\*|__)(?=\\S)([^\\n]+?)(?<=\\S)\\1")
+    private static let italic = try! NSRegularExpression(pattern: "(?<![*_\\w])([*_])(?=\\S)([^*_\\n]+?)(?<=\\S)\\1(?![*_\\w])")
+    private static let code = try! NSRegularExpression(pattern: "`[^`\\n]+`")
+    private static let tag = try! NSRegularExpression(pattern: "(?<![\\w#&/])#[\\p{L}\\p{N}_/-]*[\\p{L}_][\\p{L}\\p{N}_/-]*")
+
+    /// Applies Markdown styling attributes and returns task marker ranges
+    /// (from the list dash through the closing bracket).
+    @discardableResult
+    static func apply(to storage: NSTextStorage) -> [(range: NSRange, isChecked: Bool)] {
+        let string = storage.string as NSString
+        let full = NSRange(location: 0, length: string.length)
+        var markers: [(range: NSRange, isChecked: Bool)] = []
+        guard full.length > 0, full.length <= 60_000 else {
+            if full.length > 0 { storage.setAttributes(baseAttributes, range: full) }
+            return markers
+        }
+        let text = storage.string
+        let muted = UIColor(Geist.muted)
+        let faint = UIColor(Geist.Palette.gray600)
+        let accent = UIColor(Geist.accentText)
+        let mono = font("GeistMono-Regular", 15, .body, weight: .regular)
+
+        storage.beginEditing()
+        storage.setAttributes(baseAttributes, range: full)
+
+        for match in heading.matches(in: text, range: full) {
+            let level = match.range(at: 1).length
+            let size: CGFloat = [30, 24, 20, 18, 17, 17][min(level, 6) - 1]
+            let style: UIFont.TextStyle = level == 1 ? .title1 : (level == 2 ? .title2 : .title3)
+            storage.addAttributes([
+                .font: font("Geist-SemiBold", size, style, weight: .semibold),
+                .kern: level <= 2 ? -0.4 : 0,
+                .paragraphStyle: paragraph(spacing: 2, before: 6),
+            ], range: match.range)
+            let marker = NSUnionRange(match.range(at: 1), match.range(at: 2))
+            storage.addAttributes([
+                .font: font("GeistMono-Regular", 16, .body, weight: .regular),
+                .foregroundColor: faint,
+            ], range: marker)
+        }
+
+        for match in task.matches(in: text, range: full) {
+            let markerRange = match.range(at: 2)
+            let checked = string.substring(with: match.range(at: 3)).lowercased() == "x"
+            markers.append((markerRange, checked))
+            // The checkbox overlay replaces the visible marker glyphs.
+            storage.addAttributes([.foregroundColor: UIColor.clear], range: markerRange)
+            if checked, match.range(at: 4).length > 0 {
+                storage.addAttributes([
+                    .foregroundColor: muted,
+                    .strikethroughStyle: NSUnderlineStyle.single.rawValue,
+                    .strikethroughColor: muted,
+                ], range: match.range(at: 4))
+            }
+        }
+
+        for match in bullet.matches(in: text, range: full) {
+            storage.addAttributes([.foregroundColor: faint], range: match.range(at: 1))
+        }
+
+        for match in quote.matches(in: text, range: full) {
+            storage.addAttributes([.foregroundColor: faint], range: match.range(at: 1))
+            storage.addAttributes([.foregroundColor: UIColor(Geist.Palette.gray800)], range: match.range(at: 2))
+        }
+
+        for match in bold.matches(in: text, range: full) {
+            storage.addAttributes([.font: font("Geist-SemiBold", 17, .body, weight: .semibold)], range: match.range(at: 2))
+            for marker in [match.range(at: 1), NSRange(location: match.range.upperBound - match.range(at: 1).length, length: match.range(at: 1).length)] {
+                storage.addAttributes([.foregroundColor: faint], range: marker)
+            }
+        }
+
+        for match in italic.matches(in: text, range: full) {
+            storage.addAttributes([.obliqueness: 0.14], range: match.range(at: 2))
+        }
+
+        for match in code.matches(in: text, range: full) {
+            storage.addAttributes([
+                .font: mono,
+                .backgroundColor: UIColor(Geist.Palette.gray200),
+            ], range: match.range)
+        }
+
+        for match in tag.matches(in: text, range: full) where !isInsideHeadingMarker(match.range, in: string) {
+            storage.addAttributes([.foregroundColor: accent], range: match.range)
+        }
+
+        for match in link.matches(in: text, range: full) {
+            storage.addAttributes([.foregroundColor: accent], range: match.range(at: 1))
+            storage.addAttributes([.foregroundColor: faint, .font: font("GeistMono-Regular", 13, .footnote, weight: .regular)], range: match.range(at: 2))
+        }
+
+        for match in wikilink.matches(in: text, range: full) {
+            storage.addAttributes([
+                .font: mono,
+                .foregroundColor: accent,
+                .backgroundColor: UIColor(Geist.accentSoft),
+            ], range: match.range)
+        }
+
+        for block in droppedQuoteBlocks(in: string) {
+            styleDroppedQuote(block, in: storage, string: string)
+        }
+
+        storage.endEditing()
+        return markers
+    }
+
+    // MARK: Dropped quotes
+
+    /// A blockquote dropped from another app: its `>` quote lines followed by
+    /// the `> — [title](url)` source line the composer appends.
+    struct DroppedQuoteBlock: Equatable {
+        let range: NSRange
+        let quoteRange: NSRange
+        let sourceLineRange: NSRange
+    }
+
+    /// Room above the first quote line for the "DROPPED QUOTE" label.
+    static let droppedQuoteLabelSpace: CGFloat = 30
+    private static let cardInset: CGFloat = 14
+    private static let sourceLine = try! NSRegularExpression(pattern: "^> — \\[[^\\]\\n]+\\]\\([^)\\s]+\\)[ \\t]*$")
+
+    static func droppedQuoteBlocks(in string: NSString) -> [DroppedQuoteBlock] {
+        guard string.length > 0, string.length <= 60_000 else { return [] }
+        var blocks: [DroppedQuoteBlock] = []
+        var lines: [NSRange] = []
+        func flush() {
+            defer { lines.removeAll() }
+            guard lines.count >= 2, let last = lines.last else { return }
+            let lastText = string.substring(with: last)
+            guard sourceLine.firstMatch(
+                in: lastText,
+                range: NSRange(location: 0, length: (lastText as NSString).length)
+            ) != nil else { return }
+            let first = lines[0]
+            let quoteEnd = lines[lines.count - 2]
+            blocks.append(DroppedQuoteBlock(
+                range: NSUnionRange(first, last),
+                quoteRange: NSUnionRange(first, quoteEnd),
+                sourceLineRange: last
+            ))
+        }
+        var location = 0
+        while location < string.length {
+            var lineEnd = 0
+            var contentsEnd = 0
+            string.getLineStart(nil, end: &lineEnd, contentsEnd: &contentsEnd, for: NSRange(location: location, length: 0))
+            let content = NSRange(location: location, length: contentsEnd - location)
+            if content.length > 0, string.character(at: location) == 0x3E /* > */ {
+                lines.append(content)
+            } else {
+                flush()
+            }
+            location = max(lineEnd, location + 1)
+        }
+        flush()
+        return blocks
+    }
+
+    /// Indents a dropped quote inside its card and hides the source line's
+    /// glyphs under the card's "source link kept" label.
+    private static func styleDroppedQuote(_ block: DroppedQuoteBlock, in storage: NSTextStorage, string: NSString) {
+        var location = block.range.location
+        var isFirst = true
+        while location < NSMaxRange(block.range) {
+            let line = string.lineRange(for: NSRange(location: location, length: 0))
+            let isSource = line.location == block.sourceLineRange.location
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = 3
+            style.firstLineHeadIndent = cardInset
+            style.headIndent = cardInset
+            style.tailIndent = -cardInset
+            if isFirst { style.paragraphSpacingBefore = droppedQuoteLabelSpace }
+            if isSource { style.paragraphSpacing = 16 }
+            storage.addAttributes([.paragraphStyle: style], range: line)
+            isFirst = false
+            location = NSMaxRange(line)
+        }
+        storage.addAttributes([
+            .font: font("GeistMono-Regular", 11, .caption2, weight: .regular),
+            .foregroundColor: UIColor.clear,
+        ], range: block.sourceLineRange)
+    }
+
+    private static func isInsideHeadingMarker(_ range: NSRange, in string: NSString) -> Bool {
+        // `# Heading` markers are handled by the heading pass.
+        let lineStart = string.lineRange(for: NSRange(location: range.location, length: 0)).location
+        return range.location == lineStart && range.length == 1
+    }
+}
+
+/// Card behind a dropped quote (Signal "Duo split view"): a dashed accent
+/// outline, the "DROPPED QUOTE" label and "source link kept" over the
+/// quote's hidden source line.
+final class MarkdownComposerDroppedQuoteCardView: UIView {
+    var sourceLabelOriginY: CGFloat = 0
+
+    private let border = CAShapeLayer()
+    private let titleLabel = UILabel()
+    private let sourceLabel = UILabel()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isUserInteractionEnabled = false
+        isAccessibilityElement = false
+        layer.cornerRadius = 16
+        layer.cornerCurve = .continuous
+        border.fillColor = UIColor.clear.cgColor
+        border.lineWidth = 2
+        border.lineDashPattern = [6, 4]
+        layer.addSublayer(border)
+        titleLabel.text = String(localized: "DROPPED QUOTE")
+        titleLabel.adjustsFontForContentSizeCategory = true
+        sourceLabel.text = String(localized: "source link kept")
+        sourceLabel.adjustsFontForContentSizeCategory = true
+        addSubview(titleLabel)
+        addSubview(sourceLabel)
+        applyColors()
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: MarkdownComposerDroppedQuoteCardView, _: UITraitCollection) in
+            view.applyColors()
+        }
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    private func applyColors() {
+        backgroundColor = UIColor(Geist.card)
+        border.strokeColor = UIColor(Geist.accent).cgColor
+        titleLabel.textColor = UIColor(Geist.accentText)
+        sourceLabel.textColor = UIColor(Geist.muted)
+        let mono = UIFont(name: "GeistMono-Regular", size: 10.5) ?? .monospacedSystemFont(ofSize: 10.5, weight: .regular)
+        titleLabel.font = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: mono)
+        let attributes: [NSAttributedString.Key: Any] = [.kern: 0.6]
+        titleLabel.attributedText = NSAttributedString(string: String(localized: "DROPPED QUOTE"), attributes: attributes)
+        let sourceFont = UIFont(name: "GeistMono-Regular", size: 11) ?? .monospacedSystemFont(ofSize: 11, weight: .regular)
+        sourceLabel.font = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: sourceFont)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        border.frame = bounds
+        border.path = UIBezierPath(
+            roundedRect: bounds.insetBy(dx: 1, dy: 1),
+            cornerRadius: 15
+        ).cgPath
+        let inset: CGFloat = 14
+        let width = max(0, bounds.width - inset * 2)
+        let titleHeight = titleLabel.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude)).height
+        titleLabel.frame = CGRect(x: inset, y: 12, width: width, height: titleHeight)
+        let sourceHeight = sourceLabel.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude)).height
+        sourceLabel.frame = CGRect(x: inset, y: sourceLabelOriginY, width: width, height: sourceHeight)
     }
 }

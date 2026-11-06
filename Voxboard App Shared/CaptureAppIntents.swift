@@ -55,7 +55,7 @@ struct CaptureDestinationEntityQuery: EntityQuery, EnumerableEntityQuery {
 
 @available(iOS 17.0, macOS 14.0, *)
 struct CaptureVoxEntity: AppEntity, Identifiable, Hashable {
-    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Capture Preset"
+    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Route"
     static var defaultQuery = CaptureVoxEntityQuery()
 
     let id: String
@@ -97,16 +97,16 @@ struct CaptureVoxEntityQuery: EntityQuery, EnumerableEntityQuery {
 @available(iOS 17.0, macOS 14.0, *)
 struct CaptureTextIntent: AppIntent {
     static let title: LocalizedStringResource = "Capture Text to Markdown"
-    static let description = IntentDescription("Sends text with a configured Capture Preset.")
+    static let description = IntentDescription("Sends text with a configured Route.")
     static var openAppWhenRun = true
 
     @Parameter(title: "Text")
     var text: String
 
-    @Parameter(title: "Preset", description: "The complete workflow and destination for this capture.")
+    @Parameter(title: "Route", description: "The complete workflow and destination for this capture.")
     var vox: CaptureVoxEntity?
 
-    @Parameter(title: "Legacy Destination Override", description: "Retained for existing shortcuts. New shortcuts should choose only a Capture Preset.")
+    @Parameter(title: "Legacy Destination Override", description: "Retained for existing shortcuts. New shortcuts should choose only a Route.")
     var destination: CaptureDestinationEntity?
 
     init() {}
@@ -137,16 +137,16 @@ struct CaptureTextIntent: AppIntent {
 @available(iOS 17.0, macOS 14.0, *)
 struct CaptureURLIntent: AppIntent {
     static let title: LocalizedStringResource = "Capture Link to Markdown"
-    static let description = IntentDescription("Sends a web link with a configured Capture Preset.")
+    static let description = IntentDescription("Sends a web link with a configured Route.")
     static var openAppWhenRun = true
 
     @Parameter(title: "URL")
     var url: URL
 
-    @Parameter(title: "Preset", description: "The complete workflow and destination for this capture.")
+    @Parameter(title: "Route", description: "The complete workflow and destination for this capture.")
     var vox: CaptureVoxEntity?
 
-    @Parameter(title: "Legacy Destination Override", description: "Retained for existing shortcuts. New shortcuts should choose only a Capture Preset.")
+    @Parameter(title: "Legacy Destination Override", description: "Retained for existing shortcuts. New shortcuts should choose only a Route.")
     var destination: CaptureDestinationEntity?
 
     init() {}
@@ -177,16 +177,16 @@ struct CaptureURLIntent: AppIntent {
 @available(iOS 17.0, macOS 14.0, *)
 struct CaptureFileIntent: AppIntent {
     static let title: LocalizedStringResource = "Capture File to Markdown"
-    static let description = IntentDescription("Copies a file or image with a configured Capture Preset.")
+    static let description = IntentDescription("Copies a file or image with a configured Route.")
     static var openAppWhenRun = true
 
     @Parameter(title: "File")
     var file: IntentFile
 
-    @Parameter(title: "Preset", description: "The complete workflow and destination for this capture.")
+    @Parameter(title: "Route", description: "The complete workflow and destination for this capture.")
     var vox: CaptureVoxEntity?
 
-    @Parameter(title: "Legacy Destination Override", description: "Retained for existing shortcuts. New shortcuts should choose only a Capture Preset.")
+    @Parameter(title: "Legacy Destination Override", description: "Retained for existing shortcuts. New shortcuts should choose only a Route.")
     var destination: CaptureDestinationEntity?
 
     init() {}
@@ -214,10 +214,10 @@ struct CaptureFileIntent: AppIntent {
 @available(iOS 17.0, macOS 14.0, *)
 struct OpenQuickCaptureIntent: AppIntent {
     static let title: LocalizedStringResource = "Open Quick Capture"
-    static let description = IntentDescription("Opens the durable Vox.md composer with a Capture Preset.")
+    static let description = IntentDescription("Opens the durable Vox.md composer with a Route.")
     static var openAppWhenRun = true
 
-    @Parameter(title: "Preset")
+    @Parameter(title: "Route")
     var vox: CaptureVoxEntity?
 
     init() {}
@@ -236,10 +236,10 @@ struct OpenQuickCaptureIntent: AppIntent {
 @available(iOS 17.0, macOS 14.0, *)
 struct OpenCaptureVoiceIntent: AppIntent {
     static let title: LocalizedStringResource = "Record a Capture"
-    static let description = IntentDescription("Opens Quick Capture and records with the selected Capture Preset entirely on device.")
+    static let description = IntentDescription("Opens Quick Capture and records with the selected Route entirely on device.")
     static var openAppWhenRun = true
 
-    @Parameter(title: "Preset")
+    @Parameter(title: "Route")
     var vox: CaptureVoxEntity?
 
     init() {}
@@ -258,10 +258,10 @@ struct OpenCaptureVoiceIntent: AppIntent {
 @available(iOS 17.0, macOS 14.0, *)
 struct OpenCaptureScreenshotIntent: AppIntent {
     static let title: LocalizedStringResource = "Capture a Screenshot"
-    static let description = IntentDescription("Opens Quick Capture and adds screenshots with the selected Capture Preset.")
+    static let description = IntentDescription("Opens Quick Capture and adds screenshots with the selected Route.")
     static var openAppWhenRun = true
 
-    @Parameter(title: "Preset")
+    @Parameter(title: "Route")
     var vox: CaptureVoxEntity?
 
     init() {}
@@ -280,10 +280,10 @@ struct OpenCaptureScreenshotIntent: AppIntent {
 @available(iOS 17.0, macOS 14.0, *)
 struct OpenCaptureScanIntent: AppIntent {
     static let title: LocalizedStringResource = "Capture a Scan"
-    static let description = IntentDescription("Opens Quick Capture and scans documents with the selected Capture Preset.")
+    static let description = IntentDescription("Opens Quick Capture and scans documents with the selected Route.")
     static var openAppWhenRun = true
 
-    @Parameter(title: "Preset")
+    @Parameter(title: "Route")
     var vox: CaptureVoxEntity?
 
     init() {}
@@ -499,7 +499,7 @@ enum CaptureIntentError: Error, LocalizedError {
         case .storageUnavailable:
             return String(localized: "Vox.md shared capture storage is unavailable.")
         case .destinationRequired:
-            return String(localized: "Configure a destination for a Capture Preset in Vox.md before running this shortcut.")
+            return String(localized: "Configure a destination for a Route in Vox.md before running this shortcut.")
         case .invalidURL:
             return String(localized: "Only HTTP and HTTPS links can be captured.")
         case .textTooLarge:
@@ -507,7 +507,7 @@ enum CaptureIntentError: Error, LocalizedError {
         case .locationDecisionRequiresApp:
             return String(localized: "Location is unavailable. Open Vox.md to send this exact Capture without location or discard it.")
         case .locationUnavailableCancelled:
-            return String(localized: "The Capture was cancelled because its preset requires an origin-time location.")
+            return String(localized: "The Capture was cancelled because its route requires an origin-time location.")
         }
     }
 }

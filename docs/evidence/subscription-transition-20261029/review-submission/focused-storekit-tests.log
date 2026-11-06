@@ -1,0 +1,238 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -project Voxboard.xcodeproj -scheme VoxboardTests -destination "platform=iOS Simulator,id=9A45202D-BD45-4AF2-8B8E-CA0BE5F2F07A" -derivedDataPath .derived/hard-paywall "-only-testing:VoxboardTests/HardPaywallStoreKitTests" CODE_SIGNING_ALLOWED=NO
+
+Build settings from command line:
+    CODE_SIGNING_ALLOWED = NO
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  SelfieOverlayKit: https://github.com/CodyBontecou/SelfieOverlayKit.git @ debug-only (dca25e1)
+  VoxboardShared: /Users/codybontecou/dev/vox.md/Packages/VoxboardShared @ local
+  FluidAudio: https://github.com/FluidInference/FluidAudio.git @ 0.13.4
+  KeyboardKit: https://github.com/KeyboardKit/KeyboardKit.git @ 10.7.3
+  LicenseKit: https://github.com/LicenseKit/LicenseKit.git @ 2.1.3
+  Notelet: https://github.com/mykolaharmash/notelet @ 1.1.0
+  ExportKit: https://github.com/CodyBontecou/ExportKit @ main (17993dc)
+
+2026-10-29 18:23:44.761 xcodebuild[63862:8510942] [MT] DVTAssertions: Warning in IDEFrameworks/IDEFoundation/Testing/IDETestRunSpecificationBuilder.m:463
+Details:  Test host (/Users/codybontecou/dev/vox.md/.derived/hard-paywall/Build/Products/Debug-iphonesimulator/Voxboard.app/Voxboard) for <Xcode3TargetProduct:0x773de78c60:VoxboardTests.xctest blueprint:<Xcode3Target:0x773d6a21c0:VoxboardTests>> was not found among the preferred buildables but a match was found in the workspace-wide search.
+Object:   <IDETestRunSpecificationBuilder>
+Method:   +hostBuildableProductForBuildable:buildParameters:workspace:preferredBuildables:
+Thread:   <_NSMainThread: 0x1047ed0c0>{number = 1, name = main}
+Please file a bug at https://feedbackassistant.apple.com with this warning message and any useful information you can provide.
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (26 targets)
+    Target 'VoxboardTests' in project 'Voxboard'
+        ➜ Explicit dependency on target 'Voxboard' in project 'Voxboard'
+    Target 'Voxboard' in project 'Voxboard'
+        ➜ Explicit dependency on target 'Voxboard Keyboard' in project 'Voxboard'
+        ➜ Explicit dependency on target 'Voxboard WidgetExtension' in project 'Voxboard'
+        ➜ Explicit dependency on target 'Voxboard Watch' in project 'Voxboard'
+        ➜ Explicit dependency on target 'Voxboard Share Extension' in project 'Voxboard'
+        ➜ Explicit dependency on target 'KeyboardKit-product' in project 'KeyboardKit'
+        ➜ Explicit dependency on target 'Notelet-product' in project 'Notelet'
+        ➜ Explicit dependency on target 'VoxboardShared-product' in project 'VoxboardShared'
+        ➜ Explicit dependency on target 'SelfieOverlayKit-product' in project 'SelfieOverlayKit'
+    Target 'SelfieOverlayKit-product' in project 'SelfieOverlayKit'
+        ➜ Explicit dependency on target 'SelfieOverlayKit' in project 'SelfieOverlayKit'
+    Target 'SelfieOverlayKit' in project 'SelfieOverlayKit' (no dependencies)
+    Target 'Notelet-product' in project 'Notelet'
+        ➜ Explicit dependency on target 'Notelet' in project 'Notelet'
+    Target 'Notelet' in project 'Notelet' (no dependencies)
+    Target 'KeyboardKit-product' in project 'KeyboardKit'
+        ➜ Explicit dependency on target 'KeyboardKitDependencies' in project 'KeyboardKit'
+        ➜ Explicit dependency on target 'LicenseKit-product' in project 'LicenseKit'
+    Target 'KeyboardKitDependencies' in project 'KeyboardKit'
+        ➜ Explicit dependency on target 'LicenseKit-product' in project 'LicenseKit'
+    Target 'LicenseKit-product' in project 'LicenseKit' (no dependencies)
+    Target 'Voxboard Share Extension' in project 'Voxboard'
+        ➜ Explicit dependency on target 'VoxboardCaptureCore-product' in project 'VoxboardShared'
+        ➜ Explicit dependency on target 'VoxboardShared-product' in project 'VoxboardShared'
+    Target 'VoxboardCaptureCore-product' in project 'VoxboardShared'
+        ➜ Explicit dependency on target 'VoxboardCaptureCore' in project 'VoxboardShared'
+    Target 'Voxboard Watch' in project 'Voxboard'
+        ➜ Explicit dependency on target 'Voxboard Watch WidgetExtension' in project 'Voxboard'
+        ➜ Explicit dependency on target 'VoxboardCaptureCore-product' in project 'VoxboardShared'
+    Target 'VoxboardCaptureCore-product' in project 'VoxboardShared'
+        ➜ Explicit dependency on target 'VoxboardCaptureCore' in project 'VoxboardShared'
+    Target 'VoxboardCaptureCore' in project 'VoxboardShared' (no dependencies)
+    Target 'Voxboard Watch WidgetExtension' in project 'Voxboard' (no dependencies)
+    Target 'Voxboard WidgetExtension' in project 'Voxboard'
+        ➜ Explicit dependency on target 'VoxboardShared-product' in project 'VoxboardShared'
+    Target 'Voxboard Keyboard' in project 'Voxboard'
+        ➜ Explicit dependency on target 'VoxboardShared-product' in project 'VoxboardShared'
+    Target 'VoxboardShared-product' in project 'VoxboardShared'
+        ➜ Explicit dependency on target 'VoxboardShared' in project 'VoxboardShared'
+        ➜ Explicit dependency on target 'VoxboardCaptureCore' in project 'VoxboardShared'
+        ➜ Explicit dependency on target 'FluidAudio-product' in project 'FluidAudio'
+        ➜ Explicit dependency on target 'ExportKit-product' in project 'ExportKit'
+    Target 'VoxboardShared' in project 'VoxboardShared'
+        ➜ Explicit dependency on target 'VoxboardCaptureCore' in project 'VoxboardShared'
+        ➜ Explicit dependency on target 'FluidAudio-product' in project 'FluidAudio'
+        ➜ Explicit dependency on target 'ExportKit-product' in project 'ExportKit'
+    Target 'ExportKit-product' in project 'ExportKit'
+        ➜ Explicit dependency on target 'ExportKit' in project 'ExportKit'
+    Target 'ExportKit' in project 'ExportKit' (no dependencies)
+    Target 'FluidAudio-product' in project 'FluidAudio'
+        ➜ Explicit dependency on target 'FluidAudio' in project 'FluidAudio'
+        ➜ Explicit dependency on target 'FastClusterWrapper' in project 'FluidAudio'
+        ➜ Explicit dependency on target 'MachTaskSelfWrapper' in project 'FluidAudio'
+    Target 'FluidAudio' in project 'FluidAudio'
+        ➜ Explicit dependency on target 'FastClusterWrapper' in project 'FluidAudio'
+        ➜ Explicit dependency on target 'MachTaskSelfWrapper' in project 'FluidAudio'
+    Target 'MachTaskSelfWrapper' in project 'FluidAudio' (no dependencies)
+    Target 'FastClusterWrapper' in project 'FluidAudio' (no dependencies)
+    Target 'VoxboardCaptureCore' in project 'VoxboardShared' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.1.sdk /Users/codybontecou/dev/vox.md/.derived/hard-paywall/SDKStatCaches.noindex/iphonesimulator27.1-24A94232-35d3147121984ba087c28d913653d626.sdkstatcache
+    cd /Users/codybontecou/dev/vox.md/Voxboard.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.1.sdk -o /Users/codybontecou/dev/vox.md/.derived/hard-paywall/SDKStatCaches.noindex/iphonesimulator27.1-24A94232-35d3147121984ba087c28d913653d626.sdkstatcache
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk /Users/codybontecou/dev/vox.md/.derived/hard-paywall/SDKStatCaches.noindex/watchsimulator27.0-24R360-c50668d93734557a32a78b937f5ceaf1.sdkstatcache
+    cd /Users/codybontecou/dev/vox.md/Voxboard.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk -o /Users/codybontecou/dev/vox.md/.derived/hard-paywall/SDKStatCaches.noindex/watchsimulator27.0-24R360-c50668d93734557a32a78b937f5ceaf1.sdkstatcache
+
+PruneExplicitPrecompiledModules /Users/codybontecou/dev/vox.md/.derived/hard-paywall/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /Users/codybontecou/dev/vox.md/.derived/hard-paywall/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /Users/codybontecou/dev/vox.md/.derived/hard-paywall/SDKExplicitPrecompiledModules
+
+2026-10-29 18:23:48.093 xcodebuild[63862:8510942] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+[DebugSelfie] installed — 3-tap 2-finger gesture summons the selfie bubble
+2026-10-29 18:23:53.487622-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.491316-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.491569-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.497291-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.497595-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.513067-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.541033-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.541268-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.543025-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.543252-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.543439-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.543594-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.543762-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.543979-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.544155-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.554677-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:53.911177-0400 Voxboard[64286:8516145] [WC] -[WCSession onqueue_handleUpdateSessionState:]_block_invoke dropping as pairingIDs no longer match. pairingID (null), client pairingID: (null)
+2026-10-29 18:23:53.917907-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.038695-0400 Voxboard[64286:8516145] [WC] WCSession is not paired
+2026-10-29 18:23:54.038873-0400 Voxboard[64286:8516145] [WC] -[WCSession onqueue_handleUpdateSessionState:]_block_invoke dropping as pairingIDs no longer match. pairingID (null), client pairingID: (null)
+2026-10-29 18:23:54.039041-0400 Voxboard[64286:8516145] [WC] WCSession is not paired
+2026-10-29 18:23:54.039142-0400 Voxboard[64286:8516145] [WC] -[WCSession onqueue_handleUpdateSessionState:]_block_invoke dropping as pairingIDs no longer match. pairingID (null), client pairingID: (null)
+2026-10-29 18:23:54.039300-0400 Voxboard[64286:8516145] [WC] WCSession is not paired
+2026-10-29 18:23:54.039435-0400 Voxboard[64286:8516145] [WC] -[WCSession onqueue_handleUpdateSessionState:]_block_invoke dropping as pairingIDs no longer match. pairingID (null), client pairingID: (null)
+2026-10-29 18:23:54.039525-0400 Voxboard[64286:8516145] [WC] WCSession is not paired
+2026-10-29 18:23:54.139727-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.140241-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.140514-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.140778-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.141291-0400 Voxboard[64286:8514187] [WC] WCSession is not paired
+2026-10-29 18:23:54.143578-0400 Voxboard[64286:8514187] [WC] -[WCSession updateApplicationContext:error:]_block_invoke failed due to WCErrorCodeDeviceNotPaired
+2026-10-29 18:23:54.149439-0400 Voxboard[64286:8514187] [WatchRecording] Failed to update watch application context: Error Domain=WCErrorDomain Code=7005 "Device is not paired." UserInfo={NSLocalizedDescription=Device is not paired., NSLocalizedRecoverySuggestion=Pair the device with a Watch.}
+2026-10-29 18:23:54.155116-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.155819-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.156089-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.158941-0400 Voxboard[64286:8516151] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.159221-0400 Voxboard[64286:8516151] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.159443-0400 Voxboard[64286:8516151] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.159670-0400 Voxboard[64286:8516151] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.159848-0400 Voxboard[64286:8516151] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.160219-0400 Voxboard[64286:8516151] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.160457-0400 Voxboard[64286:8516151] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.160624-0400 Voxboard[64286:8516151] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.268535-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.269041-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.269438-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.269750-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.269935-0400 Voxboard[64286:8514187] [WC] WCSession is not paired
+2026-10-29 18:23:54.270007-0400 Voxboard[64286:8514187] [WC] -[WCSession updateApplicationContext:error:]_block_invoke failed due to WCErrorCodeDeviceNotPaired
+2026-10-29 18:23:54.270070-0400 Voxboard[64286:8514187] [WatchRecording] Failed to update watch application context: Error Domain=WCErrorDomain Code=7005 "Device is not paired." UserInfo={NSLocalizedDescription=Device is not paired., NSLocalizedRecoverySuggestion=Pair the device with a Watch.}
+2026-10-29 18:23:54.273419-0400 Voxboard[64286:8514187] [XPCErrors] non-launching port is incompatible with service identifier "com.apple.PointerUI.pointeruid.default-service"
+2026-10-29 18:23:54.274445-0400 Voxboard[64286:8516138] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.282112-0400 Voxboard[64286:8516138] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.284051-0400 Voxboard[64286:8516138] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.285159-0400 Voxboard[64286:8516138] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.286287-0400 Voxboard[64286:8516138] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.286900-0400 Voxboard[64286:8516138] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.287824-0400 Voxboard[64286:8516138] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.296330-0400 Voxboard[64286:8516138] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.306247-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:54.375889-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+2026-10-29 18:23:54.394116-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+Test Suite 'Selected tests' started at 2026-10-29 18:23:54.614.
+Test Suite 'VoxboardTests.xctest' started at 2026-10-29 18:23:54.614.
+Test Suite 'HardPaywallStoreKitTests' started at 2026-10-29 18:23:54.615.
+Test Case '-[VoxboardTests.HardPaywallStoreKitTests testCatalogPricesTrialsAndFamilyOptions]' started.
+Test Case '-[VoxboardTests.HardPaywallStoreKitTests testCatalogPricesTrialsAndFamilyOptions]' passed (0.176 seconds).
+Test Case '-[VoxboardTests.HardPaywallStoreKitTests testPaywallLayoutLightDarkAndLargeType]' started.
+2026-10-29 18:23:54.955340-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+objc[64286]: Class UIAccessibilityLoaderWebShared is implemented in both /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.sIIocG/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x1072bc398) and /private/var/run/com.apple.security.cryptexd/mnt/com.apple.iPhoneOS.SimulatorRuntime-v24.1.434.0.sIIocG/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 27.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x10e084310). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+2026-10-29 18:23:55.577200-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+2026-10-29 18:23:55.582236-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+2026-10-29 18:23:55.582316-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+2026-10-29 18:23:56.164179-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+2026-10-29 18:23:56.166536-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+2026-10-29 18:23:56.166589-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+2026-10-29 18:23:56.731676-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+2026-10-29 18:23:56.735114-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+2026-10-29 18:23:56.735203-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+Test Case '-[VoxboardTests.HardPaywallStoreKitTests testPaywallLayoutLightDarkAndLargeType]' passed (2.437 seconds).
+Test Case '-[VoxboardTests.HardPaywallStoreKitTests testSubscriptionExpirationRelocksButLifetimeSurvives]' started.
+2026-10-29 18:23:57.598639-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:57.601208-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:57.642785-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+2026-10-29 18:23:57.642914-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+2026-10-29 18:23:57.668955-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+Test Case '-[VoxboardTests.HardPaywallStoreKitTests testSubscriptionExpirationRelocksButLifetimeSurvives]' passed (0.450 seconds).
+Test Case '-[VoxboardTests.HardPaywallStoreKitTests testTrialPurchaseAndRefundThroughStoreManager]' started.
+2026-10-29 18:23:57.699566-0400 Voxboard[64286:8516133] [Default] [03549ce3_SK2] Error finishing transaction: StoreKitServiceError(error: StoreKit.StoreKitServiceError.ErrorType.system(StoreKit.StoreKitInternalError.unknown), environment: Optional("XcodeTest"), storefront: Optional("USA"))
+2026-10-29 18:23:57.701135-0400 Voxboard[64286:8514187] [Default] Could not find a UI anchor for bontecou.Voxboard.family.yearly purchase. UI may behave incorrectly.
+2026-10-29 18:23:57.702807-0400 Voxboard[64286:8516145] [Default] Could not get confirmation scene ID for bontecou.Voxboard.family.yearly purchase. UI may behave incorrectly.
+2026-10-29 18:23:57.795964-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+2026-10-29 18:23:57.796066-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+Test Case '-[VoxboardTests.HardPaywallStoreKitTests testTrialPurchaseAndRefundThroughStoreManager]' passed (0.152 seconds).
+Test Case '-[VoxboardTests.HardPaywallStoreKitTests testUnpaidHistoryCanExportExistingTranscriptWithoutUnlocking]' started.
+2026-10-29 18:23:57.849376-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:57.849652-0400 Voxboard[64286:8514187] [unspecified] container_create_or_lookup_app_group_path_by_app_group_identifier: client is not entitled
+2026-10-29 18:23:58.031727-0400 Voxboard[64286:8514187] [Assert] _dictationButton not yet initialized when setting up for the large content viewer.
+2026-10-29 18:23:58.105720-0400 Voxboard[64286:8514187] [API] cannot add handler to 0 from 0 - dropping
+Test Case '-[VoxboardTests.HardPaywallStoreKitTests testUnpaidHistoryCanExportExistingTranscriptWithoutUnlocking]' passed (0.668 seconds).
+Test Suite 'HardPaywallStoreKitTests' passed at 2026-10-29 18:23:58.502.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 3.883 (3.887) seconds
+Test Suite 'VoxboardTests.xctest' passed at 2026-10-29 18:23:58.502.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 3.883 (3.887) seconds
+Test Suite 'Selected tests' passed at 2026-10-29 18:23:58.502.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 3.883 (3.888) seconds
+2026-10-29 18:23:58.526 xcodebuild[63862:8510942] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-10-29 18:23:58.527 xcodebuild[63862:8510942] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-10-29 18:23:58.527 xcodebuild[63862:8510942] [MT] IDESchemeActionSDKRecord: operatingSystemBuild = <DVTBuildVersion 24A94232>, error = invalidDigitCount(94232).
+2026-10-29 18:23:58.788 xcodebuild[63862:8510942] [MT] IDETestOperationsObserverDebug: 11.288 elapsed -- Testing started completed.
+2026-10-29 18:23:58.788 xcodebuild[63862:8510942] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-10-29 18:23:58.788 xcodebuild[63862:8510942] [MT] IDETestOperationsObserverDebug: 11.288 sec, +11.288 sec -- end
+
+Test session results, code coverage, and logs:
+	/Users/codybontecou/dev/vox.md/.derived/hard-paywall/Logs/Test/Test-VoxboardTests-2026.10.29_18-23-44--0400.xcresult
+
+** TEST SUCCEEDED **
+
+Testing started

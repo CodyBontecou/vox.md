@@ -13,29 +13,49 @@ struct URLDeliveryRecoveryView: View {
     var body: some View {
         List {
             Section {
-                Text("Retry sends the saved JSON only. It does not write another note or audio attachment.")
-                Text("The original endpoint and content stay unchanged. Opening or refreshing this list never sends.")
-                    .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: Geist.Spacing.two) {
+                    Text("Retry sends the saved JSON only. It does not write another note or audio attachment.")
+                        .foregroundStyle(Geist.text)
+                    Text("The original endpoint and content stay unchanged. Opening or refreshing this list never sends.")
+                        .foregroundStyle(Geist.muted)
+                }
+                .font(Geist.body(.subheadline))
+                .fixedSize(horizontal: false, vertical: true)
+                .signalRecoveryRow()
             }
             if coordinator.receipts.isEmpty {
-                ContentUnavailableView("No Pending Deliveries", systemImage: "tray",
-                    description: Text("Failed or deferred URL deliveries appear here."))
-                    .listRowBackground(Color.clear)
-                    .accessibilityIdentifier("url_deliveries_empty")
+                ActivitySignalEmptyState(
+                    systemImage: "checkmark",
+                    tint: Geist.success,
+                    title: "No Pending Deliveries",
+                    message: "Failed or deferred URL deliveries appear here."
+                )
+                .padding(.vertical, Geist.Spacing.eight)
+                .signalRecoveryRow()
+                .accessibilityIdentifier("url_deliveries_empty")
             } else {
-                Section("Needs Attention") {
-                    ForEach(coordinator.receipts) { receipt in receiptRow(receipt) }
+                Section {
+                    ForEach(coordinator.receipts) { receipt in
+                        receiptRow(receipt)
+                            .signalRecoveryRow()
+                    }
+                } header: {
+                    GeistSectionLabel(number: "", title: "Needs Attention")
                 }
             }
             if let error = coordinator.lastError {
-                Section { Text(error).foregroundStyle(.red).accessibilityIdentifier("url_deliveries_error") }
+                Section {
+                    Text(error)
+                        .font(Geist.body(.subheadline))
+                        .foregroundStyle(Geist.error)
+                        .accessibilityIdentifier("url_deliveries_error")
+                        .signalRecoveryRow()
+                }
             }
         }
-        #if os(iOS)
-        .listStyle(.insetGrouped)
-        #else
-        .listStyle(.inset)
-        #endif
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .background(Geist.bg.ignoresSafeArea())
         .navigationTitle("URL Deliveries")
         .accessibilityIdentifier("url_deliveries_screen")
         .toolbar {
@@ -73,47 +93,69 @@ struct URLDeliveryRecoveryView: View {
         let id = UUID(uuidString: receipt.id)
         let active = id.map { coordinator.activeIDs.contains($0) } ?? false
         let shortID = id.map { String($0.uuidString.lowercased().prefix(8)) } ?? String(localized: "Unknown")
-        return VStack(alignment: .leading, spacing: 8) {
-            Text(origin(receipt)).font(.headline).textSelection(.enabled)
-            Text("\(receipt.date.formatted(date: .abbreviated, time: .shortened)) · \(shortID)")
-                .font(.caption).foregroundStyle(.secondary)
-            if active {
-                HStack { ProgressView(); Text("Sending…") }
-            } else {
-                Text(status(receipt)).font(.subheadline.weight(.medium))
-                Text(explanation(receipt)).font(.caption).foregroundStyle(.secondary)
-            }
-            HStack(spacing: 16) {
+        let needsAttention = !active && receipt.outcome != .delivered
+            && !(receipt.attempt == 0 && receipt.outcome == .pending)
+        return HStack(alignment: .top, spacing: Geist.Spacing.three) {
+            ActivitySignalDot(color: active ? Geist.accent : (needsAttention ? Geist.warning : Geist.Palette.gray600))
+                .padding(.top, 6)
+            VStack(alignment: .leading, spacing: Geist.Spacing.two) {
+                Text(origin(receipt))
+                    .font(Geist.heading(.callout))
+                    .foregroundStyle(Geist.text)
+                    .textSelection(.enabled)
+                Text("\(receipt.date.formatted(date: .abbreviated, time: .shortened)) · \(shortID)")
+                    .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                    .foregroundStyle(Geist.muted)
                 if active {
-                    Button { if let id { Task { await coordinator.cancel(id: id) } } } label: {
-                        Text("Cancel Send").frame(minWidth: 44, minHeight: 44)
+                    HStack(spacing: Geist.Spacing.two) {
+                        ProgressView().controlSize(.small)
+                        Text("Sending…")
+                            .font(Geist.body(.subheadline))
+                            .foregroundStyle(Geist.muted)
                     }
-                        .accessibilityIdentifier("url_delivery_cancel_\(receipt.id)")
-                } else if receipt.outcome != .discarded {
-                    Button {
-                        if receipt.attempt == 0 && receipt.outcome == .pending, let id {
-                            coordinator.dispatch(id: id)
-                        } else {
-                            retryReceipt = receipt
-                        }
-                    } label: {
-                        Text(receipt.attempt == 0 && receipt.outcome == .pending ? "Send Now" : "Retry")
-                            .frame(minWidth: 44, minHeight: 44)
-                    }
-                    .disabled(id == nil)
-                    .accessibilityIdentifier("url_delivery_retry_\(receipt.id)")
+                } else {
+                    Text(status(receipt))
+                        .font(Geist.label(.subheadline))
+                        .foregroundStyle(needsAttention ? Geist.Palette.amber900 : Geist.text)
+                    Text(explanation(receipt))
+                        .font(Geist.body(.subheadline))
+                        .foregroundStyle(Geist.muted)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-                Button(role: .destructive) {
-                    discardReceipt = receipt
-                    showDiscardConfirmation = true
-                } label: { Text("Discard").frame(minWidth: 44, minHeight: 44) }
-                .disabled(active || id == nil)
-                .accessibilityIdentifier("url_delivery_discard_\(receipt.id)")
+                ActivitySignalFlowLayout(spacing: Geist.Spacing.two) {
+                    if active {
+                        Button { if let id { Task { await coordinator.cancel(id: id) } } } label: {
+                            Text("Cancel Send").frame(minWidth: 44)
+                        }
+                        .buttonStyle(ActivitySignalPillButtonStyle(kind: .secondary))
+                        .accessibilityIdentifier("url_delivery_cancel_\(receipt.id)")
+                    } else if receipt.outcome != .discarded {
+                        Button {
+                            if receipt.attempt == 0 && receipt.outcome == .pending, let id {
+                                coordinator.dispatch(id: id)
+                            } else {
+                                retryReceipt = receipt
+                            }
+                        } label: {
+                            Text(receipt.attempt == 0 && receipt.outcome == .pending ? "Send Now" : "Retry")
+                                .frame(minWidth: 44)
+                        }
+                        .buttonStyle(ActivitySignalPillButtonStyle(kind: .primary))
+                        .disabled(id == nil)
+                        .accessibilityIdentifier("url_delivery_retry_\(receipt.id)")
+                    }
+                    Button(role: .destructive) {
+                        discardReceipt = receipt
+                        showDiscardConfirmation = true
+                    } label: { Text("Discard").frame(minWidth: 44) }
+                    .buttonStyle(ActivitySignalPillButtonStyle(kind: .destructive))
+                    .disabled(active || id == nil)
+                    .accessibilityIdentifier("url_delivery_discard_\(receipt.id)")
+                }
+                .padding(.top, Geist.Spacing.one)
             }
-            .buttonStyle(.borderless)
-            .frame(minHeight: 44)
         }
-        .padding(.vertical, 4)
+        .activitySignalCard(needsAttention: needsAttention)
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("url_delivery_\(receipt.id)")
     }
@@ -139,7 +181,7 @@ struct URLDeliveryRecoveryView: View {
         case .pending where receipt.attempt == 0:
             return String(localized: "Prepared locally. No HTTP attempt has been made.")
         case .needsAuthentication:
-            return String(localized: "Correct the saved credentials for the original endpoint in Capture Presets, then Retry.")
+            return String(localized: "Correct the saved credentials for the original endpoint in Routes, then Retry.")
         case .retryable, .permanent:
             if let code = receipt.statusCode { return String(localized: "The endpoint returned HTTP \(code). Retry only after correcting the cause.") }
             return String(localized: "Check your connection and endpoint before retrying.")
@@ -150,5 +192,15 @@ struct URLDeliveryRecoveryView: View {
         case .delivered:
             return String(localized: "No further HTTP attempt is needed.")
         }
+    }
+}
+
+private extension View {
+    /// Clears the List chrome so Signal cards sit directly on the paper ground.
+    func signalRecoveryRow() -> some View {
+        self
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
     }
 }
