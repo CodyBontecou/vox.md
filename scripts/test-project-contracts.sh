@@ -2407,31 +2407,37 @@ for font_name in [
     'GeistMono-Regular.ttf',
     'GeistMono-Medium.ttf',
     'LICENSE.txt',
+    'BricolageGrotesque-Variable-latin.woff2',
+    'InstrumentSerif-Italic-latin.woff2',
+    'OFL-BricolageGrotesque-InstrumentSerif.txt',
 ]:
     if not (website_root / 'fonts' / font_name).exists():
-        errors.append(f'website is missing bundled Geist font asset {font_name}')
+        errors.append(f'website is missing bundled font asset {font_name}')
 
 if not website_css.exists():
-    errors.append('website is missing its shared Signal stylesheet')
+    errors.append('website is missing its shared stylesheet')
 else:
     css = website_css.read_text()
+    # The "raw file" theme: light paper only, Bricolage Grotesque over Geist Mono,
+    # Signal blue plus a highlighter lime, Instrument Serif italic for spoken words.
     for required in [
-        '--bg: #F2F2EE',
+        'color-scheme: light;',
+        '--bg: #EFEEE8',
         '--ink: #121212',
         '--accent: #2F3BE8',
-        '--bg: #0B0B0B',
-        '--ink: #F4F4F1',
-        '--font-sans: "Geist Sans"',
+        '--lime: #E4FF3D',
+        '--font-sans: "Bricolage Grotesque"',
         '--font-mono: "Geist Mono"',
-        '@media (prefers-color-scheme: dark)',
+        '--font-voice: "Instrument Serif"',
+        'RAW FILE THEME',
         '@media (prefers-reduced-motion: reduce)',
         ':focus-visible',
     ]:
         if required not in css:
-            errors.append(f'website Signal stylesheet is missing {required}')
-    for forbidden in ['JetBrains Mono', '#30D158', '--background-100: #ffffff']:
+            errors.append(f'website stylesheet is missing {required}')
+    for forbidden in ['JetBrains Mono', '#30D158', '--background-100: #ffffff', 'prefers-color-scheme: dark']:
         if forbidden in css:
-            errors.append(f'website Signal stylesheet still contains legacy styling {forbidden}')
+            errors.append(f'website stylesheet still contains retired styling {forbidden}')
     for asset in re.findall(r'url\(["\']?([^"\')]+)', css):
         parsed = urlsplit(asset)
         if parsed.scheme or asset.startswith('data:'):
