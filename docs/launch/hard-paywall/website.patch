@@ -1,29 +1,29 @@
 --- a/website/index.html
 +++ b/website/index.html
-@@ -125,7 +125,7 @@
-         <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="btn-primary btn-lg" target="_blank" rel="noopener" data-download-campaign="seo_home">Download Vox.md free</a>
-         <a href="blog/obsidian-quick-capture-iphone/" class="btn-secondary btn-lg">Choose a capture method</a>
-       </div>
--      <p class="mono-note">15 transcription minutes + 10 Capture deliveries free · iOS 17.6+ · no account</p>
-+      <p class="mono-note">Seven-day free trial for eligible subscriptions · iOS 17.6+ · no account</p>
-       <details class="desktop-download-qr">
-         <summary>Scan to download on your iPhone</summary>
-         <div class="download-qr-panel">
-@@ -354,7 +354,7 @@
-         </details>
-         <details>
-           <summary>What does Vox.md cost?</summary>
--          <p>Vox.md includes 15 minutes of transcription and 10 successful Capture deliveries free. Unlimited transcription and Capture are available with a one-time lifetime purchase, with no subscription or ads. Voice transcripts sent to Markdown use the transcription allowance rather than a second Capture allowance. The App Store shows the current price for your region.</p>
-+          <p>Vox.md is a free download. New Capture and transcription require paid access: choose Individual or Family, weekly, yearly, or lifetime. Eligible subscriptions include a seven-day free trial. Existing purchases remain valid, and viewing or exporting existing history requires no new purchase. Apple shows the current local price and renewal terms before you confirm.</p>
-         </details>
-       </div>
+@@ -156,7 +156,7 @@
+           <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_home">Download Vox.md free</a>
+           <a href="blog/obsidian-quick-capture-iphone/" class="r-btn r-btn-line">Choose a capture method</a>
+         </div>
+-        <p class="r-note">15 transcription minutes + 10 Capture deliveries free · iOS 17.6+ · no account</p>
++        <p class="r-note">Seven-day free trial for eligible subscriptions · iOS 17.6+ · no account</p>
+         <details class="desktop-download-qr">
+           <summary>Scan to download on your iPhone</summary>
+           <div class="download-qr-panel">
+@@ -443,7 +443,7 @@
+       </details>
+       <details>
+         <summary>What does Vox.md cost?</summary>
+-        <p>Vox.md includes 15 minutes of transcription and 10 successful Capture deliveries free. Unlimited transcription and Capture are available with a one-time lifetime purchase, with no subscription or ads. Voice transcripts sent to Markdown use the transcription allowance rather than a second Capture allowance. The App Store shows the current price for your region.</p>
++        <p>Vox.md is a free download. New Capture and transcription require paid access: choose Individual or Family, weekly, yearly, or lifetime. Eligible subscriptions include a seven-day free trial. Existing purchases remain valid, and viewing or exporting existing history requires no new purchase. Apple shows the current local price and renewal terms before you confirm.</p>
+       </details>
      </div>
-@@ -370,7 +370,7 @@
-       </div>
-       <div class="cta-actions">
-         <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="btn-accent btn-lg" target="_blank" rel="noopener" data-download-campaign="seo_home">Download Vox.md free</a>
--        <span class="mono-note">Free allowances · one lifetime unlock · no account required</span>
-+        <span class="mono-note">Seven-day trial for eligible subscriptions · Lifetime available · no account required</span>
+   </div>
+@@ -456,7 +456,7 @@
+       <p>Connect a vault or local folder once. The next idea can go straight to the note, heading, and format you chose.</p>
+       <div class="r-actions">
+         <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_home">Download Vox.md free</a>
+-        <span class="r-note">Free allowances · one lifetime unlock · no account required</span>
++        <span class="r-note">Seven-day trial for eligible subscriptions · Lifetime available · no account required</span>
        </div>
      </div>
    </div>
@@ -169,7 +169,7 @@
    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
    <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
--  <link rel="preload" href="fonts/Geist-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+-  <link rel="preload" href="fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
    <link rel="stylesheet" href="geist.css">
 -  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="openapi.json" title="Vox.md Public Information API">
  </head>
