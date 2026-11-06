@@ -1,6 +1,11 @@
 package md.vox.android
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
+import md.vox.android.ui.Signal
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -207,6 +212,16 @@ internal fun RecoveryStories(story: String): Boolean {
                 endAction = VoiceAutoStopEndAction.SAVE_SEGMENT_AND_CONTINUE,
             ),
         )
+        // Activity
+        "recovery-activity-all" -> ActivityStory(activityStoryItems, activityStoryTranscripts)
+        "recovery-activity-needs-you" -> ActivityStory(activityStoryItems, activityStoryTranscripts, ActivityFilter.NEEDS_YOU)
+        "recovery-activity-in-flight" -> ActivityStory(activityStoryItems, activityStoryTranscripts, ActivityFilter.IN_FLIGHT)
+        "recovery-activity-empty" -> ActivityStory(emptyList())
+        "recovery-activity-needs-you-empty" -> ActivityStory(emptyList(), filter = ActivityFilter.NEEDS_YOU)
+
+        // Delivery problem sheet content
+        "recovery-delivery-failed" -> DeliveryProblemStory(activityCapture(5, md.vox.android.capturedomain.CaptureState.NEEDS_USER_ACTION))
+        "recovery-delivery-vault" -> DeliveryProblemStory(activityCapture(4, md.vox.android.capturedomain.CaptureState.NEEDS_PERMISSION))
         else -> return false
     }
     return true
@@ -398,3 +413,98 @@ private fun ModelsStory(
         },
     )
 }
+
+// region Activity and delivery problems
+
+@Composable
+private fun ActivityStory(
+    items: List<md.vox.android.capturedomain.CaptureHistoryItem>,
+    transcripts: List<RecordingTranscriptionState> = emptyList(),
+    filter: ActivityFilter = ActivityFilter.ALL,
+) {
+    ActivityScreen(
+        items = items,
+        transcripts = transcripts,
+        isBusy = false,
+        refresh = {},
+        retry = {},
+        repairAccess = {},
+        openDetail = {},
+        openTranscript = {},
+        openCapture = {},
+        nowEpochMillis = FIXED_TIME,
+        captureRouteName = { activityStoryRoutes[it.requestID.take(8).toInt() % activityStoryRoutes.size] },
+        loadCaptureDetail = { activityStoryDetail(it) },
+        editRoute = {},
+        initialFilter = filter,
+    )
+}
+
+@Composable
+private fun DeliveryProblemStory(item: md.vox.android.capturedomain.CaptureHistoryItem) {
+    androidx.compose.foundation.layout.Box(
+        androidx.compose.ui.Modifier
+            .fillMaxSize()
+            .background(Signal.colors.bg)
+            .padding(top = 24.dp),
+    ) {
+        DeliveryProblemContent(
+            item = item,
+            routeName = "Tasks",
+            loadDetail = { activityStoryDetail(it) },
+            isBusy = false,
+            retry = {},
+            repairAccess = {},
+            openDetail = {},
+            editRoute = {},
+        )
+    }
+}
+
+private val activityStoryRoutes = listOf("Tasks", "Journal", "Meeting Notes", "Inbox")
+
+private fun activityCapture(
+    index: Int,
+    state: md.vox.android.capturedomain.CaptureState,
+    path: String? = null,
+) = md.vox.android.capturedomain.CaptureHistoryItem(
+    requestID = "%08d-2222-4222-8222-%012d".format(index, index),
+    createdAtEpochMillis = FIXED_TIME - index * 600_000L,
+    updatedAtEpochMillis = FIXED_TIME - index * 600_000L,
+    state = state,
+    attemptCount = 1,
+    logicalPath = path,
+    presetID = "33333333-3333-4333-8333-333333333333",
+)
+
+private fun activityStoryDetail(requestID: String) = md.vox.android.capturedomain.CaptureHistoryDetail(
+    requestID = requestID,
+    createdAtEpochMillis = FIXED_TIME - 600_000L,
+    state = md.vox.android.capturedomain.CaptureState.NEEDS_USER_ACTION,
+    capturedText = "- [ ] Renew passport\n- [ ] Call the dentist\n- [ ] Order printer ink",
+    capturedURL = null,
+    presetID = "33333333-3333-4333-8333-333333333333",
+    logicalPath = "Tasks.md",
+    preparedMarkdown = "- [ ] Renew passport\n- [ ] Call the dentist\n- [ ] Order printer ink\n",
+)
+
+private val activityStoryItems = listOf(
+    activityCapture(4, md.vox.android.capturedomain.CaptureState.NEEDS_PERMISSION),
+    activityCapture(5, md.vox.android.capturedomain.CaptureState.RETRYABLE_FAILURE),
+    activityCapture(2, md.vox.android.capturedomain.CaptureState.COMMITTING),
+    activityCapture(1, md.vox.android.capturedomain.CaptureState.COMPLETED, "Journal/2023-W46.md"),
+    activityCapture(3, md.vox.android.capturedomain.CaptureState.COMPLETED, "Meetings/2023-11-14.md"),
+    activityCapture(7, md.vox.android.capturedomain.CaptureState.COMPLETED, "Inbox/Book recs.md"),
+)
+
+private val activityStoryTranscripts = listOf(
+    RecordingTranscriptionState(
+        sessionID = "00000006-1111-4111-8111-000000000006",
+        phase = RecordingTranscriptionPhase.PROCESSING,
+        progress = 0.62f,
+        durationMillis = 119_000L,
+        recordedAtEpochMillis = FIXED_TIME - 300_000L,
+    ),
+)
+
+// endregion

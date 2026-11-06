@@ -465,6 +465,10 @@ internal class CaptureViewModel private constructor(
         }
     }
 
+    /** Reads one capture's local package without touching the screen's selected detail. */
+    suspend fun historyDetailSnapshot(requestID: String): CaptureHistoryDetail? =
+        runCatching { repository.historyDetail(requestID) }.getOrNull()
+
     fun clearHistoryDetail() {
         mutableState.update { it.copy(historyDetail = null, isLoadingHistoryDetail = false) }
     }

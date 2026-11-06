@@ -105,7 +105,7 @@ class HistoryUiInstrumentationTest {
             }
         }
 
-        val search = compose.onNode(hasSetTextAction() and hasText("Search History", substring = true))
+        val search = compose.onNode(hasSetTextAction() and hasText("Search words, routes, files", substring = true))
         listOf("microphone", "shipping", "resume", "client launch", "planning").forEach { query ->
             search.performTextReplacement(query)
             compose.onNodeWithText("Résumé réunion").assertIsDisplayed()
@@ -151,7 +151,7 @@ class HistoryUiInstrumentationTest {
             }
         }
 
-        compose.onNode(hasSetTextAction() and hasText("Search History", substring = true))
+        compose.onNode(hasSetTextAction() and hasText("Search words, routes, files", substring = true))
             .performTextReplacement("needle")
         compose.onNodeWithText("Keep target").assertDoesNotExist()
         compose.onNodeWithText("Delete target").performClick()

@@ -62,6 +62,23 @@ internal fun LibraryStories(story: String): Boolean {
         )
         "library-history-busy" -> LibraryHistoryStory(libraryMixedCaptures, emptyList(), isBusy = true)
         "library-history-long-text" -> LibraryHistoryStory(libraryLongTextCaptures, listOf(libraryLongTranscript))
+        "library-history-grouped" -> LibraryHistoryStory(
+            libraryMixedCaptures + libraryCapture(100, CaptureState.RETRYABLE_FAILURE, "Design crit", "Keyboard picker needs bigger targets"),
+            libraryTranscriptsAllPhases.take(3),
+            withRoutes = true,
+        )
+        "library-history-route-filter" -> LibraryHistoryStory(
+            libraryMixedCaptures,
+            libraryTranscriptsAllPhases.take(3),
+            withRoutes = true,
+            initialRoute = "Meeting Notes",
+        )
+        "library-history-read-only" -> LibraryHistoryStory(
+            libraryMixedCaptures,
+            libraryTranscriptsAllPhases.take(2),
+            withRoutes = true,
+            isReadOnly = true,
+        )
         "library-history-clear-confirm" -> LibraryHistoryStory(
             libraryMixedCaptures,
             emptyList(),
@@ -82,6 +99,18 @@ internal fun LibraryStories(story: String): Boolean {
             initialOperationMessage = voxUiText("%@ exported.", voxUiText("Markdown")),
         )
         "library-capture-detail-failed-delivery" -> LibraryCaptureDetailStory(libraryFailedDeliveryDetail)
+        "library-capture-detail-transcript-tab" -> LibraryCaptureDetailStory(
+            libraryCompletedDetail,
+            initialTab = CaptureDetailTab.TRANSCRIPT,
+        )
+        "library-capture-detail-route-log" -> LibraryCaptureDetailStory(
+            libraryCompletedDetail,
+            initialTab = CaptureDetailTab.ROUTE_LOG,
+        )
+        "library-capture-detail-route-log-failed" -> LibraryCaptureDetailStory(
+            libraryFailedDeliveryDetail,
+            initialTab = CaptureDetailTab.ROUTE_LOG,
+        )
         "library-capture-detail-permanent-failure" -> LibraryCaptureDetailStory(
             libraryFailedDeliveryDetail.copy(state = CaptureState.PERMANENT_FAILURE),
         )
@@ -110,6 +139,7 @@ internal fun LibraryStories(story: String): Boolean {
         "library-transcript-failed" -> LibraryTranscriptDetailStory(libraryTranscriptsAllPhases.phase(RecordingTranscriptionPhase.FAILED))
         "library-transcript-discarded" -> LibraryTranscriptDetailStory(libraryTranscriptsAllPhases.phase(RecordingTranscriptionPhase.DISCARDED))
         "library-transcript-long-text" -> LibraryTranscriptDetailStory(libraryLongTranscript)
+        "library-transcript-audio" -> LibraryTranscriptDetailStory(libraryCompletedTranscript, withAudio = true)
         "library-transcript-unavailable" -> LibraryTranscriptDetailStory(null)
 
         // Adaptive split panes
@@ -135,6 +165,9 @@ private fun LibraryHistoryStory(
     initialKind: UnifiedHistoryKind = UnifiedHistoryKind.ALL,
     initialNeedsAttentionOnly: Boolean = false,
     initialShowsClearConfirmation: Boolean = false,
+    withRoutes: Boolean = false,
+    initialRoute: String? = null,
+    isReadOnly: Boolean = false,
 ) {
     HistoryScreen(
         items = items,
@@ -151,8 +184,19 @@ private fun LibraryHistoryStory(
         initialKind = initialKind,
         initialNeedsAttentionOnly = initialNeedsAttentionOnly,
         initialShowsClearConfirmation = initialShowsClearConfirmation,
+        captureRouteName = { item -> if (withRoutes) libraryStoryRoute(item.requestID) else null },
+        transcriptRouteName = { id -> if (withRoutes) libraryStoryRoute(id) else null },
+        initialRoute = initialRoute,
+        isReadOnly = isReadOnly,
+        openPlans = {},
+        nowEpochMillis = FIXED_TIME,
     )
 }
+
+private val libraryStoryRoutes = listOf("Meeting Notes", "Inbox", "Journal", "Tasks")
+
+/** Deterministic route for a fixture ID so route chips and rows are stable across runs. */
+internal fun libraryStoryRoute(id: String): String = libraryStoryRoutes[id.take(8).toInt() % libraryStoryRoutes.size]
 
 @Composable
 private fun LibraryCaptureDetailStory(
@@ -161,6 +205,7 @@ private fun LibraryCaptureDetailStory(
     isDeleting: Boolean = false,
     initialOperationMessage: VoxUiText? = null,
     initialShowsDeleteConfirmation: Boolean = false,
+    initialTab: CaptureDetailTab = CaptureDetailTab.WRITTEN,
 ) {
     HistoryDetailScreen(
         detail = detail,
@@ -170,6 +215,10 @@ private fun LibraryCaptureDetailStory(
         delete = {},
         initialOperationMessage = initialOperationMessage,
         initialShowsDeleteConfirmation = initialShowsDeleteConfirmation,
+        routeName = "Meeting Notes",
+        retry = {},
+        repairAccess = {},
+        initialTab = initialTab,
     )
 }
 
@@ -180,6 +229,7 @@ private fun LibraryTranscriptDetailStory(
     initialOperationMessage: VoxUiText? = null,
     initialShowsDeleteConfirmation: Boolean = false,
     withPresetExport: Boolean = false,
+    withAudio: Boolean = false,
 ) {
     TranscriptDetailScreen(
         state = state,
@@ -198,6 +248,7 @@ private fun LibraryTranscriptDetailStory(
         initialEditing = initialEditing,
         initialOperationMessage = initialOperationMessage,
         initialShowsDeleteConfirmation = initialShowsDeleteConfirmation,
+        hasRetainedAudio = { withAudio },
     )
 }
 

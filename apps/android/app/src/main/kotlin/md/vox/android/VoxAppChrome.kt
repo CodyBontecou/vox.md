@@ -37,6 +37,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import md.vox.android.capturedomain.CaptureHistoryDetail
+import md.vox.android.capturedomain.CapturePresetCollection
+import md.vox.android.platformservices.AudioCaptureClient
+import md.vox.android.ui.SignalCard
+import md.vox.android.ui.SignalDivider
+import md.vox.android.ui.signalStatusColors
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,7 +76,6 @@ import md.vox.android.ui.SignalType
 import md.vox.android.ui.SignalButton
 import md.vox.android.ui.SignalButtonSize
 import md.vox.android.ui.SignalButtonVariant
-import java.util.Calendar
 
 /** The four top-level destinations shown in the navigation bar and rail. */
 internal enum class VoxTopLevelDestination(val route: String) {
@@ -90,7 +103,7 @@ private val VoxTopLevelDestination.icon: ImageVector
 @Composable
 private fun VoxTopLevelDestination.label(): String = when (this) {
     VoxTopLevelDestination.CAPTURE -> voxString("Capture")
-    VoxTopLevelDestination.HISTORY -> voxString("History")
+    VoxTopLevelDestination.HISTORY -> voxString("Library")
     VoxTopLevelDestination.ACTIVITY -> voxString("Activity")
     VoxTopLevelDestination.SETTINGS -> voxString("Settings")
 }
@@ -273,11 +286,14 @@ private fun VoxNavigationItem(
     }
 }
 
+/** Activity filter: everything, only what needs the person, or only what is on the way. */
+internal enum class ActivityFilter { ALL, NEEDS_YOU, IN_FLIGHT }
+
 /**
  * Activity: what is on the way to the vault right now. Captures that need the person
  * come first with their repair or retry action, then captures and private transcripts
- * still in flight, then what was delivered today. Activity shows status only; capture
- * text is not part of it.
+ * still in flight, then what was delivered today. Activity keeps routes and status
+ * only; capture text is not part of it.
  */
 @Composable
 internal fun ActivityScreen(
@@ -291,23 +307,33 @@ internal fun ActivityScreen(
     openTranscript: (String) -> Unit,
     openCapture: () -> Unit,
     nowEpochMillis: Long = System.currentTimeMillis(),
+    /** Route (capture preset) name for a capture, from its frozen preset ID. */
+    captureRouteName: (CaptureHistoryItem) -> String? = { null },
+    /** Loads a capture's local package so the delivery sheet can preview and copy it. */
+    loadCaptureDetail: suspend (String) -> CaptureHistoryDetail? = { null },
+    /** Opens the route editor for a capture's frozen preset ID. */
+    editRoute: ((String) -> Unit)? = null,
+    initialFilter: ActivityFilter = ActivityFilter.ALL,
+    initialProblemRequestID: String? = null,
 ) {
     val c = Signal.colors
+    var filter by rememberSaveable { mutableStateOf(initialFilter) }
+    var problemRequestID by rememberSaveable { mutableStateOf(initialProblemRequestID) }
     val attention = items.filter { it.state.needsAttention() }.sortedByDescending(CaptureHistoryItem::updatedAtEpochMillis)
     val inFlight = items.filter { it.state.isInFlight() }.sortedByDescending(CaptureHistoryItem::updatedAtEpochMillis)
-    val transcriptRows = transcripts
-        .filter { it.phase.isTranscriptInFlight() || it.phase == RecordingTranscriptionPhase.FAILED }
-    val startOfToday = Calendar.getInstance().apply {
-        timeInMillis = nowEpochMillis
-        set(Calendar.HOUR_OF_DAY, 0)
-        set(Calendar.MINUTE, 0)
-        set(Calendar.SECOND, 0)
-        set(Calendar.MILLISECOND, 0)
-    }.timeInMillis
+    val failedTranscripts = transcripts.filter { it.phase == RecordingTranscriptionPhase.FAILED }
+    val processing = transcripts.filter { it.phase.isTranscriptInFlight() }
+    val startOfToday = libraryStartOfDay(nowEpochMillis)
     val deliveredToday = items
         .filter { it.state == CaptureState.COMPLETED && it.updatedAtEpochMillis >= startOfToday }
         .sortedByDescending(CaptureHistoryItem::updatedAtEpochMillis)
-    val isEmpty = attention.isEmpty() && inFlight.isEmpty() && transcriptRows.isEmpty() && deliveredToday.isEmpty()
+    val needsYouCount = attention.size + failedTranscripts.size
+    val showsNeedsYou = filter != ActivityFilter.IN_FLIGHT
+    val showsInFlight = filter != ActivityFilter.NEEDS_YOU
+    val showsDelivered = filter == ActivityFilter.ALL
+    val isEmpty = (!showsNeedsYou || needsYouCount == 0) &&
+        (!showsInFlight || (inFlight.isEmpty() && processing.isEmpty())) &&
+        (!showsDelivered || deliveredToday.isEmpty())
     Column(Modifier.fillMaxSize().background(c.bg)) {
         VoxTopBar(
             title = voxUiText("Activity"),
@@ -321,99 +347,286 @@ internal fun ActivityScreen(
                 )
             },
         )
+        LibrarySegmentedTabs(
+            options = listOf(
+                voxString("All") to ActivityFilter.ALL,
+                (if (needsYouCount > 0) voxFormat("%@ · %@", voxString("Needs you"), needsYouCount.toString()) else voxString("Needs you")) to ActivityFilter.NEEDS_YOU,
+                voxString("In flight") to ActivityFilter.IN_FLIGHT,
+            ),
+            selected = filter,
+            onSelect = { filter = it },
+            modifier = Modifier
+                .padding(horizontal = SignalMetrics.PageGutter)
+                .padding(bottom = 12.dp)
+                .testTag("activity-filter"),
+        )
         if (isEmpty) {
             Box(Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
-                SignalEmptyState(
-                    icon = Icons.Outlined.CheckCircle,
-                    title = voxString("No activity yet"),
-                    message = voxString("Record or send a Capture to create your first history item."),
-                    iconTint = c.successText,
-                    action = {
-                        SignalButton(
-                            voxString("Capture"),
-                            onClick = openCapture,
-                            size = SignalButtonSize.MEDIUM,
-                            fillWidth = false,
-                        )
-                    },
-                )
+                when (filter) {
+                    ActivityFilter.ALL -> SignalEmptyState(
+                        icon = Icons.Outlined.CheckCircle,
+                        title = voxString("All caught up"),
+                        message = voxString("Nothing waiting. Captures from the keyboard, Watch and Mac show up here while they’re on the way to your vault."),
+                        iconTint = c.successText,
+                        action = {
+                            SignalButton(
+                                voxString("New capture"),
+                                onClick = openCapture,
+                                size = SignalButtonSize.MEDIUM,
+                                fillWidth = false,
+                            )
+                        },
+                    )
+                    ActivityFilter.NEEDS_YOU -> SignalEmptyState(
+                        icon = Icons.Outlined.CheckCircle,
+                        title = voxString("All caught up"),
+                        message = voxString("Nothing needs you right now."),
+                        iconTint = c.successText,
+                    )
+                    ActivityFilter.IN_FLIGHT -> SignalEmptyState(
+                        icon = Icons.Outlined.CheckCircle,
+                        title = voxString("All caught up"),
+                        message = voxString("Nothing is in flight right now."),
+                        iconTint = c.successText,
+                    )
+                }
             }
         } else {
             LazyColumn(
                 modifier = Modifier.fillMaxWidth().weight(1f).testTag("activity-list"),
                 contentPadding = PaddingValues(start = SignalMetrics.PageGutter, end = SignalMetrics.PageGutter, top = 4.dp, bottom = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                if (attention.isNotEmpty() || transcriptRows.any { it.phase == RecordingTranscriptionPhase.FAILED }) {
-                    item(key = "attention-label") { SignalSectionLabel(voxString("Needs attention"), Modifier.padding(start = 4.dp, top = 4.dp)) }
+                if (showsNeedsYou) {
+                    items(attention, key = { "attention:${it.requestID}" }) { item ->
+                        ActivityProblemCard(
+                            item = item,
+                            routeName = captureRouteName(item),
+                            isBusy = isBusy,
+                            retry = { retry(item.requestID) },
+                            repairAccess = { repairAccess(item.requestID) },
+                            openProblem = { problemRequestID = item.requestID },
+                        )
+                    }
+                    items(failedTranscripts, key = { "failed:${it.sessionID}" }) { transcript ->
+                        TranscriptHistoryCard(transcript = transcript, openDetail = { openTranscript(transcript.sessionID) })
+                    }
                 }
-                items(attention, key = { "attention:${it.requestID}" }) { item ->
-                    HistoryCard(
-                        item = item,
-                        isBusy = isBusy,
-                        retry = { retry(item.requestID) },
-                        repairAccess = { repairAccess(item.requestID) },
-                        openDetail = { openDetail(item.requestID) },
-                    )
+                if (showsInFlight) {
+                    items(inFlight, key = { "flight:${it.requestID}" }) { item ->
+                        ActivityInFlightRow(
+                            title = captureRouteName(item) ?: voxString("Capture"),
+                            detail = historyTitleUiText(item.state).localized(),
+                            timeEpochMillis = item.updatedAtEpochMillis,
+                            progress = null,
+                            onClick = { openDetail(item.requestID) },
+                        )
+                    }
+                    items(processing, key = { "transcript:${it.sessionID}" }) { transcript ->
+                        ActivityInFlightRow(
+                            title = libraryTranscriptPhaseTitle(transcript),
+                            detail = formatTranscriptDuration(transcript.durationMillis),
+                            timeEpochMillis = transcript.recordedAtEpochMillis ?: transcript.completedAtEpochMillis,
+                            progress = transcript.progress
+                                .takeIf { transcript.phase == RecordingTranscriptionPhase.PROCESSING && it > 0f }
+                                ?.coerceIn(0f, 1f),
+                            onClick = { openTranscript(transcript.sessionID) },
+                        )
+                    }
                 }
-                items(transcriptRows.filter { it.phase == RecordingTranscriptionPhase.FAILED }, key = { "failed:${it.sessionID}" }) { transcript ->
-                    TranscriptHistoryCard(transcript = transcript, openDetail = { openTranscript(transcript.sessionID) })
-                }
-                val processing = transcriptRows.filter { it.phase.isTranscriptInFlight() }
-                if (inFlight.isNotEmpty() || processing.isNotEmpty()) {
-                    item(key = "processing-label") { SignalSectionLabel(voxString("Processing"), Modifier.padding(start = 4.dp, top = 12.dp)) }
-                }
-                items(inFlight, key = { "flight:${it.requestID}" }) { item ->
-                    HistoryCard(
-                        item = item,
-                        isBusy = isBusy,
-                        retry = { retry(item.requestID) },
-                        repairAccess = { repairAccess(item.requestID) },
-                        openDetail = { openDetail(item.requestID) },
-                    )
-                }
-                items(processing, key = { "transcript:${it.sessionID}" }) { transcript ->
-                    TranscriptHistoryCard(transcript = transcript, openDetail = { openTranscript(transcript.sessionID) })
-                }
-                if (deliveredToday.isNotEmpty()) {
-                    item(key = "delivered-label") { SignalSectionLabel(voxString("Delivered"), Modifier.padding(start = 4.dp, top = 12.dp)) }
-                    item(key = "delivered") { DeliveredTodayGroup(deliveredToday, openDetail) }
+                if (showsDelivered && deliveredToday.isNotEmpty()) {
+                    item(key = "delivered-label") {
+                        SignalSectionLabel(voxString("Delivered today"), Modifier.padding(start = 4.dp, top = 12.dp), color = c.muted)
+                    }
+                    item(key = "delivered") { DeliveredTodayGroup(deliveredToday, captureRouteName, openDetail) }
                 }
             }
         }
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Top,
         ) {
-            Icon(Icons.Outlined.Lock, contentDescription = null, tint = c.muted, modifier = Modifier.size(14.dp))
-            Text(voxString("Everything stays on this device."), style = MaterialTheme.typography.bodySmall, color = c.muted)
+            Icon(Icons.Outlined.Lock, contentDescription = null, tint = c.muted, modifier = Modifier.size(14.dp).padding(top = 2.dp))
+            Text(
+                voxString("Activity keeps routes and status only — never your words, links or locations."),
+                style = MaterialTheme.typography.bodySmall,
+                color = c.muted,
+            )
+        }
+    }
+    val problem = problemRequestID?.let { id -> attention.firstOrNull { it.requestID == id } }
+    if (problem != null) {
+        val presetID = problem.presetID
+        DeliveryProblemSheet(
+            item = problem,
+            routeName = captureRouteName(problem),
+            loadDetail = loadCaptureDetail,
+            isBusy = isBusy,
+            retry = { retry(problem.requestID) },
+            repairAccess = { repairAccess(problem.requestID) },
+            openDetail = { openDetail(problem.requestID) },
+            editRoute = if (editRoute != null && presetID != null) ({ editRoute(presetID) }) else null,
+            onDismiss = { problemRequestID = null },
+        )
+    }
+}
+
+/**
+ * A capture that needs the person: a warning dot, what went wrong, and the action that
+ * fixes it. Content-free: the route and time stand in for the capture's words.
+ */
+@Composable
+internal fun ActivityProblemCard(
+    item: CaptureHistoryItem,
+    routeName: String?,
+    isBusy: Boolean,
+    retry: () -> Unit,
+    repairAccess: () -> Unit,
+    openProblem: () -> Unit,
+) {
+    val c = Signal.colors
+    val isVaultProblem = item.state == CaptureState.NEEDS_PERMISSION
+    val status = signalStatusColors(libraryCaptureStatus(item.state))
+    SignalCard(
+        modifier = Modifier.fillMaxWidth(),
+        padding = PaddingValues(14.dp),
+        radius = 18.dp,
+        borderColor = status.fill,
+        onClick = openProblem,
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.Top) {
+            Box(Modifier.padding(top = 6.dp).size(10.dp).clip(CircleShape).background(status.dot))
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    if (isVaultProblem) voxString("Can’t reach your vault") else historyTitleUiText(item.state).localized(),
+                    style = SignalType.rowTitle,
+                    color = c.text,
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+                )
+                val time = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(java.util.Date(item.updatedAtEpochMillis))
+                Text(
+                    listOfNotNull(
+                        routeName,
+                        time,
+                        if (isVaultProblem) voxString("Keeps this capture waiting on this device until vault access is back.") else null,
+                    ).joinToString(" · "),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = c.muted,
+                )
+            }
+        }
+        if (item.state != CaptureState.DISCARDED) {
+            Spacer(Modifier.height(12.dp))
+            Row(Modifier.padding(start = 22.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (isVaultProblem) {
+                    SignalButton(
+                        voxString("Fix access"),
+                        onClick = repairAccess,
+                        size = SignalButtonSize.MEDIUM,
+                        enabled = !isBusy,
+                        fillWidth = false,
+                    )
+                }
+                SignalButton(
+                    voxString("Retry"),
+                    onClick = retry,
+                    variant = SignalButtonVariant.SECONDARY,
+                    size = SignalButtonSize.MEDIUM,
+                    enabled = !isBusy,
+                    fillWidth = false,
+                )
+            }
         }
     }
 }
 
-/** Segmented rows (16dp outer, 4dp inner corners) of today's deliveries. */
+/** Something on the way to the vault: a primary dot, its route and step, and progress. */
 @Composable
-private fun DeliveredTodayGroup(items: List<CaptureHistoryItem>, openDetail: (String) -> Unit) {
+private fun ActivityInFlightRow(
+    title: String,
+    detail: String,
+    timeEpochMillis: Long?,
+    progress: Float?,
+    onClick: () -> Unit,
+) {
     val c = Signal.colors
-    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+    SignalCard(
+        modifier = Modifier.fillMaxWidth(),
+        padding = PaddingValues(14.dp),
+        radius = 18.dp,
+        borderColor = c.border,
+        onClick = onClick,
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.Top) {
+            Box(Modifier.padding(top = 6.dp).size(10.dp).clip(CircleShape).background(c.tint))
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(verticalAlignment = Alignment.Top) {
+                    Text(
+                        title,
+                        style = SignalType.rowTitle,
+                        color = c.text,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f),
+                    )
+                    timeEpochMillis?.let {
+                        Text(
+                            java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(java.util.Date(it)),
+                            style = SignalType.monoCaption,
+                            color = c.muted,
+                            modifier = Modifier.padding(start = 8.dp, top = 2.dp),
+                        )
+                    }
+                }
+                Text(detail, style = MaterialTheme.typography.bodyMedium, color = c.muted)
+                val barModifier = Modifier.fillMaxWidth().height(4.dp).clip(CircleShape)
+                if (progress != null) {
+                    LinearProgressIndicator(
+                        progress = { progress },
+                        modifier = barModifier,
+                        color = c.tint,
+                        trackColor = c.well,
+                        drawStopIndicator = {},
+                        gapSize = 0.dp,
+                    )
+                } else {
+                    LinearProgressIndicator(modifier = barModifier, color = c.tint, trackColor = c.well, gapSize = 0.dp)
+                }
+            }
+        }
+    }
+}
+
+/** One card of divided rows for today's deliveries: route, where it went, and when. */
+@Composable
+private fun DeliveredTodayGroup(
+    items: List<CaptureHistoryItem>,
+    routeName: (CaptureHistoryItem) -> String?,
+    openDetail: (String) -> Unit,
+) {
+    val c = Signal.colors
+    SignalCard(
+        modifier = Modifier.fillMaxWidth(),
+        padding = PaddingValues(horizontal = 14.dp),
+        radius = 18.dp,
+        borderColor = c.border,
+    ) {
         items.forEachIndexed { index, item ->
-            val shape = segmentedShape(index, items.size)
+            if (index > 0) SignalDivider()
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = 64.dp)
-                    .clip(shape)
-                    .background(c.card)
+                    .heightIn(min = 56.dp)
                     .clickable { openDetail(item.requestID) }
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                    .padding(vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(14.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                Icon(Icons.Outlined.CheckCircle, contentDescription = null, tint = c.success, modifier = Modifier.size(20.dp))
+                Icon(Icons.Outlined.Check, contentDescription = null, tint = c.successText, modifier = Modifier.size(18.dp))
                 Column(Modifier.weight(1f)) {
                     Text(
-                        item.title?.takeIf(String::isNotBlank) ?: historyTitleUiText(item.state).localized(),
+                        routeName(item) ?: historyTitleUiText(item.state).localized(),
                         style = SignalType.rowTitle.copy(fontSize = 15.sp),
                         color = c.text,
                         maxLines = 1,
@@ -432,6 +645,14 @@ private fun DeliveredTodayGroup(items: List<CaptureHistoryItem>, openDetail: (St
         }
     }
 }
+
+/** Display name of the route (capture preset) with [presetID], if it still exists. */
+internal fun libraryRouteName(collection: CapturePresetCollection?, presetID: String?): String? =
+    presetID?.let { id -> collection?.presets?.firstOrNull { it.id == id }?.name?.takeIf(String::isNotBlank) }
+
+/** True when a finished recording still has its local audio chunks. Reads storage. */
+internal fun AudioCaptureClient.hasRetainedAudio(sessionID: String): Boolean =
+    recordings().any { it.sessionID == sessionID && it.chunkCount > 0 && !it.isActive }
 
 /** 16dp outer and 4dp inner corners for row [index] of a [count]-row segmented list. */
 internal fun segmentedShape(index: Int, count: Int): RoundedCornerShape {
