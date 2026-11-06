@@ -349,7 +349,7 @@ internal fun SettingsScreen(
                 )
                 SignalRowDivider()
                 SettingsSignalNavRow(
-                    title = voxString("Capture Presets"),
+                    title = voxString("Routes"),
                     subtitle = presets.filter { it.isEnabled }.joinToString(" · ") { it.name }
                         .ifBlank { voxString("Processing, formatting, metadata, and destinations") },
                     value = presets.count { it.isEnabled }.takeIf { it > 0 }?.toString(),
@@ -403,7 +403,7 @@ internal fun SettingsScreen(
                 SettingsSignalNavRow(
                     title = voxString("Wear OS"),
                     subtitle = presets.filter { it.isEnabled && it.isPinned }.joinToString(" · ") { it.name }
-                        .ifBlank { voxString("Capture Presets") },
+                        .ifBlank { voxString("Routes") },
                     subtitleMaxLines = 1,
                     onClick = openPresets,
                 )

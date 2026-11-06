@@ -366,7 +366,7 @@ internal fun ActivityScreen(
                     ActivityFilter.ALL -> SignalEmptyState(
                         icon = Icons.Outlined.CheckCircle,
                         title = voxString("All caught up"),
-                        message = voxString("Nothing waiting. Captures from the keyboard, Watch and Mac show up here while they’re on the way to your vault."),
+                        message = voxString("Nothing waiting. Captures from the keyboard and Wear OS show up here while they’re on the way to your vault."),
                         iconTint = c.successText,
                         action = {
                             SignalButton(

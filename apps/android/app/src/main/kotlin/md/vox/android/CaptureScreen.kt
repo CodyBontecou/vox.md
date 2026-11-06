@@ -1272,7 +1272,7 @@ internal fun CaptureTopControls(
     val selectorClickLabel = voxString(
         if (isPresetRailExpanded) "Hide pinned capture presets" else "Show pinned capture presets",
     )
-    val chooseLabel = voxString("Choose Capture Preset")
+    val chooseLabel = voxString("Choose Route")
     val railOpen = expandsRail && isPresetRailExpanded
     val selectorDescription = if (expandsRail) selectorClickLabel else chooseLabel
     val imeVisible = androidx.compose.foundation.layout.WindowInsets.isImeVisible

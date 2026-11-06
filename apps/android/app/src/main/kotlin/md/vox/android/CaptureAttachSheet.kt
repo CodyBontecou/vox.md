@@ -10,9 +10,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -236,7 +240,7 @@ internal fun CaptureAttachSheetContent(
                         icon = Icons.AutoMirrored.Outlined.MenuBook,
                         enabled = !isBusy,
                         onClick = { expanded = true },
-                        modifier = Modifier.fillMaxWidth().testTag("capture-attach-journal"),
+                        modifier = Modifier.fillMaxSize().testTag("capture-attach-journal"),
                     )
                     CaptureSignalMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                         CaptureMenuItem(voxString("Capture Journal Pages"), Icons.Outlined.CameraAlt) {
@@ -254,9 +258,10 @@ internal fun CaptureAttachSheetContent(
                 scan(Modifier.fillMaxWidth())
                 journal(Modifier.fillMaxWidth())
             } else {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    scan(Modifier.weight(1f))
-                    journal(Modifier.weight(1f))
+                // Equal-height tiles even when one subtitle wraps.
+                Row(Modifier.height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    scan(Modifier.weight(1f).fillMaxHeight())
+                    journal(Modifier.weight(1f).fillMaxHeight())
                 }
             }
             Text(

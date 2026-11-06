@@ -399,6 +399,8 @@ internal fun routeSamplePreview(preset: CapturePreset, now: Date = Date()): Rout
         .replace("{timestamp}", "$date $time")
         .replace("{date}", date)
         .replace("{time}", time)
+        .replace("{hour}", "10")
+        .replace("{minute}", "42")
         .replace("{title}", title)
         .replace("{period}", period)
         .replace("{week}", week)
@@ -406,10 +408,15 @@ internal fun routeSamplePreview(preset: CapturePreset, now: Date = Date()): Rout
         .replace("{year}", year)
         .replace("{quarter}", quarter.toString())
         .replace("{id}", "3f2a9c1e")
+        .replace("{uuid}", "3f2a9c1e-7b4d-4c1a-9e2f-5a6b7c8d9e0f")
+        .replace("{model}", "Whisper")
+        .replace("{language}", "en")
         .replace("{location}", "")
     val body = when (preset.effectiveProcessingMode()) {
+        // The route's own entry prefix supplies the heading when it has one.
         CaptureProcessingMode.MEETING_NOTES ->
-            "### $time · $title\n- [ ] Review final designs\n- [ ] Loop in design before Friday\nDecision: ship routing first."
+            (if (preset.entryPrefix.isBlank()) "### $time · $title\n" else "") +
+                "- [ ] Review final designs\n- [ ] Loop in design before Friday\nDecision: ship routing first."
         CaptureProcessingMode.TODO_LIST -> "- [ ] Book flights for Lisbon"
         CaptureProcessingMode.NONE -> "Walked along the river after lunch. Felt clearer about the plan."
         else -> "Remind me to book flights for Lisbon before Friday."
