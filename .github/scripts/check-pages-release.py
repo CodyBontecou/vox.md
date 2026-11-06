@@ -40,9 +40,24 @@ def local_page(root, url, origin):
     return target
 
 
-# A fresh Pages deployment can answer 404 or 5xx for a few seconds while new files
-# propagate. Retry those briefly; every other check stays exact.
-RETRY_DELAYS = (2, 4, 8, 15, 30)
+# A fresh Pages deployment can answer 404, 5xx or the previous release's bytes for a
+# short while as new files propagate through the edge. Retry those briefly; every
+# check stays exact and a mismatch that outlasts the window still fails.
+RETRY_DELAYS = (2, 4, 8, 15, 30, 45)
+
+
+def until_current(attempt):
+    for delay in (*RETRY_DELAYS, None):
+        try:
+            return attempt()
+        except StaleContent:
+            if delay is None:
+                raise
+        time.sleep(delay)
+
+
+class StaleContent(ValueError):
+    pass
 
 
 def fetch(url, accept='text/html'):
@@ -88,13 +103,16 @@ def main():
 
     def check(url):
         page = local_page(args.site, url, canonical_origin)
+        until_current(lambda: check_once(url, page))
+
+    def check_once(url, page):
         headers, body = fetch(origin + url.removeprefix(canonical_origin))
         if headers.get_content_type() != 'text/html':
             raise ValueError('Expected HTML: ' + url)
         if not args.preview and re.search(r'\bnoindex\b', headers.get('X-Robots-Tag', ''), flags=re.I):
             raise ValueError('Canonical URL is noindex: ' + url)
         if normalize_html(body.decode()) != normalize_html(page.read_text()):
-            raise ValueError('Live HTML differs from the validated artifact: ' + url)
+            raise StaleContent('Live HTML differs from the validated artifact: ' + url)
         canonical = re.findall(r'<link\b[^>]*rel=["\x27]canonical["\x27][^>]*href=["\x27]([^"\x27]+)', body.decode(), re.I)
         if canonical != [url]:
             raise ValueError('Unexpected canonical: ' + url)
@@ -102,10 +120,13 @@ def main():
         list(pool.map(check, urls))
     assets = [p for p in args.site.rglob('*') if p.is_file() and p.suffix in {'.mjs', '.js', '.css', '.svg', '.gpx', '.csv', '.geojson', '.kml', '.zip'} and p.name != '_worker.js']
     def asset(path):
+        until_current(lambda: asset_once(path))
+
+    def asset_once(path):
         url = origin + '/' + path.relative_to(args.site).as_posix()
         _, body = fetch(url, '*/*')
         if body != path.read_bytes():
-            raise ValueError('Live asset differs from the validated artifact: ' + url)
+            raise StaleContent('Live asset differs from the validated artifact: ' + url)
     with ThreadPoolExecutor(max_workers=5) as pool:
         list(pool.map(asset, assets))
     if args.private_tools:

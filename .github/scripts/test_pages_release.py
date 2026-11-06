@@ -44,5 +44,34 @@ class ReleaseBoundaryTests(unittest.TestCase):
         finally:
             release.fetch_once, release.time.sleep = original_once, original_sleep
 
+    def test_stale_edge_content_is_retried_then_still_fails(self):
+        attempts = []
+        def settles():
+            attempts.append(1)
+            if len(attempts) < 3:
+                raise release.StaleContent('old release')
+            return 'current'
+        original_sleep = release.time.sleep
+        release.time.sleep = lambda _: None
+        try:
+            self.assertEqual(release.until_current(settles), 'current')
+            self.assertEqual(len(attempts), 3)
+            attempts.clear()
+            def never():
+                attempts.append(1)
+                raise release.StaleContent('old release')
+            with self.assertRaises(release.StaleContent):
+                release.until_current(never)
+            self.assertEqual(len(attempts), len(release.RETRY_DELAYS) + 1)
+            def other():
+                attempts.append(1)
+                raise ValueError('Unexpected canonical')
+            attempts.clear()
+            with self.assertRaises(ValueError):
+                release.until_current(other)
+            self.assertEqual(len(attempts), 1)
+        finally:
+            release.time.sleep = original_sleep
+
 if __name__ == '__main__':
     unittest.main()
