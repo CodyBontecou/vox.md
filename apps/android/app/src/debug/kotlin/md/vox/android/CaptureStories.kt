@@ -7,6 +7,8 @@ import md.vox.android.capturedomain.CaptureBarAction
 import md.vox.android.capturedomain.CaptureBarConfiguration
 import md.vox.android.capturedomain.CaptureDraft
 import md.vox.android.capturedomain.CaptureEntryTemplate
+import md.vox.android.capturedomain.CaptureHistoryItem
+import md.vox.android.capturedomain.CaptureState
 import md.vox.android.capturedomain.CaptureLocationUnavailableReason
 import md.vox.android.capturedomain.CapturePlacementKind
 import md.vox.android.capturedomain.CapturePresetCollection
@@ -27,6 +29,7 @@ import md.vox.android.ui.CaptureUiState
  * `adb shell am start -n md.vox.android/.VisualStoryActivity --es story <id> --ez dark <bool>`.
  * Returns false when [story] is not one of these.
  */
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 internal fun CaptureStories(story: String): Boolean {
     when (story) {
@@ -157,10 +160,35 @@ internal fun CaptureStories(story: String): Boolean {
             CaptureSignalStory()
             LinkDialog(initialValue = "", onDismiss = {}, onSave = {})
         }
-        "capture-media-dialog" -> Box {
+
+        // Attach sheet (AttachV2 board)
+        "capture-attach-sheet" -> CaptureSignalStory(showsAttachSheet = true)
+        "capture-attach-sheet-clipboard" -> Box {
             CaptureSignalStory()
-            CaptureMediaDialog(onDismiss = {}, choosePhotos = {}, chooseScreenshots = {}, takePhoto = {})
+            CaptureAttachSheet(
+                destinationLine = captureDestinationLine(visualPresets.activePreset, null),
+                clipboard = CaptureClipboardKind.LINK,
+                isBusy = false,
+                onDismiss = {},
+                paste = {},
+                choosePhotos = {},
+                scanDocument = {},
+                captureJournalPages = {},
+                chooseJournalPhotos = {},
+                choose = {},
+            )
         }
+
+        // Capture states board
+        "capture-vault-unreachable" -> CaptureSignalStory(history = captureStoryWaitingHistory)
+        "capture-microphone-off" -> CaptureSignalStory(text = "", microphoneBlocked = true)
+        "capture-route-progress" -> CaptureSignalStory(
+            recordingPhase = RecordingPhase.COMPLETED,
+            transcription = captureStoryTranscription(RecordingTranscriptionPhase.PROCESSING, progress = 0.64f),
+        )
+
+        // Resting composer with the grouped quick actions (CaptureRestActions board)
+        "capture-all-quick-actions" -> CaptureSignalStory(text = "", showsAllQuickActions = true)
         "capture-sketch" -> Box {
             CaptureSignalStory()
             SketchDialog(onDismiss = {}, onSave = {}, onFailure = {})
@@ -180,6 +208,25 @@ private val captureStoryLongText = buildString {
     }
     append("\nDecision: ship routing first and keep the composer calm.")
 }
+
+private val captureStoryWaitingHistory = listOf(
+    CaptureHistoryItem(
+        requestID = "55555555-5555-4555-8555-555555555555",
+        createdAtEpochMillis = FIXED_TIME,
+        updatedAtEpochMillis = FIXED_TIME,
+        state = CaptureState.NEEDS_PERMISSION,
+        attemptCount = 1,
+        title = "Renew passport",
+    ),
+    CaptureHistoryItem(
+        requestID = "66666666-6666-4666-8666-666666666666",
+        createdAtEpochMillis = FIXED_TIME,
+        updatedAtEpochMillis = FIXED_TIME,
+        state = CaptureState.NEEDS_PERMISSION,
+        attemptCount = 1,
+        title = "Call the dentist",
+    ),
+)
 
 private val captureStoryAttachments = listOf(
     CaptureAttachment(
@@ -236,6 +283,10 @@ private fun CaptureSignalStory(
     transcription: RecordingTranscriptionState? = null,
     liveSpeech: LiveSpeechState? = null,
     showDetails: Boolean = recordingPhase != RecordingPhase.IDLE || transcription != null,
+    history: List<CaptureHistoryItem> = emptyList(),
+    microphoneBlocked: Boolean = false,
+    showsAttachSheet: Boolean = false,
+    showsAllQuickActions: Boolean = false,
 ) {
     val state = CaptureUiState(
         isLoading = false,
@@ -252,6 +303,7 @@ private fun CaptureSignalStory(
         presetCollection = presets,
         isPresetRailExpanded = isPresetRailExpanded,
         entryTemplates = entryTemplates,
+        history = history,
     )
     val recordingStatus = if (recordingPhase != RecordingPhase.IDLE) {
         RecordingStatus(
@@ -308,5 +360,8 @@ private fun CaptureSignalStory(
         frozenRecordingPreset = { visualPresets.activePreset },
         requestEditorFocus = false,
         initialShowsVoiceCaptureDetails = showDetails,
+        microphoneBlocked = microphoneBlocked,
+        initialShowsAttachSheet = showsAttachSheet,
+        initialShowsAllQuickActions = showsAllQuickActions,
     )
 }

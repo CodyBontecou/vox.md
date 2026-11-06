@@ -385,12 +385,23 @@ internal fun VoxApp(
         }.toTypedArray()
     }
     var pendingRecordingPreset by remember { mutableStateOf<CapturePreset?>(null) }
+    // Whether the system offered the rationale before this request; together with the
+    // reading afterwards it tells a permanent denial (Capture then offers Open Settings)
+    // from a first refusal or a dismissed dialog.
+    var microphoneRationaleBeforeRequest by remember { mutableStateOf(false) }
     val microphonePermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions(),
     ) { grants ->
         val preset = pendingRecordingPreset
         pendingRecordingPreset = null
-        if (grants[Manifest.permission.RECORD_AUDIO] == true && preset != null) recordingClient.start(preset)
+        val granted = grants[Manifest.permission.RECORD_AUDIO] == true
+        MicrophonePermissionMemory.recordResult(
+            context,
+            granted = granted,
+            rationaleBefore = microphoneRationaleBeforeRequest,
+            rationaleAfter = MicrophonePermissionMemory.shouldShowRationale(context.findActivity()),
+        )
+        if (granted && preset != null) recordingClient.start(preset)
     }
     val startRecording: () -> Unit = {
         recordingClient.dismissResult()
@@ -404,6 +415,7 @@ internal fun VoxApp(
             recordingClient.start(preset)
         } else {
             pendingRecordingPreset = preset
+            microphoneRationaleBeforeRequest = MicrophonePermissionMemory.shouldShowRationale(context.findActivity())
             microphonePermissionLauncher.launch(microphonePermissions)
         }
     }
@@ -847,6 +859,9 @@ internal fun VoxNavigation(
                     },
                     frozenRecordingPreset = recordingClient::frozenPreset,
                     setVoiceRecordingResult = model::setVoiceRecordingResult,
+                    microphoneBlocked = rememberMicrophoneBlocked(),
+                    hasVaultAccess = rememberVaultAccess(latestState.destination),
+                    regrantVaultAccess = openTree,
                 )
             }
             composable(Destination.History.route) {
