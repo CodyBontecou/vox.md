@@ -23,5 +23,26 @@ class ReleaseBoundaryTests(unittest.TestCase):
                 with self.subTest(url=url), self.assertRaises(ValueError):
                     release.local_page(root, url, 'https://site.test')
 
+    def test_fresh_deployment_404_is_retried_but_other_errors_are_not(self):
+        from urllib.error import HTTPError
+        calls = []
+        def flaky(url, accept='text/html'):
+            calls.append(url)
+            if len(calls) < 3:
+                raise HTTPError(url, 404, 'Not Found', {}, None)
+            return {}, b'ok'
+        original_once, original_sleep = release.fetch_once, release.time.sleep
+        release.fetch_once, release.time.sleep = flaky, lambda _: None
+        try:
+            self.assertEqual(release.fetch('https://example.pages.dev/'), ({}, b'ok'))
+            self.assertEqual(len(calls), 3)
+            def forbidden(url, accept='text/html'):
+                raise HTTPError(url, 403, 'Forbidden', {}, None)
+            release.fetch_once = forbidden
+            with self.assertRaises(HTTPError):
+                release.fetch('https://example.pages.dev/')
+        finally:
+            release.fetch_once, release.time.sleep = original_once, original_sleep
+
 if __name__ == '__main__':
     unittest.main()
