@@ -41,6 +41,11 @@ import md.vox.android.ui.SignalCard
 import md.vox.android.ui.SignalChip
 import md.vox.android.ui.SignalCircleButton
 import md.vox.android.ui.SignalEmptyState
+import md.vox.android.ui.SignalBanner
+import md.vox.android.ui.SignalInvertedCard
+import md.vox.android.ui.SignalPillButton
+import md.vox.android.ui.SignalSectionLabel
+import md.vox.android.capturedomain.CaptureHistoryDetail
 import md.vox.android.ui.SignalIconTile
 import md.vox.android.ui.SignalMetrics
 import md.vox.android.ui.SignalStatus
@@ -162,6 +167,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
@@ -317,8 +323,50 @@ internal sealed interface UnifiedHistoryRow {
 
     data class Transcript(val item: RecordingTranscriptionState) : UnifiedHistoryRow {
         override val stableKey: String = "transcript:${item.sessionID}"
-        override val sortTime: Long = item.completedAtEpochMillis ?: 0L
+        override val sortTime: Long = item.completedAtEpochMillis ?: item.recordedAtEpochMillis ?: 0L
     }
+}
+
+/** Local midnight that starts the day containing [epochMillis]. */
+internal fun libraryStartOfDay(epochMillis: Long): Long = Calendar.getInstance().apply {
+    timeInMillis = epochMillis
+    set(Calendar.HOUR_OF_DAY, 0)
+    set(Calendar.MINUTE, 0)
+    set(Calendar.SECOND, 0)
+    set(Calendar.MILLISECOND, 0)
+}.timeInMillis
+
+/** "Today", "Yesterday", or the medium date of the day starting at [dayStart]. */
+@Composable
+internal fun libraryDayLabel(dayStart: Long, nowEpochMillis: Long): String {
+    val today = libraryStartOfDay(nowEpochMillis)
+    val yesterday = libraryStartOfDay(today - 1L)
+    return when (dayStart) {
+        today -> voxString("Today")
+        yesterday -> voxString("Yesterday")
+        else -> DateFormat.getDateInstance(DateFormat.MEDIUM).format(Date(dayStart))
+    }
+}
+
+/**
+ * One Markdown document with everything the Library still holds locally: each pending
+ * capture as it would be written, and each completed transcript. Completed captures are
+ * content-free markers and are skipped. Returns null when nothing has text.
+ */
+internal fun libraryMarkdownExport(
+    captures: List<CaptureHistoryDetail>,
+    transcripts: List<RecordingTranscriptionState>,
+): String? {
+    val sections = buildList {
+        captures.sortedByDescending(CaptureHistoryDetail::createdAtEpochMillis).forEach { detail ->
+            HistoryDetailExporter.render(detail, HistoryExportFormat.MARKDOWN).trim().takeIf(String::isNotBlank)?.let(::add)
+        }
+        transcripts
+            .filter { it.phase == RecordingTranscriptionPhase.COMPLETED && !it.preferredTranscript.isNullOrBlank() }
+            .sortedByDescending { it.recordedAtEpochMillis ?: it.completedAtEpochMillis ?: 0L }
+            .forEach { add(TranscriptExporter.render(it, TranscriptExportFormat.MARKDOWN).trim()) }
+    }
+    return sections.takeIf { it.isNotEmpty() }?.joinToString(separator = "\n\n---\n\n", postfix = "\n")
 }
 
 @Composable
@@ -337,36 +385,118 @@ internal fun HistoryScreen(
     initialKind: UnifiedHistoryKind = UnifiedHistoryKind.ALL,
     initialNeedsAttentionOnly: Boolean = false,
     initialShowsClearConfirmation: Boolean = false,
+    /** Route (capture preset) name for a pending capture, from its frozen preset ID. */
+    captureRouteName: (CaptureHistoryItem) -> String? = { null },
+    /** Route name frozen with a recording; may read local storage, so it runs off the main thread. */
+    transcriptRouteName: suspend (String) -> String? = { null },
+    /** Loads a capture's local package for "Export all as Markdown". */
+    loadCaptureDetail: suspend (String) -> CaptureHistoryDetail? = { null },
+    initialRoute: String? = null,
+    /** Paid access ended: the Library stays readable, new captures need a plan. */
+    isReadOnly: Boolean = false,
+    openPlans: (() -> Unit)? = null,
+    nowEpochMillis: Long = System.currentTimeMillis(),
 ) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     var query by rememberSaveable { mutableStateOf(initialQuery) }
     var needsAttentionOnly by rememberSaveable { mutableStateOf(initialNeedsAttentionOnly) }
     var kind by rememberSaveable { mutableStateOf(initialKind.name) }
+    var route by rememberSaveable { mutableStateOf(initialRoute) }
     var showsClearConfirmation by rememberSaveable { mutableStateOf(initialShowsClearConfirmation) }
-    val filteredCaptures = items.filter { item ->
-        val searchTerms = query.trim().split(Regex("\\s+")).filter(String::isNotBlank)
-        val searchText = listOfNotNull(
-            item.requestID,
-            historyTitleUiText(item.state).source,
-            item.title,
-            item.snippet,
-            item.logicalPath,
-            item.captureSource,
-        ).joinToString(" ")
-        val matchesQuery = searchTerms.all { searchText.contains(it, ignoreCase = true) }
-        val matchesAttention = !needsAttentionOnly || item.state != CaptureState.COMPLETED
-        val matchesKind = kind != UnifiedHistoryKind.TRANSCRIPTS.name
-        matchesQuery && matchesAttention && matchesKind
+    var exportMenuOpen by remember { mutableStateOf(false) }
+    var isExporting by remember { mutableStateOf(false) }
+    var pendingExport by remember { mutableStateOf<String?>(null) }
+    var operationMessage by remember { mutableStateOf<VoxUiText?>(null) }
+    val transcriptIDs = transcripts.map(RecordingTranscriptionState::sessionID)
+    val transcriptRoutes by produceState(emptyMap<String, String>(), transcriptIDs) {
+        value = withContext(Dispatchers.IO) {
+            transcriptIDs.mapNotNull { id -> runCatching { transcriptRouteName(id) }.getOrNull()?.let { id to it } }.toMap()
+        }
     }
-    val filteredTranscripts = transcripts.filter { transcript ->
-        val matchesQuery = TranscriptSearch.matches(transcript, query)
-        val matchesAttention = !needsAttentionOnly || transcript.phase != RecordingTranscriptionPhase.COMPLETED
-        val matchesKind = kind != UnifiedHistoryKind.CAPTURES.name
-        matchesQuery && matchesAttention && matchesKind
+    val routeOf: (UnifiedHistoryRow) -> String? = { row ->
+        when (row) {
+            is UnifiedHistoryRow.Capture -> captureRouteName(row.item)
+            is UnifiedHistoryRow.Transcript -> transcriptRoutes[row.item.sessionID]
+        }
     }
-    val unifiedRows = buildList<UnifiedHistoryRow> {
-        filteredCaptures.forEach { add(UnifiedHistoryRow.Capture(it)) }
-        filteredTranscripts.forEach { add(UnifiedHistoryRow.Transcript(it)) }
+    val allRows = buildList<UnifiedHistoryRow> {
+        items.forEach { add(UnifiedHistoryRow.Capture(it)) }
+        transcripts.forEach { add(UnifiedHistoryRow.Transcript(it)) }
     }.sortedByDescending(UnifiedHistoryRow::sortTime)
+    val routeNames = allRows.mapNotNull(routeOf).filter(String::isNotBlank).distinct()
+    val selectedRoute = route?.takeIf(routeNames::contains)
+    val searchTerms = query.trim().split(Regex("\\s+")).filter(String::isNotBlank)
+    val unifiedRows = allRows.filter { row ->
+        val rowRoute = routeOf(row)
+        val matchesRoute = selectedRoute == null || rowRoute == selectedRoute
+        val matches = when (row) {
+            is UnifiedHistoryRow.Capture -> {
+                val item = row.item
+                val searchText = listOfNotNull(
+                    item.requestID,
+                    historyTitleUiText(item.state).source,
+                    item.title,
+                    item.snippet,
+                    item.logicalPath,
+                    item.captureSource,
+                    rowRoute,
+                ).joinToString(" ")
+                searchTerms.all { searchText.contains(it, ignoreCase = true) } &&
+                    (!needsAttentionOnly || item.state != CaptureState.COMPLETED) &&
+                    kind != UnifiedHistoryKind.TRANSCRIPTS.name
+            }
+            is UnifiedHistoryRow.Transcript -> {
+                val transcript = row.item
+                (TranscriptSearch.matches(transcript, query) ||
+                    (rowRoute != null && searchTerms.isNotEmpty() && searchTerms.all { rowRoute.contains(it, ignoreCase = true) })) &&
+                    (!needsAttentionOnly || transcript.phase != RecordingTranscriptionPhase.COMPLETED) &&
+                    kind != UnifiedHistoryKind.CAPTURES.name
+            }
+        }
+        matchesRoute && matches
+    }
+    val dayGroups = unifiedRows.groupBy { libraryStartOfDay(it.sortTime) }.toSortedMap(compareByDescending { it })
+    val hasExportableContent = items.any { it.state != CaptureState.COMPLETED } ||
+        transcripts.any { it.phase == RecordingTranscriptionPhase.COMPLETED && !it.preferredTranscript.isNullOrBlank() }
+    val createDocument = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("text/markdown")) { uri ->
+        val content = pendingExport
+        pendingExport = null
+        if (uri != null && content != null) {
+            scope.launch {
+                val written = withContext(Dispatchers.IO) {
+                    runCatching {
+                        context.contentResolver.openOutputStream(uri, "w")?.use { output ->
+                            output.write(content.toByteArray(Charsets.UTF_8))
+                            output.flush()
+                        } != null
+                    }.getOrDefault(false)
+                }
+                operationMessage = if (written) {
+                    voxUiText("%@ exported.", voxUiText("Markdown"))
+                } else {
+                    voxUiText("The export could not be written.")
+                }
+            }
+        }
+    }
+    val exportAll: () -> Unit = {
+        exportMenuOpen = false
+        isExporting = true
+        scope.launch {
+            val details = items
+                .filter { it.state != CaptureState.COMPLETED }
+                .mapNotNull { runCatching { loadCaptureDetail(it.requestID) }.getOrNull() }
+            val markdown = withContext(Dispatchers.Default) { libraryMarkdownExport(details, transcripts) }
+            isExporting = false
+            if (markdown == null) {
+                operationMessage = voxUiText("The export could not be written.")
+            } else {
+                pendingExport = markdown
+                createDocument.launch("vox-library.md")
+            }
+        }
+    }
     val signal = Signal.colors
     Column(
         modifier = Modifier
@@ -375,39 +505,95 @@ internal fun HistoryScreen(
             .navigationBarsPadding(),
     ) {
         VoxTopBar(
-            title = voxUiText("History"),
+            title = voxUiText("Library"),
             navigateBack = navigateBack,
             actions = {
-                SignalCircleButton(
-                    icon = Icons.Outlined.Delete,
-                    contentDescription = voxString("Clear all history"),
-                    onClick = { showsClearConfirmation = true },
-                    enabled = !isBusy && items.any { it.state == CaptureState.COMPLETED },
-                )
                 SignalCircleButton(
                     icon = Icons.Outlined.Refresh,
                     contentDescription = voxString("Refresh"),
                     onClick = refresh,
                     enabled = !isBusy,
                 )
+                Box {
+                    val exportLabel = voxString("Export all")
+                    SignalPillButton(
+                        text = voxString("Export"),
+                        onClick = { exportMenuOpen = true },
+                        modifier = Modifier
+                            .padding(end = 4.dp)
+                            .semantics { contentDescription = exportLabel }
+                            .testTag("library-export-menu"),
+                    )
+                    LibraryExportMenu(
+                        expanded = exportMenuOpen,
+                        onDismiss = { exportMenuOpen = false },
+                        labels = listOf(voxString("Export all as Markdown"), voxString("Clear Library…")),
+                        enabled = listOf(
+                            hasExportableContent && !isExporting,
+                            !isBusy && items.any { it.state == CaptureState.COMPLETED },
+                        ),
+                        destructive = setOf(1),
+                        onSelect = { index ->
+                            if (index == 0) {
+                                exportAll()
+                            } else {
+                                exportMenuOpen = false
+                                showsClearConfirmation = true
+                            }
+                        },
+                    )
+                }
             },
         )
+        if (isReadOnly) {
+            SignalInvertedCard(
+                title = voxString("Your trial has ended"),
+                message = voxString("You can still read, search, copy, export and delete everything here. New captures and edits need Vox.md."),
+                actionLabel = openPlans?.let { voxString("See plans") },
+                onAction = openPlans,
+                modifier = Modifier
+                    .padding(horizontal = SignalMetrics.PageGutter)
+                    .padding(bottom = 12.dp)
+                    .testTag("library-read-only"),
+            )
+        }
         LibrarySearchField(
             value = query,
             onValueChange = { query = it.take(128) },
             modifier = Modifier.padding(horizontal = SignalMetrics.PageGutter),
         )
+        val allLabel = voxString("All")
         LazyRow(
-            modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 6.dp)
+                .testTag("library-filters"),
             contentPadding = PaddingValues(horizontal = SignalMetrics.PageGutter),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            items(UnifiedHistoryKind.entries, key = UnifiedHistoryKind::name) { option ->
+            item(key = "all") {
                 LibraryFilterChip(
-                    text = option.label,
+                    text = allLabel,
+                    selected = selectedRoute == null && kind == UnifiedHistoryKind.ALL.name,
+                    onClick = {
+                        route = null
+                        kind = UnifiedHistoryKind.ALL.name
+                    },
+                )
+            }
+            items(routeNames, key = { "route:$it" }) { name ->
+                LibraryFilterChip(
+                    text = name,
+                    selected = selectedRoute == name,
+                    onClick = { route = if (selectedRoute == name) null else name },
+                )
+            }
+            items(UnifiedHistoryKind.entries.filter { it != UnifiedHistoryKind.ALL }, key = UnifiedHistoryKind::name) { option ->
+                LibraryFilterChip(
+                    text = voxString(option.label),
                     selected = kind == option.name,
-                    onClick = { kind = option.name },
+                    onClick = { kind = if (kind == option.name) UnifiedHistoryKind.ALL.name else option.name },
                 )
             }
             item(key = "needs-attention") {
@@ -426,19 +612,29 @@ internal fun HistoryScreen(
             color = signal.muted,
             modifier = Modifier.padding(start = SignalMetrics.PageGutter + 4.dp, end = SignalMetrics.PageGutter, top = 2.dp, bottom = 8.dp),
         )
+        operationMessage?.let { message ->
+            SignalBanner(
+                message = message.localized(),
+                status = SignalStatus.ACTIVE,
+                liveRegion = true,
+                modifier = Modifier.padding(horizontal = SignalMetrics.PageGutter).padding(bottom = 8.dp),
+            )
+        }
         if (unifiedRows.isEmpty()) {
             val nothingYet = items.isEmpty() && transcripts.isEmpty()
-            EmptyHistory(
-                modifier = Modifier.fillMaxWidth().weight(1f),
-                title = if (nothingYet) "No history yet" else "No matching history",
-                detail = if (nothingYet) {
-                    "Captures and private on-device transcripts will appear here."
-                } else "Try another search or filter.",
-                icon = if (nothingYet) Icons.Outlined.Inbox else Icons.Outlined.SearchOff,
-            )
+            if (nothingYet) {
+                EmptyHistory(
+                    modifier = Modifier.fillMaxWidth().weight(1f),
+                    title = voxString("Nothing in Library Yet"),
+                    detail = voxString("Record or send a Capture to add it to your Library."),
+                    icon = Icons.Outlined.Inbox,
+                )
+            } else {
+                LibraryNoMatches(query = query, modifier = Modifier.fillMaxWidth().weight(1f))
+            }
         } else {
             LazyColumn(
-                modifier = Modifier.fillMaxWidth().weight(1f),
+                modifier = Modifier.fillMaxWidth().weight(1f).testTag("library-list"),
                 contentPadding = PaddingValues(
                     start = SignalMetrics.PageGutter,
                     end = SignalMetrics.PageGutter,
@@ -447,19 +643,30 @@ internal fun HistoryScreen(
                 ),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                items(unifiedRows, key = UnifiedHistoryRow::stableKey) { row ->
-                    when (row) {
-                        is UnifiedHistoryRow.Capture -> HistoryCard(
-                            item = row.item,
-                            isBusy = isBusy,
-                            retry = { retry(row.item.requestID) },
-                            repairAccess = { repairAccess(row.item.requestID) },
-                            openDetail = { openDetail(row.item.requestID) },
+                dayGroups.forEach { (dayStart, rows) ->
+                    item(key = "day:$dayStart") {
+                        SignalSectionLabel(
+                            libraryDayLabel(dayStart, nowEpochMillis),
+                            Modifier.padding(start = 4.dp, top = 8.dp),
+                            color = signal.muted,
                         )
-                        is UnifiedHistoryRow.Transcript -> TranscriptHistoryCard(
-                            transcript = row.item,
-                            openDetail = { openTranscript(row.item.sessionID) },
-                        )
+                    }
+                    items(rows, key = UnifiedHistoryRow::stableKey) { row ->
+                        when (row) {
+                            is UnifiedHistoryRow.Capture -> HistoryCard(
+                                item = row.item,
+                                isBusy = isBusy,
+                                retry = { retry(row.item.requestID) },
+                                repairAccess = { repairAccess(row.item.requestID) },
+                                openDetail = { openDetail(row.item.requestID) },
+                                routeName = routeOf(row),
+                            )
+                            is UnifiedHistoryRow.Transcript -> TranscriptHistoryCard(
+                                transcript = row.item,
+                                openDetail = { openTranscript(row.item.sessionID) },
+                                routeName = routeOf(row),
+                            )
+                        }
                     }
                 }
             }
@@ -479,6 +686,37 @@ internal fun HistoryScreen(
     }
 }
 
+/** Search found nothing: explain the Library's scope and offer an Obsidian search when it is installed. */
+@Composable
+private fun LibraryNoMatches(query: String, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val trimmed = query.trim()
+    val searchUri = remember(trimmed) { trimmed.takeIf(String::isNotEmpty)?.let(::obsidianSearchUri) }
+    val canSearchObsidian = remember(searchUri) { searchUri != null && canOpenObsidian(context, searchUri) }
+    Column(
+        modifier = modifier.verticalScroll(rememberScrollState()).padding(top = 40.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        SignalEmptyState(
+            icon = Icons.Outlined.SearchOff,
+            title = voxString("No captures match"),
+            message = voxString("Library searches what Vox.md captured on this device. Older notes live in your vault."),
+            iconTint = Signal.colors.muted,
+            action = if (canSearchObsidian && searchUri != null) {
+                {
+                    SignalButton(
+                        text = voxString("Search in Obsidian"),
+                        onClick = { openObsidian(context, searchUri) },
+                        variant = SignalButtonVariant.SECONDARY,
+                        size = SignalButtonSize.MEDIUM,
+                        fillWidth = false,
+                    )
+                }
+            } else null,
+        )
+    }
+}
+
 /** Capsule search field on a white card; its label stays in the semantics tree while text is entered. */
 @Composable
 private fun LibrarySearchField(
@@ -489,7 +727,7 @@ private fun LibrarySearchField(
     val signal = Signal.colors
     val interaction = remember { MutableInteractionSource() }
     val focused by interaction.collectIsFocusedAsState()
-    val label = voxString("Search History")
+    val label = voxString("Search words, routes, files")
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
@@ -643,6 +881,7 @@ internal fun HistoryCard(
     retry: () -> Unit,
     repairAccess: () -> Unit,
     openDetail: () -> Unit,
+    routeName: String? = null,
 ) {
     val signal = Signal.colors
     val completed = item.state == CaptureState.COMPLETED
@@ -694,7 +933,10 @@ internal fun HistoryCard(
                     )
                 }
                 Text(
-                    DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(item.updatedAtEpochMillis)),
+                    listOfNotNull(
+                        routeName,
+                        DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(item.updatedAtEpochMillis)),
+                    ).joinToString(" · "),
                     style = SignalType.monoCaption,
                     color = signal.muted,
                 )
@@ -800,6 +1042,7 @@ internal fun LibraryTranscriptProgress(transcript: RecordingTranscriptionState, 
 internal fun TranscriptHistoryCard(
     transcript: RecordingTranscriptionState,
     openDetail: () -> Unit,
+    routeName: String? = null,
 ) {
     val signal = Signal.colors
     val title = libraryTranscriptPhaseTitle(transcript)
@@ -840,6 +1083,7 @@ internal fun TranscriptHistoryCard(
                 }
                 LibraryTranscriptProgress(transcript, Modifier.padding(vertical = 4.dp))
                 val metadata = listOfNotNull(
+                    routeName,
                     transcript.completedAtEpochMillis?.let {
                         DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(it))
                     },

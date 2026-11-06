@@ -1122,6 +1122,7 @@ class AndroidCaptureRepository(
                 logicalPath = detail?.logicalPath,
                 captureSource = detail?.captureSource ?: "app",
                 attachmentCount = detail?.attachments?.size ?: 0,
+                presetID = detail?.presetID,
             )
         }
         val tombstoneRows = completionRows.map { completion ->

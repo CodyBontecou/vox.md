@@ -5,6 +5,18 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.FileProvider
+import androidx.compose.material.icons.outlined.FolderOff
+import androidx.compose.material.icons.outlined.FolderOpen
+import androidx.compose.material.icons.outlined.Tune
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.produceState
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.heading
+import md.vox.android.capturedomain.CaptureHistoryDetail
+import md.vox.android.capturedomain.CaptureHistoryItem
+import md.vox.android.capturedomain.CaptureState
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -1818,6 +1830,214 @@ private fun RecoveryConfirmDialog(
             }
         },
     )
+}
+
+// endregion
+
+// region Delivery problem
+
+/**
+ * Bottom sheet for a capture that could not be delivered. The Android pipeline reports a
+ * coarse state (folder access lost, retry, needs action), not the iOS failure reason, so
+ * the sheet offers only actions with real code paths: fix folder access or retry delivery,
+ * copy the Markdown, open the capture, and edit the route. Discard, "Pick a heading",
+ * "Send to Inbox" and "Add heading and deliver" need repository APIs Android does not have.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun DeliveryProblemSheet(
+    item: CaptureHistoryItem,
+    routeName: String?,
+    loadDetail: suspend (String) -> CaptureHistoryDetail?,
+    isBusy: Boolean,
+    retry: () -> Unit,
+    repairAccess: () -> Unit,
+    openDetail: () -> Unit,
+    editRoute: (() -> Unit)?,
+    onDismiss: () -> Unit,
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        containerColor = Signal.colors.bg,
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+        tonalElevation = 0.dp,
+    ) {
+        DeliveryProblemContent(
+            item = item,
+            routeName = routeName,
+            loadDetail = loadDetail,
+            isBusy = isBusy,
+            retry = {
+                retry()
+                onDismiss()
+            },
+            repairAccess = {
+                repairAccess()
+                onDismiss()
+            },
+            openDetail = {
+                onDismiss()
+                openDetail()
+            },
+            editRoute = editRoute?.let { edit -> { onDismiss(); edit() } },
+        )
+    }
+}
+
+@Composable
+internal fun DeliveryProblemContent(
+    item: CaptureHistoryItem,
+    routeName: String?,
+    loadDetail: suspend (String) -> CaptureHistoryDetail?,
+    isBusy: Boolean,
+    retry: () -> Unit,
+    repairAccess: () -> Unit,
+    openDetail: () -> Unit,
+    editRoute: (() -> Unit)?,
+    modifier: Modifier = Modifier,
+) {
+    val c = Signal.colors
+    val context = LocalContext.current
+    val detail by produceState<CaptureHistoryDetail?>(null, item.requestID) {
+        value = runCatching { loadDetail(item.requestID) }.getOrNull()
+    }
+    var copied by remember(item.requestID) { mutableStateOf(false) }
+    val isVaultProblem = item.state == CaptureState.NEEDS_PERMISSION
+    val markdown = detail?.let { HistoryDetailExporter.render(it, HistoryExportFormat.MARKDOWN) }
+    val preview = detail?.preparedMarkdown?.trimEnd()
+        ?: detail?.capturedText?.takeIf(String::isNotBlank)
+        ?: item.snippet
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 24.dp)
+            .testTag("delivery-problem"),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.Top) {
+            val warning = signalStatusColors(SignalStatus.WARNING)
+            SignalIconTile(
+                icon = if (isVaultProblem) Icons.Outlined.FolderOff else Icons.Outlined.ErrorOutline,
+                size = 40.dp,
+                fill = warning.fill,
+                tint = warning.ink,
+            )
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    voxString(if (isVaultProblem) "Can’t reach your vault" else "Couldn’t deliver this capture"),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = c.text,
+                    modifier = Modifier.semantics { heading() },
+                )
+                Text(
+                    if (isVaultProblem) {
+                        voxString("Keeps this capture waiting on this device until vault access is back.")
+                    } else {
+                        voxFormat("%@. Your capture is safe on this device.", historyTitleUiText(item.state).localized())
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = c.muted,
+                )
+            }
+        }
+        SignalCard(
+            modifier = Modifier.fillMaxWidth(),
+            padding = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
+            radius = SignalMetrics.GroupRadius,
+            borderColor = c.border,
+        ) {
+            Text(
+                listOfNotNull(
+                    routeName?.uppercase(Locale.getDefault()),
+                    DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(item.createdAtEpochMillis)),
+                ).joinToString(" · "),
+                style = SignalType.monoCaption,
+                color = c.muted,
+            )
+            if (preview != null) {
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    preview,
+                    style = SignalType.mono,
+                    color = c.text,
+                    maxLines = 12,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            if (isVaultProblem) {
+                SignalButton(
+                    text = voxString("Fix access"),
+                    onClick = repairAccess,
+                    enabled = !isBusy,
+                    icon = Icons.Outlined.FolderOpen,
+                )
+            } else {
+                SignalButton(
+                    text = voxString("Retry delivery"),
+                    onClick = retry,
+                    enabled = !isBusy,
+                    loading = isBusy,
+                    icon = Icons.Outlined.Refresh,
+                )
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                SignalButton(
+                    text = voxString(if (copied) "Copied Markdown" else "Copy Markdown"),
+                    onClick = {
+                        markdown?.let {
+                            copyLibraryText(context, it)
+                            copied = true
+                        }
+                    },
+                    modifier = Modifier.weight(1f),
+                    variant = SignalButtonVariant.SECONDARY,
+                    size = SignalButtonSize.MEDIUM,
+                    enabled = markdown != null,
+                    icon = if (copied) Icons.Outlined.Check else Icons.Outlined.ContentCopy,
+                    fillWidth = true,
+                )
+                SignalButton(
+                    text = voxString("Details"),
+                    onClick = openDetail,
+                    modifier = Modifier.weight(1f),
+                    variant = SignalButtonVariant.SECONDARY,
+                    size = SignalButtonSize.MEDIUM,
+                    fillWidth = true,
+                )
+            }
+            if (isVaultProblem) {
+                SignalButton(
+                    text = voxString("Retry"),
+                    onClick = retry,
+                    variant = SignalButtonVariant.TERTIARY,
+                    size = SignalButtonSize.MEDIUM,
+                    enabled = !isBusy,
+                )
+            }
+        }
+        if (editRoute != null && routeName != null && !isVaultProblem) {
+            TextButton(
+                onClick = editRoute,
+                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+                colors = ButtonDefaults.textButtonColors(contentColor = c.tint),
+            ) {
+                Icon(Icons.Outlined.Tune, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.size(8.dp))
+                Text(
+                    voxFormat("Fix the %@ route too, so this doesn’t happen again", routeName),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.weight(1f),
+                )
+            }
+        }
+    }
 }
 
 // endregion

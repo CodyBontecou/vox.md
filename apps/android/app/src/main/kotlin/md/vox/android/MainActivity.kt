@@ -814,6 +814,9 @@ internal fun VoxNavigation(
                         clearCompleted = {
                             model.deleteCompletedHistory(latestState.history.filter { it.state == CaptureState.COMPLETED }.mapTo(mutableSetOf()) { it.requestID })
                         },
+                        captureRouteName = { libraryRouteName(latestState.presetCollection, it.presetID) },
+                        transcriptRouteName = { recordingClient.frozenPreset(it)?.name },
+                        loadCaptureDetail = model::historyDetailSnapshot,
                     )
                 }
                 if (!expanded) {
@@ -825,6 +828,11 @@ internal fun VoxNavigation(
                                     detail = latestState.historyDetail,
                                     isLoading = latestState.isLoadingHistoryDetail,
                                     isDeleting = latestState.isDeletingHistory,
+                                    routeName = libraryRouteName(latestState.presetCollection, latestState.historyDetail?.presetID),
+                                    vaultName = latestState.destination?.displayName,
+                                    retry = model::retry,
+                                    repairAccess = openTree,
+                                    isBusy = latestState.isSending,
                                     navigateBack = {
                                         adaptiveHistorySelection = null
                                         model.clearHistoryDetail()
@@ -844,6 +852,8 @@ internal fun VoxNavigation(
                                         prepareConfiguredExportAudio = { id, preset ->
                                             configuredTranscriptAudioSource(context, recordingClient, id, preset)
                                         },
+                                        hasRetainedAudio = recordingClient::hasRetainedAudio,
+                                        loadRetainedAudio = { id -> exportRecordingForCapture(context, recordingClient, id) },
                                         navigateBack = { adaptiveHistorySelection = null },
                                         save = transcriptionClient::updateTranscriptDetails,
                                         delete = { id ->
@@ -881,6 +891,9 @@ internal fun VoxNavigation(
                     },
                     openTranscript = { sessionID -> navController.navigate("$TRANSCRIPT_DETAIL_ROUTE/$sessionID") },
                     openCapture = { selectTopLevel(VoxTopLevelDestination.CAPTURE) },
+                    captureRouteName = { libraryRouteName(latestState.presetCollection, it.presetID) },
+                    loadCaptureDetail = model::historyDetailSnapshot,
+                    editRoute = { presetID -> navController.navigate("$PRESET_EDITOR_ROUTE/$presetID") },
                 )
             }
             composable("$TRANSCRIPT_DETAIL_ROUTE/{sessionID}") { entry ->
@@ -891,6 +904,8 @@ internal fun VoxNavigation(
                     prepareConfiguredExportAudio = { id, preset ->
                         configuredTranscriptAudioSource(context, recordingClient, id, preset)
                     },
+                    hasRetainedAudio = recordingClient::hasRetainedAudio,
+                    loadRetainedAudio = { id -> exportRecordingForCapture(context, recordingClient, id) },
                     navigateBack = { navController.popBackStack() },
                     save = transcriptionClient::updateTranscriptDetails,
                     delete = { id ->
@@ -911,6 +926,11 @@ internal fun VoxNavigation(
                     detail = latestState.historyDetail,
                     isLoading = latestState.isLoadingHistoryDetail,
                     isDeleting = latestState.isDeletingHistory,
+                    routeName = libraryRouteName(latestState.presetCollection, latestState.historyDetail?.presetID),
+                    vaultName = latestState.destination?.displayName,
+                    retry = model::retry,
+                    repairAccess = openTree,
+                    isBusy = latestState.isSending,
                     navigateBack = {
                         model.clearHistoryDetail()
                         navController.popBackStack()

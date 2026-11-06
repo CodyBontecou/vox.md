@@ -421,6 +421,8 @@ data class CaptureHistoryItem(
     val logicalPath: String? = null,
     val captureSource: String = "app",
     val attachmentCount: Int = 0,
+    /** Route (capture preset) the request was frozen with; null for content-free completion markers. */
+    val presetID: String? = null,
 )
 
 data class CaptureHistoryDetail(

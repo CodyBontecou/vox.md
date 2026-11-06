@@ -58,14 +58,14 @@ class VisualStoryInstrumentationTest {
 
         val expectations = listOf(
             VisualStoryActivity.STORY_CAPTURE to "Launch notes",
-            VisualStoryActivity.STORY_HISTORY to "History",
+            VisualStoryActivity.STORY_HISTORY to "Library",
             VisualStoryActivity.STORY_SETTINGS to "Settings",
             VisualStoryActivity.STORY_MODELS to "Models",
             VisualStoryActivity.STORY_PRESETS to "Routes",
             VisualStoryActivity.STORY_APP_LANGUAGE to "App Language",
             VisualStoryActivity.STORY_LIVE_RECORDING to "Recording",
             VisualStoryActivity.STORY_VAULT_REPAIR to "Choose vault or folder",
-            VisualStoryActivity.STORY_HISTORY_EMPTY to "No history yet",
+            VisualStoryActivity.STORY_HISTORY_EMPTY to "Nothing in Library Yet",
             VisualStoryActivity.STORY_HISTORY_FOLDER_REPAIR to "Folder access needed",
             VisualStoryActivity.STORY_RECORDING_PAUSED to "Recording paused",
             VisualStoryActivity.STORY_RECORDING_FAILED to "Local transcription failed",

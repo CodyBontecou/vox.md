@@ -1,6 +1,19 @@
 package md.vox.android
 
 import android.content.Intent
+import android.media.MediaPlayer
+import android.net.Uri
+import androidx.compose.material.icons.outlined.Pause
+import androidx.compose.material.icons.outlined.PlayArrow
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.produceState
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import kotlinx.coroutines.delay
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -279,10 +292,18 @@ internal fun TranscriptDetailScreen(
     initialEditing: Boolean = false,
     initialOperationMessage: VoxUiText? = null,
     initialShowsDeleteConfirmation: Boolean = false,
+    /** True when the recording's local audio is still retained; may read storage. */
+    hasRetainedAudio: suspend (String) -> Boolean = { false },
+    /** Prepares the retained audio for playback and returns its content URI. */
+    loadRetainedAudio: suspend (String) -> String? = { null },
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val signal = Signal.colors
+    val showsAudio by produceState(false, state?.sessionID) {
+        val id = state?.sessionID
+        value = id != null && withContext(Dispatchers.IO) { runCatching { hasRetainedAudio(id) }.getOrDefault(false) }
+    }
     val configuredExporter = remember(context) { AndroidConfiguredTranscriptExporter(context) }
     var editing by remember(state?.sessionID) { mutableStateOf(initialEditing) }
     var editedRawText by remember(state?.sessionID, state?.transcript) { mutableStateOf(state?.transcript.orEmpty()) }
@@ -408,6 +429,7 @@ internal fun TranscriptDetailScreen(
                         Text(it, style = SignalType.caption, color = signal.muted)
                     }
                 }
+                if (showsAudio) TranscriptAudioCard(state, loadRetainedAudio)
                 operationMessage?.let { message ->
                     SignalBanner(
                         message = message.localized(),
@@ -630,4 +652,129 @@ internal fun formatTranscriptDuration(milliseconds: Long): String {
     val seconds = totalSeconds % 60
     return if (hours > 0) "%d:%02d:%02d".format(Locale.ROOT, hours, minutes, seconds)
     else "%d:%02d".format(Locale.ROOT, minutes, seconds)
+}
+
+/**
+ * Player for a recording's retained local audio: a play/pause button, a seekable
+ * scrubber and the elapsed and total time. The WAV is prepared only on first play.
+ */
+@Composable
+internal fun TranscriptAudioCard(
+    state: RecordingTranscriptionState,
+    loadRetainedAudio: suspend (String) -> String?,
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val signal = Signal.colors
+    var player by remember(state.sessionID) { mutableStateOf<MediaPlayer?>(null) }
+    var isPlaying by remember(state.sessionID) { mutableStateOf(false) }
+    var isPreparing by remember(state.sessionID) { mutableStateOf(false) }
+    var unavailable by remember(state.sessionID) { mutableStateOf(false) }
+    var positionMillis by remember(state.sessionID) { mutableLongStateOf(0L) }
+    var durationMillis by remember(state.sessionID) { mutableLongStateOf(state.durationMillis.coerceAtLeast(0L)) }
+    DisposableEffect(state.sessionID) {
+        onDispose {
+            player?.release()
+            player = null
+        }
+    }
+    LaunchedEffect(isPlaying, player) {
+        val active = player ?: return@LaunchedEffect
+        while (isPlaying) {
+            positionMillis = runCatching { active.currentPosition.toLong() }.getOrDefault(positionMillis)
+            delay(200)
+        }
+    }
+    val togglePlayback: () -> Unit = {
+        val current = player
+        when {
+            current != null && isPlaying -> {
+                current.pause()
+                isPlaying = false
+            }
+            current != null -> {
+                current.start()
+                isPlaying = true
+            }
+            !isPreparing -> {
+                isPreparing = true
+                scope.launch {
+                    val prepared = withContext(Dispatchers.IO) {
+                        val uri = runCatching { loadRetainedAudio(state.sessionID) }.getOrNull() ?: return@withContext null
+                        runCatching {
+                            MediaPlayer().apply {
+                                setDataSource(context, Uri.parse(uri))
+                                prepare()
+                            }
+                        }.getOrNull()
+                    }
+                    isPreparing = false
+                    if (prepared == null) {
+                        unavailable = true
+                    } else {
+                        prepared.setOnCompletionListener {
+                            isPlaying = false
+                            positionMillis = 0L
+                            it.seekTo(0)
+                        }
+                        prepared.duration.toLong().takeIf { it > 0 }?.let { durationMillis = it }
+                        if (positionMillis > 0) prepared.seekTo(positionMillis.toInt())
+                        prepared.start()
+                        player = prepared
+                        isPlaying = true
+                    }
+                }
+            }
+        }
+    }
+    SignalCard(
+        modifier = modifier.fillMaxWidth().testTag("transcript-audio"),
+        padding = PaddingValues(horizontal = 14.dp, vertical = 12.dp),
+        radius = SignalMetrics.GroupRadius,
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            SignalCircleButton(
+                icon = if (isPlaying) Icons.Outlined.Pause else Icons.Outlined.PlayArrow,
+                contentDescription = voxString(if (isPlaying) "Pause recording" else "Play recording"),
+                onClick = togglePlayback,
+                filled = signal.text,
+                contentColor = signal.bg,
+                enabled = !unavailable && !isPreparing,
+            )
+            Column(Modifier.weight(1f)) {
+                val playbackLabel = voxString("Playback position")
+                Slider(
+                    value = if (durationMillis > 0) (positionMillis.toFloat() / durationMillis).coerceIn(0f, 1f) else 0f,
+                    onValueChange = { fraction ->
+                        positionMillis = (fraction * durationMillis).toLong()
+                        player?.seekTo(positionMillis.toInt())
+                    },
+                    enabled = !unavailable && durationMillis > 0,
+                    colors = SliderDefaults.colors(
+                        thumbColor = signal.text,
+                        activeTrackColor = signal.tint,
+                        inactiveTrackColor = signal.well,
+                    ),
+                    modifier = Modifier.fillMaxWidth().semantics { contentDescription = playbackLabel },
+                )
+                Text(
+                    listOfNotNull(
+                        "${formatTranscriptDuration(positionMillis)} / ${formatTranscriptDuration(durationMillis)}",
+                        if (state.speakerCount > 0) voxFormat("%lld speakers", state.speakerCount) else null,
+                    ).joinToString(" · "),
+                    style = SignalType.monoCaption,
+                    color = signal.muted,
+                )
+            }
+        }
+        if (unavailable) {
+            Spacer(Modifier.height(8.dp))
+            Text(
+                voxString("Playback is unavailable, but the audio remains safely attached."),
+                style = SignalType.caption,
+                color = signal.muted,
+            )
+        }
+    }
 }
