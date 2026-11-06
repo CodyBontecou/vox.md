@@ -1,11 +1,11 @@
 {
   "artifactsSHA256": {
-    "app": "b50beee6e6bb02199f3e9d1030b9dcc8b566d279e4c58ed53de688d188dc9a5a",
-    "tests": "ecfcec93d7771ced294e9a4cc1b461a29f8b508382e214d7c8e849f57540340e"
+    "app": "59ef115ae71ed64a7fcaaaa6fced1e5868dd29d760cc7148c517a8ebd4cc8fd5",
+    "tests": "bcc07d0c2936a6ec673de392ee9435104cf7198d2ef8e28e1a82ce7b6c709d0c"
   },
   "device": {
-    "serial": "emulator-5570",
-    "avd": "vox-qualification-api36-20261104",
+    "serial": "emulator-5572",
+    "avd": "vox-qualification-api36-20261106",
     "apiLevel": "36",
     "abi": "arm64-v8a"
   },
@@ -18,10 +18,10 @@
     "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/RecordingFileRecovery.kt": "328df6514114abb5e71292d8243bce081747149ff07b5eac27f469475f18d5e3",
     "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SpeakerDiarization.kt": "70e8a93e0d4ae4305d675b529b2345b9136ca28f8c70557995bfaf6e1b5bff4f",
     "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/OnDeviceCaptureTextProcessor.kt": "9acb878c7e24bdc5b5074c1db275c9adee5734c5a3be48abd7fef3f05595fa20",
-    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRepository.kt": "aca0520d404f8cb0a95f330351f717488a43f6543217db93eb68f1b570d62d55",
+    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRepository.kt": "7ce7b99055304778c8cdf19da75312bce7baeb6867dff2eb797829467796b083",
     "Packages/vox-core-rust/crates/vox-core/src/lib.rs": "26f0e9ba806519c0853123775f3377220bce6cfe40b087f4fb72da424acc3d71",
     "apps/android/app/src/main/kotlin/md/vox/android/VoxApplication.kt": "96e570e6912d40d6d8626486f5e00cb8c9f5b945bb374c6659d807f7016ac5f0",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt": "79d05a0e1606ec8c51c80a7303f07cc92300795e476ef4c3e1dfce97778946f2",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt": "23b50f0f742848e9c6c5755d2f12b97fad8ad1978785e1f7993bf717f610331b",
     "apps/android/app/src/main/cpp/intelligence.cpp": "00ed04da3c3ab010afce25d9a08dc74e3aa965346b4e7d3ff1be3ff14bbab6f8",
     "apps/android/app/src/main/cpp/CMakeLists.txt": "78571488f580feb3981c7c73c75654fde4fb4b8dd0c215ac3b5b50fdb0f2589d",
     "apps/android/scripts/validate-intelligence-evaluations.py": "9a00c99c2d286c52d364206f7c780862412374498d728382c50195676ea189f0",
@@ -55,6 +55,6 @@
     "vosk-api-test.wav": "dcfea5712c43a43ba7ae8083afb39d36993e5a69c46e88b68aaa72b65cb615bb",
     "vosk-model-spk-0.4.zip": "a74d8f51144484813e16af689bb0f916b7a111e2347f467c4933c1166097b5a7"
   },
-  "sourceRevision": "c225bd93d37d55e0be3f22675c0200cef540d516",
+  "sourceRevision": "3c09718f55b1685be7a81e741a73bf9b169a4a3f",
   "sourceTreeClean": true
 }
