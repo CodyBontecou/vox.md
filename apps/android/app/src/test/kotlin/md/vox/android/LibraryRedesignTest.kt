@@ -27,18 +27,18 @@ class LibraryRedesignTest {
     )
 
     @Test fun routeLogRecordsCaptureProcessingShapeAndFailedDelivery() {
-        val steps = captureRouteSteps(pending)
+        val steps = captureRouteLogEntries(pending)
         assertEquals(
             listOf("Captured", "Processing skipped", "Shaped with the route template", "Delivery failed"),
             steps.map { it.title.source },
         )
-        assertEquals(CaptureRouteStepOutcome.SKIPPED, steps[1].outcome)
-        assertEquals(CaptureRouteStepOutcome.FAILED, steps.last().outcome)
+        assertEquals(CaptureRouteLogOutcome.SKIPPED, steps[1].outcome)
+        assertEquals(CaptureRouteLogOutcome.FAILED, steps.last().outcome)
         assertEquals(1_000L, steps.first().atEpochMillis)
     }
 
     @Test fun routeLogShowsDeliveredPathAndOmitsUnrequestedProcessing() {
-        val steps = captureRouteSteps(
+        val steps = captureRouteLogEntries(
             pending.copy(state = CaptureState.COMPLETED, processingMode = CaptureProcessingMode.NONE, preparedMarkdown = null),
         )
         assertEquals(listOf("Captured", "Delivered"), steps.map { it.title.source })
@@ -46,8 +46,8 @@ class LibraryRedesignTest {
     }
 
     @Test fun routeLogKeepsInFlightDeliveryPending() {
-        val step = captureRouteSteps(pending.copy(state = CaptureState.COMMITTING)).last()
-        assertEquals(CaptureRouteStepOutcome.PENDING, step.outcome)
+        val step = captureRouteLogEntries(pending.copy(state = CaptureState.COMMITTING)).last()
+        assertEquals(CaptureRouteLogOutcome.PENDING, step.outcome)
         assertEquals("Capture in progress", step.title.source)
     }
 

@@ -110,7 +110,8 @@ class VisualAccessibilityInstrumentationTest {
 
         val getStarted = compose.onNode(hasText("Get started") and hasClickAction())
         getStarted.assertIsDisplayed().assertHasClickAction()
-        assertTrue(getStarted.fetchSemanticsNode().boundsInRoot.height / deviceDensity >= 48f)
+        val defaultBounds = getStarted.fetchSemanticsNode().boundsInRoot
+        assertTrue(defaultBounds.height / deviceDensity >= 48f)
         compose.runOnIdle { assertEquals(VoxColors.BackgroundLight, renderedBackground) }
         getStarted.performClick()
 

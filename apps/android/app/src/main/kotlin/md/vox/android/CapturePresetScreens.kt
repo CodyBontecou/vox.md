@@ -582,7 +582,7 @@ private fun PresetRouteCard(
             ) {
                 routeStepChips(preset).forEachIndexed { index, chip ->
                     if (index > 0) {
-                        Text("→", style = SignalType.caption.copy(fontSize = 12.sp), color = c.faint, modifier = Modifier.clearAndSetSemantics {})
+                        Text(ROUTE_STEP_ARROW, style = SignalType.caption.copy(fontSize = 12.sp), color = c.faint, modifier = Modifier.clearAndSetSemantics {})
                     }
                     Text(
                         chip,
@@ -1388,7 +1388,8 @@ private fun routeEditorSubtitle(isDefault: Boolean, isEnabled: Boolean, isPinned
         if (isPinned) add(voxFormat("pinned to %@", voxString("Capture Bar")))
     }.ifEmpty { listOf(voxString("Route")) }
     val joined = parts.joinToString(" · ")
-    return joined.replaceFirstChar { it.titlecase(Locale.getDefault()) }
+    val locale = LocalConfiguration.current.locales[0] ?: Locale.ENGLISH
+    return joined.replaceFirstChar { it.titlecase(locale) }
 }
 
 @Composable
@@ -1487,7 +1488,7 @@ private fun RouteEditorStepPage(
         containerColor = c.bg,
         topBar = {
             SignalTopBar(
-                title = voxString(step.kindSource),
+                title = step.kindText.localized(),
                 navigateBack = navigateBack,
                 backDescription = voxString("Back"),
             )
@@ -2769,3 +2770,6 @@ internal fun presetSymbolLabel(symbol: String): VoxUiText = when (symbol) {
     "favorite" -> voxUiText("Favorite")
     else -> voxUiText("Document")
 }
+
+/** Decorative arrow between route step chips; hidden from accessibility. */
+private const val ROUTE_STEP_ARROW = "→"

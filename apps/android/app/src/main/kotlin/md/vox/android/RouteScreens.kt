@@ -98,7 +98,16 @@ internal enum class RouteEditorStep(val number: Int, val kindSource: String) {
     CAPTURE(1, "Capture"),
     PROCESS(2, "Process"),
     SHAPE(3, "Shape"),
-    DELIVER(4, "Deliver"),
+    DELIVER(4, "Deliver");
+
+    /** Localizable step name; literal sources keep the catalog audit static. */
+    val kindText: VoxUiText
+        get() = when (this) {
+            CAPTURE -> voxUiText("Capture")
+            PROCESS -> voxUiText("Process")
+            SHAPE -> voxUiText("Shape")
+            DELIVER -> voxUiText("Deliver")
+        }
 }
 
 /** Processing mode as it reads on route chips and the PROCESS step ("Meeting summary"). */
@@ -324,7 +333,7 @@ internal fun RouteStepRail(steps: List<RouteStepSummary>, openStep: (RouteEditor
 private fun RouteStepCard(summary: RouteStepSummary, onClick: () -> Unit, enabled: Boolean, modifier: Modifier = Modifier) {
     val c = Signal.colors
     val shape = RoundedCornerShape(16.dp)
-    val kind = voxString(summary.step.kindSource)
+    val kind = summary.step.kindText.localized()
     val hint = voxString("Shows the settings for this step")
     Column(
         modifier = modifier
@@ -505,7 +514,7 @@ internal fun RouteQuickActionsCard(actions: List<CaptureBarAction>, onClick: () 
                 }
                 actions.take(4).forEach { RouteActionGlyph(it, height = 30.dp) }
                 if (actions.size > 4) {
-                    Text("+${actions.size - 4}", style = SignalType.caption, color = c.muted)
+                    Text(overflowCountLabel(actions.size - 4), style = SignalType.caption, color = c.muted)
                 }
             }
         }
@@ -830,3 +839,6 @@ private fun Modifier.dashedBorder(color: Color): Modifier = drawBehind {
 }
 
 // endregion
+
+/** Numeric overflow badge (for example "+3"); contains no translatable words. */
+private fun overflowCountLabel(count: Int): String = "+$count"

@@ -89,6 +89,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
@@ -1952,7 +1953,7 @@ internal fun DeliveryProblemContent(
         ) {
             Text(
                 listOfNotNull(
-                    routeName?.uppercase(Locale.getDefault()),
+                    routeName?.uppercase(LocalConfiguration.current.locales[0] ?: Locale.ENGLISH),
                     DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(item.createdAtEpochMillis)),
                 ).joinToString(" · "),
                 style = SignalType.monoCaption,

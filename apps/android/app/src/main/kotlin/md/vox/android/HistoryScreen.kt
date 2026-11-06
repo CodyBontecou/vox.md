@@ -309,7 +309,15 @@ import kotlin.math.roundToLong
 internal enum class UnifiedHistoryKind(val label: String) {
     ALL("All"),
     CAPTURES("Captures"),
-    TRANSCRIPTS("Transcripts"),
+    TRANSCRIPTS("Transcripts");
+
+    /** Localizable chip label; literal sources keep the catalog audit static. */
+    val labelText: VoxUiText
+        get() = when (this) {
+            ALL -> voxUiText("All")
+            CAPTURES -> voxUiText("Captures")
+            TRANSCRIPTS -> voxUiText("Transcripts")
+        }
 }
 
 internal sealed interface UnifiedHistoryRow {
@@ -591,7 +599,7 @@ internal fun HistoryScreen(
             }
             items(UnifiedHistoryKind.entries.filter { it != UnifiedHistoryKind.ALL }, key = UnifiedHistoryKind::name) { option ->
                 LibraryFilterChip(
-                    text = voxString(option.label),
+                    text = option.labelText.localized(),
                     selected = kind == option.name,
                     onClick = { kind = if (kind == option.name) UnifiedHistoryKind.ALL.name else option.name },
                 )

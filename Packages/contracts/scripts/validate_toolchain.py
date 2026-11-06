@@ -1075,7 +1075,6 @@ def main(argv=None):
         {"source": "Attachments folder", "catalogSource": "Attachments Folder"},
         {"source": "Custom instruction", "catalogSource": "Custom Instruction"},
         {"source": "Edit transcript", "catalogSource": "Edit Transcript"},
-        {"source": "Search History", "catalogSource": "Search history"},
     ]
     if localization_audit["aliases"] != expected_aliases:
         fail("Android localization review alias inventory drift")
@@ -1087,9 +1086,9 @@ def main(argv=None):
         localization_audit["incompleteCatalogSourceCount"],
         localization_audit["missingCatalogSourceCount"],
     )
-    if counts != (822, 288, 6, 528, 0, 0) or counts[0] != sum(counts[1:]):
+    if counts != (994, 444, 5, 545, 0, 0) or counts[0] != sum(counts[1:]):
         fail("Android localization review source counts changed without review")
-    if localization_audit["runtimeSourceLiteralCount"] != 2700:
+    if localization_audit["runtimeSourceLiteralCount"] != 2957:
         fail("Android runtime localization lookup-source count changed without review")
     if localization_audit["fallbackSourceCount"] != counts[4] + counts[5]:
         fail("Android localization fallback count differs from incomplete and absent sources")
@@ -1242,8 +1241,8 @@ def main(argv=None):
     for needle in (
         "createAndroidComposeRule<MainActivity>()",
         'AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("ar"))',
-        'hasText("خطوط محددة Markdown")',
-        'hasText("اختيار كوكب أو ملف")',
+        'hasText("يُنسخ صوتيًا على هذا الجهاز")',
+        'hasText("ابدأ") and hasClickAction()',
         "AppCompatDelegate.setApplicationLocales(previous)",
     ):
         if needle not in app_language_test:
@@ -1317,7 +1316,7 @@ def main(argv=None):
         "VisualStoryActivity.STORY_CAPTURE to \"Launch notes\"",
         "VisualStoryActivity.STORY_LIVE_RECORDING to \"Recording\"",
         "VisualStoryActivity.STORY_VAULT_REPAIR to \"Choose vault or folder\"",
-        "VisualStoryActivity.STORY_HISTORY_EMPTY to \"No history yet\"",
+        "VisualStoryActivity.STORY_HISTORY_EMPTY to \"Nothing in Library Yet\"",
         "VisualStoryActivity.STORY_HISTORY_FOLDER_REPAIR to \"Folder access needed\"",
         "VisualStoryActivity.STORY_RECORDING_PAUSED to \"Recording paused\"",
         "VisualStoryActivity.STORY_RECORDING_FAILED to \"Local transcription failed\"",
@@ -1385,8 +1384,8 @@ def main(argv=None):
             fail(f"Android motion evidence mutation coverage drift: {needle}")
     capture_ui = android_app_ui_source(root)
     for needle in (
-        "items(UnifiedHistoryKind.entries, key = UnifiedHistoryKind::name)",
-        "text = option.label,",
+        "items(UnifiedHistoryKind.entries.filter { it != UnifiedHistoryKind.ALL }, key = UnifiedHistoryKind::name)",
+        "text = option.labelText.localized(),",
         "FlowRow(",
         'voxString("Cancel"),',
         ".heightIn(max = LocalConfiguration.current.screenHeightDp.dp * 0.42f)",

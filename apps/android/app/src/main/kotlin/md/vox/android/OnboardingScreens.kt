@@ -116,6 +116,24 @@ internal enum class StarterRoute(
     TASKS("Tasks", "Tasks/Tasks.md › ## Today", true),
     JOURNAL("Journal", "Journal/{week}.md", false);
 
+    /** Localizable name; literal sources keep the catalog audit static. */
+    val nameText: VoxUiText
+        get() = when (this) {
+            INBOX -> voxUiText("Inbox")
+            MEETING_NOTES -> voxUiText("Meeting Notes")
+            TASKS -> voxUiText("Tasks")
+            JOURNAL -> voxUiText("Journal")
+        }
+
+    /** Localizable prompt; literal sources keep the catalog audit static. */
+    val promptText: VoxUiText
+        get() = when (this) {
+            INBOX -> voxUiText("What’s on your mind?")
+            MEETING_NOTES -> voxUiText("What was decided?")
+            TASKS -> voxUiText("What needs doing?")
+            JOURNAL -> voxUiText("How was today?")
+        }
+
     val promptSource: String
         get() = when (this) {
             INBOX -> "What’s on your mind?"
@@ -193,7 +211,7 @@ internal enum class StarterRoute(
 @Composable
 internal fun starterPresets(selection: Set<StarterRoute>): List<Pair<StarterRoute, CapturePreset>> =
     StarterRoute.installOrder.filter { it in selection }.map { route ->
-        route to route.preset(voxString(route.nameSource), voxString(route.promptSource))
+        route to route.preset(route.nameText.localized(), route.promptText.localized())
     }
 
 /**
@@ -335,7 +353,7 @@ private fun WelcomeExample() {
             radius = 14.dp,
             padding = PaddingValues(14.dp),
         ) {
-            Text("Tasks.md › ## Today", style = SignalType.mono, color = c.faint)
+            Text(STARTER_TASKS_PATH_EXAMPLE, style = SignalType.mono, color = c.faint)
             Text(voxString("- [ ] Book flights for Lisbon"), style = SignalType.mono, color = c.text)
         }
     }
@@ -495,7 +513,7 @@ private fun VaultFolderCard(destination: CaptureDestination?, enabled: Boolean, 
 @Composable
 private fun StarterRouteRow(route: StarterRoute, isOn: Boolean, enabled: Boolean, onToggle: () -> Unit) {
     val c = Signal.colors
-    val name = voxString(route.nameSource)
+    val name = route.nameText.localized()
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -570,3 +588,6 @@ internal fun VaultSetupScreen(notice: String?, onChooseFolder: () -> Unit) {
         )
     }
 }
+
+/** Literal file path shown in the Tasks starter route; file paths are not translated. */
+private const val STARTER_TASKS_PATH_EXAMPLE = "Tasks.md › ## Today"

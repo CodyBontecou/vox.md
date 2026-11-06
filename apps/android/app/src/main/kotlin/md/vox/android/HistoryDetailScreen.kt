@@ -206,12 +206,12 @@ internal object HistoryDetailExporter {
 /** The three views of one capture: what is written, what was said or typed, and what happened to it. */
 internal enum class CaptureDetailTab { WRITTEN, TRANSCRIPT, ROUTE_LOG }
 
-internal enum class CaptureRouteStepOutcome { SUCCEEDED, SKIPPED, FAILED, PENDING }
+internal enum class CaptureRouteLogOutcome { SUCCEEDED, SKIPPED, FAILED, PENDING }
 
 /** One row of the Route log, derived only from what the local package records. */
-internal data class CaptureRouteStep(
+internal data class CaptureRouteLogEntry(
     val title: VoxUiText,
-    val outcome: CaptureRouteStepOutcome,
+    val outcome: CaptureRouteLogOutcome,
     val atEpochMillis: Long? = null,
     val detail: VoxUiText? = null,
 )
@@ -221,11 +221,11 @@ internal data class CaptureRouteStep(
  * prepared entry and the delivery state. Android keeps no per-step timings, so only the
  * capture step carries a time.
  */
-internal fun captureRouteSteps(detail: CaptureHistoryDetail): List<CaptureRouteStep> = buildList {
+internal fun captureRouteLogEntries(detail: CaptureHistoryDetail): List<CaptureRouteLogEntry> = buildList {
     add(
-        CaptureRouteStep(
+        CaptureRouteLogEntry(
             title = voxUiText("Captured"),
-            outcome = CaptureRouteStepOutcome.SUCCEEDED,
+            outcome = CaptureRouteLogOutcome.SUCCEEDED,
             atEpochMillis = detail.createdAtEpochMillis,
             detail = captureSourceUiText(detail.captureSource),
         ),
@@ -233,34 +233,34 @@ internal fun captureRouteSteps(detail: CaptureHistoryDetail): List<CaptureRouteS
     detail.processingMode?.takeIf { it != CaptureProcessingMode.NONE }?.let { mode ->
         val (title, outcome) = when (detail.processingOutcome) {
             CaptureTextProcessingOutcome.APPLIED, CaptureTextProcessingOutcome.UNCHANGED ->
-                voxUiText("Processed on device") to CaptureRouteStepOutcome.SUCCEEDED
+                voxUiText("Processed on device") to CaptureRouteLogOutcome.SUCCEEDED
             CaptureTextProcessingOutcome.MODEL_FAILURE ->
-                voxUiText("Processing failed") to CaptureRouteStepOutcome.FAILED
-            else -> voxUiText("Processing skipped") to CaptureRouteStepOutcome.SKIPPED
+                voxUiText("Processing failed") to CaptureRouteLogOutcome.FAILED
+            else -> voxUiText("Processing skipped") to CaptureRouteLogOutcome.SKIPPED
         }
-        add(CaptureRouteStep(title, outcome, detail = processingModeUiText(mode)))
+        add(CaptureRouteLogEntry(title, outcome, detail = processingModeUiText(mode)))
     }
     if (detail.preparedMarkdown != null) {
-        add(CaptureRouteStep(voxUiText("Shaped with the route template"), CaptureRouteStepOutcome.SUCCEEDED))
+        add(CaptureRouteLogEntry(voxUiText("Shaped with the route template"), CaptureRouteLogOutcome.SUCCEEDED))
     }
     val deliverOutcome = when (detail.state) {
-        CaptureState.COMPLETED -> CaptureRouteStepOutcome.SUCCEEDED
-        CaptureState.DISCARDED -> CaptureRouteStepOutcome.SKIPPED
+        CaptureState.COMPLETED -> CaptureRouteLogOutcome.SUCCEEDED
+        CaptureState.DISCARDED -> CaptureRouteLogOutcome.SKIPPED
         CaptureState.RETRYABLE_FAILURE, CaptureState.NEEDS_PERMISSION, CaptureState.NEEDS_USER_ACTION,
-        CaptureState.PERMANENT_FAILURE -> CaptureRouteStepOutcome.FAILED
+        CaptureState.PERMANENT_FAILURE -> CaptureRouteLogOutcome.FAILED
         CaptureState.QUEUED, CaptureState.PREPARING, CaptureState.MATERIALIZED, CaptureState.COMMITTING,
-        CaptureState.UNKNOWN_OUTCOME -> CaptureRouteStepOutcome.PENDING
+        CaptureState.UNKNOWN_OUTCOME -> CaptureRouteLogOutcome.PENDING
     }
     add(
-        CaptureRouteStep(
+        CaptureRouteLogEntry(
             title = when (deliverOutcome) {
-                CaptureRouteStepOutcome.SUCCEEDED -> voxUiText("Delivered")
-                CaptureRouteStepOutcome.FAILED -> voxUiText("Delivery failed")
+                CaptureRouteLogOutcome.SUCCEEDED -> voxUiText("Delivered")
+                CaptureRouteLogOutcome.FAILED -> voxUiText("Delivery failed")
                 else -> historyTitleUiText(detail.state)
             },
             outcome = deliverOutcome,
             detail = when (deliverOutcome) {
-                CaptureRouteStepOutcome.SUCCEEDED -> detail.logicalPath?.let { voxUiText("%@", it) }
+                CaptureRouteLogOutcome.SUCCEEDED -> detail.logicalPath?.let { voxUiText("%@", it) }
                 else -> captureStateUiText(detail.state)
             },
         ),
@@ -448,7 +448,7 @@ internal fun HistoryDetailScreen(
                                 )
                             }
                         }
-                        CaptureDetailTab.ROUTE_LOG -> CaptureRouteLog(captureRouteSteps(detail))
+                        CaptureDetailTab.ROUTE_LOG -> CaptureRouteLog(captureRouteLogEntries(detail))
                     }
                     DetailMetadataCard(detail)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -620,7 +620,7 @@ internal fun LibraryCodeBlock(text: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun CaptureRouteLog(steps: List<CaptureRouteStep>) {
+private fun CaptureRouteLog(steps: List<CaptureRouteLogEntry>) {
     val signal = Signal.colors
     SignalCard(
         modifier = Modifier.fillMaxWidth().testTag("capture-route-log"),
@@ -630,10 +630,10 @@ private fun CaptureRouteLog(steps: List<CaptureRouteStep>) {
         steps.forEachIndexed { index, step ->
             if (index > 0) SignalDivider()
             val (icon, tint) = when (step.outcome) {
-                CaptureRouteStepOutcome.SUCCEEDED -> Icons.Outlined.Check to signal.successText
-                CaptureRouteStepOutcome.FAILED -> Icons.Outlined.ErrorOutline to signal.warningText
-                CaptureRouteStepOutcome.SKIPPED -> Icons.Outlined.Remove to signal.muted
-                CaptureRouteStepOutcome.PENDING -> Icons.Outlined.Schedule to signal.tint
+                CaptureRouteLogOutcome.SUCCEEDED -> Icons.Outlined.Check to signal.successText
+                CaptureRouteLogOutcome.FAILED -> Icons.Outlined.ErrorOutline to signal.warningText
+                CaptureRouteLogOutcome.SKIPPED -> Icons.Outlined.Remove to signal.muted
+                CaptureRouteLogOutcome.PENDING -> Icons.Outlined.Schedule to signal.tint
             }
             Row(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp).semantics(mergeDescendants = true) {},
@@ -647,7 +647,7 @@ private fun CaptureRouteLog(steps: List<CaptureRouteStep>) {
                         Text(
                             it.localized(),
                             style = SignalType.monoCaption,
-                            color = if (step.outcome == CaptureRouteStepOutcome.FAILED) signal.warningText else signal.muted,
+                            color = if (step.outcome == CaptureRouteLogOutcome.FAILED) signal.warningText else signal.muted,
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
                         )
