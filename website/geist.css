@@ -1457,9 +1457,9 @@ html:not(:lang(en)) body.raw {
 }
 html:not(:lang(en)) :is(.r-h1, .r-h2, .r-cta-card h2) { letter-spacing: normal; line-height: 1.18; overflow-wrap: anywhere; }
 html:not(:lang(en)) :is(.r-voice, .voice) { font-style: normal; }
-html:is(:lang(ja), :lang(ko), :lang(zh)) .r-h1 { font-size: clamp(36px, 4.6vw, 64px); line-height: 1.25; text-wrap: wrap; }
-html:is(:lang(ja), :lang(ko), :lang(zh)) :is(.r-h2, .r-cta-card h2) { font-size: clamp(32px, 4vw, 56px); line-height: 1.25; }
-html:is(:lang(ja), :lang(ko), :lang(zh)) .r-stop h3 { font-size: 28px; line-height: 1.3; }
+html:is(:lang(ja), :lang(ko), :lang(zh), :lang(ta)) .r-h1 { font-size: clamp(36px, 4.6vw, 64px); line-height: 1.25; text-wrap: wrap; }
+html:is(:lang(ja), :lang(ko), :lang(zh), :lang(ta)) :is(.r-h2, .r-cta-card h2) { font-size: clamp(32px, 4vw, 56px); line-height: 1.25; }
+html:is(:lang(ja), :lang(ko), :lang(zh), :lang(ta)) .r-stop h3 { font-size: 28px; line-height: 1.3; }
 .r-h1 del, .r-h1 .r-voice { white-space: nowrap; }
 html[dir="rtl"] :is(pre, code, kbd, samp, .r-tree, .r-gutter) { direction: ltr; unicode-bidi: isolate; text-align: left; }
 html[dir="rtl"] .r-tree { box-shadow: -10px 10px 0 var(--r-ink); }
