@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vox.md — iPhone Duo cover · recording</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 466px; height: 678px; box-sizing: border-box; background: #0B0B0B; color: #F4F4F1; font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+  <header style="padding: 48px 20px 0; display: flex; align-items: center; justify-content: space-between">
+    <span style="display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px 0 6px; border-radius: 999px; background: #1C1C1C; font-size: 14px; font-weight: 600"><span style="width: 22px; height: 22px; border-radius: 999px; background: #2F3BE8; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700">M</span>Meeting Notes</span>
+    <span style="display: inline-flex; align-items: baseline; gap: 8px">
+      <span style="width: 9px; height: 9px; border-radius: 999px; background: {{rec}}; align-self: center"></span>
+      <span style="font-family: 'Geist Mono', monospace; font-size: 22px; font-weight: 500">01:59</span>
+    </span>
+  </header>
+
+  <main style="flex: 1; padding: 22px 24px 0; display: flex; flex-direction: column; gap: 14px; overflow: hidden">
+    <p style="margin: 0; font-size: 19px; line-height: 1.4; font-weight: 500; color: #8A8A85">So the plan is to ship routing first.</p>
+    <p style="margin: 0; font-size: 19px; line-height: 1.4; font-weight: 500">Can we add a task for the release notes and loop in design before Friday<span style="display: inline-block; width: 2px; height: 20px; background: {{rec}}; vertical-align: -4px; margin-left: 3px"></span></p>
+  </main>
+
+  <div aria-hidden="true" style="height: 52px; padding: 0 24px; display: flex; align-items: center; gap: 3px">
+    <sc-for list="{{bars}}" as="b" hint-placeholder-count="40">
+      <span style="{{b.style}}"></span>
+    </sc-for>
+  </div>
+
+  <div style="margin: 6px 20px 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; color: #9A9A95">
+    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="8" height="14" rx="1.5"></rect><rect x="13" y="5" width="8" height="14" rx="1.5"></rect></svg>
+    Open, or prop it up, to keep recording on the big screen
+  </div>
+
+  <footer style="padding: 16px 32px 28px; display: flex; align-items: center; justify-content: space-between">
+    <button aria-label="Discard recording" style="width: 52px; height: 52px; border-radius: 999px; border: 0; background: #1C1C1C; color: #F4F4F1; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
+    <button aria-label="Stop and send" style="width: 80px; height: 80px; border-radius: 999px; border: 3px solid #F4F4F1; background: transparent; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0">
+      <span style="width: 30px; height: 30px; border-radius: 8px; background: {{rec}}; display: block"></span>
+    </button>
+    <button aria-label="Pause" style="width: 52px; height: 52px; border-radius: 999px; border: 0; background: #1C1C1C; color: #F4F4F1; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 5v14M15 5v14"></path></svg>
+    </button>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"rec":{"editor":"color","default":"#F0474A"},"$preview":{"width":466,"height":678}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var rec = this.props.rec ?? '#F0474A';
+    var bars = [];
+    for (var i = 0; i < 40; i++) {
+      var v = Math.round(6 + Math.abs(Math.sin(i * 0.55) * Math.cos(i * 0.21)) * 40);
+      bars.push({ style: 'display:block;flex:1;border-radius:2px;height:' + v + 'px;background:' + (i > 33 ? rec : '#3A3A38') });
+    }
+    return { rec: rec, bars: bars };
+  }
+}
+</script>
+</body>
+</html>

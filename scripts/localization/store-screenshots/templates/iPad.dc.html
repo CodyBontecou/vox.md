@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vox.md — iPad capture</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+a{color:#2F3BE8}a:hover{color:#1E27B0}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1180px; height: 820px; box-sizing: border-box; background: #F2F2EE; color: #121212; font-family: Geist, system-ui, sans-serif; display: grid; grid-template-columns: 260px minmax(0, 1fr) 300px; overflow: hidden">
+  <nav aria-label="Sidebar" style="background: #EAEAE4; border-right: 1px solid #DEDED8; padding: 28px 14px; display: flex; flex-direction: column; gap: 4px">
+    <div style="font-size: 22px; font-weight: 650; letter-spacing: -0.02em; padding: 0 8px 16px">Vox.md</div>
+    <div style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: #5E5E5A; padding: 0 8px 6px">ROUTES</div>
+    <sc-for list="{{routes}}" as="r" hint-placeholder-count="4">
+      <a href="#" style="{{r.row}}"><span style="{{r.tile}}">{{r.letter}}</span>{{r.name}}</a>
+    </sc-for>
+    <div style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: #5E5E5A; padding: 20px 8px 6px">VIEWS</div>
+    <a href="Activity.dc.html" style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 10px; border-radius: 12px; color: #121212; text-decoration: none; font-size: 15px"><span style="width: 8px; height: 8px; border-radius: 999px; background: #E8590C; margin: 0 8px"></span>Activity<span style="margin-left: auto; font-family: 'Geist Mono', monospace; font-size: 11px; color: #5E5E5A">1</span></a>
+    <a href="Library.dc.html" style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 10px; border-radius: 12px; color: #121212; text-decoration: none; font-size: 15px"><span style="width: 8px; height: 8px; margin: 0 8px"></span>Library</a>
+    <a href="Settings.dc.html" style="margin-top: auto; display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 10px; border-radius: 12px; color: #121212; text-decoration: none; font-size: 15px"><span style="width: 8px; height: 8px; margin: 0 8px"></span>Settings</a>
+  </nav>
+
+  <main style="display: flex; flex-direction: column; min-width: 0">
+    <div style="height: 64px; padding: 0 28px; display: flex; align-items: center; border-bottom: 1px solid #DEDED8">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: #5E5E5A">Meetings / 2026-11-01.md</span>
+      <div role="toolbar" aria-label="Quick actions" style="margin-left: auto; min-width: 0; max-width: 400px; display: flex; gap: 6px; align-items: center; overflow-x: auto; scrollbar-width: none"><button aria-label="Time" style="height: 36px; min-width: 36px; padding: 0 9px; border-radius: 9px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; font-family: 'Geist Mono', monospace; font-size: 12.5px; cursor: pointer; flex-shrink: 0">10:42</button><button aria-label="Task" style="height: 36px; min-width: 36px; padding: 0 9px; border-radius: 9px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; font-family: 'Geist Mono', monospace; font-size: 12.5px; cursor: pointer; flex-shrink: 0">- [ ]</button><button aria-label="Link note" style="height: 36px; min-width: 36px; padding: 0 9px; border-radius: 9px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; font-family: 'Geist Mono', monospace; font-size: 12.5px; cursor: pointer; flex-shrink: 0">[[ ]]</button><button aria-label="Heading" style="height: 36px; min-width: 36px; padding: 0 9px; border-radius: 9px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; font-family: 'Geist Mono', monospace; font-size: 12.5px; cursor: pointer; flex-shrink: 0">H</button><button aria-label="Bullet" style="height: 36px; min-width: 36px; padding: 0 9px; border-radius: 9px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; font-family: 'Geist Mono', monospace; font-size: 12.5px; cursor: pointer; flex-shrink: 0">•</button><button aria-label="Tag" style="height: 36px; min-width: 36px; padding: 0 9px; border-radius: 9px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; font-family: 'Geist Mono', monospace; font-size: 12.5px; cursor: pointer; flex-shrink: 0">#</button><button aria-label="Bold" style="height: 36px; min-width: 36px; padding: 0 9px; border-radius: 9px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; font-family: 'Geist Mono', monospace; font-size: 12.5px; cursor: pointer; flex-shrink: 0">B</button><button aria-label="Location" style="height: 36px; min-width: 36px; padding: 0 9px; border-radius: 9px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; font-family: 'Geist Mono', monospace; font-size: 12.5px; cursor: pointer; flex-shrink: 0">◎</button><button aria-label="Text case" style="height: 36px; min-width: 36px; padding: 0 9px; border-radius: 9px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; font-family: 'Geist Mono', monospace; font-size: 12.5px; cursor: pointer; flex-shrink: 0">Aa</button><button aria-label="All quick actions" style="flex-shrink: 0; height: 36px; width: 36px; border-radius: 9px; border: 0; background: transparent; color: #121212; cursor: pointer">•••</button></div>
+    </div>
+    <article style="flex: 1; padding: 44px 48px 0; display: flex; flex-direction: column; gap: 16px">
+      <h1 style="margin: 0; font-size: 36px; line-height: 1.1; font-weight: 650; letter-spacing: -0.025em">Project sync</h1>
+      <label style="display: flex; gap: 12px; align-items: center; font-size: 18px"><input type="checkbox" style="width: 20px; height: 20px; margin: 0; accent-color: #2F3BE8"> Review final designs</label>
+      <label style="display: flex; gap: 12px; align-items: center; font-size: 18px"><input type="checkbox" style="width: 20px; height: 20px; margin: 0; accent-color: #2F3BE8"> Loop in design before Friday</label>
+      <p style="margin: 0; font-size: 18px; line-height: 1.6; max-width: 560px">Decision: ship routing first and keep the composer as calm as it is now. Pencil sketches drop in as images beside the text.</p>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 520px">
+        <div style="height: 140px; border-radius: 16px; background: #DCDCD5; display: flex; align-items: flex-end; padding: 12px; box-sizing: border-box; font-family: 'Geist Mono', monospace; font-size: 11.5px; color: #3E3E3B">[Whiteboard.jpg]</div>
+        <div style="height: 140px; border-radius: 16px; background: #FFFFFF; border: 1px dashed #A3A39E; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #5E5E5A">Draw with Pencil</div>
+      </div>
+    </article>
+    <footer style="padding: 16px 28px 28px; display: flex; gap: 12px; align-items: center; justify-content: center">
+      <button aria-label="Attach" style="width: 56px; height: 56px; border-radius: 999px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; font-size: 22px; cursor: pointer">+</button>
+      <button style="width: 320px; height: 64px; border-radius: 999px; border: 0; background: #121212; color: #FFFFFF; font-size: 17px; font-weight: 600; cursor: pointer">Speak</button>
+      <button style="height: 56px; padding: 0 22px; border-radius: 999px; border: 0; background: #2F3BE8; color: #FFFFFF; font-size: 16px; font-weight: 600; cursor: pointer">Send <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #C9CCFA">⌘↩</span></button>
+    </footer>
+  </main>
+
+  <aside aria-label="Route inspector" style="background: #F7F7F4; border-left: 1px solid #DEDED8; padding: 28px 20px; display: flex; flex-direction: column; gap: 12px">
+    <span style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: #5E5E5A">THIS ROUTE</span>
+    <ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px">
+      <sc-for list="{{steps}}" as="s" hint-placeholder-count="4">
+        <li style="background: #FFFFFF; border: 1px solid #DEDED8; border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px">
+          <span style="font-family: 'Geist Mono', monospace; font-size: 10.5px; letter-spacing: 0.06em; color: #5E5E5A">{{s.kind}}</span>
+          <span style="font-size: 14px; font-weight: 500">{{s.title}}</span>
+        </li>
+      </sc-for>
+    </ol>
+    <a href="RouteEditor.dc.html" style="font-size: 14px; font-weight: 500; text-decoration: none; padding-top: 4px">Edit route</a>
+  </aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var routes = [
+      { name: 'Meeting Notes', letter: 'M', on: true, bg: '#2F3BE8', fg: '#FFFFFF' },
+      { name: 'Inbox', letter: 'I', bg: '#121212', fg: '#FFFFFF' },
+      { name: 'Journal', letter: 'J', bg: '#D9D9D2', fg: '#121212' },
+      { name: 'Tasks', letter: 'T', bg: '#D9D9D2', fg: '#121212' }
+    ];
+    return {
+      routes: routes.map(function (r) {
+        return Object.assign({}, r, {
+          row: 'display:flex;align-items:center;gap:10px;height:44px;padding:0 10px;border-radius:12px;text-decoration:none;color:#121212;font-size:15px;' + (r.on ? 'background:#FFFFFF;font-weight:600;box-shadow:0 0 0 1px #DEDED8' : ''),
+          tile: 'width:26px;height:26px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:' + r.bg + ';color:' + r.fg
+        });
+      }),
+      steps: [
+        { kind: 'CAPTURE', title: 'Voice, text, Pencil, photos' },
+        { kind: 'PROCESS', title: 'Meeting summary · on device' },
+        { kind: 'SHAPE', title: 'Timestamped entry' },
+        { kind: 'DELIVER', title: 'Daily note › ## Notes · append' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

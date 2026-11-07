@@ -62,3 +62,7 @@ apps/android/**/.gradle/
 # Python cache
 __pycache__/
 *.py[cod]
+
+# Store screenshot intermediates (regenerable: CAPTURE.md + render.mjs --set as)
+artifacts/localization/store-signal-captures/
+artifacts/localization/store-signal-as/

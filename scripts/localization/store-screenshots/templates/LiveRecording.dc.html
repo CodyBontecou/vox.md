@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title>Vox.md — Live recording</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style></style>
+<style>
+body{margin:0}
+a{color:#9DA4FF}a:hover{color:#C4C8FF}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #0B0B0B; color: #F4F4F1; font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+  <header style="padding: 56px 20px 0; display: flex; align-items: center; justify-content: space-between">
+    <div style="display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px 0 6px; border-radius: 999px; background: #1C1C1C; font-size: 14px; font-weight: 600">
+      <span style="width: 22px; height: 22px; border-radius: 999px; background: #2F3BE8; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700">M</span>
+      Meeting Notes
+    </div>
+    <div style="display: inline-flex; align-items: center; gap: 6px; font-family: 'Geist Mono', monospace; font-size: 11.5px; color: #9A9A95">
+      <svg aria-hidden="true" width="13" height="13" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+      On device
+    </div>
+  </header>
+
+  <section style="padding: 28px 24px 0; display: flex; align-items: baseline; gap: 12px">
+    <span style="width: 10px; height: 10px; border-radius: 999px; background: {{rec}}; align-self: center"></span>
+    <span style="font-family: 'Geist Mono', monospace; font-size: 44px; font-weight: 500; letter-spacing: -0.02em">01:59</span>
+    <span style="font-size: 13px; color: #9A9A95">Apple Speech · live</span>
+  </section>
+
+  <main style="flex: 1; padding: 28px 24px 0; display: flex; flex-direction: column; gap: 20px; overflow: hidden">
+    <div style="display: flex; gap: 12px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #9A9A95; padding-top: 5px; width: 22px; flex-shrink: 0">S1</span>
+      <p style="margin: 0; font-size: 21px; line-height: 1.4; font-weight: 500; color: #F4F4F1">So the plan is to ship routing first, and keep the composer exactly as calm as it is now.</p>
+    </div>
+    <div style="display: flex; gap: 12px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #9A9A95; padding-top: 5px; width: 22px; flex-shrink: 0">S2</span>
+      <p style="margin: 0; font-size: 21px; line-height: 1.4; font-weight: 500; color: #F4F4F1">Agreed. Can we add a task for the release notes <span style="color: #8A8A85">and loop in design before Friday</span><span style="display: inline-block; width: 2px; height: 22px; background: {{rec}}; vertical-align: -4px; margin-left: 3px"></span></p>
+    </div>
+  </main>
+
+  <div aria-hidden="true" style="height: 72px; padding: 0 24px; display: flex; align-items: center; gap: 3px">
+    <sc-for list="{{bars}}" as="b" hint-placeholder-count="48">
+      <span style="{{b.style}}"></span>
+    </sc-for>
+  </div>
+
+  <footer style="padding: 12px 20px 34px; display: flex; flex-direction: column; gap: 20px">
+    <div role="group" aria-label="When I stop" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; background: #1C1C1C; border-radius: 999px">
+      <button aria-pressed="false" style="height: 36px; border: 0; border-radius: 999px; background: transparent; color: #B4B4AF; font-size: 14px; font-weight: 500; cursor: pointer">Add to draft</button>
+      <button aria-pressed="true" style="height: 36px; border: 0; border-radius: 999px; background: #F4F4F1; color: #0B0B0B; font-size: 14px; font-weight: 600; cursor: pointer">Send on stop</button>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 12px">
+      <button aria-label="Discard recording" style="width: 56px; height: 56px; border-radius: 999px; border: 0; background: #1C1C1C; color: #F4F4F1; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+        <svg aria-hidden="true" width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </button>
+      <button aria-label="Stop and send" style="width: 88px; height: 88px; border-radius: 999px; border: 3px solid #F4F4F1; background: transparent; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0">
+        <span style="width: 34px; height: 34px; border-radius: 8px; background: {{rec}}; display: block"></span>
+      </button>
+      <button aria-label="Pause" style="width: 56px; height: 56px; border-radius: 999px; border: 0; background: #1C1C1C; color: #F4F4F1; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+        <svg aria-hidden="true" width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 5v14M15 5v14"></path></svg>
+      </button>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;rec&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#F0474A&quot;},&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844}}">
+class Component extends DCLogic {
+  renderVals() {
+    var rec = this.props.rec ?? '#F0474A';
+    var bars = [];
+    for (var i = 0; i < 48; i++) {
+      var v = Math.round(8 + Math.abs(Math.sin(i * 0.55) * Math.cos(i * 0.21)) * 52);
+      var live = i > 40;
+      bars.push({ style: 'display:block;flex:1;border-radius:2px;height:' + v + 'px;background:' + (live ? rec : '#3A3A38') });
+    }
+    return { rec: rec, bars: bars };
+  }
+}
+</script>
+
+
+</body></html>
