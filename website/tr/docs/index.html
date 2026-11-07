@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="tr" dir="ltr" data-search-section="Bölüm" data-search-guide="Kılavuz" data-search-empty="“{query}” için sonuç yok">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vox.md Belgeleri: Tam Özellik Kılavuzu</title>
+  <meta name="description" content="Vox.md Hızlı yakalama, Rotalar, Markdown hedefleri, iOS klavyesi, yerel döküm modelleri, araç takımları, Kestirmeler, Apple Watch ve Mac için eksiksiz belgeler.">
+  <link rel="canonical" href="https://vox.isolated.tech/tr/docs/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Dil modelleri için Vox.md belgeleri">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Vox.md Belgeleri: Tam Özellik Kılavuzu">
+  <meta property="og:description" content="Kalıcı Markdown yakalama ve rotalardan yerel konuşma modellerine, klavyeye, Apple Watch&#x27;a ve Mac&#x27;e kadar yayımlanmış tüm Vox.md özelliklerini öğrenin.">
+  <meta property="og:url" content="https://vox.isolated.tech/tr/docs/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vox.md Belgeleri">
+  <meta name="twitter:description" content="Vox.md yakalama, yönlendirme, ses dökümü ve sistem entegrasyonları için kapsamlı kılavuz.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Vox.md Tam Özellik Kılavuzu",
+  "description": "Yayımlanmış tüm Vox.md yakalama, yönlendirme, döküm, klavye, sistem entegrasyonu, Apple Watch ve Mac özelliklerinin belgeleri.",
+  "dateModified": "2026-10-26",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/tr/docs/",
+  "inLanguage": "tr",
+  "name": "Vox.md Belgeleri: Tam Özellik Kılavuzu"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/tr/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Belgeler",
+      "item": "https://vox.isolated.tech/tr/docs/"
+    }
+  ],
+  "inLanguage": "tr",
+  "name": "Vox.md Belgeleri: Tam Özellik Kılavuzu",
+  "description": "Vox.md Hızlı yakalama, Rotalar, Markdown hedefleri, iOS klavyesi, yerel döküm modelleri, araç takımları, Kestirmeler, Apple Watch ve Mac için eksiksiz belgeler."
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md Herkese Açık Bilgi API&#x27;si">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="Ana gezinme">
+  <div class="nav-inner docs-header-inner">
+    <a href="/tr/" class="logo" aria-label="Vox.md ana sayfası">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ belgeler</span></span>
+    </a>
+    <form class="docs-search" role="search" action="./" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="Belgelerde ara" aria-label="Belgelerde ara" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Arama sonuçları" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/tr/blog/">Blog yazıları</a></li>
+      <li><a href="/tr/privacy.html">Gizlilik</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>Dil</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr" aria-current="page">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="Bu sayfada">
+      <div class="docs-sidebar-title">Bu Sayfada</div>
+      <ol>
+        <li><a href="#getting-started">Başlarken</a></li>
+        <li><a href="#quick-capture">Hızlı yakalama</a></li>
+        <li><a href="#presets">Rotalar</a></li>
+        <li><a href="/tr/docs/location/">Mevcut konum ve {location}</a></li>
+        <li><a href="#models">Modeller ve Ses Dökümü</a></li>
+        <li><a href="#keyboard">iOS Klavyesi</a></li>
+        <li><a href="#system-integrations">Sistem Entegrasyonları</a></li>
+        <li><a href="#apple-watch">Apple Watch</a></li>
+        <li><a href="#mac">Mac Yardımcısı</a></li>
+        <li><a href="#history-settings">Arşiv, Ayarlar ve Gizlilik</a></li>
+        <li><a href="#troubleshooting">Sorun Giderme</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="docs-title">
+      <div class="page-eyebrow">Belgeler · Güncel Ürün Kılavuzu</div>
+      <h1 class="page-title" id="docs-title">Vox.md ile yapabileceğiniz her şey</h1>
+      <p class="docs-hero-copy">Yakalama, rotalar, Markdown yönlendirme, ses klavyesi, yerel modeller, Apple sistem entegrasyonları, Apple Watch, Mac, geçmiş, ayarlar ve gizlilik için kapsamlı kılavuz.</p>
+      <div class="docs-meta-row" aria-label="Belgelenmiş bilgiler">
+        <span>26 Eki 2026 tarihinde güncellendi</span>
+        <span>iOS 17.6+</span>
+        <span>macOS 14+</span>
+        <span>watchOS 10+</span>
+      </div>
+      </header>
+
+      <section class="docs-directory" aria-labelledby="browse-docs">
+      <h2 class="visually-hidden" id="browse-docs">Kategoriye göre göz atın</h2>
+      <div class="docs-category-grid">
+        <a class="docs-category-card" href="#getting-started"><span>01</span><strong>Başlarken</strong><small>Platformlar, kurulum, izinler ve ilk yakalama</small></a>
+        <a class="docs-category-card" href="#quick-capture"><span>02</span><strong>Hızlı yakalama</strong><small>Düzenleyici, medya, ses, Yakalama Çubuğu ve taslaklar</small></a>
+        <a class="docs-category-card" href="#presets"><span>03</span><strong>Rotalar</strong><small>İşleme, meta veriler, hedefler ve şablonlar</small></a>
+        <a class="docs-category-card is-guide" href="/tr/docs/location/"><span>Kılavuz</span><strong>Mevcut konum ve <code>{location}</code></strong><small>Yalnızca belirteçli bağlantılar, isteğe bağlı meta veriler, hassasiyet, gizlilik ve geçiş</small></a>
+        <a class="docs-category-card" href="#models"><span>04</span><strong>Modeller</strong><small>Otomatik, Apple Speech, Whisper ve Parakeet</small></a>
+        <a class="docs-category-card" href="#keyboard"><span>05</span><strong>Klavye</strong><small>Kurulum, dikte, ekleme, dokunsal geri bildirim ve otomatik durdurma</small></a>
+        <a class="docs-category-card" href="#system-integrations"><span>06</span><strong>Sistem Entegrasyonları</strong><small>Araç takımları, Paylaşım Sayfası, Kestirmeler ve derin bağlantılar</small></a>
+        <a class="docs-category-card" href="#apple-watch"><span>07</span><strong>Apple Watch</strong><small>Kayıt, rota eşitleme, kuyruk ve komplikasyonlar</small></a>
+        <a class="docs-category-card" href="#mac"><span>08</span><strong>Mac</strong><small>Toplantı yakalama, çalışma alanı, menü çubuğu ve genel tuş atamaları</small></a>
+        <a class="docs-category-card" href="#history-settings"><span>09</span><strong>Arşiv ve Ayarlar</strong><small>Kurtarma, istatistikler, gizlilik, sınırlar, satın alma ve destek</small></a>
+      </div>
+      </section>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="getting-started">
+        <div class="docs-section-label">01 / Başlarken</div>
+        <h2>Yeni bir kapalı not deposu oluşturmadan Markdown&#x27;a yakalayın</h2>
+        <p>Vox.md yerel öncelikli hızlı yakalama uygulamasıdır. Standart Markdown ve ekleri Obsidian kasasına veya Dosyalar üzerinden seçtiğiniz başka yazılabilir klasöre yazar. Vox.md hesabı, eklenti veya sunucuda barındırılan not veritabanı gerekmez.</p>
+
+        <p>Tam ses iş akışı için, <a href="/tr/blog/voice-notes-to-obsidian-iphone/">iPhone sesli notlarından Obsidian&#x27;a kılavuzunu izleyin</a>, klasör seçmekten oluşan Markdown&#x27;ı kontrol etmeye kadar.</p>
+
+        <p>Yakalama yöntemi mi seçiyorsunuz? Şunu okuyun: <a href="/tr/blog/obsidian-quick-capture-iphone/">iPhone yakalama karar kılavuzu</a> veya <a href="/tr/compare/vox-md-vs-obsidian-quick-capture/">Vox.md ile yerleşik Obsidian&#x27;ı karşılaştırın</a>.</p>
+
+        <div class="docs-table-wrap" id="platform-availability">
+          <table class="docs-table">
+            <thead><tr><th>Çalıştığı platform</th><th>Gereksinim</th><th>Neler kullanılabilir?</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone ve iPad</td><td class="req">iOS/iPadOS 17.6+</td><td>Hızlı yakalama, klavye, Paylaşım Sayfası, araç takımları, Kestirmeler, Canlı Etkinlikler, geçmiş ve ayarlar</td></tr>
+              <tr><td>Mac</td><td class="req">macOS 14+</td><td>Yakalama çalışma alanı, kayıt/içe aktarma, rotalar, modeller, geçmiş, menü çubuğu ve genel tuş atamaları</td></tr>
+              <tr><td>Apple Watch</td><td class="req">watchOS 10+</td><td>Yerel kayıt, rota seçimi, eşitleme kuyruğu, yalnızca kayıt teslimatı ve komplikasyon</td></tr>
+              <tr><td>Denetim Merkezi kontrolleri</td><td class="req">iOS 18+</td><td>Hızlı yakalama ve rotaya duyarlı kayıt kontrolleri</td></tr>
+              <tr><td>Apple Speech Otomatik arka ucu</td><td class="req">Desteklenen iOS 26 cihazı ve dil</td><td>Sistem tarafından yönetilen, cihazda canlı ve toplu ses dökümü</td></tr>
+              <tr><td>Apple Intelligence işlemesi</td><td class="req">Uyumlu iOS/macOS 26 cihazı</td><td>Yedek davranışlarla cihazda temizleme, yapılandırılmış çıktı ve özel talimatlar</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <p><strong>Temel iş akışı.</strong> Rota seçip hedefini bağlayın, Hızlı yakalama&#x27;da yazın veya içerik ekleyin, sonra Gönder&#x27;e dokunun. İçeriğin nasıl işleneceğini, biçimlendirileceğini ve notlarınıza yerleştirileceğini rota belirler.</p>
+        </div>
+
+
+        <h3 id="first-capture">İlk yakalamanızı yapın</h3>
+        <ol class="docs-steps">
+          <li><strong>Vox.md&#x27;yi açın.</strong><span>Uygulama doğrudan kalıcı Markdown düzenleyicisine açılır.</span></li>
+          <li><strong>Rota seçin.</strong><span>Yerleşik Varsayılan rota silinemez ama devre dışı bırakılabilir. En az bir rotayı etkin tutup hedef verin.</span></li>
+          <li><strong>Hedefini kurun.</strong><span>Dokunun: <em>Destinasyonu belirleyin</em>, Obsidian kasası veya Dosyalar klasörü seçin, ardından yeni, dönen veya mevcut not seçin.</span></li>
+          <li><strong>İçerik ekleyin.</strong><span>Markdown yazın veya bağlantı, fotoğraf, dosya, tarama, çizim, konum ya da ses kaydı ekleyin.</span></li>
+          <li><strong>Gönder&#x27;e dokunun.</strong><span>Vox.md seçili rotaya kaydeder ve şunu bildirir: <em>Alıntıyla Cevap Gönder</em>. Başarısız veya kuyruktaki işler kurtarılmak üzere kullanılabilir kalır.</span></li>
+        </ol>
+
+        <h3 id="permissions">İzinler ve sistem erişimi</h3>
+        <ul>
+          <li><strong>Mikrofon:</strong> ses kaydı, yerel döküm, klavye dinlemesi ve ses yakalama için. Hızlı yakalama bu isteği, kayıt başlatmadan önce çalışma alanı ilk açıldığında gösterebilir.</li>
+          <li><strong>Konuşma tanıma:</strong> Desteklenen sistemlerde Apple Speech.</li>
+          <li><strong>Dosyalar klasör erişimi:</strong> hedefler, şablonlar, içe aktarımlar ve Watch Yalnızca Kayıt çıktısı.</li>
+          <li><strong>Kamera ve seçili fotoğraflar:</strong> yalnızca medya, ekran görüntüleri, günlük fotoğrafları veya taramalar eklediğinizde.</li>
+          <li><strong>Kullanırken Konum:</strong> yalnızca bağımsız Mevcut konum Yakalama Çubuğu komutu için veya etkinleştirilmiş bir Rota kaynak anına ait tek konuma ihtiyaç duyduğunda. Vox.md konumu hiçbir zaman sürekli veya arka planda izlemez.</li>
+          <li><strong>Bildirimler:</strong> gözetimsiz Apple Watch hataları dahil isteğe bağlı teslimat durumu.</li>
+          <li><strong>Klavye Tam Erişime İzin Ver:</strong> Vox.md klavyesinin paylaşılan cihaz içi uygulama iş akışını kullanması için gereklidir. Bkz. <a href="#keyboard-setup">Klavye kurulumu</a>.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="quick-capture">
+        <div class="docs-section-label">02 / Hızlı yakalama</div>
+        <h2>Metin, medya, dosya ve ses için tek kalıcı düzenleyici</h2>
+        <p>Hızlı yakalama, ana iOS ve iPadOS çalışma alanıdır. Rota menüsü mevcut iş akışını değiştirir; hedef menüsü taslağın teslim edileceği yeri önizler veya geçici değiştirir. Alt çubuk Arşiv ve Ayarlar&#x27;ı da açar; yazılım klavyesini gösterebilir veya kapatabilir.</p>
+
+        <h3 id="durable-drafts">Kalıcı taslaklar ve güvenli teslimat</h3>
+        <ul>
+          <li>Metin, ekler, seçili rota, hedef geçersiz kılmaları ve yakalama kaynağı askıya alma ve yeniden başlatmadan sonra korunur.</li>
+          <li>Düzenlemeler kısa beklemeden sonra kaydedilir; uygulamayı arka plana almak hemen kaydetmeyi tetikler.</li>
+          <li>Gönderme sürerken düzenlemeye devam ederseniz yeni düzenlemeler atılmak yerine yeni taslakta korunur.</li>
+          <li>Teslimattan önce hedef yapılandırılmalıdır. Düzenleyici şunu gösterir: <em>Konfigurasyon Yapılmamış</em> gerektiğinde Kur eylemiyle.</li>
+          <li>Yeniden denemeye dayanıklı yakalama istekleri yerelde günlüğe alınır; böylece izin, dosya sağlayıcısı veya eşitleme hatası yeniden denenebilir.</li>
+          <li>Boş düzenleyici, bir rota seçseniz veya dosya ekleseniz bile, metin ekleyene kadar önbellekteki ilham verici bir alıntıyı gösterir; alıntı istekleri taslağınızı asla içermez.</li>
+        </ul>
+
+        <p>Görev odaklı anlatım için bkz. <a href="/tr/blog/save-links-photos-obsidian-iphone/">bağlantıları, fotoğrafları ve taramaları Obsidian&#x27;a kaydedin</a>.</p>
+
+        <h3 id="capture-types">Yakalama türleri</h3>
+        <div class="docs-feature-grid">
+          <div><strong>Metin ve Markdown</strong><p>Seçimi gözeten Markdown düzenleyicisinde doğrudan yazın, mevcut metni yapıştırın ve metni diğer içeriklerle birleştirin.</p></div>
+          <div><strong>Web bağlantıları</strong><p>Markdown bağlantı biçimlendirmesiyle HTTP veya HTTPS URL&#x27;si ekleyin.</p></div>
+          <div><strong>Fotoğraflar ve kamera</strong><p>Fotoğraf veya ekran görüntüsü seçin ya da yeni fotoğraf çekin. Görseller hazırlanır ve teslim edilen nota gömülür.</p></div>
+          <div><strong>Dosyalar</strong><p>Birden fazla Dosyalar öğesi seçin. Görseller gömmeye dönüşür, ses ses içeriği olarak kalır, diğer dosyalar Obsidian tarzı bağlantılar kullanır.</p></div>
+          <div><strong>Belge taramaları</strong><p>VisionKit ile sayfa tarayın. Vox.md sayfa görsellerini korur, PDF oluşturur ve cihazda mümkün olan en iyi OCR sonucunu ekler.</p></div>
+          <div><strong>Günlük OCR</strong><p>Deklanşöre elle basarak en fazla 10 günlük sayfası yakalayın veya günlük fotoğrafları seçin. Hassas Vision OCR otomatik dil algılama kullanır.</p></div>
+          <div><strong>Çizimler</strong><p>Beyaz PencilKit tuvaline siyah kalemle çizin. Vox.md düzenlenebilir çizim verisini ve PNG önizlemesini saklar.</p></div>
+          <div><strong>Mevcut konum eylemi</strong><p>Tek konum isteyip taslağa doğrulanmış Google Maps Markdown bağlantısı ekleyin. Bu bağımsız Yakalama Çubuğu eylemi rota başına iki konum kontrolünü de değiştirmez.</p></div>
+          <div><strong>Ses ve içe aktarılan ses</strong><p>Düzenleyiciden kaydedin veya ses/video içe aktarın, yerelde döküm oluşturun ve sonucu taslağa ekleyin ya da hemen gönderin.</p></div>
+        </div>
+        <p class="docs-note">Erişilebilirlik: OCR, “Bu cihazda metin çıkarılıyor” ilerleme başlığı gösterir; VoiceOver yakalama akışlarında OCR ilerlemesini ve tamamlanmasını, “Yakalama gönderildi” ve “Döküm Yakalama&#x27;ya eklendi” bildirimlerini seslendirir.</p>
+
+        <h3 id="capture-bar">Yakalama Çubuğu</h3>
+        <p>Ayarlar → Yakalama Çubuğu, eylemleri sıralamanızı veya gizlemenizi sağlar. Varsayılan olarak her eylem görünürdür.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Eylem</th><th>Davranış</th></tr></thead>
+            <tbody>
+              <tr><td>Medya ekle</td><td>Çizim, Kamera, Fotoğraf, Ekran Görüntüsü ve Web Bağlantısı seçeneklerini açar.</td></tr>
+              <tr><td>Dosyaları ekle</td><td>Dosyalar&#x27;dan birden fazla dosya seçip taslakla birlikte hazırlar.</td></tr>
+              <tr><td>Scan Belgeleri</td><td>Çok sayfalı tarama, PDF, sayfa görselleri ve mümkün olan en iyi OCR sonucunu yakalar.</td></tr>
+              <tr><td>Ekstra Yazı</td><td>OCR odaklı yakalama için Günlük Sayfalarını Yakala ve Günlük Fotoğraflarını Seç seçeneklerini sunar.</td></tr>
+              <tr><td>9 tane</td><td>Son düzenleyici işlemini geri alır.</td></tr>
+              <tr><td>formatları Markdown</td><td>Kalın, İtalik, Hashtag veya Başlık 1 ile Başlık 6 arasını uygular.</td></tr>
+              <tr><td>Markdown linkler</td><td>Şunu ekler: <code>[link text](url)</code> ve düzenlenebilir kısmı seçer.</td></tr>
+              <tr><td>İç bağlantı</td><td>Obsidian tarzı şunu ekler: <code>[[Target]]</code> wikilink bağlantısı.</td></tr>
+              <tr><td>İki tarih belirleyin</td><td>Bugün, Yarın veya Bu Hafta Sonu; isteğe bağlı saat; ±15m, ±30m veya ±1h ayarlarını kullanır. Şunu ekler: <code>(@yyyy-MM-dd)</code> veya saatli biçim.</td></tr>
+              <tr><td>Checklist</td><td>Markdown görev önekini uygular: <code>- [ ]</code>.</td></tr>
+              <tr><td>Bullet Listesi</td><td>Markdown madde işareti öneki uygular.</td></tr>
+              <tr><td>Pasta yapın</td><td>Pano metnini mevcut seçime yapıştırır.</td></tr>
+              <tr><td>Sketch</td><td>Düzenlenebilir PencilKit çizim yakalamasını açar.</td></tr>
+              <tr><td>Mevcut konum</td><td>Tek konum isteyip Google Maps bağlantısı ekler.</td></tr>
+              <tr><td>Zamanlama Seti</td><td>Yerel saat ve tarihi şu biçimde ekler: <code>h:mm a yyyy-MM-dd</code>.</td></tr>
+              <tr><td>Tarih Giriş</td><td>Şunu ekler: <code>yyyy-MM-dd</code>.</td></tr>
+              <tr><td>Değiştirme Yazıları Case</td><td>Küçük harf, Büyük harf, Cümle düzeni, Baş Harfleri Büyük ve Slug Biçimi seçenekleri sunar.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">Biçimlendirme mevcut seçimi gözetir, satır sonlarını normalleştirir, geçersiz seçim aralıklarını sınırlar ve emoji gibi birleşik karakterleri bölmez.</p>
+
+        <h3 id="inline-voice">Satır içi ses kontrolleri</h3>
+        <ul>
+          <li>Başlatmak veya durdurmak için ses düğmesine dokunun. Ayrıntılı kontrolleri göstermek için yaklaşık 0,45 saniye basılı tutun.</li>
+          <li>Kayıt sırasında bir <strong>Duraklat</strong> düğmesi ses düğmesinin yanında görünür — bir dokunuş duraklatır, bir dokunuş sürdürür. Son not, duraklatılan ses ve süre hariç tutularak tek kayıt olarak kalır. Duraklatma, siz sürdürünceye kadar canlı döküm önizlemesini ve sesin otomatik durdurulmasını da askıya alır.</li>
+          <li><strong>Taslağa Ekle</strong> tamamlanan dökümü sona ekler. <strong>Hemen Gönder</strong> seçilen rotayı ve hedefini çalıştırır.</li>
+          <li><strong>Hemen Gönder varsayılan olarak seçilidir</strong> iOS ve Mac yakalama çalışma alanlarında. iOS ses eylemini şunun üzerinden açmak: <code>voxboard://capture?action=voice</code> o kaydı Taslağa Ekle&#x27;ye geçirir.</li>
+          <li>Bu <strong>Ses</strong> seçeneği, istendiğinde kaynak kaydı taslağın parçası olarak saklar.</li>
+          <li><strong>Audio İhracat</strong> ses veya film dosyalarını kabul eder ve aynı yerel ses dökümü hattını kullanır.</li>
+          <li><strong>Konuşmacıları tanımlayın</strong> kayıtlar ve içe aktarılan ses için isteğe bağlı Rota ses işleme adımıdır. İlk kullanımda ayrı konuşmacı modeli hazırlar, yerelde mümkün olan en iyi anonim etiketleri ekler; çalışamadığında görünür Arşiv gerekçesiyle düz dökümü korur.</li>
+          <li>Otomatik, kayıt sırasında kesinleşmiş ve geçici Apple Speech metnini doğrudan düzenlenebilir düzenleyicide gösterebilir. Açıkça seçilen Whisper ve Parakeet modelleri, kayıt durduktan sonra döküm oluşturur.</li>
+          <li>Başarısız döküm kaynak kaydı yok etmez; kurtarılabilir kalır.</li>
+          <li>Kalıcı klavye dinlemesi yalnızca açıkça etkinleştirildiğinde uygulama açılışları arasında korunur. Tek seferlik uygulama kaydı ses oturumunu boşta durumuna döndürür.</li>
+        </ul>
+
+        <h3 id="capture-limits">Yakalama girdi sınırları</h3>
+        <div class="docs-callout docs-callout-neutral">
+          <p>Bir istek en fazla şunu içerebilir: <strong>100.000 karakter</strong> paylaşılan metin, <strong>10 paylaşılan öğe</strong>, ve <strong>250 MB</strong> toplam hazırlanmış varlık sınırıdır. Fotoğraf ve ekran görüntüsü seçicileri en fazla 10 öğe, günlük yakalama ise en fazla 10 sayfa kabul eder. Vox.md öğeleri sessizce atmak yerine sınır aşımını reddeder.</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="presets">
+        <div class="docs-section-label">03 / Rotalar</div>
+        <h2>Yalnızca klasörü değil, tüm iş akışını kaydedin</h2>
+        <p>Rota; yakalamanın anlamını, metnin işlenip işlenmeyeceğini, meta veri ve sesin nasıl ele alınacağını ve Markdown&#x27;ın tam nereye yazılacağını saklar. Rotalar yazılı metin, bağlantı, medya, tarama, dosya, çizim, ses, Kestirmeler, araç takımları, Paylaşım Sayfası, Watch ve Mac için geçerlidir.</p>
+
+        <h3 id="preset-management">Rotaları oluşturun ve yönetin</h3>
+        <ul>
+          <li>Özel rota oluşturmak, adlandırmak, etkinleştirmek, devre dışı bırakmak, simge seçmek veya silmek için Ayarlar → Rotalar&#x27;ı açın.</li>
+          <li>Aranabilir simge seçicisi sembolleri Yazı, Ses, Görevler, Kişisel ve İş altında gruplar.</li>
+          <li>Devre dışı rotalar normal seçicilerde gizlenir. Yerleşik Varsayılan rota silinemez.</li>
+          <li>Yerleşik Varsayılan rota dalga biçimi sembolünü ve şu istemi kullanır: <em>Bir fikir, görev, bağlantı, dosya, tarama veya kayıt yakalayın.</em>, <code>type: capture</code> meta veri, Akıcı Metin işleme, yazılı metin işleme kapalı ve ses kaydetme kapalı.</li>
+          <li>Yeni özel rota şu şekilde başlar: <em>Özel Rota</em>, kaydırıcı simgesini ve şunu kullanır: <em>Ne yakalamak istiyorsunuz?</em> istemini kullanır; Özel Talimat seçili, yazılı/karma metin işleme kapalı başlar.</li>
+        </ul>
+
+        <h3 id="processing-modes">İşleme modları</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Mod</th><th>Sonuç</th><th>Yedek davranış</th></tr></thead>
+            <tbody>
+              <tr><td>Orijinali Koru</td><td>Yakalanan metni yapay zekâyla yeniden yazmadan korur.</td><td>Orijinal metin teslim edilir.</td></tr>
+              <tr><td>Metni Düzenle</td><td>Anlamı ve Markdown&#x27;ı koruyarak büyük/küçük harfleri ve noktalamayı düzeltir.</td><td>Cihazda zenginleştirme kullanılamadığında orijinal metin.</td></tr>
+              <tr><td>Yapılacaklar Listesi</td><td>Markdown üretir <code>- [ ]</code> görev öğeleri.</td><td>Öngörülebilir kontrol listesi biçimlendiricisi.</td></tr>
+              <tr><td>Toplantı Notları</td><td>Şunu üretir: <code>## Notes</code> bölümü ve varsa <code>## Action Items</code>.</td><td>Öngörülebilir toplantı notu yapısı.</td></tr>
+              <tr><td>Özel Talimat</td><td>Kullanılabildiğinde cihazdaki Apple Intelligence ile talimatınızı uygular.</td><td>Talimat yerelde çalışamadığında orijinal metin.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Ses dökümleri seçili rota modunu kullanır. <strong>Yazı Kapatmak için Uygulama</strong> yazılı Markdown, OCR ve metin içeren diğer karma yakalamaları işlemeye izin veren, varsayılan olarak kapalı ayrı tercihtir. Kapalı bırakmak yazdığınız Markdown&#x27;ın beklenmedik şekilde yeniden yazılmasını engeller. İşlenmiş isteğin tam hali teslimattan önce kaydedilir; böylece yeniden denemeler değişen ayarlara göre işlemeyi tekrar çalıştırmaz.</p>
+
+        <h3 id="preset-metadata">Meta Veri</h3>
+        <ul>
+          <li>Sabit meta verileri tek bir <code>key: value</code> çifti, her satıra bir tane; örneğin: <code>tags: [journal, idea]</code>.</li>
+          <li><strong>Not Ön Bilgileri</strong> belge kapsamında meta veri yazar.</li>
+          <li><strong>Satır İçi Girdi Alanları</strong> yazar <code>key:: value</code> alanlarını dönen nottaki her girdinin yanına yazar.</li>
+          <li>Kullanılabildiğinde cihazda zenginleştirme, sabit rota meta verilerinin yanına başlık, etiket, kategori ve temizlenmiş metin ekleyebilir.</li>
+        </ul>
+
+        <h3 id="preset-location">İsteğe bağlı konum</h3>
+        <p>Mevcut konum varsayılan olarak kapalıdır ve her Rotaya aittir. Etkinleştirildiğinde Vox.md yakalamanın kaynağında tek konum ister: iOS/iPadOS, Paylaşım Sayfası, derin bağlantı/düzenleyici, Mac ve düzenleyiciyi açan sistem eylemlerinde Gönder sırasında; doğrudan kuyruğa alınan metin, bağlantı ve dosya amaçlarında çağrı sırasında; anında ses, klavyeyle yönlendirilen rota kaydı, araç takımı/kontrol kaydı veya normal Yakalama teslimatıyla yönlendirilen Apple Watch kaydı durduğunda. Watch Yalnızca Kayıt, Markdown konum alanı olmayan ham sesin Dosyalar&#x27;a aktarımıdır ve konum istemez. Vox.md konumu asla sürekli izlemez veya arka planda konum takibi yapmaz.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Ayar</th><th>Davranış</th></tr></thead>
+            <tbody>
+              <tr><td>Mevcut Konumu Kullan</td><td>Bu rota için kaynak anına ait tek konum ister ve şunu sağlar: <code>{location}</code>. Meta veriyi otomatik olarak yazmaz.</td></tr>
+              <tr><td>tam (varsayılan)</td><td>Gizlilik ayarlı kaynak konum ölçümünü korur; seçili meta veriler gerektirdiğinde ilgi çekici yer etiketi içerebilir.</td></tr>
+              <tr><td>Şehir</td><td>Enlem ve boylamı iki ondalık basamağa yuvarlar, ilgi çekici yer etiketlerini çıkarır. Türetilen tüm alanlar ve bağlantılar bu yuvarlanmış koordinatları kullanır.</td></tr>
+              <tr><td>Konum Meta Verilerini Yaz</td><td>şuna ek olarak yapılandırılmış veya gelişmiş meta verileri ayrıca etkinleştirir: <code>{location}</code> girdi şablonu bağlantısı.</td></tr>
+              <tr><td>Yapılandırılmış Alanlar</td><td>Koordinatları, enlemi, boylamı, yeri, şehri, bölgeyi, ülkeyi, Apple Maps, Google Maps, OpenStreetMap alanlarını seçip yeniden adlandırın, <code>geo:</code> URI, doğruluk, zaman damgası, kaynak ve Yakalama Kimliği.</td></tr>
+              <tr><td>Gelişmiş YAML Şablonu</td><td>Not Ön Bilgileri için doğrulanmış, sınırlandırılmış YAML kullanır. İlgisiz ön bilgileri değiştiremez ve satır içi girdi alanlarında kullanılamaz.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Konum Meta Verilerini Yaz etkinleştirildiğinde belge kapsamı, her sonucu Yakalama Kimliğiyle anahtarlanmış yapılandırılmış ön bilgi koleksiyonunun sonuna ekler. Bir not birden fazla konum tutabilir; idempotent yeniden deneme aynı konumu iki kez ekleyemez. Girdi kapsamı ise seçili yapılandırılmış alanları şu biçimde işler: <code>key:: value</code> o yakalama girdisinin yanında.</p>
+        <p>Yer, şehir, bölge ve ülke, yalnızca etkin meta veri alanları gerektirdiğinde Apple&#x27;ın sistem ters coğrafi kodlayıcısını kullanır. Yalnızca belirteçli konum ters coğrafi kodlamayı atlar. Hizmet ücretsizdir ve API anahtarı gerektirmez, ancak ağ bağlantısı kullanabilir; sorgu başarısız olursa Yakalama yalnızca koordinat meta verileriyle sürer. Girdi önekleri, sonekleri ve kasa Markdown şablonları şunu kullanabilir: <code>{location}</code> rotanın kullanılabilir, gizlilik ayarlı anlık konumundan, meta veri çıktısını etkinleştirmeden tıklanabilir Google Maps bağlantısı eklemek için; Mevcut konum kapalı veya kullanılamazken belirteç boştur. Sağlayıcı bağlantısı oluşturmak Apple, Google veya OpenStreetMap ile iletişim kurmaz. Bağlantıyı açmak, bağlantıda saklanan aynı tam veya yuvarlanmış koordinatları sağlayıcıya açıklar.</p>
+        <p>Yeni ve önceden devre dışı rotalarda iki kontrol de kapalı kalır. Zaten konum meta verisi yazan rotalarda yükseltmeden sonra ikisi de açık kalarak mevcut çıktı korunur.</p>
+        <div class="docs-callout">
+          <strong>Tam Mevcut Konum kılavuzu</strong>
+          <p>Bkz. <a href="/tr/docs/location/">Mevcut konum, <code>{location}</code>, ve Meta Veri</a> kurulum düzenleri, örnekler, yakalama kaynağı zamanlaması, geçiş davranışı, gizlilik ve sorun giderme için.</p>
+        </div>
+        <div class="docs-callout docs-callout-neutral">
+          <strong>Kullanılamayan konum</strong>
+          <p>Etkileşimli arayüzler yeniden deneyebilir, iptal edebilir, bir kez konumsuz gönderebilir veya şunu seçebilir: <em>Her Zaman Konumsuz Gönder</em> o rota için. Kayıtlı tercihi rotanın Konum ayarlarında sıfırlayın. Gözetimsiz bir <em>Sor</em> yakalama, siz karar verene kadar kaynak anındaki kullanılamama sonucunu korur; yeniden deneme ve kurtarma asla sonraki konumu yeniden almaz.</p>
+        </div>
+
+        <h3 id="destinations">Markdown hedefleri</h3>
+        <p>Her rotanın, kökü bir Obsidian kasasında veya yazılabilir Dosyalar klasöründe olan tek hedefi vardır.</p>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Yeni Not</strong><p>Şu tür belirteçlerle her yakalama için ayrı Markdown dosyası oluşturun: <code>{timestamp}</code>, <code>{date}</code>, <code>{time}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{id8}</code>, ve <code>{id}</code>.</p></div>
+          <div><strong>Rolling Notları</strong><p>Günlük, haftalık, aylık, üç aylık veya yıllık notların sonuna ekleyin. Yollar ayrıca şunu destekler: <code>{period}</code> ve <code>{week}</code>. Yeni hedefin varsayılanı: <code>Journal/{period}.md</code> günlük dönemle.</p></div>
+          <div><strong>Mevcut not</strong><p>Seçili kasa veya klasörün içindeki Markdown dosyasını seçin. Vox.md hedefin güvenle o kök içinde kaldığını doğrular.</p></div>
+        </div>
+
+        <p>Tam rota tarifi için bkz. <a href="/tr/blog/append-to-obsidian-daily-note-iphone/">Obsidian günlük notunun sonuna metin ve ses ekleyin</a>.</p>
+
+        <p><a href="/tr/blog/obsidian-capture-templates/">Gelen kutusu, günlük veya görev şablonu tarifi kullanın</a> girdi biçimlendirmesini öngörülebilir tutmak için.</p>
+
+        <h3 id="placement-templates">Yerleşim, başlıklar ve şablonlar</h3>
+        <ul>
+          <li><strong>Altında</strong> sona ekler; <strong>Top</strong> başa ekler; <strong>Başlık</strong> 1 ile 6 arasındaki seçili başlık düzeyinin altına ekler.</li>
+          <li>Başlık eksikse şunu seçin: <strong>hata göstermek</strong> veya <strong>Başlık oluşturma</strong>.</li>
+          <li>Kasadan canlı Markdown şablon dosyası, yeniden kullanılabilir Girdi Şablonu veya özel önek ve sonek metni kullanın.</li>
+          <li>Girdi biçimlendirmesi şunları destekler: <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>, ve <code>{location}</code>.</li>
+          <li>Varsayılan ekler alt klasörü: <code>attachments</code>.</li>
+          <li><strong>Geri Koruma</strong>, varsayılan olarak kapalıdır; görünür bir <code>vox-capture</code> HTML yorumunu, yinelenen yeniden denemeleri algılayabilmek için.</li>
+          <li>Vox.md mutlak yolları, ters eğik çizgileri, dizin geçişini, güvensiz adları ve sembolik bağlantıyla kök dışına çıkmayı reddeder.</li>
+        </ul>
+
+        <h3 id="capture-overrides">Tek yakalamalık geçersiz kılmalar</h3>
+        <p>Hedef kontrolü Rota Varsayılanı&#x27;nı kullanabilir, bu yakalamayı Üst veya Alt konuma yerleştirebilir, tek seferlik Girdi Şablonu uygulayabilir veya aynı kasada başka not seçebilir. <strong>Rota hedefi varsayılanlarını kullan</strong> geçersiz kılmayı kaldırır. Bu tercihler yalnızca mevcut taslağı etkiler; rotayı asla değiştirmez.</p>
+
+        <h3 id="audio-export">Ses saklama ve uyumluluk dışa aktarımı</h3>
+        <ul>
+          <li>Ses kaydetme modları: <strong>Kapalı</strong>, <strong>Notun Yanında</strong>, veya <strong>Folders Çevrimiçi</strong>.</li>
+          <li>Markdown, saklanan sesi Üst veya Alt konuma şu tür Obsidian sözdizimiyle gömebilir: <code>![[recording.m4a]]</code>.</li>
+          <li>Birleşik Markdown hedefi olmayan eski doğrudan ses yapılandırmalarında, <strong>Notları Dosyalara Kaydet</strong> TXT, MD, JSON ve YAML; Yeni Dosya veya Sona Ekle; model ve dil dahil dosya adı belirteçleri; Markdown şablonları; Obsidian Bases seçenekleri; seçilebilir YAML özellikleri ve isteğe bağlı şunu destekler: <code>.md</code> YAML uzantısı.</li>
+          <li>Uyumluluk dışa aktarma ayarları yalnızca rotada birleşik Yakalama hedefi bulunmadığında doğrudan ses işlemleri için geçerlidir.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="models">
+        <div class="docs-section-label">04 / Modeller ve Ses Dökümü</div>
+        <h2>Sistem arka ucu veya isteğe bağlı yerel model seçin</h2>
+        <p>Tüm ses dökümü Apple cihazında çalışır. iOS varsayılanı Otomatik&#x27;tir. İsteğe bağlı Whisper ve Parakeet model dosyaları yalnızca talep ettiğinizde indirilir; seçilebilir, indirme sırasında iptal edilebilir veya sonradan silinebilir.</p>
+
+        <p><a href="/tr/blog/offline-transcription-iphone-markdown/">Çevrimdışı döküm iş akışı hazırlayın</a> yerel arka uç ve yazılabilir hedefle.</p>
+
+        <h3 id="model-options">Kullanılabilir ses dökümü seçenekleri</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Seçenek</th><th>Yaklaşık boyut</th><th>En uygun seçenek</th></tr></thead>
+            <tbody>
+              <tr><td>Otomatik</td><td>Sistem tarafından yönetilen</td><td>Desteklenen iOS 26 cihazı ve dilde Apple Speech&#x27;i tercih eder; yalnızca açıkça indirdiğiniz yerel modele geri döner.</td></tr>
+              <tr><td>Whisper Tiny</td><td>75 MB</td><td>En küçük indirme ve en hızlı Whisper seçeneği.</td></tr>
+              <tr><td>Whisper Base</td><td>142 MB</td><td>Dengeli küçük yerel model; eski Mac varsayılanı.</td></tr>
+              <tr><td>Whisper Small</td><td>466 MB</td><td>Daha fazla depolama ve işleme maliyetiyle daha yüksek doğruluk.</td></tr>
+              <tr><td>Whisper Medium</td><td>1.5 GB</td><td>Daha büyük çok dilli Whisper modeli.</td></tr>
+              <tr><td>Whisper Large v3 Turbo</td><td>1.6 GB</td><td>Kullanılabilir en büyük Whisper seçeneği.</td></tr>
+              <tr><td>Parakeet v2</td><td>~800 MB</td><td>İngilizce için optimize edilmiş Core ML/FluidAudio modeli.</td></tr>
+              <tr><td>Parakeet v3</td><td>~800 MB</td><td>25 dili destekleyen Core ML/FluidAudio modeli.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="automatic-model">Otomatik nasıl çalışır?</h3>
+        <ul>
+          <li>Desteklenen iOS 26 cihazında Otomatik, seçili dil için Apple&#x27;ın sistemce yönetilen Speech tanıyıcısını kontrol eder; gerektiğinde dil varlığını hazırlar.</li>
+          <li><strong>Sistem Dili</strong> cihaz dilini izler. Kayıt başka dildeyse o dili açıkça seçin.</li>
+          <li>Otomatik, Whisper veya Parakeet yedeğini asla sessizce indirmez. Yalnızca önceden indirmeyi seçtiğiniz modeli kullanabilir.</li>
+          <li>Canlı Apple Speech, eklenmesi güvenli kesinleşmiş metni hâlâ değişebilen geçici metinden ayırır.</li>
+          <li>Açıkça seçilen Whisper ve Parakeet, bölüm bittikten sonra toplu döküm kullanır.</li>
+        </ul>
+
+        <h3 id="model-languages">Diller</h3>
+        <ul>
+          <li><strong>Whisper:</strong> Otomatik Algıla, İngilizce, İspanyolca, Fransızca, Almanca, İtalyanca, Portekizce, Felemenkçe, Lehçe, Rusça, Çince, Japonca, Korece, Arapça, Hintçe, Türkçe, Vietnamca, Tayca, Ukraynaca, İsveççe, Danca, Norveççe ve Fince.</li>
+          <li><strong>Otomatik:</strong> Apple ilgili yerel ayarı desteklediğinde Sistem Dili ve Whisper için açıkça listelenen diller.</li>
+          <li><strong>Parakeet v2:</strong> İngilizce.</li>
+          <li><strong>Parakeet v3:</strong> Bulgarca, Hırvatça, Çekçe, Danca, Felemenkçe, İngilizce, Estonca, Fince, Fransızca, Almanca, Yunanca, Macarca, İtalyanca, Letonca, Litvanca, Maltaca, Lehçe, Portekizce, Rumence, Slovakça, Slovence, İspanyolca, İsveççe, Rusça ve Ukraynaca. Parakeet iş akışında dil otomatik algılanır.</li>
+        </ul>
+
+        <h3 id="parakeet-autostop">Parakeet klavye otomatik durdurma</h3>
+        <p>İsteğe bağlı yaklaşık 1 MB boyutunda <strong>Ses Durumu Deteksiyonu</strong> modeli, açıkça seçilmiş Parakeet v2 veya v3 klavye kaydını sessizlikten sonra durdurabilir. Şunu etkinleştirin: <strong>Duraklamadan sonra Parakeet&#x27;i durdurun</strong> ve yaklaşık 0,5, 0,75, 1, 1,5 veya 2 saniye seçin. Yardımcı model kullanılabilir olduktan sonra varsayılan olarak 0,75 saniyelik duraklamayla etkindir. Otomatik ve Whisper, elle durdurulan iş akışları olarak kalır.</p>
+
+        <h3 id="audio-pipeline">Yerel ses davranışı</h3>
+        <ul>
+          <li>Whisper girdisi 16 kHz mono, 16 bit sese normalleştirilir.</li>
+          <li>Kalıcı iOS dinlemesi 10 dakikalık dairesel tampon kullanır; bölüm başladığında iki saniyelik ön kayıt ekler.</li>
+          <li>Whisper şunu kullanır: <code>whisper.cpp</code>; Parakeet FluidAudio ve Core ML kullanır. Whisper Mac&#x27;te Metal hızlandırmasını kullanır.</li>
+          <li>Model indirmeleri ağ bağlantısı gerektirir, ancak seçilen arka uç hazır olduktan sonra ses dökümü yerelde çalışır.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="keyboard">
+        <div class="docs-section-label">05 / iOS Klavyesi</div>
+        <h2>Zaten düzenlediğiniz metin alanına dikte edin</h2>
+        <p>Vox.md klavyesi; Mesajlar, Notlar, Mail, Safari, Slack ve standart iOS klavyesini kabul eden diğer uygulamalarda çalışır. KeyboardKit düzeninin üstünde ses araç çubuğu bulunur ve ana Vox.md uygulamasıyla özel paylaşılan App Group üzerinden iletişim kurar.</p>
+
+        <h3 id="keyboard-setup">Klavyeyi kurun</h3>
+        <ol class="docs-steps">
+          <li><strong>Vox.md&#x27;de ses dökümünü hazırlayın.</strong><span>Desteklenen cihazda Otomatik&#x27;i seçili tutun veya Ayarlar → Modeller&#x27;de Whisper ya da Parakeet indirip seçin.</span></li>
+          <li><strong>Klavyeyi ekleyin.</strong><span>iOS Ayarlar → Genel → Klavye → Klavyeler → Yeni Klavye Ekle yolunu açıp Vox.md&#x27;yi seçin.</span></li>
+          <li><strong>Tam Erişime İzin Ver&#x27;i etkinleştirin.</strong><span>Mevcut klavye iş akışı, paylaşılan App Group durumunu kullanıp ana uygulamayla kaydı koordine etmek için bunu gerektirir.</span></li>
+          <li><strong>Klavye değiştirin.</strong><span>Metin alanı açın, dünya tuşuyla Vox.md&#x27;yi seçip mikrofona dokunun.</span></li>
+        </ol>
+        <div class="docs-callout">
+          <strong>Tam Erişim burada ne yapar?</strong>
+          <p>iOS izni geniş kapsamlı adlandırır. Vox.md bunu cihazdaki uygulama/klavye iş akışı, paylaşılan durum ve isteğe bağlı dokunsal geri bildirim için kullanır. Vox.md tuş vuruşlarını, dikte metnini, dökümleri veya mikrofon sesini Vox.md sunucularına yüklemez. Bkz. <a href="/tr/privacy.html">Gizlilik Politikası</a>.</p>
+        </div>
+
+        <h3 id="keyboard-workflow">Ses araç çubuğu ve ekleme</h3>
+        <ul>
+          <li>Araç çubuğu mevcut arka ucu, durumu, kayıt süresini, canlı dalga biçimini ve mikrofon/durdurma eylemini gösterir.</li>
+          <li>Önceki ve sonraki kontrolleri, kullanılabilir indirilmiş arka uçlar arasında geçiş yapar.</li>
+          <li>Dinleme etkin değilse klavye Vox.md&#x27;yi bir kez açar, dinlemeyi başlatır ve sizi orijinal metin alanına geri döndürebilir.</li>
+          <li>Otomatik ile, siz konuşurken kesinleşen döküm parçaları eklenir; geçici kelimeler Apple tarafından kesinleştirilene kadar yalnızca görüntülenir.</li>
+          <li>Whisper veya Parakeet ile tamamlanan döküm, bölümü durdurduğunuzda veya otomatik durdurulduğunda eklenir.</li>
+          <li>Ekleme kesilir veya askıya alınırsa bekleyen metin kalıcı saklanır ve klavye bir sonraki göründüğünde yeniden denenir.</li>
+          <li>Araç çubuğu şu tür durumları bildirir: <em>Vox.md&#x27;yi açın</em>, <em>Transcribe etmek...</em>, ve <em>Tam Erişimi Etkinleştir</em>.</li>
+        </ul>
+
+        <h3 id="keyboard-customization">Klavye özelleştirme</h3>
+        <ul>
+          <li><strong>Dokunsal Geri Bildirim</strong> varsayılan olarak etkindir ve Vox.md Ayarlar&#x27;ında değiştirilebilir.</li>
+          <li>Uzun basmayla açılan alternatif karakter seçenekleri İngilizce, Almanca, İspanyolca, Fransızca, İtalyanca, Portekizce, Felemenkçe, İsveççe, Danca ve Norveççe için kullanılabilir.</li>
+          <li>Parakeet&#x27;i açıkça seçen kullanıcılar, Ayarlar → Modeller&#x27;den duraklamaya dayalı otomatik durdurma ekleyebilir.</li>
+          <li>15 dakikalık ücretsiz ses dökümü hakkı, uygulama kayıtları ve içe aktarımların yanı sıra klavye diktesi için de geçerlidir.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="system-integrations">
+        <div class="docs-section-label">06 / Sistem Entegrasyonları</div>
+        <h2>Paylaşım Sayfası, Ana Ekran, Kilit Ekranı veya Kestirmeler&#x27;den yakalama başlatın</h2>
+
+        <h3 id="share-extension">Paylaşım Uzantısı</h3>
+        <p>iOS Paylaşım Sayfası eyleminin adı: <strong>Vox.md&#x27;ye Kaydet</strong>. Paylaşılan öğe ve varlık sınırları dahilinde metin, HTTP/HTTPS URL&#x27;leri, görseller, dosyalar ve filmler kabul eder. Rota ve hedef seçin, isteğe bağlı not ekleyip Gönder&#x27;e basın. Rota Mevcut konum kullanıyorsa Paylaş, meta veri çıktısı etkin olsun veya olmasın, bu Gönder eyleminde kaynak anına ait tek konum ister. İçerik özel App Group&#x27;ta hazırlanır, kalıcı kuyruğa alınır ve teslimat için Vox.md&#x27;de açılır. Teslimat ana uygulamayı gerektiriyorsa şunu kullanın: <strong>Vox.md&#x27;yi açın</strong>.</p>
+
+        <h3 id="widgets">Ana Ekran ve Kilit Ekranı araç takımları</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Hızlı yakalama</strong><p>Kalıcı Markdown taslağı açar. Orta ve büyük araç takımları Not, Fotoğraf, Ekran Görüntüsü, Kamera, Dosya, Bağlantı, Tarama, Çizim ve Ses eylemlerini sunar.</p></div>
+          <div><strong>Hızlı Rekor</strong><p>Yapılandırılmış kayıt akışını başlatır; desteklenen Ana Ekran ve Kilit Ekranı ailelerinde hazır, dinliyor veya devre dışı durumunu yansıtır.</p></div>
+          <div><strong>Araç takımı güvenlik ayarı</strong><p>Kaydı hemen başlatmak yerine kapalı durumunu göstermek için Ayarlar&#x27;daki Kilit Ekranı Kayıt Düğmesi&#x27;ni kapatın.</p></div>
+        </div>
+
+        <h3 id="control-center-live-activities">Denetim Merkezi, Canlı Etkinlikler ve Dynamic Island</h3>
+        <ul>
+          <li>iOS 18+ üzerinde Denetim Merkezi&#x27;nden kullanılabilir Vox.md yakalama ve kayıt kontrollerini ekleyin. Yüklü sürümünüzün sunduğu Rotayı ve seçenekleri yapılandırın.</li>
+          <li>Kayıt kontrolünü kullanmadan önce Vox.md&#x27;de mikrofon, model ve hedef kurulumunu tamamlayın. iOS ve yüklü uygulama sürümüne bağlı olarak kayıt, uygulamayı açabilir. Arka planda yakalamaya güvenmeden önce cihazınızda kısa bir kayıtla doğrulayın.</li>
+          <li>Bu <strong>Canlı Etkinlik İzleyicisi</strong> ayarı, Kilit Ekranı ve Dynamic Island&#x27;daki kayıt durumuyla Kaydet/Durdur eylemlerini kontrol eder.</li>
+          <li>Canlı Etkinlik durumları Kaydediliyor, sayaç, İşleniyor, Hazır, Kaydet ve Durdur&#x27;u içerir.</li>
+          <li>Canlı Etkinlikler iOS 17&#x27;den itibaren kullanılabilir; Denetim Merkezi kontrolleri iOS 18 gerektirir.</li>
+        </ul>
+
+        <h3 id="shortcuts">Kestirmeler ve Uygulama Amaçları</h3>
+        <p>Rotalar Kestirmeler ve desteklenen kontrollerde seçilebilir varlıklar olarak görünür. Mevcut Konumu Kullan etkinken doğrudan kuyruğa alınan metin, bağlantı ve dosya amaçları çağrı sırasında; Hızlı yakalama&#x27;yı açan eylemler Gönder sırasında; kayıt eylemleri kayıt durduğunda konum ister. Meta veri çıktısı bu zamanlamayı değiştirmez. Gözetimsiz bir <em>Sor</em> isteği konumu alamazsa kaynak anında kullanılamadığına dair sonuç yeniden alınmak yerine sonraki karar için saklanır. Yüklü Vox.md sürümünüzdeki eylemleri kullanın. Yakalama eylemleri şunlardır:</p>
+        <ul class="docs-columns">
+          <li>Hızlı Kapatma Açık</li>
+          <li>Kayıt tutma</li>
+          <li>Bir ekran görüntüsü</li>
+          <li>Tekstiği Kapatın Markdown</li>
+          <li>Link alın Markdown</li>
+          <li>Dosya Kapatma Markdown</li>
+        </ul>
+
+        <h3 id="action-button-recording">Eylem Düğmesi kayıt kurulumu</h3>
+        <p>Mikrofon izni vermek, döküm arka ucunu hazırlamak ve Rotayı hedefe bağlamak için Vox.md&#x27;yi bir kez açın. Kestirmeler&#x27;de kullanılabilir Vox.md yakalama eylemi ekleyip Rotanızı seçin. Ayarlar → Eylem Düğmesi → Kestirme altında atamadan önce, telefon açıkken kestirmeyi çalıştırıp amaçlanan nota kaydettiğini doğrulayın.</p>
+        <p class="docs-note">Kullanılabilir eylemler ve arka plan kayıt davranışı yüklü sürüme ve iOS&#x27;a bağlıdır. Cihazınızdaki Kestirmeler&#x27;de gösterilen eylemleri kullanın. Kayıt uygulamanın açık olmasını gerektiriyorsa kaydetmek için Vox.md&#x27;yi açın. Seçicide kestirme görünmesi kilitli telefondan kaydı garanti etmez.</p>
+
+        <h3 id="deep-links">Derin bağlantılar</h3>
+        <p>Vox.md şunu kaydeder: <code>voxboard://</code> URL şeması. Sorgu değerlerinde URL kodlaması kullanın.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table docs-code-table">
+            <thead><tr><th>URL</th><th>Davranış</th></tr></thead>
+            <tbody>
+              <tr><td><code>voxboard://capture</code></td><td>Kalıcı Hızlı yakalama düzenleyicisini açın.</td></tr>
+              <tr><td><code>voxboard://capture?action=photos</code></td><td>Fotoğraf seçicisini açın. Diğer eylemler: <code>screenshots</code>, <code>camera</code>, <code>files</code>, <code>scan</code>, <code>sketch</code>, <code>link</code>, ve <code>voice</code>.</td></tr>
+              <tr><td><code>voxboard://capture?text=...</code></td><td>Sınırlandırılmış metinle taslak açın.</td></tr>
+              <tr><td><code>voxboard://capture?url=https%3A%2F%2F...</code></td><td>HTTP/HTTPS bağlantısıyla bir taslak açın.</td></tr>
+              <tr><td><code>voxboard://capture?route=...</code></td><td>Etkin bir Rota seçin. Desteklenen eylem, metin veya URL ile birleştirilebilir.</td></tr>
+              <tr><td><code>voxboard://capture-request?id=...</code></td><td>Sistem uzantısının veya amacın oluşturduğu kalıcı isteği üstlenin.</td></tr>
+              <tr><td><code>voxboard://listen</code></td><td>Klavye dinlemesini başlatma akışını açın.</td></tr>
+              <tr><td><code>voxboard://record</code></td><td>Dinlemeye yönlendirilen eski kayıt giriş noktası.</td></tr>
+              <tr><td><code>voxboard://widget-record</code></td><td>Eski araç takımı kayıt giriş noktası.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">Bilinmeyen veya yinelenen parametreler, bozuk UUID&#x27;ler, güvensiz rota tanımlayıcıları, HTTP olmayan URL&#x27;ler ve paylaşılan sınırı aşan metin reddedilir.</p>
+      </section>
+
+      <section class="docs-section" id="apple-watch">
+        <div class="docs-section-label">07 / Apple Watch</div>
+        <h2>Watch&#x27;ta yerel kaydedin, ardından iPhone ile teslim edin</h2>
+
+        <p><a href="/tr/blog/apple-watch-obsidian-voice-notes/">Apple Watch&#x27;tan Obsidian&#x27;a kurulum kılavuzunu izleyin</a> rota seçimi, aktarım ve teslimat kontrolleri için.</p>
+
+        <h3 id="watch-recording">Kayıt iş akışı</h3>
+        <ul>
+          <li>Watch uygulaması Hazır, Kaydediliyor, Duraklatıldı, Eşitleniyor, Kuyrukta, Döküm Oluşturuluyor, Kaydediliyor, Gönderildi ve İlgilenilmesi Gerekiyor durumlarını gösterir.</li>
+          <li>Kaydet, Duraklat/Sürdür, Durdur, İptal, Eşitle ve Yenile kontrollerini kullanın. Duraklatma, notu bölmeden düşüncelerinizi toparlamanızı sağlar — duraklatılan süre sayacı dondurur ve kayıttan çıkarılır. İptal, yerel kaydı eşitlemek yerine açıkça siler.</li>
+          <li>Kayıtlar yerelde günlüğe alınır; kesinti veya çökmelerden sonra kurtarılır.</li>
+          <li>iPhone teslimatı veya silmeyi doğrulayana kadar kayıt Watch&#x27;ta kalır.</li>
+          <li>Mevcut Konumu Kullan etkin ve normal Yakalama teslimatıyla yönlendirilen bir rota için Watch, kayıt durduğunda Watch kaynaklı tek konum ister ve gizlilik ayarları uygulanmış sonucu rota anlık görüntüsüyle aktarır. iPhone hiçbir zaman kendi konumunu bunun yerine koymaz. Yalnızca Kayıt, Markdown alanı olmadan ham ses dışa aktardığı için konumu atlar.</li>
+        </ul>
+
+        <h3 id="watch-presets">Watch&#x27;ta Rotalar</h3>
+        <p>Watch&#x27;tan etkin iPhone Rotası seçin: <strong>Rota</strong> kartı. Vox.md kayıtla birlikte güvenli bir anlık görüntü aktarır. iPhone kullanılamıyorsa istenen seçim beklemede kalır; son doğrulanmış rota etkin kalır.</p>
+
+        <h3 id="watch-queue">iPhone&#x27;daki Watch Kayıtları kuyruğu</h3>
+        <p>iPhone kuyruğu kayıt zamanını, süresini, rotayı, işleme durumunu ve teslimat eylemlerini gösterir. Başarısız öğeler yeniden denenebilir, başka bir rotaya atanabilir, silinebilir veya döküm olmadan yakalanabilir. Silme, saklanan sesi ve kuyruktaki teslimatı kaldırır.</p>
+
+        <h3 id="watch-recording-only">Yalnızca Kayıt çıktısı</h3>
+        <ul>
+          <li>Rotanın Çıktı ayarını şöyle ayarlayın: <strong>Yalnızca Kayıt</strong> M4A sesini döküm, yapay zekâ işlemesi veya döküm kotası kullanımı olmadan Dosyalar klasörüne kopyalamak için.</li>
+          <li>Varsayılan dosya adı şablonu: <code>recording-{timestamp}-{id8}</code>.</li>
+          <li>Rotayı kullanmadan önce iPhone&#x27;da kayıt klasörünü bir kez seçin.</li>
+          <li>Arka plan teslimatı iOS tarafından geciktirilebilir. Vox.md&#x27;yi zorla kapatmak, uygulama yeniden açılana kadar teslimatı engeller.</li>
+        </ul>
+
+        <h3 id="watch-complication">Komplikasyon ve araç takımı</h3>
+        <p>Bu <strong>Sesli Notlar</strong> komplikasyonu dairesel, dikdörtgen, satır içi ve köşe ailelerini destekler. Yerel Watch kaydını açar veya değiştirir; sayaç ya da duruma bağlı etiketler gösterir.</p>
+      </section>
+
+      <section class="docs-section" id="mac">
+        <div class="docs-section-label">08 / Mac Yardımcısı</div>
+        <h2>Aynı yakalama sistemini macOS&#x27;tan kullanın</h2>
+        <p>Mac uygulamasında Yakalama, Arşiv ve Ayarlar hedefleri vardır; iOS&#x27;ta kullanılan yerel model, rota, rota, dışa aktarma ve yeniden deneme mimarisini paylaşır.</p>
+
+        <h3 id="mac-workspace">Yakalama çalışma alanı</h3>
+        <ul>
+          <li>Markdown yazıp düzenleyin; dosya, görsel ve ses yapıştırın veya sürükleyip bırakın.</li>
+          <li>Dahili, harici veya Süreklilik Kamerası cihazlarından kamera girdisi kullanın.</li>
+          <li>Tarama veya PDF içe aktarın, fare, izleme dörtgeni veya bağlı tabletle çizim oluşturun; bağlantı, wikilink, bitiş tarihi ve metin dönüşümleri ekleyin.</li>
+          <li>Şununla kaydedin: <strong>Taslağa Ekle</strong> veya <strong>Hemen Gönder</strong>; isterseniz taslak modunda Sesi saklayın.</li>
+          <li><strong>Duraklat</strong> ve <strong>Sürdür</strong> durum çubuğundan mikrofon kaydını. Duraklatılan ses dışarıda tutulur; böylece tek son not parçalar halinde kaydedilebilir. Toplantı yakalama duraklatılamaz.</li>
+          <li>Yerel ses dökümü için ses veya video içe aktarın.</li>
+          <li>Yakalamayı Gönder için Command-Return tuşlarına basın. Mevcut Konumu Kullan etkin bir rota, meta veri çıktısı etkin olsun veya olmasın, Gönder sırasında veya kayıt durduğunda Mac kaynaklı tek konum ister.</li>
+          <li>Hedef kurulum başlığı ve rota denetçisi, seçili rotanın çözümlenen notunu ve yerleşimini gösterir.</li>
+        </ul>
+
+        <h3 id="mac-meeting">Ayrı ses kanallarıyla toplantı yakalama</h3>
+        <p>Girdi modu seçicisini şundan değiştirin: <strong>Mikrofon</strong> şuraya: <strong>Toplantı</strong> Mac&#x27;inizde uygulamanın çaldığı sesi ve kendi mikrofonunuzu iki ayrı temiz ses kanalı olarak kaydetmek için. Vox.md ScreenCaptureKit&#x27;i tek uygulama modunda kullanır; tam olarak bir uygulama seçersiniz ve Vox.md&#x27;nin kendisi asla yakalanmaz.</p>
+        <ul>
+          <li>Kayıt sırasında durum çubuğu canlı sistem ve mikrofon seviye göstergelerini, kaynak başına durumu ve yakalama uyarılarını gösterir.</li>
+          <li>İki ses kanalı da kurtarma bildirimiyle birlikte kalıcı parçalar halinde yazılır; böylece duran akış, çıkarılan mikrofon veya zorla kapatma gibi kesintiler güvenle sonlandırılır ve toplantının dökümü yine oluşturulabilir. Kesilen oturumlar, kayıt kuyruğu bir sonraki kez devam ettiğinde otomatik kurtarılır.</li>
+          <li>Durdurduktan sonra her kanal cihazda ayrı dökülür ve sonuçlar ortak zaman çizelgesinde birleştirilir: mikrofonunuz şöyle görünür: <strong>Siz</strong>, uygulama ses kanalı ise uzaktaki konuşmacı olarak etiketlenir. İsteğe bağlı konuşmacı tanımlama, birden fazla uzak sesi ayrıca ayırabilir.</li>
+          <li>İki kanalın oynatma karışımı kaydın sesi olarak tutulur; tamamlanan döküm diğer kayıtlar gibi Rota, Taslağa Ekle veya Hemen Gönder ve pano ayarlarınızı izler.</li>
+        </ul>
+
+        <h3 id="mac-keybinds">Genel tuş atamaları</h3>
+        <p>Ayarlar → Genel Tuş Atamaları, şunlara kısayol atayabilir: <strong>Clipboard için yorumlar</strong>, <strong>Seçili Rota</strong>, veya herhangi bir etkin rota. Kısayollar varsayılan olarak kapalıdır; değiştirici olmayan bir tuşla birlikte Control, Option veya Command gerektirir, Shift de içerebilir ve çakışmaları reddeder. Kaydı durdurmak için etkin kısayola tekrar basın.</p>
+        <div class="docs-callout docs-callout-neutral">
+          <p><strong>Clipboard için yorumlar</strong> not, Arşiv öğesi veya saklanan ses oluşturmaz. Herhangi bir Mac uygulamasına hızlı dikte için tasarlanmıştır.</p>
+        </div>
+
+        <h3 id="mac-menu-bar">Menü çubuğu ve uygulama görünürlüğü</h3>
+        <ul>
+          <li>Görünürlük seçenekleri: <strong>Dock + Menü Bar</strong> (varsayılan), <strong>Menü Bar</strong>, <strong>Dock Tek</strong>, ve <strong>gizli</strong>.</li>
+          <li>Menü çubuğu kayıt, döküm ve dışa aktarma durumunu bildirir.</li>
+          <li>Menü eylemleri Kaydı Başlat, Durdur + Döküm Oluştur, Ses İçe Aktar…, Son Dökümü Kopyala, Son Dışa Aktarımı Göster, Rota seçimi, Yakalamayı Göster, Arşivi Göster, Veri Klasörünü Göster ve Vox.md&#x27;den Çık seçeneklerini içerir.</li>
+          <li>Tıklanabilir kontrollerin üzerinde klavye ipuçlarını göstermek için Mac uygulamasında Control-B tuşlarına basın.</li>
+        </ul>
+
+        <h3 id="mac-history">Mac geçmişi ve modelleri</h3>
+        <p>Yerel geçmişi arayın, yeniden yükleyin, temizleyin, kopyalayın veya silin; temizlenmiş ve ham döküm ayrıntılarını açın; teslim edilen notu Finder&#x27;da gösterin. Modeller ekranı Whisper veya Parakeet modellerini indirir, seçer ve siler; döküm dilini değiştirir. Whisper, desteklenen Mac&#x27;lerde Metal hızlandırmasını kullanır.</p>
+      </section>
+
+      <section class="docs-section" id="history-settings">
+        <div class="docs-section-label">09 / Arşiv, Ayarlar ve Gizlilik</div>
+        <h2>Çalışmalarınızı kurtarın, yerel verilerinizi yönetin ve sınırsız kullanımı açın</h2>
+
+        <h3 id="history">iOS&#x27;ta Birleşik Arşiv</h3>
+        <ul>
+          <li>Arşiv, yerel ses dökümlerini ve Yakalama teslimat kayıtlarını aranabilir tek listede birleştirir.</li>
+          <li>Ham metin, temizlenmiş metin, başlıklar, etiketler ve kategorilerde arayın; yenilemek için çekin.</li>
+          <li>Temizlenmiş veya ham döküm metnini kopyalayın, döküm meta verilerini ve metnini düzenleyin ya da paylaşım sayfasından Markdown kopyası dışa aktarın.</li>
+          <li>Tek bir dökümü silin veya tüm yerel geçmişi temizleyin. Geçmişi temizlemek, hedefinize zaten yazılmış Markdown notlarını veya ekleri silmez.</li>
+          <li>Kuyruktaki yakalamaları yeniden deneyin; genel kaynak, rota, hedef, not yolu, ek sayısı, zaman, sonuç ve hata kategorisini inceleyin.</li>
+          <li>Döküm düzenleme Başlık, Etiketler, Kategori, Temizlenmiş metin ve Ham döküm alanlarını içerir.</li>
+        </ul>
+
+        <h3 id="stats">Özel faaliyetler devletleri</h3>
+        <p>Kullanımınızın ömür boyu özetini görmek için Ayarlar → Etkinlik → İstatistikler&#x27;i açın: toplam kayıt ve yakalama, kaydedilen süre ve ek sayısı; son yedi gün grafiği ve yakalamaların kaynaklara göre dağılımı (uygulama, klavye, Paylaşım Sayfası, araç takımları, Kestirmeler, Apple Watch, Mac, derin bağlantılar, dosya içe aktarma ve ses).</p>
+        <ul>
+          <li>İstatistikler yalnızca teslim edilen yakalamaları sayar; yeni etkinlikten sonra yenilemek için çekin.</li>
+          <li>Kayıt defteri cihazınızda kalır; yakalanan içeriği, dosya adlarını veya hedefleri saklamaz.</li>
+        </ul>
+
+        <h3 id="settings-map">Ayarlar haritası</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Bölüm</th><th>Kontroller</th></tr></thead>
+            <tbody>
+              <tr><td>Vox.md Sınırsız</td><td>Ücretsiz kullanım durumu, ömür boyu kilit açma ve satın alımı geri yükleme.</td></tr>
+              <tr><td>Özelleştirme</td><td>Modeller; Rotalar; Yakalama Çubuğu eylemlerinin görünürlüğü ve sırası.</td></tr>
+              <tr><td>Klavye</td><td>Dokunsal Geri Bildirim.</td></tr>
+              <tr><td>Kilit Ekranı</td><td>Canlı Etkinlik İzleyicisi ve Kilit Ekranı Kayıt Düğmesi.</td></tr>
+              <tr><td>Hakkında</td><td>Varsayılan ses dökümü, Whisper, Parakeet, cihazda işleme, gizlilik, uygulama sürümü ve Apple Intelligence kullanılabilirliği.</td></tr>
+              <tr><td>Geri Bildirim</td><td>Isolated Tech Discord&#x27;una katılın veya tanılama geri bildirimi e-postası oluşturun.</td></tr>
+              <tr><td>Hata Ayıklama</td><td>Yerel hata ayıklama günlüğünü görüntüleyin.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Sürüm notları güncellemeden sonra görünebilir; Watch eşitleme, Mac genel tuş atamaları, rota simgeleri, Kilit Ekranı kontrolleri, rota yönlendirme, ses kuralları ve son işleme gibi güncel özellikleri açıklar.</p>
+
+        <h3 id="pricing-limits">Ücretsiz kullanım ve ömür boyu kilit açma</h3>
+        <ul>
+          <li>Ücretsiz kullanım şunları içerir: <strong>15 dakikalık ses dökümü</strong> ve <strong>10 başarılı Yakalama teslimatı</strong>.</li>
+          <li>Ses dökümü süresinden zaten düşülen bir döküm, Markdown&#x27;a yönlendirildiğinde ayrı Yakalama hakkını ayrıca tüketmez.</li>
+          <li>Başarısız yazmalar ve idempotent yeniden denemeler başarılı Yakalama teslimatı tüketmez.</li>
+          <li>Sınırsız, abonelik, yenileme veya reklam olmadan ömür boyu geçerli tek seferlik satın alımdır. Yerel App Store fiyatı esastır; ABD fiyatları Bireysel $19.99, Aile $39.99 ve Aile Yükseltmesi $19.99 olup diğer mağazalarda alım gücüne göre fiyatlandırma uygulanır.</li>
+          <li>Satın Alımı Geri Yükle, uygun satın alımı kurtarır. Koşulları karşılayan eski ücretli sürümlerin kullanıcıları sınırsız kullanımı korur.</li>
+          <li>İçeriksiz App Group defteri, yerel uygulama verileri durduğu sürece yeniden denemelerde iki kez sayılmayı önler. Anahtar Zinciri&#x27;nde saklanmaz; yerel uygulama verilerini kaldırmak yeni ücretsiz hak başlatır.</li>
+        </ul>
+
+        <h3 id="privacy-data">Neler yerelde kalır?</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Yakalanan içerik</strong><p>Taslaklar, metinler, bağlantılar, şablonlar, rotalar, ekler, ses, OCR ve dökümler Vox.md sunucularına gönderilmez.</p></div>
+          <div><strong>İşleme</strong><p>Apple Speech, Whisper, Parakeet, Vision OCR ve desteklenen Apple Intelligence işlemesi cihazda çalışır.</p></div>
+          <div><strong>Hedefiniz</strong><p>Tamamlanan dosyalar yalnızca seçtiğiniz klasöre gider. Üçüncü taraf dosya sağlayıcısı bunları kendi koşullarıyla eşitleyebilir.</p></div>
+        </div>
+        <ul>
+          <li>Başarılı teslimattan sonra kurtarılabilir Yakalama istekleri içeriksiz alındılara dönüşür; tamamlanmış Watch kuyruk öğeleri yalnızca genel nihai teslimat alanlarını tutar. İkisi de koordinat, etiket, sağlayıcı URL&#x27;si, konum şablonu veya rota içeriği saklamaz.</li>
+          <li>Tamamlanmış Yakalama geçmişi teslimat meta verilerini saklar; not metni, URL, koordinat, konum etiketi veya şablonu, yer imi, mutlak yol ya da ek dosya adı saklamaz.</li>
+          <li>Bekleyen ve başarısız öğeler yalnızca yerel kurtarma için gerekenleri saklar; rota anlık görüntüsü ile gizlilik ayarlı konumu veya kullanılamama sonucu dahil olabilir.</li>
+          <li>Üretim ilk kullanım analizleri varsayılan olarak kapalıdır. Uygulama üçüncü taraf analiz SDK&#x27;sı, reklam ağı veya uygulamalar arası izleyici içermez.</li>
+          <li>Düzenleyici, taslak içeriği veya tanımlayıcı göndermeden ZenQuotes&#x27;tan önbelleğe alınmış ilham verici alıntılar getirir.</li>
+        </ul>
+        <p>Veri işleme, saklama ve üçüncü taraf hizmetlerinin tüm ayrıntıları için şunu okuyun: <a href="/tr/privacy.html">Gizlilik Politikası</a>.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">10 / Sorun Giderme</div>
+        <h2>Yaygın kurulum ve teslimat sorunları</h2>
+        <div class="docs-troubleshooting">
+          <details open>
+            <summary>Yakalama gönderilemiyor</summary>
+            <p>Hedef kontrolünü açıp seçili Rotayı yapılandırın. Klasör taşınmışsa veya erişim süresi dolmuşsa kasayı/klasörü yeniden seçin. Kuyruktaki işler Arşiv&#x27;de kullanılabilir kalır.</p>
+          </details>
+          <details>
+            <summary>Klavye Tam Erişimi Etkinleştir diyor</summary>
+            <p>iOS Ayarlar → Genel → Klavye → Klavyeler → Vox.md yolunu açın ve Tam Erişime İzin Ver&#x27;i etkinleştirin. Vox.md&#x27;nin paylaşılan dinleme iş akışını sürdürebilmesi için uygulamaya bir kez dönün.</p>
+          </details>
+          <details>
+            <summary>Otomatik kullanılamıyor</summary>
+            <p>Apple Speech Otomatik, desteklenen iOS 26 cihazı ve dil gerektirir. Whisper veya Parakeet modeli seçip indirin; sonra açıkça seçin veya kullanıcının onayladığı yedek olarak kullanılabilmesi için Otomatik&#x27;e dönün.</p>
+          </details>
+          <details>
+            <summary>Döküm başarısız</summary>
+            <p>Seçili modelin tamamen indirildiğini ve dilin uygun olduğunu doğrulayın. Vox.md mümkün olduğunda kurtarılabilir kaynak sesi korur; böylece başka bir model seçip yeniden deneyebilirsiniz.</p>
+          </details>
+          <details>
+            <summary>Başlık rotası başarısız</summary>
+            <p>Rotanın hedefini düzenleyip başlık metnini ve düzeyini doğrulayın. Teslimat durmak yerine eksik başlığı oluşturacaksa Başlık Oluştur&#x27;u seçin.</p>
+          </details>
+          <details>
+            <summary>Watch kaydı kuyrukta</summary>
+            <p>iPhone&#x27;da Vox.md&#x27;yi, ardından Watch Kayıtları&#x27;nı açın. Yenileyin veya yeniden deneyin, istendiğinde geçerli rota seçin; arka plan devri için uygulamayı yüklü ve kullanılabilir tutun. Zorla kapatma yeniden açılana kadar arka plan teslimatını engeller.</p>
+          </details>
+          <details>
+            <summary><code>{location}</code> boş işlenir</summary>
+            <p>Teslimatı yapan rotada Mevcut Konumu Kullan&#x27;ı açın; algılanan girdi önekleri, sonekleri ve yeniden kullanılabilir Girdi Şablonları için düzenleyicinin tek dokunuşluk düzeltmesi bunu meta veriyi etkinleştirmeden yapar. Canlı kasa şablon dosyaları elle rota kurulumu gerektirir. İzin kullanılamıyorsa veya yakalama konumsuz sürerse belirteç bilerek boş işlenir. Bkz. <a href="/tr/docs/location/">tam konum kılavuzu</a>.</p>
+          </details>
+          <details>
+            <summary>Rota konumu kullanılamıyor</summary>
+            <p>Yeniden denemeyi yalnızca orijinal etkileşimli Gönder&#x27;i hâlâ çözümlerken kullanın. Bunun yerine iptal edebilir, bir kez konumsuz gönderebilir veya rota için her zaman konumsuz gönderebilirsiniz. Kayıtlı tercihi rotanın Konum ayarlarında sıfırlayın. Kuyruktaki gözetimsiz istek orijinal kullanılamama sonucunu korur; yeni konum almaz.</p>
+          </details>
+        </div>
+        <div class="docs-callout docs-support-callout">
+          <strong>Hâlâ takıldınız mı?</strong>
+          <p>Ayarlar → Hata Ayıklama Günlüğünü Görüntüle yolunu açıp Geri Bildirim Gönder&#x27;i kullanın; böylece uygulama sürümü, platform, işletim sistemi ve cihaz ayrıntıları eklenebilir. Şuna da katılabilirsiniz: <a href="https://discord.gg/RaQYS4t6gn">Isolated Tech Discord sunucusu</a>.</p>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/tr/developers">Geliştiriciler</a></li>
+        <li><a href="/tr/about">Hakkında</a></li>
+        <li><a href="/tr/contact">İletişim</a></li>
+        <li><a href="/tr/">Ana Sayfa</a></li>
+        <li><a href="/tr/docs/" aria-current="page">Belgeler</a></li>
+        <li><a href="/tr/blog/">Blog yazıları</a></li>
+        <li><a href="/tr/privacy.html">Gizlilik</a></li>
+        <li><a href="/tr/terms.html">Koşullar</a></li>
+        <li><a href="/llms.txt">llms.txt</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Destek</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_tr_60877eba17c1">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Eksiksiz özellik belgeleri · Yerel öncelikli yakalama.</div>
+    </div>
+  <details class="language-switcher"><summary>Dil</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr" aria-current="page">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

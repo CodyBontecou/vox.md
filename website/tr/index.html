@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="tr" dir="ltr" data-search-section="Bölüm" data-search-guide="Kılavuz" data-search-empty="“{query}” için sonuç yok">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone ve Apple Watch&#x27;ta Obsidian için hızlı yakalama | Vox.md</title>
+  <meta name="description" content="iPhone&#x27;da metinleri, bağlantıları, fotoğrafları, dosyaları, taramaları, çizimleri ve özel sesli notları Obsidian kasalarına veya yerel Markdown dosyalarına yakalayın.">
+  <link rel="canonical" href="https://vox.isolated.tech/tr/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Dil modelleri için Vox.md belgeleri">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="iPhone ve Apple Watch&#x27;ta Obsidian için hızlı yakalama | Vox.md">
+  <meta property="og:description" content="Obsidian&#x27;ı açmadan her fikri doğru kasaya, nota veya başlığa gönderin. Ses dökümü cihazınızda kalır.">
+  <meta property="og:url" content="https://vox.isolated.tech/tr/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="iPhone ve Apple Watch&#x27;ta Obsidian için hızlı yakalama | Vox.md">
+  <meta name="twitter:description" content="Önce yakalayın; ardından hassas Markdown rotaları her şeyi doğru nota yerleştirsin.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Vox.md",
+  "applicationCategory": "ProductivityApplication",
+  "operatingSystem": "iOS 17.6+, iPadOS 17.6+, macOS 14+, watchOS 10+",
+  "description": "Metinler, bağlantılar, medya, belge taramaları, çizimler ve cihazda özel ses dökümüyle Obsidian kasaları ve yerel Markdown notları için hızlı yakalama.",
+  "url": "https://vox.isolated.tech/tr/",
+  "downloadUrl": "https://apps.apple.com/us/app/voxboard/id6758967337",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/",
+    "sameAs": [
+      "https://github.com/CodyBontecou"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "featureList": [
+    "Metinleri, bağlantıları, fotoğrafları, dosyaları, belge taramalarını, çizimleri ve sesi yakalayın",
+    "Obsidian kasalarına veya Dosyalar klasörlerine standart Markdown yazın",
+    "Yeni notlar oluşturun, dönen notları güncelleyin veya mevcut notları hedefleyin",
+    "En üste, en alta veya seçili başlığın altına ekleyin",
+    "Şablonlarda isteğe bağlı meta veri çıktısıyla tek seferlik Mevcut konum kullanın",
+    "Araç takımlarını, Kestirmeler'i, paylaşım uzantısını veya klavyeyi kullanın",
+    "Sesi yüklemeden cihazda metne dökün"
+  ],
+  "inLanguage": "tr"
+}
+</script>
+
+  <link rel="stylesheet" href="/geist.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://isolated.tech/#organization",
+  "name": "Isolated Tech",
+  "url": "https://isolated.tech/",
+  "sameAs": [
+    "https://github.com/CodyBontecou"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "müşteri desteği",
+    "email": "codybontecou@gmail.com",
+    "url": "https://vox.isolated.tech/tr/contact",
+    "availableLanguage": "İngilizce"
+  },
+  "inLanguage": "tr",
+  "description": "iPhone'da metinleri, bağlantıları, fotoğrafları, dosyaları, taramaları, çizimleri ve özel sesli notları Obsidian kasalarına veya yerel Markdown dosyalarına yakalayın."
+}
+</script>
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md Herkese Açık Bilgi API&#x27;si">
+<meta name="naver-site-verification" content="cae11a861102ae94853f1f7e773318e17525df3a">
+  <meta name="color-scheme" content="light">
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/InstrumentSerif-Italic-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/">
+</head>
+<body class="raw">
+<a class="skip-link" href="#main">İçeriğe atla</a>
+
+<nav aria-label="Ana gezinme">
+  <div class="r-wrap r-nav">
+    <a href="/tr/" class="r-logo" aria-label="Vox.md ana sayfası">
+      <span class="r-logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <span class="r-tab-current" aria-hidden="true">index.md</span>
+    <ul class="r-nav-links">
+      <li><a href="#how">how.md</a></li>
+      <li><a href="#capture">files.md</a></li>
+      <li><a href="#presets">routes.md</a></li>
+      <li><a href="#privacy">privacy.md</a></li>
+      <li><a href="/tr/docs/">docs/</a></li>
+      <li><a href="/tr/blog/">guides/</a></li>
+      <li><a href="/tr/compare/">compare/</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_tr_8a5edab28263">Ücretsiz indir</a>
+  <details class="language-switcher"><summary>Dil</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ar/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/" lang="tr" hreflang="tr" aria-current="page">Türkçe</a></li><li><a href="/uk/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+<main id="main">
+<section aria-labelledby="hero-title">
+  <div class="r-wrap r-hero">
+    <p class="r-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</p>
+    <div class="r-hero-body">
+      <div class="r-hero-copy">
+        <pre class="r-front" aria-label="Bir bakışta Vox.md">---
+app: Vox.md
+for: Obsidian &amp; any Markdown folder
+runs_on: [iPhone, iPad, Mac, Apple Watch]
+transcribes_on: <b>this device</b>
+writes_to: <b>a folder you pick</b>
+copies_on_our_servers: <b class="r-hl">0</b>
+---</pre>
+        <h1 class="r-h1" id="hero-title" aria-label="Düşünceleriniz, yerel bir dosyada."><span class="r-mark" aria-hidden="true">#</span>Düşünceleriniz, bir <span aria-hidden="true"><del>bulut</del> </span><span class="visually-hidden">yerel </span><span class="r-voice r-hl">dosyada.</span><span class="r-caret" aria-hidden="true"></span></h1>
+        <p class="r-hero-lead">iPhone, Mac ve Apple Watch&#x27;tan fikirleri Obsidian&#x27;a yakalayın: yazın, fotoğrafını çekin, tarayın, çizin veya sesli söyleyin. Vox.md cihazınızda döküm oluşturup düz Markdown&#x27;ı seçtiğiniz kasa veya Dosyalar klasörüne, belirlediğiniz not ve başlık altına doğrudan yazar.</p>
+        <div class="r-actions">
+          <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_tr_8a5edab28263">Vox.md&#x27;yi ücretsiz indirin</a>
+          <a href="/tr/blog/obsidian-quick-capture-iphone/" class="r-btn r-btn-line">Yakalama yöntemi seçin</a>
+        </div>
+        <p class="r-note">15 döküm dakikası + 10 Yakalama teslimatı ücretsiz · iOS 17.6+ · hesap yok</p>
+        <details class="desktop-download-qr">
+          <summary>iPhone&#x27;unuza indirmek için tarayın</summary>
+          <div class="download-qr-panel">
+            <a href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-kind="qr" aria-label="App Store&#x27;da Vox.md&#x27;yi açın" data-download-campaign="seo_home_qr">
+              <img src="/assets/download-qr.svg" alt="App Store&#x27;da Vox.md&#x27;yi açmak için QR kodu" width="176" height="176" decoding="async">
+            </a>
+            <p>App Store&#x27;da Vox.md&#x27;yi açmak için iPhone kameranızla tarayın.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="r-demo" aria-labelledby="demo-title">
+        <h2 class="visually-hidden" id="demo-title">Yakalamanın dönüştüğü şey</h2>
+        <div class="r-demo-tabs" role="tablist" aria-label="Bir yakalama seçin" hidden>
+          <button type="button" role="tab" id="demo-tab-voice" aria-controls="demo-voice" aria-selected="true">sesli not</button>
+          <button type="button" role="tab" id="demo-tab-link" aria-controls="demo-link" aria-selected="false" tabindex="-1">paylaşılan bağlantı</button>
+          <button type="button" role="tab" id="demo-tab-scan" aria-controls="demo-scan" aria-selected="false" tabindex="-1">taranmış sayfa</button>
+        </div>
+
+        <div class="r-demo-panel" id="demo-voice" role="tabpanel" aria-labelledby="demo-tab-voice">
+          <div class="r-said">
+            <p class="r-said-meta"><span>Verdiğiniz girdi</span><span>Ses · 0:03</span></p>
+            <div class="r-wave" aria-hidden="true"><span style="height:8px"></span><span style="height:14px"></span><span style="height:22px"></span><span style="height:30px"></span><span style="height:18px"></span><span style="height:10px"></span><span style="height:26px"></span><span style="height:34px"></span><span style="height:20px"></span><span style="height:12px"></span><span style="height:6px"></span><span style="height:16px"></span><span style="height:28px"></span><span style="height:24px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:20px"></span><span style="height:32px"></span><span style="height:26px"></span><span style="height:12px"></span><span style="height:18px"></span><span style="height:30px"></span><span style="height:22px"></span><span style="height:10px"></span><span style="height:6px"></span><span style="height:14px"></span><span style="height:24px"></span><span style="height:34px"></span><span style="height:28px"></span><span style="height:16px"></span><span style="height:10px"></span><span style="height:20px"></span><span style="height:26px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:18px"></span></div>
+            <p class="r-voice">“Dişçi randevusu almayı unutma.”</p>
+          </div>
+          <div class="r-pipe"><ul><li>bu cihazda metne döküldü</li><li>rota: <strong>Günlük Not · Tasks</strong></li><li>kullanılan ağ: <span class="r-hl">yok</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/2026-11-06.md</span><span>+ 1 satır</span></p>
+            <pre>## Tasks
+- Remember to book the dentist</pre>
+          </div>
+        </div>
+
+        <div class="r-demo-panel" id="demo-link" role="tabpanel" aria-labelledby="demo-tab-link" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>Verdiğiniz girdi</span><span>Paylaşım sayfası · Safari</span></p>
+            <p class="r-voice">Üç hafta önce okumayı düşündüğünüz, doğrudan Safari&#x27;den paylaşılan bağlantı.</p>
+          </div>
+          <div class="r-pipe"><ul><li>olduğu gibi kaydedilir</li><li>rota: <strong>Okuma listesi</strong></li><li>kullanılan ağ: <span class="r-hl">yok</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Inbox/Reading.md</span><span>+ 2 satır</span></p>
+            <pre>### 14:07
+- https://www.inkandswitch.com/local-first/</pre>
+          </div>
+        </div>
+
+        <div class="r-demo-panel" id="demo-scan" role="tabpanel" aria-labelledby="demo-tab-scan" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>Verdiğiniz girdi</span><span>Tarama · 1 sayfa</span></p>
+            <p class="r-voice">Bu sabahın, kamerayla taranmış defter sayfası.</p>
+          </div>
+          <div class="r-pipe"><ul><li>metin bu cihazda çıkarıldı</li><li>rota: <strong>Günlük sayfaları</strong></li><li>kullanılan ağ: <span class="r-hl">yok</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/Pages/2026-11-06 0912.md</span><span>+ 4 satır</span></p>
+            <pre>![[scan-2026-11-06-0912.jpg]]
+
+&gt; ship routing first.
+&gt; ask about the watch build</pre>
+          </div>
+        </div>
+        <p class="r-demo-foot">Örnekler açıklama amaçlıdır. Çıktı rotanıza ve ses dökümünüze bağlıdır.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-zero" id="privacy" aria-labelledby="privacy-title">
+  <div class="r-wrap r-zero-inner">
+    <div class="r-zero-copy">
+      <p class="r-file">## privacy.md</p>
+      <h2 id="privacy-title">0<small>bayt</small></h2>
+      <p>taslaklarınızın, eklerinizin, not yollarınızın, şablonlarınızın, yazılı metninizin, dökümlerinizin veya etkinleştirdiğiniz konumun hiçbiri Vox.md sunucularına veya analizlere ulaşmaz. Dosyalar yalnızca seçtiğiniz klasöre gider. Konum asla sürekli veya arka planda izlenmez.</p>
+    </div>
+    <dl class="r-ledger" aria-label="Vox.md&#x27;nin aldıkları">
+      <div><dt>yüklenen ses</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>yüklenen dökümler</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>taslaklar ve ekler</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>not yolları ve şablonlar</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>hesap gerekir</dt><span aria-hidden="true"></span><dd>hayır</dd></div>
+      <div><dt>arka plan konumu</dt><span aria-hidden="true"></span><dd>asla</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-section" id="how" aria-labelledby="how-title">
+  <div class="r-wrap r-stack">
+    <div class="r-head">
+      <p class="r-file">L041 · how.md</p>
+      <h2 class="r-h2" id="how-title"><span class="r-mark" aria-hidden="true">##</span>Üç durak. <span class="r-voice">Hiçbiri bizim değil.</span></h2>
+      <p class="r-lead">Geçici bir düşünce için kasa açmak, not bulmak ve doğru yeri seçmek fazla uğraştırır. Rotayı bir kez ayarlayın, sonra yakalayın.</p>
+    </div>
+    <ol class="r-stops">
+      <li class="r-stop"><p class="r-stop-meta"><span>01</span><span>klasörünüz</span></p><h3>Kasa bağlayın</h3><p>Bir Obsidian kasası veya Dosyalar&#x27;da yazılabilir herhangi bir klasör seçin. Vox.md zaten sahibi olduğunuz Markdown dosyalarıyla çalışır.</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>02</span><span>cebiniz</span></p><h3>Her şeyi yakalayın</h3><p>Yazın, bağlantı yapıştırın, medya veya dosya ekleyin, belge tarayın, çizin veya özel sesli not kaydedin. Ses tam orada metne dökülür.</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>03</span><span>dosyanız</span></p><h3>Rota onu dosyalar</h3><p>Not oluşturun, dönen notu güncelleyin veya mevcut notu hedefleyin. En üste, en alta veya başlık altına yerleştirin.</p></li>
+    </ol>
+    <p class="r-skip"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9A9A93" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.1 9.5 4.25 4.25 0 0 0 7 18z"/><path d="M3 3l18 18"/></svg><span><del>Durak 2.5: başkasının bulutu</del>. Atlanır. Eşitleme, sağlayıcının koşulları altında klasörünüzün zaten yaptığı işlemdir.</span></p>
+  </div>
+</section>
+
+<section class="r-section" id="capture" aria-labelledby="capture-title">
+  <span class="anchor" id="features" aria-hidden="true"></span>
+  <div class="r-wrap r-split">
+    <div class="r-stack" style="gap: 20px">
+      <p class="r-file">L077 · files.md</p>
+      <h2 class="r-h2" id="capture-title"><span class="r-mark" aria-hidden="true">##</span>Bu <span class="r-voice r-hl">sadece</span> dosyaları.</h2>
+      <p class="r-lead">Eklenti yok, Vox.md bulut hesabı yok, özel dosya biçimi yok. Vox.md okunabilir Markdown ve Obsidian tarzı bağlantıları kontrolünüzdeki klasörlere yazar; notlarınız hiçbir zaman uygulamaya bağımlı kalmaz.</p>
+      <ul class="r-inputs">
+        <li><code>.md</code><span>Standart Markdown olarak yazılı notlar ve ses dökümleri</span></li>
+        <li><code>[[ ]]</code><span>Obsidian&#x27;ın anladığı wikilink bağlantıları ve gömülü ekler</span></li>
+        <li><code>img</code><span>Çıkarılmış metinle fotoğraflar, dosyalar ve belge taramaları. <a href="/tr/blog/save-links-photos-obsidian-iphone/">Medya yakalama kılavuzu</a></span></li>
+        <li><code>url</code><span>Paylaşım yapabildiğiniz her yerden bağlantılar</span></li>
+        <li><code>draw</code><span>Düzenlenebilir çizimler</span></li>
+        <li><code>voice</code><span>Düzenleyiciden veya klavyeden özel ses; ses asla yüklenmez. <a href="/tr/blog/voice-notes-to-obsidian-iphone/">iPhone sesli not kılavuzu</a></span></li>
+        <li><code>---</code><span>Tarih, saat, kaynak ve tanımlayıcı belirteçleriyle yeniden kullanılabilir Markdown veya YAML</span></li>
+      </ul>
+    </div>
+    <div class="r-tree" role="img" aria-label="Üç yeni yakalaması vurgulanmış kasa klasör ağacı">
+      <p class="r-tree-head"><span>~/Obsidian/Second Brain</span><span>ls -R</span></p>
+      <ul aria-hidden="true">
+        <li>├── Inbox/</li>
+        <li>│   └── Reading.md <mark>just now</mark></li>
+        <li>├── Journal/</li>
+        <li class="old">│   ├── 2026-11-05.md</li>
+        <li>│   ├── 2026-11-06.md <mark>+ ## Tasks</mark></li>
+        <li>│   └── Pages/</li>
+        <li>│       └── 2026-11-06 0912.md <mark>scan</mark></li>
+        <li>├── Meetings/</li>
+        <li class="old">│   └── 2026-11-01.md</li>
+        <li>├── Projects/</li>
+        <li class="old">│   └── Ideas.md</li>
+        <li class="old">└── attachments/</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="r-section" id="presets" aria-labelledby="presets-title">
+  <span class="anchor" id="destinations" aria-hidden="true"></span>
+  <div class="r-wrap r-stack">
+    <div class="r-head">
+      <p class="r-file">L112 · routes.md</p>
+      <h2 class="r-h2" id="presets-title"><span class="r-mark" aria-hidden="true">##</span>Rotayı bir kez ayarlayın. <span class="r-voice">Sonra sadece konuşun.</span></h2>
+      <p class="r-lead">Rota, yakalamanın nasıl işlenip biçimlendirileceğini; kasa, not hedefi, yerleşim, ekler, yeniden deneme davranışı ve isteğe bağlı tek seferlik Mevcut konum ile birlikte hatırlar.</p>
+    </div>
+    <div class="r-table-box">
+      <table class="r-table">
+        <caption class="visually-hidden">Örnek rotalar</caption>
+        <thead><tr><th scope="col">Rota</th><th scope="col">Dosya</th><th scope="col">İçinde neresi?</th><th scope="col">Şu biçimde sarılır:</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Günlük Not · Tasks</th><td>Journal/{date}.md</td><td>## Tasks sonu</td><td>- {text}</td></tr>
+          <tr><th scope="row">Toplantı Notları</th><td>Meetings/{date}.md</td><td>## Notes altında</td><td>### {time} · {title}</td></tr>
+          <tr><th scope="row">Okuma listesi</th><td>Inbox/Reading.md</td><td>dosyanın başı</td><td>### {time}</td></tr>
+          <tr><th scope="row">Fikirler</th><td>Projects/Ideas.md</td><td>dosyanın sonu</td><td>&gt; {text}</td></tr>
+          <tr><th scope="row">Yeni not</th><td>Inbox/{timestamp}.md</td><td>yeni dosya</td><td>YAML ön bilgileri + gövde</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <dl class="r-targets">
+      <div><dt>Mevcut not <code>Projects/Ideas.md</code></dt><dd>Kasanızdaki mevcut bir belgeye eklemeye devam edin.</dd></div>
+      <div><dt>Dönen not <code>Journal/&#123;period&#125;.md</code></dt><dd>Günlük, haftalık, aylık, üç aylık veya yıllık notlar. <a href="/tr/blog/append-to-obsidian-daily-note-iphone/">Günlük notları ve başlık yerleşimini kurun.</a></dd></div>
+      <div><dt>Yeni not <code>Inbox/&#123;timestamp&#125;.md</code></dt><dd>Her yeni yakalama için temiz dosya oluşturun.</dd></div>
+      <div><dt>Tam yerleşim <code>Top · Bottom · Heading</code></dt><dd>Herhangi bir başlık düzeyinin altında; eksikse sizin için oluşturulur.</dd></div>
+      <div><dt>Tapınağın giriş <code>Markdown · YAML · Tokens</code></dt><dd>Tekrarlanan yakalamaları yeniden biçimlendirmeden tutarlı tutun.</dd></div>
+      <div><dt>Mevcut konum <code>&#123;location&#125;</code></dt><dd>Meta veri olmadan kaynak anına ait tek harita bağlantısı veya isteğe bağlı ön bilgiler ve satır içi alanlar. <a href="/tr/docs/location/">Kılavuzu okuyun.</a></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-section" id="everywhere" aria-labelledby="everywhere-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L140 · anywhere.md</p>
+    <h2 class="r-h2" id="everywhere-title"><span class="r-mark" aria-hidden="true">##</span>Düşünce nerede olursa <span class="r-voice">görünür</span></h2>
+    <ul class="r-pills" aria-label="Yakalama giriş noktaları">
+      <li>Klavye <small>her uygulama</small></li>
+      <li>Apple Watch <small>bileğiniz</small></li>
+      <li>Mac <small>hızlı yakalama</small></li>
+      <li>Paylaşım sayfası <small>her şey</small></li>
+      <li>Araç Takımları <small>ana ekran ve kilit</small></li>
+      <li>Denetim Merkezi <small>tek dokunuş</small></li>
+      <li>Kestirmeler <small>otomatikleştirin</small></li>
+    </ul>
+    <p class="r-lead"><a href="/tr/blog/apple-watch-obsidian-voice-notes/">Apple Watch sesli notlarını Obsidian&#x27;a ayarlayın</a>. Watch&#x27;ta kaydedin, ardından eşlenmiş iPhone&#x27;unuzla döküm oluşturup teslim edin.</p>
+  </div>
+</section>
+
+<section class="r-section" id="specs" aria-labelledby="specs-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L158 · specs.yml</p>
+    <h2 class="r-h2" id="specs-title"><span class="r-mark" aria-hidden="true">##</span>Dosyalar üzerine kurulu <span class="r-voice">koruyabilirsiniz</span></h2>
+    <dl class="r-yaml">
+      <div><dt>capture_types</dt><dd>Metin, bağlantılar, fotoğraflar, dosyalar, taramalar, çizimler ve ses</dd></div>
+      <div><dt>note_format</dt><dd>Standart Markdown</dd></div>
+      <div><dt>destinations</dt><dd>Obsidian kasaları ve yazılabilir Dosyalar klasörleri</dd></div>
+      <div><dt>note_targets</dt><dd>Yeni, dönen veya mevcut notlar</dd></div>
+      <div><dt>placement</dt><dd>En üste, en alta veya bir başlığın altına</dd></div>
+      <div><dt>rolling_periods</dt><dd>Günlük, haftalık, aylık, üç aylık ve yıllık</dd></div>
+      <div><dt>obsidian_syntax</dt><dd>Wikilink bağlantıları ve gömülü ekler</dd></div>
+      <div><dt>entry_formats</dt><dd>Yeniden kullanılabilir Markdown ve YAML şablonları</dd></div>
+      <div><dt>entry_points</dt><dd>Uygulama, araç takımları, Kestirmeler, paylaşım uzantısı, klavye, Apple Watch, Mac ve Denetim Merkezi</dd></div>
+      <div><dt>voice_processing</dt><dd>Cihazda Apple Speech, Whisper veya Parakeet</dd></div>
+      <div><dt>audio_uploads</dt><dd>Ses dökümü için yok</dd></div>
+      <div><dt>account</dt><dd>Gerekmez</dd></div>
+      <div><dt>platforms</dt><dd>iOS/iPadOS 17.6+, macOS 14+, watchOS 10+</dd></div>
+      <div><dt>location</dt><dd>İsteğe bağlı tek anlık konum; {location} meta verisiz çalışır; arka planda izleme yok</dd></div>
+      <div><dt>location_metadata</dt><dd>Ön bilgiler veya satır içi alanlar için ayrı tercih; tam varsayılanı veya Şehir yuvarlaması</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-dark" id="reviews" aria-labelledby="reviews-title">
+  <div class="r-wrap r-dark-inner">
+    <p class="r-file">L190 · reviews.md · from the App Store</p>
+    <h2 class="r-h2" id="reviews-title"><span class="r-mark" aria-hidden="true">##</span>Söylenen <span class="r-voice">hakkında</span> onu</h2>
+    <div class="r-quotes">
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5b29-4b3500000000">
+        <div>
+          <h3>Tam İhtiyacım Olan · <span role="img" aria-label="5 üzerinden 5 yıldız">★★★★★</span></h3>
+          <blockquote><p>“Bir süredir hızlıca sözlü not almanın, ekler eklemenin, yerel döküm oluşturmanın ve bir Obsidian klasörüne eşitlemenin yolunu arıyordum. Bu uygulama bunu kusursuz yapıyor.”</p></blockquote>
+          <figcaption><span class="review-author">SteamingCoax</span> · App Store yorumu · <time datetime="2026-08-11">11 Ağu 2026</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5bf7-fadc00000000">
+        <div>
+          <h3>Sessiz yakalama gücü · <span role="img" aria-label="5 üzerinden 5 yıldız">★★★★★</span></h3>
+          <blockquote>
+            <p>“Vox.md en çok kullandığım araçlardan biri oldu. Obsidian&#x27;a sesli notlar için edinmiştim; günlük yakalama akışımı sessizce dönüştürdü.</p>
+            <p>Yakalama ön ayarları sistemi harika — her ön ayarın kendi hedefi, şablonu ve yerleşimi var. Sesli notlarım tam istediğim gibi biçimlendirilmiş halde doğrudan doğru günlük nota ulaşıyor, hiç uğraştırmadan.”</p>
+          </blockquote>
+          <figcaption><span class="review-author">Eric Know</span> · App Store yorumu · <time datetime="2026-08-14">14 Ağu 2026</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5a77-5cb500000000">
+        <div>
+          <h3>Değeri Bilinmeyen, Gözden Kaçan, Unutulmayan · <span role="img" aria-label="5 üzerinden 5 yıldız">★★★★★</span></h3>
+          <blockquote><p>“2026&#x27;da en sevdiğim ve en çok kullandığım uygulamalardan biri haline hızla geliyor!”</p></blockquote>
+          <figcaption><span class="review-author">PromisedOne</span> · App Store yorumu · <time datetime="2026-08-08">8 Ağu 2026</time></figcaption>
+        </div>
+      </figure>
+    </div>
+    <p class="r-fine">Seçme App Store yorumları. Eric&#x27;in alıntısı kısaltılmıştır; ifadeler değiştirilmemiştir. <a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_tr_8a5edab28263">App Store yorumlarını okuyun <span aria-hidden="true">→</span></a></p>
+  </div>
+</section>
+
+<section class="r-section" id="faq" aria-labelledby="faq-title">
+  <div class="r-wrap r-faq">
+    <div class="r-head">
+      <p class="r-file">L214 · faq.md</p>
+      <h2 class="r-h2" id="faq-title" style="font-size: clamp(36px, 4.4vw, 60px)"><span class="r-mark" aria-hidden="true">##</span>Aç <span class="r-voice">sorular</span></h2>
+      <p class="r-lead">Vox.md doğrudan seçtiğiniz Markdown klasörleriyle çalışır. Obsidian doğal bir eşleşmedir ama zorunlu değildir. Yanıtı okumak için birini işaretleyin.</p>
+    </div>
+    <div class="r-faq-list">
+      <details>
+        <summary>Vox.md, Obsidian ile çalışır mı?</summary>
+        <p>Evet. Bir Rota oluşturup hedef olarak Obsidian kasanızı seçin. Vox.md standart Markdown&#x27;ı, wikilink bağlantılarını ve ek gömmelerini doğrudan kasaya yazar. Obsidian eklentisi gerektirmez. <a href="/tr/compare/vox-md-vs-obsidian-quick-capture/">Vox.md ile yerleşik Obsidian yakalamasını karşılaştırın.</a> <a href="/tr/blog/obsidian-daily-note-iphone/">Günlük nota yakalama iş akışı kurun.</a></p>
+      </details>
+      <details>
+        <summary>Neleri yakalayabilirim?</summary>
+        <p>Düzenleyici metin, web bağlantıları, fotoğraf, dosya, belge taraması, çizim ve ses kabul eder. Taramalar çıkarılmış metin içerebilir, ses yerelde dökülebilir.</p>
+      </details>
+      <details>
+        <summary>Yakalama nereye gidebilir?</summary>
+        <p>Her Rota, yeni not oluşturabilen, dönen günlük veya dönemsel notu güncelleyebilen ya da mevcut Markdown dosyasına yazabilen hedefe sahiptir. Tek bir yakalama, rotayı değiştirmeden geçici olarak başka not seçebilir.</p>
+      </details>
+      <details>
+        <summary>Vox.md başlığın altına ekleyebilir mi?</summary>
+        <p>Evet. Rota başa, sona veya bir ile altı arasındaki başlık düzeyinin altına ekleyebilir. Eksik başlığın teslimatı durdurmasını veya otomatik oluşturulmasını; yeni girdilerin doğrudan başlık altına mı yoksa bölüm sonuna mı geleceğini seçebilirsiniz.</p>
+      </details>
+      <details>
+        <summary>Obsidian olmadan kullanabilir miyim?</summary>
+        <p>Evet. Bir Rota, Dosyalar üzerinden sunulan herhangi bir yazılabilir klasörü kullanabilir. Çıktı, sıradan eklerle düz Markdown&#x27;dır; dolayısıyla notlar Vox.md&#x27;ye bağımlı kalmaz.</p>
+      </details>
+      <details>
+        <summary>Vox.md notlarımı veya sesimi yükler mi?</summary>
+        <p>Yakalanan içerik Vox.md sunucularına gönderilmez. Taslaklar ve ses işlemesi cihazda kalır; tamamlanan dosyalar seçtiğiniz klasöre yazılır. Klasör eşitleme sağlayıcısına aitse sağlayıcı kendi koşullarıyla işler. <a href="/tr/blog/offline-transcription-iphone-markdown/">Çevrimdışı kurulum gereksinimlerini kontrol edin.</a></p>
+      </details>
+      <details>
+        <summary>Meta veri eklemeden şablonda konum kullanabilir miyim?</summary>
+        <p>Evet. O Rotada Mevcut Konumu Kullan&#x27;ı açın, Konum Meta Verilerini Yaz&#x27;ı kapalı tutun ve şunu ekleyin: <code>{location}</code> girdi biçimlendirmesine. Vox.md, ön bilgi veya satır içi konum alanı eklemeden tek seferlik harita bağlantısı ekler. <a href="/tr/docs/location/">Konum kılavuzunun tamamını okuyun.</a></p>
+      </details>
+      <details>
+        <summary>Uygulama dışından yakalayabilir miyim?</summary>
+        <p>Evet. Vox.md araç takımları, Kestirmeler eylemleri, paylaşım uzantısı ve ses klavyesi içerir. Bu giriş noktaları aynı yerel yakalama sistemini besler.</p>
+      </details>
+      <details>
+        <summary>Vox.md&#x27;nin fiyatı nedir?</summary>
+        <p>Vox.md ücretsiz 15 dakikalık ses dökümü ve 10 başarılı Yakalama teslimatı içerir. Sınırsız döküm ve Yakalama, abonelik veya reklam olmadan ömür boyu geçerli tek seferlik satın alımla sunulur. Markdown&#x27;a gönderilen ses dökümleri ikinci bir Yakalama hakkı yerine döküm hakkını kullanır. App Store bölgenizin güncel fiyatını gösterir.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="r-cta" id="download" aria-labelledby="download-title">
+  <div class="r-wrap">
+    <div class="r-cta-card">
+      <h2 id="download-title">Sonraki düşüncenizi kaydedin: <span class="r-voice">bir dosyada.</span></h2>
+      <p>Kasa veya yerel klasörü bir kez bağlayın. Sonraki fikir doğrudan seçtiğiniz nota, başlığa ve biçime gidebilir.</p>
+      <div class="r-actions">
+        <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_tr_8a5edab28263">Vox.md&#x27;yi ücretsiz indirin</a>
+        <span class="r-note">Ücretsiz haklar · ömür boyu tek kilit açma · hesap gerekmez</span>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="r-wrap r-foot">
+    <span class="r-eof" aria-hidden="true">EOF</span>
+    <ul>
+      <li><a href="/tr/developers">Geliştiriciler</a></li>
+      <li><a href="/tr/about">Hakkında</a></li>
+      <li><a href="/tr/contact">İletişim</a></li>
+      <li><a href="/tr/docs/">Belgeler</a></li>
+      <li><a href="/tr/blog/">Kılavuzlar</a></li>
+      <li><a href="/tr/compare/">Karşılaştırın</a></li>
+      <li><a href="/tr/privacy.html">Gizlilik</a></li>
+      <li><a href="/tr/terms.html">Koşullar</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="mailto:codybontecou@gmail.com">Destek</a></li>
+      <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_tr_8a5edab28263">App Store</a></li>
+    </ul>
+    <p class="r-foot-copy">© 2026 Vox.md · Geliştiren <a href="https://codybontecou.com/">Cody Bontecou</a> şurada: <a href="https://isolated.tech/">Isolated Tech</a> · İçerik yükleme yok.</p>
+
+  <details class="language-switcher"><summary>Dil</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ar/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/" lang="tr" hreflang="tr" aria-current="page">Türkçe</a></li><li><a href="/uk/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+
+<script>
+/* Hero demo tabs. Without JavaScript the first example shows on its own. */
+(function () {
+  var list = document.querySelector('.r-demo-tabs');
+  if (!list) return;
+  var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+  function select(tab, focus) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { select(tab, false); });
+    tab.addEventListener('keydown', function (ev) {
+      var next = ev.key === 'ArrowRight' ? i + 1 : ev.key === 'ArrowLeft' ? i - 1 : ev.key === 'Home' ? 0 : ev.key === 'End' ? tabs.length - 1 : null;
+      if (next === null) return;
+      ev.preventDefault();
+      select(tabs[(next + tabs.length) % tabs.length], true);
+    });
+  });
+  list.hidden = false;
+})();
+</script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
