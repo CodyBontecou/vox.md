@@ -26,9 +26,13 @@
       item.link.setAttribute('aria-current', 'true');
       // Keep the active chip visible when the list scrolls horizontally (phone width).
       if (list && list.scrollWidth > list.clientWidth + 1) {
-        var l = item.link.offsetLeft - list.offsetLeft;
-        if (l < list.scrollLeft || l + item.link.offsetWidth > list.scrollLeft + list.clientWidth) {
-          list.scrollTo({ left: Math.max(0, l - 16), behavior: 'auto' });
+        // Geometry works with both LTR and RTL's negative scrollLeft values.
+        var linkBox = item.link.getBoundingClientRect();
+        var listBox = list.getBoundingClientRect();
+        if (linkBox.left < listBox.left) {
+          list.scrollBy({ left: linkBox.left - listBox.left - 16, behavior: 'auto' });
+        } else if (linkBox.right > listBox.right) {
+          list.scrollBy({ left: linkBox.right - listBox.right + 16, behavior: 'auto' });
         }
       }
     }
@@ -66,6 +70,13 @@
     var input = document.getElementById('docs-search-input');
     var results = document.getElementById('docs-search-results');
     if (!input || !results) return;
+    var labels = document.documentElement.dataset;
+    var searchLocale = document.documentElement.lang || 'en';
+    function foldCase(text) {
+      var folded = text.toLocaleLowerCase(searchLocale);
+      // Loose Turkish search also keeps literal English terms such as API findable.
+      return /^tr(?:-|$)/i.test(searchLocale) ? folded.replace(/ı/g, 'i') : folded;
+    }
 
     // Index every titled section and subsection on the page.
     var index = [];
@@ -86,28 +97,28 @@
       index.push({
         id: id,
         title: h.textContent.trim(),
-        group: level === 2 ? (group || 'Section') : group,
-        body: text.replace(/\s+/g, ' ').trim().toLowerCase()
+        group: level === 2 ? (group || labels.searchSection || 'Section') : group,
+        body: foldCase(text.replace(/\s+/g, ' ').trim())
       });
     });
     // Sidebar entries that leave the page (e.g. dedicated guides).
     Array.prototype.forEach.call(document.querySelectorAll('.docs-sidebar a:not([href^="#"]), .docs-category-card:not([href^="#"])'), function (a) {
       var title = (a.querySelector('strong') || a).textContent.trim();
       if (index.some(function (e) { return e.href === a.getAttribute('href'); })) return;
-      index.push({ href: a.getAttribute('href'), title: title, group: 'Guide', body: (a.textContent || '').toLowerCase() });
+      index.push({ href: a.getAttribute('href'), title: title, group: labels.searchGuide || 'Guide', body: foldCase(a.textContent || '') });
     });
 
     var matches = [];
     var selected = -1;
 
     function render(query) {
-      var q = query.trim().toLowerCase();
+      var q = foldCase(query.trim());
       results.innerHTML = '';
       selected = -1;
       if (!q) { close(); return; }
       var terms = q.split(/\s+/);
       matches = index.map(function (e) {
-        var t = e.title.toLowerCase();
+        var t = foldCase(e.title);
         var score = 0;
         for (var i = 0; i < terms.length; i++) {
           var term = terms[i];
@@ -121,7 +132,7 @@
       if (!matches.length) {
         var li = document.createElement('li');
         li.className = 'empty';
-        li.textContent = 'No matches for “' + query.trim() + '”';
+        li.textContent = (labels.searchEmpty || 'No matches for “{query}”').replace('{query}', function () { return query.trim(); });
         results.appendChild(li);
       }
       matches.forEach(function (m, i) {

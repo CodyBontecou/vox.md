@@ -1,38 +1,146 @@
-<!doctype html>
-<html lang="zh-Hans">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vox.md：快速记录到 Obsidian 与本地 Markdown</title><meta name="description" content="在 iPhone 上将文字、链接、照片、文件、扫描件、手绘和语音快速保存到 Obsidian 仓库或本地 Markdown。语音转写在设备上进行，笔记保存位置由你选择。">
-<meta name="robots" content="index,follow"><link rel="canonical" href="https://vox.isolated.tech/zh-hans/">
+<!DOCTYPE html>
+<html lang="zh-Hans" dir="ltr" data-search-section="部分" data-search-guide="指南" data-search-empty="没有与“{query}”匹配的结果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在 iPhone 和 Apple Watch 上快速采集到 Obsidian | Vox.md</title>
+  <meta name="description" content="在 iPhone 上，将文本、链接、照片、文件、扫描件、草图和私密语音笔记采集到 Obsidian 仓库或本地 Markdown 文件中。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hans/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供语言模型使用的 Vox.md 文档">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="在 iPhone 和 Apple Watch 上快速采集到 Obsidian | Vox.md">
+  <meta property="og:description" content="无需打开 Obsidian，就将每个想法送到正确仓库、笔记或标题下。语音转录留在设备上。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hans/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="在 iPhone 和 Apple Watch 上快速采集到 Obsidian | Vox.md">
+  <meta name="twitter:description" content="先采集，再让精确的 Markdown 路由把一切放入正确的笔记。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Vox.md",
+  "applicationCategory": "ProductivityApplication",
+  "operatingSystem": "iOS 17.6+, iPadOS 17.6+, macOS 14+, watchOS 10+",
+  "description": "快速采集到 Obsidian 仓库和本地 Markdown 笔记，支持文本、链接、媒体、文档扫描、草图，以及私密设备端语音转录。",
+  "url": "https://vox.isolated.tech/zh-hans/",
+  "downloadUrl": "https://apps.apple.com/us/app/voxboard/id6758967337",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/",
+    "sameAs": [
+      "https://github.com/CodyBontecou"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "featureList": [
+    "采集文本、链接、照片、文件、文档扫描件、草图和语音",
+    "将标准 Markdown 写入 Obsidian 仓库或文件文件夹",
+    "创建新笔记、更新滚动笔记，或定位现有笔记",
+    "插入顶部、底部或指定标题下",
+    "在模板中使用一次性目前位置，可选输出元数据",
+    "使用小组件、快捷指令、共享扩展或键盘",
+    "在设备上转录语音，不上传音频"
+  ],
+  "inLanguage": "zh-Hans"
+}
+</script>
+
+  <link rel="stylesheet" href="/geist.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://isolated.tech/#organization",
+  "name": "Isolated Tech",
+  "url": "https://isolated.tech/",
+  "sameAs": [
+    "https://github.com/CodyBontecou"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "客户支持",
+    "email": "codybontecou@gmail.com",
+    "url": "https://vox.isolated.tech/zh-hans/contact",
+    "availableLanguage": "英语"
+  },
+  "inLanguage": "zh-Hans",
+  "description": "在 iPhone 上，将文本、链接、照片、文件、扫描件、草图和私密语音笔记采集到 Obsidian 仓库或本地 Markdown 文件中。"
+}
+</script>
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md 公开信息 API">
+<meta name="naver-site-verification" content="cae11a861102ae94853f1f7e773318e17525df3a">
+  <meta name="color-scheme" content="light">
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/InstrumentSerif-Italic-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="alternate" hreflang="en" href="https://vox.isolated.tech/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/">
 <link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/">
 <link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/">
-<meta property="og:type" content="website"><meta property="og:site_name" content="Vox.md"><meta property="og:locale" content="zh_CN"><meta property="og:locale:alternate" content="en_US">
-<meta property="og:title" content="Vox.md：快速记录到 Obsidian 与本地 Markdown"><meta property="og:description" content="在 iPhone 上将文字、链接、照片、文件、扫描件、手绘和语音快速保存到 Obsidian 仓库或本地 Markdown。语音转写在设备上进行，笔记保存位置由你选择。"><meta property="og:url" content="https://vox.isolated.tech/zh-hans/"><meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
-<meta property="og:image:alt" content="Vox.md 产品预览">
-<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Vox.md：快速记录到 Obsidian 与本地 Markdown"><meta name="twitter:description" content="在 iPhone 上将文字、链接、照片、文件、扫描件、手绘和语音快速保存到 Obsidian 仓库或本地 Markdown。语音转写在设备上进行，笔记保存位置由你选择。"><meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png"><meta name="twitter:image:alt" content="Vox.md 产品预览">
-<link rel="icon" href="../favicon.ico">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Vox.md：快速记录到 Obsidian 与本地 Markdown", "description": "在 iPhone 上将文字、链接、照片、文件、扫描件、手绘和语音快速保存到 Obsidian 仓库或本地 Markdown。语音转写在设备上进行，笔记保存位置由你选择。", "url": "https://vox.isolated.tech/zh-hans/", "inLanguage": "zh-Hans", "isPartOf": {"@type": "WebSite", "name": "Vox.md", "url": "https://vox.isolated.tech/"}}</script>
-<meta name="color-scheme" content="light">
-<link rel="preload" href="../fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../geist.css">
 </head>
 <body class="raw">
-<a class="skip-link" href="#main">跳至主要内容</a>
-<nav aria-label="主要导航">
+<a class="skip-link" href="#main">跳至内容</a>
+
+<nav aria-label="主导航">
   <div class="r-wrap r-nav">
-    <a class="r-logo" href="index.html" aria-label="Vox.md 首页">
+    <a href="/zh-hans/" class="r-logo" aria-label="Vox.md 首页">
       <span class="r-logo-mark" aria-hidden="true">md</span>
       <span>Vox.md</span>
     </a>
-    <span class="r-tab-current" aria-hidden="true">index.zh.md</span>
+    <span class="r-tab-current" aria-hidden="true">index.md</span>
     <ul class="r-nav-links">
+      <li><a href="#how">how.md</a></li>
+      <li><a href="#capture">files.md</a></li>
+      <li><a href="#presets">routes.md</a></li>
       <li><a href="#privacy">privacy.md</a></li>
-      <li><a href="#features">features.md</a></li>
-      <li><a href="#faq">faq.md</a></li>
-      <li><a href="../index.html" lang="en" hreflang="en">English</a></li>
+      <li><a href="/zh-hans/docs/">docs/</a></li>
+      <li><a href="/zh-hans/blog/">guides/</a></li>
+      <li><a href="/zh-hans/compare/">compare/</a></li>
     </ul>
-    <a class="r-nav-cta" href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-campaign="seo_home_zh">在 App Store 查看</a>
-  </div>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_home_zh">免费下载</a>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ar/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
 </nav>
 
 <main id="main">
@@ -55,40 +163,87 @@
 15
 16
 17
-18</p>
+18
+19
+20</p>
     <div class="r-hero-body">
       <div class="r-hero-copy">
-        <pre class="r-front" aria-label="Vox.md 概览">---
+        <pre class="r-front" aria-label="Vox.md 一览">---
 app: Vox.md
-for: Obsidian &amp; 本地 Markdown
+for: Obsidian &amp; any Markdown folder
 runs_on: [iPhone, iPad, Mac, Apple Watch]
-transcribes_on: <b>本设备</b>
-writes_to: <b>你选择的文件夹</b>
+transcribes_on: <b>this device</b>
+writes_to: <b>a folder you pick</b>
 copies_on_our_servers: <b class="r-hl">0</b>
 ---</pre>
-        <h1 class="r-h1" id="hero-title"><span class="r-mark" aria-hidden="true">#</span>你的想法，存进<span aria-hidden="true"><del>云端</del></span><span class="visually-hidden">本地</span><span class="r-hl">文件。</span><span class="r-caret" aria-hidden="true"></span></h1>
-        <p class="r-hero-lead">输入想法、保存链接、添加照片和文件、扫描文档、手绘或口述。语音在设备上转写，Vox.md 将内容写入你选定的 Obsidian 仓库或“文件”文件夹。</p>
+        <h1 class="r-h1" id="hero-title" aria-label="你的想法，存入本地文件。"><span class="r-mark" aria-hidden="true">#</span>你的想法，存为 <span aria-hidden="true"><del>云端</del> </span><span class="visually-hidden">本地 </span><span class="r-voice r-hl">文件。</span><span class="r-caret" aria-hidden="true"></span></h1>
+        <p class="r-hero-lead">从 iPhone、Mac 和 Apple Watch 将想法采集到 Obsidian：键入、拍照、扫描、绘图，或直接说出来。Vox.md 在设备上转录，将纯 Markdown 直接写入你选择的仓库或文件文件夹，放在指定笔记和标题下。</p>
         <div class="r-actions">
-          <a class="r-btn r-btn-ink" href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-campaign="seo_home_zh">在 App Store 查看</a>
-          <a class="r-btn r-btn-line" href="../docs/" hreflang="en">阅读使用指南（英文）</a>
+          <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_home_zh">免费下载 Vox.md</a>
+          <a href="/zh-hans/blog/obsidian-quick-capture-iphone/" class="r-btn r-btn-line">选择采集方式</a>
         </div>
-        <p class="r-note">免费下载。iPhone 需要 iOS 17.6 或更新版本。</p>
+        <p class="r-note">免费 15 分钟转录 + 10 次采集投递 · iOS 17.6+ · 无需账户</p>
+        <details class="desktop-download-qr">
+          <summary>扫码下载到 iPhone</summary>
+          <div class="download-qr-panel">
+            <a href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-kind="qr" aria-label="在 App Store 打开 Vox.md" data-download-campaign="seo_home_qr">
+              <img src="/assets/download-qr.svg" alt="用于在 App Store 打开 Vox.md 的二维码" width="176" height="176" decoding="async">
+            </a>
+            <p>用 iPhone 相机扫描，在 App Store 打开 Vox.md。</p>
+          </div>
+        </details>
       </div>
 
       <div class="r-demo" aria-labelledby="demo-title">
-        <h2 class="visually-hidden" id="demo-title">一条记录会变成什么</h2>
-        <div class="r-said">
-          <p class="r-said-meta"><span>你说的话</span><span>语音 · 0:02</span></p>
-          <div class="r-wave" aria-hidden="true"><span style="height:8px"></span><span style="height:14px"></span><span style="height:22px"></span><span style="height:30px"></span><span style="height:18px"></span><span style="height:10px"></span><span style="height:26px"></span><span style="height:34px"></span><span style="height:20px"></span><span style="height:12px"></span><span style="height:6px"></span><span style="height:16px"></span><span style="height:28px"></span><span style="height:24px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:20px"></span><span style="height:32px"></span><span style="height:26px"></span><span style="height:12px"></span><span style="height:18px"></span><span style="height:30px"></span><span style="height:22px"></span><span style="height:10px"></span><span style="height:6px"></span><span style="height:14px"></span><span style="height:24px"></span><span style="height:34px"></span><span style="height:28px"></span><span style="height:16px"></span></div>
-          <p class="r-voice">“记得预约牙医。”</p>
+        <h2 class="visually-hidden" id="demo-title">采集内容会变成什么</h2>
+        <div class="r-demo-tabs" role="tablist" aria-label="选择采集内容" hidden>
+          <button type="button" role="tab" id="demo-tab-voice" aria-controls="demo-voice" aria-selected="true">语音备忘录</button>
+          <button type="button" role="tab" id="demo-tab-link" aria-controls="demo-link" aria-selected="false" tabindex="-1">共享的链接</button>
+          <button type="button" role="tab" id="demo-tab-scan" aria-controls="demo-scan" aria-selected="false" tabindex="-1">扫描页面</button>
         </div>
-        <div class="r-pipe"><ul><li>在本设备上转写</li><li>规则：<strong>每日笔记 · 待办</strong></li><li>网络：<span class="r-hl">未使用</span></li></ul></div>
-        <div class="r-out">
-          <p class="r-out-head"><span>Journal/2026-11-06.md</span><span>+ 1 行</span></p>
-          <pre>## 待办
-- 记得预约牙医</pre>
+
+        <div class="r-demo-panel" id="demo-voice" role="tabpanel" aria-labelledby="demo-tab-voice">
+          <div class="r-said">
+            <p class="r-said-meta"><span>你提供的内容</span><span>语音 · 0:03</span></p>
+            <div class="r-wave" aria-hidden="true"><span style="height:8px"></span><span style="height:14px"></span><span style="height:22px"></span><span style="height:30px"></span><span style="height:18px"></span><span style="height:10px"></span><span style="height:26px"></span><span style="height:34px"></span><span style="height:20px"></span><span style="height:12px"></span><span style="height:6px"></span><span style="height:16px"></span><span style="height:28px"></span><span style="height:24px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:20px"></span><span style="height:32px"></span><span style="height:26px"></span><span style="height:12px"></span><span style="height:18px"></span><span style="height:30px"></span><span style="height:22px"></span><span style="height:10px"></span><span style="height:6px"></span><span style="height:14px"></span><span style="height:24px"></span><span style="height:34px"></span><span style="height:28px"></span><span style="height:16px"></span><span style="height:10px"></span><span style="height:20px"></span><span style="height:26px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:18px"></span></div>
+            <p class="r-voice">“记得预约牙医。”</p>
+          </div>
+          <div class="r-pipe"><ul><li>在此设备上转录</li><li>路由： <strong>每日笔记 · 任务</strong></li><li>网络用途： <span class="r-hl">无</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/2026-11-06.md</span><span>+ 1 行</span></p>
+            <pre>## Tasks
+- Remember to book the dentist</pre>
+          </div>
         </div>
-        <p class="r-demo-foot">示例仅供说明，实际输出取决于你的规则与转写结果。</p>
+
+        <div class="r-demo-panel" id="demo-link" role="tabpanel" aria-labelledby="demo-tab-link" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>你提供的内容</span><span>共享表单 · Safari</span></p>
+            <p class="r-voice">三周前就想读的链接，直接从 Safari 共享过来。</p>
+          </div>
+          <div class="r-pipe"><ul><li>原样保存</li><li>路由： <strong>阅读清单</strong></li><li>网络用途： <span class="r-hl">无</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Inbox/Reading.md</span><span>+ 2 行</span></p>
+            <pre>### 14:07
+- https://www.inkandswitch.com/local-first/</pre>
+          </div>
+        </div>
+
+        <div class="r-demo-panel" id="demo-scan" role="tabpanel" aria-labelledby="demo-tab-scan" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>你提供的内容</span><span>扫描 · 1 页</span></p>
+            <p class="r-voice">今早的笔记本页面，用相机扫描。</p>
+          </div>
+          <div class="r-pipe"><ul><li>在此设备上提取文本</li><li>路由： <strong>日志页面</strong></li><li>网络用途： <span class="r-hl">无</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/Pages/2026-11-06 0912.md</span><span>+ 4 行</span></p>
+            <pre>![[scan-2026-11-06-0912.jpg]]
+
+&gt; ship routing first.
+&gt; ask about the watch build</pre>
+          </div>
+        </div>
+        <p class="r-demo-foot">示例。输出取决于路由和转录结果。</p>
       </div>
     </div>
   </div>
@@ -98,57 +253,224 @@ copies_on_our_servers: <b class="r-hl">0</b>
   <div class="r-wrap r-zero-inner">
     <div class="r-zero-copy">
       <p class="r-file">## privacy.md</p>
-      <h2 id="privacy-title">0<small>bytes</small></h2>
-      <p>你的草稿、附件、笔记路径、模板、输入文本、转写内容和授权的位置信息，都不会被 Vox.md 服务器或分析工具收集。文件只会写入你选择的文件夹。</p>
+      <h2 id="privacy-title">0<small>字节</small></h2>
+      <p>你的草稿、附件、笔记路径、模板、键入文本、转录或主动启用的位置会到达 Vox.md 服务器或分析系统。文件仅存入所选文件夹。绝不持续或在后台跟踪位置。</p>
     </div>
-    <dl class="r-ledger" aria-label="Vox.md 收到的内容">
+    <dl class="r-ledger" aria-label="Vox.md 接收什么">
       <div><dt>上传的音频</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
-      <div><dt>上传的转写内容</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>上传的转录文本</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
       <div><dt>草稿与附件</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
-      <div><dt>需要账号</dt><span aria-hidden="true"></span><dd>否</dd></div>
+      <div><dt>笔记路径与模板</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>需要账户</dt><span aria-hidden="true"></span><dd>不</dd></div>
+      <div><dt>后台位置</dt><span aria-hidden="true"></span><dd>绝不</dd></div>
     </dl>
   </div>
 </section>
 
-<section class="r-section" id="features" aria-labelledby="features-title">
+<section class="r-section" id="how" aria-labelledby="how-title">
   <div class="r-wrap r-stack">
     <div class="r-head">
-      <p class="r-file">L034 · features.md</p>
-      <h2 class="r-h2" id="features-title"><span class="r-mark" aria-hidden="true">##</span>为你的日常工作方式而设计</h2>
+      <p class="r-file">L041 · how.md</p>
+      <h2 class="r-h2" id="how-title"><span class="r-mark" aria-hidden="true">##</span>三站。 <span class="r-voice">没有一站属于我们。</span></h2>
+      <p class="r-lead">打开仓库、查找笔记、选择正确位置，对转瞬即逝的想法来说太费事。设置一次路由，然后直接采集。</p>
     </div>
     <ol class="r-stops">
-      <li class="r-stop"><p class="r-stop-meta"><span>01</span><span>composer</span></p><h3>多种内容，一处记录</h3><p>在同一个编辑界面中记录文字、链接、照片、文件、扫描文档、手绘和语音。</p></li>
-      <li class="r-stop"><p class="r-stop-meta"><span>02</span><span>route</span></p><h3>精确指定位置</h3><p>创建新笔记、持续追加到固定笔记，或将内容写到现有文档的指定标题下。</p></li>
-      <li class="r-stop"><p class="r-stop-meta"><span>03</span><span>file</span></p><h3>保留标准 Markdown</h3><p>使用标准 Markdown、双向链接和附件嵌入。草稿与语音处理保留在设备上，目标文件夹由你选择。</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>01</span><span>你的文件夹</span></p><h3>连接仓库</h3><p>选择 Obsidian 仓库或文件中的任意可写文件夹。Vox.md 使用你已有的 Markdown 文件。</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>02</span><span>你的口袋</span></p><h3>采集任何内容</h3><p>写字、粘贴链接、添加媒体或文件、扫描文档、画草图，或录制私密语音笔记。语音就在这里转录。</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>03</span><span>你的文件</span></p><h3>路由负责归档</h3><p>创建笔记、更新滚动笔记，或定位现有笔记。放在顶部、底部或标题下。</p></li>
     </ol>
+    <p class="r-skip"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9A9A93" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.1 9.5 4.25 4.25 0 0 0 7 18z"/><path d="M3 3l18 18"/></svg><span><del>第 2.5 站：别人的云</del>。跳过。同步沿用文件夹原有方式，受提供商条款约束。</span></p>
   </div>
 </section>
 
-<section class="r-section" id="start" aria-labelledby="start-title">
+<section class="r-section" id="capture" aria-labelledby="capture-title">
+  <span class="anchor" id="features" aria-hidden="true"></span>
+  <div class="r-wrap r-split">
+    <div class="r-stack" style="gap: 20px">
+      <p class="r-file">L077 · files.md</p>
+      <h2 class="r-h2" id="capture-title"><span class="r-mark" aria-hidden="true">##</span>它是 <span class="r-voice r-hl">只需</span> 文件。</h2>
+      <p class="r-lead">无需插件，无需 Vox.md 云账户，没有专有格式。Vox.md 将可读的 Markdown 和 Obsidian 风格链接写入你控制的文件夹，笔记绝不会被锁在应用里。</p>
+      <ul class="r-inputs">
+        <li><code>.md</code><span>标准 Markdown 格式的键入笔记与语音转录</span></li>
+        <li><code>[[ ]]</code><span>Obsidian 能识别的 wikilink 与嵌入附件</span></li>
+        <li><code>img</code><span>照片、文件和带提取文本的文档扫描件。 <a href="/zh-hans/blog/save-links-photos-obsidian-iphone/">媒体采集指南</a></span></li>
+        <li><code>url</code><span>从任何可共享的地方保存链接</span></li>
+        <li><code>draw</code><span>可编辑草图</span></li>
+        <li><code>voice</code><span>从编辑器或键盘使用私密语音；绝不上传音频。 <a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/">iPhone 语音笔记指南</a></span></li>
+        <li><code>---</code><span>带日期、时间、来源和标识符令牌的可复用 Markdown 或 YAML</span></li>
+      </ul>
+    </div>
+    <div class="r-tree" role="img" aria-label="仓库文件夹树，突出显示三条新采集内容">
+      <p class="r-tree-head"><span>~/Obsidian/Second Brain</span><span>ls -R</span></p>
+      <ul aria-hidden="true">
+        <li>├── Inbox/</li>
+        <li>│   └── Reading.md <mark>just now</mark></li>
+        <li>├── Journal/</li>
+        <li class="old">│   ├── 2026-11-05.md</li>
+        <li>│   ├── 2026-11-06.md <mark>+ ## Tasks</mark></li>
+        <li>│   └── Pages/</li>
+        <li>│       └── 2026-11-06 0912.md <mark>scan</mark></li>
+        <li>├── Meetings/</li>
+        <li class="old">│   └── 2026-11-01.md</li>
+        <li>├── Projects/</li>
+        <li class="old">│   └── Ideas.md</li>
+        <li class="old">└── attachments/</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="r-section" id="presets" aria-labelledby="presets-title">
+  <span class="anchor" id="destinations" aria-hidden="true"></span>
   <div class="r-wrap r-stack">
     <div class="r-head">
-      <p class="r-file">L052 · start.md</p>
-      <h2 class="r-h2" id="start-title"><span class="r-mark" aria-hidden="true">##</span>从这里开始</h2>
+      <p class="r-file">L112 · routes.md</p>
+      <h2 class="r-h2" id="presets-title"><span class="r-mark" aria-hidden="true">##</span>路由只需设置一次。 <span class="r-voice">然后，开口就好。</span></h2>
+      <p class="r-lead">路由记住采集的处理和格式方式，以及仓库、笔记目标、放置位置、附件、重试行为和可选的一次性目前位置。</p>
     </div>
-    <ol class="r-inputs">
-      <li><code>01</code><span><strong>设置目标位置。</strong>选择 Obsidian 仓库或本地文件夹，配置常用的保存规则。</span></li>
-      <li><code>02</code><span><strong>随手捕捉想法。</strong>使用应用、部件、快捷指令、分享扩展或键盘记录内容。</span></li>
-      <li><code>03</code><span><strong>写入对应笔记。</strong>按预设规则生成笔记，或将内容插入顶部、底部或指定标题下。</span></li>
-    </ol>
+    <div class="r-table-box">
+      <table class="r-table">
+        <caption class="visually-hidden">路由示例</caption>
+        <thead><tr><th scope="col">路线</th><th scope="col">档案</th><th scope="col">放在其中哪里</th><th scope="col">包装为</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">每日笔记 · 任务</th><td>Journal/{date}.md</td><td>## Tasks 的底部</td><td>- {text}</td></tr>
+          <tr><th scope="row">会议记录</th><td>Meetings/{date}.md</td><td>在 ## Notes 下方</td><td>### {time} · {title}</td></tr>
+          <tr><th scope="row">阅读清单</th><td>Inbox/Reading.md</td><td>文件顶部</td><td>### {time}</td></tr>
+          <tr><th scope="row">想法</th><td>Projects/Ideas.md</td><td>文件底部</td><td>&gt; {text}</td></tr>
+          <tr><th scope="row">新建笔记</th><td>Inbox/{timestamp}.md</td><td>新文件</td><td>YAML frontmatter + 正文</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <dl class="r-targets">
+      <div><dt>现有笔记 <code>Projects/Ideas.md</code></dt><dd>持续向仓库中已有文档添加内容。</dd></div>
+      <div><dt>滚动笔记 <code>Journal/&#123;period&#125;.md</code></dt><dd>每日、每周、每月、每季度或每年笔记。 <a href="/zh-hans/blog/append-to-obsidian-daily-note-iphone/">设置每日笔记和标题放置。</a></dd></div>
+      <div><dt>新笔记 <code>Inbox/&#123;timestamp&#125;.md</code></dt><dd>为每次新采集创建干净文件。</dd></div>
+      <div><dt>精确放置 <code>Top · Bottom · Heading</code></dt><dd>放在任意级别标题下，缺少时可自动创建。</dd></div>
+      <div><dt>条目模板 <code>Markdown · YAML · Tokens</code></dt><dd>让重复采集保持一致，无需重新排版。</dd></div>
+      <div><dt>目前位置 <code>&#123;location&#125;</code></dt><dd>使用一次发起时位置的地图链接而不添加元数据，或主动启用 frontmatter 和行内字段。 <a href="/zh-hans/docs/location/">阅读指南。</a></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-section" id="everywhere" aria-labelledby="everywhere-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L140 · anywhere.md</p>
+    <h2 class="r-h2" id="everywhere-title"><span class="r-mark" aria-hidden="true">##</span>无论想法在哪里 <span class="r-voice">出现</span></h2>
+    <ul class="r-pills" aria-label="采集入口">
+      <li>键盘 <small>任意应用</small></li>
+      <li>Apple Watch <small>手腕</small></li>
+      <li>Mac <small>快速采集</small></li>
+      <li>共享表单 <small>任何内容</small></li>
+      <li>小组件 <small>主屏幕与锁屏</small></li>
+      <li>控制中心 <small>轻点一次</small></li>
+      <li>快捷指令 <small>自动化</small></li>
+    </ul>
+    <p class="r-lead"><a href="/zh-hans/blog/apple-watch-obsidian-voice-notes/">设置 Apple Watch 语音笔记发送到 Obsidian</a>。在手表上录音，再通过配对的 iPhone 转录和投递。</p>
+  </div>
+</section>
+
+<section class="r-section" id="specs" aria-labelledby="specs-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L158 · specs.yml</p>
+    <h2 class="r-h2" id="specs-title"><span class="r-mark" aria-hidden="true">##</span>以文件为核心 <span class="r-voice">你可以保留</span></h2>
+    <dl class="r-yaml">
+      <div><dt>capture_types</dt><dd>文本、链接、照片、文件、扫描件、草图和语音</dd></div>
+      <div><dt>note_format</dt><dd>标准 Markdown</dd></div>
+      <div><dt>destinations</dt><dd>Obsidian 仓库和可写的文件文件夹</dd></div>
+      <div><dt>note_targets</dt><dd>新笔记、滚动笔记或现有笔记</dd></div>
+      <div><dt>placement</dt><dd>顶部、底部或标题下方</dd></div>
+      <div><dt>rolling_periods</dt><dd>每日、每周、每月、每季度和每年</dd></div>
+      <div><dt>obsidian_syntax</dt><dd>wikilink 与嵌入附件</dd></div>
+      <div><dt>entry_formats</dt><dd>可复用 Markdown 和 YAML 模板</dd></div>
+      <div><dt>entry_points</dt><dd>应用、小组件、快捷指令、共享扩展、键盘、Apple Watch、Mac 和控制中心</dd></div>
+      <div><dt>voice_processing</dt><dd>设备端 Apple Speech、Whisper 或 Parakeet</dd></div>
+      <div><dt>audio_uploads</dt><dd>转录不需要</dd></div>
+      <div><dt>account</dt><dd>不需要</dd></div>
+      <div><dt>platforms</dt><dd>iOS/iPadOS 17.6+, macOS 14+, watchOS 10+</dd></div>
+      <div><dt>location</dt><dd>主动启用的一次性快照；{location} 无需元数据即可使用；不后台跟踪</dd></div>
+      <div><dt>location_metadata</dt><dd>frontmatter 或行内字段需单独启用；默认准确，或选择城市舍入</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-dark" id="reviews" aria-labelledby="reviews-title">
+  <div class="r-wrap r-dark-inner">
+    <p class="r-file">L190 · reviews.md · from the App Store</p>
+    <h2 class="r-h2" id="reviews-title"><span class="r-mark" aria-hidden="true">##</span>说了 <span class="r-voice">关于</span> 它</h2>
+    <div class="r-quotes">
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5b29-4b3500000000">
+        <div>
+          <h3>正是我需要的 · <span role="img" aria-label="5 星满分中的 5 星">★★★★★</span></h3>
+          <blockquote><p>“这段时间我一直想找个办法，能快速口述笔记、添加附件、本地转录，并同步到 Obsidian 文件夹。这个应用完美做到了。”</p></blockquote>
+          <figcaption><span class="review-author">SteamingCoax</span> · App Store 评价 · <time datetime="2026-08-11">2026 年 8 月 11 日</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5bf7-fadc00000000">
+        <div>
+          <h3>低调而强大的采集工具 · <span role="img" aria-label="5 星满分中的 5 星">★★★★★</span></h3>
+          <blockquote>
+            <p>“Vox.md 已成为我最常用的工具之一。我原本用它将语音备忘录存入 Obsidian，它却悄悄改变了我的日常采集流程。</p>
+            <p>采集预设系统太棒了——每个预设都有自己的目标位置、模板和放置方式。我的语音备忘录直接进入正确的每日笔记，格式完全符合心意，毫无阻碍。”</p>
+          </blockquote>
+          <figcaption><span class="review-author">Eric Know</span> · App Store 评价 · <time datetime="2026-08-14">2026 年 8 月 14 日</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5a77-5cb500000000">
+        <div>
+          <h3>被低估、被忽视，但没被遗忘 · <span role="img" aria-label="5 星满分中的 5 星">★★★★★</span></h3>
+          <blockquote><p>“迅速成为我在 2026 年最喜欢、最常用的应用之一！”</p></blockquote>
+          <figcaption><span class="review-author">PromisedOne</span> · App Store 评价 · <time datetime="2026-08-08">2026 年 8 月 8 日</time></figcaption>
+        </div>
+      </figure>
+    </div>
+    <p class="r-fine">App Store 精选评价。Eric 的引文为节选，措辞未作修改。 <a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_home_zh">阅读 App Store 评价 <span aria-hidden="true">→</span></a></p>
   </div>
 </section>
 
 <section class="r-section" id="faq" aria-labelledby="faq-title">
   <div class="r-wrap r-faq">
     <div class="r-head">
-      <p class="r-file">L068 · faq.md</p>
-      <h2 class="r-h2" id="faq-title" style="font-size: clamp(36px, 4.4vw, 60px)"><span class="r-mark" aria-hidden="true">##</span>常见问题</h2>
-      <p class="r-lead">勾选一项即可查看答案。</p>
+      <p class="r-file">L214 · faq.md</p>
+      <h2 class="r-h2" id="faq-title" style="font-size: clamp(36px, 4.4vw, 60px)"><span class="r-mark" aria-hidden="true">##</span>开放 <span class="r-voice">问题</span></h2>
+      <p class="r-lead">Vox.md 直接使用你选择的 Markdown 文件夹。Obsidian 很合适，但不是必需的。勾选一项查看答案。</p>
     </div>
     <div class="r-faq-list">
-      <details><summary>必须使用 Obsidian 吗？</summary><p>不需要。Vox.md 可以写入 Obsidian 仓库，也可以写入你通过“文件”选择的文件夹。</p></details>
-      <details><summary>语音是否上传到服务器转写？</summary><p>语音转写在设备上进行，不需要上传音频。可用引擎和语言支持取决于设备、系统与设置。</p></details>
-      <details><summary>支持哪些系统？</summary><p>当前网站列出的最低要求为 iOS 17.6、iPadOS 17.6、macOS 14 和 watchOS 10。具体设备兼容性请查看 App Store。</p></details>
+      <details>
+        <summary>Vox.md 能配合 Obsidian 使用吗？</summary>
+        <p>可以。创建路由并选择 Obsidian 仓库作为目标位置。Vox.md 将标准 Markdown、wikilink 和附件嵌入直接写入仓库。不需要 Obsidian 插件。 <a href="/zh-hans/compare/vox-md-vs-obsidian-quick-capture/">比较 Vox.md 与 Obsidian 原生采集功能。</a> <a href="/zh-hans/blog/obsidian-daily-note-iphone/">设置每日笔记采集工作流。</a></p>
+      </details>
+      <details>
+        <summary>可以采集什么？</summary>
+        <p>编辑器接受文本、网页链接、照片、文件、文档扫描件、草图和语音。扫描件可包含提取文本，语音可在本地转录。</p>
+      </details>
+      <details>
+        <summary>采集内容可以送到哪里？</summary>
+        <p>每个路由都有目标位置，可创建新笔记、更新每日或周期滚动笔记，或写入现有 Markdown 文件。单次采集可临时选择另一笔记而不更改路由。</p>
+      </details>
+      <details>
+        <summary>Vox.md 可以在标题下插入吗？</summary>
+        <p>可以。路由可前置插入、追加，或插入到一级至六级标题下。你可选择缺少标题时停止投递还是自动创建，以及新条目直接位于标题下，还是放在该标题所在节末尾。</p>
+      </details>
+      <details>
+        <summary>不用 Obsidian 也可以吗？</summary>
+        <p>可以。路由可使用文件中开放的任何可写文件夹。输出是带普通附件的纯 Markdown，因此笔记不会被锁定在 Vox.md 中。</p>
+      </details>
+      <details>
+        <summary>Vox.md 会上传笔记或音频吗？</summary>
+        <p>任何采集内容都不会发送到 Vox.md 服务器。草稿和语音处理留在设备上，完成的文件写入所选文件夹。如果文件夹属于同步提供商，该提供商按其自身条款处理。 <a href="/zh-hans/blog/offline-transcription-iphone-markdown/">检查离线设置要求。</a></p>
+      </details>
+      <details>
+        <summary>能否在模板中使用位置而不添加元数据？</summary>
+        <p>可以。为该路由开启使用当前位置，保持写入位置元数据关闭，并添加 <code>{location}</code> 到其条目格式中。Vox.md 会插入一次性地图链接，而不添加 frontmatter 或行内位置字段。 <a href="/zh-hans/docs/location/">阅读完整位置指南。</a></p>
+      </details>
+      <details>
+        <summary>可以在应用外采集吗？</summary>
+        <p>可以。Vox.md 提供小组件、快捷指令操作、共享扩展和语音键盘。这些入口都连接同一本地采集系统。</p>
+      </details>
+      <details>
+        <summary>Vox.md 多少钱？</summary>
+        <p>Vox.md 免费提供 15 分钟转录和 10 次成功采集投递。一次终身购买即可无限转录和采集，无订阅、无广告。发送到 Markdown 的语音转录使用转录额度，不再消耗第二次采集额度。App Store 显示你所在地区的当前价格。</p>
+      </details>
     </div>
   </div>
 </section>
@@ -156,13 +478,13 @@ copies_on_our_servers: <b class="r-hl">0</b>
 <section class="r-cta" id="download" aria-labelledby="download-title">
   <div class="r-wrap">
     <div class="r-cta-card">
-      <h2 id="download-title">把下一个想法写进文件。</h2>
-      <p>免费下载。iPhone 需要 iOS 17.6 或更新版本。</p>
+      <h2 id="download-title">把下一个想法放入 <span class="r-voice">文件中。</span></h2>
+      <p>一次连接仓库或本地文件夹。下一个想法就能直接进入所选笔记、标题和格式。</p>
       <div class="r-actions">
-        <a class="r-btn r-btn-ink" href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-campaign="seo_home_zh">在 App Store 查看</a>
+        <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_home_zh">免费下载 Vox.md</a>
+        <span class="r-note">免费额度 · 一次终身解锁 · 无需账户</span>
       </div>
     </div>
-    <p class="r-note" style="margin-top: 28px">本页为简体中文产品介绍。详细文档和隐私政策目前提供英文版本；应用语言与地区可用性请查看各产品的商店页面或发行说明。</p>
   </div>
 </section>
 </main>
@@ -171,11 +493,117 @@ copies_on_our_servers: <b class="r-hl">0</b>
   <div class="r-wrap r-foot">
     <span class="r-eof" aria-hidden="true">EOF</span>
     <ul>
-      <li><a href="../docs/" hreflang="en">使用指南（英文）</a></li>
-      <li><a href="../privacy.html" hreflang="en">隐私政策（英文）</a></li>
-      <li><a href="../index.html" lang="en" hreflang="en">English</a></li>
+      <li><a href="/zh-hans/developers">开发者</a></li>
+      <li><a href="/zh-hans/about">关于</a></li>
+      <li><a href="/zh-hans/contact">联系</a></li>
+      <li><a href="/zh-hans/docs/">文档</a></li>
+      <li><a href="/zh-hans/blog/">指南</a></li>
+      <li><a href="/zh-hans/compare/">比较</a></li>
+      <li><a href="/zh-hans/privacy.html">隐私</a></li>
+      <li><a href="/zh-hans/terms.html">条款</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="mailto:codybontecou@gmail.com">支持</a></li>
+      <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_home_zh">App Store</a></li>
     </ul>
-    <p class="r-foot-copy">© 2026 Vox.md</p>
-  </div>
+    <p class="r-foot-copy">© 2026 Vox.md · 开发者： <a href="https://codybontecou.com/">Cody Bontecou</a> 于 <a href="https://isolated.tech/">Isolated Tech</a> · 不上传内容。</p>
+
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ar/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
 </footer>
-</body></html>
+
+<script>
+/* Hero demo tabs. Without JavaScript the first example shows on its own. */
+(function () {
+  var list = document.querySelector('.r-demo-tabs');
+  if (!list) return;
+  var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+  function select(tab, focus) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { select(tab, false); });
+    tab.addEventListener('keydown', function (ev) {
+      var next = ev.key === 'ArrowRight' ? i + 1 : ev.key === 'ArrowLeft' ? i - 1 : ev.key === 'Home' ? 0 : ev.key === 'End' ? tabs.length - 1 : null;
+      if (next === null) return;
+      ev.preventDefault();
+      select(tabs[(next + tabs.length) % tabs.length], true);
+    });
+  });
+  list.hidden = false;
+})();
+</script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

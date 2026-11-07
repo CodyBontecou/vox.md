@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" dir="ltr" data-search-section="部分" data-search-guide="指南" data-search-empty="没有与“{query}”匹配的结果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>目前位置、{location} 和元数据 — Vox.md 文档</title>
+  <meta name="description" content="在 Vox.md 路由中配置一次性目前位置、{location} Markdown 令牌、可选 frontmatter 或行内位置元数据、精度、隐私和恢复。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hans/docs/location/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供语言模型使用的 Vox.md 文档">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="目前位置、{location} 和元数据 — Vox.md 文档">
+  <meta property="og:description" content="在 Markdown 模板中使用一次性位置，不自动向笔记添加位置元数据。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hans/docs/location/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vox.md 目前位置指南">
+  <meta name="twitter:description" content="一次性位置、{location}、元数据输出、精度、隐私和迁移完整指南。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Vox.md 中的目前位置、{location} 和位置元数据",
+  "description": "完整介绍按预设获取目前位置、{location} Markdown 令牌、可选元数据输出、隐私、迁移和故障排查。",
+  "dateModified": "2026-08-21",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hans/docs/location/",
+  "inLanguage": "zh-Hans",
+  "name": "目前位置、{location} 和元数据 — Vox.md 文档"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hans/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "文档",
+      "item": "https://vox.isolated.tech/zh-hans/docs/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "目前位置",
+      "item": "https://vox.isolated.tech/zh-hans/docs/location/"
+    }
+  ],
+  "inLanguage": "zh-Hans",
+  "name": "目前位置、{location} 和元数据 — Vox.md 文档",
+  "description": "在 Vox.md 路由中配置一次性目前位置、{location} Markdown 令牌、可选 frontmatter 或行内位置元数据、精度、隐私和恢复。"
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md 公开信息 API">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/location/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/location/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/location/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/location/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/location/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/location/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/location/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/location/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/location/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/location/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/location/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/location/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/location/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/location/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/location/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/location/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/location/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/location/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/location/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/location/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/location/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/location/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/location/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/location/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="主导航">
+  <div class="nav-inner docs-header-inner">
+    <a href="/zh-hans/" class="logo" aria-label="Vox.md 首页">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ 文档</span></span>
+    </a>
+    <form class="docs-search" role="search" action="../" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="搜索文档" aria-label="搜索文档" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="搜索结果" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/zh-hans/blog/">博客</a></li>
+      <li><a href="/zh-hans/privacy.html">隐私</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="本页内容">
+      <div class="docs-sidebar-title">本页内容</div>
+      <ol>
+        <li><a href="#overview">两项独立选择</a></li>
+        <li><a href="#setup">设置路由</a></li>
+        <li><a href="#configurations">常用配置</a></li>
+        <li><a href="#location-token"><code>{location}</code> 令牌</a></li>
+        <li><a href="#metadata-output">元数据输出</a></li>
+        <li><a href="#precision">精度与标签</a></li>
+        <li><a href="#capture-sources">抓取来源</a></li>
+        <li><a href="#unavailable">不可用与恢复</a></li>
+        <li><a href="#migration">现有路由</a></li>
+        <li><a href="#privacy">隐私与保留</a></li>
+        <li><a href="#troubleshooting">故障排查</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="location-guide-title">
+      <div class="page-eyebrow">文档 · 路由</div>
+      <h1 class="page-title" id="location-guide-title">目前位置、 <code>{location}</code>，以及元数据</h1>
+      <p class="docs-hero-copy">在条目格式中使用一次发起时位置，不自动添加 YAML 或行内字段。每个路由中，获取位置和输出元数据都是分开、明确的选择。</p>
+      <div class="docs-meta-row" aria-label="指南信息">
+        <span>更新于 2026 年 8 月 21 日</span>
+        <span>一次性获取</span>
+        <span>不在后台跟踪</span>
+        <a href="/zh-hans/docs/">完整功能指南</a>
+      </div>
+      </header>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="overview">
+        <div class="docs-section-label">01 / 概览</div>
+        <h2>获取位置不等于输出元数据</h2>
+        <p>每个路由有两项独立的位置控件。 <strong>使用当前位置</strong> 决定路由是否请求一次采集发起时的位置。 <strong>写入位置元数据</strong> 决定是否将获取的快照也写入 frontmatter 或行内字段。</p>
+
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>控件</th><th>含义</th><th>它不意味着什么</th></tr></thead>
+            <tbody>
+              <tr><td>系统位置权限</td><td>允许 Vox.md 在使用应用或受支持的采集界面时请求位置。</td><td>它不会为任何路由启用位置。</td></tr>
+              <tr><td>使用当前位置</td><td>为此路由请求一次位置，并供以下内容使用： <code>{location}</code>.</td><td>它不会自动写入 YAML 或行内元数据。</td></tr>
+              <tr><td>写入位置元数据</td><td>根据获取的快照写入所选结构化字段或经验证的高级 YAML。</td><td>它不控制是否 <code>{location}</code> 可以渲染。</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <strong>路由才是意图信号，不是权限</strong>
+          <p>授予使用期间权限仅打开操作系统的门槛。Vox.md 仍仅为独立的采集栏目前位置操作，或已开启使用当前位置的路由请求位置。</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="setup">
+        <div class="docs-section-label">02 / 设置</div>
+        <h2>为单个路由设置目前位置</h2>
+        <ol class="docs-steps">
+          <li><strong>打开路由。</strong><span>在 iPhone 或 iPad 上打开设置 → 路由。在 Mac 上打开设置并选择路由。</span></li>
+          <li><strong>编辑路由。</strong><span>选择应使用发起位置的路由。该设置仅属于该路由，不影响其他路由。</span></li>
+          <li><strong>打开位置。</strong><span>开启 <em>使用当前位置</em>。保持 <em>写入位置元数据</em> 关闭，以使用仅令牌行为。</span></li>
+          <li><strong>选择精度。</strong><span>选择准确可使用原始定位结果；选择城市则将坐标四舍五入到小数点后两位，且不显示兴趣点名称。</span></li>
+          <li><strong>选择不可用时的行为。</strong><span>询问、不带位置发送或取消采集，决定无法获取原始定位结果时的行为。</span></li>
+          <li><strong>添加 <code>{location}</code> 如有需要。</strong><span>将令牌放入条目模板、自定义条目前后缀，或仓库 Markdown 模板。</span></li>
+        </ol>
+        <p>首次使用可能显示操作系统位置权限提示。如果此前拒绝权限，请在 iOS、iPadOS 或 macOS 系统设置中为 Vox.md 启用位置访问。</p>
+      </section>
+
+      <section class="docs-section" id="configurations">
+        <div class="docs-section-label">03 / 常用配置</div>
+        <h2>选择满足需求的最少位置内容</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>所需结果</th><th>使用当前位置</th><th>写入位置元数据</th><th>寺庙</th></tr></thead>
+            <tbody>
+              <tr><td>无路由位置</td><td>关闭</td><td>关闭</td><td>请勿使用 <code>{location}</code>，否则会渲染为空。</td></tr>
+              <tr><td>仅可点击链接</td><td>开</td><td>关闭</td><td>添加 <code>{location}</code>。不写入位置字段。</td></tr>
+              <tr><td>仅元数据</td><td>开</td><td>开</td><td>省略 <code>{location}</code>。仅写入已配置的字段。</td></tr>
+              <tr><td>链接与元数据</td><td>开</td><td>开</td><td>添加 <code>{location}</code> 并配置元数据字段。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>关闭使用当前位置，会同时阻止该路由的令牌渲染和元数据输出，即使仍保留之前配置的元数据格式供以后使用。</p>
+      </section>
+
+      <section class="docs-section" id="location-token">
+        <div class="docs-section-label">04 / 模板令牌</div>
+        <h2>使用 <code>{location}</code> 不更改笔记元数据</h2>
+        <p>开启使用当前位置且原始快照可用时， <code>{location}</code> 渲染经过验证的 Google Maps Markdown 链接：</p>
+        <pre class="docs-code-block"><code>[Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>令牌可用于可复用条目模板、自定义条目前后缀和仓库 Markdown 模板。它使用路由所选的同一组准确或城市坐标。</p>
+
+        <h3 id="token-example">仅令牌示例</h3>
+        <p>对于这样的后缀：</p>
+        <pre class="docs-code-block"><code>Captured from {location}</code></pre>
+        <p>Vox.md 可生成：</p>
+        <pre class="docs-code-block"><code>Captured from [Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>关闭写入位置元数据时，该链接是路由添加的唯一位置内容。不会添加 <code>locations:</code> 集合，也没有 <code>location.*::</code> 字段被写入。</p>
+
+        <h3 id="composer-fix">编辑器一键修复</h3>
+        <p>如果实际生效的条目前缀、后缀或可复用条目模板使用 <code>{location}</code> 而所选路由关闭了目前位置时，编辑器会说明令牌将渲染为空，并提供 <strong>为 [Route] 使用当前位置</strong>。该操作为路由开启目前位置，同时有意保持写入位置元数据关闭，让下一次发送可解析令牌而不更改笔记元数据。实时仓库模板文件仅在投递时读取，因此其内容无法触发编辑器提示；仓库模板使用该令牌时，请手动启用目前位置。</p>
+
+        <div class="docs-callout docs-callout-neutral">
+          <strong>令牌为空时</strong>
+          <p><code>{location}</code> 在目前位置关闭、位置不可用或采集选择不带位置继续时变为空字符串。设计可选模板行时，请注意周围标点和标签。</p>
+        </div>
+
+        <h3 id="capture-bar-location">独立采集栏操作</h3>
+        <p>快速捕捉 <strong>目前位置</strong> 操作直接在当前草稿中插入一次性 Google Maps 链接。它独立于路由，不更改使用当前位置或写入位置元数据设置。</p>
+      </section>
+
+      <section class="docs-section" id="metadata-output">
+        <div class="docs-section-label">05 / 元数据输出</div>
+        <h2>仅在你选择时写入结构化字段</h2>
+        <p>笔记需要接收机器可读位置字段，以补充或替代以下内容时，请开启写入位置元数据： <code>{location}</code> 链接。</p>
+
+        <div class="docs-feature-grid">
+          <div><strong>笔记 frontmatter</strong><p>将每个位置追加到名为以下内容的集合： <code>locations</code> 默认以采集 ID 为键。现有的无关 frontmatter 会保留。</p></div>
+          <div><strong>行内条目字段</strong><p>写入 Dataview 风格的 <code>location.key:: value</code> 行放在采集条目旁边。不会添加 frontmatter 集合。</p></div>
+          <div><strong>结构化字段</strong><p>选择并重命名坐标、纬度、经度、地点、城市、地区、国家、提供商链接、geo URI、精度、时间戳、来源和 ID。</p></div>
+          <div><strong>高级 YAML</strong><p>为笔记 frontmatter 使用经过验证且有边界限制的 YAML 模板。高级 YAML 不适用于行内条目字段。</p></div>
+        </div>
+
+        <h3 id="frontmatter-example">结构化 frontmatter 示例</h3>
+        <pre class="docs-code-block"><code>---
+title: Field Notes
+locations:
+  - id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    coordinates: [45.501235, -73.567890]
+    place: "Café &amp; Main"
+    appleMapsURL: "https://maps.apple.com/?ll=45.501235%2C-73.567890&amp;q=Caf%C3%A9%20%26%20Main"
+    timestamp: "2023-11-14T22:13:20.000Z"
+    source: "app"
+---</code></pre>
+        <p>滚动笔记可在集合中保留多次采集。位置合并内置重试保护：同一采集 ID 的重试无法重复追加同一位置。如果所选集合键已有不兼容的用户编写值，Vox.md 会停止，而不会覆盖。</p>
+
+        <h3 id="inline-example">行内条目示例</h3>
+        <pre class="docs-code-block"><code>location.id:: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+location.coordinates:: [45.501235, -73.567890]
+location.place:: "Café &amp; Main"
+
+Captured text</code></pre>
+
+        <h3 id="advanced-yaml">高级 YAML 占位符</h3>
+        <p>高级模板可使用占位符，例如 <code>{{coordinates}}</code>, <code>{{latitude}}</code>, <code>{{longitude}}</code>, <code>{{place}}</code>, <code>{{city}}</code>, <code>{{region}}</code>, <code>{{country}}</code>, <code>{{appleMapsURL}}</code>, <code>{{googleMapsURL}}</code>, <code>{{openStreetMapURL}}</code>, <code>{{geoURI}}</code>, <code>{{accuracy}}</code>, <code>{{timestamp}}</code>, <code>{{source}}</code>，以及 <code>{{id}}</code>。保存前请在路由设置中预览配置。</p>
+      </section>
+
+      <section class="docs-section" id="precision">
+        <div class="docs-section-label">06 / 精度与标签</div>
+        <h2>准确与城市使用同一份一致快照</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>精度</th><th>坐标</th><th>标签</th><th>链接与字段</th></tr></thead>
+            <tbody>
+              <tr><td>准确</td><td>保留原始定位结果，显示到小数点后六位。</td><td>所选元数据字段需要时，可包含兴趣点名称。</td><td>所有派生值都使用准确坐标。</td></tr>
+              <tr><td>城市</td><td>在保留快照前，将经纬度四舍五入到小数点后两位。</td><td>移除兴趣点名称；城市、地区和国家可保留。</td><td>所有提供商 URL、geo URI、令牌和字段都使用舍入后的坐标。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>仅在开启写入位置元数据，且所选结构化字段或高级占位符需要地点、城市、地区或国家时，才使用 Apple 系统反向地理编码器。仅令牌路由会跳过反向地理编码。标签查询失败时，基于坐标的输出仍可用。</p>
+      </section>
+
+      <section class="docs-section" id="capture-sources">
+        <div class="docs-section-label">07 / 采集来源</div>
+        <h2>快照属于采集发起位置</h2>
+        <p>目前位置在采集发起的边界时刻确定。重试和恢复会复用这一持久保存的结果，而不会悄悄获取更新的位置。</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>采集来源</th><th>获取边界</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone 和 iPad 快速捕捉</td><td>发送</td></tr>
+              <tr><td>共享表单</td><td>在共享扩展中发送</td></tr>
+              <tr><td>直接入队的文本、链接和文件意图</td><td>意图调用</td></tr>
+              <tr><td>打开快速捕捉的快捷指令、小组件、控件和深层链接</td><td>在编辑器中发送</td></tr>
+              <tr><td>快捷指令、小组件、控件、即时语音和键盘驱动路由录音</td><td>录音停止时</td></tr>
+              <tr><td>Apple Watch 普通采集投递</td><td>以手表停止录音时为准；iPhone 不会替换为自身的位置</td></tr>
+              <tr><td>Mac 采集</td><td>发送时，或即时语音投递的录音停止时</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>手表仅录音</strong> 将原始 M4A 音频导出到文件，没有 Markdown 内容，因此即使路由其他情况下使用目前位置，也不会请求位置。</p>
+      </section>
+
+      <section class="docs-section" id="unavailable">
+        <div class="docs-section-label">08 / 不可用与恢复</div>
+        <h2>选择各路由如何处理不可用的定位结果</h2>
+        <ul>
+          <li><strong>询问：</strong> 交互式采集可重试、取消、仅本次不带位置发送，或为该路由选择始终不带位置发送。</li>
+          <li><strong>不带位置发送：</strong> 不带令牌值或元数据输出继续投递。</li>
+          <li><strong>取消采集：</strong> 会停止投递，而不会创建缺少所请求发起位置的笔记。</li>
+          <li><strong>重置已保存选择：</strong> 使用路由位置设置中的重置位置不可用选择。</li>
+        </ul>
+        <p>无人值守的询问请求保存发起时位置不可用的结果，以供稍后检查。重试排队或失败的采集绝不会替换为稍后位置。待处理工作仅保留本地恢复所需的、按隐私设置调整后的快照或不可用结果。</p>
+      </section>
+
+      <section class="docs-section" id="migration">
+        <div class="docs-section-label">09 / 现有路由</div>
+        <h2>升级保留原有元数据行为</h2>
+        <p>将获取和输出分开可保证迁移安全：</p>
+        <ul>
+          <li><strong>新路由：</strong> 使用当前位置和写入位置元数据初始均关闭。</li>
+          <li><strong>以前启用位置的路由：</strong> 升级后两项控件均保持开启，保留这些路由原有元数据输出。</li>
+          <li><strong>此前停用位置的路由：</strong> 两项控件都保持关闭；升级不会引入新的元数据输出。</li>
+        </ul>
+        <p>要将现有写入元数据的路由改为仅令牌行为，保持使用当前位置开启，关闭写入位置元数据。现有 Markdown 不会被重写或移除。</p>
+      </section>
+
+      <section class="docs-section" id="privacy">
+        <div class="docs-section-label">10 / 隐私与保留</div>
+        <h2>一次明确的位置快照，绝不后台跟踪</h2>
+        <ul>
+          <li>Vox.md 不会持续监测位置或运行后台位置跟踪。</li>
+          <li>位置不会发送至 Vox.md 服务器、分析系统、广告系统或第三方 AI 服务。</li>
+          <li>令牌和提供商 URL 在本地格式化。只有打开链接时，Apple Maps、Google Maps 或 OpenStreetMap 才会收到坐标。</li>
+          <li>仅当所选元数据需要地点名称时，Apple 系统反向地理编码器才可能发起网络请求。仅令牌位置会跳过此查询。</li>
+          <li>投递成功后，可恢复请求会精简为不含内容的回执，已完成采集历史不保留坐标、标签、提供商 URL 或位置模板。</li>
+          <li>位置元数据或令牌链接写入 Markdown 后，便成为所选文件的一部分。文件同步提供商可能按其自身条款处理该文件。</li>
+        </ul>
+        <div class="docs-callout">
+          <strong>权限可保持开启，路由仍保持私密</strong>
+          <p>可以保持系统权限可用于独立的目前位置操作，同时关闭所有路由的使用当前位置设置。</p>
+        </div>
+        <p>请参阅 <a href="/zh-hans/privacy.html">隐私政策</a> 了解完整的数据处理和保留详情。</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">11 / 故障排查</div>
+        <h2>修复常见位置和模板问题</h2>
+        <div class="docs-troubleshooting">
+          <details>
+            <summary><code>{location}</code> 渲染为空</summary>
+            <p>确认实际生效的条目模板、前缀、后缀或仓库模板使用了完全一致的小写令牌 <code>{location}</code>。然后为执行投递的路由开启使用当前位置。编辑器的一键修复可针对检测到的行内条目格式执行此操作，而不启用元数据；实时仓库模板文件需手动设置路由。如果权限被拒绝或定位结果不可用，请检查路由的不可用行为及系统位置设置。</p>
+          </details>
+          <details>
+            <summary>链接有效，但未出现元数据</summary>
+            <p>仅令牌配置下，这是预期行为。打开路由的位置设置，开启写入位置元数据，再选择笔记 frontmatter 或行内条目字段，并选择所需字段。</p>
+          </details>
+          <details>
+            <summary>出现元数据，但条目中没有链接</summary>
+            <p>元数据输出不会自动插入链接。请添加 <code>{location}</code> 到实际生效的条目格式或仓库 Markdown 模板中。</p>
+          </details>
+          <details>
+            <summary>缺少地点或城市</summary>
+            <p>确认已选择标签字段。坐标仍可用时，Apple 反向地理编码器仍可能失败。城市精度会按设计移除兴趣点名称。</p>
+          </details>
+          <details>
+            <summary>frontmatter 投递报告冲突</summary>
+            <p>配置的集合键， <code>locations</code> 默认情况下必须是兼容的位置列表。在路由设置中重命名集合，或调整现有用户编写的 frontmatter。Vox.md 不会覆盖不兼容的值。</p>
+          </details>
+          <details>
+            <summary>重试时的位置较旧或不可用</summary>
+            <p>这是有意设计。请求保留发起时结果，避免稍后重试悄悄声称另一个采集位置。需要新快照时请新建采集。</p>
+          </details>
+          <details>
+            <summary>已允许位置权限，但路由未请求位置</summary>
+            <p>系统权限只是门槛。编辑该路由并开启使用当前位置。仅授予权限绝不会自动为路由启用位置。</p>
+          </details>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hans/developers">开发者</a></li>
+        <li><a href="/zh-hans/about">关于</a></li>
+        <li><a href="/zh-hans/contact">联系</a></li>
+        <li><a href="/zh-hans/">首页</a></li>
+        <li><a href="/zh-hans/docs/">文档</a></li>
+        <li><a href="/zh-hans/blog/">博客</a></li>
+        <li><a href="/zh-hans/privacy.html">隐私</a></li>
+        <li><a href="/zh-hans/terms.html">条款</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地采集 · 用户掌控文件。</div>
+    </div>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="tr" dir="ltr" data-search-section="Bölüm" data-search-guide="Kılavuz" data-search-empty="“{query}” için sonuç yok">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mevcut konum, {location} ve Meta Veri — Vox.md Belgeleri</title>
+  <meta name="description" content="Vox.md Rotalarında tek seferlik Mevcut konumu, {location} Markdown belirtecini, isteğe bağlı ön bilgi veya satır içi konum meta verilerini, hassasiyeti, gizliliği ve kurtarmayı yapılandırın.">
+  <link rel="canonical" href="https://vox.isolated.tech/tr/docs/location/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Dil modelleri için Vox.md belgeleri">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Mevcut konum, {location} ve Meta Veri — Vox.md Belgeleri">
+  <meta property="og:description" content="Notlarınıza otomatik konum meta verisi eklemeden Markdown şablonlarında tek seferlik konum kullanın.">
+  <meta property="og:url" content="https://vox.isolated.tech/tr/docs/location/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vox.md Mevcut Konum Kılavuzu">
+  <meta name="twitter:description" content="Tek seferlik konum, {location}, meta veri çıktısı, hassasiyet, gizlilik ve geçiş için kapsamlı kılavuz.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Vox.md'de Mevcut konum, {location} ve Konum Meta Verileri",
+  "description": "Ön ayar başına Mevcut konum alma, {location} Markdown belirteci, isteğe bağlı meta veri çıktısı, gizlilik, geçiş ve sorun giderme için kapsamlı kılavuz.",
+  "dateModified": "2026-08-21",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/tr/docs/location/",
+  "inLanguage": "tr",
+  "name": "Mevcut konum, {location} ve Meta Veri — Vox.md Belgeleri"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/tr/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Belgeler",
+      "item": "https://vox.isolated.tech/tr/docs/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Mevcut konum",
+      "item": "https://vox.isolated.tech/tr/docs/location/"
+    }
+  ],
+  "inLanguage": "tr",
+  "name": "Mevcut konum, {location} ve Meta Veri — Vox.md Belgeleri",
+  "description": "Vox.md Rotalarında tek seferlik Mevcut konumu, {location} Markdown belirtecini, isteğe bağlı ön bilgi veya satır içi konum meta verilerini, hassasiyeti, gizliliği ve kurtarmayı yapılandırın."
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md Herkese Açık Bilgi API&#x27;si">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/location/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/location/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/location/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/location/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/location/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/location/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/location/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/location/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/location/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/location/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/location/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/location/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/location/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/location/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/location/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/location/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/location/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/location/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/location/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/location/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/location/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/location/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/location/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/location/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="Ana gezinme">
+  <div class="nav-inner docs-header-inner">
+    <a href="/tr/" class="logo" aria-label="Vox.md ana sayfası">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ belgeler</span></span>
+    </a>
+    <form class="docs-search" role="search" action="../" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="Belgelerde ara" aria-label="Belgelerde ara" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Arama sonuçları" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/tr/blog/">Blog yazıları</a></li>
+      <li><a href="/tr/privacy.html">Gizlilik</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>Dil</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr" aria-current="page">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="Bu sayfada">
+      <div class="docs-sidebar-title">Bu Sayfada</div>
+      <ol>
+        <li><a href="#overview">İki Bağımsız Tercih</a></li>
+        <li><a href="#setup">Rota Kurun</a></li>
+        <li><a href="#configurations">Yaygın Yapılandırmalar</a></li>
+        <li><a href="#location-token"><code>{location}</code> Belirteç</a></li>
+        <li><a href="#metadata-output">Meta Veri Çıktısı</a></li>
+        <li><a href="#precision">Hassasiyet ve Etiketler</a></li>
+        <li><a href="#capture-sources">Yakalama Kaynakları</a></li>
+        <li><a href="#unavailable">Kullanılamama ve Kurtarma</a></li>
+        <li><a href="#migration">Mevcut Rotalar</a></li>
+        <li><a href="#privacy">Gizlilik ve Saklama</a></li>
+        <li><a href="#troubleshooting">Sorun Giderme</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="location-guide-title">
+      <div class="page-eyebrow">Belgeler · Rotalar</div>
+      <h1 class="page-title" id="location-guide-title">Mevcut konum, <code>{location}</code>, ve Meta Veri</h1>
+      <p class="docs-hero-copy">Otomatik YAML veya satır içi alan eklemeden girdi biçimlendirmesinde kaynak anına ait tek konumu kullanın. Konum alma ve meta veri çıktısı, her Rotada ayrı ve açık tercihlerdir.</p>
+      <div class="docs-meta-row" aria-label="Kılavuz bilgileri">
+        <span>21 Ağustos 2026 tarihinde güncellendi</span>
+        <span>Tek seferlik alma</span>
+        <span>Arka planda izleme yok</span>
+        <a href="/tr/docs/">Tam Özellik Kılavuzu</a>
+      </div>
+      </header>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="overview">
+        <div class="docs-section-label">01 / Genel Bakış</div>
+        <h2>Konum Almak Meta Veri Çıktısı Anlamına Gelmez</h2>
+        <p>Her Rotada iki ayrı konum kontrolü bulunur. <strong>Mevcut Konumu Kullan</strong> rotanın kaynak anına ait tek bir konum isteyip istemeyeceğini belirler. <strong>Konum Meta Verilerini Yaz</strong> alınan anlık konumun ön bilgi veya satır içi alan olarak da yazılıp yazılmayacağını belirler.</p>
+
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Kontrol</th><th>Anlamı</th><th>Ne anlama gelmez?</th></tr></thead>
+            <tbody>
+              <tr><td>Sistem konum izni</td><td>Uygulama veya desteklenen yakalama arayüzü kullanımdayken Vox.md&#x27;nin konum istemesine izin verir.</td><td>Hiçbir Rota için konumu etkinleştirmez.</td></tr>
+              <tr><td>Mevcut Konumu Kullan</td><td>Bu rota için bir konum ister ve şurada kullanılabilir kılar: <code>{location}</code>.</td><td>Otomatik olarak YAML veya satır içi meta veri yazmaz.</td></tr>
+              <tr><td>Konum Meta Verilerini Yaz</td><td>Alınan anlık konumdan seçili yapılandırılmış alanları veya doğrulanmış gelişmiş YAML&#x27;ı yazar.</td><td>şunun olup olmayacağını kontrol etmez: <code>{location}</code> işleyebilir.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <strong>Niyeti belirleyen izin değil, rotadır</strong>
+          <p>Kullanırken izni vermek yalnızca işletim sistemi geçidini açar. Vox.md yine yalnızca bağımsız Mevcut konum Yakalama Çubuğu eylemi veya Mevcut Konumu Kullan&#x27;ı açtığınız Rota için konum ister.</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="setup">
+        <div class="docs-section-label">02 / Kurulum</div>
+        <h2>Tek Bir Rota İçin Mevcut Konumu Ayarlayın</h2>
+        <ol class="docs-steps">
+          <li><strong>Rotalar&#x27;ı açın.</strong><span>iPhone veya iPad&#x27;de Ayarlar → Rotalar&#x27;ı açın. Mac&#x27;te Ayarlar&#x27;ı açıp Rotalar&#x27;ı seçin.</span></li>
+          <li><strong>Rotayı düzenleyin.</strong><span>Kaynak konumunu kullanacak rotayı seçin. Ayar o rotaya aittir, diğerlerini etkilemez.</span></li>
+          <li><strong>Konum&#x27;u açın.</strong><span>Açın: <em>Mevcut Konumu Kullan</em>. Şunu koruyun: <em>Konum Meta Verilerini Yaz</em> yalnızca belirteçli davranış için kapalı.</span></li>
+          <li><strong>Hassasiyeti seçin.</strong><span>Kaynak konum ölçümü için tam, ilgi çekici yer etiketi olmadan iki ondalık basamağa yuvarlanan koordinatlar için Şehir kullanın.</span></li>
+          <li><strong>Kullanılamama davranışını seçin.</strong><span>Sor, Konumsuz Gönder veya Yakalamayı İptal Et, kaynak konum ölçümü alınamadığında ne olacağını belirler.</span></li>
+          <li><strong>Ekle <code>{location}</code> istenirse.</strong><span>Belirteci Girdi Şablonu&#x27;na, özel girdi öneki veya sonekine ya da kasa Markdown şablonuna yerleştirin.</span></li>
+        </ol>
+        <p>İlk kullanımda işletim sisteminin konum izni istemi görünebilir. İzin önceden reddedilmişse iOS, iPadOS veya macOS sistem ayarlarında Vox.md için konum erişimini açın.</p>
+      </section>
+
+      <section class="docs-section" id="configurations">
+        <div class="docs-section-label">03 / Yaygın Yapılandırmalar</div>
+        <h2>Gereken En Küçük Konum Alanını Seçin</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>İstenen sonuç</th><th>Mevcut Konumu Kullan</th><th>Konum Meta Verilerini Yaz</th><th>tapınak</th></tr></thead>
+            <tbody>
+              <tr><td>Rota konumu yok</td><td>Kapalı</td><td>Kapalı</td><td>Kullanmayın: <code>{location}</code>, aksi halde boş işlenir.</td></tr>
+              <tr><td>Yalnızca tıklanabilir bağlantı</td><td>Açık</td><td>Kapalı</td><td>Ekle <code>{location}</code>. Konum alanı yazılmaz.</td></tr>
+              <tr><td>Yalnızca meta veri</td><td>Açık</td><td>Açık</td><td>Atla <code>{location}</code>. Yalnızca yapılandırılmış alanlar yazılır.</td></tr>
+              <tr><td>Bağlantı ve meta veriler</td><td>Açık</td><td>Açık</td><td>Ekle <code>{location}</code> ve meta veri alanlarını yapılandırın.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Mevcut Konumu Kullan&#x27;ı kapatmak, önceki meta veri biçimlendirme tercihleri sonradan kullanılmak üzere yapılandırılmış kalsa bile, o rota için belirteç işlemeyi ve meta veri çıktısını engeller.</p>
+      </section>
+
+      <section class="docs-section" id="location-token">
+        <div class="docs-section-label">04 / Şablon Belirteci</div>
+        <h2>Kullanın: <code>{location}</code> Not Meta Verilerini Değiştirmeden</h2>
+        <p>Mevcut Konumu Kullan açık ve kaynak anlık konumu kullanılabilirken, <code>{location}</code> doğrulanmış Google Maps Markdown bağlantısı oluşturur:</p>
+        <pre class="docs-code-block"><code>[Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>Belirteç yeniden kullanılabilir Girdi Şablonlarında, özel girdi önek ve soneklerinde ve kasa Markdown şablonlarında çalışır. Rota için seçilen aynı tam veya Şehir koordinatlarını kullanır.</p>
+
+        <h3 id="token-example">Yalnızca belirteç örneği</h3>
+        <p>Şu tür sonek için:</p>
+        <pre class="docs-code-block"><code>Captured from {location}</code></pre>
+        <p>Vox.md şunları üretebilir:</p>
+        <pre class="docs-code-block"><code>Captured from [Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>Konum Meta Verilerini Yaz kapalıyken bu bağlantı, rotanın eklediği tek konum içeriğidir. Şu eklenmez: <code>locations:</code> koleksiyonu ve şu bulunmaz: <code>location.*::</code> alanları yazılır.</p>
+
+        <h3 id="composer-fix">Düzenleyicide tek dokunuşluk düzeltme</h3>
+        <p>Etkin girdi öneki, soneki veya yeniden kullanılabilir Girdi Şablonu şunu kullanıyorsa: <code>{location}</code> seçili rotada Mevcut konum kapalıyken düzenleyici belirtecin boş işleneceğini açıklar ve şunu sunar: <strong>[Route] için Mevcut Konumu Kullan</strong>. Bu eylem rotada Mevcut konumu açarken Konum Meta Verilerini Yaz&#x27;ı bilerek kapalı bırakır; böylece sonraki Gönder not meta verilerini değiştirmeden belirteci çözebilir. Canlı kasa şablon dosyaları yalnızca teslimatta okunur; içerikleri bu düzenleyici ipucunu tetikleyemez. Kasa şablonu belirteci kullanıyorsa Mevcut konumu elle etkinleştirin.</p>
+
+        <div class="docs-callout docs-callout-neutral">
+          <strong>Belirteç boş olduğunda</strong>
+          <p><code>{location}</code> Mevcut konum kapalıysa, konum kullanılamıyorsa veya yakalama konumsuz sürerse boş dizeye dönüşür. İsteğe bağlı şablon satırları tasarlarken çevresindeki noktalama ve etiketleri düşünün.</p>
+        </div>
+
+        <h3 id="capture-bar-location">Bağımsız Yakalama Çubuğu eylemi</h3>
+        <p>Hızlı yakalama <strong>Mevcut konum</strong> eylemi, mevcut taslağa doğrudan tek seferlik Google Maps bağlantısı ekler. Rotalardan bağımsızdır; Mevcut Konumu Kullan&#x27;ı veya Konum Meta Verilerini Yaz&#x27;ı değiştirmez.</p>
+      </section>
+
+      <section class="docs-section" id="metadata-output">
+        <div class="docs-section-label">05 / Meta Veri Çıktısı</div>
+        <h2>Yapılandırılmış Alanları Yalnızca Seçtiğinizde Yazın</h2>
+        <p>Not, şuna ek olarak veya onun yerine makinece okunabilir konum alanları alacaksa Konum Meta Verilerini Yaz&#x27;ı açın: <code>{location}</code> bağlantısı.</p>
+
+        <div class="docs-feature-grid">
+          <div><strong>Not Ön Bilgileri</strong><p>Her konumu şu adlı koleksiyona ekler: <code>locations</code> varsayılan olarak Yakalama Kimliğiyle anahtarlanır. İlgisiz mevcut ön bilgiler korunur.</p></div>
+          <div><strong>Satır İçi Girdi Alanları</strong><p>Dataview tarzında şunu yazar: <code>location.key:: value</code> satırları yakalanan girdinin yanında yer alır. Ön bilgi koleksiyonu eklenmez.</p></div>
+          <div><strong>Yapılandırılmış Alanlar</strong><p>Koordinatları, enlemi, boylamı, yeri, şehri, bölgeyi, ülkeyi, sağlayıcı bağlantılarını, geo URI&#x27;sini, doğruluğu, zaman damgasını, kaynağı ve kimliği seçip yeniden adlandırın.</p></div>
+          <div><strong>Gelişmiş YAML</strong><p>Not Ön Bilgileri için doğrulanmış, sınırlandırılmış YAML şablonu kullanır. Gelişmiş YAML, satır içi girdi alanlarında kullanılamaz.</p></div>
+        </div>
+
+        <h3 id="frontmatter-example">Yapılandırılmış ön bilgi örneği</h3>
+        <pre class="docs-code-block"><code>---
+title: Field Notes
+locations:
+  - id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    coordinates: [45.501235, -73.567890]
+    place: "Café &amp; Main"
+    appleMapsURL: "https://maps.apple.com/?ll=45.501235%2C-73.567890&amp;q=Caf%C3%A9%20%26%20Main"
+    timestamp: "2023-11-14T22:13:20.000Z"
+    source: "app"
+---</code></pre>
+        <p>Dönen notlar koleksiyonda birden fazla yakalama tutabilir. Yeniden deneme koruması konum birleştirmede yerleşiktir: aynı Yakalama Kimliğiyle yeniden deneme aynı konumu iki kez ekleyemez. Seçili koleksiyon anahtarı zaten kullanıcının yazdığı uyumsuz değer içeriyorsa Vox.md üzerine yazmak yerine durur.</p>
+
+        <h3 id="inline-example">Satır içi girdi örneği</h3>
+        <pre class="docs-code-block"><code>location.id:: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+location.coordinates:: [45.501235, -73.567890]
+location.place:: "Café &amp; Main"
+
+Captured text</code></pre>
+
+        <h3 id="advanced-yaml">Gelişmiş YAML yer tutucuları</h3>
+        <p>Gelişmiş şablonlar şu tür yer tutucuları kullanabilir: <code>{{coordinates}}</code>, <code>{{latitude}}</code>, <code>{{longitude}}</code>, <code>{{place}}</code>, <code>{{city}}</code>, <code>{{region}}</code>, <code>{{country}}</code>, <code>{{appleMapsURL}}</code>, <code>{{googleMapsURL}}</code>, <code>{{openStreetMapURL}}</code>, <code>{{geoURI}}</code>, <code>{{accuracy}}</code>, <code>{{timestamp}}</code>, <code>{{source}}</code>, ve <code>{{id}}</code>. Kaydetmeden önce rota ayarlarında yapılandırmayı önizleyin.</p>
+      </section>
+
+      <section class="docs-section" id="precision">
+        <div class="docs-section-label">06 / Hassasiyet ve Etiketler</div>
+        <h2>tam ve Şehir Tek Tutarlı Anlık Konum Kullanır</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Hassasiyet</th><th>Koordinatlar</th><th>Etiketler</th><th>Bağlantılar ve alanlar</th></tr></thead>
+            <tbody>
+              <tr><td>tam</td><td>Kaynak konum ölçümünü altı ondalık basamakla korur.</td><td>Seçili meta veri alanı gerektirdiğinde ilgi çekici yer etiketi içerebilir.</td><td>Türetilen her değer tam koordinatlarını kullanır.</td></tr>
+              <tr><td>Şehir</td><td>Anlık konum saklanmadan önce enlem ve boylamı iki ondalık basamağa yuvarlar.</td><td>İlgi çekici yer etiketlerini kaldırır; şehir, bölge ve ülke kalabilir.</td><td>Her sağlayıcı URL&#x27;si, geo URI, belirteç ve alan yuvarlanmış koordinatları kullanır.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Apple&#x27;ın sistem ters coğrafi kodlayıcısı yalnızca Konum Meta Verilerini Yaz açıkken ve seçili yapılandırılmış alan veya gelişmiş yer tutucu yer, şehir, bölge ya da ülke gerektiriyorsa kullanılır. Yalnızca belirteçli rota ters coğrafi kodlamayı atlar. Etiket sorgusu başarısız olursa koordinat tabanlı çıktı kullanılabilir kalır.</p>
+      </section>
+
+      <section class="docs-section" id="capture-sources">
+        <div class="docs-section-label">07 / Yakalama Kaynakları</div>
+        <h2>Anlık Konum Yakalamanın Kaynağına Aittir</h2>
+        <p>Mevcut konum, yakalamanın başladığı sınırda değerlendirilir. Yeniden deneme ve kurtarma, sessizce daha yeni bir konum almak yerine bu kalıcı sonucu yeniden kullanır.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Yakalama kaynağı</th><th>Alma sınırı</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone ve iPad Hızlı yakalama</td><td>Gönder</td></tr>
+              <tr><td>Paylaşım Sayfası</td><td>Paylaşım uzantısında Gönder</td></tr>
+              <tr><td>Doğrudan kuyruğa alınan metin, bağlantı ve dosya amaçları</td><td>Amaç çağrısı</td></tr>
+              <tr><td>Hızlı yakalama&#x27;yı açan Kestirmeler, araç takımları, kontroller ve derin bağlantılar</td><td>Düzenleyicide Gönder</td></tr>
+              <tr><td>Kestirme, araç takımı, kontrol, anında ses ve klavyeyle yönlendirilen rota kaydı</td><td>Kaydın durdurulması</td></tr>
+              <tr><td>Apple Watch normal Yakalama teslimatı</td><td>Watch&#x27;ta kaydın durdurulması; iPhone kendi konumunu bunun yerine kullanmaz</td></tr>
+              <tr><td>Mac Yakalama</td><td>Gönder veya anında sesli teslimat için kaydın durdurulması</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Watch Yalnızca Kayıt</strong> ham M4A sesini Markdown alanı olmadan Dosyalar&#x27;a aktarır; bu yüzden rota normalde Mevcut konum kullansa bile konum istemez.</p>
+      </section>
+
+      <section class="docs-section" id="unavailable">
+        <div class="docs-section-label">08 / Kullanılamama ve Kurtarma</div>
+        <h2>Konum Ölçümü Kullanılamadığında Her Rotanın Davranışını Seçin</h2>
+        <ul>
+          <li><strong>Sor:</strong> etkileşimli yakalamalar yeniden deneyebilir, iptal edebilir, bir kez konumsuz gönderebilir veya rota için Her Zaman Konumsuz Gönder&#x27;i seçebilir.</li>
+          <li><strong>Konumsuz Gönder:</strong> belirteç değeri veya meta veri çıktısı olmadan teslimatı sürdürür.</li>
+          <li><strong>Yakalamayı İptal Et:</strong> istenen kaynak konumu olmadan not oluşturmak yerine teslimatı durdurur.</li>
+          <li><strong>Kayıtlı tercihi sıfırlayın:</strong> rotanın Konum ayarlarında Konum Kullanılamama Tercihini Sıfırla&#x27;yı kullanın.</li>
+        </ul>
+        <p>Gözetimsiz Sor isteği, kaynak anındaki kullanılamama sonucunu sonraki inceleme için saklar. Kuyruktaki veya başarısız yakalamayı yeniden denemek asla sonraki konumu bunun yerine koymaz. Bekleyen iş yalnızca yerel kurtarma için gereken gizlilik ayarlı anlık konumu veya kullanılamama sonucunu tutar.</p>
+      </section>
+
+      <section class="docs-section" id="migration">
+        <div class="docs-section-label">09 / Mevcut Rotalar</div>
+        <h2>Yükseltmeler Önceki Meta Veri Davranışını Korur</h2>
+        <p>Alma ile çıktı ayrımı geçişte güvenlidir:</p>
+        <ul>
+          <li><strong>Yeni rotalar:</strong> Mevcut Konumu Kullan ve Konum Meta Verilerini Yaz başlangıçta kapalıdır.</li>
+          <li><strong>Önceden konumu etkinleştirilmiş rotalar:</strong> yükseltmeden sonra iki kontrol de açık kalarak rotaların zaten yazdığı meta verileri korur.</li>
+          <li><strong>Önceden konumu kapalı rotalar:</strong> iki kontrol de kapalı kalır; yükseltme yeni meta veri çıktısı getirmez.</li>
+        </ul>
+        <p>Mevcut meta veri yazan rotayı yalnızca belirteçli davranışa dönüştürmek için Mevcut Konumu Kullan&#x27;ı açık bırakıp Konum Meta Verilerini Yaz&#x27;ı kapatın. Mevcut Markdown yeniden yazılmaz veya kaldırılmaz.</p>
+      </section>
+
+      <section class="docs-section" id="privacy">
+        <div class="docs-section-label">10 / Gizlilik ve Saklama</div>
+        <h2>Açıkça İstenen Tek Anlık Konum, Asla Arka Plan Takibi Değil</h2>
+        <ul>
+          <li>Vox.md konumu sürekli izlemez veya arka planda konum takibi yapmaz.</li>
+          <li>Konum, Vox.md sunucularına, analiz veya reklam sistemlerine ya da üçüncü taraf yapay zekâ hizmetlerine gönderilmez.</li>
+          <li>Belirteç ve sağlayıcı URL&#x27;leri yerelde biçimlendirilir. Apple Maps, Google Maps veya OpenStreetMap, koordinatları yalnızca bağlantısını açtığınızda alır.</li>
+          <li>Apple&#x27;ın sistem ters coğrafi kodlayıcısı, yalnızca seçili meta veriler yer etiketi gerektirdiğinde ağ isteği yapabilir. Yalnızca belirteçli konum bu sorgulamayı atlar.</li>
+          <li>Başarılı teslimattan sonra kurtarılabilir istekler içeriksiz alındılara indirgenir; tamamlanmış Yakalama geçmişi koordinatları, etiketleri, sağlayıcı URL&#x27;lerini veya konum şablonlarını saklamaz.</li>
+          <li>Konum meta verisi veya belirteç bağlantısı Markdown&#x27;a yazılırsa seçtiğiniz dosyanın parçası olur. Dosya eşitleme sağlayıcınız bu dosyayı kendi koşullarıyla işleyebilir.</li>
+        </ul>
+        <div class="docs-callout">
+          <strong>Rotalar özel kalırken izin açık kalabilir</strong>
+          <p>Bağımsız Mevcut konum eylemi için sistem iznini açık bırakırken her Rotanın Mevcut Konumu Kullan ayarını kapalı tutabilirsiniz.</p>
+        </div>
+        <p>Şuna bakın: <a href="/tr/privacy.html">Gizlilik Politikası</a> veri işleme ve saklama ayrıntılarının tamamı için.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">11 / Sorun Giderme</div>
+        <h2>Yaygın Konum ve Şablon Sorunlarını Düzeltin</h2>
+        <div class="docs-troubleshooting">
+          <details>
+            <summary><code>{location}</code> boş işlenir</summary>
+            <p>Etkin Girdi Şablonu&#x27;nun, önekin, sonekin veya kasa şablonunun tam olarak şu küçük harfli belirteci kullandığını doğrulayın: <code>{location}</code>. Sonra teslimatı yapan rotada Mevcut Konumu Kullan&#x27;ı açın. Düzenleyicinin tek dokunuşluk düzeltmesi, algılanan satır içi girdi biçimlendirmesi için meta veriyi etkinleştirmeden bunu yapabilir; canlı kasa şablon dosyaları elle rota kurulumu gerektirir. İzin reddedilmişse veya konum ölçümü kullanılamıyorsa rotanın kullanılamama davranışını ve sistem konum ayarlarını inceleyin.</p>
+          </details>
+          <details>
+            <summary>Bağlantı çalışıyor ama meta veri yok</summary>
+            <p>Yalnızca belirteçli yapılandırmada bu beklenir. Rotanın Konum ayarlarını açıp Konum Meta Verilerini Yaz&#x27;ı etkinleştirin; ardından Not Ön Bilgileri veya Satır İçi Girdi Alanları&#x27;nı seçip istediğiniz alanları belirleyin.</p>
+          </details>
+          <details>
+            <summary>Meta veri görünüyor ama girdide bağlantı yok</summary>
+            <p>Meta veri çıktısı otomatik bağlantı eklemez. Şunu ekleyin: <code>{location}</code> etkin girdi biçimlendirmesine veya kasa Markdown şablonuna.</p>
+          </details>
+          <details>
+            <summary>Yer veya şehir eksik</summary>
+            <p>Etiket alanının seçili olduğunu doğrulayın. Koordinatlar kullanılabilirken Apple&#x27;ın ters coğrafi kodlayıcısı başarısız olabilir. Şehir hassasiyeti, ilgi çekici yer etiketlerini bilerek kaldırır.</p>
+          </details>
+          <details>
+            <summary>Ön bilgi teslimatı çakışma bildiriyor</summary>
+            <p>Yapılandırılmış koleksiyon anahtarı, <code>locations</code> varsayılan olarak uyumlu konum listesi olmalıdır. Rota ayarlarında koleksiyonu yeniden adlandırın veya kullanıcının yazdığı mevcut ön bilgileri düzenleyin. Vox.md uyumsuz değerin üzerine yazmaz.</p>
+          </details>
+          <details>
+            <summary>Yeniden denemede eski veya kullanılamayan konum var</summary>
+            <p>Bu bilinçli bir davranıştır. İstek, sonraki yeniden denemenin sessizce farklı yakalama konumu iddia edememesi için kaynak anındaki sonucu korur. Yeni anlık konum gerektiğinde yeni yakalama başlatın.</p>
+          </details>
+          <details>
+            <summary>Konum izni verilmiş ama rota konum istemiyor</summary>
+            <p>Sistem izni yalnızca bir geçittir. İlgili Rotayı düzenleyip Mevcut Konumu Kullan&#x27;ı açın. Tek başına izin, rotayı asla etkinleştirmez.</p>
+          </details>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/tr/developers">Geliştiriciler</a></li>
+        <li><a href="/tr/about">Hakkında</a></li>
+        <li><a href="/tr/contact">İletişim</a></li>
+        <li><a href="/tr/">Ana Sayfa</a></li>
+        <li><a href="/tr/docs/">Belgeler</a></li>
+        <li><a href="/tr/blog/">Blog yazıları</a></li>
+        <li><a href="/tr/privacy.html">Gizlilik</a></li>
+        <li><a href="/tr/terms.html">Koşullar</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Yerel yakalama · Kullanıcı kontrolündeki dosyalar.</div>
+    </div>
+  <details class="language-switcher"><summary>Dil</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr" aria-current="page">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

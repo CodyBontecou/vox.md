@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-search-section="القسم" data-search-guide="دليل" data-search-empty="لا نتائج لـ «{query}»">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مدونة Vox.md: الالتقاط السريع وObsidian والملاحظات المحلية</title>
+  <meta name="description" content="أدلة وملاحظات عن الالتقاط السريع ومسارات Obsidian وMarkdown المحلي والتفريغ الصوتي الخاص على الجهاز.">
+  <link rel="canonical" href="https://vox.isolated.tech/ar/blog/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="وثائق Vox.md للنماذج اللغوية">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="مدونة Vox.md: الالتقاط السريع وMarkdown المحلي">
+  <meta property="og:description" content="ملاحظات عملية لإدخال النصوص والروابط والوسائط والصوت إلى Obsidian أو ملفات Markdown المحلية.">
+  <meta property="og:url" content="https://vox.isolated.tech/ar/blog/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="مدونة Vox.md: الالتقاط السريع والملاحظات المحلية">
+  <meta name="twitter:description" content="مسارات Obsidian والتقاط Markdown وتحديثات المنتج وأدوات الصوت الخاصة.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "مدونة Vox.md",
+  "description": "أدلة وملاحظات منتج عن الالتقاط السريع ومسارات Obsidian وMarkdown المحلي وأدوات الصوت الخاصة.",
+  "url": "https://vox.isolated.tech/ar/blog/",
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "blogPost": [
+    {
+      "@type": "BlogPosting",
+      "headline": "فرّغ مذكرات iPhone الصوتية إلى Markdown",
+      "url": "https://vox.isolated.tech/ar/blog/transcribe-voice-memos-iphone/",
+      "datePublished": "2026-10-30"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "التقاط سريع إلى Obsidian على iPhone: اختر طريقة",
+      "url": "https://vox.isolated.tech/ar/blog/obsidian-quick-capture-iphone/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "كيفية حفظ ملاحظات iPhone الصوتية في Obsidian",
+      "url": "https://vox.isolated.tech/ar/blog/voice-notes-to-obsidian-iphone/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "أرسل ملاحظات Apple Watch الصوتية إلى Obsidian",
+      "url": "https://vox.isolated.tech/ar/blog/apple-watch-obsidian-voice-notes/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "أضف نصًا وصوتًا إلى ملاحظة Obsidian اليومية على iPhone",
+      "url": "https://vox.isolated.tech/ar/blog/append-to-obsidian-daily-note-iphone/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "تحويل صوت خاص إلى نص على iPhone: إعداد اللوحة والخيارات",
+      "url": "https://vox.isolated.tech/ar/blog/best-voice-to-text-keyboard-iphone/",
+      "datePublished": "2026-06-13"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "فرّغ الصوت إلى Markdown دون اتصال على iPhone",
+      "url": "https://vox.isolated.tech/ar/blog/offline-transcription-iphone-markdown/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "احفظ الروابط والصور والمسح إلى Obsidian من iPhone",
+      "url": "https://vox.isolated.tech/ar/blog/save-links-photos-obsidian-iphone/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "قوالب التقاط Obsidian للوارد واليوميات وقائمة المهام",
+      "url": "https://vox.isolated.tech/ar/blog/obsidian-capture-templates/",
+      "datePublished": "2026-10-26"
+    }
+  ],
+  "inLanguage": "ar"
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="API المعلومات العامة لـ Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/">
+</head>
+<body>
+
+<nav aria-label="التنقل الرئيسي">
+  <div class="nav-inner">
+    <a href="/ar/" class="logo" aria-label="رئيسية Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ar/#how">كيف يعمل</a></li>
+      <li><a href="/ar/docs/">الوثائق</a></li>
+      <li><a href="/ar/blog/" aria-current="page">المدونة</a></li>
+      <li><a href="/ar/privacy.html">الخصوصية</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ar_68a120ac7e20">نزّل Vox.md</a>
+  <details class="language-switcher"><summary>اللغة</summary><ul><li><a href="/blog/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/" lang="ar" hreflang="ar" aria-current="page">العربية</a></li><li><a href="/bn/blog/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+<main>
+  <section class="blog-hero" aria-labelledby="blog-title">
+    <div class="wrap">
+      <p class="hero-label">ملاحظات Vox.md · مسارات Obsidian · تحديثات المنتج</p>
+      <h1 class="hero-title" id="blog-title">ملاحظات عن التقاط أسرع</h1>
+      <p class="hero-subtitle">ملاحظات منتج وأدلة عملية لإيصال الأفكار إلى Markdown محلي بفرز ونقر وتبديل تطبيقات أقل.</p>
+      <p class="mono-note"><strong>اختر سير التقاطك.</strong> اختر بين Obsidian المدمج والاختصارات و Vox.md، ثم اتبع دليل إعداد صوت iPhone أو تسجيلات Watch أو توجيه الملاحظات اليومية.</p>
+    </div>
+  </section>
+
+  <section class="blog-section" aria-labelledby="latest-posts">
+    <div class="wrap" style="display: flex; flex-direction: column; gap: 56px; padding-top: 16px; padding-bottom: 96px">
+      <div class="section-head">
+        <p class="section-label">01 / الأدلة</p>
+        <h2 class="section-title" id="latest-posts">تبدأ مسارات الالتقاط هنا</h2>
+        <p class="section-kicker">أدلة لاستخدام Vox.md مع Obsidian ومجلدات Markdown المحلية وأدوات الالتقاط في النظام والصوت الخاص على الجهاز.</p>
+      </div>
+
+      <div class="post-grid">
+        <article class="post-card">
+          <p class="post-meta">تسجيلات موجودة · <time datetime="2026-10-30">30 أكتوبر 2026</time></p>
+          <h3 class="post-title"><a href="/ar/blog/transcribe-voice-memos-iphone/">فرّغ مذكرات iPhone الصوتية إلى Markdown</a></h3>
+          <p class="post-desc">انسخ تفريغ Apple المتاح أو استورد تسجيلًا واحدًا إلى Vox.md، وراجع النص وتحقّق من وجهة Markdown.</p>
+          <span class="post-more" aria-hidden="true">اتبع دليل الاستيراد →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">ابدأ هنا · <time datetime="2026-10-26">26 أكتوبر 2026</time></p>
+          <h3 class="post-title"><a href="/ar/blog/obsidian-quick-capture-iphone/">التقاط سريع إلى Obsidian على iPhone: اختر طريقة</a></h3>
+          <p class="post-desc">قارن الالتقاط المدمج والاختصارات و Vox.md، ثم اختر دليل إعداد مفصلًا للملاحظة التي تريد حفظها.</p>
+          <span class="post-more" aria-hidden="true">اختر طريقة التقاط →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">مقارنة · <time datetime="2026-10-26">26 أكتوبر 2026</time></p>
+          <h3 class="post-title"><a href="/ar/compare/vox-md-vs-obsidian-quick-capture/">Vox.md مقابل الالتقاط السريع في Obsidian</a></h3>
+          <p class="post-desc">متى يكفي الخيار المدمج، وأين يناسبك Vox.md، وما الإعداد الذي يحتاجه كل سير عمل.</p>
+          <span class="post-more" aria-hidden="true">اقرأ المقارنة →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">سير Obsidian · <time datetime="2026-10-26">26 أكتوبر 2026</time></p>
+          <h3 class="post-title"><a href="/ar/blog/voice-notes-to-obsidian-iphone/">كيفية حفظ ملاحظات iPhone الصوتية في Obsidian</a></h3>
+          <p class="post-desc">اربط خزنتك واختر التفريغ المحلي وأرسل تسجيلًا إلى ملاحظة جديدة أو يومية. يشمل Markdown نموذجيًا وحدود الإعداد وخيار Obsidian المدمج.</p>
+          <span class="post-more" aria-hidden="true">اقرأ دليل الملاحظات الصوتية →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">سير Obsidian · <time datetime="2026-10-26">26 أكتوبر 2026</time></p>
+          <h3 class="post-title"><a href="/ar/blog/apple-watch-obsidian-voice-notes/">أرسل ملاحظات Apple Watch الصوتية إلى Obsidian</a></h3>
+          <p class="post-desc">سجّل على Apple Watch وأرسل الملاحظات إلى Obsidian عبر iPhone. أعدّ إعداد التقاط مسبقًا وافهم القائمة واستكشف أخطاء التسليم.</p>
+          <span class="post-more" aria-hidden="true">اقرأ الدليل →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">سير Obsidian · <time datetime="2026-10-26">26 أكتوبر 2026</time></p>
+          <h3 class="post-title"><a href="/ar/blog/append-to-obsidian-daily-note-iphone/">أضف نصًا وصوتًا إلى ملاحظة Obsidian اليومية على iPhone</a></h3>
+          <p class="post-desc">أعدّ إعداد Vox.md مسبقًا لإضافة نص أو صوت إلى ملاحظة Obsidian يومية. طابق أسماء الملفات وأدرج تحت العناوين ونسّق المهام دون بادئات مكررة.</p>
+          <span class="post-more" aria-hidden="true">اقرأ الدليل →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">تفريغ خاص · <time datetime="2026-10-26">26 أكتوبر 2026</time></p>
+          <h3 class="post-title"><a href="/ar/blog/offline-transcription-iphone-markdown/">فرّغ الصوت إلى Markdown دون اتصال على iPhone</a></h3>
+          <p class="post-desc">جهّز التفريغ المحلي في Vox.md وسجّل الصوت أو استورده واحفظ Markdown على iPhone. افهم تنزيل النماذج وتوفر المجلدات وفحوص العمل دون اتصال.</p>
+          <span class="post-more" aria-hidden="true">اقرأ الدليل →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">التقاط وسائط · <time datetime="2026-10-26">26 أكتوبر 2026</time></p>
+          <h3 class="post-title"><a href="/ar/blog/save-links-photos-obsidian-iphone/">احفظ الروابط والصور والمسح إلى Obsidian من iPhone</a></h3>
+          <p class="post-desc">التقط عناوين URL والصور والملفات والمستندات الممسوحة إلى خزنة Obsidian باستخدام Vox.md. افهم روابط Markdown ومسارات المرفقات وOCR والوصول عبر موفّر الملفات.</p>
+          <span class="post-more" aria-hidden="true">اقرأ الدليل →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">قوالب · <time datetime="2026-10-26">26 أكتوبر 2026</time></p>
+          <h3 class="post-title"><a href="/ar/blog/obsidian-capture-templates/">قوالب التقاط Obsidian للوارد واليوميات وقائمة المهام</a></h3>
+          <p class="post-desc">انسخ بنيات Markdown واضبط بادئات Vox.md لوارد Obsidian ويوميات وقائمة مهام. يشمل وصفات مسارات ورموز أختام زمنية وأمثلة مخرجات.</p>
+          <span class="post-more" aria-hidden="true">اقرأ الدليل →</span>
+        </article>
+
+        <article class="post-card">
+          <dl class="post-preview" aria-label="مسار التقاط نموذجي">
+            <div><dt>المسار</dt><dd>Daily Inbox</dd></div>
+            <div><dt>ملاحظة</dt><dd>Journal/{period}.md</dd></div>
+            <div><dt>الرؤية</dt><dd>## Inbox</dd></div>
+          </dl>
+          <p class="post-meta">دليل سير العمل · <time datetime="2026-10-25">25 أكتوبر 2026</time></p>
+          <h3 class="post-title"><a href="/ar/blog/obsidian-daily-note-iphone/">التقط إلى ملاحظة Obsidian اليومية من iPhone</a></h3>
+          <p class="post-desc">اضبط مسارًا واختر ملاحظة يومية وعنوانًا وتحقّق من Markdown المحفوظ واستعد عمليات التسليم الفاشلة.</p>
+          <span class="post-more" aria-hidden="true">اقرأ دليل الملاحظات اليومية →</span>
+        </article>
+
+        <article class="post-card">
+          <div class="post-preview post-preview-rec" aria-hidden="true">
+            <span class="rec-dot"></span>
+            <span class="rec-text">وقائمة الإعدادات المسبقة المحدّثة…</span>
+          </div>
+          <p class="post-meta">دليل · <time datetime="2026-06-13">13 يونيو 2026</time> · قراءة 6 دقائق</p>
+          <h3 class="post-title"><a href="/ar/blog/best-voice-to-text-keyboard-iphone/">تحويل صوت خاص إلى نص على iPhone: إعداد اللوحة والخيارات</a></h3>
+          <p class="post-desc">أعدّ إملاءً خاصًا في حقول النص المدعومة على iPhone، وافهم الوصول الكامل، وجهّز التفريغ المحلي.</p>
+          <span class="post-more" aria-hidden="true">اقرأ الدليل →</span>
+        </article>
+      </div>
+
+      <div class="start-here">
+        <div>
+          <p class="section-label">ابدأ هنا</p>
+          <h2>اقرأ ملاحظات المنتج والخصوصية</h2>
+          <p>تشرح الصفحة الرئيسية والصفحات القانونية كيفية تعامل Vox.md مع مسودات الالتقاط ووجهات Markdown والمرفقات والتفريغ المحلي ومزامنة موفّر الملفات.</p>
+        </div>
+        <div class="btn-row" aria-label="روابط البداية">
+          <a class="btn-secondary" href="/ar/docs/">وثائق الميزات</a>
+          <a class="btn-secondary" href="/ar/#how">جولة في المنتج</a>
+          <a class="btn-secondary" href="/ar/privacy.html">سياسة الخصوصية</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ar/developers">المطوّرون</a></li>
+        <li><a href="/ar/about">حول</a></li>
+        <li><a href="/ar/contact">تواصل</a></li>
+        <li><a href="/ar/">الرئيسية</a></li>
+        <li><a href="/ar/docs/">الوثائق</a></li>
+        <li><a href="/ar/blog/" aria-current="page">المدونة</a></li>
+        <li><a href="/ar/privacy.html">الخصوصية</a></li>
+        <li><a href="/ar/terms.html">الشروط</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">الدعم</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ar_68a120ac7e20">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · لا رفع للمحتوى</div>
+    </div>
+  <details class="language-switcher"><summary>اللغة</summary><ul><li><a href="/blog/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/" lang="ar" hreflang="ar" aria-current="page">العربية</a></li><li><a href="/bn/blog/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

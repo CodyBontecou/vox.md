@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="th" dir="ltr" data-search-section="ส่วน" data-search-guide="คู่มือ" data-search-empty="ไม่พบ “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ตำแหน่งปัจจุบัน {location} และข้อมูลเมตา — เอกสาร Vox.md</title>
+  <meta name="description" content="ตั้งค่าตำแหน่งปัจจุบันครั้งเดียว โทเคน Markdown {location} ข้อมูลเมตาตำแหน่งแบบ frontmatter หรือในบรรทัดที่เลือกใช้ได้ ความละเอียด ความเป็นส่วนตัว และกู้คืนในเส้นทาง Vox.md">
+  <link rel="canonical" href="https://vox.isolated.tech/th/docs/location/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="เอกสาร Vox.md สำหรับโมเดลภาษา">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="ตำแหน่งปัจจุบัน {location} และข้อมูลเมตา — เอกสาร Vox.md">
+  <meta property="og:description" content="ใช้ตำแหน่งที่ขอครั้งเดียวในเทมเพลต Markdown โดยไม่เพิ่มข้อมูลเมตาตำแหน่งลงโน้ตโดยอัตโนมัติ">
+  <meta property="og:url" content="https://vox.isolated.tech/th/docs/location/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="คู่มือตำแหน่งปัจจุบันของ Vox.md">
+  <meta name="twitter:description" content="คู่มือครบเรื่องตำแหน่งครั้งเดียว {location} ผลลัพธ์ข้อมูลเมตา ความละเอียด ความเป็นส่วนตัว และย้ายระบบ">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "ตำแหน่งปัจจุบัน {location} และข้อมูลเมตาตำแหน่งใน Vox.md",
+  "description": "คู่มือฉบับสมบูรณ์เรื่องการรับตำแหน่งปัจจุบันแยกตามค่าที่ตั้งไว้ โทเคน Markdown {location} ผลลัพธ์ข้อมูลเมตาที่เลือกใช้ได้ ความเป็นส่วนตัว การย้ายระบบ และการแก้ปัญหา",
+  "dateModified": "2026-08-21",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/th/docs/location/",
+  "inLanguage": "th",
+  "name": "ตำแหน่งปัจจุบัน {location} และข้อมูลเมตา — เอกสาร Vox.md"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/th/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "เอกสาร",
+      "item": "https://vox.isolated.tech/th/docs/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "ตําแหน่งปัจจุบัน",
+      "item": "https://vox.isolated.tech/th/docs/location/"
+    }
+  ],
+  "inLanguage": "th",
+  "name": "ตำแหน่งปัจจุบัน {location} และข้อมูลเมตา — เอกสาร Vox.md",
+  "description": "ตั้งค่าตำแหน่งปัจจุบันครั้งเดียว โทเคน Markdown {location} ข้อมูลเมตาตำแหน่งแบบ frontmatter หรือในบรรทัดที่เลือกใช้ได้ ความละเอียด ความเป็นส่วนตัว และกู้คืนในเส้นทาง Vox.md"
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="API ข้อมูลสาธารณะ Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/location/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/location/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/location/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/location/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/location/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/location/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/location/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/location/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/location/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/location/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/location/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/location/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/location/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/location/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/location/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/location/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/location/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/location/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/location/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/location/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/location/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/location/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/location/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/location/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="การนำทางหลัก">
+  <div class="nav-inner docs-header-inner">
+    <a href="/th/" class="logo" aria-label="หน้าแรก Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ เอกสาร</span></span>
+    </a>
+    <form class="docs-search" role="search" action="../" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="ค้นเอกสาร" aria-label="ค้นเอกสาร" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="ผลค้นหา" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/th/blog/">บล็อก</a></li>
+      <li><a href="/th/privacy.html">ความเป็นส่วนตัว</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>ภาษา</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th" aria-current="page">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="ในหน้านี้">
+      <div class="docs-sidebar-title">ในหน้านี้</div>
+      <ol>
+        <li><a href="#overview">สองตัวเลือกอิสระ</a></li>
+        <li><a href="#setup">ตั้งเส้นทาง</a></li>
+        <li><a href="#configurations">การกำหนดค่าทั่วไป</a></li>
+        <li><a href="#location-token"><code>{location}</code> โทเคน</a></li>
+        <li><a href="#metadata-output">ผลลัพธ์ข้อมูลเมตา</a></li>
+        <li><a href="#precision">ความละเอียดและป้ายชื่อ</a></li>
+        <li><a href="#capture-sources">แหล่งข้อมูลสำหรับจดบันทึก</a></li>
+        <li><a href="#unavailable">ไม่พร้อมและกู้คืน</a></li>
+        <li><a href="#migration">เส้นทางที่มี</a></li>
+        <li><a href="#privacy">ความเป็นส่วนตัวและการเก็บรักษา</a></li>
+        <li><a href="#troubleshooting">แก้ปัญหา</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="location-guide-title">
+      <div class="page-eyebrow">เอกสาร · เส้นทาง</div>
+      <h1 class="page-title" id="location-guide-title">ตําแหน่งปัจจุบัน, <code>{location}</code> และข้อมูลเมตา</h1>
+      <p class="docs-hero-copy">ใช้ตำแหน่งหนึ่งครั้ง ณ เวลาต้นทางในการจัดรูปแบบรายการ โดยไม่เพิ่ม YAML หรือฟิลด์ในบรรทัดอัตโนมัติ การรับตำแหน่งและการส่งออกข้อมูลเมตาเป็นตัวเลือกชัดเจนที่แยกกันในทุกเส้นทาง</p>
+      <div class="docs-meta-row" aria-label="ข้อเท็จจริงในคู่มือ">
+        <span>ปรับปรุง 21 สิงหาคม 2026</span>
+        <span>การรับครั้งเดียว</span>
+        <span>ไม่ติดตามเบื้องหลัง</span>
+        <a href="/th/docs/">คู่มือฟีเจอร์ครบ</a>
+      </div>
+      </header>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="overview">
+        <div class="docs-section-label">01 / ภาพรวม</div>
+        <h2>การรับตำแหน่งไม่ได้หมายถึงเขียนข้อมูลเมตา</h2>
+        <p>แต่ละเส้นทางมีตัวควบคุมตำแหน่งสองตัวแยกกัน <strong>ใช้ตำแหน่งปัจจุบัน</strong> กำหนดว่าเส้นทางจะขอตำแหน่งหนึ่งครั้ง ณ เวลาต้นทางหรือไม่ <strong>เขียนข้อมูลเมตาตำแหน่ง</strong> กำหนดว่าจะเขียนตำแหน่งที่ได้เป็น frontmatter หรือฟิลด์ในบรรทัดด้วยหรือไม่</p>
+
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>ตัวควบคุม</th><th>ความหมาย</th><th>สิ่งที่ไม่ได้หมายถึง</th></tr></thead>
+            <tbody>
+              <tr><td>สิทธิ์ตำแหน่งของระบบ</td><td>อนุญาตให้ Vox.md ขอตำแหน่งขณะใช้แอปหรือหน้าจอจดบันทึกที่รองรับ</td><td>ไม่เปิดใช้ตำแหน่งให้เส้นทางใด</td></tr>
+              <tr><td>ใช้ตำแหน่งปัจจุบัน</td><td>ขอตำแหน่งหนึ่งครั้งสำหรับเส้นทางนี้และเปิดให้ใช้กับ <code>{location}</code>.</td><td>ไม่เขียน YAML หรือข้อมูลเมตาในบรรทัดอัตโนมัติ</td></tr>
+              <tr><td>เขียนข้อมูลเมตาตำแหน่ง</td><td>เขียนฟิลด์แบบมีโครงสร้างที่เลือกหรือ YAML ขั้นสูงที่ตรวจสอบแล้วจากข้อมูลตำแหน่งที่รับมา</td><td>ไม่ควบคุมว่า <code>{location}</code> สามารถแสดงผล</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <strong>เส้นทางคือสัญญาณเจตนา ไม่ใช่สิทธิ์</strong>
+          <p>การให้สิทธิ์ขณะใช้งานเปิดเพียงประตูของระบบปฏิบัติการ Vox.md ยังคงขอตำแหน่งเฉพาะการทำงาน ตําแหน่งปัจจุบัน บนแถบจดแบบอิสระ หรือเส้นทางที่เปิด ใช้ตำแหน่งปัจจุบัน</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="setup">
+        <div class="docs-section-label">02 / การตั้งค่าเริ่มต้น</div>
+        <h2>ตั้งค่าตำแหน่งปัจจุบันสำหรับหนึ่งเส้นทาง</h2>
+        <ol class="docs-steps">
+          <li><strong>เปิดเส้นทาง</strong><span>บน iPhone หรือ iPad เปิด การตั้งค่า → เส้นทาง บน Mac เปิดการตั้งค่าแล้วเลือกเส้นทาง</span></li>
+          <li><strong>แก้เส้นทาง</strong><span>เลือกเส้นทางที่ควรใช้ตำแหน่งต้นทาง การตั้งค่าเป็นของเส้นทางนั้นและไม่กระทบเส้นทางอื่น</span></li>
+          <li><strong>เปิดตำแหน่ง</strong><span>เปิด <em>ใช้ตำแหน่งปัจจุบัน</em> คง <em>เขียนข้อมูลเมตาตำแหน่ง</em> ปิดสำหรับพฤติกรรมโทเคนเท่านั้น</span></li>
+          <li><strong>เลือกความละเอียด</strong><span>ใช้ Exact สำหรับตำแหน่งต้นทาง หรือ City สำหรับพิกัดที่ปัดเป็นทศนิยมสองตำแหน่งโดยไม่มีป้ายสถานที่น่าสนใจ</span></li>
+          <li><strong>เลือกพฤติกรรมเมื่อไม่พร้อม</strong><span>ถาม ส่งโดยไม่มีตำแหน่ง หรือยกเลิกการจดกำหนดว่าจะเกิดอะไรเมื่อรับตำแหน่งต้นทางไม่ได้</span></li>
+          <li><strong>เพิ่ม <code>{location}</code> หากต้องการ</strong><span>วางโทเคนในเทมเพลตรายการ คำนำหน้าหรือต่อท้ายรายการกำหนดเอง หรือเทมเพลต Markdown ในคลัง</span></li>
+        </ol>
+        <p>ครั้งแรกอาจขึ้นคำขอสิทธิ์ตำแหน่ง OS หากเคยปฏิเสธ เปิดสิทธิ์ตำแหน่ง Vox.md ในการตั้งค่าระบบ iOS, iPadOS หรือ macOS</p>
+      </section>
+
+      <section class="docs-section" id="configurations">
+        <div class="docs-section-label">03 / การกำหนดค่าทั่วไป</div>
+        <h2>เลือกขอบเขตตำแหน่งเล็กที่สุดที่จำเป็น</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>ผลที่ต้องการ</th><th>ใช้ตำแหน่งปัจจุบัน</th><th>เขียนข้อมูลเมตาตำแหน่ง</th><th>โบสถ์</th></tr></thead>
+            <tbody>
+              <tr><td>ไม่มีตำแหน่งเส้นทาง</td><td>ปิด</td><td>ปิด</td><td>อย่าใช้ <code>{location}</code> หรือแสดงผลว่าง</td></tr>
+              <tr><td>ลิงก์กดได้เท่านั้น</td><td>เปิด</td><td>ปิด</td><td>เพิ่ม <code>{location}</code> ไม่เขียนฟิลด์ตำแหน่งใด</td></tr>
+              <tr><td>ข้อมูลเมตาเท่านั้น</td><td>เปิด</td><td>เปิด</td><td>ละไว้ <code>{location}</code> เขียนเฉพาะฟิลด์ที่กำหนดไว้</td></tr>
+              <tr><td>ลิงก์และข้อมูลเมตา</td><td>เปิด</td><td>เปิด</td><td>เพิ่ม <code>{location}</code> และกำหนดฟิลด์ข้อมูลเมตา</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>ปิด ใช้ตำแหน่งปัจจุบัน จะกันทั้งแสดงโทเคนและเขียนข้อมูลเมตาสำหรับเส้นทาง แม้ตัวเลือกรูปแบบข้อมูลเมตาเก่ายังตั้งไว้ใช้ภายหลัง</p>
+      </section>
+
+      <section class="docs-section" id="location-token">
+        <div class="docs-section-label">04 / โทเคนเทมเพลต</div>
+        <h2>ใช้ <code>{location}</code> โดยไม่เปลี่ยนข้อมูลเมตาโน้ต</h2>
+        <p>เมื่อเปิด ใช้ตำแหน่งปัจจุบัน และมีตำแหน่งต้นทาง <code>{location}</code> สร้างลิงก์ Markdown ของ Google Maps ที่ตรวจแล้ว:</p>
+        <pre class="docs-code-block"><code>[Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>โทเคนใช้ในเทมเพลตรายการใช้ซ้ำ คำนำหน้าและต่อท้ายกำหนดเอง และเทมเพลต Markdown ในคลัง ใช้พิกัด Exact หรือ City เดียวกับที่เลือกในเส้นทาง</p>
+
+        <h3 id="token-example">ตัวอย่างใช้โทเคนเท่านั้น</h3>
+        <p>สำหรับคำต่อท้าย เช่น:</p>
+        <pre class="docs-code-block"><code>Captured from {location}</code></pre>
+        <p>Vox.md สร้างได้ดังนี้:</p>
+        <pre class="docs-code-block"><code>Captured from [Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>เมื่อปิด เขียนข้อมูลเมตาตำแหน่ง ลิงก์นี้เป็นเนื้อหาตำแหน่งอย่างเดียวที่เส้นทางเพิ่ม ไม่มี <code>locations:</code> เป็นคอลเลกชัน และไม่มี <code>location.*::</code> เป็นฟิลด์ที่เขียน</p>
+
+        <h3 id="composer-fix">แก้ด้วยแตะเดียวในตัวเขียน</h3>
+        <p>หากคำนำหน้า คำต่อท้าย หรือเทมเพลตรายการใช้ซ้ำที่มีผลอยู่ใช้ <code>{location}</code> ขณะที่เส้นทางปิดตำแหน่งปัจจุบัน ตัวเขียนบอกว่าโทเคนจะแสดงว่างและเสนอ <strong>ใช้ตำแหน่งปัจจุบันสำหรับ [Route]</strong> การทำงานนั้นเปิดตำแหน่งปัจจุบันในเส้นทางแต่จงใจคงเขียนข้อมูลเมตาปิด เพื่อให้ส่งครั้งถัดไปเติมโทเคนโดยไม่เปลี่ยนข้อมูลเมตาโน้ต ไฟล์เทมเพลตสดในคลังอ่านเฉพาะตอนส่ง เนื้อหาจึงไม่เรียกคำแนะนำตัวเขียนนี้ เปิดตำแหน่งเองเมื่อเทมเพลตคลังใช้โทเคน</p>
+
+        <div class="docs-callout docs-callout-neutral">
+          <strong>เมื่อโทเคนว่าง</strong>
+          <p><code>{location}</code> กลายเป็นสตริงว่างเมื่อตำแหน่งปัจจุบันปิด ตำแหน่งไม่พร้อม หรือจดต่อโดยไม่มีตำแหน่ง คำนึงถึงวรรคตอนและป้ายรอบข้างเมื่อออกแบบบรรทัดเทมเพลตที่เลือกมีได้</p>
+        </div>
+
+        <h3 id="capture-bar-location">การทำงานแถบจดแบบอิสระ</h3>
+        <p>การจับภาพอย่างรวดเร็ว <strong>ตําแหน่งปัจจุบัน</strong> แทรกลิงก์ Google Maps ครั้งเดียวตรงลงฉบับร่างปัจจุบัน แยกจากเส้นทางและไม่เปลี่ยน ใช้ตำแหน่งปัจจุบัน หรือ เขียนข้อมูลเมตาตำแหน่ง</p>
+      </section>
+
+      <section class="docs-section" id="metadata-output">
+        <div class="docs-section-label">05 / ผลลัพธ์ข้อมูลเมตา</div>
+        <h2>เขียนฟิลด์แบบมีโครงสร้างเฉพาะเมื่อคุณเลือก</h2>
+        <p>เปิด เขียนข้อมูลเมตาตำแหน่ง เมื่อโน้ตควรรับฟิลด์ตำแหน่งอ่านด้วยเครื่องเพิ่มเติมหรือแทน <code>{location}</code> ลิงก์</p>
+
+        <div class="docs-feature-grid">
+          <div><strong>Frontmatter ของโน้ต</strong><p>ต่อท้ายแต่ละตำแหน่งในคอลเลกชันชื่อ <code>locations</code> โดยค่าเริ่มต้น ใช้รหัสการจดบันทึกเป็นคีย์ frontmatter อื่นที่มีอยู่จะคงเดิม</p></div>
+          <div><strong>ฟิลด์รายการในบรรทัด</strong><p>เขียนแบบ Dataview <code>location.key:: value</code> ข้างรายการที่จด โดยไม่เพิ่มคอลเลกชัน frontmatter</p></div>
+          <div><strong>ฟิลด์ที่มีโครงสร้าง</strong><p>เลือกและเปลี่ยนชื่อพิกัด ละติจูด ลองจิจูด สถานที่ เมือง ภูมิภาค ประเทศ ลิงก์ผู้ให้บริการ geo URI ความแม่นยำ เวลา แหล่งที่มา และรหัส</p></div>
+          <div><strong>YAML ขั้นสูง</strong><p>ใช้เทมเพลต YAML ที่ตรวจแล้วและจำกัดขอบเขตสำหรับ frontmatter โน้ต YAML ขั้นสูงใช้กับฟิลด์รายการในบรรทัดไม่ได้</p></div>
+        </div>
+
+        <h3 id="frontmatter-example">ตัวอย่าง frontmatter แบบมีโครงสร้าง</h3>
+        <pre class="docs-code-block"><code>---
+title: Field Notes
+locations:
+  - id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    coordinates: [45.501235, -73.567890]
+    place: "Café &amp; Main"
+    appleMapsURL: "https://maps.apple.com/?ll=45.501235%2C-73.567890&amp;q=Caf%C3%A9%20%26%20Main"
+    timestamp: "2023-11-14T22:13:20.000Z"
+    source: "app"
+---</code></pre>
+        <p>โน้ตต่อเนื่องเก็บหลายรายการในคอลเลกชันได้ การรวมตำแหน่งมีป้องกันลองซ้ำ รหัสการจดเดิมเพิ่มตำแหน่งเดิมสองครั้งไม่ได้ หากคีย์ที่เลือกมีค่าผู้ใช้ที่เข้ากันไม่ได้อยู่แล้ว Vox.md หยุดแทนเขียนทับ</p>
+
+        <h3 id="inline-example">ตัวอย่างรายการในบรรทัด</h3>
+        <pre class="docs-code-block"><code>location.id:: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+location.coordinates:: [45.501235, -73.567890]
+location.place:: "Café &amp; Main"
+
+Captured text</code></pre>
+
+        <h3 id="advanced-yaml">ตัวแทนค่า YAML ขั้นสูง</h3>
+        <p>เทมเพลตขั้นสูงใช้ตัวแทนค่าได้ เช่น <code>{{coordinates}}</code>, <code>{{latitude}}</code>, <code>{{longitude}}</code>, <code>{{place}}</code>, <code>{{city}}</code>, <code>{{region}}</code>, <code>{{country}}</code>, <code>{{appleMapsURL}}</code>, <code>{{googleMapsURL}}</code>, <code>{{openStreetMapURL}}</code>, <code>{{geoURI}}</code>, <code>{{accuracy}}</code>, <code>{{timestamp}}</code>, <code>{{source}}</code> และ <code>{{id}}</code> ดูตัวอย่างการกำหนดค่าในการตั้งค่าเส้นทางก่อนบันทึก</p>
+      </section>
+
+      <section class="docs-section" id="precision">
+        <div class="docs-section-label">06 / ความละเอียดและป้ายชื่อ</div>
+        <h2>Exact และ City ใช้ข้อมูลตำแหน่งชุดเดียวกัน</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>ความแม่นยำ</th><th>พิกัด</th><th>ป้ายชื่อ</th><th>ลิงก์และฟิลด์</th></tr></thead>
+            <tbody>
+              <tr><td>แน่นอน</td><td>คงตำแหน่งต้นทางโดยแสดงทศนิยมหกตำแหน่ง</td><td>ใส่ชื่อสถานที่น่าสนใจได้เมื่อฟิลด์ข้อมูลเมตาที่เลือกต้องการ</td><td>ค่าที่คำนวณต่อทั้งหมดใช้พิกัด Exact</td></tr>
+              <tr><td>เมือง</td><td>ปัดละติจูดและลองจิจูดเป็นทศนิยมสองตำแหน่งก่อนเก็บข้อมูลตำแหน่ง</td><td>ลบป้ายสถานที่น่าสนใจ เมือง ภูมิภาค และประเทศอาจยังอยู่</td><td>URL ผู้ให้บริการ geo URI โทเคน และฟิลด์ทั้งหมดใช้พิกัดที่ปัดแล้ว</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>ระบบแปลงพิกัด Apple ใช้เฉพาะเมื่อเปิด เขียนข้อมูลเมตาตำแหน่ง และฟิลด์ที่เลือกหรือตัวแทนค่าขั้นสูงต้องใช้สถานที่ เมือง ภูมิภาค หรือประเทศ เส้นทางโทเคนเท่านั้นข้ามการแปลง หากหาป้ายล้มเหลว ผลลัพธ์พิกัดยังใช้ได้</p>
+      </section>
+
+      <section class="docs-section" id="capture-sources">
+        <div class="docs-section-label">07 / แหล่งข้อมูลการจด</div>
+        <h2>ข้อมูลตำแหน่งเป็นของต้นทางการจด</h2>
+        <p>ตําแหน่งปัจจุบันจะประเมิน ณ จุดกำเนิดของการบันทึก การลองใหม่และการกู้คืนจะใช้ผลลัพธ์เดิมที่เก็บไว้อย่างคงทน แทนการรับตำแหน่งใหม่โดยไม่แจ้งให้ทราบ</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>แหล่งข้อมูลการจด</th><th>จุดรับตำแหน่ง</th></tr></thead>
+            <tbody>
+              <tr><td>การจับภาพอย่างรวดเร็วบน iPhone และ iPad</td><td>ส่ง</td></tr>
+              <tr><td>แผ่นแชร์</td><td>ส่งในส่วนขยายแชร์</td></tr>
+              <tr><td>อินเทนต์ข้อความ ลิงก์ และไฟล์เข้าคิวตรง</td><td>การเรียกอินเทนต์</td></tr>
+              <tr><td>Shortcuts วิดเจ็ต ตัวควบคุม และลิงก์เจาะลึกที่เปิด การจับภาพอย่างรวดเร็ว</td><td>ส่งในตัวเขียน</td></tr>
+              <tr><td>คำสั่งลัด วิดเจ็ต ตัวควบคุม เสียงทันที และบันทึกเส้นทางด้วยคีย์บอร์ด</td><td>หยุดบันทึก</td></tr>
+              <tr><td>ส่งการจดปกติจาก Apple Watch</td><td>หยุดบันทึกบน Watch; iPhone จะไม่ใช้ตำแหน่งของตนแทน</td></tr>
+              <tr><td>จดบน Mac</td><td>ส่ง หรือหยุดบันทึกสำหรับการส่งเสียงทันที</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Watch แบบบันทึกเสียงเท่านั้น</strong> ส่งออกเสียง M4A ดิบไป Files โดยไม่มีส่วน Markdown จึงไม่ขอตำแหน่งแม้เส้นทางจะใช้ตำแหน่งปัจจุบันสำหรับอย่างอื่น</p>
+      </section>
+
+      <section class="docs-section" id="unavailable">
+        <div class="docs-section-label">08 / ไม่พร้อมและกู้คืน</div>
+        <h2>เลือกวิธีจัดการตำแหน่งไม่พร้อมของแต่ละเส้นทาง</h2>
+        <ul>
+          <li><strong>ถาม:</strong> การจดแบบโต้ตอบสามารถลองใหม่ ยกเลิก ส่งครั้งเดียวโดยไม่มีตำแหน่ง หรือเลือกส่งโดยไม่มีตำแหน่งเสมอสำหรับเส้นทางนั้น</li>
+          <li><strong>ส่งโดยไม่มีตำแหน่ง:</strong> ส่งต่อโดยไม่มีค่าโทเคนหรือผลข้อมูลเมตา</li>
+          <li><strong>ยกเลิกการจด:</strong> หยุดการส่งแทนสร้างโน้ตโดยไม่มีตำแหน่งต้นทางที่ร้องขอ</li>
+          <li><strong>รีเซ็ตตัวเลือกที่เก็บ:</strong> ใช้รีเซ็ตตัวเลือกตำแหน่งไม่พร้อมในการตั้งค่าตำแหน่งเส้นทาง</li>
+        </ul>
+        <p>คำขอถามที่ไม่มีผู้ดูแลเก็บผลไม่พร้อม ณ เวลาต้นทางให้ตรวจภายหลัง การลองรายการค้างหรือล้มเหลวไม่แทนด้วยตำแหน่งเวลาถัดมา งานค้างเก็บเฉพาะตำแหน่งปรับเพื่อความเป็นส่วนตัวหรือผลไม่พร้อมที่ต้องใช้กู้คืนในเครื่อง</p>
+      </section>
+
+      <section class="docs-section" id="migration">
+        <div class="docs-section-label">09 / เส้นทางที่มีอยู่</div>
+        <h2>การอัปเกรดคงพฤติกรรมข้อมูลเมตาเดิม</h2>
+        <p>การแยกรับข้อมูลและผลลัพธ์ปลอดภัยต่อการย้ายระบบ:</p>
+        <ul>
+          <li><strong>เส้นทางใหม่:</strong> ใช้ตำแหน่งปัจจุบัน และ เขียนข้อมูลเมตาตำแหน่ง เริ่มปิดทั้งคู่</li>
+          <li><strong>เส้นทางตำแหน่งที่เคยเปิดใช้:</strong> ทั้งสองยังเปิดหลังอัปเกรด คงข้อมูลเมตาที่เส้นทางเคยเขียน</li>
+          <li><strong>เส้นทางตำแหน่งที่เคยปิด:</strong> ตัวควบคุมทั้งสองยังปิด การอัปเกรดไม่เพิ่มผลลัพธ์ข้อมูลเมตาใหม่</li>
+        </ul>
+        <p>หากแปลงเส้นทางที่เขียนข้อมูลเมตาเป็นแบบโทเคนเท่านั้น ให้คง ใช้ตำแหน่งปัจจุบัน เปิดและปิด เขียนข้อมูลเมตาตำแหน่ง Markdown เดิมไม่ถูกเขียนใหม่หรือลบ</p>
+      </section>
+
+      <section class="docs-section" id="privacy">
+        <div class="docs-section-label">10 / ความเป็นส่วนตัวและการเก็บรักษา</div>
+        <h2>ข้อมูลตำแหน่งครั้งเดียวที่เลือกชัดเจน ไม่ติดตามเบื้องหลัง</h2>
+        <ul>
+          <li>Vox.md ไม่ตรวจตำแหน่งต่อเนื่องหรือติดตามเบื้องหลัง</li>
+          <li>ตำแหน่งจะไม่ถูกส่งไปยังเซิร์ฟเวอร์ Vox.md ระบบวิเคราะห์ ระบบโฆษณา หรือบริการ AI ภายนอก</li>
+          <li>URL ของโทเคนและผู้ให้บริการจัดรูปแบบในเครื่อง Apple Maps, Google Maps หรือ OpenStreetMap จะได้รับพิกัดเฉพาะเมื่อคุณเปิดลิงก์ของบริการนั้น</li>
+          <li>ระบบแปลงพิกัดเป็นสถานที่ของ Apple อาจเรียกเครือข่ายเฉพาะเมื่อข้อมูลเมตาที่เลือกต้องใช้ชื่อสถานที่ ตำแหน่งแบบโทเคนเท่านั้นข้ามการค้นหานี้</li>
+          <li>หลังส่งสำเร็จ คำขอกู้คืนลดเหลือใบรับไร้เนื้อหา ประวัติจดสำเร็จไม่เก็บพิกัด ป้าย URL ผู้ให้บริการ หรือเทมเพลตตำแหน่ง</li>
+          <li>หากเขียนข้อมูลเมตาตำแหน่งหรือลิงก์โทเคนลง Markdown จะเป็นส่วนไฟล์ที่เลือก ผู้ให้บริการซิงค์อาจประมวลผลตามข้อกำหนดของตน</li>
+        </ul>
+        <div class="docs-callout">
+          <strong>สิทธิ์เปิดอยู่ได้ขณะที่เส้นทางยังเป็นส่วนตัว</strong>
+          <p>คุณให้สิทธิ์ระบบไว้สำหรับตำแหน่งปัจจุบันแบบอิสระ และยังปิด ใช้ตำแหน่งปัจจุบัน ในทุกเส้นทางได้</p>
+        </div>
+        <p>ดู <a href="/th/privacy.html">นโยบายความเป็นส่วนตัว</a> เพื่อดูรายละเอียดการจัดการและเก็บข้อมูลทั้งหมด</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">11 / การแก้ปัญหา</div>
+        <h2>แก้ปัญหาตำแหน่งและเทมเพลตทั่วไป</h2>
+        <div class="docs-troubleshooting">
+          <details>
+            <summary><code>{location}</code> แสดงค่าว่าง</summary>
+            <p>ตรวจว่าเทมเพลตรายการ คำนำหน้า ต่อท้าย หรือเทมเพลตคลังที่มีผลใช้โทเคนตัวพิมพ์เล็กตรงตามนี้ <code>{location}</code> แล้วเปิด ใช้ตำแหน่งปัจจุบัน สำหรับเส้นทางส่ง การแก้แตะเดียวในตัวเขียนทำได้กับรูปแบบรายการในบรรทัดที่ตรวจพบโดยไม่เปิดข้อมูลเมตา ไฟล์เทมเพลตสดในคลังต้องตั้งเอง หากสิทธิ์ถูกปฏิเสธหรือหาตำแหน่งไม่ได้ ให้ตรวจพฤติกรรมเมื่อไม่พร้อมของเส้นทางและการตั้งค่าตำแหน่งระบบ</p>
+          </details>
+          <details>
+            <summary>ลิงก์ใช้ได้แต่ไม่มีข้อมูลเมตา</summary>
+            <p>เป็นปกติในการตั้งค่าโทเคนเท่านั้น เปิดการตั้งค่าตำแหน่งเส้นทางและเปิด เขียนข้อมูลเมตาตำแหน่ง แล้วเลือก frontmatter โน้ตหรือฟิลด์รายการในบรรทัด และฟิลด์ที่ต้องการ</p>
+          </details>
+          <details>
+            <summary>มีข้อมูลเมตาแต่ไม่มีลิงก์ในรายการ</summary>
+            <p>ผลลัพธ์ข้อมูลเมตาไม่แทรกลิงก์อัตโนมัติ เพิ่ม <code>{location}</code> ในรูปแบบรายการที่มีผลหรือเทมเพลต Markdown ในคลัง</p>
+          </details>
+          <details>
+            <summary>ไม่มีสถานที่หรือเมือง</summary>
+            <p>ตรวจว่าเลือกฟิลด์ป้ายชื่อแล้ว ระบบแปลงพิกัด Apple อาจล้มเหลวแม้ยังมีพิกัด ความละเอียด City จงใจลบชื่อสถานที่น่าสนใจ</p>
+          </details>
+          <details>
+            <summary>การส่ง frontmatter รายงานการชนกันของข้อมูล</summary>
+            <p>คีย์คอลเลกชันที่ตั้ง <code>locations</code> โดยค่าเริ่มต้น ต้องเป็นรายการตำแหน่งที่เข้ากันได้ เปลี่ยนชื่อคอลเลกชันในเส้นทางหรือแก้ frontmatter ที่ผู้ใช้เขียนไว้ Vox.md ไม่ทับค่าที่เข้ากันไม่ได้</p>
+          </details>
+          <details>
+            <summary>การลองใหม่มีตำแหน่งเก่าหรือไม่มีตำแหน่ง</summary>
+            <p>เป็นความตั้งใจ คำขอเก็บผล ณ เวลาต้นทางเพื่อไม่ให้การลองภายหลังแอบอ้างตำแหน่งต่างออกไป เริ่มการจดใหม่เมื่อต้องการตำแหน่งใหม่</p>
+          </details>
+          <details>
+            <summary>อนุญาตสิทธิ์ตำแหน่งแล้ว แต่เส้นทางไม่ขอตำแหน่ง</summary>
+            <p>สิทธิ์ระบบเป็นเพียงประตูอนุญาต แก้ไขเส้นทางนั้นและเปิด ใช้ตำแหน่งปัจจุบัน การอนุญาตสิทธิ์อย่างเดียวไม่เคยเปิดฟีเจอร์ให้เส้นทาง</p>
+          </details>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/th/developers">นักพัฒนา</a></li>
+        <li><a href="/th/about">เกี่ยวกับ</a></li>
+        <li><a href="/th/contact">ติดต่อ</a></li>
+        <li><a href="/th/">หน้าแรก</a></li>
+        <li><a href="/th/docs/">เอกสาร</a></li>
+        <li><a href="/th/blog/">บล็อก</a></li>
+        <li><a href="/th/privacy.html">ความเป็นส่วนตัว</a></li>
+        <li><a href="/th/terms.html">ข้อกำหนด</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · จดในเครื่อง · ผู้ใช้ควบคุมไฟล์</div>
+    </div>
+  <details class="language-switcher"><summary>ภาษา</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th" aria-current="page">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

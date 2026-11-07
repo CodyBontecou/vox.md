@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="vi" dir="ltr" data-search-section="Mục" data-search-guide="Hướng dẫn" data-search-empty="Không khớp “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tài liệu Vox.md: hướng dẫn tính năng đầy đủ</title>
+  <meta name="description" content="Tài liệu đầy đủ nhanh capture Vox.md, Lộ trình, đích Markdown, bàn phím iOS, mô hình chép cục bộ, tiện ích, Shortcuts, Apple Watch và Mac.">
+  <link rel="canonical" href="https://vox.isolated.tech/vi/docs/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Tài liệu Vox.md về mô hình ngôn ngữ">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Tài liệu Vox.md: hướng dẫn tính năng đầy đủ">
+  <meta property="og:description" content="Tìm hiểu mọi tính năng Vox.md đã phát hành, từ ghi Markdown bền vững và lộ trình đến mô hình giọng nói cục bộ, bàn phím, Apple Watch và Mac.">
+  <meta property="og:url" content="https://vox.isolated.tech/vi/docs/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Tài liệu Vox.md">
+  <meta name="twitter:description" content="Hướng dẫn đầy đủ ghi nhanh, định tuyến, chép lời và tích hợp hệ thống Vox.md.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Hướng dẫn tính năng Vox.md đầy đủ",
+  "description": "Tài liệu mọi tính năng ghi, định tuyến, chép, bàn phím, tích hợp hệ thống, Apple Watch và Mac đã phát hành của Vox.md.",
+  "dateModified": "2026-10-26",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/vi/docs/",
+  "inLanguage": "vi",
+  "name": "Tài liệu Vox.md: hướng dẫn tính năng đầy đủ"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/vi/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tài liệu",
+      "item": "https://vox.isolated.tech/vi/docs/"
+    }
+  ],
+  "inLanguage": "vi",
+  "name": "Tài liệu Vox.md: hướng dẫn tính năng đầy đủ",
+  "description": "Tài liệu đầy đủ nhanh capture Vox.md, Lộ trình, đích Markdown, bàn phím iOS, mô hình chép cục bộ, tiện ích, Shortcuts, Apple Watch và Mac."
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="API thông tin công khai Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="Điều hướng chính">
+  <div class="nav-inner docs-header-inner">
+    <a href="/vi/" class="logo" aria-label="trang chủ Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ tài liệu</span></span>
+    </a>
+    <form class="docs-search" role="search" action="./" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="Tìm tài liệu" aria-label="Tìm tài liệu" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Kết quả tìm" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/vi/blog/">Nhật ký web</a></li>
+      <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="Trên trang này">
+      <div class="docs-sidebar-title">Trên trang này</div>
+      <ol>
+        <li><a href="#getting-started">Bắt đầu</a></li>
+        <li><a href="#quick-capture">nhanh capture</a></li>
+        <li><a href="#presets">Lộ trình</a></li>
+        <li><a href="/vi/docs/location/">Vị trí hiện tại &amp; {location}</a></li>
+        <li><a href="#models">Mô hình và chép lời</a></li>
+        <li><a href="#keyboard">Bàn phím iOS</a></li>
+        <li><a href="#system-integrations">Tích hợp hệ thống</a></li>
+        <li><a href="#apple-watch">Apple Watch</a></li>
+        <li><a href="#mac">Mac đồng hành</a></li>
+        <li><a href="#history-settings">Thư viện, Cài đặt và Riêng tư</a></li>
+        <li><a href="#troubleshooting">Khắc phục lỗi</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="docs-title">
+      <div class="page-eyebrow">Tài liệu · Hướng dẫn sản phẩm hiện tại</div>
+      <h1 class="page-title" id="docs-title">Mọi điều làm được với Vox.md</h1>
+      <p class="docs-hero-copy">Hướng dẫn đầy đủ ghi, lộ trình, định tuyến Markdown, bàn phím giọng nói, mô hình cục bộ, tích hợp Apple, Apple Watch, Mac, lịch sử, cài đặt và riêng tư.</p>
+      <div class="docs-meta-row" aria-label="Thông tin từ tài liệu">
+        <span>Cập nhật 26/10/2026</span>
+        <span>iOS 17.6+</span>
+        <span>macOS 14+</span>
+        <span>watchOS 10+</span>
+      </div>
+      </header>
+
+      <section class="docs-directory" aria-labelledby="browse-docs">
+      <h2 class="visually-hidden" id="browse-docs">Duyệt theo danh mục</h2>
+      <div class="docs-category-grid">
+        <a class="docs-category-card" href="#getting-started"><span>01</span><strong>Bắt đầu</strong><small>Nền tảng, thiết lập, quyền và ghi đầu</small></a>
+        <a class="docs-category-card" href="#quick-capture"><span>02</span><strong>nhanh capture</strong><small>Trình soạn, phương tiện, giọng nói, Thanh ghi nhanh và nháp</small></a>
+        <a class="docs-category-card" href="#presets"><span>03</span><strong>Lộ trình</strong><small>Xử lý, siêu dữ liệu, đích và mẫu</small></a>
+        <a class="docs-category-card is-guide" href="/vi/docs/location/"><span>Hướng dẫn</span><strong>Vị trí hiện tại &amp; <code>{location}</code></strong><small>Liên kết chỉ token, siêu dữ liệu tùy chọn, độ chính xác, riêng tư và chuyển đổi</small></a>
+        <a class="docs-category-card" href="#models"><span>04</span><strong>Mô hình</strong><small>Tự động, Apple Speech, Whisper và Parakeet</small></a>
+        <a class="docs-category-card" href="#keyboard"><span>05</span><strong>Bàn phím</strong><small>Thiết lập, đọc chính tả, chèn, xúc giác và tự dừng</small></a>
+        <a class="docs-category-card" href="#system-integrations"><span>06</span><strong>Tích hợp hệ thống</strong><small>Tiện ích, Bảng chia sẻ, Shortcuts và liên kết sâu</small></a>
+        <a class="docs-category-card" href="#apple-watch"><span>07</span><strong>Apple Watch</strong><small>Ghi âm, đồng bộ lộ trình, hàng đợi và tổ hợp mặt đồng hồ</small></a>
+        <a class="docs-category-card" href="#mac"><span>08</span><strong>Mac</strong><small>Ghi cuộc họp, không gian làm việc, thanh menu và phím tắt toàn cục</small></a>
+        <a class="docs-category-card" href="#history-settings"><span>09</span><strong>Thư viện và Cài đặt</strong><small>Khôi phục, thống kê, riêng tư, giới hạn, mua và hỗ trợ</small></a>
+      </div>
+      </section>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="getting-started">
+        <div class="docs-section-label">01 / Bắt đầu</div>
+        <h2>Ghi vào Markdown, không tạo kho ghi chú biệt lập mới</h2>
+        <p>Vox.md là ứng dụng ghi nhanh ưu tiên cục bộ. Ghi Markdown chuẩn và đính kèm vào kho Obsidian hoặc thư mục ghi được bạn chọn qua Files. Không cần tài khoản Vox.md, phần bổ trợ hay cơ sở dữ liệu ghi chú được lưu trữ trên máy chủ.</p>
+
+        <p>Cho quy trình giọng nói đầy đủ, <a href="/vi/blog/voice-notes-to-obsidian-iphone/">làm theo hướng dẫn ghi chú giọng nói iPhone vào Obsidian</a>, từ chọn thư mục đến kiểm Markdown kết quả.</p>
+
+        <p>Đang chọn cách ghi nhanh? Đọc <a href="/vi/blog/obsidian-quick-capture-iphone/">hướng dẫn chọn cách ghi iPhone</a> hoặc <a href="/vi/compare/vox-md-vs-obsidian-quick-capture/">so sánh Vox.md với Obsidian tích hợp</a>.</p>
+
+        <div class="docs-table-wrap" id="platform-availability">
+          <table class="docs-table">
+            <thead><tr><th>Nền tảng</th><th>Yêu cầu</th><th>Những gì khả dụng</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone và iPad</td><td class="req">iOS/iPadOS 17.6+</td><td>nhanh capture, bàn phím, Bảng chia sẻ, tiện ích, Shortcuts, Hoạt động trực tiếp, lịch sử và cài đặt</td></tr>
+              <tr><td>Mac</td><td class="req">macOS 14+</td><td>Không gian ghi nhanh, ghi âm hoặc nhập tệp, lộ trình, mô hình, lịch sử, thanh menu và phím tắt toàn cục</td></tr>
+              <tr><td>Apple Watch</td><td class="req">watchOS 10+</td><td>Ghi cục bộ, chọn lộ trình, hàng đồng bộ, gửi chỉ âm thanh và tổ hợp mặt đồng hồ</td></tr>
+              <tr><td>Điều khiển Trung tâm điều khiển</td><td class="req">iOS 18+</td><td>nhanh capture và điều khiển ghi âm nhận biết lộ trình</td></tr>
+              <tr><td>Bộ xử lý Tự động Apple Speech</td><td class="req">iOS 26 trên máy và ngôn ngữ hỗ trợ</td><td>Chép trực tiếp và theo lô trên thiết bị do hệ thống quản lý</td></tr>
+              <tr><td>Xử lý Apple Intelligence</td><td class="req">Thiết bị iOS/macOS 26 tương thích</td><td>Dọn trên máy, đầu ra có cấu trúc và chỉ dẫn tùy chỉnh kèm dự phòng</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <p><strong>Quy trình cơ bản.</strong> Chọn Lộ trình, nối đích, gõ hoặc thêm trong nhanh capture rồi chạm Gửi. Lộ trình quyết định xử lý, định dạng và đặt vào ghi chú.</p>
+        </div>
+
+
+        <h3 id="first-capture">Ghi nhanh lần đầu</h3>
+        <ol class="docs-steps">
+          <li><strong>Mở Vox.md.</strong><span>Ứng dụng mở thẳng trình soạn Markdown bền vững.</span></li>
+          <li><strong>Chọn Lộ trình.</strong><span>Default tích hợp không xóa được nhưng tắt được. Giữ ít nhất một lộ trình bật có đích.</span></li>
+          <li><strong>Đặt đích của nó.</strong><span>Chạm <em>Đặt mục tiêu</em>, chọn kho Obsidian hoặc một thư mục trong Files, rồi chọn ghi chú mới, liên tục hoặc đã có.</span></li>
+          <li><strong>Thêm nội dung.</strong><span>Gõ Markdown hoặc thêm liên kết, ảnh, tệp, bản quét, phác thảo, vị trí hay ghi âm.</span></li>
+          <li><strong>Chạm Gửi.</strong><span>Vox.md lưu qua lộ trình chọn, báo <em>bắt được</em>. Công việc lỗi hoặc chờ vẫn có để khôi phục.</span></li>
+        </ol>
+
+        <h3 id="permissions">Quyền và truy cập hệ thống</h3>
+        <ul>
+          <li><strong>Micrô:</strong> ghi âm, chép cục bộ, nghe bàn phím và thu âm. nhanh capture có thể xin khi lần đầu mở không gian, trước khi ghi.</li>
+          <li><strong>Nhận dạng giọng nói:</strong> Apple Speech trên hệ thống hỗ trợ.</li>
+          <li><strong>Quyền thư mục Files:</strong> đích, mẫu, nhập và đầu ra Watch chỉ ghi âm.</li>
+          <li><strong>Camera và ảnh chọn:</strong> chỉ khi thêm phương tiện, ảnh màn hình, ảnh nhật ký hoặc bản quét.</li>
+          <li><strong>Vị trí khi dùng:</strong> chỉ cho tác vụ Vị trí hiện tại độc lập trên Thanh ghi nhanh hoặc khi Lộ trình đã bật cần một vị trí tại thời điểm gốc. Vox.md không theo dõi vị trí liên tục hay nền.</li>
+          <li><strong>Thông báo:</strong> trạng thái gửi tùy chọn, gồm lỗi Apple Watch không có người giám sát.</li>
+          <li><strong>Cho phép Truy cập đầy đủ bàn phím:</strong> cần cho bàn phím Vox.md dùng quy trình chung trên máy. Xem <a href="#keyboard-setup">Thiết lập bàn phím</a>.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="quick-capture">
+        <div class="docs-section-label">02 / nhanh capture</div>
+        <h2>Một trình soạn bền vững cho chữ, phương tiện, tệp và giọng nói</h2>
+        <p>nhanh capture là không gian chính iOS và iPadOS. Menu lộ trình đổi quy trình; menu đích xem trước hoặc tạm ghi đè nơi nháp gửi. Thanh dưới mở Thư viện, Cài đặt và hiện hoặc ẩn bàn phím mềm.</p>
+
+        <h3 id="durable-drafts">Nháp bền vững, gửi an toàn</h3>
+        <ul>
+          <li>Văn bản, đính kèm, lộ trình đã chọn, các ghi đè đích và nguồn ghi nhanh đều được giữ qua việc tạm ngưng và mở lại ứng dụng.</li>
+          <li>Chỉnh sửa lưu sau khoảng debounce ngắn; đưa ứng dụng nền lưu ngay.</li>
+          <li>Nếu tiếp sửa khi gửi, chỉnh mới giữ trong nháp mới thay vì bỏ.</li>
+          <li>Phải đặt đích trước gửi. Trình soạn hiện <em>Destination Không được cấu hình</em> cùng tác vụ Thiết lập khi cần.</li>
+          <li>Yêu cầu ghi thử lại an toàn lưu nhật ký cục bộ để thử lại khi lỗi quyền, nhà tệp hay đồng bộ.</li>
+          <li>Trình soạn trống hiện trích dẫn truyền cảm hứng lưu đệm đến khi thêm chữ, kể cả sau khi chọn lộ trình hay đính tệp; yêu cầu trích dẫn không chứa bản nháp.</li>
+        </ul>
+
+        <p>Để xem hướng dẫn theo tác vụ, xem <a href="/vi/blog/save-links-photos-obsidian-iphone/">lưu liên kết, ảnh và quét vào Obsidian</a>.</p>
+
+        <h3 id="capture-types">Loại ghi nhanh</h3>
+        <div class="docs-feature-grid">
+          <div><strong>Văn bản và Markdown</strong><p>Viết thẳng trong trình Markdown nhận biết vùng chọn, dán chữ có sẵn, kết hợp dữ liệu khác.</p></div>
+          <div><strong>Liên kết web</strong><p>Thêm URL HTTP hoặc HTTPS với định dạng liên kết Markdown.</p></div>
+          <div><strong>Ảnh và camera</strong><p>Chọn ảnh, ảnh màn hình hoặc chụp mới. Ảnh chuẩn bị và nhúng trong ghi chú gửi.</p></div>
+          <div><strong>Tệp</strong><p>Chọn nhiều mục Files. Ảnh thành nhúng, âm vẫn là dữ liệu âm, tệp khác dùng liên kết Obsidian.</p></div>
+          <div><strong>Bản quét tài liệu</strong><p>Quét trang bằng VisionKit. Vox.md giữ ảnh trang, tạo PDF và kèm OCR trên thiết bị theo khả năng.</p></div>
+          <div><strong>OCR nhật ký</strong><p>Chụp thủ công tối đa 10 trang nhật ký hoặc chọn ảnh nhật ký. Chế độ nhận dạng chính xác của Vision OCR tự phát hiện ngôn ngữ.</p></div>
+          <div><strong>Phác thảo</strong><p>Vẽ trên nền PencilKit trắng với bút đen. Vox.md lưu dữ liệu vẽ sửa được và xem trước PNG.</p></div>
+          <div><strong>Tác vụ Vị trí hiện tại</strong><p>Yêu cầu một vị trí rồi chèn liên kết Google Maps dạng Markdown đã được kiểm tra tính hợp lệ vào bản nháp. Tác vụ độc lập này trên Thanh ghi nhanh không thay đổi bất kỳ điều khiển vị trí nào trong hai điều khiển của từng lộ trình.</p></div>
+          <div><strong>Giọng nói và âm thanh nhập</strong><p>Ghi từ trình soạn hoặc nhập âm thanh hay video, chép cục bộ, thêm kết quả vào nháp hoặc gửi ngay.</p></div>
+        </div>
+        <p class="docs-note">Trợ năng: OCR hiện tiến trình “Đang trích chữ trên thiết bị này”; VoiceOver đọc tiến trình và hoàn tất OCR, “Đã gửi ghi nhanh” và “Đã thêm bản chép vào ghi nhanh” trong các quy trình.</p>
+
+        <h3 id="capture-bar">Thanh ghi nhanh</h3>
+        <p>Cài đặt → Thanh ghi nhanh cho xếp lại hay ẩn tác vụ. Mặc định hiện hết.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Tác vụ</th><th>Hành vi</th></tr></thead>
+            <tbody>
+              <tr><td>Thêm Media</td><td>Mở chọn Sketch, Camera, Ảnh, Ảnh màn hình và Liên kết web.</td></tr>
+              <tr><td>Thêm file</td><td>Chọn nhiều tệp từ Files, chuẩn bị cùng bản nháp.</td></tr>
+              <tr><td>Scan tài liệu</td><td>Ghi quét nhiều trang, PDF, ảnh trang và OCR theo khả năng.</td></tr>
+              <tr><td>Text Extract Bài viết</td><td>Có Ghi trang nhật ký và Chọn ảnh nhật ký cho ghi tập trung OCR.</td></tr>
+              <tr><td>9 Đời</td><td>Hoàn tác thao tác sửa cuối.</td></tr>
+              <tr><td>Định dạng Markdown</td><td>Áp dụng Đậm, Nghiêng, Hashtag hoặc Tiêu đề 1 đến 6.</td></tr>
+              <tr><td>Markdown Link</td><td>Chèn <code>[link text](url)</code> và chọn phần sửa được.</td></tr>
+              <tr><td>Liên kết nội bộ</td><td>Chèn dạng kiểu Obsidian <code>[[Target]]</code> liên kết wiki.</td></tr>
+              <tr><td>2 Ngày định kỳ</td><td>Dùng Hôm nay, Ngày mai hoặc Cuối tuần này; thời gian tùy chọn; chỉnh ±15m, ±30m hoặc ±1h. Chèn <code>(@yyyy-MM-dd)</code> hoặc dạng có giờ.</td></tr>
+              <tr><td>Checklist</td><td>Áp dụng tiền tố tác vụ Markdown <code>- [ ]</code>.</td></tr>
+              <tr><td>Danh sách Bullet</td><td>Áp tiền tố dấu dòng Markdown.</td></tr>
+              <tr><td>Paste</td><td>Dán chữ clipboard vào vùng chọn.</td></tr>
+              <tr><td>Sketch</td><td>Mở ghi phác PencilKit sửa được.</td></tr>
+              <tr><td>Vị trí hiện tại</td><td>Xin một vị trí, chèn liên kết Google Maps.</td></tr>
+              <tr><td>Đặt timestamp</td><td>Chèn ngày giờ địa phương dưới dạng <code>h:mm a yyyy-MM-dd</code>.</td></tr>
+              <tr><td>Nhập ngày</td><td>Chèn <code>yyyy-MM-dd</code>.</td></tr>
+              <tr><td>Thay đổi text case</td><td>Có chữ thường, chữ hoa, kiểu câu, viết hoa đầu từ và Slugify.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">Định dạng tôn trọng vùng chọn, chuẩn hóa kết dòng, chặn khoảng chọn sai và tránh tách ký tự tổ hợp như emoji.</p>
+
+        <h3 id="inline-voice">Điều khiển giọng nói nội tuyến</h3>
+        <ul>
+          <li>Chạm nút giọng nói để bắt đầu hoặc dừng. Giữ khoảng 0,45 giây để hiện điều khiển chi tiết.</li>
+          <li>Khi ghi, <strong>Tạm dừng</strong> xuất hiện cạnh nút giọng nói — chạm một lần để tạm dừng, lần nữa để tiếp tục. Ghi chú cuối vẫn là một bản ghi, không tính âm thanh và thời gian tạm dừng. Tạm dừng cũng ngưng xem trước bản chép lời trực tiếp và tự dừng giọng nói cho đến khi tiếp tục.</li>
+          <li><strong>Thêm vào bản nháp</strong> nối bản chép hoàn chỉnh. <strong>Gửi ngay</strong> chạy lộ trình đã chọn và đích của nó.</li>
+          <li><strong>Mặc định chọn Gửi ngay</strong> trong không gian ghi iOS và Mac. Mở tác vụ giọng nói iOS qua <code>voxboard://capture?action=voice</code> đổi bản ghi đó thành Thêm vào bản nháp.</li>
+          <li>Phần <strong>Audio</strong> giữ bản ghi nguồn như phần nháp khi yêu cầu.</li>
+          <li><strong>Audio nhập khẩu</strong> nhận tệp âm hoặc phim, dùng cùng quy trình chép cục bộ.</li>
+          <li><strong>Xác định Speakers</strong> là bước xử lý giọng nói Lộ trình chủ động bật cho bản ghi và âm thanh nhập. Chuẩn bị mô hình người nói riêng lần đầu, gắn nhãn ẩn danh cục bộ theo khả năng, giữ bản chép thường với lý do hiển thị trong Thư viện khi không chạy được.</li>
+          <li>Tự động có thể hiện chữ Apple Speech đã chốt và tạm thời ngay trong trình soạn sửa được khi ghi. Whisper và Parakeet chọn trực tiếp chép sau khi dừng.</li>
+          <li>Chép lỗi không phá bản ghi nguồn; vẫn khôi phục được.</li>
+          <li>Chế độ nghe bàn phím liên tục chỉ được duy trì qua các lần mở ứng dụng khi bạn chủ động bật. Ghi âm một lần trong ứng dụng sẽ đưa phiên âm thanh trở về trạng thái rảnh sau khi xong.</li>
+        </ul>
+
+        <h3 id="capture-limits">Giới hạn đầu vào ghi nhanh</h3>
+        <div class="docs-callout docs-callout-neutral">
+          <p>Một yêu cầu chứa tối đa <strong>100.000 ký tự</strong> văn bản chia sẻ, <strong>10 mục chia sẻ</strong>, và <strong>250 MB</strong> tổng tài nguyên đã chuẩn bị. Bộ chọn ảnh và ảnh màn hình nhận tối đa 10 mục; ghi nhật ký nhận tối đa 10 trang. Vox.md từ chối phần vượt, không âm thầm bỏ mục.</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="presets">
+        <div class="docs-section-label">03 / Lộ trình</div>
+        <h2>Lưu cả quy trình, không chỉ thư mục</h2>
+        <p>Lộ trình lưu ý nghĩa của nội dung ghi nhanh, có xử lý văn bản hay không, cách xử lý siêu dữ liệu và âm thanh, cũng như vị trí chính xác để ghi Markdown. Lộ trình áp dụng cho văn bản gõ, liên kết, phương tiện, bản quét, tệp, phác thảo, giọng nói, Shortcuts, tiện ích, Bảng chia sẻ, Watch và Mac.</p>
+
+        <h3 id="preset-management">Tạo và quản lý lộ trình</h3>
+        <ul>
+          <li>Mở Cài đặt → Lộ trình để tạo, đổi tên, bật, tắt, chọn biểu tượng hay xóa lộ trình riêng.</li>
+          <li>Bộ chọn biểu tượng tìm được nhóm ký hiệu theo Viết, Giọng nói, Tác vụ, Cá nhân và Công việc.</li>
+          <li>Lộ trình tắt ẩn khỏi bộ chọn thường. Lộ trình Default tích hợp không xóa được.</li>
+          <li>Lộ trình Default tích hợp dùng biểu tượng sóng, lời nhắc <em>Ghi lại ý tưởng, tác vụ, liên kết, tệp, bản quét hoặc bản ghi âm.</em>, <code>type: capture</code> làm siêu dữ liệu, xử lý Văn bản gọn, tắt xử lý gõ và tắt lưu âm thanh.</li>
+          <li>Lộ trình tùy chỉnh mới bắt đầu là <em>Lộ trình tùy chỉnh</em>, dùng biểu tượng thanh trượt và <em>Bạn muốn ghi gì?</em> làm lời nhắc, bắt đầu chọn Hướng dẫn tùy chỉnh nhưng tắt xử lý gõ và hỗn hợp.</li>
+        </ul>
+
+        <h3 id="processing-modes">Chế độ xử lý</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Chế độ</th><th>Kết quả</th><th>Hành vi dự phòng</th></tr></thead>
+            <tbody>
+              <tr><td>Giữ nguyên bản</td><td>Giữ văn bản ghi, không AI viết lại.</td><td>Gửi chữ gốc.</td></tr>
+              <tr><td>Văn bản gọn</td><td>Sửa hoa thường, dấu câu, giữ nghĩa và Markdown.</td><td>Chữ gốc khi bổ sung trên máy không khả dụng.</td></tr>
+              <tr><td>Danh sách việc cần làm</td><td>Tạo Markdown <code>- [ ]</code> mục tác vụ.</td><td>Bộ định dạng danh sách kiểm xác định.</td></tr>
+              <tr><td>Ghi chú cuộc họp</td><td>Tạo <code>## Notes</code> làm phần và, khi có, <code>## Action Items</code>.</td><td>Cấu trúc ghi chú cuộc họp xác định.</td></tr>
+              <tr><td>Hướng dẫn tùy chỉnh</td><td>Theo chỉ dẫn bằng Apple Intelligence trên máy khi sẵn.</td><td>Văn bản gốc khi chỉ dẫn không chạy cục bộ được.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Bản chép giọng nói dùng chế độ lộ trình đã chọn. <strong>Ứng dụng Capture Text</strong> là tùy chọn bật riêng, mặc định tắt, cho phép xử lý Markdown gõ, OCR và các nội dung ghi nhanh hỗn hợp khác có chứa văn bản. Giữ tắt để tránh viết lại Markdown đã soạn ngoài ý muốn. Toàn bộ yêu cầu sau xử lý được lưu nguyên vẹn trước khi gửi, nên thử lại không chạy lại quá trình xử lý với những cài đặt đã thay đổi.</p>
+
+        <h3 id="preset-metadata">metadata</h3>
+        <ul>
+          <li>Nhập siêu dữ liệu tĩnh dưới dạng một <code>key: value</code> mỗi cặp một dòng, như <code>tags: [journal, idea]</code>.</li>
+          <li><strong>Frontmatter ghi chú</strong> ghi siêu dữ liệu cấp tài liệu.</li>
+          <li><strong>Trường mục nội tuyến</strong> ghi <code>key:: value</code> thành các trường bên cạnh từng mục trong ghi chú liên tục.</li>
+          <li>Khi khả dụng, tính năng bổ sung thông tin trên thiết bị có thể thêm tiêu đề, thẻ, danh mục và văn bản đã làm sạch bên cạnh siêu dữ liệu tĩnh của lộ trình.</li>
+        </ul>
+
+        <h3 id="preset-location">Vị trí chủ động bật</h3>
+        <p>Vị trí hiện tại mặc định tắt, thuộc từng Lộ trình. Bật thì Vox.md xin một vị trí tại nguồn: lúc Gửi cho iOS/iPadOS, Bảng chia sẻ, liên kết sâu và trình soạn, Mac và tác vụ hệ thống mở trình soạn; lúc gọi intent chữ, liên kết, tệp vào hàng trực tiếp; hoặc lúc dừng ghi giọng nói tức thì, ghi lộ trình bàn phím, tiện ích hay điều khiển hoặc Apple Watch gửi bình thường. Chỉ ghi âm Watch xuất âm thô Files không có vị trí Markdown nên không xin. Vox.md không bao giờ theo dõi liên tục hoặc nền.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Cài đặt</th><th>Hành vi</th></tr></thead>
+            <tbody>
+              <tr><td>Sử dụng vị trí hiện tại</td><td>Xin một vị trí tại gốc cho lộ trình và cung cấp cho <code>{location}</code>. Không tự ghi siêu dữ liệu.</td></tr>
+              <tr><td>Chính xác (mặc định)</td><td>Giữ vị trí gốc chỉnh riêng tư, có thể thêm nhãn điểm quan tâm nếu siêu dữ liệu chọn cần.</td></tr>
+              <tr><td>Thành phố</td><td>Làm tròn vĩ độ và kinh độ đến hai chữ số thập phân, đồng thời bỏ nhãn điểm quan tâm. Mọi trường dẫn xuất và liên kết đều dùng các tọa độ đã làm tròn đó.</td></tr>
+              <tr><td>Ghi siêu dữ liệu vị trí</td><td>Bật riêng siêu dữ liệu có cấu trúc hoặc nâng cao ngoài <code>{location}</code> liên kết mẫu mục.</td></tr>
+              <tr><td>Trường có cấu trúc</td><td>Chọn, đổi tên tọa độ, vĩ độ, kinh độ, địa điểm, thành phố, vùng, nước, Apple Maps, Google Maps, OpenStreetMap, <code>geo:</code> URI, độ chính xác, thời gian, nguồn và ID ghi.</td></tr>
+              <tr><td>Mẫu YAML nâng cao</td><td>Dùng YAML kiểm chứng giới hạn cho Frontmatter ghi chú. Không thay frontmatter không liên quan và không dùng cho trường mục nội tuyến.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Khi bật Ghi siêu dữ liệu vị trí, phạm vi tài liệu nối từng kết quả vào tập hợp frontmatter đã cấu hình, với khóa là ID ghi nhanh. Một ghi chú có thể giữ nhiều vị trí, còn lần thử lại không tạo kết quả trùng sẽ không nối cùng vị trí hai lần. Ngược lại, phạm vi mục xuất các trường có cấu trúc đã chọn thành <code>key:: value</code> cạnh mục đã ghi đó.</p>
+        <p>Địa điểm, thành phố, vùng và quốc gia chỉ dùng bộ mã hóa địa lý ngược của hệ thống Apple khi các trường siêu dữ liệu đã bật cần đến chúng. Vị trí chỉ dùng token bỏ qua tra cứu ngược. Dịch vụ này miễn phí và không cần khóa API nhưng có thể dùng kết nối mạng; nếu tra cứu thất bại, việc ghi nhanh tiếp tục với siêu dữ liệu chỉ có tọa độ. Tiền tố, hậu tố của mục và mẫu Markdown trong kho có thể dùng <code>{location}</code> để chèn liên kết Google Maps bấm được từ ảnh chụp vị trí khả dụng đã chỉnh riêng tư của lộ trình, không bật siêu dữ liệu; token rỗng khi Vị trí hiện tại tắt hay không khả dụng. Tạo liên kết không liên hệ Apple, Google hoặc OpenStreetMap. Mở liên kết tiết lộ cùng tọa độ chính xác hay làm tròn trong nó cho nhà cung cấp.</p>
+        <p>Lộ trình mới và từng tắt giữ hai điều khiển tắt. Lộ trình đã ghi siêu dữ liệu vị trí giữ cả hai bật sau nâng cấp, bảo toàn đầu ra.</p>
+        <div class="docs-callout">
+          <strong>Hướng dẫn Vị trí hiện tại đầy đủ</strong>
+          <p>Xem <a href="/vi/docs/location/">Vị trí hiện tại, <code>{location}</code>, và siêu dữ liệu</a> để xem dạng thiết lập, ví dụ, thời điểm nguồn ghi, chuyển đổi, riêng tư và sửa lỗi.</p>
+        </div>
+        <div class="docs-callout docs-callout-neutral">
+          <strong>Vị trí không khả dụng</strong>
+          <p>Giao diện tương tác thử lại, hủy, gửi một lần không vị trí hoặc chọn <em>Luôn gửi không vị trí</em> cho lộ trình. Đặt lại lựa chọn lưu trong cài đặt Vị trí. Yêu cầu không giám sát <em>Hỏi</em> giữ kết quả không khả dụng tại gốc đến khi quyết; thử lại và khôi phục không lấy vị trí sau.</p>
+        </div>
+
+        <h3 id="destinations">Đích Markdown</h3>
+        <p>Mỗi lộ trình có một đích gốc ở kho Obsidian hoặc thư mục Files ghi được.</p>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Note mới</strong><p>Tạo Markdown riêng mỗi ghi nhanh bằng token như <code>{timestamp}</code>, <code>{date}</code>, <code>{time}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{id8}</code>, và <code>{id}</code>.</p></div>
+          <div><strong>Rolling Note</strong><p>Nối vào ghi chú hằng ngày, hằng tuần, hằng tháng, hằng quý hoặc hằng năm. Đường dẫn còn hỗ trợ <code>{period}</code> và <code>{week}</code>. Mặc định đích mới là <code>Journal/{period}.md</code> với chu kỳ hằng ngày.</p></div>
+          <div><strong>Note hiện tại</strong><p>Chọn Markdown đã ở trong kho hay thư mục. Vox.md xác minh đích an toàn trong gốc đó.</p></div>
+        </div>
+
+        <p>Công thức lộ trình đầy đủ xem <a href="/vi/blog/append-to-obsidian-daily-note-iphone/">nối chữ và giọng nói vào ghi chú hằng ngày Obsidian</a>.</p>
+
+        <p><a href="/vi/blog/obsidian-capture-templates/">Dùng công thức mẫu hộp thư, nhật ký hay tác vụ</a> để giữ định dạng mục nhất quán.</p>
+
+        <h3 id="placement-templates">Vị trí chèn, tiêu đề và mẫu</h3>
+        <ul>
+          <li><strong>dưới</strong> nối cuối; <strong>Top</strong> chèn đầu; <strong>hướng dẫn</strong> chèn dưới tiêu đề chọn cấp 1 đến 6.</li>
+          <li>Nếu thiếu tiêu đề, chọn <strong>Hiển thị lỗi</strong> hoặc <strong>Tạo Head</strong>.</li>
+          <li>Dùng tệp mẫu Markdown trực tiếp từ kho, mẫu mục dùng lại hoặc tiền tố và hậu tố tùy chỉnh.</li>
+          <li>Định dạng mục hỗ trợ <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>, và <code>{location}</code>.</li>
+          <li>Thư mục con đính kèm mặc định là <code>attachments</code>.</li>
+          <li><strong>Retry bảo vệ</strong>, mặc định tắt, ghi dạng nhìn thấy <code>vox-capture</code> chú thích HTML để phát hiện lần thử trùng.</li>
+          <li>Vox.md từ chối đường tuyệt đối, gạch chéo ngược, duyệt thoát, tên không an toàn và symlink ra ngoài.</li>
+        </ul>
+
+        <h3 id="capture-overrides">Ghi đè cho một lần ghi</h3>
+        <p>Đích dùng mặc định lộ trình, đặt ghi này ở Top hay dưới, áp mẫu mục một lần hoặc chọn ghi chú khác cùng kho được. <strong>Dùng mặc định đích của lộ trình</strong> xóa ghi đè. Lựa chọn chỉ ảnh hưởng nháp hiện tại, không đổi lộ trình.</p>
+
+        <h3 id="audio-export">Giữ âm thanh và xuất tương thích</h3>
+        <ul>
+          <li>Chế độ lưu âm thanh là <strong>Tắt</strong>, <strong>Cạnh ghi chú</strong>, hoặc <strong>Phụ kiện Folder</strong>.</li>
+          <li>Markdown có thể nhúng âm thanh được giữ lại tại vị trí Top hoặc dưới bằng cú pháp Obsidian như <code>![[recording.m4a]]</code>.</li>
+          <li>Với cấu hình giọng nói trực tiếp cũ không có đích Markdown thống nhất, <strong>Lưu ghi chú vào tệp</strong> hỗ trợ TXT, MD, JSON, YAML; Tệp mới hay Nối; token tên gồm mô hình và ngôn ngữ; mẫu Markdown; tùy chọn Obsidian Bases; thuộc tính YAML chọn; và tùy chọn <code>.md</code> làm phần mở rộng YAML.</li>
+          <li>Xuất tương thích chỉ áp dụng giọng nói trực tiếp khi lộ trình không có đích ghi thống nhất.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="models">
+        <div class="docs-section-label">04 / Mô hình và chép lời</div>
+        <h2>Chọn bộ xử lý hệ thống hay mô hình cục bộ tùy chọn</h2>
+        <p>Mọi chép lời chạy trên thiết bị Apple. Tự động là mặc định iOS. Tệp Whisper và Parakeet tùy chọn chỉ tải khi yêu cầu, chọn được, hủy khi tải hoặc xóa sau.</p>
+
+        <p><a href="/vi/blog/offline-transcription-iphone-markdown/">Chuẩn bị quy trình chép ngoại tuyến</a> với bộ xử lý cục bộ và đích ghi được.</p>
+
+        <h3 id="model-options">Tùy chọn chép lời khả dụng</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Tùy chọn</th><th>Kích thước ước tính</th><th>Phù hợp nhất</th></tr></thead>
+            <tbody>
+              <tr><td>Tự động</td><td>Hệ thống quản lý</td><td>Ưu tiên Apple Speech trên thiết bị iOS 26 và ngôn ngữ được hỗ trợ; chỉ dùng dự phòng là mô hình cục bộ mà bạn đã chủ động tải xuống.</td></tr>
+              <tr><td>Whisper Tiny</td><td>75 MB</td><td>Tải nhỏ nhất, tùy chọn Whisper nhanh nhất.</td></tr>
+              <tr><td>Whisper Base</td><td>142 MB</td><td>Mô hình nhỏ cân bằng; mặc định Mac cũ.</td></tr>
+              <tr><td>Whisper Small</td><td>466 MB</td><td>Chính xác hơn, tốn dung lượng và xử lý hơn.</td></tr>
+              <tr><td>Whisper Medium</td><td>1.5 GB</td><td>Whisper đa ngôn ngữ lớn hơn.</td></tr>
+              <tr><td>Whisper Large v3 Turbo</td><td>1.6 GB</td><td>Tùy chọn Whisper lớn nhất có sẵn.</td></tr>
+              <tr><td>Parakeet v2</td><td>~800 MB</td><td>Mô hình Core ML/FluidAudio tối ưu tiếng Anh.</td></tr>
+              <tr><td>Parakeet v3</td><td>~800 MB</td><td>Mô hình Core ML/FluidAudio hỗ trợ 25 ngôn ngữ.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="automatic-model">Tự động hoạt động thế nào</h3>
+        <ul>
+          <li>Trên thiết bị iOS 26 được hỗ trợ, Tự động kiểm tra bộ nhận dạng Speech do hệ thống Apple quản lý cho ngôn ngữ đã chọn và chuẩn bị tài nguyên ngôn ngữ đó khi cần.</li>
+          <li><strong>Ngôn ngữ hệ thống</strong> theo ngôn ngữ máy. Chọn cụ thể khi bản ghi ngôn ngữ khác.</li>
+          <li>Tự động không âm thầm tải Whisper hay Parakeet dự phòng. Chỉ dùng mô hình đã chủ động chọn tải.</li>
+          <li>Apple Speech trực tiếp phân biệt chữ chốt chèn an toàn và chữ tạm còn thay đổi.</li>
+          <li>Whisper và Parakeet chọn trực tiếp chép theo lô sau đoạn xong.</li>
+        </ul>
+
+        <h3 id="model-languages">Ngôn ngữ</h3>
+        <ul>
+          <li><strong>Whisper:</strong> Tự nhận dạng, Anh, Tây Ban Nha, Pháp, Đức, Ý, Bồ Đào Nha, Hà Lan, Ba Lan, Nga, Trung, Nhật, Hàn, Ả Rập, Hindi, Thổ Nhĩ Kỳ, Việt, Thái, Ukraina, Thụy Điển, Đan Mạch, Na Uy và Phần Lan.</li>
+          <li><strong>Tự động:</strong> Ngôn ngữ hệ thống cộng các ngôn ngữ liệt kê cho Whisper khi Apple hỗ trợ ngôn ngữ đó.</li>
+          <li><strong>Parakeet v2:</strong> Tiếng Anh.</li>
+          <li><strong>Parakeet v3:</strong> Bulgaria, Croatia, Séc, Đan Mạch, Hà Lan, Anh, Estonia, Phần Lan, Pháp, Đức, Hy Lạp, Hungary, Ý, Latvia, Litva, Malta, Ba Lan, Bồ Đào Nha, Romania, Slovakia, Slovenia, Tây Ban Nha, Thụy Điển, Nga và Ukraina. Parakeet tự nhận ngôn ngữ.</li>
+        </ul>
+
+        <h3 id="parakeet-autostop">Tự dừng bàn phím Parakeet</h3>
+        <p>Mô hình tùy chọn khoảng 1 MB <strong>Phát hiện giọng nói Pause</strong> có thể dừng ghi bàn phím Parakeet v2 hoặc v3 chọn trực tiếp sau im lặng. Bật <strong>Dừng Parakeet sau khoảng lặng</strong> và chọn khoảng 0,5; 0,75; 1; 1,5 hoặc 2 giây. Mặc định bật với khoảng lặng 0,75 giây sau khi mô hình phụ sẵn sàng. Tự động và Whisper vẫn dừng thủ công.</p>
+
+        <h3 id="audio-pipeline">Hành vi âm thanh cục bộ</h3>
+        <ul>
+          <li>Đầu Whisper chuẩn hóa âm mono 16 kHz, 16-bit.</li>
+          <li>Nghe liên tục iOS dùng bộ đệm vòng 10 phút, kèm hai giây âm trước lúc đoạn bắt đầu.</li>
+          <li>Whisper dùng <code>whisper.cpp</code>; Parakeet dùng FluidAudio và Core ML. Whisper dùng Metal tăng tốc trên Mac.</li>
+          <li>Tải mô hình cần mạng, nhưng chép lời chạy cục bộ sau khi bộ xử lý đã sẵn.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="keyboard">
+        <div class="docs-section-label">05 / Bàn phím iOS</div>
+        <h2>Đọc chính tả vào trường văn bản đang sửa</h2>
+        <p>Bàn phím Vox.md chạy trong Messages, Notes, Mail, Safari, Slack và mọi ứng dụng nhận bàn phím iOS chuẩn. Thanh giọng nói nằm trên bố cục KeyboardKit, giao tiếp với ứng dụng Vox.md chính qua App Group chia sẻ riêng tư.</p>
+
+        <h3 id="keyboard-setup">Thiết lập bàn phím</h3>
+        <ol class="docs-steps">
+          <li><strong>Chuẩn bị chép lời trong Vox.md.</strong><span>Giữ Tự động trên thiết bị hỗ trợ hoặc tải chọn Whisper hay Parakeet trong Cài đặt → Mô hình.</span></li>
+          <li><strong>Thêm bàn phím.</strong><span>Mở Cài đặt iOS → Cài đặt chung → Bàn phím → Bàn phím → Thêm bàn phím mới, chọn Vox.md.</span></li>
+          <li><strong>Bật Cho phép truy cập đầy đủ.</strong><span>Quy trình bàn phím hiện cần quyền này dùng trạng thái App Group chung và phối hợp ghi với ứng dụng chính.</span></li>
+          <li><strong>Đổi bàn phím.</strong><span>Mở trường chữ, dùng phím địa cầu chọn Vox.md rồi chạm micrô.</span></li>
+        </ol>
+        <div class="docs-callout">
+          <strong>Truy cập đầy đủ làm gì đây</strong>
+          <p>iOS đặt tên quyền rộng. Vox.md dùng cho ứng dụng và bàn phím trên thiết bị, trạng thái chung và xúc giác tùy chọn. Vox.md không tải phím gõ, chữ đọc, bản chép hay micrô lên máy chủ Vox.md. Xem <a href="/vi/privacy.html">Chính sách bảo mật</a>.</p>
+        </div>
+
+        <h3 id="keyboard-workflow">Thanh giọng nói và chèn</h3>
+        <ul>
+          <li>Thanh công cụ hiện bộ xử lý, trạng thái, thời lượng, sóng trực tiếp và micrô/dừng.</li>
+          <li>Điều khiển trước và sau xoay giữa bộ xử lý đã tải khả dụng.</li>
+          <li>Nếu chưa nghe, bàn phím mở Vox.md một lần, bắt đầu nghe và có thể đưa bạn về trường văn bản gốc.</li>
+          <li>Với Tự động, phần chép lời đã chốt chèn khi bạn nói; từ tạm thời chỉ hiển thị đến khi Apple chốt.</li>
+          <li>Với Whisper hoặc Parakeet, bản chép hoàn chỉnh chèn sau khi dừng hoặc tự dừng đoạn.</li>
+          <li>Nếu chèn gián đoạn hay tạm ngưng, chữ chờ lưu bền, thử lại lần bàn phím hiện tiếp.</li>
+          <li>Thanh công cụ báo trạng thái như <em>Mở Vox.md</em>, <em>Transkript...</em>, và <em>Bật Truy cập đầy đủ</em>.</li>
+        </ul>
+
+        <h3 id="keyboard-customization">Tùy chỉnh bàn phím</h3>
+        <ul>
+          <li><strong>Phản hồi xúc giác</strong> mặc định bật, đổi trong Cài đặt Vox.md được.</li>
+          <li>Bảng ký tự thay thế khi giữ phím có cho tiếng Anh, Đức, Tây Ban Nha, Pháp, Ý, Bồ Đào Nha, Hà Lan, Thụy Điển, Đan Mạch và Na Uy.</li>
+          <li>Người chọn Parakeet trực tiếp có thể thêm tự dừng theo khoảng lặng trong Cài đặt → Mô hình.</li>
+          <li>Hạn mức 15 phút chép lời miễn phí áp dụng cho cả đọc chính tả qua bàn phím, bản ghi trong ứng dụng và âm thanh nhập vào.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="system-integrations">
+        <div class="docs-section-label">06 / Tích hợp hệ thống</div>
+        <h2>Bắt đầu ghi từ Bảng chia sẻ, Màn hình chính, Màn hình khóa hoặc Shortcuts</h2>
+
+        <h3 id="share-extension">Phần mở rộng chia sẻ</h3>
+        <p>Tác vụ Bảng chia sẻ iOS tên là <strong>Ghi vào Vox.md</strong>. Nhận chữ, URL HTTP/HTTPS, ảnh, tệp và phim theo giới hạn mục và tài nguyên chung. Chọn Lộ trình và đích, thêm ghi chú tùy ý, rồi Gửi. Nếu dùng Vị trí hiện tại, Chia sẻ lấy một vị trí tại gốc lúc Gửi này dù siêu dữ liệu có bật không. Nội dung chuẩn bị trong App Group riêng, xếp hàng bền vững và mở Vox.md để gửi. Nếu gửi cần ứng dụng chính, dùng <strong>Mở Vox.md</strong>.</p>
+
+        <h3 id="widgets">Tiện ích Màn hình chính và khóa</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>nhanh capture</strong><p>Mở nháp Markdown bền vững. Tiện ích vừa, lớn có Note, Ảnh, Ảnh màn hình, Camera, File, Liên kết, Quét, Sketch, giọng nói.</p></div>
+          <div><strong>nhanh kỷ lục</strong><p>Bắt đầu ghi theo cấu hình, hiện sẵn, nghe hoặc tắt trên kiểu Màn hình chính và khóa hỗ trợ.</p></div>
+          <div><strong>Cài đặt an toàn tiện ích</strong><p>Tắt nút ghi âm màn hình khóa trong Cài đặt để hiện trạng thái tắt thay vì ghi ngay.</p></div>
+        </div>
+
+        <h3 id="control-center-live-activities">Trung tâm điều khiển, Hoạt động trực tiếp và Dynamic Island</h3>
+        <ul>
+          <li>Trên iOS 18+, thêm điều khiển ghi nhanh và ghi âm Vox.md từ Trung tâm điều khiển. Đặt Lộ trình và tùy chọn phiên bản cài có.</li>
+          <li>Hoàn tất thiết lập micrô, mô hình và đích trong Vox.md trước khi dùng điều khiển ghi âm. Việc ghi có thể mở ứng dụng tùy iOS và phiên bản đã cài. Kiểm tra bản ghi ngắn trên thiết bị trước khi dựa vào ghi nhanh nền.</li>
+          <li>Phần <strong>Trình theo dõi hoạt động trực tiếp</strong> điều khiển trạng thái ghi và Ghi/Dừng trên Màn hình khóa và Dynamic Island.</li>
+          <li>Hoạt động trực tiếp có Đang ghi, đồng hồ, Xử lý, Sẵn sàng, Ghi âm và Dừng.</li>
+          <li>Hoạt động trực tiếp có từ iOS 17; các điều khiển trong Trung tâm điều khiển yêu cầu iOS 18.</li>
+        </ul>
+
+        <h3 id="shortcuts">Shortcuts và App Intents</h3>
+        <p>Lộ trình là thực thể chọn được trong Shortcuts và điều khiển hỗ trợ. Bật Sử dụng vị trí hiện tại thì intent chữ, liên kết, tệp vào hàng trực tiếp xin lúc gọi; tác vụ mở nhanh capture xin lúc Gửi; ghi âm xin lúc dừng. Siêu dữ liệu không đổi thời điểm. Nếu yêu cầu không giám sát <em>Hỏi</em> không lấy được vị trí, kết quả không khả dụng tại thời điểm gốc được giữ cho quyết định sau, không lấy lại. Dùng tác vụ có trong phiên bản Vox.md đã cài. Tác vụ ghi nhanh gồm:</p>
+        <ul class="docs-columns">
+          <li>Chụp nhanh Open</li>
+          <li>Ghi chú về Capture</li>
+          <li>Chụp ảnh màn hình</li>
+          <li>Tải text to Markdown</li>
+          <li>Chụp link Markdown</li>
+          <li>File bắt giữ Markdown</li>
+        </ul>
+
+        <h3 id="action-button-recording">Thiết lập ghi Nút tác vụ</h3>
+        <p>Mở Vox.md một lần để cấp quyền micrô, chuẩn bị bộ chép lời và kết nối một Lộ trình với đích lưu. Trong Shortcuts, thêm một tác vụ ghi nhanh Vox.md hiện có và chọn Lộ trình của bạn. Chạy phím tắt khi điện thoại đã mở khóa để xác nhận nội dung được lưu vào đúng ghi chú mong muốn, rồi mới gán phím tắt trong Cài đặt → Nút tác vụ → Phím tắt.</p>
+        <p class="docs-note">Tác vụ và ghi nền tùy phiên bản và iOS. Dùng tác vụ Shortcuts hiện trên máy. Nếu cần mở ứng dụng, mở Vox.md ghi. Phím tắt có trong bộ chọn không bảo đảm ghi được từ máy khóa.</p>
+
+        <h3 id="deep-links">Liên kết sâu</h3>
+        <p>Vox.md đăng ký <code>voxboard://</code> làm lược đồ URL. Mã hóa URL cho giá trị truy vấn.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table docs-code-table">
+            <thead><tr><th>URL</th><th>Hành vi</th></tr></thead>
+            <tbody>
+              <tr><td><code>voxboard://capture</code></td><td>Mở trình nhanh capture bền vững.</td></tr>
+              <tr><td><code>voxboard://capture?action=photos</code></td><td>Mở bộ chọn ảnh. Tác vụ khác: <code>screenshots</code>, <code>camera</code>, <code>files</code>, <code>scan</code>, <code>sketch</code>, <code>link</code>, và <code>voice</code>.</td></tr>
+              <tr><td><code>voxboard://capture?text=...</code></td><td>Mở nháp với văn bản giới hạn.</td></tr>
+              <tr><td><code>voxboard://capture?url=https%3A%2F%2F...</code></td><td>Mở bản nháp với liên kết HTTP/HTTPS.</td></tr>
+              <tr><td><code>voxboard://capture?route=...</code></td><td>Chọn Lộ trình bật. Kết hợp tác vụ hỗ trợ, chữ hoặc URL được.</td></tr>
+              <tr><td><code>voxboard://capture-request?id=...</code></td><td>Nhận yêu cầu bền vững do phần mở rộng hệ thống hay intent tạo.</td></tr>
+              <tr><td><code>voxboard://listen</code></td><td>Bắt đầu luồng mở nghe bàn phím.</td></tr>
+              <tr><td><code>voxboard://record</code></td><td>Điểm vào ghi cũ chuyển sang nghe.</td></tr>
+              <tr><td><code>voxboard://widget-record</code></td><td>Điểm ghi tiện ích cũ.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">Từ chối tham số lạ hoặc trùng, UUID sai, ID lộ trình không an toàn, URL không HTTP và chữ quá giới hạn chung.</p>
+      </section>
+
+      <section class="docs-section" id="apple-watch">
+        <div class="docs-section-label">07 / Apple Watch</div>
+        <h2>Ghi cục bộ Watch, gửi qua iPhone</h2>
+
+        <p><a href="/vi/blog/apple-watch-obsidian-voice-notes/">Theo hướng dẫn Apple Watch vào Obsidian</a> để kiểm chọn lộ trình, chuyển và gửi.</p>
+
+        <h3 id="watch-recording">Quy trình ghi âm</h3>
+        <ul>
+          <li>Ứng dụng Watch hiện Sẵn sàng, Đang ghi, Tạm dừng, Đồng bộ, Chờ, Chép lời, Lưu, Đã gửi và Cần chú ý.</li>
+          <li>Dùng Ghi âm, Tạm dừng/Tiếp tục, Dừng, Hủy, Đồng bộ và Làm mới. Tạm dừng giúp suy nghĩ mà không tách ghi chú — đóng băng đồng hồ và không tính vào bản ghi. Hủy chủ động xóa bản cục bộ thay vì đồng bộ.</li>
+          <li>Bản ghi lưu nhật ký cục bộ, khôi phục sau gián đoạn hoặc sự cố.</li>
+          <li>Bản ghi ở Watch đến khi iPhone xác nhận gửi hoặc bỏ.</li>
+          <li>Lộ trình bật Sử dụng vị trí hiện tại và gửi bình thường yêu cầu một vị trí gốc Watch lúc dừng ghi, chuyển kết quả đã chỉnh riêng tư cùng ảnh chụp lộ trình. iPhone không thay vị trí của mình. Chỉ ghi âm bỏ vị trí vì xuất âm thanh thô không có phần Markdown.</li>
+        </ul>
+
+        <h3 id="watch-presets">Lộ trình trên Watch</h3>
+        <p>Chọn Lộ trình iPhone bật từ Watch <strong>Lộ trình</strong> . Vox.md chuyển ảnh chụp an toàn cùng bản ghi. Nếu iPhone không sẵn, lựa chọn yêu cầu vẫn chờ và lộ trình xác nhận cuối vẫn hoạt động.</p>
+
+        <h3 id="watch-queue">Hàng đợi bản ghi Watch trên iPhone</h3>
+        <p>Hàng đợi iPhone hiện thời điểm, thời lượng, lộ trình, trạng thái xử lý và tác vụ gửi. Mục lỗi có thể thử lại, đổi lộ trình, bỏ hoặc ghi không có bản chép lời. Bỏ sẽ xóa âm thanh giữ lại và lần gửi trong hàng đợi.</p>
+
+        <h3 id="watch-recording-only">Đầu ra Chỉ ghi âm</h3>
+        <ul>
+          <li>Đặt Đầu ra lộ trình là <strong>Chỉ ghi âm</strong> để sao chép âm thanh M4A vào một thư mục Files mà không chép lời, không xử lý AI và không sử dụng hạn mức chép lời.</li>
+          <li>Mẫu tên tệp mặc định là <code>recording-{timestamp}-{id8}</code>.</li>
+          <li>Chọn thư mục ghi âm một lần trên iPhone trước khi dùng lộ trình.</li>
+          <li>iOS có thể trì hoãn gửi nền. Buộc thoát Vox.md chặn gửi đến khi mở lại.</li>
+        </ul>
+
+        <h3 id="watch-complication">Tổ hợp mặt đồng hồ và tiện ích</h3>
+        <p>Phần <strong>Ghi âm Voice Note</strong> hỗ trợ dạng tròn, chữ nhật, nội tuyến và góc. Mở hoặc bật tắt ghi cục bộ Watch, hiện giờ hoặc nhãn tùy trạng thái.</p>
+      </section>
+
+      <section class="docs-section" id="mac">
+        <div class="docs-section-label">08 / Mac đồng hành</div>
+        <h2>Dùng cùng hệ thống ghi trên macOS</h2>
+        <p>Ứng dụng Mac có Ghi nhanh, Thư viện, Cài đặt; dùng chung kiến trúc mô hình cục bộ, lộ trình, lộ trình, xuất và thử lại của iOS.</p>
+
+        <h3 id="mac-workspace">Không gian ghi nhanh</h3>
+        <ul>
+          <li>Gõ, sửa Markdown, dán hoặc kéo thả tệp, ảnh và âm thanh.</li>
+          <li>Dùng camera tích hợp, bên ngoài hoặc thiết bị Continuity Camera.</li>
+          <li>Nhập bản quét hoặc PDF, tạo phác thảo bằng chuột, trackpad hoặc bảng vẽ được kết nối, rồi thêm liên kết, wikilink, ngày đến hạn và các phép biến đổi văn bản.</li>
+          <li>Ghi bằng <strong>Thêm vào bản nháp</strong> hoặc <strong>Gửi ngay</strong>; tùy chọn giữ Audio trong chế độ nháp.</li>
+          <li><strong>Tạm dừng</strong> và <strong>Tiếp tục</strong> ghi micrô từ thanh trạng thái. Âm tạm dừng bị loại, nên ghi một ghi chú thành nhiều đoạn được. Ghi cuộc họp không tạm dừng.</li>
+          <li>Nhập âm thanh hoặc video để chép lời cục bộ.</li>
+          <li>Nhấn Command-Return để gửi ghi nhanh. Lộ trình bật Sử dụng vị trí hiện tại yêu cầu một vị trí gốc Mac lúc Gửi hoặc dừng ghi, bất kể xuất siêu dữ liệu có bật không.</li>
+          <li>Biểu ngữ thiết lập đích và trình kiểm tra lộ trình cho thấy ghi chú và vị trí chèn đã phân giải của lộ trình chọn.</li>
+        </ul>
+
+        <h3 id="mac-meeting">Ghi cuộc họp với các luồng âm thanh riêng</h3>
+        <p>Chuyển bộ chọn chế độ đầu vào từ <strong>Micrô</strong> đến <strong>Cuộc họp</strong> để ghi âm ứng dụng phát trên Mac và micrô riêng thành hai luồng tách sạch. Vox.md dùng ScreenCaptureKit chế độ một ứng dụng, chọn đúng một ứng dụng, không bao giờ ghi Vox.md.</p>
+        <ul>
+          <li>Khi ghi, thanh trạng thái hiện mức hệ thống và micrô trực tiếp, trạng thái từng nguồn, mọi cảnh báo ghi.</li>
+          <li>Cả hai luồng âm thanh ghi thành khối bền vững có bản kê khôi phục, nên gián đoạn — dừng luồng, rút micrô hoặc buộc thoát — kết thúc an toàn và cuộc họp vẫn chép được. Phiên gián đoạn tự khôi phục khi hàng đợi ghi tiếp tục lần sau.</li>
+          <li>Sau dừng, mỗi luồng chép riêng trên máy, kết quả xen theo thời gian chung: micrô bạn hiện là <strong>Bạn</strong>, luồng ứng dụng gắn nhãn người nói từ xa. Nhận dạng người nói tùy chọn còn tách nhiều giọng từ xa được.</li>
+          <li>Bản trộn phát lại hai luồng giữ làm âm thanh bản ghi; bản chép hoàn tất theo Lộ trình, Thêm vào bản nháp hay Gửi ngay, và cài đặt clipboard như bản ghi khác.</li>
+        </ul>
+
+        <h3 id="mac-keybinds">Phím tắt toàn cục</h3>
+        <p>Settings → Global Keybinds có thể gán phím tắt cho <strong>Tải về Clipboard</strong>, <strong>Lộ trình đã chọn</strong>, hoặc lộ trình bật bất kỳ. Phím tắt mặc định tắt, cần phím thường cùng Control, Option hay Command, có thể kèm Shift, từ chối xung đột. Nhấn phím đang bật lần nữa dừng ghi.</p>
+        <div class="docs-callout docs-callout-neutral">
+          <p><strong>Tải về Clipboard</strong> không tạo ghi chú, mục Thư viện hay âm thanh giữ lại. Dành cho đọc chính tả nhanh vào mọi ứng dụng Mac.</p>
+        </div>
+
+        <h3 id="mac-menu-bar">Thanh menu và hiển thị ứng dụng</h3>
+        <ul>
+          <li>Lựa chọn hiển thị là <strong>+ Menu Bar</strong> (mặc định), <strong>Menu Bar chỉ</strong>, <strong>Dock chỉ</strong>, và <strong>Ẩn</strong>.</li>
+          <li>Thanh menu báo đang ghi, chép và xuất.</li>
+          <li>Các tác vụ menu gồm Bắt đầu ghi âm, Stop + Transcribe (Hãy chuyển tiếp) để dừng và chép lời, Nhập khẩu Audio để nhập âm thanh, Copy Transcript cuối cùng để sao chép bản chép lời gần nhất, Xuất khẩu mới nhất để hiển thị bản xuất gần nhất, chọn Lộ trình, Show Capture để hiện ghi nhanh, Hiện Thư viện, Tải dữ liệu Folder để hiển thị thư mục dữ liệu và Đừng Vox.md để thoát ứng dụng.</li>
+          <li>Nhấn Control-B trong Mac hiện gợi ý bàn phím trên điều khiển bấm được.</li>
+        </ul>
+
+        <h3 id="mac-history">Lịch sử và mô hình Mac</h3>
+        <p>Tìm kiếm, tải lại, xóa toàn bộ, sao chép hoặc xóa từng mục trong lịch sử cục bộ; mở chi tiết bản chép đã làm sạch và bản thô; hiển thị ghi chú đã gửi trong Finder. Màn hình Mô hình cho phép tải, chọn và xóa mô hình Whisper hoặc Parakeet, đồng thời đổi ngôn ngữ chép lời. Whisper sử dụng tăng tốc Metal trên các máy Mac được hỗ trợ.</p>
+      </section>
+
+      <section class="docs-section" id="history-settings">
+        <div class="docs-section-label">09 / Thư viện, Cài đặt và Riêng tư</div>
+        <h2>Khôi phục công việc, kiểm soát dữ liệu cục bộ và mở khóa dùng không giới hạn</h2>
+
+        <h3 id="history">Thư viện hợp nhất trên iOS</h3>
+        <ul>
+          <li>Thư viện hợp nhất bản chép cục bộ và lịch sử gửi ghi nhanh trong một danh sách tìm được.</li>
+          <li>Tìm chữ thô, gọn, tên, thẻ, danh mục; kéo làm mới.</li>
+          <li>Chép bản gọn hoặc thô, sửa siêu dữ liệu và chữ, xuất bản Markdown qua bảng chia sẻ.</li>
+          <li>Xóa một bản chép hoặc toàn bộ lịch sử cục bộ. Xóa lịch sử không xóa Markdown hay đính kèm đã ghi vào đích.</li>
+          <li>Thử lại mục chờ và xem nguồn tổng quát, lộ trình, đích, đường ghi chú, số đính kèm, giờ, kết quả và loại lỗi.</li>
+          <li>Sửa bản chép gồm Tên, Thẻ, Danh mục, Văn bản gọn và Bản thô.</li>
+        </ul>
+
+        <h3 id="stats">Hoạt động tư nhân</h3>
+        <p>Mở Cài đặt → Hoạt động → Thống kê xem tổng sử dụng trọn đời: tổng ghi âm và ghi nhanh, thời lượng, số đính kèm; biểu đồ bảy ngày và nguồn ghi (ứng dụng, bàn phím, Bảng chia sẻ, tiện ích, Shortcuts, Apple Watch, Mac, liên kết sâu, nhập tệp, giọng nói).</p>
+        <ul>
+          <li>Thống kê chỉ tính nội dung ghi nhanh đã gửi thành công; kéo để làm mới sau hoạt động mới.</li>
+          <li>Sổ đếm ở trên thiết bị, không lưu nội dung ghi, tên tệp hay đích.</li>
+        </ul>
+
+        <h3 id="settings-map">Sơ đồ cài đặt</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Mục</th><th>Điều khiển</th></tr></thead>
+            <tbody>
+              <tr><td>Vox.md Unlimited</td><td>Trạng thái dùng miễn phí, mở khóa trọn đời và khôi phục mua.</td></tr>
+              <tr><td>Tùy chỉnh</td><td>Mô hình; Lộ trình; hiển thị và thứ tự tác vụ Thanh ghi nhanh.</td></tr>
+              <tr><td>Bàn phím</td><td>Phản hồi xúc giác.</td></tr>
+              <tr><td>Màn hình khóa</td><td>Trình theo dõi hoạt động trực tiếp và nút ghi Màn hình khóa.</td></tr>
+              <tr><td>Về</td><td>Chép mặc định, Whisper, Parakeet, xử lý trên máy, riêng tư, phiên bản và Apple Intelligence khả dụng.</td></tr>
+              <tr><td>Phản hồi</td><td>Tham gia Discord Isolated Tech hoặc soạn thư phản hồi chẩn đoán.</td></tr>
+              <tr><td>Debug</td><td>Xem nhật ký gỡ lỗi cục bộ.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Ghi chú phát hành có thể hiện sau cập nhật, mô tả tính năng như đồng bộ Watch, phím tắt Mac toàn cục, biểu tượng lộ trình, điều khiển Màn hình khóa, định tuyến, quy tắc âm thanh và hậu xử lý.</p>
+
+        <h3 id="pricing-limits">Dùng miễn phí và mở khóa trọn đời</h3>
+        <ul>
+          <li>Dùng miễn phí gồm <strong>15 phút chép lời</strong> và <strong>10 lần gửi ghi nhanh thành công</strong>.</li>
+          <li>Bản chép đã tính thời gian chép lời không dùng thêm hạn mức ghi nhanh riêng khi định tuyến sang Markdown.</li>
+          <li>Lần ghi tệp thất bại và lần thử lại không tạo kết quả trùng không tiêu tốn hạn mức gửi ghi nhanh thành công.</li>
+          <li>Unlimited là mua một lần trọn đời, không thuê bao, gia hạn hay quảng cáo. Giá App Store địa phương là chính thức; tại Mỹ $19.99 Individual, $39.99 Family và $19.99 Family Upgrade, cửa hàng khác định giá theo sức mua.</li>
+          <li>Khôi phục mua lấy lại giao dịch đủ điều kiện. Người dùng bản trả phí cũ đủ điều kiện giữ quyền dùng không giới hạn.</li>
+          <li>Sổ App Group không nội dung ngăn tính lại khi thử trong lúc dữ liệu cục bộ còn. Không lưu Keychain; xóa dữ liệu cục bộ bắt đầu hạn mức mới.</li>
+        </ul>
+
+        <h3 id="privacy-data">Những gì ở lại máy</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Nội dung ghi nhanh</strong><p>Nháp, chữ, liên kết, mẫu, lộ trình, đính kèm, âm thanh, OCR và bản chép không gửi máy chủ Vox.md.</p></div>
+          <div><strong>xử lý</strong><p>Apple Speech, Whisper, Parakeet, Vision OCR và xử lý Apple Intelligence hỗ trợ chạy trên máy.</p></div>
+          <div><strong>Đích của bạn</strong><p>Tệp hoàn chỉnh chỉ đến thư mục bạn chọn. Nhà cung cấp tệp bên thứ ba có thể đồng bộ theo điều khoản riêng.</p></div>
+        </div>
+        <ul>
+          <li>Sau khi gửi thành công, yêu cầu ghi nhanh có thể khôi phục trở thành biên nhận không chứa nội dung, còn các mục hàng đợi Watch đã hoàn tất chỉ giữ các trường tổng quát về trạng thái gửi cuối cùng. Cả hai đều không giữ tọa độ, nhãn, URL nhà cung cấp, mẫu vị trí hoặc dữ liệu lộ trình.</li>
+          <li>Lịch sử hoàn tất lưu siêu dữ liệu gửi, không lưu chữ ghi chú, URL, tọa độ, nhãn hay mẫu vị trí, dấu trang, đường tuyệt đối hoặc tên đính kèm.</li>
+          <li>Các mục đang chờ và thất bại chỉ giữ dữ liệu cần cho khôi phục cục bộ, có thể bao gồm bản chụp cấu hình lộ trình cùng vị trí đã điều chỉnh để bảo vệ riêng tư hoặc kết quả không lấy được vị trí của lộ trình đó.</li>
+          <li>Phân tích khởi đầu bản phát hành mặc định tắt. Không có SDK phân tích bên thứ ba, mạng quảng cáo hay theo dõi chéo.</li>
+          <li>Trình soạn lấy trích dẫn truyền cảm hứng lưu đệm từ ZenQuotes, không gửi nội dung nháp hay mã định danh.</li>
+        </ul>
+        <p>Để biết đầy đủ xử lý, giữ dữ liệu và dịch vụ bên thứ ba, đọc <a href="/vi/privacy.html">Chính sách bảo mật</a>.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">10 / Khắc phục sự cố</div>
+        <h2>Lỗi thiết lập và gửi thường gặp</h2>
+        <div class="docs-troubleshooting">
+          <details open>
+            <summary>Không gửi ghi nhanh được</summary>
+            <p>Mở Đích, đặt Lộ trình chọn. Nếu thư mục chuyển hay quyền hết, chọn kho hoặc thư mục lại. Công việc chờ còn trong Thư viện.</p>
+          </details>
+          <details>
+            <summary>Bàn phím báo Bật Truy cập đầy đủ</summary>
+            <p>Mở Cài đặt iOS → Cài đặt chung → Bàn phím → Bàn phím → Vox.md, bật Cho phép truy cập đầy đủ. Trở về ứng dụng một lần để Vox.md tiếp tục quy trình nghe chung.</p>
+          </details>
+          <details>
+            <summary>Tự động không khả dụng</summary>
+            <p>Apple Speech ở chế độ Tự động cần thiết bị iOS 26 và ngôn ngữ được hỗ trợ. Chọn rồi tải một mô hình Whisper hoặc Parakeet, sau đó chọn dùng mô hình đó trực tiếp hoặc trở về Tự động để mô hình có thể làm phương án dự phòng đã được người dùng chấp thuận.</p>
+          </details>
+          <details>
+            <summary>Chép lời lỗi</summary>
+            <p>Xác nhận mô hình tải đủ và ngôn ngữ phù hợp. Vox.md giữ âm thanh nguồn khôi phục được khi có thể để chọn mô hình khác rồi thử lại.</p>
+          </details>
+          <details>
+            <summary>Lộ trình tiêu đề lỗi</summary>
+            <p>Sửa đích của lộ trình, xác nhận nội dung và cấp tiêu đề. Chọn Tạo Head nếu muốn việc gửi tạo tiêu đề còn thiếu thay vì dừng lại.</p>
+          </details>
+          <details>
+            <summary>Bản ghi Watch đang chờ</summary>
+            <p>Mở Vox.md trên iPhone, Xem các Recordings. Làm mới, thử lại, chọn lộ trình hợp lệ khi hỏi; giữ ứng dụng cài và sẵn bàn giao nền. Buộc thoát chặn gửi nền đến mở lại.</p>
+          </details>
+          <details>
+            <summary><code>{location}</code> hiện rỗng</summary>
+            <p>Bật Sử dụng vị trí hiện tại cho lộ trình gửi; sửa một chạm trong trình soạn làm được cho tiền tố, hậu tố và mẫu mục dùng lại phát hiện được mà không bật siêu dữ liệu. Tệp mẫu kho trực tiếp cần tự thiết lập. Nếu không có quyền hoặc tiếp tục không vị trí, token cố ý rỗng. Xem <a href="/vi/docs/location/">hướng dẫn vị trí đầy đủ</a>.</p>
+          </details>
+          <details>
+            <summary>Vị trí lộ trình không khả dụng</summary>
+            <p>Chỉ dùng Thử lại trong khi giải quyết lần Gửi tương tác gốc. Có thể hủy, gửi một lần không vị trí hoặc luôn không vị trí cho lộ trình. Đặt lại lựa chọn lưu trong cài đặt Vị trí lộ trình. Yêu cầu chờ không giám sát giữ kết quả không sẵn gốc, không lấy vị trí mới.</p>
+          </details>
+        </div>
+        <div class="docs-callout docs-support-callout">
+          <strong>Vẫn mắc kẹt?</strong>
+          <p>Mở Cài đặt → Xem nhật ký gỡ lỗi, dùng Gửi phản hồi để kèm phiên bản, nền tảng, OS và máy. Cũng tham gia được <a href="https://discord.gg/RaQYS4t6gn">Discord của Isolated Tech</a>.</p>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/vi/developers">Nhà phát triển</a></li>
+        <li><a href="/vi/about">Về</a></li>
+        <li><a href="/vi/contact">Liên hệ</a></li>
+        <li><a href="/vi/">Trang chủ</a></li>
+        <li><a href="/vi/docs/" aria-current="page">Tài liệu</a></li>
+        <li><a href="/vi/blog/">Nhật ký web</a></li>
+        <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+        <li><a href="/vi/terms.html">Điều khoản</a></li>
+        <li><a href="/llms.txt">llms.txt</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Hỗ trợ</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_60877eba17c1">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Tài liệu đầy đủ · Ghi ưu tiên cục bộ.</div>
+    </div>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

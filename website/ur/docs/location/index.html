@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl" data-search-section="حصہ" data-search-guide="رہنمائی" data-search-empty="«{query}» کا نتیجہ نہیں">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>موجودہ مقام، {location} اور میٹا ڈیٹا — Vox.md دستاویزات</title>
+  <meta name="description" content="Vox.md راستوں میں ایک بار کا موجودہ مقام، Markdown ٹوکن {location}، اختیاری ابتدائی یا اندرونی مقام میٹا ڈیٹا، درستگی، رازداری اور بحالی مقرر کریں۔">
+  <link rel="canonical" href="https://vox.isolated.tech/ur/docs/location/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="لسانی ماڈلز کے لیے Vox.md دستاویزات">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="موجودہ مقام، {location} اور میٹا ڈیٹا — Vox.md دستاویزات">
+  <meta property="og:description" content="نوٹس میں مقام کا میٹا ڈیٹا خودکار شامل کیے بغیر Markdown ٹیمپلیٹ میں ایک بار کا مقام استعمال کریں۔">
+  <meta property="og:url" content="https://vox.isolated.tech/ur/docs/location/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vox.md میں موجودہ مقام کی رہنمائی">
+  <meta name="twitter:description" content="ایک بار مقام، {location}، میٹا ڈیٹا، درستگی، رازداری اور منتقلی کی مکمل رہنمائی۔">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Vox.md میں موجودہ مقام، {location} اور مقام میٹا ڈیٹا",
+  "description": "ہر پیش سیٹ کے لیے موجودہ مقام حاصل کرنے، Markdown ٹوکن {location}، اختیاری میٹا ڈیٹا آؤٹ پٹ، رازداری، منتقلی اور مسائل کے حل کی مکمل رہنمائی۔",
+  "dateModified": "2026-08-21",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/ur/docs/location/",
+  "inLanguage": "ur",
+  "name": "موجودہ مقام، {location} اور میٹا ڈیٹا — Vox.md دستاویزات"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ur/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "دستاویزات",
+      "item": "https://vox.isolated.tech/ur/docs/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "موجودہ مقام",
+      "item": "https://vox.isolated.tech/ur/docs/location/"
+    }
+  ],
+  "inLanguage": "ur",
+  "name": "موجودہ مقام، {location} اور میٹا ڈیٹا — Vox.md دستاویزات",
+  "description": "Vox.md راستوں میں ایک بار کا موجودہ مقام، Markdown ٹوکن {location}، اختیاری ابتدائی یا اندرونی مقام میٹا ڈیٹا، درستگی، رازداری اور بحالی مقرر کریں۔"
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md عوامی معلومات API">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/location/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/location/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/location/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/location/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/location/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/location/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/location/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/location/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/location/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/location/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/location/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/location/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/location/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/location/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/location/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/location/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/location/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/location/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/location/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/location/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/location/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/location/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/location/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/location/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="بنیادی سمت یابی">
+  <div class="nav-inner docs-header-inner">
+    <a href="/ur/" class="logo" aria-label="Vox.md مرکزی صفحہ">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ دستاویزات</span></span>
+    </a>
+    <form class="docs-search" role="search" action="../" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="دستاویزات تلاش کریں" aria-label="دستاویزات تلاش کریں" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="تلاش نتائج" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/ur/blog/">بلاگ</a></li>
+      <li><a href="/ur/privacy.html">رازداری</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>زبان</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur" aria-current="page">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="اس صفحے پر">
+      <div class="docs-sidebar-title">اس صفحے پر</div>
+      <ol>
+        <li><a href="#overview">دو آزاد فیصلے</a></li>
+        <li><a href="#setup">راستہ بنائیں</a></li>
+        <li><a href="#configurations">عام ترتیبات</a></li>
+        <li><a href="#location-token"><code>{location}</code> ٹوکن</a></li>
+        <li><a href="#metadata-output">میٹا ڈیٹا آؤٹ پٹ</a></li>
+        <li><a href="#precision">درستگی اور نام</a></li>
+        <li><a href="#capture-sources">کیپچر کے ذرائع</a></li>
+        <li><a href="#unavailable">عدم دستیابی اور بحالی</a></li>
+        <li><a href="#migration">موجودہ راستے</a></li>
+        <li><a href="#privacy">رازداری اور محفوظ رکھنا</a></li>
+        <li><a href="#troubleshooting">مسائل کا حل</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="location-guide-title">
+      <div class="page-eyebrow">دستاویزات · راستے</div>
+      <h1 class="page-title" id="location-guide-title">موجودہ مقام، <code>{location}</code>، اور میٹا ڈیٹا</h1>
+      <p class="docs-hero-copy">YAML یا اندرونی خانے خودکار ڈالے بغیر اندراج کی فارمیٹنگ میں آغاز کا ایک مقام استعمال کریں۔ ہر راستے پر مقام لینا اور میٹا ڈیٹا لکھنا الگ واضح اختیارات ہیں۔</p>
+      <div class="docs-meta-row" aria-label="رہنمائی کے حقائق">
+        <span>تازہ کاری: 21 اگست 2026</span>
+        <span>ایک بار حصول</span>
+        <span>پس منظر تعاقب نہیں</span>
+        <a href="/ur/docs/">مکمل خصوصیات رہنما</a>
+      </div>
+      </header>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="overview">
+        <div class="docs-section-label">01 / جائزہ</div>
+        <h2>مقام لینا میٹا ڈیٹا لکھنا نہیں</h2>
+        <p>ہر راستے میں مقام کے دو الگ کنٹرول ہیں۔ <strong>موجودہ مقام استعمال کریں</strong> طے کرتا ہے کہ راستہ آغاز کے وقت ایک مقام مانگے گا یا نہیں۔ <strong>مقام کا میٹا ڈیٹا لکھیں</strong> طے کرتا ہے کہ حاصل مقام ابتدائی یا اندرونی خانے بھی بنے۔</p>
+
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>کنٹرول</th><th>مطلب</th><th>اس کا کیا مطلب نہیں</th></tr></thead>
+            <tbody>
+              <tr><td>نظام کی مقام اجازت</td><td>ایپ یا معاون کیپچر سطح استعمال ہوتے وقت Vox.md کو مقام مانگنے دیتا ہے۔</td><td>کسی راستے کا مقام فعال نہیں کرتا۔</td></tr>
+              <tr><td>موجودہ مقام استعمال کریں</td><td>اس راستے کے لیے ایک مقام مانگتا اور اسے دستیاب کرتا ہے <code>{location}</code>.</td><td>YAML یا اندرونی میٹا ڈیٹا خود نہیں لکھتا۔</td></tr>
+              <tr><td>مقام کا میٹا ڈیٹا لکھیں</td><td>حاصل سنیپ شاٹ سے منتخب منظم خانے یا تصدیق شدہ اعلیٰ YAML لکھتا ہے۔</td><td>یہ طے نہیں کرتا کہ <code>{location}</code> بنا سکتا ہے۔</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <strong>ارادہ راستہ ہے، اجازت نہیں</strong>
+          <p>استعمال کے دوران مقام کی اجازت دینا صرف آپریٹنگ سسٹم کا دروازہ کھولتا ہے۔ Vox.md پھر بھی صرف کیپچر بار کے الگ موجودہ مقام عمل کے لیے، یا ایسے راستے کے لیے مقام مانگتا ہے جس میں آپ نے موجودہ مقام استعمال کریں فعال کیا ہو۔</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="setup">
+        <div class="docs-section-label">02 / ترتیب</div>
+        <h2>ایک راستے کے لیے موجودہ مقام ترتیب دیں</h2>
+        <ol class="docs-steps">
+          <li><strong>راستے کھولیں۔</strong><span>iPhone یا iPad پر ترتیبات → راستے کھولیں۔ Mac پر ترتیبات کھول کر راستے منتخب کریں۔</span></li>
+          <li><strong>راستہ بدلیں۔</strong><span>اپنا آغاز مقام استعمال کرنے والا راستہ چنیں۔ ترتیب اسی کی ہے، دوسروں پر اثر نہیں۔</span></li>
+          <li><strong>مقام کھولیں۔</strong><span>فعال کریں <em>موجودہ مقام استعمال کریں</em>۔ رکھیں <em>مقام کا میٹا ڈیٹا لکھیں</em> صرف ٹوکن کے لیے بند۔</span></li>
+          <li><strong>درستگی منتخب کریں۔</strong><span>اصل پیمائش کے لیے عین مطابق، یا دو اعشاری ہندسوں تک گول محددات اور بغیر دلچسپی کے مقام کے نام کے لیے شہر استعمال کریں۔</span></li>
+          <li><strong>عدم دستیابی رویہ چنیں۔</strong><span>پوچھو، مقام کے بغیر بھیجیں۔ یا کیپچر منسوخ کریں۔ طے کرتے ہیں اصل مقام نہ ملے تو کیا ہو۔</span></li>
+          <li><strong>شامل کریں <code>{location}</code> اگر چاہیں۔</strong><span>ٹوکن اندراج ٹیمپلیٹ، حسبِ منشا سابقے یا لاحقے، یا والٹ Markdown ٹیمپلیٹ میں ڈالیں۔</span></li>
+        </ol>
+        <p>پہلے استعمال پر آپریٹنگ سسٹم مقام کی اجازت مانگ سکتا ہے۔ اگر اجازت پہلے رد کی گئی ہو تو iOS، iPadOS یا macOS کی نظامی ترتیبات میں Vox.md کے لیے مقام کی رسائی فعال کریں۔</p>
+      </section>
+
+      <section class="docs-section" id="configurations">
+        <div class="docs-section-label">03 / عام ترتیبات</div>
+        <h2>مقام کی کم سے کم ضروری جگہ لیں</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>مطلوبہ نتیجہ</th><th>موجودہ مقام استعمال کریں</th><th>مقام کا میٹا ڈیٹا لکھیں</th><th>معبد</th></tr></thead>
+            <tbody>
+              <tr><td>راستے کا مقام نہیں</td><td>بند</td><td>بند</td><td>مت لیں <code>{location}</code>، ورنہ خالی بنتا ہے۔</td></tr>
+              <tr><td>صرف قابلِ کلک رابطہ</td><td>آن</td><td>بند</td><td>شامل کریں <code>{location}</code>۔ مقام خانے نہیں لکھے جاتے۔</td></tr>
+              <tr><td>صرف میٹا ڈیٹا</td><td>آن</td><td>آن</td><td>چھوڑیں <code>{location}</code>۔ صرف ترتیب شدہ خانے لکھے جاتے ہیں۔</td></tr>
+              <tr><td>رابطہ اور میٹا ڈیٹا</td><td>آن</td><td>آن</td><td>شامل کریں <code>{location}</code> اور میٹا ڈیٹا خانے ترتیب دیں۔</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>موجودہ مقام استعمال کریں بند ہو تو ٹوکن اور میٹا ڈیٹا دونوں رکتے، چاہے پچھلی فارمیٹنگ بعد کے لیے محفوظ ہو۔</p>
+      </section>
+
+      <section class="docs-section" id="location-token">
+        <div class="docs-section-label">04 / ٹیمپلیٹ ٹوکن</div>
+        <h2>استعمال کریں <code>{location}</code> نوٹ کا میٹا ڈیٹا بدلے بغیر</h2>
+        <p>موجودہ مقام استعمال کریں کھلا اور اصل سنیپ شاٹ دستیاب ہو تو، <code>{location}</code> تصدیق شدہ Google Maps Markdown رابطہ بناتا ہے:</p>
+        <pre class="docs-code-block"><code>[Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>ٹوکن دوبارہ استعمال ہونے والے اندراج ٹیمپلیٹس، حسبِ منشا اندراج سابقوں اور لاحقوں، اور والٹ کے Markdown ٹیمپلیٹس میں کام کرتا ہے۔ یہ راستے کے لیے منتخب عین مطابق یا شہر کے وہی محددات استعمال کرتا ہے۔</p>
+
+        <h3 id="token-example">صرف ٹوکن کی مثال</h3>
+        <p>اس لاحقے کے لیے:</p>
+        <pre class="docs-code-block"><code>Captured from {location}</code></pre>
+        <p>Vox.md بنا سکتا ہے:</p>
+        <pre class="docs-code-block"><code>Captured from [Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>مقام کا میٹا ڈیٹا لکھیں بند ہو تو راستے کا واحد مقام مواد یہ رابطہ ہے۔ کوئی <code>locations:</code> مجموعہ، اور کوئی نہیں <code>location.*::</code> خانے لکھے جاتے ہیں۔</p>
+
+        <h3 id="composer-fix">ایڈیٹر کی ایک لمس اصلاح</h3>
+        <p>موثر اندراج سابقہ، لاحقہ یا قابلِ تکرار اندراج ٹیمپلیٹ اگر استعمال کرے <code>{location}</code> منتخب راستے کا مقام بند ہو تو ایڈیٹر بتاتا ہے کہ ٹوکن خالی ہوگا اور پیش کرتا ہے <strong>[Route] کے لیے موجودہ مقام استعمال کریں</strong>۔ یہ عمل راستے کے لیے موجودہ مقام فعال کرتا ہے مگر مقام کا میٹا ڈیٹا لکھیں جان بوجھ کر بند رکھتا ہے، تاکہ اگلا بھیجنے کا عمل نوٹ کا میٹا ڈیٹا بدلے بغیر ٹوکن حل کر سکے۔ والٹ کی زندہ ٹیمپلیٹ فائلیں صرف ترسیل کے وقت پڑھی جاتی ہیں، اس لیے ان کا مواد ایڈیٹر کا یہ اشارہ نہیں چلا سکتا؛ والٹ ٹیمپلیٹ ٹوکن استعمال کرتا ہو تو موجودہ مقام دستی طور پر فعال کریں۔</p>
+
+        <div class="docs-callout docs-callout-neutral">
+          <strong>جب ٹوکن خالی ہو</strong>
+          <p><code>{location}</code> مقام بند، غیر دستیاب یا بغیر مقام جاری ہو تو خالی سٹرنگ ہے۔ اختیاری ٹیمپلیٹ سطروں کے آس پاس رموز اور نام ذہن میں رکھیں۔</p>
+        </div>
+
+        <h3 id="capture-bar-location">کیپچر بار کا الگ عمل</h3>
+        <p>فوری پکڑنے <strong>موجودہ مقام</strong> عمل موجودہ مسودے میں براہِ راست ایک بار کا Google Maps رابطہ ڈالتا ہے۔ یہ راستوں سے آزاد ہے اور نہ موجودہ مقام استعمال کریں کو بدلتا ہے، نہ مقام کا میٹا ڈیٹا لکھیں کو۔</p>
+      </section>
+
+      <section class="docs-section" id="metadata-output">
+        <div class="docs-section-label">05 / میٹا ڈیٹا آؤٹ پٹ</div>
+        <h2>منظم خانے صرف اپنی مرضی سے لکھیں</h2>
+        <p>نوٹ کو مشینی مقام خانے اس کے علاوہ یا بدل چاہیں تو مقام کا میٹا ڈیٹا لکھیں کھولیں <code>{location}</code> رابطہ۔</p>
+
+        <div class="docs-feature-grid">
+          <div><strong>نوٹ کا ابتدائی میٹا ڈیٹا</strong><p>ہر مقام اس نام کے مجموعے میں ڈالتا ہے <code>locations</code> بطورِ طے شدہ، کیپچر شناخت کی کلید کے ساتھ۔ غیر متعلق موجودہ ابتدائی میٹا ڈیٹا محفوظ رہتا ہے۔</p></div>
+          <div><strong>اندرونی اندراج خانے</strong><p>Dataview طرز میں لکھتا ہے <code>location.key:: value</code> کیپچر اندراج کے ساتھ سطریں۔ ابتدائی میٹا ڈیٹا کا مجموعہ نہیں بنتا۔</p></div>
+          <div><strong>سٹرکچرڈ فیلڈز</strong><p>محددات، عرض بلد، طول بلد، جگہ، شہر، خطہ، ملک، فراہم کنندہ روابط، geo URI، درستگی، وقت، ماخذ اور شناخت منتخب کرکے نام بدلیں۔</p></div>
+          <div><strong>اعلیٰ YAML</strong><p>ابتدائی نوٹ کے لیے تصدیق شدہ محدود YAML ٹیمپلیٹ لیتا ہے۔ اعلیٰ YAML اندرونی اندراج خانوں کے لیے نہیں۔</p></div>
+        </div>
+
+        <h3 id="frontmatter-example">منظم ابتدائی میٹا ڈیٹا کی مثال</h3>
+        <pre class="docs-code-block"><code>---
+title: Field Notes
+locations:
+  - id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    coordinates: [45.501235, -73.567890]
+    place: "Café &amp; Main"
+    appleMapsURL: "https://maps.apple.com/?ll=45.501235%2C-73.567890&amp;q=Caf%C3%A9%20%26%20Main"
+    timestamp: "2023-11-14T22:13:20.000Z"
+    source: "app"
+---</code></pre>
+        <p>رولنگ نوٹس مجموعے میں کئی کیپچر رکھ سکتے ہیں۔ دوبارہ کوشش کی حفاظت مقام کے انضمام میں شامل ہے: ایک ہی کیپچر شناخت سے دوبارہ کوشش وہی مقام دو بار شامل نہیں کر سکتی۔ منتخب مجموعے کی کلید میں صارف کی لکھی ہوئی غیر موافق قدر پہلے سے ہو تو Vox.md اس کے اوپر لکھنے کے بجائے رک جاتا ہے۔</p>
+
+        <h3 id="inline-example">اندرونی اندراج مثال</h3>
+        <pre class="docs-code-block"><code>location.id:: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+location.coordinates:: [45.501235, -73.567890]
+location.place:: "Café &amp; Main"
+
+Captured text</code></pre>
+
+        <h3 id="advanced-yaml">اعلیٰ YAML جگہ دار</h3>
+        <p>اعلیٰ ٹیمپلیٹس یہ جگہ دار استعمال کر سکتے ہیں <code>{{coordinates}}</code>, <code>{{latitude}}</code>, <code>{{longitude}}</code>, <code>{{place}}</code>, <code>{{city}}</code>, <code>{{region}}</code>, <code>{{country}}</code>, <code>{{appleMapsURL}}</code>, <code>{{googleMapsURL}}</code>, <code>{{openStreetMapURL}}</code>, <code>{{geoURI}}</code>, <code>{{accuracy}}</code>, <code>{{timestamp}}</code>, <code>{{source}}</code>، اور <code>{{id}}</code>۔ محفوظ کرنے سے پہلے راستے کی ترتیبات میں پیش منظر دیکھیں۔</p>
+      </section>
+
+      <section class="docs-section" id="precision">
+        <div class="docs-section-label">06 / درستگی اور نام</div>
+        <h2>عین مطابق اور شہر ایک ہی سنیپ شاٹ لیتے ہیں</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>درستگی</th><th>محددات</th><th>نام</th><th>روابط اور خانے</th></tr></thead>
+            <tbody>
+              <tr><td>عین مطابق</td><td>اصل مقام چھ اعشاری ہندسوں کے ساتھ رکھتا ہے۔</td><td>منتخب ڈیٹا مانگے تو دلچسپی جگہ کا نام۔</td><td>ہر اخذ کردہ قدر عین مطابق محددات استعمال کرتی ہے۔</td></tr>
+              <tr><td>شہر</td><td>محفوظ کرنے سے پہلے عرض اور طول بلد دو اعشاری ہندسوں تک گول کرتا ہے۔</td><td>دلچسپی کے مقامات کے نام ہٹاتا؛ شہر، خطہ اور ملک رہ سکتے ہیں۔</td><td>ہر فراہم کنندہ URL، geo URI، ٹوکن اور خانہ گول محددات لیتا ہے۔</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Apple کا نظامی الٹا جغرافیائی کوڈر صرف تب استعمال ہوتا ہے جب مقام کا میٹا ڈیٹا لکھیں فعال ہو اور منتخب منظم خانے یا اعلیٰ درجے کے جگہ دار کو جگہ، شہر، خطہ یا ملک درکار ہو۔ صرف ٹوکن والا راستہ یہ تلاش نہیں کرتا۔ مقام کا نام تلاش نہ ہو سکے تو محددات پر مبنی آؤٹ پٹ دستیاب رہتا ہے۔</p>
+      </section>
+
+      <section class="docs-section" id="capture-sources">
+        <div class="docs-section-label">07 / کیپچر ماخذ</div>
+        <h2>سنیپ شاٹ کیپچر کے آغاز کا ہے</h2>
+        <p>موجودہ مقام کی جانچ وہاں ہوتی ہے جہاں کیپچر شروع ہوتا ہے۔ دوبارہ کوشش اور بحالی خاموشی سے نیا مقام حاصل کرنے کے بجائے وہی محفوظ نتیجہ استعمال کرتی ہیں۔</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>کیپچر ماخذ</th><th>حصول کی حد</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone اور iPad فوری پکڑنے</td><td>بھیجیں</td></tr>
+              <tr><td>شیئر شیٹ</td><td>شیئر ایکسٹینشن میں بھیجیں</td></tr>
+              <tr><td>براہِ راست قطار متن، رابطہ اور فائل انٹینٹس</td><td>انٹینٹ کی استدعا</td></tr>
+              <tr><td>فوری پکڑنے کھولنے والے شارٹ کٹس، وجٹس، کنٹرول اور گہرے روابط</td><td>ایڈیٹر میں بھیجیں</td></tr>
+              <tr><td>شارٹ کٹ، وجٹ، کنٹرول، فوری آواز اور کی بورڈ راستہ ریکارڈنگ</td><td>ریکارڈنگ کا اختتام</td></tr>
+              <tr><td>Apple Watch عام کیپچر ترسیل</td><td>Watch پر ریکارڈنگ بند ہونا؛ iPhone اپنا مقام متبادل نہیں بناتا</td></tr>
+              <tr><td>Mac کیپچر</td><td>بھیجیں، یا فوری صوتی ترسیل کے لیے ریکارڈنگ کا اختتام</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Watch صرف ریکارڈنگ</strong> خام M4A کو Files میں Markdown جگہ کے بغیر برآمد کرتا، اس لیے راستہ ورنہ مقام لیتا ہو تب بھی یہاں نہیں۔</p>
+      </section>
+
+      <section class="docs-section" id="unavailable">
+        <div class="docs-section-label">08 / عدم دستیابی اور بحالی</div>
+        <h2>مقام نہ ملے تو ہر راستے کا رویہ چنیں</h2>
+        <ul>
+          <li><strong>پوچھو:</strong> تعاملی کیپچر دوبارہ کوشش، منسوخ، ایک بار بغیر مقام یا راستے کے لیے ہمیشہ بغیر مقام چن سکتے ہیں۔</li>
+          <li><strong>مقام کے بغیر بھیجیں۔:</strong> ٹوکن کی قدر یا میٹا ڈیٹا آؤٹ پٹ کے بغیر ترسیل جاری رکھتا ہے۔</li>
+          <li><strong>کیپچر منسوخ کریں۔:</strong> مطلوبہ اصل مقام کے بغیر نوٹ بنانے کے بجائے ترسیل روکتا ہے۔</li>
+          <li><strong>محفوظ فیصلہ ری سیٹ:</strong> راستے کی مقام ترتیبات میں عدم دستیابی فیصلہ ری سیٹ کریں۔</li>
+        </ul>
+        <p>بغیر نگرانی پوچھو درخواست آغاز کی غیر دستیابی بعد میں دیکھنے کو رکھتی ہے۔ قطار یا ناکام کیپچر کی کوشش کبھی نیا مقام متبادل نہیں بناتی۔ منتظر کام صرف رازداری درست سنیپ شاٹ یا مقامی بحالی کا عدم دستیابی نتیجہ رکھتا ہے۔</p>
+      </section>
+
+      <section class="docs-section" id="migration">
+        <div class="docs-section-label">09 / موجودہ راستے</div>
+        <h2>اپ گریڈ پہلے کا میٹا ڈیٹا رویہ رکھتا ہے</h2>
+        <p>مقام حاصل کرنا اور آؤٹ پٹ الگ ہونا منتقلی میں محفوظ ہے:</p>
+        <ul>
+          <li><strong>نئے راستے:</strong> موجودہ مقام استعمال کریں اور مقام کا میٹا ڈیٹا لکھیں دونوں ابتدا بند۔</li>
+          <li><strong>پہلے مقام فعال راستے:</strong> اپ گریڈ بعد دونوں فعال، پہلے لکھے میٹا ڈیٹا کو برقرار رکھتے ہیں۔</li>
+          <li><strong>پہلے مقام بند راستے:</strong> دونوں کنٹرولز بند رہتے ہیں؛ اپ گریڈ نیا میٹا ڈیٹا آؤٹ پٹ نہیں لاتا۔</li>
+        </ul>
+        <p>موجودہ میٹا ڈیٹا راستہ صرف ٹوکن میں بدلنا ہو تو موجودہ مقام استعمال کریں کھلا اور مقام کا میٹا ڈیٹا لکھیں بند رکھیں۔ موجودہ Markdown دوبارہ نہیں لکھتا نہ مٹاتا۔</p>
+      </section>
+
+      <section class="docs-section" id="privacy">
+        <div class="docs-section-label">10 / رازداری اور محفوظ رکھنا</div>
+        <h2>ایک واضح سنیپ شاٹ، پس منظر تعاقب کبھی نہیں</h2>
+        <ul>
+          <li>Vox.md مسلسل مقام یا پس منظر تعاقب نہیں کرتا۔</li>
+          <li>مقام Vox.md سرورز، تجزیات، اشتہاری نظاموں یا تیسرے فریق کی AI خدمات کو نہیں بھیجا جاتا۔</li>
+          <li>ٹوکن اور فراہم کنندہ URL مقامی طور پر بنتے ہیں۔ Apple Maps، Google Maps یا OpenStreetMap کو محددات تبھی ملتے ہیں جب ان کا رابطہ کھولیں۔</li>
+          <li>Apple کا نظامی الٹا جغرافیائی کوڈر تبھی نیٹ ورک مانگ سکتا ہے جب منتخب میٹا ڈیٹا کو جگہ کا نام چاہیے۔ صرف ٹوکن مقام یہ تلاش چھوڑتا ہے۔</li>
+          <li>کامیاب ترسیل کے بعد قابلِ بحالی درخواستیں بے مواد رسیدوں تک محدود ہو جاتی ہیں، اور مکمل کیپچر کا ریکارڈ محددات، مقام کے نام، فراہم کنندگان کے URL یا مقام ٹیمپلیٹس نہیں رکھتا۔</li>
+          <li>مقام ڈیٹا یا رابطہ Markdown میں لکھا جائے تو فائل کا حصہ ہے۔ ہم وقتی فراہم کنندہ اپنی شرائط پر برت سکتا ہے۔</li>
+        </ul>
+        <div class="docs-callout">
+          <strong>راستے نجی رہیں اور اجازت کھلی رہ سکتی ہے</strong>
+          <p>الگ موجودہ مقام عمل کے لیے نظام اجازت کھلی رکھ کر ہر راستے کا موجودہ مقام استعمال کریں بند رکھ سکتے ہیں۔</p>
+        </div>
+        <p>دیکھیے <a href="/ur/privacy.html">رازداری پالیسی</a> ڈیٹا برتاؤ اور برقرار رکھنے کی مکمل تفصیل کے لیے۔</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">11 / مسائل کا حل</div>
+        <h2>عام مقام و ٹیمپلیٹ مسائل درست کریں</h2>
+        <div class="docs-troubleshooting">
+          <details>
+            <summary><code>{location}</code> خالی بنتا ہے</summary>
+            <p>تصدیق کریں کہ استعمال ہونے والا اندراج ٹیمپلیٹ، سابقہ، لاحقہ یا والٹ ٹیمپلیٹ عین یہ چھوٹے حروف والا ٹوکن استعمال کرتا ہے <code>{location}</code>۔ پھر ترسیل والے راستے میں موجودہ مقام استعمال کریں کھولیں۔ پہچانی اندرونی فارمیٹنگ کے لیے ایک لمس اصلاح میٹا ڈیٹا بغیر کھولے یہ کرتی ہے؛ زندہ والٹ ٹیمپلیٹس کی دستی ترتیب چاہیے۔ اجازت رد یا مقام نہ ملے تو عدم دستیابی رویہ اور نظام مقام ترتیبات دیکھیں۔</p>
+          </details>
+          <details>
+            <summary>رابطہ چلتا، میٹا ڈیٹا نہیں</summary>
+            <p>صرف ٹوکن میں یہی متوقع ہے۔ راستے کی مقام ترتیبات سے مقام کا میٹا ڈیٹا لکھیں کھولیں، پھر نوٹ ابتدائی یا اندرونی اندراج خانے اور مطلوبہ خانے چنیں۔</p>
+          </details>
+          <details>
+            <summary>میٹا ڈیٹا ہے مگر اندراج میں رابطہ نہیں</summary>
+            <p>میٹا ڈیٹا خود رابطہ نہیں ڈالتا۔ شامل کریں <code>{location}</code> موثر اندراج فارمیٹ یا والٹ Markdown ٹیمپلیٹ میں۔</p>
+          </details>
+          <details>
+            <summary>جگہ یا شہر نہیں</summary>
+            <p>نام خانہ منتخب دیکھیں۔ Apple کا الٹا کوڈر محددات رہنے پر بھی ناکام ہو سکتا ہے۔ شہر درستگی دلچسپی کے نام دانستہ ہٹاتی ہے۔</p>
+          </details>
+          <details>
+            <summary>ابتدائی میٹا ڈیٹا کی ترسیل میں تصادم</summary>
+            <p>مقرر مجموعہ کلید، <code>locations</code> طے شدہ طور پر، ایک موافق مقامات کی فہرست ہونا چاہیے۔ راستے کی ترتیبات میں مجموعے کا نام بدلیں یا صارف کا لکھا ہوا موجودہ ابتدائی میٹا ڈیٹا درست کریں۔ Vox.md غیر موافق قدر کے اوپر نہیں لکھے گا۔</p>
+          </details>
+          <details>
+            <summary>دوبارہ کوشش میں مقام پرانا یا غیر دستیاب ہے</summary>
+            <p>یہ ارادی ہے۔ درخواست آغاز کا نتیجہ رکھتی ہے تاکہ بعد کی کوشش خاموشی سے مختلف مقام نہ بتائے۔ نیا سنیپ شاٹ چاہیے تو نیا کیپچر کریں۔</p>
+          </details>
+          <details>
+            <summary>مقام کی اجازت ہے مگر راستہ مقام نہیں مانگتا</summary>
+            <p>نظام کی اجازت صرف دروازہ ہے۔ راستہ بدل کر موجودہ مقام استعمال کریں فعال کریں۔ اکیلی اجازت راستے کو کبھی فعال نہیں کرتی۔</p>
+          </details>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ur/developers">ڈویلپرز</a></li>
+        <li><a href="/ur/about">تعارف</a></li>
+        <li><a href="/ur/contact">رابطہ</a></li>
+        <li><a href="/ur/">مرکزی صفحہ</a></li>
+        <li><a href="/ur/docs/">دستاویزات</a></li>
+        <li><a href="/ur/blog/">بلاگ</a></li>
+        <li><a href="/ur/privacy.html">رازداری</a></li>
+        <li><a href="/ur/terms.html">شرائط</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · مقامی کیپچر · صارف کے اختیار کی فائلیں۔</div>
+    </div>
+  <details class="language-switcher"><summary>زبان</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur" aria-current="page">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

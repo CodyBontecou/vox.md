@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr" data-search-section="Раздел" data-search-guide="Руководство" data-search-empty="Ничего не найдено по запросу «{query}»">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Документация Vox.md: полное руководство по функциям</title>
+  <meta name="description" content="Полная документация Vox.md: быстрый захват, маршруты, места Markdown, клавиатура iOS, локальные модели расшифровки, виджеты, команды, Apple Watch и Mac.">
+  <link rel="canonical" href="https://vox.isolated.tech/ru/docs/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Документация Vox.md для языковых моделей">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Документация Vox.md: полное руководство по функциям">
+  <meta property="og:description" content="Изучите все выпущенные функции Vox.md: надёжное сохранение Markdown, маршруты, локальные речевые модели, клавиатуру, Apple Watch и Mac.">
+  <meta property="og:url" content="https://vox.isolated.tech/ru/docs/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Документация Vox.md">
+  <meta name="twitter:description" content="Полное руководство по захвату, маршрутам, расшифровке и системным интеграциям Vox.md.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Полное руководство по функциям Vox.md",
+  "description": "Документация всех выпущенных функций Vox.md: захвата, маршрутов, расшифровки, клавиатуры, системной интеграции, Apple Watch и Mac.",
+  "dateModified": "2026-10-26",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/ru/docs/",
+  "inLanguage": "ru",
+  "name": "Документация Vox.md: полное руководство по функциям"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ru/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Документация",
+      "item": "https://vox.isolated.tech/ru/docs/"
+    }
+  ],
+  "inLanguage": "ru",
+  "name": "Документация Vox.md: полное руководство по функциям",
+  "description": "Полная документация Vox.md: быстрый захват, маршруты, места Markdown, клавиатура iOS, локальные модели расшифровки, виджеты, команды, Apple Watch и Mac."
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="API общедоступных сведений Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="Основная навигация">
+  <div class="nav-inner docs-header-inner">
+    <a href="/ru/" class="logo" aria-label="Главная Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ документация</span></span>
+    </a>
+    <form class="docs-search" role="search" action="./" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="Поиск по документации" aria-label="Поиск по документации" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Результаты поиска" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/ru/blog/">Блог</a></li>
+      <li><a href="/ru/privacy.html">Конфиденциальность</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>Язык</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru" aria-current="page">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="На этой странице">
+      <div class="docs-sidebar-title">На этой странице</div>
+      <ol>
+        <li><a href="#getting-started">Начало работы</a></li>
+        <li><a href="#quick-capture">Быстрый захват</a></li>
+        <li><a href="#presets">Маршруты</a></li>
+        <li><a href="/ru/docs/location/">Текущее местоположение и {location}</a></li>
+        <li><a href="#models">Модели и расшифровка</a></li>
+        <li><a href="#keyboard">Клавиатура iOS</a></li>
+        <li><a href="#system-integrations">Системные интеграции</a></li>
+        <li><a href="#apple-watch">Apple Watch</a></li>
+        <li><a href="#mac">Сопровождающий Mac</a></li>
+        <li><a href="#history-settings">Библиотека, настройки и конфиденциальность</a></li>
+        <li><a href="#troubleshooting">Устранение неполадок</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="docs-title">
+      <div class="page-eyebrow">Документация · Актуальное руководство по продукту</div>
+      <h1 class="page-title" id="docs-title">Всё, что можно делать с Vox.md</h1>
+      <p class="docs-hero-copy">Полное руководство по захвату, маршрутам, маршрутизации Markdown, голосовой клавиатуре, локальным моделям, системным интеграциям Apple, Apple Watch, Mac, истории, настройкам и конфиденциальности.</p>
+      <div class="docs-meta-row" aria-label="Сведения из документации">
+        <span>Обновлено 26 окт. 2026 г.</span>
+        <span>iOS 17.6+</span>
+        <span>macOS 14+</span>
+        <span>watchOS 10+</span>
+      </div>
+      </header>
+
+      <section class="docs-directory" aria-labelledby="browse-docs">
+      <h2 class="visually-hidden" id="browse-docs">Просмотр по категориям</h2>
+      <div class="docs-category-grid">
+        <a class="docs-category-card" href="#getting-started"><span>01</span><strong>Начало работы</strong><small>Платформы, настройка, разрешения и первый захват</small></a>
+        <a class="docs-category-card" href="#quick-capture"><span>02</span><strong>Быстрый захват</strong><small>Редактор, медиа, голос, панель захвата и черновики</small></a>
+        <a class="docs-category-card" href="#presets"><span>03</span><strong>Маршруты</strong><small>Обработка, метаданные, места сохранения и шаблоны</small></a>
+        <a class="docs-category-card is-guide" href="/ru/docs/location/"><span>Руководство</span><strong>Текущее местоположение и <code>{location}</code></strong><small>Ссылки через токены, необязательные метаданные, точность, конфиденциальность и миграция</small></a>
+        <a class="docs-category-card" href="#models"><span>04</span><strong>Модели</strong><small>Режим «Автоматический», Apple Speech, Whisper и Parakeet</small></a>
+        <a class="docs-category-card" href="#keyboard"><span>05</span><strong>Клавиатура</strong><small>Настройка, диктовка, вставка, тактильный отклик и автоостановка</small></a>
+        <a class="docs-category-card" href="#system-integrations"><span>06</span><strong>Системные интеграции</strong><small>Виджеты, меню общего доступа, команды и глубокие ссылки</small></a>
+        <a class="docs-category-card" href="#apple-watch"><span>07</span><strong>Apple Watch</strong><small>Запись, синхронизация маршрутов, очередь и расширения циферблата</small></a>
+        <a class="docs-category-card" href="#mac"><span>08</span><strong>Mac</strong><small>Запись встреч, рабочее пространство, строка меню и глобальные сочетания клавиш</small></a>
+        <a class="docs-category-card" href="#history-settings"><span>09</span><strong>Библиотека и настройки</strong><small>Восстановление, статистика, конфиденциальность, лимиты, покупка и поддержка</small></a>
+      </div>
+      </section>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="getting-started">
+        <div class="docs-section-label">01 / Начало работы</div>
+        <h2>Сохраняйте в Markdown без нового закрытого хранилища заметок</h2>
+        <p>Vox.md — приложение быстрого захвата с приоритетом локальной работы. Оно пишет стандартный Markdown и вложения в хранилище Obsidian или другую доступную для записи папку, выбранную через «Файлы». Аккаунт Vox.md, плагин и облачная база заметок не нужны.</p>
+
+        <p>Для полного голосового процесса <a href="/ru/blog/voice-notes-to-obsidian-iphone/">следуйте руководству по голосовым заметкам с iPhone в Obsidian</a>, от выбора папки до проверки полученного Markdown.</p>
+
+        <p>Выбираете способ захвата? Прочитайте <a href="/ru/blog/obsidian-quick-capture-iphone/">руководство по выбору захвата на iPhone</a> или <a href="/ru/compare/vox-md-vs-obsidian-quick-capture/">сравните Vox.md со встроенным Obsidian</a>.</p>
+
+        <div class="docs-table-wrap" id="platform-availability">
+          <table class="docs-table">
+            <thead><tr><th>Платформа</th><th>Требование</th><th>Что доступно</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone и iPad</td><td class="req">iOS/iPadOS 17.6+</td><td>Быстрый захват, клавиатура, меню общего доступа, виджеты, команды, Live Activities, история и настройки</td></tr>
+              <tr><td>Mac</td><td class="req">macOS 14+</td><td>Рабочее пространство захвата, запись/импорт, маршруты, модели, история, строка меню и глобальные сочетания клавиш</td></tr>
+              <tr><td>Apple Watch</td><td class="req">watchOS 10+</td><td>Локальная запись, выбор маршрута, очередь синхронизации, доставка только аудио и расширение циферблата</td></tr>
+              <tr><td>Элементы Пункта управления</td><td class="req">iOS 18+</td><td>Быстрый захват и элементы записи с учётом маршрута</td></tr>
+              <tr><td>Автоматический движок Apple Speech</td><td class="req">Поддерживаемое устройство iOS 26 и язык</td><td>Управляемая системой потоковая и пакетная расшифровка на устройстве</td></tr>
+              <tr><td>Обработка Apple Intelligence</td><td class="req">Совместимое устройство с iOS/macOS 26</td><td>Локальная правка, структурированный вывод и свои инструкции с запасными вариантами</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <p><strong>Основной процесс.</strong> Выберите маршрут, подключите место сохранения, введите или добавьте содержимое в «Быстрый захват» и нажмите «Отправить». Маршрут определяет обработку, оформление и размещение в заметках.</p>
+        </div>
+
+
+        <h3 id="first-capture">Сделайте первый захват</h3>
+        <ol class="docs-steps">
+          <li><strong>Откройте Vox.md.</strong><span>Приложение открывает сразу надёжный редактор Markdown.</span></li>
+          <li><strong>Выберите маршрут.</strong><span>Встроенный маршрут Default нельзя удалить, но можно отключить. Оставьте хотя бы один маршрут включённым и задайте ему место сохранения.</span></li>
+          <li><strong>Настройте его место сохранения.</strong><span>Нажмите <em>Определите место назначения</em>, выберите хранилище Obsidian или папку «Файлов», затем новую, периодическую или существующую заметку.</span></li>
+          <li><strong>Добавьте содержимое.</strong><span>Введите Markdown или добавьте ссылку, фото, файл, скан, набросок, местоположение или голосовую запись.</span></li>
+          <li><strong>Нажмите «Отправить».</strong><span>Vox.md сохраняет по выбранному маршруту и сообщает <em>Захват посылается</em>. Неудачные операции и работа в очереди остаются доступны для восстановления.</span></li>
+        </ol>
+
+        <h3 id="permissions">Разрешения и системный доступ</h3>
+        <ul>
+          <li><strong>Микрофон:</strong> голосовая запись, локальная расшифровка, прослушивание клавиатуры и захват аудио. «Быстрый захват» может показать запрос при первом открытии пространства до начала записи.</li>
+          <li><strong>Распознавание речи:</strong> Apple Speech на поддерживаемых системах.</li>
+          <li><strong>Доступ к папке в «Файлах»:</strong> мест сохранения, шаблонов, импорта и режима вывода только записи с часов.</li>
+          <li><strong>Камера и выбранные фото:</strong> только при добавлении медиафайлов, снимков экрана, фотографий дневника или сканов.</li>
+          <li><strong>Геопозиция при использовании:</strong> только для независимой команды «Текущее местоположение» на панели захвата или когда явно включённому маршруту нужно разовое местоположение в момент создания. Vox.md никогда не отслеживает геопозицию непрерывно или в фоне.</li>
+          <li><strong>Уведомления:</strong> необязательные уведомления о доставке, включая фоновые сбои Apple Watch.</li>
+          <li><strong>Полный доступ клавиатуры:</strong> нужен клавиатуре Vox.md для совместного процесса компонентов на устройстве. См. <a href="#keyboard-setup">Настройка клавиатуры</a>.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="quick-capture">
+        <div class="docs-section-label">02 / Быстрый захват</div>
+        <h2>Один надёжный редактор для текста, медиа, файлов и голоса</h2>
+        <p>«Быстрый захват» — основное пространство iOS и iPadOS. Меню маршрута меняет текущий процесс; меню места сохранения показывает или временно меняет, куда доставится черновик. Нижняя панель также открывает библиотеку и настройки, показывает и скрывает программную клавиатуру.</p>
+
+        <h3 id="durable-drafts">Надёжные черновики и безопасная доставка</h3>
+        <ul>
+          <li>Текст, вложения, выбранный маршрут, изменения места сохранения и источник захвата переживают приостановку и перезапуск.</li>
+          <li>Правки сохраняются после небольшой задержки, а переход приложения в фон вызывает немедленное сохранение.</li>
+          <li>Если продолжить редактирование во время отправки, новые правки сохранятся в свежем черновике, а не будут отброшены.</li>
+          <li>До доставки нужно настроить место сохранения. Редактор показывает <em>Дестинация не конфигурирована</em> с действием настройки при необходимости.</li>
+          <li>Защищённые от повторной доставки запросы журналируются локально, чтобы после сбоя разрешений, файлового провайдера или синхронизации можно было повторить попытку.</li>
+          <li>В пустом редакторе показывается кешированная вдохновляющая цитата, пока вы не добавите текст, даже если уже выбрали маршрут или прикрепили файл; запросы цитат никогда не содержат ваш черновик.</li>
+        </ul>
+
+        <p>Пошаговый разбор задачи приведён в <a href="/ru/blog/save-links-photos-obsidian-iphone/">сохраняйте ссылки, фото и сканы в Obsidian</a>.</p>
+
+        <h3 id="capture-types">Типы захвата</h3>
+        <div class="docs-feature-grid">
+          <div><strong>Текст и Markdown</strong><p>Пишите прямо в редакторе Markdown с учётом выделения, вставляйте существующий текст и сочетайте его с другими данными.</p></div>
+          <div><strong>Веб-ссылки</strong><p>Добавьте URL HTTP или HTTPS со ссылкой в формате Markdown.</p></div>
+          <div><strong>Фото и камера</strong><p>Выберите фото или снимки экрана либо сделайте новое фото. Изображения подготавливаются и встраиваются в доставленную заметку.</p></div>
+          <div><strong>Файлы</strong><p>Выберите несколько элементов «Файлов». Изображения встраиваются, аудио остаётся аудиоданными, остальные файлы используют ссылки в стиле Obsidian.</p></div>
+          <div><strong>Сканы документов</strong><p>Сканируйте страницы через VisionKit. Vox.md сохраняет изображения страниц, создаёт PDF и выполняет OCR на устройстве с доступной точностью.</p></div>
+          <div><strong>OCR дневника</strong><p>Снимайте вручную до 10 страниц дневника или выбирайте его фото. Точный Vision OCR использует автоматическое определение языка.</p></div>
+          <div><strong>Наброски</strong><p>Рисуйте чёрным пером на белом холсте PencilKit. Vox.md сохраняет редактируемый рисунок и предпросмотр PNG.</p></div>
+          <div><strong>Действие текущего местоположения</strong><p>Запросите одну геопозицию и вставьте проверенную ссылку Markdown на Google Maps в черновик. Это независимое действие панели захвата не меняет оба параметра геолокации маршрутов.</p></div>
+          <div><strong>Голос и импортированное аудио</strong><p>Запишите из редактора или импортируйте аудио/видео, расшифруйте локально и добавьте результат в черновик либо отправьте сразу.</p></div>
+        </div>
+        <p class="docs-note">Универсальный доступ: OCR показывает баннер выполнения «Извлечение текста на этом устройстве», а VoiceOver объявляет ход и завершение OCR, отправку захвата и добавление расшифровки в захват в разных сценариях.</p>
+
+        <h3 id="capture-bar">Панель захвата</h3>
+        <p>В разделе «Настройки → Панель захвата» можно менять порядок и скрывать действия. По умолчанию видны все действия.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Действие</th><th>Поведение</th></tr></thead>
+            <tbody>
+              <tr><td>Добавить СМИ</td><td>Открывает выбор наброска, камеры, фото, снимка экрана и веб-ссылки.</td></tr>
+              <tr><td>Добавить файлы</td><td>Выбирает несколько файлов из «Файлов» и подготавливает их вместе с черновиком.</td></tr>
+              <tr><td>Сканирование документов</td><td>Захватывает многостраничный скан, PDF, изображения страниц и OCR с доступной точностью.</td></tr>
+              <tr><td>Экстракт текста</td><td>Предлагает захват страниц дневника и выбор фото дневника для захвата с акцентом на OCR.</td></tr>
+              <tr><td>девять</td><td>Отменяет последнюю операцию редактора.</td></tr>
+              <tr><td>Формат Markdown</td><td>Применяет полужирный, курсив, хештег или заголовок уровня от 1 до 6.</td></tr>
+              <tr><td>Markdown Линк</td><td>Вставляет <code>[link text](url)</code> и выделяет редактируемую часть.</td></tr>
+              <tr><td>Внутренние линки</td><td>Вставляет в стиле Obsidian <code>[[Target]]</code> викиссылку.</td></tr>
+              <tr><td>Настройте две даты</td><td>Использует сегодня, завтра или эти выходные; необязательное время и поправки ±15m, ±30m или ±1h. Вставляет <code>(@yyyy-MM-dd)</code> или вариант со временем.</td></tr>
+              <tr><td>Чеклист</td><td>Применяет префикс задачи Markdown <code>- [ ]</code>.</td></tr>
+              <tr><td>Список пуль</td><td>Применяет префикс маркера списка Markdown.</td></tr>
+              <tr><td>Паста</td><td>Вставляет текст буфера обмена вместо текущего выделения.</td></tr>
+              <tr><td>Скетч</td><td>Открывает редактируемый захват наброска PencilKit.</td></tr>
+              <tr><td>Текущее местоположение</td><td>Запрашивает одну геопозицию и вставляет ссылку Google Maps.</td></tr>
+              <tr><td>Вставьте Timestamp</td><td>Вставляет местные дату и время в виде <code>h:mm a yyyy-MM-dd</code>.</td></tr>
+              <tr><td>Вставьте дату</td><td>Вставляет <code>yyyy-MM-dd</code>.</td></tr>
+              <tr><td>Изменить текст дела</td><td>Предлагает нижний регистр, верхний регистр, регистр предложений, заглавную букву каждого слова и преобразование в slug.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">Форматирование учитывает выделение, нормализует переводы строк, ограничивает неверные диапазоны выделения и не разрывает составные символы, например эмодзи.</p>
+
+        <h3 id="inline-voice">Встроенные голосовые элементы управления</h3>
+        <ul>
+          <li>Нажмите кнопку голоса для начала или остановки. Удерживайте около 0,45 секунды, чтобы открыть подробные элементы управления.</li>
+          <li>Во время записи <strong>Пауза</strong> появляется рядом с кнопкой голоса: одно нажатие приостанавливает запись, следующее возобновляет её. Итоговая заметка содержит одну запись без звука и времени паузы. На время паузы также отключаются предварительный показ расшифровки и автоматическая остановка по голосу.</li>
+          <li><strong>Добавить в черновик</strong> добавляет готовую расшифровку. <strong>Отправить сразу</strong> выполняет выбранный маршрут с его местом сохранения.</li>
+          <li><strong>«Отправить сразу» выбрано по умолчанию</strong> в рабочих пространствах захвата iOS и Mac. Открытие голосового действия iOS через <code>voxboard://capture?action=voice</code> переключает эту запись на «Добавить в черновик».</li>
+          <li>Эта <strong>Аудио</strong> сохраняет исходную запись в черновике по запросу.</li>
+          <li><strong>Импорт аудио</strong> принимает аудио или видеофайлы и использует тот же локальный процесс расшифровки.</li>
+          <li><strong>Идентифицировать спикеров</strong> — явно включаемый этап обработки голоса маршрута для записей и импортированного аудио. При первом использовании подготавливается отдельная модель говорящих, локально добавляются анонимные подписи с доступной точностью; если выполнение невозможно, сохраняется обычная расшифровка с видимой причиной в библиотеке.</li>
+          <li>В режиме «Автоматический» подтверждённый и предварительный текст Apple Speech может отображаться прямо в редактируемом поле во время записи. Явно выбранные модели Whisper и Parakeet расшифровывают после остановки записи.</li>
+          <li>Сбой расшифровки не уничтожает исходную запись; она остаётся доступной для восстановления.</li>
+          <li>Постоянное прослушивание клавиатуры сохраняется между запусками только при явном включении. Разовая запись приложения возвращает аудиосеанс в неактивное состояние.</li>
+        </ul>
+
+        <h3 id="capture-limits">Ограничения входных данных захвата</h3>
+        <div class="docs-callout docs-callout-neutral">
+          <p>Запрос может включать до <strong>100 000 символов</strong> переданного текста, <strong>10 переданных элементов</strong>, и <strong>250 MB</strong> общего объёма подготовленных ресурсов. Выбор фото и снимков экрана допускает до 10 элементов, захват дневника — до 10 страниц. Vox.md отклоняет превышение лимита, а не незаметно отбрасывает элементы.</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="presets">
+        <div class="docs-section-label">03 / Маршруты</div>
+        <h2>Сохраняйте весь процесс, а не только папку</h2>
+        <p>Маршрут хранит смысл захвата, необходимость обработки текста, правила метаданных и аудио и точное место записи Markdown. Маршруты применимы к печатному тексту, ссылкам, медиа, сканам, файлам, наброскам, голосу, командам, виджетам, меню общего доступа, часам и Mac.</p>
+
+        <h3 id="preset-management">Создавайте маршруты и управляйте ими</h3>
+        <ul>
+          <li>Откройте «Настройки → Маршруты» для создания, переименования, включения, отключения, выбора значка и удаления своего маршрута.</li>
+          <li>Выбор значков с поиском группирует символы по письму, голосу, задачам, личному и работе.</li>
+          <li>Отключённые маршруты скрыты в обычных списках выбора. Встроенный маршрут Default удалить нельзя.</li>
+          <li>Встроенный маршрут Default использует символ звуковой волны, подсказку <em>Зафиксируйте идею, задачу, ссылку, файл, скан или запись.</em>, <code>type: capture</code> метаданные, обработку «Чистый текст», отключённую обработку печатного текста и отключённое сохранение аудио.</li>
+          <li>Новый пользовательский маршрут начинается как <em>Свой маршрут</em>, использует значок ползунков и <em>Что хотите сохранить?</em> и начинает с выбранной «Своя инструкция», но выключенной обработкой печатного/смешанного текста.</li>
+        </ul>
+
+        <h3 id="processing-modes">Режимы обработки</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Режим</th><th>Результат</th><th>Поведение при недоступности</th></tr></thead>
+            <tbody>
+              <tr><td>Сохранить оригинал</td><td>Сохраняет захваченный текст без переписывания с помощью ИИ.</td><td>Доставляется исходный текст.</td></tr>
+              <tr><td>Чистый текст</td><td>Исправляет регистр и пунктуацию, сохраняя смысл и Markdown.</td><td>Исходный текст, когда локальное обогащение недоступно.</td></tr>
+              <tr><td>Список задач</td><td>Создаёт Markdown <code>- [ ]</code> пункты задач.</td><td>Детерминированное оформление списка с флажками.</td></tr>
+              <tr><td>Заметки встречи</td><td>Создаёт <code>## Notes</code> раздел и, при наличии, <code>## Action Items</code>.</td><td>Детерминированная структура заметки встречи.</td></tr>
+              <tr><td>Своя инструкция</td><td>Следует вашей инструкции с помощью локального Apple Intelligence, когда он доступен.</td><td>Исходный текст, если инструкция не может выполняться локально.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Голосовые расшифровки используют выбранный режим маршрута. <strong>Применить для захвата текста</strong> включается отдельно и по умолчанию выключено; разрешает обработку печатного Markdown, OCR и смешанных захватов с текстом. Оставьте выключенным, чтобы избежать неожиданного переписывания вашего Markdown. Точный обработанный запрос сохраняется до доставки, поэтому повторы не запускают обработку заново с изменёнными настройками.</p>
+
+        <h3 id="preset-metadata">Метаданные</h3>
+        <ul>
+          <li>Введите статические метаданные по одному <code>key: value</code> пару в каждой строке, например <code>tags: [journal, idea]</code>.</li>
+          <li><strong>Frontmatter заметки</strong> записывает метаданные на уровне документа.</li>
+          <li><strong>Встроенные поля записи</strong> записывает <code>key:: value</code> поля рядом с каждой записью периодической заметки.</li>
+          <li>При доступности локальное обогащение добавляет заголовок, теги, категорию и обработанный текст наряду со статическими метаданными маршрута.</li>
+        </ul>
+
+        <h3 id="preset-location">Геолокация по выбору</h3>
+        <p>Текущее местоположение по умолчанию выключено и задаётся для каждого маршрута. После включения Vox.md запрашивает геопозицию один раз у источника захвата: при отправке на iOS/iPadOS, из меню общего доступа, глубоких ссылок/редактора, Mac и системных действий, открывающих редактор; при вызове намерений текста, ссылок и файлов с прямой постановкой в очередь; либо при остановке немедленной голосовой записи, записи маршрута с клавиатуры, виджета/элемента управления или Apple Watch с обычной доставкой захвата. «Только запись» на часах экспортирует исходное аудио в «Файлы» без геопозиции Markdown и не запрашивает местоположение. Vox.md никогда не отслеживает геопозицию непрерывно или в фоне.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Настройка</th><th>Поведение</th></tr></thead>
+            <tbody>
+              <tr><td>Использовать текущее местоположение</td><td>Запрашивает одну геопозицию в момент создания для маршрута и обеспечивает <code>{location}</code>. Метаданные автоматически не записываются.</td></tr>
+              <tr><td>Точный (по умолчанию)</td><td>Сохраняет скорректированную для конфиденциальности исходную геопозицию и может включать название объекта, если оно нужно выбранным метаданным.</td></tr>
+              <tr><td>Город</td><td>Округляет широту и долготу до двух знаков и исключает названия объектов. Все производные поля и ссылки используют эти округлённые координаты.</td></tr>
+              <tr><td>Записывать метаданные местоположения</td><td>Отдельно включает структурированные или расширенные метаданные в дополнение к любому <code>{location}</code> ссылку шаблона записи.</td></tr>
+              <tr><td>Структурированные поля</td><td>Выбирайте и переименовывайте координаты, широту, долготу, место, город, регион, страну, Apple Maps, Google Maps, OpenStreetMap, <code>geo:</code> URI, точность, время, источник и ID захвата.</td></tr>
+              <tr><td>Расширенный шаблон YAML</td><td>Использует проверенный YAML с ограничениями для frontmatter заметки. Не может заменить посторонние поля frontmatter и недоступен для встроенных полей записи.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>При включённой записи геометаданных область документа добавляет каждый результат в настроенную коллекцию frontmatter по ID захвата. Одна заметка может хранить несколько мест, но идемпотентный повтор не добавит одно место дважды. Область записи вместо этого отображает выбранные структурированные поля как <code>key:: value</code> рядом с этой сохранённой записью.</p>
+        <p>Для места, города, региона и страны используется системное обратное геокодирование Apple, только если они нужны включённым полям метаданных. Геолокация только через токен пропускает обратное геокодирование. Сервис бесплатен и не требует ключа API, но может использовать сеть; при сбое поиска захват продолжается с метаданными только из координат. В префиксах, суффиксах и шаблонах Markdown хранилища можно использовать <code>{location}</code> для вставки кликабельной ссылки Google Maps из доступного снимка маршрута с учётом конфиденциальности без включения вывода метаданных; токен пуст, когда текущее местоположение отключено или недоступно. Создание ссылки провайдера не обращается к Apple, Google или OpenStreetMap. Открытие раскрывает этому провайдеру те же точные или округлённые координаты, которые хранятся в ссылке.</p>
+        <p>В новых и ранее отключённых маршрутах оба параметра выключены. В маршрутах, уже записывавших геометаданные, после обновления оба остаются включёнными, сохраняя прежний вывод.</p>
+        <div class="docs-callout">
+          <strong>Полное руководство по текущему местоположению</strong>
+          <p>См. <a href="/ru/docs/location/">Текущее местоположение, <code>{location}</code>, и метаданные</a> со схемами настройки, примерами, моментом получения для разных источников, миграцией, конфиденциальностью и устранением неполадок.</p>
+        </div>
+        <div class="docs-callout docs-callout-neutral">
+          <strong>Недоступное местоположение</strong>
+          <p>В интерактивном интерфейсе можно повторить, отменить, отправить раз без местоположения или выбрать <em>Всегда отправлять без местоположения</em> для маршрута. Сбросьте сохранённый выбор в геонастройках маршрута. Фоновый <em>Спросить</em> сохраняет результат недоступности на момент создания до вашего решения; повтор и восстановление никогда не запрашивают более позднюю геопозицию.</p>
+        </div>
+
+        <h3 id="destinations">Места сохранения Markdown</h3>
+        <p>У каждого маршрута одно место сохранения внутри хранилища Obsidian или доступной для записи папки в «Файлах».</p>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Новая нота</strong><p>Создавайте отдельный файл Markdown для каждого захвата с токенами, например <code>{timestamp}</code>, <code>{date}</code>, <code>{time}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{id8}</code>, и <code>{id}</code>.</p></div>
+          <div><strong>Ролинг нота</strong><p>Добавляйте в ежедневные, еженедельные, ежемесячные, ежеквартальные или ежегодные заметки. Пути также поддерживают <code>{period}</code> и <code>{week}</code>. Для нового места сохранения по умолчанию выбран <code>Journal/{period}.md</code> с ежедневным периодом.</p></div>
+          <div><strong>существующая запись</strong><p>Выберите файл Markdown внутри выбранного хранилища или папки. Vox.md проверяет, что цель безопасно остаётся в пределах корневой папки.</p></div>
+        </div>
+
+        <p>Полный рецепт маршрута описан в <a href="/ru/blog/append-to-obsidian-daily-note-iphone/">добавляйте текст и голос в ежедневную заметку Obsidian</a>.</p>
+
+        <p><a href="/ru/blog/obsidian-capture-templates/">Используйте рецепт шаблона входящих, дневника или задач</a> для предсказуемого оформления записей.</p>
+
+        <h3 id="placement-templates">Размещение, заголовки и шаблоны</h3>
+        <ul>
+          <li><strong>Нижнее</strong> добавляет в конец; <strong>ТОП</strong> добавляет в начало; <strong>Руководство</strong> вставляет под выбранным заголовком уровня от 1 до 6.</li>
+          <li>Если заголовка нет, выберите <strong>Показать ошибку</strong> или <strong>Создать заголовки</strong>.</li>
+          <li>Используйте считываемый из хранилища файл шаблона Markdown, многоразовый шаблон записи или собственные префикс и суффикс.</li>
+          <li>Форматирование записи поддерживает <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>, и <code>{location}</code>.</li>
+          <li>Подпапка вложений по умолчанию — <code>attachments</code>.</li>
+          <li><strong>Защита от ретро</strong>, выключенная по умолчанию, записывает видимый <code>vox-capture</code> комментарий HTML для обнаружения повторных попыток.</li>
+          <li>Vox.md отклоняет абсолютные пути, обратные косые черты, выход за пределы папки, небезопасные имена и выход через символические ссылки.</li>
+        </ul>
+
+        <h3 id="capture-overrides">Изменения для одного захвата</h3>
+        <p>В выборе места сохранения можно использовать настройки маршрута, поместить этот захват в начало или конец, применить разовый шаблон записи либо выбрать другую заметку того же хранилища. <strong>Использовать настройки места назначения маршрута</strong> снимает изменение. Эти варианты влияют только на текущий черновик и никогда не меняют маршрут.</p>
+
+        <h3 id="audio-export">Хранение аудио и экспорт для совместимости</h3>
+        <ul>
+          <li>Режимы сохранения аудио: <strong>Выкл.</strong>, <strong>Рядом с заметкой</strong>, или <strong>Приложения Фолдер</strong>.</li>
+          <li>Markdown может встраивать сохранённое аудио в начале или конце с синтаксисом Obsidian, например <code>![[recording.m4a]]</code>.</li>
+          <li>Для старых конфигураций прямой голосовой записи без единого места сохранения Markdown <strong>Сохранять заметки в файлы</strong> поддерживает TXT, MD, JSON и YAML; новый файл или добавление; токены имени файла, включая модель и язык; шаблоны Markdown; параметры Obsidian Bases; выбираемые свойства YAML; и необязательные <code>.md</code> расширение для YAML.</li>
+          <li>Настройки экспорта совместимости применяются только к прямой голосовой записи, если у маршрута нет единого места захвата.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="models">
+        <div class="docs-section-label">04 / Модели и расшифровка</div>
+        <h2>Выберите системный движок или дополнительную локальную модель</h2>
+        <p>Вся расшифровка выполняется на устройстве Apple. На iOS по умолчанию выбран режим «Автоматический». Дополнительные файлы моделей Whisper и Parakeet загружаются только по вашему запросу; можно выбрать модель, отменить загрузку или позже удалить её.</p>
+
+        <p><a href="/ru/blog/offline-transcription-iphone-markdown/">Подготовьте расшифровку без сети</a> с локальным движком и доступным для записи местом сохранения.</p>
+
+        <h3 id="model-options">Доступные способы расшифровки</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Параметр</th><th>Примерный размер</th><th>Кому подходит</th></tr></thead>
+            <tbody>
+              <tr><td>Автоматический</td><td>Управляется системой</td><td>Предпочитает Apple Speech на поддерживаемом устройстве iOS 26 и языке; переключается только на явно загруженную вами локальную модель.</td></tr>
+              <tr><td>Whisper Tiny</td><td>75 MB</td><td>Самая маленькая и быстрая модель Whisper.</td></tr>
+              <tr><td>Whisper Base</td><td>142 MB</td><td>Сбалансированная небольшая локальная модель; прежний вариант по умолчанию на Mac.</td></tr>
+              <tr><td>Whisper Small</td><td>466 MB</td><td>Выше точность, но больше расход памяти и вычислений.</td></tr>
+              <tr><td>Whisper Medium</td><td>1.5 GB</td><td>Более крупная многоязычная модель Whisper.</td></tr>
+              <tr><td>Whisper Large v3 Turbo</td><td>1.6 GB</td><td>Самая большая доступная модель Whisper.</td></tr>
+              <tr><td>Parakeet v2</td><td>~800 MB</td><td>Модель Core ML/FluidAudio, оптимизированная для английского.</td></tr>
+              <tr><td>Parakeet v3</td><td>~800 MB</td><td>Модель Core ML/FluidAudio с поддержкой 25 языков.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="automatic-model">Как работает режим «Автоматический»</h3>
+        <ul>
+          <li>На поддерживаемом устройстве iOS 26 режим «Автоматический» проверяет системный распознаватель Speech Apple для выбранного языка и при необходимости подготавливает его языковые ресурсы.</li>
+          <li><strong>Язык системы</strong> следует языку устройства. Выберите конкретный язык, если запись сделана на другом.</li>
+          <li>Режим «Автоматический» никогда не загружает запасную модель Whisper или Parakeet незаметно. Он использует только модель, которую вы ранее решили скачать.</li>
+          <li>Живое распознавание Apple Speech различает подтверждённый текст, который безопасно вставлять, и предварительный, который ещё может измениться.</li>
+          <li>Явно выбранные Whisper и Parakeet используют пакетную расшифровку после завершения фрагмента.</li>
+        </ul>
+
+        <h3 id="model-languages">Языки</h3>
+        <ul>
+          <li><strong>Whisper:</strong> Автоопределение, английский, испанский, французский, немецкий, итальянский, португальский, нидерландский, польский, русский, китайский, японский, корейский, арабский, хинди, турецкий, вьетнамский, тайский, украинский, шведский, датский, норвежский и финский.</li>
+          <li><strong>Автоматический:</strong> Язык системы и явно перечисленные для Whisper языки, если Apple поддерживает соответствующую локаль.</li>
+          <li><strong>Parakeet v2:</strong> Английский.</li>
+          <li><strong>Parakeet v3:</strong> Болгарский, хорватский, чешский, датский, нидерландский, английский, эстонский, финский, французский, немецкий, греческий, венгерский, итальянский, латышский, литовский, мальтийский, польский, португальский, румынский, словацкий, словенский, испанский, шведский, русский и украинский. При работе с Parakeet язык определяется автоматически.</li>
+        </ul>
+
+        <h3 id="parakeet-autostop">Автоостановка Parakeet на клавиатуре</h3>
+        <p>Дополнительная модель размером около 1 MB <strong>Открытие голосового перерыва</strong> может останавливать запись клавиатуры с явно выбранным Parakeet v2 или v3 после тишины. Включите <strong>Останавливайте Parakeet после паузы</strong> и выберите примерно 0,5, 0,75, 1, 1,5 или 2 секунды. По умолчанию включена пауза 0,75 секунды после подготовки вспомогательной модели. Режим «Автоматический» и Whisper по-прежнему требуют ручной остановки.</p>
+
+        <h3 id="audio-pipeline">Локальная обработка аудио</h3>
+        <ul>
+          <li>Вход Whisper нормализуется в моноаудио 16 кГц, 16 бит.</li>
+          <li>Постоянное прослушивание iOS использует кольцевой буфер на 10 минут и включает две секунды предзаписи при начале фрагмента.</li>
+          <li>Whisper использует <code>whisper.cpp</code>; Parakeet использует FluidAudio и Core ML. Whisper использует ускорение Metal на Mac.</li>
+          <li>Для загрузки моделей нужна сеть, но после подготовки выбранного движка расшифровка работает локально.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="keyboard">
+        <div class="docs-section-label">05 / Клавиатура iOS</div>
+        <h2>Диктуйте в текстовое поле, которое уже редактируете</h2>
+        <p>Клавиатура Vox.md работает в «Сообщениях», «Заметках», «Почте», Safari, Slack и любом другом приложении со стандартной клавиатурой iOS. Голосовая панель находится над раскладкой KeyboardKit и связывается с основным приложением Vox.md через закрытую общую App Group.</p>
+
+        <h3 id="keyboard-setup">Настройте клавиатуру</h3>
+        <ol class="docs-steps">
+          <li><strong>Подготовьте расшифровку в Vox.md.</strong><span>Оставьте «Автоматический» на поддерживаемом устройстве либо загрузите и выберите Whisper или Parakeet в разделе «Настройки → Модели».</span></li>
+          <li><strong>Добавьте клавиатуру.</strong><span>Откройте настройки iOS → Основные → Клавиатура → Клавиатуры → Новые клавиатуры и выберите Vox.md.</span></li>
+          <li><strong>Включите полный доступ.</strong><span>Текущий процесс клавиатуры требует этого для общего состояния App Group и согласования записи с основным приложением.</span></li>
+          <li><strong>Переключите клавиатуру.</strong><span>Откройте текстовое поле, выберите Vox.md клавишей глобуса и нажмите микрофон.</span></li>
+        </ol>
+        <div class="docs-callout">
+          <strong>Что здесь даёт полный доступ</strong>
+          <p>iOS даёт разрешению широкое название. Vox.md использует его для локального взаимодействия приложения и клавиатуры, общего состояния и необязательного тактильного отклика. Vox.md не загружает нажатия клавиш, диктуемый текст, расшифровки или аудио микрофона на серверы Vox.md. См. <a href="/ru/privacy.html">политика конфиденциальности</a>.</p>
+        </div>
+
+        <h3 id="keyboard-workflow">Голосовая панель и вставка</h3>
+        <ul>
+          <li>Панель показывает текущий движок, состояние, длительность записи, живую волну и действие микрофона/остановки.</li>
+          <li>Кнопки предыдущего и следующего варианта переключают доступные загруженные движки.</li>
+          <li>Если прослушивание не запущено, клавиатура один раз открывает Vox.md, запускает прослушивание и может вернуть вас в исходное текстовое поле.</li>
+          <li>В режиме «Автоматический» подтверждённые фрагменты расшифровки вставляются по мере речи; предварительные слова только отображаются, пока Apple не подтвердит их.</li>
+          <li>С Whisper или Parakeet готовая расшифровка вставляется после ручной или автоматической остановки фрагмента.</li>
+          <li>При прерывании или приостановке вставки ожидающий текст сохраняется и вставляется повторно при следующем появлении клавиатуры.</li>
+          <li>Панель показывает состояния, например <em>Открытый Vox.md</em>, <em>Переписывать...</em>, и <em>Включите полный доступ</em>.</li>
+        </ul>
+
+        <h3 id="keyboard-customization">Настройка клавиатуры</h3>
+        <ul>
+          <li><strong>Тактильный отклик</strong> включён по умолчанию и меняется в настройках Vox.md.</li>
+          <li>Выбор дополнительных символов долгим нажатием доступен для английского, немецкого, испанского, французского, итальянского, португальского, нидерландского, шведского, датского и норвежского языков.</li>
+          <li>При явно выбранном Parakeet можно добавить автоостановку по паузе в разделе «Настройки → Модели».</li>
+          <li>Бесплатный лимит в 15 минут расшифровки распространяется и на диктовку с клавиатуры, и на записи в приложении, и на импорт.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="system-integrations">
+        <div class="docs-section-label">06 / Системные интеграции</div>
+        <h2>Начинайте захват из меню общего доступа, с домашнего экрана, экрана блокировки или через команды</h2>
+
+        <h3 id="share-extension">Расширение общего доступа</h3>
+        <p>Действие меню общего доступа iOS называется <strong>Сохранить в Vox.md</strong>. Принимаются текст, URL HTTP/HTTPS, изображения, файлы и видео в пределах общих лимитов элементов и ресурсов. Выберите маршрут и место сохранения, при желании добавьте заметку и отправьте. Если маршрут использует текущее местоположение, расширение общего доступа запрашивает его один раз при этой отправке независимо от включения вывода метаданных. Содержимое подготавливается в закрытой App Group, надёжно ставится в очередь и открывается в Vox.md для доставки. Если для доставки нужно основное приложение, используйте <strong>Открытый Vox.md</strong>.</p>
+
+        <h3 id="widgets">Виджеты домашнего экрана и экрана блокировки</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Быстрый захват</strong><p>Открывает надёжный черновик Markdown. Средние и большие виджеты предлагают заметку, фото, снимок экрана, камеру, файл, ссылку, скан, набросок и голос.</p></div>
+          <div><strong>Быстрый рекорд</strong><p>Запускает настроенный процесс записи и показывает готовность, прослушивание или отключение в поддерживаемых вариантах домашнего экрана и экрана блокировки.</p></div>
+          <div><strong>Защитная настройка виджета</strong><p>Отключите кнопку записи на экране блокировки в настройках, чтобы она показывала выключенное состояние, а не сразу начинала запись.</p></div>
+        </div>
+
+        <h3 id="control-center-live-activities">Пункт управления, Live Activities и Dynamic Island</h3>
+        <ul>
+          <li>На iOS 18+ добавьте доступные элементы захвата и записи Vox.md из Пункта управления. Настройте маршрут и параметры, предлагаемые установленной версией.</li>
+          <li>Настройте микрофон, модель и место сохранения в Vox.md до использования элементов записи. В зависимости от iOS и версии приложения запись может открывать приложение. Проверьте короткую запись на своём устройстве, прежде чем полагаться на фоновый захват.</li>
+          <li>Эта <strong>Монитор текущей активности</strong> управляет состоянием записи и действиями записи/остановки на экране блокировки и Dynamic Island.</li>
+          <li>В Live Activity показываются запись, таймер, обработка, готовность, а также действия записи и остановки.</li>
+          <li>Live Activities доступны с iOS 17; элементы Пункта управления требуют iOS 18.</li>
+        </ul>
+
+        <h3 id="shortcuts">Команды и App Intents</h3>
+        <p>Маршруты доступны как выбираемые сущности в «Командах» и поддерживаемых элементах управления. При включённом параметре «Использовать текущее местоположение» намерения текста, ссылок и файлов с прямой постановкой в очередь запрашивают геопозицию при вызове; действия, открывающие «Быстрый захват», — при отправке; действия записи — при остановке. Вывод метаданных не меняет момент запроса. Если фоновый <em>Спросить</em> не может получить местоположение, результат о его недоступности в момент создания сохраняется для последующего решения, а не запрашивается заново. Используйте действия, доступные в установленной версии Vox.md. Среди действий захвата:</p>
+        <ul class="docs-columns">
+          <li>Открытый быстрый захват</li>
+          <li>Запись и захват</li>
+          <li>Захватывать скриншоты</li>
+          <li>Захватывает текст для Markdown</li>
+          <li>Загрузить линк к Markdown</li>
+          <li>Захватывать файл для Markdown</li>
+        </ul>
+
+        <h3 id="action-button-recording">Настройка записи кнопкой действия</h3>
+        <p>Один раз откройте Vox.md для разрешения микрофона, подготовки движка и подключения маршрута к месту сохранения. В «Командах» добавьте доступное действие захвата Vox.md и выберите маршрут. Запустите команду на разблокированном телефоне и подтвердите запись в нужную заметку до назначения в разделе Настройки → Кнопка действия → Быстрая команда.</p>
+        <p class="docs-note">Доступные действия и фоновая запись зависят от установленной версии и iOS. Используйте действия в «Командах» на вашем устройстве. Если для записи нужно открытое приложение, откройте Vox.md. Наличие команды в списке не гарантирует запись с заблокированного телефона.</p>
+
+        <h3 id="deep-links">Глубокие ссылки</h3>
+        <p>Vox.md регистрирует <code>voxboard://</code> схему URL. Кодируйте значения параметров как URL.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table docs-code-table">
+            <thead><tr><th>URL</th><th>Поведение</th></tr></thead>
+            <tbody>
+              <tr><td><code>voxboard://capture</code></td><td>Откройте надёжный редактор «Быстрый захват».</td></tr>
+              <tr><td><code>voxboard://capture?action=photos</code></td><td>Откройте выбор фото. Другие действия: <code>screenshots</code>, <code>camera</code>, <code>files</code>, <code>scan</code>, <code>sketch</code>, <code>link</code>, и <code>voice</code>.</td></tr>
+              <tr><td><code>voxboard://capture?text=...</code></td><td>Откройте черновик с текстом в пределах лимита.</td></tr>
+              <tr><td><code>voxboard://capture?url=https%3A%2F%2F...</code></td><td>Откройте черновик со ссылкой HTTP/HTTPS.</td></tr>
+              <tr><td><code>voxboard://capture?route=...</code></td><td>Выберите включённый маршрут. Его можно сочетать с поддерживаемым действием, текстом или URL.</td></tr>
+              <tr><td><code>voxboard://capture-request?id=...</code></td><td>Примите в обработку надёжно сохранённый запрос системного расширения или намерения.</td></tr>
+              <tr><td><code>voxboard://listen</code></td><td>Запустите процесс включения прослушивания клавиатуры.</td></tr>
+              <tr><td><code>voxboard://record</code></td><td>Старая точка входа записи перенаправлена в прослушивание.</td></tr>
+              <tr><td><code>voxboard://widget-record</code></td><td>Старая точка входа записи из виджета.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">Неизвестные или повторные параметры, неверные UUID, небезопасные идентификаторы маршрутов, URL не по HTTP и текст сверх общего лимита отклоняются.</p>
+      </section>
+
+      <section class="docs-section" id="apple-watch">
+        <div class="docs-section-label">07 / Apple Watch</div>
+        <h2>Записывайте локально на часах, затем доставляйте через iPhone</h2>
+
+        <p><a href="/ru/blog/apple-watch-obsidian-voice-notes/">Руководство настройки Apple Watch для Obsidian</a> о выборе маршрута, передаче и проверке доставки.</p>
+
+        <h3 id="watch-recording">Процесс записи</h3>
+        <ul>
+          <li>Приложение часов показывает состояния готовности, записи, паузы, синхронизации, очереди, расшифровки, сохранения, отправки и необходимости внимания.</li>
+          <li>Используйте запись, паузу/продолжение, остановку, отмену, синхронизацию и обновление. Пауза даёт собраться с мыслями, не разделяя заметку: таймер замирает, время паузы исключается из записи. Отмена явно удаляет локальную запись вместо её синхронизации.</li>
+          <li>Записи журналируются локально и восстанавливаются после прерываний или сбоев.</li>
+          <li>Запись остаётся на часах, пока iPhone не подтвердит доставку или удаление.</li>
+          <li>Для маршрута с включённым параметром «Использовать текущее местоположение» и обычной доставкой захвата часы запрашивают свою геопозицию один раз при остановке записи и передают скорректированный для конфиденциальности результат со снимком маршрута. iPhone никогда не подставляет свою геопозицию. Режим «Только запись» пропускает геолокацию: он экспортирует исходное аудио без вывода в Markdown.</li>
+        </ul>
+
+        <h3 id="watch-presets">Маршруты на часах</h3>
+        <p>Выберите включённый маршрут iPhone на часах через <strong>Маршрут</strong> . Vox.md передаёт безопасный снимок вместе с записью. Если iPhone недоступен, запрос выбора остаётся ожидающим, а последний подтверждённый маршрут — активным.</p>
+
+        <h3 id="watch-queue">Очередь «Смотреть записи» на iPhone</h3>
+        <p>Очередь на iPhone показывает время и длительность записи, маршрут, состояние обработки и действия доставки. Неудачные элементы можно повторить, перенаправить на другой маршрут, удалить или сохранить без расшифровки. Удаление убирает сохранённое аудио и доставку из очереди.</p>
+
+        <h3 id="watch-recording-only">Вывод в режиме «Только запись»</h3>
+        <ul>
+          <li>Установите вывод маршрута в <strong>Только запись</strong> для копирования аудио M4A в папку «Файлов» без расшифровки, обработки ИИ или расхода минут.</li>
+          <li>Шаблон имени файла по умолчанию — <code>recording-{timestamp}-{id8}</code>.</li>
+          <li>Один раз выберите папку записей на iPhone перед использованием маршрута.</li>
+          <li>iOS может задерживать фоновую доставку. Принудительное завершение Vox.md блокирует доставку до повторного открытия приложения.</li>
+        </ul>
+
+        <h3 id="watch-complication">Расширение циферблата и виджет</h3>
+        <p>Эта <strong>Рекорд голосовой ноты</strong> поддерживает круглые, прямоугольные, строчные и угловые расширения циферблата. Оно открывает или переключает локальную запись часов и показывает таймер или подписи по состоянию.</p>
+      </section>
+
+      <section class="docs-section" id="mac">
+        <div class="docs-section-label">08 / Приложение для Mac</div>
+        <h2>Используйте ту же систему захвата в macOS</h2>
+        <p>В приложении Mac есть разделы захвата, библиотеки и настроек; используется та же архитектура локальных моделей, маршрутов, маршрутизации, экспорта и повторов, что и в iOS.</p>
+
+        <h3 id="mac-workspace">Рабочее пространство захвата</h3>
+        <ul>
+          <li>Вводите и редактируйте Markdown, вставляйте или перетаскивайте файлы, изображения и аудио.</li>
+          <li>Используйте встроенную, внешнюю камеру или устройство Continuity Camera.</li>
+          <li>Импортируйте скан или PDF, рисуйте мышью, трекпадом или подключённым планшетом, добавляйте ссылки, викиссылки, сроки и преобразования текста.</li>
+          <li>Записывайте с <strong>Добавить в черновик</strong> или <strong>Отправить сразу</strong>; при желании сохраняйте аудио в режиме черновика.</li>
+          <li><strong>Пауза</strong> и <strong>Продолжить</strong> запись микрофона из строки состояния. Звук пауз исключается, поэтому одну итоговую заметку можно записывать частями. Запись встреч не приостанавливается.</li>
+          <li>Импортируйте аудио или видео для локальной расшифровки.</li>
+          <li>Нажмите Command-Return для отправки захвата. Маршрут с включённым параметром «Использовать текущее местоположение» запрашивает одну геопозицию Mac при отправке или остановке записи независимо от включения вывода метаданных.</li>
+          <li>Баннер настройки места сохранения и инспектор маршрута показывают итоговую заметку и размещение выбранного маршрута.</li>
+        </ul>
+
+        <h3 id="mac-meeting">Запись встреч с отдельными дорожками</h3>
+        <p>Переключите выбор режима ввода с <strong>Микрофон</strong> в <strong>Встреча</strong> для записи воспроизводимого приложением на Mac звука и вашего микрофона в две чётко разделённые дорожки. Vox.md использует ScreenCaptureKit в режиме одного приложения: вы выбираете ровно одно, а сам Vox.md никогда не записывается.</p>
+        <ul>
+          <li>При записи строка состояния показывает текущие уровни системы и микрофона, состояние каждого источника и предупреждения захвата.</li>
+          <li>Обе дорожки записываются надёжными блоками с манифестом восстановления, поэтому при прерывании — остановке потока, отключении микрофона или принудительном завершении — запись безопасно финализируется и встречу всё ещё можно расшифровать. Прерванные сеансы автоматически восстанавливаются при следующем запуске очереди записей.</li>
+          <li>После остановки каждая дорожка отдельно расшифровывается на устройстве, результаты чередуются на общей шкале времени: ваш микрофон обозначается как <strong>Вы</strong>, а дорожка приложения помечается как удалённый собеседник. Необязательное определение говорящих может дополнительно разделить несколько удалённых голосов.</li>
+          <li>Сведённый звук обеих дорожек сохраняется как аудио записи, а готовая расшифровка следует настройкам маршрута, «Добавить в черновик» или «Отправить сразу» и буфера обмена, как любая другая запись.</li>
+        </ul>
+
+        <h3 id="mac-keybinds">Глобальные сочетания клавиш</h3>
+        <p>В разделе «Настройки → Глобальные сочетания клавиш» можно назначить сочетания для <strong>Перевод на Clipboard</strong>, <strong>Выбранный маршрут</strong>, или любому включённому маршруту. По умолчанию сочетания отключены; нужны обычная клавиша и Control, Option или Command, также можно добавить Shift; конфликты отклоняются. Нажмите активное сочетание ещё раз для остановки.</p>
+        <div class="docs-callout docs-callout-neutral">
+          <p><strong>Перевод на Clipboard</strong> не создаёт заметку, элемент библиотеки или сохранённое аудио. Это предназначено для быстрой диктовки в любое приложение Mac.</p>
+        </div>
+
+        <h3 id="mac-menu-bar">Строка меню и видимость приложения</h3>
+        <ul>
+          <li>Варианты видимости: <strong>Док + меню бар</strong> (по умолчанию), <strong>Меню только бар</strong>, <strong>Док только</strong>, и <strong>скрыть</strong>.</li>
+          <li>Строка меню показывает состояние записи, расшифровки и экспорта.</li>
+          <li>В меню доступны начало записи, остановка с расшифровкой, импорт аудио, копирование последней расшифровки, показ последнего экспорта, выбор маршрута, открытие захвата и библиотеки, показ папки данных и выход из Vox.md.</li>
+          <li>Нажмите Control-B в приложении Mac для подсказок клавиш над нажимаемыми элементами.</li>
+        </ul>
+
+        <h3 id="mac-history">История и модели Mac</h3>
+        <p>Ищите, обновляйте, очищайте, копируйте и удаляйте локальную историю; открывайте обработанную и исходную расшифровки, показывайте доставленную заметку в Finder. На экране моделей можно загружать, выбирать и удалять Whisper или Parakeet и менять язык расшифровки. На поддерживаемых Mac Whisper использует ускорение Metal.</p>
+      </section>
+
+      <section class="docs-section" id="history-settings">
+        <div class="docs-section-label">09 / Библиотека, настройки и конфиденциальность</div>
+        <h2>Восстанавливайте работу, управляйте локальными данными и снимайте ограничения</h2>
+
+        <h3 id="history">Единая библиотека iOS</h3>
+        <ul>
+          <li>Библиотека объединяет локальные голосовые расшифровки и записи доставки захватов в одном списке с поиском.</li>
+          <li>Ищите по исходному и обработанному тексту, заголовкам, тегам и категориям; потяните для обновления.</li>
+          <li>Копируйте обработанный или исходный текст, редактируйте метаданные и текст расшифровки или экспортируйте копию Markdown через меню общего доступа.</li>
+          <li>Удаляйте отдельную расшифровку или всю локальную историю. Очистка истории не удаляет заметки Markdown или вложения, уже записанные в место сохранения.</li>
+          <li>Повторяйте захваты из очереди и просматривайте общие сведения об источнике, маршруте, месте сохранения, пути заметки, числе вложений, времени, результате и категории сбоя.</li>
+          <li>Редактирование расшифровки включает заголовок, теги, категорию, обработанный и исходный текст.</li>
+        </ul>
+
+        <h3 id="stats">Частная деятельность государства</h3>
+        <p>Откройте «Настройки → Активность → Статистика» для обзора за всё время: общее число записей и захватов, длительность аудио и число вложений, график за последние семь дней и разбивка по источникам (приложение, клавиатура, меню общего доступа, виджеты, команды, Apple Watch, Mac, глубокие ссылки, импорт файлов и голос).</p>
+        <ul>
+          <li>Статистика считает только доставленные захваты; потяните для обновления после новой активности.</li>
+          <li>Журнал остаётся на устройстве и не хранит содержимое захватов, имена файлов или места сохранения.</li>
+        </ul>
+
+        <h3 id="settings-map">Карта настроек</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Раздел</th><th>Элементы управления</th></tr></thead>
+            <tbody>
+              <tr><td>Vox.md неограниченный</td><td>Состояние бесплатного лимита, пожизненный безлимит и восстановление покупки.</td></tr>
+              <tr><td>Настройка</td><td>Модели; маршруты; видимость и порядок действий панели захвата.</td></tr>
+              <tr><td>Клавиатура</td><td>Тактильный отклик.</td></tr>
+              <tr><td>Закрыть экран</td><td>Монитор текущей активности и кнопка записи на экране блокировки.</td></tr>
+              <tr><td>О приложении</td><td>Расшифровка по умолчанию, Whisper, Parakeet, обработка на устройстве, конфиденциальность, версия приложения и доступность Apple Intelligence.</td></tr>
+              <tr><td>Обратная связь</td><td>Присоединитесь к Discord Isolated Tech или создайте письмо с диагностическим отзывом.</td></tr>
+              <tr><td>Дебю</td><td>Посмотреть локальный журнал отладки.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>После обновления могут показываться примечания к выпуску с описанием актуальных функций: синхронизации часов, глобальных сочетаний Mac, значков маршрутов, элементов экрана блокировки, маршрутизации, правил аудио и постобработки.</p>
+
+        <h3 id="pricing-limits">Бесплатное использование и пожизненный безлимит</h3>
+        <ul>
+          <li>Бесплатное использование включает <strong>15 минут расшифровки</strong> и <strong>10 успешных доставок захвата</strong>.</li>
+          <li>Голосовая расшифровка, уже учтённая в минутах, не расходует дополнительный лимит захватов при сохранении в Markdown.</li>
+          <li>Неудачные записи файлов и идемпотентные повторы не расходуют успешную доставку захвата.</li>
+          <li>Безлимит приобретается навсегда одним платежом, без подписки, продления и рекламы. Действительна локализованная цена App Store; в США индивидуальная покупка стоит $19.99, семейная — $39.99, переход на семейную — $19.99. В других магазинах цены учитывают покупательную способность.</li>
+          <li>Восстановление покупки возвращает доступ по соответствующей покупке. Пользователи подходящих старых платных сборок сохраняют право на безлимитное использование.</li>
+          <li>Журнал App Group без содержимого предотвращает двойной расход лимита при повторах, пока локальные данные сохранены. Он не хранится в Связке ключей; удаление локальных данных начинает новый бесплатный лимит.</li>
+        </ul>
+
+        <h3 id="privacy-data">Что остаётся на устройстве</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Содержимое захвата</strong><p>Черновики, текст, ссылки, шаблоны, маршруты, вложения, аудио, OCR и расшифровки не отправляются на серверы Vox.md.</p></div>
+          <div><strong>обработки</strong><p>Apple Speech, Whisper, Parakeet, Vision OCR и поддерживаемая обработка Apple Intelligence работают на устройстве.</p></div>
+          <div><strong>Ваше место сохранения</strong><p>Готовые файлы попадают только в выбранную папку. Сторонний файловый провайдер может синхронизировать их на своих условиях.</p></div>
+        </div>
+        <ul>
+          <li>После доставки восстанавливаемые запросы захвата превращаются в квитанции без содержимого, а завершённые элементы очереди часов хранят только общие поля итоговой доставки. Ни те ни другие не хранят координаты, подписи, URL провайдеров, геошаблоны или данные маршрута.</li>
+          <li>История завершённых захватов хранит метаданные доставки, но не текст заметок, URL, координаты, подписи мест или шаблоны, закладки, абсолютные пути или имена файлов вложений.</li>
+          <li>Ожидающие и неудачные элементы хранят только нужное для локального восстановления, включая снимок маршрута и уже скорректированную геопозицию или результат недоступности.</li>
+          <li>Аналитика знакомства с приложением в релизных сборках по умолчанию отключена. В приложении нет сторонних SDK аналитики, рекламных сетей или межприложенческих трекеров.</li>
+          <li>Редактор получает кешированные вдохновляющие цитаты ZenQuotes без отправки содержимого черновика или идентификаторов.</li>
+        </ul>
+        <p>Полные сведения об обработке, хранении данных и сторонних сервисах приведены в <a href="/ru/privacy.html">политика конфиденциальности</a>.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">10 / Устранение неполадок</div>
+        <h2>Типичные проблемы настройки и доставки</h2>
+        <div class="docs-troubleshooting">
+          <details open>
+            <summary>Захват не отправляется</summary>
+            <p>Откройте элемент места сохранения и настройте выбранный маршрут. Если папка перемещена или разрешение истекло, выберите хранилище/папку снова. Работа в очереди остаётся в библиотеке.</p>
+          </details>
+          <details>
+            <summary>Клавиатура просит включить полный доступ</summary>
+            <p>Откройте настройки iOS → Основные → Клавиатура → Клавиатуры → Vox.md и включите полный доступ. Один раз вернитесь в приложение, чтобы Vox.md мог возобновить совместный процесс прослушивания.</p>
+          </details>
+          <details>
+            <summary>Режим «Автоматический» недоступен</summary>
+            <p>Автоматический Apple Speech требует поддерживаемого устройства iOS 26 и языка. Выберите и загрузите Whisper или Parakeet, затем выберите модель явно или вернитесь к режиму «Автоматический», чтобы она служила одобренным вами запасным вариантом.</p>
+          </details>
+          <details>
+            <summary>Не удалось расшифровать</summary>
+            <p>Убедитесь, что выбранная модель полностью загружена, а язык подходит. По возможности Vox.md сохраняет восстанавливаемое исходное аудио, чтобы вы могли выбрать другую модель и повторить попытку.</p>
+          </details>
+          <details>
+            <summary>Сбой маршрута с заголовком</summary>
+            <p>Измените место сохранения маршрута и проверьте текст и уровень заголовка. Выберите «Создать заголовки», если при отсутствии заголовка его нужно создать, а не останавливать доставку.</p>
+          </details>
+          <details>
+            <summary>Запись с часов в очереди</summary>
+            <p>Откройте Vox.md на iPhone, затем «Смотреть записи». Обновите или повторите, при запросе выберите действующий маршрут, оставьте приложение установленным и доступным для фоновой передачи. Принудительное завершение блокирует доставку до повторного открытия.</p>
+          </details>
+          <details>
+            <summary><code>{location}</code> остаётся пустым</summary>
+            <p>Включите «Использовать текущее местоположение» для маршрута доставки; для обнаруженных префиксов, суффиксов и многоразовых шаблонов записи исправление одним нажатием в редакторе включает это без метаданных. Файлы шаблонов, считываемые из хранилища, требуют ручной настройки маршрута. Если разрешение недоступно или захват продолжается без геопозиции, токен намеренно остаётся пустым. См. <a href="/ru/docs/location/">полное руководство по геолокации</a>.</p>
+          </details>
+          <details>
+            <summary>Местоположение маршрута недоступно</summary>
+            <p>Повторяйте попытку, только пока разбираетесь с исходной интерактивной отправкой. Можно отменить, отправить один раз без геопозиции или всегда отправлять без неё для этого маршрута. Сбросьте сохранённый выбор в геонастройках маршрута. Фоновый запрос в очереди хранит исходный результат недоступности и не получает более новую геопозицию.</p>
+          </details>
+        </div>
+        <div class="docs-callout docs-support-callout">
+          <strong>Всё ещё не получается?</strong>
+          <p>Откройте настройки и просмотр журнала отладки, затем отправьте отзыв, чтобы включить версию приложения, платформу, ОС и сведения устройства. Можно также присоединиться к <a href="https://discord.gg/RaQYS4t6gn">Discord Isolated Tech</a>.</p>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ru/developers">Разработчикам</a></li>
+        <li><a href="/ru/about">О приложении</a></li>
+        <li><a href="/ru/contact">Контакты</a></li>
+        <li><a href="/ru/">Главная</a></li>
+        <li><a href="/ru/docs/" aria-current="page">Документация</a></li>
+        <li><a href="/ru/blog/">Блог</a></li>
+        <li><a href="/ru/privacy.html">Конфиденциальность</a></li>
+        <li><a href="/ru/terms.html">Условия</a></li>
+        <li><a href="/llms.txt">llms.txt</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Поддержка</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ru_60877eba17c1">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Полная документация функций · Локальный захват прежде всего.</div>
+    </div>
+  <details class="language-switcher"><summary>Язык</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru" aria-current="page">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

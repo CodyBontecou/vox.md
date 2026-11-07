@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="th" dir="ltr" data-search-section="ส่วน" data-search-guide="คู่มือ" data-search-empty="ไม่พบ “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>จดด่วนสำหรับ Obsidian บน iPhone และ Apple Watch | Vox.md</title>
+  <meta name="description" content="เก็บข้อความ ลิงก์ รูปภาพ ไฟล์ สแกน ภาพร่าง และโน้ตเสียงส่วนตัวลงคลัง Obsidian หรือไฟล์ Markdown ในเครื่องบน iPhone">
+  <link rel="canonical" href="https://vox.isolated.tech/th/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="เอกสาร Vox.md สำหรับโมเดลภาษา">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="จดด่วนสำหรับ Obsidian บน iPhone และ Apple Watch | Vox.md">
+  <meta property="og:description" content="ส่งแต่ละไอเดียเข้าคลัง โน้ต หรือหัวข้อที่ถูกต้องโดยไม่เปิด Obsidian การถอดเสียงอยู่บนอุปกรณ์คุณ">
+  <meta property="og:url" content="https://vox.isolated.tech/th/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="จดด่วนสำหรับ Obsidian บน iPhone และ Apple Watch | Vox.md">
+  <meta name="twitter:description" content="จดก่อน แล้วให้เส้นทาง Markdown ที่แม่นยำจัดทุกอย่างลงโน้ตที่ถูกต้อง">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Vox.md",
+  "applicationCategory": "ProductivityApplication",
+  "operatingSystem": "iOS 17.6+, iPadOS 17.6+, macOS 14+, watchOS 10+",
+  "description": "จดด่วนสำหรับคลัง Obsidian และโน้ต Markdown ในเครื่อง พร้อมข้อความ ลิงก์ สื่อ สแกนเอกสาร ภาพร่าง และถอดเสียงส่วนตัวบนอุปกรณ์",
+  "url": "https://vox.isolated.tech/th/",
+  "downloadUrl": "https://apps.apple.com/us/app/voxboard/id6758967337",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/",
+    "sameAs": [
+      "https://github.com/CodyBontecou"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "featureList": [
+    "เก็บข้อความ ลิงก์ รูปภาพ ไฟล์ สแกนเอกสาร ภาพร่าง และเสียง",
+    "เขียน Markdown มาตรฐานลงคลัง Obsidian หรือโฟลเดอร์ Files",
+    "สร้างโน้ตใหม่ อัปเดตโน้ตต่อเนื่อง หรือเลือกโน้ตเดิมเป็นเป้าหมาย",
+    "แทรกต้น ท้าย หรือใต้หัวข้อที่เลือก",
+    "ใช้ตำแหน่งปัจจุบันครั้งเดียวในเทมเพลตพร้อมข้อมูลเมตาที่เลือกใช้",
+    "ใช้วิดเจ็ต Shortcuts ส่วนขยายแชร์ หรือคีย์บอร์ด",
+    "ถอดเสียงบนอุปกรณ์โดยไม่อัปโหลดเสียง"
+  ],
+  "inLanguage": "th"
+}
+</script>
+
+  <link rel="stylesheet" href="/geist.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://isolated.tech/#organization",
+  "name": "Isolated Tech",
+  "url": "https://isolated.tech/",
+  "sameAs": [
+    "https://github.com/CodyBontecou"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "ฝ่ายช่วยเหลือลูกค้า",
+    "email": "codybontecou@gmail.com",
+    "url": "https://vox.isolated.tech/th/contact",
+    "availableLanguage": "อังกฤษ"
+  },
+  "inLanguage": "th",
+  "description": "เก็บข้อความ ลิงก์ รูปภาพ ไฟล์ สแกน ภาพร่าง และโน้ตเสียงส่วนตัวลงคลัง Obsidian หรือไฟล์ Markdown ในเครื่องบน iPhone"
+}
+</script>
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="API ข้อมูลสาธารณะ Vox.md">
+<meta name="naver-site-verification" content="cae11a861102ae94853f1f7e773318e17525df3a">
+  <meta name="color-scheme" content="light">
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/InstrumentSerif-Italic-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/">
+</head>
+<body class="raw">
+<a class="skip-link" href="#main">ข้ามไปเนื้อหา</a>
+
+<nav aria-label="การนำทางหลัก">
+  <div class="r-wrap r-nav">
+    <a href="/th/" class="r-logo" aria-label="หน้าแรก Vox.md">
+      <span class="r-logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <span class="r-tab-current" aria-hidden="true">index.md</span>
+    <ul class="r-nav-links">
+      <li><a href="#how">how.md</a></li>
+      <li><a href="#capture">files.md</a></li>
+      <li><a href="#presets">routes.md</a></li>
+      <li><a href="#privacy">privacy.md</a></li>
+      <li><a href="/th/docs/">docs/</a></li>
+      <li><a href="/th/blog/">guides/</a></li>
+      <li><a href="/th/compare/">compare/</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_th_8a5edab28263">ดาวน์โหลดฟรี</a>
+  <details class="language-switcher"><summary>ภาษา</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ar/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/" lang="th" hreflang="th" aria-current="page">ไทย</a></li><li><a href="/tr/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+<main id="main">
+<section aria-labelledby="hero-title">
+  <div class="r-wrap r-hero">
+    <p class="r-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</p>
+    <div class="r-hero-body">
+      <div class="r-hero-copy">
+        <pre class="r-front" aria-label="Vox.md โดยย่อ">---
+app: Vox.md
+for: Obsidian &amp; any Markdown folder
+runs_on: [iPhone, iPad, Mac, Apple Watch]
+transcribes_on: <b>this device</b>
+writes_to: <b>a folder you pick</b>
+copies_on_our_servers: <b class="r-hl">0</b>
+---</pre>
+        <h1 class="r-h1" id="hero-title" aria-label="ความคิดของคุณ ในไฟล์บนเครื่อง"><span class="r-mark" aria-hidden="true">#</span>ความคิดของคุณ ใน <span aria-hidden="true"><del>คลาวด์</del> </span><span class="visually-hidden">ในเครื่อง </span><span class="r-voice r-hl">ไฟล์</span><span class="r-caret" aria-hidden="true"></span></h1>
+        <p class="r-hero-lead">จดไอเดียเข้า Obsidian จาก iPhone, Mac และ Apple Watch: พิมพ์ ถ่าย สแกน วาด หรือพูด Vox.md ถอดเสียงบนอุปกรณ์และเขียน Markdown ธรรมดาตรงเข้าคลังหรือโฟลเดอร์ Files ที่เลือก ใต้โน้ตและหัวข้อที่กำหนด</p>
+        <div class="r-actions">
+          <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_th_8a5edab28263">ดาวน์โหลด Vox.md ฟรี</a>
+          <a href="/th/blog/obsidian-quick-capture-iphone/" class="r-btn r-btn-line">เลือกวิธีจด</a>
+        </div>
+        <p class="r-note">ถอดเสียง 15 นาที + ส่งการจด 10 ครั้งฟรี · iOS 17.6+ · ไม่ต้องมีบัญชี</p>
+        <details class="desktop-download-qr">
+          <summary>สแกนเพื่อดาวน์โหลดบน iPhone</summary>
+          <div class="download-qr-panel">
+            <a href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-kind="qr" aria-label="เปิด Vox.md ใน App Store" data-download-campaign="seo_home_qr">
+              <img src="/assets/download-qr.svg" alt="รหัส QR เพื่อเปิด Vox.md ใน App Store" width="176" height="176" decoding="async">
+            </a>
+            <p>สแกนด้วยกล้อง iPhone เพื่อเปิด Vox.md ใน App Store</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="r-demo" aria-labelledby="demo-title">
+        <h2 class="visually-hidden" id="demo-title">สิ่งที่จดกลายเป็นอะไร</h2>
+        <div class="r-demo-tabs" role="tablist" aria-label="เลือกสิ่งที่จะจด" hidden>
+          <button type="button" role="tab" id="demo-tab-voice" aria-controls="demo-voice" aria-selected="true">บันทึกเสียง</button>
+          <button type="button" role="tab" id="demo-tab-link" aria-controls="demo-link" aria-selected="false" tabindex="-1">ลิงก์ที่แชร์</button>
+          <button type="button" role="tab" id="demo-tab-scan" aria-controls="demo-scan" aria-selected="false" tabindex="-1">หน้าที่สแกน</button>
+        </div>
+
+        <div class="r-demo-panel" id="demo-voice" role="tabpanel" aria-labelledby="demo-tab-voice">
+          <div class="r-said">
+            <p class="r-said-meta"><span>สิ่งที่คุณป้อน</span><span>เสียง · 0:03</span></p>
+            <div class="r-wave" aria-hidden="true"><span style="height:8px"></span><span style="height:14px"></span><span style="height:22px"></span><span style="height:30px"></span><span style="height:18px"></span><span style="height:10px"></span><span style="height:26px"></span><span style="height:34px"></span><span style="height:20px"></span><span style="height:12px"></span><span style="height:6px"></span><span style="height:16px"></span><span style="height:28px"></span><span style="height:24px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:20px"></span><span style="height:32px"></span><span style="height:26px"></span><span style="height:12px"></span><span style="height:18px"></span><span style="height:30px"></span><span style="height:22px"></span><span style="height:10px"></span><span style="height:6px"></span><span style="height:14px"></span><span style="height:24px"></span><span style="height:34px"></span><span style="height:28px"></span><span style="height:16px"></span><span style="height:10px"></span><span style="height:20px"></span><span style="height:26px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:18px"></span></div>
+            <p class="r-voice">“อย่าลืมนัดหมอฟัน”</p>
+          </div>
+          <div class="r-pipe"><ul><li>ถอดเสียงบนอุปกรณ์นี้</li><li>เส้นทาง: <strong>โน้ตรายวัน · Tasks</strong></li><li>ใช้เครือข่าย: <span class="r-hl">ไม่มี</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/2026-11-06.md</span><span>+ 1 บรรทัด</span></p>
+            <pre>## Tasks
+- Remember to book the dentist</pre>
+          </div>
+        </div>
+
+        <div class="r-demo-panel" id="demo-link" role="tabpanel" aria-labelledby="demo-tab-link" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>สิ่งที่คุณป้อน</span><span>แผ่นแชร์ · Safari</span></p>
+            <p class="r-voice">ลิงก์ที่ตั้งใจจะอ่านเมื่อสามสัปดาห์ก่อน แชร์ตรงจาก Safari</p>
+          </div>
+          <div class="r-pipe"><ul><li>เก็บตามเดิม</li><li>เส้นทาง: <strong>รายการอ่าน</strong></li><li>ใช้เครือข่าย: <span class="r-hl">ไม่มี</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Inbox/Reading.md</span><span>+ 2 บรรทัด</span></p>
+            <pre>### 14:07
+- https://www.inkandswitch.com/local-first/</pre>
+          </div>
+        </div>
+
+        <div class="r-demo-panel" id="demo-scan" role="tabpanel" aria-labelledby="demo-tab-scan" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>สิ่งที่คุณป้อน</span><span>สแกน · 1 หน้า</span></p>
+            <p class="r-voice">หน้าสมุดเช้านี้ สแกนด้วยกล้อง</p>
+          </div>
+          <div class="r-pipe"><ul><li>ข้อความดึงบนอุปกรณ์นี้</li><li>เส้นทาง: <strong>หน้าสมุดบันทึก</strong></li><li>ใช้เครือข่าย: <span class="r-hl">ไม่มี</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/Pages/2026-11-06 0912.md</span><span>+ 4 บรรทัด</span></p>
+            <pre>![[scan-2026-11-06-0912.jpg]]
+
+&gt; ship routing first.
+&gt; ask about the watch build</pre>
+          </div>
+        </div>
+        <p class="r-demo-foot">ตัวอย่างประกอบ ผลลัพธ์ขึ้นอยู่กับเส้นทางและการถอดเสียงของคุณ</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-zero" id="privacy" aria-labelledby="privacy-title">
+  <div class="r-wrap r-zero-inner">
+    <div class="r-zero-copy">
+      <p class="r-file">## privacy.md</p>
+      <h2 id="privacy-title">0<small>ไบต์</small></h2>
+      <p>ของฉบับร่าง ไฟล์แนบ เส้นทางโน้ต เทมเพลต ข้อความพิมพ์ ข้อความถอดเสียง หรือตำแหน่งที่เปิดใช้ไปถึงเซิร์ฟเวอร์หรือการวิเคราะห์ Vox.md ไฟล์ไปเฉพาะโฟลเดอร์ที่เลือก ตำแหน่งไม่ถูกติดตามต่อเนื่องหรือเบื้องหลัง</p>
+    </div>
+    <dl class="r-ledger" aria-label="สิ่งที่ Vox.md ได้รับ">
+      <div><dt>เสียงที่อัปโหลด</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>ข้อความถอดเสียงที่อัปโหลด</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>ฉบับร่างและไฟล์แนบ</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>เส้นทางโน้ตและเทมเพลต</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>ต้องมีบัญชี</dt><span aria-hidden="true"></span><dd>ไม่</dd></div>
+      <div><dt>ตำแหน่งเบื้องหลัง</dt><span aria-hidden="true"></span><dd>ไม่เคย</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-section" id="how" aria-labelledby="how-title">
+  <div class="r-wrap r-stack">
+    <div class="r-head">
+      <p class="r-file">L041 · how.md</p>
+      <h2 class="r-h2" id="how-title"><span class="r-mark" aria-hidden="true">##</span>สามจุดแวะ <span class="r-voice">ไม่มีอันไหนของเรา</span></h2>
+      <p class="r-lead">เปิดคลัง หาโน้ต และเลือกจุดที่ถูกต้องยุ่งยากเกินไปสำหรับความคิดชั่ววูบ ตั้งเส้นทางครั้งเดียวแล้วจด</p>
+    </div>
+    <ol class="r-stops">
+      <li class="r-stop"><p class="r-stop-meta"><span>01</span><span>โฟลเดอร์ของคุณ</span></p><h3>เชื่อมคลัง</h3><p>เลือกคลัง Obsidian หรือโฟลเดอร์ที่เขียนได้ใน Files Vox.md ทำงานกับไฟล์ Markdown ที่คุณเป็นเจ้าของอยู่แล้ว</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>02</span><span>กระเป๋าคุณ</span></p><h3>จดได้ทุกอย่าง</h3><p>เขียน วางลิงก์ เพิ่มสื่อหรือไฟล์ สแกนเอกสาร วาด หรือบันทึกโน้ตเสียงส่วนตัว ถอดเสียงตรงนั้นได้เลย</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>03</span><span>ไฟล์ของคุณ</span></p><h3>เส้นทางจัดเก็บให้</h3><p>สร้างโน้ต อัปเดตโน้ตต่อเนื่อง หรือเลือกโน้ตเดิม วางต้น ท้าย หรือใต้หัวข้อ</p></li>
+    </ol>
+    <p class="r-skip"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9A9A93" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.1 9.5 4.25 4.25 0 0 0 7 18z"/><path d="M3 3l18 18"/></svg><span><del>จุดแวะ 2.5: คลาวด์ของคนอื่น</del> ข้ามไป การซิงค์เป็นไปตามที่โฟลเดอร์ทำอยู่แล้วภายใต้ข้อกำหนดผู้ให้บริการ</span></p>
+  </div>
+</section>
+
+<section class="r-section" id="capture" aria-labelledby="capture-title">
+  <span class="anchor" id="features" aria-hidden="true"></span>
+  <div class="r-wrap r-split">
+    <div class="r-stack" style="gap: 20px">
+      <p class="r-file">L077 · files.md</p>
+      <h2 class="r-h2" id="capture-title"><span class="r-mark" aria-hidden="true">##</span>มันคือ <span class="r-voice r-hl">เพียง</span> ไฟล์</h2>
+      <p class="r-lead">ไม่ต้องใช้ปลั๊กอิน บัญชีคลาวด์ Vox.md หรือรูปแบบเฉพาะ Vox.md เขียน Markdown ที่อ่านได้และลิงก์แบบ Obsidian ลงโฟลเดอร์ที่คุณควบคุม โน้ตจึงไม่ผูกติดกับแอป</p>
+      <ul class="r-inputs">
+        <li><code>.md</code><span>โน้ตพิมพ์และข้อความถอดเสียงในรูป Markdown มาตรฐาน</span></li>
+        <li><code>[[ ]]</code><span>wikilink และไฟล์แนบฝังที่ Obsidian เข้าใจ</span></li>
+        <li><code>img</code><span>รูปภาพ ไฟล์ และสแกนเอกสารพร้อมข้อความที่ดึงออกมา <a href="/th/blog/save-links-photos-obsidian-iphone/">คู่มือจดสื่อ</a></span></li>
+        <li><code>url</code><span>ลิงก์จากทุกที่ที่แชร์ได้</span></li>
+        <li><code>draw</code><span>ภาพร่างที่แก้ไขได้</span></li>
+        <li><code>voice</code><span>เสียงส่วนตัวจากตัวเขียนหรือคีย์บอร์ด ไม่เคยอัปโหลดเสียง <a href="/th/blog/voice-notes-to-obsidian-iphone/">คู่มือโน้ตเสียง iPhone</a></span></li>
+        <li><code>---</code><span>Markdown หรือ YAML ใช้ซ้ำพร้อมโทเคนวัน เวลา แหล่ง และรหัส</span></li>
+      </ul>
+    </div>
+    <div class="r-tree" role="img" aria-label="โครงสร้างโฟลเดอร์คลังที่เน้นรายการใหม่สามรายการ">
+      <p class="r-tree-head"><span>~/Obsidian/Second Brain</span><span>ls -R</span></p>
+      <ul aria-hidden="true">
+        <li>├── Inbox/</li>
+        <li>│   └── Reading.md <mark>just now</mark></li>
+        <li>├── Journal/</li>
+        <li class="old">│   ├── 2026-11-05.md</li>
+        <li>│   ├── 2026-11-06.md <mark>+ ## Tasks</mark></li>
+        <li>│   └── Pages/</li>
+        <li>│       └── 2026-11-06 0912.md <mark>scan</mark></li>
+        <li>├── Meetings/</li>
+        <li class="old">│   └── 2026-11-01.md</li>
+        <li>├── Projects/</li>
+        <li class="old">│   └── Ideas.md</li>
+        <li class="old">└── attachments/</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="r-section" id="presets" aria-labelledby="presets-title">
+  <span class="anchor" id="destinations" aria-hidden="true"></span>
+  <div class="r-wrap r-stack">
+    <div class="r-head">
+      <p class="r-file">L112 · routes.md</p>
+      <h2 class="r-h2" id="presets-title"><span class="r-mark" aria-hidden="true">##</span>ตั้งค่าเส้นทางครั้งเดียว <span class="r-voice">แล้วแค่พูด</span></h2>
+      <p class="r-lead">เส้นทางจดจำวิธีประมวลผลและจัดรูปแบบการจด รวมถึงคลัง โน้ตเป้าหมาย ตำแหน่งวาง ไฟล์แนบ พฤติกรรมลองใหม่ และตำแหน่งปัจจุบันครั้งเดียวที่เลือกใช้ได้</p>
+    </div>
+    <div class="r-table-box">
+      <table class="r-table">
+        <caption class="visually-hidden">เส้นทางตัวอย่าง</caption>
+        <thead><tr><th scope="col">เส้นทาง</th><th scope="col">ไฟล์</th><th scope="col">ตรงไหนในนั้น</th><th scope="col">ครอบด้วย</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">โน้ตรายวัน · Tasks</th><td>Journal/{date}.md</td><td>ท้าย ## Tasks</td><td>- {text}</td></tr>
+          <tr><th scope="row">บันทึกการประชุม</th><td>Meetings/{date}.md</td><td>ใต้ ## Notes</td><td>### {time} · {title}</td></tr>
+          <tr><th scope="row">รายการอ่าน</th><td>Inbox/Reading.md</td><td>ต้นไฟล์</td><td>### {time}</td></tr>
+          <tr><th scope="row">ไอเดีย</th><td>Projects/Ideas.md</td><td>ท้ายไฟล์</td><td>&gt; {text}</td></tr>
+          <tr><th scope="row">โน้ตใหม่</th><td>Inbox/{timestamp}.md</td><td>ไฟล์ใหม่</td><td>frontmatter YAML + เนื้อหา</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <dl class="r-targets">
+      <div><dt>โน้ตที่มีอยู่ <code>Projects/Ideas.md</code></dt><dd>เพิ่มลงเอกสารที่มีในคลังต่อไป</dd></div>
+      <div><dt>โน้ตต่อเนื่อง <code>Journal/&#123;period&#125;.md</code></dt><dd>โน้ตรายวัน สัปดาห์ เดือน ไตรมาส หรือปี <a href="/th/blog/append-to-obsidian-daily-note-iphone/">ตั้งโน้ตรายวันและตำแหน่งหัวข้อ</a></dd></div>
+      <div><dt>โน้ตใหม่ <code>Inbox/&#123;timestamp&#125;.md</code></dt><dd>สร้างไฟล์ใหม่สะอาดทุกครั้งที่จด</dd></div>
+      <div><dt>ตำแหน่งแม่นยำ <code>Top · Bottom · Heading</code></dt><dd>ใต้หัวข้อทุกระดับ สร้างให้เมื่อยังไม่มี</dd></div>
+      <div><dt>โบสถ์ <code>Markdown · YAML · Tokens</code></dt><dd>คงรูปแบบการจดซ้ำโดยไม่จัดใหม่</dd></div>
+      <div><dt>ตำแหน่งปัจจุบัน <code>&#123;location&#125;</code></dt><dd>ลิงก์แผนที่หนึ่งครั้ง ณ เวลาต้นทางโดยไม่มีข้อมูลเมตา หรือเปิด frontmatter และฟิลด์ในบรรทัด <a href="/th/docs/location/">อ่านคู่มือ</a></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-section" id="everywhere" aria-labelledby="everywhere-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L140 · anywhere.md</p>
+    <h2 class="r-h2" id="everywhere-title"><span class="r-mark" aria-hidden="true">##</span>ไม่ว่าความคิดจะ <span class="r-voice">ปรากฏ</span></h2>
+    <ul class="r-pills" aria-label="จุดเริ่มจด">
+      <li>แป้นพิมพ์ <small>แอปใดก็ได้</small></li>
+      <li>Apple Watch <small>ข้อมือ</small></li>
+      <li>Mac <small>จดด่วน</small></li>
+      <li>แผ่นงานการแชร์ <small>ทุกอย่าง</small></li>
+      <li>วิดเจ็ต <small>โฮมและล็อก</small></li>
+      <li>ศูนย์ควบคุม <small>แตะเดียว</small></li>
+      <li>คำสั่งลัด <small>ทำอัตโนมัติ</small></li>
+    </ul>
+    <p class="r-lead"><a href="/th/blog/apple-watch-obsidian-voice-notes/">ตั้งค่าโน้ตเสียง Apple Watch ไปยัง Obsidian</a> บันทึกบน Watch แล้วถอดเสียงและส่งผ่าน iPhone ที่จับคู่</p>
+  </div>
+</section>
+
+<section class="r-section" id="specs" aria-labelledby="specs-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L158 · specs.yml</p>
+    <h2 class="r-h2" id="specs-title"><span class="r-mark" aria-hidden="true">##</span>สร้างบนพื้นฐานไฟล์ <span class="r-voice">คุณเก็บไว้ได้</span></h2>
+    <dl class="r-yaml">
+      <div><dt>capture_types</dt><dd>ข้อความ ลิงก์ รูปภาพ ไฟล์ สแกน ภาพร่าง และเสียง</dd></div>
+      <div><dt>note_format</dt><dd>Markdown มาตรฐาน</dd></div>
+      <div><dt>destinations</dt><dd>คลัง Obsidian และโฟลเดอร์ Files ที่เขียนได้</dd></div>
+      <div><dt>note_targets</dt><dd>โน้ตใหม่ ต่อเนื่อง หรือเดิม</dd></div>
+      <div><dt>placement</dt><dd>บน ล่าง หรือใต้หัวข้อ</dd></div>
+      <div><dt>rolling_periods</dt><dd>รายวัน รายสัปดาห์ รายเดือน รายไตรมาส และรายปี</dd></div>
+      <div><dt>obsidian_syntax</dt><dd>wikilink และไฟล์แนบฝัง</dd></div>
+      <div><dt>entry_formats</dt><dd>เทมเพลต Markdown และ YAML ใช้ซ้ำ</dd></div>
+      <div><dt>entry_points</dt><dd>แอป วิดเจ็ต Shortcuts ส่วนขยายแชร์ คีย์บอร์ด Apple Watch, Mac และศูนย์ควบคุม</dd></div>
+      <div><dt>voice_processing</dt><dd>Apple Speech, Whisper หรือ Parakeet บนอุปกรณ์</dd></div>
+      <div><dt>audio_uploads</dt><dd>ไม่มีสำหรับถอดเสียง</dd></div>
+      <div><dt>account</dt><dd>ไม่จำเป็น</dd></div>
+      <div><dt>platforms</dt><dd>iOS/iPadOS 17.6+, macOS 14+, watchOS 10+</dd></div>
+      <div><dt>location</dt><dd>เลือกเปิดตำแหน่งครั้งเดียว; {location} ใช้ได้โดยไม่มีข้อมูลเมตา; ไม่ติดตามเบื้องหลัง</dd></div>
+      <div><dt>location_metadata</dt><dd>เปิดแยกสำหรับ frontmatter หรือฟิลด์ในบรรทัด ค่าเริ่มต้น Exact หรือปัด City</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-dark" id="reviews" aria-labelledby="reviews-title">
+  <div class="r-wrap r-dark-inner">
+    <p class="r-file">L190 · reviews.md · from the App Store</p>
+    <h2 class="r-h2" id="reviews-title"><span class="r-mark" aria-hidden="true">##</span>สิ่งที่พูด <span class="r-voice">เกี่ยวกับ</span> สิ่งนั้น</h2>
+    <div class="r-quotes">
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5b29-4b3500000000">
+        <div>
+          <h3>ตรงที่ต้องการพอดี · <span role="img" aria-label="5 จาก 5 ดาว">★★★★★</span></h3>
+          <blockquote><p>“ฉันพยายามหาวิธีจดด้วยเสียงอย่างรวดเร็ว เพิ่มไฟล์แนบ ถอดเสียงในเครื่อง และซิงค์เข้าโฟลเดอร์ Obsidian มาพักหนึ่งแล้ว แอปนี้ทำได้อย่างสมบูรณ์แบบ”</p></blockquote>
+          <figcaption><span class="review-author">SteamingCoax</span> · รีวิว App Store · <time datetime="2026-08-11">11 ส.ค. 2026</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5bf7-fadc00000000">
+        <div>
+          <h3>พลังจดเงียบ ๆ · <span role="img" aria-label="5 จาก 5 ดาว">★★★★★</span></h3>
+          <blockquote>
+            <p>“Vox.md กลายเป็นเครื่องมือที่ฉันใช้มากที่สุดตัวหนึ่ง เริ่มใช้เพื่อส่งเสียงเข้า Obsidian แล้วมันค่อย ๆ เปลี่ยนขั้นตอนจดประจำวันของฉัน</p>
+            <p>ระบบค่าจับภาพที่ตั้งไว้ยอดเยี่ยม แต่ละชุดมีปลายทาง เทมเพลต และตำแหน่งของตน เสียงของฉันลงโน้ตรายวันที่ถูกตรง ๆ รูปแบบตรงใจ ไม่ติดขัดเลย”</p>
+          </blockquote>
+          <figcaption><span class="review-author">Eric Know</span> · รีวิว App Store · <time datetime="2026-08-14">14 ส.ค. 2026</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5a77-5cb500000000">
+        <div>
+          <h3>ถูกประเมินต่ำ มองข้าม แต่ไม่ลืม · <span role="img" aria-label="5 จาก 5 ดาว">★★★★★</span></h3>
+          <blockquote><p>“กำลังกลายเป็นหนึ่งในแอปโปรดและใช้บ่อยที่สุดของฉันในปี 2026 อย่างรวดเร็ว!”</p></blockquote>
+          <figcaption><span class="review-author">PromisedOne</span> · รีวิว App Store · <time datetime="2026-08-08">8 ส.ค. 2026</time></figcaption>
+        </div>
+      </figure>
+    </div>
+    <p class="r-fine">รีวิวที่คัดเลือกจาก App Store ข้อความของ Eric เป็นบางส่วนที่ยกมา โดยไม่ได้เปลี่ยนถ้อยคำ <a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_th_8a5edab28263">อ่านรีวิว App Store <span aria-hidden="true">→</span></a></p>
+  </div>
+</section>
+
+<section class="r-section" id="faq" aria-labelledby="faq-title">
+  <div class="r-wrap r-faq">
+    <div class="r-head">
+      <p class="r-file">L214 · faq.md</p>
+      <h2 class="r-h2" id="faq-title" style="font-size: clamp(36px, 4.4vw, 60px)"><span class="r-mark" aria-hidden="true">##</span>เปิด <span class="r-voice">คำถาม</span></h2>
+      <p class="r-lead">Vox.md ทำงานโดยตรงกับโฟลเดอร์ Markdown ที่คุณเลือก Obsidian เข้ากันได้ดีแต่ไม่จำเป็นต้องใช้ ติ๊กหนึ่งข้อเพื่ออ่านคำตอบ</p>
+    </div>
+    <div class="r-faq-list">
+      <details>
+        <summary>Vox.md ใช้กับ Obsidian ได้หรือไม่?</summary>
+        <p>ได้ สร้างเส้นทางและเลือกคลัง Obsidian เป็นปลายทาง Vox.md เขียน Markdown มาตรฐาน wikilink และไฟล์แนบฝังลงคลังโดยตรง ไม่ต้องใช้ปลั๊กอิน Obsidian <a href="/th/compare/vox-md-vs-obsidian-quick-capture/">เปรียบเทียบ Vox.md กับการจดบันทึกในตัวของ Obsidian</a> <a href="/th/blog/obsidian-daily-note-iphone/">ตั้งค่าขั้นตอนจดลงโน้ตรายวัน</a></p>
+      </details>
+      <details>
+        <summary>จดอะไรได้บ้าง?</summary>
+        <p>ตัวเขียนรับข้อความ ลิงก์เว็บ รูปภาพ ไฟล์ สแกนเอกสาร ภาพร่าง และเสียง สแกนมีข้อความที่ดึงได้ และเสียงถอดในเครื่องได้</p>
+      </details>
+      <details>
+        <summary>สิ่งที่จดส่งไปไหนได้บ้าง?</summary>
+        <p>แต่ละเส้นทางมีปลายทางที่สร้างโน้ตใหม่ อัปเดตโน้ตรายวันหรือรายช่วงแบบต่อเนื่อง หรือเขียนลง Markdown ที่มีได้ การจดหนึ่งครั้งเลือกโน้ตอื่นชั่วคราวได้โดยไม่เปลี่ยนเส้นทาง</p>
+      </details>
+      <details>
+        <summary>Vox.md แทรกใต้หัวข้อได้หรือไม่?</summary>
+        <p>ได้ เส้นทางแทรกข้างหน้า ต่อท้าย หรือใต้หัวข้อระดับหนึ่งถึงหกได้ เลือกได้ว่าหัวข้อที่ไม่มีจะหยุดส่งหรือสร้างอัตโนมัติ และให้รายการใหม่ลงใต้หัวข้อทันทีหรือท้ายส่วนนั้น</p>
+      </details>
+      <details>
+        <summary>ใช้โดยไม่มี Obsidian ได้หรือไม่?</summary>
+        <p>ได้ เส้นทางใช้โฟลเดอร์ที่เขียนได้ซึ่งเข้าถึงผ่าน Files ได้ทุกแห่ง ผลลัพธ์เป็น Markdown ธรรมดาพร้อมไฟล์แนบทั่วไป โน้ตจึงไม่ผูกติดกับ Vox.md</p>
+      </details>
+      <details>
+        <summary>Vox.md อัปโหลดโน้ตหรือเสียงหรือไม่?</summary>
+        <p>ไม่มีเนื้อหาที่จดส่งไปเซิร์ฟเวอร์ Vox.md ฉบับร่างและประมวลผลเสียงอยู่บนอุปกรณ์ ไฟล์สำเร็จเขียนโฟลเดอร์ที่เลือก หากโฟลเดอร์เป็นของผู้ให้บริการซิงค์ บริการจัดการตามข้อกำหนดของตน <a href="/th/blog/offline-transcription-iphone-markdown/">ตรวจข้อกำหนดตั้งค่าออฟไลน์</a></p>
+      </details>
+      <details>
+        <summary>ใช้ตำแหน่งในเทมเพลตโดยไม่เพิ่มข้อมูลเมตาได้หรือไม่?</summary>
+        <p>ได้ เปิด ใช้ตำแหน่งปัจจุบัน สำหรับเส้นทางนั้น ปิด เขียนข้อมูลเมตาตำแหน่ง ไว้ แล้วเพิ่ม <code>{location}</code> ในการจัดรูปแบบรายการ Vox.md แทรกลิงก์แผนที่ครั้งเดียวโดยไม่เพิ่ม frontmatter หรือฟิลด์ตำแหน่งในบรรทัด <a href="/th/docs/location/">อ่านคู่มือตำแหน่งทั้งหมด</a></p>
+      </details>
+      <details>
+        <summary>จดนอกแอปได้หรือไม่?</summary>
+        <p>ได้ Vox.md มีวิดเจ็ต การทำงาน Shortcuts ส่วนขยายแชร์ และคีย์บอร์ดเสียง จุดเริ่มเหล่านี้เข้าระบบจดในเครื่องเดียวกัน</p>
+      </details>
+      <details>
+        <summary>Vox.md ราคาเท่าไร?</summary>
+        <p>Vox.md ให้ถอดเสียงฟรี 15 นาทีและส่งสำเร็จ 10 ครั้ง ถอดเสียงและจดไม่จำกัดด้วยซื้อครั้งเดียวตลอดชีพ ไม่มีสมาชิกหรือโฆษณา ข้อความเสียงที่ส่ง Markdown ใช้โควตาถอดเสียง ไม่ใช้โควตาจดซ้ำ App Store แสดงราคาปัจจุบันตามภูมิภาค</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="r-cta" id="download" aria-labelledby="download-title">
+  <div class="r-wrap">
+    <div class="r-cta-card">
+      <h2 id="download-title">วางความคิดถัดไป <span class="r-voice">ในไฟล์</span></h2>
+      <p>เชื่อมคลังหรือโฟลเดอร์ในเครื่องครั้งเดียว ไอเดียถัดไปลงโน้ต หัวข้อ และรูปแบบที่เลือกได้ตรง ๆ</p>
+      <div class="r-actions">
+        <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_th_8a5edab28263">ดาวน์โหลด Vox.md ฟรี</a>
+        <span class="r-note">โควตาฟรี · ปลดล็อกตลอดชีพครั้งเดียว · ไม่ต้องมีบัญชี</span>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="r-wrap r-foot">
+    <span class="r-eof" aria-hidden="true">EOF</span>
+    <ul>
+      <li><a href="/th/developers">นักพัฒนา</a></li>
+      <li><a href="/th/about">เกี่ยวกับ</a></li>
+      <li><a href="/th/contact">ติดต่อ</a></li>
+      <li><a href="/th/docs/">เอกสาร</a></li>
+      <li><a href="/th/blog/">คู่มือ</a></li>
+      <li><a href="/th/compare/">เปรียบเทียบ</a></li>
+      <li><a href="/th/privacy.html">ความเป็นส่วนตัว</a></li>
+      <li><a href="/th/terms.html">ข้อกำหนด</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="mailto:codybontecou@gmail.com">ช่วยเหลือ</a></li>
+      <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_th_8a5edab28263">App Store</a></li>
+    </ul>
+    <p class="r-foot-copy">© 2026 Vox.md · สร้างโดย <a href="https://codybontecou.com/">Cody Bontecou</a> ที่ <a href="https://isolated.tech/">Isolated Tech</a> · ไม่อัปโหลดเนื้อหา</p>
+
+  <details class="language-switcher"><summary>ภาษา</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ar/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/" lang="th" hreflang="th" aria-current="page">ไทย</a></li><li><a href="/tr/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+
+<script>
+/* Hero demo tabs. Without JavaScript the first example shows on its own. */
+(function () {
+  var list = document.querySelector('.r-demo-tabs');
+  if (!list) return;
+  var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+  function select(tab, focus) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { select(tab, false); });
+    tab.addEventListener('keydown', function (ev) {
+      var next = ev.key === 'ArrowRight' ? i + 1 : ev.key === 'ArrowLeft' ? i - 1 : ev.key === 'Home' ? 0 : ev.key === 'End' ? tabs.length - 1 : null;
+      if (next === null) return;
+      ev.preventDefault();
+      select(tabs[(next + tabs.length) % tabs.length], true);
+    });
+  });
+  list.hidden = false;
+})();
+</script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

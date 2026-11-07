@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr" data-search-section="Abschnitt" data-search-guide="Anleitung" data-search-empty="Keine Treffer für „{query}“">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio auf dem iPhone offline in Markdown transkribieren | Vox.md</title>
+  <meta name="description" content="Bereite lokale Transkription in Vox.md vor, nimm Audio auf oder importiere es und speichere Markdown auf dem iPhone. Verstehe Modelldownloads, Ordnerverfügbarkeit und Offline-Prüfungen.">
+  <link rel="canonical" href="https://vox.isolated.tech/de/blog/offline-transcription-iphone-markdown/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-Dokumentation für Sprachmodelle">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Audio auf dem iPhone offline in Markdown transkribieren">
+  <meta property="og:description" content="Bereite lokale Transkription in Vox.md vor, nimm Audio auf oder importiere es und speichere Markdown auf dem iPhone. Verstehe Modelldownloads, Ordnerverfügbarkeit und Offline-Prüfungen.">
+  <meta property="og:url" content="https://vox.isolated.tech/de/blog/offline-transcription-iphone-markdown/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Audio auf dem iPhone offline in Markdown transkribieren">
+  <meta name="twitter:description" content="Bereite lokale Transkription in Vox.md vor, nimm Audio auf oder importiere es und speichere Markdown auf dem iPhone. Verstehe Modelldownloads, Ordnerverfügbarkeit und Offline-Prüfungen.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Audio auf dem iPhone offline in Markdown transkribieren",
+  "description": "Bereite lokale Transkription in Vox.md vor, nimm Audio auf oder importiere es und speichere Markdown auf dem iPhone. Verstehe Modelldownloads, Ordnerverfügbarkeit und Offline-Prüfungen.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/de/blog/offline-transcription-iphone-markdown/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "de",
+  "name": "Audio auf dem iPhone offline in Markdown transkribieren | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/de/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Anleitungen",
+      "item": "https://vox.isolated.tech/de/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Audio auf dem iPhone offline in Markdown transkribieren",
+      "item": "https://vox.isolated.tech/de/blog/offline-transcription-iphone-markdown/"
+    }
+  ],
+  "inLanguage": "de",
+  "name": "Audio auf dem iPhone offline in Markdown transkribieren | Vox.md",
+  "description": "Bereite lokale Transkription in Vox.md vor, nimm Audio auf oder importiere es und speichere Markdown auf dem iPhone. Verstehe Modelldownloads, Ordnerverfügbarkeit und Offline-Prüfungen."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/offline-transcription-iphone-markdown/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Zur Anleitung springen</a>
+<nav aria-label="Hauptnavigation">
+  <div class="nav-inner">
+    <a href="/de/" class="logo" aria-label="Vox.md-Startseite">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/de/#how">So funktioniert es</a></li>
+      <li><a href="/de/docs/">Dokumentation</a></li>
+      <li><a href="/de/blog/">Anleitungen</a></li>
+      <li><a href="/de/compare/">Vergleichen</a></li>
+      <li><a href="/de/privacy.html">Datenschutz</a></li>
+      <li><a href="/de/terms.html">Bedingungen</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_de_1483aca5c728">Vox.md laden</a>
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/blog/offline-transcription-iphone-markdown/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/offline-transcription-iphone-markdown/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/offline-transcription-iphone-markdown/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/offline-transcription-iphone-markdown/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/blog/offline-transcription-iphone-markdown/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/offline-transcription-iphone-markdown/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/offline-transcription-iphone-markdown/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/offline-transcription-iphone-markdown/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/offline-transcription-iphone-markdown/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/offline-transcription-iphone-markdown/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/offline-transcription-iphone-markdown/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/offline-transcription-iphone-markdown/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/offline-transcription-iphone-markdown/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/offline-transcription-iphone-markdown/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/offline-transcription-iphone-markdown/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/offline-transcription-iphone-markdown/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/offline-transcription-iphone-markdown/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/offline-transcription-iphone-markdown/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/offline-transcription-iphone-markdown/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/offline-transcription-iphone-markdown/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/offline-transcription-iphone-markdown/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/offline-transcription-iphone-markdown/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/offline-transcription-iphone-markdown/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">iPhone · Lokale Transkription · Markdown</div>
+        <h1 class="hero-title">Audio auf dem iPhone offline in Markdown transkribieren</h1>
+        <p class="hero-subtitle">Bereite das Sprach-Backend und ein lokales Ziel vor, bevor du sie brauchst. Behandle Transkription und Dateisynchronisierung als getrennte Entscheidungen.</p>
+      </div>
+      <aside class="meta-card" aria-label="Über diese Anleitung">
+        <dl>
+          <div><dt>Von</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Aktualisiert</dt><dd><time datetime="2026-10-26">26. Oktober 2026</time></dd></div>
+          <div><dt>Erfordert</dt><dd>Vorbereitetes Backend · beschreibbarer Ordner</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Audio auf dem iPhone offline in Markdown transkribieren">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Die kurze Antwort</div>
+        <p>Vox.md transkribiert auf deinem Gerät mit einem verfügbaren Apple Speech-Backend oder einem ausdrücklich heruntergeladenen Whisper- oder Parakeet-Modell. Zum Speichern des Transkripts als Markdown im Offlinebetrieb brauchst du auch einen lokal verfügbaren, beschreibbaren Ordner. Bereite beides vor dem Trennen der Verbindung vor.</p>
+      </div>
+      <p>„Lokale Transkription“ beschreibt, wo die Erkennung läuft. Sie verspricht nicht, dass ein Modell bereits installiert, jede Sprache unterstützt oder ein cloudgestützter Ordner offline verfügbar ist. Diese Anleitung erklärt die Einrichtung und eine Prüfung, die du auf deinem eigenen Telefon durchführen kannst; sie ist kein Bericht über Flugmodustests auf jedem unterstützten Gerät.</p>
+      <nav class="toc" aria-label="In dieser Anleitung"><div class="toc-title">In dieser Anleitung</div><ol>
+        <li><a href="#prepare">Ein Sprach-Backend vorbereiten</a></li>
+        <li><a href="#destination">Das Markdown-Ziel wählen</a></li>
+        <li><a href="#transcribe">Audio aufnehmen oder importieren</a></li>
+        <li><a href="#offline-check">Den vollständigen Ablauf offline prüfen</a></li>
+        <li><a href="#limitations">Datenschutz- und Verfügbarkeitsgrenzen verstehen</a></li>
+      </ol></nav>
+
+      <h2 id="prepare">1. Ein Sprach-Backend mit Verbindung vorbereiten</h2>
+      <p>Öffne die Vox.md-Modelleinstellungen und wähle ein Backend, das für dein Gerät und deine Sprache verfügbar ist. „Automatisch“ bevorzugt Apple Speech auf unterstützten iOS 26-Geräten und in unterstützten Sprachen. Optionale Whisper- und Parakeet-Modelle werden nach deiner Auswahl heruntergeladen.</p>
+      <p>Schließe Modelldownloads und die Vorbereitung der Systemsprache ab, bevor du offline gehst. „Automatisch“ lädt keinen Whisper- oder Parakeet-Ersatz unbemerkt herunter; es kann nur ein Ersatzmodell verwenden, dessen Download du bereits gewählt hast. Wenn kein Backend bereit ist, macht das Trennen der Verbindung auch keines verfügbar.</p>
+      <p>Explizit gewählte Whisper- und Parakeet-Modelle transkribieren nach dem Aufnahmestopp. Live-Apple Speech kann auf unterstützten Geräten vorläufigen und endgültigen Text anzeigen. Eine Live-Vorschau ist zur Erstellung eines Markdown-Transkripts nicht erforderlich.</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/05-settings-local-360.webp" alt="Vox.md-Einstellungen für lokale Sprachmodelle und Verarbeitung" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>Wähle und bereite ein lokales Backend vor, solange du verbunden bist. Verfügbare Modelle und Einstellungen hängen von der installierten Version und dem Gerät ab.</figcaption>
+      </figure>
+      <p>Die Modellwahl verändert Speicherbedarf, Verarbeitungszeit, Sprachabdeckung und Erkennungsqualität. Prüfe die <a href="/de/docs/#models">Modellreferenz</a> statt anzunehmen, dass ein größeres Modell unterstützt wird oder eine Option jede Sprache erkennt.</p>
+
+      <h2 id="destination">2. Das Markdown-Ziel wählen</h2>
+      <p>Erstelle oder wähle ein Aufnahme-Preset und verbinde es über Dateien mit einem Ordner. Verwende beim ersten Test „Neue Notiz“ als Ziel, damit die Ausgabe leicht zu erkennen ist. „Original behalten“ ist ein nützlicher Ausgangspunkt, wenn du das Transkript ohne optionale Überarbeitung möchtest.</p>
+      <p>Stelle sicher, dass das Ziel lokal verfügbar ist und Schreibzugriff erlaubt. Ein in Dateien sichtbarer Ordnername bedeutet nicht unbedingt, dass seine Inhalte heruntergeladen sind. Wenn du einen Obsidian-Vault wählst, muss er für Vox.md über die Auswahl zugänglich sein; Vox.md verbindet sich nicht direkt mit dem Obsidian Sync-Dienst.</p>
+      <p>Für die detaillierte Ordnereinrichtung folge <a href="/de/blog/voice-notes-to-obsidian-iphone/">iPhone-Sprachnotizen in Obsidian speichern</a>. Ein einfacher beschreibbarer Markdown-Ordner funktioniert ebenfalls; Obsidian ist für Transkription nicht erforderlich.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_1483aca5c728">Vox.md kostenlos laden</a></p>
+      <p>Teste 15 Transkriptionsminuten und 10 erfolgreiche Erfassungszustellungen. Unbegrenzte Nutzung ist ein einmaliger Kauf auf Lebenszeit. Richte Käufe oder Modelle mit Verbindung ein, statt darauf zu vertrauen, dass eine neue Einrichtung offline abgeschlossen wird.</p>
+
+      <p>Du beginnst mit Apple Sprachmemos? Folge der <a href="/de/blog/transcribe-voice-memos-iphone/">Sprachmemos-Auswahl für Transkript- und Audioexport</a> bevor du die Aufnahme importierst.</p>
+<h2 id="transcribe">3. Audio aufnehmen oder importieren</h2>
+      <ol>
+        <li>Öffne Schnelle Erfassung und wähle die Voreinstellung mit deinem vorbereiteten Ziel. Wähle <strong>Zum Entwurf hinzufügen</strong> in der Sprachsteuerung vor dem Start, damit du das erste Transkript prüfen kannst.</li>
+        <li>Nimm eine kurze Sprachnotiz auf oder verwende <strong>Audio oder Video importieren</strong> in der Sprachsteuerung, um eine vorhandene unterstützte Datei auszuwählen.</li>
+        <li>Lass das gewählte Backend die Erkennung abschließen, prüfe das Transkript im Entwurf und tippe dann auf „Senden“.</li>
+        <li>Prüfe, ob die Zustellung abgeschlossen ist, und öffne dann die Markdown-Datei am Ziel.</li>
+      </ol>
+      <p>Eine kurze Aufnahme könnte diesen beispielhaften Notiztext ergeben:</p>
+      <pre class="guide-code"><code>Review the outline before the next meeting.</code></pre>
+      <p>Der tatsächliche Wortlaut und die Zeichensetzung hängen von Erkennung und Verarbeitung ab. Behalte das Quellaudio, wenn du eine Referenz brauchst, und gleiche wichtige Transkripte damit ab. Die optionale Überarbeitung hat eigene Geräteanforderungen und Ersatzverfahren; Transkription auf dem Gerät bedeutet nicht, dass Apple Intelligence-Verarbeitung auf jedem unterstützten Telefon verfügbar ist.</p>
+
+      <h2 id="offline-check">Den vollständigen Ablauf offline prüfen</h2>
+      <p>Wiederhole nach einer erfolgreichen Erfassung mit Verbindung einen kleinen Test ohne Verbindung. Wenn du den Flugmodus verwendest, prüfe, ob auch WLAN aus ist.</p>
+      <ol>
+        <li>Bestätige, dass das gewählte Backend vorbereitet wurde und das Ziel lokal verfügbar ist.</li>
+        <li>Trenne die Verbindung, erstelle eine neue kurze Aufnahme und warte auf die Transkription.</li>
+        <li>Prüfe und sende das Transkript. Prüfe die fertige Markdown-Datei, während die Verbindung noch getrennt ist.</li>
+        <li>Verbinde dich wieder, wenn du bereit bist, und prüfe getrennt eine etwaige Synchronisierung mit einem anderen Gerät.</li>
+      </ol>
+      <p>Erfolg bedeutet, dass sowohl Erkennung als auch lokales Schreiben abgeschlossen sind. Ein sichtbares Transkript im Entwurf beweist die erfolgreiche Erkennung; eine Erfassung in der Warteschlange beweist noch keinen erfolgreichen Schreibvorgang am Ziel. Schlägt die Zustellung fehl, behalte die wiederherstellbare Erfassung und versuche es nach Wiederherstellung des Ordnerzugriffs erneut, statt eine weitere Kopie der Aufnahme anzulegen.</p>
+
+      <h2 id="limitations">Datenschutz- und Verfügbarkeitsgrenzen verstehen</h2>
+      <p>Vox.md lädt kein Audio zur Transkription hoch. Wenn du das entstandene Transkript oder aufbewahrtes Audio bewusst in einem cloudgestützten Ordner speicherst, kann dessen Anbieter die Synchronisierung nach eigenen Bedingungen übernehmen. Halte das Ziel lokal, wenn diese Datei nicht über einen Anbieter synchronisiert werden soll.</p>
+      <p>Lange Aufnahmen, verfügbarer Speicher, Audioqualität und Modellunterstützung beeinflussen die praktischen Ergebnisse. Diese Anleitung trifft keine allgemeine Aussage zu Transkriptionsgeschwindigkeit oder -genauigkeit. Prüfe sensible oder folgenreiche Formulierungen, bevor du sie verwendest.</p>
+      <p>Bei Watch-Aufnahmen verwendet die <a href="/de/blog/apple-watch-obsidian-voice-notes/">das gekoppelte iPhone übernimmt weiterhin Transkription und Zustellung</a>. Eine Aufnahme auf der Watch zu behalten, während das Telefon nicht verfügbar ist, bedeutet verzögerte Zustellung, nicht eigenständige Transkription auf der Watch.</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Einmal vorbereiten.<br>Prüfe es, bevor du die Verbindung trennst.</h2>
+        <p>Beginne mit einer kurzen Aufnahme und einem zugänglichen lokalen Ordner und prüfe dann die vollständige Markdown-Ausgabe.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_1483aca5c728">Vox.md kostenlos laden</a></p>
+      </section>
+      <nav class="toc" aria-label="Verwandte Anleitungen"><div class="toc-title">Einrichtung fortsetzen</div><ul>
+        <li><a href="/de/blog/voice-notes-to-obsidian-iphone/">iPhone-Sprachnotizen in Obsidian</a></li>
+        <li><a href="/de/blog/obsidian-capture-templates/">Eingangs-, Journal- und Aufgabeneinträge formatieren</a></li>
+        <li><a href="/de/docs/#models">Backend-Voraussetzungen und Sprachoptionen</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/de/">Startseite</a></li>
+        <li><a href="/de/docs/">Dokumentation</a></li>
+        <li><a href="/de/blog/">Anleitungen</a></li>
+        <li><a href="/de/compare/">Vergleichen</a></li>
+        <li><a href="/de/privacy.html">Datenschutz</a></li>
+        <li><a href="/de/terms.html">Bedingungen</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Unterstützung</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_1483aca5c728">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Schnellerfassung für lokale Notizen · Keine Inhaltsuploads.</div>
+    </div>
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/blog/offline-transcription-iphone-markdown/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/offline-transcription-iphone-markdown/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/offline-transcription-iphone-markdown/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/offline-transcription-iphone-markdown/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/blog/offline-transcription-iphone-markdown/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/offline-transcription-iphone-markdown/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/offline-transcription-iphone-markdown/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/offline-transcription-iphone-markdown/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/offline-transcription-iphone-markdown/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/offline-transcription-iphone-markdown/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/offline-transcription-iphone-markdown/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/offline-transcription-iphone-markdown/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/offline-transcription-iphone-markdown/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/offline-transcription-iphone-markdown/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/offline-transcription-iphone-markdown/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/offline-transcription-iphone-markdown/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/offline-transcription-iphone-markdown/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/offline-transcription-iphone-markdown/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/offline-transcription-iphone-markdown/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/offline-transcription-iphone-markdown/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/offline-transcription-iphone-markdown/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/offline-transcription-iphone-markdown/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/offline-transcription-iphone-markdown/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

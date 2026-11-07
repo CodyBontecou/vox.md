@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-search-section="Sección" data-search-guide="Guía" data-search-empty="Sin resultados para «{query}»">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cómo guardar notas de voz del iPhone en Obsidian | Vox.md</title>
+  <meta name="description" content="Graba una nota de voz en iPhone, transcríbela en el dispositivo y guarda Markdown en tu bóveda de Obsidian. Configura notas nuevas o enrutamiento a notas diarias con Vox.md.">
+  <link rel="canonical" href="https://vox.isolated.tech/es/blog/voice-notes-to-obsidian-iphone/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Documentación de Vox.md para modelos de lenguaje">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Cómo guardar notas de voz del iPhone en Obsidian">
+  <meta property="og:description" content="Graba una nota de voz en iPhone, transcríbela en el dispositivo y guarda Markdown en tu bóveda de Obsidian. Configura notas nuevas o enrutamiento a notas diarias con Vox.md.">
+  <meta property="og:url" content="https://vox.isolated.tech/es/blog/voice-notes-to-obsidian-iphone/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cómo guardar notas de voz del iPhone en Obsidian">
+  <meta name="twitter:description" content="Graba una nota de voz en iPhone, transcríbela en el dispositivo y guarda Markdown en tu bóveda de Obsidian. Configura notas nuevas o enrutamiento a notas diarias con Vox.md.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Cómo guardar notas de voz del iPhone en Obsidian",
+  "description": "Graba una nota de voz en iPhone, transcríbela en el dispositivo y guarda Markdown en tu bóveda de Obsidian. Configura notas nuevas o enrutamiento a notas diarias con Vox.md.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/es/blog/voice-notes-to-obsidian-iphone/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "es",
+  "name": "Cómo guardar notas de voz del iPhone en Obsidian | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/es/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guías",
+      "item": "https://vox.isolated.tech/es/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo guardar notas de voz del iPhone en Obsidian",
+      "item": "https://vox.isolated.tech/es/blog/voice-notes-to-obsidian-iphone/"
+    }
+  ],
+  "inLanguage": "es",
+  "name": "Cómo guardar notas de voz del iPhone en Obsidian | Vox.md",
+  "description": "Graba una nota de voz en iPhone, transcríbela en el dispositivo y guarda Markdown en tu bóveda de Obsidian. Configura notas nuevas o enrutamiento a notas diarias con Vox.md."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/voice-notes-to-obsidian-iphone/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Saltar a la guía</a>
+<nav aria-label="Navegación principal">
+  <div class="nav-inner">
+    <a href="/es/" class="logo" aria-label="inicio de Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/es/#how">Cómo funciona</a></li>
+      <li><a href="/es/docs/">Documentación</a></li>
+      <li><a href="/es/blog/">Guías</a></li>
+      <li><a href="/es/compare/">Comparar</a></li>
+      <li><a href="/es/privacy.html">Privacidad</a></li>
+      <li><a href="/es/terms.html">Términos</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_es_45e81e2e5027">Descargar Vox.md</a>
+  <details class="language-switcher"><summary>Idioma</summary><ul><li><a href="/blog/voice-notes-to-obsidian-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/voice-notes-to-obsidian-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/voice-notes-to-obsidian-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/voice-notes-to-obsidian-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/voice-notes-to-obsidian-iphone/" lang="es" hreflang="es" aria-current="page">Español</a></li><li><a href="/fr/blog/voice-notes-to-obsidian-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/voice-notes-to-obsidian-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/voice-notes-to-obsidian-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/voice-notes-to-obsidian-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/voice-notes-to-obsidian-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/voice-notes-to-obsidian-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/voice-notes-to-obsidian-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/voice-notes-to-obsidian-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/voice-notes-to-obsidian-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/voice-notes-to-obsidian-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/voice-notes-to-obsidian-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/voice-notes-to-obsidian-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/voice-notes-to-obsidian-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/voice-notes-to-obsidian-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/voice-notes-to-obsidian-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/voice-notes-to-obsidian-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Notas de voz en iPhone · Obsidian · Markdown local</div>
+        <h1 class="hero-title">Cómo guardar notas de voz del iPhone en Obsidian</h1>
+        <p class="hero-subtitle">Di una idea, transcríbela en tu iPhone y coloca el texto en la bóveda, nota o encabezado que elijas.</p>
+      </div>
+      <aside class="meta-card" aria-label="Acerca de esta guía">
+        <dl>
+          <div><dt>Por</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Actualizado</dt><dd><time datetime="2026-10-26">26 de octubre de 2026</time></dd></div>
+          <div><dt>Requiere</dt><dd>iPhone · iOS 17.6+</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Cómo guardar notas de voz del iPhone en Obsidian">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer">
+        <div class="label">La respuesta breve</div>
+        <p>En Vox.md, conecta un Capturar Prep a una carpeta de bóveda de Obsidian, prepara un motor de transcripción local y graba en Rápido captura. Envía la transcripción a una nota Markdown nueva o añádela a una nota existente o diaria. No necesitas ningún complemento de Obsidian ni una cuenta de Vox.md.</p>
+      </div>
+      <p>Obsidian también tiene herramientas de captura nativas. <a href="#native-obsidian">Comprueba la opción integrada que se muestra abajo</a> antes de instalar otra app. Vox.md resulta útil si quieres sus preajustes de captura, sus opciones de modelos de voz locales y texto, contenido multimedia y voz en el mismo flujo.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_es_45e81e2e5027">Descargar Vox.md gratis</a></p>
+      <p>Prueba 15 minutos de transcripción y 10 entregas de Captura completadas. El uso ilimitado se obtiene con una compra única de por vida; el App Store muestra el precio de tu región.</p>
+      <nav class="toc" aria-label="En esta guía">
+        <div class="toc-title">En esta guía</div>
+        <ol>
+          <li><a href="#before-you-start">Antes de empezar</a></li>
+          <li><a href="#connect-vault">Conecta tu bóveda de Obsidian</a></li>
+          <li><a href="#transcription">Prepara la transcripción local</a></li>
+          <li><a href="#record">Graba y guarda una nota de voz</a></li>
+          <li><a href="#daily-note">Envía voz a una nota diaria o a un encabezado</a></li>
+          <li><a href="#native-obsidian">Cuándo basta con lo que incluye Obsidian</a></li>
+          <li><a href="#troubleshooting">Resolución de problemas y uso sin conexión</a></li>
+        </ol>
+      </nav>
+
+      <h2 id="before-you-start">Antes de empezar</h2>
+      <ul>
+        <li><strong>Un iPhone con iOS 17.6 o posterior.</strong> Los motores de voz disponibles dependen de tu dispositivo, sistema operativo e idioma. Apple Speech en directo requiere un dispositivo e idioma compatibles con iOS 26.</li>
+        <li><strong>Una carpeta de bóveda que puedas seleccionar mediante Archivos.</strong> Vox.md necesita permiso para escribir en esa carpeta. Una bóveda visible dentro de Obsidian no está necesariamente disponible para otras apps mediante Archivos.</li>
+        <li><strong>Un motor de transcripción preparado.</strong> automático puede necesitar preparar el idioma; los modelos opcionales Whisper o Parakeet necesitan una descarga inicial. Prepáralos con conexión antes de depender de la transcripción sin conexión.</li>
+        <li><strong>Permiso de micrófono.</strong> El teclado es opcional para esta guía. Puedes grabar en la app principal sin activar un teclado personalizado ni Acceso total.</li>
+      </ul>
+      <p>Si usas Obsidian Sync, comprueba si la carpeta de tu bóveda es accesible en el selector de Archivos. Vox.md escribe archivos; no se conecta a Obsidian Sync como servicio. No cambies una configuración de sincronización existente ni combines proveedores solo para seguir esta guía.</p>
+
+      <h2 id="connect-vault">1. Conecta tu bóveda de Obsidian</h2>
+      <ol>
+        <li>Abre Vox.md. En Rápido captura, selecciona un Capturar Prep. Puedes usar un preajuste existente o crear uno en <strong>Ajustes → Preajustes de captura</strong>.</li>
+        <li>elegir <strong>Establecer el destino</strong> si el preajuste no tiene destino. Usa el selector de Archivos para elegir la carpeta que contiene los archivos Markdown de tu bóveda.</li>
+        <li>Empieza con una <strong>Nueva nota</strong> como destino para que cada captura cree su propio archivo. Elige una subcarpeta de entrada si quieres reunir estas notas.</li>
+        <li>Comprueba la vista previa del destino antes de guardar. Para tu primera captura, usa <strong>Conservar original</strong> como procesamiento para que un paso opcional no reescriba la transcripción.</li>
+      </ol>
+      <p>El preajuste recuerda el destino. Las capturas posteriores pueden usar la misma ruta. Consulta la <a href="/es/docs/#presets">referencia de preajustes y destinos</a> para ver plantillas, carpetas de adjuntos y reglas de inserción.</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/00-capture-light-640.webp" alt="Editor Rápido captura de Vox.md con controles de voz y destino" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>El editor Rápido captura. Elige tu preajuste y destino antes de grabar. Las etiquetas pueden variar según la versión de la app.</figcaption>
+      </figure>
+
+      <h2 id="transcription">2. Prepara la transcripción local</h2>
+      <p>Abre los ajustes de modelos y elige un motor compatible con tu teléfono e idioma. Vox.md admite Apple Speech y modelos opcionales Whisper y Parakeet. Completa la preparación o descarga del modelo antes de realizar tu primera grabación.</p>
+      <p>Con Automático en dispositivos compatibles con iOS 26, Apple Speech puede mostrar texto mientras grabas. Los modelos Whisper y Parakeet seleccionados explícitamente transcriben después de detener la grabación. No es necesaria una vista previa en directo para guardar una nota de voz.</p>
+      <p>La transcripción en el dispositivo no requiere una cuenta de transcripción en la nube. La disponibilidad de modelos, la calidad del reconocimiento y el tiempo de procesamiento varían. Lee la <a href="/es/docs/#models">requisitos de modelos y pasos de preparación</a> si tu motor preferido no está disponible.</p>
+
+      <h2 id="record">3. Graba y guarda una nota de voz</h2>
+      <ol>
+        <li>Selecciona tu preajuste configurado en Rápido captura. Antes de grabar, elige <strong>Añadir al borrador</strong> en los controles de voz para poder revisar la primera transcripción y empieza a grabar.</li>
+        <li>Di una idea corta, como «Recuerda pedir cita con el dentista». Detén la grabación cuando termines.</li>
+        <li>Con Añadir al borrador seleccionado, espera a la transcripción, corrige los errores de reconocimiento en el editor y toca <strong>Envío</strong>. Si eliges <strong>Enviar inmediatamente</strong> antes de grabar, en cambio, el preajuste envía la transcripción por su ruta al terminar la grabación.</li>
+        <li>Confirma la entrega en Vox.md y después abre la carpeta de destino en Obsidian y comprueba la nota nueva.</li>
+      </ol>
+      <p>Para una transcripción simple con procesamiento Conservar original, el cuerpo de la nota podría tener este aspecto. Es un ejemplo ilustrativo, no una promesa de reconocimiento ni puntuación exactos:</p>
+      <pre class="guide-code"><code>Remember to book the dentist.</code></pre>
+      <p>El nombre de archivo y los metadatos iniciales proceden del preajuste. Puedes conservar el audio de origen si lo quieres como adjunto; una transcripción no necesita un audio adjunto para ser útil en Obsidian.</p>
+      <p>El teclado sigue otro camino: inserta el texto dictado en el campo de texto activo. Para enviar voz mediante un Capturar Prep a un archivo Markdown, usa el flujo de captura descrito aquí. Consulta la <a href="/es/blog/best-voice-to-text-keyboard-iphone/">guía del teclado privado para iPhone</a> para dictar en otras apps.</p>
+
+      <h2 id="daily-note">Envía voz a una nota diaria o a un encabezado</h2>
+      <p>Una vez que funcione una captura a nota nueva, edita el destino del preajuste para usar una <strong>Rolling Note</strong> con el período diario. Sigue la carpeta y el formato de nombre de archivo que ya usen tus notas diarias de Obsidian. Vox.md no detecta automáticamente los ajustes del complemento Daily Notes.</p>
+      <p>Para reunir las tareas dictadas, elige insertar bajo un encabezado de nivel dos llamado <strong>Tasks</strong> como encabezado. Elige si Vox.md debe crear ese encabezado cuando falte y si las entradas corresponden al principio o al final de la sección. Un preajuste orientado a tareas puede usar el procesamiento Lista de tareas; usa Conservar original para prosa.</p>
+      <p>Por ejemplo, un preajuste diario de tareas dirigido a <code>Journal/2026-10-26.md</code> podría producir:</p>
+      <pre class="guide-code"><code>## Tasks
+- Remember to book the dentist.</code></pre>
+      <p>Este ejemplo muestra una salida configurada, no un formato predeterminado. Conserva tu convención de fechas y revisa la vista previa del destino para no crear otra nota diaria por accidente. Para una única bandeja de entrada continua, elige en su lugar una <strong>Nota existente</strong> y añade el contenido allí.</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="Ajustes de destino de Vox.md para seleccionar notas y ubicarlas en encabezados" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>Usa los ajustes de destino para elegir una nota y un punto de inserción. Adapta la ruta a las convenciones existentes de tu bóveda.</figcaption>
+      </figure>
+
+      <h2 id="native-obsidian">Cuándo basta con lo que incluye Obsidian</h2>
+      <p>de Obsidian <a href="https://obsidian.md/help/ios">guía oficial de iOS</a> documenta la captura rápida nativa en la versión 1.14 o posterior con iOS 26 o posterior. Puede crear o actualizar notas desde widgets y Atajos. Si solo necesitas capturar texto básico en tu bóveda, empieza ahí.</p>
+      <p>La <a href="https://obsidian.md/changelog/2026-10-22-mobile-v1.15.0/">Anuncio del 22 de octubre de 2026 sobre el acceso anticipado móvil de Obsidian 1.15</a> también añade transcripción de voz y grabaciones guardadas, incluida la captura desde la pantalla bloqueada en iOS 26. A fecha de la actualización de esta guía, el 26 de octubre, ese anuncio corresponde al canal de acceso anticipado; comprueba la disponibilidad en tu versión instalada.</p>
+      <p>Elige Vox.md si quieres su combinación de opciones de motores de voz locales, procesamiento y enrutamiento de capturas configurables y mezcla de texto, fotos, escaneos, archivos y voz. También puedes usarlo con una carpeta Markdown con permiso de escritura que no sea una bóveda de Obsidian. Ninguna app tiene que sustituir a la otra: Obsidian puede seguir siendo el lugar donde organizas y lees tus notas.</p>
+
+      <h2 id="troubleshooting">Resolución de problemas y uso sin conexión</h2>
+      <h3>La bóveda no aparece en Archivos</h3>
+      <p>Confirma que la carpeta esté disponible mediante un proveedor de archivos y que otra app pueda seleccionarla. Si no es accesible, usa una carpeta con permiso de escritura y mueve manualmente una nota Markdown de prueba a Obsidian para evaluar el flujo. No des por hecho que Vox.md puede acceder a una bóveda de Obsidian Sync.</p>
+      <h3>La transcripción falta o es imprecisa</h3>
+      <p>Comprueba el acceso al micrófono, la preparación del motor y la compatibilidad de idioma. El texto en directo de Apple Speech depende de combinaciones compatibles de sistema y dispositivo; los modelos descargados pueden funcionar de otra manera. Revisa el texto importante antes de enviar. Consulta <a href="/es/docs/#models">Modelos y transcripción</a> para ver las opciones disponibles.</p>
+      <h3>Una captura está pendiente o no se pudo guardar</h3>
+      <p>Comprueba los permisos de destino y la disponibilidad del proveedor de archivos. Revisa el elemento pendiente o fallido y reintenta después de corregir el destino, en lugar de hacer otra captura de la misma idea. Vox.md conserva los datos de entrega pendientes para recuperarlos. Consulta <a href="/es/docs/#troubleshooting">resolución de problemas de entrega</a>.</p>
+      <h3>¿Puedo hacerlo sin conexión?</h3>
+      <p>La transcripción de voz se ejecuta en tu dispositivo una vez preparado el motor. Escribir la nota también depende de que la carpeta seleccionada esté disponible localmente y permita escribir. Una carpeta en la nube puede necesitar conexión para acceder a los archivos o sincronizarlos después. La transcripción local no implica que el proveedor de sincronización que elijas nunca reciba la nota terminada.</p>
+      <h3>¿Una nota de voz usa ambos cupos gratuitos?</h3>
+      <p>Una transcripción de voz enviada a Markdown utiliza el cupo de transcripción, sin consumir además una entrega de Captura. La descarga gratuita incluye 15 minutos de transcripción y 10 entregas de Captura completadas para otros flujos. El uso ilimitado se obtiene con una compra única de por vida.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Tu próxima idea puede llegar a la nota correcta.</h2>
+        <p>Conecta una carpeta, prepara la transcripción local y prueba una captura de voz corta antes de crear un preajuste más detallado.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_es_45e81e2e5027">Descargar Vox.md gratis</a></p>
+        <p>Cupos gratuitos · sin cuenta · un desbloqueo de por vida</p>
+      </section>
+      <p><a href="/es/blog/obsidian-quick-capture-iphone/">Elige entre métodos de captura en iPhone</a>, o <a href="/es/compare/vox-md-vs-obsidian-quick-capture/">compara Obsidian nativo con Vox.md</a>.</p>
+      <nav class="toc" aria-label="Guías relacionadas">
+        <div class="toc-title">Continúa la configuración</div>
+        <ul>
+          <li><a href="/es/blog/offline-transcription-iphone-markdown/">Prepara la transcripción y un destino Markdown para usarlos sin conexión</a></li>
+          <li><a href="/es/blog/append-to-obsidian-daily-note-iphone/">Añade texto y voz bajo un encabezado de nota diaria</a></li>
+          <li><a href="/es/blog/apple-watch-obsidian-voice-notes/">Envía grabaciones del Apple Watch a Obsidian</a></li>
+          <li><a href="/es/docs/#presets">Preajustes de captura y destinos Markdown</a></li>
+          <li><a href="/es/docs/#models">Modelos de voz locales e idiomas</a></li>
+          <li><a href="/es/blog/best-voice-to-text-keyboard-iphone/">Dictado de voz privado en otras apps de iPhone</a></li>
+        </ul>
+      </nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/es/">Inicio</a></li>
+        <li><a href="/es/docs/">Documentación</a></li>
+        <li><a href="/es/blog/">Guías</a></li>
+        <li><a href="/es/compare/">Comparar</a></li>
+        <li><a href="/es/privacy.html">Privacidad</a></li>
+        <li><a href="/es/terms.html">Términos</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Asistencia</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_es_45e81e2e5027">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Captura rápida para notas locales · Sin subir contenido.</div>
+    </div>
+  <details class="language-switcher"><summary>Idioma</summary><ul><li><a href="/blog/voice-notes-to-obsidian-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/voice-notes-to-obsidian-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/voice-notes-to-obsidian-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/voice-notes-to-obsidian-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/voice-notes-to-obsidian-iphone/" lang="es" hreflang="es" aria-current="page">Español</a></li><li><a href="/fr/blog/voice-notes-to-obsidian-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/voice-notes-to-obsidian-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/voice-notes-to-obsidian-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/voice-notes-to-obsidian-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/voice-notes-to-obsidian-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/voice-notes-to-obsidian-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/voice-notes-to-obsidian-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/voice-notes-to-obsidian-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/voice-notes-to-obsidian-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/voice-notes-to-obsidian-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/voice-notes-to-obsidian-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/voice-notes-to-obsidian-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/voice-notes-to-obsidian-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/voice-notes-to-obsidian-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/voice-notes-to-obsidian-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/voice-notes-to-obsidian-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

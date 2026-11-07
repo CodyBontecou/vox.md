@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" dir="ltr" data-search-section="段落" data-search-guide="指南" data-search-empty="沒有與“{query}”匹配的結果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>將 iPhone 語音備忘錄轉錄為 Markdown | Vox.md</title>
+  <meta name="description" content="複製 Apple 語音備忘錄轉錄文字，或將錄音匯入 Vox.md，進行裝置端轉錄並輸出 Markdown。檢查模型、資料夾和音訊限制。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hant/blog/transcribe-voice-memos-iphone/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供語言模型使用的 Vox.md 文件">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="將 iPhone 語音備忘錄轉錄為 Markdown">
+  <meta property="og:description" content="複製 Apple 語音備忘錄轉錄文字，或將錄音匯入 Vox.md，進行裝置端轉錄並輸出 Markdown。檢查模型、資料夾和音訊限制。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hant/blog/transcribe-voice-memos-iphone/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-10-30">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="將 iPhone 語音備忘錄轉錄為 Markdown">
+  <meta name="twitter:description" content="複製 Apple 語音備忘錄轉錄文字，或將錄音匯入 Vox.md，進行裝置端轉錄並輸出 Markdown。檢查模型、資料夾和音訊限制。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "將 iPhone 語音備忘錄轉錄為 Markdown",
+  "description": "複製 Apple 語音備忘錄轉錄文字，或將錄音匯入 Vox.md，進行裝置端轉錄並輸出 Markdown。檢查模型、資料夾和音訊限制。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-10-30",
+  "dateModified": "2026-10-30",
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hant/blog/transcribe-voice-memos-iphone/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "zh-Hant",
+  "name": "將 iPhone 語音備忘錄轉錄為 Markdown | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hant/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "指南",
+      "item": "https://vox.isolated.tech/zh-hant/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "將 iPhone 語音備忘錄轉錄為 Markdown",
+      "item": "https://vox.isolated.tech/zh-hant/blog/transcribe-voice-memos-iphone/"
+    }
+  ],
+  "inLanguage": "zh-Hant",
+  "name": "將 iPhone 語音備忘錄轉錄為 Markdown | Vox.md",
+  "description": "複製 Apple 語音備忘錄轉錄文字，或將錄音匯入 Vox.md，進行裝置端轉錄並輸出 Markdown。檢查模型、資料夾和音訊限制。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-voice-memos-iphone/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳至指南</a>
+<nav aria-label="主導航">
+  <div class="nav-inner">
+    <a href="/zh-hant/" class="logo" aria-label="Vox.md 首頁">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hant/#how">工作原理</a></li>
+      <li><a href="/zh-hant/docs/">文件</a></li>
+      <li><a href="/zh-hant/blog/">指南</a></li>
+      <li><a href="/zh-hant/compare/">比較</a></li>
+      <li><a href="/zh-hant/privacy.html">隱私</a></li>
+      <li><a href="/zh-hant/terms.html">條款</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_36c0cc133580">下載 Vox.md</a>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/transcribe-voice-memos-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-voice-memos-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-voice-memos-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-voice-memos-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-voice-memos-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-voice-memos-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-voice-memos-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-voice-memos-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-voice-memos-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-voice-memos-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-voice-memos-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-voice-memos-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-voice-memos-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-voice-memos-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-voice-memos-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-voice-memos-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-voice-memos-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-voice-memos-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-voice-memos-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-voice-memos-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-voice-memos-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-voice-memos-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-voice-memos-iphone/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">iPhone · 語音備忘錄 · Markdown</div>
+        <h1 class="hero-title">將 iPhone 語音備忘錄轉錄為 Markdown</h1>
+        <p class="hero-subtitle">Apple 轉錄夠用時，就從它開始。需要 Vox.md 本地轉錄和 Markdown 目標位置時，再匯入音訊。</p>
+      </div>
+      <aside class="meta-card" aria-label="關於本指南">
+        <dl>
+          <div><dt>作者：</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新於</dt><dd><time datetime="2026-10-30">2026 年 10 月 30 日</time></dd></div>
+          <div><dt>需要</dt><dd>已儲存錄音 · 後端已就緒</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="將 iPhone 語音備忘錄轉錄為 Markdown">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">簡短回答</div><p>要將 iPhone 語音備忘錄轉成文字，先檢查語音備忘錄是否已有轉錄。如果複製即可完成任務，就直接複製。若要使用 Vox.md 裝置端轉錄和 Markdown 路線，請將錄音匯出到檔案，把音訊匯入 Vox.md，核對轉錄並儲存到所選資料夾。</p></div>
+<p>本指南從 Apple 語音備忘錄中的現有錄音開始。要直接在 Vox.md 中新錄音，請使用 <a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/">語音筆記存入 Obsidian 指南</a>。操作說明基於文件與源代碼審閱，並非新執行的裝置匯出。</p>
+<nav class="toc" aria-label="本指南中"><div class="toc-title">本指南中</div><ol><li><a href="#native">試用 Apple 轉錄文字</a></li><li><a href="#export">匯出錄音</a></li><li><a href="#prepare">準備 Vox.md</a></li><li><a href="#import">匯入並核對</a></li><li><a href="#save">驗證 Markdown 檔案</a></li><li><a href="#limits">檢查限制與恢復</a></li></ol></nav>
+<h2 id="native">1. 檢查語音備忘錄是否已有文字</h2>
+<p>Apple 文件列出了支援轉錄的 iPhone、語言和地區。在語音備忘錄中選擇錄音，打開其 <strong>更多</strong> 選單，查找 <strong>查看轉錄</strong> 或 <strong>拷貝逐字稿</strong>。如果只需要文字，複製完整轉錄或所選文字，再貼上到筆記即可。</p>
+<p>僅為複製 Apple 已提供的轉錄文字，你不需要另裝App。請查閱 <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios" target="_blank" rel="noopener">Apple 轉錄指南</a> 瞭解目前可用情況。缺少某個選項可能與裝置、系統、語言或地區支援有關；這並不能證明音訊已損壞。</p>
+<h2 id="export">2. 需要 Vox.md 轉錄時匯出音訊</h2>
+<p>Apple 的 <a href="https://support.apple.com/en-nz/guide/iphone/iph831c37815/ios" target="_blank" rel="noopener">語音備忘錄匯出說明</a> 說明如何選擇錄音、打開 <strong>更多 → 共享</strong>，並選擇 <strong>儲存到檔案</strong>。選擇能再次找到的資料夾，再儲存。</p>
+<p>普通匯出為 <code>.m4a</code> 錄音。某些選項可以用不同形式保留可編輯圖層或效果。此工作流程先使用普通的扁平化音訊匯出；本指南並不保證每一種分層或可編輯匯出都適用於每個轉錄後端。請保留原始語音備忘錄。</p>
+<p>共享音訊檔案與複製 Apple 轉錄文字不同。將音訊匯入 Vox.md 會再次執行其所選轉錄後端；不會匯入 Apple 的轉錄文字，也不保證措辭一致。</p>
+<h2 id="prepare">3. 準備後端和 Markdown 目標位置</h2>
+<p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_36c0cc133580">獲取 iPhone 版 Vox.md</a></p>
+<ol><li>在 Vox.md 中選擇支援裝置和錄音語言的轉錄後端。聯網完成所需模型下載。</li><li>建立或選擇帶可寫 Markdown 資料夾的擷取預設。使用 <strong>新筆記</strong> 用於首次匯入，方便辨認生成檔案。</li><li>選擇 <strong>保留原文</strong> 處理，適合只要識別文字、不需要可選 AI 改寫時。</li><li>在快速捕捉語音控制項中選擇 <strong>加入草稿</strong> 在匯入前選擇，以便核對首次轉錄。</li></ol>
+<p>保留原文保留識別文字，不會讓識別變成逐字準確或毫無錯誤。自動模式、Apple Speech 和下載模型有不同裝置與語言要求。請檢查 <a href="/zh-hant/docs/#models">模型參考</a> 以及已安裝App目前的購買或取用要求，再進行較長音訊的匯入。</p>
+<p>使用 Obsidian 時，請選擇通過檔案開放的實際儲存庫資料夾。Vox.md 不直接連接 Obsidian Sync 服務。普通可寫 Markdown 資料夾也適用。</p>
+<h2 id="import">4. 匯入已儲存錄音並核對草稿</h2>
+<ol><li>開放 <strong>匯入音訊或影片</strong> 位於快速捕捉的語音控制項中。</li><li>從檔案中選擇匯出的錄音，等待匯入和轉錄完成。</li><li>選擇加入草稿後，在編輯器中核對轉錄。對照源音訊修正姓名、日期、數字和其他重要措辭。</li><li>確認所選預設和目標位置，然後輕點 <strong>發送</strong>.</li></ol>
+<p>請使用轉錄匯入控制項，不要通過通用檔案附件操作附加檔案。筆記中的音訊附件本身不是轉錄文字。</p>
+<p>使用 <strong>立即傳送</strong> 改為選中時，完成的轉錄可通過所選預設繼續，不經過相同的草稿核對步驟。首次檢查先設定加入草稿。開始匯入前結束任何正在進行的錄音。</p>
+<h2 id="save">5. 檢查實際 Markdown 檔案</h2>
+<p>等待傳送完成。在檔案或 Obsidian 中打開目標位置，確認檔案、文字和檔名。編輯器中可見轉錄僅證明識別生成了文字，不證明資料夾寫入成功。</p>
+<p>虛構錄音可能生成以下筆記正文：</p>
+<pre class="guide-code"><code>Review the garden plan on Saturday.
+Bring the updated measurements.</code></pre>
+<p>這是範例輸出，不是真實錄音或準確度測試。檔名、後設資料和格式由預設控制。新匯入的日期或檔名不自動等於原始語音備忘錄的錄音日期。需要時請有意補充該上下文。</p>
+<p>一次新筆記匯入成功後，請按照 <a href="/zh-hant/blog/append-to-obsidian-daily-note-iphone/">每日筆記指南</a> 用於滾動目標位置，或 <a href="/zh-hant/blog/obsidian-capture-templates/">模板方案</a> 用於收件匣或任務條目。將舊錄音傳送到每日日誌前，請匹配目標筆記的日期和路徑。</p>
+<h2 id="limits">限制、隱私權和匯入失敗</h2>
+<ul><li><strong>無法匯入：</strong> 完成目前錄音，檢查App取用要求，確認所選預設已啟用。</li><li><strong>識別失敗：</strong> 檢查後端是否就緒、語言、本地儲存及檔案音訊能否解碼。保留原件，先嘗試簡短普通音訊匯出，再處理較長或特殊檔案。</li><li><strong>傳送待處理：</strong> 恢復資料夾取用權限，然後重試保留下來的失敗傳送。重新匯入同一備忘錄可能產生第二條擷取記錄。</li><li><strong>還需要原始音訊：</strong> 單獨配置並驗證音訊保留。不要僅因預設生成文字，就假定它儲存音訊附件。</li></ul>
+<p>Vox.md 在裝置上執行轉錄。首次準備後端可能需要下載，檔案提供程式可能需要聯網獲取源檔案或寫入目標位置。如果將音訊或 Markdown 儲存在同步資料夾中，該提供商會自行處理同步。完整的斷網工作流程請按照 <a href="/zh-hant/blog/offline-transcription-iphone-markdown/">離線準備與驗證指南</a>.</p>
+<p>此路線不是語音備忘錄資料庫自動同步、批量歸檔匯入器，也不承諾保留 Apple 的編輯、圖層、轉錄時間或錄音後設資料。先從一段錄音開始，保留原件，驗證儲存的文字後再擴展工作流程。</p>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hant/">首頁</a></li>
+        <li><a href="/zh-hant/docs/">文件</a></li>
+        <li><a href="/zh-hant/blog/">指南</a></li>
+        <li><a href="/zh-hant/compare/">比較</a></li>
+        <li><a href="/zh-hant/privacy.html">隱私</a></li>
+        <li><a href="/zh-hant/terms.html">條款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支援</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_36c0cc133580">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地筆記快速擷取 · 不上傳內容。</div>
+    </div>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/transcribe-voice-memos-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-voice-memos-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-voice-memos-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-voice-memos-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-voice-memos-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-voice-memos-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-voice-memos-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-voice-memos-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-voice-memos-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-voice-memos-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-voice-memos-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-voice-memos-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-voice-memos-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-voice-memos-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-voice-memos-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-voice-memos-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-voice-memos-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-voice-memos-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-voice-memos-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-voice-memos-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-voice-memos-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-voice-memos-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-voice-memos-iphone/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

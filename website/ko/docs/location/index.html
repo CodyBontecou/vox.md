@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr" data-search-section="섹션" data-search-guide="가이드" data-search-empty="“{query}” 검색 결과 없음">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>현재 위치, {location}, 메타데이터 — Vox.md 문서</title>
+  <meta name="description" content="Vox.md 루트에서 일회성 현재 위치, {location} Markdown 토큰, 선택적 프런트매터 또는 인라인 위치 메타데이터, 정밀도, 개인정보 보호, 복구를 설정하세요.">
+  <link rel="canonical" href="https://vox.isolated.tech/ko/docs/location/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="언어 모델용 Vox.md 문서">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="현재 위치, {location}, 메타데이터 — Vox.md 문서">
+  <meta property="og:description" content="노트에 위치 메타데이터를 자동 추가하지 않고 Markdown 템플릿에서 일회성 위치를 사용하세요.">
+  <meta property="og:url" content="https://vox.isolated.tech/ko/docs/location/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vox.md 현재 위치 가이드">
+  <meta name="twitter:description" content="일회성 위치, {location}, 메타데이터 출력, 정밀도, 개인정보 보호, 마이그레이션 전체 가이드.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Vox.md의 현재 위치, {location}, 위치 메타데이터",
+  "description": "프리셋별 현재 위치 획득, {location} Markdown 토큰, 선택적 메타데이터 출력, 개인정보 보호, 마이그레이션, 문제 해결에 관한 전체 가이드입니다.",
+  "dateModified": "2026-08-21",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/ko/docs/location/",
+  "inLanguage": "ko",
+  "name": "현재 위치, {location}, 메타데이터 — Vox.md 문서"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ko/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "문서",
+      "item": "https://vox.isolated.tech/ko/docs/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "현재 위치",
+      "item": "https://vox.isolated.tech/ko/docs/location/"
+    }
+  ],
+  "inLanguage": "ko",
+  "name": "현재 위치, {location}, 메타데이터 — Vox.md 문서",
+  "description": "Vox.md 루트에서 일회성 현재 위치, {location} Markdown 토큰, 선택적 프런트매터 또는 인라인 위치 메타데이터, 정밀도, 개인정보 보호, 복구를 설정하세요."
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md 공개 정보 API">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/location/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/location/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/location/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/location/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/location/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/location/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/location/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/location/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/location/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/location/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/location/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/location/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/location/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/location/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/location/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/location/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/location/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/location/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/location/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/location/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/location/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/location/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/location/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/location/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="주 탐색">
+  <div class="nav-inner docs-header-inner">
+    <a href="/ko/" class="logo" aria-label="Vox.md 홈">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ 문서</span></span>
+    </a>
+    <form class="docs-search" role="search" action="../" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="문서 검색" aria-label="문서 검색" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="검색 결과" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/ko/blog/">블로그</a></li>
+      <li><a href="/ko/privacy.html">개인정보 보호</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>언어</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko" aria-current="page">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="이 페이지 내용">
+      <div class="docs-sidebar-title">이 페이지 내용</div>
+      <ol>
+        <li><a href="#overview">독립적인 두 선택</a></li>
+        <li><a href="#setup">루트 설정</a></li>
+        <li><a href="#configurations">일반 설정</a></li>
+        <li><a href="#location-token"><code>{location}</code> 토큰</a></li>
+        <li><a href="#metadata-output">메타데이터 출력</a></li>
+        <li><a href="#precision">정밀도 및 표시명</a></li>
+        <li><a href="#capture-sources">캡처 소스</a></li>
+        <li><a href="#unavailable">사용 불가 및 복구</a></li>
+        <li><a href="#migration">기존 루트</a></li>
+        <li><a href="#privacy">개인정보 보호 및 보관</a></li>
+        <li><a href="#troubleshooting">문제 해결</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="location-guide-title">
+      <div class="page-eyebrow">문서 · 루트</div>
+      <h1 class="page-title" id="location-guide-title">현재 위치, <code>{location}</code>, 메타데이터</h1>
+      <p class="docs-hero-copy">YAML이나 인라인 필드를 자동 추가하지 않고 항목 서식에 시작 시점 위치 한 건을 사용하세요. 각 루트에서 위치 획득과 메타데이터 출력은 별개로 명시적으로 선택합니다.</p>
+      <div class="docs-meta-row" aria-label="가이드 정보">
+        <span>2026년 8월 21일 업데이트</span>
+        <span>일회성 획득</span>
+        <span>백그라운드 추적 없음</span>
+        <a href="/ko/docs/">전체 기능 가이드</a>
+      </div>
+      </header>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="overview">
+        <div class="docs-section-label">01 / 개요</div>
+        <h2>위치 획득이 메타데이터 출력을 뜻하지는 않습니다</h2>
+        <p>각 루트에는 별도의 위치 컨트롤 두 개가 있습니다. <strong>현재 위치 사용</strong> 루트가 시작 시점의 위치를 한 번 요청할지 결정합니다. <strong>위치 메타데이터 작성</strong> 가 획득 스냅샷을 프런트매터나 인라인 필드로도 쓸지 결정합니다.</p>
+
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>컨트롤</th><th>의미</th><th>의미하지 않는 것</th></tr></thead>
+            <tbody>
+              <tr><td>시스템 위치 권한</td><td>앱이나 지원 캡처 화면 사용 중 Vox.md가 위치를 요청하도록 허용합니다.</td><td>어떤 루트의 위치 기능도 켜지 않습니다.</td></tr>
+              <tr><td>현재 위치 사용</td><td>이 루트에 대해 위치를 한 번 요청하여 다음에서 사용할 수 있게 합니다: <code>{location}</code>.</td><td>YAML이나 인라인 메타데이터를 자동 작성하지 않습니다.</td></tr>
+              <tr><td>위치 메타데이터 작성</td><td>획득한 스냅샷에서 선택한 구조화 필드나 검증된 고급 YAML을 씁니다.</td><td>다음 여부를 제어하지는 않습니다: <code>{location}</code> 를 출력할 수 있습니다.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <strong>의도 신호는 권한이 아닌 루트</strong>
+          <p>사용 중 권한은 운영체제의 문만 열어줍니다. Vox.md는 독립적인 캡처 바의 현재 위치 작업이나 현재 위치 사용을 켠 루트에서만 위치를 요청합니다.</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="setup">
+        <div class="docs-section-label">02 / 설정</div>
+        <h2>한 루트의 현재 위치 설정</h2>
+        <ol class="docs-steps">
+          <li><strong>루트를 여세요.</strong><span>iPhone이나 iPad에서는 설정 → 루트를 여세요. Mac에서는 설정을 열고 루트를 선택하세요.</span></li>
+          <li><strong>루트를 편집하세요.</strong><span>시작 위치를 사용할 루트를 선택하세요. 설정은 해당 루트에만 적용되며 다른 루트에는 영향이 없습니다.</span></li>
+          <li><strong>위치를 여세요.</strong><span>켜세요: <em>현재 위치 사용</em>. 다음을 유지하세요: <em>위치 메타데이터 작성</em> 을 꺼 토큰 전용으로 사용하세요.</span></li>
+          <li><strong>정밀도를 선택하세요.</strong><span>원래 위치 좌표를 사용하려면 정확함을, 관심 장소 이름 없이 소수점 둘째 자리로 반올림한 좌표를 사용하려면 도시를 선택하세요.</span></li>
+          <li><strong>사용 불가 동작을 선택하세요.</strong><span>원래 위치를 얻지 못하면 &#x27;물어보세요&#x27;, &#x27;위치 없이 보내기&#x27;, &#x27;캡처 취소&#x27;가 다음 동작을 결정합니다.</span></li>
+          <li><strong>추가 <code>{location}</code> 원한다면 사용하세요.</strong><span>토큰을 항목 템플릿, 사용자 설정 항목 접두사나 접미사, 보관함 Markdown 템플릿에 넣으세요.</span></li>
+        </ol>
+        <p>첫 사용에는 OS 위치 권한 창이 보일 수 있습니다. 전에 거부했다면 iOS, iPadOS, macOS 설정에서 Vox.md 위치 접근을 켜세요.</p>
+      </section>
+
+      <section class="docs-section" id="configurations">
+        <div class="docs-section-label">03 / 일반 설정</div>
+        <h2>필요한 최소한의 위치 정보 선택</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>원하는 결과</th><th>현재 위치 사용</th><th>위치 메타데이터 작성</th><th>템플</th></tr></thead>
+            <tbody>
+              <tr><td>루트 위치 없음</td><td>끔</td><td>끔</td><td>사용하지 마세요: <code>{location}</code>, 그렇지 않으면 비어 있게 출력됩니다.</td></tr>
+              <tr><td>클릭 가능한 링크만</td><td>켬</td><td>끔</td><td>추가 <code>{location}</code>. 위치 필드는 쓰지 않습니다.</td></tr>
+              <tr><td>메타데이터만</td><td>켬</td><td>켬</td><td>생략 <code>{location}</code>. 설정된 필드만 기록됩니다.</td></tr>
+              <tr><td>링크 및 메타데이터</td><td>켬</td><td>켬</td><td>추가 <code>{location}</code> 을 선택하고 메타데이터 필드를 설정하세요.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>현재 위치 사용을 끄면 이전 메타데이터 서식이 나중 사용용으로 남아 있어도 해당 루트의 토큰 출력과 메타데이터 출력 모두 막습니다.</p>
+      </section>
+
+      <section class="docs-section" id="location-token">
+        <div class="docs-section-label">04 / 템플릿 토큰</div>
+        <h2>사용: <code>{location}</code> 노트 메타데이터 변경 없이</h2>
+        <p>현재 위치 사용이 켜져 있고 시작 스냅샷이 있다면 <code>{location}</code> 검증된 Google Maps Markdown 링크를 출력합니다:</p>
+        <pre class="docs-code-block"><code>[Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>토큰은 재사용 항목 템플릿, 사용자 설정 항목 접두사·접미사, 보관함 Markdown 템플릿에서 작동합니다. 루트에서 고른 정확함 또는 도시 좌표를 동일하게 사용합니다.</p>
+
+        <h3 id="token-example">토큰 전용 예시</h3>
+        <p>다음과 같은 접미사:</p>
+        <pre class="docs-code-block"><code>Captured from {location}</code></pre>
+        <p>Vox.md가 만들 수 있는 것:</p>
+        <pre class="docs-code-block"><code>Captured from [Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>위치 메타데이터 작성을 끄면 이 링크만 루트의 위치 콘텐츠로 추가됩니다. 다음은 없습니다: <code>locations:</code> 컬렉션도 다음도 없습니다: <code>location.*::</code> 필드가 기록됩니다.</p>
+
+        <h3 id="composer-fix">작성 화면 한 번 탭 수정</h3>
+        <p>유효한 항목 접두사, 접미사, 재사용 항목 템플릿이 다음을 사용하면 <code>{location}</code> 을 사용하지만 선택 루트의 현재 위치가 꺼져 있으면 작성 화면이 토큰이 빈 값이 됨을 설명하고 다음을 제안합니다: <strong>[Route]의 현재 위치 사용</strong>. 이 작업은 루트 현재 위치를 켜고 위치 메타데이터 작성은 의도적으로 꺼두므로 다음 보내기는 노트 메타데이터 변경 없이 토큰을 해석합니다. 보관함 실시간 템플릿은 전송 중에만 읽어 이 힌트를 트리거할 수 없습니다. 해당 템플릿에 토큰이 있으면 현재 위치를 수동으로 켜세요.</p>
+
+        <div class="docs-callout docs-callout-neutral">
+          <strong>토큰이 비어 있을 때</strong>
+          <p><code>{location}</code> 는 현재 위치가 꺼져 있거나 사용 불가이거나 위치 없이 계속하면 빈 문자열이 됩니다. 선택적 템플릿 줄을 설계할 때 주변 문장부호와 표시명을 고려하세요.</p>
+        </div>
+
+        <h3 id="capture-bar-location">독립 캡처 바 작업</h3>
+        <p>빠른 캡처 <strong>현재 위치</strong> 작업은 현재 초안에 일회성 Google Maps 링크를 직접 삽입합니다. 루트와 독립적이며 현재 위치 사용이나 위치 메타데이터 작성을 바꾸지 않습니다.</p>
+      </section>
+
+      <section class="docs-section" id="metadata-output">
+        <div class="docs-section-label">05 / 메타데이터 출력</div>
+        <h2>원할 때만 구조화 필드 작성</h2>
+        <p>노트에 다음 정보 외에, 또는 그 대신 기계 판독 가능한 위치 필드가 필요하면 위치 메타데이터 작성을 켜세요: <code>{location}</code> 링크.</p>
+
+        <div class="docs-feature-grid">
+          <div><strong>노트 프런트매터</strong><p>각 위치를 다음 이름의 컬렉션에 추가합니다: <code>locations</code> 기본적으로 캡처 ID를 키로 사용합니다. 관련 없는 기존 프런트매터는 유지됩니다.</p></div>
+          <div><strong>인라인 항목 필드</strong><p>Dataview 스타일의 다음을 씁니다: <code>location.key:: value</code> 줄이 캡처 항목 옆에 놓입니다. 프런트매터 컬렉션은 추가되지 않습니다.</p></div>
+          <div><strong>구조화된 필드</strong><p>좌표, 위도, 경도, 장소, 도시, 지역, 국가, 제공자 링크, geo URI, 정확도, 타임스탬프, 소스, ID를 선택하고 이름을 바꾸세요.</p></div>
+          <div><strong>고급 YAML</strong><p>노트 프런트매터에 검증되고 범위가 제한된 YAML 템플릿을 사용합니다. 고급 YAML은 인라인 항목 필드에 사용할 수 없습니다.</p></div>
+        </div>
+
+        <h3 id="frontmatter-example">구조화된 프런트매터 예시</h3>
+        <pre class="docs-code-block"><code>---
+title: Field Notes
+locations:
+  - id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    coordinates: [45.501235, -73.567890]
+    place: "Café &amp; Main"
+    appleMapsURL: "https://maps.apple.com/?ll=45.501235%2C-73.567890&amp;q=Caf%C3%A9%20%26%20Main"
+    timestamp: "2023-11-14T22:13:20.000Z"
+    source: "app"
+---</code></pre>
+        <p>롤링 노트는 컬렉션에 여러 캡처를 보관합니다. 위치 병합에는 재시도 보호가 내장되어 같은 캡처 ID로 같은 위치를 두 번 추가하지 않습니다. 선택 컬렉션 키에 호환되지 않는 사용자 값이 있으면 Vox.md는 덮어쓰지 않고 중단합니다.</p>
+
+        <h3 id="inline-example">인라인 항목 예시</h3>
+        <pre class="docs-code-block"><code>location.id:: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+location.coordinates:: [45.501235, -73.567890]
+location.place:: "Café &amp; Main"
+
+Captured text</code></pre>
+
+        <h3 id="advanced-yaml">고급 YAML 자리표시자</h3>
+        <p>고급 템플릿에서는 다음과 같은 자리표시자를 사용할 수 있습니다: <code>{{coordinates}}</code>, <code>{{latitude}}</code>, <code>{{longitude}}</code>, <code>{{place}}</code>, <code>{{city}}</code>, <code>{{region}}</code>, <code>{{country}}</code>, <code>{{appleMapsURL}}</code>, <code>{{googleMapsURL}}</code>, <code>{{openStreetMapURL}}</code>, <code>{{geoURI}}</code>, <code>{{accuracy}}</code>, <code>{{timestamp}}</code>, <code>{{source}}</code>, 그리고 <code>{{id}}</code>. 저장하기 전에 루트 설정에서 구성을 미리 확인하세요.</p>
+      </section>
+
+      <section class="docs-section" id="precision">
+        <div class="docs-section-label">06 / 정밀도 및 표시명</div>
+        <h2>정확함과 도시는 같은 스냅샷을 사용합니다</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>정밀도</th><th>좌표</th><th>표시명</th><th>링크 및 필드</th></tr></thead>
+            <tbody>
+              <tr><td>정확함</td><td>원래 위치를 소수점 여섯 자리로 표시합니다.</td><td>선택 메타데이터 필드에 필요하면 관심 장소 이름을 포함합니다.</td><td>모든 파생 값은 정확함 좌표를 사용합니다.</td></tr>
+              <tr><td>도시</td><td>스냅샷을 보관하기 전에 위도와 경도를 소수점 둘째 자리로 반올림합니다.</td><td>관심 장소 이름을 제거합니다. 도시, 지역, 국가는 남을 수 있습니다.</td><td>모든 제공자 URL, geo URI, 토큰, 필드는 반올림 좌표를 사용합니다.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>위치 메타데이터 작성이 켜져 있고 선택 구조화 필드나 고급 자리표시자에 장소, 도시, 지역, 국가가 필요할 때만 Apple 시스템 역지오코더를 사용합니다. 토큰 전용 루트는 역지오코딩을 건너뜁니다. 이름 조회에 실패해도 좌표 기반 출력은 가능합니다.</p>
+      </section>
+
+      <section class="docs-section" id="capture-sources">
+        <div class="docs-section-label">07 / 캡처 소스</div>
+        <h2>스냅샷은 캡처 시작점에 속합니다</h2>
+        <p>현재 위치는 캡처가 시작되는 경계 시점에 결정됩니다. 재시도와 복구에서는 새 위치를 몰래 가져오지 않고 영구 저장된 결과를 다시 사용합니다.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>캡처 소스</th><th>획득 경계</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone 및 iPad 빠른 캡처</td><td>보내기</td></tr>
+              <tr><td>공유 시트</td><td>공유 확장에서 보내기</td></tr>
+              <tr><td>직접 대기열에 넣는 텍스트·링크·파일 인텐트</td><td>인텐트 호출</td></tr>
+              <tr><td>빠른 캡처를 여는 단축어, 위젯, 컨트롤, 딥 링크</td><td>작성 화면에서 보내기</td></tr>
+              <tr><td>단축어, 위젯, 컨트롤, 즉시 음성, 키보드 기반 루트 녹음</td><td>녹음 중지</td></tr>
+              <tr><td>Apple Watch 일반 캡처 전송</td><td>Watch에서 녹음을 중지한 시점; iPhone은 자체 위치로 대체하지 않음</td></tr>
+              <tr><td>Mac 캡처</td><td>보내기 시점, 또는 즉시 음성 전송의 녹음 중지 시점</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Watch 녹음만</strong> 는 Markdown 없이 원본 M4A 오디오를 파일 앱으로 내보내므로 다른 경우 루트가 현재 위치를 사용하더라도 위치를 요청하지 않습니다.</p>
+      </section>
+
+      <section class="docs-section" id="unavailable">
+        <div class="docs-section-label">08 / 사용 불가 및 복구</div>
+        <h2>위치를 얻지 못할 때 각 루트의 처리 방식 선택</h2>
+        <ul>
+          <li><strong>물어보세요:</strong> 대화형 캡처는 재시도, 취소, 한 번만 위치 없이 보내기, 루트의 항상 위치 없이 보내기를 선택할 수 있습니다.</li>
+          <li><strong>위치 없이 보내기:</strong> 는 토큰 값이나 메타데이터 없이 전송을 계속합니다.</li>
+          <li><strong>캡처 취소:</strong> 는 요청한 시작 위치 없이 노트를 만드는 대신 전송을 중단합니다.</li>
+          <li><strong>저장된 선택 초기화:</strong> 루트 위치 설정의 위치 사용 불가 선택 초기화를 쓰세요.</li>
+        </ul>
+        <p>무인 &#x27;물어보세요&#x27; 요청은 시작 시점 위치 사용 불가 결과를 나중 검토용으로 저장합니다. 대기/실패 캡처를 재시도해도 나중 위치로 바꾸지 않습니다. 대기 작업에는 로컬 복구에 필요한 개인정보 보호 스냅샷이나 사용 불가 결과만 남습니다.</p>
+      </section>
+
+      <section class="docs-section" id="migration">
+        <div class="docs-section-label">09 / 기존 루트</div>
+        <h2>업그레이드는 기존 메타데이터 동작을 유지합니다</h2>
+        <p>획득과 출력의 분리는 마이그레이션에도 안전합니다:</p>
+        <ul>
+          <li><strong>새 루트:</strong> 현재 위치 사용과 위치 메타데이터 작성은 처음에는 둘 다 꺼져 있습니다.</li>
+          <li><strong>이전에 위치가 활성화된 루트:</strong> 는 업그레이드 후 둘 다 켜져 기존 루트 메타데이터를 유지합니다.</li>
+          <li><strong>이전에 위치가 꺼진 루트:</strong> 두 컨트롤 모두 꺼진 상태로 유지되며 업그레이드로 새 메타데이터 출력이 생기지 않습니다.</li>
+        </ul>
+        <p>메타데이터를 쓰는 기존 루트를 토큰 전용으로 바꾸려면 현재 위치 사용을 켜두고 위치 메타데이터 작성을 끄세요. 기존 Markdown은 재작성되거나 삭제되지 않습니다.</p>
+      </section>
+
+      <section class="docs-section" id="privacy">
+        <div class="docs-section-label">10 / 개인정보 보호 및 보관</div>
+        <h2>명시적인 스냅샷 한 번, 백그라운드 추적 없음</h2>
+        <ul>
+          <li>Vox.md는 지속 위치 모니터링이나 백그라운드 위치 추적을 하지 않습니다.</li>
+          <li>위치는 Vox.md 서버, 분석, 광고 시스템, 타사 AI 서비스에 전송되지 않습니다.</li>
+          <li>토큰과 제공자 URL은 로컬에서 서식화됩니다. Apple Maps, Google Maps, OpenStreetMap은 해당 링크를 열 때만 좌표를 받습니다.</li>
+          <li>선택한 메타데이터에 장소 이름이 필요할 때만 Apple 시스템 역지오코더가 네트워크를 요청할 수 있습니다. 토큰 전용 위치는 이 조회를 건너뜁니다.</li>
+          <li>전송 성공 후 복구 요청은 콘텐츠 없는 영수증으로 줄어들고 완료 캡처 기록에 좌표, 이름, 제공자 URL, 위치 템플릿은 남지 않습니다.</li>
+          <li>위치 메타데이터나 토큰 링크를 Markdown에 쓰면 선택한 파일 일부가 됩니다. 동기화 제공자가 자체 약관으로 파일을 처리할 수 있습니다.</li>
+        </ul>
+        <div class="docs-callout">
+          <strong>권한을 켜두어도 루트는 비공개로 유지됩니다</strong>
+          <p>독립적인 현재 위치 작업의 시스템 권한은 허용해두면서 모든 루트의 현재 위치 사용은 꺼둘 수 있습니다.</p>
+        </div>
+        <p>다음을 참조하세요: <a href="/ko/privacy.html">개인정보 처리방침</a> 에서 전체 데이터 처리 및 보관 세부 사항을 확인하세요.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">11 / 문제 해결</div>
+        <h2>흔한 위치 및 템플릿 문제 해결</h2>
+        <div class="docs-troubleshooting">
+          <details>
+            <summary><code>{location}</code> 빈 값으로 출력됨</summary>
+            <p>유효한 항목 템플릿, 접두사, 접미사, 보관함 템플릿이 정확한 소문자 토큰을 사용하는지 확인하세요: <code>{location}</code>. 전송할 루트의 현재 위치 사용을 켜세요. 감지된 인라인 항목 서식은 작성 화면의 한 번 탭 수정으로 메타데이터 활성화 없이 처리할 수 있습니다. 보관함의 실시간 템플릿은 수동 루트 설정이 필요합니다. 권한 거부나 위치 사용 불가 시 루트의 불가 동작과 시스템 위치 설정을 확인하세요.</p>
+          </details>
+          <details>
+            <summary>링크는 되지만 메타데이터가 없음</summary>
+            <p>토큰 전용 설정의 정상 동작입니다. 루트 위치 설정에서 위치 메타데이터 작성을 켜고 노트 프런트매터나 인라인 항목 필드를 고른 다음 필요한 필드를 선택하세요.</p>
+          </details>
+          <details>
+            <summary>메타데이터는 있지만 항목에 링크가 없음</summary>
+            <p>메타데이터 출력은 링크를 자동 삽입하지 않습니다. 다음을 추가하세요: <code>{location}</code> 을 유효한 항목 서식이나 보관함 Markdown 템플릿에 추가하세요.</p>
+          </details>
+          <details>
+            <summary>장소나 도시 누락</summary>
+            <p>이름 필드가 선택되었는지 확인하세요. 좌표가 있어도 Apple 역지오코더는 실패할 수 있습니다. 도시 정밀도는 의도적으로 관심 장소 이름을 제거합니다.</p>
+          </details>
+          <details>
+            <summary>프런트매터 전송에서 충돌 보고</summary>
+            <p>설정된 컬렉션 키인 <code>locations</code> 가 기본값이며 호환되는 위치 목록이어야 합니다. 루트 설정에서 컬렉션 이름을 바꾸거나 사용자가 작성한 기존 프런트매터를 조정하세요. Vox.md는 호환되지 않는 값을 덮어쓰지 않습니다.</p>
+          </details>
+          <details>
+            <summary>재시도 시 위치가 오래되었거나 사용 불가로 표시됨</summary>
+            <p>의도된 동작입니다. 나중 재시도가 다른 위치를 몰래 주장하지 못하도록 요청은 시작 시점 결과를 유지합니다. 새 스냅샷이 필요하면 새 캡처를 만드세요.</p>
+          </details>
+          <details>
+            <summary>위치 권한은 허용되었지만 루트가 요청하지 않음</summary>
+            <p>시스템 권한은 문을 열어줄 뿐입니다. 해당 루트를 편집해 현재 위치 사용을 켜세요. 권한만으로 루트의 위치 기능이 활성화되지는 않습니다.</p>
+          </details>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ko/developers">개발자</a></li>
+        <li><a href="/ko/about">소개</a></li>
+        <li><a href="/ko/contact">문의</a></li>
+        <li><a href="/ko/">홈</a></li>
+        <li><a href="/ko/docs/">문서</a></li>
+        <li><a href="/ko/blog/">블로그</a></li>
+        <li><a href="/ko/privacy.html">개인정보 보호</a></li>
+        <li><a href="/ko/terms.html">약관</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 로컬 캡처 · 사용자 제어 파일.</div>
+    </div>
+  <details class="language-switcher"><summary>언어</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko" aria-current="page">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

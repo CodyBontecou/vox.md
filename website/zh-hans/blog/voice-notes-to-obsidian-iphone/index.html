@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" dir="ltr" data-search-section="部分" data-search-guide="指南" data-search-empty="没有与“{query}”匹配的结果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何将 iPhone 语音笔记保存到 Obsidian | Vox.md</title>
+  <meta name="description" content="在 iPhone 上录制语音笔记，在设备上转录，并将 Markdown 保存到 Obsidian 仓库。用 Vox.md 设置新笔记或每日笔记路由。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hans/blog/voice-notes-to-obsidian-iphone/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供语言模型使用的 Vox.md 文档">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="如何将 iPhone 语音笔记保存到 Obsidian">
+  <meta property="og:description" content="在 iPhone 上录制语音笔记，在设备上转录，并将 Markdown 保存到 Obsidian 仓库。用 Vox.md 设置新笔记或每日笔记路由。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hans/blog/voice-notes-to-obsidian-iphone/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="如何将 iPhone 语音笔记保存到 Obsidian">
+  <meta name="twitter:description" content="在 iPhone 上录制语音笔记，在设备上转录，并将 Markdown 保存到 Obsidian 仓库。用 Vox.md 设置新笔记或每日笔记路由。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "如何将 iPhone 语音笔记保存到 Obsidian",
+  "description": "在 iPhone 上录制语音笔记，在设备上转录，并将 Markdown 保存到 Obsidian 仓库。用 Vox.md 设置新笔记或每日笔记路由。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hans/blog/voice-notes-to-obsidian-iphone/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "zh-Hans",
+  "name": "如何将 iPhone 语音笔记保存到 Obsidian | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hans/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "指南",
+      "item": "https://vox.isolated.tech/zh-hans/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "如何将 iPhone 语音笔记保存到 Obsidian",
+      "item": "https://vox.isolated.tech/zh-hans/blog/voice-notes-to-obsidian-iphone/"
+    }
+  ],
+  "inLanguage": "zh-Hans",
+  "name": "如何将 iPhone 语音笔记保存到 Obsidian | Vox.md",
+  "description": "在 iPhone 上录制语音笔记，在设备上转录，并将 Markdown 保存到 Obsidian 仓库。用 Vox.md 设置新笔记或每日笔记路由。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/voice-notes-to-obsidian-iphone/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳至指南</a>
+<nav aria-label="主导航">
+  <div class="nav-inner">
+    <a href="/zh-hans/" class="logo" aria-label="Vox.md 首页">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hans/#how">工作原理</a></li>
+      <li><a href="/zh-hans/docs/">文档</a></li>
+      <li><a href="/zh-hans/blog/">指南</a></li>
+      <li><a href="/zh-hans/compare/">比较</a></li>
+      <li><a href="/zh-hans/privacy.html">隐私</a></li>
+      <li><a href="/zh-hans/terms.html">条款</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_45e81e2e5027">下载 Vox.md</a>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/blog/voice-notes-to-obsidian-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/voice-notes-to-obsidian-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/voice-notes-to-obsidian-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/voice-notes-to-obsidian-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/voice-notes-to-obsidian-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/voice-notes-to-obsidian-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/voice-notes-to-obsidian-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/voice-notes-to-obsidian-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/voice-notes-to-obsidian-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/voice-notes-to-obsidian-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/voice-notes-to-obsidian-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/voice-notes-to-obsidian-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/voice-notes-to-obsidian-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/voice-notes-to-obsidian-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/voice-notes-to-obsidian-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/voice-notes-to-obsidian-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/voice-notes-to-obsidian-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/voice-notes-to-obsidian-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/voice-notes-to-obsidian-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/voice-notes-to-obsidian-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/voice-notes-to-obsidian-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">iPhone 语音笔记 · Obsidian · 本地 Markdown</div>
+        <h1 class="hero-title">如何将 iPhone 语音笔记保存到 Obsidian</h1>
+        <p class="hero-subtitle">说出想法，在 iPhone 上转录，将文本放入所选仓库、笔记或标题下。</p>
+      </div>
+      <aside class="meta-card" aria-label="关于本指南">
+        <dl>
+          <div><dt>作者：</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新于</dt><dd><time datetime="2026-10-26">2026 年 10 月 26 日</time></dd></div>
+          <div><dt>需要</dt><dd>iPhone · iOS 17.6+</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="如何将 iPhone 语音笔记保存到 Obsidian">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer">
+        <div class="label">简短回答</div>
+        <p>在 Vox.md 中，将采集预设连接到 Obsidian 仓库文件夹，准备本地转录后端，并在快速捕捉中录音。将转录文本发送到新的 Markdown 笔记，或追加到现有笔记或每日笔记。不需要 Obsidian 插件或 Vox.md 账户。</p>
+      </div>
+      <p>Obsidian 也有原生采集工具。 <a href="#native-obsidian">查看下方内置选项</a> 再安装其他应用。需要采集预设、本地语音模型选择，以及将文本、媒体和语音放在同一工作流中时，Vox.md 很有用。</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_45e81e2e5027">免费下载 Vox.md</a></p>
+      <p>试用 15 分钟转录和 10 次成功采集投递。无限使用为一次购买、终身有效；App Store 显示所在地区价格。</p>
+      <nav class="toc" aria-label="本指南中">
+        <div class="toc-title">本指南中</div>
+        <ol>
+          <li><a href="#before-you-start">开始之前</a></li>
+          <li><a href="#connect-vault">连接 Obsidian 仓库</a></li>
+          <li><a href="#transcription">准备本地转录</a></li>
+          <li><a href="#record">录制并保存语音笔记</a></li>
+          <li><a href="#daily-note">将语音发送到每日笔记或标题下</a></li>
+          <li><a href="#native-obsidian">Obsidian 内置功能何时够用</a></li>
+          <li><a href="#troubleshooting">故障排查与离线使用</a></li>
+        </ol>
+      </nav>
+
+      <h2 id="before-you-start">开始之前</h2>
+      <ul>
+        <li><strong>运行 iOS 17.6 或更高版本的 iPhone。</strong> 可用语音后端取决于设备、系统和语言。实时 Apple Speech 需要受支持的 iOS 26 设备和语言。</li>
+        <li><strong>能通过文件选择的仓库文件夹。</strong> Vox.md 需要写入该文件夹的权限。Obsidian 内可见的仓库不一定通过文件向其他应用开放。</li>
+        <li><strong>已准备好的转录后端。</strong> 自动模式可能需要准备语言；可选 Whisper 或 Parakeet 模型需要首次下载。依赖离线转录前，请联网完成准备。</li>
+        <li><strong>麦克风权限。</strong> 本指南不要求键盘。无需启用自定义键盘或完全访问，就能在主应用中录音。</li>
+      </ul>
+      <p>使用 Obsidian Sync 时，请检查仓库文件夹能否在文件选择器中访问。Vox.md 写入文件，不连接 Obsidian Sync 服务。不要仅为遵循本指南而更改现有同步设置或混用同步提供商。</p>
+
+      <h2 id="connect-vault">1. 连接 Obsidian 仓库</h2>
+      <ol>
+        <li>打开 Vox.md。在快速捕捉中选择采集预设。可用现有预设，也可在以下位置创建： <strong>设置 → 采集预设</strong>.</li>
+        <li>选择 <strong>设定目的地</strong> 如果预设没有目标位置。使用文件选择器选择包含仓库 Markdown 文件的文件夹。</li>
+        <li>从一个开始： <strong>新笔记</strong> 目标，让每次采集各自创建文件。如果想把这些笔记放在一起，请选择收件箱子文件夹。</li>
+        <li>保存前检查目标位置预览。首次采集请使用 <strong>保留原文</strong> 处理，避免可选处理步骤改写转录文本。</li>
+      </ol>
+      <p>预设记住目标位置。后续采集可沿用同一路由。请参阅 <a href="/zh-hans/docs/#presets">预设与目标位置参考</a> 了解模板、附件文件夹和插入规则。</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/00-capture-light-640.webp" alt="带语音和目标位置控件的 Vox.md 快速捕捉编辑器" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>快速捕捉编辑器。录音前选择预设和目标位置。标签可能因应用版本而异。</figcaption>
+      </figure>
+
+      <h2 id="transcription">2. 准备本地转录</h2>
+      <p>打开模型设置，选择手机和语言支持的后端。Vox.md 支持 Apple Speech 及可选的 Whisper 和 Parakeet 模型。首次录音前完成所有准备或模型下载。</p>
+      <p>在受支持的 iOS 26 设备上使用自动模式时，Apple Speech 可在录音过程中显示文本。明确选择的 Whisper 和 Parakeet 模型在录音停止后转录。保存语音笔记无需实时预览。</p>
+      <p>设备端转录不需要云端转录账户。模型可用性、识别质量和处理时间各有不同。请阅读 <a href="/zh-hans/docs/#models">模型要求与准备步骤</a> 如果首选后端不可用。</p>
+
+      <h2 id="record">3. 录制并保存语音笔记</h2>
+      <ol>
+        <li>在快速捕捉中选择已配置的预设。录音前选择 <strong>添加到草稿</strong> 在语音控件中选择，以便核对首次转录，然后开始录音。</li>
+        <li>说一个简短想法，例如“记得预约牙医”。说完后停止录音。</li>
+        <li>选择添加到草稿后，等待转录，在编辑器修正识别错误，再轻点 <strong>发送</strong>。如果你选择 <strong>立即发送</strong> 改在录音前选择，预设便会在录音完成时路由转录文本。</li>
+        <li>在 Vox.md 中确认投递，然后在 Obsidian 中打开目标文件夹，检查新笔记。</li>
+      </ol>
+      <p>使用保留原文处理的纯转录，笔记正文可能如下。这只是示例，不保证识别结果或标点完全一致：</p>
+      <pre class="guide-code"><code>Remember to book the dentist.</code></pre>
+      <p>文件名和 frontmatter 来自预设。需要音频附件时可以保留源音频；转录文本无需附带音频，也能在 Obsidian 中发挥作用。</p>
+      <p>键盘走独立路径：将听写文本插入当前文本框。要通过采集预设将语音路由到 Markdown 文件，请使用此处所述采集工作流。请参阅 <a href="/zh-hans/blog/best-voice-to-text-keyboard-iphone/">私密 iPhone 键盘指南</a> 用于其他应用中的听写。</p>
+
+      <h2 id="daily-note">将语音发送到每日笔记或标题下</h2>
+      <p>新笔记采集成功后，编辑预设目标位置，改用 <strong>滚动笔记</strong> 并使用每日周期。匹配 Obsidian 每日笔记现有文件夹和文件名格式。Vox.md 不会自动发现 Daily Notes 插件设置。</p>
+      <p>要把听写任务放在一起，请选择在二级标题下插入： <strong>Tasks</strong> 标题。选择缺少标题时是否由 Vox.md 创建，以及条目应放在该节开头还是末尾。任务预设可使用待办清单处理；行文请使用保留原文。</p>
+      <p>例如，目标为以下位置的每日任务预设： <code>Journal/2026-10-26.md</code> 可能生成：</p>
+      <pre class="guide-code"><code>## Tasks
+- Remember to book the dentist.</code></pre>
+      <p>此例展示配置后的输出，并非默认格式。保持现有日期约定，核对目标位置预览，避免意外创建第二份每日笔记。若要单个持续收件箱，请选择 <strong>现有笔记</strong> 并追加到那里。</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="Vox.md 笔记定位与标题放置的目标位置设置" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>在目标位置设置中选择笔记目标和插入点。让路由匹配仓库现有约定。</figcaption>
+      </figure>
+
+      <h2 id="native-obsidian">Obsidian 内置功能何时够用</h2>
+      <p>Obsidian 的 <a href="https://obsidian.md/help/ios">官方 iOS 指南</a> 介绍 iOS 26 或更高版本上、1.14 或更高版本的原生快速采集。它可通过小组件和快捷指令创建或更新笔记。如果只需要向仓库采集基本文本，就从它开始。</p>
+      <p>该 <a href="https://obsidian.md/changelog/2026-10-22-mobile-v1.15.0/">2026 年 10 月 22 日 Obsidian 1.15 移动版抢先体验公告</a> 还加入语音转录和录音保存，包括 iOS 26 上的锁屏采集。截至本指南 10 月 26 日更新时，该公告针对抢先体验渠道；请检查已安装版本是否可用。</p>
+      <p>当你需要本地语音后端选择、可配置采集处理与路由，以及混合文本、照片、扫描件、文件和语音的组合时，请选择 Vox.md。它也可使用非 Obsidian 仓库的可写 Markdown 文件夹。两款应用不必互相替代：你仍可在 Obsidian 中整理和阅读笔记。</p>
+
+      <h2 id="troubleshooting">故障排查与离线使用</h2>
+      <h3>仓库未出现在文件中</h3>
+      <p>确认文件夹通过可用的文件提供程序开放，并且其他应用可以选择它。如果无法访问，请使用可写文件夹，并手动将一份示例 Markdown 笔记移入 Obsidian，以评估工作流。不要假定 Vox.md 可以访问 Obsidian Sync 仓库。</p>
+      <h3>转录缺失或不准确</h3>
+      <p>检查麦克风访问权限、后端准备和语言支持。Apple Speech 实时文本取决于受支持的系统与设备组合；下载模型的行为可能不同。发送重要文本前请核对。参阅 <a href="/zh-hans/docs/#models">模型与转录</a> 了解可用选项。</p>
+      <h3>采集待处理或无法保存</h3>
+      <p>检查目标位置权限和文件提供商可用性。查看待处理或失败项目，修复目标位置后重试，不要再次采集同一个想法。Vox.md 会保留待投递数据以供恢复。参阅 <a href="/zh-hans/docs/#troubleshooting">投递故障排查</a>.</p>
+      <h3>可以离线操作吗？</h3>
+      <p>准备好后端后，语音转录在设备上运行。写入笔记也要求所选文件夹在本地可用且可写。云端支持的文件夹可能需要联网才能访问文件或稍后同步。本地转录不代表你选择的同步提供商永远不会收到完成的笔记。</p>
+      <h3>语音笔记会同时消耗两种免费额度吗？</h3>
+      <p>路由到 Markdown 的语音转录使用转录额度，不会再消耗一次采集投递。免费下载包含 15 分钟转录，以及用于其他采集工作流的 10 次成功采集投递。无限使用为一次购买、终身有效。</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">下一个想法，可以直接落入正确的笔记。</h2>
+        <p>连接文件夹、准备本地转录，并先试一次简短语音采集，再构建更详细的预设。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_45e81e2e5027">免费下载 Vox.md</a></p>
+        <p>免费额度 · 无需账户 · 一次终身解锁</p>
+      </section>
+      <p><a href="/zh-hans/blog/obsidian-quick-capture-iphone/">选择 iPhone 采集方式</a>，或 <a href="/zh-hans/compare/vox-md-vs-obsidian-quick-capture/">比较原生 Obsidian 与 Vox.md</a>.</p>
+      <nav class="toc" aria-label="相关指南">
+        <div class="toc-title">继续设置</div>
+        <ul>
+          <li><a href="/zh-hans/blog/offline-transcription-iphone-markdown/">为离线使用准备转录和 Markdown 目标位置</a></li>
+          <li><a href="/zh-hans/blog/append-to-obsidian-daily-note-iphone/">在每日笔记标题下追加文本和语音</a></li>
+          <li><a href="/zh-hans/blog/apple-watch-obsidian-voice-notes/">将 Apple Watch 录音发送到 Obsidian</a></li>
+          <li><a href="/zh-hans/docs/#presets">采集预设与 Markdown 目标位置</a></li>
+          <li><a href="/zh-hans/docs/#models">本地语音模型与语言</a></li>
+          <li><a href="/zh-hans/blog/best-voice-to-text-keyboard-iphone/">在其他 iPhone 应用中私密语音听写</a></li>
+        </ul>
+      </nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hans/">首页</a></li>
+        <li><a href="/zh-hans/docs/">文档</a></li>
+        <li><a href="/zh-hans/blog/">指南</a></li>
+        <li><a href="/zh-hans/compare/">比较</a></li>
+        <li><a href="/zh-hans/privacy.html">隐私</a></li>
+        <li><a href="/zh-hans/terms.html">条款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支持</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_45e81e2e5027">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地笔记快速采集 · 不上传内容。</div>
+    </div>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/blog/voice-notes-to-obsidian-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/voice-notes-to-obsidian-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/voice-notes-to-obsidian-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/voice-notes-to-obsidian-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/voice-notes-to-obsidian-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/voice-notes-to-obsidian-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/voice-notes-to-obsidian-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/voice-notes-to-obsidian-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/voice-notes-to-obsidian-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/voice-notes-to-obsidian-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/voice-notes-to-obsidian-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/voice-notes-to-obsidian-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/voice-notes-to-obsidian-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/voice-notes-to-obsidian-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/voice-notes-to-obsidian-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/voice-notes-to-obsidian-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/voice-notes-to-obsidian-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/voice-notes-to-obsidian-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/voice-notes-to-obsidian-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/voice-notes-to-obsidian-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/voice-notes-to-obsidian-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

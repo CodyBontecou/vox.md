@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="vi" dir="ltr" data-search-section="Mục" data-search-guide="Hướng dẫn" data-search-empty="Không khớp “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vị trí hiện tại, {location} và siêu dữ liệu — Tài liệu Vox.md</title>
+  <meta name="description" content="Thiết lập Vị trí hiện tại một lần, token Markdown {location}, frontmatter hoặc siêu dữ liệu nội tuyến tùy chọn, độ chính xác, riêng tư và khôi phục trong Lộ trình Vox.md.">
+  <link rel="canonical" href="https://vox.isolated.tech/vi/docs/location/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Tài liệu Vox.md về mô hình ngôn ngữ">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Vị trí hiện tại, {location} và siêu dữ liệu — Tài liệu Vox.md">
+  <meta property="og:description" content="Dùng vị trí lấy một lần trong mẫu Markdown, không tự thêm siêu dữ liệu vị trí vào ghi chú.">
+  <meta property="og:url" content="https://vox.isolated.tech/vi/docs/location/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Hướng dẫn Vị trí hiện tại của Vox.md">
+  <meta name="twitter:description" content="Hướng dẫn đầy đủ vị trí một lần, {location}, siêu dữ liệu, độ chính xác, riêng tư và chuyển đổi.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Vị trí hiện tại, {location} và siêu dữ liệu vị trí trong Vox.md",
+  "description": "Hướng dẫn đầy đủ lấy Vị trí hiện tại theo cấu hình, token Markdown {location}, siêu dữ liệu tùy chọn, riêng tư, chuyển đổi và khắc phục lỗi.",
+  "dateModified": "2026-08-21",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/vi/docs/location/",
+  "inLanguage": "vi",
+  "name": "Vị trí hiện tại, {location} và siêu dữ liệu — Tài liệu Vox.md"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/vi/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tài liệu",
+      "item": "https://vox.isolated.tech/vi/docs/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Vị trí hiện tại",
+      "item": "https://vox.isolated.tech/vi/docs/location/"
+    }
+  ],
+  "inLanguage": "vi",
+  "name": "Vị trí hiện tại, {location} và siêu dữ liệu — Tài liệu Vox.md",
+  "description": "Thiết lập Vị trí hiện tại một lần, token Markdown {location}, frontmatter hoặc siêu dữ liệu nội tuyến tùy chọn, độ chính xác, riêng tư và khôi phục trong Lộ trình Vox.md."
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="API thông tin công khai Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/location/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/location/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/location/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/location/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/location/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/location/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/location/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/location/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/location/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/location/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/location/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/location/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/location/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/location/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/location/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/location/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/location/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/location/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/location/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/location/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/location/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/location/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/location/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/location/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="Điều hướng chính">
+  <div class="nav-inner docs-header-inner">
+    <a href="/vi/" class="logo" aria-label="trang chủ Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ tài liệu</span></span>
+    </a>
+    <form class="docs-search" role="search" action="../" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="Tìm tài liệu" aria-label="Tìm tài liệu" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Kết quả tìm" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/vi/blog/">Nhật ký web</a></li>
+      <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="Trên trang này">
+      <div class="docs-sidebar-title">Trên trang này</div>
+      <ol>
+        <li><a href="#overview">Hai lựa chọn độc lập</a></li>
+        <li><a href="#setup">Đặt Lộ trình</a></li>
+        <li><a href="#configurations">Cấu hình phổ biến</a></li>
+        <li><a href="#location-token"><code>{location}</code> Mã giữ chỗ</a></li>
+        <li><a href="#metadata-output">Đầu ra siêu dữ liệu</a></li>
+        <li><a href="#precision">Độ chính xác và nhãn</a></li>
+        <li><a href="#capture-sources">Chụp nguồn</a></li>
+        <li><a href="#unavailable">Không khả dụng và khôi phục</a></li>
+        <li><a href="#migration">Lộ trình hiện có</a></li>
+        <li><a href="#privacy">Riêng tư và lưu giữ</a></li>
+        <li><a href="#troubleshooting">Khắc phục lỗi</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="location-guide-title">
+      <div class="page-eyebrow">Tài liệu · Lộ trình</div>
+      <h1 class="page-title" id="location-guide-title">Vị trí hiện tại, <code>{location}</code>, và siêu dữ liệu</h1>
+      <p class="docs-hero-copy">Dùng một vị trí tại gốc khi định dạng mục, không tự thêm YAML hay trường nội tuyến. Lấy vị trí và xuất siêu dữ liệu là lựa chọn rõ ràng, riêng biệt trên mỗi Lộ trình.</p>
+      <div class="docs-meta-row" aria-label="Thông tin hướng dẫn">
+        <span>Cập nhật 21 tháng 8 năm 2026</span>
+        <span>Lấy một lần</span>
+        <span>Không theo dõi nền</span>
+        <a href="/vi/docs/">Hướng dẫn tính năng đầy đủ</a>
+      </div>
+      </header>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="overview">
+        <div class="docs-section-label">01 / Tổng quan</div>
+        <h2>Lấy vị trí không có nghĩa xuất siêu dữ liệu</h2>
+        <p>Mỗi Lộ trình có hai điều khiển vị trí riêng. <strong>Sử dụng vị trí hiện tại</strong> quyết định lộ trình có yêu cầu một vị trí tại thời điểm gốc hay không. <strong>Ghi siêu dữ liệu vị trí</strong> quyết định vị trí lấy có ghi thêm frontmatter hay nội tuyến không.</p>
+
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Điều khiển</th><th>Ý nghĩa</th><th>Điều không có nghĩa</th></tr></thead>
+            <tbody>
+              <tr><td>Quyền vị trí hệ thống</td><td>Cho phép Vox.md yêu cầu vị trí khi dùng ứng dụng hoặc giao diện ghi nhanh hỗ trợ.</td><td>Không bật vị trí cho bất cứ Lộ trình nào.</td></tr>
+              <tr><td>Sử dụng vị trí hiện tại</td><td>Yêu cầu một vị trí cho lộ trình này và cung cấp cho <code>{location}</code>.</td><td>Không tự ghi YAML hay siêu dữ liệu nội tuyến.</td></tr>
+              <tr><td>Ghi siêu dữ liệu vị trí</td><td>Ghi trường có cấu trúc đã chọn hoặc YAML nâng cao đã kiểm chứng từ vị trí lấy được.</td><td>Không kiểm soát việc <code>{location}</code> có thể hiển thị.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <strong>Lộ trình thể hiện ý định, không phải quyền</strong>
+          <p>Cấp quyền Khi dùng chỉ mở cổng hệ điều hành. Vox.md vẫn chỉ yêu cầu vị trí cho tác vụ Vị trí hiện tại độc lập trên Thanh ghi nhanh hoặc Lộ trình đã bật Sử dụng vị trí hiện tại.</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="setup">
+        <div class="docs-section-label">02 / Thiết lập</div>
+        <h2>Thiết lập Vị trí hiện tại cho một lộ trình</h2>
+        <ol class="docs-steps">
+          <li><strong>Mở Lộ trình.</strong><span>iPhone hoặc iPad mở Cài đặt → Lộ trình. Mac mở Cài đặt, chọn Lộ trình.</span></li>
+          <li><strong>Sửa lộ trình.</strong><span>Chọn lộ trình cần dùng vị trí gốc. Cài đặt thuộc lộ trình đó, không tác động lộ trình khác.</span></li>
+          <li><strong>Mở Vị trí.</strong><span>Bật <em>Sử dụng vị trí hiện tại</em>. Giữ <em>Ghi siêu dữ liệu vị trí</em> tắt cho chỉ token.</span></li>
+          <li><strong>Chọn độ chính xác.</strong><span>Dùng Chính xác cho vị trí gốc hoặc Thành phố cho tọa độ làm tròn hai chữ số thập phân, không có nhãn điểm quan tâm.</span></li>
+          <li><strong>Chọn hành vi không sẵn.</strong><span>Hỏi, Gửi không vị trí hoặc Hủy ghi quyết định khi không lấy được vị trí gốc.</span></li>
+          <li><strong>Thêm <code>{location}</code> nếu muốn.</strong><span>Đặt token trong mẫu mục, tiền tố hoặc hậu tố tùy chỉnh, hay mẫu Markdown kho.</span></li>
+        </ol>
+        <p>Lần sử dụng đầu tiên có thể hiện hộp thoại xin quyền vị trí của hệ điều hành. Nếu trước đó đã từ chối, hãy bật quyền truy cập vị trí cho Vox.md trong cài đặt hệ thống iOS, iPadOS hoặc macOS.</p>
+      </section>
+
+      <section class="docs-section" id="configurations">
+        <div class="docs-section-label">03 / Cấu hình phổ biến</div>
+        <h2>Chọn phạm vi vị trí nhỏ nhất cần</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Kết quả muốn có</th><th>Sử dụng vị trí hiện tại</th><th>Ghi siêu dữ liệu vị trí</th><th>Đền Thờ</th></tr></thead>
+            <tbody>
+              <tr><td>Không vị trí lộ trình</td><td>Tắt</td><td>Tắt</td><td>Không dùng <code>{location}</code>, hoặc hiện rỗng.</td></tr>
+              <tr><td>Chỉ liên kết bấm được</td><td>Bật</td><td>Tắt</td><td>Thêm <code>{location}</code>. Không ghi trường vị trí.</td></tr>
+              <tr><td>Chỉ siêu dữ liệu</td><td>Bật</td><td>Bật</td><td>Bỏ qua <code>{location}</code>. Chỉ ghi các trường đã cấu hình.</td></tr>
+              <tr><td>Liên kết và siêu dữ liệu</td><td>Bật</td><td>Bật</td><td>Thêm <code>{location}</code> và đặt các trường siêu dữ liệu.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Tắt Sử dụng vị trí hiện tại ngăn cả token và siêu dữ liệu của lộ trình, dù cài định dạng siêu dữ liệu trước vẫn giữ cho sau.</p>
+      </section>
+
+      <section class="docs-section" id="location-token">
+        <div class="docs-section-label">04 / Token mẫu</div>
+        <h2>Dùng <code>{location}</code> Không đổi siêu dữ liệu ghi chú</h2>
+        <p>Khi Sử dụng vị trí hiện tại bật và vị trí gốc sẵn, <code>{location}</code> tạo liên kết Markdown Google Maps đã kiểm chứng:</p>
+        <pre class="docs-code-block"><code>[Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>Token dùng trong mẫu mục dùng lại, tiền tố hậu tố tùy chỉnh và mẫu Markdown kho. Dùng cùng tọa độ Chính xác hoặc Thành phố đã chọn cho lộ trình.</p>
+
+        <h3 id="token-example">Ví dụ chỉ token</h3>
+        <p>Với hậu tố như:</p>
+        <pre class="docs-code-block"><code>Captured from {location}</code></pre>
+        <p>Vox.md có thể tạo:</p>
+        <pre class="docs-code-block"><code>Captured from [Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>Khi Ghi siêu dữ liệu vị trí tắt, liên kết này là nội dung vị trí duy nhất lộ trình thêm. Không có <code>locations:</code> làm tập hợp, không có <code>location.*::</code> là các trường được ghi.</p>
+
+        <h3 id="composer-fix">Sửa một chạm trình soạn</h3>
+        <p>Nếu tiền tố, hậu tố hoặc mẫu mục dùng lại đang có hiệu lực dùng <code>{location}</code> khi lộ trình chọn tắt Vị trí hiện tại, trình soạn giải thích token rỗng, cung cấp <strong>Sử dụng vị trí hiện tại cho [Route]</strong>. Tác vụ đó bật Vị trí hiện tại cho lộ trình nhưng cố ý giữ Ghi siêu dữ liệu vị trí tắt, để lần Gửi tiếp theo có thể phân giải token mà không thay đổi siêu dữ liệu ghi chú. Tệp mẫu đọc trực tiếp từ kho chỉ được đọc khi gửi, nên nội dung của chúng không thể kích hoạt gợi ý này trong trình soạn; hãy bật Vị trí hiện tại thủ công khi mẫu trong kho dùng token.</p>
+
+        <div class="docs-callout docs-callout-neutral">
+          <strong>Khi token rỗng</strong>
+          <p><code>{location}</code> thành chuỗi rỗng khi Vị trí hiện tại tắt, không có hoặc ghi tiếp không vị trí. Lưu ý dấu câu và nhãn xung quanh khi tạo dòng mẫu tùy chọn.</p>
+        </div>
+
+        <h3 id="capture-bar-location">Tác vụ Thanh ghi nhanh độc lập</h3>
+        <p>nhanh capture <strong>Vị trí hiện tại</strong> chèn thẳng liên kết Google Maps một lần vào nháp. Độc lập Lộ trình, không đổi Sử dụng vị trí hiện tại hay Ghi siêu dữ liệu vị trí.</p>
+      </section>
+
+      <section class="docs-section" id="metadata-output">
+        <div class="docs-section-label">05 / Đầu ra siêu dữ liệu</div>
+        <h2>Chỉ ghi trường có cấu trúc khi bạn chọn</h2>
+        <p>Bật Ghi siêu dữ liệu vị trí khi ghi chú cần trường vị trí máy đọc thêm hoặc thay <code>{location}</code> liên kết.</p>
+
+        <div class="docs-feature-grid">
+          <div><strong>Frontmatter ghi chú</strong><p>Nối mỗi vị trí vào tập hợp tên <code>locations</code> theo mặc định, khóa bằng ID ghi nhanh. Frontmatter không liên quan có sẵn được giữ nguyên.</p></div>
+          <div><strong>Trường mục nội tuyến</strong><p>Ghi kiểu Dataview <code>location.key:: value</code> thành các dòng bên cạnh mục đã ghi. Không thêm tập hợp frontmatter.</p></div>
+          <div><strong>Trường có cấu trúc</strong><p>Chọn và đổi tên tọa độ, vĩ độ, kinh độ, địa điểm, thành phố, vùng, quốc gia, liên kết nhà cung cấp, geo URI, độ chính xác, thời gian, nguồn và ID.</p></div>
+          <div><strong>YAML nâng cao</strong><p>Dùng mẫu YAML kiểm chứng, giới hạn cho Frontmatter ghi chú. YAML nâng cao không dùng cho trường mục nội tuyến.</p></div>
+        </div>
+
+        <h3 id="frontmatter-example">Ví dụ frontmatter có cấu trúc</h3>
+        <pre class="docs-code-block"><code>---
+title: Field Notes
+locations:
+  - id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    coordinates: [45.501235, -73.567890]
+    place: "Café &amp; Main"
+    appleMapsURL: "https://maps.apple.com/?ll=45.501235%2C-73.567890&amp;q=Caf%C3%A9%20%26%20Main"
+    timestamp: "2023-11-14T22:13:20.000Z"
+    source: "app"
+---</code></pre>
+        <p>Ghi chú liên tục có thể giữ nhiều lần ghi nhanh trong cùng tập hợp. Tính năng gộp vị trí đã tích hợp bảo vệ khi thử lại: lần thử lại có cùng ID ghi nhanh không thể nối cùng vị trí hai lần. Nếu khóa tập hợp đã chọn chứa giá trị không tương thích do người dùng viết, Vox.md sẽ dừng thay vì ghi đè giá trị đó.</p>
+
+        <h3 id="inline-example">Ví dụ mục nội tuyến</h3>
+        <pre class="docs-code-block"><code>location.id:: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+location.coordinates:: [45.501235, -73.567890]
+location.place:: "Café &amp; Main"
+
+Captured text</code></pre>
+
+        <h3 id="advanced-yaml">Chỗ giữ YAML nâng cao</h3>
+        <p>Mẫu nâng cao có thể dùng các mã giữ chỗ như <code>{{coordinates}}</code>, <code>{{latitude}}</code>, <code>{{longitude}}</code>, <code>{{place}}</code>, <code>{{city}}</code>, <code>{{region}}</code>, <code>{{country}}</code>, <code>{{appleMapsURL}}</code>, <code>{{googleMapsURL}}</code>, <code>{{openStreetMapURL}}</code>, <code>{{geoURI}}</code>, <code>{{accuracy}}</code>, <code>{{timestamp}}</code>, <code>{{source}}</code>, và <code>{{id}}</code>. Xem trước cấu hình trong cài đặt lộ trình trước khi lưu.</p>
+      </section>
+
+      <section class="docs-section" id="precision">
+        <div class="docs-section-label">06 / Độ chính xác và nhãn</div>
+        <h2>Chính xác và Thành phố dùng cùng ảnh vị trí nhất quán</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Độ chính xác</th><th>Tọa độ</th><th>Nhãn</th><th>Liên kết và trường</th></tr></thead>
+            <tbody>
+              <tr><td>Chính xác</td><td>Giữ vị trí gốc với sáu chữ số thập phân hiển thị.</td><td>Có thể kèm nhãn điểm quan tâm khi trường chọn cần.</td><td>Mọi giá trị dẫn xuất dùng tọa độ Chính xác.</td></tr>
+              <tr><td>Thành phố</td><td>Làm tròn vĩ độ và kinh độ hai chữ số thập phân trước khi giữ vị trí.</td><td>Bỏ nhãn điểm quan tâm; thành phố, vùng và nước có thể còn.</td><td>Mọi URL nhà cung cấp, geo URI, token và trường dùng tọa độ làm tròn.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Bộ mã hóa địa lý ngược của hệ thống Apple chỉ được dùng khi bật Ghi siêu dữ liệu vị trí và một trường có cấu trúc đã chọn hoặc mã giữ chỗ nâng cao cần địa điểm, thành phố, vùng hoặc quốc gia. Lộ trình chỉ dùng token bỏ qua tra cứu này. Nếu tra cứu nhãn thất bại, đầu ra dựa trên tọa độ vẫn khả dụng.</p>
+      </section>
+
+      <section class="docs-section" id="capture-sources">
+        <div class="docs-section-label">07 / Nguồn ghi nhanh</div>
+        <h2>Ảnh vị trí thuộc nguồn ghi</h2>
+        <p>Vị trí hiện tại được xác định tại thời điểm nguồn tạo ghi nhanh. Thử lại và khôi phục dùng lại kết quả được lưu bền vững đó, không âm thầm lấy vị trí mới.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Nguồn ghi nhanh</th><th>Thời điểm lấy vị trí</th></tr></thead>
+            <tbody>
+              <tr><td>nhanh capture trên iPhone và iPad</td><td>Gửi</td></tr>
+              <tr><td>Bảng chia sẻ</td><td>Gửi trong phần chia sẻ</td></tr>
+              <tr><td>Intent chữ, liên kết và tệp vào hàng trực tiếp</td><td>Gọi intent</td></tr>
+              <tr><td>Shortcuts, tiện ích, điều khiển, liên kết sâu mở nhanh capture</td><td>Gửi trong trình soạn</td></tr>
+              <tr><td>Shortcut, tiện ích, điều khiển, giọng nói tức thì và ghi lộ trình bàn phím</td><td>Dừng ghi âm</td></tr>
+              <tr><td>Gửi ghi bình thường Apple Watch</td><td>Dừng ghi trên Watch; iPhone không thay bằng vị trí của mình</td></tr>
+              <tr><td>Ghi nhanh Mac</td><td>Gửi, hoặc dừng ghi để gửi giọng nói ngay</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Watch Chỉ ghi âm</strong> xuất âm thanh M4A thô vào Files không có phần Markdown, nên không xin vị trí dù lộ trình dùng Vị trí hiện tại cho cách khác.</p>
+      </section>
+
+      <section class="docs-section" id="unavailable">
+        <div class="docs-section-label">08 / Không khả dụng và khôi phục</div>
+        <h2>Chọn cách mỗi lộ trình xử lý vị trí không có</h2>
+        <ul>
+          <li><strong>Hỏi:</strong> ghi tương tác có thể thử lại, hủy, gửi một lần không vị trí hoặc chọn Luôn gửi không vị trí cho lộ trình.</li>
+          <li><strong>Gửi không vị trí:</strong> tiếp tục gửi mà không có giá trị token hoặc đầu ra siêu dữ liệu.</li>
+          <li><strong>Hủy ghi nhanh:</strong> dừng gửi thay vì tạo ghi chú không có vị trí gốc yêu cầu.</li>
+          <li><strong>Đặt lại lựa chọn lưu:</strong> dùng Đặt lại lựa chọn vị trí không khả dụng trong cài đặt Vị trí lộ trình.</li>
+        </ul>
+        <p>Yêu cầu Hỏi không giám sát giữ kết quả không khả dụng tại gốc cho xem sau. Thử mục chờ hoặc lỗi không thay vị trí sau. Công việc chờ chỉ giữ ảnh vị trí chỉnh riêng tư hoặc kết quả không sẵn cần khôi phục cục bộ.</p>
+      </section>
+
+      <section class="docs-section" id="migration">
+        <div class="docs-section-label">09 / Lộ trình hiện có</div>
+        <h2>Nâng cấp giữ hành vi siêu dữ liệu cũ</h2>
+        <p>Tách lấy dữ liệu và xuất an toàn khi chuyển đổi:</p>
+        <ul>
+          <li><strong>Lộ trình mới:</strong> Sử dụng vị trí hiện tại và Ghi siêu dữ liệu vị trí đều bắt đầu tắt.</li>
+          <li><strong>Lộ trình vị trí đã bật trước:</strong> cả hai vẫn bật sau nâng cấp, giữ siêu dữ liệu đã ghi.</li>
+          <li><strong>Lộ trình vị trí từng tắt:</strong> cả hai vẫn tắt; nâng cấp không tạo đầu ra siêu dữ liệu mới.</li>
+        </ul>
+        <p>Để đổi lộ trình ghi siêu dữ liệu thành chỉ token, giữ Sử dụng vị trí hiện tại bật, tắt Ghi siêu dữ liệu vị trí. Markdown cũ không viết lại hay xóa.</p>
+      </section>
+
+      <section class="docs-section" id="privacy">
+        <div class="docs-section-label">10 / Riêng tư và lưu giữ</div>
+        <h2>Một lần lấy rõ ràng, không theo dõi nền</h2>
+        <ul>
+          <li>Vox.md không theo dõi vị trí liên tục hay nền.</li>
+          <li>Vị trí không gửi đến máy chủ Vox.md, phân tích, quảng cáo hay dịch vụ AI bên thứ ba.</li>
+          <li>URL token và nhà cung cấp định dạng cục bộ. Apple Maps, Google Maps hoặc OpenStreetMap chỉ nhận tọa độ khi mở liên kết của họ.</li>
+          <li>Bộ mã hóa địa lý ngược hệ thống Apple có thể gọi mạng chỉ khi siêu dữ liệu chọn cần nhãn địa điểm. Vị trí chỉ token bỏ truy vấn này.</li>
+          <li>Sau khi gửi thành công, các yêu cầu có thể khôi phục được rút gọn thành biên nhận không chứa nội dung; lịch sử ghi nhanh đã hoàn tất không giữ tọa độ, nhãn, URL nhà cung cấp hoặc mẫu vị trí.</li>
+          <li>Nếu siêu dữ liệu vị trí hoặc liên kết từ token được ghi vào Markdown, nó trở thành một phần của tệp bạn đã chọn. Nhà cung cấp đồng bộ tệp của bạn có thể xử lý tệp đó theo các điều khoản riêng của họ.</li>
+        </ul>
+        <div class="docs-callout">
+          <strong>Quyền vẫn bật, lộ trình vẫn riêng tư</strong>
+          <p>Giữ quyền hệ thống cho Vị trí hiện tại độc lập và vẫn tắt Sử dụng vị trí hiện tại trên mỗi Lộ trình được.</p>
+        </div>
+        <p>Xem <a href="/vi/privacy.html">Chính sách bảo mật</a> để biết đầy đủ xử lý và lưu dữ liệu.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">11 / Khắc phục sự cố</div>
+        <h2>Sửa lỗi vị trí và mẫu thường gặp</h2>
+        <div class="docs-troubleshooting">
+          <details>
+            <summary><code>{location}</code> hiện rỗng</summary>
+            <p>Xác nhận mẫu mục, tiền tố, hậu tố hay mẫu kho có hiệu lực dùng đúng token chữ thường <code>{location}</code>. Sau đó bật Sử dụng vị trí hiện tại cho lộ trình gửi. Nút sửa một chạm trong trình soạn có thể bật tính năng này khi phát hiện định dạng mục nội tuyến, mà không bật siêu dữ liệu; tệp mẫu đọc trực tiếp từ kho cần thiết lập lộ trình thủ công. Nếu quyền bị từ chối hoặc không có tùy chọn sửa một chạm, hãy xem lại hành vi khi không lấy được vị trí của lộ trình và cài đặt vị trí hệ thống.</p>
+          </details>
+          <details>
+            <summary>Liên kết hoạt động, không siêu dữ liệu</summary>
+            <p>Đúng như dự kiến với chỉ token. Mở cài đặt Vị trí lộ trình, bật Ghi siêu dữ liệu vị trí, chọn Frontmatter ghi chú hoặc Trường mục nội tuyến và trường cần.</p>
+          </details>
+          <details>
+            <summary>Siêu dữ liệu có nhưng mục không có liên kết</summary>
+            <p>Xuất siêu dữ liệu không tự chèn liên kết. Thêm <code>{location}</code> vào định dạng mục hiệu lực hoặc mẫu Markdown kho.</p>
+          </details>
+          <details>
+            <summary>Thiếu địa điểm hoặc thành phố</summary>
+            <p>Xác nhận chọn trường nhãn. Tra cứu ngược Apple có thể lỗi dù còn tọa độ. Độ chính xác Thành phố cố ý bỏ nhãn điểm quan tâm.</p>
+          </details>
+          <details>
+            <summary>Gửi frontmatter báo xung đột</summary>
+            <p>Khóa tập hợp cấu hình, <code>locations</code> theo mặc định, phải là danh sách vị trí tương thích. Đổi tên tập hợp trong lộ trình hoặc sửa frontmatter người dùng đã viết. Vox.md không ghi đè giá trị không tương thích.</p>
+          </details>
+          <details>
+            <summary>Lần thử lại có vị trí cũ hoặc không có vị trí</summary>
+            <p>Có chủ ý. Yêu cầu giữ kết quả tại gốc để lần thử sau không âm thầm nhận vị trí ghi khác. Bắt đầu ghi mới khi cần vị trí mới.</p>
+          </details>
+          <details>
+            <summary>Đã cấp quyền vị trí nhưng lộ trình không yêu cầu</summary>
+            <p>Quyền hệ thống chỉ là cổng. Sửa Lộ trình đó và bật Sử dụng vị trí hiện tại. Chỉ cấp quyền không tự bật cho lộ trình.</p>
+          </details>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/vi/developers">Nhà phát triển</a></li>
+        <li><a href="/vi/about">Về</a></li>
+        <li><a href="/vi/contact">Liên hệ</a></li>
+        <li><a href="/vi/">Trang chủ</a></li>
+        <li><a href="/vi/docs/">Tài liệu</a></li>
+        <li><a href="/vi/blog/">Nhật ký web</a></li>
+        <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+        <li><a href="/vi/terms.html">Điều khoản</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Ghi cục bộ · Người dùng quản lý tệp.</div>
+    </div>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

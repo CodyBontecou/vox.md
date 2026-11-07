@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr" data-search-section="Раздел" data-search-guide="Руководство" data-search-empty="Ничего не найдено по запросу «{query}»">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Блог Vox.md: быстрый захват, Obsidian и локальные заметки</title>
+  <meta name="description" content="Руководства и заметки о быстром захвате, работе с Obsidian, локальном Markdown и конфиденциальной голосовой расшифровке на устройстве.">
+  <link rel="canonical" href="https://vox.isolated.tech/ru/blog/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Документация Vox.md для языковых моделей">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Блог Vox.md: быстрый захват и локальный Markdown">
+  <meta property="og:description" content="Практические заметки о сохранении текста, ссылок, медиа и голоса в Obsidian или локальные файлы Markdown.">
+  <meta property="og:url" content="https://vox.isolated.tech/ru/blog/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Блог Vox.md: быстрый захват и локальные заметки">
+  <meta name="twitter:description" content="Работа с Obsidian, сохранение Markdown, обновления продукта и конфиденциальные голосовые инструменты.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Блог Vox.md",
+  "description": "Руководства и заметки о быстром захвате, работе с Obsidian, локальном Markdown и конфиденциальных голосовых инструментах.",
+  "url": "https://vox.isolated.tech/ru/blog/",
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "blogPost": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Расшифровывайте записи «Диктофона» iPhone в Markdown",
+      "url": "https://vox.isolated.tech/ru/blog/transcribe-voice-memos-iphone/",
+      "datePublished": "2026-10-30"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Быстрое сохранение в Obsidian на iPhone: выберите способ",
+      "url": "https://vox.isolated.tech/ru/blog/obsidian-quick-capture-iphone/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Как сохранить голосовые заметки iPhone в Obsidian",
+      "url": "https://vox.isolated.tech/ru/blog/voice-notes-to-obsidian-iphone/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Отправляйте голосовые заметки Apple Watch в Obsidian",
+      "url": "https://vox.isolated.tech/ru/blog/apple-watch-obsidian-voice-notes/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Добавляйте текст и голос в ежедневную заметку Obsidian на iPhone",
+      "url": "https://vox.isolated.tech/ru/blog/append-to-obsidian-daily-note-iphone/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Конфиденциальное преобразование речи в текст на iPhone: клавиатура и варианты",
+      "url": "https://vox.isolated.tech/ru/blog/best-voice-to-text-keyboard-iphone/",
+      "datePublished": "2026-06-13"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Расшифровывайте аудио в Markdown без сети на iPhone",
+      "url": "https://vox.isolated.tech/ru/blog/offline-transcription-iphone-markdown/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Сохраняйте ссылки, фото и сканы в Obsidian с iPhone",
+      "url": "https://vox.isolated.tech/ru/blog/save-links-photos-obsidian-iphone/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "Шаблоны захвата Obsidian для входящих, дневника и задач",
+      "url": "https://vox.isolated.tech/ru/blog/obsidian-capture-templates/",
+      "datePublished": "2026-10-26"
+    }
+  ],
+  "inLanguage": "ru"
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="API общедоступных сведений Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/">
+</head>
+<body>
+
+<nav aria-label="Основная навигация">
+  <div class="nav-inner">
+    <a href="/ru/" class="logo" aria-label="Главная Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ru/#how">Как это работает</a></li>
+      <li><a href="/ru/docs/">Документация</a></li>
+      <li><a href="/ru/blog/" aria-current="page">Блог</a></li>
+      <li><a href="/ru/privacy.html">Конфиденциальность</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ru_68a120ac7e20">Скачать Vox.md</a>
+  <details class="language-switcher"><summary>Язык</summary><ul><li><a href="/blog/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/" lang="ru" hreflang="ru" aria-current="page">Русский</a></li><li><a href="/ta/blog/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+<main>
+  <section class="blog-hero" aria-labelledby="blog-title">
+    <div class="wrap">
+      <p class="hero-label">Заметки Vox.md · Работа с Obsidian · Обновления продукта</p>
+      <h1 class="hero-title" id="blog-title">Заметки о быстром захвате</h1>
+      <p class="hero-subtitle">Заметки о продукте и практические руководства по переносу идей в локальный Markdown с меньшим количеством сортировки, нажатий и переключений приложений.</p>
+      <p class="mono-note"><strong>Выберите способ захвата.</strong> Выберите встроенный Obsidian, команды или Vox.md, затем следуйте руководству для голоса на iPhone, записей с часов или сохранения в ежедневные заметки.</p>
+    </div>
+  </section>
+
+  <section class="blog-section" aria-labelledby="latest-posts">
+    <div class="wrap" style="display: flex; flex-direction: column; gap: 56px; padding-top: 16px; padding-bottom: 96px">
+      <div class="section-head">
+        <p class="section-label">01 / Руководства</p>
+        <h2 class="section-title" id="latest-posts">Начните сохранять здесь</h2>
+        <p class="section-kicker">Руководства по работе Vox.md с Obsidian, локальными папками Markdown, системными средствами захвата и конфиденциальным голосом на устройстве.</p>
+      </div>
+
+      <div class="post-grid">
+        <article class="post-card">
+          <p class="post-meta">Существующие записи · <time datetime="2026-10-30">30 окт. 2026 г.</time></p>
+          <h3 class="post-title"><a href="/ru/blog/transcribe-voice-memos-iphone/">Расшифровывайте записи «Диктофона» iPhone в Markdown</a></h3>
+          <p class="post-desc">Скопируйте доступную расшифровку Apple или импортируйте одну запись в Vox.md, проверьте текст и место сохранения Markdown.</p>
+          <span class="post-more" aria-hidden="true">Руководство по импорту →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">Начните здесь · <time datetime="2026-10-26">26 окт. 2026 г.</time></p>
+          <h3 class="post-title"><a href="/ru/blog/obsidian-quick-capture-iphone/">Быстрое сохранение в Obsidian на iPhone: выберите способ</a></h3>
+          <p class="post-desc">Сравните встроенный захват, команды и Vox.md, затем выберите подробное руководство для нужной заметки.</p>
+          <span class="post-more" aria-hidden="true">Выберите способ захвата →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">Сравнение · <time datetime="2026-10-26">26 окт. 2026 г.</time></p>
+          <h3 class="post-title"><a href="/ru/compare/vox-md-vs-obsidian-quick-capture/">Vox.md и быстрый захват Obsidian</a></h3>
+          <p class="post-desc">Когда достаточно встроенных средств, где пригодится Vox.md и что нужно настроить для каждого варианта.</p>
+          <span class="post-more" aria-hidden="true">Прочитать сравнение →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">Работа с Obsidian · <time datetime="2026-10-26">26 окт. 2026 г.</time></p>
+          <h3 class="post-title"><a href="/ru/blog/voice-notes-to-obsidian-iphone/">Как сохранить голосовые заметки iPhone в Obsidian</a></h3>
+          <p class="post-desc">Подключите хранилище, выберите локальную расшифровку и отправьте запись в новую или ежедневную заметку. С примерами Markdown, ограничениями настройки и встроенным вариантом Obsidian.</p>
+          <span class="post-more" aria-hidden="true">Руководство по голосовым заметкам →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">Работа с Obsidian · <time datetime="2026-10-26">26 окт. 2026 г.</time></p>
+          <h3 class="post-title"><a href="/ru/blog/apple-watch-obsidian-voice-notes/">Отправляйте голосовые заметки Apple Watch в Obsidian</a></h3>
+          <p class="post-desc">Записывайте на Apple Watch и отправляйте голосовые заметки в Obsidian через iPhone. Настройте пресет захвата, разберитесь с очередью и исправляйте доставку.</p>
+          <span class="post-more" aria-hidden="true">Читать руководство →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">Работа с Obsidian · <time datetime="2026-10-26">26 окт. 2026 г.</time></p>
+          <h3 class="post-title"><a href="/ru/blog/append-to-obsidian-daily-note-iphone/">Добавляйте текст и голос в ежедневную заметку Obsidian на iPhone</a></h3>
+          <p class="post-desc">Настройте пресет Vox.md для добавления текста или голоса в ежедневную заметку Obsidian. Согласуйте имена файлов, вставляйте под заголовки и оформляйте задачи без повторных префиксов.</p>
+          <span class="post-more" aria-hidden="true">Читать руководство →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">Конфиденциальная расшифровка · <time datetime="2026-10-26">26 окт. 2026 г.</time></p>
+          <h3 class="post-title"><a href="/ru/blog/offline-transcription-iphone-markdown/">Расшифровывайте аудио в Markdown без сети на iPhone</a></h3>
+          <p class="post-desc">Подготовьте локальную расшифровку в Vox.md, запишите или импортируйте аудио и сохраните Markdown на iPhone. Разберитесь с загрузкой моделей, доступностью папок и проверками без сети.</p>
+          <span class="post-more" aria-hidden="true">Читать руководство →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">Захват медиа · <time datetime="2026-10-26">26 окт. 2026 г.</time></p>
+          <h3 class="post-title"><a href="/ru/blog/save-links-photos-obsidian-iphone/">Сохраняйте ссылки, фото и сканы в Obsidian с iPhone</a></h3>
+          <p class="post-desc">Сохраняйте URL, фото, файлы и сканы документов в хранилище Obsidian через Vox.md. Разберитесь со ссылками Markdown, путями вложений, OCR и доступом файлового провайдера.</p>
+          <span class="post-more" aria-hidden="true">Читать руководство →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">Шаблоны · <time datetime="2026-10-26">26 окт. 2026 г.</time></p>
+          <h3 class="post-title"><a href="/ru/blog/obsidian-capture-templates/">Шаблоны захвата Obsidian для входящих, дневника и задач</a></h3>
+          <p class="post-desc">Копируйте структуры Markdown и настраивайте префиксы Vox.md для входящих, ежедневного дневника и списка задач Obsidian. С рецептами путей, токенами времени и примерами вывода.</p>
+          <span class="post-more" aria-hidden="true">Читать руководство →</span>
+        </article>
+
+        <article class="post-card">
+          <dl class="post-preview" aria-label="Пример маршрута захвата">
+            <div><dt>Маршрут</dt><dd>Daily Inbox</dd></div>
+            <div><dt>нота</dt><dd>Journal/{period}.md</dd></div>
+            <div><dt>Руководство</dt><dd>## Inbox</dd></div>
+          </dl>
+          <p class="post-meta">Руководство по процессу · <time datetime="2026-10-25">25 окт. 2026 г.</time></p>
+          <h3 class="post-title"><a href="/ru/blog/obsidian-daily-note-iphone/">Сохраняйте в ежедневную заметку Obsidian с iPhone</a></h3>
+          <p class="post-desc">Настройте маршрут, выберите ежедневную заметку и заголовок, проверьте сохранённый Markdown и восстанавливайте неудачные доставки.</p>
+          <span class="post-more" aria-hidden="true">Руководство по ежедневным заметкам →</span>
+        </article>
+
+        <article class="post-card">
+          <div class="post-preview post-preview-rec" aria-hidden="true">
+            <span class="rec-dot"></span>
+            <span class="rec-text">и обновлённый список пресетов…</span>
+          </div>
+          <p class="post-meta">Руководство · <time datetime="2026-06-13">13 июн. 2026 г.</time> · чтение 6 мин</p>
+          <h3 class="post-title"><a href="/ru/blog/best-voice-to-text-keyboard-iphone/">Конфиденциальное преобразование речи в текст на iPhone: клавиатура и варианты</a></h3>
+          <p class="post-desc">Настройте конфиденциальную диктовку в поддерживаемых полях iPhone, разберитесь с полным доступом и подготовьте локальную расшифровку.</p>
+          <span class="post-more" aria-hidden="true">Читать руководство →</span>
+        </article>
+      </div>
+
+      <div class="start-here">
+        <div>
+          <p class="section-label">Начните здесь</p>
+          <h2>Прочитайте сведения о продукте и конфиденциальности</h2>
+          <p>Главная и правовые страницы объясняют, как Vox.md обрабатывает черновики захватов, места сохранения Markdown, вложения, локальную расшифровку и синхронизацию файлового провайдера.</p>
+        </div>
+        <div class="btn-row" aria-label="Ссылки для начала">
+          <a class="btn-secondary" href="/ru/docs/">Документация функций</a>
+          <a class="btn-secondary" href="/ru/#how">Обзор продукта</a>
+          <a class="btn-secondary" href="/ru/privacy.html">Политика конфиденциальности</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ru/developers">Разработчикам</a></li>
+        <li><a href="/ru/about">О приложении</a></li>
+        <li><a href="/ru/contact">Контакты</a></li>
+        <li><a href="/ru/">Главная</a></li>
+        <li><a href="/ru/docs/">Документация</a></li>
+        <li><a href="/ru/blog/" aria-current="page">Блог</a></li>
+        <li><a href="/ru/privacy.html">Конфиденциальность</a></li>
+        <li><a href="/ru/terms.html">Условия</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Поддержка</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ru_68a120ac7e20">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Без загрузки содержимого на сервер</div>
+    </div>
+  <details class="language-switcher"><summary>Язык</summary><ul><li><a href="/blog/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/" lang="ru" hreflang="ru" aria-current="page">Русский</a></li><li><a href="/ta/blog/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

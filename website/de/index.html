@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr" data-search-section="Abschnitt" data-search-guide="Anleitung" data-search-empty="Keine Treffer für „{query}“">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schnellerfassung für Obsidian auf iPhone und Apple Watch | Vox.md</title>
+  <meta name="description" content="Erfasse Text, Links, Fotos, Dateien, Scans, Skizzen und private Sprachnotizen auf dem iPhone in Obsidian-Vaults oder lokalen Markdown-Dateien.">
+  <link rel="canonical" href="https://vox.isolated.tech/de/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-Dokumentation für Sprachmodelle">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Schnellerfassung für Obsidian auf iPhone und Apple Watch | Vox.md">
+  <meta property="og:description" content="Sende jede Idee an den richtigen Vault, die richtige Notiz oder Überschrift, ohne Obsidian zu öffnen. Die Sprachtranskription bleibt auf deinem Gerät.">
+  <meta property="og:url" content="https://vox.isolated.tech/de/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Schnellerfassung für Obsidian auf iPhone und Apple Watch | Vox.md">
+  <meta name="twitter:description" content="Erst erfassen, dann alles über präzise Markdown-Routen in die richtige Notiz legen lassen.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Vox.md",
+  "applicationCategory": "ProductivityApplication",
+  "operatingSystem": "iOS 17.6+, iPadOS 17.6+, macOS 14+, watchOS 10+",
+  "description": "Schnellerfassung für Obsidian-Vaults und lokale Markdown-Notizen mit Text, Links, Medien, Dokumentenscans, Skizzen und privater Sprachtranskription auf dem Gerät.",
+  "url": "https://vox.isolated.tech/de/",
+  "downloadUrl": "https://apps.apple.com/us/app/voxboard/id6758967337",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/",
+    "sameAs": [
+      "https://github.com/CodyBontecou"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "featureList": [
+    "Text, Links, Fotos, Dateien, Dokumentenscans, Skizzen und Sprache erfassen",
+    "Standard-Markdown in Obsidian-Vaults oder Dateien-Ordner schreiben",
+    "Neue Notizen erstellen, Rolling Notes aktualisieren oder vorhandene Notizen ansteuern",
+    "Am Anfang, Ende oder unter einer gewählten Überschrift einfügen",
+    "Einmaligen aktuellen Standort in Vorlagen mit optionaler Metadatenausgabe verwenden",
+    "Widgets, Kurzbefehle, Teilen-Erweiterung oder Tastatur verwenden",
+    "Sprache auf dem Gerät ohne Audio-Uploads transkribieren"
+  ],
+  "inLanguage": "de"
+}
+</script>
+
+  <link rel="stylesheet" href="/geist.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://isolated.tech/#organization",
+  "name": "Isolated Tech",
+  "url": "https://isolated.tech/",
+  "sameAs": [
+    "https://github.com/CodyBontecou"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Kundensupport",
+    "email": "codybontecou@gmail.com",
+    "url": "https://vox.isolated.tech/de/contact",
+    "availableLanguage": "Englisch"
+  },
+  "inLanguage": "de",
+  "description": "Erfasse Text, Links, Fotos, Dateien, Scans, Skizzen und private Sprachnotizen auf dem iPhone in Obsidian-Vaults oder lokalen Markdown-Dateien."
+}
+</script>
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Öffentliche Informations-API von Vox.md">
+<meta name="naver-site-verification" content="cae11a861102ae94853f1f7e773318e17525df3a">
+  <meta name="color-scheme" content="light">
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/InstrumentSerif-Italic-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/">
+</head>
+<body class="raw">
+<a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+<nav aria-label="Hauptnavigation">
+  <div class="r-wrap r-nav">
+    <a href="/de/" class="r-logo" aria-label="Vox.md-Startseite">
+      <span class="r-logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <span class="r-tab-current" aria-hidden="true">index.md</span>
+    <ul class="r-nav-links">
+      <li><a href="#how">how.md</a></li>
+      <li><a href="#capture">files.md</a></li>
+      <li><a href="#presets">routes.md</a></li>
+      <li><a href="#privacy">privacy.md</a></li>
+      <li><a href="/de/docs/">docs/</a></li>
+      <li><a href="/de/blog/">guides/</a></li>
+      <li><a href="/de/compare/">compare/</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_de_8a5edab28263">Kostenlos laden</a>
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ar/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+<main id="main">
+<section aria-labelledby="hero-title">
+  <div class="r-wrap r-hero">
+    <p class="r-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</p>
+    <div class="r-hero-body">
+      <div class="r-hero-copy">
+        <pre class="r-front" aria-label="Vox.md auf einen Blick">---
+app: Vox.md
+for: Obsidian &amp; any Markdown folder
+runs_on: [iPhone, iPad, Mac, Apple Watch]
+transcribes_on: <b>this device</b>
+writes_to: <b>a folder you pick</b>
+copies_on_our_servers: <b class="r-hl">0</b>
+---</pre>
+        <h1 class="r-h1" id="hero-title" aria-label="Deine Gedanken, in einer lokalen Datei."><span class="r-mark" aria-hidden="true">#</span>Deine Gedanken, in einer <span aria-hidden="true"><del>Cloud</del> </span><span class="visually-hidden">lokal </span><span class="r-voice r-hl">Datei.</span><span class="r-caret" aria-hidden="true"></span></h1>
+        <p class="r-hero-lead">Erfasse Ideen vom iPhone, Mac und der Apple Watch in Obsidian: tippen, fotografieren, scannen, skizzieren oder laut aussprechen. Vox.md transkribiert auf deinem Gerät und schreibt einfaches Markdown direkt in den gewählten Vault oder Dateien-Ordner, unter deiner gewählten Notiz und Überschrift.</p>
+        <div class="r-actions">
+          <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_de_8a5edab28263">Vox.md kostenlos laden</a>
+          <a href="/de/blog/obsidian-quick-capture-iphone/" class="r-btn r-btn-line">Eine Erfassungsmethode wählen</a>
+        </div>
+        <p class="r-note">15 Transkriptionsminuten + 10 Erfassungszustellungen kostenlos · iOS 17.6+ · kein Konto</p>
+        <details class="desktop-download-qr">
+          <summary>Scannen und auf dein iPhone laden</summary>
+          <div class="download-qr-panel">
+            <a href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-kind="qr" aria-label="Vox.md im App Store öffnen" data-download-campaign="seo_home_qr">
+              <img src="/assets/download-qr.svg" alt="QR-Code zum Öffnen von Vox.md im App Store" width="176" height="176" decoding="async">
+            </a>
+            <p>Scanne mit deiner iPhone-Kamera, um Vox.md im App Store zu öffnen.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="r-demo" aria-labelledby="demo-title">
+        <h2 class="visually-hidden" id="demo-title">Was aus einer Erfassung wird</h2>
+        <div class="r-demo-tabs" role="tablist" aria-label="Erfassung wählen" hidden>
+          <button type="button" role="tab" id="demo-tab-voice" aria-controls="demo-voice" aria-selected="true">Sprachmemo</button>
+          <button type="button" role="tab" id="demo-tab-link" aria-controls="demo-link" aria-selected="false" tabindex="-1">geteilter Link</button>
+          <button type="button" role="tab" id="demo-tab-scan" aria-controls="demo-scan" aria-selected="false" tabindex="-1">gescannte Seite</button>
+        </div>
+
+        <div class="r-demo-panel" id="demo-voice" role="tabpanel" aria-labelledby="demo-tab-voice">
+          <div class="r-said">
+            <p class="r-said-meta"><span>Was du eingegeben hast</span><span>Sprache · 0:03</span></p>
+            <div class="r-wave" aria-hidden="true"><span style="height:8px"></span><span style="height:14px"></span><span style="height:22px"></span><span style="height:30px"></span><span style="height:18px"></span><span style="height:10px"></span><span style="height:26px"></span><span style="height:34px"></span><span style="height:20px"></span><span style="height:12px"></span><span style="height:6px"></span><span style="height:16px"></span><span style="height:28px"></span><span style="height:24px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:20px"></span><span style="height:32px"></span><span style="height:26px"></span><span style="height:12px"></span><span style="height:18px"></span><span style="height:30px"></span><span style="height:22px"></span><span style="height:10px"></span><span style="height:6px"></span><span style="height:14px"></span><span style="height:24px"></span><span style="height:34px"></span><span style="height:28px"></span><span style="height:16px"></span><span style="height:10px"></span><span style="height:20px"></span><span style="height:26px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:18px"></span></div>
+            <p class="r-voice">„Daran denken, den Zahnarzttermin zu buchen.“</p>
+          </div>
+          <div class="r-pipe"><ul><li>auf diesem Gerät transkribiert</li><li>Route: <strong>Tagesnotiz · Aufgaben</strong></li><li>Netzwerknutzung: <span class="r-hl">keine</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/2026-11-06.md</span><span>+ 1 Zeile</span></p>
+            <pre>## Tasks
+- Remember to book the dentist</pre>
+          </div>
+        </div>
+
+        <div class="r-demo-panel" id="demo-link" role="tabpanel" aria-labelledby="demo-tab-link" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>Was du eingegeben hast</span><span>Teilen-Menü · Safari</span></p>
+            <p class="r-voice">Ein Link, den du schon vor drei Wochen lesen wolltest, direkt aus Safari geteilt.</p>
+          </div>
+          <div class="r-pipe"><ul><li>unverändert gespeichert</li><li>Route: <strong>Leseliste</strong></li><li>Netzwerknutzung: <span class="r-hl">keine</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Inbox/Reading.md</span><span>+ 2 Zeilen</span></p>
+            <pre>### 14:07
+- https://www.inkandswitch.com/local-first/</pre>
+          </div>
+        </div>
+
+        <div class="r-demo-panel" id="demo-scan" role="tabpanel" aria-labelledby="demo-tab-scan" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>Was du eingegeben hast</span><span>Scan · 1 Seite</span></p>
+            <p class="r-voice">Die Notizbuchseite von heute Morgen, mit der Kamera gescannt.</p>
+          </div>
+          <div class="r-pipe"><ul><li>auf diesem Gerät extrahierter Text</li><li>Route: <strong>Journalseiten</strong></li><li>Netzwerknutzung: <span class="r-hl">keine</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/Pages/2026-11-06 0912.md</span><span>+ 4 Zeilen</span></p>
+            <pre>![[scan-2026-11-06-0912.jpg]]
+
+&gt; ship routing first.
+&gt; ask about the watch build</pre>
+          </div>
+        </div>
+        <p class="r-demo-foot">Veranschaulichende Beispiele. Die Ausgabe hängt von deiner Route und Transkription ab.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-zero" id="privacy" aria-labelledby="privacy-title">
+  <div class="r-wrap r-zero-inner">
+    <div class="r-zero-copy">
+      <p class="r-file">## privacy.md</p>
+      <h2 id="privacy-title">0<small>Byte</small></h2>
+      <p>deiner Entwürfe, Anhänge, Notizpfade, Vorlagen, getippten Texte, Transkripte oder ausdrücklich aktivierten Standortdaten erreichen Vox.md-Server oder Analysedienste. Dateien gehen nur in deinen gewählten Ordner. Der Standort wird niemals fortlaufend oder im Hintergrund verfolgt.</p>
+    </div>
+    <dl class="r-ledger" aria-label="Was Vox.md erhält">
+      <div><dt>Audio hochgeladen</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>Transkripte hochgeladen</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>Entwürfe und Anhänge</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>Notizpfade und Vorlagen</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>Konto erforderlich</dt><span aria-hidden="true"></span><dd>nein</dd></div>
+      <div><dt>Standort im Hintergrund</dt><span aria-hidden="true"></span><dd>niemals</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-section" id="how" aria-labelledby="how-title">
+  <div class="r-wrap r-stack">
+    <div class="r-head">
+      <p class="r-file">L041 · how.md</p>
+      <h2 class="r-h2" id="how-title"><span class="r-mark" aria-hidden="true">##</span>Drei Stationen. <span class="r-voice">Keine davon gehört uns.</span></h2>
+      <p class="r-lead">Einen Vault öffnen, eine Notiz finden und die richtige Stelle wählen ist zu viel Arbeit für einen flüchtigen Gedanken. Lege die Route einmal fest und erfasse dann.</p>
+    </div>
+    <ol class="r-stops">
+      <li class="r-stop"><p class="r-stop-meta"><span>01</span><span>dein Ordner</span></p><h3>Einen Vault verbinden</h3><p>Wähle einen Obsidian-Vault oder einen beliebigen beschreibbaren Ordner in Dateien. Vox.md arbeitet mit den Markdown-Dateien, die dir bereits gehören.</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>02</span><span>deine Tasche</span></p><h3>Alles erfassen</h3><p>Schreibe, füge einen Link, Medien oder eine Datei hinzu, scanne ein Dokument, skizziere oder nimm eine private Sprachnotiz auf. Sprache wird direkt dort transkribiert.</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>03</span><span>deine Datei</span></p><h3>Die Route legt es ab</h3><p>Erstelle eine Notiz, aktualisiere eine Rolling Note oder wähle eine vorhandene. Platziere den Inhalt am Anfang, Ende oder unter einer Überschrift.</p></li>
+    </ol>
+    <p class="r-skip"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9A9A93" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.1 9.5 4.25 4.25 0 0 0 7 18z"/><path d="M3 3l18 18"/></svg><span><del>Station 2,5: die Cloud von jemand anderem</del>. Übersprungen. Die Synchronisierung macht das, was dein Ordner ohnehin tut, nach den Bedingungen des jeweiligen Anbieters.</span></p>
+  </div>
+</section>
+
+<section class="r-section" id="capture" aria-labelledby="capture-title">
+  <span class="anchor" id="features" aria-hidden="true"></span>
+  <div class="r-wrap r-split">
+    <div class="r-stack" style="gap: 20px">
+      <p class="r-file">L077 · files.md</p>
+      <h2 class="r-h2" id="capture-title"><span class="r-mark" aria-hidden="true">##</span>Es ist <span class="r-voice r-hl">nur</span> Dateien.</h2>
+      <p class="r-lead">Kein Plugin, kein Vox.md-Cloud-Konto, kein proprietäres Format. Vox.md schreibt lesbares Markdown und Links im Obsidian-Stil in Ordner unter deiner Kontrolle, sodass deine Notizen nie an die App gebunden sind.</p>
+      <ul class="r-inputs">
+        <li><code>.md</code><span>Getippte Notizen und Sprachtranskripte als Standard-Markdown</span></li>
+        <li><code>[[ ]]</code><span>Wikilinks und eingebettete Anhänge, die Obsidian versteht</span></li>
+        <li><code>img</code><span>Fotos, Dateien und Dokumentenscans mit extrahiertem Text. <a href="/de/blog/save-links-photos-obsidian-iphone/">Anleitung zur Medienerfassung</a></span></li>
+        <li><code>url</code><span>Links von überall, wo du teilen kannst</span></li>
+        <li><code>draw</code><span>Bearbeitbare Skizzen</span></li>
+        <li><code>voice</code><span>Private Sprachaufnahme über Editor oder Tastatur; Audio wird niemals hochgeladen. <a href="/de/blog/voice-notes-to-obsidian-iphone/">Anleitung für iPhone-Sprachnotizen</a></span></li>
+        <li><code>---</code><span>Wiederverwendbares Markdown oder YAML mit Datums-, Zeit-, Quellen- und Kennungs-Token</span></li>
+      </ul>
+    </div>
+    <div class="r-tree" role="img" aria-label="Eine Vault-Ordnerstruktur mit drei hervorgehobenen neuen Erfassungen">
+      <p class="r-tree-head"><span>~/Obsidian/Second Brain</span><span>ls -R</span></p>
+      <ul aria-hidden="true">
+        <li>├── Inbox/</li>
+        <li>│   └── Reading.md <mark>just now</mark></li>
+        <li>├── Journal/</li>
+        <li class="old">│   ├── 2026-11-05.md</li>
+        <li>│   ├── 2026-11-06.md <mark>+ ## Tasks</mark></li>
+        <li>│   └── Pages/</li>
+        <li>│       └── 2026-11-06 0912.md <mark>scan</mark></li>
+        <li>├── Meetings/</li>
+        <li class="old">│   └── 2026-11-01.md</li>
+        <li>├── Projects/</li>
+        <li class="old">│   └── Ideas.md</li>
+        <li class="old">└── attachments/</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="r-section" id="presets" aria-labelledby="presets-title">
+  <span class="anchor" id="destinations" aria-hidden="true"></span>
+  <div class="r-wrap r-stack">
+    <div class="r-head">
+      <p class="r-file">L112 · routes.md</p>
+      <h2 class="r-h2" id="presets-title"><span class="r-mark" aria-hidden="true">##</span>Route einmal festlegen. <span class="r-voice">Dann einfach sprechen.</span></h2>
+      <p class="r-lead">Eine Route merkt sich die Verarbeitung und Formatierung einer Erfassung sowie Vault, Notizziel, Platzierung, Anhänge, Wiederholungsverhalten und den optionalen einmaligen aktuellen Standort.</p>
+    </div>
+    <div class="r-table-box">
+      <table class="r-table">
+        <caption class="visually-hidden">Beispielrouten</caption>
+        <thead><tr><th scope="col">Route</th><th scope="col">Datei</th><th scope="col">Wo darin</th><th scope="col">Eingebettet als</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Tagesnotiz · Aufgaben</th><td>Journal/{date}.md</td><td>Ende von ## Tasks</td><td>- {text}</td></tr>
+          <tr><th scope="row">Besprechungsnotizen</th><td>Meetings/{date}.md</td><td>unter ## Notes</td><td>### {time} · {title}</td></tr>
+          <tr><th scope="row">Leseliste</th><td>Inbox/Reading.md</td><td>Dateianfang</td><td>### {time}</td></tr>
+          <tr><th scope="row">Ideen</th><td>Projects/Ideas.md</td><td>Dateiende</td><td>&gt; {text}</td></tr>
+          <tr><th scope="row">Neue Notiz</th><td>Inbox/{timestamp}.md</td><td>neue Datei</td><td>YAML-Frontmatter und Inhalt</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <dl class="r-targets">
+      <div><dt>Vorhandene Notiz <code>Projects/Ideas.md</code></dt><dd>Ergänze weiter ein Dokument, das bereits in deinem Vault liegt.</dd></div>
+      <div><dt>Fortlaufende Notiz <code>Journal/&#123;period&#125;.md</code></dt><dd>Tägliche, wöchentliche, monatliche, vierteljährliche oder jährliche Notizen. <a href="/de/blog/append-to-obsidian-daily-note-iphone/">Tagesnotizen und Überschriftenplatzierung einrichten.</a></dd></div>
+      <div><dt>Neue Notiz <code>Inbox/&#123;timestamp&#125;.md</code></dt><dd>Für jede neue Erfassung eine saubere Datei erstellen.</dd></div>
+      <div><dt>Genaue Platzierung <code>Top · Bottom · Heading</code></dt><dd>Unter jeder Überschriftenebene; eine fehlende Überschrift wird für dich erstellt.</dd></div>
+      <div><dt>Eintragsvorlage <code>Markdown · YAML · Tokens</code></dt><dd>Halte wiederholte Erfassungen einheitlich, ohne sie neu zu formatieren.</dd></div>
+      <div><dt>Aktueller Standort <code>&#123;location&#125;</code></dt><dd>Ein Kartenlink vom Entstehungszeitpunkt ohne Metadaten oder ausdrücklich aktiviertes Frontmatter und Inline-Felder. <a href="/de/docs/location/">Anleitung lesen.</a></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-section" id="everywhere" aria-labelledby="everywhere-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L140 · anywhere.md</p>
+    <h2 class="r-h2" id="everywhere-title"><span class="r-mark" aria-hidden="true">##</span>Wo immer der Gedanke <span class="r-voice">auftaucht</span></h2>
+    <ul class="r-pills" aria-label="Einstiegspunkte für Erfassungen">
+      <li>Tastatur <small>jede App</small></li>
+      <li>Apple Watch <small>Handgelenk</small></li>
+      <li>Mac <small>Schnellerfassung</small></li>
+      <li>Teilen-Menü <small>alles</small></li>
+      <li>Widgets <small>Home- und Sperrbildschirm</small></li>
+      <li>Kontrollzentrum <small>ein Tippen</small></li>
+      <li>Kurzbefehle <small>automatisieren</small></li>
+    </ul>
+    <p class="r-lead"><a href="/de/blog/apple-watch-obsidian-voice-notes/">Apple Watch-Sprachnotizen für Obsidian einrichten</a>. Nimm auf der Watch auf und transkribiere und stelle dann über dein gekoppeltes iPhone zu.</p>
+  </div>
+</section>
+
+<section class="r-section" id="specs" aria-labelledby="specs-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L158 · specs.yml</p>
+    <h2 class="r-h2" id="specs-title"><span class="r-mark" aria-hidden="true">##</span>Dateien im Mittelpunkt <span class="r-voice">kannst du behalten</span></h2>
+    <dl class="r-yaml">
+      <div><dt>capture_types</dt><dd>Text, Links, Fotos, Dateien, Scans, Skizzen und Sprache</dd></div>
+      <div><dt>note_format</dt><dd>Standard-Markdown</dd></div>
+      <div><dt>destinations</dt><dd>Obsidian-Vaults und beschreibbare Dateien-Ordner</dd></div>
+      <div><dt>note_targets</dt><dd>Neue, fortlaufende oder vorhandene Notizen</dd></div>
+      <div><dt>placement</dt><dd>Oben, unten oder unter einer Überschrift</dd></div>
+      <div><dt>rolling_periods</dt><dd>Täglich, wöchentlich, monatlich, vierteljährlich und jährlich</dd></div>
+      <div><dt>obsidian_syntax</dt><dd>Wikilinks und eingebettete Anhänge</dd></div>
+      <div><dt>entry_formats</dt><dd>Wiederverwendbare Markdown- und YAML-Vorlagen</dd></div>
+      <div><dt>entry_points</dt><dd>App, Widgets, Kurzbefehle, Teilen-Erweiterung, Tastatur, Apple Watch, Mac und Kontrollzentrum</dd></div>
+      <div><dt>voice_processing</dt><dd>Apple Speech, Whisper oder Parakeet auf dem Gerät</dd></div>
+      <div><dt>audio_uploads</dt><dd>Keine für Transkription</dd></div>
+      <div><dt>account</dt><dd>Nicht erforderlich</dd></div>
+      <div><dt>platforms</dt><dd>iOS/iPadOS 17.6+, macOS 14+, watchOS 10+</dd></div>
+      <div><dt>location</dt><dd>Ausdrücklich aktivierter einmaliger Schnappschuss; {location} funktioniert ohne Metadaten; kein Hintergrundtracking</dd></div>
+      <div><dt>location_metadata</dt><dd>Separate Aktivierung für Frontmatter- oder Inline-Felder; Standard Genau oder Rundung auf Stadtgenauigkeit</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-dark" id="reviews" aria-labelledby="reviews-title">
+  <div class="r-wrap r-dark-inner">
+    <p class="r-file">L190 · reviews.md · from the App Store</p>
+    <h2 class="r-h2" id="reviews-title"><span class="r-mark" aria-hidden="true">##</span>Gesprochen <span class="r-voice">über</span> es</h2>
+    <div class="r-quotes">
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5b29-4b3500000000">
+        <div>
+          <h3>Genau das, was ich brauchte · <span role="img" aria-label="5 von 5 Sternen">★★★★★</span></h3>
+          <blockquote><p>„Schon seit einiger Zeit suche ich nach einer Möglichkeit, schnell mündliche Notizen zu machen, Anhänge hinzuzufügen, lokal zu transkribieren und alles in einen Obsidian-Ordner zu synchronisieren. Diese App erledigt das perfekt.“</p></blockquote>
+          <figcaption><span class="review-author">SteamingCoax</span> · App Store-Rezension · <time datetime="2026-08-11">11. Aug. 2026</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5bf7-fadc00000000">
+        <div>
+          <h3>Das stille Erfassungskraftpaket · <span role="img" aria-label="5 von 5 Sternen">★★★★★</span></h3>
+          <blockquote>
+            <p>„Vox.md ist zu einem meiner meistgenutzten Werkzeuge geworden. Ich habe es für Sprachmemos in Obsidian geholt, und es hat meinen täglichen Erfassungsablauf ganz nebenbei verändert.</p>
+            <p>Das System der Aufnahmevoreinstellungen ist brillant — jedes Aufnahme-Preset hat sein eigenes Ziel, seine Vorlage und Platzierung. Meine Sprachmemos landen direkt in der richtigen Tagesnotiz, genau wie gewünscht formatiert, ganz ohne Reibung.“</p>
+          </blockquote>
+          <figcaption><span class="review-author">Eric Know</span> · App Store-Rezension · <time datetime="2026-08-14">14. Aug. 2026</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5a77-5cb500000000">
+        <div>
+          <h3>Unterschätzt, übersehen, nicht vergessen · <span role="img" aria-label="5 von 5 Sternen">★★★★★</span></h3>
+          <blockquote><p>„Wird schnell zu einer meiner liebsten und meistgenutzten Apps im Jahr 2026!“</p></blockquote>
+          <figcaption><span class="review-author">PromisedOne</span> · App Store-Rezension · <time datetime="2026-08-08">8. Aug. 2026</time></figcaption>
+        </div>
+      </figure>
+    </div>
+    <p class="r-fine">Ausgewählte App Store-Rezensionen. Erics Zitat ist ein Auszug; der Wortlaut ist unverändert. <a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_8a5edab28263">App Store-Rezensionen lesen <span aria-hidden="true">→</span></a></p>
+  </div>
+</section>
+
+<section class="r-section" id="faq" aria-labelledby="faq-title">
+  <div class="r-wrap r-faq">
+    <div class="r-head">
+      <p class="r-file">L214 · faq.md</p>
+      <h2 class="r-h2" id="faq-title" style="font-size: clamp(36px, 4.4vw, 60px)"><span class="r-mark" aria-hidden="true">##</span>Öffne <span class="r-voice">Fragen</span></h2>
+      <p class="r-lead">Vox.md arbeitet direkt mit den von dir gewählten Markdown-Ordnern. Obsidian passt gut dazu, ist aber nicht erforderlich. Wähle eine Frage, um die Antwort zu lesen.</p>
+    </div>
+    <div class="r-faq-list">
+      <details>
+        <summary>Funktioniert Vox.md mit Obsidian?</summary>
+        <p>Ja. Erstelle eine Route und wähle deinen Obsidian-Vault als Ziel. Vox.md schreibt Standard-Markdown, Wikilinks und eingebettete Anhänge direkt in den Vault. Ein Obsidian-Plugin ist nicht erforderlich. <a href="/de/compare/vox-md-vs-obsidian-quick-capture/">Vergleiche Vox.md mit der nativen Obsidian-Erfassung.</a> <a href="/de/blog/obsidian-daily-note-iphone/">Einen Erfassungsablauf für Tagesnotizen einrichten.</a></p>
+      </details>
+      <details>
+        <summary>Was kann ich erfassen?</summary>
+        <p>Der Editor akzeptiert Text, Weblinks, Fotos, Dateien, Dokumentenscans, Skizzen und Sprache. Scans können extrahierten Text enthalten; Sprache lässt sich lokal transkribieren.</p>
+      </details>
+      <details>
+        <summary>Wohin kann eine Erfassung gehen?</summary>
+        <p>Jede Route hat ein Ziel, das eine neue Notiz erstellen, eine fortlaufende Tages- oder periodische Notiz aktualisieren oder in eine vorhandene Markdown-Datei schreiben kann. Eine einzelne Erfassung kann vorübergehend eine andere Notiz wählen, ohne die Route zu ändern.</p>
+      </details>
+      <details>
+        <summary>Kann Vox.md unter einer Überschrift einfügen?</summary>
+        <p>Ja. Eine Route kann voranstellen, anhängen oder unter einer Überschrift der Ebene eins bis sechs einfügen. Du kannst wählen, ob eine fehlende Überschrift die Zustellung stoppen oder automatisch erstellt werden soll und ob neue Einträge direkt unter der Überschrift oder am Ende ihres Abschnitts landen.</p>
+      </details>
+      <details>
+        <summary>Kann ich es ohne Obsidian nutzen?</summary>
+        <p>Ja. Eine Route kann jeden beschreibbaren Ordner verwenden, der über Dateien bereitgestellt wird. Die Ausgabe besteht aus einfachem Markdown mit normalen Anhängen; deine Notizen sind also nicht an Vox.md gebunden.</p>
+      </details>
+      <details>
+        <summary>Lädt Vox.md meine Notizen oder Audio hoch?</summary>
+        <p>Es werden keine Erfassungsinhalte an Vox.md-Server gesendet. Entwürfe und Sprachverarbeitung bleiben auf dem Gerät; fertige Dateien werden in deinen gewählten Ordner geschrieben. Gehört dieser Ordner zu einem Synchronisierungsanbieter, behandelt dieser ihn nach eigenen Bedingungen. <a href="/de/blog/offline-transcription-iphone-markdown/">Offline-Einrichtungsanforderungen prüfen.</a></p>
+      </details>
+      <details>
+        <summary>Kann ich Standort in einer Vorlage ohne Metadaten verwenden?</summary>
+        <p>Ja. Aktiviere „Aktuellen Standort verwenden“ für diese Route, lass „Standortmetadaten schreiben“ aus und ergänze <code>{location}</code> zur Eintragsformatierung hinzu. Vox.md fügt einen einmaligen Kartenlink ein, ohne Frontmatter- oder Inline-Standortfelder hinzuzufügen. <a href="/de/docs/location/">Vollständige Standortanleitung lesen.</a></p>
+      </details>
+      <details>
+        <summary>Kann ich außerhalb der App erfassen?</summary>
+        <p>Ja. Vox.md enthält Widgets, Kurzbefehle-Aktionen, eine Teilen-Erweiterung und eine Sprachtastatur. Diese Einstiegspunkte speisen dasselbe lokale Erfassungssystem.</p>
+      </details>
+      <details>
+        <summary>Was kostet Vox.md?</summary>
+        <p>Vox.md enthält kostenlos 15 Transkriptionsminuten und 10 erfolgreiche Erfassungszustellungen. Unbegrenzte Transkription und Erfassung sind mit einem einmaligen Kauf auf Lebenszeit verfügbar, ohne Abo oder Werbung. Nach Markdown gesendete Sprachtranskripte verwenden das Transkriptionskontingent, kein zweites Erfassungskontingent. Der App Store zeigt den aktuellen Preis für deine Region.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="r-cta" id="download" aria-labelledby="download-title">
+  <div class="r-wrap">
+    <div class="r-cta-card">
+      <h2 id="download-title">Speichere den nächsten Gedanken <span class="r-voice">in einer Datei.</span></h2>
+      <p>Verbinde einmal einen Vault oder lokalen Ordner. Die nächste Idee kann direkt in die gewählte Notiz, Überschrift und das gewählte Format gehen.</p>
+      <div class="r-actions">
+        <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_de_8a5edab28263">Vox.md kostenlos laden</a>
+        <span class="r-note">Freikontingente · eine lebenslange Freischaltung · kein Konto nötig</span>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="r-wrap r-foot">
+    <span class="r-eof" aria-hidden="true">EOF</span>
+    <ul>
+      <li><a href="/de/developers">Entwickler</a></li>
+      <li><a href="/de/about">Über</a></li>
+      <li><a href="/de/contact">Kontakt</a></li>
+      <li><a href="/de/docs/">Dokumentation</a></li>
+      <li><a href="/de/blog/">Anleitungen</a></li>
+      <li><a href="/de/compare/">Vergleichen</a></li>
+      <li><a href="/de/privacy.html">Datenschutz</a></li>
+      <li><a href="/de/terms.html">Bedingungen</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="mailto:codybontecou@gmail.com">Unterstützung</a></li>
+      <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_8a5edab28263">App Store</a></li>
+    </ul>
+    <p class="r-foot-copy">© 2026 Vox.md · Entwickelt von <a href="https://codybontecou.com/">Cody Bontecou</a> um <a href="https://isolated.tech/">Isolated Tech</a> · Keine Inhaltsuploads.</p>
+
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ar/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+
+<script>
+/* Hero demo tabs. Without JavaScript the first example shows on its own. */
+(function () {
+  var list = document.querySelector('.r-demo-tabs');
+  if (!list) return;
+  var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+  function select(tab, focus) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { select(tab, false); });
+    tab.addEventListener('keydown', function (ev) {
+      var next = ev.key === 'ArrowRight' ? i + 1 : ev.key === 'ArrowLeft' ? i - 1 : ev.key === 'Home' ? 0 : ev.key === 'End' ? tabs.length - 1 : null;
+      if (next === null) return;
+      ev.preventDefault();
+      select(tabs[(next + tabs.length) % tabs.length], true);
+    });
+  });
+  list.hidden = false;
+})();
+</script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -28,18 +28,8 @@ def build(destination: Path) -> None:
     for page in destination.rglob('*.html'):
         html = page.read_text()
         relative = page.relative_to(destination).as_posix()
-        if relative == 'index.html':
-            # The production edge localization layer recognizes the canonical path.
-            # Keep source links relative for the repository contract checker.
-            html = html.replace('href="zh-hans/"', 'href="/zh-hans/"')
-        if relative == 'zh-hans/index.html':
-            # Preserve the equivalent links served by the existing locale edge.
-            html = html.replace(
-                'href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-campaign="seo_home_zh"',
-                'href="https://apps.apple.com/app/id6758967337"',
-            )
         route = '/' + relative
-        canonical = route[:-10] if route.endswith('index.html') else route[:-5]
+        canonical = re.search(r'<link rel="canonical" href="https://vox\.isolated\.tech([^\"]*)', html)[1]
         parser = MarkdownDocument('https://vox.isolated.tech' + canonical)
         parser.feed(html)
         if relative == 'index.html':
@@ -48,11 +38,12 @@ def build(destination: Path) -> None:
             product = {key: app[key] for key in ['name', 'description', 'url', 'downloadUrl', 'operatingSystem', 'applicationCategory']}
             product['documentationUrl'] = 'https://vox.isolated.tech/docs/'
             product['supportUrl'] = 'https://vox.isolated.tech/contact'
-        if relative != '404.html':
-            title = unescape(re.search(r'<title>(.*?)</title>', html, re.S)[1])
+        title = unescape(re.search(r'<title>(.*?)</title>', html, re.S)[1])
+        if page.name != '404.html':
             description = unescape(re.search(r'<meta name="description" content="([^"]*)', html)[1])
             documents.append({'title': title, 'url': 'https://vox.isolated.tech' + canonical,
-                              'description': description, 'markdownUrl': 'https://vox.isolated.tech' + canonical})
+                              'description': description, 'markdownUrl': 'https://vox.isolated.tech' + canonical,
+                              'inLanguage': re.search(r'<html[^>]*lang="([^"]+)"', html)[1]})
         markdown_path = '/' + relative[:-5] + '.md'
         markdown = parser.markdown()
         if not parser.has_title:
@@ -66,7 +57,7 @@ def build(destination: Path) -> None:
             lambda _: '<style data-source="geist.css">\n' + css + '\n</style>',
             html,
         )
-        if count != 1 and not (relative == 'zh-hans/index.html' and count == 0 and '<style>' in html):
+        if count != 1:
             raise SystemExit(f'Expected one shared stylesheet in {page}')
         page.write_text(html)
     worker = (ROOT / 'worker/website/index.mjs').read_text()

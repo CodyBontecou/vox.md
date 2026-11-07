@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr" data-search-section="অংশ" data-search-guide="গাইড" data-search-empty="“{query}”-এর কোনো ফল নেই">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vox.md ডেভেলপার গাইড — Vox.md</title>
+  <meta name="description" content="বিনামূল্যের শুধু-পড়ার JSON API ও Markdown কনটেন্ট নেগোশিয়েশনে Vox.md পণ্যের প্রকাশ্য তথ্য ও নথি পড়ুন।">
+  <link rel="canonical" href="https://vox.isolated.tech/bn/developers">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="ভাষা মডেলের জন্য Vox.md নথি">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Vox.md ডেভেলপার গাইড — Vox.md">
+  <meta property="og:description" content="বিনামূল্যের শুধু-পড়ার JSON API ও Markdown কনটেন্ট নেগোশিয়েশনে Vox.md পণ্যের প্রকাশ্য তথ্য ও নথি পড়ুন।">
+  <meta property="og:url" content="https://vox.isolated.tech/bn/developers">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md সর্বজনীন তথ্য API">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/developers">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/developers">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/developers">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/developers">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/developers">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/developers">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/developers">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/developers">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/developers">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/developers">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/developers">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/developers">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/developers">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/developers">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/developers">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/developers">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/developers">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/developers">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/developers">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/developers">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/developers">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/developers">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/developers">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/developers">
+<meta name="twitter:title" content="Vox.md ডেভেলপার গাইড — Vox.md">
+<meta name="twitter:description" content="বিনামূল্যের শুধু-পড়ার JSON API ও Markdown কনটেন্ট নেগোশিয়েশনে Vox.md পণ্যের প্রকাশ্য তথ্য ও নথি পড়ুন।">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Vox.md ডেভেলপার গাইড — Vox.md",
+  "description": "বিনামূল্যের শুধু-পড়ার JSON API ও Markdown কনটেন্ট নেগোশিয়েশনে Vox.md পণ্যের প্রকাশ্য তথ্য ও নথি পড়ুন।",
+  "url": "https://vox.isolated.tech/bn/developers",
+  "inLanguage": "bn"
+}
+</script>
+</head>
+<body>
+
+<nav aria-label="প্রধান নেভিগেশন">
+  <div class="nav-inner">
+    <a href="/bn/" class="logo" aria-label="Vox.md হোম">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/bn/">হোম</a></li>
+      <li><a href="/bn/docs/">নথি</a></li>
+      <li><a href="/bn/blog/">ব্লগ</a></li>
+      <li><a href="/bn/terms.html">শর্তাবলি</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_bn_5c05ec80d972">Vox.md ডাউনলোড করুন</a>
+  <details class="language-switcher"><summary>ভাষা</summary><ul><li><a href="/developers" lang="en" hreflang="en">English</a></li><li><a href="/ar/developers" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/developers" lang="bn" hreflang="bn" aria-current="page">বাংলা</a></li><li><a href="/de/developers" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/developers" lang="es" hreflang="es">Español</a></li><li><a href="/fr/developers" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/developers" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/developers" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/developers" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/developers" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/developers" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/developers" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/developers" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/developers" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/developers" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/developers" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/developers" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/developers" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/developers" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/developers" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/developers" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/developers" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/developers" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+<main id="main">
+<section class="page-hero"><div class="container"><div class="page-eyebrow">Vox.md · ডেভেলপার</div><h1 class="page-title">সর্বজনীন তথ্য API</h1></div></section>
+<div class="container"><div class="legal-content">
+<h2>পণ্যের তথ্য ও নথি খুঁজুন</h2>
+<p>Vox.md সর্বজনীন তথ্য API পণ্যের তথ্য ও প্রকাশিত নথির লিঙ্ক দেয়। বিনামূল্যে পড়তে অ্যাকাউন্ট, API কী, OAuth বা পেমেন্ট লাগে না। এন্ডপয়েন্টে এই প্রকাশ্য সাইটের আগে থেকেই থাকা তথ্য ফেরে। পড়ুন <a href="/openapi.json">OpenAPI 3.1 চুক্তি</a> টাইপযুক্ত রেসপন্স স্কিমা, অপারেশন শনাক্তকারী, ত্রুটি ও বিবরণের জন্য।</p>
+<h2>পণ্যের তথ্য নিন</h2>
+<p><code>GET https://vox.isolated.tech/api/v1/product</code> পণ্যের নাম, বিবরণ, সমর্থিত সিস্টেম, App Store তালিকা, নথির URL ও সহায়তার URL দেয়। বিল্ড হোমের স্ট্রাকচার্ড ডেটা থেকে তথ্য নেয়।</p>
+<pre><code>curl https://vox.isolated.tech/api/v1/product</code></pre>
+<p><a href="https://vox.isolated.tech/api/v1/product">পণ্যের JSON দেখুন</a></p>
+<h2>নথি খুঁজুন</h2>
+<p><code>GET https://vox.isolated.tech/api/v1/documents</code> প্রকাশ্য পৃষ্ঠার শিরোনাম, সারাংশ ও URL তালিকাভুক্ত করে। লেখা চাওয়ার আগে সংশ্লিষ্ট সুবিধা, নীতি, ব্লগ বা সহায়তার পৃষ্ঠা খুঁজুন।</p>
+<pre><code>curl https://vox.isolated.tech/api/v1/documents</code></pre>
+<p><a href="https://vox.isolated.tech/api/v1/documents">নথির সূচির JSON দেখুন</a></p>
+<h2>পৃষ্ঠাটি Markdown হিসেবে পড়ুন</h2>
+<p>তালিকাভুক্ত যেকোনো পৃষ্ঠার অনুরোধ করুন এটি দিয়ে: <code>Accept: text/markdown</code> মূল বিষয়বস্তুর জন্য। এভাবে অনুরোধ করলে: <code>Accept: text/html</code> এখনো HTML পায়। উভয় রূপেই রয়েছে <code>Vary: Accept</code>. এটি <a href="/llms.txt">এজেন্ট গাইড</a> Vox.md কোন কাজে মানানসই ব্যাখ্যা করে এবং সুবিধার বিবরণ দেখায়।</p>
+<pre><code>curl -H 'Accept: text/markdown' https://vox.isolated.tech/docs/</code></pre>
+<h2>ত্রুটি, ক্যাশিং ও পদ্ধতি</h2>
+<p>JSON এন্ডপয়েন্ট GET ও HEAD সমর্থন করে। অজানা API পাথ HTTP 404 ফেরত দেয়, সঙ্গে <code>application/problem+json</code>, একটি স্থায়ী <code>code</code>, ব্যাখ্যা ও পুনরুদ্ধারের ইঙ্গিত। অসমর্থিত পদ্ধতি HTTP 405 ফেরত দেয়, সঙ্গে <code>Allow: GET, HEAD</code>. সর্বজনীন মেটাডেটা রেসপন্স অন্য উৎস থেকে পড়া যায় এবং পাঁচ মিনিট ক্যাশের মেয়াদ জানায়। পরিচয়পত্র বা ব্যবহারকারীভিত্তিক ডেটা নেই।</p>
+<h2>ইনস্টল করা অ্যাপ স্বয়ংক্রিয় করুন</h2>
+<p>ক্যাপচার, প্রতিলিখন, স্থানীয় ভল্ট খোলা ও নোট লেখা ইনস্টল Apple অ্যাপে চলে। নথিভুক্তটি নিন <a href="/bn/docs/#system-integrations">শর্টকাট ও URL স্কিম সমন্বয়</a> ডিভাইসের মালিকের অনুমতিতে। প্রকাশ্য তথ্য API ক্যাপচার অ্যাকশন, রেকর্ডিং, প্রতিলিপি, ব্যক্তিগত নোট বা গন্তব্য ফোল্ডার দেয় না। যোগাযোগ করুন <a href="/bn/contact">Vox.md সহায়তা</a> প্রশ্নের জন্য।</p>
+</div></div></main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/bn/developers">ডেভেলপার</a></li>
+        <li><a href="/bn/about">সম্পর্কে</a></li>
+        <li><a href="/bn/contact">যোগাযোগ</a></li>
+        <li><a href="/bn/">হোম</a></li>
+        <li><a href="/bn/docs/">নথি</a></li>
+        <li><a href="/bn/blog/">ব্লগ</a></li>
+        <li><a href="/bn/privacy.html">গোপনীয়তা</a></li>
+        <li><a href="/bn/terms.html">শর্তাবলি</a></li>
+      </ul>
+      <div class="footer-copy">© ২০২৬ Vox.md · স্থানীয় ক্যাপচার · ব্যবহারকারীর নিয়ন্ত্রণে ফাইল।</div>
+    </div>
+  <details class="language-switcher"><summary>ভাষা</summary><ul><li><a href="/developers" lang="en" hreflang="en">English</a></li><li><a href="/ar/developers" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/developers" lang="bn" hreflang="bn" aria-current="page">বাংলা</a></li><li><a href="/de/developers" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/developers" lang="es" hreflang="es">Español</a></li><li><a href="/fr/developers" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/developers" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/developers" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/developers" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/developers" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/developers" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/developers" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/developers" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/developers" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/developers" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/developers" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/developers" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/developers" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/developers" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/developers" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/developers" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/developers" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/developers" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

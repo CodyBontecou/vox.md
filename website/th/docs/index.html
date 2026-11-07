@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="th" dir="ltr" data-search-section="ส่วน" data-search-guide="คู่มือ" data-search-empty="ไม่พบ “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เอกสาร Vox.md: คู่มือฟีเจอร์ครบ</title>
+  <meta name="description" content="เอกสารครบสำหรับ การจับภาพอย่างรวดเร็ว เส้นทาง ปลายทาง Markdown คีย์บอร์ด iOS โมเดลถอดเสียงในเครื่อง วิดเจ็ต Shortcuts, Apple Watch และ Mac ของ Vox.md">
+  <link rel="canonical" href="https://vox.isolated.tech/th/docs/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="เอกสาร Vox.md สำหรับโมเดลภาษา">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="เอกสาร Vox.md: คู่มือฟีเจอร์ครบ">
+  <meta property="og:description" content="เรียนรู้ทุกฟีเจอร์ Vox.md ที่เผยแพร่ ตั้งแต่การเก็บ Markdown อย่างคงทนและเส้นทาง ไปจนถึงโมเดลเสียงในเครื่อง คีย์บอร์ด Apple Watch และ Mac">
+  <meta property="og:url" content="https://vox.isolated.tech/th/docs/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="เอกสาร Vox.md">
+  <meta name="twitter:description" content="คู่มือครบถ้วนสำหรับจด เส้นทาง ถอดเสียง และการผสานระบบของ Vox.md">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "คู่มือฟีเจอร์ Vox.md ฉบับสมบูรณ์",
+  "description": "เอกสารทุกฟีเจอร์จด เส้นทาง ถอดเสียง คีย์บอร์ด ผสานระบบ Apple Watch และ Mac ที่ Vox.md เผยแพร่",
+  "dateModified": "2026-10-26",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/th/docs/",
+  "inLanguage": "th",
+  "name": "เอกสาร Vox.md: คู่มือฟีเจอร์ครบ"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/th/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "เอกสาร",
+      "item": "https://vox.isolated.tech/th/docs/"
+    }
+  ],
+  "inLanguage": "th",
+  "name": "เอกสาร Vox.md: คู่มือฟีเจอร์ครบ",
+  "description": "เอกสารครบสำหรับ การจับภาพอย่างรวดเร็ว เส้นทาง ปลายทาง Markdown คีย์บอร์ด iOS โมเดลถอดเสียงในเครื่อง วิดเจ็ต Shortcuts, Apple Watch และ Mac ของ Vox.md"
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="API ข้อมูลสาธารณะ Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="การนำทางหลัก">
+  <div class="nav-inner docs-header-inner">
+    <a href="/th/" class="logo" aria-label="หน้าแรก Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ เอกสาร</span></span>
+    </a>
+    <form class="docs-search" role="search" action="./" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="ค้นเอกสาร" aria-label="ค้นเอกสาร" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="ผลค้นหา" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/th/blog/">บล็อก</a></li>
+      <li><a href="/th/privacy.html">ความเป็นส่วนตัว</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>ภาษา</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th" aria-current="page">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="ในหน้านี้">
+      <div class="docs-sidebar-title">ในหน้านี้</div>
+      <ol>
+        <li><a href="#getting-started">เริ่มต้นใช้งาน</a></li>
+        <li><a href="#quick-capture">การจับภาพอย่างรวดเร็ว</a></li>
+        <li><a href="#presets">เส้นทาง</a></li>
+        <li><a href="/th/docs/location/">ตําแหน่งปัจจุบัน &amp; {location}</a></li>
+        <li><a href="#models">โมเดลและถอดเสียง</a></li>
+        <li><a href="#keyboard">คีย์บอร์ด iOS</a></li>
+        <li><a href="#system-integrations">การผสานกับระบบ</a></li>
+        <li><a href="#apple-watch">Apple Watch</a></li>
+        <li><a href="#mac">คู่มือ Mac</a></li>
+        <li><a href="#history-settings">คลัง การตั้งค่า และความเป็นส่วนตัว</a></li>
+        <li><a href="#troubleshooting">แก้ปัญหา</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="docs-title">
+      <div class="page-eyebrow">เอกสาร · คู่มือผลิตภัณฑ์ปัจจุบัน</div>
+      <h1 class="page-title" id="docs-title">ทุกสิ่งที่ทำได้ด้วย Vox.md</h1>
+      <p class="docs-hero-copy">คู่มือครบเรื่องจด เส้นทาง กำหนด Markdown คีย์บอร์ดเสียง โมเดลในเครื่อง ผสานระบบ Apple, Apple Watch, Mac ประวัติ การตั้งค่า และความเป็นส่วนตัว</p>
+      <div class="docs-meta-row" aria-label="ข้อเท็จจริงจากเอกสาร">
+        <span>ปรับปรุง 26 ต.ค. 2026</span>
+        <span>iOS 17.6+</span>
+        <span>macOS 14+</span>
+        <span>watchOS 10+</span>
+      </div>
+      </header>
+
+      <section class="docs-directory" aria-labelledby="browse-docs">
+      <h2 class="visually-hidden" id="browse-docs">เรียกดูตามหมวดหมู่</h2>
+      <div class="docs-category-grid">
+        <a class="docs-category-card" href="#getting-started"><span>01</span><strong>เริ่มต้นใช้งาน</strong><small>แพลตฟอร์ม ตั้งค่า สิทธิ์ และการจดครั้งแรก</small></a>
+        <a class="docs-category-card" href="#quick-capture"><span>02</span><strong>การจับภาพอย่างรวดเร็ว</strong><small>ตัวเขียน สื่อ เสียง แถบจด และฉบับร่าง</small></a>
+        <a class="docs-category-card" href="#presets"><span>03</span><strong>เส้นทาง</strong><small>ประมวลผล ข้อมูลเมตา ปลายทาง และเทมเพลต</small></a>
+        <a class="docs-category-card is-guide" href="/th/docs/location/"><span>คู่มือ</span><strong>ตําแหน่งปัจจุบัน &amp; <code>{location}</code></strong><small>ลิงก์ผ่านโทเคนเท่านั้น ข้อมูลเมตาที่เลือกใช้ได้ ความละเอียด ความเป็นส่วนตัว และการย้ายระบบ</small></a>
+        <a class="docs-category-card" href="#models"><span>04</span><strong>รูปแบบ</strong><small>อัตโนมัติ Apple Speech, Whisper และ Parakeet</small></a>
+        <a class="docs-category-card" href="#keyboard"><span>05</span><strong>แป้นพิมพ์</strong><small>ตั้งค่า พูดเป็นข้อความ แทรก สั่น และหยุดอัตโนมัติ</small></a>
+        <a class="docs-category-card" href="#system-integrations"><span>06</span><strong>การผสานกับระบบ</strong><small>วิดเจ็ต แผ่นแชร์ Shortcuts และลิงก์เจาะลึก</small></a>
+        <a class="docs-category-card" href="#apple-watch"><span>07</span><strong>Apple Watch</strong><small>การบันทึก การซิงค์เส้นทาง คิว และคอมพลิเคชัน</small></a>
+        <a class="docs-category-card" href="#mac"><span>08</span><strong>Mac</strong><small>จดบันทึกการประชุม พื้นที่ทำงาน แถบเมนู และปุ่มลัดส่วนกลาง</small></a>
+        <a class="docs-category-card" href="#history-settings"><span>09</span><strong>คลังและการตั้งค่า</strong><small>กู้คืน สถิติ ความเป็นส่วนตัว ข้อจำกัด ซื้อ และช่วยเหลือ</small></a>
+      </div>
+      </section>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="getting-started">
+        <div class="docs-section-label">01 / เริ่มต้นใช้งาน</div>
+        <h2>จดลง Markdown โดยไม่สร้างที่เก็บโน้ตแยกใหม่</h2>
+        <p>Vox.md เป็นแอปจดด่วนที่ให้ความสำคัญกับข้อมูลในเครื่อง เขียน Markdown มาตรฐานและไฟล์แนบลงคลัง Obsidian หรือโฟลเดอร์อื่นที่เขียนได้ซึ่งคุณเลือกผ่าน Files ไม่ต้องมีบัญชี Vox.md ปลั๊กอิน หรือฐานข้อมูลโน้ตบนเซิร์ฟเวอร์</p>
+
+        <p>สำหรับขั้นตอนเสียงครบ <a href="/th/blog/voice-notes-to-obsidian-iphone/">ทำตามคู่มือโน้ตเสียง iPhone ไปยัง Obsidian</a> ตั้งแต่เลือกโฟลเดอร์จนตรวจ Markdown ที่ได้</p>
+
+        <p>กำลังเลือกวิธีจดบันทึก? อ่าน <a href="/th/blog/obsidian-quick-capture-iphone/">คู่มือเลือกวิธีจดบน iPhone</a> หรือ <a href="/th/compare/vox-md-vs-obsidian-quick-capture/">เปรียบเทียบ Vox.md กับ Obsidian ในตัว</a>.</p>
+
+        <div class="docs-table-wrap" id="platform-availability">
+          <table class="docs-table">
+            <thead><tr><th>แพลตฟอร์ม</th><th>ข้อกำหนด</th><th>สิ่งที่มีให้</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone และ iPad</td><td class="req">iOS/iPadOS 17.6+</td><td>การจับภาพอย่างรวดเร็ว คีย์บอร์ด แผ่นแชร์ วิดเจ็ต Shortcuts กิจกรรมสด ประวัติ และการตั้งค่า</td></tr>
+              <tr><td>Mac</td><td class="req">macOS 14+</td><td>พื้นที่จด บันทึก/นำเข้า เส้นทาง โมเดล ประวัติ แถบเมนู และปุ่มลัดส่วนกลาง</td></tr>
+              <tr><td>Apple Watch</td><td class="req">watchOS 10+</td><td>บันทึกในเครื่อง เลือกเส้นทาง คิวซิงค์ ส่งเฉพาะเสียง และคอมพลิเคชัน</td></tr>
+              <tr><td>ตัวควบคุมศูนย์ควบคุม</td><td class="req">iOS 18+</td><td>การจับภาพอย่างรวดเร็วและตัวควบคุมบันทึกที่รับรู้เส้นทาง</td></tr>
+              <tr><td>ระบบอัตโนมัติ Apple Speech</td><td class="req">อุปกรณ์ iOS 26 และภาษาที่รองรับ</td><td>ถอดเสียงสดและแบบชุดบนอุปกรณ์ที่ระบบจัดการ</td></tr>
+              <tr><td>ประมวลผล Apple Intelligence</td><td class="req">อุปกรณ์ iOS/macOS 26 ที่เข้ากันได้</td><td>ปรับข้อความบนอุปกรณ์ ผลแบบมีโครงสร้าง และคำสั่งกำหนดเองพร้อมวิธีสำรอง</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <p><strong>ขั้นตอนพื้นฐาน</strong> เลือกเส้นทาง เชื่อมปลายทาง พิมพ์หรือเพิ่มใน การจับภาพอย่างรวดเร็ว แล้วแตะ ส่ง เส้นทางกำหนดประมวลผล จัดรูปแบบ และวางในโน้ตอย่างไร</p>
+        </div>
+
+
+        <h3 id="first-capture">จดครั้งแรก</h3>
+        <ol class="docs-steps">
+          <li><strong>เปิด Vox.md</strong><span>แอปเปิดตรงตัวเขียน Markdown ที่เก็บคงทน</span></li>
+          <li><strong>เลือกเส้นทาง</strong><span>เส้นทาง Default ในตัวลบไม่ได้แต่ปิดได้ คงอย่างน้อยหนึ่งเส้นทางเปิดและให้ปลายทาง</span></li>
+          <li><strong>ตั้งปลายทางของมัน</strong><span>แตะ <em>ตั้งเป้าหมาย</em> เลือกคลัง Obsidian หรือโฟลเดอร์ Files แล้วเลือกโน้ตใหม่ ต่อเนื่อง หรือที่มี</span></li>
+          <li><strong>เพิ่มเนื้อหา</strong><span>พิมพ์ Markdown หรือเพิ่มลิงก์ รูปภาพ ไฟล์ สแกน ภาพร่าง ตำแหน่ง หรือเสียงบันทึก</span></li>
+          <li><strong>แตะ ส่ง</strong><span>Vox.md เก็บผ่านเส้นทางที่เลือกและรายงาน <em>การจับภาพ</em> งานที่ล้มเหลวหรืออยู่ในคิวยังคงกู้คืนได้</span></li>
+        </ol>
+
+        <h3 id="permissions">สิทธิ์และการเข้าถึงระบบ</h3>
+        <ul>
+          <li><strong>ไมโครโฟน:</strong> บันทึกเสียง ถอดในเครื่อง ฟังคีย์บอร์ด และเก็บเสียง การจับภาพอย่างรวดเร็ว อาจขอสิทธิ์ตอนเปิดพื้นที่ครั้งแรก ก่อนเริ่มบันทึก</li>
+          <li><strong>การรู้จำเสียงพูด:</strong> Apple Speech บนระบบที่รองรับ</li>
+          <li><strong>สิทธิ์โฟลเดอร์ Files:</strong> ปลายทาง เทมเพลต การนำเข้า และผลลัพธ์ Watch แบบเสียงอย่างเดียว</li>
+          <li><strong>กล้องและรูปที่เลือก:</strong> เฉพาะเมื่อเพิ่มสื่อ ภาพหน้าจอ รูปสมุดบันทึก หรือสแกน</li>
+          <li><strong>ตำแหน่งขณะใช้งาน:</strong> เฉพาะคำสั่ง ตําแหน่งปัจจุบัน บนแถบจดบันทึกแบบอิสระ หรือเมื่อเส้นทางที่เปิดใช้ต้องการตำแหน่งหนึ่งครั้ง ณ เวลาต้นทาง Vox.md ไม่เคยติดตามตำแหน่งอย่างต่อเนื่องหรือเบื้องหลัง</li>
+          <li><strong>การแจ้งเตือน:</strong> สถานะการส่งที่เลือกใช้ได้ รวมถึงความล้มเหลวของ Apple Watch เมื่อไม่มีผู้ดูแล</li>
+          <li><strong>อนุญาตสิทธิ์เข้าถึงแบบเต็มสำหรับคีย์บอร์ด:</strong> จำเป็นเพื่อให้คีย์บอร์ด Vox.md ใช้ขั้นตอนแอปร่วมบนอุปกรณ์ ดู <a href="#keyboard-setup">ตั้งค่าคีย์บอร์ด</a>.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="quick-capture">
+        <div class="docs-section-label">02 / การจับภาพอย่างรวดเร็ว</div>
+        <h2>ตัวเขียนคงทนเดียวสำหรับข้อความ สื่อ ไฟล์ และเสียง</h2>
+        <p>การจับภาพอย่างรวดเร็ว เป็นพื้นที่หลัก iOS และ iPadOS เมนูเส้นทางเปลี่ยนขั้นตอนปัจจุบัน เมนูปลายทางดูตัวอย่างหรือแทนที่ส่งฉบับร่างชั่วคราว แถบล่างเปิดคลังกับการตั้งค่าและแสดงหรือซ่อนคีย์บอร์ดซอฟต์แวร์ได้</p>
+
+        <h3 id="durable-drafts">ฉบับร่างคงทนและส่งปลอดภัย</h3>
+        <ul>
+          <li>ข้อความ ไฟล์แนบ เส้นทางที่เลือก การแทนปลายทาง และแหล่งการจดยังคงอยู่หลังพักแอปและเปิดใหม่</li>
+          <li>การแก้ไขเก็บหลังรอช่วงสั้นแบบ debounce การส่งแอปไปเบื้องหลังกระตุ้นเก็บทันที</li>
+          <li>หากแก้ต่อระหว่างส่ง การแก้ใหม่เก็บเป็นฉบับร่างใหม่แทนทิ้ง</li>
+          <li>ต้องตั้งปลายทางก่อนส่ง ตัวเขียนแสดง <em>จุดหมายปลายทาง ไม่กําหนดค่า</em> พร้อมการทำงานตั้งค่าเมื่อจำเป็น</li>
+          <li>คำขอจดที่ลองใหม่ได้ปลอดภัยบันทึกในเครื่อง เพื่อให้ลองใหม่เมื่อสิทธิ์ ผู้ให้บริการไฟล์ หรือซิงค์ล้มเหลว</li>
+          <li>ตัวเขียนที่ว่างจะแสดงคำคมสร้างแรงบันดาลใจจากแคชจนกว่าจะเพิ่มข้อความ แม้เลือกเส้นทางหรือแนบไฟล์แล้ว คำขอคำคมไม่เคยมีฉบับร่างของคุณรวมอยู่</li>
+        </ul>
+
+        <p>ดูคำแนะนำตามงานที่ <a href="/th/blog/save-links-photos-obsidian-iphone/">เก็บลิงก์ รูปภาพ และสแกนเข้า Obsidian</a>.</p>
+
+        <h3 id="capture-types">ชนิดการจดบันทึก</h3>
+        <div class="docs-feature-grid">
+          <div><strong>ข้อความและ Markdown</strong><p>เขียนตรงในตัวแก้ Markdown ที่รับรู้ส่วนเลือก วางข้อความเดิม และรวมข้อความกับข้อมูลอื่น</p></div>
+          <div><strong>ลิงก์เว็บ</strong><p>เพิ่ม URL HTTP หรือ HTTPS ด้วยรูปแบบลิงก์ Markdown</p></div>
+          <div><strong>รูปภาพและกล้อง</strong><p>เลือกรูปภาพหรือภาพหน้าจอ หรือถ่ายใหม่ ภาพจะเตรียมและฝังในโน้ตที่ส่ง</p></div>
+          <div><strong>ไฟล์</strong><p>เลือกหลายรายการ Files ภาพเป็นภาพฝัง เสียงยังเป็นข้อมูลเสียง และไฟล์อื่นใช้ลิงก์แบบ Obsidian</p></div>
+          <div><strong>สแกนเอกสาร</strong><p>สแกนหน้าด้วย VisionKit Vox.md เก็บภาพหน้า สร้าง PDF และใส่ OCR บนอุปกรณ์ตามความสามารถ</p></div>
+          <div><strong>OCR สมุดบันทึก</strong><p>เก็บหน้าสมุดกดชัตเตอร์เองสูงสุด 10 หน้า หรือเลือกรูปสมุด Vision OCR แบบแม่นยำใช้ตรวจภาษาอัตโนมัติ</p></div>
+          <div><strong>ภาพร่าง</strong><p>วาดบนผืน PencilKit สีขาวด้วยปากกาดำ Vox.md เก็บข้อมูลวาดที่แก้ได้และภาพตัวอย่าง PNG</p></div>
+          <div><strong>การทำงานตำแหน่งปัจจุบัน</strong><p>ขอตำแหน่งหนึ่งครั้งแล้วแทรกลิงก์ Markdown ของ Google Maps ที่ตรวจแล้วในฉบับร่าง การทำงานแถบจดแบบอิสระนี้ไม่เปลี่ยนตัวควบคุมตำแหน่งต่อเส้นทางทั้งสอง</p></div>
+          <div><strong>เสียงพูดและเสียงนำเข้า</strong><p>บันทึกจากตัวเขียนหรือนำเข้าเสียง/วิดีโอ ถอดในเครื่อง แล้วเพิ่มผลในฉบับร่างหรือส่งทันที</p></div>
+        </div>
+        <p class="docs-note">การช่วยการเข้าถึง: OCR แสดงแบนเนอร์ “กำลังดึงข้อความบนอุปกรณ์นี้” และ VoiceOver ประกาศความคืบหน้ากับเสร็จ OCR “ส่งการจดแล้ว” และ “เพิ่มข้อความถอดเสียงในการจดแล้ว” ในขั้นตอนการจดต่าง ๆ</p>
+
+        <h3 id="capture-bar">แถบจับภาพ</h3>
+        <p>การตั้งค่า → แถบจดบันทึก ให้เรียงใหม่หรือซ่อนการทำงานได้ ทุกการทำงานแสดงเป็นค่าเริ่มต้น</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>การทำงาน</th><th>พฤติกรรม</th></tr></thead>
+            <tbody>
+              <tr><td>เพิ่มสื่อ</td><td>เปิดตัวเลือกภาพร่าง กล้อง รูปภาพ ภาพหน้าจอ และลิงก์เว็บ</td></tr>
+              <tr><td>เพิ่มไฟล์</td><td>เลือกหลายไฟล์จาก Files และเตรียมไว้กับฉบับร่าง</td></tr>
+              <tr><td>สแกนเอกสาร</td><td>เก็บสแกนหลายหน้า PDF ภาพหน้า และ OCR ตามความสามารถ</td></tr>
+              <tr><td>สกัดข้อความ</td><td>มีเก็บหน้าสมุดบันทึกและเลือกรูปสมุดบันทึกสำหรับจดเน้น OCR</td></tr>
+              <tr><td>สี่</td><td>เลิกทำการแก้ไขล่าสุด</td></tr>
+              <tr><td>รูปแบบ Markdown</td><td>ใช้ตัวหนา เอียง แฮชแท็ก หรือหัวข้อ 1 ถึง 6</td></tr>
+              <tr><td>Markdown ลิงค์</td><td>แทรก <code>[link text](url)</code> และเลือกส่วนที่แก้ไขได้</td></tr>
+              <tr><td>ลิงค์ภายใน</td><td>แทรกรูปแบบ Obsidian <code>[[Target]]</code> ลิงก์วิกิ</td></tr>
+              <tr><td>วางสองวันที่</td><td>ใช้ วันนี้ พรุ่งนี้ หรือสุดสัปดาห์นี้ เวลาที่เลือกได้ และปรับ ±15m, ±30m หรือ ±1h แทรก <code>(@yyyy-MM-dd)</code> หรือรูปแบบมีเวลา</td></tr>
+              <tr><td>รายการตรวจสอบ</td><td>ใช้คำนำหน้างาน Markdown <code>- [ ]</code>.</td></tr>
+              <tr><td>รายการลูกศร</td><td>ใช้คำนำหน้าหัวข้อย่อย Markdown</td></tr>
+              <tr><td>ปากกา</td><td>วางข้อความคลิปบอร์ดในส่วนเลือกปัจจุบัน</td></tr>
+              <tr><td>สเก็ตช์</td><td>เปิดจดภาพร่าง PencilKit ที่แก้ได้</td></tr>
+              <tr><td>ตําแหน่งปัจจุบัน</td><td>ขอตำแหน่งครั้งเดียวและแทรกลิงก์ Google Maps</td></tr>
+              <tr><td>วางเวลา</td><td>แทรกวันและเวลาท้องถิ่นเป็น <code>h:mm a yyyy-MM-dd</code>.</td></tr>
+              <tr><td>วันที่ใส่</td><td>แทรก <code>yyyy-MM-dd</code>.</td></tr>
+              <tr><td>เปลี่ยนข้อความกรณี</td><td>มีตัวพิมพ์เล็ก ตัวพิมพ์ใหญ่ แบบประโยค ขึ้นต้นคำใหญ่ และ Slugify</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">การจัดรูปแบบเคารพส่วนเลือกปัจจุบัน ปรับจบบรรทัดให้มาตรฐาน จำกัดช่วงเลือกไม่ถูกต้อง และไม่แยกอักขระประกอบ เช่น อีโมจิ</p>
+
+        <h3 id="inline-voice">ตัวควบคุมเสียงในบรรทัด</h3>
+        <ul>
+          <li>แตะปุ่มเสียงเพื่อเริ่มหรือหยุด กดค้างประมาณ 0.45 วินาทีเพื่อแสดงตัวควบคุมแบบละเอียด</li>
+          <li>ขณะบันทึก <strong>พัก</strong> จะปรากฏข้างปุ่มเสียง — แตะหนึ่งครั้งเพื่อพัก และแตะอีกครั้งเพื่อบันทึกต่อ โน้ตสุดท้ายยังเป็นการบันทึกเดียว โดยไม่นับเสียงและเวลาขณะพัก การพักยังหยุดตัวอย่างข้อความถอดเสียงสดและการหยุดเสียงอัตโนมัติจนกว่าจะบันทึกต่อ</li>
+          <li><strong>เพิ่มไปยังฉบับร่าง</strong> ต่อท้ายข้อความถอดเสร็จ <strong>ส่งทันที</strong> เรียกใช้เส้นทางที่เลือกและปลายทางของเส้นทางนั้น</li>
+          <li><strong>ส่งทันที ถูกเลือกเป็นค่าเริ่มต้น</strong> ในพื้นที่จดบน iOS และ Mac การเปิดการทำงานเสียง iOS ผ่าน <code>voxboard://capture?action=voice</code> เปลี่ยนเสียงนั้นเป็น เพิ่มไปยังฉบับร่าง</li>
+          <li>ส่วน <strong>อูเดีย</strong> เก็บเสียงต้นทางเป็นส่วนฉบับร่างเมื่อร้องขอ</li>
+          <li><strong>อัปโหลดเสียง</strong> รับไฟล์เสียงหรือวิดีโอและใช้ขั้นตอนถอดเสียงในเครื่องเดียวกัน</li>
+          <li><strong>การระบุผู้พูด</strong> เป็นขั้นประมวลผลเสียงของเส้นทางที่เลือกเปิดได้สำหรับเสียงบันทึกและนำเข้า เตรียมโมเดลผู้พูดแยกเมื่อใช้ครั้งแรก ใส่ป้ายไม่ระบุตัวตนในเครื่องตามความสามารถ และคงข้อความธรรมดาพร้อมเหตุผลในคลังเมื่อทำงานไม่ได้</li>
+          <li>อัตโนมัติสามารถแสดงข้อความ Apple Speech ทั้งที่ยืนยันแล้วและชั่วคราวในตัวเขียนที่แก้ไขได้ขณะบันทึก โมเดล Whisper และ Parakeet ที่เลือกโดยตรงจะถอดเสียงหลังหยุดบันทึก</li>
+          <li>ถอดเสียงล้มเหลวไม่ทำลายเสียงต้นฉบับ ยังกู้คืนได้</li>
+          <li>ฟังคีย์บอร์ดต่อเนื่องคงข้ามการเปิดแอปเฉพาะเมื่อเลือกเปิดโดยตรง การบันทึกครั้งเดียวในแอปคืนเซสชันเสียงสู่พัก</li>
+        </ul>
+
+        <h3 id="capture-limits">ขีดจำกัดข้อมูลการจด</h3>
+        <div class="docs-callout docs-callout-neutral">
+          <p>หนึ่งคำขอใส่ได้สูงสุด <strong>100,000 อักขระ</strong> ของข้อความที่แชร์ <strong>รายการแชร์ 10 รายการ</strong> และ <strong>250 MB</strong> ของทรัพยากรที่เตรียมไว้รวมกัน ตัวเลือกรูปภาพและภาพหน้าจอรับได้สูงสุด 10 รายการ การจดสมุดบันทึกรับได้สูงสุด 10 หน้า Vox.md ปฏิเสธส่วนที่เกินแทนการทิ้งรายการโดยไม่แจ้ง</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="presets">
+        <div class="docs-section-label">03 / เส้นทาง</div>
+        <h2>เก็บขั้นตอนทั้งหมด ไม่ใช่แค่โฟลเดอร์</h2>
+        <p>เส้นทางเก็บความหมายการจด จะประมวลผลข้อความหรือไม่ จัดการข้อมูลเมตากับเสียงอย่างไร และเขียน Markdown ที่ไหนแน่นอน ใช้กับพิมพ์ ลิงก์ สื่อ สแกน ไฟล์ ภาพร่าง เสียง Shortcuts วิดเจ็ต แผ่นแชร์ Watch และ Mac</p>
+
+        <h3 id="preset-management">สร้างและจัดการเส้นทาง</h3>
+        <ul>
+          <li>เปิด การตั้งค่า → เส้นทาง เพื่อสร้าง เปลี่ยนชื่อ เปิด ปิด เลือกไอคอน หรือลบเส้นทางกำหนดเอง</li>
+          <li>ตัวเลือกไอคอนค้นหาได้จัดกลุ่มสัญลักษณ์ใน เขียน เสียง งาน ส่วนตัว และงานอาชีพ</li>
+          <li>เส้นทางที่ปิดจะซ่อนจากตัวเลือกทั่วไป เส้นทาง Default ในตัวลบไม่ได้</li>
+          <li>เส้นทาง Default ในตัวใช้สัญลักษณ์คลื่นเสียง คำสั่ง <em>จดไอเดีย งาน ลิงก์ ไฟล์ สแกน หรือเสียงบันทึก</em>, <code>type: capture</code> เป็นข้อมูลเมตา ประมวลผลแบบ ปรับข้อความให้อ่านง่าย ปิดประมวลผลข้อความพิมพ์ และปิดเก็บเสียง</li>
+          <li>เส้นทางกำหนดเองใหม่เริ่มเป็น <em>เส้นทางกำหนดเอง</em> ใช้ไอคอนตัวเลื่อนและ <em>ต้องการจดอะไร?</em> เป็นคำสั่ง และเริ่มโดยเลือกคำสั่งกำหนดเอง แต่ปิดประมวลผลข้อความพิมพ์และผสม</li>
+        </ul>
+
+        <h3 id="processing-modes">โหมดประมวลผล</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>โหมด</th><th>ผลลัพธ์</th><th>พฤติกรรมสำรอง</th></tr></thead>
+            <tbody>
+              <tr><td>เก็บต้นฉบับ</td><td>คงข้อความที่จดโดยไม่ให้ AI เขียนใหม่</td><td>ส่งข้อความต้นฉบับ</td></tr>
+              <tr><td>ปรับข้อความให้อ่านง่าย</td><td>ปรับตัวพิมพ์และวรรคตอนโดยคงความหมายและ Markdown</td><td>ข้อความต้นฉบับเมื่อการเพิ่มข้อมูลบนอุปกรณ์ไม่พร้อม</td></tr>
+              <tr><td>รายการสิ่งที่ต้องทำ</td><td>สร้าง Markdown <code>- [ ]</code> รายการงาน</td><td>ตัวจัดรูปแบบรายการตรวจสอบแบบแน่นอน</td></tr>
+              <tr><td>บันทึกการประชุม</td><td>สร้าง <code>## Notes</code> เป็นส่วน และหากมี <code>## Action Items</code>.</td><td>โครงสร้างโน้ตประชุมที่กำหนดแน่นอน</td></tr>
+              <tr><td>คำสั่งกำหนดเอง</td><td>ทำตามคำสั่งด้วย Apple Intelligence บนอุปกรณ์เมื่อพร้อม</td><td>ข้อความต้นฉบับเมื่อไม่สามารถดำเนินคำสั่งในเครื่องได้</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>ข้อความถอดเสียงใช้โหมดเส้นทางที่เลือก <strong>แอพลิเคชันเพื่อจับข้อความ</strong> ต้องเลือกเปิดแยก ปิดเป็นค่าเริ่มต้น เพื่อให้ประมวลผล Markdown พิมพ์ OCR และข้อมูลผสมที่มีข้อความ ปิดไว้เพื่อกันเขียน Markdown ของผู้ใช้ใหม่โดยไม่คาดคิด คำขอที่ประมวลผลเสร็จเก็บตรงก่อนส่ง การลองใหม่จึงไม่ประมวลผลอีกด้วยค่าที่เปลี่ยน</p>
+
+        <h3 id="preset-metadata">ข้อมูลเมตา</h3>
+        <ul>
+          <li>ป้อนข้อมูลเมตาคงที่เป็นหนึ่ง <code>key: value</code> หนึ่งคู่ต่อบรรทัด เช่น <code>tags: [journal, idea]</code>.</li>
+          <li><strong>Frontmatter ของโน้ต</strong> เขียนข้อมูลเมตาระดับเอกสาร</li>
+          <li><strong>ฟิลด์รายการในบรรทัด</strong> เขียน <code>key:: value</code> ข้างแต่ละรายการในโน้ตต่อเนื่อง</li>
+          <li>เมื่อพร้อม การเพิ่มข้อมูลบนอุปกรณ์ใส่ชื่อ แท็ก หมวด และข้อความปรับแล้วข้างข้อมูลเมตาเส้นทางคงที่ได้</li>
+        </ul>
+
+        <h3 id="preset-location">ตำแหน่งที่เลือกเปิดใช้</h3>
+        <p>ตำแหน่งปัจจุบันปิดเป็นค่าเริ่มต้นและเป็นของแต่ละเส้นทาง เมื่อเปิด Vox.md ขอตำแหน่งหนึ่งครั้งที่ต้นทาง: เมื่อส่งสำหรับ iOS/iPadOS แผ่นแชร์ ลิงก์เจาะลึก/ตัวเขียน Mac และการทำงานระบบที่เปิดตัวเขียน เมื่อเรียกอินเทนต์ข้อความ ลิงก์ และไฟล์ที่เข้าคิวตรง หรือเมื่อหยุดเสียงส่งทันที บันทึกเส้นทางผ่านคีย์บอร์ด วิดเจ็ต/ตัวควบคุม หรือ Apple Watch ที่ส่งปกติ Watch แบบบันทึกเสียงเท่านั้นส่งออกเสียงดิบไป Files ไม่มีส่วนตำแหน่ง Markdown จึงไม่ขอตำแหน่ง Vox.md ไม่ตรวจตำแหน่งต่อเนื่องและไม่ติดตามเบื้องหลัง</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>การตั้งค่า</th><th>พฤติกรรม</th></tr></thead>
+            <tbody>
+              <tr><td>ใช้ตำแหน่งปัจจุบัน</td><td>ขอตำแหน่งหนึ่งครั้ง ณ เวลาต้นทางสำหรับเส้นทางนี้ และให้ข้อมูลแก่ <code>{location}</code> ไม่เขียนข้อมูลเมตาโดยอัตโนมัติ</td></tr>
+              <tr><td>Exact (ค่าเริ่มต้น)</td><td>เก็บตำแหน่งต้นทางที่ปรับเพื่อความเป็นส่วนตัว และใส่ชื่อสถานที่น่าสนใจได้หากข้อมูลเมตาที่เลือกต้องการ</td></tr>
+              <tr><td>เมือง</td><td>ปัดละติจูดและลองจิจูดสองทศนิยมและละป้ายสถานที่น่าสนใจ ทุกฟิลด์คำนวณและลิงก์ใช้พิกัดที่ปัดนั้น</td></tr>
+              <tr><td>เขียนข้อมูลเมตาตำแหน่ง</td><td>เปิดใช้ข้อมูลเมตาแบบมีโครงสร้างหรือขั้นสูงแยกต่างหาก นอกเหนือจาก <code>{location}</code> ลิงก์เทมเพลตรายการ</td></tr>
+              <tr><td>ฟิลด์ที่มีโครงสร้าง</td><td>เลือกและเปลี่ยนชื่อพิกัด ละติจูด ลองจิจูด สถานที่ เมือง ภูมิภาค ประเทศ Apple Maps, Google Maps, OpenStreetMap, <code>geo:</code> URI ความแม่นยำ เวลา แหล่ง และรหัสการจด</td></tr>
+              <tr><td>เทมเพลต YAML ขั้นสูง</td><td>ใช้ YAML ที่ตรวจแล้วและจำกัดขอบเขตสำหรับ frontmatter โน้ต แทน frontmatter อื่นไม่ได้ และใช้กับฟิลด์รายการในบรรทัดไม่ได้</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>เมื่อเปิด เขียนข้อมูลเมตาตำแหน่ง ขอบเขตเอกสารต่อท้ายผลในคอลเลกชัน frontmatter ที่ตั้งโดยใช้รหัสการจดเป็นคีย์ โน้ตหนึ่งเก็บหลายตำแหน่งได้ แต่ลองซ้ำแบบ idempotent เพิ่มตำแหน่งเดิมสองครั้งไม่ได้ ขอบเขตรายการแสดงฟิลด์ที่เลือกเป็น <code>key:: value</code> ข้างรายการที่จดนั้น</p>
+        <p>สถานที่ เมือง ภูมิภาค และประเทศใช้ระบบแปลงพิกัดของ Apple เฉพาะเมื่อฟิลด์ข้อมูลเมตาที่เปิดต้องการ ตำแหน่งแบบโทเคนเท่านั้นข้ามการค้นหานี้ บริการฟรีไม่ต้องมีคีย์ API แต่อาจใช้เครือข่าย หากค้นล้มเหลว การจดยังต่อด้วยข้อมูลพิกัดอย่างเดียว คำนำหน้า คำต่อท้าย และเทมเพลต Markdown ในคลังใช้ได้กับ <code>{location}</code> เพื่อแทรกลิงก์ Google Maps ที่กดได้จากตำแหน่งที่พร้อมและปรับเพื่อความเป็นส่วนตัวของเส้นทาง โดยไม่เปิดข้อมูลเมตา โทเคนว่างเมื่อตำแหน่งปัจจุบันปิดหรือไม่พร้อม การสร้างลิงก์ไม่ติดต่อ Apple, Google หรือ OpenStreetMap เมื่อเปิดจึงเปิดเผยพิกัดตรงหรือที่ปัดแล้วในลิงก์แก่ผู้ให้บริการนั้น</p>
+        <p>เส้นทางใหม่และที่เคยปิดคงตัวควบคุมทั้งสองปิด เส้นทางที่เคยเขียนข้อมูลเมตาตำแหน่งคงทั้งสองเปิดหลังอัปเกรด เพื่อรักษาผลลัพธ์เดิม</p>
+        <div class="docs-callout">
+          <strong>คู่มือตำแหน่งปัจจุบันครบ</strong>
+          <p>ดู <a href="/th/docs/location/">ตําแหน่งปัจจุบัน, <code>{location}</code> และข้อมูลเมตา</a> เพื่อดูรูปแบบตั้งค่า ตัวอย่าง เวลาแต่ละแหล่ง พฤติกรรมย้ายระบบ ความเป็นส่วนตัว และแก้ปัญหา</p>
+        </div>
+        <div class="docs-callout docs-callout-neutral">
+          <strong>ตำแหน่งไม่พร้อม</strong>
+          <p>หน้าจอโต้ตอบลองใหม่ ยกเลิก ส่งครั้งเดียวไม่มีตำแหน่ง หรือเลือก <em>ส่งโดยไม่มีตำแหน่งเสมอ</em> สำหรับเส้นทางนั้น รีเซ็ตตัวเลือกที่เก็บในการตั้งค่าตำแหน่งของเส้นทาง คำขอไม่มีผู้ดูแล <em>ถาม</em> เก็บผลไม่มีตำแหน่ง ณ ต้นทางจนคุณตัดสินใจ การลองใหม่และกู้คืนไม่ขอตำแหน่งเวลาหลัง</p>
+        </div>
+
+        <h3 id="destinations">ปลายทาง Markdown</h3>
+        <p>แต่ละเส้นทางมีหนึ่งปลายทางซึ่งมีรากในคลัง Obsidian หรือโฟลเดอร์ Files ที่เขียนได้</p>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>หมายเหตุใหม่</strong><p>สร้างไฟล์ Markdown แยกทุกครั้งด้วยโทเคน เช่น <code>{timestamp}</code>, <code>{date}</code>, <code>{time}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{id8}</code> และ <code>{id}</code>.</p></div>
+          <div><strong>หมายเหตุโรล</strong><p>ต่อท้ายโน้ตรายวัน สัปดาห์ เดือน ไตรมาส หรือปี เส้นทางรองรับด้วย <code>{period}</code> และ <code>{week}</code> ค่าเริ่มต้นปลายทางใหม่คือ <code>Journal/{period}.md</code> พร้อมช่วงรายวัน</p></div>
+          <div><strong>หมายเหตุที่มีอยู่</strong><p>เลือก Markdown ที่อยู่ในคลังหรือโฟลเดอร์ที่เลือกแล้ว Vox.md ตรวจว่าเป้าหมายยังอยู่ในรากนั้นอย่างปลอดภัย</p></div>
+        </div>
+
+        <p>ดูสูตรเส้นทางครบที่ <a href="/th/blog/append-to-obsidian-daily-note-iphone/">ต่อท้ายข้อความและเสียงลงโน้ตรายวัน Obsidian</a>.</p>
+
+        <p><a href="/th/blog/obsidian-capture-templates/">ใช้สูตรเทมเพลตกล่องรับเข้า สมุดบันทึก หรืองาน</a> เพื่อให้รูปแบบรายการคาดเดาได้</p>
+
+        <h3 id="placement-templates">ตำแหน่งแทรก หัวข้อ และเทมเพลต</h3>
+        <ul>
+          <li><strong>ด้านล่าง</strong> ต่อท้าย; <strong>ด้านบน</strong> แทรกไว้ข้างหน้า; <strong>หัวหน้า</strong> แทรกใต้หัวข้อที่เลือกระดับ 1 ถึง 6</li>
+          <li>หากไม่มีหัวข้อ ให้เลือก <strong>แสดงข้อผิดพลาด</strong> หรือ <strong>สร้างหัวข้อ</strong>.</li>
+          <li>ใช้ไฟล์เทมเพลต Markdown สดจากคลัง เทมเพลตรายการใช้ซ้ำ หรือคำนำหน้าและต่อท้ายกำหนดเอง</li>
+          <li>รูปแบบรายการรองรับ <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code> และ <code>{location}</code>.</li>
+          <li>โฟลเดอร์ย่อยไฟล์แนบเริ่มต้นคือ <code>attachments</code>.</li>
+          <li><strong>การป้องกันการคืนเงิน</strong> ปิดเป็นค่าเริ่มต้น เขียนสิ่งที่มองเห็น <code>vox-capture</code> คอมเมนต์ HTML เพื่อตรวจการลองใหม่ซ้ำ</li>
+          <li>Vox.md ปฏิเสธเส้นทางเต็ม แบ็กสแลช การย้อนเส้นทาง ชื่อไม่ปลอดภัย และ symlink ที่ออกนอกราก</li>
+        </ul>
+
+        <h3 id="capture-overrides">การแทนค่าสำหรับการจดครั้งเดียว</h3>
+        <p>ตัวควบคุมปลายทางใช้ค่าเริ่มต้นเส้นทาง วางรายการนี้ต้นหรือท้าย ใช้เทมเพลตรายการครั้งเดียว หรือเลือกโน้ตอื่นในคลังเดียวกันได้ <strong>ใช้ค่าเริ่มต้นปลายทางของเส้นทาง</strong> ลบการแทนค่า ตัวเลือกนี้กระทบเฉพาะฉบับร่างปัจจุบัน ไม่แก้เส้นทาง</p>
+
+        <h3 id="audio-export">การเก็บเสียงและการส่งออกเพื่อความเข้ากันได้</h3>
+        <ul>
+          <li>โหมดเก็บเสียงคือ <strong>ปิด</strong>, <strong>ข้างโน้ต</strong> หรือ <strong>แพคเกจแถบ</strong>.</li>
+          <li>Markdown ฝังเสียงที่เก็บไว้ด้านบนหรือล่างด้วยไวยากรณ์ Obsidian เช่น <code>![[recording.m4a]]</code>.</li>
+          <li>สำหรับการตั้งค่าเสียงโดยตรงแบบเก่าที่ไม่มีปลายทาง Markdown แบบรวม <strong>บันทึกโน้ตลงในไฟล์</strong> รองรับ TXT, MD, JSON และ YAML สร้างไฟล์ใหม่หรือต่อท้าย โทเคนชื่อไฟล์รวมโมเดลกับภาษา เทมเพลต Markdown ตัวเลือก Obsidian Bases คุณสมบัติ YAML ที่เลือกได้ และตัวเลือก <code>.md</code> เป็นส่วนขยายสำหรับ YAML</li>
+          <li>การส่งออกเพื่อเข้ากันได้ใช้เฉพาะเสียงตรงเมื่อเส้นทางไม่มีปลายทางจดแบบรวม</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="models">
+        <div class="docs-section-label">04 / โมเดลและถอดเสียง</div>
+        <h2>เลือกระบบของ OS หรือโมเดลในเครื่องที่เลือกใช้</h2>
+        <p>การถอดเสียงทั้งหมดทำงานบนอุปกรณ์ Apple อัตโนมัติเป็นค่าเริ่มต้น iOS ไฟล์โมเดล Whisper และ Parakeet ที่เลือกใช้ได้ดาวน์โหลดเมื่อคุณขอเท่านั้น เลือกโมเดล ยกเลิกระหว่างดาวน์โหลด หรือลบภายหลังได้</p>
+
+        <p><a href="/th/blog/offline-transcription-iphone-markdown/">เตรียมขั้นตอนถอดเสียงออฟไลน์</a> ด้วยระบบในเครื่องและปลายทางเขียนได้</p>
+
+        <h3 id="model-options">ตัวเลือกถอดเสียงที่มี</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>ตัวเลือก</th><th>ขนาดโดยประมาณ</th><th>เหมาะที่สุด</th></tr></thead>
+            <tbody>
+              <tr><td>อัตโนมัติ</td><td>ระบบจัดการ</td><td>เลือก Apple Speech ก่อนบน iOS 26 และภาษาที่รองรับ ใช้สำรองเฉพาะโมเดลในเครื่องที่คุณดาวน์โหลดโดยตรง</td></tr>
+              <tr><td>Whisper Tiny</td><td>75 MB</td><td>ดาวน์โหลดเล็กที่สุดและเป็นตัวเลือก Whisper เร็วที่สุด</td></tr>
+              <tr><td>Whisper Base</td><td>142 MB</td><td>โมเดลเล็กในเครื่องที่สมดุล ค่าเริ่มต้น Mac เดิม</td></tr>
+              <tr><td>Whisper Small</td><td>466 MB</td><td>แม่นยำขึ้น แลกพื้นที่และการประมวลผลมากขึ้น</td></tr>
+              <tr><td>Whisper Medium</td><td>1.5 GB</td><td>โมเดล Whisper หลายภาษาที่ใหญ่ขึ้น</td></tr>
+              <tr><td>Whisper Large v3 Turbo</td><td>1.6 GB</td><td>ตัวเลือก Whisper ใหญ่ที่สุดที่มี</td></tr>
+              <tr><td>Parakeet v2</td><td>~800 MB</td><td>โมเดล Core ML/FluidAudio ที่ปรับเหมาะกับภาษาอังกฤษ</td></tr>
+              <tr><td>Parakeet v3</td><td>~800 MB</td><td>โมเดล Core ML/FluidAudio ที่รองรับ 25 ภาษา</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="automatic-model">อัตโนมัติทำงานอย่างไร</h3>
+        <ul>
+          <li>บนอุปกรณ์ iOS 26 ที่รองรับ อัตโนมัติตรวจตัวรู้จำ Speech ที่ระบบ Apple จัดการสำหรับภาษาที่เลือก และเตรียมทรัพยากรภาษาเมื่อจำเป็น</li>
+          <li><strong>ภาษาของระบบ</strong> ตามภาษาอุปกรณ์ เลือกภาษาเฉพาะเมื่อเสียงใช้ภาษาอื่น</li>
+          <li>อัตโนมัติไม่แอบดาวน์โหลด Whisper หรือ Parakeet สำรอง ใช้ได้เฉพาะโมเดลที่คุณเคยเลือกดาวน์โหลด</li>
+          <li>Apple Speech สดแยกข้อความยืนยันที่แทรกได้ปลอดภัยจากข้อความชั่วคราวที่ยังเปลี่ยนได้</li>
+          <li>Whisper และ Parakeet ที่เลือกตรงใช้ถอดเสียงแบบชุดหลังช่วงบันทึกจบ</li>
+        </ul>
+
+        <h3 id="model-languages">ภาษา</h3>
+        <ul>
+          <li><strong>Whisper:</strong> ตรวจอัตโนมัติ อังกฤษ สเปน ฝรั่งเศส เยอรมัน อิตาลี โปรตุเกส ดัตช์ โปแลนด์ รัสเซีย จีน ญี่ปุ่น เกาหลี อาหรับ ฮินดี ตุรกี เวียดนาม ไทย ยูเครน สวีเดน เดนมาร์ก นอร์เวย์ และฟินแลนด์</li>
+          <li><strong>อัตโนมัติ:</strong> ภาษาระบบรวมกับภาษาที่ระบุไว้สำหรับ Whisper เมื่อ Apple รองรับภาษาท้องถิ่นนั้น</li>
+          <li><strong>Parakeet v2:</strong> อังกฤษ</li>
+          <li><strong>Parakeet v3:</strong> บัลแกเรีย โครเอเชีย เช็ก เดนมาร์ก ดัตช์ อังกฤษ เอสโตเนีย ฟินแลนด์ ฝรั่งเศส เยอรมัน กรีก ฮังการี อิตาลี ลัตเวีย ลิทัวเนีย มอลตา โปแลนด์ โปรตุเกส โรมาเนีย สโลวัก สโลวีเนีย สเปน สวีเดน รัสเซีย และยูเครน ขั้นตอน Parakeet ตรวจภาษาอัตโนมัติ</li>
+        </ul>
+
+        <h3 id="parakeet-autostop">หยุดอัตโนมัติคีย์บอร์ด Parakeet</h3>
+        <p>โมเดลที่เลือกใช้ขนาดประมาณ 1 MB <strong>การตรวจจับการหยุดเสียง</strong> หยุดการบันทึกคีย์บอร์ด Parakeet v2 หรือ v3 ที่เลือกโดยตรงหลังเงียบได้ เปิด <strong>หยุด Parakeet หลังเงียบ</strong> และเลือกประมาณ 0.5, 0.75, 1, 1.5 หรือ 2 วินาที ค่าเริ่มต้นเปิดพร้อมช่วงเงียบ 0.75 วินาทีหลังโมเดลเสริมพร้อม อัตโนมัติและ Whisper ยังคงหยุดด้วยตนเอง</p>
+
+        <h3 id="audio-pipeline">พฤติกรรมเสียงในเครื่อง</h3>
+        <ul>
+          <li>ข้อมูล Whisper ปรับเป็นเสียงโมโน 16 kHz, 16-bit</li>
+          <li>การฟังต่อเนื่องบน iOS ใช้บัฟเฟอร์วน 10 นาทีและรวมเสียงก่อนเริ่มสองวินาทีเมื่อเริ่มช่วงบันทึก</li>
+          <li>Whisper ใช้ <code>whisper.cpp</code>; Parakeet ใช้ FluidAudio และ Core ML ส่วน Whisper ใช้ Metal เร่งบน Mac</li>
+          <li>การดาวน์โหลดโมเดลต้องเชื่อมต่อเครือข่าย แต่ถอดเสียงในเครื่องได้หลังระบบที่เลือกพร้อม</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="keyboard">
+        <div class="docs-section-label">05 / คีย์บอร์ด iOS</div>
+        <h2>พูดเป็นข้อความลงในช่องที่กำลังแก้ไข</h2>
+        <p>คีย์บอร์ด Vox.md ใช้ใน Messages, Notes, Mail, Safari, Slack และแอปอื่นที่รับคีย์บอร์ด iOS มาตรฐาน แถบเครื่องมือเสียงอยู่เหนือเค้าโครง KeyboardKit และสื่อสารกับแอปหลัก Vox.md ผ่าน App Group ร่วมส่วนตัว</p>
+
+        <h3 id="keyboard-setup">ตั้งค่าคีย์บอร์ด</h3>
+        <ol class="docs-steps">
+          <li><strong>เตรียมถอดเสียงใน Vox.md</strong><span>เลือก อัตโนมัติ ไว้บนอุปกรณ์ที่รองรับ หรือดาวน์โหลดและเลือก Whisper หรือ Parakeet ในการตั้งค่า → โมเดล</span></li>
+          <li><strong>เพิ่มคีย์บอร์ด</strong><span>เปิดการตั้งค่า iOS → ทั่วไป → คีย์บอร์ด → คีย์บอร์ด → เพิ่มคีย์บอร์ดใหม่ แล้วเลือก Vox.md</span></li>
+          <li><strong>เปิดอนุญาตสิทธิ์เข้าถึงแบบเต็ม</strong><span>ขั้นตอนคีย์บอร์ดปัจจุบันต้องใช้เพื่อเข้าถึงสถานะ App Group ร่วมและประสานการบันทึกกับแอปหลัก</span></li>
+          <li><strong>สลับคีย์บอร์ด</strong><span>เปิดช่องข้อความ ใช้ปุ่มลูกโลกเลือก Vox.md แล้วแตะไมโครโฟน</span></li>
+        </ol>
+        <div class="docs-callout">
+          <strong>สิทธิ์เต็มทำอะไรที่นี่</strong>
+          <p>iOS ตั้งชื่อสิทธิ์ไว้กว้าง Vox.md ใช้เพื่อขั้นตอนแอปและคีย์บอร์ดบนอุปกรณ์ สถานะร่วม และการสั่นที่เลือกใช้ Vox.md ไม่อัปโหลดการกดแป้น ข้อความที่พูด ข้อความถอดเสียง หรือเสียงไมโครโฟนไปเซิร์ฟเวอร์ Vox.md ดู <a href="/th/privacy.html">นโยบายความเป็นส่วนตัว</a>.</p>
+        </div>
+
+        <h3 id="keyboard-workflow">แถบเสียงและการแทรก</h3>
+        <ul>
+          <li>แถบเครื่องมือแสดงระบบปัจจุบัน สถานะ ระยะเวลาบันทึก คลื่นเสียงสด และปุ่มไมโครโฟน/หยุด</li>
+          <li>ตัวควบคุมก่อนหน้าและถัดไปวนเลือกระบบที่ดาวน์โหลดและพร้อม</li>
+          <li>หากยังไม่ฟังเสียง คีย์บอร์ดจะเปิด Vox.md หนึ่งครั้ง เริ่มฟัง และสามารถพาคุณกลับไปช่องข้อความเดิม</li>
+          <li>เมื่อใช้ อัตโนมัติ ข้อความถอดเสียงส่วนที่ยืนยันแล้วจะแทรกขณะพูด ส่วนคำชั่วคราวจะแสดงเท่านั้นจนกว่า Apple จะยืนยัน</li>
+          <li>เมื่อใช้ Whisper หรือ Parakeet ข้อความถอดเสียงสมบูรณ์แทรกหลังคุณหยุดหรือระบบหยุดช่วงบันทึกอัตโนมัติ</li>
+          <li>หากแทรกถูกขัดจังหวะหรือพัก ข้อความค้างเก็บคงทนและลองใหม่เมื่อคีย์บอร์ดแสดงครั้งหน้า</li>
+          <li>แถบเครื่องมือรายงานสถานะ เช่น <em>เปิด Vox.md</em>, <em>การแปล...</em> และ <em>เปิดสิทธิ์เข้าถึงแบบเต็ม</em>.</li>
+        </ul>
+
+        <h3 id="keyboard-customization">ปรับแต่งคีย์บอร์ด</h3>
+        <ul>
+          <li><strong>การตอบสนองแบบสั่น</strong> เปิดเป็นค่าเริ่มต้นและเปลี่ยนได้ในการตั้งค่า Vox.md</li>
+          <li>เมนูอักขระทางเลือกเมื่อกดค้างมีสำหรับภาษาอังกฤษ เยอรมัน สเปน ฝรั่งเศส อิตาลี โปรตุเกส ดัตช์ สวีเดน เดนมาร์ก และนอร์เวย์</li>
+          <li>ผู้ที่เลือก Parakeet โดยตรงเพิ่มหยุดอัตโนมัติตามช่วงเงียบได้จากการตั้งค่า → โมเดล</li>
+          <li>โควตาถอดเสียงฟรี 15 นาทีใช้กับการพูดผ่านคีย์บอร์ด การบันทึกในแอป และการนำเข้า</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="system-integrations">
+        <div class="docs-section-label">06 / ผสานระบบ</div>
+        <h2>เริ่มจดจากแผ่นแชร์ หน้าจอโฮม หน้าจอล็อก หรือ Shortcuts</h2>
+
+        <h3 id="share-extension">ส่วนขยายแชร์</h3>
+        <p>การทำงานในแผ่นแชร์ iOS ชื่อ <strong>บันทึกไปยัง Vox.md</strong> รับข้อความ URL HTTP/HTTPS รูปภาพ ไฟล์ และวิดีโอ ตามขีดจำกัดรายการและทรัพยากรร่วม เลือกเส้นทางกับปลายทาง เพิ่มโน้ตได้ แล้วส่ง หากเส้นทางใช้ตำแหน่งปัจจุบัน การแชร์จะขอตำแหน่งครั้งเดียว ณ การส่งนี้ ไม่ว่าจะเปิดข้อมูลเมตาหรือไม่ เนื้อหาเตรียมใน App Group ส่วนตัว เข้าคิวอย่างคงทน และเปิดใน Vox.md เพื่อส่ง หากต้องใช้แอปหลัก ให้ใช้ <strong>เปิด Vox.md</strong>.</p>
+
+        <h3 id="widgets">วิดเจ็ตหน้าจอโฮมและล็อก</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>การจับภาพอย่างรวดเร็ว</strong><p>เปิดฉบับร่าง Markdown คงทน วิดเจ็ตกลางและใหญ่มีการทำงานโน้ต รูป ภาพหน้าจอ กล้อง ไฟล์ ลิงก์ สแกน ภาพร่าง และเสียง</p></div>
+          <div><strong>บันทึกอย่างรวดเร็ว</strong><p>เริ่มขั้นตอนบันทึกที่ตั้งและแสดงสถานะพร้อม ฟัง หรือปิดในรูปแบบหน้าจอโฮมกับล็อกที่รองรับ</p></div>
+          <div><strong>การตั้งค่าความปลอดภัยวิดเจ็ต</strong><p>ปิดปุ่มบันทึกบนหน้าจอล็อกในการตั้งค่า เพื่อแสดงสถานะปิดแทนการเริ่มบันทึกทันที</p></div>
+        </div>
+
+        <h3 id="control-center-live-activities">ศูนย์ควบคุม กิจกรรมสด และ Dynamic Island</h3>
+        <ul>
+          <li>บน iOS 18+ เพิ่มตัวควบคุมจดและบันทึก Vox.md ที่มีจากศูนย์ควบคุม ตั้งเส้นทางกับตัวเลือกที่รุ่นติดตั้งมีให้</li>
+          <li>ตั้งค่าไมโครโฟน โมเดล และปลายทางใน Vox.md ให้เสร็จก่อนใช้ตัวควบคุมการบันทึก การบันทึกอาจเปิดแอปขึ้นอยู่กับ iOS และรุ่นแอปที่ติดตั้ง ลองบันทึกสั้น ๆ บนอุปกรณ์ก่อนพึ่งพาการจดบันทึกเบื้องหลัง</li>
+          <li>ส่วน <strong>ตัวตรวจสอบกิจกรรมสด</strong> ควบคุมสถานะบันทึกและการบันทึก/หยุดบนหน้าจอล็อกและ Dynamic Island</li>
+          <li>สถานะกิจกรรมสดมี บันทึก ตัวจับเวลา ประมวลผล พร้อม เริ่มบันทึก และหยุด</li>
+          <li>กิจกรรมสดใช้ได้ตั้งแต่ iOS 17 ตัวควบคุมศูนย์ควบคุมต้องใช้ iOS 18</li>
+        </ul>
+
+        <h3 id="shortcuts">Shortcuts และ App Intents</h3>
+        <p>เส้นทางเป็นรายการเลือกได้ใน Shortcuts และตัวควบคุมที่รองรับ เมื่อเปิด ใช้ตำแหน่งปัจจุบัน อินเทนต์ข้อความ ลิงก์ และไฟล์เข้าคิวตรงขอตำแหน่งตอนเรียก การทำงานที่เปิดตัวเขียนขอตอนส่ง และบันทึกขอตอนหยุด ข้อมูลเมตาไม่เปลี่ยนเวลานี้ หากคำขอไม่มีผู้ดูแล <em>ถาม</em> ไม่สามารถรับตำแหน่งได้ ผลลัพธ์ว่าไม่พร้อมใช้งาน ณ เวลาต้นทางจะถูกเก็บไว้ให้ตัดสินใจภายหลัง แทนการขอใหม่ ใช้การทำงานที่มีใน Vox.md รุ่นที่ติดตั้ง การทำงานสำหรับจดบันทึกประกอบด้วย:</p>
+        <ul class="docs-columns">
+          <li>เปิดการจับภาพอย่างรวดเร็ว</li>
+          <li>บันทึกการจับภาพ</li>
+          <li>ระบายความร้อน Screenshot</li>
+          <li>ไฟล์ที่จับภาพ Markdown</li>
+          <li>ลิงค์เพื่อ Markdown</li>
+          <li>ไฟล์ที่จับภาพ Markdown</li>
+        </ul>
+
+        <h3 id="action-button-recording">ตั้งบันทึกด้วยปุ่มแอ็กชัน</h3>
+        <p>เปิด Vox.md หนึ่งครั้งเพื่อให้สิทธิ์ไมโครโฟน เตรียมระบบถอดเสียง และเชื่อมเส้นทางกับปลายทาง ใน Shortcuts เพิ่มการจด Vox.md ที่มีและเลือกเส้นทาง รันขณะโทรศัพท์ปลดล็อกเพื่อยืนยันว่าเก็บลงโน้ตที่ต้องการก่อนกำหนดใน การตั้งค่า → ปุ่มแอ็กชัน → คำสั่งลัด</p>
+        <p class="docs-note">การทำงานที่มีและบันทึกเบื้องหลังขึ้นอยู่กับรุ่นติดตั้งและ iOS ใช้การทำงานที่ Shortcuts แสดงบนอุปกรณ์ หากต้องเปิดแอป ให้เปิด Vox.md เพื่อบันทึก การมีคำสั่งลัดในตัวเลือกไม่รับรองบันทึกจากโทรศัพท์ที่ล็อก</p>
+
+        <h3 id="deep-links">ลิงก์เจาะลึก</h3>
+        <p>Vox.md ลงทะเบียน <code>voxboard://</code> เป็นรูปแบบ URL ใช้การเข้ารหัส URL สำหรับค่าคิวรี</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table docs-code-table">
+            <thead><tr><th>URL</th><th>พฤติกรรม</th></tr></thead>
+            <tbody>
+              <tr><td><code>voxboard://capture</code></td><td>เปิดตัวเขียน การจับภาพอย่างรวดเร็ว ที่เก็บคงทน</td></tr>
+              <tr><td><code>voxboard://capture?action=photos</code></td><td>เปิดตัวเลือกรูป การทำงานอื่น: <code>screenshots</code>, <code>camera</code>, <code>files</code>, <code>scan</code>, <code>sketch</code>, <code>link</code> และ <code>voice</code>.</td></tr>
+              <tr><td><code>voxboard://capture?text=...</code></td><td>เปิดฉบับร่างพร้อมข้อความจำกัดขนาด</td></tr>
+              <tr><td><code>voxboard://capture?url=https%3A%2F%2F...</code></td><td>เปิดฉบับร่างพร้อมลิงก์ HTTP/HTTPS</td></tr>
+              <tr><td><code>voxboard://capture?route=...</code></td><td>เลือกเส้นทางที่เปิดใช้ รวมกับการทำงาน ข้อความ หรือ URL ที่รองรับได้</td></tr>
+              <tr><td><code>voxboard://capture-request?id=...</code></td><td>รับคำขอที่เก็บคงทนซึ่งส่วนขยายระบบหรืออินเทนต์สร้างไว้</td></tr>
+              <tr><td><code>voxboard://listen</code></td><td>เริ่มขั้นตอนเปิดฟังคีย์บอร์ด</td></tr>
+              <tr><td><code>voxboard://record</code></td><td>จุดเริ่มบันทึกแบบเก่าเปลี่ยนไปฟังเสียง</td></tr>
+              <tr><td><code>voxboard://widget-record</code></td><td>จุดเริ่มบันทึกวิดเจ็ตแบบเก่า</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">ปฏิเสธพารามิเตอร์ไม่รู้จักหรือซ้ำ UUID ผิดรูปแบบ รหัสเส้นทางไม่ปลอดภัย URL ไม่ใช่ HTTP และข้อความเกินขีดจำกัดร่วม</p>
+      </section>
+
+      <section class="docs-section" id="apple-watch">
+        <div class="docs-section-label">07 / Apple Watch</div>
+        <h2>บันทึกในเครื่องบน Watch แล้วส่งผ่าน iPhone</h2>
+
+        <p><a href="/th/blog/apple-watch-obsidian-voice-notes/">ทำตามคู่มือตั้ง Apple Watch ไป Obsidian</a> เพื่อตรวจเลือกเส้นทาง ถ่ายโอน และส่ง</p>
+
+        <h3 id="watch-recording">ขั้นตอนบันทึกเสียง</h3>
+        <ul>
+          <li>แอป Watch แสดงสถานะพร้อม บันทึก พัก ซิงค์ อยู่ในคิว ถอดเสียง เก็บ ส่งแล้ว และต้องดูแล</li>
+          <li>ใช้ บันทึก พัก/ต่อ หยุด ยกเลิก ซิงค์ และรีเฟรช การพักให้เวลาคิดโดยไม่แบ่งโน้ต — ช่วงพักหยุดตัวจับเวลาและไม่รวมในเสียงบันทึก ยกเลิกจะลบเสียงในเครื่องอย่างชัดเจนแทนการซิงค์</li>
+          <li>เสียงบันทึกเก็บเป็นบันทึกธุรกรรมในเครื่องและกู้คืนหลังขัดจังหวะหรือแอปขัดข้อง</li>
+          <li>เสียงบันทึกอยู่บน Watch จน iPhone ยืนยันการส่งหรือทิ้ง</li>
+          <li>สำหรับเส้นทางที่เปิด ใช้ตำแหน่งปัจจุบัน และส่งผ่านการจดปกติ Watch ขอตำแหน่งจาก Watch หนึ่งครั้งเมื่อหยุดบันทึก แล้วส่งผลลัพธ์ที่ปรับเพื่อความเป็นส่วนตัวพร้อมข้อมูลเส้นทาง iPhone ไม่ใช้ตำแหน่งของตนแทน บันทึกเสียงเท่านั้นจะข้ามตำแหน่งเพราะส่งออกเสียงดิบโดยไม่มีส่วน Markdown</li>
+        </ul>
+
+        <h3 id="watch-presets">เส้นทางบน Watch</h3>
+        <p>เลือกเส้นทาง iPhone ที่เปิดใช้จาก Watch <strong>เส้นทาง</strong>  Vox.md ส่งข้อมูลภาพรวมที่ปลอดภัยพร้อมเสียงบันทึก หาก iPhone ไม่พร้อม ตัวเลือกที่ขอจะค้างและเส้นทางที่ยืนยันล่าสุดยังทำงาน</p>
+
+        <h3 id="watch-queue">คิวรายการบันทึกจาก Watch บน iPhone</h3>
+        <p>คิวบน iPhone แสดงเวลาบันทึก ระยะเวลา เส้นทาง สถานะประมวลผล และการทำงานสำหรับส่ง รายการที่ล้มเหลวสามารถลองใหม่ เปลี่ยนเส้นทาง ทิ้ง หรือเก็บโดยไม่มีข้อความถอดเสียง การทิ้งจะลบเสียงที่เก็บไว้และการส่งที่อยู่ในคิว</p>
+
+        <h3 id="watch-recording-only">ผลลัพธ์แบบบันทึกเสียงเท่านั้น</h3>
+        <ul>
+          <li>ตั้งผลลัพธ์เส้นทางเป็น <strong>บันทึกเสียงเท่านั้น</strong> เพื่อคัดลอกเสียง M4A ลงโฟลเดอร์ Files โดยไม่ถอดเสียง ประมวลผล AI หรือใช้โควตาถอดเสียง</li>
+          <li>เทมเพลตชื่อไฟล์เริ่มต้นคือ <code>recording-{timestamp}-{id8}</code>.</li>
+          <li>เลือกโฟลเดอร์เสียงบันทึกบน iPhone หนึ่งครั้งก่อนใช้เส้นทาง</li>
+          <li>iOS อาจชะลอส่งเบื้องหลัง การบังคับปิด Vox.md หยุดการส่งจนเปิดแอปอีกครั้ง</li>
+        </ul>
+
+        <h3 id="watch-complication">คอมพลิเคชันและวิดเจ็ต</h3>
+        <p>ส่วน <strong>บันทึกเสียงบันทึก</strong> รองรับรูปแบบวงกลม สี่เหลี่ยม ในบรรทัด และมุม เปิดหรือสลับบันทึกในเครื่องบน Watch และแสดงเวลาหรือป้ายตามสถานะ</p>
+      </section>
+
+      <section class="docs-section" id="mac">
+        <div class="docs-section-label">08 / แอปคู่บน Mac</div>
+        <h2>ใช้ระบบจดเดียวกันจาก macOS</h2>
+        <p>แอป Mac มีหน้าจด คลัง และการตั้งค่า และใช้สถาปัตยกรรมโมเดลในเครื่อง เส้นทาง เส้นทาง ส่งออก และลองใหม่ร่วมกับ iOS</p>
+
+        <h3 id="mac-workspace">พื้นที่จดบันทึก</h3>
+        <ul>
+          <li>พิมพ์และแก้ไข Markdown วาง หรือลากแล้วปล่อยไฟล์ รูปภาพ และเสียง</li>
+          <li>ใช้ภาพจากกล้องในตัว กล้องภายนอก หรืออุปกรณ์ Continuity Camera</li>
+          <li>นำเข้าสแกนหรือ PDF วาดด้วยเมาส์ แทร็กแพด หรือแท็บเล็ตเชื่อมต่อ และเพิ่มลิงก์ wikilink วันครบกำหนด กับการแปลงข้อความ</li>
+          <li>บันทึกด้วย <strong>เพิ่มไปยังฉบับร่าง</strong> หรือ <strong>ส่งทันที</strong>; เลือกเก็บเสียงไว้ในโหมดฉบับร่างได้</li>
+          <li><strong>พัก</strong> และ <strong>ทำต่อ</strong> เสียงไมโครโฟนจากแถบสถานะ ช่วงพักไม่รวมในเสียง จึงบันทึกโน้ตเดียวเป็นช่วง ๆ ได้ การบันทึกประชุมพักไม่ได้</li>
+          <li>นำเข้าเสียงหรือวิดีโอเพื่อถอดเสียงในเครื่อง</li>
+          <li>กด Command-Return เพื่อส่งการจด เส้นทางที่เปิด ใช้ตำแหน่งปัจจุบัน จะขอตำแหน่งต้นทางจาก Mac หนึ่งครั้งเมื่อส่งหรือหยุดบันทึก ไม่ว่าจะเปิดผลลัพธ์ข้อมูลเมตาหรือไม่</li>
+          <li>แบนเนอร์ตั้งค่าปลายทางและตัวตรวจเส้นทางแสดงโน้ตกับตำแหน่งวางที่คำนวณจากเส้นทางที่เลือก</li>
+        </ul>
+
+        <h3 id="mac-meeting">บันทึกประชุมพร้อมแทร็กเสียงแยก</h3>
+        <p>สลับตัวเลือกโหมดนำเข้าจาก <strong>ไมโครโฟน</strong> ไปยัง <strong>การประชุม</strong> เพื่อเก็บเสียงที่แอปบน Mac เล่นและไมโครโฟนคุณเป็นสองแทร็กแยกสะอาด Vox.md ใช้ ScreenCaptureKit แบบแอปเดียว คุณเลือกหนึ่งแอปเท่านั้นและไม่บันทึก Vox.md เอง</p>
+        <ul>
+          <li>ขณะบันทึก แถบสถานะแสดงระดับเสียงระบบและไมโครโฟนสด สถานะแต่ละแหล่ง และคำเตือนการจด</li>
+          <li>เสียงทั้งสองแทร็กเขียนเป็นส่วนที่เก็บอย่างคงทนพร้อมรายการกู้คืน เมื่อเกิดเหตุขัดจังหวะ เช่น สตรีมหยุด ถอดไมโครโฟน หรือบังคับปิด ระบบจึงจบงานได้อย่างปลอดภัยและยังถอดเสียงประชุมได้ เซสชันที่ขาดตอนจะกู้คืนอัตโนมัติเมื่อคิวบันทึกทำงานต่อครั้งถัดไป</li>
+          <li>หลังหยุด แต่ละแทร็กถอดแยกบนอุปกรณ์และผลสลับในลำดับเวลาร่วม ไมโครโฟนคุณแสดงเป็น <strong>คุณ</strong> และแทร็กเสียงแอปมีป้ายเป็นผู้พูดระยะไกล การระบุผู้พูดที่เลือกใช้ได้ยังแยกเสียงระยะไกลหลายคนได้อีก</li>
+          <li>เสียงรวมสำหรับเล่นของสองแทร็กเก็บเป็นเสียงของรายการ ข้อความถอดเสียงสำเร็จทำตามเส้นทาง เพิ่มไปยังฉบับร่าง หรือ ส่งทันที และการตั้งค่าคลิปบอร์ดเหมือนเสียงบันทึกอื่น</li>
+        </ul>
+
+        <h3 id="mac-keybinds">ปุ่มลัดส่วนกลาง</h3>
+        <p>Settings → Global Keybinds สามารถกำหนดปุ่มลัดให้ <strong>แปลงไปยัง Clipboard</strong>, <strong>เส้นทางที่เลือก</strong> หรือเส้นทางที่เปิดใช้ใดก็ได้ ปุ่มลัดปิดเป็นค่าเริ่มต้น ต้องมีปุ่มที่ไม่ใช่ตัวปรับร่วมกับ Control, Option หรือ Command ใส่ Shift ได้ และไม่ยอมรับปุ่มขัดกัน กดปุ่มลัดเดิมอีกเพื่อหยุดบันทึก</p>
+        <div class="docs-callout docs-callout-neutral">
+          <p><strong>แปลงไปยัง Clipboard</strong> ไม่สร้างโน้ต รายการในคลัง หรือเสียงที่เก็บไว้ ใช้สำหรับพูดเป็นข้อความด่วนลงแอป Mac ใดก็ได้</p>
+        </div>
+
+        <h3 id="mac-menu-bar">แถบเมนูและการแสดงแอป</h3>
+        <ul>
+          <li>ตัวเลือกการแสดงคือ <strong>โดค + เมนูบาร์</strong> (ค่าเริ่มต้น), <strong>เฟอร์นิเจอร์ Menu Bar Only</strong>, <strong>Dock เท่านั้น</strong> และ <strong>ซ่อนอยู่</strong>.</li>
+          <li>แถบเมนูรายงานสถานะบันทึก ถอดเสียง และส่งออก</li>
+          <li>เมนูมีเริ่มบันทึก หยุด + ถอดเสียง นำเข้าเสียง… คัดลอกข้อความล่าสุด แสดงส่งออกล่าสุด เลือกเส้นทาง แสดงการจด แสดงคลัง แสดงโฟลเดอร์ข้อมูล และออกจาก Vox.md</li>
+          <li>กด Control-B ในแอป Mac เพื่อแสดงคำแนะนำปุ่มเหนือสิ่งที่คลิกได้</li>
+        </ul>
+
+        <h3 id="mac-history">ประวัติและโมเดล Mac</h3>
+        <p>ค้นหา โหลดใหม่ ล้าง คัดลอก หรือลบประวัติในเครื่อง เปิดรายละเอียดข้อความปรับแล้วกับดิบ และแสดงโน้ตที่ส่งใน Finder หน้าจอโมเดลดาวน์โหลด เลือก ลบ Whisper หรือ Parakeet และเปลี่ยนภาษาถอดเสียง Whisper ใช้ Metal เร่งบน Mac ที่รองรับ</p>
+      </section>
+
+      <section class="docs-section" id="history-settings">
+        <div class="docs-section-label">09 / คลัง การตั้งค่า และความเป็นส่วนตัว</div>
+        <h2>กู้คืนงาน ควบคุมข้อมูลในเครื่อง และปลดล็อกการใช้งานไม่จำกัด</h2>
+
+        <h3 id="history">คลังรวมบน iOS</h3>
+        <ul>
+          <li>คลังรวมข้อความถอดเสียงในเครื่องและประวัติส่งการจดไว้ในรายการเดียวที่ค้นหาได้</li>
+          <li>ค้นข้อความดิบ ปรับแล้ว ชื่อ แท็ก และหมวด ดึงเพื่อรีเฟรช</li>
+          <li>คัดลอกข้อความปรับแล้วหรือดิบ แก้ข้อมูลเมตากับข้อความ หรือส่งออกสำเนา Markdown ผ่านแผ่นแชร์</li>
+          <li>ลบข้อความถอดเสียงหนึ่งรายการหรือล้างประวัติในเครื่องทั้งหมด การล้างประวัติไม่ลบโน้ต Markdown หรือไฟล์แนบที่เขียนลงปลายทางแล้ว</li>
+          <li>ลองรายการในคิวใหม่และตรวจข้อมูลคร่าว ๆ ของแหล่ง เส้นทาง ปลายทาง เส้นทางโน้ต จำนวนไฟล์แนบ เวลา ผล และหมวดข้อผิดพลาด</li>
+          <li>แก้ข้อความถอดเสียงได้ทั้งชื่อ แท็ก หมวด ข้อความปรับแล้ว และข้อความดิบ</li>
+        </ul>
+
+        <h3 id="stats">สหรัฐกิจกรรมส่วนตัว</h3>
+        <p>เปิด การตั้งค่า → กิจกรรม → สถิติ เพื่อดูการใช้ตลอดชีพ: จำนวนเสียงบันทึกและการจดทั้งหมด ระยะเวลา และไฟล์แนบ พร้อมแผนภูมิเจ็ดวันล่าสุดและแหล่งที่มา (แอป คีย์บอร์ด แผ่นแชร์ วิดเจ็ต Shortcuts, Apple Watch, Mac ลิงก์เจาะลึก นำเข้าไฟล์ และเสียง)</p>
+        <ul>
+          <li>สถิตินับเฉพาะส่งสำเร็จ ดึงเพื่อรีเฟรชหลังมีกิจกรรมใหม่</li>
+          <li>บัญชีการใช้งานอยู่บนอุปกรณ์และไม่เก็บเนื้อหาที่จด ชื่อไฟล์ หรือปลายทาง</li>
+        </ul>
+
+        <h3 id="settings-map">แผนผังการตั้งค่า</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>ส่วน</th><th>ตัวควบคุม</th></tr></thead>
+            <tbody>
+              <tr><td>Vox.md ไม่ จํากัด</td><td>สถานะโควตาฟรี การปลดล็อกตลอดชีพ และกู้คืนการซื้อ</td></tr>
+              <tr><td>การปรับแต่ง</td><td>โมเดล; เส้นทาง; การแสดงและลำดับการทำงานในแถบจดบันทึก</td></tr>
+              <tr><td>แป้นพิมพ์</td><td>การตอบสนองแบบสั่น</td></tr>
+              <tr><td>หน้าจอล็อค</td><td>ตัวติดตามกิจกรรมสดและปุ่มบันทึกหน้าจอล็อก</td></tr>
+              <tr><td>เกี่ยวกับ</td><td>ถอดเสียงเริ่มต้น Whisper, Parakeet ประมวลผลบนอุปกรณ์ ความเป็นส่วนตัว รุ่นแอป และความพร้อม Apple Intelligence</td></tr>
+              <tr><td>ความคิดเห็น</td><td>เข้าร่วม Discord ของ Isolated Tech หรือเขียนอีเมลความเห็นพร้อมวินิจฉัย</td></tr>
+              <tr><td>การทํา Debug</td><td>ดูบันทึกแก้จุดบกพร่องในเครื่อง</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>บันทึกรุ่นอาจปรากฏหลังอัปเดตและอธิบายฟีเจอร์ปัจจุบัน เช่น ซิงค์ Watch ปุ่มลัดส่วนกลาง Mac ไอคอนเส้นทาง ตัวควบคุมหน้าจอล็อก การกำหนดเส้นทาง กฎเสียง และประมวลผลภายหลัง</p>
+
+        <h3 id="pricing-limits">การใช้ฟรีและปลดล็อกตลอดชีพ</h3>
+        <ul>
+          <li>การใช้ฟรีประกอบด้วย <strong>ถอดเสียง 15 นาที</strong> และ <strong>ส่งการจดสำเร็จ 10 ครั้ง</strong>.</li>
+          <li>ข้อความเสียงที่คิดเวลาถอดเสียงแล้วไม่ใช้โควตาการจดแยกอีกเมื่อส่งไป Markdown</li>
+          <li>เขียนล้มเหลวและลองซ้ำแบบ idempotent ไม่ใช้โควตาส่งสำเร็จ</li>
+          <li>ไม่จำกัดคือซื้อครั้งเดียวตลอดชีพ ไม่มีสมาชิก ต่ออายุ หรือโฆษณา ราคา App Store ในพื้นที่เป็นราคาที่ใช้จริง ราคาในสหรัฐฯ คือ $19.99 Individual, $39.99 Family และ $19.99 Family Upgrade โดยพื้นที่อื่นใช้ราคาตามกำลังซื้อ</li>
+          <li>กู้คืนการซื้อจะกู้การซื้อที่เข้าเกณฑ์ ผู้ใช้รุ่นเสียเงินเก่าที่เข้าเกณฑ์ได้สิทธิ์ใช้ไม่จำกัดตามสิทธิ์เดิม</li>
+          <li>บัญชี App Group ไร้เนื้อหาป้องกันคิดโควตาซ้ำเมื่อลองใหม่ขณะที่ข้อมูลแอปในเครื่องยังอยู่ ไม่เก็บใน Keychain การลบข้อมูลแอปเริ่มโควตาฟรีใหม่</li>
+        </ul>
+
+        <h3 id="privacy-data">สิ่งที่อยู่ในเครื่อง</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>เนื้อหาที่จด</strong><p>ฉบับร่าง ข้อความ ลิงก์ เทมเพลต เส้นทาง ไฟล์แนบ เสียง OCR และข้อความถอดเสียงไม่ส่งไปเซิร์ฟเวอร์ Vox.md</p></div>
+          <div><strong>การประมวลผล</strong><p>Apple Speech, Whisper, Parakeet, Vision OCR และประมวลผล Apple Intelligence ที่รองรับทำบนอุปกรณ์</p></div>
+          <div><strong>ปลายทางของคุณ</strong><p>ไฟล์สำเร็จไปเฉพาะโฟลเดอร์ที่เลือก ผู้ให้บริการไฟล์ภายนอกอาจซิงค์ตามข้อกำหนดของตน</p></div>
+        </div>
+        <ul>
+          <li>หลังส่งสำเร็จ คำขอจดกู้คืนกลายเป็นใบรับไร้เนื้อหา คิว Watch ที่เสร็จเก็บเฉพาะฟิลด์ผลส่งสุดท้ายคร่าว ๆ ทั้งคู่ไม่เก็บพิกัด ป้าย URL ผู้ให้บริการ เทมเพลตตำแหน่ง หรือข้อมูลเส้นทาง</li>
+          <li>ประวัติจดสำเร็จเก็บข้อมูลเมตาส่ง ไม่ใช่ข้อความโน้ต URL พิกัด ป้ายหรือเทมเพลตตำแหน่ง บุ๊กมาร์ก เส้นทางเต็ม หรือชื่อไฟล์แนบ</li>
+          <li>รายการค้างและล้มเหลวเก็บเฉพาะที่ต้องใช้กู้คืนในเครื่อง อาจรวมข้อมูลเส้นทางและตำแหน่งที่ปรับเพื่อความเป็นส่วนตัวแล้ว หรือผลไม่พร้อม</li>
+          <li>การวิเคราะห์เริ่มใช้งานในรุ่นจริงปิดเป็นค่าเริ่มต้น แอปไม่มี SDK วิเคราะห์ภายนอก เครือข่ายโฆษณา หรือติดตามข้ามแอป</li>
+          <li>ตัวเขียนรับคำคมสร้างแรงบันดาลใจจากแคช ZenQuotes โดยไม่ส่งเนื้อหาฉบับร่างหรือรหัสระบุตัวตน</li>
+        </ul>
+        <p>ดูรายละเอียดการจัดการข้อมูล การเก็บรักษา และบริการภายนอกทั้งหมดใน <a href="/th/privacy.html">นโยบายความเป็นส่วนตัว</a>.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">10 / การแก้ไขปัญหา</div>
+        <h2>ปัญหาตั้งค่าและส่งทั่วไป</h2>
+        <div class="docs-troubleshooting">
+          <details open>
+            <summary>ส่งการจดไม่ได้</summary>
+            <p>เปิดตัวควบคุมปลายทางและตั้งเส้นทางที่เลือก หากย้ายโฟลเดอร์หรือสิทธิ์หมด เลือกคลัง/โฟลเดอร์อีก งานในคิวยังอยู่ในคลัง</p>
+          </details>
+          <details>
+            <summary>คีย์บอร์ดบอกให้เปิดสิทธิ์เข้าถึงแบบเต็ม</summary>
+            <p>เปิดการตั้งค่า iOS → ทั่วไป → คีย์บอร์ด → คีย์บอร์ด → Vox.md แล้วเปิดอนุญาตสิทธิ์เข้าถึงแบบเต็ม กลับเข้าแอปหนึ่งครั้งเพื่อให้ Vox.md ทำขั้นตอนฟังเสียงร่วมต่อได้</p>
+          </details>
+          <details>
+            <summary>อัตโนมัติไม่พร้อม</summary>
+            <p>Apple Speech อัตโนมัติต้องใช้ iOS 26 บนอุปกรณ์และภาษาที่รองรับ เลือกดาวน์โหลด Whisper หรือ Parakeet แล้วเลือกตรง หรือกลับอัตโนมัติเพื่อใช้เป็นสำรองที่ผู้ใช้อนุมัติ</p>
+          </details>
+          <details>
+            <summary>ถอดเสียงล้มเหลว</summary>
+            <p>ตรวจว่าโมเดลที่เลือกดาวน์โหลดครบและภาษาเหมาะสม Vox.md เก็บเสียงต้นทางที่กู้คืนได้เมื่อทำได้ เพื่อให้เลือกโมเดลอื่นแล้วลองใหม่</p>
+          </details>
+          <details>
+            <summary>เส้นทางหัวข้อล้มเหลว</summary>
+            <p>แก้ปลายทางเส้นทางและยืนยันข้อความหัวข้อกับระดับ เลือกสร้างหัวข้อหากควรสร้างเมื่อไม่มีแทนหยุดส่ง</p>
+          </details>
+          <details>
+            <summary>เสียงบันทึก Watch อยู่ในคิว</summary>
+            <p>เปิด Vox.md บน iPhone แล้วเปิดรายการบันทึก Watch รีเฟรชหรือลองใหม่ เลือกเส้นทางใช้ได้เมื่อขอ และคงแอปติดตั้งพร้อมรับเบื้องหลัง การบังคับปิดกั้นส่งเบื้องหลังจนเปิดอีก</p>
+          </details>
+          <details>
+            <summary><code>{location}</code> แสดงค่าว่าง</summary>
+            <p>เปิด ใช้ตำแหน่งปัจจุบัน สำหรับเส้นทางส่ง สำหรับคำนำหน้า คำต่อท้าย และเทมเพลตรายการใช้ซ้ำที่ตรวจพบ การแก้ด้วยแตะเดียวในตัวเขียนทำได้โดยไม่เปิดข้อมูลเมตา ไฟล์เทมเพลตสดในคลังต้องตั้งค่าเส้นทางเอง หากไม่มีสิทธิ์หรือจดต่อโดยไม่มีตำแหน่ง โทเคนจะว่างโดยเจตนา ดู <a href="/th/docs/location/">คู่มือตำแหน่งทั้งหมด</a>.</p>
+          </details>
+          <details>
+            <summary>ตำแหน่งของเส้นทางไม่พร้อมใช้งาน</summary>
+            <p>ใช้ลองใหม่เฉพาะขณะยังจัดการการส่งโต้ตอบต้นฉบับ คุณยกเลิก ส่งครั้งเดียวไม่มีตำแหน่ง หรือส่งไม่มีตำแหน่งเสมอสำหรับเส้นทางได้ รีเซ็ตตัวเลือกที่เก็บในการตั้งค่าตำแหน่งของเส้นทาง คำขอในคิวไม่มีผู้ดูแลคงผลไม่มีตำแหน่งเดิมและไม่รับตำแหน่งใหม่</p>
+          </details>
+        </div>
+        <div class="docs-callout docs-support-callout">
+          <strong>ยังติดขัด?</strong>
+          <p>เปิด การตั้งค่า → ดูบันทึกแก้จุดบกพร่อง แล้วใช้ ส่งความเห็น เพื่อแนบรุ่นแอป แพลตฟอร์ม OS และอุปกรณ์ได้ หรือเข้าร่วม <a href="https://discord.gg/RaQYS4t6gn">Discord ของ Isolated Tech</a>.</p>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/th/developers">นักพัฒนา</a></li>
+        <li><a href="/th/about">เกี่ยวกับ</a></li>
+        <li><a href="/th/contact">ติดต่อ</a></li>
+        <li><a href="/th/">หน้าแรก</a></li>
+        <li><a href="/th/docs/" aria-current="page">เอกสาร</a></li>
+        <li><a href="/th/blog/">บล็อก</a></li>
+        <li><a href="/th/privacy.html">ความเป็นส่วนตัว</a></li>
+        <li><a href="/th/terms.html">ข้อกำหนด</a></li>
+        <li><a href="/llms.txt">llms.txt</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">ช่วยเหลือ</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_th_60877eba17c1">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · เอกสารฟีเจอร์ครบ · จดเน้นข้อมูลในเครื่อง</div>
+    </div>
+  <details class="language-switcher"><summary>ภาษา</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th" aria-current="page">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

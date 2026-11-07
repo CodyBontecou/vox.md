@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr" data-search-section="섹션" data-search-guide="가이드" data-search-empty="“{query}” 검색 결과 없음">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone과 Apple Watch에서 Obsidian으로 빠른 캡처 | Vox.md</title>
+  <meta name="description" content="iPhone에서 텍스트, 링크, 사진, 파일, 스캔, 스케치, 비공개 음성 노트를 Obsidian 보관함이나 로컬 Markdown 파일로 캡처하세요.">
+  <link rel="canonical" href="https://vox.isolated.tech/ko/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="언어 모델용 Vox.md 문서">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="iPhone과 Apple Watch에서 Obsidian으로 빠른 캡처 | Vox.md">
+  <meta property="og:description" content="Obsidian을 열지 않고 각 아이디어를 알맞은 보관함, 노트, 제목으로 보내세요. 음성 전사는 기기에 남습니다.">
+  <meta property="og:url" content="https://vox.isolated.tech/ko/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="iPhone과 Apple Watch에서 Obsidian으로 빠른 캡처 | Vox.md">
+  <meta name="twitter:description" content="먼저 캡처하세요. 정확한 Markdown 루트가 모두 알맞은 노트에 넣어줍니다.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Vox.md",
+  "applicationCategory": "ProductivityApplication",
+  "operatingSystem": "iOS 17.6+, iPadOS 17.6+, macOS 14+, watchOS 10+",
+  "description": "텍스트, 링크, 미디어, 문서 스캔, 스케치, 비공개 기기 내 음성 전사를 Obsidian 보관함과 로컬 Markdown 노트로 빠르게 캡처.",
+  "url": "https://vox.isolated.tech/ko/",
+  "downloadUrl": "https://apps.apple.com/us/app/voxboard/id6758967337",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/",
+    "sameAs": [
+      "https://github.com/CodyBontecou"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "featureList": [
+    "텍스트, 링크, 사진, 파일, 문서 스캔, 스케치, 음성 캡처",
+    "Obsidian 보관함이나 파일 폴더에 표준 Markdown 쓰기",
+    "새 노트 생성, 롤링 노트 업데이트, 기존 노트 지정",
+    "맨 위, 맨 아래, 선택한 제목 아래에 삽입",
+    "선택적 메타데이터 출력과 함께 템플릿에 일회성 현재 위치 사용",
+    "위젯, 단축어, 공유 확장, 키보드 사용",
+    "오디오 업로드 없이 기기에서 음성 전사"
+  ],
+  "inLanguage": "ko"
+}
+</script>
+
+  <link rel="stylesheet" href="/geist.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://isolated.tech/#organization",
+  "name": "Isolated Tech",
+  "url": "https://isolated.tech/",
+  "sameAs": [
+    "https://github.com/CodyBontecou"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "고객 지원",
+    "email": "codybontecou@gmail.com",
+    "url": "https://vox.isolated.tech/ko/contact",
+    "availableLanguage": "영어"
+  },
+  "inLanguage": "ko",
+  "description": "iPhone에서 텍스트, 링크, 사진, 파일, 스캔, 스케치, 비공개 음성 노트를 Obsidian 보관함이나 로컬 Markdown 파일로 캡처하세요."
+}
+</script>
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md 공개 정보 API">
+<meta name="naver-site-verification" content="cae11a861102ae94853f1f7e773318e17525df3a">
+  <meta name="color-scheme" content="light">
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/InstrumentSerif-Italic-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/">
+</head>
+<body class="raw">
+<a class="skip-link" href="#main">콘텐츠로 건너뛰기</a>
+
+<nav aria-label="주 탐색">
+  <div class="r-wrap r-nav">
+    <a href="/ko/" class="r-logo" aria-label="Vox.md 홈">
+      <span class="r-logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <span class="r-tab-current" aria-hidden="true">index.md</span>
+    <ul class="r-nav-links">
+      <li><a href="#how">how.md</a></li>
+      <li><a href="#capture">files.md</a></li>
+      <li><a href="#presets">routes.md</a></li>
+      <li><a href="#privacy">privacy.md</a></li>
+      <li><a href="/ko/docs/">docs/</a></li>
+      <li><a href="/ko/blog/">guides/</a></li>
+      <li><a href="/ko/compare/">compare/</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ko_8a5edab28263">무료 다운로드</a>
+  <details class="language-switcher"><summary>언어</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ar/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/" lang="ko" hreflang="ko" aria-current="page">한국어</a></li><li><a href="/nl/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+<main id="main">
+<section aria-labelledby="hero-title">
+  <div class="r-wrap r-hero">
+    <p class="r-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</p>
+    <div class="r-hero-body">
+      <div class="r-hero-copy">
+        <pre class="r-front" aria-label="Vox.md 한눈에 보기">---
+app: Vox.md
+for: Obsidian &amp; any Markdown folder
+runs_on: [iPhone, iPad, Mac, Apple Watch]
+transcribes_on: <b>this device</b>
+writes_to: <b>a folder you pick</b>
+copies_on_our_servers: <b class="r-hl">0</b>
+---</pre>
+        <h1 class="r-h1" id="hero-title" aria-label="생각을 로컬 파일에 담으세요."><span class="r-mark" aria-hidden="true">#</span>생각을 담는 <span aria-hidden="true"><del>클라우드</del> </span><span class="visually-hidden">로컬 </span><span class="r-voice r-hl">파일입니다.</span><span class="r-caret" aria-hidden="true"></span></h1>
+        <p class="r-hero-lead">iPhone, Mac, Apple Watch에서 아이디어를 Obsidian으로 캡처하세요. 입력, 촬영, 스캔, 스케치, 말하기 모두 가능합니다. Vox.md는 기기에서 전사하고 선택한 보관함이나 파일 폴더의 지정 노트 및 제목 아래에 순수 Markdown을 직접 씁니다.</p>
+        <div class="r-actions">
+          <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_ko_8a5edab28263">Vox.md 무료 다운로드</a>
+          <a href="/ko/blog/obsidian-quick-capture-iphone/" class="r-btn r-btn-line">캡처 방법 선택</a>
+        </div>
+        <p class="r-note">무료 전사 15분 + 캡처 전송 10회 · iOS 17.6+ · 계정 없음</p>
+        <details class="desktop-download-qr">
+          <summary>스캔해 iPhone에 다운로드</summary>
+          <div class="download-qr-panel">
+            <a href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-kind="qr" aria-label="App Store에서 Vox.md 열기" data-download-campaign="seo_home_qr">
+              <img src="/assets/download-qr.svg" alt="App Store의 Vox.md를 여는 QR 코드" width="176" height="176" decoding="async">
+            </a>
+            <p>iPhone 카메라로 스캔해 App Store에서 Vox.md를 여세요.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="r-demo" aria-labelledby="demo-title">
+        <h2 class="visually-hidden" id="demo-title">캡처가 되는 결과물</h2>
+        <div class="r-demo-tabs" role="tablist" aria-label="캡처 선택" hidden>
+          <button type="button" role="tab" id="demo-tab-voice" aria-controls="demo-voice" aria-selected="true">음성 메모</button>
+          <button type="button" role="tab" id="demo-tab-link" aria-controls="demo-link" aria-selected="false" tabindex="-1">공유 링크</button>
+          <button type="button" role="tab" id="demo-tab-scan" aria-controls="demo-scan" aria-selected="false" tabindex="-1">스캔한 페이지</button>
+        </div>
+
+        <div class="r-demo-panel" id="demo-voice" role="tabpanel" aria-labelledby="demo-tab-voice">
+          <div class="r-said">
+            <p class="r-said-meta"><span>입력한 내용</span><span>음성 · 0:03</span></p>
+            <div class="r-wave" aria-hidden="true"><span style="height:8px"></span><span style="height:14px"></span><span style="height:22px"></span><span style="height:30px"></span><span style="height:18px"></span><span style="height:10px"></span><span style="height:26px"></span><span style="height:34px"></span><span style="height:20px"></span><span style="height:12px"></span><span style="height:6px"></span><span style="height:16px"></span><span style="height:28px"></span><span style="height:24px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:20px"></span><span style="height:32px"></span><span style="height:26px"></span><span style="height:12px"></span><span style="height:18px"></span><span style="height:30px"></span><span style="height:22px"></span><span style="height:10px"></span><span style="height:6px"></span><span style="height:14px"></span><span style="height:24px"></span><span style="height:34px"></span><span style="height:28px"></span><span style="height:16px"></span><span style="height:10px"></span><span style="height:20px"></span><span style="height:26px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:18px"></span></div>
+            <p class="r-voice">“치과 예약하는 것 잊지 말기.”</p>
+          </div>
+          <div class="r-pipe"><ul><li>이 기기에서 전사됨</li><li>루트: <strong>일일 노트 · 할 일</strong></li><li>네트워크 사용: <span class="r-hl">없음</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/2026-11-06.md</span><span>+ 1줄</span></p>
+            <pre>## Tasks
+- Remember to book the dentist</pre>
+          </div>
+        </div>
+
+        <div class="r-demo-panel" id="demo-link" role="tabpanel" aria-labelledby="demo-tab-link" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>입력한 내용</span><span>공유 시트 · Safari</span></p>
+            <p class="r-voice">3주 전에 읽으려던 링크를 Safari에서 바로 공유.</p>
+          </div>
+          <div class="r-pipe"><ul><li>그대로 저장</li><li>루트: <strong>읽기 목록</strong></li><li>네트워크 사용: <span class="r-hl">없음</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Inbox/Reading.md</span><span>+ 2줄</span></p>
+            <pre>### 14:07
+- https://www.inkandswitch.com/local-first/</pre>
+          </div>
+        </div>
+
+        <div class="r-demo-panel" id="demo-scan" role="tabpanel" aria-labelledby="demo-tab-scan" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>입력한 내용</span><span>스캔 · 1페이지</span></p>
+            <p class="r-voice">오늘 아침 노트 페이지를 카메라로 스캔.</p>
+          </div>
+          <div class="r-pipe"><ul><li>이 기기에서 추출한 텍스트</li><li>루트: <strong>일지 페이지</strong></li><li>네트워크 사용: <span class="r-hl">없음</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/Pages/2026-11-06 0912.md</span><span>+ 4줄</span></p>
+            <pre>![[scan-2026-11-06-0912.jpg]]
+
+&gt; ship routing first.
+&gt; ask about the watch build</pre>
+          </div>
+        </div>
+        <p class="r-demo-foot">예시입니다. 출력은 루트와 전사에 따라 달라집니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-zero" id="privacy" aria-labelledby="privacy-title">
+  <div class="r-wrap r-zero-inner">
+    <div class="r-zero-copy">
+      <p class="r-file">## privacy.md</p>
+      <h2 id="privacy-title">0<small>바이트</small></h2>
+      <p>초안, 첨부, 노트 경로, 템플릿, 입력 텍스트, 전사, 선택한 위치 정보가 Vox.md 서버나 분석으로 전달되지 않습니다. 파일은 고른 폴더로만 갑니다. 위치를 지속 또는 백그라운드 추적하지 않습니다.</p>
+    </div>
+    <dl class="r-ledger" aria-label="Vox.md가 받는 정보">
+      <div><dt>업로드된 오디오</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>업로드된 전사</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>초안 및 첨부파일</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>노트 경로 및 템플릿</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>계정 필요</dt><span aria-hidden="true"></span><dd>없음</dd></div>
+      <div><dt>백그라운드 위치</dt><span aria-hidden="true"></span><dd>절대 없음</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-section" id="how" aria-labelledby="how-title">
+  <div class="r-wrap r-stack">
+    <div class="r-head">
+      <p class="r-file">L041 · how.md</p>
+      <h2 class="r-h2" id="how-title"><span class="r-mark" aria-hidden="true">##</span>세 정거장. <span class="r-voice">그 어느 곳도 당사 것이 아닙니다.</span></h2>
+      <p class="r-lead">스쳐가는 생각을 위해 보관함을 열고 노트를 찾고 위치를 고르는 것은 너무 번거롭습니다. 루트를 한 번 설정하고 캡처하세요.</p>
+    </div>
+    <ol class="r-stops">
+      <li class="r-stop"><p class="r-stop-meta"><span>01</span><span>사용자 폴더</span></p><h3>보관함 연결</h3><p>Obsidian 보관함 또는 파일 앱의 쓰기 가능한 폴더를 선택하세요. Vox.md는 이미 소유한 Markdown 파일을 사용합니다.</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>02</span><span>주머니</span></p><h3>무엇이든 캡처</h3><p>글을 쓰고 링크를 붙이고 미디어나 파일을 더하고 문서를 스캔하고 스케치하거나 비공개 음성 노트를 녹음하세요. 음성은 바로 그곳에서 전사됩니다.</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>03</span><span>사용자 파일</span></p><h3>루트가 정리합니다</h3><p>노트를 만들거나 롤링 노트를 업데이트하거나 기존 노트를 지정하세요. 맨 위, 아래, 제목 아래에 배치하세요.</p></li>
+    </ol>
+    <p class="r-skip"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9A9A93" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.1 9.5 4.25 4.25 0 0 0 7 18z"/><path d="M3 3l18 18"/></svg><span><del>2.5번 정거장: 다른 사람의 클라우드</del>. 건너뜁니다. 동기화는 제공자 약관에 따라 폴더의 기존 방식을 따릅니다.</span></p>
+  </div>
+</section>
+
+<section class="r-section" id="capture" aria-labelledby="capture-title">
+  <span class="anchor" id="features" aria-hidden="true"></span>
+  <div class="r-wrap r-split">
+    <div class="r-stack" style="gap: 20px">
+      <p class="r-file">L077 · files.md</p>
+      <h2 class="r-h2" id="capture-title"><span class="r-mark" aria-hidden="true">##</span>바로 <span class="r-voice r-hl">단</span> 파일입니다.</h2>
+      <p class="r-lead">플러그인도, Vox.md 클라우드 계정도, 독점 형식도 없습니다. Vox.md는 사용자가 관리하는 폴더에 읽을 수 있는 Markdown과 Obsidian 스타일 링크를 쓰므로 노트가 앱에 묶이지 않습니다.</p>
+      <ul class="r-inputs">
+        <li><code>.md</code><span>표준 Markdown으로 된 입력 노트 및 음성 전사</span></li>
+        <li><code>[[ ]]</code><span>Obsidian이 이해하는 위키링크 및 첨부파일 임베드</span></li>
+        <li><code>img</code><span>사진, 파일, 추출 텍스트가 있는 문서 스캔. <a href="/ko/blog/save-links-photos-obsidian-iphone/">미디어 캡처 가이드</a></span></li>
+        <li><code>url</code><span>공유할 수 있는 모든 곳의 링크</span></li>
+        <li><code>draw</code><span>편집 가능한 스케치</span></li>
+        <li><code>voice</code><span>작성 화면이나 키보드의 비공개 음성. 오디오는 업로드하지 않습니다. <a href="/ko/blog/voice-notes-to-obsidian-iphone/">iPhone 음성 노트 가이드</a></span></li>
+        <li><code>---</code><span>날짜, 시간, 소스, 식별자 토큰이 있는 재사용 Markdown 또는 YAML</span></li>
+      </ul>
+    </div>
+    <div class="r-tree" role="img" aria-label="새 캡처 세 개가 강조된 보관함 폴더 트리">
+      <p class="r-tree-head"><span>~/Obsidian/Second Brain</span><span>ls -R</span></p>
+      <ul aria-hidden="true">
+        <li>├── Inbox/</li>
+        <li>│   └── Reading.md <mark>just now</mark></li>
+        <li>├── Journal/</li>
+        <li class="old">│   ├── 2026-11-05.md</li>
+        <li>│   ├── 2026-11-06.md <mark>+ ## Tasks</mark></li>
+        <li>│   └── Pages/</li>
+        <li>│       └── 2026-11-06 0912.md <mark>scan</mark></li>
+        <li>├── Meetings/</li>
+        <li class="old">│   └── 2026-11-01.md</li>
+        <li>├── Projects/</li>
+        <li class="old">│   └── Ideas.md</li>
+        <li class="old">└── attachments/</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="r-section" id="presets" aria-labelledby="presets-title">
+  <span class="anchor" id="destinations" aria-hidden="true"></span>
+  <div class="r-wrap r-stack">
+    <div class="r-head">
+      <p class="r-file">L112 · routes.md</p>
+      <h2 class="r-h2" id="presets-title"><span class="r-mark" aria-hidden="true">##</span>루트는 한 번만 설정하세요. <span class="r-voice">그냥 말하세요.</span></h2>
+      <p class="r-lead">루트는 캡처 처리 및 서식 방법과 보관함, 대상 노트, 배치, 첨부파일, 재시도 동작, 선택적 일회성 현재 위치를 기억합니다.</p>
+    </div>
+    <div class="r-table-box">
+      <table class="r-table">
+        <caption class="visually-hidden">루트 예시</caption>
+        <thead><tr><th scope="col">루트</th><th scope="col">파일</th><th scope="col">그 안의 위치</th><th scope="col">감싸는 형식</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">일일 노트 · 할 일</th><td>Journal/{date}.md</td><td>## Tasks 맨 아래</td><td>- {text}</td></tr>
+          <tr><th scope="row">회의 메모</th><td>Meetings/{date}.md</td><td>## Notes 아래</td><td>### {time} · {title}</td></tr>
+          <tr><th scope="row">읽기 목록</th><td>Inbox/Reading.md</td><td>파일 맨 위</td><td>### {time}</td></tr>
+          <tr><th scope="row">아이디어</th><td>Projects/Ideas.md</td><td>파일 맨 아래</td><td>&gt; {text}</td></tr>
+          <tr><th scope="row">새 노트</th><td>Inbox/{timestamp}.md</td><td>새 파일</td><td>YAML 프런트매터 + 본문</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <dl class="r-targets">
+      <div><dt>기존 노트 <code>Projects/Ideas.md</code></dt><dd>보관함에 이미 있는 문서에 계속 추가하세요.</dd></div>
+      <div><dt>롤링 노트 <code>Journal/&#123;period&#125;.md</code></dt><dd>일별, 주별, 월별, 분기별, 연별 노트. <a href="/ko/blog/append-to-obsidian-daily-note-iphone/">일일 노트 및 제목 배치를 설정하세요.</a></dd></div>
+      <div><dt>새로운 메모 <code>Inbox/&#123;timestamp&#125;.md</code></dt><dd>새 캡처마다 새 파일을 만드세요.</dd></div>
+      <div><dt>정확한 배치 <code>Top · Bottom · Heading</code></dt><dd>모든 수준의 제목 아래에 넣고 없으면 생성합니다.</dd></div>
+      <div><dt>항목 템플릿 <code>Markdown · YAML · Tokens</code></dt><dd>다시 서식화하지 않고 반복 캡처를 일관되게 유지하세요.</dd></div>
+      <div><dt>현재 위치 <code>&#123;location&#125;</code></dt><dd>메타데이터 없이 시작 시점 지도 링크 하나를 사용하거나 프런트매터 및 인라인 필드를 활성화하세요. <a href="/ko/docs/location/">가이드를 읽으세요.</a></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-section" id="everywhere" aria-labelledby="everywhere-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L140 · anywhere.md</p>
+    <h2 class="r-h2" id="everywhere-title"><span class="r-mark" aria-hidden="true">##</span>생각이 어디에서 떠오르든 <span class="r-voice">도착합니다</span></h2>
+    <ul class="r-pills" aria-label="캡처 진입점">
+      <li>키보드 <small>모든 앱</small></li>
+      <li>Apple Watch <small>손목</small></li>
+      <li>Mac <small>빠른 캡처</small></li>
+      <li>공유 시트 <small>무엇이든</small></li>
+      <li>위젯 <small>홈 및 잠금</small></li>
+      <li>제어 센터 <small>한 번 탭</small></li>
+      <li>단축어 <small>자동화</small></li>
+    </ul>
+    <p class="r-lead"><a href="/ko/blog/apple-watch-obsidian-voice-notes/">Apple Watch 음성 노트를 Obsidian으로 보내도록 설정</a>. Watch에서 녹음한 뒤 페어링된 iPhone으로 전사하고 전송하세요.</p>
+  </div>
+</section>
+
+<section class="r-section" id="specs" aria-labelledby="specs-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L158 · specs.yml</p>
+    <h2 class="r-h2" id="specs-title"><span class="r-mark" aria-hidden="true">##</span>파일 중심 설계 <span class="r-voice">유지할 수 있습니다</span></h2>
+    <dl class="r-yaml">
+      <div><dt>capture_types</dt><dd>텍스트, 링크, 사진, 파일, 스캔, 스케치, 음성</dd></div>
+      <div><dt>note_format</dt><dd>표준 Markdown</dd></div>
+      <div><dt>destinations</dt><dd>Obsidian 보관함 및 쓰기 가능한 파일 폴더</dd></div>
+      <div><dt>note_targets</dt><dd>새 노트, 롤링 노트, 기존 노트</dd></div>
+      <div><dt>placement</dt><dd>맨 위, 맨 아래, 제목 아래</dd></div>
+      <div><dt>rolling_periods</dt><dd>일별, 주별, 월별, 분기별, 연별</dd></div>
+      <div><dt>obsidian_syntax</dt><dd>위키링크 및 첨부파일 임베드</dd></div>
+      <div><dt>entry_formats</dt><dd>재사용 Markdown 및 YAML 템플릿</dd></div>
+      <div><dt>entry_points</dt><dd>앱, 위젯, 단축어, 공유 확장, 키보드, Apple Watch, Mac, 제어 센터</dd></div>
+      <div><dt>voice_processing</dt><dd>기기 내 Apple Speech, Whisper, Parakeet</dd></div>
+      <div><dt>audio_uploads</dt><dd>전사에는 없음</dd></div>
+      <div><dt>account</dt><dd>필요 없음</dd></div>
+      <div><dt>platforms</dt><dd>iOS/iPadOS 17.6+, macOS 14+, watchOS 10+</dd></div>
+      <div><dt>location</dt><dd>선택적 일회성 스냅샷; 메타데이터 없이 {location} 사용; 백그라운드 추적 없음</dd></div>
+      <div><dt>location_metadata</dt><dd>프런트매터/인라인 필드는 별도 선택; 기본 정확함 또는 도시 반올림</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-dark" id="reviews" aria-labelledby="reviews-title">
+  <div class="r-wrap r-dark-inner">
+    <p class="r-file">L190 · reviews.md · from the App Store</p>
+    <h2 class="r-h2" id="reviews-title"><span class="r-mark" aria-hidden="true">##</span>말한 내용 <span class="r-voice">소개</span> 그곳에</h2>
+    <div class="r-quotes">
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5b29-4b3500000000">
+        <div>
+          <h3>딱 필요했던 것 · <span role="img" aria-label="별 5개 중 5개">★★★★★</span></h3>
+          <blockquote><p>“한동안 빠르게 말로 노트를 남기고 첨부파일을 추가하고 로컬에서 전사해 Obsidian 폴더에 동기화할 방법을 찾고 있었어요. 이 앱이 완벽하게 해냅니다.”</p></blockquote>
+          <figcaption><span class="review-author">SteamingCoax</span> · App Store 리뷰 · <time datetime="2026-08-11">2026년 8월 11일</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5bf7-fadc00000000">
+        <div>
+          <h3>조용하고 강력한 캡처 도구 · <span role="img" aria-label="별 5개 중 5개">★★★★★</span></h3>
+          <blockquote>
+            <p>“Vox.md는 제가 가장 자주 쓰는 도구가 됐어요. 음성 메모를 Obsidian에 넣으려고 샀는데 일상 캡처 흐름을 조용히 바꿔놓았죠.</p>
+            <p>캡처 프리셋은 정말 훌륭해요. 프리셋마다 대상, 템플릿, 배치가 있어요. 음성 메모가 원하는 서식 그대로 맞는 일일 노트에 바로 들어가니 번거로움이 없죠.”</p>
+          </blockquote>
+          <figcaption><span class="review-author">Eric Know</span> · App Store 리뷰 · <time datetime="2026-08-14">2026년 8월 14일</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5a77-5cb500000000">
+        <div>
+          <h3>저평가, 외면, 그러나 잊히지 않은 · <span role="img" aria-label="별 5개 중 5개">★★★★★</span></h3>
+          <blockquote><p>“2026년 가장 좋아하고 자주 사용하는 앱 중 하나가 되고 있어요!”</p></blockquote>
+          <figcaption><span class="review-author">PromisedOne</span> · App Store 리뷰 · <time datetime="2026-08-08">2026년 8월 8일</time></figcaption>
+        </div>
+      </figure>
+    </div>
+    <p class="r-fine">엄선한 App Store 리뷰입니다. Eric의 인용문은 발췌했으며 문구는 바꾸지 않았습니다. <a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ko_8a5edab28263">App Store 리뷰 읽기 <span aria-hidden="true">→</span></a></p>
+  </div>
+</section>
+
+<section class="r-section" id="faq" aria-labelledby="faq-title">
+  <div class="r-wrap r-faq">
+    <div class="r-head">
+      <p class="r-file">L214 · faq.md</p>
+      <h2 class="r-h2" id="faq-title" style="font-size: clamp(36px, 4.4vw, 60px)"><span class="r-mark" aria-hidden="true">##</span>오픈 <span class="r-voice">질문</span></h2>
+      <p class="r-lead">Vox.md는 선택한 Markdown 폴더를 직접 사용합니다. Obsidian과 잘 맞지만 꼭 필요하지는 않습니다. 항목을 선택해 답변을 읽으세요.</p>
+    </div>
+    <div class="r-faq-list">
+      <details>
+        <summary>Vox.md는 Obsidian과 함께 작동하나요?</summary>
+        <p>네. 루트를 만들고 Obsidian 보관함을 대상으로 선택하세요. Vox.md는 표준 Markdown, 위키링크, 첨부파일 임베드를 보관함에 직접 씁니다. Obsidian 플러그인이 필요하지 않습니다. <a href="/ko/compare/vox-md-vs-obsidian-quick-capture/">Vox.md와 Obsidian 기본 캡처를 비교하세요.</a> <a href="/ko/blog/obsidian-daily-note-iphone/">일일 노트 캡처 워크플로를 설정하세요.</a></p>
+      </details>
+      <details>
+        <summary>무엇을 캡처할 수 있나요?</summary>
+        <p>작성 화면은 텍스트, 웹 링크, 사진, 파일, 문서 스캔, 스케치, 음성을 받습니다. 스캔에는 추출 텍스트를 포함하며 음성은 로컬 전사할 수 있습니다.</p>
+      </details>
+      <details>
+        <summary>캡처를 어디로 보낼 수 있나요?</summary>
+        <p>각 루트의 대상은 새 노트를 만들거나 일별·주기별 롤링 노트를 업데이트하거나 기존 Markdown 파일에 쓸 수 있습니다. 캡처 한 번에 한해 루트를 바꾸지 않고 다른 노트를 선택할 수 있습니다.</p>
+      </details>
+      <details>
+        <summary>Vox.md는 제목 아래에 삽입할 수 있나요?</summary>
+        <p>네. 루트는 앞이나 뒤에 추가하거나 1~6단계 제목 아래에 삽입할 수 있습니다. 제목이 없을 때 전송을 멈출지 자동 생성할지, 새 항목을 제목 바로 아래나 섹션 끝에 둘지 선택할 수 있습니다.</p>
+      </details>
+      <details>
+        <summary>Obsidian 없이 쓸 수 있나요?</summary>
+        <p>네. 루트는 파일 앱에 공개된 모든 쓰기 가능한 폴더를 사용할 수 있습니다. 출력은 일반 첨부파일이 있는 순수 Markdown이므로 노트가 Vox.md에 묶이지 않습니다.</p>
+      </details>
+      <details>
+        <summary>Vox.md는 노트나 오디오를 업로드하나요?</summary>
+        <p>캡처 내용은 Vox.md 서버로 가지 않습니다. 초안과 음성 처리는 기기에 남으며 완성 파일은 선택 폴더에 씁니다. 동기화 제공자의 폴더라면 해당 약관으로 처리됩니다. <a href="/ko/blog/offline-transcription-iphone-markdown/">오프라인 설정 요건을 확인하세요.</a></p>
+      </details>
+      <details>
+        <summary>메타데이터 없이 템플릿에 위치를 쓸 수 있나요?</summary>
+        <p>네. 해당 루트의 현재 위치 사용을 켜고 위치 메타데이터 작성은 끈 상태에서 다음을 추가하세요: <code>{location}</code> 을 항목 서식에 추가하세요. Vox.md는 프런트매터나 인라인 위치 필드 없이 일회성 지도 링크를 삽입합니다. <a href="/ko/docs/location/">전체 위치 가이드를 읽으세요.</a></p>
+      </details>
+      <details>
+        <summary>앱 밖에서 캡처할 수 있나요?</summary>
+        <p>네. Vox.md의 위젯, 단축어 작업, 공유 확장, 음성 키보드는 모두 같은 로컬 캡처 시스템으로 연결됩니다.</p>
+      </details>
+      <details>
+        <summary>Vox.md 가격은 얼마인가요?</summary>
+        <p>Vox.md에는 무료 전사 15분과 성공 캡처 전송 10회가 포함됩니다. 구독이나 광고 없이 일회성 평생 구매로 전사와 캡처를 무제한 사용할 수 있습니다. Markdown으로 보낸 음성 전사는 추가 캡처가 아닌 전사 할당량을 사용합니다. App Store에 현재 지역 가격이 표시됩니다.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="r-cta" id="download" aria-labelledby="download-title">
+  <div class="r-wrap">
+    <div class="r-cta-card">
+      <h2 id="download-title">다음 생각을 <span class="r-voice">파일에 담으세요.</span></h2>
+      <p>보관함이나 로컬 폴더를 한 번 연결하세요. 다음 아이디어는 선택한 노트, 제목, 서식으로 바로 갈 수 있습니다.</p>
+      <div class="r-actions">
+        <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_ko_8a5edab28263">Vox.md 무료 다운로드</a>
+        <span class="r-note">무료 할당량 · 한 번의 평생 잠금 해제 · 계정 불필요</span>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="r-wrap r-foot">
+    <span class="r-eof" aria-hidden="true">EOF</span>
+    <ul>
+      <li><a href="/ko/developers">개발자</a></li>
+      <li><a href="/ko/about">소개</a></li>
+      <li><a href="/ko/contact">문의</a></li>
+      <li><a href="/ko/docs/">문서</a></li>
+      <li><a href="/ko/blog/">가이드</a></li>
+      <li><a href="/ko/compare/">비교</a></li>
+      <li><a href="/ko/privacy.html">개인정보 보호</a></li>
+      <li><a href="/ko/terms.html">약관</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="mailto:codybontecou@gmail.com">지원</a></li>
+      <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ko_8a5edab28263">App Store</a></li>
+    </ul>
+    <p class="r-foot-copy">© 2026 Vox.md · 제작: <a href="https://codybontecou.com/">Cody Bontecou</a> 위치: <a href="https://isolated.tech/">Isolated Tech</a> · 콘텐츠 업로드 없음.</p>
+
+  <details class="language-switcher"><summary>언어</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ar/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/" lang="ko" hreflang="ko" aria-current="page">한국어</a></li><li><a href="/nl/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+
+<script>
+/* Hero demo tabs. Without JavaScript the first example shows on its own. */
+(function () {
+  var list = document.querySelector('.r-demo-tabs');
+  if (!list) return;
+  var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+  function select(tab, focus) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { select(tab, false); });
+    tab.addEventListener('keydown', function (ev) {
+      var next = ev.key === 'ArrowRight' ? i + 1 : ev.key === 'ArrowLeft' ? i - 1 : ev.key === 'Home' ? 0 : ev.key === 'End' ? tabs.length - 1 : null;
+      if (next === null) return;
+      ev.preventDefault();
+      select(tabs[(next + tabs.length) % tabs.length], true);
+    });
+  });
+  list.hidden = false;
+})();
+</script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

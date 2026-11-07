@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-search-section="Sección" data-search-guide="Guía" data-search-empty="Sin resultados para «{query}»">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plantillas de captura de Obsidian para bandeja de entrada, diario y lista de tareas | Vox.md</title>
+  <meta name="description" content="Copia estructuras Markdown y configura prefijos de Vox.md para una bandeja de entrada, un diario y una lista de tareas de Obsidian. Incluye recetas de rutas, tokens de marcas de tiempo y ejemplos de salida.">
+  <link rel="canonical" href="https://vox.isolated.tech/es/blog/obsidian-capture-templates/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Documentación de Vox.md para modelos de lenguaje">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Plantillas de captura de Obsidian para bandeja de entrada, diario y lista de tareas">
+  <meta property="og:description" content="Copia estructuras Markdown y configura prefijos de Vox.md para una bandeja de entrada, un diario y una lista de tareas de Obsidian. Incluye recetas de rutas, tokens de marcas de tiempo y ejemplos de salida.">
+  <meta property="og:url" content="https://vox.isolated.tech/es/blog/obsidian-capture-templates/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Plantillas de captura de Obsidian para bandeja de entrada, diario y lista de tareas">
+  <meta name="twitter:description" content="Copia estructuras Markdown y configura prefijos de Vox.md para una bandeja de entrada, un diario y una lista de tareas de Obsidian. Incluye recetas de rutas, tokens de marcas de tiempo y ejemplos de salida.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Plantillas de captura de Obsidian para bandeja de entrada, diario y lista de tareas",
+  "description": "Copia estructuras Markdown y configura prefijos de Vox.md para una bandeja de entrada, un diario y una lista de tareas de Obsidian. Incluye recetas de rutas, tokens de marcas de tiempo y ejemplos de salida.",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/es/blog/obsidian-capture-templates/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "es",
+  "name": "Plantillas de captura de Obsidian para bandeja de entrada, diario y lista de tareas | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/es/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guías",
+      "item": "https://vox.isolated.tech/es/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Plantillas de captura de Obsidian para bandeja de entrada, diario y lista de tareas",
+      "item": "https://vox.isolated.tech/es/blog/obsidian-capture-templates/"
+    }
+  ],
+  "inLanguage": "es",
+  "name": "Plantillas de captura de Obsidian para bandeja de entrada, diario y lista de tareas | Vox.md",
+  "description": "Copia estructuras Markdown y configura prefijos de Vox.md para una bandeja de entrada, un diario y una lista de tareas de Obsidian. Incluye recetas de rutas, tokens de marcas de tiempo y ejemplos de salida."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-capture-templates/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Saltar a la guía</a>
+<nav aria-label="Navegación principal">
+  <div class="nav-inner">
+    <a href="/es/" class="logo" aria-label="inicio de Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/es/#how">Cómo funciona</a></li>
+      <li><a href="/es/docs/">Documentación</a></li>
+      <li><a href="/es/blog/">Guías</a></li>
+      <li><a href="/es/compare/">Comparar</a></li>
+      <li><a href="/es/privacy.html">Privacidad</a></li>
+      <li><a href="/es/terms.html">Términos</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_es_32fa42cf87f1">Descargar Vox.md</a>
+  <details class="language-switcher"><summary>Idioma</summary><ul><li><a href="/blog/obsidian-capture-templates/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-capture-templates/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-capture-templates/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-capture-templates/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-capture-templates/" lang="es" hreflang="es" aria-current="page">Español</a></li><li><a href="/fr/blog/obsidian-capture-templates/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-capture-templates/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-capture-templates/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-capture-templates/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-capture-templates/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-capture-templates/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-capture-templates/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-capture-templates/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-capture-templates/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-capture-templates/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-capture-templates/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-capture-templates/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-capture-templates/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-capture-templates/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-capture-templates/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-capture-templates/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-capture-templates/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-capture-templates/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Obsidian · Plantillas de captura · Markdown</div>
+        <h1 class="hero-title">Plantillas de captura de Obsidian para bandeja de entrada, diario y lista de tareas</h1>
+        <p class="hero-subtitle">Usa un conjunto pequeño de formatos predecibles. Adapta la nota, el encabezado y el estilo de entrada al tipo de idea que guardas.</p>
+      </div>
+      <aside class="meta-card" aria-label="Acerca de esta guía">
+        <dl>
+          <div><dt>Por</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Actualizado</dt><dd><time datetime="2026-10-26">26 de octubre de 2026</time></dd></div>
+          <div><dt>Requiere</dt><dd>Destino configurado de Vox.md</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Plantillas de captura de Obsidian para bandeja de entrada, diario y lista de tareas">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">La respuesta breve</div>
+        <p>Empieza con tres recetas sencillas: una viñeta bajo Inbox, una entrada de diario con marca de tiempo y una casilla bajo Tasks. Configura el destino y el prefijo de entrada en un Capturar Prep de Vox.md. Conserva la ruta de tus notas diarias y elige un solo lugar para añadir cada marcador de formato.</p>
+      </div>
+      <p>Los ejemplos siguientes son estructuras Markdown simples y ajustes de preajustes, no archivos que importen automáticamente un preajuste de Vox.md. Pega una estructura en una nota cuando la necesites; introduce los ajustes de ruta y prefijo en el editor de destinos. Los resultados mostrados son ilustrativos.</p>
+      <nav class="toc" aria-label="En esta guía"><div class="toc-title">En esta guía</div><ol>
+        <li><a href="#inbox">Una bandeja de entrada de captura sencilla</a></li>
+        <li><a href="#journal">Un diario con marcas de tiempo</a></li>
+        <li><a href="#tasks">Una lista de tareas compacta</a></li>
+        <li><a href="#tokens">Usa la sintaxis de tokens correcta</a></li>
+        <li><a href="#check">Comprueba el resultado antes de reutilizar un preajuste</a></li>
+      </ol></nav>
+
+      <h2 id="inbox">Receta 1: una bandeja de entrada de captura sencilla</h2>
+      <p>Usa Nota existente como destino, por ejemplo <code>Inbox.md</code>, o una Rolling Note diaria si quieres un nuevo archivo de entrada cada día. Elige la ubicación La dirección bajo un encabezado de nivel dos llamado Inbox y la inserción al final de esa sección.</p>
+      <p>Una estructura mínima de nota es:</p>
+      <pre class="guide-code"><code>## Inbox</code></pre>
+      <p>Elige el procesamiento Conservar original. En el formato de entrada del destino, establece el prefijo en un guion seguido de un espacio:</p>
+      <pre class="guide-code"><code>- </code></pre>
+      <p>Una captura corta que contenga «Revisa el esquema del borrador» puede producir entonces:</p>
+      <pre class="guide-code"><code>## Inbox
+- Review the draft outline</code></pre>
+      <p>Introduce el prefijo en el ajuste, no en cada idea capturada. Si tu texto capturado ya empieza con una viñeta, comprueba la salida en vez de añadir otro marcador a ciegas. Para encabezados ausentes, elige Creación de la cabeza o Mostrar error según prefieras.</p>
+
+      <h2 id="journal">Receta 2: un diario con marcas de tiempo</h2>
+      <p>Usa una Rolling Note diaria y sigue la convención de nombres de archivo que ya usa tu bóveda. Para archivos como <code>Journal/2026-10-26.md</code>, un patrón de ruta es <code>Journal/{period}.md</code> con el período diario. Elige un encabezado Journal de nivel dos e inserción al final de su sección.</p>
+      <p>Conserva la prosa capturada sin cambios y usa este prefijo de entrada para una marca de tiempo compacta:</p>
+      <pre class="guide-code"><code>- **{hour}:{minute}** </code></pre>
+      <p>Para una captura realizada a las 14:05, una sección ilustrativa sería:</p>
+      <pre class="guide-code"><code>## Journal
+- **14:05** A short walk helped me settle on the next step.</code></pre>
+      <p>El formateador de entradas de Vox.md expande los tokens de hora y minuto. Un archivo de plantilla de nota puede aportar los encabezados circundantes, mientras que el prefijo de entrada da formato a cada captura. Separa esas funciones para que las entradas posteriores no inserten repetidamente toda la estructura de la nota diaria.</p>
+      <p>Para configurar la ruta en detalle, consulta <a href="/es/blog/append-to-obsidian-daily-note-iphone/">rutas de notas diarias y ubicación en encabezados</a>.</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="Editor de destinos de Vox.md para establecer una nota de destino y la ubicación en un encabezado" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>Configura el destino y el formato de entrada en el destino del preajuste. Un cambio para una sola captura no modifica esos valores predeterminados guardados.</figcaption>
+      </figure>
+
+      <h2 id="tasks">Receta 3: una lista de tareas compacta</h2>
+      <p>Elige Nota existente o una Rolling Note diaria con un encabezado Tasks de nivel dos. Para tareas escritas cortas sin procesamiento de texto, usa Conservar original y este prefijo:</p>
+      <pre class="guide-code"><code>- [ ] </code></pre>
+      <p>Dos capturas pueden formar entonces:</p>
+      <pre class="guide-code"><code>## Tasks
+- [ ] Review the draft outline
+- [ ] Send the reading list</code></pre>
+      <p>Si activas en cambio el procesamiento Lista de tareas, deja que este gestione los marcadores de la lista. No configures además un prefijo duplicado de casilla. El procesamiento de texto escrito y mixto se activa por separado; el procesamiento de voz y un editor de texto escrito no son ajustes intercambiables.</p>
+      <p>Una tarea solo es útil si su texto es correcto. En las capturas de voz, revisa la transcripción cuando un error de reconocimiento pueda cambiar la instrucción. La <a href="/es/blog/voice-notes-to-obsidian-iphone/">guía de voz para iPhone</a> explica Añadir al borrador y Enviar inmediatamente.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_es_32fa42cf87f1">Descargar Vox.md gratis</a></p>
+      <p>La descarga gratuita incluye 10 entregas de Captura completadas y 15 minutos de transcripción. El uso ilimitado se obtiene con una compra única de por vida.</p>
+
+      <h2 id="tokens">Usa la sintaxis de tokens correcta</h2>
+      <p>Los ajustes de ruta y entrada de Vox.md usan tokens como <code>{period}</code>, <code>{date}</code>, <code>{hour}</code> y <code>{minute}</code>. Estos ejemplos no son expresiones de Obsidian Core Templates ni de Templater. Usa la sintaxis propia de cada sistema de plantillas en sus ajustes.</p>
+      <p>Usar <code>{hour}:{minute}</code> para la hora separada por dos puntos que se muestra aquí. El token de Vox.md <code>{time}</code> es un valor de hora compacto, así que no debe sustituirse en la receta suponiendo que tiene la misma presentación.</p>
+      <p>El contenido capturado no es un editor de plantillas. Un token escrito en una idea puede permanecer como texto literal; configura la expansión de tokens en los ajustes de formato compatibles del destino. Consulta la <a href="/es/docs/#placement-templates">referencia de tokens y plantillas</a> para ver los campos disponibles.</p>
+      <p>Si añades metadatos YAML, distingue los metadatos iniciales de la nota de los campos destinados a cada entrada de una nota periódica. Una propiedad del archivo completo no se convierte automáticamente en una propiedad independiente de cada entrada del diario. Empieza sin metadatos adicionales y añádelos cuando sepas cómo los consultarás.</p>
+
+      <h2 id="check">Comprueba el resultado antes de reutilizar un preajuste</h2>
+      <ol>
+        <li>Confirma que la vista previa del destino coincida con el archivo previsto.</li>
+        <li>Envía una captura de texto corta con el preajuste seleccionado.</li>
+        <li>Abre el archivo en Obsidian e inspecciona el encabezado y el prefijo.</li>
+        <li>Envía una segunda captura y comprueba el orden, el espaciado y los marcadores repetidos.</li>
+        <li>Solo después añade voz, adjuntos, procesamiento opcional o metadatos.</li>
+      </ol>
+      <p>Estas recetas pueden coexistir en un archivo diario bajo encabezados distintos. En una carpeta accesible, el mismo preajuste también puede aceptar una transcripción entregada desde el <a href="/es/blog/apple-watch-obsidian-voice-notes/">Flujo de captura del Watch al iPhone</a>. Ten en cuenta los permisos de carpeta y la disponibilidad del proveedor de archivos cuando una captura siga pendiente.</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Mantén un formato predecible.<br>Deja espacio a la idea.</h2>
+        <p>Empieza con un encabezado y un prefijo. Añade más estructura solo cuando te ayude a usar la nota capturada.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_es_32fa42cf87f1">Descargar Vox.md gratis</a></p>
+      </section>
+      <nav class="toc" aria-label="Guías relacionadas"><div class="toc-title">Continúa la configuración</div><ul>
+        <li><a href="/es/blog/append-to-obsidian-daily-note-iphone/">Configurar el enrutamiento a la nota diaria</a></li>
+        <li><a href="/es/blog/save-links-photos-obsidian-iphone/">Conserva fotos, escaneos y enlaces con una nota</a></li>
+        <li><a href="/es/blog/obsidian-quick-capture-iphone/">Elige un método de captura</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/es/">Inicio</a></li>
+        <li><a href="/es/docs/">Documentación</a></li>
+        <li><a href="/es/blog/">Guías</a></li>
+        <li><a href="/es/compare/">Comparar</a></li>
+        <li><a href="/es/privacy.html">Privacidad</a></li>
+        <li><a href="/es/terms.html">Términos</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Asistencia</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_es_32fa42cf87f1">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Captura rápida para notas locales · Sin subir contenido.</div>
+    </div>
+  <details class="language-switcher"><summary>Idioma</summary><ul><li><a href="/blog/obsidian-capture-templates/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-capture-templates/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-capture-templates/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-capture-templates/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-capture-templates/" lang="es" hreflang="es" aria-current="page">Español</a></li><li><a href="/fr/blog/obsidian-capture-templates/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-capture-templates/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-capture-templates/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-capture-templates/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-capture-templates/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-capture-templates/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-capture-templates/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-capture-templates/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-capture-templates/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-capture-templates/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-capture-templates/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-capture-templates/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-capture-templates/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-capture-templates/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-capture-templates/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-capture-templates/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-capture-templates/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-capture-templates/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

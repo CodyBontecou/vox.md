@@ -25,11 +25,23 @@ class Page(HTMLParser):
         self.descriptions = []
         self.schema = []
         self.script_text = None
+        self.languages = []
+        self.alternates = []
+        self.direction = None
+        self.social = {}
         self.feed(path.read_text())
 
     def handle_starttag(self, tag, attributes):
         attrs = dict(attributes)
         self.counts[tag] += 1
+        if tag == 'html':
+            self.languages.append(attrs.get('lang'))
+            self.direction = attrs.get('dir')
+        if tag == 'link' and attrs.get('rel') == 'alternate' and attrs.get('hreflang'):
+            self.alternates.append((attrs['hreflang'], attrs.get('href')))
+        if tag == 'meta':
+            label = attrs.get('property', attrs.get('name'))
+            self.social[label] = attrs.get('content', '')
         if "id" in attrs:
             self.ids.append(attrs["id"])
         if tag == "link" and attrs.get("rel") == "canonical":
@@ -74,10 +86,29 @@ def main():
         canonical = HOST + "/" + relative.as_posix()
         if canonical.endswith("index.html"):
             canonical = canonical[:-len("index.html")]
-        if relative.as_posix() in ("about.html", "contact.html", "developers.html", "404.html"):
+        if relative.name in ("about.html", "contact.html", "developers.html", "404.html"):
             canonical = canonical[:-len(".html")]
         if page.canonicals != [canonical]:
             fail(page, f"expected canonical {canonical}")
+        from build_locales import HOST as LOCALE_HOST, LANGUAGES, active_locales, localized, route
+        locale = next((l for l in LANGUAGES if relative.parts[0] == l.lower() and l != 'en'), 'en')
+        english_relative = Path(*relative.parts[1:]) if locale != 'en' else relative
+        if page.languages != [locale]:
+            fail(page, f'expected html lang={locale}')
+        if page.direction != ('rtl' if locale in {'ar', 'ur'} else 'ltr'):
+            fail(page, 'unexpected text direction')
+        expected_alternates = [(l, LOCALE_HOST + localized(route(english_relative),l)) for l in active_locales()]
+        expected_alternates.append(('x-default', LOCALE_HOST + route(english_relative)))
+        if sorted(page.alternates) != sorted(expected_alternates):
+            fail(page, 'missing, duplicate or nonreciprocal hreflang alternates')
+        for label in ('og:title', 'og:description', 'twitter:title', 'twitter:description'):
+            if not page.social.get(label):
+                fail(page, f'missing {label}')
+        if not page.schema:
+            fail(page, 'missing JSON-LD')
+        for schema in page.schema:
+            if schema.get('inLanguage') != locale or not schema.get('name') or not schema.get('description'):
+                fail(page, 'JSON-LD missing name, description or inLanguage')
         for reference in page.references:
             url = urlsplit(reference)
             if url.path in DYNAMIC_ROUTES and (not url.netloc or url.netloc == urlsplit(HOST).netloc):
@@ -105,6 +136,13 @@ def main():
     if len(urls) != len(set(urls)):
         errors.append("Sitemap contains duplicate URLs")
     submitted = set(urls)
+    from build_locales import active_locales, localized
+    for node in ET.parse(ROOT / 'sitemap.xml').getroot():
+        loc = node.find('{*}loc').text
+        page = next((p for p in pages.values() if p.canonicals == [loc]), None)
+        actual = [(a.get('hreflang'), a.get('href')) for a in node.findall('{http://www.w3.org/1999/xhtml}link')]
+        if page and sorted(actual) != sorted(page.alternates):
+            errors.append(f'{loc}: sitemap alternates differ from page')
     for page in pages.values():
         if page.path.name != "404.html" and page.canonicals and page.canonicals[0] not in submitted:
             fail(page, "canonical missing from sitemap")

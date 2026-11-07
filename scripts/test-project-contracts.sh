@@ -2490,12 +2490,14 @@ for page in website_pages:
         errors.append(f'{page.relative_to(root)} has duplicate IDs: {sorted(duplicate_ids)}')
     for reference in parser.references:
         parsed = urlsplit(reference)
-        if parsed.scheme or reference.startswith(('#', 'mailto:', 'tel:', 'data:')):
+        if parsed.scheme or parsed.netloc or reference.startswith(('#', 'mailto:', 'tel:', 'data:')):
             continue
-        referenced_path = (page.parent / parsed.path).resolve()
-        if parsed.path.endswith('/'):
+        referenced_path = ((website_root / parsed.path.lstrip('/')) if parsed.path.startswith('/') else (page.parent / parsed.path)).resolve()
+        if referenced_path.is_dir() or parsed.path.endswith('/'):
             referenced_path /= 'index.html'
-        if not referenced_path.exists():
+        elif not referenced_path.exists() and not referenced_path.suffix:
+            referenced_path = referenced_path.with_suffix('.html')
+        if not referenced_path.is_relative_to(website_root.resolve()) or not referenced_path.exists():
             errors.append(
                 f'{page.relative_to(root)} references missing local asset {reference}'
             )

@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="hi" dir="ltr" data-search-section="सेक्शन" data-search-guide="गाइड" data-search-empty="“{query}” के लिए कोई परिणाम नहीं">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vox.md दस्तावेज़: पूरी सुविधा गाइड</title>
+  <meta name="description" content="Vox.md त्वरित कैप्चर, रूट, Markdown गंतव्य, iOS कीबोर्ड, स्थानीय लिप्यंतरण मॉडल, विजेट, शॉर्टकट्स, Apple Watch और Mac के पूरे दस्तावेज़।">
+  <link rel="canonical" href="https://vox.isolated.tech/hi/docs/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="भाषा मॉडलों के लिए Vox.md दस्तावेज़">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Vox.md दस्तावेज़: पूरी सुविधा गाइड">
+  <meta property="og:description" content="Vox.md की हर जारी सुविधा जानें: स्थायी Markdown कैप्चर और रूट से लेकर स्थानीय वाक् मॉडल, कीबोर्ड, Apple Watch और Mac तक।">
+  <meta property="og:url" content="https://vox.isolated.tech/hi/docs/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vox.md दस्तावेज़">
+  <meta name="twitter:description" content="Vox.md कैप्चर, रूटिंग, लिप्यंतरण और सिस्टम एकीकरण की पूरी गाइड।">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Vox.md पूरी सुविधा गाइड",
+  "description": "Vox.md की हर जारी कैप्चर, रूटिंग, लिप्यंतरण, कीबोर्ड, सिस्टम एकीकरण, Apple Watch और Mac सुविधा के दस्तावेज़।",
+  "dateModified": "2026-10-26",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/hi/docs/",
+  "inLanguage": "hi",
+  "name": "Vox.md दस्तावेज़: पूरी सुविधा गाइड"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/hi/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "दस्तावेज़",
+      "item": "https://vox.isolated.tech/hi/docs/"
+    }
+  ],
+  "inLanguage": "hi",
+  "name": "Vox.md दस्तावेज़: पूरी सुविधा गाइड",
+  "description": "Vox.md त्वरित कैप्चर, रूट, Markdown गंतव्य, iOS कीबोर्ड, स्थानीय लिप्यंतरण मॉडल, विजेट, शॉर्टकट्स, Apple Watch और Mac के पूरे दस्तावेज़।"
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md सार्वजनिक जानकारी API">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="मुख्य नेविगेशन">
+  <div class="nav-inner docs-header-inner">
+    <a href="/hi/" class="logo" aria-label="Vox.md मुखपृष्ठ">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ दस्तावेज़</span></span>
+    </a>
+    <form class="docs-search" role="search" action="./" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="दस्तावेज़ खोजें" aria-label="दस्तावेज़ खोजें" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="खोज परिणाम" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/hi/blog/">ब्लॉग</a></li>
+      <li><a href="/hi/privacy.html">गोपनीयता</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>भाषा</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi" aria-current="page">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="इस पृष्ठ पर">
+      <div class="docs-sidebar-title">इस पृष्ठ पर</div>
+      <ol>
+        <li><a href="#getting-started">शुरुआत करें</a></li>
+        <li><a href="#quick-capture">तेजी से पकड़</a></li>
+        <li><a href="#presets">रूट्स</a></li>
+        <li><a href="/hi/docs/location/">वर्तमान स्थान और {location}</a></li>
+        <li><a href="#models">मॉडल और लिप्यंतरण</a></li>
+        <li><a href="#keyboard">iOS कीबोर्ड</a></li>
+        <li><a href="#system-integrations">सिस्टम एकीकरण</a></li>
+        <li><a href="#apple-watch">Apple Watch</a></li>
+        <li><a href="#mac">Mac साथी</a></li>
+        <li><a href="#history-settings">लाइब्रेरी, सेटिंग्स और गोपनीयता</a></li>
+        <li><a href="#troubleshooting">समस्या निवारण</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="docs-title">
+      <div class="page-eyebrow">दस्तावेज़ · वर्तमान उत्पाद गाइड</div>
+      <h1 class="page-title" id="docs-title">Vox.md से आप जो कुछ कर सकते हैं</h1>
+      <p class="docs-hero-copy">कैप्चर, रूट, Markdown रूटिंग, वॉइस कीबोर्ड, स्थानीय मॉडल, Apple सिस्टम एकीकरण, Apple Watch, Mac, इतिहास, सेटिंग्स और गोपनीयता की पूरी गाइड।</p>
+      <div class="docs-meta-row" aria-label="दस्तावेज़ी तथ्य">
+        <span>अपडेट: 26 अक्तूबर, 2026</span>
+        <span>iOS 17.6+</span>
+        <span>macOS 14+</span>
+        <span>watchOS 10+</span>
+      </div>
+      </header>
+
+      <section class="docs-directory" aria-labelledby="browse-docs">
+      <h2 class="visually-hidden" id="browse-docs">श्रेणी के अनुसार देखें</h2>
+      <div class="docs-category-grid">
+        <a class="docs-category-card" href="#getting-started"><span>01</span><strong>शुरुआत करें</strong><small>प्लेटफ़ॉर्म, सेटअप, अनुमतियाँ और पहला कैप्चर</small></a>
+        <a class="docs-category-card" href="#quick-capture"><span>02</span><strong>तेजी से पकड़</strong><small>कंपोज़र, मीडिया, आवाज, कैप्चर बार और ड्राफ़्ट</small></a>
+        <a class="docs-category-card" href="#presets"><span>03</span><strong>रूट्स</strong><small>प्रोसेसिंग, मेटाडेटा, गंतव्य और टेम्पलेट</small></a>
+        <a class="docs-category-card is-guide" href="/hi/docs/location/"><span>गाइड</span><strong>वर्तमान स्थान और <code>{location}</code></strong><small>केवल टोकन वाले लिंक, वैकल्पिक मेटाडेटा, सटीकता, गोपनीयता और माइग्रेशन</small></a>
+        <a class="docs-category-card" href="#models"><span>04</span><strong>मॉडल</strong><small>स्वचालित, Apple Speech, Whisper और Parakeet</small></a>
+        <a class="docs-category-card" href="#keyboard"><span>05</span><strong>कीबोर्ड</strong><small>सेटअप, डिक्टेशन, पाठ जोड़ना, हैप्टिक्स और ऑटो-स्टॉप</small></a>
+        <a class="docs-category-card" href="#system-integrations"><span>06</span><strong>सिस्टम एकीकरण</strong><small>विजेट, शेयर शीट, शॉर्टकट्स और डीप लिंक</small></a>
+        <a class="docs-category-card" href="#apple-watch"><span>07</span><strong>Apple Watch</strong><small>रिकॉर्डिंग, रूट सिंक, कतार और कॉम्प्लिकेशन</small></a>
+        <a class="docs-category-card" href="#mac"><span>08</span><strong>Mac</strong><small>मीटिंग कैप्चर, कार्यक्षेत्र, मेनू बार और वैश्विक कुंजी संयोजन</small></a>
+        <a class="docs-category-card" href="#history-settings"><span>09</span><strong>लाइब्रेरी और सेटिंग्स</strong><small>पुनर्प्राप्ति, आँकड़े, गोपनीयता, सीमाएँ, खरीद और सहायता</small></a>
+      </div>
+      </section>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="getting-started">
+        <div class="docs-section-label">01 / शुरुआत करें</div>
+        <h2>नोट का एक और बंद भंडार बनाए बिना Markdown में कैप्चर करें</h2>
+        <p>Vox.md स्थानीय उपयोग को प्राथमिकता देने वाला त्वरित कैप्चर ऐप है। यह मानक Markdown और अटैचमेंट Obsidian वॉल्ट या फ़ाइल्स से चुने आपके किसी अन्य लिखने योग्य फ़ोल्डर में लिखता है। Vox.md खाते, प्लगइन या होस्ट किए नोट डेटाबेस की आवश्यकता नहीं है।</p>
+
+        <p>पूरे वॉइस कार्यप्रवाह के लिए, <a href="/hi/blog/voice-notes-to-obsidian-iphone/">iPhone वॉइस नोट से Obsidian तक की गाइड का पालन करें</a>, फ़ोल्डर चुनने से लेकर बने Markdown को जाँचने तक।</p>
+
+        <p>कैप्चर का तरीका चुन रहे हैं? पढ़ें <a href="/hi/blog/obsidian-quick-capture-iphone/">iPhone कैप्चर निर्णय गाइड</a> या <a href="/hi/compare/vox-md-vs-obsidian-quick-capture/">Vox.md की तुलना Obsidian की अंतर्निहित सुविधा से करें</a>.</p>
+
+        <div class="docs-table-wrap" id="platform-availability">
+          <table class="docs-table">
+            <thead><tr><th>प्लेटफ़ॉर्म</th><th>आवश्यकता</th><th>क्या उपलब्ध है</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone और iPad</td><td class="req">iOS/iPadOS 17.6+</td><td>त्वरित कैप्चर, कीबोर्ड, शेयर शीट, विजेट, शॉर्टकट्स, लाइव ऐक्टिविटी, इतिहास और सेटिंग्स</td></tr>
+              <tr><td>Mac</td><td class="req">macOS 14+</td><td>कैप्चर कार्यक्षेत्र, रिकॉर्डिंग/आयात, रूट, मॉडल, इतिहास, मेनू बार और वैश्विक कुंजी संयोजन</td></tr>
+              <tr><td>Apple Watch</td><td class="req">watchOS 10+</td><td>स्थानीय रिकॉर्डिंग, रूट चयन, सिंक कतार, केवल रिकॉर्डिंग डिलीवरी और कॉम्प्लिकेशन</td></tr>
+              <tr><td>कंट्रोल सेंटर नियंत्रण</td><td class="req">iOS 18+</td><td>त्वरित कैप्चर और रूट-अनुकूल रिकॉर्डिंग नियंत्रण</td></tr>
+              <tr><td>Apple Speech स्वचालित बैकएंड</td><td class="req">समर्थित iOS 26 डिवाइस और भाषा</td><td>सिस्टम-प्रबंधित, डिवाइस पर लाइव और बैच लिप्यंतरण</td></tr>
+              <tr><td>Apple Intelligence प्रोसेसिंग</td><td class="req">संगत iOS/macOS 26 डिवाइस</td><td>डिवाइस पर पाठ सुधार, संरचित आउटपुट और वैकल्पिक उपायों सहित कस्टम निर्देश</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <p><strong>बुनियादी कार्यप्रवाह।</strong> रूट चुनें, उसका गंतव्य जोड़ें, तेजी से पकड़ में सामग्री लिखें या जोड़ें, फिर भेजिए टैप करें। रूट तय करता है कि सामग्री आपके नोट में कैसे प्रोसेस, फ़ॉर्मैट और रखी जाएगी।</p>
+        </div>
+
+
+        <h3 id="first-capture">अपना पहला कैप्चर करें</h3>
+        <ol class="docs-steps">
+          <li><strong>Vox.md खोलें।</strong><span>ऐप सीधे स्थायी Markdown कंपोज़र पर खुलता है।</span></li>
+          <li><strong>रूट चुनें।</strong><span>अंतर्निहित डिफ़ॉल्ट रूट हटाया नहीं जा सकता, पर बंद किया जा सकता है। कम से कम एक रूट सक्षम रखें और उसका गंतव्य दें।</span></li>
+          <li><strong>उसका गंतव्य सेट करें।</strong><span>टैप करें <em>लक्ष्य निर्धारित करें</em>, Obsidian वॉल्ट या फ़ाइल्स फ़ोल्डर चुनें, फिर नया, रोलिंग या मौजूदा नोट चुनें।</span></li>
+          <li><strong>सामग्री जोड़ें।</strong><span>Markdown लिखें या लिंक, फ़ोटो, फ़ाइल, स्कैन, स्केच, स्थान या वॉइस रिकॉर्डिंग जोड़ें।</span></li>
+          <li><strong>भेजिए टैप करें।</strong><span>Vox.md चुने रूट में सहेजता है और बताता है <em>कैप्शन भेजने</em>. विफल या कतार में लगा काम पुनर्प्राप्ति के लिए उपलब्ध रहता है।</span></li>
+        </ol>
+
+        <h3 id="permissions">अनुमतियाँ और सिस्टम ऐक्सेस</h3>
+        <ul>
+          <li><strong>माइक्रोफ़ोन:</strong> वॉइस रिकॉर्डिंग, स्थानीय लिप्यंतरण, कीबोर्ड से सुनने और ऑडियो कैप्चर के लिए। तेजी से पकड़ कार्यक्षेत्र पहली बार खुलते समय, रिकॉर्डिंग शुरू करने से पहले ही यह अनुरोध दिखा सकता है।</li>
+          <li><strong>वाक् पहचान:</strong> समर्थित सिस्टम पर Apple Speech।</li>
+          <li><strong>फ़ाइल्स फ़ोल्डर तक पहुँच:</strong> गंतव्य, टेम्पलेट, आयात और Watch का केवल रिकॉर्डिंग आउटपुट।</li>
+          <li><strong>कैमरा और चयनित फ़ोटो:</strong> केवल जब आप मीडिया, स्क्रीनशॉट, जर्नल फ़ोटो या स्कैन जोड़ते हैं।</li>
+          <li><strong>उपयोग के दौरान स्थान:</strong> केवल स्वतंत्र वर्तमान स्थान कैप्चर बार कमांड के लिए या जब सहमति वाले रूट को शुरुआत के समय के एक स्थान की ज़रूरत हो। Vox.md स्थान को लगातार या पृष्ठभूमि में कभी ट्रैक नहीं करता।</li>
+          <li><strong>सूचनाएँ:</strong> वैकल्पिक डिलीवरी स्थिति, जिसमें बिना निगरानी वाली Apple Watch विफलताएँ भी हैं।</li>
+          <li><strong>कीबोर्ड को पूर्ण ऐक्सेस की अनुमति:</strong> Vox.md कीबोर्ड के साझा डिवाइस-आधारित ऐप कार्यप्रवाह का उपयोग करने के लिए आवश्यक है। देखें <a href="#keyboard-setup">कीबोर्ड सेटअप</a>.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="quick-capture">
+        <div class="docs-section-label">02 / त्वरित कैप्चर</div>
+        <h2>पाठ, मीडिया, फ़ाइलों और आवाज के लिए एक स्थायी कंपोज़र</h2>
+        <p>तेजी से पकड़ मुख्य iOS और iPadOS कार्यक्षेत्र है। रूट मेनू मौजूदा कार्यप्रवाह बदलता है; गंतव्य मेनू पूर्वावलोकन करता है या अस्थायी रूप से बदलता है कि यह ड्राफ़्ट कहाँ भेजा जाएगा। निचला बार लाइब्रेरी और सेटिंग्स भी खोलता है और सॉफ़्टवेयर कीबोर्ड दिखा या छिपा सकता है।</p>
+
+        <h3 id="durable-drafts">स्थायी ड्राफ़्ट और सुरक्षित डिलीवरी</h3>
+        <ul>
+          <li>पाठ, अटैचमेंट, चुना रूट, गंतव्य ओवरराइड और कैप्चर स्रोत निलंबन व फिर लॉन्च होने के बाद भी बने रहते हैं।</li>
+          <li>बदलाव थोड़ी देर की डिबाउंस अवधि के बाद सहेजे जाते हैं और ऐप को पृष्ठभूमि में भेजने पर तुरंत सहेजा जाता है।</li>
+          <li>भेजना जारी रहते समय आप संपादन करते रहें, तो वे नए बदलाव हटाए जाने के बजाय नए ड्राफ़्ट में सुरक्षित रहते हैं।</li>
+          <li>डिलीवरी से पहले गंतव्य कॉन्फ़िगर होना चाहिए। कंपोज़र दिखाता है <em>लक्ष्य नहीं बनाया गया</em> ज़रूरत होने पर सेटअप ऐक्शन के साथ।</li>
+          <li>दोबारा प्रयास में सुरक्षित कैप्चर अनुरोध स्थानीय जर्नल में रखे जाते हैं, ताकि अनुमति, फ़ाइल प्रदाता या सिंक की विफलता पर फिर प्रयास हो सके।</li>
+          <li>खाली कंपोज़र आपके पाठ जोड़ने तक कैश किया प्रेरक उद्धरण दिखाता है, रूट चुनने या फ़ाइल जोड़ने के बाद भी; उद्धरण अनुरोधों में आपका ड्राफ़्ट कभी शामिल नहीं होता।</li>
+        </ul>
+
+        <p>किसी कार्य पर केंद्रित चरण-दर-चरण गाइड के लिए देखें <a href="/hi/blog/save-links-photos-obsidian-iphone/">लिंक, फ़ोटो और स्कैन Obsidian में सहेजें</a>.</p>
+
+        <h3 id="capture-types">कैप्चर प्रकार</h3>
+        <div class="docs-feature-grid">
+          <div><strong>पाठ और Markdown</strong><p>चयन को समझने वाले Markdown संपादक में सीधे लिखें, मौजूदा पाठ पेस्ट करें और पाठ को अन्य पेलोड के साथ मिलाएँ।</p></div>
+          <div><strong>वेब लिंक</strong><p>Markdown लिंक फ़ॉर्मैट में HTTP या HTTPS URL जोड़ें।</p></div>
+          <div><strong>फ़ोटो और कैमरा</strong><p>फ़ोटो या स्क्रीनशॉट चुनें या नई फ़ोटो लें। चित्र तैयार रखे जाते हैं और भेजे गए नोट में एम्बेड होते हैं।</p></div>
+          <div><strong>फ़ाइल्स</strong><p>फ़ाइल्स के कई आइटम चुनें। चित्र एम्बेड बनते हैं, ऑडियो ऑडियो पेलोड रहता है और अन्य फ़ाइलें Obsidian शैली के लिंक इस्तेमाल करती हैं।</p></div>
+          <div><strong>दस्तावेज़ स्कैन</strong><p>VisionKit से पृष्ठ स्कैन करें। Vox.md पृष्ठों के चित्र सुरक्षित रखता है, PDF बनाता है और डिवाइस पर यथासंभव OCR शामिल करता है।</p></div>
+          <div><strong>जर्नल OCR</strong><p>मैन्युअल शटर से अधिकतम 10 जर्नल पृष्ठ कैप्चर करें या जर्नल फ़ोटो चुनें। सटीक Vision OCR अपने आप भाषा पहचानता है।</p></div>
+          <div><strong>स्केच</strong><p>सफ़ेद PencilKit कैनवस पर काले पेन से बनाएँ। Vox.md संपादन योग्य ड्रॉइंग डेटा और PNG पूर्वावलोकन रखता है।</p></div>
+          <div><strong>वर्तमान स्थान ऐक्शन</strong><p>एक स्थान माँगें और ड्राफ़्ट में सत्यापित Google Maps Markdown लिंक डालें। यह स्वतंत्र कैप्चर बार ऐक्शन रूट के दोनों स्थान नियंत्रणों में से किसी को नहीं बदलता।</p></div>
+          <div><strong>आवाज और आयात किया ऑडियो</strong><p>कंपोज़र से रिकॉर्ड करें या ऑडियो अथवा वीडियो आयात करें, स्थानीय लिप्यंतरण करें और परिणाम ड्राफ़्ट में जोड़ें या तुरंत भेजें।</p></div>
+        </div>
+        <p class="docs-note">सुलभता: OCR “इस डिवाइस पर पाठ निकाला जा रहा है” प्रगति बैनर दिखाता है और VoiceOver कैप्चर कार्यप्रवाहों में OCR की प्रगति व पूर्णता, “कैप्चर भेजा गया” और “कैप्चर में ट्रांसक्रिप्ट जोड़ा गया” की घोषणा करता है।</p>
+
+        <h3 id="capture-bar">कैप्चर बार</h3>
+        <p>सेटिंग्स → कैप्चर बार में ऐक्शन का क्रम बदल या उन्हें छिपा सकते हैं। डिफ़ॉल्ट रूप से सभी ऐक्शन दिखते हैं।</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>कार्रवाई</th><th>व्यवहार</th></tr></thead>
+            <tbody>
+              <tr><td>मीडिया को जोड़ें</td><td>स्केच, कैमरा, फ़ोटो, स्क्रीनशॉट और वेब लिंक के विकल्प खोलता है।</td></tr>
+              <tr><td>फ़ाइलों को जोड़ें</td><td>फ़ाइल्स से कई फ़ाइलें चुनकर ड्राफ़्ट के साथ तैयार रखता है।</td></tr>
+              <tr><td>दस्तावेज़ स्कैन</td><td>कई पृष्ठों का स्कैन, PDF, पृष्ठ चित्र और यथासंभव OCR कैप्चर करता है।</td></tr>
+              <tr><td>पाठ निकालना</td><td>OCR-केंद्रित कैप्चर के लिए जर्नल पृष्ठ कैप्चर करें और जर्नल फ़ोटो चुनें देता है।</td></tr>
+              <tr><td>नौ</td><td>संपादक की पिछली कार्रवाई पहले जैसी करता है।</td></tr>
+              <tr><td>प्रारूप Markdown</td><td>बोल्ड, इटैलिक, हैशटैग या शीर्षक 1 से शीर्षक 6 तक लगाता है।</td></tr>
+              <tr><td>Markdown लिंक</td><td>डालता है <code>[link text](url)</code> और संपादन योग्य हिस्सा चुनता है।</td></tr>
+              <tr><td>आंतरिक लिंक</td><td>Obsidian शैली का यह डालता है: <code>[[Target]]</code> विकिलिंक।</td></tr>
+              <tr><td>दो तारीखें</td><td>आज, कल या इस सप्ताहांत; वैकल्पिक समय; और ±15m, ±30m या ±1h समायोजन इस्तेमाल करता है। डालता है <code>(@yyyy-MM-dd)</code> या समय वाला रूप।</td></tr>
+              <tr><td>चेकलिस्ट</td><td>Markdown कार्य उपसर्ग लगाता है <code>- [ ]</code>.</td></tr>
+              <tr><td>गेंद सूची</td><td>Markdown बुलेट उपसर्ग लगाता है।</td></tr>
+              <tr><td>पास्ता</td><td>क्लिपबोर्ड का पाठ मौजूदा चयन में पेस्ट करता है।</td></tr>
+              <tr><td>स्केच</td><td>संपादन योग्य PencilKit स्केच कैप्चर खोलता है।</td></tr>
+              <tr><td>वर्तमान स्थान</td><td>एक स्थान माँगता है और Google Maps लिंक डालता है।</td></tr>
+              <tr><td>टाइमस्टैम्प को जोड़ें</td><td>स्थानीय समय और तारीख इस रूप में डालता है <code>h:mm a yyyy-MM-dd</code>.</td></tr>
+              <tr><td>डेटा दर्ज करें</td><td>डालता है <code>yyyy-MM-dd</code>.</td></tr>
+              <tr><td>Text Case में बदलाव</td><td>छोटे अक्षर, बड़े अक्षर, वाक्य शैली, हर शब्द का पहला अक्षर बड़ा और स्लग रूप बनाने के विकल्प देता है।</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">फ़ॉर्मैटिंग मौजूदा चयन का सम्मान करती है, पंक्ति अंत सामान्य करती है, अमान्य चयन सीमाओं को वैध हदों में रखती है और इमोजी जैसे संयुक्त अक्षरों को तोड़ने से बचती है।</p>
+
+        <h3 id="inline-voice">इनलाइन वॉइस नियंत्रण</h3>
+        <ul>
+          <li>शुरू या बंद करने के लिए आवाज बटन टैप करें। विस्तृत नियंत्रण देखने के लिए लगभग 0.45 सेकंड दबाए रखें।</li>
+          <li>रिकॉर्डिंग के दौरान, एक <strong>विराम</strong> बटन आवाज बटन के पास दिखता है — एक टैप से विराम, अगले से फिर शुरू। अंतिम नोट एक ही रिकॉर्डिंग रहता है, जिसमें विराम का ऑडियो और समय शामिल नहीं होते। विराम के दौरान लाइव ट्रांसक्रिप्ट पूर्वावलोकन और आवाज का ऑटो-स्टॉप भी फिर शुरू करने तक रुक जाते हैं।</li>
+          <li><strong>ड्राफ़्ट में जोड़ें</strong> पूरे हुए ट्रांसक्रिप्ट को अंत में जोड़ता है। <strong>तुरंत भेजें</strong> चुना रूट और उसका गंतव्य चलाता है।</li>
+          <li><strong>तुरंत भेजें डिफ़ॉल्ट रूप से चुना होता है</strong> iOS और Mac कैप्चर कार्यक्षेत्रों में। इसके ज़रिए iOS वॉइस ऐक्शन खोलने पर: <code>voxboard://capture?action=voice</code> उस रिकॉर्डिंग को ड्राफ़्ट में जोड़ें पर बदल देता है।</li>
+          <li>यह <strong>ऑडियो</strong> विकल्प अनुरोध किए जाने पर मूल रिकॉर्डिंग को ड्राफ़्ट का हिस्सा बनाकर रखता है।</li>
+          <li><strong>ऑडियो आयात</strong> ऑडियो या वीडियो फ़ाइलें स्वीकार करता है और वही स्थानीय लिप्यंतरण प्रक्रिया इस्तेमाल करता है।</li>
+          <li><strong>भाषणदाताओं की पहचान</strong> रिकॉर्डिंग और आयात किए ऑडियो के लिए रूट की वैकल्पिक वॉइस प्रोसेसिंग का चरण है। पहली बार उपयोग पर यह अलग वक्ता मॉडल तैयार करता है, स्थानीय रूप से यथासंभव अनाम नाम जोड़ता है और न चल पाने पर लाइब्रेरी में स्पष्ट कारण के साथ सादा ट्रांसक्रिप्ट सुरक्षित रखता है।</li>
+          <li>स्वचालित मोड रिकॉर्डिंग के दौरान Apple Speech का अंतिम और अस्थायी पाठ सीधे संपादन योग्य कंपोज़र में दिखा सकता है। स्पष्ट रूप से चुने Whisper और Parakeet मॉडल रिकॉर्डिंग रुकने के बाद लिप्यंतरण करते हैं।</li>
+          <li>लिप्यंतरण विफल होने से मूल रिकॉर्डिंग नष्ट नहीं होती; वह पुनर्प्राप्ति योग्य रहती है।</li>
+          <li>लगातार कीबोर्ड सुनने का मोड केवल स्पष्ट रूप से सक्षम किए जाने पर लॉन्च के बीच बना रहता है। ऐप की एकबारगी रिकॉर्डिंग ऑडियो सत्र को निष्क्रिय कर देती है।</li>
+        </ul>
+
+        <h3 id="capture-limits">कैप्चर इनपुट सीमाएँ</h3>
+        <div class="docs-callout docs-callout-neutral">
+          <p>एक अनुरोध में अधिकतम शामिल हो सकते हैं <strong>1,00,000 अक्षर</strong> साझा पाठ के, <strong>10 साझा आइटम</strong>, और <strong>250 MB</strong> कुल तैयार संसाधनों के। फ़ोटो और स्क्रीनशॉट पिकर अधिकतम 10 आइटम लेते हैं; जर्नल कैप्चर अधिकतम 10 पृष्ठ लेता है। सीमा से अधिक आइटम Vox.md चुपचाप छोड़ने के बजाय अस्वीकार करता है।</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="presets">
+        <div class="docs-section-label">03 / रूट्स</div>
+        <h2>सिर्फ़ फ़ोल्डर नहीं, पूरा कार्यप्रवाह सहेजें</h2>
+        <p>रूट सहेजता है कि कैप्चर का उद्देश्य क्या है, पाठ प्रोसेस होगा या नहीं, मेटाडेटा व ऑडियो कैसे संभाले जाएँगे और Markdown ठीक कहाँ लिखा जाएगा। रूट टाइप किए पाठ, लिंक, मीडिया, स्कैन, फ़ाइलों, स्केच, आवाज, शॉर्टकट्स, विजेट, शेयर शीट, Watch और Mac पर लागू होते हैं।</p>
+
+        <h3 id="preset-management">रूट बनाएँ और प्रबंधित करें</h3>
+        <ul>
+          <li>कस्टम रूट बनाने, नाम बदलने, सक्षम या बंद करने, आइकन चुनने या हटाने के लिए सेटिंग्स → रूट्स खोलें।</li>
+          <li>खोजने योग्य आइकन पिकर प्रतीकों को लेखन, आवाज, कार्य, निजी और काम समूहों में रखता है।</li>
+          <li>बंद किए रूट सामान्य चयनकर्ताओं से छिप जाते हैं। अंतर्निहित डिफ़ॉल्ट रूट हटाया नहीं जा सकता।</li>
+          <li>अंतर्निहित डिफ़ॉल्ट रूट वेवफ़ॉर्म प्रतीक और यह संकेत इस्तेमाल करता है: <em>कोई विचार, कार्य, लिंक, फ़ाइल, स्कैन या रिकॉर्डिंग कैप्चर करें।</em>, <code>type: capture</code> मेटाडेटा, सुस्पष्ट गद्य प्रोसेसिंग, टाइप किए पाठ की प्रोसेसिंग बंद और ऑडियो सहेजना बंद।</li>
+          <li>नया कस्टम रूट इस रूप में शुरू होता है: <em>कस्टम रूट</em>, स्लाइडर आइकन और यह इस्तेमाल करता है: <em>आप क्या कैप्चर करना चाहते हैं?</em> संकेत और शुरुआत में कस्टम निर्देश चुना होता है, पर टाइप किए/मिश्रित पाठ की प्रोसेसिंग बंद होती है।</li>
+        </ul>
+
+        <h3 id="processing-modes">प्रोसेसिंग मोड</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>मोड</th><th>परिणाम</th><th>फ़ॉलबैक का व्यवहार</th></tr></thead>
+            <tbody>
+              <tr><td>मूल रखें</td><td>AI से दोबारा लिखवाए बिना कैप्चर किया पाठ सुरक्षित रखता है।</td><td>मूल पाठ भेजा जाता है।</td></tr>
+              <tr><td>सुस्पष्ट गद्य</td><td>अर्थ और Markdown बनाए रखते हुए अक्षरों का आकार व विराम चिह्न सुधारता है।</td><td>डिवाइस पर संवर्धन उपलब्ध न हो तो मूल पाठ।</td></tr>
+              <tr><td>कार्य सूची</td><td>Markdown बनाता है <code>- [ ]</code> कार्य आइटम।</td><td>निश्चित नियमों वाला चेकलिस्ट फ़ॉर्मैटर।</td></tr>
+              <tr><td>मीटिंग नोट्स</td><td>बनाता है <code>## Notes</code> अनुभाग और, मौजूद होने पर, <code>## Action Items</code>.</td><td>मीटिंग नोट की पूर्वनिर्धारित संरचना।</td></tr>
+              <tr><td>कस्टम निर्देश</td><td>उपलब्ध होने पर डिवाइस पर Apple Intelligence से आपके निर्देश का पालन करता है।</td><td>जब निर्देश स्थानीय रूप से न चल सके, तब मूल पाठ।</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>वॉइस ट्रांसक्रिप्ट चुने रूट का मोड इस्तेमाल करते हैं। <strong>संदेश को कब्जा करने के लिए आवेदन करें</strong> अलग सहमति वाला, डिफ़ॉल्ट रूप से बंद विकल्प है, जो टाइप किए Markdown, OCR और अन्य पाठयुक्त मिश्रित कैप्चर की प्रोसेसिंग की अनुमति देता है। इसे बंद रखने से लिखे गए Markdown का अनचाहा पुनर्लेखन रुकता है। डिलीवरी से पहले ठीक वही प्रोसेस किया अनुरोध सहेजा जाता है, इसलिए दोबारा प्रयास बदली सेटिंग्स पर फिर प्रोसेसिंग नहीं चलाते।</p>
+
+        <h3 id="preset-metadata">मेटाडेटा</h3>
+        <ul>
+          <li>स्थिर मेटाडेटा एक के रूप में दर्ज करें <code>key: value</code> जोड़ा प्रति पंक्ति, जैसे <code>tags: [journal, idea]</code>.</li>
+          <li><strong>नोट फ़्रंटमैटर</strong> दस्तावेज़ दायरे में मेटाडेटा लिखता है।</li>
+          <li><strong>इनलाइन प्रविष्टि फ़ील्ड</strong> लिखता है <code>key:: value</code> फ़ील्ड रोलिंग नोट की हर प्रविष्टि के पास।</li>
+          <li>उपलब्ध होने पर डिवाइस पर संवर्धन स्थिर रूट मेटाडेटा के साथ शीर्षक, टैग, श्रेणी और साफ़ किया पाठ जोड़ सकता है।</li>
+        </ul>
+
+        <h3 id="preset-location">सहमति से स्थान</h3>
+        <p>वर्तमान स्थान डिफ़ॉल्ट रूप से बंद होता है और हर रूट का अपना होता है। सक्षम होने पर Vox.md कैप्चर के मूल स्थान पर एक स्थान माँगता है: iOS/iPadOS, शेयर शीट, डीप लिंक/कंपोज़र, Mac और कंपोज़र खोलने वाले सिस्टम ऐक्शन में भेजने पर; सीधे कतार में जोड़ने वाले पाठ, लिंक और फ़ाइल इंटेंट में चलाए जाने पर; या तत्काल वॉइस, कीबोर्ड से संचालित रूट रिकॉर्डिंग, विजेट/नियंत्रण रिकॉर्डिंग या सामान्य कैप्चर डिलीवरी वाली Apple Watch रिकॉर्डिंग रुकने पर। Watch का केवल रिकॉर्डिंग मोड फ़ाइल्स में मूल ऑडियो निर्यात करता है, जिसमें Markdown स्थान सुविधा नहीं होती और स्थान का अनुरोध नहीं किया जाता। Vox.md स्थान की लगातार निगरानी या पृष्ठभूमि में स्थान ट्रैकिंग कभी नहीं करता।</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>सेटिंग</th><th>व्यवहार</th></tr></thead>
+            <tbody>
+              <tr><td>वर्तमान स्थान का उपयोग करें</td><td>इस रूट के लिए शुरुआत के समय का एक स्थान माँगता है और सक्षम करता है <code>{location}</code>. यह मेटाडेटा अपने आप नहीं लिखता।</td></tr>
+              <tr><td>सटीक (डिफ़ॉल्ट)</td><td>गोपनीयता-अनुकूलित शुरुआती स्थान रखता है और चुने मेटाडेटा को ज़रूरत होने पर रुचि-स्थल का नाम शामिल कर सकता है।</td></tr>
+              <tr><td>शहर</td><td>अक्षांश और देशांतर को दो दशमलव स्थानों तक राउंड करता है और रुचि-स्थल के नाम हटाता है। सभी व्युत्पन्न फ़ील्ड और लिंक इन्हीं राउंड किए निर्देशांकों का उपयोग करते हैं।</td></tr>
+              <tr><td>स्थान मेटाडेटा लिखें</td><td>इसके अतिरिक्त संरचित या उन्नत मेटाडेटा के लिए अलग से सहमति देता है: <code>{location}</code> प्रविष्टि-टेम्पलेट लिंक।</td></tr>
+              <tr><td>संरचित फ़ील्ड</td><td>निर्देशांक, अक्षांश, देशांतर, स्थान, शहर, क्षेत्र, देश, Apple Maps, Google Maps, OpenStreetMap चुनें और नाम बदलें, <code>geo:</code> URI, सटीकता, टाइमस्टैम्प, स्रोत और कैप्चर ID।</td></tr>
+              <tr><td>उन्नत YAML टेम्पलेट</td><td>नोट फ़्रंटमैटर के लिए सत्यापित, सीमित YAML इस्तेमाल करता है। यह असंबंधित फ़्रंटमैटर की जगह नहीं ले सकता और इनलाइन प्रविष्टि फ़ील्ड के लिए उपलब्ध नहीं है।</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>स्थान मेटाडेटा लिखें सक्षम होने पर दस्तावेज़ दायरा हर परिणाम को कैप्चर ID के अनुसार कॉन्फ़िगर किए फ़्रंटमैटर संग्रह में जोड़ता है। एक नोट कई स्थान रख सकता है, जबकि समान परिणाम देने वाला दोबारा प्रयास वही स्थान दो बार नहीं जोड़ सकता। इसके बजाय प्रविष्टि दायरा चुने संरचित फ़ील्ड इस रूप में दिखाता है: <code>key:: value</code> उस कैप्चर की गई प्रविष्टि के पास।</p>
+        <p>स्थान, शहर, क्षेत्र और देश के लिए Apple का सिस्टम रिवर्स जियोकोडर केवल तब इस्तेमाल होता है जब सक्षम मेटाडेटा फ़ील्ड को उनकी ज़रूरत हो। केवल टोकन वाला स्थान रिवर्स जियोकोडिंग छोड़ देता है। यह सेवा मुफ़्त है और API कुंजी नहीं माँगती, पर नेटवर्क कनेक्शन इस्तेमाल कर सकती है; खोज विफल होने पर कैप्चर केवल निर्देशांक वाले मेटाडेटा के साथ जारी रहता है। प्रविष्टि उपसर्ग, प्रत्यय और वॉल्ट के Markdown टेम्पलेट इस्तेमाल कर सकते हैं <code>{location}</code> ताकि मेटाडेटा आउटपुट सक्षम किए बिना रूट के उपलब्ध गोपनीयता-अनुकूलित स्नैपशॉट से क्लिक करने योग्य Google Maps लिंक डाला जाए; वर्तमान स्थान बंद या अनुपलब्ध होने पर टोकन खाली रहता है। प्रदाता का लिंक बनाने से Apple, Google या OpenStreetMap से संपर्क नहीं होता। उसे खोलने पर लिंक में रखे वही सटीक या राउंड किए निर्देशांक उस प्रदाता को बताए जाते हैं।</p>
+        <p>नए और पहले बंद किए रूट दोनों नियंत्रण बंद रखते हैं। जो रूट पहले से स्थान मेटाडेटा लिखते थे, वे अपग्रेड के बाद दोनों नियंत्रण चालू रखते हैं ताकि मौजूदा आउटपुट बना रहे।</p>
+        <div class="docs-callout">
+          <strong>वर्तमान स्थान की पूरी गाइड</strong>
+          <p>देखें <a href="/hi/docs/location/">वर्तमान स्थान, <code>{location}</code>, और मेटाडेटा</a> सेटअप के तरीकों, उदाहरणों, कैप्चर स्रोत के समय, माइग्रेशन के व्यवहार, गोपनीयता और समस्या निवारण के लिए।</p>
+        </div>
+        <div class="docs-callout docs-callout-neutral">
+          <strong>अनुपलब्ध स्थान</strong>
+          <p>इंटरैक्टिव इंटरफ़ेस में दोबारा प्रयास, रद्द करना, एक बार बिना स्थान भेजना या यह चुनना संभव है: <em>हमेशा बिना स्थान भेजें</em> उस रूट के लिए। रूट की स्थान सेटिंग्स में सहेजा विकल्प रीसेट करें। बिना निगरानी वाला <em>पूछो</em> कैप्चर आपका निर्णय होने तक शुरुआत के समय का अनुपलब्ध परिणाम रखता है; दोबारा प्रयास और पुनर्प्राप्ति कभी बाद का नया स्थान नहीं लेते।</p>
+        </div>
+
+        <h3 id="destinations">Markdown गंतव्य</h3>
+        <p>हर रूट का एक गंतव्य होता है, जिसका मूल Obsidian वॉल्ट या लिखने योग्य फ़ाइल्स फ़ोल्डर होता है।</p>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>नई नोट</strong><p>हर कैप्चर के लिए इन जैसे टोकन से अलग Markdown फ़ाइल बनाएँ: <code>{timestamp}</code>, <code>{date}</code>, <code>{time}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{id8}</code>, और <code>{id}</code>.</p></div>
+          <div><strong>रोल नोट</strong><p>दैनिक, साप्ताहिक, मासिक, तिमाही या वार्षिक नोट के अंत में जोड़ें। पथ इनका भी समर्थन करते हैं: <code>{period}</code> और <code>{week}</code>. नए गंतव्य का डिफ़ॉल्ट है <code>Journal/{period}.md</code> दैनिक अवधि के साथ।</p></div>
+          <div><strong>मौजूदा नोट</strong><p>चुने वॉल्ट या फ़ोल्डर में पहले से मौजूद Markdown फ़ाइल चुनें। Vox.md जाँचता है कि लक्ष्य सुरक्षित रूप से उसी मूल फ़ोल्डर के अंदर रहे।</p></div>
+        </div>
+
+        <p>रूट के पूरे तरीके के लिए देखें <a href="/hi/blog/append-to-obsidian-daily-note-iphone/">Obsidian के दैनिक नोट में पाठ और आवाज जोड़ें</a>.</p>
+
+        <p><a href="/hi/blog/obsidian-capture-templates/">इनबॉक्स, जर्नल या कार्य टेम्पलेट का तरीका अपनाएँ</a> ताकि प्रविष्टि का फ़ॉर्मैट एक जैसा रहे।</p>
+
+        <h3 id="placement-templates">स्थान, शीर्षक और टेम्पलेट</h3>
+        <ul>
+          <li><strong>नीचे</strong> अंत में जोड़ता है; <strong>शीर्ष</strong> शुरुआत में जोड़ता है; <strong>दिशा</strong> स्तर 1 से 6 तक चुने शीर्षक के नीचे डालता है।</li>
+          <li>यदि शीर्षक नहीं है, तो चुनें <strong>दिखाई ग़लती</strong> या <strong>हेडलिंग बनाएं</strong>.</li>
+          <li>वॉल्ट की लाइव Markdown टेम्पलेट फ़ाइल, पुनः उपयोग योग्य प्रविष्टि टेम्पलेट या कस्टम उपसर्ग और प्रत्यय पाठ इस्तेमाल करें।</li>
+          <li>प्रविष्टि का फ़ॉर्मैट इनका समर्थन करता है: <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>, और <code>{location}</code>.</li>
+          <li>डिफ़ॉल्ट अटैचमेंट उपफ़ोल्डर है <code>attachments</code>.</li>
+          <li><strong>रीडिंग संरक्षण</strong>, जो डिफ़ॉल्ट रूप से बंद है, दृश्यमान रूप में लिखता है <code>vox-capture</code> HTML टिप्पणी, ताकि दोहराए गए प्रयास पहचाने जा सकें।</li>
+          <li>Vox.md पूर्ण पथ, बैकस्लैश, डायरेक्टरी ट्रैवर्सल, असुरक्षित नाम और सिमलिंक से बाहर निकलने के प्रयास अस्वीकार करता है।</li>
+        </ul>
+
+        <h3 id="capture-overrides">एक कैप्चर के लिए ओवरराइड</h3>
+        <p>गंतव्य नियंत्रण रूट डिफ़ॉल्ट इस्तेमाल कर सकता है, इस कैप्चर को शुरुआत या अंत में रख सकता है, एकबारगी प्रविष्टि टेम्पलेट लगा सकता है या उसी वॉल्ट में दूसरा नोट चुन सकता है। <strong>रूट के गंतव्य डिफ़ॉल्ट का उपयोग करें</strong> ओवरराइड हटाता है। ये विकल्प केवल मौजूदा ड्राफ़्ट को प्रभावित करते हैं और रूट को कभी नहीं बदलते।</p>
+
+        <h3 id="audio-export">ऑडियो का संरक्षण और संगतता निर्यात</h3>
+        <ul>
+          <li>ऑडियो सहेजने के मोड हैं <strong>बंद</strong>, <strong>नोट के साथ</strong>, या <strong>फ़ोल्डर के लिए</strong>.</li>
+          <li>Markdown रखे गए ऑडियो को शुरुआत या अंत में Obsidian सिंटैक्स से एम्बेड कर सकता है, जैसे <code>![[recording.m4a]]</code>.</li>
+          <li>एकीकृत Markdown गंतव्य के बिना पुराने सीधे-वॉइस कॉन्फ़िगरेशन के लिए, <strong>नोट्स को फ़ाइलों में सहेजें</strong> TXT, MD, JSON और YAML; नई फ़ाइल या अंत में जोड़ना; मॉडल व भाषा सहित फ़ाइल नाम टोकन; Markdown टेम्पलेट; Obsidian Bases विकल्प; चुनने योग्य YAML गुण; और वैकल्पिक रूप से इसका समर्थन करता है: <code>.md</code> एक्सटेंशन YAML के लिए।</li>
+          <li>संगतता निर्यात सेटिंग्स केवल सीधे वॉइस संचालन पर लागू होती हैं, जब रूट का एकीकृत कैप्चर गंतव्य नहीं होता।</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="models">
+        <div class="docs-section-label">04 / मॉडल और लिप्यंतरण</div>
+        <h2>सिस्टम बैकएंड या वैकल्पिक स्थानीय मॉडल चुनें</h2>
+        <p>पूरा लिप्यंतरण Apple डिवाइस पर चलता है। iOS पर स्वचालित डिफ़ॉल्ट है। वैकल्पिक Whisper और Parakeet मॉडल फ़ाइलें केवल आपके माँगने पर डाउनलोड होती हैं; उन्हें चुना जा सकता है, डाउनलोड के दौरान रद्द किया जा सकता है या बाद में हटाया जा सकता है।</p>
+
+        <p><a href="/hi/blog/offline-transcription-iphone-markdown/">ऑफ़लाइन लिप्यंतरण कार्यप्रवाह तैयार करें</a> स्थानीय बैकएंड और लिखने योग्य गंतव्य के साथ।</p>
+
+        <h3 id="model-options">उपलब्ध लिप्यंतरण विकल्प</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>विकल्प</th><th>अनुमानित आकार</th><th>सबसे उपयुक्त</th></tr></thead>
+            <tbody>
+              <tr><td>स्वचालित</td><td>सिस्टम-प्रबंधित</td><td>समर्थित iOS 26 डिवाइस और भाषा पर Apple Speech को प्राथमिकता देता है; विकल्प के तौर पर केवल आपके स्पष्ट रूप से डाउनलोड किए स्थानीय मॉडल का सहारा लेता है।</td></tr>
+              <tr><td>Whisper Tiny</td><td>75 MB</td><td>सबसे छोटा डाउनलोड और सबसे तेज़ Whisper विकल्प।</td></tr>
+              <tr><td>Whisper Base</td><td>142 MB</td><td>संतुलित छोटा स्थानीय मॉडल; Mac का पुराना डिफ़ॉल्ट।</td></tr>
+              <tr><td>Whisper Small</td><td>466 MB</td><td>अधिक स्टोरेज और प्रोसेसिंग लागत के बदले अधिक सटीकता।</td></tr>
+              <tr><td>Whisper Medium</td><td>1.5 GB</td><td>बड़ा बहुभाषी Whisper मॉडल।</td></tr>
+              <tr><td>Whisper Large v3 Turbo</td><td>1.6 GB</td><td>सबसे बड़ा उपलब्ध Whisper विकल्प।</td></tr>
+              <tr><td>Parakeet v2</td><td>~800 MB</td><td>अंग्रेज़ी के लिए अनुकूलित Core ML/FluidAudio मॉडल।</td></tr>
+              <tr><td>Parakeet v3</td><td>~800 MB</td><td>25 भाषाओं का समर्थन करने वाला Core ML/FluidAudio मॉडल।</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="automatic-model">स्वचालित कैसे काम करता है</h3>
+        <ul>
+          <li>समर्थित iOS 26 डिवाइस पर स्वचालित मोड चुनी भाषा के लिए Apple का सिस्टम-प्रबंधित Speech पहचानकर्ता जाँचता है और ज़रूरत पड़ने पर उसका भाषा संसाधन तैयार करता है।</li>
+          <li><strong>सिस्टम भाषा</strong> डिवाइस की भाषा का पालन करता है। रिकॉर्डिंग दूसरी भाषा में हो तो वह भाषा स्पष्ट रूप से चुनें।</li>
+          <li>स्वचालित कभी चुपचाप वैकल्पिक Whisper या Parakeet मॉडल डाउनलोड नहीं करता। यह केवल वही मॉडल इस्तेमाल कर सकता है जिसे आपने पहले डाउनलोड करने के लिए चुना था।</li>
+          <li>लाइव Apple Speech सुरक्षित रूप से डालने योग्य अंतिम पाठ और अब भी बदल सकने वाले अस्थायी पाठ में अंतर करता है।</li>
+          <li>स्पष्ट रूप से चुने Whisper और Parakeet खंड समाप्त होने के बाद बैच लिप्यंतरण करते हैं।</li>
+        </ul>
+
+        <h3 id="model-languages">भाषाएँ</h3>
+        <ul>
+          <li><strong>Whisper:</strong> स्वतः पहचान, अंग्रेज़ी, स्पैनिश, फ़्रेंच, जर्मन, इतालवी, पुर्तगाली, डच, पोलिश, रूसी, चीनी, जापानी, कोरियाई, अरबी, हिन्दी, तुर्की, वियतनामी, थाई, यूक्रेनी, स्वीडिश, डेनिश, नॉर्वेजियन और फ़िनिश।</li>
+          <li><strong>स्वचालित:</strong> सिस्टम भाषा और Whisper के लिए सूचीबद्ध स्पष्ट भाषाएँ, जहाँ Apple उस लोकेल का समर्थन करता है।</li>
+          <li><strong>Parakeet v2:</strong> अंग्रेज़ी।</li>
+          <li><strong>Parakeet v3:</strong> बुल्गारियाई, क्रोएशियाई, चेक, डेनिश, डच, अंग्रेज़ी, एस्टोनियाई, फ़िनिश, फ़्रेंच, जर्मन, यूनानी, हंगेरियाई, इतालवी, लातवियाई, लिथुआनियाई, माल्टीज़, पोलिश, पुर्तगाली, रोमानियाई, स्लोवाक, स्लोवेनियाई, स्पैनिश, स्वीडिश, रूसी और यूक्रेनी। Parakeet कार्यप्रवाह में भाषा अपने आप पहचानी जाती है।</li>
+        </ul>
+
+        <h3 id="parakeet-autostop">Parakeet कीबोर्ड ऑटो-स्टॉप</h3>
+        <p>वैकल्पिक लगभग 1 MB का <strong>आवाज ब्रेक डिटेक्शन</strong> मॉडल, स्पष्ट रूप से चुनी Parakeet v2 या v3 कीबोर्ड रिकॉर्डिंग को मौन के बाद रोक सकता है। सक्षम करें <strong>विराम के बाद Parakeet रोकें</strong> और लगभग 0.5, 0.75, 1, 1.5 या 2 सेकंड चुनें। सहायक मॉडल उपलब्ध होने के बाद यह डिफ़ॉल्ट रूप से 0.75 सेकंड के विराम के साथ सक्षम होता है। स्वचालित और Whisper में रिकॉर्डिंग मैन्युअल रूप से रोकनी होती है।</p>
+
+        <h3 id="audio-pipeline">स्थानीय ऑडियो का व्यवहार</h3>
+        <ul>
+          <li>Whisper इनपुट 16 kHz मोनो, 16-बिट ऑडियो में सामान्यीकृत होता है।</li>
+          <li>लगातार iOS सुनने का मोड 10 मिनट का चक्रीय बफ़र इस्तेमाल करता है और खंड शुरू होने पर पिछले दो सेकंड भी शामिल करता है।</li>
+          <li>Whisper इस्तेमाल करता है <code>whisper.cpp</code>; Parakeet, FluidAudio और Core ML इस्तेमाल करता है। Whisper, Mac पर Metal त्वरण इस्तेमाल करता है।</li>
+          <li>मॉडल डाउनलोड के लिए नेटवर्क कनेक्शन आवश्यक है, लेकिन चुना बैकएंड तैयार होने के बाद लिप्यंतरण स्थानीय रूप से चलता है।</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="keyboard">
+        <div class="docs-section-label">05 / iOS कीबोर्ड</div>
+        <h2>जिस टेक्स्ट फ़ील्ड को संपादित कर रहे हैं, उसी में बोलकर लिखें</h2>
+        <p>Vox.md कीबोर्ड Messages, Notes, Mail, Safari, Slack और मानक iOS कीबोर्ड स्वीकार करने वाले किसी भी ऐप में काम करता है। वॉइस टूलबार KeyboardKit लेआउट के ऊपर रहता है और निजी साझा App Group के ज़रिए मुख्य Vox.md ऐप से संचार करता है।</p>
+
+        <h3 id="keyboard-setup">कीबोर्ड सेट करें</h3>
+        <ol class="docs-steps">
+          <li><strong>Vox.md में लिप्यंतरण तैयार करें।</strong><span>समर्थित डिवाइस पर स्वचालित चुना रहने दें या सेटिंग्स → मॉडल में Whisper या Parakeet डाउनलोड करके चुनें।</span></li>
+          <li><strong>कीबोर्ड जोड़ें।</strong><span>iOS सेटिंग्स → सामान्य → कीबोर्ड → कीबोर्ड → नया कीबोर्ड जोड़ें खोलें और Vox.md चुनें।</span></li>
+          <li><strong>पूर्ण ऐक्सेस की अनुमति सक्षम करें।</strong><span>मौजूदा कीबोर्ड कार्यप्रवाह को साझा App Group की स्थिति का उपयोग करने और मुख्य ऐप के साथ रिकॉर्डिंग का समन्वय करने के लिए इसकी आवश्यकता है।</span></li>
+          <li><strong>कीबोर्ड बदलें।</strong><span>टेक्स्ट फ़ील्ड खोलें, ग्लोब कुंजी से Vox.md चुनें, फिर माइक्रोफ़ोन टैप करें।</span></li>
+        </ol>
+        <div class="docs-callout">
+          <strong>यहाँ पूर्ण ऐक्सेस क्या करता है</strong>
+          <p>iOS इस अनुमति को व्यापक नाम देता है। Vox.md इसे अपने डिवाइस-आधारित ऐप/कीबोर्ड कार्यप्रवाह, साझा स्थिति और वैकल्पिक हैप्टिक्स के लिए इस्तेमाल करता है। Vox.md कुंजी दबाने का विवरण, बोलकर लिखा पाठ, ट्रांसक्रिप्ट या माइक्रोफ़ोन ऑडियो Vox.md सर्वर पर अपलोड नहीं करता। देखें <a href="/hi/privacy.html">गोपनीयता नीति</a>.</p>
+        </div>
+
+        <h3 id="keyboard-workflow">वॉइस टूलबार और पाठ जोड़ना</h3>
+        <ul>
+          <li>टूलबार मौजूदा बैकएंड, स्थिति, रिकॉर्डिंग अवधि, लाइव वेवफ़ॉर्म और माइक्रोफ़ोन/रोकें ऐक्शन दिखाता है।</li>
+          <li>पिछला और अगला नियंत्रण उपलब्ध डाउनलोड किए बैकएंड में बारी-बारी ले जाते हैं।</li>
+          <li>यदि सुनना सक्रिय नहीं है, तो कीबोर्ड Vox.md एक बार खोलता है, सुनना शुरू करता है और आपको मूल टेक्स्ट फ़ील्ड में वापस ला सकता है।</li>
+          <li>स्वचालित मोड में बोलते समय ट्रांसक्रिप्ट के अंतिम रूप दिए गए नए हिस्से जुड़ते हैं; अस्थायी शब्द Apple द्वारा अंतिम किए जाने तक केवल दिखाए जाते हैं।</li>
+          <li>Whisper या Parakeet के साथ, खंड को रोकने या उसके अपने आप रुकने के बाद पूरा ट्रांसक्रिप्ट डाला जाता है।</li>
+          <li>पाठ डालना बाधित या निलंबित हो, तो लंबित पाठ स्थायी रूप से रखा जाता है और कीबोर्ड अगली बार दिखने पर दोबारा प्रयास होता है।</li>
+          <li>टूलबार इन जैसी स्थितियाँ बताता है: <em>खुले Vox.md</em>, <em>अनुवाद...</em>, और <em>पूर्ण ऐक्सेस सक्षम करें</em>.</li>
+        </ul>
+
+        <h3 id="keyboard-customization">कीबोर्ड अनुकूलन</h3>
+        <ul>
+          <li><strong>हैप्टिक फ़ीडबैक</strong> डिफ़ॉल्ट रूप से सक्षम है और इसे Vox.md सेटिंग्स में बदला जा सकता है।</li>
+          <li>दबाए रखने पर वैकल्पिक अक्षरों के विकल्प अंग्रेज़ी, जर्मन, स्पैनिश, फ़्रेंच, इतालवी, पुर्तगाली, डच, स्वीडिश, डेनिश और नॉर्वेजियन में उपलब्ध हैं।</li>
+          <li>Parakeet स्पष्ट रूप से चुनने वाले उपयोगकर्ता सेटिंग्स → मॉडल से विराम-आधारित ऑटो-स्टॉप जोड़ सकते हैं।</li>
+          <li>15 मिनट की मुफ़्त लिप्यंतरण सीमा कीबोर्ड डिक्टेशन, ऐप रिकॉर्डिंग और आयात सभी पर लागू है।</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="system-integrations">
+        <div class="docs-section-label">06 / सिस्टम एकीकरण</div>
+        <h2>शेयर शीट, होम स्क्रीन, लॉक स्क्रीन या शॉर्टकट्स से कैप्चर शुरू करें</h2>
+
+        <h3 id="share-extension">शेयर एक्सटेंशन</h3>
+        <p>iOS शेयर शीट ऐक्शन का नाम है <strong>Vox.md में कैप्चर करें</strong>. यह साझा आइटम और संसाधन सीमाओं के भीतर पाठ, HTTP/HTTPS URL, चित्र, फ़ाइलें और वीडियो स्वीकार करता है। रूट और गंतव्य चुनें, चाहें तो नोट जोड़ें, फिर भेजें। यदि वह रूट वर्तमान स्थान इस्तेमाल करता है, तो शेयर इसी भेजने के ऐक्शन पर शुरुआत के समय का एक स्थान माँगता है, मेटाडेटा आउटपुट सक्षम हो या न हो। सामग्री निजी App Group में तैयार होती है, स्थायी कतार में रखी जाती है और डिलीवरी के लिए Vox.md में खोली जाती है। डिलीवरी के लिए मुख्य ऐप चाहिए तो इस्तेमाल करें <strong>खुले Vox.md</strong>.</p>
+
+        <h3 id="widgets">होम स्क्रीन और लॉक स्क्रीन विजेट</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>तेजी से पकड़</strong><p>स्थायी Markdown ड्राफ़्ट खोलता है। मध्यम और बड़े विजेट नोट, फ़ोटो, स्क्रीनशॉट, कैमरा, फ़ाइल, लिंक, स्कैन, स्केच और आवाज ऐक्शन देते हैं।</p></div>
+          <div><strong>तेजी से रिकॉर्ड</strong><p>कॉन्फ़िगर किया रिकॉर्डिंग कार्यप्रवाह शुरू करता है और समर्थित होम स्क्रीन व लॉक स्क्रीन प्रकारों पर तैयार, सुन रहा है या बंद स्थिति दिखाता है।</p></div>
+          <div><strong>विजेट सुरक्षा सेटिंग</strong><p>तुरंत रिकॉर्डिंग शुरू करने के बजाय बंद स्थिति दिखाने के लिए सेटिंग्स में लॉक स्क्रीन रिकॉर्ड बटन बंद करें।</p></div>
+        </div>
+
+        <h3 id="control-center-live-activities">कंट्रोल सेंटर, लाइव ऐक्टिविटी और Dynamic Island</h3>
+        <ul>
+          <li>iOS 18+ पर कंट्रोल सेंटर से उपलब्ध Vox.md कैप्चर और रिकॉर्डिंग नियंत्रण जोड़ें। अपने इंस्टॉल किए संस्करण में दिए रूट और विकल्प सेट करें।</li>
+          <li>रिकॉर्डिंग नियंत्रण इस्तेमाल करने से पहले Vox.md में माइक्रोफ़ोन, मॉडल और गंतव्य का सेटअप पूरा करें। iOS और इंस्टॉल किए ऐप के संस्करण के अनुसार रिकॉर्डिंग ऐप खोल सकती है। पृष्ठभूमि कैप्चर पर निर्भर होने से पहले अपने डिवाइस पर छोटी रिकॉर्डिंग जाँचें।</li>
+          <li>यह <strong>लाइव एक्टिविटी मॉनिटर</strong> सेटिंग लॉक स्क्रीन और Dynamic Island पर रिकॉर्डिंग की स्थिति और रिकॉर्ड/रोकें ऐक्शन नियंत्रित करती है।</li>
+          <li>लाइव ऐक्टिविटी की स्थितियों में रिकॉर्डिंग, टाइमर, प्रोसेसिंग, तैयार, रिकॉर्ड और रोकें शामिल हैं।</li>
+          <li>लाइव ऐक्टिविटी iOS 17 से उपलब्ध हैं; कंट्रोल सेंटर नियंत्रणों के लिए iOS 18 आवश्यक है।</li>
+        </ul>
+
+        <h3 id="shortcuts">शॉर्टकट्स और App Intents</h3>
+        <p>रूट शॉर्टकट्स और समर्थित नियंत्रणों में चुनने योग्य इकाइयों की तरह दिखते हैं। वर्तमान स्थान का उपयोग करें सक्षम होने पर सीधे कतार में जोड़ने वाले पाठ, लिंक और फ़ाइल इंटेंट चलाए जाने के दौरान स्थान माँगते हैं; तेजी से पकड़ खोलने वाले ऐक्शन भेजने पर माँगते हैं; रिकॉर्डिंग ऐक्शन रिकॉर्डिंग रुकने पर माँगते हैं। मेटाडेटा आउटपुट यह समय नहीं बदलता। यदि बिना निगरानी वाला <em>पूछो</em> अनुरोध को स्थान न मिले, तो उसका शुरुआत के समय का अनुपलब्ध परिणाम बाद के निर्णय के लिए रखा जाता है, स्थान दोबारा नहीं लिया जाता। Vox.md के अपने इंस्टॉल किए संस्करण में उपलब्ध ऐक्शन इस्तेमाल करें। कैप्चर ऐक्शन में शामिल हैं:</p>
+        <ul class="docs-columns">
+          <li>तेज खुलने का तरीका</li>
+          <li>कैप्शन के लिए रिकॉर्ड</li>
+          <li>एक स्क्रीनशॉट</li>
+          <li>पाठ को कब्जा करें Markdown</li>
+          <li>कब्जा करने के लिए लिंक Markdown</li>
+          <li>फ़ाइल को कब्जा करें Markdown</li>
+        </ul>
+
+        <h3 id="action-button-recording">ऐक्शन बटन रिकॉर्डिंग सेटअप</h3>
+        <p>माइक्रोफ़ोन की अनुमति देने, लिप्यंतरण बैकएंड तैयार करने और रूट को गंतव्य से जोड़ने के लिए Vox.md एक बार खोलें। शॉर्टकट्स में उपलब्ध Vox.md कैप्चर ऐक्शन जोड़ें और रूट चुनें। सेटिंग्स → ऐक्शन बटन → शॉर्टकट में देने से पहले फ़ोन अनलॉक रखते हुए शॉर्टकट चलाकर जाँचें कि वह सही नोट में सहेजता है।</p>
+        <p class="docs-note">उपलब्ध ऐक्शन और पृष्ठभूमि रिकॉर्डिंग का व्यवहार आपके इंस्टॉल किए संस्करण और iOS पर निर्भर है। अपने डिवाइस के शॉर्टकट्स में दिखे ऐक्शन इस्तेमाल करें। रिकॉर्डिंग के लिए ऐप खुलना ज़रूरी हो, तो Vox.md खोलकर रिकॉर्ड करें। पिकर में शॉर्टकट दिखने का मतलब लॉक किए फ़ोन से रिकॉर्डिंग की गारंटी नहीं है।</p>
+
+        <h3 id="deep-links">डीप लिंक</h3>
+        <p>Vox.md पंजीकृत करता है <code>voxboard://</code> URL स्कीम। क्वेरी मानों के लिए URL एन्कोडिंग इस्तेमाल करें।</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table docs-code-table">
+            <thead><tr><th>URL</th><th>व्यवहार</th></tr></thead>
+            <tbody>
+              <tr><td><code>voxboard://capture</code></td><td>स्थायी तेजी से पकड़ कंपोज़र खोलें।</td></tr>
+              <tr><td><code>voxboard://capture?action=photos</code></td><td>फ़ोटो पिकर खोलें। अन्य ऐक्शन: <code>screenshots</code>, <code>camera</code>, <code>files</code>, <code>scan</code>, <code>sketch</code>, <code>link</code>, और <code>voice</code>.</td></tr>
+              <tr><td><code>voxboard://capture?text=...</code></td><td>सीमित पाठ वाला ड्राफ़्ट खोलें।</td></tr>
+              <tr><td><code>voxboard://capture?url=https%3A%2F%2F...</code></td><td>HTTP/HTTPS लिंक वाला ड्राफ़्ट खोलें।</td></tr>
+              <tr><td><code>voxboard://capture?route=...</code></td><td>सक्षम रूट चुनें। इसे समर्थित ऐक्शन, पाठ या URL के साथ जोड़ा जा सकता है।</td></tr>
+              <tr><td><code>voxboard://capture-request?id=...</code></td><td>सिस्टम एक्सटेंशन या इंटेंट द्वारा बनाए गए स्थायी अनुरोध का ज़िम्मा लें।</td></tr>
+              <tr><td><code>voxboard://listen</code></td><td>कीबोर्ड से सुनने का लॉन्च कार्यप्रवाह शुरू करें।</td></tr>
+              <tr><td><code>voxboard://record</code></td><td>पुराना रिकॉर्डिंग प्रवेश बिंदु सुनने के मोड में भेजता है।</td></tr>
+              <tr><td><code>voxboard://widget-record</code></td><td>पुराना विजेट रिकॉर्डिंग प्रवेश बिंदु।</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">अज्ञात या दोहराए पैरामीटर, गलत UUID, असुरक्षित रूट पहचानकर्ता, गैर-HTTP URL और साझा सीमा से अधिक पाठ अस्वीकार किए जाते हैं।</p>
+      </section>
+
+      <section class="docs-section" id="apple-watch">
+        <div class="docs-section-label">07 / Apple Watch</div>
+        <h2>Watch पर स्थानीय रिकॉर्ड करें, फिर iPhone से भेजें</h2>
+
+        <p><a href="/hi/blog/apple-watch-obsidian-voice-notes/">Apple Watch से Obsidian तक की सेटअप गाइड का पालन करें</a> रूट चयन, हस्तांतरण और डिलीवरी की जाँच के लिए।</p>
+
+        <h3 id="watch-recording">रिकॉर्डिंग कार्यप्रवाह</h3>
+        <ul>
+          <li>Watch ऐप तैयार, रिकॉर्डिंग, विराम, सिंक हो रहा है, कतार में, लिप्यंतरण, सहेजा जा रहा है, भेजा गया और ध्यान चाहिए स्थितियाँ दिखाता है।</li>
+          <li>रिकॉर्ड करें, विराम/फिर शुरू करें, रोकें, रद्द करें, सिंक और रीफ़्रेश का उपयोग करें। विराम नोट को बाँटे बिना सोचने का समय देता है — विराम में टाइमर रुक जाता है और वह समय रिकॉर्डिंग में शामिल नहीं होता। रद्द करने पर स्थानीय रिकॉर्डिंग सिंक होने के बजाय स्पष्ट रूप से हटा दी जाती है।</li>
+          <li>रिकॉर्डिंग स्थानीय जर्नल में लिखी जाती हैं और रुकावट या क्रैश के बाद पुनर्प्राप्त होती हैं।</li>
+          <li>रिकॉर्डिंग Watch पर तब तक रहती है जब तक iPhone डिलीवरी या हटाने की पुष्टि न करे।</li>
+          <li>वर्तमान स्थान का उपयोग करें सक्षम और सामान्य कैप्चर डिलीवरी वाले रूट के लिए Watch रिकॉर्डिंग रुकने पर Watch से एक स्थान माँगता है और उस गोपनीयता-अनुकूलित परिणाम को रूट स्नैपशॉट के साथ भेजता है। iPhone कभी उसकी जगह अपना स्थान नहीं रखता। केवल रिकॉर्डिंग स्थान छोड़ देता है क्योंकि वह Markdown के बिना मूल ऑडियो निर्यात करता है।</li>
+        </ul>
+
+        <h3 id="watch-presets">Watch पर रूट्स</h3>
+        <p>Watch से सक्षम iPhone रूट चुनें, यहाँ: <strong>रूट</strong> कार्ड। Vox.md रिकॉर्डिंग के साथ सुरक्षित स्नैपशॉट भेजता है। iPhone उपलब्ध न हो, तो अनुरोधित चयन लंबित रहता है और पिछला पुष्ट रूट सक्रिय रहता है।</p>
+
+        <h3 id="watch-queue">iPhone पर रिकॉर्डिंग देखें की कतार</h3>
+        <p>iPhone की कतार रिकॉर्डिंग का समय, अवधि, रूट, प्रोसेसिंग स्थिति और डिलीवरी ऐक्शन दिखाती है। विफल आइटम पर दोबारा प्रयास किया जा सकता है, दूसरा रूट दिया जा सकता है, हटाया जा सकता है या बिना ट्रांसक्रिप्ट कैप्चर किया जा सकता है। हटाने से रखा गया ऑडियो और कतारबद्ध डिलीवरी हट जाते हैं।</p>
+
+        <h3 id="watch-recording-only">केवल रिकॉर्डिंग का आउटपुट</h3>
+        <ul>
+          <li>रूट का आउटपुट इस पर सेट करें: <strong>केवल रिकॉर्डिंग</strong> ताकि M4A ऑडियो बिना लिप्यंतरण, AI प्रोसेसिंग या लिप्यंतरण सीमा के उपयोग के फ़ाइल्स फ़ोल्डर में कॉपी हो।</li>
+          <li>डिफ़ॉल्ट फ़ाइल नाम टेम्पलेट है <code>recording-{timestamp}-{id8}</code>.</li>
+          <li>रूट का उपयोग करने से पहले iPhone पर रिकॉर्डिंग फ़ोल्डर एक बार चुनें।</li>
+          <li>iOS पृष्ठभूमि डिलीवरी में देर कर सकता है। Vox.md को जबरन बंद करने पर ऐप दोबारा खुलने तक डिलीवरी रुक जाती है।</li>
+        </ul>
+
+        <h3 id="watch-complication">कॉम्प्लिकेशन और विजेट</h3>
+        <p>यह <strong>रिकॉर्ड Voice Note</strong> कॉम्प्लिकेशन गोल, आयताकार, इनलाइन और कोने वाले प्रकारों का समर्थन करता है। यह स्थानीय Watch रिकॉर्डिंग खोलता या चालू-बंद करता है और टाइमर या स्थिति के अनुसार नाम दिखाता है।</p>
+      </section>
+
+      <section class="docs-section" id="mac">
+        <div class="docs-section-label">08 / Mac साथी</div>
+        <h2>macOS से वही कैप्चर सिस्टम इस्तेमाल करें</h2>
+        <p>Mac ऐप में कैप्चर, लाइब्रेरी और सेटिंग्स गंतव्य हैं और यह iOS जैसा ही स्थानीय मॉडल, रूट, रूट, निर्यात और दोबारा प्रयास का ढाँचा साझा करता है।</p>
+
+        <h3 id="mac-workspace">कैप्चर कार्यक्षेत्र</h3>
+        <ul>
+          <li>Markdown टाइप और संपादित करें, पेस्ट करें या फ़ाइलें, चित्र और ऑडियो खींचकर डालें।</li>
+          <li>अंतर्निहित, बाहरी या Continuity Camera डिवाइस से कैमरा इनपुट इस्तेमाल करें।</li>
+          <li>स्कैन या PDF आयात करें, माउस, ट्रैकपैड या जुड़े टैबलेट से स्केच बनाएँ और लिंक, विकिलिंक, नियत तारीखें व पाठ रूपांतरण जोड़ें।</li>
+          <li>इसके साथ रिकॉर्ड करें: <strong>ड्राफ़्ट में जोड़ें</strong> या <strong>तुरंत भेजें</strong>; ड्राफ़्ट मोड में चाहें तो ऑडियो रखें।</li>
+          <li><strong>विराम</strong> और <strong>फिर शुरू करें</strong> माइक्रोफ़ोन रिकॉर्डिंग को स्थिति बार से। विराम का ऑडियो शामिल नहीं होता, इसलिए एक पूरा नोट टुकड़ों में रिकॉर्ड हो सकता है। मीटिंग कैप्चर में विराम नहीं होता।</li>
+          <li>स्थानीय लिप्यंतरण के लिए ऑडियो या वीडियो आयात करें।</li>
+          <li>कैप्चर भेजने के लिए Command-Return दबाएँ। वर्तमान स्थान का उपयोग करें सक्षम रूट, मेटाडेटा आउटपुट सक्षम हो या न हो, भेजने या रिकॉर्डिंग रुकने पर Mac से एक स्थान का अनुरोध करता है।</li>
+          <li>गंतव्य सेटअप बैनर और रूट निरीक्षक चुने रूट का निर्धारित नोट और स्थान दिखाते हैं।</li>
+        </ul>
+
+        <h3 id="mac-meeting">अलग स्टेम के साथ मीटिंग कैप्चर</h3>
+        <p>इनपुट मोड पिकर को इससे बदलें: <strong>माइक्रोफ़ोन</strong> तक <strong>मीटिंग</strong> ताकि आपके Mac पर किसी ऐप्लिकेशन की आवाज और आपका माइक्रोफ़ोन दो साफ़ अलग ऑडियो स्टेम में रिकॉर्ड हों। Vox.md, ScreenCaptureKit का एकल-ऐप्लिकेशन मोड इस्तेमाल करता है, इसलिए आप ठीक एक ऐप चुनते हैं और Vox.md स्वयं कभी रिकॉर्ड नहीं होता।</p>
+        <ul>
+          <li>रिकॉर्डिंग के दौरान स्थिति बार लाइव सिस्टम और माइक्रोफ़ोन लेवल मीटर, हर स्रोत की स्थिति और कैप्चर चेतावनियाँ दिखाता है।</li>
+          <li>दोनों स्टेम पुनर्प्राप्ति मैनिफ़ेस्ट के साथ स्थायी हिस्सों में लिखे जाते हैं, इसलिए बाधा — स्ट्रीम रुकना, माइक्रोफ़ोन निकलना या जबरन बंद करना — आने पर सुरक्षित रूप से अंतिम रूप मिलता है और मीटिंग का लिप्यंतरण फिर भी हो सकता है। रिकॉर्डिंग कतार अगली बार चलने पर बाधित सत्र अपने आप पुनर्प्राप्त होते हैं।</li>
+          <li>आपके रोकने के बाद हर स्टेम का अलग-अलग डिवाइस पर लिप्यंतरण होता है और परिणाम साझा समयरेखा पर क्रम से मिलाए जाते हैं: आपका माइक्रोफ़ोन इस रूप में दिखता है: <strong>आप</strong>, और ऐप्लिकेशन स्टेम को दूरस्थ वक्ता का नाम दिया जाता है। वैकल्पिक वक्ता पहचान कई दूरस्थ आवाजों को और अलग कर सकती है।</li>
+          <li>दोनों स्टेम का प्लेबैक मिक्स रिकॉर्डिंग के ऑडियो के रूप में रखा जाता है और तैयार ट्रांसक्रिप्ट किसी भी अन्य रिकॉर्डिंग की तरह आपके रूट, ड्राफ़्ट में जोड़ें या तुरंत भेजें और क्लिपबोर्ड सेटिंग्स का पालन करता है।</li>
+        </ul>
+
+        <h3 id="mac-keybinds">वैश्विक कुंजी संयोजन</h3>
+        <p>सेटिंग्स → वैश्विक कुंजी संयोजन में इनके लिए शॉर्टकट तय किए जा सकते हैं: <strong>Clipboard में संपादन करें</strong>, <strong>चुना गया रूट</strong>, या कोई भी सक्षम रूट। शॉर्टकट डिफ़ॉल्ट रूप से बंद हैं; इनके लिए संशोधक के अलावा एक कुंजी और Control, Option या Command आवश्यक है, Shift भी जोड़ा जा सकता है और टकराव अस्वीकार किए जाते हैं। रिकॉर्डिंग रोकने के लिए सक्रिय शॉर्टकट फिर दबाएँ।</p>
+        <div class="docs-callout docs-callout-neutral">
+          <p><strong>Clipboard में संपादन करें</strong> कोई नोट, लाइब्रेरी आइटम या रखा गया ऑडियो नहीं बनाता। यह किसी भी Mac ऐप में तुरंत बोलकर लिखने के लिए है।</p>
+        </div>
+
+        <h3 id="mac-menu-bar">मेनू बार और ऐप की दृश्यता</h3>
+        <ul>
+          <li>दृश्यता के विकल्प हैं <strong>डोक + मेनू बार</strong> (डिफ़ॉल्ट), <strong>मेनू बार केवल</strong>, <strong>केवल डोकला</strong>, और <strong>छिपा</strong>.</li>
+          <li>मेनू बार रिकॉर्डिंग, लिप्यंतरण और निर्यात की स्थिति बताता है।</li>
+          <li>मेनू ऐक्शन में रिकॉर्डिंग शुरू करें, रोकें + लिप्यंतरण, ऑडियो आयात करें…, पिछला ट्रांसक्रिप्ट कॉपी करें, पिछला निर्यात दिखाएँ, रूट चयन, कैप्चर दिखाएँ, लाइब्रेरी दिखाएँ, डेटा फ़ोल्डर दिखाएँ और Vox.md बंद करें शामिल हैं।</li>
+          <li>क्लिक करने योग्य नियंत्रणों पर कीबोर्ड संकेत दिखाने के लिए Mac ऐप में Control-B दबाएँ।</li>
+        </ul>
+
+        <h3 id="mac-history">Mac इतिहास और मॉडल</h3>
+        <p>स्थानीय इतिहास खोजें, फिर लोड करें, साफ़ करें, कॉपी करें या हटाएँ; साफ़ और मूल ट्रांसक्रिप्ट का विवरण खोलें; और भेजा गया नोट Finder में दिखाएँ। मॉडल स्क्रीन Whisper या Parakeet मॉडल डाउनलोड, चयन व हटाने और लिप्यंतरण की भाषा बदलने देती है। Whisper समर्थित Mac पर Metal त्वरण इस्तेमाल करता है।</p>
+      </section>
+
+      <section class="docs-section" id="history-settings">
+        <div class="docs-section-label">09 / लाइब्रेरी, सेटिंग्स और गोपनीयता</div>
+        <h2>काम पुनर्प्राप्त करें, स्थानीय डेटा नियंत्रित करें और असीमित उपयोग अनलॉक करें</h2>
+
+        <h3 id="history">iOS पर एकीकृत लाइब्रेरी</h3>
+        <ul>
+          <li>लाइब्रेरी स्थानीय वॉइस ट्रांसक्रिप्ट और कैप्चर डिलीवरी रिकॉर्ड एक ही खोजने योग्य सूची में रखती है।</li>
+          <li>मूल पाठ, साफ़ पाठ, शीर्षक, टैग और श्रेणियाँ खोजें; रीफ़्रेश करने के लिए नीचे खींचें।</li>
+          <li>साफ़ या मूल ट्रांसक्रिप्ट का पाठ कॉपी करें, ट्रांसक्रिप्ट का मेटाडेटा व पाठ संपादित करें या शेयर शीट से Markdown प्रति निर्यात करें।</li>
+          <li>एक ट्रांसक्रिप्ट हटाएँ या पूरा स्थानीय इतिहास साफ़ करें। इतिहास साफ़ करने से गंतव्य पर पहले से लिखे Markdown नोट या अटैचमेंट नहीं हटते।</li>
+          <li>कतारबद्ध कैप्चर पर दोबारा प्रयास करें और स्रोत, रूट, गंतव्य, नोट पथ, अटैचमेंट संख्या, समय, परिणाम और विफलता श्रेणी की मोटी जानकारी देखें।</li>
+          <li>ट्रांसक्रिप्ट संपादन में शीर्षक, टैग, श्रेणी, साफ़ किया पाठ और मूल ट्रांसक्रिप्ट शामिल हैं।</li>
+        </ul>
+
+        <h3 id="stats">निजी गतिविधियों की स्थिति</h3>
+        <p>अपने उपयोग का आजीवन अवलोकन देखने के लिए सेटिंग्स → गतिविधि → आँकड़े खोलें: कुल रिकॉर्डिंग और कैप्चर, रिकॉर्ड की गई अवधि, अटैचमेंट की संख्या, पिछले सात दिनों का चार्ट और कैप्चर के स्रोतों का विवरण (ऐप, कीबोर्ड, शेयर शीट, विजेट, शॉर्टकट्स, Apple Watch, Mac, डीप लिंक, फ़ाइल आयात और आवाज)।</p>
+        <ul>
+          <li>आँकड़ों में केवल भेजे गए कैप्चर गिने जाते हैं; नई गतिविधि के बाद रीफ़्रेश के लिए नीचे खींचें।</li>
+          <li>लेखा आपके डिवाइस पर रहता है और इसमें कैप्चर की सामग्री, फ़ाइल नाम या गंतव्य नहीं रखे जाते।</li>
+        </ul>
+
+        <h3 id="settings-map">सेटिंग्स का नक्शा</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>सेक्शन</th><th>नियंत्रण</th></tr></thead>
+            <tbody>
+              <tr><td>Vox.md असीमित</td><td>मुफ़्त उपयोग की स्थिति, आजीवन अनलॉक और खरीद बहाली।</td></tr>
+              <tr><td>अनुकूलन</td><td>मॉडल; रूट्स; कैप्चर बार ऐक्शन की दृश्यता और क्रम।</td></tr>
+              <tr><td>कीबोर्ड</td><td>हैप्टिक फ़ीडबैक।</td></tr>
+              <tr><td>स्क्रीन लॉक</td><td>लाइव एक्टिविटी मॉनिटर और लॉक स्क्रीन रिकॉर्ड बटन।</td></tr>
+              <tr><td>के बारे में</td><td>डिफ़ॉल्ट लिप्यंतरण, Whisper, Parakeet, डिवाइस पर प्रोसेसिंग, गोपनीयता, ऐप संस्करण और Apple Intelligence की उपलब्धता।</td></tr>
+              <tr><td>प्रतिक्रिया</td><td>Isolated Tech Discord से जुड़ें या निदान विवरण वाला प्रतिक्रिया ईमेल लिखें।</td></tr>
+              <tr><td>डेब्यू</td><td>स्थानीय डिबग लॉग देखें।</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>अपडेट के बाद रिलीज़ नोट दिखाई दे सकते हैं, जिनमें Watch सिंक, Mac वैश्विक कुंजी संयोजन, रूट आइकन, लॉक स्क्रीन नियंत्रण, रूट रूटिंग, ऑडियो नियम और बाद की प्रोसेसिंग जैसी मौजूदा सुविधाएँ बताई जाती हैं।</p>
+
+        <h3 id="pricing-limits">मुफ़्त उपयोग और आजीवन अनलॉक</h3>
+        <ul>
+          <li>मुफ़्त उपयोग में शामिल है <strong>15 मिनट का लिप्यंतरण</strong> और <strong>10 सफल कैप्चर डिलीवरी</strong>.</li>
+          <li>लिप्यंतरण समय में पहले से गिना गया वॉइस ट्रांसक्रिप्ट Markdown में भेजे जाने पर अलग कैप्चर सीमा का भी उपयोग नहीं करता।</li>
+          <li>विफल लेखन और समान परिणाम देने वाले दोबारा प्रयास सफल कैप्चर डिलीवरी की सीमा का उपयोग नहीं करते।</li>
+          <li>असीमित उपयोग एक बार की आजीवन खरीद है; कोई सदस्यता, नवीनीकरण या विज्ञापन नहीं। App Store की स्थानीय कीमत निर्णायक है; अमेरिकी कीमतें व्यक्तिगत के लिए $19.99, परिवार के लिए $39.99 और परिवार अपग्रेड के लिए $19.99 हैं; अन्य स्टोरफ़्रंट में क्रय-शक्ति के अनुसार कीमतें हैं।</li>
+          <li>खरीद बहाल करें योग्य खरीद वापस लाता है। योग्य पुराने सशुल्क बिल्ड के उपयोगकर्ताओं को पहले से मिले अधिकार के तहत असीमित उपयोग मिलता है।</li>
+          <li>सामग्री-रहित App Group लेखा स्थानीय ऐप डेटा रहने तक दोबारा प्रयास का शुल्क दो बार लगने से रोकता है। यह कीचेन में नहीं रखा जाता; स्थानीय ऐप डेटा हटाने से नई मुफ़्त सीमा शुरू होती है।</li>
+        </ul>
+
+        <h3 id="privacy-data">क्या स्थानीय रहता है</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>कैप्चर की सामग्री</strong><p>ड्राफ़्ट, पाठ, लिंक, टेम्पलेट, रूट, अटैचमेंट, ऑडियो, OCR और ट्रांसक्रिप्ट Vox.md सर्वर पर नहीं भेजे जाते।</p></div>
+          <div><strong>प्रसंस्करण</strong><p>Apple Speech, Whisper, Parakeet, Vision OCR और समर्थित Apple Intelligence प्रोसेसिंग डिवाइस पर चलते हैं।</p></div>
+          <div><strong>आपका गंतव्य</strong><p>पूरी हुई फ़ाइलें केवल आपके चुने फ़ोल्डर में जाती हैं। तृतीय-पक्ष फ़ाइल प्रदाता उन्हें अपनी शर्तों के अनुसार सिंक कर सकता है।</p></div>
+        </div>
+        <ul>
+          <li>सफल डिलीवरी के बाद पुनर्प्राप्ति योग्य कैप्चर अनुरोध सामग्री-रहित रसीद बन जाते हैं और Watch कतार के पूरे हुए आइटम केवल अंतिम डिलीवरी की मोटी जानकारी रखते हैं। दोनों में निर्देशांक, नाम, प्रदाता URL, स्थान टेम्पलेट या रूट पेलोड नहीं रहते।</li>
+          <li>पूरे हुए कैप्चर के इतिहास में डिलीवरी मेटाडेटा रहता है, नोट का पाठ, URL, निर्देशांक, स्थान के नाम या टेम्पलेट, बुकमार्क, पूर्ण पथ या अटैचमेंट फ़ाइल नाम नहीं।</li>
+          <li>लंबित और विफल आइटम केवल स्थानीय पुनर्प्राप्ति के लिए आवश्यक चीज़ें रखते हैं, जिनमें रूट स्नैपशॉट और उसका पहले से गोपनीयता-अनुकूलित स्थान या अनुपलब्ध परिणाम शामिल हो सकता है।</li>
+          <li>प्रोडक्शन ऑनबोर्डिंग विश्लेषिकी डिफ़ॉल्ट रूप से बंद है। ऐप में तृतीय-पक्ष विश्लेषिकी SDK, विज्ञापन नेटवर्क या अलग-अलग ऐप में ट्रैकर नहीं है।</li>
+          <li>कंपोज़र ड्राफ़्ट सामग्री या पहचानकर्ता भेजे बिना ZenQuotes से कैश किए प्रेरक उद्धरण लाता है।</li>
+        </ul>
+        <p>डेटा प्रबंधन, प्रतिधारण और तृतीय-पक्ष सेवा के पूरे विवरण के लिए पढ़ें <a href="/hi/privacy.html">गोपनीयता नीति</a>.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">10 / समस्या निवारण</div>
+        <h2>सेटअप और डिलीवरी की आम समस्याएँ</h2>
+        <div class="docs-troubleshooting">
+          <details open>
+            <summary>कैप्चर भेजा नहीं जा सकता</summary>
+            <p>गंतव्य नियंत्रण खोलें और चुना रूट सेट करें। फ़ोल्डर खिसक गया हो या पहुँच समाप्त हो गई हो, तो वॉल्ट/फ़ोल्डर फिर चुनें। कतारबद्ध काम लाइब्रेरी में उपलब्ध रहता है।</p>
+          </details>
+          <details>
+            <summary>कीबोर्ड पूर्ण ऐक्सेस सक्षम करें कहता है</summary>
+            <p>iOS सेटिंग्स → सामान्य → कीबोर्ड → कीबोर्ड → Vox.md खोलें और पूर्ण ऐक्सेस की अनुमति सक्षम करें। ऐप पर एक बार लौटें ताकि Vox.md साझा सुनने का कार्यप्रवाह फिर शुरू कर सके।</p>
+          </details>
+          <details>
+            <summary>स्वचालित उपलब्ध नहीं है</summary>
+            <p>Apple Speech स्वचालित के लिए समर्थित iOS 26 डिवाइस और भाषा आवश्यक हैं। Whisper या Parakeet मॉडल चुनकर डाउनलोड करें, फिर उसे स्पष्ट रूप से चुनें या स्वचालित पर लौटें, ताकि वह उपयोगकर्ता की अनुमति वाला वैकल्पिक मॉडल बन सके।</p>
+          </details>
+          <details>
+            <summary>लिप्यंतरण विफल हुआ</summary>
+            <p>पुष्टि करें कि चुना मॉडल पूरी तरह डाउनलोड हो चुका है और भाषा सही है। Vox.md जहाँ संभव हो पुनर्प्राप्ति योग्य मूल ऑडियो सुरक्षित रखता है ताकि आप दूसरा मॉडल चुनकर फिर प्रयास कर सकें।</p>
+          </details>
+          <details>
+            <summary>शीर्षक वाला रूट विफल होता है</summary>
+            <p>रूट का गंतव्य संपादित करें और शीर्षक के पाठ व स्तर की पुष्टि करें। डिलीवरी को रुकने के बजाय अनुपस्थित शीर्षक बनाना हो, तो हेडलिंग बनाएं चुनें।</p>
+          </details>
+          <details>
+            <summary>Watch की रिकॉर्डिंग कतार में है</summary>
+            <p>iPhone पर Vox.md खोलें, फिर रिकॉर्डिंग देखें खोलें। रीफ़्रेश या दोबारा प्रयास करें, माँगे जाने पर वैध रूट चुनें और पृष्ठभूमि हस्तांतरण के लिए ऐप इंस्टॉल व उपलब्ध रखें। जबरन बंद करने पर दोबारा खुलने तक पृष्ठभूमि डिलीवरी रुकती है।</p>
+          </details>
+          <details>
+            <summary><code>{location}</code> खाली रहता है</summary>
+            <p>डिलीवरी करने वाले रूट के लिए वर्तमान स्थान का उपयोग करें चालू करें; पहचाने गए प्रविष्टि उपसर्ग, प्रत्यय और पुनः उपयोग योग्य प्रविष्टि टेम्पलेट के लिए कंपोज़र का एक-टैप सुधार मेटाडेटा सक्षम किए बिना यह कर देता है। वॉल्ट की लाइव टेम्पलेट फ़ाइलों के लिए रूट मैन्युअल रूप से सेट करना होगा। अनुमति न हो या कैप्चर बिना स्थान जारी रहे, तो टोकन जानबूझकर खाली रहता है। देखें <a href="/hi/docs/location/">स्थान की पूरी गाइड</a>.</p>
+          </details>
+          <details>
+            <summary>रूट का स्थान उपलब्ध नहीं है</summary>
+            <p>दोबारा प्रयास केवल तब करें जब आप अभी मूल इंटरैक्टिव भेजने की कार्रवाई सुलझा रहे हों। इसके बजाय आप रद्द कर सकते हैं, एक बार बिना स्थान भेज सकते हैं या उस रूट के लिए हमेशा बिना स्थान भेज सकते हैं। सहेजा विकल्प रूट की स्थान सेटिंग्स में रीसेट करें। कतारबद्ध बिना निगरानी वाला अनुरोध अपना मूल अनुपलब्ध परिणाम रखता है और नया स्थान नहीं लेगा।</p>
+          </details>
+        </div>
+        <div class="docs-callout docs-support-callout">
+          <strong>अब भी अटके हैं?</strong>
+          <p>सेटिंग्स → डिबग लॉग देखें खोलें, फिर प्रतिक्रिया भेजें इस्तेमाल करें ताकि ऐप संस्करण, प्लेटफ़ॉर्म, OS और डिवाइस का विवरण शामिल हो सके। आप इसमें भी जुड़ सकते हैं: <a href="https://discord.gg/RaQYS4t6gn">Isolated Tech का Discord</a>.</p>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/hi/developers">डेवलपर</a></li>
+        <li><a href="/hi/about">के बारे में</a></li>
+        <li><a href="/hi/contact">संपर्क</a></li>
+        <li><a href="/hi/">मुखपृष्ठ</a></li>
+        <li><a href="/hi/docs/" aria-current="page">दस्तावेज़</a></li>
+        <li><a href="/hi/blog/">ब्लॉग</a></li>
+        <li><a href="/hi/privacy.html">गोपनीयता</a></li>
+        <li><a href="/hi/terms.html">शर्तें</a></li>
+        <li><a href="/llms.txt">llms.txt</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">सहायता</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_hi_60877eba17c1">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · सुविधाओं के पूरे दस्तावेज़ · स्थानीय कैप्चर को प्राथमिकता।</div>
+    </div>
+  <details class="language-switcher"><summary>भाषा</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi" aria-current="page">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

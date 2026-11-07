@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr" data-search-section="セクション" data-search-guide="ガイド記事" data-search-empty="「{query}」に一致する結果はありません">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>受信ノート、日記、タスクリスト用の Obsidian キャプチャテンプレート | Vox.md</title>
+  <meta name="description" content="Markdown の構造をコピーし、Obsidian の受信ノート、日記、タスクリスト用に Vox.md の接頭辞を設定します。パスのレシピ、時刻トークン、出力例を含みます。">
+  <link rel="canonical" href="https://vox.isolated.tech/ja/blog/obsidian-capture-templates/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="言語モデル向けの Vox.md ドキュメント">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="受信ノート、日記、タスクリスト用の Obsidian キャプチャテンプレート">
+  <meta property="og:description" content="Markdown の構造をコピーし、Obsidian の受信ノート、日記、タスクリスト用に Vox.md の接頭辞を設定します。パスのレシピ、時刻トークン、出力例を含みます。">
+  <meta property="og:url" content="https://vox.isolated.tech/ja/blog/obsidian-capture-templates/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="受信ノート、日記、タスクリスト用の Obsidian キャプチャテンプレート">
+  <meta name="twitter:description" content="Markdown の構造をコピーし、Obsidian の受信ノート、日記、タスクリスト用に Vox.md の接頭辞を設定します。パスのレシピ、時刻トークン、出力例を含みます。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "受信ノート、日記、タスクリスト用の Obsidian キャプチャテンプレート",
+  "description": "Markdown の構造をコピーし、Obsidian の受信ノート、日記、タスクリスト用に Vox.md の接頭辞を設定します。パスのレシピ、時刻トークン、出力例を含みます。",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/ja/blog/obsidian-capture-templates/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "ja",
+  "name": "受信ノート、日記、タスクリスト用の Obsidian キャプチャテンプレート | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ja/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "ガイド",
+      "item": "https://vox.isolated.tech/ja/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "受信ノート、日記、タスクリスト用の Obsidian キャプチャテンプレート",
+      "item": "https://vox.isolated.tech/ja/blog/obsidian-capture-templates/"
+    }
+  ],
+  "inLanguage": "ja",
+  "name": "受信ノート、日記、タスクリスト用の Obsidian キャプチャテンプレート | Vox.md",
+  "description": "Markdown の構造をコピーし、Obsidian の受信ノート、日記、タスクリスト用に Vox.md の接頭辞を設定します。パスのレシピ、時刻トークン、出力例を含みます。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-capture-templates/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">ガイド本文へ</a>
+<nav aria-label="メインナビゲーション">
+  <div class="nav-inner">
+    <a href="/ja/" class="logo" aria-label="Vox.md ホーム">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ja/#how">動作の仕組み</a></li>
+      <li><a href="/ja/docs/">ドキュメント</a></li>
+      <li><a href="/ja/blog/">ガイド</a></li>
+      <li><a href="/ja/compare/">比較する</a></li>
+      <li><a href="/ja/privacy.html">プライバシー</a></li>
+      <li><a href="/ja/terms.html">利用規約</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ja_32fa42cf87f1">Vox.md をダウンロード</a>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/obsidian-capture-templates/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-capture-templates/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-capture-templates/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-capture-templates/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-capture-templates/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-capture-templates/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-capture-templates/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-capture-templates/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-capture-templates/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-capture-templates/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li><li><a href="/ko/blog/obsidian-capture-templates/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-capture-templates/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-capture-templates/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-capture-templates/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-capture-templates/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-capture-templates/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-capture-templates/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-capture-templates/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-capture-templates/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-capture-templates/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-capture-templates/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-capture-templates/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-capture-templates/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Obsidian · キャプチャテンプレート · Markdown</div>
+        <h1 class="hero-title">受信ノート、日記、タスクリスト用の Obsidian キャプチャテンプレート</h1>
+        <p class="hero-subtitle">予測しやすい少数の書式を使います。保存する考えの種類に合わせて、ノート、見出し、項目の書き方を選んでください。</p>
+      </div>
+      <aside class="meta-card" aria-label="このガイドについて">
+        <dl>
+          <div><dt>作成者</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新日</dt><dd><time datetime="2026-10-26">2026年10月26日</time></dd></div>
+          <div><dt>必要条件</dt><dd>設定済みの Vox.md 保存先</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="受信ノート、日記、タスクリスト用の Obsidian キャプチャテンプレート">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">短く答えると</div>
+        <p>まずは3つのシンプルなレシピから。Inbox の下の箇条書き、タイムスタンプ付きの日記項目、Tasks の下のチェックボックスです。Vox.md のキャプチャプレスで保存先とエントリー接頭辞を設定します。既存のデイリーノートのパスを保ち、各書式記号を加える場所は1か所に決めてください。</p>
+      </div>
+      <p>以下の例は、プレーンな Markdown の構造とプリセットの設定であり、Vox.md のプリセットを自動読み込みするファイルではありません。必要に応じてノートの構造を貼り付け、パスや接頭辞は保存先エディタで設定してください。表示した結果は説明用の例です。</p>
+      <nav class="toc" aria-label="このガイドの内容"><div class="toc-title">このガイドの内容</div><ol>
+        <li><a href="#inbox">シンプルなキャプチャ受信ノート</a></li>
+        <li><a href="#journal">タイムスタンプ付きのデイリー日記</a></li>
+        <li><a href="#tasks">コンパクトなタスクリスト</a></li>
+        <li><a href="#tokens">正しいトークン構文を使う</a></li>
+        <li><a href="#check">プリセットを再利用する前に結果を確認</a></li>
+      </ol></nav>
+
+      <h2 id="inbox">レシピ1：シンプルなキャプチャ受信ノート</h2>
+      <p>次のような既存のノートを対象に指定します。 <code>Inbox.md</code>、または日ごとに新しい受信ファイルを作る場合は、日単位のローリングノートを選びます。レベル2の Inbox 見出しの下に挿入し、そのセクションの末尾に追加するよう設定してください。</p>
+      <p>最小限のノート構成は次のとおりです。</p>
+      <pre class="guide-code"><code>## Inbox</code></pre>
+      <p>「オリジナルを保持」の処理を選びます。保存先のエントリー書式で、接頭辞をハイフンとスペースに設定します。</p>
+      <pre class="guide-code"><code>- </code></pre>
+      <p>「ドラフトの構成を見直す」という短いキャプチャから、たとえば次の出力になります。</p>
+      <pre class="guide-code"><code>## Inbox
+- Review the draft outline</code></pre>
+      <p>接頭辞は、キャプチャする考えのたびに入力せず、設定に指定します。キャプチャするテキストがすでに箇条書きで始まる場合は、記号を無条件に追加せず出力を確認してください。見出しがない場合は、好みに応じて「創出ヘッド」か「エラー表示」を選びます。</p>
+
+      <h2 id="journal">レシピ2：タイムスタンプ付きのデイリー日記</h2>
+      <p>日単位のローリングノートを使い、保管庫で使っているファイル名の規則に合わせます。次のようなファイルには、 <code>Journal/2026-10-26.md</code>で、パスのパターンは、 <code>Journal/{period}.md</code> を日単位で使います。レベル2の Journal 見出しと、そのセクション末尾への挿入を選んでください。</p>
+      <p>キャプチャした文章はそのままにし、コンパクトな時刻を付けるため、次のエントリー接頭辞を使います。</p>
+      <pre class="guide-code"><code>- **{hour}:{minute}** </code></pre>
+      <p>14:05にキャプチャした場合、セクションはたとえば次のようになります。</p>
+      <pre class="guide-code"><code>## Journal
+- **14:05** A short walk helped me settle on the next step.</code></pre>
+      <p>時と分のトークンは、Vox.md のエントリー整形機能が展開します。ノート単位のテンプレートファイルで周囲の見出しを用意し、エントリーの接頭辞で各キャプチャを整形できます。後の項目でデイリーノート全体の構造を繰り返し挿入しないよう、役割を分けてください。</p>
+      <p>ルートの詳しい設定については、次を参照してください。 <a href="/ja/blog/append-to-obsidian-daily-note-iphone/">デイリーノートのパスと見出しの挿入位置</a>.</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="対象ノートと見出しの挿入位置を指定する Vox.md の保存先エディタ" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>対象とエントリー書式は、プリセットの保存先で設定します。1回のキャプチャだけの上書きで、保存した既定値が変わることはありません。</figcaption>
+      </figure>
+
+      <h2 id="tasks">レシピ3：コンパクトなタスクリスト</h2>
+      <p>レベル2の Tasks 見出しがある既存のノートか、日単位のローリングノートを選びます。テキスト処理をしない短い入力タスクには、「オリジナルを保持」と次の接頭辞を使います。</p>
+      <pre class="guide-code"><code>- [ ] </code></pre>
+      <p>2件のキャプチャで、次のようになります。</p>
+      <pre class="guide-code"><code>## Tasks
+- [ ] Review the draft outline
+- [ ] Send the reading list</code></pre>
+      <p>代わりに タスクチェックリスト処理を有効にする場合は、チェックリストの記号を処理側に任せます。チェックボックスの接頭辞を重複して設定しないでください。入力テキストや混在テキストの処理は、別途有効化する必要があります。音声処理と入力画面のテキスト処理は、同じ設定ではありません。</p>
+      <p>タスクは言葉が正確であってこそ役立ちます。音声キャプチャでは、認識の誤りで指示が変わり得る場合、文字起こしを確認してください。次の <a href="/ja/blog/voice-notes-to-obsidian-iphone/">iPhone の音声ガイド</a> で「下書きに追加」と「すぐに送信」を説明しています。</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_32fa42cf87f1">Vox.md を無料でダウンロード</a></p>
+      <p>無料ダウンロードには、10回の成功したキャプチャ配信と15分の文字起こしが含まれます。無制限利用は1回限りの永久ライセンス購入です。</p>
+
+      <h2 id="tokens">正しいトークン構文を使う</h2>
+      <p>Vox.md のパスとエントリー設定は、次のようなトークンを使います。 <code>{period}</code>, <code>{date}</code>, <code>{hour}</code> と <code>{minute}</code>。これらは Obsidian Core Templates や Templater の式ではありません。テンプレートシステムの設定には、そのシステム固有の構文を使ってください。</p>
+      <p>使用 <code>{hour}:{minute}</code> で、ここに示すコロン区切りの時刻になります。Vox.md の <code>{time}</code> トークンはコンパクトな時刻値なので、同じ表示形式だと思ってレシピに置き換えてはいけません。</p>
+      <p>キャプチャ内容はテンプレートエディタではありません。考えの中に書いたトークンは、そのままのテキストになる場合があります。トークンの展開は、保存先の対応する書式設定で指定してください。次を参照してください。 <a href="/ja/docs/#placement-templates">トークンとテンプレートのリファレンス</a> で利用可能なフィールドを確認してください。</p>
+      <p>YAML メタデータを追加する場合は、ノート全体のフロントマターと、ローリングノートの各項目に付けるフィールドを区別してください。ファイル全体のプロパティが、そのまま日記の各項目の個別プロパティになるわけではありません。最初は追加のメタデータなしで始め、検索や集計の方法が決まってから加えましょう。</p>
+
+      <h2 id="check">プリセットを再利用する前に結果を確認</h2>
+      <ol>
+        <li>保存先のプレビューが、意図したファイルと一致することを確認します。</li>
+        <li>選択したプリセットで、短いテキストのキャプチャを送信します。</li>
+        <li>Obsidian でファイルを開き、見出しと接頭辞を調べます。</li>
+        <li>2件目のキャプチャを送り、順序、空き行、記号の重複を確認します。</li>
+        <li>音声、添付ファイル、任意の処理やメタデータを加えるのは、その後です。</li>
+      </ol>
+      <p>これらのレシピは、1つのデイリーファイル内で別々の見出しに共存できます。アクセス可能なフォルダであれば、同じプリセットで次から配信された文字起こしも受け取れます。 <a href="/ja/blog/apple-watch-obsidian-voice-notes/">Watch から iPhone へのキャプチャ手順</a>。キャプチャが保留中のままなら、フォルダの権限とファイルプロバイダの利用可否を確認してください。</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">書式を一定に保つ。<br>考えのための余白を。</h2>
+        <p>まずは見出しと接頭辞を1つずつ。保存したノートの活用に役立つときだけ、構造を増やしましょう。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_32fa42cf87f1">Vox.md を無料でダウンロード</a></p>
+      </section>
+      <nav class="toc" aria-label="関連ガイド"><div class="toc-title">設定を続ける</div><ul>
+        <li><a href="/ja/blog/append-to-obsidian-daily-note-iphone/">デイリーノートへの振り分けを設定する</a></li>
+        <li><a href="/ja/blog/save-links-photos-obsidian-iphone/">写真、スキャン、リンクをノートと一緒に残す</a></li>
+        <li><a href="/ja/blog/obsidian-quick-capture-iphone/">キャプチャ方法を選ぶ</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ja/">ホーム</a></li>
+        <li><a href="/ja/docs/">ドキュメント</a></li>
+        <li><a href="/ja/blog/">ガイド</a></li>
+        <li><a href="/ja/compare/">比較する</a></li>
+        <li><a href="/ja/privacy.html">プライバシー</a></li>
+        <li><a href="/ja/terms.html">利用規約</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">サポート</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_32fa42cf87f1">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · ローカルノートにクイックキャプチャ · コンテンツのアップロードなし。</div>
+    </div>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/obsidian-capture-templates/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-capture-templates/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-capture-templates/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-capture-templates/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-capture-templates/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-capture-templates/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-capture-templates/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-capture-templates/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-capture-templates/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-capture-templates/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li><li><a href="/ko/blog/obsidian-capture-templates/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-capture-templates/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-capture-templates/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-capture-templates/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-capture-templates/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-capture-templates/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-capture-templates/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-capture-templates/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-capture-templates/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-capture-templates/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-capture-templates/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-capture-templates/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-capture-templates/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

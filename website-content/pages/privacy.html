@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Vox.md</title>
+  <meta name="description" content="How Vox.md handles local capture drafts, Markdown destinations, attachments, one-shot location, keyboard input, and on-device voice transcription.">
+  <link rel="canonical" href="https://vox.isolated.tech/privacy.html">
+  <link rel="alternate" type="text/plain" href="llms.txt" title="Vox.md documentation for language models">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Privacy Policy — Vox.md">
+  <meta property="og:description" content="Privacy details for quick capture, one-shot location, local Markdown files, attachments, system extensions, and on-device voice transcription.">
+  <meta property="og:url" content="https://vox.isolated.tech/privacy.html">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="preload" href="fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="openapi.json" title="Vox.md Public Information API">
+</head>
+<body>
+
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="logo" aria-label="Vox.md home">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="docs/">Docs</a></li>
+      <li><a href="blog/">Blog</a></li>
+    </ul>
+    <div class="legal-tabs" aria-label="Legal documents">
+      <a href="privacy.html" aria-current="page">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<div class="page-layout">
+  <nav class="side-nav" aria-label="Sections">
+    <div class="side-nav-title">Sections</div>
+    <ol>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#information-we-do-not-collect">Information We Do Not Collect</a></li>
+      <li><a href="#privacy-safe-onboarding-analytics">Privacy-safe onboarding analytics</a></li>
+      <li><a href="#on-device-processing">On-Device Processing</a></li>
+      <li><a href="#keyboard-extension">Keyboard Extension</a></li>
+      <li><a href="#microphone-usage">Microphone Usage</a></li>
+      <li><a href="#location-usage">Location Usage</a></li>
+      <li><a href="#speech-models">Speech Models</a></li>
+      <li><a href="#third-party-services">Third-Party Services</a></li>
+      <li><a href="#data-storage-deletion">Data Storage &amp; Deletion</a></li>
+      <li><a href="#childrens-privacy">Children's Privacy</a></li>
+      <li><a href="#changes-to-this-policy">Changes to This Policy</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ol>
+  </nav>
+
+  <article class="legal-content">
+    <div class="page-eyebrow">Legal · Privacy</div>
+    <h1 class="page-title">Privacy Policy</h1>
+    <p class="page-meta">Effective: February 9, 2026 · Last updated: October 26, 2026</p>
+
+    <div class="callout" role="note" aria-label="In short">
+      <span class="callout-label">In short</span>
+      <p>Vox.md keeps capture drafts, attachments, transcripts, and note routes on your device. It sends completed files only to destinations you choose and never sends capture content to Vox.md servers. Production builds send the coarse first-party onboarding analytics described below.</p>
+    </div>
+
+    <h2 id="overview">Overview</h2>
+    <p>This Privacy Policy describes how Vox.md ("we," "our," or "the app") handles information when you use our iOS and macOS applications and their extensions. Audio, transcripts, keystrokes, capture drafts, attachments, exported file contents, and user-entered text are handled locally. Files are written only to locations you select; your chosen storage provider may sync those files under its own terms.</p>
+
+    <h2 id="information-we-do-not-collect">Information we do not collect</h2>
+    <p>Vox.md does not collect any of the following for the developer, analytics, advertising, or tracking. The coarse onboarding metadata described below can leave the device automatically. Capture content leaves the device only through a feature you choose, such as writing to a synced folder or opening a map-provider link, as described below.</p>
+    <ul>
+      <li>Audio recordings or voice data</li>
+      <li>Transcribed text or transcription history</li>
+      <li>Keystrokes, typed text, or keyboard input</li>
+      <li>Personal information such as your name, email, or phone number</li>
+      <li>Location data for the developer, analytics, advertising, or tracking</li>
+      <li>Photos, scans, sketches, audio, and files you explicitly select for a local capture</li>
+      <li>File names, folder paths, template text, exported note contents, or model file paths</li>
+      <li>Advertising identifiers, raw IP address storage, or third-party tracking identifiers</li>
+    </ul>
+
+    <h2 id="privacy-safe-onboarding-analytics">Privacy-safe onboarding analytics</h2>
+    <p>Production builds send a small first-party event set to understand onboarding, setup friction, and purchase or restore outcomes. Development builds require explicit opt-in for setup testing. These events are intentionally coarse and are not used for advertising or cross-app tracking.</p>
+    <p>Onboarding analytics may include:</p>
+    <ul>
+      <li>An anonymous Vox.md install ID used only to count funnel progress</li>
+      <li>Event names such as onboarding started, microphone permission completed, model setup completed, paywall shown, purchase or restore outcome, and onboarding completed</li>
+      <li>App version, build number, platform, and experiment variant</li>
+      <li>Coarse setup state such as microphone permission status, model engine and size bucket, file export format/mode, free-minute and successful-Capture usage buckets, and paywall context</li>
+    </ul>
+    <p>These analytics never include audio, transcripts, dictated text, keystrokes, file/folder paths, template text, model file paths, names, email addresses, raw dates, raw IP addresses, or device names.</p>
+
+    <h2 id="on-device-processing">On-device processing</h2>
+    <p>All voice-to-text transcription is performed entirely on your device. On supported iOS 26 devices, Automatic uses Apple's system-managed Speech framework. You can also opt into local Whisper or Parakeet model downloads. Audio captured by the microphone is processed by the selected on-device backend and is never transmitted over a network connection.</p>
+    <p>If you explicitly enable Capture Text processing for a Route, eligible typed text, on-device OCR, and voice transcripts can be cleaned or formatted locally with Apple Intelligence. Processing falls back to deterministic formatting or the original text when on-device intelligence is unavailable. Vox.md does not send captured text to its servers or third-party AI APIs.</p>
+    <p>Transcription results, capture drafts, and retry requests are stored locally within the app's sandboxed container and shared App Group. This data is accessible only to signed Vox.md app components such as the app, keyboard, widgets, and share extension. No Vox.md service or server can access it.</p>
+
+    <h2 id="keyboard-extension">Keyboard extension</h2>
+    <p>Vox.md includes a custom keyboard extension that enables voice-to-text input across all apps on your device. Apple requires us to disclose the following about keyboard extensions:</p>
+    <ul>
+      <li><strong>Allow Full Access is required for the current keyboard workflow.</strong> It lets the keyboard use shared App Group state and coordinate recording with the main Vox.md app.</li>
+      <li>Vox.md does not use Full Access to upload, sell, or analyze keystrokes, dictated text, transcripts, or microphone audio. The keyboard does not transmit that content to Vox.md or third-party servers.</li>
+      <li>The keyboard extension communicates with signed Vox.md app components through the shared App Group container on the device.</li>
+    </ul>
+
+    <h2 id="microphone-usage">Microphone usage</h2>
+    <p>Vox.md requests microphone access to capture audio for voice transcription. Microphone audio is:</p>
+    <ul>
+      <li>Processed locally by Apple Speech or an optional downloaded Whisper/Parakeet model</li>
+      <li>Written temporarily only when local transcription requires a file</li>
+      <li>Never transmitted to any server, API, or third-party service</li>
+      <li>Removed after transcription unless you explicitly configure a Route to retain audio or insert a voice recording into a capture draft</li>
+    </ul>
+
+    <h2 id="location-usage">Location usage</h2>
+    <p>Vox.md has two explicit location features. The independent Current Location Capture Bar action requests one location and inserts a Google Maps link in your local draft. Separately, Current Location is off by default and can be enabled per Route across iOS/iPadOS, Share Sheet, Shortcuts and intents, voice and keyboard-driven route recording, widgets and controls, Apple Watch captures routed to Markdown, and Mac. A route can use that one snapshot for a <code>{location}</code> entry-template link without writing additional metadata; Write Location Metadata is a separate opt-in. Watch Recording Only remains a raw audio Files export with no Markdown location surface and does not request location.</p>
+    <p>An enabled route requests one origin-time location at Send, invocation, or recording stop, depending on the capture source. Exact is the default. City precision rounds latitude and longitude to two decimal places and removes point-of-interest labels before the result is retained; every derived field, template link, and provider link uses the same privacy-adjusted coordinates. Vox.md does not monitor location continuously, run background location tracking, include location in analytics or logs, or send it to a Vox.md server.</p>
+    <p>If enabled metadata needs place, city, region, or country, Vox.md uses Apple’s system reverse geocoder. Token-only Current Location skips this lookup. This service is free and requires no API key, but may make a network request to Apple under Apple’s terms. Reverse-geocoding failure does not block Capture; coordinate-only metadata remains available. Vox.md can format links for Apple Maps, Google Maps, and OpenStreetMap without contacting those providers. Only opening a link discloses its exact or rounded coordinates to that provider.</p>
+    <p>If location is unavailable, interactive surfaces can retry, cancel, send once without location, or save Always Send Without Location for that route; the saved behavior can be reset in route settings. Unattended Ask requests preserve their origin-time unavailable result for a later decision and never acquire a newer location during retry. Pending and failed requests may retain the already privacy-adjusted result needed for local recovery. Any coordinates written into Markdown become part of the note you chose, and your selected file-sync provider may process that file under its own terms.</p>
+    <p>For configuration examples and capture-source behavior, see <a href="docs/location/">Current Location, <code>{location}</code>, and Metadata</a>.</p>
+
+    <h2 id="speech-models">Speech models</h2>
+    <p>Vox.md does not bundle speech model weights. Apple's supported language assets are managed by iOS. Optional Whisper, Parakeet, and voice-pause model downloads begin only after you choose them and are stored locally on your device. No account or personal information is required to prepare or download a model.</p>
+
+    <h2 id="third-party-services">Third-party services</h2>
+    <p>Vox.md does not integrate with third-party analytics SDKs, advertising networks, crash-reporting SDKs, or cross-app tracking services. User-initiated Whisper and Parakeet model downloads connect to model-distribution infrastructure hosted by Hugging Face, either directly or through FluidAudio. Model requests never include capture drafts, typed text, audio, transcripts, attachments, file paths, or location, but the provider may receive ordinary HTTPS connection data and the requested model identifier under its own terms.</p>
+    <p>The Capture editor requests batches of inspirational quotes from <a href="https://zenquotes.io/">ZenQuotes API</a> and rotates through them from an on-device cache. These requests never include capture drafts, typed text, audio, attachments, file paths, location, install identifiers, or analytics. Like any HTTPS service, ZenQuotes may receive technical connection data such as an IP address and user agent under its own terms. First-party onboarding events are sent directly to a Vox.md Cloudflare Worker and stored in its D1 database using the strict allowlist described above.</p>
+
+    <h2 id="data-storage-deletion">Data storage &amp; deletion</h2>
+    <p>Capture content and local app data — including transcription history, capture drafts, staged attachments, downloaded models, templates, settings, and free-usage records — are stored locally on your device or in a file destination you explicitly choose. The content-free successful-Capture ledger contains only the count and random identifiers for up to ten successful requests, which prevent retries from being charged twice while local app data remains. It contains no captured text, filenames, destinations, or attachment metadata, is never stored in the system Keychain, and is never sent to Vox.md.</p>
+    <p>Versions released before this policy change may have left an inert, content-free free-usage item in the system Keychain. Current versions do not access that item; it can be removed with Keychain Access without affecting captures, transcripts, or purchases.</p>
+    <p>The local Recent Captures list contains delivery metadata only: outcome, source, Route identifier and display name, destination identifier and display name, relative note path, attachment count, timestamps, and a coarse failure category. It never duplicates note text, links, coordinates, location labels or templates, bookmarks, absolute paths, or attachment filenames. Pending and failed captures retain only the content needed for local recovery, which may include an already privacy-adjusted location snapshot or durable unavailable outcome. After successful delivery, a recoverable Capture request is immediately replaced by an identifier-and-timestamp-only tombstone; completed Watch queue items are likewise scrubbed, and upgrades sanitize legacy completed requests.</p>
+    <p>You can delete locally stored user content and settings by:</p>
+    <ul>
+      <li>Deleting individual transcriptions or clearing Recent Capture metadata from the history views within the app</li>
+      <li>Removing downloaded models from Settings</li>
+      <li>Removing Vox.md and its local app data. This also resets the free usage allowance; eligible StoreKit purchases remain restorable from Apple.</li>
+    </ul>
+
+    <h2 id="childrens-privacy">Children's privacy</h2>
+    <p>Vox.md does not knowingly collect personal information from anyone, including children under the age of 13. The privacy-safe onboarding analytics described above are not intended to identify or contact a child and never include audio, transcripts, keystrokes, or user-entered content.</p>
+
+    <h2 id="changes-to-this-policy">Changes to this policy</h2>
+    <p>We may update this Privacy Policy from time to time. Any changes will be reflected on this page with an updated "Last updated" date.</p>
+
+    <h2 id="contact">Contact</h2>
+    <p>If you have questions or concerns about this Privacy Policy, please contact us at:</p>
+    <p><strong>Email:</strong> <a href="mailto:codybontecou@gmail.com">codybontecou@gmail.com</a></p>
+
+  </article>
+</div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="developers.html">Developers</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="docs/">Docs</a></li>
+        <li><a href="blog/">Blog</a></li>
+        <li><a href="privacy.html" aria-current="page">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Support</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · <a href="https://isolated.tech/">Isolated Tech</a></div>
+    </div>
+  </div>
+</footer>
+<script src="site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

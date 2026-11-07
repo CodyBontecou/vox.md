@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="hi" dir="ltr" data-search-section="सेक्शन" data-search-guide="गाइड" data-search-empty="“{query}” के लिए कोई परिणाम नहीं">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>वर्तमान स्थान, {location} और मेटाडेटा — Vox.md दस्तावेज़</title>
+  <meta name="description" content="Vox.md रूट में एकबारगी वर्तमान स्थान, {location} Markdown टोकन, वैकल्पिक फ़्रंटमैटर या इनलाइन स्थान मेटाडेटा, सटीकता, गोपनीयता और पुनर्प्राप्ति सेट करें।">
+  <link rel="canonical" href="https://vox.isolated.tech/hi/docs/location/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="भाषा मॉडलों के लिए Vox.md दस्तावेज़">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="वर्तमान स्थान, {location} और मेटाडेटा — Vox.md दस्तावेज़">
+  <meta property="og:description" content="अपने नोट में स्थान मेटाडेटा अपने आप जोड़े बिना Markdown टेम्पलेट में एकबारगी स्थान इस्तेमाल करें।">
+  <meta property="og:url" content="https://vox.isolated.tech/hi/docs/location/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vox.md वर्तमान स्थान गाइड">
+  <meta name="twitter:description" content="एकबारगी स्थान, {location}, मेटाडेटा आउटपुट, सटीकता, गोपनीयता और माइग्रेशन की पूरी गाइड।">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Vox.md में वर्तमान स्थान, {location} और स्थान मेटाडेटा",
+  "description": "हर प्रीसेट के वर्तमान स्थान अधिग्रहण, {location} Markdown टोकन, वैकल्पिक मेटाडेटा आउटपुट, गोपनीयता, माइग्रेशन और समस्या निवारण की पूरी गाइड।",
+  "dateModified": "2026-08-21",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/hi/docs/location/",
+  "inLanguage": "hi",
+  "name": "वर्तमान स्थान, {location} और मेटाडेटा — Vox.md दस्तावेज़"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/hi/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "दस्तावेज़",
+      "item": "https://vox.isolated.tech/hi/docs/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "वर्तमान स्थान",
+      "item": "https://vox.isolated.tech/hi/docs/location/"
+    }
+  ],
+  "inLanguage": "hi",
+  "name": "वर्तमान स्थान, {location} और मेटाडेटा — Vox.md दस्तावेज़",
+  "description": "Vox.md रूट में एकबारगी वर्तमान स्थान, {location} Markdown टोकन, वैकल्पिक फ़्रंटमैटर या इनलाइन स्थान मेटाडेटा, सटीकता, गोपनीयता और पुनर्प्राप्ति सेट करें।"
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md सार्वजनिक जानकारी API">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/location/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/location/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/location/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/location/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/location/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/location/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/location/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/location/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/location/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/location/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/location/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/location/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/location/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/location/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/location/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/location/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/location/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/location/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/location/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/location/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/location/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/location/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/location/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/location/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="मुख्य नेविगेशन">
+  <div class="nav-inner docs-header-inner">
+    <a href="/hi/" class="logo" aria-label="Vox.md मुखपृष्ठ">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ दस्तावेज़</span></span>
+    </a>
+    <form class="docs-search" role="search" action="../" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="दस्तावेज़ खोजें" aria-label="दस्तावेज़ खोजें" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="खोज परिणाम" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/hi/blog/">ब्लॉग</a></li>
+      <li><a href="/hi/privacy.html">गोपनीयता</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>भाषा</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi" aria-current="page">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="इस पृष्ठ पर">
+      <div class="docs-sidebar-title">इस पृष्ठ पर</div>
+      <ol>
+        <li><a href="#overview">दो स्वतंत्र विकल्प</a></li>
+        <li><a href="#setup">रूट सेट करें</a></li>
+        <li><a href="#configurations">सामान्य कॉन्फ़िगरेशन</a></li>
+        <li><a href="#location-token"><code>{location}</code> टोकन</a></li>
+        <li><a href="#metadata-output">मेटाडेटा आउटपुट</a></li>
+        <li><a href="#precision">सटीकता और नाम</a></li>
+        <li><a href="#capture-sources">कैप्चर स्रोत</a></li>
+        <li><a href="#unavailable">अनुपलब्धता और पुनर्प्राप्ति</a></li>
+        <li><a href="#migration">मौजूदा रूट</a></li>
+        <li><a href="#privacy">गोपनीयता और प्रतिधारण</a></li>
+        <li><a href="#troubleshooting">समस्या निवारण</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="location-guide-title">
+      <div class="page-eyebrow">दस्तावेज़ · रूट्स</div>
+      <h1 class="page-title" id="location-guide-title">वर्तमान स्थान, <code>{location}</code>, और मेटाडेटा</h1>
+      <p class="docs-hero-copy">YAML या इनलाइन फ़ील्ड अपने आप जोड़े बिना प्रविष्टि फ़ॉर्मैट में शुरुआत के समय का एक स्थान इस्तेमाल करें। हर रूट में स्थान लेना और मेटाडेटा आउटपुट अलग, स्पष्ट विकल्प हैं।</p>
+      <div class="docs-meta-row" aria-label="गाइड के तथ्य">
+        <span>अपडेट: 21 अगस्त, 2026</span>
+        <span>एकबारगी स्थान अधिग्रहण</span>
+        <span>पृष्ठभूमि में ट्रैकिंग नहीं</span>
+        <a href="/hi/docs/">पूरी सुविधा गाइड</a>
+      </div>
+      </header>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="overview">
+        <div class="docs-section-label">01 / अवलोकन</div>
+        <h2>स्थान लेने का अर्थ मेटाडेटा आउटपुट नहीं है</h2>
+        <p>हर रूट के स्थान के दो अलग नियंत्रण होते हैं। <strong>वर्तमान स्थान का उपयोग करें</strong> तय करता है कि रूट कैप्चर शुरू होने के समय एक स्थान का अनुरोध करे या नहीं। <strong>स्थान मेटाडेटा लिखें</strong> तय करता है कि लिया गया स्नैपशॉट फ़्रंटमैटर या इनलाइन फ़ील्ड में भी लिखा जाए या नहीं।</p>
+
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>नियंत्रण</th><th>इसका क्या अर्थ है</th><th>इसका क्या अर्थ नहीं है</th></tr></thead>
+            <tbody>
+              <tr><td>सिस्टम स्थान अनुमति</td><td>ऐप या समर्थित कैप्चर इंटरफ़ेस के उपयोग के दौरान Vox.md को स्थान माँगने देता है।</td><td>यह किसी रूट के लिए स्थान अपने आप सक्षम नहीं करता।</td></tr>
+              <tr><td>वर्तमान स्थान का उपयोग करें</td><td>इस रूट के लिए एक स्थान का अनुरोध करता है और इसे उपलब्ध कराता है: <code>{location}</code>.</td><td>यह YAML या इनलाइन मेटाडेटा अपने आप नहीं लिखता।</td></tr>
+              <tr><td>स्थान मेटाडेटा लिखें</td><td>लिए गए स्नैपशॉट से चुने संरचित फ़ील्ड या सत्यापित उन्नत YAML लिखता है।</td><td>यह नियंत्रित नहीं करता कि <code>{location}</code> दिखा सकता है।</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <strong>इरादे का संकेत रूट है, अनुमति नहीं</strong>
+          <p>उपयोग के दौरान अनुमति देना केवल ऑपरेटिंग सिस्टम का द्वार खोलता है। Vox.md फिर भी स्थान केवल स्वतंत्र वर्तमान स्थान कैप्चर बार ऐक्शन या वर्तमान स्थान का उपयोग करें चालू किए रूट के लिए माँगता है।</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="setup">
+        <div class="docs-section-label">02 / सेटअप</div>
+        <h2>एक रूट के लिए वर्तमान स्थान सेट करें</h2>
+        <ol class="docs-steps">
+          <li><strong>रूट्स खोलें।</strong><span>iPhone या iPad पर सेटिंग्स → रूट्स खोलें। Mac पर सेटिंग्स खोलकर रूट्स चुनें।</span></li>
+          <li><strong>रूट संपादित करें।</strong><span>वह रूट चुनें जिसे अपने शुरुआती स्थान का उपयोग करना चाहिए। यह सेटिंग उसी रूट की है और अन्य रूट को प्रभावित नहीं करती।</span></li>
+          <li><strong>स्थान खोलें।</strong><span>चालू करें <em>वर्तमान स्थान का उपयोग करें</em>. रखें <em>स्थान मेटाडेटा लिखें</em> केवल टोकन वाले व्यवहार के लिए बंद।</span></li>
+          <li><strong>सटीकता चुनें।</strong><span>शुरुआती स्थान के लिए सटीक चुनें, या बिना रुचि-स्थल नाम के दो दशमलव स्थानों तक राउंड किए निर्देशांकों के लिए शहर चुनें।</span></li>
+          <li><strong>अनुपलब्ध होने का व्यवहार चुनें।</strong><span>पूछो, बिना स्थान भेजें या कैप्चर रद्द करें तय करता है कि शुरुआती स्थान न मिल पाने पर क्या होगा।</span></li>
+          <li><strong>जोड़ें <code>{location}</code> यदि चाहें।</strong><span>टोकन को प्रविष्टि टेम्पलेट, कस्टम प्रविष्टि उपसर्ग या प्रत्यय या वॉल्ट Markdown टेम्पलेट में रखें।</span></li>
+        </ol>
+        <p>पहले उपयोग पर ऑपरेटिंग सिस्टम का स्थान अनुमति अनुरोध दिख सकता है। पहले अनुमति न दी हो तो iOS, iPadOS या macOS सिस्टम सेटिंग्स में Vox.md का स्थान ऐक्सेस सक्षम करें।</p>
+      </section>
+
+      <section class="docs-section" id="configurations">
+        <div class="docs-section-label">03 / सामान्य कॉन्फ़िगरेशन</div>
+        <h2>स्थान की केवल उतनी सुविधा चुनें जितनी चाहिए</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>इच्छित परिणाम</th><th>वर्तमान स्थान का उपयोग करें</th><th>स्थान मेटाडेटा लिखें</th><th>टेम्पलेट</th></tr></thead>
+            <tbody>
+              <tr><td>रूट के लिए स्थान नहीं</td><td>बंद</td><td>बंद</td><td>इस्तेमाल न करें <code>{location}</code>, नहीं तो यह खाली रहता है।</td></tr>
+              <tr><td>केवल क्लिक करने योग्य लिंक</td><td>चालू</td><td>बंद</td><td>जोड़ें <code>{location}</code>. स्थान के कोई फ़ील्ड नहीं लिखे जाते।</td></tr>
+              <tr><td>केवल मेटाडेटा</td><td>चालू</td><td>चालू</td><td>छोड़ें <code>{location}</code>. केवल कॉन्फ़िगर किए फ़ील्ड लिखे जाते हैं।</td></tr>
+              <tr><td>लिंक और मेटाडेटा</td><td>चालू</td><td>चालू</td><td>जोड़ें <code>{location}</code> और मेटाडेटा फ़ील्ड सेट करें।</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>वर्तमान स्थान का उपयोग करें बंद करने से उस रूट के लिए टोकन विस्तार और मेटाडेटा आउटपुट दोनों रुकते हैं, भले ही पिछली मेटाडेटा फ़ॉर्मैट सेटिंग्स बाद के उपयोग के लिए बनी रहें।</p>
+      </section>
+
+      <section class="docs-section" id="location-token">
+        <div class="docs-section-label">04 / टेम्पलेट टोकन</div>
+        <h2>उपयोग करें <code>{location}</code> नोट मेटाडेटा बदले बिना</h2>
+        <p>वर्तमान स्थान का उपयोग करें चालू हो और शुरुआती स्नैपशॉट उपलब्ध हो, तो <code>{location}</code> सत्यापित Google Maps Markdown लिंक बनाता है:</p>
+        <pre class="docs-code-block"><code>[Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>टोकन पुनः उपयोग योग्य प्रविष्टि टेम्पलेट, कस्टम प्रविष्टि उपसर्ग व प्रत्यय और वॉल्ट Markdown टेम्पलेट में चलता है। यह रूट के लिए चुने वही सटीक या शहर निर्देशांक इस्तेमाल करता है।</p>
+
+        <h3 id="token-example">केवल टोकन वाला उदाहरण</h3>
+        <p>ऐसे प्रत्यय के लिए:</p>
+        <pre class="docs-code-block"><code>Captured from {location}</code></pre>
+        <p>Vox.md बना सकता है:</p>
+        <pre class="docs-code-block"><code>Captured from [Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>स्थान मेटाडेटा लिखें बंद हो तो रूट द्वारा जोड़ी गई स्थान की सामग्री केवल यह लिंक है। कोई नहीं <code>locations:</code> संग्रह और कोई नहीं <code>location.*::</code> फ़ील्ड लिखे जाते हैं।</p>
+
+        <h3 id="composer-fix">कंपोज़र का एक-टैप सुधार</h3>
+        <p>यदि प्रभावी प्रविष्टि उपसर्ग, प्रत्यय या पुनः उपयोग योग्य प्रविष्टि टेम्पलेट इस्तेमाल करता है <code>{location}</code> जब चुने रूट में वर्तमान स्थान बंद हो, तो कंपोज़र बताता है कि टोकन खाली रहेगा और विकल्प देता है <strong>[Route] के लिए वर्तमान स्थान का उपयोग करें</strong>. वह ऐक्शन रूट के लिए वर्तमान स्थान चालू करता है और जानबूझकर स्थान मेटाडेटा लिखें बंद रखता है, ताकि अगला भेजना नोट मेटाडेटा बदले बिना टोकन का मान दे सके। वॉल्ट की लाइव टेम्पलेट फ़ाइलें केवल डिलीवरी के दौरान पढ़ी जाती हैं, इसलिए उनकी सामग्री कंपोज़र का यह संकेत नहीं दिखा सकती; वॉल्ट टेम्पलेट में टोकन हो तो वर्तमान स्थान मैन्युअल रूप से सक्षम करें।</p>
+
+        <div class="docs-callout docs-callout-neutral">
+          <strong>जब टोकन खाली हो</strong>
+          <p><code>{location}</code> वर्तमान स्थान बंद होने, स्थान अनुपलब्ध होने या बिना स्थान कैप्चर जारी रहने पर खाली स्ट्रिंग बनता है। वैकल्पिक टेम्पलेट पंक्तियाँ बनाते समय आसपास के विराम चिह्न और नाम ध्यान में रखें।</p>
+        </div>
+
+        <h3 id="capture-bar-location">स्वतंत्र कैप्चर बार ऐक्शन</h3>
+        <p>तेजी से पकड़ <strong>वर्तमान स्थान</strong> ऐक्शन मौजूदा ड्राफ़्ट में सीधे एकबारगी Google Maps लिंक डालता है। यह रूट से स्वतंत्र है और वर्तमान स्थान का उपयोग करें या स्थान मेटाडेटा लिखें को नहीं बदलता।</p>
+      </section>
+
+      <section class="docs-section" id="metadata-output">
+        <div class="docs-section-label">05 / मेटाडेटा आउटपुट</div>
+        <h2>संरचित फ़ील्ड केवल आपके चुनने पर लिखें</h2>
+        <p>नोट में इसके अलावा या इसकी जगह मशीन-पठनीय स्थान फ़ील्ड चाहिए तो स्थान मेटाडेटा लिखें चालू करें: <code>{location}</code> लिंक।</p>
+
+        <div class="docs-feature-grid">
+          <div><strong>नोट फ़्रंटमैटर</strong><p>हर स्थान को इस नाम के संग्रह में जोड़ता है: <code>locations</code> डिफ़ॉल्ट रूप से, कैप्चर ID के अनुसार। मौजूदा असंबंधित फ़्रंटमैटर सुरक्षित रहता है।</p></div>
+          <div><strong>इनलाइन प्रविष्टि फ़ील्ड</strong><p>Dataview शैली में लिखता है <code>location.key:: value</code> पंक्तियाँ कैप्चर की गई प्रविष्टि के पास। कोई फ़्रंटमैटर संग्रह नहीं जोड़ा जाता।</p></div>
+          <div><strong>संरचित फ़ील्ड</strong><p>निर्देशांक, अक्षांश, देशांतर, स्थान, शहर, क्षेत्र, देश, प्रदाता लिंक, geo URI, सटीकता, टाइमस्टैम्प, स्रोत और ID चुनें व नाम बदलें।</p></div>
+          <div><strong>उन्नत YAML</strong><p>नोट फ़्रंटमैटर के लिए सत्यापित, सीमित YAML टेम्पलेट इस्तेमाल करता है। उन्नत YAML इनलाइन प्रविष्टि फ़ील्ड के लिए उपलब्ध नहीं।</p></div>
+        </div>
+
+        <h3 id="frontmatter-example">संरचित फ़्रंटमैटर का उदाहरण</h3>
+        <pre class="docs-code-block"><code>---
+title: Field Notes
+locations:
+  - id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    coordinates: [45.501235, -73.567890]
+    place: "Café &amp; Main"
+    appleMapsURL: "https://maps.apple.com/?ll=45.501235%2C-73.567890&amp;q=Caf%C3%A9%20%26%20Main"
+    timestamp: "2023-11-14T22:13:20.000Z"
+    source: "app"
+---</code></pre>
+        <p>रोलिंग नोट संग्रह में कई कैप्चर रख सकते हैं। स्थान मर्ज में दोबारा प्रयास की सुरक्षा अंतर्निहित है: समान कैप्चर ID वाला प्रयास वही स्थान दो बार नहीं जोड़ सकता। चुनी संग्रह कुंजी में पहले से उपयोगकर्ता का लिखा असंगत मान हो तो Vox.md उसके ऊपर लिखने के बजाय रुकता है।</p>
+
+        <h3 id="inline-example">इनलाइन प्रविष्टि का उदाहरण</h3>
+        <pre class="docs-code-block"><code>location.id:: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+location.coordinates:: [45.501235, -73.567890]
+location.place:: "Café &amp; Main"
+
+Captured text</code></pre>
+
+        <h3 id="advanced-yaml">उन्नत YAML प्लेसहोल्डर</h3>
+        <p>उन्नत टेम्पलेट ऐसे प्लेसहोल्डर इस्तेमाल कर सकते हैं: <code>{{coordinates}}</code>, <code>{{latitude}}</code>, <code>{{longitude}}</code>, <code>{{place}}</code>, <code>{{city}}</code>, <code>{{region}}</code>, <code>{{country}}</code>, <code>{{appleMapsURL}}</code>, <code>{{googleMapsURL}}</code>, <code>{{openStreetMapURL}}</code>, <code>{{geoURI}}</code>, <code>{{accuracy}}</code>, <code>{{timestamp}}</code>, <code>{{source}}</code>, और <code>{{id}}</code>. सहेजने से पहले रूट सेटिंग्स में कॉन्फ़िगरेशन का पूर्वावलोकन करें।</p>
+      </section>
+
+      <section class="docs-section" id="precision">
+        <div class="docs-section-label">06 / सटीकता और नाम</div>
+        <h2>सटीक और शहर एक ही सुसंगत स्नैपशॉट इस्तेमाल करते हैं</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>परिशुद्धता</th><th>निर्देशांक</th><th>नाम</th><th>लिंक और फ़ील्ड</th></tr></thead>
+            <tbody>
+              <tr><td>सटीक</td><td>शुरुआती स्थान को छह दिखाए गए दशमलव स्थानों तक रखता है।</td><td>चुने मेटाडेटा फ़ील्ड को ज़रूरत होने पर रुचि-स्थल का नाम शामिल कर सकता है।</td><td>हर व्युत्पन्न मान सटीक निर्देशांकों का उपयोग करता है।</td></tr>
+              <tr><td>शहर</td><td>स्नैपशॉट रखने से पहले अक्षांश और देशांतर को दो दशमलव स्थानों तक राउंड करता है।</td><td>रुचि-स्थल के नाम हटाता है; शहर, क्षेत्र और देश रह सकते हैं।</td><td>हर प्रदाता URL, geo URI, टोकन और फ़ील्ड राउंड किए निर्देशांक इस्तेमाल करता है।</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Apple का सिस्टम रिवर्स जियोकोडर केवल तब इस्तेमाल होता है जब स्थान मेटाडेटा लिखें चालू हो और चुने संरचित फ़ील्ड या उन्नत प्लेसहोल्डर को स्थान, शहर, क्षेत्र या देश चाहिए। केवल टोकन वाला रूट रिवर्स जियोकोडिंग छोड़ देता है। नाम की खोज विफल हो तो निर्देशांक-आधारित आउटपुट उपलब्ध रहता है।</p>
+      </section>
+
+      <section class="docs-section" id="capture-sources">
+        <div class="docs-section-label">07 / कैप्चर स्रोत</div>
+        <h2>स्नैपशॉट कैप्चर के मूल स्थान का होता है</h2>
+        <p>वर्तमान स्थान का मूल्यांकन वहीं होता है जहाँ कैप्चर शुरू होता है। दोबारा प्रयास और पुनर्प्राप्ति चुपचाप नया स्थान लेने के बजाय उसी स्थायी परिणाम का फिर उपयोग करते हैं।</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>कैप्चर स्रोत</th><th>स्थान लेने का बिंदु</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone और iPad त्वरित कैप्चर</td><td>भेजिए</td></tr>
+              <tr><td>शेयर शीट</td><td>शेयर एक्सटेंशन में भेजें</td></tr>
+              <tr><td>सीधे कतार में जोड़ने वाले पाठ, लिंक और फ़ाइल इंटेंट</td><td>इंटेंट चलाए जाने पर</td></tr>
+              <tr><td>तेजी से पकड़ खोलने वाले शॉर्टकट, विजेट, नियंत्रण और डीप लिंक</td><td>कंपोज़र में भेजें</td></tr>
+              <tr><td>शॉर्टकट, विजेट, नियंत्रण, तत्काल आवाज और कीबोर्ड से संचालित रूट रिकॉर्डिंग</td><td>रिकॉर्डिंग रुकने पर</td></tr>
+              <tr><td>Apple Watch की सामान्य कैप्चर डिलीवरी</td><td>Watch पर रिकॉर्डिंग रुकने का समय; iPhone अपना स्थान उसके बदले नहीं रखता</td></tr>
+              <tr><td>Mac कैप्चर</td><td>भेजना, या तत्काल वॉइस डिलीवरी के लिए रिकॉर्डिंग रुकना</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Watch केवल रिकॉर्डिंग</strong> Markdown सुविधा के बिना मूल M4A ऑडियो फ़ाइल्स में निर्यात करता है, इसलिए रूट अन्यथा वर्तमान स्थान इस्तेमाल करता हो तब भी स्थान नहीं माँगता।</p>
+      </section>
+
+      <section class="docs-section" id="unavailable">
+        <div class="docs-section-label">08 / अनुपलब्धता और पुनर्प्राप्ति</div>
+        <h2>अनुपलब्ध स्थान को हर रूट कैसे संभाले, चुनें</h2>
+        <ul>
+          <li><strong>पूछो:</strong> इंटरैक्टिव कैप्चर में दोबारा प्रयास, रद्द करना, एक बार बिना स्थान भेजना या उस रूट के लिए हमेशा बिना स्थान भेजें चुनना संभव है।</li>
+          <li><strong>बिना स्थान भेजें:</strong> टोकन मान या मेटाडेटा आउटपुट के बिना डिलीवरी जारी रखता है।</li>
+          <li><strong>कैप्चर रद्द करें:</strong> माँगे गए शुरुआती स्थान के बिना नोट बनाने के बजाय डिलीवरी रोकता है।</li>
+          <li><strong>सहेजा विकल्प रीसेट करें:</strong> रूट की स्थान सेटिंग्स में स्थान अनुपलब्ध होने का विकल्प रीसेट करें इस्तेमाल करें।</li>
+        </ul>
+        <p>बिना निगरानी वाला पूछो अनुरोध शुरुआत के समय का अनुपलब्ध परिणाम बाद की समीक्षा के लिए रखता है। कतारबद्ध या विफल कैप्चर पर दोबारा प्रयास बाद का स्थान कभी नहीं लगाता। लंबित काम केवल स्थानीय पुनर्प्राप्ति के लिए आवश्यक गोपनीयता-अनुकूलित स्नैपशॉट या अनुपलब्ध परिणाम रखता है।</p>
+      </section>
+
+      <section class="docs-section" id="migration">
+        <div class="docs-section-label">09 / मौजूदा रूट</div>
+        <h2>अपग्रेड मेटाडेटा का पिछला व्यवहार बनाए रखते हैं</h2>
+        <p>स्थान लेने और आउटपुट के बीच यह अलगाव माइग्रेशन में सुरक्षित है:</p>
+        <ul>
+          <li><strong>नए रूट:</strong> वर्तमान स्थान का उपयोग करें और स्थान मेटाडेटा लिखें दोनों शुरुआत में बंद होते हैं।</li>
+          <li><strong>पहले से स्थान सक्षम रूट:</strong> अपग्रेड के बाद दोनों नियंत्रण चालू रहते हैं, जिससे उन रूट द्वारा पहले लिखा मेटाडेटा बना रहता है।</li>
+          <li><strong>पहले स्थान बंद किए रूट:</strong> दोनों नियंत्रण बंद रहते हैं; अपग्रेड नया मेटाडेटा आउटपुट नहीं जोड़ता।</li>
+        </ul>
+        <p>मौजूदा मेटाडेटा लिखने वाले रूट को केवल टोकन व्यवहार में बदलने के लिए वर्तमान स्थान का उपयोग करें चालू रखें और स्थान मेटाडेटा लिखें बंद करें। मौजूदा Markdown दोबारा लिखा या हटाया नहीं जाता।</p>
+      </section>
+
+      <section class="docs-section" id="privacy">
+        <div class="docs-section-label">10 / गोपनीयता और प्रतिधारण</div>
+        <h2>एक स्पष्ट स्नैपशॉट, पृष्ठभूमि ट्रैकिंग कभी नहीं</h2>
+        <ul>
+          <li>Vox.md स्थान की लगातार निगरानी या पृष्ठभूमि में स्थान ट्रैकिंग नहीं करता।</li>
+          <li>स्थान Vox.md सर्वर, विश्लेषिकी, विज्ञापन सिस्टम या तृतीय-पक्ष AI सेवाओं को नहीं भेजा जाता।</li>
+          <li>टोकन और प्रदाता URL स्थानीय रूप से बनाए जाते हैं। Apple Maps, Google Maps या OpenStreetMap को निर्देशांक तभी मिलते हैं जब आप उनका लिंक खोलते हैं।</li>
+          <li>Apple का सिस्टम रिवर्स जियोकोडर केवल चुने मेटाडेटा को स्थान नाम चाहिए होने पर नेटवर्क अनुरोध कर सकता है। केवल टोकन वाला स्थान यह खोज छोड़ देता है।</li>
+          <li>सफल डिलीवरी के बाद पुनर्प्राप्ति योग्य अनुरोध सामग्री-रहित रसीदों तक सीमित हो जाते हैं और पूरे कैप्चर का इतिहास निर्देशांक, नाम, प्रदाता URL या स्थान टेम्पलेट नहीं रखता।</li>
+          <li>स्थान मेटाडेटा या टोकन लिंक Markdown में लिखा जाए तो वह आपकी चुनी फ़ाइल का हिस्सा बन जाता है। आपका फ़ाइल-सिंक प्रदाता उस फ़ाइल को अपनी शर्तों के तहत प्रोसेस कर सकता है।</li>
+        </ul>
+        <div class="docs-callout">
+          <strong>अनुमति चालू रह सकती है जबकि रूट निजी बने रहें</strong>
+          <p>स्वतंत्र वर्तमान स्थान ऐक्शन के लिए सिस्टम अनुमति उपलब्ध रख सकते हैं और फिर भी हर रूट की वर्तमान स्थान का उपयोग करें सेटिंग बंद रख सकते हैं।</p>
+        </div>
+        <p>देखें <a href="/hi/privacy.html">गोपनीयता नीति</a> डेटा प्रबंधन और प्रतिधारण के पूरे विवरण के लिए।</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">11 / समस्या निवारण</div>
+        <h2>स्थान और टेम्पलेट की आम समस्याएँ ठीक करें</h2>
+        <div class="docs-troubleshooting">
+          <details>
+            <summary><code>{location}</code> खाली रहता है</summary>
+            <p>पुष्टि करें कि प्रभावी प्रविष्टि टेम्पलेट, उपसर्ग, प्रत्यय या वॉल्ट टेम्पलेट ठीक वही छोटे अक्षरों वाला टोकन इस्तेमाल करता है: <code>{location}</code>. फिर डिलीवरी करने वाले रूट के लिए वर्तमान स्थान का उपयोग करें चालू करें। कंपोज़र का एक-टैप सुधार पहचाने गए इनलाइन प्रविष्टि फ़ॉर्मैट के लिए मेटाडेटा सक्षम किए बिना ऐसा कर सकता है; वॉल्ट की लाइव टेम्पलेट फ़ाइलों के लिए मैन्युअल रूट सेटअप चाहिए। अनुमति न मिले या स्थान अनुपलब्ध हो तो रूट का अनुपलब्धता व्यवहार और सिस्टम स्थान सेटिंग्स जाँचें।</p>
+          </details>
+          <details>
+            <summary>लिंक काम करता है, पर मेटाडेटा नहीं दिखता</summary>
+            <p>केवल टोकन कॉन्फ़िगरेशन में यह अपेक्षित है। रूट की स्थान सेटिंग्स खोलें और स्थान मेटाडेटा लिखें चालू करें, फिर नोट फ़्रंटमैटर या इनलाइन प्रविष्टि फ़ील्ड और इच्छित फ़ील्ड चुनें।</p>
+          </details>
+          <details>
+            <summary>मेटाडेटा दिखता है, पर प्रविष्टि में लिंक नहीं दिखता</summary>
+            <p>मेटाडेटा आउटपुट अपने आप लिंक नहीं डालता। जोड़ें <code>{location}</code> प्रभावी प्रविष्टि फ़ॉर्मैट या वॉल्ट Markdown टेम्पलेट में।</p>
+          </details>
+          <details>
+            <summary>स्थान या शहर नहीं है</summary>
+            <p>पुष्टि करें कि नाम वाला फ़ील्ड चुना है। निर्देशांक उपलब्ध रहते हुए भी Apple का रिवर्स जियोकोडर विफल हो सकता है। शहर सटीकता जानबूझकर रुचि-स्थल नाम हटाती है।</p>
+          </details>
+          <details>
+            <summary>फ़्रंटमैटर डिलीवरी टकराव बताती है</summary>
+            <p>कॉन्फ़िगर की गई संग्रह कुंजी, <code>locations</code> डिफ़ॉल्ट रूप से, संगत स्थान सूची होनी चाहिए। रूट सेटिंग्स में संग्रह का नाम बदलें या उपयोगकर्ता द्वारा लिखे मौजूदा फ़्रंटमैटर को समायोजित करें। Vox.md असंगत मान के ऊपर नहीं लिखेगा।</p>
+          </details>
+          <details>
+            <summary>दोबारा प्रयास में स्थान पुराना है या उपलब्ध नहीं है</summary>
+            <p>यह जानबूझकर है। अनुरोध शुरुआत के समय का परिणाम रखता है ताकि बाद का दोबारा प्रयास चुपचाप अलग कैप्चर स्थान का दावा न करे। नया स्नैपशॉट चाहिए तो नया कैप्चर शुरू करें।</p>
+          </details>
+          <details>
+            <summary>स्थान की अनुमति मिली है, लेकिन रूट इसका अनुरोध नहीं करता</summary>
+            <p>सिस्टम अनुमति केवल एक द्वार है। रूट संपादित करें और वर्तमान स्थान का उपयोग करें चालू करें। केवल अनुमति से रूट अपने आप सहमति नहीं देता।</p>
+          </details>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/hi/developers">डेवलपर</a></li>
+        <li><a href="/hi/about">के बारे में</a></li>
+        <li><a href="/hi/contact">संपर्क</a></li>
+        <li><a href="/hi/">मुखपृष्ठ</a></li>
+        <li><a href="/hi/docs/">दस्तावेज़</a></li>
+        <li><a href="/hi/blog/">ब्लॉग</a></li>
+        <li><a href="/hi/privacy.html">गोपनीयता</a></li>
+        <li><a href="/hi/terms.html">शर्तें</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · स्थानीय कैप्चर · उपयोगकर्ता-नियंत्रित फ़ाइलें।</div>
+    </div>
+  <details class="language-switcher"><summary>भाषा</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi" aria-current="page">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

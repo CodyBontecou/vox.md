@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr" data-search-section="섹션" data-search-guide="가이드" data-search-empty="“{query}” 검색 결과 없음">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone 음성 노트를 Obsidian에 저장하는 방법 | Vox.md</title>
+  <meta name="description" content="iPhone에서 음성 노트를 녹음하고 기기에서 전사해 Obsidian 보관함에 Markdown을 저장하세요. Vox.md로 새 노트나 일일 노트 라우팅을 설정하세요.">
+  <link rel="canonical" href="https://vox.isolated.tech/ko/blog/voice-notes-to-obsidian-iphone/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="언어 모델용 Vox.md 문서">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="iPhone 음성 노트를 Obsidian에 저장하는 방법">
+  <meta property="og:description" content="iPhone에서 음성 노트를 녹음하고 기기에서 전사해 Obsidian 보관함에 Markdown을 저장하세요. Vox.md로 새 노트나 일일 노트 라우팅을 설정하세요.">
+  <meta property="og:url" content="https://vox.isolated.tech/ko/blog/voice-notes-to-obsidian-iphone/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="iPhone 음성 노트를 Obsidian에 저장하는 방법">
+  <meta name="twitter:description" content="iPhone에서 음성 노트를 녹음하고 기기에서 전사해 Obsidian 보관함에 Markdown을 저장하세요. Vox.md로 새 노트나 일일 노트 라우팅을 설정하세요.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "iPhone 음성 노트를 Obsidian에 저장하는 방법",
+  "description": "iPhone에서 음성 노트를 녹음하고 기기에서 전사해 Obsidian 보관함에 Markdown을 저장하세요. Vox.md로 새 노트나 일일 노트 라우팅을 설정하세요.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/ko/blog/voice-notes-to-obsidian-iphone/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "ko",
+  "name": "iPhone 음성 노트를 Obsidian에 저장하는 방법 | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ko/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "가이드",
+      "item": "https://vox.isolated.tech/ko/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "iPhone 음성 노트를 Obsidian에 저장하는 방법",
+      "item": "https://vox.isolated.tech/ko/blog/voice-notes-to-obsidian-iphone/"
+    }
+  ],
+  "inLanguage": "ko",
+  "name": "iPhone 음성 노트를 Obsidian에 저장하는 방법 | Vox.md",
+  "description": "iPhone에서 음성 노트를 녹음하고 기기에서 전사해 Obsidian 보관함에 Markdown을 저장하세요. Vox.md로 새 노트나 일일 노트 라우팅을 설정하세요."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/voice-notes-to-obsidian-iphone/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">가이드로 건너뛰기</a>
+<nav aria-label="주 탐색">
+  <div class="nav-inner">
+    <a href="/ko/" class="logo" aria-label="Vox.md 홈">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ko/#how">작동 방식</a></li>
+      <li><a href="/ko/docs/">문서</a></li>
+      <li><a href="/ko/blog/">가이드</a></li>
+      <li><a href="/ko/compare/">비교</a></li>
+      <li><a href="/ko/privacy.html">개인정보 보호</a></li>
+      <li><a href="/ko/terms.html">약관</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ko_45e81e2e5027">Vox.md 다운로드</a>
+  <details class="language-switcher"><summary>언어</summary><ul><li><a href="/blog/voice-notes-to-obsidian-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/voice-notes-to-obsidian-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/voice-notes-to-obsidian-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/voice-notes-to-obsidian-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/voice-notes-to-obsidian-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/voice-notes-to-obsidian-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/voice-notes-to-obsidian-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/voice-notes-to-obsidian-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/voice-notes-to-obsidian-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/voice-notes-to-obsidian-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/voice-notes-to-obsidian-iphone/" lang="ko" hreflang="ko" aria-current="page">한국어</a></li><li><a href="/nl/blog/voice-notes-to-obsidian-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/voice-notes-to-obsidian-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/voice-notes-to-obsidian-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/voice-notes-to-obsidian-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/voice-notes-to-obsidian-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/voice-notes-to-obsidian-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/voice-notes-to-obsidian-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/voice-notes-to-obsidian-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/voice-notes-to-obsidian-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/voice-notes-to-obsidian-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">iPhone 음성 노트 · Obsidian · 로컬 Markdown</div>
+        <h1 class="hero-title">iPhone 음성 노트를 Obsidian에 저장하는 방법</h1>
+        <p class="hero-subtitle">생각을 말하고 iPhone에서 전사해 원하는 보관함, 노트, 제목에 넣으세요.</p>
+      </div>
+      <aside class="meta-card" aria-label="이 가이드 소개">
+        <dl>
+          <div><dt>작성자</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>업데이트</dt><dd><time datetime="2026-10-26">2026년 10월 26일</time></dd></div>
+          <div><dt>필요 조건</dt><dd>iPhone · iOS 17.6+</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="iPhone 음성 노트를 Obsidian에 저장하는 방법">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer">
+        <div class="label">짧은 답변</div>
+        <p>Vox.md에서 캡처 프리셋을 Obsidian 보관함 폴더에 연결하고 로컬 전사 백엔드를 준비한 뒤 빠른 캡처에서 녹음하세요. 전사 내용을 새 Markdown 노트로 보내거나 기존 노트 또는 일일 노트에 추가하세요. Obsidian 플러그인이나 Vox.md 계정은 필요하지 않습니다.</p>
+      </div>
+      <p>Obsidian에도 기본 캡처 도구가 있습니다. <a href="#native-obsidian">아래 기본 옵션 확인</a> 을 다른 앱을 설치하기 전에 확인하세요. 캡처 프리셋, 로컬 음성 모델 선택, 같은 워크플로의 텍스트·미디어·음성이 필요할 때 Vox.md가 유용합니다.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ko_45e81e2e5027">Vox.md 무료 다운로드</a></p>
+      <p>전사 15분과 성공 캡처 전송 10회를 체험하세요. 무제한 사용은 일회성 평생 구매이며 App Store가 지역 가격을 표시합니다.</p>
+      <nav class="toc" aria-label="이 가이드에서">
+        <div class="toc-title">이 가이드에서</div>
+        <ol>
+          <li><a href="#before-you-start">시작 전</a></li>
+          <li><a href="#connect-vault">Obsidian 보관함 연결</a></li>
+          <li><a href="#transcription">로컬 전사 준비</a></li>
+          <li><a href="#record">음성 노트 녹음 및 저장</a></li>
+          <li><a href="#daily-note">음성을 일일 노트나 제목 아래로 보내기</a></li>
+          <li><a href="#native-obsidian">Obsidian 기본 기능만으로 충분한 경우</a></li>
+          <li><a href="#troubleshooting">문제 해결 및 오프라인 사용</a></li>
+        </ol>
+      </nav>
+
+      <h2 id="before-you-start">시작 전</h2>
+      <ul>
+        <li><strong>iOS 17.6 이상인 iPhone.</strong> 음성 백엔드는 기기, OS, 언어에 따라 다릅니다. 실시간 Apple Speech에는 지원되는 iOS 26 기기와 언어가 필요합니다.</li>
+        <li><strong>파일 앱에서 고를 수 있는 보관함 폴더.</strong> Vox.md는 해당 폴더 쓰기 권한이 필요합니다. Obsidian 안에서 보이는 보관함도 파일 앱에서 다른 앱에 공개되지 않을 수 있습니다.</li>
+        <li><strong>준비된 전사 백엔드.</strong> 자동은 언어 준비가 필요할 수 있고 선택적 Whisper나 Parakeet 모델은 최초 다운로드가 필요합니다. 오프라인 전사에 의존하기 전에 연결된 상태에서 준비하세요.</li>
+        <li><strong>마이크 권한.</strong> 이 가이드에서 키보드는 선택 사항입니다. 사용자 키보드나 전체 접근 없이 본 앱에서 녹음할 수 있습니다.</li>
+      </ul>
+      <p>Obsidian Sync를 쓴다면 보관함 폴더를 파일 선택기로 접근할 수 있는지 확인하세요. Vox.md는 파일을 쓰며 Obsidian Sync 서비스에 연결하지 않습니다. 이 가이드 때문에 기존 동기화 설정을 바꾸거나 제공자를 혼용하지 마세요.</p>
+
+      <h2 id="connect-vault">1. Obsidian 보관함 연결</h2>
+      <ol>
+        <li>Vox.md를 열어 빠른 캡처에서 프리셋을 고르세요. 기존 프리셋을 쓰거나 다음에서 만드세요: <strong>설정 → 캡처 프리셋</strong>.</li>
+        <li>선택: <strong>목적지 설정</strong> 프리셋에 대상이 없을 때 사용하세요. 파일 선택기로 보관함의 Markdown 파일이 있는 폴더를 고르세요.</li>
+        <li>다음으로 시작하세요: <strong>새 노트</strong> 대상으로 각 캡처가 별도 파일을 만들도록 하세요. 노트를 한곳에 모으려면 받은 편지함 하위 폴더를 선택하세요.</li>
+        <li>저장 전에 대상 미리보기를 확인하세요. 첫 캡처에는 다음을 쓰세요: <strong>원본 유지</strong> 처리로 선택적 단계의 전사 재작성을 막으세요.</li>
+      </ol>
+      <p>프리셋이 대상을 기억합니다. 이후에도 같은 루트를 쓰세요. 참조: <a href="/ko/docs/#presets">프리셋 및 대상 참조</a> 에서 템플릿, 첨부 폴더, 삽입 규칙을 확인하세요.</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/00-capture-light-640.webp" alt="음성 및 대상 컨트롤이 있는 Vox.md 빠른 캡처 작성 화면" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>빠른 캡처 작성 화면. 녹음 전에 프리셋과 대상을 선택하세요. 표시는 앱 버전에 따라 다를 수 있습니다.</figcaption>
+      </figure>
+
+      <h2 id="transcription">2. 로컬 전사 준비</h2>
+      <p>모델 설정을 열고 휴대폰과 언어를 지원하는 백엔드를 선택하세요. Vox.md는 Apple Speech와 선택적인 Whisper 및 Parakeet 모델을 지원합니다. 첫 녹음 전에 준비나 모델 다운로드를 완료하세요.</p>
+      <p>지원되는 iOS 26 기기에서 자동을 사용하면 Apple Speech가 녹음 중 텍스트를 표시할 수 있습니다. 명시적으로 선택한 Whisper와 Parakeet 모델은 녹음이 끝난 뒤 전사합니다. 음성 노트를 저장하는 데 실시간 미리보기가 필요하지는 않습니다.</p>
+      <p>기기 내 전사에는 클라우드 전사 계정이 필요하지 않습니다. 모델 가용성, 인식 품질, 처리 시간은 다릅니다. 다음을 읽으세요: <a href="/ko/docs/#models">모델 요건 및 준비 단계</a> 선호하는 백엔드를 사용할 수 없을 때 사용하세요.</p>
+
+      <h2 id="record">3. 음성 노트 녹음 및 저장</h2>
+      <ol>
+        <li>빠른 캡처에서 설정한 프리셋을 선택하세요. 녹음 전에 다음을 선택하세요: <strong>초안에 추가</strong> 을 음성 컨트롤에서 골라 첫 전사를 검토할 수 있게 하고 녹음을 시작하세요.</li>
+        <li>“치과 예약하는 것 잊지 말기”처럼 짧은 생각을 말하세요. 마치면 녹음을 중지하세요.</li>
+        <li>초안에 추가를 선택하고 전사를 기다려 작성 화면에서 인식 오류를 고친 뒤 다음을 탭하세요: <strong>보내기</strong>. 다음을 선택하면 <strong>즉시 전송</strong> 을 녹음 전에 선택하면 녹음 완료 시 프리셋이 전사를 라우팅합니다.</li>
+        <li>Vox.md에서 전송을 확인한 뒤 Obsidian에서 대상 폴더를 열어 새 노트를 확인하세요.</li>
+      </ol>
+      <p>원본 유지 처리의 순수 전사 노트 본문은 다음과 같을 수 있습니다. 예시이며 정확히 같은 인식이나 문장부호를 보장하지 않습니다:</p>
+      <pre class="guide-code"><code>Remember to book the dentist.</code></pre>
+      <p>파일명과 프런트매터는 프리셋에서 정합니다. 첨부파일이 필요하면 원본 오디오를 보관할 수 있지만 Obsidian에서 전사를 활용하는 데 오디오 첨부는 필요하지 않습니다.</p>
+      <p>키보드는 별도 경로로 받아쓴 텍스트를 활성 필드에 삽입합니다. 캡처 프리셋으로 음성을 Markdown 파일로 보내려면 여기의 캡처 흐름을 쓰세요. 참조: <a href="/ko/blog/best-voice-to-text-keyboard-iphone/">비공개 iPhone 키보드 가이드</a> 에서 다른 앱에 받아쓰세요.</p>
+
+      <h2 id="daily-note">음성을 일일 노트나 제목 아래로 보내기</h2>
+      <p>새 노트 캡처가 작동하면 프리셋 대상을 편집해 다음을 사용하세요: <strong>롤링 노트</strong> 에 일별 주기를 쓰세요. 기존 Obsidian 일일 노트의 폴더와 파일명 형식에 맞추세요. Vox.md는 Daily Notes 플러그인 설정을 자동 탐지하지 않습니다.</p>
+      <p>받아쓴 할 일을 모으려면 다음 2단계 제목 아래 삽입을 선택하세요: <strong>Tasks</strong> 제목을 선택하세요. 제목이 없으면 Vox.md가 만들지, 항목을 섹션 앞이나 끝에 둘지 정하세요. 할 일 프리셋은 할 일 체크리스트 처리, 일반 문장은 원본 유지를 사용하면 됩니다.</p>
+      <p>예를 들어 다음을 대상으로 하는 일일 할 일 프리셋: <code>Journal/2026-10-26.md</code> 의 결과 예시:</p>
+      <pre class="guide-code"><code>## Tasks
+- Remember to book the dentist.</code></pre>
+      <p>기본 형식이 아닌 설정된 출력 예시입니다. 두 번째 일일 노트를 만들지 않도록 기존 날짜 규칙을 유지하고 대상 미리보기를 확인하세요. 하나의 지속적인 받은 편지함을 원하면 다음을 고르세요: <strong>기존 노트</strong> 을 선택해 그곳에 추가하세요.</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="노트 지정 및 제목 배치를 위한 Vox.md 대상 설정" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>대상 설정에서 노트와 삽입 지점을 선택하세요. 루트를 기존 보관함 규칙에 맞추세요.</figcaption>
+      </figure>
+
+      <h2 id="native-obsidian">Obsidian 기본 기능만으로 충분한 경우</h2>
+      <p>Obsidian의 <a href="https://obsidian.md/help/ios">공식 iOS 가이드</a> 는 iOS 26 이상에서 버전 1.14 이상의 기본 빠른 캡처를 설명합니다. 위젯과 단축어로 노트를 만들거나 업데이트합니다. 보관함에 기본 텍스트 캡처만 필요하면 여기서 시작하세요.</p>
+      <p>해당 <a href="https://obsidian.md/changelog/2026-10-22-mobile-v1.15.0/">Obsidian 1.15 모바일 얼리 액세스에 관한 2026년 10월 22일 발표</a> 에는 iOS 26 잠금 화면 캡처를 포함한 음성 전사와 녹음 저장도 추가됩니다. 이 가이드의 10월 26일 업데이트 기준으로 해당 발표는 얼리 액세스 채널 대상입니다. 설치된 버전에서 사용 가능한지 확인하세요.</p>
+      <p>로컬 음성 백엔드 선택, 설정 가능한 캡처 처리와 라우팅, 텍스트·사진·스캔·파일·음성의 조합이 필요하다면 Vox.md를 선택하세요. Obsidian 보관함이 아닌 쓰기 가능한 Markdown 폴더에서도 사용할 수 있습니다. 어느 앱도 다른 앱을 대체할 필요가 없습니다. Obsidian은 계속 노트를 정리하고 읽는 공간으로 쓰세요.</p>
+
+      <h2 id="troubleshooting">문제 해결 및 오프라인 사용</h2>
+      <h3>보관함이 파일 앱에 나타나지 않음</h3>
+      <p>사용 가능한 파일 제공자를 통해 폴더가 공개되어 다른 앱에서도 선택할 수 있는지 확인하세요. 접근할 수 없다면 쓰기 가능한 폴더를 사용하고, 샘플 Markdown 노트를 Obsidian으로 직접 옮겨 워크플로를 평가하세요. Vox.md가 Obsidian Sync 보관함에 접근할 수 있다고 가정하지 마세요.</p>
+      <h3>전사가 없거나 부정확함</h3>
+      <p>마이크 접근, 백엔드 준비, 언어 지원을 확인하세요. Apple Speech 실시간 텍스트는 지원 OS·기기 조합이 필요하며 다운로드 모델과 동작이 다를 수 있습니다. 보내기 전 중요한 글을 검토하세요. 참조: <a href="/ko/docs/#models">모델 및 전사</a> 에서 사용 가능한 옵션을 확인하세요.</p>
+      <h3>캡처 대기 중 또는 저장 불가</h3>
+      <p>대상 권한과 파일 제공자 가용성을 확인하세요. 같은 생각을 다시 캡처하기보다 대기/실패 항목을 검토해 대상을 수정한 뒤 재시도하세요. Vox.md는 복구용 대기 전송 데이터를 보관합니다. 참조: <a href="/ko/docs/#troubleshooting">전송 문제 해결</a>.</p>
+      <h3>오프라인에서도 할 수 있나요?</h3>
+      <p>백엔드 준비 후 음성 전사는 기기에서 실행됩니다. 노트를 쓰려면 선택한 폴더도 로컬에서 사용 가능하고 쓰기가 허용되어야 합니다. 클라우드 기반 폴더는 파일 접근이나 이후 동기화에 연결이 필요할 수 있습니다. 로컬 전사라고 해서 선택한 동기화 제공자에게 완성된 노트가 절대 전달되지 않는 것은 아닙니다.</p>
+      <h3>음성 노트는 무료 할당량 두 가지를 모두 쓰나요?</h3>
+      <p>Markdown으로 라우팅된 음성 전사는 전사 할당량을 사용하며 캡처 전송을 추가로 사용하지 않습니다. 무료 다운로드에는 전사 15분과 다른 캡처 워크플로용 성공한 캡처 전송 10회가 포함됩니다. 무제한 사용은 한 번 구매하면 평생 이용할 수 있습니다.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">다음 생각은 알맞은 노트에 도착할 수 있습니다.</h2>
+        <p>세부적인 프리셋을 만들기 전에 폴더를 연결하고 로컬 전사를 준비해 짧은 음성 캡처를 시험하세요.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ko_45e81e2e5027">Vox.md 무료 다운로드</a></p>
+        <p>무료 할당량 · 계정 불필요 · 한 번의 평생 잠금 해제</p>
+      </section>
+      <p><a href="/ko/blog/obsidian-quick-capture-iphone/">iPhone 캡처 방법 비교 선택</a>, 또는 <a href="/ko/compare/vox-md-vs-obsidian-quick-capture/">Obsidian 기본 기능과 Vox.md 비교</a>.</p>
+      <nav class="toc" aria-label="관련 가이드">
+        <div class="toc-title">설정 계속</div>
+        <ul>
+          <li><a href="/ko/blog/offline-transcription-iphone-markdown/">오프라인용 전사 및 Markdown 대상 준비</a></li>
+          <li><a href="/ko/blog/append-to-obsidian-daily-note-iphone/">일일 노트 제목 아래 텍스트와 음성 추가</a></li>
+          <li><a href="/ko/blog/apple-watch-obsidian-voice-notes/">Apple Watch 녹음을 Obsidian으로 보내기</a></li>
+          <li><a href="/ko/docs/#presets">캡처 프리셋 및 Markdown 대상</a></li>
+          <li><a href="/ko/docs/#models">로컬 음성 모델 및 언어</a></li>
+          <li><a href="/ko/blog/best-voice-to-text-keyboard-iphone/">다른 iPhone 앱의 비공개 음성 받아쓰기</a></li>
+        </ul>
+      </nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ko/">홈</a></li>
+        <li><a href="/ko/docs/">문서</a></li>
+        <li><a href="/ko/blog/">가이드</a></li>
+        <li><a href="/ko/compare/">비교</a></li>
+        <li><a href="/ko/privacy.html">개인정보 보호</a></li>
+        <li><a href="/ko/terms.html">약관</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">지원</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ko_45e81e2e5027">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 로컬 노트용 빠른 캡처 · 콘텐츠 업로드 없음.</div>
+    </div>
+  <details class="language-switcher"><summary>언어</summary><ul><li><a href="/blog/voice-notes-to-obsidian-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/voice-notes-to-obsidian-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/voice-notes-to-obsidian-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/voice-notes-to-obsidian-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/voice-notes-to-obsidian-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/voice-notes-to-obsidian-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/voice-notes-to-obsidian-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/voice-notes-to-obsidian-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/voice-notes-to-obsidian-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/voice-notes-to-obsidian-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/voice-notes-to-obsidian-iphone/" lang="ko" hreflang="ko" aria-current="page">한국어</a></li><li><a href="/nl/blog/voice-notes-to-obsidian-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/voice-notes-to-obsidian-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/voice-notes-to-obsidian-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/voice-notes-to-obsidian-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/voice-notes-to-obsidian-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/voice-notes-to-obsidian-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/voice-notes-to-obsidian-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/voice-notes-to-obsidian-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/voice-notes-to-obsidian-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/voice-notes-to-obsidian-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

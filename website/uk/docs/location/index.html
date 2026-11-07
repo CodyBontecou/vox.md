@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="uk" dir="ltr" data-search-section="Розділ" data-search-guide="Посібник" data-search-empty="Немає збігів для «{query}»">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Поточне місцеположення, {location} і метадані — Документація Vox.md</title>
+  <meta name="description" content="Налаштуйте разову геопозицію, токен Markdown {location}, необов’язкові геометадані frontmatter або вбудованих полів, точність, конфіденційність і відновлення в маршрутах Vox.md.">
+  <link rel="canonical" href="https://vox.isolated.tech/uk/docs/location/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Документація Vox.md для мовних моделей">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Поточне місцеположення, {location} і метадані — Документація Vox.md">
+  <meta property="og:description" content="Використовуйте разову геопозицію в шаблонах Markdown без автоматичного додавання геометаданих до нотаток.">
+  <meta property="og:url" content="https://vox.isolated.tech/uk/docs/location/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Посібник із поточного місцеположення у Vox.md">
+  <meta name="twitter:description" content="Повний посібник разової геопозиції, {location}, метаданих, точності, конфіденційності й міграції.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Поточне місцеположення, {location} і геометадані у Vox.md",
+  "description": "Повний посібник з отримання поточної геопозиції для кожного пресету, токена Markdown {location}, необов’язкового виводу метаданих, конфіденційності, міграції й усунення несправностей.",
+  "dateModified": "2026-08-21",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/uk/docs/location/",
+  "inLanguage": "uk",
+  "name": "Поточне місцеположення, {location} і метадані — Документація Vox.md"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/uk/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Документація",
+      "item": "https://vox.isolated.tech/uk/docs/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Теперішнє місцезнаходження",
+      "item": "https://vox.isolated.tech/uk/docs/location/"
+    }
+  ],
+  "inLanguage": "uk",
+  "name": "Поточне місцеположення, {location} і метадані — Документація Vox.md",
+  "description": "Налаштуйте разову геопозицію, токен Markdown {location}, необов’язкові геометадані frontmatter або вбудованих полів, точність, конфіденційність і відновлення в маршрутах Vox.md."
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="API публічної інформації Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/location/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/location/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/location/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/location/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/location/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/location/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/location/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/location/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/location/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/location/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/location/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/location/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/location/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/location/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/location/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/location/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/location/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/location/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/location/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/location/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/location/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/location/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/location/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/location/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="Основна навігація">
+  <div class="nav-inner docs-header-inner">
+    <a href="/uk/" class="logo" aria-label="Головна Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ документація</span></span>
+    </a>
+    <form class="docs-search" role="search" action="../" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="Пошук документації" aria-label="Пошук документації" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Результати пошуку" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/uk/blog/">Блог</a></li>
+      <li><a href="/uk/privacy.html">Конфіденційність</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>Мова</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk" aria-current="page">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="На цій сторінці">
+      <div class="docs-sidebar-title">На цій сторінці</div>
+      <ol>
+        <li><a href="#overview">Два незалежні вибори</a></li>
+        <li><a href="#setup">Налаштуйте маршрут</a></li>
+        <li><a href="#configurations">Типові конфігурації</a></li>
+        <li><a href="#location-token"><code>{location}</code> Токен</a></li>
+        <li><a href="#metadata-output">Вивід метаданих</a></li>
+        <li><a href="#precision">Точність і підписи</a></li>
+        <li><a href="#capture-sources">Захоплення джерел</a></li>
+        <li><a href="#unavailable">Недоступність і відновлення</a></li>
+        <li><a href="#migration">Наявні маршрути</a></li>
+        <li><a href="#privacy">Конфіденційність і зберігання</a></li>
+        <li><a href="#troubleshooting">Усунення несправностей</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="location-guide-title">
+      <div class="page-eyebrow">Документація · Маршрути</div>
+      <h1 class="page-title" id="location-guide-title">Поточне місцеположення, <code>{location}</code>, і метадані</h1>
+      <p class="docs-hero-copy">Використовуйте одну геопозицію на момент створення в оформленні запису без автоматичного додавання YAML чи вбудованих полів. Отримання геопозиції та вивід метаданих — окремі, явні параметри кожного маршруту.</p>
+      <div class="docs-meta-row" aria-label="Відомості посібника">
+        <span>Оновлено 21 серпня 2026 року</span>
+        <span>Разове отримання</span>
+        <span>Без фонового відстеження</span>
+        <a href="/uk/docs/">Повний посібник функцій</a>
+      </div>
+      </header>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="overview">
+        <div class="docs-section-label">01 / Огляд</div>
+        <h2>Отримання геопозиції не означає вивід метаданих</h2>
+        <p>Кожен маршрут має два окремі параметри геолокації. <strong>Використовувати поточне місцезнаходження</strong> визначає, чи маршрут запитує одну геопозицію в момент створення. <strong>Записувати метадані місцезнаходження</strong> визначає, чи знімок також записується в frontmatter або вбудовані поля.</p>
+
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Елемент керування</th><th>Що це означає</th><th>Чого це не означає</th></tr></thead>
+            <tbody>
+              <tr><td>Системний дозвіл геолокації</td><td>Дозволяє Vox.md запитувати геопозицію під час використання застосунку або підтримуваного інтерфейсу захоплення.</td><td>Це не вмикає геолокацію жодного маршруту.</td></tr>
+              <tr><td>Використовувати поточне місцезнаходження</td><td>Запитує одну геопозицію для цього маршруту й робить її доступною для <code>{location}</code>.</td><td>YAML чи вбудовані метадані автоматично не записуються.</td></tr>
+              <tr><td>Записувати метадані місцезнаходження</td><td>Записує вибрані структуровані поля чи перевірений розширений YAML з отриманого знімка геопозиції.</td><td>Не визначає, чи <code>{location}</code> може показати.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <strong>Намір задає маршрут, а не дозвіл</strong>
+          <p>Дозвіл під час використання лише відкриває системний доступ. Vox.md усе одно запитує геопозицію тільки для незалежної дії поточного місцеположення на панелі або маршруту з увімкненим її використанням.</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="setup">
+        <div class="docs-section-label">02 / Налаштування</div>
+        <h2>Налаштуйте поточне місцеположення для одного маршруту</h2>
+        <ol class="docs-steps">
+          <li><strong>Відкрийте маршрути.</strong><span>На iPhone чи iPad відкрийте Налаштування → Маршрути. На Mac відкрийте налаштування й виберіть маршрути.</span></li>
+          <li><strong>Змініть маршрут.</strong><span>Виберіть маршрут, якому потрібна вихідна геопозиція. Налаштування належить лише йому й не впливає на інші.</span></li>
+          <li><strong>Відкрийте місцеположення.</strong><span>Увімкніть <em>Використовувати поточне місцезнаходження</em>. Залиште <em>Записувати метадані місцезнаходження</em> вимкненим для самого токена.</span></li>
+          <li><strong>Виберіть точність.</strong><span>Використовуйте «Точний» для вихідних координат або «Місто» для округлення до двох десяткових знаків без назви об’єкта.</span></li>
+          <li><strong>Виберіть поведінку недоступності.</strong><span>Запитання, надсилання без геопозиції чи скасування визначає поведінку без вихідних координат.</span></li>
+          <li><strong>Додайте <code>{location}</code> за бажанням.</strong><span>Помістіть токен у шаблон запису, власний префікс чи суфікс або шаблон Markdown сховища.</span></li>
+        </ol>
+        <p>Спочатку ОС може запросити дозвіл геолокації. Після попередньої відмови дозвольте Vox.md місцеположення в параметрах iOS, iPadOS або macOS.</p>
+      </section>
+
+      <section class="docs-section" id="configurations">
+        <div class="docs-section-label">03 / Типові конфігурації</div>
+        <h2>Виберіть найменший потрібний вивід геоданих</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Бажаний результат</th><th>Використовувати поточне місцезнаходження</th><th>Записувати метадані місцезнаходження</th><th>Храм</th></tr></thead>
+            <tbody>
+              <tr><td>Без геопозиції маршруту</td><td>Вимкнено</td><td>Вимкнено</td><td>Не використовуйте <code>{location}</code>, інакше він порожній.</td></tr>
+              <tr><td>Лише клікабельне посилання</td><td>Увімк.</td><td>Вимкнено</td><td>Додайте <code>{location}</code>. Геополя не записуються.</td></tr>
+              <tr><td>Лише метадані</td><td>Увімк.</td><td>Увімк.</td><td>Не зберігати <code>{location}</code>. Записуються лише налаштовані поля.</td></tr>
+              <tr><td>Посилання й метадані</td><td>Увімк.</td><td>Увімк.</td><td>Додайте <code>{location}</code> і налаштуйте поля метаданих.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Вимкнення геолокації блокує токен і метадані маршруту, навіть якщо попередні формати метаданих збережені на майбутнє.</p>
+      </section>
+
+      <section class="docs-section" id="location-token">
+        <div class="docs-section-label">04 / Токен шаблону</div>
+        <h2>Використати <code>{location}</code> Без зміни метаданих нотатки</h2>
+        <p>Коли використання геопозиції ввімкнено й вихідний знімок доступний, <code>{location}</code> формує перевірене посилання Markdown на Google Maps:</p>
+        <pre class="docs-code-block"><code>[Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>Токен працює в багаторазових шаблонах запису, власних префіксах і суфіксах та Markdown-шаблонах сховища. Використовує ті самі точні чи міські координати маршруту.</p>
+
+        <h3 id="token-example">Приклад лише з токеном</h3>
+        <p>Для суфікса на кшталт:</p>
+        <pre class="docs-code-block"><code>Captured from {location}</code></pre>
+        <p>Vox.md може створювати:</p>
+        <pre class="docs-code-block"><code>Captured from [Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>Коли запис геометаданих вимкнено, це посилання — єдині геодані маршруту. Без <code>locations:</code> колекції й без <code>location.*::</code> поля записуються.</p>
+
+        <h3 id="composer-fix">Виправлення одним натисканням</h3>
+        <p>Якщо чинний префікс, суфікс або багаторазовий шаблон запису використовує <code>{location}</code> коли геолокацію маршруту вимкнено, редактор пояснює порожній токен і пропонує <strong>Використовувати поточне місцеположення для [Route]</strong>. Дія вмикає геопозицію маршруту, навмисно лишаючи метадані вимкненими: наступне надсилання розгорне токен без зміни метаданих нотатки. Шаблони сховища читаються лише при доставці, тому не викликають підказку; увімкніть геолокацію вручну для токена в них.</p>
+
+        <div class="docs-callout docs-callout-neutral">
+          <strong>Коли токен порожній</strong>
+          <p><code>{location}</code> стає порожнім рядком, коли геолокацію вимкнено, вона недоступна чи захоплення триває без неї. Зважайте на навколишню пунктуацію й підписи необов’язкових рядків шаблону.</p>
+        </div>
+
+        <h3 id="capture-bar-location">Незалежна дія панелі захоплення</h3>
+        <p>Швидке захоплення <strong>Теперішнє місцезнаходження</strong> безпосередньо вставляє разове Google Maps до чернетки. Не залежить від маршрутів і не змінює використання геопозиції чи запис метаданих.</p>
+      </section>
+
+      <section class="docs-section" id="metadata-output">
+        <div class="docs-section-label">05 / Вивід метаданих</div>
+        <h2>Записуйте структуровані поля лише за власним вибором</h2>
+        <p>Увімкніть геометадані для машинозчитуваних полів на додачу чи замість <code>{location}</code> посилання.</p>
+
+        <div class="docs-feature-grid">
+          <div><strong>Frontmatter нотатки</strong><p>Додає кожну геопозицію до колекції з назвою <code>locations</code> за замовчуванням, за ID захоплення. Наявні сторонні поля frontmatter зберігаються.</p></div>
+          <div><strong>Вбудовані поля запису</strong><p>Записує у стилі Dataview <code>location.key:: value</code> рядки поруч зі збереженим записом. Колекція frontmatter не додається.</p></div>
+          <div><strong>Структуровані поля</strong><p>Вибирайте й перейменовуйте координати, широту, довготу, місце, місто, регіон, країну, посилання провайдерів, geo URI, точність, час, джерело та ID.</p></div>
+          <div><strong>Розширений YAML</strong><p>Використовує перевірений обмежений шаблон YAML для frontmatter. Розширений YAML недоступний для вбудованих полів запису.</p></div>
+        </div>
+
+        <h3 id="frontmatter-example">Приклад структурованого frontmatter</h3>
+        <pre class="docs-code-block"><code>---
+title: Field Notes
+locations:
+  - id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    coordinates: [45.501235, -73.567890]
+    place: "Café &amp; Main"
+    appleMapsURL: "https://maps.apple.com/?ll=45.501235%2C-73.567890&amp;q=Caf%C3%A9%20%26%20Main"
+    timestamp: "2023-11-14T22:13:20.000Z"
+    source: "app"
+---</code></pre>
+        <p>Періодичні нотатки можуть тримати кілька захоплень у колекції. Захист вбудовано в об’єднання: повтор з тим самим ID не додає геопозицію двічі. Несумісне користувацьке значення в ключі колекції зупиняє Vox.md замість перезапису.</p>
+
+        <h3 id="inline-example">Приклад вбудованих полів запису</h3>
+        <pre class="docs-code-block"><code>location.id:: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+location.coordinates:: [45.501235, -73.567890]
+location.place:: "Café &amp; Main"
+
+Captured text</code></pre>
+
+        <h3 id="advanced-yaml">Підстановки розширеного YAML</h3>
+        <p>Розширені шаблони можуть використовувати підстановки, наприклад <code>{{coordinates}}</code>, <code>{{latitude}}</code>, <code>{{longitude}}</code>, <code>{{place}}</code>, <code>{{city}}</code>, <code>{{region}}</code>, <code>{{country}}</code>, <code>{{appleMapsURL}}</code>, <code>{{googleMapsURL}}</code>, <code>{{openStreetMapURL}}</code>, <code>{{geoURI}}</code>, <code>{{accuracy}}</code>, <code>{{timestamp}}</code>, <code>{{source}}</code>, і <code>{{id}}</code>. Перед збереженням перегляньте конфігурацію в налаштуваннях маршруту.</p>
+      </section>
+
+      <section class="docs-section" id="precision">
+        <div class="docs-section-label">06 / Точність і підписи</div>
+        <h2>Точний і міський режими мають один узгоджений знімок</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Точність</th><th>Координати</th><th>Підписи</th><th>Посилання й поля</th></tr></thead>
+            <tbody>
+              <tr><td>Точний</td><td>Зберігає вихідну геопозицію з шістьма видимими десятковими знаками.</td><td>Може мати назву об’єкта за потреби поля метаданих.</td><td>Кожне похідне значення використовує точні координати.</td></tr>
+              <tr><td>Місто</td><td>Округлює широту й довготу до двох десяткових знаків перед збереженням знімка.</td><td>Прибирає назви об’єктів; місто, регіон і країна можуть лишитися.</td><td>Кожен URL провайдера, geo URI, токен і поле використовує округлені координати.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Системний зворотний геокодер Apple використовується лише з увімкненим записом геометаданих, якщо вибраному структурованому полю або розширеному заповнювачу потрібні місце, місто, регіон чи країна. Маршрут лише з токеном пропускає зворотне геокодування. Якщо пошук підпису не вдається, результат на основі координат залишається доступним.</p>
+      </section>
+
+      <section class="docs-section" id="capture-sources">
+        <div class="docs-section-label">07 / Джерела захоплення</div>
+        <h2>Знімок належить джерелу захоплення</h2>
+        <p>Поточне місцеположення визначається на межі, де виникає захоплення. Повторна спроба й відновлення використовують цей надійно збережений результат, а не непомітно запитують новішу геопозицію.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Джерело захоплення</th><th>Момент отримання</th></tr></thead>
+            <tbody>
+              <tr><td>Швидке захоплення iPhone та iPad</td><td>відправити</td></tr>
+              <tr><td>Меню поширення</td><td>Надсилання в розширенні поширення</td></tr>
+              <tr><td>Прямі наміри тексту, посилання й файлу в чергу</td><td>Виклик наміру</td></tr>
+              <tr><td>Команди, віджети, керування й глибокі посилання редактора</td><td>Надсилання в редакторі</td></tr>
+              <tr><td>Команда, віджет, керування, негайний голос і запис маршруту клавіатурою</td><td>Зупинка запису</td></tr>
+              <tr><td>Звичайна доставка захоплення Apple Watch</td><td>Зупинка запису на годиннику; iPhone не підставляє власну геопозицію</td></tr>
+              <tr><td>Захоплення Mac</td><td>Надсилання або зупинка запису для негайної голосової доставки</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Лише запис годинника</strong> експортує вихідне M4A до «Файлів» без Markdown, тому не запитує геопозиції, навіть якщо маршрут зазвичай її використовує.</p>
+      </section>
+
+      <section class="docs-section" id="unavailable">
+        <div class="docs-section-label">08 / Недоступність і відновлення</div>
+        <h2>Виберіть поведінку кожного маршруту без геопозиції</h2>
+        <ul>
+          <li><strong>Запитувати:</strong> інтерактивні захоплення можуть повторити, скасувати, раз надіслати без геопозиції чи вибрати постійне надсилання без неї для маршруту.</li>
+          <li><strong>Надіслати без місцеположення:</strong> продовжує доставку без токена й метаданих.</li>
+          <li><strong>Скасувати захоплення:</strong> зупиняє доставку замість нотатки без запитаної вихідної геопозиції.</li>
+          <li><strong>Скинути вибір:</strong> скиньте вибір недоступної геопозиції в геоналаштуваннях маршруту.</li>
+        </ul>
+        <p>Фоновий запит запитання зберігає початковий результат недоступності для перевірки. Повтор черги чи збою не підставляє пізнішу геопозицію. Очікувана робота тримає лише скоригований знімок чи недоступність для локального відновлення.</p>
+      </section>
+
+      <section class="docs-section" id="migration">
+        <div class="docs-section-label">09 / Наявні маршрути</div>
+        <h2>Оновлення зберігають попередню поведінку метаданих</h2>
+        <p>Поділ отримання й виводу безпечний під час міграції:</p>
+        <ul>
+          <li><strong>Нові маршрути:</strong> Використання геопозиції й запис геометаданих початково вимкнені.</li>
+          <li><strong>Маршрути з раніше ввімкненою геолокацією:</strong> обидва параметри лишаються ввімкненими після оновлення для збереження попередніх метаданих.</li>
+          <li><strong>Раніше вимкнені геомаршрути:</strong> обидва параметри лишаються вимкненими; оновлення не додає нового виводу метаданих.</li>
+        </ul>
+        <p>Щоб перевести наявний маршрут на токен без метаданих, залиште геолокацію ввімкненою й вимкніть запис геометаданих. Наявний Markdown не переписується й не видаляється.</p>
+      </section>
+
+      <section class="docs-section" id="privacy">
+        <div class="docs-section-label">10 / Конфіденційність і зберігання</div>
+        <h2>Один явний знімок, жодного фонового відстеження</h2>
+        <ul>
+          <li>Vox.md не стежить за геопозицією постійно чи у фоні.</li>
+          <li>Геопозиція не надсилається на сервери Vox.md, до систем аналітики, реклами чи сторонніх сервісів ШІ.</li>
+          <li>Токени й URL провайдерів формуються локально. Apple Maps, Google Maps або OpenStreetMap отримує координати лише коли ви відкриваєте його посилання.</li>
+          <li>Системне зворотне геокодування Apple може робити мережевий запит лише коли вибраним метаданим потрібна назва місця. Геолокація лише через токен пропускає цей пошук.</li>
+          <li>Після доставки запити стають квитанціями без вмісту; завершена історія не містить координат, підписів, URL провайдерів чи геошаблонів.</li>
+          <li>Якщо геометадані або посилання токена записано до Markdown, вони стають частиною вибраного вами файлу. Ваш файловий провайдер синхронізації може обробляти цей файл на власних умовах.</li>
+        </ul>
+        <div class="docs-callout">
+          <strong>Дозвіл може лишатися ввімкненим без розкриття геопозиції маршрутами</strong>
+          <p>Можна залишити системний дозвіл для незалежної дії геопозиції й вимкнути її використання в усіх маршрутах.</p>
+        </div>
+        <p>Див. <a href="/uk/privacy.html">Політика конфіденційності</a> із повними відомостями обробки й зберігання даних.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">11 / Усунення несправностей</div>
+        <h2>Виправте типові проблеми геопозиції й шаблонів</h2>
+        <div class="docs-troubleshooting">
+          <details>
+            <summary><code>{location}</code> порожній</summary>
+            <p>Перевірте, що чинний шаблон, префікс, суфікс чи шаблон сховища використовує точний токен у нижньому регістрі <code>{location}</code>. Потім увімкніть використання поточного місцеположення для маршруту доставки. Виправлення одним натисканням у редакторі робить це для виявленого вбудованого оформлення без метаданих; файли шаблонів сховища потребують ручного налаштування. Якщо дозвіл відхилено чи геопозиція недоступна, перевірте поведінку маршруту й системні налаштування геолокації.</p>
+          </details>
+          <details>
+            <summary>Посилання працює, метаданих немає</summary>
+            <p>Це очікувано для самого токена. У геоналаштуваннях маршруту ввімкніть запис метаданих, виберіть frontmatter нотатки чи вбудовані поля запису та потрібні поля.</p>
+          </details>
+          <details>
+            <summary>Метадані є, а посилання в записі немає</summary>
+            <p>Метадані не вставляють посилання автоматично. Додайте <code>{location}</code> до чинного оформлення чи шаблону Markdown сховища.</p>
+          </details>
+          <details>
+            <summary>Немає місця чи міста</summary>
+            <p>Підтвердьте вибір поля підпису. Геокодування Apple може дати збій при доступних координатах. Точність «Місто» навмисно прибирає назви об’єктів.</p>
+          </details>
+          <details>
+            <summary>Доставка frontmatter повідомляє про конфлікт</summary>
+            <p>Налаштований ключ колекції, <code>locations</code> типово, має бути сумісним списком геопозицій. Перейменуйте колекцію в маршруті або виправте користувацький frontmatter. Vox.md не перезапише несумісне значення.</p>
+          </details>
+          <details>
+            <summary>Під час повторної спроби місцеположення застаріле чи недоступне</summary>
+            <p>Так задумано. Запит зберігає початковий результат, щоб пізній повтор не підставив інше місце непомітно. Для нового знімка почніть нове захоплення.</p>
+          </details>
+          <details>
+            <summary>Геолокацію дозволено, але маршрут її не запитує</summary>
+            <p>Системний дозвіл лише відкриває доступ. Відредагуйте маршрут і ввімкніть використання поточного місцеположення. Сам дозвіл ніколи не вмикає геолокацію маршруту.</p>
+          </details>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/uk/developers">Розробникам</a></li>
+        <li><a href="/uk/about">Про</a></li>
+        <li><a href="/uk/contact">Контакти</a></li>
+        <li><a href="/uk/">Головна</a></li>
+        <li><a href="/uk/docs/">Документація</a></li>
+        <li><a href="/uk/blog/">Блог</a></li>
+        <li><a href="/uk/privacy.html">Конфіденційність</a></li>
+        <li><a href="/uk/terms.html">Умови</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Локальне захоплення · Файли під вашим контролем.</div>
+    </div>
+  <details class="language-switcher"><summary>Мова</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk" aria-current="page">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" dir="ltr" data-search-section="部分" data-search-guide="指南" data-search-empty="没有与“{query}”匹配的结果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在 iPhone 上离线将音频转录为 Markdown | Vox.md</title>
+  <meta name="description" content="在 Vox.md 中准备本地转录，录制或导入音频，并在 iPhone 上保存 Markdown。了解模型下载、文件夹可用性和离线检查。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hans/blog/offline-transcription-iphone-markdown/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供语言模型使用的 Vox.md 文档">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="在 iPhone 上离线将音频转录为 Markdown">
+  <meta property="og:description" content="在 Vox.md 中准备本地转录，录制或导入音频，并在 iPhone 上保存 Markdown。了解模型下载、文件夹可用性和离线检查。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hans/blog/offline-transcription-iphone-markdown/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="在 iPhone 上离线将音频转录为 Markdown">
+  <meta name="twitter:description" content="在 Vox.md 中准备本地转录，录制或导入音频，并在 iPhone 上保存 Markdown。了解模型下载、文件夹可用性和离线检查。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "在 iPhone 上离线将音频转录为 Markdown",
+  "description": "在 Vox.md 中准备本地转录，录制或导入音频，并在 iPhone 上保存 Markdown。了解模型下载、文件夹可用性和离线检查。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hans/blog/offline-transcription-iphone-markdown/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "zh-Hans",
+  "name": "在 iPhone 上离线将音频转录为 Markdown | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hans/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "指南",
+      "item": "https://vox.isolated.tech/zh-hans/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "在 iPhone 上离线将音频转录为 Markdown",
+      "item": "https://vox.isolated.tech/zh-hans/blog/offline-transcription-iphone-markdown/"
+    }
+  ],
+  "inLanguage": "zh-Hans",
+  "name": "在 iPhone 上离线将音频转录为 Markdown | Vox.md",
+  "description": "在 Vox.md 中准备本地转录，录制或导入音频，并在 iPhone 上保存 Markdown。了解模型下载、文件夹可用性和离线检查。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/offline-transcription-iphone-markdown/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳至指南</a>
+<nav aria-label="主导航">
+  <div class="nav-inner">
+    <a href="/zh-hans/" class="logo" aria-label="Vox.md 首页">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hans/#how">工作原理</a></li>
+      <li><a href="/zh-hans/docs/">文档</a></li>
+      <li><a href="/zh-hans/blog/">指南</a></li>
+      <li><a href="/zh-hans/compare/">比较</a></li>
+      <li><a href="/zh-hans/privacy.html">隐私</a></li>
+      <li><a href="/zh-hans/terms.html">条款</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_1483aca5c728">下载 Vox.md</a>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/blog/offline-transcription-iphone-markdown/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/offline-transcription-iphone-markdown/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/offline-transcription-iphone-markdown/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/offline-transcription-iphone-markdown/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/offline-transcription-iphone-markdown/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/offline-transcription-iphone-markdown/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/offline-transcription-iphone-markdown/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/offline-transcription-iphone-markdown/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/offline-transcription-iphone-markdown/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/offline-transcription-iphone-markdown/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/offline-transcription-iphone-markdown/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/offline-transcription-iphone-markdown/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/offline-transcription-iphone-markdown/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/offline-transcription-iphone-markdown/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/offline-transcription-iphone-markdown/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/offline-transcription-iphone-markdown/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/offline-transcription-iphone-markdown/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/offline-transcription-iphone-markdown/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/offline-transcription-iphone-markdown/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/offline-transcription-iphone-markdown/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/offline-transcription-iphone-markdown/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/offline-transcription-iphone-markdown/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/blog/offline-transcription-iphone-markdown/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">iPhone · 本地转录 · Markdown</div>
+        <h1 class="hero-title">在 iPhone 上离线将音频转录为 Markdown</h1>
+        <p class="hero-subtitle">需要之前先准备语音后端和本地目标位置。将转录和文件同步视为独立选择。</p>
+      </div>
+      <aside class="meta-card" aria-label="关于本指南">
+        <dl>
+          <div><dt>作者：</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新于</dt><dd><time datetime="2026-10-26">2026 年 10 月 26 日</time></dd></div>
+          <div><dt>需要</dt><dd>后端已就绪 · 文件夹可写</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="在 iPhone 上离线将音频转录为 Markdown">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">简短回答</div>
+        <p>Vox.md 使用可用的 Apple Speech 后端，或明确下载的 Whisper 或 Parakeet 模型，在设备上转录。离线保存 Markdown 转录文本还需要本地可用、可写的文件夹。断网前请准备好两者。</p>
+      </div>
+      <p>“本地转录”描述识别运行的位置，不承诺模型已安装、支持所有语言，或云端文件夹离线可用。本指南解释设置及你可在自己手机上执行的检查，并非对每款受支持设备进行飞行模式测试的报告。</p>
+      <nav class="toc" aria-label="本指南中"><div class="toc-title">本指南中</div><ol>
+        <li><a href="#prepare">准备语音后端</a></li>
+        <li><a href="#destination">选择 Markdown 目标位置</a></li>
+        <li><a href="#transcribe">录制或导入音频</a></li>
+        <li><a href="#offline-check">离线检查完整工作流</a></li>
+        <li><a href="#limitations">了解隐私与可用性限制</a></li>
+      </ol></nav>
+
+      <h2 id="prepare">1. 联网准备语音后端</h2>
+      <p>打开 Vox.md 模型设置，选择设备和语言可用的后端。自动模式在支持的 iOS 26 设备和语言上优先使用 Apple Speech。可选 Whisper 和 Parakeet 模型会在你选择时下载。</p>
+      <p>离线前完成模型下载或系统语言准备。自动模式不会悄悄下载 Whisper 或 Parakeet 备用模型，只能使用你已选择下载的备用模型。如果后端未就绪，断网并不会让它变得可用。</p>
+      <p>明确选择 Whisper 和 Parakeet 时，录音停止后转录。实时 Apple Speech 可在支持设备上显示暂定与定稿文本。生成 Markdown 转录无需实时预览。</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/05-settings-local-360.webp" alt="Vox.md 本地语音模型与处理设置" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>联网时选择并准备本地后端。可用模型和设置取决于已安装版本和设备。</figcaption>
+      </figure>
+      <p>模型选择影响存储用量、处理时间、语言覆盖和识别质量。请检查 <a href="/zh-hans/docs/#models">模型参考</a> 不要假定更大模型受支持，或某个选项能识别所有语言。</p>
+
+      <h2 id="destination">2. 选择 Markdown 目标位置</h2>
+      <p>创建或选择采集预设，并通过文件连接文件夹。首次测试使用新笔记目标，方便辨认输出。需要转录文本而无需可选改写时，保留原文处理是不错的起点。</p>
+      <p>确保目标位置本地可用且允许写入。文件中出现文件夹名，不一定代表内容已下载。若选择 Obsidian 仓库，它必须可通过选择器供 Vox.md 访问；Vox.md 不直接连接 Obsidian Sync 服务。</p>
+      <p>详细文件夹设置请按照 <a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/">将 iPhone 语音笔记保存到 Obsidian</a>。普通可写 Markdown 文件夹也适用；转录不要求 Obsidian。</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_1483aca5c728">免费下载 Vox.md</a></p>
+      <p>试用 15 分钟转录和 10 次成功采集投递。无限使用为一次购买、终身有效。请联网完成购买或模型准备，不要指望新设置能离线完成。</p>
+
+      <p>从 Apple 语音备忘录开始？请按照 <a href="/zh-hans/blog/transcribe-voice-memos-iphone/">语音备忘录转录和音频导出选择器</a> 再导入录音。</p>
+<h2 id="transcribe">3. 录制或导入音频</h2>
+      <ol>
+        <li>打开快速捕捉，选择已准备好目标位置的预设。选择 <strong>添加到草稿</strong> 在开始前于语音控件中选择，以便核对首次转录。</li>
+        <li>录制一段简短语音笔记，或使用 <strong>导入音频或视频</strong> 在语音控件中选择现有的受支持文件。</li>
+        <li>等待所选后端完成识别，在草稿中核对转录，再轻点发送。</li>
+        <li>检查投递已完成，再在目标位置打开 Markdown 文件。</li>
+      </ol>
+      <p>一段简短录音可能生成以下示例笔记正文：</p>
+      <pre class="guide-code"><code>Review the outline before the next meeting.</code></pre>
+      <p>实际措辞和标点取决于识别和处理。需要参考时请保留源音频，并对照核对重要转录。可选整理功能有自身的设备要求和回退方式；设备端转录不意味着所有受支持手机都能使用 Apple Intelligence 处理。</p>
+
+      <h2 id="offline-check">离线检查完整工作流</h2>
+      <p>联网采集成功后，断网重复一次小测试。使用飞行模式时，也请确认 Wi-Fi 已关闭。</p>
+      <ol>
+        <li>确认所选后端已准备好，目标位置在本地可用。</li>
+        <li>断网，新录一段简短内容，等待转录。</li>
+        <li>核对并发送转录文本。保持断网，检查完成的 Markdown 文件。</li>
+        <li>准备好后重新联网，单独检查同步到其他设备的情况。</li>
+      </ol>
+      <p>成功意味着识别和本地写入均已完成。草稿中可见转录文本只证明识别成功；采集已排队尚不能证明目标写入成功。投递失败时，保留可恢复的采集，恢复文件夹访问后重试，不要再复制一份录音。</p>
+
+      <h2 id="limitations">了解隐私与可用性限制</h2>
+      <p>Vox.md 不上传音频进行转录。如果你有意将生成的转录或保留音频保存到云端文件夹，提供商可按自身条款同步。不想通过提供商同步该文件时，请使用本地目标位置。</p>
+      <p>长录音、可用存储、音频质量和模型支持影响实际结果。本指南不对转录速度或准确度作普遍承诺。使用前请核对敏感或可能产生重大影响的措辞。</p>
+      <p>对于手表录音， <a href="/zh-hans/blog/apple-watch-obsidian-voice-notes/">仍由配对的 iPhone 执行转录和投递</a>。手机不可用时将录音留在手表上，属于延迟投递，而不是独立的手表转录。</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">一次准备好。<br>断网前检查。</h2>
+        <p>先用简短录音和可访问的本地文件夹测试，再验证完整的 Markdown 输出。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_1483aca5c728">免费下载 Vox.md</a></p>
+      </section>
+      <nav class="toc" aria-label="相关指南"><div class="toc-title">继续设置</div><ul>
+        <li><a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/">将 iPhone 语音笔记存入 Obsidian</a></li>
+        <li><a href="/zh-hans/blog/obsidian-capture-templates/">设置收件箱、日志和任务条目的格式</a></li>
+        <li><a href="/zh-hans/docs/#models">后端要求与语言选项</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hans/">首页</a></li>
+        <li><a href="/zh-hans/docs/">文档</a></li>
+        <li><a href="/zh-hans/blog/">指南</a></li>
+        <li><a href="/zh-hans/compare/">比较</a></li>
+        <li><a href="/zh-hans/privacy.html">隐私</a></li>
+        <li><a href="/zh-hans/terms.html">条款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支持</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_1483aca5c728">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地笔记快速采集 · 不上传内容。</div>
+    </div>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/blog/offline-transcription-iphone-markdown/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/offline-transcription-iphone-markdown/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/offline-transcription-iphone-markdown/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/offline-transcription-iphone-markdown/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/offline-transcription-iphone-markdown/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/offline-transcription-iphone-markdown/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/offline-transcription-iphone-markdown/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/offline-transcription-iphone-markdown/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/offline-transcription-iphone-markdown/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/offline-transcription-iphone-markdown/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/offline-transcription-iphone-markdown/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/offline-transcription-iphone-markdown/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/offline-transcription-iphone-markdown/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/offline-transcription-iphone-markdown/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/offline-transcription-iphone-markdown/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/offline-transcription-iphone-markdown/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/offline-transcription-iphone-markdown/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/offline-transcription-iphone-markdown/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/offline-transcription-iphone-markdown/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/offline-transcription-iphone-markdown/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/offline-transcription-iphone-markdown/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/offline-transcription-iphone-markdown/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/blog/offline-transcription-iphone-markdown/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
