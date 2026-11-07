@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vox.md — iPhone Duo cover · capture</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+a{color:#2F3BE8}a:hover{color:#1E27B0}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 466px; height: 678px; box-sizing: border-box; background: #F2F2EE; color: #121212; font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+  <header style="padding: 48px 20px 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px">
+    <div role="radiogroup" aria-label="Route" style="display: flex; gap: 6px; min-width: 0">
+      <sc-for list="{{routes}}" as="r" hint-placeholder-count="4">
+        <button role="radio" aria-checked="{{r.checked}}" onClick="{{r.pick}}" style="{{r.pill}}"><span style="{{r.tile}}">{{r.letter}}</span><sc-if value="{{r.on}}" hint-placeholder-val="{{ false }}">{{r.name}}</sc-if></button>
+      </sc-for>
+    </div>
+    <a href="Activity.dc.html" aria-label="Activity, 1 pending" style="position: relative; width: 44px; height: 44px; border-radius: 999px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; box-sizing: border-box">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"></path></svg>
+      <span style="position: absolute; top: 6px; right: 6px; width: 9px; height: 9px; border-radius: 999px; background: #E8590C; border: 2px solid #FFFFFF"></span>
+    </a>
+  </header>
+  <div style="padding: 0 24px; font-family: 'Geist Mono', monospace; font-size: 11.5px; color: #5E5E5A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{path}}</div>
+
+  <main style="flex: 1; padding: 16px 24px 0; display: flex; flex-direction: column; gap: 10px; overflow: hidden">
+    <h1 style="margin: 0; font-size: 26px; line-height: 1.1; font-weight: 650; letter-spacing: -0.02em">Project sync</h1>
+    <p style="margin: 0; font-size: 17px; line-height: 1.5">Ship the routing view first, then loop in design before Friday<span style="display: inline-block; width: 2px; height: 20px; background: #2F3BE8; vertical-align: -4px; margin-left: 2px"></span></p>
+  </main>
+
+  <div style="margin: 0 16px 10px; display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 12px; background: #E6E6FC; color: #1E27B0; font-size: 13px">
+    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="8" height="14" rx="1.5"></rect><rect x="13" y="5" width="8" height="14" rx="1.5"></rect></svg>
+    Open to see route steps and the “will write” preview
+  </div>
+
+  <footer style="padding: 4px 16px 28px; display: flex; align-items: center; gap: 12px">
+    <button aria-label="Attach" style="width: 52px; height: 52px; border-radius: 999px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+    </button>
+    <a href="DuoCoverRecording.dc.html" style="flex: 1; height: 60px; border-radius: 999px; background: #121212; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-size: 17px; font-weight: 600; text-decoration: none">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg>
+      Speak
+    </a>
+    <button aria-label="Send" style="width: 52px; height: 52px; border-radius: 999px; border: 0; background: #2F3BE8; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"></path></svg>
+    </button>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":466,"height":678}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { picked: 'M' }; }
+  renderVals() {
+    var self = this;
+    var list = [
+      { letter: 'M', name: 'Meeting Notes', bg: '#2F3BE8', fg: '#FFFFFF', path: 'Vox Notes / Meetings / 2026-11-01.md · ## Notes' },
+      { letter: 'I', name: 'Inbox', bg: '#121212', fg: '#FFFFFF', path: 'Vox Notes / Inbox / {title}.md' },
+      { letter: 'J', name: 'Journal', bg: '#D9D9D2', fg: '#121212', path: 'Vox Notes / Journal / 2026-W44.md' },
+      { letter: 'T', name: 'Tasks', bg: '#D9D9D2', fg: '#121212', path: 'Vox Notes / Tasks.md › ## Today' }
+    ];
+    var cur = list.filter(function (r) { return r.letter === self.state.picked; })[0];
+    return {
+      path: cur.path,
+      routes: list.map(function (r) {
+        var on = r.letter === self.state.picked;
+        return Object.assign({}, r, {
+          on: on, checked: on ? 'true' : 'false',
+          pick: function () { self.setState({ picked: r.letter }); },
+          pill: 'display:inline-flex;align-items:center;gap:8px;height:44px;border-radius:999px;cursor:pointer;font-size:15px;font-weight:600;color:#121212;flex-shrink:0;' + (on ? 'padding:0 14px 0 8px;background:#FFFFFF;border:1.5px solid #121212' : 'padding:0 8px;background:transparent;border:1px solid #DEDED8'),
+          tile: 'width:26px;height:26px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:' + r.bg + ';color:' + r.fg
+        });
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -145,8 +145,9 @@ struct CapturePresetSettingsRouteTile: View {
 
     var body: some View {
         let tone = SignalRouteTileTone.forRoute(id: preset.id)
-        if let name = preset.visibleName, let first = name.first {
-            SignalRouteTile(letter: String(first), size: size, tone: tone)
+        if let name = preset.visibleName, !name.isEmpty {
+            // The tile picks the initial (skipping the Arabic article), so pass the full name.
+            SignalRouteTile(letter: name, size: size, tone: tone)
         } else {
             CapturePresetIconView(symbolName: preset.symbolName, emoji: preset.emoji)
                 .foregroundStyle(SignalRouteTile.letterColor(tone))

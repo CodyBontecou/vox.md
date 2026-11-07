@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vox.md — iPhone Duo inner · library</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+a{color:#2F3BE8}a:hover{color:#1E27B0}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 890px; height: 626px; box-sizing: border-box; background: #F2F2EE; color: #121212; font-family: Geist, system-ui, sans-serif; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: hidden; position: relative">
+  <span aria-hidden="true" style="position: absolute; left: 444px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.06) 20%, rgba(0,0,0,0.06) 80%, rgba(0,0,0,0))"></span>
+
+  <section aria-label="Captures" style="padding: 32px 24px 20px 28px; display: flex; flex-direction: column; gap: 12px; min-width: 0; overflow: hidden">
+    <div style="display: flex; align-items: center; justify-content: space-between">
+      <h1 style="margin: 0; font-size: 28px; font-weight: 650; letter-spacing: -0.02em">Library</h1>
+      <a href="DuoInnerCapture.dc.html" style="height: 40px; padding: 0 14px; border-radius: 999px; background: #121212; color: #FFFFFF; display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; text-decoration: none">New</a>
+    </div>
+    <label style="display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 14px; border-radius: 999px; background: #FFFFFF; border: 1px solid #DEDED8">
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5E5E5A" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input type="search" aria-label="Search captures" placeholder="Search words, routes, files" style="flex: 1; border: 0; outline: none; background: transparent; font-family: inherit; font-size: 15px">
+    </label>
+    <div style="background: #FFFFFF; border: 1px solid #DEDED8; border-radius: 16px; padding: 4px; display: flex; flex-direction: column; gap: 2px; overflow: hidden">
+      <sc-for list="{{items}}" as="it" hint-placeholder-count="5">
+        <button onClick="{{it.pick}}" aria-current="{{it.current}}" style="{{it.row}}">
+          <span style="{{it.tile}}">{{it.letter}}</span>
+          <span style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; text-align: left">
+            <span style="font-size: 15px; font-weight: 600">{{it.title}}</span>
+            <span style="font-size: 13px; color: #5E5E5A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{it.excerpt}}</span>
+          </span>
+          <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #5E5E5A">{{it.time}}</span>
+        </button>
+      </sc-for>
+    </div>
+  </section>
+
+  <section aria-label="Selected capture" style="padding: 32px 28px 20px 24px; display: flex; flex-direction: column; gap: 12px; background: #F7F7F4; min-width: 0; overflow: hidden">
+    <span style="font-size: 13px; color: #5E5E5A">{{sel.route}} · {{sel.time}}</span>
+    <h2 style="margin: 0; font-size: 26px; font-weight: 650; letter-spacing: -0.02em">{{sel.title}}</h2>
+    <span style="font-size: 13px; color: #0F7B5F; font-weight: 500">✓ Delivered to {{sel.dest}}</span>
+    <pre style="margin: 0; flex: 1; background: #121212; color: #E9E9E4; border-radius: 14px; padding: 14px; font-family: 'Geist Mono', monospace; font-size: 12px; line-height: 1.6; white-space: pre-wrap; overflow: hidden">{{sel.md}}</pre>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+      <button style="height: 46px; border-radius: 999px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; font-size: 14px; font-weight: 600; cursor: pointer">Send to another route</button>
+      <button style="height: 46px; border-radius: 999px; border: 0; background: #121212; color: #FFFFFF; font-size: 14px; font-weight: 600; cursor: pointer">Open in Obsidian</button>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":890,"height":626}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { i: 0 }; }
+  renderVals() {
+    var self = this;
+    var tiles = { M: ['#2F3BE8', '#FFFFFF'], I: ['#121212', '#FFFFFF'], J: ['#E3E3DC', '#121212'], T: ['#E3E3DC', '#121212'] };
+    var list = [
+      { letter: 'M', route: 'Meeting Notes', title: 'Project sync', excerpt: 'Ship routing first, then loop in design…', time: '10:42', dest: 'Meetings/2026-11-01.md', md: '### 10:42 · Project sync\n- [ ] Review final designs\n- [ ] Loop in design before Friday\n\nDecision: ship routing first and keep\nthe composer calm.\n![[2026-11-01-1042.m4a]]' },
+      { letter: 'I', route: 'Inbox', title: 'Book recs from Sam', excerpt: 'The Overstory, then anything by Le Guin', time: '09:18', dest: 'Inbox/Book recs from Sam.md', md: '# Book recs from Sam\n\n- The Overstory\n- Anything by Le Guin\n\n#reading' },
+      { letter: 'J', route: 'Journal', title: 'Morning pages', excerpt: 'Slept well. Want to keep the walk before…', time: '07:55', dest: 'Journal/2026-W44.md', md: '## Sun 1 Nov\n\nSlept well. Want to keep the walk\nbefore work this week.' },
+      { letter: 'T', route: 'Tasks', title: '3 tasks', excerpt: 'Renew passport · call the dentist · …', time: 'Yesterday', dest: 'Tasks.md › ## Today', md: '- [ ] Renew passport\n- [ ] Call the dentist\n- [ ] Order printer ink' },
+      { letter: 'M', route: 'Meeting Notes', title: 'Design crit', excerpt: 'Keyboard picker needs bigger targets', time: 'Yesterday', dest: 'Meetings/2026-10-31.md', md: '### 14:30 · Design crit\n- Keyboard picker needs bigger targets' }
+    ];
+    var i = this.state.i;
+    return {
+      sel: list[i],
+      items: list.map(function (x, k) {
+        var t = tiles[x.letter];
+        var on = k === i;
+        return Object.assign({}, x, {
+          current: on ? 'true' : 'false',
+          pick: function () { self.setState({ i: k }); },
+          row: 'display:flex;align-items:center;gap:12px;padding:10px;border:0;border-radius:12px;cursor:pointer;color:#121212;font-family:inherit;background:' + (on ? '#E6E6FC' : 'transparent'),
+          tile: 'width:30px;height:30px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;background:' + t[0] + ';color:' + t[1]
+        });
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

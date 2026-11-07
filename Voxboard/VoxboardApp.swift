@@ -35,6 +35,8 @@ struct VoxboardApp: App {
         if let defaults = AppConstants.sharedDefaults { RetiredAnalyticsCleanup.run(defaults: defaults) }
         #if DEBUG
         DebugSelfie.install()
+        // Store screenshots: start every launch from a clean, unseeded state.
+        ScreenshotReset.applyIfRequested()
         #endif
 
         // Reconcile AppleLanguages with any stored in-app language override

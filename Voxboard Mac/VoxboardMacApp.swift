@@ -1675,6 +1675,26 @@ private struct MacMenuBarMenu: View {
 enum MacDebugSignalFixtures {
     static let argument = "--debug-seed-signal-fixtures"
 
+    /// Sample note text. English by default; App Store screenshot runs pass the
+    /// translated text as JSON through `-VoxSeedSamples` (same keys as iOS).
+    struct SeedText {
+        var draft = "# Project sync\n- [ ] Review final designs\n- [ ] Loop in design before Friday\n\nDecision: ship routing first and keep the composer as calm as it is now. The keyboard and Watch get the same route picker.\n"
+        var bookRecsTitle = "Book recs from Sam"
+
+        static var current: SeedText {
+            var text = SeedText()
+            // Raw launch argument: UserDefaults would parse "{…}" as a property list.
+            let arguments = ProcessInfo.processInfo.arguments
+            guard let index = arguments.firstIndex(of: "-VoxSeedSamples"),
+                  arguments.indices.contains(index + 1),
+                  let data = arguments[index + 1].data(using: .utf8),
+                  let decoded = try? JSONDecoder().decode([String: String].self, from: data) else { return text }
+            if let draft = decoded["draft"] { text.draft = draft + "\n" }
+            if let recs = decoded["bookRecs"]?.split(separator: "\n").first { text.bookRecsTitle = String(recs) }
+            return text
+        }
+    }
+
     static var isRequested: Bool {
         ProcessInfo.processInfo.arguments.contains(argument)
     }
@@ -1699,13 +1719,26 @@ enum MacDebugSignalFixtures {
         await viewModel.load()
         trace("loaded profiles=\(viewModel.voxProfiles.count)")
 
+        // Route names follow the launch language, so store screenshots read naturally.
         let routes: [(id: String, name: String, path: String, heading: String?)] = [
-            ("debug-meeting-notes", "Meeting Notes", "Meetings/{date}.md", "Notes"),
-            ("debug-inbox", "Inbox", "Inbox/Inbox.md", nil),
-            ("debug-journal", "Journal", "Journal/{period}.md", nil),
-            ("debug-tasks", "Tasks", "Tasks.md", "Today"),
+            ("debug-meeting-notes", String(localized: "Meeting Notes"), "Meetings/{date}.md", "Notes"),
+            ("debug-inbox", String(localized: "Inbox"), "Inbox/Inbox.md", nil),
+            ("debug-journal", String(localized: "Journal"), "Journal/{period}.md", nil),
+            ("debug-tasks", String(localized: "Tasks"), "Tasks.md", "Today"),
         ]
-        let existing = CapturePresetStore.loadFlows(defaults: defaults)
+        let routeName = Dictionary(uniqueKeysWithValues: routes.map { ($0.id, $0.name) })
+        let samples = SeedText.current
+        var existing = CapturePresetStore.loadFlows(defaults: defaults)
+        // A previous run seeded the routes in another language: rename them in place.
+        if existing.contains(where: { $0.id == routes[0].id }) {
+            existing = existing.map { flow in
+                var flow = flow
+                if let name = routeName[flow.id] { flow.name = name }
+                return flow
+            }
+            CapturePresetStore.saveFlows(existing, defaults: defaults)
+            viewModel.refreshVoxProfiles()
+        }
         if !existing.contains(where: { $0.id == routes[0].id }) {
             let presets = routes.map { route -> CapturePreset in
                 var preset = CapturePresetStore.makeCustomFlow()
@@ -1769,7 +1802,7 @@ enum MacDebugSignalFixtures {
             viewModel.errorMessage = nil
         }
         if viewModel.draft.text.isEmpty {
-            viewModel.draft.text = "# Project sync\n- [ ] Review final designs\n- [ ] Loop in design before Friday\n\nDecision: ship routing first and keep the composer as calm as it is now. The keyboard and Watch get the same route picker.\n"
+            viewModel.draft.text = samples.draft
             viewModel.scheduleDraftSave()
         }
 
@@ -1782,9 +1815,9 @@ enum MacDebugSignalFixtures {
             )
             let now = Date()
             let seeds: [(String, String, String, CaptureSource, TimeInterval)] = [
-                ("debug-meeting-notes", "Meeting Notes", "Meetings/2026-11-01.md", .app, 40 * 60),
-                ("debug-inbox", "Inbox", "Inbox/Book recs from Sam.md", .keyboard, 2 * 3_600),
-                ("debug-journal", "Journal", "Journal/2026-W44.md", .watch, 4 * 3_600),
+                ("debug-meeting-notes", routes[0].name, "Meetings/2026-11-01.md", .app, 40 * 60),
+                ("debug-inbox", routes[1].name, "Inbox/\(samples.bookRecsTitle).md", .keyboard, 2 * 3_600),
+                ("debug-journal", routes[2].name, "Journal/2026-W44.md", .watch, 4 * 3_600),
             ]
             for (index, seed) in seeds.enumerated() {
                 let id = UUID(uuidString: String(format: "00000000-0000-4000-8000-%012d", index + 1))!
@@ -1810,10 +1843,10 @@ enum MacDebugSignalFixtures {
                 deliveredAt: nil,
                 source: .mac,
                 outcome: .failed,
-                destinationID: destinationsByName["Tasks"] ?? UUID(),
-                destinationName: "Tasks",
+                destinationID: destinationsByName[routes[3].name] ?? UUID(),
+                destinationName: routes[3].name,
                 voxID: "debug-tasks",
-                voxName: "Tasks",
+                voxName: routes[3].name,
                 relativeNotePath: "Tasks.md",
                 attachmentCount: 0,
                 failureCategory: .fileWrite

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vox.md — Library</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+a{color:#2F3BE8}a:hover{color:#1E27B0}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F2F2EE; color: #121212; font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+  <header style="padding: 56px 20px 0; display: flex; align-items: center; justify-content: space-between">
+    <a href="Main.dc.html" aria-label="Back to capture" style="width: 44px; height: 44px; border-radius: 999px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>
+    </a>
+    <button aria-label="Export all" style="height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; font-size: 14px; font-weight: 500; cursor: pointer">Export</button>
+  </header>
+
+  <section style="padding: 20px 20px 12px; display: flex; flex-direction: column; gap: 14px">
+    <h1 style="margin: 0; font-size: 34px; font-weight: 650; letter-spacing: -0.025em">Library</h1>
+    <label style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; border-radius: 999px; background: #FFFFFF; border: 1px solid #DEDED8">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5E5E5A" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search captures</span>
+      <input type="search" placeholder="Search words, routes, files" style="flex: 1; border: 0; outline: none; background: transparent; font-family: inherit; font-size: 16px; color: #121212">
+    </label>
+    <div role="group" aria-label="Filter by route" style="display: flex; gap: 6px; flex-wrap: wrap">
+      <sc-for list="{{chips}}" as="c" hint-placeholder-count="5">
+        <button aria-pressed="{{c.pressed}}" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button>
+      </sc-for>
+    </div>
+  </section>
+
+  <main style="flex: 1; padding: 0 16px; display: flex; flex-direction: column; gap: 6px; overflow: hidden">
+    <sc-for list="{{days}}" as="d" hint-placeholder-count="2">
+      <div style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: #5E5E5A; padding: 8px 4px 2px">{{d.label}}</div>
+      <div style="background: #FFFFFF; border: 1px solid #DEDED8; border-radius: 16px; padding: 0 14px">
+        <sc-for list="{{d.items}}" as="it" hint-placeholder-count="2">
+          <a href="CaptureDetail.dc.html" style="{{it.row}}">
+            <span style="{{it.tile}}">{{it.letter}}</span>
+            <span style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0">
+              <span style="display: flex; justify-content: space-between; gap: 8px">
+                <span style="font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{it.title}}</span>
+                <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #5E5E5A; flex-shrink: 0">{{it.time}}</span>
+              </span>
+              <span style="font-size: 13.5px; color: #5E5E5A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{it.excerpt}}</span>
+            </span>
+          </a>
+        </sc-for>
+      </div>
+    </sc-for>
+  </main>
+  <div style="height: 30px"></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { route: 'All' }; }
+  renderVals() {
+    var self = this;
+    var tiles = { M: ['#2F3BE8', '#FFFFFF'], I: ['#121212', '#FFFFFF'], J: ['#E3E3DC', '#121212'], T: ['#E3E3DC', '#121212'] };
+    var all = [
+      { day: 'TODAY', letter: 'M', route: 'Meeting Notes', title: 'Project sync', excerpt: 'Ship routing first, then loop in design…', time: '10:42' },
+      { day: 'TODAY', letter: 'I', route: 'Inbox', title: 'Book recs from Sam', excerpt: 'The Overstory, then anything by Le Guin', time: '09:18' },
+      { day: 'TODAY', letter: 'J', route: 'Journal', title: 'Morning pages', excerpt: 'Slept well. Want to keep the walk before…', time: '07:55' },
+      { day: 'YESTERDAY', letter: 'T', route: 'Tasks', title: '3 tasks', excerpt: 'Renew passport · call the dentist · …', time: '18:02' },
+      { day: 'YESTERDAY', letter: 'M', route: 'Meeting Notes', title: 'Design crit', excerpt: 'Keyboard picker needs bigger targets', time: '14:30' }
+    ];
+    var picked = this.state.route;
+    var shown = all.filter(function (x) { return picked === 'All' || x.route === picked; });
+    var dayNames = ['TODAY', 'YESTERDAY'];
+    var chips = ['All', 'Meeting Notes', 'Inbox', 'Journal', 'Tasks'];
+    return {
+      chips: chips.map(function (c) {
+        var on = c === picked;
+        return { label: c, pressed: on ? 'true' : 'false', pick: function () { self.setState({ route: c }); },
+          style: 'height:34px;padding:0 12px;border-radius:999px;font-size:13.5px;cursor:pointer;' + (on ? 'border:0;background:#121212;color:#FFFFFF;font-weight:600' : 'border:1px solid #DEDED8;background:#FFFFFF;color:#121212;font-weight:500') };
+      }),
+      days: dayNames.map(function (d) {
+        var items = shown.filter(function (x) { return x.day === d; });
+        return { label: d, items: items.map(function (x, i) {
+          var t = tiles[x.letter];
+          return Object.assign({}, x, {
+            row: 'display:flex;align-items:center;gap:12px;padding:12px 0;text-decoration:none;color:#121212;' + (i ? 'border-top:1px solid #ECECE6' : ''),
+            tile: 'width:32px;height:32px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;background:' + t[0] + ';color:' + t[1]
+          });
+        }) };
+      }).filter(function (d) { return d.items.length; })
+    };
+  }
+}
+</script>
+</body>
+</html>

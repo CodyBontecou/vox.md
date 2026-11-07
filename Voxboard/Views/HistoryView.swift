@@ -778,8 +778,8 @@ struct LibraryRouteTileView: View {
     var size: CGFloat = 32
 
     var body: some View {
-        if let name, let first = name.trimmingCharacters(in: .whitespacesAndNewlines).first {
-            SignalRouteTile(letter: String(first), size: size, tone: .forRoute(named: name))
+        if let name, !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            SignalRouteTile(letter: name, size: size, tone: .forRoute(named: name))
         } else {
             Image(systemName: "tray")
                 .font(.system(size: size * 0.4, weight: .semibold))

@@ -490,7 +490,7 @@ struct SignalRouteTile: View {
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: circular ? size / 2 : size * 0.3, style: .continuous)
-        Text(letter.prefix(1).uppercased())
+        Text(VoxboardLiveActivityState.routeInitial(of: letter))
             .font(.custom("Geist-SemiBold", fixedSize: size * 0.42))
             .foregroundStyle(Self.letterColor(resolvedTone))
             .frame(width: size, height: size)

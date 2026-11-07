@@ -41,7 +41,7 @@ struct CaptureEntryTemplateLibraryView: View {
                         templateToEdit = template
                     } label: {
                         HStack(spacing: 12) {
-                            SignalRouteTile(letter: String(template.name.first ?? "#"), size: 40)
+                            SignalRouteTile(letter: template.name.isEmpty ? "#" : template.name, size: 40)
                             Text(template.name)
                                 .font(.custom("Geist-SemiBold", size: 17, relativeTo: .body))
                                 .foregroundStyle(Geist.text)

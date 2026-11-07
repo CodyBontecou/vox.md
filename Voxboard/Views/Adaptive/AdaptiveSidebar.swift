@@ -45,7 +45,7 @@ struct AdaptiveSidebar: View {
                 .padding(.bottom, 16)
                 .accessibilityAddTraits(.isHeader)
 
-            sectionLabel("ROUTES")
+            sectionLabel(String(localized: "ROUTES"))
                 .padding(.bottom, 6)
 
             ScrollView {
@@ -58,7 +58,7 @@ struct AdaptiveSidebar: View {
             .scrollBounceBehavior(.basedOnSize)
             .frame(maxHeight: CGFloat(max(1, routes.count)) * 48)
 
-            sectionLabel("VIEWS")
+            sectionLabel(String(localized: "VIEWS"))
                 .padding(.top, 20)
                 .padding(.bottom, 6)
 
@@ -101,7 +101,7 @@ struct AdaptiveSidebar: View {
         } label: {
             HStack(spacing: 10) {
                 SignalRouteTile(
-                    letter: String(route.displayName.first ?? "•"),
+                    letter: route.displayName.isEmpty ? "•" : route.displayName,
                     size: 26,
                     isPrimary: index == 0,
                     isInk: index == 1

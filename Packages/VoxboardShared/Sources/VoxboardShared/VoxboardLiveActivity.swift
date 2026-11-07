@@ -83,9 +83,17 @@ public struct VoxboardLiveActivityState: Codable, Hashable, Sendable {
     /// name, else the emoji, else nil.
     public static func monogram(name: String?, emoji: String?) -> String? {
         let trimmed = name?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        if let first = trimmed.first { return String(first).uppercased() }
+        if !trimmed.isEmpty { return routeInitial(of: trimmed) }
         let trimmedEmoji = emoji?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         return trimmedEmoji.isEmpty ? nil : trimmedEmoji
+    }
+
+    /// First letter of a route name for its tile. Skips the Arabic definite article
+    /// ("ال"), which otherwise gives every Arabic route the same "ا" tile.
+    public static func routeInitial(of name: String) -> String {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let body = trimmed.hasPrefix("ال") && trimmed.count > 2 ? String(trimmed.dropFirst(2)) : trimmed
+        return body.first.map { String($0).uppercased() } ?? ""
     }
 
     public static let idle = VoxboardLiveActivityState(

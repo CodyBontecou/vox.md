@@ -48,7 +48,9 @@ enum AdaptiveDebugSeed {
         try? await Task.sleep(for: settleDelay)
         viewModel.refreshVoxProfiles()
         await viewModel.refreshLibrary()
-        let preferred = ProcessInfo.processInfo.arguments.contains("-VoxAdaptiveSeedInbox") ? "Inbox" : "Meeting Notes"
+        // Starter route names are localized, so look them up through StarterRoute.
+        let preferred = ProcessInfo.processInfo.arguments.contains("-VoxAdaptiveSeedInbox")
+            ? StarterRoute.inbox.name : StarterRoute.meetingNotes.name
         if let route = viewModel.voxProfiles.first(where: { $0.name == preferred }) {
             _ = viewModel.selectVox(route.id)
         }
@@ -59,7 +61,7 @@ enum AdaptiveDebugSeed {
             await seedHeadingNotFound(viewModel: viewModel)
         }
         if viewModel.draft.text.isEmpty {
-            viewModel.draft.text = "# Project sync\n- [ ] Review final designs\n- [ ] Loop in design before Friday\n\nDecision: ship routing first and keep the composer calm."
+            viewModel.draft.text = SeedSamples.current.draft
         }
     }
 
@@ -83,12 +85,13 @@ enum AdaptiveDebugSeed {
                 let day = calendar.date(byAdding: .day, value: -daysAgo, to: today) ?? today
                 return calendar.date(bySettingHour: hour, minute: minute, second: 0, of: day) ?? day
             }
+            let text = SeedSamples.current
             let samples: [(String, Date, String)] = [
-                ("Meeting Notes", at(16, 10, daysAgo: 1), "# Design crit\nKeyboard picker needs bigger targets"),
-                ("Tasks", at(18, 30, daysAgo: 1), "- [ ] Renew passport\n- [ ] Call the dentist\n- [ ] Order printer ink"),
-                ("Journal", at(7, 55), "Morning pages\nSlept well. Want to keep the walk before work."),
-                ("Inbox", at(9, 18), "Book recs from Sam\nThe Overstory, then anything by Le Guin"),
-                ("Meeting Notes", at(10, 42), "# Project sync\n- [ ] Review final designs\n- [ ] Loop in design before Friday\n\nDecision: ship routing first and keep the composer calm."),
+                (StarterRoute.meetingNotes.name, at(16, 10, daysAgo: 1), text.designCrit),
+                (StarterRoute.tasks.name, at(18, 30, daysAgo: 1), text.tasks),
+                (StarterRoute.journal.name, at(7, 55), text.morningPages),
+                (StarterRoute.inbox.name, at(9, 18), text.bookRecs),
+                (StarterRoute.meetingNotes.name, at(10, 42), text.draft),
             ]
             let inbox = CaptureInbox(rootDirectoryURL: root)
             for (name, date, text) in samples {
@@ -121,7 +124,7 @@ enum AdaptiveDebugSeed {
             let store = CaptureLibraryStore(fileURL: libraryURL)
             var tasksID: UUID?
             _ = try await store.update { library in
-                guard let index = library.destinations.firstIndex(where: { $0.name == "Tasks" }) else { return }
+                guard let index = library.destinations.firstIndex(where: { $0.name == StarterRoute.tasks.name }) else { return }
                 library.destinations[index].placement = .beneathHeading(
                     CaptureHeadingSelector(title: "Today", level: 2),
                     missingHeadingBehavior: .fail,
@@ -148,6 +151,65 @@ enum AdaptiveDebugSeed {
             viewModel.errorMessage = nil
         } catch {
             print("[AdaptiveDebugSeed] heading-missing: \(error)")
+        }
+    }
+}
+/// DEBUG only. Sample note text for the seed. English by default; App Store
+/// screenshot runs pass translated text as JSON through `-VoxSeedSamples`
+/// (keys: draft, designCrit, tasks, morningPages, bookRecs,
+/// liveFinalized, liveVolatile), so every
+/// language shows the same notes as the localized store frames.
+struct SeedSamples: Decodable {
+    var draft = "# Project sync\n- [ ] Review final designs\n- [ ] Loop in design before Friday\n\nDecision: ship routing first and keep the composer calm."
+    var designCrit = "# Design crit\nKeyboard picker needs bigger targets"
+    var tasks = "- [ ] Renew passport\n- [ ] Call the dentist\n- [ ] Order printer ink"
+    var morningPages = "Morning pages\nSlept well. Want to keep the walk before work."
+    var bookRecs = "Book recs from Sam\nThe Overstory, then anything by Le Guin"
+    var liveFinalized: String?
+    var liveVolatile: String?
+
+    static let current: SeedSamples = {
+        var samples = SeedSamples()
+        // Read the raw launch argument: UserDefaults parses a value starting with "{"
+        // as a property list, so JSON never arrives through it.
+        let arguments = ProcessInfo.processInfo.arguments
+        guard let index = arguments.firstIndex(of: "-VoxSeedSamples"),
+              arguments.indices.contains(index + 1),
+              let data = arguments[index + 1].data(using: .utf8),
+              let decoded = try? JSONDecoder().decode([String: String].self, from: data) else { return samples }
+        samples.draft = decoded["draft"] ?? samples.draft
+        samples.designCrit = decoded["designCrit"] ?? samples.designCrit
+        samples.tasks = decoded["tasks"] ?? samples.tasks
+        samples.morningPages = decoded["morningPages"] ?? samples.morningPages
+        samples.bookRecs = decoded["bookRecs"] ?? samples.bookRecs
+        samples.liveFinalized = decoded["liveFinalized"]
+        samples.liveVolatile = decoded["liveVolatile"]
+        return samples
+    }()
+}
+/// DEBUG only. `-VoxScreenshotReset` wipes the app-group data (drafts, library,
+/// routes, shared defaults), the local "Vox Notes" folder and the seed markers before
+/// anything loads. Reinstalling does not clear the app group, so without this a
+/// screenshot run in one language restores the previous language's notes.
+enum ScreenshotReset {
+    static func applyIfRequested() {
+        guard ProcessInfo.processInfo.arguments.contains("-VoxScreenshotReset") else { return }
+        let fileManager = FileManager.default
+        if let group = fileManager.containerURL(forSecurityApplicationGroupIdentifier: AppConstants.appGroupIdentifier),
+           let items = try? fileManager.contentsOfDirectory(at: group, includingPropertiesForKeys: nil) {
+            // Library/Preferences holds the shared defaults, cleared below. Hidden files
+            // include the container manager's metadata: removing it drops the container.
+            for item in items where item.lastPathComponent != "Library" && !item.lastPathComponent.hasPrefix(".") {
+                try? fileManager.removeItem(at: item)
+            }
+        }
+        UserDefaults(suiteName: AppConstants.appGroupIdentifier)?
+            .removePersistentDomain(forName: AppConstants.appGroupIdentifier)
+        if let documents = try? fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
+            try? fileManager.removeItem(at: documents.appendingPathComponent("Vox Notes", isDirectory: true))
+        }
+        for key in ["vox.debug.adaptiveSeedDemo.v1", "vox.debug.adaptiveSeedLibrary.v1"] {
+            UserDefaults.standard.removeObject(forKey: key)
         }
     }
 }
