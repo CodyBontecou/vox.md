@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" dir="ltr" data-search-section="部分" data-search-guide="指南" data-search-empty="没有与“{query}”匹配的结果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vox.md 博客：快速采集、Obsidian 与本地笔记</title>
+  <meta name="description" content="关于快速采集、Obsidian 工作流、本地 Markdown 和私密设备端语音转录的指南与产品笔记。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hans/blog/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供语言模型使用的 Vox.md 文档">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Vox.md 博客：快速采集与本地 Markdown">
+  <meta property="og:description" content="将文本、链接、媒体和语音存入 Obsidian 或本地 Markdown 文件的实用笔记。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hans/blog/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vox.md 博客：快速采集与本地笔记">
+  <meta name="twitter:description" content="Obsidian 工作流、Markdown 采集、产品更新和私密语音工具。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Vox.md 博客",
+  "description": "关于快速采集、Obsidian 工作流、本地 Markdown 和私密语音工具的指南与产品笔记。",
+  "url": "https://vox.isolated.tech/zh-hans/blog/",
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "blogPost": [
+    {
+      "@type": "BlogPosting",
+      "headline": "将 iPhone 语音备忘录转录为 Markdown",
+      "url": "https://vox.isolated.tech/zh-hans/blog/transcribe-voice-memos-iphone/",
+      "datePublished": "2026-10-30"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "在 iPhone 上快速采集到 Obsidian：选择方式",
+      "url": "https://vox.isolated.tech/zh-hans/blog/obsidian-quick-capture-iphone/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "如何将 iPhone 语音笔记保存到 Obsidian",
+      "url": "https://vox.isolated.tech/zh-hans/blog/voice-notes-to-obsidian-iphone/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "将 Apple Watch 语音笔记发送到 Obsidian",
+      "url": "https://vox.isolated.tech/zh-hans/blog/apple-watch-obsidian-voice-notes/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "在 iPhone 上向 Obsidian 每日笔记追加文本和语音",
+      "url": "https://vox.isolated.tech/zh-hans/blog/append-to-obsidian-daily-note-iphone/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "iPhone 私密语音转文字：键盘设置与选项",
+      "url": "https://vox.isolated.tech/zh-hans/blog/best-voice-to-text-keyboard-iphone/",
+      "datePublished": "2026-06-13"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "在 iPhone 上离线将音频转录为 Markdown",
+      "url": "https://vox.isolated.tech/zh-hans/blog/offline-transcription-iphone-markdown/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "从 iPhone 将链接、照片和扫描件保存到 Obsidian",
+      "url": "https://vox.isolated.tech/zh-hans/blog/save-links-photos-obsidian-iphone/",
+      "datePublished": "2026-10-26"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "适用于收件箱、日志和任务列表的 Obsidian 采集模板",
+      "url": "https://vox.isolated.tech/zh-hans/blog/obsidian-capture-templates/",
+      "datePublished": "2026-10-26"
+    }
+  ],
+  "inLanguage": "zh-Hans"
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md 公开信息 API">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/">
+</head>
+<body>
+
+<nav aria-label="主导航">
+  <div class="nav-inner">
+    <a href="/zh-hans/" class="logo" aria-label="Vox.md 首页">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hans/#how">工作原理</a></li>
+      <li><a href="/zh-hans/docs/">文档</a></li>
+      <li><a href="/zh-hans/blog/" aria-current="page">博客</a></li>
+      <li><a href="/zh-hans/privacy.html">隐私</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_68a120ac7e20">下载 Vox.md</a>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/blog/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/blog/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+<main>
+  <section class="blog-hero" aria-labelledby="blog-title">
+    <div class="wrap">
+      <p class="hero-label">Vox.md 笔记 · Obsidian 工作流 · 产品更新</p>
+      <h1 class="hero-title" id="blog-title">更快采集的笔记</h1>
+      <p class="hero-subtitle">产品笔记与实用指南：以更少整理、点击和应用切换，将想法存入本地 Markdown。</p>
+      <p class="mono-note"><strong>选择采集工作流。</strong> 在 Obsidian 原生功能、快捷指令和 Vox.md 之间选择，再按照 iPhone 语音、手表录音或每日笔记路由的设置指南操作。</p>
+    </div>
+  </section>
+
+  <section class="blog-section" aria-labelledby="latest-posts">
+    <div class="wrap" style="display: flex; flex-direction: column; gap: 56px; padding-top: 16px; padding-bottom: 96px">
+      <div class="section-head">
+        <p class="section-label">01 / 指南</p>
+        <h2 class="section-title" id="latest-posts">采集工作流从这里开始</h2>
+        <p class="section-kicker">使用 Vox.md 搭配 Obsidian、本地 Markdown 文件夹、系统采集工具和私密设备端语音的指南。</p>
+      </div>
+
+      <div class="post-grid">
+        <article class="post-card">
+          <p class="post-meta">现有录音 · <time datetime="2026-10-30">2026 年 10 月 30 日</time></p>
+          <h3 class="post-title"><a href="/zh-hans/blog/transcribe-voice-memos-iphone/">将 iPhone 语音备忘录转录为 Markdown</a></h3>
+          <p class="post-desc">复制 Apple 已提供的转录文本，或将一段录音导入 Vox.md，核对文本并验证 Markdown 目标位置。</p>
+          <span class="post-more" aria-hidden="true">按照导入指南操作 →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">从这里开始 · <time datetime="2026-10-26">2026 年 10 月 26 日</time></p>
+          <h3 class="post-title"><a href="/zh-hans/blog/obsidian-quick-capture-iphone/">在 iPhone 上快速采集到 Obsidian：选择方式</a></h3>
+          <p class="post-desc">比较内置采集、快捷指令和 Vox.md，再为想保存的笔记选择详细设置指南。</p>
+          <span class="post-more" aria-hidden="true">选择采集方式 →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">对比 · <time datetime="2026-10-26">2026 年 10 月 26 日</time></p>
+          <h3 class="post-title"><a href="/zh-hans/compare/vox-md-vs-obsidian-quick-capture/">Vox.md 与 Obsidian 快速采集</a></h3>
+          <p class="post-desc">内置选项何时够用、Vox.md 适合什么场景，以及各工作流需要哪些设置。</p>
+          <span class="post-more" aria-hidden="true">阅读对比 →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">Obsidian 工作流 · <time datetime="2026-10-26">2026 年 10 月 26 日</time></p>
+          <h3 class="post-title"><a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/">如何将 iPhone 语音笔记保存到 Obsidian</a></h3>
+          <p class="post-desc">连接仓库、选择本地转录，将录音发送到新笔记或每日笔记。包含 Markdown 示例、设置限制和 Obsidian 内置选项。</p>
+          <span class="post-more" aria-hidden="true">阅读语音笔记指南 →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">Obsidian 工作流 · <time datetime="2026-10-26">2026 年 10 月 26 日</time></p>
+          <h3 class="post-title"><a href="/zh-hans/blog/apple-watch-obsidian-voice-notes/">将 Apple Watch 语音笔记发送到 Obsidian</a></h3>
+          <p class="post-desc">在 Apple Watch 录音，通过 iPhone 将语音笔记发送到 Obsidian。设置采集预设、了解队列并排查投递问题。</p>
+          <span class="post-more" aria-hidden="true">阅读指南 →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">Obsidian 工作流 · <time datetime="2026-10-26">2026 年 10 月 26 日</time></p>
+          <h3 class="post-title"><a href="/zh-hans/blog/append-to-obsidian-daily-note-iphone/">在 iPhone 上向 Obsidian 每日笔记追加文本和语音</a></h3>
+          <p class="post-desc">设置 Vox.md 预设，向 Obsidian 每日笔记追加文本或语音。匹配文件名、插入标题下，并格式化任务而不重复前缀。</p>
+          <span class="post-more" aria-hidden="true">阅读指南 →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">私密转录 · <time datetime="2026-10-26">2026 年 10 月 26 日</time></p>
+          <h3 class="post-title"><a href="/zh-hans/blog/offline-transcription-iphone-markdown/">在 iPhone 上离线将音频转录为 Markdown</a></h3>
+          <p class="post-desc">在 Vox.md 中准备本地转录，录制或导入音频，并在 iPhone 上保存 Markdown。了解模型下载、文件夹可用性和离线检查。</p>
+          <span class="post-more" aria-hidden="true">阅读指南 →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">媒体采集 · <time datetime="2026-10-26">2026 年 10 月 26 日</time></p>
+          <h3 class="post-title"><a href="/zh-hans/blog/save-links-photos-obsidian-iphone/">从 iPhone 将链接、照片和扫描件保存到 Obsidian</a></h3>
+          <p class="post-desc">用 Vox.md 将 URL、照片、文件和文档扫描件采集到 Obsidian 仓库。了解 Markdown 链接、附件路径、OCR 和文件提供程序访问。</p>
+          <span class="post-more" aria-hidden="true">阅读指南 →</span>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">模板 · <time datetime="2026-10-26">2026 年 10 月 26 日</time></p>
+          <h3 class="post-title"><a href="/zh-hans/blog/obsidian-capture-templates/">适用于收件箱、日志和任务列表的 Obsidian 采集模板</a></h3>
+          <p class="post-desc">复制 Markdown 结构，配置 Vox.md 前缀，用于 Obsidian 收件箱、每日日志和任务列表。含路径方案、时间戳令牌和输出示例。</p>
+          <span class="post-more" aria-hidden="true">阅读指南 →</span>
+        </article>
+
+        <article class="post-card">
+          <dl class="post-preview" aria-label="采集路由示例">
+            <div><dt>路线</dt><dd>Daily Inbox</dd></div>
+            <div><dt>笔记</dt><dd>Journal/{period}.md</dd></div>
+            <div><dt>头条</dt><dd>## Inbox</dd></div>
+          </dl>
+          <p class="post-meta">工作流指南 · <time datetime="2026-10-25">2026 年 10 月 25 日</time></p>
+          <h3 class="post-title"><a href="/zh-hans/blog/obsidian-daily-note-iphone/">从 iPhone 采集到 Obsidian 每日笔记</a></h3>
+          <p class="post-desc">配置路由、选择每日笔记和标题、验证保存的 Markdown，并恢复失败的投递。</p>
+          <span class="post-more" aria-hidden="true">阅读每日笔记指南 →</span>
+        </article>
+
+        <article class="post-card">
+          <div class="post-preview post-preview-rec" aria-hidden="true">
+            <span class="rec-dot"></span>
+            <span class="rec-text">以及更新后的预设列表…</span>
+          </div>
+          <p class="post-meta">指南 · <time datetime="2026-06-13">2026 年 6 月 13 日</time> · 阅读需 6 分钟</p>
+          <h3 class="post-title"><a href="/zh-hans/blog/best-voice-to-text-keyboard-iphone/">iPhone 私密语音转文字：键盘设置与选项</a></h3>
+          <p class="post-desc">在受支持的 iPhone 文本框中设置私密听写、了解完全访问权限，并准备本地转录。</p>
+          <span class="post-more" aria-hidden="true">阅读指南 →</span>
+        </article>
+      </div>
+
+      <div class="start-here">
+        <div>
+          <p class="section-label">从这里开始</p>
+          <h2>阅读产品与隐私说明</h2>
+          <p>首页和法律页面说明 Vox.md 如何处理采集草稿、Markdown 目标位置、附件、本地转录和文件提供商同步。</p>
+        </div>
+        <div class="btn-row" aria-label="入门链接">
+          <a class="btn-secondary" href="/zh-hans/docs/">功能文档</a>
+          <a class="btn-secondary" href="/zh-hans/#how">产品导览</a>
+          <a class="btn-secondary" href="/zh-hans/privacy.html">隐私政策</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hans/developers">开发者</a></li>
+        <li><a href="/zh-hans/about">关于</a></li>
+        <li><a href="/zh-hans/contact">联系</a></li>
+        <li><a href="/zh-hans/">首页</a></li>
+        <li><a href="/zh-hans/docs/">文档</a></li>
+        <li><a href="/zh-hans/blog/" aria-current="page">博客</a></li>
+        <li><a href="/zh-hans/privacy.html">隐私</a></li>
+        <li><a href="/zh-hans/terms.html">条款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支持</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_68a120ac7e20">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 不上传内容</div>
+    </div>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/blog/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/blog/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

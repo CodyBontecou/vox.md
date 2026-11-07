@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr" data-search-section="섹션" data-search-guide="가이드" data-search-empty="“{query}” 검색 결과 없음">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vox.md 개발자 가이드 — Vox.md</title>
+  <meta name="description" content="무료 읽기 전용 JSON API 및 Markdown 콘텐츠 협상으로 공개 Vox.md 제품 정보와 문서를 읽으세요.">
+  <link rel="canonical" href="https://vox.isolated.tech/ko/developers">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="언어 모델용 Vox.md 문서">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Vox.md 개발자 가이드 — Vox.md">
+  <meta property="og:description" content="무료 읽기 전용 JSON API 및 Markdown 콘텐츠 협상으로 공개 Vox.md 제품 정보와 문서를 읽으세요.">
+  <meta property="og:url" content="https://vox.isolated.tech/ko/developers">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md 공개 정보 API">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/developers">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/developers">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/developers">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/developers">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/developers">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/developers">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/developers">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/developers">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/developers">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/developers">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/developers">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/developers">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/developers">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/developers">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/developers">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/developers">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/developers">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/developers">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/developers">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/developers">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/developers">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/developers">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/developers">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/developers">
+<meta name="twitter:title" content="Vox.md 개발자 가이드 — Vox.md">
+<meta name="twitter:description" content="무료 읽기 전용 JSON API 및 Markdown 콘텐츠 협상으로 공개 Vox.md 제품 정보와 문서를 읽으세요.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Vox.md 개발자 가이드 — Vox.md",
+  "description": "무료 읽기 전용 JSON API 및 Markdown 콘텐츠 협상으로 공개 Vox.md 제품 정보와 문서를 읽으세요.",
+  "url": "https://vox.isolated.tech/ko/developers",
+  "inLanguage": "ko"
+}
+</script>
+</head>
+<body>
+
+<nav aria-label="주 탐색">
+  <div class="nav-inner">
+    <a href="/ko/" class="logo" aria-label="Vox.md 홈">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ko/">홈</a></li>
+      <li><a href="/ko/docs/">문서</a></li>
+      <li><a href="/ko/blog/">블로그</a></li>
+      <li><a href="/ko/terms.html">약관</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ko_5c05ec80d972">Vox.md 다운로드</a>
+  <details class="language-switcher"><summary>언어</summary><ul><li><a href="/developers" lang="en" hreflang="en">English</a></li><li><a href="/ar/developers" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/developers" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/developers" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/developers" lang="es" hreflang="es">Español</a></li><li><a href="/fr/developers" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/developers" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/developers" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/developers" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/developers" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/developers" lang="ko" hreflang="ko" aria-current="page">한국어</a></li><li><a href="/nl/developers" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/developers" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/developers" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/developers" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/developers" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/developers" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/developers" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/developers" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/developers" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/developers" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/developers" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/developers" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+<main id="main">
+<section class="page-hero"><div class="container"><div class="page-eyebrow">Vox.md · 개발자</div><h1 class="page-title">공개 정보 API</h1></div></section>
+<div class="container"><div class="legal-content">
+<h2>제품 정보 및 문서 찾기</h2>
+<p>Vox.md 공개 정보 API는 제품 정보와 게시된 문서 링크를 제공합니다. 무료이며 계정, API 키, OAuth 절차, 결제가 필요하지 않습니다. 엔드포인트는 이 공개 웹사이트에 이미 있는 정보를 반환합니다. 다음을 읽으세요: <a href="/openapi.json">OpenAPI 3.1 계약</a> 에서 형식이 지정된 응답 스키마, 작업 식별자, 오류, 설명을 확인하세요.</p>
+<h2>제품 정보 받기</h2>
+<p><code>GET https://vox.isolated.tech/api/v1/product</code> 는 제품명, 설명, 지원 운영체제, App Store 페이지, 문서 URL, 지원 URL을 반환합니다. 빌드는 홈페이지 구조화 데이터에서 정보를 가져옵니다.</p>
+<pre><code>curl https://vox.isolated.tech/api/v1/product</code></pre>
+<p><a href="https://vox.isolated.tech/api/v1/product">제품 JSON 보기</a></p>
+<h2>문서 찾기</h2>
+<p><code>GET https://vox.isolated.tech/api/v1/documents</code> 는 공개 페이지 제목, 요약, URL을 나열합니다. 콘텐츠 요청 전에 관련 기능 가이드, 방침, 블로그 글, 지원 페이지를 찾으세요.</p>
+<pre><code>curl https://vox.isolated.tech/api/v1/documents</code></pre>
+<p><a href="https://vox.isolated.tech/api/v1/documents">문서 색인 JSON 보기</a></p>
+<h2>페이지를 Markdown으로 읽기</h2>
+<p>목록의 페이지를 다음으로 요청하세요: <code>Accept: text/markdown</code> 로 주요 콘텐츠를 제공합니다. 다음을 포함한 요청은 <code>Accept: text/html</code> 는 계속 HTML을 받습니다. 두 표현 모두 다음을 포함합니다: <code>Vary: Accept</code>. 해당 <a href="/llms.txt">에이전트 가이드</a> 에서 Vox.md에 맞는 용도와 기능 세부 정보를 안내합니다.</p>
+<pre><code>curl -H 'Accept: text/markdown' https://vox.isolated.tech/docs/</code></pre>
+<h2>오류, 캐시, 메서드</h2>
+<p>JSON 엔드포인트는 GET과 HEAD를 지원합니다. 알 수 없는 API 경로는 HTTP 404와 함께 다음을 반환합니다. <code>application/problem+json</code>, 안정적인 <code>code</code>, 설명, 복구 힌트를 반환합니다. 지원하지 않는 메서드는 HTTP 405와 다음을 반환합니다: <code>Allow: GET, HEAD</code>. 공개 메타데이터 응답은 교차 출처 읽기를 허용하고 5분의 캐시 수명을 알립니다. 자격 증명이나 사용자별 데이터는 관련되지 않습니다.</p>
+<h2>설치 앱 자동화</h2>
+<p>캡처, 전사, 로컬 보관함 접근, 노트 쓰기는 설치된 Apple 앱에서 실행됩니다. 문서의 다음을 사용하세요: <a href="/ko/docs/#system-integrations">단축어 및 URL 스킴 통합</a> 을 기기 소유자 허가하에 사용하세요. 공개 정보 API는 캡처 작업, 녹음, 전사, 비공개 노트, 대상 폴더를 공개하지 않습니다. 문의: <a href="/ko/contact">Vox.md 지원</a> 로 질문하세요.</p>
+</div></div></main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ko/developers">개발자</a></li>
+        <li><a href="/ko/about">소개</a></li>
+        <li><a href="/ko/contact">문의</a></li>
+        <li><a href="/ko/">홈</a></li>
+        <li><a href="/ko/docs/">문서</a></li>
+        <li><a href="/ko/blog/">블로그</a></li>
+        <li><a href="/ko/privacy.html">개인정보 보호</a></li>
+        <li><a href="/ko/terms.html">약관</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 로컬 캡처 · 사용자 제어 파일.</div>
+    </div>
+  <details class="language-switcher"><summary>언어</summary><ul><li><a href="/developers" lang="en" hreflang="en">English</a></li><li><a href="/ar/developers" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/developers" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/developers" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/developers" lang="es" hreflang="es">Español</a></li><li><a href="/fr/developers" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/developers" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/developers" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/developers" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/developers" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/developers" lang="ko" hreflang="ko" aria-current="page">한국어</a></li><li><a href="/nl/developers" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/developers" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/developers" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/developers" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/developers" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/developers" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/developers" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/developers" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/developers" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/developers" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/developers" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/developers" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

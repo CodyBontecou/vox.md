@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" dir="ltr" data-search-section="段落" data-search-guide="指南" data-search-empty="沒有與“{query}”匹配的結果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>將 Apple Watch 語音筆記傳送到 Obsidian | Vox.md</title>
+  <meta name="description" content="在 Apple Watch 錄音，通過 iPhone 將語音筆記傳送到 Obsidian。設定擷取預設、瞭解隊列並排查傳送問題。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hant/blog/apple-watch-obsidian-voice-notes/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供語言模型使用的 Vox.md 文件">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="將 Apple Watch 語音筆記傳送到 Obsidian">
+  <meta property="og:description" content="在 Apple Watch 錄音，通過 iPhone 將語音筆記傳送到 Obsidian。設定擷取預設、瞭解隊列並排查傳送問題。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hant/blog/apple-watch-obsidian-voice-notes/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/watch-ready.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="將 Apple Watch 語音筆記傳送到 Obsidian">
+  <meta name="twitter:description" content="在 Apple Watch 錄音，通過 iPhone 將語音筆記傳送到 Obsidian。設定擷取預設、瞭解隊列並排查傳送問題。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/watch-ready.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "將 Apple Watch 語音筆記傳送到 Obsidian",
+  "description": "在 Apple Watch 錄音，通過 iPhone 將語音筆記傳送到 Obsidian。設定擷取預設、瞭解隊列並排查傳送問題。",
+  "image": "https://vox.isolated.tech/screenshots/watch-ready.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hant/blog/apple-watch-obsidian-voice-notes/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "zh-Hant",
+  "name": "將 Apple Watch 語音筆記傳送到 Obsidian | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hant/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "指南",
+      "item": "https://vox.isolated.tech/zh-hant/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "將 Apple Watch 語音筆記傳送到 Obsidian",
+      "item": "https://vox.isolated.tech/zh-hant/blog/apple-watch-obsidian-voice-notes/"
+    }
+  ],
+  "inLanguage": "zh-Hant",
+  "name": "將 Apple Watch 語音筆記傳送到 Obsidian | Vox.md",
+  "description": "在 Apple Watch 錄音，通過 iPhone 將語音筆記傳送到 Obsidian。設定擷取預設、瞭解隊列並排查傳送問題。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/apple-watch-obsidian-voice-notes/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳至指南</a>
+<nav aria-label="主導航">
+  <div class="nav-inner">
+    <a href="/zh-hant/" class="logo" aria-label="Vox.md 首頁">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hant/#how">工作原理</a></li>
+      <li><a href="/zh-hant/docs/">文件</a></li>
+      <li><a href="/zh-hant/blog/">指南</a></li>
+      <li><a href="/zh-hant/compare/">比較</a></li>
+      <li><a href="/zh-hant/privacy.html">隱私</a></li>
+      <li><a href="/zh-hant/terms.html">條款</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_267f01bcd146">下載 Vox.md</a>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/apple-watch-obsidian-voice-notes/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/apple-watch-obsidian-voice-notes/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/apple-watch-obsidian-voice-notes/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/apple-watch-obsidian-voice-notes/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/apple-watch-obsidian-voice-notes/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/apple-watch-obsidian-voice-notes/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/apple-watch-obsidian-voice-notes/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/apple-watch-obsidian-voice-notes/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/apple-watch-obsidian-voice-notes/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/apple-watch-obsidian-voice-notes/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/apple-watch-obsidian-voice-notes/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/apple-watch-obsidian-voice-notes/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/apple-watch-obsidian-voice-notes/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/apple-watch-obsidian-voice-notes/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/apple-watch-obsidian-voice-notes/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/apple-watch-obsidian-voice-notes/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/apple-watch-obsidian-voice-notes/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/apple-watch-obsidian-voice-notes/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/apple-watch-obsidian-voice-notes/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/apple-watch-obsidian-voice-notes/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/apple-watch-obsidian-voice-notes/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/apple-watch-obsidian-voice-notes/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/apple-watch-obsidian-voice-notes/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Apple Watch · 語音擷取 · Obsidian</div>
+        <h1 class="hero-title">將 Apple Watch 語音筆記傳送到 Obsidian</h1>
+        <p class="hero-subtitle">在手腕上錄下想法，讓 iPhone 轉錄並將 Markdown 寫入所選筆記。</p>
+      </div>
+      <aside class="meta-card" aria-label="關於本指南">
+        <dl>
+          <div><dt>作者：</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新於</dt><dd><time datetime="2026-10-26">2026 年 10 月 26 日</time></dd></div>
+          <div><dt>需要</dt><dd>watchOS 10+ · 配對的 iPhone</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="將 Apple Watch 語音筆記傳送到 Obsidian">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer">
+        <div class="label">簡短回答</div>
+        <p>Vox.md 在 Apple Watch 上本地錄音，傳輸到配對的 iPhone，再使用所選擷取預設轉錄並傳送到 Obsidian 儲存庫資料夾。手錶負責錄音，iPhone 負責轉錄和寫入筆記。不需要 Obsidian 外掛程式。</p>
+      </div>
+      <p>先準備 iPhone 目標位置，再錄一段簡短手錶錄音，確認筆記已送達後，才在遠離手機時依賴此工作流程。</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_267f01bcd146">免費下載 Vox.md</a></p>
+      <p>免費試用 15 分鐘轉錄和 10 次成功擷取傳送。無限使用為一次購買、終身有效；App Store 會顯示你所在地區的價格。</p>
+      <nav class="toc" aria-label="本指南中"><div class="toc-title">本指南中</div><ol>
+        <li><a href="#setup">準備 iPhone 和儲存庫</a></li>
+        <li><a href="#record">選擇預設並在手錶上錄音</a></li>
+        <li><a href="#delivery">檢查 Markdown 傳送</a></li>
+        <li><a href="#away-from-phone">遠離手機時錄音</a></li>
+        <li><a href="#troubleshooting">修復排隊或失敗錄音</a></li>
+      </ol></nav>
+
+      <h2 id="setup">1. 準備 iPhone 和儲存庫</h2>
+      <ul>
+        <li>在執行 iOS 17.6 或更高版本的配對 iPhone 和執行 watchOS 10 或更高版本的 Apple Watch 上安裝 Vox.md。</li>
+        <li>在 iPhone 上打開 Vox.md，授予麥克風權限，準備可用的本地語音後端。後端與語言支援因手機和系統而異；首次模型或語言準備可能需要下載。</li>
+        <li>啟用擷取預設，將目標位置連接到通過檔案開放的儲存庫資料夾。先用新筆記目標，方便找到首個結果。</li>
+        <li>在 iPhone 上擷取一次，在 Obsidian 中檢查生成檔案。正常的 iPhone 路線可將資料夾和模型設定問題與手錶傳輸問題區分開來。</li>
+      </ul>
+      <p>該 <a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/">iPhone 語音筆記指南</a> 介紹這些步驟。Vox.md 寫入所選資料夾，不直接連接 Obsidian Sync 服務。如果無法通過檔案選擇儲存庫，該目標位置尚不能用於此工作流程。</p>
+
+      <h2 id="record">2. 選擇預設並在手錶上錄音</h2>
+      <ol>
+        <li>在 iPhone 上打開 Vox.md，讓已啟用的擷取預設同步到手錶。</li>
+        <li>在手錶上打開 Vox.md。使用 <strong>抓取預先</strong> 卡片選擇所需預設，錄音前確認顯示的選擇。</li>
+        <li>輕點 <strong>錄音</strong> 並說一個簡短想法。需要時暫停和繼續；暫停仍保持為同一段錄音。</li>
+        <li>輕點 <strong>停止</strong> 完成後使用。手錶會將錄音加入傳輸隊列。取消會丟棄錄音，因此要保留時請使用停止。</li>
+      </ol>
+      <p>請求更換預設時若 iPhone 不可用，選擇可能保持待定，最近確認的預設仍生效。外出前，在裝置可通信時選擇並確認路線。</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/watch-ready.png" alt="Apple Watch 上的 Vox.md，已就緒，可錄制音訊並同步至 iPhone" width="396" height="484" loading="lazy" decoding="async">
+        <figcaption>手錶錄音界面。現有產品截圖顯示錄音操作；控制項和預設位置因版本而異。</figcaption>
+      </figure>
+      <p>想要更快的入口，請添加 <strong>音頻記錄</strong> 複雜功能添加到相容錶盤。其顯示方式取決於錶盤和複雜功能槽位。請參閱 <a href="/zh-hant/docs/#watch-complication">複雜功能參考</a>.</p>
+
+      <h2 id="delivery">3. 檢查 Markdown 傳送</h2>
+      <p>iPhone 接收音訊，在裝置上轉錄，再通過所選預設儲存。過程中手錶可顯示已排隊、轉錄中、儲存中、已傳送或需要關注狀態。錄音已排隊並不確認 Markdown 已到達儲存庫。</p>
+      <p>首次檢查請在 iPhone 上打開 Vox.md，查看 <strong>觀看錄音</strong>。傳送成功後，在 Obsidian 中打開目標檔案。口述“週六前查一下步道地圖”這樣的想法，可成為以下純文字筆記正文：</p>
+      <pre class="guide-code"><code>Look up the trail map before Saturday.</code></pre>
+      <p>這是範例輸出。識別、標點、檔名、後設資料和處理結果取決於錄音和預設。請核對重要轉錄文字。</p>
+      <p>確認傳送正常後，使用每日滾動筆記或現有筆記，不必每次建立新檔案。請按照 <a href="/zh-hant/blog/append-to-obsidian-daily-note-iphone/">每日筆記路線指南</a> 將日誌條目或任務保留在所選標題下。</p>
+
+      <h2 id="away-from-phone">離開手機時會怎樣？</h2>
+      <p>等待傳輸時，手錶可在本地保留錄音。轉錄和 Markdown 傳送仍需配對的 iPhone、準備好的語音後端和目標資料夾取用權限。這是延遲傳送，不是手錶獨立轉錄。</p>
+      <p>錄音會保留在手錶上，直到 iPhone 確認傳送或丟棄。iOS 可能延遲後台處理。在 iPhone 上強制退出 Vox.md 會阻止後台傳送，直到再次打開App。如果筆記有時效要求，請檢查已傳送檔案，不要假定傳輸已完成。</p>
+      <p>本地轉錄也不決定儲存庫的同步方式。雲端支援的目標位置可能需要聯網，才能按提供商條款取用檔案或稍後同步。</p>
+
+      <h2 id="troubleshooting">修復排隊或失敗錄音</h2>
+      <h3>錄音仍在隊列中</h3>
+      <p>在 iPhone 上打開 Vox.md，打開手錶錄音，使用界面提供的重新整理或重試。檢查預設是否啟用、語音後端是否就緒，以及資料夾權限是否仍有效。保持App已安裝且可用於交接。</p>
+      <h3>所選目標位置已不可用</h3>
+      <p>在 iPhone 隊列中選擇有效預設，或恢復資料夾取用後重試。如果界面提供，也可不帶轉錄文字擷取。丟棄會移除保留音訊和排隊傳送，因此僅在不再需要錄音時使用。</p>
+      <h3>我只要音訊檔案</h3>
+      <p>配置預設，使用 <strong>僅錄音</strong> 輸出，並在 iPhone 上選擇錄音資料夾。這只複製 M4A 音訊，不進行轉錄；不會生成此處所述的 Markdown 轉錄文字，也不消耗轉錄分鐘數。請參閱 <a href="/zh-hant/docs/#watch-recording-only">僅錄音設定</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">在手腕上擷取。<br>在筆記中找到那個想法。</h2>
+        <p>一次設定好 iPhone 目標位置，確認手錶預設，試錄一段簡短內容。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_267f01bcd146">免費下載 Vox.md</a></p>
+      </section>
+      <p><a href="/zh-hant/blog/obsidian-quick-capture-iphone/">選擇 iPhone 擷取方式</a>，或 <a href="/zh-hant/compare/vox-md-vs-obsidian-quick-capture/">比較原生 Obsidian 與 Vox.md</a>.</p>
+      <nav class="toc" aria-label="相關指南"><div class="toc-title">繼續設定</div><ul>
+        <li><a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/">將 iPhone 語音筆記存入 Obsidian</a></li>
+        <li><a href="/zh-hant/blog/append-to-obsidian-daily-note-iphone/">每日筆記、標題和任務擷取</a></li>
+        <li><a href="/zh-hant/docs/#apple-watch">Apple Watch 參考與隊列控制項</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hant/">首頁</a></li>
+        <li><a href="/zh-hant/docs/">文件</a></li>
+        <li><a href="/zh-hant/blog/">指南</a></li>
+        <li><a href="/zh-hant/compare/">比較</a></li>
+        <li><a href="/zh-hant/privacy.html">隱私</a></li>
+        <li><a href="/zh-hant/terms.html">條款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支援</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_267f01bcd146">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地筆記快速擷取 · 不上傳內容。</div>
+    </div>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/apple-watch-obsidian-voice-notes/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/apple-watch-obsidian-voice-notes/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/apple-watch-obsidian-voice-notes/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/apple-watch-obsidian-voice-notes/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/apple-watch-obsidian-voice-notes/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/apple-watch-obsidian-voice-notes/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/apple-watch-obsidian-voice-notes/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/apple-watch-obsidian-voice-notes/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/apple-watch-obsidian-voice-notes/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/apple-watch-obsidian-voice-notes/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/apple-watch-obsidian-voice-notes/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/apple-watch-obsidian-voice-notes/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/apple-watch-obsidian-voice-notes/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/apple-watch-obsidian-voice-notes/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/apple-watch-obsidian-voice-notes/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/apple-watch-obsidian-voice-notes/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/apple-watch-obsidian-voice-notes/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/apple-watch-obsidian-voice-notes/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/apple-watch-obsidian-voice-notes/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/apple-watch-obsidian-voice-notes/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/apple-watch-obsidian-voice-notes/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/apple-watch-obsidian-voice-notes/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/apple-watch-obsidian-voice-notes/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

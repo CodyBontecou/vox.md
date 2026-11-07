@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" dir="ltr" data-search-section="部分" data-search-guide="指南" data-search-empty="没有与“{query}”匹配的结果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vox.md 文档：完整功能指南</title>
+  <meta name="description" content="Vox.md 快速捕捉、路由、Markdown 目标位置、iOS 键盘、本地转录模型、小组件、快捷指令、Apple Watch 和 Mac 完整文档。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hans/docs/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供语言模型使用的 Vox.md 文档">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Vox.md 文档：完整功能指南">
+  <meta property="og:description" content="了解 Vox.md 所有已发布功能，从持久化 Markdown 采集和路由，到本地语音模型、键盘、Apple Watch 和 Mac。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hans/docs/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vox.md 文档">
+  <meta name="twitter:description" content="Vox.md 采集、路由、转录和系统集成完整指南。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Vox.md 完整功能指南",
+  "description": "涵盖 Vox.md 所有已发布采集、路由、转录、键盘、系统集成、Apple Watch 和 Mac 功能的文档。",
+  "dateModified": "2026-10-26",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hans/docs/",
+  "inLanguage": "zh-Hans",
+  "name": "Vox.md 文档：完整功能指南"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hans/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "文档",
+      "item": "https://vox.isolated.tech/zh-hans/docs/"
+    }
+  ],
+  "inLanguage": "zh-Hans",
+  "name": "Vox.md 文档：完整功能指南",
+  "description": "Vox.md 快速捕捉、路由、Markdown 目标位置、iOS 键盘、本地转录模型、小组件、快捷指令、Apple Watch 和 Mac 完整文档。"
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md 公开信息 API">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="主导航">
+  <div class="nav-inner docs-header-inner">
+    <a href="/zh-hans/" class="logo" aria-label="Vox.md 首页">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ 文档</span></span>
+    </a>
+    <form class="docs-search" role="search" action="./" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="搜索文档" aria-label="搜索文档" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="搜索结果" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/zh-hans/blog/">博客</a></li>
+      <li><a href="/zh-hans/privacy.html">隐私</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="本页内容">
+      <div class="docs-sidebar-title">本页内容</div>
+      <ol>
+        <li><a href="#getting-started">入门</a></li>
+        <li><a href="#quick-capture">快速捕捉</a></li>
+        <li><a href="#presets">路线</a></li>
+        <li><a href="/zh-hans/docs/location/">目前位置与 {location}</a></li>
+        <li><a href="#models">模型与转录</a></li>
+        <li><a href="#keyboard">iOS 键盘</a></li>
+        <li><a href="#system-integrations">系统集成</a></li>
+        <li><a href="#apple-watch">Apple Watch</a></li>
+        <li><a href="#mac">Mac 同伴</a></li>
+        <li><a href="#history-settings">资料库、设置与隐私</a></li>
+        <li><a href="#troubleshooting">故障排查</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="docs-title">
+      <div class="page-eyebrow">文档 · 当前产品指南</div>
+      <h1 class="page-title" id="docs-title">Vox.md 能做的一切</h1>
+      <p class="docs-hero-copy">完整介绍采集、路由、Markdown 路由、语音键盘、本地模型、Apple 系统集成、Apple Watch、Mac、历史记录、设置和隐私。</p>
+      <div class="docs-meta-row" aria-label="文档事实">
+        <span>更新于 2026 年 10 月 26 日</span>
+        <span>iOS 17.6+</span>
+        <span>macOS 14+</span>
+        <span>watchOS 10+</span>
+      </div>
+      </header>
+
+      <section class="docs-directory" aria-labelledby="browse-docs">
+      <h2 class="visually-hidden" id="browse-docs">按类别浏览</h2>
+      <div class="docs-category-grid">
+        <a class="docs-category-card" href="#getting-started"><span>01</span><strong>入门</strong><small>平台、设置、权限与首次采集</small></a>
+        <a class="docs-category-card" href="#quick-capture"><span>02</span><strong>快速捕捉</strong><small>编辑器、媒体、语音、采集栏与草稿</small></a>
+        <a class="docs-category-card" href="#presets"><span>03</span><strong>路线</strong><small>处理、元数据、目标位置和模板</small></a>
+        <a class="docs-category-card is-guide" href="/zh-hans/docs/location/"><span>指南</span><strong>目前位置与 <code>{location}</code></strong><small>仅令牌链接、可选元数据、精度、隐私和迁移</small></a>
+        <a class="docs-category-card" href="#models"><span>04</span><strong>模特</strong><small>自动、Apple Speech、Whisper 和 Parakeet</small></a>
+        <a class="docs-category-card" href="#keyboard"><span>05</span><strong>键盘</strong><small>设置、听写、插入、触感反馈和自动停止</small></a>
+        <a class="docs-category-card" href="#system-integrations"><span>06</span><strong>系统集成</strong><small>小组件、共享表单、快捷指令和深层链接</small></a>
+        <a class="docs-category-card" href="#apple-watch"><span>07</span><strong>Apple Watch</strong><small>录音、路由同步、队列和复杂功能</small></a>
+        <a class="docs-category-card" href="#mac"><span>08</span><strong>Mac</strong><small>会议采集、工作区、菜单栏和全局快捷键</small></a>
+        <a class="docs-category-card" href="#history-settings"><span>09</span><strong>资料库与设置</strong><small>恢复、统计、隐私、限制、购买和支持</small></a>
+      </div>
+      </section>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="getting-started">
+        <div class="docs-section-label">01 / 入门</div>
+        <h2>采集到 Markdown，不另建笔记孤岛</h2>
+        <p>Vox.md 是本地优先的快速采集应用。它将标准 Markdown 和附件写入 Obsidian 仓库，或你通过文件选择的其他可写文件夹。无需 Vox.md 账户、插件或托管笔记数据库。</p>
+
+        <p>完整语音工作流请 <a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/">按照 iPhone 语音笔记存入 Obsidian 指南操作</a>，从选择文件夹到检查生成的 Markdown。</p>
+
+        <p>正在选择采集方式？请阅读 <a href="/zh-hans/blog/obsidian-quick-capture-iphone/">iPhone 采集选择指南</a> 或 <a href="/zh-hans/compare/vox-md-vs-obsidian-quick-capture/">比较 Vox.md 与原生 Obsidian</a>.</p>
+
+        <div class="docs-table-wrap" id="platform-availability">
+          <table class="docs-table">
+            <thead><tr><th>平台</th><th>要求</th><th>可用内容</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone 和 iPad</td><td class="req">iOS/iPadOS 17.6+</td><td>快速捕捉、键盘、共享表单、小组件、快捷指令、实时活动、历史记录和设置</td></tr>
+              <tr><td>Mac</td><td class="req">macOS 14+</td><td>采集工作区、录音/导入、路由、模型、历史、菜单栏和全局快捷键</td></tr>
+              <tr><td>Apple Watch</td><td class="req">watchOS 10+</td><td>本地录音、路由选择、同步队列、仅录音投递和复杂功能</td></tr>
+              <tr><td>控制中心控件</td><td class="req">iOS 18+</td><td>快速捕捉与识别路由的录音控件</td></tr>
+              <tr><td>Apple Speech 自动后端</td><td class="req">受支持的 iOS 26 设备和语言</td><td>系统管理的设备端实时和批量转录</td></tr>
+              <tr><td>Apple Intelligence 处理</td><td class="req">兼容的 iOS/macOS 26 设备</td><td>设备端整理、结构化输出和带回退的自定义指令</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <p><strong>基本工作流。</strong> 选择路由、连接目标位置，在快速捕捉中键入或添加内容，再轻点发送。路由决定内容如何处理、格式化及放入笔记。</p>
+        </div>
+
+
+        <h3 id="first-capture">进行首次采集</h3>
+        <ol class="docs-steps">
+          <li><strong>打开 Vox.md。</strong><span>应用直接打开持久化 Markdown 编辑器。</span></li>
+          <li><strong>选择路由。</strong><span>内置默认路由不可删除，但可停用。至少保持一个路由启用，并为它设置目标位置。</span></li>
+          <li><strong>设置其目标位置。</strong><span>轻点 <em>设定目的地</em>，选择 Obsidian 仓库或文件文件夹，然后选择新笔记、滚动笔记或现有笔记。</span></li>
+          <li><strong>添加内容。</strong><span>键入 Markdown，或添加链接、照片、文件、扫描件、草图、位置或语音录音。</span></li>
+          <li><strong>轻点发送。</strong><span>Vox.md 保存到所选路由，并报告 <em>抓捕 送</em>。失败或排队中的工作仍可恢复。</span></li>
+        </ol>
+
+        <h3 id="permissions">权限与系统访问</h3>
+        <ul>
+          <li><strong>麦克风：</strong> 语音录制、本地转录、键盘聆听和音频采集。快速捕捉可能在首次打开工作区时、开始录音前显示此请求。</li>
+          <li><strong>语音识别：</strong> 受支持系统上的 Apple Speech。</li>
+          <li><strong>文件文件夹访问权限：</strong> 目标位置、模板、导入和手表仅录音输出。</li>
+          <li><strong>相机与所选照片：</strong> 仅在添加媒体、屏幕截图、日记照片或扫描件时。</li>
+          <li><strong>使用期间的位置权限：</strong> 仅用于独立的采集栏目前位置命令，或已启用位置的路由需要一次发起时位置时。Vox.md 从不持续或在后台跟踪位置。</li>
+          <li><strong>通知：</strong> 可选的投递状态，包括无人值守时的 Apple Watch 失败记录。</li>
+          <li><strong>键盘允许完全访问：</strong> 是 Vox.md 键盘使用共享设备端应用工作流所必需的。参阅 <a href="#keyboard-setup">键盘设置</a>.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="quick-capture">
+        <div class="docs-section-label">02 / 快速捕捉</div>
+        <h2>一个持久编辑器，容纳文本、媒体、文件和语音</h2>
+        <p>快速捕捉是 iOS 和 iPadOS 主工作区。路由菜单更改当前工作流；目标位置菜单预览或临时覆盖此草稿的投递位置。底栏也可打开资料库和设置，并显示或收起软件键盘。</p>
+
+        <h3 id="durable-drafts">持久草稿与安全投递</h3>
+        <ul>
+          <li>文本、附件、所选路由、目标位置覆盖设置和采集来源在应用挂起及重启后保留。</li>
+          <li>编辑在短暂防抖延迟后保存，应用切到后台时立即触发保存。</li>
+          <li>发送过程中继续编辑时，新编辑会保存在新草稿中，不会丢弃。</li>
+          <li>投递前必须配置目标位置。编辑器会显示 <em>目的地未配置</em> 并在需要时提供设置操作。</li>
+          <li>可安全重试的采集请求记录于本地日志，因此权限、文件提供商或同步失败后可以重试。</li>
+          <li>空编辑器会显示缓存的励志名言，直到添加文本；即使已选择路由或附加文件也一样。名言请求绝不包含你的草稿。</li>
+        </ul>
+
+        <p>以任务为中心的操作演示请参阅 <a href="/zh-hans/blog/save-links-photos-obsidian-iphone/">将链接、照片和扫描件保存到 Obsidian</a>.</p>
+
+        <h3 id="capture-types">采集类型</h3>
+        <div class="docs-feature-grid">
+          <div><strong>文本与 Markdown</strong><p>在支持感知选区的 Markdown 编辑器中直接写作，粘贴现有文本，并将文本与其他载荷组合。</p></div>
+          <div><strong>网页链接</strong><p>以 Markdown 链接格式添加 HTTP 或 HTTPS URL。</p></div>
+          <div><strong>照片与相机</strong><p>选择照片或截图，或拍摄新照片。图片会暂存，并嵌入投递的笔记。</p></div>
+          <div><strong>文件</strong><p>选择多个文件项目。图片变为嵌入内容，音频保留为音频载荷，其他文件使用 Obsidian 风格链接。</p></div>
+          <div><strong>文档扫描</strong><p>用 VisionKit 扫描页面。Vox.md 保留页面图像、创建 PDF，并尽力进行设备端 OCR。</p></div>
+          <div><strong>日志 OCR</strong><p>手动按快门采集最多 10 页日志，或选择日志照片。准确的 Vision OCR 使用自动语言检测。</p></div>
+          <div><strong>草图</strong><p>在白色 PencilKit 画布上用黑色画笔绘图。Vox.md 存储可编辑绘图数据和 PNG 预览。</p></div>
+          <div><strong>目前位置操作</strong><p>请求一次位置，并在草稿中插入经过验证的 Google Maps Markdown 链接。此独立采集栏操作不更改任何按路由设置的位置控件。</p></div>
+          <div><strong>语音与导入音频</strong><p>在编辑器中录音或导入音频/视频，本地转录，再将结果加入草稿或立即发送。</p></div>
+        </div>
+        <p class="docs-note">无障碍：OCR 显示“正在此设备上提取文本”进度横幅；VoiceOver 会在采集流程中播报 OCR 进度与完成状态、“采集已发送”和“转录已添加到采集”。</p>
+
+        <h3 id="capture-bar">采集栏</h3>
+        <p>设置 → 采集栏可调整操作顺序或隐藏操作。默认所有操作都可见。</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>操作</th><th>行为</th></tr></thead>
+            <tbody>
+              <tr><td>添加媒体</td><td>打开草图、相机、照片、截图和网页链接选项。</td></tr>
+              <tr><td>添加文件</td><td>从文件中选择多个文件，与草稿一同暂存。</td></tr>
+              <tr><td>扫描文件</td><td>采集多页扫描、PDF、页面图像，并尽力进行 OCR。</td></tr>
+              <tr><td>摘取文本</td><td>提供采集日志页面和选择日志照片，用于侧重 OCR 的采集。</td></tr>
+              <tr><td>九 个</td><td>撤销上一次编辑器操作。</td></tr>
+              <tr><td>格式 Markdown</td><td>应用粗体、斜体、井号标签，或标题 1 至标题 6。</td></tr>
+              <tr><td>Markdown 链接</td><td>插入 <code>[link text](url)</code> 并选中可编辑部分。</td></tr>
+              <tr><td>内部链接</td><td>插入 Obsidian 风格的 <code>[[Target]]</code> wikilink。</td></tr>
+              <tr><td>两日期设置</td><td>使用今天、明天或本周末；可选时间；以及 ±15m、±30m 或 ±1h 调整。插入 <code>(@yyyy-MM-dd)</code> 或带时间的形式。</td></tr>
+              <tr><td>检查名单</td><td>应用 Markdown 任务前缀 <code>- [ ]</code>.</td></tr>
+              <tr><td>子弹列表</td><td>应用 Markdown 项目符号前缀。</td></tr>
+              <tr><td>面包</td><td>将剪贴板文本粘贴到当前选区。</td></tr>
+              <tr><td>草图</td><td>打开可编辑的 PencilKit 草图采集。</td></tr>
+              <tr><td>目前位置</td><td>请求一次位置，并插入 Google Maps 链接。</td></tr>
+              <tr><td>插入时刻表</td><td>将本地时间和日期插入为 <code>h:mm a yyyy-MM-dd</code>.</td></tr>
+              <tr><td>插入日期</td><td>插入 <code>yyyy-MM-dd</code>.</td></tr>
+              <tr><td>修改案例文本</td><td>提供小写、大写、句首大写、每词首字母大写和转为 slug。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">格式处理尊重当前选区、规范化换行、限制无效选区范围，并避免拆开 emoji 等组合字符。</p>
+
+        <h3 id="inline-voice">内嵌语音控件</h3>
+        <ul>
+          <li>轻点语音按钮开始或停止。长按约 0.45 秒显示详细控件。</li>
+          <li>录音时， <strong>暂停</strong> 按钮位于语音按钮旁边——轻点一次暂停，再点一次继续。最终笔记仍为一段录音，不包含暂停期间的音频和时长。暂停也会停止实时转录预览和语音自动停止功能，直到你继续录音。</li>
+          <li><strong>添加到草稿</strong> 追加完成的转录文本。 <strong>立即发送</strong> 运行所选路由及其目标位置。</li>
+          <li><strong>默认选择立即发送</strong> 位于 iOS 和 Mac 采集工作区中。通过以下方式打开 iOS 语音操作： <code>voxboard://capture?action=voice</code> 将该录音切换为添加到草稿。</li>
+          <li>该 <strong>音频</strong> 选项可按要求将源录音保留为草稿的一部分。</li>
+          <li><strong>音频进口</strong> 接受音频或影片文件，并使用相同的本地转录管线。</li>
+          <li><strong>识别演讲者</strong> 是针对录音和导入音频、需主动启用的路由语音处理步骤。首次使用会准备独立说话人模型，在本地尽力添加匿名标签；无法运行时保留纯转录，并在资料库显示原因。</li>
+          <li>自动模式可在录音时，直接在可编辑的编辑器中显示 Apple Speech 已定稿和暂定的文本。明确选择的 Whisper 和 Parakeet 模型在录音停止后转录。</li>
+          <li>转录失败不会破坏源录音；它仍可恢复。</li>
+          <li>只有明确启用时，持续键盘聆听才会跨启动保留。一次性应用录音会将音频会话恢复为空闲状态。</li>
+        </ul>
+
+        <h3 id="capture-limits">采集输入限制</h3>
+        <div class="docs-callout docs-callout-neutral">
+          <p>每次请求最多包含 <strong>100,000 个字符</strong> 共享文本， <strong>10 个共享项目</strong>，以及 <strong>250 MB</strong> 的暂存资源总量。照片和截图选择器最多接受 10 项；日志采集最多接受 10 页。Vox.md 会拒绝超限输入，而不会悄悄丢弃项目。</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="presets">
+        <div class="docs-section-label">03 / 路由</div>
+        <h2>保存完整工作流，不只是文件夹</h2>
+        <p>路由保存采集的含义、是否处理文本、如何处理元数据和音频，以及 Markdown 的确切写入位置。路由适用于键入文本、链接、媒体、扫描件、文件、草图、语音、快捷指令、小组件、共享表单、手表和 Mac。</p>
+
+        <h3 id="preset-management">创建和管理路由</h3>
+        <ul>
+          <li>打开设置 → 路由，创建、重命名、启用、停用自定义路由，为其选择图标或删除。</li>
+          <li>可搜索图标选择器将符号分为写作、语音、任务、个人和工作类别。</li>
+          <li>已停用的路由不在常规选择器中显示。内置默认路由不可删除。</li>
+          <li>内置默认路由使用波形符号，提示为 <em>采集想法、任务、链接、文件、扫描件或录音。</em>, <code>type: capture</code> 元数据、整理行文处理，关闭键入文本处理，关闭音频保存。</li>
+          <li>新的自定义路由初始为 <em>自定义路由</em>，使用滑块图标和 <em>想采集什么？</em> 提示，初始选择自定义指令，但关闭键入/混合文本处理。</li>
+        </ul>
+
+        <h3 id="processing-modes">处理模式</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>模式</th><th>结果</th><th>回退行为</th></tr></thead>
+            <tbody>
+              <tr><td>保留原文</td><td>保留采集文本，不进行 AI 改写。</td><td>投递原始文本。</td></tr>
+              <tr><td>润色文本</td><td>整理大小写和标点，同时保留含义与 Markdown。</td><td>设备端增强不可用时保留原文。</td></tr>
+              <tr><td>任务清单</td><td>生成 Markdown <code>- [ ]</code> 任务项。</td><td>确定性的清单格式器。</td></tr>
+              <tr><td>会议记录</td><td>生成 <code>## Notes</code> 节，以及存在时的 <code>## Action Items</code>.</td><td>确定的会议笔记结构。</td></tr>
+              <tr><td>自定义指令</td><td>可用时使用设备端 Apple Intelligence 遵循你的指令。</td><td>指令无法在本地运行时保留原文。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>语音转录使用所选路由模式。 <strong>应用于捕捉文本</strong> 是默认关闭、需单独启用的选项，允许处理键入的 Markdown、OCR 和其他带文本的混合采集。保持关闭可防止意外改写已编写的 Markdown。投递前保存确切的已处理请求，因此重试不会依据变化后的设置重新处理。</p>
+
+        <h3 id="preset-metadata">元素</h3>
+        <ul>
+          <li>将静态元数据输入为一个 <code>key: value</code> 键值对，每行一对，例如 <code>tags: [journal, idea]</code>.</li>
+          <li><strong>笔记 frontmatter</strong> 在文档范围写入元数据。</li>
+          <li><strong>行内条目字段</strong> 写入 <code>key:: value</code> 字段放在滚动笔记的每个条目旁边。</li>
+          <li>可用时，设备端增强可在静态路由元数据之外添加标题、标签、类别和整理后文本。</li>
+        </ul>
+
+        <h3 id="preset-location">主动启用的位置功能</h3>
+        <p>目前位置默认关闭，且属于各个路由。启用后，Vox.md 在采集发起时请求一次位置：iOS/iPadOS、共享表单、深层链接/编辑器、Mac 及打开编辑器的系统操作在发送时请求；直接入队的文本、链接和文件意图在调用时请求；即时语音、键盘驱动路由录音、小组件/控件录音或通过普通采集投递的 Apple Watch 录音在停止时请求。手表仅录音是原始音频文件导出，没有 Markdown 位置内容，也不请求位置。Vox.md 绝不持续监测位置，绝不运行后台位置跟踪。</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>设置项</th><th>行为</th></tr></thead>
+            <tbody>
+              <tr><td>使用当前位置</td><td>为此路由请求一次发起时位置，并支持 <code>{location}</code>。它不会自动写入元数据。</td></tr>
+              <tr><td>准确（默认）</td><td>保留按隐私设置调整的原始定位结果，所选元数据需要时可包含兴趣点名称。</td></tr>
+              <tr><td>城市</td><td>将经纬度四舍五入到小数点后两位，并省略兴趣点名称。所有派生字段和链接使用这些舍入坐标。</td></tr>
+              <tr><td>写入位置元数据</td><td>单独启用结构化或高级元数据，除此之外还可使用任何 <code>{location}</code> 条目模板链接。</td></tr>
+              <tr><td>结构化字段</td><td>选择并重命名坐标、纬度、经度、地点、城市、地区、国家、Apple Maps、Google Maps、OpenStreetMap、 <code>geo:</code> URI、精度、时间戳、来源和采集 ID。</td></tr>
+              <tr><td>高级 YAML 模板</td><td>为笔记 frontmatter 使用经过验证且有边界限制的 YAML。它无法替换无关 frontmatter，也不适用于行内条目字段。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>启用写入位置元数据后，文档范围将各结果按采集 ID 追加至配置的 frontmatter 集合。同一笔记可保留多个位置，而幂等重试不会重复追加同一位置。条目范围则将所选结构化字段渲染为 <code>key:: value</code> 放在该采集条目旁边。</p>
+        <p>只有启用的元数据字段需要时，地点、城市、地区和国家才使用 Apple 系统反向地理编码器。仅令牌位置会跳过反向地理编码。该服务免费且无需 API 密钥，但可能需要网络连接；查询失败时，采集继续使用仅坐标元数据。条目前后缀和仓库 Markdown 模板可使用 <code>{location}</code> 从路由可用且已按隐私设置调整的快照插入可点击的 Google Maps 链接，无需启用元数据输出；目前位置关闭或不可用时，令牌为空。生成提供商链接不会联系 Apple、Google 或 OpenStreetMap。打开链接会向该提供商披露链接中保存的同一组精确或舍入后的坐标。</p>
+        <p>新路由和此前停用位置的路由保持两项控件关闭。原来写入位置元数据的路由在升级后保持两项开启，以保留现有输出。</p>
+        <div class="docs-callout">
+          <strong>完整目前位置指南</strong>
+          <p>参阅 <a href="/zh-hans/docs/location/">目前位置、 <code>{location}</code>，以及元数据</a> 了解设置方案、示例、采集来源时机、迁移行为、隐私和故障排查。</p>
+        </div>
+        <div class="docs-callout docs-callout-neutral">
+          <strong>位置不可用</strong>
+          <p>交互界面可重试、取消、仅本次不带位置发送，或选择 <em>始终不带位置发送</em> 为该路由设置。在路由位置设置中重置已保存的选择。无人值守的 <em>询问</em> 采集会持久保留发起时位置不可用的结果，直到你决定；重试和恢复绝不重新获取稍后位置。</p>
+        </div>
+
+        <h3 id="destinations">Markdown 目标位置</h3>
+        <p>每个路由都有一个以 Obsidian 仓库或可写的文件文件夹为根的目标位置。</p>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>新笔记</strong><p>为每次采集创建独立 Markdown 文件，可使用令牌，例如 <code>{timestamp}</code>, <code>{date}</code>, <code>{time}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{id8}</code>，以及 <code>{id}</code>.</p></div>
+          <div><strong>滚动笔记</strong><p>追加到每日、每周、每月、每季度或每年笔记。路径也支持 <code>{period}</code> 和 <code>{week}</code>。新目标位置的默认值为 <code>Journal/{period}.md</code> 以每日为周期。</p></div>
+          <div><strong>现有笔记</strong><p>选择所选仓库或文件夹内已有的 Markdown 文件。Vox.md 会验证目标始终安全地位于该根目录内。</p></div>
+        </div>
+
+        <p>完整路由方案请参阅 <a href="/zh-hans/blog/append-to-obsidian-daily-note-iphone/">向 Obsidian 每日笔记追加文本和语音</a>.</p>
+
+        <p><a href="/zh-hans/blog/obsidian-capture-templates/">使用收件箱、日志或任务模板方案</a> 以保持条目格式可预测。</p>
+
+        <h3 id="placement-templates">放置位置、标题和模板</h3>
+        <ul>
+          <li><strong>底部</strong> 追加； <strong>顶部</strong> 前置插入； <strong>头条</strong> 插入到所选的 1 至 6 级标题下。</li>
+          <li>如果缺少标题，请选择 <strong>显示错误</strong> 或 <strong>创建头条</strong>.</li>
+          <li>使用仓库中的实时 Markdown 模板文件、可复用条目模板，或自定义前后缀文本。</li>
+          <li>条目格式支持 <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>，以及 <code>{location}</code>.</li>
+          <li>默认附件子文件夹为 <code>attachments</code>.</li>
+          <li><strong>保护回归</strong>，默认关闭，会写入可见的 <code>vox-capture</code> HTML 注释，以便检测重复重试。</li>
+          <li>Vox.md 拒绝绝对路径、反斜杠、路径遍历、不安全名称和符号链接越界。</li>
+        </ul>
+
+        <h3 id="capture-overrides">单次采集覆盖设置</h3>
+        <p>目标位置控件可使用路由默认值、将本次采集放在顶部或底部、应用一次性条目模板，或选择同一仓库中的另一笔记。 <strong>使用路线的目标位置默认设置</strong> 移除覆盖设置。这些选择仅影响当前草稿，绝不修改路由。</p>
+
+        <h3 id="audio-export">音频保留与兼容导出</h3>
+        <ul>
+          <li>音频保存模式为 <strong>关闭</strong>, <strong>笔记旁边</strong>，或 <strong>附件文件夹</strong>.</li>
+          <li>Markdown 可在顶部或底部嵌入保留音频，使用 Obsidian 语法，例如 <code>![[recording.m4a]]</code>.</li>
+          <li>对于未使用统一 Markdown 目标位置的旧版直接语音配置， <strong>将笔记保存到文件</strong> 支持 TXT、MD、JSON 和 YAML；新建文件或追加；包含模型和语言的文件名令牌；Markdown 模板；Obsidian Bases 选项；可选 YAML 属性；以及可选的 <code>.md</code> 扩展名，用于 YAML。</li>
+          <li>兼容导出设置仅适用于路由没有统一采集目标位置时的直接语音运行。</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="models">
+        <div class="docs-section-label">04 / 模型与转录</div>
+        <h2>选择系统后端或可选本地模型</h2>
+        <p>所有转录都在 Apple 设备上运行。自动是 iOS 默认模式。可选的 Whisper 和 Parakeet 模型文件仅在你请求时下载，可选择、在下载中取消或之后删除。</p>
+
+        <p><a href="/zh-hans/blog/offline-transcription-iphone-markdown/">准备离线转录工作流</a> 使用本地后端和可写目标位置。</p>
+
+        <h3 id="model-options">可用转录选项</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>选项</th><th>大致大小</th><th>最适合</th></tr></thead>
+            <tbody>
+              <tr><td>自动化</td><td>系统管理</td><td>在受支持的 iOS 26 设备和语言上优先使用 Apple Speech；仅回退到你明确下载的本地模型。</td></tr>
+              <tr><td>Whisper Tiny</td><td>75 MB</td><td>下载最小、速度最快的 Whisper 选项。</td></tr>
+              <tr><td>Whisper Base</td><td>142 MB</td><td>均衡的小型本地模型；旧版 Mac 默认模型。</td></tr>
+              <tr><td>Whisper Small</td><td>466 MB</td><td>更高准确度，代价是更多存储和处理开销。</td></tr>
+              <tr><td>Whisper Medium</td><td>1.5 GB</td><td>较大的多语言 Whisper 模型。</td></tr>
+              <tr><td>Whisper Large v3 Turbo</td><td>1.6 GB</td><td>可用的最大 Whisper 选项。</td></tr>
+              <tr><td>Parakeet v2</td><td>~800 MB</td><td>针对英语优化的 Core ML/FluidAudio 模型。</td></tr>
+              <tr><td>Parakeet v3</td><td>~800 MB</td><td>支持 25 种语言的 Core ML/FluidAudio 模型。</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="automatic-model">自动模式如何工作</h3>
+        <ul>
+          <li>在受支持的 iOS 26 设备上，自动模式检查 Apple 系统管理的所选语言语音识别器，并在需要时准备语言资源。</li>
+          <li><strong>系统语言</strong> 遵循设备语言。录音使用其他语言时，请选择具体语言。</li>
+          <li>自动模式绝不悄悄下载 Whisper 或 Parakeet 备用模型。它只能使用你之前选择下载的模型。</li>
+          <li>实时 Apple Speech 区分可安全插入的已定稿文本与仍可能变化的暂定文本。</li>
+          <li>明确选择 Whisper 和 Parakeet 时，音频段结束后批量转录。</li>
+        </ul>
+
+        <h3 id="model-languages">语言</h3>
+        <ul>
+          <li><strong>Whisper:</strong> 自动检测、英语、西班牙语、法语、德语、意大利语、葡萄牙语、荷兰语、波兰语、俄语、中文、日语、韩语、阿拉伯语、印地语、土耳其语、越南语、泰语、乌克兰语、瑞典语、丹麦语、挪威语和芬兰语。</li>
+          <li><strong>自动：</strong> 系统语言，以及 Whisper 明确列出的语言，前提是 Apple 支持该语言区域。</li>
+          <li><strong>Parakeet v2:</strong> 英语。</li>
+          <li><strong>Parakeet v3:</strong> 保加利亚语、克罗地亚语、捷克语、丹麦语、荷兰语、英语、爱沙尼亚语、芬兰语、法语、德语、希腊语、匈牙利语、意大利语、拉脱维亚语、立陶宛语、马耳他语、波兰语、葡萄牙语、罗马尼亚语、斯洛伐克语、斯洛文尼亚语、西班牙语、瑞典语、俄语和乌克兰语。Parakeet 工作流会自动检测语言。</li>
+        </ul>
+
+        <h3 id="parakeet-autostop">Parakeet 键盘自动停止</h3>
+        <p>可选的约 1 MB <strong>语音休息检测器</strong> 模型可在静音后停止明确选择的 Parakeet v2 或 v3 键盘录音。启用 <strong>让 Parakeet 在停顿后停止</strong> ，选择约 0.5、0.75、1、1.5 或 2 秒。辅助模型可用后默认启用，暂停阈值为 0.75 秒。自动和 Whisper 仍需手动停止。</p>
+
+        <h3 id="audio-pipeline">本地音频行为</h3>
+        <ul>
+          <li>Whisper 输入会规范化为 16 kHz 单声道、16 位音频。</li>
+          <li>iOS 持续聆听使用 10 分钟环形缓冲区，音频段开始时包含两秒预录。</li>
+          <li>Whisper 使用 <code>whisper.cpp</code>；Parakeet 使用 FluidAudio 和 Core ML。Whisper 在 Mac 上使用 Metal 加速。</li>
+          <li>模型下载需要网络连接，但所选后端就绪后，转录在本地运行。</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="keyboard">
+        <div class="docs-section-label">05 / iOS 键盘</div>
+        <h2>直接在正在编辑的文本框中听写</h2>
+        <p>Vox.md 键盘可用于信息、备忘录、邮件、Safari、Slack 及其他接受标准 iOS 键盘的应用。语音工具栏位于 KeyboardKit 布局上方，通过私有共享 App Group 与 Vox.md 主应用通信。</p>
+
+        <h3 id="keyboard-setup">设置键盘</h3>
+        <ol class="docs-steps">
+          <li><strong>在 Vox.md 中准备转录。</strong><span>在受支持设备上保持选择自动，或在设置 → 模型中下载并选择 Whisper 或 Parakeet。</span></li>
+          <li><strong>添加键盘。</strong><span>打开 iOS 设置 → 通用 → 键盘 → 键盘 → 添加新键盘，选择 Vox.md。</span></li>
+          <li><strong>开启允许完全访问。</strong><span>当前键盘工作流需要此权限，以使用共享 App Group 状态，并与主应用协调录音。</span></li>
+          <li><strong>切换键盘。</strong><span>打开文本框，用地球键选择 Vox.md，再轻点麦克风。</span></li>
+        </ol>
+        <div class="docs-callout">
+          <strong>完全访问在这里做什么</strong>
+          <p>iOS 对该权限的描述很宽泛。Vox.md 将它用于设备端应用/键盘工作流、共享状态和可选触感反馈。Vox.md 不会将按键记录、听写文本、转录文本或麦克风音频上传至 Vox.md 服务器。请参阅 <a href="/zh-hans/privacy.html">隐私政策</a>.</p>
+        </div>
+
+        <h3 id="keyboard-workflow">语音工具栏与插入</h3>
+        <ul>
+          <li>工具栏显示当前后端、状态、录音时长、实时波形和麦克风/停止操作。</li>
+          <li>上一个和下一个控件可循环切换可用的已下载后端。</li>
+          <li>如果尚未开始聆听，键盘会打开 Vox.md 一次，开始聆听，并可让你返回原始文本框。</li>
+          <li>自动模式会在你说话时插入已定稿的转录增量；暂定词语仅供显示，直到 Apple 将其定稿。</li>
+          <li>使用 Whisper 或 Parakeet 时，停止或自动停止该段后才会插入完整转录。</li>
+          <li>插入中断或挂起时，待处理文本会持久保存，在下次键盘出现时重试。</li>
+          <li>工具栏报告的状态包括 <em>开放 Vox.md</em>, <em>转载...</em>，以及 <em>启用完全访问</em>.</li>
+        </ul>
+
+        <h3 id="keyboard-customization">键盘自定义</h3>
+        <ul>
+          <li><strong>触觉反馈</strong> 默认启用，可在 Vox.md 设置中更改。</li>
+          <li>英语、德语、西班牙语、法语、意大利语、葡萄牙语、荷兰语、瑞典语、丹麦语和挪威语支持长按显示替代字符。</li>
+          <li>明确选择 Parakeet 的用户可在设置 → 模型中添加基于停顿的自动停止。</li>
+          <li>15 分钟免费转录额度同时适用于键盘听写、应用录音和导入。</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="system-integrations">
+        <div class="docs-section-label">06 / 系统集成</div>
+        <h2>从共享表单、主屏幕、锁屏或快捷指令开始采集</h2>
+
+        <h3 id="share-extension">共享扩展</h3>
+        <p>iOS 共享表单操作名为 <strong>采集到 Vox.md</strong>。它接受文本、HTTP/HTTPS URL、图像、文件和影片，受共享项目与资源限制约束。选择路由和目标位置，可选添加备注，然后发送。如果路由使用目前位置，共享会在此次发送时请求一次发起时位置，无论是否启用元数据输出。内容暂存于私有 App Group，持久排队，并在 Vox.md 中打开以投递。如果投递需要主应用，请使用 <strong>开放 Vox.md</strong>.</p>
+
+        <h3 id="widgets">主屏幕与锁屏小组件</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>快速捕捉</strong><p>打开持久化 Markdown 草稿。中型和大型小组件提供笔记、照片、截图、相机、文件、链接、扫描、草图和语音操作。</p></div>
+          <div><strong>快速记录</strong><p>启动配置的录音流程，并在支持的主屏幕和锁屏系列中反映就绪、聆听或停用状态。</p></div>
+          <div><strong>小组件安全设置</strong><p>在设置中关闭锁屏录音按钮，即可显示关闭状态，而不立即开始录音。</p></div>
+        </div>
+
+        <h3 id="control-center-live-activities">控制中心、实时活动和灵动岛</h3>
+        <ul>
+          <li>在 iOS 18+ 上，从控制中心添加可用的 Vox.md 采集和录音控件。配置已安装版本提供的路由和选项。</li>
+          <li>使用录音控件前，请先在 Vox.md 中完成麦克风、模型和目标位置设置。根据 iOS 和已安装应用的版本，录音操作可能会打开应用。依赖后台采集前，请先在设备上测试一段简短录音。</li>
+          <li>该 <strong>实时活动监控</strong> 设置控制锁屏和灵动岛上的录音状态及录音/停止操作。</li>
+          <li>实时活动状态包括录音中、计时器、处理中、就绪、录音和停止。</li>
+          <li>实时活动从 iOS 17 起可用；控制中心控件需要 iOS 18。</li>
+        </ul>
+
+        <h3 id="shortcuts">快捷指令与 App Intents</h3>
+        <p>路由在快捷指令和受支持控件中显示为可选实体。启用使用当前位置后，直接入队的文本、链接和文件意图在调用时请求位置；打开快速捕捉的操作在发送时请求；录音操作在停止录音时请求。元数据输出不改变这一时机。如果无人值守的 <em>询问</em> 请求无法获取位置时，会保留其发起时位置不可用的结果，以供稍后决定，而不会重新获取。请使用已安装 Vox.md 版本提供的操作。采集操作包括：</p>
+        <ul class="docs-columns">
+          <li>快速捕获</li>
+          <li>记录捕获</li>
+          <li>拍摄一个屏幕</li>
+          <li>收集文本到 Markdown</li>
+          <li>抓住链接 Markdown</li>
+          <li>捕捉文件 Markdown</li>
+        </ul>
+
+        <h3 id="action-button-recording">操作按钮录音设置</h3>
+        <p>先打开 Vox.md，授予麦克风权限、准备转录后端并将路由连接到目标位置。在快捷指令中添加可用的 Vox.md 采集操作并选择路由。手机解锁时运行快捷指令，确认保存到预期笔记，再通过设置 → 操作按钮 → 快捷指令分配它。</p>
+        <p class="docs-note">可用操作和后台录音行为取决于已安装版本及 iOS。使用设备快捷指令中显示的操作。如果录音需要应用打开，请打开 Vox.md 录音。快捷指令出现在选择器中，并不保证可在锁定手机上录音。</p>
+
+        <h3 id="deep-links">深层链接</h3>
+        <p>Vox.md 注册了 <code>voxboard://</code> URL 协议。查询值请使用 URL 编码。</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table docs-code-table">
+            <thead><tr><th>URL</th><th>行为</th></tr></thead>
+            <tbody>
+              <tr><td><code>voxboard://capture</code></td><td>打开持久化快速捕捉编辑器。</td></tr>
+              <tr><td><code>voxboard://capture?action=photos</code></td><td>打开照片选择器。其他操作： <code>screenshots</code>, <code>camera</code>, <code>files</code>, <code>scan</code>, <code>sketch</code>, <code>link</code>，以及 <code>voice</code>.</td></tr>
+              <tr><td><code>voxboard://capture?text=...</code></td><td>打开带有限长度文本的草稿。</td></tr>
+              <tr><td><code>voxboard://capture?url=https%3A%2F%2F...</code></td><td>打开带 HTTP/HTTPS 链接的草稿。</td></tr>
+              <tr><td><code>voxboard://capture?route=...</code></td><td>选择已启用路由。它可与受支持的操作、文本或 URL 组合。</td></tr>
+              <tr><td><code>voxboard://capture-request?id=...</code></td><td>领取系统扩展或意图创建的持久请求。</td></tr>
+              <tr><td><code>voxboard://listen</code></td><td>启动键盘聆听启动流程。</td></tr>
+              <tr><td><code>voxboard://record</code></td><td>旧版录音入口已重定向到聆听。</td></tr>
+              <tr><td><code>voxboard://widget-record</code></td><td>旧版小组件录音入口。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">未知或重复参数、格式错误的 UUID、不安全路由标识符、非 HTTP URL 和超过共享限制的文本会被拒绝。</p>
+      </section>
+
+      <section class="docs-section" id="apple-watch">
+        <div class="docs-section-label">07 / Apple Watch</div>
+        <h2>在手表本地录音，再通过 iPhone 投递</h2>
+
+        <p><a href="/zh-hans/blog/apple-watch-obsidian-voice-notes/">按照 Apple Watch 到 Obsidian 设置指南操作</a> 了解路由选择、传输和投递检查。</p>
+
+        <h3 id="watch-recording">录音工作流</h3>
+        <ul>
+          <li>手表应用显示就绪、录音中、已暂停、同步中、已排队、转录中、保存中、已发送和需要关注等状态。</li>
+          <li>使用录音、暂停/继续、停止、取消、同步和刷新。暂停让你整理思路而不拆分笔记——暂停期间计时器冻结，且该时段不计入录音。取消会明确删除本地录音，而非同步。</li>
+          <li>录音在本地以日志方式记录，中断或崩溃后可恢复。</li>
+          <li>录音会保留在手表上，直到 iPhone 确认投递或丢弃。</li>
+          <li>对于启用使用当前位置且通过普通采集投递的路由，手表会在录音停止时请求一次源自手表的位置，并将按隐私设置调整后的结果随路由快照一同传输。iPhone 绝不替换为自身位置。仅录音会跳过位置，因为它只导出原始音频，没有 Markdown 内容。</li>
+        </ul>
+
+        <h3 id="watch-presets">手表上的路由</h3>
+        <p>从手表的以下位置选择已启用的 iPhone 路由： <strong>路线</strong> 卡片。Vox.md 随录音传输安全快照。如果 iPhone 不可用，请求的选择会保持待定，最近确认的路由仍处于活动状态。</p>
+
+        <h3 id="watch-queue">iPhone 上的手表录音队列</h3>
+        <p>iPhone 队列显示录音时间、时长、路由、处理状态和投递操作。失败项目可重试、更换路由、丢弃或不带转录文本进行采集。丢弃会移除保留的音频和排队投递。</p>
+
+        <h3 id="watch-recording-only">仅录音输出</h3>
+        <ul>
+          <li>将路由输出设为 <strong>仅录音</strong> 将 M4A 音频复制到文件文件夹，不进行转录或 AI 处理，也不消耗转录额度。</li>
+          <li>默认文件名模板为 <code>recording-{timestamp}-{id8}</code>.</li>
+          <li>使用路由前，先在 iPhone 上选择一次录音文件夹。</li>
+          <li>iOS 可能延迟后台投递。强制退出 Vox.md 会阻止投递，直到再次打开应用。</li>
+        </ul>
+
+        <h3 id="watch-complication">复杂功能与小组件</h3>
+        <p>该 <strong>音频记录</strong> 复杂功能支持圆形、矩形、行内和角落系列。它可打开或切换手表本地录音，并显示计时器或随状态变化的标签。</p>
+      </section>
+
+      <section class="docs-section" id="mac">
+        <div class="docs-section-label">08 / Mac 配套应用</div>
+        <h2>在 macOS 上使用同一采集系统</h2>
+        <p>Mac 应用有采集、资料库和设置页面，并共享 iOS 所用的本地模型、路由、路由、导出和重试架构。</p>
+
+        <h3 id="mac-workspace">采集工作区</h3>
+        <ul>
+          <li>键入和编辑 Markdown，粘贴或拖放文件、图像和音频。</li>
+          <li>使用内置、外接或连续互通相机设备的相机输入。</li>
+          <li>导入扫描件或 PDF，用鼠标、触控板或连接的数位板画草图，并添加链接、wikilink、截止日期和文本转换。</li>
+          <li>使用以下方式录音： <strong>添加到草稿</strong> 或 <strong>立即发送</strong>；可选在草稿模式下保留音频。</li>
+          <li><strong>暂停</strong> 和 <strong>继续</strong> 在状态栏操作麦克风录音。暂停音频不计入录音，因此一条最终笔记可以分段录制。会议采集不支持暂停。</li>
+          <li>导入音频或视频进行本地转录。</li>
+          <li>按 Command-Return 发送采集。启用使用当前位置的路由会在发送或停止录音时请求一次 Mac 发起的位置，无论是否启用元数据输出。</li>
+          <li>目标位置设置横幅和路由检查器显示所选路由解析出的笔记及放置位置。</li>
+        </ul>
+
+        <h3 id="mac-meeting">分轨采集会议</h3>
+        <p>将输入模式选择器从 <strong>麦克风</strong> 到 <strong>会议</strong> 将 Mac 上某个应用播放的声音和自己的麦克风录为两路清晰分离的音轨。Vox.md 以单应用模式使用 ScreenCaptureKit，因此你只选择一个应用，且绝不会采集 Vox.md 自身。</p>
+        <ul>
+          <li>录音时，状态栏显示系统和麦克风实时电平表、各来源状态，以及采集警告。</li>
+          <li>两路音轨都以持久分块和恢复清单写入，因此即使中断——数据流停止、麦克风拔出或强制退出——也能安全收尾，会议仍可转录。下次录音队列恢复时，会自动恢复中断的会话。</li>
+          <li>停止后，各音轨在设备上独立转录，结果在同一时间线上交错排列：你的麦克风显示为 <strong>你</strong>，应用音轨则标记为远端说话人。可选的说话人识别还能进一步区分多个远端声音。</li>
+          <li>两路音轨的回放混音保存为录音音频，完成的转录与其他录音一样，遵循你的路由、添加到草稿或立即发送及剪贴板设置。</li>
+        </ul>
+
+        <h3 id="mac-keybinds">全局快捷键</h3>
+        <p>设置 → 全局快捷键可为以下操作分配快捷键： <strong>转载到 Clipboard</strong>, <strong>所选路线</strong>，或任意已启用路由。快捷键默认关闭，需要非修饰键加 Control、Option 或 Command，也可包含 Shift，且会拒绝冲突。再次按活动快捷键可停止录音。</p>
+        <div class="docs-callout docs-callout-neutral">
+          <p><strong>转载到 Clipboard</strong> 不创建笔记、资料库项目或保留音频。它用于向任意 Mac 应用快速听写。</p>
+        </div>
+
+        <h3 id="mac-menu-bar">菜单栏与应用可见性</h3>
+        <ul>
+          <li>可见性选项为 <strong>门户 + 菜单</strong> （默认）， <strong>菜单 只 酒吧</strong>, <strong>只用Dock</strong>，以及 <strong>隐藏</strong>.</li>
+          <li>菜单栏显示录音、转录和导出状态。</li>
+          <li>菜单操作包括开始录音、停止 + 转录、导入音频…、复制上次转录、显示上次导出、路由选择、显示采集、显示资料库、显示数据文件夹和退出 Vox.md。</li>
+          <li>在 Mac 应用中按 Control-B，在可点击控件上显示键盘提示。</li>
+        </ul>
+
+        <h3 id="mac-history">Mac 历史与模型</h3>
+        <p>搜索、重新载入、清除、复制或删除本地历史；打开整理后和原始转录详情；在 Finder 中显示已投递笔记。模型界面可下载、选择和删除 Whisper 或 Parakeet 模型，并更改转录语言。Whisper 在受支持的 Mac 上使用 Metal 加速。</p>
+      </section>
+
+      <section class="docs-section" id="history-settings">
+        <div class="docs-section-label">09 / 资料库、设置与隐私</div>
+        <h2>恢复工作、管理本地数据、解锁无限使用</h2>
+
+        <h3 id="history">iOS 统一资料库</h3>
+        <ul>
+          <li>资料库将本地语音转录和采集投递记录整合为一个可搜索列表。</li>
+          <li>搜索原始文本、整理后文本、标题、标签和类别；下拉刷新。</li>
+          <li>复制整理后或原始转录文本，编辑转录元数据和文本，或通过共享表单导出 Markdown 副本。</li>
+          <li>删除一条转录，或清除所有本地历史记录。清除历史不会删除已写入目标位置的 Markdown 笔记或附件。</li>
+          <li>重试排队采集，检查粗粒度来源、路由、目标位置、笔记路径、附件数量、时间、结果和失败类别。</li>
+          <li>转录编辑包含标题、标签、类别、整理后文本和原始转录。</li>
+        </ul>
+
+        <h3 id="stats">私人活动国家</h3>
+        <p>打开设置 → 活动 → 统计，查看累计用量：录音与采集总数、录音时长和附件数量，以及最近七天图表和采集来源细分（应用、键盘、共享表单、小组件、快捷指令、Apple Watch、Mac、深层链接、文件导入和语音）。</p>
+        <ul>
+          <li>统计仅计算已投递采集；新活动后下拉刷新。</li>
+          <li>台账保留在设备上，不存储采集内容、文件名或目标位置。</li>
+        </ul>
+
+        <h3 id="settings-map">设置概览</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>部分</th><th>控件</th></tr></thead>
+            <tbody>
+              <tr><td>Vox.md 无限</td><td>免费用量状态、终身解锁和购买恢复。</td></tr>
+              <tr><td>自定义</td><td>模型；路由；采集栏操作的可见性与顺序。</td></tr>
+              <tr><td>键盘</td><td>触感反馈。</td></tr>
+              <tr><td>屏幕锁定</td><td>实时活动监视器和锁屏录音按钮。</td></tr>
+              <tr><td>关于</td><td>默认转录、Whisper、Parakeet、设备端处理、隐私、应用版本和 Apple Intelligence 可用性。</td></tr>
+              <tr><td>反馈</td><td>加入 Isolated Tech Discord，或撰写诊断反馈邮件。</td></tr>
+              <tr><td>德布格</td><td>查看本地调试日志。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>更新后可能显示发行说明，介绍手表同步、Mac 全局快捷键、路由图标、锁屏控件、路由分发、音频规则和后处理等当前功能。</p>
+
+        <h3 id="pricing-limits">免费使用与终身解锁</h3>
+        <ul>
+          <li>免费使用包含 <strong>15 分钟转录</strong> 和 <strong>10 次成功采集投递</strong>.</li>
+          <li>已计入转录时长的语音转录，路由到 Markdown 时不会再消耗单独的采集额度。</li>
+          <li>失败写入和幂等重试不消耗成功采集投递次数。</li>
+          <li>无限版为一次购买、终身有效，无订阅、续费或广告。以 App Store 本地价格为准；美国价格为个人版 $19.99、家庭版 $39.99、家庭升级 $19.99，其他商店按购买力定价。</li>
+          <li>恢复购买可恢复符合条件的购买。符合条件的旧付费版本用户可沿用无限使用权益。</li>
+          <li>不含内容的 App Group 台账可在本地应用数据保留期间防止重试重复扣额。它不存于钥匙串；移除本地应用数据后会重新开始免费额度。</li>
+        </ul>
+
+        <h3 id="privacy-data">哪些内容留在本地</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>采集内容</strong><p>草稿、文本、链接、模板、路由、附件、音频、OCR 和转录文本不会发送到 Vox.md 服务器。</p></div>
+          <div><strong>处理</strong><p>Apple Speech、Whisper、Parakeet、Vision OCR 和受支持的 Apple Intelligence 处理在设备上运行。</p></div>
+          <div><strong>你的目标位置</strong><p>完成的文件仅存入你选择的文件夹。第三方文件提供商可能按其自身条款同步。</p></div>
+        </div>
+        <ul>
+          <li>成功投递后，可恢复采集请求变为不含内容的回执，已完成手表队列项仅保留粗粒度最终投递字段。两者都不保留坐标、标签、提供商 URL、位置模板或路由载荷。</li>
+          <li>已完成采集历史仅存储投递元数据，不存储笔记文本、URL、坐标、位置标签或模板、书签、绝对路径或附件文件名。</li>
+          <li>待处理和失败项目仅保留本地恢复所需内容，可能包括路由快照及其已按隐私设置调整的位置或不可用结果。</li>
+          <li>正式版引导分析默认禁用。应用不包含第三方分析 SDK、广告网络或跨应用跟踪器。</li>
+          <li>编辑器从 ZenQuotes 获取并缓存励志名言，不发送草稿内容或标识符。</li>
+        </ul>
+        <p>完整的数据处理、保留和第三方服务详情请阅读 <a href="/zh-hans/privacy.html">隐私政策</a>.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">10 / 故障排查</div>
+        <h2>常见设置与投递问题</h2>
+        <div class="docs-troubleshooting">
+          <details open>
+            <summary>采集无法发送</summary>
+            <p>打开目标位置控件，配置所选路由。如果文件夹已移动或访问权限过期，请重新选择仓库/文件夹。排队工作仍可在资料库中找到。</p>
+          </details>
+          <details>
+            <summary>键盘提示启用完全访问</summary>
+            <p>打开 iOS 设置 → 通用 → 键盘 → 键盘 → Vox.md，开启允许完全访问。返回应用一次，让 Vox.md 恢复共享聆听工作流。</p>
+          </details>
+          <details>
+            <summary>自动模式不可用</summary>
+            <p>Apple Speech 自动模式需要受支持的 iOS 26 设备和语言。选择并下载 Whisper 或 Parakeet 模型，再明确选择它，或返回自动模式让它成为用户批准的备用模型。</p>
+          </details>
+          <details>
+            <summary>转录失败</summary>
+            <p>确认所选模型已完整下载，且语言适用。Vox.md 会尽可能保留可恢复的源音频，让你更换模型后重试。</p>
+          </details>
+          <details>
+            <summary>标题路由失败</summary>
+            <p>编辑路由目标位置，确认标题文本和级别。如果希望投递时创建缺少的标题而不是停止，请选择创建标题。</p>
+          </details>
+          <details>
+            <summary>手表录音已排队</summary>
+            <p>在 iPhone 上打开 Vox.md，再打开手表录音。刷新或重试，按提示选择有效路由，保持应用已安装且可用于后台交接。强制退出会阻止后台投递，直到重新打开。</p>
+          </details>
+          <details>
+            <summary><code>{location}</code> 渲染为空</summary>
+            <p>为执行投递的路由开启使用当前位置；对于检测到的条目前缀、后缀和可复用条目模板，编辑器的一键修复可完成此操作，而不启用元数据。实时仓库模板文件需要手动设置路由。如果权限不可用，或采集选择不带位置继续，令牌会按设计渲染为空。请参阅 <a href="/zh-hans/docs/location/">完整位置指南</a>.</p>
+          </details>
+          <details>
+            <summary>路由位置不可用</summary>
+            <p>仅在仍处理原始交互式发送时使用重试。也可取消、仅本次不带位置发送，或为该路由始终不带位置发送。已保存的选择可在路由位置设置中重置。排队的无人值守请求保留原始不可用结果，不会获取更新的位置。</p>
+          </details>
+        </div>
+        <div class="docs-callout docs-support-callout">
+          <strong>仍有困难？</strong>
+          <p>打开设置 → 查看调试日志，再使用发送反馈，即可包含应用版本、平台、系统和设备详情。你也可以加入 <a href="https://discord.gg/RaQYS4t6gn">Isolated Tech 的 Discord 社区</a>.</p>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hans/developers">开发者</a></li>
+        <li><a href="/zh-hans/about">关于</a></li>
+        <li><a href="/zh-hans/contact">联系</a></li>
+        <li><a href="/zh-hans/">首页</a></li>
+        <li><a href="/zh-hans/docs/" aria-current="page">文档</a></li>
+        <li><a href="/zh-hans/blog/">博客</a></li>
+        <li><a href="/zh-hans/privacy.html">隐私</a></li>
+        <li><a href="/zh-hans/terms.html">条款</a></li>
+        <li><a href="/llms.txt">llms.txt</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支持</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_60877eba17c1">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 完整功能文档 · 本地优先采集。</div>
+    </div>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

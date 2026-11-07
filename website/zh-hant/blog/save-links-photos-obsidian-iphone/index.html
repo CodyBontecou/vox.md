@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" dir="ltr" data-search-section="段落" data-search-guide="指南" data-search-empty="沒有與“{query}”匹配的結果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>從 iPhone 將連結、照片和掃描件儲存到 Obsidian | Vox.md</title>
+  <meta name="description" content="用 Vox.md 將 URL、照片、檔案和文件掃描件擷取到 Obsidian 儲存庫。瞭解 Markdown 連結、附件路徑、OCR 和檔案提供程式取用。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hant/blog/save-links-photos-obsidian-iphone/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供語言模型使用的 Vox.md 文件">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="從 iPhone 將連結、照片和掃描件儲存到 Obsidian">
+  <meta property="og:description" content="用 Vox.md 將 URL、照片、檔案和文件掃描件擷取到 Obsidian 儲存庫。瞭解 Markdown 連結、附件路徑、OCR 和檔案提供程式取用。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hant/blog/save-links-photos-obsidian-iphone/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="從 iPhone 將連結、照片和掃描件儲存到 Obsidian">
+  <meta name="twitter:description" content="用 Vox.md 將 URL、照片、檔案和文件掃描件擷取到 Obsidian 儲存庫。瞭解 Markdown 連結、附件路徑、OCR 和檔案提供程式取用。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "從 iPhone 將連結、照片和掃描件儲存到 Obsidian",
+  "description": "用 Vox.md 將 URL、照片、檔案和文件掃描件擷取到 Obsidian 儲存庫。瞭解 Markdown 連結、附件路徑、OCR 和檔案提供程式取用。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hant/blog/save-links-photos-obsidian-iphone/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "zh-Hant",
+  "name": "從 iPhone 將連結、照片和掃描件儲存到 Obsidian | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hant/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "指南",
+      "item": "https://vox.isolated.tech/zh-hant/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "從 iPhone 將連結、照片和掃描件儲存到 Obsidian",
+      "item": "https://vox.isolated.tech/zh-hant/blog/save-links-photos-obsidian-iphone/"
+    }
+  ],
+  "inLanguage": "zh-Hant",
+  "name": "從 iPhone 將連結、照片和掃描件儲存到 Obsidian | Vox.md",
+  "description": "用 Vox.md 將 URL、照片、檔案和文件掃描件擷取到 Obsidian 儲存庫。瞭解 Markdown 連結、附件路徑、OCR 和檔案提供程式取用。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/save-links-photos-obsidian-iphone/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/save-links-photos-obsidian-iphone/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳至指南</a>
+<nav aria-label="主導航">
+  <div class="nav-inner">
+    <a href="/zh-hant/" class="logo" aria-label="Vox.md 首頁">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hant/#how">工作原理</a></li>
+      <li><a href="/zh-hant/docs/">文件</a></li>
+      <li><a href="/zh-hant/blog/">指南</a></li>
+      <li><a href="/zh-hant/compare/">比較</a></li>
+      <li><a href="/zh-hant/privacy.html">隱私</a></li>
+      <li><a href="/zh-hant/terms.html">條款</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_7b7e240510a9">下載 Vox.md</a>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/save-links-photos-obsidian-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/save-links-photos-obsidian-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/save-links-photos-obsidian-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/save-links-photos-obsidian-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/save-links-photos-obsidian-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/save-links-photos-obsidian-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/save-links-photos-obsidian-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/save-links-photos-obsidian-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/save-links-photos-obsidian-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/save-links-photos-obsidian-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/save-links-photos-obsidian-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/save-links-photos-obsidian-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/save-links-photos-obsidian-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/save-links-photos-obsidian-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/save-links-photos-obsidian-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/save-links-photos-obsidian-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/save-links-photos-obsidian-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/save-links-photos-obsidian-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/save-links-photos-obsidian-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/save-links-photos-obsidian-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/save-links-photos-obsidian-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/save-links-photos-obsidian-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/save-links-photos-obsidian-iphone/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">iPhone · 分享表單 · 媒體擷取</div>
+        <h1 class="hero-title">從 iPhone 將連結、照片和掃描件儲存到 Obsidian</h1>
+        <p class="hero-subtitle">將源材料放在想法旁邊。把連結、圖片或掃描件傳送到你選擇的 Markdown 目標位置。</p>
+      </div>
+      <aside class="meta-card" aria-label="關於本指南">
+        <dl>
+          <div><dt>作者：</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新於</dt><dd><time datetime="2026-10-26">2026 年 10 月 26 日</time></dd></div>
+          <div><dt>需要</dt><dd>iOS 17.6+ · 可寫儲存庫資料夾</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="從 iPhone 將連結、照片和掃描件儲存到 Obsidian">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">簡短回答</div>
+        <p>將 Vox.md 擷取預設連接到可寫儲存庫資料夾，在快速捕捉中添加 URL、照片、檔案或掃描件，再傳送。預設選擇筆記和附件位置。檢查傳送的 Markdown，確認附件能在 Obsidian 中打開。</p>
+      </div>
+      <p>儲存連結和儲存文章是不同任務。Vox.md 將網頁 URL 作為 Markdown 連結接收；不要假定添加 URL 就會下載或提取整頁。請按要儲存的材料選擇擷取方式。</p>
+      <nav class="toc" aria-label="本指南中"><div class="toc-title">本指南中</div><ol>
+        <li><a href="#destination">準備儲存庫目標位置</a></li>
+        <li><a href="#links">儲存網頁連結</a></li>
+        <li><a href="#photos">添加照片、截圖或檔案</a></li>
+        <li><a href="#scans">掃描文件並核對 OCR</a></li>
+        <li><a href="#verify">檢查附件與同步</a></li>
+      </ol></nav>
+
+      <h2 id="destination">1. 準備儲存庫目標位置</h2>
+      <p>在設定 → 擷取預設中建立或選擇已啟用預設，通過檔案連接其目標位置。選擇包含儲存庫 Markdown 檔案的資料夾。如果該資料夾未對其他App開放，Vox.md 不會僅因它在 Obsidian 內可見就能寫入。</p>
+      <p>第一個範例選擇新筆記和保留原文處理。單獨的收件匣資料夾便於查找混合擷取。以後要將內容加入同一檔案時，可選擇滾動筆記或現有筆記。</p>
+      <p>在目標位置設定中指定附件子資料夾；預設是 <code>attachments</code>。傳送前檢查解析後的筆記路徑和附件規則。每日日誌請按照 <a href="/zh-hant/blog/append-to-obsidian-daily-note-iphone/">每日筆記路線指南</a>.</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/00-capture-light-640.webp" alt="帶 Markdown、照片、檔案、掃描、草圖和語音控制項的 Vox.md 編輯器" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>在編輯器中補充上下文，然後為完整擷取內容選擇預設和目標位置。</figcaption>
+      </figure>
+
+      <h2 id="links">2. 儲存網頁連結</h2>
+      <p>複製要保留的 URL。在快速捕捉中使用網頁連結控制項，核對連結文字和地址。簡短說明儲存原因，然後傳送。</p>
+      <p>一條簡單筆記可能包含以下範例 Markdown：</p>
+      <pre class="guide-code"><code>Read before planning the trip:
+[Trail information](https://example.com/trail)</code></pre>
+      <p>上方地址僅為範例，不是資源推薦。請替換為實際頁面。連結提供返回來源的路徑；如果網站更改或消失，它不會保留來源內容。</p>
+      <p>Vox.md 分享表單也接受其他App的受支援內容。App共享的可能是 URL、文字或檔案。請檢查收到的內容和所選預設，不要假定來源螢幕上的所有可見內容都已包含。</p>
+
+      <h2 id="photos">3. 添加照片、截圖或檔案</h2>
+      <ol>
+        <li>選擇收件匣或項目筆記的預設。</li>
+        <li>使用照片或截圖選擇器、相機或添加檔案控制項選擇材料。</li>
+        <li>在編輯器中添加簡短標題或說明。</li>
+        <li>傳送後在 Obsidian 中打開筆記，檢查嵌入圖片或檔案連結。</li>
+      </ol>
+      <p>圖片嵌入 Markdown 輸出，其他檔案類型使用連結。例如筆記可這樣引用已配置的附件路徑：</p>
+      <pre class="guide-code"><code>## Reference
+![[attachments/whiteboard.png]]
+[[attachments/brief.pdf]]</code></pre>
+      <p>這些是範例檔名和路徑；Vox.md 實際輸出取決於所選檔案和目標位置規則。請將引用檔案與儲存庫放在一起。只把 Markdown 檔案移到其他資料夾可能破壞相對連結。</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_7b7e240510a9">免費下載 Vox.md</a></p>
+      <p>試用 10 次成功擷取傳送和 15 分鐘轉錄。無限使用為一次購買、終身有效。</p>
+
+      <h2 id="scans">4. 掃描文件並核對 OCR</h2>
+      <p>在擷取列選擇掃描文件，按掃描器操作。Vox.md 保留頁面圖像、建立 PDF，並盡力進行裝置端文字識別。傳送前核對識別文字，尤其是姓名、日期、金額和手寫內容。</p>
+      <p>對於日誌照片，獨立的提取文字流程支援手動拍攝或選擇的頁面。即使圖像清晰，OCR 也可能遺漏結構或誤讀詞語。以後需核對文字時，請保留源圖片或掃描件。</p>
+      <p>不希望可選處理改寫擷取文字時，請選擇保留原文。鍵入和混合文字處理需在預設中單獨啟用。 <a href="/zh-hant/docs/#capture-types">擷取參考</a> 介紹支援的輸入，以及 <a href="/zh-hant/docs/#capture-limits">輸入限制</a>.</p>
+
+      <h2 id="verify">檢查附件與同步</h2>
+      <p>傳送後在 Obsidian 中打開筆記，逐個打開連結，確認所需檔案存在。筆記出現在另一裝置上，不證明每個附件都已同步完成。也請在該裝置上檢查圖片或 PDF。</p>
+      <p>寫入失敗後可在 Vox.md 中保持待處理狀態。建立副本前，先修復目標位置取用並重試現有擷取。即使擷取處理本身在本地進行，雲端提供商儲存的檔案仍可能需要聯網才能取用或同步。</p>
+      <p>如果需要提取完整網頁，請直接比較相關工具。Obsidian 在以下文件中介紹其原生共享選項： <a href="https://obsidian.md/help/ios">官方 iOS 指南</a>。可為一項任務用原生共享，為另一項任務用 Vox.md 預設。</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">保留上下文。<br>放在筆記旁邊。</h2>
+        <p>試擷取一個連結或一張圖片，再檢查完整檔案和附件輸出。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_7b7e240510a9">免費下載 Vox.md</a></p>
+      </section>
+      <nav class="toc" aria-label="相關指南"><div class="toc-title">繼續設定</div><ul>
+        <li><a href="/zh-hant/blog/obsidian-quick-capture-iphone/">選擇 iPhone 擷取方式</a></li>
+        <li><a href="/zh-hant/blog/obsidian-capture-templates/">收件匣、日誌和任務模板</a></li>
+        <li><a href="/zh-hant/docs/#quick-capture">擷取控制項與支援的輸入</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hant/">首頁</a></li>
+        <li><a href="/zh-hant/docs/">文件</a></li>
+        <li><a href="/zh-hant/blog/">指南</a></li>
+        <li><a href="/zh-hant/compare/">比較</a></li>
+        <li><a href="/zh-hant/privacy.html">隱私</a></li>
+        <li><a href="/zh-hant/terms.html">條款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支援</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hant_7b7e240510a9">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地筆記快速擷取 · 不上傳內容。</div>
+    </div>
+  <details class="language-switcher"><summary>語言</summary><ul><li><a href="/blog/save-links-photos-obsidian-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/save-links-photos-obsidian-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/save-links-photos-obsidian-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/save-links-photos-obsidian-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/save-links-photos-obsidian-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/save-links-photos-obsidian-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/save-links-photos-obsidian-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/save-links-photos-obsidian-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/save-links-photos-obsidian-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/save-links-photos-obsidian-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/save-links-photos-obsidian-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/save-links-photos-obsidian-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/save-links-photos-obsidian-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/save-links-photos-obsidian-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/save-links-photos-obsidian-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/save-links-photos-obsidian-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/save-links-photos-obsidian-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/save-links-photos-obsidian-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/save-links-photos-obsidian-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/save-links-photos-obsidian-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/save-links-photos-obsidian-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/save-links-photos-obsidian-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/save-links-photos-obsidian-iphone/" lang="zh-Hant" hreflang="zh-Hant" aria-current="page">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

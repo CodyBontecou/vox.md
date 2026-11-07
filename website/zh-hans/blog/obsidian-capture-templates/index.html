@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" dir="ltr" data-search-section="部分" data-search-guide="指南" data-search-empty="没有与“{query}”匹配的结果">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>适用于收件箱、日志和任务列表的 Obsidian 采集模板 | Vox.md</title>
+  <meta name="description" content="复制 Markdown 结构，配置 Vox.md 前缀，用于 Obsidian 收件箱、每日日志和任务列表。含路径方案、时间戳令牌和输出示例。">
+  <link rel="canonical" href="https://vox.isolated.tech/zh-hans/blog/obsidian-capture-templates/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="供语言模型使用的 Vox.md 文档">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="适用于收件箱、日志和任务列表的 Obsidian 采集模板">
+  <meta property="og:description" content="复制 Markdown 结构，配置 Vox.md 前缀，用于 Obsidian 收件箱、每日日志和任务列表。含路径方案、时间戳令牌和输出示例。">
+  <meta property="og:url" content="https://vox.isolated.tech/zh-hans/blog/obsidian-capture-templates/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="适用于收件箱、日志和任务列表的 Obsidian 采集模板">
+  <meta name="twitter:description" content="复制 Markdown 结构，配置 Vox.md 前缀，用于 Obsidian 收件箱、每日日志和任务列表。含路径方案、时间戳令牌和输出示例。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "适用于收件箱、日志和任务列表的 Obsidian 采集模板",
+  "description": "复制 Markdown 结构，配置 Vox.md 前缀，用于 Obsidian 收件箱、每日日志和任务列表。含路径方案、时间戳令牌和输出示例。",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/zh-hans/blog/obsidian-capture-templates/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "zh-Hans",
+  "name": "适用于收件箱、日志和任务列表的 Obsidian 采集模板 | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/zh-hans/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "指南",
+      "item": "https://vox.isolated.tech/zh-hans/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "适用于收件箱、日志和任务列表的 Obsidian 采集模板",
+      "item": "https://vox.isolated.tech/zh-hans/blog/obsidian-capture-templates/"
+    }
+  ],
+  "inLanguage": "zh-Hans",
+  "name": "适用于收件箱、日志和任务列表的 Obsidian 采集模板 | Vox.md",
+  "description": "复制 Markdown 结构，配置 Vox.md 前缀，用于 Obsidian 收件箱、每日日志和任务列表。含路径方案、时间戳令牌和输出示例。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-capture-templates/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳至指南</a>
+<nav aria-label="主导航">
+  <div class="nav-inner">
+    <a href="/zh-hans/" class="logo" aria-label="Vox.md 首页">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/zh-hans/#how">工作原理</a></li>
+      <li><a href="/zh-hans/docs/">文档</a></li>
+      <li><a href="/zh-hans/blog/">指南</a></li>
+      <li><a href="/zh-hans/compare/">比较</a></li>
+      <li><a href="/zh-hans/privacy.html">隐私</a></li>
+      <li><a href="/zh-hans/terms.html">条款</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_32fa42cf87f1">下载 Vox.md</a>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/blog/obsidian-capture-templates/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-capture-templates/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-capture-templates/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-capture-templates/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-capture-templates/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-capture-templates/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-capture-templates/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-capture-templates/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-capture-templates/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-capture-templates/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-capture-templates/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-capture-templates/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-capture-templates/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-capture-templates/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-capture-templates/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-capture-templates/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-capture-templates/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-capture-templates/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-capture-templates/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-capture-templates/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-capture-templates/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-capture-templates/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-capture-templates/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Obsidian · 采集模板 · Markdown</div>
+        <h1 class="hero-title">适用于收件箱、日志和任务列表的 Obsidian 采集模板</h1>
+        <p class="hero-subtitle">使用少量可预测的格式。让笔记、标题和条目样式匹配所保存想法的类型。</p>
+      </div>
+      <aside class="meta-card" aria-label="关于本指南">
+        <dl>
+          <div><dt>作者：</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新于</dt><dd><time datetime="2026-10-26">2026 年 10 月 26 日</time></dd></div>
+          <div><dt>需要</dt><dd>已配置的 Vox.md 目标位置</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="适用于收件箱、日志和任务列表的 Obsidian 采集模板">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">简短回答</div>
+        <p>从三个简单方案开始：Inbox 下的项目符号、带时间戳的日志条目、Tasks 下的复选框。在 Vox.md 采集预设中配置目标位置和条目前缀。保持现有每日笔记路径，并为每种格式标记选一个添加位置。</p>
+      </div>
+      <p>以下示例是纯 Markdown 结构和预设设置，不是可自动导入 Vox.md 预设的文件。需要时将笔记结构粘贴到笔记，在目标位置编辑器中输入路径和前缀设置。显示结果仅为示例。</p>
+      <nav class="toc" aria-label="本指南中"><div class="toc-title">本指南中</div><ol>
+        <li><a href="#inbox">简单采集收件箱</a></li>
+        <li><a href="#journal">带时间戳的每日日志</a></li>
+        <li><a href="#tasks">紧凑的任务列表</a></li>
+        <li><a href="#tokens">使用正确的令牌语法</a></li>
+        <li><a href="#check">复用预设前检查结果</a></li>
+      </ol></nav>
+
+      <h2 id="inbox">方案 1：简单采集收件箱</h2>
+      <p>使用现有笔记目标，例如 <code>Inbox.md</code>，如果希望每天新建一个收件箱文件，也可使用每日滚动笔记。选择头条放置方式，置于二级 Inbox 标题下，并在该节末尾插入。</p>
+      <p>最简笔记结构如下：</p>
+      <pre class="guide-code"><code>## Inbox</code></pre>
+      <p>选择保留原文处理。在目标位置的条目格式中，将前缀设为短横线加空格：</p>
+      <pre class="guide-code"><code>- </code></pre>
+      <p>包含“核对草稿大纲”的简短采集可生成：</p>
+      <pre class="guide-code"><code>## Inbox
+- Review the draft outline</code></pre>
+      <p>在设置中输入前缀，不要在每条想法里输入。采集文本已以项目符号开头时，请检查输出，不要盲目再加标记。对于缺少的标题，可按偏好选择创建标题或显示错误。</p>
+
+      <h2 id="journal">方案 2：带时间戳的每日日志</h2>
+      <p>使用每日滚动笔记，并匹配仓库已有的文件命名约定。对于这样的文件： <code>Journal/2026-10-26.md</code>，路径模式为 <code>Journal/{period}.md</code> 并使用每日周期。选择二级 Journal 标题，在该节末尾插入。</p>
+      <p>保持采集行文不变，使用此前缀添加紧凑时间戳：</p>
+      <pre class="guide-code"><code>- **{hour}:{minute}** </code></pre>
+      <p>对于 14:05 进行的采集，示例章节如下：</p>
+      <pre class="guide-code"><code>## Journal
+- **14:05** A short walk helped me settle on the next step.</code></pre>
+      <p>小时与分钟令牌由 Vox.md 条目格式器展开。笔记级模板文件可提供周围标题，而条目前缀格式化每次采集。请分清两者职责，避免后续条目反复插入整套每日笔记结构。</p>
+      <p>详细的路由配置请参阅 <a href="/zh-hans/blog/append-to-obsidian-daily-note-iphone/">每日笔记路径与标题放置</a>.</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="用于设置笔记目标与标题放置的 Vox.md 目标位置编辑器" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>在预设目标位置中配置目标和条目格式。单次采集覆盖设置不会更改保存的默认值。</figcaption>
+      </figure>
+
+      <h2 id="tasks">方案 3：紧凑任务列表</h2>
+      <p>选择带二级 Tasks 标题的现有笔记或每日滚动笔记。对于不进行文本处理的简短键入任务，使用保留原文和以下前缀：</p>
+      <pre class="guide-code"><code>- [ ] </code></pre>
+      <p>两次采集即可组成：</p>
+      <pre class="guide-code"><code>## Tasks
+- [ ] Review the draft outline
+- [ ] Send the reading list</code></pre>
+      <p>若改为启用待办清单处理，就让处理步骤负责清单标记。不要再配置重复的复选框前缀。键入和混合文本处理需单独启用；语音处理和键入编辑器的设置不可互换。</p>
+      <p>任务只有表述正确才有用。语音采集中，如果识别错误可能改变指令，请核对转录文本。 <a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/">iPhone 语音指南</a> 介绍添加到草稿和立即发送。</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_32fa42cf87f1">免费下载 Vox.md</a></p>
+      <p>免费下载包含 10 次成功采集投递和 15 分钟转录。无限使用为一次购买、终身有效。</p>
+
+      <h2 id="tokens">使用正确的令牌语法</h2>
+      <p>Vox.md 路径和条目设置使用令牌，例如 <code>{period}</code>, <code>{date}</code>, <code>{hour}</code> 和 <code>{minute}</code>。这些示例不是 Obsidian Core Templates 或 Templater 表达式。在模板系统自身的设置中，应使用该系统的语法。</p>
+      <p>使用 <code>{hour}:{minute}</code> 以显示此处用冒号分隔的时间。Vox.md 的 <code>{time}</code> 令牌是紧凑时间值，不应假定呈现方式相同而直接替换方案中的令牌。</p>
+      <p>采集内容不是模板编辑器。想法中的令牌可能保持为字面文本；请在目标位置支持的格式设置中配置令牌展开。请参阅 <a href="/zh-hans/docs/#placement-templates">令牌与模板参考</a> 了解可用字段。</p>
+      <p>如果添加 YAML 元数据，请区分笔记级 frontmatter 与每个滚动笔记条目的字段。整个文件的属性不会自动成为各条日志的独立属性。先不添加额外元数据，等明确查询方式后再添加。</p>
+
+      <h2 id="check">复用预设前检查结果</h2>
+      <ol>
+        <li>确认目标位置预览与预期文件一致。</li>
+        <li>用所选预设发送一段简短的键入采集内容。</li>
+        <li>在 Obsidian 中打开文件，检查标题与前缀。</li>
+        <li>发送第二次采集，检查顺序、间距和重复标记。</li>
+        <li>之后再添加语音、附件、可选处理或元数据。</li>
+      </ol>
+      <p>这些方案可放在同一个每日文件的不同标题下。文件夹可访问时，同一预设也能接收来自以下来源的转录： <a href="/zh-hans/blog/apple-watch-obsidian-voice-notes/">手表到 iPhone 的采集工作流</a>。采集仍待处理时，请留意文件夹权限和文件提供商可用性。</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">保持格式可预测。<br>给想法留点空间。</h2>
+        <p>从一个标题和一个前缀开始。只有更多结构有助于使用采集笔记时再添加。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_32fa42cf87f1">免费下载 Vox.md</a></p>
+      </section>
+      <nav class="toc" aria-label="相关指南"><div class="toc-title">继续设置</div><ul>
+        <li><a href="/zh-hans/blog/append-to-obsidian-daily-note-iphone/">配置每日笔记路由</a></li>
+        <li><a href="/zh-hans/blog/save-links-photos-obsidian-iphone/">让照片、扫描件和链接与笔记相伴</a></li>
+        <li><a href="/zh-hans/blog/obsidian-quick-capture-iphone/">选择采集方式</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/zh-hans/">首页</a></li>
+        <li><a href="/zh-hans/docs/">文档</a></li>
+        <li><a href="/zh-hans/blog/">指南</a></li>
+        <li><a href="/zh-hans/compare/">比较</a></li>
+        <li><a href="/zh-hans/privacy.html">隐私</a></li>
+        <li><a href="/zh-hans/terms.html">条款</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">支持</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_zh_hans_32fa42cf87f1">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 本地笔记快速采集 · 不上传内容。</div>
+    </div>
+  <details class="language-switcher"><summary>语言</summary><ul><li><a href="/blog/obsidian-capture-templates/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-capture-templates/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-capture-templates/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-capture-templates/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-capture-templates/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-capture-templates/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-capture-templates/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-capture-templates/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-capture-templates/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-capture-templates/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-capture-templates/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-capture-templates/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-capture-templates/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-capture-templates/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-capture-templates/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-capture-templates/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-capture-templates/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-capture-templates/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-capture-templates/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-capture-templates/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-capture-templates/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-capture-templates/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-capture-templates/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
