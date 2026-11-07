@@ -169,16 +169,18 @@ class CatalogValidationTests(unittest.TestCase):
         locales.validate('ja',self.en)
 
     def test_tutorial_heading_identifiers_must_match_unchanged_code(self):
-        ident = locales.key('Tasks')
-        self.en = {'strings':{ident:'Tasks'},'allow_identical':[ident]}
-        (self.path/'en.json').write_text(json.dumps(self.en))
-        self.cat['strings'] = {ident:'タスク'}
-        self.save()
-        with self.assertRaisesRegex(ValueError,'literal tutorial'):
-            locales.validate('ja')
-        self.cat['strings'][ident] = 'Tasks'
-        self.save()
-        locales.validate('ja')
+        for source,target in [('Tasks','タスク'),('## Inbox','## 受信箱')]:
+            with self.subTest(source=source):
+                ident = locales.key(source)
+                self.en = {'strings':{ident:source},'allow_identical':[ident]}
+                (self.path/'en.json').write_text(json.dumps(self.en))
+                self.cat['strings'] = {ident:target}
+                self.save()
+                with self.assertRaisesRegex(ValueError,'literal tutorial'):
+                    locales.validate('ja')
+                self.cat['strings'][ident] = source
+                self.save()
+                locales.validate('ja')
 
     def test_review_claims_invalid_json_and_duplicates_are_rejected(self):
         self.cat['metadata']['status'] = 'reviewed'

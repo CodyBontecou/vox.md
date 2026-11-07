@@ -258,7 +258,7 @@ def validate(locale, en=None):
         if k not in en['strings']:
             continue
         source = en['strings'][k]
-        if source in LITERAL_EXAMPLES and text != source:
+        if (source in LITERAL_EXAMPLES or re.fullmatch(r'#{1,6} (?:Inbox|Tasks|Notes)',source)) and text != source:
             errors.append(f'{k}: altered literal tutorial heading/route identifier')
         if not isinstance(text, str) or not text.strip():
             errors.append(f'{k}: expected nonempty string')
