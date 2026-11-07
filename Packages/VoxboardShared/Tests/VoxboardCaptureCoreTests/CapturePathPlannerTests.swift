@@ -126,6 +126,39 @@ final class CapturePathPlannerTests: XCTestCase {
         XCTAssertEqual(path, "Journal/2023/12/2023-12-31.md")
     }
 
+    func test_dateTokensUseGregorianYearsWhateverTheDeviceCalendar() throws {
+        let destination = makeDestination(
+            target: .rollingNote(pathTemplate: "Journal/{date}/{week}/{YR}.md", period: .daily)
+        )
+        // 2026-11-07T12:00:00Z — Hijri 1448, Buddhist 2569, Japanese Reiwa 8.
+        let request = makeRequest(date: Date(timeIntervalSince1970: 1_794_052_800))
+
+        for identifier in [Calendar.Identifier.islamicUmmAlQura, .buddhist, .japanese, .persian, .hebrew] {
+            var calendar = Calendar(identifier: identifier)
+            calendar.locale = Locale(identifier: "en_US_POSIX")
+            calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+            calendar.firstWeekday = 2
+            calendar.minimumDaysInFirstWeek = 4
+
+            let path = try CapturePathPlanner(calendar: calendar).relativePath(for: request, destination: destination)
+
+            XCTAssertEqual(path, "Journal/2026-11-07/2026-W45/26.md", "\(identifier)")
+        }
+    }
+
+    func test_entryTemplateDateTokensUseGregorianYearsUnderHijriCalendar() {
+        var calendar = Calendar(identifier: .islamicUmmAlQura)
+        calendar.locale = Locale(identifier: "ar_SA")
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+
+        let rendered = CaptureEntryTemplateRenderer(calendar: calendar).render(
+            "{date} {year}-{month}-{day}",
+            for: makeRequest(date: Date(timeIntervalSince1970: 1_794_052_800))
+        )
+
+        XCTAssertEqual(rendered, "2026-11-07 2026-11-07")
+    }
+
     func test_existingNote_usesResolvedFileReference() throws {
         let destination = makeDestination(target: .existingNote(relativePath: "Projects/Vox.md"))
 
