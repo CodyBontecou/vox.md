@@ -5,6 +5,17 @@ API_KEY_ID = "T7KGDK4Y4V"
 API_ISSUER_ID = "6c3b3640-c6bf-40a9-b6e5-57cda2c7776e"
 API_KEY_PATH = "/Users/codybontecou/dev/AuthKey_T7KGDK4Y4V.p8"
 
+# The App Store version every lane targets: the app's MARKETING_VERSION
+# (Voxboard.xcodeproj), unless VOX_APP_VERSION overrides it. deliver creates
+# the version in App Store Connect if it does not exist yet.
+def app_version
+  return ENV["VOX_APP_VERSION"] if ENV["VOX_APP_VERSION"].to_s != ""
+  pbxproj = File.read(File.expand_path("../Voxboard.xcodeproj/project.pbxproj", __dir__))
+  versions = pbxproj.scan(/"?MARKETING_VERSION"?\s*=\s*"?([0-9][0-9.]*)"?;/).flatten.uniq
+  UI.user_error!("Expected one MARKETING_VERSION in the project, found #{versions.inspect}") unless versions.length == 1
+  versions.first
+end
+
 def connect_api_key
   app_store_connect_api_key(
     key_id: API_KEY_ID,
@@ -56,7 +67,7 @@ platform :ios do
     deliver(
       api_key: api_key,
       app_identifier: APP_ID,
-      app_version: "1.9.5",
+      app_version: app_version,
       skip_binary_upload: true,
       skip_screenshots: true,
       run_precheck_before_submit: false,
@@ -71,7 +82,7 @@ platform :ios do
     deliver(
       api_key: api_key,
       app_identifier: APP_ID,
-      app_version: "1.9.5",
+      app_version: app_version,
       skip_binary_upload: true,
       skip_metadata: true,
       overwrite_screenshots: true,
@@ -87,7 +98,7 @@ platform :ios do
     deliver(
       api_key: api_key,
       app_identifier: APP_ID,
-      app_version: "1.9.5",
+      app_version: app_version,
       skip_binary_upload: true,
       overwrite_screenshots: true,
       run_precheck_before_submit: false,
@@ -102,7 +113,7 @@ platform :ios do
     deliver(
       api_key: api_key,
       app_identifier: APP_ID,
-      app_version: "1.9.5",
+      app_version: app_version,
       skip_binary_upload: true,
       skip_screenshots: true,
       run_precheck_before_submit: false,
