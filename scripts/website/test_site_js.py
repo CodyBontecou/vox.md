@@ -87,6 +87,49 @@ for (const rtl of [false, true]) {
         result = subprocess.run(['node','-e',script,str(source)],text=True,capture_output=True,timeout=15)
         self.assertEqual(result.returncode,0,result.stdout+result.stderr)
 
+    def test_turkish_search_matches_native_case_and_literal_api_terms(self):
+        source = Path(__file__).resolve().parents[2]/'website/site.js'
+        script = r'''
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const source = fs.readFileSync(process.argv[1], 'utf8');
+const handlers = {};
+function node() {
+  return {
+    children: [], attributes: {}, textContent: '',
+    appendChild(child) { this.children.push(child); },
+    setAttribute(k, v) { this.attributes[k] = v; },
+    removeAttribute(k) { delete this.attributes[k]; },
+    addEventListener() {}, scrollIntoView() {}
+  };
+}
+const input = Object.assign(node(), {value: '', closest() { return null; }, addEventListener(k,v) { handlers[k] = v; }});
+const results = node();
+Object.defineProperty(results, 'innerHTML', {set() { this.children = []; }});
+results.querySelectorAll = function () { return this.children.flatMap(li => li.children).filter(a => a.attributes.role === 'option'); };
+const headings = ['İzinler ve sistem erişimi', 'API', 'Işık'].map((title, i) => ({
+  id: 'heading-' + i, textContent: title, tagName: 'H3', nextElementSibling: null,
+  closest() { return {id: 'section', querySelector() { return null; }}; }
+}));
+const document = {
+  readyState: 'complete', documentElement: {lang: 'tr', dataset: {}},
+  querySelector() { return null; },
+  querySelectorAll(selector) { return selector.includes('h3[id]') ? headings : []; },
+  getElementById(id) { return id === 'docs-search-input' ? input : id === 'docs-search-results' ? results : null; },
+  createElement() { return node(); }, addEventListener() {}
+};
+vm.runInNewContext(source, {document, window: {}}, {filename: 'website/site.js'});
+for (const [query, expected] of [['izinler', headings[0].textContent], ['api', 'API'], ['ışık', 'Işık']]) {
+  input.value = query; handlers.input();
+  const options = results.querySelectorAll();
+  assert.equal(options.length, 1, query + ' must match its native/code heading');
+  assert.equal(options[0].children[0].textContent, expected);
+}
+'''
+        result = subprocess.run(['node','-e',script,str(source)],text=True,capture_output=True,timeout=15)
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+
 
 if __name__ == '__main__':
     unittest.main()

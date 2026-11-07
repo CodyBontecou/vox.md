@@ -71,6 +71,12 @@
     var results = document.getElementById('docs-search-results');
     if (!input || !results) return;
     var labels = document.documentElement.dataset;
+    var searchLocale = document.documentElement.lang || 'en';
+    function foldCase(text) {
+      var folded = text.toLocaleLowerCase(searchLocale);
+      // Loose Turkish search also keeps literal English terms such as API findable.
+      return /^tr(?:-|$)/i.test(searchLocale) ? folded.replace(/ı/g, 'i') : folded;
+    }
 
     // Index every titled section and subsection on the page.
     var index = [];
@@ -92,27 +98,27 @@
         id: id,
         title: h.textContent.trim(),
         group: level === 2 ? (group || labels.searchSection || 'Section') : group,
-        body: text.replace(/\s+/g, ' ').trim().toLowerCase()
+        body: foldCase(text.replace(/\s+/g, ' ').trim())
       });
     });
     // Sidebar entries that leave the page (e.g. dedicated guides).
     Array.prototype.forEach.call(document.querySelectorAll('.docs-sidebar a:not([href^="#"]), .docs-category-card:not([href^="#"])'), function (a) {
       var title = (a.querySelector('strong') || a).textContent.trim();
       if (index.some(function (e) { return e.href === a.getAttribute('href'); })) return;
-      index.push({ href: a.getAttribute('href'), title: title, group: labels.searchGuide || 'Guide', body: (a.textContent || '').toLowerCase() });
+      index.push({ href: a.getAttribute('href'), title: title, group: labels.searchGuide || 'Guide', body: foldCase(a.textContent || '') });
     });
 
     var matches = [];
     var selected = -1;
 
     function render(query) {
-      var q = query.trim().toLowerCase();
+      var q = foldCase(query.trim());
       results.innerHTML = '';
       selected = -1;
       if (!q) { close(); return; }
       var terms = q.split(/\s+/);
       matches = index.map(function (e) {
-        var t = e.title.toLowerCase();
+        var t = foldCase(e.title);
         var score = 0;
         for (var i = 0; i < terms.length; i++) {
           var term = terms[i];
