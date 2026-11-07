@@ -38,7 +38,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -64,7 +68,33 @@ internal data class GeneratedCaptureAsset(
 )
 
 internal data class SketchPoint(val x: Float, val y: Float, val pressure: Float)
-private data class SketchStroke(val points: androidx.compose.runtime.snapshots.SnapshotStateList<SketchPoint>)
+private data class SketchStroke(val points: SnapshotStateList<SketchPoint>)
+
+/** Flattens each stroke to [x, y, pressure, …] so a sketch survives rotation and process death. */
+internal fun encodeSketchStrokes(strokes: List<List<SketchPoint>>): List<FloatArray> = strokes.map { points ->
+    FloatArray(points.size * 3).also { values ->
+        points.forEachIndexed { index, point ->
+            values[index * 3] = point.x
+            values[index * 3 + 1] = point.y
+            values[index * 3 + 2] = point.pressure
+        }
+    }
+}
+
+internal fun decodeSketchStrokes(saved: List<FloatArray>): List<List<SketchPoint>> = saved.map { values ->
+    (0 until values.size / 3).map { index ->
+        SketchPoint(values[index * 3], values[index * 3 + 1], values[index * 3 + 2])
+    }
+}
+
+private val SketchStrokesSaver = listSaver<SnapshotStateList<SketchStroke>, FloatArray>(
+    save = { strokes -> encodeSketchStrokes(strokes.map { it.points.toList() }) },
+    restore = { saved ->
+        decodeSketchStrokes(saved).mapTo(mutableStateListOf<SketchStroke>()) { points ->
+            SketchStroke(points.toMutableStateList())
+        }
+    },
+)
 
 @Composable
 internal fun SketchDialog(
@@ -73,7 +103,7 @@ internal fun SketchDialog(
     onFailure: () -> Unit,
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
-    val strokes = remember { mutableStateListOf<SketchStroke>() }
+    val strokes = rememberSaveable(saver = SketchStrokesSaver) { mutableStateListOf<SketchStroke>() }
     var isSaving by remember { mutableStateOf(false) }
 
     val c = Signal.colors
