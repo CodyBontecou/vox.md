@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr" data-search-section="অংশ" data-search-guide="গাইড" data-search-empty="“{query}”-এর কোনো ফল নেই">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>বর্তমান অবস্থান, {location} ও মেটাডেটা — Vox.md নথি</title>
+  <meta name="description" content="Vox.md রুটে একবারের বর্তমান অবস্থান, {location} Markdown টোকেন, ঐচ্ছিক ফ্রন্টম্যাটার বা ইনলাইন মেটাডেটা, যথার্থতা, গোপনীয়তা ও পুনরুদ্ধার সেট করুন।">
+  <link rel="canonical" href="https://vox.isolated.tech/bn/docs/location/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="ভাষা মডেলের জন্য Vox.md নথি">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="বর্তমান অবস্থান, {location} ও মেটাডেটা — Vox.md নথি">
+  <meta property="og:description" content="নোটে স্বয়ংক্রিয় অবস্থান মেটাডেটা না দিয়ে Markdown টেমপ্লেটে একবারের অবস্থান নিন।">
+  <meta property="og:url" content="https://vox.isolated.tech/bn/docs/location/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vox.md বর্তমান অবস্থান গাইড">
+  <meta name="twitter:description" content="একবারের অবস্থান, {location}, মেটাডেটা, যথার্থতা, গোপনীয়তা ও স্থানান্তরের পূর্ণ গাইড।">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Vox.md-এ বর্তমান অবস্থান, {location} ও অবস্থান মেটাডেটা",
+  "description": "প্রতি প্রিসেটে বর্তমান অবস্থান নেওয়া, {location} Markdown টোকেন, ঐচ্ছিক মেটাডেটা আউটপুট, গোপনীয়তা, স্থানান্তর ও সমস্যা সমাধানের পূর্ণ গাইড।",
+  "dateModified": "2026-08-21",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/bn/docs/location/",
+  "inLanguage": "bn",
+  "name": "বর্তমান অবস্থান, {location} ও মেটাডেটা — Vox.md নথি"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/bn/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "নথি",
+      "item": "https://vox.isolated.tech/bn/docs/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "বর্তমান অবস্থান",
+      "item": "https://vox.isolated.tech/bn/docs/location/"
+    }
+  ],
+  "inLanguage": "bn",
+  "name": "বর্তমান অবস্থান, {location} ও মেটাডেটা — Vox.md নথি",
+  "description": "Vox.md রুটে একবারের বর্তমান অবস্থান, {location} Markdown টোকেন, ঐচ্ছিক ফ্রন্টম্যাটার বা ইনলাইন মেটাডেটা, যথার্থতা, গোপনীয়তা ও পুনরুদ্ধার সেট করুন।"
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md সর্বজনীন তথ্য API">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/location/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/location/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/location/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/location/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/location/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/location/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/location/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/location/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/location/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/location/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/location/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/location/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/location/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/location/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/location/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/location/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/location/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/location/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/location/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/location/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/location/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/location/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/location/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/location/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="প্রধান নেভিগেশন">
+  <div class="nav-inner docs-header-inner">
+    <a href="/bn/" class="logo" aria-label="Vox.md হোম">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ নথি</span></span>
+    </a>
+    <form class="docs-search" role="search" action="../" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="নথি খুঁজুন" aria-label="নথি খুঁজুন" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="অনুসন্ধানের ফল" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/bn/blog/">ব্লগ</a></li>
+      <li><a href="/bn/privacy.html">গোপনীয়তা</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>ভাষা</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn" aria-current="page">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="এই পৃষ্ঠায়">
+      <div class="docs-sidebar-title">এই পৃষ্ঠায়</div>
+      <ol>
+        <li><a href="#overview">দুটি স্বাধীন পছন্দ</a></li>
+        <li><a href="#setup">রুট সেট করুন</a></li>
+        <li><a href="#configurations">সাধারণ কনফিগারেশন</a></li>
+        <li><a href="#location-token"><code>{location}</code> টোকেন</a></li>
+        <li><a href="#metadata-output">মেটাডেটা আউটপুট</a></li>
+        <li><a href="#precision">যথার্থতা ও নাম</a></li>
+        <li><a href="#capture-sources">ক্যাপচারের উৎস</a></li>
+        <li><a href="#unavailable">অনুপলব্ধতা ও পুনরুদ্ধার</a></li>
+        <li><a href="#migration">বর্তমান রুট</a></li>
+        <li><a href="#privacy">গোপনীয়তা ও তথ্য রাখা</a></li>
+        <li><a href="#troubleshooting">সমস্যা সমাধান</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="location-guide-title">
+      <div class="page-eyebrow">নথি · রুটগুলো</div>
+      <h1 class="page-title" id="location-guide-title">বর্তমান অবস্থান, <code>{location}</code>, এবং মেটাডেটা</h1>
+      <p class="docs-hero-copy">স্বয়ংক্রিয় YAML বা ইনলাইন ফিল্ড না দিয়ে এন্ট্রি ফরম্যাটে শুরুর অবস্থান একবার নিন। প্রতি রুটে অবস্থান নেওয়া ও মেটাডেটা আউটপুট আলাদা স্পষ্ট পছন্দ।</p>
+      <div class="docs-meta-row" aria-label="গাইডের তথ্য">
+        <span>হালনাগাদ: ২১ আগস্ট, ২০২৬</span>
+        <span>একবার অবস্থান নেওয়া</span>
+        <span>ব্যাকগ্রাউন্ড ট্র্যাকিং নেই</span>
+        <a href="/bn/docs/">সম্পূর্ণ সুবিধার গাইড</a>
+      </div>
+      </header>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="overview">
+        <div class="docs-section-label">০১ / সংক্ষিপ্ত বিবরণ</div>
+        <h2>অবস্থান নিলেই মেটাডেটা আউটপুট হয় না</h2>
+        <p>প্রতি রুটে অবস্থানের দুটি আলাদা নিয়ন্ত্রণ আছে। <strong>বর্তমান অবস্থান ব্যবহার করুন</strong> রুট শুরুর সময়ের একটি অবস্থান চাইবে কি না ঠিক করে। <strong>অবস্থান মেটাডেটা লিখুন</strong> নেওয়া স্ন্যাপশট ফ্রন্টম্যাটার বা ইনলাইনেও লিখবে কি না ঠিক করে।</p>
+
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>নিয়ন্ত্রণ</th><th>এর অর্থ</th><th>এর অর্থ যা নয়</th></tr></thead>
+            <tbody>
+              <tr><td>সিস্টেমের অবস্থান অনুমতি</td><td>অ্যাপ বা সমর্থিত ক্যাপচার পর্দা ব্যবহারের সময় Vox.md-কে অবস্থান চাইতে দেয়।</td><td>এটি কোনো রুটে অবস্থান নিজে থেকে চালু করে না।</td></tr>
+              <tr><td>বর্তমান অবস্থান ব্যবহার করুন</td><td>এই রুটে একবার অবস্থান চায় এবং তা উপলব্ধ করে <code>{location}</code>.</td><td>এতে স্বয়ংক্রিয়ভাবে YAML বা ইনলাইন মেটাডেটা লেখা হয় না।</td></tr>
+              <tr><td>অবস্থান মেটাডেটা লিখুন</td><td>নেওয়া স্ন্যাপশট থেকে বাছা স্ট্রাকচার্ড ফিল্ড বা যাচাই করা উন্নত YAML লেখে।</td><td>এটি ঠিক করে না যে <code>{location}</code> দেখাতে পারে।</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <strong>ইচ্ছার সংকেত রুট, অনুমতি নয়</strong>
+          <p>ব্যবহারের সময় অনুমতি দিলে শুধু অপারেটিং সিস্টেমের দরজা খোলে। Vox.md তবুও শুধু স্বাধীন বর্তমান অবস্থান ক্যাপচার বার বা বর্তমান অবস্থান ব্যবহার করুন চালু রুটেই অবস্থান চায়।</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="setup">
+        <div class="docs-section-label">০২ / সেটআপ</div>
+        <h2>একটি রুটে বর্তমান অবস্থান সেট করুন</h2>
+        <ol class="docs-steps">
+          <li><strong>রুটগুলো খুলুন।</strong><span>iPhone বা iPad-এ সেটিংস → রুটগুলো খুলুন। Mac-এ সেটিংস খুলে রুটগুলো বাছুন।</span></li>
+          <li><strong>রুট সম্পাদনা করুন।</strong><span>যে রুট শুরুর অবস্থান নেবে তা বাছুন। সেটিং সেই রুটেরই; অন্যদের বদলায় না।</span></li>
+          <li><strong>অবস্থান খুলুন।</strong><span>চালু করুন <em>বর্তমান অবস্থান ব্যবহার করুন</em>. রাখুন <em>অবস্থান মেটাডেটা লিখুন</em> শুধু টোকেনের আচরণে বন্ধ।</span></li>
+          <li><strong>যথার্থতা বেছে নিন।</strong><span>শুরুর অবস্থানে সঠিক নিন অথবা উল্লেখযোগ্য স্থানের নাম ছাড়া দুই দশমিক ঘরে স্থানাঙ্কে শহর নিন।</span></li>
+          <li><strong>অবস্থান না পেলে আচরণ বাছুন।</strong><span>শুরুর অবস্থান না পেলে জিজ্ঞাসা করুন, অবস্থান ছাড়া পাঠান বা ক্যাপচার বাতিল ফল নির্ধারণ করে।</span></li>
+          <li><strong>যোগ করুন <code>{location}</code> ইচ্ছা হলে।</strong><span>এন্ট্রি টেমপ্লেট, নিজস্ব এন্ট্রি প্রিফিক্স বা সাফিক্স কিংবা ভল্ট Markdown টেমপ্লেটে টোকেন রাখুন।</span></li>
+        </ol>
+        <p>প্রথমবার সিস্টেম অবস্থানের অনুমতি চাইতে পারে। আগে না দিলে iOS, iPadOS বা macOS সেটিংসে Vox.md অবস্থান অ্যাক্সেস চালু করুন।</p>
+      </section>
+
+      <section class="docs-section" id="configurations">
+        <div class="docs-section-label">০৩ / সাধারণ কনফিগারেশন</div>
+        <h2>অবস্থানের যতটুকু সুবিধা দরকার ততটুকু বাছুন</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>কাঙ্ক্ষিত ফল</th><th>বর্তমান অবস্থান ব্যবহার করুন</th><th>অবস্থান মেটাডেটা লিখুন</th><th>টেমপ্লেট</th></tr></thead>
+            <tbody>
+              <tr><td>রুটের অবস্থান নেই</td><td>বন্ধ</td><td>বন্ধ</td><td>ব্যবহার করবেন না <code>{location}</code>, নয়তো এটি ফাঁকা থাকে।</td></tr>
+              <tr><td>শুধু ক্লিকযোগ্য লিঙ্ক</td><td>চালু</td><td>বন্ধ</td><td>যোগ করুন <code>{location}</code>. অবস্থানের কোনো ফিল্ড লেখা হয় না।</td></tr>
+              <tr><td>শুধু মেটাডেটা</td><td>চালু</td><td>চালু</td><td>বাদ দিন <code>{location}</code>. শুধু নির্ধারিত ফিল্ড লেখা হয়।</td></tr>
+              <tr><td>লিঙ্ক ও মেটাডেটা</td><td>চালু</td><td>চালু</td><td>যোগ করুন <code>{location}</code> ও মেটাডেটা ফিল্ড সেট করুন।</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>বর্তমান অবস্থান ব্যবহার করুন বন্ধ করলে রুটে টোকেন ও মেটাডেটা দুইই বন্ধ, আগের ফরম্যাট পছন্দ পরে নেওয়ার জন্য থাকলেও।</p>
+      </section>
+
+      <section class="docs-section" id="location-token">
+        <div class="docs-section-label">০৪ / টেমপ্লেট টোকেন</div>
+        <h2>ব্যবহার করুন <code>{location}</code> নোটের মেটাডেটা না বদলেই</h2>
+        <p>বর্তমান অবস্থান ব্যবহার করুন চালু ও শুরুর স্ন্যাপশট পাওয়া গেলে, <code>{location}</code> যাচাই করা Google Maps Markdown লিঙ্ক দেখায়:</p>
+        <pre class="docs-code-block"><code>[Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>টোকেন পুনর্ব্যবহারযোগ্য এন্ট্রি টেমপ্লেট, নিজস্ব প্রিফিক্স-সাফিক্স ও ভল্ট Markdown টেমপ্লেটে চলে। রুটে নির্বাচিত একই সঠিক বা শহর স্থানাঙ্ক নেয়।</p>
+
+        <h3 id="token-example">শুধু টোকেনের উদাহরণ</h3>
+        <p>এমন সাফিক্সের জন্য:</p>
+        <pre class="docs-code-block"><code>Captured from {location}</code></pre>
+        <p>Vox.md তৈরি করতে পারে:</p>
+        <pre class="docs-code-block"><code>Captured from [Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>অবস্থান মেটাডেটা লিখুন বন্ধ থাকলে রুটের যোগ করা একমাত্র অবস্থান বিষয়বস্তু এই লিঙ্ক। নেই <code>locations:</code> সংগ্রহ ও নেই <code>location.*::</code> ফিল্ড লেখা হয়।</p>
+
+        <h3 id="composer-fix">কম্পোজারের এক-ট্যাপ সমাধান</h3>
+        <p>কার্যকর এন্ট্রি প্রিফিক্স, সাফিক্স বা পুনর্ব্যবহারযোগ্য এন্ট্রি টেমপ্লেটে যদি থাকে <code>{location}</code> যখন নির্বাচিত রুটে বর্তমান অবস্থান বন্ধ, কম্পোজার বলে টোকেন ফাঁকা হবে এবং দেয় <strong>[Route]-এর জন্য বর্তমান অবস্থান ব্যবহার করুন</strong>. অ্যাকশন রুটে বর্তমান অবস্থান চালু কিন্তু অবস্থান মেটাডেটা লিখুন ইচ্ছাকৃত বন্ধ রাখে; পরের পাঠানো নোটের মেটাডেটা না বদলে টোকেনের মান দেয়। লাইভ ভল্ট টেমপ্লেট শুধু পাঠানোর সময় পড়ে, তাই কম্পোজারে এই ইঙ্গিত দেয় না; টোকেন থাকলে হাতে অবস্থান চালু করুন।</p>
+
+        <div class="docs-callout docs-callout-neutral">
+          <strong>টোকেন ফাঁকা হলে</strong>
+          <p><code>{location}</code> বর্তমান অবস্থান বন্ধ, না পাওয়া বা ক্যাপচার অবস্থান ছাড়া চললে ফাঁকা স্ট্রিং হয়। ঐচ্ছিক টেমপ্লেট লাইনে আশপাশের যতিচিহ্ন ও নাম মনে রাখুন।</p>
+        </div>
+
+        <h3 id="capture-bar-location">স্বাধীন ক্যাপচার বার অ্যাকশন</h3>
+        <p>দ্রুত আটকে <strong>বর্তমান অবস্থান</strong> অ্যাকশন সরাসরি বর্তমান খসড়ায় একবারের Google Maps লিঙ্ক ঢোকায়। রুট থেকে স্বাধীন, বর্তমান অবস্থান ব্যবহার করুন বা অবস্থান মেটাডেটা লিখুন বদলায় না।</p>
+      </section>
+
+      <section class="docs-section" id="metadata-output">
+        <div class="docs-section-label">০৫ / মেটাডেটা আউটপুট</div>
+        <h2>আপনি চাইলেই কেবল স্ট্রাকচার্ড ফিল্ড লিখুন</h2>
+        <p>এর সঙ্গে বা বদলে যন্ত্র-পাঠযোগ্য অবস্থান ফিল্ড নোটে চাইলে অবস্থান মেটাডেটা লিখুন চালু করুন: <code>{location}</code> লিঙ্ক।</p>
+
+        <div class="docs-feature-grid">
+          <div><strong>নোটের ফ্রন্টম্যাটার</strong><p>প্রতি অবস্থান যোগ করে এই নামের সংগ্রহে: <code>locations</code> ডিফল্টে, ক্যাপচার ID অনুযায়ী। সম্পর্কহীন পুরোনো ফ্রন্টম্যাটার অক্ষুণ্ণ থাকে।</p></div>
+          <div><strong>ইনলাইন এন্ট্রি ফিল্ড</strong><p>Dataview-ধরনে লেখে <code>location.key:: value</code> লাইন ক্যাপচার করা এন্ট্রির পাশে। ফ্রন্টম্যাটার সংগ্রহ যোগ হয় না।</p></div>
+          <div><strong>স্ট্রাকচার্ড ফিল্ড</strong><p>স্থানাঙ্ক, অক্ষাংশ, দ্রাঘিমাংশ, স্থান, শহর, অঞ্চল, দেশ, সেবাদাতার লিঙ্ক, geo URI, নির্ভুলতা, টাইমস্ট্যাম্প, উৎস ও ID বাছুন ও নাম বদলান।</p></div>
+          <div><strong>উন্নত YAML</strong><p>নোট ফ্রন্টম্যাটারে যাচাই করা সীমাবদ্ধ YAML টেমপ্লেট লাগে। ইনলাইন এন্ট্রি ফিল্ডে উন্নত YAML নেই।</p></div>
+        </div>
+
+        <h3 id="frontmatter-example">স্ট্রাকচার্ড ফ্রন্টম্যাটারের উদাহরণ</h3>
+        <pre class="docs-code-block"><code>---
+title: Field Notes
+locations:
+  - id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    coordinates: [45.501235, -73.567890]
+    place: "Café &amp; Main"
+    appleMapsURL: "https://maps.apple.com/?ll=45.501235%2C-73.567890&amp;q=Caf%C3%A9%20%26%20Main"
+    timestamp: "2023-11-14T22:13:20.000Z"
+    source: "app"
+---</code></pre>
+        <p>চলমান নোটের সংগ্রহে একাধিক ক্যাপচার থাকে। অবস্থান মার্জে পুনরায় চেষ্টার সুরক্ষা আছে: একই ক্যাপচার ID-তে একই অবস্থান দুবার যোগ হয় না। নির্বাচিত কীয়ে আগের অসামঞ্জস্যপূর্ণ ব্যবহারকারীর মান থাকলে Vox.md তার ওপর না লিখে থামে।</p>
+
+        <h3 id="inline-example">ইনলাইন এন্ট্রির উদাহরণ</h3>
+        <pre class="docs-code-block"><code>location.id:: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+location.coordinates:: [45.501235, -73.567890]
+location.place:: "Café &amp; Main"
+
+Captured text</code></pre>
+
+        <h3 id="advanced-yaml">উন্নত YAML প্লেসহোল্ডার</h3>
+        <p>উন্নত টেমপ্লেটে এমন প্লেসহোল্ডার ব্যবহার করা যায়: <code>{{coordinates}}</code>, <code>{{latitude}}</code>, <code>{{longitude}}</code>, <code>{{place}}</code>, <code>{{city}}</code>, <code>{{region}}</code>, <code>{{country}}</code>, <code>{{appleMapsURL}}</code>, <code>{{googleMapsURL}}</code>, <code>{{openStreetMapURL}}</code>, <code>{{geoURI}}</code>, <code>{{accuracy}}</code>, <code>{{timestamp}}</code>, <code>{{source}}</code>, এবং <code>{{id}}</code>. সংরক্ষণের আগে রুট সেটিংসে কনফিগারেশনের পূর্বরূপ দেখুন।</p>
+      </section>
+
+      <section class="docs-section" id="precision">
+        <div class="docs-section-label">০৬ / যথার্থতা ও নাম</div>
+        <h2>সঠিক ও শহর একই সামঞ্জস্যপূর্ণ স্ন্যাপশট নেয়</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>যথার্থতা</th><th>স্থানাঙ্ক</th><th>নাম</th><th>লিঙ্ক ও ফিল্ড</th></tr></thead>
+            <tbody>
+              <tr><td>সঠিক</td><td>শুরুর অবস্থান ছয়টি দৃশ্যমান দশমিক ঘরে রাখে।</td><td>নির্বাচিত মেটাডেটা ফিল্ডে লাগলে উল্লেখযোগ্য স্থানের নাম থাকতে পারে।</td><td>প্রতিটি নির্ণীত মান সঠিক স্থানাঙ্ক ব্যবহার করে।</td></tr>
+              <tr><td>শহর</td><td>স্ন্যাপশট রাখার আগে অক্ষাংশ ও দ্রাঘিমাংশ দুই দশমিক ঘরে রাউন্ড করে।</td><td>উল্লেখযোগ্য স্থানের নাম সরায়; শহর, অঞ্চল ও দেশ থাকতে পারে।</td><td>সব সেবাদাতা URL, geo URI, টোকেন ও ফিল্ড রাউন্ড করা স্থানাঙ্ক নেয়।</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>অবস্থান মেটাডেটা লিখুন চালু এবং নির্বাচিত স্ট্রাকচার্ড ফিল্ড বা উন্নত প্লেসহোল্ডারে স্থান, শহর, অঞ্চল বা দেশ লাগলেই Apple-এর সিস্টেম রিভার্স জিওকোডার লাগে। শুধু টোকেন রুট এটি এড়ায়। নামের খোঁজ ব্যর্থ হলেও স্থানাঙ্কের ফল থাকে।</p>
+      </section>
+
+      <section class="docs-section" id="capture-sources">
+        <div class="docs-section-label">০৭ / ক্যাপচারের উৎস</div>
+        <h2>স্ন্যাপশট ক্যাপচারের শুরুর স্থানের</h2>
+        <p>ক্যাপচার যেখান থেকে শুরু হয় সেখানেই বর্তমান অবস্থান নির্ধারিত হয়। পুনরায় চেষ্টা ও পুনরুদ্ধারে নীরবে নতুন অবস্থান না নিয়ে সেই স্থায়ী ফল আবার নেওয়া হয়।</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>ক্যাপচারের উৎস</th><th>অবস্থান নেওয়ার সীমারেখা</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone ও iPad দ্রুত ক্যাপচার</td><td>পাঠান</td></tr>
+              <tr><td>শেয়ার শিট</td><td>শেয়ার এক্সটেনশনে পাঠান</td></tr>
+              <tr><td>সরাসরি কিউতে যোগ করা লেখা, লিঙ্ক ও ফাইল ইন্টেন্ট</td><td>ইন্টেন্ট চালানোর সময়</td></tr>
+              <tr><td>দ্রুত আটকে খোলে এমন শর্টকাট, উইজেট, নিয়ন্ত্রণ ও ডিপ লিঙ্ক</td><td>কম্পোজারে পাঠান</td></tr>
+              <tr><td>শর্টকাট, উইজেট, নিয়ন্ত্রণ, তাৎক্ষণিক কণ্ঠ ও কীবোর্ড-চালিত রুট রেকর্ডিং</td><td>রেকর্ডিং থামার সময়</td></tr>
+              <tr><td>Apple Watch-এর স্বাভাবিক ক্যাপচার ডেলিভারি</td><td>Watch-এ রেকর্ডিং থামার সময়; iPhone নিজের অবস্থান বসিয়ে দেয় না</td></tr>
+              <tr><td>Mac ক্যাপচার</td><td>পাঠানোর সময়, বা তাৎক্ষণিক কণ্ঠ ডেলিভারিতে রেকর্ডিং থামার সময়</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Watch শুধু রেকর্ডিং</strong> Markdown সুবিধা ছাড়া মূল M4A ফাইলসে দেয়, তাই রুট অন্যত্র বর্তমান অবস্থান নিলেও এখানে চায় না।</p>
+      </section>
+
+      <section class="docs-section" id="unavailable">
+        <div class="docs-section-label">০৮ / অনুপলব্ধতা ও পুনরুদ্ধার</div>
+        <h2>অবস্থান না পেলে প্রতিটি রুটের আচরণ বেছে নিন</h2>
+        <ul>
+          <li><strong>জিজ্ঞাসা করুন:</strong> ইন্টারঅ্যাকটিভ ক্যাপচারে আবার চেষ্টা, বাতিল, একবার অবস্থান ছাড়া পাঠানো বা রুটে সবসময় অবস্থান ছাড়া পাঠানো যায়।</li>
+          <li><strong>অবস্থান ছাড়া পাঠান:</strong> টোকেনের মান বা মেটাডেটা আউটপুট ছাড়াই ডেলিভারি চালায়।</li>
+          <li><strong>ক্যাপচার বাতিল:</strong> চাওয়া শুরুর অবস্থান ছাড়া নোট তৈরি না করে ডেলিভারি থামায়।</li>
+          <li><strong>সংরক্ষিত পছন্দ রিসেট করুন:</strong> রুটের অবস্থান সেটিংসে অবস্থান অনুপলব্ধের পছন্দ রিসেট করুন ব্যবহার করুন।</li>
+        </ul>
+        <p>নজরদারিহীন জিজ্ঞাসা করুন অনুরোধ শুরুর অনুপলব্ধ ফল পরে দেখার জন্য রাখে। কিউ বা ব্যর্থ ক্যাপচারে আবার চেষ্টা পরের স্থান বসায় না। অপেক্ষমাণ কাজে শুধু স্থানীয় পুনরুদ্ধারের দরকারি গোপনীয়তা-সমন্বিত স্ন্যাপশট বা অনুপলব্ধ ফল থাকে।</p>
+      </section>
+
+      <section class="docs-section" id="migration">
+        <div class="docs-section-label">০৯ / বর্তমান রুট</div>
+        <h2>আপগ্রেডে আগের মেটাডেটার আচরণ বজায় থাকে</h2>
+        <p>অবস্থান নেওয়া ও আউটপুটের এই বিভাজন স্থানান্তরে নিরাপদ:</p>
+        <ul>
+          <li><strong>নতুন রুট:</strong> বর্তমান অবস্থান ব্যবহার করুন ও অবস্থান মেটাডেটা লিখুন শুরুতে বন্ধ থাকে।</li>
+          <li><strong>আগে অবস্থান চালু থাকা রুট:</strong> আপগ্রেডের পর দুই নিয়ন্ত্রণ চালু থেকে রুটের পুরোনো মেটাডেটা রাখে।</li>
+          <li><strong>আগে অবস্থান বন্ধ থাকা রুট:</strong> দুই নিয়ন্ত্রণই বন্ধ থাকে; আপগ্রেডে নতুন মেটাডেটা আউটপুট চালু হয় না।</li>
+        </ul>
+        <p>আগের মেটাডেটা রুট শুধু টোকেনে নিতে বর্তমান অবস্থান ব্যবহার করুন চালু ও অবস্থান মেটাডেটা লিখুন বন্ধ রাখুন। আগের Markdown পুনর্লিখন বা মোছা হয় না।</p>
+      </section>
+
+      <section class="docs-section" id="privacy">
+        <div class="docs-section-label">১০ / গোপনীয়তা ও তথ্য রাখা</div>
+        <h2>একটি স্পষ্ট স্ন্যাপশট, ব্যাকগ্রাউন্ড ট্র্যাকিং কখনো নয়</h2>
+        <ul>
+          <li>Vox.md একটানা অবস্থান দেখে না বা ব্যাকগ্রাউন্ডে ট্র্যাক করে না।</li>
+          <li>অবস্থান Vox.md সার্ভার, বিশ্লেষণ, বিজ্ঞাপন ব্যবস্থা বা তৃতীয়-পক্ষ AI সেবায় যায় না।</li>
+          <li>টোকেন ও সেবাদাতার URL স্থানীয়ভাবে বানানো হয়। Apple Maps, Google Maps বা OpenStreetMap শুধু তাদের লিঙ্ক খুললে স্থানাঙ্ক পায়।</li>
+          <li>নির্বাচিত মেটাডেটায় স্থানের নাম লাগলেই Apple-এর সিস্টেম রিভার্স জিওকোডার নেটওয়ার্ক চাইতে পারে। শুধু টোকেনের অবস্থান এ খোঁজ এড়ায়।</li>
+          <li>সফল ডেলিভারির পর পুনরুদ্ধারযোগ্য অনুরোধ বিষয়বস্তুবিহীন রসিদে নামে এবং সম্পন্ন ইতিহাসে স্থানাঙ্ক, নাম, সেবাদাতার URL বা অবস্থান টেমপ্লেট থাকে না।</li>
+          <li>Markdown-এ অবস্থান মেটাডেটা বা টোকেন লিঙ্ক লিখলে নির্বাচিত ফাইলের অংশ। সিঙ্ক সেবাদাতা নিজের শর্তে তা প্রক্রিয়া করতে পারে।</li>
+        </ul>
+        <div class="docs-callout">
+          <strong>রুট ব্যক্তিগত রেখেও অনুমতি চালু রাখা যায়</strong>
+          <p>স্বাধীন বর্তমান অবস্থান অ্যাকশনে সিস্টেম অনুমতি রেখে প্রতি রুটে বর্তমান অবস্থান ব্যবহার করুন বন্ধ রাখতে পারেন।</p>
+        </div>
+        <p>দেখুন <a href="/bn/privacy.html">গোপনীয়তা নীতি</a> ডেটা পরিচালনা ও রাখার সম্পূর্ণ বিবরণ জানতে।</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">১১ / সমস্যা সমাধান</div>
+        <h2>অবস্থান ও টেমপ্লেটের সাধারণ সমস্যা ঠিক করুন</h2>
+        <div class="docs-troubleshooting">
+          <details>
+            <summary><code>{location}</code> ফাঁকা থাকে</summary>
+            <p>কার্যকর এন্ট্রি টেমপ্লেট, প্রিফিক্স, সাফিক্স বা ভল্ট টেমপ্লেটে হুবহু ছোট অক্ষরের এই টোকেন আছে নিশ্চিত করুন: <code>{location}</code>. তারপর ডেলিভারির রুটে বর্তমান অবস্থান ব্যবহার করুন চালু করুন। কম্পোজারের এক-ট্যাপ সমাধান শনাক্ত ইনলাইন এন্ট্রিতে মেটাডেটা ছাড়াই তা করে; লাইভ ভল্ট টেমপ্লেটে হাতে রুট সেট চাই। অনুমতি না পেলে বা অবস্থান না মিললে রুটের অনুপলব্ধতার আচরণ ও সিস্টেম সেটিংস দেখুন।</p>
+          </details>
+          <details>
+            <summary>লিঙ্ক চলে, কিন্তু মেটাডেটা নেই</summary>
+            <p>শুধু টোকেনে এমনই হয়। রুটের অবস্থান সেটিংসে অবস্থান মেটাডেটা লিখুন চালু করে নোট ফ্রন্টম্যাটার বা ইনলাইন এন্ট্রি ফিল্ড এবং চাওয়া ফিল্ড বাছুন।</p>
+          </details>
+          <details>
+            <summary>মেটাডেটা দেখা যায়, কিন্তু এন্ট্রিতে লিঙ্ক নেই</summary>
+            <p>মেটাডেটা আউটপুট স্বয়ংক্রিয়ভাবে লিঙ্ক ঢোকায় না। যোগ করুন <code>{location}</code> কার্যকর এন্ট্রি ফরম্যাট বা ভল্ট Markdown টেমপ্লেটে।</p>
+          </details>
+          <details>
+            <summary>স্থান বা শহর নেই</summary>
+            <p>নামের ফিল্ড বাছা আছে দেখুন। স্থানাঙ্ক থাকলেও Apple-এর রিভার্স জিওকোডার ব্যর্থ হতে পারে। শহর যথার্থতায় ইচ্ছাকৃতভাবে উল্লেখযোগ্য স্থানের নাম বাদ।</p>
+          </details>
+          <details>
+            <summary>ফ্রন্টম্যাটার ডেলিভারিতে সংঘাত দেখায়</summary>
+            <p>নির্ধারিত সংগ্রহের কী, <code>locations</code> ডিফল্টে, সামঞ্জস্যপূর্ণ অবস্থানের তালিকা হতে হবে। রুট সেটিংসে সংগ্রহের নাম বা আগের ব্যবহারকারীর ফ্রন্টম্যাটার বদলান। Vox.md অসামঞ্জস্যপূর্ণ মানের ওপর লিখবে না।</p>
+          </details>
+          <details>
+            <summary>পুনরায় চেষ্টায় অবস্থান পুরোনো বা অনুপলব্ধ</summary>
+            <p>এটি ইচ্ছাকৃত। অনুরোধ শুরুর ফল রাখে, যাতে পরের চেষ্টা নীরবে অন্য ক্যাপচার স্থান না দাবি করে। নতুন স্ন্যাপশটে নতুন ক্যাপচার করুন।</p>
+          </details>
+          <details>
+            <summary>অবস্থানের অনুমতি আছে, কিন্তু রুট তা চায় না</summary>
+            <p>সিস্টেম অনুমতি শুধু দরজা খোলে। রুট সম্পাদনা করে বর্তমান অবস্থান ব্যবহার করুন চালু করুন। শুধু অনুমতিতে রুট সম্মতি দেয় না।</p>
+          </details>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/bn/developers">ডেভেলপার</a></li>
+        <li><a href="/bn/about">সম্পর্কে</a></li>
+        <li><a href="/bn/contact">যোগাযোগ</a></li>
+        <li><a href="/bn/">হোম</a></li>
+        <li><a href="/bn/docs/">নথি</a></li>
+        <li><a href="/bn/blog/">ব্লগ</a></li>
+        <li><a href="/bn/privacy.html">গোপনীয়তা</a></li>
+        <li><a href="/bn/terms.html">শর্তাবলি</a></li>
+      </ul>
+      <div class="footer-copy">© ২০২৬ Vox.md · স্থানীয় ক্যাপচার · ব্যবহারকারীর নিয়ন্ত্রণে ফাইল।</div>
+    </div>
+  <details class="language-switcher"><summary>ভাষা</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn" aria-current="page">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
