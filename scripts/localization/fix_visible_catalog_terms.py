@@ -85,6 +85,13 @@ EXPLICIT = {
         "ta": "முடக்கப்பட்டது", "th": "ปิดใช้งาน", "tr": "Devre dışı", "uk": "Вимкнено",
         "ur": "غیر فعال", "vi": "Đã tắt", "zh-Hans": "已停用", "zh-Hant": "已停用",
     },
+    # New iPad/Duo labels: languages outside the store set (bn, ta, ur) plus the English
+    # source value, so the runtime-catalog audit sees every app language.
+    "VIEWS": {"en": "VIEWS", "bn": "ভিউ", "ta": "காட்சிகள்", "ur": "مناظر"},
+    "PROCESS": {"en": "PROCESS", "bn": "প্রক্রিয়া", "ta": "செயலாக்கம்", "ur": "پروسیسنگ"},
+    "SHAPE": {"en": "SHAPE", "bn": "রূপ", "ta": "வடிவம்", "ur": "شکل"},
+    "DELIVER": {"en": "DELIVER", "bn": "পাঠানো", "ta": "வழங்கல்", "ur": "ترسیل"},
+    "WILL WRITE": {"en": "WILL WRITE", "bn": "যা লেখা হবে", "ta": "எழுதப்படும்", "ur": "لکھا جائے گا"},
     # Recording-details attachment chip: "Audi" (ar), "Audião" (pt-BR), "About Audio" (tr)…
     "Audio": {
         "ar": "صوت", "id": "Audio", "it": "Audio", "pt-BR": "Áudio", "ta": "ஆடியோ",
