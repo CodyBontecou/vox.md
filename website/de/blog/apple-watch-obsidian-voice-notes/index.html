@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr" data-search-section="Abschnitt" data-search-guide="Anleitung" data-search-empty="Keine Treffer für „{query}“">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple Watch-Sprachnotizen an Obsidian senden | Vox.md</title>
+  <meta name="description" content="Nimm auf der Apple Watch auf und sende Sprachnotizen über dein iPhone an Obsidian. Richte ein Aufnahme-Preset ein, verstehe die Warteschlange und behebe Zustellprobleme.">
+  <link rel="canonical" href="https://vox.isolated.tech/de/blog/apple-watch-obsidian-voice-notes/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-Dokumentation für Sprachmodelle">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Apple Watch-Sprachnotizen an Obsidian senden">
+  <meta property="og:description" content="Nimm auf der Apple Watch auf und sende Sprachnotizen über dein iPhone an Obsidian. Richte ein Aufnahme-Preset ein, verstehe die Warteschlange und behebe Zustellprobleme.">
+  <meta property="og:url" content="https://vox.isolated.tech/de/blog/apple-watch-obsidian-voice-notes/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/watch-ready.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Apple Watch-Sprachnotizen an Obsidian senden">
+  <meta name="twitter:description" content="Nimm auf der Apple Watch auf und sende Sprachnotizen über dein iPhone an Obsidian. Richte ein Aufnahme-Preset ein, verstehe die Warteschlange und behebe Zustellprobleme.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/watch-ready.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Apple Watch-Sprachnotizen an Obsidian senden",
+  "description": "Nimm auf der Apple Watch auf und sende Sprachnotizen über dein iPhone an Obsidian. Richte ein Aufnahme-Preset ein, verstehe die Warteschlange und behebe Zustellprobleme.",
+  "image": "https://vox.isolated.tech/screenshots/watch-ready.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/de/blog/apple-watch-obsidian-voice-notes/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "de",
+  "name": "Apple Watch-Sprachnotizen an Obsidian senden | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/de/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Anleitungen",
+      "item": "https://vox.isolated.tech/de/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Apple Watch-Sprachnotizen an Obsidian senden",
+      "item": "https://vox.isolated.tech/de/blog/apple-watch-obsidian-voice-notes/"
+    }
+  ],
+  "inLanguage": "de",
+  "name": "Apple Watch-Sprachnotizen an Obsidian senden | Vox.md",
+  "description": "Nimm auf der Apple Watch auf und sende Sprachnotizen über dein iPhone an Obsidian. Richte ein Aufnahme-Preset ein, verstehe die Warteschlange und behebe Zustellprobleme."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/apple-watch-obsidian-voice-notes/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/apple-watch-obsidian-voice-notes/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Zur Anleitung springen</a>
+<nav aria-label="Hauptnavigation">
+  <div class="nav-inner">
+    <a href="/de/" class="logo" aria-label="Vox.md-Startseite">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/de/#how">So funktioniert es</a></li>
+      <li><a href="/de/docs/">Dokumentation</a></li>
+      <li><a href="/de/blog/">Anleitungen</a></li>
+      <li><a href="/de/compare/">Vergleichen</a></li>
+      <li><a href="/de/privacy.html">Datenschutz</a></li>
+      <li><a href="/de/terms.html">Bedingungen</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_de_267f01bcd146">Vox.md laden</a>
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/blog/apple-watch-obsidian-voice-notes/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/apple-watch-obsidian-voice-notes/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/apple-watch-obsidian-voice-notes/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/apple-watch-obsidian-voice-notes/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/blog/apple-watch-obsidian-voice-notes/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/apple-watch-obsidian-voice-notes/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/apple-watch-obsidian-voice-notes/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/apple-watch-obsidian-voice-notes/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/apple-watch-obsidian-voice-notes/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/apple-watch-obsidian-voice-notes/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/apple-watch-obsidian-voice-notes/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/apple-watch-obsidian-voice-notes/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/apple-watch-obsidian-voice-notes/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/apple-watch-obsidian-voice-notes/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/apple-watch-obsidian-voice-notes/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/apple-watch-obsidian-voice-notes/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/apple-watch-obsidian-voice-notes/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/apple-watch-obsidian-voice-notes/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/apple-watch-obsidian-voice-notes/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/apple-watch-obsidian-voice-notes/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/apple-watch-obsidian-voice-notes/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/apple-watch-obsidian-voice-notes/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/apple-watch-obsidian-voice-notes/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Apple Watch · Spracherfassung · Obsidian</div>
+        <h1 class="hero-title">Apple Watch-Sprachnotizen an Obsidian senden</h1>
+        <p class="hero-subtitle">Nimm einen Gedanken am Handgelenk auf. Lass dein iPhone ihn transkribieren und Markdown in die gewählte Notiz schreiben.</p>
+      </div>
+      <aside class="meta-card" aria-label="Über diese Anleitung">
+        <dl>
+          <div><dt>Von</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Aktualisiert</dt><dd><time datetime="2026-10-26">26. Oktober 2026</time></dd></div>
+          <div><dt>Erfordert</dt><dd>watchOS 10+ · gekoppeltes iPhone</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Apple Watch-Sprachnotizen an Obsidian senden">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer">
+        <div class="label">Die kurze Antwort</div>
+        <p>Vox.md nimmt Audio lokal auf der Apple Watch auf, überträgt es auf dein gekoppeltes iPhone und verwendet das gewählte Aufnahme-Preset zum Transkribieren und Zustellen in einen Obsidian-Vault-Ordner. Die Watch nimmt auf; das iPhone transkribiert und schreibt die Notiz. Ein Obsidian-Plugin ist nicht erforderlich.</p>
+      </div>
+      <p>Bereite zuerst das iPhone-Ziel vor, mache dann eine kurze Watch-Aufnahme und bestätige die angekommene Notiz, bevor du dich ohne Telefon auf den Ablauf verlässt.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_267f01bcd146">Vox.md kostenlos laden</a></p>
+      <p>Teste 15 Transkriptionsminuten und 10 erfolgreiche Erfassungszustellungen kostenlos. Unbegrenzte Nutzung ist ein einmaliger Kauf auf Lebenszeit; der App Store zeigt deinen regionalen Preis.</p>
+      <nav class="toc" aria-label="In dieser Anleitung"><div class="toc-title">In dieser Anleitung</div><ol>
+        <li><a href="#setup">iPhone und Vault vorbereiten</a></li>
+        <li><a href="#record">Aufnahme-Preset wählen und auf der Watch aufnehmen</a></li>
+        <li><a href="#delivery">Markdown-Zustellung prüfen</a></li>
+        <li><a href="#away-from-phone">Aufnehmen ohne dein Telefon</a></li>
+        <li><a href="#troubleshooting">Ausstehende oder fehlgeschlagene Aufnahmen beheben</a></li>
+      </ol></nav>
+
+      <h2 id="setup">1. iPhone und Vault vorbereiten</h2>
+      <ul>
+        <li>Installiere Vox.md auf einem gekoppelten iPhone mit iOS 17.6 oder neuer und auf der Apple Watch mit watchOS 10 oder neuer.</li>
+        <li>Öffne Vox.md auf dem iPhone, erlaube den Mikrofonzugriff und bereite ein verfügbares lokales Sprach-Backend vor. Backend- und Sprachunterstützung variieren je nach Telefon und Betriebssystem; die anfängliche Modell- oder Sprachvorbereitung kann einen Download erfordern.</li>
+        <li>Aktiviere ein Aufnahme-Preset und verbinde sein Ziel mit einem über Dateien zugänglichen Vault-Ordner. Beginne mit „Neue Notiz“ als Ziel, damit das erste Ergebnis leicht auffindbar ist.</li>
+        <li>Erfasse etwas auf dem iPhone und prüfe die entstandene Datei in Obsidian. Eine funktionierende iPhone-Route trennt Ordner- und Modelleinrichtungsprobleme von Watch-Übertragungsproblemen.</li>
+      </ul>
+      <p>Die <a href="/de/blog/voice-notes-to-obsidian-iphone/">Anleitung für iPhone-Sprachnotizen</a> führt durch diese Schritte. Vox.md schreibt in einen gewählten Ordner; es verbindet sich nicht direkt mit dem Obsidian Sync-Dienst. Wenn sich der Vault nicht über Dateien auswählen lässt, ist dieses Ziel für den Ablauf nicht bereit.</p>
+
+      <h2 id="record">2. Aufnahme-Preset wählen und auf der Watch aufnehmen</h2>
+      <ol>
+        <li>Öffne Vox.md auf dem iPhone, damit deine aktivierten Aufnahmevoreinstellungen mit der Watch synchronisiert werden können.</li>
+        <li>Öffne Vox.md auf der Watch. Verwende die <strong>Aufnahme-Preset</strong> Karte, um das gewünschte Aufnahme-Preset zu wählen. Bestätige dann vor der Aufnahme die angezeigte Auswahl.</li>
+        <li>Tippe auf <strong>Aufnehmen</strong> und sprich einen kurzen Gedanken. Verwende bei Bedarf Pause und Fortsetzen; beim Pausieren bleibt es eine Aufnahme.</li>
+        <li>Tippe auf <strong>Stopp</strong> zum Beenden. Die Watch reiht die Aufnahme zur Übertragung ein. Abbrechen verwirft eine Aufnahme; verwende daher „Stopp“, wenn du sie behalten möchtest.</li>
+      </ol>
+      <p>Ist das iPhone nicht verfügbar, während du ein anderes Aufnahme-Preset anforderst, kann die Auswahl ausstehend bleiben und das zuletzt bestätigte Aufnahme-Preset bleibt aktiv. Wähle und bestätige deine Route vor dem Aufbrechen, solange die Geräte kommunizieren können.</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/watch-ready.png" alt="Vox.md auf der Apple Watch, bereit zur Audioaufnahme und Synchronisierung mit dem iPhone" width="396" height="484" loading="lazy" decoding="async">
+        <figcaption>Die Watch-Aufnahmeoberfläche. Der vorhandene Produkt-Screenshot zeigt die Aktion „Aufnehmen“; Steuerelemente und Platzierung des Aufnahme-Presets variieren je nach Version.</figcaption>
+      </figure>
+      <p>Für einen schnelleren Einstieg ergänze die <strong>Sprachnotiz aufnehmen</strong> Komplikation zu einem kompatiblen Zifferblatt hinzu. Ihre verfügbare Darstellung hängt vom Zifferblatt und Komplikationsplatz ab. Siehe die <a href="/de/docs/#watch-complication">Komplikationsreferenz</a>.</p>
+
+      <h2 id="delivery">3. Markdown-Zustellung prüfen</h2>
+      <p>Dein iPhone empfängt das Audio, transkribiert es auf dem Gerät und speichert es über das gewählte Aufnahme-Preset. Die Watch kann dabei die Zustände In Warteschlange, Transkription, Speichern, Gesendet oder Aufmerksamkeit erforderlich anzeigen. Eine eingereihte Aufnahme bestätigt nicht, dass das Markdown deinen Vault erreicht hat.</p>
+      <p>Öffne für eine erste Prüfung Vox.md auf dem iPhone und prüfe <strong>Watch-Aufnahmen</strong>. Öffne nach erfolgreicher Zustellung die Zieldatei in Obsidian. Ein gesprochener Gedanke wie „Vor Samstag die Wanderkarte nachschlagen“ könnte diesen einfachen Notiztext ergeben:</p>
+      <pre class="guide-code"><code>Look up the trail map before Saturday.</code></pre>
+      <p>Dies ist eine Beispielausgabe. Erkennung, Zeichensetzung, Dateiname, Metadaten und Verarbeitung hängen von deiner Aufnahme und Voreinstellung ab. Prüfe wichtige Transkripte.</p>
+      <p>Sobald die Zustellung funktioniert, verwende eine tägliche Rolling Note oder eine Vorhandene Notiz, statt jedes Mal eine neue Datei zu erstellen. Folge der <a href="/de/blog/append-to-obsidian-daily-note-iphone/">Anleitung zum Tagesnotiz-Routing</a> um Journaleinträge oder Aufgaben unter einer gewählten Überschrift zu halten.</p>
+
+      <h2 id="away-from-phone">Was passiert ohne dein Telefon?</h2>
+      <p>Die Watch kann eine Aufnahme lokal behalten, während sie auf die Übertragung wartet. Transkription und Markdown-Zustellung benötigen weiterhin das gekoppelte iPhone, ein vorbereitetes Sprach-Backend und Zugriff auf den Zielordner. Das ist verzögerte Zustellung, nicht eigenständige Transkription auf der Watch.</p>
+      <p>Aufnahmen bleiben auf der Watch, bis das iPhone Zustellung oder Verwerfen bestätigt. iOS kann Hintergrundverarbeitung verzögern. Wenn du Vox.md auf dem iPhone zwangsweise beendest, ist die Hintergrundzustellung bis zum erneuten Öffnen blockiert. Ist eine Notiz zeitkritisch, prüfe die zugestellte Datei, statt eine abgeschlossene Übertragung anzunehmen.</p>
+      <p>Lokale Transkription bestimmt auch nicht, wie dein Vault synchronisiert wird. Ein cloudgestütztes Ziel kann für Dateizugriff oder spätere Synchronisierung nach den Bedingungen dieses Anbieters eine Verbindung benötigen.</p>
+
+      <h2 id="troubleshooting">Ausstehende oder fehlgeschlagene Aufnahmen beheben</h2>
+      <h3>Die Aufnahme bleibt in der Warteschlange</h3>
+      <p>Öffne Vox.md auf dem iPhone, öffne Watch-Aufnahmen und verwende je nach Angebot „Aktualisieren“ oder „Erneut versuchen“. Prüfe, ob das Aufnahme-Preset aktiviert, das Sprach-Backend bereit und die Ordnerberechtigung noch gültig ist. Lass die App installiert und für die Übergabe verfügbar.</p>
+      <h3>Das gewählte Ziel ist nicht mehr verfügbar</h3>
+      <p>Wähle über die iPhone-Warteschlange ein gültiges Aufnahme-Preset oder versuche es nach Wiederherstellung des Ordnerzugriffs erneut. Wenn angeboten, kannst du auch ohne Transkript erfassen. Verwerfen entfernt gespeichertes Audio und die eingereihte Zustellung; verwende es daher nur, wenn du die Aufnahme nicht mehr brauchst.</p>
+      <h3>Ich möchte nur die Audiodatei</h3>
+      <p>Konfiguriere ein Aufnahme-Preset mit <strong>Nur Aufnahme</strong> als Ausgabe und wähle den Aufnahmeordner auf dem iPhone. Dadurch wird M4A-Audio ohne Transkription kopiert; es entsteht nicht das hier beschriebene Markdown-Transkript und es werden keine Transkriptionsminuten verbraucht. Siehe <a href="/de/docs/#watch-recording-only">„Nur Aufnahme“ einrichten</a>.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Am Handgelenk erfassen.<br>Finde den Gedanken in deinen Notizen.</h2>
+        <p>Richte das iPhone-Ziel einmal ein, bestätige dein Watch-Aufnahme-Preset und teste eine kurze Aufnahme.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_267f01bcd146">Vox.md kostenlos laden</a></p>
+      </section>
+      <p><a href="/de/blog/obsidian-quick-capture-iphone/">Zwischen iPhone-Erfassungsmethoden wählen</a>oder <a href="/de/compare/vox-md-vs-obsidian-quick-capture/">natives Obsidian mit Vox.md vergleichen</a>.</p>
+      <nav class="toc" aria-label="Verwandte Anleitungen"><div class="toc-title">Einrichtung fortsetzen</div><ul>
+        <li><a href="/de/blog/voice-notes-to-obsidian-iphone/">iPhone-Sprachnotizen in Obsidian</a></li>
+        <li><a href="/de/blog/append-to-obsidian-daily-note-iphone/">Tagesnotizen, Überschriften und Aufgabenerfassung</a></li>
+        <li><a href="/de/docs/#apple-watch">Apple Watch-Referenz und Warteschlangensteuerung</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/de/">Startseite</a></li>
+        <li><a href="/de/docs/">Dokumentation</a></li>
+        <li><a href="/de/blog/">Anleitungen</a></li>
+        <li><a href="/de/compare/">Vergleichen</a></li>
+        <li><a href="/de/privacy.html">Datenschutz</a></li>
+        <li><a href="/de/terms.html">Bedingungen</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Unterstützung</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_267f01bcd146">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Schnellerfassung für lokale Notizen · Keine Inhaltsuploads.</div>
+    </div>
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/blog/apple-watch-obsidian-voice-notes/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/apple-watch-obsidian-voice-notes/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/apple-watch-obsidian-voice-notes/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/apple-watch-obsidian-voice-notes/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/blog/apple-watch-obsidian-voice-notes/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/apple-watch-obsidian-voice-notes/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/apple-watch-obsidian-voice-notes/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/apple-watch-obsidian-voice-notes/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/apple-watch-obsidian-voice-notes/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/apple-watch-obsidian-voice-notes/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/apple-watch-obsidian-voice-notes/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/apple-watch-obsidian-voice-notes/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/apple-watch-obsidian-voice-notes/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/apple-watch-obsidian-voice-notes/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/apple-watch-obsidian-voice-notes/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/apple-watch-obsidian-voice-notes/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/apple-watch-obsidian-voice-notes/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/apple-watch-obsidian-voice-notes/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/apple-watch-obsidian-voice-notes/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/apple-watch-obsidian-voice-notes/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/apple-watch-obsidian-voice-notes/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/apple-watch-obsidian-voice-notes/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/apple-watch-obsidian-voice-notes/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

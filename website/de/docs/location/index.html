@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr" data-search-section="Abschnitt" data-search-guide="Anleitung" data-search-empty="Keine Treffer für „{query}“">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aktueller Standort, {location} und Metadaten — Vox.md-Dokumentation</title>
+  <meta name="description" content="Konfiguriere den einmaligen aktuellen Standort, das Markdown-Token {location}, optionale Standortmetadaten als Frontmatter oder Inline-Felder, Genauigkeit, Datenschutz und Wiederherstellung in Vox.md-Routen.">
+  <link rel="canonical" href="https://vox.isolated.tech/de/docs/location/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-Dokumentation für Sprachmodelle">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Aktueller Standort, {location} und Metadaten — Vox.md-Dokumentation">
+  <meta property="og:description" content="Verwende einen einmalig ermittelten Standort in Markdown-Vorlagen, ohne deinen Notizen automatisch Standortmetadaten hinzuzufügen.">
+  <meta property="og:url" content="https://vox.isolated.tech/de/docs/location/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vox.md-Anleitung zum aktuellen Standort">
+  <meta name="twitter:description" content="Eine vollständige Anleitung zu einmaligem Standort, {location}, Metadatenausgabe, Genauigkeit, Datenschutz und Migration.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Aktueller Standort, {location} und Standortmetadaten in Vox.md",
+  "description": "Eine vollständige Anleitung zur Standortermittlung pro Aufnahme-Preset, zum Markdown-Token {location}, zur optionalen Metadatenausgabe, zu Datenschutz, Migration und Fehlerbehebung.",
+  "dateModified": "2026-08-21",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/de/docs/location/",
+  "inLanguage": "de",
+  "name": "Aktueller Standort, {location} und Metadaten — Vox.md-Dokumentation"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/de/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Dokumentation",
+      "item": "https://vox.isolated.tech/de/docs/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Aktueller Standort",
+      "item": "https://vox.isolated.tech/de/docs/location/"
+    }
+  ],
+  "inLanguage": "de",
+  "name": "Aktueller Standort, {location} und Metadaten — Vox.md-Dokumentation",
+  "description": "Konfiguriere den einmaligen aktuellen Standort, das Markdown-Token {location}, optionale Standortmetadaten als Frontmatter oder Inline-Felder, Genauigkeit, Datenschutz und Wiederherstellung in Vox.md-Routen."
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Öffentliche Informations-API von Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/location/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/location/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/location/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/location/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/location/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/location/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/location/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/location/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/location/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/location/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/location/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/location/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/location/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/location/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/location/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/location/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/location/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/location/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/location/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/location/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/location/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/location/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/location/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/location/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="Hauptnavigation">
+  <div class="nav-inner docs-header-inner">
+    <a href="/de/" class="logo" aria-label="Vox.md-Startseite">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ Dokumentation</span></span>
+    </a>
+    <form class="docs-search" role="search" action="../" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="Dokumentation durchsuchen" aria-label="Dokumentation durchsuchen" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Suchergebnisse" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/de/blog/">Beiträge</a></li>
+      <li><a href="/de/privacy.html">Datenschutz</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="Auf dieser Seite">
+      <div class="docs-sidebar-title">Auf dieser Seite</div>
+      <ol>
+        <li><a href="#overview">Zwei unabhängige Entscheidungen</a></li>
+        <li><a href="#setup">Eine Route einrichten</a></li>
+        <li><a href="#configurations">Häufige Konfigurationen</a></li>
+        <li><a href="#location-token"><code>{location}</code> Platzhalter</a></li>
+        <li><a href="#metadata-output">Metadatenausgabe</a></li>
+        <li><a href="#precision">Genauigkeit und Bezeichnungen</a></li>
+        <li><a href="#capture-sources">Erfassungsquellen</a></li>
+        <li><a href="#unavailable">Nichtverfügbarkeit und Wiederherstellung</a></li>
+        <li><a href="#migration">Vorhandene Routen</a></li>
+        <li><a href="#privacy">Datenschutz und Aufbewahrung</a></li>
+        <li><a href="#troubleshooting">Fehlerbehebung</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="location-guide-title">
+      <div class="page-eyebrow">Dokumentation · Routen</div>
+      <h1 class="page-title" id="location-guide-title">Aktueller Standort, <code>{location}</code>und Metadaten</h1>
+      <p class="docs-hero-copy">Verwende einen Standort vom Entstehungszeitpunkt in der Eintragsformatierung, ohne automatisch YAML- oder Inline-Felder hinzuzufügen. Standortermittlung und Metadatenausgabe sind in jeder Route getrennte, ausdrückliche Entscheidungen.</p>
+      <div class="docs-meta-row" aria-label="Fakten zur Anleitung">
+        <span>Aktualisiert am 21. August 2026</span>
+        <span>Einmalige Ermittlung</span>
+        <span>Kein Hintergrundtracking</span>
+        <a href="/de/docs/">Vollständige Funktionsanleitung</a>
+      </div>
+      </header>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="overview">
+        <div class="docs-section-label">01 / Übersicht</div>
+        <h2>Standortermittlung bedeutet nicht Metadatenausgabe</h2>
+        <p>Jede Route hat zwei getrennte Standort-Steuerelemente. <strong>Aktuellen Standort verwenden</strong> legt fest, ob die Route einmalig den Standort zum Entstehungszeitpunkt anfordert. <strong>Standortmetadaten schreiben</strong> entscheidet, ob dieser ermittelte Schnappschuss auch als Frontmatter oder Inline-Felder geschrieben wird.</p>
+
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Steuerelement</th><th>Was es bedeutet</th><th>Was es nicht bedeutet</th></tr></thead>
+            <tbody>
+              <tr><td>Systemberechtigung für Standortzugriff</td><td>Erlaubt Vox.md, den Standort anzufordern, während die App oder eine unterstützte Erfassungsoberfläche verwendet wird.</td><td>Dadurch wird für keine Route der Standort aktiviert.</td></tr>
+              <tr><td>Aktuellen Standort verwenden</td><td>Fordert einen Standort für diese Route an und stellt ihn bereit für <code>{location}</code>.</td><td>Es schreibt nicht automatisch YAML- oder Inline-Metadaten.</td></tr>
+              <tr><td>Standortmetadaten schreiben</td><td>Schreibt ausgewählte strukturierte Felder oder validiertes erweitertes YAML aus dem ermittelten Schnappschuss.</td><td>Es steuert nicht, ob <code>{location}</code> darstellen kann.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <strong>Das Absichtssignal ist die Route, nicht die Berechtigung</strong>
+          <p>Die Berechtigung „Beim Verwenden“ öffnet nur die Betriebssystem-Schranke. Vox.md fordert den Standort weiterhin nur für die unabhängige Aktion „Aktueller Standort“ in der Erfassungsleiste oder eine Route an, in der du „Aktuellen Standort verwenden“ eingeschaltet hast.</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="setup">
+        <div class="docs-section-label">02 / Einrichtung</div>
+        <h2>Aktuellen Standort für eine Route einrichten</h2>
+        <ol class="docs-steps">
+          <li><strong>Routen öffnen.</strong><span>Öffne auf iPhone oder iPad Einstellungen → Routen. Öffne auf dem Mac Einstellungen und wähle Routen.</span></li>
+          <li><strong>Route bearbeiten.</strong><span>Wähle die Route, die ihren Ursprungsstandort verwenden soll. Die Einstellung gehört zu dieser Route und wirkt sich nicht auf die anderen aus.</span></li>
+          <li><strong>Standort öffnen.</strong><span>Aktiviere <em>Aktuellen Standort verwenden</em>. Behalte <em>Standortmetadaten schreiben</em> aus für reine Token-Nutzung.</span></li>
+          <li><strong>Genauigkeit wählen.</strong><span>Verwende „Genau“ für den Standort am Ursprung oder „Stadt“ für auf zwei Nachkommastellen gerundete Koordinaten ohne Ortsbezeichnung.</span></li>
+          <li><strong>Verhalten bei Nichtverfügbarkeit wählen.</strong><span>Fragen, Ohne Standort senden oder Aufnahme abbrechen legt fest, was passiert, wenn der Ursprungsstandort nicht ermittelt werden kann.</span></li>
+          <li><strong>Hinzufügen <code>{location}</code> falls gewünscht.</strong><span>Setze das Token in eine Eintragsvorlage, ein eigenes Eintragspräfix oder -suffix oder eine Markdown-Vorlage im Vault.</span></li>
+        </ol>
+        <p>Bei der ersten Nutzung kann die Standortberechtigungsabfrage des Betriebssystems erscheinen. Wurde die Berechtigung zuvor verweigert, aktiviere den Standortzugriff für Vox.md in den Systemeinstellungen von iOS, iPadOS oder macOS.</p>
+      </section>
+
+      <section class="docs-section" id="configurations">
+        <div class="docs-section-label">03 / Häufige Konfigurationen</div>
+        <h2>So wenig Standortausgabe wie nötig wählen</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Gewünschtes Ergebnis</th><th>Aktuellen Standort verwenden</th><th>Standortmetadaten schreiben</th><th>Vorlage</th></tr></thead>
+            <tbody>
+              <tr><td>Kein Routenstandort</td><td>Aus</td><td>Aus</td><td>Verwende nicht <code>{location}</code>oder es bleibt leer.</td></tr>
+              <tr><td>Nur anklickbarer Link</td><td>Ein</td><td>Aus</td><td>Hinzufügen <code>{location}</code>. Es werden keine Standortfelder geschrieben.</td></tr>
+              <tr><td>Nur Metadaten</td><td>Ein</td><td>Ein</td><td>Weglassen <code>{location}</code>. Nur die konfigurierten Felder werden geschrieben.</td></tr>
+              <tr><td>Link und Metadaten</td><td>Ein</td><td>Ein</td><td>Hinzufügen <code>{location}</code> und konfiguriere die Metadatenfelder.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Das Ausschalten von „Aktuellen Standort verwenden“ verhindert sowohl Token-Ausgabe als auch Metadatenausgabe für diese Route, selbst wenn frühere Metadatenformatierungen für spätere Nutzung konfiguriert bleiben.</p>
+      </section>
+
+      <section class="docs-section" id="location-token">
+        <div class="docs-section-label">04 / Vorlagen-Token</div>
+        <h2>Verwende <code>{location}</code> Ohne Notizmetadaten zu ändern</h2>
+        <p>Wenn „Aktuellen Standort verwenden“ an und der Ursprungsschnappschuss verfügbar ist, <code>{location}</code> erzeugt einen validierten Google Maps-Markdown-Link:</p>
+        <pre class="docs-code-block"><code>[Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>Das Token funktioniert in wiederverwendbaren Eintragsvorlagen, eigenen Eintragspräfixen und -suffixen sowie Markdown-Vorlagen im Vault. Es verwendet dieselben genauen oder auf Stadtgenauigkeit gerundeten Koordinaten, die für die Route gewählt wurden.</p>
+
+        <h3 id="token-example">Beispiel nur mit Token</h3>
+        <p>Für ein Suffix wie:</p>
+        <pre class="docs-code-block"><code>Captured from {location}</code></pre>
+        <p>Vox.md kann erzeugen:</p>
+        <pre class="docs-code-block"><code>Captured from [Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>Ist „Standortmetadaten schreiben“ aus, ist dieser Link der einzige von der Route hinzugefügte Standortinhalt. Keine <code>locations:</code> Sammlung und keine <code>location.*::</code> Felder geschrieben werden.</p>
+
+        <h3 id="composer-fix">Ein-Tipp-Korrektur im Editor</h3>
+        <p>Wenn ein wirksames Eintragspräfix, -suffix oder eine wiederverwendbare Eintragsvorlage <code>{location}</code> während bei der gewählten Route „Aktueller Standort“ aus ist, erklärt der Editor, dass das Token leer bleibt, und bietet <strong>Aktuellen Standort für [Route] verwenden</strong>. Diese Aktion aktiviert „Aktueller Standort“ für die Route und lässt „Standortmetadaten schreiben“ bewusst aus, damit die nächste Sendeaktion das Token ohne Änderung der Notizmetadaten auflösen kann. Live-Vorlagendateien im Vault werden erst bei der Zustellung gelesen; ihr Inhalt kann diesen Editorhinweis daher nicht auslösen. Aktiviere „Aktueller Standort“ manuell, wenn eine Vault-Vorlage das Token verwendet.</p>
+
+        <div class="docs-callout docs-callout-neutral">
+          <strong>Wenn das Token leer ist</strong>
+          <p><code>{location}</code> wird zu einer leeren Zeichenfolge, wenn „Aktueller Standort“ aus, der Standort nicht verfügbar oder die Erfassung ohne Standort fortgesetzt wird. Berücksichtige umgebende Satzzeichen und Bezeichnungen bei optionalen Vorlagenzeilen.</p>
+        </div>
+
+        <h3 id="capture-bar-location">Unabhängige Aktion der Erfassungsleiste</h3>
+        <p>Die Schnelle Erfassung <strong>Aktueller Standort</strong> Aktion fügt direkt einen einmaligen Google Maps-Link in den aktuellen Entwurf ein. Sie ist unabhängig von Routen und ändert weder „Aktuellen Standort verwenden“ noch „Standortmetadaten schreiben“.</p>
+      </section>
+
+      <section class="docs-section" id="metadata-output">
+        <div class="docs-section-label">05 / Metadatenausgabe</div>
+        <h2>Strukturierte Felder nur auf deinen Wunsch schreiben</h2>
+        <p>Aktiviere „Standortmetadaten schreiben“, wenn die Notiz maschinenlesbare Standortfelder zusätzlich zum oder anstelle des <code>{location}</code> Link.</p>
+
+        <div class="docs-feature-grid">
+          <div><strong>Notiz-Frontmatter</strong><p>Hängt jeden Standort an eine Sammlung an, benannt <code>locations</code> standardmäßig, mit der Erfassungs-ID als Schlüssel. Bestehendes, unabhängiges Frontmatter bleibt erhalten.</p></div>
+          <div><strong>Inline-Eintragsfelder</strong><p>Schreibt im Dataview-Stil <code>location.key:: value</code> Zeilen neben dem erfassten Eintrag. Es wird keine Frontmatter-Sammlung hinzugefügt.</p></div>
+          <div><strong>Strukturierte Felder</strong><p>Wähle und benenne Koordinaten, Breitengrad, Längengrad, Ort, Stadt, Region, Land, Anbieterlinks, Geo-URI, Genauigkeit, Zeitstempel, Quelle und ID um.</p></div>
+          <div><strong>Erweitertes YAML</strong><p>Verwendet eine validierte, begrenzte YAML-Vorlage für Notiz-Frontmatter. Erweitertes YAML ist für Inline-Eintragsfelder nicht verfügbar.</p></div>
+        </div>
+
+        <h3 id="frontmatter-example">Beispiel für strukturiertes Frontmatter</h3>
+        <pre class="docs-code-block"><code>---
+title: Field Notes
+locations:
+  - id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    coordinates: [45.501235, -73.567890]
+    place: "Café &amp; Main"
+    appleMapsURL: "https://maps.apple.com/?ll=45.501235%2C-73.567890&amp;q=Caf%C3%A9%20%26%20Main"
+    timestamp: "2023-11-14T22:13:20.000Z"
+    source: "app"
+---</code></pre>
+        <p>Rolling Notes können mehrere Erfassungen in der Sammlung behalten. Wiederholungsschutz ist in das Zusammenführen der Standorte eingebaut: Ein Wiederholungsversuch mit derselben Erfassungs-ID kann denselben Standort nicht zweimal anhängen. Enthält der gewählte Sammlungsschlüssel bereits einen inkompatiblen selbst verfassten Wert, stoppt Vox.md, statt ihn zu überschreiben.</p>
+
+        <h3 id="inline-example">Beispiel für einen Inline-Eintrag</h3>
+        <pre class="docs-code-block"><code>location.id:: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+location.coordinates:: [45.501235, -73.567890]
+location.place:: "Café &amp; Main"
+
+Captured text</code></pre>
+
+        <h3 id="advanced-yaml">Erweiterte YAML-Platzhalter</h3>
+        <p>Erweiterte Vorlagen können Platzhalter verwenden wie <code>{{coordinates}}</code>, <code>{{latitude}}</code>, <code>{{longitude}}</code>, <code>{{place}}</code>, <code>{{city}}</code>, <code>{{region}}</code>, <code>{{country}}</code>, <code>{{appleMapsURL}}</code>, <code>{{googleMapsURL}}</code>, <code>{{openStreetMapURL}}</code>, <code>{{geoURI}}</code>, <code>{{accuracy}}</code>, <code>{{timestamp}}</code>, <code>{{source}}</code>und <code>{{id}}</code>. Prüfe die Konfiguration vor dem Speichern in den Routeneinstellungen.</p>
+      </section>
+
+      <section class="docs-section" id="precision">
+        <div class="docs-section-label">06 / Genauigkeit und Bezeichnungen</div>
+        <h2>Genau und Stadt verwenden einen einheitlichen Schnappschuss</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Präzision</th><th>Koordinaten</th><th>Bezeichnungen</th><th>Links und Felder</th></tr></thead>
+            <tbody>
+              <tr><td>Genau</td><td>Behält den ursprünglichen Standort mit sechs angezeigten Nachkommastellen bei.</td><td>Kann eine Ortsbezeichnung enthalten, wenn ein ausgewähltes Metadatenfeld sie benötigt.</td><td>Jeder abgeleitete Wert verwendet die genauen Koordinaten.</td></tr>
+              <tr><td>Stadt</td><td>Rundet Breiten- und Längengrad auf zwei Nachkommastellen, bevor der Schnappschuss gespeichert wird.</td><td>Entfernt Ortsbezeichnungen; Stadt, Region und Land können erhalten bleiben.</td><td>Jede Anbieter-URL, Geo-URI, jedes Token und Feld verwendet die gerundeten Koordinaten.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Apples systemeigene umgekehrte Geokodierung wird nur genutzt, wenn „Standortmetadaten schreiben“ an ist und ein ausgewähltes strukturiertes Feld oder ein erweiterter Platzhalter Ort, Stadt, Region oder Land benötigt. Eine reine Token-Route überspringt sie. Schlägt die Abfrage von Bezeichnungen fehl, bleibt die koordinatenbasierte Ausgabe verfügbar.</p>
+      </section>
+
+      <section class="docs-section" id="capture-sources">
+        <div class="docs-section-label">07 / Erfassungsquellen</div>
+        <h2>Der Schnappschuss gehört zum Ursprung der Erfassung</h2>
+        <p>Der aktuelle Standort wird beim Entstehen der Erfassung ermittelt. Wiederholungs- und Wiederherstellungsversuche verwenden dieses dauerhaft gespeicherte Ergebnis erneut, statt unbemerkt einen neueren Standort abzurufen.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Erfassungsquelle</th><th>Ermittlungszeitpunkt</th></tr></thead>
+            <tbody>
+              <tr><td>Schnelle Erfassung auf iPhone und iPad</td><td>Senden</td></tr>
+              <tr><td>Teilen-Menü</td><td>In der Teilen-Erweiterung senden</td></tr>
+              <tr><td>Direkt eingereihte Text-, Link- und Datei-Intents</td><td>Intent-Aufruf</td></tr>
+              <tr><td>Kurzbefehle, Widgets, Steuerelemente und Deep-Links, die Schnelle Erfassung öffnen</td><td>Im Editor senden</td></tr>
+              <tr><td>Kurzbefehle-, Widget-, Steuerelement-, Sofortsprach- und tastaturgesteuerte Routenaufnahme</td><td>Aufnahmestopp</td></tr>
+              <tr><td>Normale Erfassungszustellung von der Apple Watch</td><td>Aufnahmestopp auf der Watch; das iPhone setzt nicht seinen eigenen Standort ein</td></tr>
+              <tr><td>Mac-Erfassung</td><td>Senden oder Aufnahmestopp bei sofortiger Sprachzustellung</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Watch: Nur Aufnahme</strong> exportiert reines M4A-Audio ohne Markdown-Ausgabe nach Dateien und fordert daher keinen Standort an, selbst wenn die Route sonst „Aktueller Standort“ verwendet.</p>
+      </section>
+
+      <section class="docs-section" id="unavailable">
+        <div class="docs-section-label">08 / Nichtverfügbarkeit und Wiederherstellung</div>
+        <h2>Wählen, wie jede Route mit einem nicht verfügbaren Standort umgeht</h2>
+        <ul>
+          <li><strong>Fragen:</strong> interaktive Erfassungen können erneut versuchen, abbrechen, einmal ohne Standort senden oder „Immer ohne Standort senden“ für diese Route wählen.</li>
+          <li><strong>Ohne Standort senden:</strong> setzt die Zustellung ohne Token-Wert oder Metadatenausgabe fort.</li>
+          <li><strong>Aufnahme abbrechen:</strong> stoppt die Zustellung, statt eine Notiz ohne den angeforderten Ursprungsstandort zu erstellen.</li>
+          <li><strong>Gespeicherte Auswahl zurücksetzen:</strong> verwende „Auswahl bei unavailablem Standort zurücksetzen“ in den Standorteinstellungen der Route.</li>
+        </ul>
+        <p>Eine unbeaufsichtigte Anfrage mit „Fragen“ speichert ihr nicht verfügbares Ergebnis vom Entstehungszeitpunkt zur späteren Prüfung. Ein Wiederholungsversuch einer ausstehenden oder fehlgeschlagenen Erfassung setzt niemals einen späteren Standort ein. Ausstehende Arbeit behält nur den datenschutzangepassten Schnappschuss oder das nicht verfügbare Ergebnis, das zur lokalen Wiederherstellung benötigt wird.</p>
+      </section>
+
+      <section class="docs-section" id="migration">
+        <div class="docs-section-label">09 / Vorhandene Routen</div>
+        <h2>Upgrades behalten das bisherige Metadatenverhalten bei</h2>
+        <p>Die Trennung von Ermittlung und Ausgabe ist migrationssicher:</p>
+        <ul>
+          <li><strong>Neue Routen:</strong> „Aktuellen Standort verwenden“ und „Standortmetadaten schreiben“ sind anfangs beide aus.</li>
+          <li><strong>Zuvor aktivierte Standortrouten:</strong> beide Steuerelemente bleiben nach dem Upgrade an und erhalten die Metadaten, die diese Routen bereits schrieben.</li>
+          <li><strong>Zuvor deaktivierte Standortrouten:</strong> beide Steuerelemente bleiben aus; ein Upgrade führt keine neue Metadatenausgabe ein.</li>
+        </ul>
+        <p>Um eine vorhandene Route mit Metadatenausgabe auf reine Token-Nutzung umzustellen, lass „Aktuellen Standort verwenden“ an und schalte „Standortmetadaten schreiben“ aus. Bestehendes Markdown wird weder umgeschrieben noch entfernt.</p>
+      </section>
+
+      <section class="docs-section" id="privacy">
+        <div class="docs-section-label">10 / Datenschutz und Aufbewahrung</div>
+        <h2>Ein ausdrücklicher Schnappschuss, niemals Hintergrundtracking</h2>
+        <ul>
+          <li>Vox.md überwacht den Standort nicht fortlaufend und führt kein Hintergrund-Standorttracking aus.</li>
+          <li>Standortdaten werden nicht an Vox.md-Server, Analysedienste, Werbesysteme oder KI-Dienste Dritter gesendet.</li>
+          <li>Token- und Anbieter-URLs werden lokal formatiert. Apple Maps, Google Maps oder OpenStreetMap erhält die Koordinaten erst, wenn du den jeweiligen Link öffnest.</li>
+          <li>Apples systemeigene umgekehrte Geokodierung kann nur dann eine Netzwerkanfrage stellen, wenn ausgewählte Metadaten eine Ortsbezeichnung benötigen. Standortnutzung nur per Token überspringt diese Abfrage.</li>
+          <li>Nach erfolgreicher Zustellung werden wiederherstellbare Anfragen auf inhaltsfreie Belege reduziert. Der Verlauf abgeschlossener Erfassungen behält weder Koordinaten, Bezeichnungen, Anbieter-URLs noch Standortvorlagen.</li>
+          <li>Wenn Standortmetadaten oder ein Token-Link in Markdown geschrieben werden, werden sie Teil deiner gewählten Datei. Dein Dateisynchronisierungsanbieter kann diese Datei nach seinen eigenen Bedingungen verarbeiten.</li>
+        </ul>
+        <div class="docs-callout">
+          <strong>Die Berechtigung kann aktiv bleiben, während Routen privat bleiben</strong>
+          <p>Du kannst die Systemberechtigung für die unabhängige Aktion „Aktueller Standort“ verfügbar lassen und dennoch „Aktuellen Standort verwenden“ in jeder Route ausschalten.</p>
+        </div>
+        <p>Siehe die <a href="/de/privacy.html">Datenschutzerklärung</a> für vollständige Einzelheiten zu Datenverarbeitung und Aufbewahrung.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">11 / Fehlerbehebung</div>
+        <h2>Häufige Standort- und Vorlagenprobleme beheben</h2>
+        <div class="docs-troubleshooting">
+          <details>
+            <summary><code>{location}</code> bleibt leer</summary>
+            <p>Prüfe, ob die wirksame Eintragsvorlage, das Präfix, Suffix oder die Vault-Vorlage das genaue kleingeschriebene Token verwendet: <code>{location}</code>. Aktiviere dann „Aktuellen Standort verwenden“ für die zustellende Route. Die Ein-Tipp-Korrektur des Editors kann dies bei erkannter Inline-Eintragsformatierung erledigen, ohne Metadaten zu aktivieren; Live-Vorlagendateien im Vault erfordern eine manuelle Routeneinrichtung. Wenn die Berechtigung verweigert oder die Standortermittlung nicht verfügbar ist, prüfe das Verhalten der Route bei fehlendem Standort und die System-Standorteinstellungen.</p>
+          </details>
+          <details>
+            <summary>Ein Link funktioniert, aber keine Metadaten erscheinen</summary>
+            <p>Das ist bei reiner Token-Konfiguration zu erwarten. Öffne die Standorteinstellungen der Route, aktiviere „Standortmetadaten schreiben“, wähle dann Notiz-Frontmatter oder Inline-Eintragsfelder und die gewünschten Felder.</p>
+          </details>
+          <details>
+            <summary>Metadaten erscheinen, aber kein Link im Eintrag</summary>
+            <p>Die Metadatenausgabe fügt nicht automatisch einen Link ein. Ergänze <code>{location}</code> zur wirksamen Eintragsformatierung oder Markdown-Vorlage im Vault hinzu.</p>
+          </details>
+          <details>
+            <summary>Ort oder Stadt fehlt</summary>
+            <p>Prüfe, ob das Bezeichnungsfeld ausgewählt ist. Apples umgekehrte Geokodierung kann fehlschlagen, während Koordinaten verfügbar bleiben. Die Genauigkeit „Stadt“ entfernt Ortsbezeichnungen absichtlich.</p>
+          </details>
+          <details>
+            <summary>Frontmatter-Zustellung meldet einen Konflikt</summary>
+            <p>Der konfigurierte Sammlungsschlüssel, <code>locations</code> als Standard muss eine kompatible Standortliste sein. Benenne die Sammlung in den Routeneinstellungen um oder passe das vorhandene selbst verfasste Frontmatter an. Vox.md überschreibt keinen inkompatiblen Wert.</p>
+          </details>
+          <details>
+            <summary>Ein Wiederholungsversuch hat einen älteren oder nicht verfügbaren Standort</summary>
+            <p>Das ist beabsichtigt. Die Anfrage behält das Ergebnis vom Entstehungszeitpunkt, damit ein späterer Wiederholungsversuch nicht unbemerkt einen anderen Erfassungsort behaupten kann. Starte eine neue Erfassung, wenn du einen neuen Schnappschuss brauchst.</p>
+          </details>
+          <details>
+            <summary>Standortzugriff ist erlaubt, aber die Route fordert ihn nicht an</summary>
+            <p>Die Systemberechtigung öffnet nur die Tür. Bearbeite diese Route und aktiviere „Aktuellen Standort verwenden“. Die Berechtigung allein aktiviert niemals eine Route.</p>
+          </details>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/de/developers">Entwickler</a></li>
+        <li><a href="/de/about">Über</a></li>
+        <li><a href="/de/contact">Kontakt</a></li>
+        <li><a href="/de/">Startseite</a></li>
+        <li><a href="/de/docs/">Dokumentation</a></li>
+        <li><a href="/de/blog/">Beiträge</a></li>
+        <li><a href="/de/privacy.html">Datenschutz</a></li>
+        <li><a href="/de/terms.html">Bedingungen</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Lokale Erfassung · Dateien unter Nutzerkontrolle.</div>
+    </div>
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

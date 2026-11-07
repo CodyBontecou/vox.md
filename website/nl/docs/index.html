@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="nl" dir="ltr" data-search-section="Sectie" data-search-guide="Handleiding" data-search-empty="Geen resultaten voor ‘{query}’">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vox.md-documentatie: Volledige functiehandleiding</title>
+  <meta name="description" content="Volledige documentatie voor Vox.md Snelle opname, routes, Markdown-bestemmingen, iOS-toetsenbord, lokale transcriptiemodellen, widgets, Opdrachten, Apple Watch en Mac.">
+  <link rel="canonical" href="https://vox.isolated.tech/nl/docs/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-documentatie voor taalmodellen">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Vox.md-documentatie: Volledige functiehandleiding">
+  <meta property="og:description" content="Leer elke beschikbare Vox.md-functie kennen, van duurzame Markdown-vastlegging en routes tot lokale spraakmodellen, het toetsenbord, Apple Watch en Mac.">
+  <meta property="og:url" content="https://vox.isolated.tech/nl/docs/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vox.md-documentatie">
+  <meta name="twitter:description" content="De volledige handleiding voor Vox.md-vastleggen, routering, transcriptie en systeemintegraties.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Volledige Vox.md-functiehandleiding",
+  "description": "Documentatie voor elke beschikbare Vox.md-functie voor vastleggen, routering, transcriptie, toetsenbord, systeemintegratie, Apple Watch en Mac.",
+  "dateModified": "2026-10-26",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/nl/docs/",
+  "inLanguage": "nl",
+  "name": "Vox.md-documentatie: Volledige functiehandleiding"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/nl/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Documentatie",
+      "item": "https://vox.isolated.tech/nl/docs/"
+    }
+  ],
+  "inLanguage": "nl",
+  "name": "Vox.md-documentatie: Volledige functiehandleiding",
+  "description": "Volledige documentatie voor Vox.md Snelle opname, routes, Markdown-bestemmingen, iOS-toetsenbord, lokale transcriptiemodellen, widgets, Opdrachten, Apple Watch en Mac."
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Openbare informatie-API van Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="Hoofdnavigatie">
+  <div class="nav-inner docs-header-inner">
+    <a href="/nl/" class="logo" aria-label="Vox.md-startpagina">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ documentatie</span></span>
+    </a>
+    <form class="docs-search" role="search" action="./" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="Documentatie doorzoeken" aria-label="Documentatie doorzoeken" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Zoekresultaten" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/nl/blog/">Blog</a></li>
+      <li><a href="/nl/privacy.html">Privacy</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="Op deze pagina">
+      <div class="docs-sidebar-title">Op deze pagina</div>
+      <ol>
+        <li><a href="#getting-started">Aan de slag</a></li>
+        <li><a href="#quick-capture">Snelle opname</a></li>
+        <li><a href="#presets">Routes</a></li>
+        <li><a href="/nl/docs/location/">Huidige locatie &amp; {location}</a></li>
+        <li><a href="#models">Modellen en transcriptie</a></li>
+        <li><a href="#keyboard">iOS-toetsenbord</a></li>
+        <li><a href="#system-integrations">Systeemintegraties</a></li>
+        <li><a href="#apple-watch">Apple Watch</a></li>
+        <li><a href="#mac">Mac-begeleider</a></li>
+        <li><a href="#history-settings">Bibliotheek, Instellingen en Privacy</a></li>
+        <li><a href="#troubleshooting">Problemen oplossen</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="docs-title">
+      <div class="page-eyebrow">Documentatie · Huidige producthandleiding</div>
+      <h1 class="page-title" id="docs-title">Alles wat je met Vox.md kunt doen</h1>
+      <p class="docs-hero-copy">Een volledige handleiding voor vastleggen, routes, Markdown-routering, spraaktoetsenbord, lokale modellen, Apple-systeemintegraties, Apple Watch, Mac, geschiedenis, instellingen en privacy.</p>
+      <div class="docs-meta-row" aria-label="Documentatiefeiten">
+        <span>Bijgewerkt op 26 okt. 2026</span>
+        <span>iOS 17.6+</span>
+        <span>macOS 14+</span>
+        <span>watchOS 10+</span>
+      </div>
+      </header>
+
+      <section class="docs-directory" aria-labelledby="browse-docs">
+      <h2 class="visually-hidden" id="browse-docs">Bladeren op categorie</h2>
+      <div class="docs-category-grid">
+        <a class="docs-category-card" href="#getting-started"><span>01</span><strong>Aan de slag</strong><small>Platformen, inrichting, machtigingen en eerste vastlegging</small></a>
+        <a class="docs-category-card" href="#quick-capture"><span>02</span><strong>Snelle opname</strong><small>Editor, media, spraak, Vastlegbalk en concepten</small></a>
+        <a class="docs-category-card" href="#presets"><span>03</span><strong>Routes</strong><small>Verwerking, metagegevens, bestemmingen en sjablonen</small></a>
+        <a class="docs-category-card is-guide" href="/nl/docs/location/"><span>Handleiding</span><strong>Huidige locatie &amp; <code>{location}</code></strong><small>Links met alleen tokens, optionele metagegevens, precisie, privacy en migratie</small></a>
+        <a class="docs-category-card" href="#models"><span>04</span><strong>Modellen</strong><small>Automatisch, Apple Speech, Whisper en Parakeet</small></a>
+        <a class="docs-category-card" href="#keyboard"><span>05</span><strong>Toetsenbord</strong><small>Instellen, dicteren, invoegen, haptiek en automatisch stoppen</small></a>
+        <a class="docs-category-card" href="#system-integrations"><span>06</span><strong>Systeemintegraties</strong><small>Widgets, deelmenu, Opdrachten en dieplinks</small></a>
+        <a class="docs-category-card" href="#apple-watch"><span>07</span><strong>Apple Watch</strong><small>Opnemen, routesynchronisatie, wachtrij en complicaties</small></a>
+        <a class="docs-category-card" href="#mac"><span>08</span><strong>Mac</strong><small>Vergaderingen vastleggen, werkruimte, menubalk en globale sneltoetsen</small></a>
+        <a class="docs-category-card" href="#history-settings"><span>09</span><strong>Bibliotheek en Instellingen</strong><small>Herstel, statistieken, privacy, limieten, aankoop en ondersteuning</small></a>
+      </div>
+      </section>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="getting-started">
+        <div class="docs-section-label">01 / Aan de slag</div>
+        <h2>Vastleggen in Markdown zonder een nieuwe notitiesilo te maken</h2>
+        <p>Vox.md is een lokaal gerichte snelle vastlegapp. De app schrijft standaard-Markdown en bijlagen naar een Obsidian-kluis of andere beschrijfbare map die je via Bestanden selecteert. Geen Vox.md-account, plugin of gehoste notitiedatabase nodig.</p>
+
+        <p>Voor een volledige spraakwerkwijze <a href="/nl/blog/voice-notes-to-obsidian-iphone/">volg de handleiding voor iPhone-spraaknotities naar Obsidian</a>van een map selecteren tot de gemaakte Markdown controleren.</p>
+
+        <p>Een vastlegmethode kiezen? Lees de <a href="/nl/blog/obsidian-quick-capture-iphone/">Keuzehulp voor vastleggen op iPhone</a> of <a href="/nl/compare/vox-md-vs-obsidian-quick-capture/">Vox.md met ingebouwd Obsidian vergelijken</a>.</p>
+
+        <div class="docs-table-wrap" id="platform-availability">
+          <table class="docs-table">
+            <thead><tr><th>Platform</th><th>Vereiste</th><th>Wat beschikbaar is</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone en iPad</td><td class="req">iOS/iPadOS 17.6+</td><td>Snelle opname, toetsenbord, deelmenu, widgets, Opdrachten, live activiteiten, geschiedenis en instellingen</td></tr>
+              <tr><td>Mac</td><td class="req">macOS 14+</td><td>Vastlegwerkruimte, opname/import, routes, modellen, geschiedenis, menubalk en globale sneltoetsen</td></tr>
+              <tr><td>Apple Watch</td><td class="req">watchOS 10+</td><td>Lokaal opnemen, routekeuze, synchronisatiewachtrij, alleen audio afleveren en complicatie</td></tr>
+              <tr><td>Bedieningspaneelregelaars</td><td class="req">iOS 18+</td><td>Snelle opname en routebewuste opnamebediening</td></tr>
+              <tr><td>Automatische Apple Speech-backend</td><td class="req">Ondersteund iOS 26-apparaat en taal</td><td>Door het systeem beheerde live- en batchtranscriptie op het apparaat</td></tr>
+              <tr><td>Apple Intelligence-verwerking</td><td class="req">Compatibel iOS/macOS 26-apparaat</td><td>Opschoning op het apparaat, gestructureerde uitvoer en eigen instructies met terugvalopties</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <p><strong>De basiswerkwijze.</strong> Kies een route, verbind de bestemming, typ of voeg inhoud toe in Snelle opname en tik op Stuur. De route bepaalt hoe inhoud wordt verwerkt, opgemaakt en in je notities geplaatst.</p>
+        </div>
+
+
+        <h3 id="first-capture">Je eerste vastlegging maken</h3>
+        <ol class="docs-steps">
+          <li><strong>Open Vox.md.</strong><span>De app opent direct de duurzame Markdown-editor.</span></li>
+          <li><strong>Selecteer een route.</strong><span>De ingebouwde Standaard-route kan niet worden verwijderd maar wel uitgeschakeld. Houd minstens één route ingeschakeld en geef die een bestemming.</span></li>
+          <li><strong>Stel de bestemming in.</strong><span>Tik op <em>Stel een bestemming</em>kies een Obsidian-kluis of Bestanden-map en vervolgens een nieuwe, doorlopende of bestaande notitie.</span></li>
+          <li><strong>Voeg inhoud toe.</strong><span>Typ Markdown of voeg een link, foto, bestand, scan, schets, locatie of spraakopname toe.</span></li>
+          <li><strong>Tik op Stuur.</strong><span>Vox.md slaat via de geselecteerde route op en meldt <em>Gevangen door</em>. Mislukt werk en werk in de wachtrij blijven beschikbaar voor herstel.</span></li>
+        </ol>
+
+        <h3 id="permissions">Machtigingen en systeemtoegang</h3>
+        <ul>
+          <li><strong>Microfoon:</strong> spraakopname, lokale transcriptie, toetsenbordluisteren en audio-opname. Snelle opname kan dit verzoek bij eerste openen van de werkruimte tonen voordat je een opname start.</li>
+          <li><strong>Spraakherkenning:</strong> Apple Speech op ondersteunde systemen.</li>
+          <li><strong>Maptoegang via Bestanden:</strong> bestemmingen, sjablonen, imports en Watch-uitvoer voor alleen opnemen.</li>
+          <li><strong>Camera en geselecteerde foto&#x27;s:</strong> alleen wanneer je media, schermafbeeldingen, dagboekfoto&#x27;s of scans toevoegt.</li>
+          <li><strong>Locatie bij gebruik:</strong> alleen voor de onafhankelijke opdracht Huidige locatie in de Vastlegbalk of wanneer een route waarvoor je toestemming gaf zijn ene locatie op het ontstaansmoment nodig heeft. Vox.md volgt je locatie nooit voortdurend of op de achtergrond.</li>
+          <li><strong>Meldingen:</strong> optionele afleverstatus, waaronder onbeheerde Apple Watch-fouten.</li>
+          <li><strong>Toetsenbord: Sta volledige toegang toe:</strong> vereist voor het Vox.md-toetsenbord om zijn gedeelde appwerkwijze op het apparaat te gebruiken. Zie <a href="#keyboard-setup">Toetsenbord instellen</a>.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="quick-capture">
+        <div class="docs-section-label">02 / Snelle opname</div>
+        <h2>Eén duurzame editor voor tekst, media, bestanden en spraak</h2>
+        <p>Snelle opname is de hoofdwerkruimte op iOS en iPadOS. Het routemenu verandert de huidige werkwijze; het bestemmingsmenu toont of overschrijft tijdelijk waar dit concept wordt afgeleverd. De onderste balk opent ook Bibliotheek en Instellingen en kan het softwaretoetsenbord tonen of verbergen.</p>
+
+        <h3 id="durable-drafts">Duurzame concepten en veilige aflevering</h3>
+        <ul>
+          <li>Tekst, bijlagen, geselecteerde route, bestemmingsoverschrijvingen en vastlegbron blijven bij onderbreken en herstarten behouden.</li>
+          <li>Bewerkingen worden kort na de laatste wijziging opgeslagen; de app naar de achtergrond verplaatsen slaat direct op.</li>
+          <li>Als je tijdens versturen verder bewerkt, blijven die nieuwere wijzigingen in een nieuw concept bewaard in plaats van verloren te gaan.</li>
+          <li>Een bestemming moet vóór aflevering worden ingesteld. De editor toont <em>Bestemming niet geconfigureerd</em> met een Instellen-actie waar nodig.</li>
+          <li>Veilig herhaalbare vastlegaanvragen worden lokaal gejournaliseerd zodat een machtigings-, bestandsaanbieder- of synchronisatiefout opnieuw kan worden geprobeerd.</li>
+          <li>Een lege editor toont een inspirerend citaat uit de cache totdat je tekst toevoegt, ook nadat je een route selecteert of een bestand bijvoegt; citaataanvragen bevatten nooit je concept.</li>
+        </ul>
+
+        <p>Zie voor een taakgerichte uitleg <a href="/nl/blog/save-links-photos-obsidian-iphone/">links, foto&#x27;s en scans in Obsidian opslaan</a>.</p>
+
+        <h3 id="capture-types">Vastlegtypen</h3>
+        <div class="docs-feature-grid">
+          <div><strong>Tekst en Markdown</strong><p>Schrijf direct in een Markdown-editor die rekening houdt met de selectie, plak bestaande tekst en combineer tekst met andere inhoud.</p></div>
+          <div><strong>Weblinks</strong><p>Voeg een HTTP- of HTTPS-URL toe met Markdown-linkopmaak.</p></div>
+          <div><strong>Foto&#x27;s en camera</strong><p>Selecteer foto&#x27;s of schermafbeeldingen of maak een nieuwe foto. Afbeeldingen worden klaargezet en ingesloten in de afgeleverde notitie.</p></div>
+          <div><strong>Bestanden</strong><p>Selecteer meerdere Bestanden-items. Afbeeldingen worden ingesloten, audio blijft audiogegevens en andere bestanden gebruiken links in Obsidian-stijl.</p></div>
+          <div><strong>Documentscans</strong><p>Scan pagina&#x27;s met VisionKit. Vox.md bewaart pagina-afbeeldingen, maakt een PDF en voegt zo goed mogelijke OCR op het apparaat toe.</p></div>
+          <div><strong>Dagboek-OCR</strong><p>Leg maximaal 10 dagboekpagina&#x27;s vast met handmatige sluiter of kies dagboekfoto&#x27;s. Nauwkeurige Vision OCR detecteert de taal automatisch.</p></div>
+          <div><strong>Schetsen</strong><p>Teken met een zwarte pen op een wit PencilKit-canvas. Vox.md bewaart bewerkbare tekengegevens en een PNG-voorbeeld.</p></div>
+          <div><strong>Actie Huidige locatie</strong><p>Vraag één locatie op en voeg een gevalideerde Google Maps-link in Markdown in het concept in. Deze onafhankelijke Vastlegbalk-actie verandert geen van beide locatieschakelaars per route.</p></div>
+          <div><strong>Spraak en geïmporteerde audio</strong><p>Neem op vanuit de editor of importeer audio/video, transcribeer lokaal en voeg het resultaat aan het concept toe of verstuur direct.</p></div>
+        </div>
+        <p class="docs-note">Toegankelijkheid: OCR toont de voortgangsbanner ‘Tekst wordt op dit apparaat geëxtraheerd’, en VoiceOver meldt OCR-voortgang en voltooiing, ‘Vastlegging verstuurd’ en ‘Transcript toegevoegd aan vastlegging’ in vastlegwerkwijzen.</p>
+
+        <h3 id="capture-bar">Vastlegbalk</h3>
+        <p>Via Instellingen → Vastlegbalk kun je acties herschikken of verbergen. Elke actie is standaard zichtbaar.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Actie</th><th>Gedrag</th></tr></thead>
+            <tbody>
+              <tr><td>Media toevoegen</td><td>Opent keuzes voor Schets, Camera, Foto, Schermafbeelding en Weblink.</td></tr>
+              <tr><td>Files toevoegen</td><td>Selecteert meerdere bestanden uit Bestanden en zet ze klaar bij het concept.</td></tr>
+              <tr><td>Scan documenten</td><td>Legt een scan met meerdere pagina&#x27;s, PDF, pagina-afbeeldingen en zo goed mogelijke OCR vast.</td></tr>
+              <tr><td>Extract tekst</td><td>Biedt ‘Journal Pages ophalen’ en ‘Selecteer een dagboek foto&#x27;s’ voor OCR-gerichte vastlegging.</td></tr>
+              <tr><td>elf</td><td>Maakt de laatste editorbewerking ongedaan.</td></tr>
+              <tr><td>Formateren Markdown</td><td>Past Vet, Cursief, Hashtag of Kop 1 tot en met Kop 6 toe.</td></tr>
+              <tr><td>Markdown Link</td><td>Voegt in <code>[link text](url)</code> en selecteert het bewerkbare gedeelte.</td></tr>
+              <tr><td>Interne link</td><td>Voegt een link in Obsidian-stijl in, van het type <code>[[Target]]</code> wikilink.</td></tr>
+              <tr><td>Twee data opstellen</td><td>Gebruikt Vandaag, Morgen of Dit weekend; optionele tijd; en aanpassingen van ±15m, ±30m of ±1h. Voegt in <code>(@yyyy-MM-dd)</code> of een getimede vorm.</td></tr>
+              <tr><td>Controlelijst</td><td>Past het Markdown-taakprefix toe <code>- [ ]</code>.</td></tr>
+              <tr><td>Bullet lijst</td><td>Past een Markdown-opsommingsprefix toe.</td></tr>
+              <tr><td>Paste</td><td>Plakt klembordtekst in de huidige selectie.</td></tr>
+              <tr><td>Sketch</td><td>Opent de bewerkbare PencilKit-schetsvastlegging.</td></tr>
+              <tr><td>Huidige locatie</td><td>Vraagt één locatie op en voegt een Google Maps-link in.</td></tr>
+              <tr><td>Invoegen Timestamp</td><td>Voegt lokale tijd en datum in als <code>h:mm a yyyy-MM-dd</code>.</td></tr>
+              <tr><td>Datum inschrijven</td><td>Voegt in <code>yyyy-MM-dd</code>.</td></tr>
+              <tr><td>Wijzigen van tekst case</td><td>Biedt kleine letters, hoofdletters, zinsstijl, beginhoofdletters en slugstijl.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">Opmaak respecteert de huidige selectie, normaliseert regeleinden, begrenst ongeldige selectiebereiken en voorkomt het splitsen van samengestelde tekens zoals emoji.</p>
+
+        <h3 id="inline-voice">Inline-spraakbediening</h3>
+        <ul>
+          <li>Tik op de spraakknop om te starten of stoppen. Houd ongeveer 0,45 seconde ingedrukt voor uitgebreide bediening.</li>
+          <li>Tijdens het opnemen verschijnt een <strong>Pauze</strong> De knop verschijnt naast de spraakknop — één tik pauzeert, nog een tik hervat. De uiteindelijke notitie blijft één opname; gepauzeerde audio en tijd worden uitgesloten. Pauzeren onderbreekt ook het live transcriptvoorbeeld en de automatische spraakstop totdat je hervat.</li>
+          <li><strong>Aan concept toevoegen</strong> voegt het voltooide transcript toe. <strong>Direct verzenden</strong> voert de geselecteerde route en bestemming uit.</li>
+          <li><strong>Direct verzenden is standaard geselecteerd</strong> in de vastlegwerkruimten van iOS en Mac. De iOS-spraakactie openen via <code>voxboard://capture?action=voice</code> schakelt die opname naar Aan concept toevoegen.</li>
+          <li>De <strong>Audio</strong> optie bewaart de bronopname op verzoek als deel van een concept.</li>
+          <li><strong>Audio importeren</strong> accepteert audio- of filmbestanden en gebruikt dezelfde lokale transcriptiepijplijn.</li>
+          <li><strong>Identificatie van sprekers</strong> is een apart in te schakelen routeverwerkingsstap voor spraakopnamen en geïmporteerde audio. Bij eerste gebruik wordt een apart sprekermodel voorbereid, worden lokaal anonieme labels naar beste vermogen toegevoegd en blijft het gewone transcript met een zichtbare reden in de bibliotheek behouden als de stap niet kan draaien.</li>
+          <li>Automatisch kan tijdens het opnemen definitieve en voorlopige Apple Speech-tekst direct in de bewerkbare editor tonen. Expliciet gekozen Whisper- en Parakeet-modellen transcriberen nadat de opname stopt.</li>
+          <li>Een mislukte transcriptie vernietigt de bronopname niet; die blijft herstelbaar.</li>
+          <li>Permanent luisteren via het toetsenbord blijft alleen tussen appstarts bewaard als dat expliciet aanstaat. Een eenmalige appopname zet de audiosessie terug naar rust.</li>
+        </ul>
+
+        <h3 id="capture-limits">Invoerlimieten voor vastleggen</h3>
+        <div class="docs-callout docs-callout-neutral">
+          <p>Een aanvraag kan maximaal <strong>100.000 tekens</strong> aan gedeelde tekst, <strong>10 gedeelde items</strong>en <strong>250 MB</strong> voor alle klaargezette bestanden samen. Foto- en schermafbeeldingskiezers accepteren maximaal 10 items; dagboekvastlegging maximaal 10 pagina&#x27;s. Vox.md weigert overschrijdingen in plaats van items ongemerkt weg te laten.</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="presets">
+        <div class="docs-section-label">03 / Routes</div>
+        <h2>Bewaar de hele werkwijze, niet alleen een map</h2>
+        <p>Een route bewaart wat een vastlegging betekent, of tekst wordt verwerkt, hoe metagegevens en audio worden behandeld en precies waar Markdown wordt geschreven. Routes gelden voor getypte tekst, links, media, scans, bestanden, schetsen, spraak, Opdrachten, widgets, het deelmenu, Watch en Mac.</p>
+
+        <h3 id="preset-management">Routes maken en beheren</h3>
+        <ul>
+          <li>Open Instellingen → Routes om een aangepaste route te maken, hernoemen, in- of uitschakelen, een pictogram te kiezen of te verwijderen.</li>
+          <li>De doorzoekbare pictogramkiezer groepeert symbolen onder Schrijven, Spraak, Taken, Persoonlijk en Werk.</li>
+          <li>Uitgeschakelde routes zijn verborgen in gewone keuzelijsten. De ingebouwde Standaard-route kan niet worden verwijderd.</li>
+          <li>De ingebouwde Standaard-route gebruikt het golfvormsymbool en de instructie <em>Leg een idee, taak, link, bestand, scan of opname vast.</em>, <code>type: capture</code> metagegevens, verwerking Heldere tekst, verwerking van getypte tekst uit en audio bewaren uit.</li>
+          <li>Een nieuwe aangepaste route begint als <em>Aangepaste route</em>gebruikt het schuifregelaarpictogram en <em>Wat wil je vastleggen?</em> instructie en begint met Aangepaste instructie geselecteerd, maar verwerking van getypte en gemengde tekst uit.</li>
+        </ul>
+
+        <h3 id="processing-modes">Verwerkingsmodi</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Modus</th><th>Resultaat</th><th>Terugvalgedrag</th></tr></thead>
+            <tbody>
+              <tr><td>Origineel behouden</td><td>Bewaart vastgelegde tekst zonder herschrijven door AI.</td><td>De oorspronkelijke tekst wordt afgeleverd.</td></tr>
+              <tr><td>Heldere tekst</td><td>Schoont hoofdlettergebruik en interpunctie op met behoud van betekenis en Markdown.</td><td>Originele tekst als verrijking op het apparaat niet beschikbaar is.</td></tr>
+              <tr><td>Takenlijst</td><td>Maakt Markdown <code>- [ ]</code> taakitems.</td><td>Een deterministische checklistformatter.</td></tr>
+              <tr><td>Vergadernotities</td><td>Maakt een <code>## Notes</code> sectie en, indien aanwezig, <code>## Action Items</code>.</td><td>Deterministische structuur voor vergadernotities.</td></tr>
+              <tr><td>Aangepaste instructie</td><td>Volgt je instructie met Apple Intelligence op het apparaat indien beschikbaar.</td><td>Originele tekst wanneer de instructie niet lokaal kan worden uitgevoerd.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Spraaktranscripten gebruiken de geselecteerde routemodus. <strong>Toepassen op tekst vastleggen</strong> is een aparte, standaard uitgeschakelde toestemming voor verwerking van getypte Markdown, OCR en andere gemengde vastleggingen met tekst. Uit laten voorkomt onverwacht herschrijven van zelfgeschreven Markdown. De exacte verwerkte aanvraag wordt vóór aflevering opgeslagen, zodat nieuwe pogingen verwerking niet opnieuw uitvoeren met gewijzigde instellingen.</p>
+
+        <h3 id="preset-metadata">Metagegevens</h3>
+        <ul>
+          <li>Voer statische metagegevens in als één <code>key: value</code> paar per regel, zoals <code>tags: [journal, idea]</code>.</li>
+          <li><strong>Frontmatter van de notitie</strong> schrijft metagegevens op documentniveau.</li>
+          <li><strong>Inline-invoervelden</strong> schrijft <code>key:: value</code> velden naast elk item in een doorlopende notitie.</li>
+          <li>Indien beschikbaar kan verrijking op het apparaat titel, tags, categorie en opgeschoonde tekst naast statische routemetagegevens toevoegen.</li>
+        </ul>
+
+        <h3 id="preset-location">Locatie na toestemming</h3>
+        <p>Huidige locatie staat standaard uit en hoort bij elke route. Indien ingeschakeld vraagt Vox.md één locatie op bij de oorsprong van de vastlegging: bij versturen voor iOS/iPadOS, deelmenu, dieplink/editor, Mac en systeemacties die de editor openen; tijdens aanroepen voor direct in de wachtrij geplaatste tekst-, link- en bestandsintents; of bij stoppen van directe spraak-, toetsenbordgestuurde route-, widget/regelaar- of Apple Watch-opnamen via normale vastlegaflevering. Alleen opnemen op de Watch is een ruwe audio-export naar Bestanden zonder Markdown-locatie-uitvoer en vraagt geen locatie op. Vox.md bewaakt locatie nooit voortdurend en voert nooit achtergrondlocatietracking uit.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Instelling</th><th>Gedrag</th></tr></thead>
+            <tbody>
+              <tr><td>Huidige locatie gebruiken</td><td>Vraagt één locatie op het ontstaansmoment voor deze route op en levert de gegevens voor <code>{location}</code>. Het schrijft niet automatisch metagegevens.</td></tr>
+              <tr><td>Exact (standaard)</td><td>Bewaart de privacy-aangepaste oorspronkelijke locatie en kan een aanduiding van een interessante plek bevatten als geselecteerde metagegevens die nodig hebben.</td></tr>
+              <tr><td>Stad</td><td>Rondt breedtegraad en lengtegraad af op twee decimalen en laat aanduidingen van interessante plekken weg. Alle afgeleide velden en links gebruiken die afgeronde coördinaten.</td></tr>
+              <tr><td>Locatiemetagegevens schrijven</td><td>Schakelt apart gestructureerde of geavanceerde metagegevens in naast een eventuele <code>{location}</code> link in het invoersjabloon.</td></tr>
+              <tr><td>Gestructureerde velden</td><td>Selecteer en hernoem coördinaten, breedtegraad, lengtegraad, plaats, stad, regio, land, Apple Maps, Google Maps, OpenStreetMap, <code>geo:</code> URI, nauwkeurigheid, tijdstempel, bron en vastleg-ID.</td></tr>
+              <tr><td>Geavanceerde YAML-sjabloon</td><td>Gebruikt gevalideerde, begrensde YAML voor notitiefrontmatter. Het kan niet-gerelateerde frontmatter niet vervangen en is niet beschikbaar voor inline-invoervelden.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Als Locatiemetagegevens schrijven aanstaat, voegt documentbereik elk resultaat toe aan de ingestelde frontmatterverzameling met vastleg-ID als sleutel. Eén notitie kan meerdere locaties bewaren, terwijl een idempotente nieuwe poging dezelfde locatie niet twee keer kan toevoegen. Invoerbereik geeft geselecteerde gestructureerde velden in plaats daarvan weer als <code>key:: value</code> naast dat vastgelegde item.</p>
+        <p>Plaats, stad, regio en land gebruiken Apples systeemdienst voor omgekeerde geocodering alleen als ingeschakelde metagegevensvelden die nodig hebben. Locatie met alleen tokens slaat dit over. De dienst is gratis en vereist geen API-sleutel, maar kan een netwerkverbinding gebruiken; mislukt het opzoeken, dan gaat Vastleggen door met alleen coördinaten als metagegevens. Invoerprefixen, achtervoegsels en Markdown-sjablonen in de kluis kunnen <code>{location}</code> om een klikbare Google Maps-link uit de beschikbare privacy-aangepaste routemomentopname in te voegen zonder metagegevensuitvoer aan te zetten; het token is leeg als Huidige locatie uitstaat of niet beschikbaar is. Een aanbiederlink maken neemt geen contact op met Apple, Google of OpenStreetMap. Openen geeft dezelfde exacte of afgeronde coördinaten in de link door aan die aanbieder.</p>
+        <p>Nieuwe en eerder uitgeschakelde routes houden beide schakelaars uit. Routes die al locatiemetagegevens schreven, houden beide na upgraden aan zodat de bestaande uitvoer behouden blijft.</p>
+        <div class="docs-callout">
+          <strong>Volledige handleiding voor Huidige locatie</strong>
+          <p>Zie <a href="/nl/docs/location/">Huidige locatie, <code>{location}</code>en metagegevens</a> voor instelpatronen, voorbeelden, tijdstippen per vastlegbron, migratiegedrag, privacy en probleemoplossing.</p>
+        </div>
+        <div class="docs-callout docs-callout-neutral">
+          <strong>Onbeschikbare locatie</strong>
+          <p>Interactieve schermen kunnen opnieuw proberen, annuleren, eenmalig zonder locatie versturen of kiezen voor <em>Altijd zonder locatie versturen</em> voor die route. Herstel die opgeslagen keuze in de locatie-instellingen van de route. Een onbeheerde <em>Vraag</em> vastlegging bewaart het niet-beschikbare resultaat van het ontstaansmoment totdat jij beslist; opnieuw proberen en herstellen vragen nooit een latere locatie op.</p>
+        </div>
+
+        <h3 id="destinations">Markdown-bestemmingen</h3>
+        <p>Elke route heeft één bestemming binnen een Obsidian-kluis of beschrijfbare Bestanden-map.</p>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Nieuwe notitie</strong><p>Maak voor elke vastlegging een apart Markdown-bestand met tokens zoals <code>{timestamp}</code>, <code>{date}</code>, <code>{time}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{id8}</code>en <code>{id}</code>.</p></div>
+          <div><strong>Rolling Note</strong><p>Toevoegen aan dagelijkse, wekelijkse, maandelijkse, kwartaal- of jaarnotities. Paden ondersteunen ook <code>{period}</code> en <code>{week}</code>. De standaard voor nieuwe bestemmingen is <code>Journal/{period}.md</code> met een dagelijkse periode.</p></div>
+          <div><strong>Bestaande notitie</strong><p>Kies een Markdown-bestand dat al in de geselecteerde kluis of map staat. Vox.md controleert of het doel veilig binnen die hoofdmap blijft.</p></div>
+        </div>
+
+        <p>Zie voor een volledig routerecept <a href="/nl/blog/append-to-obsidian-daily-note-iphone/">tekst en spraak aan een Obsidian-dagnotitie toevoegen</a>.</p>
+
+        <p><a href="/nl/blog/obsidian-capture-templates/">Een sjabloonrecept voor inbox, dagboek of taken gebruiken</a> om invoeropmaak voorspelbaar te houden.</p>
+
+        <h3 id="placement-templates">Plaatsing, koppen en sjablonen</h3>
+        <ul>
+          <li><strong>onderaan</strong> voegt achteraan toe; <strong>Top</strong> voegt vooraan toe; <strong>Hoofd</strong> voegt onder een gekozen kop van niveau 1 tot en met 6 in.</li>
+          <li>Als een kop ontbreekt, kies <strong>Toon fout</strong> of <strong>Creëer een headline</strong>.</li>
+          <li>Gebruik een actueel Markdown-sjabloonbestand uit de kluis, een herbruikbaar invoersjabloon of eigen prefix- en achtervoegseltekst.</li>
+          <li>Invoeropmaak ondersteunt <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>en <code>{location}</code>.</li>
+          <li>De standaardbijlagensubmap is <code>attachments</code>.</li>
+          <li><strong>Retry bescherming</strong>staat standaard uit en schrijft een zichtbare <code>vox-capture</code> HTML-opmerking zodat dubbele pogingen kunnen worden herkend.</li>
+          <li>Vox.md weigert absolute paden, backslashes, padtraversal, onveilige namen en ontsnappen via symbolische links.</li>
+        </ul>
+
+        <h3 id="capture-overrides">Overschrijvingen voor één vastlegging</h3>
+        <p>Bestemming kan Routestandaard gebruiken, deze vastlegging bovenaan of onderaan plaatsen, een eenmalig invoersjabloon toepassen of een andere notitie in dezelfde kluis kiezen. <strong>Standaardinstellingen van routebestemming gebruiken</strong> verwijdert de overschrijving. Deze keuzes gelden alleen voor het huidige concept en veranderen nooit de route.</p>
+
+        <h3 id="audio-export">Audio bewaren en compatibiliteitsexport</h3>
+        <ul>
+          <li>Audio-opslagmodi zijn <strong>Uit</strong>, <strong>Naast notitie</strong>of <strong>Afsluiten Folder</strong>.</li>
+          <li>Markdown kan bewaarde audio bovenaan of onderaan insluiten met Obsidian-syntaxis zoals <code>![[recording.m4a]]</code>.</li>
+          <li>Voor oudere directe spraakconfiguraties zonder uniforme Markdown-bestemming <strong>Notities in bestanden bewaren</strong> ondersteunt TXT, MD, JSON en YAML; Nieuw bestand of Toevoegen; bestandsnaamtokens inclusief model en taal; Markdown-sjablonen; Obsidian Bases-opties; selecteerbare YAML-eigenschappen; en optioneel de <code>.md</code> extensie voor YAML.</li>
+          <li>Compatibiliteitsexportinstellingen gelden alleen voor directe spraakuitvoering als de route geen uniforme vastlegbestemming heeft.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="models">
+        <div class="docs-section-label">04 / Modellen en transcriptie</div>
+        <h2>Een systeembackend of optioneel lokaal model kiezen</h2>
+        <p>Alle transcriptie draait op het Apple-apparaat. Automatisch is de iOS-standaard. Optionele Whisper- en Parakeet-modelbestanden worden alleen op jouw verzoek gedownload en kunnen worden geselecteerd, tijdens het downloaden worden geannuleerd of later worden verwijderd.</p>
+
+        <p><a href="/nl/blog/offline-transcription-iphone-markdown/">Een offline transcriptiewerkwijze voorbereiden</a> met een lokale backend en beschrijfbare bestemming.</p>
+
+        <h3 id="model-options">Beschikbare transcriptieopties</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Optie</th><th>Geschatte grootte</th><th>Beste toepassing</th></tr></thead>
+            <tbody>
+              <tr><td>Automatisch</td><td>Door systeem beheerd</td><td>Geeft de voorkeur aan Apple Speech op een ondersteund iOS 26-apparaat en taal; valt alleen terug op een lokaal model dat je expliciet hebt gedownload.</td></tr>
+              <tr><td>Whisper Tiny</td><td>75 MB</td><td>Kleinste download en snelste Whisper-optie.</td></tr>
+              <tr><td>Whisper Base</td><td>142 MB</td><td>Evenwichtig klein lokaal model; oudere Mac-standaard.</td></tr>
+              <tr><td>Whisper Small</td><td>466 MB</td><td>Nauwkeuriger met meer opslag- en verwerkingskosten.</td></tr>
+              <tr><td>Whisper Medium</td><td>1.5 GB</td><td>Groter meertalig Whisper-model.</td></tr>
+              <tr><td>Whisper Large v3 Turbo</td><td>1.6 GB</td><td>Grootste beschikbare Whisper-optie.</td></tr>
+              <tr><td>Parakeet v2</td><td>~800 MB</td><td>Core ML/FluidAudio-model geoptimaliseerd voor Engels.</td></tr>
+              <tr><td>Parakeet v3</td><td>~800 MB</td><td>Core ML/FluidAudio-model dat 25 talen ondersteunt.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="automatic-model">Zo werkt Automatisch</h3>
+        <ul>
+          <li>Op een ondersteund iOS 26-apparaat controleert Automatisch Apples systeembeheerde Speech-herkenner voor de gekozen taal en bereidt zo nodig het taalonderdeel voor.</li>
+          <li><strong>Systeemtaal</strong> volgt de apparaattaal. Kies een specifieke taal als de opname een andere taal gebruikt.</li>
+          <li>Automatisch downloadt nooit stilletjes een Whisper- of Parakeet-reservemodel. Het kan alleen een model gebruiken dat je eerder koos te downloaden.</li>
+          <li>Live Apple Speech onderscheidt definitieve tekst die veilig kan worden ingevoegd van voorlopige tekst die nog kan veranderen.</li>
+          <li>Expliciete Whisper- en Parakeet-selecties gebruiken batchtranscriptie nadat het segment eindigt.</li>
+        </ul>
+
+        <h3 id="model-languages">Talen</h3>
+        <ul>
+          <li><strong>Whisper:</strong> Automatisch detecteren, Engels, Spaans, Frans, Duits, Italiaans, Portugees, Nederlands, Pools, Russisch, Chinees, Japans, Koreaans, Arabisch, Hindi, Turks, Vietnamees, Thais, Oekraïens, Zweeds, Deens, Noors en Fins.</li>
+          <li><strong>Automatisch:</strong> Systeemtaal plus de expliciet voor Whisper vermelde talen wanneer Apple die landinstelling ondersteunt.</li>
+          <li><strong>Parakeet v2:</strong> Engels.</li>
+          <li><strong>Parakeet v3:</strong> Bulgaars, Kroatisch, Tsjechisch, Deens, Nederlands, Engels, Ests, Fins, Frans, Duits, Grieks, Hongaars, Italiaans, Lets, Litouws, Maltees, Pools, Portugees, Roemeens, Slowaaks, Sloveens, Spaans, Zweeds, Russisch en Oekraïens. De Parakeet-werkwijze detecteert de taal automatisch.</li>
+        </ul>
+
+        <h3 id="parakeet-autostop">Parakeet automatisch stoppen via toetsenbord</h3>
+        <p>Een optioneel model van ongeveer 1 MB voor <strong>Stempauze detectie</strong> model kan een expliciete Parakeet v2- of v3-toetsenbordopname na stilte stoppen. Schakel in <strong>Parakeet na een pauze stoppen</strong> en kies ongeveer 0,5, 0,75, 1, 1,5 of 2 seconden. Dit staat standaard aan met een pauze van 0,75 seconde nadat het begeleidende model beschikbaar is. Automatisch en Whisper blijven handmatig stoppen vereisen.</p>
+
+        <h3 id="audio-pipeline">Lokaal audiogedrag</h3>
+        <ul>
+          <li>Whisper-invoer wordt genormaliseerd naar 16 kHz mono-audio, 16 bit.</li>
+          <li>Permanent luisteren op iOS gebruikt een ringbuffer van 10 minuten en bevat twee seconden voorloop bij het begin van een segment.</li>
+          <li>Whisper gebruikt <code>whisper.cpp</code>; Parakeet gebruikt FluidAudio en Core ML. Whisper gebruikt Metal-versnelling op Mac.</li>
+          <li>Modeldownloads vereisen een netwerkverbinding, maar transcriptie draait lokaal zodra de geselecteerde backend klaarstaat.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="keyboard">
+        <div class="docs-section-label">05 / iOS-toetsenbord</div>
+        <h2>Dicteer in het tekstveld dat je al bewerkt</h2>
+        <p>Het Vox.md-toetsenbord werkt in apps zoals Berichten, Notities, Mail, Safari, Slack en elke andere app die een standaard-iOS-toetsenbord accepteert. Een spraakwerkbalk staat boven de KeyboardKit-indeling en communiceert via de gedeelde privé-App Group met de hoofdapp van Vox.md.</p>
+
+        <h3 id="keyboard-setup">Het toetsenbord instellen</h3>
+        <ol class="docs-steps">
+          <li><strong>Bereid transcriptie voor in Vox.md.</strong><span>Laat Automatisch geselecteerd op een ondersteund apparaat of download en selecteer Whisper of Parakeet via Instellingen → Modellen.</span></li>
+          <li><strong>Voeg het toetsenbord toe.</strong><span>Open iOS-instellingen → Algemeen → Toetsenbord → Toetsenborden → Voeg toetsenbord toe en kies Vox.md.</span></li>
+          <li><strong>Schakel Sta volledige toegang toe in.</strong><span>De huidige toetsenbordwerkwijze heeft dit nodig om gedeelde App Group-status te gebruiken en opnemen met de hoofdapp te coördineren.</span></li>
+          <li><strong>Wissel van toetsenbord.</strong><span>Open een tekstveld, selecteer Vox.md via de wereldboltoets en tik op de microfoon.</span></li>
+        </ol>
+        <div class="docs-callout">
+          <strong>Wat Volledige toegang hier doet</strong>
+          <p>iOS geeft de machtiging een brede naam. Vox.md gebruikt die voor zijn lokale app- en toetsenbordwerkwijze, gedeelde status en optionele haptiek. Vox.md uploadt geen toetsaanslagen, gedicteerde tekst, transcripten of microfoonaudio naar Vox.md-servers. Zie het <a href="/nl/privacy.html">Privacybeleid</a>.</p>
+        </div>
+
+        <h3 id="keyboard-workflow">Spraakwerkbalk en invoegen</h3>
+        <ul>
+          <li>De werkbalk toont huidige backend, status, opnameduur, live golfvorm en microfoon- of stopactie.</li>
+          <li>Vorige en volgende wisselen tussen beschikbare gedownloade backends.</li>
+          <li>Als luisteren niet actief is, opent het toetsenbord Vox.md één keer, start het luisteren en kan het je terugbrengen naar het oorspronkelijke tekstveld.</li>
+          <li>Met Automatisch worden definitieve transcriptwijzigingen tijdens het spreken ingevoegd; voorlopige woorden blijven alleen zichtbaar totdat Apple ze definitief maakt.</li>
+          <li>Bij Whisper of Parakeet wordt het voltooide transcript ingevoegd nadat je stopt of het segment automatisch stopt.</li>
+          <li>Als invoegen wordt onderbroken of opgeschort, blijft de wachtende tekst bewaard en wordt opnieuw geprobeerd wanneer het toetsenbord weer verschijnt.</li>
+          <li>De werkbalk meldt statussen zoals <em>Vox.md openen</em>, <em>Transcribeer...</em>en <em>Volledige toegang inschakelen</em>.</li>
+        </ul>
+
+        <h3 id="keyboard-customization">Toetsenbord aanpassen</h3>
+        <ul>
+          <li><strong>Haptische feedback</strong> staat standaard aan en kan in Vox.md-instellingen worden gewijzigd.</li>
+          <li>Alternatieve tekens via lang indrukken zijn beschikbaar voor Engels, Duits, Spaans, Frans, Italiaans, Portugees, Nederlands, Zweeds, Deens en Noors.</li>
+          <li>Gebruikers die expliciet Parakeet kiezen, kunnen via Instellingen → Modellen automatisch stoppen op basis van pauzes toevoegen.</li>
+          <li>Het gratis transcriptietegoed van 15 minuten geldt voor toetsenborddicteren, appopnamen en imports.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="system-integrations">
+        <div class="docs-section-label">06 / Systeemintegraties</div>
+        <h2>Start vastleggen via het deelmenu, beginscherm, toegangsscherm of Opdrachten</h2>
+
+        <h3 id="share-extension">Deelextensie</h3>
+        <p>De actie in het iOS-deelmenu heet <strong>Vastleggen in Vox.md</strong>. Het accepteert tekst, HTTP/HTTPS-URL&#x27;s, afbeeldingen, bestanden en films tot de gedeelde item- en bestandslimieten. Kies route en bestemming, voeg optioneel een notitie toe en verstuur. Als die route Huidige locatie gebruikt, vraagt Delen zijn ene locatie van het ontstaansmoment bij deze verstuuractie op, ongeacht of metagegevensuitvoer aanstaat. Inhoud wordt klaargezet in de privé-App Group, duurzaam in de wachtrij gezet en in Vox.md geopend voor aflevering. Gebruik als aflevering de hoofdapp nodig heeft <strong>Vox.md openen</strong>.</p>
+
+        <h3 id="widgets">Widgets voor begin- en toegangsscherm</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Snelle opname</strong><p>Opent een duurzaam Markdown-concept. Middelgrote en grote widgets bieden acties voor Notitie, Foto, Schermafbeelding, Camera, Bestand, Link, Scan, Schets en Spraak.</p></div>
+          <div><strong>Snelle record</strong><p>Start de ingestelde opnamewerkwijze en toont gereed-, luister- of uitgeschakelde status op ondersteunde begin- en toegangsschermformaten.</p></div>
+          <div><strong>Widgetveiligheidsinstelling</strong><p>Schakel de opnameknop op het toegangsscherm uit in Instellingen om een uitgeschakelde toestand te tonen in plaats van direct een opname te starten.</p></div>
+        </div>
+
+        <h3 id="control-center-live-activities">Bedieningspaneel, live activiteiten en Dynamic Island</h3>
+        <ul>
+          <li>Voeg op iOS 18+ beschikbare Vox.md-vastleg- en opnameregelaars toe via het bedieningspaneel. Stel de route en opties van jouw geïnstalleerde versie in.</li>
+          <li>Stel microfoon, model en bestemming in Vox.md in voordat je een opnameknop gebruikt. Afhankelijk van iOS en de geïnstalleerde appversie kan opnemen de app openen. Test een korte opname op je apparaat voordat je op achtergrondopnamen vertrouwt.</li>
+          <li>De <strong>Live-activiteitenmonitor</strong> bepaalt opnamestatus en Opnemen/Stoppen-acties op het toegangsscherm en Dynamic Island.</li>
+          <li>Live activiteit toont Opnemen, timer, Verwerken, Gereed, Opnemen en Stoppen.</li>
+          <li>Live activiteiten zijn beschikbaar vanaf iOS 17; bedieningspaneelregelaars vereisen iOS 18.</li>
+        </ul>
+
+        <h3 id="shortcuts">Opdrachten en App Intents</h3>
+        <p>Routes verschijnen als selecteerbare entiteiten in Opdrachten en ondersteunde regelaars. Met Huidige locatie gebruiken aan vragen direct ingeplande tekst-, link- en bestandsintents locatie bij aanroepen op; acties die Snelle opname openen bij versturen; en opnameacties wanneer de opname stopt. Metagegevensuitvoer verandert deze timing niet. Als een onbeheerde <em>Vraag</em> aanvraag geen locatie kan krijgen, blijft het niet-beschikbare resultaat van het ontstaansmoment bewaard voor een latere beslissing in plaats van opnieuw te worden opgevraagd. Gebruik de acties in jouw geïnstalleerde Vox.md-versie. Vastlegacties zijn onder meer:</p>
+        <ul class="docs-columns">
+          <li>Open snelle opname</li>
+          <li>Record een opname</li>
+          <li>Een screenshot maken</li>
+          <li>Tekst opnemen naar Markdown</li>
+          <li>Link naar de Markdown</li>
+          <li>File opnemen Markdown</li>
+        </ul>
+
+        <h3 id="action-button-recording">Opnemen met actieknop instellen</h3>
+        <p>Open Vox.md één keer om microfoontoestemming te geven, de transcriptiebackend voor te bereiden en een route met een bestemming te verbinden. Voeg in Opdrachten een beschikbare Vox.md-vastlegactie toe en selecteer je route. Voer de opdracht uit met een ontgrendelde telefoon om te bevestigen dat de bedoelde notitie wordt opgeslagen voordat je deze via Instellingen → Actieknop → Opdracht toewijst.</p>
+        <p class="docs-note">Beschikbare acties en achtergrondopnamegedrag hangen af van je geïnstalleerde versie en iOS. Gebruik de acties die Opdrachten op je apparaat toont. Als opnemen de geopende app nodig heeft, open Vox.md om op te nemen. Een opdracht in de kiezer garandeert geen opname vanaf een vergrendelde telefoon.</p>
+
+        <h3 id="deep-links">Dieplinks</h3>
+        <p>Vox.md registreert het <code>voxboard://</code> URL-schema. Gebruik URL-codering voor querywaarden.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table docs-code-table">
+            <thead><tr><th>URL</th><th>Gedrag</th></tr></thead>
+            <tbody>
+              <tr><td><code>voxboard://capture</code></td><td>De duurzame editor voor Snelle opname openen.</td></tr>
+              <tr><td><code>voxboard://capture?action=photos</code></td><td>Open de fotokiezer. Andere acties: <code>screenshots</code>, <code>camera</code>, <code>files</code>, <code>scan</code>, <code>sketch</code>, <code>link</code>en <code>voice</code>.</td></tr>
+              <tr><td><code>voxboard://capture?text=...</code></td><td>Een concept met begrensde tekst openen.</td></tr>
+              <tr><td><code>voxboard://capture?url=https%3A%2F%2F...</code></td><td>Een concept met een HTTP/HTTPS-link openen.</td></tr>
+              <tr><td><code>voxboard://capture?route=...</code></td><td>Selecteer een ingeschakelde route. Deze kan worden gecombineerd met een ondersteunde actie, tekst of URL.</td></tr>
+              <tr><td><code>voxboard://capture-request?id=...</code></td><td>Een duurzame aanvraag overnemen die door een systeemextensie of intent is gemaakt.</td></tr>
+              <tr><td><code>voxboard://listen</code></td><td>Start de opstartwerkwijze voor toetsenbordluisteren.</td></tr>
+              <tr><td><code>voxboard://record</code></td><td>Ouder opnamestartpunt, omgeleid naar luisteren.</td></tr>
+              <tr><td><code>voxboard://widget-record</code></td><td>Ouder widgetstartpunt voor opnamen.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">Onbekende of dubbele parameters, ongeldige UUID&#x27;s, onveilige route-ID&#x27;s, niet-HTTP-URL&#x27;s en tekst boven de gedeelde limiet worden geweigerd.</p>
+      </section>
+
+      <section class="docs-section" id="apple-watch">
+        <div class="docs-section-label">07 / Apple Watch</div>
+        <h2>Lokaal opnemen op de Watch en via iPhone afleveren</h2>
+
+        <p><a href="/nl/blog/apple-watch-obsidian-voice-notes/">Volg de instelhandleiding van Apple Watch naar Obsidian</a> voor routekeuze, overdracht en aflevercontroles.</p>
+
+        <h3 id="watch-recording">Opnamewerkwijze</h3>
+        <ul>
+          <li>De Watch-app toont Gereed, Opnemen, Gepauzeerd, Synchroniseren, In wachtrij, Transcriberen, Opslaan, Verstuurd en Aandacht nodig.</li>
+          <li>Gebruik Opnemen, Pauze/Hervatten, Stoppen, Annuleren, Synchroniseren en Verfrissen. Een pauze laat je nadenken zonder de notitie te splitsen — de timer staat stil en gepauzeerde tijd wordt uitgesloten van de opname. Annuleren verwijdert de lokale opname expliciet in plaats van die te synchroniseren.</li>
+          <li>Opnamen worden lokaal gejournaliseerd en na onderbrekingen of crashes hersteld.</li>
+          <li>Een opname blijft op de Watch totdat de iPhone aflevering of verwijdering bevestigt.</li>
+          <li>Bij een route met Huidige locatie gebruiken en normale vastlegaflevering vraagt de Watch bij opnamestop één locatie van de Watch op en draagt dat privacy-aangepaste resultaat met de routemomentopname over. De iPhone vervangt die nooit door zijn eigen locatie. Alleen opnemen slaat locatie over omdat het ruwe audio zonder Markdown-uitvoer exporteert.</li>
+        </ul>
+
+        <h3 id="watch-presets">Routes op de Watch</h3>
+        <p>Selecteer een ingeschakelde iPhone-route via de Watch- <strong>Route</strong> kaart. Vox.md draagt een veilige momentopname met de opname over. Als de iPhone niet beschikbaar is, blijft de aangevraagde selectie wachten en blijft de laatst bevestigde route actief.</p>
+
+        <h3 id="watch-queue">Wachtrij voor Watch-opnamen op iPhone</h3>
+        <p>De iPhone-wachtrij toont opnametijd, duur, route, verwerkingsstatus en afleveracties. Mislukte items kun je opnieuw proberen, aan een andere route toewijzen, verwijderen of zonder transcript vastleggen. Verwijderen wist bewaarde audio en de geplande aflevering.</p>
+
+        <h3 id="watch-recording-only">Uitvoer Alleen opnemen</h3>
+        <ul>
+          <li>Stel de uitvoer van een route in op <strong>Alleen opnemen</strong> om M4A-audio naar een Bestanden-map te kopiëren zonder transcriptie, AI-verwerking of gebruik van transcriptietegoed.</li>
+          <li>Het standaardbestandsnaamsjabloon is <code>recording-{timestamp}-{id8}</code>.</li>
+          <li>Kies de opnamemap één keer op je iPhone voordat je de route gebruikt.</li>
+          <li>iOS kan achtergrondaflevering vertragen. Geforceerd afsluiten van Vox.md verhindert aflevering totdat de app weer wordt geopend.</li>
+        </ul>
+
+        <h3 id="watch-complication">Complicatie en widget</h3>
+        <p>De <strong>Record van de stem</strong> complicatie ondersteunt cirkel-, rechthoek-, inline- en hoekvormen. Ze opent of schakelt lokale Watch-opname en toont een timer of statusafhankelijke labels.</p>
+      </section>
+
+      <section class="docs-section" id="mac">
+        <div class="docs-section-label">08 / Mac-begeleider</div>
+        <h2>Hetzelfde vastlegsysteem op macOS gebruiken</h2>
+        <p>De Mac-app heeft Vastleggen, Bibliotheek en Instellingen en deelt de lokale model-, route-, route-, export- en herhaalarchitectuur van iOS.</p>
+
+        <h3 id="mac-workspace">Vastlegwerkruimte</h3>
+        <ul>
+          <li>Typ en bewerk Markdown, plak of sleep bestanden, afbeeldingen en audio.</li>
+          <li>Gebruik camera-invoer van ingebouwde, externe of Continuïteitscamera-apparaten.</li>
+          <li>Importeer een scan of PDF, maak een schets met muis, trackpad of aangesloten tablet en voeg links, wikilinks, vervaldatums en teksttransformaties toe.</li>
+          <li>Opnemen met <strong>Aan concept toevoegen</strong> of <strong>Direct verzenden</strong>; bewaar indien gewenst audio in de conceptmodus.</li>
+          <li><strong>Pauze</strong> en <strong>Hervatten</strong> een microfoonopname vanuit de statusbalk. Gepauzeerde audio wordt uitgesloten, zodat één uiteindelijke notitie in delen kan worden opgenomen. Vergadervastlegging kan niet pauzeren.</li>
+          <li>Audio of video importeren voor lokale transcriptie.</li>
+          <li>Druk op Command-Return voor Stuur capture. Een route met Huidige locatie gebruiken vraagt bij versturen of opnamestop één locatie van de Mac op, ongeacht of metagegevensuitvoer aanstaat.</li>
+          <li>Een bestemmingsbanner en route-inspector tonen de berekende notitie en plaatsing van de geselecteerde route.</li>
+        </ul>
+
+        <h3 id="mac-meeting">Vergadering opnemen met afzonderlijke sporen</h3>
+        <p>Schakel de invoermoduskiezer van <strong>Microfoon</strong> naar <strong>Vergadering</strong> om wat een app op je Mac afspeelt en je eigen microfoon als twee netjes gescheiden audiosporen op te nemen. Vox.md gebruikt ScreenCaptureKit in één-appmodus: je kiest precies één app en Vox.md zelf wordt nooit opgenomen.</p>
+        <ul>
+          <li>Tijdens het opnemen toont de statusbalk live systeem- en microfoonniveaumeters, status per bron en eventuele vastlegwaarschuwingen.</li>
+          <li>Beide audiosporen worden in duurzame blokken met een herstelmanifest geschreven. Daardoor wordt een onderbreking — een gestopte stream, losgekoppelde microfoon of geforceerd afsluiten — veilig afgerond en kan de vergadering nog worden getranscribeerd. Onderbroken sessies worden automatisch hersteld wanneer de opnamewachtrij weer doorgaat.</li>
+          <li>Na stoppen wordt elk spoor apart op het apparaat getranscribeerd en worden de resultaten op een gedeelde tijdlijn verweven: je microfoon verschijnt als <strong>Jij</strong>en het applicatiespoor krijgt het label van een externe spreker. Optionele sprekerherkenning kan meerdere externe stemmen verder scheiden.</li>
+          <li>Een afspeelmix van beide sporen blijft als opnameaudio bewaard en het voltooide transcript volgt je route, Aan concept toevoegen of Direct verzenden, en klembordinstellingen zoals elke andere opname.</li>
+        </ul>
+
+        <h3 id="mac-keybinds">Globale sneltoetsen</h3>
+        <p>Via Instellingen → Wereldwijde Keybinds kun je sneltoetsen toewijzen aan <strong>Transcribe naar Clipboard</strong>, <strong>Geselecteerde route</strong>of elke ingeschakelde route. Sneltoetsen staan standaard uit, vereisen een niet-modificatietoets plus Control, Option of Command, kunnen ook Shift bevatten en weigeren conflicten. Druk nogmaals op de actieve sneltoets om de opname te stoppen.</p>
+        <div class="docs-callout docs-callout-neutral">
+          <p><strong>Transcribe naar Clipboard</strong> maakt geen notitie, bibliotheekitem of bewaarde audio. Het is bedoeld voor snel dicteren in elke Mac-app.</p>
+        </div>
+
+        <h3 id="mac-menu-bar">Menubalk en appzichtbaarheid</h3>
+        <ul>
+          <li>Zichtbaarheidskeuzes zijn <strong>Dock + Menu Bar</strong> (standaard), <strong>Menu Bar alleen</strong>, <strong>Dock alleen</strong>en <strong>verborgen</strong>.</li>
+          <li>De menubalk toont de status van opnemen, transcriberen en exporteren.</li>
+          <li>Menuacties zijn Opname starten, Stoppen + Transcriberen, Audio importeren…, Laatste transcript kopiëren, Laatste export tonen, routekeuze, Vastleggen tonen, Bibliotheek tonen, Gegevensmap tonen en Vox.md afsluiten.</li>
+          <li>Druk op Control-B in de Mac-app om toetsenbordaanwijzingen boven klikbare regelaars te tonen.</li>
+        </ul>
+
+        <h3 id="mac-history">Mac-geschiedenis en modellen</h3>
+        <p>Zoek, herlaad, wis, kopieer of verwijder lokale geschiedenis; open details van opgeschoonde en ruwe transcripten en toon een afgeleverde notitie in Finder. Via Modellen download, selecteer en verwijder je Whisper- of Parakeet-modellen en wijzig je de transcriptietaal. Whisper gebruikt Metal-versnelling op ondersteunde Macs.</p>
+      </section>
+
+      <section class="docs-section" id="history-settings">
+        <div class="docs-section-label">09 / Bibliotheek, Instellingen en Privacy</div>
+        <h2>Werk herstellen, lokale gegevens beheren en onbeperkt gebruik ontgrendelen</h2>
+
+        <h3 id="history">Uniforme bibliotheek op iOS</h3>
+        <ul>
+          <li>De bibliotheek combineert lokale spraaktranscripten en vastlegafleveringsgegevens in één doorzoekbare lijst.</li>
+          <li>Zoek ruwe tekst, opgeschoonde tekst, titels, tags en categorieën; trek omlaag om te vernieuwen.</li>
+          <li>Kopieer opgeschoonde of ruwe transcripttekst, bewerk transcriptmetagegevens en tekst of exporteer een Markdown-kopie via het deelmenu.</li>
+          <li>Verwijder één transcript of wis alle lokale geschiedenis. Geschiedenis wissen verwijdert geen Markdown-notities of bijlagen die al naar je bestemming zijn geschreven.</li>
+          <li>Probeer vastleggingen in de wachtrij opnieuw en bekijk globale bron-, route-, bestemmings-, notitiepad-, bijlagenaantal-, tijd-, resultaat- en foutcategoriegegevens.</li>
+          <li>Transcriptbewerking bevat Titel, Tags, Categorie, Opgeschoonde tekst en Ruw transcript.</li>
+        </ul>
+
+        <h3 id="stats">Privé-activiteitsstatistieken</h3>
+        <p>Open Instellingen → Activiteit → Statistieken voor een levenslang gebruiksoverzicht: totale opnamen en vastleggingen, opnameduur en bijlagenaantal, plus een grafiek van de laatste zeven dagen en uitsplitsing van vastlegbronnen (app, toetsenbord, deelmenu, widgets, Opdrachten, Apple Watch, Mac, dieplinks, bestandsimport en spraak).</p>
+        <ul>
+          <li>Statistieken tellen alleen afgeleverde vastleggingen; trek omlaag om na nieuwe activiteit te vernieuwen.</li>
+          <li>Het gebruiksregister blijft op je apparaat en bewaart geen vastgelegde inhoud, bestandsnamen of bestemmingen.</li>
+        </ul>
+
+        <h3 id="settings-map">Instellingenoverzicht</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Sectie</th><th>Regelaars</th></tr></thead>
+            <tbody>
+              <tr><td>Vox.md Onbeperkt</td><td>Status van gratis gebruik, levenslange ontgrendeling en aankoopherstel.</td></tr>
+              <tr><td>Aanpassing</td><td>Modellen; routes; zichtbaarheid en volgorde van Vastlegbalk-acties.</td></tr>
+              <tr><td>Toetsenbord</td><td>Haptische feedback.</td></tr>
+              <tr><td>Toegangsscherm</td><td>Live-activiteitenmonitor en Opnameknop op vergrendelscherm.</td></tr>
+              <tr><td>Over</td><td>Standaardtranscriptie, Whisper, Parakeet, verwerking op het apparaat, privacy, appversie en beschikbaarheid van Apple Intelligence.</td></tr>
+              <tr><td>Feedback</td><td>Word lid van de Isolated Tech Discord of schrijf een diagnostische feedbackmail.</td></tr>
+              <tr><td>Debuggen</td><td>Het lokale debuglog bekijken.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Versienotities kunnen na een update verschijnen en huidige functies beschrijven zoals Watch-synchronisatie, globale Mac-sneltoetsen, routepictogrammen, toegangsschermbediening, routering, audioregels en nabewerking.</p>
+
+        <h3 id="pricing-limits">Gratis gebruik en levenslange ontgrendeling</h3>
+        <ul>
+          <li>Gratis gebruik bevat <strong>15 minuten transcriptie</strong> en <strong>10 geslaagde vastlegafleveringen</strong>.</li>
+          <li>Een spraaktranscript dat al op transcriptietijd is afgerekend, verbruikt bij routering naar Markdown niet ook het aparte vastlegtegoed.</li>
+          <li>Mislukte schrijfacties en idempotente nieuwe pogingen verbruiken geen geslaagde vastlegaflevering.</li>
+          <li>Unlimited is een eenmalige levenslange aankoop zonder abonnement, verlenging of advertenties. De lokale App Store-prijs is leidend; Amerikaanse prijzen zijn US$ 19,99 individueel, US$ 39,99 gezin en US$ 19,99 gezinsupgrade, met koopkrachtprijzen in andere winkels.</li>
+          <li>Aankoop herstellen herstelt een geldige aankoop. Gebruikers van in aanmerking komende oudere betaalde versies behouden onbeperkt gebruik.</li>
+          <li>Een inhoudsvrij App Group-register voorkomt dubbel meetellen bij nieuwe pogingen zolang lokale appgegevens blijven bestaan. Het wordt niet in de sleutelhanger opgeslagen; lokale appgegevens verwijderen start een nieuw gratis tegoed.</li>
+        </ul>
+
+        <h3 id="privacy-data">Wat lokaal blijft</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Vastleginhoud</strong><p>Concepten, tekst, links, sjablonen, routes, bijlagen, audio, OCR en transcripten worden niet naar Vox.md-servers verstuurd.</p></div>
+          <div><strong>Verwerken</strong><p>Apple Speech, Whisper, Parakeet, Vision OCR en ondersteunde Apple Intelligence-verwerking draaien op het apparaat.</p></div>
+          <div><strong>Jouw bestemming</strong><p>Voltooide bestanden gaan alleen naar de map die je koos. Een externe bestandsaanbieder kan ze volgens eigen voorwaarden synchroniseren.</p></div>
+        </div>
+        <ul>
+          <li>Na geslaagde aflevering worden herstelbare vastlegaanvragen inhoudsvrije ontvangstbewijzen en bewaren voltooide Watch-wachtrijitems alleen globale definitieve aflevervelden. Geen van beide bewaart coördinaten, labels, aanbieder-URL&#x27;s, locatiesjablonen of routegegevens.</li>
+          <li>De geschiedenis van voltooide vastleggingen bewaart aflevermetagegevens, geen notitietekst, URL&#x27;s, coördinaten, locatielabels of -sjablonen, bladwijzers, absolute paden of bijlagebestandsnamen.</li>
+          <li>Wachtende en mislukte items bewaren alleen wat voor lokaal herstel nodig is, waaronder eventueel een routemomentopname en de al privacy-aangepaste locatie of het onbeschikbare resultaat.</li>
+          <li>Introductieanalyses in productie staan standaard uit. De app bevat geen analyse-SDK van derden, advertentienetwerk of tracker tussen apps.</li>
+          <li>De editor haalt inspirerende citaten voor de cache op bij ZenQuotes zonder conceptinhoud of identificatiegegevens te versturen.</li>
+        </ul>
+        <p>Lees voor volledige informatie over gegevensverwerking, bewaring en diensten van derden het <a href="/nl/privacy.html">Privacybeleid</a>.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">10 / Problemen oplossen</div>
+        <h2>Veelvoorkomende instel- en afleverproblemen</h2>
+        <div class="docs-troubleshooting">
+          <details open>
+            <summary>Een vastlegging kan niet versturen</summary>
+            <p>Open Bestemming en stel de geselecteerde route in. Is de map verplaatst of toegang verlopen, selecteer de kluis of map opnieuw. Werk in de wachtrij blijft beschikbaar in de bibliotheek.</p>
+          </details>
+          <details>
+            <summary>Het toetsenbord toont Volledige toegang inschakelen</summary>
+            <p>Open iOS-instellingen → Algemeen → Toetsenbord → Toetsenborden → Vox.md en schakel Sta volledige toegang toe in. Ga één keer terug naar de app zodat Vox.md de gedeelde luisterwerkwijze kan hervatten.</p>
+          </details>
+          <details>
+            <summary>Automatisch is niet beschikbaar</summary>
+            <p>Apple Speech Automatisch vereist een ondersteund iOS 26-apparaat en taal. Kies en download een Whisper- of Parakeet-model en selecteer het expliciet of ga terug naar Automatisch zodat het als door jou goedgekeurd reservemodel kan dienen.</p>
+          </details>
+          <details>
+            <summary>Transcriptie mislukt</summary>
+            <p>Controleer of het geselecteerde model volledig is gedownload en de taal passend is. Vox.md bewaart herstelbare bronaudio waar mogelijk, zodat je een ander model kunt kiezen en opnieuw proberen.</p>
+          </details>
+          <details>
+            <summary>Een koproute mislukt</summary>
+            <p>Bewerk de routebestemming en bevestig koptekst en niveau. Kies Creëer een headline als aflevering een ontbrekende kop moet maken in plaats van stoppen.</p>
+          </details>
+          <details>
+            <summary>Een Watch-opname staat in de wachtrij</summary>
+            <p>Open Vox.md op iPhone en open Bekijk de opnames. Vernieuw of probeer opnieuw, kies op verzoek een geldige route en houd de app geïnstalleerd en beschikbaar voor overdracht op de achtergrond. Geforceerd afsluiten blokkeert achtergrondaflevering tot opnieuw openen.</p>
+          </details>
+          <details>
+            <summary><code>{location}</code> blijft leeg</summary>
+            <p>Schakel Huidige locatie gebruiken in voor de afleverroute; bij herkende invoerprefixen, achtervoegsels en herbruikbare invoersjablonen doet de een-tik-oplossing van de editor dit zonder metagegevens in te schakelen. Actuele kluissjabloonbestanden vereisen handmatige route-instelling. Als toestemming ontbreekt of de vastlegging zonder locatie doorgaat, blijft het token bewust leeg. Zie de <a href="/nl/docs/location/">volledige locatiehandleiding</a>.</p>
+          </details>
+          <details>
+            <summary>Routelocatie niet beschikbaar</summary>
+            <p>Gebruik opnieuw proberen alleen terwijl je de oorspronkelijke interactieve verstuuractie nog oplost. Je kunt ook annuleren, eenmalig zonder locatie versturen of voor die route altijd zonder locatie versturen. Herstel een opgeslagen keuze in de locatie-instellingen van de route. Een onbeheerde aanvraag in de wachtrij bewaart het oorspronkelijke onbeschikbare resultaat en haalt geen nieuwere locatie op.</p>
+          </details>
+        </div>
+        <div class="docs-callout docs-support-callout">
+          <strong>Nog steeds vastgelopen?</strong>
+          <p>Open Instellingen → Bekijk Debug Log en gebruik Feedback verzenden zodat appversie, platform, OS en apparaatgegevens kunnen worden meegestuurd. Je kunt ook deelnemen aan de <a href="https://discord.gg/RaQYS4t6gn">Isolated Tech-Discord</a>.</p>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/nl/developers">Ontwikkelaars</a></li>
+        <li><a href="/nl/about">Over</a></li>
+        <li><a href="/nl/contact">Contact opnemen</a></li>
+        <li><a href="/nl/">Startpagina</a></li>
+        <li><a href="/nl/docs/" aria-current="page">Documentatie</a></li>
+        <li><a href="/nl/blog/">Blog</a></li>
+        <li><a href="/nl/privacy.html">Privacy</a></li>
+        <li><a href="/nl/terms.html">Voorwaarden</a></li>
+        <li><a href="/llms.txt">llms.txt</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Ondersteuning</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_60877eba17c1">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Volledige functiedocumentatie · Lokaal gericht vastleggen.</div>
+    </div>
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

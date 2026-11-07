@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="nl" dir="ltr" data-search-section="Sectie" data-search-guide="Handleiding" data-search-empty="Geen resultaten voor ‘{query}’">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian-vastlegsjablonen voor inbox, dagboek en takenlijst | Vox.md</title>
+  <meta name="description" content="Kopieer Markdown-structuren en stel Vox.md-prefixen in voor een Obsidian-inbox, dagboek en takenlijst. Met padrecepten, tijdstempeltokens en uitvoervoorbeelden.">
+  <link rel="canonical" href="https://vox.isolated.tech/nl/blog/obsidian-capture-templates/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-documentatie voor taalmodellen">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Obsidian-vastlegsjablonen voor inbox, dagboek en takenlijst">
+  <meta property="og:description" content="Kopieer Markdown-structuren en stel Vox.md-prefixen in voor een Obsidian-inbox, dagboek en takenlijst. Met padrecepten, tijdstempeltokens en uitvoervoorbeelden.">
+  <meta property="og:url" content="https://vox.isolated.tech/nl/blog/obsidian-capture-templates/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Obsidian-vastlegsjablonen voor inbox, dagboek en takenlijst">
+  <meta name="twitter:description" content="Kopieer Markdown-structuren en stel Vox.md-prefixen in voor een Obsidian-inbox, dagboek en takenlijst. Met padrecepten, tijdstempeltokens en uitvoervoorbeelden.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Obsidian-vastlegsjablonen voor inbox, dagboek en takenlijst",
+  "description": "Kopieer Markdown-structuren en stel Vox.md-prefixen in voor een Obsidian-inbox, dagboek en takenlijst. Met padrecepten, tijdstempeltokens en uitvoervoorbeelden.",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/nl/blog/obsidian-capture-templates/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "nl",
+  "name": "Obsidian-vastlegsjablonen voor inbox, dagboek en takenlijst | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/nl/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Handleidingen",
+      "item": "https://vox.isolated.tech/nl/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Obsidian-vastlegsjablonen voor inbox, dagboek en takenlijst",
+      "item": "https://vox.isolated.tech/nl/blog/obsidian-capture-templates/"
+    }
+  ],
+  "inLanguage": "nl",
+  "name": "Obsidian-vastlegsjablonen voor inbox, dagboek en takenlijst | Vox.md",
+  "description": "Kopieer Markdown-structuren en stel Vox.md-prefixen in voor een Obsidian-inbox, dagboek en takenlijst. Met padrecepten, tijdstempeltokens en uitvoervoorbeelden."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-capture-templates/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Naar de handleiding</a>
+<nav aria-label="Hoofdnavigatie">
+  <div class="nav-inner">
+    <a href="/nl/" class="logo" aria-label="Vox.md-startpagina">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/nl/#how">Zo werkt het</a></li>
+      <li><a href="/nl/docs/">Documentatie</a></li>
+      <li><a href="/nl/blog/">Handleidingen</a></li>
+      <li><a href="/nl/compare/">Vergelijken</a></li>
+      <li><a href="/nl/privacy.html">Privacy</a></li>
+      <li><a href="/nl/terms.html">Voorwaarden</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_nl_32fa42cf87f1">Vox.md downloaden</a>
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/blog/obsidian-capture-templates/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-capture-templates/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-capture-templates/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-capture-templates/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-capture-templates/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-capture-templates/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-capture-templates/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-capture-templates/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-capture-templates/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-capture-templates/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-capture-templates/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-capture-templates/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/blog/obsidian-capture-templates/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-capture-templates/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-capture-templates/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-capture-templates/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-capture-templates/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-capture-templates/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-capture-templates/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-capture-templates/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-capture-templates/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-capture-templates/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-capture-templates/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Obsidian · Vastlegsjablonen · Markdown</div>
+        <h1 class="hero-title">Obsidian-vastlegsjablonen voor inbox, dagboek en takenlijst</h1>
+        <p class="hero-subtitle">Gebruik een kleine set voorspelbare indelingen. Stem notitie, kop en invoerstijl af op het soort gedachte dat je bewaart.</p>
+      </div>
+      <aside class="meta-card" aria-label="Over deze handleiding">
+        <dl>
+          <div><dt>Door</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Bijgewerkt</dt><dd><time datetime="2026-10-26">26 oktober 2026</time></dd></div>
+          <div><dt>Vereist</dt><dd>Ingestelde Vox.md-bestemming</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Obsidian-vastlegsjablonen voor inbox, dagboek en takenlijst">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Het korte antwoord</div>
+        <p>Begin met drie eenvoudige recepten: een opsommingsteken onder Inbox, een dagboekitem met tijdstempel en een selectievakje onder Tasks. Stel bestemming en invoerprefix in een Vox.md-vastlegvoorinstelling in. Behoud het bestaande dagnotitiepad en kies één plek om elke opmaakmarkering toe te voegen.</p>
+      </div>
+      <p>De onderstaande voorbeelden zijn gewone Markdown-structuren en voorinstellingsinstellingen, geen bestanden die automatisch een Vox.md-voorinstelling importeren. Plak zo nodig een notitiestructuur in een notitie; voer pad- en prefixinstellingen in de bestemmingseditor in. De getoonde resultaten zijn illustratief.</p>
+      <nav class="toc" aria-label="In deze handleiding"><div class="toc-title">In deze handleiding</div><ol>
+        <li><a href="#inbox">Een eenvoudige vastleginbox</a></li>
+        <li><a href="#journal">Een dagelijks dagboek met tijdstempels</a></li>
+        <li><a href="#tasks">Een compacte takenlijst</a></li>
+        <li><a href="#tokens">Gebruik de juiste tokensyntaxis</a></li>
+        <li><a href="#check">Controleer het resultaat voordat je een voorinstelling hergebruikt</a></li>
+      </ol></nav>
+
+      <h2 id="inbox">Recept 1: een eenvoudige vastleginbox</h2>
+      <p>Gebruik Bestaande notitie als doel, zoals <code>Inbox.md</code>of een dagelijkse Rolling Note als je voor elke dag een nieuw inboxbestand wilt. Kies plaatsing onder een Inbox-kop op niveau twee en invoegen aan het einde van die sectie.</p>
+      <p>Een minimale notitiestructuur is:</p>
+      <pre class="guide-code"><code>## Inbox</code></pre>
+      <p>Kies Origineel behouden als verwerking. Stel in de invoeropmaak van de bestemming als prefix een streepje gevolgd door een spatie in:</p>
+      <pre class="guide-code"><code>- </code></pre>
+      <p>Een korte vastlegging met ‘Controleer de conceptopzet’ kan dan opleveren:</p>
+      <pre class="guide-code"><code>## Inbox
+- Review the draft outline</code></pre>
+      <p>Voer het prefix in de instelling in, niet in elke vastgelegde gedachte. Begint je tekst al met een opsommingsteken, controleer dan de uitvoer in plaats van blind een markering toe te voegen. Kies voor ontbrekende koppen Creëer een headline of Toon fout naar voorkeur.</p>
+
+      <h2 id="journal">Recept 2: een dagelijks dagboek met tijdstempels</h2>
+      <p>Gebruik een dagelijkse Rolling Note en volg de bestaande bestandsnaamconventie van je kluis. Voor bestanden zoals <code>Journal/2026-10-26.md</code>is een padpatroon <code>Journal/{period}.md</code> met een dagelijkse periode. Kies een Journal-kop op niveau twee en invoegen aan het einde van die sectie.</p>
+      <p>Behoud de vastgelegde lopende tekst ongewijzigd en gebruik dit invoerprefix voor een compact tijdstempel:</p>
+      <pre class="guide-code"><code>- **{hour}:{minute}** </code></pre>
+      <p>Voor een vastlegging om 14:05 is dit een voorbeeldsectie:</p>
+      <pre class="guide-code"><code>## Journal
+- **14:05** A short walk helped me settle on the next step.</code></pre>
+      <p>De uur- en minuuttokens worden door de Vox.md-invoerformatter uitgebreid. Een sjabloonbestand op notitieniveau kan de omliggende koppen leveren, terwijl het invoerprefix elke vastlegging opmaakt. Houd die taken gescheiden zodat latere items niet steeds de hele dagnotitiestructuur invoegen.</p>
+      <p>Zie voor gedetailleerde route-instellingen <a href="/nl/blog/append-to-obsidian-daily-note-iphone/">dagnotitiepaden en kopplaatsing</a>.</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="Vox.md-bestemmingseditor voor notitiedoel en kopplaatsing" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>Stel doel en invoeropmaak in via de bestemming van de voorinstelling. Een overschrijving voor één vastlegging verandert die opgeslagen standaarden niet.</figcaption>
+      </figure>
+
+      <h2 id="tasks">Recept 3: een compacte takenlijst</h2>
+      <p>Kies Bestaande notitie of een dagelijkse Rolling Note met een Tasks-kop op niveau twee. Gebruik voor korte getypte taken zonder tekstverwerking Origineel behouden en dit prefix:</p>
+      <pre class="guide-code"><code>- [ ] </code></pre>
+      <p>Twee vastleggingen kunnen dan vormen:</p>
+      <pre class="guide-code"><code>## Tasks
+- [ ] Review the draft outline
+- [ ] Send the reading list</code></pre>
+      <p>Als je in plaats daarvan Takenlijst-verwerking aanzet, laat de verwerking dan de checklistmarkeringen beheren. Stel niet ook een dubbel selectievakjesprefix in. Verwerking van getypte en gemengde tekst vereist aparte toestemming; spraakverwerking en getypte editorinhoud zijn geen uitwisselbare instellingen.</p>
+      <p>Een taak is alleen nuttig als de woorden kloppen. Controleer bij spraakvastleggingen het transcript als een herkenningsfout de instructie kan veranderen. De <a href="/nl/blog/voice-notes-to-obsidian-iphone/">iPhone-spraakhandleiding</a> legt Aan concept toevoegen en Direct verzenden uit.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_32fa42cf87f1">Vox.md gratis downloaden</a></p>
+      <p>De gratis download bevat 10 geslaagde vastlegafleveringen en 15 transcriptieminuten. Onbeperkt gebruik is een eenmalige levenslange aankoop.</p>
+
+      <h2 id="tokens">Gebruik de juiste tokensyntaxis</h2>
+      <p>Vox.md-pad- en invoerinstellingen gebruiken tokens zoals <code>{period}</code>, <code>{date}</code>, <code>{hour}</code> en <code>{minute}</code>. Deze voorbeelden zijn geen Obsidian Core Templates- of Templater-expressies. Gebruik de eigen syntaxis van een sjabloonsysteem in de instellingen van dat systeem.</p>
+      <p>Gebruik <code>{hour}:{minute}</code> voor de hier getoonde tijd met dubbele punten. Het Vox.md-token <code>{time}</code> token is een compacte tijdwaarde; vervang het token in het recept dus niet in de aanname dat het dezelfde weergave heeft.</p>
+      <p>Vastleginhoud is geen sjablooneditor. Een token in een gedachte kan letterlijke tekst blijven; stel tokenuitbreiding in via de ondersteunde opmaakinstellingen van de bestemming. Zie de <a href="/nl/docs/#placement-templates">token- en sjabloonreferentie</a> voor de beschikbare velden.</p>
+      <p>Als je YAML-metagegevens toevoegt, maak dan onderscheid tussen frontmatter op notitieniveau en velden voor elk item in een doorlopende notitie. Een eigenschap van het hele bestand is niet automatisch een aparte eigenschap per dagboekitem. Begin zonder extra metagegevens en voeg die toe wanneer je weet hoe je ze gaat bevragen.</p>
+
+      <h2 id="check">Controleer het resultaat voordat je een voorinstelling hergebruikt</h2>
+      <ol>
+        <li>Controleer of het bestemmingsvoorbeeld overeenkomt met het bedoelde bestand.</li>
+        <li>Verstuur een korte getypte vastlegging met de geselecteerde voorinstelling.</li>
+        <li>Open het bestand in Obsidian en controleer kop en prefix.</li>
+        <li>Verstuur een tweede vastlegging en controleer volgorde, witruimte en herhaalde markeringen.</li>
+        <li>Voeg pas daarna spraak, bijlagen, optionele verwerking of metagegevens toe.</li>
+      </ol>
+      <p>Deze recepten kunnen in één dagbestand onder aparte koppen naast elkaar bestaan. Bij een toegankelijke map kan dezelfde voorinstelling ook een transcript ontvangen vanuit de <a href="/nl/blog/apple-watch-obsidian-voice-notes/">Vastlegwerkwijze van Watch naar iPhone</a>. Houd mapmachtigingen en bestandsaanbiederbeschikbaarheid in gedachten als een vastlegging blijft wachten.</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Houd de indeling voorspelbaar.<br>Laat ruimte voor de gedachte.</h2>
+        <p>Begin met één kop en één prefix. Voeg alleen meer structuur toe als die helpt de vastgelegde notitie te gebruiken.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_32fa42cf87f1">Vox.md gratis downloaden</a></p>
+      </section>
+      <nav class="toc" aria-label="Gerelateerde handleidingen"><div class="toc-title">Doorgaan met instellen</div><ul>
+        <li><a href="/nl/blog/append-to-obsidian-daily-note-iphone/">Routering naar dagnotities instellen</a></li>
+        <li><a href="/nl/blog/save-links-photos-obsidian-iphone/">Foto&#x27;s, scans en links bij een notitie bewaren</a></li>
+        <li><a href="/nl/blog/obsidian-quick-capture-iphone/">Kies een vastlegmethode</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/nl/">Startpagina</a></li>
+        <li><a href="/nl/docs/">Documentatie</a></li>
+        <li><a href="/nl/blog/">Handleidingen</a></li>
+        <li><a href="/nl/compare/">Vergelijken</a></li>
+        <li><a href="/nl/privacy.html">Privacy</a></li>
+        <li><a href="/nl/terms.html">Voorwaarden</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Ondersteuning</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_32fa42cf87f1">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Snel vastleggen voor lokale notities · Geen inhoud uploaden.</div>
+    </div>
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/blog/obsidian-capture-templates/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-capture-templates/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-capture-templates/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-capture-templates/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-capture-templates/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-capture-templates/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-capture-templates/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-capture-templates/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-capture-templates/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-capture-templates/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-capture-templates/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-capture-templates/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/blog/obsidian-capture-templates/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-capture-templates/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-capture-templates/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-capture-templates/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-capture-templates/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-capture-templates/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-capture-templates/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-capture-templates/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-capture-templates/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-capture-templates/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-capture-templates/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="nl" dir="ltr" data-search-section="Sectie" data-search-guide="Handleiding" data-search-empty="Geen resultaten voor ‘{query}’">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zo sla je iPhone-spraaknotities op in Obsidian | Vox.md</title>
+  <meta name="description" content="Neem een spraaknotitie op iPhone op, transcribeer op het apparaat en sla Markdown op in je Obsidian-kluis. Stel nieuwe notities of dagnotitieroutering in met Vox.md.">
+  <link rel="canonical" href="https://vox.isolated.tech/nl/blog/voice-notes-to-obsidian-iphone/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-documentatie voor taalmodellen">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Zo sla je iPhone-spraaknotities op in Obsidian">
+  <meta property="og:description" content="Neem een spraaknotitie op iPhone op, transcribeer op het apparaat en sla Markdown op in je Obsidian-kluis. Stel nieuwe notities of dagnotitieroutering in met Vox.md.">
+  <meta property="og:url" content="https://vox.isolated.tech/nl/blog/voice-notes-to-obsidian-iphone/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Zo sla je iPhone-spraaknotities op in Obsidian">
+  <meta name="twitter:description" content="Neem een spraaknotitie op iPhone op, transcribeer op het apparaat en sla Markdown op in je Obsidian-kluis. Stel nieuwe notities of dagnotitieroutering in met Vox.md.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Zo sla je iPhone-spraaknotities op in Obsidian",
+  "description": "Neem een spraaknotitie op iPhone op, transcribeer op het apparaat en sla Markdown op in je Obsidian-kluis. Stel nieuwe notities of dagnotitieroutering in met Vox.md.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/nl/blog/voice-notes-to-obsidian-iphone/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "nl",
+  "name": "Zo sla je iPhone-spraaknotities op in Obsidian | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/nl/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Handleidingen",
+      "item": "https://vox.isolated.tech/nl/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Zo sla je iPhone-spraaknotities op in Obsidian",
+      "item": "https://vox.isolated.tech/nl/blog/voice-notes-to-obsidian-iphone/"
+    }
+  ],
+  "inLanguage": "nl",
+  "name": "Zo sla je iPhone-spraaknotities op in Obsidian | Vox.md",
+  "description": "Neem een spraaknotitie op iPhone op, transcribeer op het apparaat en sla Markdown op in je Obsidian-kluis. Stel nieuwe notities of dagnotitieroutering in met Vox.md."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/voice-notes-to-obsidian-iphone/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/voice-notes-to-obsidian-iphone/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Naar de handleiding</a>
+<nav aria-label="Hoofdnavigatie">
+  <div class="nav-inner">
+    <a href="/nl/" class="logo" aria-label="Vox.md-startpagina">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/nl/#how">Zo werkt het</a></li>
+      <li><a href="/nl/docs/">Documentatie</a></li>
+      <li><a href="/nl/blog/">Handleidingen</a></li>
+      <li><a href="/nl/compare/">Vergelijken</a></li>
+      <li><a href="/nl/privacy.html">Privacy</a></li>
+      <li><a href="/nl/terms.html">Voorwaarden</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_nl_45e81e2e5027">Vox.md downloaden</a>
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/blog/voice-notes-to-obsidian-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/voice-notes-to-obsidian-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/voice-notes-to-obsidian-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/voice-notes-to-obsidian-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/voice-notes-to-obsidian-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/voice-notes-to-obsidian-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/voice-notes-to-obsidian-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/voice-notes-to-obsidian-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/voice-notes-to-obsidian-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/voice-notes-to-obsidian-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/voice-notes-to-obsidian-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/voice-notes-to-obsidian-iphone/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/blog/voice-notes-to-obsidian-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/voice-notes-to-obsidian-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/voice-notes-to-obsidian-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/voice-notes-to-obsidian-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/voice-notes-to-obsidian-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/voice-notes-to-obsidian-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/voice-notes-to-obsidian-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/voice-notes-to-obsidian-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/voice-notes-to-obsidian-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">iPhone-spraaknotities · Obsidian · Lokale Markdown</div>
+        <h1 class="hero-title">Zo sla je iPhone-spraaknotities op in Obsidian</h1>
+        <p class="hero-subtitle">Spreek een gedachte uit, transcribeer die op je iPhone en zet de tekst in de gekozen kluis, notitie of kop.</p>
+      </div>
+      <aside class="meta-card" aria-label="Over deze handleiding">
+        <dl>
+          <div><dt>Door</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Bijgewerkt</dt><dd><time datetime="2026-10-26">26 oktober 2026</time></dd></div>
+          <div><dt>Vereist</dt><dd>iPhone · iOS 17.6+</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Zo sla je iPhone-spraaknotities op in Obsidian">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer">
+        <div class="label">Het korte antwoord</div>
+        <p>Verbind in Vox.md een vastlegvoorinstelling met een Obsidian-kluismap, bereid een lokale transcriptiebackend voor en neem op in Snelle opname. Verstuur het transcript naar een nieuwe Markdown-notitie of voeg het toe aan een bestaande notitie of dagnotitie. Je hebt geen Obsidian-plugin of Vox.md-account nodig.</p>
+      </div>
+      <p>Obsidian heeft ook ingebouwde vastleghulpmiddelen. <a href="#native-obsidian">Bekijk de ingebouwde optie hieronder</a> voordat je een andere app installeert. Vox.md is nuttig als je de vastlegvoorinstellingen, lokale spraakmodelkeuzes en tekst, media en spraak in dezelfde werkwijze wilt.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_45e81e2e5027">Vox.md gratis downloaden</a></p>
+      <p>Probeer 15 minuten transcriptie en 10 geslaagde vastlegafleveringen. Onbeperkt gebruik is een eenmalige levenslange aankoop; de App Store toont jouw regionale prijs.</p>
+      <nav class="toc" aria-label="In deze handleiding">
+        <div class="toc-title">In deze handleiding</div>
+        <ol>
+          <li><a href="#before-you-start">Voordat je begint</a></li>
+          <li><a href="#connect-vault">Je Obsidian-kluis verbinden</a></li>
+          <li><a href="#transcription">Lokale transcriptie voorbereiden</a></li>
+          <li><a href="#record">Een spraaknotitie opnemen en opslaan</a></li>
+          <li><a href="#daily-note">Spraak naar een dagnotitie of kop sturen</a></li>
+          <li><a href="#native-obsidian">Wanneer ingebouwd Obsidian volstaat</a></li>
+          <li><a href="#troubleshooting">Problemen oplossen en offline gebruik</a></li>
+        </ol>
+      </nav>
+
+      <h2 id="before-you-start">Voordat je begint</h2>
+      <ul>
+        <li><strong>Een iPhone met iOS 17.6 of nieuwer.</strong> Beschikbare spraakbackends hangen af van apparaat, OS en taal. Live Apple Speech vereist een ondersteund iOS 26-apparaat en taal.</li>
+        <li><strong>Een kluismap die je via Bestanden kunt selecteren.</strong> Vox.md heeft toestemming nodig om naar die map te schrijven. Een kluis die in Obsidian zichtbaar is, is niet noodzakelijk via Bestanden toegankelijk voor andere apps.</li>
+        <li><strong>Een voorbereide transcriptiebackend.</strong> Automatisch kan taalvoorbereiding nodig hebben; optionele Whisper- of Parakeet-modellen vereisen een eerste download. Bereid dit met verbinding voor voordat je op offline transcriptie vertrouwt.</li>
+        <li><strong>Microfoontoestemming.</strong> Het toetsenbord is optioneel voor deze handleiding. Je kunt in de hoofdapp opnemen zonder een aangepast toetsenbord of Volledige toegang in te schakelen.</li>
+      </ul>
+      <p>Als je Obsidian Sync gebruikt, controleer dan of je kluismap toegankelijk is in de Bestanden-kiezer. Vox.md schrijft bestanden; het verbindt niet met Obsidian Sync als dienst. Verander geen bestaande synchronisatie en combineer geen synchronisatieaanbieders alleen om deze handleiding te volgen.</p>
+
+      <h2 id="connect-vault">1. Verbind je Obsidian-kluis</h2>
+      <ol>
+        <li>Open Vox.md. Selecteer in Snelle opname een vastlegvoorinstelling. Je kunt een bestaande gebruiken of er een maken onder <strong>Instellingen → Vastlegvoorinstellingen</strong>.</li>
+        <li>Kies <strong>Stel een bestemming</strong> als de voorinstelling geen bestemming heeft. Selecteer via de Bestanden-kiezer de map met de Markdown-bestanden van je kluis.</li>
+        <li>Begin met een <strong>Nieuwe notitie</strong> als doel zodat elke vastlegging een eigen bestand maakt. Kies een inboxsubmap als je deze notities bij elkaar wilt houden.</li>
+        <li>Controleer het bestemmingsvoorbeeld voordat je opslaat. Gebruik voor je eerste vastlegging <strong>Origineel behouden</strong> als verwerking zodat het transcript niet door een optionele verwerkingsstap wordt herschreven.</li>
+      </ol>
+      <p>De voorinstelling onthoudt de bestemming. Latere vastleggingen kunnen dezelfde route gebruiken. Zie de <a href="/nl/docs/#presets">referentie voor voorinstellingen en bestemmingen</a> voor sjablonen, bijlagenmappen en invoegregels.</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/00-capture-light-640.webp" alt="Vox.md-editor voor Snelle opname met spraak- en bestemmingsbediening" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>De editor voor Snelle opname. Kies voorinstelling en bestemming vóór het opnemen. Labels kunnen per appversie verschillen.</figcaption>
+      </figure>
+
+      <h2 id="transcription">2. Bereid lokale transcriptie voor</h2>
+      <p>Open de modelinstellingen en kies een backend die je telefoon en taal ondersteunt. Vox.md ondersteunt Apple Speech en optionele Whisper- en Parakeet-modellen. Voltooi voorbereiding of modeldownload vóór je eerste opname.</p>
+      <p>Met Automatisch op ondersteunde iOS 26-apparaten kan Apple Speech tijdens het opnemen tekst tonen. Expliciet gekozen Whisper- en Parakeet-modellen transcriberen nadat de opname stopt. Een live voorbeeld is niet nodig om een spraaknotitie op te slaan.</p>
+      <p>Transcriptie op het apparaat vereist geen cloudtranscriptieaccount. Modelbeschikbaarheid, herkenningskwaliteit en verwerkingstijd verschillen. Lees de <a href="/nl/docs/#models">modelvereisten en voorbereidingsstappen</a> als je voorkeursbackend niet beschikbaar is.</p>
+
+      <h2 id="record">3. Neem een spraaknotitie op en sla die op</h2>
+      <ol>
+        <li>Selecteer je ingestelde voorinstelling in Snelle opname. Kies vóór het opnemen <strong>Aan concept toevoegen</strong> in de spraakbediening zodat je het eerste transcript kunt controleren en start daarna de opname.</li>
+        <li>Spreek een korte gedachte uit, zoals ‘Niet vergeten een tandartsafspraak te maken.’ Stop de opname als je klaar bent.</li>
+        <li>Wacht met Aan concept toevoegen geselecteerd op het transcript, corrigeer herkenningsfouten in de editor en tik op <strong>Stuur</strong>. Als je kiest voor <strong>Direct verzenden</strong> in plaats daarvan vóór het opnemen kiest, routeert de voorinstelling het transcript wanneer de opname eindigt.</li>
+        <li>Bevestig de aflevering in Vox.md, open daarna de doelmap in Obsidian en controleer de nieuwe notitie.</li>
+      </ol>
+      <p>Voor een gewoon transcript met Origineel behouden kan de notitietekst er zo uitzien. Dit is een voorbeeld, geen belofte van exacte herkenning of interpunctie:</p>
+      <pre class="guide-code"><code>Remember to book the dentist.</code></pre>
+      <p>Bestandsnaam en eventuele frontmatter komen uit de voorinstelling. Je kunt bronaudio als bijlage bewaren; een transcript heeft geen audiobijlage nodig om nuttig te zijn in Obsidian.</p>
+      <p>Het toetsenbord volgt een apart pad: het voegt gedicteerde tekst in het actieve tekstveld in. Gebruik de hier beschreven vastlegwerkwijze om spraak via een vastlegvoorinstelling naar een Markdown-bestand te leiden. Zie de <a href="/nl/blog/best-voice-to-text-keyboard-iphone/">handleiding voor privé-iPhone-toetsenbord</a> voor dicteren in andere apps.</p>
+
+      <h2 id="daily-note">Spraak naar een dagnotitie of kop sturen</h2>
+      <p>Zodra vastleggen naar een nieuwe notitie werkt, bewerk je de bestemming van de voorinstelling voor een <strong>Rolling Note</strong> met een dagelijkse periode. Gebruik dezelfde map en bestandsnaamindeling als je bestaande Obsidian-dagnotities. Vox.md ontdekt je Daily Notes-plugininstellingen niet automatisch.</p>
+      <p>Kies om gedicteerde taken bij elkaar te houden invoegen onder een kop op niveau twee met de naam <strong>Tasks</strong> kop. Kies of Vox.md de kop moet maken als die ontbreekt en of items aan het begin of einde van de sectie horen. Een taakgerichte voorinstelling kan Takenlijst-verwerking gebruiken; gebruik Origineel behouden voor lopende tekst.</p>
+      <p>Een dagelijkse taakvoorinstelling met als doel <code>Journal/2026-10-26.md</code> kan opleveren:</p>
+      <pre class="guide-code"><code>## Tasks
+- Remember to book the dentist.</code></pre>
+      <p>Dit voorbeeld toont ingestelde uitvoer, geen standaardindeling. Houd je bestaande datumconventie aan en controleer het bestemmingsvoorbeeld zodat je niet per ongeluk een tweede dagnotitie maakt. Kies voor één doorlopende inbox in plaats daarvan een <strong>Bestaande notitie</strong> en daar toevoegen.</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="Vox.md-bestemmingsinstellingen voor notitiedoel en kopplaatsing" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>Gebruik de bestemmingsinstellingen om een notitiedoel en invoegpunt te kiezen. Stem de route af op bestaande kluisconventies.</figcaption>
+      </figure>
+
+      <h2 id="native-obsidian">Wanneer ingebouwd Obsidian volstaat</h2>
+      <p>Obsidian- <a href="https://obsidian.md/help/ios">officiële iOS-handleiding</a> documenteert ingebouwd Quick Capture vanaf versie 1.14 op iOS 26 of nieuwer. Het kan notities maken of bijwerken via widgets en Opdrachten. Als je alleen eenvoudige tekstvastlegging in je kluis nodig hebt, begin daar.</p>
+      <p>De <a href="https://obsidian.md/changelog/2026-10-22-mobile-v1.15.0/">Aankondiging van 22 oktober 2026 voor vroege mobiele toegang tot Obsidian 1.15</a> voegt ook spraaktranscriptie en opgeslagen opnamen toe, inclusief vastleggen vanaf het toegangsscherm op iOS 26. Bij de update van deze handleiding op 26 oktober betreft die aankondiging het kanaal voor vroege toegang; controleer de beschikbaarheid in je geïnstalleerde versie.</p>
+      <p>Kies Vox.md als je de combinatie wilt van lokale spraakbackends, instelbare vastlegverwerking en routering, en gemengde tekst, foto&#x27;s, scans, bestanden en spraak. Je kunt het ook gebruiken met een beschrijfbare Markdown-map die geen Obsidian-kluis is. Geen van beide apps hoeft de andere te vervangen: Obsidian kan blijven waar je notities ordent en leest.</p>
+
+      <h2 id="troubleshooting">Problemen oplossen en offline gebruik</h2>
+      <h3>De kluis verschijnt niet in Bestanden</h3>
+      <p>Controleer of de map via een beschikbare bestandsaanbieder wordt aangeboden en door een andere app kan worden geselecteerd. Is de map niet toegankelijk, gebruik dan een beschrijfbare map en verplaats handmatig een voorbeeldnotitie in Markdown naar Obsidian om de werkwijze te beoordelen. Ga er niet van uit dat een Obsidian Sync-kluis beschikbaar is voor Vox.md.</p>
+      <h3>Het transcript ontbreekt of is onnauwkeurig</h3>
+      <p>Controleer microfoontoegang, backendvoorbereiding en taalondersteuning. Live Apple Speech-tekst hangt af van ondersteunde OS- en apparaatcombinaties; gedownloade modellen kunnen anders werken. Controleer belangrijke tekst voordat je verstuurt. Zie <a href="/nl/docs/#models">Modellen en transcriptie</a> voor de beschikbare opties.</p>
+      <h3>Een vastlegging wacht of kon niet worden opgeslagen</h3>
+      <p>Controleer bestemmingsmachtigingen en beschikbaarheid van de bestandsaanbieder. Bekijk het wachtende of mislukte item en probeer na herstel van de bestemming opnieuw in plaats van dezelfde gedachte nogmaals vast te leggen. Vox.md bewaart wachtende aflevergegevens voor herstel. Zie <a href="/nl/docs/#troubleshooting">problemen met aflevering oplossen</a>.</p>
+      <h3>Kan dit offline?</h3>
+      <p>Spraaktranscriptie draait na voorbereiding van de backend op je apparaat. Voor het schrijven van de notitie moet ook de geselecteerde map lokaal beschikbaar en beschrijfbaar zijn. Een cloudmap kan verbinding nodig hebben voor bestandstoegang of latere synchronisatie. Lokale transcriptie betekent niet dat je gekozen synchronisatieaanbieder de uiteindelijke notitie nooit ontvangt.</p>
+      <h3>Gebruikt een spraaknotitie beide gratis tegoeden?</h3>
+      <p>Een spraaktranscript dat naar Markdown wordt geleid, gebruikt het transcriptietegoed en verbruikt niet ook een vastlegaflevering. De gratis download bevat 15 transcriptieminuten en 10 geslaagde vastlegafleveringen voor andere vastlegwerkwijzen. Onbeperkt gebruik is een eenmalige levenslange aankoop.</p>
+
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Je volgende gedachte kan in de juiste notitie landen.</h2>
+        <p>Verbind een map, bereid lokale transcriptie voor en probeer een korte spraakvastlegging voordat je een uitgebreidere voorinstelling maakt.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_45e81e2e5027">Vox.md gratis downloaden</a></p>
+        <p>Gratis tegoeden · geen account nodig · één levenslange ontgrendeling</p>
+      </section>
+      <p><a href="/nl/blog/obsidian-quick-capture-iphone/">Kiezen tussen iPhone-vastlegmethoden</a>of <a href="/nl/compare/vox-md-vs-obsidian-quick-capture/">ingebouwd Obsidian met Vox.md vergelijken</a>.</p>
+      <nav class="toc" aria-label="Gerelateerde handleidingen">
+        <div class="toc-title">Doorgaan met instellen</div>
+        <ul>
+          <li><a href="/nl/blog/offline-transcription-iphone-markdown/">Transcriptie en een Markdown-bestemming voor offline gebruik voorbereiden</a></li>
+          <li><a href="/nl/blog/append-to-obsidian-daily-note-iphone/">Tekst en spraak onder een dagnotitiekop toevoegen</a></li>
+          <li><a href="/nl/blog/apple-watch-obsidian-voice-notes/">Apple Watch-opnamen naar Obsidian versturen</a></li>
+          <li><a href="/nl/docs/#presets">Vastlegvoorinstellingen en Markdown-bestemmingen</a></li>
+          <li><a href="/nl/docs/#models">Lokale spraakmodellen en talen</a></li>
+          <li><a href="/nl/blog/best-voice-to-text-keyboard-iphone/">Privédictaten in andere iPhone-apps</a></li>
+        </ul>
+      </nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/nl/">Startpagina</a></li>
+        <li><a href="/nl/docs/">Documentatie</a></li>
+        <li><a href="/nl/blog/">Handleidingen</a></li>
+        <li><a href="/nl/compare/">Vergelijken</a></li>
+        <li><a href="/nl/privacy.html">Privacy</a></li>
+        <li><a href="/nl/terms.html">Voorwaarden</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Ondersteuning</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_45e81e2e5027">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Snel vastleggen voor lokale notities · Geen inhoud uploaden.</div>
+    </div>
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/blog/voice-notes-to-obsidian-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/voice-notes-to-obsidian-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/voice-notes-to-obsidian-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/voice-notes-to-obsidian-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/voice-notes-to-obsidian-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/voice-notes-to-obsidian-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/voice-notes-to-obsidian-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/voice-notes-to-obsidian-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/voice-notes-to-obsidian-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/voice-notes-to-obsidian-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/voice-notes-to-obsidian-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/voice-notes-to-obsidian-iphone/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/blog/voice-notes-to-obsidian-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/voice-notes-to-obsidian-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/voice-notes-to-obsidian-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/voice-notes-to-obsidian-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/voice-notes-to-obsidian-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/voice-notes-to-obsidian-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/voice-notes-to-obsidian-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/voice-notes-to-obsidian-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/voice-notes-to-obsidian-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/voice-notes-to-obsidian-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

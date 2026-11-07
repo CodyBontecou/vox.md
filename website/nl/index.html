@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="nl" dir="ltr" data-search-section="Sectie" data-search-guide="Handleiding" data-search-empty="Geen resultaten voor ‘{query}’">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snel vastleggen voor Obsidian op iPhone en Apple Watch | Vox.md</title>
+  <meta name="description" content="Leg tekst, links, foto&#x27;s, bestanden, scans, schetsen en privé-spraaknotities op je iPhone vast in Obsidian-kluizen of lokale Markdown-bestanden.">
+  <link rel="canonical" href="https://vox.isolated.tech/nl/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-documentatie voor taalmodellen">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Snel vastleggen voor Obsidian op iPhone en Apple Watch | Vox.md">
+  <meta property="og:description" content="Verstuur elk idee naar de juiste kluis, notitie of kop zonder Obsidian te openen. Spraaktranscriptie blijft op je apparaat.">
+  <meta property="og:url" content="https://vox.isolated.tech/nl/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Snel vastleggen voor Obsidian op iPhone en Apple Watch | Vox.md">
+  <meta name="twitter:description" content="Leg eerst vast en laat precieze Markdown-routes alles in de juiste notitie plaatsen.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Vox.md",
+  "applicationCategory": "ProductivityApplication",
+  "operatingSystem": "iOS 17.6+, iPadOS 17.6+, macOS 14+, watchOS 10+",
+  "description": "Snel vastleggen voor Obsidian-kluizen en lokale Markdown-notities, met tekst, links, media, documentscans, schetsen en privé-spraaktranscriptie op het apparaat.",
+  "url": "https://vox.isolated.tech/nl/",
+  "downloadUrl": "https://apps.apple.com/us/app/voxboard/id6758967337",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/",
+    "sameAs": [
+      "https://github.com/CodyBontecou"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "featureList": [
+    "Tekst, links, foto's, bestanden, documentscans, schetsen en spraak vastleggen",
+    "Standaard-Markdown schrijven naar Obsidian-kluizen of Bestanden-mappen",
+    "Nieuwe notities maken, doorlopende notities bijwerken of bestaande notities kiezen",
+    "Bovenaan, onderaan of onder een gekozen kop invoegen",
+    "Eenmalige Huidige locatie in sjablonen gebruiken met optionele metagegevensuitvoer",
+    "Widgets, Opdrachten, de deelextensie of het toetsenbord gebruiken",
+    "Spraak op het apparaat transcriberen zonder audio te uploaden"
+  ],
+  "inLanguage": "nl"
+}
+</script>
+
+  <link rel="stylesheet" href="/geist.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://isolated.tech/#organization",
+  "name": "Isolated Tech",
+  "url": "https://isolated.tech/",
+  "sameAs": [
+    "https://github.com/CodyBontecou"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "klantenondersteuning",
+    "email": "codybontecou@gmail.com",
+    "url": "https://vox.isolated.tech/nl/contact",
+    "availableLanguage": "Engels"
+  },
+  "inLanguage": "nl",
+  "description": "Leg tekst, links, foto's, bestanden, scans, schetsen en privé-spraaknotities op je iPhone vast in Obsidian-kluizen of lokale Markdown-bestanden."
+}
+</script>
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Openbare informatie-API van Vox.md">
+<meta name="naver-site-verification" content="cae11a861102ae94853f1f7e773318e17525df3a">
+  <meta name="color-scheme" content="light">
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/InstrumentSerif-Italic-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/">
+</head>
+<body class="raw">
+<a class="skip-link" href="#main">Naar de inhoud</a>
+
+<nav aria-label="Hoofdnavigatie">
+  <div class="r-wrap r-nav">
+    <a href="/nl/" class="r-logo" aria-label="Vox.md-startpagina">
+      <span class="r-logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <span class="r-tab-current" aria-hidden="true">index.md</span>
+    <ul class="r-nav-links">
+      <li><a href="#how">how.md</a></li>
+      <li><a href="#capture">files.md</a></li>
+      <li><a href="#presets">routes.md</a></li>
+      <li><a href="#privacy">privacy.md</a></li>
+      <li><a href="/nl/docs/">docs/</a></li>
+      <li><a href="/nl/blog/">guides/</a></li>
+      <li><a href="/nl/compare/">compare/</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_nl_8a5edab28263">Gratis downloaden</a>
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ar/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+<main id="main">
+<section aria-labelledby="hero-title">
+  <div class="r-wrap r-hero">
+    <p class="r-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</p>
+    <div class="r-hero-body">
+      <div class="r-hero-copy">
+        <pre class="r-front" aria-label="Vox.md in het kort">---
+app: Vox.md
+for: Obsidian &amp; any Markdown folder
+runs_on: [iPhone, iPad, Mac, Apple Watch]
+transcribes_on: <b>this device</b>
+writes_to: <b>a folder you pick</b>
+copies_on_our_servers: <b class="r-hl">0</b>
+---</pre>
+        <h1 class="r-h1" id="hero-title" aria-label="Je gedachten, in een lokaal bestand."><span class="r-mark" aria-hidden="true">#</span>Je gedachten, in een <span aria-hidden="true"><del>cloud</del> </span><span class="visually-hidden">lokaal </span><span class="r-voice r-hl">bestand.</span><span class="r-caret" aria-hidden="true"></span></h1>
+        <p class="r-hero-lead">Leg ideeën vanaf iPhone, Mac en Apple Watch vast in Obsidian: typ, fotografeer, scan, schets of spreek ze uit. Vox.md transcribeert op je apparaat en schrijft gewone Markdown rechtstreeks naar de kluis of Bestanden-map die je kiest, onder de gekozen notitie en kop.</p>
+        <div class="r-actions">
+          <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_nl_8a5edab28263">Vox.md gratis downloaden</a>
+          <a href="/nl/blog/obsidian-quick-capture-iphone/" class="r-btn r-btn-line">Kies een vastlegmethode</a>
+        </div>
+        <p class="r-note">15 transcriptieminuten + 10 vastlegafleveringen gratis · iOS 17.6+ · geen account</p>
+        <details class="desktop-download-qr">
+          <summary>Scan om op je iPhone te downloaden</summary>
+          <div class="download-qr-panel">
+            <a href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-kind="qr" aria-label="Vox.md in de App Store openen" data-download-campaign="seo_home_qr">
+              <img src="/assets/download-qr.svg" alt="QR-code om Vox.md in de App Store te openen" width="176" height="176" decoding="async">
+            </a>
+            <p>Scan met je iPhone-camera om Vox.md in de App Store te openen.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="r-demo" aria-labelledby="demo-title">
+        <h2 class="visually-hidden" id="demo-title">Wat een vastlegging wordt</h2>
+        <div class="r-demo-tabs" role="tablist" aria-label="Kies een vastlegging" hidden>
+          <button type="button" role="tab" id="demo-tab-voice" aria-controls="demo-voice" aria-selected="true">memo</button>
+          <button type="button" role="tab" id="demo-tab-link" aria-controls="demo-link" aria-selected="false" tabindex="-1">gedeelde link</button>
+          <button type="button" role="tab" id="demo-tab-scan" aria-controls="demo-scan" aria-selected="false" tabindex="-1">gescande pagina</button>
+        </div>
+
+        <div class="r-demo-panel" id="demo-voice" role="tabpanel" aria-labelledby="demo-tab-voice">
+          <div class="r-said">
+            <p class="r-said-meta"><span>Wat je invoerde</span><span>Spraak · 0:03</span></p>
+            <div class="r-wave" aria-hidden="true"><span style="height:8px"></span><span style="height:14px"></span><span style="height:22px"></span><span style="height:30px"></span><span style="height:18px"></span><span style="height:10px"></span><span style="height:26px"></span><span style="height:34px"></span><span style="height:20px"></span><span style="height:12px"></span><span style="height:6px"></span><span style="height:16px"></span><span style="height:28px"></span><span style="height:24px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:20px"></span><span style="height:32px"></span><span style="height:26px"></span><span style="height:12px"></span><span style="height:18px"></span><span style="height:30px"></span><span style="height:22px"></span><span style="height:10px"></span><span style="height:6px"></span><span style="height:14px"></span><span style="height:24px"></span><span style="height:34px"></span><span style="height:28px"></span><span style="height:16px"></span><span style="height:10px"></span><span style="height:20px"></span><span style="height:26px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:18px"></span></div>
+            <p class="r-voice">‘Niet vergeten een tandartsafspraak te maken.’</p>
+          </div>
+          <div class="r-pipe"><ul><li>op dit apparaat getranscribeerd</li><li>route: <strong>Dagnotitie · Taken</strong></li><li>netwerkgebruik: <span class="r-hl">geen</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/2026-11-06.md</span><span>+ 1 regel</span></p>
+            <pre>## Tasks
+- Remember to book the dentist</pre>
+          </div>
+        </div>
+
+        <div class="r-demo-panel" id="demo-link" role="tabpanel" aria-labelledby="demo-tab-link" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>Wat je invoerde</span><span>Deelmenu · Safari</span></p>
+            <p class="r-voice">Een link die je drie weken geleden al wilde lezen, direct gedeeld vanuit Safari.</p>
+          </div>
+          <div class="r-pipe"><ul><li>ongewijzigd opgeslagen</li><li>route: <strong>Leeslijst</strong></li><li>netwerkgebruik: <span class="r-hl">geen</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Inbox/Reading.md</span><span>+ 2 regels</span></p>
+            <pre>### 14:07
+- https://www.inkandswitch.com/local-first/</pre>
+          </div>
+        </div>
+
+        <div class="r-demo-panel" id="demo-scan" role="tabpanel" aria-labelledby="demo-tab-scan" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>Wat je invoerde</span><span>Scan · 1 pagina</span></p>
+            <p class="r-voice">De notitieboekpagina van vanochtend, gescand met de camera.</p>
+          </div>
+          <div class="r-pipe"><ul><li>op dit apparaat geëxtraheerde tekst</li><li>route: <strong>Dagboekpagina&#x27;s</strong></li><li>netwerkgebruik: <span class="r-hl">geen</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/Pages/2026-11-06 0912.md</span><span>+ 4 regels</span></p>
+            <pre>![[scan-2026-11-06-0912.jpg]]
+
+&gt; ship routing first.
+&gt; ask about the watch build</pre>
+          </div>
+        </div>
+        <p class="r-demo-foot">Illustratieve voorbeelden. De uitvoer hangt af van je route en transcriptie.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-zero" id="privacy" aria-labelledby="privacy-title">
+  <div class="r-wrap r-zero-inner">
+    <div class="r-zero-copy">
+      <p class="r-file">## privacy.md</p>
+      <h2 id="privacy-title">0<small>bytes</small></h2>
+      <p>van je concepten, bijlagen, notitiepaden, sjablonen, getypte tekst, transcripten of locatie na toestemming bereiken Vox.md-servers of analyses. Bestanden gaan alleen naar de map die je kiest. Locatie wordt nooit voortdurend of op de achtergrond gevolgd.</p>
+    </div>
+    <dl class="r-ledger" aria-label="Wat Vox.md ontvangt">
+      <div><dt>audio geüpload</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>transcripten geüpload</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>concepten en bijlagen</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>notitiepaden en sjablonen</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>account vereist</dt><span aria-hidden="true"></span><dd>nee</dd></div>
+      <div><dt>achtergrondlocatie</dt><span aria-hidden="true"></span><dd>nooit</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-section" id="how" aria-labelledby="how-title">
+  <div class="r-wrap r-stack">
+    <div class="r-head">
+      <p class="r-file">L041 · how.md</p>
+      <h2 class="r-h2" id="how-title"><span class="r-mark" aria-hidden="true">##</span>Drie haltes. <span class="r-voice">Geen daarvan is van ons.</span></h2>
+      <p class="r-lead">Een kluis openen, een notitie zoeken en de juiste plek kiezen is te veel werk voor een vluchtige gedachte. Stel de route één keer in en leg daarna vast.</p>
+    </div>
+    <ol class="r-stops">
+      <li class="r-stop"><p class="r-stop-meta"><span>01</span><span>jouw map</span></p><h3>Een kluis verbinden</h3><p>Kies een Obsidian-kluis of een willekeurige beschrijfbare map in Bestanden. Vox.md werkt met de Markdown-bestanden die je al bezit.</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>02</span><span>je broekzak</span></p><h3>Alles vastleggen</h3><p>Schrijf, plak een link, voeg media of een bestand toe, scan een document, schets of neem een privé-spraaknotitie op. Spraak wordt daar meteen getranscribeerd.</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>03</span><span>jouw bestand</span></p><h3>De route bergt het op</h3><p>Maak een notitie, werk een doorlopende notitie bij of kies een bestaande. Plaats de inhoud bovenaan, onderaan of onder een kop.</p></li>
+    </ol>
+    <p class="r-skip"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9A9A93" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.1 9.5 4.25 4.25 0 0 0 7 18z"/><path d="M3 3l18 18"/></svg><span><del>Halte 2,5: de cloud van iemand anders</del>. Overgeslagen. Synchronisatie blijft wat je map al doet, onder de voorwaarden van die aanbieder.</span></p>
+  </div>
+</section>
+
+<section class="r-section" id="capture" aria-labelledby="capture-title">
+  <span class="anchor" id="features" aria-hidden="true"></span>
+  <div class="r-wrap r-split">
+    <div class="r-stack" style="gap: 20px">
+      <p class="r-file">L077 · files.md</p>
+      <h2 class="r-h2" id="capture-title"><span class="r-mark" aria-hidden="true">##</span>Het is <span class="r-voice r-hl">gewoon</span> bestanden.</h2>
+      <p class="r-lead">Geen plugin, geen Vox.md-cloudaccount, geen eigen bestandsformaat. Vox.md schrijft leesbare Markdown en links in Obsidian-stijl naar mappen onder jouw beheer, zodat je notities nooit vastzitten aan de app.</p>
+      <ul class="r-inputs">
+        <li><code>.md</code><span>Getypte notities en spraaktranscripten als standaard-Markdown</span></li>
+        <li><code>[[ ]]</code><span>Wikilinks en ingesloten bijlagen die Obsidian begrijpt</span></li>
+        <li><code>img</code><span>Foto&#x27;s, bestanden en documentscans met geëxtraheerde tekst. <a href="/nl/blog/save-links-photos-obsidian-iphone/">Handleiding voor media vastleggen</a></span></li>
+        <li><code>url</code><span>Links van overal waar je kunt delen</span></li>
+        <li><code>draw</code><span>Bewerkbare schetsen</span></li>
+        <li><code>voice</code><span>Privé-spraak via editor of toetsenbord; audio wordt nooit geüpload. <a href="/nl/blog/voice-notes-to-obsidian-iphone/">Handleiding voor iPhone-spraaknotities</a></span></li>
+        <li><code>---</code><span>Herbruikbare Markdown of YAML met datum-, tijd-, bron- en ID-tokens</span></li>
+      </ul>
+    </div>
+    <div class="r-tree" role="img" aria-label="Een kluismappenstructuur met drie gemarkeerde nieuwe vastleggingen">
+      <p class="r-tree-head"><span>~/Obsidian/Second Brain</span><span>ls -R</span></p>
+      <ul aria-hidden="true">
+        <li>├── Inbox/</li>
+        <li>│   └── Reading.md <mark>just now</mark></li>
+        <li>├── Journal/</li>
+        <li class="old">│   ├── 2026-11-05.md</li>
+        <li>│   ├── 2026-11-06.md <mark>+ ## Tasks</mark></li>
+        <li>│   └── Pages/</li>
+        <li>│       └── 2026-11-06 0912.md <mark>scan</mark></li>
+        <li>├── Meetings/</li>
+        <li class="old">│   └── 2026-11-01.md</li>
+        <li>├── Projects/</li>
+        <li class="old">│   └── Ideas.md</li>
+        <li class="old">└── attachments/</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="r-section" id="presets" aria-labelledby="presets-title">
+  <span class="anchor" id="destinations" aria-hidden="true"></span>
+  <div class="r-wrap r-stack">
+    <div class="r-head">
+      <p class="r-file">L112 · routes.md</p>
+      <h2 class="r-h2" id="presets-title"><span class="r-mark" aria-hidden="true">##</span>Stel de route één keer in. <span class="r-voice">Praat daarna gewoon.</span></h2>
+      <p class="r-lead">Een route onthoudt hoe een vastlegging wordt verwerkt en opgemaakt, plus de kluis, het notitiedoel, plaatsing, bijlagen, gedrag bij nieuwe pogingen en optionele eenmalige huidige locatie.</p>
+    </div>
+    <div class="r-table-box">
+      <table class="r-table">
+        <caption class="visually-hidden">Voorbeeldroutes</caption>
+        <thead><tr><th scope="col">Route</th><th scope="col">Bestand</th><th scope="col">Waar daarin</th><th scope="col">Verpakt als</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Dagnotitie · Taken</th><td>Journal/{date}.md</td><td>onderaan ## Tasks</td><td>- {text}</td></tr>
+          <tr><th scope="row">Vergadernotities</th><td>Meetings/{date}.md</td><td>onder ## Notes</td><td>### {time} · {title}</td></tr>
+          <tr><th scope="row">Leeslijst</th><td>Inbox/Reading.md</td><td>bovenaan het bestand</td><td>### {time}</td></tr>
+          <tr><th scope="row">Ideeën</th><td>Projects/Ideas.md</td><td>onderaan het bestand</td><td>&gt; {text}</td></tr>
+          <tr><th scope="row">Nieuwe notitie</th><td>Inbox/{timestamp}.md</td><td>nieuw bestand</td><td>YAML-frontmatter en hoofdtekst</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <dl class="r-targets">
+      <div><dt>Bestaande notitie <code>Projects/Ideas.md</code></dt><dd>Blijf toevoegen aan een document dat al in je kluis staat.</dd></div>
+      <div><dt>Doorlopende notitie <code>Journal/&#123;period&#125;.md</code></dt><dd>Dagelijkse, wekelijkse, maandelijkse, kwartaal- of jaarnotities. <a href="/nl/blog/append-to-obsidian-daily-note-iphone/">Dagnotities en kopplaatsing instellen.</a></dd></div>
+      <div><dt>Nieuwe notitie <code>Inbox/&#123;timestamp&#125;.md</code></dt><dd>Maak voor elke nieuwe vastlegging een schoon bestand.</dd></div>
+      <div><dt>Exacte plaatsing <code>Top · Bottom · Heading</code></dt><dd>Onder elk kopniveau, automatisch gemaakt als het ontbreekt.</dd></div>
+      <div><dt>Invoersjabloon <code>Markdown · YAML · Tokens</code></dt><dd>Houd herhaalde vastleggingen consistent zonder ze opnieuw op te maken.</dd></div>
+      <div><dt>Huidige locatie <code>&#123;location&#125;</code></dt><dd>Eén kaartlink van het ontstaansmoment zonder metagegevens, of schakel frontmatter en inlinevelden expliciet in. <a href="/nl/docs/location/">Lees de handleiding.</a></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-section" id="everywhere" aria-labelledby="everywhere-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L140 · anywhere.md</p>
+    <h2 class="r-h2" id="everywhere-title"><span class="r-mark" aria-hidden="true">##</span>Waar de gedachte ook <span class="r-voice">verschijnt</span></h2>
+    <ul class="r-pills" aria-label="Startpunten voor vastleggen">
+      <li>Toetsenbord <small>elke app</small></li>
+      <li>Apple Watch <small>pols</small></li>
+      <li>Mac <small>snel vastleggen</small></li>
+      <li>Deelmenu <small>alles</small></li>
+      <li>Widgets <small>begin- en toegangsscherm</small></li>
+      <li>Bedieningspaneel <small>één tik</small></li>
+      <li>Opdrachten <small>automatiseren</small></li>
+    </ul>
+    <p class="r-lead"><a href="/nl/blog/apple-watch-obsidian-voice-notes/">Apple Watch-spraaknotities naar Obsidian instellen</a>. Neem op met de Watch en transcribeer en lever vervolgens af via je gekoppelde iPhone.</p>
+  </div>
+</section>
+
+<section class="r-section" id="specs" aria-labelledby="specs-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L158 · specs.yml</p>
+    <h2 class="r-h2" id="specs-title"><span class="r-mark" aria-hidden="true">##</span>Gebouwd rond bestanden <span class="r-voice">kun je behouden</span></h2>
+    <dl class="r-yaml">
+      <div><dt>capture_types</dt><dd>Tekst, links, foto&#x27;s, bestanden, scans, schetsen en spraak</dd></div>
+      <div><dt>note_format</dt><dd>Standaard-Markdown</dd></div>
+      <div><dt>destinations</dt><dd>Obsidian-kluizen en beschrijfbare Bestanden-mappen</dd></div>
+      <div><dt>note_targets</dt><dd>Nieuwe, doorlopende of bestaande notities</dd></div>
+      <div><dt>placement</dt><dd>Bovenaan, onderaan of onder een kop</dd></div>
+      <div><dt>rolling_periods</dt><dd>Dagelijks, wekelijks, maandelijks, per kwartaal en jaarlijks</dd></div>
+      <div><dt>obsidian_syntax</dt><dd>Wikilinks en ingesloten bijlagen</dd></div>
+      <div><dt>entry_formats</dt><dd>Herbruikbare Markdown- en YAML-sjablonen</dd></div>
+      <div><dt>entry_points</dt><dd>App, widgets, Opdrachten, deelextensie, toetsenbord, Apple Watch, Mac en bedieningspaneel</dd></div>
+      <div><dt>voice_processing</dt><dd>Apple Speech, Whisper of Parakeet op het apparaat</dd></div>
+      <div><dt>audio_uploads</dt><dd>Geen voor transcriptie</dd></div>
+      <div><dt>account</dt><dd>Niet vereist</dd></div>
+      <div><dt>platforms</dt><dd>iOS/iPadOS 17.6+, macOS 14+, watchOS 10+</dd></div>
+      <div><dt>location</dt><dd>Eenmalige momentopname na toestemming; {location} werkt zonder metagegevens; geen achtergrondtracking</dd></div>
+      <div><dt>location_metadata</dt><dd>Aparte toestemming voor frontmatter of inlinevelden; standaard Exact of afronding Stad</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-dark" id="reviews" aria-labelledby="reviews-title">
+  <div class="r-wrap r-dark-inner">
+    <p class="r-file">L190 · reviews.md · from the App Store</p>
+    <h2 class="r-h2" id="reviews-title"><span class="r-mark" aria-hidden="true">##</span>Gezegd <span class="r-voice">over</span> het</h2>
+    <div class="r-quotes">
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5b29-4b3500000000">
+        <div>
+          <h3>Precies wat ik nodig had · <span role="img" aria-label="5 van 5 sterren">★★★★★</span></h3>
+          <blockquote><p>‘Ik zoek al een tijdje naar een manier om snel mondeling notities te maken, bijlagen toe te voegen, lokaal te transcriberen en naar een Obsidian-map te synchroniseren. Deze app doet dat perfect.’</p></blockquote>
+          <figcaption><span class="review-author">SteamingCoax</span> · App Store-recensie · <time datetime="2026-08-11">11 aug. 2026</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5bf7-fadc00000000">
+        <div>
+          <h3>De stille vastlegkrachtpatser · <span role="img" aria-label="5 van 5 sterren">★★★★★</span></h3>
+          <blockquote>
+            <p>‘Vox.md is een van mijn meest gebruikte hulpmiddelen geworden. Ik nam het voor spraakmemo&#x27;s naar Obsidian en het veranderde stilletjes mijn dagelijkse vastlegwerkwijze.</p>
+            <p>Het systeem van Vastlegvoorinstellingen is briljant — elke voorinstelling heeft een eigen bestemming, sjabloon en plaatsing. Mijn spraakmemo&#x27;s komen direct in de juiste dagnotitie terecht, precies opgemaakt zoals ik wil, zonder gedoe.’</p>
+          </blockquote>
+          <figcaption><span class="review-author">Eric Know</span> · App Store-recensie · <time datetime="2026-08-14">14 aug. 2026</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5a77-5cb500000000">
+        <div>
+          <h3>Onderschat, over het hoofd gezien, niet vergeten · <span role="img" aria-label="5 van 5 sterren">★★★★★</span></h3>
+          <blockquote><p>‘Wordt snel een van mijn favoriete en meest gebruikte apps in 2026!’</p></blockquote>
+          <figcaption><span class="review-author">PromisedOne</span> · App Store-recensie · <time datetime="2026-08-08">8 aug. 2026</time></figcaption>
+        </div>
+      </figure>
+    </div>
+    <p class="r-fine">Geselecteerde App Store-recensies. Erics citaat is een fragment; de bewoording is ongewijzigd. <a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_8a5edab28263">App Store-recensies lezen <span aria-hidden="true">→</span></a></p>
+  </div>
+</section>
+
+<section class="r-section" id="faq" aria-labelledby="faq-title">
+  <div class="r-wrap r-faq">
+    <div class="r-head">
+      <p class="r-file">L214 · faq.md</p>
+      <h2 class="r-h2" id="faq-title" style="font-size: clamp(36px, 4.4vw, 60px)"><span class="r-mark" aria-hidden="true">##</span>Open <span class="r-voice">vragen</span></h2>
+      <p class="r-lead">Vox.md werkt direct met Markdown-mappen die je kiest. Obsidian past er goed bij, maar is niet vereist. Vink een vraag aan om het antwoord te lezen.</p>
+    </div>
+    <div class="r-faq-list">
+      <details>
+        <summary>Werkt Vox.md met Obsidian?</summary>
+        <p>Ja. Maak een route en kies je Obsidian-kluis als bestemming. Vox.md schrijft standaard-Markdown, wikilinks en ingesloten bijlagen direct in de kluis. Een Obsidian-plugin is niet vereist. <a href="/nl/compare/vox-md-vs-obsidian-quick-capture/">Vergelijk Vox.md met ingebouwd vastleggen in Obsidian.</a> <a href="/nl/blog/obsidian-daily-note-iphone/">Een vastlegwerkwijze voor dagnotities instellen.</a></p>
+      </details>
+      <details>
+        <summary>Wat kan ik vastleggen?</summary>
+        <p>De editor accepteert tekst, weblinks, foto&#x27;s, bestanden, documentscans, schetsen en spraak. Scans kunnen geëxtraheerde tekst bevatten en spraak kan lokaal worden getranscribeerd.</p>
+      </details>
+      <details>
+        <summary>Waar kan een vastlegging heen?</summary>
+        <p>Elke route heeft een bestemming die een nieuwe notitie kan maken, een doorlopende dag- of periodieke notitie kan bijwerken of naar een bestaand Markdown-bestand kan schrijven. Eén vastlegging kan tijdelijk een andere notitie kiezen zonder de route te veranderen.</p>
+      </details>
+      <details>
+        <summary>Kan Vox.md onder een kop invoegen?</summary>
+        <p>Ja. Een route kan vooraan of achteraan toevoegen of onder een kop van niveau één tot zes invoegen. Je kunt kiezen of een ontbrekende kop de aflevering stopt of automatisch wordt gemaakt en of nieuwe items direct onder de kop of aan het einde van die sectie komen.</p>
+      </details>
+      <details>
+        <summary>Kan ik het zonder Obsidian gebruiken?</summary>
+        <p>Ja. Een route kan elke beschrijfbare map gebruiken die via Bestanden toegankelijk is. De uitvoer is gewone Markdown met normale bijlagen, dus je notities zitten niet vast aan Vox.md.</p>
+      </details>
+      <details>
+        <summary>Uploadt Vox.md mijn notities of audio?</summary>
+        <p>Geen vastleginhoud wordt naar Vox.md-servers verstuurd. Concepten en spraakverwerking blijven op het apparaat; voltooide bestanden worden naar de gekozen map geschreven. Hoort die map bij een synchronisatieaanbieder, dan behandelt die hem volgens eigen voorwaarden. <a href="/nl/blog/offline-transcription-iphone-markdown/">Controleer de vereisten voor offline inrichting.</a></p>
+      </details>
+      <details>
+        <summary>Kan ik locatie in een sjabloon gebruiken zonder metagegevens toe te voegen?</summary>
+        <p>Ja. Zet Huidige locatie gebruiken aan voor die route, houd Locatiemetagegevens schrijven uit en voeg toe <code>{location}</code> aan de invoeropmaak. Vox.md voegt een eenmalige kaartlink in zonder frontmatter of inline-locatievelden toe te voegen. <a href="/nl/docs/location/">Lees de volledige locatiehandleiding.</a></p>
+      </details>
+      <details>
+        <summary>Kan ik buiten de app vastleggen?</summary>
+        <p>Ja. Vox.md heeft widgets, Opdrachten-acties, een deelextensie en spraaktoetsenbord. Deze startpunten gebruiken hetzelfde lokale vastlegsysteem.</p>
+      </details>
+      <details>
+        <summary>Wat kost Vox.md?</summary>
+        <p>Vox.md biedt 15 minuten transcriptie en 10 geslaagde vastlegafleveringen gratis. Onbeperkte transcriptie en vastleggen zijn beschikbaar met een eenmalige levenslange aankoop, zonder abonnement of advertenties. Spraaktranscripten naar Markdown gebruiken het transcriptietegoed in plaats van een tweede vastlegtegoed. De App Store toont de huidige prijs voor jouw regio.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="r-cta" id="download" aria-labelledby="download-title">
+  <div class="r-wrap">
+    <div class="r-cta-card">
+      <h2 id="download-title">Zet de volgende gedachte <span class="r-voice">in een bestand.</span></h2>
+      <p>Verbind één keer een kluis of lokale map. Het volgende idee kan direct naar de gekozen notitie, kop en opmaak.</p>
+      <div class="r-actions">
+        <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_nl_8a5edab28263">Vox.md gratis downloaden</a>
+        <span class="r-note">Gratis tegoeden · één levenslange ontgrendeling · geen account nodig</span>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="r-wrap r-foot">
+    <span class="r-eof" aria-hidden="true">EOF</span>
+    <ul>
+      <li><a href="/nl/developers">Ontwikkelaars</a></li>
+      <li><a href="/nl/about">Over</a></li>
+      <li><a href="/nl/contact">Contact opnemen</a></li>
+      <li><a href="/nl/docs/">Documentatie</a></li>
+      <li><a href="/nl/blog/">Handleidingen</a></li>
+      <li><a href="/nl/compare/">Vergelijken</a></li>
+      <li><a href="/nl/privacy.html">Privacy</a></li>
+      <li><a href="/nl/terms.html">Voorwaarden</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="mailto:codybontecou@gmail.com">Ondersteuning</a></li>
+      <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_8a5edab28263">App Store</a></li>
+    </ul>
+    <p class="r-foot-copy">© 2026 Vox.md · Gemaakt door <a href="https://codybontecou.com/">Cody Bontecou</a> om <a href="https://isolated.tech/">Isolated Tech</a> · Geen inhoud uploaden.</p>
+
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ar/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+
+<script>
+/* Hero demo tabs. Without JavaScript the first example shows on its own. */
+(function () {
+  var list = document.querySelector('.r-demo-tabs');
+  if (!list) return;
+  var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+  function select(tab, focus) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { select(tab, false); });
+    tab.addEventListener('keydown', function (ev) {
+      var next = ev.key === 'ArrowRight' ? i + 1 : ev.key === 'ArrowLeft' ? i - 1 : ev.key === 'Home' ? 0 : ev.key === 'End' ? tabs.length - 1 : null;
+      if (next === null) return;
+      ev.preventDefault();
+      select(tabs[(next + tabs.length) % tabs.length], true);
+    });
+  });
+  list.hidden = false;
+})();
+</script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

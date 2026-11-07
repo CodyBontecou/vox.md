@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="nl" dir="ltr" data-search-section="Sectie" data-search-guide="Handleiding" data-search-empty="Geen resultaten voor ‘{query}’">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Huidige locatie, {location} en metagegevens — Vox.md-documentatie</title>
+  <meta name="description" content="Stel eenmalige Huidige locatie, het Markdown-token {location}, optionele locatiefrontmatter of inline-metagegevens, precisie, privacy en herstel in via Vox.md-routes.">
+  <link rel="canonical" href="https://vox.isolated.tech/nl/docs/location/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-documentatie voor taalmodellen">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Huidige locatie, {location} en metagegevens — Vox.md-documentatie">
+  <meta property="og:description" content="Gebruik een eenmalige locatie in Markdown-sjablonen zonder automatisch locatiemetagegevens aan je notities toe te voegen.">
+  <meta property="og:url" content="https://vox.isolated.tech/nl/docs/location/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vox.md-handleiding voor huidige locatie">
+  <meta name="twitter:description" content="Een volledige handleiding voor eenmalige locatie, {location}, metagegevensuitvoer, precisie, privacy en migratie.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Huidige locatie, {location} en locatiemetagegevens in Vox.md",
+  "description": "Een volledige handleiding voor huidige locatie per voorinstelling, het Markdown-token {location}, optionele metagegevensuitvoer, privacy, migratie en probleemoplossing.",
+  "dateModified": "2026-08-21",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/nl/docs/location/",
+  "inLanguage": "nl",
+  "name": "Huidige locatie, {location} en metagegevens — Vox.md-documentatie"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/nl/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Documentatie",
+      "item": "https://vox.isolated.tech/nl/docs/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Huidige locatie",
+      "item": "https://vox.isolated.tech/nl/docs/location/"
+    }
+  ],
+  "inLanguage": "nl",
+  "name": "Huidige locatie, {location} en metagegevens — Vox.md-documentatie",
+  "description": "Stel eenmalige Huidige locatie, het Markdown-token {location}, optionele locatiefrontmatter of inline-metagegevens, precisie, privacy en herstel in via Vox.md-routes."
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Openbare informatie-API van Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/location/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/location/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/location/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/location/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/location/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/location/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/location/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/location/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/location/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/location/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/location/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/location/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/location/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/location/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/location/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/location/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/location/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/location/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/location/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/location/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/location/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/location/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/location/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/location/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="Hoofdnavigatie">
+  <div class="nav-inner docs-header-inner">
+    <a href="/nl/" class="logo" aria-label="Vox.md-startpagina">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ documentatie</span></span>
+    </a>
+    <form class="docs-search" role="search" action="../" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="Documentatie doorzoeken" aria-label="Documentatie doorzoeken" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Zoekresultaten" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/nl/blog/">Blog</a></li>
+      <li><a href="/nl/privacy.html">Privacy</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="Op deze pagina">
+      <div class="docs-sidebar-title">Op deze pagina</div>
+      <ol>
+        <li><a href="#overview">Twee onafhankelijke keuzes</a></li>
+        <li><a href="#setup">Een route instellen</a></li>
+        <li><a href="#configurations">Veelgebruikte configuraties</a></li>
+        <li><a href="#location-token"><code>{location}</code> Token</a></li>
+        <li><a href="#metadata-output">Metagegevensuitvoer</a></li>
+        <li><a href="#precision">Precisie en aanduidingen</a></li>
+        <li><a href="#capture-sources">Vastlegbronnen</a></li>
+        <li><a href="#unavailable">Onbeschikbaarheid en herstel</a></li>
+        <li><a href="#migration">Bestaande routes</a></li>
+        <li><a href="#privacy">Privacy en bewaring</a></li>
+        <li><a href="#troubleshooting">Problemen oplossen</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="location-guide-title">
+      <div class="page-eyebrow">Documentatie · Routes</div>
+      <h1 class="page-title" id="location-guide-title">Huidige locatie, <code>{location}</code>en metagegevens</h1>
+      <p class="docs-hero-copy">Gebruik één locatie op het ontstaansmoment in de invoeropmaak zonder automatisch YAML- of inlinevelden toe te voegen. Locatie opvragen en metagegevens uitvoeren zijn aparte, expliciete keuzes per route.</p>
+      <div class="docs-meta-row" aria-label="Feiten over de handleiding">
+        <span>Bijgewerkt op 21 augustus 2026</span>
+        <span>Eenmalig opvragen</span>
+        <span>Geen tracking op de achtergrond</span>
+        <a href="/nl/docs/">Volledige functiehandleiding</a>
+      </div>
+      </header>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="overview">
+        <div class="docs-section-label">01 / Overzicht</div>
+        <h2>Locatie opvragen betekent geen metagegevensuitvoer</h2>
+        <p>Elke route heeft twee aparte locatieschakelaars. <strong>Huidige locatie gebruiken</strong> bepaalt of de route één locatie op het ontstaansmoment opvraagt. <strong>Locatiemetagegevens schrijven</strong> bepaalt of die opgehaalde momentopname ook als frontmatter of inlinevelden wordt geschreven.</p>
+
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Bediening</th><th>Wat het betekent</th><th>Wat het niet betekent</th></tr></thead>
+            <tbody>
+              <tr><td>Systeemtoestemming voor locatie</td><td>Staat Vox.md toe locatie op te vragen terwijl de app of een ondersteund vastlegscherm in gebruik is.</td><td>Het schakelt locatie voor geen enkele route in.</td></tr>
+              <tr><td>Huidige locatie gebruiken</td><td>Vraagt één locatie voor deze route op en stelt die beschikbaar voor <code>{location}</code>.</td><td>Het schrijft niet automatisch YAML of inline-metagegevens.</td></tr>
+              <tr><td>Locatiemetagegevens schrijven</td><td>Schrijft geselecteerde gestructureerde velden of gevalideerde geavanceerde YAML vanuit de opgehaalde momentopname.</td><td>Het bepaalt niet of <code>{location}</code> kan weergeven.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <strong>Het intentiesignaal is de route, niet de toestemming</strong>
+          <p>Toestemming Bij gebruik opent alleen de toegangspoort van het besturingssysteem. Vox.md vraagt nog steeds alleen locatie op voor de onafhankelijke Vastlegbalk-actie Huidige locatie of een route waarin je Huidige locatie gebruiken inschakelde.</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="setup">
+        <div class="docs-section-label">02 / Instellen</div>
+        <h2>Huidige locatie instellen voor één route</h2>
+        <ol class="docs-steps">
+          <li><strong>Open Routes.</strong><span>Open op iPhone of iPad Instellingen → Routes. Open op Mac Instellingen en kies Routes.</span></li>
+          <li><strong>Bewerk de route.</strong><span>Kies de route die zijn oorspronkelijke locatie moet gebruiken. De instelling hoort bij die route en beïnvloedt de andere niet.</span></li>
+          <li><strong>Open Locatie.</strong><span>Schakel in <em>Huidige locatie gebruiken</em>. Houd <em>Locatiemetagegevens schrijven</em> uit voor alleen tokens.</span></li>
+          <li><strong>Kies precisie.</strong><span>Gebruik Exact voor de oorspronkelijke locatiebepaling of Stad voor coördinaten afgerond op twee decimalen zonder aanduiding van een interessante plek.</span></li>
+          <li><strong>Kies gedrag bij onbeschikbaarheid.</strong><span>Vragen, Verzenden zonder locatie of Annuleer het vastleggen bepaalt wat er gebeurt als de oorspronkelijke locatie niet kan worden opgehaald.</span></li>
+          <li><strong>Toevoegen <code>{location}</code> indien gewenst.</strong><span>Plaats het token in een invoersjabloon, eigen invoerprefix of achtervoegsel, of een Markdown-sjabloon in de kluis.</span></li>
+        </ol>
+        <p>Bij eerste gebruik kan het besturingssysteem locatietoestemming vragen. Is die eerder geweigerd, schakel locatietoegang voor Vox.md in via de systeeminstellingen van iOS, iPadOS of macOS.</p>
+      </section>
+
+      <section class="docs-section" id="configurations">
+        <div class="docs-section-label">03 / Veelgebruikte configuraties</div>
+        <h2>Kies zo weinig locatie-uitvoer als nodig</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Gewenst resultaat</th><th>Huidige locatie gebruiken</th><th>Locatiemetagegevens schrijven</th><th>Sjabloon</th></tr></thead>
+            <tbody>
+              <tr><td>Geen routelocatie</td><td>Uit</td><td>Uit</td><td>Gebruik niet <code>{location}</code>of het blijft leeg.</td></tr>
+              <tr><td>Alleen klikbare link</td><td>Aan</td><td>Uit</td><td>Toevoegen <code>{location}</code>. Er worden geen locatievelden geschreven.</td></tr>
+              <tr><td>Alleen metagegevens</td><td>Aan</td><td>Aan</td><td>Weglaten <code>{location}</code>. Alleen de ingestelde velden worden geschreven.</td></tr>
+              <tr><td>Link en metagegevens</td><td>Aan</td><td>Aan</td><td>Toevoegen <code>{location}</code> en stel de metagegevensvelden in.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Huidige locatie gebruiken uitschakelen verhindert zowel tokenweergave als metagegevensuitvoer voor die route, zelfs als eerdere metagegevensopmaak ingesteld blijft voor later gebruik.</p>
+      </section>
+
+      <section class="docs-section" id="location-token">
+        <div class="docs-section-label">04 / Sjabloontoken</div>
+        <h2>Gebruik <code>{location}</code> Zonder notitiemetagegevens te veranderen</h2>
+        <p>Als Huidige locatie gebruiken aanstaat en de oorspronkelijke momentopname beschikbaar is, <code>{location}</code> levert een gevalideerde Google Maps-link in Markdown op:</p>
+        <pre class="docs-code-block"><code>[Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>Het token werkt in herbruikbare invoersjablonen, eigen invoerprefixen en achtervoegsels, en Markdown-sjablonen in de kluis. Het gebruikt dezelfde Exact- of Stad-coördinaten die voor de route zijn gekozen.</p>
+
+        <h3 id="token-example">Voorbeeld met alleen tokens</h3>
+        <p>Voor een achtervoegsel zoals:</p>
+        <pre class="docs-code-block"><code>Captured from {location}</code></pre>
+        <p>Vox.md kan maken:</p>
+        <pre class="docs-code-block"><code>Captured from [Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>Als Locatiemetagegevens schrijven uitstaat, is deze link de enige locatie-inhoud die de route toevoegt. Er worden geen <code>locations:</code> verzameling en geen <code>location.*::</code> velden geschreven worden.</p>
+
+        <h3 id="composer-fix">Een-tik-oplossing in de editor</h3>
+        <p>Als een effectief invoerprefix, achtervoegsel of herbruikbaar invoersjabloon gebruikmaakt van <code>{location}</code> terwijl Huidige locatie bij de geselecteerde route uitstaat, legt de editor uit dat het token leeg blijft en biedt <strong>Huidige locatie gebruiken voor [Route]</strong>. Die actie zet Huidige locatie voor de route aan en laat Locatiemetagegevens schrijven bewust uit, zodat de volgende verstuuractie het token kan oplossen zonder notitiemetagegevens te veranderen. Actuele kluissjabloonbestanden worden pas bij aflevering gelezen, dus hun inhoud kan deze editorhint niet activeren; schakel Huidige locatie handmatig in als een kluissjabloon het token gebruikt.</p>
+
+        <div class="docs-callout docs-callout-neutral">
+          <strong>Wanneer het token leeg is</strong>
+          <p><code>{location}</code> wordt een lege tekenreeks als Huidige locatie uitstaat, locatie niet beschikbaar is of de vastlegging zonder locatie doorgaat. Houd bij optionele sjabloonregels rekening met omliggende leestekens en labels.</p>
+        </div>
+
+        <h3 id="capture-bar-location">Onafhankelijke Vastlegbalk-actie</h3>
+        <p>De Snelle opname <strong>Huidige locatie</strong> actie voegt direct een eenmalige Google Maps-link in het huidige concept in. Die staat los van routes en verandert Huidige locatie gebruiken noch Locatiemetagegevens schrijven.</p>
+      </section>
+
+      <section class="docs-section" id="metadata-output">
+        <div class="docs-section-label">05 / Metagegevensuitvoer</div>
+        <h2>Schrijf gestructureerde velden alleen wanneer jij dat kiest</h2>
+        <p>Schakel Locatiemetagegevens schrijven in als de notitie machineleesbare locatievelden moet krijgen naast of in plaats van de <code>{location}</code> link.</p>
+
+        <div class="docs-feature-grid">
+          <div><strong>Frontmatter van de notitie</strong><p>Voegt elke locatie toe aan een verzameling met de naam <code>locations</code> standaard, met de vastleg-ID als sleutel. Bestaande niet-gerelateerde frontmatter blijft behouden.</p></div>
+          <div><strong>Inline-invoervelden</strong><p>Schrijft in Dataview-stijl <code>location.key:: value</code> regels naast het vastgelegde item. Er wordt geen frontmatterverzameling toegevoegd.</p></div>
+          <div><strong>Gestructureerde velden</strong><p>Selecteer en hernoem coördinaten, breedtegraad, lengtegraad, plaats, stad, regio, land, aanbiederlinks, geo-URI, nauwkeurigheid, tijdstempel, bron en ID.</p></div>
+          <div><strong>Geavanceerde YAML</strong><p>Gebruikt een gevalideerd, begrensd YAML-sjabloon voor notitiefrontmatter. Geavanceerde YAML is niet beschikbaar voor inline-invoervelden.</p></div>
+        </div>
+
+        <h3 id="frontmatter-example">Voorbeeld van gestructureerde frontmatter</h3>
+        <pre class="docs-code-block"><code>---
+title: Field Notes
+locations:
+  - id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    coordinates: [45.501235, -73.567890]
+    place: "Café &amp; Main"
+    appleMapsURL: "https://maps.apple.com/?ll=45.501235%2C-73.567890&amp;q=Caf%C3%A9%20%26%20Main"
+    timestamp: "2023-11-14T22:13:20.000Z"
+    source: "app"
+---</code></pre>
+        <p>Doorlopende notities kunnen meerdere vastleggingen in de verzameling bewaren. Bescherming bij herhalen is ingebouwd in het samenvoegen van locaties: dezelfde vastleg-ID kan dezelfde locatie niet twee keer toevoegen. Bevat de gekozen verzamelingssleutel al een incompatibele zelfgeschreven waarde, dan stopt Vox.md in plaats van die te overschrijven.</p>
+
+        <h3 id="inline-example">Voorbeeld van inline-invoer</h3>
+        <pre class="docs-code-block"><code>location.id:: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+location.coordinates:: [45.501235, -73.567890]
+location.place:: "Café &amp; Main"
+
+Captured text</code></pre>
+
+        <h3 id="advanced-yaml">Geavanceerde YAML-plaatsaanduidingen</h3>
+        <p>Geavanceerde sjablonen kunnen plaatsaanduidingen gebruiken zoals <code>{{coordinates}}</code>, <code>{{latitude}}</code>, <code>{{longitude}}</code>, <code>{{place}}</code>, <code>{{city}}</code>, <code>{{region}}</code>, <code>{{country}}</code>, <code>{{appleMapsURL}}</code>, <code>{{googleMapsURL}}</code>, <code>{{openStreetMapURL}}</code>, <code>{{geoURI}}</code>, <code>{{accuracy}}</code>, <code>{{timestamp}}</code>, <code>{{source}}</code>en <code>{{id}}</code>. Bekijk de configuratie in de route-instellingen voordat je opslaat.</p>
+      </section>
+
+      <section class="docs-section" id="precision">
+        <div class="docs-section-label">06 / Precisie en aanduidingen</div>
+        <h2>Exact en Stad gebruiken één consistente momentopname</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Precisie</th><th>Coördinaten</th><th>Aanduidingen</th><th>Links en velden</th></tr></thead>
+            <tbody>
+              <tr><td>Exact</td><td>Bewaart de oorspronkelijke locatiebepaling met zes weergegeven decimalen.</td><td>Kan een aanduiding van een interessante plek bevatten wanneer een geselecteerd metagegevensveld die nodig heeft.</td><td>Elke afgeleide waarde gebruikt de exacte coördinaten.</td></tr>
+              <tr><td>Stad</td><td>Rondt breedtegraad en lengtegraad af op twee decimalen voordat de momentopname wordt bewaard.</td><td>Verwijdert aanduidingen van interessante plekken; stad, regio en land kunnen blijven.</td><td>Elke aanbieder-URL, geo-URI, elk token en veld gebruikt de afgeronde coördinaten.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Apples systeemdienst voor omgekeerde geocodering wordt alleen gebruikt als Locatiemetagegevens schrijven aanstaat en een geselecteerd gestructureerd veld of geavanceerde plaatsaanduiding plaats, stad, regio of land nodig heeft. Een route met alleen tokens slaat dit over. Mislukt het opzoeken van labels, dan blijft uitvoer op basis van coördinaten beschikbaar.</p>
+      </section>
+
+      <section class="docs-section" id="capture-sources">
+        <div class="docs-section-label">07 / Vastlegbronnen</div>
+        <h2>De momentopname hoort bij de oorsprong van de vastlegging</h2>
+        <p>De huidige locatie wordt bepaald op het moment waarop de vastlegging ontstaat. Opnieuw proberen en herstellen hergebruiken dat duurzaam opgeslagen resultaat in plaats van ongemerkt een nieuwere locatie op te vragen.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Vastlegbron</th><th>Moment van opvragen</th></tr></thead>
+            <tbody>
+              <tr><td>Snelle opname op iPhone en iPad</td><td>Stuur</td></tr>
+              <tr><td>Deelmenu</td><td>Versturen in de deelextensie</td></tr>
+              <tr><td>Direct in de wachtrij geplaatste tekst-, link- en bestandsintents</td><td>Intentaanroep</td></tr>
+              <tr><td>Opdrachten, widgets, regelaars en dieplinks die Snelle opname openen</td><td>Versturen vanuit de editor</td></tr>
+              <tr><td>Opdrachten-, widget-, regelaar-, directe spraak- en toetsenbordgestuurde routeopname</td><td>Opnamestop</td></tr>
+              <tr><td>Normale vastlegaflevering via Apple Watch</td><td>Opnamestop op de Watch; iPhone vervangt de locatie niet door zijn eigen locatie</td></tr>
+              <tr><td>Mac-vastlegging</td><td>Versturen, of opnamestop bij directe spraakaflevering</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Watch Alleen opnemen</strong> exporteert ruwe M4A-audio naar Bestanden zonder Markdown-uitvoer en vraagt dus geen locatie op, zelfs als de route verder Huidige locatie gebruikt.</p>
+      </section>
+
+      <section class="docs-section" id="unavailable">
+        <div class="docs-section-label">08 / Onbeschikbaarheid en herstel</div>
+        <h2>Kies hoe elke route omgaat met een onbeschikbare locatiebepaling</h2>
+        <ul>
+          <li><strong>Vragen:</strong> interactieve vastleggingen kunnen opnieuw proberen, annuleren, eenmalig zonder locatie versturen of Altijd zonder locatie versturen voor die route kiezen.</li>
+          <li><strong>Verzenden zonder locatie:</strong> zet aflevering voort zonder tokenwaarde of metagegevensuitvoer.</li>
+          <li><strong>Annuleer het vastleggen:</strong> stopt de aflevering in plaats van een notitie zonder gevraagde oorspronkelijke locatie te maken.</li>
+          <li><strong>Een opgeslagen keuze herstellen:</strong> gebruik ‘Locatie opnieuw instellen Niet beschikbaar Keuze’ in de locatie-instellingen van de route.</li>
+        </ul>
+        <p>Een onbeheerde Vragen-aanvraag bewaart zijn niet-beschikbare resultaat van het ontstaansmoment voor latere controle. Een wachtende of mislukte vastlegging opnieuw proberen vervangt nooit de locatie door een latere. Wachtend werk bewaart alleen de privacy-aangepaste momentopname of het niet-beschikbare resultaat nodig voor lokaal herstel.</p>
+      </section>
+
+      <section class="docs-section" id="migration">
+        <div class="docs-section-label">09 / Bestaande routes</div>
+        <h2>Upgrades behouden bestaand metagegevensgedrag</h2>
+        <p>De scheiding tussen opvragen en uitvoer is migratieveilig:</p>
+        <ul>
+          <li><strong>Nieuwe routes:</strong> Huidige locatie gebruiken en Locatiemetagegevens schrijven staan beide aanvankelijk uit.</li>
+          <li><strong>Eerder ingeschakelde locatieroutes:</strong> beide schakelaars blijven na upgraden aan zodat de metagegevens die deze routes al schreven behouden blijven.</li>
+          <li><strong>Eerder uitgeschakelde locatieroutes:</strong> beide schakelaars blijven uit; upgraden introduceert geen nieuwe metagegevensuitvoer.</li>
+        </ul>
+        <p>Om een bestaande route met metagegevens om te zetten naar alleen tokens, laat je Huidige locatie gebruiken aan en zet je Locatiemetagegevens schrijven uit. Bestaande Markdown wordt niet herschreven of verwijderd.</p>
+      </section>
+
+      <section class="docs-section" id="privacy">
+        <div class="docs-section-label">10 / Privacy en bewaring</div>
+        <h2>Eén expliciete momentopname, nooit achtergrondtracking</h2>
+        <ul>
+          <li>Vox.md bewaakt locatie niet voortdurend en voert geen achtergrondlocatietracking uit.</li>
+          <li>Locatie wordt niet verstuurd naar Vox.md-servers, analyses, advertentiesystemen of AI-diensten van derden.</li>
+          <li>Token- en aanbieder-URL&#x27;s worden lokaal opgemaakt. Apple Maps, Google Maps of OpenStreetMap ontvangt de coördinaten pas wanneer je de link opent.</li>
+          <li>Apples systeemdienst voor omgekeerde geocodering kan alleen een netwerkverzoek doen wanneer geselecteerde metagegevens een plaatsaanduiding nodig hebben. Locatie met alleen tokens slaat dit opzoeken over.</li>
+          <li>Na geslaagde aflevering worden herstelbare aanvragen tot inhoudsvrije ontvangstbewijzen teruggebracht en bewaart voltooide vastleggeschiedenis geen coördinaten, labels, aanbieder-URL&#x27;s of locatiesjablonen.</li>
+          <li>Als locatiemetagegevens of een tokenlink in Markdown worden geschreven, worden ze onderdeel van je gekozen bestand. Je bestandssynchronisatieaanbieder kan dat bestand volgens eigen voorwaarden verwerken.</li>
+        </ul>
+        <div class="docs-callout">
+          <strong>Toestemming kan aan blijven terwijl routes privé blijven</strong>
+          <p>Je kunt de systeemtoestemming beschikbaar laten voor de onafhankelijke actie Huidige locatie en toch Huidige locatie gebruiken voor elke route uit laten.</p>
+        </div>
+        <p>Zie de <a href="/nl/privacy.html">Privacybeleid</a> voor volledige informatie over gegevensverwerking en bewaring.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">11 / Problemen oplossen</div>
+        <h2>Veelvoorkomende locatie- en sjabloonproblemen oplossen</h2>
+        <div class="docs-troubleshooting">
+          <details>
+            <summary><code>{location}</code> blijft leeg</summary>
+            <p>Controleer of het effectieve invoersjabloon, prefix, achtervoegsel of kluissjabloon het exacte token in kleine letters gebruikt: <code>{location}</code>. Schakel vervolgens Huidige locatie gebruiken in voor de afleverroute. De een-tik-oplossing van de editor kan dit voor herkende inline-invoeropmaak doen zonder metagegevens in te schakelen; actuele kluissjabloonbestanden vereisen handmatige route-instelling. Controleer bij geweigerde toestemming of onbeschikbare locatiebepaling het gedrag bij ontbrekende locatie en de systeemlocatie-instellingen.</p>
+          </details>
+          <details>
+            <summary>Een link werkt, maar er verschijnen geen metagegevens</summary>
+            <p>Dit is verwacht bij een configuratie met alleen tokens. Open de locatie-instellingen van de route, schakel Locatiemetagegevens schrijven in, kies notitiefrontmatter of inline-invoervelden en selecteer de gewenste velden.</p>
+          </details>
+          <details>
+            <summary>Metagegevens verschijnen, maar geen link in het item</summary>
+            <p>Metagegevensuitvoer voegt niet automatisch een link in. Voeg toe <code>{location}</code> aan de effectieve invoeropmaak of het Markdown-sjabloon in de kluis toe.</p>
+          </details>
+          <details>
+            <summary>Plaats of stad ontbreekt</summary>
+            <p>Controleer of het labelveld geselecteerd is. Apples omgekeerde geocodering kan mislukken terwijl coördinaten beschikbaar blijven. Precisie Stad verwijdert bewust aanduidingen van interessante plekken.</p>
+          </details>
+          <details>
+            <summary>Frontmatteraflevering meldt een conflict</summary>
+            <p>De ingestelde verzamelingssleutel, <code>locations</code> als standaard moet een compatibele locatielijst zijn. Hernoem de verzameling in de route-instellingen of pas bestaande zelfgeschreven frontmatter aan. Vox.md overschrijft geen incompatibele waarde.</p>
+          </details>
+          <details>
+            <summary>Een nieuwe poging heeft een oudere of niet-beschikbare locatie</summary>
+            <p>Dit is bewust. De aanvraag bewaart het resultaat van het ontstaansmoment zodat een latere poging niet ongemerkt een andere vastleglocatie kan claimen. Start een nieuwe vastlegging als je een nieuwe momentopname nodig hebt.</p>
+          </details>
+          <details>
+            <summary>Locatietoegang is toegestaan, maar de route vraagt geen locatie op</summary>
+            <p>De systeemmachtiging is alleen een toegangspoort. Bewerk die route en schakel Huidige locatie gebruiken in. Alleen toestemming activeert dit nooit voor een route.</p>
+          </details>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/nl/developers">Ontwikkelaars</a></li>
+        <li><a href="/nl/about">Over</a></li>
+        <li><a href="/nl/contact">Contact opnemen</a></li>
+        <li><a href="/nl/">Startpagina</a></li>
+        <li><a href="/nl/docs/">Documentatie</a></li>
+        <li><a href="/nl/blog/">Blog</a></li>
+        <li><a href="/nl/privacy.html">Privacy</a></li>
+        <li><a href="/nl/terms.html">Voorwaarden</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Lokaal vastleggen · Bestanden onder gebruikersbeheer.</div>
+    </div>
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

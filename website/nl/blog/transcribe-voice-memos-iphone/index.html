@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="nl" dir="ltr" data-search-section="Sectie" data-search-guide="Handleiding" data-search-empty="Geen resultaten voor ‘{query}’">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone-memo&#x27;s naar Markdown transcriberen | Vox.md</title>
+  <meta name="description" content="Kopieer een Apple Dictafoon-transcript of importeer de opname in Vox.md voor transcriptie op het apparaat en Markdown. Controleer model-, map- en audiolimieten.">
+  <link rel="canonical" href="https://vox.isolated.tech/nl/blog/transcribe-voice-memos-iphone/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-documentatie voor taalmodellen">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="iPhone-memo&#x27;s naar Markdown transcriberen">
+  <meta property="og:description" content="Kopieer een Apple Dictafoon-transcript of importeer de opname in Vox.md voor transcriptie op het apparaat en Markdown. Controleer model-, map- en audiolimieten.">
+  <meta property="og:url" content="https://vox.isolated.tech/nl/blog/transcribe-voice-memos-iphone/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-10-30">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="iPhone-memo&#x27;s naar Markdown transcriberen">
+  <meta name="twitter:description" content="Kopieer een Apple Dictafoon-transcript of importeer de opname in Vox.md voor transcriptie op het apparaat en Markdown. Controleer model-, map- en audiolimieten.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "iPhone-memo's naar Markdown transcriberen",
+  "description": "Kopieer een Apple Dictafoon-transcript of importeer de opname in Vox.md voor transcriptie op het apparaat en Markdown. Controleer model-, map- en audiolimieten.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-10-30",
+  "dateModified": "2026-10-30",
+  "mainEntityOfPage": "https://vox.isolated.tech/nl/blog/transcribe-voice-memos-iphone/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "nl",
+  "name": "iPhone-memo's naar Markdown transcriberen | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/nl/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Handleidingen",
+      "item": "https://vox.isolated.tech/nl/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "iPhone-memo's naar Markdown transcriberen",
+      "item": "https://vox.isolated.tech/nl/blog/transcribe-voice-memos-iphone/"
+    }
+  ],
+  "inLanguage": "nl",
+  "name": "iPhone-memo's naar Markdown transcriberen | Vox.md",
+  "description": "Kopieer een Apple Dictafoon-transcript of importeer de opname in Vox.md voor transcriptie op het apparaat en Markdown. Controleer model-, map- en audiolimieten."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-voice-memos-iphone/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Naar de handleiding</a>
+<nav aria-label="Hoofdnavigatie">
+  <div class="nav-inner">
+    <a href="/nl/" class="logo" aria-label="Vox.md-startpagina">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/nl/#how">Zo werkt het</a></li>
+      <li><a href="/nl/docs/">Documentatie</a></li>
+      <li><a href="/nl/blog/">Handleidingen</a></li>
+      <li><a href="/nl/compare/">Vergelijken</a></li>
+      <li><a href="/nl/privacy.html">Privacy</a></li>
+      <li><a href="/nl/terms.html">Voorwaarden</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_nl_36c0cc133580">Vox.md downloaden</a>
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/blog/transcribe-voice-memos-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-voice-memos-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-voice-memos-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-voice-memos-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-voice-memos-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-voice-memos-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-voice-memos-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-voice-memos-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-voice-memos-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-voice-memos-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-voice-memos-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-voice-memos-iphone/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/blog/transcribe-voice-memos-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-voice-memos-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-voice-memos-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-voice-memos-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-voice-memos-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-voice-memos-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-voice-memos-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-voice-memos-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-voice-memos-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-voice-memos-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-voice-memos-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">iPhone · Dictafoon · Markdown</div>
+        <h1 class="hero-title">iPhone-memo&#x27;s naar Markdown transcriberen</h1>
+        <p class="hero-subtitle">Begin met Apples transcript als dat volstaat. Importeer de audio als je lokale Vox.md-transcriptie en de Markdown-bestemming nodig hebt.</p>
+      </div>
+      <aside class="meta-card" aria-label="Over deze handleiding">
+        <dl>
+          <div><dt>Door</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Bijgewerkt</dt><dd><time datetime="2026-10-30">30 oktober 2026</time></dd></div>
+          <div><dt>Vereist</dt><dd>Opgeslagen opname · voorbereide backend</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="iPhone-memo&#x27;s naar Markdown transcriberen">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Het korte antwoord</div><p>Controleer om een iPhone-memo in tekst om te zetten of Dictafoon al een transcript biedt. Kopieer het als dat de taak oplost. Exporteer voor lokale Vox.md-transcriptie en Markdown-routering de opname naar Bestanden, importeer die audio in Vox.md, controleer het transcript en sla het op in je gekozen map.</p></div>
+<p>Deze handleiding begint met een bestaande opname in Apple Dictafoon. Gebruik voor een nieuwe opname direct in Vox.md de <a href="/nl/blog/voice-notes-to-obsidian-iphone/">handleiding voor spraaknotities naar Obsidian</a>. De uitleg is gebaseerd op documentatie en broncodebeoordeling, niet op een nieuw uitgevoerde apparaatexport.</p>
+<nav class="toc" aria-label="In deze handleiding"><div class="toc-title">In deze handleiding</div><ol><li><a href="#native">Probeer Apples transcript</a></li><li><a href="#export">De opname exporteren</a></li><li><a href="#prepare">Vox.md voorbereiden</a></li><li><a href="#import">Importeren en controleren</a></li><li><a href="#save">Het Markdown-bestand controleren</a></li><li><a href="#limits">Limieten en herstel controleren</a></li></ol></nav>
+<h2 id="native">1. Controleer of Dictafoon de tekst al heeft</h2>
+<p>Apple documenteert transcriptie op ondersteunde iPhones en voor ondersteunde talen en regio&#x27;s. Selecteer in Dictafoon de opname en open het <strong>Meer</strong> menu en zoek naar <strong>Transcript bekijken</strong> of <strong>Kopieer transcript</strong>. Kopieer het volledige transcript of geselecteerde tekst en plak die in je notitie als dat alles is wat je nodig hebt.</p>
+<p>Je hebt geen andere app nodig om een beschikbaar Apple-transcript te kopiëren. Raadpleeg <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios" target="_blank" rel="noopener">Apples transcriptiehandleiding</a> voor de huidige beschikbaarheid. Een ontbrekende optie kan liggen aan ondersteuning door apparaat, systeem, taal of regio; het bewijst niet dat de audio beschadigd is.</p>
+<h2 id="export">2. Exporteer audio wanneer je Vox.md wilt laten transcriberen</h2>
+<p>Apples <a href="https://support.apple.com/en-nz/guide/iphone/iph831c37815/ios" target="_blank" rel="noopener">Exportinstructies voor Dictafoon</a> beschrijven hoe je een opname selecteert en <strong>Meer → Delen</strong>en de keuze voor <strong>Bewaar in Bestanden</strong>. Kies een map die je terug kunt vinden en sla op.</p>
+<p>De normale export is een <code>.m4a</code> opname. Opties kunnen bewerkbare lagen of effecten in een andere vorm behouden. Begin voor deze werkwijze met de gewone samengevoegde audio-export; deze handleiding stelt niet vast dat elke gelaagde of bewerkbare export met elke transcriptiebackend werkt. Bewaar de oorspronkelijke memo.</p>
+<p>Een audiobestand delen is iets anders dan Apples transcript kopiëren. Audio importeren in Vox.md voert de gekozen transcriptiebackend opnieuw uit; het importeert Apples transcript niet en garandeert niet dezelfde bewoording.</p>
+<h2 id="prepare">3. Een backend en Markdown-bestemming voorbereiden</h2>
+<p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_36c0cc133580">Vox.md voor iPhone downloaden</a></p>
+<ol><li>Kies in Vox.md een transcriptiebackend die je apparaat en opnametaal ondersteunt. Voltooi vereiste modeldownloads met verbinding.</li><li>Maak of selecteer een vastlegvoorinstelling met een beschrijfbare Markdown-map. Gebruik <strong>Nieuwe notitie</strong> voor de eerste import zodat het resulterende bestand makkelijk te herkennen is.</li><li>Kies <strong>Origineel behouden</strong> als verwerking wanneer je de herkende tekst zonder optioneel herschrijven door AI wilt.</li><li>Selecteer in de spraakbediening van Snelle opname <strong>Aan concept toevoegen</strong> vóór importeren zodat je het eerste transcript kunt controleren.</li></ol>
+<p>Origineel behouden bewaart de herkende tekst; het maakt herkenning niet letterlijk of foutloos. Automatisch, Apple Speech en gedownloade modellen hebben verschillende apparaat- en taalvereisten. Controleer de <a href="/nl/docs/#models">modelreferentie</a> en de huidige aankoop- of toegangsvereisten van je geïnstalleerde app voordat je een langer bestand importeert.</p>
+<p>Kies voor Obsidian de echte kluismap die via Bestanden toegankelijk is. Vox.md verbindt niet rechtstreeks met de Obsidian Sync-dienst. Een gewone beschrijfbare Markdown-map werkt ook.</p>
+<h2 id="import">4. Importeer de opgeslagen opname en controleer het concept</h2>
+<ol><li>Open <strong>Audio of video importeren</strong> in de spraakbediening van Snelle opname.</li><li>Selecteer de geëxporteerde opname in Bestanden en laat import en transcriptie afronden.</li><li>Controleer met Aan concept toevoegen geselecteerd het transcript in de editor. Vergelijk namen, datums, getallen en andere belangrijke woorden met de bronaudio en corrigeer ze.</li><li>Bevestig de geselecteerde voorinstelling en bestemming en tik op <strong>Stuur</strong>.</li></ol>
+<p>Gebruik de transcriptie-importknop in plaats van het bestand via een algemene Bestanden-bijlageactie bij te voegen. Een audiobijlage in een notitie is zelf geen transcript.</p>
+<p>Met <strong>Direct verzenden</strong> in plaats daarvan geselecteerd is, kan een voltooid transcript via de gekozen voorinstelling doorgaan zonder dezelfde conceptcontrole. Stel eerst Aan concept toevoegen in voor deze eerste controle. Rond elke actieve opname af voordat je een import start.</p>
+<h2 id="save">5. Controleer het echte Markdown-bestand</h2>
+<p>Wacht tot de aflevering voltooid is. Open de bestemming in Bestanden of Obsidian en controleer bestand, tekst en bestandsnaam. Een transcript in de editor bewijst dat herkenning tekst heeft gemaakt; het bewijst niet dat schrijven naar de map geslaagd is.</p>
+<p>Een synthetische opname kan deze notitietekst opleveren:</p>
+<pre class="guide-code"><code>Review the garden plan on Saturday.
+Bring the updated measurements.</code></pre>
+<p>Dit is voorbeelduitvoer, geen echte opname of nauwkeurigheidstest. Je voorinstelling bepaalt bestandsnaam, metagegevens en opmaak. Datum of bestandsnaam van een nieuwe import is niet automatisch de oorspronkelijke opnamedatum van de memo. Voeg die context bewust toe als je die nodig hebt.</p>
+<p>Volg nadat één import naar een nieuwe notitie werkt de <a href="/nl/blog/append-to-obsidian-daily-note-iphone/">handleiding voor dagnotities</a> voor een doorlopende bestemming of de <a href="/nl/blog/obsidian-capture-templates/">sjabloonrecepten</a> voor een inbox- of taakitem. Stem datum en pad van de bedoelde notitie af voordat je oudere opnamen naar een dagboek verstuurt.</p>
+<h2 id="limits">Limieten, privacy en mislukte imports</h2>
+<ul><li><strong>Importeren niet beschikbaar:</strong> voltooi de huidige opname, controleer de toegangsvereisten van je app en bevestig dat de geselecteerde voorinstelling aanstaat.</li><li><strong>Herkenning mislukt:</strong> controleer backendgereedheid, taal, lokale opslag en of de bestandsaudio kan worden gedecodeerd. Bewaar het origineel en probeer een kleine gewone audio-export vóór een lang of ongebruikelijk bestand.</li><li><strong>Aflevering wacht:</strong> herstel de maptoegang en probeer de bewaarde mislukte aflevering opnieuw. Dezelfde memo opnieuw importeren kan een tweede vastlegging maken.</li><li><strong>Je hebt ook de oorspronkelijke audio nodig:</strong> stel audiobewaring apart in en controleer die. Neem niet aan dat elke voorinstelling een audiobijlage bewaart alleen omdat er tekst uitkwam.</li></ul>
+<p>Vox.md transcribeert op het apparaat. De eerste backendvoorbereiding kan een download vereisen en een Bestanden-aanbieder kan verbinding nodig hebben om de bron op te halen of naar de bestemming te schrijven. Als je audio of Markdown in een gesynchroniseerde map opslaat, regelt die aanbieder zijn eigen synchronisatie. Volg voor een volledig losgekoppelde werkwijze de <a href="/nl/blog/offline-transcription-iphone-markdown/">handleiding voor offline voorbereiding en controle</a>.</p>
+<p>Deze route is geen automatische Dictafoon-bibliotheeksynchronisatie, batcharchiefimport of belofte om Apple-bewerkingen, lagen, transcripttiming of opnamemetagegevens te behouden. Begin met één opname, bewaar het origineel en controleer de opgeslagen tekst voordat je de werkwijze uitbreidt.</p>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/nl/">Startpagina</a></li>
+        <li><a href="/nl/docs/">Documentatie</a></li>
+        <li><a href="/nl/blog/">Handleidingen</a></li>
+        <li><a href="/nl/compare/">Vergelijken</a></li>
+        <li><a href="/nl/privacy.html">Privacy</a></li>
+        <li><a href="/nl/terms.html">Voorwaarden</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Ondersteuning</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_nl_36c0cc133580">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Snel vastleggen voor lokale notities · Geen inhoud uploaden.</div>
+    </div>
+  <details class="language-switcher"><summary>Taal</summary><ul><li><a href="/blog/transcribe-voice-memos-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-voice-memos-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-voice-memos-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-voice-memos-iphone/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/transcribe-voice-memos-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-voice-memos-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-voice-memos-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-voice-memos-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-voice-memos-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-voice-memos-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-voice-memos-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-voice-memos-iphone/" lang="nl" hreflang="nl" aria-current="page">Nederlands</a></li><li><a href="/pl/blog/transcribe-voice-memos-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-voice-memos-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-voice-memos-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-voice-memos-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-voice-memos-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-voice-memos-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-voice-memos-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-voice-memos-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-voice-memos-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-voice-memos-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-voice-memos-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

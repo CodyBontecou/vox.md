@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr" data-search-section="Abschnitt" data-search-guide="Anleitung" data-search-empty="Keine Treffer für „{query}“">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone-Sprachmemos in Markdown transkribieren | Vox.md</title>
+  <meta name="description" content="Kopiere ein Apple Sprachmemos-Transkript oder importiere die Aufnahme in Vox.md zur Transkription auf dem Gerät und als Markdown. Prüfe Modell-, Ordner- und Audiogrenzen.">
+  <link rel="canonical" href="https://vox.isolated.tech/de/blog/transcribe-voice-memos-iphone/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Vox.md-Dokumentation für Sprachmodelle">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="iPhone-Sprachmemos in Markdown transkribieren">
+  <meta property="og:description" content="Kopiere ein Apple Sprachmemos-Transkript oder importiere die Aufnahme in Vox.md zur Transkription auf dem Gerät und als Markdown. Prüfe Modell-, Ordner- und Audiogrenzen.">
+  <meta property="og:url" content="https://vox.isolated.tech/de/blog/transcribe-voice-memos-iphone/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-10-30">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="iPhone-Sprachmemos in Markdown transkribieren">
+  <meta name="twitter:description" content="Kopiere ein Apple Sprachmemos-Transkript oder importiere die Aufnahme in Vox.md zur Transkription auf dem Gerät und als Markdown. Prüfe Modell-, Ordner- und Audiogrenzen.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "iPhone-Sprachmemos in Markdown transkribieren",
+  "description": "Kopiere ein Apple Sprachmemos-Transkript oder importiere die Aufnahme in Vox.md zur Transkription auf dem Gerät und als Markdown. Prüfe Modell-, Ordner- und Audiogrenzen.",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-10-30",
+  "dateModified": "2026-10-30",
+  "mainEntityOfPage": "https://vox.isolated.tech/de/blog/transcribe-voice-memos-iphone/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "de",
+  "name": "iPhone-Sprachmemos in Markdown transkribieren | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/de/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Anleitungen",
+      "item": "https://vox.isolated.tech/de/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "iPhone-Sprachmemos in Markdown transkribieren",
+      "item": "https://vox.isolated.tech/de/blog/transcribe-voice-memos-iphone/"
+    }
+  ],
+  "inLanguage": "de",
+  "name": "iPhone-Sprachmemos in Markdown transkribieren | Vox.md",
+  "description": "Kopiere ein Apple Sprachmemos-Transkript oder importiere die Aufnahme in Vox.md zur Transkription auf dem Gerät und als Markdown. Prüfe Modell-, Ordner- und Audiogrenzen."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-voice-memos-iphone/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Zur Anleitung springen</a>
+<nav aria-label="Hauptnavigation">
+  <div class="nav-inner">
+    <a href="/de/" class="logo" aria-label="Vox.md-Startseite">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/de/#how">So funktioniert es</a></li>
+      <li><a href="/de/docs/">Dokumentation</a></li>
+      <li><a href="/de/blog/">Anleitungen</a></li>
+      <li><a href="/de/compare/">Vergleichen</a></li>
+      <li><a href="/de/privacy.html">Datenschutz</a></li>
+      <li><a href="/de/terms.html">Bedingungen</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_de_36c0cc133580">Vox.md laden</a>
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/blog/transcribe-voice-memos-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-voice-memos-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-voice-memos-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-voice-memos-iphone/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/blog/transcribe-voice-memos-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-voice-memos-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-voice-memos-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-voice-memos-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-voice-memos-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-voice-memos-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-voice-memos-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-voice-memos-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-voice-memos-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-voice-memos-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-voice-memos-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-voice-memos-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-voice-memos-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-voice-memos-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-voice-memos-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-voice-memos-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-voice-memos-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-voice-memos-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-voice-memos-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">iPhone · Sprachmemos · Markdown</div>
+        <h1 class="hero-title">iPhone-Sprachmemos in Markdown transkribieren</h1>
+        <p class="hero-subtitle">Beginne mit Apples Transkript, wenn es genügt. Importiere das Audio, wenn du Vox.md-Transkription vor Ort und sein Markdown-Ziel brauchst.</p>
+      </div>
+      <aside class="meta-card" aria-label="Über diese Anleitung">
+        <dl>
+          <div><dt>Von</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Aktualisiert</dt><dd><time datetime="2026-10-30">30. Oktober 2026</time></dd></div>
+          <div><dt>Erfordert</dt><dd>Gespeicherte Aufnahme · vorbereitetes Backend</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="iPhone-Sprachmemos in Markdown transkribieren">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Die kurze Antwort</div><p>Um eine iPhone-Sprachmemo in Text umzuwandeln, prüfe, ob Sprachmemos bereits ein Transkript anbietet. Kopiere es, wenn das die Aufgabe löst. Für Vox.md-Transkription auf dem Gerät und Markdown-Routing exportiere die Aufnahme nach Dateien, importiere dieses Audio in Vox.md, prüfe das Transkript und speichere es im gewählten Ordner.</p></div>
+<p>Diese Anleitung beginnt mit einer vorhandenen Aufnahme in Apple Sprachmemos. Für eine direkt in Vox.md erstellte neue Aufnahme verwende die <a href="/de/blog/voice-notes-to-obsidian-iphone/">Anleitung für Sprachnotizen in Obsidian</a>. Die Schritt-für-Schritt-Anleitung basiert auf Dokumentation und Quelltextprüfung, nicht auf einem neu durchgeführten Geräteexport.</p>
+<nav class="toc" aria-label="In dieser Anleitung"><div class="toc-title">In dieser Anleitung</div><ol><li><a href="#native">Apples Transkript testen</a></li><li><a href="#export">Aufnahme exportieren</a></li><li><a href="#prepare">Vox.md vorbereiten</a></li><li><a href="#import">Importieren und prüfen</a></li><li><a href="#save">Markdown-Datei prüfen</a></li><li><a href="#limits">Grenzen und Wiederherstellung prüfen</a></li></ol></nav>
+<h2 id="native">1. Prüfen, ob Sprachmemos den Text bereits enthält</h2>
+<p>Apple dokumentiert die Transkription für unterstützte iPhones, Sprachen und Regionen. Wähle in Sprachmemos die Aufnahme und öffne ihr <strong>Mehr</strong> Menü und suche nach <strong>Transkript anzeigen</strong> oder <strong>Transkript kopieren</strong>. Kopiere das gesamte Transkript oder ausgewählten Text und füge ihn in deine Notiz ein, wenn das bereits genügt.</p>
+<p>Du brauchst keine weitere App, nur um ein verfügbares Apple-Transkript zu kopieren. Siehe <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios" target="_blank" rel="noopener">Apples Transkriptionsanleitung</a> zur aktuellen Verfügbarkeit. Eine fehlende Option kann an der Unterstützung durch Gerät, System, Sprache oder Region liegen; sie beweist nicht, dass die Audiodatei beschädigt ist.</p>
+<h2 id="export">2. Audio exportieren, wenn Vox.md es transkribieren soll</h2>
+<p>Apples <a href="https://support.apple.com/en-nz/guide/iphone/iph831c37815/ios" target="_blank" rel="noopener">Exportanleitung für Sprachmemos</a> beschreiben die Auswahl einer Aufnahme, das Öffnen von <strong>Mehr → Teilen</strong>und die Auswahl von <strong>In Dateien sichern</strong>. Wähle einen Ordner, den du wiederfindest, und speichere dann.</p>
+<p>Der normale Export ist eine <code>.m4a</code> Aufnahme. Optionen können bearbeitbare Ebenen oder Effekte in einer anderen Darstellung erhalten. Beginne für diesen Ablauf mit dem normalen zusammengeführten Audioexport; diese Anleitung bestätigt nicht, dass jeder Export mit Ebenen oder Bearbeitungsmöglichkeiten mit jedem Transkriptions-Backend funktioniert. Behalte die ursprüngliche Sprachmemo.</p>
+<p>Eine Audiodatei zu teilen ist etwas anderes, als Apples Transkript zu kopieren. Beim Audioimport in Vox.md läuft das gewählte Transkriptions-Backend erneut; Apples Transkript wird nicht importiert und derselbe Wortlaut ist nicht garantiert.</p>
+<h2 id="prepare">3. Ein Backend und ein Markdown-Ziel vorbereiten</h2>
+<p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_36c0cc133580">Vox.md für iPhone holen</a></p>
+<ol><li>Wähle in Vox.md ein Transkriptions-Backend, das dein Gerät und die Aufnahmesprache unterstützt. Schließe erforderliche Modelldownloads mit Verbindung ab.</li><li>Erstelle oder wähle ein Aufnahme-Preset mit einem beschreibbaren Markdown-Ordner. Verwende <strong>Neue Notiz</strong> für den ersten Import, damit die entstandene Datei leicht zu erkennen ist.</li><li>Wähle <strong>Original behalten</strong> als Verarbeitung, wenn du den erkannten Text ohne optionales KI-Umschreiben möchtest.</li><li>Wähle in der Sprachsteuerung von Schnelle Erfassung <strong>Zum Entwurf hinzufügen</strong> vor dem Import, damit du das erste Transkript prüfen kannst.</li></ol>
+<p>„Original behalten“ behält den erkannten Text bei; es macht die Erkennung nicht wortgetreu oder fehlerfrei. „Automatisch“, Apple Speech und heruntergeladene Modelle haben unterschiedliche Geräte- und Sprachanforderungen. Prüfe die <a href="/de/docs/#models">Modellreferenz</a> und die aktuellen Kauf- oder Zugangsvoraussetzungen deiner installierten App, bevor du längere Dateien importierst.</p>
+<p>Wähle für Obsidian den tatsächlichen, über Dateien zugänglichen Vault-Ordner. Vox.md verbindet sich nicht direkt mit dem Obsidian Sync-Dienst. Ein einfacher beschreibbarer Markdown-Ordner funktioniert ebenfalls.</p>
+<h2 id="import">4. Gespeicherte Aufnahme importieren und Entwurf prüfen</h2>
+<ol><li>Öffne <strong>Audio oder Video importieren</strong> in der Sprachsteuerung von Schnelle Erfassung.</li><li>Wähle die exportierte Aufnahme in Dateien und lass Import und Transkription abschließen.</li><li>Ist „Zum Entwurf hinzufügen“ ausgewählt, prüfe das Transkript im Editor. Gleiche Namen, Daten, Zahlen und andere wichtige Formulierungen mit dem Quellaudio ab.</li><li>Bestätige das gewählte Aufnahme-Preset und Ziel und tippe dann auf <strong>Senden</strong>.</li></ol>
+<p>Verwende das Import-Steuerelement für Transkription, statt die Datei über eine allgemeine Dateien-Anhangsaktion anzuhängen. Ein Audioanhang in einer Notiz ist selbst kein Transkript.</p>
+<p>Mit <strong>Sofort senden</strong> stattdessen ausgewählt, kann ein fertiges Transkript über das gewählte Aufnahme-Preset ohne denselben Entwurfsprüfschritt fortfahren. Wähle für diese erste Prüfung zuerst „Zum Entwurf hinzufügen“. Beende jede aktive Aufnahme, bevor du einen Import startest.</p>
+<h2 id="save">5. Die tatsächliche Markdown-Datei prüfen</h2>
+<p>Warte auf die abgeschlossene Zustellung. Öffne das Ziel in Dateien oder Obsidian und prüfe Datei, Text und Dateiname. Ein sichtbares Transkript im Editor beweist, dass die Erkennung Text erzeugt hat; es beweist keinen erfolgreichen Schreibvorgang im Ordner.</p>
+<p>Eine synthetische Aufnahme könnte diesen Notiztext erzeugen:</p>
+<pre class="guide-code"><code>Review the garden plan on Saturday.
+Bring the updated measurements.</code></pre>
+<p>Dies ist eine Beispielausgabe, keine echte Aufnahme oder Genauigkeitsprüfung. Dein Aufnahme-Preset steuert Dateiname, Metadaten und Formatierung. Datum oder Dateiname eines neuen Imports sind nicht automatisch das ursprüngliche Aufnahmedatum der Sprachmemo. Ergänze diesen Kontext bewusst, wenn du ihn brauchst.</p>
+<p>Wenn ein Import in eine neue Notiz funktioniert, folge der <a href="/de/blog/append-to-obsidian-daily-note-iphone/">Anleitung für Tagesnotizen</a> für ein fortlaufendes Ziel oder die <a href="/de/blog/obsidian-capture-templates/">Vorlagenrezepte</a> für einen Eingangs- oder Aufgabeneintrag. Stimme Datum und Pfad der beabsichtigten Notiz ab, bevor du ältere Aufnahmen an ein tägliches Journal sendest.</p>
+<h2 id="limits">Grenzen, Datenschutz und fehlgeschlagene Importe</h2>
+<ul><li><strong>Import nicht verfügbar:</strong> beende die aktuelle Aufnahme, prüfe die Zugangsvoraussetzungen deiner App und bestätige, dass das gewählte Aufnahme-Preset aktiviert ist.</li><li><strong>Erkennung schlägt fehl:</strong> prüfe Backend-Bereitschaft, Sprache, lokalen Speicher und ob das Audio der Datei dekodiert werden kann. Behalte das Original und teste einen kleinen gewöhnlichen Audioexport vor einer langen oder ungewöhnlichen Datei.</li><li><strong>Zustellung ausstehend:</strong> stelle den Ordnerzugriff wieder her und wiederhole die gespeicherte fehlgeschlagene Zustellung. Ein erneuter Import derselben Sprachmemo kann eine zweite Erfassung erzeugen.</li><li><strong>Du brauchst auch das ursprüngliche Audio:</strong> konfiguriere und prüfe die Audioaufbewahrung getrennt. Gehe nicht davon aus, dass jedes Aufnahme-Preset einen Audioanhang speichert, nur weil es Text erzeugt hat.</li></ul>
+<p>Vox.md transkribiert auf dem Gerät. Die erstmalige Backend-Vorbereitung kann einen Download erfordern, und ein Dateien-Anbieter kann zum Abrufen der Quelle oder Schreiben des Ziels eine Verbindung benötigen. Wenn du Audio oder Markdown in einem synchronisierten Ordner speicherst, übernimmt dieser Anbieter seine eigene Synchronisierung. Für einen vollständig verbindungslosen Ablauf folge der <a href="/de/blog/offline-transcription-iphone-markdown/">Anleitung zur Offline-Vorbereitung und -Prüfung</a>.</p>
+<p>Diese Route ist weder eine automatische Synchronisierung der Sprachmemos-Mediathek noch ein Stapelarchiv-Import oder ein Versprechen, Apple-Bearbeitungen, Ebenen, Transkriptzeitpunkte oder Aufnahmemetadaten zu erhalten. Beginne mit einer Aufnahme, behalte ihr Original und prüfe den gespeicherten Text, bevor du den Ablauf erweiterst.</p>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/de/">Startseite</a></li>
+        <li><a href="/de/docs/">Dokumentation</a></li>
+        <li><a href="/de/blog/">Anleitungen</a></li>
+        <li><a href="/de/compare/">Vergleichen</a></li>
+        <li><a href="/de/privacy.html">Datenschutz</a></li>
+        <li><a href="/de/terms.html">Bedingungen</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Unterstützung</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_de_36c0cc133580">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Schnellerfassung für lokale Notizen · Keine Inhaltsuploads.</div>
+    </div>
+  <details class="language-switcher"><summary>Sprache</summary><ul><li><a href="/blog/transcribe-voice-memos-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/transcribe-voice-memos-iphone/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/transcribe-voice-memos-iphone/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/transcribe-voice-memos-iphone/" lang="de" hreflang="de" aria-current="page">Deutsch</a></li><li><a href="/es/blog/transcribe-voice-memos-iphone/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/transcribe-voice-memos-iphone/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/transcribe-voice-memos-iphone/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/transcribe-voice-memos-iphone/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/transcribe-voice-memos-iphone/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/transcribe-voice-memos-iphone/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/transcribe-voice-memos-iphone/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/transcribe-voice-memos-iphone/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/transcribe-voice-memos-iphone/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/transcribe-voice-memos-iphone/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/transcribe-voice-memos-iphone/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/transcribe-voice-memos-iphone/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/transcribe-voice-memos-iphone/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/transcribe-voice-memos-iphone/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/transcribe-voice-memos-iphone/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/transcribe-voice-memos-iphone/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/transcribe-voice-memos-iphone/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/blog/transcribe-voice-memos-iphone/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/transcribe-voice-memos-iphone/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
