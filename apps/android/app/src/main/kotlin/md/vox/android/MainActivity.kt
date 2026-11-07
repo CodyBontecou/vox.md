@@ -293,12 +293,17 @@ import java.util.Locale
 import java.util.UUID
 import kotlin.math.roundToLong
 
+private const val EXTERNAL_REQUEST_HANDLED_KEY = "md.vox.android.externalRequestHandled"
+
 class MainActivity : AppCompatActivity() {
     private var externalCaptureRequest by mutableStateOf<ExternalCaptureRequest?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        externalCaptureRequest = ExternalCaptureRequestParser.parse(intent)
+        val restoredRequestHandled = savedInstanceState?.getBoolean(EXTERNAL_REQUEST_HANDLED_KEY, true)
+        if (ExternalCaptureRequestParser.shouldParseOnCreate(intent?.flags, restoredRequestHandled)) {
+            externalCaptureRequest = ExternalCaptureRequestParser.parse(intent)
+        }
         enableEdgeToEdge()
         val root = (application as VoxApplication).compositionRoot
         setContent {
@@ -316,6 +321,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // An unconsumed request is re-parsed after recreation; a consumed one must not be replayed.
+        outState.putBoolean(EXTERNAL_REQUEST_HANDLED_KEY, externalCaptureRequest == null)
     }
 
     override fun onNewIntent(intent: Intent) {
