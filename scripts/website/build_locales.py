@@ -207,7 +207,7 @@ def identical_translation_allowlists(strings):
             if translation.get('state') == 'translated' and translation.get('value') == source:
                 allowed[locale].add(ident)
     # Worker-reported and source-reviewed lexical identities, including Dutch
-    # imperatives shared with English. Exact locale/segment matches only, never
+    # and Portuguese imperatives. Exact locale/segment matches only, never
     # arbitrary prose fallback. Widgets is covered by shipped app labels.
     natural_identities = {
         'es': ('Ideas', 'local', 'bytes', 'Control', 'Blog', 'no', 'Token'),
@@ -218,6 +218,9 @@ def identical_translation_allowlists(strings):
         'nl': ('bytes', 'wikilink.', 'Privacy', 'cloud', '03 / Routes',
                'sitemap', 'route:', 'link.', 'Open Vox.md.', 'Blog',
                'Open Routes.', 'Focus', 'Platform', 'Token'),
+        'it': ('Blog', 'no', 'Token', 'file.'),
+        'pl': ('Blog', 'Token'),
+        'pt-BR': ('local', 'bytes', 'Blog', 'Prepare Vox.md', 'Token', 'Compare'),
     }
     for locale, words in natural_identities.items():
         for source in words:
