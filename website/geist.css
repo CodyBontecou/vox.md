@@ -465,7 +465,7 @@ body > footer { border-top: 1px solid var(--line); }
   display: flex; flex-wrap: wrap; gap: 40px 56px; align-items: flex-start;
 }
 .side-nav {
-  flex: 1 1 220px; max-width: 260px; display: flex; flex-direction: column; gap: 2px;
+  flex: 1 1 220px; max-width: 260px; min-inline-size: 0; display: flex; flex-direction: column; gap: 2px;
   position: sticky; top: 24px; max-height: calc(100vh - 48px); overflow-y: auto;
 }
 .side-nav-title, .docs-sidebar-title, .toc-title {
@@ -619,7 +619,7 @@ table.comparison td:first-child, .docs-table td:first-child { font-weight: 600; 
   display: flex; flex-wrap: wrap; align-items: flex-start;
 }
 .docs-sidebar {
-  flex: 1 1 240px; max-width: 280px; padding-block: 32px; padding-inline: 0 24px;
+  flex: 1 1 240px; max-width: 280px; min-inline-size: 0; padding-block: 32px; padding-inline: 0 24px;
   position: sticky; top: 0; max-height: 100vh; overflow-y: auto;
 }
 .docs-sidebar ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; counter-reset: toc; }

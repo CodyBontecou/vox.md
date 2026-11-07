@@ -1,4 +1,4 @@
-"""Run the actual docs-search event handler with a minimal DOM (Node stdlib only)."""
+"""Run actual site event handlers with a minimal DOM (Node stdlib only)."""
 from pathlib import Path
 import shutil
 import subprocess
@@ -6,7 +6,7 @@ import unittest
 
 
 @unittest.skipUnless(shutil.which('node'), 'Node is required for website JavaScript tests')
-class DocsSearchTests(unittest.TestCase):
+class SiteBehaviorTests(unittest.TestCase):
     def test_localized_empty_result_preserves_literal_query_characters(self):
         source = Path(__file__).resolve().parents[2]/'website/site.js'
         script = r'''
@@ -41,6 +41,47 @@ for (const localized of [false, true]) {
     assert.equal(results.children.length, 1);
     assert.equal(results.children[0].textContent, expected);
   }
+}
+'''
+        result = subprocess.run(['node','-e',script,str(source)],text=True,capture_output=True,timeout=15)
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+
+    def test_scroll_spy_reveals_active_phone_chip_in_both_directions(self):
+        source = Path(__file__).resolve().parents[2]/'website/site.js'
+        script = r'''
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const source = fs.readFileSync(process.argv[1], 'utf8');
+for (const rtl of [false, true]) {
+  let movement = null;
+  const list = {
+    clientWidth: 300, scrollWidth: 900, scrollLeft: 0, offsetLeft: 0,
+    getBoundingClientRect() { return {left: 0, right: 300}; },
+    scrollTo({left}) { movement = left; },
+    scrollBy({left}) { movement = left; }
+  };
+  const links = ['one', 'two'].map((id, i) => {
+    const left = i === 0 ? 0 : rtl ? -200 : 450;
+    return {
+      attributes: {}, offsetLeft: left, offsetWidth: 120,
+      getAttribute() { return '#' + id; },
+      setAttribute(name, value) { this.attributes[name] = value; },
+      removeAttribute(name) { delete this.attributes[name]; },
+      addEventListener() {},
+      getBoundingClientRect() { return {left, right: left + 120}; }
+    };
+  });
+  const nav = {querySelectorAll() { return links; }, querySelector() { return list; }};
+  const document = {
+    readyState: 'complete', documentElement: {dir: rtl ? 'rtl' : 'ltr', scrollHeight: 4000},
+    querySelector() { return nav; },
+    getElementById(id) { return id === 'one' || id === 'two' ? {getBoundingClientRect() { return {top: id === 'one' ? -1000 : 0}; }} : null; }
+  };
+  const window = {innerHeight: 800, scrollY: 1000, addEventListener() {}};
+  vm.runInNewContext(source, {document, window}, {filename: 'website/site.js'});
+  assert.equal(links[1].attributes['aria-current'], 'true');
+  assert(rtl ? movement < 0 : movement > 0, 'active chip must reveal toward its clipped edge; rtl=' + rtl + ', movement=' + movement);
 }
 '''
         result = subprocess.run(['node','-e',script,str(source)],text=True,capture_output=True,timeout=15)

@@ -26,9 +26,13 @@
       item.link.setAttribute('aria-current', 'true');
       // Keep the active chip visible when the list scrolls horizontally (phone width).
       if (list && list.scrollWidth > list.clientWidth + 1) {
-        var l = item.link.offsetLeft - list.offsetLeft;
-        if (l < list.scrollLeft || l + item.link.offsetWidth > list.scrollLeft + list.clientWidth) {
-          list.scrollTo({ left: Math.max(0, l - 16), behavior: 'auto' });
+        // Geometry works with both LTR and RTL's negative scrollLeft values.
+        var linkBox = item.link.getBoundingClientRect();
+        var listBox = list.getBoundingClientRect();
+        if (linkBox.left < listBox.left) {
+          list.scrollBy({ left: linkBox.left - listBox.left - 16, behavior: 'auto' });
+        } else if (linkBox.right > listBox.right) {
+          list.scrollBy({ left: linkBox.right - listBox.right + 16, behavior: 'auto' });
         }
       }
     }
