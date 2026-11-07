@@ -585,7 +585,14 @@ enum MarkdownComposerStyler {
         storage.beginEditing()
         storage.setAttributes(baseAttributes, range: full)
 
-        for match in heading.matches(in: text, range: full) {
+        // Inside fenced code, `# comment`, `- [ ]`, `#tag` and `[[link]]` are code,
+        // not Markdown: skip every inline pass there and show the block as code.
+        let codeBlocks = fencedCodeBlocks(in: string)
+        func isCode(_ range: NSRange) -> Bool {
+            codeBlocks.contains { NSIntersectionRange($0, range).length > 0 }
+        }
+
+        for match in heading.matches(in: text, range: full) where !isCode(match.range) {
             let level = match.range(at: 1).length
             let size: CGFloat = [30, 24, 20, 18, 17, 17][min(level, 6) - 1]
             let style: UIFont.TextStyle = level == 1 ? .title1 : (level == 2 ? .title2 : .title3)
@@ -601,7 +608,7 @@ enum MarkdownComposerStyler {
             ], range: marker)
         }
 
-        for match in task.matches(in: text, range: full) {
+        for match in task.matches(in: text, range: full) where !isCode(match.range) {
             let markerRange = match.range(at: 2)
             let checked = string.substring(with: match.range(at: 3)).lowercased() == "x"
             markers.append((markerRange, checked))
@@ -616,43 +623,44 @@ enum MarkdownComposerStyler {
             }
         }
 
-        for match in bullet.matches(in: text, range: full) {
+        for match in bullet.matches(in: text, range: full) where !isCode(match.range) {
             storage.addAttributes([.foregroundColor: faint], range: match.range(at: 1))
         }
 
-        for match in quote.matches(in: text, range: full) {
+        for match in quote.matches(in: text, range: full) where !isCode(match.range) {
             storage.addAttributes([.foregroundColor: faint], range: match.range(at: 1))
             storage.addAttributes([.foregroundColor: UIColor(Geist.Palette.gray800)], range: match.range(at: 2))
         }
 
-        for match in bold.matches(in: text, range: full) {
+        for match in bold.matches(in: text, range: full) where !isCode(match.range) {
             storage.addAttributes([.font: font("Geist-SemiBold", 17, .body, weight: .semibold)], range: match.range(at: 2))
             for marker in [match.range(at: 1), NSRange(location: match.range.upperBound - match.range(at: 1).length, length: match.range(at: 1).length)] {
                 storage.addAttributes([.foregroundColor: faint], range: marker)
             }
         }
 
-        for match in italic.matches(in: text, range: full) {
+        for match in italic.matches(in: text, range: full) where !isCode(match.range) {
             storage.addAttributes([.obliqueness: 0.14], range: match.range(at: 2))
         }
 
-        for match in code.matches(in: text, range: full) {
+        for match in code.matches(in: text, range: full) where !isCode(match.range) {
             storage.addAttributes([
                 .font: mono,
                 .backgroundColor: UIColor(Geist.Palette.gray200),
             ], range: match.range)
         }
 
-        for match in tag.matches(in: text, range: full) where !isInsideHeadingMarker(match.range, in: string) {
+        for match in tag.matches(in: text, range: full)
+            where !isInsideHeadingMarker(match.range, in: string) && !isCode(match.range) {
             storage.addAttributes([.foregroundColor: accent], range: match.range)
         }
 
-        for match in link.matches(in: text, range: full) {
+        for match in link.matches(in: text, range: full) where !isCode(match.range) {
             storage.addAttributes([.foregroundColor: accent], range: match.range(at: 1))
             storage.addAttributes([.foregroundColor: faint, .font: font("GeistMono-Regular", 13, .footnote, weight: .regular)], range: match.range(at: 2))
         }
 
-        for match in wikilink.matches(in: text, range: full) {
+        for match in wikilink.matches(in: text, range: full) where !isCode(match.range) {
             storage.addAttributes([
                 .font: mono,
                 .foregroundColor: accent,
@@ -660,12 +668,56 @@ enum MarkdownComposerStyler {
             ], range: match.range)
         }
 
-        for block in droppedQuoteBlocks(in: string) {
+        for block in droppedQuoteBlocks(in: string) where !isCode(block.range) {
             styleDroppedQuote(block, in: storage, string: string)
+        }
+
+        for block in codeBlocks {
+            storage.addAttributes([.font: mono], range: block)
         }
 
         storage.endEditing()
         return markers
+    }
+
+    // MARK: Fenced code
+
+    private static let fenceLine = try! NSRegularExpression(pattern: "^ {0,3}(`{3,}|~{3,})(.*)$")
+
+    /// Ranges of fenced code blocks, fences included. As in CommonMark, a fence
+    /// closes on a run of the same character at least as long with nothing
+    /// after it, and an unclosed fence runs to the end of the text.
+    static func fencedCodeBlocks(in string: NSString) -> [NSRange] {
+        guard string.length > 0, string.length <= 60_000 else { return [] }
+        var blocks: [NSRange] = []
+        var open: (start: Int, fence: String)?
+        var location = 0
+        while location < string.length {
+            var lineEnd = 0
+            var contentsEnd = 0
+            string.getLineStart(nil, end: &lineEnd, contentsEnd: &contentsEnd, for: NSRange(location: location, length: 0))
+            let line = string.substring(with: NSRange(location: location, length: contentsEnd - location))
+            let nsLine = line as NSString
+            if let match = fenceLine.firstMatch(in: line, range: NSRange(location: 0, length: nsLine.length)) {
+                let fence = nsLine.substring(with: match.range(at: 1))
+                let rest = nsLine.substring(with: match.range(at: 2))
+                if let current = open {
+                    if fence.first == current.fence.first,
+                       fence.count >= current.fence.count,
+                       rest.trimmingCharacters(in: .whitespaces).isEmpty {
+                        blocks.append(NSRange(location: current.start, length: lineEnd - current.start))
+                        open = nil
+                    }
+                } else if !(fence.first == "`" && rest.contains("`")) {
+                    open = (location, fence)
+                }
+            }
+            location = max(lineEnd, location + 1)
+        }
+        if let current = open {
+            blocks.append(NSRange(location: current.start, length: string.length - current.start))
+        }
+        return blocks
     }
 
     // MARK: Dropped quotes
