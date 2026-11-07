@@ -184,13 +184,40 @@ def transform(text, strings=None, collect=None):
     return re.sub(r'<script type="application/ld\+json">(.*?)</script>', schema, output, flags=re.S)
 
 
+def identical_translation_allowlists(strings):
+    """Source-owned exceptions, never a translator-controlled English fallback.
+
+    The task requires exact shipped UI labels, including labels deliberately
+    retained in English. Only short, explicitly translated app entries qualify;
+    long copied help/prose never gains an exception through this mechanism.
+    """
+    allowed = {locale: set() for locale in LANGUAGES if locale != 'en'}
+    app = json.loads((ROOT / 'Voxboard/Localizable.xcstrings').read_text())
+    for source, unit in app['strings'].items():
+        localizations = unit.get('localizations', {})
+        source = localizations.get('en', {}).get('stringUnit', {}).get('value', source)
+        ident = key(source)
+        if ident not in strings or len(source) > 60 or len(source.split()) > 6:
+            continue
+        for locale in allowed:
+            translation = localizations.get(locale, {}).get('stringUnit', {})
+            if translation.get('state') == 'translated' and translation.get('value') == source:
+                allowed[locale].add(ident)
+    # Confirmed by the Spanish worker: genuine lexical identities, not English
+    # prose or arbitrary UI fallbacks. Widgets is covered by shipped app labels.
+    for source in ('Ideas', 'local', 'bytes', 'Control'):
+        if key(source) in strings:
+            allowed['es'].add(key(source))
+    return {locale: sorted(ids) for locale, ids in allowed.items()}
+
+
 def english_catalog():
     strings = {}
     for text in sources().values():
         transform(text, collect=strings)
     for text in [NOTICE, LABEL, *SEARCH_TEXT.values()]:
         strings[key(text)] = text
-    return {'metadata': {'locale': 'en', 'status': 'source', 'source': 'English sources'}, 'allow_identical': sorted(k for k,v in strings.items() if literal(v)), 'strings': dict(sorted(strings.items()))}
+    return {'metadata': {'locale': 'en', 'status': 'source', 'source': 'English sources'}, 'allow_identical': sorted(k for k,v in strings.items() if literal(v)), 'allow_identical_by_locale': identical_translation_allowlists(strings), 'strings': dict(sorted(strings.items()))}
 
 
 def load(locale):
@@ -237,7 +264,7 @@ def validate(locale, en=None):
             errors.append(f'{k}: broken placeholder braces')
         if token_counts(text) != token_counts(source):
             errors.append(f'{k}: altered protected name, URL, path or placeholder')
-        if text == source and k not in en['allow_identical']:
+        if text == source and k not in en['allow_identical'] and k not in en.get('allow_identical_by_locale', {}).get(locale, []):
             errors.append(f'{k}: untranslated English: {source[:90]}')
     if errors:
         raise ValueError(locale + ':\n' + '\n'.join(errors))

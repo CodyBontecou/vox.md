@@ -35,6 +35,10 @@ The catalog validator only reads files; it never renders or writes `website/`.
 It rejects missing/extra/duplicate keys, invalid JSON, incorrect review metadata,
 changed protected names, URLs, paths, placeholders or Markdown/code syntax,
 and unchanged English except explicit source-owned literal/name allowances.
+`en.json` also owns locale-specific identity allowances: short, explicitly
+translated app labels whose shipped wording is English, plus individually
+confirmed lexical identities (for example Spanish `Ideas`). These are not a
+locale-controlled bypass or a fallback for long untranslated prose.
 Follow `docs/localization-glossary.md` and reuse shipped app UI labels exactly.
 A changed source can require translation review even if adjacent string IDs do
 not change. Inline text segments should be reviewed in page context.

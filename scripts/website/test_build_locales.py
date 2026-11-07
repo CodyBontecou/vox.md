@@ -63,6 +63,26 @@ class ExtractionTests(unittest.TestCase):
         self.assertEqual(actual,{'values-'+r for r in resource_names.values()})
         self.assertEqual(set(locales.LANGUAGES),{'en',*resource_names})
 
+    def test_app_identity_allowances_are_locale_specific_and_label_bounded(self):
+        label = 'Quick Record'
+        prose = 'This is a long untranslated help paragraph that must never gain a website translation exception from an app fallback.'
+        strings = {locales.key(s):s for s in (label,prose,'Unfinished')}
+        app = {'strings': {
+            label: {'localizations': {'de': {'stringUnit': {'state':'translated','value':label}}, 'ja': {'stringUnit': {'state':'translated','value':'速記録'}}}},
+            prose: {'localizations': {'de': {'stringUnit': {'state':'translated','value':prose}}}},
+            'Unfinished': {'localizations': {'de': {'stringUnit': {'state':'new','value':'Unfinished'}}}}
+        }}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root/'Voxboard').mkdir()
+            (root/'Voxboard/Localizable.xcstrings').write_text(json.dumps(app))
+            with patch.object(locales,'ROOT',root):
+                allowed = locales.identical_translation_allowlists(strings)
+        self.assertIn(locales.key(label),allowed['de'])
+        self.assertNotIn(locales.key(label),allowed['ja'])
+        self.assertNotIn(locales.key(prose),allowed['de'])
+        self.assertNotIn(locales.key('Unfinished'),allowed['de'])
+
     def test_source_catalog_covers_all_english_pages(self):
         sources = locales.sources()
         self.assertEqual(len(sources),22)
@@ -136,6 +156,15 @@ class CatalogValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'untranslated English'):
             locales.validate('ja')
         self.en['allow_identical'] = [self.ident]
+        locales.validate('ja',self.en)
+
+    def test_one_locales_identity_allowance_does_not_allow_anothers_english(self):
+        self.cat['strings'][self.ident] = self.source
+        self.save()
+        self.en['allow_identical_by_locale'] = {'de':[self.ident]}
+        with self.assertRaisesRegex(ValueError,'untranslated English'):
+            locales.validate('ja',self.en)
+        self.en['allow_identical_by_locale']['ja'] = [self.ident]
         locales.validate('ja',self.en)
 
     def test_review_claims_invalid_json_and_duplicates_are_rejected(self):
