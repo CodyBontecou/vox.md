@@ -21,11 +21,14 @@ SITE = ROOT / 'website'
 CATALOGS = ROOT / 'website-content/locales'
 HOST = 'https://vox.isolated.tech'
 LANGUAGES = {'en': 'English', 'ar': 'العربية', 'bn': 'বাংলা', 'de': 'Deutsch', 'es': 'Español', 'fr': 'Français', 'hi': 'हिन्दी', 'id': 'Bahasa Indonesia', 'it': 'Italiano', 'ja': '日本語', 'ko': '한국어', 'nl': 'Nederlands', 'pl': 'Polski', 'pt-BR': 'Português (Brasil)', 'ru': 'Русский', 'ta': 'தமிழ்', 'th': 'ไทย', 'tr': 'Türkçe', 'uk': 'Українська', 'ur': 'اردو', 'vi': 'Tiếng Việt', 'zh-Hans': '简体中文', 'zh-Hant': '繁體中文'}
-PROTECTED = ['Vox.md', 'Apple Intelligence', 'Apple Speech', 'Whisper', 'whisper.cpp', 'Parakeet', 'FluidAudio', 'CoreML', 'Obsidian', 'Markdown', 'App Store', 'Apple Watch', 'iPhone', 'iPad', 'iOS', 'iPadOS', 'watchOS', 'macOS', 'Android', 'Google Play', 'Wear OS', 'M4A', 'WAV', 'TXT', 'JSON', 'YAML', 'SF Symbols', 'ZenQuotes', 'Core ML', 'Whisper Tiny', 'Whisper Base', 'Whisper Small', 'Whisper Medium', 'Whisper Large v3 Turbo', 'Parakeet v2', 'Parakeet v3']
+PROTECTED = ['Vox.md', 'Apple Intelligence', 'Apple Speech', 'Whisper', 'whisper.cpp', 'Parakeet', 'FluidAudio', 'CoreML', 'Obsidian', 'Markdown', 'App Store', 'Apple Watch', 'iPhone', 'iPad', 'iOS', 'iPadOS', 'watchOS', 'macOS', 'Android', 'Google Play', 'Wear OS', 'M4A', 'WAV', 'TXT', 'JSON', 'YAML', 'SF Symbols', 'ZenQuotes', 'Core ML', 'Whisper Tiny', 'Whisper Base', 'Whisper Small', 'Whisper Medium', 'Whisper Large v3 Turbo', 'Parakeet v2', 'Parakeet v3', 'Daily Inbox']
 # Longest first prevents Whisper being counted inside whisper.cpp, etc.
-TOKENS = re.compile('|'.join(re.escape(s) for s in sorted(PROTECTED, key=len, reverse=True)) + r'|\b(?:Command|Control|Option|Shift|Ctrl|Alt|Cmd)(?:[-+](?:Command|Control|Option|Shift|Ctrl|Alt|Cmd|Return|Enter|Tab|Space|Escape|Delete|Backspace|[A-Za-z0-9]))+\b|[⌘⌃⌥⇧]+[A-Za-z0-9↵⏎]|±\d+(?:m|h)\b|https?://[^\s<>"\)。、」』”]+|[\w.+-]+@[\w.-]+|\{[^{}]*\}|%\d*\$?[a-zA-Z@]|\[\[[^\]]*\]\]|(?:[\w{}.-]+/)+[\w{}.-]+\.(?:md|json|html|txt|yml|yaml|xml|wav|m4a|jpg|png)\b|(?<![\w/])/(?:[\w{}.-]+/)*[\w{}.-]+|\b[\w.-]+\.(?:md|json|html|txt|yml|yaml|xml|wav|m4a|jpg|png)\b')
+TOKENS = re.compile('|'.join(re.escape(s) for s in sorted(PROTECTED, key=len, reverse=True)) + r'|\b(?:Command|Control|Option|Shift|Ctrl|Alt|Cmd)(?:[-+](?:Command|Control|Option|Shift|Ctrl|Alt|Cmd|Return|Enter|Tab|Space|Escape|Delete|Backspace|[A-Za-z0-9]))+\b|[⌘⌃⌥⇧]+[A-Za-z0-9↵⏎]|±\d+(?:m|h)\b|https?://[^\s<>"\)。、」』”]+|[\w.+-]+@[\w.-]+|\{[^{}]*\}|%\d*\$?[a-zA-Z@]|\[\[[^\]]*\]\]|(?:[\w{}.-]+/)+[\w{}.-]+\.(?:md|json|html|txt|yml|yaml|xml|wav|m4a|jpg|png)\b|(?<![\w/.-])/(?:[\w{}.-]+/)*[\w{}.-]+|\b[\w.-]+\.(?:md|json|html|txt|yml|yaml|xml|wav|m4a|jpg|png)\b')
 NOTICE = 'This translation is provided for convenience. The English version governs in case of any discrepancy.'
 LABEL = 'Language'
+# Exact current-source occurrences name tutorial headings/routes, not app UI
+# controls. Keep them aligned with the deliberately unchanged sample code.
+LITERAL_EXAMPLES = {'Inbox', 'Tasks', 'Daily Inbox'}
 SEARCH_TEXT = {'section': 'Section', 'guide': 'Guide', 'empty': 'No matches for “{query}”'}
 SCHEMA_TEXT = {'name', 'description', 'headline', 'text', 'featureList', 'contactType', 'availableLanguage', 'articleBody', 'caption'}
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'}
@@ -39,7 +42,7 @@ def literal(text):
     """Explicit lexical allowlist for code/brands/names, not English fallback."""
     rest = TOKENS.sub('', text)
     rest = re.sub(r'\b(?:Cody Bontecou|Isolated Tech|SteamingCoax|Eric Know|PromisedOne|Safari|Mac|EOF|md|en|USD|B|GB|MB|KB|HTTP|HTTPS|URL|API|GET|POST)\b', '', rest)
-    if re.fullmatch(r'#{1,6} (?:Inbox|Tasks|Notes)',text):
+    if text in LITERAL_EXAMPLES or re.fullmatch(r'#{1,6} (?:Inbox|Tasks|Notes)',text):
         return True
     model_name = re.fullmatch(r'(?:Whisper (?:Tiny|Base|Small|Medium|Large v3 Turbo)|Parakeet v[23]):?', text)
     directory = re.fullmatch(r'[\w./~-]+/',text)
@@ -205,9 +208,14 @@ def identical_translation_allowlists(strings):
                 allowed[locale].add(ident)
     # Confirmed by the Spanish worker: genuine lexical identities, not English
     # prose or arbitrary UI fallbacks. Widgets is covered by shipped app labels.
-    for source in ('Ideas', 'local', 'bytes', 'Control'):
-        if key(source) in strings:
-            allowed['es'].add(key(source))
+    natural_identities = {
+        'es': ('Ideas', 'local', 'bytes', 'Control', 'Blog', 'no', 'Token'),
+        'id': ('Blog', 'Platform', 'Token'),
+    }
+    for locale, words in natural_identities.items():
+        for source in words:
+            if key(source) in strings:
+                allowed[locale].add(key(source))
     return {locale: sorted(ids) for locale, ids in allowed.items()}
 
 
@@ -250,6 +258,8 @@ def validate(locale, en=None):
         if k not in en['strings']:
             continue
         source = en['strings'][k]
+        if source in LITERAL_EXAMPLES and text != source:
+            errors.append(f'{k}: altered literal tutorial heading/route identifier')
         if not isinstance(text, str) or not text.strip():
             errors.append(f'{k}: expected nonempty string')
             continue
@@ -290,6 +300,15 @@ def enhance(text, relative, locale='en', strings=None):
     text = re.sub(r'<link[^>]*hreflang=[^>]*>\s*', '', text)
     text = re.sub(r'<nav aria-label="Language">.*?</nav>', '', text, flags=re.S)
     text = transform(text, strings)
+    if locale in {'es','fr','it','pt-BR'} and 'id="hero-title"' in text:
+        # The visual cloud/file strike-through is fixed markup, but Romance
+        # adjective order is file + local, unlike English's local + file. Give
+        # the heading a grammatical accessible name using existing segments.
+        lead = strings[key('Your thoughts, in a')].strip()
+        file_word = re.sub(r'[.!?。]+$', '', strings[key('file.')].strip())
+        local_word = strings[key('local')].strip()
+        accessible = escape(f'{lead} {file_word} {local_word}.',quote=True)
+        text = re.sub(r'<h1\b[^>]*\bid="hero-title"[^>]*>',lambda m:m[0][:-1] + f' aria-label="{accessible}">',text,count=1)
     search_attributes = ''.join(f' data-search-{name}="{escape(strings[key(value)], quote=True)}"' for name,value in SEARCH_TEXT.items())
     text = re.sub(r'<html\b[^>]*>', f'<html lang="{locale}" dir="{"rtl" if locale in {"ar", "ur"} else "ltr"}"{search_attributes}>', text, count=1)
     text = re.sub(r'(<link rel="canonical" href=")[^"]*', lambda m: m[1] + HOST + public, text)

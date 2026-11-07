@@ -42,6 +42,7 @@ class ExtractionTests(unittest.TestCase):
 
     def test_prose_slashes_are_not_mistaken_for_file_paths(self):
         self.assertEqual(locales.token_counts('format/mode and append/prepend'), {})
+        self.assertEqual(locales.token_counts('Groß-/Kleinschreibung ändern'), {})
         self.assertEqual(locales.token_counts('Inbox/{date}.md and /api/v1/product'), {'Inbox/{date}.md': 1, '/api/v1/product': 1})
         self.assertEqual(locales.token_counts('https://example.com/help。次へ'), {'https://example.com/help': 1})
         self.assertFalse(locales.literal('Contact Vox.md'))
@@ -167,6 +168,18 @@ class CatalogValidationTests(unittest.TestCase):
         self.en['allow_identical_by_locale']['ja'] = [self.ident]
         locales.validate('ja',self.en)
 
+    def test_tutorial_heading_identifiers_must_match_unchanged_code(self):
+        ident = locales.key('Tasks')
+        self.en = {'strings':{ident:'Tasks'},'allow_identical':[ident]}
+        (self.path/'en.json').write_text(json.dumps(self.en))
+        self.cat['strings'] = {ident:'タスク'}
+        self.save()
+        with self.assertRaisesRegex(ValueError,'literal tutorial'):
+            locales.validate('ja')
+        self.cat['strings'][ident] = 'Tasks'
+        self.save()
+        locales.validate('ja')
+
     def test_review_claims_invalid_json_and_duplicates_are_rejected(self):
         self.cat['metadata']['status'] = 'reviewed'
         self.save()
@@ -207,6 +220,19 @@ class RenderingTests(unittest.TestCase):
         self.assertIn('"inLanguage": "ar"',html)
         self.assertIn('&lt;a href="../contact.html"&gt;literal&lt;/a&gt;',html)
         self.assertIn('name="twitter:title" content="ترجمة Page"',html)
+
+    def test_romance_hero_accessible_name_places_local_after_file(self):
+        source = '<html lang="en"><head><title>Page</title><meta name="description" content="Description"><link rel="canonical" href="https://vox.isolated.tech/"></head><body><nav></nav><main><h1 class="r-h1" id="hero-title">Your thoughts, in a <span aria-hidden="true"><del>cloud</del></span><span class="visually-hidden">local </span><span class="r-voice r-hl">file.</span></h1></main><footer></footer></body></html>'
+        strings = {}
+        locales.transform(source,collect=strings)
+        strings = {k:'Traducción ' + v for k,v in strings.items()}
+        strings.update({locales.key('Your thoughts, in a'):'Tus ideas, en un',locales.key('local'):'local',locales.key('file.'):'archivo.',locales.key(locales.LABEL):'Idioma'})
+        strings.update({locales.key(value):'Traducción ' + value for value in locales.SEARCH_TEXT.values()})
+        with patch.object(locales,'active_locales',return_value=['en','es']), patch('download_links.decorate_html',side_effect=lambda text,path:text):
+            html = locales.enhance(source,'index.html','es',strings)
+        self.assertIn('aria-label="Tus ideas, en un archivo local."',html)
+        self.assertIn('<del>Traducción cloud</del>',html)
+        self.assertIn('class="visually-hidden">local </span>',html)
 
     def test_full_site_render_uses_validated_catalogs_without_writing_site(self):
         # Deliberately synthetic test strings, never saved as a real translation.
