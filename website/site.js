@@ -122,7 +122,7 @@
       if (!matches.length) {
         var li = document.createElement('li');
         li.className = 'empty';
-        li.textContent = (labels.searchEmpty || 'No matches for “{query}”').replace('{query}', query.trim());
+        li.textContent = (labels.searchEmpty || 'No matches for “{query}”').replace('{query}', function () { return query.trim(); });
         results.appendChild(li);
       }
       matches.forEach(function (m, i) {
