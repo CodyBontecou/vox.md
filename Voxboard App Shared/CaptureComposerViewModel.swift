@@ -296,6 +296,7 @@ final class QuickCaptureViewModel {
             if draft.voxID == nil {
                 draft.voxID = CapturePresetProfileStore.selectedProfileID(defaults: defaults)
             }
+            moveDraftOffDeletedRoute()
             if draft.destinationSelectionMode == .explicit {
                 if draft.destinationID == nil || !destinations.contains(where: { $0.id == draft.destinationID }) {
                     draft.useInheritedDestination()
@@ -386,6 +387,21 @@ final class QuickCaptureViewModel {
     func refreshVoxProfiles() {
         // Refreshing availability is not an implicit draft-selection operation.
         voxProfiles = CapturePresetProfileStore.enabledProfiles(defaults: defaults)
+        moveDraftOffDeletedRoute()
+    }
+
+    /// A draft stays on its route while that route is merely disabled, so it is
+    /// never silently delivered elsewhere. A route the user deleted can never
+    /// deliver again, though, so the draft moves to the route Settings fell back
+    /// to instead of stranding Send behind "Destination Not Configured".
+    private func moveDraftOffDeletedRoute() {
+        guard let voxID = draft.voxID,
+              CapturePresetStore.isRetiredPreset(id: voxID, defaults: defaults) else { return }
+        let selectedID = CapturePresetProfileStore.selectedProfileID(defaults: defaults)
+        guard let fallback = voxProfiles.first(where: { $0.id == selectedID })?.id ?? voxProfiles.first?.id,
+              fallback != voxID else { return }
+        draft.selectVox(fallback)
+        scheduleDraftSave()
     }
 
     /// App installs live readers once, before any external launch. A recorder

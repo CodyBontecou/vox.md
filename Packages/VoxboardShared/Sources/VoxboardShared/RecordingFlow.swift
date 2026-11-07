@@ -1260,6 +1260,12 @@ public enum CapturePresetStore {
         Set((defaults.stringArray(forKey: retiredRouteIDsKey) ?? []).compactMap(UUID.init(uuidString:)))
     }
 
+    /// Whether `id` names a route the user deleted. A deleted route never comes
+    /// back, unlike a disabled one, so a draft pinned to it can move on.
+    public static func isRetiredPreset(id: String, defaults: UserDefaults? = AppConstants.sharedDefaults) -> Bool {
+        Set(defaults?.stringArray(forKey: retiredPresetIDsKey) ?? []).contains(id)
+    }
+
     public static func retirePreset(
         id: String,
         ownedRouteID: UUID?,

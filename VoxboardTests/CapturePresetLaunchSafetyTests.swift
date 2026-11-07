@@ -175,6 +175,34 @@ final class CapturePresetLaunchSafetyTests: XCTestCase {
         }
     }
 
+    func testDeletingTheDraftsRouteMovesTheDraftToTheSelectedRoute() async throws {
+        let f = try await fixture()
+        XCTAssertEqual(f.vm.draft.voxID, "journal")
+        CapturePresetStore.retirePreset(id: "journal", ownedRouteID: nil, defaults: f.defaults)
+        f.defaults.set(try JSONEncoder().encode([f.presets[1]]), forKey: CapturePresetProfileStore.profilesKey)
+        f.defaults.set("inbox", forKey: CapturePresetProfileStore.selectedCaptureProfileIDKey)
+
+        f.vm.refreshVoxProfiles()
+
+        XCTAssertEqual(f.vm.draft.voxID, "inbox")
+        XCTAssertEqual(f.vm.draft.text, "Original")
+        XCTAssertEqual(f.vm.selectedDestination?.id, f.secondDestinationID)
+    }
+
+    func testDisablingTheDraftsRouteKeepsTheDraftOnIt() async throws {
+        let f = try await fixture()
+        var journal = f.presets[0]
+        journal.isEnabled = false
+        f.defaults.set(try JSONEncoder().encode([journal, f.presets[1]]), forKey: CapturePresetProfileStore.profilesKey)
+        f.defaults.set("inbox", forKey: CapturePresetProfileStore.selectedCaptureProfileIDKey)
+
+        f.vm.refreshVoxProfiles()
+
+        // A disabled route can come back, so the draft is never silently rerouted.
+        XCTAssertEqual(f.vm.draft.voxID, "journal")
+        XCTAssertNil(f.vm.selectedVoxProfile)
+    }
+
     func testAcceptanceRevalidatesDisabledDeletedPresetAndDestination() async throws {
         for mutation in 0..<3 {
             let f = try await fixture()
