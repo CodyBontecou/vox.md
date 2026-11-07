@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr" data-search-section="Раздел" data-search-guide="Руководство" data-search-empty="Ничего не найдено по запросу «{query}»">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Политика конфиденциальности — Vox.md</title>
+  <meta name="description" content="Как Vox.md обрабатывает локальные черновики, места сохранения Markdown, вложения, разовую геопозицию, клавиатурный ввод и локальную расшифровку голоса.">
+  <link rel="canonical" href="https://vox.isolated.tech/ru/privacy.html">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Документация Vox.md для языковых моделей">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Политика конфиденциальности — Vox.md">
+  <meta property="og:description" content="Конфиденциальность быстрого захвата, разовой геопозиции, локальных файлов Markdown, вложений, системных расширений и расшифровки голоса на устройстве.">
+  <meta property="og:url" content="https://vox.isolated.tech/ru/privacy.html">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="API общедоступных сведений Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/privacy.html">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/privacy.html">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/privacy.html">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/privacy.html">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/privacy.html">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/privacy.html">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/privacy.html">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/privacy.html">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/privacy.html">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/privacy.html">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/privacy.html">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/privacy.html">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/privacy.html">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/privacy.html">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/privacy.html">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/privacy.html">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/privacy.html">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/privacy.html">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/privacy.html">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/privacy.html">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/privacy.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/privacy.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/privacy.html">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/privacy.html">
+<meta name="twitter:title" content="Политика конфиденциальности — Vox.md">
+<meta name="twitter:description" content="Как Vox.md обрабатывает локальные черновики, места сохранения Markdown, вложения, разовую геопозицию, клавиатурный ввод и локальную расшифровку голоса.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Политика конфиденциальности — Vox.md",
+  "description": "Как Vox.md обрабатывает локальные черновики, места сохранения Markdown, вложения, разовую геопозицию, клавиатурный ввод и локальную расшифровку голоса.",
+  "url": "https://vox.isolated.tech/ru/privacy.html",
+  "inLanguage": "ru"
+}
+</script>
+</head>
+<body>
+
+<nav aria-label="Основная навигация">
+  <div class="nav-inner">
+    <a href="/ru/" class="logo" aria-label="Главная Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ru/docs/">Документация</a></li>
+      <li><a href="/ru/blog/">Блог</a></li>
+    </ul>
+    <div class="legal-tabs" aria-label="Правовые документы">
+      <a href="/ru/privacy.html" aria-current="page">Конфиденциальность</a>
+      <a href="/ru/terms.html">Условия</a>
+    </div>
+  <details class="language-switcher"><summary>Язык</summary><ul><li><a href="/privacy.html" lang="en" hreflang="en">English</a></li><li><a href="/ar/privacy.html" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/privacy.html" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/privacy.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/privacy.html" lang="es" hreflang="es">Español</a></li><li><a href="/fr/privacy.html" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/privacy.html" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/privacy.html" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/privacy.html" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/privacy.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/privacy.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/privacy.html" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/privacy.html" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/privacy.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/privacy.html" lang="ru" hreflang="ru" aria-current="page">Русский</a></li><li><a href="/ta/privacy.html" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/privacy.html" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/privacy.html" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/privacy.html" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/privacy.html" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/privacy.html" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/privacy.html" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/privacy.html" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+<main><p class="translation-notice">Перевод предоставлен для удобства. При расхождениях преимущественную силу имеет английская версия. <a href="/privacy.html" lang="en" hreflang="en">English</a></p>
+<div class="page-layout">
+  <nav class="side-nav" aria-label="Разделы">
+    <div class="side-nav-title">Разделы</div>
+    <ol>
+      <li><a href="#overview">Обзор</a></li>
+      <li><a href="#information-we-do-not-collect">Какие данные мы не собираем</a></li>
+      <li><a href="#privacy-safe-onboarding-analytics">Конфиденциальная аналитика знакомства с приложением</a></li>
+      <li><a href="#on-device-processing">Обработка на устройстве</a></li>
+      <li><a href="#keyboard-extension">Расширение клавиатуры</a></li>
+      <li><a href="#microphone-usage">Использование микрофона</a></li>
+      <li><a href="#location-usage">Использование местоположения</a></li>
+      <li><a href="#speech-models">Речевые модели</a></li>
+      <li><a href="#third-party-services">Сторонние сервисы</a></li>
+      <li><a href="#data-storage-deletion">Хранение и удаление данных</a></li>
+      <li><a href="#childrens-privacy">Конфиденциальность детей</a></li>
+      <li><a href="#changes-to-this-policy">Изменения этой политики</a></li>
+      <li><a href="#contact">Контакты</a></li>
+    </ol>
+  </nav>
+
+  <article class="legal-content">
+    <div class="page-eyebrow">Правовая информация · Конфиденциальность</div>
+    <h1 class="page-title">политика конфиденциальности</h1>
+    <p class="page-meta">Действует с 9 февраля 2026 года · Обновлено 26 октября 2026 года</p>
+
+    <div class="callout" role="note" aria-label="Кратко">
+      <span class="callout-label">Кратко</span>
+      <p>Vox.md хранит черновики захватов, вложения, расшифровки и маршруты заметок на устройстве. Готовые файлы отправляются только в выбранные места, а содержимое захвата никогда не отправляется на серверы Vox.md. Релизные сборки отправляют описанные ниже обобщённые события собственной аналитики знакомства с приложением.</p>
+    </div>
+
+    <h2 id="overview">Обзор</h2>
+    <p>Эта политика конфиденциальности описывает обработку информации Vox.md («мы», «наш» или «приложение») при использовании наших приложений iOS и macOS и их расширений. Аудио, расшифровки, нажатия клавиш, черновики захватов, вложения, содержимое экспортируемых файлов и введённый пользователем текст обрабатываются локально. Файлы записываются только в выбранные вами места; выбранный провайдер хранения может синхронизировать эти файлы на собственных условиях.</p>
+
+    <h2 id="information-we-do-not-collect">Какие данные мы не собираем</h2>
+    <p>Vox.md не собирает перечисленные ниже данные для разработчика, аналитики, рекламы или отслеживания. Описанные далее обобщённые метаданные знакомства с приложением могут автоматически покидать устройство. Содержимое захватов покидает его только через выбранную вами функцию, например запись в синхронизируемую папку или открытие ссылки карты, как описано ниже.</p>
+    <ul>
+      <li>Аудиозаписи или голосовые данные</li>
+      <li>Расшифрованный текст или история расшифровки</li>
+      <li>Нажатия клавиш, печатный текст или клавиатурный ввод</li>
+      <li>Персональные данные: имя, адрес электронной почты или номер телефона</li>
+      <li>Геоданные для разработчика, аналитики, рекламы или отслеживания</li>
+      <li>Фото, сканы, наброски, аудио и файлы, которые вы явно выбрали для локального захвата</li>
+      <li>Имена файлов, пути папок, текст шаблонов, содержимое экспортируемых заметок или пути файлов моделей</li>
+      <li>Рекламные идентификаторы, хранение исходных IP-адресов или сторонние идентификаторы отслеживания</li>
+    </ul>
+
+    <h2 id="privacy-safe-onboarding-analytics">Конфиденциальная аналитика знакомства с приложением</h2>
+    <p>Релизные сборки отправляют небольшой набор событий в собственную систему аналитики, чтобы понять процесс знакомства с приложением, трудности настройки и результаты покупки или восстановления. В сборках для разработки тестовая аналитика настройки требует явного включения. Эти события намеренно обобщены и не используются для рекламы или отслеживания между приложениями.</p>
+    <p>Аналитика знакомства с приложением может включать:</p>
+    <ul>
+      <li>Анонимный идентификатор установки Vox.md, используемый только для подсчёта прохождения этапов</li>
+      <li>Названия событий: начало знакомства с приложением, завершение запроса микрофона, завершение настройки модели, показ экрана покупки, результат покупки или восстановления и завершение знакомства</li>
+      <li>Версия приложения, номер сборки, платформа и вариант эксперимента</li>
+      <li>Общее состояние настройки: разрешение микрофона, движок и категория размера модели, формат и режим экспорта файлов, диапазоны использования бесплатных минут и успешных захватов, контекст экрана покупки</li>
+    </ul>
+    <p>Эта аналитика никогда не включает аудио, расшифровки, продиктованный текст, нажатия клавиш, пути файлов и папок, текст шаблонов, пути моделей, имена, адреса электронной почты, исходные даты, IP-адреса или названия устройств.</p>
+
+    <h2 id="on-device-processing">Обработка на устройстве</h2>
+    <p>Всё преобразование речи в текст выполняется полностью на вашем устройстве. На поддерживаемых устройствах iOS 26 режим «Автоматический» использует системный фреймворк Speech Apple. Можно явно загрузить локальные модели Whisper или Parakeet. Аудио с микрофона обрабатывается выбранным локальным движком и никогда не передаётся по сети.</p>
+    <p>Если явно включить обработку текста захвата для маршрута, подходящие печатный текст, локальный OCR и голосовые расшифровки можно исправлять или оформлять локально с Apple Intelligence. При недоступности локального ИИ используется детерминированное оформление или исходный текст. Vox.md не отправляет захваченный текст на свои серверы или сторонние API ИИ.</p>
+    <p>Результаты расшифровки, черновики захватов и запросы повтора хранятся локально в изолированном контейнере приложения и общей App Group. Доступ имеют только подписанные компоненты Vox.md: приложение, клавиатура, виджеты и расширение общего доступа. Ни один сервис или сервер Vox.md не имеет к ним доступа.</p>
+
+    <h2 id="keyboard-extension">Расширение клавиатуры</h2>
+    <p>Vox.md включает расширение клавиатуры для голосового ввода в приложениях устройства. Apple требует раскрыть следующие сведения о расширениях клавиатуры:</p>
+    <ul>
+      <li><strong>Текущий процесс клавиатуры требует полного доступа.</strong> Позволяет клавиатуре использовать общее состояние App Group и согласовывать запись с основным приложением Vox.md.</li>
+      <li>Vox.md не использует полный доступ для загрузки, продажи или анализа нажатий клавиш, диктуемого текста, расшифровок или звука микрофона. Клавиатура не передаёт это содержимое на серверы Vox.md или третьих сторон.</li>
+      <li>Расширение клавиатуры связывается с подписанными компонентами Vox.md через общий контейнер App Group на устройстве.</li>
+    </ul>
+
+    <h2 id="microphone-usage">Использование микрофона</h2>
+    <p>Vox.md запрашивает микрофон для записи звука и расшифровки голоса. Аудио микрофона:</p>
+    <ul>
+      <li>Обрабатывается локально Apple Speech или дополнительно загруженной моделью Whisper/Parakeet</li>
+      <li>Временно записывается только тогда, когда локальной расшифровке нужен файл</li>
+      <li>Никогда не передаётся на серверы, API или сторонние сервисы</li>
+      <li>Удаляется после расшифровки, если вы явно не настроили маршрут на сохранение аудио или не вставили голосовую запись в черновик захвата</li>
+    </ul>
+
+    <h2 id="location-usage">Использование местоположения</h2>
+    <p>В Vox.md есть две явно включаемые функции геолокации. Независимое действие «Текущее местоположение» на панели захвата запрашивает геопозицию один раз и вставляет ссылку Google Maps в локальный черновик. Отдельно текущая геопозиция по умолчанию отключена и включается для каждого маршрута: в iOS/iPadOS, меню общего доступа, командах и намерениях, голосовой записи маршрута и записи с клавиатуры, виджетах и элементах управления, захватах Apple Watch с выводом в Markdown и на Mac. Маршрут может использовать этот единственный снимок для <code>{location}</code> ссылки в шаблоне записи без дополнительной записи метаданных; параметр «Записывать метаданные местоположения» включается отдельно. Режим «Только запись» на часах экспортирует исходное аудио в «Файлы», не создаёт местоположение в Markdown и не запрашивает геопозицию.</p>
+    <p>Включённый маршрут запрашивает геопозицию один раз в момент создания при отправке, вызове или остановке записи — в зависимости от источника захвата. По умолчанию выбран «Точный». Точность «Город» округляет широту и долготу до двух знаков и удаляет названия объектов до сохранения результата; все производные поля, ссылки шаблонов и провайдеров используют одинаковые скорректированные координаты. Vox.md не отслеживает местоположение непрерывно или в фоне, не включает его в аналитику или журналы и не отправляет на сервер Vox.md.</p>
+    <p>Если включённым метаданным нужны место, город, регион или страна, Vox.md использует системное обратное геокодирование Apple. Текущее местоположение только через токен пропускает этот поиск. Сервис бесплатен и не требует ключа API, но может делать сетевой запрос Apple на её условиях. Сбой обратного геокодирования не блокирует захват; метаданные координат остаются доступны. Vox.md формирует ссылки Apple Maps, Google Maps и OpenStreetMap без обращения к ним. Только открытие ссылки раскрывает провайдеру точные или округлённые координаты.</p>
+    <p>Если местоположение недоступно, в интерактивном интерфейсе можно повторить попытку, отменить, отправить один раз без геопозиции или сохранить для маршрута правило «Всегда отправлять без местоположения»; его можно сбросить в настройках маршрута. Фоновые запросы в режиме «Спросить» сохраняют исходный результат недоступности для последующего решения и никогда не получают новую геопозицию при повторе. Ожидающие и неудачные запросы могут хранить уже скорректированный для конфиденциальности результат, необходимый для локального восстановления. Координаты, записанные в Markdown, становятся частью выбранной заметки, и выбранный провайдер синхронизации может обрабатывать этот файл на своих условиях.</p>
+    <p>Примеры настроек и поведение источников захвата описаны в <a href="/ru/docs/location/">Текущее местоположение, <code>{location}</code>, и метаданные</a>.</p>
+
+    <h2 id="speech-models">Речевые модели</h2>
+    <p>Vox.md не включает веса речевых моделей в комплект. Поддерживаемыми языковыми ресурсами Apple управляет iOS. Загрузка дополнительных моделей Whisper, Parakeet и распознавания голосовых пауз начинается только после вашего выбора; они хранятся локально на устройстве. Для подготовки или загрузки модели не нужны аккаунт или персональные данные.</p>
+
+    <h2 id="third-party-services">Сторонние сервисы</h2>
+    <p>Vox.md не интегрируется со сторонними SDK аналитики, рекламными сетями, SDK отчётов о сбоях или сервисами межприложенческого отслеживания. Загрузка моделей Whisper и Parakeet по инициативе пользователя подключается к инфраструктуре Hugging Face напрямую или через FluidAudio. Запросы моделей никогда не содержат черновики, печатный текст, аудио, расшифровки, вложения, пути файлов или геопозицию, но провайдер может получать обычные данные HTTPS-соединения и идентификатор модели на своих условиях.</p>
+    <p>Редактор захвата запрашивает наборы вдохновляющих цитат у <a href="https://zenquotes.io/">ZenQuotes API</a> и меняет их из кеша на устройстве. Эти запросы никогда не содержат черновики захватов, печатный текст, аудио, вложения, пути файлов, местоположение, идентификаторы установки или аналитику. Как любой HTTPS-сервис, ZenQuotes может получать технические данные соединения, например IP-адрес и user agent, на своих условиях. Собственные события знакомства с приложением отправляются напрямую в Cloudflare Worker Vox.md и хранятся в его базе D1 со строгим списком разрешённых данных, описанным выше.</p>
+
+    <h2 id="data-storage-deletion">Хранение и удаление данных</h2>
+    <p>Содержимое захватов и локальные данные приложения — история расшифровки, черновики, подготовленные вложения, загруженные модели, шаблоны, настройки и учёт бесплатного использования — хранятся локально на устройстве или в явно выбранном вами файловом месте. Журнал успешных захватов без содержимого хранит только счётчик и случайные идентификаторы до десяти успешных запросов: это предотвращает двойной расход лимита при повторах, пока локальные данные приложения сохранены. Он не содержит захваченный текст, имена файлов, места сохранения или метаданные вложений, никогда не хранится в системной Связке ключей и никогда не отправляется Vox.md.</p>
+    <p>Версии до изменения политики могли оставить неиспользуемый элемент бесплатного лимита без содержимого в системной Связке ключей. Текущие версии к нему не обращаются; его можно удалить через «Связку ключей» без влияния на захваты, расшифровки и покупки.</p>
+    <p>Локальный список недавних захватов содержит только метаданные доставки: результат, источник, идентификатор и название маршрута, идентификатор и название места сохранения, относительный путь заметки, число вложений, время и общую категорию сбоя. Он никогда не дублирует текст заметки, ссылки, координаты, названия мест или шаблоны, закладки, абсолютные пути и имена вложений. Ожидающие и неудачные захваты хранят лишь нужное для локального восстановления содержимое, включая уже скорректированную геопозицию или сохранённый результат недоступности. После успешной доставки восстанавливаемый запрос немедленно заменяется маркером только с идентификатором и временем; завершённые элементы очереди часов также очищаются, а обновления очищают старые завершённые запросы.</p>
+    <p>Удалить локально сохранённое пользовательское содержимое и настройки можно следующими способами:</p>
+    <ul>
+      <li>Удаление отдельных расшифровок или очистка метаданных недавних захватов в истории приложения</li>
+      <li>Удаление загруженных моделей в настройках</li>
+      <li>Удаление Vox.md и локальных данных приложения. Это также сбрасывает бесплатный лимит; соответствующие покупки StoreKit по-прежнему можно восстановить через Apple.</li>
+    </ul>
+
+    <h2 id="childrens-privacy">Конфиденциальность детей</h2>
+    <p>Vox.md сознательно не собирает персональные данные ни о ком, включая детей младше 13 лет. Описанная выше аналитика знакомства с приложением с защитой конфиденциальности не предназначена для идентификации ребёнка или связи с ним и никогда не включает аудио, расшифровки, нажатия клавиш или введённое пользователем содержимое.</p>
+
+    <h2 id="changes-to-this-policy">Изменения этой политики</h2>
+    <p>Мы можем время от времени обновлять эту политику конфиденциальности. Изменения отражаются на этой странице с новой датой последнего обновления.</p>
+
+    <h2 id="contact">Контакты</h2>
+    <p>Если у вас есть вопросы или сомнения по поводу этой политики конфиденциальности, свяжитесь с нами:</p>
+    <p><strong>Эл. почта:</strong> <a href="mailto:codybontecou@gmail.com">codybontecou@gmail.com</a></p>
+
+  </article>
+</div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ru/developers">Разработчикам</a></li>
+        <li><a href="/ru/about">О приложении</a></li>
+        <li><a href="/ru/contact">Контакты</a></li>
+        <li><a href="/ru/">Главная</a></li>
+        <li><a href="/ru/docs/">Документация</a></li>
+        <li><a href="/ru/blog/">Блог</a></li>
+        <li><a href="/ru/privacy.html" aria-current="page">Конфиденциальность</a></li>
+        <li><a href="/ru/terms.html">Условия</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Поддержка</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · <a href="https://isolated.tech/">Isolated Tech</a></div>
+    </div>
+  <details class="language-switcher"><summary>Язык</summary><ul><li><a href="/privacy.html" lang="en" hreflang="en">English</a></li><li><a href="/ar/privacy.html" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/privacy.html" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/privacy.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/privacy.html" lang="es" hreflang="es">Español</a></li><li><a href="/fr/privacy.html" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/privacy.html" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/privacy.html" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/privacy.html" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/privacy.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/privacy.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/privacy.html" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/privacy.html" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/privacy.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/privacy.html" lang="ru" hreflang="ru" aria-current="page">Русский</a></li><li><a href="/ta/privacy.html" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/privacy.html" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/privacy.html" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/privacy.html" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/privacy.html" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/privacy.html" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/privacy.html" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/privacy.html" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
