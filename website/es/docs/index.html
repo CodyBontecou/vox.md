@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" data-search-section="Sección" data-search-guide="Guía" data-search-empty="Sin resultados para «{query}»">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentación de Vox.md: guía completa de funciones</title>
+  <meta name="description" content="Documentación completa de Rápido captura, Rutas, destinos Markdown, teclado iOS, modelos de transcripción locales, widgets, Atajos, Apple Watch y Mac de Vox.md.">
+  <link rel="canonical" href="https://vox.isolated.tech/es/docs/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Documentación de Vox.md para modelos de lenguaje">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Documentación de Vox.md: guía completa de funciones">
+  <meta property="og:description" content="Conoce todas las funciones incluidas en Vox.md, desde la captura persistente en Markdown y las rutas hasta los modelos de voz locales, el teclado, Apple Watch y Mac.">
+  <meta property="og:url" content="https://vox.isolated.tech/es/docs/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Documentación de Vox.md">
+  <meta name="twitter:description" content="La guía completa de captura, enrutamiento, transcripción e integraciones del sistema de Vox.md.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Guía completa de funciones de Vox.md",
+  "description": "Documentación de todas las funciones incluidas en Vox.md de captura, enrutamiento, transcripción, teclado, integración del sistema, Apple Watch y Mac.",
+  "dateModified": "2026-10-26",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/es/docs/",
+  "inLanguage": "es",
+  "name": "Documentación de Vox.md: guía completa de funciones"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/es/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Documentación",
+      "item": "https://vox.isolated.tech/es/docs/"
+    }
+  ],
+  "inLanguage": "es",
+  "name": "Documentación de Vox.md: guía completa de funciones",
+  "description": "Documentación completa de Rápido captura, Rutas, destinos Markdown, teclado iOS, modelos de transcripción locales, widgets, Atajos, Apple Watch y Mac de Vox.md."
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="API de información pública de Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="Navegación principal">
+  <div class="nav-inner docs-header-inner">
+    <a href="/es/" class="logo" aria-label="inicio de Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ documentación</span></span>
+    </a>
+    <form class="docs-search" role="search" action="./" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="Buscar en la documentación" aria-label="Buscar en la documentación" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Resultados de búsqueda" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/es/blog/">Blog</a></li>
+      <li><a href="/es/privacy.html">Privacidad</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>Idioma</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es" aria-current="page">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="En esta página">
+      <div class="docs-sidebar-title">En esta página</div>
+      <ol>
+        <li><a href="#getting-started">Primeros pasos</a></li>
+        <li><a href="#quick-capture">Rápido captura</a></li>
+        <li><a href="#presets">Rutas</a></li>
+        <li><a href="/es/docs/location/">Ubicación actual y {location}</a></li>
+        <li><a href="#models">Modelos y transcripción</a></li>
+        <li><a href="#keyboard">Teclado de iOS</a></li>
+        <li><a href="#system-integrations">Integraciones del sistema</a></li>
+        <li><a href="#apple-watch">Apple Watch</a></li>
+        <li><a href="#mac">Mac Compañía</a></li>
+        <li><a href="#history-settings">Biblioteca, Ajustes y privacidad</a></li>
+        <li><a href="#troubleshooting">Resolución de problemas</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="docs-title">
+      <div class="page-eyebrow">Documentación · Guía actual del producto</div>
+      <h1 class="page-title" id="docs-title">Todo lo que puedes hacer con Vox.md</h1>
+      <p class="docs-hero-copy">Una guía completa de captura, rutas, enrutamiento Markdown, teclado de voz, modelos locales, integraciones del sistema Apple, Apple Watch, Mac, historial, ajustes y privacidad.</p>
+      <div class="docs-meta-row" aria-label="Datos de la documentación">
+        <span>Actualizado el 26 oct 2026</span>
+        <span>iOS 17.6+</span>
+        <span>macOS 14+</span>
+        <span>watchOS 10+</span>
+      </div>
+      </header>
+
+      <section class="docs-directory" aria-labelledby="browse-docs">
+      <h2 class="visually-hidden" id="browse-docs">Explorar por categoría</h2>
+      <div class="docs-category-grid">
+        <a class="docs-category-card" href="#getting-started"><span>01</span><strong>Primeros pasos</strong><small>Plataformas, configuración, permisos y primera captura</small></a>
+        <a class="docs-category-card" href="#quick-capture"><span>02</span><strong>Rápido captura</strong><small>Editor, contenido multimedia, voz, Barra de captura y borradores</small></a>
+        <a class="docs-category-card" href="#presets"><span>03</span><strong>Rutas</strong><small>Procesamiento, metadatos, destinos y plantillas</small></a>
+        <a class="docs-category-card is-guide" href="/es/docs/location/"><span>Guía</span><strong>Ubicación actual y <code>{location}</code></strong><small>Enlaces solo con tokens, metadatos opcionales, precisión, privacidad y migración</small></a>
+        <a class="docs-category-card" href="#models"><span>04</span><strong>Modelos</strong><small>automático, Apple Speech, Whisper y Parakeet</small></a>
+        <a class="docs-category-card" href="#keyboard"><span>05</span><strong>Teclado</strong><small>Configuración, dictado, inserción, respuesta háptica y detención automática</small></a>
+        <a class="docs-category-card" href="#system-integrations"><span>06</span><strong>Integraciones del sistema</strong><small>Widgets, hoja para compartir, Atajos y enlaces profundos</small></a>
+        <a class="docs-category-card" href="#apple-watch"><span>07</span><strong>Apple Watch</strong><small>Grabación, sincronización de rutas, cola y complicaciones</small></a>
+        <a class="docs-category-card" href="#mac"><span>08</span><strong>Mac</strong><small>Captura de reuniones, espacio de trabajo, barra de menús y atajos globales</small></a>
+        <a class="docs-category-card" href="#history-settings"><span>09</span><strong>Biblioteca y Ajustes</strong><small>Recuperación, estadísticas, privacidad, límites, compra y asistencia</small></a>
+      </div>
+      </section>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="getting-started">
+        <div class="docs-section-label">01 / Primeros pasos</div>
+        <h2>Captura en Markdown sin crear otro silo de notas</h2>
+        <p>Vox.md es una app de captura rápida que prioriza lo local. Escribe Markdown estándar y adjuntos en una bóveda de Obsidian u otra carpeta con permiso de escritura que selecciones mediante Archivos. No requiere cuenta de Vox.md, complemento ni base de datos de notas alojada en un servidor.</p>
+
+        <p>Para un flujo completo de voz, <a href="/es/blog/voice-notes-to-obsidian-iphone/">sigue la guía de notas de voz del iPhone a Obsidian</a>, desde seleccionar una carpeta hasta comprobar el Markdown resultante.</p>
+
+        <p>¿Estás eligiendo un método de captura? Lee la <a href="/es/blog/obsidian-quick-capture-iphone/">guía para elegir cómo capturar en iPhone</a> o <a href="/es/compare/vox-md-vs-obsidian-quick-capture/">compara Vox.md con Obsidian nativo</a>.</p>
+
+        <div class="docs-table-wrap" id="platform-availability">
+          <table class="docs-table">
+            <thead><tr><th>Plataforma</th><th>Requisito</th><th>Qué está disponible</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone y iPad</td><td class="req">iOS/iPadOS 17.6+</td><td>Rápido captura, teclado, hoja para compartir, widgets, Atajos, Actividades en directo, historial y ajustes</td></tr>
+              <tr><td>Mac</td><td class="req">macOS 14+</td><td>Espacio de captura, grabación e importación, rutas, modelos, historial, barra de menús y atajos globales</td></tr>
+              <tr><td>Apple Watch</td><td class="req">watchOS 10+</td><td>Grabación local, selección de ruta, cola de sincronización, entrega de solo grabación y complicación</td></tr>
+              <tr><td>Controles del Centro de control</td><td class="req">iOS 18+</td><td>Rápido captura y controles de grabación vinculados a la ruta</td></tr>
+              <tr><td>Motor automático de Apple Speech</td><td class="req">Dispositivo e idioma compatibles con iOS 26</td><td>Transcripción en directo y por lotes en el dispositivo, gestionada por el sistema</td></tr>
+              <tr><td>Procesamiento de Apple Intelligence</td><td class="req">Dispositivo compatible con iOS/macOS 26</td><td>Depuración en el dispositivo, salida estructurada e instrucciones personalizadas con alternativas</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <p><strong>El flujo básico.</strong> Elige una Ruta, conecta su destino, escribe o añade contenido en Rápido captura y toca Envío. La ruta decide cómo se procesa, formatea y coloca el contenido en tus notas.</p>
+        </div>
+
+
+        <h3 id="first-capture">Haz tu primera captura</h3>
+        <ol class="docs-steps">
+          <li><strong>Abre Vox.md.</strong><span>La app se abre directamente en el editor Markdown persistente.</span></li>
+          <li><strong>Selecciona una Ruta.</strong><span>La ruta predeterminada integrada no se puede eliminar, pero sí desactivar. Mantén al menos una ruta activada y asígnale un destino.</span></li>
+          <li><strong>Configura su destino.</strong><span>Toca <em>Establecer el destino</em>, elige una bóveda de Obsidian o carpeta de Archivos y después una nota nueva, periódica o existente.</span></li>
+          <li><strong>Añade contenido.</strong><span>Escribe Markdown o añade un enlace, foto, archivo, escaneo, boceto, ubicación o grabación de voz.</span></li>
+          <li><strong>Toca Envío.</strong><span>Vox.md guarda mediante la ruta seleccionada e informa de <em>Capturar el</em>. El trabajo fallido o en cola sigue disponible para recuperarlo.</span></li>
+        </ol>
+
+        <h3 id="permissions">Permisos y acceso al sistema</h3>
+        <ul>
+          <li><strong>Micrófono:</strong> grabación de voz, transcripción local, escucha del teclado y captura de audio. Rápido captura puede mostrar esta solicitud al abrir el espacio de trabajo por primera vez, antes de iniciar una grabación.</li>
+          <li><strong>Reconocimiento de voz:</strong> Apple Speech en sistemas compatibles.</li>
+          <li><strong>Acceso a carpetas de Archivos:</strong> destinos, plantillas, importaciones y salida Solo grabación del Watch.</li>
+          <li><strong>Cámara y fotos seleccionadas:</strong> solo cuando añades contenido multimedia, capturas de pantalla, fotos de diario o escaneos.</li>
+          <li><strong>Ubicación mientras se usa:</strong> solo para el comando independiente Ubicación actual de la barra de captura o cuando una ruta que lo haya activado necesite su única ubicación del momento de origen. Vox.md nunca rastrea la ubicación de forma continua ni en segundo plano.</li>
+          <li><strong>Notificaciones:</strong> estado de entrega opcional, incluidos los fallos desatendidos del Apple Watch.</li>
+          <li><strong>Permitir acceso total al teclado:</strong> necesario para que el teclado de Vox.md use su flujo compartido entre apps en el dispositivo. Consulta <a href="#keyboard-setup">Configuración del teclado</a>.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="quick-capture">
+        <div class="docs-section-label">02 / Captura rápida</div>
+        <h2>Un editor persistente para texto, contenido multimedia, archivos y voz</h2>
+        <p>Rápido captura es el espacio principal de trabajo de iOS y iPadOS. El menú de ruta cambia el flujo actual; el menú de destino previsualiza o cambia temporalmente dónde se entregará este borrador. La barra inferior también abre Biblioteca y Ajustes y permite mostrar u ocultar el teclado en pantalla.</p>
+
+        <h3 id="durable-drafts">Borradores persistentes y entrega segura</h3>
+        <ul>
+          <li>El texto, los adjuntos, la ruta seleccionada, los cambios temporales de destino y la fuente de captura sobreviven a la suspensión y al reinicio.</li>
+          <li>Las ediciones se guardan tras una breve espera para agrupar cambios, y pasar la app a segundo plano activa un guardado inmediato.</li>
+          <li>Si sigues editando mientras un envío está en curso, esas ediciones nuevas se conservan en un borrador nuevo en lugar de descartarse.</li>
+          <li>Es necesario configurar un destino antes de la entrega. El editor muestra <em>Destino no configurado</em> con una acción de configuración cuando hace falta.</li>
+          <li>Las solicitudes de captura seguras frente a reintentos se registran localmente para poder reintentarlas tras un fallo de permisos, proveedor de archivos o sincronización.</li>
+          <li>Un editor vacío muestra una cita inspiradora en caché hasta que añades texto, incluso después de seleccionar una ruta o adjuntar un archivo; las solicitudes de citas nunca incluyen tu borrador.</li>
+        </ul>
+
+        <p>Para un tutorial centrado en tareas, consulta <a href="/es/blog/save-links-photos-obsidian-iphone/">guarda enlaces, fotos y escaneos en Obsidian</a>.</p>
+
+        <h3 id="capture-types">Tipos de captura</h3>
+        <div class="docs-feature-grid">
+          <div><strong>Texto y Markdown</strong><p>Escribe directamente en un editor Markdown que respeta la selección, pega texto existente y combina texto con otros contenidos.</p></div>
+          <div><strong>Enlaces web</strong><p>Añade una URL HTTP o HTTPS con formato de enlace Markdown.</p></div>
+          <div><strong>Fotos y cámara</strong><p>Selecciona fotos o capturas de pantalla, o haz una foto nueva. Las imágenes se preparan y se insertan en la nota entregada.</p></div>
+          <div><strong>Archivos</strong><p>Selecciona varios elementos de Archivos. Las imágenes se insertan, el audio se conserva como contenido de audio y los demás archivos usan enlaces al estilo de Obsidian.</p></div>
+          <div><strong>Escaneos de documentos</strong><p>Escanea páginas con VisionKit. Vox.md conserva las imágenes de las páginas, crea un PDF e incluye OCR local con el mejor resultado posible.</p></div>
+          <div><strong>OCR de diario</strong><p>Captura hasta 10 páginas de diario con disparo manual o elige fotos de diario. El OCR preciso de Vision usa detección automática de idioma.</p></div>
+          <div><strong>Bocetos</strong><p>Dibuja en un lienzo blanco de PencilKit con un bolígrafo negro. Vox.md almacena datos de dibujo editables y una vista previa PNG.</p></div>
+          <div><strong>Acción Ubicación actual</strong><p>Solicita una ubicación e inserta un enlace Markdown validado de Google Maps en el borrador. Esta acción independiente de la Barra de captura no cambia ninguno de los dos controles de ubicación por ruta.</p></div>
+          <div><strong>Voz y audio importado</strong><p>Graba desde el editor o importa audio o vídeo, transcribe localmente y añade el resultado al borrador o envíalo inmediatamente.</p></div>
+        </div>
+        <p class="docs-note">Accesibilidad: el OCR muestra un aviso de progreso «Extrayendo texto en este dispositivo», y VoiceOver anuncia el progreso y la finalización del OCR, «Captura enviada» y «Transcripción añadida a Captura» en los flujos de captura.</p>
+
+        <h3 id="capture-bar">Barra de captura</h3>
+        <p>Ajustes → Barra de captura permite reordenar u ocultar acciones. Todas son visibles de forma predeterminada.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Acción</th><th>Comportamiento</th></tr></thead>
+            <tbody>
+              <tr><td>Añadir medios</td><td>Abre las opciones Boceto, Cámara, Foto, Captura de pantalla y Enlace web.</td></tr>
+              <tr><td>Adicionar archivos</td><td>Selecciona varios archivos de Archivos y los prepara junto al borrador.</td></tr>
+              <tr><td>Escanear el documento</td><td>Captura un escaneo de varias páginas, un PDF, imágenes de página y OCR con el mejor resultado posible.</td></tr>
+              <tr><td>Extraer texto</td><td>Ofrece Capturar páginas de diario y Elegir fotos de diario para captura centrada en OCR.</td></tr>
+              <tr><td>nueve</td><td>Deshace la última operación del editor.</td></tr>
+              <tr><td>Formato Markdown</td><td>Aplica negrita, cursiva, hashtag o encabezados de nivel 1 a 6.</td></tr>
+              <tr><td>Markdown Enlace</td><td>Inserta <code>[link text](url)</code> y selecciona la parte editable.</td></tr>
+              <tr><td>Enlace interno</td><td>Inserta un enlace al estilo de Obsidian de tipo <code>[[Target]]</code> de tipo wikilink.</td></tr>
+              <tr><td>2 Página de fecha</td><td>Usa Hoy, Mañana o Este fin de semana; hora opcional; y ajustes de ±15m, ±30m o ±1h. Inserta <code>(@yyyy-MM-dd)</code> o una variante con hora.</td></tr>
+              <tr><td>Checklist</td><td>Aplica el prefijo de tarea de Markdown <code>- [ ]</code>.</td></tr>
+              <tr><td>Lista de balas</td><td>Aplica un prefijo de viñeta Markdown.</td></tr>
+              <tr><td>Pasto</td><td>Pega el texto del portapapeles en la selección actual.</td></tr>
+              <tr><td>Esquema</td><td>Abre la captura editable de bocetos de PencilKit.</td></tr>
+              <tr><td>Ubicación actual</td><td>Solicita una ubicación e inserta un enlace de Google Maps.</td></tr>
+              <tr><td>Introducción a Timestamp</td><td>Inserta la hora y la fecha locales como <code>h:mm a yyyy-MM-dd</code>.</td></tr>
+              <tr><td>Insertar la fecha</td><td>Inserta <code>yyyy-MM-dd</code>.</td></tr>
+              <tr><td>Cambiar el texto de caso</td><td>Ofrece minúsculas, mayúsculas, tipo oración, iniciales en mayúscula y conversión a slug.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">El formato respeta la selección actual, normaliza los finales de línea, limita los intervalos de selección no válidos y evita dividir caracteres compuestos, como los emoji.</p>
+
+        <h3 id="inline-voice">Controles de voz integrados</h3>
+        <ul>
+          <li>Toca el botón de voz para iniciar o detener. Mantenlo pulsado unos 0,45 segundos para mostrar los controles detallados.</li>
+          <li>Durante la grabación, el botón <strong>Pausar</strong> aparece junto al botón de voz: un toque pausa y otro reanuda. La nota final sigue siendo una sola grabación, sin el audio ni el tiempo de la pausa. Al pausar también se suspenden la vista previa de la transcripción en directo y la detención automática por voz hasta que reanudes.</li>
+          <li><strong>Añadir al borrador</strong> añade al final la transcripción terminada. <strong>Enviar inmediatamente</strong> ejecuta la ruta seleccionada y su destino.</li>
+          <li><strong>Enviar inmediatamente está seleccionado de forma predeterminada</strong> en los espacios de captura de iOS y Mac. Abrir la acción de voz de iOS mediante <code>voxboard://capture?action=voice</code> cambia esa grabación a Añadir al borrador.</li>
+          <li>La <strong>Audio</strong> conserva la grabación de origen como parte de un borrador cuando se solicita.</li>
+          <li><strong>Importación de audio</strong> acepta archivos de audio o vídeo y usa el mismo proceso local de transcripción.</li>
+          <li><strong>Identificar a los oradores</strong> es un paso opcional de procesamiento de voz por Ruta para grabaciones y audio importado. Prepara un modelo de hablantes independiente en el primer uso, añade etiquetas anónimas localmente con el mejor resultado posible y conserva la transcripción simple con un motivo visible en la biblioteca cuando no puede ejecutarse.</li>
+          <li>automático puede mostrar texto confirmado y provisional de Apple Speech directamente en el editor mientras grabas. Los modelos Whisper y Parakeet seleccionados explícitamente transcriben cuando se detiene la grabación.</li>
+          <li>Una transcripción fallida no destruye la grabación de origen; sigue siendo recuperable.</li>
+          <li>La escucha persistente del teclado solo se conserva entre aperturas cuando se activa expresamente. Una grabación puntual de la app devuelve la sesión de audio al estado inactivo.</li>
+        </ul>
+
+        <h3 id="capture-limits">Límites de entrada de captura</h3>
+        <div class="docs-callout docs-callout-neutral">
+          <p>Una solicitud puede incluir hasta <strong>100.000 caracteres</strong> de texto compartido, <strong>10 elementos compartidos</strong>, y <strong>250 MB</strong> de recursos preparados en total. Los selectores de fotos y capturas de pantalla admiten hasta 10 elementos; la captura de diario admite hasta 10 páginas. Vox.md rechaza los excesos en lugar de omitir elementos sin avisar.</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="presets">
+        <div class="docs-section-label">03 / Rutas</div>
+        <h2>Guarda todo el flujo, no solo una carpeta</h2>
+        <p>Una Ruta almacena qué significa una captura, si se procesa el texto, cómo se gestionan los metadatos y el audio y dónde se escribe exactamente el Markdown. Las rutas se aplican a texto escrito, enlaces, contenido multimedia, escaneos, archivos, bocetos, voz, Atajos, widgets, hoja para compartir, Watch y Mac.</p>
+
+        <h3 id="preset-management">Crea y gestiona rutas</h3>
+        <ul>
+          <li>Abre Ajustes → Rutas para crear, renombrar, activar, desactivar, elegir un icono o eliminar una ruta personalizada.</li>
+          <li>El selector de iconos con búsqueda agrupa los símbolos en Escritura, Voz, Tareas, Personal y Trabajo.</li>
+          <li>Las rutas desactivadas se ocultan de los selectores normales. La ruta predeterminada integrada no se puede eliminar.</li>
+          <li>La ruta predeterminada integrada usa el símbolo de forma de onda y el mensaje <em>Captura una idea, tarea, enlace, archivo, escaneo o grabación.</em>, <code>type: capture</code> como metadatos, procesamiento Prosa depurada, procesamiento de texto escrito desactivado y guardado de audio desactivado.</li>
+          <li>Una ruta personalizada nueva comienza como <em>Ruta personalizada</em>, usa el icono de reguladores y <em>¿Qué quieres capturar?</em> como mensaje, y empieza con Instrucción personalizada seleccionado pero con el procesamiento de texto escrito o mixto desactivado.</li>
+        </ul>
+
+        <h3 id="processing-modes">Modos de procesamiento</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Modo</th><th>Resultado</th><th>Comportamiento alternativo</th></tr></thead>
+            <tbody>
+              <tr><td>Conservar original</td><td>Conserva el texto capturado sin reescritura por IA.</td><td>Se entrega el texto original.</td></tr>
+              <tr><td>Prosa depurada</td><td>Corrige mayúsculas y puntuación conservando el significado y el Markdown.</td><td>Texto original cuando el enriquecimiento en el dispositivo no está disponible.</td></tr>
+              <tr><td>Lista de tareas</td><td>Produce Markdown <code>- [ ]</code> elementos de tarea.</td><td>Un formateador determinista de listas de verificación.</td></tr>
+              <tr><td>Notas de reunión</td><td>Produce una <code>## Notes</code> como sección y, cuando esté presente, <code>## Action Items</code>.</td><td>Estructura determinista de notas de reunión.</td></tr>
+              <tr><td>Instrucción personalizada</td><td>Sigue tu instrucción con Apple Intelligence en el dispositivo cuando está disponible.</td><td>Texto original cuando la instrucción no puede ejecutarse localmente.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Las transcripciones de voz usan el modo de ruta seleccionado. <strong>Aplique para capturar texto</strong> es una activación voluntaria independiente, desactivada de forma predeterminada, que permite procesar Markdown escrito, OCR y otras capturas mixtas con texto. Dejarla desactivada evita reescrituras inesperadas del Markdown creado. La solicitud procesada exacta se guarda antes de la entrega, de modo que los reintentos no vuelven a procesarla con ajustes modificados.</p>
+
+        <h3 id="preset-metadata">Metadatos</h3>
+        <ul>
+          <li>Introduce los metadatos estáticos como un <code>key: value</code> por línea, como <code>tags: [journal, idea]</code>.</li>
+          <li><strong>Metadatos iniciales de la nota</strong> escribe metadatos en el ámbito de documento.</li>
+          <li><strong>Campos de entrada en línea</strong> escribe <code>key:: value</code> junto a cada entrada de una nota periódica.</li>
+          <li>Cuando está disponible, el enriquecimiento en el dispositivo puede añadir título, etiquetas, categoría y texto depurado junto a los metadatos estáticos de la ruta.</li>
+        </ul>
+
+        <h3 id="preset-location">Ubicación con activación voluntaria</h3>
+        <p>Ubicación actual está desactivada de forma predeterminada y pertenece a cada Ruta. Cuando se activa, Vox.md solicita una ubicación en el origen de la captura: al enviar en iOS/iPadOS, hoja para compartir, enlace profundo o editor, Mac y acciones del sistema que abren el editor; durante la invocación de intents de texto, enlace y archivo que se ponen directamente en cola; o al detener una grabación de voz inmediata, de ruta desde el teclado, de widget o control, o de Apple Watch enviada mediante la entrega normal de Captura. Solo grabación del Watch es una exportación de audio sin procesar a Archivos, sin superficie de ubicación Markdown, y no solicita ubicación. Vox.md nunca supervisa la ubicación continuamente ni realiza seguimiento de ubicación en segundo plano.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Ajuste</th><th>Comportamiento</th></tr></thead>
+            <tbody>
+              <tr><td>Usar ubicación actual</td><td>Solicita una ubicación del momento de origen para esta ruta y alimenta <code>{location}</code>. No escribe metadatos automáticamente.</td></tr>
+              <tr><td>exacto (predeterminado)</td><td>Conserva la posición de origen ajustada por privacidad y puede incluir una etiqueta de punto de interés cuando los metadatos seleccionados la necesiten.</td></tr>
+              <tr><td>ciudad</td><td>Redondea la latitud y la longitud a dos decimales y omite las etiquetas de puntos de interés. Todos los campos derivados y enlaces usan esas coordenadas redondeadas.</td></tr>
+              <tr><td>Escribir metadatos de ubicación</td><td>Activa por separado los metadatos estructurados o avanzados, además de cualquier <code>{location}</code> en la plantilla de entrada.</td></tr>
+              <tr><td>Campos estructurados</td><td>Selecciona y renombra coordenadas, latitud, longitud, lugar, ciudad, región, país, Apple Maps, Google Maps, OpenStreetMap, <code>geo:</code> URI, precisión, marca de tiempo, origen e ID de captura.</td></tr>
+              <tr><td>Plantilla YAML avanzada</td><td>Usa YAML validado y acotado para los metadatos iniciales de la nota. No puede sustituir metadatos iniciales ajenos y no está disponible para los campos de entrada en línea.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Cuando Escribir metadatos de ubicación está activado, el ámbito de documento añade cada resultado a la colección configurada de metadatos iniciales, con el ID de captura como clave. Una nota puede conservar varias ubicaciones, mientras que un reintento idempotente no puede añadir la misma ubicación dos veces. El ámbito de entrada, en cambio, representa los campos estructurados seleccionados como <code>key:: value</code> junto a esa entrada capturada.</p>
+        <p>El lugar, la ciudad, la región y el país usan el geocodificador inverso del sistema de Apple solo cuando los campos de metadatos activados los necesitan. La ubicación solo con tokens omite la geocodificación inversa. El servicio es gratuito y no requiere clave de API, pero puede usar una conexión de red; si falla la consulta, Captura continúa con metadatos que contienen solo coordenadas. Los prefijos y sufijos de entrada y las plantillas Markdown de la bóveda pueden usar <code>{location}</code> para insertar un enlace de Google Maps que se puede pulsar a partir de la instantánea disponible de la ruta ajustada por privacidad, sin activar la salida de metadatos; el token está vacío cuando Ubicación actual está desactivada o no disponible. Crear un enlace de proveedor no contacta con Apple, Google ni OpenStreetMap. Al abrirlo, se revelan a ese proveedor las mismas coordenadas exactas o redondeadas almacenadas en el enlace.</p>
+        <p>Las rutas nuevas y las desactivadas anteriormente mantienen ambos controles apagados. Las rutas que ya escribían metadatos de ubicación mantienen ambos controles activados tras la actualización, conservando su salida existente.</p>
+        <div class="docs-callout">
+          <strong>Guía completa de Ubicación actual</strong>
+          <p>Consulta <a href="/es/docs/location/">Ubicación actual, <code>{location}</code>, y Metadatos</a> para ver patrones de configuración, ejemplos, momentos de obtención según la fuente, comportamiento de migración, privacidad y resolución de problemas.</p>
+        </div>
+        <div class="docs-callout docs-callout-neutral">
+          <strong>Ubicación no disponible</strong>
+          <p>Las interfaces interactivas permiten reintentar, cancelar, enviar una vez sin ubicación o elegir <em>Enviar siempre sin ubicación</em> para esa ruta. Restablece esa opción guardada en los ajustes de ubicación de la ruta. Una solicitud desatendida <em>preguntar</em> conserva su resultado no disponible del momento de origen hasta que decidas; los reintentos y la recuperación nunca vuelven a obtener una ubicación posterior.</p>
+        </div>
+
+        <h3 id="destinations">Destinos Markdown</h3>
+        <p>Cada ruta tiene un destino con raíz en una bóveda de Obsidian o en una carpeta de Archivos con permiso de escritura.</p>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Nueva nota</strong><p>Crea un archivo Markdown independiente para cada captura con tokens como <code>{timestamp}</code>, <code>{date}</code>, <code>{time}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{id8}</code>, y <code>{id}</code>.</p></div>
+          <div><strong>Rolling Note</strong><p>Añade contenido a notas diarias, semanales, mensuales, trimestrales o anuales. Las rutas también admiten <code>{period}</code> y <code>{week}</code>. El valor predeterminado de un destino nuevo es <code>Journal/{period}.md</code> con un período diario.</p></div>
+          <div><strong>Nota existente</strong><p>Elige un archivo Markdown que ya esté dentro de la bóveda o carpeta seleccionada. Vox.md comprueba que el destino siga estando de forma segura dentro de esa raíz.</p></div>
+        </div>
+
+        <p>Para una receta completa de ruta, consulta <a href="/es/blog/append-to-obsidian-daily-note-iphone/">añade texto y voz a una nota diaria de Obsidian</a>.</p>
+
+        <p><a href="/es/blog/obsidian-capture-templates/">Usa una receta de plantilla de bandeja de entrada, diario o tareas</a> para mantener un formato de entrada predecible.</p>
+
+        <h3 id="placement-templates">Ubicación, encabezados y plantillas</h3>
+        <ul>
+          <li><strong>Bajo</strong> añade al final; <strong>Top</strong> antepone; <strong>La dirección</strong> inserta bajo un encabezado elegido de nivel 1 a 6.</li>
+          <li>Si falta un encabezado, elige <strong>Mostrar error</strong> o <strong>Creación de la cabeza</strong>.</li>
+          <li>Usa un archivo de plantilla Markdown activo de la bóveda, una plantilla de entrada reutilizable o texto personalizado de prefijo y sufijo.</li>
+          <li>El formato de entrada admite <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>, y <code>{location}</code>.</li>
+          <li>La subcarpeta de adjuntos predeterminada es <code>attachments</code>.</li>
+          <li><strong>Protección de retroceso</strong>, desactivado de forma predeterminada, escribe un comentario visible <code>vox-capture</code> como comentario HTML para detectar reintentos duplicados.</li>
+          <li>Vox.md rechaza rutas absolutas, barras invertidas, recorridos fuera de la carpeta, nombres inseguros y escapes mediante enlaces simbólicos.</li>
+        </ul>
+
+        <h3 id="capture-overrides">Cambios para una sola captura</h3>
+        <p>El control de destino permite usar el valor predeterminado de la Ruta, colocar esta captura al principio o al final, aplicar una plantilla de entrada puntual o elegir otra nota en la misma bóveda. <strong>Usar los valores predeterminados del destino de la ruta</strong> elimina el cambio temporal. Estas opciones solo afectan al borrador actual y nunca modifican la ruta.</p>
+
+        <h3 id="audio-export">Conservación de audio y exportación de compatibilidad</h3>
+        <ul>
+          <li>Los modos de guardado de audio son <strong>Apagado</strong>, <strong>Junto a la nota</strong>, o <strong>Folleto de adhesivos</strong>.</li>
+          <li>Markdown puede insertar el audio conservado al principio o al final con sintaxis de Obsidian como <code>![[recording.m4a]]</code>.</li>
+          <li>Para configuraciones antiguas de voz directa sin un destino Markdown unificado, <strong>Guardar notas en archivos</strong> admite TXT, MD, JSON y YAML; Archivo nuevo o Añadir al final; tokens de nombre de archivo que incluyen modelo e idioma; plantillas Markdown; opciones de Obsidian Bases; propiedades YAML seleccionables; y la opción <code>.md</code> como extensión para YAML.</li>
+          <li>Los ajustes de exportación de compatibilidad se aplican solo a ejecuciones de voz directa cuando la ruta no tiene un destino de Captura unificado.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="models">
+        <div class="docs-section-label">04 / Modelos y transcripción</div>
+        <h2>Elige un motor del sistema o un modelo local opcional</h2>
+        <p>Toda la transcripción se ejecuta en el dispositivo Apple. automático es la opción predeterminada en iOS. Los archivos de los modelos opcionales Whisper y Parakeet solo se descargan cuando lo pides y se pueden seleccionar, cancelar durante la descarga o eliminar después.</p>
+
+        <p><a href="/es/blog/offline-transcription-iphone-markdown/">Prepara un flujo de transcripción sin conexión</a> con un motor local y un destino que permita escribir.</p>
+
+        <h3 id="model-options">Opciones de transcripción disponibles</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Opción</th><th>Tamaño aproximado</th><th>La mejor opción para</th></tr></thead>
+            <tbody>
+              <tr><td>automático</td><td>Gestionado por el sistema</td><td>Da prioridad a Apple Speech en un dispositivo e idioma compatibles con iOS 26; solo recurre a un modelo local que hayas descargado expresamente.</td></tr>
+              <tr><td>Whisper Tiny</td><td>75 MB</td><td>La descarga más pequeña y la opción Whisper más rápida.</td></tr>
+              <tr><td>Whisper Base</td><td>142 MB</td><td>Modelo local pequeño y equilibrado; opción predeterminada antigua del Mac.</td></tr>
+              <tr><td>Whisper Small</td><td>466 MB</td><td>Más precisión con mayor coste de almacenamiento y procesamiento.</td></tr>
+              <tr><td>Whisper Medium</td><td>1.5 GB</td><td>Modelo Whisper multilingüe de mayor tamaño.</td></tr>
+              <tr><td>Whisper Large v3 Turbo</td><td>1.6 GB</td><td>La opción Whisper más grande disponible.</td></tr>
+              <tr><td>Parakeet v2</td><td>~800 MB</td><td>Modelo Core ML/FluidAudio optimizado para inglés.</td></tr>
+              <tr><td>Parakeet v3</td><td>~800 MB</td><td>Modelo Core ML/FluidAudio compatible con 25 idiomas.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="automatic-model">Cómo funciona automático</h3>
+        <ul>
+          <li>En un dispositivo compatible con iOS 26, automático comprueba el reconocedor Speech gestionado por el sistema de Apple para el idioma seleccionado y prepara su recurso de idioma cuando hace falta.</li>
+          <li><strong>Idioma del sistema</strong> sigue el idioma del dispositivo. Elige un idioma concreto cuando la grabación use otro.</li>
+          <li>automático nunca descarga sin avisar un modelo Whisper o Parakeet alternativo. Solo puede usar un modelo que hayas elegido descargar previamente.</li>
+          <li>Apple Speech en directo distingue el texto confirmado que se puede insertar con seguridad del provisional, que aún puede cambiar.</li>
+          <li>Las selecciones explícitas de Whisper y Parakeet usan transcripción por lotes después de terminar el segmento.</li>
+        </ul>
+
+        <h3 id="model-languages">Idiomas</h3>
+        <ul>
+          <li><strong>Whisper:</strong> Detección automática, inglés, español, francés, alemán, italiano, portugués, neerlandés, polaco, ruso, chino, japonés, coreano, árabe, hindi, turco, vietnamita, tailandés, ucraniano, sueco, danés, noruego y finés.</li>
+          <li><strong>Automático:</strong> Idioma del sistema más los idiomas explícitos indicados para Whisper cuando Apple admita esa configuración regional.</li>
+          <li><strong>Parakeet v2:</strong> Inglés.</li>
+          <li><strong>Parakeet v3:</strong> Búlgaro, croata, checo, danés, neerlandés, inglés, estonio, finés, francés, alemán, griego, húngaro, italiano, letón, lituano, maltés, polaco, portugués, rumano, eslovaco, esloveno, español, sueco, ruso y ucraniano. El idioma se detecta automáticamente en el flujo de Parakeet.</li>
+        </ul>
+
+        <h3 id="parakeet-autostop">Detención automática de Parakeet en el teclado</h3>
+        <p>Un modelo opcional de aproximadamente 1 MB de <strong>Detección de pausa de voz</strong> puede detener una grabación de teclado con Parakeet v2 o v3 seleccionado explícitamente tras un silencio. Activa <strong>Detén Parakeet tras una pausa</strong> y elige aproximadamente 0,5, 0,75, 1, 1,5 o 2 segundos. De forma predeterminada se activa con una pausa de 0,75 segundos cuando el modelo complementario está disponible. automático y Whisper siguen siendo flujos con detención manual.</p>
+
+        <h3 id="audio-pipeline">Comportamiento del audio local</h3>
+        <ul>
+          <li>La entrada de Whisper se normaliza a audio mono de 16 kHz y 16 bits.</li>
+          <li>La escucha persistente de iOS usa un búfer circular de 10 minutos e incluye dos segundos de audio previo al iniciar un segmento.</li>
+          <li>Whisper usa <code>whisper.cpp</code>; Parakeet usa FluidAudio y Core ML. Whisper usa aceleración Metal en Mac.</li>
+          <li>Las descargas de modelos requieren conexión a la red, pero la transcripción se ejecuta localmente una vez que el motor seleccionado está preparado.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="keyboard">
+        <div class="docs-section-label">05 / Teclado de iOS</div>
+        <h2>Dicta en el campo de texto que ya estás editando</h2>
+        <p>El teclado de Vox.md funciona en apps como Mensajes, Notas, Mail, Safari, Slack y cualquier otra app que acepte un teclado estándar de iOS. Una barra de voz aparece sobre la distribución de KeyboardKit y se comunica con la app principal de Vox.md mediante el App Group privado compartido.</p>
+
+        <h3 id="keyboard-setup">Configura el teclado</h3>
+        <ol class="docs-steps">
+          <li><strong>Prepara la transcripción en Vox.md.</strong><span>Mantén automático seleccionado en un dispositivo compatible o descarga y selecciona Whisper o Parakeet en Ajustes → Modelos.</span></li>
+          <li><strong>Añade el teclado.</strong><span>Abre Ajustes de iOS → General → Teclado → Teclados → Añadir nuevo teclado y elige Vox.md.</span></li>
+          <li><strong>Activa Permitir acceso total.</strong><span>El flujo actual del teclado lo requiere para usar el estado compartido del App Group y coordinar la grabación con la app principal.</span></li>
+          <li><strong>Cambia de teclado.</strong><span>Abre un campo de texto, usa la tecla del globo para seleccionar Vox.md y toca el micrófono.</span></li>
+        </ol>
+        <div class="docs-callout">
+          <strong>Qué hace Acceso total aquí</strong>
+          <p>iOS describe el permiso en términos amplios. Vox.md lo usa para su flujo de app y teclado en el dispositivo, el estado compartido y la respuesta háptica opcional. Vox.md no sube pulsaciones de teclas, texto dictado, transcripciones ni audio del micrófono a los servidores de Vox.md. Consulta la <a href="/es/privacy.html">Política de privacidad</a>.</p>
+        </div>
+
+        <h3 id="keyboard-workflow">Barra de voz e inserción</h3>
+        <ul>
+          <li>La barra muestra el motor actual, el estado, la duración de grabación, la forma de onda en directo y la acción de micrófono o detención.</li>
+          <li>Los controles anterior y siguiente recorren los motores descargados disponibles.</li>
+          <li>Si la escucha no está activa, el teclado abre Vox.md una vez, inicia la escucha y puede devolverte al campo de texto original.</li>
+          <li>Con automático, los fragmentos confirmados de la transcripción se insertan mientras hablas; las palabras provisionales solo se muestran hasta que Apple las confirme.</li>
+          <li>Con Whisper o Parakeet, la transcripción completa se inserta después de detener el segmento manual o automáticamente.</li>
+          <li>Si la inserción se interrumpe o suspende, el texto pendiente se guarda y se vuelve a intentar la próxima vez que aparece el teclado.</li>
+          <li>La barra informa de estados como <em>abierta Vox.md</em>, <em>Transcribir...</em>, y <em>Activar Acceso total</em>.</li>
+        </ul>
+
+        <h3 id="keyboard-customization">Personalización del teclado</h3>
+        <ul>
+          <li><strong>Respuesta háptica</strong> está activado de forma predeterminada y se puede cambiar en Ajustes de Vox.md.</li>
+          <li>Los menús de caracteres alternativos al mantener pulsado están disponibles en inglés, alemán, español, francés, italiano, portugués, neerlandés, sueco, danés y noruego.</li>
+          <li>Quienes elijan Parakeet explícitamente pueden añadir la detención automática por pausas desde Ajustes → Modelos.</li>
+          <li>El cupo gratuito de 15 minutos de transcripción se aplica tanto al dictado por teclado como a las grabaciones e importaciones de la app.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="system-integrations">
+        <div class="docs-section-label">06 / Integraciones del sistema</div>
+        <h2>Inicia una captura desde la hoja para compartir, la pantalla de inicio, la pantalla bloqueada o Atajos</h2>
+
+        <h3 id="share-extension">Extensión para compartir</h3>
+        <p>La acción de la hoja para compartir de iOS se llama <strong>Capturar en Vox.md</strong>. Acepta texto, URL HTTP/HTTPS, imágenes, archivos y vídeos, hasta los límites compartidos de elementos y recursos. Elige una Ruta y un destino, añade una nota opcional y toca Envío. Si esa ruta usa Ubicación actual, Compartir solicita su única ubicación del momento de origen en esta acción de envío, esté o no activada la salida de metadatos. El contenido se prepara en el App Group privado, se pone en cola de forma persistente y se abre en Vox.md para su entrega. Si la entrega necesita la app principal, usa <strong>abierta Vox.md</strong>.</p>
+
+        <h3 id="widgets">Widgets de pantalla de inicio y pantalla bloqueada</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Rápido captura</strong><p>Abre un borrador Markdown persistente. Los widgets medianos y grandes ofrecen acciones de Nota, Foto, Captura de pantalla, Cámara, Archivo, Enlace, Escaneo, Boceto y Voz.</p></div>
+          <div><strong>Rápido registro</strong><p>Inicia el flujo de grabación configurado y refleja el estado listo, escuchando o desactivado en las familias compatibles de pantalla de inicio y bloqueada.</p></div>
+          <div><strong>Ajuste de seguridad del widget</strong><p>Desactiva el botón de grabación de la pantalla bloqueada en Ajustes para mostrar un estado desactivado en lugar de empezar a grabar inmediatamente.</p></div>
+        </div>
+
+        <h3 id="control-center-live-activities">Centro de control, Actividades en directo y Dynamic Island</h3>
+        <ul>
+          <li>En iOS 18+, añade los controles disponibles de captura y grabación de Vox.md desde el Centro de control. Configura la Ruta y las opciones que ofrezca tu versión instalada.</li>
+          <li>Completa la configuración del micrófono, del modelo y del destino en Vox.md antes de usar un control de grabación. Según iOS y la versión instalada de la app, grabar puede abrir la app. Prueba una grabación corta en tu dispositivo antes de depender de la captura en segundo plano.</li>
+          <li>La <strong>Monitor de actividad en directo</strong> controla el estado de grabación y las acciones Grabar/Detener en la pantalla bloqueada y Dynamic Island.</li>
+          <li>Los estados de Actividad en directo incluyen Grabación, temporizador, procesamiento, Listo, Grabar y Detener.</li>
+          <li>Las Actividades en directo están disponibles desde iOS 17; los controles del Centro de control requieren iOS 18.</li>
+        </ul>
+
+        <h3 id="shortcuts">Atajos y App Intents</h3>
+        <p>Las rutas aparecen como entidades seleccionables en Atajos y controles compatibles. Con Usar ubicación actual activado, los intents de texto, enlace y archivo que se ponen directamente en cola solicitan la ubicación durante la invocación; las acciones que abren Rápido captura la solicitan al enviar; y las acciones de grabación la solicitan al detenerse. La salida de metadatos no cambia estos momentos. Si una solicitud desatendida <em>preguntar</em> no puede obtener la ubicación, su resultado no disponible del momento de origen se conserva para decidir más tarde, en lugar de volver a obtenerlo. Usa las acciones disponibles en la versión de Vox.md que tienes instalada. Las acciones de captura incluyen:</p>
+        <ul class="docs-columns">
+          <li>Abierto rápido capturar</li>
+          <li>Recordar una captura</li>
+          <li>Capturar una captura de pantalla</li>
+          <li>Capturar texto para Markdown</li>
+          <li>Capturar el enlace Markdown</li>
+          <li>Capturar archivo para Markdown</li>
+        </ul>
+
+        <h3 id="action-button-recording">Configuración de grabación con el botón Acción</h3>
+        <p>Abre Vox.md una vez para conceder permiso de micrófono, preparar el motor de transcripción y conectar una Ruta a un destino. En Atajos, añade una acción de captura disponible de Vox.md y selecciona tu Ruta. Ejecuta el atajo con el teléfono desbloqueado para confirmar que guarda en la nota prevista antes de asignarlo en Ajustes → Botón Acción → Atajo.</p>
+        <p class="docs-note">Las acciones disponibles y el comportamiento de grabación en segundo plano dependen de la versión instalada y de iOS. Usa las acciones que aparezcan en Atajos en tu dispositivo. Si grabar requiere tener la app abierta, abre Vox.md para grabar. Que un atajo aparezca en el selector no garantiza que grabe con el teléfono bloqueado.</p>
+
+        <h3 id="deep-links">Enlaces profundos</h3>
+        <p>Vox.md registra el <code>voxboard://</code> como esquema URL. Codifica los valores de consulta para URL.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table docs-code-table">
+            <thead><tr><th>URL</th><th>Comportamiento</th></tr></thead>
+            <tbody>
+              <tr><td><code>voxboard://capture</code></td><td>Abre el editor persistente Rápido captura.</td></tr>
+              <tr><td><code>voxboard://capture?action=photos</code></td><td>Abre el selector de fotos. Otras acciones: <code>screenshots</code>, <code>camera</code>, <code>files</code>, <code>scan</code>, <code>sketch</code>, <code>link</code>, y <code>voice</code>.</td></tr>
+              <tr><td><code>voxboard://capture?text=...</code></td><td>Abre un borrador con texto de longitud limitada.</td></tr>
+              <tr><td><code>voxboard://capture?url=https%3A%2F%2F...</code></td><td>Abre un borrador con un enlace HTTP/HTTPS.</td></tr>
+              <tr><td><code>voxboard://capture?route=...</code></td><td>Selecciona una Ruta activada. Se puede combinar con una acción compatible, texto o URL.</td></tr>
+              <tr><td><code>voxboard://capture-request?id=...</code></td><td>Asume una solicitud persistente creada por una extensión del sistema o un intent.</td></tr>
+              <tr><td><code>voxboard://listen</code></td><td>Inicia el flujo de apertura para la escucha del teclado.</td></tr>
+              <tr><td><code>voxboard://record</code></td><td>Punto de entrada de grabación antiguo redirigido a la escucha.</td></tr>
+              <tr><td><code>voxboard://widget-record</code></td><td>Punto de entrada antiguo de grabación desde widgets.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">Se rechazan parámetros desconocidos o duplicados, UUID mal formados, identificadores de ruta inseguros, URL que no sean HTTP y texto que supere el límite compartido.</p>
+      </section>
+
+      <section class="docs-section" id="apple-watch">
+        <div class="docs-section-label">07 / Apple Watch</div>
+        <h2>Graba localmente en el Watch y entrega después mediante iPhone</h2>
+
+        <p><a href="/es/blog/apple-watch-obsidian-voice-notes/">Sigue la guía de configuración de Apple Watch a Obsidian</a> para comprobar la selección de ruta, la transferencia y la entrega.</p>
+
+        <h3 id="watch-recording">Flujo de grabación</h3>
+        <ul>
+          <li>La app del Watch muestra los estados Listo, Grabando, En pausa, Sincronizando, En cola, Transcribiendo, Guardando, Enviado y Requiere atención.</li>
+          <li>Usa Grabar, Pausar/Reanudar, Detener, Cancelar, Sincronizar y Actualizar. Pausar te permite ordenar tus ideas sin dividir la nota: el tiempo de pausa congela el temporizador y se excluye de la grabación. Cancelar elimina expresamente la grabación local en lugar de sincronizarla.</li>
+          <li>Las grabaciones se registran localmente y se recuperan después de interrupciones o cierres inesperados.</li>
+          <li>Una grabación permanece en el Watch hasta que el iPhone confirma la entrega o el descarte.</li>
+          <li>En una ruta con Usar ubicación actual activado y entrega normal de Captura, el Watch solicita una ubicación originada en el Watch al detener la grabación y transfiere ese resultado ajustado por privacidad con la instantánea de la ruta. El iPhone nunca la sustituye por su propia ubicación. Solo grabación omite la ubicación porque exporta audio sin procesar, sin superficie Markdown.</li>
+        </ul>
+
+        <h3 id="watch-presets">Rutas en el Watch</h3>
+        <p>Selecciona una Ruta del iPhone activada desde el Watch <strong>Ruta</strong> . Vox.md transfiere una instantánea segura con la grabación. Si el iPhone no está disponible, la selección solicitada queda pendiente y la última ruta confirmada sigue activa.</p>
+
+        <h3 id="watch-queue">Cola de grabaciones del Watch en iPhone</h3>
+        <p>La cola del iPhone muestra la hora de grabación, duración, ruta, estado de procesamiento y acciones de entrega. Los elementos fallidos se pueden reintentar, asignar a otra ruta, descartar o capturar sin transcripción. Descartar elimina el audio conservado y la entrega en cola.</p>
+
+        <h3 id="watch-recording-only">Salida Solo grabación</h3>
+        <ul>
+          <li>Establece la salida de una ruta en <strong>Solo grabación</strong> para copiar audio M4A a una carpeta de Archivos sin transcripción, procesamiento por IA ni uso del cupo de transcripción.</li>
+          <li>La plantilla de nombre de archivo predeterminada es <code>recording-{timestamp}-{id8}</code>.</li>
+          <li>Elige la carpeta de grabaciones una vez en iPhone antes de usar la ruta.</li>
+          <li>iOS puede retrasar la entrega en segundo plano. Forzar el cierre de Vox.md impide la entrega hasta que vuelvas a abrir la app.</li>
+        </ul>
+
+        <h3 id="watch-complication">Complicación y widget</h3>
+        <p>La <strong>Nota de voz</strong> admite las familias circular, rectangular, en línea y de esquina. Abre o alterna la grabación local del Watch y muestra el temporizador o etiquetas según el estado.</p>
+      </section>
+
+      <section class="docs-section" id="mac">
+        <div class="docs-section-label">08 / Complemento para Mac</div>
+        <h2>Usa el mismo sistema de captura desde macOS</h2>
+        <p>La app para Mac tiene destinos Captura, Biblioteca y Ajustes y comparte la arquitectura de modelos locales, rutas, rutas, exportación y reintentos que usa iOS.</p>
+
+        <h3 id="mac-workspace">Espacio de trabajo de captura</h3>
+        <ul>
+          <li>Escribe y edita Markdown, pega o arrastra y suelta archivos, imágenes y audio.</li>
+          <li>Usa la entrada de cámara de dispositivos integrados, externos o de Cámara de Continuidad.</li>
+          <li>Importa un escaneo o PDF, crea un boceto con un ratón, trackpad o tableta conectada y añade enlaces, wikilinks, fechas de vencimiento y transformaciones de texto.</li>
+          <li>Graba con <strong>Añadir al borrador</strong> o <strong>Enviar inmediatamente</strong>; opcionalmente, conserva Audio en modo borrador.</li>
+          <li><strong>Pausar</strong> y <strong>Reanudar</strong> una grabación de micrófono desde la barra de estado. El audio de las pausas se excluye, así que puedes grabar una nota terminada por partes. La captura de reuniones no se pausa.</li>
+          <li>Importa audio o vídeo para transcribirlo localmente.</li>
+          <li>Pulsa Command-Return para enviar la captura. Una ruta con Usar ubicación actual activado solicita una ubicación originada en el Mac al enviar o al detener la grabación, esté o no activada la salida de metadatos.</li>
+          <li>Un aviso de configuración del destino y un inspector de ruta muestran la nota resuelta y la ubicación de la ruta seleccionada.</li>
+        </ul>
+
+        <h3 id="mac-meeting">Captura de reuniones con pistas separadas</h3>
+        <p>Cambia el selector de modo de entrada de <strong>Micrófono</strong> a <strong>Reunión</strong> para grabar lo que reproduce una aplicación en tu Mac y tu propio micrófono como dos pistas de audio claramente separadas. Vox.md usa ScreenCaptureKit en modo de una sola aplicación, así que eliges exactamente una app y nunca se captura el propio Vox.md.</p>
+        <ul>
+          <li>Durante la grabación, la barra de estado muestra medidores de nivel del sistema y del micrófono en directo, el estado de cada fuente y los avisos de captura.</li>
+          <li>Ambas pistas se escriben en bloques persistentes con un manifiesto de recuperación, de modo que una interrupción —una transmisión detenida, un micrófono desconectado o un cierre forzado— permite finalizar de forma segura y la reunión aún puede transcribirse. Las sesiones interrumpidas se recuperan automáticamente la próxima vez que se reanude la cola de grabación.</li>
+          <li>Después de detenerte, cada pista se transcribe por separado en el dispositivo y los resultados se intercalan en una línea temporal compartida: tu micrófono aparece como <strong>Tú</strong>, y la pista de la aplicación se etiqueta como hablante remoto. La identificación opcional de hablantes permite distinguir además varias voces remotas.</li>
+          <li>Se conserva una mezcla de reproducción de ambas pistas como audio de la grabación, y la transcripción terminada sigue tu Ruta, Añadir al borrador o Enviar inmediatamente, y los ajustes del portapapeles como cualquier otra grabación.</li>
+        </ul>
+
+        <h3 id="mac-keybinds">Atajos globales</h3>
+        <p>Ajustes → Atajos globales permite asignar atajos a <strong>Transcribir a Clipboard</strong>, <strong>Ruta seleccionada</strong>, o cualquier ruta activada. Los atajos están desactivados de forma predeterminada, requieren una tecla no modificadora más Control, Option o Command, también pueden incluir Shift y rechazan conflictos. Pulsa otra vez el atajo activo para detener la grabación.</p>
+        <div class="docs-callout docs-callout-neutral">
+          <p><strong>Transcribir a Clipboard</strong> no crea ninguna nota, elemento de biblioteca ni audio conservado. Está pensado para dictar rápidamente en cualquier app del Mac.</p>
+        </div>
+
+        <h3 id="mac-menu-bar">Barra de menús y visibilidad de la app</h3>
+        <ul>
+          <li>Las opciones de visibilidad son <strong>Dock + Menu Bar</strong> (predeterminado), <strong>Menú sólo bar</strong>, <strong>Doc sólo</strong>, y <strong>ocultado</strong>.</li>
+          <li>La barra de menús informa de los estados de grabación, transcripción y exportación.</li>
+          <li>Las acciones del menú incluyen Iniciar grabación, Detener + Transcribir, Importar audio…, Copiar última transcripción, Mostrar última exportación, selección de Ruta, Mostrar Captura, Mostrar Biblioteca, Mostrar carpeta de datos y Salir de Vox.md.</li>
+          <li>Pulsa Control-B en la app para Mac para mostrar indicaciones de teclado sobre los controles que se pueden pulsar.</li>
+        </ul>
+
+        <h3 id="mac-history">Historial y modelos del Mac</h3>
+        <p>Busca, recarga, borra, copia o elimina el historial local; abre los detalles de las transcripciones depuradas y originales; y muestra una nota entregada en Finder. La pantalla Modelos permite descargar, seleccionar y eliminar modelos Whisper o Parakeet y cambiar el idioma de transcripción. Whisper usa aceleración Metal en los Mac compatibles.</p>
+      </section>
+
+      <section class="docs-section" id="history-settings">
+        <div class="docs-section-label">09 / Biblioteca, Ajustes y privacidad</div>
+        <h2>Recupera tu trabajo, controla los datos locales y desbloquea el uso ilimitado</h2>
+
+        <h3 id="history">Biblioteca unificada en iOS</h3>
+        <ul>
+          <li>La biblioteca reúne las transcripciones de voz locales y los registros de entrega de Captura en una lista con búsqueda.</li>
+          <li>Busca en texto original, texto depurado, títulos, etiquetas y categorías; tira para actualizar.</li>
+          <li>Copia el texto depurado u original de la transcripción, edita sus metadatos y texto o exporta una copia Markdown mediante la hoja para compartir.</li>
+          <li>Elimina una transcripción o borra todo el historial local. Borrar el historial no elimina las notas Markdown ni los adjuntos ya escritos en tu destino.</li>
+          <li>Reintenta capturas en cola e inspecciona datos generales de origen, ruta, destino, ruta de la nota, cantidad de adjuntos, hora, resultado y categoría de error.</li>
+          <li>La edición de transcripciones incluye título, etiquetas, categoría, texto depurado y transcripción original.</li>
+        </ul>
+
+        <h3 id="stats">Actividades privadas de Estado</h3>
+        <p>Abre Ajustes → Actividad → Estadísticas para ver un resumen de tu uso acumulado: total de grabaciones y capturas, duración grabada y cantidad de adjuntos, además de un gráfico de los últimos siete días y un desglose del origen de las capturas (app, teclado, hoja para compartir, widgets, Atajos, Apple Watch, Mac, enlaces profundos, importación de archivos y voz).</p>
+        <ul>
+          <li>Las estadísticas solo cuentan capturas entregadas; tira para actualizar después de nueva actividad.</li>
+          <li>El registro permanece en tu dispositivo y no almacena contenido capturado, nombres de archivo ni destinos.</li>
+        </ul>
+
+        <h3 id="settings-map">Mapa de ajustes</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Sección</th><th>Controles</th></tr></thead>
+            <tbody>
+              <tr><td>Vox.md Ilimitado</td><td>Estado del uso gratuito, desbloqueo de por vida y restauración de compras.</td></tr>
+              <tr><td>Personalización</td><td>Modelos; Rutas; visibilidad y orden de las acciones de la Barra de captura.</td></tr>
+              <tr><td>Teclado</td><td>Respuesta háptica.</td></tr>
+              <tr><td>Lock de pantalla</td><td>Monitor de actividad en directo y botón de grabación de pantalla bloqueada.</td></tr>
+              <tr><td>Sobre</td><td>Transcripción predeterminada, Whisper, Parakeet, procesamiento en el dispositivo, privacidad, versión de la app y disponibilidad de Apple Intelligence.</td></tr>
+              <tr><td>Comentarios</td><td>Únete al Discord de Isolated Tech o redacta un correo de diagnóstico y comentarios.</td></tr>
+              <tr><td>Debugó</td><td>Ver el registro local de depuración.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Las notas de versión pueden aparecer tras una actualización y describir funciones actuales como la sincronización del Watch, atajos globales del Mac, iconos de ruta, controles de pantalla bloqueada, enrutamiento, reglas de audio y posprocesamiento.</p>
+
+        <h3 id="pricing-limits">Uso gratuito y desbloqueo de por vida</h3>
+        <ul>
+          <li>El uso gratuito incluye <strong>15 minutos de transcripción</strong> y <strong>10 entregas de Captura completadas</strong>.</li>
+          <li>Una transcripción de voz ya descontada del tiempo de transcripción no consume además el cupo independiente de Captura al enviarse a Markdown.</li>
+          <li>Las escrituras fallidas y los reintentos idempotentes no consumen una entrega de Captura completada.</li>
+          <li>El acceso ilimitado es una compra única de por vida, sin suscripción, renovación ni anuncios. El precio local del App Store es el de referencia; los precios en EE. UU. son 19,99 $ Individual, 39,99 $ Familiar y 19,99 $ Actualización familiar, con precios según poder adquisitivo en otras tiendas regionales.</li>
+          <li>Restaurar compra recupera una compra válida. Los usuarios de versiones antiguas de pago que cumplan los requisitos conservan el derecho al uso ilimitado.</li>
+          <li>Un registro sin contenido del App Group evita el doble cobro entre reintentos mientras se conserven los datos locales de la app. No se almacena en el llavero; eliminar los datos locales inicia un nuevo cupo gratuito.</li>
+        </ul>
+
+        <h3 id="privacy-data">Qué se queda en local</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Contenido capturado</strong><p>Los borradores, texto, enlaces, plantillas, rutas, adjuntos, audio, OCR y transcripciones no se envían a los servidores de Vox.md.</p></div>
+          <div><strong>procesamiento</strong><p>Apple Speech, Whisper, Parakeet, Vision OCR y el procesamiento compatible de Apple Intelligence se ejecutan en el dispositivo.</p></div>
+          <div><strong>Tu destino</strong><p>Los archivos terminados van únicamente a la carpeta que elijas. Un proveedor de archivos de terceros puede sincronizarlos según sus propias condiciones.</p></div>
+        </div>
+        <ul>
+          <li>Tras una entrega correcta, las solicitudes de Captura recuperables se convierten en recibos sin contenido y los elementos completados de la cola del Watch solo conservan campos generales de entrega final. Ninguno conserva coordenadas, etiquetas, URL de proveedores, plantillas de ubicación ni contenido de rutas.</li>
+          <li>El historial de Capturas completadas almacena metadatos de entrega, no texto de notas, URL, coordenadas, etiquetas o plantillas de ubicación, marcadores, rutas absolutas ni nombres de archivos adjuntos.</li>
+          <li>Los elementos pendientes y fallidos conservan solo lo necesario para la recuperación local, lo que puede incluir una instantánea de ruta y su ubicación ya ajustada por privacidad o un resultado no disponible.</li>
+          <li>Los análisis de incorporación de producción están desactivados de forma predeterminada. La app no contiene SDK de análisis de terceros, redes publicitarias ni rastreadores entre apps.</li>
+          <li>El editor obtiene citas inspiradoras almacenadas en caché de ZenQuotes sin enviar el contenido del borrador ni identificadores.</li>
+        </ul>
+        <p>Para conocer todos los detalles del tratamiento de datos, su conservación y los servicios de terceros, lee la <a href="/es/privacy.html">Política de privacidad</a>.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">10 / Resolución de problemas</div>
+        <h2>Problemas habituales de configuración y entrega</h2>
+        <div class="docs-troubleshooting">
+          <details open>
+            <summary>Una captura no se puede enviar</summary>
+            <p>Abre el control de destino y configura la Ruta seleccionada. Si la carpeta se movió o el acceso caducó, selecciona de nuevo la bóveda o carpeta. El trabajo en cola sigue disponible en la biblioteca.</p>
+          </details>
+          <details>
+            <summary>El teclado indica Activar Acceso total</summary>
+            <p>Abre Ajustes de iOS → General → Teclado → Teclados → Vox.md y activa Permitir acceso total. Vuelve una vez a la app para que Vox.md pueda reanudar el flujo de escucha compartido.</p>
+          </details>
+          <details>
+            <summary>automático no está disponible</summary>
+            <p>Apple Speech automático requiere un dispositivo e idioma compatibles con iOS 26. Elige y descarga un modelo Whisper o Parakeet y selecciónalo explícitamente o vuelve a automático para que pueda servir como alternativa aprobada por ti.</p>
+          </details>
+          <details>
+            <summary>La transcripción falló</summary>
+            <p>Confirma que el modelo seleccionado se haya descargado por completo y que el idioma sea el adecuado. Vox.md conserva el audio de origen recuperable cuando es posible para que puedas elegir otro modelo y reintentarlo.</p>
+          </details>
+          <details>
+            <summary>Falla una ruta con encabezado</summary>
+            <p>Edita el destino de la ruta y confirma el texto y el nivel del encabezado. Elige Creación de la cabeza si la entrega debe crear un encabezado ausente en vez de detenerse.</p>
+          </details>
+          <details>
+            <summary>Una grabación del Watch está en cola</summary>
+            <p>Abre Vox.md en iPhone y después Ver grabaciones. Actualiza o reintenta, elige una ruta válida cuando se solicite y mantén la app instalada y disponible para recibir en segundo plano. Forzar el cierre bloquea la entrega en segundo plano hasta volver a abrirla.</p>
+          </details>
+          <details>
+            <summary><code>{location}</code> se deja vacío</summary>
+            <p>Activa Usar ubicación actual para la ruta de entrega; para los prefijos y sufijos de entrada y las plantillas de entrada reutilizables detectados, la corrección con un toque del editor lo hace sin activar metadatos. Los archivos de plantilla activos de la bóveda requieren configurar la ruta manualmente. Si no hay permiso o la captura continúa sin ubicación, el token se deja vacío intencionadamente. Consulta la <a href="/es/docs/location/">guía completa de ubicación</a>.</p>
+          </details>
+          <details>
+            <summary>La ubicación de la ruta no está disponible</summary>
+            <p>Usa el reintento solo mientras sigues resolviendo el envío interactivo original. También puedes cancelar, enviar una vez sin ubicación o enviar siempre sin ubicación para esa ruta. Restablece una opción guardada en los ajustes de ubicación de la ruta. Una solicitud desatendida en cola conserva su resultado original no disponible y no obtiene una ubicación más reciente.</p>
+          </details>
+        </div>
+        <div class="docs-callout docs-support-callout">
+          <strong>¿Sigues sin resolverlo?</strong>
+          <p>Abre Ajustes → Ver registro de depuración y usa Enviar comentarios para incluir la versión de la app, la plataforma, el sistema operativo y los datos del dispositivo. También puedes unirte al <a href="https://discord.gg/RaQYS4t6gn">Discord de Isolated Tech</a>.</p>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/es/developers">Desarrolladores</a></li>
+        <li><a href="/es/about">Sobre</a></li>
+        <li><a href="/es/contact">Contacto</a></li>
+        <li><a href="/es/">Inicio</a></li>
+        <li><a href="/es/docs/" aria-current="page">Documentación</a></li>
+        <li><a href="/es/blog/">Blog</a></li>
+        <li><a href="/es/privacy.html">Privacidad</a></li>
+        <li><a href="/es/terms.html">Términos</a></li>
+        <li><a href="/llms.txt">llms.txt</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Asistencia</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_es_60877eba17c1">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Documentación completa de funciones · Captura que prioriza lo local.</div>
+    </div>
+  <details class="language-switcher"><summary>Idioma</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es" aria-current="page">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
