@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi" dir="ltr" data-search-section="Mục" data-search-guide="Hướng dẫn" data-search-empty="Không khớp “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mẫu ghi Obsidian cho hộp thư, nhật ký và tác vụ | Vox.md</title>
+  <meta name="description" content="Chép cấu trúc Markdown, đặt tiền tố Vox.md cho hộp thư, nhật ký hằng ngày và tác vụ Obsidian. Có công thức đường, token giờ và ví dụ.">
+  <link rel="canonical" href="https://vox.isolated.tech/vi/blog/obsidian-capture-templates/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Tài liệu Vox.md về mô hình ngôn ngữ">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Mẫu ghi Obsidian cho hộp thư, nhật ký và tác vụ">
+  <meta property="og:description" content="Chép cấu trúc Markdown, đặt tiền tố Vox.md cho hộp thư, nhật ký hằng ngày và tác vụ Obsidian. Có công thức đường, token giờ và ví dụ.">
+  <meta property="og:url" content="https://vox.isolated.tech/vi/blog/obsidian-capture-templates/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mẫu ghi Obsidian cho hộp thư, nhật ký và tác vụ">
+  <meta name="twitter:description" content="Chép cấu trúc Markdown, đặt tiền tố Vox.md cho hộp thư, nhật ký hằng ngày và tác vụ Obsidian. Có công thức đường, token giờ và ví dụ.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Mẫu ghi Obsidian cho hộp thư, nhật ký và tác vụ",
+  "description": "Chép cấu trúc Markdown, đặt tiền tố Vox.md cho hộp thư, nhật ký hằng ngày và tác vụ Obsidian. Có công thức đường, token giờ và ví dụ.",
+  "image": "https://vox.isolated.tech/screenshots/01-route-heading-light.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/vi/blog/obsidian-capture-templates/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "vi",
+  "name": "Mẫu ghi Obsidian cho hộp thư, nhật ký và tác vụ | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/vi/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Hướng dẫn",
+      "item": "https://vox.isolated.tech/vi/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Mẫu ghi Obsidian cho hộp thư, nhật ký và tác vụ",
+      "item": "https://vox.isolated.tech/vi/blog/obsidian-capture-templates/"
+    }
+  ],
+  "inLanguage": "vi",
+  "name": "Mẫu ghi Obsidian cho hộp thư, nhật ký và tác vụ | Vox.md",
+  "description": "Chép cấu trúc Markdown, đặt tiền tố Vox.md cho hộp thư, nhật ký hằng ngày và tác vụ Obsidian. Có công thức đường, token giờ và ví dụ."
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/blog/obsidian-capture-templates/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-capture-templates/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Đến hướng dẫn</a>
+<nav aria-label="Điều hướng chính">
+  <div class="nav-inner">
+    <a href="/vi/" class="logo" aria-label="trang chủ Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/vi/#how">Cách hoạt động</a></li>
+      <li><a href="/vi/docs/">Tài liệu</a></li>
+      <li><a href="/vi/blog/">Hướng dẫn</a></li>
+      <li><a href="/vi/compare/">So sánh</a></li>
+      <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+      <li><a href="/vi/terms.html">Điều khoản</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_vi_32fa42cf87f1">Tải Vox.md</a>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/blog/obsidian-capture-templates/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-capture-templates/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-capture-templates/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-capture-templates/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-capture-templates/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-capture-templates/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-capture-templates/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-capture-templates/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-capture-templates/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-capture-templates/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-capture-templates/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-capture-templates/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-capture-templates/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-capture-templates/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-capture-templates/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-capture-templates/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-capture-templates/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-capture-templates/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-capture-templates/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-capture-templates/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-capture-templates/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-capture-templates/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-capture-templates/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">Obsidian · Mẫu ghi · Markdown</div>
+        <h1 class="hero-title">Mẫu ghi Obsidian cho hộp thư, nhật ký và tác vụ</h1>
+        <p class="hero-subtitle">Dùng ít dạng nhất quán. Khớp ghi chú, tiêu đề và kiểu mục với loại ý nghĩ đang lưu.</p>
+      </div>
+      <aside class="meta-card" aria-label="Về hướng dẫn này">
+        <dl>
+          <div><dt>Bởi</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>Cập nhật</dt><dd><time datetime="2026-10-26">26 tháng 10 năm 2026</time></dd></div>
+          <div><dt>Yêu cầu</dt><dd>Đích Vox.md đã cấu hình</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="Mẫu ghi Obsidian cho hộp thư, nhật ký và tác vụ">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">Trả lời ngắn</div>
+        <p>Bắt đầu với ba công thức đơn giản: mục có dấu đầu dòng dưới Inbox, mục nhật ký có mốc thời gian và ô kiểm dưới Tasks. Cấu hình đích cùng tiền tố mục trong Chụp trước Vox.md. Giữ đường dẫn ghi chú hằng ngày hiện có và chọn duy nhất một nơi để thêm mỗi dấu định dạng.</p>
+      </div>
+      <p>Các ví dụ dưới đây là cấu trúc Markdown thông thường và cài đặt cấu hình, không phải tệp tự động nhập cấu hình Vox.md. Dán cấu trúc vào ghi chú khi cần; nhập đường dẫn và tiền tố trong trình sửa đích. Các kết quả hiển thị chỉ là minh họa.</p>
+      <nav class="toc" aria-label="Trong hướng dẫn này"><div class="toc-title">Trong hướng dẫn này</div><ol>
+        <li><a href="#inbox">Hộp thư ghi nhanh đơn giản</a></li>
+        <li><a href="#journal">Nhật ký hằng ngày có thời gian</a></li>
+        <li><a href="#tasks">Danh sách tác vụ gọn</a></li>
+        <li><a href="#tokens">Dùng đúng cú pháp token</a></li>
+        <li><a href="#check">Kiểm kết quả trước dùng lại cấu hình</a></li>
+      </ol></nav>
+
+      <h2 id="inbox">Công thức 1: hộp thư ghi nhanh đơn giản</h2>
+      <p>Dùng Note hiện tại làm đích như <code>Inbox.md</code>, hoặc Rolling Note hằng ngày nếu muốn có tệp hộp thư mới mỗi ngày. Chọn vị trí hướng dẫn để chèn bên dưới tiêu đề Inbox cấp hai, và chọn chèn ở cuối phần thuộc tiêu đề đó.</p>
+      <p>Cấu trúc ghi chú tối thiểu:</p>
+      <pre class="guide-code"><code>## Inbox</code></pre>
+      <p>Chọn Giữ nguyên bản. Trong định dạng mục ở đích, đặt tiền tố dấu gạch ngang rồi khoảng trắng:</p>
+      <pre class="guide-code"><code>- </code></pre>
+      <p>Ghi ngắn “Xem lại dàn ý nháp” có thể tạo:</p>
+      <pre class="guide-code"><code>## Inbox
+- Review the draft outline</code></pre>
+      <p>Nhập tiền tố trong cài đặt, không nhập lại trong từng ý ghi nhanh. Nếu văn bản đã bắt đầu bằng dấu đầu dòng, hãy kiểm tra đầu ra thay vì thêm một dấu nữa một cách máy móc. Với tiêu đề còn thiếu, chọn Tạo Head hoặc Hiển thị lỗi theo ý muốn.</p>
+
+      <h2 id="journal">Công thức 2: nhật ký hằng ngày có thời gian</h2>
+      <p>Dùng Rolling Note hằng ngày và khớp quy tắc tên tệp kho đang dùng. Với tệp như <code>Journal/2026-10-26.md</code>, mẫu đường dẫn là <code>Journal/{period}.md</code> với chu kỳ hằng ngày. Chọn tiêu đề Journal cấp hai và chèn ở cuối phần thuộc tiêu đề đó.</p>
+      <p>Giữ nguyên văn xuôi, dùng tiền tố này cho thời gian gọn:</p>
+      <pre class="guide-code"><code>- **{hour}:{minute}** </code></pre>
+      <p>Với ghi lúc 14:05, phần minh họa:</p>
+      <pre class="guide-code"><code>## Journal
+- **14:05** A short walk helped me settle on the next step.</code></pre>
+      <p>Trình định dạng mục của Vox.md mở rộng các token giờ và phút. Tệp mẫu cấp ghi chú có thể cung cấp các tiêu đề bao quanh, còn tiền tố mục định dạng từng lần ghi nhanh. Giữ hai nhiệm vụ này riêng biệt để các mục thêm sau không chèn lại toàn bộ cấu trúc ghi chú hằng ngày.</p>
+      <p>Để thiết lập lộ trình chi tiết, xem <a href="/vi/blog/append-to-obsidian-daily-note-iphone/">đường ngày và vị trí tiêu đề</a>.</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/01-route-heading-light-640.webp" alt="Trình sửa đích Vox.md đặt mục tiêu và vị trí tiêu đề" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>Đặt đích và định dạng mục trong đích cấu hình. Ghi đè một lần không đổi mặc định lưu.</figcaption>
+      </figure>
+
+      <h2 id="tasks">Công thức 3: danh sách tác vụ gọn</h2>
+      <p>Chọn Note hiện tại hoặc Rolling Note hằng ngày có tiêu đề Tasks cấp hai. Với tác vụ gõ ngắn không dùng xử lý văn bản, chọn Giữ nguyên bản và tiền tố này:</p>
+      <pre class="guide-code"><code>- [ ] </code></pre>
+      <p>Hai lần ghi có thể thành:</p>
+      <pre class="guide-code"><code>## Tasks
+- [ ] Review the draft outline
+- [ ] Send the reading list</code></pre>
+      <p>Nếu bật Danh sách việc cần làm thay thế, để xử lý quản lý dấu kiểm. Không đặt thêm tiền tố ô kiểm trùng. Xử lý gõ và hỗn hợp phải bật riêng; xử lý giọng nói và trình soạn gõ không phải cài đặt thay nhau.</p>
+      <p>Tác vụ chỉ hữu ích khi câu chữ đúng. Với ghi nhanh bằng giọng nói, kiểm tra bản chép lời nếu lỗi nhận dạng có thể đổi chỉ dẫn. Phần <a href="/vi/blog/voice-notes-to-obsidian-iphone/">hướng dẫn giọng nói iPhone</a> giải thích Thêm vào bản nháp và Gửi ngay.</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_32fa42cf87f1">Tải Vox.md miễn phí</a></p>
+      <p>Bản tải miễn phí gồm 10 lần gửi ghi nhanh thành công và 15 phút chép lời. Dùng không giới hạn là mua một lần trọn đời.</p>
+
+      <h2 id="tokens">Dùng đúng cú pháp token</h2>
+      <p>Cài đường và mục Vox.md dùng token như <code>{period}</code>, <code>{date}</code>, <code>{hour}</code> và <code>{minute}</code>. Ví dụ không phải biểu thức Obsidian Core Templates hay Templater. Dùng cú pháp riêng trong cài đặt của hệ thống mẫu đó.</p>
+      <p>Dùng <code>{hour}:{minute}</code> cho thời gian có dấu hai chấm như ở đây. Trong Vox.md, <code>{time}</code> là token biểu thị thời gian dạng gọn, nên đừng thay nó vào công thức rồi cho rằng cách hiển thị vẫn giống như trên.</p>
+      <p>Nội dung ghi nhanh không phải trình sửa mẫu. Token viết trong một ý nghĩ có thể vẫn là văn bản nguyên dạng; hãy cấu hình việc mở rộng token trong các cài đặt định dạng mà đích hỗ trợ. Xem <a href="/vi/docs/#placement-templates">tham chiếu token và mẫu</a> để xem các trường khả dụng.</p>
+      <p>Nếu thêm YAML, phân biệt frontmatter cấp ghi chú và trường cho từng mục ghi chú liên tục. Thuộc tính cả tệp không tự là thuộc tính riêng của mỗi mục nhật ký. Bắt đầu không thêm siêu dữ liệu, rồi thêm khi biết cách truy vấn.</p>
+
+      <h2 id="check">Kiểm kết quả trước dùng lại cấu hình</h2>
+      <ol>
+        <li>Xác nhận xem trước đích khớp tệp dự định.</li>
+        <li>Gửi ghi nhanh gõ ngắn với cấu hình chọn.</li>
+        <li>Mở tệp Obsidian, kiểm tiêu đề và tiền tố.</li>
+        <li>Gửi ghi nhanh thứ hai, kiểm tra thứ tự, khoảng cách và dấu lặp.</li>
+        <li>Sau đó mới thêm giọng nói, đính kèm, xử lý hoặc siêu dữ liệu tùy chọn.</li>
+      </ol>
+      <p>Các công thức cùng tồn tại trong một tệp hằng ngày dưới tiêu đề riêng. Với thư mục truy cập được, cùng cấu hình cũng nhận bản chép gửi từ <a href="/vi/blog/apple-watch-obsidian-voice-notes/">Quy trình ghi Watch sang iPhone</a>. Nhớ quyền thư mục và nhà tệp khả dụng khi mục còn chờ.</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">Giữ định dạng nhất quán.<br>Chừa chỗ cho ý nghĩ.</h2>
+        <p>Bắt đầu một tiêu đề, một tiền tố. Chỉ thêm cấu trúc khi giúp dùng ghi chú.</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_32fa42cf87f1">Tải Vox.md miễn phí</a></p>
+      </section>
+      <nav class="toc" aria-label="Hướng dẫn liên quan"><div class="toc-title">Tiếp tục thiết lập</div><ul>
+        <li><a href="/vi/blog/append-to-obsidian-daily-note-iphone/">Thiết lập định tuyến ghi chú hằng ngày</a></li>
+        <li><a href="/vi/blog/save-links-photos-obsidian-iphone/">Giữ ảnh, quét và liên kết với ghi chú</a></li>
+        <li><a href="/vi/blog/obsidian-quick-capture-iphone/">Chọn cách ghi nhanh</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/vi/">Trang chủ</a></li>
+        <li><a href="/vi/docs/">Tài liệu</a></li>
+        <li><a href="/vi/blog/">Hướng dẫn</a></li>
+        <li><a href="/vi/compare/">So sánh</a></li>
+        <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+        <li><a href="/vi/terms.html">Điều khoản</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Hỗ trợ</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_32fa42cf87f1">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Ghi nhanh cho ghi chú cục bộ · Không tải nội dung lên.</div>
+    </div>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/blog/obsidian-capture-templates/" lang="en" hreflang="en">English</a></li><li><a href="/ar/blog/obsidian-capture-templates/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/blog/obsidian-capture-templates/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/blog/obsidian-capture-templates/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/blog/obsidian-capture-templates/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/blog/obsidian-capture-templates/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/blog/obsidian-capture-templates/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/blog/obsidian-capture-templates/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/blog/obsidian-capture-templates/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/blog/obsidian-capture-templates/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/blog/obsidian-capture-templates/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/blog/obsidian-capture-templates/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/blog/obsidian-capture-templates/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/blog/obsidian-capture-templates/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/blog/obsidian-capture-templates/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/blog/obsidian-capture-templates/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/blog/obsidian-capture-templates/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/blog/obsidian-capture-templates/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/blog/obsidian-capture-templates/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/blog/obsidian-capture-templates/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/blog/obsidian-capture-templates/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/blog/obsidian-capture-templates/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/blog/obsidian-capture-templates/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

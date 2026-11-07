@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="vi" dir="ltr" data-search-section="Mục" data-search-guide="Hướng dẫn" data-search-empty="Không khớp “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ghi nhanh Obsidian trên iPhone và Apple Watch | Vox.md</title>
+  <meta name="description" content="Ghi văn bản, liên kết, ảnh, tệp, bản quét, phác thảo và ghi chú giọng nói riêng tư vào kho Obsidian hoặc tệp Markdown cục bộ trên iPhone.">
+  <link rel="canonical" href="https://vox.isolated.tech/vi/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Tài liệu Vox.md về mô hình ngôn ngữ">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Ghi nhanh Obsidian trên iPhone và Apple Watch | Vox.md">
+  <meta property="og:description" content="Gửi từng ý đúng kho, ghi chú hay tiêu đề không cần mở Obsidian. Chép giọng nói ở lại thiết bị.">
+  <meta property="og:url" content="https://vox.isolated.tech/vi/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ghi nhanh Obsidian trên iPhone và Apple Watch | Vox.md">
+  <meta name="twitter:description" content="Ghi trước, để lộ trình Markdown chính xác đưa tất cả đúng ghi chú.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Vox.md",
+  "applicationCategory": "ProductivityApplication",
+  "operatingSystem": "iOS 17.6+, iPadOS 17.6+, macOS 14+, watchOS 10+",
+  "description": "Ghi nhanh cho kho Obsidian và Markdown cục bộ, với chữ, liên kết, phương tiện, quét, phác thảo và chép riêng tư trên máy.",
+  "url": "https://vox.isolated.tech/vi/",
+  "downloadUrl": "https://apps.apple.com/us/app/voxboard/id6758967337",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/",
+    "sameAs": [
+      "https://github.com/CodyBontecou"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "featureList": [
+    "Ghi văn bản, liên kết, ảnh, tệp, bản quét tài liệu, phác thảo và giọng nói",
+    "Ghi Markdown chuẩn vào kho Obsidian hoặc thư mục Files",
+    "Tạo ghi chú mới, cập nhật ghi chú liên tục hoặc nhắm ghi chú có sẵn",
+    "Chèn đầu, cuối hoặc dưới tiêu đề chọn",
+    "Dùng Vị trí hiện tại một lần trong mẫu, siêu dữ liệu tùy chọn",
+    "Dùng tiện ích, Shortcuts, phần mở rộng chia sẻ hoặc bàn phím",
+    "Chép giọng nói trên máy, không tải âm lên"
+  ],
+  "inLanguage": "vi"
+}
+</script>
+
+  <link rel="stylesheet" href="/geist.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://isolated.tech/#organization",
+  "name": "Isolated Tech",
+  "url": "https://isolated.tech/",
+  "sameAs": [
+    "https://github.com/CodyBontecou"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "hỗ trợ khách hàng",
+    "email": "codybontecou@gmail.com",
+    "url": "https://vox.isolated.tech/vi/contact",
+    "availableLanguage": "Tiếng Anh"
+  },
+  "inLanguage": "vi",
+  "description": "Ghi văn bản, liên kết, ảnh, tệp, bản quét, phác thảo và ghi chú giọng nói riêng tư vào kho Obsidian hoặc tệp Markdown cục bộ trên iPhone."
+}
+</script>
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="API thông tin công khai Vox.md">
+<meta name="naver-site-verification" content="cae11a861102ae94853f1f7e773318e17525df3a">
+  <meta name="color-scheme" content="light">
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/InstrumentSerif-Italic-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/">
+</head>
+<body class="raw">
+<a class="skip-link" href="#main">Đến nội dung</a>
+
+<nav aria-label="Điều hướng chính">
+  <div class="r-wrap r-nav">
+    <a href="/vi/" class="r-logo" aria-label="trang chủ Vox.md">
+      <span class="r-logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <span class="r-tab-current" aria-hidden="true">index.md</span>
+    <ul class="r-nav-links">
+      <li><a href="#how">how.md</a></li>
+      <li><a href="#capture">files.md</a></li>
+      <li><a href="#presets">routes.md</a></li>
+      <li><a href="#privacy">privacy.md</a></li>
+      <li><a href="/vi/docs/">docs/</a></li>
+      <li><a href="/vi/blog/">guides/</a></li>
+      <li><a href="/vi/compare/">compare/</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_vi_8a5edab28263">Tải miễn phí</a>
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ar/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+<main id="main">
+<section aria-labelledby="hero-title">
+  <div class="r-wrap r-hero">
+    <p class="r-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</p>
+    <div class="r-hero-body">
+      <div class="r-hero-copy">
+        <pre class="r-front" aria-label="Vox.md sơ lược">---
+app: Vox.md
+for: Obsidian &amp; any Markdown folder
+runs_on: [iPhone, iPad, Mac, Apple Watch]
+transcribes_on: <b>this device</b>
+writes_to: <b>a folder you pick</b>
+copies_on_our_servers: <b class="r-hl">0</b>
+---</pre>
+        <h1 class="r-h1" id="hero-title" aria-label="Ý nghĩ của bạn, trong một tệp cục bộ."><span class="r-mark" aria-hidden="true">#</span>Ý nghĩ của bạn, trong một <span aria-hidden="true"><del>đám mây</del> </span><span class="visually-hidden">cục bộ </span><span class="r-voice r-hl">tệp.</span><span class="r-caret" aria-hidden="true"></span></h1>
+        <p class="r-hero-lead">Ghi ý tưởng vào Obsidian từ iPhone, Mac và Apple Watch: gõ, chụp, quét, phác hoặc nói. Vox.md chép trên máy, viết Markdown thường thẳng kho hoặc Files chọn, vào đúng ghi chú và tiêu đề.</p>
+        <div class="r-actions">
+          <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_vi_8a5edab28263">Tải Vox.md miễn phí</a>
+          <a href="/vi/blog/obsidian-quick-capture-iphone/" class="r-btn r-btn-line">Chọn cách ghi nhanh</a>
+        </div>
+        <p class="r-note">Miễn phí 15 phút chép lời + 10 lần gửi ghi nhanh · iOS 17.6+ · không cần tài khoản</p>
+        <details class="desktop-download-qr">
+          <summary>Quét để tải trên iPhone</summary>
+          <div class="download-qr-panel">
+            <a href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-kind="qr" aria-label="Mở Vox.md trên App Store" data-download-campaign="seo_home_qr">
+              <img src="/assets/download-qr.svg" alt="Mã QR mở Vox.md trên App Store" width="176" height="176" decoding="async">
+            </a>
+            <p>Quét bằng camera iPhone để mở Vox.md trên App Store.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="r-demo" aria-labelledby="demo-title">
+        <h2 class="visually-hidden" id="demo-title">Ghi nhanh trở thành gì</h2>
+        <div class="r-demo-tabs" role="tablist" aria-label="Chọn nội dung ghi" hidden>
+          <button type="button" role="tab" id="demo-tab-voice" aria-controls="demo-voice" aria-selected="true">ghi âm giọng nói</button>
+          <button type="button" role="tab" id="demo-tab-link" aria-controls="demo-link" aria-selected="false" tabindex="-1">liên kết chia sẻ</button>
+          <button type="button" role="tab" id="demo-tab-scan" aria-controls="demo-scan" aria-selected="false" tabindex="-1">trang quét</button>
+        </div>
+
+        <div class="r-demo-panel" id="demo-voice" role="tabpanel" aria-labelledby="demo-tab-voice">
+          <div class="r-said">
+            <p class="r-said-meta"><span>Những gì bạn đưa vào</span><span>Giọng nói · 0:03</span></p>
+            <div class="r-wave" aria-hidden="true"><span style="height:8px"></span><span style="height:14px"></span><span style="height:22px"></span><span style="height:30px"></span><span style="height:18px"></span><span style="height:10px"></span><span style="height:26px"></span><span style="height:34px"></span><span style="height:20px"></span><span style="height:12px"></span><span style="height:6px"></span><span style="height:16px"></span><span style="height:28px"></span><span style="height:24px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:20px"></span><span style="height:32px"></span><span style="height:26px"></span><span style="height:12px"></span><span style="height:18px"></span><span style="height:30px"></span><span style="height:22px"></span><span style="height:10px"></span><span style="height:6px"></span><span style="height:14px"></span><span style="height:24px"></span><span style="height:34px"></span><span style="height:28px"></span><span style="height:16px"></span><span style="height:10px"></span><span style="height:20px"></span><span style="height:26px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:18px"></span></div>
+            <p class="r-voice">“Nhớ đặt lịch nha sĩ.”</p>
+          </div>
+          <div class="r-pipe"><ul><li>chép trên thiết bị này</li><li>lộ trình: <strong>Ghi chú hằng ngày · Tasks</strong></li><li>mạng sử dụng: <span class="r-hl">không có</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/2026-11-06.md</span><span>+ 1 dòng</span></p>
+            <pre>## Tasks
+- Remember to book the dentist</pre>
+          </div>
+        </div>
+
+        <div class="r-demo-panel" id="demo-link" role="tabpanel" aria-labelledby="demo-tab-link" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>Những gì bạn đưa vào</span><span>Bảng chia sẻ · Safari</span></p>
+            <p class="r-voice">Liên kết định đọc ba tuần trước, chia sẻ thẳng từ Safari.</p>
+          </div>
+          <div class="r-pipe"><ul><li>lưu nguyên trạng</li><li>lộ trình: <strong>Danh sách đọc</strong></li><li>mạng sử dụng: <span class="r-hl">không có</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Inbox/Reading.md</span><span>+ 2 dòng</span></p>
+            <pre>### 14:07
+- https://www.inkandswitch.com/local-first/</pre>
+          </div>
+        </div>
+
+        <div class="r-demo-panel" id="demo-scan" role="tabpanel" aria-labelledby="demo-tab-scan" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>Những gì bạn đưa vào</span><span>Quét · 1 trang</span></p>
+            <p class="r-voice">Trang sổ sáng nay, quét bằng camera.</p>
+          </div>
+          <div class="r-pipe"><ul><li>chữ trích trên thiết bị này</li><li>lộ trình: <strong>Trang nhật ký</strong></li><li>mạng sử dụng: <span class="r-hl">không có</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/Pages/2026-11-06 0912.md</span><span>+ 4 dòng</span></p>
+            <pre>![[scan-2026-11-06-0912.jpg]]
+
+&gt; ship routing first.
+&gt; ask about the watch build</pre>
+          </div>
+        </div>
+        <p class="r-demo-foot">Ví dụ minh họa. Đầu ra tùy lộ trình và chép lời.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-zero" id="privacy" aria-labelledby="privacy-title">
+  <div class="r-wrap r-zero-inner">
+    <div class="r-zero-copy">
+      <p class="r-file">## privacy.md</p>
+      <h2 id="privacy-title">0<small>byte</small></h2>
+      <p>nháp, đính kèm, đường ghi chú, mẫu, chữ gõ, bản chép hay vị trí đã bật tới máy chủ hoặc phân tích Vox.md. Tệp chỉ tới thư mục chọn. Không theo dõi vị trí liên tục hay nền.</p>
+    </div>
+    <dl class="r-ledger" aria-label="Vox.md nhận gì">
+      <div><dt>âm thanh tải lên</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>bản chép tải lên</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>bản nháp và đính kèm</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>đường dẫn ghi chú và mẫu</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>cần tài khoản</dt><span aria-hidden="true"></span><dd>không</dd></div>
+      <div><dt>vị trí nền</dt><span aria-hidden="true"></span><dd>không bao giờ</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-section" id="how" aria-labelledby="how-title">
+  <div class="r-wrap r-stack">
+    <div class="r-head">
+      <p class="r-file">L041 · how.md</p>
+      <h2 class="r-h2" id="how-title"><span class="r-mark" aria-hidden="true">##</span>Ba điểm dừng. <span class="r-voice">Không gì của chúng tôi.</span></h2>
+      <p class="r-lead">Mở kho, tìm ghi chú và chọn đúng chỗ quá nhiều việc cho ý thoáng qua. Đặt lộ trình một lần rồi ghi.</p>
+    </div>
+    <ol class="r-stops">
+      <li class="r-stop"><p class="r-stop-meta"><span>01</span><span>thư mục của bạn</span></p><h3>Nối kho</h3><p>Chọn kho Obsidian hoặc thư mục ghi được trong Files. Vox.md dùng các tệp Markdown bạn đã sở hữu.</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>02</span><span>túi của bạn</span></p><h3>Ghi mọi thứ</h3><p>Viết, dán liên kết, thêm phương tiện hay tệp, quét, vẽ hoặc ghi giọng nói riêng tư. Chép giọng nói ngay đó.</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>03</span><span>tệp của bạn</span></p><h3>Lộ trình cất giúp</h3><p>Tạo ghi chú, cập nhật liên tục hoặc nhắm ghi chú cũ. Đặt đầu, cuối hay dưới tiêu đề.</p></li>
+    </ol>
+    <p class="r-skip"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9A9A93" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.1 9.5 4.25 4.25 0 0 0 7 18z"/><path d="M3 3l18 18"/></svg><span><del>Điểm dừng 2.5: đám mây người khác</del>. Bỏ qua. Đồng bộ theo cách thư mục đang làm và điều khoản nhà cung cấp.</span></p>
+  </div>
+</section>
+
+<section class="r-section" id="capture" aria-labelledby="capture-title">
+  <span class="anchor" id="features" aria-hidden="true"></span>
+  <div class="r-wrap r-split">
+    <div class="r-stack" style="gap: 20px">
+      <p class="r-file">L077 · files.md</p>
+      <h2 class="r-h2" id="capture-title"><span class="r-mark" aria-hidden="true">##</span>Đó là <span class="r-voice r-hl">chỉ</span> tệp.</h2>
+      <p class="r-lead">Không phần bổ trợ, không tài khoản đám mây Vox.md, không định dạng độc quyền. Vox.md ghi Markdown đọc được và liên kết kiểu Obsidian vào thư mục bạn kiểm soát, nên ghi chú không khóa vào ứng dụng.</p>
+      <ul class="r-inputs">
+        <li><code>.md</code><span>Ghi chú gõ và bản chép giọng nói dạng Markdown chuẩn</span></li>
+        <li><code>[[ ]]</code><span>Wikilink và đính kèm nhúng Obsidian hiểu</span></li>
+        <li><code>img</code><span>Ảnh, tệp và quét tài liệu có chữ trích xuất. <a href="/vi/blog/save-links-photos-obsidian-iphone/">Hướng dẫn ghi phương tiện</a></span></li>
+        <li><code>url</code><span>Liên kết từ mọi nơi chia sẻ được</span></li>
+        <li><code>draw</code><span>Phác thảo chỉnh sửa được</span></li>
+        <li><code>voice</code><span>Giọng nói riêng tư từ trình soạn hoặc bàn phím; không bao giờ tải âm thanh lên. <a href="/vi/blog/voice-notes-to-obsidian-iphone/">hướng dẫn ghi chú giọng nói iPhone</a></span></li>
+        <li><code>---</code><span>Markdown hoặc YAML dùng lại, token ngày, giờ, nguồn và ID</span></li>
+      </ul>
+    </div>
+    <div class="r-tree" role="img" aria-label="Cây thư mục kho đánh dấu ba ghi nhanh mới">
+      <p class="r-tree-head"><span>~/Obsidian/Second Brain</span><span>ls -R</span></p>
+      <ul aria-hidden="true">
+        <li>├── Inbox/</li>
+        <li>│   └── Reading.md <mark>just now</mark></li>
+        <li>├── Journal/</li>
+        <li class="old">│   ├── 2026-11-05.md</li>
+        <li>│   ├── 2026-11-06.md <mark>+ ## Tasks</mark></li>
+        <li>│   └── Pages/</li>
+        <li>│       └── 2026-11-06 0912.md <mark>scan</mark></li>
+        <li>├── Meetings/</li>
+        <li class="old">│   └── 2026-11-01.md</li>
+        <li>├── Projects/</li>
+        <li class="old">│   └── Ideas.md</li>
+        <li class="old">└── attachments/</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="r-section" id="presets" aria-labelledby="presets-title">
+  <span class="anchor" id="destinations" aria-hidden="true"></span>
+  <div class="r-wrap r-stack">
+    <div class="r-head">
+      <p class="r-file">L112 · routes.md</p>
+      <h2 class="r-h2" id="presets-title"><span class="r-mark" aria-hidden="true">##</span>Đặt lộ trình một lần. <span class="r-voice">Rồi chỉ cần nói.</span></h2>
+      <p class="r-lead">Lộ trình nhớ cách xử lý và định dạng ghi nhanh, cùng kho, ghi chú mục tiêu, vị trí chèn, đính kèm, hành vi thử lại và Vị trí hiện tại một lần tùy chọn.</p>
+    </div>
+    <div class="r-table-box">
+      <table class="r-table">
+        <caption class="visually-hidden">Lộ trình ví dụ</caption>
+        <thead><tr><th scope="col">Lộ trình</th><th scope="col">File</th><th scope="col">Ở đâu trong đó</th><th scope="col">Được bao bằng</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Ghi chú hằng ngày · Tasks</th><td>Journal/{date}.md</td><td>cuối ## Tasks</td><td>- {text}</td></tr>
+          <tr><th scope="row">Ghi chú cuộc họp</th><td>Meetings/{date}.md</td><td>dưới ## Notes</td><td>### {time} · {title}</td></tr>
+          <tr><th scope="row">Danh sách đọc</th><td>Inbox/Reading.md</td><td>đầu tệp</td><td>### {time}</td></tr>
+          <tr><th scope="row">Ý tưởng</th><td>Projects/Ideas.md</td><td>cuối tệp</td><td>&gt; {text}</td></tr>
+          <tr><th scope="row">Ghi chú mới</th><td>Inbox/{timestamp}.md</td><td>tệp mới</td><td>Frontmatter YAML + nội dung</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <dl class="r-targets">
+      <div><dt>Ghi chú có sẵn <code>Projects/Ideas.md</code></dt><dd>Tiếp tục thêm vào tài liệu đã có trong kho.</dd></div>
+      <div><dt>Ghi chú liên tục <code>Journal/&#123;period&#125;.md</code></dt><dd>Ghi chú ngày, tuần, tháng, quý hay năm. <a href="/vi/blog/append-to-obsidian-daily-note-iphone/">Đặt ghi chú hằng ngày và vị trí tiêu đề.</a></dd></div>
+      <div><dt>Ghi chú mới <code>Inbox/&#123;timestamp&#125;.md</code></dt><dd>Tạo tệp sạch mỗi lần ghi mới.</dd></div>
+      <div><dt>Vị trí chính xác <code>Top · Bottom · Heading</code></dt><dd>Dưới mọi cấp tiêu đề, tự tạo nếu thiếu.</dd></div>
+      <div><dt>Lối vào Temple <code>Markdown · YAML · Tokens</code></dt><dd>Giữ ghi lặp nhất quán không cần định dạng lại.</dd></div>
+      <div><dt>Vị trí hiện tại <code>&#123;location&#125;</code></dt><dd>Một liên kết bản đồ tại gốc không siêu dữ liệu, hoặc bật frontmatter và trường nội tuyến. <a href="/vi/docs/location/">Đọc hướng dẫn.</a></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-section" id="everywhere" aria-labelledby="everywhere-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L140 · anywhere.md</p>
+    <h2 class="r-h2" id="everywhere-title"><span class="r-mark" aria-hidden="true">##</span>Dù ý nghĩ ở đâu <span class="r-voice">xuất hiện</span></h2>
+    <ul class="r-pills" aria-label="Điểm vào ghi nhanh">
+      <li>Bàn phím <small>mọi ứng dụng</small></li>
+      <li>Apple Watch <small>cổ tay</small></li>
+      <li>Mac <small>ghi nhanh</small></li>
+      <li>Bảng chia sẻ <small>mọi thứ</small></li>
+      <li>Tiện ích <small>chính và khóa</small></li>
+      <li>Trung tâm điều khiển <small>một chạm</small></li>
+      <li>Phím tắt <small>tự động hóa</small></li>
+    </ul>
+    <p class="r-lead"><a href="/vi/blog/apple-watch-obsidian-voice-notes/">Thiết lập ghi chú giọng nói Apple Watch vào Obsidian</a>. Ghi trên Watch rồi chép và gửi qua iPhone ghép đôi.</p>
+  </div>
+</section>
+
+<section class="r-section" id="specs" aria-labelledby="specs-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L158 · specs.yml</p>
+    <h2 class="r-h2" id="specs-title"><span class="r-mark" aria-hidden="true">##</span>Xây dựng quanh tệp <span class="r-voice">bạn có thể giữ</span></h2>
+    <dl class="r-yaml">
+      <div><dt>capture_types</dt><dd>Văn bản, liên kết, ảnh, tệp, quét, phác thảo và giọng nói</dd></div>
+      <div><dt>note_format</dt><dd>Markdown tiêu chuẩn</dd></div>
+      <div><dt>destinations</dt><dd>Kho Obsidian và thư mục Files ghi được</dd></div>
+      <div><dt>note_targets</dt><dd>Ghi chú mới, liên tục hoặc cũ</dd></div>
+      <div><dt>placement</dt><dd>Đầu, cuối hoặc dưới tiêu đề</dd></div>
+      <div><dt>rolling_periods</dt><dd>Hằng ngày, tuần, tháng, quý và năm</dd></div>
+      <div><dt>obsidian_syntax</dt><dd>Wikilink và đính kèm nhúng</dd></div>
+      <div><dt>entry_formats</dt><dd>Mẫu Markdown và YAML dùng lại</dd></div>
+      <div><dt>entry_points</dt><dd>Ứng dụng, tiện ích, Shortcuts, phần mở rộng chia sẻ, bàn phím, Apple Watch, Mac và Trung tâm điều khiển</dd></div>
+      <div><dt>voice_processing</dt><dd>Apple Speech, Whisper hoặc Parakeet trên thiết bị</dd></div>
+      <div><dt>audio_uploads</dt><dd>Không cho chép lời</dd></div>
+      <div><dt>account</dt><dd>Không cần</dd></div>
+      <div><dt>platforms</dt><dd>iOS/iPadOS 17.6+, macOS 14+, watchOS 10+</dd></div>
+      <div><dt>location</dt><dd>Chủ động lấy một vị trí; {location} dùng không siêu dữ liệu; không theo dõi nền</dd></div>
+      <div><dt>location_metadata</dt><dd>Bật riêng frontmatter hay nội tuyến; Chính xác mặc định hoặc làm tròn Thành phố</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-dark" id="reviews" aria-labelledby="reviews-title">
+  <div class="r-wrap r-dark-inner">
+    <p class="r-file">L190 · reviews.md · from the App Store</p>
+    <h2 class="r-h2" id="reviews-title"><span class="r-mark" aria-hidden="true">##</span>Đã nói <span class="r-voice">về</span> nó</h2>
+    <div class="r-quotes">
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5b29-4b3500000000">
+        <div>
+          <h3>Đúng thứ tôi cần · <span role="img" aria-label="5 trên 5 sao">★★★★★</span></h3>
+          <blockquote><p>“Một thời gian nay tôi tìm cách ghi nhanh bằng lời nói, thêm đính kèm, chép cục bộ và đồng bộ vào thư mục Obsidian. Ứng dụng này làm hoàn hảo.”</p></blockquote>
+          <figcaption><span class="review-author">SteamingCoax</span> · Đánh giá App Store · <time datetime="2026-08-11">11/08/2026</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5bf7-fadc00000000">
+        <div>
+          <h3>Sức mạnh ghi thầm lặng · <span role="img" aria-label="5 trên 5 sao">★★★★★</span></h3>
+          <blockquote>
+            <p>“Vox.md đã thành một trong công cụ tôi dùng nhiều nhất. Tôi chọn nó để đưa ghi âm vào Obsidian, rồi nó âm thầm đổi quy trình ghi mỗi ngày.</p>
+            <p>Hệ Cấu hình ghi nhanh tuyệt vời — mỗi cấu hình có đích, mẫu, vị trí riêng. Ghi âm tôi vào thẳng đúng ngày, dạng đúng ý, không phiền gì.”</p>
+          </blockquote>
+          <figcaption><span class="review-author">Eric Know</span> · Đánh giá App Store · <time datetime="2026-08-14">14/08/2026</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5a77-5cb500000000">
+        <div>
+          <h3>Bị đánh giá thấp, bỏ qua, không quên · <span role="img" aria-label="5 trên 5 sao">★★★★★</span></h3>
+          <blockquote><p>“Nhanh chóng thành một trong các ứng dụng yêu thích và dùng nhiều nhất của tôi năm 2026!”</p></blockquote>
+          <figcaption><span class="review-author">PromisedOne</span> · Đánh giá App Store · <time datetime="2026-08-08">08/08/2026</time></figcaption>
+        </div>
+      </figure>
+    </div>
+    <p class="r-fine">Đánh giá chọn lọc từ App Store. Lời Eric được trích một phần, giữ nguyên câu chữ. <a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_8a5edab28263">Đọc đánh giá App Store <span aria-hidden="true">→</span></a></p>
+  </div>
+</section>
+
+<section class="r-section" id="faq" aria-labelledby="faq-title">
+  <div class="r-wrap r-faq">
+    <div class="r-head">
+      <p class="r-file">L214 · faq.md</p>
+      <h2 class="r-h2" id="faq-title" style="font-size: clamp(36px, 4.4vw, 60px)"><span class="r-mark" aria-hidden="true">##</span>Mở <span class="r-voice">câu hỏi</span></h2>
+      <p class="r-lead">Vox.md làm trực tiếp với thư mục Markdown bạn chọn. Obsidian phù hợp tự nhiên nhưng không bắt buộc. Đánh dấu một mục để đọc trả lời.</p>
+    </div>
+    <div class="r-faq-list">
+      <details>
+        <summary>Vox.md dùng với Obsidian được không?</summary>
+        <p>Có. Tạo Lộ trình và chọn kho Obsidian làm đích. Vox.md ghi Markdown chuẩn, wikilink và đính kèm nhúng thẳng vào kho. Không cần phần bổ trợ Obsidian. <a href="/vi/compare/vox-md-vs-obsidian-quick-capture/">So sánh Vox.md với ghi nhanh tích hợp Obsidian.</a> <a href="/vi/blog/obsidian-daily-note-iphone/">Thiết lập quy trình ghi nhanh hằng ngày.</a></p>
+      </details>
+      <details>
+        <summary>Ghi được những gì?</summary>
+        <p>Trình soạn nhận chữ, liên kết web, ảnh, tệp, quét, phác và giọng nói. Quét kèm chữ trích được, giọng nói chép cục bộ được.</p>
+      </details>
+      <details>
+        <summary>Ghi nhanh gửi đi đâu được?</summary>
+        <p>Mỗi Lộ trình có đích tạo ghi chú mới, cập nhật ghi chú liên tục hằng ngày hay định kỳ hoặc ghi tệp Markdown có sẵn. Một lần ghi chọn ghi chú khác tạm được, không đổi lộ trình.</p>
+      </details>
+      <details>
+        <summary>Vox.md chèn dưới tiêu đề được không?</summary>
+        <p>Có. Lộ trình có thể chèn vào đầu, nối vào cuối hoặc chèn bên dưới tiêu đề cấp một đến sáu. Bạn có thể chọn dừng gửi khi thiếu tiêu đề hoặc tự động tạo tiêu đề đó, đồng thời chọn đặt mục mới ngay bên dưới tiêu đề hay ở cuối phần thuộc tiêu đề ấy.</p>
+      </details>
+      <details>
+        <summary>Dùng không Obsidian được không?</summary>
+        <p>Có. Lộ trình dùng mọi thư mục ghi được qua Files. Đầu ra Markdown thường với đính kèm thông thường nên ghi chú không khóa vào Vox.md.</p>
+      </details>
+      <details>
+        <summary>Vox.md tải ghi chú hay âm thanh lên không?</summary>
+        <p>Không nội dung ghi gửi máy chủ Vox.md. Nháp và xử lý giọng nói ở trên máy, tệp hoàn tất ghi thư mục chọn. Nếu thuộc nhà đồng bộ, họ xử lý theo điều khoản riêng. <a href="/vi/blog/offline-transcription-iphone-markdown/">Kiểm yêu cầu thiết lập ngoại tuyến.</a></p>
+      </details>
+      <details>
+        <summary>Dùng vị trí trong mẫu không thêm siêu dữ liệu được không?</summary>
+        <p>Có. Bật Sử dụng vị trí hiện tại cho Lộ trình, giữ Ghi siêu dữ liệu vị trí tắt, thêm <code>{location}</code> vào định dạng mục. Vox.md chèn liên kết bản đồ một lần, không thêm frontmatter hay trường vị trí nội tuyến. <a href="/vi/docs/location/">Đọc hướng dẫn vị trí đầy đủ.</a></p>
+      </details>
+      <details>
+        <summary>Ghi ngoài ứng dụng được không?</summary>
+        <p>Có. Vox.md gồm tiện ích, tác vụ Shortcuts, phần mở rộng chia sẻ và bàn phím giọng nói. Các điểm vào dùng cùng hệ ghi cục bộ.</p>
+      </details>
+      <details>
+        <summary>Vox.md giá bao nhiêu?</summary>
+        <p>Vox.md cung cấp miễn phí 15 phút chép lời và 10 lần gửi nội dung ghi nhanh thành công. Mua một lần trọn đời để chép lời và ghi nhanh không giới hạn, không thuê bao hay quảng cáo. Bản chép giọng nói gửi tới Markdown được tính vào hạn mức chép lời, không bị tính thêm vào hạn mức gửi ghi nhanh riêng. App Store hiển thị giá hiện hành cho khu vực của bạn.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="r-cta" id="download" aria-labelledby="download-title">
+  <div class="r-wrap">
+    <div class="r-cta-card">
+      <h2 id="download-title">Đặt ý nghĩ tiếp theo <span class="r-voice">trong tệp.</span></h2>
+      <p>Nối kho hay thư mục cục bộ một lần. Ý tiếp tới đúng ghi chú, tiêu đề và dạng chọn.</p>
+      <div class="r-actions">
+        <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_vi_8a5edab28263">Tải Vox.md miễn phí</a>
+        <span class="r-note">Hạn mức miễn phí · Một lần mở trọn đời · Không cần tài khoản</span>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="r-wrap r-foot">
+    <span class="r-eof" aria-hidden="true">EOF</span>
+    <ul>
+      <li><a href="/vi/developers">Nhà phát triển</a></li>
+      <li><a href="/vi/about">Về</a></li>
+      <li><a href="/vi/contact">Liên hệ</a></li>
+      <li><a href="/vi/docs/">Tài liệu</a></li>
+      <li><a href="/vi/blog/">Hướng dẫn</a></li>
+      <li><a href="/vi/compare/">So sánh</a></li>
+      <li><a href="/vi/privacy.html">Quyền riêng tư</a></li>
+      <li><a href="/vi/terms.html">Điều khoản</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="mailto:codybontecou@gmail.com">Hỗ trợ</a></li>
+      <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_vi_8a5edab28263">App Store</a></li>
+    </ul>
+    <p class="r-foot-copy">© 2026 Vox.md · Tạo bởi <a href="https://codybontecou.com/">Cody Bontecou</a> tại <a href="https://isolated.tech/">Isolated Tech</a> · Không tải nội dung lên.</p>
+
+  <details class="language-switcher"><summary>Ngôn ngữ</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ar/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/" lang="id" hreflang="id">Bahasa Indonesia</a></li><li><a href="/it/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/" lang="vi" hreflang="vi" aria-current="page">Tiếng Việt</a></li><li><a href="/zh-hans/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+
+<script>
+/* Hero demo tabs. Without JavaScript the first example shows on its own. */
+(function () {
+  var list = document.querySelector('.r-demo-tabs');
+  if (!list) return;
+  var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+  function select(tab, focus) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { select(tab, false); });
+    tab.addEventListener('keydown', function (ev) {
+      var next = ev.key === 'ArrowRight' ? i + 1 : ev.key === 'ArrowLeft' ? i - 1 : ev.key === 'Home' ? 0 : ev.key === 'End' ? tabs.length - 1 : null;
+      if (next === null) return;
+      ev.preventDefault();
+      select(tabs[(next + tabs.length) % tabs.length], true);
+    });
+  });
+  list.hidden = false;
+})();
+</script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

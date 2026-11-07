@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr" data-search-section="Bagian" data-search-guide="Panduan" data-search-empty="Tidak ada hasil untuk “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lokasi saat ini, {location}, dan Metadata — Dokumentasi Vox.md</title>
+  <meta name="description" content="Atur Lokasi saat ini sekali ambil, token Markdown {location}, frontmatter atau metadata lokasi sebaris opsional, presisi, privasi, dan pemulihan pada Rute Vox.md.">
+  <link rel="canonical" href="https://vox.isolated.tech/id/docs/location/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Dokumentasi Vox.md untuk model bahasa">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Lokasi saat ini, {location}, dan Metadata — Dokumentasi Vox.md">
+  <meta property="og:description" content="Gunakan lokasi sekali ambil dalam templat Markdown tanpa otomatis menambahkan metadata lokasi ke catatan.">
+  <meta property="og:url" content="https://vox.isolated.tech/id/docs/location/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Panduan Lokasi Saat Ini Vox.md">
+  <meta name="twitter:description" content="Panduan lengkap lokasi sekali ambil, {location}, keluaran metadata, presisi, privasi, dan migrasi.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Lokasi saat ini, {location}, dan Metadata Lokasi di Vox.md",
+  "description": "Panduan lengkap pengambilan Lokasi saat ini per preset, token Markdown {location}, keluaran metadata opsional, privasi, migrasi, dan pemecahan masalah.",
+  "dateModified": "2026-08-21",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/id/docs/location/",
+  "inLanguage": "id",
+  "name": "Lokasi saat ini, {location}, dan Metadata — Dokumentasi Vox.md"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/id/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Dokumentasi",
+      "item": "https://vox.isolated.tech/id/docs/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Lokasi saat ini",
+      "item": "https://vox.isolated.tech/id/docs/location/"
+    }
+  ],
+  "inLanguage": "id",
+  "name": "Lokasi saat ini, {location}, dan Metadata — Dokumentasi Vox.md",
+  "description": "Atur Lokasi saat ini sekali ambil, token Markdown {location}, frontmatter atau metadata lokasi sebaris opsional, presisi, privasi, dan pemulihan pada Rute Vox.md."
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="API Informasi Publik Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/location/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/location/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/location/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/location/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/location/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/location/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/location/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/location/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/location/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/location/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/location/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/location/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/location/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/location/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/location/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/location/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/location/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/location/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/location/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/location/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/location/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/location/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/location/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/location/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="Navigasi utama">
+  <div class="nav-inner docs-header-inner">
+    <a href="/id/" class="logo" aria-label="Beranda Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ dokumentasi</span></span>
+    </a>
+    <form class="docs-search" role="search" action="../" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="Cari dokumentasi" aria-label="Cari dokumentasi" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Hasil pencarian" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/id/blog/">Blog</a></li>
+      <li><a href="/id/privacy.html">Privasi</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>Bahasa</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id" aria-current="page">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="Di halaman ini">
+      <div class="docs-sidebar-title">Di Halaman Ini</div>
+      <ol>
+        <li><a href="#overview">Dua Pilihan Mandiri</a></li>
+        <li><a href="#setup">Siapkan Rute</a></li>
+        <li><a href="#configurations">Konfigurasi Umum</a></li>
+        <li><a href="#location-token"><code>{location}</code> Token</a></li>
+        <li><a href="#metadata-output">Keluaran Metadata</a></li>
+        <li><a href="#precision">Presisi &amp; Label</a></li>
+        <li><a href="#capture-sources">Menangkap sumber</a></li>
+        <li><a href="#unavailable">Tidak Tersedia &amp; Pemulihan</a></li>
+        <li><a href="#migration">Rute yang Ada</a></li>
+        <li><a href="#privacy">Privasi &amp; Retensi</a></li>
+        <li><a href="#troubleshooting">Pemecahan Masalah</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="location-guide-title">
+      <div class="page-eyebrow">Dokumentasi · Rute</div>
+      <h1 class="page-title" id="location-guide-title">Lokasi saat ini, <code>{location}</code>, dan Metadata</h1>
+      <p class="docs-hero-copy">Gunakan satu lokasi saat asal dalam pemformatan entri tanpa otomatis menambahkan YAML atau bidang sebaris. Pengambilan lokasi dan keluaran metadata adalah pilihan eksplisit yang terpisah pada setiap Rute.</p>
+      <div class="docs-meta-row" aria-label="Fakta panduan">
+        <span>Diperbarui 21 Agustus 2026</span>
+        <span>Pengambilan sekali</span>
+        <span>Tanpa pelacakan latar belakang</span>
+        <a href="/id/docs/">Panduan Fitur Lengkap</a>
+      </div>
+      </header>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="overview">
+        <div class="docs-section-label">01 / Ikhtisar</div>
+        <h2>Pengambilan Lokasi Tidak Berarti Keluaran Metadata</h2>
+        <p>Setiap Rute memiliki dua kontrol lokasi terpisah. <strong>Gunakan Lokasi Saat Ini</strong> menentukan apakah rute meminta satu lokasi pada saat asal. <strong>Tulis Metadata Lokasi</strong> menentukan apakah cuplikan yang diperoleh juga ditulis sebagai frontmatter atau bidang sebaris.</p>
+
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Kontrol</th><th>Artinya</th><th>Yang tidak dimaksud</th></tr></thead>
+            <tbody>
+              <tr><td>Izin lokasi sistem</td><td>Memungkinkan Vox.md meminta lokasi saat aplikasi atau antarmuka pencatatan yang didukung sedang digunakan.</td><td>Ini tidak mengaktifkan lokasi untuk Rute mana pun.</td></tr>
+              <tr><td>Gunakan Lokasi Saat Ini</td><td>Meminta satu lokasi untuk rute ini dan menyediakannya bagi <code>{location}</code>.</td><td>Ini tidak otomatis menulis YAML atau metadata sebaris.</td></tr>
+              <tr><td>Tulis Metadata Lokasi</td><td>Menulis bidang terstruktur pilihan atau YAML lanjutan tervalidasi dari cuplikan yang diperoleh.</td><td>Ini tidak mengontrol apakah <code>{location}</code> dapat dirender.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <strong>Sinyal niatnya adalah rute, bukan izin</strong>
+          <p>Memberikan izin Saat Digunakan hanya membuka gerbang sistem operasi. Vox.md tetap hanya meminta lokasi untuk tindakan Lokasi saat ini mandiri pada Bilah Tangkapan atau Rute dengan Gunakan Lokasi Saat Ini yang Anda aktifkan.</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="setup">
+        <div class="docs-section-label">02 / Penyiapan</div>
+        <h2>Atur Lokasi Saat Ini untuk Satu Rute</h2>
+        <ol class="docs-steps">
+          <li><strong>Buka Rute.</strong><span>Di iPhone atau iPad, buka Pengaturan → Rute. Di Mac, buka Pengaturan lalu pilih Rute.</span></li>
+          <li><strong>Sunting rute.</strong><span>Pilih rute yang harus memakai lokasi asalnya. Pengaturan milik rute tersebut dan tidak memengaruhi rute lain.</span></li>
+          <li><strong>Buka Lokasi.</strong><span>Aktifkan <em>Gunakan Lokasi Saat Ini</em>. Pertahankan <em>Tulis Metadata Lokasi</em> nonaktif untuk perilaku token saja.</span></li>
+          <li><strong>Pilih presisi.</strong><span>Gunakan Exact untuk lokasi asal, atau City untuk koordinat yang dibulatkan ke dua angka desimal tanpa label tempat menarik.</span></li>
+          <li><strong>Pilih perilaku saat tidak tersedia.</strong><span>Tanya, Kirim Tanpa Lokasi, atau Batalkan Tangkapan menentukan tindakan jika lokasi asal tidak dapat diperoleh.</span></li>
+          <li><strong>Tambahkan <code>{location}</code> jika diinginkan.</strong><span>Taruh token dalam Templat Entri, awalan atau akhiran entri kustom, atau templat Markdown vault.</span></li>
+        </ol>
+        <p>Penggunaan pertama mungkin menampilkan permintaan izin lokasi sistem operasi. Jika izin pernah ditolak, aktifkan akses lokasi Vox.md di pengaturan sistem iOS, iPadOS, atau macOS.</p>
+      </section>
+
+      <section class="docs-section" id="configurations">
+        <div class="docs-section-label">03 / Konfigurasi Umum</div>
+        <h2>Pilih Cakupan Lokasi Sekecil yang Anda Butuhkan</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Hasil yang diinginkan</th><th>Gunakan Lokasi Saat Ini</th><th>Tulis Metadata Lokasi</th><th>Kuilnya</th></tr></thead>
+            <tbody>
+              <tr><td>Tanpa lokasi rute</td><td>Mati</td><td>Mati</td><td>Jangan gunakan <code>{location}</code>, atau hasilnya kosong.</td></tr>
+              <tr><td>Hanya tautan yang dapat diklik</td><td>Aktif</td><td>Mati</td><td>Tambahkan <code>{location}</code>. Tidak ada bidang lokasi yang ditulis.</td></tr>
+              <tr><td>Hanya metadata</td><td>Aktif</td><td>Aktif</td><td>Hilangkan <code>{location}</code>. Hanya bidang yang dikonfigurasi yang ditulis.</td></tr>
+              <tr><td>Tautan dan metadata</td><td>Aktif</td><td>Aktif</td><td>Tambahkan <code>{location}</code> dan atur bidang metadata.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Menonaktifkan Gunakan Lokasi Saat Ini mencegah render token dan keluaran metadata rute itu, meski pilihan format metadata sebelumnya tetap dikonfigurasi untuk dipakai nanti.</p>
+      </section>
+
+      <section class="docs-section" id="location-token">
+        <div class="docs-section-label">04 / Token Templat</div>
+        <h2>Gunakan <code>{location}</code> Tanpa Mengubah Metadata Catatan</h2>
+        <p>Ketika Gunakan Lokasi Saat Ini aktif dan cuplikan asal tersedia, <code>{location}</code> menghasilkan tautan Markdown Google Maps tervalidasi:</p>
+        <pre class="docs-code-block"><code>[Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>Token bekerja dalam Templat Entri pakai ulang, awalan dan akhiran entri kustom, serta templat Markdown vault. Memakai koordinat Exact atau City yang sama dengan pilihan rute.</p>
+
+        <h3 id="token-example">Contoh token saja</h3>
+        <p>Untuk akhiran seperti:</p>
+        <pre class="docs-code-block"><code>Captured from {location}</code></pre>
+        <p>Vox.md dapat menghasilkan:</p>
+        <pre class="docs-code-block"><code>Captured from [Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>Dengan Write Location Metadata nonaktif, tautan ini satu-satunya konten lokasi yang ditambahkan rute. Tidak ada <code>locations:</code> sebagai koleksi dan tanpa <code>location.*::</code> sebagai bidang yang ditulis.</p>
+
+        <h3 id="composer-fix">Perbaikan sekali ketuk penyusun</h3>
+        <p>Jika awalan, akhiran, atau Templat Entri pakai ulang yang berlaku menggunakan <code>{location}</code> ketika rute pilihan menonaktifkan Lokasi saat ini, penyusun menjelaskan bahwa token akan kosong dan menawarkan <strong>Gunakan Lokasi Saat Ini untuk [Route]</strong>. Tindakan itu mengaktifkan Lokasi saat ini untuk rute sambil sengaja membiarkan Tulis Metadata Lokasi nonaktif, sehingga Kirim berikutnya dapat mengisi token tanpa mengubah metadata catatan. Berkas templat vault langsung hanya dibaca saat pengiriman, jadi isinya tidak dapat memicu petunjuk penyusun ini; aktifkan Lokasi saat ini secara manual jika templat vault memakai token.</p>
+
+        <div class="docs-callout docs-callout-neutral">
+          <strong>Saat token kosong</strong>
+          <p><code>{location}</code> menjadi string kosong ketika Lokasi saat ini nonaktif, lokasi tidak tersedia, atau tangkapan berlanjut tanpa lokasi. Perhatikan tanda baca dan label di sekitarnya saat merancang baris templat opsional.</p>
+        </div>
+
+        <h3 id="capture-bar-location">Tindakan Bilah Tangkapan mandiri</h3>
+        <p>Fitur Cepat menangkap <strong>Lokasi saat ini</strong> langsung menyisipkan tautan Google Maps sekali ambil ke draf saat ini. Terpisah dari Rute dan tidak mengubah Gunakan Lokasi Saat Ini maupun Write Location Metadata.</p>
+      </section>
+
+      <section class="docs-section" id="metadata-output">
+        <div class="docs-section-label">05 / Keluaran Metadata</div>
+        <h2>Tulis Bidang Terstruktur Hanya Jika Anda Memilihnya</h2>
+        <p>Aktifkan Tulis Metadata Lokasi jika catatan harus menerima bidang lokasi yang dapat dibaca mesin sebagai tambahan atau pengganti <code>{location}</code> tautan.</p>
+
+        <div class="docs-feature-grid">
+          <div><strong>Frontmatter Catatan</strong><p>Menambahkan setiap lokasi ke koleksi bernama <code>locations</code> secara default, dengan ID Tangkapan sebagai kunci. Frontmatter lain yang sudah ada dipertahankan.</p></div>
+          <div><strong>Bidang Entri Sebaris</strong><p>Menulis bentuk bergaya Dataview <code>location.key:: value</code> di samping entri tangkapan. Tidak ada koleksi frontmatter yang ditambahkan.</p></div>
+          <div><strong>Bidang Terstruktur</strong><p>Pilih dan ganti nama koordinat, lintang, bujur, tempat, kota, wilayah, negara, tautan penyedia, URI geo, akurasi, cap waktu, sumber, dan ID.</p></div>
+          <div><strong>YAML Lanjutan</strong><p>Memakai templat YAML tervalidasi dan terbatas untuk Frontmatter Catatan. YAML lanjutan tidak tersedia bagi bidang entri sebaris.</p></div>
+        </div>
+
+        <h3 id="frontmatter-example">Contoh frontmatter terstruktur</h3>
+        <pre class="docs-code-block"><code>---
+title: Field Notes
+locations:
+  - id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    coordinates: [45.501235, -73.567890]
+    place: "Café &amp; Main"
+    appleMapsURL: "https://maps.apple.com/?ll=45.501235%2C-73.567890&amp;q=Caf%C3%A9%20%26%20Main"
+    timestamp: "2023-11-14T22:13:20.000Z"
+    source: "app"
+---</code></pre>
+        <p>Catatan bergulir dapat menyimpan beberapa tangkapan dalam koleksi. Perlindungan percobaan ulang dibangun dalam penggabungan lokasi: percobaan ulang dengan ID Tangkapan sama tidak dapat menambahkan lokasi sama dua kali. Jika kunci koleksi pilihan sudah berisi nilai buatan pengguna yang tidak kompatibel, Vox.md berhenti alih-alih menimpanya.</p>
+
+        <h3 id="inline-example">Contoh entri sebaris</h3>
+        <pre class="docs-code-block"><code>location.id:: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+location.coordinates:: [45.501235, -73.567890]
+location.place:: "Café &amp; Main"
+
+Captured text</code></pre>
+
+        <h3 id="advanced-yaml">Placeholder YAML lanjutan</h3>
+        <p>Templat lanjutan dapat memakai placeholder seperti <code>{{coordinates}}</code>, <code>{{latitude}}</code>, <code>{{longitude}}</code>, <code>{{place}}</code>, <code>{{city}}</code>, <code>{{region}}</code>, <code>{{country}}</code>, <code>{{appleMapsURL}}</code>, <code>{{googleMapsURL}}</code>, <code>{{openStreetMapURL}}</code>, <code>{{geoURI}}</code>, <code>{{accuracy}}</code>, <code>{{timestamp}}</code>, <code>{{source}}</code>, dan <code>{{id}}</code>. Pratinjau konfigurasi di pengaturan rute sebelum menyimpan.</p>
+      </section>
+
+      <section class="docs-section" id="precision">
+        <div class="docs-section-label">06 / Presisi &amp; Label</div>
+        <h2>Exact dan City Memakai Satu Cuplikan Konsisten</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Presisi</th><th>Koordinat</th><th>Label</th><th>Tautan dan bidang</th></tr></thead>
+            <tbody>
+              <tr><td>Tepat</td><td>Mempertahankan lokasi asal dengan enam angka desimal yang ditampilkan.</td><td>Dapat menyertakan label tempat menarik jika bidang metadata pilihan membutuhkannya.</td><td>Setiap nilai turunan menggunakan koordinat Exact.</td></tr>
+              <tr><td>Kota</td><td>Membulatkan lintang dan bujur ke dua angka desimal sebelum cuplikan disimpan.</td><td>Menghapus label tempat menarik; kota, wilayah, dan negara mungkin tetap ada.</td><td>Setiap URL penyedia, URI geo, token, dan bidang memakai koordinat yang dibulatkan.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Geocoder balik sistem Apple hanya dipakai jika Write Location Metadata aktif dan bidang terstruktur pilihan atau placeholder lanjutan memerlukan tempat, kota, wilayah, atau negara. Rute token saja melewati geocoding balik. Jika pencarian label gagal, keluaran berbasis koordinat tetap tersedia.</p>
+      </section>
+
+      <section class="docs-section" id="capture-sources">
+        <div class="docs-section-label">07 / Sumber Tangkapan</div>
+        <h2>Cuplikan Milik Asal Tangkapan</h2>
+        <p>Lokasi saat ini dievaluasi ketika tangkapan berasal. Percobaan ulang dan pemulihan memakai kembali hasil yang tersimpan tersebut, bukan diam-diam mengambil lokasi baru.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Sumber tangkapan</th><th>Batas pengambilan</th></tr></thead>
+            <tbody>
+              <tr><td>Cepat menangkap di iPhone dan iPad</td><td>Kirim</td></tr>
+              <tr><td>Lembar Berbagi</td><td>Kirim dari ekstensi berbagi</td></tr>
+              <tr><td>Intent teks, tautan, dan berkas yang langsung diantrekan</td><td>Pemanggilan intent</td></tr>
+              <tr><td>Shortcuts, widget, kontrol, dan tautan dalam yang membuka Cepat menangkap</td><td>Kirim dari penyusun</td></tr>
+              <tr><td>Pintasan, widget, kontrol, suara langsung, dan perekaman rute melalui papan ketik</td><td>Penghentian perekaman</td></tr>
+              <tr><td>Pengiriman Tangkapan normal Apple Watch</td><td>Perekaman berhenti di Watch; iPhone tidak menggantinya dengan lokasi sendiri</td></tr>
+              <tr><td>Tangkapan Mac</td><td>Kirim, atau penghentian perekaman untuk pengiriman suara langsung</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Hanya Rekaman Watch</strong> mengekspor audio M4A mentah ke Files tanpa wadah Markdown, sehingga tidak meminta lokasi meski rute memakai Lokasi saat ini untuk keluaran lain.</p>
+      </section>
+
+      <section class="docs-section" id="unavailable">
+        <div class="docs-section-label">08 / Tidak Tersedia &amp; Pemulihan</div>
+        <h2>Pilih Cara Setiap Rute Menangani Lokasi yang Tidak Tersedia</h2>
+        <ul>
+          <li><strong>Tanya:</strong> tangkapan interaktif dapat mencoba ulang, membatalkan, mengirim sekali tanpa lokasi, atau memilih Selalu Kirim Tanpa Lokasi untuk rute tersebut.</li>
+          <li><strong>Kirim Tanpa Lokasi:</strong> melanjutkan pengiriman tanpa nilai token atau keluaran metadata.</li>
+          <li><strong>Batalkan Tangkapan:</strong> menghentikan pengiriman, bukan membuat catatan tanpa lokasi asal yang diminta.</li>
+          <li><strong>Atur ulang pilihan tersimpan:</strong> gunakan Atur Ulang Pilihan Lokasi Tidak Tersedia di pengaturan Lokasi rute.</li>
+        </ul>
+        <p>Permintaan Tanya tanpa pengawasan menyimpan hasil tidak tersedia saat asal untuk ditinjau nanti. Percobaan ulang tangkapan antrean atau gagal tidak pernah mengganti dengan lokasi kemudian. Pekerjaan tertunda hanya menyimpan cuplikan yang disesuaikan demi privasi atau hasil tidak tersedia yang diperlukan untuk pemulihan lokal.</p>
+      </section>
+
+      <section class="docs-section" id="migration">
+        <div class="docs-section-label">09 / Rute yang Ada</div>
+        <h2>Pembaruan Mempertahankan Perilaku Metadata Sebelumnya</h2>
+        <p>Pemisahan pengambilan dan keluaran aman untuk migrasi:</p>
+        <ul>
+          <li><strong>Rute baru:</strong> Gunakan Lokasi Saat Ini dan Tulis Metadata Lokasi awalnya sama-sama nonaktif.</li>
+          <li><strong>Rute lokasi yang sebelumnya aktif:</strong> kedua kontrol tetap aktif setelah pembaruan, mempertahankan metadata yang sudah ditulis rute tersebut.</li>
+          <li><strong>Rute lokasi yang sebelumnya nonaktif:</strong> kedua kontrol tetap nonaktif; pembaruan tidak memperkenalkan keluaran metadata baru.</li>
+        </ul>
+        <p>Untuk mengubah rute penulis metadata menjadi perilaku token saja, biarkan Gunakan Lokasi Saat Ini aktif dan nonaktifkan Write Location Metadata. Markdown yang ada tidak ditulis ulang atau dihapus.</p>
+      </section>
+
+      <section class="docs-section" id="privacy">
+        <div class="docs-section-label">10 / Privasi &amp; Retensi</div>
+        <h2>Satu Cuplikan Eksplisit, Tanpa Pelacakan Latar Belakang</h2>
+        <ul>
+          <li>Vox.md tidak memantau lokasi terus-menerus atau melacak lokasi di latar belakang.</li>
+          <li>Lokasi tidak dikirim ke server Vox.md, analitik, sistem iklan, atau layanan AI pihak ketiga.</li>
+          <li>URL token dan penyedia diformat secara lokal. Apple Maps, Google Maps, atau OpenStreetMap menerima koordinat hanya saat Anda membuka tautannya.</li>
+          <li>Geocoder balik sistem Apple mungkin membuat permintaan jaringan hanya jika metadata pilihan memerlukan label tempat. Lokasi berbasis token saja melewati pencarian ini.</li>
+          <li>Setelah pengiriman berhasil, permintaan yang dapat dipulihkan dipangkas menjadi tanda terima tanpa konten, dan riwayat Tangkapan selesai tidak menyimpan koordinat, label, URL penyedia, atau templat lokasi.</li>
+          <li>Jika metadata lokasi atau tautan token ditulis ke Markdown, itu menjadi bagian dari berkas pilihan Anda. Penyedia sinkronisasi berkas dapat memproses berkas itu menurut ketentuannya.</li>
+        </ul>
+        <div class="docs-callout">
+          <strong>Izin boleh tetap aktif sementara rute tetap privat</strong>
+          <p>Anda dapat membiarkan izin sistem tersedia untuk tindakan Lokasi saat ini mandiri sambil tetap menonaktifkan Gunakan Lokasi Saat Ini pada setiap Rute.</p>
+        </div>
+        <p>Lihat <a href="/id/privacy.html">Kebijakan Privasi</a> untuk detail lengkap penanganan dan retensi data.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">11 / Pemecahan Masalah</div>
+        <h2>Perbaiki Masalah Umum Lokasi dan Templat</h2>
+        <div class="docs-troubleshooting">
+          <details>
+            <summary><code>{location}</code> menghasilkan teks kosong</summary>
+            <p>Pastikan Templat Entri, awalan, akhiran, atau templat vault yang berlaku memakai token huruf kecil persis <code>{location}</code>. Lalu aktifkan Gunakan Lokasi Saat Ini untuk rute pengiriman. Perbaikan sekali ketuk penyusun dapat melakukannya untuk format entri sebaris yang terdeteksi tanpa mengaktifkan metadata; berkas templat vault langsung perlu penyiapan rute manual. Jika izin ditolak atau lokasi tidak tersedia, tinjau perilaku rute saat lokasi tidak tersedia dan pengaturan lokasi sistem.</p>
+          </details>
+          <details>
+            <summary>Tautan berfungsi, tetapi metadata tidak muncul</summary>
+            <p>Ini wajar pada konfigurasi token saja. Buka pengaturan Lokasi rute dan aktifkan Write Location Metadata, lalu pilih Frontmatter Catatan atau Bidang Entri Sebaris dan pilih bidang yang diinginkan.</p>
+          </details>
+          <details>
+            <summary>Metadata muncul, tetapi tautan tidak muncul di entri</summary>
+            <p>Keluaran metadata tidak menyisipkan tautan otomatis. Tambahkan <code>{location}</code> ke pemformatan entri yang berlaku atau templat Markdown vault.</p>
+          </details>
+          <details>
+            <summary>Tempat atau kota tidak ada</summary>
+            <p>Pastikan bidang label dipilih. Geocoder balik Apple dapat gagal meski koordinat tetap tersedia. Presisi City sengaja menghapus label tempat menarik.</p>
+          </details>
+          <details>
+            <summary>Pengiriman frontmatter melaporkan benturan</summary>
+            <p>Kunci koleksi yang dikonfigurasi, <code>locations</code> secara default, harus berupa daftar lokasi kompatibel. Ganti nama koleksi di pengaturan rute atau sesuaikan frontmatter buatan pengguna yang ada. Vox.md tidak akan menimpa nilai yang tidak kompatibel.</p>
+          </details>
+          <details>
+            <summary>Percobaan ulang memiliki lokasi lama atau lokasi yang tidak tersedia</summary>
+            <p>Ini disengaja. Permintaan mempertahankan hasil saat asal agar percobaan ulang nanti tidak diam-diam mengklaim lokasi tangkapan berbeda. Mulai tangkapan baru jika perlu cuplikan baru.</p>
+          </details>
+          <details>
+            <summary>Izin lokasi diberikan, tetapi rute tidak memintanya</summary>
+            <p>Izin sistem hanya gerbang. Sunting Rute tersebut dan aktifkan Gunakan Lokasi Saat Ini. Izin saja tidak pernah mengaktifkan fitur untuk rute.</p>
+          </details>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/id/developers">Pengembang</a></li>
+        <li><a href="/id/about">Tentang</a></li>
+        <li><a href="/id/contact">Kontak</a></li>
+        <li><a href="/id/">Beranda</a></li>
+        <li><a href="/id/docs/">Dokumentasi</a></li>
+        <li><a href="/id/blog/">Blog</a></li>
+        <li><a href="/id/privacy.html">Privasi</a></li>
+        <li><a href="/id/terms.html">Ketentuan</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Pencatatan lokal · Berkas dalam kendali pengguna.</div>
+    </div>
+  <details class="language-switcher"><summary>Bahasa</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/location/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/location/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/location/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/location/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/location/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/location/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/location/" lang="id" hreflang="id" aria-current="page">Bahasa Indonesia</a></li><li><a href="/it/docs/location/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/location/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/location/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/location/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/location/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/location/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/location/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/location/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/location/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/location/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/location/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/location/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/location/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/location/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr" data-search-section="Bagian" data-search-guide="Panduan" data-search-empty="Tidak ada hasil untuk “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dokumentasi Vox.md: Panduan Fitur Lengkap</title>
+  <meta name="description" content="Dokumentasi lengkap Cepat menangkap Vox.md, Rute, tujuan Markdown, papan ketik iOS, model transkripsi lokal, widget, Shortcuts, Apple Watch, dan Mac.">
+  <link rel="canonical" href="https://vox.isolated.tech/id/docs/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Dokumentasi Vox.md untuk model bahasa">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Dokumentasi Vox.md: Panduan Fitur Lengkap">
+  <meta property="og:description" content="Pelajari semua fitur Vox.md yang dirilis, dari tangkapan Markdown tersimpan dan rute hingga model ucapan lokal, papan ketik, Apple Watch, dan Mac.">
+  <meta property="og:url" content="https://vox.isolated.tech/id/docs/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dokumentasi Vox.md">
+  <meta name="twitter:description" content="Panduan lengkap pencatatan, perutean, transkripsi, dan integrasi sistem Vox.md.">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Panduan Fitur Lengkap Vox.md",
+  "description": "Dokumentasi setiap fitur tangkapan, perutean, transkripsi, papan ketik, integrasi sistem, Apple Watch, dan Mac yang dirilis di Vox.md.",
+  "dateModified": "2026-10-26",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/id/docs/",
+  "inLanguage": "id",
+  "name": "Dokumentasi Vox.md: Panduan Fitur Lengkap"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/id/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Dokumentasi",
+      "item": "https://vox.isolated.tech/id/docs/"
+    }
+  ],
+  "inLanguage": "id",
+  "name": "Dokumentasi Vox.md: Panduan Fitur Lengkap",
+  "description": "Dokumentasi lengkap Cepat menangkap Vox.md, Rute, tujuan Markdown, papan ketik iOS, model transkripsi lokal, widget, Shortcuts, Apple Watch, dan Mac."
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="API Informasi Publik Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/docs/">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/docs/">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/docs/">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/docs/">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/docs/">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/docs/">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/docs/">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/docs/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/docs/">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/docs/">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/docs/">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/docs/">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/docs/">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/docs/">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/docs/">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/docs/">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/docs/">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/docs/">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/docs/">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/docs/">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/docs/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="Navigasi utama">
+  <div class="nav-inner docs-header-inner">
+    <a href="/id/" class="logo" aria-label="Beranda Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ dokumentasi</span></span>
+    </a>
+    <form class="docs-search" role="search" action="./" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="Cari dokumentasi" aria-label="Cari dokumentasi" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="Hasil pencarian" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/id/blog/">Blog</a></li>
+      <li><a href="/id/privacy.html">Privasi</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>Bahasa</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id" aria-current="page">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="Di halaman ini">
+      <div class="docs-sidebar-title">Di Halaman Ini</div>
+      <ol>
+        <li><a href="#getting-started">Memulai</a></li>
+        <li><a href="#quick-capture">Cepat menangkap</a></li>
+        <li><a href="#presets">Rute</a></li>
+        <li><a href="/id/docs/location/">Lokasi saat ini &amp; {location}</a></li>
+        <li><a href="#models">Model &amp; Transkripsi</a></li>
+        <li><a href="#keyboard">Papan Ketik iOS</a></li>
+        <li><a href="#system-integrations">Integrasi Sistem</a></li>
+        <li><a href="#apple-watch">Apple Watch</a></li>
+        <li><a href="#mac">Mac Pengikut</a></li>
+        <li><a href="#history-settings">Pustaka, Pengaturan &amp; Privasi</a></li>
+        <li><a href="#troubleshooting">Pemecahan Masalah</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="docs-title">
+      <div class="page-eyebrow">Dokumentasi · Panduan Produk Terkini</div>
+      <h1 class="page-title" id="docs-title">Semua yang dapat dilakukan dengan Vox.md</h1>
+      <p class="docs-hero-copy">Panduan lengkap tangkapan, rute, perutean Markdown, papan ketik suara, model lokal, integrasi sistem Apple, Apple Watch, Mac, riwayat, pengaturan, dan privasi.</p>
+      <div class="docs-meta-row" aria-label="Fakta dokumentasi">
+        <span>Diperbarui 26 Okt 2026</span>
+        <span>iOS 17.6+</span>
+        <span>macOS 14+</span>
+        <span>watchOS 10+</span>
+      </div>
+      </header>
+
+      <section class="docs-directory" aria-labelledby="browse-docs">
+      <h2 class="visually-hidden" id="browse-docs">Telusuri berdasarkan kategori</h2>
+      <div class="docs-category-grid">
+        <a class="docs-category-card" href="#getting-started"><span>01</span><strong>Memulai</strong><small>Platform, penyiapan, izin, dan tangkapan pertama</small></a>
+        <a class="docs-category-card" href="#quick-capture"><span>02</span><strong>Cepat menangkap</strong><small>Penyusun, media, suara, Bilah Tangkapan, dan draf</small></a>
+        <a class="docs-category-card" href="#presets"><span>03</span><strong>Rute</strong><small>Pemrosesan, metadata, tujuan, dan templat</small></a>
+        <a class="docs-category-card is-guide" href="/id/docs/location/"><span>Panduan</span><strong>Lokasi saat ini &amp; <code>{location}</code></strong><small>Tautan berbasis token saja, metadata opsional, presisi, privasi, dan migrasi</small></a>
+        <a class="docs-category-card" href="#models"><span>04</span><strong>Modelnya</strong><small>Otomatis, Apple Speech, Whisper, dan Parakeet</small></a>
+        <a class="docs-category-card" href="#keyboard"><span>05</span><strong>Papan Ketik</strong><small>Penyiapan, dikte, penyisipan, haptik, dan penghentian otomatis</small></a>
+        <a class="docs-category-card" href="#system-integrations"><span>06</span><strong>Integrasi Sistem</strong><small>Widget, Lembar Berbagi, Shortcuts, dan tautan dalam</small></a>
+        <a class="docs-category-card" href="#apple-watch"><span>07</span><strong>Apple Watch</strong><small>Perekaman, sinkronisasi rute, antrean, dan komplikasi</small></a>
+        <a class="docs-category-card" href="#mac"><span>08</span><strong>Mac</strong><small>Pencatatan rapat, ruang kerja, bar menu, dan pintasan global</small></a>
+        <a class="docs-category-card" href="#history-settings"><span>09</span><strong>Pustaka &amp; Pengaturan</strong><small>Pemulihan, statistik, privasi, batas, pembelian, dan dukungan</small></a>
+      </div>
+      </section>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="getting-started">
+        <div class="docs-section-label">01 / Memulai</div>
+        <h2>Catat ke Markdown tanpa membuat silo catatan baru</h2>
+        <p>Vox.md adalah aplikasi pencatatan cepat yang mengutamakan penyimpanan lokal. Menulis Markdown standar dan lampiran ke vault Obsidian atau folder lain yang dapat ditulisi, pilihan Anda melalui Files. Tidak perlu akun Vox.md, plugin, atau basis data catatan yang dihosting.</p>
+
+        <p>Untuk alur suara lengkap, <a href="/id/blog/voice-notes-to-obsidian-iphone/">ikuti panduan catatan suara iPhone ke Obsidian</a>, dari memilih folder hingga memeriksa Markdown hasilnya.</p>
+
+        <p>Sedang memilih metode pencatatan? Baca <a href="/id/blog/obsidian-quick-capture-iphone/">panduan memilih pencatatan iPhone</a> atau <a href="/id/compare/vox-md-vs-obsidian-quick-capture/">bandingkan Vox.md dengan fitur bawaan Obsidian</a>.</p>
+
+        <div class="docs-table-wrap" id="platform-availability">
+          <table class="docs-table">
+            <thead><tr><th>Platform</th><th>Persyaratan</th><th>Yang tersedia</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone dan iPad</td><td class="req">iOS/iPadOS 17.6+</td><td>Cepat menangkap, papan ketik, Lembar Berbagi, widget, Shortcuts, Aktivitas Langsung, riwayat, dan pengaturan</td></tr>
+              <tr><td>Mac</td><td class="req">macOS 14+</td><td>Ruang kerja tangkapan, rekam/impor, rute, model, riwayat, bar menu, dan pintasan global</td></tr>
+              <tr><td>Apple Watch</td><td class="req">watchOS 10+</td><td>Perekaman lokal, pemilihan rute, antrean sinkronisasi, pengiriman rekaman saja, dan komplikasi</td></tr>
+              <tr><td>Kontrol Pusat Kontrol</td><td class="req">iOS 18+</td><td>Cepat menangkap dan kontrol perekaman yang mengenali rute</td></tr>
+              <tr><td>Backend Otomatis Apple Speech</td><td class="req">Perangkat iOS 26 dan bahasa yang didukung</td><td>Transkripsi langsung dan batch di perangkat yang dikelola sistem</td></tr>
+              <tr><td>Pemrosesan Apple Intelligence</td><td class="req">Perangkat iOS/macOS 26 yang kompatibel</td><td>Perapian di perangkat, keluaran terstruktur, dan instruksi kustom dengan cadangan</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <p><strong>Alur dasar.</strong> Pilih Rute, hubungkan tujuannya, ketik atau tambahkan konten di Cepat menangkap, lalu ketuk Kirim. Rute menentukan cara konten diproses, diformat, dan ditempatkan dalam catatan.</p>
+        </div>
+
+
+        <h3 id="first-capture">Buat tangkapan pertama</h3>
+        <ol class="docs-steps">
+          <li><strong>Buka Vox.md.</strong><span>Aplikasi langsung membuka penyusun Markdown persisten.</span></li>
+          <li><strong>Pilih Rute.</strong><span>Rute Default bawaan tidak dapat dihapus, tetapi dapat dinonaktifkan. Biarkan setidaknya satu rute aktif dan beri tujuan.</span></li>
+          <li><strong>Siapkan tujuannya.</strong><span>Ketuk <em>Menentukan Destinasi</em>, pilih vault Obsidian atau folder Files, lalu pilih catatan baru, bergulir, atau yang sudah ada.</span></li>
+          <li><strong>Tambahkan konten.</strong><span>Ketik Markdown atau tambahkan tautan, foto, berkas, hasil pindai, sketsa, lokasi, atau rekaman suara.</span></li>
+          <li><strong>Ketuk Kirim.</strong><span>Vox.md menyimpan ke rute pilihan dan melaporkan <em>Menangkap Sendiri</em>. Pekerjaan gagal atau dalam antrean tetap tersedia untuk dipulihkan.</span></li>
+        </ol>
+
+        <h3 id="permissions">Izin dan akses sistem</h3>
+        <ul>
+          <li><strong>Mikrofon:</strong> perekaman suara, transkripsi lokal, mode mendengarkan papan ketik, dan pengambilan audio. Cepat menangkap mungkin menampilkan permintaan ini saat ruang kerja pertama dibuka, sebelum Anda mulai merekam.</li>
+          <li><strong>Pengenalan ucapan:</strong> Apple Speech pada sistem yang didukung.</li>
+          <li><strong>Akses folder Files:</strong> tujuan, templat, impor, dan keluaran Watch berupa rekaman saja.</li>
+          <li><strong>Kamera dan foto pilihan:</strong> hanya saat Anda menambahkan media, tangkapan layar, foto jurnal, atau hasil pindai.</li>
+          <li><strong>Lokasi Saat Digunakan:</strong> hanya untuk perintah Lokasi saat ini mandiri pada Bilah Tangkapan atau ketika Rute yang diaktifkan memerlukan satu lokasi saat asal. Vox.md tidak pernah melacak lokasi terus-menerus atau di latar belakang.</li>
+          <li><strong>Pemberitahuan:</strong> status pengiriman opsional, termasuk kegagalan Apple Watch tanpa pengawasan.</li>
+          <li><strong>Izinkan Akses Penuh Papan Ketik:</strong> diperlukan agar papan ketik Vox.md memakai alur aplikasi bersama di perangkat. Lihat <a href="#keyboard-setup">Penyiapan papan ketik</a>.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="quick-capture">
+        <div class="docs-section-label">02 / Cepat menangkap</div>
+        <h2>Satu penyusun persisten untuk teks, media, berkas, dan suara</h2>
+        <p>Cepat menangkap adalah ruang kerja utama iOS dan iPadOS. Menu rute mengubah alur saat ini; menu tujuan menampilkan pratinjau atau mengganti sementara tempat draf dikirim. Bilah bawah juga membuka Pustaka dan Pengaturan serta dapat menampilkan atau menutup papan ketik perangkat lunak.</p>
+
+        <h3 id="durable-drafts">Draf persisten dan pengiriman aman</h3>
+        <ul>
+          <li>Teks, lampiran, rute pilihan, penggantian tujuan, dan sumber tangkapan tetap tersimpan setelah penangguhan dan peluncuran ulang.</li>
+          <li>Suntingan disimpan setelah debounce singkat, dan memindahkan aplikasi ke latar belakang memicu penyimpanan segera.</li>
+          <li>Jika terus menyunting saat pengiriman berlangsung, suntingan baru dipertahankan dalam draf baru, bukan dibuang.</li>
+          <li>Tujuan harus dikonfigurasi sebelum pengiriman. Penyusun menampilkan <em>Destinasi Tidak Konfigurasi</em> dengan tindakan Siapkan bila diperlukan.</li>
+          <li>Permintaan tangkapan yang aman dicoba ulang dijurnal lokal sehingga kegagalan izin, penyedia berkas, atau sinkronisasi dapat dicoba ulang.</li>
+          <li>Penyusun kosong menampilkan kutipan inspiratif tersimpan hingga Anda menambahkan teks, bahkan setelah memilih rute atau melampirkan berkas; permintaan kutipan tidak pernah menyertakan draf Anda.</li>
+        </ul>
+
+        <p>Untuk panduan berfokus tugas, lihat <a href="/id/blog/save-links-photos-obsidian-iphone/">simpan tautan, foto, dan hasil pindai ke Obsidian</a>.</p>
+
+        <h3 id="capture-types">Jenis tangkapan</h3>
+        <div class="docs-feature-grid">
+          <div><strong>Teks dan Markdown</strong><p>Tulis langsung di editor Markdown yang mengenali seleksi, tempel teks yang ada, dan gabungkan teks dengan muatan lain.</p></div>
+          <div><strong>Tautan web</strong><p>Tambahkan URL HTTP atau HTTPS dengan format tautan Markdown.</p></div>
+          <div><strong>Foto dan kamera</strong><p>Pilih foto atau tangkapan layar, atau ambil foto baru. Gambar disiapkan dan disematkan dalam catatan yang dikirim.</p></div>
+          <div><strong>File</strong><p>Pilih beberapa item Files. Gambar menjadi sematan, audio tetap muatan audio, dan berkas lain memakai tautan bergaya Obsidian.</p></div>
+          <div><strong>Pindaian dokumen</strong><p>Pindai halaman dengan VisionKit. Vox.md mempertahankan gambar halaman, membuat PDF, dan menyertakan OCR di perangkat dengan upaya terbaik.</p></div>
+          <div><strong>OCR Jurnal</strong><p>Ambil hingga 10 halaman jurnal dengan rana manual atau pilih foto jurnal. Vision OCR akurat memakai deteksi bahasa otomatis.</p></div>
+          <div><strong>Sketsa</strong><p>Gambar di kanvas PencilKit putih dengan pena hitam. Vox.md menyimpan data gambar yang dapat disunting dan pratinjau PNG.</p></div>
+          <div><strong>Tindakan Lokasi saat ini</strong><p>Minta satu lokasi dan sisipkan tautan Markdown Google Maps tervalidasi dalam draf. Tindakan Bilah Tangkapan mandiri ini tidak mengubah kedua kontrol lokasi per rute.</p></div>
+          <div><strong>Suara dan audio impor</strong><p>Rekam dari penyusun atau impor audio/video, transkripsikan lokal, lalu tambahkan hasil ke draf atau kirim segera.</p></div>
+        </div>
+        <p class="docs-note">Aksesibilitas: OCR menampilkan spanduk kemajuan “Mengekstrak teks di perangkat ini”, dan VoiceOver mengumumkan kemajuan serta penyelesaian OCR, “Tangkapan terkirim”, dan “Transkrip ditambahkan ke Tangkapan” di seluruh alur tangkapan.</p>
+
+        <h3 id="capture-bar">Bilah Tangkapan</h3>
+        <p>Pengaturan → Bilah Tangkapan memungkinkan Anda mengurutkan ulang atau menyembunyikan tindakan. Semua tindakan terlihat secara default.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Tindakan</th><th>Perilaku</th></tr></thead>
+            <tbody>
+              <tr><td>Menambahkan Media</td><td>Membuka pilihan Sketsa, Kamera, Foto, Tangkapan Layar, dan Tautan Web.</td></tr>
+              <tr><td>Tambahkan File</td><td>Memilih beberapa berkas dari Files dan menyiapkannya bersama draf.</td></tr>
+              <tr><td>Scan dokumen</td><td>Menyimpan pindaian multihalaman, PDF, gambar halaman, dan OCR dengan upaya terbaik.</td></tr>
+              <tr><td>Ekstrak teks</td><td>Menyediakan Simpan Halaman Jurnal dan Pilih Foto Jurnal untuk pencatatan berfokus OCR.</td></tr>
+              <tr><td>Sembilan</td><td>Membatalkan operasi editor terakhir.</td></tr>
+              <tr><td>Formatnya Markdown</td><td>Menerapkan Tebal, Miring, Tagar, atau Judul 1 hingga Judul 6.</td></tr>
+              <tr><td>Markdown Linknya</td><td>Menyisipkan <code>[link text](url)</code> dan memilih bagian yang dapat disunting.</td></tr>
+              <tr><td>Link internal</td><td>Menyisipkan bentuk bergaya Obsidian <code>[[Target]]</code> tautan wiki.</td></tr>
+              <tr><td>Dua Tanggal yang</td><td>Memakai Hari Ini, Besok, atau Akhir Pekan Ini; waktu opsional; dan penyesuaian ±15m, ±30m, atau ±1h. Menyisipkan <code>(@yyyy-MM-dd)</code> atau bentuk dengan waktu.</td></tr>
+              <tr><td>Checklistnya</td><td>Menerapkan awalan tugas Markdown <code>- [ ]</code>.</td></tr>
+              <tr><td>Daftar Peluru</td><td>Menerapkan awalan butir Markdown.</td></tr>
+              <tr><td>Paste</td><td>Menempelkan teks papan klip ke seleksi saat ini.</td></tr>
+              <tr><td>Sketch</td><td>Membuka tangkapan sketsa PencilKit yang dapat disunting.</td></tr>
+              <tr><td>Lokasi saat ini</td><td>Meminta satu lokasi dan menyisipkan tautan Google Maps.</td></tr>
+              <tr><td>Menggunakan Timestamp</td><td>Menyisipkan waktu dan tanggal lokal sebagai <code>h:mm a yyyy-MM-dd</code>.</td></tr>
+              <tr><td>Menambahkan tanggal</td><td>Menyisipkan <code>yyyy-MM-dd</code>.</td></tr>
+              <tr><td>Perubahan teks kasus</td><td>Menyediakan Huruf kecil, Huruf besar, Kapitalisasi kalimat, Kapitalisasi kata, dan Slugify.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">Pemformatan menghormati seleksi saat ini, menormalkan akhir baris, membatasi rentang seleksi tidak valid, dan menghindari pemisahan karakter gabungan seperti emoji.</p>
+
+        <h3 id="inline-voice">Kontrol suara sebaris</h3>
+        <ul>
+          <li>Ketuk tombol suara untuk memulai atau berhenti. Tekan lama sekitar 0,45 detik untuk membuka kontrol terperinci.</li>
+          <li>Saat merekam, <strong>Jeda</strong> muncul di samping tombol suara — ketuk sekali untuk menjeda, sekali lagi untuk melanjutkan. Catatan akhir tetap berupa satu rekaman, tanpa audio dan durasi selama jeda. Jeda juga menghentikan pratinjau transkrip langsung dan penghentian suara otomatis hingga Anda melanjutkan.</li>
+          <li><strong>Tambahkan ke Draf</strong> menambahkan transkrip akhir. <strong>Kirim Sekarang</strong> menjalankan rute pilihan dan tujuannya.</li>
+          <li><strong>Kirim Sekarang dipilih secara default</strong> di ruang kerja tangkapan iOS dan Mac. Membuka tindakan suara iOS melalui <code>voxboard://capture?action=voice</code> mengalihkan rekaman itu ke Tambahkan ke Draf.</li>
+          <li>Bagian <strong>Audio yang</strong> menyimpan rekaman sumber sebagai bagian draf jika diminta.</li>
+          <li><strong>Impor Audio</strong> menerima berkas audio atau video dan memakai jalur transkripsi lokal yang sama.</li>
+          <li><strong>Identifikasi Pembicara</strong> adalah langkah pemrosesan suara Rute opsional untuk rekaman dan audio impor. Menyiapkan model pembicara terpisah pada penggunaan pertama, menambahkan label anonim lokal dengan upaya terbaik, serta mempertahankan transkrip biasa dengan alasan terlihat di Pustaka jika tidak dapat berjalan.</li>
+          <li>Otomatis dapat menampilkan teks Apple Speech final dan sementara langsung di penyusun yang dapat disunting saat merekam. Model Whisper dan Parakeet eksplisit mentranskripsikan setelah perekaman berhenti.</li>
+          <li>Transkripsi gagal tidak menghancurkan rekaman sumber; tetap dapat dipulihkan.</li>
+          <li>Mode mendengarkan papan ketik persisten dipertahankan antar peluncuran hanya jika diaktifkan eksplisit. Rekaman aplikasi sekali pakai mengembalikan sesi audio ke keadaan diam.</li>
+        </ul>
+
+        <h3 id="capture-limits">Batas masukan tangkapan</h3>
+        <div class="docs-callout docs-callout-neutral">
+          <p>Satu permintaan dapat memuat hingga <strong>100.000 karakter</strong> teks bersama, <strong>10 item bersama</strong>, dan <strong>250 MB</strong> total aset yang disiapkan. Pemilih foto dan tangkapan layar menerima hingga 10 item; pencatatan jurnal menerima hingga 10 halaman. Vox.md menolak kelebihan, bukan diam-diam menghilangkan item.</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="presets">
+        <div class="docs-section-label">03 / Rute</div>
+        <h2>Simpan seluruh alur kerja, bukan sekadar folder</h2>
+        <p>Rute menyimpan makna tangkapan, apakah teks diproses, cara metadata dan audio ditangani, dan lokasi penulisan Markdown yang tepat. Rute berlaku untuk teks ketikan, tautan, media, pindaian, berkas, sketsa, suara, Shortcuts, widget, Lembar Berbagi, Watch, dan Mac.</p>
+
+        <h3 id="preset-management">Buat dan kelola rute</h3>
+        <ul>
+          <li>Buka Pengaturan → Rute untuk membuat, mengganti nama, mengaktifkan, menonaktifkan, memilih ikon, atau menghapus rute kustom.</li>
+          <li>Pemilih ikon yang dapat dicari mengelompokkan simbol dalam Menulis, Suara, Tugas, Pribadi, dan Kerja.</li>
+          <li>Rute nonaktif disembunyikan dari pemilih biasa. Rute Default bawaan tidak dapat dihapus.</li>
+          <li>Rute Default bawaan memakai simbol bentuk gelombang, perintah <em>Catat gagasan, tugas, tautan, berkas, hasil pindai, atau rekaman.</em>, <code>type: capture</code> sebagai metadata, pemrosesan Prosa Rapi, pemrosesan teks ketikan nonaktif, dan penyimpanan audio nonaktif.</li>
+          <li>Rute kustom baru dimulai sebagai <em>Rute Kustom</em>, memakai ikon penggeser dan <em>Apa yang ingin Anda catat?</em> sebagai perintah, dan dimulai dengan Instruksi Kustom dipilih tetapi pemrosesan teks ketikan/campuran nonaktif.</li>
+        </ul>
+
+        <h3 id="processing-modes">Mode pemrosesan</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Mode</th><th>Hasil</th><th>Perilaku cadangan</th></tr></thead>
+            <tbody>
+              <tr><td>Pertahankan Asli</td><td>Mempertahankan teks tangkapan tanpa penulisan ulang AI.</td><td>Teks asli dikirim.</td></tr>
+              <tr><td>Prosa Rapi</td><td>Merapikan kapitalisasi dan tanda baca sambil mempertahankan makna dan Markdown.</td><td>Teks asli saat pengayaan di perangkat tidak tersedia.</td></tr>
+              <tr><td>Daftar Tugas</td><td>Menghasilkan Markdown <code>- [ ]</code> item tugas.</td><td>Pemformat daftar centang deterministik.</td></tr>
+              <tr><td>Catatan Rapat</td><td>Menghasilkan <code>## Notes</code> sebagai bagian dan, jika ada, <code>## Action Items</code>.</td><td>Struktur catatan rapat deterministik.</td></tr>
+              <tr><td>Instruksi Khusus</td><td>Mengikuti instruksi Anda dengan Apple Intelligence di perangkat jika tersedia.</td><td>Teks asli ketika instruksi tidak dapat dijalankan secara lokal.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Transkrip suara memakai mode rute pilihan. <strong>Menggunakan capture text</strong> adalah pengaktifan terpisah, nonaktif secara default, yang mengizinkan pemrosesan Markdown ketikan, OCR, dan tangkapan campuran lain berisi teks. Membiarkannya nonaktif mencegah penulisan ulang Markdown buatan Anda yang tidak diharapkan. Permintaan yang sudah diproses disimpan persis sebelum pengiriman, sehingga percobaan ulang tidak menjalankan ulang pemrosesan dengan pengaturan yang berubah.</p>
+
+        <h3 id="preset-metadata">Metadata</h3>
+        <ul>
+          <li>Masukkan metadata statis sebagai satu <code>key: value</code> pasangan per baris, seperti <code>tags: [journal, idea]</code>.</li>
+          <li><strong>Frontmatter Catatan</strong> menulis metadata pada cakupan dokumen.</li>
+          <li><strong>Bidang Entri Sebaris</strong> menulis <code>key:: value</code> di samping tiap entri dalam catatan bergulir.</li>
+          <li>Jika tersedia, pengayaan di perangkat dapat menambah judul, tag, kategori, dan teks rapi di samping metadata rute statis.</li>
+        </ul>
+
+        <h3 id="preset-location">Lokasi atas persetujuan</h3>
+        <p>Lokasi saat ini nonaktif secara default dan dimiliki tiap Rute. Saat diaktifkan, Vox.md meminta satu lokasi di asal tangkapan: pada Kirim untuk iOS/iPadOS, Lembar Berbagi, tautan dalam/penyusun, Mac, dan tindakan sistem yang membuka penyusun; saat pemanggilan untuk intent teks, tautan, dan berkas yang langsung diantrekan; atau ketika perekaman suara langsung, perekaman rute melalui papan ketik, perekaman widget/kontrol, atau rekaman Apple Watch melalui pengiriman Tangkapan normal berhenti. Hanya Rekaman di Watch adalah ekspor audio mentah ke Files tanpa wadah lokasi Markdown dan tidak meminta lokasi. Vox.md tidak pernah memantau lokasi terus-menerus atau melacak lokasi di latar belakang.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Pengaturan</th><th>Perilaku</th></tr></thead>
+            <tbody>
+              <tr><td>Gunakan Lokasi Saat Ini</td><td>Meminta satu lokasi saat asal untuk rute ini dan menyediakan <code>{location}</code>. Ini tidak otomatis menulis metadata.</td></tr>
+              <tr><td>Exact (defaultnya)</td><td>Mempertahankan lokasi asal yang disesuaikan demi privasi dan dapat menyertakan label tempat menarik jika metadata pilihan membutuhkannya.</td></tr>
+              <tr><td>Kota</td><td>Membulatkan lintang dan bujur ke dua angka desimal dan menghilangkan label tempat menarik. Semua bidang turunan dan tautan memakai koordinat bulat tersebut.</td></tr>
+              <tr><td>Tulis Metadata Lokasi</td><td>Mengaktifkan metadata terstruktur atau lanjutan secara terpisah, selain <code>{location}</code> tautan templat entri.</td></tr>
+              <tr><td>Bidang Terstruktur</td><td>Pilih dan ganti nama koordinat, lintang, bujur, tempat, kota, wilayah, negara, Apple Maps, Google Maps, OpenStreetMap, <code>geo:</code> URI, akurasi, cap waktu, sumber, dan ID Tangkapan.</td></tr>
+              <tr><td>Templat YAML Tingkat Lanjut</td><td>Memakai YAML tervalidasi dan terbatas untuk Frontmatter Catatan. Tidak dapat mengganti frontmatter lain dan tidak tersedia untuk bidang entri sebaris.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Saat Tulis Metadata Lokasi aktif, cakupan dokumen menambahkan tiap hasil ke koleksi frontmatter yang dikonfigurasi dengan ID Tangkapan sebagai kunci. Satu catatan dapat menyimpan beberapa lokasi, sedangkan percobaan ulang idempoten tidak dapat menambahkan lokasi sama dua kali. Cakupan entri justru merender bidang terstruktur pilihan sebagai <code>key:: value</code> di samping entri tangkapan itu.</p>
+        <p>Tempat, kota, wilayah, dan negara memakai geocoder balik sistem Apple hanya jika bidang metadata aktif membutuhkannya. Lokasi berbasis token saja melewati geocoding balik. Layanan ini gratis dan tidak perlu kunci API, tetapi mungkin memakai koneksi jaringan; jika pencarian gagal, Tangkapan berlanjut dengan metadata koordinat saja. Awalan, akhiran entri, dan templat Markdown vault dapat memakai <code>{location}</code> untuk menyisipkan tautan Google Maps yang dapat diklik dari cuplikan rute tersedia yang disesuaikan demi privasi tanpa mengaktifkan keluaran metadata; token kosong jika Lokasi saat ini nonaktif atau tidak tersedia. Membuat tautan penyedia tidak menghubungi Apple, Google, atau OpenStreetMap. Membukanya mengungkap koordinat persis atau bulat yang sama dalam tautan kepada penyedia itu.</p>
+        <p>Rute baru dan yang sebelumnya nonaktif membiarkan kedua kontrol nonaktif. Rute yang sudah menulis metadata lokasi mempertahankan kedua kontrol aktif setelah pembaruan, menjaga keluaran yang ada.</p>
+        <div class="docs-callout">
+          <strong>Panduan lengkap Lokasi Saat Ini</strong>
+          <p>Lihat <a href="/id/docs/location/">Lokasi saat ini, <code>{location}</code>, dan Metadata</a> untuk pola penyiapan, contoh, waktu sumber tangkapan, perilaku migrasi, privasi, dan pemecahan masalah.</p>
+        </div>
+        <div class="docs-callout docs-callout-neutral">
+          <strong>Lokasi tidak tersedia</strong>
+          <p>Antarmuka interaktif dapat mencoba ulang, membatalkan, mengirim sekali tanpa lokasi, atau memilih <em>Selalu Kirim Tanpa Lokasi</em> untuk rute itu. Atur ulang pilihan tersimpan di pengaturan Lokasi rute. Permintaan tanpa pengawasan <em>Tanyakan</em> menyimpan hasil tidak tersedia saat asal hingga Anda memutuskan; percobaan ulang dan pemulihan tidak pernah mengambil lokasi kemudian.</p>
+        </div>
+
+        <h3 id="destinations">Tujuan Markdown</h3>
+        <p>Setiap rute memiliki satu tujuan yang berakar di vault Obsidian atau folder Files yang dapat ditulisi.</p>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Catatan Baru</strong><p>Buat berkas Markdown terpisah untuk tiap tangkapan dengan token seperti <code>{timestamp}</code>, <code>{date}</code>, <code>{time}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{id8}</code>, dan <code>{id}</code>.</p></div>
+          <div><strong>Rolling Note yang</strong><p>Tambahkan ke catatan harian, mingguan, bulanan, triwulanan, atau tahunan. Jalur juga mendukung <code>{period}</code> dan <code>{week}</code>. Default tujuan baru adalah <code>Journal/{period}.md</code> dengan periode harian.</p></div>
+          <div><strong>Catatan yang ada</strong><p>Pilih berkas Markdown yang sudah ada dalam vault atau folder pilihan. Vox.md memastikan target tetap aman di dalam akar tersebut.</p></div>
+        </div>
+
+        <p>Untuk resep rute lengkap, lihat <a href="/id/blog/append-to-obsidian-daily-note-iphone/">tambahkan teks dan suara ke catatan harian Obsidian</a>.</p>
+
+        <p><a href="/id/blog/obsidian-capture-templates/">Gunakan resep templat kotak masuk, jurnal, atau tugas</a> agar pemformatan entri tetap konsisten.</p>
+
+        <h3 id="placement-templates">Penempatan, judul, dan templat</h3>
+        <ul>
+          <li><strong>bawah</strong> menambahkan di akhir; <strong>Top</strong> menambahkan di awal; <strong>Kepala</strong> menyisipkan di bawah judul pilihan dari tingkat 1 hingga 6.</li>
+          <li>Jika judul tidak ada, pilih <strong>Tampilkan kesalahan</strong> atau <strong>Membuat head</strong>.</li>
+          <li>Gunakan berkas templat Markdown langsung dari vault, Templat Entri pakai ulang, atau teks awalan dan akhiran kustom.</li>
+          <li>Pemformatan entri mendukung <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>, dan <code>{location}</code>.</li>
+          <li>Subfolder lampiran default adalah <code>attachments</code>.</li>
+          <li><strong>Perlindungan Retry</strong>, nonaktif secara default, menulis bentuk terlihat <code>vox-capture</code> komentar HTML agar percobaan ulang duplikat dapat terdeteksi.</li>
+          <li>Vox.md menolak jalur absolut, garis miring terbalik, traversal, nama tidak aman, dan pelolosan symlink.</li>
+        </ul>
+
+        <h3 id="capture-overrides">Penggantian untuk satu tangkapan</h3>
+        <p>Kontrol Tujuan dapat memakai Default Rute, menempatkan tangkapan ini di Atas atau Bawah, menerapkan Templat Entri sekali pakai, atau memilih catatan lain di vault yang sama. <strong>Gunakan default tujuan Rute</strong> menghapus penggantian. Pilihan ini hanya memengaruhi draf saat ini dan tidak pernah mengubah rute.</p>
+
+        <h3 id="audio-export">Penyimpanan audio dan ekspor kompatibilitas</h3>
+        <ul>
+          <li>Mode simpan audio adalah <strong>Mati</strong>, <strong>Di Samping Catatan</strong>, atau <strong>Follower yang</strong>.</li>
+          <li>Markdown dapat menyematkan audio tersimpan di Atas atau Bawah dengan sintaks Obsidian seperti <code>![[recording.m4a]]</code>.</li>
+          <li>Untuk konfigurasi suara langsung lama tanpa tujuan Markdown terpadu, <strong>Simpan Catatan ke File</strong> mendukung TXT, MD, JSON, dan YAML; Berkas Baru atau Tambahkan; token nama berkas termasuk model dan bahasa; templat Markdown; opsi Obsidian Bases; properti YAML pilihan; serta opsi <code>.md</code> sebagai ekstensi untuk YAML.</li>
+          <li>Pengaturan ekspor kompatibilitas hanya berlaku untuk proses suara langsung ketika rute tidak memiliki tujuan Tangkapan terpadu.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="models">
+        <div class="docs-section-label">04 / Model &amp; Transkripsi</div>
+        <h2>Pilih backend sistem atau model lokal opsional</h2>
+        <p>Semua transkripsi berjalan di perangkat Apple. Otomatis adalah default iOS. Berkas model Whisper dan Parakeet opsional hanya diunduh saat diminta, dapat dipilih, dibatalkan saat diunduh, atau dihapus nanti.</p>
+
+        <p><a href="/id/blog/offline-transcription-iphone-markdown/">Siapkan alur transkripsi offline</a> dengan backend lokal dan tujuan yang dapat ditulisi.</p>
+
+        <h3 id="model-options">Opsi transkripsi yang tersedia</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Opsi</th><th>Perkiraan ukuran</th><th>Paling cocok</th></tr></thead>
+            <tbody>
+              <tr><td>otomatis</td><td>Dikelola sistem</td><td>Mengutamakan Apple Speech pada perangkat iOS 26 dan bahasa yang didukung; hanya beralih ke model lokal yang Anda unduh secara eksplisit.</td></tr>
+              <tr><td>Whisper Tiny</td><td>75 MB</td><td>Unduhan terkecil dan opsi Whisper tercepat.</td></tr>
+              <tr><td>Whisper Base</td><td>142 MB</td><td>Model lokal kecil yang seimbang; default Mac lama.</td></tr>
+              <tr><td>Whisper Small</td><td>466 MB</td><td>Akurasi lebih tinggi dengan kebutuhan penyimpanan dan pemrosesan lebih besar.</td></tr>
+              <tr><td>Whisper Medium</td><td>1.5 GB</td><td>Model Whisper multibahasa yang lebih besar.</td></tr>
+              <tr><td>Whisper Large v3 Turbo</td><td>1.6 GB</td><td>Opsi Whisper terbesar yang tersedia.</td></tr>
+              <tr><td>Parakeet v2</td><td>~800 MB</td><td>Model Core ML/FluidAudio yang dioptimalkan untuk bahasa Inggris.</td></tr>
+              <tr><td>Parakeet v3</td><td>~800 MB</td><td>Model Core ML/FluidAudio yang mendukung 25 bahasa.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="automatic-model">Cara kerja Otomatis</h3>
+        <ul>
+          <li>Pada perangkat iOS 26 yang didukung, Otomatis memeriksa pengenal Speech kelolaan sistem Apple untuk bahasa pilihan dan menyiapkan aset bahasanya bila diperlukan.</li>
+          <li><strong>Bahasa Sistem</strong> mengikuti bahasa perangkat. Pilih bahasa tertentu jika rekaman memakai bahasa lain.</li>
+          <li>Otomatis tidak pernah diam-diam mengunduh Whisper atau Parakeet cadangan. Hanya dapat memakai model yang sebelumnya Anda pilih untuk diunduh.</li>
+          <li>Apple Speech langsung membedakan teks final yang aman disisipkan dari teks sementara yang masih dapat berubah.</li>
+          <li>Pilihan Whisper dan Parakeet eksplisit memakai transkripsi batch setelah segmen berakhir.</li>
+        </ul>
+
+        <h3 id="model-languages">Bahasa</h3>
+        <ul>
+          <li><strong>Whisper:</strong> Deteksi Otomatis, Inggris, Spanyol, Prancis, Jerman, Italia, Portugis, Belanda, Polandia, Rusia, Tionghoa, Jepang, Korea, Arab, Hindi, Turki, Vietnam, Thai, Ukraina, Swedia, Denmark, Norwegia, dan Finlandia.</li>
+          <li><strong>Otomatis:</strong> Bahasa Sistem ditambah bahasa eksplisit yang tercantum untuk Whisper jika Apple mendukung lokal tersebut.</li>
+          <li><strong>Parakeet v2:</strong> Inggris.</li>
+          <li><strong>Parakeet v3:</strong> Bulgaria, Kroasia, Ceko, Denmark, Belanda, Inggris, Estonia, Finlandia, Prancis, Jerman, Yunani, Hungaria, Italia, Latvia, Lituania, Malta, Polandia, Portugis, Rumania, Slovakia, Slovenia, Spanyol, Swedia, Rusia, dan Ukraina. Bahasa dideteksi otomatis dalam alur Parakeet.</li>
+        </ul>
+
+        <h3 id="parakeet-autostop">Penghentian otomatis papan ketik Parakeet</h3>
+        <p>Model opsional sekitar 1 MB <strong>Pengidentifikasi Pause suara</strong> dapat menghentikan rekaman papan ketik Parakeet v2 atau v3 eksplisit setelah hening. Aktifkan <strong>Hentikan Parakeet setelah jeda</strong> dan pilih sekitar 0,5, 0,75, 1, 1,5, atau 2 detik. Defaultnya aktif dengan jeda 0,75 detik setelah model pendamping tersedia. Otomatis dan Whisper tetap dihentikan secara manual.</p>
+
+        <h3 id="audio-pipeline">Perilaku audio lokal</h3>
+        <ul>
+          <li>Masukan Whisper dinormalkan ke audio mono 16 kHz, 16-bit.</li>
+          <li>Mode mendengarkan persisten iOS memakai buffer melingkar 10 menit dan menyertakan dua detik prarekaman saat segmen dimulai.</li>
+          <li>Whisper memakai <code>whisper.cpp</code>; Parakeet memakai FluidAudio dan Core ML. Whisper memakai akselerasi Metal di Mac.</li>
+          <li>Unduhan model memerlukan koneksi jaringan, tetapi transkripsi berjalan lokal setelah backend pilihan siap.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="keyboard">
+        <div class="docs-section-label">05 / Papan Ketik iOS</div>
+        <h2>Diktekan ke bidang teks yang sedang Anda sunting</h2>
+        <p>Papan ketik Vox.md bekerja di aplikasi seperti Messages, Notes, Mail, Safari, Slack, dan aplikasi lain yang menerima papan ketik standar iOS. Bilah alat suara berada di atas tata letak KeyboardKit dan berkomunikasi dengan aplikasi utama Vox.md melalui App Group bersama yang privat.</p>
+
+        <h3 id="keyboard-setup">Siapkan papan ketik</h3>
+        <ol class="docs-steps">
+          <li><strong>Siapkan transkripsi di Vox.md.</strong><span>Biarkan Otomatis dipilih pada perangkat yang didukung, atau unduh dan pilih Whisper atau Parakeet di Pengaturan → Model.</span></li>
+          <li><strong>Tambahkan papan ketik.</strong><span>Buka Pengaturan iOS → Umum → Papan Ketik → Papan Ketik → Tambah Papan Ketik Baru, lalu pilih Vox.md.</span></li>
+          <li><strong>Aktifkan Izinkan Akses Penuh.</strong><span>Alur papan ketik saat ini memerlukannya untuk menggunakan status App Group bersama dan mengoordinasikan perekaman dengan aplikasi utama.</span></li>
+          <li><strong>Beralih papan ketik.</strong><span>Buka bidang teks, gunakan tombol globe untuk memilih Vox.md, lalu ketuk mikrofon.</span></li>
+        </ol>
+        <div class="docs-callout">
+          <strong>Fungsi Akses Penuh di sini</strong>
+          <p>iOS memberi label izin yang luas. Vox.md memakainya untuk alur aplikasi/papan ketik di perangkat, status bersama, dan haptik opsional. Vox.md tidak mengunggah ketukan tombol, teks dikte, transkrip, atau audio mikrofon ke server Vox.md. Lihat <a href="/id/privacy.html">Kebijakan Privasi</a>.</p>
+        </div>
+
+        <h3 id="keyboard-workflow">Bilah alat suara dan penyisipan</h3>
+        <ul>
+          <li>Bilah alat menampilkan backend saat ini, status, durasi rekaman, bentuk gelombang langsung, serta tindakan mikrofon/berhenti.</li>
+          <li>Kontrol sebelumnya dan berikutnya bergantian memilih backend unduhan yang tersedia.</li>
+          <li>Jika belum mendengarkan, papan ketik membuka Vox.md sekali, mulai mendengarkan, dan dapat mengembalikan Anda ke bidang teks asal.</li>
+          <li>Dengan Otomatis, bagian transkrip yang difinalisasi disisipkan saat Anda berbicara; kata sementara hanya ditampilkan hingga Apple memfinalisasikannya.</li>
+          <li>Dengan Whisper atau Parakeet, transkrip lengkap disisipkan setelah Anda menghentikan segmen atau segmen berhenti otomatis.</li>
+          <li>Jika penyisipan terganggu atau ditangguhkan, teks tertunda disimpan dan dicoba ulang saat papan ketik muncul lagi.</li>
+          <li>Bilah alat melaporkan status seperti <em>terbuka Vox.md</em>, <em>Transcript...</em>, dan <em>Aktifkan Akses Penuh</em>.</li>
+        </ul>
+
+        <h3 id="keyboard-customization">Kustomisasi papan ketik</h3>
+        <ul>
+          <li><strong>Umpan Balik Haptik</strong> aktif secara default dan dapat diubah di Pengaturan Vox.md.</li>
+          <li>Pilihan karakter alternatif dengan tekan lama tersedia untuk bahasa Inggris, Jerman, Spanyol, Prancis, Italia, Portugis, Belanda, Swedia, Denmark, dan Norwegia.</li>
+          <li>Pengguna Parakeet eksplisit dapat menambahkan penghentian otomatis berbasis jeda dari Pengaturan → Model.</li>
+          <li>Jatah 15 menit transkripsi gratis berlaku untuk dikte papan ketik, rekaman aplikasi, dan impor.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="system-integrations">
+        <div class="docs-section-label">06 / Integrasi Sistem</div>
+        <h2>Mulai tangkapan dari Lembar Berbagi, Layar Utama, Layar Terkunci, atau Shortcuts</h2>
+
+        <h3 id="share-extension">Ekstensi Berbagi</h3>
+        <p>Tindakan Lembar Berbagi iOS bernama <strong>Simpan ke Vox.md</strong>. Menerima teks, URL HTTP/HTTPS, gambar, berkas, dan video, hingga batas item dan aset bersama. Pilih Rute dan tujuan, tambahkan catatan opsional, lalu Kirim. Jika rute memakai Lokasi saat ini, Berbagi meminta satu lokasi saat asal pada tindakan Kirim ini, terlepas dari aktif tidaknya keluaran metadata. Konten disiapkan dalam App Group privat, diantrekan secara persisten, dan dibuka di Vox.md untuk dikirim. Jika pengiriman memerlukan aplikasi utama, gunakan <strong>terbuka Vox.md</strong>.</p>
+
+        <h3 id="widgets">Widget Layar Utama dan Layar Terkunci</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Cepat menangkap</strong><p>Membuka draf Markdown persisten. Widget sedang dan besar menampilkan tindakan Catatan, Foto, Tangkapan Layar, Kamera, Berkas, Tautan, Pindai, Sketsa, dan Suara.</p></div>
+          <div><strong>Rekor cepat</strong><p>Memulai alur rekaman yang dikonfigurasi serta mencerminkan status siap, mendengarkan, atau nonaktif pada jenis Layar Utama dan Layar Terkunci yang didukung.</p></div>
+          <div><strong>Pengaturan keamanan widget</strong><p>Nonaktifkan Tombol Rekam Layar Terkunci di Pengaturan agar menampilkan keadaan nonaktif, bukan langsung mulai merekam.</p></div>
+        </div>
+
+        <h3 id="control-center-live-activities">Pusat Kontrol, Aktivitas Langsung, dan Dynamic Island</h3>
+        <ul>
+          <li>Pada iOS 18+, tambahkan kontrol tangkapan dan perekaman Vox.md yang tersedia dari Pusat Kontrol. Atur Rute dan opsi yang ditawarkan versi terpasang.</li>
+          <li>Selesaikan penyiapan mikrofon, model, dan tujuan di Vox.md sebelum memakai kontrol perekaman. Perekaman mungkin membuka aplikasi, tergantung iOS dan versi aplikasi. Uji rekaman singkat di perangkat sebelum mengandalkan pencatatan di latar belakang.</li>
+          <li>Bagian <strong>Monitor Aktivitas Langsung</strong> mengontrol status rekaman serta tindakan Rekam/Berhenti pada Layar Terkunci dan Dynamic Island.</li>
+          <li>Status Aktivitas Langsung mencakup Merekam, penghitung waktu, Memproses, Siap, Rekam, dan Berhenti.</li>
+          <li>Aktivitas Langsung tersedia mulai iOS 17; kontrol Pusat Kontrol memerlukan iOS 18.</li>
+        </ul>
+
+        <h3 id="shortcuts">Shortcuts dan App Intents</h3>
+        <p>Rute muncul sebagai entitas pilihan di Shortcuts dan kontrol yang didukung. Dengan Gunakan Lokasi Saat Ini aktif, intent teks, tautan, dan berkas yang langsung diantrekan meminta lokasi saat pemanggilan; tindakan yang membuka Cepat menangkap memintanya pada Kirim; dan tindakan rekam memintanya saat perekaman berhenti. Keluaran metadata tidak mengubah waktu ini. Jika permintaan tanpa pengawasan <em>Tanyakan</em> tidak dapat memperoleh lokasi, hasil tidak tersedia pada waktu asal itu disimpan untuk keputusan berikutnya, bukan diambil ulang. Gunakan tindakan yang tersedia pada versi Vox.md yang terpasang. Tindakan Tangkapan meliputi:</p>
+        <ul class="docs-columns">
+          <li>Pembukaan Quick Capture</li>
+          <li>Rekor untuk menangkap</li>
+          <li>Mengambil screenshot</li>
+          <li>Menangkap teks untuk Markdown</li>
+          <li>Link yang terhubung ke Markdown</li>
+          <li>File yang ditangkap Markdown</li>
+        </ul>
+
+        <h3 id="action-button-recording">Penyiapan perekaman Tombol Tindakan</h3>
+        <p>Buka Vox.md sekali untuk mengizinkan mikrofon, menyiapkan backend transkripsi, dan menghubungkan Rute ke tujuan. Di Shortcuts, tambahkan tindakan tangkapan Vox.md yang tersedia dan pilih Rute. Jalankan pintasan saat ponsel tidak terkunci untuk memastikan catatan tersimpan di tujuan sebelum menetapkannya di Pengaturan → Tombol Tindakan → Pintasan.</p>
+        <p class="docs-note">Tindakan dan perilaku perekaman latar belakang bergantung pada versi terpasang dan iOS. Gunakan tindakan yang ditampilkan di Shortcuts perangkat Anda. Jika perekaman perlu aplikasi terbuka, buka Vox.md untuk merekam. Pintasan di pemilih tidak menjamin perekaman dari ponsel terkunci.</p>
+
+        <h3 id="deep-links">Tautan dalam</h3>
+        <p>Vox.md mendaftarkan <code>voxboard://</code> sebagai skema URL. Gunakan enkode URL untuk nilai kueri.</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table docs-code-table">
+            <thead><tr><th>URL</th><th>Perilaku</th></tr></thead>
+            <tbody>
+              <tr><td><code>voxboard://capture</code></td><td>Buka penyusun Cepat menangkap persisten.</td></tr>
+              <tr><td><code>voxboard://capture?action=photos</code></td><td>Buka pemilih foto. Tindakan lain: <code>screenshots</code>, <code>camera</code>, <code>files</code>, <code>scan</code>, <code>sketch</code>, <code>link</code>, dan <code>voice</code>.</td></tr>
+              <tr><td><code>voxboard://capture?text=...</code></td><td>Buka draf dengan teks berbatas.</td></tr>
+              <tr><td><code>voxboard://capture?url=https%3A%2F%2F...</code></td><td>Buka draf dengan tautan HTTP/HTTPS.</td></tr>
+              <tr><td><code>voxboard://capture?route=...</code></td><td>Pilih Rute aktif. Dapat digabungkan dengan tindakan yang didukung, teks, atau URL.</td></tr>
+              <tr><td><code>voxboard://capture-request?id=...</code></td><td>Klaim permintaan tersimpan yang dibuat ekstensi sistem atau intent.</td></tr>
+              <tr><td><code>voxboard://listen</code></td><td>Mulai alur peluncuran mode mendengarkan papan ketik.</td></tr>
+              <tr><td><code>voxboard://record</code></td><td>Titik masuk perekaman lama dialihkan ke mode mendengarkan.</td></tr>
+              <tr><td><code>voxboard://widget-record</code></td><td>Titik masuk perekaman widget lama.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">Parameter tidak dikenal atau duplikat, UUID salah format, pengenal rute tidak aman, URL non-HTTP, dan teks melebihi batas bersama ditolak.</p>
+      </section>
+
+      <section class="docs-section" id="apple-watch">
+        <div class="docs-section-label">07 / Apple Watch</div>
+        <h2>Rekam lokal di Watch, lalu kirim melalui iPhone</h2>
+
+        <p><a href="/id/blog/apple-watch-obsidian-voice-notes/">Ikuti panduan penyiapan Apple Watch ke Obsidian</a> untuk pemeriksaan pemilihan rute, transfer, dan pengiriman.</p>
+
+        <h3 id="watch-recording">Alur perekaman</h3>
+        <ul>
+          <li>Aplikasi Watch menampilkan status Siap, Merekam, Dijeda, Menyinkronkan, Dalam Antrean, Mentranskripsikan, Menyimpan, Terkirim, dan Perlu perhatian.</li>
+          <li>Gunakan Rekam, Jeda/Lanjutkan, Berhenti, Batal, Sinkronkan, dan Segarkan. Jeda memungkinkan Anda berpikir tanpa memecah catatan — waktu jeda membekukan penghitung dan tidak dimasukkan ke rekaman. Batal secara eksplisit menghapus rekaman lokal, bukan menyinkronkannya.</li>
+          <li>Rekaman dijurnal secara lokal dan dipulihkan setelah gangguan atau crash.</li>
+          <li>Rekaman tetap di Watch hingga iPhone mengonfirmasi pengiriman atau pembuangan.</li>
+          <li>Untuk rute dengan Gunakan Lokasi Saat Ini aktif melalui pengiriman Tangkapan normal, Watch meminta satu lokasi asal Watch saat perekaman berhenti dan mentransfer hasil yang disesuaikan demi privasi bersama cuplikan rute. iPhone tidak pernah menggantinya dengan lokasinya sendiri. Hanya Rekaman melewati lokasi karena mengekspor audio mentah tanpa wadah Markdown.</li>
+        </ul>
+
+        <h3 id="watch-presets">Rute di Watch</h3>
+        <p>Pilih Rute iPhone aktif dari Watch <strong>Rute</strong> . Vox.md mentransfer cuplikan aman bersama rekaman. Jika iPhone tidak tersedia, pilihan yang diminta tetap tertunda dan rute terakhir yang dikonfirmasi tetap aktif.</p>
+
+        <h3 id="watch-queue">Antrean Rekaman Watch di iPhone</h3>
+        <p>Antrean iPhone menampilkan waktu rekam, durasi, rute, status pemrosesan, dan tindakan pengiriman. Item gagal dapat dicoba ulang, diberi rute lain, dibuang, atau disimpan tanpa transkrip. Membuang menghapus audio tersimpan dan pengiriman dalam antrean.</p>
+
+        <h3 id="watch-recording-only">Keluaran Hanya Rekaman</h3>
+        <ul>
+          <li>Atur Keluaran rute menjadi <strong>Hanya Rekaman</strong> untuk menyalin audio M4A ke folder Files tanpa transkripsi, pemrosesan AI, atau penggunaan kuota transkripsi.</li>
+          <li>Templat nama berkas default adalah <code>recording-{timestamp}-{id8}</code>.</li>
+          <li>Pilih folder rekaman sekali di iPhone sebelum memakai rute.</li>
+          <li>Pengiriman latar belakang dapat ditunda iOS. Menutup paksa Vox.md mencegah pengiriman hingga aplikasi dibuka lagi.</li>
+        </ul>
+
+        <h3 id="watch-complication">Komplikasi dan widget</h3>
+        <p>Bagian <strong>Catatan suara</strong> mendukung bentuk lingkaran, persegi panjang, sebaris, dan sudut. Membuka atau mengaktifkan/nonaktifkan perekaman Watch lokal serta menampilkan penghitung atau label sesuai status.</p>
+      </section>
+
+      <section class="docs-section" id="mac">
+        <div class="docs-section-label">08 / Pendamping Mac</div>
+        <h2>Gunakan sistem pencatatan yang sama dari macOS</h2>
+        <p>Aplikasi Mac memiliki tujuan Tangkapan, Pustaka, dan Pengaturan serta berbagi arsitektur model lokal, rute, rute, ekspor, dan percobaan ulang yang dipakai iOS.</p>
+
+        <h3 id="mac-workspace">Ruang kerja tangkapan</h3>
+        <ul>
+          <li>Ketik dan sunting Markdown, tempel, atau seret dan lepas berkas, gambar, dan audio.</li>
+          <li>Gunakan masukan kamera bawaan, eksternal, atau perangkat Continuity Camera.</li>
+          <li>Impor hasil pindai atau PDF, buat sketsa dengan mouse, trackpad, atau tablet terhubung, lalu tambahkan tautan, wikilink, tenggat, dan transformasi teks.</li>
+          <li>Rekam dengan <strong>Tambahkan ke Draf</strong> atau <strong>Kirim Sekarang</strong>; opsional, simpan Audio dalam mode draf.</li>
+          <li><strong>Jeda</strong> dan <strong>Lanjutkan</strong> rekaman mikrofon dari bar status. Audio saat jeda tidak disertakan, jadi satu catatan akhir dapat direkam bertahap. Pencatatan rapat tidak dapat dijeda.</li>
+          <li>Impor audio atau video untuk transkripsi lokal.</li>
+          <li>Tekan Command-Return untuk Kirim Tangkapan. Rute dengan Gunakan Lokasi Saat Ini aktif meminta satu lokasi asal Mac saat Kirim atau perekaman berhenti, baik keluaran metadata aktif maupun tidak.</li>
+          <li>Spanduk penyiapan tujuan dan pemeriksa rute memperlihatkan catatan hasil resolusi serta penempatan rute pilihan.</li>
+        </ul>
+
+        <h3 id="mac-meeting">Pencatatan rapat dengan trek terpisah</h3>
+        <p>Ubah pemilih mode masukan dari <strong>Mikrofon</strong> ke <strong>Rapat</strong> untuk merekam audio yang diputar aplikasi di Mac dan mikrofon Anda sebagai dua trek terpisah bersih. Vox.md memakai ScreenCaptureKit dalam mode satu aplikasi, jadi Anda memilih tepat satu aplikasi dan Vox.md sendiri tidak pernah direkam.</p>
+        <ul>
+          <li>Saat merekam, bar status menampilkan meter level sistem dan mikrofon langsung, status per sumber, serta peringatan tangkapan.</li>
+          <li>Kedua trek ditulis dalam potongan tersimpan dengan manifes pemulihan, sehingga gangguan — aliran berhenti, mikrofon dicabut, atau keluar paksa — diselesaikan dengan aman dan rapat masih dapat ditranskripsikan. Sesi terganggu dipulihkan otomatis ketika antrean rekaman dilanjutkan lagi.</li>
+          <li>Setelah Anda berhenti, tiap trek ditranskripsikan terpisah di perangkat dan hasilnya diselingkan pada lini masa bersama: mikrofon Anda ditampilkan sebagai <strong>Anda</strong>, dan trek aplikasi diberi label pembicara jarak jauh. Identifikasi pembicara opsional dapat memisahkan lebih lanjut beberapa suara jarak jauh.</li>
+          <li>Campuran putar ulang kedua trek disimpan sebagai audio rekaman, dan transkrip akhir mengikuti Rute, Tambahkan ke Draf atau Kirim Sekarang, serta pengaturan papan klip seperti rekaman lainnya.</li>
+        </ul>
+
+        <h3 id="mac-keybinds">Pintasan global</h3>
+        <p>Settings → Global Keybinds dapat menetapkan pintasan untuk <strong>Menulis dengan Clipboard</strong>, <strong>Rute yang Dipilih</strong>, atau rute aktif apa pun. Pintasan nonaktif secara default, memerlukan tombol nonpengubah ditambah Control, Option, atau Command, boleh menyertakan Shift, dan menolak konflik. Tekan pintasan aktif lagi untuk berhenti merekam.</p>
+        <div class="docs-callout docs-callout-neutral">
+          <p><strong>Menulis dengan Clipboard</strong> tidak membuat catatan, item Pustaka, atau audio tersimpan. Fitur ini untuk dikte cepat ke aplikasi Mac apa pun.</p>
+        </div>
+
+        <h3 id="mac-menu-bar">Bar menu dan visibilitas aplikasi</h3>
+        <ul>
+          <li>Pilihan visibilitas adalah <strong>Menu + Bar</strong> (defaultnya), <strong>Menu Bar yang Hanya</strong>, <strong>Dock hanya</strong>, dan <strong>Tersembunyi</strong>.</li>
+          <li>Bar menu melaporkan status merekam, mentranskripsikan, dan mengekspor.</li>
+          <li>Tindakan menu mencakup Mulai Merekam, Berhenti + Transkripsikan, Impor Audio…, Salin Transkrip Terakhir, Tampilkan Ekspor Terakhir, pemilihan Rute, Tampilkan Tangkapan, Tampilkan Pustaka, Tampilkan Folder Data, dan Keluar dari Vox.md.</li>
+          <li>Tekan Control-B di aplikasi Mac untuk menampilkan petunjuk papan ketik di atas kontrol yang dapat diklik.</li>
+        </ul>
+
+        <h3 id="mac-history">Riwayat dan model Mac</h3>
+        <p>Cari, muat ulang, bersihkan, salin, atau hapus riwayat lokal; buka detail transkrip rapi dan mentah; serta tampilkan catatan terkirim di Finder. Layar Model mengunduh, memilih, dan menghapus model Whisper atau Parakeet serta mengubah bahasa transkripsi. Whisper memakai akselerasi Metal pada Mac yang didukung.</p>
+      </section>
+
+      <section class="docs-section" id="history-settings">
+        <div class="docs-section-label">09 / Pustaka, Pengaturan &amp; Privasi</div>
+        <h2>Pulihkan pekerjaan, kendalikan data lokal, dan buka penggunaan tanpa batas</h2>
+
+        <h3 id="history">Pustaka Terpadu di iOS</h3>
+        <ul>
+          <li>Pustaka menggabungkan transkrip suara lokal dan catatan pengiriman Tangkapan dalam satu daftar yang dapat dicari.</li>
+          <li>Cari teks mentah, teks rapi, judul, tag, dan kategori; tarik untuk menyegarkan.</li>
+          <li>Salin teks transkrip rapi atau mentah, sunting metadata dan teks transkrip, atau ekspor salinan Markdown melalui lembar berbagi.</li>
+          <li>Hapus satu transkrip atau bersihkan seluruh riwayat lokal. Membersihkan riwayat tidak menghapus catatan Markdown atau lampiran yang sudah ditulis ke tujuan Anda.</li>
+          <li>Coba ulang tangkapan antrean dan periksa sumber umum, rute, tujuan, jalur catatan, jumlah lampiran, waktu, hasil, dan kategori kegagalan.</li>
+          <li>Penyuntingan transkrip mencakup Judul, Tag, Kategori, Teks rapi, dan Transkrip mentah.</li>
+        </ul>
+
+        <h3 id="stats">Negara-negara Aktivitas Pribadi</h3>
+        <p>Buka Pengaturan → Aktivitas → Statistik untuk ringkasan penggunaan seumur hidup: total rekaman dan tangkapan, durasi rekaman, dan jumlah lampiran, ditambah grafik tujuh hari terakhir dan rincian asal tangkapan (aplikasi, papan ketik, Lembar Berbagi, widget, Shortcuts, Apple Watch, Mac, tautan dalam, impor berkas, dan suara).</p>
+        <ul>
+          <li>Statistik hanya menghitung tangkapan terkirim; tarik untuk menyegarkan setelah aktivitas baru.</li>
+          <li>Buku pencatatan tetap di perangkat dan tidak menyimpan konten tangkapan, nama berkas, atau tujuan.</li>
+        </ul>
+
+        <h3 id="settings-map">Peta pengaturan</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>Bagian</th><th>Kontrol</th></tr></thead>
+            <tbody>
+              <tr><td>Vox.md Tidak Terbatas</td><td>Status penggunaan gratis, akses seumur hidup, dan pemulihan pembelian.</td></tr>
+              <tr><td>Penyesuaian</td><td>Model; Rute; visibilitas dan urutan tindakan Bilah Tangkapan.</td></tr>
+              <tr><td>Papan Ketik</td><td>Umpan Balik Haptik.</td></tr>
+              <tr><td>Layar Terkunci</td><td>Pemantau Aktivitas Langsung dan Tombol Rekam Layar Terkunci.</td></tr>
+              <tr><td>Tentang</td><td>Transkripsi default, Whisper, Parakeet, pemrosesan di perangkat, privasi, versi aplikasi, dan ketersediaan Apple Intelligence.</td></tr>
+              <tr><td>Masukan</td><td>Bergabung ke Discord Isolated Tech atau buat surel masukan diagnostik.</td></tr>
+              <tr><td>Debug</td><td>Lihat log debug lokal.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Catatan rilis dapat muncul setelah pembaruan dan menjelaskan fitur terkini seperti sinkronisasi Watch, pintasan global Mac, ikon rute, kontrol Layar Terkunci, perutean rute, aturan audio, dan pascapemrosesan.</p>
+
+        <h3 id="pricing-limits">Penggunaan gratis dan akses seumur hidup</h3>
+        <ul>
+          <li>Penggunaan gratis mencakup <strong>15 menit transkripsi</strong> dan <strong>10 pengiriman Tangkapan yang berhasil</strong>.</li>
+          <li>Transkrip suara yang sudah dihitung dalam waktu transkripsi tidak sekaligus memakai jatah Tangkapan terpisah saat dirutekan ke Markdown.</li>
+          <li>Penulisan gagal dan percobaan ulang idempoten tidak memakai pengiriman Tangkapan berhasil.</li>
+          <li>Tanpa Batas adalah pembelian sekali untuk seumur hidup tanpa langganan, perpanjangan, atau iklan. Harga App Store lokal adalah acuan; harga AS adalah $19.99 Individual, $39.99 Family, dan $19.99 Family Upgrade, dengan harga berdasarkan daya beli di etalase lainnya.</li>
+          <li>Pulihkan Pembelian memulihkan pembelian yang memenuhi syarat. Pengguna versi berbayar lama yang memenuhi syarat mendapat penggunaan tanpa batas berdasarkan hak sebelumnya.</li>
+          <li>Buku pencatatan App Group tanpa konten mencegah penghitungan ganda saat percobaan ulang selama data aplikasi lokal masih ada. Tidak disimpan di Keychain; menghapus data aplikasi lokal memulai jatah gratis baru.</li>
+        </ul>
+
+        <h3 id="privacy-data">Yang tetap lokal</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>Konten tangkapan</strong><p>Draf, teks, tautan, templat, rute, lampiran, audio, OCR, dan transkrip tidak dikirim ke server Vox.md.</p></div>
+          <div><strong>Pengolahan</strong><p>Apple Speech, Whisper, Parakeet, Vision OCR, serta pemrosesan Apple Intelligence yang didukung berjalan di perangkat.</p></div>
+          <div><strong>Tujuan Anda</strong><p>Berkas akhir hanya masuk ke folder pilihan Anda. Penyedia berkas pihak ketiga mungkin menyinkronkannya menurut ketentuannya sendiri.</p></div>
+        </div>
+        <ul>
+          <li>Setelah pengiriman berhasil, permintaan Tangkapan yang dapat dipulihkan menjadi tanda terima tanpa konten dan item antrean Watch selesai hanya mempertahankan bidang akhir pengiriman umum. Keduanya tidak menyimpan koordinat, label, URL penyedia, templat lokasi, atau muatan rute.</li>
+          <li>Riwayat Tangkapan selesai menyimpan metadata pengiriman, bukan teks catatan, URL, koordinat, label lokasi atau templat, bookmark, jalur absolut, maupun nama berkas lampiran.</li>
+          <li>Item tertunda dan gagal hanya menyimpan yang diperlukan untuk pemulihan lokal, mungkin mencakup cuplikan rute dan lokasi yang sudah disesuaikan demi privasi atau hasil tidak tersedia.</li>
+          <li>Analitik orientasi produksi nonaktif secara default. Aplikasi tidak mengandung SDK analitik pihak ketiga, jaringan iklan, atau pelacak lintas aplikasi.</li>
+          <li>Penyusun mengambil kutipan inspiratif tersimpan dari ZenQuotes tanpa mengirim isi draf atau pengenal.</li>
+        </ul>
+        <p>Untuk detail lengkap penanganan data, retensi, dan layanan pihak ketiga, baca <a href="/id/privacy.html">Kebijakan Privasi</a>.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">10 / Pemecahan Masalah</div>
+        <h2>Masalah penyiapan dan pengiriman umum</h2>
+        <div class="docs-troubleshooting">
+          <details open>
+            <summary>Tangkapan tidak dapat dikirim</summary>
+            <p>Buka kontrol Tujuan dan atur Rute pilihan. Jika folder dipindahkan atau akses kedaluwarsa, pilih lagi vault/folder. Pekerjaan antrean tetap tersedia di Pustaka.</p>
+          </details>
+          <details>
+            <summary>Papan ketik menampilkan Aktifkan Akses Penuh</summary>
+            <p>Buka Pengaturan iOS → Umum → Papan Ketik → Papan Ketik → Vox.md, lalu aktifkan Izinkan Akses Penuh. Kembali ke aplikasi sekali agar Vox.md dapat melanjutkan alur mendengarkan bersama.</p>
+          </details>
+          <details>
+            <summary>Otomatis tidak tersedia</summary>
+            <p>Otomatis Apple Speech memerlukan perangkat iOS 26 dan bahasa yang didukung. Pilih dan unduh model Whisper atau Parakeet, lalu pilih secara eksplisit atau kembali ke Otomatis agar dapat menjadi cadangan yang disetujui pengguna.</p>
+          </details>
+          <details>
+            <summary>Transkripsi gagal</summary>
+            <p>Pastikan model pilihan sudah diunduh sepenuhnya dan bahasanya sesuai. Vox.md mempertahankan audio sumber yang dapat dipulihkan jika memungkinkan agar Anda dapat memilih model lain dan mencoba ulang.</p>
+          </details>
+          <details>
+            <summary>Rute judul gagal</summary>
+            <p>Sunting tujuan rute dan pastikan teks serta tingkat judul. Pilih Buat Judul jika pengiriman harus membuat judul yang belum ada, bukan berhenti.</p>
+          </details>
+          <details>
+            <summary>Rekaman Watch dalam antrean</summary>
+            <p>Buka Vox.md di iPhone, lalu buka Rekaman Watch. Segarkan atau coba ulang, pilih rute valid jika diminta, dan biarkan aplikasi terpasang serta tersedia untuk serah terima latar belakang. Tutup paksa menghalangi pengiriman latar belakang hingga dibuka kembali.</p>
+          </details>
+          <details>
+            <summary><code>{location}</code> menghasilkan teks kosong</summary>
+            <p>Aktifkan Gunakan Lokasi Saat Ini untuk rute pengiriman; untuk awalan, akhiran, dan Templat Entri pakai ulang yang terdeteksi, perbaikan sekali ketuk pada penyusun melakukannya tanpa mengaktifkan metadata. Berkas templat vault langsung memerlukan penyiapan rute manual. Jika izin tidak tersedia atau tangkapan dilanjutkan tanpa lokasi, token sengaja dikosongkan. Lihat <a href="/id/docs/location/">panduan lokasi lengkap</a>.</p>
+          </details>
+          <details>
+            <summary>Lokasi rute tidak tersedia</summary>
+            <p>Gunakan Retrika hanya saat masih menyelesaikan Kirim interaktif asli. Anda dapat membatalkan, mengirim sekali tanpa lokasi, atau selalu mengirim tanpa lokasi untuk rute itu. Atur ulang pilihan tersimpan di pengaturan Lokasi rute. Permintaan antrean tanpa pengawasan mempertahankan hasil tidak tersedia aslinya dan tidak akan mengambil lokasi baru.</p>
+          </details>
+        </div>
+        <div class="docs-callout docs-support-callout">
+          <strong>Masih kesulitan?</strong>
+          <p>Buka Pengaturan → Lihat Log Debug, lalu gunakan Kirim Masukan agar versi aplikasi, platform, OS, dan detail perangkat dapat disertakan. Anda juga dapat bergabung ke <a href="https://discord.gg/RaQYS4t6gn">Discord Isolated Tech</a>.</p>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/id/developers">Pengembang</a></li>
+        <li><a href="/id/about">Tentang</a></li>
+        <li><a href="/id/contact">Kontak</a></li>
+        <li><a href="/id/">Beranda</a></li>
+        <li><a href="/id/docs/" aria-current="page">Dokumentasi</a></li>
+        <li><a href="/id/blog/">Blog</a></li>
+        <li><a href="/id/privacy.html">Privasi</a></li>
+        <li><a href="/id/terms.html">Ketentuan</a></li>
+        <li><a href="/llms.txt">llms.txt</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">Dukungan</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_id_60877eba17c1">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Dokumentasi fitur lengkap · Pencatatan yang mengutamakan lokal.</div>
+    </div>
+  <details class="language-switcher"><summary>Bahasa</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ar/docs/" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/docs/" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="/fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/docs/" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/docs/" lang="id" hreflang="id" aria-current="page">Bahasa Indonesia</a></li><li><a href="/it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/docs/" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/docs/" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/docs/" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/docs/" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/docs/" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/docs/" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/docs/" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/docs/" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/docs/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/docs/" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

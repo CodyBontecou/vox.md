@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr" data-search-section="Bagian" data-search-guide="Panduan" data-search-empty="Tidak ada hasil untuk “{query}”">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panduan Pengembang Vox.md — Vox.md</title>
+  <meta name="description" content="Baca fakta produk dan dokumentasi publik Vox.md melalui API JSON gratis hanya-baca dan negosiasi konten Markdown.">
+  <link rel="canonical" href="https://vox.isolated.tech/id/developers">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Dokumentasi Vox.md untuk model bahasa">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Panduan Pengembang Vox.md — Vox.md">
+  <meta property="og:description" content="Baca fakta produk dan dokumentasi publik Vox.md melalui API JSON gratis hanya-baca dan negosiasi konten Markdown.">
+  <meta property="og:url" content="https://vox.isolated.tech/id/developers">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="API Informasi Publik Vox.md">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/developers">
+<link rel="alternate" hreflang="ar" href="https://vox.isolated.tech/ar/developers">
+<link rel="alternate" hreflang="bn" href="https://vox.isolated.tech/bn/developers">
+<link rel="alternate" hreflang="de" href="https://vox.isolated.tech/de/developers">
+<link rel="alternate" hreflang="es" href="https://vox.isolated.tech/es/developers">
+<link rel="alternate" hreflang="fr" href="https://vox.isolated.tech/fr/developers">
+<link rel="alternate" hreflang="hi" href="https://vox.isolated.tech/hi/developers">
+<link rel="alternate" hreflang="id" href="https://vox.isolated.tech/id/developers">
+<link rel="alternate" hreflang="it" href="https://vox.isolated.tech/it/developers">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/developers">
+<link rel="alternate" hreflang="ko" href="https://vox.isolated.tech/ko/developers">
+<link rel="alternate" hreflang="nl" href="https://vox.isolated.tech/nl/developers">
+<link rel="alternate" hreflang="pl" href="https://vox.isolated.tech/pl/developers">
+<link rel="alternate" hreflang="pt-BR" href="https://vox.isolated.tech/pt-br/developers">
+<link rel="alternate" hreflang="ru" href="https://vox.isolated.tech/ru/developers">
+<link rel="alternate" hreflang="ta" href="https://vox.isolated.tech/ta/developers">
+<link rel="alternate" hreflang="th" href="https://vox.isolated.tech/th/developers">
+<link rel="alternate" hreflang="tr" href="https://vox.isolated.tech/tr/developers">
+<link rel="alternate" hreflang="uk" href="https://vox.isolated.tech/uk/developers">
+<link rel="alternate" hreflang="ur" href="https://vox.isolated.tech/ur/developers">
+<link rel="alternate" hreflang="vi" href="https://vox.isolated.tech/vi/developers">
+<link rel="alternate" hreflang="zh-Hans" href="https://vox.isolated.tech/zh-hans/developers">
+<link rel="alternate" hreflang="zh-Hant" href="https://vox.isolated.tech/zh-hant/developers">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/developers">
+<meta name="twitter:title" content="Panduan Pengembang Vox.md — Vox.md">
+<meta name="twitter:description" content="Baca fakta produk dan dokumentasi publik Vox.md melalui API JSON gratis hanya-baca dan negosiasi konten Markdown.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Panduan Pengembang Vox.md — Vox.md",
+  "description": "Baca fakta produk dan dokumentasi publik Vox.md melalui API JSON gratis hanya-baca dan negosiasi konten Markdown.",
+  "url": "https://vox.isolated.tech/id/developers",
+  "inLanguage": "id"
+}
+</script>
+</head>
+<body>
+
+<nav aria-label="Navigasi utama">
+  <div class="nav-inner">
+    <a href="/id/" class="logo" aria-label="Beranda Vox.md">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/id/">Beranda</a></li>
+      <li><a href="/id/docs/">Dokumentasi</a></li>
+      <li><a href="/id/blog/">Blog</a></li>
+      <li><a href="/id/terms.html">Ketentuan</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_id_5c05ec80d972">Unduh Vox.md</a>
+  <details class="language-switcher"><summary>Bahasa</summary><ul><li><a href="/developers" lang="en" hreflang="en">English</a></li><li><a href="/ar/developers" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/developers" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/developers" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/developers" lang="es" hreflang="es">Español</a></li><li><a href="/fr/developers" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/developers" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/developers" lang="id" hreflang="id" aria-current="page">Bahasa Indonesia</a></li><li><a href="/it/developers" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/developers" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/developers" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/developers" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/developers" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/developers" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/developers" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/developers" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/developers" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/developers" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/developers" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/developers" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/developers" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/developers" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/developers" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</nav>
+
+<main id="main">
+<section class="page-hero"><div class="container"><div class="page-eyebrow">Vox.md · Pengembang</div><h1 class="page-title">API Informasi Publik</h1></div></section>
+<div class="container"><div class="legal-content">
+<h2>Temukan fakta produk dan dokumentasi</h2>
+<p>API Informasi Publik Vox.md menyajikan informasi produk dan tautan dokumentasi terbitan. Gratis dibaca tanpa akun, kunci API, alur OAuth, atau pembayaran. Endpoint ini mengembalikan informasi yang sudah tersedia di situs publik ini. Baca <a href="/openapi.json">kontrak OpenAPI 3.1</a> untuk skema respons bertipe, pengenal operasi, galat, dan deskripsi.</p>
+<h2>Dapatkan informasi produk</h2>
+<p><code>GET https://vox.isolated.tech/api/v1/product</code> mengembalikan nama produk, deskripsi, sistem operasi yang didukung, halaman App Store, URL dokumentasi, dan URL dukungan. Build mengambil fakta ini dari data terstruktur beranda.</p>
+<pre><code>curl https://vox.isolated.tech/api/v1/product</code></pre>
+<p><a href="https://vox.isolated.tech/api/v1/product">Lihat JSON produk</a></p>
+<h2>Temukan dokumen</h2>
+<p><code>GET https://vox.isolated.tech/api/v1/documents</code> mencantumkan judul halaman publik, ringkasan, dan URL. Gunakan untuk mencari panduan fitur, kebijakan, artikel blog, atau halaman dukungan terkait sebelum meminta kontennya.</p>
+<pre><code>curl https://vox.isolated.tech/api/v1/documents</code></pre>
+<p><a href="https://vox.isolated.tech/api/v1/documents">Lihat JSON indeks dokumen</a></p>
+<h2>Baca halaman sebagai Markdown</h2>
+<p>Minta halaman mana pun yang terdaftar dengan <code>Accept: text/markdown</code> untuk konten utamanya. Permintaan dengan <code>Accept: text/html</code> tetap menerima HTML. Kedua representasi menyertakan <code>Vary: Accept</code>. Bagian <a href="/llms.txt">panduan agen</a> menjelaskan penggunaan yang cocok untuk Vox.md dan menunjuk detail fitur.</p>
+<pre><code>curl -H 'Accept: text/markdown' https://vox.isolated.tech/docs/</code></pre>
+<h2>Galat, cache, dan metode</h2>
+<p>Endpoint JSON mendukung GET dan HEAD. Jalur API yang tidak dikenal mengembalikan HTTP 404 dengan <code>application/problem+json</code>, nilai stabil <code>code</code>, penjelasan, dan petunjuk pemulihan. Metode yang tidak didukung mengembalikan HTTP 405 dan <code>Allow: GET, HEAD</code>. Respons metadata publik mengizinkan pembacaan lintas asal dan menyatakan masa cache lima menit. Tidak melibatkan kredensial atau data khusus pengguna.</p>
+<h2>Otomatiskan aplikasi terpasang</h2>
+<p>Tangkapan, transkripsi, akses vault lokal, dan penulisan catatan berjalan di aplikasi Apple terpasang. Gunakan dokumentasi <a href="/id/docs/#system-integrations">Integrasi Shortcuts dan skema URL</a> dengan izin pemilik perangkat. API informasi publik tidak mengekspos tindakan tangkapan, rekaman, transkrip, catatan privat, atau folder tujuan. Hubungi <a href="/id/contact">dukungan Vox.md</a> untuk pertanyaan.</p>
+</div></div></main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/id/developers">Pengembang</a></li>
+        <li><a href="/id/about">Tentang</a></li>
+        <li><a href="/id/contact">Kontak</a></li>
+        <li><a href="/id/">Beranda</a></li>
+        <li><a href="/id/docs/">Dokumentasi</a></li>
+        <li><a href="/id/blog/">Blog</a></li>
+        <li><a href="/id/privacy.html">Privasi</a></li>
+        <li><a href="/id/terms.html">Ketentuan</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · Pencatatan lokal · Berkas dalam kendali pengguna.</div>
+    </div>
+  <details class="language-switcher"><summary>Bahasa</summary><ul><li><a href="/developers" lang="en" hreflang="en">English</a></li><li><a href="/ar/developers" lang="ar" hreflang="ar">العربية</a></li><li><a href="/bn/developers" lang="bn" hreflang="bn">বাংলা</a></li><li><a href="/de/developers" lang="de" hreflang="de">Deutsch</a></li><li><a href="/es/developers" lang="es" hreflang="es">Español</a></li><li><a href="/fr/developers" lang="fr" hreflang="fr">Français</a></li><li><a href="/hi/developers" lang="hi" hreflang="hi">हिन्दी</a></li><li><a href="/id/developers" lang="id" hreflang="id" aria-current="page">Bahasa Indonesia</a></li><li><a href="/it/developers" lang="it" hreflang="it">Italiano</a></li><li><a href="/ja/developers" lang="ja" hreflang="ja">日本語</a></li><li><a href="/ko/developers" lang="ko" hreflang="ko">한국어</a></li><li><a href="/nl/developers" lang="nl" hreflang="nl">Nederlands</a></li><li><a href="/pl/developers" lang="pl" hreflang="pl">Polski</a></li><li><a href="/pt-br/developers" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="/ru/developers" lang="ru" hreflang="ru">Русский</a></li><li><a href="/ta/developers" lang="ta" hreflang="ta">தமிழ்</a></li><li><a href="/th/developers" lang="th" hreflang="th">ไทย</a></li><li><a href="/tr/developers" lang="tr" hreflang="tr">Türkçe</a></li><li><a href="/uk/developers" lang="uk" hreflang="uk">Українська</a></li><li><a href="/ur/developers" lang="ur" hreflang="ur">اردو</a></li><li><a href="/vi/developers" lang="vi" hreflang="vi">Tiếng Việt</a></li><li><a href="/zh-hans/developers" lang="zh-Hans" hreflang="zh-Hans">简体中文</a></li><li><a href="/zh-hant/developers" lang="zh-Hant" hreflang="zh-Hant">繁體中文</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
