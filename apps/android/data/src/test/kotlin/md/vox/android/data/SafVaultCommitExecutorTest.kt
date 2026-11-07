@@ -266,6 +266,33 @@ class SafVaultCommitExecutorTest {
         assertEquals(CommitMarker.MarkerState.ACTIVE, fixture.store.readCommitMarker(requestID)!!.state)
     }
 
+    @Test fun folderThatCannotBeCreatedAtCommitIsProvedNotCommittedAndRecoversOnRetry() {
+        val fixture = fixture()
+        val gateway = FakeGateway(folderCreateFails = true)
+        val outcome = executor(fixture, gateway).execute(requestID, leaseToken)
+        assertTrue("Folder failure before create: $outcome", outcome is ExecutorOutcome.Ok && outcome.value == CommitOutcome.ProvedNotCommitted)
+        assertEquals(CaptureState.RETRYABLE_FAILURE, fixture.store.loadJournal(requestID)!!.state)
+        assertEquals(CommitMarker.MarkerState.CLEARED, fixture.store.readCommitMarker(requestID)!!.state)
+        assertTrue(gateway.created.isEmpty())
+
+        // The folder comes back: a retry runs the normal path instead of reconciling forever.
+        gateway.folderCreateFails = false
+        fun transition(state: CaptureState, code: JournalCode) {
+            val snapshot = fixture.store.loadJournal(requestID)!!
+            val at = fixture.nextTime()
+            assertTrue(fixture.coordinator.mutate(JournalMutationCommand(requestID, snapshot.revision,
+                JournalEvent(snapshot.revision + 1, snapshot.state, state, code, at,
+                    planHash = if (state == CaptureState.MATERIALIZED) fixture.planHash else null),
+                leaseToken), at) is JournalMutationResult.Applied)
+        }
+        transition(CaptureState.PREPARING, JournalCode.PREPARATION_STARTED)
+        transition(CaptureState.MATERIALIZED, JournalCode.MATERIALIZED)
+        val delivered = executor(fixture, gateway).execute(requestID, leaseToken)
+        assertTrue("Retry after folder restored: $delivered", delivered is ExecutorOutcome.Ok && delivered.value is CommitOutcome.VerifiedCommitted)
+        assertEquals(CaptureState.COMPLETED, fixture.store.loadJournal(requestID)!!.state)
+        assertEquals(1, gateway.created.size)
+    }
+
     @Test fun restartCommittingWithoutMarkerIsCausallyProvedNotCommittedAndClears() {
         val fixture = fixture()
         val gateway = FakeGateway()
@@ -433,6 +460,7 @@ class SafVaultCommitExecutorTest {
         private val preexistingNames: Set<String> = emptySet(),
         internal var failCreate: Boolean = false,
         internal var duplicateNames: Boolean = false,
+        internal var folderCreateFails: Boolean = false,
     ) : SafDocumentsGateway {
         val documents = LinkedHashMap<String, ByteArray>()
         val created = mutableListOf<String>()
@@ -448,7 +476,7 @@ class SafVaultCommitExecutorTest {
         }
 
         override fun resolveFolder(destination: VaultDestination, segments: List<String>, createMissing: Boolean): SafFolderHandle? {
-            if (!grantValid) return null
+            if (!grantValid || (createMissing && folderCreateFails)) return null
             return SafFolderHandle("/" + segments.joinToString("/"))
         }
 

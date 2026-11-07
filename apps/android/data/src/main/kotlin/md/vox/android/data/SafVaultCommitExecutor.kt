@@ -157,8 +157,16 @@ internal class SafVaultCommitExecutor(
         } catch (_: Exception) { return ExecutorOutcome.err("markerPersist") }
 
         val note = noteDescriptorOf(artifacts.planBytes) ?: return ExecutorOutcome.err("noteDescriptorMissing")
+        // A folder that cannot be resolved means nothing was copied and the note's create
+        // was never issued in this attempt: in-process causal proof of non-commit
+        // (ADR-0023). Clear the marker so a retry runs the normal path once the folder is
+        // back, instead of leaving the capture in UNKNOWN_OUTCOME with no way out.
         val folder = gateway.resolveFolder(destination, note.logicalPath.dropLast(1), createMissing = note.writeMode == "create")
-            ?: return appendAmbiguous(requestID, leaseToken, snapshot)
+            ?: return if (appendProvedNotCommitted(requestID, leaseToken, snapshot)) {
+                ExecutorOutcome.ok(CommitOutcome.ProvedNotCommitted)
+            } else {
+                ExecutorOutcome.LeaseLost
+            }
 
         // Attachments are immutable package members, copied before the note. A crash can
         // therefore never leave a committed note whose embeds point at missing files.
