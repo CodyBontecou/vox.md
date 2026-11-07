@@ -84,6 +84,13 @@ class ExtractionTests(unittest.TestCase):
         self.assertNotIn(locales.key(prose),allowed['de'])
         self.assertNotIn(locales.key('Unfinished'),allowed['de'])
 
+    def test_confirmed_dutch_identity_is_not_an_english_fallback_elsewhere(self):
+        en = locales.english_catalog()
+        ident = locales.key('Open Vox.md.')
+        self.assertIn(ident,en['allow_identical_by_locale']['nl'])
+        self.assertNotIn(ident,en['allow_identical_by_locale']['de'])
+        self.assertNotIn(ident,en['allow_identical'])
+
     def test_source_catalog_covers_all_english_pages(self):
         sources = locales.sources()
         self.assertEqual(len(sources),22)

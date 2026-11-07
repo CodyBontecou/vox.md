@@ -206,11 +206,15 @@ def identical_translation_allowlists(strings):
             translation = localizations.get(locale, {}).get('stringUnit', {})
             if translation.get('state') == 'translated' and translation.get('value') == source:
                 allowed[locale].add(ident)
-    # Confirmed by the Spanish worker: genuine lexical identities, not English
-    # prose or arbitrary UI fallbacks. Widgets is covered by shipped app labels.
+    # Worker-reported and source-reviewed lexical identities, including Dutch
+    # imperatives shared with English. Exact locale/segment matches only, never
+    # arbitrary prose fallback. Widgets is covered by shipped app labels.
     natural_identities = {
         'es': ('Ideas', 'local', 'bytes', 'Control', 'Blog', 'no', 'Token'),
         'id': ('Blog', 'Platform', 'Token'),
+        'nl': ('bytes', 'wikilink.', 'Privacy', 'cloud', '03 / Routes',
+               'sitemap', 'route:', 'link.', 'Open Vox.md.', 'Blog',
+               'Open Routes.', 'Focus', 'Platform', 'Token'),
     }
     for locale, words in natural_identities.items():
         for source in words:
