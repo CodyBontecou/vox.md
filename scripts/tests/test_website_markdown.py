@@ -20,6 +20,10 @@ class WebsiteMarkdownTests(unittest.TestCase):
         text = self.render('<nav>Menu</nav><main><h1>Guide</h1><script>secret()</script><svg><path /></svg><p>Useful text</p></main><footer>Footer</footer>')
         self.assertEqual(text, '# Guide\n\nUseful text\n')
 
+    def test_accessible_heading_replaces_visual_fragments_once(self):
+        text = self.render('<main><h1 aria-label="Tus ideas, en un archivo local.">Tus ideas, en un <span aria-hidden="true">nube</span><span>local </span><strong>archivo.</strong></h1><p>Después.</p></main>')
+        self.assertEqual(text, '# Tus ideas, en un archivo local.\n\nDespués.\n')
+
     def test_links_and_images_resolve_relative_to_the_original_page(self):
         text = self.render('<main><h2>Help</h2><p>Read <a href="../contact">support</a>.</p><img src="example.webp" alt="Example"></main>')
         self.assertIn('[support](https://vox.isolated.tech/contact)', text)

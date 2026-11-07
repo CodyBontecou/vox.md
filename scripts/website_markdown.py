@@ -35,6 +35,11 @@ class MarkdownDocument(HTMLParser):
             if tag == 'h1':
                 self.has_title = True
             self.parts.append('\n\n' + '#' * int(tag[1]) + ' ')
+            if values.get('aria-label'):
+                # Accessible headings can supply natural locale word order while
+                # visual strike-through/inline fragments preserve the raw design.
+                self.parts.append(values['aria-label'] + '\n\n')
+                self.skip_depth = 1
         elif tag in {'ul', 'ol'}:
             self.list_depth += 1
             self.parts.append('\n')
