@@ -505,16 +505,16 @@ final class PersistentRecorder {
         liveCaptureSessionID = sessionID
         // The full-screen recording surface reads the recorder's own live
         // lines, so feed them too (not only the composer draft).
-        recordLiveTranscript(
-            finalized: String(localized: "Capture ideas as they arrive."),
-            volatile: String(localized: "Everything stays on this device.")
-        )
+        // Store screenshots pass the frame's translated lines via -VoxSeedSamples.
+        let finalized = SeedSamples.current.liveFinalized ?? String(localized: "Capture ideas as they arrive.")
+        let volatile = SeedSamples.current.liveVolatile ?? String(localized: "Everything stays on this device.")
+        recordLiveTranscript(finalized: finalized, volatile: volatile)
         guard let captureDraftEventHandler else { return }
         Task { @MainActor in
             _ = await captureDraftEventHandler(.liveTranscript(
                 sessionID: sessionID,
-                finalizedText: String(localized: "Capture ideas as they arrive."),
-                volatileText: String(localized: "Everything stays on this device.")
+                finalizedText: finalized,
+                volatileText: volatile
             ))
         }
     }

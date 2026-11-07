@@ -10,6 +10,11 @@ public final class UsageTracker {
     // MARK: - Constants
 
     // The trial is provided by StoreKit, not a device-local free allowance.
+    #if DEBUG
+    /// `-VoxScreenshotUnlocked` (DEBUG only): see `accessLevel`.
+    static let debugScreenshotUnlocked = ProcessInfo.processInfo.arguments.contains("-VoxScreenshotUnlocked")
+    #endif
+
     public static let freeMinutesLimit: Double = 0
     public static let freeCaptureLimit: Int = 0
     private static let usageSecondsKey = "totalTranscriptionSeconds"
@@ -42,6 +47,11 @@ public final class UsageTracker {
     public var hasAccessEnded: Bool { !hasUnlocked && hasHadUnlimitedAccess }
 
     public var accessLevel: VoxboardAccessLevel {
+        #if DEBUG
+        // App Store screenshots: show the unlocked app for this launch only.
+        // Nothing is purchased or persisted, and Release builds ignore the flag.
+        if Self.debugScreenshotUnlocked { return .individual }
+        #endif
         if let storeAccessExpiration, storeAccessExpiration <= Date() {
             return VoxboardAccessLevel.highest(permanentAccessLevel, lifetimeStoreAccess)
         }

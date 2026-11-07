@@ -37,12 +37,12 @@ enum AdaptiveRouteSummary {
         }
         return [
             // Apple Pencil is iPad-only; the Duo inner screen lists the rest.
-            Step(kind: "CAPTURE", title: UIDevice.current.userInterfaceIdiom == .pad
+            Step(kind: String(localized: "CAPTURE"), title: UIDevice.current.userInterfaceIdiom == .pad
                 ? String(localized: "Voice, text, Pencil, photos")
                 : String(localized: "Voice, text, photos")),
-            Step(kind: "PROCESS", title: process),
-            Step(kind: "SHAPE", title: shape),
-            Step(kind: "DELIVER", title: deliverSummary(for: viewModel)),
+            Step(kind: String(localized: "PROCESS"), title: process),
+            Step(kind: String(localized: "SHAPE"), title: shape),
+            Step(kind: String(localized: "DELIVER"), title: deliverSummary(for: viewModel)),
         ]
     }
 
@@ -160,7 +160,7 @@ struct AdaptiveRouteInspector: View {
 
     private var header: some View {
         HStack {
-            Text(layout == .regularPane ? "ROUTE" : "THIS ROUTE")
+            Text(layout == .regularPane ? String(localized: "ROUTE") : String(localized: "THIS ROUTE"))
                 .font(Geist.mono(size: 11, relativeTo: .caption))
                 .tracking(0.66)
                 .foregroundStyle(Geist.muted)
@@ -209,7 +209,7 @@ struct AdaptiveRouteInspector: View {
         let markdown = AdaptiveRouteSummary.willWrite(for: viewModel)
         let heading = AdaptiveRouteSummary.headingMarkdown(for: viewModel.selectedDestination)
         return VStack(alignment: .leading, spacing: 8) {
-            Text(verbatim: heading.map { "WILL WRITE · \($0)" } ?? "WILL WRITE")
+            Text(verbatim: heading.map { String(localized: "WILL WRITE") + " · \($0)" } ?? String(localized: "WILL WRITE"))
                 .font(Geist.mono(size: 10.5, relativeTo: .caption2))
                 .tracking(0.63)
                 .foregroundStyle(Color(captureHex: 0x9A9A95))
