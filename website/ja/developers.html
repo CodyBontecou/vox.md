@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr" data-search-section="セクション" data-search-guide="ガイド記事" data-search-empty="「{query}」に一致する結果はありません">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vox.md 開発者ガイド — Vox.md</title>
+  <meta name="description" content="無料の読み取り専用 JSON API と Markdown のコンテンツネゴシエーションを通じて、Vox.md の公開製品情報とドキュメントを読み取れます。">
+  <link rel="canonical" href="https://vox.isolated.tech/ja/developers">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="言語モデル向けの Vox.md ドキュメント">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Vox.md 開発者ガイド — Vox.md">
+  <meta property="og:description" content="無料の読み取り専用 JSON API と Markdown のコンテンツネゴシエーションを通じて、Vox.md の公開製品情報とドキュメントを読み取れます。">
+  <meta property="og:url" content="https://vox.isolated.tech/ja/developers">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md の公開情報 API">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/developers">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/developers">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/developers">
+<meta name="twitter:title" content="Vox.md 開発者ガイド — Vox.md">
+<meta name="twitter:description" content="無料の読み取り専用 JSON API と Markdown のコンテンツネゴシエーションを通じて、Vox.md の公開製品情報とドキュメントを読み取れます。">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Vox.md 開発者ガイド — Vox.md",
+  "description": "無料の読み取り専用 JSON API と Markdown のコンテンツネゴシエーションを通じて、Vox.md の公開製品情報とドキュメントを読み取れます。",
+  "url": "https://vox.isolated.tech/ja/developers",
+  "inLanguage": "ja"
+}
+</script>
+</head>
+<body>
+
+<nav aria-label="メインナビゲーション">
+  <div class="nav-inner">
+    <a href="/ja/" class="logo" aria-label="Vox.md ホーム">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ja/">ホーム</a></li>
+      <li><a href="/ja/docs/">ドキュメント</a></li>
+      <li><a href="/ja/blog/">ブログ</a></li>
+      <li><a href="/ja/terms.html">利用規約</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ja_5c05ec80d972">Vox.md をダウンロード</a>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/developers" lang="en" hreflang="en">English</a></li><li><a href="/ja/developers" lang="ja" hreflang="ja" aria-current="page">日本語</a></li></ul></details></div>
+</nav>
+
+<main id="main">
+<section class="page-hero"><div class="container"><div class="page-eyebrow">Vox.md · 開発者向け</div><h1 class="page-title">公開情報 API</h1></div></section>
+<div class="container"><div class="legal-content">
+<h2>製品情報とドキュメントを探す</h2>
+<p>Vox.md 公開情報 API は、製品情報と公開ドキュメントへのリンクを提供します。無料で読み取れ、アカウント、API キー、OAuth フロー、支払いは不要です。これらのエンドポイントは、この公開ウェブサイトですでに提供している情報を返します。次をお読みください。 <a href="/openapi.json">OpenAPI 3.1 仕様</a> で、型付きの応答スキーマ、操作識別子、エラー、説明を確認できます。</p>
+<h2>製品情報を取得</h2>
+<p><code>GET https://vox.isolated.tech/api/v1/product</code> は、製品名、説明、対応 OS、App Store 掲載ページ、ドキュメント URL、サポート URL を返します。ビルド時に、ホームページの構造化データからこれらを取得します。</p>
+<pre><code>curl https://vox.isolated.tech/api/v1/product</code></pre>
+<p><a href="https://vox.isolated.tech/api/v1/product">製品の JSON を見る</a></p>
+<h2>ドキュメントを探す</h2>
+<p><code>GET https://vox.isolated.tech/api/v1/documents</code> は、公開ページのタイトル、概要、URL を一覧にします。内容をリクエストする前に、関連する機能ガイド、ポリシー、ブログ記事、サポートページを探すために使ってください。</p>
+<pre><code>curl https://vox.isolated.tech/api/v1/documents</code></pre>
+<p><a href="https://vox.isolated.tech/api/v1/documents">文書一覧の JSON を見る</a></p>
+<h2>ページを Markdown で読む</h2>
+<p>掲載したページは、次を指定してリクエストできます。 <code>Accept: text/markdown</code> で主要な内容を取得できます。次を指定するリクエストには、 <code>Accept: text/html</code> には引き続き HTML を返します。両方の表現には次が含まれます。 <code>Vary: Accept</code>。この <a href="/llms.txt">エージェント向けガイド</a> で Vox.md に合う用途を説明し、機能の詳細へ案内しています。</p>
+<pre><code>curl -H 'Accept: text/markdown' https://vox.isolated.tech/docs/</code></pre>
+<h2>エラー、キャッシュ、メソッド</h2>
+<p>JSON エンドポイントは GET と HEAD に対応しています。不明な API パスには HTTP 404 と次の内容を返します。 <code>application/problem+json</code>、安定した <code>code</code>、説明、復旧のヒントを返します。非対応のメソッドには HTTP 405 と次を返します。 <code>Allow: GET, HEAD</code>。公開メタデータの応答はオリジンをまたいだ読み取りを許可し、5分間のキャッシュ有効期間を通知します。認証情報や利用者固有のデータは扱いません。</p>
+<h2>インストール済みアプリを自動化</h2>
+<p>キャプチャ、文字起こし、ローカル保管庫へのアクセス、ノートの書き込みは、インストール済みの Apple アプリ内で実行します。文書化された次の方法を使ってください。 <a href="/ja/docs/#system-integrations">ショートカットと URL スキームの連携</a> をデバイス所有者の許可を得て使ってください。公開情報 API は、キャプチャの操作、録音、文字起こし、非公開のノート、保存先フォルダを公開しません。お問い合わせ先： <a href="/ja/contact">Vox.md のサポート</a> までお問い合わせください。</p>
+</div></div></main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ja/developers">開発者向け</a></li>
+        <li><a href="/ja/about">について</a></li>
+        <li><a href="/ja/contact">お問い合わせ</a></li>
+        <li><a href="/ja/">ホーム</a></li>
+        <li><a href="/ja/docs/">ドキュメント</a></li>
+        <li><a href="/ja/blog/">ブログ</a></li>
+        <li><a href="/ja/privacy.html">プライバシー</a></li>
+        <li><a href="/ja/terms.html">利用規約</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · ローカルキャプチャ · ファイルは利用者が管理。</div>
+    </div>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/developers" lang="en" hreflang="en">English</a></li><li><a href="/ja/developers" lang="ja" hreflang="ja" aria-current="page">日本語</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

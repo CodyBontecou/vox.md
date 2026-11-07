@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr" data-search-section="セクション" data-search-guide="ガイド記事" data-search-empty="「{query}」に一致する結果はありません">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>現在の位置、{location}、メタデータ — Vox.md ドキュメント</title>
+  <meta name="description" content="Vox.md のルートで、1回限りの現在の位置の取得、{location} Markdown トークン、任意のフロントマターまたはインラインの位置メタデータ、精度、プライバシー、復元を設定します。">
+  <link rel="canonical" href="https://vox.isolated.tech/ja/docs/location/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="言語モデル向けの Vox.md ドキュメント">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="現在の位置、{location}、メタデータ — Vox.md ドキュメント">
+  <meta property="og:description" content="ノートに位置メタデータを自動追加せず、Markdown テンプレートで1回限りの位置取得を使います。">
+  <meta property="og:url" content="https://vox.isolated.tech/ja/docs/location/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vox.md の現在の位置ガイド">
+  <meta name="twitter:description" content="1回限りの位置取得、{location}、メタデータ出力、精度、プライバシー、移行の完全ガイド。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Vox.md の現在の位置、{location}、位置メタデータ",
+  "description": "プリセットごとの現在の位置の取得、{location} Markdown トークン、任意のメタデータ出力、プライバシー、移行、トラブルシューティングを扱う完全ガイド。",
+  "dateModified": "2026-08-21",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/ja/docs/location/",
+  "inLanguage": "ja",
+  "name": "現在の位置、{location}、メタデータ — Vox.md ドキュメント"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ja/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "ドキュメント一覧",
+      "item": "https://vox.isolated.tech/ja/docs/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "現在の位置",
+      "item": "https://vox.isolated.tech/ja/docs/location/"
+    }
+  ],
+  "inLanguage": "ja",
+  "name": "現在の位置、{location}、メタデータ — Vox.md ドキュメント",
+  "description": "Vox.md のルートで、1回限りの現在の位置の取得、{location} Markdown トークン、任意のフロントマターまたはインラインの位置メタデータ、精度、プライバシー、復元を設定します。"
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md の公開情報 API">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/location/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/location/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/location/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="メインナビゲーション">
+  <div class="nav-inner docs-header-inner">
+    <a href="/ja/" class="logo" aria-label="Vox.md ホーム">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ ドキュメント</span></span>
+    </a>
+    <form class="docs-search" role="search" action="../" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="ドキュメントを検索" aria-label="ドキュメントを検索" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="検索結果" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/ja/blog/">ブログ</a></li>
+      <li><a href="/ja/privacy.html">プライバシー</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="このページ内">
+      <div class="docs-sidebar-title">このページの内容</div>
+      <ol>
+        <li><a href="#overview">独立した2つの選択</a></li>
+        <li><a href="#setup">ルートを設定</a></li>
+        <li><a href="#configurations">よく使う設定</a></li>
+        <li><a href="#location-token"><code>{location}</code> トークン</a></li>
+        <li><a href="#metadata-output">メタデータの出力</a></li>
+        <li><a href="#precision">精度とラベル</a></li>
+        <li><a href="#capture-sources">収集源</a></li>
+        <li><a href="#unavailable">取得不能と復元</a></li>
+        <li><a href="#migration">既存のルート</a></li>
+        <li><a href="#privacy">プライバシーと保持期間</a></li>
+        <li><a href="#troubleshooting">問題の解決</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="location-guide-title">
+      <div class="page-eyebrow">ドキュメント · ルート</div>
+      <h1 class="page-title" id="location-guide-title">現在の位置、 <code>{location}</code>、およびメタデータ</h1>
+      <p class="docs-hero-copy">YAML やインラインフィールドを自動追加せず、発生時点で1回取得した位置をエントリーの書式で使います。位置の取得とメタデータの出力は、すべてのルートで別々に明示的に選ぶ設定です。</p>
+      <div class="docs-meta-row" aria-label="ガイドの基本情報">
+        <span>2026年8月21日更新</span>
+        <span>1回限りの取得</span>
+        <span>バックグラウンド追跡なし</span>
+        <a href="/ja/docs/">全機能のガイド</a>
+      </div>
+      </header>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="overview">
+        <div class="docs-section-label">01 / 概要</div>
+        <h2>位置の取得とメタデータの出力は別</h2>
+        <p>各ルートには、位置情報の設定が2つに分かれてあります。 <strong>現在地を使用</strong> で、そのルートがキャプチャ発生時に位置を1回取得するかを決めます。 <strong>位置情報メタデータを書き込む</strong> で、取得した位置をフロントマターやインラインフィールドにも書き込むかを決めます。</p>
+
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>コントロール</th><th>意味すること</th><th>意味しないこと</th></tr></thead>
+            <tbody>
+              <tr><td>システムの位置情報へのアクセス許可</td><td>アプリや対応するキャプチャ画面を使用中に、Vox.md が位置を取得できるようにします。</td><td>この操作でルートの位置取得が有効になることはありません。</td></tr>
+              <tr><td>現在地を使用</td><td>このルート用に位置情報を1回取得し、次で利用できるようにします。 <code>{location}</code>.</td><td>YAML やインラインのメタデータを自動的に書き込むことはありません。</td></tr>
+              <tr><td>位置情報メタデータを書き込む</td><td>取得した位置情報から、選択した構造化フィールド、または検証済みの高度な YAML を書き込みます。</td><td>これは次の動作の有無は制御しません。 <code>{location}</code> として出力できます。</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <strong>利用意思を示すのは権限ではなくルート</strong>
+          <p>「使用中のみ」の許可は、OS 側の利用条件を満たすだけです。Vox.md が位置を取得するのは、独立した「現在の位置」キャプチャバーアクション、または「現在地を使用」をオンにしたルートに限ります。</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="setup">
+        <div class="docs-section-label">02 / 設定</div>
+        <h2>1つのルートに現在の位置を設定する</h2>
+        <ol class="docs-steps">
+          <li><strong>ルートを開く。</strong><span>iPhone または iPad では「設定」→「ルート」を開きます。Mac では設定を開き、ルートを選びます。</span></li>
+          <li><strong>ルートを編集する。</strong><span>発生時点の位置を使うルートを選びます。設定はそのルートに属し、ほかのルートには影響しません。</span></li>
+          <li><strong>位置情報を開く。</strong><span>オンにする項目は、 <em>現在地を使用</em>。次はそのままにします。 <em>位置情報メタデータを書き込む</em> をオフにすると、トークンだけの動作になります。</span></li>
+          <li><strong>精度を選ぶ。</strong><span>取得時の位置を使う場合は「正確な」を、座標を小数点以下2桁に丸め、施設名を含めない場合は「都市」を選択します。</span></li>
+          <li><strong>取得できない場合の動作を選ぶ。</strong><span>発生時点の位置を取得できない場合の動作は、「確認」「位置なしで送信」「キャプチャをキャンセル」で決まります。</span></li>
+          <li><strong>追加 <code>{location}</code> は必要に応じて指定します。</strong><span>トークンは、入り口 寺、独自のエントリー接頭辞・接尾辞、保管庫内の Markdown テンプレートに置けます。</span></li>
+        </ol>
+        <p>初回は、OS の位置情報の許可画面が表示される場合があります。以前に拒否した場合は、iOS、iPadOS、macOS のシステム設定で Vox.md の位置情報アクセスを有効にしてください。</p>
+      </section>
+
+      <section class="docs-section" id="configurations">
+        <div class="docs-section-label">03 / よく使う設定</div>
+        <h2>必要最小限の位置情報の出し方を選ぶ</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>期待する結果</th><th>現在地を使用</th><th>位置情報メタデータを書き込む</th><th>寺</th></tr></thead>
+            <tbody>
+              <tr><td>ルートの位置情報なし</td><td>オフ</td><td>オフ</td><td>次は使わないでください。 <code>{location}</code>、または空で出力されます。</td></tr>
+              <tr><td>クリックできるリンクのみ</td><td>オン</td><td>オフ</td><td>追加 <code>{location}</code>。位置情報のフィールドは書き込みません。</td></tr>
+              <tr><td>メタデータのみ</td><td>オン</td><td>オン</td><td>省略 <code>{location}</code>。設定したフィールドだけを書き込みます。</td></tr>
+              <tr><td>リンクとメタデータ</td><td>オン</td><td>オン</td><td>追加 <code>{location}</code> を選び、メタデータのフィールドを設定します。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>「現在地を使用」をオフにすると、そのルートのトークン展開とメタデータ出力の両方を無効にします。後で使うために以前のメタデータ書式の設定が残っていても同様です。</p>
+      </section>
+
+      <section class="docs-section" id="location-token">
+        <div class="docs-section-label">04 / テンプレートトークン</div>
+        <h2>使用 <code>{location}</code> ノートのメタデータを変えずに</h2>
+        <p>「現在地を使用」がオンで、発生時点の取得結果を使える場合、 <code>{location}</code> は、検証済みの Google Maps 用 Markdown リンクを出力します。</p>
+        <pre class="docs-code-block"><code>[Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>トークンは、再利用可能な入り口 寺、独自のエントリー接頭辞・接尾辞、保管庫内の Markdown テンプレートで使えます。ルートで選んだ「正確な」または「都市」の座標を使います。</p>
+
+        <h3 id="token-example">トークンのみの例</h3>
+        <p>接尾辞を次のようにする場合：</p>
+        <pre class="docs-code-block"><code>Captured from {location}</code></pre>
+        <p>Vox.md では次の出力を作れます。</p>
+        <pre class="docs-code-block"><code>Captured from [Location](https://www.google.com/maps/search/?api=1&amp;query=45.501235%2C-73.567890)</code></pre>
+        <p>「位置情報メタデータを書き込む」がオフの場合、ルートが追加する位置情報はこのリンクだけです。次は追加しません。 <code>locations:</code> コレクションも、次も追加しません。 <code>location.*::</code> のフィールドを書き込みます。</p>
+
+        <h3 id="composer-fix">入力画面のワンタップ修正</h3>
+        <p>有効なエントリー接頭辞、接尾辞、または再利用できる入り口 寺で次を使う場合、 <code>{location}</code> を使い、選択したルートの現在の位置がオフの場合、入力画面はトークンが空になることを説明し、次を提案します。 <strong>[Route] で現在地を使用</strong>。この操作は、意図的に「位置情報メタデータを書き込む」をオフにしたまま、ルートの現在の位置をオンにします。次の送信で、ノートのメタデータを変えずにトークンを解決できます。保管庫のテンプレートファイルは配信時にしか読まないため、その内容から入力画面のヒントを出すことはできません。保管庫テンプレートでトークンを使う場合、現在の位置は手動で有効にしてください。</p>
+
+        <div class="docs-callout docs-callout-neutral">
+          <strong>トークンが空になる場合</strong>
+          <p><code>{location}</code> は、現在の位置がオフ、位置を取得できない、位置なしでキャプチャを続行する場合に、空文字列になります。任意のテンプレート行を作る際は、周囲の句読点やラベルに注意してください。</p>
+        </div>
+
+        <h3 id="capture-bar-location">独立したキャプチャバーアクション</h3>
+        <p>速い捕獲の <strong>現在の位置</strong> アクションは、1回取得した位置の Google Maps リンクを現在のドラフトに直接挿入します。ルートとは独立しており、「現在地を使用」と「位置情報メタデータを書き込む」のどちらも変更しません。</p>
+      </section>
+
+      <section class="docs-section" id="metadata-output">
+        <div class="docs-section-label">05 / メタデータの出力</div>
+        <h2>構造化フィールドは選んだときだけ書き込む</h2>
+        <p>次のリンクに加えて、または代わりに、機械可読な位置フィールドをノートに出力したい場合は、「位置情報メタデータを書き込む」をオンにします。 <code>{location}</code> リンクです。</p>
+
+        <div class="docs-feature-grid">
+          <div><strong>ノートのフロントマター</strong><p>各位置を、次の名前のコレクションに追加します。 <code>locations</code> が既定で、キャプチャ ID をキーにします。関係のない既存のフロントマターは保持されます。</p></div>
+          <div><strong>エントリーのインラインフィールド</strong><p>Dataview 形式で次を書き込みます。 <code>location.key:: value</code> 行をキャプチャした項目の横に書き込みます。フロントマターのコレクションは追加されません。</p></div>
+          <div><strong>構造化フィールド</strong><p>座標、緯度、経度、場所、市区町村、地域、国、プロバイダのリンク、geo URI、精度、タイムスタンプ、ソース、ID を選択して名前を変更できます。</p></div>
+          <div><strong>高度な YAML</strong><p>ノートのフロントマターには、検証済みで範囲を制限した YAML テンプレートを使います。高度な YAML は、エントリーのインラインフィールドでは使えません。</p></div>
+        </div>
+
+        <h3 id="frontmatter-example">構造化フロントマターの例</h3>
+        <pre class="docs-code-block"><code>---
+title: Field Notes
+locations:
+  - id: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    coordinates: [45.501235, -73.567890]
+    place: "Café &amp; Main"
+    appleMapsURL: "https://maps.apple.com/?ll=45.501235%2C-73.567890&amp;q=Caf%C3%A9%20%26%20Main"
+    timestamp: "2023-11-14T22:13:20.000Z"
+    source: "app"
+---</code></pre>
+        <p>ローリングノートのコレクションには、複数のキャプチャを残せます。位置のマージには再試行の保護が組み込まれており、同じキャプチャ ID で再試行しても、同じ位置を重複して追加できません。選んだコレクションキーに、利用者が記述した互換性のない値がすでにある場合、Vox.md は上書きせず停止します。</p>
+
+        <h3 id="inline-example">インラインエントリーの例</h3>
+        <pre class="docs-code-block"><code>location.id:: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+location.coordinates:: [45.501235, -73.567890]
+location.place:: "Café &amp; Main"
+
+Captured text</code></pre>
+
+        <h3 id="advanced-yaml">高度な YAML プレースホルダ</h3>
+        <p>高度なテンプレートでは、次のようなプレースホルダを使えます。 <code>{{coordinates}}</code>, <code>{{latitude}}</code>, <code>{{longitude}}</code>, <code>{{place}}</code>, <code>{{city}}</code>, <code>{{region}}</code>, <code>{{country}}</code>, <code>{{appleMapsURL}}</code>, <code>{{googleMapsURL}}</code>, <code>{{openStreetMapURL}}</code>, <code>{{geoURI}}</code>, <code>{{accuracy}}</code>, <code>{{timestamp}}</code>, <code>{{source}}</code>、および <code>{{id}}</code>。保存する前にルート設定で構成をプレビューしてください。</p>
+      </section>
+
+      <section class="docs-section" id="precision">
+        <div class="docs-section-label">06 / 精度とラベル</div>
+        <h2>「正確な」と「都市」は一貫した同じ取得結果を使う</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>精度</th><th>座標</th><th>ラベル</th><th>リンクとフィールド</th></tr></thead>
+            <tbody>
+              <tr><td>正確な</td><td>取得時の位置を小数点以下6桁で表示します。</td><td>選択したメタデータフィールドで必要な場合、施設名のラベルを含められます。</td><td>すべての派生値に正確な座標を使います。</td></tr>
+              <tr><td>都市</td><td>取得結果を保持する前に、緯度と経度を小数点以下2桁に丸めます。</td><td>施設名のラベルを削除します。市区町村、地域、国は残る場合があります。</td><td>すべてのプロバイダ URL、geo URI、トークン、フィールドが、丸めた座標を使います。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Apple のシステム逆ジオコーダを使うのは、「位置情報メタデータを書き込む」がオンで、選択した構造化フィールドや高度なプレースホルダに、場所、市区町村、地域、国が必要な場合だけです。トークンのみのルートでは逆ジオコーディングを行いません。ラベルの取得に失敗しても、座標に基づく出力は使えます。</p>
+      </section>
+
+      <section class="docs-section" id="capture-sources">
+        <div class="docs-section-label">07 / キャプチャ元</div>
+        <h2>取得結果はキャプチャの発生地点に属する</h2>
+        <p>現在の位置は、キャプチャが発生した時点で取得されます。再試行や復元では、その保存済みの結果を再利用し、通知なく新しい位置を取得することはありません。</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>キャプチャ元</th><th>取得のタイミング</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone と iPad の速い捕獲</td><td>送る</td></tr>
+              <tr><td>共有シート</td><td>共有拡張機能から送信</td></tr>
+              <tr><td>直接キューに入れるテキスト、リンク、ファイルのインテント</td><td>インテントの呼び出し</td></tr>
+              <tr><td>速い捕獲を開くショートカット、ウィジェット、コントロール、ディープリンク</td><td>入力画面から送信</td></tr>
+              <tr><td>ショートカット、ウィジェット、コントロール、即時音声、キーボード経由のルート録音</td><td>録音の停止時</td></tr>
+              <tr><td>Apple Watch の通常のキャプチャ配信</td><td>Watch での録音停止時。iPhone 自身の位置に置き換えることはありません</td></tr>
+              <tr><td>Mac のキャプチャ</td><td>送信時、または音声を即時配信する場合の録音停止時</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Watch の「録音のみ」</strong> は、Markdown への出力面なしで未処理の M4A 音声を Files に書き出すため、ルートの他の用途で現在の位置を使っていても、位置を取得しません。</p>
+      </section>
+
+      <section class="docs-section" id="unavailable">
+        <div class="docs-section-label">08 / 取得不能と復元</div>
+        <h2>位置を取得できない場合の動作をルートごとに選ぶ</h2>
+        <ul>
+          <li><strong>確認：</strong> 操作可能なキャプチャでは、再試行、キャンセル、今回だけ位置なしで送信、そのルートで常に位置なしで送信、を選べます。</li>
+          <li><strong>位置なしで送信：</strong> は、トークン値やメタデータを出力せず、配信を続行します。</li>
+          <li><strong>キャプチャをキャンセル：</strong> は、要求した発生時点の位置なしでノートを作るのではなく、配信を停止します。</li>
+          <li><strong>保存した選択をリセット：</strong> ルートの位置設定で「位置取得不能時の選択をリセット」を使ってください。</li>
+        </ul>
+        <p>無人実行の「確認」リクエストでは、発生時に位置を取得できなかった結果を、後で確認できるよう保存します。待機中や失敗したキャプチャを再試行しても、後の位置に置き換えることはありません。保留中の作業には、ローカル復元に必要な、プライバシー処理済みの取得結果または取得不能の結果だけを保持します。</p>
+      </section>
+
+      <section class="docs-section" id="migration">
+        <div class="docs-section-label">09 / 既存のルート</div>
+        <h2>更新後も従来のメタデータ動作を保持</h2>
+        <p>取得と出力を分けているため、移行時の動作も安全に保てます。</p>
+        <ul>
+          <li><strong>新しいルート：</strong> 「現在地を使用」と「位置情報メタデータを書き込む」は、どちらも初めはオフです。</li>
+          <li><strong>以前から位置情報を有効にしていたルート：</strong> は、更新後も両方をオンに保ち、それらのルートがすでに書き込んでいたメタデータを維持します。</li>
+          <li><strong>以前は位置情報が無効だったルート：</strong> では、両方の設定をオフのままにします。更新によって新しいメタデータ出力が有効になることはありません。</li>
+        </ul>
+        <p>メタデータを書き込む既存のルートをトークンだけの動作に変えるには、「現在地を使用」はオンのまま、「位置情報メタデータを書き込む」をオフにします。既存の Markdown を書き換えたり削除したりすることはありません。</p>
+      </section>
+
+      <section class="docs-section" id="privacy">
+        <div class="docs-section-label">10 / プライバシーと保持期間</div>
+        <h2>明示的な取得は1回だけ。バックグラウンド追跡はしません</h2>
+        <ul>
+          <li>Vox.md は継続的に位置を監視したり、バックグラウンドで位置を追跡したりしません。</li>
+          <li>位置情報は Vox.md のサーバー、分析システム、広告システム、サードパーティの AI サービスには送信されません。</li>
+          <li>トークンとプロバイダの URL はローカルで整形します。Apple Maps、Google Maps、OpenStreetMap に座標が渡るのは、そのリンクを開いたときだけです。</li>
+          <li>選択したメタデータに場所のラベルが必要な場合に限り、Apple のシステム逆ジオコーダがネットワークリクエストを行うことがあります。トークンだけで位置を使う場合、この照会は行いません。</li>
+          <li>配信成功後、復元可能なリクエストは内容を含まない受領記録に縮小され、完了したキャプチャ履歴には座標、ラベル、プロバイダ URL、位置テンプレートを保持しません。</li>
+          <li>位置メタデータやトークンのリンクを Markdown に書き込むと、選択したファイルの一部になります。ファイル同期プロバイダは、そのファイルを自身の規約に基づいて処理する場合があります。</li>
+        </ul>
+        <div class="docs-callout">
+          <strong>権限を許可したままでも、ルートごとの位置取得は無効にできます</strong>
+          <p>独立した「現在の位置」アクションのためにシステム権限を許可したままでも、すべてのルートの「現在地を使用」はオフにしておけます。</p>
+        </div>
+        <p>次を参照してください。 <a href="/ja/privacy.html">プライバシーポリシー</a> で、データの取り扱いと保持期間の詳細を確認してください。</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">11 / トラブルシューティング</div>
+        <h2>位置情報とテンプレートのよくある問題を解決</h2>
+        <div class="docs-troubleshooting">
+          <details>
+            <summary><code>{location}</code> は空で出力されます</summary>
+            <p>有効な入り口 寺、接頭辞、接尾辞、保管庫テンプレートに、正確に次の小文字トークンが使われているか確認します。 <code>{location}</code>。次に、配信するルートで「現在地を使用」をオンにします。検出したインラインのエントリー書式は、入力画面のワンタップ修正で、メタデータを有効にせず設定できます。保管庫のテンプレートファイルには、手動のルート設定が必要です。権限が拒否されている場合や修正が使えない場合は、ルートの取得不能時の動作と、システムの位置情報設定を確認してください。</p>
+          </details>
+          <details>
+            <summary>リンクは使えるが、メタデータが出ない</summary>
+            <p>トークンのみの設定では、その動作が正しい状態です。ルートの位置設定で「位置情報メタデータを書き込む」をオンにし、ノートのフロントマターまたはエントリーのインラインフィールドを選んで、必要なフィールドを指定します。</p>
+          </details>
+          <details>
+            <summary>メタデータはあるが、エントリーにリンクがない</summary>
+            <p>メタデータ出力でリンクが自動挿入されることはありません。次を追加してください。 <code>{location}</code> を、有効なエントリー書式や保管庫の Markdown テンプレートに追加します。</p>
+          </details>
+          <details>
+            <summary>場所や市区町村が表示されない</summary>
+            <p>ラベルのフィールドが選択されているか確認してください。座標は取得できても、Apple の逆ジオコーダが失敗する場合があります。「都市」の精度では、施設名を意図的に削除します。</p>
+          </details>
+          <details>
+            <summary>フロントマターへの配信で衝突が報告される</summary>
+            <p>設定したコレクションのキー、 <code>locations</code> が既定で、互換性のある位置リストである必要があります。ルート設定でコレクション名を変更するか、利用者が記述した既存のフロントマターを調整してください。Vox.md は、互換性のない値を上書きしません。</p>
+          </details>
+          <details>
+            <summary>再試行で位置情報が古い、または取得できない</summary>
+            <p>これは意図した動作です。リクエストは発生時点の結果を保持するため、後の再試行が通知なく別の場所をキャプチャ位置として扱うことはありません。新しい位置が必要なら、新しいキャプチャを始めてください。</p>
+          </details>
+          <details>
+            <summary>位置情報へのアクセスは許可されているが、ルートが取得しない</summary>
+            <p>システムの許可は、利用の前提にすぎません。そのルートを編集し、「現在地を使用」をオンにしてください。権限を許可しただけでは、ルートの位置取得は有効になりません。</p>
+          </details>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ja/developers">開発者向け</a></li>
+        <li><a href="/ja/about">について</a></li>
+        <li><a href="/ja/contact">お問い合わせ</a></li>
+        <li><a href="/ja/">ホーム</a></li>
+        <li><a href="/ja/docs/">ドキュメント</a></li>
+        <li><a href="/ja/blog/">ブログ</a></li>
+        <li><a href="/ja/privacy.html">プライバシー</a></li>
+        <li><a href="/ja/terms.html">利用規約</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · ローカルキャプチャ · ファイルは利用者が管理。</div>
+    </div>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/docs/location/" lang="en" hreflang="en">English</a></li><li><a href="/ja/docs/location/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li></ul></details></div>
+</footer>
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr" data-search-section="セクション" data-search-guide="ガイド記事" data-search-empty="「{query}」に一致する結果はありません">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone から Obsidian のデイリーノートにキャプチャ — Vox.md</title>
+  <meta name="description" content="Vox.md で、テキストとデバイス上の音声文字起こしを Obsidian のデイリーノートに追加する設定を行い、見出しの選択、Markdown 出力の確認、失敗した配信の復元を説明します。">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://vox.isolated.tech/ja/blog/obsidian-daily-note-iphone/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="iPhone から Obsidian のデイリーノートにキャプチャする">
+  <meta property="og:description" content="Vox.md で、テキストとデバイス上の音声文字起こしを Obsidian のデイリーノートに追加する設定を行い、見出しの選択、Markdown 出力の確認、失敗した配信の復元を説明します。">
+  <meta property="og:url" content="https://vox.isolated.tech/ja/blog/obsidian-daily-note-iphone/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/01-route-heading-light.png">
+  <meta property="article:published_time" content="2026-10-25">
+  <meta property="article:modified_time" content="2026-10-25">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="/geist.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "iPhone から Obsidian のデイリーノートにキャプチャする",
+  "description": "Vox.md で、テキストとデバイス上の音声文字起こしを Obsidian のデイリーノートに追加する設定を行い、見出しの選択、Markdown 出力の確認、失敗した配信の復元を説明します。",
+  "datePublished": "2026-10-25",
+  "dateModified": "2026-10-25",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/ja/blog/obsidian-daily-note-iphone/",
+  "inLanguage": "ja",
+  "name": "iPhone から Obsidian のデイリーノートにキャプチャ — Vox.md"
+}
+</script>
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/obsidian-daily-note-iphone/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/obsidian-daily-note-iphone/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/obsidian-daily-note-iphone/">
+<meta name="twitter:title" content="iPhone から Obsidian のデイリーノートにキャプチャ — Vox.md">
+<meta name="twitter:description" content="Vox.md で、テキストとデバイス上の音声文字起こしを Obsidian のデイリーノートに追加する設定を行い、見出しの選択、Markdown 出力の確認、失敗した配信の復元を説明します。">
+</head>
+<body>
+<nav aria-label="メインナビゲーション">
+  <div class="nav-inner">
+    <a href="/ja/" class="logo" aria-label="Vox.md ホーム">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ja/docs/">ドキュメント</a></li>
+      <li><a href="/ja/blog/" aria-current="page">ブログ</a></li>
+      <li><a href="/ja/privacy.html">プライバシー</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ja_08d223c1ddf2">Vox.md をダウンロード</a>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/obsidian-daily-note-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ja/blog/obsidian-daily-note-iphone/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li></ul></details></div>
+</nav>
+
+
+<main>
+<div class="article-layout">
+  <article class="article-main">
+    <header>
+      <a class="back-link" href="/ja/blog/">← すべてのノート</a>
+      <p class="eyebrow">Vox.md · Obsidian · iPhone</p>
+      <h1 class="hero-title">iPhone から Obsidian のデイリーノートにキャプチャ</h1>
+      <p class="hero-subtitle">Vox.md は、テキスト、リンク、スキャン、写真、デバイス上で作成した音声の文字起こしを、Obsidian の保管庫や Markdown フォルダに送ります。選んだ見出しの下でデイリーノートに項目を追加するよう、ルートを1つ設定します。</p>
+      <p class="byline">Cody Bontecou 著 · 2026年10月25日</p>
+      <dl class="meta-strip" aria-label="キャプチャルートの例">
+        <div><dt>ルート</dt><dd>デイリー受信ノート</dd></div>
+        <div><dt>メモ</dt><dd class="mono">Journal/{period}.md</dd></div>
+        <div><dt>ヘッド</dt><dd>Inbox · レベル2</dd></div>
+      </dl>
+    </header>
+    <div class="article-body">
+  <h2 id="before-you-start">始める前に</h2>
+  <p>同じ iPhone に Vox.md をインストールし、Obsidian で保管庫を開きます。Files でその保管庫のフォルダを確認してください。Obsidian のプラグインや Vox.md のアカウントは不要です。このガイドは iPhone の手順を扱います。ファイルプロバイダの利用可否やアプリのラベルは異なる場合があります。</p>
+  <h2 id="create-preset">1. デイリーノート用のルートを作る</h2>
+  <ol>
+    <li>Vox.md の「設定」→「ルート」を開き、Daily Inbox というルートを作ります。</li>
+    <li>最初のテストでは、「オリジナルを保持」を選び、入力テキストの処理はオフのままにします。送ったテキストと保存されたノートを比較しやすくなります。</li>
+    <li>保存先を設定し、Obsidian で開いた保管庫のフォルダを選択します。</li>
+    <li>日単位のローリングノートを選び、次のようなパスを使います。 <code>Journal/{period}.md</code>、または保管庫で実際に使うデイリーノートのフォルダと命名規則に合わせます。</li>
+    <li>見出しへの挿入を選び、Inbox と入力して、見出しレベルを2にします。見出しが不要なら、代わりに末尾への挿入を使ってください。</li>
+  </ol>
+  <p>参照先： <a href="/ja/docs/#destinations">保存先の選択肢</a> と <a href="/ja/docs/#placement-templates">挿入位置の規則</a>。既存のノートは固定の1ファイル用で、ローリングノートは選択した期間に従います。</p>
+  <figure class="shot"><div class="phone"><img src="/screenshots/01-route-heading-light.png" alt="ローリングノートと見出しへの挿入を操作する Vox.md の保存先エディタ" width="1206" height="2622" loading="lazy"></div><figcaption>日単位のローリングノートと見出しへの挿入を選びます。ラベルはアプリのバージョンによって異なる場合があります。</figcaption></figure>
+  <h2 id="send-test">2. テストを1件送り、ファイルを調べる</h2>
+  <p>速い捕獲で Daily Inbox を選択し、次を入力します。 <em>歯医者を予約する</em>を入力して送信をタップし、捕獲 送信の表示を待ちます。Obsidian でその日のノートを開き、見出しと項目を確認します。似た名前の保管庫がある場合は、Files でもフォルダを確かめてください。</p>
+  <figure class="code-figure">
+    <pre class="docs-code-block"><code># October 25
+
+## Inbox
+Book dentist appointment</code></pre>
+    <figcaption>Journal/2026-10-25.md · 出力例</figcaption>
+  </figure>
+  <p>これは、合成したキャプチャと10月25日付のデイリーノートを使った出力例です。正確なファイル内容は、テンプレート、メタデータ、挿入位置の設定で決まります。誤って別系列のデイリーノートを作らないよう、プレビューと保存ファイル名を、自分のデイリーノートの命名規則に合わせてください。</p>
+  <h2 id="add-voice">3. テキストの配信を確認してから音声を追加</h2>
+  <p>同じルートで短い音声をキャプチャします。文字起こしはデバイス上で行われます。ローカルモデルは初回利用前にダウンロードが必要な場合があります。Apple Speech の利用可否は、デバイス、システム、言語によって異なります。無人キャプチャを頼りにする前に、文字起こしと保存先を確認してください。次を参照してください。 <a href="/ja/docs/#models">モデルと文字起こし</a>.</p>
+  <p>次に、次を追加します。 <a href="/ja/docs/#system-integrations">共有シート、ウィジェット、ショートカット</a> を手順に追加します。まずは動作確認済みの保存先を1つ使ってください。</p>
+  <aside class="trouble-card" id="troubleshooting" aria-labelledby="troubleshooting-title">
+    <h2 class="trouble-label" id="troubleshooting-title">キャプチャが届かない場合</h2>
+    <ul>
+      <li>選択したルートと、そのキャプチャだけの保存先の上書きを確認します。</li>
+      <li>フォルダを移動したか、アクセス権が期限切れの場合は、選び直してください。ファイルプロバイダが利用可能かも確認します。</li>
+      <li>ライブラリで待機中や失敗した作業を確認し、保存先を修正してから復元の操作を使います。新しいキャプチャとして繰り返し送ると、別々の項目ができる場合があります。</li>
+      <li>文字起こしに失敗したら、選択したモデルがダウンロード済みで、言語に適しているか確認してください。</li>
+    </ul>
+  </aside>
+  <p><a href="/ja/docs/#troubleshooting">トラブルシューティングのリファレンス</a> · <a href="/ja/docs/#history-settings">ライブラリ、上限、購入</a> · <a href="/ja/privacy.html">プライバシーの詳細</a></p>
+  <p>Vox.md は選択した保存先にファイルを書き込みます。その保管庫を iCloud などで同期する場合、コピーはそのサービスの設定に従います。内容は2026年10月25日に製品ドキュメントと照合しています。</p>
+  <p><a href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-campaign="seo_ja_08d223c1ddf2">App Store で Vox.md を入手</a> または <a href="/ja/docs/">完全なドキュメントを読む</a>.</p>
+    </div>
+  </article>
+
+  <aside class="article-aside" aria-label="このページ内">
+    <nav class="aside-card" aria-label="目次">
+      <div class="side-nav-title">このページの内容</div>
+      <ol>
+        <li><a href="#before-you-start">始める前に</a></li>
+        <li><a href="#create-preset">1. ルートを作る</a></li>
+        <li><a href="#send-test">2. テストを1件送信</a></li>
+        <li><a href="#add-voice">3. 音声を追加</a></li>
+        <li><a href="#troubleshooting">キャプチャが届かない場合</a></li>
+      </ol>
+    </nav>
+    <div class="aside-cta">
+      <strong>Vox.md を入手</strong>
+      <p>ローカルノートにすばやくキャプチャ。コンテンツのアップロードはありません。</p>
+      <a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_08d223c1ddf2">App Store</a>
+    </div>
+  </aside>
+</div>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ja/">ホーム</a></li>
+        <li><a href="/ja/docs/">ドキュメント</a></li>
+        <li><a href="/ja/blog/" aria-current="page">ブログ</a></li>
+        <li><a href="/ja/privacy.html">プライバシー</a></li>
+        <li><a href="/ja/terms.html">利用規約</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">サポート</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_08d223c1ddf2">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · ローカルノートにクイックキャプチャ · コンテンツのアップロードなし</div>
+    </div>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/obsidian-daily-note-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ja/blog/obsidian-daily-note-iphone/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

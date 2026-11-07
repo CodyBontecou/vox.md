@@ -1,4 +1,5 @@
 import importlib.util
+import json
 from pathlib import Path
 import sys
 import tempfile
@@ -38,9 +39,9 @@ class WebsiteMarkdownTests(unittest.TestCase):
             output = Path(directory) / 'site'
             module.build(output)
             html = (output / 'index.html').read_text()
-            self.assertEqual(html.count('<nav aria-label="Language">'), 1)
-            self.assertIn('href="/zh-hans/" lang="zh-Hans"', html)
-            self.assertNotIn('href="zh-hans/"', html)
+            self.assertEqual(html.count('class="language-switcher"'), 2)
+            self.assertIn('href="/ja/" lang="ja"', html)
+            self.assertNotIn('href="ja/"', html)
             self.assertIn('<style data-source="geist.css">', html)
             self.assertNotIn('<link rel="stylesheet"', html)
             self.assertIn('Capture ideas into Obsidian', (output / 'index.md').read_text())
@@ -53,15 +54,21 @@ class WebsiteMarkdownTests(unittest.TestCase):
             self.assertNotIn('/* @generated-markdown-routes */', worker)
             self.assertIn('"/docs/": "/docs/index.md"', worker)
             self.assertIn('"/contact": "/contact.md"', worker)
-            locale = (output / 'zh-hans/index.html').read_text()
-            self.assertIn('https://vox.isolated.tech/zh-hans/', locale)
+            locale = (output / 'ja/index.html').read_text()
+            self.assertIn('https://vox.isolated.tech/ja/', locale)
             self.assertIn('<style data-source="geist.css">', locale)
-            self.assertEqual(locale.count('href="https://apps.apple.com/app/id6758967337"'), 3)
-            self.assertNotIn('data-download-campaign="seo_home_zh"', locale)
-            self.assertEqual((module.ROOT / 'website/zh-hans/index.html').read_text().count('data-download-campaign="seo_home_zh"'), 3)
-            self.assertIn('https://apps.apple.com/app/id6758967337', (output / 'zh-hans/index.md').read_text())
-            self.assertIn('# 你的想法，存进本地文件。', (output / 'zh-hans/index.md').read_text())
-            self.assertIn('"/zh-hans/": "/zh-hans/index.md"', worker)
+            self.assertIn('<html lang="ja" dir="ltr"', locale)
+            self.assertIn('data-download-campaign=', locale)
+            self.assertIn('https://apps.apple.com/us/app/voxboard/id6758967337', (output / 'ja/index.md').read_text())
+            self.assertIn('Obsidian', (output / 'ja/index.md').read_text())
+            self.assertIn('"/ja/": "/ja/index.md"', worker)
+            public = json.loads(worker.split('const publicData = ',1)[1].split(';\n',1)[0])
+            self.assertEqual(len(public['documents']),len(list(output.rglob('*.html'))) - len(list(output.rglob('404.html'))))
+            documents = {item['url']:item for item in public['documents']}
+            self.assertEqual(documents['https://vox.isolated.tech/ja/docs/']['inLanguage'],'ja')
+            self.assertEqual(documents['https://vox.isolated.tech/ja/privacy.html']['markdownUrl'],'https://vox.isolated.tech/ja/privacy.html')
+            self.assertNotIn('https://vox.isolated.tech/ja/404',documents)
+            self.assertIn('"/ja/privacy.html": "/ja/privacy.md"',worker)
 
 
 if __name__ == '__main__':

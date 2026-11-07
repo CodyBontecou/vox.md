@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr" data-search-section="セクション" data-search-guide="ガイド記事" data-search-empty="「{query}」に一致する結果はありません">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone のボイスメモを Markdown に文字起こし | Vox.md</title>
+  <meta name="description" content="Apple のボイスメモの文字起こしをコピーするか、録音を Vox.md に読み込んで、デバイス上で文字起こしして Markdown に保存。モデル、フォルダ、音声の制約を確認します。">
+  <link rel="canonical" href="https://vox.isolated.tech/ja/blog/transcribe-voice-memos-iphone/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="言語モデル向けの Vox.md ドキュメント">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="iPhone のボイスメモを Markdown に文字起こし">
+  <meta property="og:description" content="Apple のボイスメモの文字起こしをコピーするか、録音を Vox.md に読み込んで、デバイス上で文字起こしして Markdown に保存。モデル、フォルダ、音声の制約を確認します。">
+  <meta property="og:url" content="https://vox.isolated.tech/ja/blog/transcribe-voice-memos-iphone/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-10-30">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="iPhone のボイスメモを Markdown に文字起こし">
+  <meta name="twitter:description" content="Apple のボイスメモの文字起こしをコピーするか、録音を Vox.md に読み込んで、デバイス上で文字起こしして Markdown に保存。モデル、フォルダ、音声の制約を確認します。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "iPhone のボイスメモを Markdown に文字起こし",
+  "description": "Apple のボイスメモの文字起こしをコピーするか、録音を Vox.md に読み込んで、デバイス上で文字起こしして Markdown に保存。モデル、フォルダ、音声の制約を確認します。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-10-30",
+  "dateModified": "2026-10-30",
+  "mainEntityOfPage": "https://vox.isolated.tech/ja/blog/transcribe-voice-memos-iphone/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "ja",
+  "name": "iPhone のボイスメモを Markdown に文字起こし | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ja/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "ガイド",
+      "item": "https://vox.isolated.tech/ja/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "iPhone のボイスメモを Markdown に文字起こし",
+      "item": "https://vox.isolated.tech/ja/blog/transcribe-voice-memos-iphone/"
+    }
+  ],
+  "inLanguage": "ja",
+  "name": "iPhone のボイスメモを Markdown に文字起こし | Vox.md",
+  "description": "Apple のボイスメモの文字起こしをコピーするか、録音を Vox.md に読み込んで、デバイス上で文字起こしして Markdown に保存。モデル、フォルダ、音声の制約を確認します。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/transcribe-voice-memos-iphone/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/transcribe-voice-memos-iphone/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">ガイド本文へ</a>
+<nav aria-label="メインナビゲーション">
+  <div class="nav-inner">
+    <a href="/ja/" class="logo" aria-label="Vox.md ホーム">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ja/#how">動作の仕組み</a></li>
+      <li><a href="/ja/docs/">ドキュメント</a></li>
+      <li><a href="/ja/blog/">ガイド</a></li>
+      <li><a href="/ja/compare/">比較する</a></li>
+      <li><a href="/ja/privacy.html">プライバシー</a></li>
+      <li><a href="/ja/terms.html">利用規約</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ja_36c0cc133580">Vox.md をダウンロード</a>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/transcribe-voice-memos-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ja/blog/transcribe-voice-memos-iphone/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">iPhone · ボイスメモ · Markdown</div>
+        <h1 class="hero-title">iPhone のボイスメモを Markdown に文字起こし</h1>
+        <p class="hero-subtitle">Apple の文字起こしで十分なら、まずそれを使います。Vox.md のローカル文字起こしと Markdown 保存先が必要なら、音声を読み込んでください。</p>
+      </div>
+      <aside class="meta-card" aria-label="このガイドについて">
+        <dl>
+          <div><dt>作成者</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新日</dt><dd><time datetime="2026-10-30">2026年10月30日</time></dd></div>
+          <div><dt>必要条件</dt><dd>保存済みの録音 · 準備済みのバックエンド</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="iPhone のボイスメモを Markdown に文字起こし">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">短く答えると</div><p>iPhone のボイスメモをテキストにするには、まずボイスメモに文字起こしがあるか確認します。目的を果たせるなら、それをコピーしてください。Vox.md のデバイス上の文字起こしと Markdown の振り分けを使う場合は、録音を Files に書き出し、その音声を Vox.md に読み込み、文字起こしを確認して選んだフォルダに保存します。</p></div>
+<p>このガイドは、Apple のボイスメモにある既存の録音から始めます。Vox.md で直接新しく録音する場合は、次を使ってください。 <a href="/ja/blog/voice-notes-to-obsidian-iphone/">音声メモを Obsidian に送るガイド</a>。この手順は、ドキュメントとソースの確認に基づくもので、新たに実機で書き出しを行ったものではありません。</p>
+<nav class="toc" aria-label="このガイドの内容"><div class="toc-title">このガイドの内容</div><ol><li><a href="#native">Apple の文字起こしを試す</a></li><li><a href="#export">録音を書き出す</a></li><li><a href="#prepare">Vox.md を準備する</a></li><li><a href="#import">読み込んで確認する</a></li><li><a href="#save">Markdown ファイルを確認する</a></li><li><a href="#limits">上限と復元を確認</a></li></ol></nav>
+<h2 id="native">1. ボイスメモにすでに文字起こしがあるか確認</h2>
+<p>Apple は、対応する iPhone、言語、地域での文字起こしを案内しています。ボイスメモで録音を選択し、次を開きます。 <strong>その他</strong> メニューで次を探します。 <strong>文字起こしを見る</strong> または <strong>文字起こしをコピー</strong>。必要なのがそれだけなら、文字起こし全体または選択したテキストをコピーし、ノートに貼り付けます。</p>
+<p>Apple がすでに作成した文字起こしをコピーするだけなら、別のアプリは不要です。次を確認してください。 <a href="https://support.apple.com/guide/iphone/view-a-transcription-iph00953a982/ios" target="_blank" rel="noopener">Apple の文字起こしガイド</a> で現在の対応状況を確認してください。項目が表示されない理由は、デバイス、システム、言語、地域の対応状況による場合があります。音声の破損を意味するものではありません。</p>
+<h2 id="export">2. Vox.md で文字起こしする場合は音声を書き出す</h2>
+<p>Apple の <a href="https://support.apple.com/en-nz/guide/iphone/iph831c37815/ios" target="_blank" rel="noopener">ボイスメモの書き出し手順</a> で、録音を選んで次を開く手順を説明しています。 <strong>その他 → 共有</strong>、さらに次を選ぶと、 <strong>Files に保存</strong>。再び見つけられるフォルダを選び、保存します。</p>
+<p>通常の書き出し形式は、 <code>.m4a</code> 録音を書き出します。設定によっては、編集可能なレイヤーやエフェクトを別の表現で保持できます。この手順では、まず通常の単一音声ファイルへの書き出しを使ってください。このガイドは、すべてのレイヤー付き・編集可能な書き出しが、すべての文字起こしバックエンドで動くことを保証するものではありません。元の Voice Memo は残してください。</p>
+<p>音声ファイルの共有は、Apple の文字起こしのコピーとは異なります。音声を Vox.md に読み込むと、選択した文字起こしバックエンドでもう一度処理します。Apple の文字起こしを読み込むわけではなく、同じ表現になる保証もありません。</p>
+<h2 id="prepare">3. バックエンドと Markdown の保存先を準備</h2>
+<p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_36c0cc133580">iPhone 用 Vox.md を入手</a></p>
+<ol><li>Vox.md で、デバイスと録音言語に対応する文字起こしバックエンドを選びます。必要なモデルのダウンロードは、接続中に完了してください。</li><li>書き込み可能な Markdown フォルダを持つキャプチャプレスを作成または選択します。次を使ってください。 <strong>新しいノート</strong> を初回の読み込みに使うと、出力ファイルを見分けやすくなります。</li><li>選択 <strong>オリジナルを保持</strong> 処理を使うと、任意の AI による書き換えをせず、認識したテキストを使えます。</li><li>速い捕獲の音声コントロールで、次を選びます。 <strong>下書きに追加</strong> を読み込み前に選ぶと、最初の文字起こしを確認できます。</li></ol>
+<p>「オリジナルを保持」は認識テキストを保持するものであり、認識を逐語的・無誤りにするものではありません。「自動」、Apple Speech、ダウンロードしたモデルでは、デバイスと言語の要件が異なります。次を確認してください。 <a href="/ja/docs/#models">モデルのリファレンス</a> と、インストール済みアプリで現在必要な購入またはアクセス条件を確認してから、長い録音を読み込んでください。</p>
+<p>Obsidian には、Files が公開する実際の保管庫フォルダを選んでください。Vox.md は Obsidian Sync サービスに直接接続しません。通常の書き込み可能な Markdown フォルダでも使えます。</p>
+<h2 id="import">4. 保存した録音を読み込み、ドラフトを確認</h2>
+<ol><li>よくある <strong>オーディオまたはビデオを読み込む</strong> を、速い捕獲の音声コントロールで選びます。</li><li>Files から書き出した録音を選び、読み込みと文字起こしの完了を待ちます。</li><li>「下書きに追加」を選んだ場合、入力画面で文字起こしを確認します。氏名、日付、数字、その他の重要な表現を元音声と照合して修正してください。</li><li>選択したプリセットと保存先を確認し、次をタップします。 <strong>送る</strong>.</li></ol>
+<p>一般的な Files 添付アクションでファイルを付けるのではなく、文字起こしの読み込みコントロールを使ってください。ノートの音声添付ファイルそのものは、文字起こしではありません。</p>
+<p>次を使って、 <strong>すぐに送信</strong> を代わりに選ぶと、完成した文字起こしは、同じドラフト確認を経ずに、選択したプリセットで処理を続けられます。最初の確認では、先に「下書きに追加」を設定してください。読み込みを始める前に、進行中の録音を終了します。</p>
+<h2 id="save">5. 実際の Markdown ファイルを確認</h2>
+<p>配信が完了するまで待ちます。Files または Obsidian で保存先を開き、ファイル、テキスト、ファイル名を確認してください。入力画面に文字起こしが見えていれば認識でテキストができたことは分かりますが、フォルダへの書き込み成功までは証明できません。</p>
+<p>合成した録音から、たとえば次の本文になります。</p>
+<pre class="guide-code"><code>Review the garden plan on Saturday.
+Bring the updated measurements.</code></pre>
+<p>これは出力例であり、実際の録音や精度テストではありません。ファイル名、メタデータ、書式はプリセットで決まります。新しく読み込んだ項目の日付やファイル名が、元のボイスメモの録音日になるとは限りません。必要な場合は、その情報を明示的に加えてください。</p>
+<p>新しいノートへの読み込みが1件成功したら、次に進みます。 <a href="/ja/blog/append-to-obsidian-daily-note-iphone/">デイリーノートのガイド</a> をローリング保存先に使うか、次を選びます。 <a href="/ja/blog/obsidian-capture-templates/">テンプレートのレシピ</a> を受信ノートやタスク項目に使います。古い録音を日記に送る前に、対象ノートの日付とパスを確認してください。</p>
+<h2 id="limits">上限、プライバシー、読み込みの失敗</h2>
+<ul><li><strong>読み込みを使えない場合：</strong> 現在の録音を終了し、アプリのアクセス条件を確認して、選択したプリセットが有効であることを確かめます。</li><li><strong>認識に失敗する場合：</strong> バックエンドの準備、言語、ローカルストレージ、ファイルの音声をデコードできるかを確認してください。原本を残し、長いファイルや特殊なファイルを試す前に、小さな通常の音声書き出しで試します。</li><li><strong>配信が保留中の場合：</strong> フォルダへのアクセスを復元し、保持されている失敗済みの配信を再試行してください。同じメモを再度読み込むと、キャプチャが重複する場合があります。</li><li><strong>元の音声も必要な場合：</strong> 音声の保持は、別途設定して確認してください。テキストができたからといって、すべてのプリセットが音声も添付保存するとは限りません。</li></ul>
+<p>Vox.md はデバイス上で文字起こしを行います。バックエンドの初回準備にはダウンロードが必要な場合があり、Files プロバイダによっては、元ファイルの取得や保存先への書き込みに接続が必要です。音声や Markdown を同期フォルダに保存すると、そのプロバイダが同期を行います。完全に接続を切って使う手順は、次に沿って確認してください。 <a href="/ja/blog/offline-transcription-iphone-markdown/">オフラインで使うための準備と確認ガイド</a>.</p>
+<p>このルートは、ボイスメモライブラリの自動同期、一括アーカイブ読み込み、Apple の編集、レイヤー、文字起こしのタイミング、録音メタデータの保持を約束するものではありません。まず録音を1件使い、原本を保持して、保存したテキストを確認してから手順を広げてください。</p>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ja/">ホーム</a></li>
+        <li><a href="/ja/docs/">ドキュメント</a></li>
+        <li><a href="/ja/blog/">ガイド</a></li>
+        <li><a href="/ja/compare/">比較する</a></li>
+        <li><a href="/ja/privacy.html">プライバシー</a></li>
+        <li><a href="/ja/terms.html">利用規約</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">サポート</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_36c0cc133580">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · ローカルノートにクイックキャプチャ · コンテンツのアップロードなし。</div>
+    </div>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/transcribe-voice-memos-iphone/" lang="en" hreflang="en">English</a></li><li><a href="/ja/blog/transcribe-voice-memos-iphone/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

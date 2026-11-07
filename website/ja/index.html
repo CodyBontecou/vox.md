@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr" data-search-section="セクション" data-search-guide="ガイド記事" data-search-empty="「{query}」に一致する結果はありません">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone と Apple Watch から Obsidian にクイックキャプチャ | Vox.md</title>
+  <meta name="description" content="iPhone からテキスト、リンク、写真、ファイル、スキャン、スケッチ、非公開の音声メモを Obsidian の保管庫やローカルの Markdown ファイルに保存。">
+  <link rel="canonical" href="https://vox.isolated.tech/ja/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="言語モデル向けの Vox.md ドキュメント">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="iPhone と Apple Watch から Obsidian にクイックキャプチャ | Vox.md">
+  <meta property="og:description" content="Obsidian を開かず、考えを適切な保管庫、ノート、見出しへ。音声の文字起こしはデバイス内で完結します。">
+  <meta property="og:url" content="https://vox.isolated.tech/ja/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="iPhone と Apple Watch から Obsidian にクイックキャプチャ | Vox.md">
+  <meta name="twitter:description" content="まずキャプチャ。あとは正確な Markdown ルートが、すべてを目的のノートへ。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Vox.md",
+  "applicationCategory": "ProductivityApplication",
+  "operatingSystem": "iOS 17.6+, iPadOS 17.6+, macOS 14+, watchOS 10+",
+  "description": "テキスト、リンク、メディア、書類のスキャン、スケッチ、デバイス上の非公開音声文字起こしで、Obsidian の保管庫とローカル Markdown ノートにすばやくキャプチャ。",
+  "url": "https://vox.isolated.tech/ja/",
+  "downloadUrl": "https://apps.apple.com/us/app/voxboard/id6758967337",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/",
+    "sameAs": [
+      "https://github.com/CodyBontecou"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "featureList": [
+    "テキスト、リンク、写真、ファイル、書類のスキャン、スケッチ、音声をキャプチャ",
+    "Obsidian の保管庫や Files のフォルダに標準の Markdown を書き込む",
+    "新しいノートを作成、ローリングノートを更新、既存のノートを指定",
+    "先頭、末尾、指定した見出しの下に挿入",
+    "テンプレートで1回限りの現在の位置を使い、任意でメタデータを出力",
+    "ウィジェット、ショートカット、共有拡張機能、キーボードから使う",
+    "音声をアップロードせず、デバイス上で文字起こし"
+  ],
+  "inLanguage": "ja"
+}
+</script>
+
+  <link rel="stylesheet" href="/geist.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://isolated.tech/#organization",
+  "name": "Isolated Tech",
+  "url": "https://isolated.tech/",
+  "sameAs": [
+    "https://github.com/CodyBontecou"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "カスタマーサポート",
+    "email": "codybontecou@gmail.com",
+    "url": "https://vox.isolated.tech/ja/contact",
+    "availableLanguage": "英語"
+  },
+  "inLanguage": "ja",
+  "description": "iPhone からテキスト、リンク、写真、ファイル、スキャン、スケッチ、非公開の音声メモを Obsidian の保管庫やローカルの Markdown ファイルに保存。"
+}
+</script>
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md の公開情報 API">
+<meta name="naver-site-verification" content="cae11a861102ae94853f1f7e773318e17525df3a">
+  <meta name="color-scheme" content="light">
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/InstrumentSerif-Italic-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/">
+</head>
+<body class="raw">
+<a class="skip-link" href="#main">本文へ移動</a>
+
+<nav aria-label="メインナビゲーション">
+  <div class="r-wrap r-nav">
+    <a href="/ja/" class="r-logo" aria-label="Vox.md ホーム">
+      <span class="r-logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <span class="r-tab-current" aria-hidden="true">index.md</span>
+    <ul class="r-nav-links">
+      <li><a href="#how">how.md</a></li>
+      <li><a href="#capture">files.md</a></li>
+      <li><a href="#presets">routes.md</a></li>
+      <li><a href="#privacy">privacy.md</a></li>
+      <li><a href="/ja/docs/">docs/</a></li>
+      <li><a href="/ja/blog/">guides/</a></li>
+      <li><a href="/ja/compare/">compare/</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ja_8a5edab28263">無料でダウンロード</a>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ja/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li></ul></details></div>
+</nav>
+
+<main id="main">
+<section aria-labelledby="hero-title">
+  <div class="r-wrap r-hero">
+    <p class="r-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</p>
+    <div class="r-hero-body">
+      <div class="r-hero-copy">
+        <pre class="r-front" aria-label="Vox.md の概要">---
+app: Vox.md
+for: Obsidian &amp; any Markdown folder
+runs_on: [iPhone, iPad, Mac, Apple Watch]
+transcribes_on: <b>this device</b>
+writes_to: <b>a folder you pick</b>
+copies_on_our_servers: <b class="r-hl">0</b>
+---</pre>
+        <h1 class="r-h1" id="hero-title"><span class="r-mark" aria-hidden="true">#</span>考えの行き先は、 <span aria-hidden="true"><del>クラウド</del> </span><span class="visually-hidden">ローカルの </span><span class="r-voice r-hl">ファイル。</span><span class="r-caret" aria-hidden="true"></span></h1>
+        <p class="r-hero-lead">iPhone、Mac、Apple Watch から Obsidian にアイデアをキャプチャ。入力、撮影、スキャン、スケッチ、声で残せます。Vox.md はデバイス上で文字起こしし、選んだ保管庫や Files フォルダに、指定したノートと見出しの下で、プレーンな Markdown を直接書き込みます。</p>
+        <div class="r-actions">
+          <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_ja_8a5edab28263">Vox.md を無料でダウンロード</a>
+          <a href="/ja/blog/obsidian-quick-capture-iphone/" class="r-btn r-btn-line">キャプチャ方法を選ぶ</a>
+        </div>
+        <p class="r-note">15分の文字起こし＋10回のキャプチャ配信が無料 · iOS 17.6+ · アカウント不要</p>
+        <details class="desktop-download-qr">
+          <summary>スキャンして iPhone にダウンロード</summary>
+          <div class="download-qr-panel">
+            <a href="https://apps.apple.com/us/app/voxboard/id6758967337" data-download-kind="qr" aria-label="App Store で Vox.md を開く" data-download-campaign="seo_home_qr">
+              <img src="/assets/download-qr.svg" alt="App Store で Vox.md を開く QR コード" width="176" height="176" decoding="async">
+            </a>
+            <p>iPhone のカメラでスキャンして、App Store で Vox.md を開きます。</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="r-demo" aria-labelledby="demo-title">
+        <h2 class="visually-hidden" id="demo-title">キャプチャがどう残るか</h2>
+        <div class="r-demo-tabs" role="tablist" aria-label="キャプチャを選ぶ" hidden>
+          <button type="button" role="tab" id="demo-tab-voice" aria-controls="demo-voice" aria-selected="true">音声メモ</button>
+          <button type="button" role="tab" id="demo-tab-link" aria-controls="demo-link" aria-selected="false" tabindex="-1">共有リンク</button>
+          <button type="button" role="tab" id="demo-tab-scan" aria-controls="demo-scan" aria-selected="false" tabindex="-1">スキャンしたページ</button>
+        </div>
+
+        <div class="r-demo-panel" id="demo-voice" role="tabpanel" aria-labelledby="demo-tab-voice">
+          <div class="r-said">
+            <p class="r-said-meta"><span>入力したもの</span><span>音声 · 0:03</span></p>
+            <div class="r-wave" aria-hidden="true"><span style="height:8px"></span><span style="height:14px"></span><span style="height:22px"></span><span style="height:30px"></span><span style="height:18px"></span><span style="height:10px"></span><span style="height:26px"></span><span style="height:34px"></span><span style="height:20px"></span><span style="height:12px"></span><span style="height:6px"></span><span style="height:16px"></span><span style="height:28px"></span><span style="height:24px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:20px"></span><span style="height:32px"></span><span style="height:26px"></span><span style="height:12px"></span><span style="height:18px"></span><span style="height:30px"></span><span style="height:22px"></span><span style="height:10px"></span><span style="height:6px"></span><span style="height:14px"></span><span style="height:24px"></span><span style="height:34px"></span><span style="height:28px"></span><span style="height:16px"></span><span style="height:10px"></span><span style="height:20px"></span><span style="height:26px"></span><span style="height:14px"></span><span style="height:8px"></span><span style="height:18px"></span></div>
+            <p class="r-voice">「歯医者の予約を忘れずに。」</p>
+          </div>
+          <div class="r-pipe"><ul><li>このデバイスで文字起こし</li><li>ルート： <strong>デイリーノート · タスク</strong></li><li>ネットワーク利用： <span class="r-hl">なし</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/2026-11-06.md</span><span>+ 1行</span></p>
+            <pre>## Tasks
+- Remember to book the dentist</pre>
+          </div>
+        </div>
+
+        <div class="r-demo-panel" id="demo-link" role="tabpanel" aria-labelledby="demo-tab-link" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>入力したもの</span><span>共有シート · Safari</span></p>
+            <p class="r-voice">3週間前から読もうと思っていたリンクを、Safari からそのまま共有。</p>
+          </div>
+          <div class="r-pipe"><ul><li>そのまま保存</li><li>ルート： <strong>読むものリスト</strong></li><li>ネットワーク利用： <span class="r-hl">なし</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Inbox/Reading.md</span><span>+ 2行</span></p>
+            <pre>### 14:07
+- https://www.inkandswitch.com/local-first/</pre>
+          </div>
+        </div>
+
+        <div class="r-demo-panel" id="demo-scan" role="tabpanel" aria-labelledby="demo-tab-scan" hidden>
+          <div class="r-said">
+            <p class="r-said-meta"><span>入力したもの</span><span>スキャン · 1ページ</span></p>
+            <p class="r-voice">今朝のノートのページを、カメラでスキャン。</p>
+          </div>
+          <div class="r-pipe"><ul><li>このデバイスでテキストを抽出</li><li>ルート： <strong>手帳のページ</strong></li><li>ネットワーク利用： <span class="r-hl">なし</span></li></ul></div>
+          <div class="r-out">
+            <p class="r-out-head"><span>Journal/Pages/2026-11-06 0912.md</span><span>+ 4行</span></p>
+            <pre>![[scan-2026-11-06-0912.jpg]]
+
+&gt; ship routing first.
+&gt; ask about the watch build</pre>
+          </div>
+        </div>
+        <p class="r-demo-foot">図示のための例です。出力はルートと文字起こしによって異なります。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-zero" id="privacy" aria-labelledby="privacy-title">
+  <div class="r-wrap r-zero-inner">
+    <div class="r-zero-copy">
+      <p class="r-file">## privacy.md</p>
+      <h2 id="privacy-title">0<small>バイト</small></h2>
+      <p>バイトも、ドラフト、添付ファイル、ノートのパス、テンプレート、入力テキスト、文字起こし、有効化した位置情報が Vox.md のサーバーや分析に届くことはありません。ファイルの行き先は選んだフォルダだけです。位置を継続的またはバックグラウンドで追跡することもありません。</p>
+    </div>
+    <dl class="r-ledger" aria-label="Vox.md が受け取るもの">
+      <div><dt>アップロードする音声</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>アップロードする文字起こし</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>ドラフトと添付ファイル</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>ノートのパスとテンプレート</dt><span aria-hidden="true"></span><dd>0 B</dd></div>
+      <div><dt>必要なアカウント</dt><span aria-hidden="true"></span><dd>不要です</dd></div>
+      <div><dt>バックグラウンドの位置取得</dt><span aria-hidden="true"></span><dd>一切なし</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-section" id="how" aria-labelledby="how-title">
+  <div class="r-wrap r-stack">
+    <div class="r-head">
+      <p class="r-file">L041 · how.md</p>
+      <h2 class="r-h2" id="how-title"><span class="r-mark" aria-hidden="true">##</span>3つの停留所。 <span class="r-voice">私たちの停留所はありません。</span></h2>
+      <p class="r-lead">一瞬の考えを残すのに、保管庫を開き、ノートを探し、書き込む場所を選ぶのは手間がかかりすぎます。ルートを一度設定したら、あとはキャプチャするだけ。</p>
+    </div>
+    <ol class="r-stops">
+      <li class="r-stop"><p class="r-stop-meta"><span>01</span><span>あなたのフォルダ</span></p><h3>保管庫を接続</h3><p>Obsidian の保管庫、または Files 内の書き込み可能なフォルダを選択します。Vox.md は、すでに所有している Markdown ファイルをそのまま扱います。</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>02</span><span>あなたのポケット</span></p><h3>何でもキャプチャ</h3><p>入力、リンクの貼り付け、メディアやファイルの追加、書類のスキャン、スケッチ、非公開の音声メモの録音。音声はその場で文字起こしします。</p></li>
+      <li class="r-stop"><p class="r-stop-meta"><span>03</span><span>あなたのファイル</span></p><h3>ルートがファイルに振り分ける</h3><p>ノートを作成、ローリングノートを更新、既存のノートを指定。先頭、末尾、見出しの下へ配置できます。</p></li>
+    </ol>
+    <p class="r-skip"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9A9A93" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.1 9.5 4.25 4.25 0 0 0 7 18z"/><path d="M3 3l18 18"/></svg><span><del>停留所2.5：誰かのクラウド</del>。省略しました。同期は、選択したフォルダがすでに使っている仕組みが、そのプロバイダの規約に従って行います。</span></p>
+  </div>
+</section>
+
+<section class="r-section" id="capture" aria-labelledby="capture-title">
+  <span class="anchor" id="features" aria-hidden="true"></span>
+  <div class="r-wrap r-split">
+    <div class="r-stack" style="gap: 20px">
+      <p class="r-file">L077 · files.md</p>
+      <h2 class="r-h2" id="capture-title"><span class="r-mark" aria-hidden="true">##</span>これは、 <span class="r-voice r-hl">ただの</span> ファイル。</h2>
+      <p class="r-lead">プラグインも、Vox.md のクラウドアカウントも、独自形式も不要。Vox.md は、管理できるフォルダに読みやすい Markdown と Obsidian 形式のリンクを書き込みます。ノートがアプリに縛られることはありません。</p>
+      <ul class="r-inputs">
+        <li><code>.md</code><span>入力したノートと音声の文字起こしを、標準の Markdown で保存</span></li>
+        <li><code>[[ ]]</code><span>Obsidian が扱えるウィキリンクと添付ファイルの埋め込み</span></li>
+        <li><code>img</code><span>写真、ファイル、抽出テキスト付きの書類スキャン。 <a href="/ja/blog/save-links-photos-obsidian-iphone/">メディアキャプチャのガイド</a></span></li>
+        <li><code>url</code><span>共有できる場所なら、どこからでもリンクを保存</span></li>
+        <li><code>draw</code><span>編集可能なスケッチ</span></li>
+        <li><code>voice</code><span>入力画面やキーボードから非公開の音声を入力。音声のアップロードは一切ありません。 <a href="/ja/blog/voice-notes-to-obsidian-iphone/">iPhone の音声メモガイド</a></span></li>
+        <li><code>---</code><span>日付、時刻、ソース、識別子のトークンを含む、再利用可能な Markdown や YAML</span></li>
+      </ul>
+    </div>
+    <div class="r-tree" role="img" aria-label="新しい3件のキャプチャを強調した保管庫フォルダのツリー">
+      <p class="r-tree-head"><span>~/Obsidian/Second Brain</span><span>ls -R</span></p>
+      <ul aria-hidden="true">
+        <li>├── Inbox/</li>
+        <li>│   └── Reading.md <mark>just now</mark></li>
+        <li>├── Journal/</li>
+        <li class="old">│   ├── 2026-11-05.md</li>
+        <li>│   ├── 2026-11-06.md <mark>+ ## Tasks</mark></li>
+        <li>│   └── Pages/</li>
+        <li>│       └── 2026-11-06 0912.md <mark>scan</mark></li>
+        <li>├── Meetings/</li>
+        <li class="old">│   └── 2026-11-01.md</li>
+        <li>├── Projects/</li>
+        <li class="old">│   └── Ideas.md</li>
+        <li class="old">└── attachments/</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="r-section" id="presets" aria-labelledby="presets-title">
+  <span class="anchor" id="destinations" aria-hidden="true"></span>
+  <div class="r-wrap r-stack">
+    <div class="r-head">
+      <p class="r-file">L112 · routes.md</p>
+      <h2 class="r-h2" id="presets-title"><span class="r-mark" aria-hidden="true">##</span>ルートの設定は一度だけ。 <span class="r-voice">あとは話すだけ。</span></h2>
+      <p class="r-lead">ルートは、キャプチャの処理方法と書式に加え、保管庫、対象ノート、挿入位置、添付ファイル、再試行の動作、任意の1回限りの現在の位置を記憶します。</p>
+    </div>
+    <div class="r-table-box">
+      <table class="r-table">
+        <caption class="visually-hidden">ルートの例</caption>
+        <thead><tr><th scope="col">ルート</th><th scope="col">ファイル</th><th scope="col">ファイル内の位置</th><th scope="col">出力書式</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">デイリーノート · タスク</th><td>Journal/{date}.md</td><td>## Tasks の下端</td><td>- {text}</td></tr>
+          <tr><th scope="row">会議メモ</th><td>Meetings/{date}.md</td><td>## Notes の下</td><td>### {time} · {title}</td></tr>
+          <tr><th scope="row">読むものリスト</th><td>Inbox/Reading.md</td><td>ファイルの先頭</td><td>### {time}</td></tr>
+          <tr><th scope="row">アイデア</th><td>Projects/Ideas.md</td><td>ファイルの末尾</td><td>&gt; {text}</td></tr>
+          <tr><th scope="row">新しいノート</th><td>Inbox/{timestamp}.md</td><td>新しいファイル</td><td>YAML フロントマター＋本文</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <dl class="r-targets">
+      <div><dt>既存のノート <code>Projects/Ideas.md</code></dt><dd>保管庫にすでにある文書に、そのまま追加できます。</dd></div>
+      <div><dt>ローリングノート <code>Journal/&#123;period&#125;.md</code></dt><dd>日、週、月、四半期、年単位のノート。 <a href="/ja/blog/append-to-obsidian-daily-note-iphone/">デイリーノートと見出しへの挿入を設定。</a></dd></div>
+      <div><dt>新規メモ <code>Inbox/&#123;timestamp&#125;.md</code></dt><dd>キャプチャのたびに、まっさらなファイルを作ります。</dd></div>
+      <div><dt>正確な挿入位置 <code>Top · Bottom · Heading</code></dt><dd>どのレベルの見出しの下にも挿入。見出しがなければ作成できます。</dd></div>
+      <div><dt>入り口 寺院 <code>Markdown · YAML · Tokens</code></dt><dd>繰り返すキャプチャの書式を、整え直さず一定に保ちます。</dd></div>
+      <div><dt>現在地 <code>&#123;location&#125;</code></dt><dd>メタデータなしで発生時点の地図リンクを1つ出力するか、フロントマターとインラインフィールドを有効にできます。 <a href="/ja/docs/location/">ガイドを読む。</a></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-section" id="everywhere" aria-labelledby="everywhere-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L140 · anywhere.md</p>
+    <h2 class="r-h2" id="everywhere-title"><span class="r-mark" aria-hidden="true">##</span>思いついたら、 <span class="r-voice">どこからでも</span></h2>
+    <ul class="r-pills" aria-label="キャプチャの入口">
+      <li>キーボード <small>どのアプリでも</small></li>
+      <li>Apple Watch <small>手首</small></li>
+      <li>Mac <small>クイックキャプチャ</small></li>
+      <li>共有シート <small>何でも</small></li>
+      <li>ウィジェット <small>ホームとロック画面</small></li>
+      <li>コントロールセンター <small>ワンタップ</small></li>
+      <li>ショートカット <small>自動化</small></li>
+    </ul>
+    <p class="r-lead"><a href="/ja/blog/apple-watch-obsidian-voice-notes/">Apple Watch の音声メモを Obsidian に送る設定</a>。Watch で録音し、ペアリングした iPhone で文字起こしと配信を行います。</p>
+  </div>
+</section>
+
+<section class="r-section" id="specs" aria-labelledby="specs-title">
+  <div class="r-wrap r-stack" style="gap: 28px">
+    <p class="r-file">L158 · specs.yml</p>
+    <h2 class="r-h2" id="specs-title"><span class="r-mark" aria-hidden="true">##</span>手元に残せる <span class="r-voice">ファイルが中心</span></h2>
+    <dl class="r-yaml">
+      <div><dt>capture_types</dt><dd>テキスト、リンク、写真、ファイル、スキャン、スケッチ、音声</dd></div>
+      <div><dt>note_format</dt><dd>標準の Markdown</dd></div>
+      <div><dt>destinations</dt><dd>Obsidian の保管庫と書き込み可能な Files フォルダ</dd></div>
+      <div><dt>note_targets</dt><dd>新しいノート、ローリングノート、既存のノート</dd></div>
+      <div><dt>placement</dt><dd>先頭、末尾、または見出しの下</dd></div>
+      <div><dt>rolling_periods</dt><dd>毎日、毎週、毎月、四半期ごと、毎年</dd></div>
+      <div><dt>obsidian_syntax</dt><dd>ウィキリンクと添付ファイルの埋め込み</dd></div>
+      <div><dt>entry_formats</dt><dd>再利用可能な Markdown と YAML のテンプレート</dd></div>
+      <div><dt>entry_points</dt><dd>アプリ、ウィジェット、ショートカット、共有拡張機能、キーボード、Apple Watch、Mac、コントロールセンター</dd></div>
+      <div><dt>voice_processing</dt><dd>デバイス上の Apple Speech、Whisper、Parakeet</dd></div>
+      <div><dt>audio_uploads</dt><dd>文字起こしには不要</dd></div>
+      <div><dt>account</dt><dd>不要</dd></div>
+      <div><dt>platforms</dt><dd>iOS/iPadOS 17.6+、macOS 14+、watchOS 10+</dd></div>
+      <div><dt>location</dt><dd>任意の1回限りの取得。{location} はメタデータなしで利用可能。バックグラウンド追跡なし</dd></div>
+      <div><dt>location_metadata</dt><dd>フロントマターとインラインフィールドは別途有効化。既定の「正確な」または「都市」の丸め</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="r-dark" id="reviews" aria-labelledby="reviews-title">
+  <div class="r-wrap r-dark-inner">
+    <p class="r-file">L190 · reviews.md · from the App Store</p>
+    <h2 class="r-h2" id="reviews-title"><span class="r-mark" aria-hidden="true">##</span>このアプリに <span class="r-voice">寄せられた</span> 声</h2>
+    <div class="r-quotes">
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5b29-4b3500000000">
+        <div>
+          <h3>まさに欲しかったもの · <span role="img" aria-label="5つ星中5つ">★★★★★</span></h3>
+          <blockquote><p>「しばらくの間、すばやく口頭でメモを取り、添付ファイルを加え、ローカルで文字起こしして Obsidian フォルダと同期できる方法を探していました。このアプリなら、それが完璧にできます。」</p></blockquote>
+          <figcaption><span class="review-author">SteamingCoax</span> · App Store レビュー · <time datetime="2026-08-11">2026年8月11日</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5bf7-fadc00000000">
+        <div>
+          <h3>静かなキャプチャの実力派 · <span role="img" aria-label="5つ星中5つ">★★★★★</span></h3>
+          <blockquote>
+            <p>「Vox.md は、私が最もよく使うツールの1つになりました。Obsidian に音声メモを送るために使い始めたのですが、日々のキャプチャの流れを静かに変えてくれました。</p>
+            <p>キャプチャプリセットの仕組みがすばらしい。それぞれのプリセットに、保存先、テンプレート、挿入位置があります。音声メモが、望んだ書式そのままで、正しいデイリーノートに直接入り、まったく手間がかかりません。」</p>
+          </blockquote>
+          <figcaption><span class="review-author">Eric Know</span> · App Store レビュー · <time datetime="2026-08-14">2026年8月14日</time></figcaption>
+        </div>
+      </figure>
+      <figure class="r-quote" data-review-id="00000192-dda8-2903-5a77-5cb500000000">
+        <div>
+          <h3>過小評価され、見過ごされても、忘れられない · <span role="img" aria-label="5つ星中5つ">★★★★★</span></h3>
+          <blockquote><p>「2026年のお気に入りで、最もよく使うアプリの1つに、あっという間になりつつあります！」</p></blockquote>
+          <figcaption><span class="review-author">PromisedOne</span> · App Store レビュー · <time datetime="2026-08-08">2026年8月8日</time></figcaption>
+        </div>
+      </figure>
+    </div>
+    <p class="r-fine">App Store レビューから抜粋。Eric の引用は一部を抜き出したもので、原文の表現は変更していません。 <a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_8a5edab28263">App Store レビューを読む <span aria-hidden="true">→</span></a></p>
+  </div>
+</section>
+
+<section class="r-section" id="faq" aria-labelledby="faq-title">
+  <div class="r-wrap r-faq">
+    <div class="r-head">
+      <p class="r-file">L214 · faq.md</p>
+      <h2 class="r-h2" id="faq-title" style="font-size: clamp(36px, 4.4vw, 60px)"><span class="r-mark" aria-hidden="true">##</span>よくある <span class="r-voice">質問</span></h2>
+      <p class="r-lead">Vox.md は選択した Markdown フォルダに直接書き込みます。Obsidian とよく合いますが、必須ではありません。項目を選ぶと回答が開きます。</p>
+    </div>
+    <div class="r-faq-list">
+      <details>
+        <summary>Vox.md は Obsidian で使えますか？</summary>
+        <p>はい。ルートを作成し、Obsidian の保管庫を保存先に選択してください。Vox.md は標準の Markdown、ウィキリンク、添付ファイルの埋め込みを保管庫に直接書き込みます。Obsidian のプラグインは不要です。 <a href="/ja/compare/vox-md-vs-obsidian-quick-capture/">Vox.md と Obsidian の標準キャプチャを比較。</a> <a href="/ja/blog/obsidian-daily-note-iphone/">デイリーノートへのキャプチャ手順を設定。</a></p>
+      </details>
+      <details>
+        <summary>何をキャプチャできますか？</summary>
+        <p>入力画面は、テキスト、ウェブリンク、写真、ファイル、書類のスキャン、スケッチ、音声を受け付けます。スキャンには抽出テキストを含められ、音声はローカルで文字起こしできます。</p>
+      </details>
+      <details>
+        <summary>キャプチャはどこに送れますか？</summary>
+        <p>各ルートの保存先は、新しいノートの作成、日単位などのローリングノートの更新、既存の Markdown ファイルへの書き込みに対応しています。ルート自体を変えずに、1回のキャプチャだけ別のノートを一時指定することもできます。</p>
+      </details>
+      <details>
+        <summary>Vox.md は見出しの下に挿入できますか？</summary>
+        <p>はい。ルートは先頭や末尾への追加、レベル1から6までの見出しの下への挿入に対応しています。見出しがない場合、配信を止めるか自動作成するかを選べます。また、新しい項目を見出しの直下に入れるか、その見出しのセクション末尾に入れるかも指定できます。</p>
+      </details>
+      <details>
+        <summary>Obsidian なしでも使えますか？</summary>
+        <p>はい。ルートには Files が公開する書き込み可能なフォルダを使えます。出力は通常の添付ファイルを伴うプレーンな Markdown なので、ノートが Vox.md に縛られることはありません。</p>
+      </details>
+      <details>
+        <summary>Vox.md はノートや音声をアップロードしますか？</summary>
+        <p>キャプチャ内容を Vox.md のサーバーに送信することはありません。ドラフトと音声処理はデバイス内にとどまり、完成したファイルは選択したフォルダに書き込みます。そのフォルダが同期プロバイダに属する場合、プロバイダが自身の規約に従って扱います。 <a href="/ja/blog/offline-transcription-iphone-markdown/">オフライン設定の要件を確認。</a></p>
+      </details>
+      <details>
+        <summary>メタデータを追加せず、テンプレートで位置情報を使えますか？</summary>
+        <p>はい。そのルートの「現在地を使用」をオンにし、「位置情報メタデータを書き込む」はオフのまま、次を追加してください。 <code>{location}</code> をエントリーの書式に追加します。Vox.md は、フロントマターやインラインの位置情報フィールドを追加せず、1回限りの取得による地図リンクを挿入します。 <a href="/ja/docs/location/">位置情報の完全ガイドを読む。</a></p>
+      </details>
+      <details>
+        <summary>アプリの外からもキャプチャできますか？</summary>
+        <p>はい。Vox.md にはウィジェット、ショートカットアクション、共有拡張機能、音声キーボードがあります。これらの入口は、同じローカルキャプチャシステムにつながっています。</p>
+      </details>
+      <details>
+        <summary>Vox.md の料金は？</summary>
+        <p>Vox.md は、15分の文字起こしと10回の成功したキャプチャ配信を無料で提供します。文字起こしとキャプチャの無制限利用は1回限りの永久ライセンス購入で利用でき、サブスクリプションや広告はありません。Markdown に送る音声の文字起こしは、文字起こし枠を使い、キャプチャ枠を重ねて消費しません。地域の現在の価格は App Store に表示されます。</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="r-cta" id="download" aria-labelledby="download-title">
+  <div class="r-wrap">
+    <div class="r-cta-card">
+      <h2 id="download-title">次の考えを <span class="r-voice">ファイルの中へ。</span></h2>
+      <p>保管庫やローカルフォルダを一度接続すれば、次のアイデアは、選んだノート、見出し、書式へ直接送れます。</p>
+      <div class="r-actions">
+        <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="r-btn r-btn-ink" target="_blank" rel="noopener" data-download-campaign="seo_ja_8a5edab28263">Vox.md を無料でダウンロード</a>
+        <span class="r-note">無料枠あり · 1回の購入で永久解除 · アカウント不要</span>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="r-wrap r-foot">
+    <span class="r-eof" aria-hidden="true">EOF</span>
+    <ul>
+      <li><a href="/ja/developers">開発者向け</a></li>
+      <li><a href="/ja/about">について</a></li>
+      <li><a href="/ja/contact">お問い合わせ</a></li>
+      <li><a href="/ja/docs/">ドキュメント</a></li>
+      <li><a href="/ja/blog/">ガイド</a></li>
+      <li><a href="/ja/compare/">比較する</a></li>
+      <li><a href="/ja/privacy.html">プライバシー</a></li>
+      <li><a href="/ja/terms.html">利用規約</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="mailto:codybontecou@gmail.com">サポート</a></li>
+      <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_8a5edab28263">App Store</a></li>
+    </ul>
+    <p class="r-foot-copy">© 2026 Vox.md · 開発： <a href="https://codybontecou.com/">Cody Bontecou</a> にて <a href="https://isolated.tech/">Isolated Tech</a> · コンテンツのアップロードなし。</p>
+
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/" lang="en" hreflang="en">English</a></li><li><a href="/ja/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li></ul></details></div>
+</footer>
+
+<script>
+/* Hero demo tabs. Without JavaScript the first example shows on its own. */
+(function () {
+  var list = document.querySelector('.r-demo-tabs');
+  if (!list) return;
+  var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+  function select(tab, focus) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { select(tab, false); });
+    tab.addEventListener('keydown', function (ev) {
+      var next = ev.key === 'ArrowRight' ? i + 1 : ev.key === 'ArrowLeft' ? i - 1 : ev.key === 'Home' ? 0 : ev.key === 'End' ? tabs.length - 1 : null;
+      if (next === null) return;
+      ev.preventDefault();
+      select(tabs[(next + tabs.length) % tabs.length], true);
+    });
+  });
+  list.hidden = false;
+})();
+</script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

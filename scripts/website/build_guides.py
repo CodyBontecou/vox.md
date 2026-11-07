@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 HOST = "https://vox.isolated.tech"
 
 
-def render(source, template):
+def render(source, template, raw=True):
     text = source.read_text()
     if not text.startswith("<!--") or "-->" not in text:
         raise ValueError(f"Missing JSON metadata comment: {source}")
@@ -66,7 +66,11 @@ def render(source, template):
     # Substitute the template once: body content is not a template language.
     output = re.sub(r"__([A-Z_]+)__", lambda match: values[match[1]], template)
     output = decorate_html(output, f"/{section}/{slug}/")
-    return ROOT / "website" / section / slug / "index.html", output
+    target = ROOT / "website" / section / slug / "index.html"
+    if not raw:
+        from build_locales import enhance
+        output = enhance(output, target.relative_to(ROOT / 'website').as_posix())
+    return target, output
 
 
 def main():
@@ -79,7 +83,7 @@ def main():
     if not sources:
         raise SystemExit("No guide sources found")
     for source in sources:
-        target, output = render(source, template)
+        target, output = render(source, template, raw=False)
         if args.check:
             if not target.exists() or target.read_text() != output:
                 stale.append(str(target.relative_to(ROOT)))

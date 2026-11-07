@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr" data-search-section="セクション" data-search-guide="ガイド記事" data-search-empty="「{query}」に一致する結果はありません">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vox.md ドキュメント：全機能ガイド</title>
+  <meta name="description" content="Vox.md の速い捕獲、ルート、Markdown 保存先、iOS キーボード、ローカル文字起こしモデル、ウィジェット、ショートカット、Apple Watch、Mac の完全ドキュメント。">
+  <link rel="canonical" href="https://vox.isolated.tech/ja/docs/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="言語モデル向けの Vox.md ドキュメント">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="Vox.md ドキュメント：全機能ガイド">
+  <meta property="og:description" content="確実な Markdown キャプチャとルートから、ローカル音声モデル、キーボード、Apple Watch、Mac まで、Vox.md で提供しているすべての機能を紹介します。">
+  <meta property="og:url" content="https://vox.isolated.tech/ja/docs/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vox.md ドキュメント">
+  <meta name="twitter:description" content="Vox.md のキャプチャ、振り分け、文字起こし、システム連携の完全ガイド。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Vox.md の全機能ガイド",
+  "description": "Vox.md で提供するキャプチャ、振り分け、文字起こし、キーボード、システム連携、Apple Watch、Mac のすべての機能を説明します。",
+  "dateModified": "2026-10-26",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Cody Bontecou"
+  },
+  "mainEntityOfPage": "https://vox.isolated.tech/ja/docs/",
+  "inLanguage": "ja",
+  "name": "Vox.md ドキュメント：全機能ガイド"
+}
+</script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ja/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "ドキュメント一覧",
+      "item": "https://vox.isolated.tech/ja/docs/"
+    }
+  ],
+  "inLanguage": "ja",
+  "name": "Vox.md ドキュメント：全機能ガイド",
+  "description": "Vox.md の速い捕獲、ルート、Markdown 保存先、iOS キーボード、ローカル文字起こしモデル、ウィジェット、ショートカット、Apple Watch、Mac の完全ドキュメント。"
+}
+</script>
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/geist.css">
+  <link rel="service-desc" type="application/vnd.oai.openapi+json" href="/openapi.json" title="Vox.md の公開情報 API">
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/docs/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/docs/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/docs/">
+</head>
+<body>
+
+<header class="docs-header">
+<nav aria-label="メインナビゲーション">
+  <div class="nav-inner docs-header-inner">
+    <a href="/ja/" class="logo" aria-label="Vox.md ホーム">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md <span class="logo-sub">/ ドキュメント</span></span>
+    </a>
+    <form class="docs-search" role="search" action="./" onsubmit="return false">
+      <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="docs-search-input" type="search" placeholder="ドキュメントを検索" aria-label="ドキュメントを検索" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="docs-search-results" aria-keyshortcuts="/">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="docs-search-results" id="docs-search-results" role="listbox" aria-label="検索結果" hidden></ul>
+    </form>
+    <ul class="docs-header-links">
+      <li><a href="/ja/blog/">ブログ</a></li>
+      <li><a href="/ja/privacy.html">プライバシー</a></li>
+      <li><a class="mono" href="/llms.txt">llms.txt</a></li>
+    </ul>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li></ul></details></div>
+</nav>
+</header>
+
+<main>
+
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" aria-label="このページ内">
+      <div class="docs-sidebar-title">このページの内容</div>
+      <ol>
+        <li><a href="#getting-started">使い始める</a></li>
+        <li><a href="#quick-capture">速い捕獲</a></li>
+        <li><a href="#presets">ルート</a></li>
+        <li><a href="/ja/docs/location/">現在の位置と {location}</a></li>
+        <li><a href="#models">モデルと文字起こし</a></li>
+        <li><a href="#keyboard">iOS キーボード</a></li>
+        <li><a href="#system-integrations">システムとの連携</a></li>
+        <li><a href="#apple-watch">Apple Watch</a></li>
+        <li><a href="#mac">Mac パートナー</a></li>
+        <li><a href="#history-settings">ライブラリ、設定、プライバシー</a></li>
+        <li><a href="#troubleshooting">問題の解決</a></li>
+      </ol>
+    </aside>
+
+    <div class="docs-main">
+      <header class="docs-intro" aria-labelledby="docs-title">
+      <div class="page-eyebrow">ドキュメント · 現行製品ガイド</div>
+      <h1 class="page-title" id="docs-title">Vox.md でできることすべて</h1>
+      <p class="docs-hero-copy">キャプチャ、ルート、Markdown の振り分け、音声キーボード、ローカルモデル、Apple システム連携、Apple Watch、Mac、履歴、設定、プライバシーの完全ガイド。</p>
+      <div class="docs-meta-row" aria-label="ドキュメントの基本情報">
+        <span>2026年10月26日更新</span>
+        <span>iOS 17.6+</span>
+        <span>macOS 14+</span>
+        <span>watchOS 10+</span>
+      </div>
+      </header>
+
+      <section class="docs-directory" aria-labelledby="browse-docs">
+      <h2 class="visually-hidden" id="browse-docs">カテゴリから探す</h2>
+      <div class="docs-category-grid">
+        <a class="docs-category-card" href="#getting-started"><span>01</span><strong>使い始める</strong><small>プラットフォーム、設定、権限、最初のキャプチャ</small></a>
+        <a class="docs-category-card" href="#quick-capture"><span>02</span><strong>速い捕獲</strong><small>入力画面、メディア、音声、キャプチャバー、ドラフト</small></a>
+        <a class="docs-category-card" href="#presets"><span>03</span><strong>ルート</strong><small>処理、メタデータ、保存先、テンプレート</small></a>
+        <a class="docs-category-card is-guide" href="/ja/docs/location/"><span>ガイド記事</span><strong>現在の位置と <code>{location}</code></strong><small>トークンのみのリンク、任意のメタデータ、精度、プライバシー、移行</small></a>
+        <a class="docs-category-card" href="#models"><span>04</span><strong>モデル</strong><small>自動、Apple Speech、Whisper、Parakeet</small></a>
+        <a class="docs-category-card" href="#keyboard"><span>05</span><strong>キーボード</strong><small>設定、音声入力、挿入、触覚フィードバック、自動停止</small></a>
+        <a class="docs-category-card" href="#system-integrations"><span>06</span><strong>システムとの連携</strong><small>ウィジェット、共有シート、ショートカット、ディープリンク</small></a>
+        <a class="docs-category-card" href="#apple-watch"><span>07</span><strong>Apple Watch</strong><small>録音、ルートの同期、キュー、コンプリケーション</small></a>
+        <a class="docs-category-card" href="#mac"><span>08</span><strong>Mac</strong><small>会議のキャプチャ、ワークスペース、メニューバー、グローバルキーバインド</small></a>
+        <a class="docs-category-card" href="#history-settings"><span>09</span><strong>ライブラリと設定</strong><small>復元、統計、プライバシー、上限、購入、サポート</small></a>
+      </div>
+      </section>
+
+
+    <article class="docs-content">
+      <section class="docs-section" id="getting-started">
+        <div class="docs-section-label">01 / はじめに</div>
+        <h2>新しいノートの囲い込みを作らず、Markdown にキャプチャ</h2>
+        <p>Vox.md はローカルを優先したクイックキャプチャアプリです。Files で選んだ Obsidian の保管庫や、その他の書き込み可能なフォルダに、標準の Markdown と添付ファイルを書き込みます。Vox.md のアカウント、プラグイン、ホスト型のノートデータベースは不要です。</p>
+
+        <p>音声の手順全体については、 <a href="/ja/blog/voice-notes-to-obsidian-iphone/">iPhone の音声メモを Obsidian に送るガイドに沿って進めてください</a>で、フォルダの選択から生成された Markdown の確認までを説明しています。</p>
+
+        <p>キャプチャ方法を選ぶなら、次をお読みください。 <a href="/ja/blog/obsidian-quick-capture-iphone/">iPhone のキャプチャ方法を選ぶガイド</a> または <a href="/ja/compare/vox-md-vs-obsidian-quick-capture/">Vox.md と Obsidian の標準機能を比較</a>.</p>
+
+        <div class="docs-table-wrap" id="platform-availability">
+          <table class="docs-table">
+            <thead><tr><th>プラットフォーム</th><th>必要なもの</th><th>利用できるもの</th></tr></thead>
+            <tbody>
+              <tr><td>iPhone と iPad</td><td class="req">iOS/iPadOS 17.6+</td><td>速い捕獲、キーボード、共有シート、ウィジェット、ショートカット、ライブアクティビティ、履歴、設定</td></tr>
+              <tr><td>Mac</td><td class="req">macOS 14+</td><td>キャプチャ画面、録音・読み込み、ルート、モデル、履歴、メニューバー、グローバルキーバインド</td></tr>
+              <tr><td>Apple Watch</td><td class="req">watchOS 10+</td><td>ローカル録音、ルート選択、同期キュー、録音のみの配信、コンプリケーション</td></tr>
+              <tr><td>コントロールセンターのコントロール</td><td class="req">iOS 18+</td><td>速い捕獲とルート連動の録音操作</td></tr>
+              <tr><td>Apple Speech の自動バックエンド</td><td class="req">対応する iOS 26 デバイスと言語</td><td>システム管理によるデバイス上のライブ・一括文字起こし</td></tr>
+              <tr><td>Apple Intelligence の処理</td><td class="req">対応する iOS/macOS 26 デバイス</td><td>代替動作を備えた、デバイス上の整文、構造化出力、独自の指示</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="docs-callout">
+          <p><strong>基本の手順。</strong> ルートを選び、保存先を接続し、速い捕獲で入力やコンテンツの追加を行って送信します。ルートが、処理、整形、ノート内への配置を決めます。</p>
+        </div>
+
+
+        <h3 id="first-capture">最初のキャプチャを作る</h3>
+        <ol class="docs-steps">
+          <li><strong>Vox.md を開く。</strong><span>アプリは、内容が保持される Markdown 入力画面を直接開きます。</span></li>
+          <li><strong>ルートを選択。</strong><span>組み込みのデフォルトルートは削除できませんが、無効にはできます。少なくとも1つのルートを有効に保ち、保存先を指定してください。</span></li>
+          <li><strong>保存先を設定する。</strong><span>タップする項目は、 <em>目的地設定</em>で、Obsidian の保管庫か Files のフォルダを選び、新しいノート、ローリングノート、既存のノートから指定します。</span></li>
+          <li><strong>内容を追加。</strong><span>Markdown を入力するか、リンク、写真、ファイル、スキャン、スケッチ、位置情報、音声録音を追加します。</span></li>
+          <li><strong>送信をタップ。</strong><span>Vox.md は、選択したルートに保存し、次を表示します。 <em>捕獲 送信</em>。失敗した作業や待機中の作業は、復元できる状態で保持されます。</span></li>
+        </ol>
+
+        <h3 id="permissions">権限とシステムへのアクセス</h3>
+        <ul>
+          <li><strong>マイク：</strong> 音声録音、ローカル文字起こし、キーボードリスニング、音声キャプチャに使います。速い捕獲は、録音開始前でも、画面を初めて開いたときにこの許可を求める場合があります。</li>
+          <li><strong>音声認識：</strong> 対応するシステム上の Apple Speech。</li>
+          <li><strong>Files のフォルダへのアクセス：</strong> 保存先、テンプレート、読み込み、Watch の録音のみの出力。</li>
+          <li><strong>カメラと選択した写真：</strong> はメディア、スクリーンショット、手帳の写真、スキャンを追加する場合にのみ必要です。</li>
+          <li><strong>使用中の位置情報：</strong> は、独立した「現在の位置」キャプチャバーコマンド、または位置取得を有効にしたルートが発生時点の位置を1回取得する必要がある場合に限ります。Vox.md は継続的な位置追跡やバックグラウンドでの追跡を行いません。</li>
+          <li><strong>通知：</strong> 任意の配信状況。操作していないときの Apple Watch の失敗も含みます。</li>
+          <li><strong>キーボードのフルアクセスを許可：</strong> が、Vox.md キーボードのデバイス上での共有アプリ連携に必要です。次を参照してください。 <a href="#keyboard-setup">キーボードの設定</a>.</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="quick-capture">
+        <div class="docs-section-label">02 / 速い捕獲</div>
+        <h2>テキスト、メディア、ファイル、音声を扱う、内容が保持される1つの入力画面</h2>
+        <p>速い捕獲は、iOS と iPadOS の主な作業画面です。ルートメニューで現在の手順を変え、保存先メニューで、このドラフトの配信先をプレビューまたは一時的に上書きします。下部バーからライブラリと設定も開け、ソフトウェアキーボードの表示・非表示も切り替えられます。</p>
+
+        <h3 id="durable-drafts">保持されるドラフトと安全な配信</h3>
+        <ul>
+          <li>テキスト、添付ファイル、選択したルート、保存先の上書き、キャプチャ元は、中断や再起動後も保持されます。</li>
+          <li>編集は短いデバウンスの後に保存され、アプリをバックグラウンドに移すと、すぐに保存します。</li>
+          <li>送信の進行中に編集を続けても、新しい編集内容は破棄せず、新しいドラフトに保持します。</li>
+          <li>配信前に保存先の設定が必要です。入力画面には次を表示します。 <em>設定されていない目的地</em> を表示し、必要に応じて設定アクションを示します。</li>
+          <li>再試行可能なキャプチャリクエストはローカルに逐次記録するため、権限、ファイルプロバイダ、同期の失敗後にも再試行できます。</li>
+          <li>入力画面が空の間は、ルートを選択したりファイルを添付した後も、テキストを加えるまでキャッシュ済みの名言を表示します。名言の取得リクエストにドラフトの内容が含まれることはありません。</li>
+        </ul>
+
+        <p>やりたいこと別の手順は、次を参照してください。 <a href="/ja/blog/save-links-photos-obsidian-iphone/">リンク、写真、スキャンを Obsidian に保存</a>.</p>
+
+        <h3 id="capture-types">キャプチャの種類</h3>
+        <div class="docs-feature-grid">
+          <div><strong>テキストと Markdown</strong><p>選択範囲を扱える Markdown エディタに直接入力し、既存のテキストを貼り付け、ほかのデータとテキストを組み合わせられます。</p></div>
+          <div><strong>ウェブリンク</strong><p>HTTP または HTTPS の URL を、Markdown のリンク形式で追加します。</p></div>
+          <div><strong>写真とカメラ</strong><p>写真やスクリーンショットを選ぶか、新しく撮影します。画像は取り込み準備され、配信先のノートに埋め込まれます。</p></div>
+          <div><strong>ファイル</strong><p>Files から複数の項目を選択します。画像は埋め込みになり、音声は音声データのまま、その他のファイルは Obsidian 形式のリンクになります。</p></div>
+          <div><strong>書類のスキャン</strong><p>VisionKit でページをスキャンします。Vox.md はページ画像を保持し、PDF を作成して、デバイス上で可能な範囲の OCR を行います。</p></div>
+          <div><strong>手帳の OCR</strong><p>手動シャッターで手帳を最大10ページ撮影するか、手帳の写真を選択します。高精度の Vision OCR は言語を自動検出します。</p></div>
+          <div><strong>スケッチ一覧</strong><p>白い PencilKit キャンバスに黒いペンで描きます。Vox.md は、編集可能な描画データと PNG プレビューを保存します。</p></div>
+          <div><strong>現在の位置アクション</strong><p>位置を1回取得し、検証済みの Google Maps 用 Markdown リンクをドラフトに挿入します。この独立したキャプチャバーアクションは、ルートごとの2つの位置設定をどちらも変更しません。</p></div>
+          <div><strong>音声と読み込んだ音声</strong><p>入力画面で録音するか音声・動画を読み込み、ローカルで文字起こしして、結果をドラフトに追加するか、すぐに送信します。</p></div>
+        </div>
+        <p class="docs-note">アクセシビリティ：OCR は「このデバイスでテキストを抽出中」の進行バナーを表示します。VoiceOver は、各キャプチャの手順で OCR の進行状況と完了、「キャプチャを送信しました」「文字起こしをキャプチャに追加しました」を読み上げます。</p>
+
+        <h3 id="capture-bar">キャプチャバー</h3>
+        <p>「設定」→「キャプチャバー」で、アクションの並べ替えや非表示を設定できます。既定ではすべて表示されます。</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>アクション</th><th>動作</th></tr></thead>
+            <tbody>
+              <tr><td>メディア追加</td><td>スケッチ、カメラ、写真、スクリーンショット、ウェブリンクの選択肢を開きます。</td></tr>
+              <tr><td>ファイル追加</td><td>Files から複数のファイルを選択し、ドラフトとともに取り込み準備します。</td></tr>
+              <tr><td>スキャンドキュメント</td><td>複数ページのスキャン、PDF、ページ画像、可能な範囲の OCR を取得します。</td></tr>
+              <tr><td>テキスト抽出</td><td>OCR を中心にしたキャプチャ用に、手帳ページのキャプチャと手帳写真の選択を提供します。</td></tr>
+              <tr><td>九</td><td>エディタでの直前の操作を取り消します。</td></tr>
+              <tr><td>形式 Markdown</td><td>太字、斜体、ハッシュタグ、見出し1から見出し6を適用します。</td></tr>
+              <tr><td>Markdown リンク</td><td>挿入する内容は、 <code>[link text](url)</code> し、編集可能な部分を選択します。</td></tr>
+              <tr><td>内部リンク</td><td>Obsidian 形式の次を挿入します。 <code>[[Target]]</code> ウィキリンク。</td></tr>
+              <tr><td>二日目設定</td><td>今日、明日、今週末を選べます。任意の時刻指定と、±15m、±30m、±1h の調整が可能です。挿入する内容は、 <code>(@yyyy-MM-dd)</code> 、または時刻指定の形式を使います。</td></tr>
+              <tr><td>チェックリスト</td><td>Markdown のタスク接頭辞を適用します。 <code>- [ ]</code>.</td></tr>
+              <tr><td>弾丸リスト</td><td>Markdown の箇条書き接頭辞を適用します。</td></tr>
+              <tr><td>パスタ</td><td>クリップボードのテキストを現在の選択範囲に貼り付けます。</td></tr>
+              <tr><td>スケッチ</td><td>編集可能な PencilKit スケッチのキャプチャを開きます。</td></tr>
+              <tr><td>現在の位置</td><td>位置を1回取得し、Google Maps リンクを挿入します。</td></tr>
+              <tr><td>タイムスタンプを挿入</td><td>ローカルの日時を次の形式で挿入します。 <code>h:mm a yyyy-MM-dd</code>.</td></tr>
+              <tr><td>入力日付</td><td>挿入する内容は、 <code>yyyy-MM-dd</code>.</td></tr>
+              <tr><td>テキストケース変更</td><td>小文字、大文字、文頭を大文字、各単語の先頭を大文字、スラッグ化の変換を提供します。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">整形は現在の選択範囲に従い、改行を正規化し、不正な選択範囲を補正して、絵文字などの合成文字を途中で分割しないようにします。</p>
+
+        <h3 id="inline-voice">インラインの音声コントロール</h3>
+        <ul>
+          <li>音声ボタンをタップして開始・停止します。約0.45秒長押しすると、詳しい操作が表示されます。</li>
+          <li>録音中は、 <strong>一時停止</strong> ボタンが音声ボタンの横に表示されます。1回タップすると一時停止し、もう1回で再開します。最終的なノートは1件の録音のままで、一時停止中の音声と時間は含まれません。再開するまで、文字起こしのライブプレビューと音声の自動停止も一時停止します。</li>
+          <li><strong>下書きに追加</strong> は、完成した文字起こしを末尾に追加します。 <strong>すぐに送信</strong> は、選択したルートとその保存先を使って実行します。</li>
+          <li><strong>既定では「すぐに送信」を選択</strong> は iOS と Mac のキャプチャ画面で使えます。iOS の音声アクションを次から開くと、 <code>voxboard://capture?action=voice</code> は、その録音を「下書きに追加」に切り替えます。</li>
+          <li>この <strong>オーディオ</strong> の設定では、指定した場合に元の録音をドラフトの一部として保持します。</li>
+          <li><strong>オーディオ輸入</strong> は音声や動画ファイルを受け付け、同じローカル文字起こしパイプラインを使います。</li>
+          <li><strong>スピーカーの識別</strong> は、録音や読み込んだ音声に対する、任意のルート音声処理ステップです。初回に別の話者モデルを準備し、ローカルで可能な範囲の匿名ラベルを加えます。実行できない場合は、ライブラリに理由を表示し、プレーンな文字起こしを保持します。</li>
+          <li>「自動」は録音中、確定済みおよび暫定の Apple Speech テキストを、編集可能な入力画面に直接表示できます。Whisper や Parakeet のモデルを明示的に選んだ場合、文字起こしは録音停止後に行われます。</li>
+          <li>文字起こしに失敗しても、元の録音は失われず、復元できる状態で残ります。</li>
+          <li>継続的なキーボードリスニングは、明示的に有効にした場合だけ、アプリの起動をまたいで維持します。アプリでの単発録音は、音声セッションを待機状態に戻します。</li>
+        </ul>
+
+        <h3 id="capture-limits">キャプチャ入力の上限</h3>
+        <div class="docs-callout docs-callout-neutral">
+          <p>1件のリクエストに含められる上限は、 <strong>100,000文字</strong> の共有テキスト、 <strong>共有10項目</strong>、および <strong>250 MB</strong> の合計ステージング容量に対応します。写真とスクリーンショットは最大10項目、手帳のキャプチャは最大10ページを選択できます。Vox.md は上限を超えた項目を通知なく落とすのではなく、超過を拒否します。</p>
+        </div>
+      </section>
+
+      <section class="docs-section" id="presets">
+        <div class="docs-section-label">03 / ルート</div>
+        <h2>フォルダだけでなく、手順全体を保存</h2>
+        <p>ルートは、キャプチャの意味、テキストを処理するか、メタデータと音声の扱い、Markdown の正確な書き込み先を保存します。ルートは、入力テキスト、リンク、メディア、スキャン、ファイル、スケッチ、音声、ショートカット、ウィジェット、共有シート、Watch、Mac に適用されます。</p>
+
+        <h3 id="preset-management">ルートを作成・管理する</h3>
+        <ul>
+          <li>「設定」→「ルート」で、カスタムルートの作成、名前変更、有効化、無効化、アイコン選択、削除を行えます。</li>
+          <li>検索可能なアイコン選択画面で、記号を執筆、音声、タスク、個人、仕事に分類しています。</li>
+          <li>無効なルートは、通常の選択画面には表示されません。組み込みのデフォルトルートは削除できません。</li>
+          <li>組み込みのデフォルトルートは、波形の記号と、次のプロンプトを使います。 <em>アイデア、タスク、リンク、ファイル、スキャン、録音をキャプチャ。</em>, <code>type: capture</code> メタデータ、文章を整えるへの処理、入力テキスト処理オフ、音声保存オフ。</li>
+          <li>新しいカスタムルートは、次の状態で始まります。 <em>カスタムルート</em>は、スライダーのアイコンと次を使います。 <em>何をキャプチャしますか？</em> というプロンプトを使い、独自の指示を選択した状態で始まりますが、入力・混在テキストの処理はオフです。</li>
+        </ul>
+
+        <h3 id="processing-modes">処理モード</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>モード</th><th>結果</th><th>代替動作</th></tr></thead>
+            <tbody>
+              <tr><td>オリジナルを保持</td><td>AI による書き換えをせず、キャプチャしたテキストを保持します。</td><td>元のテキストを配信します。</td></tr>
+              <tr><td>文章を整える</td><td>意味と Markdown を保ち、大文字・小文字や句読点を整えます。</td><td>デバイス上の補助処理を使えない場合の元テキスト。</td></tr>
+              <tr><td>タスクチェックリスト</td><td>Markdown を出力 <code>- [ ]</code> タスク項目です。</td><td>一定の結果を返すチェックリスト整形機能。</td></tr>
+              <tr><td>会議メモ</td><td>生成する内容は、 <code>## Notes</code> セクションと、存在する場合は、 <code>## Action Items</code>.</td><td>一定の構造を持つ会議ノート。</td></tr>
+              <tr><td>カスタム指示</td><td>利用できる場合、デバイス上の Apple Intelligence で指示に従います。</td><td>指示をローカルで実行できない場合の元のテキスト。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>音声の文字起こしは、選択したルートのモードを使います。 <strong>テキストキャプチャのためのアプリケーション</strong> は別途有効化する設定で、既定ではオフです。入力した Markdown、OCR、その他のテキストを含む混在キャプチャの処理を許可します。オフのままなら、自分で書いた Markdown が予期せず書き換わることを防げます。処理済みの正確なリクエストは配信前に保存するため、再試行で変更後の設定を使って処理し直すことはありません。</p>
+
+        <h3 id="preset-metadata">メタデータ</h3>
+        <ul>
+          <li>静的メタデータは、次の形式で1つずつ入力します。 <code>key: value</code> の組を1行ずつ指定します。例： <code>tags: [journal, idea]</code>.</li>
+          <li><strong>ノートのフロントマター</strong> は、文書スコープでメタデータを書き込みます。</li>
+          <li><strong>エントリーのインラインフィールド</strong> 書き込む内容は、 <code>key:: value</code> フィールドをローリングノートの各項目の横に書き込みます。</li>
+          <li>利用できる場合、デバイス上の補助処理が、固定のルートメタデータに加えて、タイトル、タグ、カテゴリ、整形済みテキストを追加できます。</li>
+        </ul>
+
+        <h3 id="preset-location">任意の位置情報</h3>
+        <p>現在の位置は既定でオフで、ルートごとに設定します。有効にすると、Vox.md はキャプチャの発生時に位置を1回取得します。iOS/iPadOS、共有シート、ディープリンク・入力画面、Mac、入力画面を開くシステムアクションでは送信時、直接キューに入れるテキスト・リンク・ファイルのインテントでは呼び出し時、即時音声、キーボード経由のルート録音、ウィジェット・コントロールの録音、通常のキャプチャ配信に送る Apple Watch 録音では停止時です。Watch の「録音のみ」は、Markdown の位置出力を持たない Files への未処理音声書き出しであり、位置を取得しません。Vox.md は、継続的な位置監視やバックグラウンドでの位置追跡を一切行いません。</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>設定項目</th><th>動作</th></tr></thead>
+            <tbody>
+              <tr><td>現在地を使用</td><td>このルートで発生時点の位置を1回取得し、次を利用できるようにします。 <code>{location}</code>。メタデータを自動的に書き込むことはありません。</td></tr>
+              <tr><td>正確（既定）</td><td>プライバシー処理済みの発生時点の位置を保持し、選択したメタデータで必要な場合には、施設名を含められます。</td></tr>
+              <tr><td>都市</td><td>緯度と経度を小数点以下2桁に丸め、施設名のラベルを省きます。すべての派生フィールドとリンクが、その丸めた座標を使います。</td></tr>
+              <tr><td>位置情報メタデータを書き込む</td><td>に加え、構造化メタデータや高度なメタデータを別途有効化します。 <code>{location}</code> のエントリーテンプレート用リンク。</td></tr>
+              <tr><td>構造化フィールド</td><td>座標、緯度、経度、場所、市区町村、地域、国、Apple Maps、Google Maps、OpenStreetMap、 <code>geo:</code> URI、精度、タイムスタンプ、ソース、キャプチャ ID。</td></tr>
+              <tr><td>高度な YAML テンプレート</td><td>ノートのフロントマターに、検証済みで範囲を制限した YAML を使います。無関係なフロントマターは置き換えられず、エントリーのインラインフィールドには使えません。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>「位置情報メタデータを書き込む」が有効な場合、文書スコープは、キャプチャ ID をキーとして、設定したフロントマターのコレクションに各結果を追加します。1つのノートに複数の位置を残せますが、冪等な再試行で同じ位置を重複して追加することはありません。一方、エントリースコープでは、選択した構造化フィールドを次の形式で出力します。 <code>key:: value</code> を、そのキャプチャ項目の横に書き込みます。</p>
+        <p>場所、市区町村、地域、国は、有効なメタデータフィールドが必要とする場合だけ、Apple のシステム逆ジオコーダを使います。トークンだけの位置利用では、逆ジオコーディングを行いません。このサービスは無料で API キーも不要ですが、ネットワーク接続を使う場合があります。照会に失敗してもキャプチャは続行し、座標だけのメタデータを使います。エントリーの接頭辞、接尾辞、保管庫内の Markdown テンプレートでは、次を使えます。 <code>{location}</code> を使い、メタデータ出力を有効にせず、ルートで使えるプライバシー処理済みの位置から、クリック可能な Google Maps リンクを挿入します。「現在の位置」がオフか取得不能の場合、トークンは空になります。プロバイダのリンクを作るだけでは、Apple、Google、OpenStreetMap に接続しません。リンクを開くと、そのリンク内に保存された正確または丸め済みの座標が、該当プロバイダに渡ります。</p>
+        <p>新しいルートと、以前無効だったルートは、両方の設定をオフに保ちます。すでに位置メタデータを書き込んでいたルートは、更新後も両方をオンに保ち、従来の出力を維持します。</p>
+        <div class="docs-callout">
+          <strong>現在の位置の完全ガイド</strong>
+          <p>参照先： <a href="/ja/docs/location/">現在の位置、 <code>{location}</code>、およびメタデータ</a> で、設定パターン、例、キャプチャ元ごとの取得タイミング、移行時の動作、プライバシー、トラブルシューティングを確認してください。</p>
+        </div>
+        <div class="docs-callout docs-callout-neutral">
+          <strong>位置を取得できない場合</strong>
+          <p>操作可能な画面では、再試行、キャンセル、今回だけ位置なしで送信、または次を選べます。 <em>常に位置なしで送信</em> をそのルートで選べます。保存した選択は、ルートの位置設定でリセットします。無人実行の、 <em>尋ねる</em> キャプチャは、利用者が判断するまで、発生時に位置を取得できなかった結果を保持します。再試行や復元で、後の位置を再取得することはありません。</p>
+        </div>
+
+        <h3 id="destinations">Markdown の保存先</h3>
+        <p>各ルートには、Obsidian の保管庫または書き込み可能な Files フォルダを起点とする保存先が1つあります。</p>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>新しいノート</strong><p>次のようなトークンを使い、キャプチャごとに独立した Markdown ファイルを作成します。 <code>{timestamp}</code>, <code>{date}</code>, <code>{time}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{id8}</code>、および <code>{id}</code>.</p></div>
+          <div><strong>ローリングノート</strong><p>日、週、月、四半期、年単位のノートに追加します。パスには、次も使えます。 <code>{period}</code> と <code>{week}</code>。新しい保存先の既定は、 <code>Journal/{period}.md</code> で日単位の期間を使います。</p></div>
+          <div><strong>既存のノート</strong><p>選択した保管庫やフォルダの中にある Markdown ファイルを選びます。Vox.md は、対象が安全にそのルート内に収まっていることを確認します。</p></div>
+        </div>
+
+        <p>ルートのレシピ全体は、次を参照してください。 <a href="/ja/blog/append-to-obsidian-daily-note-iphone/">テキストと音声を Obsidian のデイリーノートに追加</a>.</p>
+
+        <p><a href="/ja/blog/obsidian-capture-templates/">受信ノート、日記、タスク用テンプレートのレシピを使う</a> でエントリーの書式を一定に保ちます。</p>
+
+        <h3 id="placement-templates">挿入位置、見出し、テンプレート</h3>
+        <ul>
+          <li><strong>底</strong> で末尾に追加します。 <strong>TOP</strong> で先頭に追加します。 <strong>ヘッド</strong> は、レベル1から6までの指定した見出しの下に挿入します。</li>
+          <li>見出しがない場合は、次を選択します。 <strong>エラー表示</strong> または <strong>創出ヘッド</strong>.</li>
+          <li>保管庫内の Markdown テンプレートファイル、再利用可能な入り口 寺、または独自の接頭辞・接尾辞を使います。</li>
+          <li>エントリーの書式で使えるものは、 <code>{date}</code>, <code>{time}</code>, <code>{hour}</code>, <code>{minute}</code>, <code>{second}</code>, <code>{timestamp}</code>, <code>{year}</code>, <code>{YR}</code>, <code>{month}</code>, <code>{day}</code>, <code>{week}</code>, <code>{source}</code>, <code>{id8}</code>, <code>{id}</code>、および <code>{location}</code>.</li>
+          <li>既定の添付ファイル用サブフォルダは、 <code>attachments</code>.</li>
+          <li><strong>保護回復</strong>は既定でオフで、表示可能な次の内容を書き込みます。 <code>vox-capture</code> HTML コメントを書き込み、重複した再試行を検出できるようにします。</li>
+          <li>Vox.md は、絶対パス、バックスラッシュ、パストラバーサル、安全でない名前、シンボリックリンクによる範囲外へのアクセスを拒否します。</li>
+        </ul>
+
+        <h3 id="capture-overrides">1回のキャプチャに限る上書き</h3>
+        <p>保存先のコントロールでは、ルートの既定値、このキャプチャだけを先頭や末尾に配置、今回限りの入り口 寺の適用、同じ保管庫の別のノートの選択ができます。 <strong>ルートの保存先のデフォルトを使用</strong> は、上書きを解除します。これらの選択は現在のドラフトだけに作用し、ルートを変更しません。</p>
+
+        <h3 id="audio-export">音声の保持と互換性のための書き出し</h3>
+        <ul>
+          <li>音声の保存モードは、 <strong>オフ</strong>, <strong>ノートと同じ場所</strong>、または <strong>添付フォルダ</strong>.</li>
+          <li>Markdown には、次のような Obsidian 構文で、保持した音声を先頭や末尾に埋め込めます。 <code>![[recording.m4a]]</code>.</li>
+          <li>統合された Markdown 保存先がない従来の直接音声設定では、 <strong>メモをファイルに保存</strong> は TXT、MD、JSON、YAML、新規ファイル作成と追記、モデルや言語などのファイル名トークン、Markdown テンプレート、Obsidian Bases の設定、選択可能な YAML プロパティ、任意の次の機能に対応しています。 <code>.md</code> 拡張子を YAML に使います。</li>
+          <li>互換性書き出し設定は、統合されたキャプチャ保存先がルートにない、直接音声実行にのみ適用します。</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="models">
+        <div class="docs-section-label">04 / モデルと文字起こし</div>
+        <h2>システムのバックエンドか、任意のローカルモデルを選ぶ</h2>
+        <p>文字起こしはすべて Apple デバイス上で行われます。iOS の既定は「自動」です。任意の Whisper と Parakeet のモデルファイルは、利用者が指定した場合だけダウンロードし、選択、ダウンロード中のキャンセル、後からの削除ができます。</p>
+
+        <p><a href="/ja/blog/offline-transcription-iphone-markdown/">オフラインの文字起こし手順を準備する</a> をローカルバックエンドと書き込み可能な保存先で使います。</p>
+
+        <h3 id="model-options">利用できる文字起こしの選択肢</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>選択肢</th><th>おおよそのサイズ</th><th>最も合う用途</th></tr></thead>
+            <tbody>
+              <tr><td>自動</td><td>システムが管理</td><td>対応する iOS 26 デバイスと言語では Apple Speech を優先し、利用者が明示的にダウンロードしたローカルモデルにのみ切り替えます。</td></tr>
+              <tr><td>Whisper Tiny</td><td>75 MB</td><td>Whisper で最小のダウンロード容量と最速の選択肢。</td></tr>
+              <tr><td>Whisper Base</td><td>142 MB</td><td>バランスのよい小型ローカルモデル。以前の Mac の既定。</td></tr>
+              <tr><td>Whisper Small</td><td>466 MB</td><td>より高い精度。ストレージと処理の負担も増えます。</td></tr>
+              <tr><td>Whisper Medium</td><td>1.5 GB</td><td>多言語対応の大きな Whisper モデル。</td></tr>
+              <tr><td>Whisper Large v3 Turbo</td><td>1.6 GB</td><td>利用できる中で最大の Whisper モデル。</td></tr>
+              <tr><td>Parakeet v2</td><td>~800 MB</td><td>英語向けに最適化した Core ML/FluidAudio モデル。</td></tr>
+              <tr><td>Parakeet v3</td><td>~800 MB</td><td>25言語に対応した Core ML/FluidAudio モデル。</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="automatic-model">「自動」の仕組み</h3>
+        <ul>
+          <li>対応する iOS 26 デバイスでは、「自動」が選択言語の Apple システム管理 Speech 認識器を確認し、必要に応じて言語アセットを準備します。</li>
+          <li><strong>システム言語</strong> はデバイスの言語に従います。録音が別の言語なら、その言語を明示的に選んでください。</li>
+          <li>「自動」が通知なく代替の Whisper や Parakeet をダウンロードすることはありません。以前に利用者がダウンロードを選んだモデルだけを使えます。</li>
+          <li>ライブ Apple Speech は、安全に挿入できる確定済みテキストと、まだ変わり得る暫定テキストを区別します。</li>
+          <li>Whisper と Parakeet を明示的に選ぶ場合は、セグメント終了後に一括で文字起こしします。</li>
+        </ul>
+
+        <h3 id="model-languages">言語</h3>
+        <ul>
+          <li><strong>Whisper:</strong> 自動検出、英語、スペイン語、フランス語、ドイツ語、イタリア語、ポルトガル語、オランダ語、ポーランド語、ロシア語、中国語、日本語、韓国語、アラビア語、ヒンディー語、トルコ語、ベトナム語、タイ語、ウクライナ語、スウェーデン語、デンマーク語、ノルウェー語、フィンランド語。</li>
+          <li><strong>自動：</strong> システム言語に加え、Apple がそのロケールに対応している場合は、Whisper に明示的に掲載された言語を使えます。</li>
+          <li><strong>Parakeet v2:</strong> 英語。</li>
+          <li><strong>Parakeet v3:</strong> ブルガリア語、クロアチア語、チェコ語、デンマーク語、オランダ語、英語、エストニア語、フィンランド語、フランス語、ドイツ語、ギリシャ語、ハンガリー語、イタリア語、ラトビア語、リトアニア語、マルタ語、ポーランド語、ポルトガル語、ルーマニア語、スロバキア語、スロベニア語、スペイン語、スウェーデン語、ロシア語、ウクライナ語。Parakeet では言語を自動検出します。</li>
+        </ul>
+
+        <h3 id="parakeet-autostop">Parakeet キーボードの自動停止</h3>
+        <p>任意の約1 MB の <strong>声の停止検出</strong> モデルは、明示的に選んだ Parakeet v2 または v3 のキーボード録音を、無音の後に停止できます。次を有効にしてください。 <strong>無音の後に Parakeet を停止する</strong> で約0.5、0.75、1、1.5、2秒から選択します。補助モデルが利用可能になると、既定では0.75秒の無音で停止する設定が有効になります。「自動」と Whisper は、引き続き手動で停止します。</p>
+
+        <h3 id="audio-pipeline">ローカル音声の動作</h3>
+        <ul>
+          <li>Whisper の入力は、16 kHz、モノラル、16ビットの音声に正規化します。</li>
+          <li>iOS の継続リスニングは10分の循環バッファを使い、セグメント開始時に2秒のプリロールを含めます。</li>
+          <li>Whisper が使うのは、 <code>whisper.cpp</code>。Parakeet は FluidAudio と Core ML を使います。Whisper は Mac で Metal による高速化を使います。</li>
+          <li>モデルのダウンロードにはネットワーク接続が必要ですが、選択したバックエンドの準備後は、ローカルで文字起こしできます。</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="keyboard">
+        <div class="docs-section-label">05 / iOS キーボード</div>
+        <h2>編集中のテキスト欄にそのまま音声入力</h2>
+        <p>Vox.md のキーボードは、メッセージ、メモ、メール、Safari、Slack など、標準の iOS キーボードを受け付けるアプリで使えます。KeyboardKit レイアウトの上に音声ツールバーが表示され、非公開の共有 App Group を通じてメインの Vox.md アプリと通信します。</p>
+
+        <h3 id="keyboard-setup">キーボードを設定する</h3>
+        <ol class="docs-steps">
+          <li><strong>Vox.md で文字起こしを準備。</strong><span>対応デバイスでは「自動」を選んだまま使うか、「設定」→「モデル」で Whisper または Parakeet をダウンロードして選択します。</span></li>
+          <li><strong>キーボードを追加。</strong><span>iOS の「設定」→「一般」→「キーボード」→「キーボード」→「新しいキーボードを追加」を開き、Vox.md を選択します。</span></li>
+          <li><strong>「フルアクセスを許可」を有効にする。</strong><span>現在のキーボードの手順では、共有 App Group の状態を使い、メインアプリと録音を連携するために必要です。</span></li>
+          <li><strong>キーボードを切り替える。</strong><span>テキスト欄を開き、地球儀キーで Vox.md を選んで、マイクをタップします。</span></li>
+        </ol>
+        <div class="docs-callout">
+          <strong>ここでのフルアクセスの役割</strong>
+          <p>iOS の権限名は広い意味を持っています。Vox.md は、デバイス上のアプリとキーボードの連携、状態の共有、任意の触覚フィードバックに使用します。Vox.md は、キー入力、音声入力のテキスト、文字起こし、マイク音声を Vox.md のサーバーにアップロードすることはありません。次を参照してください。 <a href="/ja/privacy.html">プライバシーポリシー</a>.</p>
+        </div>
+
+        <h3 id="keyboard-workflow">音声ツールバーと挿入</h3>
+        <ul>
+          <li>ツールバーには、現在のバックエンド、状態、録音時間、リアルタイムの波形、マイク・停止アクションが表示されます。</li>
+          <li>前後のコントロールで、利用可能なダウンロード済みバックエンドを順に切り替えます。</li>
+          <li>リスニングが有効でない場合、キーボードは Vox.md を一度開いてリスニングを開始し、元のテキスト欄に戻ることができます。</li>
+          <li>「自動」では、話している間に確定した文字起こしの差分を挿入します。暫定の単語は、Apple が確定するまで表示のみにとどまります。</li>
+          <li>Whisper または Parakeet では、停止またはセグメントの自動停止後に、完成した文字起こしを挿入します。</li>
+          <li>挿入が中断または一時停止された場合、待機中のテキストを永続化し、次にキーボードが表示されたときに再試行します。</li>
+          <li>ツールバーには、次のような状態が表示されます。 <em>オープン Vox.md</em>, <em>翻訳...</em>、および <em>フルアクセスを有効にする</em>.</li>
+        </ul>
+
+        <h3 id="keyboard-customization">キーボードのカスタマイズ</h3>
+        <ul>
+          <li><strong>触覚フィードバック</strong> は既定で有効です。Vox.md の設定で変更できます。</li>
+          <li>英語、ドイツ語、スペイン語、フランス語、イタリア語、ポルトガル語、オランダ語、スウェーデン語、デンマーク語、ノルウェー語では、長押しで代替文字の候補を表示できます。</li>
+          <li>Parakeet を明示的に選んだ場合、「設定」→「モデル」から、無音に基づく自動停止を追加できます。</li>
+          <li>15分の無料文字起こし枠は、アプリ内の録音や読み込みに加え、キーボードの音声入力にも適用されます。</li>
+        </ul>
+      </section>
+
+      <section class="docs-section" id="system-integrations">
+        <div class="docs-section-label">06 / システム連携</div>
+        <h2>共有シート、ホーム画面、ロック画面、ショートカットからキャプチャを開始</h2>
+
+        <h3 id="share-extension">共有拡張機能</h3>
+        <p>iOS の共有シートのアクション名は、 <strong>Vox.mdにキャプチャ</strong>。テキスト、HTTP/HTTPS URL、画像、ファイル、動画を、共通の項目数とアセット容量の上限内で受け付けます。ルートと保存先を選び、任意のメモを加えて送信します。そのルートで現在の位置を使う場合、共有機能はメタデータ出力の有無にかかわらず、この送信操作時に発生時点の位置を1回取得します。内容は非公開の App Group に取り込み準備され、永続的なキューに入れられ、配信のために Vox.md で開かれます。メインアプリが必要な配信では、次を使います。 <strong>オープン Vox.md</strong>.</p>
+
+        <h3 id="widgets">ホーム画面とロック画面のウィジェット</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>速い捕獲</strong><p>内容が保持される Markdown ドラフトを開きます。中・大サイズのウィジェットには、ノート、写真、スクリーンショット、カメラ、ファイル、リンク、スキャン、スケッチ、音声のアクションがあります。</p></div>
+          <div><strong>速記録</strong><p>設定した録音手順を開始し、対応するホーム画面・ロック画面の表示形式で、準備完了、リスニング中、無効の状態を示します。</p></div>
+          <div><strong>ウィジェットの安全設定</strong><p>設定でロック画面の録音ボタンをオフにすると、すぐに録音を開始せず、オフの状態が表示されます。</p></div>
+        </div>
+
+        <h3 id="control-center-live-activities">コントロールセンター、ライブアクティビティ、Dynamic Island</h3>
+        <ul>
+          <li>iOS 18+ では、コントロールセンターから利用可能な Vox.md のキャプチャ・録音コントロールを追加できます。インストール済みのバージョンで表示されるルートと設定を指定してください。</li>
+          <li>録音コントロールを使う前に、Vox.md でマイク、モデル、保存先の設定を完了してください。iOS とアプリのバージョンによっては、録音時にアプリが開きます。バックグラウンドでのキャプチャに頼る前に、お使いのデバイスで短い録音を試してください。</li>
+          <li>この <strong>ライブアクティビティモニタ</strong> の設定で、ロック画面と Dynamic Island の録音状態と録音・停止操作を制御します。</li>
+          <li>ライブアクティビティには、録音中、タイマー、処理中、準備完了、録音、停止の状態を表示します。</li>
+          <li>ライブアクティビティは iOS 17 から利用でき、コントロールセンターのコントロールには iOS 18 が必要です。</li>
+        </ul>
+
+        <h3 id="shortcuts">ショートカットと App Intents</h3>
+        <p>ルートは、ショートカットや対応コントロールで選択可能なエンティティとして表示されます。「現在地を使用」が有効な場合、直接キューに入れるテキスト・リンク・ファイルのインテントは呼び出し時に、速い捕獲を開くアクションは送信時に、録音アクションは録音停止時に位置を取得します。メタデータ出力の有無で、このタイミングは変わりません。無人実行の次のリクエストでは、 <em>尋ねる</em> リクエストで位置を取得できない場合、発生時点で取得不能だった結果を保持し、再取得せずに後で対応を選べるようにします。インストール済みの Vox.md で使える操作を選んでください。キャプチャの操作には次があります。</p>
+        <ul class="docs-columns">
+          <li>速いキャプチャー</li>
+          <li>記録 捕獲</li>
+          <li>スクリーンショットを撮影</li>
+          <li>テキストをキャプチャ Markdown</li>
+          <li>キャプチャリンク to Markdown</li>
+          <li>ファイルをキャプチャ Markdown</li>
+        </ul>
+
+        <h3 id="action-button-recording">アクションボタンの録音設定</h3>
+        <p>Vox.md を一度開き、マイクの許可、文字起こしバックエンドの準備、ルートと保存先の接続を行います。ショートカットで利用可能な Vox.md のキャプチャアクションを追加し、ルートを選択します。「設定」→「アクションボタン」→「ショートカット」に割り当てる前に、端末のロックを解除した状態で実行し、意図したノートに保存されるか確認してください。</p>
+        <p class="docs-note">利用可能なアクションとバックグラウンド録音の動作は、インストール済みのバージョンと iOS によって異なります。デバイスのショートカットに表示されるアクションを使ってください。録音にアプリの起動が必要なら、Vox.md を開いて録音します。選択画面にショートカットがあるだけでは、ロック中の端末から録音できる保証にはなりません。</p>
+
+        <h3 id="deep-links">ディープリンク</h3>
+        <p>Vox.md が登録するのは、 <code>voxboard://</code> の URL スキーム。クエリの値は URL エンコードしてください。</p>
+        <div class="docs-table-wrap">
+          <table class="docs-table docs-code-table">
+            <thead><tr><th>URL</th><th>動作</th></tr></thead>
+            <tbody>
+              <tr><td><code>voxboard://capture</code></td><td>内容が保持される速い捕獲入力画面を開きます。</td></tr>
+              <tr><td><code>voxboard://capture?action=photos</code></td><td>写真の選択画面を開きます。その他のアクション： <code>screenshots</code>, <code>camera</code>, <code>files</code>, <code>scan</code>, <code>sketch</code>, <code>link</code>、および <code>voice</code>.</td></tr>
+              <tr><td><code>voxboard://capture?text=...</code></td><td>長さを制限したテキストを含むドラフトを開きます。</td></tr>
+              <tr><td><code>voxboard://capture?url=https%3A%2F%2F...</code></td><td>HTTP/HTTPS リンクを含むドラフトを開きます。</td></tr>
+              <tr><td><code>voxboard://capture?route=...</code></td><td>有効なルートを選びます。対応するアクション、テキスト、URL と組み合わせられます。</td></tr>
+              <tr><td><code>voxboard://capture-request?id=...</code></td><td>システム拡張やインテントが作成した永続リクエストを引き受けます。</td></tr>
+              <tr><td><code>voxboard://listen</code></td><td>キーボードのリスニング開始手順を起動します。</td></tr>
+              <tr><td><code>voxboard://record</code></td><td>従来の録音開始方法を、リスニングに転送します。</td></tr>
+              <tr><td><code>voxboard://widget-record</code></td><td>従来のウィジェットからの録音開始方法。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="docs-note">不明または重複したパラメータ、不正な UUID、安全でないルート識別子、HTTP 以外の URL、共通上限を超えたテキストは拒否します。</p>
+      </section>
+
+      <section class="docs-section" id="apple-watch">
+        <div class="docs-section-label">07 / Apple Watch</div>
+        <h2>Watch でローカル録音し、iPhone 経由で配信</h2>
+
+        <p><a href="/ja/blog/apple-watch-obsidian-voice-notes/">Apple Watch から Obsidian への設定ガイドに沿って進む</a> で、ルート選択、転送、配信の確認を行えます。</p>
+
+        <h3 id="watch-recording">録音の手順</h3>
+        <ul>
+          <li>Watch アプリには、準備完了、録音中、一時停止中、同期中、待機中、文字起こし中、保存中、送信済み、対応が必要、の状態を表示します。</li>
+          <li>録音、一時停止・再開、停止、キャンセル、同期、更新を使います。一時停止すれば、ノートを分割せずに考えを整理できます。一時停止中はタイマーも止まり、その時間は録音に含まれません。キャンセルは同期ではなく、ローカル録音を明示的に削除します。</li>
+          <li>録音はローカルに逐次記録され、中断やクラッシュの後に復元されます。</li>
+          <li>録音は、iPhone が配信または破棄を確認するまで Watch に残ります。</li>
+          <li>「現在地を使用」が有効で、通常のキャプチャ配信を使うルートでは、Watch が録音停止時に Watch 側で位置を1回取得し、プライバシー処理済みの結果をルートのスナップショットとともに転送します。iPhone 自身の位置に置き換えることはありません。「録音のみ」は Markdown への出力面を持たず、未処理の音声を書き出すため、位置取得を行いません。</li>
+        </ul>
+
+        <h3 id="watch-presets">Watch のルート</h3>
+        <p>Watch の次の項目から、有効な iPhone ルートを選択します。 <strong>ルート</strong> カードを使います。Vox.md は、安全なスナップショットを録音とともに転送します。iPhone が利用できない場合、要求した選択は保留となり、最後に確認済みのルートが有効なままになります。</p>
+
+        <h3 id="watch-queue">iPhone の Watch 録音キュー</h3>
+        <p>iPhone のキューには、録音時刻、長さ、ルート、処理状態、配信操作が表示されます。失敗した項目は、再試行、ルートの変更、破棄、文字起こしなしのキャプチャが可能です。破棄すると、保持されていた音声と待機中の配信が削除されます。</p>
+
+        <h3 id="watch-recording-only">「録音のみ」の出力</h3>
+        <ul>
+          <li>ルートの出力を次に設定します。 <strong>録音のみ</strong> で、文字起こし、AI 処理、文字起こし枠の消費をせず、M4A 音声を Files のフォルダにコピーします。</li>
+          <li>既定のファイル名テンプレートは、 <code>recording-{timestamp}-{id8}</code>.</li>
+          <li>ルートを使う前に、iPhone で録音フォルダを一度選択してください。</li>
+          <li>iOS により、バックグラウンド配信が遅れる場合があります。Vox.md を強制終了すると、アプリを再び開くまで配信できません。</li>
+        </ul>
+
+        <h3 id="watch-complication">コンプリケーションとウィジェット</h3>
+        <p>この <strong>音声ノートレコード</strong> コンプリケーションは、円形、長方形、インライン、コーナーの各ファミリーに対応しています。Watch のローカル録音を開くか切り替え、タイマーや状態に応じたラベルを表示します。</p>
+      </section>
+
+      <section class="docs-section" id="mac">
+        <div class="docs-section-label">08 / Mac コンパニオン</div>
+        <h2>macOS でも同じキャプチャシステムを使う</h2>
+        <p>Mac アプリには、キャプチャ、ライブラリ、設定があり、iOS と同じローカルモデル、ルート、ルート処理、書き出し、再試行のアーキテクチャを共有します。</p>
+
+        <h3 id="mac-workspace">キャプチャのワークスペース</h3>
+        <ul>
+          <li>Markdown の入力と編集、貼り付け、ファイル・画像・音声のドラッグ＆ドロップ。</li>
+          <li>内蔵カメラ、外部カメラ、連係カメラの入力を使います。</li>
+          <li>スキャンや PDF の読み込み、マウス・トラックパッド・接続したタブレットでのスケッチ作成、リンク、ウィキリンク、期限、テキスト変換の追加ができます。</li>
+          <li>録音に使う項目は、 <strong>下書きに追加</strong> または <strong>すぐに送信</strong>。必要に応じて、ドラフトモードで音声を保持します。</li>
+          <li><strong>一時停止</strong> と <strong>再開</strong> をステータスバーからマイク録音に適用します。一時停止中の音声は含まれないため、1つの完成ノートを何回かに分けて録音できます。会議キャプチャは一時停止しません。</li>
+          <li>音声や動画を読み込み、ローカルで文字起こし。</li>
+          <li>Command-Return を押してキャプチャを送信します。「現在地を使用」が有効なルートは、メタデータ出力の有無にかかわらず、送信時または録音停止時に Mac で位置を1回取得します。</li>
+          <li>保存先の設定バナーとルートの詳細画面に、選択したルートが解決するノートと挿入位置が表示されます。</li>
+        </ul>
+
+        <h3 id="mac-meeting">ステムを分けたミーティングのキャプチャ</h3>
+        <p>入力モードの選択を、次から切り替えます。 <strong>マイク</strong> への <strong>ミーティング</strong> を使い、Mac のアプリが再生する音声と自分のマイクを、明確に分かれた2つの音声トラックとして録音します。Vox.md は ScreenCaptureKit の単一アプリケーションモードを使うため、アプリを1つだけ正確に指定し、Vox.md 自体をキャプチャすることはありません。</p>
+        <ul>
+          <li>録音中は、ステータスバーにシステム音声とマイクのリアルタイム音量メーター、入力元ごとの状態、キャプチャの警告を表示します。</li>
+          <li>両方の音声トラックは、復元用マニフェストとともに永続化されるチャンクとして書き込まれます。ストリームの停止、マイクの取り外し、強制終了などの中断が起きても、安全に確定処理され、会議を文字起こしできます。中断されたセッションは、次に録音キューが再開するときに自動的に復元されます。</li>
+          <li>停止後、各音声トラックをデバイス上で個別に文字起こしし、共通のタイムラインに結果を交互に並べます。自分のマイクは、次のように表示されます。 <strong>利用者</strong>、アプリケーションの音声トラックにはリモート話者のラベルを付けます。任意の話者識別を使うと、複数のリモート音声をさらに分けられます。</li>
+          <li>両方の音声トラックをミックスした再生用音声を、録音の音声として保持します。完成した文字起こしは、ほかの録音と同様、ルート、「下書きに追加」または「すぐに送信」、クリップボードの設定に従います。</li>
+        </ul>
+
+        <h3 id="mac-keybinds">グローバルキーバインド</h3>
+        <p>「設定」→「グローバルキーバインド」で次の操作にショートカットを割り当てられます。 <strong>トランスクリプト Clipboard</strong>, <strong>選択中のルート</strong>、または有効な任意のルートを指定できます。ショートカットは既定でオフで、修飾キー以外のキーに Control、Option、Command のいずれかを組み合わせる必要があります。Shift も追加でき、競合は拒否します。有効なショートカットをもう一度押すと、録音を停止します。</p>
+        <div class="docs-callout docs-callout-neutral">
+          <p><strong>トランスクリプト Clipboard</strong> は、ノート、ライブラリ項目、保持する音声を作成しません。Mac の任意のアプリにすばやく音声入力するための機能です。</p>
+        </div>
+
+        <h3 id="mac-menu-bar">メニューバーとアプリの表示</h3>
+        <ul>
+          <li>表示方法の選択肢は、 <strong>ドック + メニューバー</strong> （既定）、 <strong>メニューバーのみ</strong>, <strong>ドックのみ</strong>、および <strong>隠し</strong>.</li>
+          <li>メニューバーに、録音中、文字起こし中、書き出し中の状態を表示します。</li>
+          <li>メニューには、録音開始、停止して文字起こし、音声の読み込み…、直前の文字起こしをコピー、直前の書き出しを表示、ルート選択、キャプチャを表示、ライブラリを表示、データフォルダを表示、Vox.md を終了、があります。</li>
+          <li>Mac アプリで Control-B を押すと、クリックできる操作の上にキーボードのヒントを表示します。</li>
+        </ul>
+
+        <h3 id="mac-history">Mac の履歴とモデル</h3>
+        <p>ローカル履歴の検索、再読み込み、消去、コピー、削除、整形済み・未加工の文字起こし詳細の表示、配信済みノートの Finder 表示ができます。モデル画面では、Whisper または Parakeet のモデルのダウンロード、選択、削除と、文字起こし言語の変更ができます。Whisper は対応する Mac で Metal による高速化を使います。</p>
+      </section>
+
+      <section class="docs-section" id="history-settings">
+        <div class="docs-section-label">09 / ライブラリ、設定、プライバシー</div>
+        <h2>作業の復元、ローカルデータの管理、無制限利用の解除</h2>
+
+        <h3 id="history">iOS の統合ライブラリ</h3>
+        <ul>
+          <li>ライブラリでは、ローカル音声の文字起こしとキャプチャ配信の記録を、検索可能な1つのリストにまとめます。</li>
+          <li>未加工のテキスト、整形済みテキスト、タイトル、タグ、カテゴリを検索し、引いて更新できます。</li>
+          <li>整形済みまたは未加工の文字起こしテキストのコピー、文字起こしのメタデータと本文の編集、共有シート経由での Markdown コピーの書き出しができます。</li>
+          <li>文字起こしを1件削除するか、ローカル履歴をすべて消去します。履歴を消去しても、保存先にすでに書き込んだ Markdown ノートや添付ファイルは削除されません。</li>
+          <li>待機中のキャプチャを再試行し、大まかなキャプチャ元、ルート、保存先、ノートのパス、添付数、時刻、結果、失敗の分類を確認します。</li>
+          <li>文字起こしの編集項目には、タイトル、タグ、カテゴリ、整形済みテキスト、未加工の文字起こしがあります。</li>
+        </ul>
+
+        <h3 id="stats">個人活動の国</h3>
+        <p>「設定」→「アクティビティ」→「統計」で、これまでの利用状況を確認できます。録音とキャプチャの総数、録音時間、添付数に加え、直近7日間のグラフと、キャプチャ元の内訳（アプリ、キーボード、共有シート、ウィジェット、ショートカット、Apple Watch、Mac、ディープリンク、ファイル読み込み、音声）を表示します。</p>
+        <ul>
+          <li>統計は配信済みのキャプチャのみを集計します。新しい操作の後は、引いて更新してください。</li>
+          <li>利用記録はデバイス内に残り、キャプチャした内容、ファイル名、保存先は記録しません。</li>
+        </ul>
+
+        <h3 id="settings-map">設定の一覧</h3>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead><tr><th>セクション</th><th>コントロール</th></tr></thead>
+            <tbody>
+              <tr><td>Vox.md 無制限</td><td>無料利用の状況、永久ライセンスの解除、購入の復元。</td></tr>
+              <tr><td>カスタマイズ</td><td>モデル、ルート、キャプチャバーのアクションの表示と順序。</td></tr>
+              <tr><td>キーボード</td><td>触覚フィードバック。</td></tr>
+              <tr><td>スクリーンロック</td><td>ライブアクティビティモニターとロック画面の録音ボタン。</td></tr>
+              <tr><td>について</td><td>既定の文字起こし、Whisper、Parakeet、デバイス上の処理、プライバシー、アプリのバージョン、Apple Intelligence の利用可否。</td></tr>
+              <tr><td>フィードバック</td><td>Isolated Tech の Discord に参加するか、診断用のフィードバックメールを作成します。</td></tr>
+              <tr><td>デビュー</td><td>ローカルのデバッグログを表示。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>更新後にリリースノートが表示される場合があります。Watch の同期、Mac のグローバルキーバインド、ルートのアイコン、ロック画面のコントロール、ルートの振り分け、音声の規則、後処理など、現在の機能を説明します。</p>
+
+        <h3 id="pricing-limits">無料利用と永久ライセンスの解除</h3>
+        <ul>
+          <li>無料利用には次が含まれます。 <strong>15分の文字起こし</strong> と <strong>10回の成功したキャプチャ配信</strong>.</li>
+          <li>文字起こし時間を消費済みの音声テキストを Markdown に送っても、別のキャプチャ利用枠を重ねて消費することはありません。</li>
+          <li>書き込みの失敗と冪等な再試行は、成功したキャプチャ配信枠を消費しません。</li>
+          <li>無制限利用は1回限りの永久ライセンス購入で、サブスクリプション、更新料、広告はありません。地域別の App Store 価格が正式な価格です。米国価格は個人用 $19.99、ファミリー用 $39.99、ファミリーへのアップグレード $19.99 で、ほかのストアでは購買力に応じた価格を設定しています。</li>
+          <li>「購入を復元」で、対象となる購入を復元できます。条件を満たす旧有料版の利用者は、従来の権利として無制限利用を引き継ぎます。</li>
+          <li>内容を含まない App Group の利用記録が、ローカルアプリデータの残る間、再試行での重複消費を防ぎます。キーチェーンには保存しません。ローカルアプリデータを削除すると、無料枠が新しく始まります。</li>
+        </ul>
+
+        <h3 id="privacy-data">ローカルにとどまるもの</h3>
+        <div class="docs-feature-grid docs-feature-grid-three">
+          <div><strong>キャプチャ内容</strong><p>ドラフト、テキスト、リンク、テンプレート、ルート、添付ファイル、音声、OCR、文字起こしは Vox.md のサーバーに送信しません。</p></div>
+          <div><strong>加工</strong><p>Apple Speech、Whisper、Parakeet、Vision OCR、対応する Apple Intelligence の処理は、デバイス上で実行します。</p></div>
+          <div><strong>あなたの保存先</strong><p>完成したファイルは、選択したフォルダにのみ保存されます。サードパーティのファイルプロバイダが、自身の規約に従って同期する場合があります。</p></div>
+        </div>
+        <ul>
+          <li>配信成功後、復元可能なキャプチャリクエストは内容を含まない受領記録となり、完了した Watch キューの項目には、大まかな最終配信フィールドだけを残します。どちらにも、座標、ラベル、プロバイダ URL、位置テンプレート、ルートの内容を保持しません。</li>
+          <li>完了したキャプチャ履歴には、配信メタデータを保存します。ノートのテキスト、URL、座標、位置ラベルやテンプレート、ブックマーク、絶対パス、添付ファイル名は保存しません。</li>
+          <li>保留中や失敗した項目は、ローカル復元に必要なものだけを保持します。ルートのスナップショットと、すでにプライバシー処理済みの位置または取得不能の結果が含まれる場合があります。</li>
+          <li>製品版の導入分析は、既定で無効です。アプリには、サードパーティの分析 SDK、広告ネットワーク、アプリ横断の追跡機能は含みません。</li>
+          <li>入力画面は、ドラフトの内容や識別子を送らずに、ZenQuotes から名言を取得してキャッシュします。</li>
+        </ul>
+        <p>データの取り扱い、保持期間、サードパーティサービスの詳細は、次をお読みください。 <a href="/ja/privacy.html">プライバシーポリシー</a>.</p>
+      </section>
+
+      <section class="docs-section" id="troubleshooting">
+        <div class="docs-section-label">10 / トラブルシューティング</div>
+        <h2>よくある設定・配信の問題</h2>
+        <div class="docs-troubleshooting">
+          <details open>
+            <summary>キャプチャを送信できない</summary>
+            <p>保存先のコントロールを開き、選択したルートを設定します。フォルダを移動したかアクセス権が期限切れの場合は、保管庫やフォルダを選び直してください。待機中の作業はライブラリに残っています。</p>
+          </details>
+          <details>
+            <summary>キーボードに「フルアクセスを有効にする」と出る</summary>
+            <p>iOS の「設定」→「一般」→「キーボード」→「キーボード」→ Vox.md を開き、「フルアクセスを許可」を有効にします。アプリに一度戻り、Vox.md が共有リスニングの手順を再開できるようにしてください。</p>
+          </details>
+          <details>
+            <summary>「自動」を利用できない</summary>
+            <p>Apple Speech の「自動」には、対応する iOS 26 デバイスと言語が必要です。Whisper または Parakeet のモデルを選んでダウンロードし、明示的に選択するか、「自動」に戻すと、利用者が承認した代替モデルとして使えます。</p>
+          </details>
+          <details>
+            <summary>文字起こしに失敗</summary>
+            <p>選択したモデルのダウンロードが完了し、言語が適切か確認してください。Vox.md は、可能な場合に復元用の元音声を保持するため、別のモデルを選んで再試行できます。</p>
+          </details>
+          <details>
+            <summary>見出しを指定したルートが失敗する</summary>
+            <p>ルートの保存先を編集し、見出しのテキストとレベルを確認します。見出しがないときに停止せず作成したい場合は、「創出ヘッド」を選んでください。</p>
+          </details>
+          <details>
+            <summary>Watch の録音が待機中</summary>
+            <p>iPhone で Vox.md の Watch 録音を開きます。更新や再試行を行い、求められた場合は有効なルートを選んでください。バックグラウンドの引き継ぎができるよう、アプリをインストールしたままにします。強制終了すると、再び開くまでバックグラウンド配信できません。</p>
+          </details>
+          <details>
+            <summary><code>{location}</code> は空で出力されます</summary>
+            <p>配信するルートで「現在地を使用」をオンにします。検出されたエントリー接頭辞、接尾辞、再利用可能な入り口 寺では、入力画面のワンタップ修正で、メタデータを有効にせず設定できます。保管庫内のテンプレートファイルには、手動でルートを設定する必要があります。権限を使えない場合や、位置なしでキャプチャを続行した場合、トークンは意図的に空になります。次を参照してください。 <a href="/ja/docs/location/">位置情報の完全ガイド</a>.</p>
+          </details>
+          <details>
+            <summary>ルートの位置情報を取得できない</summary>
+            <p>再試行は、元の対話的な送信を解決している間だけ使います。代わりに、キャンセル、今回だけ位置なしで送信、そのルートで常に位置なしで送信、を選べます。保存した選択は、ルートの位置設定でリセットできます。無人実行でキューに入ったリクエストは、元の取得不能の結果を保持し、新しい位置を取得しません。</p>
+          </details>
+        </div>
+        <div class="docs-callout docs-support-callout">
+          <strong>まだ解決しませんか？</strong>
+          <p>「設定」→「デバッグログを表示」を開き、「フィードバックを送信」を使うと、アプリのバージョン、プラットフォーム、OS、デバイスの詳細を含められます。次に参加することもできます。 <a href="https://discord.gg/RaQYS4t6gn">Isolated Tech の Discord</a>.</p>
+        </div>
+      </section>
+    </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ja/developers">開発者向け</a></li>
+        <li><a href="/ja/about">について</a></li>
+        <li><a href="/ja/contact">お問い合わせ</a></li>
+        <li><a href="/ja/">ホーム</a></li>
+        <li><a href="/ja/docs/" aria-current="page">ドキュメント</a></li>
+        <li><a href="/ja/blog/">ブログ</a></li>
+        <li><a href="/ja/privacy.html">プライバシー</a></li>
+        <li><a href="/ja/terms.html">利用規約</a></li>
+        <li><a href="/llms.txt">llms.txt</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">サポート</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_60877eba17c1">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · 全機能ドキュメント · ローカル優先のキャプチャ。</div>
+    </div>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/docs/" lang="en" hreflang="en">English</a></li><li><a href="/ja/docs/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li></ul></details></div>
+</footer>
+
+<script src="/site.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  function checkAnalyticsGate() {
+    fetch('https://img-host.costream.workers.dev/analytics-gate', {
+      cache: 'no-store',
+      priority: 'low',
+      mode: 'cors',
+      credentials: 'omit'
+    })
+      .then(function (response) {
+        return response.ok ? response.json() : { track: false };
+      })
+      .then(function (gate) {
+        if (gate && gate.track) {
+          loadCloudflareBeacon();
+        }
+      })
+      .catch(function () {
+        // Fail closed so excluded IPs are not accidentally tracked.
+      });
+  }
+
+  // Analytics must not compete with the content visitors came to read.
+  function scheduleAnalytics() {
+    requestAnimationFrame(function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(checkAnalyticsGate, { timeout: 2000 });
+      } else {
+        setTimeout(checkAnalyticsGate, 0);
+      }
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    scheduleAnalytics();
+  } else {
+    window.addEventListener('load', scheduleAnalytics, { once: true });
+  }
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

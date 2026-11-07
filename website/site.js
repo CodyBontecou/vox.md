@@ -66,6 +66,7 @@
     var input = document.getElementById('docs-search-input');
     var results = document.getElementById('docs-search-results');
     if (!input || !results) return;
+    var labels = document.documentElement.dataset;
 
     // Index every titled section and subsection on the page.
     var index = [];
@@ -86,7 +87,7 @@
       index.push({
         id: id,
         title: h.textContent.trim(),
-        group: level === 2 ? (group || 'Section') : group,
+        group: level === 2 ? (group || labels.searchSection || 'Section') : group,
         body: text.replace(/\s+/g, ' ').trim().toLowerCase()
       });
     });
@@ -94,7 +95,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('.docs-sidebar a:not([href^="#"]), .docs-category-card:not([href^="#"])'), function (a) {
       var title = (a.querySelector('strong') || a).textContent.trim();
       if (index.some(function (e) { return e.href === a.getAttribute('href'); })) return;
-      index.push({ href: a.getAttribute('href'), title: title, group: 'Guide', body: (a.textContent || '').toLowerCase() });
+      index.push({ href: a.getAttribute('href'), title: title, group: labels.searchGuide || 'Guide', body: (a.textContent || '').toLowerCase() });
     });
 
     var matches = [];
@@ -121,7 +122,7 @@
       if (!matches.length) {
         var li = document.createElement('li');
         li.className = 'empty';
-        li.textContent = 'No matches for “' + query.trim() + '”';
+        li.textContent = (labels.searchEmpty || 'No matches for “{query}”').replace('{query}', query.trim());
         results.appendChild(li);
       }
       matches.forEach(function (m, i) {

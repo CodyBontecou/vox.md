@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr" data-search-section="セクション" data-search-guide="ガイド記事" data-search-empty="「{query}」に一致する結果はありません">
+<head>
+  <meta charset="UTF-8">
+  <meta name="is-agentic-site-type" content="business">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone で音声をオフラインで Markdown に文字起こし | Vox.md</title>
+  <meta name="description" content="Vox.md でローカル文字起こしを準備し、音声を録音または読み込んで、iPhone に Markdown を保存。モデルのダウンロード、フォルダの利用可否、オフラインでの確認を説明します。">
+  <link rel="canonical" href="https://vox.isolated.tech/ja/blog/offline-transcription-iphone-markdown/">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="言語モデル向けの Vox.md ドキュメント">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Vox.md">
+  <meta property="og:title" content="iPhone で音声をオフラインで Markdown に文字起こし">
+  <meta property="og:description" content="Vox.md でローカル文字起こしを準備し、音声を録音または読み込んで、iPhone に Markdown を保存。モデルのダウンロード、フォルダの利用可否、オフラインでの確認を説明します。">
+  <meta property="og:url" content="https://vox.isolated.tech/ja/blog/offline-transcription-iphone-markdown/">
+  <meta property="og:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:author" content="Cody Bontecou">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="iPhone で音声をオフラインで Markdown に文字起こし">
+  <meta name="twitter:description" content="Vox.md でローカル文字起こしを準備し、音声を録音または読み込んで、iPhone に Markdown を保存。モデルのダウンロード、フォルダの利用可否、オフラインでの確認を説明します。">
+  <meta name="twitter:image" content="https://vox.isolated.tech/screenshots/00-capture-light.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <link rel="preload" href="/fonts/BricolageGrotesque-Variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/geist.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "iPhone で音声をオフラインで Markdown に文字起こし",
+  "description": "Vox.md でローカル文字起こしを準備し、音声を録音または読み込んで、iPhone に Markdown を保存。モデルのダウンロード、フォルダの利用可否、オフラインでの確認を説明します。",
+  "image": "https://vox.isolated.tech/screenshots/00-capture-light.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "mainEntityOfPage": "https://vox.isolated.tech/ja/blog/offline-transcription-iphone-markdown/",
+  "author": {
+    "@type": "Person",
+    "name": "Cody Bontecou",
+    "url": "https://codybontecou.com/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Isolated Tech",
+    "url": "https://isolated.tech/"
+  },
+  "inLanguage": "ja",
+  "name": "iPhone で音声をオフラインで Markdown に文字起こし | Vox.md"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Vox.md",
+      "item": "https://vox.isolated.tech/ja/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "ガイド",
+      "item": "https://vox.isolated.tech/ja/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "iPhone で音声をオフラインで Markdown に文字起こし",
+      "item": "https://vox.isolated.tech/ja/blog/offline-transcription-iphone-markdown/"
+    }
+  ],
+  "inLanguage": "ja",
+  "name": "iPhone で音声をオフラインで Markdown に文字起こし | Vox.md",
+  "description": "Vox.md でローカル文字起こしを準備し、音声を録音または読み込んで、iPhone に Markdown を保存。モデルのダウンロード、フォルダの利用可否、オフラインでの確認を説明します。"
+}
+</script>
+
+<link rel="alternate" hreflang="en" href="https://vox.isolated.tech/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="ja" href="https://vox.isolated.tech/ja/blog/offline-transcription-iphone-markdown/">
+<link rel="alternate" hreflang="x-default" href="https://vox.isolated.tech/blog/offline-transcription-iphone-markdown/">
+</head>
+<body>
+<a class="skip-link" href="#main-content">ガイド本文へ</a>
+<nav aria-label="メインナビゲーション">
+  <div class="nav-inner">
+    <a href="/ja/" class="logo" aria-label="Vox.md ホーム">
+      <span class="logo-mark" aria-hidden="true">md</span>
+      <span>Vox.md</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/ja/#how">動作の仕組み</a></li>
+      <li><a href="/ja/docs/">ドキュメント</a></li>
+      <li><a href="/ja/blog/">ガイド</a></li>
+      <li><a href="/ja/compare/">比較する</a></li>
+      <li><a href="/ja/privacy.html">プライバシー</a></li>
+      <li><a href="/ja/terms.html">利用規約</a></li>
+    </ul>
+    <a href="https://apps.apple.com/us/app/voxboard/id6758967337" class="nav-cta" target="_blank" rel="noopener" data-download-campaign="seo_ja_1483aca5c728">Vox.md をダウンロード</a>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/offline-transcription-iphone-markdown/" lang="en" hreflang="en">English</a></li><li><a href="/ja/blog/offline-transcription-iphone-markdown/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li></ul></details></div>
+</nav>
+
+
+<main id="main-content" class="voice-guide">
+  <header class="hero">
+    <div class="hero-grid-bg" aria-hidden="true"></div>
+    <div class="container"><div class="hero-inner">
+      <div>
+        <div class="eyebrow">iPhone · ローカル文字起こし · Markdown</div>
+        <h1 class="hero-title">iPhone で音声をオフラインで Markdown に文字起こし</h1>
+        <p class="hero-subtitle">必要になる前に、音声バックエンドとローカルの保存先を準備します。文字起こしとファイル同期は、別々に選んでください。</p>
+      </div>
+      <aside class="meta-card" aria-label="このガイドについて">
+        <dl>
+          <div><dt>作成者</dt><dd><a href="https://codybontecou.com/">Cody Bontecou</a></dd></div>
+          <div><dt>更新日</dt><dd><time datetime="2026-10-26">2026年10月26日</time></dd></div>
+          <div><dt>必要条件</dt><dd>準備済みバックエンド · 書き込み可能なフォルダ</dd></div>
+        </dl>
+      </aside>
+    </div></div>
+  </header>
+  <article aria-label="iPhone で音声をオフラインで Markdown に文字起こし">
+    <div class="article-container article-body">
+<div class="answer-box" id="short-answer"><div class="label">短く答えると</div>
+        <p>Vox.md は、利用可能な Apple Speech バックエンド、または明示的にダウンロードした Whisper や Parakeet のモデルを使い、デバイス上で文字起こしを行います。オフラインで Markdown として保存するには、ローカルで使える書き込み可能なフォルダも必要です。接続を切る前に、両方を準備してください。</p>
+      </div>
+      <p>「ローカル文字起こし」は、認識処理をどこで実行するかを表します。モデルがすでにインストールされていること、すべての言語に対応していること、クラウド連携フォルダをオフラインで使えることを約束するものではありません。このガイドは、ご自身の端末で行う設定と確認を説明するものであり、すべての対応デバイスで機内モードをテストした報告ではありません。</p>
+      <nav class="toc" aria-label="このガイドの内容"><div class="toc-title">このガイドの内容</div><ol>
+        <li><a href="#prepare">音声バックエンドを準備する</a></li>
+        <li><a href="#destination">Markdown の保存先を選ぶ</a></li>
+        <li><a href="#transcribe">音声を録音・読み込み</a></li>
+        <li><a href="#offline-check">手順全体をオフラインで確認</a></li>
+        <li><a href="#limitations">プライバシーと利用可否の制約を理解する</a></li>
+      </ol></nav>
+
+      <h2 id="prepare">1. 接続中に音声バックエンドを準備</h2>
+      <p>Vox.md のモデル設定で、デバイスと言語に対応するバックエンドを選びます。「自動」は、対応する iOS 26 デバイスと言語では Apple Speech を優先します。任意の Whisper と Parakeet のモデルは、選んだときにダウンロードします。</p>
+      <p>オフラインになる前に、モデルのダウンロードやシステム言語の準備を完了してください。「自動」が、代替の Whisper や Parakeet を通知なくダウンロードすることはありません。すでに自分で選んでダウンロードした代替モデルだけを使えます。準備済みのバックエンドがなければ、接続を切っても使えるようにはなりません。</p>
+      <p>Whisper と Parakeet を明示的に選んだ場合、録音停止後に文字起こしします。ライブ Apple Speech は、対応デバイスで暫定テキストと確定テキストを表示できます。Markdown の文字起こしを作るのに、ライブプレビューは必須ではありません。</p>
+      <figure class="guide-figure">
+        <img src="/screenshots/optimized/05-settings-local-360.webp" alt="ローカル音声モデルと処理に関する Vox.md の設定" width="1206" height="2622" loading="lazy" decoding="async">
+        <figcaption>オンラインの間にローカルのバックエンドを選んで準備します。利用できるモデルや設定は、インストール済みのバージョンとデバイスによって異なります。</figcaption>
+      </figure>
+      <p>モデルの選択によって、ストレージ使用量、処理時間、対応言語、認識品質が変わります。次を確認してください。 <a href="/ja/docs/#models">モデルのリファレンス</a> を確認し、大きなモデルが対応している、あるいは1つの選択肢ですべての言語を認識できると決めつけないでください。</p>
+
+      <h2 id="destination">2. Markdown の保存先を選ぶ</h2>
+      <p>キャプチャプレスを作成または選択し、Files でフォルダに保存先を接続します。最初のテストには、出力を見分けやすい新しいノートを選んでください。任意の書き換えをせず文字起こしを使いたい場合は、「オリジナルを保持」の処理から始めると便利です。</p>
+      <p>保存先がローカルで使え、書き込みを許可しているか確認してください。Files にフォルダ名が表示されていても、内容がダウンロード済みとは限りません。Obsidian の保管庫を選ぶ場合、選択画面から Vox.md がアクセスできる必要があります。Vox.md は Obsidian Sync サービスに直接接続しません。</p>
+      <p>フォルダの詳しい設定は、次に沿って進めてください。 <a href="/ja/blog/voice-notes-to-obsidian-iphone/">iPhone の音声メモを Obsidian に保存</a>。通常の書き込み可能な Markdown フォルダでも使えます。文字起こしに Obsidian は不要です。</p>
+      <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_1483aca5c728">Vox.md を無料でダウンロード</a></p>
+      <p>15分の文字起こしと10回の成功したキャプチャ配信を試せます。無制限利用は1回限りの永久ライセンス購入です。新規設定がオフラインで完了することを前提にせず、購入やモデルの準備は接続中に行ってください。</p>
+
+      <p>Apple のボイスメモから始める場合は、次に沿って進めてください。 <a href="/ja/blog/transcribe-voice-memos-iphone/">ボイスメモの文字起こしと音声書き出しの選択画面</a> を録音の読み込み前に確認してください。</p>
+<h2 id="transcribe">3. 音声を録音または読み込み</h2>
+      <ol>
+        <li>速い捕獲を開き、準備済みの保存先を持つプリセットを選択します。次を選んでください。 <strong>下書きに追加</strong> を録音開始前に音声コントロールで選ぶと、最初の文字起こしを確認できます。</li>
+        <li>短い音声メモを録音するか、次を使用します。 <strong>オーディオまたはビデオを読み込む</strong> を音声コントロールで選ぶと、対応する既存のファイルを選択できます。</li>
+        <li>選択したバックエンドの認識が終わるのを待ち、ドラフトで文字起こしを確認してから送信します。</li>
+        <li>配信が完了したことを確かめ、保存先で Markdown ファイルを開きます。</li>
+      </ol>
+      <p>短い録音から、たとえば次のようなノート本文ができます。</p>
+      <pre class="guide-code"><code>Review the outline before the next meeting.</code></pre>
+      <p>実際の言葉と句読点は、認識と処理によって異なります。参照が必要なら元の音声を保持し、重要な文字起こしと照合してください。任意の整文機能には、別のデバイス要件と代替動作があります。デバイス上で文字起こしできても、対応するすべての端末で Apple Intelligence の処理を使えるわけではありません。</p>
+
+      <h2 id="offline-check">手順全体をオフラインで確認</h2>
+      <p>接続中のキャプチャが成功したら、接続を切って小さなテストを繰り返します。機内モードを使う場合は、Wi-Fi もオフになっていることを確認してください。</p>
+      <ol>
+        <li>選択したバックエンドの準備が済み、保存先をローカルで利用できることを確認します。</li>
+        <li>接続を切り、新しい短い録音を行って、文字起こしを待ちます。</li>
+        <li>文字起こしを確認して送信します。接続を切ったまま、完成した Markdown ファイルを確認してください。</li>
+        <li>準備ができたら再接続し、ほかのデバイスへの同期は別途確認してください。</li>
+      </ol>
+      <p>成功とは、認識とローカルへの書き込みの両方が完了したことです。ドラフトに文字起こしが見えていれば、認識できたことは確認できます。ただし、キャプチャがキューに入っただけでは、保存先への書き込みが成功したとはいえません。配信に失敗したら、録音のコピーを増やすのではなく、復元可能なキャプチャを保持し、フォルダへのアクセスを直してから再試行してください。</p>
+
+      <h2 id="limitations">プライバシーと利用可否の制約を理解する</h2>
+      <p>Vox.md は文字起こしのために音声をアップロードしません。完成した文字起こしや保持した音声を、利用者が意図してクラウド連携フォルダに保存した場合、そのプロバイダが自身の規約に従って同期できます。プロバイダ経由で同期したくないファイルは、ローカルの保存先に置いてください。</p>
+      <p>録音の長さ、空き容量、音質、モデルの対応状況が、実際の結果に影響します。このガイドは、文字起こしの速度や精度を一律に保証するものではありません。機微な内容や影響の大きい表現は、使う前に確認してください。</p>
+      <p>Watch の録音では、 <a href="/ja/blog/apple-watch-obsidian-voice-notes/">文字起こしと配信は、引き続きペアリングした iPhone が行います</a>。端末が使えない間に Watch で録音を保持するのは、配信の遅延であり、Watch 単独の文字起こしではありません。</p>
+      <section class="cta" aria-labelledby="guide-cta">
+        <h2 id="guide-cta">準備は一度だけ。<br>接続を切る前に確認してください。</h2>
+        <p>短い録音とアクセス可能なローカルフォルダから始めて、Markdown の出力全体を確認してください。</p>
+        <p><a class="btn-primary" href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_1483aca5c728">Vox.md を無料でダウンロード</a></p>
+      </section>
+      <nav class="toc" aria-label="関連ガイド"><div class="toc-title">設定を続ける</div><ul>
+        <li><a href="/ja/blog/voice-notes-to-obsidian-iphone/">iPhone の音声メモを Obsidian へ</a></li>
+        <li><a href="/ja/blog/obsidian-capture-templates/">受信ノート、日記、タスクの項目を整形する</a></li>
+        <li><a href="/ja/docs/#models">バックエンドの要件と言語設定</a></li>
+      </ul></nav>
+    </div>
+  </article>
+</main>
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="/ja/">ホーム</a></li>
+        <li><a href="/ja/docs/">ドキュメント</a></li>
+        <li><a href="/ja/blog/">ガイド</a></li>
+        <li><a href="/ja/compare/">比較する</a></li>
+        <li><a href="/ja/privacy.html">プライバシー</a></li>
+        <li><a href="/ja/terms.html">利用規約</a></li>
+        <li><a href="mailto:codybontecou@gmail.com">サポート</a></li>
+        <li><a href="https://apps.apple.com/us/app/voxboard/id6758967337" target="_blank" rel="noopener" data-download-campaign="seo_ja_1483aca5c728">App Store</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Vox.md · ローカルノートにクイックキャプチャ · コンテンツのアップロードなし。</div>
+    </div>
+  <details class="language-switcher"><summary>言語</summary><ul><li><a href="/blog/offline-transcription-iphone-markdown/" lang="en" hreflang="en">English</a></li><li><a href="/ja/blog/offline-transcription-iphone-markdown/" lang="ja" hreflang="ja" aria-current="page">日本語</a></li></ul></details></div>
+</footer>
+<!-- Cloudflare Web Analytics -->
+<script>
+(function () {
+  var productionHosts = {
+    'instareply.isolated.tech': true,
+    'vox.isolated.tech': true,
+    'healthmd.isolated.tech': true,
+    'isome.isolated.tech': true,
+    'gitsyncmd.isolated.tech': true,
+    'timemd.isolated.tech': true,
+    'imghost.isolated.tech': true
+  };
+
+  if (!productionHosts[window.location.hostname]) {
+    return;
+  }
+
+  function loadCloudflareBeacon() {
+    if (document.querySelector('script[src="https://static.cloudflareinsights.com/beacon.min.js"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token":"090f363070334cddad5c5cc1509b8807"}');
+    document.head.appendChild(script);
+  }
+
+  fetch('https://img-host.costream.workers.dev/analytics-gate', {
+    cache: 'no-store',
+    mode: 'cors',
+    credentials: 'omit'
+  })
+    .then(function (response) {
+      return response.ok ? response.json() : { track: false };
+    })
+    .then(function (gate) {
+      if (gate && gate.track) {
+        loadCloudflareBeacon();
+      }
+    })
+    .catch(function () {
+      // Fail closed so excluded IPs are not accidentally tracked.
+    });
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

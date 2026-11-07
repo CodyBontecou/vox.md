@@ -4,6 +4,72 @@ The deployed site remains plain HTML in `website/`. New capture guides share
 `scripts/website/templates/guide.html`; their editable sources are in
 `website-content/guides/`.
 
+## Localized pages
+
+`build_locales.py` owns generated English and localized HTML, the sitemap and
+language discovery entries in `llms.txt`. Edit static English pages under
+`website-content/pages/`, or guide sources and the guide template described
+below, rather than editing generated HTML under `website/`.
+
+English segments are deduplicated plain-text strings with content-derived IDs
+in `website-content/locales/en.json`. Text nodes, accessible labels, image alt
+text, social metadata and JSON-LD prose are extracted; executable code, sample
+files, HTML markup, paths and template tokens remain literal. Translation files
+have `metadata` and `strings` objects. Every non-English catalog must declare
+`"status": "requires-human-review"` and `"source": "machine"`; these are machine
+drafts, not claims of human approval.
+
+To change copy, edit the English source, refresh `en.json`, then translate every
+new/changed key and remove obsolete keys in every catalog. If editing the
+catalog directly, make the same copy change in its English source: the check
+rejects source/catalog drift. Unchanged copy retains its ID even when moved.
+
+```sh
+python3 scripts/website/build_locales.py --extract
+python3 scripts/website/build_locales.py --check-catalog ja
+npm run website:build
+npm run website:check
+```
+
+The catalog validator only reads files; it never renders or writes `website/`.
+It rejects missing/extra/duplicate keys, invalid JSON, incorrect review metadata,
+changed protected names, URLs, paths, placeholders or Markdown/code syntax,
+and unchanged English except explicit source-owned literal/name allowances.
+Follow `docs/localization-glossary.md` and reuse shipped app UI labels exactly.
+A changed source can require translation review even if adjacent string IDs do
+not change. Inline text segments should be reviewed in page context.
+
+URLs use lowercase BCP-47 prefixes (`/pt-br/blog/<slug>/`, `/zh-hant/docs/`),
+while English retains its existing paths and legal `.html` canonicals. The
+former hand-maintained `/zh-hans/` home uses the same generator. Assets and
+sample code stay shared. Plain-link nav/footer switchers target the equivalent
+page; canonical, reciprocal hreflang, social metadata, JSON-LD language, sitemap
+alternates, and the deployment builder's Markdown/documents routes agree.
+Arabic and Urdu are RTL; code and literal file examples remain LTR.
+
+New pages need an English campaign mapping in `website-content/downloads.json`.
+Then explicitly add deterministic per-locale campaign names (not Apple provider
+tokens) before rebuilding:
+
+```sh
+python3 scripts/website/build_locales.py --sync-campaigns
+```
+
+Normal production builds require all 23 catalogs; missing translations never
+fall back to English. During initial development only,
+`VOX_WEBSITE_PILOT=ja npm run website:build` and the same environment on checks
+render an isolated English/Japanese pilot. Do not deploy pilot output. A full
+build must be run without this environment before review or release.
+
+The external `search-chinese-landing-pages` Cloudflare Worker routes on
+`vox.isolated.tech/` and `/sitemap.xml*` must be removed before or immediately
+after merging the localized site. Otherwise injected alternates/sitemap data
+can differ from the validated artifact and the exact release check will fail.
+No Cloudflare changes are made by this build. Preserve the Naver verification
+meta tag in the English homepage source; it already matches the live tag.
+
+## Guide sources
+
 Each source starts with a JSON metadata comment, followed by the article body
 as HTML. Its filename must match the metadata slug. Edit those sources rather
 than the generated `website/blog/<slug>/index.html` files. Comparison sources
@@ -69,8 +135,8 @@ layout were checked; the QR disclosure is hidden on phones.
 The deployment script also runs `scripts/build-website.py`, preserving the inline
 CSS, Markdown negotiation and read-only discovery API introduced on main. The
 site check covers extensionless public pages and excludes the noindex 404 page
-from sitemap requirements. After integration, 21 HTML pages and 20 sitemap URLs
-are checked.
+from sitemap requirements. Full localization covers 506 HTML pages (22 per language) and 483 sitemap
+URLs (21 indexable pages per language). The noindex 404 pages are excluded.
 
 
 ## Cloud publishing
