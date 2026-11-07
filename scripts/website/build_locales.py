@@ -212,6 +212,9 @@ def identical_translation_allowlists(strings):
     natural_identities = {
         'es': ('Ideas', 'local', 'bytes', 'Control', 'Blog', 'no', 'Token'),
         'id': ('Blog', 'Platform', 'Token'),
+        'fr': ('Scan · 1 page', 'questions', 'Guide ·', 'local', 'Contact',
+               '01 / Guides', 'Option', 'Guides', '6 minutes', 'Blog', 'Guide',
+               'Documentation', 'documentation'),
         'nl': ('bytes', 'wikilink.', 'Privacy', 'cloud', '03 / Routes',
                'sitemap', 'route:', 'link.', 'Open Vox.md.', 'Blog',
                'Open Routes.', 'Focus', 'Platform', 'Token'),
