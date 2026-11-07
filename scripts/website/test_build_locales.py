@@ -221,12 +221,12 @@ class RenderingTests(unittest.TestCase):
         self.assertIn('&lt;a href="../contact.html"&gt;literal&lt;/a&gt;',html)
         self.assertIn('name="twitter:title" content="ترجمة Page"',html)
 
-    def test_romance_hero_accessible_name_places_local_after_file(self):
-        source = '<html lang="en"><head><title>Page</title><meta name="description" content="Description"><link rel="canonical" href="https://vox.isolated.tech/"></head><body><nav></nav><main><h1 class="r-h1" id="hero-title">Your thoughts, in a <span aria-hidden="true"><del>cloud</del></span><span class="visually-hidden">local </span><span class="r-voice r-hl">file.</span></h1></main><footer></footer></body></html>'
+    def test_hero_accessible_name_is_a_complete_translatable_segment(self):
+        source = '<html lang="en"><head><title>Page</title><meta name="description" content="Description"><link rel="canonical" href="https://vox.isolated.tech/"></head><body><nav></nav><main><h1 class="r-h1" id="hero-title" aria-label="Your thoughts, in a local file.">Your thoughts, in a <span aria-hidden="true"><del>cloud</del></span><span class="visually-hidden">local </span><span class="r-voice r-hl">file.</span></h1></main><footer></footer></body></html>'
         strings = {}
         locales.transform(source,collect=strings)
         strings = {k:'Traducción ' + v for k,v in strings.items()}
-        strings.update({locales.key('Your thoughts, in a'):'Tus ideas, en un',locales.key('local'):'local',locales.key('file.'):'archivo.',locales.key(locales.LABEL):'Idioma'})
+        strings.update({locales.key('Your thoughts, in a'):'Tus ideas, en un',locales.key('local'):'local',locales.key('file.'):'archivo.',locales.key('Your thoughts, in a local file.'):'Tus ideas, en un archivo local.',locales.key(locales.LABEL):'Idioma'})
         strings.update({locales.key(value):'Traducción ' + value for value in locales.SEARCH_TEXT.values()})
         with patch.object(locales,'active_locales',return_value=['en','es']), patch('download_links.decorate_html',side_effect=lambda text,path:text):
             html = locales.enhance(source,'index.html','es',strings)

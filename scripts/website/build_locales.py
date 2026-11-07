@@ -300,15 +300,6 @@ def enhance(text, relative, locale='en', strings=None):
     text = re.sub(r'<link[^>]*hreflang=[^>]*>\s*', '', text)
     text = re.sub(r'<nav aria-label="Language">.*?</nav>', '', text, flags=re.S)
     text = transform(text, strings)
-    if locale in {'es','fr','it','pt-BR'} and 'id="hero-title"' in text:
-        # The visual cloud/file strike-through is fixed markup, but Romance
-        # adjective order is file + local, unlike English's local + file. Give
-        # the heading a grammatical accessible name using existing segments.
-        lead = strings[key('Your thoughts, in a')].strip()
-        file_word = re.sub(r'[.!?。]+$', '', strings[key('file.')].strip())
-        local_word = strings[key('local')].strip()
-        accessible = escape(f'{lead} {file_word} {local_word}.',quote=True)
-        text = re.sub(r'<h1\b[^>]*\bid="hero-title"[^>]*>',lambda m:m[0][:-1] + f' aria-label="{accessible}">',text,count=1)
     search_attributes = ''.join(f' data-search-{name}="{escape(strings[key(value)], quote=True)}"' for name,value in SEARCH_TEXT.items())
     text = re.sub(r'<html\b[^>]*>', f'<html lang="{locale}" dir="{"rtl" if locale in {"ar", "ur"} else "ltr"}"{search_attributes}>', text, count=1)
     text = re.sub(r'(<link rel="canonical" href=")[^"]*', lambda m: m[1] + HOST + public, text)

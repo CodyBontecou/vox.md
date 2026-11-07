@@ -41,9 +41,10 @@ confirmed lexical identities (for example Spanish `Ideas`). These are not a
 locale-controlled bypass or a fallback for long untranslated prose.
 Literal tutorial headings/routes (`Inbox`, `Tasks`, `Daily Inbox`) must remain
 exactly aligned with unchanged sample code and named route examples, rather
-than borrowing unrelated translated app controls. Romance homepage headings
-receive a grammatical accessible name assembled from the existing translated
-segments, putting the localized file noun before the hidden adjective.
+than borrowing unrelated translated app controls. The homepage heading has an
+independent full-sentence accessible-label segment, so every language can use
+natural grammar without inheriting the visible strike-through markup's word
+order.
 Follow `docs/localization-glossary.md` and reuse shipped app UI labels exactly.
 A changed source can require translation review even if adjacent string IDs do
 not change. Inline text segments should be reviewed in page context.
