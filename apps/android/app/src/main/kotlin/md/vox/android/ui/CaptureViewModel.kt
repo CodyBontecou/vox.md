@@ -28,6 +28,7 @@ import md.vox.android.capturedomain.ActivityStats
 import md.vox.android.capturedomain.CompletedRecordingActivity
 import md.vox.android.capturedomain.CaptureLocationOutcome
 import md.vox.android.VoxUiText
+import md.vox.android.mergeExternalDraft
 
 internal data class CaptureUiState(
     val isLoading: Boolean = true,
@@ -212,7 +213,11 @@ internal class CaptureViewModel private constructor(
                 return@launch
             }
             runCatching { repository.setDraftEntryTemplateOverride(null) }
-            var draft = runCatching { repository.saveDraft(text, url, captureSource) }.getOrElse {
+            var draft = runCatching {
+                val present = repository.currentDraft()
+                val merged = mergeExternalDraft(present.text, present.url, text, url)
+                repository.saveDraft(merged.text, merged.url, captureSource)
+            }.getOrElse {
                 mutableState.update { state ->
                     state.copy(notice = voxNotice("%@ could not be saved locally.", sourceLabel))
                 }
