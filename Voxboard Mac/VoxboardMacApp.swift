@@ -480,8 +480,8 @@ struct VoxboardMacApp: App {
     }
 
     private func handleURL(_ url: URL) {
-        guard url.scheme == AppConstants.urlScheme else { return }
-        switch url.host {
+        guard url.scheme?.lowercased() == AppConstants.urlScheme else { return }
+        switch url.host?.lowercased() {
         case "capture", "capture-request":
             do {
                 let action = try CaptureDeepLinkParser().parse(url)

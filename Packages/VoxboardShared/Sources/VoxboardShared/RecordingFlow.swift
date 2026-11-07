@@ -579,6 +579,16 @@ public enum CapturePresetStore {
         )
     }
 
+    /// The route to select after `deletedID` is deleted. Prefers an enabled route
+    /// that can actually deliver (it has a destination), so deleting the active
+    /// route never strands the composer on the destination-less built-in Default.
+    public static func fallbackPresetID(afterDeleting deletedID: String, from presets: [CapturePreset]) -> String {
+        let remaining = presets.filter { $0.id != deletedID }
+        return remaining.first { $0.isEnabled && !$0.isBuiltIn && $0.captureDestinationID != nil }?.id
+            ?? remaining.first { $0.isEnabled && $0.id != generalId }?.id
+            ?? generalId
+    }
+
     public static var defaultFlows: [CapturePreset] {
         [defaultFlow]
     }
@@ -1248,6 +1258,12 @@ public enum CapturePresetStore {
 
     fileprivate static func retiredRouteIDs(defaults: UserDefaults) -> Set<UUID> {
         Set((defaults.stringArray(forKey: retiredRouteIDsKey) ?? []).compactMap(UUID.init(uuidString:)))
+    }
+
+    /// Whether `id` names a route the user deleted. A deleted route never comes
+    /// back, unlike a disabled one, so a draft pinned to it can move on.
+    public static func isRetiredPreset(id: String, defaults: UserDefaults? = AppConstants.sharedDefaults) -> Bool {
+        Set(defaults?.stringArray(forKey: retiredPresetIDsKey) ?? []).contains(id)
     }
 
     public static func retirePreset(

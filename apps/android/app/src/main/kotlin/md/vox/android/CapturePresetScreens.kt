@@ -1364,9 +1364,30 @@ internal fun CapturePresetEditorScreen(
                     )
                 }
                 if (delete != null) {
+                    // Deleting a route also retires its destination, so it is confirmed first.
+                    var confirmingDelete by rememberSaveable { mutableStateOf(false) }
+                    if (confirmingDelete) {
+                        AlertDialog(
+                            onDismissRequest = { confirmingDelete = false },
+                            containerColor = c.bg,
+                            titleContentColor = c.text,
+                            textContentColor = c.text,
+                            shape = RoundedCornerShape(24.dp),
+                            title = { Text(voxString("Delete Route")) },
+                            text = { Text(draft.name) },
+                            confirmButton = {
+                                TextButton(onClick = { confirmingDelete = false; delete() }) {
+                                    Text(voxString("Delete Route"), color = c.error)
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(onClick = { confirmingDelete = false }) { Text(voxString("Cancel")) }
+                            },
+                        )
+                    }
                     SignalButton(
                         text = voxString("Delete Route"),
-                        onClick = delete,
+                        onClick = { confirmingDelete = true },
                         modifier = Modifier.padding(top = 12.dp),
                         variant = SignalButtonVariant.DESTRUCTIVE,
                         enabled = !isBusy,

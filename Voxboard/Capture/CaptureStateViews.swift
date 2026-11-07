@@ -720,6 +720,16 @@ struct CaptureRoutePillsRow: View {
     var pillHeight: CGFloat = 40
     let select: (String) -> Void
 
+    /// The selected pill sits in a horizontal ScrollView, which offers unlimited
+    /// width, so a long route name is shortened here rather than pushing the
+    /// header aside. The pill's accessibility label keeps the full name.
+    static let pillNameLimit = 24
+
+    static func pillName(_ name: String) -> String {
+        guard name.count > pillNameLimit else { return name }
+        return name.prefix(pillNameLimit - 1).trimmingCharacters(in: .whitespaces) + "…"
+    }
+
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 6) {
@@ -737,7 +747,7 @@ struct CaptureRoutePillsRow: View {
                                 tone: SignalRouteTileTone.forRoute(at: index)
                             )
                             if isOn, let name = profile.visibleName {
-                                Text(verbatim: name)
+                                Text(verbatim: Self.pillName(name))
                                     .font(.custom("Geist-SemiBold", size: 15, relativeTo: .subheadline))
                                     .foregroundStyle(Geist.text)
                                     .lineLimit(1)

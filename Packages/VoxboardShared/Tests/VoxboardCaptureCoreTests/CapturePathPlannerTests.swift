@@ -228,6 +228,11 @@ final class CapturePathPlannerTitleTokenTests: XCTestCase {
         )
     }
 
+    func test_titleToken_skipsCodeFenceDelimiters() throws {
+        XCTAssertEqual(try plan("Inbox/{title}", payloads: [.text("```swift\nlet answer = 42\n```")]), "Inbox/let answer = 42.md")
+        XCTAssertEqual(try plan("Inbox/{title}", payloads: [.text("~~~\n~~~\nAfter the block")]), "Inbox/After the block.md")
+    }
+
     func test_titleToken_fallsBackToTimestampWithoutText() throws {
         XCTAssertEqual(try plan("Inbox/{title}", payloads: []), "Inbox/2024-01-02-030405.md")
         XCTAssertEqual(try plan("Inbox/{title}", payloads: [.text("  /// ")]), "Inbox/2024-01-02-030405.md")
