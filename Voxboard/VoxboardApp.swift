@@ -401,12 +401,14 @@ struct VoxboardApp: App {
         // note text or URLs. Host-level diagnostics are sufficient.
         log.log("[App] onOpenURL host=\(url.host ?? "nil")")
 
-        guard url.scheme == AppConstants.urlScheme else {
+        // Schemes and hosts are case-insensitive (RFC 3986), and CaptureDeepLinkParser
+        // already lowercases them; match the same way so VOXBOARD://Capture works.
+        guard url.scheme?.lowercased() == AppConstants.urlScheme else {
             log.log("[App] ❌ Wrong scheme: \(url.scheme ?? "nil")")
             return
         }
 
-        switch url.host {
+        switch url.host?.lowercased() {
         case "capture", "capture-request":
             do {
                 let action = try CaptureDeepLinkParser().parse(url)
