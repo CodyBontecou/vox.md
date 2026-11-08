@@ -560,7 +560,7 @@
       {
         "name" : "CaptureCoreEnginePolicy",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureCoreEnginePolicy.swift",
-        "sha256" : "8bb6d34d9fe2925d50aab38f7206479e99da06acd460ea6d9d33151fb95aa574"
+        "sha256" : "933bc0d6bbc521edca7e4972a51f9138e94dd024ad13aaf20333054c7b568ef7"
       },
       {
         "name" : "CaptureDateTokenValues",
@@ -570,7 +570,7 @@
       {
         "name" : "CaptureDeepLinkParser",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureDeepLinkParser.swift",
-        "sha256" : "dcd1b5a3b55a507a2c2fde12c5db7abf82197ac1d489a5cebcfda70f35ff7bf2"
+        "sha256" : "35d27fd2f0580ed017927c9f5f8765ce47d16625e2f58f90c09987819b82ccc5"
       },
       {
         "name" : "CaptureDraftStore",
@@ -630,7 +630,7 @@
       {
         "name" : "CaptureMarkdownRenderer",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureMarkdownRenderer.swift",
-        "sha256" : "1eb72888e60e68db46622e6bd1cce259556b3ee3c38fa20934c23c1d579fc800"
+        "sha256" : "bf2abdcbeb778964d9308b6ee9f740c7d228c1c803a132dac3b23c2e10249a5a"
       },
       {
         "name" : "CaptureModels",
@@ -723,6 +723,11 @@
         "sha256" : "53712df3cf02ac9802df383441f6a6eec31ea1db1fb9f01e95abdf4b58981ffd"
       },
       {
+        "name" : "CaptureWebLink",
+        "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureWebLink.swift",
+        "sha256" : "656b59809d65c0c3a4ac6c44534ae0559eb1dcd739513c97df69ace2b9be35a1"
+      },
+      {
         "name" : "CoordinatedCaptureWriter",
         "path" : "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CoordinatedCaptureWriter.swift",
         "sha256" : "cd19180a7c63565e97e45633d624c338cf8eb5166c4a954901b7296eebef338c"
@@ -748,9 +753,9 @@
         "sha256" : "dda9b75f64b106eb544de201f599122d75abc483c5b156bba6c05c0f956dbc3c"
       }
     ],
-    "sourceRevision" : "2c1b3934bd6085f9b4dc457d4206c60d498189ce",
+    "sourceRevision" : "f884b4e51f4823bc3a7c7beeb1a458f1787f4ab2",
     "swiftCompilerIdentity" : "Apple Swift version 6.4.2 (swiftlang-6.4.2.1.9 clang-2100.4.1.1) Target: arm64-apple-macosx27.2.0",
-    "toolchainManifestSHA256" : "47a6b605e1575cc2131bfe1c21a11222bafa134afecfd079bddc724fa9fc0b95",
+    "toolchainManifestSHA256" : "0b39c1bc405511c42556939e637fe5e92aea35ee9dcb730ba1f004cbc4ac153a",
     "xcodeIdentity" : "Xcode 27.2 Build version 27B52"
   }
 }
