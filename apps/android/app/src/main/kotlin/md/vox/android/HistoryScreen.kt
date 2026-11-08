@@ -414,7 +414,8 @@ internal fun HistoryScreen(
     var showsClearConfirmation by rememberSaveable { mutableStateOf(initialShowsClearConfirmation) }
     var exportMenuOpen by remember { mutableStateOf(false) }
     var isExporting by remember { mutableStateOf(false) }
-    var pendingExport by remember { mutableStateOf<String?>(null) }
+    val pendingExport = rememberPendingDocumentRequest()
+    val exportStore = remember(context) { PendingTextExportStore(java.io.File(context.noBackupFilesDir, "pending-library-exports")) }
     var operationMessage by remember { mutableStateOf<VoxUiText?>(null) }
     val transcriptIDs = transcripts.map(RecordingTranscriptionState::sessionID)
     val transcriptRoutes by produceState(emptyMap<String, String>(), transcriptIDs) {
@@ -468,19 +469,24 @@ internal fun HistoryScreen(
     val hasExportableContent = items.any { it.state != CaptureState.COMPLETED } ||
         transcripts.any { it.phase == RecordingTranscriptionPhase.COMPLETED && !it.preferredTranscript.isNullOrBlank() }
     val createDocument = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("text/markdown")) { uri ->
-        val content = pendingExport
-        pendingExport = null
-        if (uri != null && content != null) {
+        val exportKey = pendingExport.consume()
+        if (exportKey != null) {
             scope.launch {
                 val written = withContext(Dispatchers.IO) {
                     runCatching {
-                        context.contentResolver.openOutputStream(uri, "w")?.use { output ->
-                            output.write(content.toByteArray(Charsets.UTF_8))
-                            output.flush()
-                        } != null
+                        if (uri == null) {
+                            exportStore.discard(exportKey)
+                            false
+                        } else exportStore.consume(exportKey) { input ->
+                            context.contentResolver.openOutputStream(uri, "w")?.use { output ->
+                                input.copyTo(output)
+                                output.flush()
+                                true
+                            } ?: false
+                        }
                     }.getOrDefault(false)
                 }
-                operationMessage = if (written) {
+                if (uri != null) operationMessage = if (written) {
                     voxUiText("%@ exported.", voxUiText("Markdown"))
                 } else {
                     voxUiText("The export could not be written.")
@@ -488,6 +494,7 @@ internal fun HistoryScreen(
             }
         }
     }
+
     val exportAll: () -> Unit = {
         exportMenuOpen = false
         isExporting = true
@@ -496,13 +503,18 @@ internal fun HistoryScreen(
                 .filter { it.state != CaptureState.COMPLETED }
                 .mapNotNull { runCatching { loadCaptureDetail(it.requestID) }.getOrNull() }
             val markdown = withContext(Dispatchers.Default) { libraryMarkdownExport(details, transcripts) }
-            isExporting = false
             if (markdown == null) {
                 operationMessage = voxUiText("The export could not be written.")
             } else {
-                pendingExport = markdown
-                createDocument.launch("vox-library.md")
+                val exportKey = withContext(Dispatchers.IO) { runCatching { exportStore.stage(markdown) }.getOrNull() }
+                if (exportKey == null) {
+                    operationMessage = voxUiText("The export could not be written.")
+                } else {
+                    pendingExport.begin(exportKey)
+                    createDocument.launch("vox-library.md")
+                }
             }
+            isExporting = false
         }
     }
     val signal = Signal.colors

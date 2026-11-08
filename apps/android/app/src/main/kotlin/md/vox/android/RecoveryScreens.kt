@@ -180,7 +180,7 @@ internal fun RecordingQueueScreen(
     val policyStore = remember(context) { RecordingJobPolicyStore.get(context) }
     var recordings by remember { mutableStateOf(client.recordings()) }
     var policies by remember { mutableStateOf(recordings.associate { requireNotNull(it.sessionID) to policyStore.policy(requireNotNull(it.sessionID)) }) }
-    var pendingExport by remember { mutableStateOf<RecordingStatus?>(null) }
+    val pendingExport = rememberPendingDocumentRequest()
     var pendingDelete by remember { mutableStateOf<RecordingStatus?>(null) }
     var operationMessage by remember { mutableStateOf<VoxUiText?>(null) }
     var isExporting by remember { mutableStateOf(false) }
@@ -208,16 +208,16 @@ internal fun RecordingQueueScreen(
         }
     }
     val exporter = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("audio/wav")) { uri ->
-        val recording = pendingExport
-        pendingExport = null
-        val recordingID = recording?.sessionID
+        val recordingID = pendingExport.consume()
         if (uri != null && recordingID != null) {
             scope.launch {
                 isExporting = true
                 val exported = withContext(Dispatchers.IO) {
-                    context.contentResolver.openOutputStream(uri, "w")?.use { output ->
-                        client.exportWav(recordingID, output)
-                    } == true
+                    runCatching {
+                        context.contentResolver.openOutputStream(uri, "w")?.use { output ->
+                            client.exportWav(recordingID, output)
+                        } == true
+                    }.getOrDefault(false)
                 }
                 if (exported && client.isImportedFromWear(recordingID)) {
                     withContext(Dispatchers.IO) {
@@ -277,7 +277,7 @@ internal fun RecordingQueueScreen(
             finish = finish,
             cancel = cancel,
             export = {
-                pendingExport = recording
+                pendingExport.begin(sessionID)
                 exporter.launch("vox-recording-${recording.sessionID?.take(8)}.wav")
             },
             shareAudio = {
@@ -906,10 +906,9 @@ internal fun ModelsScreen(navigateBack: () -> Unit) {
     val speakerModelState by speakerManager.state.collectAsStateWithLifecycle()
     val autoStopStore = remember(context) { VoiceAutoStopSettingsStore.get(context) }
     val autoStopSettings by autoStopStore.state.collectAsStateWithLifecycle()
-    var pendingImportModelID by remember { mutableStateOf<String?>(null) }
+    val pendingModelImport = rememberPendingDocumentRequest()
     val importer = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        val modelID = pendingImportModelID
-        pendingImportModelID = null
+        val modelID = pendingModelImport.consume()
         if (uri != null && modelID != null) {
             val input = runCatching { context.contentResolver.openInputStream(uri) }.getOrNull()
             if (input != null) manager.installImportedZip(modelID, input)
@@ -933,7 +932,7 @@ internal fun ModelsScreen(navigateBack: () -> Unit) {
         selectAutomatic = manager::selectAutomatic,
         installModel = { manager.install(it) },
         importModel = { modelID ->
-            pendingImportModelID = modelID
+            pendingModelImport.begin(modelID)
             importer.launch(arrayOf("application/zip", "application/octet-stream"))
         },
         cancelModel = { manager.cancel(it) },

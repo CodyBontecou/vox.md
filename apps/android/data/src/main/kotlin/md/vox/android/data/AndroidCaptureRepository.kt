@@ -1,5 +1,8 @@
 package md.vox.android.data
 
+import md.vox.android.capturedomain.CapturePresetPaths
+import md.vox.android.capturedomain.CaptureWebLink
+
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
@@ -173,8 +176,8 @@ class AndroidCaptureRepository(
     override suspend fun saveDraft(text: String, url: String?, captureSource: String): CaptureDraft = withContext(Dispatchers.IO) {
         require(text.length <= MAX_TEXT_CHARACTERS) { "draftTextTooLarge" }
         require(captureSource in CAPTURE_SOURCES) { "invalidCaptureSource" }
-        val normalizedURL = url?.trim()?.takeIf(String::isNotEmpty)
-        require(normalizedURL == null || (normalizedURL.length <= MAX_URL_CHARACTERS && isHttpURL(normalizedURL))) { "invalidDraftURL" }
+        val normalizedURL = CaptureWebLink.normalize(url)
+        require(url.isNullOrBlank() || normalizedURL != null) { "invalidDraftURL" }
         val present = draftFrom(preferences.data.first())
         val draft = CaptureDraft(
             text = text,
@@ -215,8 +218,8 @@ class AndroidCaptureRepository(
     ): CaptureDraft = withContext(Dispatchers.IO) {
         require(UUID_PATTERN.matches(originRecordingID)) { "invalidOriginRecordingID" }
         require(text.length <= MAX_TEXT_CHARACTERS) { "draftTextTooLarge" }
-        val normalizedURL = url?.trim()?.takeIf(String::isNotEmpty)
-        require(normalizedURL == null || (normalizedURL.length <= MAX_URL_CHARACTERS && isHttpURL(normalizedURL))) { "invalidDraftURL" }
+        val normalizedURL = CaptureWebLink.normalize(url)
+        require(url.isNullOrBlank() || normalizedURL != null) { "invalidDraftURL" }
         val preset = frozenPreset?.let(::normalizePreset)
             ?: presetCollectionFrom(preferences.data.first()).activePreset
         val current = draftFrom(preferences.data.first())
@@ -594,15 +597,15 @@ class AndroidCaptureRepository(
             return CaptureSubmitResult.Delivered(requestID)
         }
         val normalizedText = draft.text.trimEnd()
-        val normalizedURL = draft.url?.trim()?.takeIf(String::isNotEmpty)
+        val normalizedURL = CaptureWebLink.normalize(draft.url)
         if (normalizedText.length > MAX_TEXT_CHARACTERS) {
             return CaptureSubmitResult.InvalidInput("Capture text must be 65,536 characters or fewer.")
         }
+        if (!draft.url.isNullOrBlank() && normalizedURL == null) {
+            return CaptureSubmitResult.InvalidInput("Enter a complete http:// or https:// link.")
+        }
         if (normalizedText.isBlank() && normalizedURL == null && draft.attachments.isEmpty()) {
             return CaptureSubmitResult.InvalidInput("Write something or add a link before sending.")
-        }
-        if (normalizedURL != null && !isHttpURL(normalizedURL)) {
-            return CaptureSubmitResult.InvalidInput("Enter a complete http:// or https:// link.")
         }
 
         val currentPreferences = preferences.data.first()
@@ -1141,7 +1144,7 @@ class AndroidCaptureRepository(
 
     private fun draftFrom(values: Preferences): CaptureDraft = CaptureDraft(
         text = values[draftTextKey].orEmpty().take(MAX_TEXT_CHARACTERS),
-        url = values[draftURLKey]?.take(MAX_URL_CHARACTERS)?.takeIf(::isHttpURL),
+        url = CaptureWebLink.normalize(values[draftURLKey]),
         updatedAtEpochMillis = values[draftUpdatedAtKey]?.coerceAtLeast(0L) ?: 0L,
         captureSource = values[draftSourceKey]?.takeIf(CAPTURE_SOURCES::contains) ?: "app",
         attachments = draftAttachmentsFrom(values),
@@ -1462,14 +1465,8 @@ class AndroidCaptureRepository(
         // then surfaces fall back to the preset's initial.
         require(symbol.codePointCount(0, symbol.length) in 0..32 && symbol.length <= 64) { "invalidPresetSymbol" }
         require(preset.emoji === null || preset.emoji!!.length <= 64) { "invalidPresetEmoji" }
-        val segments = preset.logicalFolder.split('/').map(String::trim).filter(String::isNotEmpty)
-        require(segments.size in 1..31 && segments.all(::isSafePathSegment)) { "invalidPresetFolder" }
-        val noteNameTemplate = preset.noteNameTemplate.trim()
-        require(
-            noteNameTemplate.length in 1..128 &&
-                noteNameTemplate.endsWith(".md", ignoreCase = true) &&
-                noteNameTemplate.none { it == '/' || it == '\\' || it == '\u0000' },
-        ) { "invalidNoteNameTemplate" }
+        val logicalFolder = requireNotNull(CapturePresetPaths.folder(preset.logicalFolder)) { "invalidPresetFolder" }
+        val noteNameTemplate = requireNotNull(CapturePresetPaths.filename(preset.noteNameTemplate)) { "invalidNoteNameTemplate" }
         require(preset.metadataFields.size <= MAX_METADATA_FIELDS) { "metadataFieldLimit" }
         val fields = preset.metadataFields.map { field ->
             val fieldName = field.name.trim()
@@ -1478,13 +1475,9 @@ class AndroidCaptureRepository(
             CaptureMetadataField(fieldName, field.value)
         }
         require(fields.map { it.name.lowercase() }.distinct().size == fields.size) { "duplicateMetadataName" }
-        val existingSegments = preset.existingNotePath.split('/').map(String::trim).filter(String::isNotEmpty)
-        if (preset.noteTargetKind == CaptureNoteTargetKind.EXISTING_NOTE) {
-            require(existingSegments.isNotEmpty() && existingSegments.size <= 32 && existingSegments.all(::isSafePathSegment)) {
-                "invalidExistingNotePath"
-            }
-            require(existingSegments.last().endsWith(".md", ignoreCase = true)) { "invalidExistingNotePath" }
-        }
+        val existingNotePath = if (preset.noteTargetKind == CaptureNoteTargetKind.EXISTING_NOTE) {
+            requireNotNull(CapturePresetPaths.existingNote(preset.existingNotePath)) { "invalidExistingNotePath" }
+        } else preset.existingNotePath.split('/').map(String::trim).filter(String::isNotEmpty).joinToString("/")
         require(preset.headingLevel in 1..6) { "invalidHeadingLevel" }
         if (preset.placement == CapturePlacementKind.BENEATH_HEADING) {
             require(preset.headingTitle.trim().isNotEmpty() && preset.headingTitle.length <= 256) { "invalidHeadingTitle" }
@@ -1492,8 +1485,9 @@ class AndroidCaptureRepository(
         require(preset.audioFilenameTemplate.length <= 1_024) { "invalidAudioFilenameTemplate" }
         require(preset.entryPrefix.length <= 16_384 && preset.entrySuffix.length <= 16_384) { "entryFormattingLimit" }
         require(preset.entryTemplateID?.let(PRESET_UUID_PATTERN::matches) != false) { "invalidEntryTemplateID" }
-        val attachmentSegments = preset.attachmentsFolder.split('/').map(String::trim).filter(String::isNotEmpty)
-        require(attachmentSegments.size <= 31 && attachmentSegments.all(::isSafePathSegment)) { "invalidAttachmentsFolder" }
+        val attachmentsFolder = requireNotNull(CapturePresetPaths.folder(preset.attachmentsFolder, allowEmpty = true)) {
+            "invalidAttachmentsFolder"
+        }
         require(preset.customProcessingInstruction.length <= 8_192 && preset.capturePrompt.length <= 512) { "processingConfigurationLimit" }
         require(preset.locationPolicy.collectionKey.matches(METADATA_NAME_PATTERN)) { "invalidLocationCollectionKey" }
         require(preset.locationPolicy.advancedTemplate.length <= 8_192) { "locationTemplateLimit" }
@@ -1536,12 +1530,12 @@ class AndroidCaptureRepository(
             symbol = symbol,
             emoji = CapturePresetEmoji.normalized(preset.emoji),
             revision = preset.revision.coerceAtLeast(1),
-            logicalFolder = segments.joinToString("/"),
+            logicalFolder = logicalFolder,
             noteNameTemplate = noteNameTemplate,
             metadataFields = fields,
-            existingNotePath = existingSegments.joinToString("/"),
+            existingNotePath = existingNotePath,
             headingTitle = preset.headingTitle.trim(),
-            attachmentsFolder = attachmentSegments.joinToString("/"),
+            attachmentsFolder = attachmentsFolder,
             locationPolicy = preset.locationPolicy.copy(structuredFields = structuredLocationFields),
             isEnabled = if (preset.id == DEFAULT_PRESET_ID) true else preset.isEnabled,
             exportSettings = export.copy(
@@ -1569,9 +1563,6 @@ class AndroidCaptureRepository(
 
     private inline fun <reified T : Enum<T>> JsonObject.enumOr(key: String, default: T): T =
         this[key]?.jsonPrimitive?.content?.let { value -> runCatching { enumValueOf<T>(value) }.getOrNull() } ?: default
-
-    private fun isSafePathSegment(value: String): Boolean =
-        value.length in 1..255 && value !in setOf(".", "..") && value.none { it == '/' || it == '\\' || it == '\u0000' }
 
     private data class PreparedRecordingAsset(
         val attachment: CaptureAttachment,
@@ -1821,11 +1812,6 @@ class AndroidCaptureRepository(
         put("templateFreezePoint", "firstPreparation")
     }
 
-    private fun isHttpURL(value: String): Boolean = runCatching {
-        val uri = URI(value)
-        (uri.scheme == "http" || uri.scheme == "https") && !uri.host.isNullOrBlank()
-    }.getOrDefault(false)
-
     private companion object {
         val destinationIDKey = stringPreferencesKey("capture.destination.id")
         val destinationNameKey = stringPreferencesKey("capture.destination.name")
@@ -1851,7 +1837,6 @@ class AndroidCaptureRepository(
         const val DEFAULT_PRESET_ID = "33333333-3333-4333-8333-333333333333"
         const val ZERO_SHA = "0000000000000000000000000000000000000000000000000000000000000000"
         const val MAX_TEXT_CHARACTERS = 65_536
-        const val MAX_URL_CHARACTERS = 8_192
         const val MAX_DRAFT_ATTACHMENTS = 32
         const val MAX_DRAFT_ATTACHMENT_BYTES = 100L * 1024 * 1024
         const val MAX_DRIVE_STEPS = 8

@@ -1161,9 +1161,11 @@ internal fun VoxNavigation(
                 )
             }
             composable(Destination.Presets.route) {
+                val templateEditor = rememberEntryTemplateEditorState()
                 BackHandler(enabled = expanded && adaptivePresetEditorID != null) { adaptivePresetEditorID = null }
                 val presetsList: @Composable () -> Unit = {
                     CapturePresetsScreen(
+                        templateEditor = templateEditor,
                         collection = latestState.presetCollection,
                         entryTemplates = latestState.entryTemplates,
                         isBusy = latestState.isSavingConfiguration,

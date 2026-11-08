@@ -32,6 +32,24 @@ class TranscriptHistoryTest {
         assertFalse(TranscriptSearch.matches(state, "revision viernes"))
     }
 
+    @Test fun searchCaseFoldingHandlesGreekSigmaAtWordAndSubstringBoundaries() {
+        for (raw in listOf("ΟΣ", "ΟΣΑΣ")) {
+            val greek = state.copy(transcript = raw, cleanedTranscript = null)
+            for (query in listOf("ΟΣ", "οσ", "ος")) {
+                assertTrue("$raw must match $query", TranscriptSearch.matches(greek, query))
+            }
+            assertFalse(TranscriptSearch.matches(greek, "ΟΣΒ"))
+        }
+    }
+
+    @Test fun searchPreservesTurkishAndPastedUnicodeNormalization() {
+        val unicode = state.copy(transcript = "İyi cafe\u0301 Straße", cleanedTranscript = null)
+        assertTrue(TranscriptSearch.matches(unicode, "İYİ\u00a0CAFÉ"))
+        assertTrue(TranscriptSearch.matches(unicode, "STRASSE"))
+        assertTrue(TranscriptSearch.matches(unicode, " \u2003 "))
+        assertFalse(TranscriptSearch.matches(unicode, "İYİ absent"))
+    }
+
     @Test fun structuredExportsEscapeContentAndStayTerminated() {
         val quoted = state.copy(transcript = "raw", cleanedTranscript = "A \"quote\"\nand slash \\")
         assertTrue(TranscriptExporter.render(quoted, TranscriptExportFormat.JSON).contains("\\\"quote\\\"\\nand slash \\\\"))

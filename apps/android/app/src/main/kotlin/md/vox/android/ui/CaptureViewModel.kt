@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import md.vox.android.capturedomain.CaptureRouteOverride
 import md.vox.android.capturedomain.CaptureDestination
 import md.vox.android.capturedomain.CaptureDraft
+import md.vox.android.capturedomain.CaptureWebLink
 import md.vox.android.capturedomain.CaptureBarAction
 import md.vox.android.capturedomain.CaptureBarConfiguration
 import md.vox.android.capturedomain.CaptureHistoryItem
@@ -94,9 +95,13 @@ internal class CaptureViewModel private constructor(
     }
 
     fun updateDraft(text: String, url: String?) {
+        val normalizedURL = CaptureWebLink.normalize(url)
+        val invalidLink = !url.isNullOrBlank() && normalizedURL == null
         val next = CaptureDraft(
             text = text.take(65_536),
-            url = url,
+            // An invalid attachment must never prevent otherwise valid text edits
+            // from reaching durable storage. Keep the last admitted link instead.
+            url = if (invalidLink) CaptureWebLink.normalize(mutableState.value.draft.url) else normalizedURL,
             updatedAtEpochMillis = System.currentTimeMillis(),
             captureSource = mutableState.value.draft.captureSource,
             attachments = mutableState.value.draft.attachments,
@@ -106,7 +111,9 @@ internal class CaptureViewModel private constructor(
             entryTemplateIDOverride = mutableState.value.draft.entryTemplateIDOverride,
             routeOverride = mutableState.value.draft.routeOverride,
         )
-        mutableState.update { it.copy(draft = next) }
+        mutableState.update {
+            it.copy(draft = next, notice = if (invalidLink) voxNotice("Enter a complete http:// or https:// link.") else it.notice)
+        }
         draftSaveJob?.cancel()
         draftSaveJob = viewModelScope.launch {
             try {

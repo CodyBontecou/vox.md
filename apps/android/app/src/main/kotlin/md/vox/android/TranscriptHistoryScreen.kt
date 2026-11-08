@@ -14,8 +14,6 @@ import androidx.compose.runtime.produceState
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import kotlinx.coroutines.delay
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -85,6 +83,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -136,7 +136,9 @@ internal object TranscriptSearch {
 
     private fun normalize(value: String): String = Normalizer.normalize(value, Normalizer.Form.NFKD)
         .filterNot { Character.getType(it) == Character.NON_SPACING_MARK.toInt() }
-        .lowercase(Locale.ROOT)
+        // Uppercase unifies normal/final sigma even at substring boundaries;
+        // lowercasing changes sigma according to its surrounding word.
+        .uppercase(Locale.ROOT)
 }
 
 internal object TranscriptExporter {
@@ -305,38 +307,22 @@ internal fun TranscriptDetailScreen(
         value = id != null && withContext(Dispatchers.IO) { runCatching { hasRetainedAudio(id) }.getOrDefault(false) }
     }
     val configuredExporter = remember(context) { AndroidConfiguredTranscriptExporter(context) }
-    var editing by remember(state?.sessionID) { mutableStateOf(initialEditing) }
-    var editedRawText by remember(state?.sessionID, state?.transcript) { mutableStateOf(state?.transcript.orEmpty()) }
-    var editedCleanedText by remember(state?.sessionID, state?.cleanedTranscript) {
-        mutableStateOf(state?.cleanedTranscript.orEmpty())
-    }
-    var editedTitle by remember(state?.sessionID, state?.title) { mutableStateOf(state?.title.orEmpty()) }
-    var editedTags by remember(state?.sessionID, state?.tags) { mutableStateOf(state?.tags.orEmpty().joinToString(", ")) }
-    var editedCategory by remember(state?.sessionID, state?.category) { mutableStateOf(state?.category.orEmpty()) }
+    // A new screen gets a fresh editor; rotation reuses its token and ViewModel.
+    val editorToken = rememberSaveable { java.util.UUID.randomUUID().toString() }
+    val editor = viewModel<TranscriptEditorViewModel>().editor(editorToken, state, initialEditing)
+    var editing by editor.editing
+    var editedRawText by editor.rawText
+    var editedCleanedText by editor.cleanedText
+    var editedTitle by editor.title
+    var editedTags by editor.tags
+    var editedCategory by editor.category
     var exportMenuOpen by remember { mutableStateOf(false) }
-    var pendingFormat by remember { mutableStateOf<TranscriptExportFormat?>(null) }
     var operationMessage by remember { mutableStateOf(initialOperationMessage) }
     var showsDeleteConfirmation by remember { mutableStateOf(initialShowsDeleteConfirmation) }
-    val createDocument = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("*/*")) { uri ->
-        val format = pendingFormat
-        pendingFormat = null
-        if (uri != null && format != null && state != null) {
-            scope.launch {
-                val written = withContext(Dispatchers.IO) {
-                    runCatching {
-                        context.contentResolver.openOutputStream(uri, "w")?.use { output ->
-                            output.write(TranscriptExporter.render(state, format).toByteArray(Charsets.UTF_8))
-                            output.flush()
-                        } != null
-                    }.getOrDefault(false)
-                }
-                operationMessage = if (written) {
-                    voxUiText("%@ exported.", format.label)
-                } else {
-                    voxUiText("The transcript could not be exported.")
-                }
-            }
-        }
+    val exportDocument = rememberDetailExport { formatName, written ->
+        val format = TranscriptExportFormat.valueOf(formatName)
+        operationMessage = if (written) voxUiText("%@ exported.", format.label)
+            else voxUiText("The transcript could not be exported.")
     }
 
     Column(
@@ -483,8 +469,7 @@ internal fun TranscriptDetailScreen(
                                 if (exportTranscript != null) {
                                     exportTranscript(state, format)
                                 } else {
-                                    pendingFormat = format
-                                    createDocument.launch("vox-transcript-${state.sessionID.take(8)}.${format.extension}")
+                                    exportDocument(format.name, TranscriptExporter.render(state, format), "vox-transcript-${state.sessionID.take(8)}.${format.extension}")
                                 }
                             },
                         )
@@ -637,6 +622,7 @@ private fun TranscriptEditField(
         modifier = Modifier.fillMaxWidth(),
         singleLine = minLines == 1,
         minLines = minLines,
+        maxLines = if (minLines == 1) 1 else maxOf(minLines, 12),
         label = { Text(label) },
         shape = SignalFieldShape,
         colors = signalTextFieldColors(),

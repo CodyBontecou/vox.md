@@ -1,8 +1,9 @@
 package md.vox.android
 
+import md.vox.android.capturedomain.CaptureWebLink
+
 import android.content.Intent
 import android.net.Uri
-import java.net.URI
 import java.util.UUID
 
 internal enum class ExternalCaptureAction {
@@ -68,7 +69,7 @@ internal object ExternalCaptureRequestParser {
         val host = uri.host?.lowercase() ?: return null
         if (host !in SUPPORTED_HOSTS) return null
         val text = uri.getQueryParameter("text").orEmpty()
-        val url = uri.getQueryParameter("url")?.takeIf(::isHttpURL)
+        val url = CaptureWebLink.normalize(uri.getQueryParameter("url"))
         val preset = uri.getQueryParameter("preset")?.takeIf(::isValidPresetID)
         val action = if (host in RECORDING_HOSTS || uri.getQueryParameter("action") == "voice") {
             ExternalCaptureAction.RECORD
@@ -108,7 +109,7 @@ internal object ExternalCaptureRequestParser {
         attachmentUris: List<String>,
     ): ExternalCaptureRequest? {
         val parts = textValues.map { it.toString().trim() }.filter(String::isNotEmpty)
-        val singleURL = parts.singleOrNull()?.takeIf(::isHttpURL)
+        val singleURL = CaptureWebLink.normalize(parts.singleOrNull())
         val normalizedTitle = title?.toString()?.trim().orEmpty()
         val text = when {
             singleURL != null -> normalizedTitle
@@ -139,11 +140,6 @@ internal object ExternalCaptureRequestParser {
 
     private fun Intent.charSequenceArrayListExtra(name: String): List<CharSequence> =
         @Suppress("DEPRECATION") (getCharSequenceArrayListExtra(name).orEmpty())
-
-    private fun isHttpURL(value: String): Boolean = runCatching {
-        val uri = URI(value.trim())
-        uri.scheme?.lowercase() in setOf("http", "https") && !uri.host.isNullOrBlank()
-    }.getOrDefault(false)
 
     private fun isValidPresetID(value: String): Boolean = runCatching { UUID.fromString(value); true }.getOrDefault(false)
 
