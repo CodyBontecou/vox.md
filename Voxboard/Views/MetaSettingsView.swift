@@ -18,6 +18,7 @@ struct MetaSettingsView: View {
 
     @State private var showPaywall = false
     @State private var showDebugLog = false
+    @State private var showsFeedbackFallback = false
 #if os(iOS)
     @State private var showMailCompose = false
 #endif
@@ -100,11 +101,6 @@ struct MetaSettingsView: View {
             routeFlows = CapturePresetStore.loadFlows().filter(\.isEnabled)
             surfaceRevision &+= 1
         }
-#if os(iOS)
-        .sheet(isPresented: $showMailCompose) {
-            MailComposeView()
-        }
-#endif
     }
 
     // MARK: - Group scaffolding
@@ -419,6 +415,17 @@ struct MetaSettingsView: View {
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(Geist.bg, for: .navigationBar)
+        .alert("Email Unavailable", isPresented: $showsFeedbackFallback) {
+            Button("Copy Email Address") { FeedbackHelper.copySupportEmailAddress() }
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("No email app could be opened. You can contact support at \(FeedbackHelper.supportEmail).")
+        }
+#if os(iOS)
+        .sheet(isPresented: $showMailCompose) {
+            MailComposeView()
+        }
+#endif
     }
 
     private var entitlementProducts: [VoxboardPurchaseProduct] { storeManager.currentEntitlementProducts }
@@ -740,6 +747,8 @@ struct MetaSettingsView: View {
             Toggle("", isOn: isOn)
                 .labelsHidden()
                 .tint(Geist.accent)
+                .accessibilityLabel(title)
+                .accessibilityHint(description)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
@@ -918,8 +927,13 @@ struct MetaSettingsView: View {
         }
 #endif
 
-        guard let url = FeedbackHelper.mailtoURL(payload: payload) else { return }
-        openURL(url)
+        guard let url = FeedbackHelper.mailtoURL(payload: payload) else {
+            showsFeedbackFallback = true
+            return
+        }
+        openURL(url) { accepted in
+            if !accepted { showsFeedbackFallback = true }
+        }
     }
 
     private var appVersionString: String {

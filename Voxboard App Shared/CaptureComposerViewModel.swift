@@ -1447,7 +1447,7 @@ final class QuickCaptureViewModel {
     }
 
     func addURL(_ url: URL, title: String? = nil) async {
-        guard let scheme = url.scheme?.lowercased(), scheme == "http" || scheme == "https" else {
+        guard CaptureWebLink.isValid(url) else {
             errorMessage = String(localized: "Enter a complete http:// or https:// link.")
             return
         }
@@ -1936,7 +1936,7 @@ final class QuickCaptureViewModel {
         if let id = incoming.destinationID, !library.destinations.contains(where: { $0.id == id }) {
             throw QuickCaptureViewModelError.unknownDestination
         }
-        if let url = incoming.url, !["http", "https"].contains(url.scheme?.lowercased() ?? "") {
+        if let url = incoming.url, !CaptureWebLink.isValid(url) {
             throw CaptureDeepLinkError.invalidURL
         }
         // Check the combined draft, not just the parser's incoming text budget.

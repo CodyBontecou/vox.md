@@ -43,8 +43,7 @@ public struct CaptureMarkdownRenderer: Sendable {
                 if includeText { append(text, to: &blocks) }
 
             case .url(let url, let title):
-                guard let scheme = url.scheme?.lowercased(),
-                      scheme == "http" || scheme == "https" else {
+                guard CaptureWebLink.isValid(url) else {
                     throw CaptureRenderingError.unsafeURL(url.absoluteString)
                 }
                 let label = nonEmpty(title) ?? url.absoluteString

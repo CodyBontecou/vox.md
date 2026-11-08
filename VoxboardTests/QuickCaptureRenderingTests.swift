@@ -77,6 +77,77 @@ final class QuickCaptureRenderingTests: XCTestCase {
         return nil
     }
 
+    func testUndoLongPasteKeepsGlyphsVisibleAfterEditorEnlarges() async throws {
+        let editor = LiveTranscriptRenderingState()
+        editor.text = "# A draft worth keeping\n- [ ] First task\n- [ ] Another task\n\nOriginal words remain visible."
+        let original = editor.text
+        let host = UIHostingController(rootView: LiveTranscriptComposerHarness(editor: editor)
+            .background(Color.white).environment(\.colorScheme, .light))
+        let window = show(host, size: CGSize(width: 390, height: 680))
+        defer { window.isHidden = true; window.rootViewController = nil }
+        try await settle(window)
+        let textView = try XCTUnwrap(find("quick_capture_text", in: host.view) as? UITextView)
+        let baseline = try darkGlyphPixels(in: textView)
+        XCTAssertGreaterThan(baseline, 500)
+        let pastes = [
+            String(repeating: "\né 👩🏽‍💻 العربية 日本語 [ ]", count: 200),
+            "\n```md\n- [ ] " + String(repeating: "x", count: 2_048) + "\n```\n"
+                + String(repeating: "> 👨‍👩‍👧‍👦 é\n", count: 80),
+        ]
+        for paste in pastes {
+            window.frame.size = CGSize(width: 390, height: 400)
+            host.view.frame = window.bounds
+            textView.becomeFirstResponder()
+            try await settle(window)
+            textView.selectedRange = NSRange(location: original.utf16.count, length: 0)
+            textView.insertText(paste)
+            try await settle(window)
+            textView.undoManager?.undo()
+            try await settle(window)
+            XCTAssertEqual(textView.text, original)
+            editor.isFocused = false
+            textView.resignFirstResponder()
+            for size in [CGSize(width: 390, height: 900), CGSize(width: 900, height: 390),
+                         CGSize(width: 390, height: 900)] {
+                window.frame.size = size
+                host.view.frame = window.bounds
+                try await settle(window)
+                XCTAssertGreaterThan(try darkGlyphPixels(in: textView), baseline / 2,
+                    "Resizing after Undo must redraw the restored paragraphs, not an empty viewport")
+            }
+            textView.becomeFirstResponder()
+            try await settle(window)
+            editor.isFocused = false
+            textView.resignFirstResponder()
+            try await settle(window)
+            XCTAssertGreaterThan(try darkGlyphPixels(in: textView), baseline / 2)
+        }
+        retainScreenshot("Undo long paste after keyboard dismissal", in: host.view)
+    }
+
+    private func darkGlyphPixels(in view: UIView) throws -> Int {
+        let bounds = CGRect(x: 0, y: 0, width: view.bounds.width, height: min(220, view.bounds.height))
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        let image = UIGraphicsImageRenderer(bounds: bounds, format: format).image { context in
+            UIColor.white.setFill()
+            context.fill(bounds)
+            view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+        }
+        let cgImage = try XCTUnwrap(image.cgImage)
+        let width = cgImage.width, height = cgImage.height
+        var pixels = [UInt8](repeating: 0, count: width * height * 4)
+        try pixels.withUnsafeMutableBytes { buffer in
+            let context = try XCTUnwrap(CGContext(data: buffer.baseAddress, width: width, height: height,
+                bitsPerComponent: 8, bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+            context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+        }
+        return stride(from: 0, to: pixels.count, by: 4).filter {
+            pixels[$0] < 120 && pixels[$0 + 1] < 120 && pixels[$0 + 2] < 120
+        }.count
+    }
+
     func testWorkspaceResizesWithoutReplacingEditorOrLosingSelection() async throws {
         let editor = LiveTranscriptRenderingState()
         editor.text = "A draft survives folding and unfolding."

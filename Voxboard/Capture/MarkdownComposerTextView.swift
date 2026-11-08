@@ -144,7 +144,16 @@ struct MarkdownComposerTextView: UIViewRepresentable {
     }
 
     func makeUIView(context: Context) -> UITextView {
-        let textView = MarkdownComposerUITextView()
+        // This editor restyles its entire text storage after edits. TextKit 2's
+        // lazy rendering can lose restored glyphs after Undo and a keyboard or
+        // orientation resize; TextKit 1 keeps those rendering surfaces coherent.
+        let storage = NSTextStorage(string: "")
+        let layoutManager = NSLayoutManager()
+        let container = NSTextContainer(size: CGSize(width: 0, height: CGFloat.greatestFiniteMagnitude))
+        container.widthTracksTextView = true
+        storage.addLayoutManager(layoutManager)
+        layoutManager.addTextContainer(container)
+        let textView = MarkdownComposerUITextView(frame: .zero, textContainer: container)
         textView.delegate = context.coordinator
         textView.textDropDelegate = context.coordinator
         textView.backgroundColor = .clear

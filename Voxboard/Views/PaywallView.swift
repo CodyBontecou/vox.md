@@ -381,8 +381,10 @@ struct PaywallView: View {
                             .accessibilityHint(family ? String(localized: "For your Apple Family Sharing group. Each person keeps their own notes.") : String(localized: "For you, across your Apple devices."))
                     }
                     if !storeManager.isEntitlementStateReady {
-                        ProgressView("Checking Purchases…")
-                            .frame(maxWidth: .infinity, minHeight: 180)
+                        if storeManager.errorMessage == nil {
+                            ProgressView("Checking Purchases…")
+                                .frame(maxWidth: .infinity, minHeight: 180)
+                        }
                     } else {
                         VStack(spacing: 8) {
                             ForEach(Array(offers.enumerated()), id: \.element.rawValue) { index, product in
@@ -552,7 +554,7 @@ struct PaywallView: View {
                 .frame(maxWidth: .infinity)
             }
             .buttonStyle(GeistButtonStyle(variant: .accent))
-            .disabled(storeManager.isPurchasing || storeManager.isRestoring || storeManager.product(for: product) == nil)
+            .disabled(!storeManager.isEntitlementStateReady || storeManager.isPurchasing || storeManager.isRestoring || storeManager.product(for: product) == nil)
             .accessibilityIdentifier("paywall.purchase")
             Text(finePrint(for: product, trial: trial))
                 .font(Geist.caption(.caption))

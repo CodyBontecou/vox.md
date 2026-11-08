@@ -13,6 +13,7 @@ struct CaptureLiveRecordingScreen: View {
     /// tile on the Capture and Routes screens.
     var routeTone: SignalRouteTileTone = .primary
     let engineLabel: String
+    var errorMessage: String? = nil
     let speakerCount: Int
     let duration: String
     let isPaused: Bool
@@ -40,29 +41,17 @@ struct CaptureLiveRecordingScreen: View {
     var body: some View {
         // Large windows (iPad, a propped Duo inner screen) switch to the
         // tabletop layout; the recorder state is the same either way.
-        GeometryReader { proxy in
-            Group {
-                if AdaptiveLayout.usesTabletopRecording(
-                    size: proxy.size,
-                    horizontalSizeClass: horizontalSizeClass,
-                    hinge: hingeState
-                ) {
-                    CaptureTabletopRecordingLayout(
-                        screen: self,
-                        feedback: actionFeedback,
-                        confirmDiscard: { confirmsDiscard = true },
-                        flash: flash
-                    )
-                } else if AdaptiveLayout.isCoverScreen(
-                    horizontalSizeClass: horizontalSizeClass,
-                    hinge: hingeState
-                ) {
-                    coverLayout
-                } else {
-                    standardLayout
-                }
+        VStack(spacing: 0) {
+            if let errorMessage {
+                Text(verbatim: errorMessage)
+                    .font(Geist.body())
+                    .foregroundStyle(Color(captureHex: 0xF4F4F1))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(12)
+                    .background(Geist.recording.opacity(0.22))
+                    .accessibilityIdentifier("capture_live_recording_error")
             }
-            .frame(width: proxy.size.width, height: proxy.size.height)
+            recordingLayout
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(captureHex: 0x0B0B0B).ignoresSafeArea())
@@ -83,6 +72,33 @@ struct CaptureLiveRecordingScreen: View {
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("capture_live_recording_screen")
+    }
+
+    private var recordingLayout: some View {
+        GeometryReader { proxy in
+            Group {
+                if AdaptiveLayout.usesTabletopRecording(
+                    size: proxy.size,
+                    horizontalSizeClass: horizontalSizeClass,
+                    hinge: hingeState
+                ) {
+                    CaptureTabletopRecordingLayout(
+                        screen: self,
+                        feedback: actionFeedback,
+                        confirmDiscard: { confirmsDiscard = true },
+                        flash: flash
+                    )
+                } else if proxy.size.height < 440 || AdaptiveLayout.isCoverScreen(
+                    horizontalSizeClass: horizontalSizeClass,
+                    hinge: hingeState
+                ) {
+                    coverLayout
+                } else {
+                    standardLayout
+                }
+            }
+            .frame(width: proxy.size.width, height: proxy.size.height)
+        }
     }
 
     /// The phone (and Duo cover) recording layout.
@@ -162,7 +178,7 @@ struct CaptureLiveRecordingScreen: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 14) {
                     let items = paragraphs
-                    if items.isEmpty && volatileText.isEmpty {
+                    if items.isEmpty && volatileText.isEmpty && errorMessage == nil {
                         Text(isPaused ? String(localized: "Paused — resume to keep recording this note.") : String(localized: "Start talking…"))
                             .font(.custom("Geist-Medium", size: 19, relativeTo: .title3))
                             .foregroundStyle(Color(captureHex: 0x8A8A85))
@@ -343,7 +359,7 @@ struct CaptureLiveRecordingScreen: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 20) {
                     let items = paragraphs
-                    if items.isEmpty && volatileText.isEmpty {
+                    if items.isEmpty && volatileText.isEmpty && errorMessage == nil {
                         Text(isPaused ? String(localized: "Paused — resume to keep recording this note.") : String(localized: "Start talking…"))
                             .font(.custom("Geist-Medium", size: 21, relativeTo: .title3))
                             .foregroundStyle(Color(captureHex: 0x8A8A85))

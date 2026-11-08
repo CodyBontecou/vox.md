@@ -481,12 +481,14 @@ struct CaptureToolbarSettingsView: View {
                     HStack(spacing: Geist.Spacing.three) {
                         actionIcon(action)
                             .frame(width: 24)
+                            .accessibilityHidden(true)
                         Text(action.title)
 
                         Spacer()
                         Toggle("", isOn: visibilityBinding(for: action))
                             .labelsHidden()
                             .tint(Geist.Palette.gray1000)
+                            .accessibilityLabel(action.title)
                     }
                 }
                 .onMove(perform: preferences.moveActions)

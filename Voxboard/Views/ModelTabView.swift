@@ -166,7 +166,7 @@ struct ModelTabView: View {
                         // Only worth a line when Apple Speech is not ready.
                         Label(automaticAvailabilityLabel, systemImage: automaticAvailabilityIcon)
                             .font(Geist.caption())
-                            .foregroundStyle(automaticAvailability == .unavailable ? Geist.Palette.amber900 : Geist.muted)
+                            .foregroundStyle(automaticAvailability == .unavailable && fallbackModel == nil ? Geist.Palette.amber900 : Geist.muted)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
@@ -235,7 +235,11 @@ struct ModelTabView: View {
         switch automaticAvailability {
         case .ready: return String(localized: "Apple Speech ready for this language")
         case .supported: return String(localized: "Apple Speech available; system asset may need preparation")
-        case .unavailable: return String(localized: "Apple Speech unavailable; a downloaded fallback is required")
+        case .unavailable:
+            if let fallbackModel {
+                return String(localized: "Apple Speech unavailable; \(fallbackModel.name) is ready as the fallback.")
+            }
+            return String(localized: "Apple Speech unavailable; a downloaded fallback is required")
         }
     }
 
@@ -243,7 +247,7 @@ struct ModelTabView: View {
         switch automaticAvailability {
         case .ready: return "checkmark.circle.fill"
         case .supported: return "arrow.down.circle"
-        case .unavailable: return "exclamationmark.triangle"
+        case .unavailable: return fallbackModel == nil ? "exclamationmark.triangle" : "checkmark.circle.fill"
         }
     }
 
