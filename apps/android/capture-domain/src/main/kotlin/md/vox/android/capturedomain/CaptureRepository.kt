@@ -440,6 +440,8 @@ data class CaptureHistoryDetail(
     val processingMode: CaptureProcessingMode? = null,
     val processingOutcome: CaptureTextProcessingOutcome? = null,
     val processingNotice: String? = null,
+    val recoverySourceRequestID: String? = null,
+    val replacementRequestID: String? = null,
 )
 
 data class CaptureDrainSummary(
@@ -549,6 +551,9 @@ interface CaptureRepository {
     ): CaptureSubmitResult
     /** Explicitly stop a provably pre-commit delivery while retaining its local content. */
     suspend fun discard(requestID: String): Boolean = false
+    suspend fun recoveryContext(requestID: String): CaptureRecoveryContext? = null
+    suspend fun replaceCapture(command: CaptureRecoveryCommand): CaptureRecoveryResult =
+        CaptureRecoveryResult.Rejected(CaptureRecoveryRejection.UNAVAILABLE)
     suspend fun retry(requestID: String): CaptureSubmitResult
     suspend fun reconcile(): List<CaptureHistoryItem>
     suspend fun history(): List<CaptureHistoryItem>

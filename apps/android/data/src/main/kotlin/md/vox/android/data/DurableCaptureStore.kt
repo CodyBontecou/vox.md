@@ -675,6 +675,9 @@ class DurableCapturePackageStore(
         }
     } catch (_: Exception) { null }
 
+    internal fun hasPackageEntry(requestID: String): Boolean =
+        UUID_PATTERN.matches(requestID) && fileOps.exists(File(root, requestID))
+
     /** Loads the current journal snapshot without mutation. */
     fun loadJournal(requestID: String): JournalSnapshot? = try {
         validatePackage(File(root, requestID)).snapshot

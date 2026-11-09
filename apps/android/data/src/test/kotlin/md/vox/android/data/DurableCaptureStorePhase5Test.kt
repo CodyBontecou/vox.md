@@ -101,7 +101,7 @@ class DurableCaptureStorePhase5Test {
     private fun command(snapshot: JournalSnapshot, token: String, event: (Int) -> JournalEvent) =
         JournalMutationCommand(requestID, snapshot.revision, event(snapshot.revision + 1), token)
 
-    private fun stageAndPromote(store: DurableCapturePackageStore, noteBytes: ByteArray, planBytes: ByteArray, hash: String = planHash): PreparedPlanDescriptor {
+    internal fun stageAndPromote(store: DurableCapturePackageStore, noteBytes: ByteArray, planBytes: ByteArray, hash: String = planHash): PreparedPlanDescriptor {
         val stagingUUID = "33333333-3333-4333-8333-333333333333"
         val sink = store.openStagedNoteSink(requestID, stagingUUID, noteBytes.size.toLong(), CapturePackageCodec.sha256(noteBytes))
         sink.write(noteBytes)
@@ -110,7 +110,7 @@ class DurableCaptureStorePhase5Test {
         return PreparedPlanDescriptor(hash, noteBytes.size.toLong(), CapturePackageCodec.sha256(noteBytes))
     }
 
-    private fun minimalPlan(noteLength: Long, noteSha: String, hash: String = planHash): ByteArray {
+    internal fun minimalPlan(noteLength: Long, noteSha: String, hash: String = planHash): ByteArray {
         val operationID = VoxDeterministicIds.uuid5(
             "vox.operation.v1",
             CapturePackageCodec.canonical(
@@ -327,7 +327,7 @@ class DurableCaptureStorePhase5Test {
 
     // ---- minimal local fakes mirroring production semantics ----
 
-    private class MemoryIndex : CaptureIndex {
+    internal class MemoryIndex : CaptureIndex {
         val rows = linkedMapOf<String, CaptureIndexProjection>()
         override fun read(requestID: String) = rows[requestID]
         override fun all(): List<CaptureIndexProjection> = rows.values.toList()
@@ -340,7 +340,7 @@ class DurableCaptureStorePhase5Test {
         }
     }
 
-    private class MemoryLeases : CaptureLeasePersistence {
+    internal class MemoryLeases : CaptureLeasePersistence {
         private val leases = ConcurrentHashMap<String, CaptureLease>()
         private var maximum = 0L
         private fun plan(requestID: String, token: String, now: Long, duration: Long, result: (CaptureLease, Long) -> LeasePlan): LeasePlan {
@@ -369,7 +369,7 @@ class DurableCaptureStorePhase5Test {
         override fun clearExpired(nowEpochMillis: Long): LeaseClearResult = LeaseClearResult.Cleared(0)
     }
 
-    private class JvmOps : DurableFileOps {
+    internal class JvmOps : DurableFileOps {
         override fun ensureDirectory(directory: File) { directory.mkdirs() || directory.isDirectory }
         override fun createDirectory(directory: File) { if (!directory.mkdir() || !isDirectoryNoFollow(directory)) error("mkdirFailed") }
         override fun writeFileDurably(file: File, bytes: ByteArray, checkpoint: (String) -> Unit) {

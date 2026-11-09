@@ -1858,6 +1858,10 @@ internal fun DeliveryProblemSheet(
     editRoute: (() -> Unit)?,
     onDismiss: () -> Unit,
     discard: (() -> Unit)? = null,
+    recoveryPresets: List<md.vox.android.capturedomain.CapturePreset> = emptyList(),
+    recoveryDestination: md.vox.android.capturedomain.CaptureDestination? = null,
+    loadRecoveryContext: suspend (String) -> md.vox.android.capturedomain.CaptureRecoveryContext? = { null },
+    replaceCapture: ((md.vox.android.capturedomain.CaptureRecoveryCommand) -> Unit)? = null,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(
@@ -1886,6 +1890,8 @@ internal fun DeliveryProblemSheet(
             },
             editRoute = editRoute?.let { edit -> { onDismiss(); edit() } },
             discard = discard?.let { action -> { action(); onDismiss() } },
+            recoveryPresets = recoveryPresets, recoveryDestination = recoveryDestination,
+            loadRecoveryContext = loadRecoveryContext, replaceCapture = replaceCapture,
         )
     }
 }
@@ -1902,6 +1908,10 @@ internal fun DeliveryProblemContent(
     editRoute: (() -> Unit)?,
     modifier: Modifier = Modifier,
     discard: (() -> Unit)? = null,
+    recoveryPresets: List<md.vox.android.capturedomain.CapturePreset> = emptyList(),
+    recoveryDestination: md.vox.android.capturedomain.CaptureDestination? = null,
+    loadRecoveryContext: suspend (String) -> md.vox.android.capturedomain.CaptureRecoveryContext? = { null },
+    replaceCapture: ((md.vox.android.capturedomain.CaptureRecoveryCommand) -> Unit)? = null,
 ) {
     val c = Signal.colors
     val context = LocalContext.current
@@ -1985,6 +1995,10 @@ internal fun DeliveryProblemContent(
             }
         }
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            replaceCapture?.let { replace ->
+                CaptureRecoveryControls(item.requestID, item.updatedAtEpochMillis, isBusy, recoveryPresets,
+                    recoveryDestination, loadRecoveryContext, replace)
+            }
             if (discard != null && item.state in setOf(CaptureState.RETRYABLE_FAILURE, CaptureState.NEEDS_USER_ACTION, CaptureState.NEEDS_PERMISSION)) {
                 SignalButton(text = voxString("Discard delivery"), onClick = { confirmsDiscard = true },
                     enabled = !isBusy, variant = SignalButtonVariant.TERTIARY)

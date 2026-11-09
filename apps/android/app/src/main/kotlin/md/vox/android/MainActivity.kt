@@ -910,6 +910,10 @@ internal fun VoxNavigation(
             composable(ACTIVITY_ROUTE) {
                 ActivityScreen(
                     discard = model::discard,
+                    recoveryPresets = latestState.presetCollection?.presets.orEmpty(),
+                    recoveryDestination = latestState.destination,
+                    loadRecoveryContext = model::recoveryContext,
+                    replaceCapture = model::replaceCapture,
                     items = latestState.history,
                     transcripts = transcriptionStates.values.toList(),
                     isBusy = latestState.isSending || latestState.isDeletingHistory,

@@ -224,6 +224,14 @@ internal fun captureRouteLogEntries(detail: CaptureHistoryDetail): List<CaptureR
             detail = captureSourceUiText(detail.captureSource),
         ),
     )
+    detail.recoverySourceRequestID?.let {
+        add(CaptureRouteLogEntry(voxUiText("Recovered from another capture"), CaptureRouteLogOutcome.SUCCEEDED,
+            detail = voxUiText("%@: %@", voxUiText("Capture"), it)))
+    }
+    detail.replacementRequestID?.let {
+        add(CaptureRouteLogEntry(voxUiText("Replaced by an explicit recovery"), CaptureRouteLogOutcome.SUCCEEDED,
+            detail = voxUiText("%@: %@", voxUiText("Capture"), it)))
+    }
     detail.processingMode?.takeIf { it != CaptureProcessingMode.NONE }?.let { mode ->
         val (title, outcome) = when (detail.processingOutcome) {
             CaptureTextProcessingOutcome.APPLIED, CaptureTextProcessingOutcome.UNCHANGED ->
