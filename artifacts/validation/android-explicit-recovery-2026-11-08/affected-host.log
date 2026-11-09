@@ -1,0 +1,512 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Calculating task graph as no cached configuration is available for tasks: :capture-domain:testDebugUnitTest :core-bridge:testDebugUnitTest :data:testDebugUnitTest :app:testDebugUnitTest :data:compileDebugAndroidTestKotlin :app:compileDebugAndroidTestKotlin :app:lintDebug
+> Task :build-logic:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :build-logic:compileKotlin UP-TO-DATE
+> Task :build-logic:compileJava NO-SOURCE
+> Task :build-logic:pluginDescriptors UP-TO-DATE
+> Task :build-logic:processResources UP-TO-DATE
+> Task :build-logic:classes UP-TO-DATE
+> Task :build-logic:jar UP-TO-DATE
+> Task :capture-domain:preBuild UP-TO-DATE
+> Task :capture-domain:preDebugBuild UP-TO-DATE
+> Task :capture-domain:generateDebugResources UP-TO-DATE
+> Task :capture-domain:packageDebugResources UP-TO-DATE
+> Task :capture-domain:processDebugNavigationResources UP-TO-DATE
+> Task :capture-domain:parseDebugLocalResources UP-TO-DATE
+> Task :capture-domain:generateDebugRFile UP-TO-DATE
+> Task :capture-domain:compileDebugKotlin UP-TO-DATE
+> Task :capture-domain:javaPreCompileDebug UP-TO-DATE
+> Task :capture-domain:compileDebugJavaWithJavac NO-SOURCE
+> Task :capture-domain:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :capture-domain:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :capture-domain:preDebugUnitTestBuild UP-TO-DATE
+> Task :capture-domain:generateDebugUnitTestStubRFile FROM-CACHE
+> Task :capture-domain:compileDebugUnitTestKotlin
+> Task :capture-domain:javaPreCompileDebugUnitTest FROM-CACHE
+> Task :capture-domain:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :capture-domain:processDebugJavaRes UP-TO-DATE
+> Task :capture-domain:processDebugUnitTestJavaRes
+> Task :capture-domain:testDebugUnitTest
+> Task :core-bridge:preBuild UP-TO-DATE
+> Task :core-bridge:preDebugBuild UP-TO-DATE
+> Task :core-bridge:generateDebugResources UP-TO-DATE
+> Task :core-bridge:packageDebugResources UP-TO-DATE
+> Task :core-bridge:processDebugNavigationResources UP-TO-DATE
+> Task :core-bridge:parseDebugLocalResources UP-TO-DATE
+> Task :core-bridge:generateDebugRFile UP-TO-DATE
+> Task :core-bridge:compileDebugKotlin UP-TO-DATE
+> Task :core-bridge:javaPreCompileDebug UP-TO-DATE
+> Task :core-bridge:compileDebugJavaWithJavac NO-SOURCE
+> Task :core-bridge:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :core-bridge:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :core-bridge:preDebugUnitTestBuild UP-TO-DATE
+> Task :core-bridge:generateDebugUnitTestStubRFile FROM-CACHE
+> Task :core-bridge:compileDebugUnitTestKotlin
+> Task :core-bridge:javaPreCompileDebugUnitTest FROM-CACHE
+> Task :core-bridge:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :core-bridge:processDebugJavaRes UP-TO-DATE
+> Task :core-bridge:processDebugUnitTestJavaRes
+> Task :core-bridge:testDebugUnitTest
+> Task :data:preBuild UP-TO-DATE
+> Task :data:preDebugBuild UP-TO-DATE
+> Task :data:generateDebugResources UP-TO-DATE
+> Task :data:packageDebugResources UP-TO-DATE
+> Task :data:processDebugNavigationResources UP-TO-DATE
+> Task :data:parseDebugLocalResources UP-TO-DATE
+> Task :data:generateDebugRFile UP-TO-DATE
+> Task :data:kaptGenerateStubsDebugKotlin
+> Task :data:kaptDebugKotlin
+> Task :data:compileDebugKotlin
+> Task :data:javaPreCompileDebug UP-TO-DATE
+> Task :data:compileDebugJavaWithJavac UP-TO-DATE
+> Task :data:bundleLibRuntimeToJarDebug
+> Task :data:bundleLibCompileToJarDebug
+> Task :data:preDebugUnitTestBuild UP-TO-DATE
+> Task :data:generateDebugUnitTestStubRFile UP-TO-DATE
+> Task :data:kaptGenerateStubsDebugUnitTestKotlin UP-TO-DATE
+> Task :data:kaptDebugUnitTestKotlin SKIPPED
+> Task :data:compileDebugUnitTestKotlin UP-TO-DATE
+> Task :data:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :data:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :data:processDebugJavaRes UP-TO-DATE
+> Task :data:processDebugUnitTestJavaRes UP-TO-DATE
+> Task :data:testDebugUnitTest
+> Task :app:physicalProvenance UP-TO-DATE
+> Task :app:generateLauncherIcons UP-TO-DATE
+
+> Task :app:generateRuntimeLocalizations
+runtime localizations: 21849 entries; literal sources: 1023; missing catalog sources: 22; rewrites: 0
+
+> Task :app:syncGeistFonts UP-TO-DATE
+> Task :app:preBuild
+> Task :app:preDebugBuild
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :platform-services:preBuild UP-TO-DATE
+> Task :platform-services:preDebugBuild UP-TO-DATE
+> Task :platform-services:processDebugNavigationResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :platform-services:generateDebugResources UP-TO-DATE
+> Task :platform-services:packageDebugResources UP-TO-DATE
+> Task :platform-services:parseDebugLocalResources UP-TO-DATE
+> Task :platform-services:generateDebugRFile UP-TO-DATE
+> Task :platform-services:compileDebugKotlin UP-TO-DATE
+> Task :platform-services:javaPreCompileDebug UP-TO-DATE
+> Task :platform-services:compileDebugJavaWithJavac NO-SOURCE
+> Task :platform-services:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :capture-domain:writeDebugAarMetadata UP-TO-DATE
+> Task :core-bridge:writeDebugAarMetadata UP-TO-DATE
+> Task :data:writeDebugAarMetadata UP-TO-DATE
+> Task :platform-services:writeDebugAarMetadata UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :capture-domain:extractDeepLinksDebug UP-TO-DATE
+> Task :capture-domain:processDebugManifest UP-TO-DATE
+> Task :core-bridge:extractDeepLinksDebug UP-TO-DATE
+> Task :core-bridge:processDebugManifest UP-TO-DATE
+> Task :data:extractDeepLinksDebug UP-TO-DATE
+> Task :data:processDebugManifest UP-TO-DATE
+> Task :platform-services:extractDeepLinksDebug UP-TO-DATE
+> Task :platform-services:processDebugManifest UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :capture-domain:mapDebugSourceSetPaths UP-TO-DATE
+> Task :capture-domain:compileDebugLibraryResources UP-TO-DATE
+> Task :core-bridge:mapDebugSourceSetPaths UP-TO-DATE
+> Task :core-bridge:compileDebugLibraryResources UP-TO-DATE
+> Task :data:mapDebugSourceSetPaths UP-TO-DATE
+> Task :data:compileDebugLibraryResources UP-TO-DATE
+> Task :platform-services:mapDebugSourceSetPaths UP-TO-DATE
+> Task :platform-services:compileDebugLibraryResources UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:bundleDebugClassesToRuntimeJar UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:preDebugUnitTestBuild
+> Task :app:compileDebugUnitTestKotlin UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:processDebugUnitTestJavaRes UP-TO-DATE
+> Task :platform-services:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :platform-services:processDebugJavaRes UP-TO-DATE
+> Task :app:testDebugUnitTest
+> Task :data:preDebugAndroidTestBuild UP-TO-DATE
+> Task :data:generateDebugAndroidTestResources FROM-CACHE
+> Task :data:packageDebugAndroidTestResources FROM-CACHE
+> Task :data:processDebugAndroidTestNavigationResources FROM-CACHE
+> Task :data:parseDebugAndroidTestLocalResources FROM-CACHE
+> Task :data:generateDebugAndroidTestRFile FROM-CACHE
+> Task :data:kaptGenerateStubsDebugAndroidTestKotlin
+> Task :data:kaptDebugAndroidTestKotlin SKIPPED
+> Task :data:compileDebugAndroidTestKotlin
+> Task :app:preDebugAndroidTestBuild SKIPPED
+> Task :app:generateDebugAndroidTestResources FROM-CACHE
+> Task :app:packageDebugAndroidTestResources FROM-CACHE
+> Task :app:processDebugAndroidTestNavigationResources FROM-CACHE
+> Task :app:parseDebugAndroidTestLocalResources FROM-CACHE
+> Task :app:generateDebugAndroidTestRFile FROM-CACHE
+
+> Task :app:compileDebugAndroidTestKotlin
+w: file:///private/tmp/vox-android-recovery-local-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureLocationLifecycleTest.kt:20:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-android-recovery-local-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityUiInstrumentationTest.kt:14:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-android-recovery-local-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureRotationInstrumentationTest.kt:23:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-android-recovery-local-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/ComposerPresetUiInstrumentationTest.kt:103:86 Unnecessary non-null assertion (!!) on a non-null receiver of type 'PresetWidgetSelection'.
+w: file:///private/tmp/vox-android-recovery-local-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/DetailExportRestorationTest.kt:27:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-android-recovery-local-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/HistoryInputFocusInstrumentationTest.kt:18:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-android-recovery-local-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/LocationUnavailableUiInstrumentationTest.kt:19:19 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-android-recovery-local-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/MainActivityInputFocusInstrumentationTest.kt:13:29 'fun <reified A : ComponentActivity> createAndroidComposeRule(effectContext: CoroutineContext = ...): AndroidComposeTestRule<ActivityScenarioRule<A>, A>' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createAndroidComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-android-recovery-local-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/PendingPickerRegressionTest.kt:28:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-android-recovery-local-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/RouteEditorEdgeCaseTest.kt:15:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-android-recovery-local-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/RouteOverrideRestorationTest.kt:14:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-android-recovery-local-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/TranscriptDraftRestorationTest.kt:17:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-android-recovery-local-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/WidgetConfigurationRestorationTest.kt:13:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+
+> Task :capture-domain:checkDebugAarMetadata
+> Task :capture-domain:mergeDebugJniLibFolders
+> Task :capture-domain:mergeDebugNativeLibs NO-SOURCE
+> Task :capture-domain:stripDebugDebugSymbols NO-SOURCE
+> Task :capture-domain:copyDebugJniLibsProjectAndLocalJars
+> Task :capture-domain:extractDebugAnnotations
+> Task :capture-domain:extractDeepLinksForAarDebug FROM-CACHE
+> Task :capture-domain:generateDebugAssets UP-TO-DATE
+> Task :capture-domain:mergeDebugAssets
+> Task :capture-domain:mergeDebugGeneratedProguardFiles
+> Task :capture-domain:mergeDebugConsumerProguardFiles
+> Task :capture-domain:prepareDebugArtProfile
+> Task :capture-domain:prepareLintJarForPublish
+> Task :capture-domain:mergeDebugJavaResource
+> Task :capture-domain:syncDebugLibJars
+> Task :capture-domain:bundleDebugLocalLintAar
+> Task :core-bridge:checkDebugAarMetadata
+
+> Task :core-bridge:buildVoxDebugNative
+    Building arm64-v8a (aarch64-linux-android)
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.24
+   Compiling libc v0.2.189
+   Compiling siphasher v1.0.3
+   Compiling anyhow v1.0.104
+   Compiling getrandom v0.4.3
+   Compiling rustix v1.1.4
+   Compiling autocfg v1.5.1
+   Compiling version_check v0.9.5
+   Compiling rand_core v0.6.4
+   Compiling regex-syntax v0.8.11
+   Compiling equivalent v1.0.2
+   Compiling serde v1.0.219
+   Compiling hashbrown v0.15.5
+   Compiling cfg-if v1.0.4
+   Compiling bitflags v2.13.1
+   Compiling typenum v1.20.1
+   Compiling once_cell v1.21.4
+   Compiling phf_shared v0.11.3
+   Compiling rand v0.8.7
+   Compiling fastrand v2.5.0
+   Compiling camino v1.2.5
+   Compiling linux-raw-sys v0.12.1
+   Compiling num-traits v0.2.19
+   Compiling fs-err v3.3.1
+   Compiling phf_generator v0.11.3
+   Compiling winnow v1.0.4
+   Compiling indexmap v2.11.1
+   Compiling generic-array v0.14.7
+   Compiling heck v0.5.0
+   Compiling phf_codegen v0.11.3
+   Compiling thiserror v2.0.12
+   Compiling toml_writer v1.1.2+spec-1.1.0
+   Compiling serde_json v1.0.140
+   Compiling winnow v0.7.15
+   Compiling toml_parser v1.1.3+spec-1.1.0
+   Compiling phf v0.11.3
+   Compiling sha1_smol v1.0.1
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.18
+   Compiling regex-automata v0.4.18
+   Compiling syn v2.0.119
+   Compiling ryu v1.0.23
+   Compiling bytes v1.12.1
+   Compiling errno v0.3.14
+   Compiling cpufeatures v0.2.17
+   Compiling static_assertions v1.1.0
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-android-recovery-local-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling chrono v0.4.41
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling digest v0.10.7
+   Compiling uniffi_core v0.32.0
+   Compiling sha2 v0.10.9
+   Compiling tempfile v3.27.0
+   Compiling regex v1.13.1
+   Compiling parse-zoneinfo v0.3.1
+   Compiling chrono-tz-build v0.4.1
+   Compiling chrono-tz v0.10.3
+   Compiling serde_derive v1.0.219
+   Compiling uniffi_internal_macros v0.32.0
+   Compiling thiserror-impl v2.0.12
+   Compiling uniffi_pipeline v0.32.0
+   Compiling uniffi_meta v0.32.0
+   Compiling serde_spanned v1.0.0
+   Compiling toml_datetime v0.7.0
+   Compiling uuid v1.16.0
+   Compiling toml v0.9.5
+   Compiling uniffi_macros v0.32.0
+   Compiling uniffi v0.32.0
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-android-recovery-local-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.89s
+    Building armeabi-v7a (armv7-linux-androideabi)
+   Compiling typenum v1.20.1
+   Compiling cfg-if v1.0.4
+   Compiling libc v0.2.189
+   Compiling generic-array v0.14.7
+   Compiling num-traits v0.2.19
+   Compiling rustix v1.1.4
+   Compiling anyhow v1.0.104
+   Compiling getrandom v0.4.3
+   Compiling siphasher v1.0.3
+   Compiling serde v1.0.219
+   Compiling once_cell v1.21.4
+   Compiling linux-raw-sys v0.12.1
+   Compiling bitflags v2.13.1
+   Compiling equivalent v1.0.2
+   Compiling fastrand v2.5.0
+   Compiling hashbrown v0.15.5
+   Compiling thiserror v2.0.12
+   Compiling serde_json v1.0.140
+   Compiling chrono-tz v0.10.3
+   Compiling bytes v1.12.1
+   Compiling itoa v1.0.18
+   Compiling memchr v2.8.3
+   Compiling sha1_smol v1.0.1
+   Compiling phf_shared v0.11.3
+   Compiling ryu v1.0.23
+   Compiling static_assertions v1.1.0
+   Compiling heck v0.5.0
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-android-recovery-local-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling phf v0.11.3
+   Compiling indexmap v2.11.1
+   Compiling uniffi_core v0.32.0
+   Compiling errno v0.3.14
+   Compiling chrono v0.4.41
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling tempfile v3.27.0
+   Compiling uniffi_pipeline v0.32.0
+   Compiling uuid v1.16.0
+   Compiling uniffi v0.32.0
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-android-recovery-local-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.83s
+    Building x86_64 (x86_64-linux-android)
+   Compiling cfg-if v1.0.4
+   Compiling typenum v1.20.1
+   Compiling libc v0.2.189
+   Compiling generic-array v0.14.7
+   Compiling num-traits v0.2.19
+   Compiling anyhow v1.0.104
+   Compiling rustix v1.1.4
+   Compiling getrandom v0.4.3
+   Compiling bitflags v2.13.1
+   Compiling serde v1.0.219
+   Compiling once_cell v1.21.4
+   Compiling linux-raw-sys v0.12.1
+   Compiling siphasher v1.0.3
+   Compiling equivalent v1.0.2
+   Compiling hashbrown v0.15.5
+   Compiling fastrand v2.5.0
+   Compiling serde_json v1.0.140
+   Compiling thiserror v2.0.12
+   Compiling chrono-tz v0.10.3
+   Compiling heck v0.5.0
+   Compiling phf_shared v0.11.3
+   Compiling cpufeatures v0.2.17
+   Compiling itoa v1.0.18
+   Compiling sha1_smol v1.0.1
+   Compiling ryu v1.0.23
+   Compiling memchr v2.8.3
+   Compiling bytes v1.12.1
+   Compiling static_assertions v1.1.0
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-android-recovery-local-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling phf v0.11.3
+   Compiling indexmap v2.11.1
+   Compiling errno v0.3.14
+   Compiling uniffi_core v0.32.0
+   Compiling chrono v0.4.41
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling tempfile v3.27.0
+   Compiling uniffi_pipeline v0.32.0
+   Compiling uuid v1.16.0
+   Compiling uniffi v0.32.0
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-android-recovery-local-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.55s
+    Building x86 (i686-linux-android)
+   Compiling cfg-if v1.0.4
+   Compiling libc v0.2.189
+   Compiling typenum v1.20.1
+   Compiling generic-array v0.14.7
+   Compiling num-traits v0.2.19
+   Compiling serde v1.0.219
+   Compiling getrandom v0.4.3
+   Compiling anyhow v1.0.104
+   Compiling rustix v1.1.4
+   Compiling siphasher v1.0.3
+   Compiling once_cell v1.21.4
+   Compiling linux-raw-sys v0.12.1
+   Compiling bitflags v2.13.1
+   Compiling hashbrown v0.15.5
+   Compiling fastrand v2.5.0
+   Compiling equivalent v1.0.2
+   Compiling thiserror v2.0.12
+   Compiling serde_json v1.0.140
+   Compiling chrono-tz v0.10.3
+   Compiling heck v0.5.0
+   Compiling cpufeatures v0.2.17
+   Compiling memchr v2.8.3
+   Compiling phf_shared v0.11.3
+   Compiling itoa v1.0.18
+   Compiling ryu v1.0.23
+   Compiling bytes v1.12.1
+   Compiling static_assertions v1.1.0
+   Compiling sha1_smol v1.0.1
+   Compiling phf v0.11.3
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-android-recovery-local-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling indexmap v2.11.1
+   Compiling errno v0.3.14
+   Compiling uniffi_core v0.32.0
+   Compiling chrono v0.4.41
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling tempfile v3.27.0
+   Compiling uniffi_pipeline v0.32.0
+   Compiling uuid v1.16.0
+   Compiling uniffi v0.32.0
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-android-recovery-local-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.47s
+     Copying libraries to /private/tmp/vox-android-recovery-local-20261108/apps/android/core-bridge/build/generated/vox-native/debug/jniLibs
+Built libvox_core_uniffi.so for Android API 28: arm64-v8a armeabi-v7a x86_64 x86
+
+> Task :core-bridge:mergeDebugJniLibFolders
+> Task :core-bridge:mergeDebugNativeLibs
+
+> Task :core-bridge:stripDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libvox_core_uniffi.so. Run with --info option to learn more.
+
+> Task :core-bridge:copyDebugJniLibsProjectAndLocalJars
+> Task :core-bridge:extractDebugAnnotations
+> Task :core-bridge:extractDeepLinksForAarDebug FROM-CACHE
+> Task :core-bridge:generateDebugAssets UP-TO-DATE
+> Task :core-bridge:mergeDebugAssets
+> Task :core-bridge:mergeDebugGeneratedProguardFiles
+> Task :core-bridge:mergeDebugConsumerProguardFiles
+> Task :core-bridge:prepareDebugArtProfile
+> Task :core-bridge:prepareLintJarForPublish
+> Task :core-bridge:mergeDebugJavaResource
+> Task :core-bridge:syncDebugLibJars
+> Task :core-bridge:bundleDebugLocalLintAar
+> Task :data:checkDebugAarMetadata
+> Task :data:mergeDebugJniLibFolders
+> Task :data:mergeDebugNativeLibs NO-SOURCE
+> Task :data:stripDebugDebugSymbols NO-SOURCE
+> Task :data:copyDebugJniLibsProjectAndLocalJars
+> Task :data:extractDebugAnnotations
+> Task :data:extractDeepLinksForAarDebug FROM-CACHE
+> Task :data:generateDebugAssets UP-TO-DATE
+> Task :data:mergeDebugAssets
+> Task :data:mergeDebugGeneratedProguardFiles
+> Task :data:mergeDebugConsumerProguardFiles
+> Task :data:prepareDebugArtProfile
+> Task :data:prepareLintJarForPublish
+> Task :data:mergeDebugJavaResource
+> Task :data:syncDebugLibJars
+> Task :data:bundleDebugLocalLintAar
+> Task :platform-services:checkDebugAarMetadata
+> Task :platform-services:mergeDebugJniLibFolders
+> Task :platform-services:mergeDebugNativeLibs NO-SOURCE
+> Task :platform-services:stripDebugDebugSymbols NO-SOURCE
+> Task :platform-services:copyDebugJniLibsProjectAndLocalJars
+> Task :platform-services:extractDebugAnnotations
+> Task :platform-services:extractDeepLinksForAarDebug FROM-CACHE
+> Task :platform-services:generateDebugAssets UP-TO-DATE
+> Task :platform-services:mergeDebugAssets
+> Task :platform-services:mergeDebugGeneratedProguardFiles
+> Task :platform-services:mergeDebugConsumerProguardFiles
+> Task :platform-services:prepareDebugArtProfile
+> Task :platform-services:prepareLintJarForPublish
+> Task :platform-services:mergeDebugJavaResource
+> Task :platform-services:syncDebugLibJars FROM-CACHE
+> Task :platform-services:bundleDebugLocalLintAar
+> Task :capture-domain:createFullJarDebug
+> Task :capture-domain:writeDebugLintModelMetadata
+> Task :core-bridge:createFullJarDebug
+> Task :core-bridge:writeDebugLintModelMetadata
+> Task :data:createFullJarDebug
+> Task :data:writeDebugLintModelMetadata
+> Task :platform-services:createFullJarDebug
+> Task :platform-services:writeDebugLintModelMetadata
+> Task :app:generateDebugAndroidTestLintModel
+> Task :app:extractProguardFiles
+> Task :capture-domain:extractProguardFiles
+> Task :capture-domain:generateDebugLintModel
+> Task :core-bridge:extractProguardFiles
+> Task :core-bridge:generateDebugLintModel
+> Task :data:extractProguardFiles
+> Task :data:generateDebugLintModel
+> Task :platform-services:extractProguardFiles
+> Task :platform-services:generateDebugLintModel
+> Task :app:generateDebugLintReportModel
+> Task :app:generateDebugUnitTestLintModel
+> Task :capture-domain:lintAnalyzeDebug
+> Task :core-bridge:lintAnalyzeDebug
+> Task :data:lintAnalyzeDebug
+> Task :platform-services:lintAnalyzeDebug
+> Task :app:lintAnalyzeDebug
+> Task :app:lintAnalyzeDebugAndroidTest
+> Task :app:lintAnalyzeDebugUnitTest
+> Task :capture-domain:preDebugAndroidTestBuild UP-TO-DATE
+> Task :capture-domain:generateDebugAndroidTestLintModel
+> Task :capture-domain:generateDebugUnitTestLintModel
+> Task :capture-domain:lintAnalyzeDebugAndroidTest
+> Task :capture-domain:lintAnalyzeDebugUnitTest
+> Task :core-bridge:preDebugAndroidTestBuild UP-TO-DATE
+> Task :core-bridge:generateDebugAndroidTestLintModel
+> Task :core-bridge:generateDebugUnitTestLintModel
+> Task :core-bridge:lintAnalyzeDebugAndroidTest
+> Task :core-bridge:lintAnalyzeDebugUnitTest
+> Task :data:generateDebugAndroidTestLintModel
+> Task :data:generateDebugUnitTestLintModel
+> Task :data:lintAnalyzeDebugAndroidTest
+> Task :data:lintAnalyzeDebugUnitTest
+> Task :platform-services:preDebugAndroidTestBuild UP-TO-DATE
+> Task :platform-services:generateDebugAndroidTestLintModel
+> Task :platform-services:preDebugUnitTestBuild UP-TO-DATE
+> Task :platform-services:generateDebugUnitTestLintModel
+> Task :platform-services:lintAnalyzeDebugAndroidTest
+> Task :platform-services:lintAnalyzeDebugUnitTest
+
+> Task :app:lintReportDebug
+Wrote HTML report to file:///private/tmp/vox-android-recovery-local-20261108/apps/android/app/build/reports/lint-results-debug.html
+
+> Task :app:lintDebug
+
+[Incubating] Problems report is available at: file:///private/tmp/vox-android-recovery-local-20261108/apps/android/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 1m 21s
+224 actionable tasks: 112 executed, 19 from cache, 93 up-to-date
+Configuration cache entry stored.
