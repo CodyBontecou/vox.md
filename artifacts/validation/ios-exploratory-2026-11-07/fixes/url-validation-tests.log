@@ -1,0 +1,133 @@
+Building for debugging...
+[Computing dependencies]
+[Provisioning 19 / 21]
+[Pre-planning 1 / 507]
+[Planning deferred tasks]
+[1 / 5]
+[2 / 6] VoxboardCaptureCore
+[11 / 41]
+[12 / 41]
+[14 / 41]
+[17 / 41]
+[19 / 41]
+[20 / 41]
+[21 / 41]
+[24 / 41]
+[26 / 41]
+[28 / 41]
+[30 / 41]
+[33 / 41]
+[35 / 41]
+[36 / 41]
+[37 / 41] VoxboardCaptureCore
+[42 / 46] VoxboardCaptureCore
+[45 / 46] VoxboardCaptureCoreTests-product
+[46 / 50] VoxboardCaptureCoreTests-product
+[60 / 85]
+[66 / 85]
+[67 / 85]
+[68 / 85]
+[69 / 85]
+[70 / 85]
+[72 / 85]
+[73 / 85]
+[74 / 85]
+[75 / 85]
+[76 / 85]
+[78 / 85]
+[79 / 85]
+[81 / 85] VoxboardCaptureCoreTests-product
+[87 / 89] VoxboardCaptureCoreTests-product
+[89 / 89] VoxboardCaptureCoreTests-product
+[90 / 94] FluidAudio
+[99 / 164]
+[101 / 164]
+[103 / 164]
+[111 / 164]
+[112 / 164]
+[113 / 164]
+[114 / 164]
+[119 / 164]
+[121 / 164]
+[122 / 164]
+[123 / 164]
+[125 / 164]
+[127 / 164]
+[131 / 164]
+[133 / 164]
+[136 / 164]
+[137 / 164]
+[145 / 164]
+[148 / 164]
+[149 / 164]
+[155 / 164]
+[158 / 164]
+[159 / 164]
+[160 / 164] FluidAudio
+[164 / 168] ExportKit
+[166 / 170] VoxboardShared
+[185 / 202]
+[189 / 202]
+[192 / 202]
+[194 / 202]
+[196 / 202]
+[197 / 202]
+/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Sources/VoxboardShared/MeetingChunkSampleWriter.swift:228:72: warning: converting non-Sendable function value to '@Sendable (URL, CMFormatDescription?, CMTime) throws -> any MeetingChunkAssetWriting' may introduce data races
+226 |         timelineOrigin: @escaping @Sendable () -> CMTime?,
+227 |         finalized: @escaping @Sendable (MeetingCaptureChunk, [MeetingTimelineEvent], [String]) -> Void,
+228 |         assetWriterFactory: @escaping MeetingChunkAssetWriterFactory = defaultMeetingChunkAssetWriterFactory
+    |                                                                        `- warning: converting non-Sendable function value to '@Sendable (URL, CMFormatDescription?, CMTime) throws -> any MeetingChunkAssetWriting' may introduce data races
+229 |     ) {
+230 |         self.source = source
+[198 / 202] VoxboardShared
+[205 / 208] FluidAudio
+[208 / 212] VoxboardShared
+[209 / 213] VoxboardShared
+[212 / 214] VoxboardSharedTests-product
+[213 / 217] VoxboardSharedTests-product
+[214 / 234]
+[230 / 234] VoxboardSharedTests-product
+[236 / 238] VoxboardSharedTests-product
+[238 / 238] VoxboardSharedTests-product
+[239 / 242] VoxCoreGenerated
+[242 / 245] VoxCoreGenerated
+[253 / 264] VoxboardShared-product
+[253 / 264] VoxboardM2Oracle-product
+[258 / 264] VoxboardM2Oracle-product
+[263 / 267] VoxboardPersistenceFixtures-product
+[265 / 268] VoxboardIntelligenceEvaluation-product
+[265 / 268] VoxboardPersistenceFixtures-product
+[267 / 268] VoxboardPersistenceFixtures-product
+[270 / 270] VoxboardM2Oracle-product
+Build complete! (47.75 sec)
+Test Suite 'Selected tests' started at 2026-11-07 19:09:01.147.
+Test Suite 'VoxboardSharedTests.xctest' started at 2026-11-07 19:09:01.151.
+Test Suite 'URLDeliveryValidationTests' started at 2026-11-07 19:09:01.151.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_credentialsInURL_areRejected]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_credentialsInURL_areRejected]' passed (0.002 seconds).
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_emptyAndUnsupportedScheme_areRejected]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_emptyAndUnsupportedScheme_areRejected]' passed (0.000 seconds).
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_httpLoopback_requiresExplicitLocalConfirmation]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_httpLoopback_requiresExplicitLocalConfirmation]' passed (0.001 seconds).
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_httpRemote_isRejected]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_httpRemote_isRejected]' passed (0.000 seconds).
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_httpsRemote_isAccepted]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_httpsRemote_isAccepted]' passed (0.000 seconds).
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_localNetworkLiterals_areRecognized]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_localNetworkLiterals_areRecognized]' passed (0.000 seconds).
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_queryStringSecret_isRejected]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_queryStringSecret_isRejected]' passed (0.000 seconds).
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validateBody_overCap_isRejected]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validateBody_overCap_isRejected]' passed (0.000 seconds).
+Test Suite 'URLDeliveryValidationTests' passed at 2026-11-07 19:09:01.156.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.005 (0.006) seconds
+Test Suite 'VoxboardSharedTests.xctest' passed at 2026-11-07 19:09:01.156.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.005 (0.006) seconds
+Test Suite 'Selected tests' passed at 2026-11-07 19:09:01.156.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.005 (0.009) seconds
+Test Suite 'Selected tests' started at 2026-11-07 19:09:01.285.
+Test Suite 'VoxboardCaptureCoreTests.xctest' started at 2026-11-07 19:09:01.287.
+Test Suite 'VoxboardCaptureCoreTests.xctest' passed at 2026-11-07 19:09:01.287.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-11-07 19:09:01.287.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
