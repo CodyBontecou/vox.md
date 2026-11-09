@@ -67,7 +67,12 @@ internal fun CaptureRecoveryControls(
         onDismissRequest = { form = form.cancel() }, title = { Text(voxString("Use another heading")) },
         text = { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedTextField(value = form.title, onValueChange = { form = form.copy(title = it.take(256)) }, label = { Text(voxString("Heading")) }, singleLine = true)
-            Row(Modifier.horizontalScroll(rememberScrollState())) { (1..6).forEach { level -> TextButton(onClick = { form = form.copy(level = level) }) { Text(if (level == form.level) "[$level]" else "$level") } } }
+            Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                (1..6).forEach { level ->
+                    FilterChip(selected = level == form.level, onClick = { form = form.copy(level = level) },
+                        label = { Text(level.toString()) })
+                }
+            }
             Text(voxString("The heading must already exist at this level. Nothing will be appended if it is missing."))
         } },
         confirmButton = { TextButton(enabled = form.title.isNotBlank() && !isBusy, onClick = {
