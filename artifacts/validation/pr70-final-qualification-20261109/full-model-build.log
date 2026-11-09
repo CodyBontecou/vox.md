@@ -1,0 +1,545 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Calculating task graph as no cached configuration is available for tasks: :app:assembleDebug :app:assembleDebugAndroidTest
+> Task :build-logic:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :build-logic:compileKotlin UP-TO-DATE
+> Task :build-logic:compileJava NO-SOURCE
+> Task :build-logic:pluginDescriptors UP-TO-DATE
+> Task :build-logic:processResources UP-TO-DATE
+> Task :build-logic:classes UP-TO-DATE
+> Task :build-logic:jar UP-TO-DATE
+> Task :app:generateLauncherIcons UP-TO-DATE
+> Task :app:physicalProvenance UP-TO-DATE
+> Task :app:syncGeistFonts UP-TO-DATE
+> Task :capture-domain:preBuild UP-TO-DATE
+> Task :capture-domain:preDebugBuild UP-TO-DATE
+> Task :capture-domain:processDebugNavigationResources UP-TO-DATE
+> Task :core-bridge:preBuild UP-TO-DATE
+> Task :core-bridge:preDebugBuild UP-TO-DATE
+> Task :core-bridge:processDebugNavigationResources UP-TO-DATE
+> Task :data:preBuild UP-TO-DATE
+> Task :data:preDebugBuild UP-TO-DATE
+> Task :data:processDebugNavigationResources UP-TO-DATE
+> Task :platform-services:preBuild UP-TO-DATE
+> Task :platform-services:preDebugBuild UP-TO-DATE
+> Task :platform-services:processDebugNavigationResources UP-TO-DATE
+> Task :capture-domain:generateDebugResources UP-TO-DATE
+> Task :capture-domain:packageDebugResources UP-TO-DATE
+> Task :capture-domain:parseDebugLocalResources UP-TO-DATE
+> Task :capture-domain:generateDebugRFile UP-TO-DATE
+> Task :capture-domain:compileDebugKotlin UP-TO-DATE
+> Task :capture-domain:javaPreCompileDebug UP-TO-DATE
+> Task :capture-domain:compileDebugJavaWithJavac NO-SOURCE
+> Task :capture-domain:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :core-bridge:generateDebugResources UP-TO-DATE
+> Task :core-bridge:packageDebugResources UP-TO-DATE
+> Task :core-bridge:parseDebugLocalResources UP-TO-DATE
+> Task :core-bridge:generateDebugRFile UP-TO-DATE
+> Task :core-bridge:compileDebugKotlin UP-TO-DATE
+> Task :core-bridge:javaPreCompileDebug UP-TO-DATE
+> Task :core-bridge:compileDebugJavaWithJavac NO-SOURCE
+> Task :core-bridge:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :data:generateDebugResources UP-TO-DATE
+> Task :data:packageDebugResources UP-TO-DATE
+> Task :data:parseDebugLocalResources UP-TO-DATE
+> Task :data:generateDebugRFile UP-TO-DATE
+> Task :data:kaptGenerateStubsDebugKotlin UP-TO-DATE
+> Task :data:kaptDebugKotlin UP-TO-DATE
+> Task :data:compileDebugKotlin UP-TO-DATE
+> Task :data:javaPreCompileDebug UP-TO-DATE
+> Task :data:compileDebugJavaWithJavac UP-TO-DATE
+> Task :data:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :platform-services:generateDebugResources UP-TO-DATE
+> Task :platform-services:packageDebugResources UP-TO-DATE
+> Task :platform-services:parseDebugLocalResources UP-TO-DATE
+> Task :platform-services:generateDebugRFile UP-TO-DATE
+> Task :platform-services:compileDebugKotlin UP-TO-DATE
+> Task :platform-services:javaPreCompileDebug UP-TO-DATE
+> Task :platform-services:compileDebugJavaWithJavac NO-SOURCE
+> Task :platform-services:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :capture-domain:generateDebugAssets UP-TO-DATE
+> Task :capture-domain:mergeDebugAssets UP-TO-DATE
+> Task :core-bridge:generateDebugAssets UP-TO-DATE
+> Task :core-bridge:mergeDebugAssets UP-TO-DATE
+> Task :data:generateDebugAssets UP-TO-DATE
+> Task :data:mergeDebugAssets UP-TO-DATE
+> Task :platform-services:generateDebugAssets UP-TO-DATE
+> Task :platform-services:mergeDebugAssets
+> Task :data:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :platform-services:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :capture-domain:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :core-bridge:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :capture-domain:writeDebugAarMetadata UP-TO-DATE
+> Task :core-bridge:writeDebugAarMetadata UP-TO-DATE
+> Task :data:writeDebugAarMetadata UP-TO-DATE
+> Task :platform-services:writeDebugAarMetadata UP-TO-DATE
+> Task :capture-domain:extractDeepLinksDebug UP-TO-DATE
+> Task :capture-domain:processDebugManifest UP-TO-DATE
+> Task :core-bridge:extractDeepLinksDebug UP-TO-DATE
+> Task :core-bridge:processDebugManifest UP-TO-DATE
+> Task :data:extractDeepLinksDebug UP-TO-DATE
+> Task :data:processDebugManifest UP-TO-DATE
+> Task :platform-services:extractDeepLinksDebug UP-TO-DATE
+> Task :platform-services:processDebugManifest UP-TO-DATE
+> Task :capture-domain:mapDebugSourceSetPaths UP-TO-DATE
+> Task :capture-domain:compileDebugLibraryResources UP-TO-DATE
+> Task :core-bridge:mapDebugSourceSetPaths UP-TO-DATE
+> Task :core-bridge:compileDebugLibraryResources UP-TO-DATE
+> Task :data:mapDebugSourceSetPaths UP-TO-DATE
+> Task :data:compileDebugLibraryResources UP-TO-DATE
+> Task :platform-services:mapDebugSourceSetPaths UP-TO-DATE
+> Task :platform-services:compileDebugLibraryResources UP-TO-DATE
+> Task :capture-domain:processDebugJavaRes UP-TO-DATE
+> Task :core-bridge:processDebugJavaRes UP-TO-DATE
+> Task :data:processDebugJavaRes UP-TO-DATE
+> Task :platform-services:processDebugJavaRes UP-TO-DATE
+> Task :data:bundleLibRuntimeToDirDebug UP-TO-DATE
+
+> Task :app:generateRuntimeLocalizations
+runtime localizations: 22333 entries; literal sources: 1023; missing catalog sources: 0; rewrites: 0
+
+> Task :app:preBuild
+> Task :app:preDebugBuild
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :platform-services:bundleLibRuntimeToDirDebug
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:mergeDebugAssets
+> Task :app:compressDebugAssets FROM-CACHE
+> Task :app:desugarDebugFileDependencies FROM-CACHE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:dexBuilderDebug FROM-CACHE
+> Task :app:mergeDebugGlobalSynthetics FROM-CACHE
+> Task :app:checkDebugDuplicateClasses
+> Task :app:mergeDebugJavaResource
+> Task :capture-domain:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :core-bridge:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :app:mergeExtDexDebug FROM-CACHE
+> Task :app:mergeProjectDexDebug FROM-CACHE
+> Task :app:mergeLibDexDebug
+> Task :capture-domain:mergeDebugJniLibFolders UP-TO-DATE
+> Task :capture-domain:mergeDebugNativeLibs NO-SOURCE
+> Task :capture-domain:copyDebugJniLibsProjectOnly UP-TO-DATE
+
+> Task :core-bridge:buildVoxDebugNative
+    Building arm64-v8a (aarch64-linux-android)
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.77s
+    Building armeabi-v7a (armv7-linux-androideabi)
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.41s
+    Building x86_64 (x86_64-linux-android)
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.49s
+    Building x86 (i686-linux-android)
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.69s
+     Copying libraries to /private/tmp/vox-apple-signal3-20261108/apps/android/core-bridge/build/generated/vox-native/debug/jniLibs
+Built libvox_core_uniffi.so for Android API 28: arm64-v8a armeabi-v7a x86_64 x86
+
+> Task :app:buildIntelligenceNative
+-- The C compiler identification is Clang 18.0.2
+-- The CXX compiler identification is Clang 18.0.2
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /Users/codybontecou/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /Users/codybontecou/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found Git: /usr/bin/git (found version "2.54.0 (Apple Git-157)") 
+-- Setting GGML_NATIVE_DEFAULT to OFF
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Check if compiler accepts -pthread
+-- Check if compiler accepts -pthread - yes
+-- Found Threads: TRUE  
+-- Warning: ccache not found - consider installing it for faster compilation or disable this warning with GGML_CCACHE=OFF
+-- CMAKE_SYSTEM_PROCESSOR: aarch64
+-- Including CPU backend
+-- ARM detected
+-- Performing Test GGML_COMPILER_SUPPORTS_FP16_FORMAT_I3E
+-- Performing Test GGML_COMPILER_SUPPORTS_FP16_FORMAT_I3E - Failed
+-- Adding CPU backend variant ggml-cpu:  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /tmp/vox-apple-signal3-20261108/apps/android/app/build/intelligence-native/arm64-v8a
+[1/45] Building C object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o
+[2/45] Building CXX object CMakeFiles/vox_intelligence.dir/intelligence.cpp.o
+[3/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-backend.cpp.o
+[4/45] Building C object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o
+[5/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-threading.cpp.o
+[6/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-opt.cpp.o
+
+> Task :core-bridge:mergeDebugJniLibFolders
+> Task :core-bridge:mergeDebugNativeLibs
+> Task :core-bridge:copyDebugJniLibsProjectOnly
+> Task :data:mergeDebugJniLibFolders UP-TO-DATE
+> Task :data:mergeDebugNativeLibs NO-SOURCE
+> Task :data:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :platform-services:mergeDebugJniLibFolders
+> Task :platform-services:mergeDebugNativeLibs NO-SOURCE
+> Task :platform-services:copyDebugJniLibsProjectOnly
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
+> Task :app:writeDebugSigningConfigVersions
+> Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:preDebugAndroidTestBuild SKIPPED
+> Task :app:generateDebugAndroidTestResources FROM-CACHE
+> Task :app:packageDebugAndroidTestResources FROM-CACHE
+> Task :app:processDebugAndroidTestNavigationResources FROM-CACHE
+> Task :app:parseDebugAndroidTestLocalResources FROM-CACHE
+> Task :app:generateDebugAndroidTestRFile FROM-CACHE
+
+> Task :app:buildIntelligenceNative
+[7/45] Building CXX object llama/ggml/src/CMakeFiles/ggml.dir/ggml-backend-reg.cpp.o
+[8/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.cpp.o
+[9/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/gguf.cpp.o
+[10/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-hbm.cpp.o
+[11/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-aarch64.cpp.o
+[12/45] Building C object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-quants.c.o
+[13/45] Building C object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-quants.c.o
+[14/45] Linking CXX static library llama/ggml/src/libggml-base.a
+[15/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-traits.cpp.o
+[16/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/amx.cpp.o
+[17/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/mmq.cpp.o
+[18/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama.cpp.o
+[19/45] Building C object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.c.o
+[20/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/binary-ops.cpp.o
+[21/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/unary-ops.cpp.o
+[22/45] Linking CXX static library llama/ggml/src/libggml-cpu.a
+[23/45] Linking CXX static library llama/ggml/src/libggml.a
+[24/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-batch.cpp.o
+[25/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-arch.cpp.o
+[26/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-adapter.cpp.o
+[27/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-chat.cpp.o
+[28/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-hparams.cpp.o
+[29/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-graph.cpp.o
+[30/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-io.cpp.o
+[31/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-impl.cpp.o
+[32/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-memory.cpp.o
+[33/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-context.cpp.o
+[34/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-mmap.cpp.o
+[35/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-kv-cache.cpp.o
+[36/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-grammar.cpp.o
+[37/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-model-loader.cpp.o
+[38/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-quant.cpp.o
+[39/45] Building CXX object llama/src/CMakeFiles/llama.dir/unicode-data.cpp.o
+[40/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-vocab.cpp.o
+[41/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-sampling.cpp.o
+[42/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-model.cpp.o
+[43/45] Building CXX object llama/src/CMakeFiles/llama.dir/unicode.cpp.o
+[44/45] Linking CXX static library llama/src/libllama.a
+[45/45] Linking CXX shared library /tmp/vox-apple-signal3-20261108/apps/android/app/build/generated/intelligence-jni/arm64-v8a/libvox_intelligence.so
+-- The C compiler identification is Clang 18.0.2
+-- The CXX compiler identification is Clang 18.0.2
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /Users/codybontecou/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /Users/codybontecou/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found Git: /usr/bin/git (found version "2.54.0 (Apple Git-157)") 
+
+> Task :app:compileDebugAndroidTestKotlin
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureLocationLifecycleTest.kt:20:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityUiInstrumentationTest.kt:14:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureRotationInstrumentationTest.kt:23:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/ComposerPresetUiInstrumentationTest.kt:103:86 Unnecessary non-null assertion (!!) on a non-null receiver of type 'PresetWidgetSelection'.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/DetailExportRestorationTest.kt:27:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/HistoryInputFocusInstrumentationTest.kt:18:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/LocationUnavailableUiInstrumentationTest.kt:19:19 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/MainActivityInputFocusInstrumentationTest.kt:13:29 'fun <reified A : ComponentActivity> createAndroidComposeRule(effectContext: CoroutineContext = ...): AndroidComposeTestRule<ActivityScenarioRule<A>, A>' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createAndroidComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/PendingPickerRegressionTest.kt:28:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/RouteEditorEdgeCaseTest.kt:15:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/RouteOverrideRestorationTest.kt:14:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/TranscriptDraftRestorationTest.kt:17:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/androidTest/kotlin/md/vox/android/WidgetConfigurationRestorationTest.kt:13:29 'fun createComposeRule(effectContext: CoroutineContext = ...): ComposeContentTestRule' is deprecated. Use `androidx.compose.ui.test.junit4.v2.createComposeRule` instead. The v2 APIs use StandardTestDispatcher instead of UnconfinedTestDispatcher, which aligns with standard coroutine behavior by queuing tasks rather than executing them immediately. Tests relying on immediate execution may require explicit synchronization. Please refer to the migration guide for more details.
+
+> Task :app:javaPreCompileDebugAndroidTest FROM-CACHE
+> Task :app:compileDebugAndroidTestJavaWithJavac NO-SOURCE
+> Task :app:generateDebugAndroidTestAssets UP-TO-DATE
+> Task :app:mergeDebugAndroidTestAssets
+> Task :app:compressDebugAndroidTestAssets FROM-CACHE
+> Task :app:desugarDebugAndroidTestFileDependencies FROM-CACHE
+> Task :app:checkDebugAndroidTestAarMetadata
+> Task :app:mapDebugAndroidTestSourceSetPaths
+> Task :app:compileDebugAndroidTestNavigationResources FROM-CACHE
+> Task :app:mergeDebugAndroidTestResources FROM-CACHE
+> Task :app:processDebugAndroidTestManifest
+> Task :app:processDebugAndroidTestResources FROM-CACHE
+> Task :app:dexBuilderDebugAndroidTest FROM-CACHE
+> Task :app:mergeDebugAndroidTestGlobalSynthetics FROM-CACHE
+> Task :app:processDebugAndroidTestJavaRes
+> Task :app:mergeDebugAndroidTestJavaResource
+> Task :app:checkDebugAndroidTestDuplicateClasses
+> Task :app:mergeExtDexDebugAndroidTest FROM-CACHE
+> Task :app:mergeLibDexDebugAndroidTest FROM-CACHE
+> Task :app:mergeProjectDexDebugAndroidTest FROM-CACHE
+> Task :app:mergeDebugAndroidTestJniLibFolders
+> Task :app:validateSigningDebugAndroidTest
+> Task :app:writeDebugAndroidTestSigningConfigVersions
+
+> Task :app:buildIntelligenceNative
+-- Setting GGML_NATIVE_DEFAULT to OFF
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Check if compiler accepts -pthread
+-- Check if compiler accepts -pthread - yes
+-- Found Threads: TRUE  
+-- Warning: ccache not found - consider installing it for faster compilation or disable this warning with GGML_CCACHE=OFF
+-- CMAKE_SYSTEM_PROCESSOR: armv7-a
+-- Including CPU backend
+-- ARM detected
+-- Performing Test GGML_COMPILER_SUPPORTS_FP16_FORMAT_I3E
+-- Performing Test GGML_COMPILER_SUPPORTS_FP16_FORMAT_I3E - Failed
+-- Adding CPU backend variant ggml-cpu:  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /tmp/vox-apple-signal3-20261108/apps/android/app/build/intelligence-native/armeabi-v7a
+[1/45] Building C object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o
+[2/45] Building CXX object CMakeFiles/vox_intelligence.dir/intelligence.cpp.o
+[3/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-backend.cpp.o
+[4/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-threading.cpp.o
+[5/45] Building C object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o
+[6/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-opt.cpp.o
+[7/45] Building CXX object llama/ggml/src/CMakeFiles/ggml.dir/ggml-backend-reg.cpp.o
+[8/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.cpp.o
+[9/45] Building C object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-quants.c.o
+[10/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-hbm.cpp.o
+[11/45] Building C object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-quants.c.o
+[12/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/gguf.cpp.o
+[13/45] Linking CXX static library llama/ggml/src/libggml-base.a
+[14/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-aarch64.cpp.o
+[15/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-traits.cpp.o
+[16/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/amx.cpp.o
+[17/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/mmq.cpp.o
+[18/45] Building C object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.c.o
+[19/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/binary-ops.cpp.o
+[20/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama.cpp.o
+[21/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/unary-ops.cpp.o
+[22/45] Linking CXX static library llama/ggml/src/libggml-cpu.a
+[23/45] Linking CXX static library llama/ggml/src/libggml.a
+[24/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-adapter.cpp.o
+[25/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-arch.cpp.o
+[26/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-batch.cpp.o
+[27/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-chat.cpp.o
+[28/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-hparams.cpp.o
+[29/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-graph.cpp.o
+[30/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-io.cpp.o
+[31/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-impl.cpp.o
+[32/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-context.cpp.o
+[33/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-memory.cpp.o
+[34/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-mmap.cpp.o
+[35/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-kv-cache.cpp.o
+[36/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-grammar.cpp.o
+[37/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-model-loader.cpp.o
+[38/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-quant.cpp.o
+[39/45] Building CXX object llama/src/CMakeFiles/llama.dir/unicode-data.cpp.o
+[40/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-vocab.cpp.o
+[41/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-sampling.cpp.o
+[42/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-model.cpp.o
+[43/45] Building CXX object llama/src/CMakeFiles/llama.dir/unicode.cpp.o
+[44/45] Linking CXX static library llama/src/libllama.a
+[45/45] Linking CXX shared library /tmp/vox-apple-signal3-20261108/apps/android/app/build/generated/intelligence-jni/armeabi-v7a/libvox_intelligence.so
+-- The C compiler identification is Clang 18.0.2
+-- The CXX compiler identification is Clang 18.0.2
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /Users/codybontecou/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /Users/codybontecou/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found Git: /usr/bin/git (found version "2.54.0 (Apple Git-157)") 
+-- Setting GGML_NATIVE_DEFAULT to OFF
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Check if compiler accepts -pthread
+-- Check if compiler accepts -pthread - yes
+-- Found Threads: TRUE  
+-- Warning: ccache not found - consider installing it for faster compilation or disable this warning with GGML_CCACHE=OFF
+-- CMAKE_SYSTEM_PROCESSOR: i686
+-- Including CPU backend
+-- x86 detected
+-- Adding CPU backend variant ggml-cpu: -msse4.2 GGML_SSE42
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /tmp/vox-apple-signal3-20261108/apps/android/app/build/intelligence-native/x86
+[1/45] Building C object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o
+[2/45] Building CXX object CMakeFiles/vox_intelligence.dir/intelligence.cpp.o
+[3/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-backend.cpp.o
+[4/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-threading.cpp.o
+[5/45] Building C object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o
+[6/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-opt.cpp.o
+[7/45] Building CXX object llama/ggml/src/CMakeFiles/ggml.dir/ggml-backend-reg.cpp.o
+[8/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.cpp.o
+[9/45] Building C object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-quants.c.o
+[10/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-hbm.cpp.o
+[11/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/gguf.cpp.o
+[12/45] Linking CXX static library llama/ggml/src/libggml-base.a
+[13/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-aarch64.cpp.o
+[14/45] Building C object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-quants.c.o
+[15/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-traits.cpp.o
+[16/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/amx.cpp.o
+[17/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/mmq.cpp.o
+[18/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama.cpp.o
+[19/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/binary-ops.cpp.o
+[20/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/unary-ops.cpp.o
+[21/45] Building C object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.c.o
+[22/45] Linking CXX static library llama/ggml/src/libggml-cpu.a
+[23/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-adapter.cpp.o
+[24/45] Linking CXX static library llama/ggml/src/libggml.a
+[25/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-arch.cpp.o
+[26/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-batch.cpp.o
+[27/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-chat.cpp.o
+[28/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-hparams.cpp.o
+[29/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-graph.cpp.o
+[30/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-context.cpp.o
+[31/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-io.cpp.o
+[32/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-impl.cpp.o
+[33/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-memory.cpp.o
+[34/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-mmap.cpp.o
+[35/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-kv-cache.cpp.o
+[36/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-grammar.cpp.o
+[37/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-model-loader.cpp.o
+[38/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-quant.cpp.o
+[39/45] Building CXX object llama/src/CMakeFiles/llama.dir/unicode-data.cpp.o
+[40/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-vocab.cpp.o
+[41/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-sampling.cpp.o
+[42/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-model.cpp.o
+[43/45] Building CXX object llama/src/CMakeFiles/llama.dir/unicode.cpp.o
+[44/45] Linking CXX static library llama/src/libllama.a
+[45/45] Linking CXX shared library /tmp/vox-apple-signal3-20261108/apps/android/app/build/generated/intelligence-jni/x86/libvox_intelligence.so
+-- The C compiler identification is Clang 18.0.2
+-- The CXX compiler identification is Clang 18.0.2
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /Users/codybontecou/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /Users/codybontecou/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found Git: /usr/bin/git (found version "2.54.0 (Apple Git-157)") 
+-- Setting GGML_NATIVE_DEFAULT to OFF
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Check if compiler accepts -pthread
+-- Check if compiler accepts -pthread - yes
+-- Found Threads: TRUE  
+-- Warning: ccache not found - consider installing it for faster compilation or disable this warning with GGML_CCACHE=OFF
+-- CMAKE_SYSTEM_PROCESSOR: x86_64
+-- Including CPU backend
+-- x86 detected
+-- Adding CPU backend variant ggml-cpu: -msse4.2 GGML_SSE42
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /tmp/vox-apple-signal3-20261108/apps/android/app/build/intelligence-native/x86_64
+[1/45] Building C object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o
+[2/45] Building CXX object CMakeFiles/vox_intelligence.dir/intelligence.cpp.o
+[3/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-backend.cpp.o
+[4/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-threading.cpp.o
+[5/45] Building C object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o
+[6/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-opt.cpp.o
+[7/45] Building CXX object llama/ggml/src/CMakeFiles/ggml.dir/ggml-backend-reg.cpp.o
+[8/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.cpp.o
+[9/45] Building C object llama/ggml/src/CMakeFiles/ggml-base.dir/ggml-quants.c.o
+[10/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-hbm.cpp.o
+[11/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-base.dir/gguf.cpp.o
+[12/45] Linking CXX static library llama/ggml/src/libggml-base.a
+[13/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-aarch64.cpp.o
+[14/45] Building C object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-quants.c.o
+[15/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu-traits.cpp.o
+[16/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/amx.cpp.o
+[17/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/mmq.cpp.o
+[18/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama.cpp.o
+[19/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/binary-ops.cpp.o
+[20/45] Building CXX object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/unary-ops.cpp.o
+[21/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-adapter.cpp.o
+[22/45] Building C object llama/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.c.o
+[23/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-arch.cpp.o
+[24/45] Linking CXX static library llama/ggml/src/libggml-cpu.a
+[25/45] Linking CXX static library llama/ggml/src/libggml.a
+[26/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-batch.cpp.o
+[27/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-chat.cpp.o
+[28/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-hparams.cpp.o
+[29/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-graph.cpp.o
+[30/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-impl.cpp.o
+[31/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-io.cpp.o
+[32/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-memory.cpp.o
+[33/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-context.cpp.o
+[34/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-mmap.cpp.o
+[35/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-kv-cache.cpp.o
+[36/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-grammar.cpp.o
+[37/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-model-loader.cpp.o
+[38/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-quant.cpp.o
+[39/45] Building CXX object llama/src/CMakeFiles/llama.dir/unicode-data.cpp.o
+[40/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-vocab.cpp.o
+[41/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-sampling.cpp.o
+[42/45] Building CXX object llama/src/CMakeFiles/llama.dir/llama-model.cpp.o
+[43/45] Building CXX object llama/src/CMakeFiles/llama.dir/unicode.cpp.o
+[44/45] Linking CXX static library llama/src/libllama.a
+[45/45] Linking CXX shared library /tmp/vox-apple-signal3-20261108/apps/android/app/build/generated/intelligence-jni/x86_64/libvox_intelligence.so
+
+> Task :app:mergeDebugJniLibFolders
+> Task :app:mergeDebugNativeLibs
+> Task :app:mergeDebugAndroidTestNativeLibs NO-SOURCE
+> Task :app:stripDebugAndroidTestDebugSymbols NO-SOURCE
+> Task :app:packageDebugAndroidTest
+> Task :app:createDebugAndroidTestApkListingFileRedirect
+> Task :app:assembleDebugAndroidTest
+
+> Task :app:stripDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so, libjnidispatch.so, libmlkit_google_ocr_pipeline.so, libmlkitcommonpipeline.so, libonnxruntime.so, libsherpa-onnx-c-api.so, libsherpa-onnx-cxx-api.so, libsherpa-onnx-jni.so, libvosk.so, libvox_core_uniffi.so, libvox_intelligence.so. Run with --info option to learn more.
+
+> Task :app:packageDebug
+> Task :app:assembleDebug
+> Task :app:createDebugApkListingFileRedirect
+
+[Incubating] Problems report is available at: file:///private/tmp/vox-apple-signal3-20261108/apps/android/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 1m 30s
+156 actionable tasks: 35 executed, 22 from cache, 99 up-to-date
+Configuration cache entry stored.
