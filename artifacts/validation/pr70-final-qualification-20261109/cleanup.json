@@ -1,0 +1,36 @@
+{
+  "completedAtUTC": "2026-11-09T16:36:01.888118+00:00",
+  "retainedAndPushedSHA": "8b6b99b2ae098f6ef4857acaa8c7ed8c47462768",
+  "remoteVerified": true,
+  "ownedDevice": {
+    "serial": "emulator-5554",
+    "avd": "vox-pr70-final-api36-20261109",
+    "shutdownOutput": "OK: killing emulator, bye bye\nOK",
+    "registeredAfter": false,
+    "connectedAfter": false
+  },
+  "activeUsersOfRemovedPaths": [],
+  "removedTargets": [
+    {
+      "path": "/private/tmp/vox-pr70-qualification-20261109",
+      "allocatedKiBBeforeRemoval": 1153916,
+      "existsAfter": false
+    },
+    {
+      "path": "/private/tmp/vox-apple-signal3-20261108/apps/android/app/build",
+      "allocatedKiBBeforeRemoval": 2070048,
+      "existsAfter": false
+    },
+    {
+      "path": "/private/tmp/vox-apple-signal3-20261108/apps/android/data/build/outputs/apk/androidTest/debug",
+      "allocatedKiBBeforeRemoval": 86312,
+      "existsAfter": false
+    }
+  ],
+  "filesystemFreeBytesBefore": 176821358592,
+  "filesystemFreeBytesAfter": 185842655232,
+  "retainedSourceWorktree": "/private/tmp/vox-apple-signal3-20261108",
+  "retainedEvidenceOutsideTemporaryCheckout": "/Users/codybontecou/dev/vox.md/artifacts/validation/pr70-final-qualification-20261109",
+  "sharedCachesOtherAVDsAndDevicesPreserved": true,
+  "note": "Free-space change is an observed APFS filesystem delta, not an exact attribution."
+}

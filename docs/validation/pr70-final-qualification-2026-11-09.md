@@ -26,4 +26,12 @@ These results qualify the named full-model suite and the three separate reposito
 
 The complete local project-contract gate passed: 90 script tests, all 162 contract tests, project structure, capability conversion, validation definitions, 209 governed contract files/four mirrors and 305 implementation hashes. Its previously failing full-model receipt test now passes with the genuine fresh execution. No validator was weakened or bypassed.
 
+Oracle regeneration used clean evidence/governance commit `baeaf18c11fc10fd1d997ee92ac4296667a5533c`. Every case output is unchanged. Committed-fixture check mode passed, followed by all 52 Rust workspace tests. The logs are retained alongside the model evidence.
+
+## Task-owned cleanup
+
+After source and evidence were pushed at `8b6b99b2ae098f6ef4857acaa8c7ed8c47462768`, remote identity and the clean source worktree were verified. Scoped Argent teardown found no live service for the task device. The exact owned AVD was then shut down gracefully and deleted; no process was using the removed paths. Only its registration/data, task fixture downloads, this worktree's generated app build directory and data-test APK output directory were removed. Source, retained receipts, other AVDs/devices, shared caches and Herdr tabs remain intact.
+
+The observed filesystem free-space increase was 9,021,296,640 bytes; APFS sharing means this is not an exact attribution. The structured `cleanup.json` records exact removed paths and postconditions. Compact receipts remain both in this branch and outside temporary checkouts at the persistent evidence path above. Final hosted CI status is reported against the final pushed SHA rather than inferred from local tests.
+
 No merge, store submission, release or production write is included.
