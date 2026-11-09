@@ -547,6 +547,8 @@ interface CaptureRepository {
         captureSource: String,
         locationOutcome: CaptureLocationOutcome = CaptureLocationOutcome.NotRequested,
     ): CaptureSubmitResult
+    /** Explicitly stop a provably pre-commit delivery while retaining its local content. */
+    suspend fun discard(requestID: String): Boolean = false
     suspend fun retry(requestID: String): CaptureSubmitResult
     suspend fun reconcile(): List<CaptureHistoryItem>
     suspend fun history(): List<CaptureHistoryItem>

@@ -23,6 +23,59 @@ class DurableCaptureStorePhase5Test {
     private val planHash = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     private val otherPlanHash = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
 
+    @Test fun explicitDiscardIsDurableIdempotentAndRetainsSourceBytes() {
+        val base = Files.createTempDirectory("discard-capture").toFile()
+        val index = MemoryIndex()
+        val store = DurableCapturePackageStore(base, index, JvmOps())
+        val bytes = fixture()
+        assertTrue(store.enqueue(bytes, 10) is EnqueueResult.SavedLocally)
+        val discard = CaptureDiscard(store, CaptureDurabilityCoordinator(store, MemoryLeases())) { 30 }
+        assertTrue(discard.discard(requestID))
+        assertTrue(discard.discard(requestID))
+        val reopened = DurableCapturePackageStore(base, index, JvmOps())
+        assertEquals(CaptureState.DISCARDED, reopened.loadJournal(requestID)!!.state)
+        assertEquals(1, reopened.loadJournal(requestID)!!.revision)
+        assertArrayEquals(bytes, reopened.loadRequestBytes(requestID))
+        assertEquals(CaptureState.DISCARDED, index.read(requestID)!!.state)
+    }
+
+    @Test fun discardDoesNotAcknowledgeUncertainReplacementUntilDirectoryResync() {
+        for (failure in listOf("beforeJournalReplace", "afterJournalReplace", "beforePackageDirectorySync")) {
+            val base = Files.createTempDirectory("discard-crash").toFile()
+            val index = MemoryIndex()
+            val clean = DurableCapturePackageStore(base, index, JvmOps())
+            assertTrue(clean.enqueue(fixture(), 10) is EnqueueResult.SavedLocally)
+            val failing = DurableCapturePackageStore(base, index, object : DurableFileOps by JvmOps() {
+                override fun checkpoint(name: String) { if (name == failure) error("injected") }
+            })
+            assertFalse(failure, CaptureDiscard(failing, CaptureDurabilityCoordinator(failing, MemoryLeases())) { 30 }.discard(requestID))
+            val syncFailure = DurableCapturePackageStore(base, index, object : DurableFileOps by JvmOps() {
+                override fun checkpoint(name: String) { if (name == "beforePackageDirectorySync") error("injected") }
+            })
+            assertFalse(CaptureDiscard(syncFailure, CaptureDurabilityCoordinator(syncFailure, MemoryLeases())) { 31 }.discard(requestID))
+            assertTrue(failure, CaptureDiscard(clean, CaptureDurabilityCoordinator(clean, MemoryLeases())) { 32 }.discard(requestID))
+            assertEquals(CaptureState.DISCARDED, clean.loadJournal(requestID)!!.state)
+            assertArrayEquals(fixture(), clean.loadRequestBytes(requestID))
+        }
+    }
+
+    @Test fun discardCannotRaceAnActiveWorkerOrACommitOfUnknownOutcome() {
+        val base = Files.createTempDirectory("discard-busy").toFile()
+        val store = DurableCapturePackageStore(base, MemoryIndex(), JvmOps())
+        assertTrue(store.enqueue(fixture(), 10) is EnqueueResult.SavedLocally)
+        val coordinator = CaptureDurabilityCoordinator(store, MemoryLeases())
+        assertTrue(coordinator.acquire(requestID, leaseToken, 20, 60_000) is LeasePlan.Grant)
+        assertFalse(CaptureDiscard(store, coordinator) { 30 }.discard(requestID))
+        assertEquals(CaptureState.QUEUED, store.loadJournal(requestID)!!.state)
+        val queued = store.loadJournal(requestID)!!
+        for (state in listOf(CaptureState.COMMITTING, CaptureState.UNKNOWN_OUTCOME, CaptureState.COMPLETED, CaptureState.PERMANENT_FAILURE)) {
+            assertFalse(canDiscardCapture(queued.copy(state = state), null))
+        }
+        assertFalse(canDiscardCapture(queued.copy(state = CaptureState.NEEDS_PERMISSION, resumeState = CaptureState.COMMITTING), null))
+        assertFalse(canDiscardCapture(queued, CommitMarker.validated(CommitMarker.MarkerState.ACTIVE, requestID, planHash, "note.md", 20)))
+        assertTrue(canDiscardCapture(queued.copy(state = CaptureState.NEEDS_PERMISSION, resumeState = CaptureState.PREPARING), null))
+    }
+
     private fun fixture() = checkNotNull(javaClass.classLoader!!.getResourceAsStream("contracts/v1/fixtures/capture-preparation-input/valid-android-m3-text-link.json")).use { it.readBytes() }
 
     private fun preparedFixture(): Triple<DurableCapturePackageStore, MemoryIndex, File> {

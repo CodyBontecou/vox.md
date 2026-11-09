@@ -161,6 +161,7 @@ data class BillingUiState(
     val scheduledSubscriptionProductID: String? = null,
     /** Set once when a free-trial purchase succeeds so the UI can ask for notification permission. */
     val trialReminderPromptPending: Boolean = false,
+    val hasSubscriptionAccessEnded: Boolean = false,
 ) {
     val hasUnlimitedAccess: Boolean get() = entitlement == VoxEntitlement.UNLIMITED
 
@@ -368,6 +369,7 @@ class PlayBillingManager private constructor(context: Context) {
     private val mutableState = MutableStateFlow(
         BillingUiState(
             entitlement = cachedEntitlement,
+            hasSubscriptionAccessEnded = cachedEvidence?.let { !it.isOwned && it.productID in SUBSCRIPTION_PRODUCT_IDS } == true,
             ownsLifetime = cachedEvidence?.takeIf { it.isOwned }?.productID == LIFETIME_PRODUCT_ID,
             activeSubscriptionProductID = cachedEvidence?.takeIf { it.isOwned }?.productID?.takeIf { it in SUBSCRIPTION_PRODUCT_IDS },
             scheduledSubscriptionProductID = planChangePreferences.getString(KEY_SCHEDULED_PRODUCT, null)
@@ -720,14 +722,26 @@ class PlayBillingManager private constructor(context: Context) {
         )
         persistScheduledPlan(scheduled)
         val checkedAt = System.currentTimeMillis()
+        // Preserve the previously verified subscription identity in signed negative evidence.
+        // An offline/error/partial response has no authority to create or clear this state.
+        val prior = mutableState.value
+        val ended = subscriptionAccessEnded(
+            prior.hasSubscriptionAccessEnded, prior.activeSubscriptionProductID != null,
+            decision.authoritativeOwned,
+        )
+        val evidenceProductID = evaluation.grantingProductID
+            ?: prior.activeSubscriptionProductID
+            ?: entitlementCache.read()?.productID
+            ?: PRODUCT_ID
         val cachePersisted = decision.authoritativeOwned?.let { owned ->
-            entitlementCache.write(owned, checkedAt, evaluation.grantingProductID ?: PRODUCT_ID)
+            entitlementCache.write(owned, checkedAt, evidenceProductID)
         } ?: true
         UnlimitedAccessRegistry.update(decision.entitlement == VoxEntitlement.UNLIMITED)
         mutableState.update {
             it.copy(
                 connectionPhase = BillingConnectionPhase.READY,
                 entitlement = decision.entitlement,
+                hasSubscriptionAccessEnded = ended,
                 ownsLifetime = ownership.ownsLifetime,
                 hasActiveSubscription = ownership.activeSubscriptionToken != null,
                 activeSubscriptionProductID = ownership.activeSubscriptionProductID,
@@ -803,6 +817,7 @@ class PlayBillingManager private constructor(context: Context) {
                     it.copy(
                         connectionPhase = BillingConnectionPhase.READY,
                         entitlement = decision.entitlement,
+                        hasSubscriptionAccessEnded = if (decision.authoritativeOwned == true) false else it.hasSubscriptionAccessEnded,
                         ownsLifetime = it.ownsLifetime || ownership.ownsLifetime,
                         hasActiveSubscription = it.hasActiveSubscription || ownership.activeSubscriptionToken != null,
                         activeSubscriptionProductID = if (scheduled != null) {

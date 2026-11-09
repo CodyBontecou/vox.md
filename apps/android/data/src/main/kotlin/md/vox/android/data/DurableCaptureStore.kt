@@ -322,6 +322,11 @@ class DurableCapturePackageStore(
             canonicalValidated = true
             val current = prior.snapshot
             if (current.revision == command.event.revision && current.events.last() == command.event) {
+                // A prior caller may have lost the result after rename but before directory fsync.
+                // Reading the new frontier alone is not a durable acknowledgement.
+                fileOps.checkpoint("beforePackageDirectorySync")
+                fileOps.syncDirectory(directory)
+                fileOps.checkpoint("afterPackageDirectorySync")
                 return projectMutation(prior, already = true)
             }
             if (current.revision != command.expectedRevision) return JournalMutationResult.FrontierConflict(current.revision)
@@ -659,6 +664,16 @@ class DurableCapturePackageStore(
     }
 
     // ---- ADR-0023 Phase 5 persistence APIs (all under the package root lock) ----
+
+    /** Recovery admission after acquiring the worker fence: remove only governed owned temps. */
+    internal fun recoverJournal(requestID: String, leaseValidator: () -> Boolean): JournalSnapshot? = try {
+        if (!UUID_PATTERN.matches(requestID)) null else withRootMutationLock {
+            if (!leaseValidator()) return@withRootMutationLock null
+            val directory = File(root, requestID)
+            removeOwnedTemps(directory)
+            validatePackage(directory).snapshot
+        }
+    } catch (_: Exception) { null }
 
     /** Loads the current journal snapshot without mutation. */
     fun loadJournal(requestID: String): JournalSnapshot? = try {

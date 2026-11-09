@@ -493,6 +493,18 @@ internal class CaptureViewModel private constructor(
         saveCaptureBar(mutableState.value.captureBar.withRoutePins(routeID, actions))
     }
 
+    fun discard(requestID: String) {
+        if (mutableState.value.isSending) return
+        mutableState.update { it.copy(isSending = true, notice = null) }
+        viewModelScope.launch {
+            val discarded = runCatching { repository.discard(requestID) }.getOrDefault(false)
+            mutableState.update { it.copy(isSending = false, notice = voxNotice(
+                if (discarded) "Capture discarded" else "This delivery cannot be discarded safely yet. Retry to check its outcome.",
+            )) }
+            refresh(reconcile = true)
+        }
+    }
+
     fun retry(requestID: String) {
         if (mutableState.value.isSending) return
         viewModelScope.launch {

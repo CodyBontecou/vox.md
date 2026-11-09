@@ -170,6 +170,10 @@ class VoxInputMethodService : InputMethodService() {
     }
 
     private fun startVoice() {
+        if (PlayBillingManager.get(this).state.value.hasSubscriptionAccessEnded) {
+            updateVoiceState("New captures and edits need Vox.md.", listening = false, mode = KeyboardVoiceMode.ERROR)
+            return
+        }
         if (sensitiveInput) {
             updateVoiceState("Voice typing is unavailable in sensitive fields", listening = false, mode = KeyboardVoiceMode.ERROR)
             return

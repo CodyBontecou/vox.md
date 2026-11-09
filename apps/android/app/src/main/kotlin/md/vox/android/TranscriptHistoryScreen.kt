@@ -291,6 +291,7 @@ internal fun TranscriptDetailScreen(
     save: (String, String, String, String, List<String>, String) -> Boolean,
     delete: (String) -> Unit,
     addToDraft: (String, String) -> Unit,
+    isReadOnly: Boolean = false,
     initialEditing: Boolean = false,
     initialOperationMessage: VoxUiText? = null,
     initialShowsDeleteConfirmation: Boolean = false,
@@ -336,7 +337,7 @@ internal fun TranscriptDetailScreen(
             title = voxUiText("Transcript"),
             navigateBack = navigateBack,
             actions = {
-                if (state?.phase == RecordingTranscriptionPhase.COMPLETED) {
+                if (state?.phase == RecordingTranscriptionPhase.COMPLETED && !isReadOnly) {
                     SignalCircleButton(
                         icon = if (editing) Icons.Outlined.Check else Icons.Outlined.Edit,
                         contentDescription = voxString(if (editing) "Stop editing" else "Edit transcript"),
@@ -513,7 +514,7 @@ internal fun TranscriptDetailScreen(
                         fillWidth = true,
                     )
                 }
-                if (editing) {
+                if (editing && !isReadOnly) {
                     SignalSectionLabel(voxString("Edit transcript"), Modifier.padding(start = 4.dp, top = 4.dp))
                     TranscriptEditField(editedTitle, { editedTitle = it.take(128) }, voxString("Title"))
                     TranscriptEditField(editedTags, { editedTags = it.take(1_280) }, voxString("Tags, comma separated"))
@@ -549,7 +550,7 @@ internal fun TranscriptDetailScreen(
                         SignalButton(
                             text = voxString("Save"),
                             onClick = {
-                                val saved = save(
+                                val saved = !isReadOnly && save(
                                     state.sessionID,
                                     editedRawText,
                                     editedCleanedText,
@@ -582,10 +583,10 @@ internal fun TranscriptDetailScreen(
                 Spacer(Modifier.height(4.dp))
                 SignalButton(
                     text = voxString("Add to Capture"),
-                    onClick = { addToDraft(state.sessionID, state.preferredTranscript.orEmpty()) },
+                    onClick = { if (!isReadOnly) addToDraft(state.sessionID, state.preferredTranscript.orEmpty()) },
                     variant = SignalButtonVariant.PRIMARY,
                     size = SignalButtonSize.LARGE,
-                    enabled = hasText,
+                    enabled = hasText && !isReadOnly,
                     icon = Icons.Outlined.Add,
                 )
                 LibraryDestructiveButton(

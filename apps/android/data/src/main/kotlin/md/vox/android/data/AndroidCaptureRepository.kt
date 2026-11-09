@@ -120,6 +120,8 @@ class AndroidCaptureRepository(
     private val captureEnqueued: (String) -> Unit = {},
     private val previouslyProcessedRecording: (String, String, CapturePreset) -> md.vox.android.capturedomain.CaptureTextProcessingResult? = { _, _, _ -> null },
     private val processCaptureText: suspend (String, CapturePreset, Boolean) -> md.vox.android.capturedomain.CaptureTextProcessingResult? = { text, preset, voice -> LocalCaptureTextProcessor.process(text, preset, voice) },
+    private val isAccessEnded: () -> Boolean = { false },
+    private val canDiscardAuxiliaryDelivery: (String) -> Boolean = { true },
     private val generateImageAltText: suspend (ByteArray, String) -> String? = { _, _ -> null },
 ) : CaptureRepository {
     private val appContext = context.applicationContext
@@ -596,6 +598,9 @@ class AndroidCaptureRepository(
             if (clearPersistedDraft) clearDraftOnWorker()
             return CaptureSubmitResult.Delivered(requestID)
         }
+        // Existing durable packages may finish; new work must not use a fresh free allowance
+        // after authoritative subscription loss. Keep the draft untouched on rejection.
+        if (isAccessEnded()) return CaptureSubmitResult.InvalidInput("New captures and edits need Vox.md.")
         val normalizedText = draft.text.trimEnd()
         val normalizedURL = CaptureWebLink.normalize(draft.url)
         if (normalizedText.length > MAX_TEXT_CHARACTERS) {
@@ -735,6 +740,14 @@ class AndroidCaptureRepository(
         return if (delivered is CaptureSubmitResult.Delivered) delivered.copy(processingOutcome = processingResult?.outcome) else delivered
     }
 
+    override suspend fun discard(requestID: String): Boolean = withContext(Dispatchers.IO) {
+        // A vault-only discard must not claim to stop a separately admitted URL delivery.
+        if (!canDiscardAuxiliaryDelivery(requestID)) return@withContext false
+        val discarded = CaptureDiscard(store, coordination, clock).discard(requestID)
+        if (discarded) store.loadJournal(requestID)?.let { quota.releaseDiscarded(it) }
+        discarded
+    }
+
     override suspend fun retry(requestID: String): CaptureSubmitResult = withContext(Dispatchers.IO) {
         retryOnWorker(requestID)
     }
@@ -742,6 +755,12 @@ class AndroidCaptureRepository(
     override suspend fun reconcile(): List<CaptureHistoryItem> = withContext(Dispatchers.IO) {
         store.reconcile()
         compactCompletedPackages()
+        // Replay the quota-release crash window after a durably journaled discard.
+        index.all().filter { it.state == CaptureState.DISCARDED }.forEach { row ->
+            if (CaptureDiscard(store, coordination, clock).discard(row.requestID)) {
+                store.loadJournal(row.requestID)?.let { quota.releaseDiscarded(it) }
+            }
+        }
         historyOnWorker()
     }
 

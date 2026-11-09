@@ -25,6 +25,12 @@ internal class CaptureDurabilityCoordinator(
             command.leaseToken == candidate && leases.isCurrent(command.requestID, candidate, nowEpochMillis) is LeasePlan.Current
         }
 
+    /** Cleanup and read share the root lock with the current-fence check. */
+    fun recoverJournal(requestID: String, token: String, nowEpochMillis: Long): JournalSnapshot? =
+        store.recoverJournal(requestID) {
+            leases.isCurrent(requestID, token, nowEpochMillis) is LeasePlan.Current
+        }
+
     /** Expiry clears only Room ownership. It never appends a journal event. */
     fun clearExpiredLeases(nowEpochMillis: Long): LeaseClearResult =
         store.withRootMutationLock { leases.clearExpired(nowEpochMillis) }

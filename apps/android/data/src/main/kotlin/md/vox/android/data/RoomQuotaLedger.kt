@@ -100,6 +100,13 @@ class RoomQuotaLedger(private val database: CaptureDatabase) {
             } else OrphanReservationDisposition.CORRUPT_OR_MISSING
         }
 
+    /** Only a durable explicit discard may release this reservation; committed usage is untouched. */
+    internal fun releaseDiscarded(snapshot: JournalSnapshot): Boolean = transaction {
+        if (snapshot.state != CaptureState.DISCARDED || snapshot.events.lastOrNull()?.code != JournalCode.USER_DISCARDED) return@transaction false
+        val reservation = dao.readReservation(snapshot.requestID) ?: return@transaction true
+        dao.releaseReservation(snapshot.requestID, reservation.reservationToken) == 1
+    }
+
     fun release(requestID: String, reservationToken: String): Boolean {
         if (!LOWER_UUID.matches(requestID) || !LOWER_UUID.matches(reservationToken)) return false
         val existing = dao.readReservation(requestID) ?: return true

@@ -76,6 +76,7 @@ import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -1840,8 +1841,9 @@ private fun RecoveryConfirmDialog(
  * Bottom sheet for a capture that could not be delivered. The Android pipeline reports a
  * coarse state (folder access lost, retry, needs action), not the iOS failure reason, so
  * the sheet offers only actions with real code paths: fix folder access or retry delivery,
- * copy the Markdown, open the capture, and edit the route. Discard, "Pick a heading",
- * "Send to Inbox" and "Add heading and deliver" need repository APIs Android does not have.
+ * copy the Markdown, open the capture, edit the route, or explicitly stop a provably
+ * pre-commit delivery. Heading repair and rerouting require a durable replacement protocol;
+ * editing a route never changes an already frozen capture request.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -1855,6 +1857,7 @@ internal fun DeliveryProblemSheet(
     openDetail: () -> Unit,
     editRoute: (() -> Unit)?,
     onDismiss: () -> Unit,
+    discard: (() -> Unit)? = null,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(
@@ -1882,6 +1885,7 @@ internal fun DeliveryProblemSheet(
                 openDetail()
             },
             editRoute = editRoute?.let { edit -> { onDismiss(); edit() } },
+            discard = discard?.let { action -> { action(); onDismiss() } },
         )
     }
 }
@@ -1897,6 +1901,7 @@ internal fun DeliveryProblemContent(
     openDetail: () -> Unit,
     editRoute: (() -> Unit)?,
     modifier: Modifier = Modifier,
+    discard: (() -> Unit)? = null,
 ) {
     val c = Signal.colors
     val context = LocalContext.current
@@ -1904,8 +1909,18 @@ internal fun DeliveryProblemContent(
         value = runCatching { loadDetail(item.requestID) }.getOrNull()
     }
     var copied by remember(item.requestID) { mutableStateOf(false) }
+    var confirmsDiscard by rememberSaveable(item.requestID) { mutableStateOf(false) }
     val isVaultProblem = item.state == CaptureState.NEEDS_PERMISSION
     val markdown = detail?.let { HistoryDetailExporter.render(it, HistoryExportFormat.MARKDOWN) }
+    if (confirmsDiscard && discard != null) {
+        RecoveryConfirmDialog(
+            title = voxString("Discard delivery"),
+            message = voxString("Stop this delivery? Its local content will be kept in Library."),
+            confirmLabel = voxString("Discard delivery"), dismissLabel = voxString("Cancel"),
+            onDismiss = { confirmsDiscard = false },
+            onConfirm = { confirmsDiscard = false; discard() },
+        )
+    }
     val preview = detail?.preparedMarkdown?.trimEnd()
         ?: detail?.capturedText?.takeIf(String::isNotBlank)
         ?: item.snippet
@@ -1970,6 +1985,10 @@ internal fun DeliveryProblemContent(
             }
         }
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            if (discard != null && item.state in setOf(CaptureState.RETRYABLE_FAILURE, CaptureState.NEEDS_USER_ACTION, CaptureState.NEEDS_PERMISSION)) {
+                SignalButton(text = voxString("Discard delivery"), onClick = { confirmsDiscard = true },
+                    enabled = !isBusy, variant = SignalButtonVariant.TERTIARY)
+            }
             if (isVaultProblem) {
                 SignalButton(
                     text = voxString("Fix access"),

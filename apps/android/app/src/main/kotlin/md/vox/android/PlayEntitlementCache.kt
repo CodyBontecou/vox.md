@@ -21,7 +21,8 @@ internal data class CachedPlayEntitlement(
  * Google Play ownership query. App backup is disabled, and the HMAC key is non-exportable.
  *
  * The signed product ID records which recognized product (lifetime or a subscription) granted the
- * entitlement; [productID] is the default written for a negative answer. The record format is
+ * entitlement. A negative subscription record preserves the last verified subscription identity
+ * as evidence that paid access ended; new installations use [productID]. The record format is
  * unchanged from v2, so existing lifetime evidence keeps working after an update.
  */
 internal class PlayEntitlementCache(
@@ -74,7 +75,7 @@ internal class PlayEntitlementCache(
         ownedProductID: String = productID,
     ): Boolean {
         if (checkedAtEpochMillis <= 0L) return false
-        val recordedProductID = ownedProductID.takeIf { isOwned && it in recognizedProductIDs } ?: productID
+        val recordedProductID = ownedProductID.takeIf { it in recognizedProductIDs } ?: productID
         return runCatching {
             val encodedMac = Base64.encodeToString(
                 signature(payload(recordedProductID, isOwned, checkedAtEpochMillis)),
