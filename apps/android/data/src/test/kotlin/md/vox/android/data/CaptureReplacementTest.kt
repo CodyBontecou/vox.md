@@ -63,6 +63,44 @@ class CaptureReplacementTest {
         }
     }
 
+    @Test fun preDrainReconciliationEnqueuesRetiredSourcesBeforePendingSelection() {
+        for (point in listOf("intentPersisted", "sourceRetired", "replacementEnqueued")) {
+            val h = harness(); enqueue(h)
+            assertTrue(engine(h, checkpoint = { if (it == point) error("crash") }).admit(intent(h)) { true } is ReplacementOutcome.Waiting)
+            val reopened = harness(h.base)
+            repeat(2) {
+                assertEquals(0, reconcileCaptureRecoveries(reopened.store, reopened.intents, engine(reopened)))
+                assertEquals(CaptureState.DISCARDED, reopened.store.loadJournal(sourceID)!!.state)
+                assertEquals(CaptureState.QUEUED, reopened.store.loadJournal(replacementID)!!.state)
+                assertEquals(1, reopened.intents.sourceIDs().size)
+            }
+        }
+    }
+
+    @Test fun preDrainReconciliationRetainsRetryWhenRetiredSourceLeaseIsBusy() {
+        val h = harness(); enqueue(h)
+        assertTrue(engine(h, checkpoint = { if (it == "sourceRetired") error("crash") }).admit(intent(h)) { true } is ReplacementOutcome.Waiting)
+        assertTrue(h.coordinator.acquire(sourceID, vaultID, 40, 60_000) is LeasePlan.Grant)
+        assertEquals(1, reconcileCaptureRecoveries(h.store, h.intents, engine(h)))
+        assertNull(h.store.loadJournal(replacementID))
+        h.coordinator.release(sourceID, vaultID)
+        assertEquals(0, reconcileCaptureRecoveries(h.store, h.intents, engine(h)))
+        assertEquals(CaptureState.QUEUED, h.store.loadJournal(replacementID)!!.state)
+    }
+
+    @Test fun preDrainReconciliationRetainsRetryAfterEnqueuePersistenceFailure() {
+        val h = harness(); enqueue(h)
+        assertTrue(engine(h, checkpoint = { if (it == "sourceRetired") error("crash") }).admit(intent(h)) { true } is ReplacementOutcome.Waiting)
+        val failing = harness(h.base, object : DurableFileOps by ops {
+            override fun checkpoint(name: String) { if (name == "beforePromotion") error("enqueue unavailable") }
+        })
+        assertEquals(1, reconcileCaptureRecoveries(failing.store, failing.intents, engine(failing)))
+        assertEquals(CaptureState.DISCARDED, failing.store.loadJournal(sourceID)!!.state)
+        val reopened = harness(h.base)
+        assertEquals(0, reconcileCaptureRecoveries(reopened.store, reopened.intents, engine(reopened)))
+        assertEquals(CaptureState.QUEUED, reopened.store.loadJournal(replacementID)!!.state)
+    }
+
     @Test fun intentPromotionUncertaintyResyncsBeforeSourceRetirement() {
         for (point in listOf("beforeRecoveryIntentPromote", "afterRecoveryIntentPromote", "afterRecoveryIntentSync")) {
             val base = Files.createTempDirectory("recovery-intent-crash").toFile()

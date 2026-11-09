@@ -152,7 +152,7 @@ class AndroidCaptureRepository(
     private val recoveryIntents = CaptureRecoveryIntentStore(appContext.noBackupFilesDir)
     private val headingFailures = CaptureHeadingFailureStore(appContext.noBackupFilesDir)
     private fun replacements() = CaptureReplacement(store, coordination, recoveryIntents, clock,
-        canDiscardAuxiliaryDelivery, completed = { completions.read(it) != null })
+        canDiscardAuxiliaryDelivery, completed = quota::hasVerifiedCompletion)
     private val draftAttachmentMutex = Mutex()
     private val preferences: DataStore<Preferences> = PreferenceDataStoreFactory.create(
         scope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
@@ -603,7 +603,7 @@ class AndroidCaptureRepository(
         clearPersistedDraft: Boolean,
         suppliedAssets: List<DurableAssetInput>? = null,
     ): CaptureSubmitResult {
-        if (completions.read(requestID) != null) {
+        if (quota.hasVerifiedCompletion(requestID)) {
             if (clearPersistedDraft) clearDraftOnWorker()
             return CaptureSubmitResult.Delivered(requestID)
         }
@@ -853,9 +853,13 @@ class AndroidCaptureRepository(
     }
 
     override suspend fun reconcile(): List<CaptureHistoryItem> = withContext(Dispatchers.IO) {
-        store.reconcile()
-        // Accepted explicit decisions are existing durable work, including after access ends.
-        recoveryIntents.sourceIDs().forEach { replacements().replay(it) }
+        reconcileOnWorker()
+        historyOnWorker()
+    }
+
+    /** Foreground refresh and WorkManager must recover the same durable decisions. */
+    private fun reconcileOnWorker(): Int {
+        val waiting = reconcileCaptureRecoveries(store, recoveryIntents, replacements())
         compactCompletedPackages()
         // Replay the quota-release crash window after a durably journaled discard.
         index.all().filter { it.state == CaptureState.DISCARDED }.forEach { row ->
@@ -863,7 +867,7 @@ class AndroidCaptureRepository(
                 store.loadJournal(row.requestID)?.let { quota.releaseDiscarded(it) }
             }
         }
-        historyOnWorker()
+        return waiting
     }
 
     override suspend fun history(): List<CaptureHistoryItem> = withContext(Dispatchers.IO) { historyOnWorker() }
@@ -903,13 +907,15 @@ class AndroidCaptureRepository(
 
     override suspend fun drainPending(maxItems: Int): CaptureDrainSummary = withContext(Dispatchers.IO) {
         require(maxItems in 1..MAX_DRAIN_ITEMS) { "invalidDrainLimit" }
-        store.reconcile()
+        val waitingRecoveries = reconcileOnWorker()
         val pending = historyOnWorker().asSequence()
             .filter { it.state.canResumeAutomatically() }
             .take(maxItems)
             .toList()
         var delivered = 0
-        var retryable = 0
+        // A retired source may have no replacement package yet. Keep its execution
+        // opportunity alive even when the package queue itself is empty.
+        var retryable = waitingRecoveries
         var needsPermission = 0
         var blocked = 0
         pending.forEach { item ->
@@ -950,7 +956,7 @@ class AndroidCaptureRepository(
                 else -> CaptureSubmitResult.SavedForRetry(requestID, "recoveryPending")
             }
         }
-        if (completions.read(requestID) != null) return CaptureSubmitResult.Delivered(requestID)
+        if (quota.hasVerifiedCompletion(requestID)) return CaptureSubmitResult.Delivered(requestID)
         val snapshot = store.loadJournal(requestID) ?: return CaptureSubmitResult.InvalidInput("Capture is no longer available.")
         if (snapshot.state == CaptureState.COMPLETED) {
             compactCompletedPackage(requestID)

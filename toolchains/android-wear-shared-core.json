@@ -678,7 +678,7 @@
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt",
-      "sha256": "c50ff1b68969ad8c148dd05470e5224a6de6e7c6e9a5166db2a1c38c1518a31e"
+      "sha256": "08f4930ae655f74c32addcd60a59f62dd06da2c67b395d75e1b88156d2b52a53"
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CapturePackageCodec.kt",
@@ -699,6 +699,10 @@
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryIntentStore.kt",
       "sha256": "dd42d2977fe79fef5274ed63264a262835004276ad4acaf719d298969fbbe97a"
+    },
+    {
+      "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryReconciliation.kt",
+      "sha256": "21a255cf42039d431c789ddf2e51491f04fc1dc112094ac81ad7fd0c2e459f0d"
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryRequest.kt",
@@ -766,7 +770,7 @@
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/RoomQuotaLedger.kt",
-      "sha256": "6e5593c2509ee300c17c2fcb5576218ddb0e3c1b2a3ba3114214f928931eb286"
+      "sha256": "3a1fd1698165dfebb9e134bf468c8af10cd0dfc3fc4df7cb675a83398f78f2e6"
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/RoomCaptureCompletionLedger.kt",
@@ -830,15 +834,19 @@
     },
     {
       "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureReplacementTest.kt",
-      "sha256": "c27b9e48c0cb6ced502ac08079aa2fba7cbb35c4af02d85a4066df14f6da0784"
+      "sha256": "24d20d6c5a0f2be155fd81a2f4d3036ebbcc44d697ec650447f32d6bae7611f6"
     },
     {
       "path": "docs/android/capture-recovery-sidecar.md",
-      "sha256": "3032c94fef0cf708738ed5602b1a28f2d5af19b42176ff4a09aae9daba69027b"
+      "sha256": "c19239f83f466b4010bc2a7e17d4a873aec64059d990396384037cf3d844ebbe"
     },
     {
       "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
       "sha256": "35eb0272c4c94a047c827cc4af6a3d29abb648474eea2df617eab852065d44b0"
+    },
+    {
+      "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureRecoveryRepositoryInstrumentationTest.kt",
+      "sha256": "ba8a3c6a0162da9a9853e75b37fb4f4e5c50fe7c0102eb41622668264a517e8f"
     },
     {
       "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/ReinstallAdjustmentInstrumentationTest.kt",

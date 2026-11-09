@@ -39,6 +39,10 @@ internal enum class TerminalQuotaResult { COMMITTED, IDENTICAL, CONFLICT, RESERV
 class RoomQuotaLedger(private val database: CaptureDatabase) {
     private val dao get() = database.captureCoordinationDao()
 
+    /** Permanent verified terminal authority; deleting Library history never removes it. */
+    internal fun hasVerifiedCompletion(requestID: String): Boolean =
+        LOWER_UUID.matches(requestID) && dao.readTombstone(requestID)?.state == "COMPLETED"
+
     fun initializeInstallation(candidateID: String, nowEpochMillis: Long): String = transaction {
         require(LOWER_UUID.matches(candidateID) && nowEpochMillis >= 0) { "invalidInstallation" }
         val current = dao.readInstallation()
