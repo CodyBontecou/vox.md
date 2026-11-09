@@ -61,10 +61,10 @@
       "sha256": "3e7e609dbe52d229e852800baa06fb43b78e4f2ec4082a9218e8bd6f01351e72"
     },
     {
-      "bytes": 1871,
+      "bytes": 3136,
       "category": "contractSource",
       "path": "Packages/contracts/core-api/v1/contract.md",
-      "sha256": "b6ede0acf0f0d5221e0b6d6f3adade055480ee6cc5be2de5bcc98eb51366b9c3"
+      "sha256": "be962a52a09c36b1a7bf55c44fd29d7c66d153bc48dbac9ac67ffaa912b8129f"
     },
     {
       "bytes": 5634,
@@ -805,10 +805,10 @@
       "sha256": "5d9c5b4ba3fc5e5cc797a6ad29dfffe1447c4f8477d15300ba519ae46e6e0d41"
     },
     {
-      "bytes": 87791,
+      "bytes": 89533,
       "category": "validatorScript",
       "path": "Packages/contracts/scripts/validate_toolchain.py",
-      "sha256": "34bb5a907adeb23e8978184804e3335e4a34f212d41f1f17f5932e174227cee6"
+      "sha256": "77ff10d9ceedf02d07c5d49bfd78d53d5393f78428a277750a79f2a83230f81f"
     },
     {
       "bytes": 113792,
@@ -823,10 +823,10 @@
       "sha256": "f9fc41a081dad0ca1261a1826de70216fad64424efcde35621cc0f5672a0253a"
     },
     {
-      "bytes": 9807,
+      "bytes": 9808,
       "category": "validatorTest",
       "path": "Packages/contracts/tests/test_android_localization_audit.py",
-      "sha256": "aaa9743e6e32c18987e9837535fcc1c48fb86060cbfc15b56d0a5928c2c97ad6"
+      "sha256": "e7f1b172bfd1ea13ea7163e064abe964f7d34b9cd4efe2cf3d5a7675e9282193"
     },
     {
       "bytes": 9013,
@@ -847,10 +847,10 @@
       "sha256": "47085c01d8e9b46ebe1820445d0e3a44764d4bac9b065ab967e93a776097862e"
     },
     {
-      "bytes": 4321,
+      "bytes": 4923,
       "category": "validatorTest",
       "path": "Packages/contracts/tests/test_local_intelligence_evaluation.py",
-      "sha256": "1429adb808566a5bd96e0581a66b9475f7f9cf3b191ec537d220d6507124a9ed"
+      "sha256": "932df715d488a1f5c6d2ddc6da761ae3b33b1a807273ecf4e9c4c657e61bb390"
     },
     {
       "bytes": 4280,
@@ -865,10 +865,10 @@
       "sha256": "be774826782d8ddd6adc94968047eace1f7b3e2abbbbefbf3c682d0c0c59c0bf"
     },
     {
-      "bytes": 39700,
+      "bytes": 40633,
       "category": "validatorTest",
       "path": "Packages/contracts/tests/test_validate.py",
-      "sha256": "1673c9e71514c466dd7959e164de50aeb98ae69bd717a326352247e781e89f05"
+      "sha256": "fad2a7c9f2a347b945c88cf22edb028f01dc7b30a3e29f4970614c1cbda352b6"
     },
     {
       "bytes": 85486,
@@ -1117,6 +1117,12 @@
       "sha256": "16a73e83e467c821bd2293f93e21611350ed87d26aff658ce7b3896a624f7062"
     },
     {
+      "bytes": 6795,
+      "category": "validationDocumentation",
+      "path": "docs/validation/android-explicit-recovery-2026-11-08.md",
+      "sha256": "1a5bbae6ff86d0018263e02e5c74c1a554025c56ecbebcb5018935acb79384dc"
+    },
+    {
       "bytes": 4770,
       "category": "validationDocumentation",
       "path": "docs/validation/android-performance-gates.md",
@@ -1207,16 +1213,22 @@
       "sha256": "682ad5ae4196683700c0657dd438f0ac9e6b88d174a982ca2f0fd3ebca1adcef"
     },
     {
+      "bytes": 10520,
+      "category": "validationDocumentation",
+      "path": "docs/validation/signal-local-recovery-2026-11-08.md",
+      "sha256": "9b19eeacfd4541ef34a5f7605b6022de924735c11c915f3bd206438837daade9"
+    },
+    {
       "bytes": 123589,
       "category": "contractGate",
       "path": "scripts/test-project-contracts.sh",
       "sha256": "dcc3e936ad6babf4e66abe0eb1af2b7a0d6c4eb523ee16838759894d144049a5"
     },
     {
-      "bytes": 59005,
+      "bytes": 62005,
       "category": "toolchainDefinition",
       "path": "toolchains/android-wear-shared-core.json",
-      "sha256": "39e2694ab1e6d86e66f01258f07f4ec79f6bc07a7f5920fb11ab8d6b8ff7f5ae"
+      "sha256": "8c97f468a1f8d0c3bb52b59fe1151783a358dc5a25f0b45843db32efabd7a3b7"
     },
     {
       "bytes": 11216,
