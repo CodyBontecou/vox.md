@@ -1,0 +1,25 @@
+{
+  "androidModelQualification": false,
+  "command": [
+    "Packages/VoxboardShared/.build/debug/VoxboardIntelligenceEvaluation",
+    "evaluations/local-intelligence/v1/corpus.json",
+    "apple-instruction-evaluation.json"
+  ],
+  "executableSHA256": "dc877e39cf20fe872343d0aec5f6cc7693e552e1c203abaa45f6df231f69b2e8",
+  "fullPhoneSuite": false,
+  "kind": "local-apple-instruction-execution",
+  "limitations": [
+    "System-managed Apple model weight revision is not exposed by the API.",
+    "Android speech inference, native delivery and full-phone assertions were not executed.",
+    "This audit preserves the observed modified tree; it does not mint a clean-source qualification receipt."
+  ],
+  "qualification": "appleInstructionSubsetOnly",
+  "schemaVersion": 1,
+  "sourceHashes": {
+    "Packages/VoxboardShared/Sources/VoxboardIntelligenceEvaluation/main.swift": "404af826b7ef55c5e2632d2c0a4824024f280f7543f15ee0d6d062d4a14e6e82",
+    "Packages/VoxboardShared/Sources/VoxboardShared/IntelligenceEvaluation.swift": "74f7924d5858317e1f226583ffb85ed443a21f93a216d8838e7e9330dcc6e73e",
+    "evaluations/local-intelligence/v1/corpus.json": "43b35c8f2401788ef7c476e576df4c67dabb7e908b3a3acf9a23e070fd2104aa"
+  },
+  "sourceRevision": "6b50da344a65b4574f86042f480cd4aeb54dcaf1",
+  "sourceTreeClean": false
+}

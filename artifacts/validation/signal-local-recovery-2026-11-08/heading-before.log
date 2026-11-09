@@ -1,0 +1,24 @@
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.69s
+     Running unittests src/lib.rs (target/debug/deps/vox_core-3d17294e04aadd7a)
+
+running 1 test
+test tests::heading_placement_fails_when_required_heading_is_missing ... FAILED
+
+failures:
+
+---- tests::heading_placement_fails_when_required_heading_is_missing stdout ----
+
+thread 'tests::heading_placement_fails_when_required_heading_is_missing' (282179) panicked at crates/vox-core/src/lib.rs:3401:9:
+assertion `left == right` failed
+  left: "rendering failed validation"
+ right: "target heading was not found"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests::heading_placement_fails_when_required_heading_is_missing
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 26 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p vox-core --lib`
