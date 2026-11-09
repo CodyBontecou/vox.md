@@ -69,11 +69,13 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/app/src/main/kotlin/md/vox/android/SettingsScreens.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/PlayEntitlementCache.kt",
+    "apps/android/app/src/main/kotlin/md/vox/android/SubscriptionAccessPolicy.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/PrivacySafeDebugLog.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/SettingsSupportScreens.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/VoxApplication.kt",
+    "apps/android/app/src/main/kotlin/md/vox/android/VoxAppChrome.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/PhoneWearBridge.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/RuntimeLocalization.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/VoxInputMethodService.kt",
@@ -95,6 +97,7 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/app/src/androidTest/kotlin/md/vox/android/WearRecordingOnlySafInstrumentationTest.kt",
     "apps/android/app/src/test/kotlin/md/vox/android/PlayBillingTest.kt",
     "apps/android/app/src/test/kotlin/md/vox/android/RuntimeLocalizationTest.kt",
+    "apps/android/app/src/test/kotlin/md/vox/android/SubscriptionAccessPolicyTest.kt",
     "apps/android/scripts/generate-android-sbom.py",
     "apps/android/scripts/generate-runtime-localizations.py",
     "apps/android/localization-review.json",
@@ -118,6 +121,7 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/data/build.gradle.kts",
     "apps/android/data/gradle.lockfile",
     "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/DurableCapture.kt",
+    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRepository.kt",
     "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureDurability.kt",
     "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureDelivery.kt",
     "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/LocalCaptureTextProcessor.kt",
@@ -130,6 +134,7 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt",
     "apps/android/data/src/main/kotlin/md/vox/android/data/CapturePackageCodec.kt",
     "apps/android/data/src/main/kotlin/md/vox/android/data/DurableCaptureStore.kt",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDiscard.kt",
     "apps/android/data/src/main/java/md/vox/android/data/CaptureProjectionEntity.java",
     "apps/android/data/src/main/java/md/vox/android/data/CaptureProjectionDao.java",
     "apps/android/data/src/main/java/md/vox/android/data/CaptureDatabase.java",
@@ -1086,7 +1091,7 @@ def main(argv=None):
         localization_audit["incompleteCatalogSourceCount"],
         localization_audit["missingCatalogSourceCount"],
     )
-    if counts != (993, 448, 5, 540, 0, 0) or counts[0] != sum(counts[1:]):
+    if counts != (996, 448, 5, 543, 0, 0) or counts[0] != sum(counts[1:]):
         fail("Android localization review source counts changed without review")
     if localization_audit["runtimeSourceLiteralCount"] != 2975:
         fail("Android runtime localization lookup-source count changed without review")

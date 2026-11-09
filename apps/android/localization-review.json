@@ -23,7 +23,7 @@
     }
   ],
   "androidCatalog": "apps/android/localization/android-strings.json",
-  "androidCatalogBackedSourceCount": 540,
+  "androidCatalogBackedSourceCount": 543,
   "catalog": "Voxboard/Localizable.xcstrings",
   "catalogBackedSourceCount": 448,
   "dynamicRuntimeCallSiteCount": 0,
@@ -70,13 +70,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ui/CaptureViewModel.kt:544"
+        "apps/android/app/src/main/kotlin/md/vox/android/ui/CaptureViewModel.kt:556"
       ],
       "source": "%lld captures removed from History."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:645"
+        "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:646"
       ],
       "source": "%lld durable chunks · %@"
     },
@@ -107,8 +107,8 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt:409",
-        "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt:750"
+        "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt:410",
+        "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt:751"
       ],
       "source": "%lld speakers"
     },
@@ -118,7 +118,7 @@
         "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2356",
         "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2462",
         "apps/android/app/src/main/kotlin/md/vox/android/CaptureStateViews.kt:319",
-        "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:661"
+        "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:662"
       ],
       "source": "%lld%%"
     },
@@ -152,7 +152,7 @@
     "Dynamic-source call sites are inventoried; the current finite-domain trace has no unresolved dynamic expressions.",
     "Missing sources fall back to English; Android machine translations require human linguistic review."
   ],
-  "literalRuntimeSourceCount": 993,
+  "literalRuntimeSourceCount": 996,
   "missingCatalogSourceCount": 0,
   "missingCatalogSources": [],
   "pluralImplementationStatus": "cldr-aware",
