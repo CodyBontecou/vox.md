@@ -143,6 +143,8 @@ struct RouteSurfacePinsView: View {
 struct ShortcutsControlCenterSettingsView: View {
     @State private var flows: [CapturePreset] = []
     @State private var actionRouteID: String = ""
+    @State private var controlCenterSummary = String(localized: "None")
+    @State private var widgetsSummary = String(localized: "None")
 
     var body: some View {
         Form {
@@ -165,12 +167,12 @@ struct ShortcutsControlCenterSettingsView: View {
                 NavigationLink {
                     RouteSurfacePinsView(surface: .controlCenter)
                 } label: {
-                    LabeledContent("Control Center", value: summary(.controlCenter))
+                    LabeledContent("Control Center", value: controlCenterSummary)
                 }
                 NavigationLink {
                     RouteSurfacePinsView(surface: .widgets)
                 } label: {
-                    LabeledContent("Widgets", value: summary(.widgets))
+                    LabeledContent("Widgets", value: widgetsSummary)
                 }
             } header: {
                 Text("Pinned Routes").textCase(.uppercase).font(Geist.mono(size: 11, relativeTo: .caption))
@@ -185,6 +187,10 @@ struct ShortcutsControlCenterSettingsView: View {
         .onAppear {
             flows = CapturePresetStore.loadFlows().filter(\.isEnabled)
             actionRouteID = CapturePresetSurfacePinStore.actionButtonRouteID(defaults: RouteSurfacePins.defaults) ?? ""
+            // Pins change in the child screens without changing the routes or
+            // Action Button selection. Refresh observable summaries on return.
+            controlCenterSummary = summary(.controlCenter)
+            widgetsSummary = summary(.widgets)
         }
         .onChange(of: actionRouteID) { _, id in
             CapturePresetSurfacePinStore.setActionButtonRouteID(id.isEmpty ? nil : id, defaults: RouteSurfacePins.defaults)

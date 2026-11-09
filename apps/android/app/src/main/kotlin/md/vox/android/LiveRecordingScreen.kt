@@ -5,6 +5,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -116,7 +118,7 @@ internal fun LiveRecordingScreen(
             minPanePx = with(density) { 200.dp.roundToPx() },
         )
     }
-    Box(
+    BoxWithConstraints(
         modifier = modifier
             .fillMaxSize()
             .background(c.cardLowest)
@@ -158,6 +160,34 @@ internal fun LiveRecordingScreen(
                         RecordingResultChoice(recordingResult, setRecordingResult, Modifier.widthIn(max = 320.dp).weight(1f, fill = false))
                         Spacer(Modifier.weight(1f))
                         LiveRecordingControls(status, pause, resume, stop, cancel, stopSize = 80.dp)
+                    }
+                }
+            }
+        } else if (maxWidth >= 600.dp && maxHeight < 480.dp) {
+            // In a phone's short landscape window, reserve a full column for
+            // actions instead of putting them below the timer and waveform.
+            Row(
+                Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()
+                    .displayCutoutPadding().padding(horizontal = 20.dp, vertical = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
+            ) {
+                Column(
+                    Modifier.weight(0.4f).fillMaxHeight().verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    LiveRecordingHeader(preset)
+                    Column { LiveRecordingTimer(status, large = false) }
+                    LiveWaveform(levels, height = 40.dp, paused = status.phase == RecordingPhase.PAUSED)
+                    Text(voxString("Voice and text stay on-device."), style = MaterialTheme.typography.bodySmall, color = c.muted)
+                }
+                Column(
+                    Modifier.weight(0.6f).fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    LiveTranscript(liveSpeech, Modifier.weight(1f).fillMaxWidth(), fontSize = 20)
+                    RecordingResultChoice(recordingResult, setRecordingResult, Modifier.fillMaxWidth())
+                    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        LiveRecordingControls(status, pause, resume, stop, cancel, stopSize = 80.dp, spread = true)
                     }
                 }
             }

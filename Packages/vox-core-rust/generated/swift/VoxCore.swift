@@ -1124,6 +1124,7 @@ enum VoxCoreError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
     case SessionTerminal
     case Cancelled
     case InternalPanic
+    case HeadingNotFound
 
 
 
@@ -1168,6 +1169,7 @@ public struct FfiConverterTypeVoxCoreError: FfiConverterRustBuffer {
         case 13: return .SessionTerminal
         case 14: return .Cancelled
         case 15: return .InternalPanic
+        case 16: return .HeadingNotFound
 
          default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -1238,6 +1240,10 @@ public struct FfiConverterTypeVoxCoreError: FfiConverterRustBuffer {
 
         case .InternalPanic:
             writeInt(&buf, Int32(15))
+
+
+        case .HeadingNotFound:
+            writeInt(&buf, Int32(16))
 
         }
     }

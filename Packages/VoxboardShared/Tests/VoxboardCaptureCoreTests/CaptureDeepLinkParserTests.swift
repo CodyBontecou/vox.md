@@ -2,6 +2,18 @@ import XCTest
 @testable import VoxboardCaptureCore
 
 final class CaptureDeepLinkParserTests: XCTestCase {
+    func test_hostlessWebLinksAreRejectedWithoutOpeningComposer() throws {
+        for value in ["https://", "http:", "https:example.com", "https:///notes", "https://?query=notes"] {
+            var components = URLComponents()
+            components.scheme = "voxboard"
+            components.host = "capture"
+            components.queryItems = [URLQueryItem(name: "url", value: value)]
+            XCTAssertThrowsError(try CaptureDeepLinkParser().parse(try XCTUnwrap(components.url)), value) {
+                XCTAssertEqual($0 as? CaptureDeepLinkError, .invalidURL)
+            }
+        }
+    }
+
     func test_validTextAndURLLinksPopulateDraftWithoutAutoSubmitting() throws {
         let destination = "11111111-2222-3333-4444-555555555555"
         let url = try XCTUnwrap(URL(string: "voxboard://capture?text=Hello%20world&url=https%3A%2F%2Fexample.com&destination=\(destination)"))

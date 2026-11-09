@@ -8,6 +8,14 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ExternalCaptureRequestTest {
+    @Test fun sharedUppercaseSchemeIsNormalizedBeforeDraftAdmission() {
+        val request = ExternalCaptureRequestParser.normalize(
+            textValues = listOf(" HTTPS://example.com/Case "), title = null, presetID = null,
+            action = ExternalCaptureAction.REVIEW, sourceLabel = "Shared content", attachmentUris = emptyList(),
+        )
+        assertEquals("https://example.com/Case", requireNotNull(request).url)
+    }
+
     @Test fun sharedHttpURLKeepsTitleAsNote() {
         val request = ExternalCaptureRequestParser.normalize(
             textValues = listOf("https://example.com/story"),

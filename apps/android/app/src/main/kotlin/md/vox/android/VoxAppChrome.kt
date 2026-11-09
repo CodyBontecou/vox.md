@@ -313,6 +313,11 @@ internal fun ActivityScreen(
     loadCaptureDetail: suspend (String) -> CaptureHistoryDetail? = { null },
     /** Opens the route editor for a capture's frozen preset ID. */
     editRoute: ((String) -> Unit)? = null,
+    discard: ((String) -> Unit)? = null,
+    recoveryPresets: List<md.vox.android.capturedomain.CapturePreset> = emptyList(),
+    recoveryDestination: md.vox.android.capturedomain.CaptureDestination? = null,
+    loadRecoveryContext: suspend (String) -> md.vox.android.capturedomain.CaptureRecoveryContext? = { null },
+    replaceCapture: ((md.vox.android.capturedomain.CaptureRecoveryCommand) -> Unit)? = null,
     initialFilter: ActivityFilter = ActivityFilter.ALL,
     initialProblemRequestID: String? = null,
 ) {
@@ -467,6 +472,9 @@ internal fun ActivityScreen(
             repairAccess = { repairAccess(problem.requestID) },
             openDetail = { openDetail(problem.requestID) },
             editRoute = if (editRoute != null && presetID != null) ({ editRoute(presetID) }) else null,
+            discard = discard?.let { action -> { action(problem.requestID) } },
+            recoveryPresets = recoveryPresets, recoveryDestination = recoveryDestination,
+            loadRecoveryContext = loadRecoveryContext, replaceCapture = replaceCapture,
             onDismiss = { problemRequestID = null },
         )
     }

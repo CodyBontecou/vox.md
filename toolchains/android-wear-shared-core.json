@@ -181,6 +181,14 @@
       "sha256": "1bcdf4efc4d51e66d59512c5399d4c536637afb5686bdb26978c5a6d181bf9e1"
     },
     {
+      "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+      "sha256": "d6259a4ab512d34b34a6cd34195965fa10f2018c8f5e2afc94bb0882fe2bbd2e"
+    },
+    {
+      "path": "Packages/vox-core-rust/crates/vox-core-uniffi/src/lib.rs",
+      "sha256": "2fdbc424da24140dfe7a930780a4064c01259c87764abe4bc598e4be0add9942"
+    },
+    {
       "path": "Packages/vox-core-rust/scripts/generate-swift-bindings.sh",
       "sha256": "f21a4ed7ad2893be6f3abb8b808acc96b300b4094e1694bad2a713acd1bfc331"
     },
@@ -194,7 +202,7 @@
     },
     {
       "path": "Packages/vox-core-rust/generated/kotlin/md/vox/core/vox_core_uniffi.kt",
-      "sha256": "d88f02f72aadf9d1914b3de7299f3f23726246e5eeefac9369b87faf7f733d0b"
+      "sha256": "51292af2edc0a31fb950a96706838235cc404f829320face9cae5db2eb93153d"
     },
     {
       "path": "Packages/vox-core-rust/scripts/check-bindings.sh",
@@ -226,11 +234,15 @@
     },
     {
       "path": "Packages/vox-core-rust/crates/vox-core/tests/m2_core.rs",
-      "sha256": "92d399fe0079941fc873748c0e9e35876e58e9319f6f3e8859d590436ba0c0ff"
+      "sha256": "681bb52a2c108be343ca60953f898fb07c1bc15f12dbfa870b1932ca320097ab"
     },
     {
       "path": "Packages/VoxboardShared/Sources/VoxCoreGenerated/VoxCore.swift",
-      "sha256": "9f456ea8362af384dd2be972d029da13eef58a99a3cabab76b1c07c3eb323b38"
+      "sha256": "67e82d75a52921456b7b110c08e170dae5e7a00198d6343b4a9ab20fe800bef8"
+    },
+    {
+      "path": "Packages/VoxboardShared/Sources/VoxboardM2MaterializationEvidence/main.swift",
+      "sha256": "866e37535594b3a3547f7524ffd7db767b0c382b5b334e45145ddacdf87d37f3"
     },
     {
       "path": "Packages/VoxboardShared/Sources/VoxCoreFFI/module.modulemap",
@@ -366,23 +378,23 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/HistoryDetailScreen.kt",
-      "sha256": "34430d88be16a96239fe73731a4586021fea1b171d45ef5dd265c9feaab0ddf5"
+      "sha256": "c7c09d3a72c7518815ca14aa0051db9078cfd3f20f8b3887ceb567dfe92482e1"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
-      "sha256": "e042845631baac736b694cee45dadf1d9078699d707ff571c577ec565c031cec"
+      "sha256": "43b147dd0ef18641290f9985aa2a75e5f6aca61674d828e96c8fd93dcb42347e"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
-      "sha256": "269bfb5ca00435455acc685890379124f44bf540442d0e8bdb09075fdff98c61"
+      "sha256": "4edb3f34d16593c4455fb7e1dbdaca679ab46dab04a52f1193df0ff4fd93a2a9"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/HistoryScreen.kt",
-      "sha256": "d451d97bd541f92b6661e8f4022d5407c4bb9172c9ca4db12d197a42590142de"
+      "sha256": "68a29fd259f1dcae61d1398ad599b5e46c01df26717b415ceb44dffecf51d0af"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/CapturePresetScreens.kt",
-      "sha256": "66a4d01350505abb3d6baf5163410c3bfec9f3b9e5e65566308ed0fb7ec94a9e"
+      "sha256": "ac45901589f4f87d6258282c808ef75ee7ce034754e0c6fd7b1ac72b63562c91"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/SettingsScreens.kt",
@@ -390,11 +402,15 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt",
-      "sha256": "e1bd96aa8727fa584437626299ae36e34bc7cc4a520cfe8a2ea2cbf9636dbfbb"
+      "sha256": "9a85ca0c35fc7c2b517d456e2fc4eac64a4fbb3a9f963b45e3fc9e1dc1c81c8d"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/PlayEntitlementCache.kt",
-      "sha256": "f6c201ff35252fbee0584fabc54134edaedf7c4542862b3505036aa52e2b038f"
+      "sha256": "d467d18bac3cc51cfdd8186c07ceb6c1643c0c0e3e9f9acefbc1e046a29f50ee"
+    },
+    {
+      "path": "apps/android/app/src/main/kotlin/md/vox/android/SubscriptionAccessPolicy.kt",
+      "sha256": "5ea63c3a9158b319a7cd4676dafee57ad0616740dbac4d349e82b6144c1209a1"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/PrivacySafeDebugLog.kt",
@@ -402,7 +418,19 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt",
-      "sha256": "87b103c158046a63181fb18ad6d9a37426e11ce16469f3eb3e5e751bbba7f0d9"
+      "sha256": "61734a6d436d2784990e40237e071a90780b45f5e8e3e09dee03f16afc1dbf6b"
+    },
+    {
+      "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureRecoveryControls.kt",
+      "sha256": "bf7151f66c34e40833b2cbf9305534a4e565cb0a656638e9c5ac5d4bc45ac498"
+    },
+    {
+      "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureRecoveryForm.kt",
+      "sha256": "3a5ea7feba3b0daadbabd2f827e8ed86bd8e9778a490700d10e8c2ec8c260065"
+    },
+    {
+      "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureRecoveryMessages.kt",
+      "sha256": "559b15cfaf2ab05f68672502fc49a29d2ea72c4ded85d2854e08496ef709f8d4"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/SettingsSupportScreens.kt",
@@ -410,11 +438,15 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
-      "sha256": "7dedd9e4cbbf63c73b6d9d1a14817a0d9509f422ba8185ae7735b9de5904e23f"
+      "sha256": "33fabcdcb750625f42676631a4801dbb15c2a0f3168a2cafde47a62d7b4c583e"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/VoxApplication.kt",
-      "sha256": "96e570e6912d40d6d8626486f5e00cb8c9f5b945bb374c6659d807f7016ac5f0"
+      "sha256": "108c6ac37051f6f64b2875e036c399ede3b966813189c546b3d3f5585880c256"
+    },
+    {
+      "path": "apps/android/app/src/main/kotlin/md/vox/android/VoxAppChrome.kt",
+      "sha256": "deec1c34f89e22d240ac44e446f056c01dd219fe8449b20f0e042e42458c426b"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/PhoneWearBridge.kt",
@@ -426,7 +458,7 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/VoxInputMethodService.kt",
-      "sha256": "1a7a20e39da1456838b5f35f580c68d805913425043afefc37cb44f234413caf"
+      "sha256": "90f64979836add8dab52a5a728793c1b208d3ae4167bef8ee6c55d8b59740953"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/WearRecordingOnlyDelivery.kt",
@@ -438,7 +470,7 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/ui/CaptureViewModel.kt",
-      "sha256": "b074bf43f2fc6bc565bb033ac67337f71834d17ded1f0989db49d0e1a26d1258"
+      "sha256": "35033bf0522571348d9dfb03fc4efc9770506b13f81c848e9ac4a75d0cc06fc3"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/ui/VoxTheme.kt",
@@ -454,7 +486,7 @@
     },
     {
       "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/AppLanguageInstrumentationTest.kt",
-      "sha256": "aee1d33a8e8de340a0d5031aa1e5e1c288ecf2e66f7ec15712db79ca0f41a6bf"
+      "sha256": "8984895e31fe652959a60d78157de29852e7bc266869896242933e2fe99e9cb3"
     },
     {
       "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/KeyboardUiInstrumentationTest.kt",
@@ -501,6 +533,14 @@
       "sha256": "a88493a658128da04ed7cd8fc743f62f114950fd7f04f8032a834809329dffec"
     },
     {
+      "path": "apps/android/app/src/test/kotlin/md/vox/android/SubscriptionAccessPolicyTest.kt",
+      "sha256": "6185b07e0100da12d4e3dba2037d2e33e85cdfd8b9e7f09241f20c207e876692"
+    },
+    {
+      "path": "apps/android/app/src/test/kotlin/md/vox/android/CaptureRecoveryFormTest.kt",
+      "sha256": "9cbab44fcab27773727c3b38d977e9d85b00dd4758c3793d4191ba02d2fbf1d9"
+    },
+    {
       "path": "apps/android/scripts/generate-android-sbom.py",
       "sha256": "0321785a4d7f887cbcdfabf1590ea3115e923868cc8cbb7dd039c3fdba70174e"
     },
@@ -510,7 +550,7 @@
     },
     {
       "path": "apps/android/localization-review.json",
-      "sha256": "377506ac7f3e574a906f984a2a13cbc19496e8e0e1afea79f4f6d82ef35bbcc5"
+      "sha256": "a11e911107e371f08bce2acc4f0805dcfdc08a2063f50a2dbbf3f8b243923cdf"
     },
     {
       "path": "apps/android/scripts/validate-debug-artifacts.py",
@@ -558,11 +598,11 @@
     },
     {
       "path": "apps/android/core-bridge/src/main/kotlin/md/vox/android/corebridge/CoreBridge.kt",
-      "sha256": "8e28137d971270dccb2ce7971301c097b7722ec4a500f152bff965a59fbe5b3c"
+      "sha256": "641b135fb0fac145dc80c731e66d5fb51336ac4235c87c90a9983f703ef524c7"
     },
     {
       "path": "apps/android/core-bridge/src/main/kotlin/md/vox/android/corebridge/GeneratedNativeCoreAdapter.kt",
-      "sha256": "b467b51f41d4f5e2963291cac00e17f2cf406345a79748ed36be63a940355415"
+      "sha256": "37e8c53eb1e535f5b92ce237b74c960562ccdb3f3e00fe0f1fa9fc5b949759e1"
     },
     {
       "path": "apps/android/core-bridge/src/test/kotlin/md/vox/android/corebridge/CoreBridgeTest.kt",
@@ -591,6 +631,14 @@
     {
       "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/DurableCapture.kt",
       "sha256": "13cd8a906ff3b6834c9e8fa14bebc5894e305845ac713ca069f48cd986f60a1c"
+    },
+    {
+      "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRepository.kt",
+      "sha256": "381be2ad76330d4a43649cc94419d61c01f0290f20537fac03bcf4e685ae0336"
+    },
+    {
+      "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRecovery.kt",
+      "sha256": "85887a76793a878bdc6f04323dc7545ce53a4fa6072075f0a47955e495ac3594"
     },
     {
       "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureDurability.kt",
@@ -630,7 +678,7 @@
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt",
-      "sha256": "23b50f0f742848e9c6c5755d2f12b97fad8ad1978785e1f7993bf717f610331b"
+      "sha256": "08f4930ae655f74c32addcd60a59f62dd06da2c67b395d75e1b88156d2b52a53"
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CapturePackageCodec.kt",
@@ -638,7 +686,35 @@
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/DurableCaptureStore.kt",
-      "sha256": "1299b0e81003546ee1a6540455c07446b1585af0c5fc05f30a3dcf874cd6bc76"
+      "sha256": "51eebef30ffbe409e2f17477053dc8ecee8f8431df8366bc86e5180402a2800c"
+    },
+    {
+      "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDiscard.kt",
+      "sha256": "d99326e3d7b9372907281ad60669b01df7c71abd0367f82105f481751365b82b"
+    },
+    {
+      "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureHeadingFailureStore.kt",
+      "sha256": "39784c596c1370138021564c1fa5632cbf5006654401bd5213899c5a95f6b7de"
+    },
+    {
+      "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryIntentStore.kt",
+      "sha256": "dd42d2977fe79fef5274ed63264a262835004276ad4acaf719d298969fbbe97a"
+    },
+    {
+      "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryReconciliation.kt",
+      "sha256": "21a255cf42039d431c789ddf2e51491f04fc1dc112094ac81ad7fd0c2e459f0d"
+    },
+    {
+      "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryRequest.kt",
+      "sha256": "2b25b6108abee428a9fe097a83d81a25a477cf79f896220870a63ebe1cf89cd9"
+    },
+    {
+      "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryRouteSelection.kt",
+      "sha256": "0c2c22ea30eea0c4ede0ad03912424f2cbbe7f9c89cf26244f63e82b19dddf7f"
+    },
+    {
+      "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureReplacement.kt",
+      "sha256": "b0f884b3fe60a5032857f37bfcb7c932e36ed9150800384e2aeef5278b647781"
     },
     {
       "path": "apps/android/data/src/main/java/md/vox/android/data/CaptureProjectionEntity.java",
@@ -694,7 +770,7 @@
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/RoomQuotaLedger.kt",
-      "sha256": "c47e825c179156e13d21aa31ac5385d9a436394b0c412d36971f8ff77b564ba2"
+      "sha256": "3a1fd1698165dfebb9e134bf468c8af10cd0dfc3fc4df7cb675a83398f78f2e6"
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/RoomCaptureCompletionLedger.kt",
@@ -706,11 +782,11 @@
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDurabilityCoordinator.kt",
-      "sha256": "c98e81092fe794ac7a92add0621d423c66b4955248f5c157e14d3f8b8af1bf01"
+      "sha256": "267e43ac82976e6cb43b404390cf0ef9222ba09c42f2127a8b083a6caa755353"
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/CoreMaterializationCoordinator.kt",
-      "sha256": "3e99a06d443f0f6ce6c4b3ffd7226d2bf6f0cc8e0382ecfa9954e6f719869720"
+      "sha256": "d225b1b3a0955f0faa98d20d7d08c457b119a3be16279ffdb1e189744a330479"
     },
     {
       "path": "apps/android/data/src/main/kotlin/md/vox/android/data/SafDocumentsGateway.kt",
@@ -742,7 +818,7 @@
     },
     {
       "path": "apps/android/data/src/test/kotlin/md/vox/android/data/DurableCaptureStorePhase5Test.kt",
-      "sha256": "5e1a59451564455e69fec1a28ee3062a84aa9786cae01f852cc3915018d12aec"
+      "sha256": "bc41e5fc30e7d912f41da0f3ae71b89c2e5c981d21680e344ffa931164817444"
     },
     {
       "path": "apps/android/data/src/test/kotlin/md/vox/android/data/SafVaultCommitExecutorTest.kt",
@@ -750,11 +826,27 @@
     },
     {
       "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CoreMaterializationCoordinatorTest.kt",
-      "sha256": "8cc899bf9ef44b296fa0fd179d6b38fb7730caeb4115426230d9d80f0a23925f"
+      "sha256": "c1a1e792091d3698a795fd718347ea78d4a822edef92dcaa750ed6e0b9bb765a"
+    },
+    {
+      "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureHeadingFailureStoreTest.kt",
+      "sha256": "44ae13f617ebcccf7672aca2681c1b317d10b86d09d6596d047b985252ca9aec"
+    },
+    {
+      "path": "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureReplacementTest.kt",
+      "sha256": "24d20d6c5a0f2be155fd81a2f4d3036ebbcc44d697ec650447f32d6bae7611f6"
+    },
+    {
+      "path": "docs/android/capture-recovery-sidecar.md",
+      "sha256": "efd5c156ed7b260626991fd10f9c97bdc3ba4d16bef5e5bdfb5080b4aad64975"
     },
     {
       "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
       "sha256": "35eb0272c4c94a047c827cc4af6a3d29abb648474eea2df617eab852065d44b0"
+    },
+    {
+      "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureRecoveryRepositoryInstrumentationTest.kt",
+      "sha256": "ba8a3c6a0162da9a9853e75b37fb4f4e5c50fe7c0102eb41622668264a517e8f"
     },
     {
       "path": "apps/android/data/src/androidTest/kotlin/md/vox/android/data/ReinstallAdjustmentInstrumentationTest.kt",
@@ -810,7 +902,7 @@
     },
     {
       "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
-      "sha256": "573f5c71966af0536eb1d683c17f141a87653ab791ef1b74ad1208081e1ee1c0"
+      "sha256": "0d824f1e3043487653a793390e3be78a0fdd1db38e68b6f718666d0b67602272"
     },
     {
       "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SherpaSpeechModels.kt",
@@ -906,15 +998,15 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureParityControls.kt",
-      "sha256": "0e71f770f5de94e5ea17bd916e69c2866a64ae6676b43e35e4d8f148a196bb5d"
+      "sha256": "7720861d53cf7787d3f208d5fa86b917ba10b8d402f95d4ce5ffa423c44836bf"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/URLDelivery.kt",
-      "sha256": "98236a45e0552a05b57efec203efb9edab96595ee363653c881dbd35fd81e2f6"
+      "sha256": "1ff086d1c9efcaba331c20edb6f138cb5542e17bb02a53974b58672607628d35"
     },
     {
       "path": "apps/android/app/src/test/kotlin/md/vox/android/URLDeliveryPolicyTest.kt",
-      "sha256": "8e4847c736a9a3652c5add6fe7b6dfa4b6cdffc9051cac0ac7b67bbc8622af9c"
+      "sha256": "a5eab4c9f52786dfd5d714000c0712ce72783b096a85f4a9a76f509ffaa7bc8f"
     },
     {
       "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/URLDeliveryInstrumentationTest.kt",
@@ -930,11 +1022,11 @@
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureComposerOptions.kt",
-      "sha256": "670ef55fc0c939582ae36333bb1a31882474d816efbd920a58aeef7c4f411697"
+      "sha256": "e4cd67ee6936e110bc3334a71e52457f64fcacf75d6d7b83116b3b140c87ef7c"
     },
     {
       "path": "apps/android/app/src/main/kotlin/md/vox/android/PresetWidgets.kt",
-      "sha256": "c4c116345e3e14ec45f11e0809866b535138fe3ec4f4dd6893bf37795fc1d250"
+      "sha256": "d81fa0c6b09c40116bd2a7eea11da747048b52ea54393ec43c6eaa9d7f211c2a"
     },
     {
       "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CapturePresentation.kt",
@@ -986,7 +1078,7 @@
     },
     {
       "path": "apps/android/localization/android-overrides.json",
-      "sha256": "b172bbdb3e17ed50e9cd9438fcbfafd7b535b541a09fce810f0c558621a70989"
+      "sha256": "4b9ea744fe26798df81465209877b80bed17019d80970261046187a5d98c0df7"
     },
     {
       "path": "apps/android/localization/plural-spec.json",
@@ -1114,7 +1206,7 @@
     },
     {
       "path": "Packages/contracts/tests/test_local_intelligence_evaluation.py",
-      "sha256": "1429adb808566a5bd96e0581a66b9475f7f9cf3b191ec537d220d6507124a9ed"
+      "sha256": "932df715d488a1f5c6d2ddc6da761ae3b33b1a807273ecf4e9c4c657e61bb390"
     },
     {
       "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/OnDeviceIntelligenceEvaluationInstrumentationTest.kt",
@@ -1182,7 +1274,7 @@
     },
     {
       "path": "apps/android/scripts/validate-intelligence-evaluations.py",
-      "sha256": "9a00c99c2d286c52d364206f7c780862412374498d728382c50195676ea189f0"
+      "sha256": "0cc75fac46fd3618f32d1a747e324b32e73fd8e736e8f01126ee0f64c4d26295"
     },
     {
       "path": "apps/android/scripts/validate-local-intelligence.py",
@@ -1234,15 +1326,15 @@
     },
     {
       "path": "artifacts/validation/local-intelligence-2026-11-01/instruction-evaluation.json",
-      "sha256": "ba1af736a94f3648e8e512eec66e0d0cb644605a16d5a6136cf4d0cd0b156b7c"
+      "sha256": "2c9b682cad867e7caaf4e38672b8bd5c69328c59a2974a58630b3e610a580325"
     },
     {
       "path": "artifacts/validation/local-intelligence-2026-11-01/receipt.json",
-      "sha256": "c633da6105e70d6576e5e0181c6fae829bc67c3529113e474b6d32aa8ebb03b7"
+      "sha256": "17718f108deca3c0111595d0ff05c881c013eff93146dc6ad96dfe759f3aad2e"
     },
     {
       "path": "artifacts/validation/local-intelligence-2026-11-01/speaker-evaluation.json",
-      "sha256": "7bf5e16c0008d17742f7371b141cbcff5d644504756742424f612daf182b5b12"
+      "sha256": "ff1419d61a07e8cc75c031472de9e5cffbdccdc0b813aa005365414fcb629b05"
     },
     {
       "path": "artifacts/validation/android-physical-capture-2026-11-01/interrupted-first-attempt.json",

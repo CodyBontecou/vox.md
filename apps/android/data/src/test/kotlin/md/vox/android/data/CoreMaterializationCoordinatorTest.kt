@@ -96,8 +96,31 @@ class CoreMaterializationCoordinatorTest {
         assertEquals(CaptureState.PREPARING, store.loadJournal(requestID)!!.state)
     }
 
+    @Test fun onlyAuthoritativeMissingHeadingGetsTheTypedRepairOutcomeAndNeverPreparedBytes() {
+        for (code in listOf(CoreErrorCode.HEADING_NOT_FOUND, CoreErrorCode.INVALID_OBSERVATION)) {
+            val base = Files.createTempDirectory("heading-result").toFile()
+            val store = DurableCapturePackageStore(base, MemoryIndex(), JvmOps())
+            val request = javaClass.classLoader!!.getResourceAsStream("contracts/v1/fixtures/capture-preparation-input/valid-android-m3-text-link.json")!!.use { it.readBytes() }
+            assertTrue(store.enqueue(request, 10) is EnqueueResult.SavedLocally)
+            val coordinator = CaptureDurabilityCoordinator(store, MemoryLeases())
+            assertTrue(coordinator.acquire(requestID, leaseToken, 20, 600_000) is LeasePlan.Grant)
+            coordinator.mutate(JournalMutationCommand(requestID, 0, JournalEvent(1, CaptureState.QUEUED, CaptureState.PREPARING, JournalCode.PREPARATION_STARTED, 20), leaseToken), 20)
+            val materializer = CoreMaterializationCoordinator(FakeCoreBridge(request, note, code), store, coordinator,
+                object : CoreMaterializationCoordinator.CandidateOccupancySource {
+                    override fun observeOccupiedCandidates(destination: VaultDestination, candidates: List<List<String>>) = emptyList<List<String>>()
+                }, object : CoreMaterializationCoordinator.ExistingNoteSource {
+                    override fun observeExistingNote(destination: VaultDestination, logicalPath: List<String>, maximumBytes: Long) = CoreMaterializationCoordinator.ExistingNoteSnapshot.Absent
+                }, destination, { 30 })
+            val result = materializer.materialize(requestID, leaseToken, 1)
+            if (code == CoreErrorCode.HEADING_NOT_FOUND) assertEquals(CoreMaterializationCoordinator.MaterializationResult.HeadingNotFound, result)
+            else assertTrue(result is CoreMaterializationCoordinator.MaterializationResult.Retryable)
+            assertEquals(CaptureState.PREPARING, store.loadJournal(requestID)!!.state)
+            assertFalse(File(base, "vox-captures/$requestID/prepared").exists())
+        }
+    }
+
     /** Fake bridge that parses the control exactly like the Rust core's strict decoder. */
-    private class FakeCoreBridge(private val requestBytes: ByteArray, private val noteBytes: ByteArray) : CoreBridge {
+    private class FakeCoreBridge(private val requestBytes: ByteArray, private val noteBytes: ByteArray, val sealFailure: CoreErrorCode? = null) : CoreBridge {
         override val availability = CoreAvailability.AVAILABLE
         val controlAssertions = mutableListOf<() -> Unit>()
         private var control: JsonObject? = null
@@ -184,6 +207,7 @@ class CoreMaterializationCoordinatorTest {
         override fun seal(): CoreResult<List<CoreArtifactDescriptor>> {
             if (sealed) return CoreResult.Failure(CoreErrorCode.SESSION_TERMINAL)
             sealed = true
+            bridge.sealFailure?.let { return CoreResult.Failure(it) }
             return CoreResult.Success(
                 listOf(
                     CoreArtifactDescriptor(

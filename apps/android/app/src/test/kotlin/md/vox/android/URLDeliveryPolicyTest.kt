@@ -4,6 +4,13 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class URLDeliveryPolicyTest {
+    @Test fun vaultDiscardCannotClaimToStopASeparateURLDelivery() {
+        assertTrue(urlDeliveryAllowsCaptureDiscard(null))
+        for (phase in URLDeliveryPhase.entries) {
+            assertEquals(phase.name, phase == URLDeliveryPhase.DISCARDED, urlDeliveryAllowsCaptureDiscard(phase))
+        }
+    }
+
     @Test fun fullEndpointRemainsSecretWhileOriginIsSafeToDisplay() {
         val uri = URLDeliveryPolicy.validate(URLDeliveryCredentials("https://example.com:8443/private/secret-hook", "token", mapOf("X-Api-Key" to "secret")))
         assertEquals("https://example.com:8443", URLDeliveryPolicy.origin(uri))

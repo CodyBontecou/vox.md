@@ -2081,7 +2081,7 @@ private struct CaptureTextProcessingInfoView: View {
         .tint(Geist.accent)
     }
 
-    private func infoRow(icon: String, title: String, detail: String) -> some View {
+    private func infoRow(icon: String, title: LocalizedStringKey, detail: LocalizedStringKey) -> some View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: icon)
                 .frame(width: 24)

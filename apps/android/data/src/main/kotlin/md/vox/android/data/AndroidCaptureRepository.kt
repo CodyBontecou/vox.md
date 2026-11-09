@@ -1,5 +1,13 @@
 package md.vox.android.data
 
+import md.vox.android.capturedomain.CaptureRecoveryRejection
+import md.vox.android.capturedomain.CaptureRecoveryContext
+import md.vox.android.capturedomain.CaptureRecoveryCommand
+import md.vox.android.capturedomain.CaptureRecoveryTarget
+import md.vox.android.capturedomain.CaptureRecoveryResult
+import md.vox.android.capturedomain.CapturePresetPaths
+import md.vox.android.capturedomain.CaptureWebLink
+
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
@@ -117,6 +125,8 @@ class AndroidCaptureRepository(
     private val captureEnqueued: (String) -> Unit = {},
     private val previouslyProcessedRecording: (String, String, CapturePreset) -> md.vox.android.capturedomain.CaptureTextProcessingResult? = { _, _, _ -> null },
     private val processCaptureText: suspend (String, CapturePreset, Boolean) -> md.vox.android.capturedomain.CaptureTextProcessingResult? = { text, preset, voice -> LocalCaptureTextProcessor.process(text, preset, voice) },
+    private val isAccessEnded: () -> Boolean = { false },
+    private val canDiscardAuxiliaryDelivery: (String) -> Boolean = { true },
     private val generateImageAltText: suspend (ByteArray, String) -> String? = { _, _ -> null },
 ) : CaptureRepository {
     private val appContext = context.applicationContext
@@ -139,6 +149,10 @@ class AndroidCaptureRepository(
     private val draftAssetDirectory = File(appContext.noBackupFilesDir, "vox-draft-assets")
     private val processingAuditStore = CaptureProcessingAuditStore(File(appContext.noBackupFilesDir, "capture-processing"))
     private val destinationBindings = CaptureDestinationBindings(File(appContext.noBackupFilesDir, "capture-vaults"))
+    private val recoveryIntents = CaptureRecoveryIntentStore(appContext.noBackupFilesDir)
+    private val headingFailures = CaptureHeadingFailureStore(appContext.noBackupFilesDir)
+    private fun replacements() = CaptureReplacement(store, coordination, recoveryIntents, clock,
+        canDiscardAuxiliaryDelivery, completed = quota::hasVerifiedCompletion)
     private val draftAttachmentMutex = Mutex()
     private val preferences: DataStore<Preferences> = PreferenceDataStoreFactory.create(
         scope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
@@ -173,8 +187,8 @@ class AndroidCaptureRepository(
     override suspend fun saveDraft(text: String, url: String?, captureSource: String): CaptureDraft = withContext(Dispatchers.IO) {
         require(text.length <= MAX_TEXT_CHARACTERS) { "draftTextTooLarge" }
         require(captureSource in CAPTURE_SOURCES) { "invalidCaptureSource" }
-        val normalizedURL = url?.trim()?.takeIf(String::isNotEmpty)
-        require(normalizedURL == null || (normalizedURL.length <= MAX_URL_CHARACTERS && isHttpURL(normalizedURL))) { "invalidDraftURL" }
+        val normalizedURL = CaptureWebLink.normalize(url)
+        require(url.isNullOrBlank() || normalizedURL != null) { "invalidDraftURL" }
         val present = draftFrom(preferences.data.first())
         val draft = CaptureDraft(
             text = text,
@@ -215,8 +229,8 @@ class AndroidCaptureRepository(
     ): CaptureDraft = withContext(Dispatchers.IO) {
         require(UUID_PATTERN.matches(originRecordingID)) { "invalidOriginRecordingID" }
         require(text.length <= MAX_TEXT_CHARACTERS) { "draftTextTooLarge" }
-        val normalizedURL = url?.trim()?.takeIf(String::isNotEmpty)
-        require(normalizedURL == null || (normalizedURL.length <= MAX_URL_CHARACTERS && isHttpURL(normalizedURL))) { "invalidDraftURL" }
+        val normalizedURL = CaptureWebLink.normalize(url)
+        require(url.isNullOrBlank() || normalizedURL != null) { "invalidDraftURL" }
         val preset = frozenPreset?.let(::normalizePreset)
             ?: presetCollectionFrom(preferences.data.first()).activePreset
         val current = draftFrom(preferences.data.first())
@@ -589,20 +603,23 @@ class AndroidCaptureRepository(
         clearPersistedDraft: Boolean,
         suppliedAssets: List<DurableAssetInput>? = null,
     ): CaptureSubmitResult {
-        if (completions.read(requestID) != null) {
+        if (quota.hasVerifiedCompletion(requestID)) {
             if (clearPersistedDraft) clearDraftOnWorker()
             return CaptureSubmitResult.Delivered(requestID)
         }
+        // Existing durable packages may finish; new work must not use a fresh free allowance
+        // after authoritative subscription loss. Keep the draft untouched on rejection.
+        if (isAccessEnded()) return CaptureSubmitResult.InvalidInput("New captures and edits need Vox.md.")
         val normalizedText = draft.text.trimEnd()
-        val normalizedURL = draft.url?.trim()?.takeIf(String::isNotEmpty)
+        val normalizedURL = CaptureWebLink.normalize(draft.url)
         if (normalizedText.length > MAX_TEXT_CHARACTERS) {
             return CaptureSubmitResult.InvalidInput("Capture text must be 65,536 characters or fewer.")
         }
+        if (!draft.url.isNullOrBlank() && normalizedURL == null) {
+            return CaptureSubmitResult.InvalidInput("Enter a complete http:// or https:// link.")
+        }
         if (normalizedText.isBlank() && normalizedURL == null && draft.attachments.isEmpty()) {
             return CaptureSubmitResult.InvalidInput("Write something or add a link before sending.")
-        }
-        if (normalizedURL != null && !isHttpURL(normalizedURL)) {
-            return CaptureSubmitResult.InvalidInput("Enter a complete http:// or https:// link.")
         }
 
         val currentPreferences = preferences.data.first()
@@ -732,14 +749,125 @@ class AndroidCaptureRepository(
         return if (delivered is CaptureSubmitResult.Delivered) delivered.copy(processingOutcome = processingResult?.outcome) else delivered
     }
 
+    override suspend fun recoveryContext(requestID: String): CaptureRecoveryContext? = withContext(Dispatchers.IO) {
+        if (!UUID_PATTERN.matches(requestID)) return@withContext null
+        val pair = store.withRootMutationLock {
+            val snapshot = store.loadJournal(requestID) ?: return@withRootMutationLock null
+            val bytes = store.loadRequestBytes(requestID) ?: return@withRootMutationLock null
+            snapshot to bytes
+        } ?: return@withContext null
+        val (snapshot, bytes) = pair
+        val intent = runCatching { recoveryIntents.read(requestID) }.getOrNull()
+        val destination = frozenDestination(bytes)
+        CaptureRecoveryContext(requestID, CapturePackageCodec.sha256(bytes), snapshot.revision, destination?.id,
+            canReplace = snapshot.revision <= 1022 && !isAccessEnded() && !recoveryIntents.exists(requestID) &&
+                canDiscardCapture(snapshot, store.readCommitMarker(requestID)) && canDiscardAuxiliaryDelivery(requestID),
+            sourceDestinationName = destination?.displayName,
+            missingHeading = headingFailures.load(requestID, bytes, snapshot),
+            replacementRequestID = intent?.replacementID)
+    }
+
+    override suspend fun replaceCapture(command: CaptureRecoveryCommand): CaptureRecoveryResult = withContext(Dispatchers.IO) {
+        val context = command.context
+        if (!UUID_PATTERN.matches(context.requestID) || !UUID_PATTERN.matches(command.intentID)) {
+            return@withContext CaptureRecoveryResult.Rejected(CaptureRecoveryRejection.UNAVAILABLE)
+        }
+        val choice = recoveryChoice(command.target)
+        if (recoveryIntents.exists(context.requestID)) {
+            val previous = runCatching { recoveryIntents.read(context.requestID) }.getOrNull()
+            if (previous == null || previous.intentID != command.intentID || previous.choice != choice || previous.sourceSHA256 != context.requestSHA256 || previous.sourceRevision != context.revision) {
+                return@withContext CaptureRecoveryResult.Rejected(CaptureRecoveryRejection.CONFLICT)
+            }
+            return@withContext finishReplacement(replacements().replay(context.requestID), context.requestID)
+        }
+        if (isAccessEnded()) return@withContext CaptureRecoveryResult.Rejected(CaptureRecoveryRejection.ACCESS_ENDED)
+        val bytes = store.loadRequestBytes(context.requestID)
+            ?: return@withContext CaptureRecoveryResult.Rejected(CaptureRecoveryRejection.UNAVAILABLE)
+        val snapshot = store.loadJournal(context.requestID)
+            ?: return@withContext CaptureRecoveryResult.Rejected(CaptureRecoveryRejection.UNAVAILABLE)
+        if (snapshot.revision != context.revision || CapturePackageCodec.sha256(bytes) != context.requestSHA256) {
+            return@withContext CaptureRecoveryResult.Rejected(CaptureRecoveryRejection.SOURCE_CHANGED)
+        }
+        val recoveryPreferences = preferences.data.first()
+        var targetPreset: CapturePreset? = null
+        var heading: CaptureRecoveryTarget.Heading? = null
+        val destination = when (val target = command.target) {
+            is CaptureRecoveryTarget.Inbox -> {
+                targetPreset = DEFAULT_PRESET
+                destinationFrom(recoveryPreferences)?.takeIf { it.id == target.destinationID }
+            }
+            is CaptureRecoveryTarget.Route -> {
+                when (val selection = selectRecoveryRoute(target, presetCollectionFrom(recoveryPreferences).presets, destinationFrom(recoveryPreferences))) {
+                    is RecoveryRouteSelection.Rejected -> return@withContext CaptureRecoveryResult.Rejected(selection.reason)
+                    is RecoveryRouteSelection.Ready -> {
+                        targetPreset = runCatching { normalizePreset(selection.preset) }.getOrNull()
+                            ?: return@withContext CaptureRecoveryResult.Rejected(CaptureRecoveryRejection.ROUTE_CHANGED)
+                        selection.destination
+                    }
+                }
+            }
+            is CaptureRecoveryTarget.Heading -> {
+                if (headingFailures.load(context.requestID, bytes, snapshot) == null) {
+                    return@withContext CaptureRecoveryResult.Rejected(CaptureRecoveryRejection.UNVERIFIED_HEADING)
+                }
+                heading = target
+                frozenDestination(bytes)?.takeIf { it.id == context.sourceDestinationID }
+            }
+        } ?: return@withContext CaptureRecoveryResult.Rejected(CaptureRecoveryRejection.DESTINATION_CHANGED)
+        if (!AndroidSafDocumentsGateway(appContext).revalidateGrant(VaultDestination(destination.id, destination.treeUri))) {
+            return@withContext CaptureRecoveryResult.Rejected(CaptureRecoveryRejection.VAULT_PERMISSION)
+        }
+        destinationBindings.save(destination)
+        val replacement = runCatching { recoveryRequest(bytes, command.intentID, destination.id, targetPreset, heading) }.getOrNull()
+            ?: return@withContext CaptureRecoveryResult.Rejected(CaptureRecoveryRejection.INVALID_CHOICE)
+        val intent = CaptureRecoveryIntent(command.intentID, context.requestID, context.requestSHA256, context.revision,
+            snapshot.state, clock(), choice, replacement)
+        finishReplacement(replacements().admit(intent) { !isAccessEnded() }, context.requestID)
+    }
+
+    private suspend fun frozenDestination(bytes: ByteArray): CaptureDestination? {
+        val reference = CapturePackageCodec.parseCanonical(bytes).getValue("preset").jsonObject.getValue("destinationPolicy").jsonObject.text("capabilityReference")
+        return if (reference == "synthetic-vault-capability") currentDestinationOnWorker() else destinationBindings.load(reference)
+    }
+
+    private suspend fun finishReplacement(outcome: ReplacementOutcome, sourceID: String): CaptureRecoveryResult = when (outcome) {
+        is ReplacementOutcome.Ready -> {
+            store.loadJournal(sourceID)?.let { quota.releaseDiscarded(it) }
+            CaptureRecoveryResult.Accepted(outcome.requestID, retryOnWorker(outcome.requestID))
+        }
+        is ReplacementOutcome.Waiting -> CaptureRecoveryResult.Waiting(outcome.requestID)
+        is ReplacementOutcome.Rejected -> CaptureRecoveryResult.Rejected(CaptureRecoveryRejection.UNSAFE)
+    }
+
+    override suspend fun discard(requestID: String): Boolean = withContext(Dispatchers.IO) {
+        if (recoveryIntents.exists(requestID)) return@withContext false
+        // A vault-only discard must not claim to stop a separately admitted URL delivery.
+        if (!canDiscardAuxiliaryDelivery(requestID)) return@withContext false
+        val discarded = CaptureDiscard(store, coordination, clock).discard(requestID)
+        if (discarded) store.loadJournal(requestID)?.let { quota.releaseDiscarded(it) }
+        discarded
+    }
+
     override suspend fun retry(requestID: String): CaptureSubmitResult = withContext(Dispatchers.IO) {
         retryOnWorker(requestID)
     }
 
     override suspend fun reconcile(): List<CaptureHistoryItem> = withContext(Dispatchers.IO) {
-        store.reconcile()
-        compactCompletedPackages()
+        reconcileOnWorker()
         historyOnWorker()
+    }
+
+    /** Foreground refresh and WorkManager must recover the same durable decisions. */
+    private fun reconcileOnWorker(): Int {
+        val waiting = reconcileCaptureRecoveries(store, recoveryIntents, replacements())
+        compactCompletedPackages()
+        // Replay the quota-release crash window after a durably journaled discard.
+        index.all().filter { it.state == CaptureState.DISCARDED }.forEach { row ->
+            if (CaptureDiscard(store, coordination, clock).discard(row.requestID)) {
+                store.loadJournal(row.requestID)?.let { quota.releaseDiscarded(it) }
+            }
+        }
+        return waiting
     }
 
     override suspend fun history(): List<CaptureHistoryItem> = withContext(Dispatchers.IO) { historyOnWorker() }
@@ -779,13 +907,15 @@ class AndroidCaptureRepository(
 
     override suspend fun drainPending(maxItems: Int): CaptureDrainSummary = withContext(Dispatchers.IO) {
         require(maxItems in 1..MAX_DRAIN_ITEMS) { "invalidDrainLimit" }
-        store.reconcile()
+        val waitingRecoveries = reconcileOnWorker()
         val pending = historyOnWorker().asSequence()
             .filter { it.state.canResumeAutomatically() }
             .take(maxItems)
             .toList()
         var delivered = 0
-        var retryable = 0
+        // A retired source may have no replacement package yet. Keep its execution
+        // opportunity alive even when the package queue itself is empty.
+        var retryable = waitingRecoveries
         var needsPermission = 0
         var blocked = 0
         pending.forEach { item ->
@@ -815,8 +945,18 @@ class AndroidCaptureRepository(
         -> false
     }
 
-    private suspend fun retryOnWorker(requestID: String): CaptureSubmitResult {
-        if (completions.read(requestID) != null) return CaptureSubmitResult.Delivered(requestID)
+    private suspend fun retryOnWorker(requestID: String, recoveryDepth: Int = 0): CaptureSubmitResult {
+        if (recoveryDepth >= 16) return CaptureSubmitResult.SavedForRetry(requestID, "recoveryDepth")
+        if (recoveryIntents.exists(requestID)) {
+            return when (val replayed = replacements().replay(requestID)) {
+                is ReplacementOutcome.Ready -> {
+                    store.loadJournal(requestID)?.let { quota.releaseDiscarded(it) }
+                    retryOnWorker(replayed.requestID, recoveryDepth + 1)
+                }
+                else -> CaptureSubmitResult.SavedForRetry(requestID, "recoveryPending")
+            }
+        }
+        if (quota.hasVerifiedCompletion(requestID)) return CaptureSubmitResult.Delivered(requestID)
         val snapshot = store.loadJournal(requestID) ?: return CaptureSubmitResult.InvalidInput("Capture is no longer available.")
         if (snapshot.state == CaptureState.COMPLETED) {
             compactCompletedPackage(requestID)
@@ -881,6 +1021,9 @@ class AndroidCaptureRepository(
         )
 
         try {
+            // Recheck after acquiring the worker fence: an intent may have been admitted
+            // after retry read the package but before this lease was granted.
+            if (recoveryIntents.exists(requestID)) return CaptureSubmitResult.SavedForRetry(requestID, "recoveryPending")
             repeat(MAX_DRIVE_STEPS) {
                 val snapshot = store.loadJournal(requestID)
                     ?: return CaptureSubmitResult.SavedForRetry(requestID, "packageMissing")
@@ -903,6 +1046,18 @@ class AndroidCaptureRepository(
 
                     CaptureState.PREPARING -> when (val result = materializer.materialize(requestID, leaseToken, snapshot.revision)) {
                         is CoreMaterializationCoordinator.MaterializationResult.Materialized -> Unit
+                        CoreMaterializationCoordinator.MaterializationResult.HeadingNotFound -> {
+                            val bytes = store.loadRequestBytes(requestID) ?: return CaptureSubmitResult.SavedForRetry(requestID, "requestUnavailable")
+                            val saved = coordination.withCurrentLease(requestID, leaseToken, clock()) {
+                                headingFailures.save(requestID, bytes, snapshot.revision)
+                                true
+                            } ?: false
+                            if (!saved || !append(requestID, leaseToken, snapshot.revision,
+                                JournalEvent(snapshot.revision + 1, snapshot.state, CaptureState.NEEDS_USER_ACTION, JournalCode.USER_ACTION_REQUIRED, clock()))) {
+                                return CaptureSubmitResult.SavedForRetry(requestID, "headingFailurePersistence")
+                            }
+                            return CaptureSubmitResult.SavedForRetry(requestID, "headingNotFound")
+                        }
                         CoreMaterializationCoordinator.MaterializationResult.LeaseLost ->
                             return CaptureSubmitResult.SavedForRetry(requestID, "leaseLost")
                         is CoreMaterializationCoordinator.MaterializationResult.Retryable -> {
@@ -1081,7 +1236,10 @@ class AndroidCaptureRepository(
                     ?.get("logicalPath")?.jsonArray
                     ?.joinToString("/") { it.jsonPrimitive.content }
             }
-            val processingAudit = processingAuditStore.load(requestID)
+            val recoverySourceID = recoveryIntents.sourceIDs().firstOrNull { source ->
+                runCatching { recoveryIntents.read(source)?.replacementID == requestID }.getOrDefault(false)
+            }
+            val processingAudit = processingAuditStore.load(requestID) ?: recoverySourceID?.let(processingAuditStore::load)
             CaptureHistoryDetail(
                 requestID = requestID,
                 createdAtEpochMillis = request.getValue("createdAtEpochMilliseconds").jsonPrimitive.content.toLong(),
@@ -1097,6 +1255,8 @@ class AndroidCaptureRepository(
                 processingMode = processingAudit?.mode,
                 processingOutcome = processingAudit?.outcome,
                 processingNotice = processingAudit?.notice,
+                recoverySourceRequestID = recoverySourceID,
+                replacementRequestID = runCatching { recoveryIntents.read(requestID)?.replacementID }.getOrNull(),
             )
         }.getOrNull()
     }
@@ -1141,7 +1301,7 @@ class AndroidCaptureRepository(
 
     private fun draftFrom(values: Preferences): CaptureDraft = CaptureDraft(
         text = values[draftTextKey].orEmpty().take(MAX_TEXT_CHARACTERS),
-        url = values[draftURLKey]?.take(MAX_URL_CHARACTERS)?.takeIf(::isHttpURL),
+        url = CaptureWebLink.normalize(values[draftURLKey]),
         updatedAtEpochMillis = values[draftUpdatedAtKey]?.coerceAtLeast(0L) ?: 0L,
         captureSource = values[draftSourceKey]?.takeIf(CAPTURE_SOURCES::contains) ?: "app",
         attachments = draftAttachmentsFrom(values),
@@ -1462,14 +1622,8 @@ class AndroidCaptureRepository(
         // then surfaces fall back to the preset's initial.
         require(symbol.codePointCount(0, symbol.length) in 0..32 && symbol.length <= 64) { "invalidPresetSymbol" }
         require(preset.emoji === null || preset.emoji!!.length <= 64) { "invalidPresetEmoji" }
-        val segments = preset.logicalFolder.split('/').map(String::trim).filter(String::isNotEmpty)
-        require(segments.size in 1..31 && segments.all(::isSafePathSegment)) { "invalidPresetFolder" }
-        val noteNameTemplate = preset.noteNameTemplate.trim()
-        require(
-            noteNameTemplate.length in 1..128 &&
-                noteNameTemplate.endsWith(".md", ignoreCase = true) &&
-                noteNameTemplate.none { it == '/' || it == '\\' || it == '\u0000' },
-        ) { "invalidNoteNameTemplate" }
+        val logicalFolder = requireNotNull(CapturePresetPaths.folder(preset.logicalFolder)) { "invalidPresetFolder" }
+        val noteNameTemplate = requireNotNull(CapturePresetPaths.filename(preset.noteNameTemplate)) { "invalidNoteNameTemplate" }
         require(preset.metadataFields.size <= MAX_METADATA_FIELDS) { "metadataFieldLimit" }
         val fields = preset.metadataFields.map { field ->
             val fieldName = field.name.trim()
@@ -1478,13 +1632,9 @@ class AndroidCaptureRepository(
             CaptureMetadataField(fieldName, field.value)
         }
         require(fields.map { it.name.lowercase() }.distinct().size == fields.size) { "duplicateMetadataName" }
-        val existingSegments = preset.existingNotePath.split('/').map(String::trim).filter(String::isNotEmpty)
-        if (preset.noteTargetKind == CaptureNoteTargetKind.EXISTING_NOTE) {
-            require(existingSegments.isNotEmpty() && existingSegments.size <= 32 && existingSegments.all(::isSafePathSegment)) {
-                "invalidExistingNotePath"
-            }
-            require(existingSegments.last().endsWith(".md", ignoreCase = true)) { "invalidExistingNotePath" }
-        }
+        val existingNotePath = if (preset.noteTargetKind == CaptureNoteTargetKind.EXISTING_NOTE) {
+            requireNotNull(CapturePresetPaths.existingNote(preset.existingNotePath)) { "invalidExistingNotePath" }
+        } else preset.existingNotePath.split('/').map(String::trim).filter(String::isNotEmpty).joinToString("/")
         require(preset.headingLevel in 1..6) { "invalidHeadingLevel" }
         if (preset.placement == CapturePlacementKind.BENEATH_HEADING) {
             require(preset.headingTitle.trim().isNotEmpty() && preset.headingTitle.length <= 256) { "invalidHeadingTitle" }
@@ -1492,8 +1642,9 @@ class AndroidCaptureRepository(
         require(preset.audioFilenameTemplate.length <= 1_024) { "invalidAudioFilenameTemplate" }
         require(preset.entryPrefix.length <= 16_384 && preset.entrySuffix.length <= 16_384) { "entryFormattingLimit" }
         require(preset.entryTemplateID?.let(PRESET_UUID_PATTERN::matches) != false) { "invalidEntryTemplateID" }
-        val attachmentSegments = preset.attachmentsFolder.split('/').map(String::trim).filter(String::isNotEmpty)
-        require(attachmentSegments.size <= 31 && attachmentSegments.all(::isSafePathSegment)) { "invalidAttachmentsFolder" }
+        val attachmentsFolder = requireNotNull(CapturePresetPaths.folder(preset.attachmentsFolder, allowEmpty = true)) {
+            "invalidAttachmentsFolder"
+        }
         require(preset.customProcessingInstruction.length <= 8_192 && preset.capturePrompt.length <= 512) { "processingConfigurationLimit" }
         require(preset.locationPolicy.collectionKey.matches(METADATA_NAME_PATTERN)) { "invalidLocationCollectionKey" }
         require(preset.locationPolicy.advancedTemplate.length <= 8_192) { "locationTemplateLimit" }
@@ -1536,12 +1687,12 @@ class AndroidCaptureRepository(
             symbol = symbol,
             emoji = CapturePresetEmoji.normalized(preset.emoji),
             revision = preset.revision.coerceAtLeast(1),
-            logicalFolder = segments.joinToString("/"),
+            logicalFolder = logicalFolder,
             noteNameTemplate = noteNameTemplate,
             metadataFields = fields,
-            existingNotePath = existingSegments.joinToString("/"),
+            existingNotePath = existingNotePath,
             headingTitle = preset.headingTitle.trim(),
-            attachmentsFolder = attachmentSegments.joinToString("/"),
+            attachmentsFolder = attachmentsFolder,
             locationPolicy = preset.locationPolicy.copy(structuredFields = structuredLocationFields),
             isEnabled = if (preset.id == DEFAULT_PRESET_ID) true else preset.isEnabled,
             exportSettings = export.copy(
@@ -1569,9 +1720,6 @@ class AndroidCaptureRepository(
 
     private inline fun <reified T : Enum<T>> JsonObject.enumOr(key: String, default: T): T =
         this[key]?.jsonPrimitive?.content?.let { value -> runCatching { enumValueOf<T>(value) }.getOrNull() } ?: default
-
-    private fun isSafePathSegment(value: String): Boolean =
-        value.length in 1..255 && value !in setOf(".", "..") && value.none { it == '/' || it == '\\' || it == '\u0000' }
 
     private data class PreparedRecordingAsset(
         val attachment: CaptureAttachment,
@@ -1821,11 +1969,6 @@ class AndroidCaptureRepository(
         put("templateFreezePoint", "firstPreparation")
     }
 
-    private fun isHttpURL(value: String): Boolean = runCatching {
-        val uri = URI(value)
-        (uri.scheme == "http" || uri.scheme == "https") && !uri.host.isNullOrBlank()
-    }.getOrDefault(false)
-
     private companion object {
         val destinationIDKey = stringPreferencesKey("capture.destination.id")
         val destinationNameKey = stringPreferencesKey("capture.destination.name")
@@ -1851,7 +1994,6 @@ class AndroidCaptureRepository(
         const val DEFAULT_PRESET_ID = "33333333-3333-4333-8333-333333333333"
         const val ZERO_SHA = "0000000000000000000000000000000000000000000000000000000000000000"
         const val MAX_TEXT_CHARACTERS = 65_536
-        const val MAX_URL_CHARACTERS = 8_192
         const val MAX_DRAFT_ATTACHMENTS = 32
         const val MAX_DRAFT_ATTACHMENT_BYTES = 100L * 1024 * 1024
         const val MAX_DRIVE_STEPS = 8
@@ -2043,7 +2185,7 @@ internal fun captureRoutePolicyFor(preset: CapturePreset): JsonObject = buildJso
     if (preset.placement == CapturePlacementKind.BENEATH_HEADING && preset.noteTargetKind != CaptureNoteTargetKind.NEW_NOTE) {
         put("headingTitle", preset.headingTitle)
         put("headingLevel", preset.headingLevel)
-        put("headingPosition", preset.headingPosition.name)
+        put("headingPosition", preset.headingPosition.name.lowercase(Locale.ROOT))
         put("missingHeadingBehavior", preset.missingHeadingBehavior.name.lowercase())
         if (preset.headingPosition == CaptureHeadingPosition.BOTTOM) put("headingPosition", "bottom")
     }

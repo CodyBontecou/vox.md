@@ -441,8 +441,7 @@ private enum ShareItemLoader {
             try Task.checkCancellation()
             if provider.hasItemConformingToTypeIdentifier(UTType.url.identifier),
                let url = try await loadURL(provider),
-               let scheme = url.scheme?.lowercased(),
-               scheme == "http" || scheme == "https" {
+               CaptureWebLink.isValid(url) {
                 payloads.append(.url(url, title: provider.suggestedName))
                 continue
             }

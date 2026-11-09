@@ -500,6 +500,18 @@ final class CaptureCoreEnginePolicyTests: XCTestCase {
             }
         }
 
+        for value in ["https://", "https:///notes"] {
+            var incompleteLink = request
+            incompleteLink.payloads = [.url(try XCTUnwrap(URL(string: value)), title: nil)]
+            XCTAssertThrowsError(try CaptureCoreAdmission.admit(
+                request: incompleteLink,
+                destination: newNoteDestination(id: destination.id),
+                calendar: calendar
+            )) { error in
+                XCTAssertEqual(error as? CaptureCoreAdmissionError, .unsupportedPayload)
+            }
+        }
+
         var uppercaseScheme = request
         uppercaseScheme.payloads = [.url(URL(string: "HTTPS://example.invalid/path")!, title: "Example")]
         XCTAssertThrowsError(try CaptureCoreAdmission.admit(

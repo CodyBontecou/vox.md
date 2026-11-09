@@ -1892,6 +1892,12 @@ internal sealed class VoxCoreException: kotlin.Exception() {
             get() = ""
     }
 
+    class HeadingNotFound(
+        ) : VoxCoreException() {
+        override val message
+            get() = ""
+    }
+
 
 
 
@@ -1926,6 +1932,7 @@ internal object FfiConverterTypeVoxCoreError : FfiConverterRustBuffer<VoxCoreExc
             13 -> VoxCoreException.SessionTerminal()
             14 -> VoxCoreException.Cancelled()
             15 -> VoxCoreException.InternalPanic()
+            16 -> VoxCoreException.HeadingNotFound()
             else -> throw RuntimeException("invalid error enum value, something is very wrong!!")
         }
     }
@@ -1992,6 +1999,10 @@ internal object FfiConverterTypeVoxCoreError : FfiConverterRustBuffer<VoxCoreExc
                 // Add the size for the Int that specifies the variant plus the size needed for all fields
                 4UL
             )
+            is VoxCoreException.HeadingNotFound -> (
+                // Add the size for the Int that specifies the variant plus the size needed for all fields
+                4UL
+            )
         }
     }
 
@@ -2055,6 +2066,10 @@ internal object FfiConverterTypeVoxCoreError : FfiConverterRustBuffer<VoxCoreExc
             }
             is VoxCoreException.InternalPanic -> {
                 buf.putInt(15)
+                Unit
+            }
+            is VoxCoreException.HeadingNotFound -> {
+                buf.putInt(16)
                 Unit
             }
         }.let { /* this makes the `when` an expression, which ensures it is exhaustive */ }

@@ -521,16 +521,18 @@ struct CaptureDestinationEditorView: View {
                     .font(Geist.caption())
                     .foregroundStyle(Geist.muted)
             }
-
-            if let errorMessage {
-                Section(header: DestinationSectionHeader("Error")) {
-                    Text(errorMessage).foregroundStyle(Geist.error)
-                }
-            }
         }
         .scrollContentBackground(.hidden)
         .background(Geist.bg.ignoresSafeArea())
         .tint(Geist.accent)
+        .alert("Destination Error", isPresented: Binding(
+            get: { errorMessage != nil },
+            set: { if !$0 { errorMessage = nil } }
+        )) {
+            Button("OK", role: .cancel) { errorMessage = nil }
+        } message: {
+            Text(errorMessage ?? "")
+        }
         .navigationTitle(
             fixedName == nil
                 ? (existing == nil ? String(localized: "Add Destination") : String(localized: "Edit Destination"))
@@ -911,15 +913,20 @@ struct CaptureEntryTemplateEditorView: View {
                     DestinationSectionHeader("{location} token")
                 }
             }
-            if let errorMessage {
-                Section(header: DestinationSectionHeader("Error")) { Text(errorMessage).foregroundStyle(Geist.error) }
-            }
         }
         .scrollContentBackground(.hidden)
         .background(Geist.bg.ignoresSafeArea())
         .tint(Geist.accent)
         .navigationTitle(existing == nil ? String(localized: "Add Template") : String(localized: "Edit Template"))
         .navigationBarTitleDisplayMode(.inline)
+        .alert("Error", isPresented: Binding(
+            get: { errorMessage != nil },
+            set: { if !$0 { errorMessage = nil } }
+        )) {
+            Button("OK", role: .cancel) { errorMessage = nil }
+        } message: {
+            Text(errorMessage ?? "")
+        }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel") { dismiss() }

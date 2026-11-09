@@ -10,9 +10,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import md.vox.android.capturedomain.CaptureRecoveryCommand
+import md.vox.android.capturedomain.CaptureRecoveryResult
 import md.vox.android.capturedomain.CaptureRouteOverride
 import md.vox.android.capturedomain.CaptureDestination
 import md.vox.android.capturedomain.CaptureDraft
+import md.vox.android.capturedomain.CaptureWebLink
 import md.vox.android.capturedomain.CaptureBarAction
 import md.vox.android.capturedomain.CaptureBarConfiguration
 import md.vox.android.capturedomain.CaptureHistoryItem
@@ -29,6 +32,7 @@ import md.vox.android.capturedomain.CompletedRecordingActivity
 import md.vox.android.capturedomain.CaptureLocationOutcome
 import md.vox.android.VoxUiText
 import md.vox.android.mergeExternalDraft
+import md.vox.android.recoveryRejectionNotice
 
 internal data class CaptureUiState(
     val isLoading: Boolean = true,
@@ -94,9 +98,13 @@ internal class CaptureViewModel private constructor(
     }
 
     fun updateDraft(text: String, url: String?) {
+        val normalizedURL = CaptureWebLink.normalize(url)
+        val invalidLink = !url.isNullOrBlank() && normalizedURL == null
         val next = CaptureDraft(
             text = text.take(65_536),
-            url = url,
+            // An invalid attachment must never prevent otherwise valid text edits
+            // from reaching durable storage. Keep the last admitted link instead.
+            url = if (invalidLink) CaptureWebLink.normalize(mutableState.value.draft.url) else normalizedURL,
             updatedAtEpochMillis = System.currentTimeMillis(),
             captureSource = mutableState.value.draft.captureSource,
             attachments = mutableState.value.draft.attachments,
@@ -106,7 +114,9 @@ internal class CaptureViewModel private constructor(
             entryTemplateIDOverride = mutableState.value.draft.entryTemplateIDOverride,
             routeOverride = mutableState.value.draft.routeOverride,
         )
-        mutableState.update { it.copy(draft = next) }
+        mutableState.update {
+            it.copy(draft = next, notice = if (invalidLink) voxNotice("Enter a complete http:// or https:// link.") else it.notice)
+        }
         draftSaveJob?.cancel()
         draftSaveJob = viewModelScope.launch {
             try {
@@ -484,6 +494,36 @@ internal class CaptureViewModel private constructor(
     /** Sets a route's own quick actions; `null` makes the route follow the global Capture Bar again. */
     fun setRouteQuickActions(routeID: String, actions: List<CaptureBarAction>?) {
         saveCaptureBar(mutableState.value.captureBar.withRoutePins(routeID, actions))
+    }
+
+    suspend fun recoveryContext(requestID: String) = runCatching { repository.recoveryContext(requestID) }.getOrNull()
+
+    fun replaceCapture(command: CaptureRecoveryCommand) {
+        if (mutableState.value.isSending) return
+        mutableState.update { it.copy(isSending = true, notice = null) }
+        viewModelScope.launch {
+            val result = runCatching { repository.replaceCapture(command) }.getOrElse { CaptureRecoveryResult.Waiting(command.intentID) }
+            val notice = when (result) {
+                is CaptureRecoveryResult.Accepted -> if (result.delivery is CaptureSubmitResult.Delivered) voxNotice("Capture delivered")
+                    else voxNotice("Recovery is saved. Delivery is waiting on this device.")
+                is CaptureRecoveryResult.Waiting -> voxNotice("Recovery is waiting. Retry delivery to continue the same decision.")
+                is CaptureRecoveryResult.Rejected -> recoveryRejectionNotice(result.reason)
+            }
+            mutableState.update { it.copy(isSending = false, notice = notice) }
+            refresh(reconcile = true)
+        }
+    }
+
+    fun discard(requestID: String) {
+        if (mutableState.value.isSending) return
+        mutableState.update { it.copy(isSending = true, notice = null) }
+        viewModelScope.launch {
+            val discarded = runCatching { repository.discard(requestID) }.getOrDefault(false)
+            mutableState.update { it.copy(isSending = false, notice = voxNotice(
+                if (discarded) "Capture discarded" else "This delivery cannot be discarded safely yet. Retry to check its outcome.",
+            )) }
+            refresh(reconcile = true)
+        }
     }
 
     fun retry(requestID: String) {

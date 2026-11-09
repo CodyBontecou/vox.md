@@ -1,0 +1,19 @@
+................................................................E...............................................................................................
+======================================================================
+ERROR: test_retained_full_model_and_cross_platform_reports_are_truthful (test_local_intelligence_evaluation.LocalIntelligenceEvaluationTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/vox-apple-signal3-20261108/Packages/contracts/tests/test_local_intelligence_evaluation.py", line 52, in test_retained_full_model_and_cross_platform_reports_are_truthful
+    VALIDATOR.validate_reports(self.corpus,VALIDATOR.REPORTS)
+  File "/private/tmp/vox-apple-signal3-20261108/apps/android/scripts/validate-intelligence-evaluations.py", line 106, in validate_reports
+    require(receipt.get("implementationHashes") == implementation_hashes(), "evaluation implementation changed; rerun the full model gate")
+  File "/private/tmp/vox-apple-signal3-20261108/apps/android/scripts/validate-intelligence-evaluations.py", line 54, in require
+    if not condition: raise ValueError(message)
+ValueError: evaluation implementation changed; rerun the full model gate
+
+----------------------------------------------------------------------
+Ran 160 tests in 100.380s
+
+FAILED (errors=1)
+Validation definitions passed: 6 roles, 3 providers, 35 cases, 23 gates; scoped campaign computed
+Validation definitions passed: 6 roles, 3 providers, 35 cases, 23 gates; scoped campaign computed

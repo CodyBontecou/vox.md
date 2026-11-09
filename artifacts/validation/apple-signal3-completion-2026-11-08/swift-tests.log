@@ -1,0 +1,248 @@
+warning: '--skip-update' option is deprecated and will be removed in a future release
+Fetching https://github.com/CodyBontecou/ExportKit from cache
+Fetched https://github.com/CodyBontecou/ExportKit from cache (0.01s)
+Fetching https://github.com/FluidInference/FluidAudio.git from cache
+Fetched https://github.com/FluidInference/FluidAudio.git from cache (0.03s)
+Computing version for https://github.com/FluidInference/FluidAudio.git
+Computed https://github.com/FluidInference/FluidAudio.git at 0.13.4 (0.52s)
+Creating working copy for https://github.com/FluidInference/FluidAudio.git
+Working copy of https://github.com/FluidInference/FluidAudio.git resolved at 0.13.4
+Creating working copy for https://github.com/CodyBontecou/ExportKit
+Working copy of https://github.com/CodyBontecou/ExportKit resolved at main (17993dc)
+Building for debugging...
+[Computing dependencies]
+[Pre-planning 1 / 507]
+[Planning deferred tasks]
+[64 / 198]
+[90 / 198]
+[96 / 202] MachTaskSelfWrapper
+[105 / 215]
+[118 / 279]
+[121 / 279]
+[127 / 279]
+[132 / 287] FluidAudio
+[143 / 367]
+[149 / 367]
+[158 / 367]
+[162 / 367]
+[165 / 367]
+[173 / 367]
+[175 / 367]
+[179 / 367]
+[187 / 367]
+[188 / 367]
+[191 / 367]
+[211 / 367] VoxboardCaptureCore
+[212 / 367] ExportKit
+[216 / 367] VoxCoreGenerated
+[226 / 367]
+[228 / 367] VoxboardCaptureCore
+[234 / 367] VoxboardCaptureCore
+[238 / 367]
+[243 / 367]
+[244 / 367]
+[244 / 367] VoxboardM2Oracle-product
+[245 / 367] VoxboardM2Oracle-product
+[258 / 367] VoxboardCaptureCore-product
+[265 / 369]
+[268 / 369] ExportKit
+[271 / 369] VoxboardCaptureCore
+[279 / 377] ExportKit
+[290 / 377]
+[306 / 377] VoxboardM2Oracle-product
+[310 / 377] VoxboardCaptureCoreTests-product
+[312 / 427]
+[314 / 427]
+[315 / 427]
+[317 / 427]
+[318 / 427]
+[319 / 427]
+[321 / 427]
+[324 / 427]
+[333 / 427]
+[335 / 427]
+[340 / 427] FluidAudio
+[343 / 427] FluidAudio-product
+[346 / 428]
+[350 / 428]
+[354 / 428]
+[354 / 428] FluidAudio
+[354 / 457]
+[375 / 477]
+[379 / 477]
+[383 / 477]
+[387 / 477]
+[388 / 477]
+[406 / 477] VoxboardCaptureCoreTests-product
+[408 / 477] VoxboardCaptureCoreTests-product
+[425 / 477] VoxboardShared
+[426 / 477] VoxboardShared
+[429 / 477] VoxboardShared
+[430 / 477] VoxboardShared
+/private/tmp/vox-apple-signal3-20261108/Packages/VoxboardShared/Sources/VoxboardShared/MeetingChunkSampleWriter.swift:228:72: warning: converting non-Sendable function value to '@Sendable (URL, CMFormatDescription?, CMTime) throws -> any MeetingChunkAssetWriting' may introduce data races
+226 |         timelineOrigin: @escaping @Sendable () -> CMTime?,
+227 |         finalized: @escaping @Sendable (MeetingCaptureChunk, [MeetingTimelineEvent], [String]) -> Void,
+228 |         assetWriterFactory: @escaping MeetingChunkAssetWriterFactory = defaultMeetingChunkAssetWriterFactory
+    |                                                                        `- warning: converting non-Sendable function value to '@Sendable (URL, CMFormatDescription?, CMTime) throws -> any MeetingChunkAssetWriting' may introduce data races
+229 |     ) {
+230 |         self.source = source
+[435 / 477] VoxboardShared
+[447 / 479]
+[447 / 479] VoxboardShared
+[447 / 479] VoxboardPersistenceFixtures-product
+[452 / 484] VoxboardCaptureCoreTests-product
+[456 / 484] VoxboardShared
+/private/tmp/vox-apple-signal3-20261108/Packages/VoxboardShared/Sources/VoxboardShared/AudioAttachmentExporter.swift:180:24: warning: capture of 'session' with non-Sendable type 'AVAssetExportSession' in a '@Sendable' closure [#SendableClosureCaptures]
+178 |         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+179 |             session.exportAsynchronously {
+180 |                 switch session.status {
+    |                        `- warning: capture of 'session' with non-Sendable type 'AVAssetExportSession' in a '@Sendable' closure [#SendableClosureCaptures]
+181 |                 case .completed:
+182 |                     continuation.resume()
+
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.2.sdk/System/Library/Frameworks/AVFoundation.framework/Headers/AVAssetExportSession.h:191:12: note: class 'AVAssetExportSession' does not conform to the 'Sendable' protocol
+189 | NS_SWIFT_NONSENDABLE
+190 | API_AVAILABLE(macos(10.7), ios(4.0), tvos(9.0), visionos(1.0)) API_UNAVAILABLE(watchos)
+191 | @interface AVAssetExportSession : NSObject
+    |            `- note: class 'AVAssetExportSession' does not conform to the 'Sendable' protocol
+192 | {
+193 | @private
+
+/private/tmp/vox-apple-signal3-20261108/Packages/VoxboardShared/Sources/VoxboardShared/AudioFileConverter.swift:305:46: warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead [#DeprecatedDeclaration]
+303 |         }
+304 |         let asset = AVURLAsset(url: url)
+305 |         let seconds = CMTimeGetSeconds(asset.duration)
+    |                                              `- warning: 'duration' was deprecated in macOS 13.0: Use load(.duration) instead [#DeprecatedDeclaration]
+306 |         return seconds.isFinite && seconds > 0 ? seconds : nil
+307 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#SendableClosureCaptures]: <https://docs.swift.org/compiler/documentation/diagnostics/sendable-closure-captures>
+[456 / 484] VoxboardIntelligenceEvaluation-product
+[461 / 484] VoxboardShared
+/private/tmp/vox-apple-signal3-20261108/Packages/VoxboardShared/Sources/VoxboardShared/MeetingChunkSampleWriter.swift:228:72: warning: converting non-Sendable function value to '@Sendable (URL, CMFormatDescription?, CMTime) throws -> any MeetingChunkAssetWriting' may introduce data races
+226 |         timelineOrigin: @escaping @Sendable () -> CMTime?,
+227 |         finalized: @escaping @Sendable (MeetingCaptureChunk, [MeetingTimelineEvent], [String]) -> Void,
+228 |         assetWriterFactory: @escaping MeetingChunkAssetWriterFactory = defaultMeetingChunkAssetWriterFactory
+    |                                                                        `- warning: converting non-Sendable function value to '@Sendable (URL, CMFormatDescription?, CMTime) throws -> any MeetingChunkAssetWriting' may introduce data races
+229 |     ) {
+230 |         self.source = source
+[461 / 484] VoxboardPersistenceFixtures-product
+[464 / 484] VoxboardShared
+[470 / 485] VoxboardIntelligenceEvaluation-product
+[474 / 485] VoxboardSharedTests-product
+[493 / 505] VoxboardSharedTests-product
+[494 / 505] VoxboardSharedTests-product
+[499 / 505] VoxboardSharedTests-product
+/private/tmp/vox-apple-signal3-20261108/Packages/VoxboardShared/Tests/VoxboardSharedTests/MeetingChunkedSampleBufferWriterTests.swift:314:74: warning: left side of nil coalescing operator '??' has non-optional type 'TimeInterval' (aka 'Double'), so the right side is never used
+312 |         )
+313 |         XCTAssertTrue(
+314 |             result.events.contains { $0.kind == .dropped && ($0.duration ?? 0) > 0 },
+    |                                                                          `- warning: left side of nil coalescing operator '??' has non-optional type 'TimeInterval' (aka 'Double'), so the right side is never used
+315 |             "overflow must surface a dropped timeline event"
+316 |         )
+[501 / 505] VoxboardSharedTests-product
+Build complete! (20.37 sec)
+Test Suite 'Selected tests' started at 2026-11-08 20:17:08.002.
+Test Suite 'VoxboardSharedTests.xctest' started at 2026-11-08 20:17:08.003.
+Test Suite 'URLDeliveryValidationTests' started at 2026-11-08 20:17:08.003.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_credentialsInURL_areRejected]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_credentialsInURL_areRejected]' passed (0.001 seconds).
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_emptyAndUnsupportedScheme_areRejected]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_emptyAndUnsupportedScheme_areRejected]' passed (0.000 seconds).
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_httpLoopback_requiresExplicitLocalConfirmation]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_httpLoopback_requiresExplicitLocalConfirmation]' passed (0.000 seconds).
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_httpRemote_isRejected]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_httpRemote_isRejected]' passed (0.000 seconds).
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_httpsRemote_isAccepted]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_httpsRemote_isAccepted]' passed (0.000 seconds).
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_localNetworkLiterals_areRecognized]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_localNetworkLiterals_areRecognized]' passed (0.000 seconds).
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_queryStringSecret_isRejected]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validate_queryStringSecret_isRejected]' passed (0.000 seconds).
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validateBody_overCap_isRejected]' started.
+Test Case '-[VoxboardSharedTests.URLDeliveryValidationTests test_validateBody_overCap_isRejected]' passed (0.000 seconds).
+Test Suite 'URLDeliveryValidationTests' passed at 2026-11-08 20:17:08.005.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'VoxboardSharedTests.xctest' passed at 2026-11-08 20:17:08.005.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'Selected tests' passed at 2026-11-08 20:17:08.005.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds
+Test Suite 'Selected tests' started at 2026-11-08 20:17:08.080.
+Test Suite 'VoxboardCaptureCoreTests.xctest' started at 2026-11-08 20:17:08.081.
+Test Suite 'CaptureCoreEnginePolicyTests' started at 2026-11-08 20:17:08.081.
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_admissionNarrowsCalendarAndWeekSemanticsAndRejectsUnsupportedTimezones]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_admissionNarrowsCalendarAndWeekSemanticsAndRejectsUnsupportedTimezones]' passed (0.002 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_admissionRejectsAmbiguousShareSourceEntryTokenButPreservesSharedTokens]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_admissionRejectsAmbiguousShareSourceEntryTokenButPreservesSharedTokens]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_admissionRejectsBoundaryWhitespaceInEveryPathSegment]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_admissionRejectsBoundaryWhitespaceInEveryPathSegment]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_admissionRejectsPathTokensThatDifferBetweenRenderers]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_admissionRejectsPathTokensThatDifferBetweenRenderers]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_admissionUsesPortableScalarAndPathBoundsAndRejectsHiddenPolicy]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_admissionUsesPortableScalarAndPathBoundsAndRejectsHiddenPolicy]' passed (0.007 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_shadowAdmissionFailureDoesNotInvokeComparatorOrAlterLegacyOutcome]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_shadowAdmissionFailureDoesNotInvokeComparatorOrAlterLegacyOutcome]' passed (0.004 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_shadowCalendarAdmissionFailureFallsBackBeforeSideEffects]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_shadowCalendarAdmissionFailureFallsBackBeforeSideEffects]' passed (0.002 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_shadowComparesOneFrozenInputBeforeSideEffectsAndLegacyRemainsAuthoritative]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_shadowComparesOneFrozenInputBeforeSideEffectsAndLegacyRemainsAuthoritative]' passed (0.002 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_testOnlyRustFailsClosedOnUnsupportedAdmissionBeforeSideEffects]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_testOnlyRustFailsClosedOnUnsupportedAdmissionBeforeSideEffects]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_testOnlyRustRejectsAggregateControlBeforeComparatorOrSideEffects]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_testOnlyRustRejectsAggregateControlBeforeComparatorOrSideEffects]' passed (0.005 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_testOnlyRustRejectsAmbiguousFrontmatterCompositionBeforeSideEffects]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_testOnlyRustRejectsAmbiguousFrontmatterCompositionBeforeSideEffects]' passed (0.001 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_testOnlyRustStopsAtCommitBarrierWithoutLegacyFallback]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureCoreEnginePolicyTests test_testOnlyRustStopsAtCommitBarrierWithoutLegacyFallback]' passed (0.000 seconds).
+Test Suite 'CaptureCoreEnginePolicyTests' passed at 2026-11-08 20:17:08.106.
+	 Executed 12 tests, with 0 failures (0 unexpected) in 0.024 (0.025) seconds
+Test Suite 'CaptureDeepLinkParserTests' started at 2026-11-08 20:17:08.106.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_arbitraryFilePathsBookmarksAndAutoSubmitAreRejected]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_arbitraryFilePathsBookmarksAndAutoSubmitAreRejected]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_hostlessWebLinksAreRejectedWithoutOpeningComposer]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_hostlessWebLinksAreRejectedWithoutOpeningComposer]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_legacyVoxParameterStillSelectsPresetAndCannotBeCombinedWithPreset]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_legacyVoxParameterStillSelectsPresetAndCannotBeCombinedWithPreset]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_malformedUnknownAndExcessivePayloadsAreRejected]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_malformedUnknownAndExcessivePayloadsAreRejected]' passed (0.001 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_presetCanBeSelectedWithoutForcingDestinationOverride]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_presetCanBeSelectedWithoutForcingDestinationOverride]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_requestIDLinkClaimsInboxItemRatherThanEmbeddingContent]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_requestIDLinkClaimsInboxItemRatherThanEmbeddingContent]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_validTextAndURLLinksPopulateDraftWithoutAutoSubmitting]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_validTextAndURLLinksPopulateDraftWithoutAutoSubmitting]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_widgetActionCanRequestAComposerInputWithoutSubmitting]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_widgetActionCanRequestAComposerInputWithoutSubmitting]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_widgetControlCanOpenComposerWithoutSubmitting]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_widgetControlCanOpenComposerWithoutSubmitting]' passed (0.000 seconds).
+Test Suite 'CaptureDeepLinkParserTests' passed at 2026-11-08 20:17:08.108.
+	 Executed 9 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds
+Test Suite 'CaptureMarkdownRendererTests' started at 2026-11-08 20:17:08.108.
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_assetOverrideUsesFinalUniquedAttachmentPath]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_assetOverrideUsesFinalUniquedAttachmentPath]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_emptyRequestFailsInsteadOfWritingMarkerOnly]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_emptyRequestFailsInsteadOfWritingMarkerOnly]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_everyPayloadKindProducesExpectedMarkdown]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_everyPayloadKindProducesExpectedMarkdown]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_nonEmbeddedRetainedAudioAloneRendersPlainAttachmentLink]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_nonEmbeddedRetainedAudioAloneRendersPlainAttachmentLink]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_nonEmbeddedRetainedAudioStaysOutOfNoteWhenTextExists]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_nonEmbeddedRetainedAudioStaysOutOfNoteWhenTextExists]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_textPayloadPreservesMarkdownBoundarySpaces]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_textPayloadPreservesMarkdownBoundarySpaces]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_urlPayloadRejectsNonHTTPProtocolsAndMissingHosts]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_urlPayloadRejectsNonHTTPProtocolsAndMissingHosts]' passed (0.000 seconds).
+Test Suite 'CaptureMarkdownRendererTests' passed at 2026-11-08 20:17:08.109.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'CaptureWebLinkTests' started at 2026-11-08 20:17:08.109.
+Test Case '-[VoxboardCaptureCoreTests.CaptureWebLinkTests testAcceptsWebHostsAndPreservesURLContent]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureWebLinkTests testAcceptsWebHostsAndPreservesURLContent]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureWebLinkTests testRejectsIncompleteAndNonWebLinks]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureWebLinkTests testRejectsIncompleteAndNonWebLinks]' passed (0.000 seconds).
+Test Suite 'CaptureWebLinkTests' passed at 2026-11-08 20:17:08.109.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'VoxboardCaptureCoreTests.xctest' passed at 2026-11-08 20:17:08.110.
+	 Executed 30 tests, with 0 failures (0 unexpected) in 0.027 (0.028) seconds
+Test Suite 'Selected tests' passed at 2026-11-08 20:17:08.110.
+	 Executed 30 tests, with 0 failures (0 unexpected) in 0.027 (0.029) seconds

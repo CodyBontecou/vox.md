@@ -1881,6 +1881,7 @@ struct QuickCaptureView: View {
                     routeEmoji: selectedFlow.emoji,
                     routeTone: SignalRouteTileTone.forRoute(id: selectedFlow.id),
                     engineLabel: persistentRecorder.segmentEngineLabel,
+                    errorMessage: captureErrorMessage,
                     speakerCount: persistentRecorder.liveSpeakerCount,
                     duration: formatRecordingDuration(persistentRecorder.segmentDuration, padded: true),
                     isPaused: persistentRecorder.isSegmentPaused,

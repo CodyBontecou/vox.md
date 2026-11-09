@@ -20,6 +20,16 @@ struct FeedbackEmailPayload {
 enum FeedbackHelper {
     static let supportEmail = "cody@isolated.tech"
 
+    @MainActor
+    static func copySupportEmailAddress() {
+#if os(iOS)
+        UIPasteboard.general.string = supportEmail
+#elseif os(macOS)
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(supportEmail, forType: .string)
+#endif
+    }
+
     static func makePayload() -> FeedbackEmailPayload {
         let appName = appDisplayName
         return FeedbackEmailPayload(

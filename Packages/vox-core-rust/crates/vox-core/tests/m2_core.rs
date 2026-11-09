@@ -941,3 +941,48 @@ fn errors_never_echo_user_content_paths_or_hashes() {
         assert!(!error.to_string().contains(secret));
     }
 }
+
+#[test]
+fn missing_heading_is_typed_and_never_exposes_a_prepared_artifact() {
+    for operation in ["existingNoteHeading", "rollingNote"] {
+        let mut value = mat_value(None);
+        value["operation"] = json!(operation);
+        let route = &mut value["preset"]["routePolicy"];
+        route["collisionPolicy"] = json!("reuseIfHashMatches");
+        route["placement"] = json!("beneathHeading");
+        route["headingTitle"] = json!("Private selector");
+        route["headingLevel"] = json!(2);
+        route["missingHeadingBehavior"] = json!("fail");
+        route["headingPosition"] = json!("top");
+        if operation == "rollingNote" {
+            route["rollingPeriod"] = json!("daily");
+        }
+        let bytes = b"## Another heading\n\nExisting confidential note";
+        let stream = uuid("bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb");
+        let prep = json!({
+            "calendar":value["calendar"], "captureSource":value["captureSource"],
+            "contractVersion":1, "createdAtEpochMilliseconds":value["createdAtEpochMilliseconds"],
+            "invocation":value["invocation"], "locale":value["locale"],
+            "operation":value["operation"], "payloads":value["payloads"], "pins":value["pins"],
+            "preset":value["preset"], "requestID":value["requestID"], "timezone":value["timezone"]
+        });
+        let required = prepare(&canonical(&prep)).unwrap();
+        value["snapshotHash"] = json!(required.snapshot_hash);
+        value["observations"] = json!([{
+            "kind":"existingNote", "observationID":required.observations[0].id,
+            "status":"present", "logicalPath":required.observations[0].logical_path,
+            "length":bytes.len(), "sha256":sha256_hex(bytes), "byteStreamID":stream
+        }]);
+        let mut session = MaterializationSession::new(&canonical(&value)).unwrap();
+        session.push_observation(stream, 0, bytes, true).unwrap();
+        let error = session.seal().unwrap_err();
+        assert_eq!(error, CoreError::HeadingNotFound);
+        assert_eq!(error.code(), "headingNotFound");
+        assert_eq!(error.to_string(), "target heading was not found");
+        assert_eq!(session.seal(), Err(CoreError::SessionTerminal));
+        assert!(matches!(
+            session.drain(Uuid::nil(), 0, 1024),
+            Err(CoreError::SessionTerminal)
+        ));
+    }
+}

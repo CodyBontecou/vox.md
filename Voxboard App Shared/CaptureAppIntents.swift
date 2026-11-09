@@ -162,7 +162,7 @@ struct CaptureURLIntent: AppIntent {
     }
 
     func perform() async throws -> some IntentResult {
-        guard let scheme = url.scheme?.lowercased(), scheme == "http" || scheme == "https" else {
+        guard CaptureWebLink.isValid(url) else {
             throw CaptureIntentError.invalidURL
         }
         try await CaptureIntentSupport.enqueue(

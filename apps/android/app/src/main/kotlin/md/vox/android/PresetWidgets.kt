@@ -18,6 +18,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
@@ -157,9 +159,16 @@ class VoxPresetWidgetConfigureActivity : AppCompatActivity() {
     }
 }
 
+private val PresetWidgetSelectionSaver = listSaver<PresetWidgetSelection, String>(
+    save = { selection -> listOf(selection.source.name) + List(6) { selection.slots.getOrNull(it).orEmpty() } },
+    restore = { saved -> PresetWidgetSelection(PresetWidgetSource.valueOf(saved[0]), saved.drop(1).map { it.ifEmpty { null } }) },
+)
+
 @Composable internal fun PresetWidgetConfigurationScreen(presets: List<CapturePreset>, initial: PresetWidgetSelection,
     cancel: () -> Unit, save: (PresetWidgetSelection) -> Unit) {
-    var selection by remember(initial) { mutableStateOf(initial.copy(slots = List(6) { initial.slots.getOrNull(it) })) }
+    var selection by rememberSaveable(initial, stateSaver = PresetWidgetSelectionSaver) {
+        mutableStateOf(initial.copy(slots = List(6) { initial.slots.getOrNull(it) }))
+    }
     val c = Signal.colors
     Surface(color = c.bg, contentColor = c.text) {
         Column(

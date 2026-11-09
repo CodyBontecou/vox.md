@@ -103,7 +103,13 @@ def validate_reports(corpus, reports):
     require(receipt["counts"].get("validate-local-speech.py") == 2 and receipt["counts"].get("validate-named-speech-model.py") == 2, "four formerly skipped ASR tests did not execute")
     require(receipt["counts"].get("generalPhone",0) >= 84, "general phone suite incomplete")
     require(receipt["counts"].get("pinnedModelRunsSharedInstructionsOffline") == 1 and receipt["counts"].get("realSpeechSpeakerAttributionBenchmark") == 1, "live intelligence tests incomplete")
-    require(receipt.get("implementationHashes") == implementation_hashes(), "evaluation implementation changed; rerun the full model gate")
+    recorded_hashes = receipt.get("implementationHashes")
+    current_hashes = implementation_hashes()
+    require(isinstance(recorded_hashes, dict) and all(isinstance(path, str) for path in recorded_hashes),
+            "evaluation implementation hash inventory is invalid")
+    changed = sorted(path for path in recorded_hashes.keys() | current_hashes.keys()
+                     if recorded_hashes.get(path) != current_hashes.get(path))
+    require(not changed, "evaluation implementation changed; rerun the full model gate: " + ", ".join(changed))
     require(receipt.get("sourceTreeClean") is True, "model suite must run from a clean implementation commit")
     require(re.fullmatch(r"[0-9a-f]{40}", receipt["sourceRevision"]) is not None, "model suite source identity missing")
     require(subprocess.run(["git", "cat-file", "-e", receipt["sourceRevision"] + "^{commit}"], cwd=ROOT, capture_output=True).returncode == 0,

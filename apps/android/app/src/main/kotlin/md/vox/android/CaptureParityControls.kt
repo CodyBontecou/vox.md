@@ -10,6 +10,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -87,14 +89,46 @@ import md.vox.android.capturedomain.*
  * Signal route line under the capture selector: a mono muted "Route: …" line
  * (iOS shows the destination path there) that opens the per-draft route sheet.
  */
-@Composable internal fun CaptureRouteControl(route: CaptureRouteOverride?, destination: CaptureDestination?, onChanged: (CaptureRouteOverride?) -> Unit) {
+@Stable
+internal class CaptureRouteEditorState {
+    var showsDialog by mutableStateOf(false)
+    var path by mutableStateOf("")
+    var placement by mutableStateOf<CapturePlacementKind?>(null)
+
+    fun open(route: CaptureRouteOverride?) {
+        path = route?.relativeNotePath.orEmpty()
+        placement = route?.placement
+        showsDialog = true
+    }
+
+    companion object {
+        val Saver = listSaver<CaptureRouteEditorState, Any>(
+            save = { listOf(it.showsDialog, it.path, it.placement?.name.orEmpty()) },
+            restore = { saved -> CaptureRouteEditorState().apply {
+                showsDialog = saved[0] as Boolean
+                path = saved[1] as String
+                placement = (saved[2] as String).takeIf(String::isNotEmpty)?.let(CapturePlacementKind::valueOf)
+            } },
+        )
+    }
+}
+
+@Composable internal fun rememberCaptureRouteEditorState() =
+    rememberSaveable(saver = CaptureRouteEditorState.Saver) { CaptureRouteEditorState() }
+
+@Composable internal fun CaptureRouteControl(
+    route: CaptureRouteOverride?,
+    destination: CaptureDestination?,
+    enabled: Boolean = true,
+    editor: CaptureRouteEditorState = rememberCaptureRouteEditorState(),
+    onChanged: (CaptureRouteOverride?) -> Unit,
+) {
     val c = Signal.colors
-    var showsDialog by remember { mutableStateOf(false) }
     Row(
         modifier = Modifier
             .heightIn(min = 48.dp)
             .clip(RoundedCornerShape(10.dp))
-            .clickable(role = Role.Button) { showsDialog = true }
+            .clickable(enabled = enabled, role = Role.Button) { editor.open(route) }
             .padding(horizontal = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -102,20 +136,18 @@ import md.vox.android.capturedomain.*
         Text(
             voxFormat("Route: %@", route?.relativeNotePath ?: destination?.displayName ?: voxString("Preset destination")),
             style = SignalType.monoCaption,
-            color = if (route != null) c.accentText else c.muted,
+            color = if (!enabled) c.faint else if (route != null) c.accentText else c.muted,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f, fill = false),
         )
         Icon(Icons.Outlined.KeyboardArrowDown, contentDescription = null, tint = c.faint, modifier = Modifier.size(16.dp))
     }
-    if (showsDialog) {
-        var path by remember { mutableStateOf(route?.relativeNotePath.orEmpty()) }
-        var placement by remember { mutableStateOf(route?.placement) }
-        val value = CaptureRouteOverride(path.trim().ifEmpty { null }, placement)
+    if (editor.showsDialog) {
+        val value = CaptureRouteOverride(editor.path.trim().ifEmpty { null }, editor.placement)
         val valid = runCatching { value.validated() }.isSuccess
         AlertDialog(
-            onDismissRequest = { showsDialog = false },
+            onDismissRequest = { editor.showsDialog = false },
             containerColor = c.card,
             shape = RoundedCornerShape(SignalMetrics.CardRadius + 4.dp),
             title = { Text(voxString("Route this capture"), style = MaterialTheme.typography.titleLarge, color = c.text) },
@@ -126,7 +158,7 @@ import md.vox.android.capturedomain.*
                         style = SignalType.mono,
                         color = c.muted,
                     )
-                    OutlinedTextField(path, { path = it }, label = { Text(voxString("Note path in this vault")) },
+                    OutlinedTextField(editor.path, { editor.path = it }, label = { Text(voxString("Note path in this vault")) },
                         placeholder = { Text(voxString("Journal/Inbox.md")) }, isError = !valid, singleLine = true,
                         shape = SignalFieldShape, colors = signalTextFieldColors(), modifier = Modifier.fillMaxWidth())
                     Text(voxString("Leave empty to use the preset note. This change applies only to the current draft."),
@@ -144,24 +176,24 @@ import md.vox.android.capturedomain.*
                                 Modifier
                                     .fillMaxWidth()
                                     .heightIn(min = 48.dp)
-                                    .selectable(selected = placement == choice, role = Role.RadioButton) { placement = choice }
+                                    .selectable(selected = editor.placement == choice, role = Role.RadioButton) { editor.placement = choice }
                                     .padding(horizontal = 14.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Text(label, style = SignalType.rowTitle, color = c.text, modifier = Modifier.weight(1f))
-                                if (placement == choice) Icon(Icons.Outlined.Check, contentDescription = null, tint = c.tint, modifier = Modifier.size(20.dp))
+                                if (editor.placement == choice) Icon(Icons.Outlined.Check, contentDescription = null, tint = c.tint, modifier = Modifier.size(20.dp))
                             }
                         }
                     }
                 }
             },
             confirmButton = {
-                SignalButton(voxString("Apply"), onClick = { onChanged(value.takeUnless { it.relativeNotePath == null && it.placement == null }); showsDialog = false },
-                    enabled = valid, size = SignalButtonSize.MEDIUM)
+                SignalButton(voxString("Apply"), onClick = { onChanged(value.takeUnless { it.relativeNotePath == null && it.placement == null }); editor.showsDialog = false },
+                    enabled = valid && enabled, size = SignalButtonSize.MEDIUM)
             },
             dismissButton = {
-                SignalButton(voxString("Reset route"), onClick = { onChanged(null); showsDialog = false },
-                    variant = SignalButtonVariant.TERTIARY, size = SignalButtonSize.MEDIUM)
+                SignalButton(voxString("Reset route"), onClick = { onChanged(null); editor.showsDialog = false },
+                    variant = SignalButtonVariant.TERTIARY, enabled = enabled, size = SignalButtonSize.MEDIUM)
             },
         )
     }

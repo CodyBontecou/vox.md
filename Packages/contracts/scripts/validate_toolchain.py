@@ -15,6 +15,8 @@ EXPECTED_GOVERNED_PATHS = (
     "Packages/vox-core-rust/uniffi.toml",
     "Packages/vox-core-rust/uniffi-bindgen.toml",
     "Packages/vox-core-rust/crates/vox-core-uniffi/uniffi.toml",
+    "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+    "Packages/vox-core-rust/crates/vox-core-uniffi/src/lib.rs",
     "Packages/vox-core-rust/scripts/generate-swift-bindings.sh",
     "Packages/vox-core-rust/scripts/generate-kotlin-bindings.sh",
     "Packages/vox-core-rust/scripts/normalize-kotlin-bindings.py",
@@ -28,6 +30,7 @@ EXPECTED_GOVERNED_PATHS = (
     "Packages/vox-core-rust/scripts/normalize-generated-text.py",
     "Packages/vox-core-rust/crates/vox-core/tests/m2_core.rs",
     "Packages/VoxboardShared/Sources/VoxCoreGenerated/VoxCore.swift",
+    "Packages/VoxboardShared/Sources/VoxboardM2MaterializationEvidence/main.swift",
     "Packages/VoxboardShared/Sources/VoxCoreFFI/module.modulemap",
     ".github/workflows/android-ci.yml",
     ".github/workflows/contracts-ci.yml",
@@ -69,11 +72,16 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/app/src/main/kotlin/md/vox/android/SettingsScreens.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/PlayEntitlementCache.kt",
+    "apps/android/app/src/main/kotlin/md/vox/android/SubscriptionAccessPolicy.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/PrivacySafeDebugLog.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt",
+    "apps/android/app/src/main/kotlin/md/vox/android/CaptureRecoveryControls.kt",
+    "apps/android/app/src/main/kotlin/md/vox/android/CaptureRecoveryForm.kt",
+    "apps/android/app/src/main/kotlin/md/vox/android/CaptureRecoveryMessages.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/SettingsSupportScreens.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/VoxApplication.kt",
+    "apps/android/app/src/main/kotlin/md/vox/android/VoxAppChrome.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/PhoneWearBridge.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/RuntimeLocalization.kt",
     "apps/android/app/src/main/kotlin/md/vox/android/VoxInputMethodService.kt",
@@ -95,6 +103,8 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/app/src/androidTest/kotlin/md/vox/android/WearRecordingOnlySafInstrumentationTest.kt",
     "apps/android/app/src/test/kotlin/md/vox/android/PlayBillingTest.kt",
     "apps/android/app/src/test/kotlin/md/vox/android/RuntimeLocalizationTest.kt",
+    "apps/android/app/src/test/kotlin/md/vox/android/SubscriptionAccessPolicyTest.kt",
+    "apps/android/app/src/test/kotlin/md/vox/android/CaptureRecoveryFormTest.kt",
     "apps/android/scripts/generate-android-sbom.py",
     "apps/android/scripts/generate-runtime-localizations.py",
     "apps/android/localization-review.json",
@@ -118,6 +128,8 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/data/build.gradle.kts",
     "apps/android/data/gradle.lockfile",
     "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/DurableCapture.kt",
+    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRepository.kt",
+    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRecovery.kt",
     "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureDurability.kt",
     "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureDelivery.kt",
     "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/LocalCaptureTextProcessor.kt",
@@ -130,6 +142,13 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt",
     "apps/android/data/src/main/kotlin/md/vox/android/data/CapturePackageCodec.kt",
     "apps/android/data/src/main/kotlin/md/vox/android/data/DurableCaptureStore.kt",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDiscard.kt",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureHeadingFailureStore.kt",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryIntentStore.kt",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryReconciliation.kt",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryRequest.kt",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryRouteSelection.kt",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureReplacement.kt",
     "apps/android/data/src/main/java/md/vox/android/data/CaptureProjectionEntity.java",
     "apps/android/data/src/main/java/md/vox/android/data/CaptureProjectionDao.java",
     "apps/android/data/src/main/java/md/vox/android/data/CaptureDatabase.java",
@@ -158,7 +177,11 @@ EXPECTED_GOVERNED_PATHS = (
     "apps/android/data/src/test/kotlin/md/vox/android/data/DurableCaptureStorePhase5Test.kt",
     "apps/android/data/src/test/kotlin/md/vox/android/data/SafVaultCommitExecutorTest.kt",
     "apps/android/data/src/test/kotlin/md/vox/android/data/CoreMaterializationCoordinatorTest.kt",
+    "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureHeadingFailureStoreTest.kt",
+    "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureReplacementTest.kt",
+    "docs/android/capture-recovery-sidecar.md",
     "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
+    "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureRecoveryRepositoryInstrumentationTest.kt",
     "apps/android/data/src/androidTest/kotlin/md/vox/android/data/ReinstallAdjustmentInstrumentationTest.kt",
     "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
     "apps/android/data/schemas/md.vox.android.data.CaptureDatabase/1.json",
@@ -957,8 +980,14 @@ def main(argv=None):
             fail(f"Android Room migration chain drift: {needle}")
     if "internal class RoomCaptureCoordination" not in phase3_coordination or "internal interface CaptureLeasePersistence" not in phase3_coordination:
         fail("Android raw Room lease coordination is not internal")
-    if phase3_coordinator.count("store.withRootMutationLock") != 5 or "store.mutateJournal(command)" not in phase3_coordinator:
+    if phase3_coordinator.count("store.withRootMutationLock") != 6 or "store.mutateJournal(command)" not in phase3_coordinator:
         fail("Android lease operations do not share the root mutation lock")
+    recovery_lease = """fun <T> withCurrentLease(requestID: String, token: String, now: Long, action: () -> T): T? =
+        store.withRootMutationLock {
+            if (leases.isCurrent(requestID, token, now) is LeasePlan.Current) action() else null
+        }"""
+    if re.sub(r"\s+", "", recovery_lease) not in re.sub(r"\s+", "", phase3_coordinator):
+        fail("Android recovery intent admission bypasses the current worker fence")
     if "internal fun mutateJournal(" not in phase3_store or "private fun mutateJournalUnderRootLock(" not in phase3_store:
         fail("Android journal mutation can bypass the internal fenced coordinator boundary")
     main_source = "\n".join(path.read_text() for path in production_source_paths)
@@ -1086,9 +1115,9 @@ def main(argv=None):
         localization_audit["incompleteCatalogSourceCount"],
         localization_audit["missingCatalogSourceCount"],
     )
-    if counts != (993, 442, 5, 546, 0, 0) or counts[0] != sum(counts[1:]):
+    if counts != (1023, 453, 5, 565, 0, 0) or counts[0] != sum(counts[1:]):
         fail("Android localization review source counts changed without review")
-    if localization_audit["runtimeSourceLiteralCount"] != 2961:
+    if localization_audit["runtimeSourceLiteralCount"] != 3039:
         fail("Android runtime localization lookup-source count changed without review")
     if localization_audit["fallbackSourceCount"] != counts[4] + counts[5]:
         fail("Android localization fallback count differs from incomplete and absent sources")

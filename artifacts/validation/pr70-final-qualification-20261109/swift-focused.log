@@ -1,0 +1,36 @@
+warning: '--skip-update' option is deprecated and will be removed in a future release
+Building for debugging...
+[Computing dependencies]
+[1 / 1]
+[2 / 7] VoxboardSharedTests-product
+[4 / 9] VoxboardSharedTests-product
+[10 / 11] VoxboardSharedTests-product
+[12 / 12] VoxboardSharedTests-product
+Build complete! (2.64 sec)
+Test Suite 'Selected tests' started at 2026-11-09 12:19:24.147.
+Test Suite 'VoxboardSharedTests.xctest' started at 2026-11-09 12:19:24.147.
+Test Suite 'OnDeviceProcessingTests' started at 2026-11-09 12:19:24.147.
+Test Case '-[VoxboardSharedTests.OnDeviceProcessingTests test_damagedLinksCodeHeadingsOrSpeakerOrderRetainSource]' started.
+Test Case '-[VoxboardSharedTests.OnDeviceProcessingTests test_damagedLinksCodeHeadingsOrSpeakerOrderRetainSource]' passed (0.002 seconds).
+Test Case '-[VoxboardSharedTests.OnDeviceProcessingTests test_nativeBackendReceivesCustomProfileAndSpeakerLabels]' started.
+Test Case '-[VoxboardSharedTests.OnDeviceProcessingTests test_nativeBackendReceivesCustomProfileAndSpeakerLabels]' passed (0.001 seconds).
+Test Case '-[VoxboardSharedTests.OnDeviceProcessingTests test_nonCooperativeWorkTimesOutAndKeepsInferenceSlotUntilFinished]' started.
+Test Case '-[VoxboardSharedTests.OnDeviceProcessingTests test_nonCooperativeWorkTimesOutAndKeepsInferenceSlotUntilFinished]' passed (0.032 seconds).
+Test Case '-[VoxboardSharedTests.OnDeviceProcessingTests test_parentCancellationStopsDeadlineImmediately]' started.
+Test Case '-[VoxboardSharedTests.OnDeviceProcessingTests test_parentCancellationStopsDeadlineImmediately]' passed (0.000 seconds).
+Test Case '-[VoxboardSharedTests.OnDeviceProcessingTests test_presetImageOptionSurvivesFullAndLightweightCoding]' started.
+Test Case '-[VoxboardSharedTests.OnDeviceProcessingTests test_presetImageOptionSurvivesFullAndLightweightCoding]' passed (0.001 seconds).
+Test Case '-[VoxboardSharedTests.OnDeviceProcessingTests test_terminalModelOutcomesNeverRetryAsPrompt]' started.
+Test Case '-[VoxboardSharedTests.OnDeviceProcessingTests test_terminalModelOutcomesNeverRetryAsPrompt]' passed (0.000 seconds).
+Test Suite 'OnDeviceProcessingTests' passed at 2026-11-09 12:19:24.184.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.036 (0.037) seconds
+Test Suite 'VoxboardSharedTests.xctest' passed at 2026-11-09 12:19:24.184.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.036 (0.037) seconds
+Test Suite 'Selected tests' passed at 2026-11-09 12:19:24.184.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.036 (0.038) seconds
+Test Suite 'Selected tests' started at 2026-11-09 12:19:24.284.
+Test Suite 'VoxboardCaptureCoreTests.xctest' started at 2026-11-09 12:19:24.285.
+Test Suite 'VoxboardCaptureCoreTests.xctest' passed at 2026-11-09 12:19:24.285.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-11-09 12:19:24.285.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds

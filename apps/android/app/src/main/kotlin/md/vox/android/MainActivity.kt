@@ -2,6 +2,7 @@ package md.vox.android
 
 import md.vox.android.ui.Signal
 import md.vox.android.ui.SignalBanner
+import md.vox.android.ui.SignalInvertedCard
 import md.vox.android.ui.SignalButton
 import md.vox.android.ui.SignalCard
 import md.vox.android.ui.SignalIconTile
@@ -413,7 +414,7 @@ internal fun VoxApp(
             rationaleBefore = microphoneRationaleBeforeRequest,
             rationaleAfter = MicrophonePermissionMemory.shouldShowRationale(context.findActivity()),
         )
-        if (granted && preset != null) recordingClient.start(preset)
+        if (granted && preset != null && !billingManager.state.value.hasSubscriptionAccessEnded) recordingClient.start(preset)
     }
     val startRecording: () -> Unit = {
         recordingClient.dismissResult()
@@ -421,7 +422,9 @@ internal fun VoxApp(
             state.entryTemplates,
             state.draft.entryTemplateIDOverride,
         )?.copy(entryTemplateID = null)
-        if (preset == null) {
+        if (billingManager.state.value.hasSubscriptionAccessEnded) {
+            model.presentNotice(voxUiText("New captures and edits need Vox.md."))
+        } else if (preset == null) {
             model.presentNotice(voxUiText("Choose an enabled Capture Preset before recording."))
         } else if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
             recordingClient.start(preset)
@@ -748,7 +751,17 @@ internal fun VoxNavigation(
     ) {
         NavHost(navController = navController, startDestination = Destination.Capture.route) {
             composable(Destination.Capture.route) {
-                CaptureScreen(
+                if (billingState.hasSubscriptionAccessEnded && !recordingStatus.isActive) {
+                    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        SignalInvertedCard(
+                            title = voxString("Your trial has ended"),
+                            message = voxString("You can still read, search, copy, export and delete everything here. New captures and edits need Vox.md."),
+                            actionLabel = voxString("See plans"),
+                            onAction = { navController.navigate(Destination.Upgrade.route) },
+                        )
+                        SignalButton(text = voxString("Library"), onClick = { selectTopLevel(VoxTopLevelDestination.HISTORY) })
+                    }
+                } else CaptureScreen(
                     state = latestState,
                     recordingStatus = recordingStatus,
                     recordingTranscription = transcriptionStates[recordingStatus.sessionID],
@@ -828,6 +841,8 @@ internal fun VoxNavigation(
                         captureRouteName = { libraryRouteName(latestState.presetCollection, it.presetID) },
                         transcriptRouteName = { recordingClient.frozenPreset(it)?.name },
                         loadCaptureDetail = model::historyDetailSnapshot,
+                        isReadOnly = billingState.hasSubscriptionAccessEnded,
+                        openPlans = { navController.navigate(Destination.Upgrade.route) },
                     )
                 }
                 if (!expanded) {
@@ -866,7 +881,11 @@ internal fun VoxNavigation(
                                         hasRetainedAudio = recordingClient::hasRetainedAudio,
                                         loadRetainedAudio = { id -> exportRecordingForCapture(context, recordingClient, id) },
                                         navigateBack = { adaptiveHistorySelection = null },
-                                        save = transcriptionClient::updateTranscriptDetails,
+                                        isReadOnly = billingState.hasSubscriptionAccessEnded,
+                                        save = { id, raw, clean, title, tags, category ->
+                                            !billingManager.state.value.hasSubscriptionAccessEnded &&
+                                                transcriptionClient.updateTranscriptDetails(id, raw, clean, title, tags, category)
+                                        },
                                         delete = { id ->
                                             transcriptionClient.clear(id)
                                             adaptiveHistorySelection = null
@@ -890,6 +909,11 @@ internal fun VoxNavigation(
             }
             composable(ACTIVITY_ROUTE) {
                 ActivityScreen(
+                    discard = model::discard,
+                    recoveryPresets = latestState.presetCollection?.presets.orEmpty(),
+                    recoveryDestination = latestState.destination,
+                    loadRecoveryContext = model::recoveryContext,
+                    replaceCapture = model::replaceCapture,
                     items = latestState.history,
                     transcripts = transcriptionStates.values.toList(),
                     isBusy = latestState.isSending || latestState.isDeletingHistory,
@@ -918,7 +942,11 @@ internal fun VoxNavigation(
                     hasRetainedAudio = recordingClient::hasRetainedAudio,
                     loadRetainedAudio = { id -> exportRecordingForCapture(context, recordingClient, id) },
                     navigateBack = { navController.popBackStack() },
-                    save = transcriptionClient::updateTranscriptDetails,
+                    isReadOnly = billingState.hasSubscriptionAccessEnded,
+                                        save = { id, raw, clean, title, tags, category ->
+                                            !billingManager.state.value.hasSubscriptionAccessEnded &&
+                                                transcriptionClient.updateTranscriptDetails(id, raw, clean, title, tags, category)
+                                        },
                     delete = { id ->
                         transcriptionClient.clear(id)
                         navController.popBackStack()
@@ -1161,9 +1189,11 @@ internal fun VoxNavigation(
                 )
             }
             composable(Destination.Presets.route) {
+                val templateEditor = rememberEntryTemplateEditorState()
                 BackHandler(enabled = expanded && adaptivePresetEditorID != null) { adaptivePresetEditorID = null }
                 val presetsList: @Composable () -> Unit = {
                     CapturePresetsScreen(
+                        templateEditor = templateEditor,
                         collection = latestState.presetCollection,
                         entryTemplates = latestState.entryTemplates,
                         isBusy = latestState.isSavingConfiguration,

@@ -97,7 +97,7 @@ struct CaptureTabletopRecordingLayout: View {
                 VStack(alignment: .leading, spacing: 14) {
                     Spacer(minLength: 0)
                     let items = paragraphs
-                    if items.isEmpty && screen.volatileText.isEmpty {
+                    if items.isEmpty && screen.volatileText.isEmpty && screen.errorMessage == nil {
                         Text(screen.isPaused
                             ? String(localized: "Paused — resume to keep recording this note.")
                             : String(localized: "Start talking…"))

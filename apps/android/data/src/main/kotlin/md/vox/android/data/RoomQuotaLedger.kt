@@ -39,6 +39,10 @@ internal enum class TerminalQuotaResult { COMMITTED, IDENTICAL, CONFLICT, RESERV
 class RoomQuotaLedger(private val database: CaptureDatabase) {
     private val dao get() = database.captureCoordinationDao()
 
+    /** Permanent verified terminal authority; deleting Library history never removes it. */
+    internal fun hasVerifiedCompletion(requestID: String): Boolean =
+        LOWER_UUID.matches(requestID) && dao.readTombstone(requestID)?.state == "COMPLETED"
+
     fun initializeInstallation(candidateID: String, nowEpochMillis: Long): String = transaction {
         require(LOWER_UUID.matches(candidateID) && nowEpochMillis >= 0) { "invalidInstallation" }
         val current = dao.readInstallation()
@@ -99,6 +103,13 @@ class RoomQuotaLedger(private val database: CaptureDatabase) {
                 OrphanReservationPlanner.classify(authoritativeSnapshots[reservation.requestID])
             } else OrphanReservationDisposition.CORRUPT_OR_MISSING
         }
+
+    /** Only a durable explicit discard may release this reservation; committed usage is untouched. */
+    internal fun releaseDiscarded(snapshot: JournalSnapshot): Boolean = transaction {
+        if (snapshot.state != CaptureState.DISCARDED || snapshot.events.lastOrNull()?.code != JournalCode.USER_DISCARDED) return@transaction false
+        val reservation = dao.readReservation(snapshot.requestID) ?: return@transaction true
+        dao.releaseReservation(snapshot.requestID, reservation.reservationToken) == 1
+    }
 
     fun release(requestID: String, reservationToken: String): Boolean {
         if (!LOWER_UUID.matches(requestID) || !LOWER_UUID.matches(reservationToken)) return false

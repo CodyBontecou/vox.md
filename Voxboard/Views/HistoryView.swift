@@ -360,9 +360,15 @@ struct HistoryView: View {
                 .fixedSize(horizontal: false, vertical: true)
             let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
             if !query.isEmpty, let url = CaptureInboxRecovery.obsidianSearchURL(query: query) {
-                Button("Search in Obsidian") { openURL(url) }
-                    .buttonStyle(ActivitySignalPillButtonStyle(kind: .secondary))
-                    .padding(.top, 6)
+                Button("Search in Obsidian") {
+                    openURL(url) { accepted in
+                        if !accepted {
+                            exportError = String(localized: "Obsidian couldn’t be opened. Install Obsidian to search your vault, then try again.")
+                        }
+                    }
+                }
+                .buttonStyle(ActivitySignalPillButtonStyle(kind: .secondary))
+                .padding(.top, 6)
             }
         }
         .multilineTextAlignment(.center)
@@ -634,8 +640,13 @@ struct LibraryItem: Identifiable {
         ]
         .compactMap { $0 }
         .joined(separator: " ")
-        let tokens = query.split(whereSeparator: \.isWhitespace).map(String.init)
-        return tokens.allSatisfy { haystack.localizedCaseInsensitiveContains($0) }
+        // Delivery-only captures should have the same forgiving Unicode search
+        // as transcripts, including dotted I, accents and full-width input.
+        let options: String.CompareOptions = [.caseInsensitive, .diacriticInsensitive, .widthInsensitive]
+        let searchable = haystack.folding(options: options, locale: .current).lowercased()
+        let tokens = query.folding(options: options, locale: .current).lowercased()
+            .split(whereSeparator: \.isWhitespace).map(String.init)
+        return tokens.allSatisfy(searchable.contains)
     }
 
     nonisolated private static func firstLine(of text: String?) -> String? {

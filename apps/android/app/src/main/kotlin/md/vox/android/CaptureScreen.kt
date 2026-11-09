@@ -1,6 +1,7 @@
 package md.vox.android
 
 import android.Manifest
+import md.vox.android.capturedomain.CaptureWebLink
 import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
@@ -135,7 +136,6 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -375,6 +375,7 @@ internal fun CaptureScreen(
     regrantVaultAccess: (String?) -> Unit = {},
     initialShowsAttachSheet: Boolean = false,
     initialShowsAllQuickActions: Boolean = false,
+    resolveLocation: (suspend (Boolean) -> CurrentLocationResult)? = null,
 ) {
     var editorValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(state.draft.text, TextRange(state.draft.text.length)))
@@ -386,12 +387,19 @@ internal fun CaptureScreen(
     var attachClipboardKind by remember { mutableStateOf<CaptureClipboardKind?>(null) }
     var showsSketchDialog by rememberSaveable { mutableStateOf(false) }
     var showsVoiceCaptureDetails by rememberSaveable { mutableStateOf(initialShowsVoiceCaptureDetails) }
-    var isResolvingPresetLocation by rememberSaveable { mutableStateOf(false) }
-    var pendingLocationSubmission by remember { mutableStateOf<PendingLocationSubmission?>(null) }
-    var locationDecision by remember { mutableStateOf<PendingLocationDecision?>(null) }
+    // The composition owns the lookup coroutine. Recreation cancels it, so its
+    // busy flag must reset rather than restore a job that no longer exists.
+    var isResolvingPresetLocation by remember { mutableStateOf(false) }
+    val locationState = viewModel<CaptureLocationViewModel>()
+    var pendingLocationSubmission by locationState.pendingSubmission
+    var locationDecision by locationState.decision
+    fun locationPreflightPending() = isResolvingPresetLocation ||
+        pendingLocationSubmission != null || locationDecision != null
+    val sendingCapture = state.isSending || locationPreflightPending()
+    val canChangeCaptureRoute = !sendingCapture && !state.isSavingConfiguration
     var pendingCameraPath by rememberSaveable { mutableStateOf<String?>(null) }
     var pendingJournalCameraPath by rememberSaveable { mutableStateOf<String?>(null) }
-    val undoStack = remember { mutableStateListOf<TextFieldValue>() }
+    val undoStack = viewModel<CaptureUndoViewModel>().entries
     val editor = remember { CaptureComposerTextEditor() }
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -588,9 +596,12 @@ internal fun CaptureScreen(
     }
 
     fun resolvePresetLocation(pending: PendingLocationSubmission) {
+        if (isResolvingPresetLocation) return
+        // Admission must precede dispatch: another tap can arrive before a new frame.
+        isResolvingPresetLocation = true
         coroutineScope.launch {
-            isResolvingPresetLocation = true
-            when (val result = locationResolver.resolve(exactRequired = pending.precision == CaptureLocationPrecision.EXACT)) {
+            when (val result = resolveLocation?.invoke(pending.precision == CaptureLocationPrecision.EXACT)
+                ?: locationResolver.resolve(exactRequired = pending.precision == CaptureLocationPrecision.EXACT)) {
                 is CurrentLocationResult.Available -> {
                     val city = pending.precision == CaptureLocationPrecision.CITY
                     val latitude = if (city) (result.latitude * 100.0).roundToLong() / 100.0 else result.latitude
@@ -694,6 +705,7 @@ internal fun CaptureScreen(
         audioDisplayName: String? = null,
         frozenPreset: CapturePreset? = null,
     ) {
+        if (state.isSending || locationPreflightPending()) return
         val policy = (frozenPreset ?: state.presetCollection?.activePreset)?.locationPolicy
         if (policy?.isEnabled != true) {
             deliverPending(
@@ -771,9 +783,10 @@ internal fun CaptureScreen(
         }
         val text = item.coerceToText(context)?.toString()?.trim().orEmpty()
         if (text.isEmpty()) return
-        if ((text.startsWith("https://") || text.startsWith("http://")) && text.none(Char::isWhitespace) && text.length <= 8_192) {
-            capturedURL = text
-            onDraftChanged(editorValue.text, text)
+        val link = CaptureWebLink.normalize(text)
+        if (link != null) {
+            capturedURL = link
+            onDraftChanged(editorValue.text, link)
         } else {
             applyCommand(CaptureComposerCommand.ReplaceSelection(text))
         }
@@ -807,8 +820,11 @@ internal fun CaptureScreen(
         else locationPermissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
     }
 
-    LaunchedEffect(requestEditorFocus) {
-        if (requestEditorFocus) {
+    LaunchedEffect(requestEditorFocus, recordingStatus.isActive) {
+        if (recordingStatus.isActive) {
+            focusManager.clearFocus()
+            keyboardController?.hide()
+        } else if (requestEditorFocus) {
             delay(180)
             focusRequester.requestFocus()
             keyboardController?.show()
@@ -840,7 +856,7 @@ internal fun CaptureScreen(
             attachmentCount = state.draft.attachments.size,
             presets = state.presetCollection?.presets.orEmpty(),
             activePresetID = state.presetCollection?.activePreset?.id,
-            isSending = state.isSending || isResolvingPresetLocation,
+            isSending = sendingCapture,
             selectPreset = onSelectPreset,
             send = { note ->
                 val combined = listOf(editorValue.text.trim(), note).filter(String::isNotBlank).joinToString("\n\n")
@@ -899,7 +915,7 @@ internal fun CaptureScreen(
                 state.draft.routeOverride,
             ),
             clipboard = attachClipboardKind,
-            isBusy = state.isSending || isResolvingPresetLocation,
+            isBusy = sendingCapture,
             onDismiss = { showsAttachSheet = false },
             paste = { closeThen(::pasteFromClipboard) },
             choosePhotos = {
@@ -1040,7 +1056,8 @@ internal fun CaptureScreen(
     val vaultUnreachable = state.destination != null && captureVaultIsUnreachable(state.history, hasVaultAccess)
     val waitingCount = captureWaitingCount(state.history)
     val c = Signal.colors
-    Box(Modifier.fillMaxSize()) {
+    androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxSize()) {
+    val compactHeight = maxWidth >= 600.dp && maxHeight < 480.dp
     Scaffold(
         // While the full-screen live recording covers the composer, the covered
         // composer (and its inline recording card) must not be read, announced or
@@ -1049,10 +1066,12 @@ internal fun CaptureScreen(
         containerColor = c.bg,
         topBar = {
             CaptureTopControls(
+                compactHeight = compactHeight,
                 preset = state.presetCollection?.activePreset,
                 destination = routeDestination,
                 route = state.draft.routeOverride,
-                onRouteChanged = onRouteChanged,
+                onRouteChanged = { if (!state.isSending && !locationPreflightPending()) onRouteChanged(it) },
+                canChangeRoute = canChangeCaptureRoute,
                 hasPinnedAlternates = pinnedPresets.isNotEmpty(),
                 isPresetRailExpanded = isPresetRailExpanded,
                 togglePresetRail = togglePresetRail,
@@ -1067,10 +1086,11 @@ internal fun CaptureScreen(
         },
         bottomBar = {
             CaptureBottomControls(
+                compactHeight = compactHeight,
                 // The route being typed into shows its own quick actions when it has them.
                 captureBar = state.captureBar.forRoute(activePreset?.id),
                 hasContent = editorValue.text.isNotBlank() || capturedURL != null || state.draft.attachments.isNotEmpty(),
-                isSending = state.isSending || isResolvingPresetLocation,
+                isSending = sendingCapture,
                 onSubmit = { submitCapture(editorValue.text, capturedURL) },
                 toggleKeyboard = {
                     focusManager.clearFocus()
@@ -1199,8 +1219,8 @@ internal fun CaptureScreen(
                 CapturePresetQuickAccessRail(
                     presets = pinnedPresets,
                     isExpanded = isPresetRailExpanded,
-                    canSelectPreset = !state.isSending && !state.isSavingConfiguration,
-                    selectPreset = onSelectPreset,
+                    canSelectPreset = canChangeCaptureRoute,
+                    selectPreset = { if (!state.isSending && !locationPreflightPending()) onSelectPreset(it) },
                     modifier = Modifier.align(if (state.captureBar.railSide == CaptureRailSide.LEFT) AbsoluteAlignment.BottomLeft else AbsoluteAlignment.BottomRight),
                 )
             }
@@ -1266,7 +1286,10 @@ internal fun CaptureTopControls(
     openHistory: () -> Unit,
     openSettings: () -> Unit,
     hideKeyboard: () -> Unit = {},
+    compactHeight: Boolean = false,
+    canChangeRoute: Boolean = true,
 ) {
+    val routeEditor = rememberCaptureRouteEditorState()
     val c = Signal.colors
     val expandsRail = hasPinnedAlternates
     val selectorClickLabel = voxString(
@@ -1285,7 +1308,7 @@ internal fun CaptureTopControls(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 64.dp)
+                .heightIn(min = if (compactHeight) 48.dp else 64.dp)
                 .padding(start = 12.dp, end = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -1297,7 +1320,7 @@ internal fun CaptureTopControls(
                         .clip(CircleShape)
                         .background(if (railOpen) c.accentSoft else c.secondarySoft)
                         .combinedClickable(
-                            enabled = true,
+                            enabled = canChangeRoute,
                             role = Role.Button,
                             onClickLabel = if (expandsRail) selectorClickLabel else null,
                             onLongClickLabel = chooseLabel,
@@ -1331,6 +1354,11 @@ internal fun CaptureTopControls(
                     )
                 }
             }
+            if (compactHeight) {
+                Box(Modifier.widthIn(max = 240.dp)) {
+                    CaptureRouteControl(route = route, destination = destination, enabled = canChangeRoute, editor = routeEditor, onChanged = onRouteChanged)
+                }
+            }
             if (imeVisible) {
                 androidx.compose.material3.TextButton(onClick = hideKeyboard) {
                     Text(voxString("Done"), style = MaterialTheme.typography.labelMedium, color = c.tint)
@@ -1346,10 +1374,12 @@ internal fun CaptureTopControls(
                 }
             }
         }
-        Box(Modifier.padding(horizontal = 16.dp)) {
+        if (!compactHeight) Box(Modifier.padding(horizontal = 16.dp)) {
             CaptureRouteControl(
                 route = route,
                 destination = destination,
+                enabled = canChangeRoute,
+                editor = routeEditor,
                 onChanged = onRouteChanged,
             )
         }
@@ -1612,6 +1642,7 @@ internal fun CaptureBottomControls(
     openMicrophoneSettings: () -> Unit = {},
     waitingLine: String? = null,
     initialShowsAllQuickActions: Boolean = false,
+    compactHeight: Boolean = false,
 ) {
     val c = Signal.colors
     var showsAllQuickActions by rememberSaveable { mutableStateOf(initialShowsAllQuickActions) }
@@ -1753,7 +1784,7 @@ internal fun CaptureBottomControls(
                 modifier = Modifier.padding(horizontal = SignalMetrics.PageGutter, vertical = 4.dp),
             )
         }
-        if (!imeVisible && !recordingStatus.isActive && (waitingLine != null || !microphoneBlocked)) {
+        if (!imeVisible && !recordingStatus.isActive && (waitingLine != null || (!compactHeight && !microphoneBlocked))) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -1837,7 +1868,7 @@ internal fun CaptureBottomControls(
             Box(
                 modifier = Modifier
                     .then(if (wideComposer) Modifier.widthIn(min = 200.dp, max = 360.dp) else Modifier.weight(1f))
-                    .height(SignalMetrics.ControlHero)
+                    .height(if (compactHeight) 48.dp else SignalMetrics.ControlHero)
                     .clip(speakShape)
                     .background(capsuleFill)
                     .speakPressGesture(
@@ -1888,6 +1919,11 @@ internal fun CaptureBottomControls(
                         status = recordingStatus,
                         transcription = recordingTranscription,
                     )
+                }
+            }
+            if (compactHeight) {
+                IconButton(onClick = toggleVoiceCaptureDetails, modifier = Modifier.testTag("capture-recording-options")) {
+                    Icon(Icons.Outlined.Tune, contentDescription = detailsLabel, tint = c.muted)
                 }
             }
             if (wideComposer) Spacer(Modifier.weight(1f))
@@ -2893,12 +2929,12 @@ internal fun formatAttachmentSize(bytes: Long): String = when {
 @Composable
 internal fun LinkDialog(initialValue: String, onDismiss: () -> Unit, onSave: (String) -> Unit) {
     var value by rememberSaveable(initialValue) { mutableStateOf(initialValue) }
-    val valid = value.startsWith("https://") || value.startsWith("http://")
+    val normalizedLink = CaptureWebLink.normalize(value)
     CaptureSignalDialog(
         onDismissRequest = onDismiss,
         title = voxString("Capture Link"),
         confirmButton = {
-            SignalButton(voxString("Add"), onClick = { onSave(value.trim()) }, enabled = valid, size = SignalButtonSize.MEDIUM)
+            SignalButton(voxString("Add"), onClick = { normalizedLink?.let(onSave) }, enabled = normalizedLink != null, size = SignalButtonSize.MEDIUM)
         },
         dismissButton = {
             SignalButton(voxString("Cancel"), onClick = onDismiss, variant = SignalButtonVariant.TERTIARY, size = SignalButtonSize.MEDIUM)

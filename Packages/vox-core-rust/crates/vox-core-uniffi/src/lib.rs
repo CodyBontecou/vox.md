@@ -94,6 +94,8 @@ pub enum VoxCoreError {
     Cancelled,
     #[error("shared core failed internally")]
     InternalPanic,
+    #[error("target heading was not found")]
+    HeadingNotFound,
 }
 
 impl From<vox_core::CoreError> for VoxCoreError {
@@ -135,6 +137,7 @@ impl From<vox_core::CoreError> for VoxCoreError {
             Source::DescriptorMismatch | Source::DrainedHashMismatch => Self::VerificationFailed,
             Source::SessionTerminal => Self::SessionTerminal,
             Source::Cancelled => Self::Cancelled,
+            Source::HeadingNotFound => Self::HeadingNotFound,
         }
     }
 }
@@ -383,6 +386,35 @@ mod tests {
     }
 
     #[test]
+    fn exported_session_preserves_missing_heading_and_then_becomes_terminal() {
+        use serde_json::json;
+        let mut input = valid_preparation();
+        input["operation"] = json!("existingNoteHeading");
+        input["preset"]["routePolicy"]["collisionPolicy"] = json!("reuseIfHashMatches");
+        input["preset"]["routePolicy"]["placement"] = json!("beneathHeading");
+        input["preset"]["routePolicy"]["headingTitle"] = json!("Private selector");
+        input["preset"]["routePolicy"]["headingLevel"] = json!(2);
+        input["preset"]["routePolicy"]["missingHeadingBehavior"] = json!("fail");
+        let required: serde_json::Value =
+            serde_json::from_slice(&core_prepare(&canonical(&input)).unwrap()).unwrap();
+        let bytes = b"## Another heading\n\nPrivate existing content";
+        let stream = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
+        input["snapshotHash"] = required["snapshotHash"].clone();
+        input["controlByteCount"] = json!(1);
+        input["preparationRevision"] = json!(1);
+        input["session"] = json!({"inputOrdering":"observation-list-then-sequence", "maximumAggregateObservationBytes":vox_core::MAX_AGGREGATE_BYTES, "maximumChunkBytes":vox_core::MAX_CHUNK_BYTES, "singleFinalize":true, "singleSeal":true});
+        input["observations"] = json!([{"kind":"existingNote", "observationID":required["observations"][0]["id"], "status":"present", "logicalPath":required["observations"][0]["logicalPath"], "length":bytes.len(), "sha256":vox_core::sha256_hex(bytes), "byteStreamID":stream}]);
+        let session = core_start_materialization(&canonical(&input)).unwrap();
+        session.push_observation(stream, 0, bytes, true).unwrap();
+        assert_eq!(session.seal(), Err(VoxCoreError::HeadingNotFound));
+        assert_eq!(session.seal(), Err(VoxCoreError::SessionTerminal));
+        assert!(matches!(
+            session.drain(stream, 0, 1024),
+            Err(VoxCoreError::SessionTerminal)
+        ));
+    }
+
+    #[test]
     fn product_source_never_mutates_the_process_panic_hook() {
         let source = include_str!("lib.rs");
         let setter = format!("panic::{}{}", "set_", "hook");
@@ -398,4 +430,16 @@ mod tests {
             "output verification failed"
         );
     }
+}
+
+#[cfg(test)]
+#[test]
+fn missing_heading_remains_distinct_and_data_free_at_the_public_boundary() {
+    let error = VoxCoreError::from(vox_core::CoreError::HeadingNotFound);
+    assert_eq!(error, VoxCoreError::HeadingNotFound);
+    assert_eq!(error.to_string(), "target heading was not found");
+    assert_eq!(
+        VoxCoreError::from(vox_core::CoreError::InvalidRendering),
+        VoxCoreError::InvalidControl
+    );
 }

@@ -49,6 +49,8 @@ class AppCompositionRoot private constructor(
                 prepareURLDelivery = { id, text, date, settings -> URLDeliveryOutbox(app).prepare(id, text, date, settings) },
                 captureEnqueued = { id -> URLDeliveryOutbox(app).admit(id); URLDeliveryWorker.schedule(app) },
                 hasUnlimitedAccess = { billingManager.state.value.hasUnlimitedAccess },
+                isAccessEnded = { billingManager.state.value.hasSubscriptionAccessEnded },
+                canDiscardAuxiliaryDelivery = { URLDeliveryOutbox(app).canDiscardLocalCapture(it) },
                 previouslyProcessedRecording = { id, text, preset ->
                     md.vox.android.platformservices.reusableRecordingProcessing(
                         md.vox.android.platformservices.RecordingTranscriptionClient.get(app).states.value[id],

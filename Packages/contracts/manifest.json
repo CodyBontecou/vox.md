@@ -61,10 +61,10 @@
       "sha256": "3e7e609dbe52d229e852800baa06fb43b78e4f2ec4082a9218e8bd6f01351e72"
     },
     {
-      "bytes": 1871,
+      "bytes": 3136,
       "category": "contractSource",
       "path": "Packages/contracts/core-api/v1/contract.md",
-      "sha256": "b6ede0acf0f0d5221e0b6d6f3adade055480ee6cc5be2de5bcc98eb51366b9c3"
+      "sha256": "be962a52a09c36b1a7bf55c44fd29d7c66d153bc48dbac9ac67ffaa912b8129f"
     },
     {
       "bytes": 5634,
@@ -805,10 +805,10 @@
       "sha256": "5d9c5b4ba3fc5e5cc797a6ad29dfffe1447c4f8477d15300ba519ae46e6e0d41"
     },
     {
-      "bytes": 87370,
+      "bytes": 89743,
       "category": "validatorScript",
       "path": "Packages/contracts/scripts/validate_toolchain.py",
-      "sha256": "7c8066e31bd3540dfc2ef6c6d36c4d2650424b69f2f13684b10b74f27bac9a07"
+      "sha256": "cf18e04e618ce160ac7aad5d2a1f3124b46e4a7cd4c63ae6073d45e2d1fc6571"
     },
     {
       "bytes": 113792,
@@ -823,10 +823,10 @@
       "sha256": "f9fc41a081dad0ca1261a1826de70216fad64424efcde35621cc0f5672a0253a"
     },
     {
-      "bytes": 9807,
+      "bytes": 9808,
       "category": "validatorTest",
       "path": "Packages/contracts/tests/test_android_localization_audit.py",
-      "sha256": "57162b0ee6e679dd81891aa4429c2d6663bf467ab2cc2e7a5f815a4cbd89c16c"
+      "sha256": "e7f1b172bfd1ea13ea7163e064abe964f7d34b9cd4efe2cf3d5a7675e9282193"
     },
     {
       "bytes": 9013,
@@ -847,10 +847,10 @@
       "sha256": "47085c01d8e9b46ebe1820445d0e3a44764d4bac9b065ab967e93a776097862e"
     },
     {
-      "bytes": 4321,
+      "bytes": 4923,
       "category": "validatorTest",
       "path": "Packages/contracts/tests/test_local_intelligence_evaluation.py",
-      "sha256": "1429adb808566a5bd96e0581a66b9475f7f9cf3b191ec537d220d6507124a9ed"
+      "sha256": "932df715d488a1f5c6d2ddc6da761ae3b33b1a807273ecf4e9c4c657e61bb390"
     },
     {
       "bytes": 4280,
@@ -865,10 +865,10 @@
       "sha256": "be774826782d8ddd6adc94968047eace1f7b3e2abbbbefbf3c682d0c0c59c0bf"
     },
     {
-      "bytes": 39700,
+      "bytes": 40633,
       "category": "validatorTest",
       "path": "Packages/contracts/tests/test_validate.py",
-      "sha256": "1673c9e71514c466dd7959e164de50aeb98ae69bd717a326352247e781e89f05"
+      "sha256": "fad2a7c9f2a347b945c88cf22edb028f01dc7b30a3e29f4970614c1cbda352b6"
     },
     {
       "bytes": 85486,
@@ -1117,10 +1117,22 @@
       "sha256": "16a73e83e467c821bd2293f93e21611350ed87d26aff658ce7b3896a624f7062"
     },
     {
+      "bytes": 6795,
+      "category": "validationDocumentation",
+      "path": "docs/validation/android-explicit-recovery-2026-11-08.md",
+      "sha256": "1a5bbae6ff86d0018263e02e5c74c1a554025c56ecbebcb5018935acb79384dc"
+    },
+    {
       "bytes": 4770,
       "category": "validationDocumentation",
       "path": "docs/validation/android-performance-gates.md",
       "sha256": "4fd95217d6634d00bbd33efcf5daf76cc140c387b1d937eba0913b555fa4656e"
+    },
+    {
+      "bytes": 6517,
+      "category": "validationDocumentation",
+      "path": "docs/validation/android-signal-finish-2026-11-08.md",
+      "sha256": "2cd4b8f3963c2fc3fc72fe9b1953ba6912585f3c6abd8c51afbe484b248d40c4"
     },
     {
       "bytes": 3771,
@@ -1133,6 +1145,54 @@
       "category": "validationDocumentation",
       "path": "docs/validation/android-wear-validation-program.md",
       "sha256": "0e2a86baaa9b1b6500308ac2d6b9216f7f0b0ed1cb5300fb94aea6eee8a66917"
+    },
+    {
+      "bytes": 9455,
+      "category": "validationDocumentation",
+      "path": "docs/validation/apple-signal3-completion-2026-11-08.md",
+      "sha256": "5ca231973b2145e8615a83c63c2c4ab9a05380205372c392bf371f561f27e482"
+    },
+    {
+      "bytes": 4833,
+      "category": "validationDocumentation",
+      "path": "docs/validation/ios-edge-qa-pass2-2026-11-07.md",
+      "sha256": "98422c2c952da86b2cb3bb4dbffbf8bf1385b8a2a5fa5330d91835a3b1dfe104"
+    },
+    {
+      "bytes": 4251,
+      "category": "validationDocumentation",
+      "path": "docs/validation/ios-edge-qa-pass3-2026-11-07.md",
+      "sha256": "2c161c5494695c9f85d29b239cf3f44327d841821894ff028d826055341dc165"
+    },
+    {
+      "bytes": 5126,
+      "category": "validationDocumentation",
+      "path": "docs/validation/ios-edge-qa-pass4-2026-11-08.md",
+      "sha256": "31018ee7e920eec4646a813ad5faf4877885f78fc1f3f72ebad6e6aa571f1ed0"
+    },
+    {
+      "bytes": 4797,
+      "category": "validationDocumentation",
+      "path": "docs/validation/ios-edge-qa-pass5-2026-11-08.md",
+      "sha256": "c5018ff516a5c86f93c99cd46df75c038851f76e213d4c8663c010a48cfb8319"
+    },
+    {
+      "bytes": 2560,
+      "category": "validationDocumentation",
+      "path": "docs/validation/ios-edge-qa-pass6-2026-11-08.md",
+      "sha256": "d9a6997e21a2271a69dc146b076be8b3e5abd43b4e0cf56117da56ef30dead68"
+    },
+    {
+      "bytes": 3495,
+      "category": "validationDocumentation",
+      "path": "docs/validation/ios-edge-qa-pass7-2026-11-08.md",
+      "sha256": "17c5a4e292e6cf1c533a85d578676473b6731e2470d25abdaea1db3e5532929d"
+    },
+    {
+      "bytes": 8823,
+      "category": "validationDocumentation",
+      "path": "docs/validation/ios-exploratory-qa-2026-11-07.md",
+      "sha256": "d72b5b9889bc82e933c2e78be5f6a6127b7bd9976e4313f89734c76de58b5253"
     },
     {
       "bytes": 4529,
@@ -1153,16 +1213,40 @@
       "sha256": "682ad5ae4196683700c0657dd438f0ac9e6b88d174a982ca2f0fd3ebca1adcef"
     },
     {
+      "bytes": 5757,
+      "category": "validationDocumentation",
+      "path": "docs/validation/pr70-final-qualification-2026-11-09.md",
+      "sha256": "bb65c2e8d8ac5934ac4e8b8d3baf7b1c40c650945c82801de5ebb8b20f07a601"
+    },
+    {
+      "bytes": 3674,
+      "category": "validationDocumentation",
+      "path": "docs/validation/pr70-recovery-persistence-fixes-2026-11-09.md",
+      "sha256": "9e2025a1fa37e1d0b3a1990a1950a4415a979b7087b5d20a7ae81c29a7458fd5"
+    },
+    {
+      "bytes": 3032,
+      "category": "validationDocumentation",
+      "path": "docs/validation/signal-full-model-refresh-2026-11-09.md",
+      "sha256": "34f4490706b2d2b4c427b49bab22645daf4b14f3998d3ab1ef3907c23fd65b2d"
+    },
+    {
+      "bytes": 10537,
+      "category": "validationDocumentation",
+      "path": "docs/validation/signal-local-recovery-2026-11-08.md",
+      "sha256": "44f4d3de60c849454e84d720d662587d70240894f7b952735aec811b30ba05b5"
+    },
+    {
       "bytes": 123589,
       "category": "contractGate",
       "path": "scripts/test-project-contracts.sh",
       "sha256": "dcc3e936ad6babf4e66abe0eb1af2b7a0d6c4eb523ee16838759894d144049a5"
     },
     {
-      "bytes": 58054,
+      "bytes": 62427,
       "category": "toolchainDefinition",
       "path": "toolchains/android-wear-shared-core.json",
-      "sha256": "47a6b605e1575cc2131bfe1c21a11222bafa134afecfd079bddc724fa9fc0b95"
+      "sha256": "fbdfa23af4c3419d18a3b70285aa03804c7da3a08fc54294753075e871f4f2cc"
     },
     {
       "bytes": 11216,

@@ -4,6 +4,24 @@ import VoxboardShared
 
 @MainActor
 final class CapturePresetLaunchSafetyTests: XCTestCase {
+    func testIncompleteLinkCannotChangeOrPersistComposerDraft() async throws {
+        let f = try await fixture()
+        let before = f.vm.draft
+        let storedBefore = try await f.store.load(id: before.id)
+        for value in ["https://", "https:example.com", "https:///notes"] {
+            await f.vm.addURL(try XCTUnwrap(URL(string: value)))
+            XCTAssertEqual(f.vm.draft, before)
+            XCTAssertNotNil(f.vm.errorMessage)
+            f.vm.errorMessage = nil
+            await f.vm.handleDeepLink(.openComposer(CaptureDeepLinkDraft(text: "Do not append", url: URL(string: value))))
+            XCTAssertEqual(f.vm.draft, before)
+            XCTAssertNil(f.vm.pendingPresetSwitch)
+            XCTAssertNotNil(f.vm.errorMessage)
+        }
+        let storedAfter = try await f.store.load(id: before.id)
+        XCTAssertEqual(storedAfter, storedBefore)
+    }
+
     func testSamePresetDoesNotSaveOrWriteEitherSelectionKey() async throws {
         let f = try await fixture()
         f.defaults.set("inbox", forKey: CapturePresetProfileStore.selectedCaptureProfileIDKey)

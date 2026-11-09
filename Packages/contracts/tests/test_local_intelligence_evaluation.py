@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT=Path(__file__).resolve().parents[3]
 SPEC=importlib.util.spec_from_file_location("intelligence_evaluations",ROOT/"apps/android/scripts/validate-intelligence-evaluations.py")
@@ -47,6 +48,15 @@ class LocalIntelligenceEvaluationTests(unittest.TestCase):
         ready="Active default network: 2\nNetworkAgentInfo{network{2} Capabilities: INTERNET&VALIDATED}"
         self.assertTrue(network.network_state_matches(ready,True))
         self.assertFalse(network.network_state_matches(ready,False))
+
+    def test_stale_receipt_identifies_the_changed_implementation(self):
+        receipt=json.loads((VALIDATOR.REPORTS/"receipt.json").read_text())
+        current=receipt["implementationHashes"].copy()
+        path="apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt"
+        current[path]="0"*64
+        with patch.object(VALIDATOR,"implementation_hashes",return_value=current):
+            with self.assertRaisesRegex(ValueError,"LocalSpeech\\.kt"):
+                VALIDATOR.validate_reports(self.corpus,VALIDATOR.REPORTS)
 
     def test_retained_full_model_and_cross_platform_reports_are_truthful(self):
         VALIDATOR.validate_reports(self.corpus,VALIDATOR.REPORTS)

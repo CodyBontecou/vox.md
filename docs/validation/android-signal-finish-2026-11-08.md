@@ -1,0 +1,32 @@
+# Android Signal finishing — 2026-11-08
+
+Source commit: `f693a6e9`, branch `fix/vox-android-finish-20261108`, isolated worktree `/private/tmp/vox-android-finish-20261108`. Base `8a059cd5` retains all four mobile QA commits above current fetched `origin/main` (`d944afb9`). PR #59 is already merged; its body still lists Android pipeline gaps. This work does not establish deployed or store state.
+
+## Implemented
+
+- Connect Library read-only state to authoritative loss of a previously verified Play subscription. Preserve that subscription identity in the existing signed negative cache record so restart retains the state. Offline/failed/partial observations cannot revoke access; pending purchases preserve the previous decision; verified purchase restores editing. Fresh free installations retain their existing policy.
+- Show plans/Library instead of the new-capture composer when subscription access has ended. Gate new repository submissions, foreground/keyboard recording admission, transcript editing, and stale save callbacks. Retain read/search/copy/export/delete and already-durable delivery retry.
+- Add confirmed Discard delivery to Activity recovery. Acquire a worker fence, validate the frontier, refuse active/uncertain commits and permission recovery of a committing write, and append the existing `USER_DISCARDED` journal event with revision CAS. Keep all local request/prepared bytes. A separately queued/sending/delivered/unknown URL delivery vetoes vault discard; its independent recovery remains in Settings. This avoids claiming that a vault action stopped another outbound delivery.
+- Recover governed owned temporary files while checking the fence under the same root lock. An exact-event replay directory-syncs before acknowledging success, closing the rename/result-loss crash window. Release only an explicit discarded capture's outstanding quota reservation; reconciliation retries this cleanup after confirming durable discard again. Committed quota remains untouched.
+- Keep the system photo picker. No `READ_MEDIA_IMAGES` permission was added.
+
+## Checks performed in this task
+
+- Initial full host command: `./apps/android/gradlew -p apps/android :data:testDebugUnitTest :app:testDebugUnitTest :app:compileDebugAndroidTestKotlin :app:lintDebug --offline --no-daemon --max-workers=1` — passed in 1m57s, 86 data and 145 app JVM tests, zero failures/errors/skips, instrumentation source compiled, lint passed. This preceded the final crash-recovery/URL guard refinements.
+- Direct cached Kotlin 2.4.10 compiler/JUnit run of the final production store, coordinator, discard implementation and `DurableCaptureStorePhase5Test` — 10 passed, including interruption before/after rename, directory-sync failure, subsequent replay, source retention, idempotence, busy worker, uncertain commit and permission-resume boundaries. It uses existing compiled domain/codec dependencies and JVM file operations; it does not exercise Android filesystem/provider behavior.
+- Subscription authority policy: 3 direct Kotlin/JUnit tests passed; the initial full app host suite also includes these tests.
+- Final full host rerun of the same command against committed `f693a6e9`: **BUILD SUCCESSFUL in 1m22s**, **87 data + 146 app JVM tests (233 total)**, zero failures/errors/skips. Instrumentation Kotlin compilation passed; no instrumentation executed. `lintDebug` passed with 0 errors and 103 warnings. Retained final log, focused JUnit XML, lint XML and summary are in `artifacts/validation/android-signal-finish-2026-11-08`.
+- An intermediate full rerun stayed red when the new crash regression exposed temporary-file retry blocking. The final code fixes that defect; the regression passes in the final full gate.
+- `git diff --check` passed.
+
+## Remaining gaps and qualification limits
+
+- **Heading-not-found repair remains open.** `CoreErrorCode` exposes no heading-specific failure/selector; materialization failures are reduced to coarse retry codes. A truthful repair screen needs durable typed failure context from the authoritative materializer, not a second Kotlin Markdown editor or guessed classification of generic errors.
+- **Send to Inbox / another route remain open.** Durable package requests are immutable; the journal has no replacement/supersession transaction. Editing a route affects future captures, not the frozen request. Safe reroute requires a durable, idempotent replacement intent linking original/replacement identities, destination and frozen assets, atomic admission/retirement recovery, and a pre-commit/verified-absence guard against duplicate delivery. No request rewriting, blind resubmission, premature success, or deletion was introduced.
+- **Full-model qualification remains stale.** The Apple sibling found `LocalIntelligenceEvaluationTests.test_retained_full_model_and_cross_platform_reports_are_truthful` failing against source changes already present in `1e1ab52b`; this task also changes AndroidCaptureRepository. Old full-model results must not be repinned as fresh execution evidence. Device/full-model requalification needs separate authorization.
+- All Android Nov7/8 exploratory QA reports, including pass 6, were inspected. Their confirmed fixes are retained in `1e1ab52b`; pass 6 records 82 historical emulator cases and 7 search tests passing. Those are prior evidence, not reruns in this task. Earlier input/System UI ANRs remain unclassified; no new device evidence exists to justify a speculative production change.
+- No simulator, emulator, Argent or physical-device interaction was performed. New UI and Android keystore/provider/crash semantics still require authorized runtime QA. Human review of agent-authored translations remains pending. No release/store submission or production write occurred.
+
+## Handoff and cleanup
+
+Apple sibling owns final shared hashes, runtime catalog/inventory and oracle, and is preparing one combined follow-up. Android source integrated there as `5977e3bb`. Generated `localization-review.json` and `app/src/main/res/raw/vox_runtime_localizations.json` changes in the Android task worktree are excluded from its source commit and retained for inspection. The shared starting checkout, its dirty files, and all untracked QA evidence are preserved. Task worktree and Herdr tabs remain open; the Gradle slot is released, no task-owned Gradle client remains active, and no device/server/Metro process was stopped. This Android task created no separate PR; the Apple agent owns the combined draft review branch.

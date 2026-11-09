@@ -1,0 +1,13 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running `target/debug/xtask bindings swift /var/folders/vh/t562rzcx5dx1w0j01ky690rm0000gn/T//vox-bindings.IcLrxV/swift`
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.81s
+generated swift bindings in /var/folders/vh/t562rzcx5dx1w0j01ky690rm0000gn/T//vox-bindings.IcLrxV/swift
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running `target/debug/xtask bindings kotlin /var/folders/vh/t562rzcx5dx1w0j01ky690rm0000gn/T//vox-bindings.IcLrxV/kotlin`
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.51s
+generated kotlin bindings in /var/folders/vh/t562rzcx5dx1w0j01ky690rm0000gn/T//vox-bindings.IcLrxV/kotlin
+UniFFI 0.32.0 Swift and Kotlin bindings and the SwiftPM generated target are byte-identical

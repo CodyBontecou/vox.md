@@ -56,6 +56,7 @@ struct CaptureInternalLinkPicker: View {
     @State private var notes: [CaptureVaultNote] = []
     @State private var isLoading = false
     @State private var errorMessage: String?
+    @State private var insertionError: String?
 
     private var filteredNotes: [CaptureVaultNote] {
         guard !query.isEmpty else { return notes }
@@ -119,6 +120,14 @@ struct CaptureInternalLinkPicker: View {
             .searchable(text: $query, prompt: "Search filenames")
             .navigationTitle("[[Internal links]]")
             .navigationBarTitleDisplayMode(.inline)
+            .alert("Error", isPresented: Binding(
+                get: { insertionError != nil },
+                set: { if !$0 { insertionError = nil } }
+            )) {
+                Button("OK", role: .cancel) { insertionError = nil }
+            } message: {
+                Text(insertionError ?? "")
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
@@ -145,7 +154,7 @@ struct CaptureInternalLinkPicker: View {
             onInsert(markdown)
             dismiss()
         } catch {
-            errorMessage = error.localizedDescription
+            insertionError = error.localizedDescription
         }
     }
 }

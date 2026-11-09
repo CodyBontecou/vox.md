@@ -25,3 +25,23 @@ SHA-256 is lowercase hexadecimal over the named bytes. UUID identities use RFC 4
 UUIDv5/SHA-1 with namespace `8c7f8d7e-4f61-5d92-a94a-3b9e6cc8e415`, domain label,
 NUL, and the exact canonical preimage defined by artifact-plan/v1. UUID strings are
 lowercase hyphenated.
+
+## Typed materialization failures
+
+The owned-value UniFFI boundary appends `HeadingNotFound` after its existing error
+variants, preserving their ordinal order. Its deterministic core code is
+`headingNotFound`. This data-free failure is returned only after the authoritative
+existing-note observation has been validated and a required `beneathHeading`
+selector with `missingHeadingBehavior=fail` has no matching heading outside fenced
+code. Both existing-note and rolling-note placement use this rule. Malformed UTF-8,
+invalid control, failed stream verification, and unsupported selectors retain their
+distinct failure categories. Create-if-missing and retry-marker idempotency are
+unchanged.
+
+The failing session becomes terminal without exposing an artifact descriptor,
+prepared bytes, or an artifact plan. Error text contains no note content, heading,
+path, URI, or request identity. Native recovery may derive selector context from the
+immutable request, binding any durable diagnostic to that request's hash and journal
+revision; the error never grants commit, replacement, or filesystem authority.
+This adds no JSON field, operation, persisted journal event, or schema version. A
+consumer that cannot recognize a boundary error must continue to fail closed.

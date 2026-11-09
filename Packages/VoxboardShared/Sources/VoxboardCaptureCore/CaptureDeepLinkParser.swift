@@ -99,9 +99,7 @@ public struct CaptureDeepLinkParser: Sendable {
 
             let capturedURL: URL?
             if let rawURL = value(named: "url", in: items) {
-                guard let parsed = URL(string: rawURL),
-                      let scheme = parsed.scheme?.lowercased(),
-                      scheme == "http" || scheme == "https" else {
+                guard let parsed = URL(string: rawURL), CaptureWebLink.isValid(parsed) else {
                     throw CaptureDeepLinkError.invalidURL
                 }
                 capturedURL = parsed
