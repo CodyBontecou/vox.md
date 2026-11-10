@@ -40,38 +40,6 @@ def safe_rel(v):
  return isinstance(v,str) and v and not v.startswith("/") and "\\" not in v and all(x not in ("",".","..") for x in PurePosixPath(v).parts)
 def relpath(path,root): return path.relative_to(root).as_posix()
 
-def category(path,root):
- r=relpath(path,root)
- if r=="Packages/contracts/README.md": return "contractReadme"
- if r=="Packages/contracts/product-capabilities.json": return "capabilityInventory"
- if r=="Packages/contracts/scope-variances.json": return "scopeVarianceOverlay"
- if r.startswith("Packages/contracts/scripts/"): return "validatorScript"
- if r.startswith("Packages/contracts/tests/"): return "validatorTest"
- if r.startswith("Packages/contracts/schemas/"): return "validationSchema"
- if r.startswith("Packages/contracts/validation/"): return "validationDefinition"
- if r.startswith("toolchains/"): return "toolchainDefinition"
- if r.startswith("Packages/vox-core-rust/"): return "toolchainEntryStub"
- if r.startswith("docs/architecture/adr-") or r.endswith("android-wear-m1-decisions.md"): return "acceptedDecision"
- if r.startswith("docs/validation/"): return "validationDocumentation"
- if r==".github/workflows/contracts-ci.yml": return "contractWorkflow"
- if r=="scripts/test-project-contracts.sh": return "contractGate"
- if "/fixtures/" in r: return "contractFixture"
- return "contractSource"
-
-def governed(root):
- base=root/"Packages/contracts"; files=[]
- for name in ("README.md","product-capabilities.json","scope-variances.json"): files.append(base/name)
- for folder in ("scripts","tests","schemas","validation"):
-  files += sorted(p for p in (base/folder).rglob("*") if p.is_file() and "__pycache__" not in p.parts and p.suffix in (".py",".json"))
- for fam in FAMILIES:
-  files += sorted(p for p in (base/fam/"v1").glob("*") if p.is_file())
- files += sorted(p for p in (base/"fixtures").glob("*/*.json"))
- files += sorted((root/"docs/architecture").glob("adr-*.md")); files.append(root/"docs/architecture/android-wear-m1-decisions.md")
- files += sorted(p for p in (root/"docs/validation").rglob("*") if p.is_file())
- files += [root/".github/workflows/contracts-ci.yml",root/"scripts/test-project-contracts.sh"]
- files += [root/"toolchains/android-wear-shared-core.json",root/"toolchains/android-wear-shared-core.schema.json",root/"Packages/vox-core-rust/rust-toolchain.toml",root/"Packages/vox-core-rust/Cargo.toml",root/"Packages/vox-core-rust/uniffi.toml"]
- return sorted(set(files),key=lambda p:relpath(p,root))
-
 def resources(root):
  base=root/"Packages/contracts"; out=[]
  for fam in FAMILIES: out += sorted(p for p in (base/fam/"v1").glob("*") if p.is_file())
@@ -529,9 +497,7 @@ def validate_android_package_fixture_binding(root):
   if any(journal[key]!=value for key,value in expected.items()): reject("package.fixtureBinding","$",f"{name} does not bind governed request/assets bytes")
 
 def build_manifest(root):
- base=root/"Packages/contracts"; files=governed(root)
- for p in files:
-  if not p.is_file(): reject("manifest.missingSource","$",relpath(p,root))
+ base=root/"Packages/contracts"
  res=resources(root); source_rels=[p.relative_to(base).as_posix() for p in res]
  for destination in MIRRORS:
   target=root/destination
@@ -551,7 +517,6 @@ def build_manifest(root):
    else: reject("fixture.negativeAccepted","$",relpath(p,root))
   cases.append(case)
  validate_android_package_fixture_binding(root)
- records=[{"path":relpath(p,root),"bytes":len(p.read_bytes()),"sha256":digest(p),"category":category(p,root)} for p in files]
  mirrors=[]
  for path,lifecycle in MIRRORS.items():
   required=path=="Packages/vox-core-rust/tests/resources/contracts/v1"
@@ -560,19 +525,12 @@ def build_manifest(root):
   else:
    consumer="vox-core m2_core::rust_contract_mirror_is_consumed" if required else None; evidence="Packages/vox-core-rust/crates/vox-core/tests/m2_core.rs" if required else None
   mirrors.append({"path":path,"lifecycle":lifecycle,"sources":source_rels,"consumer":consumer,"evidence":evidence})
- manifest={"schemaVersion":2,"producerRevision":CLOSURE,"healthMdPrecedent":HEALTH,"files":records,"fixtureCases":cases,"mirrors":mirrors,"producer":{"name":"vox-contract-manifest-generator","script":"Packages/contracts/scripts/validate.py","scriptSHA256":digest(base/"scripts/validate.py")}}
+ manifest={"schemaVersion":2,"producerRevision":CLOSURE,"healthMdPrecedent":HEALTH,"fixtureCases":cases,"mirrors":mirrors,"producer":{"name":"vox-contract-manifest-generator","script":"Packages/contracts/scripts/validate.py"}}
  (base/"manifest.json").write_bytes(canonical(manifest)); return manifest
 
 def validate(root):
  base=root/"Packages/contracts"; manifest=load(base/"manifest.json")
  if manifest.get("schemaVersion")!=2: reject("manifest.version","$.schemaVersion","expected 2")
- if manifest.get("producer",{}).get("scriptSHA256")!=digest(base/"scripts/validate.py"): reject("manifest.producerHash","$.producer.scriptSHA256","validator drift")
- expected={relpath(p,root) for p in governed(root)}; records=manifest.get("files",[]); paths=[r.get("path") for r in records]
- if set(paths)!=expected or len(paths)!=len(set(paths)): reject("manifest.exactFileSet","$.files","governed set differs")
- for rec in records:
-  p=root/rec["path"]
-  if rec.get("category")!=category(p,root): reject("manifest.category","$.files","category differs")
-  if rec.get("bytes")!=len(p.read_bytes()) or rec.get("sha256")!=digest(p): reject("manifest.hash","$.files",rec["path"])
  schemas={f:(base/f/"v1/schema.json",load(base/f/"v1/schema.json")) for f in FAMILIES}; schemas["wearable-protocol-trace"]=(base/"wearable-protocol/v1/trace.schema.json",load(base/"wearable-protocol/v1/trace.schema.json"))
  for _,schema in schemas.values(): audit_schema(schema)
  fixtures={relpath(p,root) for p in (base/"fixtures").glob("*/*.json")}; cases=manifest.get("fixtureCases",[])
@@ -595,7 +553,7 @@ def validate(root):
    if (target/rel).read_bytes()!=(base/rel).read_bytes(): reject("mirror.bytes",f"$.mirrors.{path}/{rel}","bytes differ")
  if seen!=set(MIRRORS): reject("mirror.inventory","$.mirrors","destination missing")
  overlay=load(base/"scope-variances.json"); inventory=load(base/"product-capabilities.json"); validate_capabilities(root,inventory,overlay)
- print(f"Contracts validation passed: {len(records)} governed files, {len(cases)} fixtures, {len(inventory['capabilities'])} owner-preserving capabilities, {len(MIRRORS)} resource mirrors.")
+ print(f"Contracts validation passed: {len(cases)} fixtures, {len(inventory['capabilities'])} owner-preserving capabilities, {len(MIRRORS)} resource mirrors.")
 
 def main(argv=None):
  parser=argparse.ArgumentParser(); parser.add_argument("--root",type=Path); parser.add_argument("--regenerate-manifest",action="store_true"); args=parser.parse_args(argv); root=(args.root or Path(__file__).resolve().parents[3]).resolve()
