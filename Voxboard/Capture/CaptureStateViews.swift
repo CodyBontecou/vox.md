@@ -730,7 +730,15 @@ struct CaptureRoutePillsRow: View {
         return name.prefix(pillNameLimit - 1).trimmingCharacters(in: .whitespaces) + "…"
     }
 
+    /// Width of the soft edge where pills run under the header actions,
+    /// instead of being sliced off flush against Done.
+    static let edgeFadeWidth: CGFloat = 28
+
+    @State private var fadesLeadingEdge = false
+    @State private var fadesTrailingEdge = false
+
     var body: some View {
+        ScrollViewReader { proxy in
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 6) {
                 ForEach(Array(profiles.enumerated()), id: \.element.id) { index, profile in
@@ -766,13 +774,57 @@ struct CaptureRoutePillsRow: View {
                     .buttonStyle(.plain)
                     .accessibilityLabel(Text(verbatim: profile.accessibilityName))
                     .accessibilityAddTraits(isOn ? [.isSelected, .isButton] : .isButton)
+                    .id(profile.id)
                 }
             }
             .padding(.vertical, 2)
+        }
+        // Lets the last pill scroll fully clear of the trailing fade.
+        .contentMargins(.trailing, Self.edgeFadeWidth / 2, for: .scrollContent)
+        .onScrollGeometryChange(for: EdgeOverflow.self) { geometry in
+            EdgeOverflow(
+                leading: geometry.contentOffset.x > geometry.contentInsets.leading + 1,
+                trailing: geometry.contentOffset.x + geometry.containerSize.width
+                    < geometry.contentSize.width + geometry.contentInsets.trailing - 1
+            )
+        } action: { _, overflow in
+            fadesLeadingEdge = overflow.leading
+            fadesTrailingEdge = overflow.trailing
+        }
+        .mask(edgeFadeMask)
+        .onAppear { proxy.scrollTo(selectedID, anchor: .center) }
+        .onChange(of: selectedID) { _, id in
+            withAnimation(.snappy) { proxy.scrollTo(id, anchor: .center) }
+        }
         }
         .disabled(!isEnabled)
         .accessibilityElement(children: .contain)
         .accessibilityLabel(Text("Route"))
         .accessibilityIdentifier("capture_route_pills")
+    }
+
+    private struct EdgeOverflow: Equatable {
+        var leading: Bool
+        var trailing: Bool
+    }
+
+    /// Opaque in the middle; each edge fades only while pills are hidden
+    /// past it, so a row that fits keeps crisp ends.
+    private var edgeFadeMask: some View {
+        HStack(spacing: 0) {
+            LinearGradient(
+                colors: [fadesLeadingEdge ? .clear : .black, .black],
+                startPoint: .leading, endPoint: .trailing
+            )
+            .frame(width: Self.edgeFadeWidth)
+            Rectangle().fill(.black)
+            LinearGradient(
+                colors: [.black, fadesTrailingEdge ? .clear : .black],
+                startPoint: .leading, endPoint: .trailing
+            )
+            .frame(width: Self.edgeFadeWidth)
+        }
+        .animation(.easeOut(duration: 0.15), value: fadesLeadingEdge)
+        .animation(.easeOut(duration: 0.15), value: fadesTrailingEdge)
     }
 }

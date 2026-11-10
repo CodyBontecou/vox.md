@@ -14,11 +14,7 @@ import md.vox.android.ui.VoxTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.isImeVisible
-import androidx.compose.foundation.layout.navigationBars
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.heightIn
@@ -719,9 +715,10 @@ internal fun VoxNavigation(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentTopLevel = VoxTopLevelDestination.forRoute(backStackEntry?.destination?.route)
     val usesNavigationRail = currentVoxWindowWidthClass() != VoxWindowWidthClass.COMPACT
-    val imeVisible = WindowInsets.isImeVisible
     val showsTopLevelChrome = currentTopLevel != null && !recordingStatus.isActive
-    val showsNavigationBar = showsTopLevelChrome && !usesNavigationRail && !imeVisible
+    // Phones follow the Signal boards: no bottom bar. Capture's header opens Activity
+    // and Settings, Activity opens Library, and each returns with Back.
+    val backToCapture: (() -> Unit)? = if (usesNavigationRail) null else ({ navController.popBackStack() })
     val activityBadge = activityAttentionCount(state.history, transcriptionStates.values)
     val selectTopLevel: (VoxTopLevelDestination) -> Unit = { destination ->
         navController.navigate(destination.route) {
@@ -746,8 +743,7 @@ internal fun VoxNavigation(
     Box(
         modifier = Modifier
             .weight(1f)
-            .fillMaxWidth()
-            .then(if (showsNavigationBar) Modifier.consumeWindowInsets(WindowInsets.navigationBars) else Modifier),
+            .fillMaxWidth(),
     ) {
         NavHost(navController = navController, startDestination = Destination.Capture.route) {
             composable(Destination.Capture.route) {
@@ -791,6 +787,8 @@ internal fun VoxNavigation(
                     openHistory = { selectTopLevel(VoxTopLevelDestination.HISTORY) },
                     openSettings = { selectTopLevel(VoxTopLevelDestination.SETTINGS) },
                     openPresets = { navController.navigate(Destination.Presets.route) },
+                    openActivity = if (usesNavigationRail) null else ({ selectTopLevel(VoxTopLevelDestination.ACTIVITY) }),
+                    activityBadge = activityBadge,
                     startRecording = startRecording,
                     pauseRecording = recordingClient::pause,
                     resumeRecording = recordingClient::resume,
@@ -828,7 +826,7 @@ internal fun VoxNavigation(
                     HistoryScreen(
                         items = latestState.history,
                         isBusy = latestState.isSending || latestState.isDeletingHistory,
-                        navigateBack = null,
+                        navigateBack = backToCapture,
                         refresh = { model.refresh(reconcile = true) },
                         retry = model::retry,
                         repairAccess = openTree,
@@ -929,6 +927,9 @@ internal fun VoxNavigation(
                     captureRouteName = { libraryRouteName(latestState.presetCollection, it.presetID) },
                     loadCaptureDetail = model::historyDetailSnapshot,
                     editRoute = { presetID -> navController.navigate("$PRESET_EDITOR_ROUTE/$presetID") },
+                    navigateBack = backToCapture,
+                    // Pushed over Activity so Back returns to it, as on iOS.
+                    openLibrary = if (usesNavigationRail) null else ({ navController.navigate(Destination.History.route) }),
                 )
             }
             composable("$TRANSCRIPT_DETAIL_ROUTE/{sessionID}") { entry ->
@@ -991,7 +992,7 @@ internal fun VoxNavigation(
                 val settingsList: @Composable () -> Unit = {
                     SettingsScreen(
                         destination = requireNotNull(latestState.destination),
-                        navigateBack = null,
+                        navigateBack = backToCapture,
                         chooseFolder = { openTree(null) },
                         openPresets = {
                             if (expanded) adaptiveSettingsDestination = Destination.Presets.route
@@ -1265,13 +1266,6 @@ internal fun VoxNavigation(
         SnackbarHost(
             hostState = snackbarHost,
             modifier = Modifier.align(Alignment.TopCenter).statusBarsPadding().padding(16.dp),
-        )
-    }
-    if (showsNavigationBar) {
-        VoxNavigationBar(
-            current = currentTopLevel,
-            activityBadge = activityBadge,
-            onSelect = selectTopLevel,
         )
     }
     }
