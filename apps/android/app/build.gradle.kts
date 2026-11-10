@@ -85,7 +85,9 @@ val generateLauncherIcons by tasks.registering(Exec::class) {
         .resolve("Voxboard/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png")
     inputs.file(generator)
     inputs.file(rootProject.file("scripts/generate-launcher-icons.py"))
+    val monochrome = rootProject.file("branding/launcher-monochrome-1024.png")
     inputs.file(icon)
+    inputs.file(monochrome)
     outputs.dir(layout.buildDirectory.dir("generated/res/launcherIcons"))
     commandLine(
         "bash",
@@ -94,7 +96,8 @@ val generateLauncherIcons by tasks.registering(Exec::class) {
         icon,
         "--out",
         layout.buildDirectory.dir("generated/res/launcherIcons").get().asFile,
-        "--emit-tile-icon",
+        "--monochrome",
+        monochrome,
     )
 }
 

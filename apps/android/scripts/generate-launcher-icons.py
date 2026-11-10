@@ -7,11 +7,13 @@ from the single 1024px iOS AppIcon so the brands stay lock-step:
 
   - mipmap-anydpi-v26/ic_launcher(.xml|_round.xml) adaptive icons
   - mipmap-*/ic_launcher_foreground.png  full artwork in the 66/108 safe zone
-  - mipmap-*/ic_launcher_monochrome.png  waveform-only glyph for themed icons
+  - mipmap-*/ic_launcher_monochrome.png  themed-icon glyph from
+    apps/android/branding/launcher-monochrome-1024.png (white on transparency)
   - mipmap-*/ic_launcher(.png|_round.png)  legacy square and circle fallbacks
   - values/ic_launcher_colors.xml  background tint sampled from the artwork edge
-  - drawable/ic_vox_waveform.xml  vector glyph for tinted surfaces such as the
-    quick-settings capture tile, measured from the artwork bars and accent dot
+
+The quick-settings tile and shortcut glyph (drawable/ic_vox_waveform.xml) is a
+committed resource in app/src/main/res, independent of the launcher artwork.
 """
 
 from __future__ import annotations
@@ -53,25 +55,7 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_ICON = (
     REPO_ROOT / "Voxboard/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png"
 )
-DOT_MAX_SIDE = 100
-EXPECTED_BARS = 6
-
-VECTOR_XML = (
-    '<?xml version="1.0" encoding="utf-8"?>\n'
-    '<vector xmlns:android="http://schemas.android.com/apk/res/android"\n'
-    '    android:width="24dp"\n'
-    '    android:height="24dp"\n'
-    '    android:viewportWidth="{viewport}"\n'
-    '    android:viewportHeight="{viewport}">\n'
-    '    <path\n'
-    '        android:fillColor="#FFFFFFFF"\n'
-    '        android:pathData="{bars}" />\n'
-    '    <path\n'
-    '        android:fillColor="{dot_color}"\n'
-    '        android:pathData="{dot}" />\n'
-    "</vector>\n"
-)
-
+DEFAULT_MONOCHROME = REPO_ROOT / "apps/android/branding/launcher-monochrome-1024.png"
 
 def fail(message: str) -> None:
     print(f"error: {message}", file=sys.stderr)
@@ -95,11 +79,10 @@ def sample_background(artwork: Image.Image) -> tuple[int, int, int]:
 def place_in_safe_zone(layer: Image.Image, canvas_size: int) -> Image.Image:
     """Centers a layer inside the 66/108 adaptive safe zone on transparency.
 
-    The artwork edge carries a faint grid texture whose brightness drifts a few
-    levels above the sampled background, which could betray a square seam on
-    circular masks. The outer band fades to transparent so the artwork blends
-    into the adaptive background; the waveform glyph sits far inside and is
-    untouched.
+    Any drift between the artwork edge and the sampled background could betray
+    a square seam on circular masks, so the outer band fades to transparent and
+    the artwork blends into the adaptive background; the glyph sits far inside
+    and is untouched.
     """
     faded = layer.convert("RGBA").copy()
     width, height = faded.size
@@ -120,122 +103,21 @@ def place_in_safe_zone(layer: Image.Image, canvas_size: int) -> Image.Image:
     inner = max(1, round(canvas_size * SAFE_ZONE_RATIO))
     scaled = faded.resize((inner, inner), Image.LANCZOS)
     offset = (canvas_size - inner) // 2
-    canvas.paste(scaled, (offset, offset), scaled)
+    # Plain paste onto the empty canvas: masking with the layer's own alpha would
+    # blend the faded edge toward transparent black and draw a dark square seam.
+    canvas.paste(scaled, (offset, offset))
     return canvas
 
 
-def content_alpha(artwork: Image.Image) -> Image.Image:
-    """Masks bright artwork content (waveform bars, accent dot) over texture."""
-    red, green, blue = artwork.convert("RGB").split()
-    brightest = ImageChops.lighter(ImageChops.lighter(red, green), blue)
-    ramp = [0 if value < 60 else 255 if value > 130 else round((value - 60) * 255 / 70) for value in range(256)]
-    return brightest.point(ramp)
-
-
-def build_monochrome_source(artwork: Image.Image) -> Image.Image:
-    """Reduces the artwork to an opaque-white waveform glyph.
-
-    Bright bars and the accent dot become opaque; the faint grid texture and
-    near-black canvas stay transparent so launcher theming tints only the glyph.
-    """
-    alpha = content_alpha(artwork)
-    white = Image.new("L", artwork.size, 255)
-    return Image.merge("RGBA", (white, white, white, alpha))
-
-
-def measure_glyph(artwork: Image.Image) -> tuple[list[tuple[int, int, int, int]], tuple[int, int, int, int]]:
-    """Locates the waveform bar and accent-dot bounds via connected components."""
-    alpha = content_alpha(artwork)
-    width, height = alpha.size
-    data = alpha.tobytes()
-    seen = bytearray(width * height)
-    bounds: list[tuple[int, int, int, int]] = []
-    for seed in range(width * height):
-        if data[seed] < 129 or seen[seed]:
-            continue
-        seen[seed] = 1
-        stack = [seed]
-        min_x = max_x = seed % width
-        min_y = max_y = seed // width
-        while stack:
-            index = stack.pop()
-            x, y = index % width, index // width
-            min_x, max_x = min(min_x, x), max(max_x, x)
-            min_y, max_y = min(min_y, y), max(max_y, y)
-            for offset in (-1, 0, 1):
-                for vertical in (-1, 0, 1):
-                    if not offset and not vertical:
-                        continue
-                    neighbor_x, neighbor_y = x + offset, y + vertical
-                    if 0 <= neighbor_x < width and 0 <= neighbor_y < height:
-                        neighbor = neighbor_y * width + neighbor_x
-                        if data[neighbor] >= 129 and not seen[neighbor]:
-                            seen[neighbor] = 1
-                            stack.append(neighbor)
-        bounds.append((min_x, min_y, max_x, max_y))
-
-    bars = [box for box in bounds if max(box[2] - box[0], box[3] - box[1]) >= DOT_MAX_SIDE]
-    dots = [box for box in bounds if max(box[2] - box[0], box[3] - box[1]) < DOT_MAX_SIDE]
-    if len(bars) != EXPECTED_BARS or len(dots) != 1:
-        fail(
-            "expected the artwork to contain "
-            f"{EXPECTED_BARS} waveform bars and 1 accent dot, measured "
-            f"{len(bars)} bars and {len(dots)} dots"
-        )
-    bars.sort(key=lambda box: box[0])
-    return bars, dots[0]
-
-
-def _format(value: float) -> str:
-    text = f"{value:.1f}"
-    return text[:-2] if text.endswith(".0") else text
-
-
-def _capsule_path(left: float, top: float, right: float, bottom: float) -> str:
-    radius = (right - left) / 2
-    return " ".join(
-        (
-            f"M{_format(left)},{_format(top + radius)}",
-            f"A{_format(radius)},{_format(radius)} 0 0 1 {_format(left + radius)},{_format(top)}",
-            f"L{_format(right - radius)},{_format(top)}",
-            f"A{_format(radius)},{_format(radius)} 0 0 1 {_format(right)},{_format(top + radius)}",
-            f"L{_format(right)},{_format(bottom - radius)}",
-            f"A{_format(radius)},{_format(radius)} 0 0 1 {_format(right - radius)},{_format(bottom)}",
-            f"L{_format(left + radius)},{_format(bottom)}",
-            f"A{_format(radius)},{_format(radius)} 0 0 1 {_format(left)},{_format(bottom - radius)}",
-            "Z",
-        )
-    )
-
-
-def _circle_path(center_x: float, center_y: float, radius: float) -> str:
-    return " ".join(
-        (
-            f"M{_format(center_x - radius)},{_format(center_y)}",
-            f"A{_format(radius)},{_format(radius)} 0 1 1 {_format(center_x + radius)},{_format(center_y)}",
-            f"A{_format(radius)},{_format(radius)} 0 1 1 {_format(center_x - radius)},{_format(center_y)}",
-            "Z",
-        )
-    )
-
-
-def build_tile_vector(artwork: Image.Image) -> str:
-    """Emits the tintable waveform vector for quick-settings and shortcut icons."""
-    bars, dot = measure_glyph(artwork)
-    bar_paths = " ".join(
-        _capsule_path(min_x, min_y, max_x + 1, max_y + 1) for min_x, min_y, max_x, max_y in bars
-    )
-    dot_left, dot_top, dot_right, dot_bottom = dot
-    dot_width = (dot_right - dot_left + 1) / 2
-    dot_center = ((dot_left + dot_right + 1) / 2, (dot_top + dot_bottom + 1) / 2)
-    dot_rgb = artwork.getpixel((round(dot_center[0]), round(dot_center[1])))
-    dot_color = "#{:02X}{:02X}{:02X}".format(*dot_rgb[:3])
-    return VECTOR_XML.format(
-        viewport=artwork.width,
-        bars=bar_paths,
-        dot_color=dot_color,
-        dot=_circle_path(dot_center[0], dot_center[1], dot_width),
-    )
+def load_monochrome(path: Path, size: int) -> Image.Image:
+    """Loads the hand-drawn themed-icon glyph: opaque white artwork on transparency."""
+    if not path.is_file():
+        fail(f"monochrome glyph not found: {path}")
+    glyph = Image.open(path).convert("RGBA")
+    if glyph.size != (size, size):
+        fail(f"monochrome glyph must be {size}x{size} to match the icon, got {glyph.width}x{glyph.height}")
+    white = Image.new("L", glyph.size, 255)
+    return Image.merge("RGBA", (white, white, white, glyph.getchannel("A")))
 
 
 def build_legacy(artwork: Image.Image, size: int, circle: bool) -> Image.Image:
@@ -254,11 +136,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--icon", type=Path, default=DEFAULT_ICON)
     parser.add_argument("--out", type=Path, required=True, help="Module res output directory.")
-    parser.add_argument(
-        "--emit-tile-icon",
-        action="store_true",
-        help="Also emits the tintable waveform vector for tiles and shortcuts.",
-    )
+    parser.add_argument("--monochrome", type=Path, default=DEFAULT_MONOCHROME)
     arguments = parser.parse_args()
 
     icon_path = arguments.icon.resolve()
@@ -271,7 +149,7 @@ def main() -> None:
 
     background = sample_background(artwork)
     background_hex = "#{:02X}{:02X}{:02X}".format(*background)
-    monochrome_source = build_monochrome_source(artwork)
+    monochrome_source = load_monochrome(arguments.monochrome.resolve(), artwork.width)
 
     written: list[Path] = []
     for density, scale in DENSITY_SCALERS.items():
@@ -305,13 +183,6 @@ def main() -> None:
     colors_path = values_dir / "ic_launcher_colors.xml"
     colors_path.write_text(COLORS_XML.format(value=background_hex), encoding="utf-8")
     written.append(colors_path)
-
-    if arguments.emit_tile_icon:
-        drawable_dir = output_root / "drawable"
-        drawable_dir.mkdir(parents=True, exist_ok=True)
-        tile_path = drawable_dir / "ic_vox_waveform.xml"
-        tile_path.write_text(build_tile_vector(artwork), encoding="utf-8")
-        written.append(tile_path)
 
     print(f"sampled adaptive background {background_hex} from {icon_path.name}")
     print(f"wrote {len(written)} launcher icon files under {output_root}")
