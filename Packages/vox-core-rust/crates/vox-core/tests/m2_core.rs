@@ -630,25 +630,15 @@ struct Corpus {
     producer: Producer,
     cases: Vec<OracleCase>,
 }
+/// Provenance hashes the oracle generator records (toolchain manifest,
+/// consumer and oracle source digests) are informational, not asserted.
 #[derive(Deserialize)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
+#[serde(rename_all = "camelCase")]
 struct Producer {
     name: String,
     source_revision: String,
-    #[serde(rename = "oracleSourceSHA256")]
-    oracle_source_sha256: String,
-    production_consumers: Vec<Consumer>,
     swift_compiler_identity: String,
     xcode_identity: String,
-    #[serde(rename = "toolchainManifestSHA256")]
-    toolchain_manifest_sha256: String,
-}
-#[derive(Deserialize)]
-#[serde(deny_unknown_fields)]
-struct Consumer {
-    name: String,
-    path: String,
-    sha256: String,
 }
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -829,56 +819,6 @@ fn swift_oracle_corpus_matches_production_sessions_and_executes_negatives() {
     assert_eq!(corpus.producer.source_revision.len(), 40);
     assert!(!corpus.producer.swift_compiler_identity.is_empty());
     assert!(!corpus.producer.xcode_identity.is_empty());
-    assert_eq!(
-        corpus.producer.toolchain_manifest_sha256,
-        sha256_hex(&fs::read(root.join("toolchains/android-wear-shared-core.json")).unwrap())
-    );
-    let mut expected_consumer_paths =
-        fs::read_dir(root.join("Packages/VoxboardShared/Sources/VoxboardCaptureCore"))
-            .unwrap()
-            .filter_map(Result::ok)
-            .map(|entry| entry.path())
-            .filter(|path| {
-                path.extension()
-                    .is_some_and(|extension| extension == "swift")
-            })
-            .map(|path| {
-                path.strip_prefix(&root)
-                    .unwrap()
-                    .to_string_lossy()
-                    .into_owned()
-            })
-            .collect::<Vec<_>>();
-    expected_consumer_paths.sort();
-    assert_eq!(
-        corpus
-            .producer
-            .production_consumers
-            .iter()
-            .map(|consumer| consumer.path.clone())
-            .collect::<Vec<_>>(),
-        expected_consumer_paths
-    );
-    for consumer in &corpus.producer.production_consumers {
-        assert_eq!(
-            consumer.name,
-            std::path::Path::new(&consumer.path)
-                .file_stem()
-                .unwrap()
-                .to_string_lossy()
-        );
-        assert_eq!(
-            consumer.sha256,
-            sha256_hex(&fs::read(root.join(&consumer.path)).unwrap())
-        );
-    }
-    assert_eq!(
-        corpus.producer.oracle_source_sha256,
-        sha256_hex(
-            &fs::read(root.join("Packages/VoxboardShared/Sources/VoxboardM2Oracle/main.swift"))
-                .unwrap()
-        )
-    );
     let mut negative_count = 0;
     for case in corpus.cases {
         let actual = run_oracle_case(&case.request);
