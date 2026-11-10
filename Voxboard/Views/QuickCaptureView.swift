@@ -2313,7 +2313,7 @@ struct QuickCaptureView: View {
     private var captureActionBar: CaptureViewSection {
         CaptureViewSection {
             VStack(spacing: Geist.Spacing.three) {
-                if !composerIsFocused {
+                if !composerIsFocused, captureHintRowHasContent {
                     captureHintRow
                 }
                 HStack(spacing: Geist.Spacing.three) {
@@ -2358,12 +2358,26 @@ struct QuickCaptureView: View {
         }
     }
 
+    private var showsPendingCaptureHint: Bool {
+        viewModel.selectedDestination != nil && !vaultIsReachable && pendingCaptureCount > 0
+    }
+
+    private var showsUnlockHint: Bool {
+        !usageTracker.hasUnlocked && usageTracker.successfulCapturesUsed >= 7
+    }
+
+    /// The hint row only takes space when it has something to say; the
+    /// idle "Tap to record" line is gone (long-press Speak for details).
+    private var captureHintRowHasContent: Bool {
+        showsPendingCaptureHint || isCaptureReadOnly || supportsInlinePreview || showsUnlockHint
+    }
+
     private var captureHintRow: CaptureViewSection {
         CaptureViewSection {
             HStack(spacing: Geist.Spacing.two) {
                 // "0 captures waiting" reads like an error; with nothing held
                 // yet the regular hint stays.
-                if viewModel.selectedDestination != nil, !vaultIsReachable, pendingCaptureCount > 0 {
+                if showsPendingCaptureHint {
                     Text(pendingCaptureCount == 1
                         ? String(localized: "1 capture waiting · nothing is lost")
                         : String(localized: "\(pendingCaptureCount) captures waiting · nothing is lost"))
@@ -2373,24 +2387,7 @@ struct QuickCaptureView: View {
                     Text("Read-only · choose a plan to capture")
                         .font(Geist.caption())
                         .foregroundStyle(Geist.muted)
-                } else {
-                    Text("Tap to record")
-                        .font(Geist.caption())
-                        .foregroundStyle(Geist.muted)
-                    Button {
-                        presentVoiceCaptureDetails()
-                    } label: {
-                        Image(systemName: "slider.horizontal.3")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(Geist.muted)
-                            .frame(width: 28, height: 24)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("Show detailed recording controls")
-                    .accessibilityIdentifier("capture_recording_options")
                 }
-
 
                 if supportsInlinePreview {
                     Button {
@@ -2408,7 +2405,7 @@ struct QuickCaptureView: View {
                     .accessibilityIdentifier("capture_toggle_preview")
                 }
 
-                if !usageTracker.hasUnlocked, usageTracker.successfulCapturesUsed >= 7 {
+                if showsUnlockHint {
                     Button {
                         presentPaywall(context: .usageMeter)
                     } label: {
