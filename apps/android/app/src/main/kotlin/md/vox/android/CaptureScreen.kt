@@ -42,7 +42,6 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.material3.minimumInteractiveComponentSize
-import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -356,6 +355,9 @@ internal fun CaptureScreen(
     openHistory: () -> Unit,
     openSettings: () -> Unit,
     openPresets: () -> Unit,
+    /** Phones only: Activity button in the header. Null when a navigation rail carries it. */
+    openActivity: (() -> Unit)? = null,
+    activityBadge: Int = 0,
     startRecording: () -> Unit,
     pauseRecording: () -> Unit,
     resumeRecording: () -> Unit,
@@ -820,11 +822,19 @@ internal fun CaptureScreen(
         else locationPermissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
     }
 
+    // The composer takes focus once when Capture first opens and again when a recording
+    // ends. Coming back from Activity, Library, Settings or Routes keeps the keyboard down
+    // so the header's Activity and Settings stay visible (Signal Capture board).
+    var initialEditorFocusDone by rememberSaveable { mutableStateOf(false) }
+    var wasRecording by remember { mutableStateOf(recordingStatus.isActive) }
     LaunchedEffect(requestEditorFocus, recordingStatus.isActive) {
+        val recordingJustEnded = wasRecording && !recordingStatus.isActive
+        wasRecording = recordingStatus.isActive
         if (recordingStatus.isActive) {
             focusManager.clearFocus()
             keyboardController?.hide()
-        } else if (requestEditorFocus) {
+        } else if (requestEditorFocus && (!initialEditorFocusDone || recordingJustEnded)) {
+            initialEditorFocusDone = true
             delay(180)
             focusRequester.requestFocus()
             keyboardController?.show()
@@ -1078,6 +1088,8 @@ internal fun CaptureScreen(
                 openPresets = openPresets,
                 openHistory = openHistory,
                 openSettings = openSettings,
+                openActivity = openActivity,
+                activityBadge = activityBadge,
                 hideKeyboard = {
                     focusManager.clearFocus()
                     keyboardController?.hide()
@@ -1265,12 +1277,12 @@ internal fun CaptureScreen(
 }
 
 /**
- * Material 3 capture header: the preset selector as a 40dp `secondaryContainer` pill
- * (route tile, preset name, chevron), the on-device indicator on the trailing edge
- * (or Done while the keyboard is open) and the mono route line underneath. The
- * selector keeps Android's preset semantics: tap toggles the pinned rail when pins
- * exist, long-press always opens all presets. History and Settings live in the
- * navigation bar or rail.
+ * Capture header (Signal Capture board): the preset selector as a 40dp pill (route
+ * tile, preset name, chevron), then on the trailing edge Activity and Settings on
+ * phones, or the on-device indicator when a navigation rail carries them, and Done
+ * while the keyboard is open; the mono route line sits underneath. The selector keeps
+ * Android's preset semantics: tap toggles the pinned rail when pins exist,
+ * long-press always opens all presets. Library is reached from Activity on phones.
  */
 @OptIn(ExperimentalFoundationApi::class, androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
@@ -1288,6 +1300,9 @@ internal fun CaptureTopControls(
     hideKeyboard: () -> Unit = {},
     compactHeight: Boolean = false,
     canChangeRoute: Boolean = true,
+    /** Phones only: opens Activity from the header. Null when a navigation rail carries it. */
+    openActivity: (() -> Unit)? = null,
+    activityBadge: Int = 0,
 ) {
     val routeEditor = rememberCaptureRouteEditorState()
     val c = Signal.colors
@@ -1318,7 +1333,8 @@ internal fun CaptureTopControls(
                     modifier = Modifier
                         .heightIn(min = 40.dp)
                         .clip(CircleShape)
-                        .background(if (railOpen) c.accentSoft else c.secondarySoft)
+                        .background(if (railOpen) c.accentSoft else c.card)
+                        .border(1.dp, if (railOpen) c.tint else c.border, CircleShape)
                         .combinedClickable(
                             enabled = canChangeRoute,
                             role = Role.Button,
@@ -1341,7 +1357,7 @@ internal fun CaptureTopControls(
                     Text(
                         preset?.name ?: "Default",
                         style = MaterialTheme.typography.labelMedium,
-                        color = if (railOpen) c.accentText else c.secondaryText,
+                        color = if (railOpen) c.accentText else c.text,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f, fill = false),
@@ -1363,6 +1379,34 @@ internal fun CaptureTopControls(
                 androidx.compose.material3.TextButton(onClick = hideKeyboard) {
                     Text(voxString("Done"), style = MaterialTheme.typography.labelMedium, color = c.tint)
                 }
+            } else if (openActivity != null) {
+                val activityLabel = voxString("Activity")
+                Box {
+                    SignalCircleButton(
+                        icon = Icons.Outlined.Schedule,
+                        contentDescription = if (activityBadge > 0) {
+                            voxFormat("%@ · %@", activityLabel, activityBadge.toString())
+                        } else activityLabel,
+                        onClick = openActivity,
+                        modifier = Modifier.testTag("capture-activity"),
+                    )
+                    if (activityBadge > 0) {
+                        Box(
+                            Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(top = 10.dp, end = 10.dp)
+                                .size(8.dp)
+                                .clip(CircleShape)
+                                .background(c.warning),
+                        )
+                    }
+                }
+                SignalCircleButton(
+                    icon = Icons.Outlined.Settings,
+                    contentDescription = voxString("Settings"),
+                    onClick = openSettings,
+                    modifier = Modifier.testTag("capture-settings"),
+                )
             } else {
                 Row(
                     modifier = Modifier.heightIn(min = 32.dp).padding(horizontal = 10.dp),
@@ -1680,24 +1724,6 @@ internal fun CaptureBottomControls(
     val voiceIdle = !recordingStatus.isActive && !recordingIsProcessing && !recordingNeedsAttention
     // Microphone permanently off: Speak rests disabled under the "Open Settings" card.
     val speakEnabled = !isSending && !(microphoneBlocked && voiceIdle)
-    // Hold to talk · tap to record (iOS QuickCaptureView): a press held past the
-    // threshold records until release; a short tap keeps hands-free recording.
-    var pushToTalkActive by remember { mutableStateOf(false) }
-    var stopsWhenRecordingStarts by remember { mutableStateOf(false) }
-    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
-    LaunchedEffect(stopsWhenRecordingStarts, recordingStatus.isActive) {
-        if (!stopsWhenRecordingStarts) return@LaunchedEffect
-        if (recordingStatus.isActive) {
-            stopsWhenRecordingStarts = false
-            pushToTalkActive = false
-            stopRecording()
-        } else {
-            // Released before the microphone finished starting; give it a moment.
-            delay(2_000)
-            stopsWhenRecordingStarts = false
-            pushToTalkActive = false
-        }
-    }
     val actionItem: @Composable (CaptureBarAction) -> Unit = { action ->
         CaptureBarActionItem(
             action = action,
@@ -1745,8 +1771,16 @@ internal fun CaptureBottomControls(
             )
         }
         // The route's pinned quick actions, then "•••" for every action (CaptureRestActions).
+        // While typing the row becomes a grey band (CaptureKeyboard) with a keyboard-down
+        // button; Attach / Speak / Send stay underneath it.
+        val typing = imeVisible && !recordingStatus.isActive
+        if (typing) HorizontalDivider(thickness = 1.dp, color = c.border)
         Row(
-            modifier = Modifier.fillMaxWidth().height(56.dp).padding(end = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(if (typing) Modifier.background(c.well) else Modifier)
+                .height(56.dp)
+                .padding(end = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             LazyRow(
@@ -1769,6 +1803,11 @@ internal fun CaptureBottomControls(
                     showsAllQuickActions = !showsAllQuickActions
                 },
             )
+            if (typing) {
+                IconButton(onClick = toggleKeyboard, modifier = Modifier.testTag("capture-hide-keyboard")) {
+                    Icon(Icons.Outlined.KeyboardHide, contentDescription = voxString("Hide keyboard"), tint = c.text)
+                }
+            }
         }
         if (showsAllQuickActions) {
             CaptureAllQuickActionsPanel(
@@ -1793,7 +1832,7 @@ internal fun CaptureBottomControls(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    waitingLine ?: voxString("Hold to talk · tap to record"),
+                    waitingLine ?: voxString("Tap to record"),
                     style = SignalType.caption.copy(fontSize = 13.sp),
                     color = c.muted,
                     textAlign = TextAlign.Center,
@@ -1828,18 +1867,19 @@ internal fun CaptureBottomControls(
                     contentDescription = pauseDescription,
                     onClick = if (isPaused) resumeRecording else pauseRecording,
                     diameter = 56.dp,
-                    filled = if (isPaused) c.accent else c.well,
-                    contentColor = if (isPaused) c.onAccent else c.text,
+                    filled = if (isPaused) c.accent else c.text,
+                    contentColor = if (isPaused) c.onAccent else c.bg,
                     enabled = !isSending,
                 )
             } else {
-                // Add media: 56dp `surfaceContainerHigh` action with a 16dp radius.
+                // Add media (Attach on the Signal board): 56dp white bordered circle.
                 val addMediaDescription = voxString("Add media")
                 Box(
                     modifier = Modifier
                         .size(56.dp)
                         .clip(actionShape)
-                        .background(c.well)
+                        .background(c.card)
+                        .border(1.dp, c.border, actionShape)
                         .clickable(enabled = !isSending, role = Role.Button, onClick = addMedia)
                         .testTag("capture-add-media")
                         .semantics { contentDescription = addMediaDescription },
@@ -1851,16 +1891,16 @@ internal fun CaptureBottomControls(
             val (capsuleFill, capsuleContent) = when {
                 !speakEnabled -> c.well to c.faint
                 recordingStatus.phase == RecordingPhase.RECORDING -> c.recording to c.onRecording
-                isPaused -> c.secondarySoft to c.secondaryText
+                isPaused -> c.text to c.bg
                 recordingIsProcessing -> c.well to c.text
                 recordingTranscription?.phase == RecordingTranscriptionPhase.COMPLETED && !recordingTranscription.addedToDraft ->
                     c.successSoft to c.successText
                 recordingStatus.phase == RecordingPhase.COMPLETED && recordingTranscription == null -> c.accentSoft to c.accentText
                 recordingNeedsAttention -> c.errorSoft to c.errorText
-                else -> c.accent to c.onAccent
+                else -> c.text to c.bg
             }
-            // Speak: the 64dp primary action, 20dp radius.
-            val speakShape = RoundedCornerShape(20.dp)
+            // Speak: the 64dp ink capsule from the Signal Capture board.
+            val speakShape = CircleShape
             // On tablets and unfolded foldables the voice FAB also lives in the rail, so
             // Speak keeps a phone-like width instead of spanning the whole composer.
             val wideComposer = LocalConfiguration.current.screenWidthDp >= 600
@@ -1871,28 +1911,12 @@ internal fun CaptureBottomControls(
                     .height(if (compactHeight) 48.dp else SignalMetrics.ControlHero)
                     .clip(speakShape)
                     .background(capsuleFill)
-                    .speakPressGesture(
+                    // Tap starts and stops recording; long-press opens the detailed controls.
+                    .combinedClickable(
                         enabled = speakEnabled,
-                        holdEnabled = voiceIdle && !microphoneBlocked,
-                        onTap = handleVoiceClick,
-                        onHoldStart = {
-                            pushToTalkActive = true
-                            haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
-                            startRecording()
-                        },
-                        onHoldEnd = { cancelled ->
-                            when {
-                                !pushToTalkActive -> Unit
-                                recordingStatus.isActive -> {
-                                    pushToTalkActive = false
-                                    stopRecording()
-                                }
-                                // A system dialog (microphone permission) took the touch:
-                                // whatever the person chooses there is hands-free.
-                                cancelled -> pushToTalkActive = false
-                                else -> stopsWhenRecordingStarts = true
-                            }
-                        },
+                        role = Role.Button,
+                        onClick = handleVoiceClick,
+                        onLongClick = toggleVoiceCaptureDetails,
                     )
                     .semantics {
                         role = Role.Button
@@ -1932,7 +1956,7 @@ internal fun CaptureBottomControls(
                 modifier = Modifier
                     .size(56.dp)
                     .clip(actionShape)
-                    .background(if (canSend || isSending) c.accentSoft else c.well)
+                    .background(if (canSend || isSending) c.accent else c.accent.copy(alpha = 0.3f))
                     .clickable(enabled = canSend, role = Role.Button, onClick = onSubmit)
                     .testTag("send-capture")
                     .semantics { contentDescription = sendDescription },
@@ -1942,13 +1966,13 @@ internal fun CaptureBottomControls(
                     CircularProgressIndicator(
                         modifier = Modifier.size(22.dp),
                         strokeWidth = 2.dp,
-                        color = c.accentText,
+                        color = c.onAccent,
                     )
                 } else {
                     Icon(
-                        Icons.AutoMirrored.Outlined.Send,
+                        Icons.Outlined.ArrowUpward,
                         contentDescription = null,
-                        tint = if (canSend) c.accentText else c.faint,
+                        tint = c.onAccent.copy(alpha = if (canSend) 1f else 0.8f),
                         modifier = Modifier.size(24.dp),
                     )
                 }
