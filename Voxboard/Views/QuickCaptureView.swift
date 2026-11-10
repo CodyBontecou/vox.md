@@ -94,7 +94,6 @@ struct QuickCaptureView: View {
     @Environment(\.defersCaptureInputFocusForReleaseNotes) private var defersCaptureInputFocusForReleaseNotes
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.layoutDirection) private var layoutDirection
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
     @Environment(\.timeZone) private var timeZone
@@ -154,13 +153,7 @@ struct QuickCaptureView: View {
     @State private var fileExportToast: FileExportToast?
     @State private var flows: [CapturePreset] = CapturePresetStore.loadFlows()
     @State private var selectedFlowId: String = CapturePresetStore.selectedFlowId()
-    @State private var quickAccessPreferences = CapturePresetQuickAccessPreferences()
-    /// A compact selector is the fresh-install default; the user's expanded
-    /// alternatives-rail preference survives view recreation and app relaunches.
-    @AppStorage(CapturePreferenceKeys.presetQuickAccessRailExpanded)
-    private var isPresetQuickAccessRailExpanded = false
     @State private var observedPresetData: Data?
-    @State private var observedPinState: CapturePresetQuickAccessState = .unavailable
     @State private var linkText = ""
     private var isProcessingMedia: Bool {
         get { viewModel.isProcessingMedia }
@@ -1851,12 +1844,6 @@ struct QuickCaptureView: View {
                         .task { await loadInspirationQuote() }
                 }
             }
-            // Overlaying only the alternatives rail keeps the editor frame and
-            // selected-preset/Send row unchanged. Physical edge preference is
-            // mapped around RTL without overriding the rail children's direction.
-            .overlay(alignment: presetQuickAccessRailAlignment) {
-                pinnedPresetRail
-            }
         }
     }
 
@@ -2165,27 +2152,6 @@ struct QuickCaptureView: View {
         }
     }
 
-    private var presetQuickAccessRailAlignment: Alignment {
-        captureToolbarPreferences.presetQuickAccessRailSide.overlayAlignment(
-            for: layoutDirection
-        )
-    }
-
-    private var pinnedPresetRail: CaptureViewSection {
-        CaptureViewSection {
-            CapturePresetQuickAccessRail(
-                profiles: quickAccessPreferences.resolvedProfiles,
-                selectedID: viewModel.draft.voxID,
-                isExpanded: isPresetQuickAccessRailExpanded,
-                canChangeCaptureRoute: viewModel.canSelectCapturePreset,
-                selectPreset: { id in
-                    guard let flow = flows.first(where: { $0.id == id }) else { return false }
-                    return selectFlow(flow)
-                }
-            )
-        }
-    }
-
     private func presetMenuButton(_ flow: CapturePreset) -> CaptureViewSection {
         CaptureViewSection {
             Button {
@@ -2211,15 +2177,10 @@ struct QuickCaptureView: View {
 
     private var routeSelectionRow: CaptureViewSection {
         CaptureViewSection {
-            CapturePresetQuickAccessSelector(
+            CaptureRouteSelector(
                 profiles: enabledFlows.map(\.captureProfile),
                 selectedProfile: selectedFlow.captureProfile,
-                hasQuickAccessProfiles: quickAccessPreferences.resolvedProfiles.contains {
-                    $0.id != viewModel.draft.voxID
-                },
-                isRailExpanded: isPresetQuickAccessRailExpanded,
                 canChangeCaptureRoute: viewModel.canSelectCapturePreset,
-                toggleRail: togglePresetQuickAccessRail,
                 selectPreset: { id in
                     guard let flow = flows.first(where: { $0.id == id }) else { return false }
                     return selectFlow(flow)
@@ -2228,12 +2189,6 @@ struct QuickCaptureView: View {
             // Keep this stable production seam at the coordinator call site
             // as well as on the reusable selector presentation.
             .accessibilityIdentifier("capture_vox_selector")
-        }
-    }
-
-    private func togglePresetQuickAccessRail() {
-        withAnimation(reduceMotion ? nil : .spring(response: 0.28, dampingFraction: 0.9)) {
-            isPresetQuickAccessRailExpanded.toggle()
         }
     }
 
@@ -3621,16 +3576,13 @@ struct QuickCaptureView: View {
         let defaults = AppConstants.sharedDefaults
         // Ignore unrelated defaults (including draft autosaves). Compare before
         // calling store APIs so seeding/migrations cannot form an observer loop.
-        guard defaults?.data(forKey: CapturePresetProfileStore.profilesKey) != observedPresetData
-            || CapturePresetQuickAccessStore.load(defaults: defaults) != observedPinState else { return }
+        guard defaults?.data(forKey: CapturePresetProfileStore.profilesKey) != observedPresetData else { return }
         reloadFlows()
     }
 
     private func reloadFlows() {
         flows = CapturePresetStore.loadFlows()
-        quickAccessPreferences.reload()
         observedPresetData = AppConstants.sharedDefaults?.data(forKey: CapturePresetProfileStore.profilesKey)
-        observedPinState = quickAccessPreferences.state
         viewModel.refreshVoxProfiles()
         let draftVoxID = viewModel.draft.voxID
         selectedFlowId = flows.contains(where: { $0.id == draftVoxID && $0.isEnabled })
