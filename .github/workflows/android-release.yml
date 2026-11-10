@@ -90,6 +90,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ needs.resolve.outputs.release_sha }}
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Use a task-owned Android SDK
@@ -149,6 +150,7 @@ jobs:
           ./apps/android/gradlew -p apps/android help
           python3 Packages/contracts/scripts/validate.py
           python3 Packages/contracts/scripts/validate_toolchain.py
+          python3 apps/android/scripts/validate-intelligence-evaluations.py
           python3 apps/android/scripts/generate-runtime-localizations.py --check
 
       - name: Test, lint, and build the credential-free release bundles
@@ -198,6 +200,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ needs.resolve.outputs.release_sha }}
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Use a task-owned Android SDK
@@ -303,6 +306,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ needs.resolve.outputs.release_sha }}
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Download the exact signed artifact
