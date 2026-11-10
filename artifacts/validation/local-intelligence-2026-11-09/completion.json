@@ -1,0 +1,39 @@
+{
+  "completedAtUTC": "2026-11-09T12:34:02.803085+00:00",
+  "producerExitCode": 0,
+  "strictValidationExitCode": 0,
+  "sourceRevision": "83e474ac516d1e361a2f66023238a9e21d10262f",
+  "sourceTreeCleanAfterRun": true,
+  "counts": {
+    "generalPhone": 123,
+    "validate-local-speech.py": 2,
+    "validate-named-speech-model.py": 2,
+    "pinnedModelRunsSharedInstructionsOffline": 1,
+    "realSpeechSpeakerAttributionBenchmark": 1
+  },
+  "totalInstrumentationTests": 129,
+  "artifactSHA256": {
+    "output/general-phone.log": "e199cca7ce8be542bbda2408ad15c0f7247d411aa1822fb6bdeea6bddb4a6827",
+    "output/instruction-evaluation.json": "8b2ce5e2079eefd219e0fd215212478c8335510045d7d0e5564396b577fc9eda",
+    "output/pinnedModelRunsSharedInstructionsOffline.log": "10a01a5378ab8dc7dd180b85166707cbf64e536bb25c668dd5386740910543f0",
+    "output/realSpeechSpeakerAttributionBenchmark.log": "afb42a90e1e446ec5fc48fc05e30ccff6c22f6f7525fa29ecc91d6d794908bd7",
+    "output/receipt.json": "dbf55646f8ce4b557b5e9a5222cdf9a2d830b4c864f5e7b1f7a88ef2ba63b7e8",
+    "output/speaker-evaluation.json": "7d6d7bb88f8e1146251c1282307ecf0f8eaae69e998711f177f66cc012269455",
+    "output/validate-local-speech.py.log": "8a8adc532c48460b9bc2576d41a555f717a89fb3b687a1a431970ff163c01f92",
+    "output/validate-named-speech-model.py.log": "e475e97d84b4d6d5912aff13c2cd7943e8bf65132dbf8f27453bbdd53d4b5e49",
+    "validation-bundle/apple-instruction-evaluation.json": "0b694f20c968970825762de93527f7c9619f3fe25c16ba6e2bc532a83d6bd155",
+    "validation-bundle/apple-speaker-evaluation.json": "c9ca995d3b422e0320970272266cfbab947aa6958d5fb71b00bafc2f7a53161f",
+    "validation-bundle/instruction-evaluation.json": "8b2ce5e2079eefd219e0fd215212478c8335510045d7d0e5564396b577fc9eda",
+    "validation-bundle/receipt.json": "dbf55646f8ce4b557b5e9a5222cdf9a2d830b4c864f5e7b1f7a88ef2ba63b7e8",
+    "validation-bundle/speaker-evaluation.json": "7d6d7bb88f8e1146251c1282307ecf0f8eaae69e998711f177f66cc012269455",
+    "preflight.json": "2597ea9b2ce743723ebef5e631820389b9e16f1e6922a7d4f47c2be6b5e50b29",
+    "build.log": "8e2041cd3736f5609fcfb9302be78d9fcbc3ef975a4b43a5559a742e43caea63",
+    "download.log": "bec7efb803627046161c38605230a8311800b1bdc1ecac011d98185a933f8480",
+    "producer.log": "dbf55646f8ce4b557b5e9a5222cdf9a2d830b4c864f5e7b1f7a88ef2ba63b7e8",
+    "strict-validation.log": "1640c151dd185569b509f121ac6b3cbacfbc4fcf0026fdddfd2ee8848c6f71ce",
+    "device-test-runner.log": "a5ad4d3973c87be1300a0785be3123174f43c4c4f872621966b883772290fb74"
+  },
+  "deviceDisposition": "task-owned emulator-5554 remains running; userdata and all external artifacts retained; no other device touched",
+  "trackedEvidenceUpdated": false,
+  "sourceChanged": false
+}

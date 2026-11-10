@@ -106,6 +106,8 @@ pub enum CoreError {
     Cancelled,
     #[error("serialization failed")]
     Serialization,
+    #[error("target heading was not found")]
+    HeadingNotFound,
 }
 
 impl CoreError {
@@ -147,6 +149,7 @@ impl CoreError {
             Self::SessionTerminal => "sessionTerminal",
             Self::Cancelled => "cancelled",
             Self::Serialization => "serialization",
+            Self::HeadingNotFound => "headingNotFound",
         }
     }
 }
@@ -2743,7 +2746,7 @@ fn insert_beneath_heading(
             &format!("{} {}", "#".repeat(level as usize), title),
             capture_block,
         ])),
-        "fail" => Err(CoreError::InvalidRendering),
+        "fail" => Err(CoreError::HeadingNotFound),
         _ => Err(CoreError::InvalidEnum),
     }
 }
@@ -3400,6 +3403,14 @@ mod tests {
 
         assert_eq!(
             materialize(&input, None, Some(b"## Archive\n\nExisting body")),
+            Err(CoreError::HeadingNotFound)
+        );
+        assert_eq!(
+            materialize(&input, None, Some(b"```md\n## Inbox\n```\n# Inbox\n")),
+            Err(CoreError::HeadingNotFound)
+        );
+        assert_eq!(
+            materialize(&input, None, Some(&[0xff])),
             Err(CoreError::InvalidRendering)
         );
     }
@@ -3917,6 +3928,7 @@ mod tests {
             CoreError::InvalidControl,
             CoreError::InvalidPath,
             CoreError::DrainedHashMismatch,
+            CoreError::HeadingNotFound,
         ] {
             assert!(
                 forbidden

@@ -1381,12 +1381,13 @@ internal fun CaptureTopControls(
                 }
             } else if (openActivity != null) {
                 val activityLabel = voxString("Activity")
+                val activityDescription = if (activityBadge > 0) {
+                    voxFormat("%@ · %@", activityLabel, activityBadge.toString())
+                } else activityLabel
                 Box {
                     SignalCircleButton(
                         icon = Icons.Outlined.Schedule,
-                        contentDescription = if (activityBadge > 0) {
-                            voxFormat("%@ · %@", activityLabel, activityBadge.toString())
-                        } else activityLabel,
+                        contentDescription = activityDescription,
                         onClick = openActivity,
                         modifier = Modifier.testTag("capture-activity"),
                     )

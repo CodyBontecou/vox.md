@@ -115,6 +115,7 @@ private inline fun <T> generatedCall(block: () -> T): T = try {
             is VoxCoreException.VerificationFailed -> CoreErrorCode.VERIFICATION_FAILED
             is VoxCoreException.SessionTerminal -> CoreErrorCode.SESSION_TERMINAL
             is VoxCoreException.Cancelled -> CoreErrorCode.CANCELLED
+            is VoxCoreException.HeadingNotFound -> CoreErrorCode.HEADING_NOT_FOUND
             is VoxCoreException.InternalPanic -> CoreErrorCode.INTERNAL_FAILURE
         },
     )

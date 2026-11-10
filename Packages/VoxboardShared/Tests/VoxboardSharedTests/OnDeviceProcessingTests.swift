@@ -46,21 +46,27 @@ final class OnDeviceProcessingTests: XCTestCase {
 
     func test_nonCooperativeWorkTimesOutAndKeepsInferenceSlotUntilFinished() async throws {
         let gate = OnDeviceInferenceGate()
+        let entered = expectation(description: "Non-cooperative work entered the inference gate")
+        let finished = expectation(description: "Timed-out work actually returned from the gate")
+        let work = ControlledInferenceWork(entered: entered)
         let start = ProcessInfo.processInfo.systemUptime
         do {
             _ = try await withRunningTask(timeout: 0.03) {
-                try await gate.run {
-                    await withCheckedContinuation { continuation in
-                        DispatchQueue.global().asyncAfter(deadline: .now() + 0.25) { continuation.resume(returning: 7) }
-                    }
+                defer { finished.fulfill() }
+                return try await gate.run {
+                    await work.run()
                 }
             }
             XCTFail("Expected timeout")
         } catch { XCTAssertTrue(error is EnrichmentTimeoutError) }
         XCTAssertLessThan(ProcessInfo.processInfo.systemUptime - start, 0.18)
+        await fulfillment(of: [entered], timeout: 2)
         do { _ = try await gate.run { 9 }; XCTFail("Expired work must retain its slot") }
         catch { XCTAssertEqual(error as? LLMBackendFailure, .busy) }
-        try await Task.sleep(nanoseconds: 300_000_000)
+        // A deadline or a fixed sleep cannot establish that a cancellation-ignoring
+        // callback returned. Release it explicitly, then join its gate lifetime.
+        await work.finish()
+        await fulfillment(of: [finished], timeout: 2)
         let recovered = try await gate.run { 11 }
         XCTAssertEqual(recovered, 11)
     }
@@ -76,6 +82,25 @@ final class OnDeviceProcessingTests: XCTestCase {
         task.cancel()
         do { _ = try await task.value; XCTFail("Expected cancellation") }
         catch { XCTAssertTrue(error is CancellationError) }
+    }
+}
+
+private actor ControlledInferenceWork {
+    private let entered: XCTestExpectation
+    private var continuation: CheckedContinuation<Int, Never>?
+
+    init(entered: XCTestExpectation) { self.entered = entered }
+
+    func run() async -> Int {
+        await withCheckedContinuation { continuation in
+            self.continuation = continuation
+            entered.fulfill()
+        }
+    }
+
+    func finish() {
+        continuation?.resume(returning: 7)
+        continuation = nil
     }
 }
 

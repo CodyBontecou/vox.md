@@ -1,0 +1,58 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Calculating task graph as no cached configuration is available for tasks: :data:compileDebugAndroidTestKotlin
+> Task :build-logic:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :build-logic:compileKotlin UP-TO-DATE
+> Task :build-logic:compileJava NO-SOURCE
+> Task :build-logic:pluginDescriptors UP-TO-DATE
+> Task :build-logic:processResources UP-TO-DATE
+> Task :build-logic:classes UP-TO-DATE
+> Task :build-logic:jar UP-TO-DATE
+> Task :capture-domain:preBuild UP-TO-DATE
+> Task :core-bridge:preBuild UP-TO-DATE
+> Task :capture-domain:preDebugBuild UP-TO-DATE
+> Task :core-bridge:preDebugBuild UP-TO-DATE
+> Task :capture-domain:processDebugNavigationResources UP-TO-DATE
+> Task :capture-domain:generateDebugResources UP-TO-DATE
+> Task :capture-domain:javaPreCompileDebug UP-TO-DATE
+> Task :core-bridge:generateDebugResources UP-TO-DATE
+> Task :capture-domain:packageDebugResources UP-TO-DATE
+> Task :core-bridge:packageDebugResources UP-TO-DATE
+> Task :core-bridge:processDebugNavigationResources UP-TO-DATE
+> Task :capture-domain:parseDebugLocalResources UP-TO-DATE
+> Task :core-bridge:parseDebugLocalResources UP-TO-DATE
+> Task :capture-domain:generateDebugRFile UP-TO-DATE
+> Task :core-bridge:generateDebugRFile UP-TO-DATE
+> Task :capture-domain:compileDebugKotlin UP-TO-DATE
+> Task :core-bridge:compileDebugKotlin UP-TO-DATE
+> Task :capture-domain:compileDebugJavaWithJavac NO-SOURCE
+> Task :core-bridge:javaPreCompileDebug UP-TO-DATE
+> Task :core-bridge:compileDebugJavaWithJavac NO-SOURCE
+> Task :capture-domain:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :data:preBuild UP-TO-DATE
+> Task :core-bridge:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :data:preDebugBuild UP-TO-DATE
+> Task :data:processDebugNavigationResources UP-TO-DATE
+> Task :data:generateDebugResources UP-TO-DATE
+> Task :data:javaPreCompileDebug UP-TO-DATE
+> Task :data:packageDebugResources UP-TO-DATE
+> Task :data:preDebugAndroidTestBuild UP-TO-DATE
+> Task :data:parseDebugLocalResources UP-TO-DATE
+> Task :data:generateDebugAndroidTestResources UP-TO-DATE
+> Task :data:generateDebugRFile UP-TO-DATE
+> Task :data:packageDebugAndroidTestResources UP-TO-DATE
+> Task :data:processDebugAndroidTestNavigationResources UP-TO-DATE
+> Task :data:parseDebugAndroidTestLocalResources UP-TO-DATE
+> Task :data:generateDebugAndroidTestRFile UP-TO-DATE
+> Task :data:kaptGenerateStubsDebugKotlin UP-TO-DATE
+> Task :data:kaptDebugKotlin UP-TO-DATE
+> Task :data:compileDebugKotlin UP-TO-DATE
+> Task :data:compileDebugJavaWithJavac UP-TO-DATE
+> Task :data:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :data:kaptGenerateStubsDebugAndroidTestKotlin
+> Task :data:kaptDebugAndroidTestKotlin SKIPPED
+> Task :data:compileDebugAndroidTestKotlin
+
+BUILD SUCCESSFUL in 9s
+38 actionable tasks: 2 executed, 36 up-to-date
+Configuration cache entry stored.

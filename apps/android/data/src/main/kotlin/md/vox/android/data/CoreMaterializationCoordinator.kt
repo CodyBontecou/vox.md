@@ -40,6 +40,9 @@ internal class CoreMaterializationCoordinator(
 
         /** Lease was lost or the frontier moved; the caller re-reads and re-drives. */
         data object LeaseLost : MaterializationResult
+
+        /** The authoritative editor failed the frozen beneath-heading selector. No output was prepared. */
+        data object HeadingNotFound : MaterializationResult
     }
 
     /**
@@ -97,6 +100,7 @@ internal class CoreMaterializationCoordinator(
         val planHash = when (val driven = driveSession(requestID, composed)) {
             is SessionDriveResult.Done -> driven.planHash
             is SessionDriveResult.Retryable -> return MaterializationResult.Retryable(driven.coarseCode)
+            SessionDriveResult.HeadingNotFound -> return MaterializationResult.HeadingNotFound
         }
 
         // 5. Append MATERIALIZED with the authoritative plan hash through revision-CAS.
@@ -248,6 +252,7 @@ internal class CoreMaterializationCoordinator(
     }
 
     private sealed interface SessionDriveResult {
+        data object HeadingNotFound : SessionDriveResult
         data class Done(val planHash: String) : SessionDriveResult
         data class Retryable(val coarseCode: String) : SessionDriveResult
     }
@@ -281,7 +286,8 @@ internal class CoreMaterializationCoordinator(
             }
             val descriptors = when (val sealed = session.seal()) {
                 is CoreResult.Success -> sealed.value
-                is CoreResult.Failure -> return SessionDriveResult.Retryable(coarse(sealed.code))
+                is CoreResult.Failure -> return if (sealed.code == CoreErrorCode.HEADING_NOT_FOUND) SessionDriveResult.HeadingNotFound
+                    else SessionDriveResult.Retryable(coarse(sealed.code))
             }
             if (descriptors.size != 1) return SessionDriveResult.Retryable("descriptorInventory")
             val note = descriptors.first()

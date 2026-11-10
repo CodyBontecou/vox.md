@@ -241,6 +241,16 @@ class ContractValidatorTests(unittest.TestCase):
   for rel,old,new,needle in (("apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureDurability.kt","MAX_DURATION_MILLIS = 600_000L","MAX_DURATION_MILLIS = 900_000L","Android durability policy drift"),("apps/android/data/src/main/kotlin/md/vox/android/data/RoomQuotaLedger.kt","internal fun commitTerminal","fun commitTerminal","terminal quota primitives are not internal"),("apps/android/data/src/main/kotlin/md/vox/android/data/RoomCaptureCoordination.kt","internal class RoomCaptureCoordination","class RoomCaptureCoordination","raw Room lease coordination is not internal"),("apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDurabilityCoordinator.kt","store.withRootMutationLock { leases.release","leases.release","lease operations do not share the root mutation lock"),("apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDurabilityCoordinator.kt","store.mutateJournal(command)","store.mutateJournal(command).also { store.mutateJournal(command) }","journal mutation has a production caller outside the fenced coordinator")):
    with self.subTest(path=rel):
     self.tearDown(); self.setUp(); p=self.root/rel; p.write_text(p.read_text().replace(old,new)); manifest=self.root/"toolchains/android-wear-shared-core.json"; m=json.loads(manifest.read_text()); next(item for item in m["governedImplementationFiles"] if item["path"]==rel)["sha256"]=hashlib.sha256(p.read_bytes()).hexdigest(); manifest.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n"); r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True); self.rejected(r,needle)
+ def test_recovery_intent_rejects_worker_fence_bypass_after_rehash(self):
+  validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py"
+  rel="apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDurabilityCoordinator.kt"
+  p=self.root/rel; old="if (leases.isCurrent(requestID, token, now) is LeasePlan.Current) action() else null"
+  self.assertIn(old,p.read_text()); p.write_text(p.read_text().replace(old,"action()"))
+  manifest=self.root/"toolchains/android-wear-shared-core.json"; m=json.loads(manifest.read_text())
+  next(item for item in m["governedImplementationFiles"] if item["path"]==rel)["sha256"]=hashlib.sha256(p.read_bytes()).hexdigest()
+  manifest.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n")
+  r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True)
+  self.rejected(r,"recovery intent admission bypasses the current worker fence")
  def test_android_phase3_new_java_bypass_source_is_rejected(self):
   validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py"; p=self.root/"apps/android/app/src/debug/java/md/vox/android/Bypass.java"; p.parent.mkdir(parents=True,exist_ok=True); p.write_text("final class Bypass { Object call(md.vox.android.data.DurableCapturePackageStore store) { return store.mutateJournal(null, null); } }\n"); r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True); self.rejected(r,"journal mutation has a production caller outside the fenced coordinator")
  def test_android_aapt2_linux_verification_metadata_is_exact(self):

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="md.vox.android.data.CaptureReplacementTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2026-11-09T14:56:04.169Z" hostname="MacBook-Pro.local" time="0.415">
+  <properties/>
+  <testcase name="preDrainReconciliationRetainsRetryWhenRetiredSourceLeaseIsBusy" classname="md.vox.android.data.CaptureReplacementTest" time="0.047"/>
+  <testcase name="routeRevisionDisableDeletionURLAndVaultChangesRejectTheReviewedChoice" classname="md.vox.android.data.CaptureReplacementTest" time="0.001"/>
+  <testcase name="preDrainReconciliationRetainsRetryAfterEnqueuePersistenceFailure" classname="md.vox.android.data.CaptureReplacementTest" time="0.031"/>
+  <testcase name="restartReplaysEveryIntentRetirementAndEnqueueCrashWindow" classname="md.vox.android.data.CaptureReplacementTest" time="0.059"/>
+  <testcase name="preDrainReconciliationEnqueuesRetiredSourcesBeforePendingSelection" classname="md.vox.android.data.CaptureReplacementTest" time="0.062"/>
+  <testcase name="intentPromotionUncertaintyResyncsBeforeSourceRetirement" classname="md.vox.android.data.CaptureReplacementTest" time="0.033"/>
+  <testcase name="sameIntentAdmitCannotRetireSourceUntilPromotedIntentDirectoryResyncs" classname="md.vox.android.data.CaptureReplacementTest" time="0.013"/>
+  <testcase name="explicitReplacementKeepsOriginalContentAssetsAndUsesExactlyOneIdentity" classname="md.vox.android.data.CaptureReplacementTest" time="0.021"/>
+  <testcase name="staleUnauthorizedBusyAndURLBoundRequestsDoNotRetireOrEnqueue" classname="md.vox.android.data.CaptureReplacementTest" time="0.012"/>
+  <testcase name="corruptAssetsBlockRetirementAndSurviveForExplicitRecovery" classname="md.vox.android.data.CaptureReplacementTest" time="0.006"/>
+  <testcase name="anotherSourceCannotReuseAnIntentIdentityOrRetireACompletedReplacementAgain" classname="md.vox.android.data.CaptureReplacementTest" time="0.019"/>
+  <testcase name="duplicateIntentWithAnotherIdentityOrChoiceIsAConflict" classname="md.vox.android.data.CaptureReplacementTest" time="0.013"/>
+  <testcase name="persistedAmbiguousCommitAndPermissionLossNeverAdmitAReplacement" classname="md.vox.android.data.CaptureReplacementTest" time="0.066"/>
+  <testcase name="ambiguousCommitAndPermissionResumeCannotBeReplaced" classname="md.vox.android.data.CaptureReplacementTest" time="0.004"/>
+  <testcase name="sourceJournalFailureNeverEnqueuesUntilRetirementIsDurable" classname="md.vox.android.data.CaptureReplacementTest" time="0.028"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

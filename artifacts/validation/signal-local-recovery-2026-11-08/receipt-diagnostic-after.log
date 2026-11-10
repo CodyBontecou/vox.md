@@ -1,0 +1,17 @@
+....E...
+======================================================================
+ERROR: test_retained_full_model_and_cross_platform_reports_are_truthful (test_local_intelligence_evaluation.LocalIntelligenceEvaluationTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/vox-apple-signal3-20261108/Packages/contracts/tests/test_local_intelligence_evaluation.py", line 62, in test_retained_full_model_and_cross_platform_reports_are_truthful
+    VALIDATOR.validate_reports(self.corpus,VALIDATOR.REPORTS)
+  File "/private/tmp/vox-apple-signal3-20261108/apps/android/scripts/validate-intelligence-evaluations.py", line 112, in validate_reports
+    require(not changed, "evaluation implementation changed; rerun the full model gate: " + ", ".join(changed))
+  File "/private/tmp/vox-apple-signal3-20261108/apps/android/scripts/validate-intelligence-evaluations.py", line 54, in require
+    if not condition: raise ValueError(message)
+ValueError: evaluation implementation changed; rerun the full model gate: Packages/vox-core-rust/crates/vox-core/src/lib.rs, apps/android/app/src/main/kotlin/md/vox/android/VoxApplication.kt, apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRepository.kt, apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt, apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt, apps/android/scripts/validate-intelligence-evaluations.py
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.010s
+
+FAILED (errors=1)

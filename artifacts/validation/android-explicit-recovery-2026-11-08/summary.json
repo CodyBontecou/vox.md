@@ -1,0 +1,70 @@
+{
+  "sourceCommit": "0bf2759cf087712d13a939577d6016af3299ee4f",
+  "featureCommit": "4377d800",
+  "presentationFollowup": "0bf2759c",
+  "totalHostTests": 347,
+  "suites": {
+    "capture-domain": {
+      "tests": 82,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "core-bridge": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "data": {
+      "tests": 103,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "app": {
+      "tests": 151,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "lint": {
+    "Error": 0,
+    "Warning": 98,
+    "Hint": 5
+  },
+  "instrumentation": "app and data source compilation only; no execution",
+  "sourceFilesMatchCommit": true,
+  "sourceSHA256": {
+    "apps/android/app/src/main/kotlin/md/vox/android/CaptureRecoveryControls.kt": "bf7151f66c34e40833b2cbf9305534a4e565cb0a656638e9c5ac5d4bc45ac498",
+    "apps/android/app/src/main/kotlin/md/vox/android/CaptureRecoveryForm.kt": "3a5ea7feba3b0daadbabd2f827e8ed86bd8e9778a490700d10e8c2ec8c260065",
+    "apps/android/app/src/main/kotlin/md/vox/android/CaptureRecoveryMessages.kt": "559b15cfaf2ab05f68672502fc49a29d2ea72c4ded85d2854e08496ef709f8d4",
+    "apps/android/app/src/main/kotlin/md/vox/android/HistoryDetailScreen.kt": "c7c09d3a72c7518815ca14aa0051db9078cfd3f20f8b3887ceb567dfe92482e1",
+    "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt": "43b147dd0ef18641290f9985aa2a75e5f6aca61674d828e96c8fd93dcb42347e",
+    "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt": "61734a6d436d2784990e40237e071a90780b45f5e8e3e09dee03f16afc1dbf6b",
+    "apps/android/app/src/main/kotlin/md/vox/android/VoxAppChrome.kt": "deec1c34f89e22d240ac44e446f056c01dd219fe8449b20f0e042e42458c426b",
+    "apps/android/app/src/main/kotlin/md/vox/android/ui/CaptureViewModel.kt": "35033bf0522571348d9dfb03fc4efc9770506b13f81c848e9ac4a75d0cc06fc3",
+    "apps/android/app/src/test/kotlin/md/vox/android/CaptureRecoveryFormTest.kt": "9cbab44fcab27773727c3b38d977e9d85b00dd4758c3793d4191ba02d2fbf1d9",
+    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRecovery.kt": "85887a76793a878bdc6f04323dc7545ce53a4fa6072075f0a47955e495ac3594",
+    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRepository.kt": "381be2ad76330d4a43649cc94419d61c01f0290f20537fac03bcf4e685ae0336",
+    "apps/android/core-bridge/src/main/kotlin/md/vox/android/corebridge/CoreBridge.kt": "641b135fb0fac145dc80c731e66d5fb51336ac4235c87c90a9983f703ef524c7",
+    "apps/android/core-bridge/src/main/kotlin/md/vox/android/corebridge/GeneratedNativeCoreAdapter.kt": "37e8c53eb1e535f5b92ce237b74c960562ccdb3f3e00fe0f1fa9fc5b949759e1",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt": "c50ff1b68969ad8c148dd05470e5224a6de6e7c6e9a5166db2a1c38c1518a31e",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDurabilityCoordinator.kt": "267e43ac82976e6cb43b404390cf0ef9222ba09c42f2127a8b083a6caa755353",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureHeadingFailureStore.kt": "39784c596c1370138021564c1fa5632cbf5006654401bd5213899c5a95f6b7de",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryIntentStore.kt": "dd42d2977fe79fef5274ed63264a262835004276ad4acaf719d298969fbbe97a",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryRequest.kt": "2b25b6108abee428a9fe097a83d81a25a477cf79f896220870a63ebe1cf89cd9",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryRouteSelection.kt": "0c2c22ea30eea0c4ede0ad03912424f2cbbe7f9c89cf26244f63e82b19dddf7f",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureReplacement.kt": "b0f884b3fe60a5032857f37bfcb7c932e36ed9150800384e2aeef5278b647781",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/CoreMaterializationCoordinator.kt": "d225b1b3a0955f0faa98d20d7d08c457b119a3be16279ffdb1e189744a330479",
+    "apps/android/data/src/main/kotlin/md/vox/android/data/DurableCaptureStore.kt": "51eebef30ffbe409e2f17477053dc8ecee8f8431df8366bc86e5180402a2800c",
+    "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureHeadingFailureStoreTest.kt": "44ae13f617ebcccf7672aca2681c1b317d10b86d09d6596d047b985252ca9aec",
+    "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureReplacementTest.kt": "c27b9e48c0cb6ced502ac08079aa2fba7cbb35c4af02d85a4066df14f6da0784",
+    "apps/android/data/src/test/kotlin/md/vox/android/data/CoreMaterializationCoordinatorTest.kt": "c1a1e792091d3698a795fd718347ea78d4a822edef92dcaa750ed6e0b9bb765a",
+    "apps/android/data/src/test/kotlin/md/vox/android/data/DurableCaptureStorePhase5Test.kt": "bc41e5fc30e7d912f41da0f3ae71b89c2e5c981d21680e344ffa931164817444"
+  },
+  "publication": "local only; no push/PR/CI/release/upload",
+  "devicesUsed": [],
+  "qualification": "historical full-model receipt remains source-stale"
+}

@@ -1,0 +1,47 @@
+{
+  "corpusID" : "vox-local-intelligence-v1",
+  "modelIdentity" : "System-managed Apple Intelligence; weight revision is not exposed by the public API",
+  "platform" : "apple",
+  "results" : [
+    {
+      "elapsedSeconds" : 1.1553239822387695,
+      "id" : "sorted-people",
+      "passed" : true,
+      "response" : "Arun\nMaya\nZoe"
+    },
+    {
+      "elapsedSeconds" : 0.46239495277404785,
+      "id" : "formal-request",
+      "passed" : true,
+      "response" : "Hello Maya,  \nCould you please send the launch notes by Friday?"
+    },
+    {
+      "elapsedSeconds" : 0.3243650197982788,
+      "id" : "spanish-extraction",
+      "passed" : true,
+      "response" : "Madrid, Sevilla"
+    },
+    {
+      "elapsedSeconds" : 0.5726889371871948,
+      "id" : "factual-summary",
+      "passed" : true,
+      "response" : "Maya, the owner, agreed to launch on Friday with an approved budget of $200."
+    },
+    {
+      "elapsedSeconds" : 0.46499204635620117,
+      "id" : "link-preservation",
+      "passed" : true,
+      "response" : "Maya shared the launch notes at https:\/\/example.com\/notes?id=42."
+    },
+    {
+      "elapsedSeconds" : 0.5108010768890381,
+      "id" : "speaker-ownership",
+      "passed" : true,
+      "response" : "Speaker 1: approve the launch.  \nSpeaker 2: send the checklist."
+    }
+  ],
+  "runtime" : "FoundationModels.SystemLanguageModel",
+  "schemaVersion" : 1,
+  "status" : "passed",
+  "systemVersion" : "Version 27.2 (Build 26B123)"
+}

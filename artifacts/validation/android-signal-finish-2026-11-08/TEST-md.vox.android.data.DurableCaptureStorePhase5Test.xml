@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="md.vox.android.data.DurableCaptureStorePhase5Test" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-11-09T00:31:59.805Z" hostname="MacBook-Pro.local" time="0.221">
+  <properties/>
+  <testcase name="discardCannotRaceAnActiveWorkerOrACommitOfUnknownOutcome" classname="md.vox.android.data.DurableCaptureStorePhase5Test" time="0.063"/>
+  <testcase name="markerPersistsReadsClearsAndRefusesActiveOverwrite" classname="md.vox.android.data.DurableCaptureStorePhase5Test" time="0.05"/>
+  <testcase name="receiptsAreAppendOnlyAndIdempotent" classname="md.vox.android.data.DurableCaptureStorePhase5Test" time="0.023"/>
+  <testcase name="inventoryGatesUnknownEntriesAndStateShapesFailClosed" classname="md.vox.android.data.DurableCaptureStorePhase5Test" time="0.007"/>
+  <testcase name="materializedAppendRequiresVerifiedPreparedArtifacts" classname="md.vox.android.data.DurableCaptureStorePhase5Test" time="0.005"/>
+  <testcase name="explicitDiscardIsDurableIdempotentAndRetainsSourceBytes" classname="md.vox.android.data.DurableCaptureStorePhase5Test" time="0.009"/>
+  <testcase name="identicalRematerializedPlanReusesImmutableBytesAndRemovesOnlyStaging" classname="md.vox.android.data.DurableCaptureStorePhase5Test" time="0.013"/>
+  <testcase name="stagedDrainPromoteAndMaterializeRoundTrips" classname="md.vox.android.data.DurableCaptureStorePhase5Test" time="0.022"/>
+  <testcase name="conflictingRematerializedBytesNeverReplaceExistingPreparedNote" classname="md.vox.android.data.DurableCaptureStorePhase5Test" time="0.008"/>
+  <testcase name="discardDoesNotAcknowledgeUncertainReplacementUntilDirectoryResync" classname="md.vox.android.data.DurableCaptureStorePhase5Test" time="0.018"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

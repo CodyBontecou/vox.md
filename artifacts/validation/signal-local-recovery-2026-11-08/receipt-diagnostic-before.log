@@ -1,0 +1,17 @@
+F
+======================================================================
+FAIL: test_stale_receipt_identifies_the_changed_implementation (test_local_intelligence_evaluation.LocalIntelligenceEvaluationTests)
+----------------------------------------------------------------------
+ValueError: evaluation implementation changed; rerun the full model gate
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/vox-apple-signal3-20261108/Packages/contracts/tests/test_local_intelligence_evaluation.py", line 59, in test_stale_receipt_identifies_the_changed_implementation
+    VALIDATOR.validate_reports(self.corpus,VALIDATOR.REPORTS)
+AssertionError: "LocalSpeech\.kt" does not match "evaluation implementation changed; rerun the full model gate"
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+FAILED (failures=1)

@@ -1,0 +1,35 @@
+..........................................................................................
+----------------------------------------------------------------------
+Ran 90 tests in 7.982s
+
+OK
+Staged five website files and website.patch; live source and public site unchanged.
+Launch 1/3: PID 101 survived 5.0s (6 checks)
+Launch 2/3: PID 102 survived 5.0s (6 checks)
+Launch 3/3: PID 103 survived 5.0s (6 checks)
+Launch 1/3: PID 100 survived 5.0s (6 checks)
+Built website: /var/folders/vh/t562rzcx5dx1w0j01ky690rm0000gn/T/tmpzq_vnvqr/site
+Android/Wear M0 validation passed: 283 capabilities, 49 source inventories, 12 persisted-key inventories, 8 required claims.
+Product capability conversion is deterministic and current.
+Contracts validation passed: 206 governed files, 98 fixtures, 283 owner-preserving capabilities, 4 resource mirrors.
+Toolchain validation passed: 303 governed implementation hashes, UniFFI 0.32.0 bindings, Gradle 9.3.1/AGP 9.1.1/Kotlin 2.4.10/API 37 application pins, 4 Android API-28 native and 3 iOS-17.6 targets.
+Validation definitions passed: 6 roles, 3 providers, 35 cases, 23 gates
+................................................................E.................................................................................................
+======================================================================
+ERROR: test_retained_full_model_and_cross_platform_reports_are_truthful (test_local_intelligence_evaluation.LocalIntelligenceEvaluationTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/vox-apple-signal3-20261108/Packages/contracts/tests/test_local_intelligence_evaluation.py", line 62, in test_retained_full_model_and_cross_platform_reports_are_truthful
+    VALIDATOR.validate_reports(self.corpus,VALIDATOR.REPORTS)
+  File "/private/tmp/vox-apple-signal3-20261108/apps/android/scripts/validate-intelligence-evaluations.py", line 112, in validate_reports
+    require(not changed, "evaluation implementation changed; rerun the full model gate: " + ", ".join(changed))
+  File "/private/tmp/vox-apple-signal3-20261108/apps/android/scripts/validate-intelligence-evaluations.py", line 54, in require
+    if not condition: raise ValueError(message)
+ValueError: evaluation implementation changed; rerun the full model gate: Packages/vox-core-rust/crates/vox-core/src/lib.rs, apps/android/app/src/main/kotlin/md/vox/android/VoxApplication.kt, apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRepository.kt, apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt, apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt, apps/android/scripts/validate-intelligence-evaluations.py
+
+----------------------------------------------------------------------
+Ran 162 tests in 86.044s
+
+FAILED (errors=1)
+Validation definitions passed: 6 roles, 3 providers, 35 cases, 23 gates; scoped campaign computed
+Validation definitions passed: 6 roles, 3 providers, 35 cases, 23 gates; scoped campaign computed

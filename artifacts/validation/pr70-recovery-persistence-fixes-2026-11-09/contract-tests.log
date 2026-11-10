@@ -1,0 +1,181 @@
+test_changed_geist_font_is_rejected (test_android_artifact_validator.AndroidArtifactValidatorTests) ... ok
+test_compose_test_activity_is_allowed_only_in_debuggable_artifact (test_android_artifact_validator.AndroidArtifactValidatorTests) ... ok
+test_exported_documents_provider_with_platform_signature_permission_is_allowed (test_android_artifact_validator.AndroidArtifactValidatorTests) ... ok
+test_incomplete_transfer_exclusions_are_rejected (test_android_artifact_validator.AndroidArtifactValidatorTests) ... ok
+test_missing_intelligence_runtime_abi_is_rejected (test_android_artifact_validator.AndroidArtifactValidatorTests) ... ok
+test_missing_jna_runtime_abi_is_rejected (test_android_artifact_validator.AndroidArtifactValidatorTests) ... ok
+test_missing_sherpa_runtime_abi_is_rejected (test_android_artifact_validator.AndroidArtifactValidatorTests) ... ok
+test_missing_vox_abi_is_rejected (test_android_artifact_validator.AndroidArtifactValidatorTests) ... ok
+test_non_literal_or_resource_exported_value_is_rejected (test_android_artifact_validator.AndroidArtifactValidatorTests) ... ok
+test_physical_control_requires_shell_permission_and_cannot_leak_into_release (test_android_artifact_validator.AndroidArtifactValidatorTests) ... ok
+test_platform_permission_is_rejected (test_android_artifact_validator.AndroidArtifactValidatorTests) ... ok
+test_unpermissioned_exported_transitive_component_is_rejected (test_android_artifact_validator.AndroidArtifactValidatorTests) ... ok
+test_valid_generated_signature_permission_is_allowed (test_android_artifact_validator.AndroidArtifactValidatorTests) ... ok
+test_workmanager_initializer_is_rejected (test_android_artifact_validator.AndroidArtifactValidatorTests) ... ok
+test_wrong_vox_elf_machine_is_rejected (test_android_artifact_validator.AndroidArtifactValidatorTests) ... ok
+test_aliases_are_reviewed_case_only_catalog_variants (test_android_localization_audit.AndroidLocalizationAuditTests) ... ok
+test_android_catalog_rejects_missing_locale_and_changed_placeholders (test_android_localization_audit.AndroidLocalizationAuditTests) ... ok
+test_audit_inventory_requires_deliberate_review_when_copy_changes (test_android_localization_audit.AndroidLocalizationAuditTests) ... ok
+test_audit_stays_explicitly_unapproved (test_android_localization_audit.AndroidLocalizationAuditTests) ... ok
+test_conditional_predicate_literals_are_not_reported_as_copy (test_android_localization_audit.AndroidLocalizationAuditTests) ... ok
+test_first_argument_parser_preserves_nested_commas (test_android_localization_audit.AndroidLocalizationAuditTests) ... ok
+test_generated_audit_is_byte_for_byte_current (test_android_localization_audit.AndroidLocalizationAuditTests) ... ok
+test_ios_catalog_values_take_precedence_over_android_drafts (test_android_localization_audit.AndroidLocalizationAuditTests) ... ok
+test_kotlin_escaped_positional_placeholder_is_not_interpolation (test_android_localization_audit.AndroidLocalizationAuditTests) ... ok
+test_missing_plural_category_and_unclassified_count_fail_closed (test_android_localization_audit.AndroidLocalizationAuditTests) ... ok
+test_plural_patterns_cover_every_quantity_and_preserve_argument_contracts (test_android_localization_audit.AndroidLocalizationAuditTests) ... ok
+test_runtime_catalog_format_arguments_match_source_contracts (test_android_localization_audit.AndroidLocalizationAuditTests) ... ok
+test_runtime_localization_plumbing_is_not_reported_as_dynamic_ui_copy (test_android_localization_audit.AndroidLocalizationAuditTests) ... ok
+test_device_local_telemetry_cannot_hide_usb_gaps_or_process_changes (test_android_physical_capture.PhysicalCaptureQualificationTests) ... ok
+test_emulator_preflight_never_dispatches_microphone_commands (test_android_physical_capture.PhysicalCaptureQualificationTests) ... ok
+test_export_verification_must_match_the_exact_recording_and_bytes (test_android_physical_capture.PhysicalCaptureQualificationTests) ... ok
+test_install_refuses_owner_application_and_nondebug_apks (test_android_physical_capture.PhysicalCaptureQualificationTests) ... ok
+test_lost_audio_invalid_wav_and_stale_builds_fail (test_android_physical_capture.PhysicalCaptureQualificationTests) ... ok
+test_missing_hardware_cannot_be_reported_as_complete (test_android_physical_capture.PhysicalCaptureQualificationTests) ... ok
+test_model_measurements_require_real_results_and_usable_thermal_samples (test_android_physical_capture.PhysicalCaptureQualificationTests) ... ok
+test_real_hour_and_microphone_workload_are_required (test_android_physical_capture.PhysicalCaptureQualificationTests) ... ok
+test_reboot_requires_explicit_unlocked_state_and_accessible_credential_storage (test_android_physical_capture.PhysicalCaptureQualificationTests) ... ok
+test_recovery_prefix_requires_every_original_chunk_exactly_once (test_android_physical_capture.PhysicalCaptureQualificationTests) ... ok
+test_recovery_setup_disconnect_still_attempts_stop_and_records_cleanup (test_android_physical_capture.PhysicalCaptureQualificationTests) ... ok
+test_approval_cannot_be_claimed_by_manifest_only (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_changed_screenshot_without_manifest_update_is_rejected (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_declared_dimension_drift_is_rejected (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_exact_unreviewed_evidence_passes (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_iOS_comparison_cannot_be_added_without_a_reference (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_missing_additional_capture_set_is_rejected (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_missing_motion_clip_is_rejected (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_missing_resilience_capture_set_is_rejected (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_missing_state_capture_set_is_rejected (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_missing_story_is_rejected (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_missing_windowing_capture_set_is_rejected (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_motion_approval_cannot_be_claimed_by_manifest_only (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_motion_clip_hash_drift_is_rejected (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_resilience_capture_hash_drift_is_rejected (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_state_capture_hash_drift_is_rejected (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_windowing_task_bounds_drift_is_rejected (test_android_visual_parity_validator.AndroidVisualParityValidatorTests) ... ok
+test_repository_ref_source_workflow_issuer_and_audience_claim_mutations_fail (test_github_actions_oidc.OIDCTests) ... ok
+test_signature_time_header_and_bounds_fail_closed (test_github_actions_oidc.OIDCTests) ... ok
+test_token_request_host_is_bounded_to_github_actions_domain (test_github_actions_oidc.OIDCTests) ... ok
+test_token_request_url_is_pinned_before_network_access (test_github_actions_oidc.OIDCTests) ... ok
+test_valid_rs256_token_and_exact_claims_pass (test_github_actions_oidc.OIDCTests) ... ok
+test_dropping_an_instruction_case_fails_closed (test_local_intelligence_evaluation.LocalIntelligenceEvaluationTests) ... ok
+test_four_model_methods_are_mandatory_instead_of_assumption_skips (test_local_intelligence_evaluation.LocalIntelligenceEvaluationTests) ... ok
+test_native_and_model_pins_are_consistent_with_the_sbom (test_local_intelligence_evaluation.LocalIntelligenceEvaluationTests) ... ok
+test_radio_transition_waits_for_the_current_validated_network (test_local_intelligence_evaluation.LocalIntelligenceEvaluationTests) ... ok
+test_retained_full_model_and_cross_platform_reports_are_truthful (test_local_intelligence_evaluation.LocalIntelligenceEvaluationTests) ... ERROR
+test_shared_audio_hashes_formats_and_zero_error_target_are_bound (test_local_intelligence_evaluation.LocalIntelligenceEvaluationTests) ... ok
+test_speaker_reports_cannot_hide_collapse_or_missing_turns (test_local_intelligence_evaluation.LocalIntelligenceEvaluationTests) ... ok
+test_stale_receipt_identifies_the_changed_implementation (test_local_intelligence_evaluation.LocalIntelligenceEvaluationTests) ... ok
+test_finalize_cannot_mint_core_diagnostics_and_rejects_mutation (test_m2_hosted_producer.HostedProducerTests) ... ok
+test_transcript_value_limit_is_explicit (test_transcript_property.TranscriptPropertyContractTests) ... ok
+test_unicode_property_names_are_valid_without_changing_text_bytes (test_transcript_property.TranscriptPropertyContractTests) ... ok
+test_yaml_syntax_cannot_be_a_property_name (test_transcript_property.TranscriptPropertyContractTests) ... ok
+test_acceptance_mapping_mutations_rejected (test_validate.ContractValidatorTests) ... ok
+test_all_wearable_integers_are_bounded (test_validate.ContractValidatorTests) ... ok
+test_android_aapt2_linux_verification_metadata_is_exact (test_validate.ContractValidatorTests) ... ok
+test_android_ci_build_logic_and_dependency_metadata_are_governed (test_validate.ContractValidatorTests) ... ok
+test_android_command_line_tools_pin_is_exact (test_validate.ContractValidatorTests) ... ok
+test_android_dependency_metadata_path_inventory_is_exact (test_validate.ContractValidatorTests) ... ok
+test_android_framework_runtime_activation_is_rejected (test_validate.ContractValidatorTests) ... ok
+test_android_linux_resolved_verification_metadata_is_exact (test_validate.ContractValidatorTests) ... ok
+test_android_local_capability_evidence_kind_must_match_ledger (test_validate.ContractValidatorTests) ... ok
+test_android_local_capability_evidence_registry_cannot_omit_ledger_claims (test_validate.ContractValidatorTests) ... ok
+test_android_local_capability_evidence_requires_present_source_symbols (test_validate.ContractValidatorTests) ... ok
+test_android_local_device_evidence_requires_connected_test_gate (test_validate.ContractValidatorTests) ... ok
+test_android_local_device_evidence_requires_instrumented_source (test_validate.ContractValidatorTests) ... ok
+test_android_local_ui_evidence_requires_connected_test_gate (test_validate.ContractValidatorTests) ... ok
+test_android_local_ui_evidence_requires_instrumented_source (test_validate.ContractValidatorTests) ... ok
+test_android_module_graph_rejects_extra_reverse_and_cycle_edges (test_validate.ContractValidatorTests) ... ok
+test_android_package_fixture_bindings_and_fixed_profile_are_semantic (test_validate.ContractValidatorTests) ... ok
+test_android_phase3_new_java_bypass_source_is_rejected (test_validate.ContractValidatorTests) ... ok
+test_android_phase3_semantic_policy_mutations_are_rejected_after_rehash (test_validate.ContractValidatorTests) ... ok
+test_android_phase4_bridge_policy_mutations_are_rejected_after_rehash (test_validate.ContractValidatorTests) ... ok
+test_android_phase4_generated_binding_bypass_sources_are_rejected (test_validate.ContractValidatorTests) ... ok
+test_android_phase4_generated_enum_surface_is_rejected_after_rehash (test_validate.ContractValidatorTests) ... ok
+test_artifact_identity_mutations_rejected (test_validate.ContractValidatorTests) ... ok
+test_artifact_plan_hash_mutation_rejected (test_validate.ContractValidatorTests) ... ok
+test_asset_replacement_after_ingest_rejected (test_validate.ContractValidatorTests) ... ok
+test_clean_pass (test_validate.ContractValidatorTests) ... ok
+test_contracts_workflow_covers_all_m3_governance_inputs (test_validate.ContractValidatorTests) ... ok
+test_core_api_semantic_negatives_are_typed (test_validate.ContractValidatorTests) ... ok
+test_declared_m1_resource_mirror_must_be_present (test_validate.ContractValidatorTests) ... ok
+test_every_capability_whose_milestone_contains_m3_is_exact (test_validate.ContractValidatorTests) ... ok
+test_frozen_policy_reassignment_rejected (test_validate.ContractValidatorTests) ... ok
+test_governed_ci_actions_require_immutable_revisions (test_validate.ContractValidatorTests) ... ok
+test_imported_reconciliation_frontier_blocks_regression_and_terminal_followup (test_validate.ContractValidatorTests) ... ok
+test_kotlin_binding_normalizer_internalizes_future_enum_shape (test_validate.ContractValidatorTests) ... ok
+test_malformed_scope_variance_rejected (test_validate.ContractValidatorTests) ... ok
+test_manifest_hash_mutation (test_validate.ContractValidatorTests) ... ok
+test_owner_classification_remains_preserved (test_validate.ContractValidatorTests) ... ok
+test_receipt_derivation_vector_is_semantic (test_validate.ContractValidatorTests) ... ok
+test_reconciliation_payload_mutations_rejected (test_validate.ContractValidatorTests) ... ok
+test_recovery_intent_rejects_worker_fence_bypass_after_rehash (test_validate.ContractValidatorTests) ... ok
+test_reinstall_epoch_is_per_installation (test_validate.ContractValidatorTests) ... ok
+test_rejected_and_stale_message_id_reuse_rejected (test_validate.ContractValidatorTests) ... ok
+test_required_mirror_without_consumer_rejected (test_validate.ContractValidatorTests) ... ok
+test_resource_only_cannot_claim_evidence (test_validate.ContractValidatorTests) ... ok
+test_retired_installation_switchback_rejected (test_validate.ContractValidatorTests) ... ok
+test_schema_unsupported_keyword_rejected (test_validate.ContractValidatorTests) ... ok
+test_secondary_imported_terminal_frontier_blocks_followup (test_validate.ContractValidatorTests) ... ok
+test_stale_present_mirror_rejected (test_validate.ContractValidatorTests) ... ok
+test_toolchain_governed_inventory_cannot_shrink (test_validate.ContractValidatorTests) ... ok
+test_toolchain_schema_weakening_is_hash_bound (test_validate.ContractValidatorTests) ... ok
+test_toolchain_validator_rejects_pin_hash_and_binding_inventory_drift (test_validate.ContractValidatorTests) ... ok
+test_trace_cross_correlation_state_rejected (test_validate.ContractValidatorTests) ... ok
+test_trace_cross_recording_state_rejected (test_validate.ContractValidatorTests) ... ok
+test_trace_envelope_semantics_execute (test_validate.ContractValidatorTests) ... ok
+test_trace_frontier_progression_rejected (test_validate.ContractValidatorTests) ... ok
+test_trace_future_retry_rejected (test_validate.ContractValidatorTests) ... ok
+test_trace_message_id_collision_rejected (test_validate.ContractValidatorTests) ... ok
+test_trace_preset_binding_rejected (test_validate.ContractValidatorTests) ... ok
+test_trace_sequence_mutation_rejected (test_validate.ContractValidatorTests) ... ok
+test_typed_negative_expectation_is_enforced (test_validate.ContractValidatorTests) ... ok
+test_unaccepted_scope_variance_rejected (test_validate.ContractValidatorTests) ... ok
+test_unknown_scope_variance_classification_rejected (test_validate.ContractValidatorTests) ... ok
+test_unsupported_version_followup_rejected (test_validate.ContractValidatorTests) ... ok
+test_aggregate_exact_sizes_and_latency_count_rejected (test_validation_definitions.Tests) ... ok
+test_campaign_file_counts_artifact_inventory_and_root_symlinks_rejected (test_validation_definitions.Tests) ... ok
+test_candidate_packaging_baseline_growth_leaf_and_sum_rejected (test_validation_definitions.Tests) ... ok
+test_case_execution_is_nonclosure_and_m3_derives_prior_cases (test_validation_definitions.Tests) ... ok
+test_chunk_omission_hash_and_rss_mutations_rejected (test_validation_definitions.Tests) ... ok
+test_chunk_sequence_size_sum_and_drain_rejected (test_validation_definitions.Tests) ... ok
+test_core_exit_case_requires_exact_provenance_and_named_build_check (test_validation_definitions.Tests) ... ok
+test_definitions_and_scoped_m2_candidate_pass (test_validation_definitions.Tests) ... ok
+test_direct_native_format_and_architecture_parsing (test_validation_definitions.Tests) ... ok
+test_future_packaging_without_registry_rejected (test_validation_definitions.Tests) ... ok
+test_governed_future_package_baseline_passes_and_mutations_fail (test_validation_definitions.Tests) ... ok
+test_host_identity_and_qualification_rejected (test_validation_definitions.Tests) ... ok
+test_hosted_package_case_executes_with_authenticated_verifier_archive_and_exact_inventory (test_validation_definitions.Tests) ... ok
+test_hosted_package_external_bytes_and_symlink_rejected (test_validation_definitions.Tests) ... ok
+test_hosted_requires_external_root_and_not_retained_rejected (test_validation_definitions.Tests) ... ok
+test_kernel_peak_retains_transient_memory_without_polling_cadence (test_validation_definitions.Tests) ... ok
+test_kernel_peak_underreporting_and_missing_observation_rejected (test_validation_definitions.Tests) ... ok
+test_m3_recovery_and_provider_definitions_are_explicit_and_required (test_validation_definitions.Tests) ... ok
+test_m3_scope_mixed_build_identities_and_blocked_wear_are_representable (test_validation_definitions.Tests) ... ok
+test_producer_and_validator_provenance_inventories_are_exact (test_validation_definitions.Tests) ... ok
+test_release_gate_requires_real_approvals_and_physical_identity_stays_strict (test_validation_definitions.Tests) ... ok
+test_safe_paths_symlink_and_oversize_rejected (test_validation_definitions.Tests) ... ok
+test_schema_fixtures (test_validation_definitions.Tests) ... ok
+test_schema_shaped_passed_m3_evidence_is_fail_closed (test_validation_definitions.Tests) ... ok
+test_scope_missing_case_is_incomplete_and_extra_rejected (test_validation_definitions.Tests) ... ok
+test_shadow_exit_requires_complete_build_bound_isolation_observations (test_validation_definitions.Tests) ... ok
+test_threshold_measurement_self_assertion_and_provenance_rejected (test_validation_definitions.Tests) ... ok
+
+======================================================================
+ERROR: test_retained_full_model_and_cross_platform_reports_are_truthful (test_local_intelligence_evaluation.LocalIntelligenceEvaluationTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/vox-apple-signal3-20261108/Packages/contracts/tests/test_local_intelligence_evaluation.py", line 62, in test_retained_full_model_and_cross_platform_reports_are_truthful
+    VALIDATOR.validate_reports(self.corpus,VALIDATOR.REPORTS)
+  File "/private/tmp/vox-apple-signal3-20261108/apps/android/scripts/validate-intelligence-evaluations.py", line 112, in validate_reports
+    require(not changed, "evaluation implementation changed; rerun the full model gate: " + ", ".join(changed))
+  File "/private/tmp/vox-apple-signal3-20261108/apps/android/scripts/validate-intelligence-evaluations.py", line 54, in require
+    if not condition: raise ValueError(message)
+ValueError: evaluation implementation changed; rerun the full model gate: apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt
+
+----------------------------------------------------------------------
+Ran 162 tests in 104.289s
+
+FAILED (errors=1)
+Validation definitions passed: 6 roles, 3 providers, 35 cases, 23 gates; scoped campaign computed
+Validation definitions passed: 6 roles, 3 providers, 35 cases, 23 gates; scoped campaign computed

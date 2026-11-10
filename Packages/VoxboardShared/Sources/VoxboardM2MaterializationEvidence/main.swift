@@ -131,7 +131,62 @@ private func preparation() throws -> (Data, [String: Any]) {
     return (try canonicalJSON(value), value)
 }
 
+// Exercises the generated Swift consumer against the real host Rust library.
+// This is a synthetic boundary check, not model/device or performance qualification.
+private func verifyHeadingFailureBoundary() throws {
+    let stream = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
+    let cases: [(String, Data, VoxCoreError)] = [
+        ("existingNoteHeading", Data("## Another heading\n\nPrivate content".utf8), .HeadingNotFound),
+        ("rollingNote", Data("```md\n## Private selector\n```".utf8), .HeadingNotFound),
+        ("existingNoteHeading", Data([0xff]), .InvalidControl),
+    ]
+    for (operation, bytes, expectedError) in cases {
+        var (_, input) = try preparation()
+        input["operation"] = operation
+        var preset = input["preset"] as! [String: Any]
+        var metadata = preset["metadataPolicy"] as! [String: Any]
+        metadata["templatePolicy"] = "none"
+        preset["metadataPolicy"] = metadata
+        var route = preset["routePolicy"] as! [String: Any]
+        route["collisionPolicy"] = "reuseIfHashMatches"
+        route["placement"] = "beneathHeading"
+        route["headingTitle"] = "Private selector"
+        route["headingLevel"] = 2
+        route["missingHeadingBehavior"] = "fail"
+        if operation == "rollingNote" { route["rollingPeriod"] = "daily" }
+        preset["routePolicy"] = route
+        input["preset"] = preset
+        let prepared = try corePrepare(preparationJson: canonicalJSON(input))
+        let requirements = try JSONSerialization.jsonObject(with: prepared) as! [String: Any]
+        let observation = (requirements["observations"] as! [[String: Any]])[0]
+        input["controlByteCount"] = 1
+        input["preparationRevision"] = 1
+        input["snapshotHash"] = requirements["snapshotHash"]!
+        input["session"] = ["inputOrdering": "observation-list-then-sequence", "maximumAggregateObservationBytes": 268_435_456, "maximumChunkBytes": maximumChunkBytes, "singleFinalize": true, "singleSeal": true]
+        input["observations"] = [["kind": "existingNote", "observationID": observation["id"]!, "status": "present", "logicalPath": observation["logicalPath"]!, "length": bytes.count, "sha256": sha256(bytes), "byteStreamID": stream]]
+        let session = try coreStartMaterialization(controlJson: canonicalJSON(input))
+        try session.pushObservation(streamId: stream, sequence: 0, bytes: bytes, eof: true)
+        do {
+            _ = try session.seal()
+            throw NSError(domain: "HeadingBoundaryCheck", code: 1)
+        } catch let error as VoxCoreError {
+            guard error == expectedError else { throw error }
+        }
+        do {
+            _ = try session.drain(artifactId: stream, sequence: 0, maximumBytes: 1024)
+            throw NSError(domain: "HeadingBoundaryCheck", code: 2)
+        } catch let error as VoxCoreError {
+            guard error == .SessionTerminal else { throw error }
+        }
+    }
+    print("Swift/Rust heading boundary passed: 3 real native sessions; typed failures and no prepared output")
+}
+
 private func main() throws {
+    if CommandLine.arguments.dropFirst() == ["--verify-heading-not-found"] {
+        try verifyHeadingFailureBoundary()
+        return
+    }
     if CommandLine.arguments.dropFirst() == ["--verify-rss-high-water"] {
         try verifyResidentMemoryPeak()
         return
