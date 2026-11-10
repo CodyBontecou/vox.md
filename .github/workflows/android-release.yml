@@ -373,3 +373,50 @@ jobs:
           if-no-files-found: error
           retention-days: 90
           compression-level: 0
+
+  listing:
+    name: Sync Play listing graphics
+    needs: [resolve, upload]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: google-play
+    steps:
+      - name: Check out the release's listing graphics
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ needs.resolve.outputs.release_sha }}
+          persist-credentials: false
+
+      - name: Authenticate to Google Play with protected Workload Identity
+        id: play-auth
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        if: vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER != ''
+        with:
+          workload_identity_provider: ${{ vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/androidpublisher
+          create_credentials_file: false
+
+      - name: Stage service-account JSON authentication
+        if: vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER == ''
+        shell: bash
+        env:
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          set -euo pipefail
+          [[ -n "$PLAY_SERVICE_ACCOUNT_JSON" ]] || {
+            echo '::error::set GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER vars or the PLAY_SERVICE_ACCOUNT_JSON secret'; exit 1;
+          }
+          key="$RUNNER_TEMP/vox-play-key.json"
+          printf '%s' "$PLAY_SERVICE_ACCOUNT_JSON" >"$key"
+          chmod 600 "$key"
+          echo "PLAY_CONSOLE_KEY_PATH=$key" >>"$GITHUB_ENV"
+
+      # Replaces only the image sets whose bytes differ from what Play serves; a no-op otherwise.
+      - name: Sync listing graphics with the release
+        env:
+          CONFIRM_PLAY_LISTING_GRAPHICS: md.vox.android:en-US
+          PLAY_ACCESS_TOKEN: ${{ steps.play-auth.outputs.access_token }}
+          PLAY_CONSOLE_KEY_PATH: ${{ env.PLAY_CONSOLE_KEY_PATH }}
+        run: ./apps/android/scripts/upload-google-play-listing-graphics.sh

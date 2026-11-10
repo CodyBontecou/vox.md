@@ -25,11 +25,18 @@ launcher set from it. The themed-icon glyph is
 
 ## Uploading
 
-```sh
-PLAY_CONSOLE_KEY_PATH=/path/to/service-account.json \
-CONFIRM_PLAY_LISTING_GRAPHICS=md.vox.android:en-US \
-apps/android/scripts/upload-google-play-listing-graphics.sh
-```
+GitHub Actions owns uploads; there is no local Play key. Both paths run
+`apps/android/scripts/upload-google-play-listing-graphics.sh` as the
+`play-publisher` service account (Workload Identity, `google-play` environment):
 
-This replaces the en-US feature graphic and all three screenshot sets in one
-Play edit. `PLAY_LISTING_DRY_RUN=1` validates the edit without committing it.
+- **Every Android Release** syncs these files after the bundle upload (the
+  `Sync Play listing graphics` job), so committing new graphics before tagging is
+  enough.
+- **Between releases**, run the **Android Play Listing** workflow from `main`.
+  It defaults to a dry run that lists which image sets differ; untick
+  `dry_run` to commit.
+
+The sync compares each set (icon, feature graphic, phone, 7-inch, 10-inch) with
+what Play serves by SHA-256 and order, replaces only the sets that differ, and
+commits nothing when everything matches. It refuses to commit while a submission
+is in review rather than cancel it; re-run the workflow once review finishes.

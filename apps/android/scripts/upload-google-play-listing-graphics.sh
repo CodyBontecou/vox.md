@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
-# Replace the Play store listing graphics (feature graphic, phone and tablet screenshots) for one
+# Sync the Play store listing graphics (icon, feature graphic, phone and tablet screenshots) for one
 # locale with the files under play-console/graphics. Touches no tracks, bundles or text fields.
 #
-#   PLAY_CONSOLE_KEY_PATH=/path/to/service-account.json \
+# Idempotent: each image set is compared by SHA-256 (and order) with what Play already serves, and
+# only sets that differ are replaced. When nothing differs the edit is discarded and nothing is
+# committed, so the release workflow can run this on every release.
+#
+#   PLAY_ACCESS_TOKEN=... (or PLAY_CONSOLE_KEY_PATH=/path/to/service-account.json) \
 #   CONFIRM_PLAY_LISTING_GRAPHICS=md.vox.android:en-US \
 #   apps/android/scripts/upload-google-play-listing-graphics.sh
 #
-# Set PLAY_LISTING_DRY_RUN=1 to validate the edit without committing it.
+# PLAY_LISTING_DRY_RUN=1 reports what would change and validates the edit without committing it.
 set -euo pipefail
 
 script_dir=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
@@ -17,19 +21,22 @@ package=${PLAY_PACKAGE_NAME:-md.vox.android}
 locale=${PLAY_LISTING_LOCALE:-en-US}
 dry_run=${PLAY_LISTING_DRY_RUN:-}
 confirmation=${CONFIRM_PLAY_LISTING_GRAPHICS:-}
+summary=${GITHUB_STEP_SUMMARY:-/dev/null}
 
 fail() { printf 'Play listing graphics: %s\n' "$*" >&2; exit 1; }
 
-# imageType → source files, in upload order.
-declare -a types=(featureGraphic phoneScreenshots sevenInchScreenshots tenInchScreenshots)
+# imageType → source files, in listing order.
+types=(icon featureGraphic phoneScreenshots sevenInchScreenshots tenInchScreenshots)
 files_for() {
   case $1 in
+    icon) printf '%s\n' "$graphics/app-icon-512.png" ;;
     featureGraphic) printf '%s\n' "$graphics/feature-graphic-1024x500.png" ;;
-    phoneScreenshots) ls "$graphics"/screenshots/phone/*.png ;;
-    sevenInchScreenshots) ls "$graphics"/screenshots/tablet-7/*.png ;;
-    tenInchScreenshots) ls "$graphics"/screenshots/tablet-10/*.png ;;
+    phoneScreenshots) find "$graphics/screenshots/phone" -maxdepth 1 -name '*.png' | LC_ALL=C sort ;;
+    sevenInchScreenshots) find "$graphics/screenshots/tablet-7" -maxdepth 1 -name '*.png' | LC_ALL=C sort ;;
+    tenInchScreenshots) find "$graphics/screenshots/tablet-10" -maxdepth 1 -name '*.png' | LC_ALL=C sort ;;
   esac
 }
+sha256_of() { if command -v sha256sum >/dev/null; then sha256sum "$1"; else shasum -a 256 "$1"; fi | awk '{print $1}'; }
 
 for type in "${types[@]}"; do
   n=0
@@ -79,7 +86,7 @@ if [[ -z "$token" ]]; then
 fi
 auth=(-H "Authorization: Bearer $token")
 
-call() { # method url [curl args...] — prints body, fails with Play's error message
+call() { # method url [curl args...] — prints the body; fails with Play's error message
   local method=$1 url=$2; shift 2
   local out="$work/resp.json" http
   http=$(curl -sS --max-time 120 -X "$method" "${auth[@]}" "$@" "$url" -o "$out" -w '%{http_code}') || true
@@ -92,20 +99,49 @@ call() { # method url [curl args...] — prints body, fails with Play's error me
 edit_id=$(call POST "$api/edits" -H 'Content-Type: application/json' -d '{}' | jq -er .id)
 printf 'Opened edit %s for %s (%s)\n' "$edit_id" "$package" "$locale"
 
+changed=()
 for type in "${types[@]}"; do
+  local_hashes=$(while IFS= read -r f; do sha256_of "$f"; done < <(files_for "$type"))
+  remote_hashes=$(call GET "$api/edits/$edit_id/listings/$locale/$type" | jq -r '.images[]?.sha256 // empty')
+  if [[ "$local_hashes" == "$remote_hashes" ]]; then
+    printf '  %-22s unchanged\n' "$type"
+  else
+    printf '  %-22s differs (Play has %s, repo has %s)\n' "$type" \
+      "$(grep -c . <<<"$remote_hashes" || true)" "$(grep -c . <<<"$local_hashes")"
+    changed+=("$type")
+  fi
+done
+
+{
+  echo "### Play listing graphics ($package, $locale)"
+  if [[ ${#changed[@]} -eq 0 ]]; then echo 'Already in sync; nothing committed.'
+  else echo "Changed sets: ${changed[*]}"; fi
+} >>"$summary"
+
+if [[ ${#changed[@]} -eq 0 ]]; then
+  printf 'Listing graphics already match the repo; discarding the edit.\n'
+  exit 0
+fi
+
+if [[ -n "$dry_run" ]]; then
+  printf 'Dry run: would replace %s. Discarding the edit.\n' "${changed[*]}"
+  echo 'Dry run: nothing committed.' >>"$summary"
+  exit 0
+fi
+
+for type in "${changed[@]}"; do
   call DELETE "$api/edits/$edit_id/listings/$locale/$type" >/dev/null
   while IFS= read -r f; do
     call POST "$upload_api/edits/$edit_id/listings/$locale/$type?uploadType=media" \
       -H 'Content-Type: image/png' --data-binary "@$f" >/dev/null
-    printf '  %-22s %s\n' "$type" "${f#"$graphics/"}"
+    printf '  uploaded %-22s %s\n' "$type" "${f#"$graphics/"}"
   done < <(files_for "$type")
 done
 
 call POST "$api/edits/$edit_id:validate" -H 'Content-Type: application/json' -d '' >/dev/null
-if [[ -n "$dry_run" ]]; then
-  printf 'Dry run: edit validated; discarding it without committing.\n'
-  exit 0
-fi
-call POST "$api/edits/$edit_id:commit" -H 'Content-Type: application/json' -d '' >/dev/null
+# Never cancel or disturb a submission that is already in review; fail visibly instead and retry
+# later with the Android Play Listing workflow.
+call POST "$api/edits/$edit_id:commit?changesInReviewBehavior=ERROR_IF_IN_REVIEW" \
+  -H 'Content-Type: application/json' -d '' >/dev/null
 committed=true
-printf 'Committed. Listing graphics for %s (%s) replaced.\n' "$package" "$locale"
+printf 'Committed. Replaced %s for %s (%s).\n' "${changed[*]}" "$package" "$locale"
