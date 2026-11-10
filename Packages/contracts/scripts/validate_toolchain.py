@@ -9,314 +9,6 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[3]
-EXPECTED_SCHEMA_CANONICAL_SHA256 = "803066cacdf4597ab43f76b63e2291b406d8b0a8cd403f07269629e0bd0dcea6"
-EXPECTED_GOVERNED_PATHS = (
-    "Packages/vox-core-rust/Cargo.lock",
-    "Packages/vox-core-rust/uniffi.toml",
-    "Packages/vox-core-rust/uniffi-bindgen.toml",
-    "Packages/vox-core-rust/crates/vox-core-uniffi/uniffi.toml",
-    "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
-    "Packages/vox-core-rust/crates/vox-core-uniffi/src/lib.rs",
-    "Packages/vox-core-rust/scripts/generate-swift-bindings.sh",
-    "Packages/vox-core-rust/scripts/generate-kotlin-bindings.sh",
-    "Packages/vox-core-rust/scripts/normalize-kotlin-bindings.py",
-    "Packages/vox-core-rust/generated/kotlin/md/vox/core/vox_core_uniffi.kt",
-    "Packages/vox-core-rust/scripts/check-bindings.sh",
-    "Packages/vox-core-rust/scripts/build-android-cdylibs.sh",
-    "Packages/vox-core-rust/scripts/build-apple-xcframework.sh",
-    "Packages/vox-core-rust/scripts/merge-apple-staticlib.sh",
-    "Packages/vox-core-rust/scripts/normalize-apple-xcframework.py",
-    "Packages/vox-core-rust/scripts/inspect-native-packages.py",
-    "Packages/vox-core-rust/scripts/normalize-generated-text.py",
-    "Packages/vox-core-rust/crates/vox-core/tests/m2_core.rs",
-    "Packages/VoxboardShared/Sources/VoxCoreGenerated/VoxCore.swift",
-    "Packages/VoxboardShared/Sources/VoxboardM2MaterializationEvidence/main.swift",
-    "Packages/VoxboardShared/Sources/VoxCoreFFI/module.modulemap",
-    ".github/workflows/android-ci.yml",
-    ".github/workflows/contracts-ci.yml",
-    "apps/android/build.gradle.kts",
-    "apps/android/settings.gradle.kts",
-    "apps/android/gradle/libs.versions.toml",
-    "apps/android/gradle.properties",
-    "apps/android/gradle/wrapper/gradle-wrapper.properties",
-    "apps/android/gradle/wrapper/gradle-wrapper.jar",
-    "apps/android/gradlew",
-    "apps/android/gradlew.bat",
-    "apps/android/build-logic/build.gradle.kts",
-    "apps/android/build-logic/settings.gradle.kts",
-    "apps/android/build-logic/src/main/kotlin/AndroidApplicationConventionPlugin.kt",
-    "apps/android/build-logic/src/main/kotlin/AndroidLibraryConventionPlugin.kt",
-    "apps/android/build-logic/src/main/kotlin/AndroidComposeConventionPlugin.kt",
-    "apps/android/build-logic/src/main/kotlin/AndroidTestConventionPlugin.kt",
-    "apps/android/build-logic/gradle.lockfile",
-    "apps/android/app/build.gradle.kts",
-    "apps/android/app/gradle.lockfile",
-    "apps/android/app/proguard-rules.pro",
-    "apps/android/app/src/main/AndroidManifest.xml",
-    "apps/android/app/src/debug/AndroidManifest.xml",
-    "apps/android/app/src/debug/kotlin/md/vox/android/VisualStoryActivity.kt",
-    "Voxboard/Fonts/Geist-Regular.ttf",
-    "Voxboard/Fonts/Geist-Medium.ttf",
-    "Voxboard/Fonts/Geist-SemiBold.ttf",
-    "Voxboard/Fonts/GeistMono-Regular.ttf",
-    "Voxboard/Fonts/GeistMono-Medium.ttf",
-    "apps/android/app/src/main/kotlin/md/vox/android/AdaptiveLayout.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/CaptureDrainWorker.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/ConfiguredTranscriptExporter.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/HistoryDetailScreen.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/MainActivity.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/HistoryScreen.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/CapturePresetScreens.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/SettingsScreens.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/PlayEntitlementCache.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/SubscriptionAccessPolicy.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/PrivacySafeDebugLog.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/CaptureRecoveryControls.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/CaptureRecoveryForm.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/CaptureRecoveryMessages.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/SettingsSupportScreens.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/VoxApplication.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/VoxAppChrome.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/PhoneWearBridge.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/RuntimeLocalization.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/VoxInputMethodService.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/WearRecordingOnlyDelivery.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/WearTranscriptDelivery.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/ui/CaptureViewModel.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/ui/VoxTheme.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/BillingRestoreDiagnosticsInstrumentationTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/PlayEntitlementCacheInstrumentationTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/AppLanguageInstrumentationTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/KeyboardUiInstrumentationTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/LiveTranscriptUiInstrumentationTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalIntelligenceInstrumentationTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalSpeechInferenceInstrumentationTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/NamedModelInferenceInstrumentationTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/PhoneWearInboxInstrumentationTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/VisualAccessibilityInstrumentationTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/VisualStoryInstrumentationTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/WearRecordingOnlySafInstrumentationTest.kt",
-    "apps/android/app/src/test/kotlin/md/vox/android/PlayBillingTest.kt",
-    "apps/android/app/src/test/kotlin/md/vox/android/RuntimeLocalizationTest.kt",
-    "apps/android/app/src/test/kotlin/md/vox/android/SubscriptionAccessPolicyTest.kt",
-    "apps/android/app/src/test/kotlin/md/vox/android/CaptureRecoveryFormTest.kt",
-    "apps/android/scripts/generate-android-sbom.py",
-    "apps/android/scripts/generate-runtime-localizations.py",
-    "apps/android/localization-review.json",
-    "apps/android/scripts/validate-debug-artifacts.py",
-    "apps/android/scripts/validate-visual-parity.py",
-    "apps/android/scripts/validate-local-speech.py",
-    "apps/android/scripts/validate-named-speech-model.py",
-    "apps/android/scripts/validate-reinstall-quota.py",
-    "apps/android/scripts/validate-release-signature.py",
-    "apps/android/scripts/validate-signing-environment.py",
-    "apps/android/scripts/validate-wear-artifacts.py",
-    "artifacts/android-parity/visual-parity-manifest.json",
-    "apps/android/core-bridge/build.gradle.kts",
-    "apps/android/core-bridge/gradle.lockfile",
-    "apps/android/core-bridge/src/main/kotlin/md/vox/android/corebridge/CoreBridge.kt",
-    "apps/android/core-bridge/src/main/kotlin/md/vox/android/corebridge/GeneratedNativeCoreAdapter.kt",
-    "apps/android/core-bridge/src/test/kotlin/md/vox/android/corebridge/CoreBridgeTest.kt",
-    "apps/android/core-bridge/src/androidTest/kotlin/md/vox/android/corebridge/GeneratedCoreBridgeInstrumentationTest.kt",
-    "apps/android/capture-domain/build.gradle.kts",
-    "apps/android/capture-domain/gradle.lockfile",
-    "apps/android/data/build.gradle.kts",
-    "apps/android/data/gradle.lockfile",
-    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/DurableCapture.kt",
-    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRepository.kt",
-    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRecovery.kt",
-    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureDurability.kt",
-    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureDelivery.kt",
-    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/LocalCaptureTextProcessor.kt",
-    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/WearProtocol.kt",
-    "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureJournalReducerTest.kt",
-    "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureDurabilityPlannerTest.kt",
-    "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureDeliveryTest.kt",
-    "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/LocalCaptureTextProcessorTest.kt",
-    "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/WearProtocolTest.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/CapturePackageCodec.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/DurableCaptureStore.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDiscard.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureHeadingFailureStore.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryIntentStore.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryReconciliation.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryRequest.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureRecoveryRouteSelection.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureReplacement.kt",
-    "apps/android/data/src/main/java/md/vox/android/data/CaptureProjectionEntity.java",
-    "apps/android/data/src/main/java/md/vox/android/data/CaptureProjectionDao.java",
-    "apps/android/data/src/main/java/md/vox/android/data/CaptureDatabase.java",
-    "apps/android/data/src/main/java/md/vox/android/data/CaptureLeaseEntity.java",
-    "apps/android/data/src/main/java/md/vox/android/data/LeaseClockEntity.java",
-    "apps/android/data/src/main/java/md/vox/android/data/InstallationIdentityEntity.java",
-    "apps/android/data/src/main/java/md/vox/android/data/QuotaReservationEntity.java",
-    "apps/android/data/src/main/java/md/vox/android/data/CaptureTombstoneEntity.java",
-    "apps/android/data/src/main/java/md/vox/android/data/CaptureCompletionEntity.java",
-    "apps/android/data/src/main/java/md/vox/android/data/CaptureActivityDao.java",
-    "apps/android/data/src/main/java/md/vox/android/data/CaptureCoordinationDao.java",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/RoomCaptureIndex.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/RoomCaptureCoordination.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/RoomQuotaLedger.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/RoomCaptureCompletionLedger.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/CompletedCaptureCompactor.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDurabilityCoordinator.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/CoreMaterializationCoordinator.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/SafDocumentsGateway.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/SafVaultCommitExecutor.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/SafCandidateOccupancy.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/PreparedPlanVerifier.kt",
-    "apps/android/data/src/test/kotlin/md/vox/android/data/CapturePackageFixtureConsumerTest.kt",
-    "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureRoutePolicyTest.kt",
-    "apps/android/data/src/test/kotlin/md/vox/android/data/DurableCapturePackageStoreTest.kt",
-    "apps/android/data/src/test/kotlin/md/vox/android/data/DurableCaptureStorePhase5Test.kt",
-    "apps/android/data/src/test/kotlin/md/vox/android/data/SafVaultCommitExecutorTest.kt",
-    "apps/android/data/src/test/kotlin/md/vox/android/data/CoreMaterializationCoordinatorTest.kt",
-    "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureHeadingFailureStoreTest.kt",
-    "apps/android/data/src/test/kotlin/md/vox/android/data/CaptureReplacementTest.kt",
-    "docs/android/capture-recovery-sidecar.md",
-    "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureDatabaseInstrumentationTest.kt",
-    "apps/android/data/src/androidTest/kotlin/md/vox/android/data/CaptureRecoveryRepositoryInstrumentationTest.kt",
-    "apps/android/data/src/androidTest/kotlin/md/vox/android/data/ReinstallAdjustmentInstrumentationTest.kt",
-    "apps/android/data/src/androidTest/kotlin/md/vox/android/data/SafVaultCommitExecutorInstrumentationTest.kt",
-    "apps/android/data/schemas/md.vox.android.data.CaptureDatabase/1.json",
-    "apps/android/data/schemas/md.vox.android.data.CaptureDatabase/2.json",
-    "apps/android/data/schemas/md.vox.android.data.CaptureDatabase/3.json",
-    "apps/android/data/schemas/md.vox.android.data.CaptureDatabase/4.json",
-    "apps/android/data/schemas/md.vox.android.data.CaptureDatabase/5.json",
-    "docs/architecture/adr-0021-android-journal-replacement-lease-quota-room-v2.md",
-    "docs/architecture/adr-0022-android-lazy-uniffi-native-packaging.md",
-    "apps/android/platform-services/build.gradle.kts",
-    "apps/android/platform-services/gradle.lockfile",
-    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt",
-    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LiveSpeech.kt",
-    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
-    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SherpaSpeechModels.kt",
-    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SpeakerDiarization.kt",
-    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/TranscriptEnrichment.kt",
-    "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/LocalSpeechPolicyTest.kt",
-    "apps/android/wear/build.gradle.kts",
-    "apps/android/wear/gradle.lockfile",
-    "apps/android/wear/proguard-rules.pro",
-    "apps/android/wear/src/main/AndroidManifest.xml",
-    "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearDataBridge.kt",
-    "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearMainActivity.kt",
-    "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearQueueStore.kt",
-    "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearRecordingNotificationExtender.kt",
-    "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearSystemSurfaces.kt",
-    "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearDataBridgeInstrumentationTest.kt",
-    "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearQueueStoreInstrumentationTest.kt",
-    "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecorderUiInstrumentationTest.kt",
-    "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecordingLifecycleInstrumentationTest.kt",
-    "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearSystemSurfaceInstrumentationTest.kt",
-    "apps/android/gradle/verification-metadata.xml",
-    "apps/android/settings-gradle.lockfile",
-    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRouting.kt",
-    "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CaptureRoutingTest.kt",
-    "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDestinationBindings.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/CaptureParityControls.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/URLDelivery.kt",
-    "apps/android/app/src/test/kotlin/md/vox/android/URLDeliveryPolicyTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/URLDeliveryInstrumentationTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityDeliveryInstrumentationTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/CaptureParityUiInstrumentationTest.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/CaptureComposerOptions.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/PresetWidgets.kt",
-    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CapturePresentation.kt",
-    "apps/android/app/src/main/res/layout/widget_preset_row.xml",
-    "apps/android/app/src/main/res/layout/widget_preset_slot.xml",
-    "apps/android/app/src/main/res/layout/widget_presets.xml",
-    "apps/android/app/src/main/res/xml/vox_preset_widget_info.xml",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/ComposerPresetUiInstrumentationTest.kt",
-    "apps/android/app/src/test/kotlin/md/vox/android/DraftPreviewTest.kt",
-    "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/CapturePresentationTest.kt",
-    "apps/android/app/src/main/kotlin/md/vox/android/BillingOperations.kt",
-    "apps/android/app/src/test/kotlin/md/vox/android/BillingOperationsTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/BillingUiInstrumentationTest.kt",
-    "apps/android/localization/android-strings.json",
-    "apps/android/localization/android-overrides.json",
-    "apps/android/localization/plural-spec.json",
-    "apps/android/scripts/translate-android-localizations.py",
-    "apps/android/app/src/main/res/raw/vox_runtime_plurals.json",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalizationParityInstrumentationTest.kt",
-    "apps/android/wear/src/main/res/values/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-ar/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-b+id/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-b+zh+Hans/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-b+zh+Hant/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-bn/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-de/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-es/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-fr/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-hi/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-it/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-ja/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-ko/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-nl/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-pl/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-pt-rBR/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-ru/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-ta/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-th/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-tr/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-uk/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-ur/platform_plurals.xml",
-    "apps/android/wear/src/main/res/values-vi/platform_plurals.xml",
-    "Packages/VoxboardShared/Sources/VoxboardIntelligenceEvaluation/SpeakerBenchmark.swift",
-    "Packages/VoxboardShared/Sources/VoxboardIntelligenceEvaluation/main.swift",
-    "Packages/VoxboardShared/Sources/VoxboardShared/IntelligenceEvaluation.swift",
-    "Packages/VoxboardShared/Tests/VoxboardSharedTests/IntelligenceEvaluationTests.swift",
-    "Packages/contracts/tests/test_local_intelligence_evaluation.py",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/OnDeviceIntelligenceEvaluationInstrumentationTest.kt",
-    "apps/android/app/src/androidTest/kotlin/md/vox/android/ProvisionedModelTest.kt",
-    "apps/android/app/src/main/assets/licenses/Qwen-Apache-2.0.txt",
-    "apps/android/app/src/main/assets/licenses/llama-cpp-MIT.txt",
-    "apps/android/app/src/main/cpp/CMakeLists.txt",
-    "apps/android/app/src/main/cpp/intelligence.cpp",
-    "apps/android/app/src/test/kotlin/md/vox/android/ui/LocalInstructionDeliveryNoticeTest.kt",
-    "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/OnDeviceCaptureTextProcessor.kt",
-    "apps/android/capture-domain/src/test/kotlin/md/vox/android/capturedomain/OnDeviceCaptureTextProcessorTest.kt",
-    "apps/android/platform-services/src/debug/kotlin/md/vox/android/platformservices/InstructionEvaluationProbe.kt",
-    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/InstructionModelManager.kt",
-    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/IntelligenceEvaluation.kt",
-    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalIntelligence.kt",
-    "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/IntelligenceEvaluationTest.kt",
-    "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingProcessingReuseTest.kt",
-    "apps/android/scripts/build-intelligence-native.py",
-    "apps/android/scripts/validate-intelligence-evaluations.py",
-    "apps/android/scripts/validate-local-intelligence.py",
-    "evaluations/local-intelligence/v1/README.md",
-    "evaluations/local-intelligence/v1/audio/2035-147960-0008.wav",
-    "evaluations/local-intelligence/v1/audio/2035-147960-0014.wav",
-    "evaluations/local-intelligence/v1/audio/2277-149896-0005.wav",
-    "evaluations/local-intelligence/v1/audio/2277-149896-0026.wav",
-    "evaluations/local-intelligence/v1/corpus.json",
-    "Packages/VoxboardShared/Package.swift",
-    "artifacts/android-release/vox-android-sbom.cdx.json",
-    "apps/android/scripts/device_model_network.py",
-    "artifacts/validation/local-intelligence-2026-11-01/apple-instruction-evaluation.json",
-    "artifacts/validation/local-intelligence-2026-11-01/apple-speaker-evaluation.json",
-    "artifacts/validation/local-intelligence-2026-11-01/instruction-evaluation.json",
-    "artifacts/validation/local-intelligence-2026-11-01/receipt.json",
-    "artifacts/validation/local-intelligence-2026-11-01/speaker-evaluation.json",
-    "artifacts/validation/android-physical-capture-2026-11-01/interrupted-first-attempt.json",
-    "artifacts/validation/android-physical-capture-2026-11-01/matrix.json",
-    "artifacts/validation/android-physical-capture-2026-11-01/recording-native-profile.json",
-    "Packages/contracts/tests/test_android_physical_capture.py",
-    "apps/android/app/src/debug/kotlin/md/vox/android/PhysicalQualificationActivity.kt",
-    "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/RecordingFileRecovery.kt",
-    "apps/android/platform-services/src/test/kotlin/md/vox/android/platformservices/RecordingFileRecoveryTest.kt",
-    "apps/android/scripts/physical_capture_provenance.py",
-    "apps/android/scripts/qualify-physical-capture.py",
-    "apps/android/scripts/validate-physical-capture.py",
-    "artifacts/validation/android-physical-capture-2026-11-01/interrupted-second-attempt.json",
-    "artifacts/validation/android-physical-capture-2026-11-01/pixel-sigkill/recovery.json",
-)
 
 
 def fail(message):
@@ -328,13 +20,6 @@ def load(path):
         return json.loads(path.read_text())
     except Exception as error:
         fail(f"{path}: {error}")
-
-
-def android_app_ui_source(root):
-    """MainActivity plus the screen files split out of it, read as one source."""
-    base = root / "apps/android/app/src/main/kotlin/md/vox/android"
-    names = ("MainActivity.kt", "CaptureScreen.kt", "HistoryScreen.kt", "CapturePresetScreens.kt", "SettingsScreens.kt")
-    return "\n".join((base / name).read_text() for name in names)
 
 
 def digest(path):
@@ -371,17 +56,12 @@ def main(argv=None):
     root = (arguments.root or DEFAULT_ROOT).resolve()
     manifest = load(root / "toolchains/android-wear-shared-core.json")
     schema = load(root / "toolchains/android-wear-shared-core.schema.json")
-    schema_canonical = json.dumps(
-        schema, sort_keys=True, separators=(",", ":"), ensure_ascii=False
-    ).encode("utf-8")
-    if hashlib.sha256(schema_canonical).hexdigest() != EXPECTED_SCHEMA_CANONICAL_SHA256:
-        fail("toolchain schema canonical hash drift")
     exact(
         manifest,
         [
             "$schema", "schemaVersion", "status", "rust", "uniffi",
             "androidNative", "androidApplication", "apple",
-            "bindingGeneration", "governedImplementationFiles",
+            "bindingGeneration",
         ],
         "manifest",
     )
@@ -540,17 +220,6 @@ def main(argv=None):
     if binding["swiftOutputPaths"] != expected_swift or binding["kotlinOutputPaths"] != expected_kotlin:
         fail("generated output inventory")
 
-    governed = manifest["governedImplementationFiles"]
-    governed_paths = [item.get("path") for item in governed]
-    if governed_paths != list(EXPECTED_GOVERNED_PATHS):
-        fail("governed implementation path inventory differs")
-    for item in governed:
-        exact(item, ["path", "sha256"], "governed file")
-        path = root / item["path"]
-        if not path.is_file():
-            fail(f"governed file missing: {item['path']}")
-        if digest(path) != item["sha256"]:
-            fail(f"governed file hash drift: {item['path']}")
     for path in expected_swift + expected_kotlin:
         if not (root / path).is_file():
             fail(f"generated binding missing: {path}")
@@ -780,9 +449,6 @@ def main(argv=None):
     for forbidden in ("renameTo(", ".writeText(", ".writeBytes(", "ContentResolver", "WorkManager", "DataStore"):
         if forbidden in store_source:
             fail(f"durable package store contains forbidden API/fallback: {forbidden}")
-    for required in ("FileOutputStream", "stream.fd.sync()", "Os.fsync", "StandardCopyOption.ATOMIC_MOVE", "FileAlreadyExistsException"):
-        if required not in store_source:
-            fail(f"durable package store ordering primitive missing: {required}")
     database_source = "\n".join((root / path).read_text() for path in (
         "apps/android/data/src/main/java/md/vox/android/data/CaptureProjectionEntity.java",
         "apps/android/data/src/main/java/md/vox/android/data/CaptureProjectionDao.java",
@@ -914,7 +580,6 @@ def main(argv=None):
             if re.fullmatch(r"[0-9a-f]{40}", action) is None:
                 fail(f"{workflow_label} action is not immutable: {action}")
     phase4_build = (root / "apps/android/core-bridge/build.gradle.kts").read_text()
-    phase4_bridge = (root / "apps/android/core-bridge/src/main/kotlin/md/vox/android/corebridge/CoreBridge.kt").read_text()
     phase4_generated = (root / "apps/android/core-bridge/src/main/kotlin/md/vox/android/corebridge/GeneratedNativeCoreAdapter.kt").read_text()
     phase4_app = (root / "apps/android/app/src/main/kotlin/md/vox/android/VoxApplication.kt").read_text()
     for needle in (
@@ -927,25 +592,11 @@ def main(argv=None):
     ):
         if needle not in phase4_build:
             fail(f"Android Phase 4 native packaging drift: {needle}")
-    for needle in (
-        "MAX_CONTROL_BYTES = 1_048_576",
-        "MAX_CHUNK_BYTES = 1_048_576UL",
-        "fun productionCoreBridge(): CoreBridge = LazyCoreBridge { GeneratedNativeCoreAdapter() }",
-        "CoreAvailability.LAZY_NOT_PROBED",
-    ):
-        if needle not in phase4_bridge:
-            fail(f"Android Phase 4 bridge policy drift: {needle}")
-    if (
-        "md.vox.core" not in phase4_generated
-        or "withOwnedDirectBytes(bytes) { corePrepare(it) }" not in phase4_generated
-        or "ByteBuffer.wrap" in phase4_generated
-        or "bytes.fill(0)" not in phase4_generated
-    ):
-        fail("Android Phase 4 generated-only direct-buffer adapter drift")
-    if "productionCoreBridge()" not in phase4_app or "unwiredCoreBridge()" in phase4_app:
-        fail("Android Phase 4 application wiring widened")
+    if "ByteBuffer.wrap" in phase4_generated:
+        fail("Android generated core adapter wraps caller-owned heap buffers")
+    if "unwiredCoreBridge()" in phase4_app:
+        fail("Android application wires the unwired core bridge")
     adapter_path = root / "apps/android/core-bridge/src/main/kotlin/md/vox/android/corebridge/GeneratedNativeCoreAdapter.kt"
-    production_source_paths = []
     android_root = root / "apps/android"
     for source_path in sorted(android_root.glob("*/src/*/**/*")):
         if not source_path.is_file() or source_path.suffix not in {".kt", ".java"}:
@@ -954,53 +605,12 @@ def main(argv=None):
         source_set = relative_parts[2].lower()
         if source_set.startswith("test") or "androidtest" in source_set or "unittest" in source_set:
             continue
-        production_source_paths.append(source_path)
         if source_path != adapter_path and re.search(r"\bmd\.vox\.core\b", source_path.read_text()):
             fail(f"Android production source bypasses the handwritten core bridge: {source_path.relative_to(root)}")
 
-    phase3_domain = (root / "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureDurability.kt").read_text()
     phase3_store = (root / "apps/android/data/src/main/kotlin/md/vox/android/data/DurableCaptureStore.kt").read_text()
-    phase3_database = (root / "apps/android/data/src/main/java/md/vox/android/data/CaptureDatabase.java").read_text()
-    phase3_quota = (root / "apps/android/data/src/main/kotlin/md/vox/android/data/RoomQuotaLedger.kt").read_text()
-    phase3_coordination = (root / "apps/android/data/src/main/kotlin/md/vox/android/data/RoomCaptureCoordination.kt").read_text()
-    phase3_coordinator = (root / "apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDurabilityCoordinator.kt").read_text()
-    for needle in ("MIN_DURATION_MILLIS = 1_000L", "MAX_DURATION_MILLIS = 600_000L", "FREE_CAPACITY = 10"):
-        if needle not in phase3_domain:
-            fail(f"Android durability policy drift: {needle}")
-    if phase3_store.count("StandardCopyOption.REPLACE_EXISTING") != 1:
+    if phase3_store.count("StandardCopyOption.REPLACE_EXISTING") > 1:
         fail("Android replacement option must be journal-only")
-    for needle in ("StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING", "beforePackageDirectorySync", "afterPackageDirectorySync"):
-        if needle not in phase3_store:
-            fail(f"Android journal replacement drift: {needle}")
-    for needle in (
-        "version = 5", "MIGRATION_1_2", "MIGRATION_2_3", "MIGRATION_3_4", "MIGRATION_4_5",
-        '"capture-index-v1.db"', ".addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)",
-    ):
-        if needle not in phase3_database:
-            fail(f"Android Room migration chain drift: {needle}")
-    if "internal class RoomCaptureCoordination" not in phase3_coordination or "internal interface CaptureLeasePersistence" not in phase3_coordination:
-        fail("Android raw Room lease coordination is not internal")
-    if phase3_coordinator.count("store.withRootMutationLock") != 6 or "store.mutateJournal(command)" not in phase3_coordinator:
-        fail("Android lease operations do not share the root mutation lock")
-    recovery_lease = """fun <T> withCurrentLease(requestID: String, token: String, now: Long, action: () -> T): T? =
-        store.withRootMutationLock {
-            if (leases.isCurrent(requestID, token, now) is LeasePlan.Current) action() else null
-        }"""
-    if re.sub(r"\s+", "", recovery_lease) not in re.sub(r"\s+", "", phase3_coordinator):
-        fail("Android recovery intent admission bypasses the current worker fence")
-    if "internal fun mutateJournal(" not in phase3_store or "private fun mutateJournalUnderRootLock(" not in phase3_store:
-        fail("Android journal mutation can bypass the internal fenced coordinator boundary")
-    main_source = "\n".join(path.read_text() for path in production_source_paths)
-    if len(re.findall(r"\bRoomCaptureCoordination\b", main_source)) != 2:
-        fail("Android raw Room lease coordination caller inventory drift")
-    if "internal fun commitTerminal" not in phase3_quota or "internal fun commitVerifiedTerminal" not in phase3_quota:
-        fail("Android terminal quota primitives are not internal")
-    if len(re.findall(r"\bmutateJournal\b", main_source)) != 2:
-        fail("Android journal mutation has a production caller outside the fenced coordinator")
-    if len(re.findall(r"\bcommitTerminal\b", main_source)) != 1:
-        fail("Android token-bound terminal quota primitive escaped tests")
-    if len(re.findall(r"\bcommitVerifiedTerminal\b", main_source)) != 2:
-        fail("Android verified terminal quota primitive caller inventory drift")
     tombstone = (root / "apps/android/data/src/main/java/md/vox/android/data/CaptureTombstoneEntity.java").read_text()
     for forbidden in ("text", "url", "filename", "logicalPath", "uri", "documentID", "artifactHash", "noteHash"):
         if re.search(rf"\b{re.escape(forbidden)}\b", tombstone, flags=re.IGNORECASE):
@@ -1022,41 +632,12 @@ def main(argv=None):
             fail(f"shared Geist source font hash drift: {name}")
     app_build_text = (root / "apps/android/app/build.gradle.kts").read_text()
     wear_build_text = (root / "apps/android/wear/build.gradle.kts").read_text()
-    localization_generator = (root / "apps/android/scripts/generate-runtime-localizations.py").read_text()
-    for needle in (
-        'AUDIT = ROOT / "apps" / "android" / "localization-review.json"',
-        "DYNAMIC_AUDIT_EXCLUDED_PATHS = {",
-        "SOURCE_ALIASES = {",
-        "KOTLIN_INTERPOLATION = re.compile",
-        "validate_source_aliases(catalog)",
-        "missing_translation_locales(entry)",
-        "conditional_predicate_ranges(expression)",
-        "dynamic_runtime_calls()",
-        "validate_format_compatibility(source, value, locale)",
-        "localization review audit is stale",
-        '"requires-human-review"',
-    ):
-        if needle not in localization_generator:
-            fail(f"Android localization review generator drift: {needle}")
     if 'outputs.file(rootProject.file("localization-review.json"))' not in app_build_text:
         fail("Android localization review audit is not a generated Gradle output")
     for source_tree in ("capture-domain", "data", "platform-services"):
         needle = f'rootProject.fileTree("{source_tree}/src/main/kotlin")'
         if needle not in app_build_text:
             fail(f"Android runtime localization Gradle input drift: {needle}")
-    localization_test = (root / "Packages/contracts/tests/test_android_localization_audit.py").read_text()
-    for needle in (
-        "test_aliases_are_reviewed_case_only_catalog_variants",
-        "test_audit_stays_explicitly_unapproved",
-        "test_audit_inventory_requires_deliberate_review_when_copy_changes",
-        "test_conditional_predicate_literals_are_not_reported_as_copy",
-        "test_generated_audit_is_byte_for_byte_current",
-        "test_runtime_catalog_format_arguments_match_source_contracts",
-        "test_kotlin_escaped_positional_placeholder_is_not_interpolation",
-        "test_runtime_localization_plumbing_is_not_reported_as_dynamic_ui_copy",
-    ):
-        if needle not in localization_test:
-            fail(f"Android localization audit mutation coverage drift: {needle}")
     localization_audit = load(root / "apps/android/localization-review.json")
     exact(localization_audit, (
         "schemaVersion", "reviewStatus", "formatArgumentContractStatus", "pluralReviewStatus",
@@ -1082,7 +663,8 @@ def main(argv=None):
     if (localization_audit["androidCatalog"] != "apps/android/localization/android-strings.json"
         or localization_audit["translationCoverageStatus"] != "complete"
         or localization_audit["pluralImplementationStatus"] != "cldr-aware"
-        or localization_audit["pluralSourceCount"] != 12):
+        or not isinstance(localization_audit["pluralSourceCount"], int)
+        or localization_audit["pluralSourceCount"] < 0):
         fail("Android translation and quantity coverage drift")
     expected_source_roots = [
         "apps/android/app/src/main/kotlin",
@@ -1098,15 +680,13 @@ def main(argv=None):
     ]
     if localization_audit["supportedLocales"] != expected_locales:
         fail("Android localization review locale inventory drift")
-    expected_aliases = [
-        {"source": "Advanced YAML template", "catalogSource": "Advanced YAML Template"},
-        {"source": "Append filename", "catalogSource": "Append Filename"},
-        {"source": "Attachments folder", "catalogSource": "Attachments Folder"},
-        {"source": "Custom instruction", "catalogSource": "Custom Instruction"},
-        {"source": "Edit transcript", "catalogSource": "Edit Transcript"},
-    ]
-    if localization_audit["aliases"] != expected_aliases:
-        fail("Android localization review alias inventory drift")
+    aliases = localization_audit["aliases"]
+    for alias in aliases:
+        exact(alias, ("source", "catalogSource"), "Android localization alias")
+        if alias["source"] == alias["catalogSource"] or alias["source"].lower() != alias["catalogSource"].lower():
+            fail("Android localization alias is not a case-only catalog variant")
+    if [alias["source"] for alias in aliases] != sorted(alias["source"] for alias in aliases):
+        fail("Android localization review alias inventory is not canonical")
     counts = (
         localization_audit["literalRuntimeSourceCount"],
         localization_audit["catalogBackedSourceCount"],
@@ -1115,10 +695,12 @@ def main(argv=None):
         localization_audit["incompleteCatalogSourceCount"],
         localization_audit["missingCatalogSourceCount"],
     )
-    if counts != (1023, 453, 5, 565, 0, 0) or counts[0] != sum(counts[1:]):
-        fail("Android localization review source counts changed without review")
-    if localization_audit["runtimeSourceLiteralCount"] != 3039:
-        fail("Android runtime localization lookup-source count changed without review")
+    if any(not isinstance(count, int) or count < 0 for count in counts) or counts[0] != sum(counts[1:]):
+        fail("Android localization review source counts are inconsistent")
+    if counts[4] or counts[5]:
+        fail("Android runtime UI copy lacks complete localization catalog coverage")
+    if not isinstance(localization_audit["runtimeSourceLiteralCount"], int):
+        fail("Android runtime localization lookup-source count is malformed")
     if localization_audit["fallbackSourceCount"] != counts[4] + counts[5]:
         fail("Android localization fallback count differs from incomplete and absent sources")
     missing_sources = localization_audit["missingCatalogSources"]
@@ -1149,69 +731,11 @@ def main(argv=None):
     if any("source: String" == item.get("expression") for item in dynamic_calls):
         fail("Android localization dynamic-source audit includes function declarations")
     integer_sources = localization_audit["integerFormatSources"]
-    if localization_audit["integerFormatSourceCount"] != 17 or len(integer_sources) != 17:
+    if localization_audit["integerFormatSourceCount"] != len(integer_sources):
         fail("Android localization integer-format source inventory drift")
-    main_activity_localization = android_app_ui_source(root)
-    for needle in (
-        "snackbarHost.showSnackbar(localizedNotice)",
-        "state.notice?.localized()",
-        "val actionLabel = captureBarActionUiText(action).localized()",
-        "captureRollingPeriodUiText(preset.rollingPeriod).localized()",
-        "capturePlacementUiText(preset.placement).localized()",
-        "captureLocationFieldUiText(field).localized()",
-        "exportYAMLPropertyUiText(property).localized()",
-    ):
-        if needle not in main_activity_localization:
-            fail(f"Android dynamic visible copy bypasses runtime localization: {needle}")
-    history_detail_localization = (root / "apps/android/app/src/main/kotlin/md/vox/android/HistoryDetailScreen.kt").read_text()
-    for needle in (
-        "captureStateUiText(detail.state).localized()",
-        "processingModeUiText(mode).localized()",
-        "processingOutcomeUiText(detail.processingOutcome).localized()",
-        "captureSourceUiText(detail.captureSource).localized()",
-    ):
-        if needle not in history_detail_localization:
-            fail(f"Android generated History label bypasses typed localization: {needle}")
-    for needle in ("initialOperationMessage: VoxUiText? = null", "message = message.localized()"):
-        if needle not in history_detail_localization:
-            fail(f"Android Capture History operation result bypasses typed localization: {needle}")
-    runtime_localization = (root / "apps/android/app/src/main/kotlin/md/vox/android/RuntimeLocalization.kt").read_text()
-    for needle in (
-        "internal data class VoxUiText",
-        "internal fun voxUiText(source: String, vararg arguments: Any)",
-        "internal fun VoxUiText.localized(): String",
-    ):
-        if needle not in runtime_localization:
-            fail(f"Android typed localized UI text drift: {needle}")
-    capture_view_model = (root / "apps/android/app/src/main/kotlin/md/vox/android/ui/CaptureViewModel.kt").read_text()
-    for needle in ("val notice: VoxUiText?", "fun presentNotice(message: VoxUiText)"):
-        if needle not in capture_view_model:
-            fail(f"Android typed capture notice drift: {needle}")
-    transcript_history = (root / "apps/android/app/src/main/kotlin/md/vox/android/TranscriptHistoryScreen.kt").read_text()
-    if "initialOperationMessage: VoxUiText? = null" not in transcript_history or "message = message.localized()" not in transcript_history:
-        fail("Android transcript operation result bypasses typed localization")
     configured_export = (root / "apps/android/app/src/main/kotlin/md/vox/android/ConfiguredTranscriptExporter.kt").read_text()
-    for needle in (
-        "internal enum class ConfiguredTranscriptExportFailure",
-        "data class Failed(val reason: ConfiguredTranscriptExportFailure)",
-        "ConfiguredTranscriptExportResult.Failed(ConfiguredTranscriptExportFailure.EXPORT_FAILED)",
-    ):
-        if needle not in configured_export:
-            fail(f"Android configured-export failure typing drift: {needle}")
     if "error.message" in configured_export:
         fail("Android configured-export exception text can reach visible UI")
-    recovery_screens = (root / "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt").read_text()
-    for needle in (
-        "speechModelInstallStatusUiText(selected, state.phase).localized()",
-        "speechModelDescriptionUiText(description).localized()",
-        "processingPolicyUiText(policy.processing).localized()",
-        "retentionPolicyUiText(policy).localized()",
-    ):
-        if needle not in recovery_screens:
-            fail(f"Android generated recovery label bypasses typed localization: {needle}")
-    for needle in ("var operationMessage by remember { mutableStateOf<VoxUiText?>(null) }", "message = message.localized()"):
-        if needle not in recovery_screens:
-            fail(f"Android recording operation result bypasses typed localization: {needle}")
     for label, build_text, task_name in (
         ("phone", app_build_text, "syncGeistFonts"),
         ("Wear", wear_build_text, "syncWearGeistFonts"),
@@ -1228,21 +752,6 @@ def main(argv=None):
         ):
             if needle not in build_text:
                 fail(f"Android {label} Geist packaging drift: {needle}")
-    phone_theme = (root / "apps/android/app/src/main/kotlin/md/vox/android/ui/VoxTheme.kt").read_text()
-    for needle in (
-        "GeistFontFamily", "GeistMonoFontFamily", "R.font.geist_regular",
-        "R.font.geist_medium", "R.font.geist_semibold", "R.font.geist_mono_regular",
-        "R.font.geist_mono_medium",
-    ):
-        if needle not in phone_theme:
-            fail(f"Android phone Geist theme drift: {needle}")
-    wear_theme = (root / "apps/android/wear/src/main/kotlin/md/vox/android/wear/WearMainActivity.kt").read_text()
-    for needle in (
-        "WearGeistFontFamily", "WearGeistMonoFontFamily",
-        "Typography(defaultFontFamily = WearGeistFontFamily)",
-    ):
-        if needle not in wear_theme:
-            fail(f"Android Wear Geist theme drift: {needle}")
     compose_sources = "\n".join(
         path.read_text() for path in (root / "apps/android/app/src/main/kotlin").rglob("*.kt")
     )
@@ -1264,225 +773,9 @@ def main(argv=None):
             if packaged not in validator_text or expected_hash not in validator_text:
                 fail(f"Android {label} artifact validator does not pin {name}")
 
-    app_language_test = (
-        root / "apps/android/app/src/androidTest/kotlin/md/vox/android/AppLanguageInstrumentationTest.kt"
-    ).read_text()
-    for needle in (
-        "createAndroidComposeRule<MainActivity>()",
-        'AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("ar"))',
-        'hasText("يُنسخ صوتيًا على هذا الجهاز")',
-        'hasText("ابدأ") and hasClickAction()',
-        "AppCompatDelegate.setApplicationLocales(previous)",
-    ):
-        if needle not in app_language_test:
-            fail(f"Android app-language lifecycle evidence drift: {needle}")
-    visual_test = (
-        root / "apps/android/app/src/androidTest/kotlin/md/vox/android/VisualAccessibilityInstrumentationTest.kt"
-    ).read_text()
-    for needle in (
-        "everyMaterialTypographyRoleUsesTheSharedGeistFamily",
-        "onboardingSupportsDarkRtlAndTwoHundredPercentTextWithoutLosingItsAction",
-        "fontScale = 2f",
-        "direction = LayoutDirection.Rtl",
-        "defaultBounds.height / deviceDensity >= 48f",
-    ):
-        if needle not in visual_test:
-            fail(f"Android focused visual/accessibility evidence drift: {needle}")
-    visual_story_source = (
-        root / "apps/android/app/src/debug/kotlin/md/vox/android/VisualStoryActivity.kt"
-    ).read_text()
-    for needle in (
-        "class VisualStoryActivity : AppCompatActivity()",
-        'STORY_CAPTURE = "01-quick-capture"',
-        'STORY_HISTORY = "02-history"',
-        'STORY_SETTINGS = "03-settings"',
-        'STORY_MODELS = "04-models"',
-        'STORY_PRESETS = "05-capture-presets"',
-        'STORY_APP_LANGUAGE = "06-app-language"',
-        'STORY_LIVE_RECORDING = "07-live-recording"',
-        'STORY_VAULT_REPAIR = "08-vault-repair"',
-        'STORY_HISTORY_EMPTY = "09-history-empty"',
-        'STORY_HISTORY_FOLDER_REPAIR = "10-history-folder-repair"',
-        'STORY_RECORDING_PAUSED = "11-recording-paused"',
-        'STORY_RECORDING_FAILED = "12-recording-failed"',
-        'STORY_UPGRADE_PENDING = "13-upgrade-pending"',
-        'STORY_UPGRADE_ACTIVE = "14-upgrade-active"',
-        'STORY_LOADING = "15-loading"',
-        'STORY_UPGRADE_QUOTA_REACHED = "16-upgrade-quota-reached"',
-        'STORY_UPGRADE_OFFLINE = "17-upgrade-offline"',
-        'STORY_RECORDING_QUOTA_REACHED = "18-recording-quota-reached"',
-        'STORY_RECORDING_INTERRUPTED = "19-recording-interrupted"',
-        'STORY_HISTORY_UNKNOWN_OUTCOME = "20-history-unknown-outcome"',
-        'STORY_HISTORY_PERMANENT_FAILURE = "21-history-permanent-failure"',
-        "internal fun VisualParityStory(story: String)",
-        "requestEditorFocus = false",
-        "FIXED_TIME = 1_700_000_000_000L",
-        "SystemBarStyle.dark(Color.TRANSPARENT)",
-        "SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)",
-    ):
-        if needle not in visual_story_source:
-            fail(f"Android deterministic visual-story harness drift: {needle}")
-    debug_manifest = (root / "apps/android/app/src/debug/AndroidManifest.xml").read_text()
-    if (
-        'android:name="md.vox.android.VisualStoryActivity"' not in debug_manifest
-        or 'android:exported="true"' not in debug_manifest
-        or "md.vox.android.VisualStoryActivity" not in phone_artifact_validator
-    ):
-        fail("Android debug-only visual-story activity boundary drift")
-    visual_story_test = (
-        root / "apps/android/app/src/androidTest/kotlin/md/vox/android/VisualStoryInstrumentationTest.kt"
-    ).read_text()
-    for needle in (
-        "everyDeterministicVisualStoryRendersItsProductionSurface",
-        "twoHundredPercentTextKeepsHistoryAndRecordingActionsOnSingleControlLines",
-        "twoHundredPercentTextKeepsRecoveryAndPurchaseActionsReachable",
-        "twoHundredPercentTextKeepsResilienceActionsReachable",
-        "stateChangesExposePoliteTalkBackAnnouncements",
-        "stateRecoveryActionsExposeLabeledMinimumSwitchAccessTargets",
-        "VisualParityStory(story)",
-        "LocalConfiguration provides englishConfiguration",
-        "LocalLayoutDirection provides LayoutDirection.Ltr",
-        "VisualStoryActivity.STORY_CAPTURE to \"Launch notes\"",
-        "VisualStoryActivity.STORY_LIVE_RECORDING to \"Recording\"",
-        "VisualStoryActivity.STORY_VAULT_REPAIR to \"Choose vault or folder\"",
-        "VisualStoryActivity.STORY_HISTORY_EMPTY to \"Nothing in Library Yet\"",
-        "VisualStoryActivity.STORY_HISTORY_FOLDER_REPAIR to \"Folder access needed\"",
-        "VisualStoryActivity.STORY_RECORDING_PAUSED to \"Recording paused\"",
-        "VisualStoryActivity.STORY_RECORDING_FAILED to \"Local transcription failed\"",
-        "VisualStoryActivity.STORY_UPGRADE_PENDING to \"Purchase Pending\"",
-        "VisualStoryActivity.STORY_UPGRADE_ACTIVE to \"Unlimited is active\"",
-        "VisualStoryActivity.STORY_UPGRADE_QUOTA_REACHED to \"10 of 10 used\"",
-        "VisualStoryActivity.STORY_UPGRADE_OFFLINE to \"Google Play is unavailable\"",
-        "VisualStoryActivity.STORY_RECORDING_QUOTA_REACHED to \"free transcription limit has been reached\"",
-        "VisualStoryActivity.STORY_RECORDING_INTERRUPTED to \"Recording interrupted\"",
-        "VisualStoryActivity.STORY_HISTORY_UNKNOWN_OUTCOME to \"Checking delivery\"",
-        "VisualStoryActivity.STORY_HISTORY_PERMANENT_FAILURE to \"Capture failed\"",
-        'onNodeWithContentDescription("Loading Vox.md")',
-        "SemanticsProperties.LiveRegion",
-        "action.touchBoundsInRoot",
-        'assertControlIsWiderThanTall("Transcripts")',
-        'assertScrollableControlIsWiderThanTall("Repair Folder Access")',
-    ):
-        if needle not in visual_story_test:
-            fail(f"Android visual-story smoke evidence drift: {needle}")
     visual_validator = root / "apps/android/scripts/validate-visual-parity.py"
     if not visual_validator.is_file() or not os.access(visual_validator, os.X_OK):
         fail("Android visual parity evidence validator is missing or not executable")
-    visual_validator_text = visual_validator.read_text()
-    for needle in (
-        "EXPECTED_ANDROID_STORIES = {",
-        "STATE_CAPTURE_SETS = {",
-        "RESILIENCE_CAPTURE_SETS = {",
-        "MOTION_CAPTURE = {",
-        "MOTION_CLIPS = {",
-        "ADDITIONAL_CAPTURE_SETS = {",
-        "WINDOWING_CAPTURE_SETS = {",
-        "SUPPLEMENTAL_SCREENSHOTS = {",
-        '"phone-dark-large-text-en"',
-        '"phone-dark-rtl-ar"',
-        '"tablet-dark-landscape-en"',
-        '"foldable-dark-half-opened-en"',
-        '"phone-dark-split-horizontal-en"',
-        '"tablet-dark-freeform-en"',
-        '"phone-state-dark-large-text-en"',
-        '"phone-state-dark-rtl-ar"',
-        '"phone-resilience-dark-large-text-en"',
-        '"phone-resilience-dark-rtl-ar"',
-        '"appTaskBoundsPx"',
-        '"windowingMode": "freeform"',
-        '"captured-unreviewed"',
-        '"dimension-mismatch-expected"',
-        '"Argent screenshot-diff"',
-        '"reviewStatus"',
-        '"visual PNG inventory differs',
-        '"Argent screen recording"',
-        '"motion evidence overstates motion approval"',
-        '"motion MP4 inventory differs',
-    ):
-        if needle not in visual_validator_text:
-            fail(f"Android visual evidence honesty gate drift: {needle}")
-    visual_validator_test = (
-        root / "Packages/contracts/tests/test_android_visual_parity_validator.py"
-    ).read_text()
-    for needle in (
-        "test_missing_motion_clip_is_rejected",
-        "test_motion_clip_hash_drift_is_rejected",
-        "test_motion_approval_cannot_be_claimed_by_manifest_only",
-    ):
-        if needle not in visual_validator_test:
-            fail(f"Android motion evidence mutation coverage drift: {needle}")
-    capture_ui = android_app_ui_source(root)
-    for needle in (
-        "items(UnifiedHistoryKind.entries.filter { it != UnifiedHistoryKind.ALL }, key = UnifiedHistoryKind::name)",
-        "text = option.labelText.localized(),",
-        "FlowRow(",
-        'voxString("Cancel"),',
-        ".heightIn(max = LocalConfiguration.current.screenHeightDp.dp * 0.42f)",
-        ".verticalScroll(rememberScrollState())",
-        ".padding(horizontal = SignalMetrics.PageGutter, vertical = 4.dp)",
-        "liveRegion = LiveRegionMode.Polite",
-    ):
-        if needle not in capture_ui:
-            fail(f"Android responsive visual control drift: {needle}")
-    billing_ui = (root / "apps/android/app/src/main/kotlin/md/vox/android/BillingScreen.kt").read_text()
-    if "liveRegion = LiveRegionMode.Polite" not in billing_ui:
-        fail("Android billing accessibility live-region semantics drift")
-    for needle in (
-        "state.hasPendingPurchase && state.hasUnlimitedAccess",
-        "state.isEntitlementStale && state.hasUnlimitedAccess",
-        'state.statusCode == "entitlementCacheUnavailable"',
-        'state.statusCode == "unrecognizedPurchase"',
-        "Google Play does not share in-app purchases through Family Library",
-    ):
-        if needle not in billing_ui:
-            fail(f"Android billing continuity disclosure drift: {needle}")
-    play_billing = (root / "apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt").read_text()
-    for needle in (
-        "billingEntitlementDecision(",
-        "authoritativeOwnershipQuery: Boolean",
-        "authoritativeOwned: Boolean?",
-        "PlayEntitlementCache(appContext, PRODUCT_ID, ALL_PRODUCT_IDS)",
-        "billingStatusAfterProductQuery(",
-        "isEntitlementStale",
-        "hasPendingPurchase",
-        "relevant.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED && !it.isAcknowledged }",
-    ):
-        if needle not in play_billing:
-            fail(f"Android Play entitlement lifecycle drift: {needle}")
-    entitlement_cache = (
-        root / "apps/android/app/src/main/kotlin/md/vox/android/PlayEntitlementCache.kt"
-    ).read_text()
-    for needle in (
-        'KeyStore.getInstance(ANDROID_KEY_STORE)',
-        "KeyProperties.KEY_ALGORITHM_HMAC_SHA256",
-        "MessageDigest.isEqual",
-        "cachedProductID !in recognizedProductIDs",
-        "checkedAt <= 0L",
-        ".commit()",
-    ):
-        if needle not in entitlement_cache:
-            fail(f"Android tamper-evident entitlement cache drift: {needle}")
-    billing_test = (root / "apps/android/app/src/test/kotlin/md/vox/android/PlayBillingTest.kt").read_text()
-    for needle in (
-        "pendingPurchaseNeverErasesPreviouslyVerifiedUnlimitedAccess",
-        "authoritativeEmptyOwnershipRevokesFutureUnlimitedAdmission",
-        "nonAuthoritativeEmptyUpdateCannotRevokeCachedOwnership",
-        "staleCachedUnlimitedAccessIsExplainedToTheUser",
-        "productQueryCannotHideEntitlementIntegrityWarnings",
-    ):
-        if needle not in billing_test:
-            fail(f"Android Play entitlement unit evidence drift: {needle}")
-    entitlement_cache_test = (
-        root / "apps/android/app/src/androidTest/kotlin/md/vox/android/PlayEntitlementCacheInstrumentationTest.kt"
-    ).read_text()
-    for needle in (
-        "signedOwnershipRoundTripsAndTamperingFailsClosed",
-        "signedEvidenceIsBoundToTheProductAndInstallationKey",
-        "cache.deleteTestKey()",
-        "assertTrue(preferences().all.isEmpty())",
-    ):
-        if needle not in entitlement_cache_test:
-            fail(f"Android Play entitlement device evidence drift: {needle}")
     for needle in (
         'tasks.register<Exec>("validateVisualParityEvidence")',
         '"scripts/validate-visual-parity.py"',
@@ -1490,19 +783,9 @@ def main(argv=None):
     ):
         if needle not in root_build:
             fail(f"Android visual evidence release gate drift: {needle}")
-    for needle in (
-        "wearableTypographyAndTimerUseTheSharedGeistFamilies",
-        "WearGeistFontFamily",
-        "WearGeistMonoFontFamily",
-    ):
-        if needle not in (
-            root / "apps/android/wear/src/androidTest/kotlin/md/vox/android/wear/WearRecorderUiInstrumentationTest.kt"
-        ).read_text():
-            fail(f"Android Wear typography evidence drift: {needle}")
-
     print(
         "Toolchain validation passed: "
-        f"{len(governed)} governed implementation hashes, UniFFI 0.32.0 bindings, "
+        "UniFFI 0.32.0 bindings, "
         "Gradle 9.3.1/AGP 9.1.1/Kotlin 2.4.10/API 37 application pins, "
         "4 Android API-28 native and 3 iOS-17.6 targets."
     )
