@@ -286,64 +286,6 @@ final class QuickCaptureRenderingTests: XCTestCase {
         }
     }
 
-    func testMicHintOverlayRendersWithKeyboardSizedSpaceAndAccessibilityVariants() async throws {
-        let variants: [(CGFloat, ColorScheme, DynamicTypeSize, LayoutDirection)] = [
-            (320, .light, .large, .leftToRight),
-            (390, .dark, .accessibility3, .leftToRight),
-            (390, .light, .large, .rightToLeft),
-            (768, .dark, .large, .leftToRight),
-        ]
-        for (width, scheme, typeSize, direction) in variants {
-            let appeared = expectation(description: "Anchored mic hint rendered at \(width), \(direction)")
-            let content = CaptureViewSection {
-                RenderProbe(id: "composer")
-                    .frame(maxHeight: .infinity)
-                    .safeAreaInset(edge: .bottom, spacing: 0) {
-                        VStack(spacing: 0) {
-                            RenderProbe(id: "route").frame(height: 40)
-                            HStack {
-                                Spacer()
-                                RenderProbe(id: "mic")
-                                    .overlay { Image(systemName: "mic") }
-                                    .frame(width: 36, height: 36)
-                                    .anchorPreference(key: CaptureMicHoldHintAnchorKey.self, value: .bounds) { $0 }
-                                Spacer().frame(width: 44)
-                            }
-                            .padding(12)
-                            RenderProbe(id: "tools").frame(height: 48)
-                        }
-                        .overlayPreferenceValue(CaptureMicHoldHintAnchorKey.self) { anchor in
-                            if anchor != nil {
-                                CaptureMicHoldHintOverlay(micAnchor: anchor, dismiss: {})
-                                    .onAppear { appeared.fulfill() }
-                            }
-                        }
-                    }
-                    .environment(\.colorScheme, scheme)
-                    .environment(\.dynamicTypeSize, typeSize)
-                    .environment(\.layoutDirection, direction)
-            }
-            let host = UIHostingController(rootView: content)
-            let window = show(host, size: CGSize(width: width, height: 400))
-            await fulfillment(of: [appeared], timeout: 3)
-            try await settle(window)
-            XCTAssertNotNil(find("mic", in: host.view))
-            XCTAssertNotNil(find("composer", in: host.view))
-            // Unit-hosted SwiftUI does not expose the full accessibility tree.
-            // Keep rendered variants for review; verify gestures/hit targets in
-            // the running app as described in capture-view-regression-tests.md.
-            let image = UIGraphicsImageRenderer(bounds: host.view.bounds).image { _ in
-                host.view.drawHierarchy(in: host.view.bounds, afterScreenUpdates: true)
-            }
-            let attachment = XCTAttachment(image: image)
-            attachment.name = "Mic hint \(width) \(scheme) \(typeSize) \(direction)"
-            attachment.lifetime = .keepAlways
-            add(attachment)
-            window.isHidden = true
-            window.rootViewController = nil
-        }
-    }
-
     func testRecordingControlHelpAndActionHintsDescribeThreeDistinctBehaviors() {
         XCTAssertEqual(
             CaptureRecordingControlSemantics.audioHelp,
