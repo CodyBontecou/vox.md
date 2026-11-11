@@ -188,6 +188,7 @@ import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.RESULT_FORMAT_PDF
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions.SCANNER_MODE_FULL
 import md.vox.android.capturedomain.CaptureRouteOverride
+import md.vox.android.capturedomain.CapturePresetPaths
 import md.vox.android.capturedomain.CaptureURLDeliverySettings
 import md.vox.android.capturedomain.normalizedTranscriptProperty
 import md.vox.android.capturedomain.CaptureHeadingPosition
@@ -323,8 +324,8 @@ internal fun CapturePresetsScreen(
     defaultDestinationName: String? = null,
     /** Pins or unpins a route on the capture bar from its long-press menu; hidden when null. */
     togglePinned: ((CapturePreset) -> Unit)? = null,
+    templateEditor: EntryTemplateEditorState = rememberEntryTemplateEditorState(),
 ) {
-    var editingEntryTemplateID by rememberSaveable { mutableStateOf<String?>(null) }
     val c = Signal.colors
     Scaffold(
         containerColor = c.bg,
@@ -426,7 +427,7 @@ internal fun CapturePresetsScreen(
                         SignalCircleButton(
                             icon = Icons.Outlined.Add,
                             contentDescription = voxString("New Entry Template"),
-                            onClick = { editingEntryTemplateID = "new" },
+                            onClick = { templateEditor.edit(null) },
                             enabled = !isBusy,
                         )
                     }
@@ -439,7 +440,7 @@ internal fun CapturePresetsScreen(
                                 PresetEntryTemplateRow(
                                     template = template,
                                     isBusy = isBusy,
-                                    edit = { editingEntryTemplateID = template.id },
+                                    edit = { templateEditor.edit(template) },
                                 )
                             }
                         }
@@ -448,22 +449,23 @@ internal fun CapturePresetsScreen(
             }
         }
     }
-    editingEntryTemplateID?.let { templateID ->
+    templateEditor.templateID?.let { templateID ->
         val existing = entryTemplates.firstOrNull { it.id == templateID }
         EntryTemplateEditorDialog(
             template = existing,
             isBusy = isBusy,
-            dismiss = { editingEntryTemplateID = null },
+            dismiss = templateEditor::dismiss,
             save = { template ->
                 saveEntryTemplate(template)
-                editingEntryTemplateID = null
+                templateEditor.dismiss()
             },
             delete = existing?.let { template ->
                 {
                     deleteEntryTemplate(template.id)
-                    editingEntryTemplateID = null
+                    templateEditor.dismiss()
                 }
             },
+            editorState = templateEditor,
         )
     }
 }
@@ -719,10 +721,14 @@ internal fun EntryTemplateEditorDialog(
     dismiss: () -> Unit,
     save: (CaptureEntryTemplate) -> Unit,
     delete: (() -> Unit)?,
+    editorState: EntryTemplateEditorState? = null,
 ) {
-    var name by remember(template?.id) { mutableStateOf(template?.name.orEmpty()) }
-    var prefix by remember(template?.id) { mutableStateOf(template?.entryPrefix.orEmpty()) }
-    var suffix by remember(template?.id) { mutableStateOf(template?.entrySuffix.orEmpty()) }
+    val draft = editorState ?: rememberSaveable(template?.id, saver = EntryTemplateEditorState.Saver) {
+        EntryTemplateEditorState().apply { edit(template) }
+    }
+    var name by draft::name
+    var prefix by draft::prefix
+    var suffix by draft::suffix
     val c = Signal.colors
     AlertDialog(
         onDismissRequest = dismiss,
@@ -1099,21 +1105,22 @@ internal fun CapturePresetEditorScreen(
     /** Opens directly on a sub-page; used by debug stories. */
     initialPage: RouteEditorPage? = null,
 ) {
-    var draft by remember(preset?.id) { mutableStateOf(CapturePresetEditorDraft.from(preset)) }
+    var draft by rememberSaveable(preset?.id, stateSaver = CapturePresetEditorDraftSaver) {
+        mutableStateOf(CapturePresetEditorDraft.from(preset))
+    }
     var pageName by rememberSaveable(preset?.id) { mutableStateOf(initialPage?.name) }
     val page = pageName?.let(RouteEditorPage::valueOf)
     BackHandler(enabled = page != null) { pageName = null }
 
     val metadata = parseMetadataFields(draft.metadataText)
-    val routeIsValid = when (draft.noteTargetKind) {
-        CaptureNoteTargetKind.EXISTING_NOTE -> draft.existingNotePath.trim().endsWith(".md", ignoreCase = true)
-        CaptureNoteTargetKind.NEW_NOTE, CaptureNoteTargetKind.ROLLING_NOTE ->
-            draft.logicalFolder.trim('/').isNotEmpty() && draft.noteNameTemplate.trim().endsWith(".md", ignoreCase = true)
-    }
+    val routeIsValid = CapturePresetPaths.folder(draft.logicalFolder) != null &&
+        CapturePresetPaths.filename(draft.noteNameTemplate) != null &&
+        (draft.noteTargetKind != CaptureNoteTargetKind.EXISTING_NOTE || CapturePresetPaths.existingNote(draft.existingNotePath) != null)
+    val attachmentsFolderIsValid = CapturePresetPaths.folder(draft.attachmentsFolder, allowEmpty = true) != null
     val headingIsValid = draft.placement != CapturePlacementKind.BENEATH_HEADING || draft.headingTitle.trim().isNotEmpty()
-    val processingIsValid = !draft.processingEnabled ||
+    val processingIsValid = draft.capturePrompt.length <= 512 && (!draft.processingEnabled ||
         draft.processingMode != CaptureProcessingMode.CUSTOM ||
-        draft.customInstruction.trim().isNotEmpty()
+        draft.customInstruction.trim().isNotEmpty())
     val configuredExportEnabled = draft.exportSettings.usesCustomExportSettings && draft.exportSettings.exportEnabled
     val exportIsValid = !configuredExportEnabled || (
         draft.exportSettings.destinationTreeUri != null &&
@@ -1139,11 +1146,11 @@ internal fun CapturePresetEditorScreen(
     val transcriptPropertyIsValid =
         draft.transcriptPropertyName.isBlank() || normalizedTranscriptProperty(draft.transcriptPropertyName) != null
     val valid = draft.name.trim().isNotEmpty() && routeIsValid && headingIsValid && processingIsValid &&
-        exportIsValid && locationIsValid && locationLabelConsentIsValid && metadata != null && transcriptPropertyIsValid
+        exportIsValid && locationIsValid && locationLabelConsentIsValid && metadata != null && transcriptPropertyIsValid && attachmentsFolderIsValid
     val invalidSteps = buildSet {
         if (!locationIsValid || !locationLabelConsentIsValid) add(RouteEditorStep.CAPTURE)
         if (!processingIsValid) add(RouteEditorStep.PROCESS)
-        if (metadata == null || !transcriptPropertyIsValid) add(RouteEditorStep.SHAPE)
+        if (metadata == null || !transcriptPropertyIsValid || !attachmentsFolderIsValid) add(RouteEditorStep.SHAPE)
         if (!routeIsValid || !headingIsValid || !exportIsValid) add(RouteEditorStep.DELIVER)
     }
     val revision = preset?.revision ?: 1
@@ -1364,9 +1371,30 @@ internal fun CapturePresetEditorScreen(
                     )
                 }
                 if (delete != null) {
+                    // Deleting a route also retires its destination, so it is confirmed first.
+                    var confirmingDelete by rememberSaveable { mutableStateOf(false) }
+                    if (confirmingDelete) {
+                        AlertDialog(
+                            onDismissRequest = { confirmingDelete = false },
+                            containerColor = c.bg,
+                            titleContentColor = c.text,
+                            textContentColor = c.text,
+                            shape = RoundedCornerShape(24.dp),
+                            title = { Text(voxString("Delete Route")) },
+                            text = { Text(draft.name) },
+                            confirmButton = {
+                                TextButton(onClick = { confirmingDelete = false; delete() }) {
+                                    Text(voxString("Delete Route"), color = c.error)
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(onClick = { confirmingDelete = false }) { Text(voxString("Cancel")) }
+                            },
+                        )
+                    }
                     SignalButton(
                         text = voxString("Delete Route"),
-                        onClick = delete,
+                        onClick = { confirmingDelete = true },
                         modifier = Modifier.padding(top = 12.dp),
                         variant = SignalButtonVariant.DESTRUCTIVE,
                         enabled = !isBusy,
@@ -1808,6 +1836,7 @@ internal fun CapturePresetDestinationEditor(
                 OutlinedTextField(
                     value = existingNotePath,
                     onValueChange = { setExistingNotePath(it.take(512)) },
+                    isError = CapturePresetPaths.existingNote(existingNotePath) == null,
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(voxString("Existing note path")) },
                     placeholder = { Text(voxString("Journal/Inbox.md"), style = SignalType.mono) },
@@ -1820,6 +1849,7 @@ internal fun CapturePresetDestinationEditor(
                 OutlinedTextField(
                     value = logicalFolder,
                     onValueChange = { setLogicalFolder(it.take(256)) },
+                    isError = CapturePresetPaths.folder(logicalFolder) == null,
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(voxString("Folder")) },
                     placeholder = { Text(voxString("Inbox"), style = SignalType.mono) },
@@ -1831,6 +1861,7 @@ internal fun CapturePresetDestinationEditor(
                 OutlinedTextField(
                     value = noteNameTemplate,
                     onValueChange = { setNoteNameTemplate(it.take(256)) },
+                    isError = CapturePresetPaths.filename(noteNameTemplate) == null,
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(voxString("Note filename template")) },
                     placeholder = { Text(voxString("capture-{id}.md"), style = SignalType.mono) },
@@ -1944,6 +1975,7 @@ internal fun CapturePresetDestinationEditor(
             OutlinedTextField(
                 value = attachmentsFolder,
                 onValueChange = { setAttachmentsFolder(it.take(256)) },
+                isError = CapturePresetPaths.folder(attachmentsFolder, allowEmpty = true) == null,
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(voxString("Attachments folder")) },
                 supportingText = { Text(voxString("Leave empty to store files beside the note.")) },
@@ -2395,7 +2427,7 @@ internal fun CapturePresetProcessingEditor(
             PresetBlock {
                 OutlinedTextField(
                     value = capturePrompt,
-                    onValueChange = { setCapturePrompt(it.take(4_096)) },
+                    onValueChange = { setCapturePrompt(it.take(512)) },
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(voxString("Capture prompt")) },
                     supportingText = { Text(voxString("Optional local context supplied to the processor.")) },

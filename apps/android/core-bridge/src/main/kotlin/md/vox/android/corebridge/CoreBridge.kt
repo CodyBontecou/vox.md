@@ -45,6 +45,7 @@ enum class CoreErrorCode {
     INTERNAL_FAILURE,
     NATIVE_UNAVAILABLE,
     RELEASED,
+    HEADING_NOT_FOUND,
 }
 
 sealed interface CoreResult<out T> {

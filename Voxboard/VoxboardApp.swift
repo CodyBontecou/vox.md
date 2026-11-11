@@ -35,6 +35,8 @@ struct VoxboardApp: App {
         if let defaults = AppConstants.sharedDefaults { RetiredAnalyticsCleanup.run(defaults: defaults) }
         #if DEBUG
         DebugSelfie.install()
+        // Store screenshots: start every launch from a clean, unseeded state.
+        ScreenshotReset.applyIfRequested()
         #endif
 
         // Reconcile AppleLanguages with any stored in-app language override
@@ -205,7 +207,11 @@ struct VoxboardApp: App {
                 // Tests render the real paywall in their own host windows.
                 Color.clear
             } else {
+                // Debug only: ScrawlKit (Voxboard/DebugTools/ScrawlKit). Inert until the phone is
+                // paired with `scrawl link --scheme voxboard`; then a three-finger long press
+                // records the app with narration and ink and sends it to Scrawl on the Mac.
                 applicationContent
+                    .scrawl()
             }
             #else
             applicationContent
@@ -399,12 +405,19 @@ struct VoxboardApp: App {
         // note text or URLs. Host-level diagnostics are sufficient.
         log.log("[App] onOpenURL host=\(url.host ?? "nil")")
 
-        guard url.scheme == AppConstants.urlScheme else {
+        // Schemes and hosts are case-insensitive (RFC 3986), and CaptureDeepLinkParser
+        // already lowercases them; match the same way so VOXBOARD://Capture works.
+        guard url.scheme?.lowercased() == AppConstants.urlScheme else {
             log.log("[App] ❌ Wrong scheme: \(url.scheme ?? "nil")")
             return
         }
 
-        switch url.host {
+        switch url.host?.lowercased() {
+        #if DEBUG
+        case "scrawl", "tether":
+            // ScrawlKit setup links; `.scrawl()` registers its own `.onOpenURL` for them.
+            log.log("[App] Scrawl setup link")
+        #endif
         case "capture", "capture-request":
             do {
                 let action = try CaptureDeepLinkParser().parse(url)

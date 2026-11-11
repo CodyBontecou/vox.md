@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - 'android/v*'
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Existing annotated android/v* tag to qualify, sign, and upload again'
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -33,11 +39,23 @@ jobs:
       - name: Resolve and validate the immutable release tag
         id: identity
         shell: bash
+        env:
+          RELEASE_TAG_INPUT: ${{ inputs.release_tag }}
         run: |
           set -euo pipefail
-          tag="$GITHUB_REF_NAME"
-          [[ "$GITHUB_REF_TYPE" == tag && "$tag" == android/v* ]] || {
-            echo '::error::this workflow accepts only annotated android/v* tags'; exit 1;
+          if [[ "$GITHUB_EVENT_NAME" == workflow_dispatch ]]; then
+            [[ "$GITHUB_REF" == refs/heads/main ]] || {
+              echo '::error::manual release recovery must use the main workflow'; exit 1;
+            }
+            tag="$RELEASE_TAG_INPUT"
+          else
+            [[ "$GITHUB_REF_TYPE" == tag ]] || {
+              echo '::error::push releases require an annotated tag'; exit 1;
+            }
+            tag="$GITHUB_REF_NAME"
+          fi
+          [[ "$tag" =~ ^android/v[0-9]+\.[0-9]+\.[0-9]+$ ]] || {
+            echo '::error::this workflow accepts only annotated android/v* release tags'; exit 1;
           }
           git fetch --force origin "+refs/tags/$tag:refs/tags/$tag"
           annotated_type=$(git cat-file -t "$tag")
@@ -48,8 +66,9 @@ jobs:
           git merge-base --is-ancestor "$release_sha" origin/main || {
             echo '::error::the tagged commit is not reachable from origin/main'; exit 1;
           }
-          version_code=$(grep -m1 '^\s*versionCode = ' apps/android/app/build.gradle.kts | grep -oE '[0-9]+')
-          version=$(grep -m1 '^\s*versionName = ' apps/android/app/build.gradle.kts | sed 's/.*= *"//; s/".*//')
+          tagged_gradle=$(git show "$release_sha:apps/android/app/build.gradle.kts")
+          version_code=$(printf '%s\n' "$tagged_gradle" | grep -m1 '^\s*versionCode = ' | grep -oE '[0-9]+')
+          version=$(printf '%s\n' "$tagged_gradle" | grep -m1 '^\s*versionName = ' | sed 's/.*= *"//; s/".*//')
           [[ "$version_code" =~ ^[1-9][0-9]*$ ]] || { echo '::error::versionCode could not be resolved'; exit 1; }
           [[ "$tag" == "android/v$version" ]] || {
             echo "::error::tag $tag does not match versionName $version"; exit 1;
@@ -66,16 +85,19 @@ jobs:
     needs: resolve
     runs-on: ubuntu-24.04
     timeout-minutes: 60
-    env:
-      ANDROID_HOME: /usr/local/lib/android/sdk
-      ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/27.1.12297006
-      ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/27.1.12297006
     steps:
       - name: Check out the exact qualified source
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ needs.resolve.outputs.release_sha }}
+          fetch-depth: 0
           persist-credentials: false
+
+      - name: Use a task-owned Android SDK
+        shell: bash
+        run: |
+          echo "ANDROID_HOME=$RUNNER_TEMP/android-sdk" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$RUNNER_TEMP/android-sdk" >> "$GITHUB_ENV"
 
       - name: Select exact Temurin JDK
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.4
@@ -92,8 +114,34 @@ jobs:
       - name: Install exact cargo-ndk
         run: cargo +1.97.1 install cargo-ndk --version 4.1.2 --locked
 
-      - name: Install the pinned NDK
-        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true && "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;27.1.12297006" >/dev/null
+      - name: Install exact Android command-line tools and SDK packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/commandlinetools-linux-15859902_latest.zip"
+          extracted="$RUNNER_TEMP/android-command-line-tools-22.0"
+          curl --fail --location --proto '=https' --tlsv1.2 \
+            --output "$archive" \
+            'https://dl.google.com/android/repository/commandlinetools-linux-15859902_latest.zip'
+          printf '%s  %s\n' \
+            '4e4c464f145a7512b57d088ac6c278c03c9eea610886b35a5e0804e74eedf583' \
+            "$archive" | sha256sum --check --strict
+          rm -rf "$ANDROID_SDK_ROOT" "$extracted"
+          mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/22.0" "$extracted"
+          unzip -q "$archive" -d "$extracted"
+          mv "$extracted/cmdline-tools/"* "$ANDROID_SDK_ROOT/cmdline-tools/22.0/"
+          sdkmanager="$ANDROID_SDK_ROOT/cmdline-tools/22.0/bin/sdkmanager"
+          test -x "$sdkmanager"
+          yes | "$sdkmanager" --sdk_root="$ANDROID_SDK_ROOT" --licenses >/dev/null || true
+          "$sdkmanager" --sdk_root="$ANDROID_SDK_ROOT" \
+            'platforms;android-37.0' \
+            'build-tools;36.0.0' \
+            'ndk;27.1.12297006' \
+            'cmake;3.22.1'
+          ndk_path="$ANDROID_SDK_ROOT/ndk/27.1.12297006"
+          test -f "$ndk_path/source.properties"
+          echo "ANDROID_NDK_HOME=$ndk_path" >> "$GITHUB_ENV"
+          echo "ANDROID_NDK_ROOT=$ndk_path" >> "$GITHUB_ENV"
 
       - name: Validate contracts and toolchain pins
         shell: bash
@@ -102,6 +150,7 @@ jobs:
           ./apps/android/gradlew -p apps/android help
           python3 Packages/contracts/scripts/validate.py
           python3 Packages/contracts/scripts/validate_toolchain.py
+          python3 apps/android/scripts/validate-intelligence-evaluations.py
           python3 apps/android/scripts/generate-runtime-localizations.py --check
 
       - name: Test, lint, and build the credential-free release bundles
@@ -144,10 +193,6 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     environment: google-play-qa
-    env:
-      ANDROID_HOME: /usr/local/lib/android/sdk
-      ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/27.1.12297006
-      ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/27.1.12297006
     outputs:
       aab_sha256: ${{ steps.signed.outputs.aab_sha256 }}
     steps:
@@ -155,7 +200,14 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ needs.resolve.outputs.release_sha }}
+          fetch-depth: 0
           persist-credentials: false
+
+      - name: Use a task-owned Android SDK
+        shell: bash
+        run: |
+          echo "ANDROID_HOME=$RUNNER_TEMP/android-sdk" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$RUNNER_TEMP/android-sdk" >> "$GITHUB_ENV"
 
       - name: Select exact Temurin JDK
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.4
@@ -172,8 +224,34 @@ jobs:
       - name: Install exact cargo-ndk
         run: cargo +1.97.1 install cargo-ndk --version 4.1.2 --locked
 
-      - name: Install the pinned NDK
-        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true && "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;27.1.12297006" >/dev/null
+      - name: Install exact Android command-line tools and SDK packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/commandlinetools-linux-15859902_latest.zip"
+          extracted="$RUNNER_TEMP/android-command-line-tools-22.0"
+          curl --fail --location --proto '=https' --tlsv1.2 \
+            --output "$archive" \
+            'https://dl.google.com/android/repository/commandlinetools-linux-15859902_latest.zip'
+          printf '%s  %s\n' \
+            '4e4c464f145a7512b57d088ac6c278c03c9eea610886b35a5e0804e74eedf583' \
+            "$archive" | sha256sum --check --strict
+          rm -rf "$ANDROID_SDK_ROOT" "$extracted"
+          mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/22.0" "$extracted"
+          unzip -q "$archive" -d "$extracted"
+          mv "$extracted/cmdline-tools/"* "$ANDROID_SDK_ROOT/cmdline-tools/22.0/"
+          sdkmanager="$ANDROID_SDK_ROOT/cmdline-tools/22.0/bin/sdkmanager"
+          test -x "$sdkmanager"
+          yes | "$sdkmanager" --sdk_root="$ANDROID_SDK_ROOT" --licenses >/dev/null || true
+          "$sdkmanager" --sdk_root="$ANDROID_SDK_ROOT" \
+            'platforms;android-37.0' \
+            'build-tools;36.0.0' \
+            'ndk;27.1.12297006' \
+            'cmake;3.22.1'
+          ndk_path="$ANDROID_SDK_ROOT/ndk/27.1.12297006"
+          test -f "$ndk_path/source.properties"
+          echo "ANDROID_NDK_HOME=$ndk_path" >> "$GITHUB_ENV"
+          echo "ANDROID_NDK_ROOT=$ndk_path" >> "$GITHUB_ENV"
 
       - name: Decode the upload keystore into a temporary file
         id: keystore
@@ -228,6 +306,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ needs.resolve.outputs.release_sha }}
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Download the exact signed artifact
@@ -294,3 +373,50 @@ jobs:
           if-no-files-found: error
           retention-days: 90
           compression-level: 0
+
+  listing:
+    name: Sync Play listing graphics
+    needs: [resolve, upload]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: google-play
+    steps:
+      - name: Check out the release's listing graphics
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ needs.resolve.outputs.release_sha }}
+          persist-credentials: false
+
+      - name: Authenticate to Google Play with protected Workload Identity
+        id: play-auth
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        if: vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER != ''
+        with:
+          workload_identity_provider: ${{ vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/androidpublisher
+          create_credentials_file: false
+
+      - name: Stage service-account JSON authentication
+        if: vars.GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER == ''
+        shell: bash
+        env:
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          set -euo pipefail
+          [[ -n "$PLAY_SERVICE_ACCOUNT_JSON" ]] || {
+            echo '::error::set GOOGLE_PLAY_WORKLOAD_IDENTITY_PROVIDER vars or the PLAY_SERVICE_ACCOUNT_JSON secret'; exit 1;
+          }
+          key="$RUNNER_TEMP/vox-play-key.json"
+          printf '%s' "$PLAY_SERVICE_ACCOUNT_JSON" >"$key"
+          chmod 600 "$key"
+          echo "PLAY_CONSOLE_KEY_PATH=$key" >>"$GITHUB_ENV"
+
+      # Replaces only the image sets whose bytes differ from what Play serves; a no-op otherwise.
+      - name: Sync listing graphics with the release
+        env:
+          CONFIRM_PLAY_LISTING_GRAPHICS: md.vox.android:en-US
+          PLAY_ACCESS_TOKEN: ${{ steps.play-auth.outputs.access_token }}
+          PLAY_CONSOLE_KEY_PATH: ${{ env.PLAY_CONSOLE_KEY_PATH }}
+        run: ./apps/android/scripts/upload-google-play-listing-graphics.sh

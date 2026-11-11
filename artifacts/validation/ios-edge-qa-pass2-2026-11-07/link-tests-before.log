@@ -1,0 +1,70 @@
+Building for debugging...
+[Computing dependencies]
+[Using on-disk description]
+[1 / 5]
+[2 / 6] VoxboardCaptureCoreTests-product
+[5 / 9] VoxboardCaptureCoreTests-product
+[11 / 13] VoxboardCaptureCoreTests-product
+[13 / 13] VoxboardCaptureCoreTests-product
+[13 / 16] VoxboardSharedTests-product
+Build complete! (3.25 sec)
+Test Suite 'Selected tests' started at 2026-11-07 21:04:38.862.
+Test Suite 'VoxboardSharedTests.xctest' started at 2026-11-07 21:04:38.864.
+Test Suite 'VoxboardSharedTests.xctest' passed at 2026-11-07 21:04:38.864.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-11-07 21:04:38.864.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.002) seconds
+Test Suite 'Selected tests' started at 2026-11-07 21:04:38.956.
+Test Suite 'VoxboardCaptureCoreTests.xctest' started at 2026-11-07 21:04:38.958.
+Test Suite 'CaptureDeepLinkParserTests' started at 2026-11-07 21:04:38.958.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_arbitraryFilePathsBookmarksAndAutoSubmitAreRejected]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_arbitraryFilePathsBookmarksAndAutoSubmitAreRejected]' passed (0.002 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_hostlessWebLinksAreRejectedWithoutOpeningComposer]' started.
+/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDeepLinkParserTests.swift:11: error: -[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_hostlessWebLinksAreRejectedWithoutOpeningComposer] : XCTAssertThrowsError failed: did not throw an error - https://
+/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDeepLinkParserTests.swift:11: error: -[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_hostlessWebLinksAreRejectedWithoutOpeningComposer] : XCTAssertThrowsError failed: did not throw an error - http:
+/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDeepLinkParserTests.swift:11: error: -[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_hostlessWebLinksAreRejectedWithoutOpeningComposer] : XCTAssertThrowsError failed: did not throw an error - https:example.com
+/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDeepLinkParserTests.swift:11: error: -[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_hostlessWebLinksAreRejectedWithoutOpeningComposer] : XCTAssertThrowsError failed: did not throw an error - https:///notes
+/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureDeepLinkParserTests.swift:11: error: -[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_hostlessWebLinksAreRejectedWithoutOpeningComposer] : XCTAssertThrowsError failed: did not throw an error - https://?query=notes
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_hostlessWebLinksAreRejectedWithoutOpeningComposer]' failed (0.288 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_legacyVoxParameterStillSelectsPresetAndCannotBeCombinedWithPreset]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_legacyVoxParameterStillSelectsPresetAndCannotBeCombinedWithPreset]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_malformedUnknownAndExcessivePayloadsAreRejected]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_malformedUnknownAndExcessivePayloadsAreRejected]' passed (0.002 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_presetCanBeSelectedWithoutForcingDestinationOverride]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_presetCanBeSelectedWithoutForcingDestinationOverride]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_requestIDLinkClaimsInboxItemRatherThanEmbeddingContent]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_requestIDLinkClaimsInboxItemRatherThanEmbeddingContent]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_validTextAndURLLinksPopulateDraftWithoutAutoSubmitting]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_validTextAndURLLinksPopulateDraftWithoutAutoSubmitting]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_widgetActionCanRequestAComposerInputWithoutSubmitting]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_widgetActionCanRequestAComposerInputWithoutSubmitting]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_widgetControlCanOpenComposerWithoutSubmitting]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureDeepLinkParserTests test_widgetControlCanOpenComposerWithoutSubmitting]' passed (0.000 seconds).
+Test Suite 'CaptureDeepLinkParserTests' failed at 2026-11-07 21:04:39.252.
+	 Executed 9 tests, with 5 failures (0 unexpected) in 0.293 (0.294) seconds
+Test Suite 'CaptureMarkdownRendererTests' started at 2026-11-07 21:04:39.252.
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_assetOverrideUsesFinalUniquedAttachmentPath]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_assetOverrideUsesFinalUniquedAttachmentPath]' passed (0.001 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_emptyRequestFailsInsteadOfWritingMarkerOnly]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_emptyRequestFailsInsteadOfWritingMarkerOnly]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_everyPayloadKindProducesExpectedMarkdown]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_everyPayloadKindProducesExpectedMarkdown]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_nonEmbeddedRetainedAudioAloneRendersPlainAttachmentLink]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_nonEmbeddedRetainedAudioAloneRendersPlainAttachmentLink]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_nonEmbeddedRetainedAudioStaysOutOfNoteWhenTextExists]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_nonEmbeddedRetainedAudioStaysOutOfNoteWhenTextExists]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_textPayloadPreservesMarkdownBoundarySpaces]' started.
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_textPayloadPreservesMarkdownBoundarySpaces]' passed (0.000 seconds).
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_urlPayloadRejectsNonHTTPProtocolsAndMissingHosts]' started.
+/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureMarkdownRendererTests.swift:136: error: -[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_urlPayloadRejectsNonHTTPProtocolsAndMissingHosts] : XCTAssertThrowsError failed: did not throw an error
+/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureMarkdownRendererTests.swift:136: error: -[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_urlPayloadRejectsNonHTTPProtocolsAndMissingHosts] : XCTAssertThrowsError failed: did not throw an error
+/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Tests/VoxboardCaptureCoreTests/CaptureMarkdownRendererTests.swift:136: error: -[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_urlPayloadRejectsNonHTTPProtocolsAndMissingHosts] : XCTAssertThrowsError failed: did not throw an error
+Test Case '-[VoxboardCaptureCoreTests.CaptureMarkdownRendererTests test_urlPayloadRejectsNonHTTPProtocolsAndMissingHosts]' failed (0.001 seconds).
+Test Suite 'CaptureMarkdownRendererTests' failed at 2026-11-07 21:04:39.255.
+	 Executed 7 tests, with 3 failures (0 unexpected) in 0.003 (0.003) seconds
+Test Suite 'VoxboardCaptureCoreTests.xctest' failed at 2026-11-07 21:04:39.255.
+	 Executed 16 tests, with 8 failures (0 unexpected) in 0.296 (0.297) seconds
+Test Suite 'Selected tests' failed at 2026-11-07 21:04:39.255.
+	 Executed 16 tests, with 8 failures (0 unexpected) in 0.296 (0.299) seconds
+Note: Some test targets reported failures:
+  - VoxboardCaptureCoreTests (XCTest)

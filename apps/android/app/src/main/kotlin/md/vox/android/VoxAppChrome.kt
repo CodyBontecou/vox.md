@@ -69,6 +69,7 @@ import md.vox.android.platformservices.RecordingTranscriptionPhase
 import md.vox.android.platformservices.RecordingTranscriptionState
 import md.vox.android.ui.Signal
 import md.vox.android.ui.SignalCircleButton
+import md.vox.android.ui.SignalPillButton
 import md.vox.android.ui.SignalEmptyState
 import md.vox.android.ui.SignalMetrics
 import md.vox.android.ui.SignalSectionLabel
@@ -138,42 +139,8 @@ internal fun activityAttentionCount(
     transcripts.count { it.phase == RecordingTranscriptionPhase.FAILED }
 
 /**
- * Material 3 navigation bar for compact windows: 80dp `surfaceContainer`, a 64x32
- * `secondaryContainer` indicator behind the selected icon and an error badge on Activity.
- */
-@Composable
-internal fun VoxNavigationBar(
-    current: VoxTopLevelDestination?,
-    activityBadge: Int,
-    onSelect: (VoxTopLevelDestination) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val c = Signal.colors
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(c.container)
-            .navigationBarsPadding()
-            .height(80.dp)
-            .selectableGroup()
-            .testTag("vox-navigation-bar"),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        VoxTopLevelDestination.entries.forEach { destination ->
-            VoxNavigationItem(
-                destination = destination,
-                selected = destination == current,
-                badge = if (destination == VoxTopLevelDestination.ACTIVITY) activityBadge else 0,
-                onClick = { onSelect(destination) },
-                indicatorWidth = 64.dp,
-                modifier = Modifier.weight(1f).fillMaxHeight(),
-            )
-        }
-    }
-}
-
-/**
- * Navigation rail for medium and expanded windows (tablets, unfolded foldables): an
+ * Navigation rail for medium and expanded windows (tablets, unfolded foldables), the
+ * Android counterpart of the iPad sidebar; phones navigate from the Capture header. An
  * 88dp column with the primary voice action as a FAB above the four destinations.
  */
 @Composable
@@ -313,8 +280,17 @@ internal fun ActivityScreen(
     loadCaptureDetail: suspend (String) -> CaptureHistoryDetail? = { null },
     /** Opens the route editor for a capture's frozen preset ID. */
     editRoute: ((String) -> Unit)? = null,
+    discard: ((String) -> Unit)? = null,
+    recoveryPresets: List<md.vox.android.capturedomain.CapturePreset> = emptyList(),
+    recoveryDestination: md.vox.android.capturedomain.CaptureDestination? = null,
+    loadRecoveryContext: suspend (String) -> md.vox.android.capturedomain.CaptureRecoveryContext? = { null },
+    replaceCapture: ((md.vox.android.capturedomain.CaptureRecoveryCommand) -> Unit)? = null,
     initialFilter: ActivityFilter = ActivityFilter.ALL,
     initialProblemRequestID: String? = null,
+    /** Phones: back to Capture. Null when a navigation rail carries the destinations. */
+    navigateBack: (() -> Unit)? = null,
+    /** Phones: the Library pill in the header, as on iOS. */
+    openLibrary: (() -> Unit)? = null,
 ) {
     val c = Signal.colors
     var filter by rememberSaveable { mutableStateOf(initialFilter) }
@@ -337,8 +313,15 @@ internal fun ActivityScreen(
     Column(Modifier.fillMaxSize().background(c.bg)) {
         VoxTopBar(
             title = voxUiText("Activity"),
-            navigateBack = null,
+            navigateBack = navigateBack,
             actions = {
+                if (openLibrary != null) {
+                    SignalPillButton(
+                        text = voxString("Library"),
+                        onClick = openLibrary,
+                        modifier = Modifier.testTag("activity-library"),
+                    )
+                }
                 SignalCircleButton(
                     icon = Icons.Outlined.Refresh,
                     contentDescription = voxString("Refresh"),
@@ -467,6 +450,9 @@ internal fun ActivityScreen(
             repairAccess = { repairAccess(problem.requestID) },
             openDetail = { openDetail(problem.requestID) },
             editRoute = if (editRoute != null && presetID != null) ({ editRoute(presetID) }) else null,
+            discard = discard?.let { action -> { action(problem.requestID) } },
+            recoveryPresets = recoveryPresets, recoveryDestination = recoveryDestination,
+            loadRecoveryContext = loadRecoveryContext, replaceCapture = replaceCapture,
             onDismiss = { problemRequestID = null },
         )
     }

@@ -94,7 +94,6 @@ struct QuickCaptureView: View {
     @Environment(\.defersCaptureInputFocusForReleaseNotes) private var defersCaptureInputFocusForReleaseNotes
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.layoutDirection) private var layoutDirection
     @Environment(\.calendar) private var calendar
     @Environment(\.locale) private var locale
     @Environment(\.timeZone) private var timeZone
@@ -126,7 +125,6 @@ struct QuickCaptureView: View {
     @State private var showsAudioImporter = false
     @State private var showsVoiceCaptureDetails = false
     @State private var showsRecordingControlHelp = false
-    @AppStorage(CapturePreferenceKeys.micHoldHintDismissed) private var micHoldHintDismissed = false
     @State private var showsWatchRecordingQueue = false
     /// Durable recording result mode ("Add to Draft" vs "Send Immediately").
     /// `recordingMode` seeds from this persisted value at first render and
@@ -155,13 +153,7 @@ struct QuickCaptureView: View {
     @State private var fileExportToast: FileExportToast?
     @State private var flows: [CapturePreset] = CapturePresetStore.loadFlows()
     @State private var selectedFlowId: String = CapturePresetStore.selectedFlowId()
-    @State private var quickAccessPreferences = CapturePresetQuickAccessPreferences()
-    /// A compact selector is the fresh-install default; the user's expanded
-    /// alternatives-rail preference survives view recreation and app relaunches.
-    @AppStorage(CapturePreferenceKeys.presetQuickAccessRailExpanded)
-    private var isPresetQuickAccessRailExpanded = false
     @State private var observedPresetData: Data?
-    @State private var observedPinState: CapturePresetQuickAccessState = .unavailable
     @State private var linkText = ""
     private var isProcessingMedia: Bool {
         get { viewModel.isProcessingMedia }
@@ -184,7 +176,6 @@ struct QuickCaptureView: View {
     @State private var composerViewportHeight: CGFloat = .infinity
     /// True while an on-screen keyboard (or the ••• panel in its place) is up.
     /// A hardware keyboard only shows the accessory bar, which stays false.
-    @State private var isSoftwareKeyboardVisible = false
     @State private var hasPerformedInitialLoad = false
     @State private var hasCompletedInitialLoad = false
     @State private var initialComposerFocusIsPending = false
@@ -196,10 +187,9 @@ struct QuickCaptureView: View {
     @State private var showsAttachSheet = false
     @State private var pendingAttachAction: CaptureAttachAction?
     /// Push-to-talk: the Speak capsule records while held and stops on release.
-    @State private var isPushToTalkActive = false
-    @State private var pushToTalkPressTask: Task<Void, Never>?
+    @State private var speakLongPressTask: Task<Void, Never>?
+    @State private var speakLongPressFired = false
     @State private var isSpeakPressed = false
-    @State private var stopsWhenPushToTalkStarts = false
     @State private var vaultIsReachable = true
     @State private var showsVaultRegrantPicker = false
     @State private var pendingCaptureCount = 0
@@ -353,13 +343,9 @@ struct QuickCaptureView: View {
         CaptureViewSection {
             VStack(alignment: .leading, spacing: 2) {
                 HStack(alignment: .top, spacing: Geist.Spacing.three) {
-                    // The foldable cover screen always shows the route radio
-                    // row; the phone shows it only while typing.
-                    if enabledFlows.count > 1, composerIsFocused || isCoverScreen {
-                        routePillsRow
-                    } else {
-                        routeSelectionRow
-                    }
+                    // One route bar everywhere (resting, typing, cover
+                    // screen): no dropdown menu to open first.
+                    routePillsRow
                     Spacer(minLength: 0)
                     captureHeaderActions
                 }
@@ -666,12 +652,13 @@ struct QuickCaptureView: View {
                 .onChange(of: defersCaptureInputFocusForReleaseNotes) { _, isDeferring in
                     if isDeferring { dismissComposer() }
                 }
-                .onChange(of: viewModel.draft.text) { previousText, currentText in
-                    if viewModel.hasLiveRecordedTranscriptPreview {
-                        followLiveTranscriptTail(from: previousText, to: currentText)
-                    } else {
+                .onChange(of: viewModel.draft.text) { _, _ in
+                    if !viewModel.hasLiveRecordedTranscriptPreview {
                         viewModel.scheduleDraftSave()
                     }
+                }
+                .onChange(of: viewModel.recordedTranscriptCaretOffset) { _, caret in
+                    followRecordedTranscriptCaret(caret)
                 }
                 .onChange(of: viewModel.draft.voxID) { _, id in
                     viewModel.scheduleDraftSave()
@@ -1176,9 +1163,7 @@ struct QuickCaptureView: View {
             // One container keeps the press gesture alive while the label swaps
             // between idle, push-to-talk and recording presentations.
             ZStack {
-                if isPushToTalkActive {
-                    pushToTalkButtonLabel
-                } else if persistentRecorder.isAppRecordingSegmentActive {
+                if persistentRecorder.isAppRecordingSegmentActive {
                     activeVoiceCaptureButtonLabel
                 } else {
                     idleVoiceCaptureButtonLabel
@@ -1190,7 +1175,7 @@ struct QuickCaptureView: View {
             .accessibilityElement()
             .accessibilityAddTraits(.isButton)
             .accessibilityLabel(recordingStatusTitle)
-            .accessibilityHint("Tap to start or stop recording. Touch and hold to talk, then release to stop.")
+            .accessibilityHint("Tap to start or stop. Long-press for detailed recording controls.")
             .accessibilityAction { handleVoiceCaptureTap() }
             .accessibilityAction(named: "Show detailed recording controls") {
                 presentVoiceCaptureDetails()
@@ -1201,7 +1186,6 @@ struct QuickCaptureView: View {
                 persistentRecorder.toggleInAppSegmentPause()
             }
             .accessibilityIdentifier("capture_voice_recording")
-            .anchorPreference(key: CaptureMicHoldHintAnchorKey.self, value: .bounds) { $0 }
             .opacity(isProcessingMedia ? 0.35 : 1)
             .task(id: persistentRecorder.isAppRecordingSegmentActive) {
                 await updateRecordingAudioLevels()
@@ -1233,30 +1217,6 @@ struct QuickCaptureView: View {
         }
     }
 
-    /// Held Speak capsule: recording red with the running time.
-    private var pushToTalkButtonLabel: CaptureViewSection {
-        CaptureViewSection {
-            HStack(spacing: 10) {
-                Circle()
-                    .fill(Color.white)
-                    .frame(width: 8, height: 8)
-                Text(verbatim: persistentRecorder.isAppRecordingSegmentActive
-                    ? String(localized: "Release to stop · \(formatRecordingDuration(persistentRecorder.segmentDuration))")
-                    : String(localized: "Starting…"))
-                    .font(.custom("Geist-SemiBold", size: 17, relativeTo: .body))
-                    .monospacedDigit()
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-            }
-            .foregroundStyle(Color.white)
-            .frame(maxWidth: .infinity)
-            .frame(height: Geist.ControlHeight.hero)
-            .background(Geist.recording, in: Capsule(style: .continuous))
-            .contentShape(Capsule(style: .continuous))
-            .accessibilityHidden(true)
-        }
-    }
-
     /// Trial ended (no paid access): capture stays readable but recording and
     /// sending need a plan. The Speak bar is shown disabled; tapping it opens
     /// the plans sheet.
@@ -1277,8 +1237,8 @@ struct QuickCaptureView: View {
         recordingMode == .draft ? "text.badge.plus" : "paperplane.fill"
     }
 
-    /// Hold to talk · tap to record. A press longer than the hold threshold
-    /// records until release; a short tap toggles hands-free recording.
+    /// Tap starts or stops recording; a long press opens the detailed
+    /// recording controls. There is no hold-to-talk.
     private var voiceCaptureGesture: some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .local)
             .onChanged { _ in beginSpeakPress() }
@@ -1288,103 +1248,40 @@ struct QuickCaptureView: View {
     private func beginSpeakPress() {
         guard !isSpeakPressed else { return }
         isSpeakPressed = true
-        pushToTalkPressTask?.cancel()
-        guard !persistentRecorder.isSegmentActive,
-              !isProcessingMedia,
-              !isCaptureReadOnly,
-              !isMicrophoneDenied else { return }
-        pushToTalkPressTask = Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(350))
-            guard !Task.isCancelled, isSpeakPressed, !persistentRecorder.isSegmentActive else { return }
-            startPushToTalk()
+        speakLongPressFired = false
+        speakLongPressTask?.cancel()
+        speakLongPressTask = Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(500))
+            guard !Task.isCancelled, isSpeakPressed else { return }
+            speakLongPressFired = true
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            presentVoiceCaptureDetails()
         }
     }
 
     private func endSpeakPress() {
         isSpeakPressed = false
-        pushToTalkPressTask?.cancel()
-        pushToTalkPressTask = nil
-        guard isPushToTalkActive else {
-            handleVoiceCaptureTap()
+        speakLongPressTask?.cancel()
+        speakLongPressTask = nil
+        guard !speakLongPressFired else {
+            speakLongPressFired = false
             return
         }
-        if persistentRecorder.isAppRecordingSegmentActive {
-            persistentRecorder.stopInAppSegment()
-        } else {
-            // Released before the microphone finished starting.
-            isPushToTalkActive = false
-            stopsWhenPushToTalkStarts = true
-            Task { @MainActor in
-                try? await Task.sleep(for: .seconds(2))
-                stopsWhenPushToTalkStarts = false
-            }
-        }
-    }
-
-    private func startPushToTalk() {
-        isPushToTalkActive = true
-        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        dismissMicHoldHint()
-        startInlineRecording()
-        if !persistentRecorder.isSegmentActive, persistentRecorder.lastError != nil || showsPaywall {
-            isPushToTalkActive = false
-        }
+        handleVoiceCaptureTap()
     }
 
     private func handleAppRecordingActiveChange(_ isActive: Bool) {
         if isActive {
-            if stopsWhenPushToTalkStarts {
-                stopsWhenPushToTalkStarts = false
-                persistentRecorder.stopInAppSegment()
-                return
-            }
-            if !isPushToTalkActive { dismissComposer() }
+            dismissComposer()
         } else {
-            isPushToTalkActive = false
             UIApplication.shared.isIdleTimerDisabled = false
         }
     }
 
     private func presentVoiceCaptureDetails() {
         guard !isProcessingMedia else { return }
-        let isFirstDiscovery = !micHoldHintDismissed
         withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
             showsVoiceCaptureDetails = true
-            // Only a successful menu reveal (including the VoiceOver action)
-            // completes the tip. A tap or blocked long-press must not consume it.
-            micHoldHintDismissed = true
-        }
-        if isFirstDiscovery {
-            UINotificationFeedbackGenerator().notificationOccurred(.success)
-        }
-    }
-
-    private func dismissMicHoldHint() {
-        withAnimation(reduceMotion ? nil : .easeOut(duration: 0.2)) {
-            micHoldHintDismissed = true
-        }
-    }
-
-    private var shouldShowMicHoldHint: Bool {
-        !micHoldHintDismissed
-            // A locked Speak bar can't be held; the tip waits for paid access.
-            && !isCaptureReadOnly
-            && hasCompletedInitialLoad
-            && scenePhase == .active
-            && !defersCaptureInputFocusForReleaseNotes
-            && !isPresentingCaptureModal
-            && !isProcessingMedia
-            && !persistentRecorder.isSegmentActive
-            && !persistentRecorder.isTranscribing
-            && !isLocalizationScreenshot
-    }
-
-    private func micHoldHintOverlay(_ anchor: Anchor<CGRect>?) -> CaptureViewSection {
-        CaptureViewSection {
-            if shouldShowMicHoldHint {
-                CaptureMicHoldHintOverlay(micAnchor: anchor, dismiss: dismissMicHoldHint)
-                    .transition(.opacity)
-            }
         }
     }
 
@@ -1774,15 +1671,10 @@ struct QuickCaptureView: View {
             : String(localized: "Choose a plan")
     }
 
-    private var hidesActionBarWhileTyping: Bool {
-        layout == .compact && composerIsFocused && isSoftwareKeyboardVisible
-            && !persistentRecorder.isAppRecordingSegmentActive && !isPushToTalkActive
-    }
-
     private var captureControls: CaptureViewSection {
         CaptureViewSection {
             VStack(spacing: 0) {
-                if showsVoiceCaptureDetails {
+                if showsVoiceCaptureDetails, !usesInlineRecordingDock {
                     voiceCaptureDetailsBar
                 }
                 if isFindingLocation || viewModel.isResolvingLocation || persistentRecorder.isResolvingLocation {
@@ -1803,29 +1695,25 @@ struct QuickCaptureView: View {
                 }
                 // CaptureRestActions board: the route's quick-action row is
                 // always there, resting bare above Attach / Speak / Send.
-                // CaptureKeyboard board: while typing it sits directly on the
-                // keyboard; Speak/Send return when the keyboard goes down
-                // (swipe down on the note, or ⌨ in •••).
-                if layout == .compact, !persistentRecorder.isAppRecordingSegmentActive {
-                    captureQuickActionsBar
-                }
-                if !hidesActionBarWhileTyping {
+                // While typing it sits on the keyboard as a band with a
+                // keyboard-down button; Attach / Speak / Send stay below it.
+                if usesInlineRecordingDock {
+                    // Speak transforms the footer into the recording dock;
+                    // the words stream into the editor at the cursor.
+                    liveRecordingDock
+                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+                } else {
+                    if layout == .compact {
+                        captureQuickActionsBar
+                    }
                     captureActionBar
                 }
             }
+            .animation(
+                reduceMotion ? nil : .easeInOut(duration: 0.22),
+                value: usesInlineRecordingDock
+            )
             .background(Geist.bg)
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillChangeFrameNotification)) { note in
-                guard let frame = note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-                let screenHeight = UIScreen.main.bounds.height
-                // Taller than an accessory bar and on screen.
-                isSoftwareKeyboardVisible = frame.height > 150 && frame.minY < screenHeight - 1
-            }
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
-                isSoftwareKeyboardVisible = false
-            }
-            .overlayPreferenceValue(CaptureMicHoldHintAnchorKey.self) { anchor in
-                micHoldHintOverlay(anchor)
-            }
         }
     }
 
@@ -1870,17 +1758,47 @@ struct QuickCaptureView: View {
         }
     }
 
-    /// Full-screen dark live recording surface for tap-to-record sessions.
-    /// Push-to-talk keeps the compact held capsule so the press is not lost.
+    /// Phones record in place: the footer becomes `liveRecordingDock`.
+    private var usesInlineRecordingDock: Bool {
+        layout == .compact && persistentRecorder.isAppRecordingSegmentActive
+    }
+
+    private var liveRecordingDock: CaptureViewSection {
+        CaptureViewSection {
+            CaptureLiveRecordingDock(
+                engineLabel: persistentRecorder.segmentEngineLabel,
+                errorMessage: captureErrorMessage,
+                duration: formatRecordingDuration(persistentRecorder.segmentDuration, padded: true),
+                isPaused: persistentRecorder.isSegmentPaused,
+                levels: recordingAudioLevels,
+                isDraftMode: Binding(
+                    get: { recordingMode == .draft },
+                    set: { switchActiveRecordingMode(to: $0 ? .draft : .preset) }
+                ),
+                canSnapWhiteboard: UIImagePickerController.isSourceTypeAvailable(.camera)
+                    || VNDocumentCameraViewController.isSupported,
+                discard: discardActiveRecording,
+                stop: { persistentRecorder.stopInAppSegment() },
+                togglePause: { persistentRecorder.toggleInAppSegmentPause() },
+                markMoment: markRecordingMoment,
+                addTask: { viewModel.insertRecordingActionLine("- [ ] ") },
+                snapWhiteboard: snapWhiteboardDuringRecording
+            )
+        }
+    }
+
+    /// Full-screen dark live recording surface for tap-to-record sessions on
+    /// larger windows (iPad, a propped Duo); phones use `liveRecordingDock`.
     private var liveRecordingScreen: CaptureViewSection {
         CaptureViewSection {
-            if persistentRecorder.isAppRecordingSegmentActive && !isPushToTalkActive {
+            if persistentRecorder.isAppRecordingSegmentActive, layout != .compact {
                 CaptureLiveRecordingScreen(
                     routeName: selectedFlow.visibleName ?? selectedFlow.accessibilityName,
                     routeSymbolName: selectedFlow.symbolName,
                     routeEmoji: selectedFlow.emoji,
                     routeTone: SignalRouteTileTone.forRoute(id: selectedFlow.id),
                     engineLabel: persistentRecorder.segmentEngineLabel,
+                    errorMessage: captureErrorMessage,
                     speakerCount: persistentRecorder.liveSpeakerCount,
                     duration: formatRecordingDuration(persistentRecorder.segmentDuration, padded: true),
                     isPaused: persistentRecorder.isSegmentPaused,
@@ -1962,12 +1880,6 @@ struct QuickCaptureView: View {
                     inspirationPlaceholder
                         .task { await loadInspirationQuote() }
                 }
-            }
-            // Overlaying only the alternatives rail keeps the editor frame and
-            // selected-preset/Send row unchanged. Physical edge preference is
-            // mapped around RTL without overriding the rail children's direction.
-            .overlay(alignment: presetQuickAccessRailAlignment) {
-                pinnedPresetRail
             }
         }
     }
@@ -2277,27 +2189,6 @@ struct QuickCaptureView: View {
         }
     }
 
-    private var presetQuickAccessRailAlignment: Alignment {
-        captureToolbarPreferences.presetQuickAccessRailSide.overlayAlignment(
-            for: layoutDirection
-        )
-    }
-
-    private var pinnedPresetRail: CaptureViewSection {
-        CaptureViewSection {
-            CapturePresetQuickAccessRail(
-                profiles: quickAccessPreferences.resolvedProfiles,
-                selectedID: viewModel.draft.voxID,
-                isExpanded: isPresetQuickAccessRailExpanded,
-                canChangeCaptureRoute: viewModel.canSelectCapturePreset,
-                selectPreset: { id in
-                    guard let flow = flows.first(where: { $0.id == id }) else { return false }
-                    return selectFlow(flow)
-                }
-            )
-        }
-    }
-
     private func presetMenuButton(_ flow: CapturePreset) -> CaptureViewSection {
         CaptureViewSection {
             Button {
@@ -2318,34 +2209,6 @@ struct QuickCaptureView: View {
             }
             .accessibilityLabel(Text(verbatim: flow.accessibilityName))
             .accessibilityAddTraits(viewModel.draft.voxID == flow.id ? .isSelected : [])
-        }
-    }
-
-    private var routeSelectionRow: CaptureViewSection {
-        CaptureViewSection {
-            CapturePresetQuickAccessSelector(
-                profiles: enabledFlows.map(\.captureProfile),
-                selectedProfile: selectedFlow.captureProfile,
-                hasQuickAccessProfiles: quickAccessPreferences.resolvedProfiles.contains {
-                    $0.id != viewModel.draft.voxID
-                },
-                isRailExpanded: isPresetQuickAccessRailExpanded,
-                canChangeCaptureRoute: viewModel.canSelectCapturePreset,
-                toggleRail: togglePresetQuickAccessRail,
-                selectPreset: { id in
-                    guard let flow = flows.first(where: { $0.id == id }) else { return false }
-                    return selectFlow(flow)
-                }
-            )
-            // Keep this stable production seam at the coordinator call site
-            // as well as on the reusable selector presentation.
-            .accessibilityIdentifier("capture_vox_selector")
-        }
-    }
-
-    private func togglePresetQuickAccessRail() {
-        withAnimation(reduceMotion ? nil : .spring(response: 0.28, dampingFraction: 0.9)) {
-            isPresetQuickAccessRailExpanded.toggle()
         }
     }
 
@@ -2470,7 +2333,7 @@ struct QuickCaptureView: View {
     private var captureActionBar: CaptureViewSection {
         CaptureViewSection {
             VStack(spacing: Geist.Spacing.three) {
-                if !composerIsFocused {
+                if !composerIsFocused, captureHintRowHasContent {
                     captureHintRow
                 }
                 HStack(spacing: Geist.Spacing.three) {
@@ -2515,12 +2378,26 @@ struct QuickCaptureView: View {
         }
     }
 
+    private var showsPendingCaptureHint: Bool {
+        viewModel.selectedDestination != nil && !vaultIsReachable && pendingCaptureCount > 0
+    }
+
+    private var showsUnlockHint: Bool {
+        !usageTracker.hasUnlocked && usageTracker.successfulCapturesUsed >= 7
+    }
+
+    /// The hint row only takes space when it has something to say; the
+    /// idle "Tap to record" line is gone (long-press Speak for details).
+    private var captureHintRowHasContent: Bool {
+        showsPendingCaptureHint || isCaptureReadOnly || supportsInlinePreview || showsUnlockHint
+    }
+
     private var captureHintRow: CaptureViewSection {
         CaptureViewSection {
             HStack(spacing: Geist.Spacing.two) {
                 // "0 captures waiting" reads like an error; with nothing held
                 // yet the regular hint stays.
-                if viewModel.selectedDestination != nil, !vaultIsReachable, pendingCaptureCount > 0 {
+                if showsPendingCaptureHint {
                     Text(pendingCaptureCount == 1
                         ? String(localized: "1 capture waiting · nothing is lost")
                         : String(localized: "\(pendingCaptureCount) captures waiting · nothing is lost"))
@@ -2530,24 +2407,7 @@ struct QuickCaptureView: View {
                     Text("Read-only · choose a plan to capture")
                         .font(Geist.caption())
                         .foregroundStyle(Geist.muted)
-                } else {
-                    Text("Hold to talk · tap to record")
-                        .font(Geist.caption())
-                        .foregroundStyle(Geist.muted)
-                    Button {
-                        presentVoiceCaptureDetails()
-                    } label: {
-                        Image(systemName: "slider.horizontal.3")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(Geist.muted)
-                            .frame(width: 28, height: 24)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("Show detailed recording controls")
-                    .accessibilityIdentifier("capture_recording_options")
                 }
-
 
                 if supportsInlinePreview {
                     Button {
@@ -2565,7 +2425,7 @@ struct QuickCaptureView: View {
                     .accessibilityIdentifier("capture_toggle_preview")
                 }
 
-                if !usageTracker.hasUnlocked, usageTracker.successfulCapturesUsed >= 7 {
+                if showsUnlockHint {
                     Button {
                         presentPaywall(context: .usageMeter)
                     } label: {
@@ -2947,13 +2807,19 @@ struct QuickCaptureView: View {
         composerController.dismissKeyboard()
     }
 
-    /// Keep programmatic live speech behaving like text entered at the end of
-    /// the editor, without stealing the insertion point from active typing.
-    private func followLiveTranscriptTail(from previousText: String, to currentText: String) {
-        let previousEnd = previousText.utf16.count
-        let selectedEnd = composerSelection.location + composerSelection.length
-        guard !composerIsFocused || selectedEnd >= previousEnd else { return }
-        composerSelection = NSRange(location: currentText.utf16.count, length: 0)
+    /// Keeps the caret just after spoken words as they stream in at the
+    /// cursor, without stealing the insertion point from active typing.
+    private func followRecordedTranscriptCaret(_ caret: Int?) {
+        guard let caret, !composerIsFocused else { return }
+        composerSelection = NSRange(location: caret, length: 0)
+    }
+
+    /// The UTF-16 offset a new recording's words go to: the composer cursor,
+    /// or the end when the cursor was never placed in an existing draft.
+    private var recordingInsertionOffset: Int? {
+        let end = composerSelection.location + composerSelection.length
+        if end == 0, !composerIsFocused, !viewModel.draft.text.isEmpty { return nil }
+        return end
     }
 
     private func loadInspirationQuote() async {
@@ -3451,7 +3317,6 @@ struct QuickCaptureView: View {
     }
 
     private func discardActiveRecording() {
-        stopsWhenPushToTalkStarts = false
         persistentRecorder.cancelSegment()
         UIAccessibility.post(notification: .announcement, argument: String(localized: "Recording discarded"))
     }
@@ -3734,16 +3599,13 @@ struct QuickCaptureView: View {
         let defaults = AppConstants.sharedDefaults
         // Ignore unrelated defaults (including draft autosaves). Compare before
         // calling store APIs so seeding/migrations cannot form an observer loop.
-        guard defaults?.data(forKey: CapturePresetProfileStore.profilesKey) != observedPresetData
-            || CapturePresetQuickAccessStore.load(defaults: defaults) != observedPinState else { return }
+        guard defaults?.data(forKey: CapturePresetProfileStore.profilesKey) != observedPresetData else { return }
         reloadFlows()
     }
 
     private func reloadFlows() {
         flows = CapturePresetStore.loadFlows()
-        quickAccessPreferences.reload()
         observedPresetData = AppConstants.sharedDefaults?.data(forKey: CapturePresetProfileStore.profilesKey)
-        observedPinState = quickAccessPreferences.state
         viewModel.refreshVoxProfiles()
         let draftVoxID = viewModel.draft.voxID
         selectedFlowId = flows.contains(where: { $0.id == draftVoxID && $0.isEnabled })
@@ -3796,6 +3658,7 @@ struct QuickCaptureView: View {
 
         lastStartedRecordingMode = recordingMode
         persistentRecorder.lastTranscriptionResult = nil
+        viewModel.beginRecordedTranscriptInsertion(atUTF16Offset: recordingInsertionOffset)
         _ = persistentRecorder.startOneShotInAppSegment(
             flowId: selectedFlow.id,
             completionMode: selectedRecordingCompletionMode,

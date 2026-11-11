@@ -1,0 +1,159 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Calculating task graph as no cached configuration is available for tasks: :data:testDebugUnitTest :data:compileDebugAndroidTestKotlin :app:testDebugUnitTest --tests md.vox.android.CaptureDrainWorkerTest
+> Task :build-logic:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :build-logic:compileKotlin UP-TO-DATE
+> Task :build-logic:compileJava NO-SOURCE
+> Task :build-logic:pluginDescriptors UP-TO-DATE
+> Task :build-logic:processResources UP-TO-DATE
+> Task :build-logic:classes UP-TO-DATE
+> Task :build-logic:jar UP-TO-DATE
+> Task :core-bridge:preBuild UP-TO-DATE
+> Task :capture-domain:preBuild UP-TO-DATE
+> Task :capture-domain:preDebugBuild UP-TO-DATE
+> Task :core-bridge:preDebugBuild UP-TO-DATE
+> Task :capture-domain:generateDebugResources UP-TO-DATE
+> Task :capture-domain:processDebugNavigationResources UP-TO-DATE
+> Task :capture-domain:javaPreCompileDebug UP-TO-DATE
+> Task :core-bridge:generateDebugResources UP-TO-DATE
+> Task :capture-domain:packageDebugResources UP-TO-DATE
+> Task :core-bridge:packageDebugResources UP-TO-DATE
+> Task :core-bridge:processDebugNavigationResources UP-TO-DATE
+> Task :capture-domain:parseDebugLocalResources UP-TO-DATE
+> Task :core-bridge:parseDebugLocalResources UP-TO-DATE
+> Task :capture-domain:generateDebugRFile UP-TO-DATE
+> Task :core-bridge:generateDebugRFile UP-TO-DATE
+> Task :core-bridge:compileDebugKotlin UP-TO-DATE
+> Task :capture-domain:compileDebugKotlin UP-TO-DATE
+> Task :capture-domain:compileDebugJavaWithJavac NO-SOURCE
+> Task :capture-domain:processDebugJavaRes UP-TO-DATE
+> Task :capture-domain:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :core-bridge:javaPreCompileDebug UP-TO-DATE
+> Task :core-bridge:compileDebugJavaWithJavac NO-SOURCE
+> Task :core-bridge:processDebugJavaRes UP-TO-DATE
+> Task :capture-domain:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :core-bridge:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :data:preBuild UP-TO-DATE
+> Task :data:preDebugBuild UP-TO-DATE
+> Task :core-bridge:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :data:generateDebugResources UP-TO-DATE
+> Task :data:processDebugNavigationResources UP-TO-DATE
+> Task :data:packageDebugResources UP-TO-DATE
+> Task :data:javaPreCompileDebug UP-TO-DATE
+> Task :data:preDebugUnitTestBuild UP-TO-DATE
+> Task :data:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :data:parseDebugLocalResources UP-TO-DATE
+> Task :data:preDebugAndroidTestBuild UP-TO-DATE
+> Task :data:generateDebugAndroidTestResources UP-TO-DATE
+> Task :data:generateDebugRFile UP-TO-DATE
+> Task :data:generateDebugUnitTestStubRFile UP-TO-DATE
+> Task :data:packageDebugAndroidTestResources UP-TO-DATE
+> Task :data:processDebugAndroidTestNavigationResources UP-TO-DATE
+> Task :data:parseDebugAndroidTestLocalResources UP-TO-DATE
+> Task :data:generateDebugAndroidTestRFile UP-TO-DATE
+> Task :app:physicalProvenance
+> Task :data:kaptGenerateStubsDebugKotlin FROM-CACHE
+> Task :data:kaptDebugKotlin UP-TO-DATE
+> Task :data:compileDebugKotlin FROM-CACHE
+> Task :data:compileDebugJavaWithJavac FROM-CACHE
+> Task :data:bundleLibRuntimeToJarDebug
+> Task :data:bundleLibCompileToJarDebug
+> Task :data:kaptGenerateStubsDebugUnitTestKotlin UP-TO-DATE
+> Task :data:kaptDebugUnitTestKotlin SKIPPED
+> Task :data:compileDebugUnitTestKotlin UP-TO-DATE
+> Task :data:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :data:processDebugJavaRes UP-TO-DATE
+> Task :data:processDebugUnitTestJavaRes UP-TO-DATE
+
+> Task :app:generateLauncherIcons
+sampled adaptive background #0F0F0F from AppIcon-1024.png
+wrote 24 launcher icon files under /private/tmp/vox-apple-signal3-20261108/apps/android/app/build/generated/res/launcherIcons
+
+> Task :data:testDebugUnitTest
+
+> Task :app:generateRuntimeLocalizations
+runtime localizations: 22333 entries; literal sources: 1023; missing catalog sources: 0; rewrites: 0
+
+> Task :app:syncGeistFonts
+> Task :app:preBuild
+> Task :app:preDebugBuild
+> Task :app:generateDebugResources FROM-CACHE
+> Task :app:packageDebugResources FROM-CACHE
+> Task :platform-services:preBuild UP-TO-DATE
+> Task :platform-services:preDebugBuild UP-TO-DATE
+> Task :platform-services:processDebugNavigationResources FROM-CACHE
+> Task :data:kaptGenerateStubsDebugAndroidTestKotlin
+> Task :data:kaptDebugAndroidTestKotlin SKIPPED
+> Task :app:processDebugNavigationResources FROM-CACHE
+> Task :app:parseDebugLocalResources FROM-CACHE
+> Task :app:generateDebugRFile FROM-CACHE
+> Task :platform-services:generateDebugResources FROM-CACHE
+> Task :platform-services:packageDebugResources FROM-CACHE
+> Task :platform-services:parseDebugLocalResources FROM-CACHE
+> Task :platform-services:generateDebugRFile FROM-CACHE
+> Task :platform-services:compileDebugKotlin FROM-CACHE
+> Task :platform-services:javaPreCompileDebug FROM-CACHE
+> Task :platform-services:compileDebugJavaWithJavac NO-SOURCE
+> Task :platform-services:bundleLibCompileToJarDebug
+> Task :data:compileDebugAndroidTestKotlin
+> Task :app:javaPreCompileDebug FROM-CACHE
+> Task :capture-domain:writeDebugAarMetadata
+> Task :core-bridge:writeDebugAarMetadata
+> Task :data:writeDebugAarMetadata
+> Task :platform-services:writeDebugAarMetadata
+> Task :app:checkDebugAarMetadata
+> Task :app:mapDebugSourceSetPaths
+> Task :app:compileDebugNavigationResources FROM-CACHE
+> Task :app:mergeDebugResources FROM-CACHE
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug FROM-CACHE
+> Task :capture-domain:extractDeepLinksDebug FROM-CACHE
+> Task :capture-domain:processDebugManifest FROM-CACHE
+> Task :core-bridge:extractDeepLinksDebug FROM-CACHE
+> Task :core-bridge:processDebugManifest FROM-CACHE
+> Task :data:extractDeepLinksDebug FROM-CACHE
+> Task :data:processDebugManifest FROM-CACHE
+> Task :platform-services:extractDeepLinksDebug FROM-CACHE
+> Task :platform-services:processDebugManifest FROM-CACHE
+> Task :app:processDebugMainManifest FROM-CACHE
+> Task :app:processDebugManifest FROM-CACHE
+> Task :app:processDebugManifestForPackage FROM-CACHE
+> Task :capture-domain:mapDebugSourceSetPaths
+> Task :capture-domain:compileDebugLibraryResources FROM-CACHE
+> Task :core-bridge:mapDebugSourceSetPaths
+> Task :core-bridge:compileDebugLibraryResources FROM-CACHE
+> Task :data:mapDebugSourceSetPaths
+> Task :data:compileDebugLibraryResources FROM-CACHE
+> Task :platform-services:mapDebugSourceSetPaths
+> Task :platform-services:compileDebugLibraryResources FROM-CACHE
+> Task :app:processDebugResources FROM-CACHE
+> Task :app:preDebugUnitTestBuild
+> Task :app:javaPreCompileDebugUnitTest FROM-CACHE
+> Task :platform-services:bundleLibRuntimeToJarDebug
+> Task :platform-services:processDebugJavaRes
+
+> Task :app:compileDebugKotlin
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/main/kotlin/md/vox/android/AdaptiveLayout.kt:95:79 No cast needed.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/main/kotlin/md/vox/android/HistoryDetailScreen.kt:497:53 Unnecessary safe call on a non-null receiver of type '(String) -> Unit'.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/main/kotlin/md/vox/android/HistoryDetailScreen.kt:505:46 Unnecessary safe call on a non-null receiver of type '(String) -> Unit'.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/main/kotlin/md/vox/android/PlayBilling.kt:538:26 'fun setSubscriptionReplacementMode(p0: Int): BillingFlowParams.SubscriptionUpdateParams.Builder' is deprecated. Deprecated in Java.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/main/kotlin/md/vox/android/TranscriptEditorViewModel.kt:38:84 Unnecessary safe call on a non-null receiver of type 'RecordingTranscriptionState'.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/main/kotlin/md/vox/android/TranscriptEditorViewModel.kt:39:99 Unnecessary safe call on a non-null receiver of type 'RecordingTranscriptionState'.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/main/kotlin/md/vox/android/TranscriptEditorViewModel.kt:40:75 Unnecessary safe call on a non-null receiver of type 'RecordingTranscriptionState'.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/main/kotlin/md/vox/android/TranscriptEditorViewModel.kt:41:91 Unnecessary safe call on a non-null receiver of type 'RecordingTranscriptionState'.
+w: file:///private/tmp/vox-apple-signal3-20261108/apps/android/app/src/main/kotlin/md/vox/android/TranscriptEditorViewModel.kt:42:84 Unnecessary safe call on a non-null receiver of type 'RecordingTranscriptionState'.
+
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:processDebugJavaRes
+> Task :app:bundleDebugClassesToCompileJar
+> Task :app:bundleDebugClassesToRuntimeJar
+> Task :app:compileDebugUnitTestKotlin
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugUnitTestJavaRes
+> Task :app:testDebugUnitTest
+
+[Incubating] Problems report is available at: file:///private/tmp/vox-apple-signal3-20261108/apps/android/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 31s
+108 actionable tasks: 30 executed, 36 from cache, 42 up-to-date
+Configuration cache entry stored.

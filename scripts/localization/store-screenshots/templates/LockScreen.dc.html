@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title>Vox.md — Lock Screen</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style></style>
+<style>
+body{margin:0}
+a{color:#C4C8FF}a:hover{color:#FFFFFF}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #2A2C31; color: #F4F4F1; font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 70px 16px 40px">
+  <div style="font-size: 18px; font-weight: 500; color: #D6D6D2">Sunday, November 1</div>
+  <div style="font-size: 92px; line-height: 1; font-weight: 600; letter-spacing: -0.04em; margin-top: 2px">9:41</div>
+
+  <div style="display: flex; gap: 10px; margin-top: 18px">
+    <button aria-label="Speak to Inbox" style="width: 72px; height: 72px; border-radius: 999px; border: 0; background: rgba(255,255,255,0.14); color: #F4F4F1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer">
+      <svg aria-hidden="true" width="20" height="20" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="12" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg>
+      <span style="font-size: 10px; font-weight: 600">Inbox</span>
+    </button>
+    <button aria-label="Open Tasks route" style="width: 160px; height: 72px; border-radius: 20px; border: 0; background: rgba(255,255,255,0.14); color: #F4F4F1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; padding: 0 14px; cursor: pointer; text-align: left">
+      <span style="font-size: 11px; font-weight: 600; color: #D6D6D2">TASKS · TODAY</span>
+      <span style="font-size: 14px; font-weight: 500">Book flights for Lisbon</span>
+      <span style="font-size: 12px; color: #D6D6D2">+2 more</span>
+    </button>
+    <button aria-label="Scan to Inbox" style="width: 72px; height: 72px; border-radius: 999px; border: 0; background: rgba(255,255,255,0.14); color: #F4F4F1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer">
+      <svg aria-hidden="true" width="20" height="20" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M7 12h10"></path></svg>
+      <span style="font-size: 10px; font-weight: 600">Scan</span>
+    </button>
+  </div>
+
+  <section aria-label="Vox.md recording" style="margin-top: auto; width: 100%; box-sizing: border-box; background: #0B0B0B; border-radius: 26px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <span style="width: 26px; height: 26px; border-radius: 999px; background: #2F3BE8; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700">M</span>
+      <div style="flex: 1; min-width: 0">
+        <div style="font-size: 15px; font-weight: 600">Meeting Notes</div>
+        <div style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #9A9A95">→ Meetings/2026-11-01.md</div>
+      </div>
+      <span style="font-family: 'Geist Mono', monospace; font-size: 22px; font-weight: 500; color: #F0474A">12:08</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px">
+      <div aria-hidden="true" style="flex: 1; display: flex; align-items: center; gap: 2px; height: 30px">
+        <sc-for list="{{bars}}" as="b" hint-placeholder-count="44"><span style="{{b}}"></span></sc-for>
+      </div>
+      <button aria-label="Pause" style="width: 44px; height: 44px; border-radius: 999px; border: 0; background: #262626; color: #F4F4F1; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+        <svg aria-hidden="true" width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M9 5v14M15 5v14"></path></svg>
+      </button>
+      <button aria-label="Stop and send" style="width: 44px; height: 44px; border-radius: 999px; border: 0; background: #F0474A; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+        <span style="width: 14px; height: 14px; border-radius: 3px; background: #FFFFFF; display: block"></span>
+      </button>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844}}">
+class Component extends DCLogic {
+  renderVals() {
+    var bars = [];
+    for (var i = 0; i < 44; i++) {
+      var v = Math.round(4 + Math.abs(Math.sin(i * 0.6) * Math.cos(i * 0.23)) * 24);
+      bars.push('display:block;flex:1;border-radius:1px;height:' + v + 'px;background:' + (i > 36 ? '#F0474A' : '#4A4A47'));
+    }
+    return { bars: bars };
+  }
+}
+</script>
+
+
+</body></html>

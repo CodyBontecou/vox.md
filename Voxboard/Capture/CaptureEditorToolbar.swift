@@ -129,6 +129,20 @@ struct CaptureEditorToolbar: View {
                         .presentationCompactAdaptation(.popover)
                         .accessibilityLabel("All quick actions")
                 }
+
+                // While typing, the band ends with a keyboard-down button.
+                if !isResting, !isInline, let dismissKeyboard {
+                    Button(action: dismissKeyboard) {
+                        Image(systemName: "keyboard.chevron.compact.down")
+                            .font(.system(size: 17, weight: .medium))
+                            .foregroundStyle(Geist.text)
+                            .frame(width: 44, height: 40)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Hide keyboard")
+                    .accessibilityIdentifier("capture_hide_keyboard")
+                }
             }
             .frame(height: 40)
             .padding(.leading, isInline ? 0 : 8)

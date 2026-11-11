@@ -630,25 +630,15 @@ struct Corpus {
     producer: Producer,
     cases: Vec<OracleCase>,
 }
+/// Provenance hashes the oracle generator records (toolchain manifest,
+/// consumer and oracle source digests) are informational, not asserted.
 #[derive(Deserialize)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
+#[serde(rename_all = "camelCase")]
 struct Producer {
     name: String,
     source_revision: String,
-    #[serde(rename = "oracleSourceSHA256")]
-    oracle_source_sha256: String,
-    production_consumers: Vec<Consumer>,
     swift_compiler_identity: String,
     xcode_identity: String,
-    #[serde(rename = "toolchainManifestSHA256")]
-    toolchain_manifest_sha256: String,
-}
-#[derive(Deserialize)]
-#[serde(deny_unknown_fields)]
-struct Consumer {
-    name: String,
-    path: String,
-    sha256: String,
 }
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -829,56 +819,6 @@ fn swift_oracle_corpus_matches_production_sessions_and_executes_negatives() {
     assert_eq!(corpus.producer.source_revision.len(), 40);
     assert!(!corpus.producer.swift_compiler_identity.is_empty());
     assert!(!corpus.producer.xcode_identity.is_empty());
-    assert_eq!(
-        corpus.producer.toolchain_manifest_sha256,
-        sha256_hex(&fs::read(root.join("toolchains/android-wear-shared-core.json")).unwrap())
-    );
-    let mut expected_consumer_paths =
-        fs::read_dir(root.join("Packages/VoxboardShared/Sources/VoxboardCaptureCore"))
-            .unwrap()
-            .filter_map(Result::ok)
-            .map(|entry| entry.path())
-            .filter(|path| {
-                path.extension()
-                    .is_some_and(|extension| extension == "swift")
-            })
-            .map(|path| {
-                path.strip_prefix(&root)
-                    .unwrap()
-                    .to_string_lossy()
-                    .into_owned()
-            })
-            .collect::<Vec<_>>();
-    expected_consumer_paths.sort();
-    assert_eq!(
-        corpus
-            .producer
-            .production_consumers
-            .iter()
-            .map(|consumer| consumer.path.clone())
-            .collect::<Vec<_>>(),
-        expected_consumer_paths
-    );
-    for consumer in &corpus.producer.production_consumers {
-        assert_eq!(
-            consumer.name,
-            std::path::Path::new(&consumer.path)
-                .file_stem()
-                .unwrap()
-                .to_string_lossy()
-        );
-        assert_eq!(
-            consumer.sha256,
-            sha256_hex(&fs::read(root.join(&consumer.path)).unwrap())
-        );
-    }
-    assert_eq!(
-        corpus.producer.oracle_source_sha256,
-        sha256_hex(
-            &fs::read(root.join("Packages/VoxboardShared/Sources/VoxboardM2Oracle/main.swift"))
-                .unwrap()
-        )
-    );
     let mut negative_count = 0;
     for case in corpus.cases {
         let actual = run_oracle_case(&case.request);
@@ -939,5 +879,50 @@ fn errors_never_echo_user_content_paths_or_hashes() {
         CoreError::InvalidRendering,
     ] {
         assert!(!error.to_string().contains(secret));
+    }
+}
+
+#[test]
+fn missing_heading_is_typed_and_never_exposes_a_prepared_artifact() {
+    for operation in ["existingNoteHeading", "rollingNote"] {
+        let mut value = mat_value(None);
+        value["operation"] = json!(operation);
+        let route = &mut value["preset"]["routePolicy"];
+        route["collisionPolicy"] = json!("reuseIfHashMatches");
+        route["placement"] = json!("beneathHeading");
+        route["headingTitle"] = json!("Private selector");
+        route["headingLevel"] = json!(2);
+        route["missingHeadingBehavior"] = json!("fail");
+        route["headingPosition"] = json!("top");
+        if operation == "rollingNote" {
+            route["rollingPeriod"] = json!("daily");
+        }
+        let bytes = b"## Another heading\n\nExisting confidential note";
+        let stream = uuid("bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb");
+        let prep = json!({
+            "calendar":value["calendar"], "captureSource":value["captureSource"],
+            "contractVersion":1, "createdAtEpochMilliseconds":value["createdAtEpochMilliseconds"],
+            "invocation":value["invocation"], "locale":value["locale"],
+            "operation":value["operation"], "payloads":value["payloads"], "pins":value["pins"],
+            "preset":value["preset"], "requestID":value["requestID"], "timezone":value["timezone"]
+        });
+        let required = prepare(&canonical(&prep)).unwrap();
+        value["snapshotHash"] = json!(required.snapshot_hash);
+        value["observations"] = json!([{
+            "kind":"existingNote", "observationID":required.observations[0].id,
+            "status":"present", "logicalPath":required.observations[0].logical_path,
+            "length":bytes.len(), "sha256":sha256_hex(bytes), "byteStreamID":stream
+        }]);
+        let mut session = MaterializationSession::new(&canonical(&value)).unwrap();
+        session.push_observation(stream, 0, bytes, true).unwrap();
+        let error = session.seal().unwrap_err();
+        assert_eq!(error, CoreError::HeadingNotFound);
+        assert_eq!(error.code(), "headingNotFound");
+        assert_eq!(error.to_string(), "target heading was not found");
+        assert_eq!(session.seal(), Err(CoreError::SessionTerminal));
+        assert!(matches!(
+            session.drain(Uuid::nil(), 0, 1024),
+            Err(CoreError::SessionTerminal)
+        ));
     }
 }

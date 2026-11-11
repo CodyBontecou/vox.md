@@ -46,7 +46,7 @@ import md.vox.android.ui.signalTextFieldColors
 }
 
 @Composable internal fun CaptureAppearanceControls(configuration: CaptureBarConfiguration, busy: Boolean,
-    setTwentyFourHour: (Boolean) -> Unit, setRailSide: (CaptureRailSide) -> Unit) {
+    setTwentyFourHour: (Boolean) -> Unit) {
     val c = Signal.colors
     Column(
         Modifier.fillMaxWidth().padding(horizontal = SignalMetrics.PageGutter, vertical = 8.dp),
@@ -62,19 +62,6 @@ import md.vox.android.ui.signalTextFieldColors
                     enabled = !busy,
                     testTag = "timestamp-${format.wireName}",
                     onClick = { setTwentyFourHour(format == CaptureTimestampFormat.TWENTY_FOUR_HOUR) },
-                )
-            }
-        }
-        SignalGroup(voxString("Pinned Preset Rail")) {
-            CaptureRailSide.entries.forEachIndexed { index, side ->
-                if (index > 0) SignalRowDivider()
-                CaptureAppearanceRadioRow(
-                    title = if (side == CaptureRailSide.LEFT) voxString("Left edge") else voxString("Right edge"),
-                    subtitle = null,
-                    selected = configuration.railSide == side,
-                    enabled = !busy,
-                    testTag = "rail-${side.name}",
-                    onClick = { setRailSide(side) },
                 )
             }
         }
@@ -105,7 +92,9 @@ import md.vox.android.ui.signalTextFieldColors
     // design's tablet board; it starts open and, on a foldable, begins past the hinge.
     var enabled by rememberSaveable { mutableStateOf(true) }
     BoxWithConstraints(modifier) {
-        val supported = maxWidth >= 760.dp && LocalDensity.current.fontScale < 1.5f
+        // A phone in landscape can be wide enough for two panes but leave only a
+        // few lines below the capture controls. Keep that space for the editor.
+        val supported = maxWidth >= 760.dp && maxHeight >= 240.dp && LocalDensity.current.fontScale < 1.5f
         val visible = supported && enabled && (text.isNotBlank() || attachmentCount > 0)
         val composer: @Composable () -> Unit = {
             Column(Modifier.fillMaxSize()) {

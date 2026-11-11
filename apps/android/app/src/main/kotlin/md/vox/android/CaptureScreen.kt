@@ -1,6 +1,7 @@
 package md.vox.android
 
 import android.Manifest
+import md.vox.android.capturedomain.CaptureWebLink
 import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
@@ -21,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,7 +41,6 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.material3.minimumInteractiveComponentSize
-import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -135,14 +134,12 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -191,7 +188,6 @@ import md.vox.android.capturedomain.CaptureRouteOverride
 import md.vox.android.capturedomain.CaptureURLDeliverySettings
 import md.vox.android.capturedomain.normalizedTranscriptProperty
 import md.vox.android.capturedomain.CaptureHeadingPosition
-import md.vox.android.capturedomain.CaptureRailSide
 import md.vox.android.capturedomain.CaptureDestination
 import md.vox.android.capturedomain.CaptureAttachment
 import md.vox.android.ui.GeistFontFamily
@@ -343,9 +339,8 @@ internal fun CaptureScreen(
     onDraftChanged: (String, String?) -> Unit,
     onEntryTemplateSelected: (String?) -> Unit,
     onRouteChanged: (CaptureRouteOverride?) -> Unit = {},
-    pinnedPresets: List<CapturePreset> = emptyList(),
-    isPresetRailExpanded: Boolean = false,
-    togglePresetRail: () -> Unit = {},
+    /** Enabled presets in settings order: the header's route pills. */
+    routePresets: List<CapturePreset> = emptyList(),
     onSelectPreset: (String) -> Unit = {},
     addDraftAttachment: (String, String?, String?, Boolean) -> Unit,
     removeDraftAttachment: (String) -> Unit,
@@ -356,6 +351,9 @@ internal fun CaptureScreen(
     openHistory: () -> Unit,
     openSettings: () -> Unit,
     openPresets: () -> Unit,
+    /** Phones only: Activity button in the header. Null when a navigation rail carries it. */
+    openActivity: (() -> Unit)? = null,
+    activityBadge: Int = 0,
     startRecording: () -> Unit,
     pauseRecording: () -> Unit,
     resumeRecording: () -> Unit,
@@ -375,6 +373,7 @@ internal fun CaptureScreen(
     regrantVaultAccess: (String?) -> Unit = {},
     initialShowsAttachSheet: Boolean = false,
     initialShowsAllQuickActions: Boolean = false,
+    resolveLocation: (suspend (Boolean) -> CurrentLocationResult)? = null,
 ) {
     var editorValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(state.draft.text, TextRange(state.draft.text.length)))
@@ -386,12 +385,19 @@ internal fun CaptureScreen(
     var attachClipboardKind by remember { mutableStateOf<CaptureClipboardKind?>(null) }
     var showsSketchDialog by rememberSaveable { mutableStateOf(false) }
     var showsVoiceCaptureDetails by rememberSaveable { mutableStateOf(initialShowsVoiceCaptureDetails) }
-    var isResolvingPresetLocation by rememberSaveable { mutableStateOf(false) }
-    var pendingLocationSubmission by remember { mutableStateOf<PendingLocationSubmission?>(null) }
-    var locationDecision by remember { mutableStateOf<PendingLocationDecision?>(null) }
+    // The composition owns the lookup coroutine. Recreation cancels it, so its
+    // busy flag must reset rather than restore a job that no longer exists.
+    var isResolvingPresetLocation by remember { mutableStateOf(false) }
+    val locationState = viewModel<CaptureLocationViewModel>()
+    var pendingLocationSubmission by locationState.pendingSubmission
+    var locationDecision by locationState.decision
+    fun locationPreflightPending() = isResolvingPresetLocation ||
+        pendingLocationSubmission != null || locationDecision != null
+    val sendingCapture = state.isSending || locationPreflightPending()
+    val canChangeCaptureRoute = !sendingCapture && !state.isSavingConfiguration
     var pendingCameraPath by rememberSaveable { mutableStateOf<String?>(null) }
     var pendingJournalCameraPath by rememberSaveable { mutableStateOf<String?>(null) }
-    val undoStack = remember { mutableStateListOf<TextFieldValue>() }
+    val undoStack = viewModel<CaptureUndoViewModel>().entries
     val editor = remember { CaptureComposerTextEditor() }
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -418,11 +424,19 @@ internal fun CaptureScreen(
         undoStack += value
     }
 
+    // Live speech renders into the editor at the cursor as a replaceable span. It is
+    // never persisted or put on the undo stack: the durable recording owns those words
+    // until the final transcript commits in their place.
+    val liveTranscript = viewModel<CaptureLiveTranscriptState>()
+    fun persistableText(text: String) = liveTranscript.preview?.withoutLiveSpan(text) ?: text
+
     fun commitEditorValue(next: TextFieldValue, registerUndo: Boolean = true) {
         if (next.text.length > 65_536) return
-        if (registerUndo && next.text != editorValue.text) rememberUndo(editorValue)
+        if (registerUndo && next.text != editorValue.text) {
+            rememberUndo(editorValue.copy(text = persistableText(editorValue.text)))
+        }
         editorValue = next
-        onDraftChanged(next.text, capturedURL)
+        onDraftChanged(persistableText(next.text), capturedURL)
     }
 
     fun applyCommand(command: CaptureComposerCommand) {
@@ -588,9 +602,12 @@ internal fun CaptureScreen(
     }
 
     fun resolvePresetLocation(pending: PendingLocationSubmission) {
+        if (isResolvingPresetLocation) return
+        // Admission must precede dispatch: another tap can arrive before a new frame.
+        isResolvingPresetLocation = true
         coroutineScope.launch {
-            isResolvingPresetLocation = true
-            when (val result = locationResolver.resolve(exactRequired = pending.precision == CaptureLocationPrecision.EXACT)) {
+            when (val result = resolveLocation?.invoke(pending.precision == CaptureLocationPrecision.EXACT)
+                ?: locationResolver.resolve(exactRequired = pending.precision == CaptureLocationPrecision.EXACT)) {
                 is CurrentLocationResult.Available -> {
                     val city = pending.precision == CaptureLocationPrecision.CITY
                     val latitude = if (city) (result.latitude * 100.0).roundToLong() / 100.0 else result.latitude
@@ -694,6 +711,7 @@ internal fun CaptureScreen(
         audioDisplayName: String? = null,
         frozenPreset: CapturePreset? = null,
     ) {
+        if (state.isSending || locationPreflightPending()) return
         val policy = (frozenPreset ?: state.presetCollection?.activePreset)?.locationPolicy
         if (policy?.isEnabled != true) {
             deliverPending(
@@ -771,9 +789,10 @@ internal fun CaptureScreen(
         }
         val text = item.coerceToText(context)?.toString()?.trim().orEmpty()
         if (text.isEmpty()) return
-        if ((text.startsWith("https://") || text.startsWith("http://")) && text.none(Char::isWhitespace) && text.length <= 8_192) {
-            capturedURL = text
-            onDraftChanged(editorValue.text, text)
+        val link = CaptureWebLink.normalize(text)
+        if (link != null) {
+            capturedURL = link
+            onDraftChanged(persistableText(editorValue.text), link)
         } else {
             applyCommand(CaptureComposerCommand.ReplaceSelection(text))
         }
@@ -807,8 +826,19 @@ internal fun CaptureScreen(
         else locationPermissionLauncher.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
     }
 
-    LaunchedEffect(requestEditorFocus) {
-        if (requestEditorFocus) {
+    // The composer takes focus once when Capture first opens and again when a recording
+    // ends. Coming back from Activity, Library, Settings or Routes keeps the keyboard down
+    // so the header's Activity and Settings stay visible (Signal Capture board).
+    var initialEditorFocusDone by rememberSaveable { mutableStateOf(false) }
+    var wasRecording by remember { mutableStateOf(recordingStatus.isActive) }
+    LaunchedEffect(requestEditorFocus, recordingStatus.isActive) {
+        val recordingJustEnded = wasRecording && !recordingStatus.isActive
+        wasRecording = recordingStatus.isActive
+        if (recordingStatus.isActive) {
+            focusManager.clearFocus()
+            keyboardController?.hide()
+        } else if (requestEditorFocus && (!initialEditorFocusDone || recordingJustEnded)) {
+            initialEditorFocusDone = true
             delay(180)
             focusRequester.requestFocus()
             keyboardController?.show()
@@ -840,7 +870,7 @@ internal fun CaptureScreen(
             attachmentCount = state.draft.attachments.size,
             presets = state.presetCollection?.presets.orEmpty(),
             activePresetID = state.presetCollection?.activePreset?.id,
-            isSending = state.isSending || isResolvingPresetLocation,
+            isSending = sendingCapture,
             selectPreset = onSelectPreset,
             send = { note ->
                 val combined = listOf(editorValue.text.trim(), note).filter(String::isNotBlank).joinToString("\n\n")
@@ -860,7 +890,7 @@ internal fun CaptureScreen(
             },
             onSave = {
                 capturedURL = it
-                onDraftChanged(editorValue.text, it)
+                onDraftChanged(persistableText(editorValue.text), it)
                 showsLinkDialog = false
                 focusRequester.requestFocus()
             },
@@ -899,7 +929,7 @@ internal fun CaptureScreen(
                 state.draft.routeOverride,
             ),
             clipboard = attachClipboardKind,
-            isBusy = state.isSending || isResolvingPresetLocation,
+            isBusy = sendingCapture,
             onDismiss = { showsAttachSheet = false },
             paste = { closeThen(::pasteFromClipboard) },
             choosePhotos = {
@@ -970,12 +1000,58 @@ internal fun CaptureScreen(
         )
     }
 
+    /** The draft with [transcript] in place of the live span, or at the recording's cursor. */
+    fun committingRecordingTranscript(transcript: String): TextFieldValue {
+        val before = persistableText(editorValue.text)
+        val (text, caret) = liveTranscript.commit(transcript, editorValue.text)
+        rememberUndo(TextFieldValue(before, editorValue.selection))
+        return TextFieldValue(text, TextRange(caret))
+    }
+
     fun addRecordingTranscriptToDraft(transcript: String) {
-        val existing = editorValue.text.trimEnd()
-        val combined = if (existing.isBlank()) transcript else "$existing\n\n$transcript"
-        commitEditorValue(TextFieldValue(combined, TextRange(combined.length)))
+        commitEditorValue(committingRecordingTranscript(transcript), registerUndo = false)
         markRecordingAdded()
         presentNotice(voxUiText("Transcript added to the current draft."))
+    }
+
+    fun discardLiveTranscript() {
+        val restored = liveTranscript.cancel(editorValue.text) ?: return
+        val caret = editorValue.selection.end.coerceAtMost(restored.length)
+        commitEditorValue(TextFieldValue(restored, TextRange(caret)), registerUndo = false)
+    }
+
+    fun startRecordingAtCursor() {
+        liveTranscript.begin(editorValue.selection.end)
+        startRecording()
+    }
+
+    fun insertRecordingLine(line: String) {
+        val (text, caret) = liveTranscript.insertLine(line, editorValue.text)
+        val selection = if (caret != null) TextRange(caret) else editorValue.selection
+        commitEditorValue(TextFieldValue(text, selection), registerUndo = false)
+    }
+
+    // Stream on-device live speech into the editor at the cursor.
+    LaunchedEffect(liveSpeech?.sessionID, liveSpeech?.committedText, liveSpeech?.partialText, recordingStatus.sessionID) {
+        val speech = liveSpeech ?: return@LaunchedEffect
+        val sessionID = speech.sessionID ?: return@LaunchedEffect
+        if (sessionID != recordingStatus.sessionID) return@LaunchedEffect
+        val rendered = liveTranscript.render(sessionID, speech.committedText, speech.partialText, editorValue.text)
+            ?: return@LaunchedEffect
+        val (text, caret, spanStart) = rendered
+        if (text == editorValue.text) return@LaunchedEffect
+        // Keep a writer's own caret when it sits before the words; otherwise follow them.
+        val selection = if (editorValue.selection.end <= spanStart) editorValue.selection else TextRange(caret)
+        commitEditorValue(TextFieldValue(text, selection), registerUndo = false)
+    }
+    // A discarded or failed recording takes its live words with it; a retry inserts the
+    // final transcript at the same cursor.
+    LaunchedEffect(recordingTranscription?.phase, recordingStatus.phase) {
+        val ended = recordingTranscription?.phase in setOf(
+            RecordingTranscriptionPhase.DISCARDED,
+            RecordingTranscriptionPhase.FAILED,
+        ) || (recordingStatus.phase == RecordingPhase.IDLE && recordingTranscription == null)
+        if (ended) discardLiveTranscript()
     }
 
     fun sendRecordingWithPreset(transcript: String) {
@@ -993,10 +1069,10 @@ internal fun CaptureScreen(
                 presentNotice(voxUiText("The audio could not be prepared. The original recording is still safe."))
                 return@launch
             }
-            val existing = editorValue.text.trimEnd()
-            val combined = if (existing.isBlank()) transcript else "$existing\n\n$transcript"
+            val combined = committingRecordingTranscript(transcript)
+            commitEditorValue(combined, registerUndo = false)
             submitCapture(
-                combined,
+                combined.text,
                 capturedURL,
                 originRecordingID = sessionID,
                 audioContentUri = audioUri,
@@ -1040,25 +1116,33 @@ internal fun CaptureScreen(
     val vaultUnreachable = state.destination != null && captureVaultIsUnreachable(state.history, hasVaultAccess)
     val waitingCount = captureWaitingCount(state.history)
     val c = Signal.colors
-    Box(Modifier.fillMaxSize()) {
+    androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxSize()) {
+    val compactHeight = maxWidth >= 600.dp && maxHeight < 480.dp
+    // Phones record in place: Speak turns the footer into the recording dock and the
+    // words stream into the editor. Larger windows keep the full-screen recording.
+    val usesInlineRecordingDock = maxWidth < 600.dp || compactHeight
+    val coversComposer = recordingStatus.isActive && !usesInlineRecordingDock
     Scaffold(
         // While the full-screen live recording covers the composer, the covered
         // composer (and its inline recording card) must not be read, announced or
         // targeted by TalkBack and Switch Access a second time.
-        modifier = if (recordingStatus.isActive) Modifier.clearAndSetSemantics {} else Modifier,
+        modifier = if (coversComposer) Modifier.clearAndSetSemantics {} else Modifier,
         containerColor = c.bg,
         topBar = {
             CaptureTopControls(
+                compactHeight = compactHeight,
                 preset = state.presetCollection?.activePreset,
                 destination = routeDestination,
                 route = state.draft.routeOverride,
-                onRouteChanged = onRouteChanged,
-                hasPinnedAlternates = pinnedPresets.isNotEmpty(),
-                isPresetRailExpanded = isPresetRailExpanded,
-                togglePresetRail = togglePresetRail,
+                onRouteChanged = { if (!state.isSending && !locationPreflightPending()) onRouteChanged(it) },
+                canChangeRoute = canChangeCaptureRoute && !recordingStatus.isActive,
+                routePresets = routePresets,
+                selectPreset = { if (!state.isSending && !locationPreflightPending()) onSelectPreset(it) },
                 openPresets = openPresets,
                 openHistory = openHistory,
                 openSettings = openSettings,
+                openActivity = openActivity,
+                activityBadge = activityBadge,
                 hideKeyboard = {
                     focusManager.clearFocus()
                     keyboardController?.hide()
@@ -1067,10 +1151,11 @@ internal fun CaptureScreen(
         },
         bottomBar = {
             CaptureBottomControls(
+                compactHeight = compactHeight,
                 // The route being typed into shows its own quick actions when it has them.
                 captureBar = state.captureBar.forRoute(activePreset?.id),
                 hasContent = editorValue.text.isNotBlank() || capturedURL != null || state.draft.attachments.isNotEmpty(),
-                isSending = state.isSending || isResolvingPresetLocation,
+                isSending = sendingCapture,
                 onSubmit = { submitCapture(editorValue.text, capturedURL) },
                 toggleKeyboard = {
                     focusManager.clearFocus()
@@ -1113,7 +1198,7 @@ internal fun CaptureScreen(
                 showsVoiceCaptureDetails = showsVoiceCaptureDetails,
                 toggleVoiceCaptureDetails = { showsVoiceCaptureDetails = !showsVoiceCaptureDetails },
                 dismissVoiceCaptureDetails = { showsVoiceCaptureDetails = false },
-                startRecording = startRecording,
+                startRecording = ::startRecordingAtCursor,
                 pauseRecording = pauseRecording,
                 resumeRecording = resumeRecording,
                 stopRecording = stopRecording,
@@ -1123,6 +1208,11 @@ internal fun CaptureScreen(
                 cancelRecordingProcessing = cancelRecordingProcessing,
                 addRecordingToDraft = ::addRecordingTranscriptToDraft,
                 sendRecordingWithPreset = ::sendRecordingWithPreset,
+                usesInlineRecordingDock = usesInlineRecordingDock,
+                recordingResult = state.captureBar.voiceRecordingResult,
+                setRecordingResult = setVoiceRecordingResult,
+                markRecordingMoment = { insertRecordingLine("⏱ ${formatRecordingElapsed(recordingStatus.elapsedMillis)} ") },
+                addRecordingTask = { insertRecordingLine("- [ ] ") },
             )
         },
     ) { padding ->
@@ -1168,9 +1258,6 @@ internal fun CaptureScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .focusRequester(focusRequester)
-                        .then(if (isPresetRailExpanded && pinnedPresets.isNotEmpty()) {
-                            if (state.captureBar.railSide == CaptureRailSide.LEFT) Modifier.absolutePadding(left = 60.dp) else Modifier.absolutePadding(right = 60.dp)
-                        } else Modifier)
                         .testTag("capture-editor")
                         .semantics { contentDescription = captureTextDescription },
                     textStyle = TextStyle(
@@ -1196,13 +1283,6 @@ internal fun CaptureScreen(
                         }
                     },
                 )
-                CapturePresetQuickAccessRail(
-                    presets = pinnedPresets,
-                    isExpanded = isPresetRailExpanded,
-                    canSelectPreset = !state.isSending && !state.isSavingConfiguration,
-                    selectPreset = onSelectPreset,
-                    modifier = Modifier.align(if (state.captureBar.railSide == CaptureRailSide.LEFT) AbsoluteAlignment.BottomLeft else AbsoluteAlignment.BottomRight),
-                )
             }
             if (capturedURL != null) {
                 Spacer(Modifier.height(10.dp))
@@ -1210,7 +1290,7 @@ internal fun CaptureScreen(
                     url = requireNotNull(capturedURL),
                     remove = {
                         capturedURL = null
-                        onDraftChanged(editorValue.text, null)
+                        onDraftChanged(persistableText(editorValue.text), null)
                     },
                 )
             }
@@ -1228,7 +1308,7 @@ internal fun CaptureScreen(
         }
     }
     }
-    if (recordingStatus.isActive) {
+    if (coversComposer) {
         LiveRecordingScreen(
             preset = recordingStatus.sessionID?.let(frozenRecordingPreset) ?: activePreset,
             status = recordingStatus,
@@ -1245,37 +1325,40 @@ internal fun CaptureScreen(
 }
 
 /**
- * Material 3 capture header: the preset selector as a 40dp `secondaryContainer` pill
- * (route tile, preset name, chevron), the on-device indicator on the trailing edge
- * (or Done while the keyboard is open) and the mono route line underneath. The
- * selector keeps Android's preset semantics: tap toggles the pinned rail when pins
- * exist, long-press always opens all presets. History and Settings live in the
- * navigation bar or rail.
+ * Capture header (Signal Capture board): the route pills row (every enabled preset as
+ * a letter tile, the selected one named), then on the trailing edge Activity and
+ * Settings on phones, or the on-device indicator when a navigation rail carries them,
+ * and Done while the keyboard is open; the mono route line sits underneath. One route
+ * bar everywhere, resting or typing, so there is no menu or rail to open first.
+ * Long-pressing a pill (or tapping the selected one) opens all presets.
  */
-@OptIn(ExperimentalFoundationApi::class, androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
 internal fun CaptureTopControls(
     preset: CapturePreset?,
     destination: CaptureDestination?,
     route: CaptureRouteOverride?,
     onRouteChanged: (CaptureRouteOverride?) -> Unit,
-    hasPinnedAlternates: Boolean,
-    isPresetRailExpanded: Boolean,
-    togglePresetRail: () -> Unit,
+    routePresets: List<CapturePreset>,
+    selectPreset: (String) -> Unit,
     openPresets: () -> Unit,
     openHistory: () -> Unit,
     openSettings: () -> Unit,
     hideKeyboard: () -> Unit = {},
+    compactHeight: Boolean = false,
+    canChangeRoute: Boolean = true,
+    /** Phones only: opens Activity from the header. Null when a navigation rail carries it. */
+    openActivity: (() -> Unit)? = null,
+    activityBadge: Int = 0,
 ) {
+    val routeEditor = rememberCaptureRouteEditorState()
     val c = Signal.colors
-    val expandsRail = hasPinnedAlternates
-    val selectorClickLabel = voxString(
-        if (isPresetRailExpanded) "Hide pinned capture presets" else "Show pinned capture presets",
-    )
-    val chooseLabel = voxString("Choose Route")
-    val railOpen = expandsRail && isPresetRailExpanded
-    val selectorDescription = if (expandsRail) selectorClickLabel else chooseLabel
     val imeVisible = androidx.compose.foundation.layout.WindowInsets.isImeVisible
+    // The selected route always has a pill, even before the collection loads.
+    val pills = when {
+        preset != null && routePresets.none { it.id == preset.id } -> listOf(preset) + routePresets
+        else -> routePresets
+    }.map(::CaptureRoutePill).ifEmpty { listOf(CaptureRoutePill("default", "Default", null)) }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -1285,56 +1368,57 @@ internal fun CaptureTopControls(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 64.dp)
+                .heightIn(min = if (compactHeight) 48.dp else 64.dp)
                 .padding(start = 12.dp, end = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            Box(Modifier.weight(1f)) {
-                Row(
-                    modifier = Modifier
-                        .heightIn(min = 40.dp)
-                        .clip(CircleShape)
-                        .background(if (railOpen) c.accentSoft else c.secondarySoft)
-                        .combinedClickable(
-                            enabled = true,
-                            role = Role.Button,
-                            onClickLabel = if (expandsRail) selectorClickLabel else null,
-                            onLongClickLabel = chooseLabel,
-                            onClick = { if (expandsRail) togglePresetRail() else openPresets() },
-                            onLongClick = openPresets,
-                        )
-                        .testTag("capture-preset-selector")
-                        .padding(start = 4.dp, end = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    SignalRouteTile(
-                        label = preset?.emoji ?: preset?.name ?: "Default",
-                        size = 32.dp,
-                        tone = SignalRouteTone.PRIMARY,
-                        circular = true,
-                    )
-                    Text(
-                        preset?.name ?: "Default",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = if (railOpen) c.accentText else c.secondaryText,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f, fill = false),
-                    )
-                    Icon(
-                        if (railOpen) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.KeyboardArrowDown,
-                        contentDescription = selectorDescription,
-                        modifier = Modifier.size(18.dp),
-                        tint = if (railOpen) c.accentText else c.secondaryText,
-                    )
+            CaptureRoutePillsRow(
+                presets = pills,
+                selectedID = preset?.id ?: pills.first().id,
+                enabled = canChangeRoute,
+                select = selectPreset,
+                openPresets = openPresets,
+                modifier = Modifier.weight(1f),
+            )
+            if (compactHeight) {
+                Box(Modifier.widthIn(max = 240.dp)) {
+                    CaptureRouteControl(route = route, destination = destination, enabled = canChangeRoute, editor = routeEditor, onChanged = onRouteChanged)
                 }
             }
             if (imeVisible) {
                 androidx.compose.material3.TextButton(onClick = hideKeyboard) {
                     Text(voxString("Done"), style = MaterialTheme.typography.labelMedium, color = c.tint)
                 }
+            } else if (openActivity != null) {
+                val activityLabel = voxString("Activity")
+                val activityDescription = if (activityBadge > 0) {
+                    voxFormat("%@ · %@", activityLabel, activityBadge.toString())
+                } else activityLabel
+                Box {
+                    SignalCircleButton(
+                        icon = Icons.Outlined.Schedule,
+                        contentDescription = activityDescription,
+                        onClick = openActivity,
+                        modifier = Modifier.testTag("capture-activity"),
+                    )
+                    if (activityBadge > 0) {
+                        Box(
+                            Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(top = 10.dp, end = 10.dp)
+                                .size(8.dp)
+                                .clip(CircleShape)
+                                .background(c.warning),
+                        )
+                    }
+                }
+                SignalCircleButton(
+                    icon = Icons.Outlined.Settings,
+                    contentDescription = voxString("Settings"),
+                    onClick = openSettings,
+                    modifier = Modifier.testTag("capture-settings"),
+                )
             } else {
                 Row(
                     modifier = Modifier.heightIn(min = 32.dp).padding(horizontal = 10.dp),
@@ -1346,10 +1430,12 @@ internal fun CaptureTopControls(
                 }
             }
         }
-        Box(Modifier.padding(horizontal = 16.dp)) {
+        if (!compactHeight) Box(Modifier.padding(horizontal = 16.dp)) {
             CaptureRouteControl(
                 route = route,
                 destination = destination,
+                enabled = canChangeRoute,
+                editor = routeEditor,
                 onChanged = onRouteChanged,
             )
         }
@@ -1479,94 +1565,6 @@ internal fun LocationUnavailableDialog(
 }
 
 /**
- * Pinned quick-access rail mirrored from the iOS capture screen: an icon column
- * on the editor's start edge, bottom-anchored near the controls. The active
- * preset is never listed — the selector row already represents it, and that
- * row's tap toggles this rail (long-press keeps full preset access). Collapsed
- * or without usable pins the rail renders nothing, like iOS's plain-menu
- * fallback.
- */
-@Composable
-internal fun CapturePresetQuickAccessRail(
-    presets: List<CapturePreset>,
-    isExpanded: Boolean,
-    canSelectPreset: Boolean,
-    selectPreset: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    if (presets.isEmpty() || !isExpanded) return
-    val scrollState = rememberScrollState()
-    // The list reads from the controls upward: anchor an overflowing rail at
-    // its bottom edge so the highest-priority pin stays visible.
-    var anchoredToBottom by remember { mutableStateOf(false) }
-    LaunchedEffect(scrollState.maxValue) {
-        if (!anchoredToBottom && scrollState.maxValue > 0) {
-            scrollState.scrollTo(scrollState.maxValue)
-            anchoredToBottom = true
-        }
-    }
-    Column(
-        modifier = modifier
-            .widthIn(min = 52.dp)
-            .heightIn(max = 340.dp)
-            .verticalScroll(scrollState)
-            .padding(vertical = 2.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        presets.forEachIndexed { index, preset ->
-            // The active route (indigo) lives in the selector; the rail continues
-            // the iOS order with the next route in ink and the rest neutral.
-            CapturePresetQuickAccessButton(
-                preset,
-                enabled = canSelectPreset,
-                tone = SignalRouteTone.forIndex(index + 1),
-            ) { selectPreset(preset.id) }
-        }
-    }
-}
-
-@Composable
-internal fun CapturePresetQuickAccessButton(
-    preset: CapturePreset,
-    enabled: Boolean,
-    onClick: () -> Unit,
-) {
-    CapturePresetQuickAccessButton(preset, enabled, SignalRouteTone.NEUTRAL, onClick)
-}
-
-/** Rail button: a bordered 52dp card holding the preset's route tile. */
-@Composable
-internal fun CapturePresetQuickAccessButton(
-    preset: CapturePreset,
-    enabled: Boolean,
-    tone: SignalRouteTone,
-    onClick: () -> Unit,
-) {
-    val c = Signal.colors
-    val presetDescription = voxFormat("Capture Preset %@", preset.name)
-    val shape = RoundedCornerShape(16.dp)
-    Box(
-        modifier = Modifier
-            .padding(vertical = 3.dp)
-            .size(52.dp)
-            .clip(shape)
-            .background(c.card)
-            .border(1.dp, c.border, shape)
-            .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
-            .testTag("capture-preset-rail-${preset.id}")
-            .semantics { contentDescription = presetDescription }
-            .alpha(if (enabled) 1f else 0.45f),
-        contentAlignment = Alignment.Center,
-    ) {
-        SignalRouteTile(
-            label = preset.emoji ?: preset.name,
-            size = 36.dp,
-            tone = tone,
-        )
-    }
-}
-
-/**
  * Signal composer dock (iOS QuickCaptureView): optional recording sheet, the
  * configurable Markdown toolbar, then a row with a circular utility button
  * (hide keyboard, or pause/resume while recording), the wide ink "speak" capsule
@@ -1612,6 +1610,13 @@ internal fun CaptureBottomControls(
     openMicrophoneSettings: () -> Unit = {},
     waitingLine: String? = null,
     initialShowsAllQuickActions: Boolean = false,
+    compactHeight: Boolean = false,
+    /** Phones: while recording, the footer becomes [CaptureLiveRecordingDock]. */
+    usesInlineRecordingDock: Boolean = false,
+    recordingResult: VoiceRecordingResult = VoiceRecordingResult.ADD_TO_DRAFT,
+    setRecordingResult: (VoiceRecordingResult) -> Unit = {},
+    markRecordingMoment: () -> Unit = {},
+    addRecordingTask: () -> Unit = {},
 ) {
     val c = Signal.colors
     var showsAllQuickActions by rememberSaveable { mutableStateOf(initialShowsAllQuickActions) }
@@ -1649,24 +1654,6 @@ internal fun CaptureBottomControls(
     val voiceIdle = !recordingStatus.isActive && !recordingIsProcessing && !recordingNeedsAttention
     // Microphone permanently off: Speak rests disabled under the "Open Settings" card.
     val speakEnabled = !isSending && !(microphoneBlocked && voiceIdle)
-    // Hold to talk · tap to record (iOS QuickCaptureView): a press held past the
-    // threshold records until release; a short tap keeps hands-free recording.
-    var pushToTalkActive by remember { mutableStateOf(false) }
-    var stopsWhenRecordingStarts by remember { mutableStateOf(false) }
-    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
-    LaunchedEffect(stopsWhenRecordingStarts, recordingStatus.isActive) {
-        if (!stopsWhenRecordingStarts) return@LaunchedEffect
-        if (recordingStatus.isActive) {
-            stopsWhenRecordingStarts = false
-            pushToTalkActive = false
-            stopRecording()
-        } else {
-            // Released before the microphone finished starting; give it a moment.
-            delay(2_000)
-            stopsWhenRecordingStarts = false
-            pushToTalkActive = false
-        }
-    }
     val actionItem: @Composable (CaptureBarAction) -> Unit = { action ->
         CaptureBarActionItem(
             action = action,
@@ -1691,6 +1678,24 @@ internal fun CaptureBottomControls(
             .background(c.bg)
             .imePadding(),
     ) {
+        if (usesInlineRecordingDock && recordingStatus.isActive) {
+            // Speak transforms the footer into the recording dock; the words stream
+            // into the editor at the cursor.
+            CaptureLiveRecordingDock(
+                status = recordingStatus,
+                liveSpeech = liveSpeech,
+                recordingResult = recordingResult,
+                setRecordingResult = setRecordingResult,
+                discard = cancelRecording,
+                stop = stopRecording,
+                pause = pauseRecording,
+                resume = resumeRecording,
+                markMoment = markRecordingMoment,
+                addTask = addRecordingTask,
+                modifier = Modifier.navigationBarsPadding(),
+            )
+            return@Column
+        }
         // The full-screen live recording supersedes the inline card while it is active.
         if (showsVoiceCaptureDetails && !recordingStatus.isActive) {
             RecordingDetails(
@@ -1714,8 +1719,16 @@ internal fun CaptureBottomControls(
             )
         }
         // The route's pinned quick actions, then "•••" for every action (CaptureRestActions).
+        // While typing the row becomes a grey band (CaptureKeyboard) with a keyboard-down
+        // button; Attach / Speak / Send stay underneath it.
+        val typing = imeVisible && !recordingStatus.isActive
+        if (typing) HorizontalDivider(thickness = 1.dp, color = c.border)
         Row(
-            modifier = Modifier.fillMaxWidth().height(56.dp).padding(end = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(if (typing) Modifier.background(c.well) else Modifier)
+                .height(56.dp)
+                .padding(end = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             LazyRow(
@@ -1738,6 +1751,11 @@ internal fun CaptureBottomControls(
                     showsAllQuickActions = !showsAllQuickActions
                 },
             )
+            if (typing) {
+                IconButton(onClick = toggleKeyboard, modifier = Modifier.testTag("capture-hide-keyboard")) {
+                    Icon(Icons.Outlined.KeyboardHide, contentDescription = voxString("Hide keyboard"), tint = c.text)
+                }
+            }
         }
         if (showsAllQuickActions) {
             CaptureAllQuickActionsPanel(
@@ -1753,34 +1771,18 @@ internal fun CaptureBottomControls(
                 modifier = Modifier.padding(horizontal = SignalMetrics.PageGutter, vertical = 4.dp),
             )
         }
-        if (!imeVisible && !recordingStatus.isActive && (waitingLine != null || !microphoneBlocked)) {
-            Row(
+        // Only the "captures waiting" line takes space here; the idle "Tap to record"
+        // hint is gone (long-press Speak for the detailed controls), as on iOS.
+        if (!imeVisible && !recordingStatus.isActive && waitingLine != null) {
+            Text(
+                waitingLine,
+                style = SignalType.caption.copy(fontSize = 13.sp),
+                color = c.muted,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = SignalMetrics.PageGutter),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    waitingLine ?: voxString("Hold to talk · tap to record"),
-                    style = SignalType.caption.copy(fontSize = 13.sp),
-                    color = c.muted,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.weight(1f, fill = false),
-                )
-                if (waitingLine == null) {
-                    val optionsDescription = voxString("Show detailed recording controls")
-                    IconButton(
-                        onClick = toggleVoiceCaptureDetails,
-                        modifier = Modifier
-                            .size(40.dp)
-                            .testTag("capture-recording-options")
-                            .semantics { contentDescription = optionsDescription },
-                    ) {
-                        Icon(Icons.Outlined.Tune, contentDescription = null, tint = c.muted, modifier = Modifier.size(16.dp))
-                    }
-                }
-            }
+            )
         }
         Row(
             modifier = Modifier
@@ -1797,18 +1799,19 @@ internal fun CaptureBottomControls(
                     contentDescription = pauseDescription,
                     onClick = if (isPaused) resumeRecording else pauseRecording,
                     diameter = 56.dp,
-                    filled = if (isPaused) c.accent else c.well,
-                    contentColor = if (isPaused) c.onAccent else c.text,
+                    filled = if (isPaused) c.accent else c.text,
+                    contentColor = if (isPaused) c.onAccent else c.bg,
                     enabled = !isSending,
                 )
             } else {
-                // Add media: 56dp `surfaceContainerHigh` action with a 16dp radius.
+                // Add media (Attach on the Signal board): 56dp white bordered circle.
                 val addMediaDescription = voxString("Add media")
                 Box(
                     modifier = Modifier
                         .size(56.dp)
                         .clip(actionShape)
-                        .background(c.well)
+                        .background(c.card)
+                        .border(1.dp, c.border, actionShape)
                         .clickable(enabled = !isSending, role = Role.Button, onClick = addMedia)
                         .testTag("capture-add-media")
                         .semantics { contentDescription = addMediaDescription },
@@ -1820,16 +1823,16 @@ internal fun CaptureBottomControls(
             val (capsuleFill, capsuleContent) = when {
                 !speakEnabled -> c.well to c.faint
                 recordingStatus.phase == RecordingPhase.RECORDING -> c.recording to c.onRecording
-                isPaused -> c.secondarySoft to c.secondaryText
+                isPaused -> c.text to c.bg
                 recordingIsProcessing -> c.well to c.text
                 recordingTranscription?.phase == RecordingTranscriptionPhase.COMPLETED && !recordingTranscription.addedToDraft ->
                     c.successSoft to c.successText
                 recordingStatus.phase == RecordingPhase.COMPLETED && recordingTranscription == null -> c.accentSoft to c.accentText
                 recordingNeedsAttention -> c.errorSoft to c.errorText
-                else -> c.accent to c.onAccent
+                else -> c.text to c.bg
             }
-            // Speak: the 64dp primary action, 20dp radius.
-            val speakShape = RoundedCornerShape(20.dp)
+            // Speak: the 64dp ink capsule from the Signal Capture board.
+            val speakShape = CircleShape
             // On tablets and unfolded foldables the voice FAB also lives in the rail, so
             // Speak keeps a phone-like width instead of spanning the whole composer.
             val wideComposer = LocalConfiguration.current.screenWidthDp >= 600
@@ -1837,31 +1840,15 @@ internal fun CaptureBottomControls(
             Box(
                 modifier = Modifier
                     .then(if (wideComposer) Modifier.widthIn(min = 200.dp, max = 360.dp) else Modifier.weight(1f))
-                    .height(SignalMetrics.ControlHero)
+                    .height(if (compactHeight) 48.dp else SignalMetrics.ControlHero)
                     .clip(speakShape)
                     .background(capsuleFill)
-                    .speakPressGesture(
+                    // Tap starts and stops recording; long-press opens the detailed controls.
+                    .combinedClickable(
                         enabled = speakEnabled,
-                        holdEnabled = voiceIdle && !microphoneBlocked,
-                        onTap = handleVoiceClick,
-                        onHoldStart = {
-                            pushToTalkActive = true
-                            haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
-                            startRecording()
-                        },
-                        onHoldEnd = { cancelled ->
-                            when {
-                                !pushToTalkActive -> Unit
-                                recordingStatus.isActive -> {
-                                    pushToTalkActive = false
-                                    stopRecording()
-                                }
-                                // A system dialog (microphone permission) took the touch:
-                                // whatever the person chooses there is hands-free.
-                                cancelled -> pushToTalkActive = false
-                                else -> stopsWhenRecordingStarts = true
-                            }
-                        },
+                        role = Role.Button,
+                        onClick = handleVoiceClick,
+                        onLongClick = toggleVoiceCaptureDetails,
                     )
                     .semantics {
                         role = Role.Button
@@ -1890,13 +1877,18 @@ internal fun CaptureBottomControls(
                     )
                 }
             }
+            if (compactHeight) {
+                IconButton(onClick = toggleVoiceCaptureDetails, modifier = Modifier.testTag("capture-recording-options")) {
+                    Icon(Icons.Outlined.Tune, contentDescription = detailsLabel, tint = c.muted)
+                }
+            }
             if (wideComposer) Spacer(Modifier.weight(1f))
             val canSend = hasContent && !isSending
             Box(
                 modifier = Modifier
                     .size(56.dp)
                     .clip(actionShape)
-                    .background(if (canSend || isSending) c.accentSoft else c.well)
+                    .background(if (canSend || isSending) c.accent else c.accent.copy(alpha = 0.3f))
                     .clickable(enabled = canSend, role = Role.Button, onClick = onSubmit)
                     .testTag("send-capture")
                     .semantics { contentDescription = sendDescription },
@@ -1906,13 +1898,13 @@ internal fun CaptureBottomControls(
                     CircularProgressIndicator(
                         modifier = Modifier.size(22.dp),
                         strokeWidth = 2.dp,
-                        color = c.accentText,
+                        color = c.onAccent,
                     )
                 } else {
                     Icon(
-                        Icons.AutoMirrored.Outlined.Send,
+                        Icons.Outlined.ArrowUpward,
                         contentDescription = null,
-                        tint = if (canSend) c.accentText else c.faint,
+                        tint = c.onAccent.copy(alpha = if (canSend) 1f else 0.8f),
                         modifier = Modifier.size(24.dp),
                     )
                 }
@@ -2893,12 +2885,12 @@ internal fun formatAttachmentSize(bytes: Long): String = when {
 @Composable
 internal fun LinkDialog(initialValue: String, onDismiss: () -> Unit, onSave: (String) -> Unit) {
     var value by rememberSaveable(initialValue) { mutableStateOf(initialValue) }
-    val valid = value.startsWith("https://") || value.startsWith("http://")
+    val normalizedLink = CaptureWebLink.normalize(value)
     CaptureSignalDialog(
         onDismissRequest = onDismiss,
         title = voxString("Capture Link"),
         confirmButton = {
-            SignalButton(voxString("Add"), onClick = { onSave(value.trim()) }, enabled = valid, size = SignalButtonSize.MEDIUM)
+            SignalButton(voxString("Add"), onClick = { normalizedLink?.let(onSave) }, enabled = normalizedLink != null, size = SignalButtonSize.MEDIUM)
         },
         dismissButton = {
             SignalButton(voxString("Cancel"), onClick = onDismiss, variant = SignalButtonVariant.TERTIARY, size = SignalButtonSize.MEDIUM)

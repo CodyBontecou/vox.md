@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vox.md — Mac library</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0}
+a{color:#2F3BE8}a:hover{color:#1E27B0}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 900px; box-sizing: border-box; background: #F2F2EE; color: #121212; font-family: Geist, system-ui, sans-serif; display: flex; flex-wrap: wrap; align-items: stretch">
+  <nav aria-label="Workspaces" style="flex: 1 1 220px; max-width: 240px; box-sizing: border-box; padding: 20px 14px; border-right: 1px solid #DEDED8; display: flex; flex-direction: column; gap: 4px; background: #EAEAE4">
+    <div style="display: flex; gap: 7px; padding: 0 6px 18px" aria-hidden="true">
+      <span style="width: 12px; height: 12px; border-radius: 999px; background: #D4D4CE"></span><span style="width: 12px; height: 12px; border-radius: 999px; background: #D4D4CE"></span><span style="width: 12px; height: 12px; border-radius: 999px; background: #D4D4CE"></span>
+    </div>
+    <a href="MacWorkspace.dc.html" style="display: flex; align-items: center; height: 34px; padding: 0 10px; border-radius: 10px; color: #121212; text-decoration: none; font-size: 14px">Capture<span style="margin-left: auto; font-family: 'Geist Mono', monospace; font-size: 11px; color: #5E5E5A">⌘N</span></a>
+    <a href="MacActivity.dc.html" style="display: flex; align-items: center; height: 34px; padding: 0 10px; border-radius: 10px; color: #121212; text-decoration: none; font-size: 14px">Activity<span style="margin-left: auto; width: 8px; height: 8px; border-radius: 999px; background: #E8590C"></span></a>
+    <a href="#" aria-current="page" style="display: flex; align-items: center; height: 34px; padding: 0 10px; border-radius: 10px; color: #121212; text-decoration: none; font-size: 14px; font-weight: 600; background: #FFFFFF; box-shadow: 0 0 0 1px #DEDED8">Library</a>
+    <div style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: #5E5E5A; padding: 20px 10px 6px">FILTER BY ROUTE</div>
+    <sc-for list="{{routes}}" as="r" hint-placeholder-count="4">
+      <label style="display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 10px; font-size: 14px; cursor: pointer">
+        <input type="checkbox" checked="{{r.on}}" style="margin: 0; accent-color: #2F3BE8">
+        <span style="{{r.tile}}">{{r.letter}}</span>{{r.name}}
+      </label>
+    </sc-for>
+  </nav>
+
+  <section aria-label="Captures" style="flex: 2 1 420px; min-width: 0; box-sizing: border-box; border-right: 1px solid #DEDED8; display: flex; flex-direction: column">
+    <div style="padding: 14px 20px; border-bottom: 1px solid #DEDED8; display: flex; gap: 10px; align-items: center; flex-wrap: wrap">
+      <label style="flex: 1; min-width: 200px; display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px; border-radius: 10px; background: #FFFFFF; border: 1px solid #DEDED8">
+        <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5E5E5A" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <input type="search" aria-label="Search library" placeholder="Search  ⌘F" style="flex: 1; border: 0; outline: none; background: transparent; font-family: inherit; font-size: 13.5px">
+      </label>
+      <button style="height: 34px; padding: 0 12px; border-radius: 10px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; font-size: 13px; font-weight: 500; cursor: pointer">Export…</button>
+    </div>
+    <div style="overflow-x: auto">
+      <table style="width: 100%; min-width: 480px; border-collapse: collapse; font-size: 13.5px">
+        <thead>
+          <tr style="text-align: left; font-family: 'Geist Mono', monospace; font-size: 10.5px; letter-spacing: 0.06em; color: #5E5E5A">
+            <th style="padding: 10px 20px; font-weight: 500">CAPTURE</th><th style="padding: 10px 8px; font-weight: 500">ROUTE</th><th style="padding: 10px 8px; font-weight: 500">FROM</th><th style="padding: 10px 20px 10px 8px; font-weight: 500; text-align: right">WHEN</th>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{rows}}" as="x" hint-placeholder-count="7">
+            <tr style="{{x.tr}}">
+              <td style="padding: 11px 20px; font-weight: 500">{{x.title}}</td>
+              <td style="padding: 11px 8px; color: #3E3E3B">{{x.route}}</td>
+              <td style="padding: 11px 8px; color: #5E5E5A">{{x.from}}</td>
+              <td style="padding: 11px 20px 11px 8px; text-align: right; font-family: 'Geist Mono', monospace; font-size: 12px; color: #5E5E5A">{{x.when}}</td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <aside aria-label="Preview" style="flex: 1 1 340px; max-width: 460px; box-sizing: border-box; padding: 24px; display: flex; flex-direction: column; gap: 14px; background: #F7F7F4">
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5E5E5A"><span style="width: 20px; height: 20px; border-radius: 6px; background: #2F3BE8; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700">M</span>Meeting Notes · Today 10:42 · iPhone</div>
+    <h1 style="margin: 0; font-size: 26px; font-weight: 650; letter-spacing: -0.02em">Project sync</h1>
+    <div style="display: inline-flex; gap: 6px; align-items: center; font-size: 13px; color: #0F7B5F; font-weight: 500">✓ Delivered to Meetings/2026-11-01.md</div>
+    <pre style="margin: 0; background: #121212; color: #E9E9E4; border-radius: 14px; padding: 14px; font-family: 'Geist Mono', monospace; font-size: 12px; line-height: 1.6; white-space: pre-wrap">### 10:42 · Project sync
+- [ ] Review final designs
+- [ ] Loop in design before Friday
+
+Decision: ship routing first…
+![[2026-11-01-1042.m4a]]</pre>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap">
+      <button style="height: 34px; padding: 0 14px; border-radius: 10px; border: 0; background: #121212; color: #FFFFFF; font-size: 13px; font-weight: 600; cursor: pointer">Open in Obsidian</button>
+      <button style="height: 34px; padding: 0 14px; border-radius: 10px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; font-size: 13px; font-weight: 500; cursor: pointer">Reveal in Finder</button>
+      <button style="height: 34px; padding: 0 14px; border-radius: 10px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; font-size: 13px; font-weight: 500; cursor: pointer">Send to…</button>
+    </div>
+  </aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var routes = [
+      { name: 'Meeting Notes', letter: 'M', bg: '#2F3BE8', fg: '#FFFFFF', on: true },
+      { name: 'Inbox', letter: 'I', bg: '#121212', fg: '#FFFFFF', on: true },
+      { name: 'Journal', letter: 'J', bg: '#D9D9D2', fg: '#121212', on: true },
+      { name: 'Tasks', letter: 'T', bg: '#D9D9D2', fg: '#121212', on: true }
+    ];
+    var rows = [
+      { title: 'Project sync', route: 'Meeting Notes', from: 'iPhone', when: '10:42', sel: true },
+      { title: 'Book recs from Sam', route: 'Inbox', from: 'Keyboard', when: '09:18' },
+      { title: 'Morning pages', route: 'Journal', from: 'Watch', when: '07:55' },
+      { title: '3 tasks', route: 'Tasks', from: 'Mac · ⌥Space', when: 'Yesterday' },
+      { title: 'Design crit', route: 'Meeting Notes', from: 'Mac', when: 'Yesterday' },
+      { title: 'Article: local-first apps', route: 'Inbox', from: 'Share sheet', when: 'Oct 30' },
+      { title: 'Weekly review', route: 'Journal', from: 'iPhone', when: 'Oct 29' }
+    ];
+    return {
+      routes: routes.map(function (r) { return Object.assign({}, r, { tile: 'width:18px;height:18px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;background:' + r.bg + ';color:' + r.fg }); }),
+      rows: rows.map(function (x) { return Object.assign({}, x, { tr: 'border-top:1px solid #E6E6E0;' + (x.sel ? 'background:#E6E6FC' : '') }); })
+    };
+  }
+}
+</script>
+</body>
+</html>

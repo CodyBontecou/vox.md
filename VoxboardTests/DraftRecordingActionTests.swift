@@ -243,7 +243,7 @@ final class DraftRecordingActionTests: XCTestCase {
         XCTAssertEqual(model.draft.requestID, draft.requestID)
         XCTAssertEqual(model.draft.voxID, draft.voxID)
         XCTAssertEqual(model.draft.destinationID, draft.destinationID)
-        XCTAssertEqual(model.draft.text, "Existing draft\n\nReview this")
+        XCTAssertEqual(model.draft.text, "Existing draft Review this")
         XCTAssertEqual(model.draft.additionalPayloads.first, draft.additionalPayloads.first)
         XCTAssertEqual(model.draft.additionalPayloads.count, 2)
         XCTAssertNil(model.lastReceipt)
@@ -256,7 +256,7 @@ final class DraftRecordingActionTests: XCTestCase {
             to: relaunched
         )
         XCTAssertTrue(repeated)
-        XCTAssertEqual(relaunched.draft.text, "Existing draft\n\nReview this")
+        XCTAssertEqual(relaunched.draft.text, "Existing draft Review this")
         XCTAssertEqual(relaunched.draft.additionalPayloads, model.draft.additionalPayloads)
     }
 
@@ -321,7 +321,7 @@ final class DraftRecordingActionTests: XCTestCase {
             try await Task.sleep(for: .milliseconds(25))
         }
         XCTAssertEqual(completed?.phase, .completed, completed?.statusMessage ?? recorder.lastError ?? "Queue did not finish")
-        XCTAssertEqual(fixture.model.draft.text, "Existing draft\n\nSynthetic reviewed transcript")
+        XCTAssertEqual(fixture.model.draft.text, "Existing draft Synthetic reviewed transcript")
         XCTAssertEqual(fixture.model.draft.requestID, fixture.draft.requestID)
         XCTAssertEqual(fixture.model.draft.additionalPayloads.count, 2)
         XCTAssertEqual(usage.totalSecondsUsed, 1)

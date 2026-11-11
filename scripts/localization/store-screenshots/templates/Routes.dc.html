@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title>Vox.md — Routes</title>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style></style>
+<style>
+body{margin:0}
+a{color:#2F3BE8}a:hover{color:#1E27B0}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F2F2EE; color: #121212; font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+  <header style="padding: 56px 20px 0; display: flex; align-items: center; justify-content: space-between">
+    <button aria-label="Back to capture" style="width: 44px; height: 44px; border-radius: 999px; border: 1px solid #DEDED8; background: #FFFFFF; color: #121212; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+      <svg aria-hidden="true" width="20" height="20" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>
+    </button>
+    <button aria-label="New route" style="height: 44px; padding: 0 16px; border-radius: 999px; border: 0; background: #121212; color: #FFFFFF; display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; cursor: pointer">
+      <svg aria-hidden="true" width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+      New
+    </button>
+  </header>
+
+  <section style="padding: 20px 20px 16px">
+    <h1 style="margin: 0; font-size: 34px; font-weight: 650; letter-spacing: -0.025em">Routes</h1>
+    <p style="margin: 6px 0 0; font-size: 15px; line-height: 1.4; color: #5E5E5A">Where a capture goes, and what happens on the way.</p>
+  </section>
+
+  <main style="flex: 1; padding: 0 16px; display: flex; flex-direction: column; gap: 10px; overflow: hidden">
+    <sc-for list="{{routes}}" as="r" hint-placeholder-count="4">
+      <a href="RouteEditor.dc.html" style="display: flex; flex-direction: column; gap: 12px; background: #FFFFFF; border: 1px solid #DEDED8; border-radius: 18px; padding: 14px 14px 14px 14px; text-decoration: none; color: #121212">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <span style="{{r.tile}}">{{r.letter}}</span>
+          <div style="flex: 1; min-width: 0">
+            <div style="display: flex; align-items: center; gap: 8px">
+              <span style="font-size: 17px; font-weight: 600">{{r.name}}</span>
+              <sc-if value="{{r.isDefault}}" hint-placeholder-val="{{ false }}">
+                <span style="font-family: 'Geist Mono', monospace; font-size: 10.5px; color: #2F3BE8; background: #E6E6FC; padding: 2px 6px; border-radius: 5px">DEFAULT</span>
+              </sc-if>
+            </div>
+            <div style="font-family: 'Geist Mono', monospace; font-size: 11.5px; color: #5E5E5A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px">{{r.path}}</div>
+          </div>
+          <svg aria-hidden="true" width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="#8A8A85" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap">
+          <span style="font-size: 12.5px; padding: 4px 9px; border-radius: 999px; background: #F2F2EE; color: #3E3E3B">{{r.input}}</span>
+          <span aria-hidden="true" style="color: #A3A39E; font-size: 12px">→</span>
+          <span style="font-size: 12.5px; padding: 4px 9px; border-radius: 999px; background: #F2F2EE; color: #3E3E3B">{{r.process}}</span>
+          <span aria-hidden="true" style="color: #A3A39E; font-size: 12px">→</span>
+          <span style="font-size: 12.5px; padding: 4px 9px; border-radius: 999px; background: #F2F2EE; color: #3E3E3B">{{r.deliver}}</span>
+        </div>
+      </a>
+    </sc-for>
+  </main>
+
+  <footer style="padding: 12px 24px 34px">
+    <p style="margin: 0; font-size: 13px; line-height: 1.45; color: #5E5E5A">Long-press a route to pin it to widgets, Control Center, the keyboard and Apple Watch.</p>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844}}">
+class Component extends DCLogic {
+  renderVals() {
+    var tile = function (bg, fg) {
+      return 'width:40px;height:40px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0;background:' + bg + ';color:' + fg;
+    };
+    return {
+      routes: [
+        { name: 'Meeting Notes', letter: 'M', isDefault: true, tile: tile('#2F3BE8', '#FFFFFF'), path: 'Vox Notes / Meetings / {date}.md', input: 'Voice + text', process: 'Meeting summary', deliver: 'Daily · append' },
+        { name: 'Inbox', letter: 'I', isDefault: false, tile: tile('#121212', '#FFFFFF'), path: 'Vox Notes / Inbox / {title}.md', input: 'Anything', process: 'Clean prose', deliver: 'New note' },
+        { name: 'Journal', letter: 'J', isDefault: false, tile: tile('#E3E3DC', '#121212'), path: 'Vox Notes / Journal / {week}.md', input: 'Voice', process: 'Keep original', deliver: 'Weekly · prepend' },
+        { name: 'Tasks', letter: 'T', isDefault: false, tile: tile('#E3E3DC', '#121212'), path: 'Vox Notes / Tasks.md › ## Today', input: 'Voice + text', process: 'Checklist', deliver: 'Under heading' }
+      ]
+    };
+  }
+}
+</script>
+
+
+</body></html>

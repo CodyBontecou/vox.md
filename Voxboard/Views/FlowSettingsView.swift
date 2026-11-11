@@ -13,6 +13,7 @@ struct CapturePresetSettingsView: View {
     @State private var pins = CapturePresetSettingsPins()
     @State private var watchStatePublishTask: Task<Void, Never>?
     @State private var deletionError: String?
+    @State private var pendingDeletion: CapturePreset?
     @State private var destinations: [UUID: CaptureDestination] = [:]
     @State private var surfacePinRevision = 0
     @Environment(\.scenePhase) private var scenePhase
@@ -36,6 +37,17 @@ struct CapturePresetSettingsView: View {
         .background(Geist.bg.ignoresSafeArea())
         .task { await migrateRoutesAndReload() }
         .onAppear { pins.reload() }
+        .confirmationDialog(
+            "Delete Route",
+            isPresented: Binding(get: { pendingDeletion != nil }, set: { if !$0 { pendingDeletion = nil } }),
+            titleVisibility: .visible,
+            presenting: pendingDeletion
+        ) { preset in
+            Button("Delete Route", role: .destructive) { delete(preset) }
+            Button("Cancel", role: .cancel) {}
+        } message: { preset in
+            Text(preset.displayName)
+        }
         .alert("Route Could Not Be Deleted", isPresented: Binding(
             get: { deletionError != nil }, set: { if !$0 { deletionError = nil } }
         )) { Button("OK", role: .cancel) {} } message: { Text(deletionError ?? "") }
@@ -236,10 +248,12 @@ struct CapturePresetSettingsView: View {
         .accessibilityValue(pins.preferences.isPinned(id: preset.id)
             ? String(localized: "Pinned to Capture Bar")
             : "")
-        .swipeActions(edge: .trailing) {
+        // Deleting a route also retires its destination, so it is confirmed and
+        // never triggered by an accidental full swipe.
+        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
             if !preset.isBuiltIn {
                 Button("Delete", role: .destructive) {
-                    delete(preset)
+                    pendingDeletion = preset
                 }
             }
         }
@@ -342,9 +356,12 @@ struct CapturePresetSettingsView: View {
             ownedRouteID: flow.captureDestinationID
         )
         CapturePresetSurfacePinStore.remove(id: flow.id, defaults: AppConstants.sharedDefaults)
+        let fallbackID = CapturePresetStore.fallbackPresetID(
+            afterDeleting: flow.id,
+            from: persistedFlows.wrappedValue
+        )
         persistedFlows.wrappedValue.removeAll { $0.id == flow.id }
         pins.pruneAfterPersistedDeletion(id: flow.id)
-        let fallbackID = flows.first?.id ?? CapturePresetStore.generalId
         if CapturePresetStore.selectedFlowId() == flow.id {
             CapturePresetStore.selectFlow(id: fallbackID)
         }
@@ -2064,7 +2081,7 @@ private struct CaptureTextProcessingInfoView: View {
         .tint(Geist.accent)
     }
 
-    private func infoRow(icon: String, title: String, detail: String) -> some View {
+    private func infoRow(icon: String, title: LocalizedStringKey, detail: LocalizedStringKey) -> some View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: icon)
                 .frame(width: 24)

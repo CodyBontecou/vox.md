@@ -38,6 +38,7 @@ import md.vox.android.ui.SignalButton
 import md.vox.android.ui.SignalButtonSize
 import md.vox.android.ui.SignalButtonVariant
 import md.vox.android.ui.SignalCard
+import md.vox.android.ui.SignalDivider
 import md.vox.android.ui.SignalChip
 import md.vox.android.ui.SignalCircleButton
 import md.vox.android.ui.SignalEmptyState
@@ -95,7 +96,6 @@ import androidx.compose.material.icons.outlined.AttachFile
 import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.CheckBox
-import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Close
@@ -414,7 +414,8 @@ internal fun HistoryScreen(
     var showsClearConfirmation by rememberSaveable { mutableStateOf(initialShowsClearConfirmation) }
     var exportMenuOpen by remember { mutableStateOf(false) }
     var isExporting by remember { mutableStateOf(false) }
-    var pendingExport by remember { mutableStateOf<String?>(null) }
+    val pendingExport = rememberPendingDocumentRequest()
+    val exportStore = remember(context) { PendingTextExportStore(java.io.File(context.noBackupFilesDir, "pending-library-exports")) }
     var operationMessage by remember { mutableStateOf<VoxUiText?>(null) }
     val transcriptIDs = transcripts.map(RecordingTranscriptionState::sessionID)
     val transcriptRoutes by produceState(emptyMap<String, String>(), transcriptIDs) {
@@ -468,19 +469,24 @@ internal fun HistoryScreen(
     val hasExportableContent = items.any { it.state != CaptureState.COMPLETED } ||
         transcripts.any { it.phase == RecordingTranscriptionPhase.COMPLETED && !it.preferredTranscript.isNullOrBlank() }
     val createDocument = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("text/markdown")) { uri ->
-        val content = pendingExport
-        pendingExport = null
-        if (uri != null && content != null) {
+        val exportKey = pendingExport.consume()
+        if (exportKey != null) {
             scope.launch {
                 val written = withContext(Dispatchers.IO) {
                     runCatching {
-                        context.contentResolver.openOutputStream(uri, "w")?.use { output ->
-                            output.write(content.toByteArray(Charsets.UTF_8))
-                            output.flush()
-                        } != null
+                        if (uri == null) {
+                            exportStore.discard(exportKey)
+                            false
+                        } else exportStore.consume(exportKey) { input ->
+                            context.contentResolver.openOutputStream(uri, "w")?.use { output ->
+                                input.copyTo(output)
+                                output.flush()
+                                true
+                            } ?: false
+                        }
                     }.getOrDefault(false)
                 }
-                operationMessage = if (written) {
+                if (uri != null) operationMessage = if (written) {
                     voxUiText("%@ exported.", voxUiText("Markdown"))
                 } else {
                     voxUiText("The export could not be written.")
@@ -488,6 +494,7 @@ internal fun HistoryScreen(
             }
         }
     }
+
     val exportAll: () -> Unit = {
         exportMenuOpen = false
         isExporting = true
@@ -496,13 +503,18 @@ internal fun HistoryScreen(
                 .filter { it.state != CaptureState.COMPLETED }
                 .mapNotNull { runCatching { loadCaptureDetail(it.requestID) }.getOrNull() }
             val markdown = withContext(Dispatchers.Default) { libraryMarkdownExport(details, transcripts) }
-            isExporting = false
             if (markdown == null) {
                 operationMessage = voxUiText("The export could not be written.")
             } else {
-                pendingExport = markdown
-                createDocument.launch("vox-library.md")
+                val exportKey = withContext(Dispatchers.IO) { runCatching { exportStore.stage(markdown) }.getOrNull() }
+                if (exportKey == null) {
+                    operationMessage = voxUiText("The export could not be written.")
+                } else {
+                    pendingExport.begin(exportKey)
+                    createDocument.launch("vox-library.md")
+                }
             }
+            isExporting = false
         }
     }
     val signal = Signal.colors
@@ -659,21 +671,35 @@ internal fun HistoryScreen(
                             color = signal.muted,
                         )
                     }
-                    items(rows, key = UnifiedHistoryRow::stableKey) { row ->
-                        when (row) {
-                            is UnifiedHistoryRow.Capture -> HistoryCard(
-                                item = row.item,
-                                isBusy = isBusy,
-                                retry = { retry(row.item.requestID) },
-                                repairAccess = { repairAccess(row.item.requestID) },
-                                openDetail = { openDetail(row.item.requestID) },
-                                routeName = routeOf(row),
-                            )
-                            is UnifiedHistoryRow.Transcript -> TranscriptHistoryCard(
-                                transcript = row.item,
-                                openDetail = { openTranscript(row.item.sessionID) },
-                                routeName = routeOf(row),
-                            )
+                    // Library board: a day's captures share one white bordered card.
+                    item(key = "rows:$dayStart") {
+                        SignalCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            padding = PaddingValues(0.dp),
+                            radius = SignalMetrics.GroupRadius,
+                        ) {
+                            rows.forEachIndexed { index, row ->
+                                if (index > 0) SignalDivider(inset = 14.dp)
+                                androidx.compose.runtime.key(row.stableKey) {
+                                    when (row) {
+                                        is UnifiedHistoryRow.Capture -> HistoryCard(
+                                            item = row.item,
+                                            isBusy = isBusy,
+                                            retry = { retry(row.item.requestID) },
+                                            repairAccess = { repairAccess(row.item.requestID) },
+                                            openDetail = { openDetail(row.item.requestID) },
+                                            routeName = routeOf(row),
+                                            grouped = true,
+                                        )
+                                        is UnifiedHistoryRow.Transcript -> TranscriptHistoryCard(
+                                            transcript = row.item,
+                                            openDetail = { openTranscript(row.item.sessionID) },
+                                            routeName = routeOf(row),
+                                            grouped = true,
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -748,11 +774,11 @@ private fun LibrarySearchField(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = 56.dp)
+                    .heightIn(min = 48.dp)
                     .clip(CircleShape)
-                    .background(signal.well)
-                    .then(if (focused) Modifier.border(2.dp, signal.tint, CircleShape) else Modifier)
-                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                    .background(signal.card)
+                    .border(if (focused) 2.dp else 1.dp, if (focused) signal.tint else signal.border, CircleShape)
+                    .padding(horizontal = 14.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
@@ -761,7 +787,7 @@ private fun LibrarySearchField(
                     Text(
                         label,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = signal.faint,
+                        color = signal.muted,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.alpha(if (value.isEmpty()) 1f else 0f),
@@ -792,24 +818,22 @@ private fun LibraryFilterChip(
     Row(
         modifier = modifier
             .minimumInteractiveComponentSize()
-            .heightIn(min = 32.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(if (selected) signal.secondarySoft else Color.Transparent)
-            .then(if (selected) Modifier else Modifier.border(1.dp, signal.border, RoundedCornerShape(8.dp)))
+            .heightIn(min = 34.dp)
+            .clip(CircleShape)
+            .background(if (selected) signal.text else signal.card)
+            .then(if (selected) Modifier else Modifier.border(1.dp, signal.border, CircleShape))
             .then(selection)
-            .padding(start = if (selected) 8.dp else 16.dp, end = 16.dp, top = 6.dp, bottom = 6.dp),
+            .padding(horizontal = 12.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        if (selected) {
-            Icon(Icons.Outlined.Check, contentDescription = null, tint = signal.secondaryText, modifier = Modifier.size(18.dp))
-        } else if (dotColor != null) {
+        if (dotColor != null) {
             Box(Modifier.size(8.dp).clip(CircleShape).background(dotColor))
         }
         Text(
             text,
-            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Medium),
-            color = if (selected) signal.secondaryText else signal.muted,
+            style = MaterialTheme.typography.labelMedium.copy(fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Medium),
+            color = if (selected) signal.bg else signal.text,
             maxLines = 1,
         )
     }
@@ -890,6 +914,8 @@ internal fun HistoryCard(
     repairAccess: () -> Unit,
     openDetail: () -> Unit,
     routeName: String? = null,
+    /** Inside a day's shared card (Library board): no card chrome of its own. */
+    grouped: Boolean = false,
 ) {
     val signal = Signal.colors
     val completed = item.state == CaptureState.COMPLETED
@@ -901,7 +927,9 @@ internal fun HistoryCard(
     SignalCard(
         modifier = Modifier.fillMaxWidth(),
         padding = PaddingValues(14.dp),
-        radius = SignalMetrics.GroupRadius,
+        radius = if (grouped) 0.dp else SignalMetrics.GroupRadius,
+        color = if (grouped) Color.Transparent else signal.card,
+        borderColor = if (grouped) null else signal.border,
         onClick = if (completed) null else openDetail,
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -1051,13 +1079,17 @@ internal fun TranscriptHistoryCard(
     transcript: RecordingTranscriptionState,
     openDetail: () -> Unit,
     routeName: String? = null,
+    /** Inside a day's shared card (Library board): no card chrome of its own. */
+    grouped: Boolean = false,
 ) {
     val signal = Signal.colors
     val title = libraryTranscriptPhaseTitle(transcript)
     SignalCard(
         modifier = Modifier.fillMaxWidth(),
         padding = PaddingValues(14.dp),
-        radius = SignalMetrics.GroupRadius,
+        radius = if (grouped) 0.dp else SignalMetrics.GroupRadius,
+        color = if (grouped) Color.Transparent else signal.card,
+        borderColor = if (grouped) null else signal.border,
         onClick = openDetail,
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {

@@ -22,9 +22,15 @@ enum CaptureTitleText {
         return nil
     }
 
-    /// The first line of `text` for which `transform` returns a value.
+    /// A fenced code block delimiter: ```` ``` ```` or `~~~`, optionally with
+    /// an info string such as `swift`. Never a meaningful title.
+    static let codeFencePattern = #"^\s{0,3}(?:`{3,}|~{3,})"#
+
+    /// The first line of `text` for which `transform` returns a value,
+    /// skipping code fence delimiters.
     static func firstLine(of text: String, _ transform: (String) -> String?) -> String? {
         for line in text.split(whereSeparator: \.isNewline) {
+            if line.range(of: codeFencePattern, options: .regularExpression) != nil { continue }
             if let result = transform(String(line)) { return result }
         }
         return nil

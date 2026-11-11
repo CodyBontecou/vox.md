@@ -1,0 +1,19 @@
+{
+  "reviewedSource": "7907cf14672f9df5636e49d0451a53d9cbe94695",
+  "finding": "Test recovery assumed a delayed callback and gate defer had completed after a fixed 300ms sleep. Exact production gate/deadline harness reproduces busy with a late callback and normal release afterward.",
+  "productionGateChanged": false,
+  "preservedAssertions": [
+    "prompt timeout",
+    "EnrichmentTimeoutError",
+    "busy while timed-out work still owns slot",
+    "new inference admitted after actual completion"
+  ],
+  "focusedTests": 6,
+  "focusedRepetitions": 25,
+  "failures": 0,
+  "sourceHashes": {
+    "Packages/VoxboardShared/Sources/VoxboardShared/OnDeviceInferenceGate.swift": "b895ec3d5f7e195e42a4d02fae617e54b458ba5fadd24b4ef3cae1e374544cb1",
+    "Packages/VoxboardShared/Sources/VoxboardCaptureCore/CaptureProcessingDeadline.swift": "de371ad6fa90afd7792df75cafdf5b4e7cac870d26ba501d4d9b042e3a9ecb74",
+    "Packages/VoxboardShared/Tests/VoxboardSharedTests/OnDeviceProcessingTests.swift": "52cd55d1de1110f14623a2206311dc4f9a25840c170b44c7961159234ca5482f"
+  }
+}

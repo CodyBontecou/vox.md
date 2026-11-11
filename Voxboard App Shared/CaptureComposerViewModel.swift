@@ -60,6 +60,12 @@ final class QuickCaptureViewModel {
     private var hasLoaded = false
     private var liveRecordedTranscriptPreview: LiveTranscriptDraftPreview?
     private var liveRecordedTranscriptSessionID: UUID?
+    /// UTF-16 offset of the writer's cursor when the current recording
+    /// started; its transcript is inserted there instead of at the end.
+    private var recordedTranscriptInsertionOffset: Int?
+    /// Where the composer caret belongs after the latest transcript render or
+    /// commit (just past the spoken words). Observed by the iOS composer.
+    private(set) var recordedTranscriptCaretOffset: Int?
     private var invalidatedLiveTranscriptSessionIDs = Set<UUID>()
     private var pendingSendWithoutLocationOutcome: CaptureLocationOutcome?
 
@@ -296,6 +302,7 @@ final class QuickCaptureViewModel {
             if draft.voxID == nil {
                 draft.voxID = CapturePresetProfileStore.selectedProfileID(defaults: defaults)
             }
+            moveDraftOffDeletedRoute()
             if draft.destinationSelectionMode == .explicit {
                 if draft.destinationID == nil || !destinations.contains(where: { $0.id == draft.destinationID }) {
                     draft.useInheritedDestination()
@@ -369,6 +376,7 @@ final class QuickCaptureViewModel {
         pendingDraftSave = nil
         liveRecordedTranscriptPreview = nil
         liveRecordedTranscriptSessionID = nil
+        recordedTranscriptInsertionOffset = nil
         do {
             try await draftStore?.complete(draftID: draft.id)
             draft = CaptureDraft(
@@ -386,6 +394,21 @@ final class QuickCaptureViewModel {
     func refreshVoxProfiles() {
         // Refreshing availability is not an implicit draft-selection operation.
         voxProfiles = CapturePresetProfileStore.enabledProfiles(defaults: defaults)
+        moveDraftOffDeletedRoute()
+    }
+
+    /// A draft stays on its route while that route is merely disabled, so it is
+    /// never silently delivered elsewhere. A route the user deleted can never
+    /// deliver again, though, so the draft moves to the route Settings fell back
+    /// to instead of stranding Send behind "Destination Not Configured".
+    private func moveDraftOffDeletedRoute() {
+        guard let voxID = draft.voxID,
+              CapturePresetStore.isRetiredPreset(id: voxID, defaults: defaults) else { return }
+        let selectedID = CapturePresetProfileStore.selectedProfileID(defaults: defaults)
+        guard let fallback = voxProfiles.first(where: { $0.id == selectedID })?.id ?? voxProfiles.first?.id,
+              fallback != voxID else { return }
+        draft.selectVox(fallback)
+        scheduleDraftSave()
     }
 
     /// App installs live readers once, before any external launch. A recorder
@@ -674,6 +697,15 @@ final class QuickCaptureViewModel {
         liveRecordedTranscriptPreview != nil
     }
 
+    /// Call when a recording starts: its transcript lands at this UTF-16
+    /// offset (the composer cursor) joined with a space, not a new paragraph.
+    /// `nil` appends to the end of the draft.
+    func beginRecordedTranscriptInsertion(atUTF16Offset offset: Int?) {
+        guard liveRecordedTranscriptPreview == nil else { return }
+        recordedTranscriptInsertionOffset = offset
+        recordedTranscriptCaretOffset = nil
+    }
+
     func updateLiveRecordedTranscript(
         sessionID: UUID? = nil,
         finalizedText: String,
@@ -693,7 +725,8 @@ final class QuickCaptureViewModel {
                activeSessionID != sessionID { return }
             liveRecordedTranscriptSessionID = sessionID
         }
-        var preview = liveRecordedTranscriptPreview ?? LiveTranscriptDraftPreview()
+        var preview = liveRecordedTranscriptPreview
+            ?? LiveTranscriptDraftPreview(insertionOffset: recordedTranscriptInsertionOffset)
         let updatedText = preview.render(
             finalizedText: finalizedText,
             volatileText: volatileText,
@@ -709,27 +742,31 @@ final class QuickCaptureViewModel {
         liveRecordedTranscriptPreview = preview
         draft.text = updatedText
         draft.updatedAt = Date()
+        recordedTranscriptCaretOffset = preview.caretOffset
     }
 
     /// Adds a recording-action line (timestamp marker, empty task) to the
     /// draft. While a live transcript preview is rendering, the line goes just
     /// ahead of the volatile Speech block so the preview can still be replaced.
     func insertRecordingActionLine(_ line: String) {
-        let insertion = line.hasSuffix("\n") ? line : line + "\n"
-        var base = draft.text
-        var liveBlock = ""
+        let updated: String
         if var preview = liveRecordedTranscriptPreview {
-            let withoutPreview = preview.cancel(in: draft.text)
-            if draft.text.hasPrefix(withoutPreview) {
-                base = withoutPreview
-                liveBlock = String(draft.text.dropFirst(withoutPreview.count))
+            updated = preview.insertLine(line, in: draft.text)
+            guard updated.count <= CaptureInputLimits.maximumTextCharacters else {
+                errorMessage = QuickCaptureViewModelError.textTooLarge.localizedDescription
+                return
             }
-        }
-        let separator = base.isEmpty || base.hasSuffix("\n") ? "" : "\n"
-        let updated = base + separator + insertion + liveBlock
-        guard updated.count <= CaptureInputLimits.maximumTextCharacters else {
-            errorMessage = QuickCaptureViewModelError.textTooLarge.localizedDescription
-            return
+            liveRecordedTranscriptPreview = preview
+            recordedTranscriptCaretOffset = preview.caretOffset
+        } else {
+            // No speech yet: the line goes where this recording's words will.
+            var preview = LiveTranscriptDraftPreview(insertionOffset: recordedTranscriptInsertionOffset)
+            updated = preview.insertLine(line, in: draft.text)
+            guard updated.count <= CaptureInputLimits.maximumTextCharacters else {
+                errorMessage = QuickCaptureViewModelError.textTooLarge.localizedDescription
+                return
+            }
+            recordedTranscriptInsertionOffset = preview.insertionOffset
         }
         draft.text = updated
         draft.updatedAt = Date()
@@ -752,6 +789,8 @@ final class QuickCaptureViewModel {
         let restoredText = preview.cancel(in: draft.text)
         liveRecordedTranscriptPreview = nil
         liveRecordedTranscriptSessionID = nil
+        recordedTranscriptInsertionOffset = nil
+        recordedTranscriptCaretOffset = nil
         draft.text = restoredText
         await saveDraftNow()
     }
@@ -868,11 +907,18 @@ final class QuickCaptureViewModel {
         let previousPreview = liveRecordedTranscriptPreview
         let previousPreviewSessionID = liveRecordedTranscriptSessionID
         let updatedText: String
+        let caretOffset: Int?
         if var preview = liveRecordedTranscriptPreview {
             updatedText = preview.commit(normalized, in: draft.text)
+            caretOffset = preview.caretOffset
         } else {
-            let separator = draft.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "" : "\n\n"
-            updatedText = draft.text + separator + normalized
+            let inserted = LiveTranscriptDraftPreview.inserting(
+                normalized,
+                into: draft.text,
+                atUTF16Offset: recordedTranscriptInsertionOffset
+            )
+            updatedText = inserted.text
+            caretOffset = inserted.caretOffset
         }
         guard updatedText.count <= CaptureInputLimits.maximumTextCharacters else {
             errorMessage = QuickCaptureViewModelError.textTooLarge.localizedDescription
@@ -881,7 +927,10 @@ final class QuickCaptureViewModel {
 
         liveRecordedTranscriptPreview = nil
         liveRecordedTranscriptSessionID = nil
+        let previousInsertionOffset = recordedTranscriptInsertionOffset
+        recordedTranscriptInsertionOffset = nil
         draft.text = updatedText
+        recordedTranscriptCaretOffset = caretOffset
         // The recorder adds transcription seconds only after a successful
         // result. Mark this durable request so sending it does not consume a
         // second, independent Capture allowance.
@@ -903,6 +952,7 @@ final class QuickCaptureViewModel {
             draft = previousDraft
             liveRecordedTranscriptPreview = previousPreview
             liveRecordedTranscriptSessionID = previousPreviewSessionID
+            recordedTranscriptInsertionOffset = previousInsertionOffset
             errorMessage = error.localizedDescription
             return false
         }
@@ -1431,7 +1481,7 @@ final class QuickCaptureViewModel {
     }
 
     func addURL(_ url: URL, title: String? = nil) async {
-        guard let scheme = url.scheme?.lowercased(), scheme == "http" || scheme == "https" else {
+        guard CaptureWebLink.isValid(url) else {
             errorMessage = String(localized: "Enter a complete http:// or https:// link.")
             return
         }
@@ -1920,7 +1970,7 @@ final class QuickCaptureViewModel {
         if let id = incoming.destinationID, !library.destinations.contains(where: { $0.id == id }) {
             throw QuickCaptureViewModelError.unknownDestination
         }
-        if let url = incoming.url, !["http", "https"].contains(url.scheme?.lowercased() ?? "") {
+        if let url = incoming.url, !CaptureWebLink.isValid(url) {
             throw CaptureDeepLinkError.invalidURL
         }
         // Check the combined draft, not just the parser's incoming text budget.

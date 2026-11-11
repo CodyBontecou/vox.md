@@ -183,12 +183,13 @@ class SpeechModelManager private constructor(context: Context) {
     }
 
     fun installImportedZip(descriptorID: String, input: InputStream) {
-        val descriptor = SpeechModelCatalog.find(descriptorID) ?: return
-        if (descriptor.engine != SpeechModelEngine.VOSK) {
+        val descriptor = SpeechModelCatalog.find(descriptorID)
+        if (descriptor == null || descriptor.engine != SpeechModelEngine.VOSK ||
+            jobs[descriptorID]?.isActive == true || installedDirectory(descriptorID) != null
+        ) {
             runCatching { input.close() }
             return
         }
-        if (jobs[descriptorID]?.isActive == true || installedDirectory(descriptorID) != null) return
         val job = scope.launch {
             val archive = archiveFile(descriptor.id)
             try {

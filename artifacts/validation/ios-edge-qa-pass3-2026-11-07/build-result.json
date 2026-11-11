@@ -1,0 +1,152 @@
+{
+  "schema": "xcodebuildmcp.output.build-result",
+  "schemaVersion": "3",
+  "didError": false,
+  "error": null,
+  "data": {
+    "summary": {
+      "status": "SUCCEEDED",
+      "durationMs": 42941,
+      "target": "simulator"
+    },
+    "artifacts": {
+      "buildLogPath": "~/Library/Developer/XcodeBuildMCP/workspaces/vox.md-ec50c23b4511/logs/build_sim_2026-11-08T01-30-28-045Z_pid76524_8103ad93.log"
+    },
+    "diagnostics": {
+      "warnings": [
+        {
+          "message": "converting non-Sendable function value to '@Sendable (URL, CMFormatDescription?, CMTime) throws -> any MeetingChunkAssetWriting' may introduce data races",
+          "location": "/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Sources/VoxboardShared/MeetingChunkSampleWriter.swift:228"
+        },
+        {
+          "message": "capture of 'session' with non-Sendable type 'AVAssetExportSession' in a '@Sendable' closure [#SendableClosureCaptures]",
+          "location": "/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Sources/VoxboardShared/AudioAttachmentExporter.swift:180"
+        },
+        {
+          "message": "'duration' was deprecated in iOS 16.0: Use load(.duration) instead [#DeprecatedDeclaration]",
+          "location": "/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Sources/VoxboardShared/AudioFileConverter.swift:305"
+        },
+        {
+          "message": "'recordPermission' was deprecated in iOS 17.0: Please use AVAudioApplication recordPermission [#DeprecatedDeclaration]",
+          "location": "/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Sources/VoxboardShared/AudioRecorder.swift:70"
+        },
+        {
+          "message": "'granted' was deprecated in iOS 17.0: renamed to 'AVAudioApplication.recordPermission.granted' [#DeprecatedDeclaration]",
+          "location": "/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Sources/VoxboardShared/AudioRecorder.swift:71"
+        },
+        {
+          "message": "'denied' was deprecated in iOS 17.0: renamed to 'AVAudioApplication.recordPermission.denied' [#DeprecatedDeclaration]",
+          "location": "/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Sources/VoxboardShared/AudioRecorder.swift:71"
+        },
+        {
+          "message": "'undetermined' was deprecated in iOS 17.0: renamed to 'AVAudioApplication.recordPermission.undetermined' [#DeprecatedDeclaration]",
+          "location": "/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Sources/VoxboardShared/AudioRecorder.swift:75"
+        },
+        {
+          "message": "'requestRecordPermission' was deprecated in iOS 17.0: Please use AVAudioApplication requestRecordPermissionWithCompletionHandler [#DeprecatedDeclaration]",
+          "location": "/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Sources/VoxboardShared/AudioRecorder.swift:79"
+        },
+        {
+          "message": "'denied' was deprecated in iOS 17.0: renamed to 'AVAudioApplication.recordPermission.denied' [#DeprecatedDeclaration]",
+          "location": "/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Sources/VoxboardShared/AudioRecorder.swift:86"
+        },
+        {
+          "message": "'allowBluetooth' was deprecated in iOS 8.0: renamed to 'AVAudioSession.CategoryOptions.allowBluetoothHFP' [#DeprecatedDeclaration]",
+          "location": "/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Sources/VoxboardShared/AudioRecorder.swift:96"
+        },
+        {
+          "message": "'requestRecordPermission' was deprecated in iOS 17.0: Please use AVAudioApplication requestRecordPermissionWithCompletionHandler [#DeprecatedDeclaration]",
+          "location": "/Users/codybontecou/dev/vox.md/Packages/VoxboardShared/Sources/VoxboardShared/AudioRecorder.swift:419"
+        },
+        {
+          "message": "main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/Capture/RouteQuickActionsView.swift:18"
+        },
+        {
+          "message": "reference to captured var 'self' in concurrently-executing code; this is an error in the Swift 6 language mode [#SendableClosureCaptures]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/Capture/CaptureStateViews.swift:374"
+        },
+        {
+          "message": "'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope [#ImplicitStrongCapture]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/Capture/QuickCaptureVoiceSession.swift:231"
+        },
+        {
+          "message": "result of 'try?' is unused [#NoUsage]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard App Shared/CaptureComposerViewModel.swift:809"
+        },
+        {
+          "message": "initialization of immutable value 'journaled' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard App Shared/CaptureComposerViewModel.swift:794"
+        },
+        {
+          "message": "result of 'try?' is unused [#NoUsage]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard App Shared/CaptureComposerViewModel.swift:843"
+        },
+        {
+          "message": "call to main actor-isolated initializer 'init(persistedRawValue:)' in a synchronous nonisolated context [#ActorIsolatedCall]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/Views/QuickCaptureView.swift:3644"
+        },
+        {
+          "message": "main actor-isolated static property 'defaultRecordingResultMode' can not be referenced from a nonisolated context",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/Views/QuickCaptureView.swift:3646"
+        },
+        {
+          "message": "'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope [#ImplicitStrongCapture]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/Views/RecordingFlowView.swift:105"
+        },
+        {
+          "message": "reference to captured var 'self' in concurrently-executing code; this is an error in the Swift 6 language mode [#SendableClosureCaptures]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/TranscriptionServer.swift:95"
+        },
+        {
+          "message": "'recordPermission' was deprecated in iOS 17.0: Please use AVAudioApplication recordPermission [#DeprecatedDeclaration]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/PersistentRecorder.swift:658"
+        },
+        {
+          "message": "'granted' was deprecated in iOS 17.0: renamed to 'AVAudioApplication.recordPermission.granted' [#DeprecatedDeclaration]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/PersistentRecorder.swift:659"
+        },
+        {
+          "message": "'granted' was deprecated in iOS 17.0: renamed to 'AVAudioApplication.recordPermission.granted' [#DeprecatedDeclaration]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/PersistentRecorder.swift:661"
+        },
+        {
+          "message": "'allowBluetooth' was deprecated in iOS 8.0: renamed to 'AVAudioSession.CategoryOptions.allowBluetoothHFP' [#DeprecatedDeclaration]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/PersistentRecorder.swift:668"
+        },
+        {
+          "message": "reference to captured var 'self' in concurrently-executing code; this is an error in the Swift 6 language mode [#SendableClosureCaptures]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/PersistentRecorder.swift:1402"
+        },
+        {
+          "message": "reference to captured var 'self' in concurrently-executing code; this is an error in the Swift 6 language mode [#SendableClosureCaptures]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/PersistentRecorder.swift:1428"
+        },
+        {
+          "message": "reference to captured var 'self' in concurrently-executing code; this is an error in the Swift 6 language mode [#SendableClosureCaptures]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/PersistentRecorder.swift:1429"
+        },
+        {
+          "message": "reference to captured var 'self' in concurrently-executing code; this is an error in the Swift 6 language mode [#SendableClosureCaptures]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/PersistentRecorder.swift:1430"
+        },
+        {
+          "message": "reference to captured var 'self' in concurrently-executing code; this is an error in the Swift 6 language mode [#SendableClosureCaptures]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/PersistentRecorder.swift:1431"
+        },
+        {
+          "message": "'allowBluetooth' was deprecated in iOS 8.0: renamed to 'AVAudioSession.CategoryOptions.allowBluetoothHFP' [#DeprecatedDeclaration]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/PersistentRecorder.swift:1579"
+        },
+        {
+          "message": "reference to captured var 'self' in concurrently-executing code; this is an error in the Swift 6 language mode [#SendableClosureCaptures]",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/PersistentRecorder.swift:4190"
+        }
+      ],
+      "errors": []
+    }
+  },
+  "nextSteps": [
+    "Get built app path in simulator derived data: get_sim_app_path({ simulatorId: \"3C7896BD-51AB-4F86-9492-C5A293392FFC\", scheme: \"Voxboard\", platform: \"iOS Simulator\", derivedDataPath: \"/tmp/vox-duo-build\" })"
+  ]
+}

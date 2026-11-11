@@ -4,6 +4,24 @@ import VoxboardShared
 
 @MainActor
 final class CapturePresetLaunchSafetyTests: XCTestCase {
+    func testIncompleteLinkCannotChangeOrPersistComposerDraft() async throws {
+        let f = try await fixture()
+        let before = f.vm.draft
+        let storedBefore = try await f.store.load(id: before.id)
+        for value in ["https://", "https:example.com", "https:///notes"] {
+            await f.vm.addURL(try XCTUnwrap(URL(string: value)))
+            XCTAssertEqual(f.vm.draft, before)
+            XCTAssertNotNil(f.vm.errorMessage)
+            f.vm.errorMessage = nil
+            await f.vm.handleDeepLink(.openComposer(CaptureDeepLinkDraft(text: "Do not append", url: URL(string: value))))
+            XCTAssertEqual(f.vm.draft, before)
+            XCTAssertNil(f.vm.pendingPresetSwitch)
+            XCTAssertNotNil(f.vm.errorMessage)
+        }
+        let storedAfter = try await f.store.load(id: before.id)
+        XCTAssertEqual(storedAfter, storedBefore)
+    }
+
     func testSamePresetDoesNotSaveOrWriteEitherSelectionKey() async throws {
         let f = try await fixture()
         f.defaults.set("inbox", forKey: CapturePresetProfileStore.selectedCaptureProfileIDKey)
@@ -173,6 +191,34 @@ final class CapturePresetLaunchSafetyTests: XCTestCase {
             XCTAssertEqual(f.vm.requestedInput, input)
             XCTAssertNil(f.vm.pendingPresetSwitch)
         }
+    }
+
+    func testDeletingTheDraftsRouteMovesTheDraftToTheSelectedRoute() async throws {
+        let f = try await fixture()
+        XCTAssertEqual(f.vm.draft.voxID, "journal")
+        CapturePresetStore.retirePreset(id: "journal", ownedRouteID: nil, defaults: f.defaults)
+        f.defaults.set(try JSONEncoder().encode([f.presets[1]]), forKey: CapturePresetProfileStore.profilesKey)
+        f.defaults.set("inbox", forKey: CapturePresetProfileStore.selectedCaptureProfileIDKey)
+
+        f.vm.refreshVoxProfiles()
+
+        XCTAssertEqual(f.vm.draft.voxID, "inbox")
+        XCTAssertEqual(f.vm.draft.text, "Original")
+        XCTAssertEqual(f.vm.selectedDestination?.id, f.secondDestinationID)
+    }
+
+    func testDisablingTheDraftsRouteKeepsTheDraftOnIt() async throws {
+        let f = try await fixture()
+        var journal = f.presets[0]
+        journal.isEnabled = false
+        f.defaults.set(try JSONEncoder().encode([journal, f.presets[1]]), forKey: CapturePresetProfileStore.profilesKey)
+        f.defaults.set("inbox", forKey: CapturePresetProfileStore.selectedCaptureProfileIDKey)
+
+        f.vm.refreshVoxProfiles()
+
+        // A disabled route can come back, so the draft is never silently rerouted.
+        XCTAssertEqual(f.vm.draft.voxID, "journal")
+        XCTAssertNil(f.vm.selectedVoxProfile)
     }
 
     func testAcceptanceRevalidatesDisabledDeletedPresetAndDestination() async throws {

@@ -121,23 +121,23 @@ public enum URLDeliveryValidationError: LocalizedError, Equatable, Sendable {
     public var errorDescription: String? {
         switch self {
         case .emptyURL:
-            return "Enter a delivery URL."
+            return String(localized: "Enter a delivery URL.")
         case .invalidURL:
-            return "That does not look like a valid URL."
+            return String(localized: "That does not look like a valid URL.")
         case .insecureScheme:
-            return "Use HTTPS. Plain HTTP is only allowed for loopback or local-network addresses."
+            return String(localized: "Use HTTPS. Plain HTTP is only allowed for loopback or local-network addresses.")
         case .insecureLocalRequiresConfirmation:
-            return "Plain HTTP is insecure. Confirm that this is a local-only endpoint to continue."
+            return String(localized: "Plain HTTP is insecure. Confirm that this is a local-only endpoint to continue.")
         case .credentialsInURL:
-            return "Remove the username or password from the URL. Put the secret in the token field instead."
+            return String(localized: "Remove the username or password from the URL. Put the secret in the token field instead.")
         case .queryStringSecret:
-            return "Do not put secrets in the URL query string. Use the token field instead."
+            return String(localized: "Do not put secrets in the URL query string. Use the token field instead.")
         case .missingHost:
-            return "The URL is missing a host."
+            return String(localized: "The URL is missing a host.")
         case .invalidHeaders:
-            return "Use valid, unique HTTP header names and single-line values. Host, cookies, and connection headers are not allowed (16 KiB maximum)."
+            return String(localized: "Use valid, unique HTTP header names and single-line values. Host, cookies, and connection headers are not allowed (16 KiB maximum).")
         case .bodyTooLarge(let bytes):
-            return "The transcript is too large to deliver (\(bytes) bytes; the limit is \(URLDeliveryValidator.maxBodyBytes) bytes)."
+            return String(localized: "The transcript is too large to deliver (\(bytes) bytes; the limit is \(URLDeliveryValidator.maxBodyBytes) bytes).")
         }
     }
 }

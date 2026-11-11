@@ -1,0 +1,283 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Calculating task graph as configuration cache cannot be reused because output of the external process 'git' has changed.
+> Task :build-logic:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :build-logic:compileKotlin UP-TO-DATE
+> Task :build-logic:compileJava NO-SOURCE
+> Task :build-logic:pluginDescriptors UP-TO-DATE
+> Task :build-logic:processResources UP-TO-DATE
+> Task :build-logic:classes UP-TO-DATE
+> Task :build-logic:jar UP-TO-DATE
+> Task :capture-domain:preBuild UP-TO-DATE
+> Task :capture-domain:preDebugBuild UP-TO-DATE
+> Task :capture-domain:generateDebugResources UP-TO-DATE
+> Task :capture-domain:packageDebugResources UP-TO-DATE
+> Task :capture-domain:processDebugNavigationResources UP-TO-DATE
+> Task :capture-domain:parseDebugLocalResources UP-TO-DATE
+> Task :capture-domain:generateDebugRFile UP-TO-DATE
+> Task :capture-domain:compileDebugKotlin UP-TO-DATE
+> Task :capture-domain:javaPreCompileDebug UP-TO-DATE
+> Task :capture-domain:compileDebugJavaWithJavac NO-SOURCE
+> Task :capture-domain:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :capture-domain:processDebugJavaRes UP-TO-DATE
+> Task :core-bridge:preBuild UP-TO-DATE
+> Task :core-bridge:preDebugBuild UP-TO-DATE
+> Task :core-bridge:generateDebugResources UP-TO-DATE
+> Task :core-bridge:packageDebugResources UP-TO-DATE
+> Task :core-bridge:processDebugNavigationResources UP-TO-DATE
+> Task :core-bridge:parseDebugLocalResources UP-TO-DATE
+> Task :core-bridge:generateDebugRFile UP-TO-DATE
+> Task :core-bridge:compileDebugKotlin UP-TO-DATE
+> Task :core-bridge:javaPreCompileDebug UP-TO-DATE
+> Task :core-bridge:compileDebugJavaWithJavac NO-SOURCE
+> Task :core-bridge:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :core-bridge:processDebugJavaRes UP-TO-DATE
+> Task :capture-domain:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :core-bridge:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :data:preBuild UP-TO-DATE
+> Task :data:preDebugBuild UP-TO-DATE
+> Task :data:generateDebugResources UP-TO-DATE
+> Task :data:packageDebugResources UP-TO-DATE
+> Task :data:processDebugNavigationResources UP-TO-DATE
+> Task :data:parseDebugLocalResources UP-TO-DATE
+> Task :data:generateDebugRFile UP-TO-DATE
+> Task :data:kaptGenerateStubsDebugKotlin
+> Task :data:kaptDebugKotlin
+> Task :data:compileDebugKotlin
+> Task :data:javaPreCompileDebug UP-TO-DATE
+> Task :data:compileDebugJavaWithJavac UP-TO-DATE
+> Task :data:bundleLibRuntimeToJarDebug
+> Task :data:bundleLibCompileToJarDebug
+> Task :data:preDebugUnitTestBuild UP-TO-DATE
+> Task :data:generateDebugUnitTestStubRFile UP-TO-DATE
+> Task :data:kaptGenerateStubsDebugUnitTestKotlin
+> Task :data:kaptDebugUnitTestKotlin SKIPPED
+> Task :data:compileDebugUnitTestKotlin
+> Task :data:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :data:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :data:processDebugJavaRes UP-TO-DATE
+> Task :data:processDebugUnitTestJavaRes UP-TO-DATE
+> Task :data:testDebugUnitTest
+> Task :app:physicalProvenance UP-TO-DATE
+> Task :app:generateLauncherIcons UP-TO-DATE
+
+> Task :app:generateRuntimeLocalizations
+runtime localizations: 21673 entries; literal sources: 996; missing catalog sources: 3; rewrites: 0
+
+> Task :app:syncGeistFonts UP-TO-DATE
+> Task :app:preBuild
+> Task :app:preDebugBuild
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :platform-services:preBuild UP-TO-DATE
+> Task :platform-services:preDebugBuild UP-TO-DATE
+> Task :platform-services:processDebugNavigationResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :platform-services:generateDebugResources UP-TO-DATE
+> Task :platform-services:packageDebugResources UP-TO-DATE
+> Task :platform-services:parseDebugLocalResources UP-TO-DATE
+> Task :platform-services:generateDebugRFile UP-TO-DATE
+> Task :platform-services:compileDebugKotlin UP-TO-DATE
+> Task :platform-services:javaPreCompileDebug UP-TO-DATE
+> Task :platform-services:compileDebugJavaWithJavac NO-SOURCE
+> Task :platform-services:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :app:compileDebugKotlin
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :capture-domain:writeDebugAarMetadata UP-TO-DATE
+> Task :core-bridge:writeDebugAarMetadata UP-TO-DATE
+> Task :data:writeDebugAarMetadata UP-TO-DATE
+> Task :platform-services:writeDebugAarMetadata UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :capture-domain:extractDeepLinksDebug UP-TO-DATE
+> Task :capture-domain:processDebugManifest UP-TO-DATE
+> Task :core-bridge:extractDeepLinksDebug UP-TO-DATE
+> Task :core-bridge:processDebugManifest UP-TO-DATE
+> Task :data:extractDeepLinksDebug UP-TO-DATE
+> Task :data:processDebugManifest UP-TO-DATE
+> Task :platform-services:extractDeepLinksDebug UP-TO-DATE
+> Task :platform-services:processDebugManifest UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :capture-domain:mapDebugSourceSetPaths UP-TO-DATE
+> Task :capture-domain:compileDebugLibraryResources UP-TO-DATE
+> Task :core-bridge:mapDebugSourceSetPaths UP-TO-DATE
+> Task :core-bridge:compileDebugLibraryResources UP-TO-DATE
+> Task :data:mapDebugSourceSetPaths UP-TO-DATE
+> Task :data:compileDebugLibraryResources UP-TO-DATE
+> Task :platform-services:mapDebugSourceSetPaths UP-TO-DATE
+> Task :platform-services:compileDebugLibraryResources UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:bundleDebugClassesToRuntimeJar
+> Task :app:bundleDebugClassesToCompileJar
+> Task :app:preDebugUnitTestBuild
+> Task :app:compileDebugUnitTestKotlin
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugJavaRes
+> Task :app:processDebugUnitTestJavaRes UP-TO-DATE
+> Task :platform-services:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :platform-services:processDebugJavaRes UP-TO-DATE
+> Task :app:testDebugUnitTest
+> Task :app:preDebugAndroidTestBuild SKIPPED
+> Task :app:generateDebugAndroidTestResources UP-TO-DATE
+> Task :app:packageDebugAndroidTestResources UP-TO-DATE
+> Task :app:processDebugAndroidTestNavigationResources UP-TO-DATE
+> Task :app:parseDebugAndroidTestLocalResources UP-TO-DATE
+> Task :app:generateDebugAndroidTestRFile UP-TO-DATE
+> Task :app:compileDebugAndroidTestKotlin
+> Task :capture-domain:checkDebugAarMetadata UP-TO-DATE
+> Task :capture-domain:mergeDebugJniLibFolders UP-TO-DATE
+> Task :capture-domain:mergeDebugNativeLibs NO-SOURCE
+> Task :capture-domain:stripDebugDebugSymbols NO-SOURCE
+> Task :capture-domain:copyDebugJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :capture-domain:extractDebugAnnotations UP-TO-DATE
+> Task :capture-domain:extractDeepLinksForAarDebug UP-TO-DATE
+> Task :capture-domain:generateDebugAssets UP-TO-DATE
+> Task :capture-domain:mergeDebugAssets UP-TO-DATE
+> Task :capture-domain:mergeDebugGeneratedProguardFiles UP-TO-DATE
+> Task :capture-domain:mergeDebugConsumerProguardFiles UP-TO-DATE
+> Task :capture-domain:prepareDebugArtProfile UP-TO-DATE
+> Task :capture-domain:prepareLintJarForPublish UP-TO-DATE
+> Task :capture-domain:mergeDebugJavaResource UP-TO-DATE
+> Task :capture-domain:syncDebugLibJars UP-TO-DATE
+> Task :capture-domain:bundleDebugLocalLintAar UP-TO-DATE
+> Task :core-bridge:checkDebugAarMetadata UP-TO-DATE
+
+> Task :core-bridge:buildVoxDebugNative
+    Building arm64-v8a (aarch64-linux-android)
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-android-finish-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-android-finish-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.69s
+    Building armeabi-v7a (armv7-linux-androideabi)
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-android-finish-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-android-finish-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.24s
+    Building x86_64 (x86_64-linux-android)
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-android-finish-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-android-finish-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.16s
+    Building x86 (i686-linux-android)
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-android-finish-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-android-finish-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.05s
+     Copying libraries to /private/tmp/vox-android-finish-20261108/apps/android/core-bridge/build/generated/vox-native/debug/jniLibs
+Built libvox_core_uniffi.so for Android API 28: arm64-v8a armeabi-v7a x86_64 x86
+
+> Task :core-bridge:mergeDebugJniLibFolders
+> Task :core-bridge:mergeDebugNativeLibs
+
+> Task :core-bridge:stripDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libvox_core_uniffi.so. Run with --info option to learn more.
+
+> Task :core-bridge:copyDebugJniLibsProjectAndLocalJars
+> Task :core-bridge:extractDebugAnnotations UP-TO-DATE
+> Task :core-bridge:extractDeepLinksForAarDebug UP-TO-DATE
+> Task :core-bridge:generateDebugAssets UP-TO-DATE
+> Task :core-bridge:mergeDebugAssets UP-TO-DATE
+> Task :core-bridge:mergeDebugGeneratedProguardFiles UP-TO-DATE
+> Task :core-bridge:mergeDebugConsumerProguardFiles UP-TO-DATE
+> Task :core-bridge:prepareDebugArtProfile UP-TO-DATE
+> Task :core-bridge:prepareLintJarForPublish UP-TO-DATE
+> Task :core-bridge:mergeDebugJavaResource UP-TO-DATE
+> Task :core-bridge:syncDebugLibJars UP-TO-DATE
+> Task :core-bridge:bundleDebugLocalLintAar
+> Task :data:checkDebugAarMetadata UP-TO-DATE
+> Task :data:mergeDebugJniLibFolders UP-TO-DATE
+> Task :data:mergeDebugNativeLibs NO-SOURCE
+> Task :data:stripDebugDebugSymbols NO-SOURCE
+> Task :data:copyDebugJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :data:extractDebugAnnotations
+> Task :data:extractDeepLinksForAarDebug UP-TO-DATE
+> Task :data:generateDebugAssets UP-TO-DATE
+> Task :data:mergeDebugAssets UP-TO-DATE
+> Task :data:mergeDebugGeneratedProguardFiles UP-TO-DATE
+> Task :data:mergeDebugConsumerProguardFiles UP-TO-DATE
+> Task :data:prepareDebugArtProfile UP-TO-DATE
+> Task :data:prepareLintJarForPublish UP-TO-DATE
+> Task :data:mergeDebugJavaResource UP-TO-DATE
+> Task :data:syncDebugLibJars
+> Task :data:bundleDebugLocalLintAar
+> Task :platform-services:checkDebugAarMetadata UP-TO-DATE
+> Task :platform-services:mergeDebugJniLibFolders UP-TO-DATE
+> Task :platform-services:mergeDebugNativeLibs NO-SOURCE
+> Task :platform-services:stripDebugDebugSymbols NO-SOURCE
+> Task :platform-services:copyDebugJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :platform-services:extractDebugAnnotations UP-TO-DATE
+> Task :platform-services:extractDeepLinksForAarDebug UP-TO-DATE
+> Task :platform-services:generateDebugAssets UP-TO-DATE
+> Task :platform-services:mergeDebugAssets UP-TO-DATE
+> Task :platform-services:mergeDebugGeneratedProguardFiles UP-TO-DATE
+> Task :platform-services:mergeDebugConsumerProguardFiles UP-TO-DATE
+> Task :platform-services:prepareDebugArtProfile UP-TO-DATE
+> Task :platform-services:prepareLintJarForPublish UP-TO-DATE
+> Task :platform-services:mergeDebugJavaResource UP-TO-DATE
+> Task :platform-services:syncDebugLibJars UP-TO-DATE
+> Task :platform-services:bundleDebugLocalLintAar UP-TO-DATE
+> Task :capture-domain:createFullJarDebug UP-TO-DATE
+> Task :capture-domain:writeDebugLintModelMetadata UP-TO-DATE
+> Task :core-bridge:createFullJarDebug UP-TO-DATE
+> Task :core-bridge:writeDebugLintModelMetadata UP-TO-DATE
+> Task :data:createFullJarDebug
+> Task :data:writeDebugLintModelMetadata UP-TO-DATE
+> Task :platform-services:createFullJarDebug UP-TO-DATE
+> Task :platform-services:writeDebugLintModelMetadata UP-TO-DATE
+> Task :app:generateDebugAndroidTestLintModel
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :capture-domain:extractProguardFiles UP-TO-DATE
+> Task :capture-domain:generateDebugLintModel UP-TO-DATE
+> Task :core-bridge:extractProguardFiles UP-TO-DATE
+> Task :core-bridge:generateDebugLintModel UP-TO-DATE
+> Task :data:extractProguardFiles UP-TO-DATE
+> Task :data:generateDebugLintModel
+> Task :platform-services:extractProguardFiles UP-TO-DATE
+> Task :platform-services:generateDebugLintModel UP-TO-DATE
+> Task :app:generateDebugLintReportModel
+> Task :app:generateDebugUnitTestLintModel
+> Task :capture-domain:lintAnalyzeDebug UP-TO-DATE
+> Task :core-bridge:lintAnalyzeDebug UP-TO-DATE
+> Task :data:lintAnalyzeDebug
+> Task :platform-services:lintAnalyzeDebug UP-TO-DATE
+> Task :app:lintAnalyzeDebug
+> Task :app:lintAnalyzeDebugAndroidTest
+> Task :app:lintAnalyzeDebugUnitTest
+> Task :capture-domain:preDebugAndroidTestBuild UP-TO-DATE
+> Task :capture-domain:generateDebugAndroidTestLintModel UP-TO-DATE
+> Task :capture-domain:preDebugUnitTestBuild UP-TO-DATE
+> Task :capture-domain:generateDebugUnitTestLintModel UP-TO-DATE
+> Task :capture-domain:lintAnalyzeDebugAndroidTest UP-TO-DATE
+> Task :capture-domain:lintAnalyzeDebugUnitTest UP-TO-DATE
+> Task :core-bridge:preDebugAndroidTestBuild UP-TO-DATE
+> Task :core-bridge:generateDebugAndroidTestLintModel
+> Task :core-bridge:preDebugUnitTestBuild UP-TO-DATE
+> Task :core-bridge:generateDebugUnitTestLintModel
+> Task :core-bridge:lintAnalyzeDebugAndroidTest
+> Task :core-bridge:lintAnalyzeDebugUnitTest
+> Task :data:preDebugAndroidTestBuild UP-TO-DATE
+> Task :data:generateDebugAndroidTestLintModel
+> Task :data:generateDebugUnitTestLintModel
+> Task :data:lintAnalyzeDebugAndroidTest
+> Task :data:lintAnalyzeDebugUnitTest
+> Task :platform-services:preDebugAndroidTestBuild UP-TO-DATE
+> Task :platform-services:generateDebugAndroidTestLintModel UP-TO-DATE
+> Task :platform-services:preDebugUnitTestBuild UP-TO-DATE
+> Task :platform-services:generateDebugUnitTestLintModel UP-TO-DATE
+> Task :platform-services:lintAnalyzeDebugAndroidTest UP-TO-DATE
+> Task :platform-services:lintAnalyzeDebugUnitTest UP-TO-DATE
+
+> Task :app:lintReportDebug
+Wrote HTML report to file:///private/tmp/vox-android-finish-20261108/apps/android/app/build/reports/lint-results-debug.html
+
+> Task :app:lintDebug
+
+BUILD SUCCESSFUL in 1m 22s
+207 actionable tasks: 44 executed, 163 up-to-date
+Configuration cache entry stored.

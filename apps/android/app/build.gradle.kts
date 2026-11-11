@@ -29,9 +29,11 @@ android {
     assetPacks += listOf(":whisper_small")
 
     defaultConfig {
+        // Setup links for ScrawlKit (debug builds): `scrawl link --scheme voxscrawl`.
+        manifestPlaceholders["scrawlScheme"] = "voxscrawl"
         applicationId = "md.vox.android"
-        versionCode = 3
-        versionName = "1.1.0"
+        versionCode = 5
+        versionName = "1.1.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging.jniLibs.excludes += setOf(
@@ -85,7 +87,9 @@ val generateLauncherIcons by tasks.registering(Exec::class) {
         .resolve("Voxboard/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png")
     inputs.file(generator)
     inputs.file(rootProject.file("scripts/generate-launcher-icons.py"))
+    val monochrome = rootProject.file("branding/launcher-monochrome-1024.png")
     inputs.file(icon)
+    inputs.file(monochrome)
     outputs.dir(layout.buildDirectory.dir("generated/res/launcherIcons"))
     commandLine(
         "bash",
@@ -94,7 +98,8 @@ val generateLauncherIcons by tasks.registering(Exec::class) {
         icon,
         "--out",
         layout.buildDirectory.dir("generated/res/launcherIcons").get().asFile,
-        "--emit-tile-icon",
+        "--monochrome",
+        monochrome,
     )
 }
 
@@ -110,7 +115,14 @@ val syncGeistFonts by tasks.registering(Sync::class) {
     into(layout.buildDirectory.dir("generated/res/geistFonts/font"))
 }
 
+// ScrawlKit in debug builds: hold three fingers to record the screen, your voice and touches and
+// send them to your coding agent through Scrawl on the Mac. It comes from ~/.m2
+// (`./gradlew publishToMavenLocal` in ~/dev/scrawl/android) and is left out where that isn't
+// there (CI); release builds never include it.
+val scrawlKitAvailable = File(System.getProperty("user.home"), ".m2/repository/dev/kitlangton/scrawl/scrawlkit-autoinstall/0.1.0").isDirectory
+
 dependencies {
+    if (scrawlKitAvailable) debugImplementation("dev.kitlangton.scrawl:scrawlkit-autoinstall:0.1.0")
     implementation(libs.serialization.json)
     implementation(project(":capture-domain"))
     implementation(project(":core-bridge"))

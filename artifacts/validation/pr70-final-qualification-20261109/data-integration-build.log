@@ -1,0 +1,337 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Calculating task graph as no cached configuration is available for tasks: :data:assembleDebugAndroidTest
+> Task :build-logic:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :build-logic:compileKotlin UP-TO-DATE
+> Task :build-logic:compileJava NO-SOURCE
+> Task :build-logic:pluginDescriptors UP-TO-DATE
+> Task :build-logic:processResources UP-TO-DATE
+> Task :build-logic:classes UP-TO-DATE
+> Task :build-logic:jar UP-TO-DATE
+> Task :core-bridge:preBuild UP-TO-DATE
+> Task :capture-domain:preBuild UP-TO-DATE
+> Task :core-bridge:preDebugBuild UP-TO-DATE
+> Task :capture-domain:preDebugBuild UP-TO-DATE
+> Task :capture-domain:generateDebugResources UP-TO-DATE
+> Task :capture-domain:processDebugNavigationResources UP-TO-DATE
+> Task :capture-domain:javaPreCompileDebug UP-TO-DATE
+> Task :core-bridge:generateDebugResources UP-TO-DATE
+> Task :capture-domain:packageDebugResources UP-TO-DATE
+> Task :core-bridge:packageDebugResources UP-TO-DATE
+> Task :core-bridge:processDebugNavigationResources UP-TO-DATE
+> Task :capture-domain:parseDebugLocalResources UP-TO-DATE
+> Task :core-bridge:parseDebugLocalResources UP-TO-DATE
+> Task :core-bridge:generateDebugRFile UP-TO-DATE
+> Task :capture-domain:generateDebugRFile UP-TO-DATE
+> Task :core-bridge:compileDebugKotlin UP-TO-DATE
+> Task :capture-domain:compileDebugKotlin UP-TO-DATE
+> Task :core-bridge:javaPreCompileDebug UP-TO-DATE
+> Task :capture-domain:compileDebugJavaWithJavac NO-SOURCE
+> Task :core-bridge:compileDebugJavaWithJavac NO-SOURCE
+> Task :capture-domain:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :data:preBuild UP-TO-DATE
+> Task :data:preDebugBuild UP-TO-DATE
+> Task :core-bridge:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :data:generateDebugResources UP-TO-DATE
+> Task :data:processDebugNavigationResources UP-TO-DATE
+> Task :data:javaPreCompileDebug UP-TO-DATE
+> Task :data:preDebugAndroidTestBuild UP-TO-DATE
+> Task :data:packageDebugResources UP-TO-DATE
+> Task :data:generateDebugAndroidTestResources UP-TO-DATE
+> Task :data:parseDebugLocalResources UP-TO-DATE
+> Task :data:generateDebugRFile UP-TO-DATE
+> Task :data:packageDebugAndroidTestResources UP-TO-DATE
+> Task :data:processDebugAndroidTestNavigationResources UP-TO-DATE
+> Task :data:parseDebugAndroidTestLocalResources UP-TO-DATE
+> Task :data:generateDebugAndroidTestRFile UP-TO-DATE
+> Task :data:javaPreCompileDebugAndroidTest FROM-CACHE
+> Task :capture-domain:generateDebugAssets UP-TO-DATE
+> Task :data:kaptGenerateStubsDebugKotlin UP-TO-DATE
+> Task :capture-domain:mergeDebugAssets
+> Task :core-bridge:generateDebugAssets UP-TO-DATE
+> Task :core-bridge:mergeDebugAssets
+> Task :data:generateDebugAndroidTestAssets UP-TO-DATE
+> Task :data:generateDebugAssets UP-TO-DATE
+> Task :data:kaptDebugKotlin UP-TO-DATE
+> Task :data:mergeDebugAssets
+> Task :data:compileDebugKotlin UP-TO-DATE
+> Task :data:compileDebugJavaWithJavac UP-TO-DATE
+> Task :data:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :data:kaptGenerateStubsDebugAndroidTestKotlin UP-TO-DATE
+> Task :data:kaptDebugAndroidTestKotlin SKIPPED
+> Task :data:compileDebugAndroidTestKotlin UP-TO-DATE
+> Task :data:compileDebugAndroidTestJavaWithJavac NO-SOURCE
+> Task :data:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :data:mergeDebugAndroidTestAssets
+> Task :data:compressDebugAndroidTestAssets FROM-CACHE
+> Task :capture-domain:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :core-bridge:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :data:desugarDebugAndroidTestFileDependencies FROM-CACHE
+> Task :capture-domain:mapDebugSourceSetPaths UP-TO-DATE
+> Task :capture-domain:compileDebugLibraryResources UP-TO-DATE
+> Task :core-bridge:mapDebugSourceSetPaths UP-TO-DATE
+> Task :core-bridge:compileDebugLibraryResources UP-TO-DATE
+> Task :capture-domain:writeDebugAarMetadata UP-TO-DATE
+> Task :core-bridge:writeDebugAarMetadata UP-TO-DATE
+> Task :data:writeDebugAarMetadata UP-TO-DATE
+> Task :data:checkDebugAndroidTestAarMetadata
+> Task :data:mapDebugAndroidTestSourceSetPaths
+> Task :data:compileDebugAndroidTestNavigationResources FROM-CACHE
+> Task :data:mapDebugSourceSetPaths UP-TO-DATE
+> Task :data:compileDebugLibraryResources UP-TO-DATE
+> Task :data:mergeDebugAndroidTestResources FROM-CACHE
+> Task :capture-domain:extractDeepLinksDebug UP-TO-DATE
+> Task :capture-domain:processDebugManifest UP-TO-DATE
+> Task :core-bridge:extractDeepLinksDebug UP-TO-DATE
+> Task :core-bridge:processDebugManifest UP-TO-DATE
+> Task :data:extractDeepLinksDebug UP-TO-DATE
+> Task :data:processDebugManifest UP-TO-DATE
+> Task :data:processDebugAndroidTestManifest
+> Task :data:processDebugAndroidTestResources FROM-CACHE
+> Task :data:dexBuilderDebugAndroidTest
+> Task :capture-domain:processDebugJavaRes UP-TO-DATE
+> Task :core-bridge:processDebugJavaRes UP-TO-DATE
+> Task :data:processDebugAndroidTestJavaRes
+> Task :data:processDebugJavaRes UP-TO-DATE
+> Task :data:mergeDebugAndroidTestJavaResource
+> Task :data:checkDebugAndroidTestDuplicateClasses
+> Task :data:mergeExtDexDebugAndroidTest FROM-CACHE
+> Task :data:bundleLibRuntimeToDirDebug
+> Task :data:mergeDebugAndroidTestGlobalSynthetics
+> Task :capture-domain:bundleLibRuntimeToDirDebug
+> Task :core-bridge:bundleLibRuntimeToDirDebug
+> Task :data:mergeProjectDexDebugAndroidTest
+> Task :capture-domain:mergeDebugJniLibFolders
+> Task :capture-domain:mergeDebugNativeLibs NO-SOURCE
+> Task :capture-domain:copyDebugJniLibsProjectOnly
+> Task :data:mergeLibDexDebugAndroidTest
+> Task :data:mergeDebugJniLibFolders
+> Task :data:mergeDebugNativeLibs NO-SOURCE
+> Task :data:copyDebugJniLibsProjectOnly
+> Task :data:mergeDebugAndroidTestJniLibFolders
+> Task :data:validateSigningDebugAndroidTest
+> Task :data:writeDebugAndroidTestSigningConfigVersions
+
+> Task :core-bridge:buildVoxDebugNative
+    Building arm64-v8a (aarch64-linux-android)
+   Compiling proc-macro2 v1.0.107
+   Compiling libc v0.2.189
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.24
+   Compiling anyhow v1.0.104
+   Compiling autocfg v1.5.1
+   Compiling rustix v1.1.4
+   Compiling getrandom v0.4.3
+   Compiling version_check v0.9.5
+   Compiling regex-syntax v0.8.11
+   Compiling rand_core v0.6.4
+   Compiling serde v1.0.219
+   Compiling typenum v1.20.1
+   Compiling cfg-if v1.0.4
+   Compiling phf_shared v0.11.3
+   Compiling siphasher v1.0.3
+   Compiling camino v1.2.5
+   Compiling once_cell v1.21.4
+   Compiling rand v0.8.7
+   Compiling bitflags v2.13.1
+   Compiling linux-raw-sys v0.12.1
+   Compiling generic-array v0.14.7
+   Compiling fastrand v2.5.0
+   Compiling hashbrown v0.15.5
+   Compiling serde_json v1.0.140
+   Compiling equivalent v1.0.2
+   Compiling num-traits v0.2.19
+   Compiling fs-err v3.3.1
+   Compiling thiserror v2.0.12
+   Compiling phf_generator v0.11.3
+   Compiling phf v0.11.3
+   Compiling itoa v1.0.18
+   Compiling ryu v1.0.23
+   Compiling bytes v1.12.1
+   Compiling static_assertions v1.1.0
+   Compiling phf_codegen v0.11.3
+   Compiling sha1_smol v1.0.1
+   Compiling memchr v2.8.3
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling heck v0.5.0
+   Compiling indexmap v2.11.1
+   Compiling regex-automata v0.4.18
+   Compiling errno v0.3.14
+   Compiling cpufeatures v0.2.17
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling syn v2.0.119
+   Compiling digest v0.10.7
+   Compiling uniffi_core v0.32.0
+   Compiling chrono v0.4.41
+   Compiling sha2 v0.10.9
+   Compiling tempfile v3.27.0
+   Compiling regex v1.13.1
+   Compiling parse-zoneinfo v0.3.1
+   Compiling chrono-tz-build v0.4.1
+   Compiling chrono-tz v0.10.3
+   Compiling serde_derive v1.0.219
+   Compiling uniffi_internal_macros v0.32.0
+   Compiling thiserror-impl v2.0.12
+   Compiling uniffi_pipeline v0.32.0
+   Compiling uniffi_meta v0.32.0
+   Compiling uuid v1.16.0
+   Compiling serde_spanned v1.0.0
+   Compiling toml_datetime v0.7.0
+   Compiling toml v0.9.5
+   Compiling uniffi_macros v0.32.0
+   Compiling uniffi v0.32.0
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 11.86s
+    Building armeabi-v7a (armv7-linux-androideabi)
+   Compiling typenum v1.20.1
+   Compiling libc v0.2.189
+   Compiling cfg-if v1.0.4
+   Compiling generic-array v0.14.7
+   Compiling num-traits v0.2.19
+   Compiling rustix v1.1.4
+   Compiling getrandom v0.4.3
+   Compiling anyhow v1.0.104
+   Compiling once_cell v1.21.4
+   Compiling serde v1.0.219
+   Compiling linux-raw-sys v0.12.1
+   Compiling bitflags v2.13.1
+   Compiling siphasher v1.0.3
+   Compiling hashbrown v0.15.5
+   Compiling equivalent v1.0.2
+   Compiling fastrand v2.5.0
+   Compiling serde_json v1.0.140
+   Compiling thiserror v2.0.12
+   Compiling chrono-tz v0.10.3
+   Compiling itoa v1.0.18
+   Compiling phf_shared v0.11.3
+   Compiling memchr v2.8.3
+   Compiling bytes v1.12.1
+   Compiling static_assertions v1.1.0
+   Compiling heck v0.5.0
+   Compiling ryu v1.0.23
+   Compiling sha1_smol v1.0.1
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling phf v0.11.3
+   Compiling indexmap v2.11.1
+   Compiling uniffi_core v0.32.0
+   Compiling errno v0.3.14
+   Compiling chrono v0.4.41
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling tempfile v3.27.0
+   Compiling uuid v1.16.0
+   Compiling uniffi_pipeline v0.32.0
+   Compiling uniffi v0.32.0
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.30s
+    Building x86_64 (x86_64-linux-android)
+   Compiling typenum v1.20.1
+   Compiling cfg-if v1.0.4
+   Compiling libc v0.2.189
+   Compiling generic-array v0.14.7
+   Compiling num-traits v0.2.19
+   Compiling getrandom v0.4.3
+   Compiling rustix v1.1.4
+   Compiling anyhow v1.0.104
+   Compiling serde v1.0.219
+   Compiling linux-raw-sys v0.12.1
+   Compiling once_cell v1.21.4
+   Compiling siphasher v1.0.3
+   Compiling bitflags v2.13.1
+   Compiling equivalent v1.0.2
+   Compiling fastrand v2.5.0
+   Compiling hashbrown v0.15.5
+   Compiling serde_json v1.0.140
+   Compiling thiserror v2.0.12
+   Compiling chrono-tz v0.10.3
+   Compiling sha1_smol v1.0.1
+   Compiling static_assertions v1.1.0
+   Compiling memchr v2.8.3
+   Compiling phf_shared v0.11.3
+   Compiling ryu v1.0.23
+   Compiling cpufeatures v0.2.17
+   Compiling itoa v1.0.18
+   Compiling heck v0.5.0
+   Compiling bytes v1.12.1
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling phf v0.11.3
+   Compiling indexmap v2.11.1
+   Compiling errno v0.3.14
+   Compiling uniffi_core v0.32.0
+   Compiling chrono v0.4.41
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling tempfile v3.27.0
+   Compiling uniffi_pipeline v0.32.0
+   Compiling uuid v1.16.0
+   Compiling uniffi v0.32.0
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.34s
+    Building x86 (i686-linux-android)
+   Compiling cfg-if v1.0.4
+   Compiling libc v0.2.189
+   Compiling typenum v1.20.1
+   Compiling generic-array v0.14.7
+   Compiling num-traits v0.2.19
+   Compiling anyhow v1.0.104
+   Compiling getrandom v0.4.3
+   Compiling rustix v1.1.4
+   Compiling once_cell v1.21.4
+   Compiling bitflags v2.13.1
+   Compiling serde v1.0.219
+   Compiling siphasher v1.0.3
+   Compiling linux-raw-sys v0.12.1
+   Compiling fastrand v2.5.0
+   Compiling hashbrown v0.15.5
+   Compiling equivalent v1.0.2
+   Compiling thiserror v2.0.12
+   Compiling serde_json v1.0.140
+   Compiling chrono-tz v0.10.3
+   Compiling memchr v2.8.3
+   Compiling ryu v1.0.23
+   Compiling sha1_smol v1.0.1
+   Compiling heck v0.5.0
+   Compiling itoa v1.0.18
+   Compiling phf_shared v0.11.3
+   Compiling cpufeatures v0.2.17
+   Compiling static_assertions v1.1.0
+   Compiling bytes v1.12.1
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling phf v0.11.3
+   Compiling errno v0.3.14
+   Compiling indexmap v2.11.1
+   Compiling chrono v0.4.41
+   Compiling uniffi_core v0.32.0
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling tempfile v3.27.0
+   Compiling uniffi_pipeline v0.32.0
+   Compiling uuid v1.16.0
+   Compiling uniffi v0.32.0
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.56s
+     Copying libraries to /private/tmp/vox-apple-signal3-20261108/apps/android/core-bridge/build/generated/vox-native/debug/jniLibs
+Built libvox_core_uniffi.so for Android API 28: arm64-v8a armeabi-v7a x86_64 x86
+
+> Task :core-bridge:mergeDebugJniLibFolders
+> Task :core-bridge:mergeDebugNativeLibs
+> Task :core-bridge:copyDebugJniLibsProjectOnly
+> Task :data:mergeDebugAndroidTestNativeLibs
+
+> Task :data:stripDebugAndroidTestDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libdatastore_shared_counter.so, libjnidispatch.so, libvox_core_uniffi.so. Run with --info option to learn more.
+
+> Task :data:packageDebugAndroidTest
+> Task :data:assembleDebugAndroidTest
+> Task :data:createDebugAndroidTestApkListingFileRedirect
+
+BUILD SUCCESSFUL in 48s
+98 actionable tasks: 32 executed, 7 from cache, 59 up-to-date
+Configuration cache entry stored.

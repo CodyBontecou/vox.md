@@ -252,7 +252,8 @@ public enum CaptureCoreAdmission {
             case .url(let url, let title):
                 let absolute = url.absoluteString
                 let label = title ?? ""
-                guard (absolute.hasPrefix("http://") || absolute.hasPrefix("https://")),
+                guard CaptureWebLink.isValid(url),
+                      (absolute.hasPrefix("http://") || absolute.hasPrefix("https://")),
                       (1...maximumURLCharacters).contains(absolute.unicodeScalars.count),
                       label.unicodeScalars.count <= maximumLabelCharacters else {
                     throw CaptureCoreAdmissionError.unsupportedPayload

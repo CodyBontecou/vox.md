@@ -83,6 +83,9 @@ internal class URLDeliverySecretStore(context: Context) {
 }
 
 internal enum class URLDeliveryPhase { QUEUED, SENDING, DELIVERED, FAILED, UNKNOWN, DISCARDED }
+
+internal fun urlDeliveryAllowsCaptureDiscard(phase: URLDeliveryPhase?): Boolean =
+    phase == null || phase == URLDeliveryPhase.DISCARDED
 internal data class URLDeliveryReceipt(val id: String, val origin: String, val phase: URLDeliveryPhase, val attempts: Int, val maxAttempts: Int, val code: Int? = null, val admitted: Boolean = false)
 
 internal class URLDeliveryOutbox(context: Context, private val openConnection: (URI) -> HttpURLConnection = { it.toURL().openConnection() as HttpURLConnection }) {
@@ -150,6 +153,11 @@ internal class URLDeliveryOutbox(context: Context, private val openConnection: (
         save(receipt.copy(phase = URLDeliveryPhase.QUEUED, code = null))
         URLDeliveryWorker.schedule(appContext)
     }
+    /** No new URL send can start after this returns true: terminal discard never requeues. */
+    fun canDiscardLocalCapture(id: String): Boolean = synchronized(LOCK) {
+        urlDeliveryAllowsCaptureDiscard(if (receiptFile(id).baseFile.exists()) load(id).phase else null)
+    }
+
     fun discard(id: String) = synchronized(LOCK) {
         val receipt = load(id); require(receipt.phase != URLDeliveryPhase.SENDING)
         save(receipt.copy(phase = URLDeliveryPhase.DISCARDED)); secrets.delete(id)

@@ -119,14 +119,14 @@ final class CaptureMarkdownRendererTests: XCTestCase {
         }
     }
 
-    func test_urlPayloadRejectsNonHTTPProtocols() throws {
+    func test_urlPayloadRejectsNonHTTPProtocolsAndMissingHosts() throws {
         let destination = CaptureDestination(
             name: "Inbox",
             rootBookmark: Data([1]),
             rootName: "Vault",
             noteTarget: .existingNote(relativePath: "Inbox.md")
         )
-        for value in ["file:///private/secret", "javascript:alert(1)"] {
+        for value in ["file:///private/secret", "javascript:alert(1)", "https://", "https:example.com", "https:///notes"] {
             let request = CaptureRequest(
                 source: .shareExtension,
                 destinationID: destination.id,

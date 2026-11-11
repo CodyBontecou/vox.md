@@ -1,8 +1,9 @@
 package md.vox.android
 
+import md.vox.android.capturedomain.CaptureWebLink
+
 import android.content.Intent
 import android.net.Uri
-import java.net.URI
 import java.util.UUID
 
 internal enum class ExternalCaptureAction {
@@ -68,7 +69,7 @@ internal object ExternalCaptureRequestParser {
         val host = uri.host?.lowercase() ?: return null
         if (host !in SUPPORTED_HOSTS) return null
         val text = uri.getQueryParameter("text").orEmpty()
-        val url = uri.getQueryParameter("url")?.takeIf(::isHttpURL)
+        val url = CaptureWebLink.normalize(uri.getQueryParameter("url"))
         val preset = uri.getQueryParameter("preset")?.takeIf(::isValidPresetID)
         val action = if (host in RECORDING_HOSTS || uri.getQueryParameter("action") == "voice") {
             ExternalCaptureAction.RECORD
@@ -108,7 +109,7 @@ internal object ExternalCaptureRequestParser {
         attachmentUris: List<String>,
     ): ExternalCaptureRequest? {
         val parts = textValues.map { it.toString().trim() }.filter(String::isNotEmpty)
-        val singleURL = parts.singleOrNull()?.takeIf(::isHttpURL)
+        val singleURL = CaptureWebLink.normalize(parts.singleOrNull())
         val normalizedTitle = title?.toString()?.trim().orEmpty()
         val text = when {
             singleURL != null -> normalizedTitle
@@ -140,16 +141,53 @@ internal object ExternalCaptureRequestParser {
     private fun Intent.charSequenceArrayListExtra(name: String): List<CharSequence> =
         @Suppress("DEPRECATION") (getCharSequenceArrayListExtra(name).orEmpty())
 
-    private fun isHttpURL(value: String): Boolean = runCatching {
-        val uri = URI(value.trim())
-        uri.scheme?.lowercase() in setOf("http", "https") && !uri.host.isNullOrBlank()
-    }.getOrDefault(false)
-
     private fun isValidPresetID(value: String): Boolean = runCatching { UUID.fromString(value); true }.getOrDefault(false)
+
+    /**
+     * Whether [intent] should be parsed as a fresh external request when the activity is created.
+     * A recreated activity (rotation, locale change, process death) still carries the intent that
+     * originally launched it, and so does a launch from Recents; replaying it would overwrite the
+     * user's draft or resurrect content that was already sent.
+     */
+    fun shouldParseOnCreate(intentFlags: Int?, restoredRequestHandled: Boolean?): Boolean {
+        intentFlags ?: return false
+        if (restoredRequestHandled == true) return false
+        return intentFlags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY == 0
+    }
 
     private val SUPPORTED_HOSTS = setOf("capture", "capture-request", "listen", "record", "widget-record")
     private val RECORDING_HOSTS = setOf("listen", "record", "widget-record")
     private val SUPPORTED_CAPTURE_SOURCES = setOf("app", "share", "keyboard", "widget", "shortcut")
     private const val MAX_TEXT_CHARACTERS = 65_536
     private const val MAX_ATTACHMENTS = 32
+}
+
+internal data class MergedExternalDraft(val text: String, val url: String?)
+
+/**
+ * Combines an incoming external request with the draft the user already has, so that a widget,
+ * shortcut, record link or attachment-only share never erases typed text. Incoming text is
+ * appended after a blank line; text the draft already contains is not duplicated.
+ */
+internal fun mergeExternalDraft(
+    existingText: String,
+    existingURL: String?,
+    incomingText: String,
+    incomingURL: String?,
+    maxCharacters: Int = 65_536,
+): MergedExternalDraft {
+    val incomingParts = buildList {
+        incomingText.trim().takeIf(String::isNotEmpty)?.let(::add)
+        // The draft holds a single URL; keep the existing one and carry a different incoming URL as text.
+        if (incomingURL != null && existingURL != null && incomingURL != existingURL) add(incomingURL)
+    }.filterNot { existingText.contains(it) }
+    val text = when {
+        existingText.isBlank() -> incomingParts.joinToString("\n\n")
+        incomingParts.isEmpty() -> existingText
+        else -> existingText.trimEnd() + "\n\n" + incomingParts.joinToString("\n\n")
+    }
+    return MergedExternalDraft(
+        text = text.take(maxCharacters),
+        url = existingURL ?: incomingURL,
+    )
 }

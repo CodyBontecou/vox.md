@@ -55,7 +55,7 @@ private struct RecordingQueuePreferencesView: View {
 
                 preferenceField(
                     title: "Original Audio",
-                    detail: "Failed recordings stay here until you retry or delete them."
+                    detail: String(localized: "Failed recordings stay here until you retry or delete them.")
                 ) {
                     Menu {
                         Button("After Processing") {

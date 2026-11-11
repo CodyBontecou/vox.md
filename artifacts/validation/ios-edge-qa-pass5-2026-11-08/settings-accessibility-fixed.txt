@@ -1,0 +1,97 @@
+{
+  "completed": 4,
+  "total": 4,
+  "steps": [
+    {
+      "tool": "gesture-tap",
+      "result": {
+        "tapped": true,
+        "timestampMs": 1794141289782
+      }
+    },
+    {
+      "tool": "await-ui-element",
+      "result": {
+        "success": true,
+        "elapsed": 866
+      }
+    },
+    {
+      "tool": "gesture-swipe",
+      "result": {
+        "swiped": true,
+        "timestampMs": 1794141290908
+      }
+    },
+    {
+      "tool": "gesture-swipe",
+      "result": {
+        "swiped": true,
+        "timestampMs": 1794141291467
+      }
+    }
+  ]
+}
+--- Screen after action ---
+Saved: /var/folders/vh/t562rzcx5dx1w0j01ky690rm0000gn/T/simserver-mMXYIx/media/580191000-1794141292596.png
+--- Elements after action (describe) ---
+Source: ax-service
+Mode: flat
+Coordinates are normalized [0,1] fractions of the screen (x, y, width, height), not pixels.
+Pass them straight to gesture-tap / gesture-swipe / gesture-pinch, which expect this same space.
+To tap an element, use its centre: tap_x = frame.x + frame.width / 2, tap_y = frame.y + frame.height / 2.
+
+ROOT  AXGroup (0.000, 0.000, 1.000, 1.000)
+
+  AXGroup "Toolbar" id="Toolbar"  (0.000, 0.000, 1.000, 1.000)
+  AXButton "Keyboard, 5 routes pinned" id="settings_keyboard_routes"  (0.036, 0.000, 0.927, 0.022)
+  AXStaticText "5 routes pinned"  (0.068, 0.000, 0.225, 0.009)
+  AXButton "Apple Watch, Default · Gelen Kutusu · Günlük · Görevler · Toplantı Notları" id="settings_watch_routes"  (0.036, 0.023, 0.927, 0.063)
+  AXStaticText "Apple Watch"  (0.068, 0.035, 0.217, 0.022)
+  AXImage "Forward" id="chevron.right"  (0.915, 0.048, 0.015, 0.012)
+  AXStaticText "Default · Gelen Kutusu · Günlük · Görevler · Toplantı Notları"  (0.068, 0.058, 0.765, 0.015)
+  AXAdjustable "Vertical scroll bar, 3 pages" value="52%"  (0.925, 0.065, 0.068, 0.870)
+  AXButton "Shortcuts & Control Center, Action button → Default route" id="settings_shortcuts"  (0.036, 0.087, 0.927, 0.063)
+  AXStaticText "Shortcuts & Control Center"  (0.068, 0.099, 0.460, 0.022)
+  AXImage "Forward" id="chevron.right"  (0.915, 0.112, 0.015, 0.012)
+  AXStaticText "Action button → Default route"  (0.068, 0.122, 0.436, 0.015)
+  AXHeading "ACCOUNT"  (0.045, 0.167, 0.116, 0.015)
+  AXStaticText "Vox.md Lifetime, One-time purchase · Family Sharing off"  (0.036, 0.186, 0.927, 0.063)
+  AXStaticText "Vox.md Lifetime"  (0.068, 0.198, 0.272, 0.022)
+  AXStaticText "One-time purchase · Family Sharing off"  (0.068, 0.221, 0.570, 0.015)
+  AXButton "Help & feedback, Version 3.0 (59)" id="settings_help"  (0.036, 0.250, 0.927, 0.063)
+  AXStaticText "Help & feedback"  (0.068, 0.263, 0.281, 0.022)
+  AXImage "Forward" id="chevron.right"  (0.915, 0.275, 0.015, 0.012)
+  AXStaticText "Version 3.0 (59)"  (0.068, 0.286, 0.240, 0.015)
+  AXHeading "ACTIVITY"  (0.045, 0.330, 0.133, 0.015)
+  AXButton "Stats, Recordings, recording time, and Capture activity"  (0.036, 0.349, 0.927, 0.064)
+  AXStaticText "Stats"  (0.068, 0.362, 0.091, 0.022)
+  AXImage "Forward" id="chevron.right"  (0.915, 0.375, 0.015, 0.012)
+  AXStaticText "Recordings, recording time, and Capture activity"  (0.068, 0.386, 0.720, 0.015)
+  AXHeading "QUEUES & RECOVERY"  (0.045, 0.430, 0.281, 0.015)
+  AXButton "Open Activity, Manage queued audio and choose processing and retention defaults"  (0.036, 0.449, 0.927, 0.079)
+  AXStaticText "Open Activity"  (0.068, 0.462, 0.230, 0.022)
+  AXImage "Forward" id="chevron.right"  (0.915, 0.483, 0.015, 0.012)
+  AXStaticText "Manage queued audio and choose processing and retention defaults"  (0.068, 0.486, 0.690, 0.030)
+  AXButton "URL Deliveries, Review saved HTTP payloads, retry with corrected credentials, or discard" id="settings_url_deliveries"  (0.036, 0.529, 0.927, 0.079)
+  AXStaticText "URL Deliveries"  (0.068, 0.542, 0.248, 0.022)
+  AXImage "Forward" id="chevron.right"  (0.915, 0.563, 0.015, 0.012)
+  AXStaticText "Review saved HTTP payloads, retry with corrected credentials, or discard"  (0.068, 0.566, 0.736, 0.030)
+  AXHeading "CUSTOMIZATION"  (0.045, 0.625, 0.215, 0.015)
+  AXButton "Capture Bar, Choose, reorder, and hide quick actions"  (0.036, 0.644, 0.927, 0.064)
+  AXStaticText "Capture Bar"  (0.068, 0.657, 0.206, 0.022)
+  AXImage "Forward" id="chevron.right"  (0.915, 0.671, 0.015, 0.012)
+  AXStaticText "Choose, reorder, and hide quick actions"  (0.068, 0.681, 0.586, 0.015)
+  AXButton "App Language, Choose which language Vox.md uses, English"  (0.036, 0.710, 0.927, 0.064)
+  AXStaticText "App Language"  (0.068, 0.722, 0.246, 0.022)
+  AXStaticText "English"  (0.780, 0.732, 0.107, 0.019)
+  AXImage "Forward" id="chevron.right"  (0.915, 0.735, 0.015, 0.012)
+  AXStaticText "Choose which language Vox.md uses"  (0.068, 0.746, 0.495, 0.015)
+  AXHeading "KEYBOARD"  (0.045, 0.790, 0.133, 0.015)
+  AXStaticText "Haptic Feedback"  (0.068, 0.822, 0.288, 0.022)
+  AXButton "Haptic Feedback" value="1"  (0.793, 0.838, 0.139, 0.029)
+  AXStaticText "Vibrate on key press. Requires Allow Full Access."  (0.068, 0.846, 0.495, 0.036)
+  AXHeading "LOCK SCREEN"  (0.045, 0.911, 0.182, 0.015)
+  AXStaticText "Live Activity Monitor"  (0.068, 0.943, 0.348, 0.022)
+  AXStaticText "Show Vox.md status and Record/Stop controls on the Lock Screen and Dynamic Island while listening."  (0.068, 0.967, 0.638, 0.033)
+  AXButton "Live Activity Monitor" value="1"  (0.793, 0.967, 0.139, 0.029)

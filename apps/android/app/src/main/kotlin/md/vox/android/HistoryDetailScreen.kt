@@ -27,8 +27,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import md.vox.android.ui.SignalRouteTile
 import md.vox.android.ui.SignalRouteTone
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -101,14 +99,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import md.vox.android.capturedomain.CaptureHistoryDetail
 import md.vox.android.capturedomain.CaptureProcessingMode
 import md.vox.android.capturedomain.CaptureState
@@ -230,6 +224,14 @@ internal fun captureRouteLogEntries(detail: CaptureHistoryDetail): List<CaptureR
             detail = captureSourceUiText(detail.captureSource),
         ),
     )
+    detail.recoverySourceRequestID?.let {
+        add(CaptureRouteLogEntry(voxUiText("Recovered from another capture"), CaptureRouteLogOutcome.SUCCEEDED,
+            detail = voxUiText("%@: %@", voxUiText("Capture"), it)))
+    }
+    detail.replacementRequestID?.let {
+        add(CaptureRouteLogEntry(voxUiText("Replaced by an explicit recovery"), CaptureRouteLogOutcome.SUCCEEDED,
+            detail = voxUiText("%@: %@", voxUiText("Capture"), it)))
+    }
     detail.processingMode?.takeIf { it != CaptureProcessingMode.NONE }?.let { mode ->
         val (title, outcome) = when (detail.processingOutcome) {
             CaptureTextProcessingOutcome.APPLIED, CaptureTextProcessingOutcome.UNCHANGED ->
@@ -326,33 +328,15 @@ internal fun HistoryDetailScreen(
     initialTab: CaptureDetailTab = CaptureDetailTab.WRITTEN,
 ) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val signal = Signal.colors
     var exportMenuOpen by remember { mutableStateOf(false) }
-    var pendingFormat by remember { mutableStateOf<HistoryExportFormat?>(null) }
     var operationMessage by remember { mutableStateOf(initialOperationMessage) }
     var showsDeleteConfirmation by remember { mutableStateOf(initialShowsDeleteConfirmation) }
     var tab by rememberSaveable(detail?.requestID) { mutableStateOf(initialTab) }
-    val createDocument = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("*/*")) { uri ->
-        val format = pendingFormat
-        pendingFormat = null
-        if (uri != null && format != null && detail != null) {
-            scope.launch {
-                val saved = withContext(Dispatchers.IO) {
-                    runCatching {
-                        context.contentResolver.openOutputStream(uri, "w")?.use { output ->
-                            output.write(HistoryDetailExporter.render(detail, format).toByteArray(Charsets.UTF_8))
-                            output.flush()
-                        } != null
-                    }.getOrDefault(false)
-                }
-                operationMessage = if (saved) {
-                    voxUiText("%@ exported.", format.uiText())
-                } else {
-                    voxUiText("The export could not be written.")
-                }
-            }
-        }
+    val exportDocument = rememberDetailExport { formatName, written ->
+        val format = HistoryExportFormat.valueOf(formatName)
+        operationMessage = if (written) voxUiText("%@ exported.", format.uiText())
+            else voxUiText("The export could not be written.")
     }
 
     Column(
@@ -484,8 +468,7 @@ internal fun HistoryDetailScreen(
                                 onSelect = { index ->
                                     val format = HistoryExportFormat.entries[index]
                                     exportMenuOpen = false
-                                    pendingFormat = format
-                                    createDocument.launch("vox-capture-${detail.requestID.take(8)}.${format.extension}")
+                                    exportDocument(format.name, HistoryDetailExporter.render(detail, format), "vox-capture-${detail.requestID.take(8)}.${format.extension}")
                                 },
                             )
                         }

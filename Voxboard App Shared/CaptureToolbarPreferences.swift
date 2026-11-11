@@ -11,42 +11,8 @@ enum CapturePreferenceKeys {
     /// "Send Immediately"). Stored as the `CaptureRecordingMode` raw value;
     /// absent means `.draft` (the fresh-install and 2.8 migration default).
     static let defaultRecordingResultMode = "capture.voice.defaultResult.v1"
-    /// One-way onboarding completion, independent of toolbar resets or app versions.
-    static let micHoldHintDismissed = "capture.voice.micHoldHintDismissed.v1"
-    /// Whether pinned Capture Presets are expanded beside the composer. An
-    /// absent value is intentionally collapsed for a compact first launch.
-    static let presetQuickAccessRailExpanded = "capture.presets.quickAccess.railExpanded.v1"
-    /// Physical screen edge for the floating pinned-preset alternatives rail.
-    static let presetQuickAccessRailSide = "capture.presets.quickAccess.railSide.v1"
     /// Explicit hour cycle for the Capture Bar's Insert Timestamp action.
     static let timestampFormat = "capture.toolbar.timestampFormat.v1"
-}
-
-/// A thumb-reach preference, intentionally expressed as physical screen edges.
-/// Mapping to SwiftUI's logical alignments accounts for layout direction while
-/// leaving the rail's child content in the user's natural semantic direction.
-enum CapturePresetQuickAccessRailSide: String, CaseIterable, Hashable, Identifiable {
-    case left
-    case right
-
-    static let `default`: Self = .left
-
-    var id: String { rawValue }
-
-    init(persistedRawValue: String?) {
-        self = Self(rawValue: persistedRawValue ?? "") ?? .default
-    }
-
-    func overlayAlignment(for layoutDirection: LayoutDirection) -> Alignment {
-        switch (self, layoutDirection) {
-        case (.left, .leftToRight), (.right, .rightToLeft):
-            return .leading
-        case (.left, .rightToLeft), (.right, .leftToRight):
-            return .trailing
-        @unknown default:
-            return self == .left ? .leading : .trailing
-        }
-    }
 }
 
 /// The quick actions users can place in the capture bar. The catalog (raw
@@ -207,7 +173,6 @@ final class CaptureToolbarPreferences {
     private(set) var orderedActions: [CaptureToolbarAction]
     private(set) var hiddenActions: Set<CaptureToolbarAction>
     private(set) var confirmsVoiceNotesBeforeAdding: Bool
-    private(set) var presetQuickAccessRailSide: CapturePresetQuickAccessRailSide
     private(set) var timestampFormat: CaptureTimestampFormat
     /// Ordered pins for routes the user customized. Routes absent here use
     /// `visibleActions`.
@@ -245,9 +210,6 @@ final class CaptureToolbarPreferences {
         }
         hiddenActions = hidden
         confirmsVoiceNotesBeforeAdding = defaults.bool(forKey: CapturePreferenceKeys.confirmVoiceNoteBeforeAdding)
-        presetQuickAccessRailSide = CapturePresetQuickAccessRailSide(
-            persistedRawValue: defaults.string(forKey: CapturePreferenceKeys.presetQuickAccessRailSide)
-        )
         timestampFormat = defaults.string(forKey: CapturePreferenceKeys.timestampFormat)
             .flatMap(CaptureTimestampFormat.init(rawValue:))
             ?? .default
@@ -429,11 +391,6 @@ final class CaptureToolbarPreferences {
         defaults.set(shouldConfirm, forKey: CapturePreferenceKeys.confirmVoiceNoteBeforeAdding)
     }
 
-    func setPresetQuickAccessRailSide(_ side: CapturePresetQuickAccessRailSide) {
-        presetQuickAccessRailSide = side
-        defaults.set(side.rawValue, forKey: CapturePreferenceKeys.presetQuickAccessRailSide)
-    }
-
     func setTimestampFormat(_ format: CaptureTimestampFormat) {
         timestampFormat = format
         defaults.set(format.rawValue, forKey: CapturePreferenceKeys.timestampFormat)
@@ -481,12 +438,14 @@ struct CaptureToolbarSettingsView: View {
                     HStack(spacing: Geist.Spacing.three) {
                         actionIcon(action)
                             .frame(width: 24)
+                            .accessibilityHidden(true)
                         Text(action.title)
 
                         Spacer()
                         Toggle("", isOn: visibilityBinding(for: action))
                             .labelsHidden()
                             .tint(Geist.Palette.gray1000)
+                            .accessibilityLabel(action.title)
                     }
                 }
                 .onMove(perform: preferences.moveActions)
@@ -524,19 +483,6 @@ struct CaptureToolbarSettingsView: View {
                 Text("Quick Actions per Route")
             } footer: {
                 Text("Pin a different row for each route. It shows above the keyboard while that route is selected.")
-            }
-
-            Section {
-                Picker("Side", selection: presetRailSideBinding) {
-                    Text("Left").tag(CapturePresetQuickAccessRailSide.left)
-                    Text("Right").tag(CapturePresetQuickAccessRailSide.right)
-                }
-                .pickerStyle(.segmented)
-                .accessibilityIdentifier("capture_preset_rail_side")
-            } header: {
-                Text("Pinned Route Rail")
-            } footer: {
-                Text("Choose the physical screen edge for pinned route alternatives. The selected route and Send stay in their usual positions.")
             }
 
             Section {
@@ -610,13 +556,6 @@ struct CaptureToolbarSettingsView: View {
         Binding(
             get: { preferences.confirmsVoiceNotesBeforeAdding },
             set: { preferences.setConfirmsVoiceNotesBeforeAdding($0) }
-        )
-    }
-
-    private var presetRailSideBinding: Binding<CapturePresetQuickAccessRailSide> {
-        Binding(
-            get: { preferences.presetQuickAccessRailSide },
-            set: { preferences.setPresetQuickAccessRailSide($0) }
         )
     }
 

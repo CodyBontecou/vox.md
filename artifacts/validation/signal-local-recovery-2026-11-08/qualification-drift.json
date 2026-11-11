@@ -1,0 +1,263 @@
+{
+  "actualAndroidModelBytesVerified": false,
+  "changedInputCount": 6,
+  "conclusion": "Historical source hashes match their real commit; current source differs. Declared model pins are unchanged. A full Android model/instrumentation run remains required.",
+  "declaredModelPins": [
+    {
+      "currentDeclaredSHA256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+      "declaredPinMatches": true,
+      "fixture": "instruction-model.gguf",
+      "receiptSHA256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e"
+    },
+    {
+      "currentDeclaredSHA256": "dcfea5712c43a43ba7ae8083afb39d36993e5a69c46e88b68aaa72b65cb615bb",
+      "declaredPinMatches": true,
+      "fixture": "vosk-api-test.wav",
+      "receiptSHA256": "dcfea5712c43a43ba7ae8083afb39d36993e5a69c46e88b68aaa72b65cb615bb"
+    },
+    {
+      "currentDeclaredSHA256": "30f26242c4eb449f948e42cb302dd7a686cb29a3423a8367f99ff41780942498",
+      "declaredPinMatches": true,
+      "fixture": "vosk-model-small-en-us-0.15.zip",
+      "receiptSHA256": "30f26242c4eb449f948e42cb302dd7a686cb29a3423a8367f99ff41780942498"
+    },
+    {
+      "currentDeclaredSHA256": "a74d8f51144484813e16af689bb0f916b7a111e2347f467c4933c1166097b5a7",
+      "declaredPinMatches": true,
+      "fixture": "vosk-model-spk-0.4.zip",
+      "receiptSHA256": "a74d8f51144484813e16af689bb0f916b7a111e2347f467c4933c1166097b5a7"
+    }
+  ],
+  "fullPhoneQualificationRenewed": false,
+  "kind": "retained-qualification-source-model-audit",
+  "recordedRevision": "68db4cb8e1cd90aee8657df95ad4716f84f49d2c",
+  "schemaVersion": 1,
+  "sourceInputs": [
+    {
+      "changed": false,
+      "currentSHA256": "b7874138ebd150d4288a53643d4add5dc7b454c29d130cb07ebcc1174dbdbe42",
+      "historicalHashMatches": true,
+      "path": "Packages/VoxboardShared/Sources/VoxboardIntelligenceEvaluation/SpeakerBenchmark.swift",
+      "receiptSHA256": "b7874138ebd150d4288a53643d4add5dc7b454c29d130cb07ebcc1174dbdbe42",
+      "recordedRevisionSHA256": "b7874138ebd150d4288a53643d4add5dc7b454c29d130cb07ebcc1174dbdbe42"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "404af826b7ef55c5e2632d2c0a4824024f280f7543f15ee0d6d062d4a14e6e82",
+      "historicalHashMatches": true,
+      "path": "Packages/VoxboardShared/Sources/VoxboardIntelligenceEvaluation/main.swift",
+      "receiptSHA256": "404af826b7ef55c5e2632d2c0a4824024f280f7543f15ee0d6d062d4a14e6e82",
+      "recordedRevisionSHA256": "404af826b7ef55c5e2632d2c0a4824024f280f7543f15ee0d6d062d4a14e6e82"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "74f7924d5858317e1f226583ffb85ed443a21f93a216d8838e7e9330dcc6e73e",
+      "historicalHashMatches": true,
+      "path": "Packages/VoxboardShared/Sources/VoxboardShared/IntelligenceEvaluation.swift",
+      "receiptSHA256": "74f7924d5858317e1f226583ffb85ed443a21f93a216d8838e7e9330dcc6e73e",
+      "recordedRevisionSHA256": "74f7924d5858317e1f226583ffb85ed443a21f93a216d8838e7e9330dcc6e73e"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "bd311accf549a55fbe1cb2eaff678a4cadb28a19c9c5e9fda2822c56430814a9",
+      "historicalHashMatches": true,
+      "path": "Packages/VoxboardShared/Sources/VoxboardShared/SpeakerDiarizationService.swift",
+      "receiptSHA256": "bd311accf549a55fbe1cb2eaff678a4cadb28a19c9c5e9fda2822c56430814a9",
+      "recordedRevisionSHA256": "bd311accf549a55fbe1cb2eaff678a4cadb28a19c9c5e9fda2822c56430814a9"
+    },
+    {
+      "changed": true,
+      "currentSHA256": "d6259a4ab512d34b34a6cd34195965fa10f2018c8f5e2afc94bb0882fe2bbd2e",
+      "historicalHashMatches": true,
+      "path": "Packages/vox-core-rust/crates/vox-core/src/lib.rs",
+      "receiptSHA256": "26f0e9ba806519c0853123775f3377220bce6cfe40b087f4fb72da424acc3d71",
+      "recordedRevisionSHA256": "26f0e9ba806519c0853123775f3377220bce6cfe40b087f4fb72da424acc3d71"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "c11a8a8cb6ef2fcc110bbec585cb21fc04e9a136a43b710cac02ac726b1971a1",
+      "historicalHashMatches": true,
+      "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/LocalSpeechInferenceInstrumentationTest.kt",
+      "receiptSHA256": "c11a8a8cb6ef2fcc110bbec585cb21fc04e9a136a43b710cac02ac726b1971a1",
+      "recordedRevisionSHA256": "c11a8a8cb6ef2fcc110bbec585cb21fc04e9a136a43b710cac02ac726b1971a1"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "d78c4c06e38507d77ea0d4450ddc44aaa39590219fa21435ecb28309a5bd0033",
+      "historicalHashMatches": true,
+      "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/NamedModelInferenceInstrumentationTest.kt",
+      "receiptSHA256": "d78c4c06e38507d77ea0d4450ddc44aaa39590219fa21435ecb28309a5bd0033",
+      "recordedRevisionSHA256": "d78c4c06e38507d77ea0d4450ddc44aaa39590219fa21435ecb28309a5bd0033"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "495da8b7bd676808f8c2b60c6c2fb2ceb807f26fa052cbf7761865afad0cd137",
+      "historicalHashMatches": true,
+      "path": "apps/android/app/src/androidTest/kotlin/md/vox/android/OnDeviceIntelligenceEvaluationInstrumentationTest.kt",
+      "receiptSHA256": "495da8b7bd676808f8c2b60c6c2fb2ceb807f26fa052cbf7761865afad0cd137",
+      "recordedRevisionSHA256": "495da8b7bd676808f8c2b60c6c2fb2ceb807f26fa052cbf7761865afad0cd137"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "78571488f580feb3981c7c73c75654fde4fb4b8dd0c215ac3b5b50fdb0f2589d",
+      "historicalHashMatches": true,
+      "path": "apps/android/app/src/main/cpp/CMakeLists.txt",
+      "receiptSHA256": "78571488f580feb3981c7c73c75654fde4fb4b8dd0c215ac3b5b50fdb0f2589d",
+      "recordedRevisionSHA256": "78571488f580feb3981c7c73c75654fde4fb4b8dd0c215ac3b5b50fdb0f2589d"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "00ed04da3c3ab010afce25d9a08dc74e3aa965346b4e7d3ff1be3ff14bbab6f8",
+      "historicalHashMatches": true,
+      "path": "apps/android/app/src/main/cpp/intelligence.cpp",
+      "receiptSHA256": "00ed04da3c3ab010afce25d9a08dc74e3aa965346b4e7d3ff1be3ff14bbab6f8",
+      "recordedRevisionSHA256": "00ed04da3c3ab010afce25d9a08dc74e3aa965346b4e7d3ff1be3ff14bbab6f8"
+    },
+    {
+      "changed": true,
+      "currentSHA256": "108c6ac37051f6f64b2875e036c399ede3b966813189c546b3d3f5585880c256",
+      "historicalHashMatches": true,
+      "path": "apps/android/app/src/main/kotlin/md/vox/android/VoxApplication.kt",
+      "receiptSHA256": "96e570e6912d40d6d8626486f5e00cb8c9f5b945bb374c6659d807f7016ac5f0",
+      "recordedRevisionSHA256": "96e570e6912d40d6d8626486f5e00cb8c9f5b945bb374c6659d807f7016ac5f0"
+    },
+    {
+      "changed": true,
+      "currentSHA256": "381be2ad76330d4a43649cc94419d61c01f0290f20537fac03bcf4e685ae0336",
+      "historicalHashMatches": true,
+      "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureRepository.kt",
+      "receiptSHA256": "7ce7b99055304778c8cdf19da75312bce7baeb6867dff2eb797829467796b083",
+      "recordedRevisionSHA256": "7ce7b99055304778c8cdf19da75312bce7baeb6867dff2eb797829467796b083"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "9acb878c7e24bdc5b5074c1db275c9adee5734c5a3be48abd7fef3f05595fa20",
+      "historicalHashMatches": true,
+      "path": "apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/OnDeviceCaptureTextProcessor.kt",
+      "receiptSHA256": "9acb878c7e24bdc5b5074c1db275c9adee5734c5a3be48abd7fef3f05595fa20",
+      "recordedRevisionSHA256": "9acb878c7e24bdc5b5074c1db275c9adee5734c5a3be48abd7fef3f05595fa20"
+    },
+    {
+      "changed": true,
+      "currentSHA256": "c50ff1b68969ad8c148dd05470e5224a6de6e7c6e9a5166db2a1c38c1518a31e",
+      "historicalHashMatches": true,
+      "path": "apps/android/data/src/main/kotlin/md/vox/android/data/AndroidCaptureRepository.kt",
+      "receiptSHA256": "23b50f0f742848e9c6c5755d2f12b97fad8ad1978785e1f7993bf717f610331b",
+      "recordedRevisionSHA256": "23b50f0f742848e9c6c5755d2f12b97fad8ad1978785e1f7993bf717f610331b"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "4126b3ff675d398a05ae63ce739ec0a35514e1b1374a568fa39100f30d71a268",
+      "historicalHashMatches": true,
+      "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/AudioCapture.kt",
+      "receiptSHA256": "4126b3ff675d398a05ae63ce739ec0a35514e1b1374a568fa39100f30d71a268",
+      "recordedRevisionSHA256": "4126b3ff675d398a05ae63ce739ec0a35514e1b1374a568fa39100f30d71a268"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "7ec751fd37d6d474f2b602d64032b13ba1510ad1436aead0fe0e68608756bd98",
+      "historicalHashMatches": true,
+      "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/InstructionModelManager.kt",
+      "receiptSHA256": "7ec751fd37d6d474f2b602d64032b13ba1510ad1436aead0fe0e68608756bd98",
+      "recordedRevisionSHA256": "7ec751fd37d6d474f2b602d64032b13ba1510ad1436aead0fe0e68608756bd98"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "b70fde803e638d6b4997b79a0e5e96512f88122acad4cf651aaa0f6409e7955c",
+      "historicalHashMatches": true,
+      "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/IntelligenceEvaluation.kt",
+      "receiptSHA256": "b70fde803e638d6b4997b79a0e5e96512f88122acad4cf651aaa0f6409e7955c",
+      "recordedRevisionSHA256": "b70fde803e638d6b4997b79a0e5e96512f88122acad4cf651aaa0f6409e7955c"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "c522d443d9740072522f58d070901b249bbe1b63b068168aa163e1eaf97f7d74",
+      "historicalHashMatches": true,
+      "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalIntelligence.kt",
+      "receiptSHA256": "c522d443d9740072522f58d070901b249bbe1b63b068168aa163e1eaf97f7d74",
+      "recordedRevisionSHA256": "c522d443d9740072522f58d070901b249bbe1b63b068168aa163e1eaf97f7d74"
+    },
+    {
+      "changed": true,
+      "currentSHA256": "0d824f1e3043487653a793390e3be78a0fdd1db38e68b6f718666d0b67602272",
+      "historicalHashMatches": true,
+      "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/LocalSpeech.kt",
+      "receiptSHA256": "573f5c71966af0536eb1d683c17f141a87653ab791ef1b74ad1208081e1ee1c0",
+      "recordedRevisionSHA256": "573f5c71966af0536eb1d683c17f141a87653ab791ef1b74ad1208081e1ee1c0"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "328df6514114abb5e71292d8243bce081747149ff07b5eac27f469475f18d5e3",
+      "historicalHashMatches": true,
+      "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/RecordingFileRecovery.kt",
+      "receiptSHA256": "328df6514114abb5e71292d8243bce081747149ff07b5eac27f469475f18d5e3",
+      "recordedRevisionSHA256": "328df6514114abb5e71292d8243bce081747149ff07b5eac27f469475f18d5e3"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "70e8a93e0d4ae4305d675b529b2345b9136ca28f8c70557995bfaf6e1b5bff4f",
+      "historicalHashMatches": true,
+      "path": "apps/android/platform-services/src/main/kotlin/md/vox/android/platformservices/SpeakerDiarization.kt",
+      "receiptSHA256": "70e8a93e0d4ae4305d675b529b2345b9136ca28f8c70557995bfaf6e1b5bff4f",
+      "recordedRevisionSHA256": "70e8a93e0d4ae4305d675b529b2345b9136ca28f8c70557995bfaf6e1b5bff4f"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "636c222a1e3392dd41e88b0edd78536015d1f9d85818f12b6286da58ad4b33dc",
+      "historicalHashMatches": true,
+      "path": "apps/android/scripts/build-intelligence-native.py",
+      "receiptSHA256": "636c222a1e3392dd41e88b0edd78536015d1f9d85818f12b6286da58ad4b33dc",
+      "recordedRevisionSHA256": "636c222a1e3392dd41e88b0edd78536015d1f9d85818f12b6286da58ad4b33dc"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "fef20797c0179409848fbf853cae42638df0498179616010e79a9c06d4c47b3f",
+      "historicalHashMatches": true,
+      "path": "apps/android/scripts/device_model_network.py",
+      "receiptSHA256": "fef20797c0179409848fbf853cae42638df0498179616010e79a9c06d4c47b3f",
+      "recordedRevisionSHA256": "fef20797c0179409848fbf853cae42638df0498179616010e79a9c06d4c47b3f"
+    },
+    {
+      "changed": true,
+      "currentSHA256": "0cc75fac46fd3618f32d1a747e324b32e73fd8e736e8f01126ee0f64c4d26295",
+      "historicalHashMatches": true,
+      "path": "apps/android/scripts/validate-intelligence-evaluations.py",
+      "receiptSHA256": "9a00c99c2d286c52d364206f7c780862412374498d728382c50195676ea189f0",
+      "recordedRevisionSHA256": "9a00c99c2d286c52d364206f7c780862412374498d728382c50195676ea189f0"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "68eb245675a9cdd6a31ac7334c67412aaf23479579ca78c5813f9cc4503cfe3b",
+      "historicalHashMatches": true,
+      "path": "apps/android/scripts/validate-local-intelligence.py",
+      "receiptSHA256": "68eb245675a9cdd6a31ac7334c67412aaf23479579ca78c5813f9cc4503cfe3b",
+      "recordedRevisionSHA256": "68eb245675a9cdd6a31ac7334c67412aaf23479579ca78c5813f9cc4503cfe3b"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "ce1541efe22c0cf1d01329dc8e1b169ee747acad0197eea09f9a9d978d072add",
+      "historicalHashMatches": true,
+      "path": "apps/android/scripts/validate-local-speech.py",
+      "receiptSHA256": "ce1541efe22c0cf1d01329dc8e1b169ee747acad0197eea09f9a9d978d072add",
+      "recordedRevisionSHA256": "ce1541efe22c0cf1d01329dc8e1b169ee747acad0197eea09f9a9d978d072add"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "a46e7431f05f1901f433988ad7d097f889e7eb869750845b5cf48cf99ee84d53",
+      "historicalHashMatches": true,
+      "path": "apps/android/scripts/validate-named-speech-model.py",
+      "receiptSHA256": "a46e7431f05f1901f433988ad7d097f889e7eb869750845b5cf48cf99ee84d53",
+      "recordedRevisionSHA256": "a46e7431f05f1901f433988ad7d097f889e7eb869750845b5cf48cf99ee84d53"
+    },
+    {
+      "changed": false,
+      "currentSHA256": "43b35c8f2401788ef7c476e576df4c67dabb7e908b3a3acf9a23e070fd2104aa",
+      "historicalHashMatches": true,
+      "path": "evaluations/local-intelligence/v1/corpus.json",
+      "receiptSHA256": "43b35c8f2401788ef7c476e576df4c67dabb7e908b3a3acf9a23e070fd2104aa",
+      "recordedRevisionSHA256": "43b35c8f2401788ef7c476e576df4c67dabb7e908b3a3acf9a23e070fd2104aa"
+    }
+  ],
+  "sourceRevision": "352c7f654655d7dd5f73fb822dd6331c9e5088c2",
+  "workingTreeClean": false
+}

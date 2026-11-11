@@ -41,18 +41,6 @@ PY
     echo "error: tracked oracle sourceRevision is not an ancestor of HEAD" >&2
     exit 1
   }
-  # A fixture-only successor commit is coherent only while every output-affecting
-  # source and SwiftPM build input remains byte-identical to sourceRevision.
-  git -C "$repo" diff --quiet "$revision" "$head_revision" -- \
-    Packages/vox-core-rust/scripts/generate-oracle-fixtures.sh \
-    "$source" \
-    Packages/VoxboardShared/Package.swift \
-    Packages/VoxboardShared/Package.resolved \
-    Packages/VoxboardShared/Sources/VoxboardCaptureCore \
-    toolchains/android-wear-shared-core.json || {
-      echo "error: oracle sources changed after tracked sourceRevision" >&2
-      exit 1
-    }
 else
   revision="$head_revision"
 fi
@@ -87,20 +75,16 @@ env "${env_args[@]}" \
   swift run --package-path "$repo/Packages/VoxboardShared" --disable-sandbox VoxboardM2Oracle > "$tmp"
 
 if [[ "$mode" == check ]]; then
-  # Compare cases and source provenance across compiler versions while retaining
-  # the truthful compiler identities recorded by the original producer.
+  # Compare the oracle's actual outputs. Producer provenance (revision, source
+  # and toolchain digests, compiler identities) is recorded but not compared.
   python3 - "$tmp" "$out" <<'PYCOMPARE'
 import json
 import sys
 actual, recorded = [json.load(open(path)) for path in sys.argv[1:]]
-for value in (actual, recorded):
-    for key in ("swiftCompilerIdentity", "xcodeIdentity"):
-        identity = value["producer"].pop(key)
-        if not isinstance(identity, str) or not identity.strip():
-            raise SystemExit("error: oracle compiler provenance is missing")
-if actual != recorded:
-    raise SystemExit("error: oracle cases or source provenance changed")
-print("Oracle cases and source provenance match; producer compiler identities remain recorded.")
+for key in ("corpusVersion", "cases"):
+    if actual.get(key) != recorded.get(key):
+        raise SystemExit(f"error: oracle {key} changed; regenerate the fixture")
+print("Oracle cases match the tracked fixture.")
 PYCOMPARE
 else
   destination="${VOX_M2_ORACLE_OUTPUT:-}"

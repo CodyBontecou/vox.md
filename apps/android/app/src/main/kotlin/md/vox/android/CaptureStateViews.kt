@@ -32,11 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,7 +40,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -439,68 +434,3 @@ internal fun CaptureMonoSectionLabel(text: String, modifier: Modifier = Modifier
 internal val CaptureTileShape = RoundedCornerShape(14.dp)
 internal val CaptureReadTileShape = RoundedCornerShape(SignalMetrics.GroupRadius)
 
-
-// region Speak press
-
-/** How long Speak must be held before it records push-to-talk (iOS uses 350ms). */
-internal const val HOLD_TO_TALK_THRESHOLD_MILLIS = 350L
-
-/**
- * Hold to talk · tap to record. A release before [HOLD_TO_TALK_THRESHOLD_MILLIS]
- * is a tap; holding (when [holdEnabled]) calls [onHoldStart] and then [onHoldEnd]
- * on release, with `cancelled = true` when the system took the touch away (for
- * example a permission dialog). Accessibility actions are set separately.
- */
-@Composable
-internal fun Modifier.speakPressGesture(
-    enabled: Boolean,
-    holdEnabled: Boolean,
-    onTap: () -> Unit,
-    onHoldStart: () -> Unit,
-    onHoldEnd: (cancelled: Boolean) -> Unit,
-): Modifier {
-    val tap by rememberUpdatedState(onTap)
-    val canHold by rememberUpdatedState(holdEnabled)
-    val holdStart by rememberUpdatedState(onHoldStart)
-    val holdEnd by rememberUpdatedState(onHoldEnd)
-    if (!enabled) return this
-    return pointerInput(Unit) {
-        awaitEachGesture {
-            awaitFirstDown()
-            var released = false
-            val finishedQuickly = withTimeoutOrNull(HOLD_TO_TALK_THRESHOLD_MILLIS) {
-                val up = waitForUpOrCancellation()
-                if (up != null) {
-                    up.consume()
-                    released = true
-                }
-                true
-            }
-            if (finishedQuickly == true) {
-                if (released) tap()
-                return@awaitEachGesture
-            }
-            if (!canHold) {
-                val up = waitForUpOrCancellation()
-                if (up != null) {
-                    up.consume()
-                    tap()
-                }
-                return@awaitEachGesture
-            }
-            holdStart()
-            var finished = false
-            try {
-                do {
-                    val event = awaitPointerEvent()
-                    event.changes.forEach { it.consume() }
-                } while (event.changes.any { it.pressed })
-                finished = true
-            } finally {
-                holdEnd(!finished)
-            }
-        }
-    }
-}
-
-// endregion

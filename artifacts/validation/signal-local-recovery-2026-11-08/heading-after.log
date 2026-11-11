@@ -1,0 +1,100 @@
+   Compiling vox-core v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core)
+   Compiling uuid v1.16.0
+   Compiling serde_json v1.0.140
+   Compiling xtask v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/xtask)
+   Compiling vox-core-uniffi v0.1.0-alpha.1 (/private/tmp/vox-apple-signal3-20261108/Packages/vox-core-rust/crates/vox-core-uniffi)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.59s
+     Running unittests src/lib.rs (Packages/vox-core-rust/target/debug/deps/vox_core-5c1b927b1b3b7fa0)
+
+running 27 tests
+test tests::chunk_bounds_are_exact ... ok
+test tests::errors_are_privacy_safe ... ok
+test tests::exact_location_formats_every_supported_field_without_locale_drift ... ok
+test tests::existing_note_target_uses_exact_relative_markdown_path ... ok
+test tests::heading_placement_ignores_fenced_headings_and_can_create_missing_heading ... ok
+test tests::retry_marker_makes_existing_note_replay_idempotent ... ok
+test tests::heading_placement_fails_when_required_heading_is_missing ... ok
+test tests::prefix_suffix_and_document_or_entry_metadata_match_apple_oracle ... ok
+test tests::frozen_location_renders_token_and_appends_request_keyed_metadata ... ok
+test tests::disabled_location_policy_emits_neither_link_nor_metadata ... ok
+test tests::consented_frozen_location_labels_render_place_city_region_and_country ... ok
+test tests::city_location_discards_exact_precision_in_rendered_values ... ok
+test tests::heading_bottom_keeps_subsections_and_fenced_headings_inside_section ... ok
+test tests::rolling_note_renders_period_and_creates_when_absent ... ok
+test tests::token_rendering_collapses_location_token_to_empty ... ok
+test tests::structured_location_fields_preserve_order_renamed_keys_and_typed_scalars ... ok
+test tests::uuid_namespace_uses_sha1_v5 ... ok
+test tests::existing_note_append_and_prepend_preserve_frontmatter ... ok
+test tests::token_rendering_does_not_normalize_unicode ... ok
+test tests::advanced_location_template_renders_the_validated_field_vocabulary ... ok
+test tests::uniform_materialization_preflight_rejects_overflow_without_expansion ... ok
+test tests::uniform_observations_do_not_accumulate_chunk_bytes ... ok
+test tests::transcript_property_quotes_yaml_and_replaces_existing_property_without_touching_body ... ok
+test tests::rolling_period_paths_match_daily_weekly_monthly_quarterly_and_yearly_oracle ... ok
+test tests::unavailable_location_reason_is_frozen_and_validated_without_rendering_metadata ... ok
+test tests::terminal_transitions_release_all_captured_resources ... ok
+test tests::recording_origin_and_asset_descriptors_are_admitted_without_copying_asset_bytes ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/m2_core.rs (Packages/vox-core-rust/target/debug/deps/m2_core-181aeaae11e54868)
+
+running 19 tests
+test build_info_exposes_exact_readiness_pins ... ok
+test rust_contract_mirror_is_consumed ... ok
+test errors_never_echo_user_content_paths_or_hashes ... ok
+test exact_deterministic_identity_matches_contract_vector ... ok
+test readiness_is_exact_and_fail_closed ... ok
+test preparation_plans_candidates_and_rejects_unsupported_semantics ... ok
+test foundation_newline_boundaries_are_trimmed_and_internal_scalars_are_preserved ... ok
+test ordered_frontmatter_is_preserved_by_rust_materialization ... ok
+test preparation_enforces_normative_bounds_enums_and_ordering ... ok
+test session_orders_seals_drains_verifies_and_becomes_terminal ... ok
+test paths_reject_traversal_and_occupancy_order_does_not_change_selection ... ok
+test governed_android_m3_request_prepares_through_production_core ... ok
+test failed_seal_is_terminal_and_drain_honors_caller_bound ... ok
+test missing_heading_is_typed_and_never_exposes_a_prepared_artifact ... ok
+test input_stream_bounds_order_hash_cancel_and_post_terminal ... ok
+test swift_oracle_corpus_matches_production_sessions_and_executes_negatives ... ok
+test aggregate_limit_constant_and_streaming_state_are_bounded ... ok
+test repeated_ascii_newline_template_materializes_without_expanding_the_prefix ... ok
+test prepared_chunk_sequence_boundary_fails_before_invalid_metadata ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.43s
+
+     Running unittests src/lib.rs (Packages/vox-core-rust/target/debug/deps/vox_core_uniffi-fe9c7566703e2bb0)
+
+running 6 tests
+test tests::errors_carry_no_dynamic_values ... ok
+test missing_heading_remains_distinct_and_data_free_at_the_public_boundary ... ok
+test tests::product_source_never_mutates_the_process_panic_hook ... ok
+test panic_is_contained ... ok
+test tests::exported_session_preserves_missing_heading_and_then_becomes_terminal ... ok
+test tests::typed_contract_bounds_survive_exported_boundary ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/uniffi-bindgen.rs (Packages/vox-core-rust/target/debug/deps/uniffi_bindgen-5002131a3846cd83)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (Packages/vox-core-rust/target/debug/deps/xtask-d7a15d2b0347712f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests vox_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests vox_core_uniffi
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
