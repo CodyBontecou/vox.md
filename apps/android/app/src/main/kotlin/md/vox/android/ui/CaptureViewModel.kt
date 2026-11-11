@@ -267,14 +267,6 @@ internal class CaptureViewModel private constructor(
         mutableState.update { it.copy(pendingExternalDraftID = null) }
     }
 
-    fun togglePresetRail() {
-        val expanded = !mutableState.value.isPresetRailExpanded
-        mutableState.update { it.copy(isPresetRailExpanded = expanded) }
-        viewModelScope.launch {
-            runCatching { repository.setPresetQuickAccessRailExpanded(expanded) }
-        }
-    }
-
     fun dismissWidgetPreset() { mutableState.update { it.copy(pendingWidgetPresetID = null) } }
     fun confirmWidgetPreset() {
         val id = mutableState.value.pendingWidgetPresetID ?: return
@@ -465,10 +457,6 @@ internal class CaptureViewModel private constructor(
             add(to, action)
         }
         saveCaptureBar(current.copy(orderedActions = order))
-    }
-
-    fun setRailSide(side: md.vox.android.capturedomain.CaptureRailSide) {
-        saveCaptureBar(mutableState.value.captureBar.copy(railSide = side))
     }
 
     fun setTwentyFourHourTimestamps(enabled: Boolean) {

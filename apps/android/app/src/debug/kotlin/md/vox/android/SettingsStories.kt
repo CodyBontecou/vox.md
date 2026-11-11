@@ -145,7 +145,6 @@ private fun CaptureBarStory(configuration: CaptureBarConfiguration, isBusy: Bool
         setVisible = { _, _ -> },
         move = { _, _ -> },
         setTwentyFourHour = {},
-        setRailSide = {},
         setVoiceConfirmation = {},
         setVoiceRecordingResult = {},
         reset = {},

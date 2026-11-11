@@ -29,6 +29,8 @@ android {
     assetPacks += listOf(":whisper_small")
 
     defaultConfig {
+        // Setup links for ScrawlKit (debug builds): `scrawl link --scheme voxscrawl`.
+        manifestPlaceholders["scrawlScheme"] = "voxscrawl"
         applicationId = "md.vox.android"
         versionCode = 5
         versionName = "1.1.2"
@@ -113,7 +115,14 @@ val syncGeistFonts by tasks.registering(Sync::class) {
     into(layout.buildDirectory.dir("generated/res/geistFonts/font"))
 }
 
+// ScrawlKit in debug builds: hold three fingers to record the screen, your voice and touches and
+// send them to your coding agent through Scrawl on the Mac. It comes from ~/.m2
+// (`./gradlew publishToMavenLocal` in ~/dev/scrawl/android) and is left out where that isn't
+// there (CI); release builds never include it.
+val scrawlKitAvailable = File(System.getProperty("user.home"), ".m2/repository/dev/kitlangton/scrawl/scrawlkit-autoinstall/0.1.0").isDirectory
+
 dependencies {
+    if (scrawlKitAvailable) debugImplementation("dev.kitlangton.scrawl:scrawlkit-autoinstall:0.1.0")
     implementation(libs.serialization.json)
     implementation(project(":capture-domain"))
     implementation(project(":core-bridge"))

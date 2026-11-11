@@ -30,67 +30,48 @@ final class CaptureToolbarPreferencesTests: XCTestCase {
         XCTAssertEqual(Set(order), Set(CaptureToolbarAction.allCases))
     }
 
-    func testRailSideAndTimestampFormatHaveStableKeysRawValuesAndDefaults() throws {
-        XCTAssertEqual(
-            CapturePreferenceKeys.presetQuickAccessRailSide,
-            "capture.presets.quickAccess.railSide.v1"
-        )
+    func testTimestampFormatHasStableKeyRawValuesAndDefault() throws {
         XCTAssertEqual(
             CapturePreferenceKeys.timestampFormat,
             "capture.toolbar.timestampFormat.v1"
         )
-        XCTAssertEqual(CapturePresetQuickAccessRailSide.left.rawValue, "left")
-        XCTAssertEqual(CapturePresetQuickAccessRailSide.right.rawValue, "right")
-        XCTAssertEqual(CapturePresetQuickAccessRailSide.allCases, [.left, .right])
-        XCTAssertEqual(CapturePresetQuickAccessRailSide.default, .left)
         XCTAssertEqual(CaptureTimestampFormat.twelveHour.rawValue, "12-hour")
         XCTAssertEqual(CaptureTimestampFormat.twentyFourHour.rawValue, "24-hour")
         XCTAssertEqual(CaptureTimestampFormat.default, .twelveHour)
 
         let (defaults, _) = try makeDefaults()
-        XCTAssertNil(defaults.object(forKey: CapturePreferenceKeys.presetQuickAccessRailSide))
         XCTAssertNil(defaults.object(forKey: CapturePreferenceKeys.timestampFormat))
         let preferences = CaptureToolbarPreferences(defaults: defaults)
-        XCTAssertEqual(preferences.presetQuickAccessRailSide, .left)
         XCTAssertEqual(preferences.timestampFormat, .twelveHour)
     }
 
-    func testUnknownRailSideAndTimestampFormatResolveDefensivelyWithoutDeviceInference() throws {
+    func testUnknownTimestampFormatResolvesDefensivelyWithoutDeviceInference() throws {
         let (defaults, _) = try makeDefaults()
-        defaults.set("center", forKey: CapturePreferenceKeys.presetQuickAccessRailSide)
         defaults.set("automatic", forKey: CapturePreferenceKeys.timestampFormat)
 
         let preferences = CaptureToolbarPreferences(defaults: defaults)
 
-        XCTAssertEqual(preferences.presetQuickAccessRailSide, .left)
         XCTAssertEqual(preferences.timestampFormat, .twelveHour)
-        XCTAssertEqual(defaults.string(forKey: CapturePreferenceKeys.presetQuickAccessRailSide), "center")
         XCTAssertEqual(defaults.string(forKey: CapturePreferenceKeys.timestampFormat), "automatic")
     }
 
-    func testRailSideAndTimestampSettersPersistEveryExplicitChoiceAcrossReload() throws {
+    func testTimestampSetterPersistsEveryExplicitChoiceAcrossReload() throws {
         let (defaults, suiteName) = try makeDefaults()
         let preferences = CaptureToolbarPreferences(defaults: defaults)
 
-        preferences.setPresetQuickAccessRailSide(.right)
         preferences.setTimestampFormat(.twentyFourHour)
-        XCTAssertEqual(defaults.string(forKey: CapturePreferenceKeys.presetQuickAccessRailSide), "right")
         XCTAssertEqual(defaults.string(forKey: CapturePreferenceKeys.timestampFormat), "24-hour")
 
         var reopened = CaptureToolbarPreferences(
             defaults: try XCTUnwrap(UserDefaults(suiteName: suiteName))
         )
-        XCTAssertEqual(reopened.presetQuickAccessRailSide, .right)
         XCTAssertEqual(reopened.timestampFormat, .twentyFourHour)
 
-        reopened.setPresetQuickAccessRailSide(.left)
         reopened.setTimestampFormat(.twelveHour)
         reopened = CaptureToolbarPreferences(
             defaults: try XCTUnwrap(UserDefaults(suiteName: suiteName))
         )
-        XCTAssertEqual(reopened.presetQuickAccessRailSide, .left)
         XCTAssertEqual(reopened.timestampFormat, .twelveHour)
-        XCTAssertEqual(defaults.string(forKey: CapturePreferenceKeys.presetQuickAccessRailSide), "left")
         XCTAssertEqual(defaults.string(forKey: CapturePreferenceKeys.timestampFormat), "12-hour")
     }
 
@@ -118,24 +99,20 @@ final class CaptureToolbarPreferencesTests: XCTestCase {
         XCTAssertEqual(preferences.pinnedActions(forRoute: "route", surfaceDefault: mac), mac)
     }
 
-    func testToolbarResetLeavesEachRailSideAndTimestampChoiceIndependent() throws {
-        for side in CapturePresetQuickAccessRailSide.allCases {
-            for format in CaptureTimestampFormat.allCases {
-                let (defaults, suiteName) = try makeDefaults()
-                let preferences = CaptureToolbarPreferences(defaults: defaults)
-                preferences.setPresetQuickAccessRailSide(side)
-                preferences.setTimestampFormat(format)
-                preferences.setVisible(false, for: .timestamp)
+    func testToolbarResetLeavesEachTimestampChoiceIndependent() throws {
+        for format in CaptureTimestampFormat.allCases {
+            let (defaults, suiteName) = try makeDefaults()
+            let preferences = CaptureToolbarPreferences(defaults: defaults)
+            preferences.setTimestampFormat(format)
+            preferences.setVisible(false, for: .timestamp)
 
-                preferences.reset()
+            preferences.reset()
 
-                let reopened = CaptureToolbarPreferences(
-                    defaults: try XCTUnwrap(UserDefaults(suiteName: suiteName))
-                )
-                XCTAssertTrue(reopened.isVisible(.timestamp))
-                XCTAssertEqual(reopened.presetQuickAccessRailSide, side)
-                XCTAssertEqual(reopened.timestampFormat, format)
-            }
+            let reopened = CaptureToolbarPreferences(
+                defaults: try XCTUnwrap(UserDefaults(suiteName: suiteName))
+            )
+            XCTAssertTrue(reopened.isVisible(.timestamp))
+            XCTAssertEqual(reopened.timestampFormat, format)
         }
     }
 

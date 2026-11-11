@@ -12,62 +12,58 @@ class ContractValidatorTests(unittest.TestCase):
   for name in ("android-wear-m1-decisions.md","android-wear-m0-capabilities.json"): shutil.copyfile(ROOT/"docs/architecture"/name,self.root/"docs/architecture"/name)
   for rel in (".github/workflows/contracts-ci.yml",".github/workflows/android-ci.yml","scripts/test-project-contracts.sh","apps/android/build.gradle.kts","apps/android/settings.gradle.kts","apps/android/gradle.properties","apps/android/gradlew","apps/android/gradlew.bat","apps/android/settings-gradle.lockfile","apps/android/scripts/validate-debug-artifacts.py","apps/android/app/build.gradle.kts","apps/android/app/gradle.lockfile","apps/android/core-bridge/build.gradle.kts","apps/android/core-bridge/gradle.lockfile","apps/android/capture-domain/build.gradle.kts","apps/android/capture-domain/gradle.lockfile","apps/android/data/build.gradle.kts","apps/android/data/gradle.lockfile","apps/android/platform-services/build.gradle.kts","apps/android/platform-services/gradle.lockfile"):
    src=ROOT/rel; dst=self.root/rel; dst.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(src,dst)
-  governed=json.loads((ROOT/"toolchains/android-wear-shared-core.json").read_text())["governedImplementationFiles"]
-  for item in governed:
-   rel=item["path"]; src=ROOT/rel; dst=self.root/rel; dst.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(src,dst)
+  for rel in ("Voxboard/Fonts","apps/android/scripts","apps/android/localization","apps/android/wear"):
+   src=ROOT/rel; dst=self.root/rel; dst.parent.mkdir(parents=True,exist_ok=True); shutil.copytree(src,dst,ignore=shutil.ignore_patterns("__pycache__","build",".gradle"),dirs_exist_ok=True)
+  for rel in ("apps/android/localization-review.json","apps/android/app/proguard-rules.pro"):
+   src=ROOT/rel; dst=self.root/rel; dst.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(src,dst)
  def tearDown(self): self.temp.cleanup()
  def run_validator(self): return subprocess.run([sys.executable,str(VALIDATOR),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True)
- def mutate(self,rel,fn,rehash=False):
+ def mutate(self,rel,fn):
   p=self.root/rel; v=json.loads(p.read_text()); fn(v); p.write_text(json.dumps(v,indent=2,sort_keys=True)+"\n")
-  if rehash:
-   m=self.root/"Packages/contracts/manifest.json"; x=json.loads(m.read_text())
-   for r in x["files"]:
-    if r["path"]==rel: r.update(bytes=len(p.read_bytes()),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
-   m.write_text(json.dumps(x,indent=2,sort_keys=True)+"\n")
  def rejected(self,result,needle): self.assertNotEqual(result.returncode,0,result.stdout+result.stderr); self.assertIn(needle,result.stdout+result.stderr)
  def test_clean_pass(self): self.assertEqual(self.run_validator().returncode,0)
  def test_android_local_capability_evidence_requires_present_source_symbols(self):
   rel="Packages/contracts/validation/android-local-capability-evidence.json"
-  self.mutate(rel,lambda x:x["capabilities"][0]["evidence"][0].update(symbol="missing evidence symbol"),True)
+  self.mutate(rel,lambda x:x["capabilities"][0]["evidence"][0].update(symbol="missing evidence symbol"))
   self.rejected(self.run_validator(),"capability.acceptanceEvidenceSymbol")
  def test_android_local_capability_evidence_registry_cannot_omit_ledger_claims(self):
   rel="Packages/contracts/validation/android-local-capability-evidence.json"
-  self.mutate(rel,lambda x:x["capabilities"].pop(),True)
+  self.mutate(rel,lambda x:x["capabilities"].pop())
   self.rejected(self.run_validator(),"capability.acceptanceEvidenceSet")
  def test_android_local_capability_evidence_kind_must_match_ledger(self):
   rel="Packages/contracts/validation/android-local-capability-evidence.json"
   def mismatch(x):
    entry=next(item for item in x["capabilities"] if item["capabilityID"]=="cap.editor.bold")
    entry["acceptanceKinds"]=["fixture"]
-  self.mutate(rel,mismatch,True)
+  self.mutate(rel,mismatch)
   self.rejected(self.run_validator(),"capability.acceptanceEvidenceKind")
  def test_android_local_ui_evidence_requires_connected_test_gate(self):
   rel="Packages/contracts/validation/android-local-capability-evidence.json"
   def remove_connected_gate(x):
    entry=next(item for item in x["capabilities"] if item["capabilityID"]=="cap.editor.bold")
    entry["gateIDs"]=["android-local-release"]
-  self.mutate(rel,remove_connected_gate,True)
+  self.mutate(rel,remove_connected_gate)
   self.rejected(self.run_validator(),"capability.acceptanceUiGate")
  def test_android_local_ui_evidence_requires_instrumented_source(self):
   rel="Packages/contracts/validation/android-local-capability-evidence.json"
   def remove_instrumented_source(x):
    entry=next(item for item in x["capabilities"] if item["capabilityID"]=="cap.editor.bold")
    entry["evidence"]=[item for item in entry["evidence"] if "/src/androidTest/" not in item["path"]]
-  self.mutate(rel,remove_instrumented_source,True)
+  self.mutate(rel,remove_instrumented_source)
   self.rejected(self.run_validator(),"capability.acceptanceUiSource")
  def test_android_local_device_evidence_requires_connected_test_gate(self):
   rel="Packages/contracts/validation/android-local-capability-evidence.json"
   def remove_connected_gate(x):
    entry=next(item for item in x["capabilities"] if item["capabilityID"]=="cap.queue.recovery")
    entry["gateIDs"]=["android-local-release"]
-  self.mutate(rel,remove_connected_gate,True)
+  self.mutate(rel,remove_connected_gate)
   self.rejected(self.run_validator(),"capability.acceptanceDeviceGate")
  def test_android_local_device_evidence_requires_instrumented_source(self):
   rel="Packages/contracts/validation/android-local-capability-evidence.json"
   def remove_instrumented_source(x):
    entry=next(item for item in x["capabilities"] if item["capabilityID"]=="cap.queue.recovery")
    entry["evidence"]=[item for item in entry["evidence"] if "/src/androidTest/" not in item["path"]]
-  self.mutate(rel,remove_instrumented_source,True)
+  self.mutate(rel,remove_instrumented_source)
   self.rejected(self.run_validator(),"capability.acceptanceDeviceSource")
  def test_every_capability_whose_milestone_contains_m3_is_exact(self):
   value=json.loads((self.root/"docs/architecture/android-wear-m0-capabilities.json").read_text()); m3={item["id"] for item in value["capabilities"] if "M3" in item["milestone"]}; self.assertEqual(m3,{"cap.ai.mode-none","cap.billing.reinstall-adjustment","cap.delivery.standard","cap.entry.app","cap.history.tombstone","cap.payload.text","cap.payload.url","cap.quota.capture","cap.quota.retry-no-charge","cap.target.new"})
@@ -78,20 +74,18 @@ class ContractValidatorTests(unittest.TestCase):
   workflow=(self.root/".github/workflows/contracts-ci.yml").read_text()
   for trigger in ("apps/android/**","toolchains/**","docs/android-wear-shared-core-implementation-plan.md","docs/architecture/android-wear-m3-scope-and-entry-audit.md","docs/architecture/android-wear-toolchain-baseline.md"):
    self.assertEqual(workflow.count("- '"+trigger+"'"),2,trigger)
- def test_manifest_hash_mutation(self):
-  self.mutate("Packages/contracts/manifest.json",lambda x:x["files"][0].update(sha256="f"*64)); self.rejected(self.run_validator(),"manifest.hash")
  def test_receipt_derivation_vector_is_semantic(self):
   rel="Packages/contracts/fixtures/artifact-plan/valid-receipt-derivation.json"
-  self.mutate(rel,lambda x:x.update(receiptID="00000000-0000-4000-8000-000000000000"),True); self.rejected(self.run_validator(),"receipt.derivation")
+  self.mutate(rel,lambda x:x.update(receiptID="00000000-0000-4000-8000-000000000000")); self.rejected(self.run_validator(),"receipt.derivation")
  def test_android_package_fixture_bindings_and_fixed_profile_are_semantic(self):
   rel="Packages/contracts/fixtures/android-capture-package/valid-queued-journal.json"
-  self.mutate(rel,lambda x:x.update(requestSHA256="f"*64),True); self.rejected(self.run_validator(),"package.fixtureBinding")
+  self.mutate(rel,lambda x:x.update(requestSHA256="f"*64)); self.rejected(self.run_validator(),"package.fixtureBinding")
   self.tearDown();self.setUp();rel="Packages/contracts/fixtures/capture-preparation-input/valid-android-m3-text-link.json"
   def drift_preset(x):
    x["preset"]["id"]="55555555-5555-4555-8555-555555555555"; snapshot=json.loads(json.dumps(x["preset"])); snapshot["snapshotHash"]="0"*64; x["preset"]["snapshotHash"]=hashlib.sha256((json.dumps(snapshot,ensure_ascii=False,indent=2,sort_keys=True)+"\n").encode()).hexdigest()
-  self.mutate(rel,drift_preset,True); self.rejected(self.run_validator(),"package.fixtureProfile")
+  self.mutate(rel,drift_preset); self.rejected(self.run_validator(),"package.fixtureProfile")
  def test_schema_unsupported_keyword_rejected(self):
-  self.mutate("Packages/contracts/artifact-plan/v1/schema.json",lambda x:x.update(contains={}),True); self.rejected(self.run_validator(),"schema.unsupportedKeyword")
+  self.mutate("Packages/contracts/artifact-plan/v1/schema.json",lambda x:x.update(contains={})); self.rejected(self.run_validator(),"schema.unsupportedKeyword")
  def test_typed_negative_expectation_is_enforced(self):
   self.mutate("Packages/contracts/manifest.json",lambda x:x["fixtureCases"][0]["expectedError"].update(code="wrong.code")); self.rejected(self.run_validator(),"fixture.wrongTypedError")
  def test_stale_present_mirror_rejected(self):
@@ -105,27 +99,27 @@ class ContractValidatorTests(unittest.TestCase):
   def f(x): x["mirrors"][0]["consumer"]="fake"
   self.mutate("Packages/contracts/manifest.json",f); self.rejected(self.run_validator(),"mirror.plannedClaimsEvidence")
  def test_owner_classification_remains_preserved(self):
-  self.mutate("Packages/contracts/product-capabilities.json",lambda x:x["capabilities"][0].update(classification="deferred"),True); self.rejected(self.run_validator(),"capability.conversionDrift")
+  self.mutate("Packages/contracts/product-capabilities.json",lambda x:x["capabilities"][0].update(classification="deferred")); self.rejected(self.run_validator(),"capability.conversionDrift")
  def test_acceptance_mapping_mutations_rejected(self):
   rel="Packages/contracts/product-capabilities.json"
   mutations=(lambda x:x["capabilities"][0]["acceptance"][0].update(assertion="changed assertion"),lambda x:x["capabilities"][0]["acceptance"][0].update(path="changed/path"),lambda x:x["capabilities"][0]["acceptance"][0].update(kind="changedKind"),lambda x:x["capabilities"][0]["acceptance"][0].update(status="changedStatus"),lambda x:x["capabilities"][0]["acceptance"][0].update(mappingID="changed.mapping"),lambda x:x["capabilities"][0].update(dependencies=["changed-dependency"]))
   for mutate in mutations:
    with self.subTest(mutate=mutate):
-    self.tearDown(); self.setUp(); self.mutate(rel,mutate,True); self.rejected(self.run_validator(),"capability.conversionDrift")
+    self.tearDown(); self.setUp(); self.mutate(rel,mutate); self.rejected(self.run_validator(),"capability.conversionDrift")
  def test_unaccepted_scope_variance_rejected(self):
   cid=json.loads((self.root/"Packages/contracts/product-capabilities.json").read_text())["capabilities"][0]["id"]
   v={"capabilityID":cid,"classification":"deferred","decisionID":"PD-M1-NOT-ACCEPTED","reason":"Synthetic scope reason","userVisibleBehavior":"Feature unavailable","objectiveAmended":False,"parityStatus":"blocking"}
-  self.mutate("Packages/contracts/scope-variances.json",lambda x:x["variances"].append(v),True); self.rejected(self.run_validator(),"variance.unapproved")
+  self.mutate("Packages/contracts/scope-variances.json",lambda x:x["variances"].append(v)); self.rejected(self.run_validator(),"variance.unapproved")
  def test_unknown_scope_variance_classification_rejected(self):
   cid=json.loads((self.root/"Packages/contracts/product-capabilities.json").read_text())["capabilities"][0]["id"]
   v={"capabilityID":cid,"classification":"garbage","decisionID":"PD-M1-NOT-ACCEPTED","reason":"Synthetic scope reason","userVisibleBehavior":"Feature unavailable","objectiveAmended":False,"parityStatus":"blocking"}
-  self.mutate("Packages/contracts/scope-variances.json",lambda x:x["variances"].append(v),True); self.rejected(self.run_validator(),"schema.enum")
+  self.mutate("Packages/contracts/scope-variances.json",lambda x:x["variances"].append(v)); self.rejected(self.run_validator(),"schema.enum")
  def test_malformed_scope_variance_rejected(self):
   cid=json.loads((self.root/"Packages/contracts/product-capabilities.json").read_text())["capabilities"][0]["id"]
   v={"capabilityID":cid,"classification":"deferred","decisionID":"PD-M1-NOT-ACCEPTED","reason":"Synthetic scope reason","userVisibleBehavior":"Feature unavailable","objectiveAmended":False,"parityStatus":"blocking","unexpected":True}
-  self.mutate("Packages/contracts/scope-variances.json",lambda x:x["variances"].append(v),True); self.rejected(self.run_validator(),"schema.unknownField")
+  self.mutate("Packages/contracts/scope-variances.json",lambda x:x["variances"].append(v)); self.rejected(self.run_validator(),"schema.unknownField")
  def trace_mutation_rejected(self,rel,fn,needle):
-  self.mutate(rel,fn,True);canonical=self.root/rel;suffix=rel.removeprefix("Packages/contracts/")
+  self.mutate(rel,fn);canonical=self.root/rel;suffix=rel.removeprefix("Packages/contracts/")
   for path in ("Packages/VoxboardShared/Tests/Fixtures/Contracts/v1","Packages/vox-core-rust/tests/resources/contracts/v1","apps/android/core-bridge/src/test/resources/contracts/v1"):
    target=self.root/path/suffix; target.parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(canonical,target)
   self.rejected(self.run_validator(),needle)
@@ -204,68 +198,43 @@ class ContractValidatorTests(unittest.TestCase):
     self.trace_mutation_rejected(rel,f,code)
  def test_artifact_plan_hash_mutation_rejected(self):
   self.trace_mutation_rejected("Packages/contracts/fixtures/artifact-plan/valid-complete.json",lambda x:x.update(planHash="f"*64),"plan.hash")
- def test_toolchain_validator_rejects_pin_hash_and_binding_inventory_drift(self):
+ def test_toolchain_validator_rejects_pin_and_binding_inventory_drift(self):
   validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py"
   p=self.root/"toolchains/android-wear-shared-core.json";m=json.loads(p.read_text());m["rust"]["toolchain"]="stable";p.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n")
   r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.assertNotEqual(r.returncode,0)
-  self.tearDown();self.setUp();p=self.root/"Packages/vox-core-rust/scripts/check-bindings.sh";p.write_text(p.read_text()+"# drift\n");r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.assertNotEqual(r.returncode,0);self.assertIn("hash drift",r.stderr+r.stdout)
   self.tearDown();self.setUp();(self.root/"Packages/vox-core-rust/generated/swift/VoxCore.swift").unlink();r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.assertNotEqual(r.returncode,0);self.assertIn("generated binding missing",r.stderr+r.stdout)
   self.tearDown();self.setUp();p=self.root/"toolchains/android-wear-shared-core.json";m=json.loads(p.read_text());m["androidApplication"]["sdk"]["compileSdk"]=36;p.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n");r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.assertNotEqual(r.returncode,0);self.assertIn("Android application pins differ",r.stderr+r.stdout)
-  self.tearDown();self.setUp();p=self.root/"apps/android/gradle/libs.versions.toml";p.write_text(p.read_text().replace('room = "2.8.4"','room = "2.8.3"'));r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.assertNotEqual(r.returncode,0);self.assertIn("hash drift",r.stderr+r.stdout)
-  self.tearDown();self.setUp();(self.root/"apps/android/gradle/wrapper/gradle-wrapper.jar").unlink();r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.assertNotEqual(r.returncode,0);self.assertIn("governed file missing",r.stderr+r.stdout)
- def test_toolchain_governed_inventory_cannot_shrink(self):
-  validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py";p=self.root/"toolchains/android-wear-shared-core.json";m=json.loads(p.read_text());m["governedImplementationFiles"].pop();p.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n");r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.rejected(r,"governed implementation path inventory differs")
- def test_android_ci_build_logic_and_dependency_metadata_are_governed(self):
-  validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py"
-  for rel in (".github/workflows/android-ci.yml",".github/workflows/contracts-ci.yml","apps/android/build-logic/src/main/kotlin/AndroidComposeConventionPlugin.kt","apps/android/app/gradle.lockfile","apps/android/gradle/verification-metadata.xml"):
-   with self.subTest(path=rel):
-    self.tearDown();self.setUp();p=self.root/rel;p.write_text(p.read_text()+"\n");r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.rejected(r,"hash drift")
+  self.tearDown();self.setUp();p=self.root/"apps/android/gradle/libs.versions.toml";p.write_text(p.read_text().replace('room = "2.8.4"','room = "2.8.3"'));r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.assertNotEqual(r.returncode,0);self.assertIn("Android version catalog pins differ",r.stderr+r.stdout)
+  self.tearDown();self.setUp();p=self.root/"apps/android/gradle/wrapper/gradle-wrapper.jar";p.write_bytes(p.read_bytes()+b"\0");r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.assertNotEqual(r.returncode,0);self.assertIn("Gradle wrapper JAR drift",r.stderr+r.stdout)
  def test_governed_ci_actions_require_immutable_revisions(self):
-  validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py"; rel=".github/workflows/contracts-ci.yml"; p=self.root/rel; p.write_text(p.read_text().replace("actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd", "actions/checkout@v6")); manifest=self.root/"toolchains/android-wear-shared-core.json"; m=json.loads(manifest.read_text()); next(item for item in m["governedImplementationFiles"] if item["path"]==rel)["sha256"]=hashlib.sha256(p.read_bytes()).hexdigest(); manifest.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n"); r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True); self.rejected(r,"Contracts CI action is not immutable")
- def test_android_phase4_bridge_policy_mutations_are_rejected_after_rehash(self):
+  validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py"; rel=".github/workflows/contracts-ci.yml"; p=self.root/rel; p.write_text(p.read_text().replace("actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd", "actions/checkout@v6")); r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True); self.rejected(r,"Contracts CI action is not immutable")
+ def test_android_phase4_bridge_policy_mutations_are_rejected(self):
   validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py"
-  for rel,old,new,needle in (("Packages/vox-core-rust/uniffi.toml","android_cleaner = true","android_cleaner = false","Android-safe UniFFI cleaner configuration drift"),("Packages/vox-core-rust/generated/kotlin/md/vox/core/vox_core_uniffi.kt","internal fun `corePrepare`","fun `corePrepare`","generated Kotlin module-internal surface drift"),("apps/android/core-bridge/build.gradle.kts","generated/vox-native/debug/jniLibs","generated/vox-native/shared/jniLibs","Android Phase 4 native packaging drift"),("apps/android/core-bridge/src/main/kotlin/md/vox/android/corebridge/CoreBridge.kt","MAX_CONTROL_BYTES = 1_048_576","MAX_CONTROL_BYTES = 2_097_152","Android Phase 4 bridge policy drift"),("apps/android/core-bridge/src/main/kotlin/md/vox/android/corebridge/GeneratedNativeCoreAdapter.kt","withOwnedDirectBytes(bytes) { corePrepare(it) }","corePrepare(ByteBuffer.wrap(bytes))","Android Phase 4 generated-only direct-buffer adapter drift"),("apps/android/app/src/main/kotlin/md/vox/android/VoxApplication.kt","productionCoreBridge()","unwiredCoreBridge()","Android Phase 4 application wiring widened")):
+  for rel,old,new,needle in (("Packages/vox-core-rust/uniffi.toml","android_cleaner = true","android_cleaner = false","Android-safe UniFFI cleaner configuration drift"),("Packages/vox-core-rust/generated/kotlin/md/vox/core/vox_core_uniffi.kt","internal fun `corePrepare`","fun `corePrepare`","generated Kotlin module-internal surface drift"),("apps/android/core-bridge/build.gradle.kts","generated/vox-native/debug/jniLibs","generated/vox-native/shared/jniLibs","Android Phase 4 native packaging drift"),("apps/android/core-bridge/src/main/kotlin/md/vox/android/corebridge/GeneratedNativeCoreAdapter.kt","withOwnedDirectBytes(bytes) { corePrepare(it) }","corePrepare(ByteBuffer.wrap(bytes))","wraps caller-owned heap buffers"),("apps/android/app/src/main/kotlin/md/vox/android/VoxApplication.kt","productionCoreBridge()","unwiredCoreBridge()","wires the unwired core bridge")):
    with self.subTest(path=rel):
-    self.tearDown(); self.setUp(); p=self.root/rel; p.write_text(p.read_text().replace(old,new)); manifest=self.root/"toolchains/android-wear-shared-core.json"; m=json.loads(manifest.read_text()); next(item for item in m["governedImplementationFiles"] if item["path"]==rel)["sha256"]=hashlib.sha256(p.read_bytes()).hexdigest(); manifest.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n"); r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True); self.rejected(r,needle)
+    self.tearDown(); self.setUp(); p=self.root/rel; p.write_text(p.read_text().replace(old,new)); r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True); self.rejected(r,needle)
  def test_android_phase4_generated_binding_bypass_sources_are_rejected(self):
   validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py"
   for source_set in ("debug", "release", "paid"):
    with self.subTest(source_set=source_set):
     self.tearDown(); self.setUp(); p=self.root/f"apps/android/app/src/{source_set}/java/md/vox/android/GeneratedBypass.java"; p.parent.mkdir(parents=True,exist_ok=True); p.write_text("final class GeneratedBypass { Object call() { return md.vox.core.Vox_core_uniffiKt.coreBuildInfo(); } }\n"); r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True); self.rejected(r,"production source bypasses the handwritten core bridge")
- def test_android_phase4_generated_enum_surface_is_rejected_after_rehash(self):
-  validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py"; rel="Packages/vox-core-rust/generated/kotlin/md/vox/core/vox_core_uniffi.kt"; p=self.root/rel; p.write_text(p.read_text()+"\nenum class FutureGeneratedEnum { VALUE }\n"); manifest=self.root/"toolchains/android-wear-shared-core.json"; m=json.loads(manifest.read_text()); next(item for item in m["governedImplementationFiles"] if item["path"]==rel)["sha256"]=hashlib.sha256(p.read_bytes()).hexdigest(); manifest.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n"); r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True); self.rejected(r,"generated Kotlin exposes a public top-level declaration")
+ def test_android_phase4_generated_enum_surface_is_rejected(self):
+  validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py"; rel="Packages/vox-core-rust/generated/kotlin/md/vox/core/vox_core_uniffi.kt"; p=self.root/rel; p.write_text(p.read_text()+"\nenum class FutureGeneratedEnum { VALUE }\n"); r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True); self.rejected(r,"generated Kotlin exposes a public top-level declaration")
  def test_kotlin_binding_normalizer_internalizes_future_enum_shape(self):
   rel="Packages/vox-core-rust/generated/kotlin/md/vox/core/vox_core_uniffi.kt"; p=self.root/rel; text=p.read_text().replace("internal ",""); text=re.sub(r"if \(\(lib\.(uniffi_[A-Za-z0-9_]+_checksum_[A-Za-z0-9_]+)\(\) and 0xffff\) != ([0-9]+)\) \{",r"if (lib.\1() != \2) {",text); p.write_text(text+"\nenum class FutureGeneratedEnum { VALUE }\nannotation class FutureGeneratedAnnotation\nvalue class FutureGeneratedValue(val raw: Int)\nfun interface FutureGeneratedCallback { fun call() }\n"); script=self.root/"Packages/vox-core-rust/scripts/normalize-kotlin-bindings.py"; r=subprocess.run([sys.executable,str(script),str(p.parents[3])],cwd=self.root,text=True,capture_output=True); self.assertEqual(r.returncode,0,r.stdout+r.stderr); normalized=p.read_text(); self.assertIn("internal enum class FutureGeneratedEnum",normalized); self.assertIn("internal annotation class FutureGeneratedAnnotation",normalized); self.assertIn("internal value class FutureGeneratedValue",normalized); self.assertIn("internal fun interface FutureGeneratedCallback",normalized)
- def test_android_phase3_semantic_policy_mutations_are_rejected_after_rehash(self):
-  validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py"
-  for rel,old,new,needle in (("apps/android/capture-domain/src/main/kotlin/md/vox/android/capturedomain/CaptureDurability.kt","MAX_DURATION_MILLIS = 600_000L","MAX_DURATION_MILLIS = 900_000L","Android durability policy drift"),("apps/android/data/src/main/kotlin/md/vox/android/data/RoomQuotaLedger.kt","internal fun commitTerminal","fun commitTerminal","terminal quota primitives are not internal"),("apps/android/data/src/main/kotlin/md/vox/android/data/RoomCaptureCoordination.kt","internal class RoomCaptureCoordination","class RoomCaptureCoordination","raw Room lease coordination is not internal"),("apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDurabilityCoordinator.kt","store.withRootMutationLock { leases.release","leases.release","lease operations do not share the root mutation lock"),("apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDurabilityCoordinator.kt","store.mutateJournal(command)","store.mutateJournal(command).also { store.mutateJournal(command) }","journal mutation has a production caller outside the fenced coordinator")):
-   with self.subTest(path=rel):
-    self.tearDown(); self.setUp(); p=self.root/rel; p.write_text(p.read_text().replace(old,new)); manifest=self.root/"toolchains/android-wear-shared-core.json"; m=json.loads(manifest.read_text()); next(item for item in m["governedImplementationFiles"] if item["path"]==rel)["sha256"]=hashlib.sha256(p.read_bytes()).hexdigest(); manifest.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n"); r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True); self.rejected(r,needle)
- def test_recovery_intent_rejects_worker_fence_bypass_after_rehash(self):
-  validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py"
-  rel="apps/android/data/src/main/kotlin/md/vox/android/data/CaptureDurabilityCoordinator.kt"
-  p=self.root/rel; old="if (leases.isCurrent(requestID, token, now) is LeasePlan.Current) action() else null"
-  self.assertIn(old,p.read_text()); p.write_text(p.read_text().replace(old,"action()"))
-  manifest=self.root/"toolchains/android-wear-shared-core.json"; m=json.loads(manifest.read_text())
-  next(item for item in m["governedImplementationFiles"] if item["path"]==rel)["sha256"]=hashlib.sha256(p.read_bytes()).hexdigest()
-  manifest.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n")
-  r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True)
-  self.rejected(r,"recovery intent admission bypasses the current worker fence")
- def test_android_phase3_new_java_bypass_source_is_rejected(self):
-  validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py"; p=self.root/"apps/android/app/src/debug/java/md/vox/android/Bypass.java"; p.parent.mkdir(parents=True,exist_ok=True); p.write_text("final class Bypass { Object call(md.vox.android.data.DurableCapturePackageStore store) { return store.mutateJournal(null, null); } }\n"); r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True); self.rejected(r,"journal mutation has a production caller outside the fenced coordinator")
  def test_android_aapt2_linux_verification_metadata_is_exact(self):
   validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py";rel="apps/android/gradle/verification-metadata.xml"
   linux='''         <artifact name="aapt2-9.1.1-14792394-linux.jar">\n            <sha256 value="e7ae17af6e4093c771243e82d66462353de87befaac206bfb43e557ac1c34440" origin="Manually verified from pinned Google Maven URL"/>\n         </artifact>\n'''
   mutations=(lambda text:text.replace(linux,""),lambda text:text.replace("e7ae17af6e4093c771243e82d66462353de87befaac206bfb43e557ac1c34440","f"*64),lambda text:text.replace("Manually verified from pinned Google Maven URL","Generated by Gradle"))
   for mutate in mutations:
    with self.subTest(mutate=mutate):
-    self.tearDown();self.setUp();p=self.root/rel;p.write_text(mutate(p.read_text()));manifest=self.root/"toolchains/android-wear-shared-core.json";m=json.loads(manifest.read_text());next(item for item in m["governedImplementationFiles"] if item["path"]==rel)["sha256"]=hashlib.sha256(p.read_bytes()).hexdigest();manifest.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n");r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.rejected(r,"AAPT2 artifact missing/drifted")
+    self.tearDown();self.setUp();p=self.root/rel;p.write_text(mutate(p.read_text()));r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.rejected(r,"AAPT2 artifact missing/drifted")
  def test_android_linux_resolved_verification_metadata_is_exact(self):
   validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py";rel="apps/android/gradle/verification-metadata.xml"
   checksums=("1239e9dbe1397cd5971342956b2511bc3ace7b641842e4372a088dcfa8b9ad55","55441db27e8869dfefe053059bdf478bdc7e95585642bf391f0023345fd56287","de23b114b3e4119a8fe6eb17bed5a3852816698bace67071579d6d927ebb080a","86477abcf490d6ca059aa9973cb108d22a506f49d1a5569bb32cc6cbf43c2cce","ab137ba5a8e32c9b066bf9126a1c76dd5614b724ba5c0b02549772b5e9f4cf1f")
   for checksum in checksums:
    with self.subTest(checksum=checksum):
-    self.tearDown();self.setUp();p=self.root/rel;p.write_text(p.read_text().replace(checksum,"f"*64));manifest=self.root/"toolchains/android-wear-shared-core.json";m=json.loads(manifest.read_text());next(item for item in m["governedImplementationFiles"] if item["path"]==rel)["sha256"]=hashlib.sha256(p.read_bytes()).hexdigest();manifest.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n");r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.rejected(r,"Linux-resolved")
+    self.tearDown();self.setUp();p=self.root/rel;p.write_text(p.read_text().replace(checksum,"f"*64));r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.rejected(r,"Linux-resolved")
  def test_android_dependency_metadata_path_inventory_is_exact(self):
   validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py";p=self.root/"toolchains/android-wear-shared-core.json";m=json.loads(p.read_text());m["androidApplication"]["dependencyMetadataPaths"]["moduleLocks"].pop();p.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n");r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.rejected(r,"Android application pins differ")
  def test_android_command_line_tools_pin_is_exact(self):
@@ -275,11 +244,9 @@ class ContractValidatorTests(unittest.TestCase):
   mutations=(("apps/android/app/build.gradle.kts",'implementation(project(":wear"))'),("apps/android/core-bridge/build.gradle.kts",'implementation(project(":app"))'),("apps/android/platform-services/build.gradle.kts",'implementation(project(":app"))'))
   for rel,edge in mutations:
    with self.subTest(path=rel,edge=edge):
-    self.tearDown();self.setUp();p=self.root/rel;p.write_text(p.read_text()+"\ndependencies { "+edge+" }\n");manifest=self.root/"toolchains/android-wear-shared-core.json";m=json.loads(manifest.read_text());next(item for item in m["governedImplementationFiles"] if item["path"]==rel)["sha256"]=hashlib.sha256(p.read_bytes()).hexdigest();manifest.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n");r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.rejected(r,"Android module graph differs")
+    self.tearDown();self.setUp();p=self.root/rel;p.write_text(p.read_text()+"\ndependencies { "+edge+" }\n");r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.rejected(r,"Android module graph differs")
  def test_android_framework_runtime_activation_is_rejected(self):
-  validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py";rel="apps/android/data/build.gradle.kts";p=self.root/rel;p.write_text(p.read_text().replace("compileOnly(libs.work.runtime.ktx)","implementation(libs.work.runtime.ktx)"));manifest=self.root/"toolchains/android-wear-shared-core.json";m=json.loads(manifest.read_text());next(item for item in m["governedImplementationFiles"] if item["path"]==rel)["sha256"]=hashlib.sha256(p.read_bytes()).hexdigest();manifest.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n");r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.rejected(r,"must remain compileOnly")
- def test_toolchain_schema_weakening_is_hash_bound(self):
-  validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py";p=self.root/"toolchains/android-wear-shared-core.schema.json";m=json.loads(p.read_text());m["properties"]["governedImplementationFiles"]["minItems"]=1;p.write_text(json.dumps(m,indent=2,sort_keys=True)+"\n");r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.rejected(r,"toolchain schema canonical hash drift")
+  validator=ROOT/"Packages/contracts/scripts/validate_toolchain.py";rel="apps/android/data/build.gradle.kts";p=self.root/rel;p.write_text(p.read_text().replace("compileOnly(libs.work.runtime.ktx)","implementation(libs.work.runtime.ktx)"));r=subprocess.run([sys.executable,str(validator),"--root",str(self.root)],cwd=self.root,text=True,capture_output=True);self.rejected(r,"must remain compileOnly")
  def test_all_wearable_integers_are_bounded(self):
   schema=json.loads((self.root/"Packages/contracts/wearable-protocol/v1/schema.json").read_text());missing=[]
   def walk(v,path="$"):

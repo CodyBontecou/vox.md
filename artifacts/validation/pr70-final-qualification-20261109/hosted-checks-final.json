@@ -1,0 +1,149 @@
+{
+  "checkedAtUTC": "2026-11-09 17:02:51 UTC",
+  "prURL": "https://github.com/CodyBontecou/vox.md/pull/70",
+  "headSHA": "4f2b31dfe321dd31788fabf998cf859c97200855",
+  "baseSHA": "d944afb9dc9bde2b5dd8e00a9bb2309557e6849b",
+  "state": "open",
+  "merged": false,
+  "checksPassed": 11,
+  "checksTotal": 11,
+  "checks": [
+    {
+      "runID": 42656556491,
+      "id": 129296483565,
+      "name": "portable-contracts",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/CodyBontecou/vox.md/actions/runs/42656556491/job/129296483565"
+    },
+    {
+      "runID": 42656556491,
+      "id": 129296483956,
+      "name": "featureset-baseline",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/CodyBontecou/vox.md/actions/runs/42656556491/job/129296483956"
+    },
+    {
+      "runID": 42656556585,
+      "id": 129296648722,
+      "name": "m2-evidence",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/CodyBontecou/vox.md/actions/runs/42656556585/job/129296648722"
+    },
+    {
+      "runID": 42656556585,
+      "id": 129296649761,
+      "name": "portable-core",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/CodyBontecou/vox.md/actions/runs/42656556585/job/129296649761"
+    },
+    {
+      "runID": 42656556598,
+      "id": 129297225349,
+      "name": "macos-build",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/CodyBontecou/vox.md/actions/runs/42656556598/job/129297225349"
+    },
+    {
+      "runID": 42656556598,
+      "id": 129297225813,
+      "name": "watch-build",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/CodyBontecou/vox.md/actions/runs/42656556598/job/129297225813"
+    },
+    {
+      "runID": 42656556598,
+      "id": 129297225814,
+      "name": "ios-tests",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/CodyBontecou/vox.md/actions/runs/42656556598/job/129297225814"
+    },
+    {
+      "runID": 42656556598,
+      "id": 129297225871,
+      "name": "swift-package-tests",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/CodyBontecou/vox.md/actions/runs/42656556598/job/129297225871"
+    },
+    {
+      "runID": 42656556598,
+      "id": 129297226156,
+      "name": "repository-contracts",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/CodyBontecou/vox.md/actions/runs/42656556598/job/129297226156"
+    },
+    {
+      "runID": 42656556598,
+      "id": 129297226335,
+      "name": "storekit-tests",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/CodyBontecou/vox.md/actions/runs/42656556598/job/129297226335"
+    },
+    {
+      "runID": 42656556460,
+      "id": 129298217489,
+      "name": "build",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/CodyBontecou/vox.md/actions/runs/42656556460/job/129298217489"
+    }
+  ],
+  "qualification": {
+    "sourceSHA": "33ac5352465d409e0c25b2220228fac7977e8e40",
+    "sourceTreeCleanBeforeAndAfter": true,
+    "fullProducerExitCode": 0,
+    "strictValidatorExitCode": 0,
+    "instrumentationTests": 129,
+    "instrumentationFailures": 0,
+    "instrumentationSkips": 0,
+    "additionalRecoveryRoomIntegrationTests": 3,
+    "instructionCases": 6,
+    "speakerAttributionError": 0
+  },
+  "resolvedFailures": [
+    {
+      "cause": "Strict stale full-model receipt after repository implementation changed",
+      "resolution": "Genuine FULL producer execution on clean source; no stale repinning or validator weakening"
+    },
+    {
+      "cause": "Swift test assumed non-cooperative callback completed after a fixed sleep",
+      "resolution": "Exact-production delayed-callback reproduction; test-only explicit completion synchronization; production gate unchanged; exact hosted test passed"
+    },
+    {
+      "cause": "Hosted SDK install could not read NDK 27.1.12297006 ZIP",
+      "failedJobID": 129296635221,
+      "resolution": "Only failed Android job retried on identical SHA; successful job129298217489; no source/evidence change"
+    }
+  ],
+  "localChecks": {
+    "dataAndWorkerJVM": 107,
+    "rustWorkspace": 52,
+    "scriptTests": 90,
+    "contractTests": 162,
+    "focusedSwiftTests": 6,
+    "focusedSwiftRepetitions": 25,
+    "oracleCaseOutputsUnchanged": true
+  },
+  "cleanup": {
+    "receipt": "cleanup.json",
+    "ownedAVDDeleted": true,
+    "taskDownloadsAndGeneratedAppBuildRemoved": true,
+    "sourceAndExternalReceiptsRetained": true,
+    "sharedDevicesCachesAndHerdrTabsPreserved": true,
+    "observedFilesystemFreeSpaceIncreaseBytes": 9021296640
+  },
+  "limits": [
+    "No manual redesign UI acceptance, physical-device qualification or exhaustive SAF/provider/keystore crash coverage implied",
+    "Historical Apple model baselines unchanged",
+    "No merge, release, store submission or production write"
+  ]
+}

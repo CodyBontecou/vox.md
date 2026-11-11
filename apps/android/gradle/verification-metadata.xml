@@ -3,6 +3,11 @@
    <configuration>
       <verify-metadata>true</verify-metadata>
       <verify-signatures>false</verify-signatures>
+      <trusted-artifacts>
+         <!-- ScrawlKit: a debug-only development tool built and published locally (~/.m2), so its
+              checksums change whenever it is republished. -->
+         <trust group="dev.kitlangton.scrawl"/>
+      </trusted-artifacts>
    </configuration>
    <components>
       <component group="androidx.activity" name="activity" version="1.0.0">

@@ -45,8 +45,8 @@ class RouteOverrideRestorationTest {
         var saved: CaptureRouteOverride? = null
         val restoration = StateRestorationTester(compose)
         restoration.setContent { VoxTheme {
-            CaptureTopControls(null, null, null, { saved = it }, false, false,
-                {}, {}, {}, {}, compactHeight = compact)
+            CaptureTopControls(null, null, null, { saved = it }, emptyList(), {},
+                {}, {}, {}, compactHeight = compact)
         } }
         compose.onNodeWithText("Route: Preset destination").performClick()
         compose.onNodeWithText("Note path in this vault").performTextInput("QA/日本語.md")

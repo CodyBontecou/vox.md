@@ -186,7 +186,6 @@ import md.vox.android.capturedomain.CaptureRouteOverride
 import md.vox.android.capturedomain.CaptureURLDeliverySettings
 import md.vox.android.capturedomain.normalizedTranscriptProperty
 import md.vox.android.capturedomain.CaptureHeadingPosition
-import md.vox.android.capturedomain.CaptureRailSide
 import md.vox.android.capturedomain.CaptureDestination
 import md.vox.android.capturedomain.CaptureAttachment
 import md.vox.android.ui.GeistMonoFontFamily
@@ -628,7 +627,6 @@ internal fun CaptureBarSettingsScreen(
     setVisible: (CaptureBarAction, Boolean) -> Unit,
     move: (CaptureBarAction, Int) -> Unit,
     setTwentyFourHour: (Boolean) -> Unit,
-    setRailSide: (CaptureRailSide) -> Unit = {},
     setVoiceConfirmation: (Boolean) -> Unit,
     setVoiceRecordingResult: (VoiceRecordingResult) -> Unit = {},
     reset: () -> Unit,
@@ -700,7 +698,7 @@ internal fun CaptureBarSettingsScreen(
             }
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 6.dp)) {
-                    CaptureBarAppearanceGroups(configuration, isBusy, setTwentyFourHour, setRailSide)
+                    CaptureBarAppearanceGroups(configuration, isBusy, setTwentyFourHour)
                     SettingsSignalGroup(title = null, modifier = Modifier.padding(top = 14.dp)) {
                         CaptureBarSwitchRow(
                             title = voxString("Review Before Adding"),
@@ -742,13 +740,12 @@ internal fun CaptureBarSettingsScreen(
     }
 }
 
-/** Timestamp format and pinned preset rail choices as Signal radio groups. */
+/** Timestamp format choice as a Signal radio group. */
 @Composable
 private fun CaptureBarAppearanceGroups(
     configuration: CaptureBarConfiguration,
     busy: Boolean,
     setTwentyFourHour: (Boolean) -> Unit,
-    setRailSide: (CaptureRailSide) -> Unit,
 ) {
     SettingsSignalGroup(voxUiText("Timestamp Format")) {
         CaptureTimestampFormat.entries.forEachIndexed { index, format ->
@@ -761,19 +758,6 @@ private fun CaptureBarAppearanceGroups(
                 enabled = !busy,
                 radioTag = "timestamp-${format.wireName}",
                 onSelect = { setTwentyFourHour(format == CaptureTimestampFormat.TWENTY_FOUR_HOUR) },
-            )
-        }
-    }
-    SettingsSignalGroup(voxUiText("Pinned Preset Rail")) {
-        CaptureRailSide.entries.forEachIndexed { index, side ->
-            if (index > 0) SignalRowDivider()
-            CaptureBarRadioRow(
-                title = if (side == CaptureRailSide.LEFT) voxString("Left edge") else voxString("Right edge"),
-                description = null,
-                selected = configuration.railSide == side,
-                enabled = !busy,
-                radioTag = "rail-${side.name}",
-                onSelect = { setRailSide(side) },
             )
         }
     }

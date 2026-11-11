@@ -200,10 +200,14 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         }
         let textEnd = text.utf16.count
         let desired = MarkdownComposerController.clamped(selection, utf16Count: textEnd)
-        if textView.selectedRange != desired {
+        let selectionChanged = textView.selectedRange != desired
+        if selectionChanged {
             textView.selectedRange = desired
         }
-        if textChanged, desired.location + desired.length == textEnd {
+        // Follow programmatic edits (live speech lands at the cursor, not
+        // only at the end) while the writer is not typing.
+        if textChanged || selectionChanged,
+           desired.location + desired.length == textEnd || !textView.isFirstResponder {
             textView.scrollRangeToVisible(desired)
         }
         if isFocused, !textView.isFirstResponder {

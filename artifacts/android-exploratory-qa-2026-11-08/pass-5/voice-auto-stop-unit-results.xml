@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="md.vox.android.platformservices.VoiceAutoStopTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-08T13:06:09.146Z" hostname="MacBook-Pro.local" time="0.234">
+  <properties/>
+  <testcase name="pauseDurationIsBoundedAndPersistentModeKeepsDetectedThoughtsSeparate" classname="md.vox.android.platformservices.VoiceAutoStopTest" time="0.225"/>
+  <testcase name="silenceCannotStopBeforeMeaningfulSpeech" classname="md.vox.android.platformservices.VoiceAutoStopTest" time="0.001"/>
+  <testcase name="sustainedSpeechThenConfiguredPauseEndsSpeech" classname="md.vox.android.platformservices.VoiceAutoStopTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

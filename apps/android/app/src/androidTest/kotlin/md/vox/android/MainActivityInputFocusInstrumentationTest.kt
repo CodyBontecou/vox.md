@@ -18,8 +18,11 @@ class MainActivityInputFocusInstrumentationTest {
     private fun checkInput(stylus: Boolean) {
         val done = hasText("Done") and hasClickAction()
         if (compose.onAllNodes(done).fetchSemanticsNodes().isNotEmpty()) compose.onNode(done).performClick()
-        compose.waitUntil(5_000) { compose.onAllNodesWithTag("nav-history").fetchSemanticsNodes().isNotEmpty() }
-        compose.onNodeWithTag("nav-history").performClick()
+        // Phones reach Library through Capture's Activity button, then Activity's Library pill.
+        compose.waitUntil(5_000) { compose.onAllNodesWithTag("capture-activity").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("capture-activity").performClick()
+        compose.waitUntil(5_000) { compose.onAllNodesWithTag("activity-library").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("activity-library").performClick()
         val search = compose.onNode(hasSetTextAction() and hasText("Search words, routes, files"))
         assertEquals("", search.fetchSemanticsNode().config[SemanticsProperties.EditableText].text)
         try {
