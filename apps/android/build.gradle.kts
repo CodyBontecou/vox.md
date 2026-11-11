@@ -11,6 +11,8 @@ plugins {
 allprojects {
     dependencyLocking {
         lockAllConfigurations()
+        // ScrawlKit is a debug-only development tool from ~/.m2, present on some machines only.
+        ignoredDependencies.add("dev.kitlangton.scrawl:*")
     }
 }
 
