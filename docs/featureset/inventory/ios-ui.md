@@ -35,7 +35,7 @@ LID: IU. Baseline inventory of every user-visible feature found in `Voxboard/Vie
 - Surface: Bottom control stack on Quick Capture
 - Summary: A menu listing all enabled presets (falls back to defaults when none enabled) with symbol icons, plus a destination/route button showing the effective destination name or override path. An "Override" chip and reset button appear when a per-capture route override is active.
 - Details:
-  - Preset menu (`capture_vox_selector`), selection syncs Watch state via `WatchRecordingController.publishState()` (QuickCaptureView.swift:1245-1279, selectFlow 1730)
+  - Route pills top bar (`capture_route_pills`), selection syncs Watch state via `WatchRecordingController.publishState()` (QuickCaptureView.swift:1245-1279, selectFlow 1730)
   - Route button label: override filename or destination rootName or "Set up destination" (routeLabel 1400-1405)
   - "Use Preset destination defaults" reset button when `hasAnyRouteOverride` (1272-1279)
 - Constraints: only enabled presets listed; if all disabled, built-in defaults shown

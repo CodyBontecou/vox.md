@@ -699,7 +699,7 @@ private struct CaptureRecentPhotoButton: View {
     }
 }
 
-// MARK: - Route pills while typing
+// MARK: - Route pills
 
 extension CapturePresetProfile {
     /// Letter for the route's Signal tile: the name's first letter, or the
@@ -709,9 +709,8 @@ extension CapturePresetProfile {
     }
 }
 
-/// Horizontal route radio row shown in place of the route pill while the
-/// keyboard is up (Signal "Capture keyboard" artboard), and always on a
-/// foldable's cover screen ("Duo cover · capture"). Every pill keeps its
+/// Horizontal route radio row: the capture header's only route switcher on
+/// phone, cover screen and iPad pane, resting or typing. Every pill keeps its
 /// route-order letter tile; only the selected pill shows the name.
 struct CaptureRoutePillsRow: View {
     let profiles: [CapturePresetProfile]

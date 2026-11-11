@@ -14,7 +14,7 @@ final class LiveTranscriptDraftPreviewTests: XCTestCase {
         XCTAssertEqual(draft, "Hello world")
     }
 
-    func testRenderAppendsToExistingDraftWithParagraphBreak() {
+    func testRenderAppendsToExistingDraftWithSpace() {
         var preview = LiveTranscriptDraftPreview()
 
         let draft = preview.render(
@@ -23,7 +23,7 @@ final class LiveTranscriptDraftPreviewTests: XCTestCase {
             in: "Typed note"
         )
 
-        XCTAssertEqual(draft, "Typed note\n\nSpoken text")
+        XCTAssertEqual(draft, "Typed note Spoken text")
     }
 
     func testLaterVolatileResultReplacesEarlierPreview() {
@@ -40,7 +40,7 @@ final class LiveTranscriptDraftPreviewTests: XCTestCase {
             in: first
         )
 
-        XCTAssertEqual(revised, "Typed note\n\nA corrected phrase")
+        XCTAssertEqual(revised, "Typed note A corrected phrase")
     }
 
     func testRenderPreservesTypingAddedBeforePreview() {
@@ -58,7 +58,7 @@ final class LiveTranscriptDraftPreviewTests: XCTestCase {
             in: edited
         )
 
-        XCTAssertEqual(revised, "Typed more\n\nLive words continue")
+        XCTAssertEqual(revised, "Typed more Live words continue")
     }
 
     func testCommitReplacesPreviewWithoutDuplicatingTranscript() {
@@ -71,7 +71,7 @@ final class LiveTranscriptDraftPreviewTests: XCTestCase {
 
         let committed = preview.commit("Hello world.", in: liveDraft)
 
-        XCTAssertEqual(committed, "Typed note\n\nHello world.")
+        XCTAssertEqual(committed, "Typed note Hello world.")
         XCTAssertFalse(preview.isRendering)
     }
 
@@ -87,5 +87,80 @@ final class LiveTranscriptDraftPreviewTests: XCTestCase {
 
         XCTAssertEqual(cancelled, "Keep this")
         XCTAssertFalse(preview.isRendering)
+    }
+
+    func testRenderAfterTrailingNewlineAddsNoSeparator() {
+        var preview = LiveTranscriptDraftPreview()
+
+        let draft = preview.render(finalizedText: "Spoken", volatileText: nil, in: "Line\n")
+
+        XCTAssertEqual(draft, "Line\nSpoken")
+    }
+
+    func testRenderInsertsAtCursorBetweenWords() {
+        let text = "Hello world"
+        var preview = LiveTranscriptDraftPreview(insertionOffset: 5)
+
+        let first = preview.render(finalizedText: "", volatileText: "big", in: text)
+        XCTAssertEqual(first, "Hello big world")
+        XCTAssertEqual(preview.caretOffset, 9)
+
+        let revised = preview.render(finalizedText: "big", volatileText: "wide", in: first)
+        XCTAssertEqual(revised, "Hello big wide world")
+
+        let committed = preview.commit("Big, wide", in: revised)
+        XCTAssertEqual(committed, "Hello Big, wide world")
+        XCTAssertEqual(preview.caretOffset, 15)
+    }
+
+    func testRenderAtCursorBeforePunctuationAddsNoTrailingSpace() {
+        var preview = LiveTranscriptDraftPreview(insertionOffset: 5)
+
+        let draft = preview.render(finalizedText: "there", volatileText: nil, in: "Hello.")
+
+        XCTAssertEqual(draft, "Hello there.")
+    }
+
+    func testRenderAtStartOfLineAddsNoLeadingSpace() {
+        var preview = LiveTranscriptDraftPreview(insertionOffset: 6)
+
+        let draft = preview.render(finalizedText: "Spoken", volatileText: nil, in: "Hello\n\nNext")
+
+        XCTAssertEqual(draft, "Hello\nSpoken\nNext")
+    }
+
+    func testTypingBeforeCursorSpanKeepsSpanInPlace() {
+        var preview = LiveTranscriptDraftPreview(insertionOffset: 5)
+        let first = preview.render(finalizedText: "big", volatileText: nil, in: "Hello world")
+        let edited = "Oh, " + first
+
+        let revised = preview.render(finalizedText: "big bright", volatileText: nil, in: edited)
+
+        XCTAssertEqual(revised, "Oh, Hello big bright world")
+    }
+
+    func testCancelAtCursorRestoresOriginalText() {
+        var preview = LiveTranscriptDraftPreview(insertionOffset: 5)
+        let live = preview.render(finalizedText: "big", volatileText: nil, in: "Hello world")
+
+        XCTAssertEqual(preview.cancel(in: live), "Hello world")
+    }
+
+    func testInsertLineGoesAheadOfLiveSpan() {
+        var preview = LiveTranscriptDraftPreview()
+        let live = preview.render(finalizedText: "Talking", volatileText: nil, in: "Note")
+
+        let withTask = preview.insertLine("- [ ] ", in: live)
+        XCTAssertEqual(withTask, "Note\n- [ ] \nTalking")
+
+        let revised = preview.render(finalizedText: "Talking more", volatileText: nil, in: withTask)
+        XCTAssertEqual(revised, "Note\n- [ ] \nTalking more")
+    }
+
+    func testOneShotInsertionUsesCursor() {
+        let result = LiveTranscriptDraftPreview.inserting("big", into: "Hello world", atUTF16Offset: 5)
+
+        XCTAssertEqual(result.text, "Hello big world")
+        XCTAssertEqual(result.caretOffset, 9)
     }
 }
