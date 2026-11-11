@@ -61,8 +61,8 @@ class AndroidLocalizationAuditTests(unittest.TestCase):
         )
 
     def test_audit_inventory_requires_deliberate_review_when_copy_changes(self):
-        self.assertEqual(self.audit["runtimeSourceLiteralCount"], 3039)
-        self.assertEqual(self.audit["literalRuntimeSourceCount"], 1023)
+        self.assertEqual(self.audit["runtimeSourceLiteralCount"], 3098)
+        self.assertEqual(self.audit["literalRuntimeSourceCount"], 1062)
         self.assertEqual(self.audit["catalogBackedSourceCount"], 453)
         self.assertEqual(self.audit["aliasBackedSourceCount"], 5)
         self.assertEqual(self.audit["incompleteCatalogSourceCount"], 0)
@@ -114,7 +114,7 @@ class AndroidLocalizationAuditTests(unittest.TestCase):
                     GENERATOR.validate_format_compatibility(source, value, locale)
         self.assertEqual(set(table["%lld attachments"]["forms"]["ar"]), {"zero", "one", "two", "few", "many", "other"})
         self.assertEqual(self.audit["translationCoverageStatus"], "complete")
-        self.assertEqual(self.audit["androidCatalogBackedSourceCount"], 565)
+        self.assertEqual(self.audit["androidCatalogBackedSourceCount"], 604)
         self.assertEqual(self.audit["pluralImplementationStatus"], "cldr-aware")
 
     def test_missing_plural_category_and_unclassified_count_fail_closed(self):

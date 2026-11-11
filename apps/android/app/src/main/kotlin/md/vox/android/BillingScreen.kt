@@ -632,7 +632,7 @@ internal fun UsageMeter(title: VoxUiText, used: Long, limit: Long, label: String
 
 /** Tinted notice whose text is announced politely when the billing state changes. */
 @Composable
-private fun BillingNotice(message: String, status: SignalStatus) {
+internal fun BillingNotice(message: String, status: SignalStatus) {
     val c = Signal.colors
     val s = signalStatusColors(status)
     val icon = when (status) {
@@ -660,7 +660,7 @@ private fun BillingNotice(message: String, status: SignalStatus) {
 }
 
 /** Tone for [billingMessage], evaluated in the same order. */
-private fun billingNoticeStatus(state: BillingUiState): SignalStatus = when {
+internal fun billingNoticeStatus(state: BillingUiState): SignalStatus = when {
     state.hasPendingPurchase && state.hasUnlimitedAccess -> SignalStatus.WARNING
     state.entitlement == VoxEntitlement.PENDING -> SignalStatus.WARNING
     state.isEntitlementStale && state.hasUnlimitedAccess -> SignalStatus.NEUTRAL

@@ -734,7 +734,7 @@ fun SignalEmptyState(
     }
 }
 
-/** Primary-container card for prominent notices ("Your trial has ended"). */
+/** Primary-container card for prominent notices ("Your subscription has ended"). */
 @Composable
 fun SignalInvertedCard(
     title: String,
