@@ -1,0 +1,27 @@
+{
+  "inspected_at": "2026-11-07",
+  "workspace": "/Users/codybontecou/dev/vox.md",
+  "inspector": "argent-environment-inspector",
+  "project_type": "native Android Kotlin/Jetpack Compose phone and Wear apps, native Apple apps, shared Rust core, static website",
+  "is_react_native": false,
+  "is_native_android": true,
+  "is_native_ios": true,
+  "android_application_id": "md.vox.android",
+  "android_qualification_application_id": "md.vox.android.qualification",
+  "android_main_activity": "md.vox.android.MainActivity",
+  "android_working_directory": "apps/android",
+  "android_build_command": "./gradlew :app:assembleDebug",
+  "android_install_command": "./gradlew :app:installDebug",
+  "metro_required": false,
+  "discovery": "Argent describe; no React Native debugger needed",
+  "tested_device": "emulator-5556",
+  "tested_avd": "vox-parity-checks-api36-20261101",
+  "android_api": 36,
+  "argent_version": "0.32.0",
+  "existing_flows": [
+    ".argent/flows/android-onboarding-folder.yaml",
+    ".argent/flows/android-custom-preset-capture.yaml",
+    ".argent/flows/android-voice-lifecycle.yaml"
+  ],
+  "notes": "Use the existing installation for exploratory QA; preserve sandbox and user data. No AGENTS.md or dedicated recent Android exploratory report was found by the inspector. This file preserves the inspector's relevant environment result for future QA."
+}
