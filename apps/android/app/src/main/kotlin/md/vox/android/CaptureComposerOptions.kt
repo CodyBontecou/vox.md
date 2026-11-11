@@ -46,7 +46,7 @@ import md.vox.android.ui.signalTextFieldColors
 }
 
 @Composable internal fun CaptureAppearanceControls(configuration: CaptureBarConfiguration, busy: Boolean,
-    setTwentyFourHour: (Boolean) -> Unit, setRailSide: (CaptureRailSide) -> Unit) {
+    setTwentyFourHour: (Boolean) -> Unit) {
     val c = Signal.colors
     Column(
         Modifier.fillMaxWidth().padding(horizontal = SignalMetrics.PageGutter, vertical = 8.dp),
@@ -62,19 +62,6 @@ import md.vox.android.ui.signalTextFieldColors
                     enabled = !busy,
                     testTag = "timestamp-${format.wireName}",
                     onClick = { setTwentyFourHour(format == CaptureTimestampFormat.TWENTY_FOUR_HOUR) },
-                )
-            }
-        }
-        SignalGroup(voxString("Pinned Preset Rail")) {
-            CaptureRailSide.entries.forEachIndexed { index, side ->
-                if (index > 0) SignalRowDivider()
-                CaptureAppearanceRadioRow(
-                    title = if (side == CaptureRailSide.LEFT) voxString("Left edge") else voxString("Right edge"),
-                    subtitle = null,
-                    selected = configuration.railSide == side,
-                    enabled = !busy,
-                    testTag = "rail-${side.name}",
-                    onClick = { setRailSide(side) },
                 )
             }
         }

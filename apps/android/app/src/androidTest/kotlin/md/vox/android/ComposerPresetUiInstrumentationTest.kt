@@ -43,15 +43,14 @@ class ComposerPresetUiInstrumentationTest {
         compose.onNodeWithText("Hide draft preview").performClick()
         compose.onNodeWithTag("preview-source").assertTextContains("edited",substring=true)
     }
-    @Test fun physicalRailSidePreferenceAndTimestampSelectionDispatchInRtl() {
+    @Test fun timestampSelectionDispatchesInRtl() {
         var configuration by mutableStateOf(CaptureBarConfiguration())
         compose.setContent { CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             MaterialTheme { Column { CaptureAppearanceControls(configuration,false,
-                { configuration=configuration.copy(usesTwentyFourHourTimestamps=it) }, { configuration=configuration.copy(railSide=it) }) } }
+                { configuration=configuration.copy(usesTwentyFourHourTimestamps=it) }) } }
         } }
         compose.onNodeWithTag("timestamp-24-hour").performClick()
-        compose.onNodeWithTag("rail-RIGHT").performClick()
-        compose.runOnIdle { assertEquals(CaptureRailSide.RIGHT,configuration.railSide); assertEquals(CaptureTimestampFormat.TWENTY_FOUR_HOUR,configuration.timestampFormat) }
+        compose.runOnIdle { assertEquals(CaptureTimestampFormat.TWENTY_FOUR_HOUR,configuration.timestampFormat) }
     }
     @Test fun railAndTimestampPreferencesSurviveRepositoryReload() = kotlinx.coroutines.runBlocking {
         val context: Context=ApplicationProvider.getApplicationContext()

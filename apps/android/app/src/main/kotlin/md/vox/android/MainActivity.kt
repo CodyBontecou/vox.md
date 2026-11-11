@@ -206,7 +206,6 @@ import md.vox.android.capturedomain.CaptureRouteOverride
 import md.vox.android.capturedomain.CaptureURLDeliverySettings
 import md.vox.android.capturedomain.normalizedTranscriptProperty
 import md.vox.android.capturedomain.CaptureHeadingPosition
-import md.vox.android.capturedomain.CaptureRailSide
 import md.vox.android.capturedomain.CaptureDestination
 import md.vox.android.capturedomain.CaptureAttachment
 import md.vox.android.ui.GeistMonoFontFamily
@@ -216,7 +215,6 @@ import md.vox.android.capturedomain.CaptureComposerTextEditor
 import md.vox.android.capturedomain.CaptureBarAction
 import md.vox.android.capturedomain.CaptureBarConfiguration
 import md.vox.android.capturedomain.CaptureHistoryItem
-import md.vox.android.capturedomain.CapturePresetQuickAccess
 import md.vox.android.capturedomain.CapturePresetEmoji
 import md.vox.android.capturedomain.CaptureMetadataField
 import md.vox.android.capturedomain.CaptureMetadataScope
@@ -767,9 +765,7 @@ internal fun VoxNavigation(
                     onDraftChanged = model::updateDraft,
                     onEntryTemplateSelected = model::setEntryTemplateOverride,
                     onRouteChanged = model::setRouteOverride,
-                    pinnedPresets = latestState.presetCollection?.let(CapturePresetQuickAccess::alternatePresets).orEmpty(),
-                    isPresetRailExpanded = latestState.isPresetRailExpanded,
-                    togglePresetRail = model::togglePresetRail,
+                    routePresets = latestState.presetCollection?.presets?.filter { it.isEnabled }.orEmpty(),
                     onSelectPreset = model::selectPreset,
                     addDraftAttachment = model::addDraftAttachment,
                     removeDraftAttachment = model::removeDraftAttachment,
@@ -1083,7 +1079,6 @@ internal fun VoxNavigation(
                                     setVisible = model::setCaptureBarActionVisible,
                                     move = model::moveCaptureBarAction,
                                     setTwentyFourHour = model::setTwentyFourHourTimestamps,
-                                    setRailSide = model::setRailSide,
                                     setVoiceConfirmation = model::setConfirmsVoiceNotesBeforeAdding,
                                     setVoiceRecordingResult = model::setVoiceRecordingResult,
                                     reset = model::resetCaptureBar,
@@ -1183,7 +1178,6 @@ internal fun VoxNavigation(
                     setVisible = model::setCaptureBarActionVisible,
                     move = model::moveCaptureBarAction,
                     setTwentyFourHour = model::setTwentyFourHourTimestamps,
-                                    setRailSide = model::setRailSide,
                     setVoiceConfirmation = model::setConfirmsVoiceNotesBeforeAdding,
                     setVoiceRecordingResult = model::setVoiceRecordingResult,
                     reset = model::resetCaptureBar,

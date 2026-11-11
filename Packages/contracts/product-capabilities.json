@@ -8990,7 +8990,7 @@
     {
       "acceptance": [
         {
-          "assertion": "Persisted physical left or right pinned-preset rail including RTL layouts; retained device and visual qualification required",
+          "assertion": "Verify Android/Wear preserves the inventoried outcome: Pinned-preset rail retired; the header route pills are the only route switcher (not an Android parity requirement)",
           "evidencePath": "docs/android-composer-parity-2026-11-01.md",
           "kind": "device",
           "mappingID": "cap.editor.rail-side.acceptance.1",
@@ -9003,21 +9003,21 @@
       ],
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
-          "symbol": "AbsoluteAlignment.BottomRight"
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureRoutePills.kt",
+          "symbol": "internal fun CaptureRoutePillsRow"
         }
       ],
       "id": "cap.editor.rail-side",
-      "legacyParity": "native-equivalent",
+      "legacyParity": "explicit-non-goal",
       "milestone": "M5",
-      "outcome": "Persisted physical left or right pinned-preset rail including RTL layouts",
+      "outcome": "Pinned-preset rail retired; the header route pills are the only route switcher (not an Android parity requirement)",
       "platforms": [
         "iphone",
         "ipad",
         "android"
       ],
-      "programScope": "parity",
-      "status": "implemented"
+      "programScope": "non-goal",
+      "status": "inventoried"
     },
     {
       "acceptance": [
@@ -9236,6 +9236,6 @@
   "schemaVersion": 1,
   "source": {
     "path": "docs/architecture/android-wear-m0-capabilities.json",
-    "sha256": "368a53428ce36054cdd04de94063dfa54a0dc32024124bff275c3c07c703a01d"
+    "sha256": "072237ea2d0f6bf617243f49b632fe39e9c6c2d6db614d0540f957e28aba0e82"
   }
 }

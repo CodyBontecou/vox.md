@@ -54,7 +54,7 @@ class CaptureLocationLifecycleTest {
         compose.setContent { VoxTheme { capture(pinned = listOf(other)) { awaitCancellation() } } }
         compose.onNodeWithContentDescription("Send capture").performClick()
         compose.onNodeWithContentDescription("Sending capture").assertExists()
-        compose.onNodeWithTag("capture-preset-rail-${other.id}").assertIsNotEnabled()
+        compose.onNodeWithTag("capture-route-pill-${other.id}").assertIsNotEnabled()
         compose.onNodeWithTag("capture-preset-selector").assertIsNotEnabled()
         compose.onNodeWithText("Route: Preset destination").assertIsNotEnabled()
     }
@@ -105,8 +105,7 @@ class CaptureLocationLifecycleTest {
             exportRecordingAudio = { null },
             frozenRecordingPreset = { null },
             requestEditorFocus = false,
-            pinnedPresets = pinned,
-            isPresetRailExpanded = pinned.isNotEmpty(),
+            routePresets = pinned,
             onSelectPreset = select,
             resolveLocation = resolve,
         )

@@ -8722,7 +8722,7 @@
     {
       "acceptance": [
         {
-          "assertion": "Persisted physical left or right pinned-preset rail including RTL layouts; retained device and visual qualification required",
+          "assertion": "Verify Android/Wear preserves the inventoried outcome: Pinned-preset rail retired; the header route pills are the only route switcher (not an Android parity requirement)",
           "evidencePath": "docs/android-composer-parity-2026-11-01.md",
           "kind": "device",
           "status": "planned"
@@ -8733,22 +8733,22 @@
       ],
       "evidence": [
         {
-          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt",
-          "symbol": "AbsoluteAlignment.BottomRight"
+          "path": "apps/android/app/src/main/kotlin/md/vox/android/CaptureRoutePills.kt",
+          "symbol": "internal fun CaptureRoutePillsRow"
         }
       ],
       "id": "cap.editor.rail-side",
       "milestone": "M5",
-      "outcome": "Persisted physical left or right pinned-preset rail including RTL layouts",
+      "outcome": "Pinned-preset rail retired; the header route pills are the only route switcher (not an Android parity requirement)",
       "owner": "native",
-      "parity": "native-equivalent",
+      "parity": "explicit-non-goal",
       "platforms": [
         "iphone",
         "ipad",
         "android"
       ],
-      "programScope": "parity",
-      "status": "implemented"
+      "programScope": "non-goal",
+      "status": "inventoried"
     },
     {
       "acceptance": [
@@ -9391,7 +9391,7 @@
         "cap.store.watch-plists"
       ],
       "path": "docs/android-wear-shared-core-implementation-plan.md",
-      "text": "M0 \u2014 Baseline stabilization"
+      "text": "M0 — Baseline stabilization"
     }
   ],
   "schemaVersion": 1,
