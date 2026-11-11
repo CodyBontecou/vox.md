@@ -12,7 +12,6 @@ import md.vox.android.capturedomain.CaptureState
 import md.vox.android.capturedomain.CaptureLocationUnavailableReason
 import md.vox.android.capturedomain.CapturePlacementKind
 import md.vox.android.capturedomain.CapturePresetCollection
-import md.vox.android.capturedomain.CapturePresetQuickAccess
 import md.vox.android.capturedomain.CaptureRailSide
 import md.vox.android.capturedomain.CaptureRouteOverride
 import md.vox.android.platformservices.LiveSpeechPhase
@@ -334,9 +333,7 @@ private fun CaptureSignalStory(
         onSubmitRecording = { _, _, _, _, _, _, _ -> },
         onDraftChanged = { _, _ -> },
         onEntryTemplateSelected = {},
-        pinnedPresets = CapturePresetQuickAccess.alternatePresets(presets),
-        isPresetRailExpanded = isPresetRailExpanded,
-        togglePresetRail = {},
+        routePresets = presets.presets.filter { it.isEnabled },
         onSelectPreset = {},
         addDraftAttachment = { _, _, _, _ -> },
         removeDraftAttachment = {},
