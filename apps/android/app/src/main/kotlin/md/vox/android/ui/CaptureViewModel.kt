@@ -12,6 +12,25 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import md.vox.android.capturedomain.CaptureRecoveryCommand
 import md.vox.android.capturedomain.CaptureRecoveryResult
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.sync.withLock
+import md.vox.android.capturedomain.CaptureDestination as LiveNoteVault
+import md.vox.android.capturedomain.LiveNoteBinding
+import md.vox.android.capturedomain.LiveNoteConflict
+import md.vox.android.capturedomain.LiveNoteCopyResult
+import md.vox.android.capturedomain.LiveNoteFileStore
+import md.vox.android.capturedomain.LiveNoteLocation
+import md.vox.android.capturedomain.LiveNotePendingWrite
+import md.vox.android.capturedomain.LiveNotePlan
+import md.vox.android.capturedomain.LiveNoteRange
+import md.vox.android.capturedomain.LiveNoteReadResult
+import md.vox.android.capturedomain.LiveNoteRelease
+import md.vox.android.capturedomain.LiveNoteSession
+import md.vox.android.capturedomain.LiveNoteSync
+import md.vox.android.capturedomain.LiveNoteSyncOutcome
+import md.vox.android.capturedomain.LiveNoteWriteResult
+import md.vox.android.capturedomain.VaultBrowser
+import md.vox.android.capturedomain.VaultListing
 import md.vox.android.capturedomain.CaptureRouteOverride
 import md.vox.android.capturedomain.CaptureDestination
 import md.vox.android.capturedomain.CaptureDraft
@@ -53,18 +72,57 @@ internal data class CaptureUiState(
     val isLoadingHistoryDetail: Boolean = false,
     val activityStats: ActivityStats = ActivityStats.Empty,
     val isDeletingHistory: Boolean = false,
+    /** Live Notes: the composer's binding to its vault file and the save status. */
+    val liveNote: LiveNoteSession = LiveNoteSession(),
+    /** Bumped whenever the view model replaces the editor text (bind, reload, New note, open). */
+    val liveNoteEditor: LiveNoteEditorUpdate? = null,
+    /** "<title> is in <preset>" after New note, with Reopen. */
+    val liveNoteReleased: LiveNoteRelease? = null,
+    /** True when the bound file was opened from the Files tab (back instead of the preset switcher). */
+    val liveNoteOpenedFromFiles: Boolean = false,
+    /** Recent "changed in another app" reloads, for the Activity timeline (this process only). */
+    val liveNoteEvents: List<LiveNoteEvent> = emptyList(),
+)
+
+internal data class LiveNoteEditorUpdate(
+    val revision: Long,
+    val text: String,
+    /** The entry to highlight (append presets) and to put the caret after. */
+    val entryRange: LiveNoteRange? = null,
+    /** Where to put the caret; null keeps it (clamped). Opened files start at the end. */
+    val caret: Int? = null,
+)
+
+internal enum class LiveNoteEventKind { RELOADED, SAVED_COPY }
+
+internal data class LiveNoteEvent(
+    val atEpochMillis: Long,
+    val kind: LiveNoteEventKind,
+    val title: String,
+    val relativePath: String,
 )
 
 internal class CaptureViewModel private constructor(
     private val repository: CaptureRepository,
+    private val liveNotes: LiveNoteFileStore,
+    private val vault: VaultBrowser?,
+    private val media: md.vox.android.capturedomain.VaultMediaResolver? = null,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(CaptureUiState())
     val state: StateFlow<CaptureUiState> = mutableState.asStateFlow()
     private var draftSaveJob: Job? = null
     private var routeSaveJob: Job? = null
+    private var liveSaveJob: Job? = null
+    private var livePersistJob: Job? = null
+    private var liveWriteJob: Job? = null
+    // Unique across process restarts: the screen applies an update only once per revision.
+    private val liveSaveMutex = kotlinx.coroutines.sync.Mutex()
+    private var livePendingSince: Long? = null
+    private var editorRevision = System.currentTimeMillis() * 1_000
 
     init {
         refresh(reconcile = true)
+        viewModelScope.launch { restoreLiveNote() }
     }
 
     fun saveDestination(treeUri: String, displayName: String, retryRequestID: String? = null) {
@@ -74,6 +132,9 @@ internal class CaptureViewModel private constructor(
                 .onSuccess { destination ->
                     mutableState.update { it.copy(isLoading = false, destination = destination) }
                     if (retryRequestID != null) retry(retryRequestID) else refresh()
+                    // Folder access is back: write what was kept on the phone.
+                    val pending = mutableState.value.liveNote.pending
+                    if (pending != null && pending.requestID != retryRequestID) retry(pending.requestID) else refreshLiveNote()
                 }
                 .onFailure {
                     mutableState.update { state -> state.copy(isLoading = false, notice = voxNotice("That folder could not be used. Choose another folder.")) }
@@ -98,6 +159,10 @@ internal class CaptureViewModel private constructor(
     }
 
     fun updateDraft(text: String, url: String?) {
+        if (mutableState.value.liveNote.isStarted || mutableState.value.liveNote.isWriting) {
+            updateLiveText(text)
+            return
+        }
         val normalizedURL = CaptureWebLink.normalize(url)
         val invalidLink = !url.isNullOrBlank() && normalizedURL == null
         val next = CaptureDraft(
@@ -179,6 +244,7 @@ internal class CaptureViewModel private constructor(
                     return@launch
                 }
             mutableState.update { it.copy(draft = draft, notice = null) }
+            if (mutableState.value.liveNote.isBound) attachToBoundNote()
         }
     }
 
@@ -203,6 +269,8 @@ internal class CaptureViewModel private constructor(
     ) {
         draftSaveJob?.cancel()
         draftSaveJob = viewModelScope.launch {
+            // Shared text starts its own note; the bound file must never be overwritten by it.
+            if (mutableState.value.liveNote.isStarted) releaseLiveNote(showToast = true)
             if (captureSource == "widget" && presetID != null && text.isBlank() && url == null && attachmentUris.isEmpty()) {
                 val loaded = runCatching { repository.capturePresets() to repository.currentDraft() }.getOrElse {
                     mutableState.update { it.copy(notice = voxNotice("That capture preset could not be selected."), pendingExternalDraftID = correlationID) }
@@ -283,6 +351,10 @@ internal class CaptureViewModel private constructor(
     fun selectPreset(presetID: String) {
         if (mutableState.value.isSavingConfiguration) return
         viewModelScope.launch {
+            // The bound file's path is fixed; another preset means another note.
+            if (mutableState.value.liveNote.isStarted && mutableState.value.presetCollection?.activePresetID != presetID) {
+                releaseLiveNote(showToast = true)
+            }
             mutableState.update { it.copy(isSavingConfiguration = true, notice = null) }
             runCatching { repository.selectCapturePreset(presetID) }
                 .onSuccess { collection ->
@@ -521,6 +593,7 @@ internal class CaptureViewModel private constructor(
             val result = runCatching { repository.retry(requestID) }
                 .getOrElse { CaptureSubmitResult.SavedForRetry(requestID, "unexpectedFailure") }
             apply(result, acceptNewCapture = false)
+            if (mutableState.value.liveNote.pending?.requestID == requestID) completeFirstWrite(result)
         }
     }
 
@@ -577,6 +650,426 @@ internal class CaptureViewModel private constructor(
         }
     }
 
+
+    // ---- Live Notes: generate = save ----
+
+    /**
+     * First write of a new composer note: the text goes through the durable capture pipeline
+     * (path planning, entry rendering, verified SAF commit) exactly once, and the composer then
+     * binds to the file it produced. Called by the screen after ~600 ms idle, on background, or
+     * when the location preflight finishes.
+     */
+    fun startLiveNote(text: String, url: String?, locationOutcome: CaptureLocationOutcome = CaptureLocationOutcome.NotRequested) {
+        val current = mutableState.value
+        if (current.liveNote.isStarted || current.isSending || liveWriteJob?.isActive == true) return
+        if (text.isBlank() && url == null && current.draft.attachments.isEmpty()) return
+        val preset = current.draft.frozenPreset ?: current.presetCollection?.activePreset
+        val route = current.draft.routeOverride
+        liveWriteJob = viewModelScope.launch {
+            mutableState.update { it.copy(liveNote = it.liveNote.copy(localText = text, isWriting = true)) }
+            draftSaveJob?.join()
+            routeSaveJob?.join()
+            val result = runCatching { repository.submit(text, url, locationOutcome) }
+                .getOrElse { CaptureSubmitResult.SavedForRetry("unknown", "unexpectedFailure", durablySaved = false) }
+            val requestID = when (result) {
+                is CaptureSubmitResult.Delivered -> result.requestID
+                is CaptureSubmitResult.LimitReached -> result.requestID
+                is CaptureSubmitResult.NeedsPermission -> result.requestID
+                is CaptureSubmitResult.SavedForRetry -> result.requestID.takeIf { result.durablySaved }
+                CaptureSubmitResult.DestinationRequired, is CaptureSubmitResult.InvalidInput -> null
+            }
+            if (requestID == null) {
+                // Not admitted: nothing was queued, the words stay in the local draft.
+                val typed = mutableState.value.liveNote.localText
+                mutableState.update { it.copy(liveNote = LiveNoteSession(parked = it.liveNote.parked)) }
+                updateDraft(typed, url)
+                apply(result, acceptNewCapture = false)
+                return@launch
+            }
+            val pending = LiveNotePendingWrite(
+                requestID = requestID,
+                submittedText = text,
+                presetID = preset?.id,
+                presetName = preset?.name,
+                isAppendTarget = LiveNotePlan.isAppendTarget(preset, route),
+                prefersLastOccurrence = LiveNotePlan.prefersLastOccurrence(preset, route),
+                plannedPath = LiveNotePlan.plannedPath(preset, route),
+            )
+            mutableState.update { state ->
+                state.copy(
+                    liveNote = state.liveNote.copy(pending = pending, isWriting = false),
+                    draft = CaptureDraft("", null, System.currentTimeMillis()),
+                )
+            }
+            persistLiveNote()
+            val history = runCatching { repository.history() }.getOrDefault(mutableState.value.history)
+            mutableState.update { it.copy(history = history) }
+            if (result is CaptureSubmitResult.LimitReached) {
+                mutableState.update { it.copy(notice = voxNotice("The free Capture limit has been reached. Your capture is saved locally.")) }
+            }
+            completeFirstWrite(result)
+        }
+    }
+
+    private suspend fun completeFirstWrite(result: CaptureSubmitResult) {
+        val pending = mutableState.value.liveNote.pending ?: return
+        when (result) {
+            is CaptureSubmitResult.Delivered -> {
+                val location = result.noteLocation
+                    ?: runCatching { repository.committedNoteLocation(pending.requestID) }.getOrNull()
+                if (location == null) {
+                    // Delivered, but the file it wrote is unknown: keep the words, end the session.
+                    releaseLiveNote(showToast = true, awaitWrite = false)
+                    return
+                }
+                bindPending(pending, location)
+                runCatching { repository.activityStats() }.getOrNull()?.let { stats -> mutableState.update { it.copy(activityStats = stats) } }
+            }
+            is CaptureSubmitResult.NeedsPermission, CaptureSubmitResult.DestinationRequired ->
+                mutableState.update { it.copy(liveNote = it.liveNote.copy(isUnreachable = true)) }
+            is CaptureSubmitResult.SavedForRetry -> mutableState.update {
+                it.copy(liveNote = it.liveNote.copy(isUnreachable = result.reason !in setOf("captureBusy", "leaseLost")))
+            }
+            is CaptureSubmitResult.LimitReached, is CaptureSubmitResult.InvalidInput -> Unit
+        }
+    }
+
+    private suspend fun bindPending(pending: LiveNotePendingWrite, location: LiveNoteLocation) {
+        when (val read = liveNotes.read(location)) {
+            is LiveNoteReadResult.Found -> {
+                val localText = mutableState.value.liveNote.localText
+                val bound = LiveNoteSync.bindFirstWrite(pending, read.file, localText)
+                mutableState.update { state ->
+                    state.copy(
+                        liveNote = state.liveNote.copy(
+                            binding = bound.binding,
+                            pending = null,
+                            localText = bound.editorText,
+                            isUnreachable = false,
+                            highlight = bound.entryRange.takeIf { pending.isAppendTarget },
+                        ),
+                        liveNoteEditor = nextEditor(bound.editorText, bound.entryRange),
+                    )
+                }
+                persistLiveNote()
+                if (bound.needsSave) saveLiveNoteNow()
+            }
+            // Written, but not readable right now: stay pending and bind on the next refresh.
+            is LiveNoteReadResult.Unreachable -> mutableState.update { it.copy(liveNote = it.liveNote.copy(isUnreachable = true)) }
+            LiveNoteReadResult.Missing -> mutableState.update { it.copy(liveNote = it.liveNote.copy(isUnreachable = true)) }
+        }
+    }
+
+    /** Editor changes while a note is live: keep them locally at once, write the file after idle. */
+    fun updateLiveText(text: String) {
+        mutableState.update { it.copy(liveNote = it.liveNote.copy(localText = text)) }
+        livePersistJob?.cancel()
+        livePersistJob = viewModelScope.launch {
+            delay(LIVE_PERSIST_DEBOUNCE_MILLIS)
+            persistLiveNote()
+        }
+        scheduleLiveSave()
+    }
+
+    private fun scheduleLiveSave() {
+        val session = mutableState.value.liveNote
+        if (session.binding == null || session.conflict != null) return
+        val now = System.currentTimeMillis()
+        val pendingSince = livePendingSince ?: now.also { livePendingSince = it }
+        // Idle debounce, but never wait longer than the max delay: dictation rarely pauses.
+        val wait = minOf(LIVE_SAVE_DEBOUNCE_MILLIS, (LIVE_SAVE_MAX_WAIT_MILLIS - (now - pendingSince)).coerceAtLeast(0L))
+        liveSaveJob?.cancel()
+        liveSaveJob = viewModelScope.launch {
+            delay(wait)
+            // The write itself is never cancelled by later keystrokes: a cancelled in-flight
+            // write could land without its new version being recorded and conflict with itself.
+            viewModelScope.launch { saveLiveNoteNow() }
+        }
+    }
+
+    /** Background: write now instead of waiting for the idle debounce. */
+    fun flushLiveNote() {
+        livePersistJob?.cancel()
+        liveSaveJob?.cancel()
+        viewModelScope.launch {
+            persistLiveNote()
+            saveLiveNoteNow()
+        }
+    }
+
+    private suspend fun saveLiveNoteNow() = liveSaveMutex.withLock {
+        livePendingSince = null
+        val session = mutableState.value.liveNote
+        val binding = session.binding ?: return@withLock
+        if (session.conflict != null || !session.hasUnsavedEdits) return@withLock
+        mutableState.update { it.copy(liveNote = it.liveNote.copy(isWriting = true)) }
+        val outcome = runCatching { LiveNoteSync.save(liveNotes, binding, session.localText) }
+            .getOrElse { LiveNoteSyncOutcome.Unreachable }
+        applySync(outcome, savedText = session.localText)
+    }
+
+    /** Resume: SAF has no change notifications, so look at the file again. */
+    fun refreshLiveNote() {
+        viewModelScope.launch {
+            drainParkedLiveNotes()
+            val session = mutableState.value.liveNote
+            val pending = session.pending
+            if (pending != null) {
+                val location = runCatching { repository.committedNoteLocation(pending.requestID) }.getOrNull()
+                if (location != null) bindPending(pending, location)
+                return@launch
+            }
+            if (session.binding == null) return@launch
+            liveSaveMutex.withLock {
+                // Re-read under the lock: a save may have just recorded a newer version.
+                val current = mutableState.value.liveNote
+                val binding = current.binding ?: return@withLock
+                if (current.conflict != null) return@withLock
+                mutableState.update { it.copy(liveNote = it.liveNote.copy(isWriting = current.hasUnsavedEdits)) }
+                val outcome = runCatching { LiveNoteSync.refresh(liveNotes, binding, current.localText) }
+                    .getOrElse { LiveNoteSyncOutcome.Unreachable }
+                applySync(outcome, savedText = current.localText)
+            }
+        }
+    }
+
+    private suspend fun applySync(outcome: LiveNoteSyncOutcome, savedText: String) {
+        mutableState.update { state ->
+            val session = state.liveNote.copy(isWriting = false)
+            when (outcome) {
+                LiveNoteSyncOutcome.Unchanged -> state.copy(liveNote = session.copy(isUnreachable = false))
+                is LiveNoteSyncOutcome.Saved -> state.copy(liveNote = session.copy(binding = outcome.binding, isUnreachable = false, conflict = null))
+                is LiveNoteSyncOutcome.Reloaded -> {
+                    val binding = outcome.binding
+                    // Only replace the editor if nobody typed while the read was in flight.
+                    if (session.localText != savedText) state.copy(liveNote = session.copy(binding = binding, isUnreachable = false))
+                    else state.copy(
+                        liveNote = session.copy(binding = binding, localText = outcome.text, isUnreachable = false, conflict = null, highlight = null),
+                        liveNoteEditor = nextEditor(outcome.text, null),
+                        liveNoteEvents = (listOf(LiveNoteEvent(System.currentTimeMillis(), LiveNoteEventKind.RELOADED, binding.location.title, binding.location.relativePath)) + state.liveNoteEvents).take(20),
+                    )
+                }
+                is LiveNoteSyncOutcome.Conflicted -> state.copy(liveNote = session.copy(conflict = outcome.conflict, isUnreachable = false))
+                LiveNoteSyncOutcome.Unreachable -> state.copy(liveNote = session.copy(isUnreachable = true))
+            }
+        }
+        persistLiveNote()
+        // Typing continued while the write was in flight: write again after idle.
+        if (outcome is LiveNoteSyncOutcome.Saved && mutableState.value.liveNote.hasUnsavedEdits) scheduleLiveSave()
+    }
+
+    fun resolveLiveNoteConflict(choice: LiveNoteConflictChoice) {
+        val session = mutableState.value.liveNote
+        val binding = session.binding ?: return
+        val conflict = session.conflict ?: return
+        viewModelScope.launch {
+            mutableState.update { it.copy(liveNote = it.liveNote.copy(isWriting = true)) }
+            val outcome = liveSaveMutex.withLock { runCatching {
+                when (choice) {
+                    LiveNoteConflictChoice.USE_THEIRS -> LiveNoteSync.useTheirs(binding, conflict)
+                    LiveNoteConflictChoice.KEEP_MINE -> LiveNoteSync.keepMine(liveNotes, binding, conflict)
+                    LiveNoteConflictChoice.SAVE_COPY -> LiveNoteSync.saveCopy(liveNotes, binding, conflict)
+                }
+            }.getOrElse { LiveNoteSyncOutcome.Unreachable } }
+            mutableState.update { state ->
+                val cleared = state.liveNote.copy(isWriting = false, conflict = null)
+                when (outcome) {
+                    is LiveNoteSyncOutcome.Reloaded -> state.copy(
+                        liveNote = cleared.copy(binding = outcome.binding, localText = outcome.text, highlight = null),
+                        liveNoteEditor = nextEditor(outcome.text, null),
+                    )
+                    is LiveNoteSyncOutcome.Saved -> state.copy(
+                        liveNote = cleared.copy(binding = outcome.binding, localText = conflict.mine, isUnreachable = false),
+                        liveNoteEvents = if (choice == LiveNoteConflictChoice.SAVE_COPY) {
+                            (listOf(LiveNoteEvent(System.currentTimeMillis(), LiveNoteEventKind.SAVED_COPY, outcome.binding.location.title, outcome.binding.location.relativePath)) + state.liveNoteEvents).take(20)
+                        } else state.liveNoteEvents,
+                        notice = if (choice == LiveNoteConflictChoice.SAVE_COPY) voxNotice("Saved a copy as %@", outcome.binding.location.fileName) else state.notice,
+                    )
+                    is LiveNoteSyncOutcome.Conflicted -> state.copy(liveNote = cleared.copy(conflict = outcome.conflict))
+                    LiveNoteSyncOutcome.Unreachable -> state.copy(liveNote = cleared.copy(conflict = conflict, isUnreachable = true))
+                    LiveNoteSyncOutcome.Unchanged -> state.copy(liveNote = cleared)
+                }
+            }
+            persistLiveNote()
+        }
+    }
+
+    /** New note: write what is pending, release the binding and open a blank composer. */
+    fun newLiveNote() {
+        val state = mutableState.value
+        if (!state.liveNote.isStarted && !state.liveNote.isWriting &&
+            (state.draft.text.isNotBlank() || state.draft.url != null || state.draft.attachments.isNotEmpty())) {
+            // Nothing written yet (idle debounce not reached): write it, then release.
+            startLiveNote(state.draft.text, state.draft.url)
+        }
+        viewModelScope.launch { releaseLiveNote(showToast = true) }
+    }
+
+    /** Files tab back affordance: release the opened file without a toast. */
+    fun closeOpenedFile() {
+        viewModelScope.launch { releaseLiveNote(showToast = false) }
+    }
+
+    private suspend fun releaseLiveNote(showToast: Boolean, awaitWrite: Boolean = true) {
+        if (awaitWrite) liveWriteJob?.join()
+        livePersistJob?.cancel()
+        liveSaveJob?.cancel()
+        if (mutableState.value.liveNote.conflict == null) saveLiveNoteNow()
+        val release = mutableState.value.liveNote.released()
+        runCatching { repository.saveDraft("", null) }
+        mutableState.update { state ->
+            state.copy(
+                liveNote = release.next,
+                draft = CaptureDraft("", null, System.currentTimeMillis()),
+                liveNoteEditor = nextEditor("", null),
+                liveNoteReleased = release.takeIf { showToast && (it.binding != null || it.relativePath != null) },
+                liveNoteOpenedFromFiles = false,
+            )
+        }
+        persistLiveNote()
+        if (release.next.parked.isNotEmpty()) drainParkedLiveNotes()
+    }
+
+    /** Finishes released notes whose last edits were kept on the phone. */
+    private suspend fun drainParkedLiveNotes() {
+        val parked = mutableState.value.liveNote.parked
+        if (parked.isEmpty()) return
+        val finished = parked.filter { item ->
+            runCatching { finishParked(item) }.getOrDefault(false)
+        }.toSet()
+        if (finished.isEmpty()) return
+        mutableState.update { it.copy(liveNote = it.liveNote.copy(parked = it.liveNote.parked.filterNot(finished::contains))) }
+        persistLiveNote()
+    }
+
+    private suspend fun finishParked(item: md.vox.android.capturedomain.LiveNoteParked): Boolean {
+        val (binding, text) = item.binding?.let { it to item.localText } ?: run {
+            val pending = item.pending ?: return true
+            val location = repository.committedNoteLocation(pending.requestID) ?: return false
+            val file = (liveNotes.read(location) as? LiveNoteReadResult.Found)?.file ?: return false
+            val bound = LiveNoteSync.bindFirstWrite(pending, file, item.localText)
+            if (!bound.needsSave) return true
+            bound.binding to bound.editorText
+        }
+        return when (val outcome = LiveNoteSync.save(liveNotes, binding, text)) {
+            LiveNoteSyncOutcome.Unchanged, is LiveNoteSyncOutcome.Saved, is LiveNoteSyncOutcome.Reloaded -> true
+            // Nobody is looking at this note any more: keep both versions rather than choose.
+            is LiveNoteSyncOutcome.Conflicted -> LiveNoteSync.saveCopy(liveNotes, binding, outcome.conflict) is LiveNoteSyncOutcome.Saved
+            LiveNoteSyncOutcome.Unreachable -> false
+        }
+    }
+
+    fun dismissLiveNoteToast() {
+        mutableState.update { it.copy(liveNoteReleased = null) }
+    }
+
+    /** Reopen from the toast: bind the released file again. */
+    fun reopenReleasedNote() {
+        val binding = mutableState.value.liveNoteReleased?.binding ?: return
+        mutableState.update { it.copy(liveNoteReleased = null) }
+        openFile(binding.location, binding.presetID, binding.presetName, fromFiles = false)
+    }
+
+    /** Opens a vault file in the composer (Files tab, Reopen). The current note is saved first. */
+    fun openFile(location: LiveNoteLocation, presetID: String? = null, presetName: String? = null, fromFiles: Boolean = true) {
+        viewModelScope.launch {
+            val current = mutableState.value.liveNote
+            if (current.binding?.location == location) {
+                mutableState.update { it.copy(liveNoteOpenedFromFiles = fromFiles || it.liveNoteOpenedFromFiles) }
+                refreshLiveNote()
+                return@launch
+            }
+            if (current.isStarted || current.localText.isNotBlank()) releaseLiveNote(showToast = false)
+            when (val read = liveNotes.read(location)) {
+                is LiveNoteReadResult.Found -> {
+                    val binding = LiveNoteBinding(
+                        location = location,
+                        presetID = presetID,
+                        presetName = presetName ?: location.folderSegments.lastOrNull(),
+                        requestID = null,
+                        isAppendTarget = false,
+                        version = read.file.version,
+                        savedText = read.file.text,
+                    )
+                    mutableState.update { state ->
+                        state.copy(
+                            liveNote = LiveNoteSession(binding = binding, localText = read.file.text, parked = state.liveNote.parked),
+                            liveNoteEditor = nextEditor(read.file.text, null, caret = read.file.text.length),
+                            liveNoteOpenedFromFiles = fromFiles,
+                        )
+                    }
+                    persistLiveNote()
+                }
+                LiveNoteReadResult.Missing -> mutableState.update { it.copy(notice = voxNotice("That file is no longer in the folder.")) }
+                is LiveNoteReadResult.Unreachable -> mutableState.update { it.copy(notice = voxNotice("The file could not be opened. Reconnect the folder and try again.")) }
+            }
+        }
+    }
+
+    suspend fun listVault(destination: LiveNoteVault, relativeFolder: String, countChildren: Boolean = true): VaultListing =
+        vault?.let { browser -> runCatching { browser.list(destination, relativeFolder, countChildren) }.getOrElse { VaultListing.Unreachable("listFailed") } }
+            ?: VaultListing.Unreachable("unavailable")
+
+    /**
+     * Live preview: a content URI for an embed in the bound note, looked up in the preset's
+     * attachments folder, "attachments", the note's folder, the vault root, then by name.
+     */
+    suspend fun resolveEmbed(target: String): String? {
+        val binding = mutableState.value.liveNote.binding ?: return null
+        val resolver = media ?: return null
+        val presetFolder = mutableState.value.presetCollection?.presets?.firstOrNull { it.id == binding.presetID }?.attachmentsFolder
+        val folders = listOfNotNull(presetFolder, "attachments", "Attachments").distinct()
+        val candidates = md.vox.android.LivePreview.candidates(binding.location.relativePath, target, folders)
+        if (candidates.isEmpty()) return null
+        return runCatching {
+            resolver.resolveMedia(binding.location.destinationID, binding.location.treeUri, candidates, target.substringAfterLast('/'))
+        }.getOrNull()
+    }
+
+    /** First non-heading, non-frontmatter line of a file, for folder previews. */
+    suspend fun previewFile(location: LiveNoteLocation): String? =
+        (runCatching { liveNotes.read(location) }.getOrNull() as? LiveNoteReadResult.Found)?.file?.text?.let(::liveNotePreviewLine)
+
+    /** Attachments added to a bound note go through the pipeline into the same file. */
+    private suspend fun attachToBoundNote() {
+        val binding = mutableState.value.liveNote.binding ?: return
+        val route = runCatching { md.vox.android.capturedomain.CaptureRouteOverride(binding.location.relativePath, md.vox.android.capturedomain.CapturePlacementKind.APPEND).validated() }.getOrNull() ?: return
+        saveLiveNoteNow()
+        if (mutableState.value.liveNote.hasUnsavedEdits) return
+        runCatching { repository.setDraftRouteOverride(route) }.getOrElse { return }
+        val result = runCatching { repository.submit("", null) }
+            .getOrElse { CaptureSubmitResult.SavedForRetry("unknown", "unexpectedFailure", durablySaved = false) }
+        val draft = runCatching { repository.currentDraft() }.getOrDefault(mutableState.value.draft)
+        mutableState.update { it.copy(draft = draft) }
+        if (result !is CaptureSubmitResult.Delivered) apply(result, acceptNewCapture = false)
+        refreshLiveNote()
+    }
+
+    private suspend fun restoreLiveNote() {
+        val restored = runCatching { repository.liveNoteSession() }.getOrNull() ?: return
+        if (!restored.isStarted) {
+            if (restored.parked.isNotEmpty()) {
+                mutableState.update { it.copy(liveNote = it.liveNote.copy(parked = restored.parked)) }
+                drainParkedLiveNotes()
+            }
+            return
+        }
+        mutableState.update { state ->
+            state.copy(liveNote = restored, liveNoteEditor = nextEditor(restored.localText, restored.highlight, caret = restored.localText.length))
+        }
+        refreshLiveNote()
+    }
+
+    private suspend fun persistLiveNote() {
+        val session = mutableState.value.liveNote
+        runCatching { repository.saveLiveNoteSession(session) }
+    }
+
+    private fun nextEditor(text: String, range: LiveNoteRange?, caret: Int? = null): LiveNoteEditorUpdate {
+        editorRevision += 1
+        return LiveNoteEditorUpdate(editorRevision, text, range, caret)
+    }
+
     fun refresh(reconcile: Boolean = false) {
         viewModelScope.launch {
             val destination = runCatching { repository.currentDestination() }.getOrNull()
@@ -626,13 +1119,14 @@ internal class CaptureViewModel private constructor(
                 CaptureSubmitResult.DestinationRequired, is CaptureSubmitResult.InvalidInput -> null
             }
             val draft = if (acceptedRequestID == null) state.draft else CaptureDraft("", null, System.currentTimeMillis())
+            val liveSession = state.liveNote.isStarted
             when (result) {
                 is CaptureSubmitResult.Delivered -> state.copy(
                     isSending = false,
                     draft = draft,
                     history = history,
                     notice = deliveredCaptureNotice(result.processingOutcome),
-                    acceptedRequestID = acceptedRequestID,
+                    acceptedRequestID = acceptedRequestID.takeUnless { liveSession },
                 )
                 CaptureSubmitResult.DestinationRequired -> state.copy(
                     isSending = false,
@@ -651,21 +1145,21 @@ internal class CaptureViewModel private constructor(
                     draft = draft,
                     history = history,
                     notice = voxNotice("The free Capture limit has been reached. Your capture is saved locally."),
-                    acceptedRequestID = acceptedRequestID,
+                    acceptedRequestID = acceptedRequestID.takeUnless { liveSession },
                 )
                 is CaptureSubmitResult.NeedsPermission -> state.copy(
                     isSending = false,
                     draft = draft,
                     history = history,
                     notice = voxNotice("Folder access changed. Your capture is saved locally; choose the folder again to continue."),
-                    acceptedRequestID = acceptedRequestID,
+                    acceptedRequestID = acceptedRequestID.takeUnless { liveSession },
                 )
                 is CaptureSubmitResult.SavedForRetry -> state.copy(
                     isSending = false,
                     draft = draft,
                     history = history,
                     notice = humanReason(result.reason),
-                    acceptedRequestID = acceptedRequestID,
+                    acceptedRequestID = acceptedRequestID.takeUnless { liveSession },
                 )
             }
         }
@@ -729,9 +1223,19 @@ internal class CaptureViewModel private constructor(
     }
 
     companion object {
-        fun factory(repository: CaptureRepository): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+        const val LIVE_SAVE_DEBOUNCE_MILLIS = 600L
+        /** While dictating there may be no idle gap; write at least this often. */
+        const val LIVE_SAVE_MAX_WAIT_MILLIS = 2_000L
+        const val LIVE_PERSIST_DEBOUNCE_MILLIS = 250L
+
+        fun factory(
+            repository: CaptureRepository,
+            liveNotes: LiveNoteFileStore = UnavailableLiveNoteStore,
+            vault: VaultBrowser? = null,
+            media: md.vox.android.capturedomain.VaultMediaResolver? = null,
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T = CaptureViewModel(repository) as T
+            override fun <T : ViewModel> create(modelClass: Class<T>): T = CaptureViewModel(repository, liveNotes, vault, media) as T
         }
     }
 }
@@ -748,4 +1252,28 @@ internal fun deliveredCaptureNotice(outcome: CaptureTextProcessingOutcome?): md.
         else -> null
     }
     return if (detail == null) voxNotice("Capture sent") else voxNotice("%@ · %@", voxNotice("Capture sent"), detail)
+}
+
+internal enum class LiveNoteConflictChoice { USE_THEIRS, KEEP_MINE, SAVE_COPY }
+
+/** Skips YAML frontmatter, headings and blank lines; returns the first line of prose. */
+internal fun liveNotePreviewLine(text: String): String? {
+    var lines = text.lineSequence()
+    if (text.startsWith("---")) {
+        val all = text.lines()
+        val end = all.drop(1).indexOfFirst { it.trim() == "---" }
+        if (end >= 0) lines = all.drop(end + 2).asSequence()
+    }
+    return lines.map(String::trim)
+        .firstOrNull { it.isNotEmpty() && !it.startsWith("#") }
+        ?.removePrefix("- [ ] ")?.removePrefix("- [x] ")?.removePrefix("- ")
+        ?.take(160)
+}
+
+/** Live Notes without a vault file store (previews and tests): every file is unreachable. */
+internal object UnavailableLiveNoteStore : LiveNoteFileStore {
+    override suspend fun read(location: LiveNoteLocation): LiveNoteReadResult = LiveNoteReadResult.Unreachable("unavailable")
+    override suspend fun replace(location: LiveNoteLocation, text: String, expected: md.vox.android.capturedomain.LiveNoteVersion?): LiveNoteWriteResult =
+        LiveNoteWriteResult.Unreachable("unavailable")
+    override suspend fun createCopy(location: LiveNoteLocation, text: String): LiveNoteCopyResult = LiveNoteCopyResult.Unreachable("unavailable")
 }

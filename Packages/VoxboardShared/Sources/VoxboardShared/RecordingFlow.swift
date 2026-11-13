@@ -140,19 +140,6 @@ public struct CapturePreset: Identifiable, Codable, Equatable, Sendable {
         visibleName ?? String(localized: "Untitled Route", bundle: .main)
     }
 
-    public var displayCapturePrompt: String {
-        let trimmed = capturePrompt.trimmingCharacters(in: .whitespacesAndNewlines)
-        if isBuiltIn,
-           id == CapturePresetStore.generalId,
-           trimmed == "Capture an idea, task, link, file, scan, or recording." {
-            return String(
-                localized: "Capture an idea, task, link, file, scan, or recording.",
-                bundle: .main
-            )
-        }
-        return trimmed
-    }
-
     public var shortLabel: String {
         let initials = (visibleName ?? "")
             .split(separator: " ")
@@ -574,8 +561,7 @@ public enum CapturePresetStore {
             kind: .general,
             staticFrontmatter: ["type": "capture"],
             postProcessingMode: .clean,
-            captureProcessingEnabled: false,
-            capturePrompt: "Capture an idea, task, link, file, scan, or recording."
+            captureProcessingEnabled: false
         )
     }
 
@@ -602,8 +588,7 @@ public enum CapturePresetStore {
             kind: .custom,
             staticFrontmatter: [:],
             postProcessingMode: .custom,
-            captureProcessingEnabled: false,
-            capturePrompt: "What do you want to capture?"
+            captureProcessingEnabled: false
         )
     }
 
@@ -1113,7 +1098,6 @@ public enum CapturePresetStore {
                         staticFrontmatter: [:],
                         postProcessingMode: .none,
                         captureProcessingEnabled: false,
-                        capturePrompt: "What do you want to capture?",
                         audioSaveMode: .off,
                         captureDestinationID: route.id
                     ))

@@ -569,13 +569,11 @@ private fun ProcessingStory(enabled: Boolean, mode: CaptureProcessingMode) {
         processingScope = draft.processingScope,
         processingMode = draft.processingMode,
         customInstruction = draft.customInstruction,
-        capturePrompt = draft.capturePrompt,
         generateImageAltText = draft.generateImageAltText,
         setProcessingEnabled = { draft = draft.copy(processingEnabled = it) },
         setProcessingScope = { draft = draft.copy(processingScope = it) },
         setProcessingMode = { draft = draft.copy(processingMode = it) },
         setCustomInstruction = { draft = draft.copy(customInstruction = it) },
-        setCapturePrompt = { draft = draft.copy(capturePrompt = it) },
         setGenerateImageAltText = { draft = draft.copy(generateImageAltText = it) },
     )
 }

@@ -94,6 +94,7 @@ import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Stop
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material.icons.outlined.Tune
@@ -266,6 +267,10 @@ import md.vox.android.capturedomain.CaptureExportYAMLProperty
 import md.vox.android.capturedomain.CapturePresetExportSettings
 import md.vox.android.capturedomain.CaptureWatchOutputMode
 import md.vox.android.capturedomain.CapturePreset
+import md.vox.android.capturedomain.LiveNotePlan
+import md.vox.android.capturedomain.LiveNoteStatus
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.outlined.NoteAdd
 import md.vox.android.capturedomain.CapturePresetCollection
 import md.vox.android.capturedomain.CaptureEntryTemplate
 import md.vox.android.capturedomain.resolvingEntryTemplate
@@ -374,10 +379,30 @@ internal fun CaptureScreen(
     initialShowsAttachSheet: Boolean = false,
     initialShowsAllQuickActions: Boolean = false,
     resolveLocation: (suspend (Boolean) -> CurrentLocationResult)? = null,
+    /** Live Notes: first write of the composer note (after the location preflight). */
+    onStartLiveNote: (String, String?, CaptureLocationOutcome) -> Unit = onSubmit,
+    /** New note: release the bound file and open a blank composer. */
+    onNewNote: () -> Unit = {},
+    onResolveConflict: (md.vox.android.ui.LiveNoteConflictChoice) -> Unit = {},
+    onReopenReleased: () -> Unit = {},
+    onDismissReleased: () -> Unit = {},
+    /** Set when the bound file was opened from Files: the header shows Back instead of the preset. */
+    onCloseOpenedFile: (() -> Unit)? = null,
+    /** Live preview: content URI for an embed in the bound note (null when it can't be found). */
+    resolveEmbed: suspend (String) -> String? = { null },
+    /** Phones: Files button in the header (iOS captureHeaderActions). Null when a rail carries it. */
+    openFiles: (() -> Unit)? = null,
 ) {
+    val liveNote = state.liveNote
     var editorValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue(state.draft.text, TextRange(state.draft.text.length)))
+        val initial = if (liveNote.isStarted) liveNote.localText else state.draft.text
+        mutableStateOf(TextFieldValue(initial, TextRange(initial.length)))
     }
+    var appliedEditorRevision by rememberSaveable { mutableStateOf(state.liveNoteEditor?.revision ?: 0L) }
+    var liveHighlight by remember { mutableStateOf(liveNote.highlight) }
+    var nextSubmissionIsLive by remember { mutableStateOf(false) }
+    // Live Notes recording: how long the recording behind the newest entry was (for "JUST ADDED · 0:21").
+    var justAddedRecordingMillis by rememberSaveable { mutableStateOf<Long?>(null) }
     var capturedURL by rememberSaveable { mutableStateOf(state.draft.url) }
     var showsLinkDialog by rememberSaveable { mutableStateOf(false) }
     var showsDueDateDialog by rememberSaveable { mutableStateOf(false) }
@@ -429,14 +454,20 @@ internal fun CaptureScreen(
     // until the final transcript commits in their place.
     val liveTranscript = viewModel<CaptureLiveTranscriptState>()
     fun persistableText(text: String) = liveTranscript.preview?.withoutLiveSpan(text) ?: text
+    // Live Notes: a bound note's file follows the editor including the live words, so the
+    // status pill reads Saving…/Saved while speaking. A discarded recording removes the
+    // span from the editor, and the next save drops it from the file again.
+    fun savedText(text: String) = if (state.liveNote.isBound) text else persistableText(text)
 
     fun commitEditorValue(next: TextFieldValue, registerUndo: Boolean = true) {
-        if (next.text.length > 65_536) return
-        if (registerUndo && next.text != editorValue.text) {
-            rememberUndo(editorValue.copy(text = persistableText(editorValue.text)))
+        // A bound note is the whole file, which may be longer than a single capture.
+        if (next.text.length > (if (state.liveNote.isStarted) 2_000_000 else 65_536)) return
+        if (registerUndo && next.text != editorValue.text) rememberUndo(editorValue.copy(text = persistableText(editorValue.text)))
+        if (next.text != editorValue.text) {
+            liveHighlight = shiftLiveNoteHighlight(liveHighlight, editorValue.text, next.text, minOf(editorValue.selection.start, next.selection.start))
         }
         editorValue = next
-        onDraftChanged(persistableText(next.text), capturedURL)
+        onDraftChanged(savedText(next.text), capturedURL)
     }
 
     fun applyCommand(command: CaptureComposerCommand) {
@@ -562,7 +593,10 @@ internal fun CaptureScreen(
 
     fun deliverPending(pending: PendingLocationSubmission, outcome: CaptureLocationOutcome) {
         val originRecordingID = pending.originRecordingID
-        if (originRecordingID == null) {
+        if (originRecordingID == null && nextSubmissionIsLive) {
+            nextSubmissionIsLive = false
+            onStartLiveNote(pending.text, pending.url, outcome)
+        } else if (originRecordingID == null) {
             onSubmit(pending.text, pending.url, outcome)
         } else {
             onSubmitRecording(
@@ -710,8 +744,10 @@ internal fun CaptureScreen(
         audioContentUri: String? = null,
         audioDisplayName: String? = null,
         frozenPreset: CapturePreset? = null,
+        live: Boolean = false,
     ) {
         if (state.isSending || locationPreflightPending()) return
+        nextSubmissionIsLive = live && originRecordingID == null
         val policy = (frozenPreset ?: state.presetCollection?.activePreset)?.locationPolicy
         if (policy?.isEnabled != true) {
             deliverPending(
@@ -851,6 +887,42 @@ internal fun CaptureScreen(
             undoStack.clear()
             consumeAcceptedCapture()
         }
+    }
+    // Live Notes: the view model replaced the text (bound, reloaded, New note, opened a file).
+    LaunchedEffect(state.liveNoteEditor?.revision) {
+        val update = state.liveNoteEditor ?: return@LaunchedEffect
+        if (update.revision == appliedEditorRevision) return@LaunchedEffect
+        appliedEditorRevision = update.revision
+        val range = update.entryRange
+        val cursor = range?.end ?: update.caret ?: editorValue.selection.end.coerceAtMost(update.text.length)
+        editorValue = TextFieldValue(update.text, TextRange(cursor.coerceIn(0, update.text.length)))
+        liveHighlight = range.takeIf { state.liveNote.binding?.isAppendTarget == true }
+        // Undo must never step back across a whole-file replacement (it would write the old text over the file).
+        undoStack.clear()
+        if (update.text.isEmpty()) capturedURL = null
+    }
+    // Generate = save: the first words are written to the preset's file after a short idle.
+    LaunchedEffect(editorValue.text, liveNote.isStarted, liveNote.isWriting, state.isSending) {
+        if (liveNote.isStarted || liveNote.isWriting || state.isSending) return@LaunchedEffect
+        if (editorValue.text.isBlank()) return@LaunchedEffect
+        delay(md.vox.android.ui.CaptureViewModel.LIVE_SAVE_DEBOUNCE_MILLIS)
+        submitCapture(editorValue.text, capturedURL, live = true)
+    }
+    val latestEditorText by rememberUpdatedState(editorValue.text)
+    val latestURL by rememberUpdatedState(capturedURL)
+    val latestLive by rememberUpdatedState(liveNote)
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            // Going to the background writes the first words now instead of after the idle delay.
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_STOP && !latestLive.isStarted && !latestLive.isWriting &&
+                latestEditorText.isNotBlank() && (state.presetCollection?.activePreset?.locationPolicy?.isEnabled != true)
+            ) {
+                submitCapture(latestEditorText, latestURL, live = true)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
     var showsShareSheet by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(state.pendingExternalDraftID) {
@@ -1009,6 +1081,7 @@ internal fun CaptureScreen(
     }
 
     fun addRecordingTranscriptToDraft(transcript: String) {
+        if (!state.liveNote.isStarted) justAddedRecordingMillis = recordingTranscription?.durationMillis?.takeIf { it > 0 }
         commitEditorValue(committingRecordingTranscript(transcript), registerUndo = false)
         markRecordingAdded()
         presentNotice(voxUiText("Transcript added to the current draft."))
@@ -1055,6 +1128,11 @@ internal fun CaptureScreen(
     }
 
     fun sendRecordingWithPreset(transcript: String) {
+        // A live note is already the file: the transcript belongs in it, not in a second capture.
+        if (state.liveNote.isStarted) {
+            addRecordingTranscriptToDraft(transcript)
+            return
+        }
         coroutineScope.launch {
             val sessionID = recordingStatus.sessionID
             if (sessionID == null) {
@@ -1104,12 +1182,15 @@ internal fun CaptureScreen(
         if (needsAttention) showsVoiceCaptureDetails = true
     }
 
+    LaunchedEffect(liveNote.highlight == null && liveHighlight == null) {
+        if (liveHighlight == null) justAddedRecordingMillis = null
+    }
     val captureTextDescription = voxString("Capture Text")
+    // An empty composer is just the caret; only microphone-off guidance earns copy.
     val composerPlaceholder = if (microphoneBlocked) {
         voxString("Type, paste or attach — or turn on the microphone to speak.")
     } else {
-        (state.draft.frozenPreset ?: state.presetCollection?.activePreset)?.capturePrompt?.trim()?.takeIf(String::isNotEmpty)
-            ?: voxString("Start typing, speak, or tap an action below")
+        null
     }
     val activePreset = state.draft.frozenPreset ?: state.presetCollection?.activePreset
     val routeDestination = activePreset?.destination ?: state.destination
@@ -1130,6 +1211,19 @@ internal fun CaptureScreen(
         containerColor = c.bg,
         topBar = {
             CaptureTopControls(
+                liveBreadcrumb = liveNoteBreadcrumb(
+                    routeDestination?.displayName,
+                    liveNote.relativePath ?: LiveNotePlan.plannedPath(activePreset, state.draft.routeOverride),
+                    activePreset?.takeIf { !liveNote.isBound && it.placement == CapturePlacementKind.BENEATH_HEADING && it.headingTitle.isNotBlank() && state.draft.routeOverride == null }
+                        ?.let { "#".repeat(it.headingLevel.coerceIn(1, 6)) + " " + it.headingTitle },
+                ),
+                liveStatus = when {
+                    liveNote.isStarted -> liveNote.status
+                    editorValue.text.isNotBlank() -> liveNote.copy(localText = editorValue.text).status
+                    else -> LiveNoteStatus.BLANK
+                },
+                liveRouteEditable = !liveNote.isStarted && !liveNote.isWriting,
+                onBack = onCloseOpenedFile,
                 compactHeight = compactHeight,
                 preset = state.presetCollection?.activePreset,
                 destination = routeDestination,
@@ -1142,6 +1236,7 @@ internal fun CaptureScreen(
                 openHistory = openHistory,
                 openSettings = openSettings,
                 openActivity = openActivity,
+                openFiles = openFiles,
                 activityBadge = activityBadge,
                 hideKeyboard = {
                     focusManager.clearFocus()
@@ -1154,9 +1249,10 @@ internal fun CaptureScreen(
                 compactHeight = compactHeight,
                 // The route being typed into shows its own quick actions when it has them.
                 captureBar = state.captureBar.forRoute(activePreset?.id),
-                hasContent = editorValue.text.isNotBlank() || capturedURL != null || state.draft.attachments.isNotEmpty(),
-                isSending = sendingCapture,
-                onSubmit = { submitCapture(editorValue.text, capturedURL) },
+                hasContent = liveNote.isStarted || editorValue.text.isNotBlank() || capturedURL != null || state.draft.attachments.isNotEmpty(),
+                isSending = sendingCapture && !liveNote.isStarted,
+                onSubmit = onNewNote,
+                newNoteLabel = voxString(if (liveNote.binding?.isAppendTarget == true && onCloseOpenedFile == null) "Done" else "New"),
                 toggleKeyboard = {
                     focusManager.clearFocus()
                     keyboardController?.hide()
@@ -1230,7 +1326,24 @@ internal fun CaptureScreen(
                 .padding(horizontal = SignalMetrics.PageGutter)
                 .padding(top = 4.dp, bottom = 8.dp),
         ) {
-            if (vaultUnreachable) {
+            val conflict = liveNote.conflict
+            if (conflict != null) {
+                LiveNoteConflictBanner(
+                    conflict = conflict,
+                    isBusy = liveNote.isWriting,
+                    useTheirs = { onResolveConflict(md.vox.android.ui.LiveNoteConflictChoice.USE_THEIRS) },
+                    keepMine = { onResolveConflict(md.vox.android.ui.LiveNoteConflictChoice.KEEP_MINE) },
+                    saveCopy = { onResolveConflict(md.vox.android.ui.LiveNoteConflictChoice.SAVE_COPY) },
+                    modifier = Modifier.padding(bottom = 12.dp),
+                )
+            } else if (liveNote.isUnreachable) {
+                LiveNoteOfflineBanner(
+                    folderName = routeDestination?.displayName ?: voxString("vault"),
+                    relativePath = liveNote.relativePath?.takeUnless { it.contains('{') },
+                    reconnect = { regrantVaultAccess(liveNote.pending?.requestID) },
+                    modifier = Modifier.padding(bottom = 12.dp),
+                )
+            } else if (vaultUnreachable) {
                 CaptureVaultUnreachableBanner(
                     regrantAccess = {
                         regrantVaultAccess(state.history.firstOrNull { it.state == CaptureState.NEEDS_PERMISSION }?.requestID)
@@ -1252,26 +1365,68 @@ internal fun CaptureScreen(
                     .fillMaxWidth()
                     .weight(1f),
             ) {
+                val showsRawMarkdown = MarkdownEditorMode.showsRaw()
+                val entryHighlight = LiveNoteHighlightTransformation(
+                    liveHighlight,
+                    liveNoteHighlightColor(),
+                    label = if (liveNote.binding?.isAppendTarget == true) liveNoteJustAddedLabel(justAddedRecordingMillis) else null,
+                    labelStyle = liveNoteJustAddedStyle(),
+                )
+                val markdownColors = markdownEditorColors()
+                // Live preview (formatted mode, bound note): frontmatter and embed lines are drawn
+                // as panels/players over their hidden source, unless the caret is inside them.
+                val density = androidx.compose.ui.platform.LocalDensity.current
+                val previewBlocks = remember(editorValue.text, showsRawMarkdown, liveNote.isBound) {
+                    if (showsRawMarkdown || !liveNote.isBound) emptyList() else LivePreview.blocks(editorValue.text)
+                }
+                val shownBlocks = previewBlocks.filterNot { LivePreview.isRevealed(it, editorValue.selection.start, editorValue.selection.end) }
+                val hiddenBlocks = shownBlocks.map { HiddenPreviewBlock(it.start, it.end, with(density) { previewBlockHeight(it).toSp().value }) }
+                val editorTransformation = if (showsRawMarkdown) {
+                    MarkdownRawTransformation(entryHighlight)
+                } else {
+                    MarkdownFormattedTransformation(markdownColors, entryHighlight, hiddenBlocks)
+                }
+                var editorLayout by remember { mutableStateOf<androidx.compose.ui.text.TextLayoutResult?>(null) }
+                val embedLookups = remember(liveNote.binding?.location) { mutableMapOf<String, String?>() }
+                val resolveEmbedCached: suspend (String) -> String? = { target ->
+                    if (embedLookups.containsKey(target)) embedLookups[target] else resolveEmbed(target).also { embedLookups[target] = it }
+                }
+                fun revealBlock(block: PreviewBlock) {
+                    // Inside the block's first content line: "---\n" → first property, embeds → after "![[".
+                    val inside = if (block is FrontmatterBlock) (block.start + 4).coerceAtMost(block.end) else (block.start + 3).coerceAtMost(block.end)
+                    // Moving the caret is enough: the block re-lays out as its source, and a tap
+                    // on that text edits it. (Requesting focus here lets the text field restore
+                    // its own last caret, which would hide the block again.)
+                    editorValue = editorValue.copy(selection = TextRange(inside))
+                }
+                val editorScroll = rememberScrollState()
+                androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxSize()) {
+                val viewport = maxHeight
+                Box(Modifier.fillMaxSize().verticalScroll(editorScroll)) {
                 BasicTextField(
                     value = editorValue,
                     onValueChange = { commitEditorValue(it) },
+                    // Raw shows the file's Markdown source in mono; formatted styles it in
+                    // place. Either way the characters, and so the file, are unchanged.
+                    visualTransformation = editorTransformation,
+                    onTextLayout = { editorLayout = it },
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
+                        .heightIn(min = viewport)
                         .focusRequester(focusRequester)
                         .testTag("capture-editor")
                         .semantics { contentDescription = captureTextDescription },
                     textStyle = TextStyle(
                         color = c.text,
-                        fontFamily = GeistFontFamily,
-                        fontSize = 18.sp,
-                        lineHeight = 27.sp,
+                        fontFamily = if (showsRawMarkdown) md.vox.android.ui.GeistMonoFontFamily else GeistFontFamily,
+                        fontSize = if (showsRawMarkdown) 15.sp else 18.sp,
+                        lineHeight = if (showsRawMarkdown) 23.sp else 27.sp,
                     ),
                     cursorBrush = SolidColor(c.tint),
                     decorationBox = { inner ->
-                        Box(Modifier.fillMaxSize().padding(top = 8.dp)) {
-                            if (editorValue.text.isEmpty()) {
-                                // CaptureRestActions board: a quiet prompt at the caret, the
-                                // route's own capture prompt, or microphone-off guidance.
+                        Box(Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                            if (editorValue.text.isEmpty() && composerPlaceholder != null) {
+                                // Microphone-off guidance only; otherwise the caret stands alone.
                                 Text(
                                     composerPlaceholder,
                                     color = c.faint,
@@ -1283,6 +1438,36 @@ internal fun CaptureScreen(
                         }
                     },
                 )
+                val layout = editorLayout
+                if (layout != null && shownBlocks.isNotEmpty()) {
+                    val mapping = remember(editorValue.text, editorTransformation) {
+                        editorTransformation.filter(androidx.compose.ui.text.AnnotatedString(editorValue.text)).offsetMapping
+                    }
+                    shownBlocks.forEach { block ->
+                        val transformedLength = layout.layoutInput.text.length
+                        val startOffset = mapping.originalToTransformed(block.start).coerceIn(0, transformedLength)
+                        val endOffset = mapping.originalToTransformed(block.end).coerceIn(0, transformedLength)
+                        val top = layout.getLineTop(layout.getLineForOffset(startOffset))
+                        val bottom = layout.getLineBottom(layout.getLineForOffset(endOffset))
+                        val height = with(density) { (bottom - top).toDp() } - 6.dp
+                        val panel = Modifier
+                            .padding(top = 8.dp + with(density) { top.toDp() } + 3.dp)
+                            .height(height.coerceAtLeast(24.dp))
+                        when (block) {
+                            is FrontmatterBlock -> FrontmatterPanel(block, reveal = { revealBlock(block) }, modifier = panel)
+                            is EmbedBlock -> EmbedPreview(block, resolve = resolveEmbedCached, reveal = { revealBlock(block) }, modifier = panel)
+                        }
+                    }
+                }
+                }
+                }
+            }
+            if (liveHighlight != null && liveNote.binding?.isAppendTarget == true) {
+                LiveNoteWholeFileHint()
+            }
+            state.liveNoteReleased?.let { release ->
+                Spacer(Modifier.height(8.dp))
+                LiveNoteReleasedToast(release = release, reopen = onReopenReleased, dismiss = onDismissReleased)
             }
             if (capturedURL != null) {
                 Spacer(Modifier.height(10.dp))
@@ -1319,6 +1504,12 @@ internal fun CaptureScreen(
             resume = resumeRecording,
             stop = stopRecording,
             cancel = cancelRecording,
+            writeLine = {
+                val boundPath = liveNote.binding?.location?.relativePath
+                val path = boundPath ?: liveNote.relativePath
+                    ?: LiveNotePlan.plannedPath(activePreset, state.draft.routeOverride)
+                if (path != null) LiveNoteRecordingLine(relativePath = path, isBound = boundPath != null, status = liveNote.status.takeIf { boundPath != null })
+            },
         )
     }
     }
@@ -1350,6 +1541,15 @@ internal fun CaptureTopControls(
     /** Phones only: opens Activity from the header. Null when a navigation rail carries it. */
     openActivity: (() -> Unit)? = null,
     activityBadge: Int = 0,
+    /** Live Notes breadcrumb ("Vox Notes / Inbox / {title}.md") and its status pill. */
+    liveBreadcrumb: String? = null,
+    liveStatus: LiveNoteStatus = LiveNoteStatus.BLANK,
+    /** Before the first write the path opens the route editor; afterwards it is fixed. */
+    liveRouteEditable: Boolean = true,
+    /** Files tab: Back replaces the preset selector. */
+    onBack: (() -> Unit)? = null,
+    /** Phones: Files, before Activity and Settings in the header. */
+    openFiles: (() -> Unit)? = null,
 ) {
     val routeEditor = rememberCaptureRouteEditorState()
     val c = Signal.colors
@@ -1373,7 +1573,20 @@ internal fun CaptureTopControls(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            CaptureRoutePillsRow(
+            if (onBack != null) Box(Modifier.weight(1f)) {
+                Row(
+                    modifier = Modifier
+                        .heightIn(min = 40.dp)
+                        .clip(CircleShape)
+                        .clickable(role = Role.Button, onClick = onBack)
+                        .padding(end = 12.dp)
+                        .testTag("live-note-back"),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(Icons.AutoMirrored.Outlined.KeyboardArrowLeft, contentDescription = null, tint = c.tint, modifier = Modifier.size(24.dp))
+                    Text(voxString("Files"), style = MaterialTheme.typography.labelMedium, color = c.tint)
+                }
+            } else CaptureRoutePillsRow(
                 presets = pills,
                 selectedID = preset?.id ?: pills.first().id,
                 enabled = canChangeRoute,
@@ -1391,6 +1604,14 @@ internal fun CaptureTopControls(
                     Text(voxString("Done"), style = MaterialTheme.typography.labelMedium, color = c.tint)
                 }
             } else if (openActivity != null) {
+                if (openFiles != null) {
+                    SignalCircleButton(
+                        icon = Icons.Outlined.Folder,
+                        contentDescription = voxString("Files"),
+                        onClick = openFiles,
+                        modifier = Modifier.testTag("capture-files"),
+                    )
+                }
                 val activityLabel = voxString("Activity")
                 val activityDescription = if (activityBadge > 0) {
                     voxFormat("%@ · %@", activityLabel, activityBadge.toString())
@@ -1431,13 +1652,31 @@ internal fun CaptureTopControls(
             }
         }
         if (!compactHeight) Box(Modifier.padding(horizontal = 16.dp)) {
-            CaptureRouteControl(
-                route = route,
-                destination = destination,
-                enabled = canChangeRoute,
-                editor = routeEditor,
-                onChanged = onRouteChanged,
-            )
+            if (liveBreadcrumb != null) {
+                LiveNoteCrumb(
+                    breadcrumb = liveBreadcrumb,
+                    status = liveStatus,
+                    onPathClick = if (liveRouteEditable && canChangeRoute) ({ routeEditor.open(route) }) else null,
+                    trailing = { MarkdownModeToggle() },
+                )
+                // The route editor dialog still belongs to CaptureRouteControl; keep it reachable.
+                if (routeEditor.showsDialog) CaptureRouteControl(
+                    route = route,
+                    destination = destination,
+                    enabled = canChangeRoute,
+                    editor = routeEditor,
+                    onChanged = onRouteChanged,
+                    showsLabel = false,
+                )
+            } else {
+                CaptureRouteControl(
+                    route = route,
+                    destination = destination,
+                    enabled = canChangeRoute,
+                    editor = routeEditor,
+                    onChanged = onRouteChanged,
+                )
+            }
         }
     }
 }
@@ -1617,6 +1856,8 @@ internal fun CaptureBottomControls(
     setRecordingResult: (VoiceRecordingResult) -> Unit = {},
     markRecordingMoment: () -> Unit = {},
     addRecordingTask: () -> Unit = {},
+    /** Live Notes: the trailing button is "New" (release and start a blank note), not Send. */
+    newNoteLabel: String? = null,
 ) {
     val c = Signal.colors
     var showsAllQuickActions by rememberSaveable { mutableStateOf(initialShowsAllQuickActions) }
@@ -1883,6 +2124,27 @@ internal fun CaptureBottomControls(
                 }
             }
             if (wideComposer) Spacer(Modifier.weight(1f))
+            if (newNoteLabel != null) {
+                val canStartNew = hasContent && !isSending
+                val newDescription = voxString("New note")
+                Row(
+                    modifier = Modifier
+                        .height(56.dp)
+                        .clip(actionShape)
+                        .background(if (canStartNew) c.accentSoft else c.accentSoft.copy(alpha = 0.5f))
+                        .clickable(enabled = canStartNew, role = Role.Button, onClick = onSubmit)
+                        .testTag("live-note-new")
+                        .semantics { contentDescription = newDescription }
+                        .padding(horizontal = 14.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                ) {
+                    val ink = c.accentText.copy(alpha = if (canStartNew) 1f else 0.45f)
+                    Icon(Icons.AutoMirrored.Outlined.NoteAdd, contentDescription = null, tint = ink, modifier = Modifier.size(20.dp))
+                    Text(newNoteLabel, style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold), color = ink, maxLines = 1)
+                }
+                return@Row
+            }
             val canSend = hasContent && !isSending
             Box(
                 modifier = Modifier
@@ -2916,4 +3178,14 @@ internal fun LinkDialog(initialValue: String, onDismiss: () -> Unit, onSave: (St
             )
         }
     }
+}
+
+/** Speech inserted into a bound note at [at], separated from neighbouring words by single spaces. */
+internal fun insertSpokenText(text: String, at: Int, spoken: String): String {
+    val position = at.coerceIn(0, text.length)
+    val before = text.substring(0, position)
+    val after = text.substring(position)
+    val spacer = if (before.isEmpty() || before.last().isWhitespace()) "" else " "
+    val trailing = if (after.isNotEmpty() && !after.first().isWhitespace()) " " else ""
+    return before + spacer + spoken + trailing + after
 }

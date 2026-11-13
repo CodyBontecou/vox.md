@@ -28,6 +28,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.MicNone
@@ -81,7 +82,8 @@ import md.vox.android.ui.SignalButtonVariant
 /** The four top-level destinations shown in the navigation bar and rail. */
 internal enum class VoxTopLevelDestination(val route: String) {
     CAPTURE(Destination.Capture.route),
-    HISTORY(Destination.History.route),
+    /** Live Notes: the vault tree replaces History as a destination (History stays reachable from Activity). */
+    FILES(FILES_ROUTE),
     ACTIVITY(ACTIVITY_ROUTE),
     SETTINGS(Destination.Settings.route),
     ;
@@ -92,11 +94,13 @@ internal enum class VoxTopLevelDestination(val route: String) {
 }
 
 internal const val ACTIVITY_ROUTE = "activity"
+internal const val FILES_ROUTE = "files"
+internal const val FILES_FOLDER_ROUTE = "files-folder"
 
 private val VoxTopLevelDestination.icon: ImageVector
     get() = when (this) {
         VoxTopLevelDestination.CAPTURE -> Icons.Outlined.EditNote
-        VoxTopLevelDestination.HISTORY -> Icons.Outlined.History
+        VoxTopLevelDestination.FILES -> Icons.Outlined.Folder
         VoxTopLevelDestination.ACTIVITY -> Icons.Outlined.Inbox
         VoxTopLevelDestination.SETTINGS -> Icons.Outlined.Tune
     }
@@ -104,7 +108,7 @@ private val VoxTopLevelDestination.icon: ImageVector
 @Composable
 private fun VoxTopLevelDestination.label(): String = when (this) {
     VoxTopLevelDestination.CAPTURE -> voxString("Capture")
-    VoxTopLevelDestination.HISTORY -> voxString("Library")
+    VoxTopLevelDestination.FILES -> voxString("Files")
     VoxTopLevelDestination.ACTIVITY -> voxString("Activity")
     VoxTopLevelDestination.SETTINGS -> voxString("Settings")
 }
@@ -214,13 +218,13 @@ private fun VoxNavigationItem(
                     .width(indicatorWidth)
                     .height(32.dp)
                     .clip(CircleShape)
-                    .background(if (selected) c.secondarySoft else androidx.compose.ui.graphics.Color.Transparent),
+                    .background(if (selected) c.accentSoft else androidx.compose.ui.graphics.Color.Transparent),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     destination.icon,
                     contentDescription = null,
-                    tint = if (selected) c.secondaryText else c.muted,
+                    tint = if (selected) c.tint else c.muted,
                     modifier = Modifier.size(24.dp),
                 )
             }
@@ -250,6 +254,43 @@ private fun VoxNavigationItem(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
+    }
+}
+
+/**
+ * Phone tab bar (Live Notes): Capture / Files / Activity / Settings, the Signal pill
+ * indicator over the selected icon. Hidden while the keyboard is up so the composer dock
+ * sits directly on the keyboard.
+ */
+@Composable
+internal fun VoxBottomBar(
+    current: VoxTopLevelDestination?,
+    activityBadge: Int,
+    onSelect: (VoxTopLevelDestination) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val c = Signal.colors
+    Column(modifier.fillMaxWidth().background(c.disabledFill)) {
+        Box(Modifier.fillMaxWidth().height(1.dp).background(c.border))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(horizontal = 8.dp, vertical = 6.dp)
+                .selectableGroup()
+                .testTag("vox-bottom-bar"),
+        ) {
+            VoxTopLevelDestination.entries.forEach { destination ->
+                VoxNavigationItem(
+                    destination = destination,
+                    selected = destination == current,
+                    badge = if (destination == VoxTopLevelDestination.ACTIVITY) activityBadge else 0,
+                    onClick = { onSelect(destination) },
+                    indicatorWidth = 52.dp,
+                    modifier = Modifier.weight(1f).heightIn(min = 52.dp),
+                )
+            }
+        }
     }
 }
 

@@ -35,6 +35,24 @@ final class QuickCaptureViewModel {
     var lastHeldForVaultRequestID: UUID?
     var failedInboxCount = 0
     var historyRecords: [CaptureHistoryRecord] = []
+    /// Live Notes: the vault file this composer is editing once its first
+    /// words were saved. `nil` while the composer holds an unsaved note.
+    var liveNote: LiveNoteSession?
+    /// The note New note just closed; drives the Reopen toast.
+    var lastClosedNote: ClosedLiveNote?
+    /// When on, the composer saves into the preset's file by itself and
+    /// keeps editing it (iOS). Off keeps the classic Send-and-clear flow.
+    var liveNotesEnabled = false
+    /// The first save is waiting because the vault folder is unreachable.
+    var liveNoteFirstSaveBlocked = false
+    /// Append presets: the entry this capture added inside the whole file,
+    /// highlighted with "JUST ADDED" until the note is closed.
+    var liveNoteHighlightedEntry: String?
+    @ObservationIgnored private var autoFirstSaveTask: Task<Void, Never>?
+    /// Live preview embeds: the open note's vault, kept in security scope
+    /// while the note is open, and resolved embed files by target.
+    @ObservationIgnored private var embedScopedRoot: (destinationID: UUID, url: URL)?
+    @ObservationIgnored private var embedURLCache: [String: URL?] = [:]
     /// Optional Library origin detail per request ID (for example the Mac
     /// Quick Capture panel). Stored on the history record as `sourceDetail`.
     @ObservationIgnored var historySourceDetails: [UUID: String] = [:]
@@ -316,6 +334,7 @@ final class QuickCaptureViewModel {
             draft.preserveCaptureStart(from: persistedDraft)
             historyRecords = (try? await historyStore?.list()) ?? []
             errorMessage = nil
+            await restoreLiveNoteIfNeeded()
             return true
         } catch {
             errorMessage = error.localizedDescription
@@ -485,6 +504,9 @@ final class QuickCaptureViewModel {
             return false
         }
         voxProfiles = profiles
+        // The open Live Note belongs to the previous preset: close it and
+        // start a blank note in the new one.
+        closeLiveNoteForPresetSwitch()
         draft.selectVox(id)
         CapturePresetProfileStore.selectCaptureProfile(id: id, defaults: defaults)
         scheduleDraftSave()
@@ -644,6 +666,7 @@ final class QuickCaptureViewModel {
             guard !Task.isCancelled, let self else { return }
             await self.saveDraftNow()
         }
+        liveNoteTextDidChange()
     }
 
     func saveDraftNow() async {
@@ -743,6 +766,9 @@ final class QuickCaptureViewModel {
         draft.text = updatedText
         draft.updatedAt = Date()
         recordedTranscriptCaretOffset = preview.caretOffset
+        // Live Notes: spoken words reach the open file as they arrive; the
+        // durable draft still waits for the final transcript.
+        liveNoteTextDidChange()
     }
 
     /// Adds a recording-action line (timestamp marker, empty task) to the
@@ -792,6 +818,8 @@ final class QuickCaptureViewModel {
         recordedTranscriptInsertionOffset = nil
         recordedTranscriptCaretOffset = nil
         draft.text = restoredText
+        // A cancelled recording takes its words back out of the open file.
+        liveNoteTextDidChange()
         await saveDraftNow()
     }
 
@@ -1487,6 +1515,7 @@ final class QuickCaptureViewModel {
         }
         draft.additionalPayloads.append(.url(url, title: title))
         await saveDraftNow()
+        await embedPendingAttachmentsInLiveNote()
     }
 
     func removePayload(at index: Int) async {
@@ -1524,6 +1553,8 @@ final class QuickCaptureViewModel {
     }
 
     func submit() async {
+        // A bound Live Note saves itself; it is never re-sent as a capture.
+        guard liveNote == nil else { return }
         guard liveRecordedTranscriptPreview == nil else {
             errorMessage = String(localized: "Finish the current recording before sending this Capture.")
             return
@@ -1762,6 +1793,19 @@ final class QuickCaptureViewModel {
                     failureCategory: nil,
                     receipt: receipt
                 )
+            }
+            if liveNotesEnabled {
+                try await bindDeliveredNote(
+                    receipt: receipt,
+                    destinationID: submittedDestinationID,
+                    submittedDraft: submittedDraft,
+                    presetID: submittedVoxProfile?.id,
+                    draftStore: draftStore
+                )
+                destinations = library.destinations
+                entryTemplates = library.entryTemplates
+                isSubmitting = false
+                return
             }
             if let concurrentlyEdited = try await draftStore.load(id: submittedDraftID) {
                 let rebased = concurrentlyEdited.rebased(afterSubmitting: submittedDraft)
@@ -2286,6 +2330,8 @@ final class QuickCaptureViewModel {
             }
             throw error
         }
+        // Live Notes: an open note takes attachments straight into the vault.
+        await embedPendingAttachmentsInLiveNote()
     }
 
     private func attachmentsFitInputBudget(_ payloads: [CapturePayload]) -> Bool {
@@ -2653,4 +2699,561 @@ struct CaptureFailedInboxEntry: Identifiable, Equatable {
     let markdown: String?
 
     var id: UUID { requestID }
+}
+
+// MARK: - Live Notes
+
+/// The composer as an editor of a real vault file: the first words are saved
+/// through the regular capture pipeline (presets, processing, location,
+/// attachments, history), then the composer stays bound to the written file
+/// and every edit autosaves to it. New note releases the binding.
+extension QuickCaptureViewModel {
+    private var liveNoteBindingStore: LiveNoteBindingStore? {
+        captureRootURL.map {
+            LiveNoteBindingStore(fileURL: $0.appendingPathComponent("live-note-binding.json"))
+        }
+    }
+
+    /// The vault root for a destination, if its folder is reachable now.
+    func vaultRootURL(destinationID: UUID) -> URL? {
+        guard let destination = destinations.first(where: { $0.id == destinationID }) else { return nil }
+        return Self.reachableRootURL(for: destination)
+    }
+
+    /// Composer text without volatile live-transcript words.
+    private var durableDraftText: String {
+        var text = draft.text
+        if var preview = liveRecordedTranscriptPreview {
+            text = preview.cancel(in: text)
+        }
+        return text
+    }
+
+    /// What the save pill under the preset shows.
+    var liveNoteStatus: LiveNoteStatus {
+        if let liveNote { return liveNote.status }
+        if liveNoteFirstSaveBlocked { return .unreachable }
+        if isSubmitting, draft.hasCaptureContent { return .saving }
+        return .idle
+    }
+
+    /// The recording dock's line: where the words are going right now.
+    var liveNoteRecordingLine: (text: String, isLive: Bool)? {
+        guard liveNotesEnabled else { return nil }
+        if let liveNote {
+            return (String(localized: "Writing to \(liveNote.binding.relativePath) as you talk"), true)
+        }
+        let target = resolvedDestinationPreview ?? selectedVoxProfile?.name ?? ""
+        return (String(localized: "Saves to \(target) when you stop"), false)
+    }
+
+    /// The vault-relative file the composer is writing, for the breadcrumb.
+    var liveNoteRelativePath: String? {
+        liveNote?.binding.relativePath
+    }
+
+    func liveNoteTextDidChange() {
+        guard liveNotesEnabled else { return }
+        if let liveNote {
+            // Words appear in the file as they are spoken; a cancelled
+            // recording removes them again on the next save.
+            liveNote.textDidChange(draft.text)
+        } else {
+            scheduleAutoFirstSave()
+        }
+    }
+
+    /// Presets that rewrite text with on-device AI wait for a longer pause,
+    /// so they process a thought rather than half a sentence.
+    private var firstSaveDelay: Duration {
+        guard let profile = selectedVoxProfile,
+              profile.captureProcessingEnabled,
+              profile.postProcessingMode != .none else { return .milliseconds(1500) }
+        return .seconds(4)
+    }
+
+    func scheduleAutoFirstSave() {
+        autoFirstSaveTask?.cancel()
+        autoFirstSaveTask = nil
+        guard liveNotesEnabled, liveNote == nil, draft.hasCaptureContent else {
+            liveNoteFirstSaveBlocked = false
+            return
+        }
+        let delay = firstSaveDelay
+        autoFirstSaveTask = Task { [weak self] in
+            try? await Task.sleep(for: delay)
+            guard !Task.isCancelled, let self else { return }
+            await self.performAutoFirstSave()
+        }
+    }
+
+    private func performAutoFirstSave() async {
+        autoFirstSaveTask = nil
+        guard liveNotesEnabled, liveNote == nil, !isSubmitting,
+              liveRecordedTranscriptPreview == nil, canSubmit else { return }
+        guard let destination = selectedDestination,
+              Self.reachableRootURL(for: destination) != nil else {
+            // Keep the words in the durable draft; retry when the app becomes
+            // active or the folder is reconnected.
+            liveNoteFirstSaveBlocked = true
+            return
+        }
+        liveNoteFirstSaveBlocked = false
+        await submit()
+    }
+
+    /// Called from `submit()` after the first save wrote the note: load the
+    /// whole file into the composer and keep editing it.
+    private func bindDeliveredNote(
+        receipt: CaptureReceipt,
+        destinationID: UUID,
+        submittedDraft: CaptureDraft,
+        presetID: String?,
+        draftStore: CaptureDraftStore
+    ) async throws {
+        let relativePath = historyRelativeNotePath(for: receipt, destinationID: destinationID)
+            ?? receipt.noteURL.lastPathComponent
+        // Words typed or dictated while the first save was running.
+        let rebased = draft.rebased(afterSubmitting: submittedDraft)
+        let remainder = rebased.hasCaptureContent ? rebased.text : ""
+        try? await draftStore.complete(draftID: submittedDraft.id)
+
+        var snapshot: VaultNoteSnapshot?
+        if let rootURL = vaultRootURL(destinationID: destinationID) {
+            snapshot = await Self.readVaultNote(rootURL: rootURL, relativePath: relativePath)
+        }
+        let fileText = snapshot?.text ?? receipt.renderedEntry ?? submittedDraft.text
+        var editorText = fileText
+        if !remainder.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            editorText += (editorText.hasSuffix("\n") ? "\n" : "\n\n") + remainder
+        }
+        var next = CaptureDraft(voxID: presetID, destinationSelectionMode: .inherited)
+        next.text = editorText
+        draft = next
+        try await draftStore.save(draft)
+        // Highlight the entry only when the file holds more than it (daily
+        // notes, fixed notes): a new note *is* the entry.
+        let entry = receipt.renderedEntry?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let whole = fileText.trimmingCharacters(in: .whitespacesAndNewlines)
+        // A new-note preset's file *is* the entry; only appends get the card.
+        let appendsIntoSharedFile: Bool = {
+            guard let destination = destinations.first(where: { $0.id == destinationID }) else { return false }
+            if case .newNote = destination.noteTarget { return submittedDraft.relativeNotePathOverride != nil }
+            return true
+        }()
+        liveNoteHighlightedEntry = appendsIntoSharedFile && !entry.isEmpty && whole.count > entry.count + 8 ? entry : nil
+        attachLiveNote(
+            binding: LiveNoteBinding(
+                destinationID: destinationID,
+                relativePath: relativePath,
+                savedVersion: snapshot?.version ?? VaultNoteVersion(text: fileText),
+                entryRequestID: receipt.requestID,
+                presetID: presetID
+            ),
+            text: editorText
+        )
+    }
+
+    private func attachLiveNote(binding: LiveNoteBinding, text: String) {
+        let session = LiveNoteSession(binding: binding, text: text) { [weak self] destinationID in
+            self?.vaultRootURL(destinationID: destinationID)
+        }
+        session.applyExternalText = { [weak self] text in
+            guard let self else { return }
+            self.draft.text = text
+            Task { try? await self.persistDurableDraft() }
+        }
+        let store = liveNoteBindingStore
+        session.bindingDidChange = { binding in store?.save(binding) }
+        store?.save(binding)
+        liveNoteFirstSaveBlocked = false
+        liveNote = session
+        session.saveIfNeeded()
+    }
+
+    /// Reattaches the file the composer was editing before a relaunch.
+    func restoreLiveNoteIfNeeded() async {
+        guard liveNotesEnabled, liveNote == nil, let binding = liveNoteBindingStore?.load() else { return }
+        attachLiveNote(binding: binding, text: draft.text)
+        await liveNote?.checkDisk()
+    }
+
+    /// New note: save and close the open file, then start a blank note.
+    func startNewNote() async {
+        autoFirstSaveTask?.cancel()
+        autoFirstSaveTask = nil
+        if liveNote == nil, draft.hasCaptureContent {
+            await submit()
+            guard liveNote != nil else { return }
+        }
+        guard let session = liveNote else { return }
+        await session.flush()
+        lastClosedNote = ClosedLiveNote(
+            binding: session.binding,
+            presetName: selectedVoxProfile?.name ?? "",
+            closedAt: Date()
+        )
+        liveNote = nil
+        liveNoteHighlightedEntry = nil
+        releaseEmbedScope()
+        liveNoteBindingStore?.save(nil)
+        let presetID = draft.voxID
+        if let draftStore {
+            try? await draftStore.complete(draftID: draft.id)
+        }
+        draft = CaptureDraft(voxID: presetID, destinationSelectionMode: .inherited)
+        try? await persistDurableDraft()
+    }
+
+    /// Switching presets while a file is open closes that file first.
+    func closeLiveNoteForPresetSwitch() {
+        guard let session = liveNote else { return }
+        lastClosedNote = ClosedLiveNote(
+            binding: session.binding,
+            presetName: selectedVoxProfile?.name ?? "",
+            closedAt: Date()
+        )
+        liveNote = nil
+        liveNoteHighlightedEntry = nil
+        releaseEmbedScope()
+        liveNoteBindingStore?.save(nil)
+        let closedDraftID = draft.id
+        let draftStore = self.draftStore
+        Task {
+            await session.flush()
+            try? await draftStore?.complete(draftID: closedDraftID)
+        }
+        draft = CaptureDraft(voxID: draft.voxID, destinationSelectionMode: .inherited)
+    }
+
+    /// Reopens the note New note just closed (the toast's Reopen).
+    func reopenClosedNote() async {
+        guard let closed = lastClosedNote, liveNote == nil else { return }
+        lastClosedNote = nil
+        if draft.hasCaptureContent { return }
+        await openLiveNote(binding: closed.binding)
+    }
+
+    /// Opens any vault note in the composer (Files → a note).
+    func openLiveNote(binding: LiveNoteBinding) async {
+        if let liveNote, liveNote.binding.relativePath == binding.relativePath,
+           liveNote.binding.destinationID == binding.destinationID { return }
+        if liveNote != nil { await startNewNote(); lastClosedNote = nil }
+        guard let rootURL = vaultRootURL(destinationID: binding.destinationID),
+              let snapshot = await Self.readVaultNote(rootURL: rootURL, relativePath: binding.relativePath) else {
+            errorMessage = String(localized: "Vox.md can't open that file right now.")
+            return
+        }
+        var opened = binding
+        opened.savedVersion = snapshot.version
+        liveNoteHighlightedEntry = nil
+        if let draftStore {
+            try? await draftStore.complete(draftID: draft.id)
+        }
+        var next = CaptureDraft(voxID: binding.presetID ?? draft.voxID, destinationSelectionMode: .inherited)
+        next.text = snapshot.text
+        draft = next
+        try? await persistDurableDraft()
+        attachLiveNote(binding: opened, text: snapshot.text)
+    }
+
+    func liveNoteSceneDidEnterBackground() async {
+        await liveNote?.flush()
+    }
+
+    func liveNoteSceneDidBecomeActive() async {
+        if let liveNote {
+            await liveNote.checkDisk()
+        } else if liveNoteFirstSaveBlocked || draft.hasCaptureContent {
+            scheduleAutoFirstSave()
+        }
+    }
+
+    nonisolated static func readVaultNote(rootURL: URL, relativePath: String) async -> VaultNoteSnapshot? {
+        await Task.detached(priority: .userInitiated) {
+            let didAccess = rootURL.startAccessingSecurityScopedResource()
+            defer { if didAccess { rootURL.stopAccessingSecurityScopedResource() } }
+            return try? VaultNoteDocument(rootURL: rootURL, relativePath: relativePath).read()
+        }.value
+    }
+}
+
+// MARK: - Files (vault tree)
+
+/// One vault root shown in Files. Destinations that share a folder share a vault.
+struct VaultRoot: Identifiable, Equatable {
+    var destinationID: UUID
+    var name: String
+    var id: UUID { destinationID }
+}
+
+/// A preset shown as a badge on the folder or file it writes to.
+struct VaultPresetBadge: Identifiable, Equatable, Hashable {
+    var presetID: String
+    var name: String
+    var isSelected: Bool
+    var id: String { presetID }
+
+    var initial: String {
+        name.trimmingCharacters(in: .whitespaces).first.map { String($0).uppercased() } ?? "•"
+    }
+}
+
+extension QuickCaptureViewModel {
+    /// Distinct vault folders behind the configured destinations.
+    var vaultRoots: [VaultRoot] {
+        var seen = Set<Data>()
+        var roots: [VaultRoot] = []
+        for destination in destinations where seen.insert(destination.rootBookmark).inserted {
+            roots.append(VaultRoot(destinationID: destination.id, name: destination.rootName))
+        }
+        return roots
+    }
+
+    /// Preset badges keyed by vault-relative folder or fixed note path, for
+    /// the vault that `rootDestinationID` belongs to.
+    func presetBadges(inVaultOf rootDestinationID: UUID) -> [String: [VaultPresetBadge]] {
+        guard let root = destinations.first(where: { $0.id == rootDestinationID }) else { return [:] }
+        let allowsLegacyFallback = !CapturePresetProfileStore.hasOwnedRouteMigration(defaults: defaults)
+        let selectedID = selectedVoxProfile?.id
+        var badges: [String: [VaultPresetBadge]] = [:]
+        for profile in voxProfiles where profile.isEnabled {
+            guard let destinationID = CapturePresetRouteResolver.destinationID(
+                selectionMode: .inherited,
+                explicitDestinationID: nil,
+                profile: profile,
+                destinations: destinations,
+                libraryDefaultDestinationID: defaultDestinationID,
+                allowsLegacyFallback: allowsLegacyFallback
+            ),
+                  let destination = destinations.first(where: { $0.id == destinationID }),
+                  destination.rootBookmark == root.rootBookmark else { continue }
+            let key = VaultFileIndex.fixedNote(for: destination.noteTarget)
+                ?? VaultFileIndex.folder(for: destination.noteTarget)
+            badges[key, default: []].append(VaultPresetBadge(
+                presetID: profile.id,
+                name: profile.name,
+                isSelected: profile.id == selectedID
+            ))
+        }
+        return badges
+    }
+
+    /// Lists one folder level of a vault off the main actor.
+    func vaultChildren(rootDestinationID: UUID, relativeDirectory: String) async -> [VaultFileEntry]? {
+        guard let rootURL = vaultRootURL(destinationID: rootDestinationID) else { return nil }
+        return await Task.detached(priority: .userInitiated) {
+            let didAccess = rootURL.startAccessingSecurityScopedResource()
+            defer { if didAccess { rootURL.stopAccessingSecurityScopedResource() } }
+            return try? VaultFileIndex.children(of: relativeDirectory, rootURL: rootURL)
+        }.value
+    }
+
+    /// First line of real text in a note, for list previews.
+    func vaultNotePreview(rootDestinationID: UUID, relativePath: String) async -> String? {
+        guard let rootURL = vaultRootURL(destinationID: rootDestinationID) else { return nil }
+        return await Task.detached(priority: .utility) {
+            let didAccess = rootURL.startAccessingSecurityScopedResource()
+            defer { if didAccess { rootURL.stopAccessingSecurityScopedResource() } }
+            let url = rootURL.appendingPathComponent(relativePath)
+            guard let handle = try? FileHandle(forReadingFrom: url) else { return nil }
+            defer { try? handle.close() }
+            let data = (try? handle.read(upToCount: 2048)) ?? Data()
+            let text = String(decoding: data, as: UTF8.self)
+            return Self.previewLine(from: text)
+        }.value
+    }
+
+    nonisolated static func previewLine(from markdown: String) -> String? {
+        var lines = markdown.components(separatedBy: .newlines)[...]
+        if lines.first?.trimmingCharacters(in: .whitespaces) == "---" {
+            lines = lines.dropFirst()
+            if let end = lines.firstIndex(where: { $0.trimmingCharacters(in: .whitespaces) == "---" }) {
+                lines = lines[lines.index(after: end)...]
+            }
+        }
+        for line in lines {
+            var trimmed = line.trimmingCharacters(in: .whitespaces)
+            while let first = trimmed.first, "#->*".contains(first) {
+                trimmed.removeFirst()
+                trimmed = trimmed.trimmingCharacters(in: .whitespaces)
+            }
+            if trimmed.hasPrefix("[ ]") || trimmed.hasPrefix("[x]") {
+                trimmed = String(trimmed.dropFirst(3)).trimmingCharacters(in: .whitespaces)
+            }
+            if !trimmed.isEmpty { return trimmed }
+        }
+        return nil
+    }
+}
+
+// MARK: - Live preview embeds
+
+extension QuickCaptureViewModel {
+    /// The file an embed in the open note points to (`![[clip.wav]]`), found
+    /// the way Obsidian does: attachments folder, the note's folder, the vault
+    /// root, then anywhere in the vault by name.
+    func liveNoteEmbedURL(_ target: String) -> URL? {
+        guard let liveNote else { return nil }
+        let binding = liveNote.binding
+        let cacheKey = "\(binding.destinationID.uuidString)|\(binding.relativePath)|\(target)"
+        if let cached = embedURLCache[cacheKey] { return cached }
+        guard let root = scopedEmbedRoot(for: binding.destinationID) else { return nil }
+        let attachments = destinations.first(where: { $0.id == binding.destinationID })?
+            .attachmentsFolderName.trimmingCharacters(in: .whitespacesAndNewlines) ?? "attachments"
+        let resolved = Self.resolveEmbed(
+            target,
+            noteRelativePath: binding.relativePath,
+            rootURL: root,
+            attachmentsFolder: attachments.isEmpty ? "attachments" : attachments
+        )
+        embedURLCache[cacheKey] = resolved
+        return resolved
+    }
+
+    private func scopedEmbedRoot(for destinationID: UUID) -> URL? {
+        if let scoped = embedScopedRoot, scoped.destinationID == destinationID { return scoped.url }
+        releaseEmbedScope()
+        guard let destination = destinations.first(where: { $0.id == destinationID }),
+              let url = try? CaptureBookmarkResolver.resolve(destination.rootBookmark).url else { return nil }
+        // Players read the file after this returns; keep access until the note closes.
+        _ = url.startAccessingSecurityScopedResource()
+        embedScopedRoot = (destinationID, url)
+        return url
+    }
+
+    func releaseEmbedScope() {
+        embedScopedRoot?.url.stopAccessingSecurityScopedResource()
+        embedScopedRoot = nil
+        embedURLCache = [:]
+    }
+
+    nonisolated static func resolveEmbed(
+        _ target: String,
+        noteRelativePath: String,
+        rootURL: URL,
+        attachmentsFolder: String,
+        fileManager: FileManager = .default
+    ) -> URL? {
+        let cleaned = target.trimmingCharacters(in: .whitespaces)
+        guard !cleaned.isEmpty, !cleaned.hasPrefix("/"), !cleaned.contains("..") else { return nil }
+        if let url = URL(string: cleaned), url.scheme != nil { return url.isFileURL ? url : nil }
+        let noteFolder = (noteRelativePath as NSString).deletingLastPathComponent
+        let candidates = [
+            "\(attachmentsFolder)/\(cleaned)",
+            noteFolder.isEmpty ? cleaned : "\(noteFolder)/\(cleaned)",
+            noteFolder.isEmpty ? "\(attachmentsFolder)/\(cleaned)" : "\(noteFolder)/\(attachmentsFolder)/\(cleaned)",
+            cleaned,
+        ]
+        for candidate in candidates {
+            let url = rootURL.appendingPathComponent(candidate)
+            if fileManager.fileExists(atPath: url.path) { return url }
+        }
+        // Obsidian resolves a bare name anywhere in the vault.
+        let name = (cleaned as NSString).lastPathComponent
+        guard let enumerator = fileManager.enumerator(
+            at: rootURL,
+            includingPropertiesForKeys: nil,
+            options: [.skipsHiddenFiles, .skipsPackageDescendants]
+        ) else { return nil }
+        var visited = 0
+        for case let url as URL in enumerator {
+            visited += 1
+            if visited > 20_000 { break }
+            if url.lastPathComponent == name { return url }
+        }
+        return nil
+    }
+}
+
+// MARK: - Attachments in an open note
+
+extension QuickCaptureViewModel {
+    /// With a note open, attachments can't wait for a first save that
+    /// already happened: copy each staged file into the vault's attachments
+    /// folder and add an embed (`![[photo.jpg]]`) to the note, which then
+    /// autosaves. Links become Markdown links.
+    func embedPendingAttachmentsInLiveNote() async {
+        guard let liveNote, !draft.additionalPayloads.isEmpty,
+              let stagingDirectory = stagingDirectoryURL else { return }
+        let binding = liveNote.binding
+        guard let root = scopedEmbedRoot(for: binding.destinationID) else {
+            // Vault unreachable: keep them staged; they embed on the next try.
+            return
+        }
+        let folder = destinations.first(where: { $0.id == binding.destinationID })?
+            .attachmentsFolderName.trimmingCharacters(in: .whitespacesAndNewlines) ?? "attachments"
+        let attachmentsFolder = folder.isEmpty ? "attachments" : folder
+        var lines: [String] = []
+        var embedded: [CapturePayload] = []
+        for payload in draft.additionalPayloads {
+            switch payload {
+            case .url(let url, let title):
+                lines.append(title.map { "[\($0)](\(url.absoluteString))" } ?? "<\(url.absoluteString)>")
+                embedded.append(payload)
+            case .text(let text):
+                lines.append(text)
+                embedded.append(payload)
+            default:
+                let assets = Self.assets(in: payload)
+                let names = await Self.copyIntoVault(
+                    assets,
+                    from: stagingDirectory,
+                    to: root.appendingPathComponent(attachmentsFolder, isDirectory: true)
+                )
+                guard names.count == assets.count else { continue }
+                lines += names.map { "![[\($0)]]" }
+                if case .scannedDocument(_, _, let extracted?) = payload, !extracted.isEmpty {
+                    lines.append(extracted)
+                }
+                embedded.append(payload)
+            }
+        }
+        guard !embedded.isEmpty else { return }
+        draft.additionalPayloads.removeAll { embedded.contains($0) }
+        let stager = CaptureAssetStager(directoryURL: stagingDirectory)
+        for asset in embedded.flatMap(Self.assets(in:)) {
+            try? await stager.remove(asset)
+        }
+        var text = draft.text
+        if !text.isEmpty, !text.hasSuffix("\n") { text += "\n" }
+        if !text.isEmpty { text += "\n" }
+        text += lines.joined(separator: "\n\n") + "\n"
+        draft.text = text
+        embedURLCache = [:]
+        scheduleDraftSave()
+    }
+
+    /// Copies staged files into the vault, never overwriting: a taken name
+    /// becomes "name 2.ext". Returns the names written, in order.
+    nonisolated private static func copyIntoVault(
+        _ assets: [CaptureAssetReference],
+        from stagingDirectory: URL,
+        to folder: URL
+    ) async -> [String] {
+        await Task.detached(priority: .userInitiated) {
+            let fm = FileManager.default
+            try? fm.createDirectory(at: folder, withIntermediateDirectories: true)
+            var names: [String] = []
+            for asset in assets {
+                let source = stagingDirectory.appendingPathComponent(asset.relativePath)
+                let original = (asset.originalFilename as NSString).lastPathComponent
+                let stem = (original as NSString).deletingPathExtension
+                let ext = (original as NSString).pathExtension
+                var name = original.isEmpty ? (asset.relativePath as NSString).lastPathComponent : original
+                var index = 2
+                while fm.fileExists(atPath: folder.appendingPathComponent(name).path) {
+                    name = ext.isEmpty ? "\(stem) \(index)" : "\(stem) \(index).\(ext)"
+                    index += 1
+                }
+                do {
+                    try fm.copyItem(at: source, to: folder.appendingPathComponent(name))
+                    names.append(name)
+                } catch {
+                    break
+                }
+            }
+            return names
+        }.value
+    }
 }

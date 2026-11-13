@@ -138,6 +138,13 @@ struct MarkdownComposerTextView: UIViewRepresentable {
     /// Receives the text's laid-out height (content size), for layouts that
     /// place content directly under the text (iPad Pencil card).
     var contentHeight: Binding<CGFloat>? = nil
+    /// Live Notes: the entry this capture just added inside a whole file,
+    /// shown with a tinted card and a "JUST ADDED" label.
+    var highlightedEntry: String? = nil
+    /// Shows the Markdown source instead of the formatted rendering.
+    var showsRawMarkdown = false
+    /// Finds the file an embed (`![[clip.wav]]`) points to, for live preview.
+    var resolveEmbedURL: ((String) -> URL?)? = nil
 
     func makeCoordinator() -> Coordinator {
         Coordinator(parent: self)
@@ -173,6 +180,9 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         textView.accessibilityHint = String(localized: "Enter raw Markdown to send to the selected destination")
         textView.accessibilityIdentifier = "quick_capture_text"
         textView.text = text
+        textView.highlightedEntry = highlightedEntry
+        textView.showsRawMarkdown = showsRawMarkdown
+        textView.resolveEmbedURL = resolveEmbedURL
         textView.restyleMarkdown()
         textView.selectedRange = MarkdownComposerController.clamped(selection, utf16Count: text.utf16.count)
         textView.toggleTask = { [weak coordinator = context.coordinator] location in
@@ -192,11 +202,19 @@ struct MarkdownComposerTextView: UIViewRepresentable {
     func updateUIView(_ textView: UITextView, context: Context) {
         context.coordinator.parent = self
         connect(textView, coordinator: context.coordinator)
+        (textView as? MarkdownComposerUITextView)?.highlightedEntry = highlightedEntry
+        (textView as? MarkdownComposerUITextView)?.showsRawMarkdown = showsRawMarkdown
+        (textView as? MarkdownComposerUITextView)?.resolveEmbedURL = resolveEmbedURL
 
         let textChanged = textView.text != text
         if textChanged {
             textView.text = text
             (textView as? MarkdownComposerUITextView)?.restyleMarkdown()
+            // The text was replaced from outside the editor (a Live Note
+            // bound or reloaded, a file opened, a transcript committed).
+            // Earlier undo steps no longer match it; replaying them would
+            // corrupt the note, and Live Notes would autosave that.
+            textView.undoManager?.removeAllActions()
         }
         let textEnd = text.utf16.count
         let desired = MarkdownComposerController.clamped(selection, utf16Count: textEnd)
@@ -268,6 +286,7 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         }
 
         func textViewDidChangeSelection(_ textView: UITextView) {
+            (textView as? MarkdownComposerUITextView)?.richBlockSelectionDidChange()
             parent.controller.publishCurrentState()
         }
 
@@ -392,12 +411,302 @@ final class MarkdownComposerUITextView: UITextView {
     private var droppedQuotes: [MarkdownComposerStyler.DroppedQuoteBlock] = []
     private var droppedQuoteCards: [MarkdownComposerDroppedQuoteCardView] = []
 
+    /// Live Notes: the entry just added inside a whole file. Restyles when it
+    /// changes so the label gets its room above the entry.
+    var highlightedEntry: String? {
+        didSet {
+            guard oldValue != highlightedEntry else { return }
+            restyleMarkdown()
+        }
+    }
+
+    private var highlightRange: NSRange?
+    private var highlightCardIsCreated = false
+    private lazy var highlightCard: UIView = {
+        highlightCardIsCreated = true
+        let card = UIView()
+        card.backgroundColor = UIColor(Geist.Palette.blue100)
+        card.layer.cornerRadius = 12
+        card.layer.cornerCurve = .continuous
+        card.isUserInteractionEnabled = false
+        card.isHidden = true
+        let label = UILabel()
+        label.attributedText = NSAttributedString(
+            string: String(localized: "JUST ADDED"),
+            attributes: [
+                .font: UIFont(name: "Geist-SemiBold", size: 10.5) ?? .systemFont(ofSize: 10.5, weight: .semibold),
+                .kern: 0.8,
+                .foregroundColor: UIColor(Geist.accentText),
+            ]
+        )
+        label.tag = 1
+        label.isAccessibilityElement = false
+        card.addSubview(label)
+        insertSubview(card, at: 0)
+        return card
+    }()
+
+    private static let highlightLabelSpace: CGFloat = 22
+
+    /// The "JUST ADDED" card's frame while it is shown (tests, accessibility).
+    var entryHighlightFrame: CGRect? {
+        highlightRange == nil || highlightCard.isHidden ? nil : highlightCard.frame
+    }
+
+    /// The character range the card covers, if the entry was found.
+    var entryHighlightRange: NSRange? { highlightRange }
+
+    /// Finds the entry and gives its first paragraph room for the label.
+    private func applyEntryHighlight() {
+        highlightRange = nil
+        let needle = highlightedEntry?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !needle.isEmpty else { return }
+        let string = textStorage.string as NSString
+        let found = string.range(of: needle, options: .backwards)
+        guard found.location != NSNotFound, found.length < string.length else { return }
+        highlightRange = found
+        let paragraph = string.paragraphRange(for: NSRange(location: found.location, length: 0))
+        let existing = (textStorage.attribute(.paragraphStyle, at: found.location, effectiveRange: nil)
+            as? NSParagraphStyle) ?? NSParagraphStyle.default
+        let style = (existing.mutableCopy() as? NSMutableParagraphStyle) ?? NSMutableParagraphStyle()
+        style.paragraphSpacingBefore = max(style.paragraphSpacingBefore, Self.highlightLabelSpace + 6)
+        textStorage.addAttribute(.paragraphStyle, value: style, range: paragraph)
+    }
+
+    private func layoutEntryHighlight() {
+        guard let range = highlightRange,
+              NSMaxRange(range) <= ((text as NSString?)?.length ?? 0),
+              let top = caretRect(at: range.location),
+              let end = caretRect(at: NSMaxRange(range)) else {
+            if highlightRange == nil, highlightedEntry == nil, highlightCardIsCreated == false { return }
+            highlightCard.isHidden = true
+            return
+        }
+        let inset = textContainerInset
+        let minY = top.minY - Self.highlightLabelSpace - 4
+        let frame = CGRect(
+            x: inset.left - 8,
+            y: minY,
+            width: max(0, bounds.width - inset.left - inset.right + 16),
+            height: end.maxY + 8 - minY
+        )
+        highlightCard.isHidden = false
+        highlightCard.frame = frame
+        if let label = highlightCard.viewWithTag(1) {
+            label.sizeToFit()
+            label.frame.origin = CGPoint(x: 8, y: 7)
+        }
+    }
+
+    /// Raw/formatted toggle: raw shows the file's Markdown source as-is.
+    var showsRawMarkdown = false {
+        didSet {
+            guard oldValue != showsRawMarkdown else { return }
+            restyleMarkdown()
+        }
+    }
+
+    // MARK: Live preview blocks (properties, audio, images, video)
+
+    var resolveEmbedURL: ((String) -> URL?)?
+    private var frontmatterBlock: MarkdownRichBlocks.Frontmatter?
+    private var embedBlocks: [MarkdownRichBlocks.Embed] = []
+    private var propertiesView: MarkdownPropertiesView?
+    private var embedViews: [String: MarkdownRichCardView] = [:]
+    private var imageAspectRatios: [String: CGFloat] = [:]
+    private var revealedBlockLocations: Set<Int> = []
+
+    /// Height of the widget drawn over a block.
+    private func richHeight(for embed: MarkdownRichBlocks.Embed) -> CGFloat {
+        switch embed.kind {
+        case .audio: return MarkdownAudioEmbedView.height
+        case .video: return MarkdownVideoEmbedView.height
+        case .image:
+            let width = max(0, bounds.width - textContainerInset.left - textContainerInset.right)
+            guard let ratio = imageAspectRatios[embed.target], width > 0 else { return 200 }
+            return min(MarkdownImageEmbedView.maximumHeight, max(80, width * ratio))
+        }
+    }
+
+    private func blockIsRevealed(_ range: NSRange) -> Bool {
+        isFirstResponder && MarkdownRichBlocks.isRevealed(range, by: selectedRange)
+    }
+
+    /// Hides each unrevealed block's Markdown and gives its first line the
+    /// widget's height; the widgets themselves are laid out as subviews.
+    private func applyRichBlocks() {
+        let string = textStorage.string as NSString
+        frontmatterBlock = nil
+        embedBlocks = []
+        revealedBlockLocations = []
+        guard string.length > 0, string.length <= 60_000 else { return }
+        if let frontmatter = MarkdownRichBlocks.frontmatter(in: string) {
+            if blockIsRevealed(frontmatter.range) {
+                revealedBlockLocations.insert(frontmatter.range.location)
+            } else {
+                frontmatterBlock = frontmatter
+                hideBlock(frontmatter.range, reserving: MarkdownPropertiesView.height(for: frontmatter.properties))
+            }
+        }
+        for embed in MarkdownRichBlocks.embeds(in: string) {
+            if let frontmatter = MarkdownRichBlocks.frontmatter(in: string),
+               NSIntersectionRange(frontmatter.range, embed.range).length > 0 { continue }
+            if blockIsRevealed(embed.range) {
+                revealedBlockLocations.insert(embed.range.location)
+                continue
+            }
+            embedBlocks.append(embed)
+            hideBlock(embed.range, reserving: richHeight(for: embed))
+        }
+    }
+
+    private func hideBlock(_ range: NSRange, reserving height: CGFloat) {
+        let string = textStorage.string as NSString
+        let paragraphs = string.paragraphRange(for: range)
+        textStorage.addAttributes([
+            .font: UIFont.systemFont(ofSize: 0.5),
+            .foregroundColor: UIColor.clear,
+        ], range: range)
+        // Link/code styling paints backgrounds; the hidden source must not.
+        textStorage.removeAttribute(.backgroundColor, range: range)
+        textStorage.removeAttribute(.underlineStyle, range: range)
+        var location = paragraphs.location
+        var isFirst = true
+        while location < NSMaxRange(paragraphs) {
+            let paragraph = string.paragraphRange(for: NSRange(location: location, length: 0))
+            let style = NSMutableParagraphStyle()
+            let lineHeight: CGFloat = isFirst ? height + 12 : 0.5
+            style.minimumLineHeight = lineHeight
+            style.maximumLineHeight = lineHeight
+            style.paragraphSpacing = 0
+            style.paragraphSpacingBefore = 0
+            textStorage.addAttribute(.paragraphStyle, value: style, range: paragraph)
+            isFirst = false
+            location = NSMaxRange(paragraph)
+        }
+    }
+
+    /// The caret moved: re-render when it entered or left a block.
+    func richBlockSelectionDidChange() {
+        guard !showsRawMarkdown, markedTextRange == nil else { return }
+        let string = textStorage.string as NSString
+        var blocks: [NSRange] = []
+        if let frontmatter = MarkdownRichBlocks.frontmatter(in: string) { blocks.append(frontmatter.range) }
+        blocks += MarkdownRichBlocks.embeds(in: string).map(\.range)
+        let revealed = Set(blocks.filter(blockIsRevealed).map(\.location))
+        if revealed != revealedBlockLocations { restyleMarkdown() }
+    }
+
+    override func becomeFirstResponder() -> Bool {
+        let became = super.becomeFirstResponder()
+        if became { DispatchQueue.main.async { [weak self] in self?.richBlockSelectionDidChange() } }
+        return became
+    }
+
+    override func resignFirstResponder() -> Bool {
+        let resigned = super.resignFirstResponder()
+        if resigned, !revealedBlockLocations.isEmpty {
+            DispatchQueue.main.async { [weak self] in self?.restyleMarkdown() }
+        }
+        return resigned
+    }
+
+    private func layoutRichBlocks() {
+        let inset = textContainerInset
+        let width = max(0, bounds.width - inset.left - inset.right)
+        func top(of location: Int) -> CGFloat? {
+            guard location < textStorage.length else { return nil }
+            let glyph = layoutManager.glyphIndexForCharacter(at: location)
+            let rect = layoutManager.lineFragmentRect(forGlyphAt: glyph, effectiveRange: nil)
+            return rect.minY + inset.top + 4
+        }
+
+        if let frontmatter = frontmatterBlock, let y = top(of: frontmatter.range.location) {
+            let view = propertiesView ?? {
+                let view = MarkdownPropertiesView()
+                view.onTap = { [weak self] in self?.revealBlock(at: frontmatter.closingLineRange.location) }
+                addSubview(view)
+                propertiesView = view
+                return view
+            }()
+            view.configure(frontmatter.properties)
+            view.isHidden = false
+            view.frame = CGRect(x: inset.left, y: y, width: width, height: MarkdownPropertiesView.height(for: frontmatter.properties))
+        } else {
+            propertiesView?.isHidden = true
+        }
+
+        var used = Set<String>()
+        for (index, embed) in embedBlocks.enumerated() {
+            let key = "\(index):\(embed.target)"
+            used.insert(key)
+            guard let y = top(of: embed.range.location) else { continue }
+            let url = resolveEmbedURL?(embed.target)
+            let view: MarkdownRichCardView
+            if let existing = embedViews[key] {
+                view = existing
+            } else {
+                switch embed.kind {
+                case .audio: view = MarkdownAudioEmbedView()
+                case .video: view = MarkdownVideoEmbedView()
+                case .image:
+                    let image = MarkdownImageEmbedView()
+                    let target = embed.target
+                    image.onAspectRatioChange = { [weak self] ratio in
+                        self?.imageAspectRatios[target] = ratio
+                        self?.restyleMarkdown()
+                    }
+                    view = image
+                }
+                addSubview(view)
+                embedViews[key] = view
+            }
+            switch view {
+            case let audio as MarkdownAudioEmbedView: audio.configure(target: embed.target, url: url)
+            case let video as MarkdownVideoEmbedView: video.configure(target: embed.target, url: url)
+            case let image as MarkdownImageEmbedView: image.configure(target: embed.target, url: url)
+            default: break
+            }
+            view.isHidden = false
+            view.frame = CGRect(x: inset.left, y: y, width: width, height: richHeight(for: embed))
+        }
+        for (key, view) in embedViews where !used.contains(key) {
+            view.removeFromSuperview()
+            embedViews[key] = nil
+        }
+    }
+
+    /// Tapping Properties shows the YAML under the caret, ready to edit.
+    private func revealBlock(at location: Int) {
+        _ = becomeFirstResponder()
+        selectedRange = NSRange(location: min(location, textStorage.length), length: 0)
+        restyleMarkdown()
+    }
+
     func restyleMarkdown() {
         guard markedTextRange == nil else { return }
         let selection = selectedRange
+        if showsRawMarkdown {
+            frontmatterBlock = nil
+            embedBlocks = []
+            droppedQuotes = []
+            updateLeadingDroppedQuoteInset()
+            taskMarkers = []
+            let full = NSRange(location: 0, length: textStorage.length)
+            textStorage.beginEditing()
+            if full.length > 0 { textStorage.setAttributes(MarkdownComposerStyler.rawAttributes, range: full) }
+            applyEntryHighlight()
+            textStorage.endEditing()
+            typingAttributes = MarkdownComposerStyler.rawAttributes
+            if selectedRange != selection { selectedRange = selection }
+            setNeedsLayout()
+            return
+        }
         droppedQuotes = MarkdownComposerStyler.droppedQuoteBlocks(in: textStorage.string as NSString)
         updateLeadingDroppedQuoteInset()
         taskMarkers = MarkdownComposerStyler.apply(to: textStorage)
+        applyRichBlocks()
+        applyEntryHighlight()
         typingAttributes = MarkdownComposerStyler.baseAttributes
         if selectedRange != selection { selectedRange = selection }
         setNeedsLayout()
@@ -439,6 +748,8 @@ final class MarkdownComposerUITextView: UITextView {
         super.layoutSubviews()
         layoutCheckboxes()
         layoutDroppedQuoteCards()
+        layoutEntryHighlight()
+        layoutRichBlocks()
         if contentHeightDidChange != nil, abs(contentSize.height - reportedContentHeight) > 0.5 {
             reportedContentHeight = contentSize.height
             contentHeightDidChange?(contentSize.height)
@@ -542,6 +853,16 @@ final class MarkdownComposerUITextView: UITextView {
 enum MarkdownComposerStyler {
     static var baseFont: UIFont {
         scaled(UIFont(name: "Geist-Regular", size: 17) ?? .systemFont(ofSize: 17), style: .body)
+    }
+
+    /// Raw mode: the Markdown exactly as it is in the file, in mono, with no
+    /// rendered headings, checkboxes or quote cards.
+    static var rawAttributes: [NSAttributedString.Key: Any] {
+        [
+            .font: scaled(UIFont(name: "GeistMono-Regular", size: 15) ?? .monospacedSystemFont(ofSize: 15, weight: .regular), style: .body),
+            .foregroundColor: UIColor(Geist.text),
+            .paragraphStyle: paragraph(spacing: 2),
+        ]
     }
 
     static var baseAttributes: [NSAttributedString.Key: Any] {

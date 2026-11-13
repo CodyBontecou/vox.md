@@ -37,7 +37,7 @@ class EntryPointUiInstrumentationTest {
     val compose = createComposeRule()
 
     @Test
-    fun mainAppQuickCaptureAcceptsTextAndDispatchesSend() {
+    fun mainAppQuickCaptureWritesTheFirstWordsAfterIdle() {
         var submittedText: String? = null
         renderCapture(
             state = state(CaptureDraft("", null, 0)),
@@ -45,7 +45,8 @@ class EntryPointUiInstrumentationTest {
         )
 
         compose.onNodeWithContentDescription("Capture Text").performTextInput("Main app capture")
-        compose.onNodeWithContentDescription("Send capture").performClick()
+        // Live Notes: no Send; the note is written once the composer is idle.
+        compose.waitUntil(3_000) { submittedText != null }
         compose.runOnIdle { assertEquals("Main app capture", submittedText) }
     }
 
@@ -254,7 +255,7 @@ class EntryPointUiInstrumentationTest {
         }
 
         compose.onNodeWithContentDescription("Capture Text").performTextInput("Next capture")
-        compose.onNodeWithContentDescription("Send capture").performClick()
+        compose.waitUntil(3_000) { submitted != null }
         compose.runOnIdle { assertEquals("Next capture", submitted) }
     }
 

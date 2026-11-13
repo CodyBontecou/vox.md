@@ -117,6 +117,9 @@ struct QuickCaptureView: View {
     @State private var showsSketch = false
     @State private var showsLinkPrompt = false
     @State private var showsCaptureHistory = false
+    @State private var showsVaultFiles = false
+    /// Raw/formatted Markdown in the editor, remembered across launches.
+    @AppStorage("capture.editor.showsRawMarkdown") private var showsRawMarkdown = false
     @State private var showsRoutePicker = false
     @State private var showsDueDate = false
     @State private var showsInternalLinks = false
@@ -352,6 +355,7 @@ struct QuickCaptureView: View {
                 // Full width under the actions row, so the vault/folder
                 // prefix is kept wherever it fits (Main board).
                 routeDestinationLine
+                liveNoteBannerSection
             }
             .padding(.horizontal, 20)
             .padding(.top, Geist.Spacing.two)
@@ -391,6 +395,9 @@ struct QuickCaptureView: View {
                     .buttonStyle(.plain)
                     .accessibilityIdentifier("capture_done_typing")
                 } else {
+                    if viewModel.liveNotesEnabled {
+                        filesButton
+                    }
                     activityButton
 
                     Button {
@@ -410,6 +417,64 @@ struct QuickCaptureView: View {
     /// Phone only: the cover screen and the iPad panes keep their actions.
     private var showsTypingDoneButton: Bool {
         layout == .compact && composerIsFocused && !isCoverScreen
+    }
+
+    /// Raw/formatted Markdown: raw shows the file's source exactly.
+    private var markdownModeToggle: CaptureViewSection {
+        CaptureViewSection {
+            Button {
+                showsRawMarkdown.toggle()
+            } label: {
+                Text(verbatim: showsRawMarkdown ? "Aa" : "</>")
+                    .font(Geist.mono(size: 11.5, relativeTo: .caption, medium: true))
+                    .foregroundStyle(showsRawMarkdown ? Geist.accentText : Geist.muted)
+                    .padding(.horizontal, 8)
+                    .frame(minWidth: 36, minHeight: 24)
+                    .background(showsRawMarkdown ? Geist.accentSoft : Geist.well, in: Capsule())
+                    .contentShape(Rectangle())
+                    .frame(minHeight: 44)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(showsRawMarkdown ? Text("Show formatted Markdown") : Text("Show raw Markdown"))
+            .accessibilityValue(showsRawMarkdown ? Text("Raw") : Text("Formatted"))
+            .accessibilityIdentifier("capture_markdown_mode")
+        }
+    }
+
+    /// Files: the vault tree (Live Notes).
+    private var filesButton: CaptureViewSection {
+        CaptureViewSection {
+            Button {
+                dismissComposer()
+                showsVaultFiles = true
+            } label: {
+                Image(systemName: "folder")
+                    .accessibilityLabel("Files")
+            }
+            .buttonStyle(SignalCircleButtonStyle())
+            .accessibilityIdentifier("capture_files")
+        }
+    }
+
+    /// Live Notes problems with the open file, under the path line.
+    private var liveNoteBannerSection: CaptureViewSection {
+        CaptureViewSection {
+            let status = viewModel.liveNoteStatus
+            if viewModel.liveNotesEnabled, status.needsAttention,
+               status != .unreachable || vaultIsReachable {
+                LiveNoteBanner(
+                    status: status,
+                    fileName: viewModel.liveNote?.binding.fileName,
+                    resolve: { choice in Task { await viewModel.liveNote?.resolveConflict(choice) } },
+                    reconnect: {
+                        dismissComposer()
+                        showsVaultRegrantPicker = true
+                    },
+                    recreate: { Task { await viewModel.liveNote?.recreateMissingFile() } }
+                )
+                .padding(.top, Geist.Spacing.two)
+            }
+        }
     }
 
     /// Activity (recent captures) with an orange dot while queued captures
@@ -492,7 +557,7 @@ struct QuickCaptureView: View {
                 .accessibilityLabel("Capture route \(routeLabel), \(viewModel.effectivePlacementLabel)")
                 .disabled(!viewModel.canChangeCaptureRoute)
 
-                if viewModel.hasAnyRouteOverride {
+                if viewModel.hasAnyRouteOverride, viewModel.liveNote == nil {
                     Button {
                         viewModel.useVoxRouteDefaults()
                     } label: {
@@ -505,6 +570,11 @@ struct QuickCaptureView: View {
                     .buttonStyle(.plain)
                     .accessibilityLabel("Use Route destination defaults")
                     .disabled(!viewModel.canChangeCaptureRoute)
+                }
+                Spacer(minLength: 4)
+                markdownModeToggle
+                if viewModel.liveNotesEnabled {
+                    LiveNoteStatusPill(status: viewModel.liveNoteStatus)
                 }
             }
         }
@@ -532,6 +602,14 @@ struct QuickCaptureView: View {
     }
 
     private var routeDestinationPath: String {
+        // Live Notes: the file the composer is editing, wherever it lives.
+        if let relativePath = viewModel.liveNoteRelativePath {
+            let vault = viewModel.liveNote.flatMap { session in
+                viewModel.destinations.first(where: { $0.id == session.binding.destinationID })?.rootName
+            }
+            let parts = ([vault].compactMap { $0 }) + relativePath.split(separator: "/").map(String.init)
+            return parts.joined(separator: " / ")
+        }
         // The iPad sidebar editor header shows only the note path, as in
         // `Meetings / 2026-11-01.md`; the phone shows vault, path and heading.
         if layout == .regularSidebar,
@@ -925,6 +1003,11 @@ struct QuickCaptureView: View {
                     )
                     .environment(transcriptStore)
                     .environment(watchRecordingPipeline)
+                }
+                .sheet(isPresented: $showsVaultFiles) {
+                    VaultFilesView(viewModel: viewModel) {
+                        showsVaultFiles = false
+                    }
                 }
                 .sheet(isPresented: $showsWatchRecordingQueue) {
                     WatchRecordingQueueView(pipeline: watchRecordingPipeline)
@@ -1782,7 +1865,11 @@ struct QuickCaptureView: View {
                 togglePause: { persistentRecorder.toggleInAppSegmentPause() },
                 markMoment: markRecordingMoment,
                 addTask: { viewModel.insertRecordingActionLine("- [ ] ") },
-                snapWhiteboard: snapWhiteboardDuringRecording
+                snapWhiteboard: snapWhiteboardDuringRecording,
+                isKeyboardVisible: composerIsFocused,
+                dismissKeyboard: dismissComposer,
+                liveNoteLine: viewModel.liveNoteRecordingLine?.text,
+                liveNoteLineIsLive: viewModel.liveNoteRecordingLine?.isLive ?? false
             )
         }
     }
@@ -1813,6 +1900,8 @@ struct QuickCaptureView: View {
                     // Live recording board: the toggle stays active while
                     // recording and only changes what Stop does.
                     isModeLocked: false,
+                    liveNoteLine: viewModel.liveNoteRecordingLine?.text,
+                    liveNoteLineIsLive: viewModel.liveNoteRecordingLine?.isLive ?? false,
                     canSnapWhiteboard: UIImagePickerController.isSourceTypeAvailable(.camera)
                         || VNDocumentCameraViewController.isSupported,
                     discard: discardActiveRecording,
@@ -1838,7 +1927,10 @@ struct QuickCaptureView: View {
                 selection: $composerSelection,
                 isFocused: $composerIsFocused,
                 controller: composerController,
-                contentHeight: showsInlinePencil ? $composerContentHeight : nil
+                contentHeight: showsInlinePencil ? $composerContentHeight : nil,
+                highlightedEntry: viewModel.liveNoteHighlightedEntry,
+                showsRawMarkdown: showsRawMarkdown,
+                resolveEmbedURL: { [viewModel] target in viewModel.liveNoteEmbedURL(target) }
             )
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Geist.bg)
@@ -1884,14 +1976,13 @@ struct QuickCaptureView: View {
         }
     }
 
-    /// Placeholder copy for an empty composer: microphone-off guidance, or the
-    /// selected Route's capture prompt when it has one.
+    /// Placeholder copy for an empty composer: only microphone-off guidance.
+    /// Otherwise the empty composer is just the blinking caret.
     private var composerPlaceholderPrompt: String? {
         if isMicrophoneDenied, !isLocalizationScreenshot {
             return String(localized: "Type, paste or attach — or turn on the microphone to speak.")
         }
-        let prompt = selectedFlow.displayCapturePrompt
-        return prompt.isEmpty ? nil : prompt
+        return nil
     }
 
     private var inspirationPlaceholder: CaptureViewSection {
@@ -2286,6 +2377,36 @@ struct QuickCaptureView: View {
         }
     }
 
+    /// Live Notes: the accent circle closes the open file and starts a blank
+    /// note. Before the first save it saves first, so nothing is lost.
+    private var newNoteControl: CaptureViewSection {
+        CaptureViewSection {
+            Button {
+                Task {
+                    await viewModel.startNewNote()
+                    if viewModel.needsCaptureUnlock {
+                        presentPaywall(context: .captureLimit)
+                    }
+                }
+            } label: {
+                Image(systemName: "square.and.pencil")
+                    .accessibilityLabel("New note")
+            }
+            .buttonStyle(SignalCircleButtonStyle(diameter: Geist.ControlHeight.large, filled: Geist.accent))
+            .disabled(!canStartNewNote)
+            .opacity(canStartNewNote ? 1 : 0.35)
+            .accessibilityHint(Text("Closes this file and starts a blank note"))
+            .accessibilityIdentifier("capture_new_note")
+            .keyboardShortcut("n", modifiers: .command)
+        }
+    }
+
+    private var canStartNewNote: Bool {
+        (viewModel.liveNote != nil || viewModel.draft.hasCaptureContent)
+            && !viewModel.isSubmitting
+            && !viewModel.hasLiveRecordedTranscriptPreview
+    }
+
     /// Vault unreachable (Signal "Capture states" A): the footer is Speak plus
     /// an outlined Save that queues the capture until access is back.
     private var captureFooterIsVaultUnreachable: Bool {
@@ -2333,6 +2454,21 @@ struct QuickCaptureView: View {
     private var captureActionBar: CaptureViewSection {
         CaptureViewSection {
             VStack(spacing: Geist.Spacing.three) {
+                if let closed = viewModel.lastClosedNote {
+                    LiveNoteClosedToast(note: closed) {
+                        Task {
+                            await viewModel.reopenClosedNote()
+                            focusComposer()
+                        }
+                    }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .task(id: closed.id) {
+                        try? await Task.sleep(for: .seconds(6))
+                        if viewModel.lastClosedNote == closed {
+                            withAnimation { viewModel.lastClosedNote = nil }
+                        }
+                    }
+                }
                 if !composerIsFocused, captureHintRowHasContent {
                     captureHintRow
                 }
@@ -2352,7 +2488,9 @@ struct QuickCaptureView: View {
 
                     voiceCaptureButton
 
-                    if captureFooterIsVaultUnreachable {
+                    if viewModel.liveNotesEnabled {
+                        if footerShowsSend { newNoteControl }
+                    } else if captureFooterIsVaultUnreachable {
                         queueSaveControl
                     } else if footerShowsSend {
                         sendRouteControl
@@ -2361,7 +2499,9 @@ struct QuickCaptureView: View {
             }
             .padding(.horizontal, Geist.Spacing.four)
             .padding(.top, Geist.Spacing.three)
-            .padding(.bottom, Geist.Spacing.two)
+            // With the keyboard up there is no home-indicator inset below
+            // the bar, so give it more room above the keys.
+            .padding(.bottom, composerIsFocused ? Geist.Spacing.four : Geist.Spacing.two)
             // Strictly opt-in confirmation (default off) for Preset sends.
             // Attached to the bar so it also works when Send lives in the
             // route pane.
@@ -2703,6 +2843,7 @@ struct QuickCaptureView: View {
             // Returning from Settings may have changed folder access.
             refreshVaultReachability()
             Task { await refreshPendingCaptureCount() }
+            Task { await viewModel.liveNoteSceneDidBecomeActive() }
         }
         // Permission prompts make the scene temporarily inactive. Keep explicit
         // one-shot requests alive until the app actually backgrounds.
@@ -2719,6 +2860,7 @@ struct QuickCaptureView: View {
                 }
             }
             await viewModel.saveDraftNow()
+            await viewModel.liveNoteSceneDidEnterBackground()
         }
     }
 
@@ -2945,6 +3087,11 @@ struct QuickCaptureView: View {
             discardSentUndoSnapshot()
         }
 
+        // Live Notes: the first save isn't a "send"; the Saved pill says it.
+        if viewModel.liveNotesEnabled {
+            discardSentUndoSnapshot()
+            return
+        }
         let presentationID = UUID()
         sentToastPresentationID = presentationID
         withAnimation(.easeOut(duration: 0.18)) { showsSentToast = true }
@@ -3287,6 +3434,7 @@ struct QuickCaptureView: View {
                 try await CaptureVaultReachability.regrant(destination: destination, folderURL: folderURL)
                 await viewModel.refreshLibrary()
                 refreshVaultReachability()
+                await viewModel.liveNoteSceneDidBecomeActive()
                 if vaultIsReachable {
                     await viewModel.retryFailedInbox()
                     await viewModel.processPendingInbox()
@@ -3623,6 +3771,8 @@ struct QuickCaptureView: View {
 
     private func startInlineRecording() {
         guard microphonePermissionTask == nil else { return }
+        // Live Notes: speech always goes into the open note.
+        if viewModel.liveNotesEnabled { recordingMode = .draft }
         guard viewModel.requireCaptureRouteAvailable(),
               selectedFlow.id == viewModel.draft.voxID,
               CapturePresetStore.loadFlows().contains(where: { $0.id == selectedFlow.id && $0.isEnabled }) else { return }

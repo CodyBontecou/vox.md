@@ -219,7 +219,12 @@ struct RootView: View {
                 showsBackButton: false
             )
         case .library:
-            AdaptiveLibrarySplit(viewModel: quickCaptureViewModel) { section = .capture }
+            if quickCaptureViewModel.liveNotesEnabled {
+                // Live Notes: the vault tree replaces the capture Library.
+                VaultFilesView(viewModel: quickCaptureViewModel) { section = .capture }
+            } else {
+                AdaptiveLibrarySplit(viewModel: quickCaptureViewModel) { section = .capture }
+            }
         case .settings:
             NavigationStack {
                 destinationView(for: settingsDestination)

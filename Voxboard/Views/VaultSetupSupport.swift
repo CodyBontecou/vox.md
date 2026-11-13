@@ -291,14 +291,6 @@ enum StarterRoute: String, CaseIterable, Identifiable {
         }
     }
 
-    private var prompt: String {
-        switch self {
-        case .inbox: String(localized: "What’s on your mind?")
-        case .meetingNotes: String(localized: "What was decided?")
-        case .tasks: String(localized: "What needs doing?")
-        case .journal: String(localized: "How was today?")
-        }
-    }
 
     /// SHAPE on the Routes / RouteEditor boards: Meeting Notes writes a
     /// timestamped entry (`### 10:42 · Project sync`, then the body); the
@@ -325,7 +317,6 @@ enum StarterRoute: String, CaseIterable, Identifiable {
         preset.postProcessingMode = processingMode
         // Starter routes ship with their processing on; delivery falls back to the raw capture when Apple Intelligence is unavailable.
         preset.captureProcessingEnabled = processingMode != .none
-        preset.capturePrompt = prompt
         preset.captureDestinationID = destination.id
         preset.exportSettings.usesCustomExportSettings = true
         return (preset, destination)

@@ -18,7 +18,7 @@ class StarterRouteTest {
     @Test
     fun `starter presets match their path labels and stay creatable without an existing note`() {
         StarterRoute.entries.forEach { route ->
-            val preset = route.preset(route.nameSource, route.promptSource)
+            val preset = route.preset(route.nameSource)
             assertNotEquals(CaptureNoteTargetKind.EXISTING_NOTE, preset.noteTargetKind)
             assertTrue(preset.noteNameTemplate.endsWith(".md"))
             assertTrue(route.pathLabel.startsWith("${preset.logicalFolder}/${preset.noteNameTemplate}"))
@@ -26,8 +26,8 @@ class StarterRouteTest {
                 assertTrue(route.pathLabel.endsWith("## ${preset.headingTitle}"))
             }
         }
-        val first = StarterRoute.INBOX.preset("Inbox", "")
-        val second = StarterRoute.INBOX.preset("Inbox", "")
+        val first = StarterRoute.INBOX.preset("Inbox")
+        val second = StarterRoute.INBOX.preset("Inbox")
         assertNotEquals(first.id, second.id)
     }
 }
