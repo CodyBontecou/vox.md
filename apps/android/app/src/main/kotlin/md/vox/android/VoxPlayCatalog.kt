@@ -17,6 +17,7 @@ import java.util.Locale
  * | Subscription product (Yearly)         | `vox_unlimited_yearly`   | `bontecou.Voxboard.individual.yearly` |
  * |   base plan, auto-renewing P1Y        | `yearly`                 |                                       |
  * |   offer: 1 week free                  | `free-trial-1w`          | intro offer `individual-yearly-trial` |
+ * |   offer: Weekly -> Yearly switch      | `switch-yearly-1y`       | none (Apple shows retention offers)   |
  *
  * The two subscription products correspond to the iOS "Vox.md Unlimited" subscription
  * group; moving between them replaces the active subscription. Prices, currencies, trial
@@ -31,6 +32,14 @@ object VoxPlayCatalog {
     const val WEEKLY_BASE_PLAN_ID = "weekly"
     const val YEARLY_BASE_PLAN_ID = "yearly"
     const val FREE_TRIAL_OFFER_ID = "free-trial-1w"
+    /**
+     * App-funded (developer-determined) Yearly offer shown only in the in-app "Before you go"
+     * sheet to an active Weekly subscriber. Play returns developer-determined offers to every
+     * customer it considers eligible; the app applies the Weekly-only rule itself.
+     */
+    const val SWITCH_YEARLY_OFFER_ID = "switch-yearly-1y"
+    /** Play Console offer tag that marks offers reserved for in-app retention surfaces. */
+    const val RETENTION_IN_APP_OFFER_TAG = "retention-in-app"
     val SUBSCRIPTION_PRODUCT_IDS: List<String> = listOf(YEARLY_PRODUCT_ID, WEEKLY_PRODUCT_ID)
 
     /** Play's subscription center, scoped to the active subscription product when known. */
@@ -70,6 +79,8 @@ data class PlaySubscriptionOffer(
     val offerID: String?,
     val offerToken: String,
     val phases: List<PlayPricingPhase>,
+    /** Play Console offer tags (`SubscriptionOfferDetails.offerTags`). */
+    val offerTags: List<String> = emptyList(),
 )
 
 /** A purchasable plan, priced from Play's own offers. */

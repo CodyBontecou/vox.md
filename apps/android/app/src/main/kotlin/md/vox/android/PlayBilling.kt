@@ -162,6 +162,13 @@ data class BillingUiState(
     /** Set once when a free-trial purchase succeeds so the UI can ask for notification permission. */
     val trialReminderPromptPending: Boolean = false,
     val hasSubscriptionAccessEnded: Boolean = false,
+    /** Weekly or Yearly product whose access ended, from signed evidence; null when unknown. */
+    val endedSubscriptionProductID: String? = null,
+    /**
+     * The tagged in-app Weekly -> Yearly offer exactly as Play returned it; eligibility is
+     * decided by [eligibleYearlySwitchOffer]. Null when Play returned no such offer.
+     */
+    val yearlySwitchOffer: VoxYearlySwitchOffer? = null,
 ) {
     val hasUnlimitedAccess: Boolean get() = entitlement == VoxEntitlement.UNLIMITED
 
@@ -355,6 +362,21 @@ internal fun billingStatusAfterProductQuery(
     it == "entitlementCacheUnavailable" || it == "unrecognizedPurchase" || it.startsWith("acknowledge:")
 } ?: productStatus
 
+/**
+ * Opens Google Play's subscription center in one step: scoped to [subscriptionProductID]
+ * (`?sku=…&package=…`) when it is a Vox.md subscription, otherwise to the app's package.
+ */
+internal fun openPlaySubscriptionCenter(activity: Activity, subscriptionProductID: String?) {
+    runCatching {
+        activity.startActivity(
+            android.content.Intent(
+                android.content.Intent.ACTION_VIEW,
+                android.net.Uri.parse(VoxPlayCatalog.manageSubscriptionsUrl(activity.packageName, subscriptionProductID)),
+            ),
+        )
+    }
+}
+
 /** Phone-only Play Billing owner; no purchase data enters capture packages or the Wear app. */
 class PlayBillingManager private constructor(context: Context) {
     private val appContext = context.applicationContext
@@ -366,10 +388,12 @@ class PlayBillingManager private constructor(context: Context) {
     } else {
         VoxEntitlement.FREE
     }
+    private val cachedLapse = subscriptionLapseFromEvidence(cachedEvidence)
     private val mutableState = MutableStateFlow(
         BillingUiState(
             entitlement = cachedEntitlement,
-            hasSubscriptionAccessEnded = cachedEvidence?.let { !it.isOwned && it.productID in SUBSCRIPTION_PRODUCT_IDS } == true,
+            hasSubscriptionAccessEnded = cachedLapse.hasEnded,
+            endedSubscriptionProductID = cachedLapse.endedProductID,
             ownsLifetime = cachedEvidence?.takeIf { it.isOwned }?.productID == LIFETIME_PRODUCT_ID,
             activeSubscriptionProductID = cachedEvidence?.takeIf { it.isOwned }?.productID?.takeIf { it in SUBSCRIPTION_PRODUCT_IDS },
             scheduledSubscriptionProductID = planChangePreferences.getString(KEY_SCHEDULED_PRODUCT, null)
@@ -442,6 +466,7 @@ class PlayBillingManager private constructor(context: Context) {
                 mutableState.update {
                     it.copy(
                         plans = emptyList(),
+                        yearlySwitchOffer = null,
                         connectionPhase = BillingConnectionPhase.UNAVAILABLE,
                         lastOutcome = BillingActionOutcome.UNAVAILABLE,
                         statusCode = "billingDisconnected",
@@ -472,21 +497,27 @@ class PlayBillingManager private constructor(context: Context) {
 
     fun restore() = refresh(restored = true)
 
-    /** Opens Play's subscription center for the Vox.md subscription. */
+    /**
+     * Opens Play's subscription center for the active Vox.md subscription, or for the one that
+     * lapsed, where Play shows its own resubscribe and win-back options.
+     */
     fun manageSubscriptions(activity: Activity) {
-        runCatching {
-            activity.startActivity(
-                android.content.Intent(
-                    android.content.Intent.ACTION_VIEW,
-                    android.net.Uri.parse(
-                        VoxPlayCatalog.manageSubscriptionsUrl(appContext.packageName, mutableState.value.activeSubscriptionProductID),
-                    ),
-                ),
-            )
-        }
+        val state = mutableState.value
+        openPlaySubscriptionCenter(activity, state.activeSubscriptionProductID ?: state.endedSubscriptionProductID)
     }
 
-    fun launchPurchase(activity: Activity, plan: VoxPlan = VoxPlan.LIFETIME) {
+    fun launchPurchase(activity: Activity, plan: VoxPlan = VoxPlan.LIFETIME) = launchPurchase(activity, plan, offerTokenOverride = null)
+
+    /**
+     * Takes the in-app `switch-yearly-1y` offer through the same Weekly -> Yearly replacement as
+     * the plans page (WITH_TIME_PRORATION). Does nothing unless the offer is eligible right now.
+     */
+    fun launchYearlySwitchOffer(activity: Activity) {
+        val offer = mutableState.value.eligibleYearlySwitchOffer() ?: return
+        launchPurchase(activity, VoxPlan.YEARLY, offerTokenOverride = offer.offerToken)
+    }
+
+    private fun launchPurchase(activity: Activity, plan: VoxPlan, offerTokenOverride: String?) {
         val current = mutableState.value
         if (!current.canPurchase() || !operations.beginPurchase(
                 current.entitlement,
@@ -494,7 +525,9 @@ class PlayBillingManager private constructor(context: Context) {
                 upgradeAllowed = current.hasActiveSubscription && !current.ownsLifetime,
             )
         ) return
-        val option = current.plans.firstOrNull { it.plan == plan }
+        val option = current.plans.firstOrNull { it.plan == plan }?.let { base ->
+            offerTokenOverride?.let { base.copy(offerToken = it, freeTrialPeriod = null) } ?: base
+        }
         val details = if (plan == VoxPlan.LIFETIME) productDetails else subscriptionDetails[plan.productID]
         if (current.hasActiveSubscription && activeSubscriptionToken == null && plan.isSubscription) {
             // Cached access without this session's Play answer: refresh before replacing anything.
@@ -570,7 +603,7 @@ class PlayBillingManager private constructor(context: Context) {
         val generation = synchronized(operations) {
             productDetails = null
             subscriptionDetails = emptyMap()
-            mutableState.update { it.copy(productAvailable = false, formattedPrice = null, plans = emptyList()) }
+            mutableState.update { it.copy(productAvailable = false, formattedPrice = null, plans = emptyList(), yearlySwitchOffer = null) }
             operations.beginProductQuery()
         }
         val lifetime = QueryProductDetailsParams.Product.newBuilder()
@@ -640,32 +673,33 @@ class PlayBillingManager private constructor(context: Context) {
                 offerToken = offer.offerToken.orEmpty(),
             )
         }
-        val subscriptions = subscriptionPlanOptions(
-            subscriptionDetails.values.flatMap { details ->
-                details.subscriptionOfferDetails.orEmpty().map { offer -> details.productId to offer }
-            }.map { (productID, offer) ->
-                PlaySubscriptionOffer(
-                    productID = productID,
-                    basePlanID = offer.basePlanId,
-                    offerID = offer.offerId,
-                    offerToken = offer.offerToken,
-                    phases = offer.pricingPhases.pricingPhaseList.map { phase ->
-                        PlayPricingPhase(
-                            formattedPrice = phase.formattedPrice,
-                            priceAmountMicros = phase.priceAmountMicros,
-                            currencyCode = phase.priceCurrencyCode,
-                            billingPeriod = phase.billingPeriod,
-                            billingCycleCount = phase.billingCycleCount,
-                            isInfiniteRecurring = phase.recurrenceMode == ProductDetails.RecurrenceMode.INFINITE_RECURRING,
-                        )
-                    },
-                )
-            },
-        )
+        val offers = subscriptionDetails.values.flatMap { details ->
+            details.subscriptionOfferDetails.orEmpty().map { offer -> details.productId to offer }
+        }.map { (productID, offer) ->
+            PlaySubscriptionOffer(
+                productID = productID,
+                basePlanID = offer.basePlanId,
+                offerID = offer.offerId,
+                offerToken = offer.offerToken,
+                phases = offer.pricingPhases.pricingPhaseList.map { phase ->
+                    PlayPricingPhase(
+                        formattedPrice = phase.formattedPrice,
+                        priceAmountMicros = phase.priceAmountMicros,
+                        currencyCode = phase.priceCurrencyCode,
+                        billingPeriod = phase.billingPeriod,
+                        billingCycleCount = phase.billingCycleCount,
+                        isInfiniteRecurring = phase.recurrenceMode == ProductDetails.RecurrenceMode.INFINITE_RECURRING,
+                    )
+                },
+                offerTags = offer.offerTags,
+            )
+        }
+        val subscriptions = subscriptionPlanOptions(offers)
         val plans = subscriptions + listOfNotNull(lifetime)
         mutableState.update {
             it.copy(
                 plans = plans,
+                yearlySwitchOffer = yearlySwitchOffer(offers),
                 productAvailable = plans.isNotEmpty(),
                 formattedPrice = lifetime?.formattedPrice,
                 statusCode = billingStatusAfterProductQuery(
@@ -725,9 +759,10 @@ class PlayBillingManager private constructor(context: Context) {
         // Preserve the previously verified subscription identity in signed negative evidence.
         // An offline/error/partial response has no authority to create or clear this state.
         val prior = mutableState.value
-        val ended = subscriptionAccessEnded(
-            prior.hasSubscriptionAccessEnded, prior.activeSubscriptionProductID != null,
-            decision.authoritativeOwned,
+        val lapse = subscriptionLapseAfterOwnershipQuery(
+            prior = SubscriptionLapse(prior.hasSubscriptionAccessEnded, prior.endedSubscriptionProductID),
+            priorActiveSubscriptionProductID = prior.activeSubscriptionProductID,
+            authoritativeOwned = decision.authoritativeOwned,
         )
         val evidenceProductID = evaluation.grantingProductID
             ?: prior.activeSubscriptionProductID
@@ -741,7 +776,8 @@ class PlayBillingManager private constructor(context: Context) {
             it.copy(
                 connectionPhase = BillingConnectionPhase.READY,
                 entitlement = decision.entitlement,
-                hasSubscriptionAccessEnded = ended,
+                hasSubscriptionAccessEnded = lapse.hasEnded,
+                endedSubscriptionProductID = lapse.endedProductID,
                 ownsLifetime = ownership.ownsLifetime,
                 hasActiveSubscription = ownership.activeSubscriptionToken != null,
                 activeSubscriptionProductID = ownership.activeSubscriptionProductID,
@@ -818,6 +854,7 @@ class PlayBillingManager private constructor(context: Context) {
                         connectionPhase = BillingConnectionPhase.READY,
                         entitlement = decision.entitlement,
                         hasSubscriptionAccessEnded = if (decision.authoritativeOwned == true) false else it.hasSubscriptionAccessEnded,
+                        endedSubscriptionProductID = if (decision.authoritativeOwned == true) null else it.endedSubscriptionProductID,
                         ownsLifetime = it.ownsLifetime || ownership.ownsLifetime,
                         hasActiveSubscription = it.hasActiveSubscription || ownership.activeSubscriptionToken != null,
                         activeSubscriptionProductID = if (scheduled != null) {

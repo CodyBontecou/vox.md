@@ -348,6 +348,9 @@ internal enum class Destination(val route: String) {
     AppLanguage("app-language"),
     DebugLog("debug-log"),
     Upgrade("upgrade"),
+    /** The paywall opened on its plans page, from Settings > Subscription > Change plan. */
+    UpgradePlans("upgrade-plans"),
+    Subscription("subscription"),
 }
 
 internal const val PRESET_EDITOR_ROUTE = "preset-editor"
@@ -748,7 +751,7 @@ internal fun VoxNavigation(
                 if (billingState.hasSubscriptionAccessEnded && !recordingStatus.isActive) {
                     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         SignalInvertedCard(
-                            title = voxString("Your trial has ended"),
+                            title = voxString("Your subscription has ended"),
                             message = voxString("You can still read, search, copy, export and delete everything here. New captures and edits need Vox.md."),
                             actionLabel = voxString("See plans"),
                             onAction = { navController.navigate(Destination.Upgrade.route) },
@@ -1024,6 +1027,10 @@ internal fun VoxNavigation(
                         },
                         billingState = billingState,
                         presets = latestState.presetCollection?.presets.orEmpty(),
+                        openSubscription = {
+                            if (expanded) adaptiveSettingsDestination = Destination.Subscription.route
+                            else navController.navigate(Destination.Subscription.route)
+                        },
                     )
                 }
                 if (!expanded) {
@@ -1031,6 +1038,25 @@ internal fun VoxNavigation(
                 } else {
                     HingeAwareTwoPane(firstFraction = 0.4f, first = settingsList, second = {
                             when {
+                                adaptiveSettingsDestination == Destination.Subscription.route -> SubscriptionScreen(
+                                    billingState = billingState,
+                                    navigateBack = closeAdaptiveSettingsDetail,
+                                    openPlans = { adaptiveSettingsDestination = Destination.UpgradePlans.route },
+                                    restore = billingManager::restore,
+                                    continueToCancel = { context.findActivity()?.let(billingManager::manageSubscriptions) },
+                                    switchToYearly = { context.findActivity()?.let(billingManager::launchYearlySwitchOffer) },
+                                )
+                                adaptiveSettingsDestination == Destination.UpgradePlans.route -> UpgradeScreen(
+                                    billingState = billingState,
+                                    stats = latestState.activityStats,
+                                    transcriptionUsage = transcriptionUsage,
+                                    navigateBack = { adaptiveSettingsDestination = Destination.Subscription.route },
+                                    purchase = { plan -> context.findActivity()?.let { billingManager.launchPurchase(it, plan) } },
+                                    manageSubscriptions = { context.findActivity()?.let(billingManager::manageSubscriptions) },
+                                    onTrialReminderPrompted = billingManager::consumeTrialReminderPrompt,
+                                    restore = billingManager::restore,
+                                    initialPage = 2,
+                                )
                                 adaptiveSettingsDestination == Destination.Upgrade.route -> UpgradeScreen(
                                     billingState = billingState,
                                     stats = latestState.activityStats,
@@ -1121,6 +1147,31 @@ internal fun VoxNavigation(
                             }
                     })
                 }
+            }
+            composable(Destination.Subscription.route) {
+                val activity = context.findActivity()
+                SubscriptionScreen(
+                    billingState = billingState,
+                    navigateBack = { navController.popBackStack() },
+                    openPlans = { navController.navigate(Destination.UpgradePlans.route) },
+                    restore = billingManager::restore,
+                    continueToCancel = { activity?.let(billingManager::manageSubscriptions) },
+                    switchToYearly = { activity?.let(billingManager::launchYearlySwitchOffer) },
+                )
+            }
+            composable(Destination.UpgradePlans.route) {
+                val activity = context.findActivity()
+                UpgradeScreen(
+                    billingState = billingState,
+                    stats = latestState.activityStats,
+                    transcriptionUsage = transcriptionUsage,
+                    navigateBack = { navController.popBackStack() },
+                    purchase = { plan -> activity?.let { billingManager.launchPurchase(it, plan) } },
+                    manageSubscriptions = { activity?.let(billingManager::manageSubscriptions) },
+                    onTrialReminderPrompted = billingManager::consumeTrialReminderPrompt,
+                    restore = billingManager::restore,
+                    initialPage = 2,
+                )
             }
             composable(Destination.Upgrade.route) {
                 val activity = context.findActivity()

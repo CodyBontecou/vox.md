@@ -708,7 +708,7 @@ fun SignalEmptyState(
     }
 }
 
-/** Inverted ink card for prominent notices, such as the read-only notice. */
+/** Primary-container card for prominent notices, such as the read-only notice. */
 @Composable
 fun SignalInvertedCard(
     title: String,

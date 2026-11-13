@@ -317,6 +317,8 @@ internal fun SettingsScreen(
     openUpgrade: () -> Unit,
     billingState: BillingUiState,
     presets: List<md.vox.android.capturedomain.CapturePreset> = emptyList(),
+    /** Settings > Subscription, for anyone with a purchase or a lapsed subscription. */
+    openSubscription: () -> Unit = openUpgrade,
 ) {
     val context = LocalContext.current
     val speechModels by remember(context) { SpeechModelManager.get(context) }.state.collectAsStateWithLifecycle()
@@ -337,7 +339,10 @@ internal fun SettingsScreen(
                 .padding(bottom = 32.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            SettingsUnlimitedCard(billingState = billingState, onClick = openUpgrade)
+            SettingsUnlimitedCard(
+                billingState = billingState,
+                onClick = if (opensSubscriptionScreen(billingState)) openSubscription else openUpgrade,
+            )
             SettingsSignalGroup(voxUiText("Capture")) {
                 SettingsSignalNavRow(
                     title = voxString("Capture Destination"),
@@ -1009,6 +1014,7 @@ private fun SettingsUnlimitedCard(billingState: BillingUiState, onClick: () -> U
                         !billingState.ownsLifetime -> voxString("Weekly starts at your next renewal.")
                     billingState.hasActiveSubscription && !billingState.ownsLifetime -> voxString("Unlimited subscription is active.")
                     active -> voxString("Unlimited is unlocked on this device.")
+                    billingState.hasSubscriptionAccessEnded -> voxString("Your subscription has ended")
                     else -> voxString("Unlock unlimited local Capture and private, on-device transcription.")
                 },
                 style = MaterialTheme.typography.bodySmall.copy(fontSize = 13.sp, lineHeight = 18.sp),

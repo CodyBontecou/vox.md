@@ -567,7 +567,7 @@ internal fun HistoryScreen(
         )
         if (isReadOnly) {
             SignalInvertedCard(
-                title = voxString("Your trial has ended"),
+                title = voxString("Your subscription has ended"),
                 message = voxString("You can still read, search, copy, export and delete everything here. New captures and edits need Vox.md."),
                 actionLabel = openPlans?.let { voxString("See plans") },
                 onAction = openPlans,

@@ -1,6 +1,8 @@
 package md.vox.android
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import md.vox.android.capturedomain.ActivityDay
 import md.vox.android.capturedomain.ActivityStats
 import md.vox.android.capturedomain.CaptureBarAction
@@ -84,6 +86,33 @@ internal fun SettingsStories(story: String): Boolean {
         "settings-upgrade-stale" -> UpgradeStateStory(
             storyBilling(entitlement = VoxEntitlement.UNLIMITED, connectionPhase = BillingConnectionPhase.UNAVAILABLE, isEntitlementStale = true),
         )
+
+        // Retention flow: Settings > Subscription, Before you go, Subscription ended.
+        // Fake Play state only; "Continue to cancel" and "Open Google Play subscriptions" fire
+        // the production subscription-center intent, and "Switch to Yearly" is a no-op.
+        "settings-subscription-weekly-offer" -> SubscriptionStateStory(storySubscriber(VoxPlayCatalog.WEEKLY_PRODUCT_ID, storySwitchOffer))
+        "settings-subscription-weekly" -> SubscriptionStateStory(storySubscriber(VoxPlayCatalog.WEEKLY_PRODUCT_ID, offer = null))
+        "settings-subscription-yearly" -> SubscriptionStateStory(storySubscriber(VoxPlayCatalog.YEARLY_PRODUCT_ID, storySwitchOffer))
+        "settings-subscription-lifetime" -> SubscriptionStateStory(
+            storyBilling(entitlement = VoxEntitlement.UNLIMITED).copy(plans = storySubscriptionPlans(trial = false), ownsLifetime = true),
+        )
+        "settings-subscription-ended" -> SubscriptionStateStory(
+            storyBilling().copy(
+                plans = storySubscriptionPlans(trial = false),
+                hasSubscriptionAccessEnded = true,
+                endedSubscriptionProductID = VoxPlayCatalog.YEARLY_PRODUCT_ID,
+            ),
+        )
+        "settings-before-you-go-weekly" -> SubscriptionStateStory(
+            storySubscriber(VoxPlayCatalog.WEEKLY_PRODUCT_ID, storySwitchOffer),
+            showsBeforeYouGo = true,
+        )
+        "settings-before-you-go-yearly" -> SubscriptionStateStory(
+            storySubscriber(VoxPlayCatalog.YEARLY_PRODUCT_ID, storySwitchOffer),
+            showsBeforeYouGo = true,
+        )
+        // Walkable: tap the Unlimited card to open Settings > Subscription, Back returns.
+        "settings-retention-walk" -> RetentionWalkStory(storySubscriber(VoxPlayCatalog.WEEKLY_PRODUCT_ID, storySwitchOffer))
         else -> return false
     }
     return true
@@ -121,6 +150,57 @@ private fun CaptureBarStory(configuration: CaptureBarConfiguration, isBusy: Bool
         reset = {},
     )
 }
+
+@Composable
+private fun RetentionWalkStory(billingState: BillingUiState) {
+    var showsSubscription by androidx.compose.runtime.saveable.rememberSaveable { androidx.compose.runtime.mutableStateOf(false) }
+    if (showsSubscription) {
+        androidx.activity.compose.BackHandler { showsSubscription = false }
+        SubscriptionStateStory(billingState, navigateBack = { showsSubscription = false })
+    } else {
+        SettingsScreen(
+            destination = visualDestination,
+            navigateBack = null,
+            chooseFolder = {},
+            openPresets = {},
+            openCaptureBar = {},
+            openStats = {},
+            openModels = {},
+            openRecordingQueue = {},
+            openAppLanguage = {},
+            openDebugLog = {},
+            openUpgrade = {},
+            billingState = billingState,
+            openSubscription = { showsSubscription = true },
+        )
+    }
+}
+
+@Composable
+private fun SubscriptionStateStory(billingState: BillingUiState, showsBeforeYouGo: Boolean = false, navigateBack: () -> Unit = {}) {
+    val activity = androidx.compose.ui.platform.LocalContext.current.findActivity()
+    val productID = billingState.activeSubscriptionProductID ?: billingState.endedSubscriptionProductID
+    SubscriptionScreen(
+        billingState = billingState,
+        navigateBack = navigateBack,
+        openPlans = {},
+        restore = {},
+        continueToCancel = { activity?.let { openPlaySubscriptionCenter(it, productID) } },
+        switchToYearly = {},
+        initialShowsBeforeYouGo = showsBeforeYouGo,
+    )
+}
+
+/** A Play-returned `switch-yearly-1y` offer as [yearlySwitchOffer] would select it. */
+private val storySwitchOffer = VoxYearlySwitchOffer("story-switch-yearly", "$19.99", "$29.99")
+
+private fun storySubscriber(productID: String, offer: VoxYearlySwitchOffer?) =
+    storyBilling(entitlement = VoxEntitlement.UNLIMITED).copy(
+        plans = storySubscriptionPlans(trial = false),
+        hasActiveSubscription = true,
+        activeSubscriptionProductID = productID,
+        yearlySwitchOffer = offer,
+    )
 
 @Composable
 private fun UpgradeStateStory(billingState: BillingUiState, captureCount: Int = 6, usedMillis: Long = 7 * 60_000L) {

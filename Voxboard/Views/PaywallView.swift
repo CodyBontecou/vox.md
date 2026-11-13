@@ -18,6 +18,9 @@ struct PaywallView: View {
     @State private var selectedPlanIndex = 0
     @State private var page = 0
     @State private var showsHistory = false
+    /// Apple's in-app subscription management sheet. Unlike the web link, it shows the
+    /// App Store Connect retention messages and retention offers when someone cancels.
+    @State private var showsManageSubscriptions = false
     private let historyViewModel: QuickCaptureViewModel?
     private let includesOnboarding: Bool
 
@@ -26,7 +29,6 @@ struct PaywallView: View {
 
     private static let pageCount = 3
     private static let plansPage = 2
-    private static let manageSubscriptionsURL = URL(string: "https://apps.apple.com/account/subscriptions")!
 
     init(context: PaywallContext = .limit, isAccessGate: Bool = false,
          historyViewModel: QuickCaptureViewModel? = nil, initialFamily: Bool = false,
@@ -59,6 +61,10 @@ struct PaywallView: View {
             } else {
                 plans
             }
+        }
+        .manageSubscriptionsSheet(isPresented: $showsManageSubscriptions)
+        .onChange(of: showsManageSubscriptions) { _, isPresented in
+            if !isPresented { Task { await storeManager.syncCurrentEntitlements() } }
         }
         .sheet(isPresented: $showsHistory) {
             if let historyViewModel {
@@ -414,7 +420,7 @@ struct PaywallView: View {
                 .fixedSize(horizontal: false, vertical: true)
             if usageTracker.hasFamilyAccess {
                 // No purchase footer: keep Manage and the Library link reachable.
-                Link("Manage Subscriptions", destination: Self.manageSubscriptionsURL)
+                Button("Manage Subscriptions") { showsManageSubscriptions = true }
                     .font(Geist.caption())
                     .foregroundStyle(Geist.accentText)
                 historyLink
@@ -565,7 +571,9 @@ struct PaywallView: View {
             HStack(spacing: 8) {
                 if page == Self.plansPage {
                     // Plans page (pw_Slide3): "Manage · Terms · Privacy".
-                    Link(destination: Self.manageSubscriptionsURL) {
+                    Button {
+                        showsManageSubscriptions = true
+                    } label: {
                         Text("Manage").frame(minWidth: 44, minHeight: 44)
                     }
                     .accessibilityLabel(Text("Manage Subscriptions"))
