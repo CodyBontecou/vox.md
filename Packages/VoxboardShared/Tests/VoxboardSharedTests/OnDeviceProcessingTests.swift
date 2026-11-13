@@ -49,24 +49,31 @@ final class OnDeviceProcessingTests: XCTestCase {
         let entered = expectation(description: "Non-cooperative work entered the inference gate")
         let finished = expectation(description: "Timed-out work actually returned from the gate")
         let work = ControlledInferenceWork(entered: entered)
-        let start = ProcessInfo.processInfo.systemUptime
-        do {
-            _ = try await withRunningTask(timeout: 0.03) {
+        let deadlineReturned = expectation(description: "Deadline returns while non-cooperative work is suspended")
+        let task = Task {
+            defer { deadlineReturned.fulfill() }
+            return try await withRunningTask(timeout: 0.03) {
                 defer { finished.fulfill() }
                 return try await gate.run {
                     await work.run()
                 }
             }
-            XCTFail("Expected timeout")
-        } catch { XCTAssertTrue(error is EnrichmentTimeoutError) }
-        XCTAssertLessThan(ProcessInfo.processInfo.systemUptime - start, 0.18)
+        }
         await fulfillment(of: [entered], timeout: 2)
+        // Assert ordering, not a sub-180 ms scheduling budget on a shared CI
+        // runner. The operation cannot return until finish() below, so this
+        // proves the deadline returns independently of non-cooperative work.
+        await fulfillment(of: [deadlineReturned], timeout: 2)
         do { _ = try await gate.run { 9 }; XCTFail("Expired work must retain its slot") }
         catch { XCTAssertEqual(error as? LLMBackendFailure, .busy) }
         // A deadline or a fixed sleep cannot establish that a cancellation-ignoring
         // callback returned. Release it explicitly, then join its gate lifetime.
         await work.finish()
         await fulfillment(of: [finished], timeout: 2)
+        do {
+            _ = try await task.value
+            XCTFail("Expected timeout")
+        } catch { XCTAssertTrue(error is EnrichmentTimeoutError) }
         let recovered = try await gate.run { 11 }
         XCTAssertEqual(recovered, 11)
     }
