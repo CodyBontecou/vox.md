@@ -222,3 +222,46 @@ final class LiveNoteEntryHighlightTests: XCTestCase {
         XCTAssertNil(makeTextView("# Note\nsomething else\n", entry: "- 14:05 gone").entryHighlightFrame)
     }
 }
+
+/// Attaching while a note is open puts the file in the vault and an embed in the note.
+@MainActor
+final class LiveNoteAttachmentTests: XCTestCase {
+    func testAttachingIntoAnOpenNoteCopiesToAttachmentsAndEmbeds() async throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let vault = root.appendingPathComponent("vault")
+        try FileManager.default.createDirectory(at: vault.appendingPathComponent("Inbox"), withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let note = vault.appendingPathComponent("Inbox/Note.md")
+        try "# Note\n".write(to: note, atomically: true, encoding: .utf8)
+        let destination = CaptureDestination(
+            name: "Inbox", rootBookmark: try vault.bookmarkData(), rootName: "Vault",
+            noteTarget: .newNote(pathTemplate: "Inbox/{title}.md")
+        )
+        try await CaptureLibraryStore(fileURL: root.appendingPathComponent(AppConstants.captureLibraryFilename))
+            .save(CaptureLibraryEnvelope(destinations: [destination], defaultDestinationID: destination.id))
+        let suite = "LiveNoteAttach." + UUID().uuidString
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let model = QuickCaptureViewModel(captureRootURL: root, defaults: defaults, pipeline: CapturePipeline())
+        model.liveNotesEnabled = true
+        await model.load()
+        await model.openLiveNote(binding: LiveNoteBinding(
+            destinationID: destination.id, relativePath: "Inbox/Note.md",
+            savedVersion: VaultNoteVersion(sha256: ""), entryRequestID: nil, presetID: nil
+        ))
+        XCTAssertNotNil(model.liveNote)
+
+        let photo = root.appendingPathComponent("whiteboard.png")
+        try Data([0x89, 0x50, 0x4E, 0x47]).write(to: photo)
+        _ = await model.stageFile(at: photo, contentTypeIdentifier: "public.png", embedAsImage: true, describeImageImmediately: false)
+        _ = await model.stageFile(at: photo, contentTypeIdentifier: "public.png", embedAsImage: true, describeImageImmediately: false)
+        await model.liveNote?.flush()
+
+        XCTAssertTrue(model.draft.additionalPayloads.isEmpty, "nothing left waiting for a send")
+        XCTAssertTrue(FileManager.default.fileExists(atPath: vault.appendingPathComponent("attachments/whiteboard.png").path))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: vault.appendingPathComponent("attachments/whiteboard 2.png").path), "never overwrites")
+        let saved = try String(contentsOf: note, encoding: .utf8)
+        XCTAssertTrue(saved.contains("![[whiteboard.png]]"), saved)
+        XCTAssertTrue(saved.contains("![[whiteboard 2.png]]"), saved)
+    }
+}

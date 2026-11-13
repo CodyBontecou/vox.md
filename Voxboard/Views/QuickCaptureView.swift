@@ -2483,7 +2483,7 @@ struct QuickCaptureView: View {
                     captureHintRow
                 }
                 HStack(spacing: Geist.Spacing.three) {
-                    if !captureFooterIsVaultUnreachable, viewModel.liveNote == nil {
+                    if !captureFooterIsVaultUnreachable {
                         Button {
                             dismissComposer()
                             showsAttachSheet = true
@@ -2509,7 +2509,9 @@ struct QuickCaptureView: View {
             }
             .padding(.horizontal, Geist.Spacing.four)
             .padding(.top, Geist.Spacing.three)
-            .padding(.bottom, Geist.Spacing.two)
+            // With the keyboard up there is no home-indicator inset below
+            // the bar, so give it more room above the keys.
+            .padding(.bottom, composerIsFocused ? Geist.Spacing.four : Geist.Spacing.two)
             // Strictly opt-in confirmation (default off) for Preset sends.
             // Attached to the bar so it also works when Send lives in the
             // route pane.

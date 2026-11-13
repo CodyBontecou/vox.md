@@ -1531,6 +1531,7 @@ final class QuickCaptureViewModel {
         }
         draft.additionalPayloads.append(.url(url, title: title))
         await saveDraftNow()
+        await embedPendingAttachmentsInLiveNote()
     }
 
     func removePayload(at index: Int) async {
@@ -2345,6 +2346,8 @@ final class QuickCaptureViewModel {
             }
             throw error
         }
+        // Live Notes: an open note takes attachments straight into the vault.
+        await embedPendingAttachmentsInLiveNote()
     }
 
     private func attachmentsFitInputBudget(_ payloads: [CapturePayload]) -> Bool {
@@ -3176,5 +3179,97 @@ extension QuickCaptureViewModel {
             if url.lastPathComponent == name { return url }
         }
         return nil
+    }
+}
+
+// MARK: - Attachments in an open note
+
+extension QuickCaptureViewModel {
+    /// With a note open, attachments can't wait for a first save that
+    /// already happened: copy each staged file into the vault's attachments
+    /// folder and add an embed (`![[photo.jpg]]`) to the note, which then
+    /// autosaves. Links become Markdown links.
+    func embedPendingAttachmentsInLiveNote() async {
+        guard let liveNote, !draft.additionalPayloads.isEmpty,
+              let stagingDirectory = stagingDirectoryURL else { return }
+        let binding = liveNote.binding
+        guard let root = scopedEmbedRoot(for: binding.destinationID) else {
+            // Vault unreachable: keep them staged; they embed on the next try.
+            return
+        }
+        let folder = destinations.first(where: { $0.id == binding.destinationID })?
+            .attachmentsFolderName.trimmingCharacters(in: .whitespacesAndNewlines) ?? "attachments"
+        let attachmentsFolder = folder.isEmpty ? "attachments" : folder
+        var lines: [String] = []
+        var embedded: [CapturePayload] = []
+        for payload in draft.additionalPayloads {
+            switch payload {
+            case .url(let url, let title):
+                lines.append(title.map { "[\($0)](\(url.absoluteString))" } ?? "<\(url.absoluteString)>")
+                embedded.append(payload)
+            case .text(let text):
+                lines.append(text)
+                embedded.append(payload)
+            default:
+                let assets = Self.assets(in: payload)
+                let names = await Self.copyIntoVault(
+                    assets,
+                    from: stagingDirectory,
+                    to: root.appendingPathComponent(attachmentsFolder, isDirectory: true)
+                )
+                guard names.count == assets.count else { continue }
+                lines += names.map { "![[\($0)]]" }
+                if case .scannedDocument(_, _, let extracted?) = payload, !extracted.isEmpty {
+                    lines.append(extracted)
+                }
+                embedded.append(payload)
+            }
+        }
+        guard !embedded.isEmpty else { return }
+        draft.additionalPayloads.removeAll { embedded.contains($0) }
+        let stager = CaptureAssetStager(directoryURL: stagingDirectory)
+        for asset in embedded.flatMap(Self.assets(in:)) {
+            try? await stager.remove(asset)
+        }
+        var text = draft.text
+        if !text.isEmpty, !text.hasSuffix("\n") { text += "\n" }
+        if !text.isEmpty { text += "\n" }
+        text += lines.joined(separator: "\n\n") + "\n"
+        draft.text = text
+        embedURLCache = [:]
+        scheduleDraftSave()
+    }
+
+    /// Copies staged files into the vault, never overwriting: a taken name
+    /// becomes "name 2.ext". Returns the names written, in order.
+    nonisolated private static func copyIntoVault(
+        _ assets: [CaptureAssetReference],
+        from stagingDirectory: URL,
+        to folder: URL
+    ) async -> [String] {
+        await Task.detached(priority: .userInitiated) {
+            let fm = FileManager.default
+            try? fm.createDirectory(at: folder, withIntermediateDirectories: true)
+            var names: [String] = []
+            for asset in assets {
+                let source = stagingDirectory.appendingPathComponent(asset.relativePath)
+                let original = (asset.originalFilename as NSString).lastPathComponent
+                let stem = (original as NSString).deletingPathExtension
+                let ext = (original as NSString).pathExtension
+                var name = original.isEmpty ? (asset.relativePath as NSString).lastPathComponent : original
+                var index = 2
+                while fm.fileExists(atPath: folder.appendingPathComponent(name).path) {
+                    name = ext.isEmpty ? "\(stem) \(index)" : "\(stem) \(index).\(ext)"
+                    index += 1
+                }
+                do {
+                    try fm.copyItem(at: source, to: folder.appendingPathComponent(name))
+                    names.append(name)
+                } catch {
+                    break
+                }
+            }
+            return names
+        }.value
     }
 }
