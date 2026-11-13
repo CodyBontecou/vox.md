@@ -117,21 +117,31 @@ final class CaptureImageDescriptionTests: XCTestCase {
 
     func test_totalBudgetAndLateCompletionCannotChangePreparedResult() async throws {
         let original = request(try (0..<10).map { .image(try asset("photo-\($0).png"), altText: nil) })
-        let fake = ImageDescriberFixture(delay: 0.2)
+        let prepared = expectation(description: "Request is prepared before image descriptions return")
+        let descriptionsFinished = expectation(description: "Late image descriptions returned")
+        let fake = ControlledImageDescriber(finished: descriptionsFinished)
         let processor = CapturePresetRequestProcessor(imageDescriber: fake, imageTimeout: 0.04, imageStageTimeout: 0.06)
-        let start = ProcessInfo.processInfo.systemUptime
-        let output = await processor.process(original, assetRootURL: URL(fileURLWithPath: "/tmp"))
-        XCTAssertLessThan(ProcessInfo.processInfo.systemUptime - start, 0.18)
+        let task = Task {
+            defer { prepared.fulfill() }
+            let output = await processor.process(original, assetRootURL: URL(fileURLWithPath: "/tmp"))
+            return (output, try JSONEncoder().encode(output))
+        }
+        // Completion must precede release of the cancellation-ignoring callbacks.
+        // A generous watchdog detects hangs without benchmarking CI scheduling.
+        await fulfillment(of: [prepared], timeout: 2)
+        let calls = await fake.callCount
+        XCTAssertGreaterThan(calls, 0)
+        XCTAssertLessThanOrEqual(calls, 2, "The stage budget must be shared across all ten images")
+        descriptionsFinished.expectedFulfillmentCount = max(calls, 1)
+        await fake.finishAll()
+        if calls > 0 { await fulfillment(of: [descriptionsFinished], timeout: 2) }
+        let (output, saved) = try await task.value
         XCTAssertEqual(output.payloads, original.payloads)
-        let saved = try JSONEncoder().encode(output)
-        try await Task.sleep(nanoseconds: 260_000_000)
-        let calls = await fake.calls
-        XCTAssertLessThanOrEqual(calls.count, 2)
         let reloaded = try JSONDecoder().decode(CaptureRequest.self, from: saved)
         let retry = await processor.process(reloaded, assetRootURL: URL(fileURLWithPath: "/tmp"))
         XCTAssertEqual(retry, output)
-        let retryCalls = await fake.calls
-        XCTAssertEqual(retryCalls.count, calls.count)
+        let retryCalls = await fake.callCount
+        XCTAssertEqual(retryCalls, calls)
     }
 
     func test_cancellationLeavesOriginalPendingRequest() async throws {
@@ -205,6 +215,32 @@ private actor ImageDescriberFixture: CaptureImageDescribing {
         }
         if fails { throw CaptureProcessingTimeout() }
         return output
+    }
+}
+
+/// Suspends until explicitly released, even after the processing deadline cancels it.
+private actor ControlledImageDescriber: CaptureImageDescribing {
+    private let finished: XCTestExpectation
+    private var continuations: [CheckedContinuation<Void, Never>] = []
+    private var released = false
+    private(set) var callCount = 0
+
+    init(finished: XCTestExpectation) { self.finished = finished }
+
+    func describe(asset: CaptureAssetReference, assetRootURL: URL, localeIdentifier: String) async throws -> String? {
+        callCount += 1
+        if !released {
+            await withCheckedContinuation { continuations.append($0) }
+        }
+        finished.fulfill()
+        return "A late description."
+    }
+
+    func finishAll() {
+        released = true
+        let pending = continuations
+        continuations.removeAll()
+        pending.forEach { $0.resume() }
     }
 }
 
