@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -24,6 +25,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.NoteAdd
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Folder
@@ -95,6 +97,8 @@ internal fun FilesScreen(
     openFolder: (String) -> Unit,
     reconnect: () -> Unit,
     nowEpochMillis: Long = System.currentTimeMillis(),
+    /** Phones: round back button to Capture (pushed screen, as on iOS). */
+    navigateBack: (() -> Unit)? = null,
 ) {
     val c = Signal.colors
     val scope = rememberCoroutineScope()
@@ -119,9 +123,10 @@ internal fun FilesScreen(
     OnResumeEffect { refreshTick += 1 }
 
     val root = listings[""]
-    Column(Modifier.fillMaxSize().background(c.bg)) {
+    Column(Modifier.fillMaxSize().background(c.bg).navigationBarsPadding()) {
+        if (navigateBack != null) LargeTitleBackRow(navigateBack)
         Row(
-            modifier = Modifier.fillMaxWidth().statusBarsPadding().padding(start = 16.dp, end = 8.dp, top = 16.dp),
+            modifier = Modifier.fillMaxWidth().then(if (navigateBack == null) Modifier.statusBarsPadding() else Modifier).padding(start = 16.dp, end = 8.dp, top = if (navigateBack == null) 16.dp else 4.dp),
             verticalAlignment = Alignment.Bottom,
         ) {
             Column(Modifier.weight(1f)) {
@@ -368,7 +373,7 @@ internal fun VaultFolderScreen(
     val files = (listing as? VaultListing.Listed)?.entries.orEmpty().filter(VaultEntry::isMarkdown)
         .let(VaultTree::sorted)
     val shown = files.filter { VaultTree.matches(it, query) }
-    Box(Modifier.fillMaxSize().background(c.bg)) {
+    Box(Modifier.fillMaxSize().background(c.bg).navigationBarsPadding()) {
         Column(Modifier.fillMaxSize()) {
             Row(Modifier.fillMaxWidth().statusBarsPadding().padding(start = 8.dp, end = 8.dp, top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                 Row(
@@ -552,3 +557,21 @@ private fun monthLabel(epochMillis: Long?): String =
 @Composable
 private fun fileCountLabel(count: Int): String =
     if (count == 1) voxString("1 file") else voxFormat("%@ files", count.toString())
+
+/** Round back button over a large title (iOS pushed screens): returns to Capture. */
+@Composable
+internal fun LargeTitleBackRow(navigateBack: () -> Unit, trailing: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {}) {
+    Row(
+        Modifier.fillMaxWidth().statusBarsPadding().padding(start = 12.dp, end = 12.dp, top = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        SignalCircleButton(
+            icon = Icons.AutoMirrored.Outlined.ArrowBack,
+            contentDescription = voxString("Back to Capture"),
+            onClick = navigateBack,
+            modifier = Modifier.testTag("back-to-capture"),
+        )
+        Spacer(Modifier.weight(1f))
+        trailing()
+    }
+}

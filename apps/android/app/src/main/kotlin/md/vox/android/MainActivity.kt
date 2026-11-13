@@ -714,9 +714,20 @@ internal fun VoxNavigation(
     val currentTopLevel = VoxTopLevelDestination.forRoute(backStackEntry?.destination?.route)
     val usesNavigationRail = currentVoxWindowWidthClass() != VoxWindowWidthClass.COMPACT
     val showsTopLevelChrome = currentTopLevel != null && !recordingStatus.isActive
-    // Live Notes: phones get the Capture / Files / Activity / Settings tab bar; History
-    // (all captures) is pushed from Activity and returns with Back.
-    val backToCapture: (() -> Unit)? = null
+    // Phones follow iOS: no tab bar. Capture is home; its header pushes Files, Activity and
+    // Settings, each with a round back button. Tablets keep the navigation rail.
+    val backToCapture: (() -> Unit)? = if (usesNavigationRail) null else ({ navController.popBackStack() })
+    val openSection: (VoxTopLevelDestination) -> Unit = { destination ->
+        navController.navigate(destination.route) {
+            if (usesNavigationRail) {
+                popUpTo(Destination.Capture.route) { saveState = true }
+                restoreState = true
+            } else {
+                popUpTo(Destination.Capture.route)
+            }
+            launchSingleTop = true
+        }
+    }
     val imeVisible = androidx.compose.foundation.layout.WindowInsets.isImeVisible
     // Live Notes: write on background, look at the file again on return (SAF has no change notifications).
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
@@ -800,10 +811,11 @@ internal fun VoxNavigation(
                     consumeAcceptedCapture = model::consumeAcceptedCapture,
                     consumeExternalDraft = model::consumeExternalDraft,
                     openHistory = { navController.navigate(Destination.History.route) },
-                    openSettings = { selectTopLevel(VoxTopLevelDestination.SETTINGS) },
+                    openSettings = { openSection(VoxTopLevelDestination.SETTINGS) },
                     openPresets = { navController.navigate(Destination.Presets.route) },
-                    // The tab bar or rail carries Activity and Settings; the header shows On-device.
-                    openActivity = null,
+                    // Phones: Files, Activity and Settings live in the header (iOS). The rail carries them on tablets.
+                    openActivity = if (usesNavigationRail) null else ({ openSection(VoxTopLevelDestination.ACTIVITY) }),
+                    openFiles = if (usesNavigationRail) null else ({ openSection(VoxTopLevelDestination.FILES) }),
                     activityBadge = activityBadge,
                     startRecording = startRecording,
                     pauseRecording = recordingClient::pause,
@@ -830,7 +842,7 @@ internal fun VoxNavigation(
                     onDismissReleased = model::dismissLiveNoteToast,
                     onCloseOpenedFile = if (latestState.liveNoteOpenedFromFiles) ({
                         model.closeOpenedFile()
-                        selectTopLevel(VoxTopLevelDestination.FILES)
+                        openSection(VoxTopLevelDestination.FILES)
                     }) else null,
                 )
             }
@@ -843,6 +855,7 @@ internal fun VoxNavigation(
                     openFile = { entry, preset -> openVaultFile(entry.relativePath, preset) },
                     openFolder = { folder -> navController.navigate("$FILES_FOLDER_ROUTE/${Uri.encode(folder)}") },
                     reconnect = { openTree(null) },
+                    navigateBack = backToCapture,
                 )
             }
             composable("$FILES_FOLDER_ROUTE/{folder}") { entry ->
@@ -978,6 +991,7 @@ internal fun VoxNavigation(
                     openLibrary = { navController.navigate(Destination.History.route) },
                     captureRouteName = { libraryRouteName(latestState.presetCollection, it.presetID) },
                     hasAudio = recordingClient::hasRetainedAudio,
+                    navigateBack = backToCapture,
                 )
             }
             composable("$TRANSCRIPT_DETAIL_ROUTE/{sessionID}") { entry ->
@@ -1311,9 +1325,6 @@ internal fun VoxNavigation(
             hostState = snackbarHost,
             modifier = Modifier.align(Alignment.TopCenter).statusBarsPadding().padding(16.dp),
         )
-    }
-    if (showsTopLevelChrome && !usesNavigationRail && !imeVisible) {
-        VoxBottomBar(current = currentTopLevel, activityBadge = activityBadge, onSelect = selectTopLevel)
     }
     }
     }

@@ -95,6 +95,7 @@ import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Stop
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material.icons.outlined.Tune
@@ -393,6 +394,8 @@ internal fun CaptureScreen(
     onCloseOpenedFile: (() -> Unit)? = null,
     /** Live preview: content URI for an embed in the bound note (null when it can't be found). */
     resolveEmbed: suspend (String) -> String? = { null },
+    /** Phones: Files button in the header (iOS captureHeaderActions). Null when a rail carries it. */
+    openFiles: (() -> Unit)? = null,
 ) {
     val liveNote = state.liveNote
     var editorValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
@@ -1222,6 +1225,7 @@ internal fun CaptureScreen(
                 openHistory = openHistory,
                 openSettings = openSettings,
                 openActivity = openActivity,
+                openFiles = openFiles,
                 activityBadge = activityBadge,
                 hideKeyboard = {
                     focusManager.clearFocus()
@@ -1541,6 +1545,8 @@ internal fun CaptureTopControls(
     liveRouteEditable: Boolean = true,
     /** Files tab: Back replaces the preset selector. */
     onBack: (() -> Unit)? = null,
+    /** Phones: Files, before Activity and Settings in the header. */
+    openFiles: (() -> Unit)? = null,
 ) {
     val routeEditor = rememberCaptureRouteEditorState()
     val c = Signal.colors
@@ -1631,6 +1637,14 @@ internal fun CaptureTopControls(
                     Text(voxString("Done"), style = MaterialTheme.typography.labelMedium, color = c.tint)
                 }
             } else if (openActivity != null) {
+                if (openFiles != null) {
+                    SignalCircleButton(
+                        icon = Icons.Outlined.Folder,
+                        contentDescription = voxString("Files"),
+                        onClick = openFiles,
+                        modifier = Modifier.testTag("capture-files"),
+                    )
+                }
                 val activityLabel = voxString("Activity")
                 Box {
                     SignalCircleButton(

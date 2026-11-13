@@ -29,7 +29,7 @@
   "dynamicRuntimeCallSiteCount": 0,
   "dynamicRuntimeCalls": [],
   "dynamicRuntimeExpressionCount": 0,
-  "fallbackSourceCount": 68,
+  "fallbackSourceCount": 69,
   "formatArgumentContractStatus": "validated",
   "incompleteCatalogSourceCount": 0,
   "incompleteCatalogSources": [],
@@ -82,7 +82,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:491"
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:494"
       ],
       "source": "%lld non-screenshot images were skipped."
     },
@@ -114,9 +114,9 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2374",
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2672",
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2778",
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2388",
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2686",
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2792",
         "apps/android/app/src/main/kotlin/md/vox/android/CaptureStateViews.kt:314",
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:661"
       ],
@@ -136,13 +136,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:3067"
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:3081"
       ],
       "source": "Heading %lld"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2888"
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2902"
       ],
       "source": "Saved locally in %lld durable chunks."
     }
@@ -152,12 +152,12 @@
     "Dynamic-source call sites are inventoried; the current finite-domain trace has no unresolved dynamic expressions.",
     "Missing sources fall back to English; Android machine translations require human linguistic review."
   ],
-  "literalRuntimeSourceCount": 1061,
-  "missingCatalogSourceCount": 68,
+  "literalRuntimeSourceCount": 1062,
+  "missingCatalogSourceCount": 69,
   "missingCatalogSources": [
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:188"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:189"
       ],
       "source": "%1$@ added to %2$@"
     },
@@ -169,69 +169,76 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:488"
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:493"
       ],
       "source": "%1$@ writes to %2$@"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:487"
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:492"
       ],
       "source": "%1$@ writes to %2$@ under %3$@"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:194"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:195"
       ],
       "source": "%@ changed in another app"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:554"
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:559"
       ],
       "source": "%@ files"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:300"
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:305"
       ],
       "source": "%@ more"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:554"
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:559"
       ],
       "source": "1 file"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:183"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:184"
       ],
       "source": "A capture couldn't be saved"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:186"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:187"
       ],
       "source": "A recording couldn't be transcribed"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:438"
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:443"
       ],
       "source": "Add to %@"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:438"
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:443"
       ],
       "source": "Add to today"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:241"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:240",
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:249"
       ],
       "source": "All captures"
+    },
+    {
+      "locations": [
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:570"
+      ],
+      "source": "Back to Capture"
     },
     {
       "locations": [
@@ -241,20 +248,20 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:146",
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:151",
         "apps/android/app/src/main/kotlin/md/vox/android/LiveNoteViews.kt:240"
       ],
       "source": "Can't reach your %@ folder"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:191"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:192"
       ],
       "source": "Capture saved"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:147"
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:152"
       ],
       "source": "Captures are kept on this phone until the folder is available again."
     },
@@ -266,31 +273,31 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:182"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:183"
       ],
       "source": "Couldn't reach your folder"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:183"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:184"
       ],
       "source": "Couldn't save %@"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:186"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:187"
       ],
       "source": "Couldn't transcribe %@"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:136"
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:141"
       ],
       "source": "Filter files"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:351"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:360"
       ],
       "source": "Folder access to %@ ended. Nothing is lost; it's kept on this phone."
     },
@@ -302,7 +309,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:357"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:366"
       ],
       "source": "It's saved on this phone. Try writing it to the folder again."
     },
@@ -332,19 +339,19 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:196"
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:201"
       ],
       "source": "Loading…"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:439"
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:444"
       ],
       "source": "New in %@"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:168"
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:173"
       ],
       "source": "No files match."
     },
@@ -392,15 +399,15 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:352",
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:149",
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:361",
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:154",
         "apps/android/app/src/main/kotlin/md/vox/android/LiveNoteViews.kt:251"
       ],
       "source": "Reconnect folder"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:184"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:185"
       ],
       "source": "Recorded %@"
     },
@@ -418,7 +425,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:189"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:190"
       ],
       "source": "Saved %@"
     },
@@ -430,13 +437,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:195"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:196"
       ],
       "source": "Saved a copy: %@"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:190"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:191"
       ],
       "source": "Saved to %@"
     },
@@ -454,25 +461,25 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:253"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:262"
       ],
       "source": "Saves, recordings and anything that needs you show up here."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:193"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:194"
       ],
       "source": "Saving %@"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:193"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:194"
       ],
       "source": "Saving a capture"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:402"
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:407"
       ],
       "source": "Search %@"
     },
@@ -514,13 +521,13 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:168"
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:173"
       ],
       "source": "This folder is empty."
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:185"
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:186"
       ],
       "source": "Transcribing a recording"
     },
@@ -550,19 +557,19 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:338"
+        "apps/android/app/src/main/kotlin/md/vox/android/FilesScreens.kt:343"
       ],
       "source": "today"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:1321"
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:1325"
       ],
       "source": "vault"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:351",
+        "apps/android/app/src/main/kotlin/md/vox/android/ActivityTimelineScreen.kt:360",
         "apps/android/app/src/main/kotlin/md/vox/android/LiveNoteViews.kt:278"
       ],
       "source": "your vault"
@@ -572,7 +579,7 @@
   "pluralReviewStatus": "requires-human-review",
   "pluralSourceCount": 12,
   "reviewStatus": "requires-human-review",
-  "runtimeSourceLiteralCount": 3167,
+  "runtimeSourceLiteralCount": 3170,
   "runtimeSourceScanRoots": [
     "apps/android/app/src/main/kotlin",
     "apps/android/capture-domain/src/main/kotlin",

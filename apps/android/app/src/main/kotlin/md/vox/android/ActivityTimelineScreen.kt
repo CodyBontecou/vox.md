@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -228,17 +229,25 @@ internal fun ActivityTimelineScreen(
     captureRouteName: (CaptureHistoryItem) -> String? = { null },
     hasAudio: (String) -> Boolean = { true },
     nowEpochMillis: Long = System.currentTimeMillis(),
+    /** Phones: round back button to Capture (pushed screen, as on iOS). */
+    navigateBack: (() -> Unit)? = null,
 ) {
     val c = Signal.colors
     val timeline = remember(items, transcripts, events) { activityTimeline(items, transcripts, events, captureRouteName, hasAudio) }
-    Column(Modifier.fillMaxSize().background(c.bg)) {
+    Column(Modifier.fillMaxSize().background(c.bg).navigationBarsPadding()) {
+        // iOS: the round back button left, the secondary action right, then the large title.
+        if (navigateBack != null) LargeTitleBackRow(navigateBack) {
+            SignalPillButton(text = voxString("All captures"), onClick = openLibrary, modifier = Modifier.testTag("activity-library"))
+        }
         Row(
-            Modifier.fillMaxWidth().statusBarsPadding().padding(start = 16.dp, end = 8.dp, top = 16.dp),
+            Modifier.fillMaxWidth().then(if (navigateBack == null) Modifier.statusBarsPadding() else Modifier).padding(start = 16.dp, end = 8.dp, top = if (navigateBack == null) 16.dp else 4.dp),
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(voxString("Activity"), style = MaterialTheme.typography.headlineMedium.copy(fontSize = 30.sp, fontWeight = FontWeight.SemiBold), color = c.text, modifier = Modifier.weight(1f))
-            SignalPillButton(text = voxString("All captures"), onClick = openLibrary, modifier = Modifier.testTag("activity-library"))
+            if (navigateBack == null) {
+                SignalPillButton(text = voxString("All captures"), onClick = openLibrary, modifier = Modifier.testTag("activity-library"))
+            }
         }
         Row(Modifier.padding(start = 16.dp, top = 8.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             LegendItem(TimelineTone.NEEDS_YOU, voxString("Needs you"))
