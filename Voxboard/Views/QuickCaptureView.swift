@@ -118,6 +118,8 @@ struct QuickCaptureView: View {
     @State private var showsLinkPrompt = false
     @State private var showsCaptureHistory = false
     @State private var showsVaultFiles = false
+    /// Raw/formatted Markdown in the editor, remembered across launches.
+    @AppStorage("capture.editor.showsRawMarkdown") private var showsRawMarkdown = false
     @State private var showsRoutePicker = false
     @State private var showsDueDate = false
     @State private var showsInternalLinks = false
@@ -417,6 +419,28 @@ struct QuickCaptureView: View {
         layout == .compact && composerIsFocused && !isCoverScreen
     }
 
+    /// Raw/formatted Markdown: raw shows the file's source exactly.
+    private var markdownModeToggle: CaptureViewSection {
+        CaptureViewSection {
+            Button {
+                showsRawMarkdown.toggle()
+            } label: {
+                Text(verbatim: showsRawMarkdown ? "Aa" : "</>")
+                    .font(Geist.mono(size: 11.5, relativeTo: .caption, medium: true))
+                    .foregroundStyle(showsRawMarkdown ? Geist.accentText : Geist.muted)
+                    .padding(.horizontal, 8)
+                    .frame(minWidth: 36, minHeight: 24)
+                    .background(showsRawMarkdown ? Geist.accentSoft : Geist.well, in: Capsule())
+                    .contentShape(Rectangle())
+                    .frame(minHeight: 44)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(showsRawMarkdown ? Text("Show formatted Markdown") : Text("Show raw Markdown"))
+            .accessibilityValue(showsRawMarkdown ? Text("Raw") : Text("Formatted"))
+            .accessibilityIdentifier("capture_markdown_mode")
+        }
+    }
+
     /// Files: the vault tree (Live Notes).
     private var filesButton: CaptureViewSection {
         CaptureViewSection {
@@ -547,8 +571,9 @@ struct QuickCaptureView: View {
                     .accessibilityLabel("Use Route destination defaults")
                     .disabled(!viewModel.canChangeCaptureRoute)
                 }
+                Spacer(minLength: 4)
+                markdownModeToggle
                 if viewModel.liveNotesEnabled {
-                    Spacer(minLength: 4)
                     LiveNoteStatusPill(status: viewModel.liveNoteStatus)
                 }
             }
@@ -1910,7 +1935,9 @@ struct QuickCaptureView: View {
                     guard persistentRecorder.isAppRecordingSegmentActive else { return }
                     viewModel.moveRecordedTranscriptInsertion(toUTF16Offset: offset)
                 },
-                highlightedEntry: viewModel.liveNoteHighlightedEntry
+                highlightedEntry: viewModel.liveNoteHighlightedEntry,
+                showsRawMarkdown: showsRawMarkdown,
+                resolveEmbedURL: { [viewModel] target in viewModel.liveNoteEmbedURL(target) }
             )
             // Phones keep the editor live under the recording dock so the
             // writer can type while speaking; larger windows cover it.

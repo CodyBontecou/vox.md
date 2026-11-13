@@ -25,6 +25,9 @@ struct CaptureLiveRecordingDock: View {
     let snapWhiteboard: () -> Void
     var isKeyboardVisible = false
     var dismissKeyboard: () -> Void = {}
+    /// Live Notes: where the words are going (replaces the Draft/Send toggle).
+    var liveNoteLine: String? = nil
+    var liveNoteLineIsLive = false
 
     @State private var confirmsDiscard = false
     @State private var actionFeedback: String?
@@ -45,6 +48,9 @@ struct CaptureLiveRecordingDock: View {
                     .accessibilityIdentifier("capture_live_recording_error")
             }
             statusRow
+            if let liveNoteLine {
+                LiveNoteRecordingLineView(text: liveNoteLine, isLive: liveNoteLineIsLive)
+            }
             controls
         }
         .padding(.horizontal, 14)
@@ -105,7 +111,11 @@ struct CaptureLiveRecordingDock: View {
                 ? String(localized: "Paused, \(duration)")
                 : String(localized: "Recording, \(duration)")))
             .accessibilityHint(Text(verbatim: engineLabel))
-            CaptureRecordingModeSegment(isDraft: $isDraftMode, isLocked: false)
+            if liveNoteLine == nil {
+                CaptureRecordingModeSegment(isDraft: $isDraftMode, isLocked: false)
+            } else {
+                Spacer(minLength: 0)
+            }
             if isKeyboardVisible {
                 Button(action: dismissKeyboard) {
                     Image(systemName: "keyboard.chevron.compact.down")

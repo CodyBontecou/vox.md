@@ -38,12 +38,16 @@ struct ActivityFeedView: View {
                     header
                     ScrollView {
                         LazyVStack(alignment: .leading, spacing: 10) {
-                            Text("Activity")
-                                .font(Geist.display(34))
-                                .foregroundStyle(Geist.text)
-                                .accessibilityAddTraits(.isHeader)
-                                .padding(.horizontal, 4)
-                                .padding(.top, Geist.Spacing.three)
+                            HStack(alignment: .lastTextBaseline) {
+                                Text("Activity")
+                                    .font(Geist.display(34))
+                                    .foregroundStyle(Geist.text)
+                                    .accessibilityAddTraits(.isHeader)
+                                Spacer(minLength: Geist.Spacing.two)
+                                ActivityTimelineLegend()
+                            }
+                            .padding(.horizontal, 4)
+                            .padding(.top, Geist.Spacing.three)
 
                             if isAllCaughtUp {
                                 allCaughtUp
@@ -171,14 +175,32 @@ struct ActivityFeedView: View {
 
     private var inFlightCount: Int { inFlightJobs.count + inFlightWatchItems.count }
 
-    private var deliveredToday: [CaptureHistoryRecord] {
-        viewModel.historyRecords.filter {
-            $0.outcome == .delivered && Calendar.current.isDateInToday($0.deliveredAt ?? $0.createdAt)
+    /// Delivered captures for the timeline, newest first, grouped by day.
+    private var recentDelivered: [CaptureHistoryRecord] {
+        Array(
+            viewModel.historyRecords
+                .filter { $0.outcome == .delivered }
+                .sorted { ($0.deliveredAt ?? $0.createdAt) > ($1.deliveredAt ?? $1.createdAt) }
+                .prefix(60)
+        )
+    }
+
+    private var deliveredByDay: [ActivityTimelineDay] {
+        let calendar = Calendar.current
+        var groups: [ActivityTimelineDay] = []
+        for record in recentDelivered {
+            let day = calendar.startOfDay(for: record.deliveredAt ?? record.createdAt)
+            if let last = groups.indices.last, groups[last].day == day {
+                groups[last].records.append(record)
+            } else {
+                groups.append(ActivityTimelineDay(day: day, records: [record]))
+            }
         }
+        return groups
     }
 
     private var isAllCaughtUp: Bool {
-        needsYouCount == 0 && inFlightCount == 0 && deliveredToday.isEmpty
+        needsYouCount == 0 && inFlightCount == 0 && recentDelivered.isEmpty
     }
 
     // MARK: Header
@@ -191,24 +213,6 @@ struct ActivityFeedView: View {
                     .accessibilityLabel("Back to capture")
             }
             Spacer()
-            // As a sidebar section, Library sits in the sidebar under
-            // Activity (iPad board), so the header skips its own link.
-            if showsBackButton {
-                NavigationLink {
-                    HistoryView(viewModel: viewModel, embedsInNavigationStack: false)
-                        .environment(transcriptStore)
-                } label: {
-                    Text("Library")
-                        .font(Geist.label(.subheadline))
-                        .foregroundStyle(Geist.text)
-                        .padding(.horizontal, 14)
-                        .frame(height: Geist.ControlHeight.medium)
-                        .background(Geist.card, in: Capsule())
-                        .overlay(Capsule().stroke(Geist.border, lineWidth: 1))
-                }
-                .buttonStyle(.plain)
-                .accessibilityHint("Opens every capture on this iPhone")
-            }
         }
         .padding(.horizontal, Geist.Spacing.four + 4)
         .padding(.vertical, Geist.Spacing.two)
@@ -238,50 +242,71 @@ struct ActivityFeedView: View {
         let showsNeeds = filter != .inFlight
         let showsFlight = filter != .needsAttention
 
-        if showsNeeds {
-            ForEach(problems) { problem in problemCard(problem) }
-            ForEach(failedWatchItems) { item in watchFailureCard(item) }
-            if let queue {
-                ForEach(failedJobs) { job in
-                    RecordingQueueJobCard(job: job, queue: queue, recoveryPresets: CapturePresetStore.loadFlows())
+        VStack(alignment: .leading, spacing: 0) {
+            if showsNeeds && needsYouCount > 0 {
+                ActivityTimelineDayHeader(title: String(localized: "Needs you"))
+                ForEach(problems) { problem in
+                    ActivityTimelineRow(date: problem.createdAt, dot: Geist.warning) { problemCard(problem) }
+                }
+                ForEach(failedWatchItems) { item in
+                    ActivityTimelineRow(date: item.createdAt, dot: Geist.warning) { watchFailureCard(item) }
+                }
+                if let queue {
+                    ForEach(failedJobs) { job in
+                        ActivityTimelineRow(date: job.createdAt, dot: Geist.warning) {
+                            RecordingQueueJobCard(job: job, queue: queue, recoveryPresets: CapturePresetStore.loadFlows())
+                        }
+                    }
                 }
             }
-        }
-        if showsFlight {
-            ForEach(inFlightWatchItems) { item in watchInFlightCard(item) }
-            if let queue {
-                ForEach(inFlightJobs) { job in
-                    RecordingQueueJobCard(job: job, queue: queue, recoveryPresets: CapturePresetStore.loadFlows())
+            if showsFlight && inFlightCount > 0 {
+                ActivityTimelineDayHeader(title: String(localized: "In flight"))
+                ForEach(inFlightWatchItems) { item in
+                    ActivityTimelineRow(date: item.createdAt, dot: Geist.accent) { watchInFlightCard(item) }
+                }
+                if let queue {
+                    ForEach(inFlightJobs) { job in
+                        ActivityTimelineRow(date: job.createdAt, dot: Geist.accent) {
+                            RecordingQueueJobCard(job: job, queue: queue, recoveryPresets: CapturePresetStore.loadFlows())
+                        }
+                    }
                 }
             }
-        }
 
-        if filter == .needsAttention && needsYouCount == 0 {
-            filteredEmpty(String(localized: "Nothing needs you right now."))
-        } else if filter == .inFlight && inFlightCount == 0 {
-            filteredEmpty(String(localized: "Nothing is in flight right now."))
-        }
+            if filter == .needsAttention && needsYouCount == 0 {
+                filteredEmpty(String(localized: "Nothing needs you right now."))
+            } else if filter == .inFlight && inFlightCount == 0 {
+                filteredEmpty(String(localized: "Nothing is in flight right now."))
+            }
 
-        if filter == .all && !deliveredToday.isEmpty {
-            Text("DELIVERED TODAY")
-                .font(Geist.mono(size: 11, relativeTo: .caption))
-                .tracking(0.66)
-                .foregroundStyle(Geist.muted)
-                .padding(.horizontal, 4)
-                .padding(.top, 10)
-                .accessibilityAddTraits(.isHeader)
-            VStack(spacing: 0) {
-                ForEach(Array(deliveredToday.enumerated()), id: \.element.id) { index, record in
-                    if index > 0 { GeistDivider() }
-                    deliveredRow(record)
+            if filter == .all {
+                ForEach(deliveredByDay) { group in
+                    ActivityTimelineDayHeader(title: Self.dayTitle(group.day))
+                    ForEach(group.records) { record in
+                        ActivityTimelineRow(
+                            date: record.deliveredAt ?? record.createdAt,
+                            dot: Self.dotColor(for: record)
+                        ) {
+                            deliveredRow(record)
+                        }
+                    }
                 }
             }
-            .padding(.horizontal, 14)
-            .background(Geist.card, in: RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: Geist.Radius.large, style: .continuous)
-                    .stroke(Geist.border, lineWidth: 1)
-            )
+        }
+    }
+
+    private static func dayTitle(_ day: Date) -> String {
+        let calendar = Calendar.current
+        if calendar.isDateInToday(day) { return String(localized: "Today") }
+        if calendar.isDateInYesterday(day) { return String(localized: "Yesterday") }
+        return day.formatted(.dateTime.weekday(.wide).day().month(.abbreviated))
+    }
+
+    /// Indigo for spoken captures (audio), green for everything else saved.
+    private static func dotColor(for record: CaptureHistoryRecord) -> Color {
+        switch record.source {
+        case .watch, .voice: Geist.accent
+        default: Geist.success
         }
     }
 
@@ -320,7 +345,6 @@ struct ActivityFeedView: View {
         }
         return VStack(alignment: .leading, spacing: Geist.Spacing.three) {
             HStack(alignment: .top, spacing: Geist.Spacing.three) {
-                ActivitySignalDot(color: Geist.warning).padding(.top, 6)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
                         .font(Geist.heading(.callout))
@@ -361,7 +385,6 @@ struct ActivityFeedView: View {
                         .accessibilityLabel("More options")
                 }
             }
-            .padding(.leading, 22)
         }
         .activitySignalCard(needsAttention: true)
     }
@@ -369,7 +392,6 @@ struct ActivityFeedView: View {
     private func watchFailureCard(_ item: WatchRecordingInboxItem) -> some View {
         VStack(alignment: .leading, spacing: Geist.Spacing.three) {
             HStack(alignment: .top, spacing: Geist.Spacing.three) {
-                ActivitySignalDot(color: Geist.warning).padding(.top, 6)
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(alignment: .firstTextBaseline) {
                         Text(item.watchStatusTitle)
@@ -404,7 +426,6 @@ struct ActivityFeedView: View {
                 Button("Discard", role: .destructive) { discardingWatchItem = item }
                     .buttonStyle(ActivitySignalPillButtonStyle(kind: .destructive))
             }
-            .padding(.leading, 22)
         }
         .activitySignalCard(needsAttention: true)
     }
@@ -422,7 +443,6 @@ struct ActivityFeedView: View {
             }
         }()
         return HStack(alignment: .top, spacing: Geist.Spacing.three) {
-            ActivitySignalDot(color: Geist.accent).padding(.top, 6)
             VStack(alignment: .leading, spacing: Geist.Spacing.two) {
                 HStack(alignment: .firstTextBaseline) {
                     Text("From Apple Watch")
@@ -457,29 +477,54 @@ struct ActivityFeedView: View {
     }
 
     private func deliveredRow(_ record: CaptureHistoryRecord) -> some View {
-        HStack(spacing: Geist.Spacing.three) {
-            Image(systemName: "checkmark")
-                .font(.system(size: 14, weight: .bold))
-                .foregroundStyle(Geist.success)
-                .frame(width: 18)
-                .accessibilityHidden(true)
+        Button {
+            openInComposer(record)
+        } label: {
             VStack(alignment: .leading, spacing: 2) {
-                Text(verbatim: record.voxName ?? record.destinationName)
-                    .font(Geist.body(.subheadline).weight(.medium))
+                Text(verbatim: Self.deliveredTitle(record))
+                    .font(Geist.heading(.callout))
                     .foregroundStyle(Geist.text)
+                    .multilineTextAlignment(.leading)
                 Text(verbatim: deliveredDestination(record))
                     .font(Geist.mono(size: 11.5, relativeTo: .caption))
                     .foregroundStyle(Geist.muted)
                     .lineLimit(1)
                     .truncationMode(.middle)
             }
-            Spacer(minLength: Geist.Spacing.two)
-            Text(record.deliveredAt ?? record.createdAt, format: .dateTime.hour().minute())
-                .font(Geist.mono(size: 11.5, relativeTo: .caption))
-                .foregroundStyle(Geist.muted)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
         }
-        .padding(.vertical, Geist.Spacing.three)
-        .accessibilityElement(children: .combine)
+        .buttonStyle(.plain)
+        .disabled(record.relativeNotePath == nil)
+        .accessibilityHint("Opens this note in Capture")
+    }
+
+    private static func deliveredTitle(_ record: CaptureHistoryRecord) -> String {
+        let route = record.voxName ?? record.destinationName
+        switch record.source {
+        case .watch: return String(localized: "Apple Watch added to \(route)")
+        case .keyboard: return String(localized: "Keyboard added to \(route)")
+        case .shareExtension: return String(localized: "Shared into \(route)")
+        case .mac: return String(localized: "Mac added to \(route)")
+        case .widget, .shortcut: return String(localized: "Quick capture to \(route)")
+        case .voice: return String(localized: "Recorded into \(route)")
+        default: return String(localized: "Saved to \(route)")
+        }
+    }
+
+    private func openInComposer(_ record: CaptureHistoryRecord) {
+        guard let path = record.relativeNotePath, path.lowercased().hasSuffix(".md") else { return }
+        let binding = LiveNoteBinding(
+            destinationID: record.destinationID,
+            relativePath: path,
+            savedVersion: VaultNoteVersion(sha256: ""),
+            entryRequestID: record.requestID,
+            presetID: record.voxID
+        )
+        Task {
+            await viewModel.openLiveNote(binding: binding)
+            if let onNewCapture { onNewCapture() } else { dismiss() }
+        }
     }
 
     private func deliveredDestination(_ record: CaptureHistoryRecord) -> String {
@@ -609,6 +654,81 @@ struct ActivityFeedView: View {
             } catch {
                 errorMessage = error.localizedDescription
             }
+        }
+    }
+}
+
+// MARK: - Timeline pieces
+
+struct ActivityTimelineDay: Identifiable {
+    var day: Date
+    var records: [CaptureHistoryRecord]
+    var id: Date { day }
+}
+
+/// One event on the Activity rail: time, colored dot, then the content.
+struct ActivityTimelineRow<Content: View>: View {
+    let date: Date
+    let dot: Color
+    @ViewBuilder var content: Content
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 8) {
+            Text(date, format: .dateTime.hour().minute())
+                .font(Geist.mono(size: 11.5, relativeTo: .caption))
+                .foregroundStyle(Geist.muted)
+                .frame(width: 58, alignment: .trailing)
+                .padding(.top, 3)
+            ZStack(alignment: .top) {
+                Rectangle()
+                    .fill(Geist.border)
+                    .frame(width: 2)
+                    .frame(maxHeight: .infinity)
+                Circle()
+                    .fill(dot)
+                    .frame(width: 12, height: 12)
+                    .overlay(Circle().stroke(Geist.bg, lineWidth: 2))
+                    .padding(.top, 4)
+            }
+            .frame(width: 20)
+            .accessibilityHidden(true)
+            content
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, Geist.Spacing.four)
+        }
+    }
+}
+
+struct ActivityTimelineDayHeader: View {
+    let title: String
+
+    var body: some View {
+        Text(title)
+            .font(Geist.label(.footnote))
+            .foregroundStyle(Geist.muted)
+            .padding(.leading, 86)
+            .padding(.top, Geist.Spacing.two)
+            .padding(.bottom, Geist.Spacing.two)
+            .accessibilityAddTraits(.isHeader)
+    }
+}
+
+struct ActivityTimelineLegend: View {
+    var body: some View {
+        HStack(spacing: 10) {
+            item(Geist.warning, "Needs you")
+            item(Geist.accent, "Audio")
+            item(Geist.success, "Saved")
+        }
+        .font(Geist.caption(.caption2))
+        .foregroundStyle(Geist.muted)
+        .accessibilityElement(children: .combine)
+    }
+
+    private func item(_ color: Color, _ title: LocalizedStringKey) -> some View {
+        HStack(spacing: 4) {
+            Circle().fill(color).frame(width: 8, height: 8)
+            Text(title).lineLimit(1).fixedSize()
         }
     }
 }

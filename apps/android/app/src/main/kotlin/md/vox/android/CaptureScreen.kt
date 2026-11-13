@@ -391,6 +391,8 @@ internal fun CaptureScreen(
     onDismissReleased: () -> Unit = {},
     /** Set when the bound file was opened from Files: the header shows Back instead of the preset. */
     onCloseOpenedFile: (() -> Unit)? = null,
+    /** Live preview: content URI for an embed in the bound note (null when it can't be found). */
+    resolveEmbed: suspend (String) -> String? = { null },
 ) {
     val liveNote = state.liveNote
     var editorValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
@@ -885,7 +887,7 @@ internal fun CaptureScreen(
         if (update.revision == appliedEditorRevision) return@LaunchedEffect
         appliedEditorRevision = update.revision
         val range = update.entryRange
-        val cursor = range?.end ?: editorValue.selection.end.coerceAtMost(update.text.length)
+        val cursor = range?.end ?: update.caret ?: editorValue.selection.end.coerceAtMost(update.text.length)
         editorValue = TextFieldValue(update.text, TextRange(cursor.coerceIn(0, update.text.length)))
         liveHighlight = range.takeIf { state.liveNote.binding?.isAppendTarget == true }
         // Undo must never step back across a whole-file replacement (it would write the old text over the file).
@@ -1343,32 +1345,70 @@ internal fun CaptureScreen(
                     .fillMaxWidth()
                     .weight(1f),
             ) {
+                val showsRawMarkdown = MarkdownEditorMode.showsRaw()
+                val entryHighlight = LiveNoteHighlightTransformation(
+                    liveHighlight,
+                    liveNoteHighlightColor(),
+                    label = if (liveNote.binding?.isAppendTarget == true) liveNoteJustAddedLabel(justAddedRecordingMillis) else null,
+                    labelStyle = liveNoteJustAddedStyle(),
+                )
+                val markdownColors = markdownEditorColors()
+                // Live preview (formatted mode, bound note): frontmatter and embed lines are drawn
+                // as panels/players over their hidden source, unless the caret is inside them.
+                val density = androidx.compose.ui.platform.LocalDensity.current
+                val previewBlocks = remember(editorValue.text, showsRawMarkdown, liveNote.isBound) {
+                    if (showsRawMarkdown || !liveNote.isBound) emptyList() else LivePreview.blocks(editorValue.text)
+                }
+                val shownBlocks = previewBlocks.filterNot { LivePreview.isRevealed(it, editorValue.selection.start, editorValue.selection.end) }
+                val hiddenBlocks = shownBlocks.map { HiddenPreviewBlock(it.start, it.end, with(density) { previewBlockHeight(it).toSp().value }) }
+                val editorTransformation = if (showsRawMarkdown) {
+                    MarkdownRawTransformation(entryHighlight)
+                } else {
+                    MarkdownFormattedTransformation(markdownColors, entryHighlight, hiddenBlocks)
+                }
+                var editorLayout by remember { mutableStateOf<androidx.compose.ui.text.TextLayoutResult?>(null) }
+                val embedLookups = remember(liveNote.binding?.location) { mutableMapOf<String, String?>() }
+                val resolveEmbedCached: suspend (String) -> String? = { target ->
+                    if (embedLookups.containsKey(target)) embedLookups[target] else resolveEmbed(target).also { embedLookups[target] = it }
+                }
+                fun revealBlock(block: PreviewBlock) {
+                    // Inside the block's first content line: "---\n" → first property, embeds → after "![[".
+                    val inside = if (block is FrontmatterBlock) (block.start + 4).coerceAtMost(block.end) else (block.start + 3).coerceAtMost(block.end)
+                    // Moving the caret is enough: the block re-lays out as its source, and a tap
+                    // on that text edits it. (Requesting focus here lets the text field restore
+                    // its own last caret, which would hide the block again.)
+                    editorValue = editorValue.copy(selection = TextRange(inside))
+                }
+                val railPadding = if (isPresetRailExpanded && pinnedPresets.isNotEmpty()) {
+                    if (state.captureBar.railSide == CaptureRailSide.LEFT) Modifier.absolutePadding(left = 60.dp) else Modifier.absolutePadding(right = 60.dp)
+                } else Modifier
+                val editorScroll = rememberScrollState()
+                androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxSize()) {
+                val viewport = maxHeight
+                Box(Modifier.fillMaxSize().verticalScroll(editorScroll)) {
                 BasicTextField(
                     value = editorValue,
                     onValueChange = { commitEditorValue(it) },
-                    visualTransformation = LiveNoteHighlightTransformation(
-                        liveHighlight,
-                        liveNoteHighlightColor(),
-                        label = if (liveNote.binding?.isAppendTarget == true) liveNoteJustAddedLabel(justAddedRecordingMillis) else null,
-                        labelStyle = liveNoteJustAddedStyle(),
-                    ),
+                    // Raw shows the file's Markdown source in mono; formatted styles it in
+                    // place. Either way the characters, and so the file, are unchanged.
+                    visualTransformation = editorTransformation,
+                    onTextLayout = { editorLayout = it },
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
+                        .heightIn(min = viewport)
                         .focusRequester(focusRequester)
-                        .then(if (isPresetRailExpanded && pinnedPresets.isNotEmpty()) {
-                            if (state.captureBar.railSide == CaptureRailSide.LEFT) Modifier.absolutePadding(left = 60.dp) else Modifier.absolutePadding(right = 60.dp)
-                        } else Modifier)
+                        .then(railPadding)
                         .testTag("capture-editor")
                         .semantics { contentDescription = captureTextDescription },
                     textStyle = TextStyle(
                         color = c.text,
-                        fontFamily = GeistFontFamily,
-                        fontSize = 18.sp,
-                        lineHeight = 27.sp,
+                        fontFamily = if (showsRawMarkdown) md.vox.android.ui.GeistMonoFontFamily else GeistFontFamily,
+                        fontSize = if (showsRawMarkdown) 15.sp else 18.sp,
+                        lineHeight = if (showsRawMarkdown) 23.sp else 27.sp,
                     ),
                     cursorBrush = SolidColor(c.tint),
                     decorationBox = { inner ->
-                        Box(Modifier.fillMaxSize().padding(top = 8.dp)) {
+                        Box(Modifier.fillMaxWidth().padding(top = 8.dp)) {
                             if (editorValue.text.isEmpty() && composerPlaceholder != null) {
                                 // Microphone-off guidance only; otherwise the caret stands alone.
                                 Text(
@@ -1382,6 +1422,30 @@ internal fun CaptureScreen(
                         }
                     },
                 )
+                val layout = editorLayout
+                if (layout != null && shownBlocks.isNotEmpty()) {
+                    val mapping = remember(editorValue.text, editorTransformation) {
+                        editorTransformation.filter(androidx.compose.ui.text.AnnotatedString(editorValue.text)).offsetMapping
+                    }
+                    shownBlocks.forEach { block ->
+                        val transformedLength = layout.layoutInput.text.length
+                        val startOffset = mapping.originalToTransformed(block.start).coerceIn(0, transformedLength)
+                        val endOffset = mapping.originalToTransformed(block.end).coerceIn(0, transformedLength)
+                        val top = layout.getLineTop(layout.getLineForOffset(startOffset))
+                        val bottom = layout.getLineBottom(layout.getLineForOffset(endOffset))
+                        val height = with(density) { (bottom - top).toDp() } - 6.dp
+                        val panel = Modifier
+                            .then(railPadding)
+                            .padding(top = 8.dp + with(density) { top.toDp() } + 3.dp)
+                            .height(height.coerceAtLeast(24.dp))
+                        when (block) {
+                            is FrontmatterBlock -> FrontmatterPanel(block, reveal = { revealBlock(block) }, modifier = panel)
+                            is EmbedBlock -> EmbedPreview(block, resolve = resolveEmbedCached, reveal = { revealBlock(block) }, modifier = panel)
+                        }
+                    }
+                }
+                }
+                }
                 CapturePresetQuickAccessRail(
                     presets = pinnedPresets,
                     isExpanded = isPresetRailExpanded,
@@ -1611,6 +1675,7 @@ internal fun CaptureTopControls(
                     breadcrumb = liveBreadcrumb,
                     status = liveStatus,
                     onPathClick = if (liveRouteEditable && canChangeRoute) ({ routeEditor.open(route) }) else null,
+                    trailing = { MarkdownModeToggle() },
                 )
                 // The route editor dialog still belongs to CaptureRouteControl; keep it reachable.
                 if (routeEditor.showsDialog) CaptureRouteControl(

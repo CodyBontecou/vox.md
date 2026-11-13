@@ -97,6 +97,8 @@ internal fun LiveRecordingScreen(
     stop: () -> Unit,
     cancel: () -> Unit,
     modifier: Modifier = Modifier,
+    /** Live Notes: where this recording is written ("Writing to … as you talk" / "Saves to … when you stop"). */
+    writeLine: (@Composable () -> Unit)? = null,
 ) {
     val c = Signal.colors
     val levels = remember { mutableStateListOf<Float>() }
@@ -140,6 +142,7 @@ internal fun LiveRecordingScreen(
                     verticalArrangement = Arrangement.spacedBy(14.dp),
                 ) {
                     LiveRecordingHeader(preset)
+                    writeLine?.invoke()
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.Center) {
                         LiveRecordingTimer(status, large = true)
                     }
@@ -176,6 +179,7 @@ internal fun LiveRecordingScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     LiveRecordingHeader(preset)
+                    writeLine?.invoke()
                     Column { LiveRecordingTimer(status, large = false) }
                     LiveWaveform(levels, height = 40.dp, paused = status.phase == RecordingPhase.PAUSED)
                     Text(voxString("Voice and text stay on-device."), style = MaterialTheme.typography.bodySmall, color = c.muted)
@@ -201,6 +205,7 @@ internal fun LiveRecordingScreen(
                 Box(Modifier.padding(start = 12.dp, end = 16.dp).heightIn(min = 64.dp), contentAlignment = Alignment.CenterStart) {
                     LiveRecordingHeader(preset)
                 }
+                if (writeLine != null) Box(Modifier.padding(start = 24.dp, end = 24.dp, top = 4.dp)) { writeLine() }
                 Column(Modifier.padding(start = 24.dp, end = 24.dp, top = 20.dp)) {
                     LiveRecordingTimer(status, large = false)
                 }

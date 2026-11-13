@@ -23,6 +23,9 @@ struct CaptureLiveRecordingScreen: View {
     let showsSpeakerLabels: Bool
     @Binding var isDraftMode: Bool
     let isModeLocked: Bool
+    /// Live Notes: where the words are going (replaces the Draft/Send toggle).
+    var liveNoteLine: String? = nil
+    var liveNoteLineIsLive = false
     let canSnapWhiteboard: Bool
     let discard: () -> Void
     let stop: () -> Void
@@ -422,7 +425,11 @@ struct CaptureLiveRecordingScreen: View {
     private var footer: some View {
         VStack(spacing: 18) {
             actionChips
-            CaptureRecordingModeSegment(isDraft: $isDraftMode, isLocked: isModeLocked)
+            if let liveNoteLine {
+                LiveNoteRecordingLineView(text: liveNoteLine, isLive: liveNoteLineIsLive)
+            } else {
+                CaptureRecordingModeSegment(isDraft: $isDraftMode, isLocked: isModeLocked)
+            }
             HStack {
                 Button {
                     confirmsDiscard = true

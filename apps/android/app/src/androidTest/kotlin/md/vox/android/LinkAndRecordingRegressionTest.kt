@@ -42,6 +42,10 @@ class LinkAndRecordingRegressionTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val repository = (context.applicationContext as VoxApplication).compositionRoot.captureRepository
         val original = repository.currentDraft()
+        // A composer bound to a vault file (Live Notes) routes edits to the file, not the draft;
+        // this regression is about the unbound draft, so start from a blank live-note session.
+        val originalLiveNote = repository.liveNoteSession()
+        repository.saveLiveNoteSession(md.vox.android.capturedomain.LiveNoteSession())
         val store = ViewModelStore()
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         try {
@@ -67,6 +71,7 @@ class LinkAndRecordingRegressionTest {
         } finally {
             instrumentation.runOnMainSync { store.clear() }
             repository.saveDraft(original.text, original.url, original.captureSource)
+            originalLiveNote?.let { repository.saveLiveNoteSession(it) }
         }
     }
 

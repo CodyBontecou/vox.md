@@ -37,6 +37,8 @@ class VoxApplication : Application(), Configuration.Provider {
 class AppCompositionRoot private constructor(
     val captureRepository: CaptureRepository,
     val billingManager: PlayBillingManager,
+    /** Live Notes: whole-file reads/replaces of the bound note and the Files tree listings. */
+    val liveNoteStore: md.vox.android.data.SafLiveNoteFileStore,
 ) {
     companion object {
         fun create(application: Application): AppCompositionRoot {
@@ -57,7 +59,7 @@ class AppCompositionRoot private constructor(
                 processCaptureText = md.vox.android.platformservices.LocalIntelligenceProcessor.get(app)::process,
                 generateImageAltText = LocalImageAltTextGenerator.get()::describe,
             )
-            return AppCompositionRoot(repository, billingManager)
+            return AppCompositionRoot(repository, billingManager, md.vox.android.data.SafLiveNoteFileStore(app))
         }
     }
 }

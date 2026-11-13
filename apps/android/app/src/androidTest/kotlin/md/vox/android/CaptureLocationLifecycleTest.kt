@@ -29,43 +29,42 @@ class CaptureLocationLifecycleTest {
     @Test fun interruptedLocationLookupDoesNotLeaveTheRestoredComposerBusy() {
         val restoration = StateRestorationTester(compose)
         restoration.setContent { VoxTheme { capture { awaitCancellation() } } }
-        compose.onNodeWithContentDescription("Send capture").performClick()
-        compose.onNodeWithContentDescription("Sending capture").assertExists()
+        compose.mainClock.advanceTimeBy(md.vox.android.ui.CaptureViewModel.LIVE_SAVE_DEBOUNCE_MILLIS + 100) // Live Notes: the first write starts after idle
+        compose.onNodeWithTag("live-note-new").assertIsNotEnabled()
         restoration.emulateSavedInstanceStateRestore()
         compose.onNodeWithTag("capture-editor").assertTextEquals("Before")
-        compose.onNodeWithContentDescription("Send capture").assertIsEnabled()
+        compose.onNodeWithTag("live-note-new").assertIsEnabled()
     }
     @Test fun unavailableDecisionSurvivesRotationAndCancelKeepsTheDraft() {
         val restoration = StateRestorationTester(compose)
         var lookups = 0
         restoration.setContent { VoxTheme { capture { lookups++; CurrentLocationResult.Unavailable } } }
-        compose.onNodeWithContentDescription("Send capture").performClick()
+        compose.mainClock.advanceTimeBy(md.vox.android.ui.CaptureViewModel.LIVE_SAVE_DEBOUNCE_MILLIS + 100) // Live Notes: the first write starts after idle
         compose.onNodeWithText(locationUnavailableMessage(CaptureLocationUnavailableReason.UNAVAILABLE)).assertExists()
         restoration.emulateSavedInstanceStateRestore()
         compose.onNodeWithText(locationUnavailableMessage(CaptureLocationUnavailableReason.UNAVAILABLE)).assertExists()
         compose.onNodeWithText("Cancel").performClick()
         compose.onNodeWithTag("capture-editor").assertTextEquals("Before")
-        compose.onNodeWithContentDescription("Send capture").assertIsEnabled()
+        compose.onNodeWithTag("live-note-new").assertIsEnabled()
         compose.runOnIdle { assertEquals(1, lookups) }
     }
 
     @Test fun locationLookupDisablesPresetAndDestinationChanges() {
         val other = route.copy(id = "bbbbbbbb-1111-4111-8111-bbbbbbbbbbbb", name = "Other")
         compose.setContent { VoxTheme { capture(pinned = listOf(other)) { awaitCancellation() } } }
-        compose.onNodeWithContentDescription("Send capture").performClick()
-        compose.onNodeWithContentDescription("Sending capture").assertExists()
+        compose.mainClock.advanceTimeBy(md.vox.android.ui.CaptureViewModel.LIVE_SAVE_DEBOUNCE_MILLIS + 100) // Live Notes: the first write starts after idle
+        compose.onNodeWithTag("live-note-new").assertIsNotEnabled()
         compose.onNodeWithTag("capture-preset-rail-${other.id}").assertIsNotEnabled()
         compose.onNodeWithTag("capture-preset-selector").assertIsNotEnabled()
-        compose.onNodeWithText("Route: Preset destination").assertIsNotEnabled()
+        // The path breadcrumb only opens the route editor while nothing is in flight.
+        compose.onNodeWithTag("live-note-path").assert(hasClickAction().not())
     }
 
-    @Test fun repeatedSendBeforeAFrameStartsOnlyOneLocationLookup() {
+    @Test fun repeatedIdleWritesStartOnlyOneLocationLookup() {
         var lookups = 0
         compose.setContent { VoxTheme { capture { lookups++; awaitCancellation() } } }
-        // Two queued actions can run before the next composition disables the button.
-        compose.onNodeWithTag("send-capture").performSemanticsAction(SemanticsActions.OnClick) { action ->
-            action(); action()
-        }
+        // The idle first write re-arms on every state change; the preflight must still run once.
+        repeat(3) { compose.mainClock.advanceTimeBy(md.vox.android.ui.CaptureViewModel.LIVE_SAVE_DEBOUNCE_MILLIS + 100) }
         compose.runOnIdle { assertEquals(1, lookups) }
     }
 
