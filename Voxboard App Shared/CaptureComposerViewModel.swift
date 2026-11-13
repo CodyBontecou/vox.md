@@ -60,6 +60,12 @@ final class QuickCaptureViewModel {
     private var hasLoaded = false
     private var liveRecordedTranscriptPreview: LiveTranscriptDraftPreview?
     private var liveRecordedTranscriptSessionID: UUID?
+    /// UTF-16 offset of the writer's cursor when the current recording
+    /// started; its transcript is inserted there instead of at the end.
+    private var recordedTranscriptInsertionOffset: Int?
+    /// Where the composer caret belongs after the latest transcript render or
+    /// commit (just past the spoken words). Observed by the iOS composer.
+    private(set) var recordedTranscriptCaretOffset: Int?
     private var invalidatedLiveTranscriptSessionIDs = Set<UUID>()
     private var pendingSendWithoutLocationOutcome: CaptureLocationOutcome?
 
@@ -370,6 +376,7 @@ final class QuickCaptureViewModel {
         pendingDraftSave = nil
         liveRecordedTranscriptPreview = nil
         liveRecordedTranscriptSessionID = nil
+        recordedTranscriptInsertionOffset = nil
         do {
             try await draftStore?.complete(draftID: draft.id)
             draft = CaptureDraft(
@@ -690,6 +697,31 @@ final class QuickCaptureViewModel {
         liveRecordedTranscriptPreview != nil
     }
 
+    /// Call when a recording starts: its transcript lands at this UTF-16
+    /// offset (the composer cursor) joined with a space, not a new paragraph.
+    /// `nil` appends to the end of the draft.
+    func beginRecordedTranscriptInsertion(atUTF16Offset offset: Int?) {
+        guard liveRecordedTranscriptPreview == nil else { return }
+        recordedTranscriptInsertionOffset = offset
+        // Seed the caret where the words will land, so a cursor already
+        // sitting there rides along to the end of the first spoken words.
+        recordedTranscriptCaretOffset = offset ?? (draft.text as NSString).length
+    }
+
+    /// The writer typed or moved the cursor while recording. Words already
+    /// spoken stay where they are as ordinary text; the next words land at
+    /// `offset` (UTF-16, in the current draft), so speech follows the cursor.
+    func moveRecordedTranscriptInsertion(toUTF16Offset offset: Int) {
+        if var preview = liveRecordedTranscriptPreview {
+            preview.moveInsertion(toUTF16Offset: offset, in: draft.text)
+            liveRecordedTranscriptPreview = preview
+            recordedTranscriptCaretOffset = preview.caretOffset
+        } else {
+            recordedTranscriptInsertionOffset = offset
+            recordedTranscriptCaretOffset = offset
+        }
+    }
+
     func updateLiveRecordedTranscript(
         sessionID: UUID? = nil,
         finalizedText: String,
@@ -709,7 +741,8 @@ final class QuickCaptureViewModel {
                activeSessionID != sessionID { return }
             liveRecordedTranscriptSessionID = sessionID
         }
-        var preview = liveRecordedTranscriptPreview ?? LiveTranscriptDraftPreview()
+        var preview = liveRecordedTranscriptPreview
+            ?? LiveTranscriptDraftPreview(insertionOffset: recordedTranscriptInsertionOffset)
         let updatedText = preview.render(
             finalizedText: finalizedText,
             volatileText: volatileText,
@@ -725,27 +758,31 @@ final class QuickCaptureViewModel {
         liveRecordedTranscriptPreview = preview
         draft.text = updatedText
         draft.updatedAt = Date()
+        recordedTranscriptCaretOffset = preview.caretOffset
     }
 
     /// Adds a recording-action line (timestamp marker, empty task) to the
     /// draft. While a live transcript preview is rendering, the line goes just
     /// ahead of the volatile Speech block so the preview can still be replaced.
     func insertRecordingActionLine(_ line: String) {
-        let insertion = line.hasSuffix("\n") ? line : line + "\n"
-        var base = draft.text
-        var liveBlock = ""
+        let updated: String
         if var preview = liveRecordedTranscriptPreview {
-            let withoutPreview = preview.cancel(in: draft.text)
-            if draft.text.hasPrefix(withoutPreview) {
-                base = withoutPreview
-                liveBlock = String(draft.text.dropFirst(withoutPreview.count))
+            updated = preview.insertLine(line, in: draft.text)
+            guard updated.count <= CaptureInputLimits.maximumTextCharacters else {
+                errorMessage = QuickCaptureViewModelError.textTooLarge.localizedDescription
+                return
             }
-        }
-        let separator = base.isEmpty || base.hasSuffix("\n") ? "" : "\n"
-        let updated = base + separator + insertion + liveBlock
-        guard updated.count <= CaptureInputLimits.maximumTextCharacters else {
-            errorMessage = QuickCaptureViewModelError.textTooLarge.localizedDescription
-            return
+            liveRecordedTranscriptPreview = preview
+            recordedTranscriptCaretOffset = preview.caretOffset
+        } else {
+            // No speech yet: the line goes where this recording's words will.
+            var preview = LiveTranscriptDraftPreview(insertionOffset: recordedTranscriptInsertionOffset)
+            updated = preview.insertLine(line, in: draft.text)
+            guard updated.count <= CaptureInputLimits.maximumTextCharacters else {
+                errorMessage = QuickCaptureViewModelError.textTooLarge.localizedDescription
+                return
+            }
+            recordedTranscriptInsertionOffset = preview.insertionOffset
         }
         draft.text = updated
         draft.updatedAt = Date()
@@ -768,6 +805,8 @@ final class QuickCaptureViewModel {
         let restoredText = preview.cancel(in: draft.text)
         liveRecordedTranscriptPreview = nil
         liveRecordedTranscriptSessionID = nil
+        recordedTranscriptInsertionOffset = nil
+        recordedTranscriptCaretOffset = nil
         draft.text = restoredText
         await saveDraftNow()
     }
@@ -884,11 +923,18 @@ final class QuickCaptureViewModel {
         let previousPreview = liveRecordedTranscriptPreview
         let previousPreviewSessionID = liveRecordedTranscriptSessionID
         let updatedText: String
+        let caretOffset: Int?
         if var preview = liveRecordedTranscriptPreview {
             updatedText = preview.commit(normalized, in: draft.text)
+            caretOffset = preview.caretOffset
         } else {
-            let separator = draft.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "" : "\n\n"
-            updatedText = draft.text + separator + normalized
+            let inserted = LiveTranscriptDraftPreview.inserting(
+                normalized,
+                into: draft.text,
+                atUTF16Offset: recordedTranscriptInsertionOffset
+            )
+            updatedText = inserted.text
+            caretOffset = inserted.caretOffset
         }
         guard updatedText.count <= CaptureInputLimits.maximumTextCharacters else {
             errorMessage = QuickCaptureViewModelError.textTooLarge.localizedDescription
@@ -897,7 +943,10 @@ final class QuickCaptureViewModel {
 
         liveRecordedTranscriptPreview = nil
         liveRecordedTranscriptSessionID = nil
+        let previousInsertionOffset = recordedTranscriptInsertionOffset
+        recordedTranscriptInsertionOffset = nil
         draft.text = updatedText
+        recordedTranscriptCaretOffset = caretOffset
         // The recorder adds transcription seconds only after a successful
         // result. Mark this durable request so sending it does not consume a
         // second, independent Capture allowance.
@@ -919,6 +968,7 @@ final class QuickCaptureViewModel {
             draft = previousDraft
             liveRecordedTranscriptPreview = previousPreview
             liveRecordedTranscriptSessionID = previousPreviewSessionID
+            recordedTranscriptInsertionOffset = previousInsertionOffset
             errorMessage = error.localizedDescription
             return false
         }

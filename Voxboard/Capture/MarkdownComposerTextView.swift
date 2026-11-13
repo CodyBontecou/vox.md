@@ -131,6 +131,7 @@ final class MarkdownComposerController {
 }
 
 struct MarkdownComposerTextView: UIViewRepresentable {
+    @Environment(\.isEnabled) private var isEnabled
     @Binding var text: String
     @Binding var selection: NSRange
     @Binding var isFocused: Bool
@@ -138,6 +139,10 @@ struct MarkdownComposerTextView: UIViewRepresentable {
     /// Receives the text's laid-out height (content size), for layouts that
     /// place content directly under the text (iPad Pencil card).
     var contentHeight: Binding<CGFloat>? = nil
+    /// Called with the caret's UTF-16 offset when the writer types or moves the
+    /// cursor (never for programmatic text or selection updates), so live
+    /// speech can follow the cursor while recording.
+    var writerMovedCaret: ((Int) -> Void)? = nil
 
     func makeCoordinator() -> Coordinator {
         Coordinator(parent: self)
@@ -154,6 +159,8 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         storage.addLayoutManager(layoutManager)
         layoutManager.addTextContainer(container)
         let textView = MarkdownComposerUITextView(frame: .zero, textContainer: container)
+        textView.allowsKeyboardFocus = isEnabled
+        textView.isEditable = isEnabled
         textView.delegate = context.coordinator
         textView.textDropDelegate = context.coordinator
         textView.backgroundColor = .clear
@@ -192,7 +199,14 @@ struct MarkdownComposerTextView: UIViewRepresentable {
     func updateUIView(_ textView: UITextView, context: Context) {
         context.coordinator.parent = self
         connect(textView, coordinator: context.coordinator)
+        // The editor stays mounted behind recording UI. Dismissal alone is not
+        // enough: UIKit taps and queued focus work must also be unable to reopen it.
+        (textView as? MarkdownComposerUITextView)?.allowsKeyboardFocus = isEnabled
+        textView.isEditable = isEnabled
 
+        // Programmatic edits below must not read as the writer moving the caret.
+        context.coordinator.isApplyingUpdate = true
+        defer { context.coordinator.isApplyingUpdate = false }
         let textChanged = textView.text != text
         if textChanged {
             textView.text = text
@@ -200,24 +214,30 @@ struct MarkdownComposerTextView: UIViewRepresentable {
         }
         let textEnd = text.utf16.count
         let desired = MarkdownComposerController.clamped(selection, utf16Count: textEnd)
-        if textView.selectedRange != desired {
+        let selectionChanged = textView.selectedRange != desired
+        if selectionChanged {
             textView.selectedRange = desired
         }
-        if textChanged, desired.location + desired.length == textEnd {
+        // Follow programmatic edits (live speech lands at the cursor, not
+        // only at the end) while the writer is not typing.
+        if textChanged || selectionChanged,
+           desired.location + desired.length == textEnd || !textView.isFirstResponder {
             textView.scrollRangeToVisible(desired)
         }
-        if isFocused, !textView.isFirstResponder {
+        if isEnabled, isFocused, !textView.isFirstResponder {
             // Focus is queued so UIKit sees an attached view. Re-check the binding
             // because navigation can dismiss the composer before this block runs.
             let coordinator = context.coordinator
             DispatchQueue.main.async { [weak textView, weak coordinator] in
                 guard let textView,
                       let coordinator,
+                      coordinator.parent.isEnabled,
                       coordinator.parent.isFocused,
+                      textView.canBecomeFirstResponder,
                       textView.window != nil else { return }
                 textView.becomeFirstResponder()
             }
-        } else if !isFocused, textView.isFirstResponder {
+        } else if !isEnabled || !isFocused, textView.isFirstResponder {
             textView.resignFirstResponder()
         }
     }
@@ -261,10 +281,24 @@ struct MarkdownComposerTextView: UIViewRepresentable {
             }
             (textView as? MarkdownComposerUITextView)?.restyleMarkdown()
             parent.controller.publishCurrentState()
+            reportWriterCaret(in: textView)
         }
 
         func textViewDidChangeSelection(_ textView: UITextView) {
             parent.controller.publishCurrentState()
+            reportWriterCaret(in: textView)
+        }
+
+        /// True while `updateUIView` writes SwiftUI state into the text view.
+        var isApplyingUpdate = false
+
+        private func reportWriterCaret(in textView: UITextView) {
+            guard !isApplyingUpdate,
+                  textView.isFirstResponder,
+                  textView.markedTextRange == nil,
+                  let writerMovedCaret = parent.writerMovedCaret else { return }
+            let range = textView.selectedRange
+            writerMovedCaret(range.location + range.length)
         }
 
         func textViewDidBeginEditing(_ textView: UITextView) {
@@ -377,6 +411,12 @@ struct MarkdownComposerTextView: UIViewRepresentable {
 /// overlays tappable checkboxes on task markers. The text itself never changes
 /// unless the user toggles a task.
 final class MarkdownComposerUITextView: UITextView {
+    var allowsKeyboardFocus = true
+
+    override var canBecomeFirstResponder: Bool {
+        allowsKeyboardFocus && super.canBecomeFirstResponder
+    }
+
     var toggleTask: ((Int) -> Void)?
     var contentHeightDidChange: ((CGFloat) -> Void)?
     private var reportedContentHeight: CGFloat = -1

@@ -77,6 +77,42 @@ final class QuickCaptureRenderingTests: XCTestCase {
         return nil
     }
 
+    func testDisabledComposerDismissesKeyboardAndRejectsDelayedFocus() async throws {
+        let editor = LiveTranscriptRenderingState()
+        let host = UIHostingController(rootView: LiveTranscriptComposerHarness(editor: editor))
+        let window = show(host)
+        defer { window.isHidden = true; window.rootViewController = nil }
+        try await settle(window)
+        let textView = try XCTUnwrap(find("quick_capture_text", in: host.view) as? UITextView)
+        editor.isFocused = true
+        try await settle(window)
+        XCTAssertTrue(textView.isFirstResponder)
+
+        // Starting recording disables editing even if a pending focus request
+        // or UIKit callback still says the composer wants the keyboard.
+        editor.isEnabled = false
+        try await settle(window)
+        XCTAssertFalse(textView.isFirstResponder, "Recording must dismiss the editor's keyboard")
+        XCTAssertFalse(textView.becomeFirstResponder(), "Recording must reject late UIKit focus")
+        editor.isFocused = true
+        try await settle(window)
+        XCTAssertFalse(textView.isFirstResponder, "A delayed focus request must not reopen the keyboard")
+        editor.text = "Words arriving from live transcription."
+        editor.selection = NSRange(location: editor.text.utf16.count, length: 0)
+        try await settle(window)
+        XCTAssertEqual(textView.text, editor.text, "Recording must still update the live draft")
+        XCTAssertEqual(textView.selectedRange, editor.selection)
+        XCTAssertFalse(textView.isFirstResponder, "Live text must not restore keyboard focus")
+
+        editor.isFocused = false
+        editor.isEnabled = true
+        try await settle(window)
+        XCTAssertFalse(textView.isFirstResponder, "Stopping recording must not restore keyboard focus")
+        editor.isFocused = true
+        try await settle(window)
+        XCTAssertTrue(textView.isFirstResponder, "Typing must still work after recording")
+    }
+
     func testUndoLongPasteKeepsGlyphsVisibleAfterEditorEnlarges() async throws {
         let editor = LiveTranscriptRenderingState()
         editor.text = "# A draft worth keeping\n- [ ] First task\n- [ ] Another task\n\nOriginal words remain visible."
@@ -450,6 +486,7 @@ private final class LiveTranscriptRenderingState {
     var text = ""
     var selection = NSRange(location: 0, length: 0)
     var isFocused = false
+    var isEnabled = true
     let controller = MarkdownComposerController()
 }
 
@@ -463,6 +500,7 @@ private struct LiveTranscriptComposerHarness: View {
             isFocused: $editor.isFocused,
             controller: editor.controller
         )
+        .disabled(!editor.isEnabled)
     }
 }
 
