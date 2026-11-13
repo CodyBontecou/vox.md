@@ -1,0 +1,31 @@
+{
+  "inspected_at": "2026-11-07",
+  "inspector": "argent_environment_inspector",
+  "project_type": "native Swift/SwiftUI iOS/macOS/watchOS and separate native Android",
+  "is_react_native": false,
+  "is_native_ios": true,
+  "is_native_android": true,
+  "bundle_id": "bontecou.Voxboard",
+  "xcode_project": "Voxboard.xcodeproj",
+  "ios_build_command": "xcodebuild -project Voxboard.xcodeproj -scheme Voxboard -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath /tmp/VoxboardDerivedData CODE_SIGNING_ALLOWED=NO ONLY_ACTIVE_ARCH=YES ARCHS=arm64 build",
+  "metro_port": null,
+  "prior_qa": "docs/validation/ios27-iphone-qa-2026-09-07.md",
+  "unit_tests": [
+    "swift test --package-path Packages/VoxboardShared",
+    "VoxboardTests Xcode target"
+  ],
+  "qa_device": {
+    "udid": "3C7896BD-51AB-4F86-9492-C5A293392FFC",
+    "name": "iPhone 18 Pro Max",
+    "runtime": "iOS 27.0"
+  },
+  "installed_version": "3.0 (59)",
+  "final_launch_args": [
+    "-AppleLanguages",
+    "(tr)",
+    "-AppleLocale",
+    "tr_TR",
+    "-VoxScreenshotUnlocked",
+    "-VoxAdaptiveNoAutofocus"
+  ]
+}

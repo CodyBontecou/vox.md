@@ -1,0 +1,28 @@
+{
+  "schema": "xcodebuildmcp.output.build-result",
+  "schemaVersion": "3",
+  "didError": false,
+  "error": null,
+  "data": {
+    "summary": {
+      "status": "SUCCEEDED",
+      "durationMs": 11654,
+      "target": "simulator"
+    },
+    "artifacts": {
+      "buildLogPath": "~/Library/Developer/XcodeBuildMCP/workspaces/vox.md-ec50c23b4511/logs/build_sim_2026-11-08T12-33-39-623Z_pid77080_422660d6.log"
+    },
+    "diagnostics": {
+      "warnings": [
+        {
+          "message": "main actor-isolated static property 'shared' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode",
+          "location": "/Users/codybontecou/dev/vox.md/Voxboard/Capture/RouteQuickActionsView.swift:18"
+        }
+      ],
+      "errors": []
+    }
+  },
+  "nextSteps": [
+    "Get built app path in simulator derived data: get_sim_app_path({ simulatorId: \"3C7896BD-51AB-4F86-9492-C5A293392FFC\", scheme: \"Voxboard\", platform: \"iOS Simulator\", derivedDataPath: \"/tmp/vox-duo-build\" })"
+  ]
+}

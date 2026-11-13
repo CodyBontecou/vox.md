@@ -1,0 +1,4 @@
+deadline returned while work retained its slot
+busy guard correctly retained the slot
+REPRODUCED: original test's 300ms recovery assumption throws busy
+production gate releases normally after the actual operation returns

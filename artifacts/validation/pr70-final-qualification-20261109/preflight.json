@@ -1,0 +1,29 @@
+{
+  "startedAtUTC": "2026-11-09T16:26:00.072639+00:00",
+  "sourceRevision": "33ac5352465d409e0c25b2220228fac7977e8e40",
+  "sourceTreeClean": true,
+  "device": {
+    "serial": "emulator-5554",
+    "avd": "vox-pr70-final-api36-20261109",
+    "api": "36",
+    "abi": "arm64-v8a",
+    "memory": "MemTotal:        4014920 kB"
+  },
+  "apks": {
+    "app": {
+      "path": "/private/tmp/vox-apple-signal3-20261108/apps/android/app/build/outputs/apk/debug/app-debug.apk",
+      "bytes": 498790961,
+      "sha256": "b4d182f0eb2ebf79fb18d90765ffaa872b3b860cb8ecaf0b717aef78bf42df7d"
+    },
+    "tests": {
+      "path": "/private/tmp/vox-apple-signal3-20261108/apps/android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk",
+      "bytes": 4199511,
+      "sha256": "7b5975fcac495826cf97894663b4fa1f8ee0864b213d7e8cd11cd496f345dc2e"
+    },
+    "recoveryTests": {
+      "path": "/private/tmp/vox-apple-signal3-20261108/apps/android/data/build/outputs/apk/androidTest/debug/data-debug-androidTest.apk",
+      "bytes": 88377693,
+      "sha256": "0a994a44fb71fcce34c2a9011d2bd3a0d40ed4d96f8968986ed57c7c0c6be88a"
+    }
+  }
+}

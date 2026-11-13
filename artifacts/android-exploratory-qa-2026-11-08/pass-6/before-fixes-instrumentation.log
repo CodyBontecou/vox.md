@@ -1,0 +1,215 @@
+INSTRUMENTATION_STATUS: class=md.vox.android.CaptureLocationLifecycleTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stream=
+md.vox.android.CaptureLocationLifecycleTest:
+INSTRUMENTATION_STATUS: test=unavailableDecisionSurvivesRotationAndCancelKeepsTheDraft
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=md.vox.android.CaptureLocationLifecycleTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains 'A current location is unavailable. Your draft is preserved.' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at md.vox.android.CaptureLocationLifecycleTest.unavailableDecisionSurvivesRotationAndCancelKeepsTheDraft(CaptureLocationLifecycleTest.kt:44)
+
+INSTRUMENTATION_STATUS: stream=
+Error in unavailableDecisionSurvivesRotationAndCancelKeepsTheDraft(md.vox.android.CaptureLocationLifecycleTest):
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains 'A current location is unavailable. Your draft is preserved.' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at md.vox.android.CaptureLocationLifecycleTest.unavailableDecisionSurvivesRotationAndCancelKeepsTheDraft(CaptureLocationLifecycleTest.kt:44)
+
+INSTRUMENTATION_STATUS: test=unavailableDecisionSurvivesRotationAndCancelKeepsTheDraft
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=md.vox.android.CaptureLocationLifecycleTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=interruptedLocationLookupDoesNotLeaveTheRestoredComposerBusy
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=md.vox.android.CaptureLocationLifecycleTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Failed to assert the following: (is enabled)
+Reason: Expected exactly '1' node but could not find any node that satisfies: (ContentDescription = 'Send capture' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:291)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:283)
+	at androidx.compose.ui.test.AssertionsKt.assertIsEnabled(Assertions.kt:60)
+	at md.vox.android.CaptureLocationLifecycleTest.interruptedLocationLookupDoesNotLeaveTheRestoredComposerBusy(CaptureLocationLifecycleTest.kt:35)
+
+INSTRUMENTATION_STATUS: stream=
+Error in interruptedLocationLookupDoesNotLeaveTheRestoredComposerBusy(md.vox.android.CaptureLocationLifecycleTest):
+java.lang.AssertionError: Failed to assert the following: (is enabled)
+Reason: Expected exactly '1' node but could not find any node that satisfies: (ContentDescription = 'Send capture' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:291)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:283)
+	at androidx.compose.ui.test.AssertionsKt.assertIsEnabled(Assertions.kt:60)
+	at md.vox.android.CaptureLocationLifecycleTest.interruptedLocationLookupDoesNotLeaveTheRestoredComposerBusy(CaptureLocationLifecycleTest.kt:35)
+
+INSTRUMENTATION_STATUS: test=interruptedLocationLookupDoesNotLeaveTheRestoredComposerBusy
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=md.vox.android.TranscriptDraftRestorationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stream=
+md.vox.android.TranscriptDraftRestorationTest:
+INSTRUMENTATION_STATUS: test=unsavedTranscriptAndMetadataSurviveRecreationAndSaveExactlyOnce
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=md.vox.android.TranscriptDraftRestorationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Action performScrollTo() failed.
+Reason: Expected exactly '1' node but could not find any node that satisfies: ((SetText is defined) && (Text + InputText + EditableText contains 'Title' (ignoreCase: false)))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at md.vox.android.TranscriptDraftRestorationTest.field(TranscriptDraftRestorationTest.kt:52)
+	at md.vox.android.TranscriptDraftRestorationTest.unsavedTranscriptAndMetadataSurviveRecreationAndSaveExactlyOnce(TranscriptDraftRestorationTest.kt:42)
+
+INSTRUMENTATION_STATUS: stream=
+Error in unsavedTranscriptAndMetadataSurviveRecreationAndSaveExactlyOnce(md.vox.android.TranscriptDraftRestorationTest):
+java.lang.AssertionError: Action performScrollTo() failed.
+Reason: Expected exactly '1' node but could not find any node that satisfies: ((SetText is defined) && (Text + InputText + EditableText contains 'Title' (ignoreCase: false)))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at md.vox.android.TranscriptDraftRestorationTest.field(TranscriptDraftRestorationTest.kt:52)
+	at md.vox.android.TranscriptDraftRestorationTest.unsavedTranscriptAndMetadataSurviveRecreationAndSaveExactlyOnce(TranscriptDraftRestorationTest.kt:42)
+
+INSTRUMENTATION_STATUS: test=unsavedTranscriptAndMetadataSurviveRecreationAndSaveExactlyOnce
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=md.vox.android.DetailExportRestorationTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stream=
+md.vox.android.DetailExportRestorationTest:
+INSTRUMENTATION_STATUS: test=transcriptPickerRotationWritesTheFrozenExportEvenWhileSourceReloads
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=md.vox.android.DetailExportRestorationTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stack=androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:901)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:500)
+	at md.vox.android.DetailExportRestorationTest.checkExport(DetailExportRestorationTest.kt:69)
+	at md.vox.android.DetailExportRestorationTest.transcriptPickerRotationWritesTheFrozenExportEvenWhileSourceReloads(DetailExportRestorationTest.kt:39)
+
+INSTRUMENTATION_STATUS: stream=
+Error in transcriptPickerRotationWritesTheFrozenExportEvenWhileSourceReloads(md.vox.android.DetailExportRestorationTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:901)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:500)
+	at md.vox.android.DetailExportRestorationTest.checkExport(DetailExportRestorationTest.kt:69)
+	at md.vox.android.DetailExportRestorationTest.transcriptPickerRotationWritesTheFrozenExportEvenWhileSourceReloads(DetailExportRestorationTest.kt:39)
+
+INSTRUMENTATION_STATUS: test=transcriptPickerRotationWritesTheFrozenExportEvenWhileSourceReloads
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=md.vox.android.DetailExportRestorationTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=capturePickerRotationWritesTheFrozenExportEvenWhileSourceReloads
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=md.vox.android.DetailExportRestorationTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stack=androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:901)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:500)
+	at md.vox.android.DetailExportRestorationTest.checkExport(DetailExportRestorationTest.kt:69)
+	at md.vox.android.DetailExportRestorationTest.capturePickerRotationWritesTheFrozenExportEvenWhileSourceReloads(DetailExportRestorationTest.kt:40)
+
+INSTRUMENTATION_STATUS: stream=
+Error in capturePickerRotationWritesTheFrozenExportEvenWhileSourceReloads(md.vox.android.DetailExportRestorationTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:901)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:500)
+	at md.vox.android.DetailExportRestorationTest.checkExport(DetailExportRestorationTest.kt:69)
+	at md.vox.android.DetailExportRestorationTest.capturePickerRotationWritesTheFrozenExportEvenWhileSourceReloads(DetailExportRestorationTest.kt:40)
+
+INSTRUMENTATION_STATUS: test=capturePickerRotationWritesTheFrozenExportEvenWhileSourceReloads
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 58.518
+There were 5 failures:
+1) unavailableDecisionSurvivesRotationAndCancelKeepsTheDraft(md.vox.android.CaptureLocationLifecycleTest)
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains 'A current location is unavailable. Your draft is preserved.' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at md.vox.android.CaptureLocationLifecycleTest.unavailableDecisionSurvivesRotationAndCancelKeepsTheDraft(CaptureLocationLifecycleTest.kt:44)
+2) interruptedLocationLookupDoesNotLeaveTheRestoredComposerBusy(md.vox.android.CaptureLocationLifecycleTest)
+java.lang.AssertionError: Failed to assert the following: (is enabled)
+Reason: Expected exactly '1' node but could not find any node that satisfies: (ContentDescription = 'Send capture' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:291)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:283)
+	at androidx.compose.ui.test.AssertionsKt.assertIsEnabled(Assertions.kt:60)
+	at md.vox.android.CaptureLocationLifecycleTest.interruptedLocationLookupDoesNotLeaveTheRestoredComposerBusy(CaptureLocationLifecycleTest.kt:35)
+3) unsavedTranscriptAndMetadataSurviveRecreationAndSaveExactlyOnce(md.vox.android.TranscriptDraftRestorationTest)
+java.lang.AssertionError: Action performScrollTo() failed.
+Reason: Expected exactly '1' node but could not find any node that satisfies: ((SetText is defined) && (Text + InputText + EditableText contains 'Title' (ignoreCase: false)))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:82)
+	at md.vox.android.TranscriptDraftRestorationTest.field(TranscriptDraftRestorationTest.kt:52)
+	at md.vox.android.TranscriptDraftRestorationTest.unsavedTranscriptAndMetadataSurviveRecreationAndSaveExactlyOnce(TranscriptDraftRestorationTest.kt:42)
+4) transcriptPickerRotationWritesTheFrozenExportEvenWhileSourceReloads(md.vox.android.DetailExportRestorationTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:901)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:500)
+	at md.vox.android.DetailExportRestorationTest.checkExport(DetailExportRestorationTest.kt:69)
+	at md.vox.android.DetailExportRestorationTest.transcriptPickerRotationWritesTheFrozenExportEvenWhileSourceReloads(DetailExportRestorationTest.kt:39)
+5) capturePickerRotationWritesTheFrozenExportEvenWhileSourceReloads(md.vox.android.DetailExportRestorationTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:901)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:500)
+	at md.vox.android.DetailExportRestorationTest.checkExport(DetailExportRestorationTest.kt:69)
+	at md.vox.android.DetailExportRestorationTest.capturePickerRotationWritesTheFrozenExportEvenWhileSourceReloads(DetailExportRestorationTest.kt:40)
+
+FAILURES!!!
+Tests run: 5,  Failures: 5
+
+
+INSTRUMENTATION_CODE: -1
+

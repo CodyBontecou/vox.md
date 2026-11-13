@@ -1,0 +1,27 @@
+{
+  "headSHA": "4f2b31dfe321dd31788fabf998cf859c97200855",
+  "workflowRunID": 42656556460,
+  "jobID": 129296635221,
+  "failedStep": "Install exact Android command-line tools and SDK packages",
+  "observedError": "NDK (Side by side) 27.1.12297006: Error reading Zip content from a SeekableByteChannel.",
+  "projectValidationReached": false,
+  "sourceOrEvidenceChanged": false,
+  "classification": "Hosted SDK setup/archive-read failure; exact underlying transport/storage cause not established",
+  "action": "Retry failed Android job only at identical SHA",
+  "excerpt": [
+    "2026-11-09T16:38:32.5612322Z [=============                          ] 33% Downloading android-ndk-r27b-linux",
+    "2026-11-09T16:38:33.3760203Z [=============                          ] 34% Downloading android-ndk-r27b-linux",
+    "2026-11-09T16:38:35.3033252Z [=============                          ] 35% Downloading android-ndk-r27b-linux",
+    "2026-11-09T16:38:36.4635706Z [==============                         ] 35% Downloading android-ndk-r27b-linux",
+    "2026-11-09T16:38:37.5974541Z [==============                         ] 36% Downloading android-ndk-r27b-linux",
+    "2026-11-09T16:38:37.9230340Z [==============                         ] 37% Downloading android-ndk-r27b-linux",
+    "2026-11-09T16:38:40.4224566Z [===============                        ] 38% Downloading android-ndk-r27b-linux",
+    "2026-11-09T16:38:40.5251119Z [===============                        ] 38% Unzipping... share/cmake-3.22/Modu",
+    "2026-11-09T16:38:40.5252463Z Warning: An error occurred while preparing SDK package NDK (Side by side) 27.1.12297006: Error reading Zip content from a SeekableByteChannel.",
+    "2026-11-09T16:38:40.5253626Z                                                                                 ",
+    "2026-11-09T16:38:40.6618132Z [===============                        ] 38% Unzipping... share/cmake-3.22/Modu",
+    "2026-11-09T16:38:40.6632281Z ##[error]Process completed with exit code 1.",
+    "2026-11-09T16:38:40.6777735Z Post job cleanup.",
+    "2026-11-09T16:38:40.8275502Z Post job cleanup."
+  ]
+}

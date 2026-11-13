@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="md.vox.android.TranscriptHistoryTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-11-08T20:24:32.344Z" hostname="MacBook-Pro.local" time="0.038">
+  <properties/>
+  <testcase name="yamlIncludesEveryGovernedTranscriptPropertyInStableIosOrder" classname="md.vox.android.TranscriptHistoryTest" time="0.022"/>
+  <testcase name="exportDateUsesRecordingStartInsteadOfCompletionTime" classname="md.vox.android.TranscriptHistoryTest" time="0.004"/>
+  <testcase name="structuredExportsEscapeContentAndStayTerminated" classname="md.vox.android.TranscriptHistoryTest" time="0.006"/>
+  <testcase name="allFourTranscriptExportFormatsRemainAvailable" classname="md.vox.android.TranscriptHistoryTest" time="0.001"/>
+  <testcase name="searchIsMultiTokenAndDiacriticInsensitive" classname="md.vox.android.TranscriptHistoryTest" time="0.002"/>
+  <testcase name="searchPreservesTurkishAndPastedUnicodeNormalization" classname="md.vox.android.TranscriptHistoryTest" time="0.001"/>
+  <testcase name="searchCaseFoldingHandlesGreekSigmaAtWordAndSubstringBoundaries" classname="md.vox.android.TranscriptHistoryTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
