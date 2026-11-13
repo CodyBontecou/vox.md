@@ -1177,7 +1177,7 @@ for required in [
     'capture_voice_recording',
     'Add to Draft',
     'Send Immediately',
-    'capture_vox_selector',
+    'CaptureRoutePillsRow(',
     'Use Route destination defaults',
     'Attach audio to Capture',
     'capture_keyboard_listening',

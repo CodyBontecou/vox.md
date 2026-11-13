@@ -3,65 +3,38 @@ import VoxboardShared
 @testable import Voxboard
 
 @MainActor
-final class CaptureRouteSelectorTests: XCTestCase {
-    func testSelectorMenuSelectsAnyEnabledRouteWithoutTouchingDraftContent() async throws {
+final class CaptureRoutePillsTests: XCTestCase {
+    func testSelectingARouteKeepsDraftContent() async throws {
         let f = try await QuickCapturePresetFixture.make(in: self)
         let before = f.vm.draft
-        XCTAssertTrue(f.selector.activatePreset(id: "work"))
+        XCTAssertTrue(f.vm.selectVox("work"))
         XCTAssertEqual(f.vm.draft.voxID, "work")
         XCTAssertEqual(f.vm.draft.text, before.text)
         XCTAssertEqual(f.vm.draft.additionalPayloads, before.additionalPayloads)
         XCTAssertEqual(f.vm.draft.id, before.id)
         XCTAssertNil(f.vm.draft.relativeNotePathOverride)
         let changed = f.vm.draft
-        XCTAssertFalse(f.selector.activatePreset(id: "work"), "Reselecting the current Route is a no-op")
+        XCTAssertFalse(f.vm.selectVox("work"), "Reselecting the current Route is a no-op")
         XCTAssertEqual(f.vm.draft, changed)
         XCTAssertEqual(f.defaults.string(forKey: CapturePresetProfileStore.selectedProfileIDKey), "keyboard-sentinel")
     }
 
-    func testDisabledSelectorAndUnknownRoutesDoNotInvokeCallback() async throws {
+    func testRouteSelectionRevalidatesBusyAndUnavailableRoutes() async throws {
         let f = try await QuickCapturePresetFixture.make(in: self)
         let before = f.vm.draft
-        var invocations = 0
-        let callback: (String) -> Bool = { id in
-            invocations += 1
-            return f.vm.selectVox(id)
-        }
-        let enabled = CaptureRouteSelector(
-            profiles: f.presets.map(\.captureProfile),
-            selectedProfile: f.presets[0].captureProfile,
-            canChangeCaptureRoute: true,
-            selectPreset: callback
-        )
-        XCTAssertFalse(enabled.activatePreset(id: "journal"))
-        XCTAssertFalse(enabled.activatePreset(id: "unlisted"))
-        let disabled = CaptureRouteSelector(
-            profiles: enabled.profiles,
-            selectedProfile: enabled.selectedProfile,
-            canChangeCaptureRoute: false,
-            selectPreset: callback
-        )
-        XCTAssertFalse(disabled.activatePreset(id: "inbox"))
-        XCTAssertEqual(invocations, 0)
-        XCTAssertEqual(f.vm.draft, before)
-    }
-
-    func testPreviouslyRenderedSelectorRevalidatesBusyAndUnavailableInputsInRealViewModel() async throws {
-        let f = try await QuickCapturePresetFixture.make(in: self)
-        let staleSelector = f.selector
-        let before = f.vm.draft
+        XCTAssertFalse(f.vm.selectVox("unlisted"))
         f.vm.isProcessingMedia = true
-        XCTAssertFalse(staleSelector.activatePreset(id: "inbox"))
+        XCTAssertFalse(f.vm.selectVox("inbox"))
         XCTAssertEqual(f.vm.draft, before)
         f.vm.isProcessingMedia = false
         var changed = f.presets
         changed[1].isEnabled = false
         f.defaults.set(try JSONEncoder().encode(changed), forKey: CapturePresetProfileStore.profilesKey)
-        XCTAssertFalse(staleSelector.activatePreset(id: "inbox"))
-        XCTAssertEqual(f.vm.draft, before)
+        XCTAssertFalse(f.vm.selectVox("inbox"))
+        XCTAssertEqual(f.vm.draft.voxID, before.voxID)
     }
 
-    func testImmutableBackgroundPresetRunLeavesTheSelectorUsable() async throws {
+    func testImmutableBackgroundPresetRunLeavesRouteSelectionUsable() async throws {
         let f = try await QuickCapturePresetFixture.make(in: self)
         f.vm.configureCaptureRouteOwnership(
             { true },
@@ -69,7 +42,7 @@ final class CaptureRouteSelectorTests: XCTestCase {
         )
         XCTAssertFalse(f.vm.canChangeCaptureRoute)
         XCTAssertTrue(f.vm.canSelectCapturePreset)
-        XCTAssertTrue(f.selector.activatePreset(id: "inbox"))
+        XCTAssertTrue(f.vm.selectVox("inbox"))
         XCTAssertEqual(f.vm.draft.voxID, "inbox")
         XCTAssertNil(f.vm.beginCaptureRouteOperation())
     }
@@ -90,17 +63,8 @@ struct QuickCapturePresetFixture {
     let defaults: UserDefaults
     let presets: [CapturePreset]
 
-    var selector: CaptureRouteSelector {
-        CaptureRouteSelector(
-            profiles: presets.map(\.captureProfile),
-            selectedProfile: vm.selectedVoxProfile ?? presets[0].captureProfile,
-            canChangeCaptureRoute: vm.canSelectCapturePreset,
-            selectPreset: vm.selectVox
-        )
-    }
-
     static func make(in test: XCTestCase) async throws -> Self {
-        let suite = "CaptureRouteSelectorTests-\(UUID().uuidString)"
+        let suite = "CaptureRoutePillsTests-\(UUID().uuidString)"
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(suite, isDirectory: true)
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)

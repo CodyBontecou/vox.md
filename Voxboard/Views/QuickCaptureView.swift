@@ -343,13 +343,9 @@ struct QuickCaptureView: View {
         CaptureViewSection {
             VStack(alignment: .leading, spacing: 2) {
                 HStack(alignment: .top, spacing: Geist.Spacing.three) {
-                    // The foldable cover screen always shows the route radio
-                    // row; the phone shows it only while typing.
-                    if enabledFlows.count > 1, composerIsFocused || isCoverScreen {
-                        routePillsRow
-                    } else {
-                        routeSelectionRow
-                    }
+                    // One route bar everywhere (resting, typing, cover
+                    // screen): no dropdown menu to open first.
+                    routePillsRow
                     Spacer(minLength: 0)
                     captureHeaderActions
                 }
@@ -2172,23 +2168,6 @@ struct QuickCaptureView: View {
             }
             .accessibilityLabel(Text(verbatim: flow.accessibilityName))
             .accessibilityAddTraits(viewModel.draft.voxID == flow.id ? .isSelected : [])
-        }
-    }
-
-    private var routeSelectionRow: CaptureViewSection {
-        CaptureViewSection {
-            CaptureRouteSelector(
-                profiles: enabledFlows.map(\.captureProfile),
-                selectedProfile: selectedFlow.captureProfile,
-                canChangeCaptureRoute: viewModel.canSelectCapturePreset,
-                selectPreset: { id in
-                    guard let flow = flows.first(where: { $0.id == id }) else { return false }
-                    return selectFlow(flow)
-                }
-            )
-            // Keep this stable production seam at the coordinator call site
-            // as well as on the reusable selector presentation.
-            .accessibilityIdentifier("capture_vox_selector")
         }
     }
 
