@@ -1176,13 +1176,6 @@ private struct MacCapturePresetEditor: View {
                     TextEditor(text: $flow.customPostProcessingInstruction)
                         .frame(minHeight: 90)
                 }
-                TextField(
-                    "Empty Capture Prompt",
-                    text: Binding(
-                        get: { flow.displayCapturePrompt },
-                        set: { flow.capturePrompt = $0 }
-                    )
-                )
                 if flow.postProcessingMode != .none {
                     if flow.captureProcessingEnabled {
                         switch flow.captureProcessingScope {

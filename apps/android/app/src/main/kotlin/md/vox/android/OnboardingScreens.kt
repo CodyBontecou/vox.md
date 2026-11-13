@@ -125,25 +125,8 @@ internal enum class StarterRoute(
             JOURNAL -> voxUiText("Journal")
         }
 
-    /** Localizable prompt; literal sources keep the catalog audit static. */
-    val promptText: VoxUiText
-        get() = when (this) {
-            INBOX -> voxUiText("What’s on your mind?")
-            MEETING_NOTES -> voxUiText("What was decided?")
-            TASKS -> voxUiText("What needs doing?")
-            JOURNAL -> voxUiText("How was today?")
-        }
-
-    val promptSource: String
-        get() = when (this) {
-            INBOX -> "What’s on your mind?"
-            MEETING_NOTES -> "What was decided?"
-            TASKS -> "What needs doing?"
-            JOURNAL -> "How was today?"
-        }
-
-    /** Builds the preset with localized [name] and [prompt] (resolved by the caller's locale). */
-    fun preset(name: String, prompt: String): CapturePreset {
+    /** Builds the preset with a localized [name] (resolved by the caller's locale). */
+    fun preset(name: String): CapturePreset {
         val base = CapturePreset(
             id = UUID.randomUUID().toString().lowercase(),
             name = name,
@@ -152,7 +135,6 @@ internal enum class StarterRoute(
             logicalFolder = "Inbox",
             noteNameTemplate = "capture-{id}.md",
             metadataFields = emptyList(),
-            capturePrompt = prompt,
         )
         return when (this) {
             INBOX -> base.copy(
@@ -211,7 +193,7 @@ internal enum class StarterRoute(
 @Composable
 internal fun starterPresets(selection: Set<StarterRoute>): List<Pair<StarterRoute, CapturePreset>> =
     StarterRoute.installOrder.filter { it in selection }.map { route ->
-        route to route.preset(route.nameText.localized(), route.promptText.localized())
+        route to route.preset(route.nameText.localized())
     }
 
 /**

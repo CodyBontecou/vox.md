@@ -1229,13 +1229,11 @@ internal fun CapturePresetEditorScreen(
                         processingScope = draft.processingScope,
                         processingMode = draft.processingMode,
                         customInstruction = draft.customInstruction,
-                        capturePrompt = draft.capturePrompt,
                         generateImageAltText = draft.generateImageAltText,
                         setProcessingEnabled = { draft = draft.copy(processingEnabled = it) },
                         setProcessingScope = { draft = draft.copy(processingScope = it) },
                         setProcessingMode = { draft = draft.copy(processingMode = it) },
                         setCustomInstruction = { draft = draft.copy(customInstruction = it) },
-                        setCapturePrompt = { draft = draft.copy(capturePrompt = it) },
                         setGenerateImageAltText = { draft = draft.copy(generateImageAltText = it) },
                     )
                     RouteEditorStep.SHAPE -> {
@@ -2366,13 +2364,11 @@ internal fun CapturePresetProcessingEditor(
     processingScope: CaptureProcessingScope,
     processingMode: CaptureProcessingMode,
     customInstruction: String,
-    capturePrompt: String,
     generateImageAltText: Boolean,
     setProcessingEnabled: (Boolean) -> Unit,
     setProcessingScope: (CaptureProcessingScope) -> Unit,
     setProcessingMode: (CaptureProcessingMode) -> Unit,
     setCustomInstruction: (String) -> Unit,
-    setCapturePrompt: (String) -> Unit,
     setGenerateImageAltText: (Boolean) -> Unit,
 ) {
     SignalGroup(voxString("On-device Processing")) {
@@ -2422,19 +2418,6 @@ internal fun CapturePresetProcessingEditor(
                         colors = signalTextFieldColors(),
                     )
                 }
-            }
-            SignalRowDivider()
-            PresetBlock {
-                OutlinedTextField(
-                    value = capturePrompt,
-                    onValueChange = { setCapturePrompt(it.take(512)) },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text(voxString("Capture prompt")) },
-                    supportingText = { Text(voxString("Optional local context supplied to the processor.")) },
-                    minLines = 2,
-                    shape = SignalFieldShape,
-                    colors = signalTextFieldColors(),
-                )
             }
             SignalRowDivider()
             PresetSwitchRow(

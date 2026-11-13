@@ -59,21 +59,6 @@ class RouteEditorEdgeCaseTest {
         compose.onNodeWithTag("capture_preset_editor_done").assertIsEnabled()
     }
 
-    @Test fun longPastedCapturePromptStaysWithinRepositoryLimit() {
-        var saved: CapturePreset? = null
-        compose.setContent {
-            VoxTheme { CapturePresetEditorScreen(
-                CapturePresetEditorDraft.from(null).copy(name = "QA", processingEnabled = true).toPreset(1, emptyList()),
-                emptyList(), false, {}, { saved = it }, null, initialPage = RouteEditorPage.PROCESS,
-            ) }
-        }
-        compose.onNodeWithText("Capture prompt").performScrollTo().performTextInput("x".repeat(700))
-        compose.onNodeWithText("Capture prompt").assert(hasText("x".repeat(512)))
-        compose.onNodeWithContentDescription("Back").performClick()
-        compose.onNodeWithTag("capture_preset_editor_done").assertIsEnabled().performClick()
-        compose.runOnIdle { assertEquals(512, saved?.capturePrompt?.length) }
-    }
-
     @Test fun rawInvalidDraftAndNestedSettingsSurviveSavedStateWithoutNormalization() {
         val original = CapturePresetEditorDraft.from(null).copy(
             name = "QA 🧪", emoji = "🧪", isEnabled = false, isPinned = true,
