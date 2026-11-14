@@ -780,16 +780,10 @@ struct CaptureRoutePillsRow: View {
         }
         // Lets the last pill scroll fully clear of the trailing fade.
         .contentMargins(.trailing, Self.edgeFadeWidth / 2, for: .scrollContent)
-        .onScrollGeometryChange(for: EdgeOverflow.self) { geometry in
-            EdgeOverflow(
-                leading: geometry.contentOffset.x > geometry.contentInsets.leading + 1,
-                trailing: geometry.contentOffset.x + geometry.containerSize.width
-                    < geometry.contentSize.width + geometry.contentInsets.trailing - 1
-            )
-        } action: { _, overflow in
-            fadesLeadingEdge = overflow.leading
-            fadesTrailingEdge = overflow.trailing
-        }
+        .modifier(EdgeOverflowTracking(
+            fadesLeadingEdge: $fadesLeadingEdge,
+            fadesTrailingEdge: $fadesTrailingEdge
+        ))
         .mask(edgeFadeMask)
         .onAppear { proxy.scrollTo(selectedID, anchor: .center) }
         .onChange(of: selectedID) { _, id in
@@ -800,6 +794,30 @@ struct CaptureRoutePillsRow: View {
         .accessibilityElement(children: .contain)
         .accessibilityLabel(Text("Route"))
         .accessibilityIdentifier("capture_route_pills")
+    }
+
+    /// Fades an edge only while pills overflow past it. Scroll geometry needs
+    /// iOS 18; on iOS 17 both edges stay unfaded.
+    private struct EdgeOverflowTracking: ViewModifier {
+        @Binding var fadesLeadingEdge: Bool
+        @Binding var fadesTrailingEdge: Bool
+
+        func body(content: Content) -> some View {
+            if #available(iOS 18.0, macOS 15.0, *) {
+                content.onScrollGeometryChange(for: EdgeOverflow.self) { geometry in
+                    EdgeOverflow(
+                        leading: geometry.contentOffset.x > geometry.contentInsets.leading + 1,
+                        trailing: geometry.contentOffset.x + geometry.containerSize.width
+                            < geometry.contentSize.width + geometry.contentInsets.trailing - 1
+                    )
+                } action: { _, overflow in
+                    fadesLeadingEdge = overflow.leading
+                    fadesTrailingEdge = overflow.trailing
+                }
+            } else {
+                content
+            }
+        }
     }
 
     private struct EdgeOverflow: Equatable {
