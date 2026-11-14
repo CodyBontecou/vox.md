@@ -25,6 +25,9 @@ internal class CaptureLiveTranscriptState : ViewModel() {
         insertionOffset = offset
     }
 
+    /** True once this recording's words have somewhere to go (Speak tapped, or words shown). */
+    val hasInsertionPoint: Boolean get() = insertionOffset != null || preview != null
+
     /** Renders the latest live speech; returns the draft, the caret after the words and where the span starts. */
     fun render(sessionID: String, committed: String, partial: String, draft: String): Triple<String, Int, Int>? {
         if (sessionID in closedSessionIDs) return null

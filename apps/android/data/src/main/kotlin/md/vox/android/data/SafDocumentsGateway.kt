@@ -50,7 +50,41 @@ interface SafDocumentsGateway {
 
     /** Bounded exact-name child lookup for reconciliation. */
     fun findChildByDisplayName(parent: SafFolderHandle, displayName: String): List<SafDocumentHandle>
+
+    // ---- Live Notes (whole-file saves of a bound note, and the Files tree) ----
+
+    /** Lists direct children with type, size and modified time (bounded, provider order). */
+    fun listChildren(parent: SafFolderHandle): List<SafChildEntry>? = null
+
+    /** Size and provider modified time of one document. */
+    fun statDocument(handle: SafDocumentHandle): SafResult<SafDocumentStat> = SafResult.error(GatewayError.InvalidState.name)
+
+    /**
+     * Truncating whole-file replace ("wt") of an existing document. Callers verify the
+     * expected version first and read the bytes back afterwards; see [SafLiveNoteFileStore].
+     */
+    fun replaceDocument(handle: SafDocumentHandle, bytes: ByteArray): SafResult<Unit> = SafResult.error(GatewayError.InvalidState.name)
+
+    /**
+     * Creates a document for a bound live note outside the capture journal: a conflict's
+     * "(Vox)" copy, or a bound file that was deleted elsewhere while it was being edited.
+     * Durable captures never use this; their creates stay behind [DurableMarkerToken].
+     */
+    fun createLiveNoteDocument(parent: SafFolderHandle, displayName: String, mediaType: String): SafResult<SafDocumentHandle> =
+        SafResult.error(GatewayError.InvalidState.name)
 }
+
+/** One direct child of a SAF folder. Folder children carry a handle to list them in turn. */
+class SafChildEntry internal constructor(
+    val displayName: String,
+    val isFolder: Boolean,
+    val lastModifiedEpochMillis: Long?,
+    val byteCount: Long?,
+    internal val document: SafDocumentHandle,
+    internal val folder: SafFolderHandle?,
+)
+
+data class SafDocumentStat(val byteCount: Long?, val lastModifiedEpochMillis: Long?)
 
 /** Typed coarse gateway failures (ADR-0019: never a provider crash/exception detail). */
 sealed interface GatewayError {
@@ -187,6 +221,64 @@ open class AndroidSafDocumentsGateway(
         emptyList()
     }
 
+    override fun listChildren(parent: SafFolderHandle): List<SafChildEntry>? = try {
+        val parentUri = Uri.parse(parent.key)
+        val children = DocumentsContract.buildChildDocumentsUriUsingTree(parentUri, DocumentsContract.getDocumentId(parentUri))
+        val projection = arrayOf(
+            DocumentsContract.Document.COLUMN_DOCUMENT_ID,
+            DocumentsContract.Document.COLUMN_DISPLAY_NAME,
+            DocumentsContract.Document.COLUMN_MIME_TYPE,
+            DocumentsContract.Document.COLUMN_LAST_MODIFIED,
+            DocumentsContract.Document.COLUMN_SIZE,
+        )
+        resolver.query(children, projection, null, null, null)?.use { cursor ->
+            val entries = mutableListOf<SafChildEntry>()
+            while (cursor.moveToNext() && entries.size < MAX_LISTED_CHILDREN) {
+                val id = cursor.getString(0) ?: continue
+                val name = cursor.getString(1) ?: continue
+                val isFolder = cursor.getString(2) == DocumentsContract.Document.MIME_TYPE_DIR
+                val uri = DocumentsContract.buildDocumentUriUsingTree(parentUri, id).toString()
+                entries += SafChildEntry(
+                    displayName = name,
+                    isFolder = isFolder,
+                    lastModifiedEpochMillis = if (cursor.isNull(3)) null else cursor.getLong(3).takeIf { it > 0 },
+                    byteCount = if (cursor.isNull(4)) null else cursor.getLong(4),
+                    document = SafDocumentHandle(uri),
+                    folder = if (isFolder) SafFolderHandle(uri) else null,
+                )
+            }
+            entries
+        }
+    } catch (_: Exception) {
+        null
+    }
+
+    override fun statDocument(handle: SafDocumentHandle): SafResult<SafDocumentStat> = watchdog("stat") {
+        val projection = arrayOf(DocumentsContract.Document.COLUMN_SIZE, DocumentsContract.Document.COLUMN_LAST_MODIFIED)
+        resolver.query(Uri.parse(handle.key), projection, null, null, null)?.use { cursor ->
+            if (!cursor.moveToFirst()) throw IllegalStateException(GatewayError.ProviderFailure.name)
+            SafDocumentStat(
+                byteCount = if (cursor.isNull(0)) null else cursor.getLong(0),
+                lastModifiedEpochMillis = if (cursor.isNull(1)) null else cursor.getLong(1).takeIf { it > 0 },
+            )
+        } ?: throw IllegalStateException(GatewayError.ProviderFailure.name)
+    }
+
+    override fun replaceDocument(handle: SafDocumentHandle, bytes: ByteArray): SafResult<Unit> = watchdog("replace") {
+        // "wt" truncates; plain "w" leaves a longer old tail behind on some providers.
+        resolver.openOutputStream(Uri.parse(handle.key), "wt")?.use { stream ->
+            stream.write(bytes)
+            stream.flush()
+        } ?: throw IllegalStateException(GatewayError.ProviderFailure.name)
+    }
+
+    override fun createLiveNoteDocument(parent: SafFolderHandle, displayName: String, mediaType: String): SafResult<SafDocumentHandle> =
+        watchdog("create-live") {
+            val created = DocumentsContract.createDocument(resolver, Uri.parse(parent.key), mediaType, displayName)
+                ?: throw IllegalStateException(GatewayError.ProviderFailure.name)
+            SafDocumentHandle(created.toString())
+        }
+
     private fun <T> watchdog(operation: String, block: () -> T): SafResult<T> {
         val executor = Executors.newSingleThreadExecutor { runnable -> Thread(runnable, "vox-saf-$operation") }
         return try {
@@ -201,6 +293,10 @@ open class AndroidSafDocumentsGateway(
         } finally {
             executor.shutdownNow()
         }
+    }
+
+    private companion object {
+        const val MAX_LISTED_CHILDREN = 2_000
     }
 
     private fun stepInto(current: Uri, segment: String, treeUri: Uri, createMissing: Boolean): Uri? {

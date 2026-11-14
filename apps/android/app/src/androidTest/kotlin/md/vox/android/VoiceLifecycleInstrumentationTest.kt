@@ -40,6 +40,7 @@ class VoiceLifecycleInstrumentationTest {
         autoStopStore.update(VoiceAutoStopSettings(enabled = false))
         val modelPreferences = context.getSharedPreferences("vox-local-speech-v1", Context.MODE_PRIVATE)
         val previousModelID = modelPreferences.getString("selected-model-id", null)
+        val previousSelectionMode = modelPreferences.getString("selection-mode", null)
         val audio = AudioCaptureClient(context)
         val transcription = RecordingTranscriptionClient.get(context)
         var sessionID: String? = null
@@ -85,7 +86,9 @@ class VoiceLifecycleInstrumentationTest {
             // Model selection is removed, not the installed model. This forces the
             // production local manager's explicit no-model failure branch without
             // deleting device state or invoking any recognizer/network fallback.
-            modelPreferences.edit().remove("selected-model-id").commit()
+            // Manual mode keeps automatic selection from picking a bundled model that
+            // has already been unpacked on devices with enough memory.
+            modelPreferences.edit().putString("selection-mode", "MANUAL").remove("selected-model-id").commit()
             SpeechModelManager.get(context).refresh()
             transcription.process(id)
             val failed = transcription.states.value.getValue(id)
@@ -106,6 +109,8 @@ class VoiceLifecycleInstrumentationTest {
             }
             if (previousModelID == null) modelPreferences.edit().remove("selected-model-id").commit()
             else modelPreferences.edit().putString("selected-model-id", previousModelID).commit()
+            if (previousSelectionMode == null) modelPreferences.edit().remove("selection-mode").commit()
+            else modelPreferences.edit().putString("selection-mode", previousSelectionMode).commit()
             SpeechModelManager.get(context).refresh()
             autoStopStore.update(previousAutoStop)
         }

@@ -189,6 +189,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
@@ -304,7 +305,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             VoxTheme {
                 Box(Modifier.semantics { testTagsAsResourceId = true }) {
-                    val model: CaptureViewModel = viewModel(factory = CaptureViewModel.factory(root.captureRepository))
+                    val model: CaptureViewModel = viewModel(factory = CaptureViewModel.factory(root.captureRepository, root.liveNoteStore, root.liveNoteStore, root.liveNoteStore))
                     VoxApp(
                         model = model,
                         billingManager = root.billingManager,
@@ -717,9 +718,47 @@ internal fun VoxNavigation(
     val currentTopLevel = VoxTopLevelDestination.forRoute(backStackEntry?.destination?.route)
     val usesNavigationRail = currentVoxWindowWidthClass() != VoxWindowWidthClass.COMPACT
     val showsTopLevelChrome = currentTopLevel != null && !recordingStatus.isActive
-    // Phones follow the Signal boards: no bottom bar. Capture's header opens Activity
-    // and Settings, Activity opens Library, and each returns with Back.
+    // Phones follow iOS: no tab bar. Capture is home; its header pushes Files, Activity and
+    // Settings, each with a round back button. Tablets keep the navigation rail.
     val backToCapture: (() -> Unit)? = if (usesNavigationRail) null else ({ navController.popBackStack() })
+    val openSection: (VoxTopLevelDestination) -> Unit = { destination ->
+        navController.navigate(destination.route) {
+            if (usesNavigationRail) {
+                popUpTo(Destination.Capture.route) { saveState = true }
+                restoreState = true
+            } else {
+                popUpTo(Destination.Capture.route)
+            }
+            launchSingleTop = true
+        }
+    }
+    val imeVisible = androidx.compose.foundation.layout.WindowInsets.isImeVisible
+    // Live Notes: write on background, look at the file again on return (SAF has no change notifications).
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    androidx.compose.runtime.DisposableEffect(lifecycleOwner) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            when (event) {
+                androidx.lifecycle.Lifecycle.Event.ON_STOP -> model.flushLiveNote()
+                androidx.lifecycle.Lifecycle.Event.ON_START -> model.refreshLiveNote()
+                else -> Unit
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+    val openVaultFile: (String, CapturePreset?) -> Unit = { relativePath, preset ->
+        latestState.destination?.let { destination ->
+            model.openFile(
+                md.vox.android.capturedomain.LiveNoteLocation(destination.id, destination.treeUri, relativePath),
+                presetID = preset?.id,
+                presetName = preset?.name,
+            )
+            navController.navigate(Destination.Capture.route) {
+                popUpTo(Destination.Capture.route) { saveState = true }
+                launchSingleTop = true
+            }
+        }
+    }
     val activityBadge = activityAttentionCount(state.history, transcriptionStates.values)
     val selectTopLevel: (VoxTopLevelDestination) -> Unit = { destination ->
         navController.navigate(destination.route) {
@@ -756,7 +795,7 @@ internal fun VoxNavigation(
                             actionLabel = voxString("See plans"),
                             onAction = { navController.navigate(Destination.Upgrade.route) },
                         )
-                        SignalButton(text = voxString("Library"), onClick = { selectTopLevel(VoxTopLevelDestination.HISTORY) })
+                        SignalButton(text = voxString("Library"), onClick = { navController.navigate(Destination.History.route) })
                     }
                 } else CaptureScreen(
                     state = latestState,
@@ -783,10 +822,12 @@ internal fun VoxNavigation(
                     },
                     consumeAcceptedCapture = model::consumeAcceptedCapture,
                     consumeExternalDraft = model::consumeExternalDraft,
-                    openHistory = { selectTopLevel(VoxTopLevelDestination.HISTORY) },
-                    openSettings = { selectTopLevel(VoxTopLevelDestination.SETTINGS) },
+                    openHistory = { navController.navigate(Destination.History.route) },
+                    openSettings = { openSection(VoxTopLevelDestination.SETTINGS) },
                     openPresets = { navController.navigate(Destination.Presets.route) },
-                    openActivity = if (usesNavigationRail) null else ({ selectTopLevel(VoxTopLevelDestination.ACTIVITY) }),
+                    // Phones: Files, Activity and Settings live in the header (iOS). The rail carries them on tablets.
+                    openActivity = if (usesNavigationRail) null else ({ openSection(VoxTopLevelDestination.ACTIVITY) }),
+                    openFiles = if (usesNavigationRail) null else ({ openSection(VoxTopLevelDestination.FILES) }),
                     activityBadge = activityBadge,
                     startRecording = startRecording,
                     pauseRecording = recordingClient::pause,
@@ -805,6 +846,46 @@ internal fun VoxNavigation(
                     microphoneBlocked = rememberMicrophoneBlocked(),
                     hasVaultAccess = rememberVaultAccess(latestState.destination),
                     regrantVaultAccess = openTree,
+                    onStartLiveNote = model::startLiveNote,
+                    resolveEmbed = model::resolveEmbed,
+                    onNewNote = model::newLiveNote,
+                    onResolveConflict = model::resolveLiveNoteConflict,
+                    onReopenReleased = model::reopenReleasedNote,
+                    onDismissReleased = model::dismissLiveNoteToast,
+                    onCloseOpenedFile = if (latestState.liveNoteOpenedFromFiles) ({
+                        model.closeOpenedFile()
+                        openSection(VoxTopLevelDestination.FILES)
+                    }) else null,
+                )
+            }
+            composable(FILES_ROUTE) {
+                val destination = latestState.destination
+                if (destination != null) FilesScreen(
+                    destination = destination,
+                    presets = latestState.presetCollection?.presets.orEmpty(),
+                    list = { folder -> model.listVault(destination, folder) },
+                    openFile = { entry, preset -> openVaultFile(entry.relativePath, preset) },
+                    openFolder = { folder -> navController.navigate("$FILES_FOLDER_ROUTE/${Uri.encode(folder)}") },
+                    reconnect = { openTree(null) },
+                    navigateBack = backToCapture,
+                )
+            }
+            composable("$FILES_FOLDER_ROUTE/{folder}") { entry ->
+                val destination = latestState.destination
+                val folder = entry.arguments?.getString("folder")?.let(Uri::decode).orEmpty()
+                if (destination != null) VaultFolderScreen(
+                    destination = destination,
+                    relativeFolder = folder,
+                    presets = latestState.presetCollection?.presets.orEmpty(),
+                    list = { path -> model.listVault(destination, path, countChildren = false) },
+                    preview = model::previewFile,
+                    openFile = { file, preset -> openVaultFile(file.relativePath, preset) },
+                    startInPreset = { preset ->
+                        model.selectPreset(preset.id)
+                        if (latestState.liveNote.isStarted) model.newLiveNote()
+                        selectTopLevel(VoxTopLevelDestination.CAPTURE)
+                    },
+                    navigateBack = { navController.popBackStack() },
                 )
             }
             composable(Destination.History.route) {
@@ -825,7 +906,11 @@ internal fun VoxNavigation(
                     HistoryScreen(
                         items = latestState.history,
                         isBusy = latestState.isSending || latestState.isDeletingHistory,
-                        navigateBack = backToCapture,
+                        // Library is no longer a tab (Files replaced it): it opens from
+                        // Activity's "All captures" and needs its own way back there.
+                        navigateBack = {
+                            if (!navController.popBackStack()) navController.navigate(ACTIVITY_ROUTE)
+                        },
                         refresh = { model.refresh(reconcile = true) },
                         retry = model::retry,
                         repairAccess = openTree,
@@ -905,30 +990,33 @@ internal fun VoxNavigation(
                 }
             }
             composable(ACTIVITY_ROUTE) {
-                ActivityScreen(
+                ActivityTimelineScreen(
                     discard = model::discard,
                     recoveryPresets = latestState.presetCollection?.presets.orEmpty(),
                     recoveryDestination = latestState.destination,
                     loadRecoveryContext = model::recoveryContext,
                     replaceCapture = model::replaceCapture,
+                    loadCaptureDetail = model::historyDetailSnapshot,
+                    editRoute = { presetID -> navController.navigate("$PRESET_EDITOR_ROUTE/$presetID") },
                     items = latestState.history,
                     transcripts = transcriptionStates.values.toList(),
+                    events = latestState.liveNoteEvents,
+                    vaultName = latestState.destination?.displayName,
                     isBusy = latestState.isSending || latestState.isDeletingHistory,
-                    refresh = { model.refresh(reconcile = true) },
                     retry = model::retry,
-                    repairAccess = openTree,
-                    openDetail = { requestID ->
+                    reconnect = openTree,
+                    openCapture = { requestID ->
                         model.loadHistoryDetail(requestID)
                         navController.navigate("$HISTORY_DETAIL_ROUTE/$requestID")
                     },
                     openTranscript = { sessionID -> navController.navigate("$TRANSCRIPT_DETAIL_ROUTE/$sessionID") },
-                    openCapture = { selectTopLevel(VoxTopLevelDestination.CAPTURE) },
+                    openFile = { path -> openVaultFile(path, null) },
+                    loadAudio = { id -> exportRecordingForCapture(context, recordingClient, id) },
+                    // Everything the old History list held (search, export, clear) stays one tap away.
+                    openLibrary = { navController.navigate(Destination.History.route) },
                     captureRouteName = { libraryRouteName(latestState.presetCollection, it.presetID) },
-                    loadCaptureDetail = model::historyDetailSnapshot,
-                    editRoute = { presetID -> navController.navigate("$PRESET_EDITOR_ROUTE/$presetID") },
+                    hasAudio = recordingClient::hasRetainedAudio,
                     navigateBack = backToCapture,
-                    // Pushed over Activity so Back returns to it, as on iOS.
-                    openLibrary = if (usesNavigationRail) null else ({ navController.navigate(Destination.History.route) }),
                 )
             }
             composable("$TRANSCRIPT_DETAIL_ROUTE/{sessionID}") { entry ->

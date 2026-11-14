@@ -18,6 +18,10 @@ public struct LiveTranscriptDraftPreview: Equatable, Sendable {
     /// UTF-16 location of `renderedBlock` in the draft it was rendered into.
     private var renderedLocation = 0
     private var transcript = ""
+    /// Leading words of the session transcript already left in the draft as
+    /// plain text because the writer typed or moved the cursor mid-recording.
+    /// Later renders and the final commit place only the words after them.
+    private var frozenWordCount = 0
     /// UTF-16 offset just past the transcript (before any trailing separator)
     /// in the most recently returned draft; a natural place for the caret.
     public private(set) var caretOffset: Int?
@@ -37,13 +41,19 @@ public struct LiveTranscriptDraftPreview: Equatable, Sendable {
         in currentDraft: String
     ) -> String {
         let base = removingRenderedBlock(from: currentDraft)
-        transcript = Self.merged(finalizedText: finalizedText, volatileText: volatileText)
+        transcript = Self.droppingWords(
+            frozenWordCount,
+            from: Self.merged(finalizedText: finalizedText, volatileText: volatileText)
+        )
         return place(in: base)
     }
 
     public mutating func commit(_ transcript: String, in currentDraft: String) -> String {
         let base = removingRenderedBlock(from: currentDraft)
-        self.transcript = transcript.trimmingCharacters(in: .whitespacesAndNewlines)
+        self.transcript = Self.droppingWords(
+            frozenWordCount,
+            from: transcript.trimmingCharacters(in: .whitespacesAndNewlines)
+        )
         let result = place(in: base)
         renderedBlock = ""
         return result
@@ -54,6 +64,19 @@ public struct LiveTranscriptDraftPreview: Equatable, Sendable {
         renderedBlock = ""
         caretOffset = nil
         return base
+    }
+
+    /// The writer typed or moved the cursor while recording: the words already
+    /// shown stay in the draft as ordinary text, and the next words go to
+    /// `offset` (UTF-16, in `currentDraft`). The draft text is unchanged.
+    public mutating func moveInsertion(toUTF16Offset offset: Int, in currentDraft: String) {
+        if !renderedBlock.isEmpty {
+            frozenWordCount += Self.wordCount(transcript)
+            renderedBlock = ""
+            transcript = ""
+        }
+        anchor = Self.clampedOffset(max(0, offset), in: currentDraft)
+        caretOffset = anchor
     }
 
     /// Inserts a whole line (timestamp marker, empty task) just ahead of the
@@ -151,6 +174,15 @@ public struct LiveTranscriptDraftPreview: Equatable, Sendable {
         case (true, false): return volatile
         case (false, false): return finalized + " " + volatile
         }
+    }
+
+    private static func wordCount(_ text: String) -> Int {
+        text.split(whereSeparator: \.isWhitespace).count
+    }
+
+    private static func droppingWords(_ count: Int, from text: String) -> String {
+        guard count > 0 else { return text }
+        return text.split(whereSeparator: \.isWhitespace).dropFirst(count).joined(separator: " ")
     }
 
     /// Clamps to the text and snaps back to a composed-character boundary so

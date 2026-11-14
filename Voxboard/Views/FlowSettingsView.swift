@@ -803,7 +803,6 @@ struct CapturePresetEditorView: View {
     }
 
     private var routeSteps: [RouteStep] {
-        let prompt = flow.capturePrompt.trimmingCharacters(in: .whitespacesAndNewlines)
         let processDetail: String = {
             guard flow.captureProcessingEnabled else {
                 return String(localized: "Apple Intelligence off · kept as captured")
@@ -833,7 +832,7 @@ struct CapturePresetEditorView: View {
                 id: 1,
                 kind: String(localized: "Capture"),
                 title: String(localized: "Voice, text, photos, scans"),
-                detail: prompt.isEmpty ? nil : String(localized: "Empty prompt: “\(prompt)”")
+                detail: nil
             ),
             RouteStep(id: 2, kind: String(localized: "Process"), title: flow.postProcessingMode.displayName, detail: processDetail),
             RouteStep(id: 3, kind: String(localized: "Shape"), title: shape.title, detail: shape.detail),
@@ -1266,6 +1265,7 @@ struct CapturePresetEditorView: View {
                 }
             }
             .accessibilityIdentifier("route_transcription_model")
+            .id("step-capture")
 
             Toggle("Identify Speakers", isOn: $flow.speakerDiarizationEnabled)
                 .tint(Geist.accent)
@@ -1353,13 +1353,6 @@ struct CapturePresetEditorView: View {
                     .font(Geist.caption())
                     .foregroundStyle(Geist.muted)
             }
-
-            TextField("Empty Capture Prompt", text: $flow.capturePrompt, axis: .vertical)
-                .lineLimit(2...4)
-                .id("step-capture")
-            Text("Example: What do you want to remember?")
-                .font(Geist.caption())
-                .foregroundStyle(Geist.muted)
         } header: {
             PresetListSectionHeader(title: "Capture Processing")
         } footer: {

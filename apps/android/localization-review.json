@@ -23,9 +23,9 @@
     }
   ],
   "androidCatalog": "apps/android/localization/android-strings.json",
-  "androidCatalogBackedSourceCount": 599,
+  "androidCatalogBackedSourceCount": 665,
   "catalog": "Voxboard/Localizable.xcstrings",
-  "catalogBackedSourceCount": 469,
+  "catalogBackedSourceCount": 471,
   "dynamicRuntimeCallSiteCount": 0,
   "dynamicRuntimeCalls": [],
   "dynamicRuntimeExpressionCount": 0,
@@ -37,7 +37,7 @@
   "integerFormatSources": [
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ui/CaptureViewModel.kt:248"
+        "apps/android/app/src/main/kotlin/md/vox/android/ui/CaptureViewModel.kt:316"
       ],
       "source": "%1$@ is ready, but %2$lld shared files could not be copied."
     },
@@ -49,7 +49,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureParityControls.kt:275"
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureParityControls.kt:277"
       ],
       "source": "%@ · %lld attempts"
     },
@@ -70,7 +70,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/ui/CaptureViewModel.kt:565"
+        "apps/android/app/src/main/kotlin/md/vox/android/ui/CaptureViewModel.kt:638"
       ],
       "source": "%lld captures removed from History."
     },
@@ -82,7 +82,7 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:467"
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:498"
       ],
       "source": "%lld non-screenshot images were skipped."
     },
@@ -114,9 +114,9 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2014",
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2312",
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2418",
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2284",
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2582",
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2688",
         "apps/android/app/src/main/kotlin/md/vox/android/CaptureStateViews.kt:314",
         "apps/android/app/src/main/kotlin/md/vox/android/RecoveryScreens.kt:662"
       ],
@@ -130,19 +130,19 @@
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureParityControls.kt:279"
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureParityControls.kt:281"
       ],
       "source": "HTTP %lld"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2707"
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2977"
       ],
       "source": "Heading %lld"
     },
     {
       "locations": [
-        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2528"
+        "apps/android/app/src/main/kotlin/md/vox/android/CaptureScreen.kt:2798"
       ],
       "source": "Saved locally in %lld durable chunks."
     }
@@ -152,14 +152,14 @@
     "Dynamic-source call sites are inventoried; the current finite-domain trace has no unresolved dynamic expressions.",
     "Missing sources fall back to English; Android machine translations require human linguistic review."
   ],
-  "literalRuntimeSourceCount": 1073,
+  "literalRuntimeSourceCount": 1141,
   "missingCatalogSourceCount": 0,
   "missingCatalogSources": [],
   "pluralImplementationStatus": "cldr-aware",
   "pluralReviewStatus": "requires-human-review",
   "pluralSourceCount": 12,
   "reviewStatus": "requires-human-review",
-  "runtimeSourceLiteralCount": 3129,
+  "runtimeSourceLiteralCount": 3321,
   "runtimeSourceScanRoots": [
     "apps/android/app/src/main/kotlin",
     "apps/android/capture-domain/src/main/kotlin",

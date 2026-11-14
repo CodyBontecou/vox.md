@@ -18,7 +18,7 @@ class MainActivityInputFocusInstrumentationTest {
     private fun checkInput(stylus: Boolean) {
         val done = hasText("Done") and hasClickAction()
         if (compose.onAllNodes(done).fetchSemanticsNodes().isNotEmpty()) compose.onNode(done).performClick()
-        // Phones reach Library through Capture's Activity button, then Activity's Library pill.
+        // Phones reach Library through Capture's Activity button, then Activity's "All captures" pill.
         compose.waitUntil(5_000) { compose.onAllNodesWithTag("capture-activity").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithTag("capture-activity").performClick()
         compose.waitUntil(5_000) { compose.onAllNodesWithTag("activity-library").fetchSemanticsNodes().isNotEmpty() }

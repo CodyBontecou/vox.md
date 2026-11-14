@@ -121,10 +121,12 @@ internal class CaptureRouteEditorState {
     destination: CaptureDestination?,
     enabled: Boolean = true,
     editor: CaptureRouteEditorState = rememberCaptureRouteEditorState(),
+    /** False when another control (the Live Notes breadcrumb) opens [editor]; only the dialog renders. */
+    showsLabel: Boolean = true,
     onChanged: (CaptureRouteOverride?) -> Unit,
 ) {
     val c = Signal.colors
-    Row(
+    if (showsLabel) Row(
         modifier = Modifier
             .heightIn(min = 48.dp)
             .clip(RoundedCornerShape(10.dp))

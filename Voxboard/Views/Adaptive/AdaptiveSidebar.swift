@@ -69,7 +69,7 @@ struct AdaptiveSidebar: View {
                 trailing: activityCount > 0 ? "\(activityCount)" : nil
             )
             .accessibilityIdentifier("sidebar_activity")
-            viewRow(title: "Library", section: .library)
+            viewRow(title: viewModel.liveNotesEnabled ? "Files" : "Library", section: .library)
                 .accessibilityIdentifier("sidebar_library")
 
             Spacer(minLength: 12)

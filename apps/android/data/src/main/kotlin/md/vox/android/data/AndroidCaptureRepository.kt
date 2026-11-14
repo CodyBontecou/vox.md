@@ -40,6 +40,8 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import md.vox.android.capturedomain.CaptureRouteOverride
+import md.vox.android.capturedomain.LiveNoteLocation
+import md.vox.android.capturedomain.LiveNoteSession
 import md.vox.android.capturedomain.CaptureURLDeliverySettings
 import md.vox.android.capturedomain.normalizedTranscriptProperty
 import md.vox.android.capturedomain.CaptureHeadingPosition
@@ -153,6 +155,7 @@ class AndroidCaptureRepository(
     private val headingFailures = CaptureHeadingFailureStore(appContext.noBackupFilesDir)
     private fun replacements() = CaptureReplacement(store, coordination, recoveryIntents, clock,
         canDiscardAuxiliaryDelivery, completed = quota::hasVerifiedCompletion)
+    private val liveNotes = LiveNoteSessionStore(File(appContext.noBackupFilesDir, "live-notes"))
     private val draftAttachmentMutex = Mutex()
     private val preferences: DataStore<Preferences> = PreferenceDataStoreFactory.create(
         scope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
@@ -605,7 +608,7 @@ class AndroidCaptureRepository(
     ): CaptureSubmitResult {
         if (quota.hasVerifiedCompletion(requestID)) {
             if (clearPersistedDraft) clearDraftOnWorker()
-            return CaptureSubmitResult.Delivered(requestID)
+            return CaptureSubmitResult.Delivered(requestID, noteLocation = liveNotes.committedLocation(requestID))
         }
         // Existing durable packages may finish; new work must not use a fresh free allowance
         // after authoritative subscription loss. Keep the draft untouched on rejection.
@@ -956,11 +959,14 @@ class AndroidCaptureRepository(
                 else -> CaptureSubmitResult.SavedForRetry(requestID, "recoveryPending")
             }
         }
-        if (quota.hasVerifiedCompletion(requestID)) return CaptureSubmitResult.Delivered(requestID)
+        if (quota.hasVerifiedCompletion(requestID)) {
+            return CaptureSubmitResult.Delivered(requestID, noteLocation = liveNotes.committedLocation(requestID))
+        }
         val snapshot = store.loadJournal(requestID) ?: return CaptureSubmitResult.InvalidInput("Capture is no longer available.")
         if (snapshot.state == CaptureState.COMPLETED) {
+            val location = recordCommittedLocation(requestID)
             compactCompletedPackage(requestID)
-            return CaptureSubmitResult.Delivered(requestID)
+            return CaptureSubmitResult.Delivered(requestID, noteLocation = location)
         }
         val admitted = store.loadRequestBytes(requestID)?.let { bytes ->
             runCatching { CapturePackageCodec.decodeHistoricalRequest(bytes) }.getOrNull()
@@ -1071,8 +1077,10 @@ class AndroidCaptureRepository(
                         ExecutorOutcome.LeaseLost -> return CaptureSubmitResult.SavedForRetry(requestID, "leaseLost")
                         is ExecutorOutcome.Ok -> when (val outcome = result.value) {
                             is CommitOutcome.VerifiedCommitted -> {
+                                // Read the committed path before compaction drops the plan.
+                                val location = recordCommittedLocation(requestID, selectedDestination)
                                 compactCompletedPackage(requestID)
-                                return CaptureSubmitResult.Delivered(requestID)
+                                return CaptureSubmitResult.Delivered(requestID, noteLocation = location)
                             }
                             CommitOutcome.PermissionLost -> return CaptureSubmitResult.NeedsPermission(requestID)
                             CommitOutcome.Ambiguous -> return CaptureSubmitResult.SavedForRetry(requestID, "commitOutcomeUnknown")
@@ -1118,8 +1126,9 @@ class AndroidCaptureRepository(
                     }
 
                     CaptureState.COMPLETED -> {
+                        val location = recordCommittedLocation(requestID, selectedDestination)
                         compactCompletedPackage(requestID)
-                        return CaptureSubmitResult.Delivered(requestID)
+                        return CaptureSubmitResult.Delivered(requestID, noteLocation = location)
                     }
                     CaptureState.NEEDS_USER_ACTION, CaptureState.PERMANENT_FAILURE, CaptureState.DISCARDED ->
                         return CaptureSubmitResult.SavedForRetry(requestID, snapshot.state.name.lowercase())
@@ -1166,6 +1175,39 @@ class AndroidCaptureRepository(
         else -> false
     }
 
+    override suspend fun committedNoteLocation(requestID: String): LiveNoteLocation? = withContext(Dispatchers.IO) {
+        if (!UUID_PATTERN.matches(requestID)) return@withContext null
+        liveNotes.committedLocation(requestID) ?: if (store.loadJournal(requestID)?.state == CaptureState.COMPLETED) {
+            recordCommittedLocation(requestID)
+        } else null
+    }
+
+    override suspend fun liveNoteSession(): LiveNoteSession? = withContext(Dispatchers.IO) { liveNotes.loadSession() }
+
+    override suspend fun saveLiveNoteSession(session: LiveNoteSession): Unit = withContext(Dispatchers.IO) {
+        liveNotes.saveSession(session)
+    }
+
+    /**
+     * Remembers which vault file a completed capture wrote (its plan's note path) so the
+     * composer can bind to it even after compaction or a background drain delivered it.
+     */
+    private fun recordCommittedLocation(requestID: String, knownDestination: CaptureDestination? = null): LiveNoteLocation? {
+        liveNotes.committedLocation(requestID)?.let { return it }
+        val logicalPath = historyDetailOnWorker(requestID)?.logicalPath ?: return null
+        val destination = knownDestination ?: run {
+            val reference = store.loadRequestBytes(requestID)?.let { bytes ->
+                runCatching {
+                    CapturePackageCodec.parseCanonical(bytes)["preset"]!!.jsonObject["destinationPolicy"]!!.jsonObject["capabilityReference"]!!.jsonPrimitive.content
+                }.getOrNull()
+            } ?: return null
+            if (reference == "synthetic-vault-capability") null else destinationBindings.load(reference)
+        } ?: return null
+        val location = LiveNoteLocation(destination.id, destination.treeUri, logicalPath)
+        runCatching { liveNotes.saveCommittedLocation(requestID, location) }
+        return location
+    }
+
     private fun compactCompletedPackages() {
         index.all().asSequence()
             .filter { it.state == CaptureState.COMPLETED }
@@ -1175,6 +1217,7 @@ class AndroidCaptureRepository(
     }
 
     private fun compactCompletedPackage(requestID: String) {
+        runCatching { recordCommittedLocation(requestID) }
         when (completionCompactor.compact(requestID)) {
             CompletionCompactionResult.Compacted,
             CompletionCompactionResult.AlreadyCompacted,

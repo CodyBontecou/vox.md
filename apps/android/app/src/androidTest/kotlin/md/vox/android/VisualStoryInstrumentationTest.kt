@@ -126,9 +126,9 @@ class VisualStoryInstrumentationTest {
         assertControlIsWiderThanTall("Transcripts")
         compose.runOnIdle { story = VisualStoryActivity.STORY_LIVE_RECORDING }
         compose.waitForIdle()
-        // The full-screen live recording uses labeled icon controls (no text to wrap);
+        // The phone recording dock uses labeled icon controls (no text to wrap);
         // at 200% text they must still be on screen and meet the minimum target size.
-        listOf("Pause recording", "Stop Recording", "Cancel voice recording")
+        listOf("Pause recording", "Stop and add to draft", "Discard recording")
             .forEach { assertLabeledIconTarget(it, deviceDensity) }
     }
 
@@ -265,7 +265,7 @@ class VisualStoryInstrumentationTest {
         val actionMatrix = listOf(
             VisualStoryActivity.STORY_VAULT_REPAIR to listOf("Choose vault or folder"),
             VisualStoryActivity.STORY_HISTORY_FOLDER_REPAIR to listOf("Repair Folder Access"),
-            VisualStoryActivity.STORY_RECORDING_PAUSED to listOf("Resume recording", "Stop Recording", "Cancel voice recording"),
+            VisualStoryActivity.STORY_RECORDING_PAUSED to listOf("Resume recording", "Stop and add to draft", "Discard recording"),
             VisualStoryActivity.STORY_RECORDING_FAILED to listOf("Retry Processing", "Dismiss"),
             VisualStoryActivity.STORY_UPGRADE_PENDING to listOf("Restore Purchase"),
             VisualStoryActivity.STORY_UPGRADE_ACTIVE to listOf("Restore Purchase"),
@@ -311,7 +311,7 @@ class VisualStoryInstrumentationTest {
         assertTrue("$label switch target is shorter than 48 dp", action.touchBoundsInRoot.height / deviceDensity >= 48f)
     }
 
-    /** Full-screen live recording controls: icon buttons labeled by content description, never scrolled. */
+    /** Recording dock controls: icon buttons labeled by content description, never scrolled. */
     private fun assertLabeledIconTarget(label: String, deviceDensity: Float) {
         val action = compose.onNode(hasContentDescription(label) and hasClickAction())
             .assertIsDisplayed()

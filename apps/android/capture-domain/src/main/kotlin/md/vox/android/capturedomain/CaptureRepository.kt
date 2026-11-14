@@ -478,7 +478,12 @@ data class CompletedRecordingActivity(
 )
 
 sealed interface CaptureSubmitResult {
-    data class Delivered(val requestID: String, val processingOutcome: CaptureTextProcessingOutcome? = null) : CaptureSubmitResult
+    data class Delivered(
+        val requestID: String,
+        val processingOutcome: CaptureTextProcessingOutcome? = null,
+        /** The vault file the capture's note landed in, when it is known (Live Notes binding). */
+        val noteLocation: LiveNoteLocation? = null,
+    ) : CaptureSubmitResult
     data class SavedForRetry(
         val requestID: String,
         val reason: String,
@@ -562,4 +567,10 @@ interface CaptureRepository {
     suspend fun activityStats(): ActivityStats
     suspend fun recordCompletedRecordings(recordings: List<CompletedRecordingActivity>): ActivityStats
     suspend fun drainPending(maxItems: Int): CaptureDrainSummary
+
+    /** The vault file a delivered capture wrote, kept after its package is compacted. */
+    suspend fun committedNoteLocation(requestID: String): LiveNoteLocation? = null
+    /** The composer's live-note session (binding, queued first write, unsaved text). */
+    suspend fun liveNoteSession(): LiveNoteSession? = null
+    suspend fun saveLiveNoteSession(session: LiveNoteSession) {}
 }

@@ -85,6 +85,8 @@ struct VoxboardApp: App {
             imageDescriber: OnDeviceImageSupport.makeDescriber()
         )
         let captureViewModel = QuickCaptureViewModel(requestProcessor: captureRequestProcessor)
+        // Live Notes: the iOS composer saves into the preset's file and keeps editing it.
+        captureViewModel.liveNotesEnabled = true
         _quickCaptureViewModel = State(initialValue: captureViewModel)
 
         #if DEBUG

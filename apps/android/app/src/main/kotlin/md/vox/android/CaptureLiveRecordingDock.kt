@@ -48,6 +48,10 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.text
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -135,17 +139,30 @@ internal fun CaptureLiveRecordingDock(
             }
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 val timerDescription = if (paused) voxFormat("Paused, %@", duration) else voxFormat("Recording, %@", duration)
+                // The dot carries the recording state for TalkBack, announced politely only when
+                // it changes (pause/resume), never on every timer tick.
+                val stateLabel = voxString(if (paused) "Recording paused" else "Recording")
                 Row(
-                    Modifier.padding(start = 4.dp).clearAndSetSemantics { contentDescription = timerDescription },
+                    Modifier.padding(start = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    Box(Modifier.size(9.dp).clip(CircleShape).background(if (paused) DockMuted else c.recording))
+                    Box(
+                        Modifier
+                            .size(9.dp)
+                            .clip(CircleShape)
+                            .background(if (paused) DockMuted else c.recording)
+                            .clearAndSetSemantics {
+                                text = AnnotatedString(stateLabel)
+                                liveRegion = LiveRegionMode.Polite
+                            },
+                    )
                     Text(
                         duration,
                         style = TextStyle(fontFamily = GeistMonoFontFamily, fontWeight = FontWeight.Medium, fontSize = 20.sp),
                         color = DockInk,
                         maxLines = 1,
+                        modifier = Modifier.clearAndSetSemantics { contentDescription = timerDescription },
                     )
                 }
                 DockRecordingResultSegment(recordingResult, setRecordingResult, Modifier.weight(1f))

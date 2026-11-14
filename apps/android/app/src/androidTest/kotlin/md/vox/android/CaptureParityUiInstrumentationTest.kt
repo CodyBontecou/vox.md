@@ -3,6 +3,8 @@ package md.vox.android
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import md.vox.android.capturedomain.*
@@ -30,7 +32,9 @@ class CaptureParityUiInstrumentationTest {
     @Test fun transcriptPropertyExposesIndependentBodyToggle() {
         var name by mutableStateOf("")
         var includeBody by mutableStateOf(true)
-        compose.setContent { MaterialTheme { Column { TranscriptPropertyControls(name, includeBody, { name = it }, { includeBody = it }) } } }
+        // Fill the window: the toggle row appears only after typing, and a wrap-content host
+        // can still be at its earlier height when the assertion runs.
+        compose.setContent { MaterialTheme { Column(Modifier.fillMaxSize()) { TranscriptPropertyControls(name, includeBody, { name = it }, { includeBody = it }) } } }
         compose.onNodeWithText("Transcript Property").performTextInput("note")
         compose.onNodeWithText("Also include transcript in body").assertIsDisplayed()
         compose.onNode(isToggleable()).performClick()
