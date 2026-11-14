@@ -380,7 +380,7 @@ internal class LiveNoteHighlightTransformation(
 /** "JUST ADDED", plus "· 0:21" when the entry came from a recording. */
 @Composable
 internal fun liveNoteJustAddedLabel(recordingDurationMillis: Long?): String {
-    val base = voxString("Just added").uppercase(java.util.Locale.getDefault())
+    val base = voxString("Just added").uppercase(androidx.compose.ui.platform.LocalConfiguration.current.locales[0])
     return recordingDurationMillis?.takeIf { it > 0 }?.let { "$base · ${formatTranscriptDuration(it)}" } ?: base
 }
 

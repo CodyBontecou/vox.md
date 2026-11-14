@@ -77,6 +77,7 @@ import md.vox.android.ui.SignalType
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import androidx.compose.ui.platform.LocalConfiguration
 import java.util.Locale
 
 /** How many files a folder shows inline before "N more" opens the full folder. */
@@ -317,7 +318,7 @@ private fun MoreTreeRow(count: Int, depth: Int, open: () -> Unit) {
 @Composable
 internal fun PresetBadge(preset: CapturePreset, large: Boolean = false) {
     val c = Signal.colors
-    val letter = preset.emoji ?: preset.name.trim().take(1).uppercase(Locale.getDefault())
+    val letter = preset.emoji ?: preset.name.trim().take(1).uppercase(LocalConfiguration.current.locales[0])
     Row(
         modifier = Modifier
             .clip(CircleShape)
@@ -420,7 +421,7 @@ internal fun VaultFolderScreen(
                     groups.forEach { (month, monthFiles) ->
                         item(key = "h:$month") {
                             Row(Modifier.fillMaxWidth().padding(start = 4.dp, end = 4.dp, top = 14.dp, bottom = 6.dp)) {
-                                Text(monthLabel(monthFiles.first().lastModifiedEpochMillis).uppercase(Locale.getDefault()), style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold, letterSpacing = 0.8.sp), color = c.muted, modifier = Modifier.weight(1f))
+                                Text(monthLabel(monthFiles.first().lastModifiedEpochMillis).uppercase(LocalConfiguration.current.locales[0]), style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold, letterSpacing = 0.8.sp), color = c.muted, modifier = Modifier.weight(1f))
                                 Text(fileCountLabel(monthFiles.size), style = SignalType.monoCaption, color = c.muted)
                             }
                         }

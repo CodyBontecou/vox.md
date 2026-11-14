@@ -71,6 +71,7 @@ import md.vox.android.ui.SignalPillButton
 import md.vox.android.ui.SignalType
 import java.text.SimpleDateFormat
 import java.util.Date
+import androidx.compose.ui.platform.LocalConfiguration
 import java.util.Locale
 
 /** Dot colors on the rail: orange needs you, indigo audio, green saved, grey changed elsewhere. */
@@ -305,7 +306,7 @@ internal fun ActivityTimelineScreen(
             days.forEach { (day, entries) ->
                 item(key = "day:$day") {
                     Text(
-                        libraryDayLabel(day, nowEpochMillis).uppercase(Locale.getDefault()),
+                        libraryDayLabel(day, nowEpochMillis).uppercase(LocalConfiguration.current.locales[0]),
                         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold, letterSpacing = 0.8.sp),
                         color = c.muted,
                         modifier = Modifier.padding(start = 64.dp, top = 8.dp, bottom = 6.dp),
@@ -361,7 +362,7 @@ private fun TimelineRow(
             .testTag("timeline-${entry.key}"),
     ) {
         Text(
-            SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(entry.atEpochMillis)),
+            SimpleDateFormat("HH:mm", LocalConfiguration.current.locales[0]).format(Date(entry.atEpochMillis)),
             style = SignalType.monoCaption.copy(fontSize = 12.sp),
             color = c.muted,
             textAlign = TextAlign.End,
