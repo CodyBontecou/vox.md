@@ -726,7 +726,23 @@ final class QuickCaptureViewModel {
     func beginRecordedTranscriptInsertion(atUTF16Offset offset: Int?) {
         guard liveRecordedTranscriptPreview == nil else { return }
         recordedTranscriptInsertionOffset = offset
-        recordedTranscriptCaretOffset = nil
+        // Seed the caret where the words will land, so a cursor already
+        // sitting there rides along to the end of the first spoken words.
+        recordedTranscriptCaretOffset = offset ?? (draft.text as NSString).length
+    }
+
+    /// The writer typed or moved the cursor while recording. Words already
+    /// spoken stay where they are as ordinary text; the next words land at
+    /// `offset` (UTF-16, in the current draft), so speech follows the cursor.
+    func moveRecordedTranscriptInsertion(toUTF16Offset offset: Int) {
+        if var preview = liveRecordedTranscriptPreview {
+            preview.moveInsertion(toUTF16Offset: offset, in: draft.text)
+            liveRecordedTranscriptPreview = preview
+            recordedTranscriptCaretOffset = preview.caretOffset
+        } else {
+            recordedTranscriptInsertionOffset = offset
+            recordedTranscriptCaretOffset = offset
+        }
     }
 
     func updateLiveRecordedTranscript(

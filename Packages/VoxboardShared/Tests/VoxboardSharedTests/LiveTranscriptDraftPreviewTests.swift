@@ -163,4 +163,43 @@ final class LiveTranscriptDraftPreviewTests: XCTestCase {
         XCTAssertEqual(result.text, "Hello big world")
         XCTAssertEqual(result.caretOffset, 9)
     }
+
+    func testTypingAfterSpeechFreezesWordsAndNextSpeechFollowsCursor() {
+        var preview = LiveTranscriptDraftPreview()
+        var draft = preview.render(finalizedText: "Hello there", volatileText: nil, in: "")
+        XCTAssertEqual(draft, "Hello there")
+
+        // The writer types after the spoken words; the caret ends past them.
+        draft += " typed."
+        preview.moveInsertion(toUTF16Offset: (draft as NSString).length, in: draft)
+
+        draft = preview.render(finalizedText: "Hello there", volatileText: "and more", in: draft)
+        XCTAssertEqual(draft, "Hello there typed. and more")
+
+        draft = preview.commit("Hello there and more words", in: draft)
+        XCTAssertEqual(draft, "Hello there typed. and more words")
+    }
+
+    func testMovingCursorEarlierSendsNextSpeechThere() {
+        var preview = LiveTranscriptDraftPreview()
+        var draft = preview.render(finalizedText: "First", volatileText: nil, in: "Intro. Outro")
+        XCTAssertEqual(draft, "Intro. Outro First")
+
+        preview.moveInsertion(toUTF16Offset: 6, in: draft)
+        XCTAssertEqual(preview.caretOffset, 6)
+
+        draft = preview.render(finalizedText: "First second", volatileText: nil, in: draft)
+        XCTAssertEqual(draft, "Intro. second Outro First")
+        XCTAssertEqual(preview.caretOffset, 13)
+    }
+
+    func testCancelAfterFreezeKeepsFrozenWords() {
+        var preview = LiveTranscriptDraftPreview()
+        var draft = preview.render(finalizedText: "Kept", volatileText: nil, in: "")
+        preview.moveInsertion(toUTF16Offset: (draft as NSString).length, in: draft)
+        draft = preview.render(finalizedText: "Kept dropped", volatileText: nil, in: draft)
+        XCTAssertEqual(draft, "Kept dropped")
+
+        XCTAssertEqual(preview.cancel(in: draft), "Kept")
+    }
 }

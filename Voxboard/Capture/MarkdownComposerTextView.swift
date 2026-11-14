@@ -138,6 +138,8 @@ struct MarkdownComposerTextView: UIViewRepresentable {
     /// Receives the text's laid-out height (content size), for layouts that
     /// place content directly under the text (iPad Pencil card).
     var contentHeight: Binding<CGFloat>? = nil
+    /// The writer typed or moved the caret (UTF-16 end of the selection).
+    var writerMovedCaret: ((Int) -> Void)? = nil
     /// Live Notes: the entry this capture just added inside a whole file,
     /// shown with a tinted card and a "JUST ADDED" label.
     var highlightedEntry: String? = nil
@@ -201,6 +203,8 @@ struct MarkdownComposerTextView: UIViewRepresentable {
 
     func updateUIView(_ textView: UITextView, context: Context) {
         context.coordinator.parent = self
+        context.coordinator.isApplyingUpdate = true
+        defer { context.coordinator.isApplyingUpdate = false }
         connect(textView, coordinator: context.coordinator)
         (textView as? MarkdownComposerUITextView)?.highlightedEntry = highlightedEntry
         (textView as? MarkdownComposerUITextView)?.showsRawMarkdown = showsRawMarkdown
@@ -283,11 +287,25 @@ struct MarkdownComposerTextView: UIViewRepresentable {
             }
             (textView as? MarkdownComposerUITextView)?.restyleMarkdown()
             parent.controller.publishCurrentState()
+            reportWriterCaret(in: textView)
         }
 
         func textViewDidChangeSelection(_ textView: UITextView) {
             (textView as? MarkdownComposerUITextView)?.richBlockSelectionDidChange()
             parent.controller.publishCurrentState()
+            reportWriterCaret(in: textView)
+        }
+
+        /// True while `updateUIView` writes SwiftUI state into the text view.
+        var isApplyingUpdate = false
+
+        private func reportWriterCaret(in textView: UITextView) {
+            guard !isApplyingUpdate,
+                  textView.isFirstResponder,
+                  textView.markedTextRange == nil,
+                  let writerMovedCaret = parent.writerMovedCaret else { return }
+            let range = textView.selectedRange
+            writerMovedCaret(range.location + range.length)
         }
 
         func textViewDidBeginEditing(_ textView: UITextView) {

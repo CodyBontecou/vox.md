@@ -735,8 +735,8 @@ struct QuickCaptureView: View {
                         viewModel.scheduleDraftSave()
                     }
                 }
-                .onChange(of: viewModel.recordedTranscriptCaretOffset) { _, caret in
-                    followRecordedTranscriptCaret(caret)
+                .onChange(of: viewModel.recordedTranscriptCaretOffset) { previous, caret in
+                    followRecordedTranscriptCaret(from: previous, to: caret)
                 }
                 .onChange(of: viewModel.draft.voxID) { _, id in
                     viewModel.scheduleDraftSave()
@@ -1928,6 +1928,11 @@ struct QuickCaptureView: View {
                 isFocused: $composerIsFocused,
                 controller: composerController,
                 contentHeight: showsInlinePencil ? $composerContentHeight : nil,
+                writerMovedCaret: { offset in
+                    // Type while recording: speech follows the cursor.
+                    guard persistentRecorder.isAppRecordingSegmentActive else { return }
+                    viewModel.moveRecordedTranscriptInsertion(toUTF16Offset: offset)
+                },
                 highlightedEntry: viewModel.liveNoteHighlightedEntry,
                 showsRawMarkdown: showsRawMarkdown,
                 resolveEmbedURL: { [viewModel] target in viewModel.liveNoteEmbedURL(target) }
@@ -2950,9 +2955,15 @@ struct QuickCaptureView: View {
     }
 
     /// Keeps the caret just after spoken words as they stream in at the
-    /// cursor, without stealing the insertion point from active typing.
-    private func followRecordedTranscriptCaret(_ caret: Int?) {
-        guard let caret, !composerIsFocused else { return }
+    /// cursor. While typing it follows only when the caret sat where the
+    /// words land, so speech and typing interleave in order without
+    /// stealing a cursor the writer placed elsewhere.
+    private func followRecordedTranscriptCaret(from previous: Int?, to caret: Int?) {
+        guard let caret else { return }
+        if composerIsFocused {
+            guard composerSelection.length == 0,
+                  composerSelection.location == previous else { return }
+        }
         composerSelection = NSRange(location: caret, length: 0)
     }
 
