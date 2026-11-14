@@ -15,13 +15,13 @@ the PNGs.
 
 File names sort in listing order.
 
-The app icon ("I.7 · Singing .md file") lives on the **Vox.md — App Icon**
-canvas (https://claude.ai/artifact/WzdzZxu7AKoVAbMVYnAQve, artboard `Doc7`).
-Its 1024px render is the canonical
+The app icon is the black V-waveform (six white bars in a V with an orange
+dot). Its 1024px render is the canonical
 `Voxboard/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png`; every iOS,
 macOS, Watch and Play size is a resize of it, and Gradle derives the Android
 launcher set from it. The themed-icon glyph is
-`apps/android/branding/launcher-monochrome-1024.png`.
+`apps/android/branding/launcher-monochrome-1024.png` (the bars and dot in white,
+drawn from the same geometry as `res/drawable/ic_vox_waveform.xml`).
 
 ## Uploading
 
