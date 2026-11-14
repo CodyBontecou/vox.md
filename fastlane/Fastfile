@@ -1,9 +1,10 @@
 default_platform(:ios)
 
 APP_ID = "bontecou.Voxboard"
-API_KEY_ID = "T7KGDK4Y4V"
-API_ISSUER_ID = "6c3b3640-c6bf-40a9-b6e5-57cda2c7776e"
-API_KEY_PATH = "/Users/codybontecou/dev/AuthKey_T7KGDK4Y4V.p8"
+# ASC_KEY_ID / ASC_ISSUER_ID / ASC_KEY_PATH override the default App Store Connect API key.
+API_KEY_ID = ENV.fetch("ASC_KEY_ID", "T7KGDK4Y4V")
+API_ISSUER_ID = ENV.fetch("ASC_ISSUER_ID", "6c3b3640-c6bf-40a9-b6e5-57cda2c7776e")
+API_KEY_PATH = ENV.fetch("ASC_KEY_PATH", "/Users/codybontecou/dev/AuthKey_T7KGDK4Y4V.p8")
 
 # The App Store version every lane targets: the app's MARKETING_VERSION
 # (Voxboard.xcodeproj), unless VOX_APP_VERSION overrides it. deliver creates
