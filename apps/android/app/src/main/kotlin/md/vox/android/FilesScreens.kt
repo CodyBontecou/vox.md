@@ -388,7 +388,7 @@ internal fun VaultFolderScreen(
                 val parent = relativeFolder.substringBeforeLast('/', "")
                 Text(liveNoteBreadcrumb(destination.displayName, parent) + " /", style = SignalType.monoCaption, color = c.muted)
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 2.dp)) {
-                    Text("$folderName/", style = androidx.compose.ui.text.TextStyle(fontFamily = GeistMonoFontFamily, fontSize = 28.sp, fontWeight = FontWeight.Medium), color = c.text, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
+                    Text(folderName + "/", style = androidx.compose.ui.text.TextStyle(fontFamily = GeistMonoFontFamily, fontSize = 28.sp, fontWeight = FontWeight.Medium), color = c.text, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
                     preset?.let { PresetBadge(it, large = true) }
                 }
                 Text(

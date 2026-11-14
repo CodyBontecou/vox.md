@@ -80,15 +80,17 @@ class LiveNoteComposerInstrumentationTest {
         compose.waitUntil(5_000) { store.files[daily.relativePath] == existing }
         assertEquals(0, store.conflicts)
 
-        // A second recording that completes: the final transcript replaces the preview at the start caret.
-        recording.value = RecordingStatus(sessionID = session, phase = RecordingPhase.RECORDING)
+        // A second recording (each recording has its own session) that completes: the final
+        // transcript replaces the preview at the start caret.
+        val second = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
+        recording.value = RecordingStatus(sessionID = second, phase = RecordingPhase.RECORDING)
         compose.waitForIdle()
-        speech.value = LiveSpeechState(session, LiveSpeechPhase.LISTENING, partialText = "draft words")
+        speech.value = LiveSpeechState(second, LiveSpeechPhase.LISTENING, partialText = "draft words")
         compose.waitUntil(5_000) { store.files[daily.relativePath]?.contains("draft words") == true }
-        recording.value = RecordingStatus(sessionID = session, phase = RecordingPhase.COMPLETED)
-        transcription.value = RecordingTranscriptionState(session, RecordingTranscriptionPhase.PROCESSING, durationMillis = 21_000)
+        recording.value = RecordingStatus(sessionID = second, phase = RecordingPhase.COMPLETED)
+        transcription.value = RecordingTranscriptionState(second, RecordingTranscriptionPhase.PROCESSING, durationMillis = 21_000)
         compose.waitForIdle()
-        transcription.value = RecordingTranscriptionState(session, RecordingTranscriptionPhase.COMPLETED, durationMillis = 21_000, transcript = "Final words")
+        transcription.value = RecordingTranscriptionState(second, RecordingTranscriptionPhase.COMPLETED, durationMillis = 21_000, transcript = "Final words")
         compose.waitUntil(5_000) { store.files[daily.relativePath] == "# Log Final words\n- 09:12 Standup\n" }
         assertEquals(0, store.conflicts)
     }

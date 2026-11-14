@@ -255,8 +255,9 @@ private fun AudioEmbed(uri: String, fileName: String) {
                 drawStopIndicator = {},
             )
         }
+        val progress = "${formatTranscriptDuration(position)} / ${formatTranscriptDuration(duration)}"
         Text(
-            if (failed) voxString("Unavailable") else "${formatTranscriptDuration(position)} / ${formatTranscriptDuration(duration)}",
+            if (failed) voxString("Unavailable") else progress,
             style = SignalType.monoCaption,
             color = c.muted,
         )
@@ -320,7 +321,7 @@ private fun VideoEmbed(uri: String, fileName: String) {
                     val video = view ?: return@clickable
                     if (video.isPlaying) { video.pause(); playing = false } else { video.start(); playing = true }
                 }
-                .semantics { contentDescription = "$label · $fileName" }
+                .semantics { contentDescription = listOf(label, fileName).joinToString(" · ") }
                 .testTag("live-preview-video"),
             contentAlignment = Alignment.Center,
         ) {

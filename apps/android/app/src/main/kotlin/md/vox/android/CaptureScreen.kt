@@ -1104,6 +1104,13 @@ internal fun CaptureScreen(
         commitEditorValue(TextFieldValue(text, selection), registerUndo = false)
     }
 
+    // A recording started elsewhere (widget, notification, watch) while a Live Note is open:
+    // the note is the whole file, so its words go to the caret, not after the file's end.
+    LaunchedEffect(recordingStatus.isActive) {
+        if (recordingStatus.isActive && state.liveNote.isBound && !liveTranscript.hasInsertionPoint) {
+            liveTranscript.begin(editorValue.selection.end)
+        }
+    }
     // Stream on-device live speech into the editor at the cursor.
     LaunchedEffect(liveSpeech?.sessionID, liveSpeech?.committedText, liveSpeech?.partialText, recordingStatus.sessionID) {
         val speech = liveSpeech ?: return@LaunchedEffect
@@ -1123,7 +1130,8 @@ internal fun CaptureScreen(
         val ended = recordingTranscription?.phase in setOf(
             RecordingTranscriptionPhase.DISCARDED,
             RecordingTranscriptionPhase.FAILED,
-        ) || (recordingStatus.phase == RecordingPhase.IDLE && recordingTranscription == null)
+        ) || (recordingStatus.phase in setOf(RecordingPhase.IDLE, RecordingPhase.DISCARDED, RecordingPhase.FAILED) &&
+            recordingTranscription == null)
         if (ended) discardLiveTranscript()
     }
 

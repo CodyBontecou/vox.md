@@ -71,8 +71,10 @@ internal fun MarkdownModeToggle(modifier: Modifier = Modifier) {
     val c = Signal.colors
     val description = if (raw) voxString("Show formatted Markdown") else voxString("Show raw Markdown")
     val state = if (raw) voxString("Raw") else voxString("Formatted")
+    // Mode glyphs, not words: the toggle is announced through its description.
+    val glyph = if (raw) "Aa" else "</>"
     Text(
-        if (raw) "Aa" else "</>",
+        glyph,
         style = SignalType.monoCaption,
         fontWeight = FontWeight.Medium,
         color = if (raw) c.accentText else c.muted,
