@@ -81,26 +81,17 @@ struct QuickCaptureCanvas: View {
     let sentToast: CaptureViewSection
     var showsPreview = false
     var preview = CaptureViewSection { EmptyView() }
+    /// iPhone: the header floats over the editor, which runs to the top and
+    /// scrolls beneath it (`QuickCaptureFloatingChrome`).
+    var floatingChrome: QuickCaptureFloatingChrome.State? = nil
+    var floatingChromeHeightChanged: (CGFloat) -> Void = { _ in }
 
     var body: some View {
         ZStack(alignment: .top) {
             Geist.bg.ignoresSafeArea()
             VStack(spacing: 0) {
-                header
-                // Inline under the header (Signal "Capture states"): a
-                // floating error used to cover the route picker, Activity
-                // and Settings until it was dismissed.
-                error
-                ocrProgress
-                if showsDestination {
-                    destination
-                        .padding(.horizontal, Geist.Spacing.four)
-                        .padding(.bottom, Geist.Spacing.two)
-                }
-                if showsWatchStatus {
-                    watchStatus
-                        .padding(.horizontal, Geist.Spacing.four)
-                        .padding(.bottom, Geist.Spacing.two)
+                if floatingChrome == nil {
+                    topStack
                 }
                 AdaptiveCaptureWorkspace(
                     showsPreview: showsPreview,
@@ -111,6 +102,13 @@ struct QuickCaptureCanvas: View {
                     attachments
                 }
             }
+            if let floatingChrome {
+                QuickCaptureFloatingChrome(
+                    state: floatingChrome,
+                    content: CaptureViewSection { topStack },
+                    heightChanged: floatingChromeHeightChanged
+                )
+            }
             // zIndex belongs to the outer siblings, not inside erased wrappers.
             keyboardGuidance.zIndex(5)
             fileExport.zIndex(4)
@@ -119,6 +117,93 @@ struct QuickCaptureCanvas: View {
         // Keep the controls in the keyboard-aware safe area; a retained first
         // responder can cover controls placed inside the flexible editor stack.
         .safeAreaInset(edge: .bottom, spacing: 0) { controls }
+    }
+
+    private var topStack: some View {
+        VStack(spacing: 0) {
+            header
+            // Inline under the header (Signal "Capture states"): a
+            // floating error used to cover the route picker, Activity
+            // and Settings until it was dismissed.
+            error
+            ocrProgress
+            if showsDestination {
+                destination
+                    .padding(.horizontal, Geist.Spacing.four)
+                    .padding(.bottom, Geist.Spacing.two)
+            }
+            if showsWatchStatus {
+                watchStatus
+                    .padding(.horizontal, Geist.Spacing.four)
+                    .padding(.bottom, Geist.Spacing.two)
+            }
+        }
+    }
+}
+
+/// The iPhone capture header floating over the note. Text scrolls up beneath
+/// it; while the writer drags or flings, the header gets out of the way, and
+/// once the note comes to rest it returns over a blurred scroll edge so the
+/// text under it stays legible (the iOS 26 scroll-edge pattern, drawn here so
+/// it also runs on iOS 17.6).
+struct QuickCaptureFloatingChrome: View {
+    struct State: Equatable {
+        /// The writer is dragging or flinging the note.
+        var isScrolling = false
+        /// Text currently sits under the header.
+        var hasContentBeneath = false
+
+        var isHidden: Bool { isScrolling && hasContentBeneath }
+    }
+
+    let state: State
+    let content: CaptureViewSection
+    let heightChanged: (CGFloat) -> Void
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        content
+            .background(alignment: .top) {
+                QuickCaptureScrollEdgeBackdrop()
+                    .opacity(state.hasContentBeneath ? 1 : 0)
+                    .ignoresSafeArea(edges: .top)
+                    .allowsHitTesting(false)
+            }
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { heightChanged($0) }
+            .offset(y: state.isHidden && !reduceMotion ? -18 : 0)
+            .opacity(state.isHidden ? 0 : 1)
+            .blur(radius: state.isHidden && !reduceMotion ? 6 : 0)
+            // Hidden chrome must not catch taps meant for the note under it.
+            .allowsHitTesting(!state.isHidden)
+            .accessibilityHidden(state.isHidden)
+            // Leaves quickly when a scroll starts; settles back more slowly.
+            .animation(
+                state.isHidden ? .easeOut(duration: 0.18) : .spring(response: 0.42, dampingFraction: 0.86),
+                value: state.isHidden
+            )
+            .animation(.easeInOut(duration: 0.2), value: state.hasContentBeneath)
+    }
+}
+
+/// A material that holds firm behind the header and dissolves into the note
+/// at its lower edge, like a soft scroll edge effect.
+struct QuickCaptureScrollEdgeBackdrop: View {
+    var body: some View {
+        Rectangle()
+            .fill(.regularMaterial)
+            .overlay(Geist.bg.opacity(0.55))
+            .mask {
+                LinearGradient(
+                    stops: [
+                        .init(color: .black, location: 0),
+                        .init(color: .black, location: 0.78),
+                        .init(color: .clear, location: 1),
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            }
+            .padding(.bottom, -14)
     }
 }
 

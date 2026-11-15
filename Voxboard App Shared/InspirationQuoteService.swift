@@ -27,9 +27,26 @@ enum InspirationQuotePresentation {
     /// iPhone composer: the quote shares the empty editor with the Route's
     /// prompt, so it only shows while the editor is tall enough for both
     /// (it steps aside when the keyboard and attachments squeeze the editor).
-    static func shouldShow(forDraftText text: String, hasPrompt: Bool, editorHeight: CGFloat) -> Bool {
-        shouldShow(forDraftText: text)
+    /// A running recording owns the empty editor: the quote steps aside so the
+    /// live transcript can fill that space as the words arrive.
+    static func shouldShow(
+        forDraftText text: String,
+        hasPrompt: Bool,
+        editorHeight: CGFloat,
+        isRecording: Bool = false
+    ) -> Bool {
+        !isRecording
+            && shouldShow(forDraftText: text)
             && (!hasPrompt || editorHeight >= minimumEditorHeightBesidePrompt)
+    }
+
+    /// The empty editor's line while a recording runs, before any words land:
+    /// it sits where the transcript will start. `nil` once there is text.
+    static func recordingStatus(forDraftText text: String, isRecording: Bool, isPaused: Bool) -> String? {
+        guard isRecording, text.isEmpty else { return nil }
+        return isPaused
+            ? String(localized: "Paused")
+            : String(localized: "Listening for speech…")
     }
 }
 
