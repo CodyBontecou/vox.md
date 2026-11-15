@@ -1027,6 +1027,10 @@ internal class CaptureViewModel private constructor(
     }
 
     /** First non-heading, non-frontmatter line of a file, for folder previews. */
+    /** Whole text of a vault note, for Files share/export; null when it can't be read. */
+    suspend fun readVaultFile(location: LiveNoteLocation): String? =
+        (runCatching { liveNotes.read(location) }.getOrNull() as? LiveNoteReadResult.Found)?.file?.text
+
     suspend fun previewFile(location: LiveNoteLocation): String? =
         (runCatching { liveNotes.read(location) }.getOrNull() as? LiveNoteReadResult.Found)?.file?.text?.let(::liveNotePreviewLine)
 

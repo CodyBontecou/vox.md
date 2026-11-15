@@ -3,7 +3,10 @@ package md.vox.android
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,13 +30,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.NoteAdd
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.RadioButtonUnchecked
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.FolderOff
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -41,6 +50,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -53,6 +63,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -94,6 +106,8 @@ internal fun FilesScreen(
     destination: CaptureDestination,
     presets: List<CapturePreset>,
     list: suspend (String) -> VaultListing,
+    /** Whole text of a note, for Share and Export. */
+    read: suspend (LiveNoteLocation) -> String?,
     openFile: (VaultEntry, CapturePreset?) -> Unit,
     openFolder: (String) -> Unit,
     reconnect: () -> Unit,
@@ -123,9 +137,29 @@ internal fun FilesScreen(
     }
     OnResumeEffect { refreshTick += 1 }
 
+    val sharing = rememberVaultSharing(destination, read)
+    var selecting by rememberSaveable { mutableStateOf(false) }
+    val selection = remember { mutableStateListOf<String>() }
+    fun endSelecting() { selecting = false; selection.clear() }
+    BackHandler(enabled = selecting) { endSelecting() }
+
     val root = listings[""]
+    val rows = (root as? VaultListing.Listed)?.let { buildTreeRows(it.entries, listings, expanded, targets, query) }.orEmpty()
+    val visibleFiles = rows.filterIsInstance<TreeRow.File>().map { it.entry.relativePath }
+    // Selected notes in tree order, then any hidden by the filter.
+    val selectedPaths = visibleFiles.filter(selection::contains) + selection.filterNot(visibleFiles::contains)
     Column(Modifier.fillMaxSize().background(c.bg).navigationBarsPadding()) {
-        if (navigateBack != null) LargeTitleBackRow(navigateBack)
+        if (selecting) {
+            VaultSelectionHeader(
+                selectedCount = selection.size,
+                allSelected = visibleFiles.isNotEmpty() && selection.containsAll(visibleFiles),
+                onToggleAll = {
+                    if (visibleFiles.isNotEmpty() && selection.containsAll(visibleFiles)) selection.removeAll(visibleFiles)
+                    else visibleFiles.filterNot(selection::contains).forEach(selection::add)
+                },
+                onDone = ::endSelecting,
+            )
+        } else if (navigateBack != null) LargeTitleBackRow(navigateBack)
         Row(
             modifier = Modifier.fillMaxWidth().then(if (navigateBack == null) Modifier.statusBarsPadding() else Modifier).padding(start = 16.dp, end = 8.dp, top = if (navigateBack == null) 16.dp else 4.dp),
             verticalAlignment = Alignment.Bottom,
@@ -134,6 +168,7 @@ internal fun FilesScreen(
                 Text(destination.displayName, style = MaterialTheme.typography.headlineMedium.copy(fontSize = 30.sp, fontWeight = FontWeight.SemiBold), color = c.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(vaultRootLine(destination.treeUri), style = SignalType.monoCaption, color = c.muted, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(top = 4.dp))
             }
+            if (!selecting) SelectNotesButton { selecting = true }
             SignalCircleButton(icon = Icons.Outlined.Refresh, contentDescription = voxString("Refresh"), onClick = { refreshTick += 1 })
         }
         SignalSearchField(
@@ -157,7 +192,6 @@ internal fun FilesScreen(
                 )
             }
             is VaultListing.Listed -> {
-                val rows = buildTreeRows(root.entries, listings, expanded, targets, query)
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -195,7 +229,21 @@ internal fun FilesScreen(
                                 depth = row.depth,
                                 badges = targets[row.entry.relativePath].orEmpty(),
                                 nowEpochMillis = nowEpochMillis,
-                                open = { openFile(row.entry, targets[row.entry.relativePath]?.firstOrNull() ?: targets[row.entry.relativePath.substringBeforeLast('/', "")]?.firstOrNull()) },
+                                selecting = selecting,
+                                checked = row.entry.relativePath in selection,
+                                open = {
+                                    val path = row.entry.relativePath
+                                    if (selecting) {
+                                        if (path in selection) selection.remove(path) else selection.add(path)
+                                    } else {
+                                        openFile(row.entry, targets[path]?.firstOrNull() ?: targets[path.substringBeforeLast('/', "")]?.firstOrNull())
+                                    }
+                                },
+                                menu = NoteMenuActions(
+                                    share = { sharing.share(listOf(row.entry.relativePath)) },
+                                    export = { sharing.export(listOf(row.entry.relativePath)) },
+                                    select = { selection.clear(); selection.add(row.entry.relativePath); selecting = true },
+                                ),
                             )
                             is TreeRow.More -> MoreTreeRow(row.count, row.depth) { openFolder(row.folder) }
                             is TreeRow.Loading -> Text(
@@ -207,10 +255,66 @@ internal fun FilesScreen(
                         }
                     }
                 }
-                Spacer(Modifier.height(12.dp))
+                if (selecting) {
+                    VaultSelectionBar(
+                        selectedCount = selection.size,
+                        isPreparing = sharing.isPreparing,
+                        onShare = { sharing.share(selectedPaths) },
+                        onExport = { sharing.export(selectedPaths) },
+                    )
+                } else {
+                    Spacer(Modifier.height(12.dp))
+                }
             }
         }
     }
+}
+
+@Composable
+private fun SelectNotesButton(onClick: () -> Unit) {
+    SignalCircleButton(
+        icon = Icons.Outlined.CheckCircle,
+        contentDescription = voxString("Select notes"),
+        onClick = onClick,
+        modifier = Modifier.padding(end = 8.dp).testTag("files-select"),
+    )
+}
+
+/** Long-press menu on a single note. */
+internal class NoteMenuActions(val share: () -> Unit, val export: () -> Unit, val select: () -> Unit)
+
+@Composable
+private fun NoteMenu(expanded: Boolean, dismiss: () -> Unit, actions: NoteMenuActions) {
+    val c = Signal.colors
+    DropdownMenu(expanded = expanded, onDismissRequest = dismiss, containerColor = c.card) {
+        DropdownMenuItem(
+            text = { Text(voxString("Share"), color = c.text) },
+            leadingIcon = { Icon(Icons.Outlined.Share, contentDescription = null, tint = c.tint) },
+            onClick = { dismiss(); actions.share() },
+        )
+        DropdownMenuItem(
+            text = { Text(voxString("Export to folder"), color = c.text) },
+            leadingIcon = { Icon(Icons.Outlined.Folder, contentDescription = null, tint = c.tint) },
+            onClick = { dismiss(); actions.export() },
+        )
+        DropdownMenuItem(
+            text = { Text(voxString("Select"), color = c.text) },
+            leadingIcon = { Icon(Icons.Outlined.CheckCircle, contentDescription = null, tint = c.tint) },
+            onClick = { dismiss(); actions.select() },
+        )
+    }
+}
+
+/** Round check shown in place of a note's icon while selecting. */
+@Composable
+private fun SelectionCheck(checked: Boolean) {
+    val c = Signal.colors
+    Icon(
+        if (checked) Icons.Filled.CheckCircle else Icons.Outlined.RadioButtonUnchecked,
+        contentDescription = null,
+        tint = if (checked) c.accent else c.faint,
+        modifier = Modifier.size(20.dp),
+    )
 }
 
 private sealed interface TreeRow {
@@ -276,26 +380,48 @@ private fun FolderTreeRow(entry: VaultEntry, depth: Int, isExpanded: Boolean, ba
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun FileTreeRow(entry: VaultEntry, depth: Int, badges: List<CapturePreset>, nowEpochMillis: Long, open: () -> Unit) {
+private fun FileTreeRow(
+    entry: VaultEntry,
+    depth: Int,
+    badges: List<CapturePreset>,
+    nowEpochMillis: Long,
+    selecting: Boolean,
+    checked: Boolean,
+    open: () -> Unit,
+    menu: NoteMenuActions,
+) {
     val c = Signal.colors
+    var menuOpen by remember { mutableStateOf(false) }
+    Box {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = 40.dp)
-            .clickable(role = Role.Button, onClick = open)
-            .padding(start = indent(depth) + 24.dp, end = 12.dp)
+            .background(if (selecting && checked) c.accentSoft else androidx.compose.ui.graphics.Color.Transparent)
+            .combinedClickable(
+                role = Role.Button,
+                onClick = open,
+                onLongClick = if (selecting) null else ({ menuOpen = true }),
+                onClickLabel = if (selecting) voxString("Select") else null,
+            )
+            .semantics { if (selecting) this.selected = checked }
+            .padding(start = if (selecting) indent(depth) + 4.dp else indent(depth) + 24.dp, end = 12.dp)
             .testTag("files-file-${entry.relativePath}"),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        if (depth == 0) Icon(Icons.Outlined.Description, contentDescription = null, tint = c.muted, modifier = Modifier.size(16.dp))
+        if (selecting) SelectionCheck(checked)
+        else if (depth == 0) Icon(Icons.Outlined.Description, contentDescription = null, tint = c.muted, modifier = Modifier.size(16.dp))
         Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(entry.name, style = FileNameStyle, color = c.text, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
             if (isToday(entry.lastModifiedEpochMillis, nowEpochMillis)) TodayTag()
             badges.take(1).forEach { PresetBadge(it) }
         }
         entry.lastModifiedEpochMillis?.let { Text(fileTimeLabel(it, nowEpochMillis), style = SignalType.monoCaption, color = c.faint, maxLines = 1) }
+    }
+    NoteMenu(expanded = menuOpen, dismiss = { menuOpen = false }, actions = menu)
     }
 }
 
@@ -359,6 +485,8 @@ internal fun VaultFolderScreen(
     presets: List<CapturePreset>,
     list: suspend (String) -> VaultListing,
     preview: suspend (LiveNoteLocation) -> String?,
+    /** Whole text of a note, for Share and Export. */
+    read: suspend (LiveNoteLocation) -> String?,
     openFile: (VaultEntry, CapturePreset?) -> Unit,
     startInPreset: (CapturePreset) -> Unit,
     navigateBack: () -> Unit,
@@ -374,9 +502,24 @@ internal fun VaultFolderScreen(
     val files = (listing as? VaultListing.Listed)?.entries.orEmpty().filter(VaultEntry::isMarkdown)
         .let(VaultTree::sorted)
     val shown = files.filter { VaultTree.matches(it, query) }
+    val sharing = rememberVaultSharing(destination, read)
+    var selecting by rememberSaveable(relativeFolder) { mutableStateOf(false) }
+    val selection = remember(relativeFolder) { mutableStateListOf<String>() }
+    fun endSelecting() { selecting = false; selection.clear() }
+    BackHandler(enabled = selecting) { endSelecting() }
+    val shownPaths = shown.map { it.relativePath }
+    val selectedPaths = shownPaths.filter(selection::contains) + selection.filterNot(shownPaths::contains)
     Box(Modifier.fillMaxSize().background(c.bg).navigationBarsPadding()) {
         Column(Modifier.fillMaxSize()) {
-            Row(Modifier.fillMaxWidth().statusBarsPadding().padding(start = 8.dp, end = 8.dp, top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+            if (selecting) VaultSelectionHeader(
+                selectedCount = selection.size,
+                allSelected = shownPaths.isNotEmpty() && selection.containsAll(shownPaths),
+                onToggleAll = {
+                    if (shownPaths.isNotEmpty() && selection.containsAll(shownPaths)) selection.removeAll(shownPaths)
+                    else shownPaths.filterNot(selection::contains).forEach(selection::add)
+                },
+                onDone = ::endSelecting,
+            ) else Row(Modifier.fillMaxWidth().statusBarsPadding().padding(start = 8.dp, end = 8.dp, top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                 Row(
                     Modifier.heightIn(min = 44.dp).clip(RoundedCornerShape(12.dp)).clickable(role = Role.Button, onClick = navigateBack).padding(horizontal = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -384,6 +527,8 @@ internal fun VaultFolderScreen(
                     Icon(Icons.AutoMirrored.Outlined.KeyboardArrowLeft, contentDescription = null, tint = c.tint)
                     Text(destination.displayName, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium), color = c.tint)
                 }
+                Spacer(Modifier.weight(1f))
+                SelectNotesButton { selecting = true }
             }
             Column(Modifier.padding(horizontal = 16.dp)) {
                 val parent = relativeFolder.substringBeforeLast('/', "")
@@ -431,7 +576,25 @@ internal fun VaultFolderScreen(
                             ) {
                                 monthFiles.forEachIndexed { index, entry ->
                                     if (index > 0) Box(Modifier.fillMaxWidth().height(1.dp).background(c.divider))
-                                    FolderFileRow(destination, entry, preview, nowEpochMillis) { openFile(entry, preset) }
+                                    FolderFileRow(
+                                        destination = destination,
+                                        entry = entry,
+                                        preview = preview,
+                                        nowEpochMillis = nowEpochMillis,
+                                        selecting = selecting,
+                                        checked = entry.relativePath in selection,
+                                        menu = NoteMenuActions(
+                                            share = { sharing.share(listOf(entry.relativePath)) },
+                                            export = { sharing.export(listOf(entry.relativePath)) },
+                                            select = { selection.clear(); selection.add(entry.relativePath); selecting = true },
+                                        ),
+                                    ) {
+                                        if (selecting) {
+                                            if (entry.relativePath in selection) selection.remove(entry.relativePath) else selection.add(entry.relativePath)
+                                        } else {
+                                            openFile(entry, preset)
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -439,7 +602,15 @@ internal fun VaultFolderScreen(
                 }
             }
         }
-        if (preset != null) {
+        if (selecting) {
+            VaultSelectionBar(
+                selectedCount = selection.size,
+                isPreparing = sharing.isPreparing,
+                onShare = { sharing.share(selectedPaths) },
+                onExport = { sharing.export(selectedPaths) },
+                modifier = Modifier.align(Alignment.BottomCenter).background(c.bg),
+            )
+        } else if (preset != null) {
             val label = if (preset.noteTargetKind == CaptureNoteTargetKind.ROLLING_NOTE) {
                 if (preset.rollingPeriod == CaptureRollingPeriod.DAILY) voxString("Add to today") else voxFormat("Add to %@", preset.name)
             } else voxFormat("New in %@", folderName)
@@ -463,15 +634,42 @@ internal fun VaultFolderScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun FolderFileRow(destination: CaptureDestination, entry: VaultEntry, preview: suspend (LiveNoteLocation) -> String?, nowEpochMillis: Long, open: () -> Unit) {
+private fun FolderFileRow(
+    destination: CaptureDestination,
+    entry: VaultEntry,
+    preview: suspend (LiveNoteLocation) -> String?,
+    nowEpochMillis: Long,
+    selecting: Boolean,
+    checked: Boolean,
+    menu: NoteMenuActions,
+    open: () -> Unit,
+) {
     val c = Signal.colors
     val line by produceState<String?>(null, entry.relativePath, entry.lastModifiedEpochMillis) {
         value = preview(LiveNoteLocation(destination.id, destination.treeUri, entry.relativePath))
     }
-    Column(
-        Modifier.fillMaxWidth().clickable(role = Role.Button, onClick = open).padding(horizontal = 14.dp, vertical = 10.dp),
+    var menuOpen by remember { mutableStateOf(false) }
+    Box {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .background(if (selecting && checked) c.accentSoft else androidx.compose.ui.graphics.Color.Transparent)
+            .combinedClickable(
+                role = Role.Button,
+                onClick = open,
+                onLongClick = if (selecting) null else ({ menuOpen = true }),
+                onClickLabel = if (selecting) voxString("Select") else null,
+            )
+            .semantics { if (selecting) this.selected = checked }
+            .padding(horizontal = 14.dp, vertical = 10.dp)
+            .testTag("folder-file-${entry.relativePath}"),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
+    if (selecting) SelectionCheck(checked)
+    Column(Modifier.weight(1f)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(entry.name, style = FileNameStyle, color = c.text, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
@@ -482,6 +680,9 @@ private fun FolderFileRow(destination: CaptureDestination, entry: VaultEntry, pr
         line?.let {
             Text(it, style = SignalType.caption, color = c.muted, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(top = 2.dp))
         }
+    }
+    }
+    NoteMenu(expanded = menuOpen, dismiss = { menuOpen = false }, actions = menu)
     }
 }
 
